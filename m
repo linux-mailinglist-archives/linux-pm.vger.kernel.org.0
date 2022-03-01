@@ -2,255 +2,261 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA9E4C8A7E
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 12:19:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE5614C8AB0
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 12:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234265AbiCALTZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 06:19:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
+        id S234523AbiCAL3D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 06:29:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233520AbiCALTY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 06:19:24 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF301E3C6
-        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 03:18:41 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id t13so14266592lfd.9
-        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 03:18:40 -0800 (PST)
+        with ESMTP id S229576AbiCAL3A (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 06:29:00 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B1A46652;
+        Tue,  1 Mar 2022 03:28:19 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id gb39so30861217ejc.1;
+        Tue, 01 Mar 2022 03:28:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2Q+7lXKvJmJfApxgPqSja1YaabJDgfdj5ysiT/jG1H4=;
-        b=I+7ITWgPUBiOy092xGztWAiT0XGbypDROgauGgObFuoP8AFQkklQrp0HO/hMkf5anX
-         CSQ+ssv/4uyBAxEvjir6uqj5EardhckZ0WwS1dzVLzuoUl/FEPIE4TVbEElwJCZuVydP
-         T7KtJRuVdHPHRH0HE60dmzEb2ssMEQZ+cHxx7wZ5u34gmmeJZiLURapQenOZSm1fSYtC
-         fv1N3S4++Mnz+NSelQnyD7GTUT1VUxd3sJQ+3TpKn8AOeWm5rRbGPahMEfwomt345g/f
-         OCv6KjXiIIwMsbAqyewXKydd6xNn3+Joc1n/0SGkNEAjVDMu8Iz0amZ8ObuigsforRpU
-         jMqQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=rLPvv7mVdDwWU3WqqHUc/M/t9o2wkfNNz2uUSA/i/Q0=;
+        b=ioxwEWwSec2mkWoQpVaP+m+cuqfrILVMZy97DsxGJQFNwUj5vt0t9wo5G7myUpC8Gn
+         ea9oHHWNkcI1g0+ETzPDSekL4muwhDYsG3jrD0dPjJWnH1vW4gUq2ufbL8yBIo9ax2rC
+         LCc4peu3G2+oC3D/CoxTwxe0jKznErkS9hGO2cQ4rpTAmgLJ5M6BCvPaoqQObgiQcr6n
+         RKDduahlScES6wicQqME3eGzY8GUno55Oqx2eUsC/sQVyrcKAkNt4/DW8JZWJd6l/Vwp
+         mTTzA+edxLDCldwyXcUf3Jn0ErW39L5ba+PqRXF7jiU95w3jgcW/Rs/bUGAwA8mWZWkw
+         L2Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2Q+7lXKvJmJfApxgPqSja1YaabJDgfdj5ysiT/jG1H4=;
-        b=v/6zwW1j8LrdRGqkCwQD+MHOm4rkZXpiHvNf4yn6mp1XxpWo1NO74vh/9qMrghjMr9
-         fu5J52FmQnUZZZQc6Y3yxHKvvcMhwgoPUa6Vqpav/kan5wBE8Zg58Wi0HjwirL2C2lnr
-         iGCnK5ZYJQ+iIbhKE1TPWuaEGOJdDf4s0bO7Y9wi/UL/ZbtIU+pI7/fAhTormyJEJUCm
-         OidifNvDanuxflnbBBmfNfmX82CgLsfDHIlzQUF7+lRiC63aOyD6OSx7d/SFZeoy7spS
-         5YI99l5ToR4a2cs/ipMfm10UYpaW76zTvmTSDzcvT2o9etOeg4tJ5dLOSnLHcJ/fcGHN
-         zlWw==
-X-Gm-Message-State: AOAM530+O4XV08UK3qMDlPY4Oi4wi8i39Fm0bRlTHJmrAd1yMAyffICB
-        Kd4RRDQIO+5KQyX644lE1q5NpfLlVmAUdbK0Jbj8yw==
-X-Google-Smtp-Source: ABdhPJxSiQAQPolHrz0IQWhcpQc3TNLO/Pl+1iEBEd3ZK9erAQE0B0t1tSg5UC7c5c0YuIGQOridzN3CixYYhzPJUQc=
-X-Received: by 2002:a19:9144:0:b0:43b:86a4:1497 with SMTP id
- y4-20020a199144000000b0043b86a41497mr15407463lfj.254.1646133519263; Tue, 01
- Mar 2022 03:18:39 -0800 (PST)
-MIME-Version: 1.0
-References: <20220223083441.1.I925ce9fa12992a58caed6b297e0171d214866fe7@changeid>
- <CAPDyKFrDncw0D2ccw9GJS+oRdm2kROJh25OV9pMs+992vQV-cQ@mail.gmail.com> <Yh36R817IjCw2dMb@pendragon.ideasonboard.com>
-In-Reply-To: <Yh36R817IjCw2dMb@pendragon.ideasonboard.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 1 Mar 2022 12:18:02 +0100
-Message-ID: <CAPDyKFrchzHnph9zg55yCbpQ5hu9P=ZOdcuigyqC_4yYjFs10Q@mail.gmail.com>
-Subject: Re: [PATCH] PM: runtime: Have devm_pm_runtime_enable() handle pm_runtime_dont_use_autosuspend()
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=rLPvv7mVdDwWU3WqqHUc/M/t9o2wkfNNz2uUSA/i/Q0=;
+        b=giO4plcs+ABte//d8gwL+2pUDHZqwCPkblhelmffpXm7V53ATpHNorjmZ913XTgE1z
+         FqflQE315aEEKvoN0tFlsYijiUOy/DnmlpKWRDKWEfBOAoXEqD08HgbwPAszCPvNBAjd
+         zg5Pa6s8phaSWtCFkVz9Q0eIigW5ve0F0j4Py0dsWriP8rjA3UE8oEFTmpjoy22jC5sR
+         rJ8TqHMKfLTj0rkSBjkvZT5NOHYtUQ6nD1seea29RX4m9ege4KP3SoDbvLaXOZrEXyBv
+         9C7PQnNtTW6e9zXaD4JhioQRXRERrornvFJqcig7/3P6MlWHkL5GEEMVFM/GHWPIvDzd
+         EuRA==
+X-Gm-Message-State: AOAM531HJ68V5UhOdCNzhzSINJGxvNunr87sa97CIt/ht8s+pnGg68cW
+        1CRheCZkNYxUF70jAhMNRTg=
+X-Google-Smtp-Source: ABdhPJykJwlP+KqTh6zSzndCpDSZzE2bN4aLh28OSmyBBaWLei6TdHv4i/sMtFtkO4GxsNuXK9LBkw==
+X-Received: by 2002:a17:906:68c2:b0:6b4:9f26:c099 with SMTP id y2-20020a17090668c200b006b49f26c099mr18827008ejr.41.1646134097608;
+        Tue, 01 Mar 2022 03:28:17 -0800 (PST)
+Received: from smtpclient.apple ([2a02:8109:9d80:3f6c:6db3:8d4c:747e:98ad])
+        by smtp.gmail.com with ESMTPSA id a25-20020a50ff19000000b0040f84cd806csm7036870edu.59.2022.03.01.03.28.15
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 01 Mar 2022 03:28:17 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.60.0.1.1\))
+Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+In-Reply-To: <CAHk-=whLK11HyvpUtEftOjc3Gup2V77KpAQ2fycj3uai=qceHw@mail.gmail.com>
+Date:   Tue, 1 Mar 2022 12:28:15 +0100
+Cc:     =?utf-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        samba-technical@lists.samba.org,
+        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
+        linux-arch <linux-arch@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        intel-wired-lan@lists.osuosl.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        bcm-kernel-feedback-list@broadcom.com,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergman <arnd@arndb.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        v9fs-developer@lists.sourceforge.net,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-sgx@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        tipc-discussion@lists.sourceforge.net,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        dma <dmaengine@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Mike Rapoport <rppt@kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <CEDAD0D9-56EE-4105-9107-72C2EAD940B0@gmail.com>
+References: <20220228110822.491923-1-jakobkoschel@gmail.com>
+ <20220228110822.491923-3-jakobkoschel@gmail.com>
+ <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
+ <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
+ <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com>
+ <CAHk-=wiTCvLQkHcJ3y0hpqH7FEk9D28LDvZZogC6OVLk7naBww@mail.gmail.com>
+ <FC710A1A-524E-481B-A668-FC258F529A2E@gmail.com>
+ <CAHk-=whLK11HyvpUtEftOjc3Gup2V77KpAQ2fycj3uai=qceHw@mail.gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+X-Mailer: Apple Mail (2.3693.60.0.1.1)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 1 Mar 2022 at 11:49, Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Ulf,
->
-> On Tue, Mar 01, 2022 at 11:26:46AM +0100, Ulf Hansson wrote:
-> > On Wed, 23 Feb 2022 at 17:35, Douglas Anderson <dianders@chromium.org> wrote:
-> > >
-> > > The PM Runtime docs say:
-> > >   Drivers in ->remove() callback should undo the runtime PM changes done
-> > >   in ->probe(). Usually this means calling pm_runtime_disable(),
-> > >   pm_runtime_dont_use_autosuspend() etc.
-> > >
-> > > From grepping code, it's clear that many people aren't aware of the
-> > > need to call pm_runtime_dont_use_autosuspend().
-> >
-> > Well, I admit it's good practice that they should take care of this.
-> >
-> > However, it doesn't really matter to keep the autosuspend turned on
-> > when runtime PM becomes disabled, I think. When the driver gets probed
-> > again, it will most likely call pm_runtime_use_autosuspend() again,
-> > which should work fine, right?
->
-> For the probe path I agree, but are there valid use cases where, at
-> runtime, a driver would disable runtime PM and re-enable it a bit later
-> ? If so, we need to ensure this won't disable auto-suspend.
 
-I am not sure I fully understand whether there is a problem.
 
-Can you perhaps write the sequence of the runtime PM calls that may
-cause an issue?
+> On 1. Mar 2022, at 01:41, Linus Torvalds =
+<torvalds@linux-foundation.org> wrote:
+>=20
+> On Mon, Feb 28, 2022 at 1:47 PM Jakob Koschel <jakobkoschel@gmail.com> =
+wrote:
+>>=20
+>> The goal of this is to get compiler warnings right? This would indeed =
+be great.
+>=20
+> Yes, so I don't mind having a one-time patch that has been gathered
+> using some automated checker tool, but I don't think that works from a
+> long-term maintenance perspective.
+>=20
+> So if we have the basic rule being "don't use the loop iterator after
+> the loop has finished, because it can cause all kinds of subtle
+> issues", then in _addition_ to fixing the existing code paths that
+> have this issue, I really would want to (a) get a compiler warning for
+> future cases and (b) make it not actually _work_ for future cases.
+>=20
+> Because otherwise it will just happen again.
+>=20
+>> Changing the list_for_each_entry() macro first will break all of =
+those cases
+>> (e.g. the ones using 'list_entry_is_head()).
+>=20
+> So I have no problems with breaking cases that we basically already
+> have a patch for due to  your automated tool. There were certainly
+> more than a handful, but it didn't look _too_ bad to just make the
+> rule be "don't use the iterator after the loop".
+>=20
+> Of course, that's just based on that patch of yours. Maybe there are a
+> ton of other cases that your patch didn't change, because they didn't
+> match your trigger case, so I may just be overly optimistic here.
 
->
-> > > When brainstorming solutions, one idea that came up was to leverage
-> > > the new-ish devm_pm_runtime_enable() function. The idea here is that:
-> > > * When the devm action is called we know that the driver is being
-> > >   removed. It's the perfect time to undo the use_autosuspend.
-> > > * The code of pm_runtime_dont_use_autosuspend() already handles the
-> > >   case of being called when autosuspend wasn't enabled.
-> >
-> > Hmm, I am hesitating to extend devm_pm_runtime_enable(), as it
-> > currently makes it look too simple to turn off things at ->remove()
-> > for runtime PM. While in fact it's more complicated.
-> >
-> > A bigger problem, for example, is that a driver calls
-> > pm_runtime_put_sync() during ->remove(), relying on that it actually
-> > ends up calling its ->runtime_suspend() callback to turn off various
-> > specific resources for the device. And in fact there are no guarantees
-> > that will happen - and when it doesn't, the next time the driver's
-> > ->probe() runs, things are likely to be really screwed up.
-> >
-> > To cover this case, one could use the below code in the ->remove() callback:
-> >
-> > ...
-> > pm_runtime_get_sync();
-> >
-> > "turn off resources for the devices - like calling
-> > clk_disable_unprepare(), for example"
-> >
-> > pm_runtime_disable();
-> > pm_runtime_put_noidle();
-> > ...
-> >
-> > In this example, it would be too late to call pm_runtime_disable()
-> > through the pm_runtime_disable_action().
->
-> My experience with runtime PM is that it's hard to use, at least if you
-> want to get it right :-) That's especially the case if a driver wants to
-> support both CONFIG_PM and !CONFIG_PM. Here's an example at probe time:
->
->         /*
->          * We need the driver to work in the event that CONFIG_PM is disabled in
->          * the kernel, so power up and verify the chip now. In the event that
->          * CONFIG_PM is disabled this will leave the chip on, so that streaming
->          * will work.
->          */
->         ret = ov5693_sensor_powerup(ov5693);
->         if (ret)
->                 goto err_media_entity_cleanup;
->
->         ret = ov5693_detect(ov5693);
->         if (ret)
->                 goto err_powerdown;
->
->         pm_runtime_set_active(&client->dev);
->         pm_runtime_get_noresume(&client->dev);
->         pm_runtime_enable(&client->dev);
->
->         ret = v4l2_async_register_subdev_sensor(&ov5693->sd);
->         if (ret) {
->                 dev_err(&client->dev, "failed to register V4L2 subdev: %d",
->                         ret);
->                 goto err_pm_runtime;
->         }
->
->         pm_runtime_set_autosuspend_delay(&client->dev, 1000);
->         pm_runtime_use_autosuspend(&client->dev);
->         pm_runtime_put_autosuspend(&client->dev);
->
-> And the corresponding code at remove time:
->
->         /*
->          * Disable runtime PM. In case CONFIG_PM is disabled in the kernel,
->          * make sure to turn power off manually.
->          */
->         pm_runtime_disable(&client->dev);
->         if (!pm_runtime_status_suspended(&client->dev))
->                 ov5693_sensor_powerdown(ov5693);
->         pm_runtime_set_suspended(&client->dev);
->
-> And of course there's no documentation that explains all this, so there
-> are endless variations of patterns originating from cargo-cult
-> programming.
->
-> I don't know what the right solution is, but we need to move towards an
-> easier to use API if we want drivers to get it right. Any step in that
-> direction would be welcome.
+Based on the coccinelle script there are ~480 cases that need fixing
+in total. I'll now finish all of them and then split them by
+submodules as Greg suggested and repost a patch set per submodule.
+Sounds good?
 
-Yep, I fully agree with you, while it's not an easy task. At least the
-example above looks fine to me. :-)
+>=20
+> But basically to _me_, the important part is that the end result is
+> maintainable longer-term. I'm more than happy to have a one-time patch
+> to fix a lot of dubious cases if we can then have clean rules going
+> forward.
+>=20
+>> I assumed it is better to fix those cases first and then have a =
+simple
+>> coccinelle script changing the macro + moving the iterator into the =
+scope
+>> of the macro.
+>=20
+> So that had been another plan of mine, until I actually looked at
+> changing the macro. In the one case I looked at, it was ugly beyond
+> belief.
+>=20
+> It turns out that just syntactically, it's really nice to give the
+> type of the iterator from outside the way we do now. Yeah, it may be a
+> bit odd, and maybe it's partly because I'm so used to the
+> "list_for_each_list_entry()" syntax, but moving the type into the loop
+> construct really made it nasty - either one very complex line, or
+> having to split it over two lines which was even worse.
+>=20
+> Maybe the place I looked at just happened to have a long typename, but
+> it's basically always going to be a struct, so it's never a _simple_
+> type. And it just looked very odd adn unnatural to have the type as
+> one of the "arguments" to that list_for_each_entry() macro.
+>=20
+> So yes, initially my idea had been to just move the iterator entirely
+> inside the macro. But specifying the type got so ugly that I think
+> that
+>=20
+>        typeof (pos) pos
+>=20
+> trick inside the macro really ends up giving us the best of all =
+worlds:
+>=20
+> (a) let's us keep the existing syntax and code for all the nice cases
+> that did everything inside the loop anyway
+>=20
+> (b) gives us a nice warning for any normal use-after-loop case
+> (unless you explicitly initialized it like that
+> sgx_mmu_notifier_release() function did for no good reason
+>=20
+> (c) also guarantees that even if you don't get a warning,
+> non-converted (or newly written) bad code won't actually _work_
+>=20
+> so you end up getting the new rules without any ambiguity or mistaken
+>=20
+>> With this you are no longer able to set the 'outer' pos within the =
+list
+>> iterator loop body or am I missing something?
+>=20
+> Correct. Any assignment inside the loop will be entirely just to the
+> local loop case. So any "break;" out of the loop will have to set
+> another variable - like your updated patch did.
+>=20
+>> I fail to see how this will make most of the changes in this
+>> patch obsolete (if that was the intention).
+>=20
+> I hope my explanation above clarifies my thinking: I do not dislike
+> your patch, and in fact your patch is indeed required to make the new
+> semantics work.
 
-Recently I noticed that some drivers are calling
-pm_runtime_force_suspend() at ->remove(). This works fine in quite
-many cases, but it wouldn't solve the case when CONFIG_PM is unset.
+ok it's all clear now, thanks for clarifying.
+I've defined all the 'tmp' iterator variables uninitialized so applying
+your patch on top of that later will just give the nice compiler warning=20=
 
-Perhaps we should explore adding a new API, along the lines of
-pm_runtime_force_suspend(), but make it specific for the ->remove()
-path, and in some way make it work for when CONFIG_PM is unset too.
+if they are used past the loop body.
 
-Kind regards
-Uffe
+>=20
+> What I disliked was always the maintainability of your patch - making
+> the rules be something that isn't actually visible in the source code,
+> and letting the old semantics still work as well as they ever did, and
+> having to basically run some verification pass to find bad users.
 
->
-> > > Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > > ---
-> > >
-> > >  drivers/base/power/runtime.c | 5 +++++
-> > >  include/linux/pm_runtime.h   | 4 ++++
-> > >  2 files changed, 9 insertions(+)
-> > >
-> > > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> > > index 2f3cce17219b..d4059e6ffeae 100644
-> > > --- a/drivers/base/power/runtime.c
-> > > +++ b/drivers/base/power/runtime.c
-> > > @@ -1476,11 +1476,16 @@ EXPORT_SYMBOL_GPL(pm_runtime_enable);
-> > >
-> > >  static void pm_runtime_disable_action(void *data)
-> > >  {
-> > > +       pm_runtime_dont_use_autosuspend(data);
-> > >         pm_runtime_disable(data);
-> > >  }
-> > >
-> > >  /**
-> > >   * devm_pm_runtime_enable - devres-enabled version of pm_runtime_enable.
-> > > + *
-> > > + * NOTE: this will also handle calling pm_runtime_dont_use_autosuspend() for
-> > > + * you at driver exit time if needed.
-> > > + *
-> > >   * @dev: Device to handle.
-> > >   */
-> > >  int devm_pm_runtime_enable(struct device *dev)
-> > > diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-> > > index 9f09601c465a..2bff6a10095d 100644
-> > > --- a/include/linux/pm_runtime.h
-> > > +++ b/include/linux/pm_runtime.h
-> > > @@ -567,6 +567,10 @@ static inline void pm_runtime_disable(struct device *dev)
-> > >   * Allow the runtime PM autosuspend mechanism to be used for @dev whenever
-> > >   * requested (or "autosuspend" will be handled as direct runtime-suspend for
-> > >   * it).
-> > > + *
-> > > + * NOTE: It's important to undo this with pm_runtime_dont_use_autosuspend()
-> > > + * at driver exit time unless your driver initially enabled pm_runtime
-> > > + * with devm_pm_runtime_enable() (which handles it for you).
-> > >   */
-> > >  static inline void pm_runtime_use_autosuspend(struct device *dev)
-> > >  {
->
-> --
-> Regards,
->
-> Laurent Pinchart
+Since this patch is not a complete list of cases that need fixing (30%)
+I haven't included the actual change of moving the iterator variable
+into the loop and thought that would be a second step coming after this
+is merged.
+
+With these changes alone, yes you still rely on manual verification =
+passes.
+
+>=20
+> (I also disliked your original patch that mixed up the "CPU
+> speculation type safety" with the actual non-speculative problems, but
+> that was another issue).
+>=20
+>                Linus
+
+- Jakob
+
