@@ -2,168 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 915F84C8B2D
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 12:58:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6F94C8B75
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 13:22:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233938AbiCAL7P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 06:59:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33574 "EHLO
+        id S234697AbiCAMWw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 07:22:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231856AbiCAL7O (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 06:59:14 -0500
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFE319C05;
-        Tue,  1 Mar 2022 03:58:33 -0800 (PST)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2dbd8777564so26716257b3.0;
-        Tue, 01 Mar 2022 03:58:33 -0800 (PST)
+        with ESMTP id S234735AbiCAMWw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 07:22:52 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524378AE7E
+        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 04:22:09 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id f38so14958872ybi.3
+        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 04:22:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EeU/XCqBauiiFbzw1sK2VEGHHTBe8GTbZd92Ok0rm8Q=;
+        b=aACN6l+cOlMU/ZYfblRjGja0AsZrkNJeTifB0UdezOnHNNdWYD8WTIU2P4sKf4H/dW
+         ohYxZ88yx1wns76H8TorEabi7MAMmC/1aWITw+6kzbEij03TmiChwTxluLq7RGdmsChe
+         o8PPvs93sZ0dUuOn4B5sQl3QPQlQ0k2Y4F3GwfKj/DyX2Bap/6eJNwL58mlOAwdP6sa8
+         yF4R7H/bjMtwUMNCChamFEIntllKv4FrwnQ/nFTpMFSr2BUvziG8kASqL27ITBrgqGZi
+         8UHA6ch9L9xLqOG2A82pU7jMUCYpWZ1+UbttluKnxoxmySJo9Fwg8Ss50cQXI+OFpOJr
+         hsSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=A/qyIuOQFc+5Oiw6APjOzNbn2V6KNSLGl7+wUhPGEhg=;
-        b=KibNUAutmkI9lRylfk2wdD2rVkD/LeXnAwT+TMYaElpANUPK952R9be6UJPgG+7RO4
-         L2CECX155t8/RuBeHrIKGt+okFaF3jgFEOEWXIFHq90D1XBAxiP3lDqpxBlEM8SXYGYP
-         rBOFWtIUXGIX3SOFvGiqA9NHRFdA65JtkLZIyGFI05HhN2G14dhT/WSXm0L+ipG5Td2p
-         0whlICjHGeNwa5pbQ8+FoYM9p4mHunPT7W0Aa8OMr8e1LW9WrLqXjazN9mHaT1IW+87G
-         WhCxcc+TNaU9xxpTAkCW5o02ap1aKBXyXk3T76n2fgSQbqCC9Un7cbNHYYLNlM1NJqVN
-         wU2w==
-X-Gm-Message-State: AOAM53376Y44B5h7aki9yvIH6IFUReLk26tmA2Wwe1lTQ/KYp24ro/c6
-        pzBPv9wSK2oVnpSvt2K1po0XPUp1Z02D4I97RXY=
-X-Google-Smtp-Source: ABdhPJxfwWc5XOlIAl4ikhr+R/swVp/xFdJpL13TXoVN+ulkbXule/Hw8MPWANRbl5US2vaaZMLHkgESDlWFyjTE1ps=
-X-Received: by 2002:a81:1611:0:b0:2d6:3290:9bd3 with SMTP id
- 17-20020a811611000000b002d632909bd3mr24746769yww.19.1646135912425; Tue, 01
- Mar 2022 03:58:32 -0800 (PST)
+        bh=EeU/XCqBauiiFbzw1sK2VEGHHTBe8GTbZd92Ok0rm8Q=;
+        b=K4o7jBu7RdK6/eYsxOqdbiwkfg2Vzg6vFSdpe6PLnqzn1IiODEGT8m7P8qhX/RAjNH
+         0h7zKCvUMUYIk7HRPBLMEFv16lSL/lrct5o3nszmGphR+qv1EjeOLv/xpsBvqnP4dpQ0
+         qO05PCR4wfdgb7Go6af/5qMvoAvjfgBM+eJHkuDYz6akfnwAwhJjqI4IIT4hxq0nKib6
+         dQxqMc6hvZ9z9xfZB8BZnzZLFYFGa9OsFivup19l8XG9jEcfFI4Y2nu/aowFfyfRJjgl
+         c+77pivOI4sa0b9pR2xi+DKr5XCGCXRIAz6URlOvX8kq4ho5MZMXzz9u+YXgkG4GvuN4
+         bbIA==
+X-Gm-Message-State: AOAM530NaDasA6nJQymgkGqhnDYeyz5wLJ26NeqZm/4HqqqdV9JxzSJq
+        8tt4OolBSoWQxVYK7zc9eyIO/3bj2F9kdkej4Eod1A==
+X-Google-Smtp-Source: ABdhPJwXiI/nuKQ+OqDAQ4DKVmuZsUIPHwvnGQTDzTmtjPovp2Ie3kIvftk3xVMnUU+dyCCcmfGgZvRbScFKA+QM2Zs=
+X-Received: by 2002:a25:aae2:0:b0:624:43f0:ec66 with SMTP id
+ t89-20020a25aae2000000b0062443f0ec66mr22929352ybi.626.1646137328544; Tue, 01
+ Mar 2022 04:22:08 -0800 (PST)
 MIME-Version: 1.0
-References: <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
- <CAAYoRsW4LqNvSZ3Et5fqeFcHQ9j9-0u9Y-LN9DmpCS3wG3+NWg@mail.gmail.com>
- <20220228041228.GH4548@shbuild999.sh.intel.com> <11956019.O9o76ZdvQC@kreacher>
- <20220301055255.GI4548@shbuild999.sh.intel.com>
-In-Reply-To: <20220301055255.GI4548@shbuild999.sh.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 1 Mar 2022 12:58:19 +0100
-Message-ID: <CAJZ5v0jWUR__zn0=SDDecFct86z-=Y6v5fi37mMyW+zOBi7oWw@mail.gmail.com>
-Subject: Re: CPU excessively long times between frequency scaling driver calls
- - bisected
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Doug Smythies <dsmythies@telus.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+References: <CACRpkdZmax=QpwnfgOJOR-5P3wTyKegaDn=VvhVOYz_AChc7bw@mail.gmail.com>
+In-Reply-To: <CACRpkdZmax=QpwnfgOJOR-5P3wTyKegaDn=VvhVOYz_AChc7bw@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 1 Mar 2022 13:21:57 +0100
+Message-ID: <CACRpkdZfYh2Oyemvwkc0SCki_V-YBX21RFjT6ppCQdT-SPBs+A@mail.gmail.com>
+Subject: Re: Question on expiring HRtimer in-kernel
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Code Kipper <codekipper@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 6:53 AM Feng Tang <feng.tang@intel.com> wrote:
->
-> On Mon, Feb 28, 2022 at 08:36:03PM +0100, Rafael J. Wysocki wrote:
-> > On Monday, February 28, 2022 5:12:28 AM CET Feng Tang wrote:
-> > > On Fri, Feb 25, 2022 at 04:36:53PM -0800, Doug Smythies wrote:
-> > > > On Fri, Feb 25, 2022 at 9:46 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> > > > >
-> > > > > On Thursday, February 24, 2022 9:08:30 AM CET Feng Tang wrote:
-> > > > ...
-> > > > > > > So it looks like a new mechanism is needed for that.
-> > > > > >
-> > > > > > If you think idle class is not the right place to solve it, I can
-> > > > > > also help testing new patches.
-> > > > >
-> > > > > So I have the appended experimental patch to address this issue that's not
-> > > > > been tested at all.  Caveat emptor.
-> > > >
-> > > > Hi Rafael,
-> > > >
-> > > > O.K., you gave fair warning.
-> > > >
-> > > > The patch applied fine.
-> > > > It does not compile for me.
-> > > > The function cpuidle_update_retain_tick does not exist.
-> > > > Shouldn't it be somewhere in cpuidle.c?
-> > > > I used the function cpuidle_disable_device as a template
-> > > > for searching and comparing.
-> > > >
-> > > > Because all of my baseline results are with kernel 5.17-rc3,
-> > > > that is what I am still using.
-> > > >
-> > > > Error:
-> > > > ld: drivers/cpufreq/intel_pstate.o: in function `intel_pstate_update_perf_ctl':
-> > > > intel_pstate.c:(.text+0x2520): undefined reference to
-> > > > `cpuidle_update_retain_tick'
-> > >
-> > > Same here, seems the cpuidle_update_retain_tick()'s implementation
-> > > is missing.
-> >
-> > That's a patch generation issue on my part, sorry.
-> >
-> > However, it was a bit racy, so maybe it's good that it was not complete.
-> >
-> > Below is a new version.
->
-> Thanks for the new version. I just gave it a try,  and the occasional
-> long delay of cpufreq auto-adjusting I have seen can not be reproduced
-> after applying it.
+Sorry for top posting, the helpful autocomplete in gmail think Rohm Europe
+is better to address than linux-pm@vger...
 
-OK, thanks!
-
-I'll wait for feedback from Dough, though.
-
-> As my test is a rough one which can't reproduce what Doug has seen
-> (including the power meter data), it's better to wait for his test result.
+On Tue, Mar 1, 2022 at 1:19 PM Linus Walleij <linus.walleij@linaro.org> wrote:
 >
-> And one minor question for the code.
+> I have a problem with a premature expiring HRtimer.
 >
-> > ---
-> >  drivers/cpufreq/intel_pstate.c     |   40 ++++++++++++++++++++++++++++---------
-> >  drivers/cpuidle/governor.c         |   23 +++++++++++++++++++++
-> >  drivers/cpuidle/governors/ladder.c |    6 +++--
-> >  drivers/cpuidle/governors/menu.c   |    2 +
-> >  drivers/cpuidle/governors/teo.c    |    3 ++
-> >  include/linux/cpuidle.h            |    4 +++
-> >  6 files changed, 67 insertions(+), 11 deletions(-)
-> >
-> [SNIP]
+> The HRtimer hrtimer_set_expires_range() is used in two places in
+> the upstream kernel:
+> kernel/futex/core.c
+> drivers/power/supply/ab8500_chargalg.c
 >
-> > Index: linux-pm/drivers/cpufreq/intel_pstate.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-> > +++ linux-pm/drivers/cpufreq/intel_pstate.c
-> > @@ -19,6 +19,7 @@
-> >  #include <linux/list.h>
-> >  #include <linux/cpu.h>
-> >  #include <linux/cpufreq.h>
-> > +#include <linux/cpuidle.h>
-> >  #include <linux/sysfs.h>
-> >  #include <linux/types.h>
-> >  #include <linux/fs.h>
-> > @@ -1970,6 +1971,30 @@ static inline void intel_pstate_cppc_set
-> >  }
-> >  #endif /* CONFIG_ACPI_CPPC_LIB */
-> >
-> > +static void intel_pstate_update_perf_ctl(struct cpudata *cpu)
-> > +{
-> > +     int pstate = cpu->pstate.current_pstate;
-> > +
-> > +     /*
-> > +      * Avoid stopping the scheduler tick from cpuidle on CPUs in turbo
-> > +      * P-states to prevent them from getting back to the high frequency
-> > +      * right away after getting out of deep idle.
-> > +      */
-> > +     cpuidle_update_retain_tick(pstate > cpu->pstate.max_pstate);
+> Now I am testing the code in the latter, and it has seen some
+> bitrot since merged in 2012. Maybe it was correct at one point.
+> The timer is started like this:
 >
-> In our test, the workload will make CPU go to highest frequency before
-> going to idle, but should we also consider that the case that the
-> high but not highest cupfreq?
-
-This covers the entire turbo range (max_pstate is the highest non-turbo one).
+>     hrtimer_init(&di->safety_timer, CLOCK_REALTIME, HRTIMER_MODE_ABS);
+> (...)
+>     hrtimer_set_expires_range(&di->safety_timer,
+>         ktime_set(timer_expiration * ONE_HOUR_IN_SECONDS, 0),
+>         ktime_set(FIVE_MINUTES_IN_SECONDS, 0));
+>     hrtimer_start_expires(&di->safety_timer, HRTIMER_MODE_REL);
+>
+> What the author wanted to achieve is a very definitive callback in one
+> hour relative to now +/- 5 min, and that is one hour later in the
+> physical world,
+> as this deals with battery charging.
+>
+> However sometimes this fires almost immediately rather than in an hour.
+>
+> My first thought is to pass HRTIMER_MODE_REL also to init as
+> hrtimer_set_expires_range() could make things happen immediately
+> if we have ABS set, but this is all just intuitive.
+>
+> Any hints? Better ways to create a definitive event in one hour?
+>
+> Yours,
+> Linus Walleij
