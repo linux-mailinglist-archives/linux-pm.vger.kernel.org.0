@@ -2,64 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B114C8869
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 10:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E23B4C88A4
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 10:58:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234000AbiCAJp3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 04:45:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
+        id S234068AbiCAJ7W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 04:59:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234011AbiCAJpM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 04:45:12 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5FFF652C4
-        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 01:44:29 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id 29so21036102ljv.10
-        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 01:44:29 -0800 (PST)
+        with ESMTP id S234049AbiCAJ7V (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 04:59:21 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA2170040
+        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 01:58:39 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id a13-20020a05600c348d00b0038188b8bbf6so838152wmq.0
+        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 01:58:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tjQCk98JCF7B3SGsqfK7HCesLKkHD86YZukO/DPNtQ0=;
-        b=a8275fH6+9IRL38qqLDpyS1w3TvaCjlAatrh/47PQJbn4W9iIUucAQap9bigDyxECn
-         TXaLOGyZ8vmF2KfxrLtFGMbL5xvYfDic9jf5mRMMfkkRR7Aybbrgh+tf+R6j/jj/lp4L
-         uCUr0PvhEU0tGNaiPU9hT+w4+Op4ut5G5kMZnISMemoP4168OXOfw3jvBdq8JP1eoWq5
-         proOhu5a2wmS5TdyBmY1plpSlnDUBG4ZO3Y+ZVYUWCg2oPG82YYwJxJ0G0ZJvfphr2ZA
-         lNZQx/+ln4Ri5Yx37fm7l3jukl/i/7u/bCVcl0JY5Gv7mEpBKJJeu4xt2bHWs2p8eoHC
-         +00Q==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ezdeTFdrJTsDEenywDPHfcLnhNipBCHF9MXHMNmg8uE=;
+        b=V2OTBoFu/3u2MYQvlXN4XFA5Mpc0sw3VVP6kB35gAmpBt4CBakEr+BEajFVumt4As4
+         0YJzO8ZkJSWBwhRj8Uy59RUU3v/hwzbgxduT2I1y1xX6HI1gg41aETpQIUdjxh7ZnBz4
+         HhdMQcg8+L7O8eux9r9AapKed4y6D46u2n+k9nwiZpMaa2tu8mfi2s4ZCxAcFvaUN+tp
+         HrzR1JisJxyRdZ3wNr04C/4Vuj0omTcfD+rfi5DwD/mU4leNbAbXNJMtNPKsu3bNCRus
+         eGsPP4EAXhwGxUe8HQ9DLeSwcxn2uyLPYqzmE2imgxG0kXR+Hov/16dL3PxdUfxU3h53
+         VE0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tjQCk98JCF7B3SGsqfK7HCesLKkHD86YZukO/DPNtQ0=;
-        b=BER99swdjB6KiPD6CQNCPM1qOafIpyR+00HPyMC3SJMwrdh8taN3A7GrAyeepXDLYv
-         NgGSFkSGArjCoCDG5hUrD6IrR0AF1cYMpmY011G+4GvsupD+rA66F/xwO3Q+WdsHUALv
-         lAUS0ouUNi/lXEbUdnLF0qGTeNGhvfWBaMRw//h0aOs/A5exwd8Czgs88yP+hJEVb9mE
-         0K3dgS8ZAoIQo7tBXO5GIEe+JzSbLGSBZC9z3MXeG2asT39RJZyFKUNXxS17cUaoAeQ9
-         GA9DoGrsqunu+KIWQG91p5C50aNH05VWe0Nd2kIb0se854bR8AzxhT7MA2wqPuTknRza
-         0nEA==
-X-Gm-Message-State: AOAM533+jt9dvwqKcoY6wsMEJaXISDXAlBsRWsMTmXltYN9dBQqCihpq
-        KX26TriI+vjUblMhuvA0SvYYwGHa6WcBopDjTfFj9w==
-X-Google-Smtp-Source: ABdhPJyupqbG0bQBQuInFjyG0YrLQq20BUN2lbd8XOqgYzbsx/NwNLqnc9QaRAEmfHcJbhpij1nqLzfCko4SgKUaGbQ=
-X-Received: by 2002:a2e:86d4:0:b0:246:40eb:2c18 with SMTP id
- n20-20020a2e86d4000000b0024640eb2c18mr17093954ljj.16.1646127867471; Tue, 01
- Mar 2022 01:44:27 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ezdeTFdrJTsDEenywDPHfcLnhNipBCHF9MXHMNmg8uE=;
+        b=VzO9nOXMJRUvRQqL2J+v7y/bWIxZ/8A8a5V8XqjYL7EAMLszDMF0mO9djzZc2eyCUv
+         leawySV3hBZAR9bfImOxOLMuAOSzpdVvF4D4WcG9PTjHsGoKFazdQEKN+tkwFflch4ic
+         9r8OPbXnZqgbrFNb7EdYfZULiIMAq/y0K2LT15SZLmikEG733TlmiatfjIuKhIy9+xmX
+         1OHPkJl/f1FKjCp8sAz/vDDU5T/Y8U9v6VnQ349vbybJX/B4cNApeCYik05gbGfySKS6
+         uvCTSwv3h/NvM6icfTQ+VBWewrCNqtZ8uB1L/kHmlrQ8yS7aE5DDSgaqdxBd4Si7oQtZ
+         tU+g==
+X-Gm-Message-State: AOAM530hI0dkLS1cG0fwUMg3FU2rs7ZnT03VZFu9QBa7YCnaFRopR7NA
+        6yfG5+WEaagWEpGhzSB7l9mWlA==
+X-Google-Smtp-Source: ABdhPJyd3JL277KFZFJnNY8vNt+J/UADyqWySP9nrfMl9nw+JMafV9kv9enuyMZSjvJi9JFM8u0lYg==
+X-Received: by 2002:a1c:29c6:0:b0:381:51d6:9afe with SMTP id p189-20020a1c29c6000000b0038151d69afemr9268826wmp.0.1646128718201;
+        Tue, 01 Mar 2022 01:58:38 -0800 (PST)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id r186-20020a1c2bc3000000b0037bdd94a4e5sm1955820wmr.39.2022.03.01.01.58.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 01:58:37 -0800 (PST)
+Date:   Tue, 1 Mar 2022 09:58:34 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Guenter Roeck <groeck@chromium.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Another pass removing cases of 'allOf'
+ containing a '$ref'
+Message-ID: <Yh3uSifwByjQWpyO@google.com>
+References: <20220228213802.1639658-1-robh@kernel.org>
 MIME-Version: 1.0
-References: <20220223080323.3717853-1-s.hauer@pengutronix.de> <20220223080858.GJ9136@pengutronix.de>
-In-Reply-To: <20220223080858.GJ9136@pengutronix.de>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 1 Mar 2022 10:43:50 +0100
-Message-ID: <CAPDyKFpyCepZ_J4LNZzz-g90RLT1mVDMbQ-gNKweM8YnEWXqdg@mail.gmail.com>
-Subject: Re: [PATCH] PM: domains: use dev_err_probe() to simplify error handling
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-pm@vger.kernel.org, Kevin Hilman <khilman@kernel.org>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        linux-kernel@vger.kernel.org, Kernel@pengutronix.de,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220228213802.1639658-1-robh@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,93 +97,81 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 23 Feb 2022 at 09:09, Sascha Hauer <s.hauer@pengutronix.de> wrote:
->
-> On Wed, Feb 23, 2022 at 09:03:23AM +0100, Sascha Hauer wrote:
-> > From: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> >
-> > dev_err_probe() can reduce code size, makes the code easier to read
-> > and has the added benefit of recording the defer reason for later
-> > read out. Use it where appropriate.
-> >
-> > This also fixes an issue, where an error message in __genpd_dev_pm_attach
-> > was not terminated by a line break.
-> >
-> > Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> > ---
-> >  drivers/base/power/domain.c | 21 ++++++---------------
-> >  1 file changed, 6 insertions(+), 15 deletions(-)
->
-> And of course:
->
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+On Mon, 28 Feb 2022, Rob Herring wrote:
 
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Another pass at removing unnecessary use of 'allOf' with a '$ref'.
+> 
+> json-schema versions draft7 and earlier have a weird behavior in that
+> any keywords combined with a '$ref' are ignored (silently). The correct
+> form was to put a '$ref' under an 'allOf'. This behavior is now changed
+> in the 2019-09 json-schema spec and '$ref' can be mixed with other
+> keywords.
+> 
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Vignesh Raghavendra <vigneshr@ti.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-input@vger.kernel.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-mtd@lists.infradead.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-phy@lists.infradead.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-remoteproc@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-spi@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../bindings/connector/usb-connector.yaml         |  3 +--
+>  .../bindings/display/brcm,bcm2711-hdmi.yaml       |  3 +--
+>  .../bindings/display/bridge/adi,adv7511.yaml      |  5 ++---
+>  .../bindings/display/bridge/synopsys,dw-hdmi.yaml |  5 ++---
+>  .../bindings/display/panel/display-timings.yaml   |  3 +--
+>  .../devicetree/bindings/display/ste,mcde.yaml     |  4 ++--
+>  .../devicetree/bindings/input/adc-joystick.yaml   |  9 ++++-----
+>  .../bindings/leds/cznic,turris-omnia-leds.yaml    |  3 +--
+>  .../devicetree/bindings/leds/leds-lp50xx.yaml     |  3 +--
 
-Next time, please add me on the to-list, otherwise it's likely that I
-will fail to review your patch.
+>  .../devicetree/bindings/mfd/google,cros-ec.yaml   | 12 ++++--------
 
-Kind regards
-Uffe
+Go for it.
 
->
-> Sascha
->
-> >
-> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > index 5db704f02e712..29428ae91349d 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -2248,12 +2248,8 @@ int of_genpd_add_provider_simple(struct device_node *np,
-> >       /* Parse genpd OPP table */
-> >       if (genpd->set_performance_state) {
-> >               ret = dev_pm_opp_of_add_table(&genpd->dev);
-> > -             if (ret) {
-> > -                     if (ret != -EPROBE_DEFER)
-> > -                             dev_err(&genpd->dev, "Failed to add OPP table: %d\n",
-> > -                                     ret);
-> > -                     return ret;
-> > -             }
-> > +             if (ret)
-> > +                     return dev_err_probe(&genpd->dev, ret, "Failed to add OPP table\n");
-> >
-> >               /*
-> >                * Save table for faster processing while setting performance
-> > @@ -2312,9 +2308,8 @@ int of_genpd_add_provider_onecell(struct device_node *np,
-> >               if (genpd->set_performance_state) {
-> >                       ret = dev_pm_opp_of_add_table_indexed(&genpd->dev, i);
-> >                       if (ret) {
-> > -                             if (ret != -EPROBE_DEFER)
-> > -                                     dev_err(&genpd->dev, "Failed to add OPP table for index %d: %d\n",
-> > -                                             i, ret);
-> > +                             dev_err_probe(&genpd->dev, ret,
-> > +                                           "Failed to add OPP table for index %d\n", i);
-> >                               goto error;
-> >                       }
-> >
-> > @@ -2672,12 +2667,8 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
-> >       ret = genpd_add_device(pd, dev, base_dev);
-> >       mutex_unlock(&gpd_list_lock);
-> >
-> > -     if (ret < 0) {
-> > -             if (ret != -EPROBE_DEFER)
-> > -                     dev_err(dev, "failed to add to PM domain %s: %d",
-> > -                             pd->name, ret);
-> > -             return ret;
-> > -     }
-> > +     if (ret < 0)
-> > +             return dev_err_probe(dev, ret, "failed to add to PM domain %s\n", pd->name);
-> >
-> >       dev->pm_domain->detach = genpd_dev_pm_detach;
-> >       dev->pm_domain->sync = genpd_dev_pm_sync;
-> > --
-> > 2.30.2
-> >
-> >
-> >
->
-> --
-> Pengutronix e.K.                           |                             |
-> Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Acked-by: Lee Jones <lee.jones@linaro.org>
+
+>  .../devicetree/bindings/mtd/nand-controller.yaml  |  8 +++-----
+>  .../bindings/mtd/rockchip,nand-controller.yaml    |  3 +--
+>  .../devicetree/bindings/net/ti,cpsw-switch.yaml   |  3 +--
+>  .../bindings/phy/phy-stm32-usbphyc.yaml           |  3 +--
+>  .../bindings/power/supply/sbs,sbs-manager.yaml    |  4 +---
+>  .../bindings/remoteproc/ti,k3-r5f-rproc.yaml      |  3 +--
+>  .../devicetree/bindings/soc/ti/ti,pruss.yaml      | 15 +++------------
+>  .../devicetree/bindings/sound/st,stm32-sai.yaml   |  3 +--
+>  .../devicetree/bindings/sound/tlv320adcx140.yaml  | 13 ++++++-------
+>  .../devicetree/bindings/spi/spi-controller.yaml   |  4 +---
+>  .../devicetree/bindings/usb/st,stusb160x.yaml     |  4 +---
+>  21 files changed, 39 insertions(+), 74 deletions(-)
+
+-- 
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
