@@ -2,74 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B604C88FA
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 11:07:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7644C8938
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 11:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232752AbiCAKHh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 05:07:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51522 "EHLO
+        id S232026AbiCAK2M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 05:28:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232129AbiCAKHh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 05:07:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDAC8BF35;
-        Tue,  1 Mar 2022 02:06:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06578B81855;
-        Tue,  1 Mar 2022 10:06:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B84BFC340F1;
-        Tue,  1 Mar 2022 10:06:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646129213;
-        bh=fYZEvCHUTCzzIGB8L9LcKOsoY2tpWRjSUopTwwDl04A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xx3JkpMGPfR90bvsEfJqssfeOVD4am2Noqa3KOgFZGWbwMPG13nGrRruOPt4zeJk6
-         SBnDTJra4wi+jXHwz3J43NUmeyuMstDhoISZnCGhAY8ROQCVJreeKbMA+nARphIuMh
-         ZgOw1/MouAINJXpZzmXZJwuoNL3TXV+0LHTvNriedKzFyQm0GtT00zdr2LzOsphHMU
-         6ipvcgHIeNmyMATrUY8U009qFXGO94XM75aYICxRWsy+5+krA86NOT5pbSm8ZWOyIQ
-         KR8efYpq0czOCDE/678WEj6ininKhpTtp8FShG/wEs4ASgRLXuHzy96S8SX7m2RobP
-         h2fJWhSnBya6Q==
-Date:   Tue, 1 Mar 2022 15:36:49 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee.jones@linaro.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Another pass removing cases of 'allOf'
- containing a '$ref'
-Message-ID: <Yh3wOYFnN9Q1F68N@matsya>
-References: <20220228213802.1639658-1-robh@kernel.org>
+        with ESMTP id S229817AbiCAK2L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 05:28:11 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178BC5F8D
+        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 02:27:24 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id u7so21194202ljk.13
+        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 02:27:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2i+D2PqtcWDc5KoZLbt1OkpDgJIEvu6U0OQ0ZqUGBOU=;
+        b=LUb0D4AOtYKuu3o3RMENT8fWAAIPqnz3tK1e2GYt1n2IGj411QDVPC3bTl6VyGMsXu
+         vKDXGBRX6kRktQq1VS7QmPsFecnmdnMBzCg3OROSq+PuwAWJAY6nctOsoaRzDWret1yj
+         6KRxOtEdpkaxgfbQAri7Sv4FN0g6QUuQ17a/huvn00u9e2s8KlN+FChvyqO9z1LHF2MK
+         UXDj26HmPP3JuUsGqGwpj/q+3grsd1EiCwyrb1SCbSFpFAvxrvAY6RuBixdN8YRC1X56
+         CCFuQoIJve168JO/KZ8m6begRfbtWpOUq+X1yWXk3qMD4zW0SQCM8y25jcStovPImJww
+         h5xA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2i+D2PqtcWDc5KoZLbt1OkpDgJIEvu6U0OQ0ZqUGBOU=;
+        b=cRO/MmT3BAGsOwuzKb4A9ewIiPJM12buYarGvBob6aU8VmFSlA0pDAikI5NJdzUj2V
+         CPyOTwJCuwWwvNfzAU26HIQFTLMqTX7wo6jHXu1nhP37rqx7GVXt3jZrsiZnRgq7YD0J
+         uwomqS/Pfek8w4HYrTizptTCaERyjFW9zi1w2pULb0nqMgJ12Lr2TSu7rpw777WvEbP2
+         qzT/a+/eC6lNFuCHiYQ/jYHEF6TvLrMjPqWHNJAz5HV+9WiWsTndaFRsvO5ypt9uGmis
+         x2J/KZ+YRBIOdzkNFekFqSBpW2fXsmrvJLnnUtniAXJsmWDSvoE7X03Tuj8WGaAvaO/O
+         bGGw==
+X-Gm-Message-State: AOAM531xMkdulIHixTU2Qf9OnwCyqWjyUSf/ufz/+xC+qGRWXsxDW8+V
+        8j1jakiJZ9QTwvUN9j4a6ZmIHSXoEV9B2ATtoCHr4h9lVUFfCA==
+X-Google-Smtp-Source: ABdhPJwfMVDrAIuUOqBJa/BAlR77m5tBBCI4Nx3/rN8zw7wSDvQg4tEVnXyNw2+J+E43j9ppcyEVYlZr2Ix9iGFjdqY=
+X-Received: by 2002:a05:651c:201b:b0:246:34b5:155e with SMTP id
+ s27-20020a05651c201b00b0024634b5155emr15953966ljo.273.1646130442354; Tue, 01
+ Mar 2022 02:27:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228213802.1639658-1-robh@kernel.org>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220223083441.1.I925ce9fa12992a58caed6b297e0171d214866fe7@changeid>
+In-Reply-To: <20220223083441.1.I925ce9fa12992a58caed6b297e0171d214866fe7@changeid>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 1 Mar 2022 11:26:46 +0100
+Message-ID: <CAPDyKFrDncw0D2ccw9GJS+oRdm2kROJh25OV9pMs+992vQV-cQ@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Have devm_pm_runtime_enable() handle pm_runtime_dont_use_autosuspend()
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,33 +71,105 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28-02-22, 15:38, Rob Herring wrote:
-> Another pass at removing unnecessary use of 'allOf' with a '$ref'.
-> 
-> json-schema versions draft7 and earlier have a weird behavior in that
-> any keywords combined with a '$ref' are ignored (silently). The correct
-> form was to put a '$ref' under an 'allOf'. This behavior is now changed
-> in the 2019-09 json-schema spec and '$ref' can be mixed with other
-> keywords.
+On Wed, 23 Feb 2022 at 17:35, Douglas Anderson <dianders@chromium.org> wrote:
+>
+> The PM Runtime docs say:
+>   Drivers in ->remove() callback should undo the runtime PM changes done
+>   in ->probe(). Usually this means calling pm_runtime_disable(),
+>   pm_runtime_dont_use_autosuspend() etc.
+>
+> From grepping code, it's clear that many people aren't aware of the
+> need to call pm_runtime_dont_use_autosuspend().
+
+Well, I admit it's good practice that they should take care of this.
+
+However, it doesn't really matter to keep the autosuspend turned on
+when runtime PM becomes disabled, I think. When the driver gets probed
+again, it will most likely call pm_runtime_use_autosuspend() again,
+which should work fine, right?
+
+>
+> When brainstorming solutions, one idea that came up was to leverage
+> the new-ish devm_pm_runtime_enable() function. The idea here is that:
+> * When the devm action is called we know that the driver is being
+>   removed. It's the perfect time to undo the use_autosuspend.
+> * The code of pm_runtime_dont_use_autosuspend() already handles the
+>   case of being called when autosuspend wasn't enabled.
+
+Hmm, I am hesitating to extend devm_pm_runtime_enable(), as it
+currently makes it look too simple to turn off things at ->remove()
+for runtime PM. While in fact it's more complicated.
+
+A bigger problem, for example, is that a driver calls
+pm_runtime_put_sync() during ->remove(), relying on that it actually
+ends up calling its ->runtime_suspend() callback to turn off various
+specific resources for the device. And in fact there are no guarantees
+that will happen - and when it doesn't, the next time the driver's
+->probe() runs, things are likely to be really screwed up.
+
+To cover this case, one could use the below code in the ->remove() callback:
 
 ...
+pm_runtime_get_sync();
 
->  .../bindings/connector/usb-connector.yaml         |  3 +--
->  .../bindings/display/brcm,bcm2711-hdmi.yaml       |  3 +--
->  .../bindings/display/bridge/adi,adv7511.yaml      |  5 ++---
->  .../bindings/display/bridge/synopsys,dw-hdmi.yaml |  5 ++---
->  .../bindings/display/panel/display-timings.yaml   |  3 +--
->  .../devicetree/bindings/display/ste,mcde.yaml     |  4 ++--
->  .../devicetree/bindings/input/adc-joystick.yaml   |  9 ++++-----
->  .../bindings/leds/cznic,turris-omnia-leds.yaml    |  3 +--
->  .../devicetree/bindings/leds/leds-lp50xx.yaml     |  3 +--
->  .../devicetree/bindings/mfd/google,cros-ec.yaml   | 12 ++++--------
->  .../devicetree/bindings/mtd/nand-controller.yaml  |  8 +++-----
->  .../bindings/mtd/rockchip,nand-controller.yaml    |  3 +--
->  .../devicetree/bindings/net/ti,cpsw-switch.yaml   |  3 +--
->  .../bindings/phy/phy-stm32-usbphyc.yaml           |  3 +--
+"turn off resources for the devices - like calling
+clk_disable_unprepare(), for example"
 
-Acked-By: Vinod Koul <vkoul@kernel.org>
+pm_runtime_disable();
+pm_runtime_put_noidle();
+...
 
--- 
-~Vinod
+In this example, it would be too late to call pm_runtime_disable()
+through the pm_runtime_disable_action().
+
+Kind regards
+Uffe
+
+>
+> Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+>
+>  drivers/base/power/runtime.c | 5 +++++
+>  include/linux/pm_runtime.h   | 4 ++++
+>  2 files changed, 9 insertions(+)
+>
+> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> index 2f3cce17219b..d4059e6ffeae 100644
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -1476,11 +1476,16 @@ EXPORT_SYMBOL_GPL(pm_runtime_enable);
+>
+>  static void pm_runtime_disable_action(void *data)
+>  {
+> +       pm_runtime_dont_use_autosuspend(data);
+>         pm_runtime_disable(data);
+>  }
+>
+>  /**
+>   * devm_pm_runtime_enable - devres-enabled version of pm_runtime_enable.
+> + *
+> + * NOTE: this will also handle calling pm_runtime_dont_use_autosuspend() for
+> + * you at driver exit time if needed.
+> + *
+>   * @dev: Device to handle.
+>   */
+>  int devm_pm_runtime_enable(struct device *dev)
+> diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+> index 9f09601c465a..2bff6a10095d 100644
+> --- a/include/linux/pm_runtime.h
+> +++ b/include/linux/pm_runtime.h
+> @@ -567,6 +567,10 @@ static inline void pm_runtime_disable(struct device *dev)
+>   * Allow the runtime PM autosuspend mechanism to be used for @dev whenever
+>   * requested (or "autosuspend" will be handled as direct runtime-suspend for
+>   * it).
+> + *
+> + * NOTE: It's important to undo this with pm_runtime_dont_use_autosuspend()
+> + * at driver exit time unless your driver initially enabled pm_runtime
+> + * with devm_pm_runtime_enable() (which handles it for you).
+>   */
+>  static inline void pm_runtime_use_autosuspend(struct device *dev)
+>  {
+> --
+> 2.35.1.473.g83b2b277ed-goog
+>
