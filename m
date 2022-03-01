@@ -2,90 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C7434C819F
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 04:29:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C204C81BC
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 04:45:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiCADa3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Feb 2022 22:30:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49636 "EHLO
+        id S230224AbiCADpy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Feb 2022 22:45:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiCADa2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Feb 2022 22:30:28 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892026E8CD;
-        Mon, 28 Feb 2022 19:29:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646105388; x=1677641388;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sb+osfrcvZS2El/NBGqKsGRy9fYRkfIxjpOnZRPdc4M=;
-  b=SIFxQ1u82fJQzdY7bc+4mcDctEoQZvectaTnrEutPSj1bq4ncnGDEzPo
-   ueYYKg68SY5x/n1Zcggb7w5Fcul6hDIV2tHe6cBQi5N1VYDU2uQe5rcgd
-   EpTOY/gl8t2QFoj6e1n5q1vkhVd0LgYkxSCf/LQezK96l8s7R19z9HW1l
-   LhREPv3gE06i83nDGMbvaD3CYf/BI/X/SWctDkUyYRH2wI3tKIbZnxbDV
-   ieAk4h3BlmLIihPfW8ekVUmMFUmCPFBa60CCalhGscZvta4fU97K/7zQZ
-   F3vuDrnsib9PvTGOl557sqFTjDptenBfUodGAiptXzXnYvUFvjj3dRQc+
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10272"; a="316261415"
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="316261415"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2022 19:29:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,144,1643702400"; 
-   d="scan'208";a="575559283"
-Received: from lkp-server01.sh.intel.com (HELO 788b1cd46f0d) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 28 Feb 2022 19:29:46 -0800
-Received: from kbuild by 788b1cd46f0d with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nOtCr-00083t-LN; Tue, 01 Mar 2022 03:29:45 +0000
-Date:   Tue, 1 Mar 2022 11:28:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH linux-next] powercap/drivers/dtpm: dtpm_node_callback[]
- can be static
-Message-ID: <20220301032854.GA65991@baa819af95e9>
-References: <202203011104.TkmvSjFD-lkp@intel.com>
+        with ESMTP id S229670AbiCADpx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Feb 2022 22:45:53 -0500
+X-Greylist: delayed 656 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Feb 2022 19:45:11 PST
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E989066C8B
+        for <linux-pm@vger.kernel.org>; Mon, 28 Feb 2022 19:45:10 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 85F96E0042;
+        Mon, 28 Feb 2022 19:34:14 -0800 (PST)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id u3wRVrMtA28w; Mon, 28 Feb 2022 19:34:13 -0800 (PST)
+From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org
+Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        linux-kernel@vger.kernel.org, kernel@puri.sm,
+        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+Subject: [PATCH v2] thermal: qoriq: Only enable sites that actually exist
+Date:   Tue,  1 Mar 2022 04:34:02 +0100
+Message-Id: <20220301033402.415445-1-sebastian.krzyszkowiak@puri.sm>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202203011104.TkmvSjFD-lkp@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-drivers/powercap/dtpm.c:525:22: warning: symbol 'dtpm_node_callback' was not declared. Should it be static?
+On i.MX8MQ, enabling monitoring sites that aren't connected to anything
+can cause unwanted side effects on some units. This seems to happen
+once some of these sites report out-of-range readings and results in
+sensor misbehavior, such as thermal zone readings getting stuck or even
+suddenly reporting an impossibly high value, triggering emergency
+shutdowns.
 
-Fixes: 3759ec678e89 ("powercap/drivers/dtpm: Add hierarchy creation")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
+The datasheet lists all non-existent sites as "reserved" and doesn't
+make any guarantees about being able to enable them at all, so let's
+not do that. Instead, iterate over sensor DT nodes and only enable
+monitoring sites that are specified there prior to registering their
+thermal zones. This still fixes the issue with bogus data being
+reported on the first reading, but doesn't introduce problems that
+come with reading from non-existent sites.
+
+Fixes: 45038e03d633 ("thermal: qoriq: Enable all sensors before registering them")
+
+Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
 ---
- drivers/powercap/dtpm.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2: augment the commit message with details on what the patch is doing
+---
+ drivers/thermal/qoriq_thermal.c | 63 ++++++++++++++++++++++-----------
+ 1 file changed, 43 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
-index 414826a1509b6..6d890d8cf9169 100644
---- a/drivers/powercap/dtpm.c
-+++ b/drivers/powercap/dtpm.c
-@@ -522,7 +522,7 @@ static struct dtpm *dtpm_setup_dt(const struct dtpm_node *hierarchy,
+diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
+index 73049f9bea25..ef0848849ee2 100644
+--- a/drivers/thermal/qoriq_thermal.c
++++ b/drivers/thermal/qoriq_thermal.c
+@@ -32,7 +32,6 @@
+ #define TMR_DISABLE	0x0
+ #define TMR_ME		0x80000000
+ #define TMR_ALPF	0x0c000000
+-#define TMR_MSITE_ALL	GENMASK(15, 0)
  
- typedef struct dtpm * (*dtpm_node_callback_t)(const struct dtpm_node *, struct dtpm *);
+ #define REGS_TMTMIR	0x008	/* Temperature measurement interval Register */
+ #define TMTMIR_DEFAULT	0x0000000f
+@@ -129,33 +128,51 @@ static const struct thermal_zone_of_device_ops tmu_tz_ops = {
+ static int qoriq_tmu_register_tmu_zone(struct device *dev,
+ 				       struct qoriq_tmu_data *qdata)
+ {
+-	int id;
++	int ret = 0;
++	struct device_node *np, *child, *sensor_np;
  
--dtpm_node_callback_t dtpm_node_callback[] = {
-+static dtpm_node_callback_t dtpm_node_callback[] = {
- 	[DTPM_NODE_VIRTUAL] = dtpm_setup_virtual,
- 	[DTPM_NODE_DT] = dtpm_setup_dt,
- };
+-	if (qdata->ver == TMU_VER1) {
+-		regmap_write(qdata->regmap, REGS_TMR,
+-			     TMR_MSITE_ALL | TMR_ME | TMR_ALPF);
+-	} else {
+-		regmap_write(qdata->regmap, REGS_V2_TMSR, TMR_MSITE_ALL);
+-		regmap_write(qdata->regmap, REGS_TMR, TMR_ME | TMR_ALPF_V2);
+-	}
++	np = of_find_node_by_name(NULL, "thermal-zones");
++	if (!np)
++		return -ENODEV;
++
++	sensor_np = of_node_get(dev->of_node);
+ 
+-	for (id = 0; id < SITES_MAX; id++) {
++	for_each_available_child_of_node(np, child) {
+ 		struct thermal_zone_device *tzd;
+-		struct qoriq_sensor *sensor = &qdata->sensor[id];
+-		int ret;
++		struct qoriq_sensor *sensor;
++		int id, site;
++
++		ret = thermal_zone_of_get_sensor_id(child, sensor_np, &id);
++
++		if (ret < 0) {
++			dev_err(dev, "failed to get valid sensor id: %d\n", ret);
++			of_node_put(child);
++			break;
++		}
+ 
++		sensor = &qdata->sensor[id];
+ 		sensor->id = id;
+ 
++		/* Enable monitoring */
++		if (qdata->ver == TMU_VER1) {
++			site = 0x1 << (15 - id);
++			regmap_update_bits(qdata->regmap, REGS_TMR,
++					   site | TMR_ME | TMR_ALPF,
++					   site | TMR_ME | TMR_ALPF);
++		} else {
++			site = 0x1 << id;
++			regmap_update_bits(qdata->regmap, REGS_V2_TMSR, site, site);
++			regmap_write(qdata->regmap, REGS_TMR, TMR_ME | TMR_ALPF_V2);
++		}
++
+ 		tzd = devm_thermal_zone_of_sensor_register(dev, id,
+ 							   sensor,
+ 							   &tmu_tz_ops);
+-		ret = PTR_ERR_OR_ZERO(tzd);
+-		if (ret) {
+-			if (ret == -ENODEV)
+-				continue;
+-
+-			regmap_write(qdata->regmap, REGS_TMR, TMR_DISABLE);
+-			return ret;
++		if (IS_ERR(tzd)) {
++			ret = PTR_ERR(tzd);
++			dev_err(dev, "failed to register thermal zone: %d\n", ret);
++			of_node_put(child);
++			break;
+ 		}
+ 
+ 		if (devm_thermal_add_hwmon_sysfs(tzd))
+@@ -164,7 +181,13 @@ static int qoriq_tmu_register_tmu_zone(struct device *dev,
+ 
+ 	}
+ 
+-	return 0;
++	of_node_put(sensor_np);
++	of_node_put(np);
++
++	if (ret)
++		regmap_write(qdata->regmap, REGS_TMR, TMR_DISABLE);
++
++	return ret;
+ }
+ 
+ static int qoriq_tmu_calibration(struct device *dev,
+-- 
+2.35.1
+
