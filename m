@@ -2,193 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D4F4C8ADA
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 12:34:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 915F84C8B2D
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 12:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbiCALem (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 06:34:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
+        id S233938AbiCAL7P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 06:59:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbiCALel (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 06:34:41 -0500
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00365621C;
-        Tue,  1 Mar 2022 03:34:00 -0800 (PST)
-Received: by mail-ed1-f45.google.com with SMTP id i11so21548185eda.9;
-        Tue, 01 Mar 2022 03:34:00 -0800 (PST)
+        with ESMTP id S231856AbiCAL7O (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 06:59:14 -0500
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFE319C05;
+        Tue,  1 Mar 2022 03:58:33 -0800 (PST)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2dbd8777564so26716257b3.0;
+        Tue, 01 Mar 2022 03:58:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=bN9HlQf/NwTO54rjjqUiLXYpe71Rz0PB5yoR/LiS8uw=;
-        b=PF5vghQESz1Y37qnrL4LJr4Ss0Cw44MRbLn7ObpGwwLMSNDnFfAPvmFGls5WpJPNGT
-         Sfe0emQpg9y2lMDIYTQNMLV2C+GFTGk67/yIPS2LZIFVlrBrXFFrt6ZAD6CyLeFbxp/V
-         xFbpMoXfpzZVd2S+9W+mSY2XrqkyddzN5iyX9+HP6mgvKuVG0ElseZFEgyCfeNYIA72A
-         oCbR6WZhQwi6JOIz2jwbACLCh+1kGeAHuAjps2Z7WOTu2dS7OhdTLdpk9kyfKu0p5lIS
-         FWD0B2hx6Z4izrdAP6SMnsLSC+S74PFeN2Wo7g/EbD3Eog3d5jQIHBLgffFtjuC+HM7r
-         Vrhg==
-X-Gm-Message-State: AOAM533lkizEuYaaq7Ju+xIUV2i/HIiadoCGr8BX98OR5Hn3lcSbdnjM
-        /Jo7pBcz8oGaDdG/X/awbd96aRpU8mo=
-X-Google-Smtp-Source: ABdhPJyYkxVmcu5KkuZaTR8i62dfcTWKqlkpeUwLdp4ggobBYY1EzxO9vryMZ/bXpn484fVk1aBwIg==
-X-Received: by 2002:a05:6402:354c:b0:412:b2f2:f8e4 with SMTP id f12-20020a056402354c00b00412b2f2f8e4mr24202197edd.269.1646134439052;
-        Tue, 01 Mar 2022 03:33:59 -0800 (PST)
-Received: from [192.168.0.136] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.googlemail.com with ESMTPSA id s6-20020a170906354600b006d6e53cd014sm524344eja.94.2022.03.01.03.33.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 03:33:57 -0800 (PST)
-Message-ID: <748eb0e1-684c-a772-bccd-64b80780192f@kernel.org>
-Date:   Tue, 1 Mar 2022 12:33:56 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=A/qyIuOQFc+5Oiw6APjOzNbn2V6KNSLGl7+wUhPGEhg=;
+        b=KibNUAutmkI9lRylfk2wdD2rVkD/LeXnAwT+TMYaElpANUPK952R9be6UJPgG+7RO4
+         L2CECX155t8/RuBeHrIKGt+okFaF3jgFEOEWXIFHq90D1XBAxiP3lDqpxBlEM8SXYGYP
+         rBOFWtIUXGIX3SOFvGiqA9NHRFdA65JtkLZIyGFI05HhN2G14dhT/WSXm0L+ipG5Td2p
+         0whlICjHGeNwa5pbQ8+FoYM9p4mHunPT7W0Aa8OMr8e1LW9WrLqXjazN9mHaT1IW+87G
+         WhCxcc+TNaU9xxpTAkCW5o02ap1aKBXyXk3T76n2fgSQbqCC9Un7cbNHYYLNlM1NJqVN
+         wU2w==
+X-Gm-Message-State: AOAM53376Y44B5h7aki9yvIH6IFUReLk26tmA2Wwe1lTQ/KYp24ro/c6
+        pzBPv9wSK2oVnpSvt2K1po0XPUp1Z02D4I97RXY=
+X-Google-Smtp-Source: ABdhPJxfwWc5XOlIAl4ikhr+R/swVp/xFdJpL13TXoVN+ulkbXule/Hw8MPWANRbl5US2vaaZMLHkgESDlWFyjTE1ps=
+X-Received: by 2002:a81:1611:0:b0:2d6:3290:9bd3 with SMTP id
+ 17-20020a811611000000b002d632909bd3mr24746769yww.19.1646135912425; Tue, 01
+ Mar 2022 03:58:32 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5] cpuidle: sunplus: Create cpuidle driver for sunplus
- sp7021
-Content-Language: en-US
-To:     =?UTF-8?B?RWR3aW4gQ2hpdSDpgrHlnoLls7A=?= <edwin.chiu@sunplus.com>,
-        Edwin Chiu <edwinchiu0505tw@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+References: <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
+ <CAAYoRsW4LqNvSZ3Et5fqeFcHQ9j9-0u9Y-LN9DmpCS3wG3+NWg@mail.gmail.com>
+ <20220228041228.GH4548@shbuild999.sh.intel.com> <11956019.O9o76ZdvQC@kreacher>
+ <20220301055255.GI4548@shbuild999.sh.intel.com>
+In-Reply-To: <20220301055255.GI4548@shbuild999.sh.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 1 Mar 2022 12:58:19 +0100
+Message-ID: <CAJZ5v0jWUR__zn0=SDDecFct86z-=Y6v5fi37mMyW+zOBi7oWw@mail.gmail.com>
+Subject: Re: CPU excessively long times between frequency scaling driver calls
+ - bisected
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Doug Smythies <dsmythies@telus.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-References: <cover.1645427180.git.edwinchiu0505tw@gmail.com>
- <1628e048220f066204b8ac27f3cedf7f3cc02963.1645427180.git.edwinchiu0505tw@gmail.com>
- <394261d1-f1df-e80d-3591-10f2d649e731@kernel.org>
- <bcc7a0b58aad4f0989d7d86eaee2c746@sphcmbx02.sunplus.com.tw>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <bcc7a0b58aad4f0989d7d86eaee2c746@sphcmbx02.sunplus.com.tw>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/03/2022 10:30, Edwin Chiu 邱垂峰 wrote:
-> 
-> 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzk@kernel.org>
->> Sent: Tuesday, February 22, 2022 12:48 AM
->> To: Edwin Chiu <edwinchiu0505tw@gmail.com>; Edwin Chiu 邱垂峰 <edwin.chiu@sunplus.com>;
->> robh+dt@kernel.org; devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; rafael@kernel.org;
->> daniel.lezcano@linaro.org; linux-pm@vger.kernel.org
->> Subject: Re: [PATCH v5] cpuidle: sunplus: Create cpuidle driver for sunplus sp7021
->>
->> On 21/02/2022 08:26, Edwin Chiu wrote:
->>> Create cpuidle driver for sunplus sp7021 chip
->>>
->>> Signed-off-by: Edwin Chiu <edwinchiu0505tw@gmail.com>
->>> ---
->>> Changes in v3
->>>  - Rearrangement #include sequence
->>>  - Change remark style to /*~*/
->>>  - Align author email address to same as sob
->>>  - Optimal code
->>> Changes in v4
->>>  - According Rob Herringrobh's comment
->>>    There is no need for this binding.
->>>    Just wanting a different driver is not a reason
->>>    for a duplicate schema.
->>>    So remove yaml file and submit driver again.
->>> Changes in v5
->>>  - According Krzysztof's comment
->>>    You either use appropriate compatible in DT
->>>    or add your compatible to cpuidle-arm.
->>>    Even if this did not work, then the solution is to
->>>    use common parts, not to duplicate entire driver.
->>>    According Sudeep's comment
->>>    In short NACK for any dedicated driver for this platform,
->>>    use the generic cpuidle-arm driver with appropriate platform hooks
->>>    Create cpuidle-sunplus.c in arch/arm/mach-sunplus/
->>>    for hook generic cpuidle-arm driver
->>>
->>>  MAINTAINERS                                   |  6 ++
->>>  arch/arm/mach-sunplus/cpuidle-sunplus.c       | 88 +++++++++++++++++
->>>  include/linux/platform_data/cpuidle-sunplus.h | 12 ++++
->>>  3 files changed, 106 insertions(+)
->>>  create mode 100644 arch/arm/mach-sunplus/cpuidle-sunplus.c
->>>  create mode 100644 include/linux/platform_data/cpuidle-sunplus.h
->>>
->>> diff --git a/MAINTAINERS b/MAINTAINERS index e0dca8f..5c96428 100644
->>> --- a/MAINTAINERS
->>> +++ b/MAINTAINERS
->>> @@ -18252,6 +18252,12 @@ L:	netdev@vger.kernel.org
->>>  S:	Maintained
->>>  F:	drivers/net/ethernet/dlink/sundance.c
->>>
->>> +SUNPLUS CPUIDLE DRIVER
->>> +M:	Edwin Chiu <edwinchiu0505tw@gmail.com>
->>> +S:	Maintained
->>> +F:	arch/arm/mach-sunplus/cpuidle-sunplus.c
->>> +F:	include/linux/platform_data/cpuidle-sunplus.h
->>> +
->>>  SUPERH
->>>  M:	Yoshinori Sato <ysato@users.sourceforge.jp>
->>>  M:	Rich Felker <dalias@libc.org>
->>> diff --git a/arch/arm/mach-sunplus/cpuidle-sunplus.c
->>> b/arch/arm/mach-sunplus/cpuidle-sunplus.c
->>> new file mode 100644
->>> index 0000000..e9d9738
->>> --- /dev/null
->>> +++ b/arch/arm/mach-sunplus/cpuidle-sunplus.c
->>> @@ -0,0 +1,88 @@
->>> +// SPDX-License-Identifier: GPL-2.0-only
->>> +/*
->>> + * SP7021 cpu idle Driver.
->>> + * Copyright (C) Sunplus Tech / Tibbo Tech.
->>> + */
->>> +#define pr_fmt(fmt) "CPUidle arm: " fmt
->>> +
->>> +#include <linux/cpuidle.h>
->>> +#include <linux/of_device.h>
->>> +#include <linux/platform_data/cpuidle-sunplus.h>
->>> +
->>> +#include <asm/cpuidle.h>
->>> +
->>> +typedef int (*idle_fn)(void);
->>> +
->>> +static DEFINE_PER_CPU(idle_fn*, sp7021_idle_ops);
->>> +
->>> +static int sp7021_cpuidle_enter(unsigned long index) {
->>> +	return __this_cpu_read(sp7021_idle_ops)[index]();
->>> +}
->>> +static int sp7021_cpu_spc(void)
->>> +{
->>> +	cpu_v7_do_idle();   /* idle to WFI */
->>> +	return 0;
->>> +}
->>> +static const struct of_device_id sp7021_idle_state_match[] = {
->>> +	{ .compatible = "arm,idle-state", .data = sp7021_cpu_spc },
->>> +	{ },
->>> +};
->>
->> This is confusing. You want to have two drivers to bind to the same compatible? As I wrote in the
->> previous messages, you should simply use arm,idle-state just like few other architectures.
->>
->>
->> Best regards,
->> Krzysztof
-> 
-> 
-> The patch v5 implemented according your comment.
-> Used common part of arm,idle-state.
-> Create new enable-method for cpuidle.ops function.
-> It only have arm cpuidle driver exist now, no two drivers to bind to the same compatible.
-> 
-> What do you mean " simply use arm,idle-state just like few other architectures "?
+On Tue, Mar 1, 2022 at 6:53 AM Feng Tang <feng.tang@intel.com> wrote:
 >
+> On Mon, Feb 28, 2022 at 08:36:03PM +0100, Rafael J. Wysocki wrote:
+> > On Monday, February 28, 2022 5:12:28 AM CET Feng Tang wrote:
+> > > On Fri, Feb 25, 2022 at 04:36:53PM -0800, Doug Smythies wrote:
+> > > > On Fri, Feb 25, 2022 at 9:46 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> > > > >
+> > > > > On Thursday, February 24, 2022 9:08:30 AM CET Feng Tang wrote:
+> > > > ...
+> > > > > > > So it looks like a new mechanism is needed for that.
+> > > > > >
+> > > > > > If you think idle class is not the right place to solve it, I can
+> > > > > > also help testing new patches.
+> > > > >
+> > > > > So I have the appended experimental patch to address this issue that's not
+> > > > > been tested at all.  Caveat emptor.
+> > > >
+> > > > Hi Rafael,
+> > > >
+> > > > O.K., you gave fair warning.
+> > > >
+> > > > The patch applied fine.
+> > > > It does not compile for me.
+> > > > The function cpuidle_update_retain_tick does not exist.
+> > > > Shouldn't it be somewhere in cpuidle.c?
+> > > > I used the function cpuidle_disable_device as a template
+> > > > for searching and comparing.
+> > > >
+> > > > Because all of my baseline results are with kernel 5.17-rc3,
+> > > > that is what I am still using.
+> > > >
+> > > > Error:
+> > > > ld: drivers/cpufreq/intel_pstate.o: in function `intel_pstate_update_perf_ctl':
+> > > > intel_pstate.c:(.text+0x2520): undefined reference to
+> > > > `cpuidle_update_retain_tick'
+> > >
+> > > Same here, seems the cpuidle_update_retain_tick()'s implementation
+> > > is missing.
+> >
+> > That's a patch generation issue on my part, sorry.
+> >
+> > However, it was a bit racy, so maybe it's good that it was not complete.
+> >
+> > Below is a new version.
+>
+> Thanks for the new version. I just gave it a try,  and the occasional
+> long delay of cpufreq auto-adjusting I have seen can not be reproduced
+> after applying it.
 
-I mean, do it similarly (by using arm,idle-state and other related
-properties) to for example ti,am4372/ti,am3352.
+OK, thanks!
 
-Best regards,
-Krzysztof
+I'll wait for feedback from Dough, though.
+
+> As my test is a rough one which can't reproduce what Doug has seen
+> (including the power meter data), it's better to wait for his test result.
+>
+> And one minor question for the code.
+>
+> > ---
+> >  drivers/cpufreq/intel_pstate.c     |   40 ++++++++++++++++++++++++++++---------
+> >  drivers/cpuidle/governor.c         |   23 +++++++++++++++++++++
+> >  drivers/cpuidle/governors/ladder.c |    6 +++--
+> >  drivers/cpuidle/governors/menu.c   |    2 +
+> >  drivers/cpuidle/governors/teo.c    |    3 ++
+> >  include/linux/cpuidle.h            |    4 +++
+> >  6 files changed, 67 insertions(+), 11 deletions(-)
+> >
+> [SNIP]
+>
+> > Index: linux-pm/drivers/cpufreq/intel_pstate.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
+> > +++ linux-pm/drivers/cpufreq/intel_pstate.c
+> > @@ -19,6 +19,7 @@
+> >  #include <linux/list.h>
+> >  #include <linux/cpu.h>
+> >  #include <linux/cpufreq.h>
+> > +#include <linux/cpuidle.h>
+> >  #include <linux/sysfs.h>
+> >  #include <linux/types.h>
+> >  #include <linux/fs.h>
+> > @@ -1970,6 +1971,30 @@ static inline void intel_pstate_cppc_set
+> >  }
+> >  #endif /* CONFIG_ACPI_CPPC_LIB */
+> >
+> > +static void intel_pstate_update_perf_ctl(struct cpudata *cpu)
+> > +{
+> > +     int pstate = cpu->pstate.current_pstate;
+> > +
+> > +     /*
+> > +      * Avoid stopping the scheduler tick from cpuidle on CPUs in turbo
+> > +      * P-states to prevent them from getting back to the high frequency
+> > +      * right away after getting out of deep idle.
+> > +      */
+> > +     cpuidle_update_retain_tick(pstate > cpu->pstate.max_pstate);
+>
+> In our test, the workload will make CPU go to highest frequency before
+> going to idle, but should we also consider that the case that the
+> high but not highest cupfreq?
+
+This covers the entire turbo range (max_pstate is the highest non-turbo one).
