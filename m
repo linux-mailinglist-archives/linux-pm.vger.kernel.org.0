@@ -2,191 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D942A4C9713
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 21:36:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BC3A4C9747
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 21:47:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237820AbiCAUh0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 15:37:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53598 "EHLO
+        id S238073AbiCAUr4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 15:47:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237739AbiCAUhS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 15:37:18 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16173BBEA
-        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 12:36:36 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id t13so16879642lfd.9
-        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 12:36:36 -0800 (PST)
+        with ESMTP id S238341AbiCAUrq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 15:47:46 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A946A037
+        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 12:47:04 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id o18-20020a05600c4fd200b003826701f847so1370593wmq.4
+        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 12:47:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rAZcpGOFnijhfBt719P+IqprCBqe8sD9TF0Sez9IwiQ=;
-        b=F+7BPGYsO9QeRc6BTbvPUJxguXCTYika7fzNVLbSEfMjTVK29FjvhOtCtbBO2oalkB
-         9cweHARFFeQAeiDWhTrtcdfTzbCEOfTOrVCN9rTTV3Ek5jpvIVUt3aua8OA61CgDhA1w
-         zQABsshAfnGl6gFdFI9HcnnKU8AOre3uWnEew=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IWRthtglu8eRkkXULTpkF/YK78fARAhKmN/Na9bYdxE=;
+        b=raOrzakU/APpa/kW7WaNpnlDiHQsQWrah4PXR7VazQ709QDuZDRWaI5ZDGUha8asHe
+         0BgtqNM7KjebnpGOBNj44zPz4tATNqJKBCA8bAHe/qVZqIEsnCp/PrrlVsimSViKbGEu
+         kafoTuHoqY4zc6AHUteV1JTxOLOcWXB0ZbdkOx98RO9PMcV1HHb+CDjwhxfHBUiwDkNn
+         MWQHERhXBKie1Zoma1CJXznQxoJT+dIfKutalVdKK3CrMP3ud/Ke7JNGfTSjxbeo7+sG
+         K2vR7tvrnMf85YQGFnW/wFBAvyJJVti1cpVCJhKUlohibKw0kRR8tsOPWjoD4zc2bUwG
+         i3gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rAZcpGOFnijhfBt719P+IqprCBqe8sD9TF0Sez9IwiQ=;
-        b=quBYnJlvF0S9smCPpCh06Cu4wWmlitI+pcxi0DLhYO1HX1kUDerIFlNGMviYtNCSrW
-         AT5Oh8stJsMh/WWuPfZNsDaYWuF4aVWJoAg204mznuLYYQjDaemP2qIFoqmJ3pqcAJso
-         3jI6plCDSKjd8qHDsutOiArKFvwll3lmAA1RUej/OpRzBLNank58UCSczNI2hmYwvCNv
-         HHlwf5BVu++fU+hOkpkXuw5N/s0SkAyS8posePJDWVc3PYgKC16WbNgqDPlFqosZ3Mri
-         +3iQ7h/lIIReRrHVpw7u5h010ZKd7jbYdKLtcgss4czBP0C6izcXxQjyxb4kDQyJiV+n
-         3cLA==
-X-Gm-Message-State: AOAM532W1U1H0gXuZevu0y1ISMApUPvPd6xRy7/rw+x8hZaN3WbvJCEY
-        qlVfRgqieTXG/mCSx3c5TL3pnMHD3OIEdcolBkI=
-X-Google-Smtp-Source: ABdhPJzGlDZn2VyyX3e29JOOpvABeKqJftzlHDiiyTT3UoFtGjZpux/yaYVZJbFZ77MLkw7ZL5m/NA==
-X-Received: by 2002:a19:e302:0:b0:445:8acb:10db with SMTP id a2-20020a19e302000000b004458acb10dbmr11179938lfh.513.1646166994650;
-        Tue, 01 Mar 2022 12:36:34 -0800 (PST)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
-        by smtp.gmail.com with ESMTPSA id u5-20020a2eb805000000b0023cfa330e59sm2170644ljo.83.2022.03.01.12.36.31
-        for <linux-pm@vger.kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IWRthtglu8eRkkXULTpkF/YK78fARAhKmN/Na9bYdxE=;
+        b=TApT+vlZnzJnz4okM7bBqxuM0c3d6z3vatP7Z1+GhJiIfKVCFCe7bPD3d2xxQuuWf3
+         fynLhBEpv1xAleG+MFBseXanNngBnZFXFYSte5uZHy58lQhqHr1epixY+dQkofdW+b4k
+         Id+TML+/M8LIeBMGBt34IxYUxAn8FDcXejNShFiA0aydhf1hJzVS43noPO1wrK4NY+YX
+         FaGN1W5dx8KnRQ7ZUqdSKsDtSBsJ7Y8xQMqpJcOOqbJpHO8MppoUUinyU3bbixlKLktf
+         j08KeLrgQ1JtP0W0SEvOD5pdIOuFPdf9uzh6D7YdWCWgUd7xpuzqmnAs264aB+EB1wwf
+         IWWg==
+X-Gm-Message-State: AOAM531gY9QietaK9Wj3S+6fpLkrwsGCzdMEhwht1C6mbvvY9Y5nExfF
+        UGOwDXrbVX4bp/hhqRdW6eUyhg==
+X-Google-Smtp-Source: ABdhPJx3n8Px49CnN1M4jXMPkOofCg4r6VJP+S9+FplnOiXmS4KhG67BnLgQcm8RtSYN6IosPovTKA==
+X-Received: by 2002:a05:600c:19cf:b0:381:7ab1:46ef with SMTP id u15-20020a05600c19cf00b003817ab146efmr7024095wmq.104.1646167623121;
+        Tue, 01 Mar 2022 12:47:03 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:49e8:f41b:b2a3:3a55? ([2a01:e34:ed2f:f020:49e8:f41b:b2a3:3a55])
+        by smtp.googlemail.com with ESMTPSA id f18-20020a05600c155200b003816bac83f6sm3988949wmg.27.2022.03.01.12.47.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 12:36:32 -0800 (PST)
-Received: by mail-lj1-f173.google.com with SMTP id u11so23470483lju.4
-        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 12:36:31 -0800 (PST)
-X-Received: by 2002:ac2:44a4:0:b0:445:8fc5:a12a with SMTP id
- c4-20020ac244a4000000b004458fc5a12amr10608648lfm.27.1646166980002; Tue, 01
- Mar 2022 12:36:20 -0800 (PST)
+        Tue, 01 Mar 2022 12:47:02 -0800 (PST)
+Message-ID: <f6f61340-24b1-770e-6b8d-9b47218a87be@linaro.org>
+Date:   Tue, 1 Mar 2022 21:47:00 +0100
 MIME-Version: 1.0
-References: <20220228110822.491923-1-jakobkoschel@gmail.com> <20220228110822.491923-7-jakobkoschel@gmail.com>
-In-Reply-To: <20220228110822.491923-7-jakobkoschel@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 1 Mar 2022 12:36:03 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgLtKofBbn9kSXRU3MpdX7S2OxN1V5Mc679oJpFnp_VnQ@mail.gmail.com>
-Message-ID: <CAHk-=wgLtKofBbn9kSXRU3MpdX7S2OxN1V5Mc679oJpFnp_VnQ@mail.gmail.com>
-Subject: Re: [PATCH 6/6] treewide: remove check of list iterator against head
- past the loop body
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     linux-arch <linux-arch@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergman <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-sgx@vger.kernel.org, drbd-dev@lists.linbit.com,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-iio@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        dma <dmaengine@vger.kernel.org>,
-        linux1394-devel@lists.sourceforge.net,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        nouveau@lists.freedesktop.org,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        intel-wired-lan@lists.osuosl.org, Netdev <netdev@vger.kernel.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-usb@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org, KVM list <kvm@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical@lists.samba.org,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net,
-        v9fs-developer@lists.sourceforge.net,
-        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] thermal: brcmstb_thermal: Interrupt is optional
+Content-Language: en-US
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Markus Mayer <mmayer@broadcom.com>,
+        "maintainer:BROADCOM STB AVS TMON DRIVER" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        "open list:BROADCOM STB AVS TMON DRIVER" <linux-pm@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20210426213647.704823-1-f.fainelli@gmail.com>
+ <933c889e-dee0-4fc3-bf1a-b3655cabbb28@gmail.com>
+ <7359c3c1-8928-d448-e503-13f587cbb567@linaro.org>
+ <2f8da2c7-98c5-4061-2e16-42b7fd4f9694@gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <2f8da2c7-98c5-4061-2e16-42b7fd4f9694@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-So looking at this patch, I really reacted to the fact that quite
-often the "use outside the loop" case is all kinds of just plain
-unnecessary, but _used_ to be a convenience feature.
+On 01/03/2022 19:05, Florian Fainelli wrote:
+> 
+> 
+> On 9/17/2021 12:51 AM, Daniel Lezcano wrote:
+>>
+>> Applied, thanks
+> 
+> Was it applied? I still cannot find it in linux-next or Linus' tree.
+I thought it was :/
 
-I'll just quote the first chunk in it's entirely as an example - not
-because I think this chunk is particularly important, but because it's
-a good example:
 
-On Mon, Feb 28, 2022 at 3:09 AM Jakob Koschel <jakobkoschel@gmail.com> wrote:
->
-> diff --git a/arch/arm/mach-mmp/sram.c b/arch/arm/mach-mmp/sram.c
-> index 6794e2db1ad5..fc47c107059b 100644
-> --- a/arch/arm/mach-mmp/sram.c
-> +++ b/arch/arm/mach-mmp/sram.c
-> @@ -39,19 +39,22 @@ static LIST_HEAD(sram_bank_list);
->  struct gen_pool *sram_get_gpool(char *pool_name)
->  {
->         struct sram_bank_info *info = NULL;
-> +       struct sram_bank_info *tmp;
->
->         if (!pool_name)
->                 return NULL;
->
->         mutex_lock(&sram_lock);
->
-> -       list_for_each_entry(info, &sram_bank_list, node)
-> -               if (!strcmp(pool_name, info->pool_name))
-> +       list_for_each_entry(tmp, &sram_bank_list, node)
-> +               if (!strcmp(pool_name, tmp->pool_name)) {
-> +                       info = tmp;
->                         break;
-> +               }
->
->         mutex_unlock(&sram_lock);
->
-> -       if (&info->node == &sram_bank_list)
-> +       if (!info)
->                 return NULL;
->
->         return info->gpool;
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-I realize this was probably at least auto-generated with coccinelle,
-but maybe that script could be taught to do avoid the "use after loop"
-by simply moving the code _into_ the loop.
-
-IOW, this all would be cleaner and clear written as
-
-        if (!pool_name)
-                return NULL;
-
-        mutex_lock(&sram_lock);
-        list_for_each_entry(info, &sram_bank_list, node) {
-                if (!strcmp(pool_name, info->pool_name)) {
-                        mutex_unlock(&sram_lock);
-                        return info;
-                }
-        }
-        mutex_unlock(&sram_lock);
-        return NULL;
-
-Ta-daa - no use outside the loop, no need for new variables, just a
-simple "just do it inside the loop". Yes, we end up having that lock
-thing twice, but it looks worth it from a "make the code obvious"
-standpoint.
-
-Would it be even cleaner if the locking was done in the caller, and
-the loop was some simple helper function? It probably would. But that
-would require a bit more smarts than probably a simple coccinelle
-script would do.
-
-                Linus
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
