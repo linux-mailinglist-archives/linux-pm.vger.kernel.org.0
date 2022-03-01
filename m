@@ -2,61 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC394C896B
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 11:38:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA034C899A
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 11:47:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234314AbiCAKjB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 05:39:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54382 "EHLO
+        id S232789AbiCAKrj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 05:47:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234302AbiCAKjA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 05:39:00 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C9F13CC7
-        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 02:38:19 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id s25so21267906lji.5
-        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 02:38:19 -0800 (PST)
+        with ESMTP id S232700AbiCAKrj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 05:47:39 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3748BE02
+        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 02:46:58 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id r20so21328949ljj.1
+        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 02:46:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Omz5gzwo4aJlILXVhXK03oGpHG1ApzpOAfyGCi5xOHM=;
-        b=qGMMfoYqfanaKo2fc2sZLShhCfqBXms0+/0P9nAD+fwPyDrn+Rj0L85pyvcaQFmFGm
-         hAv4RxXp3kx4LjgY7giQfALYTr/ekGZCab/NZ2FCGmzK9jxy4QJCQuW5i0TzKaI159S0
-         QGbX8NCQBm9y2cUVMm6HgeyftsApenBKIuSQtlX+d+z5PCZCHHolWlw0plzDIWj4Usaj
-         hdvkuZnwEmA++s5vrIOZK6BRaaqE2pNbLn4F31PtOK3J9U+uxSDFAJfC70jZxtdnnCLQ
-         AGpomoJJc8JkXbhWqRD4RgXXLMxOPkDmjhZENhLnVYf4gZqLOIANScXfqfsZMJEsqFHx
-         TMjw==
+        bh=rnV9MOMDMud5b3YWUikIL0pv7sKgaX7Li/OdkySNYLY=;
+        b=YOCWqG+oypVn1NlC909jw6wtQ2qG6OkdilA5XVKhUBAOJLT7xPgOYtOH6SiXgg+Yux
+         CPSM4a/wxJhYh0W70txaMPstlAw4EiDCgYdTForvI9WbWtrY7ysAmJRl7Yg/4+Su7ZJD
+         zRnNAWdhwLF+9xScW9apOyd1VpjdNHrPckvR+R7Q3viSf+RhB358+qr4uLu1H59XgFeq
+         xSmSCyxRfbFfos5M3DUVShGRApUk+1KCCTLiu889yNsNzk/I0yotOF7nrazqDFYg8MxN
+         PpCu+LMKfbLPWiShh3FNWtUqljfLphSgI6ro7m1vZyvmajlsK1RRfTZOB9PuTOZc0EB6
+         jFWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Omz5gzwo4aJlILXVhXK03oGpHG1ApzpOAfyGCi5xOHM=;
-        b=n/tVGDL8EYFVKRMr0HSnCJGlvnVBn8+nKXkGgvfaclQn6DkbIXEz1YGk5Y5S//NMKC
-         kIlYMwNzy5NcGZJ+EDIbTwzjBWfCyqXS9WiRucVF32BW2Rj4mStR4ovQsMkxJ7vY6fxi
-         2AfZvFXUR07VyfPbL5RA8A9K75Ep08q/eqrTSsEB3AOtmHtyQTvV1WbKlrswRflI2ynG
-         wpdndRhT/ZzbYxTeEZ/5EMdQJnStjKCO83GPV5sm37GTRZ6ObSPu5uoVEal72hMxaog0
-         bElrdXIO0KhLbtlUhqidfVe5Lu3rcr2k+eKvrfwDtF8cK4AAcAN0Nn5uAhRLiQPmE+zg
-         g1Nw==
-X-Gm-Message-State: AOAM530/kIkoF/F6l+cAGYgB7ig7RPG/kwaeFxj+nWEP/rKum0i7m6Rv
-        I0/Q/isdZlbjtYGhcpjKCNseXnoFftUUeVrUVvH7ig==
-X-Google-Smtp-Source: ABdhPJywlPCioo2/+DVdHzNQQkG8kpU+jzVjiPnR1HyRr/ivK6iJFvw1wPBnWBbm1QWeNvd+RMeF6YoCaxZSAavIZ4U=
-X-Received: by 2002:a2e:9cc5:0:b0:239:da6e:290d with SMTP id
- g5-20020a2e9cc5000000b00239da6e290dmr17130771ljj.4.1646131097502; Tue, 01 Mar
- 2022 02:38:17 -0800 (PST)
+        bh=rnV9MOMDMud5b3YWUikIL0pv7sKgaX7Li/OdkySNYLY=;
+        b=d+q0GKL602b8xjr+yxyTB8xZE/zTDtW40uIpWKJA+EaU8vLNTFHtwAvOjyi5isURgG
+         jvHb9j/SRhId2cv65X6JNbp1UEsmqhR7NTVFiDY+aNgGqan2wMLOizXicAKq9Ns+/3rD
+         Kv5quHOc8/W+hzNcfJ79AdVB9LnEriypwdiCaj6R1STvzvoQGNs5V6U8/++SxWwGFQEd
+         67Mhih6Yp+hozmKVrlW7cBdiygnvjHM+K4+SJtRk7t/nzBeD6IpPdIJOOENdI2/KnSqZ
+         gBJ0hjkwECk+qjqh8U3iL2ki4UuNuQnCLucEj8ZFnINUIXUv1LWHMY5NLqmOB/QFYw27
+         /qDg==
+X-Gm-Message-State: AOAM532SeCajKFnuKsle5vXLlf7yZMcQCoWmxJllom1wOIpNMD8El7CU
+        uderbH9wS+v2dloQbJ4/HTNW37rMkLcQQk3k5cPGGQ==
+X-Google-Smtp-Source: ABdhPJxHZlthLuC9WaupbqdLgFrH9guhS4/CWc+S8E9l03fe+QxigB9DuYCSqzqBkCCuQleWnmu0k6jCIWyM2/YZI6E=
+X-Received: by 2002:a2e:8603:0:b0:246:24c:b79c with SMTP id
+ a3-20020a2e8603000000b00246024cb79cmr16849078lji.367.1646131616563; Tue, 01
+ Mar 2022 02:46:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20220225064815.444571-1-shawnguo@kernel.org>
-In-Reply-To: <20220225064815.444571-1-shawnguo@kernel.org>
+References: <20220225082420.450620-1-shawn.guo@linaro.org>
+In-Reply-To: <20220225082420.450620-1-shawn.guo@linaro.org>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 1 Mar 2022 11:37:41 +0100
-Message-ID: <CAPDyKFq195ptPe1i71mcQG+VLvLWgrYD0kF8ZNV-KLOqS0td4g@mail.gmail.com>
-Subject: Re: [PATCH] PM: domains: Fix sleep-in-atomic bug caused by genpd_debug_remove()
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>
-Cc:     Kevin Hilman <khilman@kernel.org>,
-        Thierry Strudel <tstrudel@google.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shawn Guo <shawn.guo@linaro.org>
+Date:   Tue, 1 Mar 2022 11:46:20 +0100
+Message-ID: <CAPDyKFqSqzrbA9vCnw18cHmCua8Hb4mrBvQE7v6hLioJhmDcqw@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: psci: Iterate backwards over list in psci_pd_remove()
+To:     Shawn Guo <shawn.guo@linaro.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -68,83 +67,59 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 25 Feb 2022 at 07:48, Shawn Guo <shawnguo@kernel.org> wrote:
+On Fri, 25 Feb 2022 at 09:24, Shawn Guo <shawn.guo@linaro.org> wrote:
 >
-> From: Shawn Guo <shawn.guo@linaro.org>
+> In case that psci_pd_init_topology() fails for some reason,
+> psci_pd_remove() will be responsible for deleting provider and removing
+> genpd from psci_pd_providers list.  There will be a failure when removing
+> the cluster PD, because the cpu (child) PDs haven't been removed.
 >
-> When a genpd with GENPD_FLAG_IRQ_SAFE gets removed, the following
-> sleep-in-atomic bug will be seen, as genpd_debug_remove() will be called
-> with a spinlock being held.
+> [    0.050232] CPUidle PSCI: init PM domain cpu0
+> [    0.050278] CPUidle PSCI: init PM domain cpu1
+> [    0.050329] CPUidle PSCI: init PM domain cpu2
+> [    0.050370] CPUidle PSCI: init PM domain cpu3
+> [    0.050422] CPUidle PSCI: init PM domain cpu-cluster0
+> [    0.050475] PM: genpd_remove: unable to remove cpu-cluster0
+> [    0.051412] PM: genpd_remove: removed cpu3
+> [    0.051449] PM: genpd_remove: removed cpu2
+> [    0.051499] PM: genpd_remove: removed cpu1
+> [    0.051546] PM: genpd_remove: removed cpu0
 >
-> [    0.029183] BUG: sleeping function called from invalid context at kernel/locking/rwsem.c:1460
-> [    0.029204] in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 1, name: swapper/0
-> [    0.029219] preempt_count: 1, expected: 0
-> [    0.029230] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc4+ #489
-> [    0.029245] Hardware name: Thundercomm TurboX CM2290 (DT)
-> [    0.029256] Call trace:
-> [    0.029265]  dump_backtrace.part.0+0xbc/0xd0
-> [    0.029285]  show_stack+0x3c/0xa0
-> [    0.029298]  dump_stack_lvl+0x7c/0xa0
-> [    0.029311]  dump_stack+0x18/0x34
-> [    0.029323]  __might_resched+0x10c/0x13c
-> [    0.029338]  __might_sleep+0x4c/0x80
-> [    0.029351]  down_read+0x24/0xd0
-> [    0.029363]  lookup_one_len_unlocked+0x9c/0xcc
-> [    0.029379]  lookup_positive_unlocked+0x10/0x50
-> [    0.029392]  debugfs_lookup+0x68/0xac
-> [    0.029406]  genpd_remove.part.0+0x12c/0x1b4
-> [    0.029419]  of_genpd_remove_last+0xa8/0xd4
-> [    0.029434]  psci_cpuidle_domain_probe+0x174/0x53c
-> [    0.029449]  platform_probe+0x68/0xe0
-> [    0.029462]  really_probe+0x190/0x430
-> [    0.029473]  __driver_probe_device+0x90/0x18c
-> [    0.029485]  driver_probe_device+0x40/0xe0
-> [    0.029497]  __driver_attach+0xf4/0x1d0
-> [    0.029508]  bus_for_each_dev+0x70/0xd0
-> [    0.029523]  driver_attach+0x24/0x30
-> [    0.029534]  bus_add_driver+0x164/0x22c
-> [    0.029545]  driver_register+0x78/0x130
-> [    0.029556]  __platform_driver_register+0x28/0x34
-> [    0.029569]  psci_idle_init_domains+0x1c/0x28
-> [    0.029583]  do_one_initcall+0x50/0x1b0
-> [    0.029595]  kernel_init_freeable+0x214/0x280
-> [    0.029609]  kernel_init+0x2c/0x13c
-> [    0.029622]  ret_from_fork+0x10/0x20
+> Fix the problem by iterating the provider list in a reversely order, so
+> that parent PD gets removed before child's PDs.
 >
-> It doesn't seem necessary to call genpd_debug_remove() with the lock, so
-> move it out from locking to fix the problem.
->
-> Fixes: 718072ceb211 ("PM: domains: create debugfs nodes when adding power domains")
 > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
 
 Thanks for fixing this!
 
 Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Rafael, I think we should tag this for stable kernels too.
+I think we should add a fixes tag, like below and also tag this for
+stable kernels.
+
+Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by using genpd")
 
 Kind regards
 Uffe
 
 > ---
->  drivers/base/power/domain.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/cpuidle/cpuidle-psci-domain.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 >
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 5db704f02e71..7e8039d1884c 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -2058,9 +2058,9 @@ static int genpd_remove(struct generic_pm_domain *genpd)
->                 kfree(link);
->         }
+> diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+> index ff2c3f8e4668..ce5c415fb04d 100644
+> --- a/drivers/cpuidle/cpuidle-psci-domain.c
+> +++ b/drivers/cpuidle/cpuidle-psci-domain.c
+> @@ -182,7 +182,8 @@ static void psci_pd_remove(void)
+>         struct psci_pd_provider *pd_provider, *it;
+>         struct generic_pm_domain *genpd;
 >
-> -       genpd_debug_remove(genpd);
->         list_del(&genpd->gpd_list_node);
->         genpd_unlock(genpd);
-> +       genpd_debug_remove(genpd);
->         cancel_work_sync(&genpd->power_off_work);
->         if (genpd_is_cpu_domain(genpd))
->                 free_cpumask_var(genpd->cpus);
+> -       list_for_each_entry_safe(pd_provider, it, &psci_pd_providers, link) {
+> +       list_for_each_entry_safe_reverse(pd_provider, it,
+> +                                        &psci_pd_providers, link) {
+>                 of_genpd_del_provider(pd_provider->node);
+>
+>                 genpd = of_genpd_remove_last(pd_provider->node);
 > --
 > 2.25.1
 >
