@@ -2,123 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 305424C914D
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 18:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA3C4C9152
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 18:18:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236440AbiCARSd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 12:18:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
+        id S231985AbiCARTI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 12:19:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236438AbiCARSc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 12:18:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01BB931DFC
-        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 09:17:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646155063;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vU3c8INkyRrLYmMmG6yRKZ1MJ2tssrI6rFUsT1snRg0=;
-        b=LI4N+48OsQHomdrVNAKBoKHpxQ6dNDSuA78AkSTP8QwHedAMzOhXdyeS00T/50xPBloNcX
-        HyYjg43K8VRh4r+JyuxAviDrja0RJCHUk4UcI0KVDuCNvzSxRJ/1DGV+J+I8LrSnvlhYyp
-        daAzQ33kuecB+0qpuNjelobBFi8Eotc=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-612-Dn0cwPqCMiOPQUc1cb0ZvA-1; Tue, 01 Mar 2022 12:17:41 -0500
-X-MC-Unique: Dn0cwPqCMiOPQUc1cb0ZvA-1
-Received: by mail-wr1-f72.google.com with SMTP id h11-20020a5d430b000000b001f01a35a86fso840111wrq.4
-        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 09:17:40 -0800 (PST)
+        with ESMTP id S236431AbiCARTH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 12:19:07 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996352DABD
+        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 09:18:25 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id u7so22732316ljk.13
+        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 09:18:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zOGmojwA30pg/gshCHQVR3nc13CD5CENWNrHNgWB7LQ=;
+        b=Y3HPP7zy6Wdu6joJdXVJnjRHMexOCUgomZx2WMTBB3MkV5OpVazBJmVD3lb8JSHfYW
+         vggaKe/i8uWZjhGkJSU1cJy4UtQmNN4P0WUQVLN+TnVZBIPcbaNBc7KD/LhsberKXCoA
+         eUe9CbdkjXUguz0HaxgOIqVM8QFOoBq2fY2xSYeHFQSH1sXCN6fIEq8jCwOnGCEB2xGV
+         etADwH6L5Zxh8usb3Dl9pUHHwHaNb9e7FF30/jcMmlQ1filTZcKARX0eMYvXzekF6L82
+         6Hw8IJig2WvPpghYhbaaH7uluQJ7xQL9UeYrvTlDH2qnOke1brcJJ4MgOh2Vw0iNhLOU
+         IX8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vU3c8INkyRrLYmMmG6yRKZ1MJ2tssrI6rFUsT1snRg0=;
-        b=yoHTJtJkJKxjh4ACO7Mp7cfI+LMBZa8OZW6LLKS5a3WM1JtCkOmu8uYqq8g2F5P+yR
-         5nOD1soZ3ci7c51bwAFS0HSmSSq0JIfijOXr3RRhf6fUbsrvPrZFdv9e4fbx1S1vrW5o
-         2e/f8GvLvY7mkKpi3TrDuBR2Tw9vLLJk2S8APx8NYTh6KvkstI/H64wKL8Am3CQFWv5b
-         JYlsb+5lk1Va2ggMF6MArengBbo5HXxkde8QKj8XyYzO/5cQVTP75Npk7NrFGmbkZ0u/
-         7XrcDq/JwY7j7IEU0Wfl5cZ0za52wRyD9bLiw4qShdIGgV0L9/MV9Fx60dsdUry2e+c0
-         +Z/Q==
-X-Gm-Message-State: AOAM532/BW/3QnpnR01OiSggWsVbuOU9f46LEMgj591X2xGKtwjRY4aw
-        fIGUlfW0Ut59rEK5lzJtwccJTK+BlE3FhYz2nBe4GY1Z4jjrRDPfqco8PK0mPyzp5iBemOBivEc
-        HV2GfrtbokiIsxiQlH64=
-X-Received: by 2002:a5d:61ca:0:b0:1f0:22ef:bb9f with SMTP id q10-20020a5d61ca000000b001f022efbb9fmr1534524wrv.56.1646155059888;
-        Tue, 01 Mar 2022 09:17:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzm0/sILq9s5oSrG8KTBgACJNRqT1mtZa0IVWQDeU62j8WMqO9Pb3os150cIhmIfKb7xYMP0Q==
-X-Received: by 2002:a5d:61ca:0:b0:1f0:22ef:bb9f with SMTP id q10-20020a5d61ca000000b001f022efbb9fmr1534511wrv.56.1646155059630;
-        Tue, 01 Mar 2022 09:17:39 -0800 (PST)
-Received: from redhat.com ([2.53.2.184])
-        by smtp.gmail.com with ESMTPSA id w26-20020a7bc11a000000b0037bf8fa8c02sm2970118wmi.13.2022.03.01.09.17.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 09:17:38 -0800 (PST)
-Date:   Tue, 1 Mar 2022 12:17:33 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Laszlo Ersek <lersek@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-hyperv@vger.kernel.org, linux-crypto@vger.kernel.org,
-        graf@amazon.com, mikelley@microsoft.com,
-        gregkh@linuxfoundation.org, adrian@parity.io, berrange@redhat.com,
-        linux@dominikbrodowski.net, jannh@google.com, rafael@kernel.org,
-        len.brown@intel.com, pavel@ucw.cz, linux-pm@vger.kernel.org,
-        colmmacc@amazon.com, tytso@mit.edu, arnd@arndb.de
-Subject: Re: propagating vmgenid outward and upward
-Message-ID: <20220301121419-mutt-send-email-mst@kernel.org>
-References: <Yh4+9+UpanJWAIyZ@zx2c4.com>
- <223f858c-34c5-3ccd-b9e8-7585a976364d@redhat.com>
- <Yh5JwK6toc/zBNL7@zx2c4.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zOGmojwA30pg/gshCHQVR3nc13CD5CENWNrHNgWB7LQ=;
+        b=DHhWdsH5tXoOKHRMK81g18Btd7Pc0TwUIt7GJTezKNqXJICTxL+h6Yd1Ns41JLudlp
+         hmNZtbOnui18qLCkCtPaq38ubxMbbrABtpodGBpOYUIFsX8v52SG0eVZOCOWWgladILi
+         Hvq4FZle3aqWcCy5/pkIG+t0yRx/Mxz2xeyiTpyeCkJy1iHHMA0I1SIqs7vI6ux7DtfQ
+         f2nG5FhSmY+aLv0tEiZkExUxknOFl/bkJ6o2dbuD8hxJgRfTaGmbCjSIUCNiACOF8e3h
+         U0cbJouYtH4utuhK+4u03+KbNzA77eaGchq5J3qLaJsCqJm6k75l81W442aFLeyb4Dxl
+         BKQw==
+X-Gm-Message-State: AOAM533EGIcknt9q/z47+bWJY03bnWfBjmvfigpnDKv4j/wqKtQEV34y
+        bdg93AXkpj/yNP8xsWfn7LSwhvejfWT0+yRu7Op9mA==
+X-Google-Smtp-Source: ABdhPJxVpgzlZUjaEeDxXtwpjgMRDodY1U9aAK87DPuyBXcvVZmF6hFZhl3lFXcRrD3JfP7/Cnj/vIJttwvo8WPTQTo=
+X-Received: by 2002:a05:651c:1542:b0:233:8ff5:eb80 with SMTP id
+ y2-20020a05651c154200b002338ff5eb80mr17596891ljp.352.1646155103364; Tue, 01
+ Mar 2022 09:18:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yh5JwK6toc/zBNL7@zx2c4.com>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
+ <CAAYoRsW4LqNvSZ3Et5fqeFcHQ9j9-0u9Y-LN9DmpCS3wG3+NWg@mail.gmail.com>
+ <20220228041228.GH4548@shbuild999.sh.intel.com> <11956019.O9o76ZdvQC@kreacher>
+ <20220301055255.GI4548@shbuild999.sh.intel.com> <CAJZ5v0jWUR__zn0=SDDecFct86z-=Y6v5fi37mMyW+zOBi7oWw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jWUR__zn0=SDDecFct86z-=Y6v5fi37mMyW+zOBi7oWw@mail.gmail.com>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Tue, 1 Mar 2022 09:18:12 -0800
+Message-ID: <CAAYoRsVLOcww0z4mp9TtGCKdrgeEiL_=FgrUO=rwkZAok4sQdg@mail.gmail.com>
+Subject: Re: CPU excessively long times between frequency scaling driver calls
+ - bisected
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Feng Tang <feng.tang@intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        dsmythies <dsmythies@telus.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 01, 2022 at 05:28:48PM +0100, Jason A. Donenfeld wrote:
-> Hi Laszlo,
-> 
-> On Tue, Mar 01, 2022 at 05:15:21PM +0100, Laszlo Ersek wrote:
-> > > If we had a "pull" model, rather than just expose a 16-byte unique
-> > > identifier, the vmgenid virtual hardware would _also_ expose a
-> > > word-sized generation counter, which would be incremented every time the
-> > > unique ID changed. Then, every time we would touch the RNG, we'd simply
-> > > do an inexpensive check of this memremap()'d integer, and reinitialize
-> > > with the unique ID if the integer changed.
-> > 
-> > Does the vmgenid spec (as-is) preclude the use of the 16-byte identifier
-> > like this?
-> > 
-> > After all, once you locate the identifier via the ADDR object, you could
-> > perhaps consult it every time you were about to touch the RNG.
-> 
-> No, you could in fact do this, and there'd be nothing wrong with that
-> from a spec perspective. You could even vDSO it all the way through
-> onward to userspace. However, doing a 16-byte atomic memcmp on
-> each-and-every packet is really a non-starter. For that kind of "check
-> it in the hot path" thing to be viable, you really want it to be a
-> counter that is word-sized. The "pull"-model involves pulling on every
-> single packet in order to be better than the "push"-model. Anyway, even
-> with a word-sized counter, it's unclear whether the costs of checking on
-> every packet would be worth it to everyone, but at least it's more
-> tenable than a 16-byte whammy.
-> 
-> Jason
+On Tue, Mar 1, 2022 at 3:58 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> On Tue, Mar 1, 2022 at 6:53 AM Feng Tang <feng.tang@intel.com> wrote:
+> > On Mon, Feb 28, 2022 at 08:36:03PM +0100, Rafael J. Wysocki wrote:
+...
+> > >
+> > > However, it was a bit racy, so maybe it's good that it was not complete.
+> > >
+> > > Below is a new version.
+> >
+> > Thanks for the new version. I just gave it a try,  and the occasional
+> > long delay of cpufreq auto-adjusting I have seen can not be reproduced
+> > after applying it.
+>
+> OK, thanks!
+>
+> I'll wait for feedback from Dough, though.
 
-Hmm okay, so it's a performance optimization... some batching then? Do
-you really need to worry about every packet? Every 64 packets not
-enough?  Packets are after all queued at NICs etc, and VM fork can
-happen after they leave wireguard ...
+Hi Rafael,
 
--- 
-MST
+Thank you for your version 2 patch.
+I screwed up an overnight test and will have to re-do it.
+However, I do have some results.
 
+From reading the patch code, one worry was the
+potential to drive down the desired/required CPU
+frequency for the main periodic workflow, causing
+overruns, or inability of the task to complete its
+work before the next period. I have always had overrun
+information, but it has never been relevant before.
+
+The other worry was if the threshold of
+turbo/not turbo frequency is enough.
+
+I do not know how to test any final solution
+thoroughly, as so far I have simply found a
+good enough problematic example.
+We have so many years of experience with
+the convenient multi second NMI forcing
+lingering high pstate clean up. I'd keep it
+deciding within it if the TSC stuff needs to be
+executed or not.
+
+Anyway...
+
+Base Kernel 5.17-rc3.
+"stock" : unmodified.
+"revert" : with commit b50db7095fe reverted
+"rjw-2" : with this version2 patch added.
+
+Test 1 (as before. There is no test 2, yet.):
+347 Hertz work/sleep frequency on one CPU while others do
+virtually no load but enough to increase the requested pstate,
+but at around 0.02 hertz aggregate.
+
+It is important to note the main load is approximately
+38.6% @ 2.422 GHz, or 100% at 0.935 GHz.
+and almost exclusively uses idle state 2 (of
+4 total idle states)
+
+/sys/devices/system/cpu/cpu7/cpuidle/state0/name:POLL
+/sys/devices/system/cpu/cpu7/cpuidle/state1/name:C1_ACPI
+/sys/devices/system/cpu/cpu7/cpuidle/state2/name:C2_ACPI
+/sys/devices/system/cpu/cpu7/cpuidle/state3/name:C3_ACPI
+
+Turbostat was used. ~10 samples at 300 seconds per.
+Processor package power (Watts):
+
+Workflow was run for 1 hour each time or 1249201 loops.
+
+revert:
+ave: 3.00
+min: 2.89
+max: 3.08
+ave freq: 2.422 GHz.
+overruns: 1.
+max overrun time: 113 uSec.
+
+stock:
+ave: 3.63 (+21%)
+min: 3.28
+max: 3.99
+ave freq: 2.791 GHz.
+overruns: 2.
+max overrun time: 677 uSec.
+
+rjw-2:
+ave: 3.14 (+5%)
+min: 2.97
+max: 3.28
+ave freq: 2.635 GHz
+overruns: 1042.
+max overrun time: 9,769 uSec.
+
+... Doug
