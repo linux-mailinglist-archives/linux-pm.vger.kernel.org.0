@@ -2,94 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92EFA4C9231
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 18:52:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5474C9236
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 18:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234670AbiCARwr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 12:52:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52576 "EHLO
+        id S236249AbiCARyM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 12:54:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbiCARwr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 12:52:47 -0500
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB29210FF1;
-        Tue,  1 Mar 2022 09:52:05 -0800 (PST)
-Received: by mail-yb1-f178.google.com with SMTP id u3so28756038ybh.5;
-        Tue, 01 Mar 2022 09:52:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=35y70918qwBmXToXnIlfMJ+QtDpOKlYytNslF63tLek=;
-        b=tUmv2TORQghAzhlhQNYo8KLFpmAIlug1u6HGmbK7p8+Rsv00GkDaNzrWe6blLVRPoA
-         /Rv0+xGJl67XJ+j1KcJSRA4rwu9kkh9dlj2dh+jtdxnTmpuzolTpHu/uEuBx4uN56oPW
-         576F6/PzeyaDITJfi/f+72cG1PLRy+PMoru4XILaKYLKpow732UclyfRTELVZdI0zCDG
-         9iZQKkgIFlJ7rfBvmy9THhDAHuJFRxRzAU2+SKd6iHIslJO1QWOv429spunXFUGTQGPi
-         oCowzEqOgFczR3BXNO2jom+SfFBK1uqUvU3GrC4qc36F+WJZtCdOakX8C4GQBl7T1Z6e
-         y8wg==
-X-Gm-Message-State: AOAM5307YnRMjtjwotJBSIqG4wgB8oYHCfcxhb7DaFRYsPSA2EHykMAW
-        ffWgHBjtwJA3yZ69i2GyO4r2JDqNAndaGSflYOU=
-X-Google-Smtp-Source: ABdhPJwv7AFIWqHBfBLq39zM/tZSi4P5b9S8dgIgqDdTxwpg6EUYOKmCzvTZnlclki3/Ate2AJPe9j+vAM1hdvdQuqs=
-X-Received: by 2002:a25:fe10:0:b0:625:262f:e792 with SMTP id
- k16-20020a25fe10000000b00625262fe792mr23181765ybe.365.1646157125190; Tue, 01
- Mar 2022 09:52:05 -0800 (PST)
+        with ESMTP id S233793AbiCARyL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 12:54:11 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73E9E29B;
+        Tue,  1 Mar 2022 09:53:28 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D6F7A1042;
+        Tue,  1 Mar 2022 09:53:27 -0800 (PST)
+Received: from [10.57.20.71] (unknown [10.57.20.71])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 92F3B3F73D;
+        Tue,  1 Mar 2022 09:53:25 -0800 (PST)
+Message-ID: <79fa792f-adb4-8c98-507d-55dc2a6273ea@arm.com>
+Date:   Tue, 1 Mar 2022 17:53:23 +0000
 MIME-Version: 1.0
-References: <20220228220532.8531-1-rdunlap@infradead.org>
-In-Reply-To: <20220228220532.8531-1-rdunlap@infradead.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 1 Mar 2022 18:51:54 +0100
-Message-ID: <CAJZ5v0gW4O8pTgCPPh7TSdc0YZqz2NbqPWPVH4G5ijEr-YUVcA@mail.gmail.com>
-Subject: Re: [PATCH] PM/hibernate: fix __setup handler error handling
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Fabian Frederick <fabf@skynet.be>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 3/4] OPP: Add support of "opp-microwatt" for advanced
+ EM registration
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, dietmar.eggemann@arm.com,
+        viresh.kumar@linaro.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, nm@ti.com, sboyd@kernel.org,
+        mka@chromium.org, dianders@chromium.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20220301093524.8870-4-lukasz.luba@arm.com>
+ <202203020012.g7rYUP7M-lkp@intel.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <202203020012.g7rYUP7M-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 11:05 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> If an invalid value is used in "resumedelay=<seconds>", it is
-> silently ignored. Add a warning message and then let the __setup
-> handler return 1 to indicate that the kernel command line option
-> has been handled.
->
-> Fixes: 317cf7e5e85e3 ("PM / hibernate: convert simple_strtoul to kstrtoul")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-> Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-> Cc: Fabian Frederick <fabf@skynet.be>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: linux-pm@vger.kernel.org
-> Cc: Len Brown <len.brown@intel.com>
-> ---
->  kernel/power/hibernate.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> --- linux-next-20220228.orig/kernel/power/hibernate.c
-> +++ linux-next-20220228/kernel/power/hibernate.c
-> @@ -1329,7 +1329,7 @@ static int __init resumedelay_setup(char
->         int rc = kstrtouint(str, 0, &resume_delay);
->
->         if (rc)
-> -               return rc;
-> +               pr_warn("resumedelay: bad option string '%s'\n", str);
->         return 1;
->  }
 
-Applied as 5.18 material, thanks!
+
+On 3/1/22 16:58, kernel test robot wrote:
+> Hi Lukasz,
+> 
+> I love your patch! Yet something to improve:
+> 
+> [auto build test ERROR on robh/for-next]
+> [also build test ERROR on linux/master rafael-pm/linux-next linus/master v5.17-rc6 next-20220301]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+> 
+> url:    https://github.com/0day-ci/linux/commits/Lukasz-Luba/Introduce-opp-microwatt-and-Energy-Model-from-DT/20220301-173700
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+> config: arc-randconfig-r014-20220301 (https://download.01.org/0day-ci/archive/20220302/202203020012.g7rYUP7M-lkp@intel.com/config)
+> compiler: arceb-elf-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/0day-ci/linux/commit/e1e83de9bf2f261cb3e5eb9f53bde3c83c6e0647
+>          git remote add linux-review https://github.com/0day-ci/linux
+>          git fetch --no-tags linux-review Lukasz-Luba/Introduce-opp-microwatt-and-Energy-Model-from-DT/20220301-173700
+>          git checkout e1e83de9bf2f261cb3e5eb9f53bde3c83c6e0647
+>          # save the config file to linux build tree
+>          mkdir build_dir
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>     drivers/opp/of.c: In function 'dev_pm_opp_of_register_em':
+>>> drivers/opp/of.c:1572:22: error: 'struct em_data_callback' has no member named 'active_power'
+>      1572 |                 em_cb.active_power = _get_dt_power;
+>           |                      ^
+> 
+
+Indeed, this structure is an empty definition for !EM kernels.
+Let me create a fix for that.
