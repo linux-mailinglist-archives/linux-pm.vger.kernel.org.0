@@ -2,141 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0924C9189
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 18:31:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A044C919B
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 18:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235169AbiCARcR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 12:32:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
+        id S235123AbiCARfT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 12:35:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234133AbiCARcQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 12:32:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347EA5DA48;
-        Tue,  1 Mar 2022 09:31:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C435561239;
-        Tue,  1 Mar 2022 17:31:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CABCC340EE;
-        Tue,  1 Mar 2022 17:31:33 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="kSUnqs4v"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1646155891;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Vc1xIBQ1Y9jEN/LhtA0lgOP4L65isWSwshwxlAZspDE=;
-        b=kSUnqs4v2IVp+YuDS1e7pn6+F98MVwNpcjppSRzGy7fGds2LOyzaZS/ZFVArBHWJxieIM+
-        5ETfadQ7LlOXQgGPRJkrzRSCEFfOhA8bTPIEpbUk6dZKiT6UUQXGu0cOAja/n21jbh+u2H
-        y7i0P8HolV9DAXdbcn10tABUEuPNC+Y=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id bae3578b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 1 Mar 2022 17:31:31 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH] PM: notify of PM_POST_VMFORK events from vmgenid
-Date:   Tue,  1 Mar 2022 18:31:20 +0100
-Message-Id: <20220301173120.297105-1-Jason@zx2c4.com>
+        with ESMTP id S231289AbiCARfT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 12:35:19 -0500
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA49240A9;
+        Tue,  1 Mar 2022 09:34:38 -0800 (PST)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2dc0364d2ceso4001087b3.7;
+        Tue, 01 Mar 2022 09:34:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iTyi2ipcTulwwvig7Nzi763q6AMtAMu2xsXlP+4t6rA=;
+        b=F+PnaY2uwMEB4IqC1E8WFbMNooJpo97CyjYjf7YXzEHR5uFDFm2gVtN3otDwF2kgT+
+         LR/3O4xCf+8ipCQU/5AX04huvGs+jp+qPKNBPNI4FnQFXMZ9++YgqjsovCYEsQPNAZDW
+         +BT2yzyrmLxxteZTzzJtF04T6CG1UD+x+UlOs4Z76HR+Jo5dx9L2CFGWlbWLZy5dmEYG
+         QexULn81CEGyVjvfxeksLLxBq2I7QSsLfOCMBp4rI1cKJtx5APqmQt2CONNe/LR824ve
+         qSeGiaOge5cTWQYIgnuuthxwyDmsa5Y+1z3zN8UzJhB+s327SUYrkLGFTgXrBtyQEh1a
+         5Zlg==
+X-Gm-Message-State: AOAM531qFBnBjalvjbP6cB8pANvlXjpb6h2cSx0HkEGaf+6oCtfzdocU
+        pOI9IwuWvvnC35/j5pbRt/oFMUi0vVKy4cGYQVk=
+X-Google-Smtp-Source: ABdhPJxCTgyRMYkeAxcgNcOsSkwBodHdEDKrvezog5o9YvcneaD8XSAb1hgouGncJwJIMhUEeoxEH9iPmucx0PuYAwE=
+X-Received: by 2002:a81:b65f:0:b0:2d6:d29c:63fd with SMTP id
+ h31-20020a81b65f000000b002d6d29c63fdmr26629207ywk.196.1646156077485; Tue, 01
+ Mar 2022 09:34:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
+ <CAAYoRsW4LqNvSZ3Et5fqeFcHQ9j9-0u9Y-LN9DmpCS3wG3+NWg@mail.gmail.com>
+ <20220228041228.GH4548@shbuild999.sh.intel.com> <11956019.O9o76ZdvQC@kreacher>
+ <20220301055255.GI4548@shbuild999.sh.intel.com> <CAJZ5v0jWUR__zn0=SDDecFct86z-=Y6v5fi37mMyW+zOBi7oWw@mail.gmail.com>
+ <CAAYoRsVLOcww0z4mp9TtGCKdrgeEiL_=FgrUO=rwkZAok4sQdg@mail.gmail.com>
+In-Reply-To: <CAAYoRsVLOcww0z4mp9TtGCKdrgeEiL_=FgrUO=rwkZAok4sQdg@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 1 Mar 2022 18:34:26 +0100
+Message-ID: <CAJZ5v0hK4zoOtgNQNFkJHC0XOiGsPGUPphHU5og44e_K4kGU9g@mail.gmail.com>
+Subject: Re: CPU excessively long times between frequency scaling driver calls
+ - bisected
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Feng Tang <feng.tang@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There's an additional virtual power state that various crypto-oriented
-drivers may benefit from being notified of, such as WireGuard: right
-after a virtual machine has forked. In WireGuard's case, the PM notifier
-there that clears keys pre-suspend will be adjusted to also clear them
-post-vmfork. This trivial commit wires up the machinery for that change,
-which builds on the recently added vmgenid driver in the random.git
-tree.
+On Tue, Mar 1, 2022 at 6:18 PM Doug Smythies <dsmythies@telus.net> wrote:
+>
+> On Tue, Mar 1, 2022 at 3:58 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > On Tue, Mar 1, 2022 at 6:53 AM Feng Tang <feng.tang@intel.com> wrote:
+> > > On Mon, Feb 28, 2022 at 08:36:03PM +0100, Rafael J. Wysocki wrote:
+> ...
+> > > >
+> > > > However, it was a bit racy, so maybe it's good that it was not complete.
+> > > >
+> > > > Below is a new version.
+> > >
+> > > Thanks for the new version. I just gave it a try,  and the occasional
+> > > long delay of cpufreq auto-adjusting I have seen can not be reproduced
+> > > after applying it.
+> >
+> > OK, thanks!
+> >
+> > I'll wait for feedback from Dough, though.
+>
+> Hi Rafael,
+>
+> Thank you for your version 2 patch.
+> I screwed up an overnight test and will have to re-do it.
+> However, I do have some results.
 
-Cc: Rafael J. Wysocki <rafael@kernel.org>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Len Brown <len.brown@intel.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- drivers/virt/vmgenid.c  | 2 ++
- include/linux/suspend.h | 4 ++++
- kernel/power/main.c     | 6 ++++++
- 3 files changed, 12 insertions(+)
+Thanks for testing it!
 
-diff --git a/drivers/virt/vmgenid.c b/drivers/virt/vmgenid.c
-index 0ae1a39f2e28..4bef3e8b3476 100644
---- a/drivers/virt/vmgenid.c
-+++ b/drivers/virt/vmgenid.c
-@@ -10,6 +10,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/acpi.h>
-+#include <linux/suspend.h>
- #include <linux/random.h>
- 
- ACPI_MODULE_NAME("vmgenid");
-@@ -75,6 +76,7 @@ static void vmgenid_notify(struct acpi_device *device, u32 event)
- 	if (!memcmp(old_id, state->this_id, sizeof(old_id)))
- 		return;
- 	add_vmfork_randomness(state->this_id, sizeof(state->this_id));
-+	pm_notify_vmfork();
- }
- 
- static const struct acpi_device_id vmgenid_ids[] = {
-diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-index 300273ff40cc..a3836473b87b 100644
---- a/include/linux/suspend.h
-+++ b/include/linux/suspend.h
-@@ -477,6 +477,7 @@ static inline int is_hibernate_resume_dev(dev_t dev) { return 0; }
- #define PM_POST_SUSPEND		0x0004 /* Suspend finished */
- #define PM_RESTORE_PREPARE	0x0005 /* Going to restore a saved image */
- #define PM_POST_RESTORE		0x0006 /* Restore failed */
-+#define PM_POST_VMFORK		0x0007 /* Virtual machine has just forked */
- 
- extern struct mutex system_transition_mutex;
- 
-@@ -487,6 +488,7 @@ void restore_processor_state(void);
- /* kernel/power/main.c */
- extern int register_pm_notifier(struct notifier_block *nb);
- extern int unregister_pm_notifier(struct notifier_block *nb);
-+extern void pm_notify_vmfork(void);
- extern void ksys_sync_helper(void);
- 
- #define pm_notifier(fn, pri) {				\
-@@ -525,6 +527,8 @@ static inline int unregister_pm_notifier(struct notifier_block *nb)
- 	return 0;
- }
- 
-+static inline void pm_notify_vmfork(void) {}
-+
- static inline void ksys_sync_helper(void) {}
- 
- #define pm_notifier(fn, pri)	do { (void)(fn); } while (0)
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index 7e646079fbeb..a64cfb36b1b3 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -94,6 +94,12 @@ int pm_notifier_call_chain(unsigned long val)
- 	return blocking_notifier_call_chain(&pm_chain_head, val, NULL);
- }
- 
-+void pm_notify_vmfork(void)
-+{
-+	pm_notifier_call_chain(PM_POST_VMFORK);
-+}
-+EXPORT_SYMBOL_GPL(pm_notify_vmfork);
-+
- /* If set, devices may be suspended and resumed asynchronously. */
- int pm_async_enabled = 1;
- 
--- 
-2.35.1
+> From reading the patch code, one worry was the
+> potential to drive down the desired/required CPU
+> frequency for the main periodic workflow, causing
+> overruns, or inability of the task to complete its
+> work before the next period.
 
+It is not clear to me why you worried about that just from reading the
+patch?  Can you explain, please?
+
+> I have always had overrun
+> information, but it has never been relevant before.
+>
+> The other worry was if the threshold of
+> turbo/not turbo frequency is enough.
+
+Agreed.
+
+> I do not know how to test any final solution
+> thoroughly, as so far I have simply found a
+> good enough problematic example.
+> We have so many years of experience with
+> the convenient multi second NMI forcing
+> lingering high pstate clean up. I'd keep it
+> deciding within it if the TSC stuff needs to be
+> executed or not.
+>
+> Anyway...
+>
+> Base Kernel 5.17-rc3.
+> "stock" : unmodified.
+> "revert" : with commit b50db7095fe reverted
+> "rjw-2" : with this version2 patch added.
+>
+> Test 1 (as before. There is no test 2, yet.):
+> 347 Hertz work/sleep frequency on one CPU while others do
+> virtually no load but enough to increase the requested pstate,
+> but at around 0.02 hertz aggregate.
+>
+> It is important to note the main load is approximately
+> 38.6% @ 2.422 GHz, or 100% at 0.935 GHz.
+> and almost exclusively uses idle state 2 (of
+> 4 total idle states)
+>
+> /sys/devices/system/cpu/cpu7/cpuidle/state0/name:POLL
+> /sys/devices/system/cpu/cpu7/cpuidle/state1/name:C1_ACPI
+> /sys/devices/system/cpu/cpu7/cpuidle/state2/name:C2_ACPI
+> /sys/devices/system/cpu/cpu7/cpuidle/state3/name:C3_ACPI
+>
+> Turbostat was used. ~10 samples at 300 seconds per.
+> Processor package power (Watts):
+>
+> Workflow was run for 1 hour each time or 1249201 loops.
+>
+> revert:
+> ave: 3.00
+> min: 2.89
+> max: 3.08
+
+I'm not sure what the above three numbers are.
+
+> ave freq: 2.422 GHz.
+> overruns: 1.
+> max overrun time: 113 uSec.
+>
+> stock:
+> ave: 3.63 (+21%)
+> min: 3.28
+> max: 3.99
+> ave freq: 2.791 GHz.
+> overruns: 2.
+> max overrun time: 677 uSec.
+>
+> rjw-2:
+> ave: 3.14 (+5%)
+> min: 2.97
+> max: 3.28
+> ave freq: 2.635 GHz
+
+I guess the numbers above could be reduced still by using a P-state
+below the max non-turbo one as a limit.
+
+> overruns: 1042.
+> max overrun time: 9,769 uSec.
+
+This would probably get worse then, though.
+
+ATM I'm not quite sure why this happens, but you seem to have some
+insight into it, so it would help if you shared it.
+
+Thanks!
