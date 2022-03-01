@@ -2,185 +2,186 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A044C919B
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 18:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 176C34C91B3
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 18:36:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235123AbiCARfT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 12:35:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
+        id S236537AbiCARhV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 12:37:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231289AbiCARfT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 12:35:19 -0500
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AA49240A9;
-        Tue,  1 Mar 2022 09:34:38 -0800 (PST)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2dc0364d2ceso4001087b3.7;
-        Tue, 01 Mar 2022 09:34:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iTyi2ipcTulwwvig7Nzi763q6AMtAMu2xsXlP+4t6rA=;
-        b=F+PnaY2uwMEB4IqC1E8WFbMNooJpo97CyjYjf7YXzEHR5uFDFm2gVtN3otDwF2kgT+
-         LR/3O4xCf+8ipCQU/5AX04huvGs+jp+qPKNBPNI4FnQFXMZ9++YgqjsovCYEsQPNAZDW
-         +BT2yzyrmLxxteZTzzJtF04T6CG1UD+x+UlOs4Z76HR+Jo5dx9L2CFGWlbWLZy5dmEYG
-         QexULn81CEGyVjvfxeksLLxBq2I7QSsLfOCMBp4rI1cKJtx5APqmQt2CONNe/LR824ve
-         qSeGiaOge5cTWQYIgnuuthxwyDmsa5Y+1z3zN8UzJhB+s327SUYrkLGFTgXrBtyQEh1a
-         5Zlg==
-X-Gm-Message-State: AOAM531qFBnBjalvjbP6cB8pANvlXjpb6h2cSx0HkEGaf+6oCtfzdocU
-        pOI9IwuWvvnC35/j5pbRt/oFMUi0vVKy4cGYQVk=
-X-Google-Smtp-Source: ABdhPJxCTgyRMYkeAxcgNcOsSkwBodHdEDKrvezog5o9YvcneaD8XSAb1hgouGncJwJIMhUEeoxEH9iPmucx0PuYAwE=
-X-Received: by 2002:a81:b65f:0:b0:2d6:d29c:63fd with SMTP id
- h31-20020a81b65f000000b002d6d29c63fdmr26629207ywk.196.1646156077485; Tue, 01
- Mar 2022 09:34:37 -0800 (PST)
-MIME-Version: 1.0
-References: <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
- <CAAYoRsW4LqNvSZ3Et5fqeFcHQ9j9-0u9Y-LN9DmpCS3wG3+NWg@mail.gmail.com>
- <20220228041228.GH4548@shbuild999.sh.intel.com> <11956019.O9o76ZdvQC@kreacher>
- <20220301055255.GI4548@shbuild999.sh.intel.com> <CAJZ5v0jWUR__zn0=SDDecFct86z-=Y6v5fi37mMyW+zOBi7oWw@mail.gmail.com>
- <CAAYoRsVLOcww0z4mp9TtGCKdrgeEiL_=FgrUO=rwkZAok4sQdg@mail.gmail.com>
-In-Reply-To: <CAAYoRsVLOcww0z4mp9TtGCKdrgeEiL_=FgrUO=rwkZAok4sQdg@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 1 Mar 2022 18:34:26 +0100
-Message-ID: <CAJZ5v0hK4zoOtgNQNFkJHC0XOiGsPGUPphHU5og44e_K4kGU9g@mail.gmail.com>
-Subject: Re: CPU excessively long times between frequency scaling driver calls
- - bisected
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Feng Tang <feng.tang@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
+        with ESMTP id S230313AbiCARhT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 12:37:19 -0500
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A879F2F03E;
+        Tue,  1 Mar 2022 09:36:37 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 668835801CF;
+        Tue,  1 Mar 2022 12:36:34 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Tue, 01 Mar 2022 12:36:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=5OE8xr6GO9X7MbNpDAcWFGeEO3b3B/8LX5WMVM
+        23luQ=; b=PuP2NuoqB9WepsjY0Uqokte1F02OSePW/KnqWPOHGfC62jDMQy8d6J
+        jihmHY7jaxPeYmV/brYSLMo2rdd0E65RFIbVZNaw+d6hF5TlV5h/HTFiyyQeuhEh
+        tTvMohVc8vJzz2F3uGXDhJ11n60AMBcwryX0OIQ4h4vBoJz9sXnQjtTWmMBfJvV8
+        ASNImP/JJmHc6aQngUkaR/9ejN6V67gkY3Ss3hOhMxZ05fa2rytR+8neryd7GnHR
+        NnoILjHkJCXbghnuIwO3WAIr0wjFgm+H99CgrlgjXtrJoB87p0eZTz8QaQ9jXLS7
+        eUmDU4ThQ2iD/GAcK9q8FPfYZ3dj5Siw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=5OE8xr6GO9X7MbNpD
+        AcWFGeEO3b3B/8LX5WMVM23luQ=; b=EDVGv6yEMy7PTbky8OfXVA9jYKh0oiM5+
+        sk6xt1CX3smAZYI0P9oaKzOCIkwMemVmh9foKoLwOV/IyVUBTTJc+ljLrovpUDdP
+        pIA4BCkMgcGpU96mM/8o9zjz4bY87GlxWmxlUETAhWUvR7QqjYOuAQqLjAz9vvM2
+        9w41DE+muRcTBgXgq7R5mX2xPAK9bu7QEmldC6d/UhIWw84PgZEMMUkVZDfimvGr
+        9rb1WTZ4HmbXffSgmjvpYAD0fz3a3kb/jxO9vzcKzkIUx9MDQUxolnVJ5gWPPm0P
+        3SACLLdt3Ji3p4//lVUF9os4MIANF8EQiUgikZ8An4R/ZWSxaE7Og==
+X-ME-Sender: <xms:oFkeYrv0LJt2Pjt0ZOYMYd1jCK6G-Z0GZXtRlOiCbijoVlbqDToesg>
+    <xme:oFkeYsdRXoRXAxTjhPFWtM5JX8rU2-dsIwxZfpFocA89gDBFD4vx9xsWmcbxEuUyQ
+    lpRakwPpYLi7A>
+X-ME-Received: <xmr:oFkeYuzzdQb5kL72Vvj74Xn0xRRyhzff8uvNHTyUqFsrLF_56anw9-ykyIbZGqAzSj0KTqXLBgC1Qf0KKdPZ7IM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddruddtvddguddttdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuhe
+    ejgfffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:oFkeYqNP0oPgoNRpau1EsmnsGvsi8MuHt5Oau7Uh5DcasQw65k9YTg>
+    <xmx:oFkeYr8eoBRonSMDQgE0d2CdwAX12XsrowbLGxOxF_rvtS3YwiTEgg>
+    <xmx:oFkeYqVNxx7WBcYUGhcHc73BR9KI7xEAuh9FjZrqFDwJGYsF_7MqUw>
+    <xmx:olkeYkWtK93reuC1fg-f2X2RrUvR780eGtvCg6vOtajRgdiJ73bSmQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 1 Mar 2022 12:36:31 -0500 (EST)
+Date:   Tue, 1 Mar 2022 18:36:27 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        alsa-devel@alsa-project.org, linux-aspeed@lists.ozlabs.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        samba-technical@lists.samba.org,
+        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
+        linux-arch <linux-arch@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        linux-staging@lists.linux.dev, "Bos, H.J." <h.j.bos@vu.nl>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        intel-wired-lan@lists.osuosl.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        bcm-kernel-feedback-list@broadcom.com,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergman <arnd@arndb.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        v9fs-developer@lists.sourceforge.net,
+        linux-tegra <linux-tegra@vger.kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-sgx@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        tipc-discussion@lists.sourceforge.net,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        dma <dmaengine@vger.kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+Message-ID: <Yh5ZmwiH5AxtQ69K@kroah.com>
+References: <20220228110822.491923-1-jakobkoschel@gmail.com>
+ <20220228110822.491923-3-jakobkoschel@gmail.com>
+ <2e4e95d6-f6c9-a188-e1cd-b1eae465562a@amd.com>
+ <CAHk-=wgQps58DPEOe4y5cTh5oE9EdNTWRLXzgMiETc+mFX7jzw@mail.gmail.com>
+ <CAHk-=wj8fkosQ7=bps5K+DDazBXk=ypfn49A0sEq+7-nZnyfXA@mail.gmail.com>
+ <CAHk-=wiTCvLQkHcJ3y0hpqH7FEk9D28LDvZZogC6OVLk7naBww@mail.gmail.com>
+ <FC710A1A-524E-481B-A668-FC258F529A2E@gmail.com>
+ <CAHk-=whLK11HyvpUtEftOjc3Gup2V77KpAQ2fycj3uai=qceHw@mail.gmail.com>
+ <CEDAD0D9-56EE-4105-9107-72C2EAD940B0@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CEDAD0D9-56EE-4105-9107-72C2EAD940B0@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 6:18 PM Doug Smythies <dsmythies@telus.net> wrote:
->
-> On Tue, Mar 1, 2022 at 3:58 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > On Tue, Mar 1, 2022 at 6:53 AM Feng Tang <feng.tang@intel.com> wrote:
-> > > On Mon, Feb 28, 2022 at 08:36:03PM +0100, Rafael J. Wysocki wrote:
-> ...
-> > > >
-> > > > However, it was a bit racy, so maybe it's good that it was not complete.
-> > > >
-> > > > Below is a new version.
-> > >
-> > > Thanks for the new version. I just gave it a try,  and the occasional
-> > > long delay of cpufreq auto-adjusting I have seen can not be reproduced
-> > > after applying it.
-> >
-> > OK, thanks!
-> >
-> > I'll wait for feedback from Dough, though.
->
-> Hi Rafael,
->
-> Thank you for your version 2 patch.
-> I screwed up an overnight test and will have to re-do it.
-> However, I do have some results.
+On Tue, Mar 01, 2022 at 12:28:15PM +0100, Jakob Koschel wrote:
+> 
+> 
+> > On 1. Mar 2022, at 01:41, Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> > 
+> > On Mon, Feb 28, 2022 at 1:47 PM Jakob Koschel <jakobkoschel@gmail.com> wrote:
+> >> 
+> >> The goal of this is to get compiler warnings right? This would indeed be great.
+> > 
+> > Yes, so I don't mind having a one-time patch that has been gathered
+> > using some automated checker tool, but I don't think that works from a
+> > long-term maintenance perspective.
+> > 
+> > So if we have the basic rule being "don't use the loop iterator after
+> > the loop has finished, because it can cause all kinds of subtle
+> > issues", then in _addition_ to fixing the existing code paths that
+> > have this issue, I really would want to (a) get a compiler warning for
+> > future cases and (b) make it not actually _work_ for future cases.
+> > 
+> > Because otherwise it will just happen again.
+> > 
+> >> Changing the list_for_each_entry() macro first will break all of those cases
+> >> (e.g. the ones using 'list_entry_is_head()).
+> > 
+> > So I have no problems with breaking cases that we basically already
+> > have a patch for due to  your automated tool. There were certainly
+> > more than a handful, but it didn't look _too_ bad to just make the
+> > rule be "don't use the iterator after the loop".
+> > 
+> > Of course, that's just based on that patch of yours. Maybe there are a
+> > ton of other cases that your patch didn't change, because they didn't
+> > match your trigger case, so I may just be overly optimistic here.
+> 
+> Based on the coccinelle script there are ~480 cases that need fixing
+> in total. I'll now finish all of them and then split them by
+> submodules as Greg suggested and repost a patch set per submodule.
+> Sounds good?
 
-Thanks for testing it!
+Sounds good to me!
 
-> From reading the patch code, one worry was the
-> potential to drive down the desired/required CPU
-> frequency for the main periodic workflow, causing
-> overruns, or inability of the task to complete its
-> work before the next period.
+If you need help carving these up and maintaining them over time as
+different subsystem maintainers accept/ignore them, just let me know.
+Doing large patchsets like this can be tough without a lot of
+experience.
 
-It is not clear to me why you worried about that just from reading the
-patch?  Can you explain, please?
+thanks,
 
-> I have always had overrun
-> information, but it has never been relevant before.
->
-> The other worry was if the threshold of
-> turbo/not turbo frequency is enough.
-
-Agreed.
-
-> I do not know how to test any final solution
-> thoroughly, as so far I have simply found a
-> good enough problematic example.
-> We have so many years of experience with
-> the convenient multi second NMI forcing
-> lingering high pstate clean up. I'd keep it
-> deciding within it if the TSC stuff needs to be
-> executed or not.
->
-> Anyway...
->
-> Base Kernel 5.17-rc3.
-> "stock" : unmodified.
-> "revert" : with commit b50db7095fe reverted
-> "rjw-2" : with this version2 patch added.
->
-> Test 1 (as before. There is no test 2, yet.):
-> 347 Hertz work/sleep frequency on one CPU while others do
-> virtually no load but enough to increase the requested pstate,
-> but at around 0.02 hertz aggregate.
->
-> It is important to note the main load is approximately
-> 38.6% @ 2.422 GHz, or 100% at 0.935 GHz.
-> and almost exclusively uses idle state 2 (of
-> 4 total idle states)
->
-> /sys/devices/system/cpu/cpu7/cpuidle/state0/name:POLL
-> /sys/devices/system/cpu/cpu7/cpuidle/state1/name:C1_ACPI
-> /sys/devices/system/cpu/cpu7/cpuidle/state2/name:C2_ACPI
-> /sys/devices/system/cpu/cpu7/cpuidle/state3/name:C3_ACPI
->
-> Turbostat was used. ~10 samples at 300 seconds per.
-> Processor package power (Watts):
->
-> Workflow was run for 1 hour each time or 1249201 loops.
->
-> revert:
-> ave: 3.00
-> min: 2.89
-> max: 3.08
-
-I'm not sure what the above three numbers are.
-
-> ave freq: 2.422 GHz.
-> overruns: 1.
-> max overrun time: 113 uSec.
->
-> stock:
-> ave: 3.63 (+21%)
-> min: 3.28
-> max: 3.99
-> ave freq: 2.791 GHz.
-> overruns: 2.
-> max overrun time: 677 uSec.
->
-> rjw-2:
-> ave: 3.14 (+5%)
-> min: 2.97
-> max: 3.28
-> ave freq: 2.635 GHz
-
-I guess the numbers above could be reduced still by using a P-state
-below the max non-turbo one as a limit.
-
-> overruns: 1042.
-> max overrun time: 9,769 uSec.
-
-This would probably get worse then, though.
-
-ATM I'm not quite sure why this happens, but you seem to have some
-insight into it, so it would help if you shared it.
-
-Thanks!
+greg k-h
