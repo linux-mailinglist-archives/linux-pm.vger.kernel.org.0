@@ -2,122 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22FAF4C9749
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 21:48:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0770A4C97AD
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 22:20:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237741AbiCAUth (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 15:49:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54814 "EHLO
+        id S238149AbiCAVVR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 16:21:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235831AbiCAUth (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 15:49:37 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E97A12AD6
-        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 12:48:55 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id m6so5167055wrr.10
-        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 12:48:55 -0800 (PST)
+        with ESMTP id S232217AbiCAVVQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 16:21:16 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD429427E5;
+        Tue,  1 Mar 2022 13:20:34 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id x18so15462123pfh.5;
+        Tue, 01 Mar 2022 13:20:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=s0zN3hhnk6tK41DrdKyQraYoi1ZXQJ31C4XFuJfqtwU=;
-        b=SLI31r+U7zdy/ueD7JyJPQIQhgVuJf7fzZYMp8w9hf8DgquIXp0VFH9xHFYh7xcAea
-         wAMtG6V5CE4HDzbbvX+HTcW87yyVMHc03f7U504cTq5cHQKX5MI23JSD5QFuhArqGomP
-         DI7rybe6+YasIBhtjvhHlaGzdaU6zEIZQip971svtaYg3sP24liyM9uHjYGAKDfc8n30
-         4QTWlJRlBFrxlLBg5xkTIhNjzrI9OmY0Roc3XWomDVTx3hpmoEmWG+47Q2Z7in3JoHid
-         Ft8Fxg11RMPt9K0PwSP3qBWo8jBbmoxKneQmJ7UgsDsMqFk9qeucQxEkQwZ47a7xVy5I
-         tZ5g==
+        bh=zcBTrbjX0+CQjxp9R0yaPxHqWIjrxSKZgC3PETeJRJM=;
+        b=ZO7Mf+4TigphNBTs6SJUAhkcnXzlmJPgGqbVEklYhU6sh8glYJ1ENl6k56PTgoBWEF
+         3l5N/zwvacRlLHlXOKzkmEC2WgEpBY9mYQ2WCyB7D/21wjJCDfrYj3WhD0N7NBsJcUE+
+         4XefI9+Hp0sZloIYBARtBhjIEIRcyCQcfcOLVLKKp9NdUb0Gjl23a7W+Qf8bRoiUQ22L
+         7UUA8lEMycjfGGDY9OMJPsc3nux26dbh3DBPL1P+SF7OQEBKDgZEQ1FIggibpMBuwNLV
+         xipMJ4BRBLp2vpiXTHdcQgvGZbySDtyoiMezvINZ7Io5aqemBhJQkFjfhd98gWwEpiVF
+         L4Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=s0zN3hhnk6tK41DrdKyQraYoi1ZXQJ31C4XFuJfqtwU=;
-        b=3Thn80hhhm0ibXJkmHTiFgHfitRl8cuKIEi6+eTx0Gokso6pGRuddp+sUPgFoHZmeC
-         sBYn+fVz31ou+Gt7tt9CipwgImP9AGtAOeoQ7d6Jdg2eHTgNrb8KFnIA/HW0dp1YgW9Y
-         ZG8v9rHWtZPhFsw9q1iwhRHMAZlv48nWFgZjPL6757N84fC9Z7o8PV2fc4LZGdGUC1Bp
-         7KxR/8pAr/kZrGa3oxA3UcyNbUaAjQyO/Bu0Xj7eP5VOzrXSdg6V799qVMe2Ht+t0vOJ
-         Psy5e+pKiZZMlSx5BjKeI49PPFkqHNCaX055TlribnHbpxijJnd/+87/05ylFduJUCmm
-         xA0w==
-X-Gm-Message-State: AOAM532zQ7aEV/i0eNjLcZNLlUt0KYXOala7m90EjIWBDmdZmhuKPj75
-        Fld808YB2QWkd73ZhgUVWEcMkw==
-X-Google-Smtp-Source: ABdhPJwH+Y7CqgO8YIBl9tabA06yVVYyTTOyCWvJUHbCEQmwylJok7ggJXBKlJSTKp2t/fg8TnB42g==
-X-Received: by 2002:a05:6000:184c:b0:1ef:f8a2:3283 with SMTP id c12-20020a056000184c00b001eff8a23283mr6410098wri.467.1646167733795;
-        Tue, 01 Mar 2022 12:48:53 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:49e8:f41b:b2a3:3a55? ([2a01:e34:ed2f:f020:49e8:f41b:b2a3:3a55])
-        by smtp.googlemail.com with ESMTPSA id f16-20020adff590000000b001f0122f63e1sm3021536wro.85.2022.03.01.12.48.52
+        bh=zcBTrbjX0+CQjxp9R0yaPxHqWIjrxSKZgC3PETeJRJM=;
+        b=IR/eTCCUj+ci55ZdnJmbRjyVZhEnFOfayWIwOf40rB+xxVlfpm0fgj5EgRPzOQmYtu
+         HGBJRN0gcIGeoeY/JYgbgg6mLZBCOXbvLtRem7rZrkkrO1hAUYRwIW8epPWIchylAWFC
+         RQWg/Q27pffqkbMrLnoUdWUPdoJI/YSPJv6y/nlNe3JR3033DkkcMYpn3hJ+T8YdbydX
+         KN+K1kLuiopLQq0f54i53xJJfL067HGDJuqcf0RUrPkBjtv/rj+4Nepv84QZ8LuEJpoN
+         mxIADfn2fSmwpGenQ/adCHoTd/PY12TDqkwfssQL6esfbGyzcMd5A6RH9u5o8VLpmfDk
+         Wk+g==
+X-Gm-Message-State: AOAM531JB68nJT47pQyIPc5wkgooj4cXgkDIvlfml/K5bWfQlmgQQ6px
+        hK+GrojDnmdH23f7KO7IBy0=
+X-Google-Smtp-Source: ABdhPJwHnV9jlJdDpc+Aek6kzoMn7NO58plC1DnzLvnLDuB9dFcDlgCDrupshh2g+/fk0Yv/BKOz5g==
+X-Received: by 2002:a63:d252:0:b0:363:271c:fe63 with SMTP id t18-20020a63d252000000b00363271cfe63mr23520447pgi.524.1646169634332;
+        Tue, 01 Mar 2022 13:20:34 -0800 (PST)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id v189-20020a6389c6000000b00372e3b6fe90sm13949702pgd.55.2022.03.01.13.20.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Mar 2022 12:48:53 -0800 (PST)
-Message-ID: <96639c1c-b135-376f-4fb7-92e04110a12e@linaro.org>
-Date:   Tue, 1 Mar 2022 21:48:52 +0100
+        Tue, 01 Mar 2022 13:20:33 -0800 (PST)
+Message-ID: <f5af24df-ceca-16ca-af85-38435130a9de@gmail.com>
+Date:   Tue, 1 Mar 2022 13:20:27 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] thermal: genetlink: Fix TZ_GET_TRIP NULL pointer
- dereference
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH] thermal: brcmstb_thermal: Interrupt is optional
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220228110351.20518-1-nicolas.cavallari@green-communications.fr>
- <20220228110351.20518-2-nicolas.cavallari@green-communications.fr>
- <CAJZ5v0iW0KvBsJZbjBoMU6RukH0AmppxpFO9RrfD+K3OcaxOUQ@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0iW0KvBsJZbjBoMU6RukH0AmppxpFO9RrfD+K3OcaxOUQ@mail.gmail.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Markus Mayer <mmayer@broadcom.com>,
+        "maintainer:BROADCOM STB AVS TMON DRIVER" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        "open list:BROADCOM STB AVS TMON DRIVER" <linux-pm@vger.kernel.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20210426213647.704823-1-f.fainelli@gmail.com>
+ <933c889e-dee0-4fc3-bf1a-b3655cabbb28@gmail.com>
+ <7359c3c1-8928-d448-e503-13f587cbb567@linaro.org>
+ <2f8da2c7-98c5-4061-2e16-42b7fd4f9694@gmail.com>
+ <f6f61340-24b1-770e-6b8d-9b47218a87be@linaro.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <f6f61340-24b1-770e-6b8d-9b47218a87be@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/03/2022 16:14, Rafael J. Wysocki wrote:
-> On Mon, Feb 28, 2022 at 12:04 PM Nicolas Cavallari
-> <nicolas.cavallari@green-communications.fr> wrote:
->>
->> Do not call get_trip_hyst() if the thermal zone does not define one.
->>
->> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
->> ---
->>   drivers/thermal/thermal_netlink.c | 5 +++--
->>   1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
->> index a16dd4d5d710..73e68cce292e 100644
->> --- a/drivers/thermal/thermal_netlink.c
->> +++ b/drivers/thermal/thermal_netlink.c
->> @@ -419,11 +419,12 @@ static int thermal_genl_cmd_tz_get_trip(struct param *p)
->>          for (i = 0; i < tz->trips; i++) {
->>
->>                  enum thermal_trip_type type;
->> -               int temp, hyst;
->> +               int temp, hyst = 0;
->>
->>                  tz->ops->get_trip_type(tz, i, &type);
->>                  tz->ops->get_trip_temp(tz, i, &temp);
->> -               tz->ops->get_trip_hyst(tz, i, &hyst);
->> +               if (tz->ops->get_trip_hyst)
->> +                       tz->ops->get_trip_hyst(tz, i, &hyst);
->>
->>                  if (nla_put_u32(msg, THERMAL_GENL_ATTR_TZ_TRIP_ID, i) ||
->>                      nla_put_u32(msg, THERMAL_GENL_ATTR_TZ_TRIP_TYPE, type) ||
->> --
-> 
-> Applied, but I think this needs to go into 5.17-rc, doesn't it?
-
-Yes, correct
 
 
+On 3/1/2022 12:47 PM, Daniel Lezcano wrote:
+> On 01/03/2022 19:05, Florian Fainelli wrote:
+>>
+>>
+>> On 9/17/2021 12:51 AM, Daniel Lezcano wrote:
+>>>
+>>> Applied, thanks
+>>
+>> Was it applied? I still cannot find it in linux-next or Linus' tree.
+> I thought it was :/
+
+No worries, I just resent it:
+
+https://lore.kernel.org/lkml/20220301181412.2008044-1-f.fainelli@gmail.com/
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Florian
