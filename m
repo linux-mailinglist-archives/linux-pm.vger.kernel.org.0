@@ -2,68 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D7644C8938
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 11:27:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC394C896B
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 11:38:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbiCAK2M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 05:28:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46914 "EHLO
+        id S234314AbiCAKjB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 05:39:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbiCAK2L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 05:28:11 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178BC5F8D
-        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 02:27:24 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id u7so21194202ljk.13
-        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 02:27:24 -0800 (PST)
+        with ESMTP id S234302AbiCAKjA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 05:39:00 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C9F13CC7
+        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 02:38:19 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id s25so21267906lji.5
+        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 02:38:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=2i+D2PqtcWDc5KoZLbt1OkpDgJIEvu6U0OQ0ZqUGBOU=;
-        b=LUb0D4AOtYKuu3o3RMENT8fWAAIPqnz3tK1e2GYt1n2IGj411QDVPC3bTl6VyGMsXu
-         vKDXGBRX6kRktQq1VS7QmPsFecnmdnMBzCg3OROSq+PuwAWJAY6nctOsoaRzDWret1yj
-         6KRxOtEdpkaxgfbQAri7Sv4FN0g6QUuQ17a/huvn00u9e2s8KlN+FChvyqO9z1LHF2MK
-         UXDj26HmPP3JuUsGqGwpj/q+3grsd1EiCwyrb1SCbSFpFAvxrvAY6RuBixdN8YRC1X56
-         CCFuQoIJve168JO/KZ8m6begRfbtWpOUq+X1yWXk3qMD4zW0SQCM8y25jcStovPImJww
-         h5xA==
+        bh=Omz5gzwo4aJlILXVhXK03oGpHG1ApzpOAfyGCi5xOHM=;
+        b=qGMMfoYqfanaKo2fc2sZLShhCfqBXms0+/0P9nAD+fwPyDrn+Rj0L85pyvcaQFmFGm
+         hAv4RxXp3kx4LjgY7giQfALYTr/ekGZCab/NZ2FCGmzK9jxy4QJCQuW5i0TzKaI159S0
+         QGbX8NCQBm9y2cUVMm6HgeyftsApenBKIuSQtlX+d+z5PCZCHHolWlw0plzDIWj4Usaj
+         hdvkuZnwEmA++s5vrIOZK6BRaaqE2pNbLn4F31PtOK3J9U+uxSDFAJfC70jZxtdnnCLQ
+         AGpomoJJc8JkXbhWqRD4RgXXLMxOPkDmjhZENhLnVYf4gZqLOIANScXfqfsZMJEsqFHx
+         TMjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=2i+D2PqtcWDc5KoZLbt1OkpDgJIEvu6U0OQ0ZqUGBOU=;
-        b=cRO/MmT3BAGsOwuzKb4A9ewIiPJM12buYarGvBob6aU8VmFSlA0pDAikI5NJdzUj2V
-         CPyOTwJCuwWwvNfzAU26HIQFTLMqTX7wo6jHXu1nhP37rqx7GVXt3jZrsiZnRgq7YD0J
-         uwomqS/Pfek8w4HYrTizptTCaERyjFW9zi1w2pULb0nqMgJ12Lr2TSu7rpw777WvEbP2
-         qzT/a+/eC6lNFuCHiYQ/jYHEF6TvLrMjPqWHNJAz5HV+9WiWsTndaFRsvO5ypt9uGmis
-         x2J/KZ+YRBIOdzkNFekFqSBpW2fXsmrvJLnnUtniAXJsmWDSvoE7X03Tuj8WGaAvaO/O
-         bGGw==
-X-Gm-Message-State: AOAM531xMkdulIHixTU2Qf9OnwCyqWjyUSf/ufz/+xC+qGRWXsxDW8+V
-        8j1jakiJZ9QTwvUN9j4a6ZmIHSXoEV9B2ATtoCHr4h9lVUFfCA==
-X-Google-Smtp-Source: ABdhPJwfMVDrAIuUOqBJa/BAlR77m5tBBCI4Nx3/rN8zw7wSDvQg4tEVnXyNw2+J+E43j9ppcyEVYlZr2Ix9iGFjdqY=
-X-Received: by 2002:a05:651c:201b:b0:246:34b5:155e with SMTP id
- s27-20020a05651c201b00b0024634b5155emr15953966ljo.273.1646130442354; Tue, 01
- Mar 2022 02:27:22 -0800 (PST)
+        bh=Omz5gzwo4aJlILXVhXK03oGpHG1ApzpOAfyGCi5xOHM=;
+        b=n/tVGDL8EYFVKRMr0HSnCJGlvnVBn8+nKXkGgvfaclQn6DkbIXEz1YGk5Y5S//NMKC
+         kIlYMwNzy5NcGZJ+EDIbTwzjBWfCyqXS9WiRucVF32BW2Rj4mStR4ovQsMkxJ7vY6fxi
+         2AfZvFXUR07VyfPbL5RA8A9K75Ep08q/eqrTSsEB3AOtmHtyQTvV1WbKlrswRflI2ynG
+         wpdndRhT/ZzbYxTeEZ/5EMdQJnStjKCO83GPV5sm37GTRZ6ObSPu5uoVEal72hMxaog0
+         bElrdXIO0KhLbtlUhqidfVe5Lu3rcr2k+eKvrfwDtF8cK4AAcAN0Nn5uAhRLiQPmE+zg
+         g1Nw==
+X-Gm-Message-State: AOAM530/kIkoF/F6l+cAGYgB7ig7RPG/kwaeFxj+nWEP/rKum0i7m6Rv
+        I0/Q/isdZlbjtYGhcpjKCNseXnoFftUUeVrUVvH7ig==
+X-Google-Smtp-Source: ABdhPJywlPCioo2/+DVdHzNQQkG8kpU+jzVjiPnR1HyRr/ivK6iJFvw1wPBnWBbm1QWeNvd+RMeF6YoCaxZSAavIZ4U=
+X-Received: by 2002:a2e:9cc5:0:b0:239:da6e:290d with SMTP id
+ g5-20020a2e9cc5000000b00239da6e290dmr17130771ljj.4.1646131097502; Tue, 01 Mar
+ 2022 02:38:17 -0800 (PST)
 MIME-Version: 1.0
-References: <20220223083441.1.I925ce9fa12992a58caed6b297e0171d214866fe7@changeid>
-In-Reply-To: <20220223083441.1.I925ce9fa12992a58caed6b297e0171d214866fe7@changeid>
+References: <20220225064815.444571-1-shawnguo@kernel.org>
+In-Reply-To: <20220225064815.444571-1-shawnguo@kernel.org>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 1 Mar 2022 11:26:46 +0100
-Message-ID: <CAPDyKFrDncw0D2ccw9GJS+oRdm2kROJh25OV9pMs+992vQV-cQ@mail.gmail.com>
-Subject: Re: [PATCH] PM: runtime: Have devm_pm_runtime_enable() handle pm_runtime_dont_use_autosuspend()
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Date:   Tue, 1 Mar 2022 11:37:41 +0100
+Message-ID: <CAPDyKFq195ptPe1i71mcQG+VLvLWgrYD0kF8ZNV-KLOqS0td4g@mail.gmail.com>
+Subject: Re: [PATCH] PM: domains: Fix sleep-in-atomic bug caused by genpd_debug_remove()
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>
+Cc:     Kevin Hilman <khilman@kernel.org>,
+        Thierry Strudel <tstrudel@google.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shawn Guo <shawn.guo@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,105 +68,83 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 23 Feb 2022 at 17:35, Douglas Anderson <dianders@chromium.org> wrote:
+On Fri, 25 Feb 2022 at 07:48, Shawn Guo <shawnguo@kernel.org> wrote:
 >
-> The PM Runtime docs say:
->   Drivers in ->remove() callback should undo the runtime PM changes done
->   in ->probe(). Usually this means calling pm_runtime_disable(),
->   pm_runtime_dont_use_autosuspend() etc.
+> From: Shawn Guo <shawn.guo@linaro.org>
 >
-> From grepping code, it's clear that many people aren't aware of the
-> need to call pm_runtime_dont_use_autosuspend().
-
-Well, I admit it's good practice that they should take care of this.
-
-However, it doesn't really matter to keep the autosuspend turned on
-when runtime PM becomes disabled, I think. When the driver gets probed
-again, it will most likely call pm_runtime_use_autosuspend() again,
-which should work fine, right?
-
+> When a genpd with GENPD_FLAG_IRQ_SAFE gets removed, the following
+> sleep-in-atomic bug will be seen, as genpd_debug_remove() will be called
+> with a spinlock being held.
 >
-> When brainstorming solutions, one idea that came up was to leverage
-> the new-ish devm_pm_runtime_enable() function. The idea here is that:
-> * When the devm action is called we know that the driver is being
->   removed. It's the perfect time to undo the use_autosuspend.
-> * The code of pm_runtime_dont_use_autosuspend() already handles the
->   case of being called when autosuspend wasn't enabled.
+> [    0.029183] BUG: sleeping function called from invalid context at kernel/locking/rwsem.c:1460
+> [    0.029204] in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 1, name: swapper/0
+> [    0.029219] preempt_count: 1, expected: 0
+> [    0.029230] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc4+ #489
+> [    0.029245] Hardware name: Thundercomm TurboX CM2290 (DT)
+> [    0.029256] Call trace:
+> [    0.029265]  dump_backtrace.part.0+0xbc/0xd0
+> [    0.029285]  show_stack+0x3c/0xa0
+> [    0.029298]  dump_stack_lvl+0x7c/0xa0
+> [    0.029311]  dump_stack+0x18/0x34
+> [    0.029323]  __might_resched+0x10c/0x13c
+> [    0.029338]  __might_sleep+0x4c/0x80
+> [    0.029351]  down_read+0x24/0xd0
+> [    0.029363]  lookup_one_len_unlocked+0x9c/0xcc
+> [    0.029379]  lookup_positive_unlocked+0x10/0x50
+> [    0.029392]  debugfs_lookup+0x68/0xac
+> [    0.029406]  genpd_remove.part.0+0x12c/0x1b4
+> [    0.029419]  of_genpd_remove_last+0xa8/0xd4
+> [    0.029434]  psci_cpuidle_domain_probe+0x174/0x53c
+> [    0.029449]  platform_probe+0x68/0xe0
+> [    0.029462]  really_probe+0x190/0x430
+> [    0.029473]  __driver_probe_device+0x90/0x18c
+> [    0.029485]  driver_probe_device+0x40/0xe0
+> [    0.029497]  __driver_attach+0xf4/0x1d0
+> [    0.029508]  bus_for_each_dev+0x70/0xd0
+> [    0.029523]  driver_attach+0x24/0x30
+> [    0.029534]  bus_add_driver+0x164/0x22c
+> [    0.029545]  driver_register+0x78/0x130
+> [    0.029556]  __platform_driver_register+0x28/0x34
+> [    0.029569]  psci_idle_init_domains+0x1c/0x28
+> [    0.029583]  do_one_initcall+0x50/0x1b0
+> [    0.029595]  kernel_init_freeable+0x214/0x280
+> [    0.029609]  kernel_init+0x2c/0x13c
+> [    0.029622]  ret_from_fork+0x10/0x20
+>
+> It doesn't seem necessary to call genpd_debug_remove() with the lock, so
+> move it out from locking to fix the problem.
+>
+> Fixes: 718072ceb211 ("PM: domains: create debugfs nodes when adding power domains")
+> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
 
-Hmm, I am hesitating to extend devm_pm_runtime_enable(), as it
-currently makes it look too simple to turn off things at ->remove()
-for runtime PM. While in fact it's more complicated.
+Thanks for fixing this!
 
-A bigger problem, for example, is that a driver calls
-pm_runtime_put_sync() during ->remove(), relying on that it actually
-ends up calling its ->runtime_suspend() callback to turn off various
-specific resources for the device. And in fact there are no guarantees
-that will happen - and when it doesn't, the next time the driver's
-->probe() runs, things are likely to be really screwed up.
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-To cover this case, one could use the below code in the ->remove() callback:
-
-...
-pm_runtime_get_sync();
-
-"turn off resources for the devices - like calling
-clk_disable_unprepare(), for example"
-
-pm_runtime_disable();
-pm_runtime_put_noidle();
-...
-
-In this example, it would be too late to call pm_runtime_disable()
-through the pm_runtime_disable_action().
+Rafael, I think we should tag this for stable kernels too.
 
 Kind regards
 Uffe
 
->
-> Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 > ---
+>  drivers/base/power/domain.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
->  drivers/base/power/runtime.c | 5 +++++
->  include/linux/pm_runtime.h   | 4 ++++
->  2 files changed, 9 insertions(+)
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 5db704f02e71..7e8039d1884c 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -2058,9 +2058,9 @@ static int genpd_remove(struct generic_pm_domain *genpd)
+>                 kfree(link);
+>         }
 >
-> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> index 2f3cce17219b..d4059e6ffeae 100644
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -1476,11 +1476,16 @@ EXPORT_SYMBOL_GPL(pm_runtime_enable);
->
->  static void pm_runtime_disable_action(void *data)
->  {
-> +       pm_runtime_dont_use_autosuspend(data);
->         pm_runtime_disable(data);
->  }
->
->  /**
->   * devm_pm_runtime_enable - devres-enabled version of pm_runtime_enable.
-> + *
-> + * NOTE: this will also handle calling pm_runtime_dont_use_autosuspend() for
-> + * you at driver exit time if needed.
-> + *
->   * @dev: Device to handle.
->   */
->  int devm_pm_runtime_enable(struct device *dev)
-> diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-> index 9f09601c465a..2bff6a10095d 100644
-> --- a/include/linux/pm_runtime.h
-> +++ b/include/linux/pm_runtime.h
-> @@ -567,6 +567,10 @@ static inline void pm_runtime_disable(struct device *dev)
->   * Allow the runtime PM autosuspend mechanism to be used for @dev whenever
->   * requested (or "autosuspend" will be handled as direct runtime-suspend for
->   * it).
-> + *
-> + * NOTE: It's important to undo this with pm_runtime_dont_use_autosuspend()
-> + * at driver exit time unless your driver initially enabled pm_runtime
-> + * with devm_pm_runtime_enable() (which handles it for you).
->   */
->  static inline void pm_runtime_use_autosuspend(struct device *dev)
->  {
+> -       genpd_debug_remove(genpd);
+>         list_del(&genpd->gpd_list_node);
+>         genpd_unlock(genpd);
+> +       genpd_debug_remove(genpd);
+>         cancel_work_sync(&genpd->power_off_work);
+>         if (genpd_is_cpu_domain(genpd))
+>                 free_cpumask_var(genpd->cpus);
 > --
-> 2.35.1.473.g83b2b277ed-goog
+> 2.25.1
 >
