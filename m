@@ -2,45 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B42C74C8768
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 10:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 295B44C878A
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 10:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233676AbiCAJIU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 04:08:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
+        id S233677AbiCAJOx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 04:14:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233681AbiCAJIT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 04:08:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903D613CF2;
-        Tue,  1 Mar 2022 01:07:36 -0800 (PST)
+        with ESMTP id S232960AbiCAJOw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 04:14:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E532657169;
+        Tue,  1 Mar 2022 01:14:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 312CFB817F7;
-        Tue,  1 Mar 2022 09:07:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73901C340EE;
-        Tue,  1 Mar 2022 09:07:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646125653;
-        bh=2u98asnBmPKIGgO3EIdj0rvNyZeALdXhp3s7aF1sT0s=;
-        h=From:To:Cc:Subject:Date:From;
-        b=HpNol1ar3qyK5CZCPYkworAtpi3XK2nfDDIfXHNkFWmDyFWhqxW40zojZKAMKBi2q
-         yL6UWuw0DW8j2JVoIJ0Wg3IIOUF9EvNlQN/O3SVpYIn+JjMkNPndeYtIeySu1ZThyA
-         +TVZyOUIt6EHrHSG18mAOvUUqUJNkzYQi4CK6WkzXs4ycIBUwQZvzslb7pxq7VUX2N
-         jmi+3Vo2TqSJ40qB/jTQnDIiiGFkV1+DQZxG9zhs/6brTjm5HvXRHYfy67fQ2xM+lE
-         RVcqFdjYZugtAdsXXQybeu3dU55KLY8qIrHlYAbb+f4G7VPQWqy6EclNa2Sq7h1wfd
-         gMuYTw3aVZM9A==
-From:   Georgi Djakov <djakov@kernel.org>
-To:     elder@linaro.org, djakov@kernel.org
-Cc:     bjorn.andersson@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] interconnect: Add stubs for the bulk API
-Date:   Tue,  1 Mar 2022 11:07:35 +0200
-Message-Id: <20220301090735.26599-1-djakov@kernel.org>
-X-Mailer: git-send-email 2.29.0
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24420B816A6;
+        Tue,  1 Mar 2022 09:14:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51870C340EE;
+        Tue,  1 Mar 2022 09:14:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1646126048;
+        bh=3u5ZRH134IsbvgB65HHGgx0NUtj7j3ilfzvoR9+6XSY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LVGI6hTsonrfGWNRI8s4fNHsvabvgQDzYG9sbH6HwDRk5ka6vwqL1OAMbHjaGdj1A
+         xk2u6mhlMWs9hk0fJz1sLIezRIIl9iUWfI58LjDkIC/XlkJ+mfVnktbAdD14ePqvUp
+         yjEUMDGKIsjHEDPiXjGWy0WJ501Djkpm2FsQ2gNM=
+Date:   Tue, 1 Mar 2022 10:14:04 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee.jones@linaro.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Another pass removing cases of 'allOf'
+ containing a '$ref'
+Message-ID: <Yh3j3D22TopTEV9E@kroah.com>
+References: <20220228213802.1639658-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220228213802.1639658-1-robh@kernel.org>
 X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -51,71 +75,47 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add stub functions for the bulk API to allow compile testing.
+On Mon, Feb 28, 2022 at 03:38:02PM -0600, Rob Herring wrote:
+> Another pass at removing unnecessary use of 'allOf' with a '$ref'.
+> 
+> json-schema versions draft7 and earlier have a weird behavior in that
+> any keywords combined with a '$ref' are ignored (silently). The correct
+> form was to put a '$ref' under an 'allOf'. This behavior is now changed
+> in the 2019-09 json-schema spec and '$ref' can be mixed with other
+> keywords.
+> 
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Guenter Roeck <groeck@chromium.org>
+> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Vignesh Raghavendra <vigneshr@ti.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-input@vger.kernel.org
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-mtd@lists.infradead.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-phy@lists.infradead.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-remoteproc@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-spi@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
----
- include/linux/interconnect.h | 36 +++++++++++++++++++++++++++++-------
- 1 file changed, 29 insertions(+), 7 deletions(-)
-
-diff --git a/include/linux/interconnect.h b/include/linux/interconnect.h
-index f2dd2fc8d3cd..f685777b875e 100644
---- a/include/linux/interconnect.h
-+++ b/include/linux/interconnect.h
-@@ -38,13 +38,6 @@ struct icc_bulk_data {
- 	u32 peak_bw;
- };
- 
--int __must_check of_icc_bulk_get(struct device *dev, int num_paths,
--				 struct icc_bulk_data *paths);
--void icc_bulk_put(int num_paths, struct icc_bulk_data *paths);
--int icc_bulk_set_bw(int num_paths, const struct icc_bulk_data *paths);
--int icc_bulk_enable(int num_paths, const struct icc_bulk_data *paths);
--void icc_bulk_disable(int num_paths, const struct icc_bulk_data *paths);
--
- #if IS_ENABLED(CONFIG_INTERCONNECT)
- 
- struct icc_path *icc_get(struct device *dev, const int src_id,
-@@ -58,6 +51,12 @@ int icc_disable(struct icc_path *path);
- int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw);
- void icc_set_tag(struct icc_path *path, u32 tag);
- const char *icc_get_name(struct icc_path *path);
-+int __must_check of_icc_bulk_get(struct device *dev, int num_paths,
-+				 struct icc_bulk_data *paths);
-+void icc_bulk_put(int num_paths, struct icc_bulk_data *paths);
-+int icc_bulk_set_bw(int num_paths, const struct icc_bulk_data *paths);
-+int icc_bulk_enable(int num_paths, const struct icc_bulk_data *paths);
-+void icc_bulk_disable(int num_paths, const struct icc_bulk_data *paths);
- 
- #else
- 
-@@ -112,6 +111,29 @@ static inline const char *icc_get_name(struct icc_path *path)
- 	return NULL;
- }
- 
-+static inline int of_icc_bulk_get(struct device *dev, int num_paths, struct icc_bulk_data *paths)
-+{
-+	return 0;
-+}
-+
-+static inline void icc_bulk_put(int num_paths, struct icc_bulk_data *paths)
-+{
-+}
-+
-+static inline int icc_bulk_set_bw(int num_paths, const struct icc_bulk_data *paths)
-+{
-+	return 0;
-+}
-+
-+static inline int icc_bulk_enable(int num_paths, const struct icc_bulk_data *paths)
-+{
-+	return 0;
-+}
-+
-+static inline void icc_bulk_disable(int num_paths, const struct icc_bulk_data *paths)
-+{
-+}
-+
- #endif /* CONFIG_INTERCONNECT */
- 
- #endif /* __LINUX_INTERCONNECT_H */
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
