@@ -2,144 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C292F4C9109
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 18:00:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 305424C914D
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 18:17:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236300AbiCARBT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 12:01:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
+        id S236440AbiCARSd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 12:18:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236245AbiCARBS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 12:01:18 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43349C77;
-        Tue,  1 Mar 2022 09:00:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646154037; x=1677690037;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cCIRMrHF0mCOd6L49Nd5tPcRzNX080z43VWjDYEi728=;
-  b=YRgck4uv7jdj5Kme3AK/ovd6Shigo7KPwcjoetafWcp4AyObnkYhnhXI
-   KLT7TBflhptPzDKVGnNYBPGzZqMA8K2CrZWv5awyzBpaLetd+sQjRbrV2
-   kX7Epng0yW0EGaWBuQxJY9L42w+v6D1D+o29ESPdr1r4bGcI4qMarhvq7
-   0qOEeZwUhwQY6fP/UPs9sYDsLqVnc95mBwf9jLsJTF3fws8maSsz/YxcF
-   l406nMPLhyv/T+kl/otS0U3GTya1F1hiohxav/mihAZylpjDUQpZ7RFHw
-   cZQLnqfU6tkbeuN0bRKpe7N9ruMORLhMl7YrKgf3PVwrZ/Ik8QMOXl69t
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="252011958"
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="252011958"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 08:58:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
-   d="scan'208";a="805364065"
-Received: from lkp-server01.sh.intel.com (HELO 2146afe809fb) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 01 Mar 2022 08:58:45 -0800
-Received: from kbuild by 2146afe809fb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nP5pk-0000m1-Qv; Tue, 01 Mar 2022 16:58:44 +0000
-Date:   Wed, 2 Mar 2022 00:58:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, lukasz.luba@arm.com,
-        dietmar.eggemann@arm.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
-        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 3/4] OPP: Add support of "opp-microwatt" for advanced
- EM registration
-Message-ID: <202203020012.g7rYUP7M-lkp@intel.com>
-References: <20220301093524.8870-4-lukasz.luba@arm.com>
+        with ESMTP id S236438AbiCARSc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 12:18:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01BB931DFC
+        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 09:17:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646155063;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vU3c8INkyRrLYmMmG6yRKZ1MJ2tssrI6rFUsT1snRg0=;
+        b=LI4N+48OsQHomdrVNAKBoKHpxQ6dNDSuA78AkSTP8QwHedAMzOhXdyeS00T/50xPBloNcX
+        HyYjg43K8VRh4r+JyuxAviDrja0RJCHUk4UcI0KVDuCNvzSxRJ/1DGV+J+I8LrSnvlhYyp
+        daAzQ33kuecB+0qpuNjelobBFi8Eotc=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-612-Dn0cwPqCMiOPQUc1cb0ZvA-1; Tue, 01 Mar 2022 12:17:41 -0500
+X-MC-Unique: Dn0cwPqCMiOPQUc1cb0ZvA-1
+Received: by mail-wr1-f72.google.com with SMTP id h11-20020a5d430b000000b001f01a35a86fso840111wrq.4
+        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 09:17:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vU3c8INkyRrLYmMmG6yRKZ1MJ2tssrI6rFUsT1snRg0=;
+        b=yoHTJtJkJKxjh4ACO7Mp7cfI+LMBZa8OZW6LLKS5a3WM1JtCkOmu8uYqq8g2F5P+yR
+         5nOD1soZ3ci7c51bwAFS0HSmSSq0JIfijOXr3RRhf6fUbsrvPrZFdv9e4fbx1S1vrW5o
+         2e/f8GvLvY7mkKpi3TrDuBR2Tw9vLLJk2S8APx8NYTh6KvkstI/H64wKL8Am3CQFWv5b
+         JYlsb+5lk1Va2ggMF6MArengBbo5HXxkde8QKj8XyYzO/5cQVTP75Npk7NrFGmbkZ0u/
+         7XrcDq/JwY7j7IEU0Wfl5cZ0za52wRyD9bLiw4qShdIGgV0L9/MV9Fx60dsdUry2e+c0
+         +Z/Q==
+X-Gm-Message-State: AOAM532/BW/3QnpnR01OiSggWsVbuOU9f46LEMgj591X2xGKtwjRY4aw
+        fIGUlfW0Ut59rEK5lzJtwccJTK+BlE3FhYz2nBe4GY1Z4jjrRDPfqco8PK0mPyzp5iBemOBivEc
+        HV2GfrtbokiIsxiQlH64=
+X-Received: by 2002:a5d:61ca:0:b0:1f0:22ef:bb9f with SMTP id q10-20020a5d61ca000000b001f022efbb9fmr1534524wrv.56.1646155059888;
+        Tue, 01 Mar 2022 09:17:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzm0/sILq9s5oSrG8KTBgACJNRqT1mtZa0IVWQDeU62j8WMqO9Pb3os150cIhmIfKb7xYMP0Q==
+X-Received: by 2002:a5d:61ca:0:b0:1f0:22ef:bb9f with SMTP id q10-20020a5d61ca000000b001f022efbb9fmr1534511wrv.56.1646155059630;
+        Tue, 01 Mar 2022 09:17:39 -0800 (PST)
+Received: from redhat.com ([2.53.2.184])
+        by smtp.gmail.com with ESMTPSA id w26-20020a7bc11a000000b0037bf8fa8c02sm2970118wmi.13.2022.03.01.09.17.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 09:17:38 -0800 (PST)
+Date:   Tue, 1 Mar 2022 12:17:33 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Laszlo Ersek <lersek@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-hyperv@vger.kernel.org, linux-crypto@vger.kernel.org,
+        graf@amazon.com, mikelley@microsoft.com,
+        gregkh@linuxfoundation.org, adrian@parity.io, berrange@redhat.com,
+        linux@dominikbrodowski.net, jannh@google.com, rafael@kernel.org,
+        len.brown@intel.com, pavel@ucw.cz, linux-pm@vger.kernel.org,
+        colmmacc@amazon.com, tytso@mit.edu, arnd@arndb.de
+Subject: Re: propagating vmgenid outward and upward
+Message-ID: <20220301121419-mutt-send-email-mst@kernel.org>
+References: <Yh4+9+UpanJWAIyZ@zx2c4.com>
+ <223f858c-34c5-3ccd-b9e8-7585a976364d@redhat.com>
+ <Yh5JwK6toc/zBNL7@zx2c4.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220301093524.8870-4-lukasz.luba@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yh5JwK6toc/zBNL7@zx2c4.com>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Lukasz,
+On Tue, Mar 01, 2022 at 05:28:48PM +0100, Jason A. Donenfeld wrote:
+> Hi Laszlo,
+> 
+> On Tue, Mar 01, 2022 at 05:15:21PM +0100, Laszlo Ersek wrote:
+> > > If we had a "pull" model, rather than just expose a 16-byte unique
+> > > identifier, the vmgenid virtual hardware would _also_ expose a
+> > > word-sized generation counter, which would be incremented every time the
+> > > unique ID changed. Then, every time we would touch the RNG, we'd simply
+> > > do an inexpensive check of this memremap()'d integer, and reinitialize
+> > > with the unique ID if the integer changed.
+> > 
+> > Does the vmgenid spec (as-is) preclude the use of the 16-byte identifier
+> > like this?
+> > 
+> > After all, once you locate the identifier via the ADDR object, you could
+> > perhaps consult it every time you were about to touch the RNG.
+> 
+> No, you could in fact do this, and there'd be nothing wrong with that
+> from a spec perspective. You could even vDSO it all the way through
+> onward to userspace. However, doing a 16-byte atomic memcmp on
+> each-and-every packet is really a non-starter. For that kind of "check
+> it in the hot path" thing to be viable, you really want it to be a
+> counter that is word-sized. The "pull"-model involves pulling on every
+> single packet in order to be better than the "push"-model. Anyway, even
+> with a word-sized counter, it's unclear whether the costs of checking on
+> every packet would be worth it to everyone, but at least it's more
+> tenable than a 16-byte whammy.
+> 
+> Jason
 
-I love your patch! Yet something to improve:
+Hmm okay, so it's a performance optimization... some batching then? Do
+you really need to worry about every packet? Every 64 packets not
+enough?  Packets are after all queued at NICs etc, and VM fork can
+happen after they leave wireguard ...
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linux/master rafael-pm/linux-next linus/master v5.17-rc6 next-20220301]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+-- 
+MST
 
-url:    https://github.com/0day-ci/linux/commits/Lukasz-Luba/Introduce-opp-microwatt-and-Energy-Model-from-DT/20220301-173700
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: arc-randconfig-r014-20220301 (https://download.01.org/0day-ci/archive/20220302/202203020012.g7rYUP7M-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/e1e83de9bf2f261cb3e5eb9f53bde3c83c6e0647
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Lukasz-Luba/Introduce-opp-microwatt-and-Energy-Model-from-DT/20220301-173700
-        git checkout e1e83de9bf2f261cb3e5eb9f53bde3c83c6e0647
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/opp/of.c: In function 'dev_pm_opp_of_register_em':
->> drivers/opp/of.c:1572:22: error: 'struct em_data_callback' has no member named 'active_power'
-    1572 |                 em_cb.active_power = _get_dt_power;
-         |                      ^
-
-
-vim +1572 drivers/opp/of.c
-
-  1540	
-  1541	/**
-  1542	 * dev_pm_opp_of_register_em() - Attempt to register an Energy Model
-  1543	 * @dev		: Device for which an Energy Model has to be registered
-  1544	 * @cpus	: CPUs for which an Energy Model has to be registered. For
-  1545	 *		other type of devices it should be set to NULL.
-  1546	 *
-  1547	 * This checks whether the "dynamic-power-coefficient" devicetree property has
-  1548	 * been specified, and tries to register an Energy Model with it if it has.
-  1549	 * Having this property means the voltages are known for OPPs and the EM
-  1550	 * might be calculated.
-  1551	 */
-  1552	int dev_pm_opp_of_register_em(struct device *dev, struct cpumask *cpus)
-  1553	{
-  1554		struct em_data_callback em_cb = EM_DATA_CB(_get_power);
-  1555		struct device_node *np;
-  1556		int ret, nr_opp;
-  1557		u32 cap;
-  1558	
-  1559		if (IS_ERR_OR_NULL(dev)) {
-  1560			ret = -EINVAL;
-  1561			goto failed;
-  1562		}
-  1563	
-  1564		nr_opp = dev_pm_opp_get_opp_count(dev);
-  1565		if (nr_opp <= 0) {
-  1566			ret = -EINVAL;
-  1567			goto failed;
-  1568		}
-  1569	
-  1570		/* First, try to find more precised Energy Model in DT */
-  1571		if (_of_has_opp_microwatt_property(dev)) {
-> 1572			em_cb.active_power = _get_dt_power;
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
