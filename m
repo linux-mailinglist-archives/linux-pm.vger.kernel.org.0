@@ -2,147 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00A264C8580
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 08:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 871384C8615
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 09:13:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233083AbiCAHvz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 02:51:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55684 "EHLO
+        id S230006AbiCAIOO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 03:14:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232923AbiCAHvy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 02:51:54 -0500
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF7970F71;
-        Mon, 28 Feb 2022 23:51:11 -0800 (PST)
-Received: from relay11.mail.gandi.net (unknown [217.70.178.231])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id C52A4C3D50;
-        Tue,  1 Mar 2022 07:40:13 +0000 (UTC)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 2B2C310000D;
-        Tue,  1 Mar 2022 07:40:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1646120409;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1EOlbUxAApC61mQjvw+lG70+JM2jHWLUjBcqvnLcepA=;
-        b=EWUY1TKvGS6Yg129zF29NgHJHMwcv48rJCLCe7SF45JHcNNriVOQo+vcGiYixEAaHnyulB
-        nJQBl068EP/pSVzbkdxbgXCJZTn/Woy6xox0qwrhuWnLDJmO7Aw8fafuMklMsuzENOIIXz
-        c+TC7F7dcVRu1QNFnUnAFY2l+9/i9oBUcQ4iFhctYdJL7TClStx6/rANhA1Sbvyn0M96zz
-        DN43uNBfzPSoxhjSP8ns2qwAGgi1xkMICNqykUP4WLVTs0I1l9IOPWWY8T3PooNnoadHUN
-        InLV/E29BXUcvgd0jZP/wxq0rm/fa2yidd9Or23IERKtnX+02I184mza7r59qQ==
-Date:   Tue, 1 Mar 2022 08:40:01 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee.jones@linaro.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Another pass removing cases of 'allOf'
- containing a '$ref'
-Message-ID: <20220301084001.3771855e@xps13>
-In-Reply-To: <20220228213802.1639658-1-robh@kernel.org>
-References: <20220228213802.1639658-1-robh@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        with ESMTP id S229457AbiCAIOO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 03:14:14 -0500
+X-Greylist: delayed 546 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 01 Mar 2022 00:13:32 PST
+Received: from mg.sunplus.com (unknown [113.196.136.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 381A845785
+        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 00:13:31 -0800 (PST)
+X-MailGates: (compute_score:DELIVER,40,3)
+Received: from 172.17.9.112
+        by mg02.sunplus.com with MailGates ESMTP Server V5.0(59936:0:AUTH_RELAY)
+        (envelope-from <lh.Kuo@sunplus.com>); Tue, 01 Mar 2022 16:04:29 +0800 (CST)
+Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
+ sphcmbx02.sunplus.com.tw (172.17.9.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.26; Tue, 1 Mar 2022 16:04:23 +0800
+Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
+ sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
+ 15.00.1497.026; Tue, 1 Mar 2022 16:04:23 +0800
+From:   =?utf-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Li-hao Kuo <lhjeff911@gmail.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "amitk@kernel.org" <amitk@kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+Subject: RE: [PATCH v4 1/2] thermal: Add thermal driver for Sunplus SP7021
+Thread-Topic: [PATCH v4 1/2] thermal: Add thermal driver for Sunplus SP7021
+Thread-Index: AQHYCPBYT2nt6KgunEqzmIXgO8c/PKykAUMAgAZvzrA=
+Date:   Tue, 1 Mar 2022 08:04:23 +0000
+Message-ID: <eb063f1a287049a1942625b846c0764d@sphcmbx02.sunplus.com.tw>
+References: <cover.1642127137.git.lhjeff911@gmail.com>
+ <2847f96335da1c74dfbee7ba67939bdc474ba2a4.1642127137.git.lhjeff911@gmail.com>
+ <48c9fecc-67eb-891c-fb07-30ae4691031c@linaro.org>
+In-Reply-To: <48c9fecc-67eb-891c-fb07-30ae4691031c@linaro.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.25.108.51]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rob,
-
-robh@kernel.org wrote on Mon, 28 Feb 2022 15:38:02 -0600:
-
-> Another pass at removing unnecessary use of 'allOf' with a '$ref'.
->=20
-> json-schema versions draft7 and earlier have a weird behavior in that
-> any keywords combined with a '$ref' are ignored (silently). The correct
-> form was to put a '$ref' under an 'allOf'. This behavior is now changed
-> in the 2019-09 json-schema spec and '$ref' can be mixed with other
-> keywords.
->=20
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Sam Ravnborg <sam@ravnborg.org>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: Guenter Roeck <groeck@chromium.org>
-> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-input@vger.kernel.org
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-mtd@lists.infradead.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-phy@lists.infradead.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-remoteproc@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-spi@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/connector/usb-connector.yaml         |  3 +--
->  .../bindings/display/brcm,bcm2711-hdmi.yaml       |  3 +--
->  .../bindings/display/bridge/adi,adv7511.yaml      |  5 ++---
->  .../bindings/display/bridge/synopsys,dw-hdmi.yaml |  5 ++---
->  .../bindings/display/panel/display-timings.yaml   |  3 +--
->  .../devicetree/bindings/display/ste,mcde.yaml     |  4 ++--
->  .../devicetree/bindings/input/adc-joystick.yaml   |  9 ++++-----
->  .../bindings/leds/cznic,turris-omnia-leds.yaml    |  3 +--
->  .../devicetree/bindings/leds/leds-lp50xx.yaml     |  3 +--
->  .../devicetree/bindings/mfd/google,cros-ec.yaml   | 12 ++++--------
->  .../devicetree/bindings/mtd/nand-controller.yaml  |  8 +++-----
->  .../bindings/mtd/rockchip,nand-controller.yaml    |  3 +--
-
-For MTD bindings:
-
-Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
-
-Thanks,
-Miqu=C3=A8l
+SGkgTXIgRGFuaWVsIExlemNhbm86DQoNClRoYW5rIHlvdSBmb3IgeW91ciByZXZpZXcgDQoNCj4g
+UGxlYXNlIGNoZWNrIHRoZSBoZWFkZXJzIGFib3ZlLiBTb21lIGFyZSBub3QgbmVjZXNzYXJ5IChl
+ZyBjcHVmcmVxLA0KPiBkZWxheSwgcnRjIC4uLikgQUZBSUNUDQo+IA0KPiA+ICsjZGVmaW5lIERJ
+U0FCTEVfVEhSRU1BTAkJKEJJVCgzMSkgfCBCSVQoMTUpKQ0KPiA+ICsjZGVmaW5lIEVOQUJMRV9U
+SFJFTUFMCQlCSVQoMzEpDQo+ID4gKyNkZWZpbmUgU1BfVEhSRU1BTF9NQVNLCQlHRU5NQVNLKDEw
+LCAwKQ0KPiANCj4gVEhSRU1BTCA/DQo+IA0KPiBzL1RIUkVNQUwvVEhFUk1BTC8gPw0KDQpTb3Jy
+eSwgSSdsbCBjb3JyZWN0IGl0IGluIG5leHQgY29tbWl0Lg0KDQo+ID4gK3N0YXRpYyBjaGFyICpz
+cDcwMjFfb3RwX2NvZWZfcmVhZChzdHJ1Y3QgZGV2aWNlICpkZXYsIHNzaXplX3QgKmxlbikNCj4g
+PiArew0KPiA+ICsJY2hhciAqcmV0ID0gTlVMTDsNCj4gPiArCXN0cnVjdCBudm1lbV9jZWxsICpj
+ID0gbnZtZW1fY2VsbF9nZXQoZGV2LCAiY2FsaWIiKTsNCj4gPiArDQo+ID4gKwlpZiAoSVNfRVJS
+X09SX05VTEwoYykpDQo+ID4gKwkJcmV0dXJuIE5VTEw7DQo+ID4gKw0KPiA+ICsJcmV0ID0gbnZt
+ZW1fY2VsbF9yZWFkKGMsIGxlbik7DQo+ID4gKwludm1lbV9jZWxsX3B1dChjKTsNCj4gDQo+IFRo
+YXQgaXMgd3JvbmcuIFBsZWFzZSByZWZlciB0byB0aGUgZG9jdW1lbnRhdGlvbiBkcml2ZXItYXBp
+L252bWVtLnJzdA0KPiANCj4gbnZtZW1fY2VsbF9wdXQoKSBtdXN0IGJlIGNhbGxlZCB3aGVuIHRo
+ZSBwb2ludGVyIHJldHVybmVkIGJ5DQo+IG52bWVtX2NlbGxfcmVhZCgpIGlzIG5vIGxvbmdlciB1
+c2VkLg0KPg0KDQpTb3JyeSBmb3IgdGhhdC4gSSBkb24ndCBrbm93IHdoaWNoIHBhcnQgaXMgd3Jv
+bmcuDQpudm1lbV9jZWxsX3B1dCgpIGhhcyBiZWVuIGNhbGxlZCBhZnRlciBudm1lbV9jZWxsX3Jl
+YWQoKQ0KSSBhbSBjb2RpbmcgYWNjb3JkaW5nIHRvIHRoZSBleGFtcGxlLg0KDQoNCj4gZHVwbGlj
+YXRlIGxpbmUNCj4gDQo+ID4gKwlzcF9kYXRhLT5vdHBfdGVtcDAgPSBGSUVMRF9HRVQoU1BfVEhS
+RU1BTF9NQVNLLCBzcF9kYXRhLT5vdHBfdGVtcDApOw0KPiA+ICsJc3BfZGF0YS0+b3RwX3RlbXAx
+ID0gKG90cF92WzFdID4+IDMpIHwgKG90cF92WzJdIDw8IDUpOw0KPiA+ICsJc3BfZGF0YS0+b3Rw
+X3RlbXAxID0gRklFTERfR0VUKFNQX1RIUkVNQUxfTUFTSywgc3BfZGF0YS0+b3RwX3RlbXAxKTsN
+Cj4gPiArCWlmIChzcF9kYXRhLT5vdHBfdGVtcDAgPT0gMCkNCj4gPiArCQlzcF9kYXRhLT5vdHBf
+dGVtcDAgPSBURU1QX09UUF9CQVNFOw0KPiANCj4gQ2FuIHlvdSBhZGQgYSBjb21tZW50IGV4cGxh
+aW5pbmcgaG93IGlzIHN0b3JlZCB0aGUgY29lZiBpbiB0aGUgbnZjZWxsLA0KPiBzbyB3ZSBjYW4g
+dW5kZXJzdGFuZCB0aGUgYWJvdmUgYWN0aW9ucyA/DQo+IA0KPg0KDQpJcyB0aGUgY29tbWVudCBi
+ZWxvdyBvaz8NCg0KLyoNCiAqV2hlbiByZW1hbnVmYWN0dXJpbmcsIHRoZSAzNSBkZWdyZWUgVF9D
+T0RFIHdpbGwgYmUgcmVhZCBhbmQgc3RvcmVkIGluIG52Y2VsbC4NCiAqVEVNUF9SQVRFIGlzIHRo
+ZSBTUDcwMjEgdGVtcGVyYXR1cmUgc2xvcGUuDQogKlRfQ09ERSA6IDExIGRpZ2l0cyBpbiB0b3Rh
+bA0KKi8NCg0KDQoNCg==
