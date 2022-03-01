@@ -2,92 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F0E4C874A
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 10:03:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B42C74C8768
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Mar 2022 10:07:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbiCAJEL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 04:04:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
+        id S233676AbiCAJIU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 04:08:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiCAJEL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 04:04:11 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9FA7087E;
-        Tue,  1 Mar 2022 01:03:29 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id n14so19299128wrq.7;
-        Tue, 01 Mar 2022 01:03:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=j0pKuZxEIbazMmfW3N+WzOik5yd4tjStLdtiIPiTMzQ=;
-        b=S8DJqyafrnRj+h01YCl2ziBZEgQ1qwa4M5+61CyatjSKtO77MNiJZI821BO2xmmNYn
-         i62bZZQSrlOTm6KQDcVAs9b7gQgZyI6mFFkhs8JJsNwkMcHU3kKjsyMocRYiPdr8ni5l
-         3dJZFUTH92Zv+Yow2Q7WliJxomeZ55+v0lV/fRHkmNewcy3x1TEwEJbwareg0uJh864Y
-         N6yehURW8TxkaByoHo5Ym+1Kqz0masUaC8TXhylN+tf91Nw4mMrVs3rJG/Ca7BTE0JJc
-         3715Wfyb8Jw/Dso8pfj54UrEKxA1bwMhwQ8FGMNoCam5RHkHZ8Ag8FJbkOEt5vZHhJxi
-         AQmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=j0pKuZxEIbazMmfW3N+WzOik5yd4tjStLdtiIPiTMzQ=;
-        b=Tz34FZnfeOIJ/upD4faABvz4GEZen/kvwiGSNpVcrDqFTKgaluLsjhha/yzWz78CKZ
-         H52UCziNvKNbdbBB7gQBekH0t9oLsHgDwypmzmxhKuhS22BcjI1rplsRgQ4n2oT3KmGS
-         +9fE61IrNtrFXp+9a0vHBaU3CGbtwJA98eLtxMeHo23EBXDUdJAyBL8XXlxXmFlSTqIA
-         WeLaUQu7gnVzbr8JU7kagvhMclegoTPpCdvN86oJ+2san+bG03Fgqoja174bqAIT77k6
-         +5oYex0g1LMnx/tsBwLEzvuSkf+ooxkdF497CdTIefeEytQaS2brLr4eMxmHMsnee+IK
-         /l3w==
-X-Gm-Message-State: AOAM5323GR6wu2ipZ0Q5ty+ipGJZqlqnlM1BwMDZ7jUiZSrTYhpskk1Y
-        +2NWv95PDT5DUBYUO0qhfSBUuY770ao=
-X-Google-Smtp-Source: ABdhPJyNR/LUVGKW1fdHspoZJ48HACeageVG4R4teuxprsu6lMp2q8wG6Y2B1quKALE+0IlF3vCvpA==
-X-Received: by 2002:a05:6000:188f:b0:1eb:74ed:9223 with SMTP id a15-20020a056000188f00b001eb74ed9223mr18951534wri.222.1646125408147;
-        Tue, 01 Mar 2022 01:03:28 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id p2-20020a1c7402000000b0038159076d30sm1870817wmc.22.2022.03.01.01.03.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 01:03:27 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Daniel Lezcano <daniel.lezcano@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] powercap/dtpm: Fix spelling mistake "initialze" -> "initialize"
-Date:   Tue,  1 Mar 2022 09:03:27 +0000
-Message-Id: <20220301090327.515454-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S233681AbiCAJIT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 04:08:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903D613CF2;
+        Tue,  1 Mar 2022 01:07:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 312CFB817F7;
+        Tue,  1 Mar 2022 09:07:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73901C340EE;
+        Tue,  1 Mar 2022 09:07:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1646125653;
+        bh=2u98asnBmPKIGgO3EIdj0rvNyZeALdXhp3s7aF1sT0s=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HpNol1ar3qyK5CZCPYkworAtpi3XK2nfDDIfXHNkFWmDyFWhqxW40zojZKAMKBi2q
+         yL6UWuw0DW8j2JVoIJ0Wg3IIOUF9EvNlQN/O3SVpYIn+JjMkNPndeYtIeySu1ZThyA
+         +TVZyOUIt6EHrHSG18mAOvUUqUJNkzYQi4CK6WkzXs4ycIBUwQZvzslb7pxq7VUX2N
+         jmi+3Vo2TqSJ40qB/jTQnDIiiGFkV1+DQZxG9zhs/6brTjm5HvXRHYfy67fQ2xM+lE
+         RVcqFdjYZugtAdsXXQybeu3dU55KLY8qIrHlYAbb+f4G7VPQWqy6EclNa2Sq7h1wfd
+         gMuYTw3aVZM9A==
+From:   Georgi Djakov <djakov@kernel.org>
+To:     elder@linaro.org, djakov@kernel.org
+Cc:     bjorn.andersson@linaro.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] interconnect: Add stubs for the bulk API
+Date:   Tue,  1 Mar 2022 11:07:35 +0200
+Message-Id: <20220301090735.26599-1-djakov@kernel.org>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is a spelling mistake in a pr_info message. Fix it.
+Add stub functions for the bulk API to allow compile testing.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Signed-off-by: Georgi Djakov <djakov@kernel.org>
 ---
- drivers/powercap/dtpm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/interconnect.h | 36 +++++++++++++++++++++++++++++-------
+ 1 file changed, 29 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
-index ec931a06d90a..b2bcd6d1e242 100644
---- a/drivers/powercap/dtpm.c
-+++ b/drivers/powercap/dtpm.c
-@@ -596,7 +596,7 @@ int dtpm_create_hierarchy(struct of_device_id *dtpm_match_table)
+diff --git a/include/linux/interconnect.h b/include/linux/interconnect.h
+index f2dd2fc8d3cd..f685777b875e 100644
+--- a/include/linux/interconnect.h
++++ b/include/linux/interconnect.h
+@@ -38,13 +38,6 @@ struct icc_bulk_data {
+ 	u32 peak_bw;
+ };
  
- 		ret = dtpm_subsys[i]->init();
- 		if (ret)
--			pr_info("Failed to initialze '%s': %d",
-+			pr_info("Failed to initialize '%s': %d",
- 				dtpm_subsys[i]->name, ret);
- 	}
+-int __must_check of_icc_bulk_get(struct device *dev, int num_paths,
+-				 struct icc_bulk_data *paths);
+-void icc_bulk_put(int num_paths, struct icc_bulk_data *paths);
+-int icc_bulk_set_bw(int num_paths, const struct icc_bulk_data *paths);
+-int icc_bulk_enable(int num_paths, const struct icc_bulk_data *paths);
+-void icc_bulk_disable(int num_paths, const struct icc_bulk_data *paths);
+-
+ #if IS_ENABLED(CONFIG_INTERCONNECT)
  
--- 
-2.34.1
-
+ struct icc_path *icc_get(struct device *dev, const int src_id,
+@@ -58,6 +51,12 @@ int icc_disable(struct icc_path *path);
+ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw);
+ void icc_set_tag(struct icc_path *path, u32 tag);
+ const char *icc_get_name(struct icc_path *path);
++int __must_check of_icc_bulk_get(struct device *dev, int num_paths,
++				 struct icc_bulk_data *paths);
++void icc_bulk_put(int num_paths, struct icc_bulk_data *paths);
++int icc_bulk_set_bw(int num_paths, const struct icc_bulk_data *paths);
++int icc_bulk_enable(int num_paths, const struct icc_bulk_data *paths);
++void icc_bulk_disable(int num_paths, const struct icc_bulk_data *paths);
+ 
+ #else
+ 
+@@ -112,6 +111,29 @@ static inline const char *icc_get_name(struct icc_path *path)
+ 	return NULL;
+ }
+ 
++static inline int of_icc_bulk_get(struct device *dev, int num_paths, struct icc_bulk_data *paths)
++{
++	return 0;
++}
++
++static inline void icc_bulk_put(int num_paths, struct icc_bulk_data *paths)
++{
++}
++
++static inline int icc_bulk_set_bw(int num_paths, const struct icc_bulk_data *paths)
++{
++	return 0;
++}
++
++static inline int icc_bulk_enable(int num_paths, const struct icc_bulk_data *paths)
++{
++	return 0;
++}
++
++static inline void icc_bulk_disable(int num_paths, const struct icc_bulk_data *paths)
++{
++}
++
+ #endif /* CONFIG_INTERCONNECT */
+ 
+ #endif /* __LINUX_INTERCONNECT_H */
