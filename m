@@ -2,228 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B01B4CA2A2
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Mar 2022 12:00:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D19D4CA39D
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Mar 2022 12:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241083AbiCBLBN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Mar 2022 06:01:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47856 "EHLO
+        id S234759AbiCBL1a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Mar 2022 06:27:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240751AbiCBLBL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Mar 2022 06:01:11 -0500
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B512D6E57D
-        for <linux-pm@vger.kernel.org>; Wed,  2 Mar 2022 03:00:21 -0800 (PST)
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220302110016epoutp03d1d5d7e70030d32f77550dcde8f25c38~Yi0qhhNg33076730767epoutp03B
-        for <linux-pm@vger.kernel.org>; Wed,  2 Mar 2022 11:00:16 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220302110016epoutp03d1d5d7e70030d32f77550dcde8f25c38~Yi0qhhNg33076730767epoutp03B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1646218816;
-        bh=kq8MQbVRkc+bOUL5EisgTWGyifp1Wf2QScEObld1uDc=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=VBiAPt2ZvaQ40xwTA8+UZ8RzRuOIDVE9uv49XxDqKoVuisSMBghbFybAjH7/9Iwru
-         TMNjOQnksf8x/hQ2B2Yy/KLdmU4zQ/C+QSDhP1DvjRKI7NYAEDACoW9CB2yCOo0wyN
-         x7oUTRy6L+AcVZll59VcXkiPT92+vyLyc4V8fRWc=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20220302110015epcas1p11e00fb34377d4913a5204264f2a86106~Yi0qGCeoa0938509385epcas1p1j;
-        Wed,  2 Mar 2022 11:00:15 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.38.241]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4K7rk64VW2z4x9Ps; Wed,  2 Mar
-        2022 11:00:14 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        7F.25.09592.E3E4F126; Wed,  2 Mar 2022 20:00:14 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220302110014epcas1p48988c9d9e7f43f5ca002f718baa7ae53~Yi0odL9Xt1455414554epcas1p4C;
-        Wed,  2 Mar 2022 11:00:14 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220302110014epsmtrp120570eea30bcef7d260dbef848ee1bda~Yi0ocaG5d0587005870epsmtrp1Q;
-        Wed,  2 Mar 2022 11:00:14 +0000 (GMT)
-X-AuditID: b6c32a37-28fff70000002578-9c-621f4e3e3792
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        E7.59.29871.E3E4F126; Wed,  2 Mar 2022 20:00:14 +0900 (KST)
-Received: from yj84jang02 (unknown [10.88.97.211]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220302110013epsmtip2d98d3399c45cf71f6484d5611b47ffdc~Yi0oO1qT42184721847epsmtip2H;
-        Wed,  2 Mar 2022 11:00:13 +0000 (GMT)
-From:   =?ks_c_5601-1987?B?wOW/tcH4L1RWIFMvVyBMYWIoVkQpL1N0YWZmIEVuZ2luZWVyL7vv?=
-         =?ks_c_5601-1987?B?vLrA/MDa?= <yj84.jang@samsung.com>
-To:     "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>
-Cc:     "'Rafael J. Wysocki'" <rafael@kernel.org>,
-        "'Pavel Machek'" <pavel@ucw.cz>,
-        "'Len Brown'" <len.brown@intel.com>,
-        "'Bjorn Helgaas'" <bhelgaas@google.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <js07.lee@samsung.com>
-In-Reply-To: <Yh8jb/X5ZNFvVQlf@kroah.com>
-Subject: RE: [PATCH] PM: Add device name to suspend_report_result()
-Date:   Wed, 2 Mar 2022 20:00:14 +0900
-Message-ID: <03e001d82e24$b1b0e450$1512acf0$@samsung.com>
+        with ESMTP id S241297AbiCBL1a (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Mar 2022 06:27:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86BA66622D;
+        Wed,  2 Mar 2022 03:26:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2419161804;
+        Wed,  2 Mar 2022 11:26:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D16F9C340F1;
+        Wed,  2 Mar 2022 11:26:45 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="FLziEXpf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1646220402;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fufxSPRIOrmbnPbDC6hJ7ttxshIW5aGS9pJhSWhnCM4=;
+        b=FLziEXpf2l0WTAhzSsctWfFPyoNczuf0yET5OvrmfeoHkbQdJJUnS5q+NI+vrChRlkMr3x
+        174jqFOO+Z3Pr5c79Gii5Ryw0Vd9q9Ey0Hlr2keq9mQvPlFbNmRp37DUVNhIihEZDWJZG5
+        HjPNCU02XchGOwdc6y1fEsx970Bts6c=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a4166dc6 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 2 Mar 2022 11:26:41 +0000 (UTC)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2dbc48104beso13440867b3.5;
+        Wed, 02 Mar 2022 03:26:40 -0800 (PST)
+X-Gm-Message-State: AOAM531CCPFcEGKBbRNRGtYXkH9nqJ+pu4T+FHrfbpHSC9V4hrNo0nv0
+        rosp0lWDaH02FtNz1efiEeJ2262x3AcFLqhgPQc=
+X-Google-Smtp-Source: ABdhPJxbaslGOWNMYlqRkibxJ2ICArMnaBOXMWHprS75pC5WtpgRWsCTpsPEORMZE4FcmdBod69a3hNDLa7CXaxndsk=
+X-Received: by 2002:a81:1143:0:b0:2db:ccb4:b0a1 with SMTP id
+ 64-20020a811143000000b002dbccb4b0a1mr9951120ywr.499.1646220398624; Wed, 02
+ Mar 2022 03:26:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="ks_c_5601-1987"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQGYo0TT2vM3t6OMkLszEBoeXVnaDgIOdYpqAcZRUMetDFa0cA==
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrOJsWRmVeSWpSXmKPExsWy7bCmrq6dn3ySwbk/ihZLmjIsmhevZ7N4
-        dPM3q8WsKXuZLJbv62e0uLxrDpvF2XnH2Sw+9x5htFi0rJXZ4u6po2wWc79MZXbg9liwqdRj
-        8Z6XTB6bVnWyeeyfu4bdo2/LKkaPFau/s3t83iQXwB6VbZORmpiSWqSQmpecn5KZl26r5B0c
-        7xxvamZgqGtoaWGupJCXmJtqq+TiE6DrlpkDdKKSQlliTilQKCCxuFhJ386mKL+0JFUhI7+4
-        xFYptSAlp8CsQK84Mbe4NC9dLy+1xMrQwMDIFKgwITtj5aeFLAUz5Cre/V/I0sB4W6KLkYND
-        QsBEYsaetC5GLg4hgR2MEnPmH2SCcD4xSrzavIwFwvnGKHGrZSGQwwnWce7zD3aIxF5Gia3H
-        Z0G1PGeU2HPqJFiGTaCdUWLnqtXsIC0iAuYScx8eB0swC1xikrh+aQsjSIJTQFNi5cc7rCC2
-        sICzxN59R8B2sAioSGw8e4sNxOYVsJT4v+IPE4QtKHFy5hOwGmYBI4klq+czQdjyEtvfzmGG
-        uE9B4ufTZawQi50kXl09wQpRIyIxu7ONGeQICYEDHBJbd05ghWhwkejr+cUOYQtLvDq+BcqW
-        knjZ3wZlp0tMfPwWyi6Q+Pt4CdQyY4l3b9dC2YoSO3/PZYRYxifx7msPKySIeSU62oQgSpQl
-        Hp9fzQZhS0qs/72faQKj0iwkr81C8tosJK/NQvLCAkaWVYxiqQXFuempxYYFxvAIT87P3cQI
-        TsFa5jsYp739oHeIkYmD8RCjBAezkgivuLV8khBvSmJlVWpRfnxRaU5q8SFGU2BoT2SWEk3O
-        B2aBvJJ4QxNLAxMzIxMLY0tjMyVx3lXTTicKCaQnlqRmp6YWpBbB9DFxcEo1MFkt29pZp93S
-        l9jl1F4RbTPj9c3Jel/Z620CNjyz67F33fvw3vWPU7beCUlWuqEgf8Yn6dWiu79nmjJsW7WC
-        f/VL8bwNyzaytV8W2av3o3vrmg/rMgJLVjX7uZi7TemzizA5pWtnU143+8058bfKsqdOLLCu
-        3VF/t3fxkqWtj1Z/Oc/VxPAy9lU6w+2FB5NSzrRJnk57I/n2wKviWOmauW9iGc6//NnPl9bE
-        mW5wqoJhsljcu+BPkkmCm5uZuLfde2+cyqEXM0mhq6LuwSk/iR2vJz61eRQ5zah48WXP8qn2
-        fceb368T+tUsclsteVlM+PX3tyS+ODzclRSQp3oqmjd3n9ilM5kikm7ZpZM3/1ZiKc5INNRi
-        LipOBABfkH8OSgQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrAIsWRmVeSWpSXmKPExsWy7bCSvK6dn3ySwZrr7BZLmjIsmhevZ7N4
-        dPM3q8WsKXuZLJbv62e0uLxrDpvF2XnH2Sw+9x5htFi0rJXZ4u6po2wWc79MZXbg9liwqdRj
-        8Z6XTB6bVnWyeeyfu4bdo2/LKkaPFau/s3t83iQXwB7FZZOSmpNZllqkb5fAlbHy00KWghly
-        Fe/+L2RpYLwt0cXIySEhYCJx7vMP9i5GLg4hgd2MEg+X/mSCSEhKfP30ma2LkQPIFpY4fLgY
-        ouYpo0Tv100sIA6bQDujxM5Vq9lBGkQEzCXmPjwOZjML3GKS+HvIGaJjJaPEteOtYAlOAU2J
-        lR/vsILYwgLOEnv3HWEBsVkEVCQ2nr3FBmLzClhK/F/xhwnCFpQ4OfMJC8RQE4nGw91QtrzE
-        9rdzmCEuVZD4+XQZK8QRThKvrp5ghagRkZjd2cY8gVF4FpJRs5CMmoVk1CwkLQsYWVYxSqYW
-        FOem5xYbFhjmpZbrFSfmFpfmpesl5+duYgRHopbmDsbtqz7oHWJk4mA8xCjBwawkwituLZ8k
-        xJuSWFmVWpQfX1Sak1p8iFGag0VJnPdC18l4IYH0xJLU7NTUgtQimCwTB6dUA9Nkq2vyFpMF
-        7k2ZyLl56a/r5x/XHqyaWXFWROdL6qxQQUOVtkqLuefu6N/xE1jZ+Pp8fmed/sp4lvnGQi4n
-        Z28vZ+/5U8rZb2av4Kt0Ma/48UbWGy/a448VKMtszNvM/in7S7TTioMxK/crq1QJfjrLfr3F
-        Ymt29Y54V//zMfofTRd4pK+N2rmLUeW628H+zqYin3v/rYqMJKdE2xtw7WG4cPq0kPujMF11
-        Xe2OPc2BFl6b2AMaJ6zX//H3Pk/8H5F38ml+muv8Fx01NJLbb7m74f1f7q4r2QWOzusZj2ax
-        R+442jFJKjjwy/bKB0wup10b/eQCZZQXK/HwvW/tPX51ZUXS8leJxZ9U9VeEKrEUZyQaajEX
-        FScCAG+lEs8zAwAA
-X-CMS-MailID: 20220302110014epcas1p48988c9d9e7f43f5ca002f718baa7ae53
-X-Msg-Generator: CA
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220302064921epcas1p19fbe8c017d776657caa696a3cef10093
-References: <CGME20220302064921epcas1p19fbe8c017d776657caa696a3cef10093@epcas1p1.samsung.com>
-        <20220302064917.64073-1-yj84.jang@samsung.com> <Yh8jb/X5ZNFvVQlf@kroah.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <Yh4+9+UpanJWAIyZ@zx2c4.com> <223f858c-34c5-3ccd-b9e8-7585a976364d@redhat.com>
+ <Yh5JwK6toc/zBNL7@zx2c4.com> <20220301121419-mutt-send-email-mst@kernel.org>
+ <CAHmME9qieLUDVoPYZPo=N8NCL1T-RzQ4p7kCFv3PKFUkhWZPsw@mail.gmail.com> <20220302031738-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220302031738-mutt-send-email-mst@kernel.org>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 2 Mar 2022 12:26:27 +0100
+X-Gmail-Original-Message-ID: <CAHmME9pf-bjnZuweoLqoFEmPy1OK7ogEgGEAva1T8uVTufhCuw@mail.gmail.com>
+Message-ID: <CAHmME9pf-bjnZuweoLqoFEmPy1OK7ogEgGEAva1T8uVTufhCuw@mail.gmail.com>
+Subject: Re: propagating vmgenid outward and upward
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Laszlo Ersek <lersek@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        linux-hyperv@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Alexander Graf <graf@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        adrian@parity.io,
+        =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Jann Horn <jannh@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> -----Original Message-----
-> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Sent: Wednesday, March 2, 2022 4:58 PM
-> To: Youngjin Jang <yj84.jang@samsung.com>
-> Cc: Rafael J. Wysocki <rafael@kernel.org>; Pavel Machek <pavel@ucw.cz>;
-> Len Brown <len.brown@intel.com>; Bjorn Helgaas <bhelgaas@google.com>;
-> linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
-> pci@vger.kernel.org; linux-acpi@vger.kernel.org; linux-
-usb@vger.kernel.org;
-> js07.lee@samsung.com
-> Subject: Re: [PATCH] PM: Add device name to suspend_report_result()
-> 
-> On Wed, Mar 02, 2022 at 03:49:17PM +0900, Youngjin Jang wrote:
-> > From: "yj84.jang" <yj84.jang@samsung.com>
-> >
-> > currently, suspend_report_result() prints only function information.
-> > If any driver uses common pm function, nobody knows who called failed
-> > function exactly.
-> >
-> > So, device information is needed to recognize specific wrong driver.
-> >
-> > e.g.)
-> > PM: dpm_run_callback(): pm_generic_suspend+0x0/0x48 returns 0
-> > PM: dpm_run_callback(): platform_pm_suspend+0x0/0x68 returns 0 after
-> > patch,
-> > PM: dpm_run_callback(): pm_generic_suspend+0x0/0x48 (amba) returns 0
-> > PM: dpm_run_callback(): platform_pm_suspend+0x0/0x68 (armv7-pmu)
-> > returns 0
-> >
-> > Signed-off-by: yj84.jang <yj84.jang@samsung.com>
-> > ---
-> >  drivers/base/power/main.c  | 10 +++++-----
-> >  drivers/pci/pci-driver.c   | 14 +++++++-------
-> >  drivers/pnp/driver.c       |  2 +-
-> >  drivers/usb/core/hcd-pci.c |  4 ++--
-> >  include/linux/pm.h         |  8 ++++----
-> >  5 files changed, 19 insertions(+), 19 deletions(-)
-> >
-> > diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-> > index 04ea92c..a762fe8 100644
-> > --- a/drivers/base/power/main.c
-> > +++ b/drivers/base/power/main.c
-> > @@ -485,7 +485,7 @@ static int dpm_run_callback(pm_callback_t cb, struct
-> device *dev,
-> >  	trace_device_pm_callback_start(dev, info, state.event);
-> >  	error = cb(dev);
-> >  	trace_device_pm_callback_end(dev, error);
-> > -	suspend_report_result(cb, error);
-> > +	suspend_report_result(dev, cb, error);
-> >
-> >  	initcall_debug_report(dev, calltime, cb, error);
-> >
-> > @@ -1568,7 +1568,7 @@ static int legacy_suspend(struct device *dev,
-> pm_message_t state,
-> >  	trace_device_pm_callback_start(dev, info, state.event);
-> >  	error = cb(dev, state);
-> >  	trace_device_pm_callback_end(dev, error);
-> > -	suspend_report_result(cb, error);
-> > +	suspend_report_result(dev, cb, error);
-> >
-> >  	initcall_debug_report(dev, calltime, cb, error);
-> >
-> > @@ -1855,7 +1855,7 @@ static int device_prepare(struct device *dev,
-> pm_message_t state)
-> >  	device_unlock(dev);
-> >
-> >  	if (ret < 0) {
-> > -		suspend_report_result(callback, ret);
-> > +		suspend_report_result(dev, callback, ret);
-> >  		pm_runtime_put(dev);
-> >  		return ret;
-> >  	}
-> > @@ -1960,10 +1960,10 @@ int dpm_suspend_start(pm_message_t state)  }
-> > EXPORT_SYMBOL_GPL(dpm_suspend_start);
-> >
-> > -void __suspend_report_result(const char *function, void *fn, int ret)
-> > +void __suspend_report_result(const char *function, struct device
-> > +*dev, void *fn, int ret)
-> >  {
-> >  	if (ret)
-> > -		pr_err("%s(): %pS returns %d\n", function, fn, ret);
-> > +		pr_err("%s(): %pS (%s) returns %d\n", function, fn,
-> > +dev_driver_string(dev), ret);
-> 
-> If you have a struct device, please use dev_err().
-> 
-> thanks,
-> 
-> greg k-h
+Hey Michael,
 
-Hello,
-Thanks for your review.
+Thanks for the benchmark.
 
-I think dev_err() is nice option, but we can see a minor issue.
-Prefix log "PM: " would be lost, If I use dev_err() in this context.
-As you know, all logs in power management include "PM :" prefix.
+On Wed, Mar 2, 2022 at 9:30 AM Michael S. Tsirkin <mst@redhat.com> wrote:
+> So yes, the overhead is higher by 50% which seems a lot but it's from a
+> very small number, so I don't see why it's a show stopper, it's not by a
+> factor of 10 such that we should sacrifice safety by default. Maybe a
+> kernel flag that removes the read replacing it with an interrupt will
+> do.
+>
+> In other words, premature optimization is the root of all evil.
 
-So, I think pr_err() with detail information would be better than dev_err().
-- PM: amba 1740000.etm: dpm_run_callback(): pm_generic_resume+0x0/0x48
-returns 0
+Unfortunately I don't think it's as simple as that for several reasons.
 
+First, I'm pretty confident a beefy Intel machine can mostly hide
+non-dependent comparisons in the memory access and have the problem
+mostly go away. But this is much less the case on, say, an in-order
+MIPS32r2, which isn't just "some crappy ISA I'm using for the sake of
+argument," but actually the platform on which a lot of networking and
+WireGuard stuff runs, so I do care about it. There, we have 4
+reads/comparisons which can't pipeline nearly as well.
 
+There's also the atomicity aspect, which I think makes your benchmark
+not quite accurate. Those 16 bytes could change between the first and
+second word (or between the Nth and N+1th word for N<=3 on 32-bit).
+What if in that case the word you read second doesn't change, but the
+word you read first did? So then you find yourself having to do a
+hi-lo-hi dance. And then consider the 32-bit case, where that's even
+more annoying. This is just one of those things that comes up when you
+compare the semantics of a "large unique ID" and "word-sized counter",
+as general topics. (My suggestion is that vmgenid provide both.)
+
+Finally, there's a slightly storage aspect, where adding 16 bytes to a
+per-key struct is a little bit heavier than adding 4 bytes and might
+bust a cache line without sufficient care, care which always has some
+cost in one way or another.
+
+So I just don't know if it's realistic to impose a 16-byte per-packet
+comparison all the time like that. I'm familiar with WireGuard
+obviously, but there's also cifs and maybe even wifi and bluetooth,
+and who knows what else, to care about too. Then there's the userspace
+discussion. I can't imagine a 16-byte hotpath comparison being
+accepted as implementable.
+
+> And I feel if linux
+> DTRT and reads the 16 bytes then hypervisor vendors will be motivated to
+> improve and add a 4 byte unique one. As long as linux is interrupt
+> driven there's no motivation for change.
+
+I reeeeeally don't want to get pulled into the politics of this on the
+hypervisor side. I assume an improved thing would begin with QEMU and
+Firecracker or something collaborating because they're both open
+source and Amazon people seem interested. And then pressure builds for
+Microsoft and VMware to do it on their side. And then we get this all
+nicely implemented in the kernel. In the meantime, though, I'm not
+going to refuse to address the problem entirely just because the
+virtual hardware is less than perfect; I'd rather make the most with
+what we've got while still being somewhat reasonable from an
+implementation perspective.
+
+Jason
