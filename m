@@ -2,133 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C00A84CB073
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Mar 2022 21:59:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EADA84CB091
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Mar 2022 22:01:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244935AbiCBVAR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Mar 2022 16:00:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
+        id S245040AbiCBVCY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Mar 2022 16:02:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244951AbiCBVAP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Mar 2022 16:00:15 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F6DDBD13
-        for <linux-pm@vger.kernel.org>; Wed,  2 Mar 2022 12:59:30 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 195so2661523pgc.6
-        for <linux-pm@vger.kernel.org>; Wed, 02 Mar 2022 12:59:30 -0800 (PST)
+        with ESMTP id S245020AbiCBVCX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Mar 2022 16:02:23 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355E1DCE11
+        for <linux-pm@vger.kernel.org>; Wed,  2 Mar 2022 13:01:39 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id n14so4712989wrq.7
+        for <linux-pm@vger.kernel.org>; Wed, 02 Mar 2022 13:01:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=R/oQqieG0aXWXHs93Td97reRxAIjZoSgBmUtDJFVhjU=;
-        b=d2ZFN7FzXJICmnX4Tyt0wAx0nHny3V7g7RBF7BzoFi4JqvMjvTlFe6r9CSmtZHYpfY
-         sI7cCbacBhQSn0c2nYjk/wWGRSWn9quhJSSynH9lMYRKPPdVW/LYlF+HQ4F3tfS4GoN+
-         rfxT6gA9HHGJJFfNnOWheyqKpysRyPxkd0f8U=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IotEGEPl+vyvT7dXmaJAP+jOA9ymnn/1Ou6RVmJElPo=;
+        b=pC98Gxui5FKMvVnCS2lvd7EDmxqExt/7anZky4i0qilnWRH8AA1eZQ7k+JzXkwQ3go
+         wjGsj6ZUDSbpJN198GqqSwRxgdlVm8AY0Txpl9M1/OncZLt0B4SA5sP+gnTsAOeCGv7y
+         RhWtOqMlqMw0hobQKS+jFMd4FKY7VnrrLFqi84m2/MWQ1FHC+HxsXA5PBKwTF/gButw1
+         osSH0jsjnJUipS/61SLjBXKjgiueFK/jy7WJOMBHdFQjpC66ont/1QMVK+t/IfNyxlut
+         8ZbbLJ9eH8L0i+IG7VoVAfehe204+4Zbn5YOHqUr7Go9PavF1SC3qpLerb2LWVEFG+zs
+         09KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=R/oQqieG0aXWXHs93Td97reRxAIjZoSgBmUtDJFVhjU=;
-        b=S1z3qHsJr8u7yf0GeAj90SXn1s70aYQ0WXNF4iyEn3UP/2dIzYHPp63HEl/Ryd2gdD
-         rVAQWuLb+M94euL4QISHVluknsfYWavGAkxry1bl9p+Qfgg48A9jfsbIkCEpq3uYPv2A
-         dswDDnuqGrf+YHBV+CWH6C7hgTis1S2BeFWYho8YwfotyBki63ORgCh9NmDd+vxu4cSM
-         lLFKRzM+hhwYJQT8K7tslJw4bLYsxN4JVxePa46zU+DsD55ohDs/QBLVd8A6wM/ZCGQ7
-         3B9/WR2o63HZFrrhYKO/SP8VPx/7iJbvW+nzmZ5v4a3j+bTNpi3Ff6eftiQ+c3df6pq/
-         C7GA==
-X-Gm-Message-State: AOAM5325GV4X6FLbl0uFHc4Hcq/9TNIMNFsBNOVtCdGfYhOdwdpXicML
-        gB2EauzaW3hRDOW6ccGaT6s5dg==
-X-Google-Smtp-Source: ABdhPJwV5Vftpu3BNFYOd1YAI3xcgBfQbmCq2DPnKYT59xnVma61vCMoUamoUdgwMbiUWTPibOctJw==
-X-Received: by 2002:a63:595e:0:b0:378:b203:a74e with SMTP id j30-20020a63595e000000b00378b203a74emr13280856pgm.328.1646254769698;
-        Wed, 02 Mar 2022 12:59:29 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z9-20020a655a49000000b00373459df190sm58337pgs.35.2022.03.02.12.59.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 12:59:29 -0800 (PST)
-Date:   Wed, 2 Mar 2022 12:59:28 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        David Laight <David.Laight@aculab.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        KVM list <kvm@vger.kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>,
-        "linux1394-devel@lists.sourceforge.net" 
-        <linux1394-devel@lists.sourceforge.net>,
-        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "kgdb-bugreport@lists.sourceforge.net" 
-        <kgdb-bugreport@lists.sourceforge.net>,
-        "bcm-kernel-feedback-list@broadcom.com" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Arnd Bergman <arnd@arndb.de>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        dma <dmaengine@vger.kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        "v9fs-developer@lists.sourceforge.net" 
-        <v9fs-developer@lists.sourceforge.net>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux F2FS Dev Mailing List 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "tipc-discussion@lists.sourceforge.net" 
-        <tipc-discussion@lists.sourceforge.net>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
- as a ptr
-Message-ID: <202203021256.69D7C4BCA6@keescook>
-References: <7D0C2A5D-500E-4F38-AD0C-A76E132A390E@kernel.org>
- <73fa82a20910c06784be2352a655acc59e9942ea.camel@HansenPartnership.com>
- <CAHk-=wiT5HX6Kp0Qv4ZYK_rkq9t5fZ5zZ7vzvi6pub9kgp=72g@mail.gmail.com>
- <7dc860874d434d2288f36730d8ea3312@AcuMS.aculab.com>
- <CAHk-=whKqg89zu4T95+ctY-hocR6kDArpo2qO14-kV40Ga7ufw@mail.gmail.com>
- <0ced2b155b984882b39e895f0211037c@AcuMS.aculab.com>
- <CAHk-=wix0HLCBs5sxAeW3uckg0YncXbTjMsE-Tv8WzmkOgLAXQ@mail.gmail.com>
- <78ccb184-405e-da93-1e02-078f90d2b9bc@rasmusvillemoes.dk>
- <202203021158.DB5204A0@keescook>
- <CAHk-=wikKPC0LUqZ8++EC5JOvGdBqVH9uUaTX=DvBioDoReYww@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IotEGEPl+vyvT7dXmaJAP+jOA9ymnn/1Ou6RVmJElPo=;
+        b=uX0UKmOCTLUvq3qX8+7LLQ8OURC+zNy4XzXp/OJoIDrr6A+UodU6+Cq9lS16VRPLtS
+         oDNLd4T1MzRqnHU1KcZq7dMvF8ZsaZp2toKPBmZ4svC2GiNzqJjz2h7STeyFq8idQku0
+         rM4cRoa+biqmCK4WOIG58arijMe1dg6ATFfg+QoypUNVzAyCz8joHQ2A9e8N/tDID5Z0
+         SiGG0vvNYUDUDOavFtbvOt38alfjTmuWwAqmldURyd1F4N9VgRPcmKOzsRywsGcuahRC
+         K7yUN7+DOJnAWRw779Nog6XBry+akrYZFUghVqJb+PHgUyQf9M8U3zX0Z/4PnEtT+5HY
+         Revw==
+X-Gm-Message-State: AOAM530aYfPCaFIeep82cZKNuml3x5eHZV0NPkGHimFi0fFeR3N08ghR
+        1DxW5eQdprfdXDGGMa/xqTisVg==
+X-Google-Smtp-Source: ABdhPJyu8xSxUgfVUOgYfqeqseA8crLejYQaJqBLvkT4iTpIUedL39JKLwdBq84PfWbf06al81Z94Q==
+X-Received: by 2002:a5d:5257:0:b0:1f0:1822:69ad with SMTP id k23-20020a5d5257000000b001f0182269admr6737136wrc.342.1646254897531;
+        Wed, 02 Mar 2022 13:01:37 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:b9e3:8853:bc0:bb98? ([2a01:e34:ed2f:f020:b9e3:8853:bc0:bb98])
+        by smtp.googlemail.com with ESMTPSA id m5-20020a05600c3b0500b00380da3ac789sm158320wms.1.2022.03.02.13.01.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Mar 2022 13:01:36 -0800 (PST)
+Message-ID: <efbb8a52-2e8b-9840-54c4-2696e19dd61c@linaro.org>
+Date:   Wed, 2 Mar 2022 22:01:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wikKPC0LUqZ8++EC5JOvGdBqVH9uUaTX=DvBioDoReYww@mail.gmail.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 2/3] dt-bindings: thermal: samsung: convert to dtschema
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220122132554.65192-1-krzysztof.kozlowski@canonical.com>
+ <20220122132554.65192-2-krzysztof.kozlowski@canonical.com>
+ <d27ee47c-6c03-3927-4cac-46a1c2515ab6@canonical.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <d27ee47c-6c03-3927-4cac-46a1c2515ab6@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -136,35 +81,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 02, 2022 at 12:18:45PM -0800, Linus Torvalds wrote:
-> On Wed, Mar 2, 2022 at 12:07 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > I've long wanted to change kfree() to explicitly set pointers to NULL on
-> > free. https://github.com/KSPP/linux/issues/87
+On 02/03/2022 20:11, Krzysztof Kozlowski wrote:
+> On 22/01/2022 14:25, Krzysztof Kozlowski wrote:
+>> Convert the Samsung Exynos SoC Thermal Management Unit bindings to DT
+>> schema format.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+>> ---
+>>   .../bindings/thermal/exynos-thermal.txt       | 106 ----------
+>>   .../thermal/samsung,exynos-thermal.yaml       | 184 ++++++++++++++++++
+>>   2 files changed, 184 insertions(+), 106 deletions(-)
+>>   delete mode 100644 Documentation/devicetree/bindings/thermal/exynos-thermal.txt
+>>   create mode 100644 Documentation/devicetree/bindings/thermal/samsung,exynos-thermal.yaml
+>>
 > 
-> We've had this discussion with the gcc people in the past, and gcc
-> actually has some support for it, but it's sadly tied to the actual
-> function name (ie gcc has some special-casing for "free()")
+> Hi Amit, Daniel, Rafael and Zhang,
 > 
-> See
-> 
->     https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94527
-> 
-> for some of that discussion.
-> 
-> Oh, and I see some patch actually got merged since I looked there last
-> so that you can mark "deallocator" functions, but I think it's only
-> for the context matching, not for actually killing accesses to the
-> pointer afterwards.
+> The patch got review from Rob. Could you pick it up to thermal/PM tree?
 
-Ah! I missed that getting added in GCC 11. But yes, there it is:
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/commit/?h=thermal/linux-next&id=ffae973348505a786a145021d72da331509af185
 
-https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-malloc-function-attribute
-
-Hah, now we may need to split __malloc from __alloc_size. ;)
-
-I'd still like the NULL assignment behavior, though, since some things
-can easily avoid static analysis.
 
 -- 
-Kees Cook
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
