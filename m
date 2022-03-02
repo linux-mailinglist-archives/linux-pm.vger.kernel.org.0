@@ -2,64 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9259A4CA59C
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Mar 2022 14:08:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C49B24CA6BC
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Mar 2022 14:55:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233052AbiCBNJT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Mar 2022 08:09:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47688 "EHLO
+        id S239968AbiCBN4i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Mar 2022 08:56:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232317AbiCBNJS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Mar 2022 08:09:18 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF8D20F59;
-        Wed,  2 Mar 2022 05:08:35 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id bk29so2720803wrb.4;
-        Wed, 02 Mar 2022 05:08:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xXlb7cc4EyqnzFw8PQ0fBnQFiOHYPm8hTsgKE/9CO8Q=;
-        b=np8mcRkHHqlMHinc7q2t/2Cpo2vbU8MWB+PuLJ05LpJg3PkpCND2SLdA8+h+nyquwP
-         5Ac60majuASwgCKFMdvHiZ0JIxrhJiDl2NUnqOR54PRxR0ViilucxdQPBYtYYxv41KPW
-         ed1su8/5e5wEAOZRJvbet8i6wZxQQh+13BcUZz1PviZNWQS47DdR6NIwvSZIrJTofUsR
-         AM7naPwKwGkd1MFJbdKJYtujY9wz3+ZF5lcfZAxCaymr1+ICDNoPvD+TgJ331G1JzMVT
-         b0KQyMiuvlaE6N/ndeQmh41u50QdE7chiwnvyFKXbO5NLfvPP2tnExYjQW76N6ZdX4wd
-         vl1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xXlb7cc4EyqnzFw8PQ0fBnQFiOHYPm8hTsgKE/9CO8Q=;
-        b=YVhWmStW704j/+7pA2RukzDFO8dCQ+CWG2XNxegsxG1G4erMr3Kp2saLa9mcVhjPfm
-         dbumB6s8xofE06WtwYvXuqg5TmahsDFP3C+sS/2vUM7aTe0QPhkjkxA5BW9w/DzMT81P
-         qAyQO0QiWY3dmWHUUo3t1u+cDRHkUwtr3Ye4B6O0jQ9ydQU1q4oGsfrvI3pEX26eWQG/
-         N8AheBvMMZyznECCwv2gfsPH/eiaZo7D8mXGRv8e7PSG8b6Vp56uTzRn/DDJyllwluaV
-         AnwwX1sZueDpbb6lZ2v3EdONmFTXdyw2AkYJUOGoNC3cSxqCLZF4mAau7LE7Jxf+T93B
-         C5Cg==
-X-Gm-Message-State: AOAM530S1V9M0gMxzpgIFSfGDX4alcXoHksryjjLKyqNcIoeIytX/MEj
-        0YJp9S1gympDm2daaaUvTS3vGtQwdcs=
-X-Google-Smtp-Source: ABdhPJzuQN521B1SFDVZQJm/ctLkm2aM+RnrCXlzS8OE0PrnAn77bMy5SiW3lTIfXcbxYhVHtuLpXw==
-X-Received: by 2002:adf:d1cc:0:b0:1f0:4570:bf75 with SMTP id b12-20020adfd1cc000000b001f04570bf75mr1502111wrd.656.1646226513863;
-        Wed, 02 Mar 2022 05:08:33 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id g17-20020a5d4891000000b001e74e998bf9sm16698803wrq.33.2022.03.02.05.08.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Mar 2022 05:08:33 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] power: supply: ab8500: fix a handful of spelling mistakes
-Date:   Wed,  2 Mar 2022 13:08:32 +0000
-Message-Id: <20220302130832.1076437-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S234460AbiCBN4f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Mar 2022 08:56:35 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152DF2B18E;
+        Wed,  2 Mar 2022 05:55:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FEF560B13;
+        Wed,  2 Mar 2022 13:55:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB550C004E1;
+        Wed,  2 Mar 2022 13:55:40 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="kpzYHDtU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1646229339;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SpVcuA/WXuSF2VylmDTidLRP/fq6dnIG3IJK6i0yAko=;
+        b=kpzYHDtUAlCnEdVEte//Tt36NxH+/Ez0o+kl3YdWmtGk9TZCjSHm6oGL/AbSTrC8Y1PuRg
+        jZ3NV3d2m9tjm6vre8HArSM79be/kQc4jqSkH3qUrcSXgTDy8VV6MN3iqBxSC6PUytw5x2
+        eJFYg/LLjTsXb0gq+k1Xln0G4fDjTNE=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id fd2dbd60 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 2 Mar 2022 13:55:38 +0000 (UTC)
+Date:   Wed, 2 Mar 2022 14:55:29 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Laszlo Ersek <lersek@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        linux-hyperv@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Alexander Graf <graf@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        adrian@parity.io,
+        Daniel =?utf-8?B?UC4gQmVycmFuZ8Op?= <berrange@redhat.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Jann Horn <jannh@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Theodore Ts'o <tytso@mit.edu>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: propagating vmgenid outward and upward
+Message-ID: <Yh93UZMQSYCe2LQ7@zx2c4.com>
+References: <Yh4+9+UpanJWAIyZ@zx2c4.com>
+ <223f858c-34c5-3ccd-b9e8-7585a976364d@redhat.com>
+ <Yh5JwK6toc/zBNL7@zx2c4.com>
+ <20220301121419-mutt-send-email-mst@kernel.org>
+ <CAHmME9qieLUDVoPYZPo=N8NCL1T-RzQ4p7kCFv3PKFUkhWZPsw@mail.gmail.com>
+ <20220302031738-mutt-send-email-mst@kernel.org>
+ <CAHmME9pf-bjnZuweoLqoFEmPy1OK7ogEgGEAva1T8uVTufhCuw@mail.gmail.com>
+ <20220302074503-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220302074503-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,54 +79,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There are a few spelling mistakes in comments and in a dev_err
-error message. Fix them.
+Hi Michael,
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/power/supply/ab8500_chargalg.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On Wed, Mar 02, 2022 at 07:58:33AM -0500, Michael S. Tsirkin wrote:
+> > There's also the atomicity aspect, which I think makes your benchmark
+> > not quite accurate. Those 16 bytes could change between the first and
+> > second word (or between the Nth and N+1th word for N<=3 on 32-bit).
+> > What if in that case the word you read second doesn't change, but the
+> > word you read first did? So then you find yourself having to do a
+> > hi-lo-hi dance.
+> > And then consider the 32-bit case, where that's even
+> > more annoying. This is just one of those things that comes up when you
+> > compare the semantics of a "large unique ID" and "word-sized counter",
+> > as general topics. (My suggestion is that vmgenid provide both.)
+> 
+> I don't see how this matters for any applications at all. Feel free to
+> present a case that would be race free with a word but not a 16
+> byte value, I could not imagine one. It's human to err of course.
 
-diff --git a/drivers/power/supply/ab8500_chargalg.c b/drivers/power/supply/ab8500_chargalg.c
-index c9c7f7028af6..8842e51b8b1c 100644
---- a/drivers/power/supply/ab8500_chargalg.c
-+++ b/drivers/power/supply/ab8500_chargalg.c
-@@ -287,7 +287,7 @@ ab8500_chargalg_safety_timer_expired(struct hrtimer *timer)
-  * the maintenance timer
-  * @timer:     pointer to the timer structure
-  *
-- * This function gets called when the maintenence timer
-+ * This function gets called when the maintenance timer
-  * expires
-  */
- static enum hrtimer_restart
-@@ -431,7 +431,7 @@ static void ab8500_chargalg_stop_safety_timer(struct ab8500_chargalg *di)
- /**
-  * ab8500_chargalg_start_maintenance_timer() - Start charging maintenance timer
-  * @di:		pointer to the ab8500_chargalg structure
-- * @duration:	duration of ther maintenance timer in minutes
-+ * @duration:	duration of the maintenance timer in minutes
-  *
-  * The maintenance timer is used to maintain the charge in the battery once
-  * the battery is considered full. These timers are chosen to match the
-@@ -1271,7 +1271,7 @@ static void ab8500_chargalg_algorithm(struct ab8500_chargalg *di)
- 				STATE_SAFETY_TIMER_EXPIRED_INIT);
- 	}
- 	/*
--	 * Check if any interrupts has occured
-+	 * Check if any interrupts has occurred
- 	 * that will prevent us from charging
- 	 */
- 
-@@ -1525,7 +1525,7 @@ static void ab8500_chargalg_algorithm(struct ab8500_chargalg *di)
- 				       bi->alert_high_temp_charge_voltage_uv,
- 				       bi->alert_high_temp_charge_current_ua);
- 		} else {
--			dev_err(di->dev, "neither low or high temp event occured\n");
-+			dev_err(di->dev, "neither low or high temp event occurred\n");
- 			ab8500_chargalg_state_to(di, STATE_NORMAL_INIT);
- 			break;
- 		}
--- 
-2.34.1
+Word-size reads happen all at once on systems that Linux supports,
+whereas this is not the case for 16 bytes (with a few niche exceptions
+like cmpxchg16b and such). If you read the counter atomically, you can
+check to see whether it's changed just after encrypting but before
+transmitting and not transmit if it has changed, and voila, no race.
+With 16 bytes, synchronization of that read is pretty tricky (though
+maybe not all together impossible), because, as I mentioned, the first
+word might have changed by the time you read a matching second word. I'm
+sure you're familiar with the use of seqlocks in the kernel for solving
+a somewhat related problem.
 
+Jason
