@@ -2,69 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8324CAC63
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Mar 2022 18:46:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC8A4CAD7E
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Mar 2022 19:25:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243227AbiCBRrd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Mar 2022 12:47:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55940 "EHLO
+        id S244517AbiCBS0O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Mar 2022 13:26:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234695AbiCBRrc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Mar 2022 12:47:32 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CEAF3D19B1;
-        Wed,  2 Mar 2022 09:46:48 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 73AEC139F;
-        Wed,  2 Mar 2022 09:46:48 -0800 (PST)
-Received: from [10.57.21.27] (unknown [10.57.21.27])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 687AE3F73D;
-        Wed,  2 Mar 2022 09:46:46 -0800 (PST)
-Message-ID: <b040ea6c-5fdf-b68a-a580-d2d0095a33de@arm.com>
-Date:   Wed, 2 Mar 2022 17:46:44 +0000
+        with ESMTP id S244546AbiCBS0M (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Mar 2022 13:26:12 -0500
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FD2D8840;
+        Wed,  2 Mar 2022 10:25:28 -0800 (PST)
+Received: by mail-oi1-f173.google.com with SMTP id j2so2516789oie.7;
+        Wed, 02 Mar 2022 10:25:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=k1UB1OHIG6YIwAeg2LTAnVW2kRcqK6QcDUgM9dd33ZI=;
+        b=pBqwIEBcmY2C4hydgsDsrWcfsrc1zuAeFpVANcVuur4iHA/T1KnAxzOdosd/rRK1Dg
+         1q62l1oFzvcMaINQ/VdVJq8v1ZCLdpB8QMJJiKn9O6iW3Pix1BsiEg+MkWWThEXwBfIe
+         d8yaiIG94l93832dc7sysDkH67jmIZdhu9KfSHf5zQ3Qzj3qvRtym4Yjpp3NXgZNjMzg
+         ISHIsrO9mjPtJ9kkdWzo2JSiisdwN4FH4Pe6276sVsmbRcc791rQ87hOa6L8QqaCHmJZ
+         ibfj+7HqnpC/U3MVJMpQODhTVLO2gAKbRXJkIm/lB26D/lbQiEZgRLqk4rEtRuYGi+e3
+         FCiQ==
+X-Gm-Message-State: AOAM5319E0hk5fAL80gDxHnMQaXp2cZk1GBmQuHTREggMj3J6Dw66jxA
+        niNf7WKdIwKyF8WUTsB50g==
+X-Google-Smtp-Source: ABdhPJxPSBwz4w7OpDd6tKba77B/a7QpLHWJN4TLiCq+6nd3Bm/CtNUwn+iS+ke2qok7qZLWAlXQvQ==
+X-Received: by 2002:a05:6808:f93:b0:2d7:bf6:a33d with SMTP id o19-20020a0568080f9300b002d70bf6a33dmr1033774oiw.161.1646245528091;
+        Wed, 02 Mar 2022 10:25:28 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id a69-20020a4a4c48000000b0031bec1608fbsm7977929oob.17.2022.03.02.10.25.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 10:25:27 -0800 (PST)
+Received: (nullmailer pid 4005227 invoked by uid 1000);
+        Wed, 02 Mar 2022 18:25:26 -0000
+Date:   Wed, 2 Mar 2022 12:25:26 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Marcus Cooper <codekipper@gmail.com>, linux-pm@vger.kernel.org,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: power: supply: ab8500_fg: Add line
+ impedance
+Message-ID: <Yh+2lrxFkSZkOQCK@robh.at.kernel.org>
+References: <20220301124254.2338270-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5 1/5] dt-bindings: opp: Add "opp-microwatt" entry in the
- OPP
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        viresh.kumar@linaro.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, nm@ti.com, sboyd@kernel.org,
-        mka@chromium.org, dianders@chromium.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20220302112917.27270-1-lukasz.luba@arm.com>
- <20220302112917.27270-2-lukasz.luba@arm.com>
- <Yh+tKe7oWCpmj5MC@robh.at.kernel.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <Yh+tKe7oWCpmj5MC@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220301124254.2338270-1-linus.walleij@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 3/2/22 17:45, Rob Herring wrote:
-> On Wed, Mar 02, 2022 at 11:29:13AM +0000, Lukasz Luba wrote:
->> Add new entry for the OPP which provides information about power
->> expressed in micro-Watts. It is useful for the Energy Model framework.
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   .../devicetree/bindings/opp/opp-v2-base.yaml  | 23 +++++++++++++++++++
->>   1 file changed, 23 insertions(+)
+On Tue, Mar 01, 2022 at 01:42:53PM +0100, Linus Walleij wrote:
+> To improve the inner resistance measurement of the battery we need
+> to account for the line impedance of the connector to the battery.
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+>  .../bindings/power/supply/stericsson,ab8500-fg.yaml          | 5 +++++
+>  1 file changed, 5 insertions(+)
 
-Thank you Rob for the review!
-
-Regards,
-Lukasz
+Acked-by: Rob Herring <robh@kernel.org>
