@@ -2,72 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C06E4C9C57
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Mar 2022 05:06:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 325154C9CC3
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Mar 2022 05:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234477AbiCBEHT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 23:07:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
+        id S235234AbiCBExv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 23:53:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbiCBEHS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 23:07:18 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71232A9E24
-        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 20:06:35 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id g39so622306lfv.10
-        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 20:06:35 -0800 (PST)
+        with ESMTP id S234768AbiCBExt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 23:53:49 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0562D49CAD
+        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 20:53:05 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id gj15-20020a17090b108f00b001bef86c67c1so619311pjb.3
+        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 20:53:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pwP/17SAMqDWK9rS3MpChCd9GusweTp8HOOLgfont+E=;
-        b=KOLiNeDMHfWMVHhvak2rzCyDMZa9OirnYBlpX3lE12Q1dZDewa9wMKZcvGqIF4X2Wg
-         zmy0A9A6XGZmQBZ6gE9WjNb9qGD8UJ5U/gF6Z19bSv4E8LFSLRC4YXJT3zf7Rd311Djp
-         3gPyW8mo8RA8UurpMkrV5Q7DI9kMkDOBXzK5AGfkthd/bVWpwOh946XXnhlNrGNLiwOi
-         Ap9CPLs4sPmFmyRfAbLAY04F+S9h2gRK+cG/7Mn4IoKPwYCcOtoJoAC8M7DJzHiMKiGT
-         AO3n9RWXzsW2cKqdX/j6dznlnbwpNFXDDNXJohEfOg0UQTVnB3eIQ5e7YGYy8QkrQdel
-         A25g==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=R9ewq8IKyII02hpWaWH/lhlLsChnLN+g08ELQd2cLms=;
+        b=jLwsIKRZQ3dzZRSk3NsjHqE2fINfKJmqaC/Kldfn6PXM8Is3wF9nZ+yS09RNAcVA8c
+         IOYqpy3AOzWIGgoeARfHCZXE/xVYUL25CanBoi+ars1ASqj9NzJJbs29FpLTipzqqoaE
+         fPJt4VKO3BrdZr6BdaCA0oYtnKmpO/E6rRHqu8Ocjd8Vbvze2xISnWsCYUueArfb0Yuk
+         JQN1X2yjxjtp1lj4Lp2JyD8Pho8LZZnrF0Uk7qvKww4v0Y8Q+Y2D38o33EjFfpDTy/NC
+         isFilFs8RdfxB/58iW5vcL77a5ZV0ixjxTRCct7ez+YvdkhWZtTBCTWnbNtn6DHDpMAJ
+         O1ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pwP/17SAMqDWK9rS3MpChCd9GusweTp8HOOLgfont+E=;
-        b=8CgeJZ4gTGxbzsEirLAxsA2ZiScB5SgqEedQVjPgJ4LBHmsbzA4wsdWvhNsC2Hdfb+
-         BUkqQu6zKUm5YWDlHRwCktFcVh1dbaDw4G4vn6Tiec56IHhQzsGjqAD/4QB5XRX75gvj
-         ista6RQY4XO/sQoTZmbgXo80jOoawjuNLK8HZ51AD/DgMevZuI5E+zbrI8PiL/95jcnj
-         al6uaW9jFVub4kiDDmjwagOB5OWDbYGNihGVeVAsX+z+BwWfDjjMCGxTDrQUNxmAD5PT
-         98XJ6kKBRcLDs0MAr7e0VPEPCdsasrTUjetcVfVOyF8DEZyvothvVfkdKDhdzYS7zL31
-         lIuw==
-X-Gm-Message-State: AOAM532PEiuchc6CtnmNemy4IExbQxtpoU7UgWryOHwwDbQPWs/y55pK
-        wOse1MFvWVJTFsj5RFXaCqEBnspdwve3Ss99N2mV3Q==
-X-Google-Smtp-Source: ABdhPJxIhO5kUNzSwaTRh+eXLnX6KV8v/DAakMxV/KVN30eBs3fqzyAmURlOETVek1Sut/7HsytwAATILxvnL+4n9Jg=
-X-Received: by 2002:a05:6512:23a2:b0:43e:da99:71c1 with SMTP id
- c34-20020a05651223a200b0043eda9971c1mr17458318lfv.515.1646193993625; Tue, 01
- Mar 2022 20:06:33 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=R9ewq8IKyII02hpWaWH/lhlLsChnLN+g08ELQd2cLms=;
+        b=sbwJWSmbVb2gtU2/tw9Iz6Drj02FaZIb72ijeJ31BJ3+5s7I1OW/VpRNjI1sgbcPmD
+         Y+S864fPkWy32xYsT2XvKNT2ckF22H7GcXRkNP0yJbowpPujdz6W/BjhpDq5D8652n3+
+         2imuaHa16LhQ+nDbeBEgWa4Sl9fkKh+xYNiSfSE7C+5tdgOW/WUYVF9FmYt7qjG3tmcP
+         5jZXJbyBoHhRdCJy+YLa1W60epGE2jacfBxqBSka91c0O/qfQqoOyH7/gJ6VKfSEuRmm
+         tm0mfSr3igoujkeH6xGLxQCkxyso7hx1MV4dK1kSnAwFywBDxQZgyHAQM/fa0q3EUl1w
+         WsIQ==
+X-Gm-Message-State: AOAM533t0JTybPe5RNjUBrtkb36KRukHramfRMj0qD15wAebyJm5m+EE
+        OAoAwp1cKHt2OiKnL4TVVi3sf4w52L0g0w==
+X-Google-Smtp-Source: ABdhPJxJ1RwhIoAz0SQKaLPZQViq70gdhaqIbQCWIugJ4u1o2z9iIDQ0avf6a/E8q2g55qxnaq6/Sw==
+X-Received: by 2002:a17:902:8ec7:b0:14a:c442:8ca2 with SMTP id x7-20020a1709028ec700b0014ac4428ca2mr29106038plo.12.1646196784471;
+        Tue, 01 Mar 2022 20:53:04 -0800 (PST)
+Received: from localhost ([223.184.83.228])
+        by smtp.gmail.com with ESMTPSA id e14-20020a056a001a8e00b004e136d54a15sm19675601pfv.105.2022.03.01.20.53.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Mar 2022 20:53:03 -0800 (PST)
+Date:   Wed, 2 Mar 2022 10:23:01 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, nm@ti.com,
+        sboyd@kernel.org, mka@chromium.org, dianders@chromium.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 3/4] OPP: Add support of "opp-microwatt" for advanced
+ EM registration
+Message-ID: <20220302045301.fq6nolscdfd5wvyo@vireshk-i7>
+References: <20220301093524.8870-1-lukasz.luba@arm.com>
+ <20220301093524.8870-4-lukasz.luba@arm.com>
 MIME-Version: 1.0
-References: <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
- <CAAYoRsW4LqNvSZ3Et5fqeFcHQ9j9-0u9Y-LN9DmpCS3wG3+NWg@mail.gmail.com>
- <20220228041228.GH4548@shbuild999.sh.intel.com> <11956019.O9o76ZdvQC@kreacher>
- <20220301055255.GI4548@shbuild999.sh.intel.com> <CAJZ5v0jWUR__zn0=SDDecFct86z-=Y6v5fi37mMyW+zOBi7oWw@mail.gmail.com>
- <CAAYoRsVLOcww0z4mp9TtGCKdrgeEiL_=FgrUO=rwkZAok4sQdg@mail.gmail.com> <CAJZ5v0hK4zoOtgNQNFkJHC0XOiGsPGUPphHU5og44e_K4kGU9g@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hK4zoOtgNQNFkJHC0XOiGsPGUPphHU5og44e_K4kGU9g@mail.gmail.com>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Tue, 1 Mar 2022 20:06:24 -0800
-Message-ID: <CAAYoRsWN-h+fBAoocGmUFHDkOv2PL+6U59_ASBYH74j0orHaCQ@mail.gmail.com>
-Subject: Re: CPU excessively long times between frequency scaling driver calls
- - bisected
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Feng Tang <feng.tang@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        dsmythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220301093524.8870-4-lukasz.luba@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -78,181 +75,24 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 1, 2022 at 9:34 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> On Tue, Mar 1, 2022 at 6:18 PM Doug Smythies <dsmythies@telus.net> wrote:
-> > On Tue, Mar 1, 2022 at 3:58 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > On Tue, Mar 1, 2022 at 6:53 AM Feng Tang <feng.tang@intel.com> wrote:
-> > > > On Mon, Feb 28, 2022 at 08:36:03PM +0100, Rafael J. Wysocki wrote:
-> > ...
-> > > > >
-> > > > > However, it was a bit racy, so maybe it's good that it was not complete.
-> > > > >
-> > > > > Below is a new version.
-> > > >
-> > > > Thanks for the new version. I just gave it a try,  and the occasional
-> > > > long delay of cpufreq auto-adjusting I have seen can not be reproduced
-> > > > after applying it.
-> > >
-> > > OK, thanks!
-> > >
-> > > I'll wait for feedback from Dough, though.
-> >
-> > Hi Rafael,
-> >
-> > Thank you for your version 2 patch.
-> > I screwed up an overnight test and will have to re-do it.
-> > However, I do have some results.
->
-> Thanks for testing it!
->
-> > From reading the patch code, one worry was the
-> > potential to drive down the desired/required CPU
-> > frequency for the main periodic workflow, causing
-> > overruns, or inability of the task to complete its
-> > work before the next period.
->
-> It is not clear to me why you worried about that just from reading the
-> patch?  Can you explain, please?
+On 01-03-22, 09:35, Lukasz Luba wrote:
+> The Energy Model (EM) can be created based on DT entry:
+> 'dynamic-power-coefficient'. It's a 'simple' EM which is limited to the
+> dynamic power. It has to fit into the math formula which requires also
+> information about voltage. Some of the platforms don't expose voltage
+> information, thus it's not possible to use EM registration using DT.
+> 
+> This patch aims to fix it. It introduces new implementation of the EM
+> registration callback. The new mechanism relies on the new OPP feature
+> allowing to get power (which is coming from "opp-microwatt" DT property)
+> expressed in micro-Watts.
+> 
+> The patch also opens new opportunity to better support platforms, which
+> have a decent static power. It allows to register 'advanced' EM (based
+> on real power measurements) which models total power (static + dynamic),
+> so better reflects real HW.
 
-It is already covered below. And a couple of further tests
-directly contradict my thinking.
+Advanced :(
 
-> > I have always had overrun
-> > information, but it has never been relevant before.
-> >
-> > The other worry was if the threshold of
-> > turbo/not turbo frequency is enough.
->
-> Agreed.
-
-Just as an easy example and test I did this on
-top of this patch ("rjw-3"):
-
-doug@s19:~/kernel/linux$ git diff
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index f878a4545eee..5cbdd7e479e8 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -1980,7 +1980,7 @@ static void intel_pstate_update_perf_ctl(struct
-cpudata *cpu)
-         * P-states to prevent them from getting back to the high frequency
-         * right away after getting out of deep idle.
-         */
--       cpuidle_update_retain_tick(pstate > cpu->pstate.max_pstate);
-+       cpuidle_update_retain_tick(pstate > (cpu->pstate.max_pstate >> 1));
-        wrmsrl(MSR_IA32_PERF_CTL, pstate_funcs.get_val(cpu, pstate));
- }
-
-> > I do not know how to test any final solution
-> > thoroughly, as so far I have simply found a
-> > good enough problematic example.
-> > We have so many years of experience with
-> > the convenient multi second NMI forcing
-> > lingering high pstate clean up. I'd keep it
-> > deciding within it if the TSC stuff needs to be
-> > executed or not.
-> >
-> > Anyway...
-> >
-> > Base Kernel 5.17-rc3.
-> > "stock" : unmodified.
-> > "revert" : with commit b50db7095fe reverted
-> > "rjw-2" : with this version2 patch added.
-> >
-> > Test 1 (as before. There is no test 2, yet.):
-> > 347 Hertz work/sleep frequency on one CPU while others do
-> > virtually no load but enough to increase the requested pstate,
-> > but at around 0.02 hertz aggregate.
-> >
-> > It is important to note the main load is approximately
-> > 38.6% @ 2.422 GHz, or 100% at 0.935 GHz.
-> > and almost exclusively uses idle state 2 (of
-> > 4 total idle states)
-> >
-> > /sys/devices/system/cpu/cpu7/cpuidle/state0/name:POLL
-> > /sys/devices/system/cpu/cpu7/cpuidle/state1/name:C1_ACPI
-> > /sys/devices/system/cpu/cpu7/cpuidle/state2/name:C2_ACPI
-> > /sys/devices/system/cpu/cpu7/cpuidle/state3/name:C3_ACPI
-> >
-> > Turbostat was used. ~10 samples at 300 seconds per.
-> > Processor package power (Watts):
-> >
-> > Workflow was run for 1 hour each time or 1249201 loops.
-> >
-> > revert:
-> > ave: 3.00
-> > min: 2.89
-> > max: 3.08
->
-> I'm not sure what the above three numbers are.
-
-Processor package power, Watts.
->
-> > ave freq: 2.422 GHz.
-> > overruns: 1.
-> > max overrun time: 113 uSec.
-> >
-> > stock:
-> > ave: 3.63 (+21%)
-> > min: 3.28
-> > max: 3.99
-> > ave freq: 2.791 GHz.
-> > overruns: 2.
-> > max overrun time: 677 uSec.
-> >
-> > rjw-2:
-> > ave: 3.14 (+5%)
-> > min: 2.97
-> > max: 3.28
-> > ave freq: 2.635 GHz
->
-> I guess the numbers above could be reduced still by using a P-state
-> below the max non-turbo one as a limit.
-
-Yes, and for a test I did "rjw-3".
-
-> > overruns: 1042.
-> > max overrun time: 9,769 uSec.
->
-> This would probably get worse then, though.
-
-Yes, that was my expectation, but not what happened.
-
-rjw-3:
-ave: 3.09 watts
-min: 3.01 watts
-max: 31.7 watts
-ave freq: 2.42 GHz.
-overruns: 12. (I did not expect this.)
-Max overruns time: 621 uSec.
-
-Note 1: IRQ's increased by 74%. i.e. it was going in
-and out of idle a lot more.
-
-Note 2: We know that processor package power
-is highly temperature dependent. I forgot to let my
-coolant cool adequately after the kernel compile,
-and so had to throw out the first 4 power samples
-(20 minutes).
-
-I retested both rjw-2 and rjw-3, but shorter tests
-and got 0 overruns in both cases.
-
-> ATM I'm not quite sure why this happens, but you seem to have some
-> insight into it, so it would help if you shared it.
-
-My insight seems questionable.
-
-My thinking was that one can not decide if the pstate needs to go
-down or not based on such a localized look. The risk being that the
-higher periodic load might suffer overruns. Since my first test did exactly
-that, I violated my own "repeat all tests 3 times before reporting rule".
-Now, I am not sure what is going on.
-I will need more time to acquire traces and dig into it.
-
-I also did a 1 hour intel_pstate_tracer test, with rjw-2, on an idle system
-and saw several long durations. This was expected as this patch set
-wouldn't change durations by more than a few jiffies.
-755 long durations (>6.1 seconds), and 327.7 seconds longest.
-
-... Doug
+-- 
+viresh
