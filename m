@@ -2,144 +2,190 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8DBD4CAE5E
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Mar 2022 20:14:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ABE14CAF64
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Mar 2022 21:07:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244940AbiCBTPF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Mar 2022 14:15:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35792 "EHLO
+        id S237774AbiCBUID (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Mar 2022 15:08:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242189AbiCBTPC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Mar 2022 14:15:02 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 931104BFF7
-        for <linux-pm@vger.kernel.org>; Wed,  2 Mar 2022 11:14:18 -0800 (PST)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 192DA3F211
-        for <linux-pm@vger.kernel.org>; Wed,  2 Mar 2022 19:14:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646248457;
-        bh=p1lNUzsyoygIQb4L2BztQSrDhNhm7EIFYsQhESyqtHE=;
-        h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-         In-Reply-To:Content-Type;
-        b=N7xWiX7Y+wM7aYTctJJztMq4FjOSdNg7TuMXUu2AtOwKdfiARgIS8LGwLu6lpo0Hp
-         1zlDSoTPqqTbYNT+4ejsYEMYxzu1v583xVwf3ayQMLaSlH0KQccOxRCRvPRwced34C
-         8dohXZO7c9Wou3yqFNvEbKMcDhPx56h37aI5wOyON2jMM8mdfvPgbyfkyY/58wu2e6
-         GGJ1N49CPsM5YDyv3aDjeh4ezcoA+qLV6wTEnym4Dezjn1r61lgMxIP9YO7b7Pd6Nw
-         wagD0l0EwhuSwNF7+Pwi9det0ndVDmaeevRmzfeJYsiw9HBx1vzpZ6++EaH7z2Iz5Y
-         bT8QcXQkY5t+A==
-Received: by mail-ed1-f70.google.com with SMTP id z24-20020a50cd18000000b00414d5314c35so1505471edi.21
-        for <linux-pm@vger.kernel.org>; Wed, 02 Mar 2022 11:14:17 -0800 (PST)
+        with ESMTP id S242825AbiCBUH4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Mar 2022 15:07:56 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCA1CA334
+        for <linux-pm@vger.kernel.org>; Wed,  2 Mar 2022 12:07:06 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id g7-20020a17090a708700b001bb78857ccdso5774476pjk.1
+        for <linux-pm@vger.kernel.org>; Wed, 02 Mar 2022 12:07:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9llME+iRL2iH9L07jwvbWbmbHLr47Rbz7WJ4fOgTlZc=;
+        b=IvpJRwG7ynxkReEE85KaN5rJUYtD4xKNHA+hy6TwBmoQ8B3uYeJI+QViQcnaGiWq86
+         F88M3HTERkoil1v4VBpPtCvYuei+/tfueI2kCXzM7ddvcotxLyWZwiewhTHLUCy28lRK
+         BraqPBOXvwYRthhpbxTgJWS9pGCc3zSZJBqHk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:cc:from:in-reply-to
-         :content-transfer-encoding;
-        bh=p1lNUzsyoygIQb4L2BztQSrDhNhm7EIFYsQhESyqtHE=;
-        b=y/a4LqqqXTnC7PMfaMyWK9z1OfLS8qNtL+DI0iXWFCmRLIcDuKH6nKJeEFOwnbIZdH
-         TZmtQOenvCehL8TimgihXUC0Y1cGCHo4Tor/CabbrbPOLjYTEeyYOERdCQRcojXI1WLD
-         rpb4N9+1t5fB+R1Ddouzn/Z8zqseUKcIkiRhkC1/vlYPNZwpPLr8DjwDw6b7XCt8LRil
-         FfzH7DTK01LTTc7QxUCGalcpFiDsqo5pqmfq1SaNHiX1C8WuN0OjMyq31m21R1kb2yqm
-         v1CfyCdNp+ClywDTbVl4x8OLIKww1arqkr9XiRiIztfbZt7kV7SuywR0is+kAregNGuh
-         AObw==
-X-Gm-Message-State: AOAM532rJLP5LevZDlAn7FoAfuwvOLLXg6zxg1kH1EHpszG5zMKDL16j
-        F8KbbJAxp4ZrDpbfrfHK5jlxRvQZGPg+dCt7SOFJ1xTqrn+HbK5BWd7Plt2toCHuB6mVRrIMgQz
-        EXwzKhWvzz0gm+afx+QlbzqA+NwztqenBmdlE
-X-Received: by 2002:a05:6402:3715:b0:410:a415:fd95 with SMTP id ek21-20020a056402371500b00410a415fd95mr31118777edb.288.1646248456781;
-        Wed, 02 Mar 2022 11:14:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx80uydDYoRT21wjUie2CEHYaY3fv75k/SRY4zouePopuxmW5Gc7gpstyQour9osDg3GWw0eQ==
-X-Received: by 2002:a05:6402:3715:b0:410:a415:fd95 with SMTP id ek21-20020a056402371500b00410a415fd95mr31118763edb.288.1646248456608;
-        Wed, 02 Mar 2022 11:14:16 -0800 (PST)
-Received: from [192.168.0.137] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id bx1-20020a0564020b4100b00410f01a91f0sm8975726edb.73.2022.03.02.11.14.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Mar 2022 11:14:16 -0800 (PST)
-Message-ID: <de345f86-47a6-115f-8e0b-29589e1289c6@canonical.com>
-Date:   Wed, 2 Mar 2022 20:14:15 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9llME+iRL2iH9L07jwvbWbmbHLr47Rbz7WJ4fOgTlZc=;
+        b=U+9Hdj0Q1YyMOcNeL9uyBOCU6r/U8xHj4mnDWoCAdJxd5h+/P+feAcBhArFnnqTdPv
+         H9nf2UfGQMHQHyuahXb7vsBf6m4uEuDBFaQzUXB10RONwZXKw9Go+es5r43mAwdSUWMN
+         uKDGfHWhl2L/aANaJQW3G5Z717Gq0HE3AKknSj4FhK7eo3r4Qb6SHi0o+s51OvgQOOQx
+         SfcF6T7VGVl128BJ1Zjw9vhziOaB11IkM3EwElT9mMXCSWBNs1oJCNerK9pZ/bdiSyE/
+         FeEoFDDlCp+Na+uh5GQqz6KEEst08iRDgkEvi59JTmN2mNjtKJVxEJt6e0AhYMGyl/9U
+         Y1nA==
+X-Gm-Message-State: AOAM532fjcqJEH1fhsn4qrBmUiz8RSQV1djeMBtflyfS3nlUywd5/utw
+        udql6qlKGx7OtMZoAtGxDZ+N7Q==
+X-Google-Smtp-Source: ABdhPJyalZw/yElDAQSdRYusWOxjkvZUrvn+e5j/jboS/+hXUtUpvVb6mMnbBbqlv1j/a0ygzQBPkQ==
+X-Received: by 2002:a17:90b:94e:b0:1bc:c99f:ede1 with SMTP id dw14-20020a17090b094e00b001bcc99fede1mr1518926pjb.49.1646251625762;
+        Wed, 02 Mar 2022 12:07:05 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d25-20020a637359000000b0037843afb785sm6664pgn.25.2022.03.02.12.07.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 12:07:05 -0800 (PST)
+Date:   Wed, 2 Mar 2022 12:07:04 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        David Laight <David.Laight@aculab.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        KVM list <kvm@vger.kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>,
+        "linux1394-devel@lists.sourceforge.net" 
+        <linux1394-devel@lists.sourceforge.net>,
+        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        CIFS <linux-cifs@vger.kernel.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "kgdb-bugreport@lists.sourceforge.net" 
+        <kgdb-bugreport@lists.sourceforge.net>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Arnd Bergman <arnd@arndb.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        dma <dmaengine@vger.kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        "v9fs-developer@lists.sourceforge.net" 
+        <v9fs-developer@lists.sourceforge.net>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux F2FS Dev Mailing List 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "tipc-discussion@lists.sourceforge.net" 
+        <tipc-discussion@lists.sourceforge.net>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH 2/6] treewide: remove using list iterator after loop body
+ as a ptr
+Message-ID: <202203021158.DB5204A0@keescook>
+References: <282f0f8d-f491-26fc-6ae0-604b367a5a1a@amd.com>
+ <b2d20961dbb7533f380827a7fcc313ff849875c1.camel@HansenPartnership.com>
+ <7D0C2A5D-500E-4F38-AD0C-A76E132A390E@kernel.org>
+ <73fa82a20910c06784be2352a655acc59e9942ea.camel@HansenPartnership.com>
+ <CAHk-=wiT5HX6Kp0Qv4ZYK_rkq9t5fZ5zZ7vzvi6pub9kgp=72g@mail.gmail.com>
+ <7dc860874d434d2288f36730d8ea3312@AcuMS.aculab.com>
+ <CAHk-=whKqg89zu4T95+ctY-hocR6kDArpo2qO14-kV40Ga7ufw@mail.gmail.com>
+ <0ced2b155b984882b39e895f0211037c@AcuMS.aculab.com>
+ <CAHk-=wix0HLCBs5sxAeW3uckg0YncXbTjMsE-Tv8WzmkOgLAXQ@mail.gmail.com>
+ <78ccb184-405e-da93-1e02-078f90d2b9bc@rasmusvillemoes.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v3 0/3] mfd/power/regulators: dt-bindings: max14577:
- convert to dtschema
-Content-Language: en-US
-To:     Lee Jones <lee.jones@linaro.org>
-References: <20220215074759.29402-1-krzysztof.kozlowski@canonical.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220215074759.29402-1-krzysztof.kozlowski@canonical.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <78ccb184-405e-da93-1e02-078f90d2b9bc@rasmusvillemoes.dk>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15/02/2022 08:47, Krzysztof Kozlowski wrote:
-> Hi,
+On Wed, Mar 02, 2022 at 10:29:31AM +0100, Rasmus Villemoes wrote:
+> This won't help the current issue (because it doesn't exist and might
+> never), but just in case some compiler people are listening, I'd like to
+> have some sort of way to tell the compiler "treat this variable as
+> uninitialized from here on". So one could do
 > 
+> #define kfree(p) do { __kfree(p); __magic_uninit(p); } while (0)
+> 
+> with __magic_uninit being a magic no-op that doesn't affect the
+> semantics of the code, but could be used by the compiler's "[is/may be]
+> used uninitialized" machinery to flag e.g. double frees on some odd
+> error path etc. It would probably only work for local automatic
+> variables, but it should be possible to just ignore the hint if p is
+> some expression like foo->bar or has side effects. If we had that, the
+> end-of-loop test could include that to "uninitialize" the iterator.
 
-Hi Lee,
+I've long wanted to change kfree() to explicitly set pointers to NULL on
+free. https://github.com/KSPP/linux/issues/87
 
-Mark reviewed regulator patch. Can you take entire set via MFD?
+The thing stopping a trivial transformation of kfree() is:
 
-Best regards,
-Krzysztof
+	kfree(get_some_pointer());
 
-> Changes since v2
-> ================
-> 1. Add tags.
-> 2. Drop DTS patch (applied).
-> 3. mfd: Fix indentation in bindings example.
-> 4. regulator: Drop regulator-name requirement and use
->    unevaluatedProperties.
-> 
-> Changes since v1
-> ================
-> 1. MFD: Use absolute path to schemas
-> 2. Regulator: mention all allowed properties,
->    additionalProperties=false, add min/max values for voltages and
->    current, don't use patternProperties when not needed.
-> 
-> Dependencies
-> ============
-> 1. DTS patch 1/4: nothing depends on it, sending here so Rob's automatic
->    checker won't complain about DTS.
->    I will take it via Samsung SoC tree.
-> 
-> 2. Final MFD patch (4/4) depends on regulator and power, so the last
->    patches (2+3+4) should go via same tree.
-> 
-> Best regards,
-> Krzysztof
-> 
-> Krzysztof Kozlowski (3):
->   dt-bindings: power: supply: maxim,max14577: convert to dtschema
->   regulator: dt-bindings: maxim,max14577: convert to dtschema
->   dt-bindings: mfd: maxim,max14577: convert to dtschema
-> 
->  .../devicetree/bindings/mfd/max14577.txt      | 147 -------------
->  .../bindings/mfd/maxim,max14577.yaml          | 195 ++++++++++++++++++
->  .../bindings/power/supply/maxim,max14577.yaml |  84 ++++++++
->  .../bindings/regulator/maxim,max14577.yaml    |  78 +++++++
->  MAINTAINERS                                   |   3 +-
->  5 files changed, 359 insertions(+), 148 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/mfd/max14577.txt
->  create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max14577.yaml
->  create mode 100644 Documentation/devicetree/bindings/power/supply/maxim,max14577.yaml
->  create mode 100644 Documentation/devicetree/bindings/regulator/maxim,max14577.yaml
-> 
+I would argue, though, that the above is poor form: the thing holding
+the pointer should be the thing freeing it, so these cases should be
+refactored and kfree() could do the NULLing by default.
+
+Quoting myself in the above issue:
 
 
+Without doing massive tree-wide changes, I think we need compiler
+support. If we had something like __builtin_is_lvalue(), we could
+distinguish function returns from lvalues. For example, right now a
+common case are things like:
+
+	kfree(get_some_ptr());
+
+But if we could at least gain coverage of the lvalue cases, and detect
+them statically at compile-time, we could do:
+
+#define __kfree_and_null(x) do { __kfree(*x); *x = NULL; } while (0)
+#define kfree(x) __builtin_choose_expr(__builtin_is_lvalue(x),
+			__kfree_and_null(&(x)), __kfree(x))
+
+Alternatively, we could do a tree-wide change of the former case (findable
+with Coccinelle) and change them into something like kfree_no_null()
+and redefine kfree() itself:
+
+#define kfree_no_null(x) do { void *__ptr = (x); __kfree(__ptr); } while (0)
+#define kfree(x) do { __kfree(x); x = NULL; } while (0)
+
+-- 
+Kees Cook
