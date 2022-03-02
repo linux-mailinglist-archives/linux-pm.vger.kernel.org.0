@@ -2,238 +2,225 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9DC4C9F15
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Mar 2022 09:25:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A6C4C9F41
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Mar 2022 09:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240085AbiCBIZm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Mar 2022 03:25:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36540 "EHLO
+        id S235732AbiCBIbM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Mar 2022 03:31:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235656AbiCBIZl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Mar 2022 03:25:41 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D506B82C9;
-        Wed,  2 Mar 2022 00:24:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646209498; x=1677745498;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=6I8oT6NdhDd+OFo/0z8u0+iNo81n4dyrY3t7EZvDNmI=;
-  b=Fb8CgPaJZKKLYYqaTwrXUR+k0uDxlHPDy419eNKirkeYqs7wiFUF/jk4
-   8DwCG9mmcbM3F7QtaDxHlDhe1C2vfQ4iYuWyR9XET8pHvp9SKCW80UOlY
-   3GSx48Q6+hcuwKx9TctW8iJioadBLjMRfTMIijfY7932j+cdKPt47zIyp
-   VUACecicAN2gn9sWOxHUJ+weHGBlt5r9vPZypdJFy6jsz5XPef58YX3bG
-   YbwpsolkMZYmk7V0xvNWdja0BeVDh9FN1nXdn/BSVdvnjyHFnH2CrKfgN
-   0fdYx7OW/RTcPz9h9lrryTTe1yZOW8O7fiGYIlfmBBy3tFDs1AsXiENZe
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="339772921"
-X-IronPort-AV: E=Sophos;i="5.90,148,1643702400"; 
-   d="scan'208";a="339772921"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 00:24:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,148,1643702400"; 
-   d="scan'208";a="508120119"
-Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 02 Mar 2022 00:24:54 -0800
-Received: from kbuild by e9605edfa585 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nPKI1-0001Em-Tz; Wed, 02 Mar 2022 08:24:53 +0000
-Date:   Wed, 02 Mar 2022 16:24:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS WITH WARNING
- f7307721a01f4f14d21c699b270a870370cf34b9
-Message-ID: <621f29a5.tUuJmET0YwP81mTF%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S240191AbiCBIa7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Mar 2022 03:30:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78BC4BB08F
+        for <linux-pm@vger.kernel.org>; Wed,  2 Mar 2022 00:30:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1646209812;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4ju3TXslkK4ikbzwJYtvQpU2DB+d0S/w2MnovYNUeUk=;
+        b=LSDk0QzDGFTMZo8ie3l84Q8M5k37KeUt7+akkIqbjXt+JAaP9BAXHH5SbpOvlI01PrH+mX
+        uUo4HY55LRvCq05WZZmjm7DFQesBwmZG+2Xo+OFTFjXSDjH5DEGLfcgJINxEPZof9KDhRk
+        2aiEzMKzYzseINDxBJTLyA6LS6DJEgA=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-662-e-zqPzr7NMqvih-oJ6bIhg-1; Wed, 02 Mar 2022 03:30:11 -0500
+X-MC-Unique: e-zqPzr7NMqvih-oJ6bIhg-1
+Received: by mail-wm1-f71.google.com with SMTP id t2-20020a7bc3c2000000b003528fe59cb9so573153wmj.5
+        for <linux-pm@vger.kernel.org>; Wed, 02 Mar 2022 00:30:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4ju3TXslkK4ikbzwJYtvQpU2DB+d0S/w2MnovYNUeUk=;
+        b=0xz20JvdpzFSAstJEqNzQDItc2icl0+aBWC9VLYCWhcdBry2yQ5dXyNQbQtidlKz++
+         khOpOpVou8zt9i+tJPPeRCaDXhQslVQLpFsz8COaLV3/WfDAkhccxoCZioosDEEt8T/n
+         fPXZHDtm7Gi60DDLAU/npoJYAF9bd0ejK+fxDadqkNT47ebMbd5OFmNbhEM0FvRGjf6o
+         xhBVv//T3wJcm6QeGM4HW0Nn3cJRzHunk1kKE0DqOkS5EIrAo2cOVjHZeesjVUGQtIKS
+         Xd8qFGkhmmd2hjiGnzFqgGnXSfdF6+BrKnC+/x49CrHAsIAPyVSKtB0GT9SWUHeiX4fn
+         4sGA==
+X-Gm-Message-State: AOAM530IETgao5PwVNXXT8+yv0OuidJ+PoAFfBQ6BUCGCZwaUqTHKcHr
+        I8d3JPz8TEXAzeNE/y3NshlUpKFO9iEJqWZPAr89c2jL+K0RMuBH80rxaElZdwbvfDmSz5uZYLp
+        4GaWIkbWsKrsq1ZqX/hI=
+X-Received: by 2002:a05:600c:587:b0:381:b2:89b0 with SMTP id o7-20020a05600c058700b0038100b289b0mr20467136wmd.114.1646209810407;
+        Wed, 02 Mar 2022 00:30:10 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyUFCa8ddS38oq9IT6e/yWdwiarFYl14hc8Iyy/vjPTuHZpDyCAzWiVC6dCDT5EWZ3tUieAJg==
+X-Received: by 2002:a05:600c:587:b0:381:b2:89b0 with SMTP id o7-20020a05600c058700b0038100b289b0mr20467105wmd.114.1646209810176;
+        Wed, 02 Mar 2022 00:30:10 -0800 (PST)
+Received: from redhat.com ([2a10:8006:355c:0:48d6:b937:2fb9:b7de])
+        by smtp.gmail.com with ESMTPSA id f4-20020a5d4dc4000000b001d8e67e5214sm16454314wru.48.2022.03.02.00.30.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Mar 2022 00:30:09 -0800 (PST)
+Date:   Wed, 2 Mar 2022 03:30:06 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Laszlo Ersek <lersek@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        linux-hyperv@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Alexander Graf <graf@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        adrian@parity.io,
+        Daniel =?iso-8859-1?Q?P=2E_Berrang=E9?= <berrange@redhat.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Jann Horn <jannh@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        Theodore Ts'o <tytso@mit.edu>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: propagating vmgenid outward and upward
+Message-ID: <20220302031738-mutt-send-email-mst@kernel.org>
+References: <Yh4+9+UpanJWAIyZ@zx2c4.com>
+ <223f858c-34c5-3ccd-b9e8-7585a976364d@redhat.com>
+ <Yh5JwK6toc/zBNL7@zx2c4.com>
+ <20220301121419-mutt-send-email-mst@kernel.org>
+ <CAHmME9qieLUDVoPYZPo=N8NCL1T-RzQ4p7kCFv3PKFUkhWZPsw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <CAHmME9qieLUDVoPYZPo=N8NCL1T-RzQ4p7kCFv3PKFUkhWZPsw@mail.gmail.com>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: f7307721a01f4f14d21c699b270a870370cf34b9  Merge branch 'acpi-soc' into bleeding-edge
+On Tue, Mar 01, 2022 at 07:37:06PM +0100, Jason A. Donenfeld wrote:
+> Hi Michael,
+> 
+> On Tue, Mar 1, 2022 at 6:17 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > Hmm okay, so it's a performance optimization... some batching then? Do
+> > you really need to worry about every packet? Every 64 packets not
+> > enough?  Packets are after all queued at NICs etc, and VM fork can
+> > happen after they leave wireguard ...
+> 
+> Unfortunately, yes, this is an "every packet" sort of thing -- if the
+> race is to be avoided in a meaningful way. It's really extra bad:
+> ChaCha20 and AES-CTR work by xoring a secret stream of bytes with
+> plaintext to produce a ciphertext. If you use that same secret stream
+> and xor it with a second plaintext and transmit that too, an attacker
+> can combine the two different ciphertexts to learn things about the
+> original plaintext.
+> 
+> But, anyway, it seems like the race is here to stay given what we have
+> _currently_ available with the virtual hardware. That's why I'm
+> focused on trying to get something going that's the least bad with
+> what we've currently got, which is racy by design. How vitally
+> important is it to have something that doesn't race in the far future?
+> I don't know, really. It seems plausible that that ACPI notifier
+> triggers so early that nothing else really even has a chance, so the
+> race concern is purely theoretical. But I haven't tried to measure
+> that so I'm not sure.
+> 
+> Jason
 
-Warning reports:
 
-https://lore.kernel.org/linux-acpi/202203020750.Uq6hGay2-lkp@intel.com
-https://lore.kernel.org/llvm/202203020737.wa9uc4gW-lkp@intel.com
+I got curious, and wrote a dumb benchmark:
 
-Warning:
 
-arch/x86/kernel/acpi/boot.c:1476:8: warning: excess elements in array initializer [-Wexcess-initializers]
-include/linux/mod_devicetable.h:587:25: warning: excess elements in array initializer
+#include <stdio.h>
+#include <assert.h>
+#include <limits.h>
+#include <string.h>
 
-Unverified Warning (likely false positive, please contact us if interested):
+struct lng {
+	unsigned long long l1;
+	unsigned long long l2;
+};
 
-arch/x86/kernel/acpi/boot.c:1394 (null)() error: buffer overflow '(acpi_dmi_table[6])->matches' 4 <= 4
-arch/x86/kernel/acpi/boot.c:1476:22: sparse: sparse: excessive elements in array initializer
+struct shrt {
+	unsigned long s;
+};
 
-Warning ids grouped by kconfigs:
 
-gcc_recent_errors
-|-- i386-randconfig-a003
-|   `-- include-linux-mod_devicetable.h:warning:excess-elements-in-array-initializer
-|-- i386-randconfig-c001
-|   `-- include-linux-mod_devicetable.h:warning:excess-elements-in-array-initializer
-|-- i386-randconfig-s001
-|   `-- include-linux-mod_devicetable.h:warning:excess-elements-in-array-initializer
-|-- i386-randconfig-s002
-|   |-- arch-x86-kernel-acpi-boot.c:sparse:sparse:excessive-elements-in-array-initializer
-|   `-- include-linux-mod_devicetable.h:warning:excess-elements-in-array-initializer
-|-- x86_64-allyesconfig
-|   `-- include-linux-mod_devicetable.h:warning:excess-elements-in-array-initializer
-|-- x86_64-kexec
-|   `-- include-linux-mod_devicetable.h:warning:excess-elements-in-array-initializer
-|-- x86_64-randconfig-a015
-|   `-- include-linux-mod_devicetable.h:warning:excess-elements-in-array-initializer
-|-- x86_64-randconfig-c002
-|   `-- include-linux-mod_devicetable.h:warning:excess-elements-in-array-initializer
-|-- x86_64-randconfig-m001
-|   `-- arch-x86-kernel-acpi-boot.c-(null)()-error:buffer-overflow-(acpi_dmi_table-)-matches
-|-- x86_64-rhel-8.3
-|   `-- include-linux-mod_devicetable.h:warning:excess-elements-in-array-initializer
-|-- x86_64-rhel-8.3-func
-|   `-- include-linux-mod_devicetable.h:warning:excess-elements-in-array-initializer
-|-- x86_64-rhel-8.3-kselftests
-|   `-- include-linux-mod_devicetable.h:warning:excess-elements-in-array-initializer
-`-- x86_64-rhel-8.3-kunit
-    `-- include-linux-mod_devicetable.h:warning:excess-elements-in-array-initializer
+struct lng l = { 1, 2 };
+struct shrt s = { 3 };
 
-clang_recent_errors
-|-- i386-randconfig-a002
-|   `-- arch-x86-kernel-acpi-boot.c:warning:excess-elements-in-array-initializer
-|-- i386-randconfig-a011
-|   `-- arch-x86-kernel-acpi-boot.c:warning:excess-elements-in-array-initializer
-`-- x86_64-randconfig-a016
-    `-- arch-x86-kernel-acpi-boot.c:warning:excess-elements-in-array-initializer
+static void test1(volatile struct shrt *sp)
+{
+	if (sp->s != s.s) {
+		printf("short mismatch!\n");
+		s.s = sp->s;
+	}
+}
+static void test2(volatile struct lng *lp)
+{
+	if (lp->l1 != l.l1 || lp->l2 != l.l2) {
+		printf("long mismatch!\n");
+		l.l1 = lp->l1;
+		l.l2 = lp->l2;
+	}
+}
 
-elapsed time: 724m
+int main(int argc, char **argv)
+{
+	volatile struct shrt sv = { 4 };
+	volatile struct lng lv = { 5, 6 };
 
-configs tested: 106
-configs skipped: 3
+	if (argc > 1) {
+		printf("test 1\n");
+		for (int i = 0; i < 10000000; ++i) 
+			test1(&sv);
+	} else {
+		printf("test 2\n");
+		for (int i = 0; i < 10000000; ++i)
+			test2(&lv);
+	}
+	return 0;
+}
 
-gcc tested configs:
-arm                                 defconfig
-arm64                               defconfig
-arm                              allmodconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-arm                            lart_defconfig
-arm                            hisi_defconfig
-h8300                            alldefconfig
-sh                            titan_defconfig
-arm                          iop32x_defconfig
-m68k                          amiga_defconfig
-arm                            pleb_defconfig
-sh                        apsh4ad0a_defconfig
-ia64                            zx1_defconfig
-mips                      maltasmvp_defconfig
-arm                         at91_dt_defconfig
-sh                               alldefconfig
-openrisc                            defconfig
-arm                  randconfig-c002-20220301
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-nds32                             allnoconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-alpha                               defconfig
-nds32                               defconfig
-nios2                            allyesconfig
-alpha                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-parisc                              defconfig
-parisc64                            defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-i386                             allyesconfig
-i386                              debian-10.3
-i386                   debian-10.3-kselftests
-sparc                               defconfig
-i386                                defconfig
-sparc                            allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-i386                          randconfig-a003
-i386                          randconfig-a001
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-x86_64                        randconfig-a006
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-arc                  randconfig-r043-20220301
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-riscv                    nommu_virt_defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                                  kexec
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
 
-clang tested configs:
-arm                          imote2_defconfig
-powerpc                      ppc64e_defconfig
-arm                        mvebu_v5_defconfig
-arm                         lpc32xx_defconfig
-mips                     cu1830-neo_defconfig
-arm                        spear3xx_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-hexagon              randconfig-r045-20220301
-hexagon              randconfig-r041-20220301
-s390                 randconfig-r044-20220301
-riscv                randconfig-r042-20220301
+Results (built with -O2, nothing fancy):
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+[mst@tuck ~]$ perf stat -r 1000 ./a.out 1 > /dev/null
+
+ Performance counter stats for './a.out 1' (1000 runs):
+
+              5.12 msec task-clock:u              #    0.945 CPUs utilized            ( +-  0.07% )
+                 0      context-switches:u        #    0.000 /sec                   
+                 0      cpu-migrations:u          #    0.000 /sec                   
+                52      page-faults:u             #   10.016 K/sec                    ( +-  0.07% )
+        20,190,800      cycles:u                  #    3.889 GHz                      ( +-  0.01% )
+        50,147,371      instructions:u            #    2.48  insn per cycle           ( +-  0.00% )
+        20,032,224      branches:u                #    3.858 G/sec                    ( +-  0.00% )
+             1,604      branch-misses:u           #    0.01% of all branches          ( +-  0.26% )
+
+        0.00541882 +- 0.00000847 seconds time elapsed  ( +-  0.16% )
+
+[mst@tuck ~]$ perf stat -r 1000 ./a.out > /dev/null
+
+ Performance counter stats for './a.out' (1000 runs):
+
+              7.75 msec task-clock:u              #    0.947 CPUs utilized            ( +-  0.12% )
+                 0      context-switches:u        #    0.000 /sec                   
+                 0      cpu-migrations:u          #    0.000 /sec                   
+                52      page-faults:u             #    6.539 K/sec                    ( +-  0.07% )
+        30,205,916      cycles:u                  #    3.798 GHz                      ( +-  0.01% )
+        80,147,373      instructions:u            #    2.65  insn per cycle           ( +-  0.00% )
+        30,032,227      branches:u                #    3.776 G/sec                    ( +-  0.00% )
+             1,621      branch-misses:u           #    0.01% of all branches          ( +-  0.23% )
+
+        0.00817982 +- 0.00000965 seconds time elapsed  ( +-  0.12% )
+
+
+So yes, the overhead is higher by 50% which seems a lot but it's from a
+very small number, so I don't see why it's a show stopper, it's not by a
+factor of 10 such that we should sacrifice safety by default. Maybe a
+kernel flag that removes the read replacing it with an interrupt will
+do.
+
+In other words, premature optimization is the root of all evil.
+
+-- 
+MST
+
