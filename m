@@ -2,91 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B074C9B5A
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Mar 2022 03:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4344C9B78
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Mar 2022 03:51:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239141AbiCBCqu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Mar 2022 21:46:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
+        id S239176AbiCBCwT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Mar 2022 21:52:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235939AbiCBCqt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 21:46:49 -0500
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4BCA9E23
-        for <linux-pm@vger.kernel.org>; Tue,  1 Mar 2022 18:46:06 -0800 (PST)
-Received: by mail-oo1-xc2b.google.com with SMTP id x6-20020a4a4106000000b003193022319cso455880ooa.4
-        for <linux-pm@vger.kernel.org>; Tue, 01 Mar 2022 18:46:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wjdqSaPpltqhLridozcEUTEQoIYV6/3L4YmJnQ5z0lY=;
-        b=LN9nnhqICRhttXAVr1od9T1t/Ymtpxhtz4tHsjH3dYjcd3Rkq9C9wMhSXlkrlSYC1A
-         DlJ/JptFxg1yVABD2c1AkWjsPC7Du3KLmBhl0PmcAe7J/mlUk1cp6g/yIWvbZRRK/ixo
-         +bm5IDVzJdC4fxWuoEI4G5CHndK46TO9kW9KbAaQI641rdN+rU1dvb6VBLEpmuuVwgUt
-         80QLDod/jgV5iicQ0WoUYh+G5NUspA9Y6GZrYqrOz6zP3KBF8+B00J/JX/kKtJbsLcZw
-         Nn9Y0EtKII81vB9nbqmK7v/AXIDRsz2QxYS4EGE2oGDGOXpVkmABqBHnLwBv01oaAEdI
-         u6og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wjdqSaPpltqhLridozcEUTEQoIYV6/3L4YmJnQ5z0lY=;
-        b=6QGEF+xeimYdC623SX2Nzi/5SbXoLa490OdtMocltoG4wwS7I/t9jgNQCiO0PBLylJ
-         TS5N4kuFmkv/IeYQqu7U01nqsoVsAKN1TuErH9QEyDG7VjaUsZUqITELyjbqqMU57flf
-         1cQOnBmKaVC9j1PsEcXFpPj+RjXcJiDJzDx+AQjGobpabdijz+OxE5NxvAlj6AMDZJ9M
-         sNPB0La1AdShZJ34ZeKJ9ebZRd5yOJGIs+YVvW98YqEIOtyzySpILtaQyTmECJvTMjQE
-         0VFFzxLkK9NUSshN8G897KMtGsnA/pkSZERvx0wwnLkENzmgVUoGaO1pTzKxsF3K30oI
-         7GUQ==
-X-Gm-Message-State: AOAM530YtdyWJO/bP/0wAnkrC/G18lQwG9egrbl/X+Qdvi3TXrN8OCeF
-        If87EerR47nvdfyGrNG8yCHXkw==
-X-Google-Smtp-Source: ABdhPJyABJwssvqzs0MiuFje5MNOUuD4BXQpc8Bd2B6R1kdb3joprE0iJZUcrLXMN5kygRaNyqLzdA==
-X-Received: by 2002:a05:6820:1396:b0:31c:59f4:2fe4 with SMTP id i22-20020a056820139600b0031c59f42fe4mr13722344oow.10.1646189166017;
-        Tue, 01 Mar 2022 18:46:06 -0800 (PST)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id 23-20020a9d0b97000000b005ad33994e93sm7196700oth.31.2022.03.01.18.46.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Mar 2022 18:46:05 -0800 (PST)
-Date:   Tue, 1 Mar 2022 18:47:56 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Lee Jones <lee.jones@linaro.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Another pass removing cases of 'allOf'
- containing a '$ref'
-Message-ID: <Yh7a3Gl6PPamTjY5@ripper>
-References: <20220228213802.1639658-1-robh@kernel.org>
+        with ESMTP id S239169AbiCBCwT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Mar 2022 21:52:19 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183FDAB450;
+        Tue,  1 Mar 2022 18:51:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646189497; x=1677725497;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Tm4+8lizUr2xgEpaQ+EdlRF/QIwp9cOAif5S+psZgdk=;
+  b=G6uyvcYyvXANKqi+hTDwFd15UtK5IQ6tNa3AJ5YIxF6aFMzJSYsBr5cL
+   LCEGvLELMQc9ePt1DOXTxHQXTZ1GgpehPX8latyPWyh2Bqu64lip9HtIA
+   8/tdwjGykA5dUd4SK2+iAm0T9LP5uiFI9skR69x37vv/a761B/EnnCQcy
+   VJPG7A/4/TXTAG3JSD2kFmAE+/vYOUEhmzJD3UBreBEVroZ2ofkenGAJZ
+   n6dDxiq7LWGWjAj85twiU43V19MSwRR4oWCWB/lnaiLNkUCKhpaPWLgQU
+   n1vYDfjYjwmjX2OhS2muc/nSlkWzGlWaRULrPqfK1CHZQCnkr+ZyovOe4
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10273"; a="253219464"
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="253219464"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Mar 2022 18:51:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,146,1643702400"; 
+   d="scan'208";a="510826971"
+Received: from lkp-server02.sh.intel.com (HELO e9605edfa585) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 01 Mar 2022 18:51:34 -0800
+Received: from kbuild by e9605edfa585 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nPF5R-0000wI-Ga; Wed, 02 Mar 2022 02:51:33 +0000
+Date:   Wed, 2 Mar 2022 10:51:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Cilissen <mark@yotsuba.nl>
+Cc:     kbuild-all@lists.01.org, linux-acpi@vger.kernel.org,
+        devel@acpica.org, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [rafael-pm:bleeding-edge 113/118]
+ include/linux/mod_devicetable.h:587:25: warning: excess elements in array
+ initializer
+Message-ID: <202203020750.Uq6hGay2-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220228213802.1639658-1-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,70 +64,56 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon 28 Feb 13:38 PST 2022, Rob Herring wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   f7307721a01f4f14d21c699b270a870370cf34b9
+commit: ed00b2b8d737f87a2437d7bd7c7f90124b50da05 [113/118] x86 / ACPI: Work around broken XSDT on SEGA AALE board
+config: i386-randconfig-a003 (https://download.01.org/0day-ci/archive/20220302/202203020750.Uq6hGay2-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=ed00b2b8d737f87a2437d7bd7c7f90124b50da05
+        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+        git fetch --no-tags rafael-pm bleeding-edge
+        git checkout ed00b2b8d737f87a2437d7bd7c7f90124b50da05
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/acpi/
 
-> Another pass at removing unnecessary use of 'allOf' with a '$ref'.
-> 
-> json-schema versions draft7 and earlier have a weird behavior in that
-> any keywords combined with a '$ref' are ignored (silently). The correct
-> form was to put a '$ref' under an 'allOf'. This behavior is now changed
-> in the 2019-09 json-schema spec and '$ref' can be mixed with other
-> keywords.
-> 
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Sam Ravnborg <sam@ravnborg.org>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: Guenter Roeck <groeck@chromium.org>
-> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-input@vger.kernel.org
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-mtd@lists.infradead.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-phy@lists.infradead.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-remoteproc@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-spi@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/connector/usb-connector.yaml         |  3 +--
->  .../bindings/display/brcm,bcm2711-hdmi.yaml       |  3 +--
->  .../bindings/display/bridge/adi,adv7511.yaml      |  5 ++---
->  .../bindings/display/bridge/synopsys,dw-hdmi.yaml |  5 ++---
->  .../bindings/display/panel/display-timings.yaml   |  3 +--
->  .../devicetree/bindings/display/ste,mcde.yaml     |  4 ++--
->  .../devicetree/bindings/input/adc-joystick.yaml   |  9 ++++-----
->  .../bindings/leds/cznic,turris-omnia-leds.yaml    |  3 +--
->  .../devicetree/bindings/leds/leds-lp50xx.yaml     |  3 +--
->  .../devicetree/bindings/mfd/google,cros-ec.yaml   | 12 ++++--------
->  .../devicetree/bindings/mtd/nand-controller.yaml  |  8 +++-----
->  .../bindings/mtd/rockchip,nand-controller.yaml    |  3 +--
->  .../devicetree/bindings/net/ti,cpsw-switch.yaml   |  3 +--
->  .../bindings/phy/phy-stm32-usbphyc.yaml           |  3 +--
->  .../bindings/power/supply/sbs,sbs-manager.yaml    |  4 +---
->  .../bindings/remoteproc/ti,k3-r5f-rproc.yaml      |  3 +--
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-For the remoteproc binding:
+All warnings (new ones prefixed by >>):
 
-Acked-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+   In file included from include/linux/of.h:18,
+                    from include/linux/irqdomain.h:35,
+                    from include/linux/acpi.h:13,
+                    from arch/x86/kernel/acpi/boot.c:11:
+>> include/linux/mod_devicetable.h:587:25: warning: excess elements in array initializer
+     587 | #define DMI_MATCH(a, b) { .slot = a, .substr = b }
+         |                         ^
+   arch/x86/kernel/acpi/boot.c:1476:8: note: in expansion of macro 'DMI_MATCH'
+    1476 |        DMI_MATCH(DMI_BIOS_DATE, "02/01/2011"),
+         |        ^~~~~~~~~
+   include/linux/mod_devicetable.h:587:25: note: (near initialization for 'acpi_dmi_table[6].matches')
+     587 | #define DMI_MATCH(a, b) { .slot = a, .substr = b }
+         |                         ^
+   arch/x86/kernel/acpi/boot.c:1476:8: note: in expansion of macro 'DMI_MATCH'
+    1476 |        DMI_MATCH(DMI_BIOS_DATE, "02/01/2011"),
+         |        ^~~~~~~~~
 
-Thanks,
-Bjorn
+
+vim +587 include/linux/mod_devicetable.h
+
+d945b697d0eea5 David Woodhouse 2008-09-16  586  
+5017b2851373ee Jani Nikula     2013-07-03 @587  #define DMI_MATCH(a, b)	{ .slot = a, .substr = b }
+5017b2851373ee Jani Nikula     2013-07-03  588  #define DMI_EXACT_MATCH(a, b)	{ .slot = a, .substr = b, .exact_match = 1 }
+d2653e92732bd3 Jean Delvare    2008-04-29  589  
+
+:::::: The code at line 587 was first introduced by commit
+:::::: 5017b2851373ee15c7035151853bb1448800cae2 dmi: add support for exact DMI matches in addition to substring matching
+
+:::::: TO: Jani Nikula <jani.nikula@intel.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
