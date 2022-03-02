@@ -2,223 +2,186 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A918D4CA02C
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Mar 2022 10:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67D2A4CA058
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Mar 2022 10:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240289AbiCBJBW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Mar 2022 04:01:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38878 "EHLO
+        id S237484AbiCBJKS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Mar 2022 04:10:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240287AbiCBJBV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Mar 2022 04:01:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 674C458E45
-        for <linux-pm@vger.kernel.org>; Wed,  2 Mar 2022 01:00:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646211637;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nglozkwZ9E5oM3xxjiOvdMHp+P3p2GEbi9ZIptGZfLU=;
-        b=aoOtKIisQYmErAxb3S8p5uJsOS0f5cwI8mgIJZ+yI4l/kV1vaj2us/zvp4SrX4Ri1Np17e
-        yGgOGuKq2LjGmDybf930LYjcJT1YK2l/kRClM9itEvrBRENVKRRNblTlD35gVfHjoBEhOj
-        /7YwAr8RLDO11YnnnLkl4qkddPZ+XB0=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-631-VyFHX0UAPv2qCRhwzEFNxA-1; Wed, 02 Mar 2022 04:00:36 -0500
-X-MC-Unique: VyFHX0UAPv2qCRhwzEFNxA-1
-Received: by mail-ed1-f72.google.com with SMTP id o20-20020aa7dd54000000b00413bc19ad08so632539edw.7
-        for <linux-pm@vger.kernel.org>; Wed, 02 Mar 2022 01:00:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nglozkwZ9E5oM3xxjiOvdMHp+P3p2GEbi9ZIptGZfLU=;
-        b=7iI/sui9NTaPtjHNFhFgLSFLPASoKY3Vl3vWTVZXPXpsCKQPyDTuA3oYNoAhE5s7n4
-         dnIsmQkXpw005XuX70lODm86y5YqxBdjsRbyHW8i1ZlBBe/7G3sesh+Wg3EOVoLRnn/X
-         eQx2/cEPZC+0YpO9Aa/hyFLnwmbEFmcpRBmSrDFPYHtREhmAbnnmdLrBlPDIlkoTcmp/
-         UjaLaMECyq2MB+j1aOqQpKmoOrdjA0pCl/no/xSqcny9yx3WCLJZaWLmku/R38Ef7lWl
-         qLGLaEAI48mNDV9tOXngiGbjxRWl1+4Wrr2PbN12LtF1gYY3N3Egen0p54rJvvwvAJnZ
-         xl/A==
-X-Gm-Message-State: AOAM531DQpXStCLQ0+o+W+kbJw6VxDwKU/kUMyMnCz1N8EnmDRoxLrRw
-        1m8PApvRjBQ4iUUzPF2PoZwJbWQyv2GmlC4NP03sQOQl8EqetTnT2ne+zRfaBOINHfRVyzVihxx
-        pG9MOxmYZ8jHdFzAyJf0=
-X-Received: by 2002:a17:907:8a25:b0:6d7:d59:6912 with SMTP id sc37-20020a1709078a2500b006d70d596912mr4089328ejc.259.1646211635241;
-        Wed, 02 Mar 2022 01:00:35 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw2PFOMyGct2RwZCRKJpVo0k7br2d4b17H/TgVXIFh2tZdS2AyukmH9dplP1caqs7n3pFiayw==
-X-Received: by 2002:a17:907:8a25:b0:6d7:d59:6912 with SMTP id sc37-20020a1709078a2500b006d70d596912mr4089310ejc.259.1646211634977;
-        Wed, 02 Mar 2022 01:00:34 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
-        by smtp.gmail.com with ESMTPSA id d4-20020a1709067a0400b006d6e3ca9f71sm1609122ejo.198.2022.03.02.01.00.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Mar 2022 01:00:34 -0800 (PST)
-Message-ID: <a429c799-f293-89b5-417b-3aa9cfeef457@redhat.com>
-Date:   Wed, 2 Mar 2022 10:00:33 +0100
+        with ESMTP id S230422AbiCBJKQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Mar 2022 04:10:16 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2060.outbound.protection.outlook.com [40.107.223.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C505B91AFA;
+        Wed,  2 Mar 2022 01:09:33 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YSQ8RzzSxOKx6lJ6FwlGv6zWew1hGJy4EYOVgW2MSYq1qWcauHJuXaObVGsdbTukh0JHVOBNrPKaW5We9QHPPa3PW8w7kJpvSFOo3RrTfGRQplNrrhLmYVkPYBzrN7Wd9svLmQ5HpWA1HLExgN1JxWowo1kOoGCBypBb2WQ30AwxcuUbuSN//Xyz5XyseP8KqyIGfXA2kCjoY/V7XEFqmzE/WEUuyiWiYbiraCw6hbYpDeinVIuV7TCMutXjePPDzC/XvfT1IM25PLx6QUK7UHjqkyIC+UjMPtr4rw0Zk9z8f6APSg6JHebm64tvv/kkKRmLTvsjftFF+uWLG0k4xA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aXktILI0PfZJ5F8vsfW1awWiliHTwPcMwz+znL6DfX4=;
+ b=bEgUnBAGvYqollxOc4NYHgiRSBgfFb0CIndRL8uVOnBHWdNEmHxJABzdrXUA2WHPVy/PBTjYLa80086CmQn2ZPN3VXxgKEvG3kgwoqTM3cj0aK2vJiluwG8BZZHxNFeWLt3ylhKKxbmKop/6RuU7ArbbEWhd4/5OEhogOizXGnFno+/LdI4ME/7nb+CpyEqL2gQAkuZhaH8cIdafyQ7aLIyZNIb+aO+CzPvRqcOKbedba1h5p82G4ZD3PokjmkcuZsFe9KD+SahIKtMe0R/S/HQ3alXHYehkoafc+yo+Wy37CVaTUfKnwEIAAqTHxX6pUkOzZ/TmEOQJcubmiL4QzQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aXktILI0PfZJ5F8vsfW1awWiliHTwPcMwz+znL6DfX4=;
+ b=m/jy4wYVhSEG94AA90O65bj9N8E2CnF1QIjicrOzyuqoFbqMDw8MuqeuGu5M1KsKLYOumkcM3Qapf2m1jVz7qx/xdScC95BpYNZVooGITcNQ3qolNddIt4/uZ8YS8vhZTWeiIr5wjTLIT9LkczatOlatu+Jb0LYvkryYvw28Stk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
+ DM5PR1201MB0091.namprd12.prod.outlook.com (2603:10b6:4:57::23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5017.26; Wed, 2 Mar 2022 09:09:31 +0000
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::8d40:da47:7312:64b8]) by DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::8d40:da47:7312:64b8%6]) with mapi id 15.20.5017.027; Wed, 2 Mar 2022
+ 09:09:31 +0000
+Date:   Wed, 2 Mar 2022 17:09:07 +0800
+From:   Huang Rui <ray.huang@amd.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>
+Cc:     "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Doug Smythies <dsmythies@telus.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Todd Brandt <todd.e.brandt@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>
+Subject: Re: [PATCH 1/3] cpufreq: amd-pstate: Add more tracepoint for AMD
+ P-State module
+Message-ID: <Yh80MwmHqAXK+PbD@amd.com>
+References: <20220223100350.3523826-1-Jinzhou.Su@amd.com>
+ <20220223100350.3523826-2-Jinzhou.Su@amd.com>
+ <CAJZ5v0iaY3tsNKFXv09Z4wg_2R3+9UsSnqfPBbOYFaqoVS1qCg@mail.gmail.com>
+ <BL1PR12MB51447B1235E91A81309190B2F7029@BL1PR12MB5144.namprd12.prod.outlook.com>
+ <CAJZ5v0jDbNVEtRiaiUXembZB2r4uxVy3iKO0aTqOJsB0rLpV=A@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0jDbNVEtRiaiUXembZB2r4uxVy3iKO0aTqOJsB0rLpV=A@mail.gmail.com>
+X-ClientProxiedBy: HK2PR03CA0063.apcprd03.prod.outlook.com
+ (2603:1096:202:17::33) To DM5PR12MB2504.namprd12.prod.outlook.com
+ (2603:10b6:4:b5::19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [rafael-pm:bleeding-edge 113/118]
- arch/x86/kernel/acpi/boot.c:1476:8: warning: excess elements in array
- initializer
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>, Mark Cilissen <mark@yotsuba.nl>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>
-References: <202203020737.wa9uc4gW-lkp@intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <202203020737.wa9uc4gW-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4a0873b1-c927-4839-dc63-08d9fc2c5c99
+X-MS-TrafficTypeDiagnostic: DM5PR1201MB0091:EE_
+X-Microsoft-Antispam-PRVS: <DM5PR1201MB0091E26990063BF83A309E61EC039@DM5PR1201MB0091.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gicSsCkd9O510YPUgAs1qI48a5aHTZHl2KBAbQy3GPEciBrkEF5EpGhHaqVvo9fdL/AElgQ2666fjIFcrjEtSxF3Yb3VIXgo9+IxtAiuhaI0WmGTPOgs2OEtdN3T822A3IPf4AKg6uRnQtK6drpobKBgkrYN5CVUtnzCwW65wJgN1j2bokVjabgajfmd3a5uJ+pPQkKZVaHJFwa94ZAkB8rQX3IbHMv81N8fAoYvlgwxAjiwc7xVKvcJkSUZi9k+jUbS6eLN9F7a9eluqa2LSfu3vBsNM/imK6xbIDV3QEQGqeKC3mkH2FxNNyYrgcl3RHzwenCNKE3wj2wHNFTTfB9+1ffVMfKZXgLO2yTx3k7s4yM5KINU5sxORsaLfyFAO0gDmpsp3304WS/rASCvAk5Y/R9TOPslSHyOvt00Ikx9lWn8dTpoUrA3SCsH/y+DSkNoiTPUWsY2xkv4W1YTEA2AOFW5zW9HxK2I7USBfNNFrdZ+GwmwDLSjZ5GFlMov7KwwH5WWbdd2tuwceZTB4fMXZZ0+CBVMJZTW5qd0jRY4MCzA/caZXxiQo8i3DLBfuKeuBYA1s6DiSr7D/nAxSH6OCzctZbFfTDnd6jxPKqVPTXA7S0tqz62W/sh/bZEhID8cnrw64HnFeDvj5FCIfadGHzskNgRO+AIeAik67d5m2ctHsNnU8RVn7ReksXZe6KXc94SpCqIfS8j+p7PPCQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(6512007)(5660300002)(316002)(8936002)(8676002)(66476007)(66556008)(66946007)(2616005)(4326008)(2906002)(186003)(26005)(38100700002)(36756003)(53546011)(6506007)(6486002)(6666004)(6636002)(83380400001)(508600001)(110136005)(54906003)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PT0sq6wk7EB8s/Nc97WSOx+jS7YFtL4OYsCoBlTauggfKrHSSvXMk61IytQU?=
+ =?us-ascii?Q?GY0jTMSZCxI2z9S1OLpT3kmLG9Dp0QTS961ON1A4YNiUO4eqPAgPoKkAfFni?=
+ =?us-ascii?Q?GsLP4j36ZxZhWVQTMxogNEonaeehtyhd3QQFDMsK7NvMOd8R3hAnLqNGHXTd?=
+ =?us-ascii?Q?chk4PYvQz9REaJT23bDj0Lh6/V+dMxcAYeg426nuDYqpa9RxmN0BxL2k8Tkx?=
+ =?us-ascii?Q?Ig2sspJcO3balTq2NJnj1AsshfO+Kytt6kECbJVT5kmK3KtUkIUfAQBfWjml?=
+ =?us-ascii?Q?UZs4gHxVyNb+Co0z2a1irVeKQliw9NKDCGChg2p2b7UxUpbZTmPZ1UKCdK2v?=
+ =?us-ascii?Q?EZSofwcBRnlKq3I+t0Xq7ksOVR4hgeZMuyt0yjX6LUKCMxhHXKeRWyRoGp5m?=
+ =?us-ascii?Q?D/yzGCL3yYXajGr9ju5rhp5v2j3o7X/IKPgKoTRJk7fdAWTz5awZPjgAhXKW?=
+ =?us-ascii?Q?Sqh90x4fuioWuULFB/54V4amwaQFOMRX9lGd/N2pvt4p7mpyIhBlSDNCbpka?=
+ =?us-ascii?Q?TY4PBk3QFtOsMBVAHnZBu80COfBYdkRmlS/cjUiYTfytsByN5s27Zt0Z3Qgx?=
+ =?us-ascii?Q?whaKG5w2PpR5oXwiS51ILMksYtmf1Ba7xeN2qHDVf/+kSjh8+d9Fq4Sl3gov?=
+ =?us-ascii?Q?LZktIsKF/YnOQ70DyRLRwCy+ZKforYqomvFthNgv/DQItUN+mA/0yAmBPJ+u?=
+ =?us-ascii?Q?XAe+S0pQOobTG/478ml10/ifGMY86rJylCc931I96Rgzy+vyMIiLkTEx5bn7?=
+ =?us-ascii?Q?tORHlkFEJgSn02W4fbJBX56gPaK3PlbPP5hZHMZhWfMRIkW2mXcFuH6Rgz/I?=
+ =?us-ascii?Q?Bwm3fwU7eDRNvJVb2YP+vQ9U350UtcFa/pa8Nwv1tat7EaerkesIqcEdXBca?=
+ =?us-ascii?Q?lR/ykbf4iLMhxdlRbND+NMq66xMTfuDgzwMiGupuyceQH0BRluhScJE/pa5e?=
+ =?us-ascii?Q?QPQqwbLsQ3Zwo0zSDqiPObhVyPom68AKZhtJ29rw5e4JnoL9JzGiuv9Ekamd?=
+ =?us-ascii?Q?/My6TR/7fMrC+Xux3IocdvxzNe5XgkuZK0okNT4cT2K8Qw1d+KQ9Alze71sJ?=
+ =?us-ascii?Q?CaTbjCZygn+YaQ1DAB11h/9Ksbouz1QGpcTbr+RN1crXXjhfKiC/iEXCChQW?=
+ =?us-ascii?Q?mCfbg8YGnk/UAmEuUCY2ODqO2e4F2Pb9LBUKXpmBLtp0jEFZmGP6b5u0jZiE?=
+ =?us-ascii?Q?pazaXNtgCoSjREQ7XoWg7hCvAEvd65b+fSom0ucMQJT3oeYQ3kt3e8/bhV8P?=
+ =?us-ascii?Q?LnrqgMIMqB1Y4GkjV7AydFD5uRvJC+gHlp/yOIrr3ZobYp+dprqcGqDSTqXS?=
+ =?us-ascii?Q?T6oRAvekuAXm7/DTEQkxkkteTY8vXYRhRGc4U4HlfspLGPijQbmjBmNbYVO+?=
+ =?us-ascii?Q?ANOEL2XfDCIARVudyc7WmiSI7tqOzBzEY6nCLMXqx+RBHEk09Uy5QYwLqX/9?=
+ =?us-ascii?Q?I6etGCDVktXeZ+cfsJTpiZVd6szYU7IMG/k73WN0RVMqcxfULKoeOXvG08o1?=
+ =?us-ascii?Q?YxSZKz0OekFTgAGIRER+kQxBo7+tUl/EdhmRBjY27TJszhlx0nYj+auVIcHU?=
+ =?us-ascii?Q?TbD+PbIreAzW6K6I5J3je5QUdfHDVzHlh3T+lTfPVOB+IQbULe2Ssx/4InIX?=
+ =?us-ascii?Q?jEX1womAxlFE/TCJz1x+We8=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a0873b1-c927-4839-dc63-08d9fc2c5c99
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2022 09:09:31.6045
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: f4oBOikUhwGXkPTduo7fw3crDT2zziHiU+RNq+hL4nUDgD1mZmc6hIdwCemkXC7ZdIH7H8FI3s8CHichfE06tQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1201MB0091
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-On 3/2/22 03:51, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-> head:   f7307721a01f4f14d21c699b270a870370cf34b9
-> commit: ed00b2b8d737f87a2437d7bd7c7f90124b50da05 [113/118] x86 / ACPI: Work around broken XSDT on SEGA AALE board
-> config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220302/202203020737.wa9uc4gW-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d271fc04d5b97b12e6b797c6067d3c96a8d7470e)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=ed00b2b8d737f87a2437d7bd7c7f90124b50da05
->         git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
->         git fetch --no-tags rafael-pm bleeding-edge
->         git checkout ed00b2b8d737f87a2437d7bd7c7f90124b50da05
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/acpi/
+On Wed, Mar 02, 2022 at 12:07:45AM +0800, Rafael J. Wysocki wrote:
+> On Tue, Mar 1, 2022 at 5:05 PM Deucher, Alexander
+> <Alexander.Deucher@amd.com> wrote:
+> >
+> > [AMD Official Use Only]
+> >
+> > > -----Original Message-----
+> > > From: Rafael J. Wysocki <rafael@kernel.org>
+> > > Sent: Tuesday, March 1, 2022 10:26 AM
+> > > To: Su, Jinzhou (Joe) <Jinzhou.Su@amd.com>
+> > > Cc: Rafael J. Wysocki <rjw@rjwysocki.net>; Linux PM <linux-
+> > > pm@vger.kernel.org>; Srinivas Pandruvada
+> > > <srinivas.pandruvada@linux.intel.com>; Doug Smythies
+> > > <dsmythies@telus.net>; Huang, Ray <Ray.Huang@amd.com>; Viresh Kumar
+> > > <viresh.kumar@linaro.org>; Todd Brandt <todd.e.brandt@linux.intel.com>;
+> > > Linux Kernel Mailing List <linux-kernel@vger.kernel.org>; Sharma, Deepak
+> > > <Deepak.Sharma@amd.com>; Deucher, Alexander
+> > > <Alexander.Deucher@amd.com>; Du, Xiaojian <Xiaojian.Du@amd.com>;
+> > > Yuan, Perry <Perry.Yuan@amd.com>; Meng, Li (Jassmine)
+> > > <Li.Meng@amd.com>
+> > > Subject: Re: [PATCH 1/3] cpufreq: amd-pstate: Add more tracepoint for AMD
+> > > P-State module
+> > >
+> > > On Wed, Feb 23, 2022 at 11:04 AM Jinzhou Su <Jinzhou.Su@amd.com>
+> > > wrote:
+> > > >
+> > > > Add frequency, mperf, aperf and tsc in the trace. This can be used to
+> > > > debug and tune the performance of AMD P-state driver.
+> > > >
+> > > > Use the time difference between amd_pstate_update to calculate CPU
+> > > > frequency. There could be sleep in arch_freq_get_on_cpu, so do not use
+> > > > it here.
+> > > >
+> > > > Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
+> > > > Signed-off-by: Huang Rui <ray.huang@amd.com>
+> > >
+> > > I'm not sure what the second sign-off is for.
+> > >
+> > > If this is a maintainer's sign-off, it should be added by the maintainer himself
+> > > and you should not add it when submitting the patch.
+> >
+> > Both developers co-worked on the patch.  Isn't that pretty standard when you rework someone else's patch?
 > 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> arch/x86/kernel/acpi/boot.c:1476:8: warning: excess elements in array initializer [-Wexcess-initializers]
->                         DMI_MATCH(DMI_BIOS_DATE, "02/01/2011"),
->                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/mod_devicetable.h:587:25: note: expanded from macro 'DMI_MATCH'
->    #define DMI_MATCH(a, b) { .slot = a, .substr = b }
->                            ^~~~~~~~~~~~~~~~~~~~~~~~~~
->    1 warning generated.
-> 
-> 
-> vim +1476 arch/x86/kernel/acpi/boot.c
-> 
->   1389	
->   1390	/*
->   1391	 * If your system is blacklisted here, but you find that acpi=force
->   1392	 * works for you, please contact linux-acpi@vger.kernel.org
->   1393	 */
->   1394	static const struct dmi_system_id acpi_dmi_table[] __initconst = {
->   1395		/*
->   1396		 * Boxes that need ACPI disabled
->   1397		 */
->   1398		{
->   1399		 .callback = dmi_disable_acpi,
->   1400		 .ident = "IBM Thinkpad",
->   1401		 .matches = {
->   1402			     DMI_MATCH(DMI_BOARD_VENDOR, "IBM"),
->   1403			     DMI_MATCH(DMI_BOARD_NAME, "2629H1G"),
->   1404			     },
->   1405		 },
->   1406	
->   1407		/*
->   1408		 * Boxes that need ACPI PCI IRQ routing disabled
->   1409		 */
->   1410		{
->   1411		 .callback = disable_acpi_irq,
->   1412		 .ident = "ASUS A7V",
->   1413		 .matches = {
->   1414			     DMI_MATCH(DMI_BOARD_VENDOR, "ASUSTeK Computer INC"),
->   1415			     DMI_MATCH(DMI_BOARD_NAME, "<A7V>"),
->   1416			     /* newer BIOS, Revision 1011, does work */
->   1417			     DMI_MATCH(DMI_BIOS_VERSION,
->   1418				       "ASUS A7V ACPI BIOS Revision 1007"),
->   1419			     },
->   1420		 },
->   1421		{
->   1422			/*
->   1423			 * Latest BIOS for IBM 600E (1.16) has bad pcinum
->   1424			 * for LPC bridge, which is needed for the PCI
->   1425			 * interrupt links to work. DSDT fix is in bug 5966.
->   1426			 * 2645, 2646 model numbers are shared with 600/600E/600X
->   1427			 */
->   1428		 .callback = disable_acpi_irq,
->   1429		 .ident = "IBM Thinkpad 600 Series 2645",
->   1430		 .matches = {
->   1431			     DMI_MATCH(DMI_BOARD_VENDOR, "IBM"),
->   1432			     DMI_MATCH(DMI_BOARD_NAME, "2645"),
->   1433			     },
->   1434		 },
->   1435		{
->   1436		 .callback = disable_acpi_irq,
->   1437		 .ident = "IBM Thinkpad 600 Series 2646",
->   1438		 .matches = {
->   1439			     DMI_MATCH(DMI_BOARD_VENDOR, "IBM"),
->   1440			     DMI_MATCH(DMI_BOARD_NAME, "2646"),
->   1441			     },
->   1442		 },
->   1443		/*
->   1444		 * Boxes that need ACPI PCI IRQ routing and PCI scan disabled
->   1445		 */
->   1446		{			/* _BBN 0 bug */
->   1447		 .callback = disable_acpi_pci,
->   1448		 .ident = "ASUS PR-DLS",
->   1449		 .matches = {
->   1450			     DMI_MATCH(DMI_BOARD_VENDOR, "ASUSTeK Computer INC."),
->   1451			     DMI_MATCH(DMI_BOARD_NAME, "PR-DLS"),
->   1452			     DMI_MATCH(DMI_BIOS_VERSION,
->   1453				       "ASUS PR-DLS ACPI BIOS Revision 1010"),
->   1454			     DMI_MATCH(DMI_BIOS_DATE, "03/21/2003")
->   1455			     },
->   1456		 },
->   1457		{
->   1458		 .callback = disable_acpi_pci,
->   1459		 .ident = "Acer TravelMate 36x Laptop",
->   1460		 .matches = {
->   1461			     DMI_MATCH(DMI_SYS_VENDOR, "Acer"),
->   1462			     DMI_MATCH(DMI_PRODUCT_NAME, "TravelMate 360"),
->   1463			     },
->   1464		 },
->   1465		/*
->   1466		 * Boxes that need ACPI XSDT use disabled due to corrupted tables
->   1467		 */
->   1468		{
->   1469		 .callback = disable_acpi_xsdt,
->   1470		 .ident = "SEGA AALE",
->   1471		 .matches = {
->   1472			     DMI_MATCH(DMI_SYS_VENDOR, "NEC"),
->   1473			     DMI_MATCH(DMI_PRODUCT_NAME, "Bearlake CRB Board"),
->   1474			     DMI_MATCH(DMI_BIOS_VENDOR, "Phoenix Technologies LTD"),
->   1475			     DMI_MATCH(DMI_BIOS_VERSION, "V1.12"),
->> 1476			     DMI_MATCH(DMI_BIOS_DATE, "02/01/2011"),
->   1477			     },
+> It is, but that's when Co-developed-by should be used.  Otherwise the
+> meaning of the second s-o-b is unclear.
 
-Ah, right there can be max 4 matches for a single dmi_system_id table entry.
+Yes.
 
-Mark, I think the BIOS-vendor match has little value, so that can be dropped, do you
-agree?
+Joe, can you add below in next V2:
 
-Regards,
+Co-developed-by: Huang Rui <ray.huang@amd.com>
 
-Hans
+Patch looks good for me, could you please add new patch to describe how to
+use the tracer script in Documentation/admin-guide/pm/amd-pstate.rst?
 
-
-
-
-
+Thanks,
+Ray
