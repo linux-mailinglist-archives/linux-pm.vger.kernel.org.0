@@ -2,73 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC334CC997
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Mar 2022 00:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 578D04CC9D8
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Mar 2022 00:11:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234379AbiCCXBi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Mar 2022 18:01:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51152 "EHLO
+        id S234926AbiCCXMP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Mar 2022 18:12:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiCCXBh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Mar 2022 18:01:37 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD3FF11B0
-        for <linux-pm@vger.kernel.org>; Thu,  3 Mar 2022 15:00:50 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id j15so5680516lfg.1
-        for <linux-pm@vger.kernel.org>; Thu, 03 Mar 2022 15:00:50 -0800 (PST)
+        with ESMTP id S234410AbiCCXMO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Mar 2022 18:12:14 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6F6A0BE9
+        for <linux-pm@vger.kernel.org>; Thu,  3 Mar 2022 15:11:27 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id b9so11121135lfv.7
+        for <linux-pm@vger.kernel.org>; Thu, 03 Mar 2022 15:11:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=uzDnW5yg9gD4SLCTn2ySS35TqchNbeOMrfXHixo0lLA=;
-        b=VwAvsxxY90wThYNJu+ZRgGBfbrJfMp1jmdpIN8+AQLvDx6TQeRg414Ilga74/eQbYD
-         N8IUZkl7pYh37hO8SVv8VJXHNcoDvEOJWJE8h5Jn8MuRurnOiFPrwUxIG+bYIuTCjYiB
-         bNpf64X+gsbKrin4t2gcowRCOne1doJOlpbMXrdd7ztTsrZlr9oGebHfoQs2dB0dPOng
-         ieXNvbSzs0Kw435vkl4NU4yQ/6b46PJoA+hUYnIVGstXLycblH06iBy35j8lTv9Tcf8l
-         y/qtPYNm71Yq7Y2sJsx/fKWuJJ2i0NrQvI4IYC+PJtaAr4XOx8n76xpnPDY1GCtxzZs6
-         +MPw==
+        bh=T+ewEVyg0jIlvf6Lmv9nvX/qjWMEIo3Y25OqPPlHQXw=;
+        b=UR6lSa6DBqthG+O7rCzXeSJyHuG/Bx1A9QSo6yn8D+JAfC4Fu/IVSU2nMO0JgqNxDC
+         SZSsNMe3jqTAxXqS6CbcbyNyO9ybJFz93mGy6XGZUEb7H9jJJH5ybPpDSUxvW8ec3Y7H
+         dTKeZBn6639MVwHcjuUdFS1ZKpXqjPZjggByYvEW/2mQulw6g8MO5DVsXVOm/3dW9e1F
+         HE/HK2rKA6EmvailAbJ9NJCgb/uKiWEAmnc2Q18ylibmR6qeFgOFq8HasIHo6mRROMvK
+         8MUUceozr5vzfqsQkoPPcID2sTSJwN1Yg7nUd36jAuOuR52AZ9zbboQQWZ8f38uBwOkD
+         Fi+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=uzDnW5yg9gD4SLCTn2ySS35TqchNbeOMrfXHixo0lLA=;
-        b=BiCv/NnukGHnXp4z4IlIwKN0fnC+RvumuhtWnZjbVD1AOzXoeI+KhQAoo5WXH1NvX8
-         xbqRenrl41smeNCDxh224P1GI6MPhPz5T5yNP+RWTVDeCdNPbEaiIXQVtPtDq9+ZGpCR
-         C6Auu7NwG3pNPpQvE48HEdqHbzSOFBtDe0Qo4hbgBi9AOFv+d2zEukwb3sQL4JxUaSAI
-         wG2CYCJ+aAxE538Q3vv6hvgmzP7NzwziHV5XB3dy0rmgUkDRajr51EDb2WzwlW1PYyKl
-         yj5cFVh5BrCX2xGvCdS+Pdyws2HxcgNrnBHcaEoAlmvM5X5HZCZJGguUKypyX9vnp3fv
-         fetQ==
-X-Gm-Message-State: AOAM532/6MC1B5Bz3r7i2KD88+bMTUuAExBQxc1vzBhWlI/UU1yevQjc
-        6BirnB7k0D3CXvLwIygW3IAqLpVRvR6yci21VTe2Eg==
-X-Google-Smtp-Source: ABdhPJwTcQrY6J+nuVpEzWxPKyS1IKT+ksAYMwYQvv9eskUqkC/iDZjsaZUAF2Lul5xGqgk+3WYIo+kbBWN9WO04yGM=
-X-Received: by 2002:a05:6512:260d:b0:445:c06e:8242 with SMTP id
- bt13-20020a056512260d00b00445c06e8242mr4033709lfb.157.1646348448054; Thu, 03
- Mar 2022 15:00:48 -0800 (PST)
+        bh=T+ewEVyg0jIlvf6Lmv9nvX/qjWMEIo3Y25OqPPlHQXw=;
+        b=PnGc39mH5uQ+MV92ED/OeDzygxPCOQ+rY5Qkf7QbHsgHRnrubyw/SMgXttUdtTWDek
+         j8eTwlZE270lGVcBBbgWjlw9uPIToqmuG7jselruUvSs62CWOsnShbtYuU70Rr7+vcNJ
+         VSTh+0PCKIOKVQh1dE2O3EKD/op3XIShdrFGAL5hO71+V/rgMbzyy2wLd/9o73/FLSbt
+         jgllXpKgIkub6qs7XssI4xS5Zt50PqdG5UnnLFfKmQs1VTUVGNHFmSO4cx81EqetYCUI
+         9nN07zdmIeUs2DtuvQ++WPXq35qUABgJ/iq3NG04IQsiXqIRCdsovb4UConvhUMDNW0U
+         noig==
+X-Gm-Message-State: AOAM5332TRX3yTm72FbnlfPt2e3gvbOXdd7jNTH6DQS0s0Onawc1TWj7
+        zGYkZdS45/u2b5cfDxlcGgRjuUWobgnoa0h/XIQxUKZkGE+/9g==
+X-Google-Smtp-Source: ABdhPJxq9HyQqub6jQpEzoyCoi5xrQrRMXMOg5EZpDUxuZisGe6uDHEXAXBUtcCai8eVtWIjGXqayVex0gYn57gJZ2g=
+X-Received: by 2002:a05:6512:260b:b0:445:c54c:4157 with SMTP id
+ bt11-20020a056512260b00b00445c54c4157mr3206141lfb.254.1646349085646; Thu, 03
+ Mar 2022 15:11:25 -0800 (PST)
 MIME-Version: 1.0
-References: <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
- <CAAYoRsW4LqNvSZ3Et5fqeFcHQ9j9-0u9Y-LN9DmpCS3wG3+NWg@mail.gmail.com>
- <20220228041228.GH4548@shbuild999.sh.intel.com> <11956019.O9o76ZdvQC@kreacher>
- <20220301055255.GI4548@shbuild999.sh.intel.com> <CAJZ5v0jWUR__zn0=SDDecFct86z-=Y6v5fi37mMyW+zOBi7oWw@mail.gmail.com>
- <CAAYoRsVLOcww0z4mp9TtGCKdrgeEiL_=FgrUO=rwkZAok4sQdg@mail.gmail.com>
- <CAJZ5v0hK4zoOtgNQNFkJHC0XOiGsPGUPphHU5og44e_K4kGU9g@mail.gmail.com>
- <CAAYoRsWN-h+fBAoocGmUFHDkOv2PL+6U59_ASBYH74j0orHaCQ@mail.gmail.com> <CAJZ5v0iOOmRY3uC1-ZGQ30VysMuAjGum=Lt4tkqNUjop+ikqZw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iOOmRY3uC1-ZGQ30VysMuAjGum=Lt4tkqNUjop+ikqZw@mail.gmail.com>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Thu, 3 Mar 2022 15:00:37 -0800
-Message-ID: <CAAYoRsVs_CB-dBGShksmXATRP3oGnD6uU-xQdSPjkRER+j6fTQ@mail.gmail.com>
-Subject: Re: CPU excessively long times between frequency scaling driver calls
- - bisected
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Feng Tang <feng.tang@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        dsmythies <dsmythies@telus.net>
+References: <20220223083441.1.I925ce9fa12992a58caed6b297e0171d214866fe7@changeid>
+ <CAPDyKFrDncw0D2ccw9GJS+oRdm2kROJh25OV9pMs+992vQV-cQ@mail.gmail.com>
+ <Yh36R817IjCw2dMb@pendragon.ideasonboard.com> <CAPDyKFrchzHnph9zg55yCbpQ5hu9P=ZOdcuigyqC_4yYjFs10Q@mail.gmail.com>
+ <Yh5J6yYyTaKldlO+@pendragon.ideasonboard.com>
+In-Reply-To: <Yh5J6yYyTaKldlO+@pendragon.ideasonboard.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 4 Mar 2022 00:10:48 +0100
+Message-ID: <CAPDyKFoUb7rdjfTiDBkZkhNBJ1_AYKQeAmW4VYURKZMLJ7dDHA@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Have devm_pm_runtime_enable() handle pm_runtime_dont_use_autosuspend()
+To:     Douglas Anderson <dianders@chromium.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -80,245 +74,188 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 2, 2022 at 11:01 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> On Wed, Mar 2, 2022 at 5:06 AM Doug Smythies <dsmythies@telus.net> wrote:
-> > On Tue, Mar 1, 2022 at 9:34 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > On Tue, Mar 1, 2022 at 6:18 PM Doug Smythies <dsmythies@telus.net> wrote:
-> > > > On Tue, Mar 1, 2022 at 3:58 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > > > On Tue, Mar 1, 2022 at 6:53 AM Feng Tang <feng.tang@intel.com> wrote:
-> > > > > > On Mon, Feb 28, 2022 at 08:36:03PM +0100, Rafael J. Wysocki wrote:
+Hi Laurent, Doug,
+
+On Tue, 1 Mar 2022 at 17:29, Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Ulf,
+>
+> On Tue, Mar 01, 2022 at 12:18:02PM +0100, Ulf Hansson wrote:
+> > On Tue, 1 Mar 2022 at 11:49, Laurent Pinchart wrote:
+> > > On Tue, Mar 01, 2022 at 11:26:46AM +0100, Ulf Hansson wrote:
+> > > > On Wed, 23 Feb 2022 at 17:35, Douglas Anderson wrote:
+> > > > >
+> > > > > The PM Runtime docs say:
+> > > > >   Drivers in ->remove() callback should undo the runtime PM changes done
+> > > > >   in ->probe(). Usually this means calling pm_runtime_disable(),
+> > > > >   pm_runtime_dont_use_autosuspend() etc.
+> > > > >
+> > > > > From grepping code, it's clear that many people aren't aware of the
+> > > > > need to call pm_runtime_dont_use_autosuspend().
+> > > >
+> > > > Well, I admit it's good practice that they should take care of this.
+> > > >
+> > > > However, it doesn't really matter to keep the autosuspend turned on
+> > > > when runtime PM becomes disabled, I think. When the driver gets probed
+> > > > again, it will most likely call pm_runtime_use_autosuspend() again,
+> > > > which should work fine, right?
+> > >
+> > > For the probe path I agree, but are there valid use cases where, at
+> > > runtime, a driver would disable runtime PM and re-enable it a bit later
+> > > ? If so, we need to ensure this won't disable auto-suspend.
+> >
+> > I am not sure I fully understand whether there is a problem.
+> >
+> > Can you perhaps write the sequence of the runtime PM calls that may
+> > cause an issue?
+>
+> Simply
+>
+>         pm_runtime_disable();
+>         /* Do something that requires runtime PM to be disabled */
+>         pm_runtime_enable();
+>
+> at runtime (not at probe or remove time). If probe() has enabled
+> auto-suspend, we don't want the above sequence to disable it. What I'm
+> not sure is if there are any valid use cases for the above sequence.
+
+The above sequence certainly exists already, for example during system
+suspend/resume.
+
+So what happens is that the runtime PM auto-suspend feature gets
+temporarily disabled between pm_runtime_disable() and
+pm_runtime_enable(). That seems correct, right?
+
+>
+> > > > > When brainstorming solutions, one idea that came up was to leverage
+> > > > > the new-ish devm_pm_runtime_enable() function. The idea here is that:
+> > > > > * When the devm action is called we know that the driver is being
+> > > > >   removed. It's the perfect time to undo the use_autosuspend.
+> > > > > * The code of pm_runtime_dont_use_autosuspend() already handles the
+> > > > >   case of being called when autosuspend wasn't enabled.
+> > > >
+> > > > Hmm, I am hesitating to extend devm_pm_runtime_enable(), as it
+> > > > currently makes it look too simple to turn off things at ->remove()
+> > > > for runtime PM. While in fact it's more complicated.
+> > > >
+> > > > A bigger problem, for example, is that a driver calls
+> > > > pm_runtime_put_sync() during ->remove(), relying on that it actually
+> > > > ends up calling its ->runtime_suspend() callback to turn off various
+> > > > specific resources for the device. And in fact there are no guarantees
+> > > > that will happen - and when it doesn't, the next time the driver's
+> > > > ->probe() runs, things are likely to be really screwed up.
+> > > >
+> > > > To cover this case, one could use the below code in the ->remove() callback:
+> > > >
 > > > > ...
-> > > > > > >
-> > > > > > > However, it was a bit racy, so maybe it's good that it was not complete.
-> > > > > > >
-> > > > > > > Below is a new version.
-> > > > > >
-> > > > > > Thanks for the new version. I just gave it a try,  and the occasional
-> > > > > > long delay of cpufreq auto-adjusting I have seen can not be reproduced
-> > > > > > after applying it.
-> > > > >
-> > > > > OK, thanks!
-> > > > >
-> > > > > I'll wait for feedback from Dough, though.
+> > > > pm_runtime_get_sync();
 > > > >
-> > > > Hi Rafael,
+> > > > "turn off resources for the devices - like calling
+> > > > clk_disable_unprepare(), for example"
 > > > >
-> > > > Thank you for your version 2 patch.
-> > > > I screwed up an overnight test and will have to re-do it.
-> > > > However, I do have some results.
+> > > > pm_runtime_disable();
+> > > > pm_runtime_put_noidle();
+> > > > ...
+> > > >
+> > > > In this example, it would be too late to call pm_runtime_disable()
+> > > > through the pm_runtime_disable_action().
 > > >
-> > > Thanks for testing it!
+> > > My experience with runtime PM is that it's hard to use, at least if you
+> > > want to get it right :-) That's especially the case if a driver wants to
+> > > support both CONFIG_PM and !CONFIG_PM. Here's an example at probe time:
 > > >
-> > > > From reading the patch code, one worry was the
-> > > > potential to drive down the desired/required CPU
-> > > > frequency for the main periodic workflow, causing
-> > > > overruns, or inability of the task to complete its
-> > > > work before the next period.
+> > >         /*
+> > >          * We need the driver to work in the event that CONFIG_PM is disabled in
+> > >          * the kernel, so power up and verify the chip now. In the event that
+> > >          * CONFIG_PM is disabled this will leave the chip on, so that streaming
+> > >          * will work.
+> > >          */
+> > >         ret = ov5693_sensor_powerup(ov5693);
+> > >         if (ret)
+> > >                 goto err_media_entity_cleanup;
 > > >
-> > > It is not clear to me why you worried about that just from reading the
-> > > patch?  Can you explain, please?
-> >
-> > It is already covered below. And a couple of further tests
-> > directly contradict my thinking.
-> >
-> > > > I have always had overrun
-> > > > information, but it has never been relevant before.
-> > > >
-> > > > The other worry was if the threshold of
-> > > > turbo/not turbo frequency is enough.
+> > >         ret = ov5693_detect(ov5693);
+> > >         if (ret)
+> > >                 goto err_powerdown;
 > > >
-> > > Agreed.
-> >
-> > Just as an easy example and test I did this on
-> > top of this patch ("rjw-3"):
-> >
-> > doug@s19:~/kernel/linux$ git diff
-> > diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> > index f878a4545eee..5cbdd7e479e8 100644
-> > --- a/drivers/cpufreq/intel_pstate.c
-> > +++ b/drivers/cpufreq/intel_pstate.c
-> > @@ -1980,7 +1980,7 @@ static void intel_pstate_update_perf_ctl(struct
-> > cpudata *cpu)
-> >          * P-states to prevent them from getting back to the high frequency
-> >          * right away after getting out of deep idle.
-> >          */
-> > -       cpuidle_update_retain_tick(pstate > cpu->pstate.max_pstate);
-> > +       cpuidle_update_retain_tick(pstate > (cpu->pstate.max_pstate >> 1));
->
-> OK, but cpu->pstate.max_pstate / 2 may be almost
-> cpu->pstate.min_pstate which would be better to use here IMO.
-
-For my processor, i5-10600K, it works out to 2.05 GHz.
-4.1 GHz / 2, whereas min pstate would be 0.8 GHz
-
-> Or something like (cpu->pstate.max_pstate + cpu->pstate.min_pstate) /
-> 2.  Can you try this one in particular?
-
-Which I agree would be a much better general case to use.
-For my processor that would be 2.45 GHz.
-(4.1 + 0.8) / 2.
-
-My code was just for testing, and I intended to go further than
-we might want to for the final solution.
-
-I'm holding off on trying your suggestion, for now.
-
-> >         wrmsrl(MSR_IA32_PERF_CTL, pstate_funcs.get_val(cpu, pstate));
-> >  }
-> >
-> > > > I do not know how to test any final solution
-> > > > thoroughly, as so far I have simply found a
-> > > > good enough problematic example.
-> > > > We have so many years of experience with
-> > > > the convenient multi second NMI forcing
-> > > > lingering high pstate clean up. I'd keep it
-> > > > deciding within it if the TSC stuff needs to be
-> > > > executed or not.
-> > > >
-> > > > Anyway...
-> > > >
-> > > > Base Kernel 5.17-rc3.
-> > > > "stock" : unmodified.
-> > > > "revert" : with commit b50db7095fe reverted
-> > > > "rjw-2" : with this version2 patch added.
-> > > >
-> > > > Test 1 (as before. There is no test 2, yet.):
-> > > > 347 Hertz work/sleep frequency on one CPU while others do
-> > > > virtually no load but enough to increase the requested pstate,
-> > > > but at around 0.02 hertz aggregate.
-> > > >
-> > > > It is important to note the main load is approximately
-> > > > 38.6% @ 2.422 GHz, or 100% at 0.935 GHz.
-> > > > and almost exclusively uses idle state 2 (of
-> > > > 4 total idle states)
-> > > >
-> > > > /sys/devices/system/cpu/cpu7/cpuidle/state0/name:POLL
-> > > > /sys/devices/system/cpu/cpu7/cpuidle/state1/name:C1_ACPI
-> > > > /sys/devices/system/cpu/cpu7/cpuidle/state2/name:C2_ACPI
-> > > > /sys/devices/system/cpu/cpu7/cpuidle/state3/name:C3_ACPI
-> > > >
-> > > > Turbostat was used. ~10 samples at 300 seconds per.
-> > > > Processor package power (Watts):
-> > > >
-> > > > Workflow was run for 1 hour each time or 1249201 loops.
-> > > >
-> > > > revert:
-> > > > ave: 3.00
-> > > > min: 2.89
-> > > > max: 3.08
+> > >         pm_runtime_set_active(&client->dev);
+> > >         pm_runtime_get_noresume(&client->dev);
+> > >         pm_runtime_enable(&client->dev);
 > > >
-> > > I'm not sure what the above three numbers are.
-> >
-> > Processor package power, Watts.
->
-> OK
->
-> > > > ave freq: 2.422 GHz.
-> > > > overruns: 1.
-> > > > max overrun time: 113 uSec.
-> > > >
-> > > > stock:
-> > > > ave: 3.63 (+21%)
-> > > > min: 3.28
-> > > > max: 3.99
-> > > > ave freq: 2.791 GHz.
-> > > > overruns: 2.
-> > > > max overrun time: 677 uSec.
-> > > >
-> > > > rjw-2:
-> > > > ave: 3.14 (+5%)
-> > > > min: 2.97
-> > > > max: 3.28
-> > > > ave freq: 2.635 GHz
+> > >         ret = v4l2_async_register_subdev_sensor(&ov5693->sd);
+> > >         if (ret) {
+> > >                 dev_err(&client->dev, "failed to register V4L2 subdev: %d",
+> > >                         ret);
+> > >                 goto err_pm_runtime;
+> > >         }
 > > >
-> > > I guess the numbers above could be reduced still by using a P-state
-> > > below the max non-turbo one as a limit.
-> >
-> > Yes, and for a test I did "rjw-3".
-> >
-> > > > overruns: 1042.
-> > > > max overrun time: 9,769 uSec.
+> > >         pm_runtime_set_autosuspend_delay(&client->dev, 1000);
+> > >         pm_runtime_use_autosuspend(&client->dev);
+> > >         pm_runtime_put_autosuspend(&client->dev);
 > > >
-> > > This would probably get worse then, though.
+> > > And the corresponding code at remove time:
+> > >
+> > >         /*
+> > >          * Disable runtime PM. In case CONFIG_PM is disabled in the kernel,
+> > >          * make sure to turn power off manually.
+> > >          */
+> > >         pm_runtime_disable(&client->dev);
+> > >         if (!pm_runtime_status_suspended(&client->dev))
+> > >                 ov5693_sensor_powerdown(ov5693);
+> > >         pm_runtime_set_suspended(&client->dev);
+> > >
+> > > And of course there's no documentation that explains all this, so there
+> > > are endless variations of patterns originating from cargo-cult
+> > > programming.
+> > >
+> > > I don't know what the right solution is, but we need to move towards an
+> > > easier to use API if we want drivers to get it right. Any step in that
+> > > direction would be welcome.
 > >
-> > Yes, that was my expectation, but not what happened.
-> >
-> > rjw-3:
-> > ave: 3.09 watts
-> > min: 3.01 watts
-> > max: 31.7 watts
+> > Yep, I fully agree with you, while it's not an easy task. At least the
+> > example above looks fine to me. :-)
 >
-> Did you mean 3.17 here?  It would be hard to get the average of 3.09
-> if the max was over 30 W.
+> It took me several days to figure out how to get it right. Most
+> developers don't bother, so we end up with drivers broken in different
+> ways :-S
 
-Yes, 3.17 watts was what I meant to write. Sorry for any confusion.
+Yes, it's definitely non-trivial.
 
-> > ave freq: 2.42 GHz.
-> > overruns: 12. (I did not expect this.)
-> > Max overruns time: 621 uSec.
-> >
-> > Note 1: IRQ's increased by 74%. i.e. it was going in
-> > and out of idle a lot more.
+Power management in general relies on cross-interaction of several
+different frameworks, so one really needs a decent overview too,
+before adding PM support in a driver.
+
 >
-> That's because the scheduler tick is allowed to run a lot more often
-> in the given workload with the changed test above.
-
-Agreed.
-
-> > Note 2: We know that processor package power
-> > is highly temperature dependent. I forgot to let my
-> > coolant cool adequately after the kernel compile,
-> > and so had to throw out the first 4 power samples
-> > (20 minutes).
+> > Recently I noticed that some drivers are calling
+> > pm_runtime_force_suspend() at ->remove(). This works fine in quite
+> > many cases, but it wouldn't solve the case when CONFIG_PM is unset.
 > >
-> > I retested both rjw-2 and rjw-3, but shorter tests
-> > and got 0 overruns in both cases.
-> >
-> > > ATM I'm not quite sure why this happens, but you seem to have some
-> > > insight into it, so it would help if you shared it.
-> >
-> > My insight seems questionable.
-> >
-> > My thinking was that one can not decide if the pstate needs to go
-> > down or not based on such a localized look. The risk being that the
-> > higher periodic load might suffer overruns. Since my first test did exactly
-> > that, I violated my own "repeat all tests 3 times before reporting rule".
-> > Now, I am not sure what is going on.
-> > I will need more time to acquire traces and dig into it.
+> > Perhaps we should explore adding a new API, along the lines of
+> > pm_runtime_force_suspend(), but make it specific for the ->remove()
+> > path, and in some way make it work for when CONFIG_PM is unset too.
 >
-> It looks like the workload's behavior depends on updating the CPU
-> performance scaling governor sufficiently often.
->
-> Previously, that happened through the watchdog workflow that is gone
-> now.  The rjw-2/3 patch is attempting to make up for that by letting
-> the tick run more often.
->
-> Admittedly, it is somewhat unclear to me why there are not so many
-> overruns in the "stock" kernel test.  Perhaps that's because the CPUs
-> generally run fast enough in that case, so the P-state governor need
-> not be updated so often for the CPU frequency to stay high and that's
-> what determines the performance (and in turn that decides whether or
-> not there are overruns and how often they occur).  The other side of
-> the coin is that the updates don't occur often enough for the power
-> draw to be reasonable, though.
+> I'm all for an improved API for drivers that would make the above
+> simpler. And documentation too, Documentation/power/runtime_pm.rst is
+> more of a documentation of the runtime PM core than the driver API.
+> There are some useful tips for drivers, but they're lost in a sea of
+> difficult to understand and/or irrelevant information (and there's also
+> a tiny bit of information in Documentation/driver-api/pm/devices.rst).
+> We're missing a document targetted at driver authors.
 
-Agreed.
+Yes, I agree - the docs can certainly be improved! I will add it to my
+TODO list and try to put some time on it, not too far ahead I hope. I
+was actually planning for a blog-post/LWN article, maybe I should
+spend some time on this instead - or both. :-)
 
-I am observing higher CPU frequencies than expected, and can not
-determine why in all cases. It is going to take several days before
-I can either reply with more detail or disprove what I think I am observing.
+When it comes to the improved API for the ->remove() case, we need to
+explore this a bit more. I will think about it.
 
-> Presumably, when the P-state governor gets updated more often (via the
-> scheduler tick), but not often enough, it effectively causes the
-> frequency (and consequently the performance) to drop over relatively
-> long time intervals (and hence the increased occurrence of overruns).
-> If it gets updated even more often (like in rjw-3), though, it causes
-> the CPU frequency to follow the utilization more precisely and so the
-> CPUs don't run "too fast" or "too slowly" for too long.
+About $subject patch, if you or Doug insist that you want to move
+forward on it, I will not object - even if I think we need something
+entirely different, in the long run.
 
-Agreed.
+[...]
 
-> > I also did a 1 hour intel_pstate_tracer test, with rjw-2, on an idle system
-> > and saw several long durations. This was expected as this patch set
-> > wouldn't change durations by more than a few jiffies.
-> > 755 long durations (>6.1 seconds), and 327.7 seconds longest.
+Kind regards
+Uffe
