@@ -2,57 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB4B4CC473
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Mar 2022 18:57:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8204CC983
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Mar 2022 23:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234052AbiCCR63 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Mar 2022 12:58:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
+        id S237079AbiCCW4K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Mar 2022 17:56:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiCCR63 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Mar 2022 12:58:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB686710D7;
-        Thu,  3 Mar 2022 09:57:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6D9FB81DB8;
-        Thu,  3 Mar 2022 17:57:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26E72C340F0;
-        Thu,  3 Mar 2022 17:57:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1646330260;
-        bh=hY8rAyb1zsetbVzg5OgbfUyuPVMG9GYiD0/OIrED5wE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=MYtflfLlh9TiDIXibSAM3pECoM8IbJp/05QsspbsKvZKkl5j4EUgMmodgp2cjdhMF
-         JTZmmwKMzxtj93Qne9s/wvdqDNlzdXG3hCnWhvtR6nVLTrQPaNra7nV1f90JR7QWSu
-         7T1Zy72GRHqDvy5VKoVwueQpSXaAWRhn4Ua/a6QC0Xc6n1npHP9CFEe8JCH2CCH+2K
-         5KLkN1opATv48ZWhgJx4cK5ypHTH6OP8R8nuErFkIY8gi+mEPrre+XgjPXlFqBzCXx
-         CMelsAhubwzk4WOjMRd+12xrL1f5UMJWpla+zs15nXAbU5nLoizleMGTIYg+AqpWIs
-         4/20pPLfFu4yg==
-Date:   Thu, 3 Mar 2022 11:57:38 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     =?utf-8?B?7J6l7JiB7KeEL1RWIFMvVyBMYWIoVkQpL1N0YWZmIEVuZ2luZWVyL+yCvA==?=
-         =?utf-8?B?7ISx7KCE7J6Q?= <yj84.jang@samsung.com>
-Cc:     'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>,
-        "'Rafael J. Wysocki'" <rafael@kernel.org>,
-        'Pavel Machek' <pavel@ucw.cz>,
-        'Len Brown' <len.brown@intel.com>,
-        'Bjorn Helgaas' <bhelgaas@google.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-usb@vger.kernel.org, js07.lee@samsung.com
-Subject: Re: [PATCH] PM: Add device name to suspend_report_result()
-Message-ID: <20220303175738.GA818511@bhelgaas>
+        with ESMTP id S236931AbiCCW4K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Mar 2022 17:56:10 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DB22DF7
+        for <linux-pm@vger.kernel.org>; Thu,  3 Mar 2022 14:55:24 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id x200so13288452ybe.6
+        for <linux-pm@vger.kernel.org>; Thu, 03 Mar 2022 14:55:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=a2ZLddQ3pBdZiXKBj6DvoFfrsQt7JsrT4COg/WlTq9Y=;
+        b=LwFEnWrrHyMoDT1FRNCmikb5MOxZp5clQsTTLmty/0c0q24AthU1TBhXRR+DB5Rig4
+         186QAr/b4cldoEBaG6DuPCFe89f397Z8KMcYUm3fNd+VJO+wIlJP5gvRkaZsLwUFEV7V
+         UzNARgRGZrK/436Sh+Qa1wbUJuo6IcfF3oQA2P5ackgETGCjoPvx4tomlHm3B/PwMsYh
+         J+9IyUilCD2ogzFnR+PI+q6onKD1kVuXZW8PAe/xMvwpZ1r10ZeccOMvr5t7ar0cQph4
+         S8SFzDKnZO6NueRFSbF1qByyx1MKCugg0dzMyauRO3GscoNFjxOOmRfWNrwGeuN1dDJG
+         OX6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=a2ZLddQ3pBdZiXKBj6DvoFfrsQt7JsrT4COg/WlTq9Y=;
+        b=2eMETa4eDrCanPhF/yNUKCeAtYMYaYmNnvR8Th7zNsQ1pbt4s95a8uGR7V4XUaIft/
+         kvI0C7oGAhK/IZ+Hxk2Y6gSOmtX3qQ2vDA4qOtaPHgo0SToEgHvq+bD41wABh5XqgtSk
+         +GevKeor8RCcREulwf6UleghwUp9yoqKQKuJjlrQOPPZn7aomnSM3jQNBasD1nL4/5Sb
+         5TXC3d51zSedLvOnunF9+SqK77k49jJMUGAXKr+zjBZ3F1gw8bjIyiZPPfTPIfR7/Qq+
+         fAoYf/RmwhnvPZ9VUDHh9mRPjuspiLHEKBamA0TfunROJxJboj9Ix+S+LiMj0qRSoTOL
+         m2Tw==
+X-Gm-Message-State: AOAM530LED57o1dMDs4KUSPtWSdVJrkLAjhAaPeAGlECTp9gucC7wY5g
+        77pDJHTUDrjDZeEsbXlx603v1CKHAOJ89jUX+T5JOw==
+X-Google-Smtp-Source: ABdhPJxkGxxLfPzvWa5E/ZBU5CtrkiE8he6BXE+3woSzT4pfn4JyqdrVO+DIVdFevj/Vj4yRSKJeDbIyTAylxAISW+c=
+X-Received: by 2002:a25:f406:0:b0:628:c29b:5c39 with SMTP id
+ q6-20020a25f406000000b00628c29b5c39mr4849539ybd.369.1646348123397; Thu, 03
+ Mar 2022 14:55:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <044701d82e88$c5edb6f0$51c924d0$@samsung.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <CACRpkdZmax=QpwnfgOJOR-5P3wTyKegaDn=VvhVOYz_AChc7bw@mail.gmail.com>
+ <abdc4d16-b2b4-6343-39d6-9bc48e8be43b@gmail.com>
+In-Reply-To: <abdc4d16-b2b4-6343-39d6-9bc48e8be43b@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 3 Mar 2022 23:55:11 +0100
+Message-ID: <CACRpkdai4+1NJ+UJxdcEHJjKtccE=LnDyv7pr1pzuQo88-MdaQ@mail.gmail.com>
+Subject: Re: Question on expiring HRtimer in-kernel
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Code Kipper <codekipper@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,62 +71,21 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 07:56:37AM +0900, 장영진/TV S/W Lab(VD)/Staff Engineer/삼성전자 wrote:
-> > -----Original Message-----
-> > From: Bjorn Helgaas <helgaas@kernel.org>
-> > Sent: Thursday, March 3, 2022 5:16 AM
-> > To: 'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>
-> > Cc: �念��/TV S/W Lab(VD)/Staff Engineer/�Ｚ���� <yj84.jang@samsung.com>;
-> > 'Rafael J. Wysocki' <rafael@kernel.org>; 'Pavel Machek' <pavel@ucw.cz>;
-> > 'Len Brown' <len.brown@intel.com>; 'Bjorn Helgaas' <bhelgaas@google.com>;
-> > linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
-> > pci@vger.kernel.org; linux-acpi@vger.kernel.org; linux-usb@vger.kernel.org;
-> > js07.lee@samsung.com
-> > Subject: Re: [PATCH] PM: Add device name to suspend_report_result()
-> > 
-> > On Wed, Mar 02, 2022 at 03:52:51PM +0100, 'Greg Kroah-Hartman' wrote:
-> > > On Wed, Mar 02, 2022 at 08:00:14PM +0900,  念  /TV S/W Lab(VD)/Staff
-> > Engineer/ Ｚ     wrote:
-> > > > > -----Original Message-----
-> > > > > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > > Sent: Wednesday, March 2, 2022 4:58 PM
-> > > > > To: Youngjin Jang <yj84.jang@samsung.com>
-> > > > > Cc: Rafael J. Wysocki <rafael@kernel.org>; Pavel Machek
-> > > > > <pavel@ucw.cz>; Len Brown <len.brown@intel.com>; Bjorn Helgaas
-> > > > > <bhelgaas@google.com>; linux-pm@vger.kernel.org;
-> > > > > linux-kernel@vger.kernel.org; linux- pci@vger.kernel.org;
-> > > > > linux-acpi@vger.kernel.org; linux-
-> > > > usb@vger.kernel.org;
-> > > > > js07.lee@samsung.com
-> > > > > Subject: Re: [PATCH] PM: Add device name to
-> > > > > suspend_report_result()
-> > > > >
-> > > > > On Wed, Mar 02, 2022 at 03:49:17PM +0900, Youngjin Jang wrote:
-> > > > > > From: "yj84.jang" <yj84.jang@samsung.com>
+On Thu, Mar 3, 2022 at 1:43 PM Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 
-> > > > > > -		pr_err("%s(): %pS returns %d\n", function, fn, ret);
-> > > > > > +		pr_err("%s(): %pS (%s) returns %d\n", function, fn,
-> > > > > > +dev_driver_string(dev), ret);
-> > > > >
-> > > > > If you have a struct device, please use dev_err().
-> > > >
-> > > > I think dev_err() is nice option, but we can see a minor issue.
-> > > > Prefix log "PM: " would be lost, If I use dev_err() in this context.
-> > > > As you know, all logs in power management include "PM :" prefix.
-> > >
-> > > Why does that matter?  Fix them all to use the struct device pointer
-> > > and then they will be properly unified with the rest of the kernel log
-> > > infrastructure.
-> > 
-> > You can #define dev_fmt if you need a prefix.
-> 
-> I tested dev_fmt before, but I feel that not a good solution.
-> Because the readability is not so great than I expected.
-> I didn't want to break the PM logging rules.
+> In any case, I remember few cases where I hit nasty issues because I
+> used CLOCK_REALTIME - which (AFAIR) is subject to the time adjustments.
+> NTP, GPS-time and so on can make the time tick in a strange way :) I
+> guess you would have noticed if time was set when timer did expire.
+>
+> Anyways, I guess the battery charging should rather be tied CLOCK_MONOTONIC.
 
-I didn't catch your meaning here.  Some examples would probably help.
+That makes a lot of sense, and is what I have learned from the internal
+kernel primitives as well, I just assumed the HRTimer was some special
+kind of beast.
 
-The patch above is from __suspend_report_result() in
-drivers/base/power/main.c.  That file already defines both pr_fmt and
-dev_fmt to be "PM: ", so I would expect dev_err() output to already
-include "PM: ".
+I'll patch this and run some testing, if it goes away with MONOTONIC
+I'll send a patch. Thanks!
+
+Yours,
+Linus Walleij
