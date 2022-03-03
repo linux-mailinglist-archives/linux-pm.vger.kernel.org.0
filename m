@@ -2,146 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE364CBD91
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Mar 2022 13:18:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 728534CBDCC
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Mar 2022 13:27:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233159AbiCCMTX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Mar 2022 07:19:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
+        id S232301AbiCCM2X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Mar 2022 07:28:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233168AbiCCMTU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Mar 2022 07:19:20 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAD6DF4B7
-        for <linux-pm@vger.kernel.org>; Thu,  3 Mar 2022 04:18:30 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id t11so7553265wrm.5
-        for <linux-pm@vger.kernel.org>; Thu, 03 Mar 2022 04:18:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=W95klwG+EWnuJlXqfneyIPG4bMJIpYFCGfgCPBAo/s4=;
-        b=BVoUYAMy6igzOx7YCxgmD2obGVeA4FBbFy39UaDXpcyotfQj1WSs4cD2dBmZ3jehpH
-         Xv0H27JfD7LtNc3KTOYt5JsPQaESLbVZdrRIjVdCS/EqEN+LtHV3OI92ZhbhaxnOPsMB
-         zwIbvmQMtvcWtqQz/AOpNYfJzkMTFsv4hojr0PuJEFUbZHgxYNi3BKpDV1mgkUzm+fR0
-         4lMaaRE5yh5PGutSdpreHiYAqhMDl6KUHTvi2q6aV5S93rhbYz2wGWOzwPq3hB3YVbYG
-         uAhL64o8wkOM/gpLUr2Hb7oB/DraMZLkoBj2jGHmKGFPjyxdoWyrLbd/6WyXGtmMO48w
-         vp2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=W95klwG+EWnuJlXqfneyIPG4bMJIpYFCGfgCPBAo/s4=;
-        b=eMjIW/hXmg8kpvVMntV6anJjgrmh5BL4kMQRHG3qTWWPsDm6WUXVofeH08hUbY/hZ9
-         jOel6Z1J6v4cHXzPqa2Dg7I7ji2pgAWVpr/Wspu1aIyk2vkLWSijgBl6prKpC6L9rVcQ
-         kPkqiUr9rfJ0iXtkBE9B5ZLQ/IXc7secTGjVlxh202VWMa1VUKbmdWd7JUNneSvKs5Gc
-         9yDrPNIDTrCcLkXBPqtR2tHppro1+Q/5K8Pl3TaeShCs282al5qKwrxvzdqkTBPAcgaZ
-         Z60KIBcOqbX8dmeVMVv9KYW/s0EgfWtZBtbhYvffG4LbAd7GduKPADwGFOifduwRWN5k
-         C69g==
-X-Gm-Message-State: AOAM531WGMHwWh7vDJQIPJ3AZSk0BPh4LG8Xy/Y2IeDqKcPhmoaxionj
-        AugdbdcgRJvCIOwiJUBILv7stg==
-X-Google-Smtp-Source: ABdhPJwgYeUN7RS9hQRShRziePljKQd/1cMutSSEkk4MeQ2QRRtTjZSLz5QSndDd2pML49XlqkHAqw==
-X-Received: by 2002:a5d:6d0d:0:b0:1e8:7b6a:38e7 with SMTP id e13-20020a5d6d0d000000b001e87b6a38e7mr26568054wrq.625.1646309908722;
-        Thu, 03 Mar 2022 04:18:28 -0800 (PST)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id p6-20020a5d4586000000b001f0436cb325sm1774600wrq.52.2022.03.03.04.18.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Mar 2022 04:18:28 -0800 (PST)
-Date:   Thu, 3 Mar 2022 12:18:24 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Cc:     david.laight@aculab.com, alsa-devel@alsa-project.org,
-        kvm@vger.kernel.org, gustavo@embeddedor.com,
-        linux-iio@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
-        linux@rasmusvillemoes.dk, dri-devel@lists.freedesktop.org,
-        c.giuffrida@vu.nl, amd-gfx@lists.freedesktop.org,
-        torvalds@linux-foundation.org, samba-technical@lists.samba.org,
-        linux1394-devel@lists.sourceforge.net, drbd-dev@lists.linbit.com,
-        linux-arch@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, linux-scsi@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-staging@lists.linux.dev,
-        h.j.bos@vu.nl, jgg@ziepe.ca, intel-wired-lan@lists.osuosl.org,
-        nouveau@lists.freedesktop.org,
-        bcm-kernel-feedback-list@broadcom.com, dan.carpenter@oracle.com,
-        linux-media@vger.kernel.org, keescook@chromium.org, arnd@arndb.de,
-        linux-pm@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        bjohannesmeyer@gmail.com, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, christophe.jaillet@wanadoo.fr,
-        jakobkoschel@gmail.com, v9fs-developer@lists.sourceforge.net,
-        linux-tegra@vger.kernel.org, tglx@linutronix.de,
-        andriy.shevchenko@linux.intel.com,
-        linux-arm-kernel@lists.infradead.org, linux-sgx@vger.kernel.org,
-        nathan@kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        tipc-discussion@lists.sourceforge.net,
-        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, akpm@linux-foundation.org,
-        linuxppc-dev@lists.ozlabs.org, christian.koenig@amd.com,
-        rppt@kernel.org
-Subject: Re: [Kgdb-bugreport] [PATCH 2/6] treewide: remove using list
- iterator after loop body as a ptr
-Message-ID: <20220303121824.qdyrognluik74iph@maple.lan>
-References: <39404befad5b44b385698ff65465abe5@AcuMS.aculab.com>
- <20220303072657.11124-1-xiam0nd.tong@gmail.com>
+        with ESMTP id S232621AbiCCM2W (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Mar 2022 07:28:22 -0500
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2106.outbound.protection.outlook.com [40.107.215.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF683EAA3;
+        Thu,  3 Mar 2022 04:27:35 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hmq1srDyZllLnFFcyyL6ehtgp4HFmWOV9R1MZSIlcZXRoQPy4tzqx2DDCruzCWSkXEDyZrECUbfcmA+Uqy6kaYHn951xKhP+YnUmIgnywV0ZDtVgxwLOUgKSYOpsi64fggaw0d4liGw0MuSHaB0F/asRs8qFiXT+fzUD7GnYDD9o6X/DydM9OvJ0yYnNcwflUB2N8hLSLhm/nUHdt7aadve4tdwA/c++TFTqoRJ7KWmv+VGjYGU8Et0sjfza9AEV5KdxhgBJVzw/FWk4Pja5IL42wP3uKzZr72cI3Qc5WvPGD672ToD23n8yUH9qA2N1m5GoNWvxp/LvDsSFIesm1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FXUS26ZpKTgWNOz9wIs1WrCtb2AHRbZPOwA/k2+rwjo=;
+ b=I47hiGneGrgQjE3DfIy+xt5RtV0aRw4pDU8jM8KkxG77QDsunkTnCr1M2Z+g+Q35tMO7HNWTSwDU8KcsJMDCsELVRX6wl+thSHc4Dxf1QmOTUc+HqzeHS8zbaZVgHjvxAkPK/abwnE4u7FlBi0y6vNnwW7VTG4S/n7NTB8FumnbBs3qQCnc1AyOOSnoJ/zoGKYFAY/7K5n8T01Rq6sSiMVz9d48DIxldyINpt90VYQYtE1VvGTD9Rs5mPRdprO8iHCvytv3ETRZQJPOYuP7sFB4OHUPeVH9OoLXR4YjDb2IfMKjZJ+Q5rITIkKndb96mcIjxgkJ5J6PU/VAzHqsfnQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FXUS26ZpKTgWNOz9wIs1WrCtb2AHRbZPOwA/k2+rwjo=;
+ b=c/KzgNHBK/BRvtIU+BmNefjlDRA39R7sJVbpRvHfKFgDSnRo+jR59X7Lk+gflv+a7eUxCM0NIGB3B4vj3Th+abnFTnM3ZfIlcGfKYjBb6t0fgKNptF++TNUweaq/ygs2iSi2SLdkZNMxEBydtWMZx2rioQJwqvX5sStLzu38cf4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
+ by HK0PR06MB3668.apcprd06.prod.outlook.com (2603:1096:203:b7::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Thu, 3 Mar
+ 2022 12:27:32 +0000
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::30ce:609e:c8e8:8a06]) by TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::30ce:609e:c8e8:8a06%4]) with mapi id 15.20.5038.014; Thu, 3 Mar 2022
+ 12:27:31 +0000
+From:   Yihao Han <hanyihao@vivo.com>
+To:     Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kernel@vivo.com, Yihao Han <hanyihao@vivo.com>
+Subject: [PATCH] power: supply: axp20x_ac_power: fix platform_get_irq.cocci warning
+Date:   Thu,  3 Mar 2022 04:27:19 -0800
+Message-Id: <20220303122719.2855-1-hanyihao@vivo.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR02CA0183.apcprd02.prod.outlook.com
+ (2603:1096:201:21::19) To TYZPR06MB4173.apcprd06.prod.outlook.com
+ (2603:1096:400:26::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220303072657.11124-1-xiam0nd.tong@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 227eff80-8319-4b04-ecc9-08d9fd11305e
+X-MS-TrafficTypeDiagnostic: HK0PR06MB3668:EE_
+X-Microsoft-Antispam-PRVS: <HK0PR06MB36686445C879DEA8FAD08987A2049@HK0PR06MB3668.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bHO86Md098fgyL4FlFO3lWftVwQq3OBpl+kOIYyMaxNarrR5oghITavMWcTfp8LNNgktpjeRsi2RQ/fZ+r+2h5naKvWpQzDrBqnd75Mi0Ojq0d/adB2dnxWDxbN41kU1C/HLeqCr6bHKzSqqxZJOACoY1SYLphqPMot7yv/TjAKHDjj847NzMNLDUcljvmA4grwH0zV+2hUZ9g9wE43dh6YLDHZJUdq4huZ+qIhkIngrSVsuhXmAMCLUrS6xgTOefhjTXRpBoUUCfJM7wvBQ50F4yq/eOollGNwYmO/MSXFe9/z1LgN17P6ZbmrhmJj/QH6xIhEx1KXgMsBchfmbWG+AgUdFDLYtRza9OD3WiPBJX/7RvmUcVZeFNi7M9Ec+L0kxRRJPaHuon/35weQ9lPpB7XsRH1oY5oH0q8o3skaAG5SK9vd4QKBa/L4/2ynUgsMurrHD/hPKlpr8pVEC44GXfoKpYNfDEdtjx1FOjromcA3FFDnOPH+NSgVDGXNpTGzPxsW70aKBKWswPvUw776SqdwcT2BrojyTOeLWH/zWiglDPAbBqlo+hc7nZkpIcqRVcPdTlxjXBb4uQOOoPe9KIg9LCirik0uKr+n9uCuRWWRhVZmgDIssYaj93K58QILDDi2nFx5qBFvF9tn79rDwhGpTiG+ZEO9v3epkqDjb3UF/8sRW2w6l4308SW22BKPWiacI3fNbMxwyJG1LhQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(186003)(2906002)(2616005)(26005)(1076003)(316002)(508600001)(8676002)(4326008)(66556008)(107886003)(52116002)(110136005)(66946007)(38100700002)(38350700002)(66476007)(8936002)(6512007)(5660300002)(6506007)(6486002)(83380400001)(6666004)(36756003)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?e5n+nfC9xZ8PQ4yuDJgaTaQ513AMifrEsF/Mm0aPwT431yPP5+Mg39d/dorj?=
+ =?us-ascii?Q?KuOrbfhPhTpA1k2eFqQKMV/2u4vQFSeF/1hPgRTmO6Ri6OY1fd9bVNBr5VHA?=
+ =?us-ascii?Q?0pwz4oqXy/R06by/gX2gV0Bpr5EwjkHLIseuia/a40VybkLRrw+XGX3Nkt1l?=
+ =?us-ascii?Q?xMm+YELaD0VOSy+38xWPCYVfl39dt9oNMVnpQSJgWPBrmIXGHtx0LE7IlOh5?=
+ =?us-ascii?Q?T15Q3n1lPAg3KgT4B0q2QFmTjKfTD7DrF4RiIKDwo/ElvhFfQ+7SqZlMNMhG?=
+ =?us-ascii?Q?YPA47kKHyqgStkAe7T7fSfWei4aGADcY/vF2uQO9s0AB/7x87lPnCxGkcKx1?=
+ =?us-ascii?Q?Pr1aPPCqlkbP2Ljmq/cbT3vKTI25EjyIiysiQgejxQiGV38BebFEoaezskzy?=
+ =?us-ascii?Q?ePUBf6iJIAlpY5CrXfbzcAW2SmgAAva2IiskHWV8+4SqjtX7OiUpn5AfdYZX?=
+ =?us-ascii?Q?J5jmII0rMKNEPZ+CC2rVGzv7MEOwHjkZRtWe+fA2/Q3iIrPjMHMWXS3QGgkw?=
+ =?us-ascii?Q?cgx+afvtBfafZmRm6HwCP/YG2klHWDbQZwjzx54zpAXe7YPuoF1+sSSClY89?=
+ =?us-ascii?Q?qP1cvtETaXpJ/3uGMR/qjjTW4/eDyWtu//2k9o+kGLBjGzyXdHeDfj0L6XBJ?=
+ =?us-ascii?Q?MZEMd6hkrwW0M0VExcco/i0aatu7ZpiQSaepVM3Xm3/GXzgAndboFQFF92fG?=
+ =?us-ascii?Q?5s6Yr7goi13mvCTMWhhWtEfyN6D1Hyk4gPhf9cYwtrQyxHnVPiR7ym8SbsD1?=
+ =?us-ascii?Q?JcaLDouBC7dYRsr9+/bhwM/v2GvWgUuJkBAOVutFtzkuwYhDGr4kZ9nQ1SXp?=
+ =?us-ascii?Q?0x4KA4OWujYAP5QylWUs+rl1gExCwM0ledhSHS+IxajZPLCtGInjdj3ssCZR?=
+ =?us-ascii?Q?bAPytQ9mf9tJ/4/jR6jflKJdm+SCWWzGitYAq1zI3rV7GoPAgGf02a9pOYHc?=
+ =?us-ascii?Q?62hbyR5Uctx+2sphPT6MFYNzudbbiU/sW1/EeArD7YwkAfbv9B7JWBrqdNSH?=
+ =?us-ascii?Q?pins47UUTm/OtP2yBBswYUjaPsyMJeL04ANJYvawUpdRJDdbKjpMsrrGoZfJ?=
+ =?us-ascii?Q?HqJAxeAh84ME7/jTUmur8IAM7truyjb6rYohQn4z6V3omUqvQNbYqjJBVDHd?=
+ =?us-ascii?Q?eSQyfKIuNu8Iy3SeFkAE/nay28shuY9Tt9w4q2dkMGdD37VuNxwyF51Hv9Mi?=
+ =?us-ascii?Q?YyZatXjaxu5EzLJ9z8RBxHhXzsSSWNJqgyilA9x2XNLWqd2GTmZ69QwbQKwI?=
+ =?us-ascii?Q?R34zhb21ynqFoVPgcM8CS2RKFEh6pnOcEppCg5moIA8xGUNsYRcuER97mXrD?=
+ =?us-ascii?Q?yyHbCmUvpVotIkDVUw7pUfaqoyDOuGj9SwOi3/e/xpQz2cR0AF1J+da3u/GF?=
+ =?us-ascii?Q?PCbk7Yg0RSB9gbLethdKVeZsARHmeYIqyOSF6UIuh5YgJu6oRXZP5Ygp3ijJ?=
+ =?us-ascii?Q?CzZJWDqYqIoIgt+ZMDGGXR2UwDYJ0nrwkP3J4NfTp75COLcMXtcouM3azc9V?=
+ =?us-ascii?Q?oZE4F0LEVi8vYbKCPnKg69Zwehx2CnTXdFgerwkfs7ppJhWoACNhxMQo1ZHu?=
+ =?us-ascii?Q?xK/lKyqj4OAcdYD38qZbFctGwp7D15IX0FMmItNrMq3plnWXzS8g4XqHPE+y?=
+ =?us-ascii?Q?y4tNgNwJk43f7Sxx0HuipSE=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 227eff80-8319-4b04-ecc9-08d9fd11305e
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2022 12:27:31.8996
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: km5ZrIfeRoATOx8/e7YUif9Bxic5RTpoVyL0tBz8DFqYXp33xM7J4kjaRIQ/9xbsZbdShQAw6KHqGU3G5Fz+Xg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB3668
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 03, 2022 at 03:26:57PM +0800, Xiaomeng Tong wrote:
-> On Thu, 3 Mar 2022 04:58:23 +0000, David Laight wrote:
-> > on 3 Mar 2022 10:27:29 +0800, Xiaomeng Tong wrote:
-> > > The problem is the mis-use of iterator outside the loop on exit, and
-> > > the iterator will be the HEAD's container_of pointer which pointers
-> > > to a type-confused struct. Sidenote: The *mis-use* here refers to
-> > > mistakely access to other members of the struct, instead of the
-> > > list_head member which acutally is the valid HEAD.
-> >
-> > The problem is that the HEAD's container_of pointer should never
-> > be calculated at all.
-> > This is what is fundamentally broken about the current definition.
-> 
-> Yes, the rule is "the HEAD's container_of pointer should never be
-> calculated at all outside the loop", but how do you make sure everyone
-> follows this rule?
+Remove dev_err() messages after platform_get_irq*() failures.
+platform_get_irq() already prints an error.
 
-Your formulation of the rule is correct: never run container_of() on HEAD
-pointer.
+Generated by: scripts/coccinelle/api/platform_get_irq.cocci
 
-However the rule that is introduced by list_for_each_entry_inside() is
-*not* this rule. The rule it introduces is: never access the iterator
-variable outside the loop.
+Signed-off-by: Yihao Han <hanyihao@vivo.com>
+---
+ drivers/power/supply/axp20x_ac_power.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Making the iterator NULL on loop exit does follow the rule you proposed
-but using a different technique: do not allow HEAD to be stored in the
-iterator variable after loop exit. This also makes it impossible to run
-container_of() on the HEAD pointer.
+diff --git a/drivers/power/supply/axp20x_ac_power.c b/drivers/power/supply/axp20x_ac_power.c
+index ac360016b08a..57e50208d537 100644
+--- a/drivers/power/supply/axp20x_ac_power.c
++++ b/drivers/power/supply/axp20x_ac_power.c
+@@ -377,11 +377,9 @@ static int axp20x_ac_power_probe(struct platform_device *pdev)
+ 	/* Request irqs after registering, as irqs may trigger immediately */
+ 	for (i = 0; i < axp_data->num_irq_names; i++) {
+ 		irq = platform_get_irq_byname(pdev, axp_data->irq_names[i]);
+-		if (irq < 0) {
+-			dev_err(&pdev->dev, "No IRQ for %s: %d\n",
+-				axp_data->irq_names[i], irq);
++		if (irq < 0)
+ 			return irq;
+-		}
++
+ 		power->irqs[i] = regmap_irq_get_virq(axp20x->regmap_irqc, irq);
+ 		ret = devm_request_any_context_irq(&pdev->dev, power->irqs[i],
+ 						   axp20x_ac_power_irq, 0,
+-- 
+2.17.1
 
-
-> Everyone makes mistakes, but we can eliminate them all from the beginning
-> with the help of compiler which can catch such use-after-loop things.
-
-Indeed but if we introduce new interfaces then we don't have to worry
-about existing usages and silent regressions. Code will have been
-written knowing the loop can exit with the iterator set to NULL.
-
-Sure it is still possible for programmers to make mistakes and
-dereference the NULL pointer but C programmers are well training w.r.t.
-NULL pointer checking so such mistakes are much less likely than with
-the current list_for_each_entry() macro. This risk must be offset
-against the way a NULLify approach can lead to more elegant code when we
-are doing a list search.
-
-
-Daniel.
