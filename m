@@ -2,121 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9F24CB610
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Mar 2022 05:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 757AC4CB661
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Mar 2022 06:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiCCE7T convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 2 Mar 2022 23:59:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
+        id S229660AbiCCF2T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Mar 2022 00:28:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbiCCE7P (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Mar 2022 23:59:15 -0500
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EAE9213D923
-        for <linux-pm@vger.kernel.org>; Wed,  2 Mar 2022 20:58:28 -0800 (PST)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mtapsc-5-c9saVIHFMHux_Sno3vxg6w-1; Thu, 03 Mar 2022 04:58:25 +0000
-X-MC-Unique: c9saVIHFMHux_Sno3vxg6w-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.28; Thu, 3 Mar 2022 04:58:23 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.028; Thu, 3 Mar 2022 04:58:23 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Xiaomeng Tong' <xiam0nd.tong@gmail.com>
-CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "bcm-kernel-feedback-list@broadcom.com" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "bjohannesmeyer@gmail.com" <bjohannesmeyer@gmail.com>,
-        "c.giuffrida@vu.nl" <c.giuffrida@vu.nl>,
-        "christian.koenig@amd.com" <christian.koenig@amd.com>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "drbd-dev@lists.linbit.com" <drbd-dev@lists.linbit.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "gustavo@embeddedor.com" <gustavo@embeddedor.com>,
-        "h.j.bos@vu.nl" <h.j.bos@vu.nl>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "jakobkoschel@gmail.com" <jakobkoschel@gmail.com>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "kgdb-bugreport@lists.sourceforge.net" 
-        <kgdb-bugreport@lists.sourceforge.net>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "linux1394-devel@lists.sourceforge.net" 
-        <linux1394-devel@lists.sourceforge.net>,
-        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tipc-discussion@lists.sourceforge.net" 
-        <tipc-discussion@lists.sourceforge.net>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "v9fs-developer@lists.sourceforge.net" 
-        <v9fs-developer@lists.sourceforge.net>
-Subject: RE: [PATCH 2/6] treewide: remove using list iterator after loop body
- as a ptr
-Thread-Topic: [PATCH 2/6] treewide: remove using list iterator after loop body
- as a ptr
-Thread-Index: AQHYLhg9+DU/OogLf0+tiSFmjztyUKysHu+QgADRVYCAACVtoA==
-Date:   Thu, 3 Mar 2022 04:58:23 +0000
-Message-ID: <39404befad5b44b385698ff65465abe5@AcuMS.aculab.com>
-References: <1077f17e50d34dc2bbfdf4e52a1cb2fd@AcuMS.aculab.com>
- <20220303022729.9321-1-xiam0nd.tong@gmail.com>
-In-Reply-To: <20220303022729.9321-1-xiam0nd.tong@gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        with ESMTP id S229491AbiCCF2Q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Mar 2022 00:28:16 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770632647;
+        Wed,  2 Mar 2022 21:27:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646285251; x=1677821251;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pxddg53G+ZCAuaY9a1hb9kOAxJ3j/gHnEYBaTCjFBNg=;
+  b=K9r4Vi2ICYmrF4bilrfcGJIBJMNLSMFkFo+wJxWauGM9cFSuT5UUozpB
+   K5K5Qh+lGIFSJEL8tfchxhnjsojEDcJnbforaXil/qabadm1+jU2LtrnA
+   eyjJ0bZDZiO6nrTro+MiHoBVJMNSCE0Ubk2/GS4vNJjCM3PGrt+AQ0Vk9
+   hj5Y8x/QO6sDH4H8cKaXQLs7V4KpdgeHs0MG2iHdDm6fkBiGR53ingQRM
+   a+aLV1QwwlEg447WGTyLBPfBJMDawNTybRkAmn/ya9uuPgTs+zhizyev2
+   PUIscRw4eoogmnrfylSUUwmfPZC5FoN20Jf5r7zsnFp4s2Ahe5lYLi7n1
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10274"; a="237092809"
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="237092809"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2022 21:27:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,151,1643702400"; 
+   d="scan'208";a="630655736"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.189])
+  by FMSMGA003.fm.intel.com with ESMTP; 02 Mar 2022 21:27:27 -0800
+Date:   Thu, 3 Mar 2022 13:27:27 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: CPU excessively long times between frequency scaling driver
+ calls - bisected
+Message-ID: <20220303052727.GM4548@shbuild999.sh.intel.com>
+References: <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
+ <CAAYoRsW4LqNvSZ3Et5fqeFcHQ9j9-0u9Y-LN9DmpCS3wG3+NWg@mail.gmail.com>
+ <20220228041228.GH4548@shbuild999.sh.intel.com>
+ <11956019.O9o76ZdvQC@kreacher>
+ <20220301055255.GI4548@shbuild999.sh.intel.com>
+ <CAJZ5v0jWUR__zn0=SDDecFct86z-=Y6v5fi37mMyW+zOBi7oWw@mail.gmail.com>
+ <CAAYoRsVLOcww0z4mp9TtGCKdrgeEiL_=FgrUO=rwkZAok4sQdg@mail.gmail.com>
+ <CAJZ5v0hK4zoOtgNQNFkJHC0XOiGsPGUPphHU5og44e_K4kGU9g@mail.gmail.com>
+ <CAAYoRsWN-h+fBAoocGmUFHDkOv2PL+6U59_ASBYH74j0orHaCQ@mail.gmail.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAYoRsWN-h+fBAoocGmUFHDkOv2PL+6U59_ASBYH74j0orHaCQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -124,69 +75,108 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Xiaomeng Tong
-> Sent: 03 March 2022 02:27
+On Tue, Mar 01, 2022 at 08:06:24PM -0800, Doug Smythies wrote:
+> On Tue, Mar 1, 2022 at 9:34 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > I guess the numbers above could be reduced still by using a P-state
+> > below the max non-turbo one as a limit.
 > 
-> On Wed, 2 Mar 2022 14:04:06 +0000, David Laight
-> <David.Laight@ACULAB.COM> wrote:
-> > I think that it would be better to make any alternate loop macro
-> > just set the variable to NULL on the loop exit.
-> > That is easier to code for and the compiler might be persuaded to
-> > not redo the test.
+> Yes, and for a test I did "rjw-3".
 > 
-> No, that would lead to a NULL dereference.
-
-Why, it would make it b ethe same as the 'easy to use':
-	for (item = head; item; item = item->next) {
-		...
-		if (...)
-			break;
-		...
-	}
-	if (!item)
-		return;
+> > > overruns: 1042.
+> > > max overrun time: 9,769 uSec.
+> >
+> > This would probably get worse then, though.
+> 
+> Yes, that was my expectation, but not what happened.
+> 
+> rjw-3:
+> ave: 3.09 watts
+> min: 3.01 watts
+> max: 31.7 watts
+> ave freq: 2.42 GHz.
+> overruns: 12. (I did not expect this.)
+> Max overruns time: 621 uSec.
+> 
+> Note 1: IRQ's increased by 74%. i.e. it was going in
+> and out of idle a lot more.
+> 
+> Note 2: We know that processor package power
+> is highly temperature dependent. I forgot to let my
+> coolant cool adequately after the kernel compile,
+> and so had to throw out the first 4 power samples
+> (20 minutes).
+> 
+> I retested both rjw-2 and rjw-3, but shorter tests
+> and got 0 overruns in both cases.
  
-> The problem is the mis-use of iterator outside the loop on exit, and
-> the iterator will be the HEAD's container_of pointer which pointers
-> to a type-confused struct. Sidenote: The *mis-use* here refers to
-> mistakely access to other members of the struct, instead of the
-> list_head member which acutally is the valid HEAD.
+One thought is can we consider trying the previous debug patch of
+calling the util_update when entering idle (time limited).
 
-The problem is that the HEAD's container_of pointer should never
-be calculated at all.
-This is what is fundamentally broken about the current definition.
+In current code, the RT/CFS/Deadline class all have places to call
+cpufreq_update_util(), the patch will make sure it is called in all
+four classes, also it follows the principle of 'schedutil' of not
+introducing more system cost. And surely I could be missing some
+details here.
 
-> IOW, you would dereference a (NULL + offset_of_member) address here.
+Following is a cleaner version of the patch, and the code could be
+moved down to the internal loop of
 
-Where?
+	while (!need_resched()) {
 
-> Please remind me if i missed something, thanks.
->
-> Can you share your "alternative definitions" details? thanks!
+	}
 
-The loop should probably use as extra variable that points
-to the 'list node' in the next structure.
-Something like:
-	for (xxx *iter = head->next;
-		iter == &head ? ((item = NULL),0) : ((item = list_item(iter),1));
-		iter = item->member->next) {
-	   ...
-With a bit of casting you can use 'item' to hold 'iter'.
+Which will make it get called more frequently.
 
+---
+
+diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+index d17b0a5ce6ac..e12688036725 100644
+--- a/kernel/sched/idle.c
++++ b/kernel/sched/idle.c
+@@ -258,15 +258,23 @@ static void cpuidle_idle_call(void)
+  *
+  * Called with polling cleared.
+  */
++DEFINE_PER_CPU(u64, last_util_update_time);	/* in jiffies */
+ static void do_idle(void)
+ {
+ 	int cpu = smp_processor_id();
++	u64 expire;
+ 
+ 	/*
+ 	 * Check if we need to update blocked load
+ 	 */
+ 	nohz_run_idle_balance(cpu);
+ 
++	expire = __this_cpu_read(last_util_update_time) + HZ * 3;
++	if (unlikely(time_is_before_jiffies((unsigned long)expire))) {
++		cpufreq_update_util(this_rq(), 0);
++		__this_cpu_write(last_util_update_time, get_jiffies_64());
++	}
++
+ 	/*
+ 	 * If the arch has a polling bit, we maintain an invariant:
+ 	 *
+
+Thanks,
+Feng
+
+> > ATM I'm not quite sure why this happens, but you seem to have some
+> > insight into it, so it would help if you shared it.
 > 
-> > OTOH there may be alternative definitions that can be used to get
-> > the compiler (or other compiler-like tools) to detect broken code.
-> > Even if the definition can't possibly generate a working kerrnel.
+> My insight seems questionable.
 > 
-> The "list_for_each_entry_inside(pos, type, head, member)" way makes
-> the iterator invisiable outside the loop, and would be catched by
-> compiler if use-after-loop things happened.
-
-It is also a compete PITA for anything doing a search.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+> My thinking was that one can not decide if the pstate needs to go
+> down or not based on such a localized look. The risk being that the
+> higher periodic load might suffer overruns. Since my first test did exactly
+> that, I violated my own "repeat all tests 3 times before reporting rule".
+> Now, I am not sure what is going on.
+> I will need more time to acquire traces and dig into it.
+> 
+> I also did a 1 hour intel_pstate_tracer test, with rjw-2, on an idle system
+> and saw several long durations. This was expected as this patch set
+> wouldn't change durations by more than a few jiffies.
+> 755 long durations (>6.1 seconds), and 327.7 seconds longest.
+> 
+> ... Doug
