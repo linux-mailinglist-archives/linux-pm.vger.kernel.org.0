@@ -2,49 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C82884CDFB6
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Mar 2022 22:23:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A004CDFBD
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Mar 2022 22:26:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbiCDVXW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Mar 2022 16:23:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
+        id S229841AbiCDVYx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Mar 2022 16:24:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiCDVXV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Mar 2022 16:23:21 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6B656760
-        for <linux-pm@vger.kernel.org>; Fri,  4 Mar 2022 13:22:32 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 9E31D1F46D77
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646428951;
-        bh=tJlbYV4WEI4gDQbXGCsUW7A6tPK3DvGdqRBssg8tAPA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QJTGe9zDBt6CIZ2oJnUt8KOJg38gKZPK55Er3gR3CKCj7n46aZvX6sDh8K8YeSatI
-         jb9gKu7rEbEBUbXuKKz/oZLENOUTzWtw0jNzPz5qe/hPr9Z4otTgr2osuFgglHfCBJ
-         Slf1sI0QjkdSMI0PQ5ihZ5e+CCU7I2BM5MK0airytJwZYS4/oDzhOVoWPXplU9kUoo
-         TocK0iAAngxnN2xXiDL3Vxwi2rgYpICTT06Q8NANqIy54DSur6RFJcfUFG62G1PLLc
-         Wyr6iuHZx3edJBqE/5/onuBwrd4q6c1VfNjQThbw/I5DNlIPfc3XITB4rvPJmgfxK7
-         NJgyzZOnYqWxg==
-Received: by mercury (Postfix, from userid 1000)
-        id 91D591060602; Fri,  4 Mar 2022 22:22:29 +0100 (CET)
-Date:   Fri, 4 Mar 2022 22:22:29 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Marcus Cooper <codekipper@gmail.com>, linux-pm@vger.kernel.org,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Subject: Re: [PATCH] power: supply: Fix static batteries
-Message-ID: <20220304212229.fqac676xf5okfdrc@mercury.elektranox.org>
-References: <20220301003020.2308835-1-linus.walleij@linaro.org>
+        with ESMTP id S229839AbiCDVYw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Mar 2022 16:24:52 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE755EBDD
+        for <linux-pm@vger.kernel.org>; Fri,  4 Mar 2022 13:24:03 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id mg21-20020a17090b371500b001bef9e4657cso8240145pjb.0
+        for <linux-pm@vger.kernel.org>; Fri, 04 Mar 2022 13:24:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0/gI0rQqdFAbRjNwHFPVJ4i6AznAGpkDeOuSwoRZAto=;
+        b=dW6sniIDfe4ZwFk7pH6asyZbMfHUDkzWKEaqD8k09+XRZxqGVgvxvwowBaBBa8GvSB
+         LnIHuXeBP/MKBb2IurRBYrLkjNiDDW9kZzPMXsmeLPCaYAg2Za7l9w1TJzZSI2ILROCa
+         Bq/xEX+B3iF9Vgn8acNFkeBDRtPua299o+IvI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0/gI0rQqdFAbRjNwHFPVJ4i6AznAGpkDeOuSwoRZAto=;
+        b=dElAhLSyzgp+eRy3xK4TT6PKNIUD41YziH6YZlrigHgnipLms/gRY17pfrsPFhmeyq
+         jNpWJb0GdxX5mLH7kKKEI4h1bH4m8TH0lFyuVL3/Bg387JIL5XS4jR6IJHpevWdzHsqV
+         R+s4BkGXzIpQtPQOI0Uhe2g1qIPPy+DheXUPbMFaQ6SYkpqmQDmn6yu6Aj7aBhaRxQcp
+         hsGLDp0C87/8DjRjepwyfdmOaIraWBh4RoxOTUoVSzwNLeWilZ6f6ZtdggAViufVx3fV
+         0kQeMmsoHkhBXJQ/PujdlcIFfV7DXj9O2dYUISSx2abs5JUH9qd4Hj5+UC4vg/IFrwtT
+         /BHQ==
+X-Gm-Message-State: AOAM532EeptHQXzF/Y8nesbOnVrUkpGD5dljrsn+rqLhv+kqilBkJX0A
+        ZzopALsZsPgeAIDVnhCKsFHPPw==
+X-Google-Smtp-Source: ABdhPJzeXYM5JVp1IZEistkWdlM9E10Rt6/gCbVwnsqXjdM071vp3edsel14904JddV43vI5XN1yYQ==
+X-Received: by 2002:a17:902:b784:b0:151:a28a:9445 with SMTP id e4-20020a170902b78400b00151a28a9445mr512967pls.82.1646429042669;
+        Fri, 04 Mar 2022 13:24:02 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:2947:8460:2ca7:c348])
+        by smtp.gmail.com with ESMTPSA id g10-20020a056a000b8a00b004de9129eb80sm7612495pfj.85.2022.03.04.13.24.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Mar 2022 13:24:02 -0800 (PST)
+Date:   Fri, 4 Mar 2022 13:23:59 -0800
+From:   Brian Norris <briannorris@chromium.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        Lin Huang <hl@rock-chips.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Derek Basehore <dbasehore@chromium.org>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Heiko Stuebner <heiko@sntech.de>
+Subject: Re: [PATCH v2 01/15] dt-bindings: devfreq: rk3399_dmc: Convert to
+ YAML
+Message-ID: <YiKDb6q5k4NHpyVn@google.com>
+References: <20220127230727.3369358-1-briannorris@chromium.org>
+ <20220127150615.v2.1.I875ab8f28c5155a7d2f103316191954d4b07ac13@changeid>
+ <YgQhXb/0BM0OFy/6@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="faaxlpnhj357gbhd"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220301003020.2308835-1-linus.walleij@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+In-Reply-To: <YgQhXb/0BM0OFy/6@robh.at.kernel.org>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,199 +76,104 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Feb 09, 2022 at 02:17:33PM -0600, Rob Herring wrote:
+> On Thu, Jan 27, 2022 at 03:07:12PM -0800, Brian Norris wrote:
+> > I want to add, deprecate, and bugfix some properties, as well as add the
+> > first users. This is easier with a proper schema.
+> > 
+> > The transformation is mostly straightforward, plus a few notable tweaks:
+> > 
+> >  * Renamed rockchip,dram_speed_bin to rockchip,ddr3_speed_bin. The
+> >    driver code and the example matched, but the description was
+> >    different. I went with the implementation.
 
---faaxlpnhj357gbhd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-Hi,
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/devfreq/rk3399_dmc.yaml
+> > @@ -0,0 +1,293 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +# %YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/devfreq/rk3399_dmc.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Rockchip rk3399 DMC (Dynamic Memory Controller) device
+> > +
+> > +maintainers:
+> > +  - Brian Norris <briannorris@chromium.org>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - rockchip,rk3399-dmc
+> > +
+> > +  devfreq-events:
+> > +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> > +    minItems: 1
+> 
+> What's the max?
+> 
+> If this is just phandles (no arg cells), then you need:
+> 
+> items:
+>   maxItems: 1
+> 
+> IOW, fully describe the number of entries and cells for each entry.
 
-On Tue, Mar 01, 2022 at 01:30:20AM +0100, Linus Walleij wrote:
-> The code for looking up static battery data was erroneously
-> rebased and assumed we were only using device tree, but we have
-> added fwnode support.
->=20
-> Augment the code properly to just pass in a compatible as a
-> string when looking up a static Samsung battery, also move
-> the fwnode parsing code up so we can still check this before
-> we move on to simple-battery and start allocating stuff.
->=20
-> Fixes: ffb983d31519 ("power: supply: Static data for Samsung batteries")
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
+We only need 1, with no args. Will add |maxItems|.
 
-Thanks, I squashed this into the previous commit.
+> > +    description:
+> > +      Node to get DDR loading. Refer to
+> > +      Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt.
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: dmc_clk
+> > +
+> > +  operating-points-v2: true
+> > +
+> > +  center-supply:
+> > +    description:
+> > +      DMC regulator supply.
+> > +
+> > +  rockchip,pmu:
+> > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > +    description:
+> > +      Phandle to the syscon managing the "PMU general register files".
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +    description:
+> > +      The CPU interrupt number. It should be a DCF interrupt. When DDR DVFS
+> > +      finishes, a DCF interrupt is triggered.
+> > +
+> > +  rockchip,ddr3_speed_bin:
+> 
+> Since you are changing this, s/_/-/
 
--- Sebastian
+I'm only including this because the driver already supports the
+rockchip,ddr3_speed_bin spelling. But I'm also deprecating it (because
+it's not really needed) and removing it later in the series. I'd rather
+not change the spelling again in the middle, when it doesn't really have
+any net effect.
 
->  drivers/power/supply/power_supply_core.c   | 63 +++++++++++-----------
->  drivers/power/supply/samsung-sdi-battery.c |  5 +-
->  drivers/power/supply/samsung-sdi-battery.h |  4 +-
->  3 files changed, 36 insertions(+), 36 deletions(-)
->=20
-> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
-ply/power_supply_core.c
-> index 44816d41b4ec..ea02c8dcd748 100644
-> --- a/drivers/power/supply/power_supply_core.c
-> +++ b/drivers/power/supply/power_supply_core.c
-> @@ -579,16 +579,42 @@ int power_supply_get_battery_info(struct power_supp=
-ly *psy,
->  	const __be32 *list;
->  	u32 min_max[2];
-> =20
-> +	if (psy->of_node) {
-> +		battery_np =3D of_parse_phandle(psy->of_node, "monitored-battery", 0);
-> +		if (!battery_np)
-> +			return -ENODEV;
-> +
-> +		fwnode =3D fwnode_handle_get(of_fwnode_handle(battery_np));
-> +	} else {
-> +		err =3D fwnode_property_get_reference_args(
-> +					dev_fwnode(psy->dev.parent),
-> +					"monitored-battery", NULL, 0, 0, &args);
-> +		if (err)
-> +			return err;
-> +
-> +		fwnode =3D args.fwnode;
-> +	}
-> +
-> +	err =3D fwnode_property_read_string(fwnode, "compatible", &value);
-> +	if (err)
-> +		goto out_put_node;
-> +
-> +
->  	/* Try static batteries first */
-> -	err =3D samsung_sdi_battery_get_info(&psy->dev, battery_np, &info);
-> -	if (!err) {
-> -		*info_out =3D info;
-> -		return err;
-> +	err =3D samsung_sdi_battery_get_info(&psy->dev, value, &info);
-> +	if (!err)
-> +		goto out_ret_pointer;
-> +
-> +	if (strcmp("simple-battery", value)) {
-> +		err =3D -ENODEV;
-> +		goto out_put_node;
->  	}
-> =20
->  	info =3D devm_kmalloc(&psy->dev, sizeof(*info), GFP_KERNEL);
-> -	if (!info)
-> -		return -ENOMEM;
-> +	if (!info) {
-> +		err =3D -ENOMEM;
-> +		goto out_put_node;
-> +	}
-> =20
->  	info->technology                     =3D POWER_SUPPLY_TECHNOLOGY_UNKNOW=
-N;
->  	info->energy_full_design_uwh         =3D -EINVAL;
-> @@ -625,31 +651,6 @@ int power_supply_get_battery_info(struct power_suppl=
-y *psy,
->  		info->ocv_table_size[index]  =3D -EINVAL;
->  	}
-> =20
-> -	if (psy->of_node) {
-> -		battery_np =3D of_parse_phandle(psy->of_node, "monitored-battery", 0);
-> -		if (!battery_np)
-> -			return -ENODEV;
-> -
-> -		fwnode =3D fwnode_handle_get(of_fwnode_handle(battery_np));
-> -	} else {
-> -		err =3D fwnode_property_get_reference_args(
-> -					dev_fwnode(psy->dev.parent),
-> -					"monitored-battery", NULL, 0, 0, &args);
-> -		if (err)
-> -			return err;
-> -
-> -		fwnode =3D args.fwnode;
-> -	}
-> -
-> -	err =3D fwnode_property_read_string(fwnode, "compatible", &value);
-> -	if (err)
-> -		goto out_put_node;
-> -
-> -	if (strcmp("simple-battery", value)) {
-> -		err =3D -ENODEV;
-> -		goto out_put_node;
-> -	}
-> -
->  	/* The property and field names below must correspond to elements
->  	 * in enum power_supply_property. For reasoning, see
->  	 * Documentation/power/power_supply_class.rst.
-> diff --git a/drivers/power/supply/samsung-sdi-battery.c b/drivers/power/s=
-upply/samsung-sdi-battery.c
-> index 64ec34a41c5b..9d59f277f519 100644
-> --- a/drivers/power/supply/samsung-sdi-battery.c
-> +++ b/drivers/power/supply/samsung-sdi-battery.c
-> @@ -10,7 +10,6 @@
->   * the BTI resistance with a multimeter on the battery.
->   */
->  #include <linux/module.h>
-> -#include <linux/of.h>
->  #include <linux/power_supply.h>
->  #include "samsung-sdi-battery.h"
-> =20
-> @@ -895,7 +894,7 @@ static struct samsung_sdi_battery samsung_sdi_batteri=
-es[] =3D {
->  };
-> =20
->  int samsung_sdi_battery_get_info(struct device *dev,
-> -				 struct device_node *np,
-> +				 const char *compatible,
->  				 struct power_supply_battery_info **info)
->  {
->  	struct samsung_sdi_battery *batt;
-> @@ -903,7 +902,7 @@ int samsung_sdi_battery_get_info(struct device *dev,
-> =20
->  	for (i =3D 0; i < ARRAY_SIZE(samsung_sdi_batteries); i++) {
->  		batt =3D &samsung_sdi_batteries[i];
-> -		if (of_device_is_compatible(np, batt->compatible))
-> +		if (!strcmp(compatible, batt->compatible))
->  			break;
->  	}
-> =20
-> diff --git a/drivers/power/supply/samsung-sdi-battery.h b/drivers/power/s=
-upply/samsung-sdi-battery.h
-> index 08783847dfcb..365ab6e85b26 100644
-> --- a/drivers/power/supply/samsung-sdi-battery.h
-> +++ b/drivers/power/supply/samsung-sdi-battery.h
-> @@ -1,11 +1,11 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
->  #if IS_ENABLED(CONFIG_BATTERY_SAMSUNG_SDI)
->  extern int samsung_sdi_battery_get_info(struct device *dev,
-> -				struct device_node *np,
-> +				const char *compatible,
->  				struct power_supply_battery_info **info);
->  #else
->  static inline int samsung_sdi_battery_get_info(struct device *dev,
-> -				struct device_node *np,
-> +				const char *compatible,
->  				struct power_supply_battery_info **info)
->  {
->  	return -ENODEV;
-> --=20
-> 2.34.1
->=20
+I can add some clarifying notes in the commit message, about impending
+deprecations, so this makes a little more sense as a standalone commit.
 
---faaxlpnhj357gbhd
-Content-Type: application/pgp-signature; name="signature.asc"
+Or if it's somehow better, I can just drop the to-be-deprecated
+properties right now in the .yaml conversion? As it happens, I've seen
+at least one (probably more) other YAML conversion that made breaking
+changes at the same time...
 
------BEGIN PGP SIGNATURE-----
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description:
+> > +      For values, reference include/dt-bindings/clock/rk3399-ddr.h. Selects the
+> > +      DDR3 cl-trp-trcd type. It must be set according to "Speed Bin" in DDR3
+> > +      datasheet; DO NOT use a smaller "Speed Bin" than specified for the DDR3
+> > +      being used.
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIigxUACgkQ2O7X88g7
-+poh1Q/+PZBV+nzD1qkx1OMiY8V+DFNx6Jw5n8+ifhsEB1p6mG+DeXqcTGzVMxX4
-YSSsa2+AV4A4dtba9eKBKgf3OHcGCcBQaGe0nJ+3f0Z7tud/vSHD81zcwO0QATgT
-MffyPzVJsfAAiFei0eT5whDkw49ZXoDvtKIGjIaUBBOo9F8Lx0V/pkHLyMRU+Yq7
-F+6jqMUywSnFxFMUajbduTWvoT1YxNyPXt1mK7Oe5nd0KBruIV8I6KvnOEXDRIhF
-N6rem+UHaaP0wPc4Ehq4CtIRbqdtuKMDNGTOOOxzfK3ahEOb7+j/pydGeNtJboKc
-bpblHkujcNDTIqk3Sd/qGOIhzqr54BdBRJVvHpKy3O1O6j7H9YYpgYAkLmVrWS0z
-/qp4/mEvIpPa/L9sgpnwnwX+EsL9YEo9Nbl3qgqfo+mV5OdhmsN+aItL4EaWfe4f
-9RXpzVU8ITUnV8aKF09U8xexCJjcPPhFXxDYXskLkQCas7Ewb9lJ/UbnPv/6km2f
-LPVT95WU5LnX/Dqle11MOLnUUF5rQjn8GkwB644Ee+wkSMEBEsVfVk7YnuIt7Yov
-OR1G5MvKFhDUyvlFkCzuraCKKsBTwV6gbjT4LKu0JiEvjvSZi/QtI5nisKevqY9+
-V82Ueb6SQ0wNudT7ernXyXGXpoZ+k5dx1LIXJ/Ffq1/+MWNizv8=
-=cbX4
------END PGP SIGNATURE-----
-
---faaxlpnhj357gbhd--
+Brian
