@@ -2,47 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 151DD4CDF86
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Mar 2022 22:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E79F34CDF98
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Mar 2022 22:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbiCDVFT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Mar 2022 16:05:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36724 "EHLO
+        id S229490AbiCDVJy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Mar 2022 16:09:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiCDVFS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Mar 2022 16:05:18 -0500
+        with ESMTP id S229525AbiCDVJx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Mar 2022 16:09:53 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7C96D84B;
-        Fri,  4 Mar 2022 13:04:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A70120198;
+        Fri,  4 Mar 2022 13:09:05 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 94E571F461A5
+        with ESMTPSA id 136861F466D3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646427869;
-        bh=YOZ8JLvEQYTHjKznkmoE7VKBmT4Bdl/APrB275SRStk=;
+        s=mail; t=1646428144;
+        bh=mf1kQ1QenWg2dMao8TGtKTeciuEgJ/FIVUidedTMpek=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mLRdE/UicDXyXKNxfshVz50hn0bPo1ub/cJQ9dg4uactFRFMtqb/CQBjcfj3Ega+k
-         r2ZmrIIaMdd0pCXC9C6ZOGxzkki+s/IcycIfLSaPF0e7jCkUUVlOScjGC+rtR1vTtU
-         WF5hTcQ4eX1QH+GzvWluTEd/+u8RyPE7c5zRi2oIpvgHNXlhQOgfUjGxFGMJS7iV+R
-         gj5nrIs9tlZrfkMjmQrPNcLZF6mxLSvpk7r47yb5Y4AobdivHxI7/g+m0fFhcd8lXf
-         xjSWtuMZWDKYQK9BK7ioEXASog29CBAL0p29QTY/ySLVuBBT5q3nC5VQKgxxFvxv/N
-         ofzeLiG+uxSVQ==
+        b=QbhX5mhjStLrOtThvVRJ78U6KZ44/8Hr0cGefhEVJsbX/F91t+f7kHAY1l3zW7/BC
+         1ChvewEIneqcWUxZQY8ftOrJl4N7otvb/WsXfQCOfqHieYMDTxP4kzMVDGrCoMT7Fj
+         MPITX9AbNvrIxZqqX47yN12H3dyarFBOnBezMzCyysD36tHGc1VBPeO4a2JBePaVTA
+         2KT6GSvNEsX8FLvsLgjfg7cYtTC7sGJ60K8lOZ++z9N3+YMY9SN+GLrGOoLWJJnro+
+         vfSOI9qzvFUGEhAbru42bMeV34kWi+yjnRvZMS5T5S2cmg0UQVcau/cmA34w9TUUOB
+         6Wp8XHnzhWtZw==
 Received: by mercury (Postfix, from userid 1000)
-        id F2F511060602; Fri,  4 Mar 2022 22:04:27 +0100 (CET)
-Date:   Fri, 4 Mar 2022 22:04:27 +0100
+        id EDBE31060602; Fri,  4 Mar 2022 22:09:00 +0100 (CET)
+Date:   Fri, 4 Mar 2022 22:09:00 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Yihao Han <hanyihao@vivo.com>
-Cc:     Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@vivo.com
-Subject: Re: [PATCH] power: supply: axp20x_usb_power: fix
- platform_get_irq.cocci warnings
-Message-ID: <20220304210427.mjocn3kdk26u5u7y@mercury.elektranox.org>
-References: <20220302023451.5040-1-hanyihao@vivo.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Marcus Cooper <codekipper@gmail.com>, linux-pm@vger.kernel.org,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: power: supply: ab8500_fg: Add line
+ impedance
+Message-ID: <20220304210900.3pvzbu3j5fbxwsca@mercury.elektranox.org>
+References: <20220301124254.2338270-1-linus.walleij@linaro.org>
+ <Yh+2lrxFkSZkOQCK@robh.at.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7vo6g6q2c56odmp3"
+        protocol="application/pgp-signature"; boundary="kkhsxr7xg2jacud7"
 Content-Disposition: inline
-In-Reply-To: <20220302023451.5040-1-hanyihao@vivo.com>
+In-Reply-To: <Yh+2lrxFkSZkOQCK@robh.at.kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
@@ -54,66 +57,48 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---7vo6g6q2c56odmp3
+--kkhsxr7xg2jacud7
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Tue, Mar 01, 2022 at 06:34:51PM -0800, Yihao Han wrote:
-> Remove dev_err() messages after platform_get_irq*() failures.
-> platform_get_irq() already prints an error.
+On Wed, Mar 02, 2022 at 12:25:26PM -0600, Rob Herring wrote:
+> On Tue, Mar 01, 2022 at 01:42:53PM +0100, Linus Walleij wrote:
+> > To improve the inner resistance measurement of the battery we need
+> > to account for the line impedance of the connector to the battery.
+> >=20
+> > Cc: devicetree@vger.kernel.org
+> > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> > ---
+> >  .../bindings/power/supply/stericsson,ab8500-fg.yaml          | 5 +++++
+> >  1 file changed, 5 insertions(+)
 >=20
-> Generated by: scripts/coccinelle/api/platform_get_irq.cocci
->=20
-> Signed-off-by: Yihao Han <hanyihao@vivo.com>
-> ---
+> Acked-by: Rob Herring <robh@kernel.org>
 
-Thanks, queued (slightly modified to remove the now useless {}).
+Thanks, queued (together with patch 2/2)
 
 -- Sebastian
 
->  drivers/power/supply/axp20x_usb_power.c | 2 --
->  1 file changed, 2 deletions(-)
->=20
-> diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supp=
-ly/axp20x_usb_power.c
-> index a1d110f7ddce..75170fe79cbf 100644
-> --- a/drivers/power/supply/axp20x_usb_power.c
-> +++ b/drivers/power/supply/axp20x_usb_power.c
-> @@ -638,8 +638,6 @@ static int axp20x_usb_power_probe(struct platform_dev=
-ice *pdev)
->  	for (i =3D 0; i < axp_data->num_irq_names; i++) {
->  		irq =3D platform_get_irq_byname(pdev, axp_data->irq_names[i]);
->  		if (irq < 0) {
-> -			dev_err(&pdev->dev, "No IRQ for %s: %d\n",
-> -				axp_data->irq_names[i], irq);
->  			return irq;
->  		}
->  		power->irqs[i] =3D regmap_irq_get_virq(axp20x->regmap_irqc, irq);
-> --=20
-> 2.17.1
->=20
-
---7vo6g6q2c56odmp3
+--kkhsxr7xg2jacud7
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIiftsACgkQ2O7X88g7
-+pow8BAAnmIFHFIZxmxPvm/fmOAtvjEkKa80AtasHkaIcsT7uDiD0mr/w4wsb3Ul
-sDQ4IMEVXaOK7OAddGzIO573405ZFdWskkiRTn7gBZd7tOJKe0iirOqwgZezjf/C
-b0m9JTkeclZsDMNlKwIfRBTrEsrJcjJLPHEn0UDVDbDcUdMQ5z+eN2QRvZJ2CITF
-4DwqMzqnvF0YJhGZequ5DPfeK3frgJU3ByqhOhRFrD32qRhy4YlyGx6mM195MODc
-UjVIkT3miVFY6RnpwbHZkcBbLZQDazrUilTp6FCjV5ZpwxX6pit8ZVO+SxAPjg/k
-TXUuMck81nkaGnIt4r76bouqGq0HC2X62CISr/o8S17tx3pOwhu6VRIbPWv5hP9j
-/kHmI70IZVYu0UxYLBEGxEkefxSChgZ6Ur7ewqFulDsT3Q8hSKm9MBHUfiBk+wJj
-JiGwwSCCSAG87F6t6aoahqxrYVEOxCvTUmbYrP8OomevmFxbRb//f/hrIS0JvI46
-SFudcWMuRTCDEs35Bn0Y9qVBrc1FEXN8vR9Mthp77mti14KVMjumMSWfmk0DA4j5
-fuCmZI9l5zbuvgIDsGyf8B04ChNZ61UX90isJSGovtZDGFFIkqUQUMB7CRjfFRuz
-q1YTTLr9LK0PG6kcdTYaGBoYQ+fmkhF9rkduop1iDiytd1dXw04=
-=VD+D
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIif+wACgkQ2O7X88g7
++prlzxAAmlxP8pwyl+dgdxormupmTRC2UzwHqUvMKG4R1uxDAdzhQNJbrQ9ax8qF
+5225I/WYTcLNnDoNqUkdvjfGnqb8JgS6CgYKsybW6/dLF9kzmPmQWnSknTvND+P/
+QmrdW0yLQIR3nNMTmX2xtOICR2/lWbVols9CbHs6Eal4dvbW2gZCtHNH3VXIxRoH
+V+lYrQPt3z4cpyTtmbreen68f0woK6vBfjiwN+zUmP4ArwlymGblvfk4rhQ47qnp
+wU/fnD4POINo3fBXTrZzyySKOrth6wAkwq44m/oRT9cgOsgKAv+uaVpc9bXgQ0Aj
+22b5W8joHRnHfmexA7HX/DvZtqJyyogs5SxaqNugyoLn0wBt5Doh9mpD8FRnqWmn
+6eH/MgrcEMGfOMSKhn5iLOfqtnx21SloArQ0jptYtbhG4a1qzA0t5vmwmGJCzw6X
+6t9jKHyhUxqvu/8aDKgIrddn3aI0pJ+GVZHiTA2jMK+DnckS3okOJFAk1AYddx+1
+xIebAVmezE3HFt8mtACtMLghk6zeFE+ktaCSf/oNpFKIgh2VMr0UZwDv7x5mg4fw
+nK7SjWzqGAOSuyGn/NT7ZAQ6b/4QwZnS4160vHBoSB8m6CpFilUQcKPgr2E7jK/x
+8dyjRBKjpRY373se5UK6qoyoNicsKUNbCTrX7xWkk0j+DyFBJIM=
+=VWp5
 -----END PGP SIGNATURE-----
 
---7vo6g6q2c56odmp3--
+--kkhsxr7xg2jacud7--
