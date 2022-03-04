@@ -2,67 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 059C44CCFA4
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Mar 2022 09:09:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5FE74CD1D3
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Mar 2022 11:00:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbiCDIK2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Mar 2022 03:10:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
+        id S231157AbiCDKBW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Mar 2022 05:01:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiCDIK1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Mar 2022 03:10:27 -0500
-X-Greylist: delayed 567 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 04 Mar 2022 00:09:39 PST
-Received: from bddwd-sys-mailin03.bddwd.baidu.com (mx411.baidu.com [124.64.200.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A702AE0AC1
-        for <linux-pm@vger.kernel.org>; Fri,  4 Mar 2022 00:09:39 -0800 (PST)
-Received: from bjhw-sys-rpm015653cc5.bjhw.baidu.com (bjhw-sys-rpm015653cc5.bjhw.baidu.com [10.227.53.39])
-        by bddwd-sys-mailin03.bddwd.baidu.com (Postfix) with ESMTP id 09C3D13D0004A;
-        Fri,  4 Mar 2022 15:53:29 +0800 (CST)
-Received: from localhost (localhost [127.0.0.1])
-        by bjhw-sys-rpm015653cc5.bjhw.baidu.com (Postfix) with ESMTP id F0099D9932;
-        Fri,  4 Mar 2022 15:53:28 +0800 (CST)
-From:   Li RongQing <lirongqing@baidu.com>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH] cpuidle-haltpoll: move cpuidle_poll_state_init after
-Date:   Fri,  4 Mar 2022 15:53:28 +0800
-Message-Id: <1646380408-57184-1-git-send-email-lirongqing@baidu.com>
-X-Mailer: git-send-email 1.7.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S233200AbiCDKBP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Mar 2022 05:01:15 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDBA19CCD0;
+        Fri,  4 Mar 2022 02:00:26 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2245iwps027365;
+        Fri, 4 Mar 2022 04:00:12 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=lwhVfdpuKKMBPiRws4X0H+QIchtAscw5Q6iMAm4osNM=;
+ b=dCVRqSvX2d4AIxXLbYj4l//Ei2h6QReFxgPwDpCm8tvq5w2TsHMeragQ7bTLqBkg5OOp
+ Ggdv7QFAGDakT0T0m5MFpN2Zc/ujnC6LYq6RkgvPX0DzVhuaDn/T47t7ZwytLqifGtSU
+ 6dMB0oTBrUves0J3GiYFp471iDTMDBRx9yjriNwvnZL8TXLmdVfbi2OcomXr6HW1FwR9
+ r6+c7NyQ35Gk92SM6S0mgjVU509tZSkGnVtbpmQELuC8+rUC2ZbIj60d1tKnVACKHq85
+ HnKxSMCxLUOIKYoXuifzSXV4VLuz63asSKZJGvrvvrfsF+3CPZ4K43FzBD4XpMZDO3wO jw== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3ek4j3gs7t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 04 Mar 2022 04:00:12 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Fri, 4 Mar
+ 2022 10:00:11 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.18 via Frontend
+ Transport; Fri, 4 Mar 2022 10:00:11 +0000
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 3A8247C;
+        Fri,  4 Mar 2022 10:00:11 +0000 (UTC)
+Date:   Fri, 4 Mar 2022 10:00:11 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+CC:     <sre@kernel.org>, <patches@opensource.cirrus.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] power: supply: Handle error for wm8350_register_irq
+Message-ID: <20220304100011.GU38351@ediswmail.ad.cirrus.com>
+References: <20220304015751.367280-1-jiasheng@iscas.ac.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220304015751.367280-1-jiasheng@iscas.ac.cn>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: f2usVe643jZg99CYmGdpU4NV6__644Rq
+X-Proofpoint-ORIG-GUID: f2usVe643jZg99CYmGdpU4NV6__644Rq
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-call cpuidle_poll_state_init only if it is needed to save
-some cpu cycles
+On Fri, Mar 04, 2022 at 09:57:51AM +0800, Jiasheng Jiang wrote:
+> As the potential failure of the wm8350_register_irq(),
+> it should be better to check it and return error if fails.
+> Also, use 'free_' in order to avoid same code.
+> 
+> Fixes: 14431aa0c5a4 ("power_supply: Add support for WM8350 PMU")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
 
-Signed-off-by: Li RongQing <lirongqing@baidu.com>
----
- drivers/cpuidle/cpuidle-haltpoll.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
-index fcc5321..3a39a7f 100644
---- a/drivers/cpuidle/cpuidle-haltpoll.c
-+++ b/drivers/cpuidle/cpuidle-haltpoll.c
-@@ -108,11 +108,11 @@ static int __init haltpoll_init(void)
- 	if (boot_option_idle_override != IDLE_NO_OVERRIDE)
- 		return -ENODEV;
- 
--	cpuidle_poll_state_init(drv);
--
- 	if (!kvm_para_available() || !haltpoll_want())
- 		return -ENODEV;
- 
-+	cpuidle_poll_state_init(drv);
-+
- 	ret = cpuidle_register_driver(drv);
- 	if (ret < 0)
- 		return ret;
--- 
-2.9.4
-
+Thanks,
+Charles
