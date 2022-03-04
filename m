@@ -2,48 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B808A4CDF64
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Mar 2022 22:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2EA4CDF85
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Mar 2022 22:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiCDU7Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Mar 2022 15:59:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
+        id S229715AbiCDVE3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Mar 2022 16:04:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiCDU7X (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Mar 2022 15:59:23 -0500
+        with ESMTP id S229794AbiCDVE2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Mar 2022 16:04:28 -0500
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AEF419B5;
-        Fri,  4 Mar 2022 12:58:34 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423515FCA;
+        Fri,  4 Mar 2022 13:03:40 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 7F3BB1F469EA
+        with ESMTPSA id 040BA1F461A5
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646427513;
-        bh=hTgfC44JS9v44NLsD1sg7Y1pWVGJtaRJ7sUIWmhL94M=;
+        s=mail; t=1646427819;
+        bh=RguIVMUzGoTQTBf2hjCZ6TUs5RZVfDH4SuiI8h8Kljg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dyP/MFwpz0UOS7kMPEvfTweRCqsKtp7dZgta3bMnXhGcc+jkvVKQZ8QoYxmpAstfR
-         aC/cIHqtWLAJK2PqednXw/M9h9nxt53MOuJhaw5vZaD54OeHllhS0Uqnu4EuOcvZbp
-         ZyHIXeG2lWYIj4OI2MjYS2unJscfG8H8zz4hx+rkBpDxlg6dq8H+4Qb3MZqBAXfPpc
-         KTrsDUAMx8fvgBrQhZpe4yHwRqADaJ/d+xM5w8yg7JMJCTIh+gfGnBmHZKcFQ0pjLO
-         dWx3FpD/uZEt3jQ+pUCV+Hvy2m90r7ZzCmM5M65e/yI0Db1gCtGT65nfdk1x2bNYiU
-         nDwMoTzuVWA+g==
+        b=FBuL2L308Ew+2uXBezgOcyRKa7g8U6w/sGREWzp++LUsUUt1d9tR3iV7MPcw5wUOI
+         TTGKfvPD6KaIen0hC5967lteFN4C+LyOtCdIGuZkAlUOqexJGPxKUxeaUCaKz3R9DZ
+         l/LWcSLjqdkpPFF0AKLnDyybrpuV600LgD7DzLvxKojNTscZD7sr2/ztaoOjke3fWP
+         /mD9onUAf0NHihanqB0QHS1nz7x8Mv8g2UYom8X4ZUIlKBJh/g/yMmTvq+v2RDKlwa
+         Qbsf7PF1uZJke93JwLsKKUhjL8A+MpzBuRagcqo6JN1IdqKqCO8unPpuWLB0lFJjos
+         VA+eyMDUv2lmA==
 Received: by mercury (Postfix, from userid 1000)
-        id E1C301060602; Fri,  4 Mar 2022 21:58:30 +0100 (CET)
-Date:   Fri, 4 Mar 2022 21:58:30 +0100
+        id B2BB91060602; Fri,  4 Mar 2022 22:03:36 +0100 (CET)
+Date:   Fri, 4 Mar 2022 22:03:36 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        patches@opensource.cirrus.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] power: supply: Handle error for wm8350_register_irq
-Message-ID: <20220304205830.udamvgsngin2gib5@mercury.elektranox.org>
-References: <20220304015751.367280-1-jiasheng@iscas.ac.cn>
- <20220304100011.GU38351@ediswmail.ad.cirrus.com>
+To:     Yihao Han <hanyihao@vivo.com>
+Cc:     Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@vivo.com
+Subject: Re: [PATCH] power: supply: axp20x_ac_power: fix
+ platform_get_irq.cocci warning
+Message-ID: <20220304210336.pxuof34536g5w2ku@mercury.elektranox.org>
+References: <20220303122719.2855-1-hanyihao@vivo.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nyivvc77cwjv2mom"
+        protocol="application/pgp-signature"; boundary="tm4mdjva6vpqbfts"
 Content-Disposition: inline
-In-Reply-To: <20220304100011.GU38351@ediswmail.ad.cirrus.com>
+In-Reply-To: <20220303122719.2855-1-hanyihao@vivo.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
@@ -55,47 +54,71 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---nyivvc77cwjv2mom
+--tm4mdjva6vpqbfts
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Fri, Mar 04, 2022 at 10:00:11AM +0000, Charles Keepax wrote:
-> On Fri, Mar 04, 2022 at 09:57:51AM +0800, Jiasheng Jiang wrote:
-> > As the potential failure of the wm8350_register_irq(),
-> > it should be better to check it and return error if fails.
-> > Also, use 'free_' in order to avoid same code.
-> >=20
-> > Fixes: 14431aa0c5a4 ("power_supply: Add support for WM8350 PMU")
-> > Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> > ---
+On Thu, Mar 03, 2022 at 04:27:19AM -0800, Yihao Han wrote:
+> Remove dev_err() messages after platform_get_irq*() failures.
+> platform_get_irq() already prints an error.
 >=20
-> Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+> Generated by: scripts/coccinelle/api/platform_get_irq.cocci
+>=20
+> Signed-off-by: Yihao Han <hanyihao@vivo.com>
+> ---
 
 Thanks, queued.
 
 -- Sebastian
 
---nyivvc77cwjv2mom
+>  drivers/power/supply/axp20x_ac_power.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/axp20x_ac_power.c b/drivers/power/suppl=
+y/axp20x_ac_power.c
+> index ac360016b08a..57e50208d537 100644
+> --- a/drivers/power/supply/axp20x_ac_power.c
+> +++ b/drivers/power/supply/axp20x_ac_power.c
+> @@ -377,11 +377,9 @@ static int axp20x_ac_power_probe(struct platform_dev=
+ice *pdev)
+>  	/* Request irqs after registering, as irqs may trigger immediately */
+>  	for (i =3D 0; i < axp_data->num_irq_names; i++) {
+>  		irq =3D platform_get_irq_byname(pdev, axp_data->irq_names[i]);
+> -		if (irq < 0) {
+> -			dev_err(&pdev->dev, "No IRQ for %s: %d\n",
+> -				axp_data->irq_names[i], irq);
+> +		if (irq < 0)
+>  			return irq;
+> -		}
+> +
+>  		power->irqs[i] =3D regmap_irq_get_virq(axp20x->regmap_irqc, irq);
+>  		ret =3D devm_request_any_context_irq(&pdev->dev, power->irqs[i],
+>  						   axp20x_ac_power_irq, 0,
+> --=20
+> 2.17.1
+>=20
+
+--tm4mdjva6vpqbfts
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIifXYACgkQ2O7X88g7
-+pqrTA/+PuT7os9q1eAwQg7iAxaYXRN5lEODz98SiA0Sjphxskwj4xf+M8RRPYo4
-N3Fswgl6df7KiiqCsRbCaappMjvRPkU2y74dAiavo4kxytPI63DuW/CPk0E0lagm
-15/Zhqj5tLKH2wBzJC54lgH7AijtPkprPQTaoNc4v6IEjiu9sS+1AipHYtlvX0Y5
-e0BNATEZoT4NUn64Q2zWXD8ZjjcD4AwLqVtCpWeSRWKffw5c9fKkr6X6Tu1o7KVZ
-ydwTnuJUDfLqrvxfSyzVvC93vEmvqubBMyMB7XSeNlaFCWj06f0YF4B9qN4dabFs
-BsQE7WuUiFs4aI70OoEHeBBVkxH17kVgrHyYFC00UM+D6XYGJ5gEhqV0jWoj8K9c
-epNGfBSmxRqrsniGc4yKrBQFr0MC7iyaMS9omQOUw7Vy5mwI1TrfW3WRB49zfLIT
-DiupIuawh3VajLjwHw4/KGjUNH3d4Pk8LiuYiJZn3y6yk0gy1G/4WcnTaqRnJkyO
-UtWdqEHhmmsWEtaxtwL3ZpdocBXRvscPXJ6+SAtJP3XlEskSevzHF9oMunHvxzF0
-s+8M9tDjGQ05Ywh1e8WhcHcTjL1cbOzMaXpgCPEgUXszpc5KkXyGyXYAwxknH/tK
-pTPOGLL2kET4zrI9QdD9EkyWe8QWWgHnsUyMxj8bKm8GedcWj9U=
-=ysUY
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIifqgACgkQ2O7X88g7
++pr4fQ/+P4vl8QdMKX868E69dvmd9lMhr8cLEUqxkdXmNFZi07MX5qAe9WjRAc6U
+xxrzbb97LpHEvoWTjTG9VTn6CHzej/WhVg3Yh5MRy+TZ7Dt2W3660rVKrIFr1NbI
+ghfDpU9Ud7bFDC50vAlMzyX7aNrGBTsAYFh+WlYzvgtNp5UsG9NnogjKan7Pzml6
+9+V1nlsEb4D6XCBQNi9GzpFFS3nGvUmuL9iHKOzK5nNAO72wqJ3zvq4ZVu5oz2kQ
+PyFXHjqX0qRszB9qQpRkCB02t+o3ttSCX2YfsClAOwoYrK4r/1Cq8nZWbf066C3p
+0HQXtx1GBjavk6XQ/kYVUobjPn39fuLSSxm89ScKKINvN3wgjpYHZMB6ieWqL3tR
+v4+oAPrq2PL0GAUFBrlUIcxE6WcC9QkB3w6V4S7hfdWfvOAQo5Ziy7yVU9oYcggj
+7v9Q7OfSsmeqa1IrL16SqAUwWkTJI32hZ3zzmV/Ip+uRDVbWPXIKl9It4qHPjHBW
+jXtUktuIVcrVGrM4zeG50jH4t17KjOcy73qviA63Rc0/wmadBRY+gjnMOVshnSqH
+SFgQzhwvG6n8v7vENmHK3qVCN4T6fZo8nM/DYE+txypUDLJMJehh8f2m63sFLeus
+Zof+q1LTYiyMaal4pCuNP4A1yFq2jlr/oms/TfTu6fEJGihwX2w=
+=Iw+l
 -----END PGP SIGNATURE-----
 
---nyivvc77cwjv2mom--
+--tm4mdjva6vpqbfts--
