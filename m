@@ -2,112 +2,279 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9714CD682
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Mar 2022 15:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F8C4CD6B8
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Mar 2022 15:47:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236318AbiCDOiC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Mar 2022 09:38:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
+        id S239924AbiCDOsE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Mar 2022 09:48:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236915AbiCDOiB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Mar 2022 09:38:01 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D943E1BAF3A;
-        Fri,  4 Mar 2022 06:37:13 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9E369143D;
-        Fri,  4 Mar 2022 06:37:13 -0800 (PST)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4DE923F70D;
-        Fri,  4 Mar 2022 06:37:12 -0800 (PST)
-Date:   Fri, 4 Mar 2022 14:37:09 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Edwin Chiu =?utf-8?B?6YKx5Z6C5bOw?= <edwin.chiu@sunplus.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Edwin Chiu <edwinchiu0505tw@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v5] cpuidle: sunplus: Create cpuidle driver for sunplus
- sp7021
-Message-ID: <YiIkFZNGUihnoVPI@bogus>
-References: <cover.1645427180.git.edwinchiu0505tw@gmail.com>
- <1628e048220f066204b8ac27f3cedf7f3cc02963.1645427180.git.edwinchiu0505tw@gmail.com>
- <394261d1-f1df-e80d-3591-10f2d649e731@kernel.org>
- <bcc7a0b58aad4f0989d7d86eaee2c746@sphcmbx02.sunplus.com.tw>
- <748eb0e1-684c-a772-bccd-64b80780192f@kernel.org>
- <fda1e55e576b4cdf9ab412529a3dfc7b@sphcmbx02.sunplus.com.tw>
- <fd39f73e-8317-38c4-6002-8defd784caec@kernel.org>
- <YiCSQCG4NkepeZKs@bogus>
- <ffdcb88f0ea240f68b5e5ec40f0f525c@sphcmbx02.sunplus.com.tw>
+        with ESMTP id S237160AbiCDOsD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Mar 2022 09:48:03 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF19848384;
+        Fri,  4 Mar 2022 06:47:15 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id g26so17243172ybj.10;
+        Fri, 04 Mar 2022 06:47:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=CUW9eyq6olA9UOxPXQmSp+qMVQaP00he0KkU/RyKjq0=;
+        b=ETyBEW7YhnLoIr1wJ94chKj8as25ZaiWCxdoQeJfM2137JFZx84RaD1MY+P+XNzoUy
+         P165qPpM5aAS9MffBzqblSELPKK9kxtTairC8Js/3oG3r3IHbrDLi18scYeptCyna7SP
+         TdxjaQ1rkJv7A03GmgIUFYy0DgSgLz7sBRlDUDER6ue7GgDUwaarpfbYV7BN1F5eTFlf
+         MSkMadqL7DBmi4eCyISJMDa+TWbOhaU34nZeSmLfAL4Zq136Q2HPdBdsgf48VgsLcMyQ
+         XNHCrMtwByGh/RsmKmeRc3AqDNe+FBnIz4FKJM4qKiAyj4Dd9ekHHh4i2tr4tAqlMK1D
+         TngQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=CUW9eyq6olA9UOxPXQmSp+qMVQaP00he0KkU/RyKjq0=;
+        b=WNsTQIGUV/jZFx7Q+LDaeTeKJwB3SRDXSZ7GLvGcx+lVdUuhI8SDulIuWECi3viQjM
+         DePpDEoSKOLSc7DwU1AxvC+0fnP2Co8MvXwEupGe2dyjsFm9VSZTVg5KrfHsNbxpQI5O
+         hYRsNjPEirnmS/Os7/KGyUopaMr6EXwYRbLjKtzUIJyWYGLOWJ3VaWrmS0PltYT2lBFC
+         vrQru2weUKIMlJdxpbQyimam4NHNBwgwciiH23ZghUcdF4f8CutBnlhX5TsF/YdoGF8L
+         uyET2Ddv8nOCMofHiuXkKr9iawtzt9lJmIkexMC06tsqlCqvTayQmdXp5TcVBtGXXp+t
+         RZBA==
+X-Gm-Message-State: AOAM531hOpco6ESSC5tqSlm/2ihKmO5jAV31gZWwem15GplQN232nJeQ
+        HGYQhlBYG2FjN1dTQ4sgFOh8y8duv+LfTm9AVc7lYj9x3Dw=
+X-Google-Smtp-Source: ABdhPJzL3K/jikdloz8L2WO3+zi/8Cp0G3owqWF4urVyT4uasuJoj++B4FPKa3BA6m7Ih1hTbhxRqbFNnawHLzBx2DA=
+X-Received: by 2002:a05:6902:143:b0:628:7cf1:f2a9 with SMTP id
+ p3-20020a056902014300b006287cf1f2a9mr17194704ybh.51.1646405234801; Fri, 04
+ Mar 2022 06:47:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ffdcb88f0ea240f68b5e5ec40f0f525c@sphcmbx02.sunplus.com.tw>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220127230727.3369358-1-briannorris@chromium.org> <20220127150615.v2.12.I3a5c7f21ecd8221b42c2dbcd618386bce7b3e9a6@changeid>
+In-Reply-To: <20220127150615.v2.12.I3a5c7f21ecd8221b42c2dbcd618386bce7b3e9a6@changeid>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Fri, 4 Mar 2022 09:47:03 -0500
+Message-ID: <CAMdYzYo9Y_pEAAtreQU0B9DVzGsbUgpTA2g7HGRyUXcSBjMy4g@mail.gmail.com>
+Subject: Re: [PATCH v2 12/15] arm64: dts: rockchip: Enable dmc and dfi nodes
+ on gru
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Lin Huang <hl@rock-chips.com>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Derek Basehore <dbasehore@chromium.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        =?UTF-8?B?R2HDq2wgUE9SVEFZ?= <gael.portay@collabora.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 11:24:32AM +0000, Edwin Chiu 邱垂峰 wrote:
-> 
-> Thanks your advice.
-> Look like key point still only WFI function when cpuidle.
-
-Indeed.
-
-> As I explain before, only enable generic ARM cpuidle driver is not work.
-
-Why do you think it is a must. Most arch(including arm) has default
-arch_cpu_idle handler that will be called if no cpuidle driver is active.
-It does execute the default WFI, so you don't need a driver to achieve
-the same.
-
-> It need enable-method code to assign cpuidle_ops functions.
-
-Correct, but you may not need that driver to be active at all. That is the
-main point of these discussions. Sorry if that was not mentioned explicitly
-earlier.
-
-> "psci" is one of enable-method, but there have problem in my side due to smc
-> or secure code unsupported. > So I create cpuidle-sunplus.c code with
-> "sunplus,sc-smp" to let cpuidle code complete for our source code.
-> With this structure, I can add more custom low power code in the future.
+On Thu, Jan 27, 2022 at 6:17 PM Brian Norris <briannorris@chromium.org> wro=
+te:
 >
+> From: Lin Huang <hl@rock-chips.com>
+>
+> Enable the DMC (Dynamic Memory Controller) and the DFI (DDR PHY
+> Interface) nodes on gru boards so we can support DDR DVFS.
+>
+> Signed-off-by: Lin Huang <hl@rock-chips.com>
+> Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+> Signed-off-by: Ga=C3=ABl PORTAY <gael.portay@collabora.com>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> Updates since the old series:
+>
+>  - reordered alphabetically by phandle name, per style
+>  - drop a ton of deprecated/unused properties
+>  - add required center-supply for scarlet
+>  - add new *_idle_dis_freq properties
+>  - drop the lowest (200 MHz) OPP; this was never stabilized for
+>    production
+>  - bump the voltage (0.9V -> 0.925V) for the highest OPP on Chromebook
+>    models; later (tablet) models were more stable, with a fixed DDR
+>    regulator
+>  - bump odt_dis_freq to 666 MHz; early versions used 333 MHz, but
+>    stabilization efforts landed on 666 MHz for production
+>
+> ---
+>
+> Changes in v2:
+>  - Adapt to new properties
+>
+> Changes in v1:
+> This was part of a previous series, at:
+> https://lore.kernel.org/r/20210308233858.24741-3-daniel.lezcano@linaro.or=
+g
+> I've picked up a bunch of changes and fixes, so I've restarted the patch
+> series numbering.
 
-So you want to add custom low power mode support in future, so add the driver
-when that is ready. The platform must do WFI even now without the driver
-you are adding. Have you checked that ?
+Good Morning,
 
-> What does it mean for "please document the chosen "sunplus,sc-smp" as bot
-> cpu idle and hotplug methods" ?
+I'm trying to bring this series over to rockpro64 (and eventually the
+pinephone-pro) and am running into some snags.
+Essentially, anytime a transition happens, the board locks up.
+I've disabled the extra power save disable flags and adjusted the OPPs
+for rockpro64's power.
+Transitions anywhere from the default 800mhz cause a lock.
 
-I meant if you are adding any custom SMP+Idle mentods you need to add the
-compatible to [1] or [2] based on what is more appropriate.
+I'm digging deeper, but I'm hoping you can answer some questions in
+the meantime:
+1. Does this require something from firmware that isn't available on
+Mainline ATF? (AKA special firmware to the Chromebook line)
+2. If not, do you have any recommendations off the top of your head?
 
-> Does it mean "edit yaml file"? (Previously, I submit yaml file also, but Rob
-> say I don't need submit when I use compatible="arm,idle-state")
+Thanks,
+Peter Geis
 
-Yes that covers the description of idle states but not the entry method.
-There are 2 separate things. You need both "arm,idle-state" and
-"sunplus,sc-smp" or "psci" whichever you decide to implement on your
-platform. If there is no implementation yet, it is strongly suggested
-to go for "psci" unless you have reasons not to. Please add that info
-when you submit the custom support, I will check on that again when
-you post. But for now you don't need anything.
-
--- 
-Regards,
-Sudeep
-
-[1] Documentation/devicetree/bindings/arm/cpu-enable-method/
-[2] Documentation/devicetree/bindings/arm/cpus.yaml
+>
+>  .../dts/rockchip/rk3399-gru-chromebook.dtsi   |  7 +++++
+>  .../boot/dts/rockchip/rk3399-gru-scarlet.dtsi | 12 ++++++++
+>  arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi  | 28 +++++++++++++++++++
+>  .../boot/dts/rockchip/rk3399-op1-opp.dtsi     | 25 +++++++++++++++++
+>  4 files changed, 72 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi b/ar=
+ch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
+> index 9b2c679f5eca..cc8950046d94 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
+> @@ -234,6 +234,13 @@ &cdn_dp {
+>         extcon =3D <&usbc_extcon0>, <&usbc_extcon1>;
+>  };
+>
+> +&dmc {
+> +       center-supply =3D <&ppvar_centerlogic>;
+> +       rockchip,pd-idle-dis-freq-hz =3D <800000000>;
+> +       rockchip,sr-idle-dis-freq-hz =3D <800000000>;
+> +       rockchip,sr-mc-gate-idle-dis-freq-hz =3D <800000000>;
+> +};
+> +
+>  &edp {
+>         status =3D "okay";
+>
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi b/arch/=
+arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi
+> index a9817b3d7edc..913d845eb51a 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi
+> @@ -391,6 +391,18 @@ &cru {
+>                 <400000000>;
+>  };
+>
+> +/* The center supply is fixed to .9V on scarlet */
+> +&dmc {
+> +       center-supply =3D <&pp900_s0>;
+> +};
+> +
+> +/* We don't need .925 V for 928 MHz on scarlet */
+> +&dmc_opp_table {
+> +       opp03 {
+> +               opp-microvolt =3D <900000>;
+> +       };
+> +};
+> +
+>  &gpio0 {
+>         gpio-line-names =3D /* GPIO0 A 0-7 */
+>                           "CLK_32K_AP",
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi b/arch/arm64/bo=
+ot/dts/rockchip/rk3399-gru.dtsi
+> index 162f08bca0d4..23bfba86daab 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
+> @@ -373,6 +373,34 @@ &cru {
+>                 <200000000>;
+>  };
+>
+> +&dfi {
+> +       status =3D "okay";
+> +};
+> +
+> +&dmc {
+> +       status =3D "okay";
+> +
+> +       rockchip,pd-idle-ns =3D <160>;
+> +       rockchip,sr-idle-ns =3D <10240>;
+> +       rockchip,sr-mc-gate-idle-ns =3D <40960>;
+> +       rockchip,srpd-lite-idle-ns =3D <61440>;
+> +       rockchip,standby-idle-ns =3D <81920>;
+> +
+> +       rockchip,ddr3_odt_dis_freq =3D <666000000>;
+> +       rockchip,lpddr3_odt_dis_freq =3D <666000000>;
+> +       rockchip,lpddr4_odt_dis_freq =3D <666000000>;
+> +
+> +       rockchip,sr-mc-gate-idle-dis-freq-hz =3D <1000000000>;
+> +       rockchip,srpd-lite-idle-dis-freq-hz =3D <0>;
+> +       rockchip,standby-idle-dis-freq-hz =3D <928000000>;
+> +};
+> +
+> +&dmc_opp_table {
+> +       opp03 {
+> +               opp-suspend;
+> +       };
+> +};
+> +
+>  &emmc_phy {
+>         status =3D "okay";
+>  };
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-op1-opp.dtsi b/arch/arm6=
+4/boot/dts/rockchip/rk3399-op1-opp.dtsi
+> index 2180e0f75003..6e29e74f6fc6 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3399-op1-opp.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk3399-op1-opp.dtsi
+> @@ -110,6 +110,27 @@ opp05 {
+>                         opp-microvolt =3D <1075000>;
+>                 };
+>         };
+> +
+> +       dmc_opp_table: dmc_opp_table {
+> +               compatible =3D "operating-points-v2";
+> +
+> +               opp00 {
+> +                       opp-hz =3D /bits/ 64 <400000000>;
+> +                       opp-microvolt =3D <900000>;
+> +               };
+> +               opp01 {
+> +                       opp-hz =3D /bits/ 64 <666000000>;
+> +                       opp-microvolt =3D <900000>;
+> +               };
+> +               opp02 {
+> +                       opp-hz =3D /bits/ 64 <800000000>;
+> +                       opp-microvolt =3D <900000>;
+> +               };
+> +               opp03 {
+> +                       opp-hz =3D /bits/ 64 <928000000>;
+> +                       opp-microvolt =3D <925000>;
+> +               };
+> +       };
+>  };
+>
+>  &cpu_l0 {
+> @@ -136,6 +157,10 @@ &cpu_b1 {
+>         operating-points-v2 =3D <&cluster1_opp>;
+>  };
+>
+> +&dmc {
+> +       operating-points-v2 =3D <&dmc_opp_table>;
+> +};
+> +
+>  &gpu {
+>         operating-points-v2 =3D <&gpu_opp_table>;
+>  };
+> --
+> 2.35.0.rc0.227.g00780c9af4-goog
+>
+>
+> _______________________________________________
+> Linux-rockchip mailing list
+> Linux-rockchip@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-rockchip
