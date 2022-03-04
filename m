@@ -2,183 +2,359 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0189E4CCE23
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Mar 2022 07:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2FC74CCE2A
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Mar 2022 07:59:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238584AbiCDG6D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Mar 2022 01:58:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
+        id S234065AbiCDHAB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Mar 2022 02:00:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236816AbiCDG6A (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Mar 2022 01:58:00 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2068.outbound.protection.outlook.com [40.107.92.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E596918E3C8;
-        Thu,  3 Mar 2022 22:57:02 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U7ZnyLGCtLHPCs/I0qsjxytYYTlkyh7wB2j1DJPXRDP1VOzylVoYIT3ZnslpgYZ+eIF/aGrQY/r8SWkcf6w1YD10T2oRNv7cAmzu0q65QG1p8NvH3ARwXHGYoQf7wfAdnNOPTx3xpODCyCg8wK0g8DEPEkL4Zd7CBfJN9T06fiCbxwGLqL+9A0Qf53EZLTxCZrd8ZefuNIQ13cb+hCZAOmUwVfX5L3PGgQutzTogZRUa2RPPzZmwAhn3TFtQyFJMhRGQ973yGzgKmYPbwf3E0KBs88ieT0DWzZKPcjuj9p9RYHoR6ybLK9GbKHRSMY0ybio9ymND/ME/CIJecixv9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=h8j3gXNxmFvcW2Zn+LWDh3nBmuIVvKKh0+DK915vi5Q=;
- b=U80N9n64Edt/AX4e5un72nZOywrdJaC80ogKB1qY+v8cuzRRLC7bLjqjcOOBY0XW6PECNySqKf6XLaZzFBKUuGucasvhaxsfpMJeqfRRs+lxQpyxcGs1CRhnuYtrJelyaLTKhpq8lNNjzj0z1UoefbRXGXAM7kG/oZZnEqLt7oNxT9ardGXDbmXxQvLcIAteLbLdV6uveRTlqzrGxsvByXi5t0OI4kpflLVP9tGg0856fQ8IE+wlgOT6oTm+/HjztPQlu7AmgwEbfgi+8Eaog4RILlP3GM+eF2L17UhB2xFMcQ8dLwaBQurH4A6Q2ce0YoY/y/XSoP9/4hGqBD3big==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=h8j3gXNxmFvcW2Zn+LWDh3nBmuIVvKKh0+DK915vi5Q=;
- b=DaAvv+WkegjQHzMejXVJOcwmu9TT+Hqp5NpMKdbhNJb2/qEycRrBupiuxmvR4gCe5g1yqlz6778epbTPfSO2dIDkcY2JCrDQGXwlEhh+w8T4axCpO2DVOXDSEcxGeaFk/QFkfmO3Ip6YMjSDuUFN0IL6zyJlcQG+rZGiqer0eh4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
- SN1PR12MB2384.namprd12.prod.outlook.com (2603:10b6:802:25::25) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5038.17; Fri, 4 Mar 2022 06:57:00 +0000
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::8d40:da47:7312:64b8]) by DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::8d40:da47:7312:64b8%6]) with mapi id 15.20.5038.017; Fri, 4 Mar 2022
- 06:57:00 +0000
-Date:   Fri, 4 Mar 2022 14:56:36 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>
-Cc:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "dsmythies@telus.net" <dsmythies@telus.net>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "todd.e.brandt@linux.intel.com" <todd.e.brandt@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>
-Subject: Re: [PATCH V2 4/4] Documentation: amd-pstate: add tracer tool
- introduction
-Message-ID: <YiG4JL+g/E1yNjDI@amd.com>
-References: <20220304060724.314582-1-Jinzhou.Su@amd.com>
- <20220304060724.314582-5-Jinzhou.Su@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220304060724.314582-5-Jinzhou.Su@amd.com>
-X-ClientProxiedBy: SG2PR01CA0142.apcprd01.prod.exchangelabs.com
- (2603:1096:4:8f::22) To DM5PR12MB2504.namprd12.prod.outlook.com
- (2603:10b6:4:b5::19)
+        with ESMTP id S238592AbiCDHAA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Mar 2022 02:00:00 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AD18BF10
+        for <linux-pm@vger.kernel.org>; Thu,  3 Mar 2022 22:59:12 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id u7so9737583ljk.13
+        for <linux-pm@vger.kernel.org>; Thu, 03 Mar 2022 22:59:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zeXRtlhG3sfsZfdLxZy0Vm8knPW7ZRte0WAm67/Di8I=;
+        b=PbaLQIBFOCyTXKCoCilodixjYedOtxkL5bPwcCmXTp8acWNdF0otlSX7KKbvhZR1yJ
+         b5fU2h7WXqsyJ0wl/BLvvMluCAovQ1zZkwkTsgc1lfN7ZUToVHNI9B6ibvgxO4ICGNJp
+         U6+2bGKMQySBsbqR5BnbWo/LHkJ+0TW5jiGMUcuAhn/nTJlIh2yv2q7ell5n7R7JpMP9
+         0AYqjGVMbj6Muqg5emJYWZucUtDVzkZvYFb8/17XA5tuKmnZMutNhl7I9TdRxh8cYGLS
+         jlqjtiKWJfosfdfE59xSPrqXZkJaTT1Udt6iDT3gPeX5jLdDg+IZQWh07aGctXslEUDG
+         eWLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zeXRtlhG3sfsZfdLxZy0Vm8knPW7ZRte0WAm67/Di8I=;
+        b=xVWjjcYQuMJxzVtD8uJQwrGqdkkG4JIAIqbL5APHwn8NHXNwUMnkgyaId5Qq6pXjzB
+         Cle/GqDgORUVBpJBJUiXGKdvZ23MuUbOtrdiUcrs6zByRuGnIctBRPyTT6Lk3I7BHPx4
+         T9XQUszx+JPadpYaubjZE26ANlatnplwW6zgT0WXUUrRf2O07t8jUdV6wlKOtXfdO5RW
+         8OFNpwPumwjvYSRi8lbHAtz9saCJ/puiOX6UB2VqwjgFf4/2olXTTNqlOOyttyzuuiJC
+         EVuQod9Qck6LqE5mMjNEHzJc/7Vadvfvhbnj8fZA2tYnJ4MGXHSRIaNe2KCLoBRgyGvN
+         SxrQ==
+X-Gm-Message-State: AOAM532HfAn/5OxTcfkuByJVcM6iivTdXf/JFXSfgfgmcZeu1Rx29PfC
+        uE2hV+GCTFZt/yWkqAY3Utp2Fms9evHCvqxXUvze+w==
+X-Google-Smtp-Source: ABdhPJyQNWXwWwfwL2FBwzF73Q33XtYz49RVuG3Rkl7yUMMzImqKcRVZeEgcaXARwR+L9fcmB+lW1lm6jmYN3qk2kwM=
+X-Received: by 2002:a2e:3004:0:b0:223:c126:5d1a with SMTP id
+ w4-20020a2e3004000000b00223c1265d1amr26434955ljw.408.1646377151049; Thu, 03
+ Mar 2022 22:59:11 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 211bf136-2aff-42bd-0ad9-08d9fdac2e47
-X-MS-TrafficTypeDiagnostic: SN1PR12MB2384:EE_
-X-Microsoft-Antispam-PRVS: <SN1PR12MB2384CCD5DD4D46C2836342AAEC059@SN1PR12MB2384.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Rh8DKYI5h0Y1Ta2PA1UZ4cPlrCT5fRR91nFXmjXOj9GejJdrBOh29Pfglj7dzaeqV8lzxR4hBys1ScOh1/yr6qKxUq6y4IUp00O81YcizmJspUlg1iETVD4mMJuU3gx0H5RkFL3NJ3VEWGTFd8VST3LpDCcQpQqSCfJJf5iyAifLAi/IQi2aY1Hoe0iST7srMUSQ+288/a3JxJd5RuGhari5R3U5ljYM/B6FsyLQUkh/RnxxnHMt0ymbT1kqFAsHaeoSPRIo2LQs4wEb1amsMIA0zxG8PUTaR4fSRjX/SQfjeW241PR9zsgOLsKawO5Uhi7kjHR/kPwLI/VKSoQvk5lbWCsIcpPrjkpocvZbdBPpxscirOv+ZnDxlGOLIvrZFXpVQ8lXk31ngsLoTb6AoqAazYDcDBMjoZ/clIg+uh6Whweovshv+yDAOjE8A8tRRARmMMoCANquMQgnD1sd4IJyWXr3syOa1gL+e4b+DFI2MEXgxSr+9zkyc+nqbKDQq2aJr36+pzMs//QfOZBYZfh10l/fSRmgUwVZczWyUY4lPoYZ8Nqo7aXwA6tF+hWCb9Yl9+l84z5verA2Q4BYBJTsJolUvRqCpPu0jeiYV2K76Afq8t8FGfpHz8bJlSfTuBKLy00GgL0MO+b2geHs3A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6636002)(66946007)(86362001)(6486002)(2906002)(8676002)(6862004)(66556008)(66476007)(4326008)(83380400001)(5660300002)(316002)(54906003)(36756003)(37006003)(8936002)(508600001)(38100700002)(6506007)(6512007)(6666004)(2616005)(186003)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?D94NYfI+8bDqIvw6Cl/mIcH7i+dpnQ13nydzqAjeNbh7reEm9gtLUkdeNPZz?=
- =?us-ascii?Q?UsyGhsL+RFVafZXxoYhZi1fE0Wxv1/1T3gG6oBcBJSbyqn6IJYkK+rPq+We3?=
- =?us-ascii?Q?2dzgu7KpGX1AixRCv+NFh44mZWXVCtq6np3c6z5KNwhUAhcLJDLrf5h8zSLl?=
- =?us-ascii?Q?IB169wiI3Zvz0EBAuet4AWE2qFHnqWR4aYVxjGs3zTF5hUzudd7j89Njh7k8?=
- =?us-ascii?Q?816lnVmRsIUwavTNIb13/pn/ivT4MqufwFpwg5GFC6JK4MGfLCa0Uk4WfYfZ?=
- =?us-ascii?Q?+J+pIOs8v5urLhCvEIJYXSl2QQkiP1zuVERhfSzQYxTEMRgMT0pkAxqWlnXR?=
- =?us-ascii?Q?mrgC+x93vJ66OsJd8hUHyXllqgZLO9X+b7BJD9Rl20XkMjepaUUHg+Ubns76?=
- =?us-ascii?Q?J41mpgOoNeqswLNwpqJrHzvsHyz+FmeAbSahDZUBXXr7OFnyhiJytRqi9zeS?=
- =?us-ascii?Q?ftkDlJzFYPH2SgysmFwDwxPD5C8EYiq1pZk5D9c24QWK/B0OXHcI8W3PLrwk?=
- =?us-ascii?Q?OlKS7dn3cj4qOtCx2yHe2iphtHBxvg3VXf2S/+flqWaWm/vboiPdEcG1A1V9?=
- =?us-ascii?Q?fQSlHxxncywX2hzsdVGpa+bFGCdfhBHN5l/E0rl639Ky0hczyDn6OYW4+61T?=
- =?us-ascii?Q?+n7/l9RVNgf5HZLW6I0xCrFfJujqEqe53Fy5QiZNIo8Wq2p7huMLZuRgYMUM?=
- =?us-ascii?Q?6GDdVqnMuyPV7ORbdIh7NH8ylDPm74SdMAjHAW0d+N9Jbq85aOciihuqyo1b?=
- =?us-ascii?Q?4axnY2hkaW0f9ig4CpBXGPHOOXrcHyebXOgFTg8GnADDEsHCTWkXWGGamSKy?=
- =?us-ascii?Q?G+u4y79V5pRXaaHPH0TgedynQTeu5GAUPQhq42Y5ts4i/FUQk6QP9zxlcIN0?=
- =?us-ascii?Q?505XWVPCYNqC2nCMxjoS44tKJR0pHmI2vIBXmMhYvkzj3ovXAqVEC0zGEpjs?=
- =?us-ascii?Q?pawXGsBa4RV+5k+aMjHpbJQV+weWk19+gXvhh6s9DEJZUeJn7xDYru2Utjob?=
- =?us-ascii?Q?3wrVAib3mvhrFrswMKyF1+wiEMhegW2ZVP2RfFIzzFBDhEP6O6KuOznUZP4G?=
- =?us-ascii?Q?wU1Ehp4We3K3qwIan/tR74x2fQ9a7tDa/W0XxMtZWS3+2xVKGnc109rsyVA+?=
- =?us-ascii?Q?ANTcUZp3D4gXIUx0vboe9iaTcdRjQtGHXGiDd/gmV8G0ETVzod5EPZZa/RvL?=
- =?us-ascii?Q?uVGPPTLUDtbNnhiah9QrlAs+ckxlxR/sEl6WATyvWUMnpzkPpVcnwqkmCqSm?=
- =?us-ascii?Q?SHnfaffgr86JzoLbpY5pi/Mt2KFzVh7Ztf/e8aWvBsUDkf6ZANeq2xcnbJPf?=
- =?us-ascii?Q?EfNB22s5/Ybd4HlJW2aLDEdn+dS58ooSAqVg7Dp0FJ4RoQHIMW5RyVj4E+OV?=
- =?us-ascii?Q?N0tduD98if8uwRCHLsnMgyXSfm3x08esW6B5hae6MMt9QhZgvKZHJSj6FAXk?=
- =?us-ascii?Q?cDyzDsLJ1UmSmv+NXb1QqIP3D07TwQXL9ZJtPmbT1Sd5CF5iFfldcvh36jNV?=
- =?us-ascii?Q?ABQinfHOOJivk5rNgd0r8S8zqspDE6sXyRXIhkNRlZsgjYo06cQAQL/JeKGD?=
- =?us-ascii?Q?Z6fLRbVYey1aH7jh+Q0oMcsYfY1WdxERlkVLE9GfWzNODgLYaRQ3fYzMvj4f?=
- =?us-ascii?Q?fOiADOgA4yyhIPEdALRm63Q=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 211bf136-2aff-42bd-0ad9-08d9fdac2e47
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 06:57:00.5370
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pZ8rsO+h64OnCM8QuJSk7AG+ggNbGAiJTsyD2OVVd0DSLB0sGkqga62cyDT4TSdgYztzBjD6HPdfGQKjXgtQcA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR12MB2384
+References: <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
+ <CAAYoRsW4LqNvSZ3Et5fqeFcHQ9j9-0u9Y-LN9DmpCS3wG3+NWg@mail.gmail.com>
+ <20220228041228.GH4548@shbuild999.sh.intel.com> <11956019.O9o76ZdvQC@kreacher>
+ <20220301055255.GI4548@shbuild999.sh.intel.com> <CAJZ5v0jWUR__zn0=SDDecFct86z-=Y6v5fi37mMyW+zOBi7oWw@mail.gmail.com>
+ <CAAYoRsVLOcww0z4mp9TtGCKdrgeEiL_=FgrUO=rwkZAok4sQdg@mail.gmail.com>
+ <CAJZ5v0hK4zoOtgNQNFkJHC0XOiGsPGUPphHU5og44e_K4kGU9g@mail.gmail.com>
+ <CAAYoRsWN-h+fBAoocGmUFHDkOv2PL+6U59_ASBYH74j0orHaCQ@mail.gmail.com>
+ <CAJZ5v0iOOmRY3uC1-ZGQ30VysMuAjGum=Lt4tkqNUjop+ikqZw@mail.gmail.com> <CAAYoRsVs_CB-dBGShksmXATRP3oGnD6uU-xQdSPjkRER+j6fTQ@mail.gmail.com>
+In-Reply-To: <CAAYoRsVs_CB-dBGShksmXATRP3oGnD6uU-xQdSPjkRER+j6fTQ@mail.gmail.com>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Thu, 3 Mar 2022 22:59:02 -0800
+Message-ID: <CAAYoRsVnPa-aiKCju7Nz+cznyOo2sbioFks+gU7W7dqWyO8JJw@mail.gmail.com>
+Subject: Re: CPU excessively long times between frequency scaling driver calls
+ - bisected
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Feng Tang <feng.tang@intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        dsmythies <dsmythies@telus.net>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 04, 2022 at 02:07:24PM +0800, Su, Jinzhou (Joe) wrote:
-> Add amd pstate tracer tool introduction
-> 
-> Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
-> ---
->  Documentation/admin-guide/pm/amd-pstate.rst | 26 +++++++++++++++++++++
->  1 file changed, 26 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-> index 2f066df4ee9c..17dd7396e8fc 100644
-> --- a/Documentation/admin-guide/pm/amd-pstate.rst
-> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
-> @@ -369,6 +369,32 @@ governor (for the policies it is attached to), or by the ``CPUFreq`` core (for t
->  policies with other scaling governors).
->  
->  
-> +Tracer Tool
-> +-------------
-> +
-> +``amd_pstate_tracer.py`` can record and parse amd-pstate trace log, then
+On Thu, Mar 3, 2022 at 3:00 PM Doug Smythies <dsmythies@telus.net> wrote:
+> On Wed, Mar 2, 2022 at 11:01 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > On Wed, Mar 2, 2022 at 5:06 AM Doug Smythies <dsmythies@telus.net> wrote:
+> > > On Tue, Mar 1, 2022 at 9:34 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > > On Tue, Mar 1, 2022 at 6:18 PM Doug Smythies <dsmythies@telus.net> wrote:
+> > > > > On Tue, Mar 1, 2022 at 3:58 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > > > > On Tue, Mar 1, 2022 at 6:53 AM Feng Tang <feng.tang@intel.com> wrote:
+> > > > > > > On Mon, Feb 28, 2022 at 08:36:03PM +0100, Rafael J. Wysocki wrote:
+> > > > > ...
+> > > > > > > >
+> > > > > > > > However, it was a bit racy, so maybe it's good that it was not complete.
+> > > > > > > >
+> > > > > > > > Below is a new version.
+> > > > > > >
+> > > > > > > Thanks for the new version. I just gave it a try,  and the occasional
+> > > > > > > long delay of cpufreq auto-adjusting I have seen can not be reproduced
+> > > > > > > after applying it.
+> > > > > >
+> > > > > > OK, thanks!
+> > > > > >
+> > > > > > I'll wait for feedback from Dough, though.
+> > > > >
+> > > > > Hi Rafael,
+> > > > >
+> > > > > Thank you for your version 2 patch.
+> > > > > I screwed up an overnight test and will have to re-do it.
+> > > > > However, I do have some results.
+> > > >
+> > > > Thanks for testing it!
+> > > >
+> > > > > From reading the patch code, one worry was the
+> > > > > potential to drive down the desired/required CPU
+> > > > > frequency for the main periodic workflow, causing
+> > > > > overruns, or inability of the task to complete its
+> > > > > work before the next period.
+> > > >
+> > > > It is not clear to me why you worried about that just from reading the
+> > > > patch?  Can you explain, please?
+> > >
+> > > It is already covered below. And a couple of further tests
+> > > directly contradict my thinking.
+> > >
+> > > > > I have always had overrun
+> > > > > information, but it has never been relevant before.
+> > > > >
+> > > > > The other worry was if the threshold of
+> > > > > turbo/not turbo frequency is enough.
+> > > >
+> > > > Agreed.
+> > >
+> > > Just as an easy example and test I did this on
+> > > top of this patch ("rjw-3"):
+> > >
+> > > doug@s19:~/kernel/linux$ git diff
+> > > diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> > > index f878a4545eee..5cbdd7e479e8 100644
+> > > --- a/drivers/cpufreq/intel_pstate.c
+> > > +++ b/drivers/cpufreq/intel_pstate.c
+> > > @@ -1980,7 +1980,7 @@ static void intel_pstate_update_perf_ctl(struct
+> > > cpudata *cpu)
+> > >          * P-states to prevent them from getting back to the high frequency
+> > >          * right away after getting out of deep idle.
+> > >          */
+> > > -       cpuidle_update_retain_tick(pstate > cpu->pstate.max_pstate);
+> > > +       cpuidle_update_retain_tick(pstate > (cpu->pstate.max_pstate >> 1));
+> >
+> > OK, but cpu->pstate.max_pstate / 2 may be almost
+> > cpu->pstate.min_pstate which would be better to use here IMO.
+>
+> For my processor, i5-10600K, it works out to 2.05 GHz.
+> 4.1 GHz / 2, whereas min pstate would be 0.8 GHz
+>
+> > Or something like (cpu->pstate.max_pstate + cpu->pstate.min_pstate) /
+> > 2.  Can you try this one in particular?
+>
+> Which I agree would be a much better general case to use.
+> For my processor that would be 2.45 GHz.
+> (4.1 + 0.8) / 2.
+>
+> My code was just for testing, and I intended to go further than
+> we might want to for the final solution.
+>
+> I'm holding off on trying your suggestion, for now.
+>
+> > >         wrmsrl(MSR_IA32_PERF_CTL, pstate_funcs.get_val(cpu, pstate));
+> > >  }
+> > >
+> > > > > I do not know how to test any final solution
+> > > > > thoroughly, as so far I have simply found a
+> > > > > good enough problematic example.
+> > > > > We have so many years of experience with
+> > > > > the convenient multi second NMI forcing
+> > > > > lingering high pstate clean up. I'd keep it
+> > > > > deciding within it if the TSC stuff needs to be
+> > > > > executed or not.
+> > > > >
+> > > > > Anyway...
+> > > > >
+> > > > > Base Kernel 5.17-rc3.
+> > > > > "stock" : unmodified.
+> > > > > "revert" : with commit b50db7095fe reverted
+> > > > > "rjw-2" : with this version2 patch added.
+> > > > >
+> > > > > Test 1 (as before. There is no test 2, yet.):
+> > > > > 347 Hertz work/sleep frequency on one CPU while others do
+> > > > > virtually no load but enough to increase the requested pstate,
+> > > > > but at around 0.02 hertz aggregate.
+> > > > >
+> > > > > It is important to note the main load is approximately
+> > > > > 38.6% @ 2.422 GHz, or 100% at 0.935 GHz.
+> > > > > and almost exclusively uses idle state 2 (of
+> > > > > 4 total idle states)
+> > > > >
+> > > > > /sys/devices/system/cpu/cpu7/cpuidle/state0/name:POLL
+> > > > > /sys/devices/system/cpu/cpu7/cpuidle/state1/name:C1_ACPI
+> > > > > /sys/devices/system/cpu/cpu7/cpuidle/state2/name:C2_ACPI
+> > > > > /sys/devices/system/cpu/cpu7/cpuidle/state3/name:C3_ACPI
+> > > > >
+> > > > > Turbostat was used. ~10 samples at 300 seconds per.
+> > > > > Processor package power (Watts):
+> > > > >
+> > > > > Workflow was run for 1 hour each time or 1249201 loops.
+> > > > >
+> > > > > revert:
+> > > > > ave: 3.00
+> > > > > min: 2.89
+> > > > > max: 3.08
+> > > >
+> > > > I'm not sure what the above three numbers are.
+> > >
+> > > Processor package power, Watts.
+> >
+> > OK
+> >
+> > > > > ave freq: 2.422 GHz.
+> > > > > overruns: 1.
+> > > > > max overrun time: 113 uSec.
+> > > > >
+> > > > > stock:
+> > > > > ave: 3.63 (+21%)
+> > > > > min: 3.28
+> > > > > max: 3.99
+> > > > > ave freq: 2.791 GHz.
+> > > > > overruns: 2.
+> > > > > max overrun time: 677 uSec.
+> > > > >
+> > > > > rjw-2:
+> > > > > ave: 3.14 (+5%)
+> > > > > min: 2.97
+> > > > > max: 3.28
+> > > > > ave freq: 2.635 GHz
+> > > >
+> > > > I guess the numbers above could be reduced still by using a P-state
+> > > > below the max non-turbo one as a limit.
+> > >
+> > > Yes, and for a test I did "rjw-3".
+> > >
+> > > > > overruns: 1042.
+> > > > > max overrun time: 9,769 uSec.
+> > > >
+> > > > This would probably get worse then, though.
+> > >
+> > > Yes, that was my expectation, but not what happened.
+> > >
+> > > rjw-3:
+> > > ave: 3.09 watts
+> > > min: 3.01 watts
+> > > max: 31.7 watts
+> >
+> > Did you mean 3.17 here?  It would be hard to get the average of 3.09
+> > if the max was over 30 W.
+>
+> Yes, 3.17 watts was what I meant to write. Sorry for any confusion.
+>
+> > > ave freq: 2.42 GHz.
+> > > overruns: 12. (I did not expect this.)
+> > > Max overruns time: 621 uSec.
+> > >
+> > > Note 1: IRQ's increased by 74%. i.e. it was going in
+> > > and out of idle a lot more.
+> >
+> > That's because the scheduler tick is allowed to run a lot more often
+> > in the given workload with the changed test above.
+>
+> Agreed.
+>
+> > > Note 2: We know that processor package power
+> > > is highly temperature dependent. I forgot to let my
+> > > coolant cool adequately after the kernel compile,
+> > > and so had to throw out the first 4 power samples
+> > > (20 minutes).
+> > >
+> > > I retested both rjw-2 and rjw-3, but shorter tests
+> > > and got 0 overruns in both cases.
+> > >
+> > > > ATM I'm not quite sure why this happens, but you seem to have some
+> > > > insight into it, so it would help if you shared it.
+> > >
+> > > My insight seems questionable.
+> > >
+> > > My thinking was that one can not decide if the pstate needs to go
+> > > down or not based on such a localized look. The risk being that the
+> > > higher periodic load might suffer overruns. Since my first test did exactly
+> > > that, I violated my own "repeat all tests 3 times before reporting rule".
+> > > Now, I am not sure what is going on.
+> > > I will need more time to acquire traces and dig into it.
+> >
+> > It looks like the workload's behavior depends on updating the CPU
+> > performance scaling governor sufficiently often.
+> >
+> > Previously, that happened through the watchdog workflow that is gone
+> > now.  The rjw-2/3 patch is attempting to make up for that by letting
+> > the tick run more often.
+> >
+> > Admittedly, it is somewhat unclear to me why there are not so many
+> > overruns in the "stock" kernel test.
 
-amd-pstate -> ``amd-pstate``
+The CPU frequency is incorrectly held considerably higher than it
+should be. From intel_pstate_tracer data it looks as though
+a CPU that is idle is not giving up its vote into the PLL as to
+what the CPU frequency should be. However, the culprit isn't
+actually that CPU, but rather the uncore, which seems to lock
+to that same CPU's pstate. It doesn't unlock from that state
+until that CPU calls the intel_pstate driver, sometimes tens of
+seconds later. Then things will proceed as normal for a short time
+until that same CPU does the same thing and the cycle repeats.
 
-> +generate performance plots. This utility can be used to debug and tune the
-> +performance of the amd-pstate driver. The tracer tool needs to import intel
+If I lock the uncore at its minimum pstate, then everything is fine
+and I can not detect any difference between the "stock" and
+"reverted" kernels. Both give better power results than
+all previous tests. Processor package power is
+approximately 2.75 watts (it is late in my time zone, exact numbers
+at a later date).  No overruns.
 
-amd-pstate -> ``amd-pstate``
+The shorter maximum durations from the "reverted" kernel merely
+cleaned up the mess faster than the "stock" kernel resulting in
+less, but still excessive, power consumption.
 
-> +pstate tracer.
-> +
-> +Tracer tool located in linux/tools/power/x86/amd_pstate_tracer. It can be
+I only heard about uncore a couple of months ago from Srinivas [1]
 
-linux/tools/power/x86/amd_pstate_tracer -> ``linux/tools/power/x86/amd_pstate_tracer``
+[1] https://lore.kernel.org/linux-pm/1b2be990d5c31f62d9ce33aa2eb2530708d5607a.camel@linux.intel.com/
 
-> +used in two ways. If trace file is available, then directly parse the file
-> +with command ::
-> +
-> + ./amd_pstate_trace.py [-c cpus] -t <trace_file> -n <test_name>
-> +
-> +Or generate trace file with root privilege, then parse and plot with command ::
-> +
-> + sudo ./amd_pstate_trace.py [-c cpus] -n <test_name> -i <interval> [-m kbytes]
-> +
-> +The test result can be found in ``results/test_name``. Following is the example
-> +about part of the output. ::
-> +
-> + common_cpu  common_secs  common_usecs  min_perf  des_perf  max_perf  freq    mperf   apef    tsc       load   duration_ms  sample_num  elapsed_time  common_comm
-> + CPU_005     712          116384        39        49        166       0.7565  9645075 2214891 38431470  25.1   11.646       469         2.496         kworker/5:0-40
-> + CPU_006     712          116408        39        49        166       0.6769  8950227 1839034 37192089  24.06  11.272       470         2.496         kworker/6:0-1264
-> +
-> +
->  Reference
->  ===========
->  
-> -- 
-> 2.27.0
-> 
+The CPU that the uncore appears to lock to is not the same for
+each run of the test, but I know which CPU it was for that run of
+the test just by looking at the load graphs from the intel_pstate_tracer
+output. Thereafter, manual searching of the data reveals the anomalies.
+
+... Doug
+
+> Perhaps that's because the CPUs
+> > generally run fast enough in that case, so the P-state governor need
+> > not be updated so often for the CPU frequency to stay high and that's
+> > what determines the performance (and in turn that decides whether or
+> > not there are overruns and how often they occur).  The other side of
+> > the coin is that the updates don't occur often enough for the power
+> > draw to be reasonable, though.
+>
+> Agreed.
+>
+> I am observing higher CPU frequencies than expected, and can not
+> determine why in all cases. It is going to take several days before
+> I can either reply with more detail or disprove what I think I am observing.
+>
+> > Presumably, when the P-state governor gets updated more often (via the
+> > scheduler tick), but not often enough, it effectively causes the
+> > frequency (and consequently the performance) to drop over relatively
+> > long time intervals (and hence the increased occurrence of overruns).
+> > If it gets updated even more often (like in rjw-3), though, it causes
+> > the CPU frequency to follow the utilization more precisely and so the
+> > CPUs don't run "too fast" or "too slowly" for too long.
+>
+> Agreed.
+>
+> > > I also did a 1 hour intel_pstate_tracer test, with rjw-2, on an idle system
+> > > and saw several long durations. This was expected as this patch set
+> > > wouldn't change durations by more than a few jiffies.
+> > > 755 long durations (>6.1 seconds), and 327.7 seconds longest.
