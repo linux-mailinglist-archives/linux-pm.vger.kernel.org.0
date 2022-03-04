@@ -2,97 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B661E4CCD96
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Mar 2022 07:09:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E2F4CCDF2
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Mar 2022 07:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238299AbiCDGKi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Mar 2022 01:10:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
+        id S232482AbiCDGnZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Mar 2022 01:43:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238290AbiCDGKe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Mar 2022 01:10:34 -0500
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2049.outbound.protection.outlook.com [40.107.100.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450C547AFE;
-        Thu,  3 Mar 2022 22:09:45 -0800 (PST)
+        with ESMTP id S229889AbiCDGnX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Mar 2022 01:43:23 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2043.outbound.protection.outlook.com [40.107.223.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1334E3AA;
+        Thu,  3 Mar 2022 22:42:32 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A3aRqQW3dwj7w1kLOks0dNf1HIOtrBY8t+tec/Mc00yn26NlTPEPjCVwDADPJVg6cbHrxp5jtM+ef1UPmfljzW+07HKsTiCiQHU2jD2wIfyASow9Xi+AwdoG+wkl+Ho8/WEVN3wsYgypfb+brN6wDR03D4asUdXRj2TGSgqBipmzXZ5zAtA4mgBKKz7XHhPgYn9D0+xLIH2F0Sx7xoIkk87pMq/hz2Z3s/WQXxUI9Zaf9vYC7pf8dzfY4vuutJGBCSEIWzqH7JuG5yjK+pKL2POnAVf/1k40JG9/hUFDSuqcMqWFRS3IOehArm5vVRv5nSPj4tHY1MZAi0NYXamXBg==
+ b=STBGzAH8iAxHvdMl5yUfqo0vKRDFw6BPHPxftPLGdoYBwJkLwcmGRyA8ilf8lFKRRMyK5YypCxAhCZXfYJ8lQBeRSVHw5lpXxBVr2BOWwx+JgmL4lsKEr95al7+smbra1IcLkdE2+V1gKcTlURXy4uoKM4ajDvzoI51p60QcV3ZH3Z4NKhrjAluQvGSbEiKs5eiKgZmprJjFLAea8EO6PT5pPw5FTKXuZ5lydtsoepYDhbtRMCu36KDc86G4vsOcc9KVq6l9ltNOzKkw6dXzNXH5wDBRljVlb6V9A7XOwEeBQqda4NOQex4dTe6SvM6tlP1E/ngKApT9R+1EEIX1sA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rQSb8aXFwzJmaujcSCOmzQP9FuKfdMzEyXLIAc7XpV0=;
- b=be1SbxMfUYwGRLs7Y8nrzMz70t1ja3LGKKRtojR3SB49gZUlJLoIsGSdNhDfJ1M+OOTcUcZwZs0wTZJOt0tEXqjT4HoFlRBQHZhwks4wdIKWx86k1ZoT7dWf/ZxyHwxxXZaSQD7evws8Bv0ctJt6cNQ+KgRlunackMykd5D5plXUlOIvXBPRTVpMjnVz6+9TtyaT6LzrfFpIO6g0FstZVzwoH5ywz26nKIHZ8TEzENP96TKaOvnPJ3DnYQKzZfqwtH08mmPmNBaSxb/x3xyn3IVpn9YLqB8fqP5JRtzuEvMAxyct+0lrQ0vqCnVY6AmY7MoBsjWV0+6EOha+Z0ebkA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=rjwysocki.net smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
+ bh=2aiWRld1LQgEEA+a7dxMLE2dj2WmunMPJLCupQJoJNI=;
+ b=EOVeixejQMXWz+zaPy1Yg4DtpzRFH8BMuJ677xw+vZ/+eThRGiupXQThwojSYGGPyULImCJsEyL/A/KtckSbk4EJFAvRAqCfgpgj4yWclUvZ4ssRwaJVj3qYjn5OW6y4ETQz/LszqWNOAZgAyhGDvzrAyeK1cDwlxg4MgA/4KWXS8Giy6GcxDhShG31Y76Pe4q5Y+7Z7Gg108j9ZtA0+XjRpUnKu/zTBbKoMGkGhyB29e77FKWUNLBXTNrlwpSpYWA5KSFy4CGjt8/iqVhhrtG/ZEkvuFBVV5+7/XKaG1K0SCW9jsVAnPau3wx2pu9y52uJoAvwAg9fe53CWuk1D+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rQSb8aXFwzJmaujcSCOmzQP9FuKfdMzEyXLIAc7XpV0=;
- b=BQAdBX/2CX1BT3h2pGfhgJRfYyMkAzdl9qSzrtj/9KyO3p4zWN/g+duLDU3gGiBCteQfCE2utDU9FkAqFbUbaeyQv0T5vi5WxtBQtgaFOp+yHhYVGY2QQVfqlJFgkg0fakXrYStkGRLzDo+bVvxOIKnq92iClfXydRy3MKz1GC8=
-Received: from BN9PR03CA0937.namprd03.prod.outlook.com (2603:10b6:408:108::12)
- by DM4PR12MB5326.namprd12.prod.outlook.com (2603:10b6:5:39f::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.15; Fri, 4 Mar
- 2022 06:09:43 +0000
-Received: from BN8NAM11FT057.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:108:cafe::31) by BN9PR03CA0937.outlook.office365.com
- (2603:10b6:408:108::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14 via Frontend
- Transport; Fri, 4 Mar 2022 06:09:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT057.mail.protection.outlook.com (10.13.177.49) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5038.14 via Frontend Transport; Fri, 4 Mar 2022 06:09:42 +0000
-Received: from jinzhosu-System-Product-Name.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.18; Fri, 4 Mar 2022 00:09:36 -0600
-From:   Jinzhou Su <Jinzhou.Su@amd.com>
-To:     <rjw@rjwysocki.net>, <linux-pm@vger.kernel.org>,
-        <srinivas.pandruvada@linux.intel.com>, <dsmythies@telus.net>
-CC:     <ray.huang@amd.com>, <viresh.kumar@linaro.org>,
-        <todd.e.brandt@linux.intel.com>, <linux-kernel@vger.kernel.org>,
-        <deepak.sharma@amd.com>, <alexander.deucher@amd.com>,
-        <xiaojian.du@amd.com>, <perry.yuan@amd.com>, <li.meng@amd.com>,
-        <jinzhou.su@amd.com>, Jinzhou Su <Jinzhou.Su@amd.com>
-Subject: [PATCH V2 4/4] Documentation: amd-pstate: add tracer tool introduction
-Date:   Fri, 4 Mar 2022 14:07:24 +0800
-Message-ID: <20220304060724.314582-5-Jinzhou.Su@amd.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220304060724.314582-1-Jinzhou.Su@amd.com>
+ bh=2aiWRld1LQgEEA+a7dxMLE2dj2WmunMPJLCupQJoJNI=;
+ b=NbdlWpHWEP9RVoBJF9k3AgyhfxptRPlMO1TNI5UpzOOG8kdJiaCSU40ZE/ZpxEEJxVzomQRG/Tcn+cyVGDSukwyOLptOwHHTlSl4cA6JD7m+mNAnxJ/bADnJpvAqazICmlx7TPhhjYFslVgViZW1Xzogi/XemL++e2VUxlwYg4M=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
+ SA0PR12MB4414.namprd12.prod.outlook.com (2603:10b6:806:9a::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5038.14; Fri, 4 Mar 2022 06:42:30 +0000
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::8d40:da47:7312:64b8]) by DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::8d40:da47:7312:64b8%6]) with mapi id 15.20.5038.017; Fri, 4 Mar 2022
+ 06:42:29 +0000
+Date:   Fri, 4 Mar 2022 14:42:02 +0800
+From:   Huang Rui <ray.huang@amd.com>
+To:     "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>
+Cc:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "srinivas.pandruvada@linux.intel.com" 
+        <srinivas.pandruvada@linux.intel.com>,
+        "dsmythies@telus.net" <dsmythies@telus.net>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        "todd.e.brandt@linux.intel.com" <todd.e.brandt@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>
+Subject: Re: [PATCH V2 1/4] cpufreq: amd-pstate: Add more tracepoint for AMD
+ P-State module
+Message-ID: <YiG0uqa+Ho7XyuHJ@amd.com>
 References: <20220304060724.314582-1-Jinzhou.Su@amd.com>
+ <20220304060724.314582-2-Jinzhou.Su@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220304060724.314582-2-Jinzhou.Su@amd.com>
+X-ClientProxiedBy: SG2PR06CA0202.apcprd06.prod.outlook.com (2603:1096:4:1::34)
+ To DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2fb6b7e3-b999-48dd-139f-08d9fda592c5
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5326:EE_
-X-Microsoft-Antispam-PRVS: <DM4PR12MB532692CC6FE823E8D32E15E890059@DM4PR12MB5326.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 249ff8e6-bc66-4810-c216-08d9fdaa2729
+X-MS-TrafficTypeDiagnostic: SA0PR12MB4414:EE_
+X-Microsoft-Antispam-PRVS: <SA0PR12MB4414336B2559BC0F2A9B7A95EC059@SA0PR12MB4414.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6GxDl/LJ/yFzWT1+TY7cwUht9DF90jLkNuLemqy8kVoRVAa8oz81bNatTvTI5YKmUookYDuqctTJ1OACfMY38Z8WdDh8a50/4d2QSy2nt9DYmzTGP14ZPAsCOwAOJ4vHoiy2lgbLHxdj206td8L3TSne9M/N1eyk0kpiZslZp6Btv2ShI0ggr9I3KMi+oJQgc7YH+qqyMNO4nzMvW73AyDPYiZmBpvNDc/1Wk3/IM2FBiN1OUKcfzsrtqYLlgPerm5pwr8YUCw6lkFWHGqvsC1I6r+v1S1tnjZqnx5BqTBaOcTpZcLRvvp9OVb4Qw3bOQ8Dx0QhFJV8g9qGxlrymtcW+HYzk1x+442ZNF2cYjkn/5Tl0kv6ydIK/IcKefj1f4CmDHNsRTGQU5UUBEVpdqp+Gxh3W35kPzG2jCrmYllCB9g5xAspD7U2phALVmpdIx2lA3Z6I7h8JDwthRrguefDWddmMSTrdccnC/69fcR3TLGYysXQSNO0iZKKePitUsansHTZE2PnqiCUmG6N65sqc4BRwLhm8c2h0uxikkod0vAygRaKXap08GYyNTjOxr1Hvut/leUJdKKOf+nhFeM/VO4ddZxusIcHZl/v+WroVV6n1jyAV0pccrFC093r7YSDZNAzYeFwVrZC25rOnSFdIRJB9nXl/CEy4Gtfu+i6cdwIDjz7LMIaLvtjoJX2ky59SjgbBM8AExHXgZN7rxw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(316002)(82310400004)(8676002)(4326008)(2616005)(70206006)(508600001)(70586007)(86362001)(110136005)(6666004)(54906003)(36860700001)(47076005)(40460700003)(26005)(81166007)(186003)(1076003)(16526019)(426003)(356005)(336012)(83380400001)(7696005)(2906002)(8936002)(5660300002)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: X+gjnYCOX28CHJ3P2TzVa0R2TPFM7MjvN+IjwiFUIH6Ar05rvAyftWAM53d/IzK019hME4S6JdXzaxy/ujt9NpBgEiOh6+bhH/yDyNzcJGQ08ax4aDgEJAf9nheOIDY15SGM5ZOgUXybPAQWQfsar0NrozeMsH1gy/dWySReQOUdAC7HXCWh9/fEAf8glX2swHrqGi1OJo79c1OgA6IViKTHmeawZbjCsKgEBet88AM7grM6MWCWpF9BvC4Q6dPqhafg9nsl3lk9cwJqpfC23cjdwsYR51RUsrafTKfTXca3znY/PLNMnRgwXP56+MdL3LJ8cH5r6r3PxBoVKSZ2lbjPzM56l6I9IQH0+JJVmtwd/VooeBlhFenta4zuPd5Y4824hi2NcmxmOGAz0oqFuPI4okYVgJkXd5fO4S+5PuVf0ZpRQLjTYE7mngvmlx47zTvlDG1BWoVLdGwKpTuWmcckRmy246+7+KBdfLG2iyUgaNgswiDCIeiouPe8/7ex1PbHyoqp2I0CEJ+OWhJsPZaTNbdN4LmosWjmupLrcBs59t7U+nsbNISFkf7zCSlN7bbG9yZ6ErgPGqu6Z3ONfoWmBmOk1zK+WYM+D0Ee0gDc209rO/T8Tb1jK8aJMggColhlAlKeOmHRs0TbnQzIjmXNyPGt3boildfyUVPIIPbmgeeQPXX+WfW2S2A2JMArlCRJTOCw3ZPSFpwOfYImRg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(2906002)(6506007)(6666004)(36756003)(2616005)(6512007)(5660300002)(508600001)(316002)(6636002)(54906003)(37006003)(83380400001)(26005)(186003)(8936002)(8676002)(38100700002)(4326008)(6862004)(86362001)(66556008)(66946007)(66476007)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/dMPxkPgLySXwhQXlZfjTEV7vaHKuIFeAXLRZ4xN0NijZNVpZrEEsnxPunaN?=
+ =?us-ascii?Q?6/YCAgxmJfghjkoZgJanH53j7N8lrgQjiuPZ+YEOhxqiHgzsNgh1ksoPFVa8?=
+ =?us-ascii?Q?WRWxbZEHDgyGW1k11a64H5m9pUKNczIfpvXfUPnb0Hns9T4VNqkesntQhMuy?=
+ =?us-ascii?Q?6Ny73AskQGe7xXo7jk9RofjV1r3pTYPoTgRk/t7Z0zyGra6QkZ4OftlYAy2q?=
+ =?us-ascii?Q?ZvUYLrG/zRT7QHDq/n5/cTn36grDNwhltjLfSr92nQDccSwm2YtETljR5yHR?=
+ =?us-ascii?Q?t9sB5//NTSs6b24c0Bijqf2ii6RKuJSKcPuG1Xm1UrfDFBVNWoFUUItZzidb?=
+ =?us-ascii?Q?dSfzsMThDlorwblqCisv3O/soyTYATW2voo+snnt6g1p+H5kbtEn2HCwBeda?=
+ =?us-ascii?Q?YW4nnEkWN52vJw/N8LCWXw/ClbBrloXeRdSKM6kgZmo1hJ+jdVlyW4oKwrSv?=
+ =?us-ascii?Q?FdsnOHGJGfeqyWXiJ7F5UcJE5Q+rEdUepQNsL8e8F08gJ5vUstyGZc9Wi41N?=
+ =?us-ascii?Q?VKk0tsnAAym7mffm95eT1RDvJ1gOZnZJcE3SYG5eLWbGClJtWP2ip18P5bxc?=
+ =?us-ascii?Q?MQJ6jfDFYtXNsFOE6MOOwVvK2QnOKZ+eqzfd6eH7NKApo1KsPx2O9bYQjZEC?=
+ =?us-ascii?Q?kWBjM3MDX6UkB1TifX9u6/jrVc5hoNSd9mBBoYGXr9zmHbVtiHy3zjlDWToT?=
+ =?us-ascii?Q?wiQVQnHLKa9IB0KCgh/dPyw0Ge79HuMHeC3ANV2IW7H/UmGx+KtwckekZJTo?=
+ =?us-ascii?Q?4zlHlU/p5INx5Y9epzjlHnCor299BZK9v+2ggFYipQuY98k9+zZse/HQeXgB?=
+ =?us-ascii?Q?14gnAi18AKiOjT8+impWAAPxzRjF4QaQcLOmA+SYwRWF537L8pm6iVRGsvFn?=
+ =?us-ascii?Q?pFLV5GE4MDjmOLDVQVNMcvZC5py8Z23KFxls4O06ONHMzOQDT6k4/ehD+jHq?=
+ =?us-ascii?Q?tDz2kPn8GxixoP/u2eX+uLe3+350k8f84SLb5Wf0+WuorDXoNhX8RHXemOKQ?=
+ =?us-ascii?Q?qfyvBAfBklcv6PcImVLp/7q6PR7mzR+XRVKM92RrmDFXGJQ8wmIywL4ikJ1x?=
+ =?us-ascii?Q?9P2mSi9AXTsHWwHrCRpdR/GfZ9rDIeG3Wzur6sbH6e8mJGD8wowq2dZ9he2K?=
+ =?us-ascii?Q?Qu7zco0fD3tFe+zViPWWwRKpYynyOUg+U8OCivuo8JecZTghOS73QPa9GAer?=
+ =?us-ascii?Q?5wv7pdi+ttRZrmAjiPeonLb6hLA1aNIM4ItXgAFdb3hSAWO36eO36auUOVl1?=
+ =?us-ascii?Q?K7BVwyOs/OBYOYC6fZjI+8KHerzU+iNI4hDHi9rJNOBpWWsN6QnrooyCOO/G?=
+ =?us-ascii?Q?lDV0vhpCS5iRC2Q+gzLRJZQVHhGK1sazJcBs9BDOt0T6Y7s+pqYP2lUdtUty?=
+ =?us-ascii?Q?klH8ZRFI2xTwGC7cdyiHCVuTLx0RNzqubYbUnZxaw90AcnlriNqu5PERjvsn?=
+ =?us-ascii?Q?4NbR/sjiP9ZmZz7aLELaMG/cvtyKYG29Q6LWHtbojCVVUvHWalN2ki7vHEht?=
+ =?us-ascii?Q?rHnxX/ROzwda3Jm78yh1Ur6s/lLJp8/4PuSYWv173Lv86Oz/Flkpwxho1OlO?=
+ =?us-ascii?Q?RaQT6GT8RD/drUOTyQJhlKWn3K+Sqb0+GgjYxhpF+Sb5ZJNiveVOxG5ineS/?=
+ =?us-ascii?Q?iyIuNlo4vqA+2Lco1syLXiM=3D?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 06:09:42.2674
+X-MS-Exchange-CrossTenant-Network-Message-Id: 249ff8e6-bc66-4810-c216-08d9fdaa2729
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Mar 2022 06:42:29.7482
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2fb6b7e3-b999-48dd-139f-08d9fda592c5
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT057.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5326
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zIN3MtDT+Ht3lCXLOmgpSIldYha41vKD0kseCDd8es9S8ZtvGZO3dVlSx++AZnuMePqD3N6xnsxwgS+wyEwz5w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4414
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -103,50 +124,192 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add amd pstate tracer tool introduction
+On Fri, Mar 04, 2022 at 02:07:21PM +0800, Su, Jinzhou (Joe) wrote:
+> Add frequency, mperf, aperf and tsc in the trace. This can be used
+> to debug and tune the performance of AMD P-state driver.
+> 
+> Use the time difference between amd_pstate_update to calculate CPU
+> frequency. There could be sleep in arch_freq_get_on_cpu, so do not
+> use it here.
+> 
+> Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
+> Co-developed-by: Huang Rui <ray.huang@amd.com>
+> Signed-off-by: Huang Rui <ray.huang@amd.com>
 
-Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
----
- Documentation/admin-guide/pm/amd-pstate.rst | 26 +++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+Let's remove "Signed-off-by" of me, just leave "Co-developed-by".
 
-diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-index 2f066df4ee9c..17dd7396e8fc 100644
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -369,6 +369,32 @@ governor (for the policies it is attached to), or by the ``CPUFreq`` core (for t
- policies with other scaling governors).
- 
- 
-+Tracer Tool
-+-------------
-+
-+``amd_pstate_tracer.py`` can record and parse amd-pstate trace log, then
-+generate performance plots. This utility can be used to debug and tune the
-+performance of the amd-pstate driver. The tracer tool needs to import intel
-+pstate tracer.
-+
-+Tracer tool located in linux/tools/power/x86/amd_pstate_tracer. It can be
-+used in two ways. If trace file is available, then directly parse the file
-+with command ::
-+
-+ ./amd_pstate_trace.py [-c cpus] -t <trace_file> -n <test_name>
-+
-+Or generate trace file with root privilege, then parse and plot with command ::
-+
-+ sudo ./amd_pstate_trace.py [-c cpus] -n <test_name> -i <interval> [-m kbytes]
-+
-+The test result can be found in ``results/test_name``. Following is the example
-+about part of the output. ::
-+
-+ common_cpu  common_secs  common_usecs  min_perf  des_perf  max_perf  freq    mperf   apef    tsc       load   duration_ms  sample_num  elapsed_time  common_comm
-+ CPU_005     712          116384        39        49        166       0.7565  9645075 2214891 38431470  25.1   11.646       469         2.496         kworker/5:0-40
-+ CPU_006     712          116408        39        49        166       0.6769  8950227 1839034 37192089  24.06  11.272       470         2.496         kworker/6:0-1264
-+
-+
- Reference
- ===========
- 
--- 
-2.27.0
+> ---
+>  drivers/cpufreq/amd-pstate-trace.h | 22 ++++++++++-
+>  drivers/cpufreq/amd-pstate.c       | 59 +++++++++++++++++++++++++++++-
+>  2 files changed, 78 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate-trace.h b/drivers/cpufreq/amd-pstate-trace.h
+> index 647505957d4f..35f38ae67fb1 100644
+> --- a/drivers/cpufreq/amd-pstate-trace.h
+> +++ b/drivers/cpufreq/amd-pstate-trace.h
+> @@ -27,6 +27,10 @@ TRACE_EVENT(amd_pstate_perf,
+>  	TP_PROTO(unsigned long min_perf,
+>  		 unsigned long target_perf,
+>  		 unsigned long capacity,
+> +		 u64 freq,
+> +		 u64 mperf,
+> +		 u64 aperf,
+> +		 u64 tsc,
+>  		 unsigned int cpu_id,
+>  		 bool changed,
+>  		 bool fast_switch
+> @@ -35,6 +39,10 @@ TRACE_EVENT(amd_pstate_perf,
+>  	TP_ARGS(min_perf,
+>  		target_perf,
+>  		capacity,
+> +		freq,
+> +		mperf,
+> +		aperf,
+> +		tsc,
+>  		cpu_id,
+>  		changed,
+>  		fast_switch
+> @@ -44,6 +52,10 @@ TRACE_EVENT(amd_pstate_perf,
+>  		__field(unsigned long, min_perf)
+>  		__field(unsigned long, target_perf)
+>  		__field(unsigned long, capacity)
+> +		__field(unsigned long long, freq)
+> +		__field(unsigned long long, mperf)
+> +		__field(unsigned long long, aperf)
+> +		__field(unsigned long long, tsc)
+>  		__field(unsigned int, cpu_id)
+>  		__field(bool, changed)
+>  		__field(bool, fast_switch)
+> @@ -53,15 +65,23 @@ TRACE_EVENT(amd_pstate_perf,
+>  		__entry->min_perf = min_perf;
+>  		__entry->target_perf = target_perf;
+>  		__entry->capacity = capacity;
+> +		__entry->freq = freq;
+> +		__entry->mperf = mperf;
+> +		__entry->aperf = aperf;
+> +		__entry->tsc = tsc;
+>  		__entry->cpu_id = cpu_id;
+>  		__entry->changed = changed;
+>  		__entry->fast_switch = fast_switch;
+>  		),
+>  
+> -	TP_printk("amd_min_perf=%lu amd_des_perf=%lu amd_max_perf=%lu cpu_id=%u changed=%s fast_switch=%s",
+> +	TP_printk("amd_min_perf=%lu amd_des_perf=%lu amd_max_perf=%lu freq=%llu mperf=%llu aperf=%llu tsc=%llu cpu_id=%u changed=%s fast_switch=%s",
+>  		  (unsigned long)__entry->min_perf,
+>  		  (unsigned long)__entry->target_perf,
+>  		  (unsigned long)__entry->capacity,
+> +		  (unsigned long long)__entry->freq,
+> +		  (unsigned long long)__entry->mperf,
+> +		  (unsigned long long)__entry->aperf,
+> +		  (unsigned long long)__entry->tsc,
+>  		  (unsigned int)__entry->cpu_id,
+>  		  (__entry->changed) ? "true" : "false",
+>  		  (__entry->fast_switch) ? "true" : "false"
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 9ce75ed11f8e..7be38bc6a673 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -65,6 +65,18 @@ MODULE_PARM_DESC(shared_mem,
+>  
+>  static struct cpufreq_driver amd_pstate_driver;
+>  
+> +/**
+> + * struct  amd_aperf_mperf
+> + * @aperf: actual performance frequency clock count
+> + * @mperf: maximum performance frequency clock count
+> + * @tsc:   time stamp counter
+> + */
+> +struct amd_aperf_mperf {
+> +	u64 aperf;
+> +	u64 mperf;
+> +	u64 tsc;
+> +};
+> +
+>  /**
+>   * struct amd_cpudata - private CPU data for AMD P-State
+>   * @cpu: CPU number
+> @@ -81,6 +93,9 @@ static struct cpufreq_driver amd_pstate_driver;
+>   * @min_freq: the frequency that mapped to lowest_perf
+>   * @nominal_freq: the frequency that mapped to nominal_perf
+>   * @lowest_nonlinear_freq: the frequency that mapped to lowest_nonlinear_perf
+> + * @cur: Difference of Aperf/Mperf/tsc count between last and current sample
+> + * @prev: Last Aperf/Mperf/tsc count value read from register
+> + * @freq: current cpu frequency value
+>   * @boost_supported: check whether the Processor or SBIOS supports boost mode
+>   *
+>   * The amd_cpudata is key private data for each CPU thread in AMD P-State, and
+> @@ -102,6 +117,10 @@ struct amd_cpudata {
+>  	u32	nominal_freq;
+>  	u32	lowest_nonlinear_freq;
+>  
+> +	struct amd_aperf_mperf cur;
+> +	struct amd_aperf_mperf prev;
+> +
+> +	u64 freq;
+>  	bool	boost_supported;
+>  };
+>  
+> @@ -211,6 +230,39 @@ static inline void amd_pstate_update_perf(struct amd_cpudata *cpudata,
+>  					    max_perf, fast_switch);
+>  }
+>  
+> +static inline bool amd_pstate_sample(struct amd_cpudata *cpudata)
+> +{
+> +	u64 aperf, mperf, tsc;
+> +	unsigned long flags;
+> +
+> +	local_irq_save(flags);
+> +	rdmsrl(MSR_IA32_APERF, aperf);
+> +	rdmsrl(MSR_IA32_MPERF, mperf);
+> +	tsc = rdtsc();
+> +
+> +	if (cpudata->prev.mperf == mperf || cpudata->prev.tsc == tsc) {
+> +		local_irq_restore(flags);
+> +		return false;
+> +	}
+> +
+> +	local_irq_restore(flags);
+> +
+> +	cpudata->cur.aperf = aperf;
+> +	cpudata->cur.mperf = mperf;
+> +	cpudata->cur.tsc =  tsc;
+> +	cpudata->cur.aperf -= cpudata->prev.aperf;
+> +	cpudata->cur.mperf -= cpudata->prev.mperf;
+> +	cpudata->cur.tsc -= cpudata->prev.tsc;
+> +
+> +	cpudata->prev.aperf = aperf;
+> +	cpudata->prev.mperf = mperf;
+> +	cpudata->prev.tsc = tsc;
+> +
+> +	cpudata->freq = div64_u64((cpudata->cur.aperf * cpu_khz), cpudata->cur.mperf);
+> +
+> +	return true;
+> +}
+> +
+>  static void amd_pstate_update(struct amd_cpudata *cpudata, u32 min_perf,
+>  			      u32 des_perf, u32 max_perf, bool fast_switch)
+>  {
+> @@ -226,8 +278,11 @@ static void amd_pstate_update(struct amd_cpudata *cpudata, u32 min_perf,
+>  	value &= ~AMD_CPPC_MAX_PERF(~0L);
+>  	value |= AMD_CPPC_MAX_PERF(max_perf);
+>  
+> -	trace_amd_pstate_perf(min_perf, des_perf, max_perf,
+> -			      cpudata->cpu, (value != prev), fast_switch);
+> +	if (trace_amd_pstate_perf_enabled() && amd_pstate_sample(cpudata)) {
+> +		trace_amd_pstate_perf(min_perf, des_perf, max_perf, cpudata->freq,
+> +			cpudata->cur.mperf, cpudata->cur.aperf, cpudata->cur.tsc,
+> +				cpudata->cpu, (value != prev), fast_switch);
 
+How about using struct amd_aperf_mperf pointer as one input:
+
+trace_amd_pstate_perf(min_perf, des_perf, max_perf, &cpudata->cur, ...);
+
+You can refer the members of struct amd_aperf_mperf in the
+amd-pstate-trace.h:
+
+	__entry->mperf = cur->mperf;
+	__entry->aperf = cur->aperf;
+	__entry->tsc = cur->tsc;
+
+Thanks,
+Ray
