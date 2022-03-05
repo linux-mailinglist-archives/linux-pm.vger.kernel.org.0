@@ -2,53 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA3214CE004
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Mar 2022 23:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 539644CE3F1
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Mar 2022 10:21:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbiCDWBm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Mar 2022 17:01:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57384 "EHLO
+        id S229913AbiCEJVz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 5 Mar 2022 04:21:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiCDWBl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Mar 2022 17:01:41 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D6327C79E;
-        Fri,  4 Mar 2022 14:00:52 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 5F7871F46F4F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1646431251;
-        bh=5Rnh1wNpzkK58N3hpQJbE+uI0UsASxwgycbiMvIBxog=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P6kq/hX7CnyJByBI6IWTdsTt2mMQp5tYVfQhWWg/YEfLIUr0INxC68pGNDxcNb5lU
-         lTBIgCDmJI+ldm1BO1h4hc9mOd84rJVwEnA+qPm4+WBQyjBU9ekLmhUoCs7T/ToMEt
-         /DqLlo+kYaydD8kcw8wye8jw1MNLusB1589vnkW15Jv17kFWHrv+PC0d+bIfTXjTFC
-         NJmYJstYrj8SwMD8/blCoK/GOi2HHv9Yn5gxj3i+F1AoUJU/3oFtbboYdLY4S7GRN5
-         qrXC3p9515zfG8snWD3sA0WvERNxOZdaohTM4yIpScQdDwrW47uhPthYGY22Xvi531
-         CGq/j39cRS70w==
-Received: by mercury (Postfix, from userid 1000)
-        id 45F021060602; Fri,  4 Mar 2022 23:00:49 +0100 (CET)
-Date:   Fri, 4 Mar 2022 23:00:49 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Jack Wu <wjack@google.com>
-Cc:     kernel-team@android.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, AleX Pelosi <apelosi@google.com>,
-        Vincent Wang <vincentwang@google.com>,
-        Ken Yang <yangken@google.com>
-Subject: Re: [PATCH v1] power: supply: add dock type
-Message-ID: <20220304220049.y7klqsgqinonsojx@mercury.elektranox.org>
-References: <20220104122500.338870-1-wjack@google.com>
- <CAHnoD8CtN6QMUDnd+A+WqG__CL0njSqYvgCu0oKTiieQGaE88g@mail.gmail.com>
- <CAHnoD8DPRvBXP04H3zzBsefvzvfzVuk271-+WAtYV_2KJBbFEw@mail.gmail.com>
+        with ESMTP id S229904AbiCEJVz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 5 Mar 2022 04:21:55 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C3314236E
+        for <linux-pm@vger.kernel.org>; Sat,  5 Mar 2022 01:21:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1646472065; x=1678008065;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=QDyX2sp5NV23hA4PXAgEC36x+xa2bhE9auGVLUjYq/Q=;
+  b=a5Nv7/v1m2GCs5gLkf8tjWqIZTerV0USXuSAg1d3u90AQNh1yJGWPmPx
+   DWyBk99DaLLVq6KCha9MhCVaKBSPTcY7TiZue1LQQJ1DANV6OIJ+YySCN
+   1/ZDTU4uZxSrPrDC0QTJSN9zfGuMG9wqryrjYQa9Jg/vEOB71ysYLFHLo
+   hkV2Nrrf9NsrxIQkgnO1HjBMJyWmWVgKPpd0TqcsQ8KIk/JsjngNxnpyT
+   ZBhnFV3L9zbhlb4F4Kw5ybXOOiJn7eCgD0ppdImW+C3tW2HuP7Flb26A4
+   TtL1fzi+R+1l9aPEU722sXcdE8U2j/7SMaNoWEQoSYIqyDCjPir6Vn5Qg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10276"; a="340562529"
+X-IronPort-AV: E=Sophos;i="5.90,157,1643702400"; 
+   d="scan'208";a="340562529"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2022 01:21:05 -0800
+X-IronPort-AV: E=Sophos;i="5.90,157,1643702400"; 
+   d="scan'208";a="552523817"
+Received: from weizhiba-mobl1.ccr.corp.intel.com (HELO chenyu5-mobl1) ([10.249.173.209])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2022 01:21:02 -0800
+Date:   Sat, 5 Mar 2022 17:20:57 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Kin Cho <kin.cho@oracle.com>
+Cc:     Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Artem Bityutskiy <dedekind1@gmail.com>,
+        Linux PM Mailing List <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH] tools/power/turbostat: Remove Package C6 Retention on
+ Ice Lake Server
+Message-ID: <20220305092057.GA8207@chenyu5-mobl1>
+References: <20210504145234.4103405-1-artem.bityutskiy@linux.intel.com>
+ <01dd04dd-a2ad-6ee2-4a8f-f801908e4299@oracle.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zintmcb5spjuabi3"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAHnoD8DPRvBXP04H3zzBsefvzvfzVuk271-+WAtYV_2KJBbFEw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <01dd04dd-a2ad-6ee2-4a8f-f801908e4299@oracle.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,116 +63,31 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Cho,
+On Fri, Mar 04, 2022 at 01:35:17PM -0800, Kin Cho wrote:
+> Hi,
+> 
+> This patch (25368d7cefcd87a94ccabcc6f9f31796607bbe4e) has affected Sapphire
+> Rapids support.
+> Specifically Pkg%pc2 and Pkg%pc6 are now missing on Sapphire Rapids (with
+> package C6 retention).
+> See below for a diff of turbostat --list output with and without 25368d7.
+> 
+> -kin
+> 
+> --- turbostat-0304_115100-v5.12-10-g25368d7cefcd    2022-03-04
+> 11:51:00.184727582 -0800
+> +++ turbostat-0304_124741-v5.12-10-g25368d7cefcd--25368d7 2022-03-04
+> 12:47:41.543801798 -0800
+> @@ -1,2 +1,2 @@
+>  turbostat version 21.03.12 - Len Brown <lenb@kernel.org>
+> -usec,Time_Of_Day_Seconds,Package,Core,CPU,APIC,X2APIC,Avg_MHz,Busy%,Bzy_MHz,TSC_MHz,IPC,IRQ,SMI,POLL,C1ACPI,C2ACPI,POLL%,C1ACPI%,C2ACPI%,CPU%c1,CPU%c6,CoreTmp,PkgTmp,PkgWatt,RAMWatt,PKG_%,RAM_%
+> +usec,Time_Of_Day_Seconds,Package,Core,CPU,APIC,X2APIC,Avg_MHz,Busy%,Bzy_MHz,TSC_MHz,IPC,IRQ,SMI,POLL,C1ACPI,C2ACPI,POLL%,C1ACPI%,C2ACPI%,CPU%c1,CPU%c6,CoreTmp,PkgTmp,Pkg%pc2,Pkg%pc6,PkgWatt,RAMWatt,PKG_%,RAM_%
+>
+My guess is that the max limited package c-state exposed might be '3' rather than '2'.
+Artem has previously found this issue on ICX and there is a patch:
+https://patchwork.kernel.org/project/linux-pm/patch/20211004105224.3145916-1-dedekind1@gmail.com/
+would you please help check if that helps?
 
---zintmcb5spjuabi3
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-When you send a new patch version you should
-
-a) increase patch version (this is v2)
-b) add a changelog below the --- marker
-
-Apart from that this submission is still missing a
-driver using the newly introduced POWER_SUPPLY_TYPE_DOCK.
-Mainline kernel ABI is only extended for mainline kernel
-users.
-
-Thanks,
-
--- Sebastian
-
-On Mon, Feb 14, 2022 at 02:22:52PM +0800, Jack Wu wrote:
-> + Ken
->=20
-> Jack Wu <wjack@google.com> =E6=96=BC 2022=E5=B9=B41=E6=9C=887=E6=97=A5 =
-=E9=80=B1=E4=BA=94 =E4=B8=8A=E5=8D=8811:37=E5=AF=AB=E9=81=93=EF=BC=9A
-> >
-> > + Alex and Vincent
-> >
-> > Jack Wu <wjack@google.com> =E6=96=BC 2022=E5=B9=B41=E6=9C=884=E6=97=A5 =
-=E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=888:25=E5=AF=AB=E9=81=93=EF=BC=9A
-> > >
-> > > Add dock power_supply_type for the drivers which supports dock can
-> > > register a power supply class device with POWER_SUPPLY_TYPE_DOCK.
-> > >
-> > > Signed-off-by: Jack Wu <wjack@google.com>
-> > > ---
-> > >  Documentation/ABI/testing/sysfs-class-power | 2 +-
-> > >  drivers/power/supply/power_supply_sysfs.c   | 1 +
-> > >  include/linux/power_supply.h                | 1 +
-> > >  3 files changed, 3 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentat=
-ion/ABI/testing/sysfs-class-power
-> > > index f7904efc4cfa..854299a0d36f 100644
-> > > --- a/Documentation/ABI/testing/sysfs-class-power
-> > > +++ b/Documentation/ABI/testing/sysfs-class-power
-> > > @@ -34,7 +34,7 @@ Description:
-> > >                 Describes the main type of the supply.
-> > >
-> > >                 Access: Read
-> > > -               Valid values: "Battery", "UPS", "Mains", "USB", "Wire=
-less"
-> > > +               Valid values: "Battery", "UPS", "Mains", "USB", "Wire=
-less", "Dock"
-> > >
-> > >  **Battery and USB properties**
-> > >
-> > > diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/powe=
-r/supply/power_supply_sysfs.c
-> > > index c3d7cbcd4fad..53494b56bbb4 100644
-> > > --- a/drivers/power/supply/power_supply_sysfs.c
-> > > +++ b/drivers/power/supply/power_supply_sysfs.c
-> > > @@ -57,6 +57,7 @@ static const char * const POWER_SUPPLY_TYPE_TEXT[] =
-=3D {
-> > >         [POWER_SUPPLY_TYPE_USB_PD_DRP]          =3D "USB_PD_DRP",
-> > >         [POWER_SUPPLY_TYPE_APPLE_BRICK_ID]      =3D "BrickID",
-> > >         [POWER_SUPPLY_TYPE_WIRELESS]            =3D "Wireless",
-> > > +       [POWER_SUPPLY_TYPE_DOCK]                =3D "Dock",
-> > >  };
-> > >
-> > >  static const char * const POWER_SUPPLY_USB_TYPE_TEXT[] =3D {
-> > > diff --git a/include/linux/power_supply.h b/include/linux/power_suppl=
-y.h
-> > > index 9ca1f120a211..fa80eaa54242 100644
-> > > --- a/include/linux/power_supply.h
-> > > +++ b/include/linux/power_supply.h
-> > > @@ -187,6 +187,7 @@ enum power_supply_type {
-> > >         POWER_SUPPLY_TYPE_USB_PD_DRP,           /* PD Dual Role Port =
-*/
-> > >         POWER_SUPPLY_TYPE_APPLE_BRICK_ID,       /* Apple Charging Met=
-hod */
-> > >         POWER_SUPPLY_TYPE_WIRELESS,             /* Wireless */
-> > > +       POWER_SUPPLY_TYPE_DOCK,                 /* Dock Charging */
-> > >  };
-> > >
-> > >  enum power_supply_usb_type {
-> > > --
-> > > 2.34.1.448.ga2b2bfdf31-goog
-> > >
-
---zintmcb5spjuabi3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIijAsACgkQ2O7X88g7
-+ppiHxAAn+nd3ao3lUWSVtE/0lz3Qm9QUpBKiJlyfBL5GyILEh8MbWLA4E2wI0E9
-ivqQb07ZWSX3mYUanGKibelr1dftw3gWruQZZWtN2OPaDReK3rHFen3ydueoMmzu
-IA6hEG20GrO1ZcJI3VBtdLZb6yxy3D23z4xG3NJ1xr/be+jaK6hHfBPV5ZZJZ4Ma
-psPfxPKU/8jd8ry1BbLx9TmT4SCAihwnFF1bdgDf622017awCxK4KWx5GK5/QGBT
-jd1wb/0aH3vMEnnHDoxS++0G5aDw0Ga+azsguGbsc7Z8SuR0/pqpIx1VjsIHhcwn
-yMSVxnHUTvoz33f3CNon7cZTXoFrjNn9okK0MowyZt06XEmz36dgbJfGI7Z9al1g
-Ycyn+4hHyXWslPv6ekeDWa4ISkR4Rt61XnwALGD2toNEuwoG41gT2nDLpM3/QqpU
-CA3+5e/dml56mJxopaMGBqbtE69VixwNLyaxmnidmrnJRaWwegHCchAGQO+ghAxz
-8Vc+VWt0Yh592FiVsdTKvOyKNxvBErfxQNs+BUM9olGWSwJhgW/rQOt6fSEwe8Be
-u6mzPwrMQU9wvG+POjO7USfQ5GCwowOwFSmfvamS3RMW8WIuT/3RbxmQcdSsZei0
-miDsBtfJDFtTXJ8AlSi617gi0FKdqQMjugfOzlV9gun1xaUNH5c=
-=rCH5
------END PGP SIGNATURE-----
-
---zintmcb5spjuabi3--
+thanks,
+Chenyu
