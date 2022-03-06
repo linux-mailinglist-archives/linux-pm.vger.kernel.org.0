@@ -2,163 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9544CE966
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Mar 2022 06:56:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56B4B4CE9A6
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Mar 2022 07:51:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbiCFFxV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 6 Mar 2022 00:53:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
+        id S233040AbiCFGwG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 6 Mar 2022 01:52:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbiCFFxV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Mar 2022 00:53:21 -0500
-Received: from mail-41104.protonmail.ch (mail-41104.protonmail.ch [185.70.41.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E74226D4
-        for <linux-pm@vger.kernel.org>; Sat,  5 Mar 2022 21:52:27 -0800 (PST)
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        by mail-41104.protonmail.ch (Postfix) with ESMTPS id 4KB9j62wBGz4xFfc
-        for <linux-pm@vger.kernel.org>; Sun,  6 Mar 2022 05:52:26 +0000 (UTC)
-Authentication-Results: mail-41104.protonmail.ch;
-        dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="R3pLfFH/"
-Date:   Sun, 06 Mar 2022 05:52:18 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-        s=protonmail2; t=1646545941;
-        bh=jlHvcCrmUJa3Tgqz2MiMzMxuvjdRv3ydQ/NyZc+5Npo=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID;
-        b=R3pLfFH/NetUj6mPXDbbD8SQJCLX+gkdh8pi4P3/DIfBMMoccXIOkQbvv+qYorcPh
-         I0G8ftBHaEgMVeDFu3BTku24W+oBLibBJPtOVoUBU0NnOmu51fML9+ehXtb9JQh4Ta
-         oC762S1ljBSBDGwoOkdZqNIf5P8cFobNBN/iHj9Fo32MPrGEoncVBCo27JH+sf2JYI
-         8jCO8VpwC7EL6yGIe8qRgQusJ8f8JYLYXgRPHmBlsv5QxjSwAZ/GFAOlTfhCArEbo7
-         vBLFOaeDfwLxqD7kW0I84uOeZiRSt5BldujmMME7MDG/LCB51O/Q8445jsh26867vE
-         VhRsQznCbra2A==
-To:     rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com
-From:   David Cohen <dacohen@pm.me>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Cohen <dacohen@pm.me>
-Reply-To: David Cohen <dacohen@pm.me>
-Subject: [PATCH] PM: fix dynamic debug within pm_pr_debug()
-Message-ID: <20220306055207.386821-1-dacohen@pm.me>
+        with ESMTP id S233073AbiCFGvz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Mar 2022 01:51:55 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C886FA3E
+        for <linux-pm@vger.kernel.org>; Sat,  5 Mar 2022 22:51:01 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id 3so2475756lfr.7
+        for <linux-pm@vger.kernel.org>; Sat, 05 Mar 2022 22:51:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=VaaSLAJ+hgNGNq49WyPsh3ndDLo+mnrYcswrOHpJSv8=;
+        b=KDgAx1nMZI4VA0728iAuqALj69hyn7X0WLLUiz2m+OH09NDtWJqkn0K0IjhaqXccDL
+         nYA9IS56U+BvEYDp5ZuYOTDJ28DkbGQXOo4nCoFRXwOq8btCUGBKve+nLdvXGAtQGfZd
+         8/3HmQyIohZytZNIAaZ2YSJ+VGfF2cuAbX+92kqJIy7dPjcCYPV+qxcIVHj5OJkNioe8
+         RnnPJV63I7FofbcYlKCR7cawwHR+Gyj/OksLFoNh7LOBENUnMHRRrWfgS+R5N0DbQgRd
+         FM7OvtlHYW5haJ9bCovh/xFv8pj40s/F/HFWyLhlvxnDTkjGlvvz7xTkeBicCtgptiHh
+         fIkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=VaaSLAJ+hgNGNq49WyPsh3ndDLo+mnrYcswrOHpJSv8=;
+        b=0/12BDuC+ASgPm0mjf6h4ZfbydES/Di5c1kN6sTE6rkRgtDeCGQ5oRyxs00K7XfMTv
+         PB3QU1DsGWlWGE8FLCtmI4c2f+Lm0BBEROEMYxT6xyevLChyCEcl3Gz5AihnaZWWxZo1
+         6eOFc4YUD8tTLOE42xTnW1xWDJLoaOx3grIJsDZwyFFaHbIBDxGflE8xFs8+izGwKlAr
+         7g4225sFQyq1UrJP+eMPlp8m7/Fx5Xd4fq5brFMufr7En9uSlofqFIUZnC2j4S79y4EA
+         mHayjLncsl0XpwwgsEgLx5dP/duxT/Xnkl9p3b3hbzKDVg3eeT+PQnGGIQIE+pVnMQip
+         mfng==
+X-Gm-Message-State: AOAM532vmHxbMmL7silz0xd7rfboRpuf5mPjAYhHE8iBKn9hQYd+l+vR
+        4L33upMPVxf4XRPdtblrLQtmMiJCYn/jSw7ZJ/gtheoHg+M=
+X-Google-Smtp-Source: ABdhPJzq04i8VJyC6uwySEx5tzgrtxCg/XL0hqdBTWFWm66/zQAuy3m2ubrZV75jrYUP9jvmG0PdhfRUhLuebg8/B7w=
+X-Received: by 2002:a2e:94c7:0:b0:247:de4e:e9bc with SMTP id
+ r7-20020a2e94c7000000b00247de4ee9bcmr2397951ljh.397.1646549448778; Sat, 05
+ Mar 2022 22:50:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Reply-To: mrs.susanelwoodhara17@gmail.com
+Sender: mrs.arawyann@gmail.com
+Received: by 2002:ab3:7d89:0:0:0:0:0 with HTTP; Sat, 5 Mar 2022 22:50:48 -0800 (PST)
+From:   Mrs Susan Elwood Hara <mrs.susanelwoodhara17@gmail.com>
+Date:   Sun, 6 Mar 2022 06:50:48 +0000
+X-Google-Sender-Auth: NOWRSnt_sskMD3s295a30bcHvEs
+Message-ID: <CACppo47TD9J4Sy+vaJu1wXHqd88WqFwMNn6OdkY1khwXu3TuFw@mail.gmail.com>
+Subject: GOD BLESS YOU AS YOU REPLY URGENTLY
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently, pm_pr_debug() and pm_deferred_pr_debug() use __pm_pr_debug()
-to filter pm debug messages based on pm_debug_messages_on flag.
-According to __pm_pr_debug() implementation, pm_deferred_pr_debug()
-indirectly calls printk_deferred() within __pm_pr_debug() which doesn't
-support dynamic debug, but pm_pr_debug() indirectly calls pr_debug()
-which does support dynamic debug.
+GOD BLESS YOU AS YOU REPLY URGENTLY
 
-The problem is if we enable/disable dynamic debug inside __pm_pr_debug()
-it will affect all pm_pr_debug() calls at once, so we can't individually
-control them.
-
-This patch changes __pm_pr_debug() implementation into macros to make
-pr_debug() to be directly called by all pr_pm_debug() cases. As a direct
-side effect all pr_pm_debug() can be individually controlled by dynamic
-debug feature.
-
-Signed-off-by: David Cohen <dacohen@pm.me>
----
- include/linux/suspend.h | 19 +++++++++++++++----
- kernel/power/main.c     | 29 -----------------------------
- 2 files changed, 15 insertions(+), 33 deletions(-)
-
-diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-index 300273ff40cc..d727d3c867e3 100644
---- a/include/linux/suspend.h
-+++ b/include/linux/suspend.h
-@@ -542,22 +542,33 @@ static inline void unlock_system_sleep(void) {}
- #ifdef CONFIG_PM_SLEEP_DEBUG
- extern bool pm_print_times_enabled;
- extern bool pm_debug_messages_on;
--extern __printf(2, 3) void __pm_pr_dbg(bool defer, const char *fmt, ...);
-+#define __pm_pr_dbg(fmt, ...)=09=09=09=09=09\
-+=09do {=09=09=09=09=09=09=09\
-+=09=09if (pm_debug_messages_on)=09=09=09\
-+=09=09=09pr_debug("PM: " fmt, ##__VA_ARGS__);=09\
-+=09} while(0)
-+#define __pm_deferred_pr_dbg(fmt, ...)=09=09=09=09\
-+=09do {=09=09=09=09=09=09=09\
-+=09=09if (pm_debug_messages_on)=09=09=09\
-+=09=09=09printk_deferred(KERN_DEBUG "PM: " fmt, ##__VA_ARGS__);=09\
-+=09} while(0)
- #else
- #define pm_print_times_enabled=09(false)
- #define pm_debug_messages_on=09(false)
-
- #include <linux/printk.h>
-
--#define __pm_pr_dbg(defer, fmt, ...) \
-+#define __pm_pr_dbg(fmt, ...) \
-+=09no_printk(KERN_DEBUG fmt, ##__VA_ARGS__)
-+#define __pm_deferred_pr_dbg(fmt, ...) \
- =09no_printk(KERN_DEBUG fmt, ##__VA_ARGS__)
- #endif
-
- #define pm_pr_dbg(fmt, ...) \
--=09__pm_pr_dbg(false, fmt, ##__VA_ARGS__)
-+=09__pm_pr_dbg(fmt, ##__VA_ARGS__)
-
- #define pm_deferred_pr_dbg(fmt, ...) \
--=09__pm_pr_dbg(true, fmt, ##__VA_ARGS__)
-+=09__pm_deferred_pr_dbg(fmt, ##__VA_ARGS__)
-
- #ifdef CONFIG_PM_AUTOSLEEP
-
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index 7e646079fbeb..5242bf2ee469 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -545,35 +545,6 @@ static int __init pm_debug_messages_setup(char *str)
- }
- __setup("pm_debug_messages", pm_debug_messages_setup);
-
--/**
-- * __pm_pr_dbg - Print a suspend debug message to the kernel log.
-- * @defer: Whether or not to use printk_deferred() to print the message.
-- * @fmt: Message format.
-- *
-- * The message will be emitted if enabled through the pm_debug_messages
-- * sysfs attribute.
-- */
--void __pm_pr_dbg(bool defer, const char *fmt, ...)
--{
--=09struct va_format vaf;
--=09va_list args;
--
--=09if (!pm_debug_messages_on)
--=09=09return;
--
--=09va_start(args, fmt);
--
--=09vaf.fmt =3D fmt;
--=09vaf.va =3D &args;
--
--=09if (defer)
--=09=09printk_deferred(KERN_DEBUG "PM: %pV", &vaf);
--=09else
--=09=09printk(KERN_DEBUG "PM: %pV", &vaf);
--
--=09va_end(args);
--}
--
- #else /* !CONFIG_PM_SLEEP_DEBUG */
- static inline void pm_print_times_init(void) {}
- #endif /* CONFIG_PM_SLEEP_DEBUG */
---
-2.35.1
-
-
+ Hello Dear,
+Greetings, I am contacting you regarding an important information i
+have for you please reply to confirm your email address and for more
+details Thanks
+Regards
+Mrs Susan Elwood Hara.
