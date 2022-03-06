@@ -2,81 +2,163 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBCA14CE83B
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Mar 2022 03:13:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9544CE966
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Mar 2022 06:56:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230517AbiCFCOk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 5 Mar 2022 21:14:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
+        id S230466AbiCFFxV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 6 Mar 2022 00:53:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiCFCOj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 5 Mar 2022 21:14:39 -0500
-Received: from smtpproxy21.qq.com (smtpbg701.qq.com [203.205.195.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401F82558F
-        for <linux-pm@vger.kernel.org>; Sat,  5 Mar 2022 18:13:48 -0800 (PST)
-X-QQ-mid: bizesmtp81t1646532791ty7g9dcd
-Received: from localhost.localdomain ( [114.222.120.105])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 06 Mar 2022 10:13:07 +0800 (CST)
-X-QQ-SSF: 01400000002000B0I000B00A0000000
-X-QQ-FEAT: F3yR32iATbgoKmRa+/ACZ5tBy7VQO2f62uNr8Pg/PwvjBE9cLNkKrbP0hJphd
-        R8j7S/FzfONMY+lSUcXuiLgtrrk104nsOWLgQKrHnT6e3GK+uYfA/AO3zc4u6BvDNcuJ7Y5
-        STiT7blnPgM3+WI8Bteg+sKhk67HfrKHIktlXhU6QkM6jCV9iRyXbWXKHD/RjS5CQU3W0Qy
-        yy4JURuJaa9zvQ+5BxIt1aljtCjfjEcKQM+ZEMhmNlFuClX2R3Dzt8EZr0BUX7hgwJyuf3b
-        kpRo2oYdPt3r9ZvRPcG2lsDj/SPK5desWXBgV5ulYIN3ZdJUS7zHMDx6X1+bj3uimkHj2Wc
-        aR9/GYYoTFg/v74f7E=
-X-QQ-GoodBg: 2
-From:   zhanglianjie <zhanglianjie@uniontech.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        zhanglianjie <zhanglianjie@uniontech.com>
-Subject: [PATCH 2/2] cpufreq: use helper macro __ATTR_XX
-Date:   Sun,  6 Mar 2022 10:12:50 +0800
-Message-Id: <20220306021250.64315-2-zhanglianjie@uniontech.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220306021250.64315-1-zhanglianjie@uniontech.com>
-References: <20220306021250.64315-1-zhanglianjie@uniontech.com>
+        with ESMTP id S229841AbiCFFxV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Mar 2022 00:53:21 -0500
+Received: from mail-41104.protonmail.ch (mail-41104.protonmail.ch [185.70.41.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E74226D4
+        for <linux-pm@vger.kernel.org>; Sat,  5 Mar 2022 21:52:27 -0800 (PST)
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        by mail-41104.protonmail.ch (Postfix) with ESMTPS id 4KB9j62wBGz4xFfc
+        for <linux-pm@vger.kernel.org>; Sun,  6 Mar 2022 05:52:26 +0000 (UTC)
+Authentication-Results: mail-41104.protonmail.ch;
+        dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="R3pLfFH/"
+Date:   Sun, 06 Mar 2022 05:52:18 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+        s=protonmail2; t=1646545941;
+        bh=jlHvcCrmUJa3Tgqz2MiMzMxuvjdRv3ydQ/NyZc+5Npo=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID;
+        b=R3pLfFH/NetUj6mPXDbbD8SQJCLX+gkdh8pi4P3/DIfBMMoccXIOkQbvv+qYorcPh
+         I0G8ftBHaEgMVeDFu3BTku24W+oBLibBJPtOVoUBU0NnOmu51fML9+ehXtb9JQh4Ta
+         oC762S1ljBSBDGwoOkdZqNIf5P8cFobNBN/iHj9Fo32MPrGEoncVBCo27JH+sf2JYI
+         8jCO8VpwC7EL6yGIe8qRgQusJ8f8JYLYXgRPHmBlsv5QxjSwAZ/GFAOlTfhCArEbo7
+         vBLFOaeDfwLxqD7kW0I84uOeZiRSt5BldujmMME7MDG/LCB51O/Q8445jsh26867vE
+         VhRsQznCbra2A==
+To:     rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com
+From:   David Cohen <dacohen@pm.me>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Cohen <dacohen@pm.me>
+Reply-To: David Cohen <dacohen@pm.me>
+Subject: [PATCH] PM: fix dynamic debug within pm_pr_debug()
+Message-ID: <20220306055207.386821-1-dacohen@pm.me>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign1
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use helper macro __ATTR_XX  to make code more clear.
-Minor readability improvement.
+Currently, pm_pr_debug() and pm_deferred_pr_debug() use __pm_pr_debug()
+to filter pm debug messages based on pm_debug_messages_on flag.
+According to __pm_pr_debug() implementation, pm_deferred_pr_debug()
+indirectly calls printk_deferred() within __pm_pr_debug() which doesn't
+support dynamic debug, but pm_pr_debug() indirectly calls pr_debug()
+which does support dynamic debug.
 
-Signed-off-by: zhanglianjie <zhanglianjie@uniontech.com>
+The problem is if we enable/disable dynamic debug inside __pm_pr_debug()
+it will affect all pm_pr_debug() calls at once, so we can't individually
+control them.
 
-diff --git a/drivers/cpufreq/cpufreq_governor.h b/drivers/cpufreq/cpufreq_governor.h
-index 65ecf32ba4f8..a5a0bc3cc23e 100644
---- a/drivers/cpufreq/cpufreq_governor.h
-+++ b/drivers/cpufreq/cpufreq_governor.h
-@@ -68,12 +68,10 @@ static ssize_t file_name##_show						\
+This patch changes __pm_pr_debug() implementation into macros to make
+pr_debug() to be directly called by all pr_pm_debug() cases. As a direct
+side effect all pr_pm_debug() can be individually controlled by dynamic
+debug feature.
+
+Signed-off-by: David Cohen <dacohen@pm.me>
+---
+ include/linux/suspend.h | 19 +++++++++++++++----
+ kernel/power/main.c     | 29 -----------------------------
+ 2 files changed, 15 insertions(+), 33 deletions(-)
+
+diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+index 300273ff40cc..d727d3c867e3 100644
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -542,22 +542,33 @@ static inline void unlock_system_sleep(void) {}
+ #ifdef CONFIG_PM_SLEEP_DEBUG
+ extern bool pm_print_times_enabled;
+ extern bool pm_debug_messages_on;
+-extern __printf(2, 3) void __pm_pr_dbg(bool defer, const char *fmt, ...);
++#define __pm_pr_dbg(fmt, ...)=09=09=09=09=09\
++=09do {=09=09=09=09=09=09=09\
++=09=09if (pm_debug_messages_on)=09=09=09\
++=09=09=09pr_debug("PM: " fmt, ##__VA_ARGS__);=09\
++=09} while(0)
++#define __pm_deferred_pr_dbg(fmt, ...)=09=09=09=09\
++=09do {=09=09=09=09=09=09=09\
++=09=09if (pm_debug_messages_on)=09=09=09\
++=09=09=09printk_deferred(KERN_DEBUG "PM: " fmt, ##__VA_ARGS__);=09\
++=09} while(0)
+ #else
+ #define pm_print_times_enabled=09(false)
+ #define pm_debug_messages_on=09(false)
+
+ #include <linux/printk.h>
+
+-#define __pm_pr_dbg(defer, fmt, ...) \
++#define __pm_pr_dbg(fmt, ...) \
++=09no_printk(KERN_DEBUG fmt, ##__VA_ARGS__)
++#define __pm_deferred_pr_dbg(fmt, ...) \
+ =09no_printk(KERN_DEBUG fmt, ##__VA_ARGS__)
+ #endif
+
+ #define pm_pr_dbg(fmt, ...) \
+-=09__pm_pr_dbg(false, fmt, ##__VA_ARGS__)
++=09__pm_pr_dbg(fmt, ##__VA_ARGS__)
+
+ #define pm_deferred_pr_dbg(fmt, ...) \
+-=09__pm_pr_dbg(true, fmt, ##__VA_ARGS__)
++=09__pm_deferred_pr_dbg(fmt, ##__VA_ARGS__)
+
+ #ifdef CONFIG_PM_AUTOSLEEP
+
+diff --git a/kernel/power/main.c b/kernel/power/main.c
+index 7e646079fbeb..5242bf2ee469 100644
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -545,35 +545,6 @@ static int __init pm_debug_messages_setup(char *str)
  }
+ __setup("pm_debug_messages", pm_debug_messages_setup);
 
- #define gov_attr_ro(_name)						\
--static struct governor_attr _name =					\
--__ATTR(_name, 0444, _name##_show, NULL)
-+static struct governor_attr _name = __ATTR_RO(_name)
-
- #define gov_attr_rw(_name)						\
--static struct governor_attr _name =					\
--__ATTR(_name, 0644, _name##_show, _name##_store)
-+static struct governor_attr _name = __ATTR_RW(_name)
-
- /* Common to all CPUs of a policy */
- struct policy_dbs_info {
+-/**
+- * __pm_pr_dbg - Print a suspend debug message to the kernel log.
+- * @defer: Whether or not to use printk_deferred() to print the message.
+- * @fmt: Message format.
+- *
+- * The message will be emitted if enabled through the pm_debug_messages
+- * sysfs attribute.
+- */
+-void __pm_pr_dbg(bool defer, const char *fmt, ...)
+-{
+-=09struct va_format vaf;
+-=09va_list args;
+-
+-=09if (!pm_debug_messages_on)
+-=09=09return;
+-
+-=09va_start(args, fmt);
+-
+-=09vaf.fmt =3D fmt;
+-=09vaf.va =3D &args;
+-
+-=09if (defer)
+-=09=09printk_deferred(KERN_DEBUG "PM: %pV", &vaf);
+-=09else
+-=09=09printk(KERN_DEBUG "PM: %pV", &vaf);
+-
+-=09va_end(args);
+-}
+-
+ #else /* !CONFIG_PM_SLEEP_DEBUG */
+ static inline void pm_print_times_init(void) {}
+ #endif /* CONFIG_PM_SLEEP_DEBUG */
 --
-2.20.1
-
+2.35.1
 
 
