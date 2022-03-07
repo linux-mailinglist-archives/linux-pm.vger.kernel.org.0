@@ -2,54 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 874914CF055
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Mar 2022 04:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 140A24CF082
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Mar 2022 04:44:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235082AbiCGDip (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 6 Mar 2022 22:38:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
+        id S232165AbiCGDpG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 6 Mar 2022 22:45:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234901AbiCGDin (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Mar 2022 22:38:43 -0500
+        with ESMTP id S229622AbiCGDpG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Mar 2022 22:45:06 -0500
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6044C24BEA
-        for <linux-pm@vger.kernel.org>; Sun,  6 Mar 2022 19:37:49 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2dbbb248ca1so122263207b3.14
-        for <linux-pm@vger.kernel.org>; Sun, 06 Mar 2022 19:37:49 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14915D5CA
+        for <linux-pm@vger.kernel.org>; Sun,  6 Mar 2022 19:44:12 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d11b6259adso122861227b3.19
+        for <linux-pm@vger.kernel.org>; Sun, 06 Mar 2022 19:44:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
+        h=date:message-id:mime-version:subject:from:to:cc;
         bh=5hsSDKF2hxibRKdAOZqtgoiMABLvidZTZY6Q7kdG83c=;
-        b=jVPRDH7CQUQtiRuTpytBrFdR1wfbt3PNKmeOwJtryOBtIEGbJke19zP8PeGyFR+TRT
-         SJa8P8Xy5F3x5KCno7dOTPpV5k8FQYoLKQftvu7nhCXDoTqp5z7tojgIQ1odyjmoKCtr
-         F2hgGgjqEQonVbXKmaSdVZT1m3s3FZ6lFmKu/vuKkZhEcBQ9Vo8lDalbo5MSELlG2D7z
-         kvX1UWCdRiknSAsegKwRCZtGCLuUVd03yZ82mseEFMspCsFNNXzqNxnwG5I+BqjHg++H
-         xCflgpOa0IV/x+KIzBm+f1hW/W5g2HvNKFYsjehZ8l+YKkp6m8042UQfdt5DAnaWsW6s
-         1XZg==
+        b=RlXb24MplPY74433fFv8w4K+KxTUczocebThBO+NCeJkU41+9DRe6HVYpYK36PRvVC
+         W0rwIlFTqrdBsfTRdZdz5Frpsv9Sc/2HQAipjMTIhNmCWYUykQpF19ZxuCGBrH38h1QD
+         G8D5hYQNTS3AivBowA52XqUUNO54x7/VWDSbUinplPOm3reRaNKBPH1UJ7V0HQvQtww8
+         +Kgnqa7bHws8W/MdOCu9HTkfKzf6Oq1hs+4uENlwy4s+PaRO+M22MA4PPhphK30kiHkz
+         +3LKlPSvW0pDJFLnGbJ8NEQeToj7xC6DppxviHLoDd9T3wTvhiLRRHPaIG9xb68naqVq
+         N+eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
         bh=5hsSDKF2hxibRKdAOZqtgoiMABLvidZTZY6Q7kdG83c=;
-        b=Y81B+0jFzgruAxwD/eM5wOgG2GRFNcCU/yUq7vTA05ljxFqb9/Q74vat4Y7NTfFutn
-         wT/JveqbhIjns1nntxf1qLiiiVHRiupSeRGKGuG6InOTK1lvo0zsHuXtd0b8kGZrlxqK
-         bcv5Cmdsl3abCVOE7C6OdSVeZy0aTdVa6lYmmghfq/+swsEwxjLkhi2tRTT6UCeY6fjN
-         XLBCLHCK2hykdRi2266DnUfKcuKeLf9MFjVxWS2Fdv++eBAbOuVStIO0KG2KH/DDyRn0
-         glgP7ghLqsIKkkM6rG/7D68F2Sr04LjneQNuuAtg3vCWjlGQG3LWN5/+uq0NuUKLnP9b
-         bqBw==
-X-Gm-Message-State: AOAM531Ai15ExMW6v3azB/kujFvsZQEo8xykVitRGoY7NNltgXI+JclS
-        E6L8ZbD/U5dHLf3g/yRbAdg6+DH9QQ==
-X-Google-Smtp-Source: ABdhPJwtjLf2Ob9SB7B/YTmp6P3LOygor58g0RrQpBuPiCI3xKjxhPxoE7UsT5rHm+Tb2pD84FoaJe+Cqw==
+        b=6BbpZ6969HrZFx4fLXu/2I6io7LfaoiV6kzW5fScz5lps4T1Amy1iQFXkNlD3pbj0m
+         d/pH4ClsKfyWNjIpK2K8QD9424/cS+Yf9bGKqRVNh9kGJS0gnKCJLxkSDiJdoBK9mvMh
+         cK086uQWjJRExssQr4l5NN09MJ4vvi03itBz+4xh8hVu6KtF41dEeGfF1O3rGvgLCEUC
+         tpGR19Cmh2YSvdfEkIg3SS4OfBGHxka+UHoRtJqXTHVtjaDV81Nua9BYFh1dfnyrAet9
+         JyJ12VHdmUWUXXu2CT+PA3nEzZyGQi47tDDH//5fvr9+NwWTVhqKQwYit8tiLLbTQpIn
+         OOLQ==
+X-Gm-Message-State: AOAM53204kj5H6rRlTDfIwefImkZGASNtgnVinLy9Vfu+7ijSrp3Fay/
+        uotyL9EibBIshRlJlm/hydYUs4D+9Q==
+X-Google-Smtp-Source: ABdhPJwBtu+UzQV6WUyeIYcs0BmQ9jLNT73tgg1C5sRndOkBzJxhP2vjOrICudqscR9VHLO+aAWzSPFOVg==
 X-Received: from wjack.tao.corp.google.com ([2401:fa00:fd:203:309f:cb85:fb3d:7ae0])
- (user=wjack job=sendgmr) by 2002:a81:1d50:0:b0:2dc:2e6d:6c34 with SMTP id
- d77-20020a811d50000000b002dc2e6d6c34mr7019035ywd.104.1646624268381; Sun, 06
- Mar 2022 19:37:48 -0800 (PST)
-Date:   Mon,  7 Mar 2022 11:31:09 +0800
-In-Reply-To: <20220307033110.283379-1-wjack@google.com>
-Message-Id: <20220307033110.283379-2-wjack@google.com>
+ (user=wjack job=sendgmr) by 2002:a0d:fe43:0:b0:2d0:b2b2:2ed4 with SMTP id
+ o64-20020a0dfe43000000b002d0b2b22ed4mr7150329ywf.355.1646624651935; Sun, 06
+ Mar 2022 19:44:11 -0800 (PST)
+Date:   Mon,  7 Mar 2022 11:43:57 +0800
+Message-Id: <20220307034358.286657-1-wjack@google.com>
 Mime-Version: 1.0
-References: <20220307033110.283379-1-wjack@google.com>
 X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
 Subject: [PATCH v2] power: supply: add dock type
 From:   Jack Wu <wjack@google.com>
