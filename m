@@ -2,143 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4274A4CF090
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Mar 2022 05:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9FEC4CF121
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Mar 2022 06:27:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234439AbiCGEGb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 6 Mar 2022 23:06:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
+        id S233217AbiCGF2l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Mar 2022 00:28:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbiCGEGb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Mar 2022 23:06:31 -0500
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F69B3AA75
-        for <linux-pm@vger.kernel.org>; Sun,  6 Mar 2022 20:05:37 -0800 (PST)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2dc28791ecbso135977997b3.4
-        for <linux-pm@vger.kernel.org>; Sun, 06 Mar 2022 20:05:37 -0800 (PST)
+        with ESMTP id S230457AbiCGF2l (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Mar 2022 00:28:41 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F5A1FA62
+        for <linux-pm@vger.kernel.org>; Sun,  6 Mar 2022 21:27:47 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id m22so12323440pja.0
+        for <linux-pm@vger.kernel.org>; Sun, 06 Mar 2022 21:27:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Va1ivrfy7pqppqn//1ybfbkoZ8zcsGzxAq5Mdwrg6Oo=;
-        b=CHEpzzbREopfx95f7FHN1MGscUrK2OsB+/98Z2ZAh7A2LQNPljJ3YRSmOdBloiWW88
-         15C9UbCzX63Lt1MJWyGx1K6HiLquJ4C0n7SQFxIYdtDTecDkgueqoOLBFpm8hp3XOJOl
-         fs0q54Wn5Kb/On5x1+rOB1f0ohhmfXewgG9SKpuaW2r/qCcy1CCAwOL/v4wlHr0fOJ6x
-         ImWHjseZvFEC+HKihvtISdH2g5sAuPxTehxNh4zuSMzVIYRmKv8QrLjaR2Cq4fnk1Z7p
-         XCGRjiZuXkkwe1yWiEvsSRVfYN+2WbIB8dzflqDvrNIE/hr8YDc4htKPsHxFvzxBSwdV
-         O9vA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=8/7RqUDbBvkcKrvkMx+8/f1EbXxbw2ANcs0FhA/Hi8Q=;
+        b=c8sv0sHzNIegotqovgxtmem5mZxrITTXtkOPZoO5n9qBoAwgfHjebvCysLnMyDBsab
+         +7p48moCE+Wbw9JUcyxCULHk6PpOPPo60Upd55fu27mdvGPHotjzZ+YKHVrDXn+Nxeea
+         4HUGFTT88J8DTxsHRrgSqyWYK7k5QplQmfpB0Qs1Ph79Upr9I+TkrVOgEUMFvepYQ1so
+         rfB90K3SwfmVm9vO52+GzOAYnOAszE+jJSuLkX5Uio3kkY8gIapGET46I4UjsrkhbALX
+         C0aB/09NOZff480xoV9O62FUDJhNiKYVac8devwk/ZprBkHqpeMtWdSPKIMgwPdx4FJF
+         1ing==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Va1ivrfy7pqppqn//1ybfbkoZ8zcsGzxAq5Mdwrg6Oo=;
-        b=tIpGcl5rMG2wArwpTq7VstsMCuNXThpiKmezRqB9VPmAWKoPaX2Uq/0BPXYgxj8lfk
-         Er3uAEk+xOYgsabflm5TFOIuUY1b3Zwup/s1o8L9yhF0YIcBR9HoS4Wv5igtiN3ILcSA
-         3gUNTRlekETPF91fMocaOaJmXfR7A/slxElhTMGkN54K4cIbzcKhtJimV6THhlt9J9Hn
-         xg4Lz0KkeDuTbkxOwnp7f90nXd+OOP1Vu/A+aVJJQAqjnPX0xBXvjlmRJLlt3mD6JChk
-         hJWzBraILMt9A+KYaoFptGSjAEYHymKqQxU4M7ITm5NVhCDX9zD10buvOV531TML8Njs
-         9smg==
-X-Gm-Message-State: AOAM532mAzy+ISpybd1nipFx/Q+gOpld4EnvDp6F1zF1Zgz4FEWkFKrl
-        bWmkf+1kKqMcBV5rljzx4iWJNqBrcuNO2m9ifJ8IqA==
-X-Google-Smtp-Source: ABdhPJyiizH6e69CmmtKrMh3+m/by+kjMdBmy1n6E4L2QN9IGHXmoGlhozNEiuGWunZQdPzehWbqrluwp1onENNGxPQ=
-X-Received: by 2002:a81:5382:0:b0:2db:81d5:14c3 with SMTP id
- h124-20020a815382000000b002db81d514c3mr6914333ywb.311.1646625936542; Sun, 06
- Mar 2022 20:05:36 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=8/7RqUDbBvkcKrvkMx+8/f1EbXxbw2ANcs0FhA/Hi8Q=;
+        b=B6EX+P1H/pxO69qUTHkUNfaaMxejwPWti1D8dBSzrjniRzidnqjyBXAMKB15dFabNY
+         4IYajNc/a+pd1X4v5w76kFO0sCDNCmFNLEuao002/BrY87ZjgE/5bRO/i/dn7ACDPxia
+         5qirKkWnjDbWhKbXABqGUi3AUzoySiLSMxQJJfIROzgArduDysLtWGGa20lQYHVICrmu
+         Ypw4vqibmQs3GDFjYh5SFR9CTMlCuEUEEZVI2SeEtaael9di0Naes3wrUyCBhD00eC7M
+         l5jPvNqPYVz7eObDrDnJurTn/UzjxQm1LDPJEfNFK0KS78uxs3KpnIFdLb96uiu5q9Bd
+         Zmvg==
+X-Gm-Message-State: AOAM533Z/oQOkp8SGdqODD6IobcUopI7aomEqLRNTX/ku3Ls1y3Eodgg
+        ycwtz8p2HN8PgLXUhfYmE8QlSA==
+X-Google-Smtp-Source: ABdhPJxbu+Rdv7+IwbG4bwBry82DczhbBPsEbSCO1AL5s9L40k2ooBzCYz+peNHV9i+vLYh1i4GRrg==
+X-Received: by 2002:a17:903:110d:b0:14f:72a1:7b18 with SMTP id n13-20020a170903110d00b0014f72a17b18mr10573418plh.111.1646630867103;
+        Sun, 06 Mar 2022 21:27:47 -0800 (PST)
+Received: from localhost ([223.184.83.228])
+        by smtp.gmail.com with ESMTPSA id b21-20020a17090a551500b001b90ef40301sm11843637pji.22.2022.03.06.21.27.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Mar 2022 21:27:46 -0800 (PST)
+Date:   Mon, 7 Mar 2022 10:57:44 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH] opp: Don't print error message if getting optional
+ regulator fails
+Message-ID: <20220307052744.s4ed3vinz5umbtlm@vireshk-i7>
+References: <91e37a12-b393-8ae9-996b-6cbb63ea9255@gmail.com>
 MIME-Version: 1.0
-References: <20220307034358.286657-1-wjack@google.com>
-In-Reply-To: <20220307034358.286657-1-wjack@google.com>
-From:   Jack Wu <wjack@google.com>
-Date:   Mon, 7 Mar 2022 12:05:25 +0800
-Message-ID: <CAHnoD8BTEPeRToRtan7LZJae-K3dv0pvBYQrXkrr3scbjUUcTg@mail.gmail.com>
-Subject: Re: [PATCH v2] power: supply: add dock type
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     kernel-team@android.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ken Yang <yangken@google.com>,
-        AleX Pelosi <apelosi@google.com>,
-        Vincent Wang <vincentwang@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <91e37a12-b393-8ae9-996b-6cbb63ea9255@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sebastian,
-
-Currently, power_supply framework supports only Battery, UPS,
-Mains, USB and WIRELESS power_supply_type. Add dock
-power_supply_type so that the drivers which supports dock can
-register a power supply class device with POWER_SUPPLY_TYPE_DOCK.
-
-change log
----
-v2: updates to Documentation
-
-Thanks!
-Jack
-
-Jack Wu <wjack@google.com> =E6=96=BC 2022=E5=B9=B43=E6=9C=887=E6=97=A5 =E9=
-=80=B1=E4=B8=80 =E4=B8=8A=E5=8D=8811:44=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> Add dock power_supply_type for the drivers which supports dock can
-> register a power supply class device with POWER_SUPPLY_TYPE_DOCK.
->
-> Signed-off-by: Jack Wu <wjack@google.com>
+On 06-03-22, 22:46, Heiner Kallweit wrote:
+> The regulators are optional, therefore I see no need to bother users
+> with an error level message if -ENODEV is returned.
+> 
+> Inspiration was the following error on my system:
+> lima d00c0000.gpu: dev_pm_opp_set_regulators: no regulator (mali) found: -19
+> 
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
 > ---
->  Documentation/ABI/testing/sysfs-class-power | 2 +-
->  drivers/power/supply/power_supply_sysfs.c   | 1 +
->  include/linux/power_supply.h                | 1 +
->  3 files changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/=
-ABI/testing/sysfs-class-power
-> index 859501366777..0b45d9d3a50f 100644
-> --- a/Documentation/ABI/testing/sysfs-class-power
-> +++ b/Documentation/ABI/testing/sysfs-class-power
-> @@ -34,7 +34,7 @@ Description:
->                 Describes the main type of the supply.
->
->                 Access: Read
-> -               Valid values: "Battery", "UPS", "Mains", "USB", "Wireless=
-"
-> +               Valid values: "Battery", "UPS", "Mains", "USB", "Wireless=
-", "Dock"
->
->  **Battery and USB properties**
->
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/su=
-pply/power_supply_sysfs.c
-> index c0dfcfa33206..2b1f18b7f98c 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -57,6 +57,7 @@ static const char * const POWER_SUPPLY_TYPE_TEXT[] =3D =
-{
->         [POWER_SUPPLY_TYPE_USB_PD_DRP]          =3D "USB_PD_DRP",
->         [POWER_SUPPLY_TYPE_APPLE_BRICK_ID]      =3D "BrickID",
->         [POWER_SUPPLY_TYPE_WIRELESS]            =3D "Wireless",
-> +       [POWER_SUPPLY_TYPE_DOCK]                =3D "Dock",
->  };
->
->  static const char * const POWER_SUPPLY_USB_TYPE_TEXT[] =3D {
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index e218041cc000..8f0425f00803 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -189,6 +189,7 @@ enum power_supply_type {
->         POWER_SUPPLY_TYPE_USB_PD_DRP,           /* PD Dual Role Port */
->         POWER_SUPPLY_TYPE_APPLE_BRICK_ID,       /* Apple Charging Method =
-*/
->         POWER_SUPPLY_TYPE_WIRELESS,             /* Wireless */
-> +       POWER_SUPPLY_TYPE_DOCK,                 /* Dock Charging */
->  };
->
->  enum power_supply_usb_type {
-> --
-> 2.35.1.616.g0bdcbb4464-goog
->
+>  drivers/opp/core.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 740407252..8af5979cc 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -2020,7 +2020,10 @@ struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
+
+If this API is called by the platform specific code, then the
+regulator should be compulsory. Isn't it ?
+
+Maybe we shouldn't use regulator_get_optional() here.
+
+>  		reg = regulator_get_optional(dev, names[i]);
+>  		if (IS_ERR(reg)) {
+>  			ret = PTR_ERR(reg);
+> -			if (ret != -EPROBE_DEFER)
+> +			if (ret == -ENODEV)
+> +				dev_info(dev, "%s: no regulator (%s) found\n",
+> +					 __func__, names[i]);
+> +			else if (ret != -EPROBE_DEFER)
+>  				dev_err(dev, "%s: no regulator (%s) found: %d\n",
+>  					__func__, names[i], ret);
+>  			goto free_regulators;
+
+-- 
+viresh
