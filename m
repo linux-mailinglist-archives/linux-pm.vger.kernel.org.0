@@ -2,221 +2,198 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CBCB4D0A28
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Mar 2022 22:43:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26ECA4D0A40
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Mar 2022 22:48:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240305AbiCGVoT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Mar 2022 16:44:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58708 "EHLO
+        id S235686AbiCGVsy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Mar 2022 16:48:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242158AbiCGVoN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Mar 2022 16:44:13 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA641B786
-        for <linux-pm@vger.kernel.org>; Mon,  7 Mar 2022 13:42:52 -0800 (PST)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id CC0033F61D
-        for <linux-pm@vger.kernel.org>; Mon,  7 Mar 2022 21:42:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646689367;
-        bh=MhNMfDbHr8DyNFMUPNwO39VGUJ2PygUUS2WxU9QRbWs=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=X3IYl4HwkFhSuunCBe5htAwBsP0AIeAWDnP+EpaHzL315bXKeJuaa0+HJG3SzeL75
-         8XNtDCDc/WLdGWgzV9lvsOHT1VQFzpQMahzK2n24xI2xeq54nbhfNOIB6LBBuChlIY
-         3Y+On9GmUOiRSw0rB2PtiYDb8PTJxJUcH5tmjLDCEmXMWgw73C5Lk8z3Axr8jdnb8W
-         8jzhAjJ2gvbspuENvyjfA/4fRuiNDC/Iw4xh0U1B5I4mR9aB+Gy45YQtVZcLia4WeC
-         X7sSR1aXYgYB2706fJwGdKhZ/PjkMhHtnhJ6/Zx682nJDElqNqnL5WqfGErpuIcbj1
-         6goEa6sEV6hWw==
-Received: by mail-ed1-f72.google.com with SMTP id bq19-20020a056402215300b0040f276105a4so9395549edb.2
-        for <linux-pm@vger.kernel.org>; Mon, 07 Mar 2022 13:42:47 -0800 (PST)
+        with ESMTP id S1343695AbiCGVsM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Mar 2022 16:48:12 -0500
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D8966210
+        for <linux-pm@vger.kernel.org>; Mon,  7 Mar 2022 13:47:17 -0800 (PST)
+Received: by mail-oo1-xc2d.google.com with SMTP id n5-20020a4a9545000000b0031d45a442feso19556258ooi.3
+        for <linux-pm@vger.kernel.org>; Mon, 07 Mar 2022 13:47:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VdojC25WVGWceIMMUzvuMxibCrHu0iM2tuhlcyvUnds=;
+        b=Bg4RRPU1OlwwMQXLlarxf1usWVdPJPsBl+gaWpDO64OycwN6aoL2tjEl8zjMZMazLU
+         H7KGC63Ibw47VubUx9qFIXi4FO3xtPtHe8+/MvHOowy8v9aFmd64D6l2YYRjDLrmtywb
+         UGRowMv0R1R+HTQ8+gpyM5QeZ29G7Vdr7RnOd0rgSR1DrQrbo7zWG6p90xhvzrgtXq1p
+         XFZPtKtBQ75SKA1PdEn7l5ub/GBaKGCPGUr2wYkuhA50MCNSVBQk45VRE7GRUtUxLcqe
+         YOb8VDKHoWRUUmws/iEZ/aaxE74B1EopJgdUI1PNAEBTZtOPhNRQMnqLz/fVx1ZgK4f8
+         7AZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MhNMfDbHr8DyNFMUPNwO39VGUJ2PygUUS2WxU9QRbWs=;
-        b=r1eu54X+EkTL5+8tMK9wT5nRMYkVoZKrTw5pdwlVaaf2/t+wp85KuwxJWsWsQMC/Az
-         Lj1JuBnScMKYT0uaxBENaMnGl8vEpVlmBG0xrFrfIy0cJGv8X2DSEFurVUcCzbEBAkEv
-         x4pN1LmHUkzsExitXJio7sLwzQlahelC4Cq0iWVHKR+5UGywerwYPV2FE36uKSHEH++b
-         Dmv+YiTvBpP0sxST4xxR61S8aaL6C5l+KoIDmQKk6LT2o1B84OKOd67gUl+ETNq8uQbB
-         5ETZ1iqM1pWI1rE6yoNxGns0TZvAQcJXrKBtIiDfcVLBWLTfAw0t7egdsrczSLhXUyww
-         y1fw==
-X-Gm-Message-State: AOAM5332Z2rpOZcB20gRj3i89NdE2IbzzDhQOcMC8IBTt9BCljhMcrqF
-        UlwoYhaeWCnipU2zWn5kT5PXTMe6pDzAzcGKqp7TiaNyyzSzZ6+o4+qjtRI7T0Omk9hS3cYrtx5
-        DGWlGX94L1pn55CkJgU+cu1AxpRqYBLlQnCLL
-X-Received: by 2002:a17:907:60ca:b0:6da:8f25:7983 with SMTP id hv10-20020a17090760ca00b006da8f257983mr10532827ejc.106.1646689367158;
-        Mon, 07 Mar 2022 13:42:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwYdGvNdcQTcQgY1xPFW9oHn64MaAA5xJnmohahgMntl3auBJxf8s7T1mVacTWUqEeHAeQ7HA==
-X-Received: by 2002:a17:907:60ca:b0:6da:8f25:7983 with SMTP id hv10-20020a17090760ca00b006da8f257983mr10532814ejc.106.1646689366933;
-        Mon, 07 Mar 2022 13:42:46 -0800 (PST)
-Received: from [192.168.0.143] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id x1-20020a05640226c100b0041668b404basm234923edd.0.2022.03.07.13.42.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 13:42:45 -0800 (PST)
-Message-ID: <bf418e08-2e32-5e61-abd8-abb0d8f5c080@canonical.com>
-Date:   Mon, 7 Mar 2022 22:42:44 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VdojC25WVGWceIMMUzvuMxibCrHu0iM2tuhlcyvUnds=;
+        b=UItgpSYVBxeTQD6w8tKWDrM+h2h7M0dY6GfpXpyj7sSpAnoYsDoh/7QgajsdJzi2ry
+         ZbEqLh89y46s5XDaP+5SGlR5BUmXYv1d/4GgktPvxk9XLkgu6C7TtDAyffowVPdJyKG3
+         lI5vE+W+2mzUDGK11yC8+U2TE4CP+M3ByYA1ocTKozVqNleGIC1PUho27S8fnsI9LfxE
+         c8rGonsvs+m4MxGmK63E70OrMl0x+HUZVc24OuONvziFjie8hnxJ53FfwQw+FkpupQJN
+         EZHfVCzXv986Fa4CvO4C7q406bEeb/G2DM4kyWpvIH1wX2uKtVyGmdBiZ/xvc8EzfNm5
+         cj2w==
+X-Gm-Message-State: AOAM530U1vltqfNmdY79I9ZiqRugxY2bUX0KS9vaRW2sJwYgtYHxHRUK
+        LvQInBZHHJ7r9E/zzM6I59VJqcj2u70W1g==
+X-Google-Smtp-Source: ABdhPJyRfmUHvA7y8eYYxFON9aA6r+LyEuepXKZ6SPl7v3jADqcMR4oHSLR7B5HxUQIdU27AkmiOng==
+X-Received: by 2002:a05:6870:d28d:b0:da:b3f:3234 with SMTP id d13-20020a056870d28d00b000da0b3f3234mr580688oae.228.1646689636634;
+        Mon, 07 Mar 2022 13:47:16 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id m5-20020a056870194500b000d9a0818925sm6012406oak.25.2022.03.07.13.47.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 13:47:16 -0800 (PST)
+Date:   Mon, 7 Mar 2022 13:49:00 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/4] cpufreq: qcom-hw: fix the race between LMH worker
+ and cpuhp
+Message-ID: <YiZ9zFqz2hU8im4f@ripper>
+References: <20220307153050.3392700-1-dmitry.baryshkov@linaro.org>
+ <20220307153050.3392700-2-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/3] dt-bindings: devfreq: mediatek: add mtk cci devfreq
- dt-bindings
-Content-Language: en-US
-To:     Tim Chang <jia-wei.chang@mediatek.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        roger.lu@mediatek.com, Allen-yy.Lin@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        hsinyi@google.com,
-        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
-References: <20220307122513.11822-1-jia-wei.chang@mediatek.com>
- <20220307122513.11822-2-jia-wei.chang@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220307122513.11822-2-jia-wei.chang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220307153050.3392700-2-dmitry.baryshkov@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/03/2022 13:25, Tim Chang wrote:
-> add devicetree binding of mtk cci devfreq on MediaTek SoC.
+On Mon 07 Mar 07:30 PST 2022, Dmitry Baryshkov wrote:
 
-Start with capital letter.
-
+> qcom_lmh_dcvs_poll() can be running when the cpu is being put offline.
+> This results in the following warning. The driver would disable the
+> worker, but it happens closer to the end of cpufreq_offline(). Change
+> the locking in the qcom_lmh_dcvs_poll(), so that the worker can not run
+> in parallel with cpufreq_offline() call.
 > 
-> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
+> [   37.122433] ------------[ cut here ]------------
+> [   37.127225] WARNING: CPU: 0 PID: 187 at drivers/base/arch_topology.c:180 topology_update_thermal_pressure+0xec/0x100
 
-This does not match your From. Please fix this in all your submissions.
+I don't have a warning on line 180 in arch_topology.c
 
+I do however believe that my proposed patch for handling the race during
+initialization would end up with a warning there.
+
+As Viresh pointed out as I tried to land those upstream, they would
+cause problems as policy->cpus changes during hotplug, i.e. something
+very similar to what you're showing here.
+
+Could it be that you're testing this in a tree that has those patches?
+
+
+PS. The two patches that did land upstream in the end are:
+4f774c4a65bf ("cpufreq: Reintroduce ready() callback")
+ef8ee1cb8fc8 ("cpufreq: qcom-hw: Delay enabling throttle_irq")
+
+> [   37.138098] Modules linked in:
+> [   37.141279] CPU: 0 PID: 187 Comm: kworker/0:3 Tainted: G S                5.17.0-rc6-00389-g37c83d0b8710-dirty #713
+
+389 patches off mainline is quite far off from the upstream, please try
+to validate your changes on something closer to mainline.
+
+Regards,
+Bjorn
+
+> [   37.158306] Workqueue: events qcom_lmh_dcvs_poll
+> [   37.163095] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [   37.170278] pc : topology_update_thermal_pressure+0xec/0x100
+> [   37.176131] lr : topology_update_thermal_pressure+0x20/0x100
+> [   37.181977] sp : ffff800009b6bce0
+> [   37.185402] x29: ffff800009b6bce0 x28: ffffd87abe92b000 x27: ffff04bd7292e205
+> [   37.192792] x26: ffffd87abe930af8 x25: ffffd87abe94e4c8 x24: 0000000000000000
+> [   37.200180] x23: ffff04bb01177018 x22: ffff04bb011770c0 x21: ffff04bb01177000
+> [   37.207567] x20: ffff04bb0a419000 x19: 00000000000c4e00 x18: 0000000000000000
+> [   37.214954] x17: 000000040044ffff x16: 004000b2b5503510 x15: 0000006aaa1326d2
+> [   37.222333] x14: 0000000000000232 x13: 0000000000000001 x12: 0000000000000040
+> [   37.229718] x11: ffff04bb00400000 x10: 968f57bd39f701c8 x9 : ffff04bb0acc8674
+> [   37.237095] x8 : fefefefefefefeff x7 : 0000000000000018 x6 : ffffd87abd90092c
+> [   37.244478] x5 : 0000000000000016 x4 : 0000000000000000 x3 : 0000000000000100
+> [   37.251852] x2 : ffff04bb0a419020 x1 : 0000000000000100 x0 : 0000000000000100
+> [   37.259235] Call trace:
+> [   37.261771]  topology_update_thermal_pressure+0xec/0x100
+> [   37.267266]  qcom_lmh_dcvs_poll+0xbc/0x154
+> [   37.271505]  process_one_work+0x288/0x69c
+> [   37.275654]  worker_thread+0x74/0x470
+> [   37.279450]  kthread+0xfc/0x100
+> [   37.282712]  ret_from_fork+0x10/0x20
+> [   37.286417] irq event stamp: 74
+> [   37.289664] hardirqs last  enabled at (73): [<ffffd87abdd78af4>] _raw_spin_unlock_irq+0x44/0x80
+> [   37.298632] hardirqs last disabled at (74): [<ffffd87abdd71fc0>] __schedule+0x710/0xa10
+> [   37.306885] softirqs last  enabled at (58): [<ffffd87abcc90410>] _stext+0x410/0x588
+> [   37.314778] softirqs last disabled at (51): [<ffffd87abcd1bf68>] __irq_exit_rcu+0x158/0x174
+> [   37.323386] ---[ end trace 0000000000000000 ]---
+> 
+> Fixes: 275157b367f4 ("cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support")
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > ---
->  .../devicetree/bindings/devfreq/mtk-cci.yaml  | 73 +++++++++++++++++++
->  1 file changed, 73 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/devfreq/mtk-cci.yaml
+>  drivers/cpufreq/qcom-cpufreq-hw.c | 24 +++++++++++++++++++++---
+>  1 file changed, 21 insertions(+), 3 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/devfreq/mtk-cci.yaml b/Documentation/devicetree/bindings/devfreq/mtk-cci.yaml
-> new file mode 100644
-> index 000000000000..e64ac4c56758
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/devfreq/mtk-cci.yaml
-> @@ -0,0 +1,73 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/devfreq/mtk-cci.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index 740518d8ae16..920c80d91c21 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -283,6 +283,23 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+>  	struct dev_pm_opp *opp;
+>  	unsigned int freq;
+>  
+> +	/*
+> +	 * Synchronize against CPU going offline.
+> +	 * cpufreq_offline() will get the write lock on policy->rwsem.
+> +	 */
+> +retry:
+> +	if (unlikely(!down_read_trylock(&policy->rwsem))) {
+> +		mutex_lock(&data->throttle_lock);
+> +		if (data->cancel_throttle) {
+> +			mutex_unlock(&data->throttle_lock);
+> +			return;
+> +		}
 > +
-> +title: Mediatek Cache Coherent Interconnect (CCI) Devfreq driver Device Tree Bindings
-
-Similarly to your other patches - the title describes hardware. Please
-fix it in all your submissions of all your series.
-
-Remove "driver Device Tree Bindings". "Devfreq" is Linuxism, so this
-maybe "bus frequency scaling"? Although later you call the device node
-as cci.
-
+> +		mutex_unlock(&data->throttle_lock);
 > +
-> +maintainers:
-> +  - Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> +
-> +description: |
-> +  This module is used to create CCI DEVFREQ.
-> +  The performance will depend on both CCI frequency and CPU frequency.
-> +  For MT8186, CCI co-buck with Little core.
-> +  Contain CCI opp table for voltage and frequency scaling.
-
-Half of this description (first and last sentence) does not describe the
-actual hardware. Please describe hardware, not driver.
-
-> +
-> +properties:
-> +  compatible:
-> +    const: "mediatek,mt8186-cci"
-
-No need for quotes.
-
-> +
-> +  clocks:
-> +    items:
-> +      - description:
-> +          The first one is the multiplexer for clock input of CPU cluster.
-> +      - description:
-> +          The other is used as an intermediate clock source when the original
-> +          CPU is under transition and not stable yet.
-> +
-> +  clock-names:
-> +    items:
-> +      - const: "cci"
-> +      - const: "intermediate"
-
-No need for quotes.
-
-> +
-> +  operating-points-v2:
-> +    description:
-> +      For details, please refer to
-> +      Documentation/devicetree/bindings/opp/opp-v2.yaml
-> +
-> +  opp-table: true
-
-Same comments as your CPU freq bindings apply.
-
-> +
-> +  proc-supply:
-> +    description:
-> +      Phandle of the regulator for CCI that provides the supply voltage.
-> +
-> +  sram-supply:
-> +    description:
-> +      Phandle of the regulator for sram of CCI that provides the supply
-> +      voltage. When present, the cci devfreq driver needs to do
-> +      "voltage tracking" to step by step scale up/down Vproc and Vsram to fit
-> +      SoC specific needs. When absent, the voltage scaling flow is handled by
-> +      hardware, hence no software "voltage tracking" is needed.
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - clock-names
-> +  - operating-points-v2
-> +  - proc-supply
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/mt8186-clk.h>
-> +    cci: cci {
-
-Node names should be generic and describe type of device. Are you sure
-this is a CCI? Maybe "interconnect" suits it better?
-
-> +      compatible = "mediatek,mt8186-cci";
-> +      clocks = <&mcusys CLK_MCU_ARMPLL_BUS_SEL>, <&apmixedsys CLK_APMIXED_MAINPLL>;
-> +      clock-names = "cci", "intermediate";
-> +      operating-points-v2 = <&cci_opp>;
-> +      proc-supply = <&mt6358_vproc12_reg>;
-> +      sram-supply = <&mt6358_vsram_proc12_reg>;
-> +    };
-
-
-Best regards,
-Krzysztof
+> +		schedule();
+> +		goto retry;
+> +	}
+>  	/*
+>  	 * Get the h/w throttled frequency, normalize it using the
+>  	 * registered opp table and use it to calculate thermal pressure.
+> @@ -301,9 +318,10 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+>  
+>  	/*
+>  	 * In the unlikely case policy is unregistered do not enable
+> -	 * polling or h/w interrupt
+> +	 * polling or h/w interrupt.
+> +	 * If we are here, we have the policy->rwsem read lock,
+> +	 * cancel_throttle can be toggled only with the write lock.
+>  	 */
+> -	mutex_lock(&data->throttle_lock);
+>  	if (data->cancel_throttle)
+>  		goto out;
+>  
+> @@ -318,7 +336,7 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+>  				 msecs_to_jiffies(10));
+>  
+>  out:
+> -	mutex_unlock(&data->throttle_lock);
+> +	up_read(&policy->rwsem);
+>  }
+>  
+>  static void qcom_lmh_dcvs_poll(struct work_struct *work)
+> -- 
+> 2.34.1
+> 
