@@ -2,108 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5184D0A4F
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Mar 2022 22:52:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BEC4D0AC8
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Mar 2022 23:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236508AbiCGVxe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Mar 2022 16:53:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55220 "EHLO
+        id S242992AbiCGWPf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Mar 2022 17:15:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232988AbiCGVxd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Mar 2022 16:53:33 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763831C12A
-        for <linux-pm@vger.kernel.org>; Mon,  7 Mar 2022 13:52:37 -0800 (PST)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 4AEF33F7E2
-        for <linux-pm@vger.kernel.org>; Mon,  7 Mar 2022 21:52:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646689956;
-        bh=avS2eWzHwYAlHNx2d4yWSoiGc/ntu1FTeA6bPKX64Gc=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=UwXb6kahRIHz71CjmuWBrp+37h7dZrVUpkRmS23GBO+mpdXe70gt4qOYtakf/Gf2I
-         BkQkmAEOaeOrfoG+vjyFZhK6kDmzsQgc7OzRiZos/wzzK9ViqQJw+dyMCVoYhCig3w
-         33eMmE4rqNGvG33Bp6hM+cC5xodejbgbTNSwl+S7GklxO8Qrn9NafS4olc+10+f4Gd
-         /czwh5e2yIDOGK51hBU6uIkL9CC49AEwx0AcgsqbfYCp0nxMKl9B/h2RhOshlymfJg
-         pZXgUgmIAmF+5Ra3vwcYtTG0WprcWRbEIEhz4ucO6iC9KgIOzZLZeU8YoQejMjSjoN
-         LVGEXezauqSdg==
-Received: by mail-ed1-f70.google.com with SMTP id cm27-20020a0564020c9b00b004137effc24bso9420361edb.10
-        for <linux-pm@vger.kernel.org>; Mon, 07 Mar 2022 13:52:36 -0800 (PST)
+        with ESMTP id S239753AbiCGWPe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Mar 2022 17:15:34 -0500
+Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3E65D1AC
+        for <linux-pm@vger.kernel.org>; Mon,  7 Mar 2022 14:14:38 -0800 (PST)
+Received: by mail-oo1-xc31.google.com with SMTP id n5-20020a4a9545000000b0031d45a442feso19645095ooi.3
+        for <linux-pm@vger.kernel.org>; Mon, 07 Mar 2022 14:14:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MbPxVmdHpUGDmCidYr90Dm7MxXegKEnI6/p2aBfWx0w=;
+        b=w/7lkXaj5gaYpOAMn7otq9nTFpXuSDyWUxTDtClV/73U7wF4JIdm+ExAzDIaOCxgJe
+         w72+CMrStkI23vsG5fhFfuPACM+GFgG7ITFpjG41tiUbz9vkWf9AZ8zdr3rLou6Syq3v
+         0zgXCoILbYxRxfNusAoqU7qSPJEkYCXZza0aksYsgfgHjFwlpzi7MsqXZqMiUuITBkFt
+         FuLp/xVs2PNStHIb06p6y6OdBGTq+0kZkZ5tGqOUkHd78DqS+x8KSsKcIi8zkRfqAoit
+         IASEAbx5XHRZKZ46oY2MaYr2Hh6fdo2a54MQK+0c3FdxOQIY+9+dJkq8ZAO5cR1B17sh
+         2pAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=avS2eWzHwYAlHNx2d4yWSoiGc/ntu1FTeA6bPKX64Gc=;
-        b=f1g0DVA1kRz61W9iQAgvPzRfiSTSki1mMpnmkG8+ZFhIzGM7vHiarm8W7TI1MSCFRg
-         5fu4P4yjU+hIR9B7t31kiMF2UOnFyYPaXBhyyYYs1ZNJiVO6Cv4/U2E8zBiULkuAJem7
-         kixut3g0aPhvU+OdR1n22FHai9MqIxmk7TgYaZ8Y2dwJIg8p+AvwZ431CsEaTVtTSCY7
-         gPjGf+QbC1xQ8NnJZabhpvvs2kMvrXiU6VVtSHZz2Y7XSLtkz3zX2C15egOjamTEbYX6
-         aiJebgYyNoSAFkyMwVKdVKICCbvm5bmINWr3g3GZaoLLIblmXFGdYiZ0bs8KIQMWNkB+
-         hnlw==
-X-Gm-Message-State: AOAM530KtSSeOTn3L5nla1iZ70a5dmsFb2OhY0QM0kZsDX8Y9PXT6Ax/
-        RM1SGpsVF8MnHLN0P/6czRo0+jO7mh1xXWVmu/XTTRe2D25W6jxrb+oYt4WqXjiAee40V7dVr0v
-        V62gmaHfIlZ+kyg0Va4iXLj4EaWZ3fiNp56bZ
-X-Received: by 2002:a05:6402:644:b0:416:4ade:54e3 with SMTP id u4-20020a056402064400b004164ade54e3mr5828299edx.222.1646689955070;
-        Mon, 07 Mar 2022 13:52:35 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzhroSgyUUiu+9iga34EIiz+zQNtDh2UNpPeDJ+/rC9xXcmLwdoBP4LNusITQji+CJ1nzOyPw==
-X-Received: by 2002:a05:6402:644:b0:416:4ade:54e3 with SMTP id u4-20020a056402064400b004164ade54e3mr5828286edx.222.1646689954927;
-        Mon, 07 Mar 2022 13:52:34 -0800 (PST)
-Received: from [192.168.0.143] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id gs39-20020a1709072d2700b006d3ed4f51c6sm5289571ejc.0.2022.03.07.13.52.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 13:52:34 -0800 (PST)
-Message-ID: <7f99b453-5510-d7f2-3d9b-b3ac3415fa62@canonical.com>
-Date:   Mon, 7 Mar 2022 22:52:33 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MbPxVmdHpUGDmCidYr90Dm7MxXegKEnI6/p2aBfWx0w=;
+        b=LRty0oh7u+DxyX4NV+GEDavj7EOJeZV/esD95lvSOIMd+OAgvthE7S3QliBR+E6i0M
+         1K38v93WymiIiOkVQspt+rXQKgYKAoaE0uee70bcwAPf5qMOpXj5oH0C0VTr0Ecn8zAC
+         IcFttWvVPRz/0IBzADdCyLFdqA5nJ+IlsFubzTCGzCmC3TT3FBKiw4Qb2DiYCbBygP5H
+         P521pm9igO8+wI0uJ2PGXNmKJj4uOZoCUOhsBdrl13Kn5s25vYglaIexT3SYX8AWrz6j
+         +hArNrE48ajYfuLoWo/lSIFRCKvnMrs30FbM2K/RbUBjQiAc9POvG04T6+qS/hg7KVf3
+         Qw+w==
+X-Gm-Message-State: AOAM531SEHCdmEZbzGlzONcKdH1Osk2YogiTEieIEPDEB3fZgS5h2HHV
+        93bXrSmrZpOjhOOAueI2HtQfQA==
+X-Google-Smtp-Source: ABdhPJykQ+Zehh0BYLxZmkq9fi3yT87+/TPM9Yh/iP5NhP/fs8kz8qeiO/3vGtVjDilPqoCCQ+cOtA==
+X-Received: by 2002:a05:6870:248a:b0:da:b3f:3256 with SMTP id s10-20020a056870248a00b000da0b3f3256mr643261oaq.262.1646691277513;
+        Mon, 07 Mar 2022 14:14:37 -0800 (PST)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id t7-20020a9d5907000000b005afa4058a4csm6993466oth.1.2022.03.07.14.14.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 14:14:36 -0800 (PST)
+Date:   Mon, 7 Mar 2022 14:16:21 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 3/4] cpufreq: qcom-hw: fix the opp entries refcounting
+Message-ID: <YiaENXyWr6t8L2Uz@ripper>
+References: <20220307153050.3392700-1-dmitry.baryshkov@linaro.org>
+ <20220307153050.3392700-3-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 3/3] devfreq: mediatek: add platform data to support
- mt8186
-Content-Language: en-US
-To:     Tim Chang <jia-wei.chang@mediatek.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        roger.lu@mediatek.com, Allen-yy.Lin@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        hsinyi@google.com,
-        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
-References: <20220307122513.11822-1-jia-wei.chang@mediatek.com>
- <20220307122513.11822-4-jia-wei.chang@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220307122513.11822-4-jia-wei.chang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220307153050.3392700-3-dmitry.baryshkov@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/03/2022 13:25, Tim Chang wrote:
-> add specific platform data to support mt8186.
+On Mon 07 Mar 07:30 PST 2022, Dmitry Baryshkov wrote:
+
+> The qcom_lmh_dcvs_notify() will get the dev_pm_opp instance for
+> throttling, but will not put it, ending up with leaking a reference
+> count and the following backtrace when putting the CPU offline.
 > 
 
-You just added this driver in patch 2. No need to split such actions
-because this is initial submission, so it can support two devices.
-Squash with previous.
+Good catch, and nice to see this kind of testing of the driver!
 
-Best regards,
-Krzysztof
+> Correctly put the reference count of the returned opp instance.
+> 
+> [   84.418025] ------------[ cut here ]------------
+> [   84.422770] WARNING: CPU: 7 PID: 43 at drivers/opp/core.c:1396 _opp_table_kref_release+0x188/0x190
+> [   84.431966] Modules linked in:
+> [   84.435106] CPU: 7 PID: 43 Comm: cpuhp/7 Tainted: G S                5.17.0-rc6-00388-g7cf3c0d89c44-dirty #721
+> [   84.451631] pstate: 82400005 (Nzcv daif +PAN -UAO +TCO -DIT -SSBS BTYPE=--)
+> [   84.458781] pc : _opp_table_kref_release+0x188/0x190
+> [   84.463878] lr : _opp_table_kref_release+0x78/0x190
+> [   84.468885] sp : ffff80000841bc70
+> [   84.472294] x29: ffff80000841bc70 x28: ffff6664afe3d000 x27: ffff1db6729e5908
+> [   84.479621] x26: 0000000000000000 x25: 0000000000000000 x24: ffff1db6729e58e0
+> [   84.486946] x23: ffff8000080a5000 x22: ffff1db40aad80e0 x21: ffff1db4002fec80
+> [   84.494277] x20: ffff1db40aad8000 x19: ffffb751c3186300 x18: ffffffffffffffff
+> [   84.501603] x17: 5300326563697665 x16: 645f676e696c6f6f x15: 00001186c1df5448
+> [   84.508928] x14: 00000000000002e9 x13: 0000000000000000 x12: 0000000000000000
+> [   84.516256] x11: ffffb751c3186368 x10: ffffb751c39a2a70 x9 : 0000000000000000
+> [   84.523585] x8 : ffff1db4008edf00 x7 : ffffb751c328c000 x6 : 0000000000000001
+> [   84.530916] x5 : 0000000000040000 x4 : 0000000000000001 x3 : ffff1db4008edf00
+> [   84.538247] x2 : 0000000000000000 x1 : ffff1db400aa6100 x0 : ffff1db40aad80d0
+> [   84.545579] Call trace:
+> [   84.548101]  _opp_table_kref_release+0x188/0x190
+> [   84.552842]  dev_pm_opp_remove_all_dynamic+0x8c/0xc0
+> [   84.557949]  qcom_cpufreq_hw_cpu_exit+0x30/0xdc
+> [   84.562608]  cpufreq_offline.isra.0+0x1b4/0x1d8
+> [   84.567270]  cpuhp_cpufreq_offline+0x10/0x6c
+> [   84.571663]  cpuhp_invoke_callback+0x16c/0x2b0
+> [   84.576231]  cpuhp_thread_fun+0x190/0x250
+> [   84.580353]  smpboot_thread_fn+0x12c/0x230
+> [   84.584568]  kthread+0xfc/0x100
+> [   84.587810]  ret_from_fork+0x10/0x20
+> [   84.591490] irq event stamp: 3482
+> [   84.594901] hardirqs last  enabled at (3481): [<ffffb751c13c3db0>] call_rcu+0x39c/0x50c
+> [   84.603119] hardirqs last disabled at (3482): [<ffffb751c236b518>] el1_dbg+0x24/0x8c
+> [   84.611074] softirqs last  enabled at (310): [<ffffb751c1290410>] _stext+0x410/0x588
+> [   84.619028] softirqs last disabled at (305): [<ffffb751c131bf68>] __irq_exit_rcu+0x158/0x174
+> [   84.627691] ---[ end trace 0000000000000000 ]---
+> 
+> Fixes: 275157b367f4 ("cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support")
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  drivers/cpufreq/qcom-cpufreq-hw.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index 920c80d91c21..580520215ee7 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -309,12 +309,16 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+>  
+>  	opp = dev_pm_opp_find_freq_floor(dev, &freq_hz);
+>  	if (IS_ERR(opp) && PTR_ERR(opp) == -ERANGE)
+> -		dev_pm_opp_find_freq_ceil(dev, &freq_hz);
+> +		opp = dev_pm_opp_find_freq_ceil(dev, &freq_hz);
+>  
+> -	throttled_freq = freq_hz / HZ_PER_KHZ;
+
+Maybe I'm missing something, but where did this division go after your
+change?
+
+> +	if (IS_ERR(opp)) {
+> +		dev_warn(dev, "Can't find the OPP for throttling: %pe!\n", opp);
+
+qcom_lmh_dcvs_notify() will be invoked repeatedly to poll the hardware
+for changing circumstances during thermal pressure. If for some reason
+dev_pm_opp_find_freq_ceil() is unable to find an opp it will probably
+continue to fail every 10ms.
+
+As such I think you should either omit the warning print, or possibly
+use dev_warn_once().
+
+Regards,
+Bjorn
+
+> +	} else {
+> +		/* Update thermal pressure (the boost frequencies are accepted) */
+> +		arch_update_thermal_pressure(policy->related_cpus, throttled_freq);
+>  
+> -	/* Update thermal pressure (the boost frequencies are accepted) */
+> -	arch_update_thermal_pressure(policy->related_cpus, throttled_freq);
+> +		dev_pm_opp_put(opp);
+> +	}
+>  
+>  	/*
+>  	 * In the unlikely case policy is unregistered do not enable
+> -- 
+> 2.34.1
+> 
