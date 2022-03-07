@@ -2,245 +2,197 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E507B4D0640
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Mar 2022 19:19:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 635224D0711
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Mar 2022 19:57:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244709AbiCGSU1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Mar 2022 13:20:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
+        id S234092AbiCGS6h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Mar 2022 13:58:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244593AbiCGSU0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Mar 2022 13:20:26 -0500
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D626180918;
-        Mon,  7 Mar 2022 10:19:30 -0800 (PST)
-Received: by mail-yb1-f170.google.com with SMTP id b35so32663559ybi.13;
-        Mon, 07 Mar 2022 10:19:30 -0800 (PST)
+        with ESMTP id S235359AbiCGS6h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Mar 2022 13:58:37 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836D311A22
+        for <linux-pm@vger.kernel.org>; Mon,  7 Mar 2022 10:57:40 -0800 (PST)
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 33B773F7E0
+        for <linux-pm@vger.kernel.org>; Mon,  7 Mar 2022 18:57:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646679459;
+        bh=Xy6MdIJ1JZ9Av676oic2sRFwBOpZq/tlPRFQIZOvVVo=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=am/q5y50SWdpD9yPWvEwNLQUOql3uPs1Dbg2Z0fuaDIXoHf778EknmFu4yxuO+ir2
+         v/6I426oaBtRLhCkNQ0uQ7mrUQEvNCYhYRtMYqbbf2UHjK1c0JKH8lx2GQVQkS4qTC
+         y2SvBwQVmu6+isqhY0JBeOcxWcBY7ZR21bZ9B7i8lL7ZL7RonA0gWNGJgDOqA8pRMr
+         6DrN3M9T0Z1ZuzNQHCvnkxyOgFMB8+phktYAQ68mQVc2ygu6+jrUSv9qEdB/TUzTcd
+         S8X238FL26gSnC6Lib6XIwB++dGvR7btIrLtO9SLakMQanPxzwPtyVKDh7vGCi2VwL
+         fgTKuFQAcGr7Q==
+Received: by mail-ed1-f70.google.com with SMTP id r8-20020aa7d588000000b00416438ed9a2so2707258edq.11
+        for <linux-pm@vger.kernel.org>; Mon, 07 Mar 2022 10:57:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JgPFBkbztEBtMJP0LHD1YxBIa8nGPhe2QaYONr9BDe4=;
-        b=N1sByrSgmydVDzCrX6MVf1CUtJnVh2k5ns74hjT4mjKGuoMlPvgKTR/YIAfzwPtskI
-         R9mhWM3y4O5EgIfAyPbQn7gVcrf27abHmq+YNhbhVrOtkIxBdp8EGaW6IkkKyZQVIeBh
-         kFbX5UFnGAiWcCQ6/ERXDeoIBtQYqPUYkCalzn0pcfT9KvRs59xGLEg6V0MUxEtoAivE
-         4/Bj/p+StAVWgjlTMuaXyHKYV1vReO1W9phtXqW4wwi42f2tuG6R+RdEVastCB1sA19b
-         20EiuuzrLMfAP6UuPgzkVF0jwpZwgXKKOFjU1iaFSm6hqeFNO8Fx1TADV7rXea0ajiEH
-         NGsw==
-X-Gm-Message-State: AOAM531G2gVFni9/fVvgU4ZuPspv5un3laYjogFsg99rMaKCxGoQLSg3
-        NSTzIA9BjV6+hffcsDf139LNbpIY0pQx355dHjh1+v/m
-X-Google-Smtp-Source: ABdhPJwogE1aj2YG96J07EcXnP1zJdXUogLKnATGGthibnkbBDYrk8GRjd/ozgW/+hSunZzbBGvnRVxRx22XWjDGNuM=
-X-Received: by 2002:a25:d7c2:0:b0:628:9d06:457b with SMTP id
- o185-20020a25d7c2000000b006289d06457bmr8997916ybg.137.1646677170081; Mon, 07
- Mar 2022 10:19:30 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Xy6MdIJ1JZ9Av676oic2sRFwBOpZq/tlPRFQIZOvVVo=;
+        b=ZNasvQFqjt22OCWIDdeUSHCYJmXi0afaShv87duAOV+jlHoaucPXpETxe9CJ5JCbrD
+         4U2izTYorn2rK7y0An9qHpukTQf2AjN+Hdy3H6AQZ6mkmXXMOAMhhA7TNlWVSE4ZG7Ke
+         zH1IT1LJ+85v+N6rhKabZjmk5P8BBLldBwW/l3rhCtlNehnQyEf4ANNu+SJxT2jv93eS
+         VwnJuPwUAmgg0me6xurKhMWLRIkZQds66V48QfnWRlRmRvbCkj5xq2VoCn3ZAkhwYL/Q
+         H67WApLcS5cmjtuBv9x3EXywahwJx3pGPurT4A5QbcoAHWT/N5RZxppvqmshTkHJEyMT
+         YNsw==
+X-Gm-Message-State: AOAM533su6PmT9Nh8DexUt0GXwTwcQ0n8WzhkUR94Cx0Vrf9q5gXbnrg
+        Uk/U7adznPkSK+n08SvcHMyRAgzJq6mj51CqG3Hh0DMG8KViz7guB0W6e+E+unbrYqT1zzwZlEu
+        lyHAm9rIdStSBRZcwoqwsFRQ77jXb2PNIRgOQ
+X-Received: by 2002:a17:907:9622:b0:6db:a30:8bb8 with SMTP id gb34-20020a170907962200b006db0a308bb8mr8103680ejc.475.1646679458580;
+        Mon, 07 Mar 2022 10:57:38 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxbw5jzHRiBUPGzW87WJtQ5FkmPc5d1NjPaESWeFD6YzdTpSqPNUVHDARbSb6sfuT75Z3pO8g==
+X-Received: by 2002:a17:907:9622:b0:6db:a30:8bb8 with SMTP id gb34-20020a170907962200b006db0a308bb8mr8103654ejc.475.1646679458293;
+        Mon, 07 Mar 2022 10:57:38 -0800 (PST)
+Received: from [192.168.0.143] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id fx13-20020a170906b74d00b006da9e406786sm4598892ejb.189.2022.03.07.10.57.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Mar 2022 10:57:37 -0800 (PST)
+Message-ID: <ee98d248-b2cd-e975-84df-448917a79287@canonical.com>
+Date:   Mon, 7 Mar 2022 19:57:36 +0100
 MIME-Version: 1.0
-References: <20220306021250.64315-1-zhanglianjie@uniontech.com>
-In-Reply-To: <20220306021250.64315-1-zhanglianjie@uniontech.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 7 Mar 2022 19:19:19 +0100
-Message-ID: <CAJZ5v0iEc59fge6bDbwFV6gVDKp8dqf7zwL_fL=WkME5qoMgtw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] cpufreq: unify the show() and store() styles of attr
-To:     zhanglianjie <zhanglianjie@uniontech.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/4] dt-bindings: cpufreq: mediatek: transform
+ cpufreq-mediatek into yaml
+Content-Language: en-US
+To:     Tim Chang <jia-wei.chang@mediatek.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, fan.chen@mediatek.com,
+        louis.yu@mediatek.com, roger.lu@mediatek.com,
+        Allen-yy.Lin@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        hsinyi@google.com,
+        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
+References: <20220307122151.11666-1-jia-wei.chang@mediatek.com>
+ <20220307122151.11666-2-jia-wei.chang@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220307122151.11666-2-jia-wei.chang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Mar 6, 2022 at 3:13 AM zhanglianjie <zhanglianjie@uniontech.com> wrote:
->
-> Unify the show() and store() styles of attr,
-> change show_xxx(), store_xxx() to xxx_show(), xxx_store().
+On 07/03/2022 13:21, Tim Chang wrote:
+> convert Mediatek cpufreq devicetree binding to YAML.
 
-You need to say something about motivation too.
+Start with capital letter please.
+> 
+> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
+> ---
+>  .../bindings/cpufreq/cpufreq-mediatek.yaml    | 131 ++++++++++++++++++
+>  1 file changed, 131 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.yaml
 
-> Signed-off-by: zhanglianjie <zhanglianjie@uniontech.com>
->
-> diff --git a/drivers/cpufreq/cpufreq_conservative.c b/drivers/cpufreq/cpufreq_conservative.c
-> index 08515f7e515f..b6bd0ff35323 100644
-> --- a/drivers/cpufreq/cpufreq_conservative.c
-> +++ b/drivers/cpufreq/cpufreq_conservative.c
-> @@ -146,7 +146,7 @@ static unsigned int cs_dbs_update(struct cpufreq_policy *policy)
->
->  /************************** sysfs interface ************************/
->
-> -static ssize_t store_sampling_down_factor(struct gov_attr_set *attr_set,
-> +static ssize_t sampling_down_factor_store(struct gov_attr_set *attr_set,
->                                           const char *buf, size_t count)
->  {
->         struct dbs_data *dbs_data = to_dbs_data(attr_set);
-> @@ -161,7 +161,7 @@ static ssize_t store_sampling_down_factor(struct gov_attr_set *attr_set,
->         return count;
->  }
->
-> -static ssize_t store_up_threshold(struct gov_attr_set *attr_set,
-> +static ssize_t up_threshold_store(struct gov_attr_set *attr_set,
->                                   const char *buf, size_t count)
->  {
->         struct dbs_data *dbs_data = to_dbs_data(attr_set);
-> @@ -177,7 +177,7 @@ static ssize_t store_up_threshold(struct gov_attr_set *attr_set,
->         return count;
->  }
->
-> -static ssize_t store_down_threshold(struct gov_attr_set *attr_set,
-> +static ssize_t down_threshold_store(struct gov_attr_set *attr_set,
->                                     const char *buf, size_t count)
->  {
->         struct dbs_data *dbs_data = to_dbs_data(attr_set);
-> @@ -195,7 +195,7 @@ static ssize_t store_down_threshold(struct gov_attr_set *attr_set,
->         return count;
->  }
->
-> -static ssize_t store_ignore_nice_load(struct gov_attr_set *attr_set,
-> +static ssize_t ignore_nice_load_store(struct gov_attr_set *attr_set,
->                                       const char *buf, size_t count)
->  {
->         struct dbs_data *dbs_data = to_dbs_data(attr_set);
-> @@ -220,7 +220,7 @@ static ssize_t store_ignore_nice_load(struct gov_attr_set *attr_set,
->         return count;
->  }
->
-> -static ssize_t store_freq_step(struct gov_attr_set *attr_set, const char *buf,
-> +static ssize_t freq_step_store(struct gov_attr_set *attr_set, const char *buf,
->                                size_t count)
->  {
->         struct dbs_data *dbs_data = to_dbs_data(attr_set);
-> diff --git a/drivers/cpufreq/cpufreq_governor.c b/drivers/cpufreq/cpufreq_governor.c
-> index 63f7c219062b..0d42cf8b88d8 100644
-> --- a/drivers/cpufreq/cpufreq_governor.c
-> +++ b/drivers/cpufreq/cpufreq_governor.c
-> @@ -27,7 +27,7 @@ static DEFINE_MUTEX(gov_dbs_data_mutex);
->
->  /* Common sysfs tunables */
->  /*
-> - * store_sampling_rate - update sampling rate effective immediately if needed.
-> + * sampling_rate_store - update sampling rate effective immediately if needed.
->   *
->   * If new rate is smaller than the old, simply updating
->   * dbs.sampling_rate might not be appropriate. For example, if the
-> @@ -41,7 +41,7 @@ static DEFINE_MUTEX(gov_dbs_data_mutex);
->   * This must be called with dbs_data->mutex held, otherwise traversing
->   * policy_dbs_list isn't safe.
->   */
-> -ssize_t store_sampling_rate(struct gov_attr_set *attr_set, const char *buf,
-> +ssize_t sampling_rate_store(struct gov_attr_set *attr_set, const char *buf,
->                             size_t count)
->  {
->         struct dbs_data *dbs_data = to_dbs_data(attr_set);
-> @@ -80,7 +80,7 @@ ssize_t store_sampling_rate(struct gov_attr_set *attr_set, const char *buf,
->
->         return count;
->  }
-> -EXPORT_SYMBOL_GPL(store_sampling_rate);
-> +EXPORT_SYMBOL_GPL(sampling_rate_store);
->
->  /**
->   * gov_update_cpu_data - Update CPU load data.
-> diff --git a/drivers/cpufreq/cpufreq_governor.h b/drivers/cpufreq/cpufreq_governor.h
-> index bab8e6140377..65ecf32ba4f8 100644
-> --- a/drivers/cpufreq/cpufreq_governor.h
-> +++ b/drivers/cpufreq/cpufreq_governor.h
-> @@ -51,7 +51,7 @@ static inline struct dbs_data *to_dbs_data(struct gov_attr_set *attr_set)
->  }
->
->  #define gov_show_one(_gov, file_name)                                  \
-> -static ssize_t show_##file_name                                                \
-> +static ssize_t file_name##_show                                                \
->  (struct gov_attr_set *attr_set, char *buf)                             \
->  {                                                                      \
->         struct dbs_data *dbs_data = to_dbs_data(attr_set);              \
-> @@ -60,7 +60,7 @@ static ssize_t show_##file_name                                               \
->  }
->
->  #define gov_show_one_common(file_name)                                 \
-> -static ssize_t show_##file_name                                                \
-> +static ssize_t file_name##_show                                                \
->  (struct gov_attr_set *attr_set, char *buf)                             \
->  {                                                                      \
->         struct dbs_data *dbs_data = to_dbs_data(attr_set);              \
-> @@ -69,11 +69,11 @@ static ssize_t show_##file_name                                             \
->
->  #define gov_attr_ro(_name)                                             \
->  static struct governor_attr _name =                                    \
-> -__ATTR(_name, 0444, show_##_name, NULL)
-> +__ATTR(_name, 0444, _name##_show, NULL)
->
->  #define gov_attr_rw(_name)                                             \
->  static struct governor_attr _name =                                    \
-> -__ATTR(_name, 0644, show_##_name, store_##_name)
-> +__ATTR(_name, 0644, _name##_show, _name##_store)
->
->  /* Common to all CPUs of a policy */
->  struct policy_dbs_info {
-> @@ -176,7 +176,7 @@ void od_register_powersave_bias_handler(unsigned int (*f)
->                 (struct cpufreq_policy *, unsigned int, unsigned int),
->                 unsigned int powersave_bias);
->  void od_unregister_powersave_bias_handler(void);
-> -ssize_t store_sampling_rate(struct gov_attr_set *attr_set, const char *buf,
-> +ssize_t sampling_rate_store(struct gov_attr_set *attr_set, const char *buf,
->                             size_t count);
->  void gov_update_cpu_data(struct dbs_data *dbs_data);
->  #endif /* _CPUFREQ_GOVERNOR_H */
-> diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
-> index 6a41ea4729b8..e8fbf970ff07 100644
-> --- a/drivers/cpufreq/cpufreq_ondemand.c
-> +++ b/drivers/cpufreq/cpufreq_ondemand.c
-> @@ -202,7 +202,7 @@ static unsigned int od_dbs_update(struct cpufreq_policy *policy)
->  /************************** sysfs interface ************************/
->  static struct dbs_governor od_dbs_gov;
->
-> -static ssize_t store_io_is_busy(struct gov_attr_set *attr_set, const char *buf,
-> +static ssize_t io_is_busy_store(struct gov_attr_set *attr_set, const char *buf,
->                                 size_t count)
->  {
->         struct dbs_data *dbs_data = to_dbs_data(attr_set);
-> @@ -220,7 +220,7 @@ static ssize_t store_io_is_busy(struct gov_attr_set *attr_set, const char *buf,
->         return count;
->  }
->
-> -static ssize_t store_up_threshold(struct gov_attr_set *attr_set,
-> +static ssize_t up_threshold_store(struct gov_attr_set *attr_set,
->                                   const char *buf, size_t count)
->  {
->         struct dbs_data *dbs_data = to_dbs_data(attr_set);
-> @@ -237,7 +237,7 @@ static ssize_t store_up_threshold(struct gov_attr_set *attr_set,
->         return count;
->  }
->
-> -static ssize_t store_sampling_down_factor(struct gov_attr_set *attr_set,
-> +static ssize_t sampling_down_factor_store(struct gov_attr_set *attr_set,
->                                           const char *buf, size_t count)
->  {
->         struct dbs_data *dbs_data = to_dbs_data(attr_set);
-> @@ -265,7 +265,7 @@ static ssize_t store_sampling_down_factor(struct gov_attr_set *attr_set,
->         return count;
->  }
->
-> -static ssize_t store_ignore_nice_load(struct gov_attr_set *attr_set,
-> +static ssize_t ignore_nice_load_store(struct gov_attr_set *attr_set,
->                                       const char *buf, size_t count)
->  {
->         struct dbs_data *dbs_data = to_dbs_data(attr_set);
-> @@ -290,7 +290,7 @@ static ssize_t store_ignore_nice_load(struct gov_attr_set *attr_set,
->         return count;
->  }
->
-> -static ssize_t store_powersave_bias(struct gov_attr_set *attr_set,
-> +static ssize_t powersave_bias_store(struct gov_attr_set *attr_set,
->                                     const char *buf, size_t count)
->  {
->         struct dbs_data *dbs_data = to_dbs_data(attr_set);
-> --
-> 2.20.1
->
->
->
+You wrote "convert" but where is the removal of TXT?
+
+> 
+> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.yaml
+> new file mode 100644
+> index 000000000000..584946eb3790
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek.yaml
+> @@ -0,0 +1,131 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/cpufreq/cpufreq-mediatek.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mediatek CPUFREQ driver Device Tree Bindings
+
+Please remove "driver Device Tree Bindings" because the title should
+describe the hardware. Therefore it could be something like "Mediatek
+SoC CPU frequency and voltage scaling".
+
+How is it related to cpufreq-mediatek-hw.yaml? The names/title look
+unfortunately too similar.
+
+In general this does not look like proper bindings (see also below lack
+of compatible). Bindings describe the hardware, so what is exactly the
+hardware here?
+
+> +
+> +maintainers:
+> +  - Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> +
+> +description: |
+> +  CPUFREQ is used for scaling clock frequency of CPUs.
+> +  The module cooperates with CCI DEVFREQ to manage frequency for some Mediatek
+> +  SoCs.
+> +
+> +properties:
+
+How is this schema going to be applied? I don't see here select neither
+compatible.
+
+> +  clocks:
+> +    items:
+> +      - description:
+> +          The first one is the multiplexer for clock input of CPU cluster.
+> +      - description:
+> +          The other is used as an intermediate clock source when the original
+> +          CPU is under transition and not stable yet.
+> +
+> +  clock-names:
+> +    items:
+> +      - const: "cpu"
+> +      - const: "intermediate"
+> +
+> +  operating-points-v2:
+> +    description:
+> +      For details, please refer to
+> +      Documentation/devicetree/bindings/opp/opp-v2.yaml
+> +
+> +  opp-table: true
+
+You have operating-points-v2. What is this for? Did it exist in original
+bindings?
+
+> +
+> +  proc-supply:
+> +    description:
+> +      Phandle of the regulator for CPU cluster that provides the supply
+> +      voltage.
+> +
+> +  sram-supply:
+> +    description:
+> +      Phandle of the regulator for sram of CPU cluster that provides the supply
+> +      voltage. When present, the cpufreq driver needs to do "voltage tracking"
+> +      to step by step scale up/down Vproc and Vsram to fit SoC specific needs.
+> +      When absent, the voltage scaling flow is handled by hardware, hence no
+> +      software "voltage tracking" is needed.
+> +
+> +  "#cooling-cells":
+> +    description:
+> +      For details, please refer to
+> +      Documentation/devicetree/bindings/thermal/thermal-cooling-devices.yaml
+
+Skip description, it's obvious. Instead add here const with value.
+
+
+Best regards,
+Krzysztof
