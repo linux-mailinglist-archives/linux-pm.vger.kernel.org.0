@@ -2,124 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634404CEFD2
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Mar 2022 03:54:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E17B4CF052
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Mar 2022 04:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234873AbiCGCzH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 6 Mar 2022 21:55:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46390 "EHLO
+        id S235056AbiCGDiG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 6 Mar 2022 22:38:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234862AbiCGCzC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Mar 2022 21:55:02 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2071.outbound.protection.outlook.com [40.107.236.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7AD037AAA;
-        Sun,  6 Mar 2022 18:54:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W05jWzSomDUd3PqwxeqOc2pIVcvxoTV2IFop7WpKHDWKMzFhMtNAdHYgCVcLJeflz8JmPuZ/xiiqvkbZxmMxc0sxMegmE4Oa+LDtZ1OgDVShFB3qDSECJ9jGdZv8W3+35JKTOW7CsdMvCQIS4QUAmOC6Vv6UWGaGTlk6pzF/YmAmtBrWMPA5s7zGFTkEfK58JiARSbLQgubzJpZ+34q8zy7/qNHiwjWfURvXRI9f23H83nHOg2grinoJaJp34dPjMua6NlME7J6x9Bm2K2al7ah5SrZcIyjgO42GhlNuqGce71spuEJMGlT/hK2Nw7tywBvhtEjVT8C3HexRokRYmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=O0ZK4sXQBnozsn6jEU3ZOnh3hC562dfAjCzYwcajmeA=;
- b=dQZejK8pck4V/+19lhyaaxVW0UEqywdozDI+E+nBHXhDTJ7MQ1vy/T7xNESnfkYx6gxTYEmjocJfIS7r7EiIJGRahaw6C5JoET+GKlKtR+bpWTL5c+4dIWqffiZhd3uAEbW4dpyrrjTTTQ4QQfG4RVmrhajKepyGwTCFbcwm8xi15ijRJylzTCSjIMJ3sPA0VjVhgB6+PUBQqfIkb64aJX+wXixbrePr6xXiA8CtwR5kWm23q+AP56bLc8qQdQYdW32H+tGAapp6+S9UzDVS/H6N/Law9s12mvf+bx9LPe/SqkRPvemNKYzP863LzWEzExnYG63bWYS/AAd6HEELEw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O0ZK4sXQBnozsn6jEU3ZOnh3hC562dfAjCzYwcajmeA=;
- b=vfaOM/ivdw6C/n6ujvxhA51v8NY7IYxvoX+FJo+v8++ZUyp0h8JPRJ2+GHanZ57VZUAL3+sE27jNn7o/yooozq8BICnIzNCppuDW2XORMg2nlvvxdf1OV/jGWm0gZsBZ5VRyJxWSulfqgxNa9hUnSGY1/MqFlD68UdJKZin73cY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
- BL0PR12MB2563.namprd12.prod.outlook.com (2603:10b6:207:4b::30) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5038.26; Mon, 7 Mar 2022 02:54:06 +0000
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::8d40:da47:7312:64b8]) by DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::8d40:da47:7312:64b8%6]) with mapi id 15.20.5038.026; Mon, 7 Mar 2022
- 02:54:06 +0000
-Date:   Mon, 7 Mar 2022 10:53:38 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "dsmythies@telus.net" <dsmythies@telus.net>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "todd.e.brandt@linux.intel.com" <todd.e.brandt@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>
-Subject: Re: [PATCH V2 1/4] cpufreq: amd-pstate: Add more tracepoint for AMD
- P-State module
-Message-ID: <YiVzssDCijRWZLoK@amd.com>
-References: <20220304060724.314582-1-Jinzhou.Su@amd.com>
- <20220304060724.314582-2-Jinzhou.Su@amd.com>
- <YiG0uqa+Ho7XyuHJ@amd.com>
- <CAJZ5v0jG2uodQGrWv01xLcDLgdU1MRs5vyJ5s+E4L0U4-GuR0g@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jG2uodQGrWv01xLcDLgdU1MRs5vyJ5s+E4L0U4-GuR0g@mail.gmail.com>
-X-ClientProxiedBy: SGBP274CA0024.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::36)
- To DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4dcd6e1f-c2f3-40f7-19c1-08d9ffe5be7d
-X-MS-TrafficTypeDiagnostic: BL0PR12MB2563:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR12MB256345F8FD981AAC2BF68E6AEC089@BL0PR12MB2563.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PL7PnmCFpS7upziCT3U4N+tF11EfiP7+8nODWt5b+ut7HBWHE4v2qdllfnnlEAFyz6evl68NzTVnbWp632u2Ocw2n0RsN3w7pXoe/FYOr4mm5Jtw7QCYN9fw7UVyNmc0h1RWLOvu98s8F1FANLN4opfAfAmfZCFejb+kio323Udb7QMCVsCSOkWuR6jAMhlbSMnMiBPcE6Z2qH/ONIMnDPGvfAvM2fxR4/mHXtqwcnbjiWjR2u/301+2buiW/ry2CoESxcouS8oWvuwKmSwHZjRfrxPtJ4e9IVjYezdHJqswOnu6bGnn25nuaDpMAODMf382U5/A66eH3rZy8s36Urfg38cYZfIc6nh7BzzMHgZRWPpEGTDPw9urV8Y2MUbkpHRIHZQ1LoFlbS6XKdQYcK9j3hgPJ4ICwWFPFKGfW89+Qh6HwuxRDDpTuCGvPDMKVuQPt51Q8K4OMOt9djUYVP8OAGQEsRRCxsFlNSXLyunpIvq4JcP3DafJvAX6Ej+89rvJ2e4Mhm86CfzA9K02HWlkPL4cSxfD0Xe7P0AFzGLqmmKufqoJEkytYmJQn+daAA5IMhARKFmcqLT6zEGdGAZptj/YGaf/MMBQg3JVmhiChH+hMabpYrjNoLtwVCaiYdYQmjyKC9XIfylHRc7qbA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(53546011)(26005)(83380400001)(2906002)(186003)(2616005)(86362001)(6506007)(66476007)(38100700002)(6666004)(66946007)(6512007)(66556008)(4326008)(508600001)(5660300002)(8936002)(8676002)(6916009)(54906003)(316002)(6486002)(4744005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tQKSn8g7Vc6lh4PR13zvwtYheqKM+sPIHjYmPXW5dRcsA8KaLKsYQ0Q4na0E?=
- =?us-ascii?Q?XXIfGAzUefUZQh93diZhlBD7a9QLCZIHXcScQCntVQab1K1IQ1za0wFLRcHB?=
- =?us-ascii?Q?G8UO1ZePBCeRrFl2rdK03yDYyNbctOOatXy4LMv/UX3dcGPguSJ0pHnaYfxj?=
- =?us-ascii?Q?/xxV1myGBR/SnHxbqvGyyg1MEp5zqXAemxxg6DCA0lRvGMpc/iU70y3zN9ys?=
- =?us-ascii?Q?Ynpxh/CACw6DGdNe83m2QZt2Ge1i5RJLb8F/tOcxfBioiSc76r9IAqJ0+gqc?=
- =?us-ascii?Q?pVY4GoUBgeh/+8nZMS2+Tj3YSbFLFiyvXTzEKcA4sKWreZVC25EC8zrJ3e7o?=
- =?us-ascii?Q?Nq5ue2S8OIbh1tznG1Nn6UNPGOv/SFXHGSKUHYh1B/1SpFYoPfArZ1bz1Ttj?=
- =?us-ascii?Q?0OZu7wU1sytKiAOOztFqCz9+atVMqcRoeoBmZy73Z3SBfLKy49Se83S7fwN6?=
- =?us-ascii?Q?D0trlUj7eXBIRfgc+19XPOVuZ3mMsBzHhzt+ul8n9XEJy3iqe/Xmhyotr3Hk?=
- =?us-ascii?Q?Rr+blU8YxgqeqRY9F984t0qAulmAKzJU4UgoWz9lFtUcznHZaCpFchszfE/3?=
- =?us-ascii?Q?Bl4vI9BZMJhJO5c0a2XvZKtf6Bs/dP7IvMzxa73sWdScekC5GCjq9ObHizLa?=
- =?us-ascii?Q?4D4Xy7z7obUfZY4VzF4NdpT68liKvW9uKjM1TQLBQtoiVf4MNvUznv/x4gHf?=
- =?us-ascii?Q?4yYFEnhk5eh9mbiB5IwCJzboZOfmdb1YPT4IGpmmytZwCmXPyAe5eOX7ktvG?=
- =?us-ascii?Q?UMPtsuDW8vngVjF2KCZyHR6OykrdyoW/1ZynWu/vtTtBtjXlmbxcS53G0g5J?=
- =?us-ascii?Q?AuMc3J/OdUZlWu5V2TSx6GO9q3s6gQ6ONEakQ4ugyybwScDR0c/5887tF5OU?=
- =?us-ascii?Q?Qzc6GTF0IEgzKeTp6KP0KL4MIVa2TniovRQ+7rhtWF4T/uQ2NeGEajLogVbl?=
- =?us-ascii?Q?cHvwDByvP7122ZrEVhgA+y6PjL89i2bJvNRFQpuSVKiAD3umVZfWkDmT8ejD?=
- =?us-ascii?Q?1ZgyyCcfIroCrxYPk8cGpOsnTrn4w8jA3OTsytjq0Cj8NYTjGr75byCHAOfZ?=
- =?us-ascii?Q?39ohqLCEZQGbkE9ISBArzHB++Jw/8NpRxQLyPCcV1Fg7J1pMDQLrW/udE4RS?=
- =?us-ascii?Q?1PPEUUtuZ9chw2w9njUdiH+PCHp59ejZ6hLtTJroqQ3S7gfJoafBWk4flJnO?=
- =?us-ascii?Q?oPKasPnaiJVJd3mb65oxHii7qkWymF/oiAwC6n+JX/kLHPZD9rx1MK0AXfxc?=
- =?us-ascii?Q?IDAQoJLll85srQ447ky9V2JIPCl3PxXtsN6nq0PuakC8l0nntGeTi3BNP+qU?=
- =?us-ascii?Q?rMVnsc5v7L4mJ+86WalTQAHeXSwekhwJ4xO8AxCqauvsbjT/IB0o8wxMCqyh?=
- =?us-ascii?Q?0R7obrZXqiKyZHy6xiaimSFjII8Ayq8EG2cuimEyk3wR0MCHxuISkHmqdI45?=
- =?us-ascii?Q?jE258DLYnIRMvCdY2/+avFB2ZGUm2pJ6vBG5FqPsClyrn+yccuFZJ3ru3Q6z?=
- =?us-ascii?Q?pmOIdcONg4sjpsirBf8Rea6ztNFWEiEYVMFis8UB0x3lO+DFRXofuVOy4psn?=
- =?us-ascii?Q?sIgzkDLmfspFSCz9gdv0ytipAtSKAIXlSaJv4ClxqUnz/QXZRvivnlPrxEbC?=
- =?us-ascii?Q?koHfpVHHeeMsJt6TuGQQ7fQ=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4dcd6e1f-c2f3-40f7-19c1-08d9ffe5be7d
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2022 02:54:06.0442
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JHa1amjtTbGym8CPk8OAXtPS5pFMH5y16EoqZ1CneJqc7zFBxehWfj4rD9OMKry6d6GheXGR5EKA6Ek/36ua1g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB2563
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        with ESMTP id S235085AbiCGDiF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Mar 2022 22:38:05 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFDA5EBF8
+        for <linux-pm@vger.kernel.org>; Sun,  6 Mar 2022 19:37:09 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id 190-20020a2505c7000000b00629283fec72so2974821ybf.5
+        for <linux-pm@vger.kernel.org>; Sun, 06 Mar 2022 19:37:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=ARpa6zPvm9PZGcuhaMPlpvBKRkuGs23E2qbxbopfbZE=;
+        b=MCCElJilTvr7B+pD7gKcvQr3ZDXAlzmXGgob1nCokYBs+kB9L9gbZZcowbYbvdwNX8
+         2ea0s2xtzpM00b2h1SF+GNyA2hOZidBC0B5tFnW0Foojz2QhIVyc5nv2yQFk9Rd7tfkg
+         pJPK2LGns7HIOwY3SKlwazz6YMfXHZsw+Omj+Tt9ZnjqkP4xbTo/aD7odi4qKS5JJHY+
+         bhanhrsRkzChc23du1M8OFUaXclZVPfqjBe6umiBZs4I/BNVY/OVUF9huoJf58CCnTC0
+         UymJ3wYRkn+hrd7zNq5laZI3suCMgJM9ipS2dLOcaa3+A/PmgD3wOHNwmtkpmLW2HIJh
+         9a2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=ARpa6zPvm9PZGcuhaMPlpvBKRkuGs23E2qbxbopfbZE=;
+        b=4wmi8NonJfVbe13jHPE1dpUJX5wI7kZTtk21pFhxLTslP6geHCFA9RGuM6MXhJitm0
+         wnwNoXcPXCOAWSbLSrAjn2bbQfUZ9QIQuGNkdY0CX4kaOvD1wjauYEhN7UjRTap4JaDl
+         blWf7cEhGpkK/qLbNhiMDyNyqmzSh/awRbUsOZcPKdl04Z1OlHLax3NZmz2AnHBRfpKH
+         jtyAR1dFXv0P1D/ab7VcDY+/KlpX9RkLUhnNd0NJ8WEEtUcYyvWmAA+R+NHyVvrgCvEM
+         oUnsNjkCKqYHO7W0sQpECeYtEVN87povGgMBF3iw/QK+5yfgIQ9Rom3hIwqDctoqScXF
+         NeDw==
+X-Gm-Message-State: AOAM530U3vJO8wF+YpoBVdjazm1vuU8msBPKcGDJy7QZKUHbU9v5i/aU
+        xADqcRFIeEzQa+1HH+jncawiJEmbJg==
+X-Google-Smtp-Source: ABdhPJy1CbjnoFeTL/HWc58+lRRM4BCd1WNPaT1xh27NXWX5WTgImWN4e5HS6Yq2RCMg/Y19e6ct8oySSg==
+X-Received: from wjack.tao.corp.google.com ([2401:fa00:fd:203:309f:cb85:fb3d:7ae0])
+ (user=wjack job=sendgmr) by 2002:a81:5545:0:b0:2db:effc:f88a with SMTP id
+ j66-20020a815545000000b002dbeffcf88amr7072121ywb.370.1646624228824; Sun, 06
+ Mar 2022 19:37:08 -0800 (PST)
+Date:   Mon,  7 Mar 2022 11:31:08 +0800
+Message-Id: <20220307033110.283379-1-wjack@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
+Subject: [PATCH v1] power: supply: add dock type
+From:   Jack Wu <wjack@google.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Jack Wu <wjack@google.com>, kernel-team@android.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -127,28 +63,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Mar 05, 2022 at 02:49:51AM +0800, Rafael J. Wysocki wrote:
-> On Fri, Mar 4, 2022 at 7:42 AM Huang Rui <ray.huang@amd.com> wrote:
-> >
-> > On Fri, Mar 04, 2022 at 02:07:21PM +0800, Su, Jinzhou (Joe) wrote:
-> > > Add frequency, mperf, aperf and tsc in the trace. This can be used
-> > > to debug and tune the performance of AMD P-state driver.
-> > >
-> > > Use the time difference between amd_pstate_update to calculate CPU
-> > > frequency. There could be sleep in arch_freq_get_on_cpu, so do not
-> > > use it here.
-> > >
-> > > Signed-off-by: Jinzhou Su <Jinzhou.Su@amd.com>
-> > > Co-developed-by: Huang Rui <ray.huang@amd.com>
-> > > Signed-off-by: Huang Rui <ray.huang@amd.com>
-> >
-> > Let's remove "Signed-off-by" of me, just leave "Co-developed-by".
-> 
-> Actually, they both need to be present (the C-d-b clarifies the S-o-b
-> meaning), so the above is correct.
-> 
+Add dock power_supply_type for the drivers which supports dock can
+register a power supply class device with POWER_SUPPLY_TYPE_DOCK.
 
-OK, I see. Thanks to clarify this.
+Signed-off-by: Jack Wu <wjack@google.com>
+---
+ drivers/power/supply/power_supply_sysfs.c | 1 +
+ include/linux/power_supply.h              | 1 +
+ 2 files changed, 2 insertions(+)
 
-Best Regards,
-Ray
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index c3d7cbcd4fad..53494b56bbb4 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -57,6 +57,7 @@ static const char * const POWER_SUPPLY_TYPE_TEXT[] = {
+ 	[POWER_SUPPLY_TYPE_USB_PD_DRP]		= "USB_PD_DRP",
+ 	[POWER_SUPPLY_TYPE_APPLE_BRICK_ID]	= "BrickID",
+ 	[POWER_SUPPLY_TYPE_WIRELESS]		= "Wireless",
++	[POWER_SUPPLY_TYPE_DOCK]		= "Dock",
+ };
+ 
+ static const char * const POWER_SUPPLY_USB_TYPE_TEXT[] = {
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index 9ca1f120a211..fa80eaa54242 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -187,6 +187,7 @@ enum power_supply_type {
+ 	POWER_SUPPLY_TYPE_USB_PD_DRP,		/* PD Dual Role Port */
+ 	POWER_SUPPLY_TYPE_APPLE_BRICK_ID,	/* Apple Charging Method */
+ 	POWER_SUPPLY_TYPE_WIRELESS,		/* Wireless */
++	POWER_SUPPLY_TYPE_DOCK,			/* Dock Charging */
+ };
+ 
+ enum power_supply_usb_type {
+-- 
+2.34.1.173.g76aa8bc2d0-goog
+
