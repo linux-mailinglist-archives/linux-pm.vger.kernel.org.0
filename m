@@ -2,117 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 568A34D1FBC
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Mar 2022 19:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A28E54D1FCA
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Mar 2022 19:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349391AbiCHSLH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Mar 2022 13:11:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
+        id S1347158AbiCHSM2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Mar 2022 13:12:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349067AbiCHSLH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Mar 2022 13:11:07 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6920852E42
-        for <linux-pm@vger.kernel.org>; Tue,  8 Mar 2022 10:10:10 -0800 (PST)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 321233F7E1
-        for <linux-pm@vger.kernel.org>; Tue,  8 Mar 2022 18:10:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646763009;
-        bh=P5NfD1dxp72/Z/UJR5oJ5juKBT9hEONgDz/FvaCJI40=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=jSzKNQ/w58XuU2p4z4aXPdeR3XWy32BU4Vu/23BqPC9TWH6DUyGo3MVtlZEC4QKCO
-         ec4jTXLEkG2dPm7fkLbI9Stu7XwDrkuTQepaCHKCZEp/vuzyuyqqeinj1ozpkmbFBH
-         KtLcUcmEeXyNtsD8JVDlWBV2StZ2AypBF3AgEVIBue0tqA3+QaudHRAtXhmDyZYDyJ
-         Bi5dvknVplyl7hH0hxOwM2gE1N6l+JbfXuGGZ/URvmjSZIKQEfa2TqBFyabQYNKNPG
-         IXw6OnYMYoMExevQinDgBj7dxl2uFGGsW9w3MVOdnWZZjMOlgVPYSKCNj7CEEeTUep
-         bSepUhObacpSg==
-Received: by mail-ej1-f70.google.com with SMTP id le4-20020a170907170400b006dab546bc40so5844848ejc.15
-        for <linux-pm@vger.kernel.org>; Tue, 08 Mar 2022 10:10:09 -0800 (PST)
+        with ESMTP id S234694AbiCHSM1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Mar 2022 13:12:27 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA755676C
+        for <linux-pm@vger.kernel.org>; Tue,  8 Mar 2022 10:11:30 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id u10so28230838wra.9
+        for <linux-pm@vger.kernel.org>; Tue, 08 Mar 2022 10:11:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
+         :subject:content-transfer-encoding;
+        bh=KVZsESrH/S2yqvHapMzlA8otCo1/mrHmDA1KH6uRnrE=;
+        b=BDSWz1XmnfrqMytFyuZ5KZDpXlq6bKLyqu+aIGaEBiduS7SinmHZ++8EtRN89mPL16
+         ixWKpyl8tqDgb9ZErJ4OHbp8mZazpu32wZOviOLs/glW5b2XD3G8Tc1Pn+ClO+A03L5H
+         6W49z3puEksUaxSFHXjw8RWoK3zcKSEJJvjZlgPaDamTeWVJL1fuc49zHr9OZGJgNo1V
+         r/38WnVkXYFGGqssrqeWekyHxqpDwmz627xtPgAf8JNjqBQDioDVuTSxtFmRy4kIXLQq
+         JxCTrPVSL2LJgPQuRKzPH/oi0ahPoCkGA8a2nx7NMY1glAr3ilYt17PyfLup3+LDVljT
+         ALOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=P5NfD1dxp72/Z/UJR5oJ5juKBT9hEONgDz/FvaCJI40=;
-        b=xKWRVGYtK/HoSSZPq0oAbMrcdLSzoTfMKcuKGT4S9I41LvTbeC+IzeueNrUC6fva8k
-         Y/F4f9198JPshrSwhONyayVK/v31QdxXzpwE2+H/1KPxeMQDxxWDeqHMCt8lzB4C09jb
-         mbvPxmncRZ0Qf9fspa8pu/Z7dh/Wp1vLJ9OAocacMK/V9LGIl4Ne+V0fSMXktNVJVqT0
-         HxJyV7Fum5I2/Nrg3O7xF9mMd0/L4ehwcr4cL6O3VzjucF7HUc85QgnimDxD8EkPFr1V
-         ioF4hD2J9K8Wd+/38//M+1RhYSmaG9wV91dViKcSdF03xqu01sTaZKaECOHIMxPyuiSw
-         v05Q==
-X-Gm-Message-State: AOAM531Anf0rzMw6W8rmF7th3vMxagTJTgOlFoGoFj9BCEap7wwl3G6z
-        KwB1I+7OZ+54kTadPkmHkYPu1Kv1lBhFuFELozbXXotS8UeTX5Sok4PdOkHeONri7NkqSIJzAIF
-        Wpy1SxYASR+5kAiujoA4BLb1TDtV1S/s1E6eN
-X-Received: by 2002:a17:906:2a50:b0:6da:ed06:b029 with SMTP id k16-20020a1709062a5000b006daed06b029mr14158897eje.506.1646763008685;
-        Tue, 08 Mar 2022 10:10:08 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzdsvPNPxGbwShrZZxnDXdfQoC5eYJxtPkPGLQtGTq+xlcflRFTJjtk66/HeJ0oH8kS8x/sSA==
-X-Received: by 2002:a17:906:2a50:b0:6da:ed06:b029 with SMTP id k16-20020a1709062a5000b006daed06b029mr14158874eje.506.1646763008423;
-        Tue, 08 Mar 2022 10:10:08 -0800 (PST)
-Received: from [192.168.0.144] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id qx13-20020a170906fccd00b006bdeb94f50csm6141273ejb.203.2022.03.08.10.10.07
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:from:subject:content-transfer-encoding;
+        bh=KVZsESrH/S2yqvHapMzlA8otCo1/mrHmDA1KH6uRnrE=;
+        b=i0FL4yPaHBjaxxa9Eq79eEcZIxUn90/RokCQ5zRkGHv/Eq2BCHgqriN09sXiG2iMj6
+         Dsejs2X1eGgDz0a6CzfmVCdreYGjsoS+0UpO3QsNpc6h0jDqeIypuofKTYQDHA0TR+27
+         TwwwdxYx4tzr/4tTVezs95+eE6Tc/iAPvNv46XO9Wiy88ozjvvd1pBL/1ie+9C44dWSW
+         J+aOeh3WV/+s9MfCGhDlCZFAiPrvuzmdzwnQALn7xHzvwazWLzncHAhbo7kZhxtaVkZ1
+         PVnQPEZ2w0VQ//mbl6qR9cbfEj8zbq7os+PI7nvh9LfnWbUgGX7nS/4DyFHIG66dP3zT
+         9Y2Q==
+X-Gm-Message-State: AOAM531R5Q17YTZ9BsiytMl66JoHGYNK7LUelYj2y/xVfeXthpNE0cg6
+        JoVJ0oEyA13txiTyRvdd34EhDJJ5KRMntw==
+X-Google-Smtp-Source: ABdhPJx02A5gaS+KyDYI6FaotYzkPpy5gsW7qKTlF2yxoZCkXrM5VurUnUMx4axG0TGcpYOIOnE3BA==
+X-Received: by 2002:a5d:6205:0:b0:1e4:b3fd:9ba8 with SMTP id y5-20020a5d6205000000b001e4b3fd9ba8mr12579926wru.426.1646763089124;
+        Tue, 08 Mar 2022 10:11:29 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:1ffc:39b4:7538:de29? ([2a01:e34:ed2f:f020:1ffc:39b4:7538:de29])
+        by smtp.googlemail.com with ESMTPSA id l7-20020adfe9c7000000b001f06f8ec92dsm11960759wrn.30.2022.03.08.10.11.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 10:10:07 -0800 (PST)
-Message-ID: <e80dd94a-633c-b1be-64c4-1c8fbdfd677f@canonical.com>
-Date:   Tue, 8 Mar 2022 19:10:07 +0100
+        Tue, 08 Mar 2022 10:11:28 -0800 (PST)
+Message-ID: <77450e71-9228-dace-56b0-c2516220f572@linaro.org>
+Date:   Tue, 8 Mar 2022 19:11:27 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
-Subject: Re: [PATCH v3 05/15] dt-bindings: devfreq: rk3399_dmc: Add more
- disable-freq properties
 Content-Language: en-US
-To:     Brian Norris <briannorris@chromium.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Lin Huang <hl@rock-chips.com>, Heiko Stuebner <heiko@sntech.de>,
-        Derek Basehore <dbasehore@chromium.org>,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Rob Herring <robh@kernel.org>
-References: <20220308000945.706701-1-briannorris@chromium.org>
- <20220307160918.v3.5.I382d4de737198ea52deb118c9bdc4d93d76e009e@changeid>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220307160918.v3.5.I382d4de737198ea52deb118c9bdc4d93d76e009e@changeid>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Romain Naour <romain.naour@smile.fr>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        YueHaibing <yuehaibing@huawei.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] thermal changes for v5.18-rc1
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/03/2022 01:09, Brian Norris wrote:
-> DDR DVFS tuning has found that several power-saving features don't have
-> good tradeoffs at higher frequencies -- at higher frequencies, we'll see
-> glitches or other errors. Provide tuning controls so these can be
-> disabled at higher OPPs, and left active only at the lower ones.
-> 
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
-> 
-> Changes in v3:
->  * Add Reviewed-by
-> 
-> Changes in v2:
->  * hyphens, not underscores
->  * *-hz units, and drop the types definition
-> 
->  .../bindings/devfreq/rk3399_dmc.yaml          | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
-> 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Hi Rafael,
 
-Best regards,
-Krzysztof
+please consider pulling,
+
+
+The following changes since commit 8a43cf06864363f43917b046ab689fab61fd44f2:
+
+   Merge branch 'thermal-hfi' into linux-next (2022-03-08 15:49:29 +0100)
+
+are available in the Git repository at:
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
+tags/thermal-v5.18-rc1
+
+for you to fetch changes up to c0013ecc2f1da00ac1683259aa02a8f696fecd6f:
+
+   MAINTAINERS: thermal: samsung: update Krzysztof Kozlowski's email 
+(2022-03-08 15:57:04 +0100)
+
+
+Thanks
+   -- Daniel
+
+----------------------------------------------------------------
+- Convert the DT bindings to yaml format for the Exynos platform
+   and fix the MAINTAINERS file regarding this driver (Krzysztof
+   Kozlowski)
+
+- Register the thermal zones as HWmon sensors for the QCom's
+   Tsens driver (Dmitry Baryshkov)
+
+- Add the sm8150 platform support to LMh (Thara Gopinath)
+
+- Add the msm8953 compatible documentation in the bindings (Luca
+   Weiss)
+
+- Register the thermal zones as HWmon sensors for the TI thermal
+   platforms (Romain Naour)
+
+- Check the command result from the IPC command to the
+   BPMP in the Tegra driver (Mikko Perttunen)
+
+- Silent the error for normal configuration where the interrupt
+   is optionnal on the Broadcom thermal driver (Florian Fainelli)
+
+- Remove a remaining dead code from the TI thermal driver (Yue
+   Haibing)
+
+- Update the email in MAINTAINERS file for the Exynos thermal
+   driver (Krzysztof Kozlowski)
+
+----------------------------------------------------------------
+Dmitry Baryshkov (1):
+       thermal/drivers/tsens: register thermal zones as hwmon sensors
+
+Florian Fainelli (1):
+       thermal/drivers/brcmstb_thermal: Interrupt is optional
+
+Krzysztof Kozlowski (3):
+       dt-bindings: thermal: samsung: Convert to dtschema
+       MAINTAINERS: thermal: samsung: Drop obsolete properties
+       MAINTAINERS: thermal: samsung: update Krzysztof Kozlowski's email
+
+Luca Weiss (1):
+       dt-bindings: thermal: tsens: Add msm8953 compatible
+
+Mikko Perttunen (1):
+       thermal: tegra-bpmp: Handle errors in BPMP response
+
+Romain Naour (1):
+       drivers/thermal/ti-soc-thermal: Add hwmon support
+
+Thara Gopinath (2):
+       thermal/drivers/qcom/lmh: Add support for sm8150
+       dt-bindings: thermal: Add sm8150 compatible string for LMh
+
+YueHaibing (1):
+       thermal/drivers/ti-soc-thermal: Remove unused function 
+ti_thermal_get_temp()
+
+  .../devicetree/bindings/thermal/exynos-thermal.txt | 106 ------------
+  .../devicetree/bindings/thermal/qcom-lmh.yaml      |   1 +
+  .../devicetree/bindings/thermal/qcom-tsens.yaml    |   1 +
+  .../bindings/thermal/samsung,exynos-thermal.yaml   | 184 
++++++++++++++++++++++
+  MAINTAINERS                                        |   7 +-
+  drivers/thermal/broadcom/brcmstb_thermal.c         |   2 +-
+  drivers/thermal/qcom/lmh.c                         |  62 ++++---
+  drivers/thermal/qcom/tsens.c                       |   5 +
+  drivers/thermal/tegra/tegra-bpmp-thermal.c         |  13 +-
+  drivers/thermal/ti-soc-thermal/ti-thermal-common.c |  12 +-
+  10 files changed, 247 insertions(+), 146 deletions(-)
+  delete mode 100644 
+Documentation/devicetree/bindings/thermal/exynos-thermal.txt
+  create mode 100644 
+Documentation/devicetree/bindings/thermal/samsung,exynos-thermal.yaml
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
