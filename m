@@ -2,157 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A41184D1E3E
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Mar 2022 18:12:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48ABF4D1F8D
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Mar 2022 18:58:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348636AbiCHRNT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Mar 2022 12:13:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40000 "EHLO
+        id S1348966AbiCHR7S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Mar 2022 12:59:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348386AbiCHRNT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Mar 2022 12:13:19 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B69352E46
-        for <linux-pm@vger.kernel.org>; Tue,  8 Mar 2022 09:12:22 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id e13so17662875plh.3
-        for <linux-pm@vger.kernel.org>; Tue, 08 Mar 2022 09:12:22 -0800 (PST)
+        with ESMTP id S1348855AbiCHR7S (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Mar 2022 12:59:18 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C372C134
+        for <linux-pm@vger.kernel.org>; Tue,  8 Mar 2022 09:58:21 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id r10so29834225wrp.3
+        for <linux-pm@vger.kernel.org>; Tue, 08 Mar 2022 09:58:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Ts2NsLw5sBXzLdDRu8UJXXgXcMQQ4I0kvuWW3GaWefE=;
-        b=ioSixTpnfjPaduAxBwJCHbXwf2TcIgPuzr7twp399fwcWibkyCwSbcR6UzD4odPM36
-         DdH6UIMlsl0IfQC0qKryZg38Ri6i2dDP1krwtDJR6spo1mzIdHFX1xqnJlB2VhxxAph1
-         ibLTLJH/wJCANDluQs+eufYWGr4g69RB0e8aL4+8Ai5AAsC2FPIiCX2QBnEBDeG5Nz0p
-         Rbr8etf73BAUZYIejNTfOYxERSjM+/BSbu+6BPwsH3N430sJcdY7BkP2UP+fSI4QxZcA
-         fUxGXV3CQzO19iuRvWN93ZMQEi+vbZ972P4txp4xAuWmDgj2VxBNW2jEDdmPLMCb58Yp
-         2NtQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=iVgT/lEpt+HT1m7k16bXsNag2nWmHNb7sF0hyEVH5MI=;
+        b=mG1cEnyozlb1eSoY4W/KY3M3+ckmtRaS6y+C8q8rQfdIjlukAfk6TM822Vb5+F9CLp
+         804h1F3SuBCGzHzRLWG31UInyQx7Cpj4YeUlRynuag0E/rXF9/lZEUia+jEYRi+ak11V
+         deFPqNCi4cmtfsIvEwMd0cN695bDjSJkDnx0qxcETYN8IAg23QtoijwyDgcm/eNO5qXJ
+         nA6vDdwMof6h+sL9589HHmDtTDj17pMmHRxb8vbT4/sX8PxRZB10gSPoDZAyWEPh+d47
+         BcXJ0jT4TCOLCWV8FmRMiQjZ83CJGuOpKiqGSzTtRnsiWA3JrzrxOjI6P4EKjZomNX8W
+         vxwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Ts2NsLw5sBXzLdDRu8UJXXgXcMQQ4I0kvuWW3GaWefE=;
-        b=o/bk9HACla2R/G0zaHxr9FDdLQiCX7tRaS3tbNs8xjB4oJsU96xPbPoJHUBVURHHG/
-         RZYuxKYIdHV2h+oRjtxpjxzldJhi4rno1X9EFdFwuJtsS3aexh+bGLXDbkRRfIkNt2R8
-         SIjtmoqxn17AzG87VXkBR/PyFTUDEYtVNxelqbWYvNcuxB0g9EBjZyyqaX3XHJuCfAmg
-         dKQ5Z1BAcavDnhHAZ2BktmqcPYiayShpB9I6cumB7awvIQMLqpX3u3wYk3G/oeBNgHOg
-         wKcIXWrtHTC+oDUwQnlGMrWC9XSZKYlxtzn2mcLXOMuGhzef6YpoGb6MMkGf9IjtMGSt
-         2TJw==
-X-Gm-Message-State: AOAM530cnJ7cMUDfhqVk5y/p3rOhK8oN0rylW/w+BLiTYrI8hMpMFM5L
-        /0eRb0Lh9wuN0B9z6uqv8FYIm+jEC2FYXjD3z94=
-X-Google-Smtp-Source: ABdhPJxq7Qb6I5dRrdqTP76WqqttNIHBrKyPYF5bJCNUH2rRFM1MzRfXegYlpBVlmSTHV4eLLM4c8w==
-X-Received: by 2002:a17:902:714d:b0:151:3f2d:8b26 with SMTP id u13-20020a170902714d00b001513f2d8b26mr18595247plm.70.1646759541805;
-        Tue, 08 Mar 2022 09:12:21 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id m8-20020a17090a158800b001bf2cec0377sm4616975pja.3.2022.03.08.09.12.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Mar 2022 09:12:21 -0800 (PST)
-Message-ID: <62278e75.1c69fb81.ca006.8a6d@mx.google.com>
-Date:   Tue, 08 Mar 2022 09:12:21 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iVgT/lEpt+HT1m7k16bXsNag2nWmHNb7sF0hyEVH5MI=;
+        b=uam77uoVJVWtKZH9bQx3L9+wayhIrfJeJcZA8Onk1qeErvnmMyXD3Y5F0ffavMNwSW
+         9aGuHREONwsRHYNG1Vswa/5LG3qb2WxEgjepvOvZ/ooYHI1/HjV5Vfnptrd//wendbGM
+         HXCsFqt8CN76BWP1fsFuJ2CUqutUfUXEMO//bbaMIAFIL+jTc2RHuA8jM79dewV9Q4Yk
+         uxvm2ly63D8E6JS6GnwPaTfZQfKuAOh64XC/ht9IxtlTCifq35P+kdQrygvRtO2o7NBv
+         cNbQ+rUbCkQhZicUTCOmKgHLTZaBIgbJBip9EIKhMlhkFAxIbJCY26N9aHxf63i/do0o
+         HhYQ==
+X-Gm-Message-State: AOAM532agF5PTlKNmkIUXvlECsSFknd4rnuzymf14Wts2ho5twM3B+/d
+        u0igM6TfKgvyHV4XjjUr25hVUg==
+X-Google-Smtp-Source: ABdhPJx47DHEBVNcPDo6vDwgYx6FVCCtJKmihpsvxZqtW+E520kDSJ/bMlJYvbRNJU9yUmCiZ+MU2g==
+X-Received: by 2002:adf:a302:0:b0:1ed:bf30:40e3 with SMTP id c2-20020adfa302000000b001edbf3040e3mr13382632wrb.270.1646762299669;
+        Tue, 08 Mar 2022 09:58:19 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:1ffc:39b4:7538:de29? ([2a01:e34:ed2f:f020:1ffc:39b4:7538:de29])
+        by smtp.googlemail.com with ESMTPSA id bi6-20020a05600c3d8600b00381590dbb25sm2835428wmb.3.2022.03.08.09.58.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Mar 2022 09:58:19 -0800 (PST)
+Message-ID: <c1a0576b-89fa-6e91-b80e-f2aa20dc7c77@linaro.org>
+Date:   Tue, 8 Mar 2022 18:58:18 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v5.17-rc7-126-g8a43cf068643
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (v5.17-rc7-126-g8a43cf068643)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] drivers/thermal/thermal_of: Add change_mode ops support
+ for thermal_of sensor
+Content-Language: en-US
+To:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1646752834-25043-1-git-send-email-quic_manafm@quicinc.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <1646752834-25043-1-git-send-email-quic_manafm@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.17-rc7-126-g8=
-a43cf068643)
+On 08/03/2022 16:20, Manaf Meethalavalappu Pallikunhi wrote:
+> The sensor driver which register through thermal_of interface doesn't
+> have an option to get thermal zone mode change notification from
+> thermal core.
+> 
+> Add support for change_mode ops in thermal_of interface so that sensor
+> driver can use this ops for mode change notification.
+> 
+> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+> ---
+>   drivers/thermal/thermal_of.c | 14 ++++++++++++++
+>   include/linux/thermal.h      |  3 +++
+>   2 files changed, 17 insertions(+)
+> 
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index 9233f7e..a4e3820 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -203,6 +203,17 @@ static int of_thermal_get_trend(struct thermal_zone_device *tz, int trip,
+>   	return data->ops->get_trend(data->sensor_data, trip, trend);
+>   }
+>   
+> +static int of_thermal_change_mode(struct thermal_zone_device *tz,
+> +				enum thermal_device_mode mode)
+> +{
+> +	struct __thermal_zone *data = tz->devdata;
+> +
+> +	if (!data->ops || !data->ops->change_mode)
+> +		return -EINVAL;
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-17-rc7-126-g8a43cf068643/
 
-Tree: pm
-Branch: testing
-Git Describe: v5.17-rc7-126-g8a43cf068643
-Git Commit: 8a43cf06864363f43917b046ab689fab61fd44f2
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
+If this function is called it is because below in the bind function 
+ops->change_mode was true, so the condition above is always true, no ?
 
 
-Warnings summary:
+> +	return data->ops->change_mode(data->sensor_data, mode);
+> +}
+> +
+>   static int of_thermal_bind(struct thermal_zone_device *thermal,
+>   			   struct thermal_cooling_device *cdev)
+>   {
+> @@ -408,6 +419,9 @@ thermal_zone_of_add_sensor(struct device_node *zone,
+>   	if (ops->set_emul_temp)
+>   		tzd->ops->set_emul_temp = of_thermal_set_emul_temp;
+>   
+> +	if (ops->change_mode)
+> +		tzd->ops->change_mode = of_thermal_change_mode;
+> +
+>   	mutex_unlock(&tzd->lock);
+>   
+>   	return tzd;
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index c3148939..365733b 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -299,6 +299,8 @@ struct thermal_zone_params {
+>    *		   temperature.
+>    * @set_trip_temp: a pointer to a function that sets the trip temperature on
+>    *		   hardware.
+> + * @change_mode: a pointer to a function that notifies the thermal zone
+> + *		   mode change.
+>    */
+>   struct thermal_zone_of_device_ops {
+>   	int (*get_temp)(void *, int *);
+> @@ -306,6 +308,7 @@ struct thermal_zone_of_device_ops {
+>   	int (*set_trips)(void *, int, int);
+>   	int (*set_emul_temp)(void *, int);
+>   	int (*set_trip_temp)(void *, int, int);
+> +	int (*change_mode) (void *, enum thermal_device_mode);
+>   };
+>   
+>   /* Function declarations */
 
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
