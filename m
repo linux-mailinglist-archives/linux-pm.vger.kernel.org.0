@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A13AA4D153A
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Mar 2022 11:53:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFEF24D156E
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Mar 2022 12:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346021AbiCHKyv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Mar 2022 05:54:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42192 "EHLO
+        id S1346118AbiCHLDn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Mar 2022 06:03:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346017AbiCHKyu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Mar 2022 05:54:50 -0500
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC1041303;
-        Tue,  8 Mar 2022 02:53:53 -0800 (PST)
-Received: by mail-qk1-f182.google.com with SMTP id q194so720807qke.5;
-        Tue, 08 Mar 2022 02:53:53 -0800 (PST)
+        with ESMTP id S1346137AbiCHLDm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Mar 2022 06:03:42 -0500
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254A427176;
+        Tue,  8 Mar 2022 03:02:44 -0800 (PST)
+Received: by mail-qk1-f175.google.com with SMTP id 85so6370759qkm.9;
+        Tue, 08 Mar 2022 03:02:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=y3UjhnfNllI0p7H4Pz4n1OpkqRIkGKtHIsAtcWmQ56k=;
-        b=wVHo5IQ5bciRSAK0P1M09x6mXHwaDOhfHfSGVE7HnYRYSs8WMMSRJAevSGGA8CmSdj
-         O7v/i1pSIl5ROilAe8XMd51r6D7irrPDX8HlU9jdfuFjlsL9zdNoBqtAvZBTG8NFXiPl
-         ozZosREixJ7X703acFawjiuztlP2BOSKtwyGoaDzVKY9ROCTtuj6XPFgrcrW/p9vAcHu
-         vsN3NpOgLQVnQ1c8KPWkpv6dIWM1mdN8PZzttfhhCh2T7CkC1Q80HORK3ip4QDkchMVL
-         qPlk7p7DAXv8WyithiJvif5fDegJEGbp+1JzAcNtLe6njEjFRSJXJlOM74J6B5xO0mi0
-         GhUA==
-X-Gm-Message-State: AOAM530Psmd0RiXDuKZA+f6oz6WnsmVADtWrZYpASFRWNKdFzCLR1f85
-        v4/Dd0CDgEPyFjZuxsxtNa9XKyiicv57xA==
-X-Google-Smtp-Source: ABdhPJyaD6taEO+1bVn3Egmp6kNMQdMy0Ml9Ar+8QirDSJHZvhJ4Kp4/462N9EEFattiblNPh5ZoTQ==
-X-Received: by 2002:a05:620a:2589:b0:67b:d0c:71bc with SMTP id x9-20020a05620a258900b0067b0d0c71bcmr8343413qko.570.1646736832493;
-        Tue, 08 Mar 2022 02:53:52 -0800 (PST)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id z3-20020ac87f83000000b002deae661c08sm10069704qtj.33.2022.03.08.02.53.51
+        bh=0stFw1+aRQ7CVonQBQEgUhIYKMIOUXl5HPF2CD2bC/k=;
+        b=0epP9pCIKqddTV7yR69IoLKkLwLJtYQkNlseH0MrxnvSNqvwTg3azZBhsFF2Cf2Zok
+         AVs2UNy7606hcBWHrqfVviOw2sn7stv1mZlCd4vBTSLbGHNkpH9t4A/VUe1a7ELzPmMs
+         ItrSF387ltqVdBD2k2rB26eHL0NBHcZJiWhSW0GkM/0dUc1qATPs9aV2x0ZzB1m56+wp
+         O6ZmjQ00KUFxfj+3Ivf+rNiUfP7yXyPSdDOSjvOZrywHGKb1XNuBra/l+NdXHq+ohhYE
+         57HblsKC4oiTTd0XvPY06wBlIvsBDfXvdZ3rRuc0d4epi2LEpQjLEUQyXnL/djBWRslC
+         7q5g==
+X-Gm-Message-State: AOAM531VA7FGNmxV/XZJ5xsNvpIHdRbwS1EZQGggzdE2o87zkE3ZyCb9
+        s/Hl9fxLu0dpq8/7qNPaswS+3P0QPR47IA==
+X-Google-Smtp-Source: ABdhPJz4LbydenFXu8BFsaSzLPvwJWKz/7OpDdSnqtbKx0d9/rD2jQ/na1tjOAcFVIw66NznhE2yAg==
+X-Received: by 2002:a05:620a:4450:b0:67c:258e:58d with SMTP id w16-20020a05620a445000b0067c258e058dmr2908687qkp.97.1646737363336;
+        Tue, 08 Mar 2022 03:02:43 -0800 (PST)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id j188-20020a3755c5000000b0067d1c76a09fsm462077qkb.74.2022.03.08.03.02.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 02:53:51 -0800 (PST)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2dbc48104beso196634157b3.5;
-        Tue, 08 Mar 2022 02:53:51 -0800 (PST)
-X-Received: by 2002:a81:618b:0:b0:2db:d952:8a39 with SMTP id
- v133-20020a81618b000000b002dbd9528a39mr12190538ywb.132.1646736830798; Tue, 08
- Mar 2022 02:53:50 -0800 (PST)
+        Tue, 08 Mar 2022 03:02:42 -0800 (PST)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2db2add4516so197138047b3.1;
+        Tue, 08 Mar 2022 03:02:41 -0800 (PST)
+X-Received: by 2002:a81:49d0:0:b0:2db:dc6d:445d with SMTP id
+ w199-20020a8149d0000000b002dbdc6d445dmr12610550ywa.512.1646737361666; Tue, 08
+ Mar 2022 03:02:41 -0800 (PST)
 MIME-Version: 1.0
-References: <20220124121009.108649-1-alistair@alistair23.me> <20220124121009.108649-3-alistair@alistair23.me>
-In-Reply-To: <20220124121009.108649-3-alistair@alistair23.me>
+References: <20220124121009.108649-1-alistair@alistair23.me> <20220124121009.108649-5-alistair@alistair23.me>
+In-Reply-To: <20220124121009.108649-5-alistair@alistair23.me>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 8 Mar 2022 11:53:39 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVNgVQzjrdybbnfCEr+G5Q4ztjRCC29RF9HwGnhKkPn3Q@mail.gmail.com>
-Message-ID: <CAMuHMdVNgVQzjrdybbnfCEr+G5Q4ztjRCC29RF9HwGnhKkPn3Q@mail.gmail.com>
-Subject: Re: [PATCH v18 2/8] mfd: simple-mfd-i2c: Add a Kconfig name
+Date:   Tue, 8 Mar 2022 12:02:30 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXhnG3ib+2C4TsejQKWNObxVbyJ1jODjyDxGpufY8bCag@mail.gmail.com>
+Message-ID: <CAMuHMdXhnG3ib+2C4TsejQKWNObxVbyJ1jODjyDxGpufY8bCag@mail.gmail.com>
+Subject: Re: [PATCH v18 4/8] regulator: sy7636a: Remove requirement on sy7636a mfd
 To:     Alistair Francis <alistair@alistair23.me>
 Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Sascha Hauer <kernel@pengutronix.de>,
@@ -78,54 +78,49 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Alistair,
 
-Thanks for your patch, which is now commit bae5a4acef67db88
-("mfd: simple-mfd-i2c: Add a Kconfig name") in mfd/for-mfd-next.
-
-On Mon, Jan 24, 2022 at 1:24 PM Alistair Francis <alistair@alistair23.me> wrote:
-> Add a Kconfig name to the "Simple Multi-Functional Device support (I2C)"
-> device so that it can be enabled via menuconfig.
-
-Which still does not explain why this would be needed...
-
+On Mon, Jan 24, 2022 at 1:25 PM Alistair Francis <alistair@alistair23.me> wrote:
 > Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+> Acked-by: Mark Brown <broonie@kernel.org>
 
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1188,7 +1188,7 @@ config MFD_SI476X_CORE
->           module will be called si476x-core.
+Thanks for your patch, which is now commit 947d0cce70ae37b8
+("regulator: sy7636a: Remove requirement on sy7636a mfd") in
+mfd/for-mfd-next.
+
+> --- a/drivers/regulator/Kconfig
+> +++ b/drivers/regulator/Kconfig
+> @@ -1208,7 +1208,6 @@ config REGULATOR_STW481X_VMMC
 >
->  config MFD_SIMPLE_MFD_I2C
-> -       tristate
-> +       tristate "Simple Multi-Functional Device support (I2C)"
->         depends on I2C
->         select MFD_CORE
->         select REGMAP_I2C
+>  config REGULATOR_SY7636A
+>         tristate "Silergy SY7636A voltage regulator"
+> -       depends on MFD_SY7636A
 
-The help text states:
+As this is an i2c mfd device, you still need a dependency on
+MFD and I2C, or some other symbol?
 
-| This driver creates a single register map with the intention for it
-| to be shared by all sub-devices.
-
-Yes, that's what MFD does?
-
-| Once the register map has been successfully initialised, any
-| sub-devices represented by child nodes in Device Tree will be
-| subsequently registered.
-
-OK...?
-
-Still, no clue about what this driver really does, and why and when
-it would be needed.
-
-There is one driver symbol that selects MFD_SIMPLE_MFD_I2C.
-There are no driver symbols that depend on this symbol.
-
-If you have a driver in the pipeline that can make use of this,
-can't it just select MFD_SIMPLE_MFD_I2C, so the symbol itself can
-stay invisible?
-
-Thanks!
+>         help
+>           This driver supports Silergy SY3686A voltage regulator.
+>
+> diff --git a/drivers/regulator/sy7636a-regulator.c b/drivers/regulator/sy7636a-regulator.c
+> index 22fddf868e4c..29fc27c2cda0 100644
+> --- a/drivers/regulator/sy7636a-regulator.c
+> +++ b/drivers/regulator/sy7636a-regulator.c
+> @@ -7,11 +7,14 @@
+>  // Authors: Lars Ivar Miljeteig <lars.ivar.miljeteig@remarkable.com>
+>  //          Alistair Francis <alistair@alistair23.me>
+>
+> +#include <linux/gpio/consumer.h>
+> +#include <linux/i2c.h>
+> +#include <linux/mfd/sy7636a.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/regulator/driver.h>
+> +#include <linux/regulator/machine.h>
+>  #include <linux/regmap.h>
+> -#include <linux/gpio/consumer.h>
+> -#include <linux/mfd/sy7636a.h>
+>
+>  struct sy7636a_data {
+>         struct regmap *regmap;
 
 Gr{oetje,eeting}s,
 
