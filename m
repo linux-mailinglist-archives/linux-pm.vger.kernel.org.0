@@ -2,129 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C7854D1B8F
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Mar 2022 16:20:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 623744D1C3C
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Mar 2022 16:46:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233414AbiCHPVt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Mar 2022 10:21:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
+        id S1347870AbiCHPr2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Mar 2022 10:47:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbiCHPVt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Mar 2022 10:21:49 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B024DF4E;
-        Tue,  8 Mar 2022 07:20:52 -0800 (PST)
+        with ESMTP id S1347970AbiCHPr1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Mar 2022 10:47:27 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6DA4EF65
+        for <linux-pm@vger.kernel.org>; Tue,  8 Mar 2022 07:46:30 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id z11so17587616lfh.13
+        for <linux-pm@vger.kernel.org>; Tue, 08 Mar 2022 07:46:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1646752852; x=1678288852;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=I8K/GbKHIgRGVF6Y27S47TZkoaxOyZifE0LQwcfM2Kc=;
-  b=MGRjbZe5efZ37TIYTVdZ+qGWqTT27eEvaf3UK47lP2GitOEZbFRGghud
-   TsCYues9+ml3Hiq2m7WAr0mn5c0BsZquWtrdbFq50kltF+78A/pZg4fhG
-   KRWBMID8ays5r/uKz5QgjABGLwzhL/ljjUEJAssciOjr6WIjKa1ypXiig
-   k=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 08 Mar 2022 07:20:52 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2022 07:20:52 -0800
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.15; Tue, 8 Mar 2022 07:20:51 -0800
-Received: from codeaurora.org (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15; Tue, 8 Mar 2022
- 07:20:49 -0800
-From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Manaf Meethalavalappu Pallikunhi" <quic_manafm@quicinc.com>
-Subject: [PATCH] drivers/thermal/thermal_of: Add change_mode ops support for thermal_of sensor
-Date:   Tue, 8 Mar 2022 20:50:34 +0530
-Message-ID: <1646752834-25043-1-git-send-email-quic_manafm@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WS72j8JGEqSGj9q0ZTN8/hogbbsFfe3+nSh2IPUnrHM=;
+        b=mnnAK6zB6mM9uuESnxE1R/FMsIvcHNXhKho2sSBoHHPInvww2Nw+wuenq5TuctFCgE
+         o0/bAnlerQeJxjF62dOllLwW3ktB2zPqpRxQlZfeQB5+empvT1XaJB5tPWlDVQS7sv4X
+         P95BcY7G9OCC/Xk1N6fM2T9dYKZ1P43Yk7bKz+pJugE1augnNVPevqRZqJA2NBwxYApE
+         jtfPqeGxG64zxNe36LF3qaSB7iNqJmNBCjjZfcipqcf7JUnNU4FeurlB3M8GdgqWpSgv
+         VAqoYK7Bf1JxXSU5fCVE7YbrzYHL+rRVjJ/7iMSXRUsDu9uIVvIRGR5aje9MHmUXcRYf
+         yyRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WS72j8JGEqSGj9q0ZTN8/hogbbsFfe3+nSh2IPUnrHM=;
+        b=BjmxnR4gX4hZp+ySPvXNOP7IhvCskIGUrFMDQdTXgcI2HmwXFlhmsO87zgVBQ+UBiP
+         FYhEkHeer1/fMTUhB9teVzYmnZyZlxKhZazUyy6b4depx+kdYpK12r/09IRK1SbbL5Ww
+         rSPHyIJERpOFLR2HSR5GZFdmdI8lUo0yw+9sNVa6C6HzJ+gHWGMTVLXinMyp7daI3iqN
+         VEjn4hVyKYEQIj8l+rPGtAyIUJE9NV8mGA21B1xONLxltm8IcjJzZycGBdira2BDNron
+         xGsrDhtqWL+4CVW1degi0PT8rjzKaimRF2Rk1/Z0A4RHm6IxUcHe0EmuuFAjaCVlAeyx
+         bf2g==
+X-Gm-Message-State: AOAM533ZAlTKubLQm7WH0j7GjE4A/UCsGd9NntxlHk1BTIUKBuoDxEbr
+        yfCbTDfy8VqDmf4TMyCt1eymoA==
+X-Google-Smtp-Source: ABdhPJymqOHDU/O5GwR9SWRCLZ93mX/T9+BrEsocE2xA+xU1VGzCeUpWe0sJAURwL7IwfPAgdgNeyw==
+X-Received: by 2002:ac2:58f0:0:b0:41f:b7ca:eb79 with SMTP id v16-20020ac258f0000000b0041fb7caeb79mr11454324lfo.221.1646754388974;
+        Tue, 08 Mar 2022 07:46:28 -0800 (PST)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id t10-20020ac24c0a000000b004435eefa4efsm3531093lfq.269.2022.03.08.07.46.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Mar 2022 07:46:28 -0800 (PST)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Marcus Cooper <codekipper@gmail.com>
+Cc:     linux-pm@vger.kernel.org,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: [PATCH] power: ab8500_chargalg: Use CLOCK_MONOTONIC
+Date:   Tue,  8 Mar 2022 16:44:25 +0100
+Message-Id: <20220308154425.296308-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The sensor driver which register through thermal_of interface doesn't
-have an option to get thermal zone mode change notification from
-thermal core.
+The HRTimer in the AB8500 charging code is using CLOCK_REALTIME
+to set an alarm some hours forward in time +/- 5 min for a safety
+timer.
 
-Add support for change_mode ops in thermal_of interface so that sensor
-driver can use this ops for mode change notification.
+I have observed that this will sometimes fire sporadically
+early when charging a battery with the result that
+charging stops.
 
-Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+As CLOCK_REALTIME can be subject to adjustments of time from
+sources such as NTP, this cannot be trusted and will likely
+for example fire events if the clock is set forward some hours
+by say NTP.
+
+Use CLOCK_MONOTONIC as indicated in other instances and the
+problem goes away. Also initialize the timer to REL mode
+as this is what will be used later.
+
+Fixes: 257107ae6b9b ("ab8500-chargalg: Use hrtimer")
+Cc: Lee Jones <lee.jones@linaro.org>
+Suggested-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/thermal/thermal_of.c | 14 ++++++++++++++
- include/linux/thermal.h      |  3 +++
- 2 files changed, 17 insertions(+)
+ drivers/power/supply/ab8500_chargalg.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index 9233f7e..a4e3820 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -203,6 +203,17 @@ static int of_thermal_get_trend(struct thermal_zone_device *tz, int trip,
- 	return data->ops->get_trend(data->sensor_data, trip, trend);
- }
+diff --git a/drivers/power/supply/ab8500_chargalg.c b/drivers/power/supply/ab8500_chargalg.c
+index 20d6b29cc9e2..c345d5e99118 100644
+--- a/drivers/power/supply/ab8500_chargalg.c
++++ b/drivers/power/supply/ab8500_chargalg.c
+@@ -1780,11 +1780,11 @@ static int ab8500_chargalg_probe(struct platform_device *pdev)
+ 	psy_cfg.drv_data = di;
  
-+static int of_thermal_change_mode(struct thermal_zone_device *tz,
-+				enum thermal_device_mode mode)
-+{
-+	struct __thermal_zone *data = tz->devdata;
-+
-+	if (!data->ops || !data->ops->change_mode)
-+		return -EINVAL;
-+
-+	return data->ops->change_mode(data->sensor_data, mode);
-+}
-+
- static int of_thermal_bind(struct thermal_zone_device *thermal,
- 			   struct thermal_cooling_device *cdev)
- {
-@@ -408,6 +419,9 @@ thermal_zone_of_add_sensor(struct device_node *zone,
- 	if (ops->set_emul_temp)
- 		tzd->ops->set_emul_temp = of_thermal_set_emul_temp;
+ 	/* Initilialize safety timer */
+-	hrtimer_init(&di->safety_timer, CLOCK_REALTIME, HRTIMER_MODE_ABS);
++	hrtimer_init(&di->safety_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+ 	di->safety_timer.function = ab8500_chargalg_safety_timer_expired;
  
-+	if (ops->change_mode)
-+		tzd->ops->change_mode = of_thermal_change_mode;
-+
- 	mutex_unlock(&tzd->lock);
+ 	/* Initilialize maintenance timer */
+-	hrtimer_init(&di->maintenance_timer, CLOCK_REALTIME, HRTIMER_MODE_ABS);
++	hrtimer_init(&di->maintenance_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+ 	di->maintenance_timer.function =
+ 		ab8500_chargalg_maintenance_timer_expired;
  
- 	return tzd;
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index c3148939..365733b 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -299,6 +299,8 @@ struct thermal_zone_params {
-  *		   temperature.
-  * @set_trip_temp: a pointer to a function that sets the trip temperature on
-  *		   hardware.
-+ * @change_mode: a pointer to a function that notifies the thermal zone
-+ *		   mode change.
-  */
- struct thermal_zone_of_device_ops {
- 	int (*get_temp)(void *, int *);
-@@ -306,6 +308,7 @@ struct thermal_zone_of_device_ops {
- 	int (*set_trips)(void *, int, int);
- 	int (*set_emul_temp)(void *, int);
- 	int (*set_trip_temp)(void *, int, int);
-+	int (*change_mode) (void *, enum thermal_device_mode);
- };
- 
- /* Function declarations */
+-- 
+2.35.1
+
