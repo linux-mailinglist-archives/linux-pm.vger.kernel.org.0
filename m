@@ -2,184 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6FD54D22C1
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Mar 2022 21:39:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59DE44D2338
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Mar 2022 22:23:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347648AbiCHUjp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Mar 2022 15:39:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40680 "EHLO
+        id S241478AbiCHVY1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Mar 2022 16:24:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349830AbiCHUjo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Mar 2022 15:39:44 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D082E09F
-        for <linux-pm@vger.kernel.org>; Tue,  8 Mar 2022 12:38:46 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id u1so30355262wrg.11
-        for <linux-pm@vger.kernel.org>; Tue, 08 Mar 2022 12:38:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :content-language:content-transfer-encoding;
-        bh=ULyo0kffQb8MFlOOF7we34fXDDyUwEdwPtkrXvglEPs=;
-        b=eVFzVvTrL6W+SQZX1e1QLD2UAbPznTtq3x/k8p4uYIFwsrcooTGex654M3pRzMSHB9
-         woARj27QMpi9ObzxyrHiZWhsb6Ialzj9mY0EXjotw9Ds62HT3dsNjnLtQZLdBJ0nJZI3
-         kKbZ5UMWAnodj6Tb7r2E9H2yd1wizdlZe2KKjjCy1pTxClYPmNIvXMpj1u3BsZ/HyyLb
-         0fSUVS6naUcKr6mn0E3786U1o7uTOFdon+7OpJsz8w8rZ+yvUfY1y3ljsnuNVhIaUfA6
-         o7E76RfCqosi4pVkXcD9Zy38zz6eclQKHImv5Llzghlqf4gOEFKkCDZMEHofZPJWRqvE
-         vLUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:content-language:content-transfer-encoding;
-        bh=ULyo0kffQb8MFlOOF7we34fXDDyUwEdwPtkrXvglEPs=;
-        b=urL4kqoUh9uZT4rTtq65EdqwjWz9UJ5BXGJkfMDckiarIC6WN8p6Pfuo01r/cD+vZi
-         rRm38b7EIBD44NG+oMVnl/Rmo3uEh27tQ+S4COswEoiPSPcGh+RVEHhJAhvvYHJVWwB1
-         RnmGz48KqeD6hORsR4Ff939rYn1l4Iy4EkBOTN7vXB+WJexKXGtskgvSzEGC+w0w2cwo
-         JOs7sRp9VDIdP0ISSqLYfJqJ3XPQus0VeUkcRKaqcMbEZzVJJNap1NzWTeSiaBV/MonW
-         d2RHHoBCb9ymP91Lt83TjbYzd8jXKmhH8+YPt4Pk4uNhvCFsD9ySPZD+rluocm2FyDU4
-         JJFg==
-X-Gm-Message-State: AOAM533bmlVu4lO1RSDJfR8pBoPxoZcR+EEMjKqaWUhUmKgDoysH+oD6
-        5aex4+3EY4Am3DttTH4r2iF3wg==
-X-Google-Smtp-Source: ABdhPJz/4VwZm9hYOJnZ+9iSbbHBKgqCe4+QA359N6ErmQ38hqJVpdPryYw75h/4Hd42BERG9d5pOw==
-X-Received: by 2002:a5d:458b:0:b0:1f1:f876:48e2 with SMTP id p11-20020a5d458b000000b001f1f87648e2mr8985866wrq.76.1646771924639;
-        Tue, 08 Mar 2022 12:38:44 -0800 (PST)
-Received: from ?IPV6:2a01:e34:ed2f:f020:1ffc:39b4:7538:de29? ([2a01:e34:ed2f:f020:1ffc:39b4:7538:de29])
-        by smtp.googlemail.com with ESMTPSA id u14-20020adfed4e000000b001e3323611e5sm14122165wro.26.2022.03.08.12.38.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 12:38:43 -0800 (PST)
-Message-ID: <98efd34d-db75-f3ce-8c47-a2d7fe4b96f6@linaro.org>
-Date:   Tue, 8 Mar 2022 21:38:41 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL] thermal changes for v5.18-rc1
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Luca Weiss <luca@z3ntu.xyz>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Romain Naour <romain.naour@smile.fr>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        YueHaibing <yuehaibing@huawei.com>
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        with ESMTP id S234333AbiCHVY0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Mar 2022 16:24:26 -0500
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6999832ED5;
+        Tue,  8 Mar 2022 13:23:28 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="5.90,165,1643641200"; 
+   d="scan'208";a="113751372"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 09 Mar 2022 06:23:27 +0900
+Received: from localhost.localdomain (unknown [10.226.36.204])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 1EACA40ED6B8;
+        Wed,  9 Mar 2022 06:23:24 +0900 (JST)
+From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] dt-bindings: thermal: rzg2l-thermal: Document RZ/V2L bindings
+Date:   Tue,  8 Mar 2022 21:23:15 +0000
+Message-Id: <20220308212315.4551-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Document RZ/V2L TSU bindings. The TSU block on RZ/V2L is identical to one
+found on RZ/G2L SoC. No driver changes are required as generic compatible
+string "renesas,rzg2l-tsu" will be used as a fallback.
 
-Hi Rafael,
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
+---
+ Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-please consider pulling,
-
-The following changes since commit 5838a14832d447990827d85e90afe17e6fb9c175:
-
-   thermal: core: Fix TZ_GET_TRIP NULL pointer dereference (2022-03-01 
-16:11:38 +0100)
-
-are available in the Git repository at:
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
-tags/thermal-v5.18-rc1
-
-for you to fetch changes up to a7da8a0955cbe81433afecad229d2a2ba60c3f0a:
-
-   MAINTAINERS: thermal: samsung: update Krzysztof Kozlowski's email 
-(2022-03-08 21:26:09 +0100)
-
-Thanks
-   -- Daniel
-
-----------------------------------------------------------------
-- Convert the DT bindings to yaml format for the Exynos platform
-   and fix the MAINTAINERS file regarding this driver (Krzysztof
-   Kozlowski)
-
-- Register the thermal zones as HWmon sensors for the QCom's
-   Tsens driver (Dmitry Baryshkov)
-
-- Add the sm8150 platform support to LMh (Thara Gopinath)
-
-- Add the msm8953 compatible documentation in the bindings (Luca
-   Weiss)
-
-- Register the thermal zones as HWmon sensors for the TI thermal
-   platforms (Romain Naour)
-
-- Check the command result from the IPC command to the
-   BPMP in the Tegra driver (Mikko Perttunen)
-
-- Silent the error for normal configuration where the interrupt
-   is optionnal on the Broadcom thermal driver (Florian Fainelli)
-
-- Remove a remaining dead code from the TI thermal driver (Yue
-   Haibing)
-
-- Update the email in MAINTAINERS file for the Exynos thermal
-   driver (Krzysztof Kozlowski)
-
-----------------------------------------------------------------
-Dmitry Baryshkov (1):
-       thermal/drivers/tsens: register thermal zones as hwmon sensors
-
-Florian Fainelli (1):
-       thermal/drivers/brcmstb_thermal: Interrupt is optional
-
-Krzysztof Kozlowski (3):
-       dt-bindings: thermal: samsung: Convert to dtschema
-       MAINTAINERS: thermal: samsung: Drop obsolete properties
-       MAINTAINERS: thermal: samsung: update Krzysztof Kozlowski's email
-
-Luca Weiss (1):
-       dt-bindings: thermal: tsens: Add msm8953 compatible
-
-Mikko Perttunen (1):
-       thermal: tegra-bpmp: Handle errors in BPMP response
-
-Romain Naour (1):
-       drivers/thermal/ti-soc-thermal: Add hwmon support
-
-Thara Gopinath (2):
-       thermal/drivers/qcom/lmh: Add support for sm8150
-       dt-bindings: thermal: Add sm8150 compatible string for LMh
-
-YueHaibing (1):
-       thermal/drivers/ti-soc-thermal: Remove unused function 
-ti_thermal_get_temp()
-
-  .../devicetree/bindings/thermal/exynos-thermal.txt | 106 ------------
-  .../devicetree/bindings/thermal/qcom-lmh.yaml      |   1 +
-  .../devicetree/bindings/thermal/qcom-tsens.yaml    |   1 +
-  .../bindings/thermal/samsung,exynos-thermal.yaml   | 184 
-+++++++++++++++++++++
-  MAINTAINERS                                        |   7 +-
-  drivers/thermal/broadcom/brcmstb_thermal.c         |   2 +-
-  drivers/thermal/qcom/lmh.c                         |  62 ++++---
-  drivers/thermal/qcom/tsens.c                       |   5 +
-  drivers/thermal/tegra/tegra-bpmp-thermal.c         |  13 +-
-  drivers/thermal/ti-soc-thermal/ti-thermal-common.c |  12 +-
-  10 files changed, 247 insertions(+), 146 deletions(-)
-  delete mode 100644 
-Documentation/devicetree/bindings/thermal/exynos-thermal.txt
-  create mode 100644 
-Documentation/devicetree/bindings/thermal/samsung,exynos-thermal.yaml
-
-
-
+diff --git a/Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml b/Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml
+index ccab9511a042..dfb6dce5652a 100644
+--- a/Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml
+@@ -18,6 +18,7 @@ properties:
+     items:
+       - enum:
+           - renesas,r9a07g044-tsu # RZ/G2{L,LC}
++          - renesas,r9a07g054-tsu # RZ/V2L
+       - const: renesas,rzg2l-tsu
+ 
+   reg:
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.17.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
