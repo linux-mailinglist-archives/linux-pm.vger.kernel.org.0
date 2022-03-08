@@ -2,138 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B1B4D0C9C
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Mar 2022 01:11:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB1274D0D0D
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Mar 2022 01:53:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344077AbiCHALn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Mar 2022 19:11:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
+        id S244357AbiCHAyt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Mar 2022 19:54:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344106AbiCHALk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Mar 2022 19:11:40 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54B737A22
-        for <linux-pm@vger.kernel.org>; Mon,  7 Mar 2022 16:10:39 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id m22so15618970pja.0
-        for <linux-pm@vger.kernel.org>; Mon, 07 Mar 2022 16:10:39 -0800 (PST)
+        with ESMTP id S237712AbiCHAyt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Mar 2022 19:54:49 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CA61155
+        for <linux-pm@vger.kernel.org>; Mon,  7 Mar 2022 16:53:53 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id d17so7088600pfv.6
+        for <linux-pm@vger.kernel.org>; Mon, 07 Mar 2022 16:53:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ExeMvBUYf18gUbw3oNoBhQIqfKznu+dtCvkD2ZUwMDI=;
-        b=dUSKXKD2oLryc1nruR3FNcnsYYhThzA308IDtnm37tWHi+DdqgeCtz4xqfUo6Nt7UW
-         fI4qPKxksSC65tT0l7YkCINT05BtyR+OAL8TSWjGo/RlhyavUD+bacUAkumZNAfYZZ52
-         goJj0JVvFwvvujDp0z90ZPeHro8+w88DMROGA=
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=WPNdv8S5fPwJfPBVpZy9CupWTv5Y0N8baPhuHLWLzL0=;
+        b=62mnrfZIu9pJKDYHCI52QRk/qsDMb28w5YLRiz3QarYMakSaD2CJ0T6FPtdE0VJMHn
+         iV5+/bt5Haq32js37VhlbijLwnLpXObkANNalS7zaDq1F6MAcY8Pj1I5DdLENmeyTp4O
+         2BFX7MZby2MLtj3KlwkmVDkcV1KdgVrwdJXLFF6D5yGib1spRZuxxSIeEeCEWYRv9Gfn
+         HD4Nf8Vd9Bs+RKbTMK4QDiuE7fp+fW11rO0YASzh6WkT3sWhfykwe31BaMBJn1WdEV0Y
+         oHNmzuqNXtR4Nnwuvq1FSVApzCg9S1DREKuwizsMKL2mPz6CG3UQlVN1BHUAv1G2hpj3
+         UKRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ExeMvBUYf18gUbw3oNoBhQIqfKznu+dtCvkD2ZUwMDI=;
-        b=X2SqA7L/7027RnRoWpfVQtai4iaGYcf/+uHjD9U3sH0K+V3+GvVUEUNTTnx/QIg0nd
-         2IVtfTBdGCpoOWH0n/Ovlki13fGzzOat69phmiU+EtD6pLW3hOHwSn3RPDVSjaPUGZ2A
-         cPuKw6/nz5fWQUSfB+n4DnT0Sv2mGdJahNVprtF+hRMNml2PZjwbhu2rMGinca8tCJtA
-         sIdg6dOqmMTsaNRZvVhe60sj5EZIS6kxpO1VYKrfou6gq5T41OSHiwRRMZ7YdPOQ0+pS
-         HRRLni3Mqy/RixB+fykTA9YRB4fbfBh9IPE/Hu31ibrVoAKq5UGANPRpkKxkT1q4lZHN
-         sGgQ==
-X-Gm-Message-State: AOAM531OjqLsmO1VnWpkdTGicElI24ZlowK/1NvTu5gFMOAWIJrv8aCY
-        xaau459MopiX4zNDJrF3T44v2w==
-X-Google-Smtp-Source: ABdhPJyrcw+XhrxMuU5ct7+AqtGPHqcx+ajYHdkXRnnV0rz1xXVGUvlzhLNfmp1oAPTEeWB/2Df2Ag==
-X-Received: by 2002:a17:902:ed82:b0:151:d081:3832 with SMTP id e2-20020a170902ed8200b00151d0813832mr14035788plj.165.1646698239237;
-        Mon, 07 Mar 2022 16:10:39 -0800 (PST)
-Received: from localhost ([2620:15c:202:201:e551:44dc:2842:57f1])
-        by smtp.gmail.com with UTF8SMTPSA id p25-20020a637419000000b0037fa57520adsm8884252pgc.27.2022.03.07.16.10.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Mar 2022 16:10:38 -0800 (PST)
-From:   Brian Norris <briannorris@chromium.org>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Lin Huang <hl@rock-chips.com>, Heiko Stuebner <heiko@sntech.de>,
-        Derek Basehore <dbasehore@chromium.org>,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Brian Norris <briannorris@chromium.org>
-Subject: [PATCH v3 15/15] PM / devfreq: rk3399_dmc: Avoid static (reused) profile
-Date:   Mon,  7 Mar 2022 16:09:45 -0800
-Message-Id: <20220307160918.v3.15.I8d71e9555aca1fa7e532d22dd1ef27976f21799d@changeid>
-X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
-In-Reply-To: <20220308000945.706701-1-briannorris@chromium.org>
-References: <20220308000945.706701-1-briannorris@chromium.org>
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=WPNdv8S5fPwJfPBVpZy9CupWTv5Y0N8baPhuHLWLzL0=;
+        b=hMEY/Bxld6pLdLSXi5+XhoJ3WZzrLbPLHvXd8GcIjLT09CKdPfQ3ph4uORHWIftcln
+         jC4ZWk62fYrl6q/+Tsxf02P8ooY/RMM5cs/ILPq8H5Hgi2FHu+IsNd7S3ZGVp7KWtmpz
+         HsQX+DgH9Qo2YW2Zwlb0NHp9iCS+JF0mkSk95DKgly6oVu3Q8CK1Au56auLv0xultYdY
+         0pGa3fj9HGptYl6bI+kj9v8SaqZVWnug/JD6caqu0Iw5mCzwKUfaAPMJ5jCHdbM1ERGn
+         8G2MVnQT1fD8E8rLuDvcVtWJOsJi/DjHeDotamSVrk3x3LQtE0xHf4uU4auwOax3WHTo
+         yEbw==
+X-Gm-Message-State: AOAM530B4fyI4gxyEf4iZzmL1FSjUE5ditri2Xdx/dXMU0DYAAIikws1
+        JVNAxDtb0kfD6etEc/UgYAQUPw==
+X-Google-Smtp-Source: ABdhPJzzVnGXOad7KV4YeJOB0hcJRCN0DMwoGF/6n7q5hcWRcW4NVAf9jMgVb6+QzM3QjKcXhqlebg==
+X-Received: by 2002:a63:1c15:0:b0:372:ffcd:4d21 with SMTP id c21-20020a631c15000000b00372ffcd4d21mr11972671pgc.450.1646700833433;
+        Mon, 07 Mar 2022 16:53:53 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id k4-20020a17090a910400b001bd171c7fd4sm525432pjo.25.2022.03.07.16.53.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Mar 2022 16:53:53 -0800 (PST)
+Message-ID: <6226a921.1c69fb81.25e83.1ecb@mx.google.com>
+Date:   Mon, 07 Mar 2022 16:53:53 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v5.17-rc7-126-g0b4cb964dac5
+Subject: pm/testing build: 6 builds: 0 failed, 6 passed,
+ 1 warning (v5.17-rc7-126-g0b4cb964dac5)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This static struct can get reused if the device gets removed/reprobed,
-and that causes use-after-free in its ->freq_table.
+pm/testing build: 6 builds: 0 failed, 6 passed, 1 warning (v5.17-rc7-126-g0=
+b4cb964dac5)
 
-Let's just move the struct to our dynamic allocation.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+17-rc7-126-g0b4cb964dac5/
 
-Signed-off-by: Brian Norris <briannorris@chromium.org>
+Tree: pm
+Branch: testing
+Git Describe: v5.17-rc7-126-g0b4cb964dac5
+Git Commit: 0b4cb964dac51d55a3a3ed4db6536e8b4b31031a
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 6 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
 ---
-
-(no changes since v2)
-
-Changes in v2:
- * New patch
-
- drivers/devfreq/rk3399_dmc.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
-index 9615658d04ae..e494d1497d60 100644
---- a/drivers/devfreq/rk3399_dmc.c
-+++ b/drivers/devfreq/rk3399_dmc.c
-@@ -38,6 +38,7 @@
- struct rk3399_dmcfreq {
- 	struct device *dev;
- 	struct devfreq *devfreq;
-+	struct devfreq_dev_profile profile;
- 	struct devfreq_simple_ondemand_data ondemand_data;
- 	struct clk *dmc_clk;
- 	struct devfreq_event_dev *edev;
-@@ -228,13 +229,6 @@ static int rk3399_dmcfreq_get_cur_freq(struct device *dev, unsigned long *freq)
- 	return 0;
- }
- 
--static struct devfreq_dev_profile rk3399_devfreq_dmc_profile = {
--	.polling_ms	= 200,
--	.target		= rk3399_dmcfreq_target,
--	.get_dev_status	= rk3399_dmcfreq_get_dev_status,
--	.get_cur_freq	= rk3399_dmcfreq_get_cur_freq,
--};
--
- static __maybe_unused int rk3399_dmcfreq_suspend(struct device *dev)
- {
- 	struct rk3399_dmcfreq *dmcfreq = dev_get_drvdata(dev);
-@@ -422,10 +416,16 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
- 	data->volt = dev_pm_opp_get_voltage(opp);
- 	dev_pm_opp_put(opp);
- 
--	rk3399_devfreq_dmc_profile.initial_freq = data->rate;
-+	data->profile = (struct devfreq_dev_profile) {
-+		.polling_ms	= 200,
-+		.target		= rk3399_dmcfreq_target,
-+		.get_dev_status	= rk3399_dmcfreq_get_dev_status,
-+		.get_cur_freq	= rk3399_dmcfreq_get_cur_freq,
-+		.initial_freq	= data->rate,
-+	};
- 
- 	data->devfreq = devm_devfreq_add_device(dev,
--					   &rk3399_devfreq_dmc_profile,
-+					   &data->profile,
- 					   DEVFREQ_GOV_SIMPLE_ONDEMAND,
- 					   &data->ondemand_data);
- 	if (IS_ERR(data->devfreq)) {
--- 
-2.35.1.616.g0bdcbb4464-goog
-
+For more info write to <info@kernelci.org>
