@@ -2,55 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2AB4D22AD
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Mar 2022 21:34:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86A134D22B0
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Mar 2022 21:34:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236834AbiCHUeq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1350247AbiCHUeq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Tue, 8 Mar 2022 15:34:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350250AbiCHUep (ORCPT
+        with ESMTP id S1350249AbiCHUep (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Mar 2022 15:34:45 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1333B561
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E8A3B55F
         for <linux-pm@vger.kernel.org>; Tue,  8 Mar 2022 12:33:47 -0800 (PST)
-Date:   Tue, 08 Mar 2022 20:33:42 -0000
+Date:   Tue, 08 Mar 2022 20:33:44 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1646771625;
+        s=2020; t=1646771626;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5JUpBq+Xb3DFveqleXsNbrL/bV3/R3LbHDXBw/nAD3g=;
-        b=xobGs1auk8oGfn3dcYn8ZurdEHyu5NZVpQJW5rGsTV7RIk6xqtIBXYanLRRweLd52LU+WN
-        K3xAtfdhTpo6hOcDOQnR6QzQaXluz12sfDoJFXg1AK69sGXl+rNtUzMSdorTLpjKZHDh+c
-        CrOPj8cibeJrfmD5r9izubEzVVhduSz9p4VoogI+WGhtc3f0ujlY23r757C9uwlR+b2dFM
-        1pLOXrsLiICAZXVYdxElglEy5ahSlyqeSaGmfyqHrOLijoGVfLuF11gIGxwInyaQCW4iFk
-        LugSf6rZP4Uy7WnHs2VhVCxqZoX6aYijbjh6QZHBkZox8YM07SeyvEruJtkupg==
+        bh=/zvWqR79Eqd1Y5kQpmzHaMWVk34SDBEM95bet+fl/3g=;
+        b=aahMp4jB7Fj+FYrRrChR/a0Aqb5y9rVkwMEzzVrv49qcBxkHRgxnrK0Wqd94Z2gF2EtPL5
+        N647SwYtU2D0ghVYufuxR20SFVzJZ9z5Z9M0vsaBdKpccyvwxmiOWRM+yhOuPYFpVm6e/e
+        hMJEh632GBCikLJNnd8cw13Sq2jm7qyoIrXE3cCBpxqs0A9RBRrMOLFusWXqLJQcIIlj64
+        SURjMwL3oXkrNyHsZQ2RFQQno4xy5GXP8ZrWdm9uyQZUudjZGdSLY5Rz+F2PcwM/RplCqG
+        IboRM8qvZ8YDQRDU+YxuZscolzSlGORZN/5c5UC0NyRbWjmcqn2VlJSeNQnI+A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1646771625;
+        s=2020e; t=1646771626;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5JUpBq+Xb3DFveqleXsNbrL/bV3/R3LbHDXBw/nAD3g=;
-        b=B2Cjgi4jeQWhSKmrf3qZJUtD9ungvf2zwxKROJ5yuvGOvZg+dzwECvQB2FOqJhPCAYlnqh
-        Q79ulHwDTEeL6iAw==
-From:   "thermal-bot for Krzysztof Kozlowski" <tip-bot2@linutronix.de>
+        bh=/zvWqR79Eqd1Y5kQpmzHaMWVk34SDBEM95bet+fl/3g=;
+        b=J2jvw7wh0If3JfAFM7gq9edf0TU07m8qs/eQcacntZfqNx/wN7O0El320jNicyi9AQhKBC
+        WsTzl1MCyynKozAg==
+From:   "thermal-bot for YueHaibing" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] MAINTAINERS: thermal: samsung: update
- Krzysztof Kozlowski's email
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+Subject: [thermal: thermal/next] thermal/drivers/ti-soc-thermal: Remove unused
+ function ti_thermal_get_temp()
+Cc:     YueHaibing <yuehaibing@huawei.com>, Bryan Brattlof <bb@ti.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20220308065648.6443-1-krzysztof.kozlowski@canonical.com>
-References: <20220308065648.6443-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220305125047.26948-1-yuehaibing@huawei.com>
+References: <20220305125047.26948-1-yuehaibing@huawei.com>
 MIME-Version: 1.0
-Message-ID: <164677162292.16921.7081685533348472454.tip-bot2@tip-bot2>
+Message-ID: <164677162401.16921.4167236429666709415.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,35 +67,42 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     a7da8a0955cbe81433afecad229d2a2ba60c3f0a
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//a7da8a0955cbe81433afecad229d2a2ba60c3f0a
-Author:        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-AuthorDate:    Tue, 08 Mar 2022 07:56:48 +01:00
+Commit-ID:     1d6aab36a26ba44b114d7f8a857c430c9e0c32c9
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//1d6aab36a26ba44b114d7f8a857c430c9e0c32c9
+Author:        YueHaibing <yuehaibing@huawei.com>
+AuthorDate:    Sat, 05 Mar 2022 20:50:47 +08:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Tue, 08 Mar 2022 21:26:09 +01:00
 
-MAINTAINERS: thermal: samsung: update Krzysztof Kozlowski's email
+thermal/drivers/ti-soc-thermal: Remove unused function ti_thermal_get_temp()
 
-Use Krzysztof Kozlowski's @kernel.org account in dt-bindings maintainer
-entry.
+commit b263b473bf62 ("thermal: ti-soc-thermal: Remove redundant code")
+left behind this, remove it.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Link: https://lore.kernel.org/r/20220308065648.6443-1-krzysztof.kozlowski@canonical.com
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Reviewed-by: Bryan Brattlof <bb@ti.com>
+Link: https://lore.kernel.org/r/20220305125047.26948-1-yuehaibing@huawei.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 82fe389..e82b6aa 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17136,7 +17136,7 @@ F:	drivers/net/ethernet/samsung/sxgbe/
+diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+index 0959632..703039d 100644
+--- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
++++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+@@ -107,14 +107,6 @@ static inline int __ti_thermal_get_temp(void *devdata, int *temp)
+ 	return ret;
+ }
  
- SAMSUNG THERMAL DRIVER
- M:	Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
--M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+M:	Krzysztof Kozlowski <krzk@kernel.org>
- L:	linux-pm@vger.kernel.org
- L:	linux-samsung-soc@vger.kernel.org
- S:	Maintained
+-static inline int ti_thermal_get_temp(struct thermal_zone_device *thermal,
+-				      int *temp)
+-{
+-	struct ti_thermal_data *data = thermal->devdata;
+-
+-	return __ti_thermal_get_temp(data, temp);
+-}
+-
+ static int __ti_thermal_get_trend(void *p, int trip, enum thermal_trend *trend)
+ {
+ 	struct ti_thermal_data *data = p;
