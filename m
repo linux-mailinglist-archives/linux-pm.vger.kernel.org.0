@@ -2,76 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1B64D108D
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Mar 2022 07:57:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3C14D123F
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Mar 2022 09:30:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242030AbiCHG54 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Mar 2022 01:57:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49424 "EHLO
+        id S243636AbiCHIaz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Mar 2022 03:30:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235791AbiCHG5z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Mar 2022 01:57:55 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36AA3D1C1
-        for <linux-pm@vger.kernel.org>; Mon,  7 Mar 2022 22:56:58 -0800 (PST)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 7A6D83F7E9
-        for <linux-pm@vger.kernel.org>; Tue,  8 Mar 2022 06:56:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646722615;
-        bh=/nQH0xMVMGOl4ilEFj0NRFMKFBrrtbNt+lvO7kMd8B8=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=bvKwDIdeaJr9K5ihdLiF0JxqqJxPDzgCESu5aK+cz4hHdzPyq5pwxmujHDUmkf8ZL
-         2Kbvh7gCa1Byx+7vcyN8B6cY14RLKUz8ychYF1pSRV4yhL4jQswiOaIGDEAfy2Y9Ri
-         RgmDbiNCF8WjB8d8+MA9di4FDFDqoIvTM6NUVFNKkbWBaUy7b6+VeyZmrfgEkZrnTo
-         BV/dtvTvOynExP5eFdqhZvsQ3uwGO5SaN6Fdpg2vv4xnV+Pg3xsl+i5Qb/0sc0hdsB
-         SRBm3kQRqT14Q2De7D1UdLUNtS+24k2XvtJE4zOiR0w6xVzJYgTY5xt7YxcDAJ+G/A
-         yakMPjuSmdhRQ==
-Received: by mail-ej1-f70.google.com with SMTP id m4-20020a170906160400b006be3f85906eso8169744ejd.23
-        for <linux-pm@vger.kernel.org>; Mon, 07 Mar 2022 22:56:55 -0800 (PST)
+        with ESMTP id S1344872AbiCHIay (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Mar 2022 03:30:54 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B1B3F88B
+        for <linux-pm@vger.kernel.org>; Tue,  8 Mar 2022 00:29:57 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id o8so15817996pgf.9
+        for <linux-pm@vger.kernel.org>; Tue, 08 Mar 2022 00:29:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=biY5ams/L/8gAUldcXYdkodIReIruP+fnC3UwnEvKik=;
+        b=FR5UYtStER6p/1YZQvrw3ScM5SgcgyBONMffv5EQPqlHUrnjdoxfZZ+yRdnVbYNFxb
+         w2ZvfSdx3sslpCnGLI6akBCeP5omUHdhKvrlVjutHND41gfD89CXojsSAnLK1GO/DR6A
+         oxsx8HCMN402k9J7sAsMuVWb/eiLNQV6/Nvhvqqcv6uwPgRYT37sNuBxrsUMyjWGIYlt
+         Eij8Eso6oHN5v9aEAUk3BYRCtCuyS6fFIa2nSsQtgukRMg4q+To4Xc14xbqQqtHR8z0H
+         2G36AgBMtUHhcbZg8HzlPBY8neN/HVTz6ppBryGonswOhmkhPs+ErpWt+Zj/QCO+VmfC
+         SFeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=/nQH0xMVMGOl4ilEFj0NRFMKFBrrtbNt+lvO7kMd8B8=;
-        b=Yno+bLJ88LHC93xAOySEITW5cga5YQKH5JZC0rta7Agiurr6O/NdF5m01dRIdgMDY4
-         23m2shHSNyBeiHkS1SxU3Ypmb0ozALyTpEfYb7G0IPYCuO6CwTb3/oTc+11NllpZSebN
-         omMnMf2XYqchCRe/7eagYXKFgStSlPcEsePiuOcbToTXrDX8qbGucfJy9e972anlQQ4z
-         s0mfyBoySz8RyzGFTdiEYGhsxBuAZyKj0u0wdsNpRocmXTzZJNLBpbEixD9sw0IOP7zC
-         VDKlaBJOkn3AMIvabJ7hAsg+CsT5DaEkqF5qSNKeF0xiHjBFcDSxCxQaNkVKSsR82mHI
-         AjjQ==
-X-Gm-Message-State: AOAM5330OEsSys6WauPF5dPqrjB2zp/t7FveagpNyQ/G+EWtykmTC8Ot
-        ey4P5Nf4HCc6F44Ky83tmsM1PKSzM7LoIzb0+5D3iXe8VcuuqBMu3Jqx/6gbxGMAO3gTCjLrRv0
-        1X9Uczf+MxHdj+TvOHDDI2qb0rZqTIrXRIgRr
-X-Received: by 2002:a17:906:a08b:b0:6b9:2e20:f139 with SMTP id q11-20020a170906a08b00b006b92e20f139mr12768800ejy.463.1646722615191;
-        Mon, 07 Mar 2022 22:56:55 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxUUfasT4Wjs6f1SXSBcbJnAlAC2IvlRrhE2phlpmtyxBZWf0RDTazNUP3wQmlNW1PxEj37jQ==
-X-Received: by 2002:a17:906:a08b:b0:6b9:2e20:f139 with SMTP id q11-20020a170906a08b00b006b92e20f139mr12768790ejy.463.1646722615008;
-        Mon, 07 Mar 2022 22:56:55 -0800 (PST)
-Received: from localhost.localdomain (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
-        by smtp.gmail.com with ESMTPSA id f5-20020a1709067f8500b006da68bfdfc7sm5517952ejr.12.2022.03.07.22.56.53
+        bh=biY5ams/L/8gAUldcXYdkodIReIruP+fnC3UwnEvKik=;
+        b=rHQ+r4H2iBtohHyPhQafdnNd2T6zKCm3fmgNgSnBkjH0wsMBXoLEKluq0S/yGv4Jee
+         0N+szB1ICJhcKDL9yTeooZpclG6RyiP8gpl9yAjiKnKRHHJ4Xfe8GnNQC88RupD0ZwNy
+         7xODS10QnVi50Pvz6W4KgLrHBQMFlsU/MNwXKOmp6LrEanDtDqrb5faZmX7grZlFi9Of
+         R2tSijKfDoS5bC4ThAUuaW1aYI1TJjKfJGvO3c5xiuC97TwRqMxlMj7TT58+j2VedQC4
+         JCmznAYtbu+142oez9vvuOSy6RAWfTmLNgusCTNmEwWs/su9GH5LD3tm3VTOM9wtcXE2
+         Rmbg==
+X-Gm-Message-State: AOAM533MDO9ZDcyY4A68qWZee68aSRbPTJv5PesiCRSCecC0OqkfTtSi
+        4LjwFvCYrqodl1iLSKaKwNju8QuK3Jdg/g==
+X-Google-Smtp-Source: ABdhPJwtleDHDeXzrBf/O+A+/gweObqeGpJC3OV68tzPuEyMJ5MfEfsiH62i5lEDEawS1VIox5YjAA==
+X-Received: by 2002:a05:6a00:2815:b0:4f6:ecc6:1173 with SMTP id bl21-20020a056a00281500b004f6ecc61173mr12739958pfb.74.1646728196621;
+        Tue, 08 Mar 2022 00:29:56 -0800 (PST)
+Received: from localhost.localdomain (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id e18-20020a056a001a9200b004bc82d0e125sm18369364pfv.119.2022.03.08.00.29.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 22:56:54 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH] MAINTAINERS: thermal: samsung: update Krzysztof Kozlowski's email
-Date:   Tue,  8 Mar 2022 07:56:48 +0100
-Message-Id: <20220308065648.6443-1-krzysztof.kozlowski@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        Tue, 08 Mar 2022 00:29:56 -0800 (PST)
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Shawn Guo <shawn.guo@linaro.org>
+Subject: [PATCH v2] cpuidle: psci: Iterate backwards over list in psci_pd_remove()
+Date:   Tue,  8 Mar 2022 16:29:31 +0800
+Message-Id: <20220308082931.3385902-1-shawn.guo@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,37 +70,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use Krzysztof Kozlowski's @kernel.org account in dt-bindings maintainer
-entry.
+In case that psci_pd_init_topology() fails for some reason,
+psci_pd_remove() will be responsible for deleting provider and removing
+genpd from psci_pd_providers list.  There will be a failure when removing
+the cluster PD, because the cpu (child) PDs haven't been removed.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+[    0.050232] CPUidle PSCI: init PM domain cpu0
+[    0.050278] CPUidle PSCI: init PM domain cpu1
+[    0.050329] CPUidle PSCI: init PM domain cpu2
+[    0.050370] CPUidle PSCI: init PM domain cpu3
+[    0.050422] CPUidle PSCI: init PM domain cpu-cluster0
+[    0.050475] PM: genpd_remove: unable to remove cpu-cluster0
+[    0.051412] PM: genpd_remove: removed cpu3
+[    0.051449] PM: genpd_remove: removed cpu2
+[    0.051499] PM: genpd_remove: removed cpu1
+[    0.051546] PM: genpd_remove: removed cpu0
 
+Fix the problem by iterating the provider list reversely, so that parent
+PD gets removed after child's PDs like below.
+
+[    0.029052] CPUidle PSCI: init PM domain cpu0
+[    0.029076] CPUidle PSCI: init PM domain cpu1
+[    0.029103] CPUidle PSCI: init PM domain cpu2
+[    0.029124] CPUidle PSCI: init PM domain cpu3
+[    0.029151] CPUidle PSCI: init PM domain cpu-cluster0
+[    0.029647] PM: genpd_remove: removed cpu0
+[    0.029666] PM: genpd_remove: removed cpu1
+[    0.029690] PM: genpd_remove: removed cpu2
+[    0.029714] PM: genpd_remove: removed cpu3
+[    0.029738] PM: genpd_remove: removed cpu-cluster0
+
+Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by using genpd")
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
 ---
+Changes since v1:
+- Fix commit log
+- Pick up Reviewed-by tag from Sudeep and Ulf (Thanks!)
+- Add Fixes tag as suggested by Ulf
 
-Hi Daniel,
+ drivers/cpuidle/cpuidle-psci-domain.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Could you take this one directly (optionally squash with the last
-patch)?
-
-See also:
-https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/commit/?h=arm/fixes&id=5125091d757a251a128ec38d2397c9d160394eac
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d8c471cb93ef..48b0cf606be0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17382,7 +17382,7 @@ F:	drivers/net/ethernet/samsung/sxgbe/
+diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+index ff2c3f8e4668..ce5c415fb04d 100644
+--- a/drivers/cpuidle/cpuidle-psci-domain.c
++++ b/drivers/cpuidle/cpuidle-psci-domain.c
+@@ -182,7 +182,8 @@ static void psci_pd_remove(void)
+ 	struct psci_pd_provider *pd_provider, *it;
+ 	struct generic_pm_domain *genpd;
  
- SAMSUNG THERMAL DRIVER
- M:	Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
--M:	Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+M:	Krzysztof Kozlowski <krzk@kernel.org>
- L:	linux-pm@vger.kernel.org
- L:	linux-samsung-soc@vger.kernel.org
- S:	Maintained
+-	list_for_each_entry_safe(pd_provider, it, &psci_pd_providers, link) {
++	list_for_each_entry_safe_reverse(pd_provider, it,
++					 &psci_pd_providers, link) {
+ 		of_genpd_del_provider(pd_provider->node);
+ 
+ 		genpd = of_genpd_remove_last(pd_provider->node);
 -- 
-2.32.0
+2.25.1
 
