@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D6CC4D211E
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Mar 2022 20:10:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 719DB4D211B
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Mar 2022 20:10:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350003AbiCHTLJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Mar 2022 14:11:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
+        id S1349938AbiCHTLP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Mar 2022 14:11:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349967AbiCHTLB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Mar 2022 14:11:01 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE11454BE6
-        for <linux-pm@vger.kernel.org>; Tue,  8 Mar 2022 11:09:43 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id fs4-20020a17090af28400b001bf5624c0aaso249757pjb.0
-        for <linux-pm@vger.kernel.org>; Tue, 08 Mar 2022 11:09:43 -0800 (PST)
+        with ESMTP id S1350022AbiCHTLC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Mar 2022 14:11:02 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F874554B5
+        for <linux-pm@vger.kernel.org>; Tue,  8 Mar 2022 11:09:46 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id k5-20020a17090a3cc500b001befa0d3102so2405449pjd.1
+        for <linux-pm@vger.kernel.org>; Tue, 08 Mar 2022 11:09:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=rU/WmKtGF4aym/wTFIaRDtTDG4TLl/BdBtfttgE23Ag=;
-        b=oH6Lb4C7wN+4PXA4AMFBLg1g7tpjNkcmBS7cOkvTu1Qh8GlHc70gL16oz6kqhTCB/o
-         DSFQ8/BGrli+yzLSqGuwRyi04qDNkafr2OUHUXVZNDUSONY9iOcQbbPyF9f8r7Wo874e
-         rGxcXSu7FkrKdaMFcCOhe5PVUZ89AloSWfI+U=
+        bh=IizyyKLt67Z0rg/Dl48rRHBPPMkh6LQBUEtOh7L4+qk=;
+        b=Bvfe9G/MEM66BYRH60KYgdCaJh8AKOGbjxX5+ZCBHFRCY02DcOTijHLwWDlLz9nFmg
+         V3PqU98KeKYRX34QTCbWnr1XJ0sMW/rOeT5GMi0izY6xvBsIPbq32RiLBMYqCOm9fUJn
+         QJnq/Qrlh5G66FkEuGcFblcQlUXp0y2ZnWIJ8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=rU/WmKtGF4aym/wTFIaRDtTDG4TLl/BdBtfttgE23Ag=;
-        b=ut8/lhLN0IA9Nhoa0TzfTpnaFi0fg4DjvLY9WHClJfG++JaHySTP471/SQWFkiZ2yR
-         wsVM/85f4vSzP0xiHUEiwBTe+fGIF4vPg2nc1yfAr0yMI09L7NgoZHwUsW6lESPTeFgg
-         FQtNtYNvLTNVSWyfPf8grkdRs9YwghMwJg+GRJ0Wj0XDFC8ZmIHLCObd8Jh9vGpBrcQv
-         Qq/1fwzqiXgu2lQQVQZDQkkPGZBrigQMakx2z04RLDIr8HrA2S9zaU6qxAjxE9oLlQ11
-         HeJYD9qkMtJ5A+32TV4fmTbeTyXRM4ILG8wl9OQv+BBuk6vKNp1Ffwi8DrHnjNXA4i7e
-         PTEw==
-X-Gm-Message-State: AOAM531kzfdKoq/tzhVeEAbRzpO/of+PmL9SmWysR9WLaBMmD9mQYSUn
-        8Pp751FadnoB/0qLaJ6z55s1VQ==
-X-Google-Smtp-Source: ABdhPJxP7h3r4ZhYwF9gzeIS3Qt9XY3Q9Ckm0p/4qOD97gRHmVDVuTqt3ovo1DJe6sYtWI+bsN95Jg==
-X-Received: by 2002:a17:902:7049:b0:151:e52e:ae42 with SMTP id h9-20020a170902704900b00151e52eae42mr13007318plt.118.1646766578783;
-        Tue, 08 Mar 2022 11:09:38 -0800 (PST)
+        bh=IizyyKLt67Z0rg/Dl48rRHBPPMkh6LQBUEtOh7L4+qk=;
+        b=3XnyOZoLXbFRKDkkp8FqcG8FSRPCbIcs9QYacNus5J3SFxR3EFcStTwbzpq6yyJUos
+         w5eJ/1weFjTxnYbjW3rd4TACDAhZD6cZ4DMkPMFl9zh7ThKvJoMbwopCziJsY9eCfe4C
+         581OsqRJMj30nOKsh351jwZ/HUmUPxq5NkIq3qQRpKEOf1N8pj7LEDI6RGaU7/MTBt4L
+         Y3/BdQYq3a5niGGha8GRsdKNMYtHlx9LuASnJeQKsRrWutsiGgB3DZG9OOXQ/RCcwpqj
+         u2C2SJaSAV/62I5nd9yDFsr400azNXDZ5hG8qqzO2Lk7BlO6zLue3DJEpOfPrYCtY9Dz
+         7k6Q==
+X-Gm-Message-State: AOAM530LNeFyuXxGySscxf0K7uugGbUWy8FDm3vePv1AoRFQdYSTITBG
+        o81iM+sD6ck62e4I8KwlwF8Qyw==
+X-Google-Smtp-Source: ABdhPJyqj7YklmvfKU/LYYyISAhNTAhR5T/zle5js+D93QhjzLdkS7Znp9ivicweO2UwT/n6KE8wCA==
+X-Received: by 2002:a17:902:e944:b0:14e:dc4f:f099 with SMTP id b4-20020a170902e94400b0014edc4ff099mr19029261pll.161.1646766585879;
+        Tue, 08 Mar 2022 11:09:45 -0800 (PST)
 Received: from localhost ([2620:15c:202:201:b3e3:a188:cbfc:3a0e])
-        by smtp.gmail.com with UTF8SMTPSA id d5-20020a17090acd0500b001b9c05b075dsm3563983pju.44.2022.03.08.11.09.36
+        by smtp.gmail.com with UTF8SMTPSA id x14-20020a17090ab00e00b001bf2d30ee9dsm3639224pjq.3.2022.03.08.11.09.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Mar 2022 11:09:38 -0800 (PST)
+        Tue, 08 Mar 2022 11:09:45 -0800 (PST)
 From:   Brian Norris <briannorris@chromium.org>
 To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
@@ -54,18 +54,14 @@ Cc:     Derek Basehore <dbasehore@chromium.org>,
         devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org,
         linux-kernel@vger.kernel.org, Lin Huang <hl@rock-chips.com>,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@collabora.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Brian Norris <briannorris@chromium.org>
-Subject: [PATCH v4 12/15] arm64: dts: rockchip: Enable dmc and dfi nodes on gru
-Date:   Tue,  8 Mar 2022 11:08:58 -0800
-Message-Id: <20220308110825.v4.12.I3a5c7f21ecd8221b42c2dbcd618386bce7b3e9a6@changeid>
+Subject: [PATCH v4 13/15] PM / devfreq: rk3399_dmc: Disable edev on remove()
+Date:   Tue,  8 Mar 2022 11:08:59 -0800
+Message-Id: <20220308110825.v4.13.I1476960b2586441beaef21dca4feb3ecc067f768@changeid>
 X-Mailer: git-send-email 2.35.1.616.g0bdcbb4464-goog
 In-Reply-To: <20220308190901.3144566-1-briannorris@chromium.org>
 References: <20220308190901.3144566-1-briannorris@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -77,169 +73,62 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Lin Huang <hl@rock-chips.com>
+Otherwise we hit an unablanced enable-count when unbinding the DFI
+device:
 
-Enable the DMC (Dynamic Memory Controller) and the DFI (DDR PHY
-Interface) nodes on gru boards so we can support DDR DVFS.
+[ 1279.659119] ------------[ cut here ]------------
+[ 1279.659179] WARNING: CPU: 2 PID: 5638 at drivers/devfreq/devfreq-event.c:360 devfreq_event_remove_edev+0x84/0x8c
+...
+[ 1279.659352] Hardware name: Google Kevin (DT)
+[ 1279.659363] pstate: 80400005 (Nzcv daif +PAN -UAO -TCO BTYPE=--)
+[ 1279.659371] pc : devfreq_event_remove_edev+0x84/0x8c
+[ 1279.659380] lr : devm_devfreq_event_release+0x1c/0x28
+...
+[ 1279.659571] Call trace:
+[ 1279.659582]  devfreq_event_remove_edev+0x84/0x8c
+[ 1279.659590]  devm_devfreq_event_release+0x1c/0x28
+[ 1279.659602]  release_nodes+0x1cc/0x244
+[ 1279.659611]  devres_release_all+0x44/0x60
+[ 1279.659621]  device_release_driver_internal+0x11c/0x1ac
+[ 1279.659629]  device_driver_detach+0x20/0x2c
+[ 1279.659641]  unbind_store+0x7c/0xb0
+[ 1279.659650]  drv_attr_store+0x2c/0x40
+[ 1279.659663]  sysfs_kf_write+0x44/0x58
+[ 1279.659672]  kernfs_fop_write_iter+0xf4/0x190
+[ 1279.659684]  vfs_write+0x2b0/0x2e4
+[ 1279.659693]  ksys_write+0x80/0xec
+[ 1279.659701]  __arm64_sys_write+0x24/0x30
+[ 1279.659714]  el0_svc_common+0xf0/0x1d8
+[ 1279.659724]  do_el0_svc_compat+0x28/0x3c
+[ 1279.659738]  el0_svc_compat+0x10/0x1c
+[ 1279.659746]  el0_sync_compat_handler+0xa8/0xcc
+[ 1279.659758]  el0_sync_compat+0x188/0x1c0
+[ 1279.659768] ---[ end trace cec200e5094155b4 ]---
 
-Signed-off-by: Lin Huang <hl@rock-chips.com>
-Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Signed-off-by: Gaël PORTAY <gael.portay@collabora.com>
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Signed-off-by: Brian Norris <briannorris@chromium.org>
 ---
 
 (no changes since v2)
 
 Changes in v2:
- - Adapt to new properties
+ - New patch
 
-Changes in v1:
-This was part of a previous series, at:
-https://lore.kernel.org/r/20210308233858.24741-3-daniel.lezcano@linaro.org
-I've picked up a bunch of changes and fixes, so I've restarted the patch
-series numbering. Updates since the old series:
- - reordered alphabetically by phandle name, per style
- - drop a ton of deprecated/unused properties
- - add required center-supply for scarlet
- - add new *_idle_dis_freq properties
- - drop the lowest (200 MHz) OPP; this was never stabilized for
-   production
- - bump the voltage (0.9V -> 0.925V) for the highest OPP on Chromebook
-   models; later (tablet) models were more stable, with a fixed DDR
-   regulator
- - bump odt_dis_freq to 666 MHz; early versions used 333 MHz, but
-   stabilization efforts landed on 666 MHz for production
+ drivers/devfreq/rk3399_dmc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
- .../dts/rockchip/rk3399-gru-chromebook.dtsi   |  7 +++++
- .../boot/dts/rockchip/rk3399-gru-scarlet.dtsi | 12 ++++++++
- arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi  | 28 +++++++++++++++++++
- .../boot/dts/rockchip/rk3399-op1-opp.dtsi     | 25 +++++++++++++++++
- 4 files changed, 72 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-index 3355fb90fa54..50d459ee4831 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-@@ -234,6 +234,13 @@ &cdn_dp {
- 	extcon = <&usbc_extcon0>, <&usbc_extcon1>;
- };
+diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
+index f778564cab49..fca9fcbd4249 100644
+--- a/drivers/devfreq/rk3399_dmc.c
++++ b/drivers/devfreq/rk3399_dmc.c
+@@ -452,6 +452,8 @@ static int rk3399_dmcfreq_remove(struct platform_device *pdev)
+ {
+ 	struct rk3399_dmcfreq *dmcfreq = dev_get_drvdata(&pdev->dev);
  
-+&dmc {
-+	center-supply = <&ppvar_centerlogic>;
-+	rockchip,pd-idle-dis-freq-hz = <800000000>;
-+	rockchip,sr-idle-dis-freq-hz = <800000000>;
-+	rockchip,sr-mc-gate-idle-dis-freq-hz = <800000000>;
-+};
++	devfreq_event_disable_edev(dmcfreq->edev);
 +
- &edp {
- 	status = "okay";
- 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi
-index a9817b3d7edc..913d845eb51a 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-scarlet.dtsi
-@@ -391,6 +391,18 @@ &cru {
- 		<400000000>;
- };
- 
-+/* The center supply is fixed to .9V on scarlet */
-+&dmc {
-+	center-supply = <&pp900_s0>;
-+};
-+
-+/* We don't need .925 V for 928 MHz on scarlet */
-+&dmc_opp_table {
-+	opp03 {
-+		opp-microvolt = <900000>;
-+	};
-+};
-+
- &gpio0 {
- 	gpio-line-names = /* GPIO0 A 0-7 */
- 			  "CLK_32K_AP",
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
-index 162f08bca0d4..23bfba86daab 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
-@@ -373,6 +373,34 @@ &cru {
- 		<200000000>;
- };
- 
-+&dfi {
-+	status = "okay";
-+};
-+
-+&dmc {
-+	status = "okay";
-+
-+	rockchip,pd-idle-ns = <160>;
-+	rockchip,sr-idle-ns = <10240>;
-+	rockchip,sr-mc-gate-idle-ns = <40960>;
-+	rockchip,srpd-lite-idle-ns = <61440>;
-+	rockchip,standby-idle-ns = <81920>;
-+
-+	rockchip,ddr3_odt_dis_freq = <666000000>;
-+	rockchip,lpddr3_odt_dis_freq = <666000000>;
-+	rockchip,lpddr4_odt_dis_freq = <666000000>;
-+
-+	rockchip,sr-mc-gate-idle-dis-freq-hz = <1000000000>;
-+	rockchip,srpd-lite-idle-dis-freq-hz = <0>;
-+	rockchip,standby-idle-dis-freq-hz = <928000000>;
-+};
-+
-+&dmc_opp_table {
-+	opp03 {
-+		opp-suspend;
-+	};
-+};
-+
- &emmc_phy {
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-op1-opp.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-op1-opp.dtsi
-index 2180e0f75003..6e29e74f6fc6 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-op1-opp.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-op1-opp.dtsi
-@@ -110,6 +110,27 @@ opp05 {
- 			opp-microvolt = <1075000>;
- 		};
- 	};
-+
-+	dmc_opp_table: dmc_opp_table {
-+		compatible = "operating-points-v2";
-+
-+		opp00 {
-+			opp-hz = /bits/ 64 <400000000>;
-+			opp-microvolt = <900000>;
-+		};
-+		opp01 {
-+			opp-hz = /bits/ 64 <666000000>;
-+			opp-microvolt = <900000>;
-+		};
-+		opp02 {
-+			opp-hz = /bits/ 64 <800000000>;
-+			opp-microvolt = <900000>;
-+		};
-+		opp03 {
-+			opp-hz = /bits/ 64 <928000000>;
-+			opp-microvolt = <925000>;
-+		};
-+	};
- };
- 
- &cpu_l0 {
-@@ -136,6 +157,10 @@ &cpu_b1 {
- 	operating-points-v2 = <&cluster1_opp>;
- };
- 
-+&dmc {
-+	operating-points-v2 = <&dmc_opp_table>;
-+};
-+
- &gpu {
- 	operating-points-v2 = <&gpu_opp_table>;
- };
+ 	/*
+ 	 * Before remove the opp table we need to unregister the opp notifier.
+ 	 */
 -- 
 2.35.1.616.g0bdcbb4464-goog
 
