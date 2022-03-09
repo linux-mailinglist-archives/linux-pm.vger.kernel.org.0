@@ -2,132 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB184D38CF
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Mar 2022 19:28:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA5ED4D391B
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Mar 2022 19:45:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233803AbiCIS26 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Mar 2022 13:28:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55898 "EHLO
+        id S235533AbiCISpl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Mar 2022 13:45:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232406AbiCIS25 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Mar 2022 13:28:57 -0500
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5B831206;
-        Wed,  9 Mar 2022 10:27:57 -0800 (PST)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2dbd8777564so33640277b3.0;
-        Wed, 09 Mar 2022 10:27:57 -0800 (PST)
+        with ESMTP id S235799AbiCISpk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Mar 2022 13:45:40 -0500
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8EC1A39D3
+        for <linux-pm@vger.kernel.org>; Wed,  9 Mar 2022 10:44:41 -0800 (PST)
+Received: by mail-qk1-x72f.google.com with SMTP id v15so2505504qkg.8
+        for <linux-pm@vger.kernel.org>; Wed, 09 Mar 2022 10:44:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1GYgab5H+rGUBq7zOJrmbkhSWBxCHw55vFYA5ItmMWs=;
+        b=CcsImuzcs2m9UWk2W++y2OAvIZ8LTsIqQoV0RAnXSz+4GipX7agpbelYtd8dDrCYdJ
+         COLNBkN2bXcs8cWWlVLA/ZtzH8AZd2WQBWAQAc0pNj+qlztj6wCn5mXJVLMX7AtrLAGB
+         S/a99NYGs6pJLpDHnjrWR/nXyBAfI1OeKk3IVIS+9E07nQG5mWB6NIWa4KBEhwNv++8+
+         PQI7+WbQJSOmiWBmW5I3ejSnld2ffAsfGzC7UwPX6BYaHZ/pF17MFdlNuYpX3jLR1dn8
+         fOz0RB7OgLlDanBknGBQD4kI+JoI6WBgAxeyw31MCvGRbkn6bv4cBU9Am3r4Zh3GSwcc
+         6ofQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=abyW9EPAt1/N2g7LcA6pvtwKR9wcKCKXIM62EVOVNTg=;
-        b=YrQWr5MRlTKtKfiHJOJ/KDZwvgPoPPoGw7IurCuo1JY4ISiyPCaoAkWBNzLvUL4cyg
-         WY06c+xpxnWRflqHFuygmL9vueS2Uyhi64A+v6rIOIdTjCciKF+Q0mmbnZlxemaaN8/y
-         RHcyf1faQGLrTKXKOarmuwxfozXv+LXZ2AVZmfmyJy5tIchAS2m2SVkA8o2Q4nhpoWjJ
-         c+tTV0lvWpXfn1TpL3qBzHf028jYatQnpXKAquEXOEHVRivhlM2AK0kN4Mludd1w4ntZ
-         aRwxUuhaYcku0FS/CVqfG97XAWlX+U1V5/VL+AfwmghLpfQkLxqb/PW+HX2UVYloWeT+
-         GSdg==
-X-Gm-Message-State: AOAM530R7GCq/7yQoeiylpTVraYev5fKHXaUvzAaXKHj+6IYCEDmHZz+
-        XOUWRvXAvphBSQRPRJ4GQ1YDP05w6BEz0TP44TIpgfw1/7c=
-X-Google-Smtp-Source: ABdhPJxl9BcwZnFKR4ckz/GGm2JFpaPyXO9ChA7b1yNGKEZEX9CiJuXw85c12rE55V8JfkQgTQ0xbzXGlD/5zF4jdOg=
-X-Received: by 2002:a81:524c:0:b0:2dc:1a00:1124 with SMTP id
- g73-20020a81524c000000b002dc1a001124mr981662ywb.196.1646850476426; Wed, 09
- Mar 2022 10:27:56 -0800 (PST)
+        bh=1GYgab5H+rGUBq7zOJrmbkhSWBxCHw55vFYA5ItmMWs=;
+        b=nIv8RJz8E2Z3k3Vw6WYGkkvzMUIQy5fC8Idu4elBTDGyfXhZfwbsLCGyWxud4drmcj
+         zJNRKSEI4TEo90eIJP+2CGDij2yJiv2wJWnCjpwFApwTwyV+YA2FrE4C3BF4NjGYt8RB
+         Wrf98YDtP9YcYmYwoME4jWWgK95u6S1lgGfLx9qJTz4t2luFE2nxyVwdZvYUZEkXsuK1
+         quTwpBgd9NBzXcz9MSgvEDz8CFPpk5A4XGhwqTt9x5KIcg5LpFSZvCdtGjJ5rr5BvT/q
+         lJsGtjXNMSey0urlqssQSl5B36AsGDjn8lOkvvS28UdC+TtqyV1VGcT6m6mw117sHLF8
+         DMDA==
+X-Gm-Message-State: AOAM533b4IrRfP87Fn3pl7wsWQLgmJ+525vuxTE78uckCngACESJGt11
+        4reTT0sFEmCGt7Kvk8dHO6MVNAjngAyXjPpZGATYXg==
+X-Google-Smtp-Source: ABdhPJzJQ27D2ONBFWs4XmQ5BOewdKNB0qEHwGt6iF6UOCud70gKpUYd6lEfUwt8/jsgCou1OiY2+6B4wa0d29f7YYg=
+X-Received: by 2002:a05:620a:44d0:b0:67b:1331:484e with SMTP id
+ y16-20020a05620a44d000b0067b1331484emr744087qkp.30.1646851480400; Wed, 09 Mar
+ 2022 10:44:40 -0800 (PST)
 MIME-Version: 1.0
-References: <31b9d1cd-6a67-218b-4ada-12f72e6f00dc@redhat.com>
- <CAJZ5v0hQifvD+U8q1O7p_5QeicG_On4=CrgNj0RsbPSbkY8Hww@mail.gmail.com>
- <ad3b77f8-7e75-1dfa-8ee4-1077336911aa@redhat.com> <CAJZ5v0js8Vr7dW09WGyR_JTn4kMybDhaTWt4yziqwSM+oAXUNA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0js8Vr7dW09WGyR_JTn4kMybDhaTWt4yziqwSM+oAXUNA@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 9 Mar 2022 19:27:45 +0100
-Message-ID: <CAJZ5v0imJfOp-Uw=tH2dimSQzb-EgHu_yEU_0LScmrQ43t3pbw@mail.gmail.com>
-Subject: Re: Many reports of laptops getting hot while suspended with kernels
- >= 5.16.10 || >= 5.17-rc1
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Justin Forbes <jmforbes@linuxtx.org>,
-        Mark Pearson <markpearson@lenovo.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+References: <20220307153050.3392700-1-dmitry.baryshkov@linaro.org> <YiZ+UuionW6DsLQX@ripper>
+In-Reply-To: <YiZ+UuionW6DsLQX@ripper>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 9 Mar 2022 21:44:29 +0300
+Message-ID: <CAA8EJprGWYD=7pUekMz=cuebmA4vKEjr4UJRMVWyXGE55PzDfQ@mail.gmail.com>
+Subject: Re: [PATCH 1/4] cpufreq: qcom-hw: drop affinity hint before freeing
+ the IRQ
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 9, 2022 at 5:34 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Tue, 8 Mar 2022 at 00:49, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
 >
-> On Wed, Mar 9, 2022 at 5:33 PM Hans de Goede <hdegoede@redhat.com> wrote:
-> >
-> > Hi,
-> >
-> > On 3/9/22 14:57, Rafael J. Wysocki wrote:
-> > > On Wed, Mar 9, 2022 at 2:44 PM Hans de Goede <hdegoede@redhat.com> wrote:
-> > >>
-> > >> Hi Rafael,
-> > >>
-> > >> We (Fedora) have been receiving a whole bunch of bug reports about
-> > >> laptops getting hot/toasty while suspended with kernels >= 5.16.10
-> > >> and this seems to still happen with 5.17-rc7 too.
-> > >>
-> > >> The following are all bugzilla.redhat.com bug numbers:
-> > >>
-> > >>    1750910 - Laptop failed to suspend and completely drained the battery
-> > >>    2050036 - Framework laptop: 5.16.5 breaks s2idle sleep
-> > >>    2053957 - Package c-states never go below C2
-> > >>    2056729 - No lid events when closing lid / laptop does not suspend
-> > >>    2057909 - Thinkpad X1C 9th in s2idle suspend still draining battery to zero over night , Ap
-> > >>    2059668 - HP Envy Laptop deadlocks on entering suspend power state when plugged in. Case ge
-> > >>    2059688 - Dell G15 5510 s2idle fails in 5.16.11 works in 5.16.10
-> > >>
-> > >> And one of the bugs has also been mirrored at bugzilla.kernel.org by
-> > >> the reporter:
-> > >>
-> > >>  bko215641 - Dell G15 5510 s2idle fails in 5.16.11 works in 5.16.10
-> > >>
-> > >> The common denominator here (besides the kernel version) seems to
-> > >> be that these are all Ice or Tiger Lake systems (I did not do
-> > >> check this applies 100% to all bugs, but it does see, to be a pattern).
-> > >>
-> > >> A similar arch-linux report:
-> > >>
-> > >> https://bbs.archlinux.org/viewtopic.php?id=274292&p=2
-> > >>
-> > >> Suggest that reverting
-> > >> "ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE"
-> > >>
-> > >> which was cherry-picked into 5.16.10 fixes things.
-> > >
-> > > Thanks for letting me know!
-> > >
-> > >> If you want I can create Fedora kernel test-rpms of a recent
-> > >> 5.16.y with just that one commit reverted and ask users to
-> > >> confirm if that helps. Please let me know if doing that woulkd
-> > >> be useful ?
-> > >
-> > > Yes, it would.
-> > >
-> > > However, it follows from the arch-linux report linked above that
-> > > 5.17-rc is fine, so it would be good to also check if reverting that
-> > > commit from 5.17-rc helps.
-> >
-> > Ok, I've done Fedora kernel builds of both 5.16.13 and 5.17-rc7 with
-> > the patch reverted and asked the bug-reporters to test both.
+> On Mon 07 Mar 07:30 PST 2022, Dmitry Baryshkov wrote:
 >
-> Thanks!
+> > Drop affinity hint before freeing the throttling IRQ to fix the
+> > following trace:
+>
+> Rather than relying on the reader of the git log having to read the
+> free_irq() implementation to figure out what the problem is, this could
+> simply state that one isn't allowed to free_irq() something with
+> affinity set.
 
-Also, in the cases where people have not tested 5.17-rc7 without any
-reverts, it would be good to ask them to do so.
+Ack, will update the commit message in v2.
 
-I have received another report related to this issue where the problem
-is not present in 5.17-rc7 (see
-https://lore.kernel.org/linux-pm/CAJZ5v0hKXyTtb1Jk=wqNV9_mZKdf3mmwF4bPOcmADyNnTkpMbQ@mail.gmail.com/).
 
-It is likely that the commit in question actually depends on some
-other commits that were not backported into 5.16.y.
+> Regards,
+> Bjorn
+>
+> >
+> > [  185.114773] ------------[ cut here ]------------
+> > [  185.119517] WARNING: CPU: 7 PID: 43 at kernel/irq/manage.c:1887 free_irq+0x3a4/0x3dc
+> > [  185.127474] Modules linked in:
+> > [  185.130618] CPU: 7 PID: 43 Comm: cpuhp/7 Tainted: G S      W         5.17.0-rc6-00386-g67382a5b705d-dirty #690
+> > [  185.147125] pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > [  185.154269] pc : free_irq+0x3a4/0x3dc
+> > [  185.158031] lr : free_irq+0x33c/0x3dc
+> > [  185.161792] sp : ffff80000841bc90
+> > [  185.165195] x29: ffff80000841bc90 x28: ffffa6edc5c3d000 x27: ffff6d93729e5908
+> > [  185.172515] x26: 0000000000000000 x25: ffff6d910109fc00 x24: ffff6d91011490e0
+> > [  185.179838] x23: ffff6d9101149218 x22: 0000000000000080 x21: 0000000000000000
+> > [  185.187163] x20: ffff6d9101149000 x19: ffff6d910ab61500 x18: ffffffffffffffff
+> > [  185.194487] x17: 2e35202020202020 x16: 2020202020202020 x15: ffff80008841b9a7
+> > [  185.201805] x14: 00000000000003c9 x13: 0000000000000001 x12: 0000000000000040
+> > [  185.209135] x11: ffff6d91005aab58 x10: ffff6d91005aab5a x9 : ffffc6a5ad1c5408
+> > [  185.216455] x8 : ffff6d91005adb88 x7 : 0000000000000000 x6 : ffffc6a5ab5a91f4
+> > [  185.223776] x5 : 0000000000000000 x4 : ffff6d91011490a8 x3 : ffffc6a5ad266108
+> > [  185.231098] x2 : 0000000013033204 x1 : ffff6d9101149000 x0 : ffff6d910a9cc000
+> > [  185.238421] Call trace:
+> > [  185.240932]  free_irq+0x3a4/0x3dc
+> > [  185.244334]  qcom_cpufreq_hw_cpu_exit+0x78/0xcc
+> > [  185.248985]  cpufreq_offline.isra.0+0x228/0x270
+> > [  185.253639]  cpuhp_cpufreq_offline+0x10/0x20
+> > [  185.258027]  cpuhp_invoke_callback+0x16c/0x2b0
+> > [  185.262592]  cpuhp_thread_fun+0x190/0x250
+> > [  185.266710]  smpboot_thread_fn+0x12c/0x230
+> > [  185.270914]  kthread+0xfc/0x100
+> > [  185.274145]  ret_from_fork+0x10/0x20
+> > [  185.277820] irq event stamp: 212
+> > [  185.281136] hardirqs last  enabled at (211): [<ffffc6a5ac57973c>] _raw_spin_unlock_irqrestore+0x8c/0xa0
+> > [  185.290775] hardirqs last disabled at (212): [<ffffc6a5ac572100>] __schedule+0x710/0xa10
+> > [  185.299081] softirqs last  enabled at (0): [<ffffc6a5ab50f7b0>] copy_process+0x7d0/0x1a14
+> > [  185.307475] softirqs last disabled at (0): [<0000000000000000>] 0x0
+> >
+> > Fixes: 275157b367f4 ("cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support")
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > ---
+> >  drivers/cpufreq/qcom-cpufreq-hw.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> > index effbb680b453..740518d8ae16 100644
+> > --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> > +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> > @@ -412,6 +412,7 @@ static void qcom_cpufreq_hw_lmh_exit(struct qcom_cpufreq_data *data)
+> >       mutex_unlock(&data->throttle_lock);
+> >
+> >       cancel_delayed_work_sync(&data->throttle_work);
+> > +     irq_set_affinity_hint(data->throttle_irq, NULL);
+> >       free_irq(data->throttle_irq, data);
+> >  }
+> >
+> > --
+> > 2.34.1
+> >
+
+
+
+-- 
+With best wishes
+Dmitry
