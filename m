@@ -2,59 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D8EE4D394C
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Mar 2022 19:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AA2B4D3975
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Mar 2022 20:05:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbiCISzr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Mar 2022 13:55:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41348 "EHLO
+        id S233508AbiCITGN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Mar 2022 14:06:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235550AbiCISzq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Mar 2022 13:55:46 -0500
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28C88D69E;
-        Wed,  9 Mar 2022 10:54:47 -0800 (PST)
-Received: by mail-yb1-f170.google.com with SMTP id g1so6340046ybe.4;
-        Wed, 09 Mar 2022 10:54:47 -0800 (PST)
+        with ESMTP id S229514AbiCITGM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Mar 2022 14:06:12 -0500
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10836F482
+        for <linux-pm@vger.kernel.org>; Wed,  9 Mar 2022 11:05:13 -0800 (PST)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2dc0364d2ceso34011577b3.7
+        for <linux-pm@vger.kernel.org>; Wed, 09 Mar 2022 11:05:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ZbXguUA3SAuK+Qqg58CaspcW6OAlxtt0qvmLSsMJ9ok=;
-        b=c1lrVoJkoq+65QcVYPEdVKLR1VZPBZQ/QDoDE0LUcioDfJPbYn6YVsEijo7BE47H4/
-         ZvYPehd0Ze907HZPub4sKVgKIIs7ANjRU4tPdUcmrvoPFIuVj5ipbe/vgMkZQGS/kx/b
-         zzhe0SmDNE4GIgVHcUrdbM+aiiKcbMu5y7em5f0M0zridtbyGQmJDoOuecqxSnx9Saiy
-         9N7AmdfLN9fPEgN2E754W4Ml4/nyfqiIEFTCa1ivFy9H7eZKcxNDbeCFFmESo0mpRDLz
-         okWUGV/t2UMQzDfUVD3OoKEqYLF2iDUoy505+u1W17FZOfzLFRf9DxbLRwtZTUtuOpaL
-         uVEA==
-X-Gm-Message-State: AOAM530Zp5xDjN9rLalijCwYz7cVCehS0/YOjK99ggG1NXKwibrlyZit
-        4tZwr0fHZpkcTcyUWVy6kfCwM8KUBG4O9Ox20UI=
-X-Google-Smtp-Source: ABdhPJySslQluMapftZwOdQuwtvKtkaH3gpq/5V55iNkRKUk3CWTKt28vTn174ahSJl2cFeLrBHio+MzDgNAc95EAoI=
-X-Received: by 2002:a25:fe10:0:b0:625:262f:e792 with SMTP id
- k16-20020a25fe10000000b00625262fe792mr950349ybe.365.1646852086908; Wed, 09
- Mar 2022 10:54:46 -0800 (PST)
+        bh=L5ZhCiN+1hWQW/iJ4V81fkb5gSLx7RVTqHBsIBjU08o=;
+        b=Owh6ea/MEW08dCcaHi+PP0jpE4Dzr/qZkYt37M1db51O093eZBEn8tvtt3mHNg550g
+         /FucipHJlKfGTiBrCOkZCyHhhmrrEkE1rCfYB3fKHdxjQTBEhdHhFYFZqVC2hpENVmXd
+         xNuz5ZoQkRUldB7xiNMpVpoHewSFPUwDCLRglGpBaFAGdJu+Z9aZ1uA2mRh9aAupII6U
+         AsKoHA5hqj8qH5osgUgu8Dtz99AmmVvsXQ7sSpERQuIORajmRepjmpj9xXRHhtd6km9X
+         ga9Z20JgHjwrG7Y5caGyoAXyWjYtbpaZUISeXb83wRX1vZcAPwALP2EKDv8W1Dw3Z5IX
+         fA2g==
+X-Gm-Message-State: AOAM5318Apl1tdesZmOd1gJC/NfRxbVswwr4HDQsZCwPN7fzthJFPM1z
+        9hNMMkgQ10A3JIkxgQr2cPNMuNhL4gJuVV6aTyk=
+X-Google-Smtp-Source: ABdhPJx0dwPUZYzU8UlaW8ZLT6bqDzDEvzODxjYFFtdgDyunrxwjEkx1TJYz4FvLdLAv3gcFP8zYzRPDzFKC9FkTKMw=
+X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
+ b145-20020a811b97000000b002db640f49d8mr1043929ywb.326.1646852712987; Wed, 09
+ Mar 2022 11:05:12 -0800 (PST)
 MIME-Version: 1.0
-References: <20220309012351.616826-1-Jinzhou.Su@amd.com> <YiisRXfrIco8hnXf@amd.com>
-In-Reply-To: <YiisRXfrIco8hnXf@amd.com>
+References: <1646380408-57184-1-git-send-email-lirongqing@baidu.com>
+In-Reply-To: <1646380408-57184-1-git-send-email-lirongqing@baidu.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 9 Mar 2022 19:54:35 +0100
-Message-ID: <CAJZ5v0ioLFryuiE7pg1ywvj22TSpV6N9ADak3rQG8z8GYqF+rw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] Add tracer tool for AMD P-State driver
-To:     Huang Rui <ray.huang@amd.com>,
-        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>
-Cc:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "dsmythies@telus.net" <dsmythies@telus.net>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "todd.e.brandt@linux.intel.com" <todd.e.brandt@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>
+Date:   Wed, 9 Mar 2022 20:05:02 +0100
+Message-ID: <CAJZ5v0gqoKRcDACCUnJT2bZNmEGtDJcErC-Qe8v_gQ_oRzCimA@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle-haltpoll: move cpuidle_poll_state_init after
+To:     Li RongQing <lirongqing@baidu.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -66,44 +55,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 9, 2022 at 2:32 PM Huang Rui <ray.huang@amd.com> wrote:
+On Fri, Mar 4, 2022 at 8:54 AM Li RongQing <lirongqing@baidu.com> wrote:
 >
-> On Wed, Mar 09, 2022 at 09:23:47AM +0800, Su, Jinzhou (Joe) wrote:
-> > Hello,
-> >
-> > intel_pstate_tracer is a useful tool to analyze the performance of
-> > intel_pstate driver. We upstream out AMD P-state driver into Linux
-> > kernel recently and like to use similar tool to tune the performance
-> > of the driver.
-> >
-> > I modified intel_pstate_tracer.py then it could import as a module to
-> > analyze AMD P-State trace event. Other trace event also can benifit from
-> > this change once they need this tool.
-> >
-> > intel_pstate_tracer could be used as the same way as before and the
-> > original functionality isn't broken.
-> >
-> > Changes from V2->V3
-> >
-> > -fix typo in amd-pstate RST
-> >
-> > Changes from V1->V2
-> >
-> > -Add tracer documentation in amd-pstate RST
-> >
-> > -fix typo in amd_pstate_trace.py
-> >
-> > -add "Co-developed-by" in patch 1/4
-> >
-> > Thanks,
-> > Joe
-> >
-> > Jinzhou Su (4):
-> >   cpufreq: amd-pstate: Add more tracepoint for AMD P-State module
-> >   tools/power/x86/intel_pstate_tracer: make tracer as a module
-> >   tools/power/x86/amd_pstate_tracer: Add tracer tool for AMD P-state
-> >   Documentation: amd-pstate: add tracer tool introduction
+> call cpuidle_poll_state_init only if it is needed to save
+> some cpu cycles
 >
-> Series are Reviewed-by: Huang Rui <ray.huang@amd.com>
+> Signed-off-by: Li RongQing <lirongqing@baidu.com>
+> ---
+>  drivers/cpuidle/cpuidle-haltpoll.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
+> index fcc5321..3a39a7f 100644
+> --- a/drivers/cpuidle/cpuidle-haltpoll.c
+> +++ b/drivers/cpuidle/cpuidle-haltpoll.c
+> @@ -108,11 +108,11 @@ static int __init haltpoll_init(void)
+>         if (boot_option_idle_override != IDLE_NO_OVERRIDE)
+>                 return -ENODEV;
+>
+> -       cpuidle_poll_state_init(drv);
+> -
+>         if (!kvm_para_available() || !haltpoll_want())
+>                 return -ENODEV;
+>
+> +       cpuidle_poll_state_init(drv);
+> +
+>         ret = cpuidle_register_driver(drv);
+>         if (ret < 0)
+>                 return ret;
+> --
 
-All patches in the series have been applied as 5.18 material, thanks!
+Applied as 5.18 material with some edits in the changelog and subject.
+
+Thanks!
