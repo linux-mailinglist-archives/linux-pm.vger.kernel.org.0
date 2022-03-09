@@ -2,60 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E6B4D2E8B
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Mar 2022 13:00:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AAC34D2F30
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Mar 2022 13:40:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232533AbiCIMAu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Mar 2022 07:00:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37126 "EHLO
+        id S232515AbiCIMlb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Mar 2022 07:41:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231759AbiCIMAu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Mar 2022 07:00:50 -0500
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5164EF94E7;
-        Wed,  9 Mar 2022 03:59:51 -0800 (PST)
-Received: by mail-yb1-xb29.google.com with SMTP id z30so3861215ybi.2;
-        Wed, 09 Mar 2022 03:59:51 -0800 (PST)
+        with ESMTP id S231403AbiCIMla (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Mar 2022 07:41:30 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0B71768EB
+        for <linux-pm@vger.kernel.org>; Wed,  9 Mar 2022 04:40:31 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id p184-20020a1c29c1000000b0037f76d8b484so1363870wmp.5
+        for <linux-pm@vger.kernel.org>; Wed, 09 Mar 2022 04:40:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vfNPAq/xUBFYXwIgl1HZDnGv0DGUDqF2s2A85pcqjZg=;
-        b=MnnhLtR5FEJAHdHPjX7mN7njyVpCD396Qt47sfyw8J2MvN5JGwW+0wj4OTBSSlsANt
-         Iq+BGRwtxLz4FfIpPFLuBEPy35/ftoUxB6lukMB0INyoDUT1LTsdidxHE4yS4K3ddE32
-         kdfRF/ePV78hxOI1UsVSewWkWZ8JscQQPEhWDkJ2E8zt3y04BKE9ubT8a6s3y2tuZu83
-         WCcVnsq2ERMEL0SeQlHK+Ui8WB6AlJ0BXvngqWRvTX04SOmW5TtwV+wjblrRYwthFfk+
-         c+FzbA3fDIZeUx2RVXea+ae/1TnbJfvOHVgj9eK+uuyhyEQ8JpqVamrmuEhaDGNynxj0
-         No9Q==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=4s6Mt6bV9KJzPwA3PnUDcbbpV/tJaB+XPizE0569IJQ=;
+        b=dg3XnY4EVcBQh9xXHjE9FppjdwOVIl6rowvTrGYTub1VkRFmyyQ6tq4YJd3dJcj2EY
+         W7uNuYxLhoVsZB8/pO+GdxPGon0+hVzwUlJUEflr9H1ypGgj6oY0MpHSjsazFYUOQQ82
+         nsQyOjDpy+bZq2XKgK38/tmfd1ReOOG/y50t4DXRDQ5L7nkg7JSJwPip3SgAw47nLimP
+         XVVbOF+eQcbSShM0H8BDcUEPR1TAebQmjP8ko/gQlCsYUJBXrxxpUr/uEpaYrrAaVrMH
+         1U1zmhDyEFi7VKyM8/MpdXjioOwTW6IsgYj2FP+h4rViKb94BEMs721OUlCtJSurAi3z
+         lKzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vfNPAq/xUBFYXwIgl1HZDnGv0DGUDqF2s2A85pcqjZg=;
-        b=KaIHLwk4RwEx7gdHPzGuFLfxByCOkyXEwXguq2bWpTX9EJSwK+nDwfzuqsjkNwlfzo
-         EGK0UgtEdx0C+d0QoJHI1UVDsyoQz3pd9/7WgiVqGhVVPRnnOfJWZ7qrJXMbnFez32hE
-         MZnADbyGu5WqvPactbOUeQbnkpjueQI3rH8MzKOjh6JgyxMwgjg5ls3vIxmsUxcx3Bdb
-         bhnwwIelSa/ceyuqBL2C19/tzcvGTylSzpwJGnz6dorOUrX6tIWbvMiG3JkrzsXT3bQ4
-         p4N3o5KxBHw/yBpwgZZRK8da9XszyzJnrQSXHPSQR97j0cJ7/6AEkhhrR7oN89VfuOix
-         ARmA==
-X-Gm-Message-State: AOAM532d2p/U0RGOI9EUObolonqbk+ScgahROA4R4QI4Rll2QHj3hO6U
-        ZD0f9KqbYD/mknHj/nKWdw0NWZzz8huaoIoUetk=
-X-Google-Smtp-Source: ABdhPJxibLKTnvAHHyuiLIXxursyh1UBsom2xJiQJLwSHl5bfQHLMx6R6kZ20WAVfISF8B/zmAJ9X4XaZOJ43VGg7NY=
-X-Received: by 2002:a25:d3cb:0:b0:629:182c:6c50 with SMTP id
- e194-20020a25d3cb000000b00629182c6c50mr16116332ybf.417.1646827190454; Wed, 09
- Mar 2022 03:59:50 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=4s6Mt6bV9KJzPwA3PnUDcbbpV/tJaB+XPizE0569IJQ=;
+        b=Ey8ToVgFZD9tTGvyoUDMZ3i0gxNtpXMOe+Aa8ZGNBvid0YPDCKirXeM82wHlc8iK9L
+         LD62XqT0+oVIsYdtHO1IuUWZNGGyPPbUv9U3o5GgS30PemNT2bS36JUMlL0ZuSSJTJTF
+         yxTeyfyZKy5ei4Jk/tZB8l2sPvUHM/MEukDA+KiGRDLjuxH9vAenm6iqgQpJl3o1YJRO
+         cBY9PJCYw/GyF6MBKwdLBz0WZCXywodEFio0AYjw8vynF0s+neYbixchGrjc034M4Wu5
+         fCDDwy8gCU87GjOhpRXeE7xK2HUV1JEG+XFhuLsUTfLxQMPEyo2ZklpLQd65kEelL2jX
+         HuLA==
+X-Gm-Message-State: AOAM533I4L0VmiZ08R7OjvvO+bmUFK3653PCsz5AAG91dPj7mqhv/XCy
+        /Fk1UOROSxWw5MfRuocsRKj/Qw==
+X-Google-Smtp-Source: ABdhPJwpo9Iy8u1qG3DrI51vHYFtmGEESb2kVdFOe9UpA5tbOD1050hXgpLahBisUU+9Y5lHnSJC5w==
+X-Received: by 2002:a7b:cf30:0:b0:389:89bd:6d32 with SMTP id m16-20020a7bcf30000000b0038989bd6d32mr3236341wmg.12.1646829629570;
+        Wed, 09 Mar 2022 04:40:29 -0800 (PST)
+Received: from ?IPV6:2a01:e34:ed2f:f020:1ffc:39b4:7538:de29? ([2a01:e34:ed2f:f020:1ffc:39b4:7538:de29])
+        by smtp.googlemail.com with ESMTPSA id m13-20020a05600c4f4d00b00386744cb31bsm5186444wmq.35.2022.03.09.04.40.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 04:40:28 -0800 (PST)
+Message-ID: <073f3d21-f544-4c75-d20b-ec7ef533e5fc@linaro.org>
+Date:   Wed, 9 Mar 2022 13:40:27 +0100
 MIME-Version: 1.0
-References: <20220110144039.5810-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220110144039.5810-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 9 Mar 2022 11:59:24 +0000
-Message-ID: <CA+V-a8uTtUjj2ccHDqB0TKfKw5KO-joPv0umw1fDP4cz6sUj2Q@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
 Subject: Re: [PATCH v4] thermal: rcar_thermal: Use platform_get_irq_optional()
  to get the interrupt
-To:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+Content-Language: en-US
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>
 Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -63,96 +67,40 @@ Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         Linux PM list <linux-pm@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+References: <20220110144039.5810-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CA+V-a8uTtUjj2ccHDqB0TKfKw5KO-joPv0umw1fDP4cz6sUj2Q@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CA+V-a8uTtUjj2ccHDqB0TKfKw5KO-joPv0umw1fDP4cz6sUj2Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Niklas,
+On 09/03/2022 12:59, Lad, Prabhakar wrote:
 
-On Mon, Jan 10, 2022 at 2:40 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
->
-> platform_get_resource(pdev, IORESOURCE_IRQ, ..) relies on static
-> allocation of IRQ resources in DT core code, this causes an issue
-> when using hierarchical interrupt domains using "interrupts" property
-> in the node as this bypasses the hierarchical setup and messes up the
-> irq chaining.
->
-> In preparation for removal of static setup of IRQ resource from DT core
-> code use platform_get_irq_optional().
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
-> v3->v4:
-> * Updated check as suggested by Andy
->
-> v2->v3:
-> * Fixed review comment pointed by Andy
->
-> v1->v2
-> * Simplified checking error code
-> * Break loop earlier if no interrupts are seen
->
-> v1: https://lkml.org/lkml/2021/12/18/163
-> ---
->  drivers/thermal/rcar_thermal.c | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
->
-This patch is not in -next yet. In which release v5.18/19 do you plan
-to merge this in?
+[ ... ]
 
-Cheers,
-Prabhakar
+>> ---
+>>   drivers/thermal/rcar_thermal.c | 17 ++++++++++++-----
+>>   1 file changed, 12 insertions(+), 5 deletions(-)
+>>
+> This patch is not in -next yet. In which release v5.18/19 do you plan
+> to merge this in?
+Right, I missed it, I'll try to catch it up for v5.18-rc1, may be with a 
+second PR.
 
-> diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
-> index b49f04daaf47..1d729ed4d685 100644
-> --- a/drivers/thermal/rcar_thermal.c
-> +++ b/drivers/thermal/rcar_thermal.c
-> @@ -445,7 +445,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
->         struct rcar_thermal_common *common;
->         struct rcar_thermal_priv *priv;
->         struct device *dev = &pdev->dev;
-> -       struct resource *res, *irq;
-> +       struct resource *res;
->         const struct rcar_thermal_chip *chip = of_device_get_match_data(dev);
->         int mres = 0;
->         int i;
-> @@ -467,9 +467,16 @@ static int rcar_thermal_probe(struct platform_device *pdev)
->         pm_runtime_get_sync(dev);
->
->         for (i = 0; i < chip->nirqs; i++) {
-> -               irq = platform_get_resource(pdev, IORESOURCE_IRQ, i);
-> -               if (!irq)
-> -                       continue;
-> +               int irq;
-> +
-> +               ret = platform_get_irq_optional(pdev, i);
-> +               if (ret < 0 && ret != -ENXIO)
-> +                       goto error_unregister;
-> +               if (ret > 0)
-> +                       irq = ret;
-> +               else
-> +                       break;
-> +
->                 if (!common->base) {
->                         /*
->                          * platform has IRQ support.
-> @@ -487,7 +494,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
->                         idle = 0; /* polling delay is not needed */
->                 }
->
-> -               ret = devm_request_irq(dev, irq->start, rcar_thermal_irq,
-> +               ret = devm_request_irq(dev, irq, rcar_thermal_irq,
->                                        IRQF_SHARED, dev_name(dev), common);
->                 if (ret) {
->                         dev_err(dev, "irq request failed\n ");
-> --
-> 2.17.1
->
+It is in the linux-next branch now and will land in linux-next tree
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
