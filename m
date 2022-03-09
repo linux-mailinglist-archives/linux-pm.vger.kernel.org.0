@@ -2,57 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC114D3D3F
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Mar 2022 23:42:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B404D3D25
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Mar 2022 23:40:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238833AbiCIWnp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Mar 2022 17:43:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
+        id S236645AbiCIWkw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Mar 2022 17:40:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238827AbiCIWno (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Mar 2022 17:43:44 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A4113D39;
-        Wed,  9 Mar 2022 14:42:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646865763; x=1678401763;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=nc9NHwoQwBBQNYgcwM//RctMraOspWMvCblxlAXdVpY=;
-  b=XoQ4Vias+FQxwh0GEnN98bMhWB5E7nMTzf2mACXGnVFxHgKIFI81HoYf
-   ImjPEWE28baMWWhu6VWcrv13dGRjnzsKbtcaaIFeseLDoHnn0sQdOsp7v
-   Zrwan/z16zECEGaWB4EiPImy6P35gjynquiWjIh0o+fqUmyszihLl7max
-   /mZ37Bpg9YV15jw7XcVxA8dh3ZFbEFbj6ZiuzQpAaX0UHBp4WHdcz4S1S
-   CxpHn+mBzmWdW/U+rqclnc2Uij2kdt/S7wbBmxaJhABiVDXqsCGqFStEM
-   OUSfiFkz/kGOyI4wd8eee5wwKYPDK7TGyih8d0XxUOrLy8p7GgTzu4FSL
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10281"; a="253938955"
-X-IronPort-AV: E=Sophos;i="5.90,168,1643702400"; 
-   d="scan'208";a="253938955"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2022 14:42:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,168,1643702400"; 
-   d="scan'208";a="554329571"
-Received: from chang-linux-3.sc.intel.com ([172.25.112.114])
-  by orsmga008.jf.intel.com with ESMTP; 09 Mar 2022 14:42:39 -0800
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     tglx@linutronix.de, dave.hansen@linux.intel.com,
-        peterz@infradead.org, bp@alien8.de, rafael@kernel.org,
-        ravi.v.shankar@intel.com, chang.seok.bae@intel.com,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Subject: [PATCH v2 2/2] intel_idle: Add a new flag to initialize the AMX state
-Date:   Wed,  9 Mar 2022 14:34:31 -0800
-Message-Id: <20220309223431.26560-3-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220309223431.26560-1-chang.seok.bae@intel.com>
-References: <20220309223431.26560-1-chang.seok.bae@intel.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S233941AbiCIWkv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Mar 2022 17:40:51 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EE8120F62
+        for <linux-pm@vger.kernel.org>; Wed,  9 Mar 2022 14:39:52 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id r4so6368730lfr.1
+        for <linux-pm@vger.kernel.org>; Wed, 09 Mar 2022 14:39:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DQZKBK074A8TFSyYxr2OkPnyn2MB2fIT3PRZzlPro58=;
+        b=TWYq/B8i0x1RGd4xJ7dZNnNlKRw6Qs5ACTLfrIMG/k62l74ASgF7HenXPTdt/SdE0a
+         uw0CdD0B4ZNN5/skVdtab8lhKgu06KbrfEsmf2PlrbzzdjHCa0qk/hSn5CkiNZRMiSXR
+         +FtLS8K/Xo8klcuUQDynwVmNGc6DXvUTzRxv3PmU+I3EFZ5C0Rx9fHwM4azKbwaT5KSq
+         gFy1f8KRD9qIOSOeQyWqGlovbp7s1qQ1QCZBWiJ4rXv8zXbT95IUjyQxCHOn6a2ul/yL
+         /GjiMpz/s3fRjerYCbgawpFUejIWu+/wEMibKHKdDJhOVXqST+byXaBuP/+4bA0lvi+S
+         Diig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DQZKBK074A8TFSyYxr2OkPnyn2MB2fIT3PRZzlPro58=;
+        b=7rkpE5Td8Eeqq7iofGvORojb3lghSeEQcn6xC39Z8I1ANY+9u/5BoQh6MSqgZJBbsx
+         S8qEWNwjOnsYlnT+EMrfbeG+oBC8TJ0eLYuAi/wQ/6a1YOrGQQpMS9L3jAnfFYjhc3N6
+         gsoYt+4oXifMwTM8YWSwtR/Ip+xO5cMCMpf/UgtRXG+gs5IX+lNI0jFHmC7rh3a1oEAB
+         xAMM6YMQVaakaM9UWAmmmpNGhPmw/gVC+l8b0oVqMPs/+wscoTXI0NZlsM0944Xq6qCm
+         0qsOkTXJaHOlz+Aaeva0itSBt/oKJanLB7gUtbR4sB9o1s9VRKFtZBsV0ZjoYWUr4wNg
+         5Exg==
+X-Gm-Message-State: AOAM533IBPXoeoxaajnXltSPF0fvuRKJpNmd9Y238VSqRrpRA9mhZY/L
+        ygbFMEtDTAeILEHSalxVBBbhKw==
+X-Google-Smtp-Source: ABdhPJxgEsqe8Ds7AHWdsjR1GGA/1opBZlNnxsNz2vvyHcizxkfTgrlgiGeDywplly4A/vkQMeyszw==
+X-Received: by 2002:a05:6512:ba6:b0:42a:84ee:d9d9 with SMTP id b38-20020a0565120ba600b0042a84eed9d9mr1177557lfv.353.1646865590554;
+        Wed, 09 Mar 2022 14:39:50 -0800 (PST)
+Received: from eriador.lan ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id b24-20020a196458000000b004483734e0afsm621036lfj.12.2022.03.09.14.39.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Mar 2022 14:39:49 -0800 (PST)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        Thara Gopinath <thara.gopinath@gmail.com>
+Subject: [PATCH v2 0/4] cpufreq: qcom-hw: Fixes for cpu hotplug support
+Date:   Thu, 10 Mar 2022 01:39:34 +0300
+Message-Id: <20220309223938.3819715-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,89 +70,31 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The non-initialized AMX state can be the cause of C-state demotion from C6
-to C1E. This low-power idle state may improve power savings and thus result
-in a higher available turbo frequency budget.
+This patchseries aims at fixing and improving CPU hotplug support on
+Qualcomm platforms. First three patches are the fixes for the LMH
+support in the cpufreq driver. The last patch adds support for
+lightweight offline() and online() callbacks which are used instead of
+exit() and init() each time the CPU is put offline or back online.
 
-This behavior is implementation-specific. Initialize the state for the C6
-entrance of Sapphire Rapids as needed.
+Changes since v1:
+- Update commit message for the first patch to describe why dropping
+  affinity hint is required (before calling free_irq()),
+- Fixed commit message for the second patch to include messages
+  generated using the mainline kernel w/o additional patches,
+- Changed third patch to use dev_warn_ratelimited(),
+- Reworked last patch to move request_irq/free_irq to online()/offline()
+  to make sure that the IRQ isn't left enabled after the CPU has been
+  put offline.
 
-Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Tested-by : Zhang Rui <rui.zhang@intel.com>
-Cc: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Cc: linux-pm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
-Changes from v1:
-* Simplify the code with a new flag (Rui).
-* Rebase on Artem's patches for SPR intel_idle.
-* Massage the changelog.
+Dmitry Baryshkov (4):
+  cpufreq: qcom-hw: drop affinity hint before freeing the IRQ
+  cpufreq: qcom-hw: fix the race between LMH worker and cpuhp
+  cpufreq: qcom-hw: fix the opp entries refcounting
+  cpufreq: qcom-hw: provide online/offline operations
 
-Dependency on the new C-state table for SPR:
-https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?h=linux-next&id=9edf3c0ffef0ec1bed8300315852b5c6a0997130
----
- drivers/idle/intel_idle.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+ drivers/cpufreq/qcom-cpufreq-hw.c | 78 +++++++++++++++++++++++++------
+ 1 file changed, 64 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 1c7c25909e54..6ecbeffdf785 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -54,6 +54,7 @@
- #include <asm/intel-family.h>
- #include <asm/mwait.h>
- #include <asm/msr.h>
-+#include <asm/fpu/api.h>
- 
- #define INTEL_IDLE_VERSION "0.5.1"
- 
-@@ -99,6 +100,11 @@ static unsigned int mwait_substates __initdata;
-  */
- #define CPUIDLE_FLAG_ALWAYS_ENABLE	BIT(15)
- 
-+/*
-+ * Initialize large xstate for the C6-state entrance.
-+ */
-+#define CPUIDLE_FLAG_INIT_XSTATE	BIT(16)
-+
- /*
-  * MWAIT takes an 8-bit "hint" in EAX "suggesting"
-  * the C-state (top nibble) and sub-state (bottom nibble)
-@@ -136,6 +142,9 @@ static __cpuidle int intel_idle(struct cpuidle_device *dev,
- 	if (state->flags & CPUIDLE_FLAG_IRQ_ENABLE)
- 		local_irq_enable();
- 
-+	if (state->flags & CPUIDLE_FLAG_INIT_XSTATE)
-+		fpu_idle_fpregs();
-+
- 	mwait_idle_with_hints(eax, ecx);
- 
- 	return index;
-@@ -156,8 +165,12 @@ static __cpuidle int intel_idle(struct cpuidle_device *dev,
- static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
- 				       struct cpuidle_driver *drv, int index)
- {
--	unsigned long eax = flg2MWAIT(drv->states[index].flags);
- 	unsigned long ecx = 1; /* break on interrupt flag */
-+	struct cpuidle_state *state = &drv->states[index];
-+	unsigned long eax = flg2MWAIT(state->flags);
-+
-+	if (state->flags & CPUIDLE_FLAG_INIT_XSTATE)
-+		fpu_idle_fpregs();
- 
- 	mwait_idle_with_hints(eax, ecx);
- 
-@@ -792,7 +805,8 @@ static struct cpuidle_state spr_cstates[] __initdata = {
- 	{
- 		.name = "C6",
- 		.desc = "MWAIT 0x20",
--		.flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED,
-+		.flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED | \
-+					   CPUIDLE_FLAG_INIT_XSTATE,
- 		.exit_latency = 290,
- 		.target_residency = 800,
- 		.enter = &intel_idle,
 -- 
-2.17.1
+2.34.1
 
