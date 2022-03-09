@@ -2,119 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A4A4D3773
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Mar 2022 18:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6698D4D3617
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Mar 2022 18:43:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235826AbiCIQoU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Mar 2022 11:44:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
+        id S236288AbiCIRBe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Mar 2022 12:01:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238518AbiCIQlc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Mar 2022 11:41:32 -0500
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A14E18FAD0;
-        Wed,  9 Mar 2022 08:35:10 -0800 (PST)
-Received: by mail-yb1-f181.google.com with SMTP id e186so5527052ybc.7;
-        Wed, 09 Mar 2022 08:35:10 -0800 (PST)
+        with ESMTP id S236893AbiCIRAu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Mar 2022 12:00:50 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F4E1045BF
+        for <linux-pm@vger.kernel.org>; Wed,  9 Mar 2022 08:47:50 -0800 (PST)
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 87D8E3F629
+        for <linux-pm@vger.kernel.org>; Wed,  9 Mar 2022 16:47:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1646844456;
+        bh=t5qKAKCgLHNfxioPnEDa1ge5OiEhv8KjWelueqMtl/A=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=G7udQNwdlDinVLi4lSkcaXkUxmniovasE/ECkS5s8BfpVoHxOIbT57dx69hRPYPwL
+         eMgXM4coGsl5N5MnQX2Hrfct+epBo4F1GVKlpnw3fZdW/OkbE2j7Ca2q/whBpX9ckp
+         I6FkxHn/2LTjHcg9pkjliN2BCoxjVb3KFLKAdfEFHdn2SAIiLvkxfFR7jUvAC2vEWM
+         34kGfDSUYOzHngURxXmp7F/u7S9hMPa4FNwcG+FdAjz2BJyRDalTN7ee3sCv4CKWk2
+         JTsDhnXvp1GY2AEeRqLWaPTAVZIBh1qANPfAROeWmOSGDXpqL4hNXnso/gA0yxgtu9
+         rddIdiDrb1+sQ==
+Received: by mail-ej1-f72.google.com with SMTP id m4-20020a170906160400b006be3f85906eso1586629ejd.23
+        for <linux-pm@vger.kernel.org>; Wed, 09 Mar 2022 08:47:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/5MaujMz6TfkcZ1KvOA3nvp+vZpIOa/uaJnkWsfgtMg=;
-        b=P4xDx92mxKerRb79iNZXmGUF2G/ZXLf4MF30j+Cc0ErsUbDO7chXsytUYvWqNohAbf
-         t1Loj5J/6Bt65RXnIg/nnyjC/AYAeOXheuGP02ou49RWXUnVeUqsegztDiSoeVUaSL1b
-         0v8KfjZ0APmIXWE0ualgleOjseRHs4p7LhSfTwL1oF2tA+Ef9iMqgybWDIe+gx5CHq3K
-         +39ZSUSglY1ITd3LEbAncETbfRTDI82qbzKABlTjwf9k4CxN0fZHNENaiPp+ONEN8kql
-         bqGbJZSJmxyzC0/bxWMbfElfn3bQI3tzuZcZ9zfAxeowpkJ/5Zwzeop5u5StHnXs5CZj
-         aUHQ==
-X-Gm-Message-State: AOAM530mDpMYLIBnV8pWvWkJDoIP+35uAA2CNPJj03XnRPggnxSu9DJi
-        Zb21z3Egw2uFqJ/CKkT/CSqilmus3y4duc8Nnag=
-X-Google-Smtp-Source: ABdhPJxAfyFWJnFtkHvypezIfISgUpnq79aDX7Iqseje3o8RJaKTkV0hHRvPWxTe1HMIJZ8ilDR9NPJ6VzXRLfaeuao=
-X-Received: by 2002:a25:4052:0:b0:628:cdca:afb7 with SMTP id
- n79-20020a254052000000b00628cdcaafb7mr446986yba.81.1646843698434; Wed, 09 Mar
- 2022 08:34:58 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=t5qKAKCgLHNfxioPnEDa1ge5OiEhv8KjWelueqMtl/A=;
+        b=gOncsSdirTQcfuXvkd1lTx9Zc3Mo/PkCDHOMe5elDzXWFMDnCey6PdvY6Y/5xh8gdE
+         9EhhUBjwGJp89WRWGZpCFdMOm1qQlkMjXqBNaB/qgYmyP6/lz2wKRttGC+oBRjFIAR6I
+         IBfhk4fWJRT6XLlgHtItxQhiaSIgTdeN2YoyRwpmdEVqzJqO+nrZ2RB4alE6S18TCr2S
+         3HFSRDAAqIXq1W9HhQ6BXuJAz8UnyELMC0HRW+qLfe01VKZlW42r92RQlzOulcy8EBgb
+         PcvkRsMx7fcKrgSPm5g54gk1eq+x5ZRDZjGLkoVPKWxbyBpY6gI+LJGbc0kj4ipb2p4p
+         Td7Q==
+X-Gm-Message-State: AOAM5319BBuVZNEUqBCZnej8+OIBcRpqF//2Ln9l+Csguvsy6jsqW5Z/
+        pMFrPPmaeUA/9R9sgrWOc7mO7VMANWOES0f4bHXUokhzO6eOA0Ux5Cb5RHKe2ZBOrUmFQYbbFRw
+        YYv7k7rQ6ku85cEH3ObPKzrV4PF+/YfJ9xJk5
+X-Received: by 2002:a05:6402:486:b0:413:bd00:4f3f with SMTP id k6-20020a056402048600b00413bd004f3fmr326529edv.103.1646844456274;
+        Wed, 09 Mar 2022 08:47:36 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwsZlug/Jtbf8IyQ3h7CW4SbOa236xZgNhxscDPorwlpm36emowHe5wTeYyk+ubVgN2NAc0dw==
+X-Received: by 2002:a05:6402:486:b0:413:bd00:4f3f with SMTP id k6-20020a056402048600b00413bd004f3fmr326496edv.103.1646844456025;
+        Wed, 09 Mar 2022 08:47:36 -0800 (PST)
+Received: from [192.168.0.144] (xdsl-188-155-174-239.adslplus.ch. [188.155.174.239])
+        by smtp.gmail.com with ESMTPSA id o2-20020a50d802000000b00410d7f0c52csm1062084edj.8.2022.03.09.08.47.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Mar 2022 08:47:35 -0800 (PST)
+Message-ID: <ba4c44bd-81d7-afd4-3a4a-6a1c6fec6692@canonical.com>
+Date:   Wed, 9 Mar 2022 17:47:34 +0100
 MIME-Version: 1.0
-References: <31b9d1cd-6a67-218b-4ada-12f72e6f00dc@redhat.com>
- <CAJZ5v0hQifvD+U8q1O7p_5QeicG_On4=CrgNj0RsbPSbkY8Hww@mail.gmail.com> <ad3b77f8-7e75-1dfa-8ee4-1077336911aa@redhat.com>
-In-Reply-To: <ad3b77f8-7e75-1dfa-8ee4-1077336911aa@redhat.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 9 Mar 2022 17:34:47 +0100
-Message-ID: <CAJZ5v0js8Vr7dW09WGyR_JTn4kMybDhaTWt4yziqwSM+oAXUNA@mail.gmail.com>
-Subject: Re: Many reports of laptops getting hot while suspended with kernels
- >= 5.16.10 || >= 5.17-rc1
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Justin Forbes <jmforbes@linuxtx.org>,
-        Mark Pearson <markpearson@lenovo.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 2/2] dt-bindings: cpufreq: cpufreq-qcom-hw: Convert to
+ YAML bindings
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        rafael@kernel.org, viresh.kumar@linaro.org, robh+dt@kernel.org,
+        krzk+dt@kernel.org
+Cc:     bjorn.andersson@linaro.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        angelogioacchino.delregno@somainline.org,
+        Rob Herring <robh@kernel.org>
+References: <20220309151541.139511-1-manivannan.sadhasivam@linaro.org>
+ <20220309151541.139511-3-manivannan.sadhasivam@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220309151541.139511-3-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 9, 2022 at 5:33 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi,
->
-> On 3/9/22 14:57, Rafael J. Wysocki wrote:
-> > On Wed, Mar 9, 2022 at 2:44 PM Hans de Goede <hdegoede@redhat.com> wrote:
-> >>
-> >> Hi Rafael,
-> >>
-> >> We (Fedora) have been receiving a whole bunch of bug reports about
-> >> laptops getting hot/toasty while suspended with kernels >= 5.16.10
-> >> and this seems to still happen with 5.17-rc7 too.
-> >>
-> >> The following are all bugzilla.redhat.com bug numbers:
-> >>
-> >>    1750910 - Laptop failed to suspend and completely drained the battery
-> >>    2050036 - Framework laptop: 5.16.5 breaks s2idle sleep
-> >>    2053957 - Package c-states never go below C2
-> >>    2056729 - No lid events when closing lid / laptop does not suspend
-> >>    2057909 - Thinkpad X1C 9th in s2idle suspend still draining battery to zero over night , Ap
-> >>    2059668 - HP Envy Laptop deadlocks on entering suspend power state when plugged in. Case ge
-> >>    2059688 - Dell G15 5510 s2idle fails in 5.16.11 works in 5.16.10
-> >>
-> >> And one of the bugs has also been mirrored at bugzilla.kernel.org by
-> >> the reporter:
-> >>
-> >>  bko215641 - Dell G15 5510 s2idle fails in 5.16.11 works in 5.16.10
-> >>
-> >> The common denominator here (besides the kernel version) seems to
-> >> be that these are all Ice or Tiger Lake systems (I did not do
-> >> check this applies 100% to all bugs, but it does see, to be a pattern).
-> >>
-> >> A similar arch-linux report:
-> >>
-> >> https://bbs.archlinux.org/viewtopic.php?id=274292&p=2
-> >>
-> >> Suggest that reverting
-> >> "ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE"
-> >>
-> >> which was cherry-picked into 5.16.10 fixes things.
-> >
-> > Thanks for letting me know!
-> >
-> >> If you want I can create Fedora kernel test-rpms of a recent
-> >> 5.16.y with just that one commit reverted and ask users to
-> >> confirm if that helps. Please let me know if doing that woulkd
-> >> be useful ?
-> >
-> > Yes, it would.
-> >
-> > However, it follows from the arch-linux report linked above that
-> > 5.17-rc is fine, so it would be good to also check if reverting that
-> > commit from 5.17-rc helps.
->
-> Ok, I've done Fedora kernel builds of both 5.16.13 and 5.17-rc7 with
-> the patch reverted and asked the bug-reporters to test both.
+On 09/03/2022 16:15, Manivannan Sadhasivam wrote:
+> Convert Qualcomm cpufreq devicetree binding to YAML.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  .../bindings/cpufreq/cpufreq-qcom-hw.txt      | 172 ---------------
+>  .../bindings/cpufreq/cpufreq-qcom-hw.yaml     | 201 ++++++++++++++++++
+>  2 files changed, 201 insertions(+), 172 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> 
 
-Thanks!
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
+
+Best regards,
+Krzysztof
