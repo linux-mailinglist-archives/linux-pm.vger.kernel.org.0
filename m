@@ -2,193 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 892B44D3A65
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Mar 2022 20:29:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE2A4D3C80
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Mar 2022 23:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237905AbiCITaM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Mar 2022 14:30:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
+        id S238277AbiCIWDa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Mar 2022 17:03:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233696AbiCITaJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Mar 2022 14:30:09 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA0BE6877
-        for <linux-pm@vger.kernel.org>; Wed,  9 Mar 2022 11:29:09 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id 11so2757380qtt.9
-        for <linux-pm@vger.kernel.org>; Wed, 09 Mar 2022 11:29:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=H7G/Vbkbc7NsJx5fFt/al9498lnauhqLTa0dXwnLiGE=;
-        b=l8iH2X+dsdqMMvbWzPW4amMZXhWG0kmpX5kBgIn4reXKF2e6GA/wBZOVPs+1XeO/e0
-         PCl1951jPNFeKgnojqAnyZ3PLdcUZkbyaXHtEhKHSavmKP1kNBgrZCdLQraabfidSwQj
-         KknbHP2jh7Z4suTb3zCggoZB4WwIK81CHMQft12hbdLjpuTUVwdynRyY86TPWEYt2+ch
-         W7kZ/7QHqQHj/qracTpY+LHdVtB3XSE6XMOiy4bPBltb0g1zJWvVUsAiegc8kXs5SgTZ
-         WQLZ3R6X5aGIGHHhyBnxfauxmYUZagFthimyoRVMgbr2hUJDtLfnMGny09xd3NMgZ+Y4
-         CcGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=H7G/Vbkbc7NsJx5fFt/al9498lnauhqLTa0dXwnLiGE=;
-        b=40rTvLkqxG1ZElloAgrr5rH+AuVlLakfxlIgiZRur3K5AjscnVxPPcQbTyHTtLd0dD
-         qbtyxJ1G3fm5z0+BMx3TT3vpkRuwP98q2xwgtLQxye1XkPLNMG3W9acjxtBrKLTEJZ/L
-         SQ1K0y1zKqkzQdwwoTeR0tmeO92z7Shtl0QVcq0Ki3vHwcWpNDCx9prdADJsmj4byAXU
-         2T0/eZfzo/+wrAuazSIeKHdXCsQl1jWz8mlkmsJjQAXDQJoqNoQ/0y15T24u5qpP9JLY
-         3bmgfcL7vgbnKzxOBN6EJejndaC/D9bHfsGeg/ZLOBNp3WXPoqf9XQ5WIW7MEJ/A+u+W
-         ba/Q==
-X-Gm-Message-State: AOAM533RfB0eJHelMxsx8N8s3hyl5DV3QDmlJT6cUJj20iIYeHjNDB4/
-        qoGcV0h89DvmPM9fZyZuzfavr/8afxcGc/BDnySpMg==
-X-Google-Smtp-Source: ABdhPJyPTjIu4MY6gA6N7QPNFd7nOPXtZFTxXgxQOMVeGxeEFvfj7zxyrIj6Zuk6McREuq/PHQ3NhnXzG0G48NZc0TM=
-X-Received: by 2002:ac8:7d0a:0:b0:2e0:4e16:d3fb with SMTP id
- g10-20020ac87d0a000000b002e04e16d3fbmr1035820qtb.295.1646854148155; Wed, 09
- Mar 2022 11:29:08 -0800 (PST)
+        with ESMTP id S232704AbiCIWD3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Mar 2022 17:03:29 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4656EBD0;
+        Wed,  9 Mar 2022 14:02:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E989EB823C9;
+        Wed,  9 Mar 2022 22:02:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BCA4C340EE;
+        Wed,  9 Mar 2022 22:02:24 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="T1fuvT6G"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1646863339;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=inreFAnh9tqy7Qlx+a012zOsU9dSDc7ob/YEs/Oahuw=;
+        b=T1fuvT6GNklQFVlKRs5Fx3/lhU5a5lY+x4d3BmbJ1TqqIVlkrwaQIbxgmi6jwH9EAOFwCQ
+        rckR7B4h3E1/mdErRIlTDIzh3wvR1gGfJ9wLYG3LURJpc1KOhyCQRKHvDssSim+a8W5OGT
+        Z5JNAqH3kaCA8JlF0U6Vt+/w9ac/tRk=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 168a9f66 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 9 Mar 2022 22:02:19 +0000 (UTC)
+Received: by mail-yb1-f175.google.com with SMTP id z30so7271091ybi.2;
+        Wed, 09 Mar 2022 14:02:18 -0800 (PST)
+X-Gm-Message-State: AOAM5321QAGWIjalmdN5yIkXmh06FE1GRZ5qPlmzgJxwoyHDGnuFgE6B
+        SosUaNvGpd76yKzRtTrsvQxBOnOylnRykDM4t8k=
+X-Google-Smtp-Source: ABdhPJyCUVD8T4qqYuq1h5ED6rk/6Kw1l+qk/ag1MpB3SuWxlea1B5XdqPkq5wTPm3WvOPgfJuy34sJfOcw4H5dA8AQ=
+X-Received: by 2002:a25:2312:0:b0:629:60d6:7507 with SMTP id
+ j18-20020a252312000000b0062960d67507mr1596488ybj.267.1646863335346; Wed, 09
+ Mar 2022 14:02:15 -0800 (PST)
 MIME-Version: 1.0
-References: <20220307153050.3392700-1-dmitry.baryshkov@linaro.org>
- <20220307153050.3392700-4-dmitry.baryshkov@linaro.org> <YiaJ2cF6SkQo3Eqz@ripper>
-In-Reply-To: <YiaJ2cF6SkQo3Eqz@ripper>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 9 Mar 2022 22:28:56 +0300
-Message-ID: <CAA8EJprKvjzkgQMsB2XGJEariCyAFsE7D7vniS5E4++pipBiww@mail.gmail.com>
-Subject: Re: [PATCH 4/4] cpufreq: qcom-hw: provide online/offline operations
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
+References: <Yh4+9+UpanJWAIyZ@zx2c4.com> <c5181fb5-38fb-f261-9de5-24655be1c749@amazon.com>
+In-Reply-To: <c5181fb5-38fb-f261-9de5-24655be1c749@amazon.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 9 Mar 2022 15:02:04 -0700
+X-Gmail-Original-Message-ID: <CAHmME9rTMDkE7UA3_wg87mrDVYps+YaHw+dZwF0EbM0zC4pQQw@mail.gmail.com>
+Message-ID: <CAHmME9rTMDkE7UA3_wg87mrDVYps+YaHw+dZwF0EbM0zC4pQQw@mail.gmail.com>
+Subject: Re: propagating vmgenid outward and upward
+To:     Alexander Graf <graf@amazon.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        QEMU Developers <qemu-devel@nongnu.org>,
+        linux-hyperv@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        adrian@parity.io, Laszlo Ersek <lersek@redhat.com>,
+        =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Jann Horn <jannh@google.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Colm MacCarthaigh <colmmacc@amazon.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Arnd Bergmann <arnd@arndb.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 8 Mar 2022 at 01:38, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
->
-> On Mon 07 Mar 07:30 PST 2022, Dmitry Baryshkov wrote:
->
-> > Provide lightweight online and offline operations. This saves us from
-> > parsing and tearing down the OPP tables each time the CPU is put online
-> > or offline.
->
-> Isn't that a slight understatement? Doesn't it also save us from e.g.
-> ioremapping the memory, traversing DT to discover the policy's
-> related_cpus and requesting the dcvs interrupt?
->
-> I like the idea of getting these things out of the init/exit path. I do
-> however think that we could move most of this to probe time, and thereby
-> be able to rely on devm operations for many of these things.
->
-> That said, I still like your idea of having a fast path for this...
->
-> >
-> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > ---
-> >  drivers/cpufreq/qcom-cpufreq-hw.c | 28 ++++++++++++++++++++++++++--
-> >  1 file changed, 26 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> > index 580520215ee7..12b67f16b78f 100644
-> > --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> > +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> > @@ -424,10 +424,26 @@ static int qcom_cpufreq_hw_lmh_init(struct cpufreq_policy *policy, int index)
-> >       return 0;
-> >  }
-> >
-> > -static void qcom_cpufreq_hw_lmh_exit(struct qcom_cpufreq_data *data)
-> > +static int qcom_cpufreq_hw_cpu_online(struct cpufreq_policy *policy)
-> >  {
-> > +     struct qcom_cpufreq_data *data = policy->driver_data;
-> > +     struct platform_device *pdev = cpufreq_get_driver_data();
-> > +     int ret;
-> > +
->
-> For backwards compatibility reasons it's valid to not have
-> data->throttle_irq. This will however cause irq_set_affinity_hint() to
-> return -EINVAL and we'll get a print.
->
-> So you should handle that gracefully.
+Hi Alex,
 
-Ack.
+On Wed, Mar 9, 2022 at 3:10 AM Alexander Graf <graf@amazon.com> wrote:
+> > The vmgenid driver basically works, though it is racy, because that ACPI
+> > notification can arrive after the system is already running again. This
+>
+>
+> I believe enough people already pointed out that this assumption is
+> incorrect. The thing that is racy about VMGenID is the interrupt based
+> notification.
 
->
-> > +     ret = irq_set_affinity_hint(data->throttle_irq, policy->cpus);
-> > +     if (ret)
-> > +             dev_err(&pdev->dev, "Failed to set CPU affinity of %s[%d]\n",
-> > +                     data->irq_name, data->throttle_irq);
-> > +
-> > +     return ret;
-> > +}
-> > +
-> > +static int qcom_cpufreq_hw_cpu_offline(struct cpufreq_policy *policy)
-> > +{
-> > +     struct qcom_cpufreq_data *data = policy->driver_data;
-> > +
-> >       if (data->throttle_irq <= 0)
-> > -             return;
-> > +             return 0;
-> >
-> >       mutex_lock(&data->throttle_lock);
-> >       data->cancel_throttle = true;
->
-> This will mark the throttle as cancelled, you need to clear this as
-> you're bringing the policy online again.
+I'm having a hard time figuring out what's different between your
+statement and mine. I said that the race is due to the notification.
+You said that the race is due to the notification. What subtle thing
+am I missing here that would lead you to say that my assumption is
+incorrect? Or did you just misread?
 
-ack.
+> The actual identifier is updated before the VM resumes
+> from its clone operation, so if you match on that you will know whether
+> you are in a new or old world. And that is enough to create
+> transactions: Save the identifier before a "crypto transaction",
+> validate before you finish, if they don't match, abort, reseed and replay.
 
->
-> > @@ -435,6 +451,12 @@ static void qcom_cpufreq_hw_lmh_exit(struct qcom_cpufreq_data *data)
-> >
-> >       cancel_delayed_work_sync(&data->throttle_work);
-> >       irq_set_affinity_hint(data->throttle_irq, NULL);
->
-> You don't disable_irq(data->throttle_irq) here. I think
-> qcom_lmh_dcvs_notify() will be unhappy if we get thermal pressure from a
-> policy with no cpus?
->
-> Note though that you can't enable it in online(), as it will be enabled
-> in ready()...
+Right. But more than just transactions, it's useful to preventing key
+reuse vulnerabilities, in which case, you store the current identifier
+just before an ephemeral key is generated, and then subsequently check
+to see that the identifier hasn't changed before transmitting anything
+related to that key.
 
-And we can't just disable it here, as it might be enabled or might be
-disabled. I think the simplest would be to call free_irq() here and
-request_irq() to online().
+> If you follow the logic at the beginning of the mail, you can create
+> something race free if you consume the hardware VMGenID counter. You can
+> not make it race free if you rely on the interrupt mechanism.
 
->
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static void qcom_cpufreq_hw_lmh_exit(struct qcom_cpufreq_data *data)
-> > +{
-> >       free_irq(data->throttle_irq, data);
->
-> As above, you should treat throttle_irq <= 0 gracefully.
->
-> Regards,
-> Bjorn
->
-> >  }
-> >
-> > @@ -588,6 +610,8 @@ static struct cpufreq_driver cpufreq_qcom_hw_driver = {
-> >       .get            = qcom_cpufreq_hw_get,
-> >       .init           = qcom_cpufreq_hw_cpu_init,
-> >       .exit           = qcom_cpufreq_hw_cpu_exit,
-> > +     .online         = qcom_cpufreq_hw_cpu_online,
-> > +     .offline        = qcom_cpufreq_hw_cpu_offline,
-> >       .register_em    = cpufreq_register_em_with_opp,
-> >       .fast_switch    = qcom_cpufreq_hw_fast_switch,
-> >       .name           = "qcom-cpufreq-hw",
-> > --
-> > 2.34.1
-> >
+Yes, as mentioned and discussed in depth before. However, your use of
+the word "counter" is problematic. Vmgenid is not a counter. It's a
+unique identifier. That means you can't compare it with a single word
+comparison but have to compare all of the 16 bytes. That seems
+potentially expensive. It's for that reason that I suggested
+augmenting the vmgenid spec with an additional word-sized _counter_
+that could be mapped into the kernels and into userspaces.
 
+> So following that train of thought, if you expose the hardware VMGenID
+> to user space, you could allow user space to act race free based on
+> VMGenID. That means consumers of user space RNGs could validate whether
+> the ID is identical between the beginning of the crypto operation and
+> the end.
 
+Right.
 
--- 
-With best wishes
-Dmitry
+> However, there are more complicated cases as well. What do you do with
+> Samba for example? It needs to generate a new SID after the clone.
+> That's a super heavy operation. Do you want to have smbd constantly poll
+> on the VMGenID just to see whether it needs to kick off some
+> administrative actions?
+
+Were it a single word-sized integer, mapped into memory, that wouldn't
+be much of a problem at all. It could constantly read this before and
+after every operation. The problem is that it's 16 bytes and
+understandably applications don't want to deal with that clunkiness.
+
+> In that case, all we would need from the kernel is an easily readable
+> GenID that changes
+
+Actually, no, you need even less than that. All that's required is a
+sysfs/procfs file that can be poll()'d on. It doesn't need to have any
+content. When poll() returns readable, the VM has been forked. Then
+userspace rngs and other things like that can call getrandom() to
+receive a fresh value to mix into whatever their operation is. Since
+all we're talking about here is _event notification_, all we need is
+that event, which is what poll() provides.
+
+> I'm also not a super big fan of putting all that logic into systemd. It
+> means applications need to create their own notification mechanisms to
+> pass that cloning notification into actual processes. Don't we have any
+> mechanism that applications and libraries could use to natively get an
+> event when the GenID changes?
+
+Yes. poll() can do this. For the purposes of discussion, I've posted
+an implementation of this idea here:
+https://lore.kernel.org/lkml/20220309215907.77526-1-Jason@zx2c4.com/
+
+What I'm sort of leaning toward is doing something like that patch,
+and then later if vmgenid ever grows an additional word-sized counter,
+moving to explore the race-free approach. Given the amount of
+programming required to actually implement the race-free approach
+(transactions and careful study of each case), the poll() file
+approach might be a medium-grade compromise for the time being.
+Evidently that's what Microsoft decided too.
+
+Jason
