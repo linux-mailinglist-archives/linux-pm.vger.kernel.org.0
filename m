@@ -2,203 +2,239 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9FD24D46C3
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Mar 2022 13:23:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAEE14D4C51
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Mar 2022 16:02:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241974AbiCJMYC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Mar 2022 07:24:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
+        id S231562AbiCJOy6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Mar 2022 09:54:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237763AbiCJMYB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Mar 2022 07:24:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A62C8B10A9
-        for <linux-pm@vger.kernel.org>; Thu, 10 Mar 2022 04:22:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1646914978;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hF4IPwDjQWvTDGnUGpdqamcykshZ8gvGsFBFPC99SW4=;
-        b=I+qjr60cX4g+J5XwNKfXa4WpYmp3z0u9h5k9QHiO0IeNORovP89xFJvFQY5yVWXQAsraf+
-        ZZAleveVhvXiJhfsaR9sxBM+cDMp6mAnBWyKOdzK+zzV3XMu23D3Y4fCtAs6UoAtq9pJ8k
-        2VB+I1rAWVlxQBPrWLH6NBhnkunHIKM=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-407-cl-wxY-8ODip9cBYrO5tWA-1; Thu, 10 Mar 2022 07:22:57 -0500
-X-MC-Unique: cl-wxY-8ODip9cBYrO5tWA-1
-Received: by mail-ed1-f69.google.com with SMTP id i5-20020a056402054500b00415ce7443f4so3017717edx.12
-        for <linux-pm@vger.kernel.org>; Thu, 10 Mar 2022 04:22:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hF4IPwDjQWvTDGnUGpdqamcykshZ8gvGsFBFPC99SW4=;
-        b=3CYJR3fV/BJC/0IfNjXt2LFSxowb+ai/EdXroX73c14WlFy0WZab9YLzDqITD9T5M+
-         L5/rUnGf7Jpu2DEwP2ilFXEem+pOf9T7RqNmCUNj2wrLKF5kX01YGu3AV+erFaordxWH
-         ZiNRSZeofw0eDnFZC4QFASOMlBp6bhAifwB4gykW3NrQKhwhat+cO4J79lqIvxGP1Xns
-         2piiIAxNNfPBiVhtAwM+RMAXS8kYgEitzVP1xloMokpbbkWXz0BMbhrOMPjrhArd25OD
-         mVAN6r8e0EOgv23NXMaY5QCJfRcGHTkr4ewSs5fuEgjoLP8mg7umfUgZ5rhAhymgfttO
-         zshg==
-X-Gm-Message-State: AOAM531/tdBLpvqkSbA4ogGjAfwoR5pE8TRs9XUIY9Ic6hOZAG3jOGrJ
-        ZvfqvIAVD7Z1aVo4F73XwMAyJ8jIYmIvIWFHv2HSuKfIWYk+S7UGq5UC5lvwX2i+ti/9rQ7S0By
-        z0VkgvDeya9j966qC9Qw=
-X-Received: by 2002:a05:6402:1042:b0:416:5b93:eae7 with SMTP id e2-20020a056402104200b004165b93eae7mr4209465edu.84.1646914976360;
-        Thu, 10 Mar 2022 04:22:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz1SJYWP5VagFvpoCai07rkPdd2gkWTXVX2uM0BwwPXPrEqCxxmQCRAMR9+jCyc1DCsqfY8pQ==
-X-Received: by 2002:a05:6402:1042:b0:416:5b93:eae7 with SMTP id e2-20020a056402104200b004165b93eae7mr4209442edu.84.1646914976093;
-        Thu, 10 Mar 2022 04:22:56 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:cdb2:2781:c55:5db0? (2001-1c00-0c1e-bf00-cdb2-2781-0c55-5db0.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:cdb2:2781:c55:5db0])
-        by smtp.gmail.com with ESMTPSA id i22-20020a170906251600b006d6d9081f46sm1730858ejb.150.2022.03.10.04.22.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Mar 2022 04:22:55 -0800 (PST)
-Message-ID: <5fb0cbe8-5f9d-1c75-ae0a-5909624189d3@redhat.com>
-Date:   Thu, 10 Mar 2022 13:22:55 +0100
+        with ESMTP id S1346127AbiCJOmh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Mar 2022 09:42:37 -0500
+Received: from smtpproxy21.qq.com (smtpbg701.qq.com [203.205.195.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697F4A2
+        for <linux-pm@vger.kernel.org>; Thu, 10 Mar 2022 06:38:49 -0800 (PST)
+X-QQ-mid: bizesmtp78t1646923117t1yfmc7d
+Received: from localhost.localdomain ( [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 10 Mar 2022 22:38:32 +0800 (CST)
+X-QQ-SSF: 01400000002000C0I000000A0000000
+X-QQ-FEAT: TskX/GkkryDRy/00gIknMd3S4WQpsQw9/GgNGOXVV7pfpVYMCclbmtw0PYgdK
+        b2JafgLLvYQJSesKATXv48bnN7UpBTzC3eHRRhEFumvXM9tdfndR5C1plnl1f3WODzSsvvr
+        Nrgctx0cCoUDALhGlRTI86OhTcaSB1XlFfH/weyyyXu6lgBJ6LeyQpzsE0QvCefEZQ6p7bZ
+        rtqtS3q0DvvR9j41SO+vma8JEuh1WuIAmTVEUzCUYZGmEM8LHETynBbfRbaXXNAS4qUVXFZ
+        6AmBGLmiWSANrzNg2C/qAET/o4DlDq2NLysPUUQlf1IKPcQwAb6Q3MA9ZGOQwa3Ra+/ElhY
+        QAJJf+YCJOK7GC1c1OkYeBsGExQyR3j4/JTwmpIDYZYV3vrjG9ND8nU3JYjiQ==
+X-QQ-GoodBg: 1
+From:   Lianjie Zhang <zhanglianjie@uniontech.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lianjie Zhang <zhanglianjie@uniontech.com>
+Subject: [PATCH v3] cpufreq: unify the show() and store() styles of attr and use __ATTR_XX macro
+Date:   Thu, 10 Mar 2022 22:38:30 +0800
+Message-Id: <20220310143830.4677-1-zhanglianjie@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: Many reports of laptops getting hot while suspended with kernels
- >= 5.16.10 || >= 5.17-rc1
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Justin Forbes <jmforbes@linuxtx.org>,
-        Mark Pearson <markpearson@lenovo.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-References: <31b9d1cd-6a67-218b-4ada-12f72e6f00dc@redhat.com>
- <CAJZ5v0hQifvD+U8q1O7p_5QeicG_On4=CrgNj0RsbPSbkY8Hww@mail.gmail.com>
- <ad3b77f8-7e75-1dfa-8ee4-1077336911aa@redhat.com>
- <CAJZ5v0js8Vr7dW09WGyR_JTn4kMybDhaTWt4yziqwSM+oAXUNA@mail.gmail.com>
- <CAJZ5v0imJfOp-Uw=tH2dimSQzb-EgHu_yEU_0LScmrQ43t3pbw@mail.gmail.com>
- <c9a1adb5-17b7-c7ed-d23f-6b6523a4771a@redhat.com>
- <CAJZ5v0gB2ZCWe3MeGnw6_CNu_Ds0QEPZ6X6jnA7dQbZe6gKZ8w@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAJZ5v0gB2ZCWe3MeGnw6_CNu_Ds0QEPZ6X6jnA7dQbZe6gKZ8w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign5
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Usually /sys directory under the file, the corresponding Attribute
+contains .show and .store, and their naming style is filename_show() and
+filename_store(). But all naming style in 'cpufreq' is show_filename()
+and store_filename(), resulting in __ATTR_RW() and __ATTR_RO() macros
+cannot be used to simplify code, So need to change naming style.
+Use helper macro __ATTR_XX  to make code more clear.
 
-On 3/10/22 11:56, Rafael J. Wysocki wrote:
-> On Thu, Mar 10, 2022 at 10:07 AM Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> Hi,
->>
->> On 3/9/22 19:27, Rafael J. Wysocki wrote:
->>> On Wed, Mar 9, 2022 at 5:34 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->>>>
->>>> On Wed, Mar 9, 2022 at 5:33 PM Hans de Goede <hdegoede@redhat.com> wrote:
->>>>>
->>>>> Hi,
->>>>>
->>>>> On 3/9/22 14:57, Rafael J. Wysocki wrote:
->>>>>> On Wed, Mar 9, 2022 at 2:44 PM Hans de Goede <hdegoede@redhat.com> wrote:
->>>>>>>
->>>>>>> Hi Rafael,
->>>>>>>
->>>>>>> We (Fedora) have been receiving a whole bunch of bug reports about
->>>>>>> laptops getting hot/toasty while suspended with kernels >= 5.16.10
->>>>>>> and this seems to still happen with 5.17-rc7 too.
->>>>>>>
->>>>>>> The following are all bugzilla.redhat.com bug numbers:
->>>>>>>
->>>>>>>    1750910 - Laptop failed to suspend and completely drained the battery
->>>>>>>    2050036 - Framework laptop: 5.16.5 breaks s2idle sleep
->>>>>>>    2053957 - Package c-states never go below C2
->>>>>>>    2056729 - No lid events when closing lid / laptop does not suspend
->>>>>>>    2057909 - Thinkpad X1C 9th in s2idle suspend still draining battery to zero over night , Ap
->>>>>>>    2059668 - HP Envy Laptop deadlocks on entering suspend power state when plugged in. Case ge
->>>>>>>    2059688 - Dell G15 5510 s2idle fails in 5.16.11 works in 5.16.10
->>>>>>>
->>>>>>> And one of the bugs has also been mirrored at bugzilla.kernel.org by
->>>>>>> the reporter:
->>>>>>>
->>>>>>>  bko215641 - Dell G15 5510 s2idle fails in 5.16.11 works in 5.16.10
->>>>>>>
->>>>>>> The common denominator here (besides the kernel version) seems to
->>>>>>> be that these are all Ice or Tiger Lake systems (I did not do
->>>>>>> check this applies 100% to all bugs, but it does see, to be a pattern).
->>>>>>>
->>>>>>> A similar arch-linux report:
->>>>>>>
->>>>>>> https://bbs.archlinux.org/viewtopic.php?id=274292&p=2
->>>>>>>
->>>>>>> Suggest that reverting
->>>>>>> "ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE"
->>>>>>>
->>>>>>> which was cherry-picked into 5.16.10 fixes things.
->>>>>>
->>>>>> Thanks for letting me know!
->>>>>>
->>>>>>> If you want I can create Fedora kernel test-rpms of a recent
->>>>>>> 5.16.y with just that one commit reverted and ask users to
->>>>>>> confirm if that helps. Please let me know if doing that woulkd
->>>>>>> be useful ?
->>>>>>
->>>>>> Yes, it would.
->>>>>>
->>>>>> However, it follows from the arch-linux report linked above that
->>>>>> 5.17-rc is fine, so it would be good to also check if reverting that
->>>>>> commit from 5.17-rc helps.
->>>>>
->>>>> Ok, I've done Fedora kernel builds of both 5.16.13 and 5.17-rc7 with
->>>>> the patch reverted and asked the bug-reporters to test both.
->>>>
->>>> Thanks!
->>>
->>> Also, in the cases where people have not tested 5.17-rc7 without any
->>> reverts, it would be good to ask them to do so.
->>
->> Ok, done.
->>
->>> I have received another report related to this issue where the problem
->>> is not present in 5.17-rc7 (see
->>> https://lore.kernel.org/linux-pm/CAJZ5v0hKXyTtb1Jk=wqNV9_mZKdf3mmwF4bPOcmADyNnTkpMbQ@mail.gmail.com/).
->>
->> The first results from the Fedora test kernel builds are in:
->>
->> "HP Envy Laptop deadlocks on entering suspend power state when plugged in. Case gets very hot and requires a power button hold to restart"
->> https://bugzilla.redhat.com/show_bug.cgi?id=2059668
->>
->> 5.16.9: good
->> 5.16.10+: bad
->> 5.16.13 with "ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE" reverted: good
->> 5.17-rc7 with "ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE" reverted: good
->> 5.17-rc7 (plain): good
->>
->> So this seems to match the arch-linux report and the email report
->> you linked. There is a problem with the backport in 5.16.10+,
->> while 5.17-rc7 is fine.
->>
->>> It is likely that the commit in question actually depends on some
->>> other commits that were not backported into 5.16.y.
->> I was thinking the same thing, but I've no idea which commits
->> that would be.
-> 
-> I do have an idea, but regardless of this, IMO the least risky way
-> forward would be to request "stable" to drop "ACPI: PM: s2idle: Cancel
-> wakeup before dispatching EC GPE" which has been backported, because
-> it carried a Fixes tag and not because it was marked for "stable".
-> 
-> Let me do that.
+Signed-off-by: Lianjie Zhang <zhanglianjie@uniontech.com>
 
-Ok, that sounds good, thank you.
+diff --git a/drivers/cpufreq/cpufreq_conservative.c b/drivers/cpufreq/cpufreq_conservative.c
+index 08515f7e515f..b6bd0ff35323 100644
+--- a/drivers/cpufreq/cpufreq_conservative.c
++++ b/drivers/cpufreq/cpufreq_conservative.c
+@@ -146,7 +146,7 @@ static unsigned int cs_dbs_update(struct cpufreq_policy *policy)
 
-Regards,
+ /************************** sysfs interface ************************/
 
-Hans
+-static ssize_t store_sampling_down_factor(struct gov_attr_set *attr_set,
++static ssize_t sampling_down_factor_store(struct gov_attr_set *attr_set,
+ 					  const char *buf, size_t count)
+ {
+ 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
+@@ -161,7 +161,7 @@ static ssize_t store_sampling_down_factor(struct gov_attr_set *attr_set,
+ 	return count;
+ }
+
+-static ssize_t store_up_threshold(struct gov_attr_set *attr_set,
++static ssize_t up_threshold_store(struct gov_attr_set *attr_set,
+ 				  const char *buf, size_t count)
+ {
+ 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
+@@ -177,7 +177,7 @@ static ssize_t store_up_threshold(struct gov_attr_set *attr_set,
+ 	return count;
+ }
+
+-static ssize_t store_down_threshold(struct gov_attr_set *attr_set,
++static ssize_t down_threshold_store(struct gov_attr_set *attr_set,
+ 				    const char *buf, size_t count)
+ {
+ 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
+@@ -195,7 +195,7 @@ static ssize_t store_down_threshold(struct gov_attr_set *attr_set,
+ 	return count;
+ }
+
+-static ssize_t store_ignore_nice_load(struct gov_attr_set *attr_set,
++static ssize_t ignore_nice_load_store(struct gov_attr_set *attr_set,
+ 				      const char *buf, size_t count)
+ {
+ 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
+@@ -220,7 +220,7 @@ static ssize_t store_ignore_nice_load(struct gov_attr_set *attr_set,
+ 	return count;
+ }
+
+-static ssize_t store_freq_step(struct gov_attr_set *attr_set, const char *buf,
++static ssize_t freq_step_store(struct gov_attr_set *attr_set, const char *buf,
+ 			       size_t count)
+ {
+ 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
+diff --git a/drivers/cpufreq/cpufreq_governor.c b/drivers/cpufreq/cpufreq_governor.c
+index 63f7c219062b..0d42cf8b88d8 100644
+--- a/drivers/cpufreq/cpufreq_governor.c
++++ b/drivers/cpufreq/cpufreq_governor.c
+@@ -27,7 +27,7 @@ static DEFINE_MUTEX(gov_dbs_data_mutex);
+
+ /* Common sysfs tunables */
+ /*
+- * store_sampling_rate - update sampling rate effective immediately if needed.
++ * sampling_rate_store - update sampling rate effective immediately if needed.
+  *
+  * If new rate is smaller than the old, simply updating
+  * dbs.sampling_rate might not be appropriate. For example, if the
+@@ -41,7 +41,7 @@ static DEFINE_MUTEX(gov_dbs_data_mutex);
+  * This must be called with dbs_data->mutex held, otherwise traversing
+  * policy_dbs_list isn't safe.
+  */
+-ssize_t store_sampling_rate(struct gov_attr_set *attr_set, const char *buf,
++ssize_t sampling_rate_store(struct gov_attr_set *attr_set, const char *buf,
+ 			    size_t count)
+ {
+ 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
+@@ -80,7 +80,7 @@ ssize_t store_sampling_rate(struct gov_attr_set *attr_set, const char *buf,
+
+ 	return count;
+ }
+-EXPORT_SYMBOL_GPL(store_sampling_rate);
++EXPORT_SYMBOL_GPL(sampling_rate_store);
+
+ /**
+  * gov_update_cpu_data - Update CPU load data.
+diff --git a/drivers/cpufreq/cpufreq_governor.h b/drivers/cpufreq/cpufreq_governor.h
+index bab8e6140377..a5a0bc3cc23e 100644
+--- a/drivers/cpufreq/cpufreq_governor.h
++++ b/drivers/cpufreq/cpufreq_governor.h
+@@ -51,7 +51,7 @@ static inline struct dbs_data *to_dbs_data(struct gov_attr_set *attr_set)
+ }
+
+ #define gov_show_one(_gov, file_name)					\
+-static ssize_t show_##file_name						\
++static ssize_t file_name##_show						\
+ (struct gov_attr_set *attr_set, char *buf)				\
+ {									\
+ 	struct dbs_data *dbs_data = to_dbs_data(attr_set);		\
+@@ -60,7 +60,7 @@ static ssize_t show_##file_name						\
+ }
+
+ #define gov_show_one_common(file_name)					\
+-static ssize_t show_##file_name						\
++static ssize_t file_name##_show						\
+ (struct gov_attr_set *attr_set, char *buf)				\
+ {									\
+ 	struct dbs_data *dbs_data = to_dbs_data(attr_set);		\
+@@ -68,12 +68,10 @@ static ssize_t show_##file_name						\
+ }
+
+ #define gov_attr_ro(_name)						\
+-static struct governor_attr _name =					\
+-__ATTR(_name, 0444, show_##_name, NULL)
++static struct governor_attr _name = __ATTR_RO(_name)
+
+ #define gov_attr_rw(_name)						\
+-static struct governor_attr _name =					\
+-__ATTR(_name, 0644, show_##_name, store_##_name)
++static struct governor_attr _name = __ATTR_RW(_name)
+
+ /* Common to all CPUs of a policy */
+ struct policy_dbs_info {
+@@ -176,7 +174,7 @@ void od_register_powersave_bias_handler(unsigned int (*f)
+ 		(struct cpufreq_policy *, unsigned int, unsigned int),
+ 		unsigned int powersave_bias);
+ void od_unregister_powersave_bias_handler(void);
+-ssize_t store_sampling_rate(struct gov_attr_set *attr_set, const char *buf,
++ssize_t sampling_rate_store(struct gov_attr_set *attr_set, const char *buf,
+ 			    size_t count);
+ void gov_update_cpu_data(struct dbs_data *dbs_data);
+ #endif /* _CPUFREQ_GOVERNOR_H */
+diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
+index 6a41ea4729b8..e8fbf970ff07 100644
+--- a/drivers/cpufreq/cpufreq_ondemand.c
++++ b/drivers/cpufreq/cpufreq_ondemand.c
+@@ -202,7 +202,7 @@ static unsigned int od_dbs_update(struct cpufreq_policy *policy)
+ /************************** sysfs interface ************************/
+ static struct dbs_governor od_dbs_gov;
+
+-static ssize_t store_io_is_busy(struct gov_attr_set *attr_set, const char *buf,
++static ssize_t io_is_busy_store(struct gov_attr_set *attr_set, const char *buf,
+ 				size_t count)
+ {
+ 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
+@@ -220,7 +220,7 @@ static ssize_t store_io_is_busy(struct gov_attr_set *attr_set, const char *buf,
+ 	return count;
+ }
+
+-static ssize_t store_up_threshold(struct gov_attr_set *attr_set,
++static ssize_t up_threshold_store(struct gov_attr_set *attr_set,
+ 				  const char *buf, size_t count)
+ {
+ 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
+@@ -237,7 +237,7 @@ static ssize_t store_up_threshold(struct gov_attr_set *attr_set,
+ 	return count;
+ }
+
+-static ssize_t store_sampling_down_factor(struct gov_attr_set *attr_set,
++static ssize_t sampling_down_factor_store(struct gov_attr_set *attr_set,
+ 					  const char *buf, size_t count)
+ {
+ 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
+@@ -265,7 +265,7 @@ static ssize_t store_sampling_down_factor(struct gov_attr_set *attr_set,
+ 	return count;
+ }
+
+-static ssize_t store_ignore_nice_load(struct gov_attr_set *attr_set,
++static ssize_t ignore_nice_load_store(struct gov_attr_set *attr_set,
+ 				      const char *buf, size_t count)
+ {
+ 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
+@@ -290,7 +290,7 @@ static ssize_t store_ignore_nice_load(struct gov_attr_set *attr_set,
+ 	return count;
+ }
+
+-static ssize_t store_powersave_bias(struct gov_attr_set *attr_set,
++static ssize_t powersave_bias_store(struct gov_attr_set *attr_set,
+ 				    const char *buf, size_t count)
+ {
+ 	struct dbs_data *dbs_data = to_dbs_data(attr_set);
+--
+2.20.1
+
+
 
