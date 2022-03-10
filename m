@@ -2,143 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D7424D54BC
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Mar 2022 23:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5D14D552B
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Mar 2022 00:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231160AbiCJWnm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Mar 2022 17:43:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49604 "EHLO
+        id S243019AbiCJXO6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Mar 2022 18:14:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344399AbiCJWnd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Mar 2022 17:43:33 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF58B43;
-        Thu, 10 Mar 2022 14:42:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1646952151; x=1678488151;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=izaQGn4N6pWq6eZ9auQerRJ5Q9RTLRKiYGRicinCT3M=;
-  b=RRZFR1N/tF6MgPVmVb3YAcBc4JfN4q0El5TDPkcSNSFV+NGSsUuCuEdS
-   xJQBipGgguRTnsuNdXuHURaHFRYw1uePPuMeQpCJ6sYShslHf1SNxb4SS
-   sTE+FvoQdeWjoeTY6n5NUb9AfvN/cB03K3QtUJpGgoJwTIb/JM0XSVAO1
-   WZADNbMsR1q/MsIdPseSmBMaTyo1gLSztHfI9qqPNnc9hC8DzIf7b9F+j
-   HrpOgdyklGRP85g34G8DulhMbGq0yLYvT4hDFrJLTzHhT5ImP61+tOLCV
-   6kRk9uYY+MzCie9/cP+kwxR0Wau7AD03dbOfxLGol/7czbcYyWi4U4O94
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10282"; a="242847417"
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="242847417"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2022 14:42:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,171,1643702400"; 
-   d="scan'208";a="642748946"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga002.fm.intel.com with ESMTP; 10 Mar 2022 14:42:29 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     lenb@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] cpufreq: intel_pstate: Use firmware default EPP
-Date:   Thu, 10 Mar 2022 14:42:23 -0800
-Message-Id: <20220310224223.684007-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.31.1
+        with ESMTP id S236297AbiCJXO6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Mar 2022 18:14:58 -0500
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0D319ABD9;
+        Thu, 10 Mar 2022 15:13:56 -0800 (PST)
+Received: by mail-oo1-f45.google.com with SMTP id n5-20020a4a9545000000b0031d45a442feso8674960ooi.3;
+        Thu, 10 Mar 2022 15:13:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=m2xvQTGJE3ysRwd1CcmXhVPZy5zdjD5mPFrEfObDZcA=;
+        b=KYABQ9i/9Tsa9ctmPuDoWyW4Gcdq5s2LhSDStwaO53DLBRGNUAPZdhbzzaknhSDrC5
+         vSzGEbDX2NstQR9SJhUCZCMaSkGkOuvGbDe/+uXBnSsFrhAmu41e14KmGO/LMB6L/WAU
+         uK+H3RfHruVHRJHC0t7nKIihTPaqzzbOIdVUgtgvF3vRIc44ligaPz0XQ9ToxEdrLipM
+         tehit+f/YMo3BcoQPwOWvTjBkjlcwOcfSp1dbDn4wDZhvxs+RibH3RDKFv6NomlHimu9
+         52DOKza8mgvRjdbFws5e6RNaGPL04um9a4Ii+Jxvv5j6SSBBr2Yl/PUOoXR3Py3H1wbT
+         syng==
+X-Gm-Message-State: AOAM5322zvDGreiw7ALa+12pIYzIGBdpiisSV6oOpyMfHPnQj6E2ZSae
+        HHv7xva/tt6oMVK4m7CbwR3n2FwNQw==
+X-Google-Smtp-Source: ABdhPJwSzxiWisq04pxicnT3+uL8xgXrN1u6Usk11hAVHbvCyHrPWp2PufxdTyNaLFlJ2icXHhWnoA==
+X-Received: by 2002:a05:6870:c0cb:b0:da:2bcc:aa09 with SMTP id e11-20020a056870c0cb00b000da2bccaa09mr4163750oad.63.1646954035737;
+        Thu, 10 Mar 2022 15:13:55 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r23-20020a056830237700b005b2610517c8sm2902188oth.56.2022.03.10.15.13.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 15:13:55 -0800 (PST)
+Received: (nullmailer pid 2273654 invoked by uid 1000);
+        Thu, 10 Mar 2022 23:13:54 -0000
+Date:   Thu, 10 Mar 2022 17:13:54 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     viresh.kumar@linaro.org, rafael@kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hector Yuan <hector.yuan@mediatek.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org,
+        krzk+dt@kernel.org, angelogioacchino.delregno@somainline.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: dvfs: Use MediaTek CPUFREQ HW as an
+ example
+Message-ID: <YiqGMkvC6UyDy4H9@robh.at.kernel.org>
+References: <20220309151541.139511-1-manivannan.sadhasivam@linaro.org>
+ <20220309151541.139511-2-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220309151541.139511-2-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-For some specific platforms (E.g. AlderLake) the balance performance
-EPP is updated from the hard coded value in the driver. This acts as
-the default and balance_performance EPP. The purpose of this EPP
-update is to reach maximum 1 core turbo frequency (when possible) out
-of the box.
+On Wed, 09 Mar 2022 20:45:40 +0530, Manivannan Sadhasivam wrote:
+> Qcom CPUFREQ HW don't have the support for generic performance domains yet.
+> So use MediaTek CPUFREQ HW that has the support available in mainline.
+> 
+> This also silences the below dtschema warnings for "cpufreq-qcom-hw.yaml":
+> 
+> Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: reg: [[305397760, 4096]] is too short
+>         From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: 'clocks' is a required property
+>         From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: 'clock-names' is a required property
+>         From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: '#freq-domain-cells' is a required property
+>         From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: '#performance-domain-cells' does not match any of the regexes: 'pinctrl-[0-9]+'
+>         From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> 
+> Cc: Hector Yuan <hector.yuan@mediatek.com>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  .../bindings/dvfs/performance-domain.yaml          | 14 ++++++++++----
+>  1 file changed, 10 insertions(+), 4 deletions(-)
+> 
 
-Although we can achieve the objective by using hard coded value in the
-driver, there can be other EPP which can be better in terms of power.
-But that will be very subjective based on platform and use cases.
-This is not practical to have a per platform specific default hard coded
-in the driver.
-
-If a platform wants to specify default EPP, it can be set in the firmware.
-If this EPP is not the chipset default of 0x80 (balance_perf_epp unless
-driver changed it) and more performance oriented but not 0, the driver
-can use this as the default and balanced_perf EPP. In this case no driver
-update is required every time there is some new platform and default EPP.
-
-If the firmware didn't update the EPP from the chipset default then
-the hard coded value is used as per existing implementation.
-
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- drivers/cpufreq/intel_pstate.c | 38 ++++++++++++++++++++++++++++------
- 1 file changed, 32 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index bc7f7e6759bd..846bb3a78788 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -1692,6 +1692,37 @@ static void intel_pstate_enable_hwp_interrupt(struct cpudata *cpudata)
- 	}
- }
- 
-+static void intel_pstate_update_epp_defaults(struct cpudata *cpudata)
-+{
-+	cpudata->epp_default = intel_pstate_get_epp(cpudata, 0);
-+
-+	/*
-+	 * If this CPU gen doesn't call for change in balance_perf
-+	 * EPP return.
-+	 */
-+	if (epp_values[EPP_INDEX_BALANCE_PERFORMANCE] == HWP_EPP_BALANCE_PERFORMANCE)
-+		return;
-+
-+	/*
-+	 * If powerup EPP is something other than chipset default 0x80 and
-+	 * - is more performance oriented than 0x80 (default balance_perf EPP)
-+	 * - But less performance oriented than performance EPP
-+	 *   then use this as new balance_perf EPP.
-+	 */
-+	if (cpudata->epp_default < HWP_EPP_BALANCE_PERFORMANCE &&
-+	    cpudata->epp_default > HWP_EPP_PERFORMANCE) {
-+		epp_values[EPP_INDEX_BALANCE_PERFORMANCE] = cpudata->epp_default;
-+		return;
-+	}
-+
-+	/*
-+	 * Use hard coded value per gen to update the balance_perf
-+	 * and default EPP.
-+	 */
-+	cpudata->epp_default = epp_values[EPP_INDEX_BALANCE_PERFORMANCE];
-+	intel_pstate_set_epp(cpudata, cpudata->epp_default);
-+}
-+
- static void intel_pstate_hwp_enable(struct cpudata *cpudata)
- {
- 	/* First disable HWP notification interrupt till we activate again */
-@@ -1705,12 +1736,7 @@ static void intel_pstate_hwp_enable(struct cpudata *cpudata)
- 	if (cpudata->epp_default >= 0)
- 		return;
- 
--	if (epp_values[EPP_INDEX_BALANCE_PERFORMANCE] == HWP_EPP_BALANCE_PERFORMANCE) {
--		cpudata->epp_default = intel_pstate_get_epp(cpudata, 0);
--	} else {
--		cpudata->epp_default = epp_values[EPP_INDEX_BALANCE_PERFORMANCE];
--		intel_pstate_set_epp(cpudata, cpudata->epp_default);
--	}
-+	intel_pstate_update_epp_defaults(cpudata);
- }
- 
- static int atom_get_min_pstate(void)
--- 
-2.31.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>
