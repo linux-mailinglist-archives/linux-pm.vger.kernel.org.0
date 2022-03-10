@@ -2,42 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D444D3F0F
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Mar 2022 02:57:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C7DD4D3F11
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Mar 2022 02:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236628AbiCJB5i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Mar 2022 20:57:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
+        id S238834AbiCJB6H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Mar 2022 20:58:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231747AbiCJB5h (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Mar 2022 20:57:37 -0500
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C552A128596
-        for <linux-pm@vger.kernel.org>; Wed,  9 Mar 2022 17:56:37 -0800 (PST)
+        with ESMTP id S239179AbiCJB6C (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Mar 2022 20:58:02 -0500
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030FC128644
+        for <linux-pm@vger.kernel.org>; Wed,  9 Mar 2022 17:57:02 -0800 (PST)
 Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220310015636epoutp02e6ff4abb6c5e257b186f9cc3e10a398d~a4kQw0nwZ1921919219epoutp020
-        for <linux-pm@vger.kernel.org>; Thu, 10 Mar 2022 01:56:36 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220310015636epoutp02e6ff4abb6c5e257b186f9cc3e10a398d~a4kQw0nwZ1921919219epoutp020
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220310015700epoutp016f92eaa724003ae62fb830b5e06f0d48~a4knUQC920456004560epoutp01S
+        for <linux-pm@vger.kernel.org>; Thu, 10 Mar 2022 01:57:00 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220310015700epoutp016f92eaa724003ae62fb830b5e06f0d48~a4knUQC920456004560epoutp01S
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1646877396;
-        bh=1l6g1NyDp1pP7XH1bkrUc4TGt99XEBsOc7UHlVjSO8I=;
+        s=mail20170921; t=1646877420;
+        bh=n0nq2hT5YQjdXZiO2MklIr8nwN5ICedzqM/c2JbrBVY=;
         h=Subject:Reply-To:From:To:CC:Date:References:From;
-        b=qGCMGVFVYtf5bIbIfvSUG/qPsRDvYCN1PESx3u0luYXzWwokEJSb6VBIoyXd1O4a8
-         hGiAl1egYuWcAQBOviUEN2ELh9L0YZPkfCWpDD12Wlsg34dtKdT/apZDFVkg720m5i
-         /jL1MkyGNXNsi9RPOAhzUFrykt4KMxdRv6TT1cC0=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20220310015635epcas2p164930aec7b732f83ba8eb33fccfffe3d~a4kQVex5j0377803778epcas2p1N;
-        Thu, 10 Mar 2022 01:56:35 +0000 (GMT)
-Received: from epsmges2p2.samsung.com (unknown [182.195.36.97]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4KDXH42ntqz4x9Q5; Thu, 10 Mar
-        2022 01:56:32 +0000 (GMT)
-X-AuditID: b6c32a46-be9ff70000023ea8-34-62295acede70
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        32.4D.16040.ECA59226; Thu, 10 Mar 2022 10:56:30 +0900 (KST)
+        b=fcf2bt7Jz/qm8EU4Mf0LkbYpSPPf9FkawafzM7g4APRqXP9l1I3X6I8rcQLzmcErX
+         sguzHpto7eBPk8cG0TMGETQcAefjAxQEnA5wwuDVhCWDLGAaTsacqivZNrbC1AtPgA
+         +RnY9ZdyhdteoaTIiJyL1l/4HmRzyQBR9EYXfBxQ=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20220310015659epcas2p3a92a5b91e90412f864fdacce6fb63fa0~a4kmiXq9v1396213962epcas2p3S;
+        Thu, 10 Mar 2022 01:56:59 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.70]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4KDXHY4x29z4x9Q1; Thu, 10 Mar
+        2022 01:56:57 +0000 (GMT)
+X-AuditID: b6c32a48-4fbff7000000810c-82-62295ae8a407
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8C.CC.33036.8EA59226; Thu, 10 Mar 2022 10:56:56 +0900 (KST)
 Mime-Version: 1.0
-Subject: [PATCH 0/3] Add support for artpec8 to samsung tmu
+Subject: [PATCH 1/3] dt-bindings: thermal: Add artpec8 compatible string for
+ exynos-thermal
 Reply-To: hypmean.kim@samsung.com
 Sender: Sang Min Kim <hypmean.kim@samsung.com>
 From:   Sang Min Kim <hypmean.kim@samsung.com>
@@ -59,40 +60,40 @@ X-Drm-Type: N,general
 X-Msg-Generator: Mail
 X-Msg-Type: PERSONAL
 X-Reply-Demand: N
-Message-ID: <20220310015629epcms2p8c0b7b218d49bacb453d8fde2c1584600@epcms2p8>
-Date:   Thu, 10 Mar 2022 10:56:29 +0900
-X-CMS-MailID: 20220310015629epcms2p8c0b7b218d49bacb453d8fde2c1584600
+Message-ID: <20220310015655epcms2p843397a4c9e6707f1e862b2d00751d8f6@epcms2p8>
+Date:   Thu, 10 Mar 2022 10:56:55 +0900
+X-CMS-MailID: 20220310015655epcms2p843397a4c9e6707f1e862b2d00751d8f6
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 X-CPGSPASS: Y
 X-CPGSPASS: Y
 CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFJsWRmVeSWpSXmKPExsWy7bCmue65KM0kg2v7pS0Oz6+w+L7lOpPF
-        y0OaFvM+y1psfPuDyeLyrjlsFp97jzBazDi/j8li7pepzBZPHvaxOXB5zGroZfPYOesuu8fi
-        PS+ZPDat6mTzuHNtD5tH35ZVjB6fN8kFsEdl22SkJqakFimk5iXnp2TmpdsqeQfHO8ebmhkY
-        6hpaWpgrKeQl5qbaKrn4BOi6ZeYAHaekUJaYUwoUCkgsLlbSt7Mpyi8tSVXIyC8usVVKLUjJ
-        KTAv0CtOzC0uzUvXy0stsTI0MDAyBSpMyM44+e43W8E//ooT5xezNjCe4O9i5OSQEDCR6P99
-        kbWLkYtDSGAHo8Tj5pPsXYwcHLwCghJ/dwiD1AgLWEvs397FDmILCShKvNyxnRkiridxc+Nn
-        sDibgI7E49b7TCBzRAS2MEn8mHaVFSTBLHCUUaJ5VirEMl6JGe1PWSBsaYnty7cyQtgaEj+W
-        9TJD2KISN1e/ZYex3x+bD1UjItF67yxUjaDEg5+7oeKSEpsOb4eqr5a4tXE52DMSAg2MEq3f
-        mphBnpEQ0JfYcd0Y4i9fiRfvCkDKWQRUJdrbnkC1ukhMal7JBHGytsSyha/BOpkFNCXW79KH
-        GKIsceQWC8wjDRt/s6OzmQX4JDoO/4WL75j3hAnCVpXYuambHWKMtMTXudUTGJVmIYJ5FpK1
-        sxDWLmBkXsUollpQnJueWmxUYASP2eT83E2M4ESq5baDccrbD3qHGJk4GA8xSnAwK4nwNoVq
-        JAnxpiRWVqUW5ccXleakFh9iNAV6eCKzlGhyPjCV55XEG5pYGpiYmRmaG5kamCuJ83qlbEgU
-        EkhPLEnNTk0tSC2C6WPi4JRqYIoT6p35IcixoPD+P46sb3n1TeLCdYqWDxPvFvstfrrqtHfh
-        jqrEF77d0ZZsO19qyyVm3Xp/q3CGveGUSZrNc8U5o/vsjxpU1YRYX4uxmuy+PPjlTS0T9sbm
-        ykVSYUXfOtjeHe5W/tNlf/F91bJ5D3tvzZs+8+g6CZbHRcdXJCTUGloYrou3jF5v43mucoHT
-        l93Vze9vruI5k9c3k+ftKucDrto2XXM1tLXKHAV2vBU9ab33Uf8HJouDhhHa+r2b1H/MX7Cl
-        JE5KN/D074Xmcyq31ca0+nT1H2lfc/1Hyp7Ea7npDRs4mvoFpaZuMalsuByhc/PqSp9ps/ks
-        pZjqnP9vPNmZ+KpL17WuuzlHiaU4I9FQi7moOBEATvLoqS0EAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBJsWRmVeSWpSXmKPExsWy7bCmhe6LKM0kg/5bfBaH51dYfN9yncni
+        5SFNi3mfZS02vv3BZHF51xw2i8+9RxgtZpzfx2Qx98tUZosnD/vYHLg8ZjX0snnsnHWX3WPx
+        npdMHptWdbJ53Lm2h82jb8sqRo/Pm+QC2KOybTJSE1NSixRS85LzUzLz0m2VvIPjneNNzQwM
+        dQ0tLcyVFPISc1NtlVx8AnTdMnOAjlNSKEvMKQUKBSQWFyvp29kU5ZeWpCpk5BeX2CqlFqTk
+        FJgX6BUn5haX5qXr5aWWWBkaGBiZAhUmZGcsOHKEueC+QMXSC9+YGhiXC3QxcnJICJhITF++
+        hRXEFhLYwSjxsyemi5GDg1dAUOLvDmEQU1ggVuL1dC+ICkWJlzu2M4PYwgJ6Ejc3fmYHsdkE
+        dCQet95n6mLk4hAR2MIk8WPaVbCRzAJHGSWaZ6VCrOKVmNH+lAXClpbYvnwrI4StIfFjWS8z
+        hC0qcXP1W3YY+/2x+VA1IhKt985C1QhKPPi5GyouKbHp8Hao+mqJWxuXs4IcISHQwCjR+q2J
+        GeQBCQF9iR3XjUFqeAV8JR7++8cEYrMIqEr8+HaQDaLERaJ5Yx3EydoSyxa+ButkFtCUWL9L
+        H6JCWeLILRaYRxo2/mZHZzML8El0HP4LF98x7wkThK0qsXNTNzvEGGmJr3OrJzAqzUKE8iwk
+        a2chrF3AyLyKUSy1oDg3PbXYqMAEHq/J+bmbGMFJVMtjB+Pstx/0DjEycTAeYpTgYFYS4W0K
+        1UgS4k1JrKxKLcqPLyrNSS0+xGgK9O9EZinR5HxgGs8riTc0sTQwMTMzNDcyNTBXEuf1StmQ
+        KCSQnliSmp2aWpBaBNPHxMEp1cC081yw+u9y/02/Yy60mnI+iTjPuyzcdbtKi8Zq2Rfz873f
+        BzYWXru+wThIZCaDLGvdhoqetS3SHZPuGjMHTyrY2V3Bpm6jsSR7qtbN4+G2jM9XzzxfviAi
+        IFZgge5S1W2NbfYzOuIjP2gV7JWc7Lc39ugdf4dZwW3TQ0vCzNf2Jp0RuaGtL7Pi9eKGs/Nq
+        7q/dxu7G1mFuLr13qkbOHv9UBhf/4M/rOwsYWmpebpp+ZHbNSZ7NVlqqkfemH5VfU+Dhy7SI
+        3ebB58zORde2tydvbd726Uuq2a/b9+P7jso0NvFlPDDtSkt/NFtxWZ/Knnlu834vnaaV1K22
+        JOeowtpFcm86fU4e803Y6BDF/VSJpTgj0VCLuag4EQBq1k8aKwQAAA==
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220310013127epcas3p3f1b7ab9549b1d6d9da65c73adda5c514
-References: <CGME20220310013127epcas3p3f1b7ab9549b1d6d9da65c73adda5c514@epcms2p8>
+X-CMS-RootMailID: 20220310013129epcas3p1110cbdfbd3d72ade45b8d98433ca0aac
+References: <CGME20220310013129epcas3p1110cbdfbd3d72ade45b8d98433ca0aac@epcms2p8>
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,30 +101,31 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-These=C2=A0patches=C2=A0are=C2=A0to=C2=A0add=C2=A0thermal=C2=A0management=
-=C2=A0uint=C2=A0to=C2=A0artpec8=C2=A0SoC.=0D=0AThe=C2=A0tmu=C2=A0of=C2=A0ar=
-tpec8=C2=A0is=C2=A0derived=C2=A0from=C2=A0the=C2=A0tmu=C2=A0of=C2=A0exynos,=
-=C2=A0but=C2=A0it=C2=A0includes=C2=A0settings=0D=0Aspecialized=C2=A0for=C2=
-=A0artpec8=C2=A0SoC,=C2=A0such=C2=A0as=C2=A0supporting=C2=A0multiple=C2=A0r=
-emote=C2=A0sensors.=0D=0A=C2=A0=0D=0AThe=C2=A0contents=C2=A0of=C2=A0each=C2=
-=A0patch=C2=A0are=C2=A0as=C2=A0follows.=0D=0A0001:=C2=A0Compatible=C2=A0for=
-=C2=A0artpec8=C2=A0has=C2=A0been=C2=A0added.=0D=0A0002:=C2=A0It=C2=A0contai=
-ns=C2=A0tmu=C2=A0driver=C2=A0code=C2=A0for=C2=A0artpec8.=0D=0A0003:=C2=A0Th=
-is=C2=A0is=C2=A0a=C2=A0modified=C2=A0version=C2=A0of=C2=A0Makefile=C2=A0to=
-=C2=A0build=C2=A0artpec8=C2=A0tmu.=0D=0A=C2=A0=0D=0AThe=C2=A0driver=C2=A0wa=
-s=C2=A0tested=C2=A0on=C2=A0a=C2=A0board=C2=A0that=C2=A0supports=C2=A0artpec=
-8=C2=A0SoC.=0D=0A=C2=A0=0D=0Asangmin=C2=A0kim=C2=A0(3):=0D=0A=C2=A0=C2=A0dt=
--bindings:=C2=A0thermal:=C2=A0Add=C2=A0artpec8=C2=A0compatible=C2=A0string=
-=C2=A0for=C2=A0exynos-thermal=0D=0A=C2=A0=C2=A0thermal:=C2=A0artpec8-tmu:=
-=C2=A0Add=C2=A0tmu=C2=A0driver=C2=A0for=C2=A0artpec8=0D=0A=C2=A0=C2=A0therm=
-al:=C2=A0samsung:=C2=A0Update=C2=A0makefile=C2=A0for=C2=A0artpec8=0D=0A=C2=
-=A0=0D=0A=C2=A0.../bindings/thermal/samsung,exynos-thermal.yaml=C2=A0=C2=A0=
-=C2=A0=7C=C2=A0=C2=A0=C2=A02=C2=A0+=0D=0A=C2=A0drivers/thermal/samsung/Make=
-file=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=7C=C2=A0=C2=A0=C2=A02=C2=A0+-=
-=0D=0A=C2=A0drivers/thermal/samsung/artpec8_tmu.c=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=7C=C2=A0754=C2=
-=A0+++++++++++++++++++++=0D=0A=C2=A03=C2=A0files=C2=A0changed,=C2=A0757=C2=
-=A0insertions(+),=C2=A01=C2=A0deletion(-)=0D=0A=C2=A0create=C2=A0mode=C2=A0=
-100644=C2=A0drivers/thermal/samsung/artpec8_tmu.c=0D=0A=C2=A0=0D=0A--=0D=0A=
-2.9.5=0D=0A=C2=A0=0D=0A=C2=A0
+=C2=A0=0D=0AExtend=C2=A0the=C2=A0exynos-thermal=C2=A0dt=C2=A0bindings=C2=A0=
+document=C2=A0to=C2=A0include=C2=A0compatible=0D=0Astring=C2=A0supporting=
+=C2=A0artpec8=C2=A0SoC.=0D=0A=C2=A0=0D=0ASigned-off-by:=C2=A0sangmin=C2=A0k=
+im=C2=A0<hypmean.kim=40samsung.com>=0D=0A---=0D=0A=C2=A0Documentation/devic=
+etree/bindings/thermal/samsung,exynos-thermal.yaml=C2=A0=7C=C2=A02=C2=A0++=
+=0D=0A=C2=A01=C2=A0file=C2=A0changed,=C2=A02=C2=A0insertions(+)=0D=0A=C2=A0=
+=0D=0Adiff=C2=A0--git=C2=A0a/Documentation/devicetree/bindings/thermal/sams=
+ung,exynos-thermal.yaml=C2=A0b/Documentation/devicetree/bindings/thermal/sa=
+msung,exynos-thermal.yaml=0D=0Aindex=C2=A017129f7..c12bcff=C2=A0100644=0D=
+=0A---=C2=A0a/Documentation/devicetree/bindings/thermal/samsung,exynos-ther=
+mal.yaml=0D=0A+++=C2=A0b/Documentation/devicetree/bindings/thermal/samsung,=
+exynos-thermal.yaml=0D=0A=40=40=C2=A0-16,6=C2=A0+16,7=C2=A0=40=40=C2=A0desc=
+ription:=C2=A0=7C=0D=0A=C2=A0properties:=0D=0A=C2=A0=C2=A0=C2=A0compatible:=
+=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0enum:=0D=0A+=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0-=C2=A0axis,artpec8-tmu=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0-=C2=A0samsung,exynos3250-tmu=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0-=C2=A0samsung,exynos4412-tmu=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0-=C2=A0samsung,exynos4210-tmu=0D=0A=40=40=C2=A0-101,6=C2=A0+102=
+,7=C2=A0=40=40=C2=A0allOf:=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0compatible:=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0contains:=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0enum:=0D=0A+=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0axis,art=
+pec8-tmu=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0samsung,exynos5433-tmu=0D=0A=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0-=C2=A0samsung,exynos7-tmu=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0then:=
+=0D=0A--=C2=A0=0D=0A2.9.5=0D=0A=C2=A0=0D=0A=C2=A0
