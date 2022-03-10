@@ -2,143 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C750A4D50FF
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Mar 2022 18:59:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 827A94D51C0
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Mar 2022 20:43:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243208AbiCJR7m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Mar 2022 12:59:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32930 "EHLO
+        id S237537AbiCJSSM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Mar 2022 13:18:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241138AbiCJR7l (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Mar 2022 12:59:41 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2087.outbound.protection.outlook.com [40.107.236.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93554166E0C;
-        Thu, 10 Mar 2022 09:58:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Blk97fQUEeq45ytR48MglP4L/WTlcF2qOUU3fR+ia+xXhJLw8CaFfFMEUuEayFsDlk9TWxGHEVI49B80INMI/bxZCMK8raV+J7eeav4rcveswBOz0Mf2gKloXomflrcu7N8Fm9prXyL0yp1E5wKV4vLa2OMYTvg0eWu8uuovlNxunheypJazZHGrChOseLxuZbqkfZaIBiOgGiHfQifWU7wrQ4ic84I3+cT6REEhX+PgACGAN5vgg1W7YnAzW7O96tdW2HWHgJsJgNRi7fUoT3H0Xjz8gN70HtRs5B9uBe4sjSH75CxC4PjLimhXeTxvaTZGJntsLg+hVBi1TmO8hg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HFecLuFmddS3zhEIG0OHrcLwWn5JT/47mMwT70dFwkQ=;
- b=a2Ed5U5k34CfDphfGllUG6Yj7zljtFzyp+feUMxfdaiE3s3RD/f4Ia1KUh21gx9Z6mi8ezNNvvj/ACmkA6oGHzErD9PZwZflPOJVzv2r7THHqa4/CNeKXMbmuUdeKZjevyZF8+SzMe1hMOTQQVrHcjbTefuIeTKikfQXG1b7Lz0nGP4ml8uybvCkepK5aYr7vshYZvzjakb1+1qNNNFxEJjRJp96TdEn4kctxog/aTaqz0FuuHk+V3kwglc6wzQWpqffTeZeCAjriP1gbZ9JorCeTZXm13VLXYy3KYc+1cxqwUByTWa3Dgy8GbgNgi+d+kwpPnYAF1eT0sKWIxi8Bg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HFecLuFmddS3zhEIG0OHrcLwWn5JT/47mMwT70dFwkQ=;
- b=IOJitR0jwb1qw4drogzaovCCFyTv2xJYcN5qovRtXJQUEnEdggeRATFHklU/tYrcUzTcHdz0OzvrKma2Keeg3D5kYvXLdE5W5i40ZvamaWGWedTfen/dVG9YqR4EiKSqE8zHdrqiCGNRQQyiXI5CRI/XRYYkNF4i90CAj1w9SBw=
-Received: from DM3PR12CA0053.namprd12.prod.outlook.com (2603:10b6:0:56::21) by
- BL0PR12MB2420.namprd12.prod.outlook.com (2603:10b6:207:4c::23) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5061.22; Thu, 10 Mar 2022 17:58:36 +0000
-Received: from DM6NAM11FT014.eop-nam11.prod.protection.outlook.com
- (2603:10b6:0:56:cafe::59) by DM3PR12CA0053.outlook.office365.com
- (2603:10b6:0:56::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.22 via Frontend
- Transport; Thu, 10 Mar 2022 17:58:36 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT014.mail.protection.outlook.com (10.13.173.132) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5061.22 via Frontend Transport; Thu, 10 Mar 2022 17:58:35 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 10 Mar
- 2022 11:58:34 -0600
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <Sanju.Mehta@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH v2] PCI: ACPI: Don't blindly trust `HotPlugSupportInD3`
-Date:   Thu, 10 Mar 2022 11:58:32 -0600
-Message-ID: <20220310175832.1259-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S245369AbiCJSSM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Mar 2022 13:18:12 -0500
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F0313D906;
+        Thu, 10 Mar 2022 10:17:10 -0800 (PST)
+Received: by mail-oo1-f51.google.com with SMTP id 6-20020a4a0906000000b0031d7eb98d31so7728071ooa.10;
+        Thu, 10 Mar 2022 10:17:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=P6BWSW4vUXtb6Zn/KM/YH6Iar9Snb8Amni/kNF2TPhI=;
+        b=bIhouM5HUH5gT0dFbqn33edSQ7g2/wDybf7r79pSoFrSMYEV10jfaN0BhX6wM2MhyY
+         eRdykjRom8KmDyhvjwO1b7GvIrCUlEyMTbuQavqtyCkG1dMlvhtTc4gufBM7e+Zpm/ta
+         X3S9iiu3R/JmpK4ErObj6MgAM0VyUtTkzAvjl4rizujblItlSfD5XzJ2DzfDiYpHp0Hu
+         i4ag2VG9cg2pLVY+Xjp3E6YuJ3AmA4qp+2Bz1dcnpkkuYh9b8NEQxNsEhuQmUx1Co51J
+         +Y7ypRzwQ8ijCPjPYZQPRq7mOPKGvhV0pS67mZRxil3aXwzNgxoWgVCEJf6lRaKs3xJB
+         tGqQ==
+X-Gm-Message-State: AOAM530Bd0UnfF2tussff7/z1SOU96ZLlH7FVutNaD2IggCo67h0lFDD
+        +83o/OXwKV90d241ouXYDg==
+X-Google-Smtp-Source: ABdhPJzpcfJhz3jsk4nC85EmodiMwC7aPQpcbxZqL/2c408GwZfrVYG01TUlRfTDa6pGFmXX0KY7KQ==
+X-Received: by 2002:a05:6870:618a:b0:da:b3f:324b with SMTP id a10-20020a056870618a00b000da0b3f324bmr3568443oah.251.1646936229684;
+        Thu, 10 Mar 2022 10:17:09 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id m13-20020a056870888d00b000d103280accsm2569260oam.16.2022.03.10.10.17.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Mar 2022 10:17:08 -0800 (PST)
+Received: (nullmailer pid 1799395 invoked by uid 1000);
+        Thu, 10 Mar 2022 18:17:07 -0000
+Date:   Thu, 10 Mar 2022 12:17:07 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Lin Huang <hl@rock-chips.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Derek Basehore <dbasehore@chromium.org>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 01/15] dt-bindings: devfreq: rk3399_dmc: Convert to
+ YAML
+Message-ID: <YipAo5zWp/MF0NW6@robh.at.kernel.org>
+References: <20220308190901.3144566-1-briannorris@chromium.org>
+ <20220308110825.v4.1.I875ab8f28c5155a7d2f103316191954d4b07ac13@changeid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d4aff9d6-bcdb-4373-1f9b-08da02bf9936
-X-MS-TrafficTypeDiagnostic: BL0PR12MB2420:EE_
-X-Microsoft-Antispam-PRVS: <BL0PR12MB24204BDBFA27DF794769F2CDE20B9@BL0PR12MB2420.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XtvFiVwPUTuQo0euVWfRFwNveuiwGDFAeuDBgCropOs6i+OLtXHtWqTudbxiOjxz0aztUhn9QmJiKccgWROxCLcS3g2byvJXhukA9d7xbrbAVVlsD5qxaBdcvMuIvxTOvaay/7e+584pcVrhjX4OWnAflknnaCCXmBJ3UGvL4fN61G8hA73deQkc7BjG7mBDkpZLbki8kufLxylvNRkTMNI0opOxSz8/Mr3rOpk3FgCIAsEBCC5bllPtq/Sq77IQh4ao1zheZjB2eYgtdA2bqy3NB9pWncZMM24SHVLQF1hEd7gZYMQw/DNiHRHca8Pn6Q0W2nJWMZhVmxizaljKkmlhkMT/6u3rugftruuI/q6vggiwzX8UkPp5moBlOjLKuGCVgcr9mMv7tMDcSeSUjezrYr0h7+Yn/JGOcxZJBWCjChoDmB3kcXJ2/VtmfQMFuInsKsfm3R7Wi0AQYSr0QISAgebirntETm4tgA/LKGtakP8D7MxxiRxeQGnvb0pm/ekZxFk/FxBeFNo0fn+859llQWca34ZaP3rtR+huMaJhBZplpcNFlCT5qaibeL2nONvnETJyFNDvTdL/AG7k8nxqMuhmpA7XPac8CZhVy52e4xMLosYeuXkftbJH8uMVAm0gN/096289xhG4NDbvhvg3fyJFVKZH2xXW31Zkzt7S5+qhDrycLmGsu1U85B24dIDBJ6Jqb5qHvKNezFUJqqeiJjzcfI7ywBMZ9e72NQ2FmyztBbz4Dqq6UHnclaDT8YNOgk0dSgs4NzfnBwWn/U4yaHjOSin4SJOZ/LWYdImPhbFrY14yV3O/BD7Uupos0BVbOG/Rtew8HbGiNU1BG7qMcZbM+DNCvZpfVwxEM6U=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(6029001)(4636009)(40470700004)(46966006)(36840700001)(5660300002)(8936002)(82310400004)(83380400001)(2906002)(36860700001)(44832011)(47076005)(36756003)(316002)(7696005)(508600001)(966005)(54906003)(110136005)(40460700003)(26005)(186003)(1076003)(336012)(426003)(2616005)(70586007)(70206006)(8676002)(4326008)(81166007)(86362001)(356005)(16526019)(81973001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2022 17:58:35.7722
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d4aff9d6-bcdb-4373-1f9b-08da02bf9936
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT014.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB2420
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220308110825.v4.1.I875ab8f28c5155a7d2f103316191954d4b07ac13@changeid>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The `_DSD` `HotPlugSupportInD3` is supposed to indicate the ability for a
-bridge to be able to wakeup from D3.
+On Tue, 08 Mar 2022 11:08:47 -0800, Brian Norris wrote:
+> I want to add, deprecate, and bugfix some properties, as well as add the
+> first users. This is easier with a proper schema.
+> 
+> The transformation is mostly straightforward, plus a few notable tweaks:
+> 
+>  * Renamed rockchip,dram_speed_bin to rockchip,ddr3_speed_bin. The
+>    driver code and the example matched, but the description was
+>    different. I went with the implementation. Note that this property is
+>    also slated for deprecation/deletion in the subsequent patches.
+> 
+>  * Drop upthreshold and downdifferential properties from the example.
+>    These were undocumented (so, wouldn't pass validation), but were
+>    representing software properties (governor tweaks). I drop them from
+>    the driver in subsequent patches.
+> 
+>  * Rename clock from pclk_ddr_mon to dmc_clk. The driver, DT example,
+>    and all downstream users matched -- the binding definition was the
+>    exception. Anyway, "dmc_clk" is a more appropriately generic name.
+> 
+>  * Choose a better filename and location (this is a memory controller).
+> 
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> ---
+> 
+> Changes in v4:
+>  * Update .yaml to use more "default" entries, instead of free-form text
+>  * s/phandle-array/phandle/
+>  * Move to .../memory-controllers, update filename
+> 
+> Changes in v3:
+>  * Add |maxItems| for devfreq-events
+>  * Improve deprecation notes
+> 
+> Changes in v2:
+>  * rename to 'memory-controller' in example
+>  * place 'required' after properties
+>  * drop superluous free-form references and repetitions of other
+>    bindings
+>  * fix for yamllint
+> 
+>  .../bindings/devfreq/rk3399_dmc.txt           | 212 ------------
+>  .../rockchip,rk3399-dmc.yaml                  | 306 ++++++++++++++++++
+>  2 files changed, 306 insertions(+), 212 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
+>  create mode 100644 Documentation/devicetree/bindings/memory-controllers/rockchip,rk3399-dmc.yaml
+> 
 
-This however is static information in the ACPI table at BIOS compilation
-time and on some platforms it's possible to configure the firmware at boot
-up such that `_S0W` will not return "0" indicating the inability to wake
-up the device from D3.
-
-To fix these situations explicitly check that the ACPI device has a GPE
-allowing the device to generate wakeup signals handled by the platform
-in `acpi_pci_bridge_d3`.
-
-This changes aligns the handling of the situation the same as Windows 10
-and Windows 11 both do as well.
-
-Link: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/07_Power_and_Performance_Mgmt/device-power-management-objects.html?highlight=s0w#s0w-s0-device-wake-state
-Link: https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-pcie-root-ports-supporting-hot-plug-in-d3
-Fixes: 26ad34d510a87 ("PCI / ACPI: Whitelist D3 for more PCIe hotplug ports")
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-v1->v2:
- * Add Mika's tag
- * Update commit message for Rafael's suggestions
- drivers/pci/pci-acpi.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
-index a42dbf448860..9f8f55ed09d9 100644
---- a/drivers/pci/pci-acpi.c
-+++ b/drivers/pci/pci-acpi.c
-@@ -999,6 +999,9 @@ bool acpi_pci_bridge_d3(struct pci_dev *dev)
- 	if (!adev)
- 		return false;
- 
-+	if (!adev->wakeup.flags.valid)
-+		return false;
-+
- 	if (acpi_dev_get_property(adev, "HotPlugSupportInD3",
- 				   ACPI_TYPE_INTEGER, &obj) < 0)
- 		return false;
--- 
-2.34.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>
