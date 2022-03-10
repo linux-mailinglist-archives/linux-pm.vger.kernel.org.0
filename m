@@ -2,167 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D51864D4427
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Mar 2022 11:02:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B07C4D4529
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Mar 2022 11:56:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241014AbiCJKDy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Mar 2022 05:03:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38304 "EHLO
+        id S230394AbiCJK50 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Mar 2022 05:57:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241162AbiCJKDG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Mar 2022 05:03:06 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7E513D57A;
-        Thu, 10 Mar 2022 02:02:05 -0800 (PST)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nSFcR-0007oo-Nx; Thu, 10 Mar 2022 11:02:03 +0100
-Message-ID: <3f86f46d-947b-8485-bf87-2ebd4477a6c7@leemhuis.info>
-Date:   Thu, 10 Mar 2022 11:02:02 +0100
+        with ESMTP id S229738AbiCJK5Z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Mar 2022 05:57:25 -0500
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CE01405FC;
+        Thu, 10 Mar 2022 02:56:24 -0800 (PST)
+Received: by mail-yb1-f169.google.com with SMTP id h126so10117597ybc.1;
+        Thu, 10 Mar 2022 02:56:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9hRn5CDDGpweS0MoucbZPEewL2lB60a7c1YjeToAIiU=;
+        b=lmfnJAidXYK+57ZHS0FsZLw3NK4Bcp4eME3pfKqAG7S88QpSH7LuNwimU0o3mdphoW
+         BRxzV/PPzQUn4K2Q4HqlNxix1unWFgXE+QcejiFILJcnJrLizf5o4rGf0sfOk+h2y1s0
+         wh0kR5klOf/AHBnn7I+poMJwocdewk4jZIgi6JVt0ZmitXGV1MclJilAf7j+mfz0lWX8
+         nS/e99KYPE2Mxof7QKykUCE1CsYPLbNI5gjjEML9A+Cspb7k3J/krHoBOpWHJW5cUwlg
+         4AwmnJGC3MngweXkfvgYwdrIojQD2SWLlcKAcsoGli2IWqqiqP9FqPSZcYQp9fuUkolO
+         3TVg==
+X-Gm-Message-State: AOAM531TyWcMy+OmcREd1wrAM6Mvskaa3Cjh/YGdnzPw2gKun7at6/9D
+        jU0qxkirXQtZJgV2MMsc9C+Qk9DW+NBF3Ifj0ThedVipHyI=
+X-Google-Smtp-Source: ABdhPJzrjwMkuTgFrhXZ4FlRjYyii5y/8U7PsKTCoY+ANf4ktCG8Bmy2ZQ1S3x0T426GRjIn+qz9Rk8XsPakralAz24=
+X-Received: by 2002:a25:24d7:0:b0:628:79dc:1250 with SMTP id
+ k206-20020a2524d7000000b0062879dc1250mr3301712ybk.153.1646909783576; Thu, 10
+ Mar 2022 02:56:23 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
+References: <31b9d1cd-6a67-218b-4ada-12f72e6f00dc@redhat.com>
+ <CAJZ5v0hQifvD+U8q1O7p_5QeicG_On4=CrgNj0RsbPSbkY8Hww@mail.gmail.com>
+ <ad3b77f8-7e75-1dfa-8ee4-1077336911aa@redhat.com> <CAJZ5v0js8Vr7dW09WGyR_JTn4kMybDhaTWt4yziqwSM+oAXUNA@mail.gmail.com>
+ <CAJZ5v0imJfOp-Uw=tH2dimSQzb-EgHu_yEU_0LScmrQ43t3pbw@mail.gmail.com> <c9a1adb5-17b7-c7ed-d23f-6b6523a4771a@redhat.com>
+In-Reply-To: <c9a1adb5-17b7-c7ed-d23f-6b6523a4771a@redhat.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 10 Mar 2022 11:56:11 +0100
+Message-ID: <CAJZ5v0gB2ZCWe3MeGnw6_CNu_Ds0QEPZ6X6jnA7dQbZe6gKZ8w@mail.gmail.com>
 Subject: Re: Many reports of laptops getting hot while suspended with kernels
  >= 5.16.10 || >= 5.17-rc1
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     stable@vger.kernel.org, Justin Forbes <jmforbes@linuxtx.org>,
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        Justin Forbes <jmforbes@linuxtx.org>,
         Mark Pearson <markpearson@lenovo.com>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <31b9d1cd-6a67-218b-4ada-12f72e6f00dc@redhat.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <31b9d1cd-6a67-218b-4ada-12f72e6f00dc@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1646906525;9a6d15ed;
-X-HE-SMSGID: 1nSFcR-0007oo-Nx
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
+On Thu, Mar 10, 2022 at 10:07 AM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> Hi,
+>
+> On 3/9/22 19:27, Rafael J. Wysocki wrote:
+> > On Wed, Mar 9, 2022 at 5:34 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >>
+> >> On Wed, Mar 9, 2022 at 5:33 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> >>>
+> >>> Hi,
+> >>>
+> >>> On 3/9/22 14:57, Rafael J. Wysocki wrote:
+> >>>> On Wed, Mar 9, 2022 at 2:44 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> >>>>>
+> >>>>> Hi Rafael,
+> >>>>>
+> >>>>> We (Fedora) have been receiving a whole bunch of bug reports about
+> >>>>> laptops getting hot/toasty while suspended with kernels >= 5.16.10
+> >>>>> and this seems to still happen with 5.17-rc7 too.
+> >>>>>
+> >>>>> The following are all bugzilla.redhat.com bug numbers:
+> >>>>>
+> >>>>>    1750910 - Laptop failed to suspend and completely drained the battery
+> >>>>>    2050036 - Framework laptop: 5.16.5 breaks s2idle sleep
+> >>>>>    2053957 - Package c-states never go below C2
+> >>>>>    2056729 - No lid events when closing lid / laptop does not suspend
+> >>>>>    2057909 - Thinkpad X1C 9th in s2idle suspend still draining battery to zero over night , Ap
+> >>>>>    2059668 - HP Envy Laptop deadlocks on entering suspend power state when plugged in. Case ge
+> >>>>>    2059688 - Dell G15 5510 s2idle fails in 5.16.11 works in 5.16.10
+> >>>>>
+> >>>>> And one of the bugs has also been mirrored at bugzilla.kernel.org by
+> >>>>> the reporter:
+> >>>>>
+> >>>>>  bko215641 - Dell G15 5510 s2idle fails in 5.16.11 works in 5.16.10
+> >>>>>
+> >>>>> The common denominator here (besides the kernel version) seems to
+> >>>>> be that these are all Ice or Tiger Lake systems (I did not do
+> >>>>> check this applies 100% to all bugs, but it does see, to be a pattern).
+> >>>>>
+> >>>>> A similar arch-linux report:
+> >>>>>
+> >>>>> https://bbs.archlinux.org/viewtopic.php?id=274292&p=2
+> >>>>>
+> >>>>> Suggest that reverting
+> >>>>> "ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE"
+> >>>>>
+> >>>>> which was cherry-picked into 5.16.10 fixes things.
+> >>>>
+> >>>> Thanks for letting me know!
+> >>>>
+> >>>>> If you want I can create Fedora kernel test-rpms of a recent
+> >>>>> 5.16.y with just that one commit reverted and ask users to
+> >>>>> confirm if that helps. Please let me know if doing that woulkd
+> >>>>> be useful ?
+> >>>>
+> >>>> Yes, it would.
+> >>>>
+> >>>> However, it follows from the arch-linux report linked above that
+> >>>> 5.17-rc is fine, so it would be good to also check if reverting that
+> >>>> commit from 5.17-rc helps.
+> >>>
+> >>> Ok, I've done Fedora kernel builds of both 5.16.13 and 5.17-rc7 with
+> >>> the patch reverted and asked the bug-reporters to test both.
+> >>
+> >> Thanks!
+> >
+> > Also, in the cases where people have not tested 5.17-rc7 without any
+> > reverts, it would be good to ask them to do so.
+>
+> Ok, done.
+>
+> > I have received another report related to this issue where the problem
+> > is not present in 5.17-rc7 (see
+> > https://lore.kernel.org/linux-pm/CAJZ5v0hKXyTtb1Jk=wqNV9_mZKdf3mmwF4bPOcmADyNnTkpMbQ@mail.gmail.com/).
+>
+> The first results from the Fedora test kernel builds are in:
+>
+> "HP Envy Laptop deadlocks on entering suspend power state when plugged in. Case gets very hot and requires a power button hold to restart"
+> https://bugzilla.redhat.com/show_bug.cgi?id=2059668
+>
+> 5.16.9: good
+> 5.16.10+: bad
+> 5.16.13 with "ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE" reverted: good
+> 5.17-rc7 with "ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE" reverted: good
+> 5.17-rc7 (plain): good
+>
+> So this seems to match the arch-linux report and the email report
+> you linked. There is a problem with the backport in 5.16.10+,
+> while 5.17-rc7 is fine.
+>
+> > It is likely that the commit in question actually depends on some
+> > other commits that were not backported into 5.16.y.
+> I was thinking the same thing, but I've no idea which commits
+> that would be.
 
-On 09.03.22 14:44, Hans de Goede wrote:
-> 
-> We (Fedora) have been receiving a whole bunch of bug reports about
-> laptops getting hot/toasty while suspended with kernels >= 5.16.10
-> and this seems to still happen with 5.17-rc7 too.
+I do have an idea, but regardless of this, IMO the least risky way
+forward would be to request "stable" to drop "ACPI: PM: s2idle: Cancel
+wakeup before dispatching EC GPE" which has been backported, because
+it carried a Fixes tag and not because it was marked for "stable".
 
-I was about to sent a similar mail, but then I found this one. Thx for
-making my life easier. :-D
-
-But could you do me a big favor and CC the regression mailing list
-(regressions@lists.linux.dev) in case similar situations arise in the
-future? tia!
-
-> The following are all bugzilla.redhat.com bug numbers:
-> 
->    1750910 - Laptop failed to suspend and completely drained the battery
->    2050036 - Framework laptop: 5.16.5 breaks s2idle sleep
->    2053957 - Package c-states never go below C2
->    2056729 - No lid events when closing lid / laptop does not suspend
->    2057909 - Thinkpad X1C 9th in s2idle suspend still draining battery to zero over night , Ap
->    2059668 - HP Envy Laptop deadlocks on entering suspend power state when plugged in. Case ge
->    2059688 - Dell G15 5510 s2idle fails in 5.16.11 works in 5.16.10
-> 
-> And one of the bugs has also been mirrored at bugzilla.kernel.org by
-> the reporter:
-> 
->  bko215641 - Dell G15 5510 s2idle fails in 5.16.11 works in 5.16.10
-
-Here is another, but it's basically linking to reports you already
-mentioned:
-https://bugzilla.kernel.org/show_bug.cgi?id=215661
-
-> The common denominator here (besides the kernel version) seems to
-> be that these are all Ice or Tiger Lake systems (I did not do
-> check this applies 100% to all bugs, but it does see, to be a pattern).
-> 
-> A similar arch-linux report:
-> 
-> https://bbs.archlinux.org/viewtopic.php?id=274292&p=2
-> 
-> Suggest that reverting 
-> "ACPI: PM: s2idle: Cancel wakeup before dispatching EC GPE"
-> 
-> which was cherry-picked into 5.16.10 fixes things.
-
-From the thread I gather that it looks like 5.17 is not affected; if
-that changes, could anybody please give me a heads up please?
-
-> If you want I can create Fedora kernel test-rpms of a recent
-> 5.16.y with just that one commit reverted and ask users to
-> confirm if that helps. Please let me know if doing that woulkd
-> be useful ?
-
-FWIW: To be sure below issue doesn't fall through the cracks unnoticed,
-I'm adding it to regzbot, my Linux kernel regression tracking bot:
-
-#regzbot ^introduced 4287509b4d21e34dc49266c
-#regzbot ignore-activity
-
-If it turns out this isn't a regression, free free to remove it from the
-tracking by sending a reply to this thread containing a paragraph like
-"#regzbot invalid: reason why this is invalid" (without the quotes).
-
-Reminder for developers: when fixing the issue, please add a 'Link:'
-tags pointing to the report (the mail quoted above) using
-lore.kernel.org/r/, as explained in
-'Documentation/process/submitting-patches.rst' and
-'Documentation/process/5.Posting.rst'. Regzbot needs them to
-automatically connect reports with fixes, but they are useful in
-general, too.
-
-I'm sending this to everyone that got the initial report, to make
-everyone aware of the tracking. I also hope that messages like this
-motivate people to directly get at least the regression mailing list and
-ideally even regzbot involved when dealing with regressions, as messages
-like this wouldn't be needed then. And don't worry, if I need to send
-other mails regarding this regression only relevant for regzbot I'll
-send them to the regressions lists only (with a tag in the subject so
-people can filter them away). With a bit of luck no such messages will
-be needed anyway.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I'm getting a lot of
-reports on my table. I can only look briefly into most of them and lack
-knowledge about most of the areas they concern. I thus unfortunately
-will sometimes get things wrong or miss something important. I hope
-that's not the case here; if you think it is, don't hesitate to tell me
-in a public reply, it's in everyone's interest to set the public record
-straight.
-
--- 
-Additional information about regzbot:
-
-If you want to know more about regzbot, check out its web-interface, the
-getting start guide, and the references documentation:
-
-https://linux-regtracking.leemhuis.info/regzbot/
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
-
-The last two documents will explain how you can interact with regzbot
-yourself if your want to.
-
-Hint for reporters: when reporting a regression it's in your interest to
-CC the regression list and tell regzbot about the issue, as that ensures
-the regression makes it onto the radar of the Linux kernel's regression
-tracker -- that's in your interest, as it ensures your report won't fall
-through the cracks unnoticed.
-
-Hint for developers: you normally don't need to care about regzbot once
-it's involved. Fix the issue as you normally would, just remember to
-include 'Link:' tag in the patch descriptions pointing to all reports
-about the issue. This has been expected from developers even before
-regzbot showed up for reasons explained in
-'Documentation/process/submitting-patches.rst' and
-'Documentation/process/5.Posting.rst'.
+Let me do that.
