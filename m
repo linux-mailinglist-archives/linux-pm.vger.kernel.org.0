@@ -2,74 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B58EE4D64CC
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Mar 2022 16:41:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E18AA4D654B
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Mar 2022 16:53:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231699AbiCKPmD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Mar 2022 10:42:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37796 "EHLO
+        id S1349961AbiCKPyj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Mar 2022 10:54:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240607AbiCKPmB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Mar 2022 10:42:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DAC81C2310;
-        Fri, 11 Mar 2022 07:40:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D656761562;
-        Fri, 11 Mar 2022 15:40:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65EF3C340E9;
-        Fri, 11 Mar 2022 15:40:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1647013257;
-        bh=SoBHkwKBTF+RKZ7fMiVI6xuvxacDWoy5OT35J4/zXOc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tyP3WpXbUggMQe1Olk1I/5jtVXJO5+IaWkc+zDdiLoert1PsRn4HjJ6kiPzQn2IwC
-         RMLzy/Z3PdGVJPljeWscYYuysNG7ObKL5jOW277LMS6yGTL9GysRm7AcEfvkkVDKyr
-         W8LCGHM5+kmDcFxeOCi9NhgjcmgGDV4Buv4uwZWs=
-Date:   Fri, 11 Mar 2022 16:40:41 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Georgi Djakov <djakov@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] interconnect changes for 5.18
-Message-ID: <YitteaQ0v9ufCA9b@kroah.com>
-References: <20220311121357.19439-1-djakov@kernel.org>
+        with ESMTP id S1350566AbiCKPyP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Mar 2022 10:54:15 -0500
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58D9ECC57;
+        Fri, 11 Mar 2022 07:53:11 -0800 (PST)
+Received: by mail-yb1-f175.google.com with SMTP id l2so17819717ybe.8;
+        Fri, 11 Mar 2022 07:53:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FEtrVBpJ9DBkNlbjxVJR5SHVgIP3hXEvRRRjSXbn5+4=;
+        b=N4HcMhA1dOsjtmB6aWz1HIPAMT3s+zwJ0qkHV9mZA1fcHOO9GIi3NRu2iUOsb+OnD8
+         zq2vkKL6ALVTFFBfmSkizHvGeLyjl79p0MOJGCPi49dh9jPXtcrZZMbkgktEC2zYStAY
+         DJbWsxs1zxTf2EPYATHgu2Zsejynkb8JQ7TurJ2lPnDUBMpTjuC+1saDNvRkMP02xgJs
+         WApW8JgWmk3BrH8IENLUfbKRt2MDpluSW1SuKYPyppP66rYk9xs6Tf6j0lMrS0X/uoH4
+         HOGSZJR6065KTiZijC9U+uWMqSEiFyllikMmZBDM7JfZ36oX6TP7mAllJpei49SXsndx
+         VguQ==
+X-Gm-Message-State: AOAM530b6mTLt5TJlIAJRW/WZxMq7cFM5MUskPkYuw5RDh3kSCDUjDGC
+        +45FwwGEIZ5COpjt6g/wjVW+q6Arq/WaJ0dUrLs=
+X-Google-Smtp-Source: ABdhPJxU3SRPSOiwueLKQjDEtPITtq/dfRJ1NV9l2AVmzq8xiqXtHR1a4E/0K4VPjjN0/g7BtgqFri/2EM9XXP4vgnw=
+X-Received: by 2002:a25:d7c2:0:b0:628:9d06:457b with SMTP id
+ o185-20020a25d7c2000000b006289d06457bmr8462316ybg.137.1647013990912; Fri, 11
+ Mar 2022 07:53:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220311121357.19439-1-djakov@kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220311081111.159639-1-zhengzucheng@huawei.com>
+In-Reply-To: <20220311081111.159639-1-zhengzucheng@huawei.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 11 Mar 2022 16:52:59 +0100
+Message-ID: <CAJZ5v0jponp=ijVx6W=eNEGrfTKh0KbGmOQG_V0P-Mq366559g@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: fix cpufreq_get() can't get correct CPU frequency
+To:     z00314508 <zhengzucheng@huawei.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Len Brown <len.brown@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 02:13:57PM +0200, Georgi Djakov wrote:
-> Hello Greg,
-> 
-> This is the pull request with interconnect changes for the 5.18-rc1 merge
-> window. It contains a few minor framework and driver updates. The details
-> are in the signed tag.
-> 
-> All patches have been in linux-next for more than a week. No issues have
-> been reported so far. Please pull into char-misc-next.
-> 
-> Thanks,
-> Georgi
-> 
-> The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
-> 
->   Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-5.18-rc1
+On Fri, Mar 11, 2022 at 9:11 AM z00314508 <zhengzucheng@huawei.com> wrote:
+>
+> From: Zucheng Zheng <zhengzucheng@huawei.com>
+>
+> On some specific platforms, the cpufreq driver does not define
+> cpufreq_driver.get() routine (eg:x86 intel_pstate driver), as a
 
-Pulled and pushed out, thanks.
+I guess you mean the cpufreq driver ->get callback.
 
-greg k-h
+No, intel_pstate doesn't implement it, because it cannot reliably
+return the current CPU frequency.
+
+> result, the cpufreq_get() can't get the correct CPU frequency.
+
+No, it can't, if intel_pstate is the driver, but what's the problem?
+This function is only called in one place in the kernel and not on x8
+even.
+
+> Modern x86 processors include the hardware needed to accurately
+> calculate frequency over an interval -- APERF, MPERF and the TSC.
+
+You can compute the average frequency over an interval, but ->get is
+expected to return the actual current frequency at the time call time.
+
+> Here we use arch_freq_get_on_cpu() in preference to any driver
+> driver-specific cpufreq_driver.get() routine to get CPU frequency.
+>
+> Fixes: f8475cef9008 ("x86: use common aperfmperf_khz_on_cpu() to calculate KHz using APERF/MPERF")
+
+No kidding.
+
+> Signed-off-by: Zucheng Zheng <zhengzucheng@huawei.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 80f535cc8a75..d777257b4454 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1806,10 +1806,14 @@ unsigned int cpufreq_get(unsigned int cpu)
+>  {
+>         struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+>         unsigned int ret_freq = 0;
+> +       unsigned int freq;
+>
+>         if (policy) {
+>                 down_read(&policy->rwsem);
+> -               if (cpufreq_driver->get)
+> +               freq = arch_freq_get_on_cpu(policy->cpu);
+> +               if (freq)
+> +                       ret_freq = freq;
+> +               else if (cpufreq_driver->get)
+
+Again, what problem exactly does this address?
+
+>                         ret_freq = __cpufreq_get(policy);
+>                 up_read(&policy->rwsem);
+>
+> --
