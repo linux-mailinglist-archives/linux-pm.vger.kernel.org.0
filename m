@@ -2,96 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5D14D552B
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Mar 2022 00:14:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 449F04D5911
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Mar 2022 04:32:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243019AbiCJXO6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Mar 2022 18:14:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60664 "EHLO
+        id S1343519AbiCKDck (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Mar 2022 22:32:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236297AbiCJXO6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Mar 2022 18:14:58 -0500
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0D319ABD9;
-        Thu, 10 Mar 2022 15:13:56 -0800 (PST)
-Received: by mail-oo1-f45.google.com with SMTP id n5-20020a4a9545000000b0031d45a442feso8674960ooi.3;
-        Thu, 10 Mar 2022 15:13:56 -0800 (PST)
+        with ESMTP id S1346312AbiCKDcb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Mar 2022 22:32:31 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EA11AAFEA
+        for <linux-pm@vger.kernel.org>; Thu, 10 Mar 2022 19:31:09 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id kx6-20020a17090b228600b001bf859159bfso9984353pjb.1
+        for <linux-pm@vger.kernel.org>; Thu, 10 Mar 2022 19:31:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=PjEzHXhBQw4nuatCRH1QTW/Mg4fDvrKguLcxURaCjB0=;
+        b=NsXj1fBbaZ+OGfMXqGmARi8JawvRSOc/kXdAbRi8A2vjdxtPYquBVky+s3t1JYgc69
+         BjJqw6euLBCyQfXXeppjLrpV2neKMna6Y/cs+c9E4EaGpNbpAdrYJqgXHIx6bRSRvj6/
+         u1Us6HHV/0gaJvAR3iMoKlI/ViHg8pQE8PF0ilezZJ7iloRVJ09yBRX8cZ5isxhhEpdG
+         kkTbkio2cpT/8f7Rx/EplTZ4qkdTMCK3FbS0hkVIITxVR6DMlejNx4GaxsImKFyo+akg
+         3VrR9KtoRkcm+MjWBGDZvKTVwxZ19NEb2IEw6peH3I+nSZN3mN8WLq3VMeWT38N8joiA
+         881A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=m2xvQTGJE3ysRwd1CcmXhVPZy5zdjD5mPFrEfObDZcA=;
-        b=KYABQ9i/9Tsa9ctmPuDoWyW4Gcdq5s2LhSDStwaO53DLBRGNUAPZdhbzzaknhSDrC5
-         vSzGEbDX2NstQR9SJhUCZCMaSkGkOuvGbDe/+uXBnSsFrhAmu41e14KmGO/LMB6L/WAU
-         uK+H3RfHruVHRJHC0t7nKIihTPaqzzbOIdVUgtgvF3vRIc44ligaPz0XQ9ToxEdrLipM
-         tehit+f/YMo3BcoQPwOWvTjBkjlcwOcfSp1dbDn4wDZhvxs+RibH3RDKFv6NomlHimu9
-         52DOKza8mgvRjdbFws5e6RNaGPL04um9a4Ii+Jxvv5j6SSBBr2Yl/PUOoXR3Py3H1wbT
-         syng==
-X-Gm-Message-State: AOAM5322zvDGreiw7ALa+12pIYzIGBdpiisSV6oOpyMfHPnQj6E2ZSae
-        HHv7xva/tt6oMVK4m7CbwR3n2FwNQw==
-X-Google-Smtp-Source: ABdhPJwSzxiWisq04pxicnT3+uL8xgXrN1u6Usk11hAVHbvCyHrPWp2PufxdTyNaLFlJ2icXHhWnoA==
-X-Received: by 2002:a05:6870:c0cb:b0:da:2bcc:aa09 with SMTP id e11-20020a056870c0cb00b000da2bccaa09mr4163750oad.63.1646954035737;
-        Thu, 10 Mar 2022 15:13:55 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r23-20020a056830237700b005b2610517c8sm2902188oth.56.2022.03.10.15.13.54
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=PjEzHXhBQw4nuatCRH1QTW/Mg4fDvrKguLcxURaCjB0=;
+        b=enDc5UWSOqpMqA1ejXVRmrw+uzRDzO5xiIRF9j9xp5mpOPhpzEjIuDKO9IDMDS7JuP
+         IrU9dknFkRGaPW9RClbHr7Cw3OayPT68nfNuf9wQSu1LLnBE73jYbif9pdzoI+1E7dLG
+         W1pFU7G+Dn6gHhXlqDSOgoPPM4kJsKnzyqef/H2uuomhc7MeFD/mu3bT4d2p+V8RWeLl
+         qiAuAL5UWbclwLTHY9JzJauwtlKJdFWBW+gvuI2zWHGXaHnqBLG50q77+rAIsHgl4Zkq
+         T1lft1fX68XOooCUYC4JzYn7APLOvka1EQakypTJUnh2WC+ecOQz3Y9zca0/fbk7ykHz
+         6xHQ==
+X-Gm-Message-State: AOAM530snb0VM3CQaB6cT33GqH5//qxLgUyMloCerPC5SPQjcl1/v8ra
+        alW2P2vOIr1bjgBAOezn7ndayA==
+X-Google-Smtp-Source: ABdhPJyIGPNOxQUuhY18oStH37LoB+iKWWQ+PAEg3o1jJBEmifnj84y5wRWsOvFdb/QlXely9NH2wg==
+X-Received: by 2002:a17:902:ea09:b0:151:f547:90a with SMTP id s9-20020a170902ea0900b00151f547090amr8384778plg.63.1646969463989;
+        Thu, 10 Mar 2022 19:31:03 -0800 (PST)
+Received: from localhost ([223.184.83.228])
+        by smtp.gmail.com with ESMTPSA id q12-20020a17090a178c00b001bd036e11fdsm11104982pja.42.2022.03.10.19.31.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Mar 2022 15:13:55 -0800 (PST)
-Received: (nullmailer pid 2273654 invoked by uid 1000);
-        Thu, 10 Mar 2022 23:13:54 -0000
-Date:   Thu, 10 Mar 2022 17:13:54 -0600
-From:   Rob Herring <robh@kernel.org>
+        Thu, 10 Mar 2022 19:31:03 -0800 (PST)
+Date:   Fri, 11 Mar 2022 09:01:01 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     viresh.kumar@linaro.org, rafael@kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
+Cc:     rafael@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        bjorn.andersson@linaro.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Hector Yuan <hector.yuan@mediatek.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org,
-        krzk+dt@kernel.org, angelogioacchino.delregno@somainline.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: dvfs: Use MediaTek CPUFREQ HW as an
- example
-Message-ID: <YiqGMkvC6UyDy4H9@robh.at.kernel.org>
+        angelogioacchino.delregno@somainline.org
+Subject: Re: [PATCH v2 0/2] Convert Qcom CPUFREQ HW binding to YAML
+Message-ID: <20220311033101.p5n3a5ik5i4nzrc6@vireshk-i7>
 References: <20220309151541.139511-1-manivannan.sadhasivam@linaro.org>
- <20220309151541.139511-2-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220309151541.139511-2-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220309151541.139511-1-manivannan.sadhasivam@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 09 Mar 2022 20:45:40 +0530, Manivannan Sadhasivam wrote:
-> Qcom CPUFREQ HW don't have the support for generic performance domains yet.
-> So use MediaTek CPUFREQ HW that has the support available in mainline.
+On 09-03-22, 20:45, Manivannan Sadhasivam wrote:
+> Hi,
 > 
-> This also silences the below dtschema warnings for "cpufreq-qcom-hw.yaml":
+> Patch 2/2 was submitted separately [1] but Rob's bot reported errors related to
+> the performance domain binding that used Qcom CPUFREQ as an example. But Qcom
+> CPUFREQ driver doesn't support the generic performance domains yet.
 > 
-> Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: reg: [[305397760, 4096]] is too short
->         From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: 'clocks' is a required property
->         From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: 'clock-names' is a required property
->         From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: '#freq-domain-cells' is a required property
->         From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> Documentation/devicetree/bindings/dvfs/performance-domain.example.dt.yaml: performance-controller@12340000: '#performance-domain-cells' does not match any of the regexes: 'pinctrl-[0-9]+'
->         From schema: Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+> So I've added a patch 1/2 that fixes the warning by using MediaTek CPUFREQ as
+> the example and added both patches to this series.
 > 
-> Cc: Hector Yuan <hector.yuan@mediatek.com>
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  .../bindings/dvfs/performance-domain.yaml          | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
+> Thanks,
+> Mani
 > 
+> [1] https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20211005044920.78544-1-manivannan.sadhasivam@linaro.org/
+> 
+> Changes in v2:
+> 
+> * Moved dvfs binding patch to 1/2 for avoiding DT Bot error.
+> * Added Krzysztof to "To" list.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Applied. Thanks.
+
+-- 
+viresh
