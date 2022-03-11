@@ -2,209 +2,316 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1404D68C3
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Mar 2022 19:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99EE54D690B
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Mar 2022 20:20:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241658AbiCKSxx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Mar 2022 13:53:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
+        id S1345996AbiCKTV3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Mar 2022 14:21:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350246AbiCKSxw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Mar 2022 13:53:52 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2071.outbound.protection.outlook.com [40.107.244.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C7C48E7E;
-        Fri, 11 Mar 2022 10:52:48 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=muHvN0I2dFsW/qy/1fFz3dzLsvBqyAUW7FprjeqFih0gBO912MQqGs+I9y3JbD5Kk17VQqzXeX4Z+ucbNN3WKEfqO0hvAKrKgHN5109xpbMH88W5nNRX4YhmWhXsRrEcf2dIJYEK1cPaiu8MSJjDTQLS8cDaT+rSMtANFHbqO9ysDO0VWZJcBv8qX76AhCVcWOiiGZLq4NXq4cryFYTpwl6AAVkmSvW4nsGxYWYMKnGdaKxho0h/9P8czhrZZVewlNrH6rIQ2RiitnM1SO37DhDicaTReL8Xuo2y0BSXhC0cjHBDjMdUgRMtr2nYPGO/w0I7YfDPMq128LhP+phWXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=x59Hcv/8fwUXPprsbiC88KLNo1Y1gdEhqkagFzQto0E=;
- b=MSDgW56JcMOSBKnOuZDpYugl5KTPLesq3aGyxs0Q5bQWaWICLpJoOBMlWHSy0O2ENr2/wGkIYenlqAlQJUos7+0MjpxQzY0tyLVn4ruEHUAqFQozsoQ26ten2MeaEi6y3jmSJcU4FerkMdkurVkcJgidDVuQbl/FLrV8X75bxVm6Tech9+KQcH+qhrCv0CvlpiSxQfs19eAIcFgH1jBukRpmQ/p5nxynCIKZI2vwrJniN+LU4fyCKrFkH52IKjAhjCeEkJelxM9GRSCUOfPCSwt40D95NMLomGjjQle3SJ4rC46ZuIt9puf30Fyt7OGC4LC7V0U2JOpQpZ5fZpXmbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=x59Hcv/8fwUXPprsbiC88KLNo1Y1gdEhqkagFzQto0E=;
- b=TidJ1VG4dcJ2XjdBE3U4KWY/IvAK51obPBaLAT2Rgkqet00XVXHLPa2yRJrcxiuG4h//HqoKu8bXXFL4/dCuLZQr5PtkTo05RSTb2/APxYXtJJbR7cZnNRXkcqQjYYG3kVtxzmiGKnLE1CYGmPaineH4vM65b/xyEe9EVYFUDUU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5157.namprd12.prod.outlook.com (2603:10b6:208:308::15)
- by CH2PR12MB5564.namprd12.prod.outlook.com (2603:10b6:610:65::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.15; Fri, 11 Mar
- 2022 18:52:46 +0000
-Received: from BL1PR12MB5157.namprd12.prod.outlook.com
- ([fe80::692d:9532:906b:2b08]) by BL1PR12MB5157.namprd12.prod.outlook.com
- ([fe80::692d:9532:906b:2b08%5]) with mapi id 15.20.5061.022; Fri, 11 Mar 2022
- 18:52:44 +0000
-Message-ID: <07e31fd8-ac26-f181-f848-290c130e5313@amd.com>
-Date:   Fri, 11 Mar 2022 12:52:37 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v2] PCI: ACPI: Don't blindly trust `HotPlugSupportInD3`
-Content-Language: en-US
+        with ESMTP id S236052AbiCKTV2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Mar 2022 14:21:28 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A6381884;
+        Fri, 11 Mar 2022 11:20:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=t1MNIGj+KFYZG9aGwrBZTTH39NuRFX1gyJctTHRiY/k=; b=fvXRlXcGfl/VX/YthinvXJg1hk
+        h19PZCHCvRYF1ozQuWq3u9FNwYV85s9hhqx73y9M/usi2qnDBkySmj8IDj/PoPNCZE3/g1KZMz/jk
+        hzd6Ygvi5cptER9ujtfszby5tUymex/OiOaY/MRN5rvV5USxUrKO7IzkXCiO8FsfQu2YAeSMklBpD
+        dXhT9D90e3kghbuzKLieDTLNRXpHjOcjepT6EbyiMWj77rdj5jv/3aD+6vMDjLRhn1HC8QvgRnsos
+        xUnqvK4QJrKb99HG8jSdDLyEtUyetLFb8tMvyGvsiSZJEJ5AB80xPpq/wrtMEbn3T+NdH1MosgyA2
+        ux2f1uyw==;
+Received: from [2001:8b0:10b:1::3ae] (helo=u3832b3a9db3152.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nSkoD-001qkO-VK; Fri, 11 Mar 2022 19:20:18 +0000
+Message-ID: <9099d8903e9b2b16daec712acc9aa533fe84d102.camel@infradead.org>
+Subject: [PATCH] PM / hibernate: Honour ACPI hardware signature by default
+ for virtual guests
+From:   David Woodhouse <dwmw2@infradead.org>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Mehta, Sanju" <Sanju.Mehta@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-References: <20220310175832.1259-1-mario.limonciello@amd.com>
- <CAJZ5v0gjPwEcq2dEE+wRr3D+w7=MTEKJoQ+x9muh_R4W-DawVw@mail.gmail.com>
- <BL1PR12MB5157D9FDDD0FC829CDD8CFB2E20B9@BL1PR12MB5157.namprd12.prod.outlook.com>
- <CAJZ5v0grj=vE1wGJpMxh-Hy7=ommfFUh5hw++nmQdLVxVtCSWw@mail.gmail.com>
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <CAJZ5v0grj=vE1wGJpMxh-Hy7=ommfFUh5hw++nmQdLVxVtCSWw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN4PR0501CA0025.namprd05.prod.outlook.com
- (2603:10b6:803:40::38) To BL1PR12MB5157.namprd12.prod.outlook.com
- (2603:10b6:208:308::15)
+Cc:     linux-pm <linux-pm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        benh <benh@kernel.crashing.org>,
+        "van der Linden, Frank" <fllinden@amazon.com>,
+        Amit Shah <aams@amazon.com>
+Date:   Fri, 11 Mar 2022 19:20:17 +0000
+In-Reply-To: <CAJZ5v0gAkOqh1LVpdXKLxpswBSG-3LUaXoZgw0Op+3V69BjhZQ@mail.gmail.com>
+References: <26decf155bffc021a97846c0a0ed09c2b5e0bef1.camel@infradead.org>
+         <CAJZ5v0gAkOqh1LVpdXKLxpswBSG-3LUaXoZgw0Op+3V69BjhZQ@mail.gmail.com>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-CmcjR5l3dQwM1q5C/6/2"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 50cf1fa4-0b73-42e5-91d6-08da03905410
-X-MS-TrafficTypeDiagnostic: CH2PR12MB5564:EE_
-X-Microsoft-Antispam-PRVS: <CH2PR12MB5564FB103CB76A9697DEE929E20C9@CH2PR12MB5564.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PMPZ4zrbPlQffgGi4kVoIQlYikMsf4RhWy3LZKubP1VXjGaYUwTskxDL6Ew3fY9jglAQ9l1GV5FbTMtW4ACqtOGq2LEHBQPhkEBNxYkshPOQTlifAVEFFxcQHkkDfTd78wF0KYxlSKLbMLMnN0sG7JrHfqeq22YyWasp9qEzntQ8NT13QjiLlE48yyYJd2QHDPF1vMDmwpoq9SGBvxdx4mIozZP+RGiwjKzpJQHJc4gKUr33mMBOXfzSU4/MKLHidPB7zQlGFNSPu7Zq21i9/5/msl2V4UrFXaC/orNS0PBLevzXz0iqCWDKk9Rk7AGKLa0wTlhL3kBF2x+WajcqXX/78pc1StK8WWylg6a8paQSYTEvNnOQERORovlb4N8soWWMtEbYO8yjGYecdLDPPTQEVolBZo5UCnD3vsEB+Q4mRyvZShFUPSONN4FDK+5x/CTX3wzMWnvQZIld7ko5hM+wQ/u86/mZs7uc8FHQxQm8jvYrreZ+61b+GF/Js6ejtM9RqEfmqDZXXziJyYgDYRJlw8Puo81mNXinGszLM4VcQ0ARYUsykdAk6dFhYDfvaEkwW4hJM8lprNv/CNe4qM2/wWcyoh3wOP2qnVIeVZ5wjDoMJTSW6y13rt6/dC56ILGryKPRKd0u+yJosaMigIO5v1G55VWqrwdVwcG1AD7YPFDvP0UIUSRXJsiSXovM7dOG/YSGrvy34mgJo99xfYmzY0LOOODvurZdZ0PeAe1Yba37wE2UV/xBwP+6QA/28F43D/wDXN5PQj8RiXiEWg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5157.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(6029001)(4636009)(366004)(6916009)(5660300002)(6512007)(19627235002)(83380400001)(54906003)(6486002)(316002)(66556008)(53546011)(6506007)(4326008)(66476007)(66946007)(8676002)(6666004)(8936002)(508600001)(31696002)(86362001)(38100700002)(36756003)(186003)(2906002)(31686004)(2616005)(81973001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WlFTQ3dvQ25xNThlNElYZjcvY1BMR1BXOURVZGYxQTJSS20rZmViQ0ZockVh?=
- =?utf-8?B?NHl1YVZrVVp2djAzTkxEU1hXM28xV1JMRFlOcCtrZHdNcmtsUlFhQnhMdFB6?=
- =?utf-8?B?bVVaU1oveVkrWHV2VUUvSEliaVpJNDBoVkx6UzJSN1BydGhoWUNvOWtNQmd5?=
- =?utf-8?B?Y00wSzZUcDRTQWMwV2ViUW40RUtnSlk0a2RLZGpqUUw1cVQ1WFZtKzJiSnk0?=
- =?utf-8?B?WjBrNTV6SXNaMG1WdDlocnV6YkM0cVhyZ0lGTmdqWUl0dzNjald1cmdpSE9R?=
- =?utf-8?B?TmZUNE1rdTVvNCtQSTFSWnJrRi9FdTBlZXRuOFIydkZ3ZEtGWEw4WFFSc2pP?=
- =?utf-8?B?SC9TQWxFZjRvUFRnYjlHM25VM1FHdkpOWUUyRzY5TlhCZmJweld0NmJLNFZQ?=
- =?utf-8?B?Vk53RnZlY2VkOVQyNEtBSVJ5V0VSWHVsZkZPQXJYK2hoTWEwTVhRc0lTUlJY?=
- =?utf-8?B?MUtkYkduZWI1R2Z5cjNhaTRFekp6YTZrUU4vTDdxdTc0REc5OUFhNEx3TGQ2?=
- =?utf-8?B?Zlc1Tk0wYXQ5YXdMS3J5RnZQN2sxd1lXd3pMclBHY0w1M0NvK2pXNlpnMENM?=
- =?utf-8?B?V1JpcVAvQ1N0ZWtIbE0xM0l4d2xOa3YyT2RXd0ZLOWZXRTVIV3NpMWl0d3VE?=
- =?utf-8?B?aGU2a3BDV3BwVUV2K0xnUFRNclM0cTJWWmt5dW1aUkF4TEg2aGo0SlVYQnF2?=
- =?utf-8?B?bFFrVDJIQ21xM0I0enA0aWJrZXBldzJ5WmVIWG9aWmlKalVUR1VMSVBNZ1pT?=
- =?utf-8?B?bDY3NUdXSXpoNTN0Tk1uMFZzYTNBZ0xwazFuR1pPbzBwSTBzUmJxRVVzSlJT?=
- =?utf-8?B?dTNBcTV2V3RtRDA1U1VVamIxTy9haEw1dERFbVVER0tyaXE1RzRUTHkxaW1I?=
- =?utf-8?B?b1BQUWg1ZkNlZFZuUDVYeGZKcGliQnhWd3dRYlZxbzVtZDd3RFFPU2JBSC9z?=
- =?utf-8?B?azNUZEU5K1dDWXZGZlBXRUNwYW02anZuSStjNDkxTkFsSUJraGxxSGRnb2tx?=
- =?utf-8?B?aGlxckhiSHN6SE9RdWg3UVgvL21BVm8yUkdaZnZXQm1TRnBiSmJLVlJXN09E?=
- =?utf-8?B?d2t6QmE4Tk1FakVZNzNyY1JYcW41ZkcxRllPTzA3TzhUWXlwWUxpVUhQRWNi?=
- =?utf-8?B?ZU5IUzFRUDZpOVNOZ3Q1OHdxMjl6c3RhM0ZqQTR3R3JsaFg2R3RLUFFhWlFW?=
- =?utf-8?B?ZkozU0I1NEhmMVNnb0h1a0lqV3B2MFdTVi90RjcwYUtNSjZmNkxVNm9tWmtk?=
- =?utf-8?B?MHFiNUlBdlFOVUlqQUxUaEU2dVZETTdYSGdqdjhWeTRaVUE3RVcxLzZtaFht?=
- =?utf-8?B?VTA3NHcycEFkcTdhV1c4di83M015SGdtNXJLQzFjMFhnZHVnNFNuRnN4Ky9X?=
- =?utf-8?B?WDJ2MVdTT2VBbHhsZDhmNEFvMnExeW1YNnMvTjBOaUh3dkNxenhldUE1Q2xF?=
- =?utf-8?B?bUQ0ZFNjbytDRmZGYWp0VXArZTRibWVSQkwrbzI1WUFzZ04vOTFRNjQwRkRK?=
- =?utf-8?B?Uml3cTBNVmtLYVhtN0xNNWZtelFXSWJ1RGdKU05SL1pwRnk3Y1Fpd3UrMDZB?=
- =?utf-8?B?bjhpWFFoVHFma3lVVTJWN2JDdmRya210dDZTOTJYV3A0ZVU3RDJ0elZ3L1hF?=
- =?utf-8?B?eEZkK2JQYmVYUXZRZGdmWUo0dXJWUFduRUxNd3BJUEkrN1J5eElwaDh5OVp1?=
- =?utf-8?B?V0tMMFM5cElBWTB2aTNoZ2tpR0poMjNvdzRvUU1wMllDOXdqZEsraW54UHk4?=
- =?utf-8?B?Y1Vmbi9uM0gxMXhTTXR5RVdid29USkFrbXQ1MmJoWk16bGRiV2x3Tmt3ZzV4?=
- =?utf-8?B?UXBWa0V4MGh1cmNGWUpzZGpvd1A0TEl4Z1pPM0Y5eUNLRDE4VGs5R1FVMGlj?=
- =?utf-8?B?YU9RQytiUGdWdk5WR3g5bGk5a1hKWmRIa1d5dVh3TWdYTUkvZ0FKUExWMUpZ?=
- =?utf-8?B?Q1ZrVmlMUHBySUhzdnA0S0h2RUZOYm96MzV1NzYycHB6a2p3c3dOcG9FaGJ6?=
- =?utf-8?B?VDY5dkxBUktzNjRaOTBHckRYT2pOMFRVSHBSaHNCN2tpN1E1TnNxaFR0K1Na?=
- =?utf-8?B?UXBBN1pzejZzRWl1RWxDcFU2a2hzUFJOZTdhS1YyTzB0TmlFL3BKMFRRTUw5?=
- =?utf-8?B?S1d3b0hndnV6RW9zTWNSVlVwSzdIWGpEc3BHS0JWRkh2RVBNd3FZTjYvVzNh?=
- =?utf-8?B?Z1IzV0VMOGNteUEzOHgxYTk4YkxneUxzVGhRT3hwZy82c1ltaWxlaTdqdy93?=
- =?utf-8?Q?v37MFtVEdWogBX5KpSg30W+oUgTgdegjNhiz/VWtd8=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 50cf1fa4-0b73-42e5-91d6-08da03905410
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5157.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2022 18:52:44.8298
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Lrlwf459qrkZNdFxM1emZgzvs1SdxWJ52zUJIYr+iXgCJnUvNQm10xazuvP+wZPjoSUTGWPgr9YsZ5Wmw6WiPA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB5564
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 3/11/2022 10:05, Rafael J. Wysocki wrote:
-> On Thu, Mar 10, 2022 at 9:13 PM Limonciello, Mario
-> <Mario.Limonciello@amd.com> wrote:
->>
->> [Public]
->>
->>>> To fix these situations explicitly check that the ACPI device has a GPE
->>>> allowing the device to generate wakeup signals handled by the platform
->>>> in `acpi_pci_bridge_d3`.
->>>
->>> Which may be orthogonal to the _S0W return value mentioned above.
->>>
->>> Also, I'm not quite sure why acpi_pci_bridge_d3() should require the
->>> root port to have a wake GPE associated with it as an indication that
->>> the hierarchy below it can be put into D3cold.
->>
->> The reason that brought me down the path in this patch was actually
->> acpi_dev_pm_get_state.  _S0W isn't actually evaluated unless
->> adev->wakeup.flags.valid is set.
-> 
-> That's true, but it is unclear how this is related to whether or not a
-> given PCIe port can handle D3cold.  But see below.
-> 
->>
->>>
->>>>
->>>> diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
->>>> index a42dbf448860..9f8f55ed09d9 100644
->>>> --- a/drivers/pci/pci-acpi.c
->>>> +++ b/drivers/pci/pci-acpi.c
->>>> @@ -999,6 +999,9 @@ bool acpi_pci_bridge_d3(struct pci_dev *dev)
->>>>          if (!adev)
->>>>                  return false;
->>>>
->>>> +       if (!adev->wakeup.flags.valid)
->>>> +               return false;
->>>
->>> Minor nit: the two checks above could be combined.
->>
->> OK if we stick to this approach I'll do that.
->>
->>>
->>> Also I would add a comment explaining why exactly wakeup.flags.valid
->>> is checked here, because I can imagine a case in which the wakeup
->>> signaling capability is irrelevant for whether or not the given port
->>> can handle D3cold.
->>
->> Specifically a case that it's a hotplug bridge that has HotPlugSupportInD3
->> though?  In practice I've only seen that in use on USB4 and Thunderbolt
->> bridges "so far".
->>
->> I haven't tried yet but I would think directly evaluating _S0W at this time
->> seems it should also work and would match closer to my original intent
->> of the patch.  Would you prefer that?
-> 
-> I guess, but I'm not sure, that you are trying to kind of validate
-> HotPlugSupportInD3 by checking if the root port in question actually
-> can signal wakeup via ACPI and if it cannot, assume that the flag was
-> set by mistake and so the bridge should not be assumed to be able to
-> handle D3cold.
-> 
-> That is not unreasonable, but in that case you need to check
-> wakeup.flags.valid first and then _S0W too, because it can return 0
-> even if the "valid" flag is set.  And explain in a comment why this is
-> done.
 
-OK I'll make these changes and check the situation again.
+--=-CmcjR5l3dQwM1q5C/6/2
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> 
->>>
->>>> +
->>>>          if (acpi_dev_get_property(adev, "HotPlugSupportInD3",
->>>>                                     ACPI_TYPE_INTEGER, &obj) < 0)
->>>>                  return false;
->>>> --
+From: David Woodhouse <dwmw@amazon.co.uk>
+
+The ACPI specification says that OSPM should refuse to restore from
+hibernate if the hardware signature changes, and should boot from
+scratch. However, real BIOSes often vary the hardware signature in cases
+where we *do* want to resume from hibernate, so Linux doesn't follow the
+spec by default.
+
+However, in a virtual environment there's no reason for the VMM to vary
+the hardware signature *unless* it wants to trigger a clean reboot as
+defined by the ACPI spec. So enable the check by default if a hypervisor
+is detected.
+
+Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+---
+
+On Wed, 2021-12-08 at 16:07 +0100, Rafael J. Wysocki wrote:
+> On Mon, Nov 8, 2021 at 5:09 PM David Woodhouse <dwmw2@infradead.org> wrot=
+e:
+> > A follow-up patch may do this automatically for certain "known good"
+> > machines based on a DMI match, or perhaps just for all hypervisor
+> > guests since there's no good reason a hypervisor would change the
+> > hardware_signature that it exposes to guests *unless* it wants them
+> > to obey the ACPI specification.
+> >
+> > Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+>
+> Applied as 5.17 material, sorry for the delay.
+
+Here's the threatened follow-up. I think that a blanket enablement for
+all hypervisors is sane enough; there's no reason why a virtual
+environment would vary the hardware signature *unless* it wanted to
+trigger the ACPI defined hibernate behaviour, is there?
+
+ arch/x86/kernel/acpi/sleep.c | 23 +++++++++++++++++++++--
+ drivers/acpi/sleep.c         | 11 +++--------
+ include/linux/acpi.h         |  2 +-
+ 3 files changed, 25 insertions(+), 11 deletions(-)
+
+diff --git a/arch/x86/kernel/acpi/sleep.c b/arch/x86/kernel/acpi/sleep.c
+index 1e97f944b47d..3b7f4cdbf2e0 100644
+--- a/arch/x86/kernel/acpi/sleep.c
++++ b/arch/x86/kernel/acpi/sleep.c
+@@ -15,6 +15,7 @@
+ #include <asm/desc.h>
+ #include <asm/cacheflush.h>
+ #include <asm/realmode.h>
++#include <asm/hypervisor.h>
+=20
+ #include <linux/ftrace.h>
+ #include "../../realmode/rm/wakeup.h"
+@@ -140,9 +141,9 @@ static int __init acpi_sleep_setup(char *str)
+ 			acpi_realmode_flags |=3D 4;
+ #ifdef CONFIG_HIBERNATION
+ 		if (strncmp(str, "s4_hwsig", 8) =3D=3D 0)
+-			acpi_check_s4_hw_signature(1);
++			acpi_check_s4_hw_signature =3D 1;
+ 		if (strncmp(str, "s4_nohwsig", 10) =3D=3D 0)
+-			acpi_check_s4_hw_signature(0);
++			acpi_check_s4_hw_signature =3D 0;
+ #endif
+ 		if (strncmp(str, "nonvs", 5) =3D=3D 0)
+ 			acpi_nvs_nosave();
+@@ -160,3 +161,21 @@ static int __init acpi_sleep_setup(char *str)
+ }
+=20
+ __setup("acpi_sleep=3D", acpi_sleep_setup);
++
++#if defined(CONFIG_HIBERNATION) && defined(CONFIG_HYPERVISOR_GUEST)
++static int __init init_s4_sigcheck(void)
++{
++	/*
++	 * If running on a hypervisor, honour the ACPI specification
++	 * by default and trigger a clean reboot when the hardware
++	 * signature in FACS is changed after hibernation.
++	 */
++	if (acpi_check_s4_hw_signature =3D=3D -1 &&
++	    !hypervisor_is_type(X86_HYPER_NATIVE))
++		acpi_check_s4_hw_signature =3D 1;
++
++	return 0;
++}
++/* This must happen before acpi_init() which is a subsys initcall */
++arch_initcall(init_s4_sigcheck);
++#endif
+diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
+index a60ff5dfed3a..4c498e1051e9 100644
+--- a/drivers/acpi/sleep.c
++++ b/drivers/acpi/sleep.c
+@@ -874,12 +874,7 @@ static inline void acpi_sleep_syscore_init(void) {}
+ #ifdef CONFIG_HIBERNATION
+ static unsigned long s4_hardware_signature;
+ static struct acpi_table_facs *facs;
+-static int sigcheck =3D -1; /* Default behaviour is just to warn */
+-
+-void __init acpi_check_s4_hw_signature(int check)
+-{
+-	sigcheck =3D check;
+-}
++int acpi_check_s4_hw_signature =3D -1; /* Default behaviour is just to war=
+n */
+=20
+ static int acpi_hibernation_begin(pm_message_t stage)
+ {
+@@ -1004,7 +999,7 @@ static void acpi_sleep_hibernate_setup(void)
+ 	hibernation_set_ops(old_suspend_ordering ?
+ 			&acpi_hibernation_ops_old : &acpi_hibernation_ops);
+ 	sleep_states[ACPI_STATE_S4] =3D 1;
+-	if (!sigcheck)
++	if (!acpi_check_s4_hw_signature)
+ 		return;
+=20
+ 	acpi_get_table(ACPI_SIG_FACS, 1, (struct acpi_table_header **)&facs);
+@@ -1016,7 +1011,7 @@ static void acpi_sleep_hibernate_setup(void)
+ 		 */
+ 		s4_hardware_signature =3D facs->hardware_signature;
+=20
+-		if (sigcheck > 0) {
++		if (acpi_check_s4_hw_signature > 0) {
+ 			/*
+ 			 * If we're actually obeying the ACPI specification
+ 			 * then the signature is written out as part of the
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index 6274758648e3..766dbcb82df1 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -526,7 +526,7 @@ acpi_status acpi_release_memory(acpi_handle handle, str=
+uct resource *res,
+ int acpi_resources_are_enforced(void);
+=20
+ #ifdef CONFIG_HIBERNATION
+-void __init acpi_check_s4_hw_signature(int check);
++extern int acpi_check_s4_hw_signature;
+ #endif
+=20
+ #ifdef CONFIG_PM_SLEEP
+--=20
+2.33.1
+
+
+--=-CmcjR5l3dQwM1q5C/6/2
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjIwMzExMTkyMDE3WjAvBgkqhkiG9w0BCQQxIgQgD6vX6kgN
+2NoHemPRgJrYHidmQ51pij4ZRLhj1AwXhVMwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgABsLkYVEuyqOhhBE5vnxT0B6RpFDADqi3I
+ShXXsHA9aaA0pnxh8QfB9QOBIynFnu9vsjyYfkJDFjLVpPRNzkVKI1Xb/BX5TFVrZtsVwGlb0K1I
+vkPQys+8oVhwNHcsc0Ud4cQj+Jpe2HiSFyecppam4/oUIQn7pg7/pJ3y5VVCtGEGuikBVadPA3ee
+jB81L0jWXW7iEa5etwS7gxqxt2DBGZ+9ECf6f/FgZfq1F7qB3DrrReFOLQIk8+qifaoBVIxLxdcH
+vS6PpugiqCU4ST5ESZ+yF6R5HkVHe8n7l/+UCPr3zc9D7nNXe2gYtwif9ickNrHXnZ8HWa7BZ8mk
+iRJp7eUcLdBjOZgpnHibiq7eii59edvaJJDgqjNV9GFYVYjMoX2rjoinOLgtuPsKrVrOdRaG9xYV
+wY9XNOTMOMSuCd2TeGwCqgW8ah8FbGoTbxIwYv8r4FvUja9ZgB2NMiGSnm4YFlgN5LYyDx4ERNhG
+O2c1uaHmSvlpxoI8i6pTJEFykwVR+2EGQprKmoNI23PSJNILKJgpylR5yTCnEEEUJM+Fo/eJDfvt
+C6w0NuitF2H6Q9ppZGS9wz1iBvCYM1VahW5EDvC4pALckVuAXYXZYLkV1zDQ4196SWmg5GjbUJ/f
+mZrtrAUBqzcS3iiMM8TTDNL6FDHiMi2QqmTuLEHxrQAAAAAAAA==
+
+
+--=-CmcjR5l3dQwM1q5C/6/2--
 
