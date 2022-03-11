@@ -2,131 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46CF34D65BE
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Mar 2022 17:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 034474D6867
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Mar 2022 19:23:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350097AbiCKQG7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Mar 2022 11:06:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48784 "EHLO
+        id S232771AbiCKSYN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Mar 2022 13:24:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245714AbiCKQG7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Mar 2022 11:06:59 -0500
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30CA1D087A;
-        Fri, 11 Mar 2022 08:05:53 -0800 (PST)
-Received: by mail-yb1-f178.google.com with SMTP id f38so17938041ybi.3;
-        Fri, 11 Mar 2022 08:05:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FXK3c5vCtDDnw6VCBRrqNO0nfhAsiB45wwEvxlNLiXo=;
-        b=dx4tpQ9zoUQtNEb7vC46mHi3QFCjO6a+s+2vdgZFPYeyXOUmivq4WN6OSrh2Gdc/qx
-         hfnUi1l6iQaymVuzAcxufmTQz+OT7qOChTdJPiodbYbnPR1nBaGUttXUNMY1oGgUgy6Y
-         Gp4TxtwqcZmH+mUTUwUJLbzR8U47jxkN9uviqQQ5XtAOCMIixefMmrHocpgaEUrm4yxt
-         mavF18BFGuqfcCrMV55V+sPVcxpwf4zBbbWHTMWy0Gf6HaBPHwL1vnr7RXW1RSKTzwNw
-         lutd7njFJoPpxw6j28udbIogOS83ZhTeRnl//RCVg3ibEESUb+K7/I9pDHYcfZs15aha
-         az7Q==
-X-Gm-Message-State: AOAM531/+F5f7I5ho8nXb6ccOQl6jHEHWYR77cqmc3u25A/lrsWckXd8
-        iwRTlmIzV50+TghAbgqGzgFM3iCEw3WMHtjiRjQ=
-X-Google-Smtp-Source: ABdhPJyQRnmhNHRK/cw7tijSXl2ZGHLhLN+9QbLC3JfGThjVGF0qdXOF5hXn/MlsEeSq6XToN1fwvl8eTZ5NXWjwAoA=
-X-Received: by 2002:a25:d7c2:0:b0:628:9d06:457b with SMTP id
- o185-20020a25d7c2000000b006289d06457bmr8518518ybg.137.1647014752934; Fri, 11
- Mar 2022 08:05:52 -0800 (PST)
-MIME-Version: 1.0
-References: <20220310175832.1259-1-mario.limonciello@amd.com>
- <CAJZ5v0gjPwEcq2dEE+wRr3D+w7=MTEKJoQ+x9muh_R4W-DawVw@mail.gmail.com> <BL1PR12MB5157D9FDDD0FC829CDD8CFB2E20B9@BL1PR12MB5157.namprd12.prod.outlook.com>
-In-Reply-To: <BL1PR12MB5157D9FDDD0FC829CDD8CFB2E20B9@BL1PR12MB5157.namprd12.prod.outlook.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 11 Mar 2022 17:05:42 +0100
-Message-ID: <CAJZ5v0grj=vE1wGJpMxh-Hy7=ommfFUh5hw++nmQdLVxVtCSWw@mail.gmail.com>
-Subject: Re: [PATCH v2] PCI: ACPI: Don't blindly trust `HotPlugSupportInD3`
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
+        with ESMTP id S232605AbiCKSYN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Mar 2022 13:24:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6839C6812;
+        Fri, 11 Mar 2022 10:23:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6179661E88;
+        Fri, 11 Mar 2022 18:23:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73AFFC340E9;
+        Fri, 11 Mar 2022 18:23:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647022988;
+        bh=fZ47RO3FWjQg0fkPbefYcV7U3D5vHA7T+eWND8FfqNg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=TY9T+WxPlnqPsJlkwlrFU08Z5Re9291zXUcwuq+sUIecJhSjvn0JowCYJb1s25+Ch
+         zI3I3eyL4f0+lv1pYxjgarf1Gjn6mkweAJEJlFYlmYQQr11ZduxWrdv8dLkqA9UicW
+         ly1h9XWp9qVYJLz8J3XUE6zPKqOJ35SD7uC/USypPS5afXNW5OzfCloyTss3T8Kr6j
+         SroUUMOqSoyZyE9oh9JBhLjvw++Zen6JPYXg8APn4zu2q4NwnYuj+Bqj1mmnfgrDHh
+         TG6cwpdZsC9U6cVmhtYM8QbjkglmeDlSdAw/FjYFIcgzCI75OFKfVZVxBeG+5ClRxo
+         ygLvVrhgE8ADQ==
+Date:   Fri, 11 Mar 2022 12:23:05 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
         "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Mehta, Sanju" <Sanju.Mehta@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        linux-pm@vger.kernel.org, Sanju.Mehta@amd.com,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v2] PCI: ACPI: Don't blindly trust `HotPlugSupportInD3`
+Message-ID: <20220311182305.GA311200@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310175832.1259-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 9:13 PM Limonciello, Mario
-<Mario.Limonciello@amd.com> wrote:
->
-> [Public]
->
-> > > To fix these situations explicitly check that the ACPI device has a GPE
-> > > allowing the device to generate wakeup signals handled by the platform
-> > > in `acpi_pci_bridge_d3`.
-> >
-> > Which may be orthogonal to the _S0W return value mentioned above.
-> >
-> > Also, I'm not quite sure why acpi_pci_bridge_d3() should require the
-> > root port to have a wake GPE associated with it as an indication that
-> > the hierarchy below it can be put into D3cold.
->
-> The reason that brought me down the path in this patch was actually
-> acpi_dev_pm_get_state.  _S0W isn't actually evaluated unless
-> adev->wakeup.flags.valid is set.
+The subject convention in drivers/pci would be "PCI/ACPI:"
 
-That's true, but it is unclear how this is related to whether or not a
-given PCIe port can handle D3cold.  But see below.
+But more importantly, please turn the subject from a non-specific
+negative ("Don't blindly trust") into a more specific *positive*,
+e.g.,
 
->
-> >
-> > >
-> > > diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
-> > > index a42dbf448860..9f8f55ed09d9 100644
-> > > --- a/drivers/pci/pci-acpi.c
-> > > +++ b/drivers/pci/pci-acpi.c
-> > > @@ -999,6 +999,9 @@ bool acpi_pci_bridge_d3(struct pci_dev *dev)
-> > >         if (!adev)
-> > >                 return false;
-> > >
-> > > +       if (!adev->wakeup.flags.valid)
-> > > +               return false;
-> >
-> > Minor nit: the two checks above could be combined.
->
-> OK if we stick to this approach I'll do that.
->
-> >
-> > Also I would add a comment explaining why exactly wakeup.flags.valid
-> > is checked here, because I can imagine a case in which the wakeup
-> > signaling capability is irrelevant for whether or not the given port
-> > can handle D3cold.
->
-> Specifically a case that it's a hotplug bridge that has HotPlugSupportInD3
-> though?  In practice I've only seen that in use on USB4 and Thunderbolt
-> bridges "so far".
->
-> I haven't tried yet but I would think directly evaluating _S0W at this time
-> seems it should also work and would match closer to my original intent
-> of the patch.  Would you prefer that?
+  PCI/ACPI: Assume HotPlugSupportInD3 only if device can wake from D3
 
-I guess, but I'm not sure, that you are trying to kind of validate
-HotPlugSupportInD3 by checking if the root port in question actually
-can signal wakeup via ACPI and if it cannot, assume that the flag was
-set by mistake and so the bridge should not be assumed to be able to
-handle D3cold.
+On Thu, Mar 10, 2022 at 11:58:32AM -0600, Mario Limonciello wrote:
+> The `_DSD` `HotPlugSupportInD3` is supposed to indicate the ability for a
+> bridge to be able to wakeup from D3.
 
-That is not unreasonable, but in that case you need to check
-wakeup.flags.valid first and then _S0W too, because it can return 0
-even if the "valid" flag is set.  And explain in a comment why this is
-done.
+Thanks for the Microsoft URL.  To make this commit log self-contained
+and guard against the link becoming stale, can you quote the relevant
+text here, since it's not long:
 
-> >
-> > > +
-> > >         if (acpi_dev_get_property(adev, "HotPlugSupportInD3",
-> > >                                    ACPI_TYPE_INTEGER, &obj) < 0)
-> > >                 return false;
-> > > --
+  This ACPI object [HotPlugSupportInD3] enables the operating system
+  to identify and power manage PCIe Root Ports that are capable of
+  handling hot plug events while in D3 state.
+
+> This however is static information in the ACPI table at BIOS compilation
+> time and on some platforms it's possible to configure the firmware at boot
+> up such that `_S0W` will not return "0" indicating the inability to wake
+> up the device from D3.
+
+Please include the spec reference (ACPI v6.4, sec 7.3.20) in case the
+URL below becomes stale, and again, the relevant text is barely longer
+than the URL and could be included:
+
+  7.3.20 _S0W (S0 Device Wake State)
+
+  This object evaluates to an integer that conveys to OSPM the deepest
+  D-state supported by this device in the S0 system sleeping state
+  where the device can wake itself.
+
+I guess the argument is that we can put a Root Port into D3 only if
+_S0W indicates that it can wake from D3 *and* it has the
+HotPlugSupportInD3 property?
+
+I'm naive about ACPI sleep/wake, but that does sound plausible.
+
+But the patch doesn't say anything about _S0W, so we need to somehow
+connect the dots there.
+
+> To fix these situations explicitly check that the ACPI device has a GPE
+> allowing the device to generate wakeup signals handled by the platform
+> in `acpi_pci_bridge_d3`.
+
+acpi_pci_bridge_d3()
+
+Would be good to say what "these situations" are.  I guess this fixes
+a bug, so let's outline what that bug is, what the symptoms are, who
+reported and tested it, etc.
+
+> This changes aligns the handling of the situation the same as Windows 10
+> and Windows 11 both do as well.
+
+s/changes/change/
+
+Sentence also needs a little polishing: "aligns ... both do as well"
+doesn't quite flow.
+
+Does this make things work like Windows 10/11 from a user's point of
+view, or have you somehow confirmed that Windows actually checks _S0W
+and HotPlugSupportInD3 in the same way?
+
+> Link: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/07_Power_and_Performance_Mgmt/device-power-management-objects.html?highlight=s0w#s0w-s0-device-wake-state
+> Link: https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#identifying-pcie-root-ports-supporting-hot-plug-in-d3
+> Fixes: 26ad34d510a87 ("PCI / ACPI: Whitelist D3 for more PCIe hotplug ports")
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v1->v2:
+>  * Add Mika's tag
+>  * Update commit message for Rafael's suggestions
+>  drivers/pci/pci-acpi.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+> index a42dbf448860..9f8f55ed09d9 100644
+> --- a/drivers/pci/pci-acpi.c
+> +++ b/drivers/pci/pci-acpi.c
+> @@ -999,6 +999,9 @@ bool acpi_pci_bridge_d3(struct pci_dev *dev)
+>  	if (!adev)
+>  		return false;
+>  
+> +	if (!adev->wakeup.flags.valid)
+> +		return false;
+> +
+>  	if (acpi_dev_get_property(adev, "HotPlugSupportInD3",
+>  				   ACPI_TYPE_INTEGER, &obj) < 0)
+>  		return false;
+> -- 
+> 2.34.1
+> 
