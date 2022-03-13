@@ -2,141 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA1E4D72D1
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Mar 2022 06:35:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A99E4D7745
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Mar 2022 18:28:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231837AbiCMFge (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 13 Mar 2022 00:36:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
+        id S231391AbiCMR3K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 13 Mar 2022 13:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiCMFge (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 13 Mar 2022 00:36:34 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2121A24BF7
-        for <linux-pm@vger.kernel.org>; Sat, 12 Mar 2022 21:35:26 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id t16-20020a92d150000000b002c799d354a8so204640ilg.9
-        for <linux-pm@vger.kernel.org>; Sat, 12 Mar 2022 21:35:26 -0800 (PST)
+        with ESMTP id S233944AbiCMR3J (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 13 Mar 2022 13:29:09 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CB526AC5;
+        Sun, 13 Mar 2022 10:27:59 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id q10so18774177ljc.7;
+        Sun, 13 Mar 2022 10:27:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to;
+        bh=7Ot0KnTq6DeYLOMs0KrRgYt66byBQfvupOKuBASSZzQ=;
+        b=G7L4Ch4ccUnHGnSNuI14sIkoOvDB2iL/etoiPBMiKWTJrjSSSRese4nTkmoLyuIU3a
+         5MyAhodw+LXrOYf+B/9xK2+VKVYjL0V1sjAn0wS0QU0GDDpmYJ2UJGMLeKsGV+0E1M8X
+         kOL4yfzXUuH072waC2DCjzs717PwvdNOK9z7ofVRjVfcYtv01RfeYPB9q+2kCGcLeDkj
+         nEoNBbkR+UMBSSocrMsJ9jm/Q/Qz5879ppkeRcJskYXVE0imWivA3dZHTd3uh1QHD5bA
+         lgnc5IW76BHPfAQrRaktthW+D7Eep7bbWia9U5ErUSLCiUJs3CbCtABquMXcgd6NsAVP
+         zbFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=j3QVeTqDupds0I2GmAX2joYrfRgvBoY7gI4v066BCts=;
-        b=L/PhLhEWLsvhjBLYLR4JRbvgvRa1hBaSMivNBFdcKUsabVxLDox3eV2ffUpjCW5dxF
-         42XN7fmIR/P9mU6Tj22YknylEuXi847GEy2MYAuT3KzULMFZp7yPD8xI90k7YWoYp77k
-         xJXPPA5WsOdZ2jSvXmAdsX6D0jAZ/yoM84tKEyd9ajYjF5v3hym9jYQB6i2yaiVt45Oa
-         3ciauCVEYWOvD+Q/5T7eAP5Z72Du67z3nGYWRRPT8WEMljyJ3uAApOnrZQ459DKv8MnD
-         5mBhEIsL8EscrnoKHXGNKN1TTwYFQ7BWvdbhyYFdybgaK9llTFmwcVEIfz1w/4sh09Up
-         vg3A==
-X-Gm-Message-State: AOAM532li/4CbvIiUVq+/iCN5VMdPWFZoBnWSJEqD2hObO/kkPYI5wHE
-        ZtvzWRVLT2FrqiqVSzuLnTlPlPOm/7WWGCCOroQtIiiG4zOx
-X-Google-Smtp-Source: ABdhPJzyQkwRsmmFLCuJXHTJ0EzTiQU7r8wIsUdsQXOFYLMLVUzVeJrDYZvNf14ZOqXsOAQumj5EQ0RhXT6EkBXWJUxCqjUbADh+
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to;
+        bh=7Ot0KnTq6DeYLOMs0KrRgYt66byBQfvupOKuBASSZzQ=;
+        b=bC/8u8A07y/hhPdoEtB/iPvSQYFZ0yb/9PjSTXcRsqvLO3wLPNfK6TqBAcgVsCoSCm
+         rjkN0fukn8+3vfaOccovTaphgo+NvNLphNEpKNMJpE4KJcQuOZJXXLWvOXZZaWYx/ihA
+         7QE5Cfjmf2CcWwqERNIQxHu5IuOixJYJyURZH/yUB9fUQkE5hfD9JpZcjvqP/JikSfNz
+         +0LyLQETAin7zkbweq1J3+G8h1+Ep/c1RrnOQw4qOLy1fLiJo5ai3Xk8Jqh8PrC41s/8
+         M/ZKedtkYrl7m+JYn5zUGHOsRm5XAmKStaJHVRcuMtpv/vdiTqHNAUIJUsGeGZZx1fYx
+         bhWQ==
+X-Gm-Message-State: AOAM533iQmccSVTxUeRjebiiuYOI84AK5x7wjeB8rfsdb656cQ05jjfb
+        NmIOicDZS9szBMXIElvHaQ8=
+X-Google-Smtp-Source: ABdhPJw1S6q9ZdK3Mu2qhvw4J1r23ALus1F47eMtuq0+OMTfPFxY5PFStWQE1jLRkIpppIMMbxLOYg==
+X-Received: by 2002:a05:651c:201a:b0:248:3d6:86aa with SMTP id s26-20020a05651c201a00b0024803d686aamr11374808ljo.339.1647192477753;
+        Sun, 13 Mar 2022 10:27:57 -0700 (PDT)
+Received: from [192.168.1.11] ([94.103.229.107])
+        by smtp.gmail.com with ESMTPSA id u15-20020a2e2e0f000000b00247e32add6esm3329336lju.0.2022.03.13.10.27.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 13 Mar 2022 10:27:57 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------0J9d59w8SRPNvIU8fOxNB2ZF"
+Message-ID: <79d2c7e0-c4ed-fa89-5d97-4b143356f814@gmail.com>
+Date:   Sun, 13 Mar 2022 20:27:55 +0300
 MIME-Version: 1.0
-X-Received: by 2002:a5d:8552:0:b0:63d:8cae:b2ca with SMTP id
- b18-20020a5d8552000000b0063d8caeb2camr14515240ios.81.1647149725464; Sat, 12
- Mar 2022 21:35:25 -0800 (PST)
-Date:   Sat, 12 Mar 2022 21:35:25 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000473c1a05da12ee25@google.com>
-Subject: [syzbot] general protection fault in __pm_runtime_resume (2)
-From:   syzbot <syzbot+b9bd12fbed3485a3e51f@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, len.brown@intel.com,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [syzbot] general protection fault in __pm_runtime_resume (2)
+Content-Language: en-US
+To:     syzbot <syzbot+b9bd12fbed3485a3e51f@syzkaller.appspotmail.com>,
+        gregkh@linuxfoundation.org, len.brown@intel.com,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         pavel@ucw.cz, rafael@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <000000000000473c1a05da12ee25@google.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <000000000000473c1a05da12ee25@google.com>
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+This is a multi-part message in MIME format.
+--------------0J9d59w8SRPNvIU8fOxNB2ZF
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-syzbot found the following issue on:
+On 3/13/22 08:35, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    92f90cc9fe0e Merge tag 'fuse-fixes-5.17-rc8' of git://git...
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=118cd3be700000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=442f8ac61e60a75e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=b9bd12fbed3485a3e51f
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15b64e79700000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1652811a700000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+b9bd12fbed3485a3e51f@syzkaller.appspotmail.com
+> 
 
-HEAD commit:    92f90cc9fe0e Merge tag 'fuse-fixes-5.17-rc8' of git://git...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=118cd3be700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=442f8ac61e60a75e
-dashboard link: https://syzkaller.appspot.com/bug?extid=b9bd12fbed3485a3e51f
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15b64e79700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1652811a700000
+hu->serdev should be checked before passing to pm functions
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b9bd12fbed3485a3e51f@syzkaller.appspotmail.com
-
-general protection fault, probably for non-canonical address 0xdffffc0000000072: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000390-0x0000000000000397]
-CPU: 0 PID: 46 Comm: kworker/u5:0 Not tainted 5.17.0-rc7-syzkaller-00060-g92f90cc9fe0e #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: hci0 hci_cmd_work
-RIP: 0010:__pm_runtime_resume+0x45/0x170 drivers/base/power/runtime.c:1126
-Code: 44 89 ee e8 2d af 02 fd 45 85 ed 75 4e e8 a3 ab 02 fd 48 8d bd 91 03 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 03 01 00 00
-RSP: 0018:ffffc9000116fc28 EFLAGS: 00010216
-RAX: dffffc0000000000 RBX: ffff888022f8d000 RCX: 0000000000000000
-RDX: 0000000000000072 RSI: ffffffff8476148d RDI: 0000000000000391
-RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8ffc4a0f
-R10: ffffffff84761483 R11: 000000000000000a R12: 0000000000000004
-R13: 0000000000000000 R14: ffff888022f8d190 R15: ffff888022f8d128
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffc3fad2418 CR3: 000000007f4c3000 CR4: 0000000000350ef0
-Call Trace:
- <TASK>
- pm_runtime_get_sync include/linux/pm_runtime.h:420 [inline]
- h5_enqueue+0x175/0x390 drivers/bluetooth/hci_h5.c:632
- hci_uart_send_frame+0x1ee/0x6b0 drivers/bluetooth/hci_ldisc.c:286
- hci_send_frame+0x1c0/0x370 net/bluetooth/hci_core.c:2942
- hci_cmd_work+0x204/0x3c0 net/bluetooth/hci_core.c:3861
- process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
- worker_thread+0x657/0x1110 kernel/workqueue.c:2454
- kthread+0x2e9/0x3a0 kernel/kthread.c:377
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__pm_runtime_resume+0x45/0x170 drivers/base/power/runtime.c:1126
-Code: 44 89 ee e8 2d af 02 fd 45 85 ed 75 4e e8 a3 ab 02 fd 48 8d bd 91 03 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 03 01 00 00
-RSP: 0018:ffffc9000116fc28 EFLAGS: 00010216
-RAX: dffffc0000000000 RBX: ffff888022f8d000 RCX: 0000000000000000
-RDX: 0000000000000072 RSI: ffffffff8476148d RDI: 0000000000000391
-RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8ffc4a0f
-R10: ffffffff84761483 R11: 000000000000000a R12: 0000000000000004
-R13: 0000000000000000 R14: ffff888022f8d190 R15: ffff888022f8d128
-FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f989adfd718 CR3: 000000007683c000 CR4: 0000000000350ef0
-----------------
-Code disassembly (best guess):
-   0:	44 89 ee             	mov    %r13d,%esi
-   3:	e8 2d af 02 fd       	callq  0xfd02af35
-   8:	45 85 ed             	test   %r13d,%r13d
-   b:	75 4e                	jne    0x5b
-   d:	e8 a3 ab 02 fd       	callq  0xfd02abb5
-  12:	48 8d bd 91 03 00 00 	lea    0x391(%rbp),%rdi
-  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
-  20:	fc ff df
-  23:	48 89 fa             	mov    %rdi,%rdx
-  26:	48 c1 ea 03          	shr    $0x3,%rdx
-* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
-  2e:	48 89 fa             	mov    %rdi,%rdx
-  31:	83 e2 07             	and    $0x7,%edx
-  34:	38 d0                	cmp    %dl,%al
-  36:	7f 08                	jg     0x40
-  38:	84 c0                	test   %al,%al
-  3a:	0f 85 03 01 00 00    	jne    0x143
+#syz test:
+git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+
+
+With regards,
+Pavel Skripkin
+--------------0J9d59w8SRPNvIU8fOxNB2ZF
+Content-Type: text/plain; charset=UTF-8; name="ph"
+Content-Disposition: attachment; filename="ph"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvYmx1ZXRvb3RoL2hjaV9oNS5jIGIvZHJpdmVycy9ibHVl
+dG9vdGgvaGNpX2g1LmMKaW5kZXggMzQyODZmZmUwNTY4Li43YWM2OTA4YTRkZmIgMTAwNjQ0
+Ci0tLSBhL2RyaXZlcnMvYmx1ZXRvb3RoL2hjaV9oNS5jCisrKyBiL2RyaXZlcnMvYmx1ZXRv
+b3RoL2hjaV9oNS5jCkBAIC02MjksOSArNjI5LDExIEBAIHN0YXRpYyBpbnQgaDVfZW5xdWV1
+ZShzdHJ1Y3QgaGNpX3VhcnQgKmh1LCBzdHJ1Y3Qgc2tfYnVmZiAqc2tiKQogCQlicmVhazsK
+IAl9CiAKLQlwbV9ydW50aW1lX2dldF9zeW5jKCZodS0+c2VyZGV2LT5kZXYpOwotCXBtX3J1
+bnRpbWVfbWFya19sYXN0X2J1c3koJmh1LT5zZXJkZXYtPmRldik7Ci0JcG1fcnVudGltZV9w
+dXRfYXV0b3N1c3BlbmQoJmh1LT5zZXJkZXYtPmRldik7CisJaWYgKGh1LT5zZXJkZXYpIHsK
+KwkJcG1fcnVudGltZV9nZXRfc3luYygmaHUtPnNlcmRldi0+ZGV2KTsKKwkJcG1fcnVudGlt
+ZV9tYXJrX2xhc3RfYnVzeSgmaHUtPnNlcmRldi0+ZGV2KTsKKwkJcG1fcnVudGltZV9wdXRf
+YXV0b3N1c3BlbmQoJmh1LT5zZXJkZXYtPmRldik7CisJfQogCiAJcmV0dXJuIDA7CiB9Cg==
+
+
+--------------0J9d59w8SRPNvIU8fOxNB2ZF--
