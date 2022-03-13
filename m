@@ -2,204 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B344D723E
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Mar 2022 03:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA1E4D72D1
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Mar 2022 06:35:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbiCMCuG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 12 Mar 2022 21:50:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
+        id S231837AbiCMFge (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 13 Mar 2022 00:36:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232220AbiCMCuF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 12 Mar 2022 21:50:05 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193405D18E
-        for <linux-pm@vger.kernel.org>; Sat, 12 Mar 2022 18:48:58 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id s42so11339997pfg.0
-        for <linux-pm@vger.kernel.org>; Sat, 12 Mar 2022 18:48:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=fhgSeBRjxr7eJMYvRhatFMqSt04PBD/AqJddO8Zg3Cg=;
-        b=fVpQ22pFqFYfdf4fcA4R+ZNV+StDWe0ZurLugDsWrCCdPwdYXwgM1jRs7VuYhpaLeS
-         0q6OpOJSaesw3zjolTDAd6wapN0nOAWlHtuAcdvGRU3OINyYonUdpGN/TfJLO3rkDL+N
-         7GTTLSxu6WEuliFwGY2QxD9TtymOY0GXKIUzOqZcH2TiBXnOdTP1YYdqtrMOONrraaBX
-         Ing7IldQxi0sd2HFIb6ntm7u6/ykFKPZk/Z2lr2DEiursJgKKOVYPLnJ9wgYDQPygwkB
-         tZkX1OHgeX5LeXOh7sT3lJ1s33sq6CwyzvyhGGlCUx9015d+IiZVgs2dJDFWw0565Gz0
-         +GRQ==
+        with ESMTP id S229441AbiCMFge (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 13 Mar 2022 00:36:34 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2121A24BF7
+        for <linux-pm@vger.kernel.org>; Sat, 12 Mar 2022 21:35:26 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id t16-20020a92d150000000b002c799d354a8so204640ilg.9
+        for <linux-pm@vger.kernel.org>; Sat, 12 Mar 2022 21:35:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=fhgSeBRjxr7eJMYvRhatFMqSt04PBD/AqJddO8Zg3Cg=;
-        b=r5Eo4jBFc2xzOUDjcJ0+ld+7KPZwAOn8GNV3ZBlJDkcfGYPnh6ZMn5GH0FeoMFZ5do
-         qQgTonZDwDw3HOSii++OJ9KhQz/9IhYbn2iNZ068AVEhNRnqM3K49oVIX0Ieg3velLda
-         WFJTX332MGe5rHmYsjx5Wn2bdlLzmHMifBrJl1LzqH977lb7ffHf8mdy1uXmuNzvVUy0
-         EXrUXrIjJLTJr58im/5m105zMF5Igzqk1L1alH3RzUzleclIyiRi2jAAncDnSKlzMiGq
-         /rM1np76ft6QF19V52AUWIjmLvgYUvAI+jTeuo0G4cG66JMI+Vo6cPuJ4MC+ufHdoaMV
-         l1jQ==
-X-Gm-Message-State: AOAM533dcsBFJV4D6//89/YEt4aOMyj0B021tQzQVLBAPya3DWeKi0CV
-        s7CNYhnlW1GgdxbaXNqYE6/4s4sn5X5BCScPrl0=
-X-Google-Smtp-Source: ABdhPJwrTtFDh8YDVXML+CTpQ11Cq1FJGhzZMktXcviad3zWxUPnhTQhJybtKXj+943O7wpTmo5P0w==
-X-Received: by 2002:a62:1481:0:b0:4f6:38c0:ed08 with SMTP id 123-20020a621481000000b004f638c0ed08mr17791650pfu.86.1647139737604;
-        Sat, 12 Mar 2022 18:48:57 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id f21-20020a056a0022d500b004f7a420c330sm4109751pfj.12.2022.03.12.18.48.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Mar 2022 18:48:57 -0800 (PST)
-Message-ID: <622d5b99.1c69fb81.ae7fc.af1e@mx.google.com>
-Date:   Sat, 12 Mar 2022 18:48:57 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=j3QVeTqDupds0I2GmAX2joYrfRgvBoY7gI4v066BCts=;
+        b=L/PhLhEWLsvhjBLYLR4JRbvgvRa1hBaSMivNBFdcKUsabVxLDox3eV2ffUpjCW5dxF
+         42XN7fmIR/P9mU6Tj22YknylEuXi847GEy2MYAuT3KzULMFZp7yPD8xI90k7YWoYp77k
+         xJXPPA5WsOdZ2jSvXmAdsX6D0jAZ/yoM84tKEyd9ajYjF5v3hym9jYQB6i2yaiVt45Oa
+         3ciauCVEYWOvD+Q/5T7eAP5Z72Du67z3nGYWRRPT8WEMljyJ3uAApOnrZQ459DKv8MnD
+         5mBhEIsL8EscrnoKHXGNKN1TTwYFQ7BWvdbhyYFdybgaK9llTFmwcVEIfz1w/4sh09Up
+         vg3A==
+X-Gm-Message-State: AOAM532li/4CbvIiUVq+/iCN5VMdPWFZoBnWSJEqD2hObO/kkPYI5wHE
+        ZtvzWRVLT2FrqiqVSzuLnTlPlPOm/7WWGCCOroQtIiiG4zOx
+X-Google-Smtp-Source: ABdhPJzyQkwRsmmFLCuJXHTJ0EzTiQU7r8wIsUdsQXOFYLMLVUzVeJrDYZvNf14ZOqXsOAQumj5EQ0RhXT6EkBXWJUxCqjUbADh+
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v5.17-rc7-161-gbda0a27564ac
-Subject: pm/testing baseline: 52 runs,
- 3 regressions (v5.17-rc7-161-gbda0a27564ac)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:8552:0:b0:63d:8cae:b2ca with SMTP id
+ b18-20020a5d8552000000b0063d8caeb2camr14515240ios.81.1647149725464; Sat, 12
+ Mar 2022 21:35:25 -0800 (PST)
+Date:   Sat, 12 Mar 2022 21:35:25 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000473c1a05da12ee25@google.com>
+Subject: [syzbot] general protection fault in __pm_runtime_resume (2)
+From:   syzbot <syzbot+b9bd12fbed3485a3e51f@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, len.brown@intel.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        pavel@ucw.cz, rafael@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 52 runs, 3 regressions (v5.17-rc7-161-gbda0a27564ac)
+Hello,
 
-Regressions Summary
--------------------
+syzbot found the following issue on:
 
-platform            | arch  | lab          | compiler | defconfig          =
-| regressions
---------------------+-------+--------------+----------+--------------------=
-+------------
-cubietruck          | arm   | lab-baylibre | gcc-10   | multi_v7_defconfig =
-| 2          =
+HEAD commit:    92f90cc9fe0e Merge tag 'fuse-fixes-5.17-rc8' of git://git...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=118cd3be700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=442f8ac61e60a75e
+dashboard link: https://syzkaller.appspot.com/bug?extid=b9bd12fbed3485a3e51f
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15b64e79700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1652811a700000
 
-r8a77950-salvator-x | arm64 | lab-baylibre | gcc-10   | defconfig          =
-| 1          =
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b9bd12fbed3485a3e51f@syzkaller.appspotmail.com
 
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.17-rc=
-7-161-gbda0a27564ac/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.17-rc7-161-gbda0a27564ac
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      bda0a27564ac6b8ddd5972a7d630a62fde44ce51 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform            | arch  | lab          | compiler | defconfig          =
-| regressions
---------------------+-------+--------------+----------+--------------------=
-+------------
-cubietruck          | arm   | lab-baylibre | gcc-10   | multi_v7_defconfig =
-| 2          =
-
-
-  Details:     https://kernelci.org/test/plan/id/622d54e90a272bc341c62968
-
-  Results:     4 PASS, 2 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.17-rc7-161-gbda0=
-a27564ac/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-cubietruck.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.17-rc7-161-gbda0=
-a27564ac/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-cubietruck.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220228.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/622d54e90a272bc=
-341c6296c
-        failing since 26 days (last pass: v5.17-rc3-39-g9b044ca4ac33, first=
- fail: v5.17-rc4-37-gd4e043a4af96)
-        16 lines
-
-    2022-03-13T02:19:28.614281  kern  :alert : 8<--- cut here ---
-    2022-03-13T02:19:28.622371  kern  :alert : Unable to handle kernel NULL=
- pointer dereference at virtual address 000001a0
-    2022-03-13T02:19:28.634007  kern  :alert : [000001a0] *pgd=3Dbc<8>[   3=
-6.980731] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Dalert RESULT=3Dfail UNITS=3D=
-lines MEASUREMENT=3D16>   =
-
-
-  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/622d54e90a272bc=
-341c6296d
-        failing since 26 days (last pass: v5.17-rc3-39-g9b044ca4ac33, first=
- fail: v5.17-rc4-37-gd4e043a4af96)
-        58 lines
-
-    2022-03-13T02:19:28.634876  f16835
-    2022-03-13T02:19:28.643049  kern  :alert : Register r0 information: NUL=
-L pointer
-    2022-03-13T02:19:28.644959  kern  :alert : Register r1 information: non=
--slab/vmalloc memory
-    2022-03-13T02:19:28.650801  kern  :alert : Register r2 information: non=
--slab/vmalloc memory
-    2022-03-13T02:19:28.655616  kern  :alert : Register r3 information: non=
--paged memory
-    2022-03-13T02:19:28.664225  kern  :alert : Register r4 information: sla=
-b kmalloc-1k start c4ec2000 pointer offset 64 size 1024
-    2022-03-13T02:19:28.671981  kern  :alert : Register r5 information: sla=
-b task_struct start c257c400 pointer offset 0
-    2022-03-13T02:19:28.681221  kern  :alert : Register r6 information: sla=
-b kmalloc-1k start c21d2000 pointer offset 16 size 1024
-    2022-03-13T02:19:28.689573  kern  :alert : Register r7 information: sla=
-b kmalloc-1k start c4ec2000 pointer offset 128 size 1024
-    2022-03-13T02:19:28.695212  kern  :alert : Register r8 information: non=
--slab/vmalloc memory =
-
-    ... (44 line(s) more)  =
-
- =
+general protection fault, probably for non-canonical address 0xdffffc0000000072: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000390-0x0000000000000397]
+CPU: 0 PID: 46 Comm: kworker/u5:0 Not tainted 5.17.0-rc7-syzkaller-00060-g92f90cc9fe0e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: hci0 hci_cmd_work
+RIP: 0010:__pm_runtime_resume+0x45/0x170 drivers/base/power/runtime.c:1126
+Code: 44 89 ee e8 2d af 02 fd 45 85 ed 75 4e e8 a3 ab 02 fd 48 8d bd 91 03 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 03 01 00 00
+RSP: 0018:ffffc9000116fc28 EFLAGS: 00010216
+RAX: dffffc0000000000 RBX: ffff888022f8d000 RCX: 0000000000000000
+RDX: 0000000000000072 RSI: ffffffff8476148d RDI: 0000000000000391
+RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8ffc4a0f
+R10: ffffffff84761483 R11: 000000000000000a R12: 0000000000000004
+R13: 0000000000000000 R14: ffff888022f8d190 R15: ffff888022f8d128
+FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffc3fad2418 CR3: 000000007f4c3000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ pm_runtime_get_sync include/linux/pm_runtime.h:420 [inline]
+ h5_enqueue+0x175/0x390 drivers/bluetooth/hci_h5.c:632
+ hci_uart_send_frame+0x1ee/0x6b0 drivers/bluetooth/hci_ldisc.c:286
+ hci_send_frame+0x1c0/0x370 net/bluetooth/hci_core.c:2942
+ hci_cmd_work+0x204/0x3c0 net/bluetooth/hci_core.c:3861
+ process_one_work+0x9ac/0x1650 kernel/workqueue.c:2307
+ worker_thread+0x657/0x1110 kernel/workqueue.c:2454
+ kthread+0x2e9/0x3a0 kernel/kthread.c:377
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__pm_runtime_resume+0x45/0x170 drivers/base/power/runtime.c:1126
+Code: 44 89 ee e8 2d af 02 fd 45 85 ed 75 4e e8 a3 ab 02 fd 48 8d bd 91 03 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 03 01 00 00
+RSP: 0018:ffffc9000116fc28 EFLAGS: 00010216
+RAX: dffffc0000000000 RBX: ffff888022f8d000 RCX: 0000000000000000
+RDX: 0000000000000072 RSI: ffffffff8476148d RDI: 0000000000000391
+RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff8ffc4a0f
+R10: ffffffff84761483 R11: 000000000000000a R12: 0000000000000004
+R13: 0000000000000000 R14: ffff888022f8d190 R15: ffff888022f8d128
+FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f989adfd718 CR3: 000000007683c000 CR4: 0000000000350ef0
+----------------
+Code disassembly (best guess):
+   0:	44 89 ee             	mov    %r13d,%esi
+   3:	e8 2d af 02 fd       	callq  0xfd02af35
+   8:	45 85 ed             	test   %r13d,%r13d
+   b:	75 4e                	jne    0x5b
+   d:	e8 a3 ab 02 fd       	callq  0xfd02abb5
+  12:	48 8d bd 91 03 00 00 	lea    0x391(%rbp),%rdi
+  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  20:	fc ff df
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax <-- trapping instruction
+  2e:	48 89 fa             	mov    %rdi,%rdx
+  31:	83 e2 07             	and    $0x7,%edx
+  34:	38 d0                	cmp    %dl,%al
+  36:	7f 08                	jg     0x40
+  38:	84 c0                	test   %al,%al
+  3a:	0f 85 03 01 00 00    	jne    0x143
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-platform            | arch  | lab          | compiler | defconfig          =
-| regressions
---------------------+-------+--------------+----------+--------------------=
-+------------
-r8a77950-salvator-x | arm64 | lab-baylibre | gcc-10   | defconfig          =
-| 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/622d52122269e0b8a1c6297f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.17-rc7-161-gbda0=
-a27564ac/arm64/defconfig/gcc-10/lab-baylibre/baseline-r8a77950-salvator-x.t=
-xt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.17-rc7-161-gbda0=
-a27564ac/arm64/defconfig/gcc-10/lab-baylibre/baseline-r8a77950-salvator-x.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220228.1/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/622d52122269e0b8a1c62=
-980
-        new failure (last pass: v5.17-rc7-144-gcdd758e337cb) =
-
- =20
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
