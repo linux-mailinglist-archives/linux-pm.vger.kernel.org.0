@@ -2,94 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 348074D7050
-	for <lists+linux-pm@lfdr.de>; Sat, 12 Mar 2022 19:08:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 963DD4D7227
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Mar 2022 03:05:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231424AbiCLSJO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 12 Mar 2022 13:09:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60194 "EHLO
+        id S232118AbiCMCGk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 12 Mar 2022 21:06:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230184AbiCLSJN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 12 Mar 2022 13:09:13 -0500
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2B775230
-        for <linux-pm@vger.kernel.org>; Sat, 12 Mar 2022 10:08:05 -0800 (PST)
-Received: by mail-wm1-x344.google.com with SMTP id v2-20020a7bcb42000000b0037b9d960079so9450128wmj.0
-        for <linux-pm@vger.kernel.org>; Sat, 12 Mar 2022 10:08:05 -0800 (PST)
+        with ESMTP id S231222AbiCMCGj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 12 Mar 2022 21:06:39 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA4726120
+        for <linux-pm@vger.kernel.org>; Sat, 12 Mar 2022 18:05:33 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id e3so11291955pjm.5
+        for <linux-pm@vger.kernel.org>; Sat, 12 Mar 2022 18:05:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=p4GORicRfKYMmuTaUvzvYC0X6pcYWYL8sK1k4bp9fMA=;
-        b=PZ2J6F7b9xENKNRz7G3Duz9NjkVPjppLErUrSJ5LZwqNgdcF3PhwLRWlBLTg0NBuxS
-         XerSDCSm92mkPBuOsGO8irWPHUjlUjzRKWTmIzRg9jQgBtt511SeD2OrRPfvHcvnC7yr
-         UW9vC2j7oJu/T4pt98eauHAgSaseOeFLzkn7biR2kPGaebV46Tl1f/2HwpK5IT+ORaa+
-         1TOUvYcnghdk+btvODSX4Xelg0UTIOxv8rEdCdz0tCCGGE/JoSByKtOn7dF+642BehOO
-         4ZZdcKJUfls5SWaGPyGP9pKB8cojA1o1aN4fDS07euOy1XhS78gWKAz9XFyE9cJF8gSH
-         Obnw==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=T71jV/Wu/1wjs4JaWF9uvFCkZ7HyEP3fPSWpUPvlh/k=;
+        b=qZYfVcraAtG8HHRdN0o7/zOnwZYdvTa3clrQPNI08zAWeUaOeld37KXZFazSyJKoU2
+         ugRZuPqU/u3yYVegO39CRYVgkT1prvs4k/l3x9AMoT39Ch6jEO0tw3LmXO1wXeaJ/dCI
+         5/OcdY33tnkB9Ekn5pW+DnNwDWmpTejH9qPPFlVGE0+vQ3FQyjlQgcQ+mJOK6c40O4Pz
+         e8v1QUv+k+dDhuFODblceXN1A3w1C0Cq6GdNdDoyze2fEEofgtj9cXuM/B9Ms/97wSBd
+         pqbpo8a497me0Kr8UUgU55BdIFrwpVKttMUM21cdUm82HMcE768HJZ62aVZ/oDtl5J2T
+         cGjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=p4GORicRfKYMmuTaUvzvYC0X6pcYWYL8sK1k4bp9fMA=;
-        b=pgT3tufSH9aUJRoutgynxRJoL3DijGQ0KHsG1S1zUq43vRFMyY80nNDccqK0j1U5rL
-         zunDBUPiRLHKJo4Ww9k2VPeCs74PPp6Q6cdxKUEaddeqevQ/tZEZkdr6NFS56RzgfNWI
-         Oz+Qymrd4ch2dyg4q5YQ1SiSkNQXtBW+RlwlllIB1O6xr3SENsDJRYHBOscfQfK5nzmt
-         RK5jan0k4B6lkBE/+54FqYO3P2RJuwpDlOsnvxt4AENQSouiLDgJi+3nvpESmN98BOxM
-         shMNTwiTqUY+1cykT4RZHx6qLNlbCqzW4jIoZj+fGRhuVJfasWyz2g+zNZY47heEO8+H
-         p1lQ==
-X-Gm-Message-State: AOAM5336V68mn8oI+Ljwei7lnf5z0/WPzcPyLrt/svUPMGV/g2wJKGUM
-        U/TktV9DdYuMtqy80+mc/nY=
-X-Google-Smtp-Source: ABdhPJzZX1RcZQInJPb1HF2VlB+0kx0nZsFp0meB2w5DcbAgQ3xP7nOyiVeXdagj+/lcwEQdIeIHzg==
-X-Received: by 2002:a1c:6a1a:0:b0:387:5ee7:750e with SMTP id f26-20020a1c6a1a000000b003875ee7750emr11809286wmc.85.1647108484153;
-        Sat, 12 Mar 2022 10:08:04 -0800 (PST)
-Received: from DESKTOP-26CLNVD.localdomain ([197.210.71.145])
-        by smtp.gmail.com with ESMTPSA id h36-20020a05600c49a400b00382aa0b1619sm9860008wmp.45.2022.03.12.10.07.59
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Sat, 12 Mar 2022 10:08:03 -0800 (PST)
-Message-ID: <622ce183.1c69fb81.128f8.7da8@mx.google.com>
-From:   Mrs Maria Elisabeth Schaeffler <yauiliyasu019@gmail.com>
-X-Google-Original-From: Mrs Maria Elisabeth Schaeffler  <info@gmail.com>
-Content-Type: text/plain; charset="iso-8859-1"
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=T71jV/Wu/1wjs4JaWF9uvFCkZ7HyEP3fPSWpUPvlh/k=;
+        b=xZ+fadLp/coXfPAmddh5s0UDfl4Q558jUhvkUCN/xWxjdfrHoeNLG20zbdl4/1B0KM
+         X+qSI7Zi89zz1VUyS9zb8pTpcPvHnnzrfFVyFC88fVPhSjAoAC4UKN15VWzjgJpLL+v5
+         ce92ykO5dCxDaXS6ixT99wDrNwfQpdlvHG+NI2urth8Mu11y0GPp9G2d5qojIX9JM2Sa
+         r2qz1M5zOKdKDF3CalP+P6ogDUVjtHzu+rvdn/z/SYMM1o5BCDblDbEpHcsEYM197xjR
+         I0XfOpkwow7LmrxSOqw+E0rI4Oo8Yc3waRvTRzIBLrU7Rfv5s+whwWbGz+qi7dIfXu08
+         UmnQ==
+X-Gm-Message-State: AOAM531RSJtkY1eEw+wnVIB9b6sFUCvHV/LnTzmrpY+CsR+VRZbMOizb
+        4OzM0hfbWGHGL7B6zwJKjiKKrg==
+X-Google-Smtp-Source: ABdhPJzCJH3fzUQCASK+jGirgAzJZZFU1atEHSYBw/ZGsLWSTr1N+2IEJxfuovryImJCJNh5F3rKuw==
+X-Received: by 2002:a17:90b:3716:b0:1bf:691f:52ad with SMTP id mg22-20020a17090b371600b001bf691f52admr29149667pjb.202.1647137132743;
+        Sat, 12 Mar 2022 18:05:32 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id d9-20020a056a0010c900b004f774c13e96sm11394650pfu.19.2022.03.12.18.05.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Mar 2022 18:05:32 -0800 (PST)
+Message-ID: <622d516c.1c69fb81.5dd27.d3a3@mx.google.com>
+Date:   Sat, 12 Mar 2022 18:05:32 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Spende
-To:     Recipients <info@gmail.com>
-Date:   Sat, 12 Mar 2022 10:07:55 -0800
-Reply-To: mariaelisabethschaeffler88@gmail.com
-X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        HK_NAME_FM_MR_MRS,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v5.17-rc7-161-gbda0a27564ac
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.17-rc7-161-gbda0a27564ac)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.17-rc7-161-gb=
+da0a27564ac)
 
-Hallo,
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+17-rc7-161-gbda0a27564ac/
 
-Ich bin Frau Maria Elisabeth Schaeffler, eine deutsche Wirtschaftsmagnatin,=
- Investorin und Philanthropin. Ich bin der Vorsitzende von Wipro Limited. I=
-ch habe 25 Prozent meines pers=F6nlichen Verm=F6gens f=FCr wohlt=E4tige Zwe=
-cke ausgegeben. Und ich habe auch versprochen, die restlichen 25% dieses Ja=
-hr 2022 an Einzelpersonen zu verschenken. Ich habe mich entschieden, 1.500.=
-000,00 Euro an Sie zu spenden. Wenn Sie an meiner Spende interessiert sind,=
- kontaktieren Sie mich f=FCr weitere Informationen.
+Tree: pm
+Branch: testing
+Git Describe: v5.17-rc7-161-gbda0a27564ac
+Git Commit: bda0a27564ac6b8ddd5972a7d630a62fde44ce51
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-Unter folgendem Link k=F6nnen Sie auch mehr =FCber mich lesen
+Warnings Detected:
 
-https://www.forbes.com/profile/maria-elisabeth-schaeffler-thumann/#443b4a6e=
-19c7
+arc:
 
-Gr=FC=DFe
-Gesch=E4ftsf=FChrer Wipro Limited
-Maria-Elisabeth_Schaeffler
-Email:mariaelisabethschaeffler88@gmail.com
+arm64:
 
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
