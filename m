@@ -2,125 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A1B74D8A24
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Mar 2022 17:50:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8004D8BD5
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Mar 2022 19:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbiCNQvc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Mar 2022 12:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
+        id S243906AbiCNSgU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Mar 2022 14:36:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231164AbiCNQva (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Mar 2022 12:51:30 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA53C31DDC
-        for <linux-pm@vger.kernel.org>; Mon, 14 Mar 2022 09:50:20 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 4BFC01F43240
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1647276619;
-        bh=k1zEXzPkCMVXLTAeMQVGFC3yHQ/z79DcaBFLf3pgYOQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ADOHMCGBPDxelnx6OcPXB7EabjhGz9thhE7sOzwj+E2eXwHDnevOvMYR2xUNMuXna
-         zNWgTLO7AgDvob9JbOE6++GqO2XGiKk094OWDTacGYnpWKORPJ+ag6kvOBCtGZ32CZ
-         IV7GWEWe7mlSnmRC5mAIZkuyX5echG/5BPfXM54AwK5mQA0XsmOcf3D2a2mUpTWWWk
-         MWpptdF7J1CKIXdk5848DW0kKbCI8OUWuRK+tjzSKTorj3wo+0dQ+hho9uYX7NF5TZ
-         Bpwg1Y80RgcuWGeGcv8vwxXFF9PZO2lMIk2m4dFZBj/Ao+HAcDT9O6V3xv+hSDVEwa
-         ref2KAhqanMPA==
-Received: by mercury (Postfix, from userid 1000)
-        id 46A90106025D; Mon, 14 Mar 2022 17:50:17 +0100 (CET)
-Date:   Mon, 14 Mar 2022 17:50:17 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Marcus Cooper <codekipper@gmail.com>, linux-pm@vger.kernel.org,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Subject: Re: [PATCH] power: supply: Add missing charge restart voltages
-Message-ID: <20220314165017.icee2kqc3wmtudfk@mercury.elektranox.org>
-References: <20220305232420.201726-1-linus.walleij@linaro.org>
+        with ESMTP id S243905AbiCNSgS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Mar 2022 14:36:18 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35493EA9D;
+        Mon, 14 Mar 2022 11:35:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647282907; x=1678818907;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=uGjJrAPj26i3gB3nwOfJJbnYbtIQpt9SBZFoTdHol64=;
+  b=bj3lfT0iVvrBdTspiXL76aWJ6duyO0exReN8EWMzMaz7byw3JnyLa4Lm
+   tfxRBMG42n+jd7OKkJbHoVtN27VL3XMToWF9XH0Zzy+HWQMtNqYqzaUXS
+   inQS8p7Jth0kqDrRPbjpnrMBp95OPkxqI1xiif4IfPlXBQxFr03l4epWs
+   NOA9dLr5thOxhvZ8xZKDtBB9LqnelFbT8peMkU4Rx8OOqJMy5j9C5Vsx0
+   WR9upS/99yONGjd5TzCFt0rr+iN+0eL98CTdBfG6BlG+ghsjgDg9TXh0G
+   eLSTkAUPIHsGBV+q3J3alPKnAlYcd6Ur6CBiNh/tCc8k0UinHDlucF5Qs
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="256067006"
+X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
+   d="scan'208";a="256067006"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 11:35:07 -0700
+X-IronPort-AV: E=Sophos;i="5.90,181,1643702400"; 
+   d="scan'208";a="713849153"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2022 11:35:07 -0700
+Message-ID: <00654dae7f6b95533a66055ea125ddb640efd7fd.camel@linux.intel.com>
+Subject: Re: [PATCH] thermal: int340x: Increase bitmap size
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     David Laight <David.Laight@ACULAB.COM>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "amitk@kernel.org" <amitk@kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "matthewgarrett@google.com" <matthewgarrett@google.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Date:   Mon, 14 Mar 2022 11:35:07 -0700
+In-Reply-To: <c23d75b4e9164094bcc488c0ba9e0d77@AcuMS.aculab.com>
+References: <20220314145017.928550-1-srinivas.pandruvada@linux.intel.com>
+         <c23d75b4e9164094bcc488c0ba9e0d77@AcuMS.aculab.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="plibiikfgj7ivez4"
-Content-Disposition: inline
-In-Reply-To: <20220305232420.201726-1-linus.walleij@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, 2022-03-14 at 15:28 +0000, David Laight wrote:
+> From: Srinivas Pandruvada
+> > Sent: 14 March 2022 14:50
+> > 
+> > The number of policies are 10, so can't be supported by the bitmap
+> > size
+> > of u8. Even though there are no platfoms with these many policies,
+> > but
+> > as correctness increase to u16.
+> 
+> You might as well just use 'unsigned int'.
+> May generate better code and there is still padding
+> in the structure.
+Correct. I can update the patch.
 
---plibiikfgj7ivez4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks,
+Srinivas
 
-Hi,
+> 
+>         David
+> 
+> > 
+> > Signed-off-by: Srinivas Pandruvada <
+> > srinivas.pandruvada@linux.intel.com>
+> > Fixes: 16fc8eca1975 ("thermal/int340x_thermal: Add additional
+> > UUIDs")
+> > Cc: stable@vger.kernel.org
+> > ---
+> >  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git
+> > a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> > b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> > index 72acb1f61849..c2d3df302214 100644
+> > --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> > +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> > @@ -53,7 +53,7 @@ struct int3400_thermal_priv {
+> >         struct art *arts;
+> >         int trt_count;
+> >         struct trt *trts;
+> > -       u8 uuid_bitmap;
+> > +       u16 uuid_bitmap;
+> >         int rel_misc_dev_res;
+> >         int current_uuid_index;
+> >         char *data_vault;
+> > --
+> > 2.31.1
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes,
+> MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+> 
 
-On Sun, Mar 06, 2022 at 12:24:20AM +0100, Linus Walleij wrote:
-> Two of the batteries were missing charging restart voltages,
-> meaning they can drain if the algorithm relies on restarting
-> charging at this voltage. Fix it up.
->=20
-> Fixes: c8aee3f41cb8 ("power: supply: Static data for Samsung batteries")
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
 
-Thanks, queued.
-
--- Sebastian
-
->  drivers/power/supply/samsung-sdi-battery.c | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/drivers/power/supply/samsung-sdi-battery.c b/drivers/power/s=
-upply/samsung-sdi-battery.c
-> index 9d59f277f519..b33daab798b9 100644
-> --- a/drivers/power/supply/samsung-sdi-battery.c
-> +++ b/drivers/power/supply/samsung-sdi-battery.c
-> @@ -824,6 +824,7 @@ static struct samsung_sdi_battery samsung_sdi_batteri=
-es[] =3D {
->  			.constant_charge_current_max_ua =3D 900000,
->  			.constant_charge_voltage_max_uv =3D 4200000,
->  			.charge_term_current_ua =3D 200000,
-> +			.charge_restart_voltage_uv =3D 4170000,
->  			.maintenance_charge =3D samsung_maint_charge_table,
->  			.maintenance_charge_size =3D ARRAY_SIZE(samsung_maint_charge_table),
->  			.alert_low_temp_charge_current_ua =3D 300000,
-> @@ -867,6 +868,7 @@ static struct samsung_sdi_battery samsung_sdi_batteri=
-es[] =3D {
->  			.constant_charge_current_max_ua =3D 1500000,
->  			.constant_charge_voltage_max_uv =3D 4350000,
->  			.charge_term_current_ua =3D 120000,
-> +			.charge_restart_voltage_uv =3D 4300000,
->  			.maintenance_charge =3D samsung_maint_charge_table,
->  			.maintenance_charge_size =3D ARRAY_SIZE(samsung_maint_charge_table),
->  			.alert_low_temp_charge_current_ua =3D 300000,
-> --=20
-> 2.35.1
->=20
-
---plibiikfgj7ivez4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmIvckMACgkQ2O7X88g7
-+prU1BAAjCcowsClR928xPcdO/gatiOFdHoGO83noa1jZ/87phvnHaUAnInoTcXU
-+b16obENf4NqsTrcqbcJXy1bhssx30XoguUAu/oxVmWpZcY4GDuANUj92Aw0Q04J
-v1CzTL/wCh3VON6r5OUsudc/+sB63R4Ts0Oomkl777eV+g1AfBSNNjYJN9PawABQ
-7c0SaRJXw5rQCgdJEWoeD0eB4I08KyRmCSRLuaVCfAnsafkK9+0UttowymGvUzDo
-HcZ8Qz1469EfF+JgY28vP5om1GewVk7m0JrnevID6zWit5MHJ2uX7E/8Pvz7OWxd
-G2zG81VTuQYjyDwJ580+k8i5c6fGyd+CYBMg18nOSQN1PUgLViigrT0XzgrI3wIJ
-RkEYCuCoDE6XvFklR532nx32Y7oeZerYLzEkiOTfuthEjHPmfyv7zPVuM5LzLAbr
-ariz+cQWZ99yKKxIvHVcMaklS7+shlUEFFCqKH900/IIJicFQVzBs2woAz1E+H03
-OP5kcV7UvZXemVAa8eKULQpjDIskkt0YMdViCJYzTGPN8tjdPaGOseaWFyMOUKAj
-iSoxW4PUC+ScXMb5aB+dc1MDUr3kj5wTeA6c8YZNiTerDWx/mD1Y7kHvHjQNCAny
-95ekZz1z20L6H1SabiZW+YTIUVDYWnZoSrHSJGO+XJqhBg4uoGo=
-=SEwx
------END PGP SIGNATURE-----
-
---plibiikfgj7ivez4--
