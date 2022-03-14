@@ -2,95 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A1364D7FAE
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Mar 2022 11:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26BD84D8622
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Mar 2022 14:41:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238477AbiCNKTS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Mar 2022 06:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
+        id S241982AbiCNNmg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Mar 2022 09:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238468AbiCNKTR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Mar 2022 06:19:17 -0400
-Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3E12409C
-        for <linux-pm@vger.kernel.org>; Mon, 14 Mar 2022 03:18:07 -0700 (PDT)
-Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-2db569555d6so156347797b3.12
-        for <linux-pm@vger.kernel.org>; Mon, 14 Mar 2022 03:18:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=s9IGPqOTuFEFxKMxMPq1P/MfyJrhGXNasZNiCUUGkGw=;
-        b=QLLsRy/dmyqoI0RxbutlRZI/KB6PQe9IvOCU+8CAeBQGMyqmF6/tAgeCdcEdZZWTQR
-         +lM4dx52NBCcTyQ2m0WfXEwW0vNy/Q2h5+2c+HanumuiwHWZmSKPKFlw44pXKTJtml+R
-         dwkeF3hAq1OG1XPpJqiioazUaaQX+JYj0dZPXjKsK11KQt1mm6NBeApJvW01vlTwCTmr
-         0zavqxu3N8bMBLwVdJob1TzN3h9Ad2e2PR9EIiqawtuU/tja8f0QInngMnTjQrwOBH97
-         yAIfAPxmHT/edHFTmHy/X6VQzKIXHrAJ5+snD7BUcPM2WrhmxfSgG3hq1NGxgIWRcIi2
-         0/fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=s9IGPqOTuFEFxKMxMPq1P/MfyJrhGXNasZNiCUUGkGw=;
-        b=cz2tt1vUrWeK+AXxKGomSvK1E+pvMxY/j7GjY3Jjg0ZyG2+JMQE5iLDp0vrbNOsNGu
-         Vilyjv0F3nPDKUlFoBK+qNeGilNB9YEP3T1P3P3BgxeBNmGWNViqmPF+0yYO+p/yr55K
-         Ng5HCn0AhD+6vEnFf24D3ms/DqtP3pJO343Yvj6YzwozXEO3mri3fc1ecnXwyEiYiG/R
-         IlNMTwsBMxZnGCphf3U9r03gXZmHTOA8oUUjQy3QtJx6s+Bn/rg9AFTNMNTHxHk19tS8
-         hjZJWWL/e+hDT3yKWW39Re/ZT3YdDCd4n0c+Uu7o1k08NrzUkOI7df+4+oNoCFzM8tkb
-         y1/w==
-X-Gm-Message-State: AOAM5304OSEM9AMWZ6iAiqZUMnaU8lB8DstNSSLBOAQw84bK1v2ppcqb
-        0ki9j14MDfFEFu3PrKvNhqvSkCGuV5omSezqBB8=
-X-Google-Smtp-Source: ABdhPJxt3sbAxxrwf4Yfrv8UBK0gVaHR239NIWyNSkIxk2Sc5EP6VOe5GgMUyXsnR38oFmRN2oH1ymMI9cBZdKCj6G0=
-X-Received: by 2002:a81:738a:0:b0:2dc:2bf4:76b0 with SMTP id
- o132-20020a81738a000000b002dc2bf476b0mr17333592ywc.296.1647253085893; Mon, 14
- Mar 2022 03:18:05 -0700 (PDT)
+        with ESMTP id S241979AbiCNNmf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Mar 2022 09:42:35 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D48FDBC16;
+        Mon, 14 Mar 2022 06:41:25 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7BCC1ED1;
+        Mon, 14 Mar 2022 06:41:25 -0700 (PDT)
+Received: from [10.57.21.234] (unknown [10.57.21.234])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 394C03F7D7;
+        Mon, 14 Mar 2022 06:41:24 -0700 (PDT)
+Message-ID: <8529a647-6127-539f-20ba-271be293fe2f@arm.com>
+Date:   Mon, 14 Mar 2022 13:41:22 +0000
 MIME-Version: 1.0
-Received: by 2002:a05:7000:664e:0:0:0:0 with HTTP; Mon, 14 Mar 2022 03:18:05
- -0700 (PDT)
-Reply-To: lawrencetansanco.y@gmail.com
-From:   Lawrence Tansanco Yacouba <ltansancoy@gmail.com>
-Date:   Mon, 14 Mar 2022 10:18:05 +0000
-Message-ID: <CAK5Y89B_nM=NB3F74FU=OkW46S8+sqUpfZMbv5ei+DSF9F90LA@mail.gmail.com>
-Subject: THANKS FOR YOUR RESPONSE AND GOD BLESS
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1141 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4223]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [ltansancoy[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] thermal: devfreq_cooling: use local ops instead of global
+ ops
+Content-Language: en-US
+To:     Kant Fan <kant@allwinnertech.com>
+Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "supporter:THERMAL" <rafael@kernel.org>,
+        "supporter:THERMAL" <daniel.lezcano@linaro.org>
+References: <20220312045922.9779-1-kant@allwinnertech.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220312045922.9779-1-kant@allwinnertech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-.
-I will like to disclose something very important to you,
-get back for more details please.
+Hi Kant,
 
-Regards.
-Mr Lawrence Tansanco Y.
+On 3/12/22 04:59, Kant Fan wrote:
+> Fix access illegal address problem in following condition:
+> There are muti devfreq cooling devices in system, some of them has
+> em model but other does not, energy model ops such as state2power will
+> append to global devfreq_cooling_ops when the cooling device with
+> em model register. It makes the cooling device without em model
+> also use devfreq_cooling_ops after appending when register later by
+> of_devfreq_cooling_register_power() or of_devfreq_cooling_register().
+> 
+> IPA governor regards the cooling devices without em model as a power actor
+> because they also have energy model ops, and will access illegal address
+> at dfc->em_pd when execute cdev->ops->get_requested_power,
+> cdev->ops->state2power or cdev->ops->power2state.
+> 
+> Signed-off-by: Kant Fan <kant@allwinnertech.com>
+
+Thank you for finding this issue. This was also an issue since the
+beginning of that code. The modified global ops after first registration
+which went through, was also previously there. Thus, we would need two
+different patches for stable kernels.
+
+For this one, please add the tag:
+Fixes: 615510fe13bd2 ("thermal: devfreq_cooling: remove old power model 
+and use EM")
+
+This patch would also go via stable tree for kernels v5.11+
+Please read the process how to send a patch which will be merged to the
+stable tree.
+
+There will be a need to create another patch(es) for stable kernels with
+Fixes: a76caf55e5b35 ("thermal: Add devfreq cooling")
+In those kernels also the global ops is modified and might not support
+properly many cooling devices. It's present in other stable kernels:
+v5.10 and older
+
+> ---
+>   drivers/thermal/devfreq_cooling.c | 25 ++++++++++++++++++-------
+>   1 file changed, 18 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
+> index 4310cb342a9f..d38a80adec73 100644
+> --- a/drivers/thermal/devfreq_cooling.c
+> +++ b/drivers/thermal/devfreq_cooling.c
+> @@ -358,21 +358,28 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
+>   	struct thermal_cooling_device *cdev;
+>   	struct device *dev = df->dev.parent;
+>   	struct devfreq_cooling_device *dfc;
+> +	struct thermal_cooling_device_ops *ops;
+>   	char *name;
+>   	int err, num_opps;
+>   
+> -	dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
+> -	if (!dfc)
+> +	ops = kmemdup(&devfreq_cooling_ops, sizeof(*ops), GFP_KERNEL);
+> +	if (!ops)
+>   		return ERR_PTR(-ENOMEM);
+>   
+> +	dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
+> +	if (!dfc) {
+> +		err = -ENOMEM;
+> +		goto free_ops;
+> +	}
+> +
+>   	dfc->devfreq = df;
+>   
+>   	dfc->em_pd = em_pd_get(dev);
+>   	if (dfc->em_pd) {
+> -		devfreq_cooling_ops.get_requested_power =
+> +		ops->get_requested_power =
+>   			devfreq_cooling_get_requested_power;
+> -		devfreq_cooling_ops.state2power = devfreq_cooling_state2power;
+> -		devfreq_cooling_ops.power2state = devfreq_cooling_power2state;
+> +		ops->state2power = devfreq_cooling_state2power;
+> +		ops->power2state = devfreq_cooling_power2state;
+>   
+>   		dfc->power_ops = dfc_power;
+>   
+> @@ -407,8 +414,7 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
+>   	if (!name)
+>   		goto remove_qos_req;
+>   
+> -	cdev = thermal_of_cooling_device_register(np, name, dfc,
+> -						  &devfreq_cooling_ops);
+> +	cdev = thermal_of_cooling_device_register(np, name, dfc, ops);
+>   	kfree(name);
+>   
+>   	if (IS_ERR(cdev)) {
+> @@ -429,6 +435,8 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
+>   	kfree(dfc->freq_table);
+>   free_dfc:
+>   	kfree(dfc);
+> +free_ops:
+> +	kfree(ops);
+>   
+>   	return ERR_PTR(err);
+>   }
+> @@ -510,11 +518,13 @@ EXPORT_SYMBOL_GPL(devfreq_cooling_em_register);
+>   void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
+>   {
+>   	struct devfreq_cooling_device *dfc;
+> +	const struct thermal_cooling_device_ops *ops;
+>   	struct device *dev;
+>   
+>   	if (IS_ERR_OR_NULL(cdev))
+>   		return;
+>   
+> +	ops = cdev->ops;
+>   	dfc = cdev->devdata;
+>   	dev = dfc->devfreq->dev.parent;
+>   
+> @@ -525,5 +535,6 @@ void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
+>   
+>   	kfree(dfc->freq_table);
+>   	kfree(dfc);
+> +	kfree(ops);
+>   }
+>   EXPORT_SYMBOL_GPL(devfreq_cooling_unregister);
+
+The fix looks good.
