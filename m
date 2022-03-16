@@ -2,190 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C52CA4DB565
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Mar 2022 16:55:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 246844DB587
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Mar 2022 17:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237175AbiCPP4R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Mar 2022 11:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46086 "EHLO
+        id S233127AbiCPQBx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Mar 2022 12:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349797AbiCPP4Q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Mar 2022 11:56:16 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534B35F4F4
-        for <linux-pm@vger.kernel.org>; Wed, 16 Mar 2022 08:55:01 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id bt26so4496970lfb.3
-        for <linux-pm@vger.kernel.org>; Wed, 16 Mar 2022 08:55:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0EYkX4OrgX9G0X3AG2Wag8hm+nxpE2bVqqRm3L6i8KU=;
-        b=X4V6d71Z+o3yHU6jsMGOnOs1l4SnXePD21qxL8FO/HAn4B9itZa0GEJpNk5Md2vsbc
-         t10a4tckKckt+4zp+PVYNKklta6/Fqtxw0RrMqU/DqIG2uLR3HfmpBrYj6yvze8nYM4q
-         /blC02pPYO8RoiPNpYmbqoElsL5GtfVvmr+8BYJZ05YDjojAMskc7EqI0U0yrKbExx3Y
-         uC01etZImdpNVswfpsWHLhcd99hFksZciuiD5JlMIjnnXjq743I70OtoFhZ1FAtta57C
-         apP1a5yAjK1dIUxW1bU3WT8kVkRQIe5A0Xss1juRM6+hJkJmzPl8ADqFK+tg76kyVRux
-         p3Xg==
+        with ESMTP id S234320AbiCPQBw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Mar 2022 12:01:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7152C3FD9E
+        for <linux-pm@vger.kernel.org>; Wed, 16 Mar 2022 09:00:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647446436;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fpm1syxt/668a84vrAP57Sr17b94ynmh10cvSiUgK9Q=;
+        b=L/CFSx4HyNpnxT0ci68eG1XP6fU/2si17A++fQ5XtDofu8nEll0hzHNA7Y77esFVROcSuG
+        SLGvM5dYWxjV6W022lK8ynYykpdOnyyAeylA5BSjWFMMUvwPVwleiu5IGPIlUXrx1Aw/9Q
+        EI7OYjsXl8llSY3JPXwwrncEKOpqMCs=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-631-OEWYYviNN5Ss7FlfMJB0LA-1; Wed, 16 Mar 2022 12:00:33 -0400
+X-MC-Unique: OEWYYviNN5Ss7FlfMJB0LA-1
+Received: by mail-ej1-f70.google.com with SMTP id de35-20020a1709069be300b006df795e2326so1419177ejc.2
+        for <linux-pm@vger.kernel.org>; Wed, 16 Mar 2022 09:00:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0EYkX4OrgX9G0X3AG2Wag8hm+nxpE2bVqqRm3L6i8KU=;
-        b=Gp38/s3WexHDDBF9a8Mse8r07sTmZbduGNPerYzca8AyrYE536DdYWCuTbO0fQ+pgO
-         Ilv8UJ/6jeVJUjeXGh7UnRaK6QRPwbaAFXMHK5vCaUywDPxFCS7nyUfinOSB60HVdJHT
-         sP0wlB5PDqDWprqADt+EZ0ETFnY5JyrzPy/WTwIdJTBQ7sR/Lc04/kSf3CtnyBOT7DZK
-         ISIdG6UP9l2Ovy6fcVYeRXtWLa7VkAG9835z1O3ds4pSHYpPWV1sBlCOyqznlYpegyNs
-         ov0+FKBw1/6o2hCRj8sI5rGDYHCrgt+ngfZE5NVtXdSklH1MW1lt4LUe/mhK/8m/lFdJ
-         lfVA==
-X-Gm-Message-State: AOAM533YAPVI4Y99vZ6hvUXhJLUiXlg4UM662C2H18YxToJDnW7QcQgU
-        bnd8eAwGA3ZQym1x8mb8WscWUB2AJGyZRjHu6tYhVQ==
-X-Google-Smtp-Source: ABdhPJxAolH424hnpalorlNlWs7el4f9vGqR1z98yQ3ROpR4cD31bao3Sq9I3mTl2sYad4i6P8NBLjkTC/72H4aieYc=
-X-Received: by 2002:a05:6512:10d4:b0:448:9691:435e with SMTP id
- k20-20020a05651210d400b004489691435emr149205lfg.465.1647446098666; Wed, 16
- Mar 2022 08:54:58 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fpm1syxt/668a84vrAP57Sr17b94ynmh10cvSiUgK9Q=;
+        b=6mJPRWfwtmxqr794coS5TMZk3hP9A2MKNk9uwh6FSqk8KOYeqSrAil5r2nyYReFs8n
+         ugb+UthR6kx72p+rD8nYXEit0T6yvfuAcr1pjeQ/BtN53dGfL9LLTX8uvShugRcRdAyz
+         EIfxzhwQgsSJ9cKDil4IPvF68EN7NStA0v1ghOvOcOvVGbBS3xbXsPCOBZsJk4OPzIks
+         J8ifFT97xgtM6ZaqhHQGxvEyC37gIV3gc25bL8+MiXAsPnZi1uEgykfG5VdP/zYj+kbe
+         Hb3UwhMAVzQUSkn1nV+LqLk2w15W9oahD2rQJ1wzMtUD1MnuYIG3B25HRRXSam3WnkEr
+         wv4Q==
+X-Gm-Message-State: AOAM531lIN9KrMU53c6hycLjs8MtBTnAcxDjPSSzVGi97ZT8+RlIvvYN
+        CxeULS8pi6IZJbkU44fjQ4zD8om66OKPTiXqhYfDt2ps/Vt/YqQaUi8aBn3hDcfcREBbfTNUlDp
+        8CdnSUNzX0UuPkx2V8bI=
+X-Received: by 2002:a17:907:7f23:b0:6de:6ac2:93c with SMTP id qf35-20020a1709077f2300b006de6ac2093cmr575137ejc.462.1647446431952;
+        Wed, 16 Mar 2022 09:00:31 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwlB7LYYCh9S/mTWzBMqQ7g5VxJEALZHNJjeZJne97yd3oQfZ+UdtxkWSZrNaP55HxNrbBWUw==
+X-Received: by 2002:a17:907:7f23:b0:6de:6ac2:93c with SMTP id qf35-20020a1709077f2300b006de6ac2093cmr575116ejc.462.1647446431725;
+        Wed, 16 Mar 2022 09:00:31 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:cdb2:2781:c55:5db0? (2001-1c00-0c1e-bf00-cdb2-2781-0c55-5db0.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:cdb2:2781:c55:5db0])
+        by smtp.gmail.com with ESMTPSA id h30-20020a056402095e00b00412b81dd96esm1173739edz.29.2022.03.16.09.00.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Mar 2022 09:00:31 -0700 (PDT)
+Message-ID: <b559b406-006e-05e6-6378-4665ff721666@redhat.com>
+Date:   Wed, 16 Mar 2022 17:00:30 +0100
 MIME-Version: 1.0
-References: <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
- <CAAYoRsW4LqNvSZ3Et5fqeFcHQ9j9-0u9Y-LN9DmpCS3wG3+NWg@mail.gmail.com>
- <20220228041228.GH4548@shbuild999.sh.intel.com> <11956019.O9o76ZdvQC@kreacher>
- <20220301055255.GI4548@shbuild999.sh.intel.com> <CAJZ5v0jWUR__zn0=SDDecFct86z-=Y6v5fi37mMyW+zOBi7oWw@mail.gmail.com>
- <CAAYoRsVLOcww0z4mp9TtGCKdrgeEiL_=FgrUO=rwkZAok4sQdg@mail.gmail.com>
- <CAJZ5v0hK4zoOtgNQNFkJHC0XOiGsPGUPphHU5og44e_K4kGU9g@mail.gmail.com>
- <CAAYoRsWN-h+fBAoocGmUFHDkOv2PL+6U59_ASBYH74j0orHaCQ@mail.gmail.com>
- <CAJZ5v0iOOmRY3uC1-ZGQ30VysMuAjGum=Lt4tkqNUjop+ikqZw@mail.gmail.com>
- <CAAYoRsVs_CB-dBGShksmXATRP3oGnD6uU-xQdSPjkRER+j6fTQ@mail.gmail.com> <CAAYoRsVnPa-aiKCju7Nz+cznyOo2sbioFks+gU7W7dqWyO8JJw@mail.gmail.com>
-In-Reply-To: <CAAYoRsVnPa-aiKCju7Nz+cznyOo2sbioFks+gU7W7dqWyO8JJw@mail.gmail.com>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Wed, 16 Mar 2022 08:54:47 -0700
-Message-ID: <CAAYoRsU=SjE2zpQPjxrE6aDzEk6+AZy9DUAJ4Vv2qimbiJ2ySQ@mail.gmail.com>
-Subject: Re: CPU excessively long times between frequency scaling driver calls
- - bisected
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        dsmythies <dsmythies@telus.net>,
-        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Feng Tang <feng.tang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: Many reports of laptops getting hot while suspended with kernels
+ >= 5.16.10 || >= 5.17-rc1
+Content-Language: en-US
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        Justin Forbes <jmforbes@linuxtx.org>,
+        Mark Pearson <markpearson@lenovo.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+References: <31b9d1cd-6a67-218b-4ada-12f72e6f00dc@redhat.com>
+ <CAJZ5v0hQifvD+U8q1O7p_5QeicG_On4=CrgNj0RsbPSbkY8Hww@mail.gmail.com>
+ <ad3b77f8-7e75-1dfa-8ee4-1077336911aa@redhat.com>
+ <CAJZ5v0js8Vr7dW09WGyR_JTn4kMybDhaTWt4yziqwSM+oAXUNA@mail.gmail.com>
+ <CAJZ5v0imJfOp-Uw=tH2dimSQzb-EgHu_yEU_0LScmrQ43t3pbw@mail.gmail.com>
+ <c9a1adb5-17b7-c7ed-d23f-6b6523a4771a@redhat.com>
+ <CAJZ5v0gB2ZCWe3MeGnw6_CNu_Ds0QEPZ6X6jnA7dQbZe6gKZ8w@mail.gmail.com>
+ <5fb0cbe8-5f9d-1c75-ae0a-5909624189d3@redhat.com>
+ <ce781d92-f269-aaf5-1733-25de85f05b7b@amd.com>
+ <CAJZ5v0irKgmSQ7YegP=US1ACUfqVMCNitu2azMbMAqm2f+cXTg@mail.gmail.com>
+ <BL1PR12MB51572AA41E116C59FE0D5698E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <BL1PR12MB51572AA41E116C59FE0D5698E2119@BL1PR12MB5157.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Readers: So that graphs and large attachments could be used, I have
-been on an off-list branch of this thread with Srinivas, and copied a
-couple of others. While now returning to this on-list thread, I'll
-only take up Rafael's proposed patch.
+Hi,
 
-Hi Rafael,
+On 3/16/22 14:37, Limonciello, Mario wrote:
+> [Public]
+> 
+>>> Just FWIW this fix that was backported to stable also fixed keyboard
+>>> wakeup from s2idle on a number of HP laptops too.  I know for sure that
+>>> it fixed it on the AMD versions of them, and Kai Heng Feng suspected it
+>>> will also fix it for the Intel versions.  So if there is another commit
+>>> that can be backported from 5.17 to make it safer for the other systems,
+>>> I think we should consider doing that to solve it too.
+>>
+>> There is a series of ACPI EC driver commits that are present in
+>> 5.17-rc, but have not been included in any "stable" series:
+>>
+>> befd9b5b0c62 ACPI: EC: Relocate acpi_ec_create_query() and drop
+>> acpi_ec_delete_query()
+>> c33676aa4824 ACPI: EC: Make the event work state machine visible
+>> c793570d8725 ACPI: EC: Avoid queuing unnecessary work in
+>> acpi_ec_submit_event()
+>> eafe7509ab8c ACPI: EC: Rename three functions
+>> a105acd7e384 ACPI: EC: Simplify locking in acpi_ec_event_handler()
+>> 388fb77dcf97 ACPI: EC: Rearrange the loop in acpi_ec_event_handler()
+>> 98d364509d77 ACPI: EC: Fold acpi_ec_check_event() into
+>> acpi_ec_event_handler()
+>> 1f2350443dd2 ACPI: EC: Pass one argument to acpi_ec_query()
+>> ca8283dcd933 ACPI: EC: Call advance_transaction() from
+>> acpi_ec_dispatch_gpe()
+>>
+>> It is likely that they prevent the problem exposed by the problematic
+>> commit from occurring, but I'm not sure which ones do that.  Some of
+>> them are clearly cosmetic, but the ordering matters.
+> 
+> Hans,
+> 
+> Do you think you could get one of the folks who reported this regression to do
+> a bisect to see which one "fixed" it?
 
-So far all work has been done with: HWP disabled; intel_pstate; powersave.
-The reason was that it is, by far, the best way to obtain good trace data
-using the intel_pstate_tracer.py utility.
+We already know which commit is causing the regression. As Rafael already
+said the question is why things are not broken in 5.17 and that is not
+a straight forward bisect. So figuring this out is going to be a lot
+of work and I'm not sure of that it is worth it. I certainly don't
+have time to help users with debugging this.
 
-I always intended to try/test: HWP disabled; intel_cpufreq; schedutil.
-There is an issue with the proposed patch and schedutil.
+> If we get lucky we can come down to
+> some smaller hunks of code that can come back to stable instead of reverting.
 
-If any CPU ever requests a pstate > the max non turbo pstate
-then it will stay at that request forever. Ultimately the idle
-power goes to about 5.7 watts (verses 1.4 watts expected).
-IRQs go very high, as the tick never turns off.
-Actually, one knows how many CPUs are stuck requesting a high
-pstate just by looking at IRQs.
+5.17 is almost done and in a couple of weeks Fedora (and Arch and other
+distros tracking the mainline kernel) will move to 5.17 resolving the
+wakeup by keyboard issue not working there.
 
-Trace is useless because it virtually never gets called.
-So I have been reading the IA32_PERF_CTL MSR
-directly.
+5.16 is not a LTS kernel, so for other distros we would at a minimum
+figure out what needs to be backported to make things work with 5.15
+making the delta / set of possible patches we need even bigger.
+So as already said IMHO this is not worth it, at least assuming that
+nothing bad happens when attempting wakeup by keyboard, iow it
+just does not work and does not put the laptop in some bad state?
 
-Example:
+Regards,
 
-Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
-6 cores, 12 CPUs
-min pstate 8
-max non-turbo pstate 41
-max turbo pstate 48
-The system is idle.
+Hans
 
-doug@s19:~$ sudo
-/home/doug/kernel/linux/tools/power/x86/turbostat/turbostat --Summary
---quiet --show Busy%,Bzy_MHz,IRQ,PkgWatt --interval 10
-Busy%   Bzy_MHz IRQ     PkgWatt
-0.11    800     844     1.33
-0.01    800     231     1.33
-0.11    800     723     1.33 <<< Powersave governor
-0.03    889     440     1.33
-0.17    4418    21511   4.31 <<< Schedutil governor
-0.12    4101    30153   4.48 <<< 3 CPUs are > pstate 41
-0.22    4347    34226   4.75
-0.17    4101    43554   4.78
-0.29    4300    50565   4.94
-0.21    4098    50297   4.76 <<< 5 CPUs are > pstate 41
-0.29    4298    50532   4.84
-0.20    4101    50126   4.63
-0.20    4101    50149   4.62
-0.29    4297    50623   4.76
-0.20    4101    50203   4.72
-0.29    4295    50642   4.78
-0.20    4101    50223   4.68
-0.29    4292    50597   4.88
-0.20    4101    50208   4.73
-0.29    4296    50519   4.84
-0.20    4101    50167   4.80
-0.20    4101    50242   4.76
-0.29    4302    50625   4.94
-0.20    4101    50233   4.73
-0.29    4296    50613   4.78
-0.20    4101    50231   4.70
-0.29    4292    50802   4.93
-1.46    4669    65610   8.36
-0.41    4225    80701   5.48
-0.33    4101    80219   5.36 <<< 8 CPUs are > ptstate 41
-0.34    4098    80313   5.38
-0.41    4228    80689   5.56
-0.33    4101    80252   5.46
-
-And the related MSR reads:
-
-3 CPUs are > pstate 41:
-root@s19:/home/doug# c/msr-decoder | grep IA32_PERF_CTL
-9.) 0x199: IA32_PERF_CTL        : CPU 0-11 :  30 :   8 :   8 :  48 :
-48 :  48 :   8 :  30 :  31 :   8 :   8 :   8 :
-
-5 CPUs are > psate 41:
-root@s19:/home/doug# c/msr-decoder | grep IA32_PERF_CTL
-9.) 0x199: IA32_PERF_CTL        : CPU 0-11 :  44 :  30 :  31 :  48 :
-48 :  48 :   8 :   8 :   8 :   8 :  48 :   8 :
-
-8 CPUs are > pstate 41:
-root@s19:/home/doug# c/msr-decoder | grep IA32_PERF_CTL
-9.) 0x199: IA32_PERF_CTL        : CPU 0-11 :  45 :  48 :  48 :  48 :
-48 :  48 :   8 :  30 :   8 :   8 :  48 :  42 :
-
-This issue is independent of the original patch or the suggested modification:
-
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index f878a4545eee..94018ac0b59b 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -1980,7 +1980,7 @@ static void intel_pstate_update_perf_ctl(struct
-> cpudata *cpu)
->          * P-states to prevent them from getting back to the high frequency
->          * right away after getting out of deep idle.
->          */
-> -       cpuidle_update_retain_tick(pstate > cpu->pstate.max_pstate);
-> +       cpuidle_update_retain_tick(pstate > ((cpu->pstate.max_pstate +
-> cpu->pstate.min_pstate)/2));
->         wrmsrl(MSR_IA32_PERF_CTL, pstate_funcs.get_val(cpu, pstate));
->  }
-
-... Doug
