@@ -2,50 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC374DB7D1
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Mar 2022 19:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F564DB7EF
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Mar 2022 19:31:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345393AbiCPSRa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Mar 2022 14:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39946 "EHLO
+        id S1346423AbiCPSch (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Mar 2022 14:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237715AbiCPSRa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Mar 2022 14:17:30 -0400
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A684D622;
-        Wed, 16 Mar 2022 11:16:15 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2e59939b862so32783857b3.10;
-        Wed, 16 Mar 2022 11:16:15 -0700 (PDT)
+        with ESMTP id S240131AbiCPScg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Mar 2022 14:32:36 -0400
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAA96C1EE;
+        Wed, 16 Mar 2022 11:31:21 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2e5757b57caso33556187b3.4;
+        Wed, 16 Mar 2022 11:31:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=h3RBLpBbAryPqG6TuJAla1nVu9jViIKaNxDEE5urMbw=;
-        b=CwVuvpDYGj3oW3UKb8V5GcaTMh2BTFiwTWxfWbGYfY8RkcsxUhd1HavDOb1r2MsyYO
-         qZtoH2+umYYi/vIkyVT0G6WNcB/RkPm78M2aBVh7RC75UvhcOH5RUpLTBpxRM/ziugry
-         q0zML6pKTLmmlXUHK3BDwm2mxvJtjG1Y+B4C0+fEumDCsYjcTmFIwRsvLOPV+BkWsQvP
-         IBFNMEhAruNJKs4TlvUNcUKpayTKrWv6s3WsPliBafoWgMq2vhNdPxDQ4nDrh9wfEwJu
-         M/L4B1thRAXtxVhpvusmUPW35ZsyZI3EkLu1ne3yfm9XFr5JLwmgCWue1iBwfD/UPI36
-         vYcA==
-X-Gm-Message-State: AOAM530lVJa1JbuJXHEvDVVOYz5IXJQw5+T6lq3LeBRbWXFS7mF6/7JU
-        FSJTSY4naUbQ/Du11wyaci5QlXfcaq9maYzr9bg=
-X-Google-Smtp-Source: ABdhPJzguP0ZdMTGW0S66n7AWLvsSCvC3k3Mm4FkLi+eluMHkzuCF4DOkF+CM0A9/LVaoIA1P6c6b2aI/X8+LVTemRY=
-X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
- b145-20020a811b97000000b002db640f49d8mr1500029ywb.326.1647454575078; Wed, 16
- Mar 2022 11:16:15 -0700 (PDT)
+        bh=5R6Uwr6nDtMkAry2ZgjQvsr9fn+4rSSNhLlmGFjcijE=;
+        b=dJpPlkQuAcvOOWfmeZzLvDlR6nNMi8Ik5DMS+yBogkQwY74wLRzKvJFPiUhOkBKRls
+         RdWwpFWMruthAa3yJCsSxI8dxQ1VCENeBPAuNgVcxj9tvVy2hMmhZ5nXXWRbDbiOwGdh
+         SinfYAWvxCv9qe3jwf0h1vAQ+eCJPejNOgsLu95vIm7TCqggOo7SQUP48MrrZOKdoQ2r
+         w/Nc5QVXjhZyapAQgJltc+65FqFnk2RQHcuH5DZczH6Xq1eqjoeeV4R0URuiKti23JaF
+         khhk6EYmqbIUAws5z/7Gn4f9rU2546umrzvKovILh4AMh+4vadXhm1ZibcQ3E4WKfF8y
+         CJ3A==
+X-Gm-Message-State: AOAM5329Xcuh0P8EM5+3KgOk683Nft6gJNhgxg833MhbCATSfgOB+azN
+        w0kVqCk8gNXh1O2W/ymoq9n/QSyQjF96Xs2W50g=
+X-Google-Smtp-Source: ABdhPJyvPygbAhc3PbvOAkBl24jnFqk5OslzC0Hp92pNVNJaYGEFN+DOyuPuHdbbGfTJqX9vUlCUsnaDfWhOuTc77cY=
+X-Received: by 2002:a81:bd0:0:b0:2dc:184b:e936 with SMTP id
+ 199-20020a810bd0000000b002dc184be936mr1609014ywl.7.1647455481095; Wed, 16 Mar
+ 2022 11:31:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220310224223.684007-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20220310224223.684007-1-srinivas.pandruvada@linux.intel.com>
+References: <26decf155bffc021a97846c0a0ed09c2b5e0bef1.camel@infradead.org>
+ <CAJZ5v0gAkOqh1LVpdXKLxpswBSG-3LUaXoZgw0Op+3V69BjhZQ@mail.gmail.com> <9099d8903e9b2b16daec712acc9aa533fe84d102.camel@infradead.org>
+In-Reply-To: <9099d8903e9b2b16daec712acc9aa533fe84d102.camel@infradead.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 16 Mar 2022 19:16:04 +0100
-Message-ID: <CAJZ5v0i8PKdaF5mt4tHsqWy5wO2+c6sRxmW+UiR7_HOn=w4Y6A@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Use firmware default EPP
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Wed, 16 Mar 2022 19:31:10 +0100
+Message-ID: <CAJZ5v0g=ZDeNVCbR7suZzK0KsAM-4msUZSr3oyxSf0NYg2yezQ@mail.gmail.com>
+Subject: Re: [PATCH] PM / hibernate: Honour ACPI hardware signature by default
+ for virtual guests
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-pm <linux-pm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        benh <benh@kernel.crashing.org>,
+        "van der Linden, Frank" <fllinden@amazon.com>,
+        Amit Shah <aams@amazon.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -57,91 +60,144 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 11:42 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
+On Fri, Mar 11, 2022 at 8:20 PM David Woodhouse <dwmw2@infradead.org> wrote:
 >
-> For some specific platforms (E.g. AlderLake) the balance performance
-> EPP is updated from the hard coded value in the driver. This acts as
-> the default and balance_performance EPP. The purpose of this EPP
-> update is to reach maximum 1 core turbo frequency (when possible) out
-> of the box.
+> From: David Woodhouse <dwmw@amazon.co.uk>
 >
-> Although we can achieve the objective by using hard coded value in the
-> driver, there can be other EPP which can be better in terms of power.
-> But that will be very subjective based on platform and use cases.
-> This is not practical to have a per platform specific default hard coded
-> in the driver.
+> The ACPI specification says that OSPM should refuse to restore from
+> hibernate if the hardware signature changes, and should boot from
+> scratch. However, real BIOSes often vary the hardware signature in cases
+> where we *do* want to resume from hibernate, so Linux doesn't follow the
+> spec by default.
 >
-> If a platform wants to specify default EPP, it can be set in the firmware.
-> If this EPP is not the chipset default of 0x80 (balance_perf_epp unless
-> driver changed it) and more performance oriented but not 0, the driver
-> can use this as the default and balanced_perf EPP. In this case no driver
-> update is required every time there is some new platform and default EPP.
+> However, in a virtual environment there's no reason for the VMM to vary
+> the hardware signature *unless* it wants to trigger a clean reboot as
+> defined by the ACPI spec. So enable the check by default if a hypervisor
+> is detected.
 >
-> If the firmware didn't update the EPP from the chipset default then
-> the hard coded value is used as per existing implementation.
->
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 > ---
->  drivers/cpufreq/intel_pstate.c | 38 ++++++++++++++++++++++++++++------
->  1 file changed, 32 insertions(+), 6 deletions(-)
 >
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index bc7f7e6759bd..846bb3a78788 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -1692,6 +1692,37 @@ static void intel_pstate_enable_hwp_interrupt(struct cpudata *cpudata)
->         }
+> On Wed, 2021-12-08 at 16:07 +0100, Rafael J. Wysocki wrote:
+> > On Mon, Nov 8, 2021 at 5:09 PM David Woodhouse <dwmw2@infradead.org> wrote:
+> > > A follow-up patch may do this automatically for certain "known good"
+> > > machines based on a DMI match, or perhaps just for all hypervisor
+> > > guests since there's no good reason a hypervisor would change the
+> > > hardware_signature that it exposes to guests *unless* it wants them
+> > > to obey the ACPI specification.
+> > >
+> > > Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+> >
+> > Applied as 5.17 material, sorry for the delay.
+>
+> Here's the threatened follow-up. I think that a blanket enablement for
+> all hypervisors is sane enough; there's no reason why a virtual
+> environment would vary the hardware signature *unless* it wanted to
+> trigger the ACPI defined hibernate behaviour, is there?
+
+I don't think so.
+
+
+>  arch/x86/kernel/acpi/sleep.c | 23 +++++++++++++++++++++--
+>  drivers/acpi/sleep.c         | 11 +++--------
+>  include/linux/acpi.h         |  2 +-
+>  3 files changed, 25 insertions(+), 11 deletions(-)
+>
+> diff --git a/arch/x86/kernel/acpi/sleep.c b/arch/x86/kernel/acpi/sleep.c
+> index 1e97f944b47d..3b7f4cdbf2e0 100644
+> --- a/arch/x86/kernel/acpi/sleep.c
+> +++ b/arch/x86/kernel/acpi/sleep.c
+> @@ -15,6 +15,7 @@
+>  #include <asm/desc.h>
+>  #include <asm/cacheflush.h>
+>  #include <asm/realmode.h>
+> +#include <asm/hypervisor.h>
+>
+>  #include <linux/ftrace.h>
+>  #include "../../realmode/rm/wakeup.h"
+> @@ -140,9 +141,9 @@ static int __init acpi_sleep_setup(char *str)
+>                         acpi_realmode_flags |= 4;
+>  #ifdef CONFIG_HIBERNATION
+>                 if (strncmp(str, "s4_hwsig", 8) == 0)
+> -                       acpi_check_s4_hw_signature(1);
+> +                       acpi_check_s4_hw_signature = 1;
+>                 if (strncmp(str, "s4_nohwsig", 10) == 0)
+> -                       acpi_check_s4_hw_signature(0);
+> +                       acpi_check_s4_hw_signature = 0;
+>  #endif
+>                 if (strncmp(str, "nonvs", 5) == 0)
+>                         acpi_nvs_nosave();
+> @@ -160,3 +161,21 @@ static int __init acpi_sleep_setup(char *str)
 >  }
 >
-> +static void intel_pstate_update_epp_defaults(struct cpudata *cpudata)
+>  __setup("acpi_sleep=", acpi_sleep_setup);
+> +
+> +#if defined(CONFIG_HIBERNATION) && defined(CONFIG_HYPERVISOR_GUEST)
+> +static int __init init_s4_sigcheck(void)
 > +{
-> +       cpudata->epp_default = intel_pstate_get_epp(cpudata, 0);
-> +
 > +       /*
-> +        * If this CPU gen doesn't call for change in balance_perf
-> +        * EPP return.
+> +        * If running on a hypervisor, honour the ACPI specification
+> +        * by default and trigger a clean reboot when the hardware
+> +        * signature in FACS is changed after hibernation.
 > +        */
-> +       if (epp_values[EPP_INDEX_BALANCE_PERFORMANCE] == HWP_EPP_BALANCE_PERFORMANCE)
-> +               return;
+> +       if (acpi_check_s4_hw_signature == -1 &&
+> +           !hypervisor_is_type(X86_HYPER_NATIVE))
+> +               acpi_check_s4_hw_signature = 1;
 > +
-> +       /*
-> +        * If powerup EPP is something other than chipset default 0x80 and
-> +        * - is more performance oriented than 0x80 (default balance_perf EPP)
-> +        * - But less performance oriented than performance EPP
-> +        *   then use this as new balance_perf EPP.
-> +        */
-> +       if (cpudata->epp_default < HWP_EPP_BALANCE_PERFORMANCE &&
-> +           cpudata->epp_default > HWP_EPP_PERFORMANCE) {
-> +               epp_values[EPP_INDEX_BALANCE_PERFORMANCE] = cpudata->epp_default;
-> +               return;
-> +       }
-> +
-> +       /*
-> +        * Use hard coded value per gen to update the balance_perf
-> +        * and default EPP.
-> +        */
-> +       cpudata->epp_default = epp_values[EPP_INDEX_BALANCE_PERFORMANCE];
-> +       intel_pstate_set_epp(cpudata, cpudata->epp_default);
+> +       return 0;
 > +}
-> +
->  static void intel_pstate_hwp_enable(struct cpudata *cpudata)
+> +/* This must happen before acpi_init() which is a subsys initcall */
+> +arch_initcall(init_s4_sigcheck);
+> +#endif
+> diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
+> index a60ff5dfed3a..4c498e1051e9 100644
+> --- a/drivers/acpi/sleep.c
+> +++ b/drivers/acpi/sleep.c
+> @@ -874,12 +874,7 @@ static inline void acpi_sleep_syscore_init(void) {}
+>  #ifdef CONFIG_HIBERNATION
+>  static unsigned long s4_hardware_signature;
+>  static struct acpi_table_facs *facs;
+> -static int sigcheck = -1; /* Default behaviour is just to warn */
+> -
+> -void __init acpi_check_s4_hw_signature(int check)
+> -{
+> -       sigcheck = check;
+> -}
+> +int acpi_check_s4_hw_signature = -1; /* Default behaviour is just to warn */
+>
+>  static int acpi_hibernation_begin(pm_message_t stage)
 >  {
->         /* First disable HWP notification interrupt till we activate again */
-> @@ -1705,12 +1736,7 @@ static void intel_pstate_hwp_enable(struct cpudata *cpudata)
->         if (cpudata->epp_default >= 0)
+> @@ -1004,7 +999,7 @@ static void acpi_sleep_hibernate_setup(void)
+>         hibernation_set_ops(old_suspend_ordering ?
+>                         &acpi_hibernation_ops_old : &acpi_hibernation_ops);
+>         sleep_states[ACPI_STATE_S4] = 1;
+> -       if (!sigcheck)
+> +       if (!acpi_check_s4_hw_signature)
 >                 return;
 >
-> -       if (epp_values[EPP_INDEX_BALANCE_PERFORMANCE] == HWP_EPP_BALANCE_PERFORMANCE) {
-> -               cpudata->epp_default = intel_pstate_get_epp(cpudata, 0);
-> -       } else {
-> -               cpudata->epp_default = epp_values[EPP_INDEX_BALANCE_PERFORMANCE];
-> -               intel_pstate_set_epp(cpudata, cpudata->epp_default);
-> -       }
-> +       intel_pstate_update_epp_defaults(cpudata);
->  }
+>         acpi_get_table(ACPI_SIG_FACS, 1, (struct acpi_table_header **)&facs);
+> @@ -1016,7 +1011,7 @@ static void acpi_sleep_hibernate_setup(void)
+>                  */
+>                 s4_hardware_signature = facs->hardware_signature;
 >
->  static int atom_get_min_pstate(void)
+> -               if (sigcheck > 0) {
+> +               if (acpi_check_s4_hw_signature > 0) {
+>                         /*
+>                          * If we're actually obeying the ACPI specification
+>                          * then the signature is written out as part of the
+> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+> index 6274758648e3..766dbcb82df1 100644
+> --- a/include/linux/acpi.h
+> +++ b/include/linux/acpi.h
+> @@ -526,7 +526,7 @@ acpi_status acpi_release_memory(acpi_handle handle, struct resource *res,
+>  int acpi_resources_are_enforced(void);
+>
+>  #ifdef CONFIG_HIBERNATION
+> -void __init acpi_check_s4_hw_signature(int check);
+> +extern int acpi_check_s4_hw_signature;
+>  #endif
+>
+>  #ifdef CONFIG_PM_SLEEP
 > --
 
 Applied as 5.18 material, thanks!
