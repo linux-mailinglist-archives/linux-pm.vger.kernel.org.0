@@ -2,57 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 299414DBB31
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Mar 2022 00:40:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32AB14DBB5B
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Mar 2022 00:52:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243267AbiCPXlt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Mar 2022 19:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42720 "EHLO
+        id S238410AbiCPXxn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Mar 2022 19:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242323AbiCPXls (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Mar 2022 19:41:48 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F98B19C2D;
-        Wed, 16 Mar 2022 16:40:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=WjyIVz0q+UMbn1WR+oudjW9eiu0evgbI/MYyy3lxxoQ=; b=YwxckvA27D7GRUSgMK2Qetxptg
-        YVjh3pu28OQx2vb2FswVPD9b11NFItoAKl2Cl5DvCOS4hd8LVGhw6Djs0ONhtQreZh3977uEtxIPq
-        H9zkAQrPjsLCS8yO/3FRu2EOKy65xyWxSR9SOcqtCb4gKq/Nfayb495wowzrfDENeWC8pISdoigkm
-        bkVia/RqZum9sFALDfLKJbq5s+BWkV4dquLhji7uMeIMv5YJoV6lE9MgzDXCXDlBgmP+Z7UKVdB1b
-        4SM1qtDNra6zDWhZj+X3z8wdRipFMxsJkkCtLHCwxBvs7gy/xnMk0nbiQr5XnfYqg12vlaMs5ueVY
-        YhLqyK+w==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nUdFY-001h55-TG; Wed, 16 Mar 2022 23:40:17 +0000
-Message-ID: <4a812ca1-7733-7826-61ee-e0d8c65230f9@infradead.org>
-Date:   Wed, 16 Mar 2022 16:40:10 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] cpuidle: tegra: add ARCH_SUSPEND_POSSIBLE dependency
-Content-Language: en-US
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Arnd Bergmann <arnd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thierry Reding <treding@nvidia.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        He Ying <heying24@huawei.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211013160125.772873-1-arnd@kernel.org>
- <2fdbd732-2496-2267-6636-2f682c39e928@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <2fdbd732-2496-2267-6636-2f682c39e928@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S229746AbiCPXxm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Mar 2022 19:53:42 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D17EEDA6;
+        Wed, 16 Mar 2022 16:52:23 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4DA3F1476;
+        Wed, 16 Mar 2022 16:52:23 -0700 (PDT)
+Received: from e123648.arm.com (unknown [10.57.19.225])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 61BC43F766;
+        Wed, 16 Mar 2022 16:52:20 -0700 (PDT)
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     lukasz.luba@arm.com, dietmar.eggemann@arm.com,
+        Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
+        viresh.kumar@linaro.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+        mka@chromium.org, nm@ti.com, sboyd@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, cristian.marussi@arm.com,
+        sudeep.holla@arm.com, matthias.bgg@gmail.com
+Subject: [0/8] Introduce support for artificial Energy Model
+Date:   Wed, 16 Mar 2022 23:52:03 +0000
+Message-Id: <20220316235211.29370-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,55 +43,69 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi all,
 
+This patch set adds new callback and support for artificial Energy Model (EM).
+The new EMs have artificially generated performance states.
+Such EMs can be created from lean information sources, such
+as the relative energy efficiency between CPUs. The ACPI based
+platforms provide this information
+(ACPI 6.4, s5.2.12.14 'GIC CPU Interface (GICC) Structure'
+'Processor Power efficiency Class' field).
 
-On 10/13/21 15:25, Dmitry Osipenko wrote:
-> 13.10.2021 19:01, Arnd Bergmann пишет:
->> From: Arnd Bergmann <arnd@arndb.de>
->>
->> Some StrongARM processors don't support suspend, which leads
->> to a build failure with the tegra cpuidle driver:
->>
->> WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
->>   Depends on [n]: ARCH_SUSPEND_POSSIBLE [=n]
->>   Selected by [y]:
->>   - ARM_TEGRA_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_TEGRA [=n] || COMPILE_TEST [=y]) && !ARM64 && MMU [=y]
->>
->> arch/arm/kernel/sleep.o: in function `__cpu_suspend':
->> (.text+0x68): undefined reference to `cpu_sa110_suspend_size'
->>
->> Add an explicit dependency to make randconfig builds avoid
->> this combination.
->>
->> Fixes: faae6c9f2e68 ("cpuidle: tegra: Enable compile testing")
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->> ---
->>  drivers/cpuidle/Kconfig.arm | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
->> index 2cc3c208a180..af97992eaa82 100644
->> --- a/drivers/cpuidle/Kconfig.arm
->> +++ b/drivers/cpuidle/Kconfig.arm
->> @@ -100,6 +100,7 @@ config ARM_MVEBU_V7_CPUIDLE
->>  config ARM_TEGRA_CPUIDLE
->>  	bool "CPU Idle Driver for NVIDIA Tegra SoCs"
->>  	depends on (ARCH_TEGRA || COMPILE_TEST) && !ARM64 && MMU
->> +	depends on ARCH_SUSPEND_POSSIBLE
->>  	select ARCH_NEEDS_CPU_IDLE_COUPLED if SMP
->>  	select ARM_CPU_SUSPEND
->>  	help
->>
-> 
-> Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+Artificial EMs might require to directly provide the 'cost' of
+the generated performance state. This patch set adds a new callback
+.get_cost() for this. The EM framework does not force any model
+or formula, it's up to the platform code.
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Artificial EMs aim to leverage the Energy Aware Scheduler
+(EAS). Other frameworks relying on performance states
+information (i.e. IPA/DTPM) must be informed of the
+EM type and might be prevented from using it. This patch
+sets also does this by introducing a new flag:
+EM_PERF_DOMAIN_ARTIFICIAL.
 
-What is the status of this patch, please?
+The patch set is based on current linux-next, where some
+changes to OPP & EM are queuing.
 
-kernel test robot is still reporting this build error, so I just
-created the same patch...
+The patch set also contains (patch 7/8 and patch 8/8) logic which prevents
+two EM's client frameworks from using this new EM type. Some other approach,
+using 'milli-watts', has been proposed and discussed, but refused [1].
+This new flag is more precised and should not leave space for
+wrong interpretation.
 
-thanks.
+Shortly after this patch set you will see a patch set implementing the
+platform code and registering this new EM.
+
+Regards,
+Lukasz Luba
+
+[1] https://lore.kernel.org/linux-pm/20220207073036.14901-1-lukasz.luba@arm.com/
+
+Lukasz Luba (7):
+  PM: EM: Add .get_cost() callback
+  PM: EM: Use the new .get_cost() callback while registering EM
+  PM: EM: Change the order of arguments in the .active_power() callback
+  PM: EM: Remove old debugfs files and print all 'flags'
+  Documentation: EM: Add artificial EM registration description
+  thermal: cooling: Check Energy Model type in cpufreq_cooling and
+    devfreq_cooling
+  powercap: DTPM: Check for Energy Model type
+
+Pierre Gondois (1):
+  PM: EM: Add artificial EM flag
+
+ Documentation/power/energy-model.rst  | 24 +++++++++-
+ drivers/cpufreq/mediatek-cpufreq-hw.c |  4 +-
+ drivers/cpufreq/scmi-cpufreq.c        |  4 +-
+ drivers/opp/of.c                      |  6 +--
+ drivers/powercap/dtpm_cpu.c           |  2 +-
+ drivers/thermal/cpufreq_cooling.c     |  2 +-
+ drivers/thermal/devfreq_cooling.c     |  8 ++--
+ include/linux/energy_model.h          | 35 +++++++++++++--
+ kernel/power/energy_model.c           | 63 +++++++++++++++------------
+ 9 files changed, 101 insertions(+), 47 deletions(-)
+
 -- 
-~Randy
+2.17.1
+
