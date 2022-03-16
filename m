@@ -2,140 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B43684DA646
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Mar 2022 00:28:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E997F4DA6E1
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Mar 2022 01:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352581AbiCOX30 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Mar 2022 19:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51464 "EHLO
+        id S1352800AbiCPAbl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Mar 2022 20:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352580AbiCOX3Z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Mar 2022 19:29:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F74EB1;
-        Tue, 15 Mar 2022 16:28:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CDB58B81907;
-        Tue, 15 Mar 2022 23:28:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3330AC340E8;
-        Tue, 15 Mar 2022 23:28:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647386889;
-        bh=w4qPeeKhNFfdJV7sHtmG6UT0h4O4RKuIt/5uhl+ouyE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nn5tTFcotsvFb1w5oolIwiVRkLvh79sDlGTnDfrGmVmnvz0y4zU1fbQ+ObyAIV6iW
-         jQI3LXys3cr3+XlTBHdW7Ep2JuyFLgTyoPW8dpZK/BBhvU7ZFa65A44uAK75M9meA6
-         sGWPCyo/sLqANnpB7o1PtKuRlQzrLXQ6HSnxw0OZ2Chb8dxDcTuJvHw68Z4vtUdzVg
-         SUUPBSVGN8554JRoslz6I9jk6zQTJwU8KXVU+BFPwiqaYuotKaGIlUNS5p0KLf8VNv
-         cOLCogEGtqz4X6Ak0W9xbI96i92N/3tEmgztAWWdh6stsFcAdxLwqsLaNTROEBLJyu
-         Q85NbEaBxjI3g==
-Received: by pali.im (Postfix)
-        id 4BCA7824; Wed, 16 Mar 2022 00:28:06 +0100 (CET)
-Date:   Wed, 16 Mar 2022 00:28:06 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     "Colin King (gmail)" <colin.i.king@gmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: bq2415x: Fix spelling mistake "vender" ->
- "vendor"
-Message-ID: <20220315232806.m4mwsdawyiafpc3d@pali>
-References: <20220315223700.2961660-1-colin.i.king@gmail.com>
- <20220315224645.ytcf7y7awc3q2y6j@pali>
- <5ea0e154-e06e-32b4-be86-f38ce07b8bec@gmail.com>
- <20220315230753.6xymu77uirjbnn3u@pali>
- <9e2ac011-72e8-977c-00c9-5fa862a4e5f6@gmail.com>
+        with ESMTP id S242769AbiCPAbj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Mar 2022 20:31:39 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC4E54F9C;
+        Tue, 15 Mar 2022 17:30:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647390625; x=1678926625;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FcDRWTou30Wxb55qZtenvzv/I/o5T65Zp2z3SdJU3pk=;
+  b=W9pNwBB50OeWQRna+LfeKPaq45dqcaaAEvpT3hBV/Ob9XoL0u9QYQLHp
+   gItjkVGvTuyApbRMUj1mL0YJFQETywiQJxv3FXLHX9OQw+Mf8mSMi3GU3
+   uANwM48OgGGJfrtvkK698Wuue1qsrdRVcY7LV0UE2pA0nG+YsDDGaPTar
+   o5vqmK+pXJLWUR63chAgtsnWxezBTmkUOnm1QrTGx2fXi206W3DMjivGb
+   Le6boqdBRkuv9KFxOuG4gaqqH1e/2auUBey17+a1UXAfBYJkIJJL1s8KH
+   UlhEusmnGo21o2btCEJN1cekZtsW8ckDTmlTjkjitR+WVien1REWJNOoJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="243906382"
+X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
+   d="scan'208";a="243906382"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 17:30:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
+   d="scan'208";a="646435143"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 15 Mar 2022 17:30:23 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nUHYU-000Bgw-Tg; Wed, 16 Mar 2022 00:30:22 +0000
+Date:   Wed, 16 Mar 2022 08:30:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 216aa68e610f96eb9882a10f1fe41732030e2d99
+Message-ID: <62312f9c.Zi4I8XH8nG5qTv9j%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9e2ac011-72e8-977c-00c9-5fa862a4e5f6@gmail.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tuesday 15 March 2022 23:09:17 Colin King (gmail) wrote:
-> On 15/03/2022 23:07, Pali Rohár wrote:
-> > On Tuesday 15 March 2022 23:00:14 Colin King (gmail) wrote:
-> > > On 15/03/2022 22:46, Pali Rohár wrote:
-> > > > On Tuesday 15 March 2022 22:37:00 Colin Ian King wrote:
-> > > > > There are several spelling mistakes in comments, function names
-> > > > > and literal strings. Fix these.
-> > > > 
-> > > > I do not think that there are mistakes.
-> > > > 
-> > > > Please look at page 29 of the official bq24150 datasheet:
-> > > > https://www.ti.com/lit/ds/symlink/bq24150.pdf
-> > > 
-> > > Looks like TI are redefining the spelling in the language :-)
-> > 
-> > Well, that could be truth, or maybe it just means something different.
-> > It is about 10 years ago and I do not remember more details about it.
-> > Anyway, in any case register name is vender and kernel code should match
-> > official register naming for which driver was written...
-> 
-> I'm fine with that. Apologies for the noise.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 216aa68e610f96eb9882a10f1fe41732030e2d99  Merge branches 'pm-docs-next' and 'devprop-next' into bleeding-edge
 
-I looked into dictionaries and word vender exists in Cambridge Dictionary:
-https://dictionary.cambridge.org/dictionary/english/vender
+elapsed time: 729m
 
-Also some details about this word are available in Wiktionary:
-https://en.wiktionary.org/wiki/vender#English
+configs tested: 104
+configs skipped: 3
 
-And looking at more internet resources and discussions, it looks like
-that word vender is just older spelling in American English.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-But I really do not know, I'm not native speaker.
+gcc tested configs:
+arm                                 defconfig
+arm                              allmodconfig
+arm                              allyesconfig
+arm64                               defconfig
+arm64                            allyesconfig
+i386                          randconfig-c001
+arm                      footbridge_defconfig
+arm                     eseries_pxa_defconfig
+powerpc                 mpc834x_itx_defconfig
+mips                        vocore2_defconfig
+sh                              ul2_defconfig
+arm                        multi_v7_defconfig
+sh                          r7780mp_defconfig
+m68k                        m5307c3_defconfig
+arm                  randconfig-c002-20220314
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+nds32                             allnoconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+alpha                               defconfig
+nds32                               defconfig
+nios2                            allyesconfig
+alpha                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+parisc64                            defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+s390                             allyesconfig
+i386                             allyesconfig
+i386                              debian-10.3
+i386                   debian-10.3-kselftests
+i386                                defconfig
+sparc                               defconfig
+sparc                            allyesconfig
+mips                             allmodconfig
+mips                             allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+i386                 randconfig-a001-20220314
+i386                 randconfig-a002-20220314
+i386                 randconfig-a004-20220314
+i386                 randconfig-a003-20220314
+i386                 randconfig-a005-20220314
+i386                 randconfig-a006-20220314
+x86_64                        randconfig-a006
+x86_64                        randconfig-a002
+x86_64                        randconfig-a004
+arc                  randconfig-r043-20220313
+riscv                randconfig-r042-20220313
+s390                 randconfig-r044-20220313
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+riscv                    nommu_virt_defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                                  kexec
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
 
-> > 
-> > > > 
-> > > > > Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> > > > > ---
-> > > > >    drivers/power/supply/bq2415x_charger.c | 10 +++++-----
-> > > > >    1 file changed, 5 insertions(+), 5 deletions(-)
-> > > > > 
-> > > > > diff --git a/drivers/power/supply/bq2415x_charger.c b/drivers/power/supply/bq2415x_charger.c
-> > > > > index 5724001e66b9..b35700071966 100644
-> > > > > --- a/drivers/power/supply/bq2415x_charger.c
-> > > > > +++ b/drivers/power/supply/bq2415x_charger.c
-> > > > > @@ -71,7 +71,7 @@
-> > > > >    #define BQ2415X_BIT_OTG_PL		1
-> > > > >    #define BQ2415X_BIT_OTG_EN		0
-> > > > > -/* vender register */
-> > > > > +/* vendor register */
-> > > > >    #define BQ2415X_MASK_VENDER		(BIT(5)|BIT(6)|BIT(7))
-> > > > >    #define BQ2415X_SHIFT_VENDER		5
-> > > > >    #define BQ2415X_MASK_PN			(BIT(3)|BIT(4))
-> > > > > @@ -491,8 +491,8 @@ static int bq2415x_detect_revision(struct bq2415x_device *bq)
-> > > > >    	return -1;
-> > > > >    }
-> > > > > -/* return chip vender code */
-> > > > > -static int bq2415x_get_vender_code(struct bq2415x_device *bq)
-> > > > > +/* return chip vendor code */
-> > > > > +static int bq2415x_get_vendor_code(struct bq2415x_device *bq)
-> > > > >    {
-> > > > >    	int ret;
-> > > > > @@ -1501,9 +1501,9 @@ static int bq2415x_power_supply_init(struct bq2415x_device *bq)
-> > > > >    		sprintf(revstr, "1.%d", ret);
-> > > > >    	bq->model = kasprintf(GFP_KERNEL,
-> > > > > -				"chip %s, revision %s, vender code %.3d",
-> > > > > +				"chip %s, revision %s, vendor code %.3d",
-> > > > >    				bq2415x_chip_name[chip], revstr,
-> > > > > -				bq2415x_get_vender_code(bq));
-> > > > > +				bq2415x_get_vendor_code(bq));
-> > > > >    	if (!bq->model) {
-> > > > >    		dev_err(bq->dev, "failed to allocate model name\n");
-> > > > >    		return -ENOMEM;
-> > > > > -- 
-> > > > > 2.35.1
-> > > > > 
-> > > 
-> 
+clang tested configs:
+mips                           ip28_defconfig
+arm                       cns3420vb_defconfig
+mips                      bmips_stb_defconfig
+arm                        magician_defconfig
+powerpc                       ebony_defconfig
+arm                      pxa255-idp_defconfig
+powerpc                     skiroot_defconfig
+powerpc                          g5_defconfig
+mips                        omega2p_defconfig
+x86_64               randconfig-a011-20220314
+x86_64               randconfig-a014-20220314
+x86_64               randconfig-a013-20220314
+x86_64               randconfig-a012-20220314
+x86_64               randconfig-a016-20220314
+x86_64               randconfig-a015-20220314
+i386                 randconfig-a012-20220314
+i386                 randconfig-a011-20220314
+i386                 randconfig-a013-20220314
+i386                 randconfig-a014-20220314
+i386                 randconfig-a015-20220314
+i386                 randconfig-a016-20220314
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+hexagon              randconfig-r045-20220313
+hexagon              randconfig-r041-20220313
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
