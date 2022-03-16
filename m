@@ -2,59 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E997F4DA6E1
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Mar 2022 01:30:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1384DA8B8
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Mar 2022 04:00:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352800AbiCPAbl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Mar 2022 20:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59962 "EHLO
+        id S1353207AbiCPDCB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Mar 2022 23:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242769AbiCPAbj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Mar 2022 20:31:39 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC4E54F9C;
-        Tue, 15 Mar 2022 17:30:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647390625; x=1678926625;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=FcDRWTou30Wxb55qZtenvzv/I/o5T65Zp2z3SdJU3pk=;
-  b=W9pNwBB50OeWQRna+LfeKPaq45dqcaaAEvpT3hBV/Ob9XoL0u9QYQLHp
-   gItjkVGvTuyApbRMUj1mL0YJFQETywiQJxv3FXLHX9OQw+Mf8mSMi3GU3
-   uANwM48OgGGJfrtvkK698Wuue1qsrdRVcY7LV0UE2pA0nG+YsDDGaPTar
-   o5vqmK+pXJLWUR63chAgtsnWxezBTmkUOnm1QrTGx2fXi206W3DMjivGb
-   Le6boqdBRkuv9KFxOuG4gaqqH1e/2auUBey17+a1UXAfBYJkIJJL1s8KH
-   UlhEusmnGo21o2btCEJN1cekZtsW8ckDTmlTjkjitR+WVien1REWJNOoJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10286"; a="243906382"
-X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="243906382"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2022 17:30:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,185,1643702400"; 
-   d="scan'208";a="646435143"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 15 Mar 2022 17:30:23 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nUHYU-000Bgw-Tg; Wed, 16 Mar 2022 00:30:22 +0000
-Date:   Wed, 16 Mar 2022 08:30:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 216aa68e610f96eb9882a10f1fe41732030e2d99
-Message-ID: <62312f9c.Zi4I8XH8nG5qTv9j%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        with ESMTP id S233363AbiCPDCA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Mar 2022 23:02:00 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A145DE6A;
+        Tue, 15 Mar 2022 20:00:47 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id p8so1995373pfh.8;
+        Tue, 15 Mar 2022 20:00:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=0vjHVqi+Ddx08szS2b3lBLBbrzzpz4a7Qqfw8HmDOco=;
+        b=OcAbNMsTnhKB9W4pF1MQN30ldoyPE9dByvJys1PocCaEtk7TeWn7tuYNXjQckEesw9
+         sl4zfv92j8FL9AXiRD2HzacRbqsnIV2GhpKXbYUDYGhoSAaSoMuILy5zwXY1etOHKLVG
+         otYnrnHb5/4vOsawBDolDQ9rutxTQInSqiHs2ysbgVADQHq3YOse1DBP6WpZVsfvG/wm
+         Gwf855nG+HopE4fVFkBlEvh9FYffYsez028VKFC7f7ury/hw1v5cJ33VSPY7Gzw2pAhh
+         Ff7PegefjSMqJleWsC/q2tmYADUDMXgtcKBh83XiSN4SbqIMZVwpmr3Uch9pb4wBowao
+         nd5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=0vjHVqi+Ddx08szS2b3lBLBbrzzpz4a7Qqfw8HmDOco=;
+        b=cKLYDiG6fo+vFOpqVNQeFWaJtY31oYqGAVXwHfKExW2yDG1fuKi8Ku4lNc7N4oy3Z+
+         MMqf7wQ7vPmpcLMS3ClCoNONXJYK9PnXTaUg00hrFIUNC/mOwTtMcvYRranm8sfbvI+d
+         KHag7UJhjeXzn/kSN2w6eSVTIqXsPFSpFDMq/xoWVJI5JWW60dVqJRv1MSgAvJ0vO/Uk
+         SoapSo5UWxdtln3r5QyS32Yz/PWp2KbcXBpKAKL1X48jgSTeyx1eeYoMyVqVq7KIP+P+
+         Xg2tMmw1QiyzYUlyddSAbfKkJQOHkOst1uYUYqfLXSQ8umfBT4gn5VxDN7yJz1KYMLUy
+         19/Q==
+X-Gm-Message-State: AOAM533FluY992UcmNK8PjyIpeHvdqevHwSSMnhoo1QohJg08d08sgI7
+        ABXDFZIbbcQ5WoHXyI0zLDN4MpyIgB1izw==
+X-Google-Smtp-Source: ABdhPJzYkZsem088i2ABAGIv0OIIk+C4eBmI4C45VDIRX5Jj/sfbudnv2G0YqyPLTges4Y3r7Bhcwg==
+X-Received: by 2002:a63:6942:0:b0:380:153e:63f9 with SMTP id e63-20020a636942000000b00380153e63f9mr27217418pgc.212.1647399646931;
+        Tue, 15 Mar 2022 20:00:46 -0700 (PDT)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id d16-20020a17090ad99000b001bcbc4247a0sm582329pjv.57.2022.03.15.20.00.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 15 Mar 2022 20:00:46 -0700 (PDT)
+From:   Li-hao Kuo <lhjeff911@gmail.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, robh+dt@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com,
+        Li-hao Kuo <lhjeff911@gmail.com>
+Subject: [PATCH v5 0/2] Add thermal control driver for Sunplus SP7021 SoC
+Date:   Wed, 16 Mar 2022 11:01:04 +0800
+Message-Id: <cover.1647399369.git.lhjeff911@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,125 +65,29 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 216aa68e610f96eb9882a10f1fe41732030e2d99  Merge branches 'pm-docs-next' and 'devprop-next' into bleeding-edge
+This is a patch series for thermal driver for Sunplus SP7021 SoC.
 
-elapsed time: 729m
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control.
 
-configs tested: 104
-configs skipped: 3
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Li-hao Kuo (2):
+  thermal: Add thermal driver for Sunplus SP7021
+  dt-bindings:thermal: Add Sunplus SP7021 schema
 
-gcc tested configs:
-arm                                 defconfig
-arm                              allmodconfig
-arm                              allyesconfig
-arm64                               defconfig
-arm64                            allyesconfig
-i386                          randconfig-c001
-arm                      footbridge_defconfig
-arm                     eseries_pxa_defconfig
-powerpc                 mpc834x_itx_defconfig
-mips                        vocore2_defconfig
-sh                              ul2_defconfig
-arm                        multi_v7_defconfig
-sh                          r7780mp_defconfig
-m68k                        m5307c3_defconfig
-arm                  randconfig-c002-20220314
-ia64                                defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-nds32                             allnoconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-alpha                               defconfig
-nds32                               defconfig
-nios2                            allyesconfig
-alpha                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-parisc64                            defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-i386                             allyesconfig
-i386                              debian-10.3
-i386                   debian-10.3-kselftests
-i386                                defconfig
-sparc                               defconfig
-sparc                            allyesconfig
-mips                             allmodconfig
-mips                             allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-i386                 randconfig-a001-20220314
-i386                 randconfig-a002-20220314
-i386                 randconfig-a004-20220314
-i386                 randconfig-a003-20220314
-i386                 randconfig-a005-20220314
-i386                 randconfig-a006-20220314
-x86_64                        randconfig-a006
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-arc                  randconfig-r043-20220313
-riscv                randconfig-r042-20220313
-s390                 randconfig-r044-20220313
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-riscv                    nommu_virt_defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                                  kexec
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
+ .../bindings/thermal/sunplus_thermal.yaml          |  47 +++++++
+ MAINTAINERS                                        |   7 ++
+ drivers/thermal/Kconfig                            |  10 ++
+ drivers/thermal/Makefile                           |   1 +
+ drivers/thermal/sunplus_thermal.c                  | 140 +++++++++++++++++++++
+ 5 files changed, 205 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/sunplus_thermal.yaml
+ create mode 100644 drivers/thermal/sunplus_thermal.c
 
-clang tested configs:
-mips                           ip28_defconfig
-arm                       cns3420vb_defconfig
-mips                      bmips_stb_defconfig
-arm                        magician_defconfig
-powerpc                       ebony_defconfig
-arm                      pxa255-idp_defconfig
-powerpc                     skiroot_defconfig
-powerpc                          g5_defconfig
-mips                        omega2p_defconfig
-x86_64               randconfig-a011-20220314
-x86_64               randconfig-a014-20220314
-x86_64               randconfig-a013-20220314
-x86_64               randconfig-a012-20220314
-x86_64               randconfig-a016-20220314
-x86_64               randconfig-a015-20220314
-i386                 randconfig-a012-20220314
-i386                 randconfig-a011-20220314
-i386                 randconfig-a013-20220314
-i386                 randconfig-a014-20220314
-i386                 randconfig-a015-20220314
-i386                 randconfig-a016-20220314
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-hexagon              randconfig-r045-20220313
-hexagon              randconfig-r041-20220313
+-- 
+2.7.4
 
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
