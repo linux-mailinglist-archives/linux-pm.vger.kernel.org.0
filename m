@@ -2,232 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7714DB9F2
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Mar 2022 22:10:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ABCA4DBA6C
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Mar 2022 22:57:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358136AbiCPVLx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Mar 2022 17:11:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
+        id S242656AbiCPV6h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Mar 2022 17:58:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358127AbiCPVLs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Mar 2022 17:11:48 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1F466C81
-        for <linux-pm@vger.kernel.org>; Wed, 16 Mar 2022 14:10:31 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id n2so2818620plf.4
-        for <linux-pm@vger.kernel.org>; Wed, 16 Mar 2022 14:10:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=squareup.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=iRv99gRR+dDFqt3eRpswNmiSreBZ631Owy00tW6yZcU=;
-        b=c37P/rYSqo6TcipSclHSiCTCd0xxWgz89Nf4rmIGY9y9jjel7xO28Lmh9gP6nJlR0C
-         LX5ks4TT5WXNA3tYH4d2s8i/VdLCtak+f0FgUZmmbZbGLTd/WUV0Q+6D+AlTnhth42Fj
-         pMdDo4lnir731OXifK8eqYIBmm9smt3/PbitM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=iRv99gRR+dDFqt3eRpswNmiSreBZ631Owy00tW6yZcU=;
-        b=RCGXADGeO/2qC8rqrCaUW8SrAiVcW+wlPE8n+25MQo7RMb44ok6oBvXFrptrSp5Qaw
-         dGbPyNgB4qnW1UMnvo1iBHn8zWVfIzVKEn/T/YslpxnSJOwXfy0xK2W9aJFf/RKkjngw
-         X4phEQfVNbLWLBp2xsLaSuPw+IaGvzV+lL+bGF6S/tMC/k2mQdL/Xese9htrcHjDTFoy
-         8rQSXuH/VRW6AyE13dIsj83e0weU6Arpxds249mz7LlXH+9StuikmS3xlrFqUnfjIml0
-         r8z4O4eq+bIwh/QRRwfKymfFf+qDdqAavoFZsxDAAxBPq3xzvcB1a9DmaCx+uPMjjEII
-         2RlQ==
-X-Gm-Message-State: AOAM5327tPsh7pcgGMJLJ8K1huFp+18sweP8yG21WB1oTH3gUwAvH0dx
-        weZvdiqNmi+icHOOM584bwfVYA==
-X-Google-Smtp-Source: ABdhPJyhIbq2BD3mzyRKhiWn/+GC/52p+XjCj0nGHchwnpXbu+hGsVhnES70nSuyfEp5Tl3by9Q81g==
-X-Received: by 2002:a17:90a:6003:b0:1c6:64a9:2155 with SMTP id y3-20020a17090a600300b001c664a92155mr1740666pji.30.1647465030726;
-        Wed, 16 Mar 2022 14:10:30 -0700 (PDT)
-Received: from localhost ([135.84.132.250])
-        by smtp.gmail.com with ESMTPSA id f21-20020a056a00239500b004f7a6d338c3sm4386234pfc.41.2022.03.16.14.10.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 16 Mar 2022 14:10:30 -0700 (PDT)
-From:   Benjamin Li <benl@squareup.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Zac Crosby <zac@squareup.com>, Benjamin Li <benl@squareup.com>,
-        Andy Gross <agross@kernel.org>,
+        with ESMTP id S233967AbiCPV6g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Mar 2022 17:58:36 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2071.outbound.protection.outlook.com [40.107.100.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9053DE94;
+        Wed, 16 Mar 2022 14:57:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TctkMs3iQU091V//03DjC9PV4b6wjXl3knpzQM5i16GX+AFTvvef14iRMVw9uNwAx2JErDTS26CisG7P3WFmqlmyjOGj0J5n9s21tbGq3JK48LtXG8mXHHIvQF4Rc39/Fr6q/TGHgm1Jbv6wb1WmfZqZAH+5JugHE0lUG1jqp89y9f756vBcl92Jyri886u5JCntsECISN0rayzpxVH6ZxvmX1w3gT6fKjC1XoJ7Y8LECrg6WE3lXo8RGPfOsifqBfcoWj/k74HPIKDUss/hcFRBLz3CSd6o6YiCncn6EwO/q8t60elrZwkgzCWnRpiJMZZNyKji1F8XiHuVO9NgSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ml5tMxBHG+g8Prcq+35jmqDJZefpolxnYAt78FIKCFk=;
+ b=imL6t/aQ8OTz+m6AMeBmf2eVjhIdmfVEOx+xnjcsw7lANsYL4UegRUOGAwjMBefKQ+oJkENyeJrBr32uU2agyIzIg88/oL5Fsiyd0p5o4eXZ4JF0qtd7T//98spcwP37tot6K5zaFJe7i2IkkQwX9t433e1RvEyLIf+8ZoeqmAxn+x1n5gnegvck4wBr3o2hlfw2NyiY8LjcdExVf+8V2myGp76xHcCHKCJU2zESrQ6O39v0t474dncoekGnJ2BtMAh3hm0kicM/b+fuuBtJ4o4WQsU8LeV3vn3QnLoJeW6PvIlSZULKTN8PYkiY8D/lPyV5WjzhROtdwZEnK6jL2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ml5tMxBHG+g8Prcq+35jmqDJZefpolxnYAt78FIKCFk=;
+ b=Q3RHus2Ffad04PD9SQ2dRjC72XEO6LeScZ3o/ZDZm5eJKdgpXrY7KNOtYBz1H0YO7oNO0aKpfTJL3HleerQN3HqJx1u1d44CepiXr+8lrGWsxvHQ3rAyVM+j6t1VSJCpkzDQrIRFDtq/Ep05FeUcq2RDlyP0IOrksTKJDkGBdsE=
+Received: from DM6PR18CA0007.namprd18.prod.outlook.com (2603:10b6:5:15b::20)
+ by CY4PR12MB1206.namprd12.prod.outlook.com (2603:10b6:903:3b::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.25; Wed, 16 Mar
+ 2022 21:57:19 +0000
+Received: from DM6NAM11FT066.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:15b:cafe::d2) by DM6PR18CA0007.outlook.office365.com
+ (2603:10b6:5:15b::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5061.28 via Frontend
+ Transport; Wed, 16 Mar 2022 21:57:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT066.mail.protection.outlook.com (10.13.173.179) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5081.14 via Frontend Transport; Wed, 16 Mar 2022 21:57:18 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 16 Mar
+ 2022 16:57:15 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <mario.limonciello@amd.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] drivers: thermal: tsens: implement change_mode to disable sensor IRQs
-Date:   Wed, 16 Mar 2022 14:09:45 -0700
-Message-Id: <20220316210946.6935-3-benl@squareup.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220316210946.6935-1-benl@squareup.com>
-References: <20220316210946.6935-1-benl@squareup.com>
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "open list:CPU FREQUENCY SCALING FRAMEWORK" 
+        <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+CC:     <Ray.Huang@amd.com>
+Subject: [PATCH] cpufreq: powernow-k8: Re-order the init checks
+Date:   Wed, 16 Mar 2022 16:55:48 -0500
+Message-ID: <20220316215548.6013-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3f09d0f6-5788-44ce-aa5e-08da0797f073
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1206:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR12MB1206869AE98070E772029C7EE2119@CY4PR12MB1206.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tJlDkoDV5oCAU20yX+YRoX0tXt1zIQ1s5hT1RwUwL3etg/UkIovZ/7Jg63aJbPLxAyRTHGmQhdqhAP+CBI9trdYAIE/juDhEq8D3h7JgfHclJOebpw9SDmVzZ79gsI4+IpZHpa+lgjIxHmHFWi3g+X67YFua426M73RqFaPUlOVZWSUscMRDYgUfftXo4+RNBMNfOP/R6GvPMjt6K6JJB0GW6+nx4+Lmbl5zn2pO817bcGypUcmtxpYpv07aMZ/AqePpbiBqRKF5YfAIw6rYKJOufeOlAgPUheCwGBwWcR62UT1ywI1jG0JIiMl/teCsMvm8h2TXbn4tR5NVmIsd8zYFylMQgq3qxz6OG01tG9YCxyYKEsqDd1WMCVZYMIn7Z7liQvTK8LNJ02v7p3viEqFdpZAESqxP3zhfCgHVaEgi91q19vu4SPig2fsfUNv/ccunJOcdsoqInWkslegtJtaQcmrLqb7mXru6zKEKPWW8OLK9Bx7BY8Dy2ZuXQ7y4M85fWCkbqtpOPuV9QSn1ApKWOTQDON+ccSYi32uoIqTZLxCLfBzktkCXXq1XecrnuvBkscU95RAutvZhQcrZpsEBKDBZnBOU1cJhgc8LELqYNJv4HBSqIC7h0FQe2WXVYaKRHnOczMqQnD6uTOxOk2TajWtznkereTpoHqIZsj9NTSVLSl6ZrurTh9/CyVjYQELB2JnAFpBhg7mCqIqW0AicseKgxinvpc5kkL+7VdPVGEcqOxPMesoY+UtUiSaF
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(70586007)(5660300002)(336012)(426003)(2906002)(8936002)(508600001)(70206006)(36756003)(7696005)(47076005)(2616005)(8676002)(36860700001)(316002)(26005)(186003)(83380400001)(40460700003)(86362001)(44832011)(6666004)(356005)(4326008)(16526019)(81166007)(82310400004)(1076003)(110136005)(169823001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2022 21:57:18.0821
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f09d0f6-5788-44ce-aa5e-08da0797f073
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT066.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1206
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Implement change_mode() to disable sensor IRQs when a sensor is disabled.
+The powernow-k8 driver will do checks at startup that the current
+active driver is acpi-cpufreq and show a warning when they're not
+expected.
 
-Note that this commit does not touch:
-- The tsens device's CPU IRQ, which is global across all sensors on a tsens
-  device.
-- Power/clock of the sensor. Future work is needed in the tsens_ops
-  interface to support single-sensor disable + handle quirks (the only
-  implementation of tsens_ops->enable and disable only supports individual
-  enable/disable on some sensors, and others must be enabled/disabled as a
-  block).
+Because of this the following warning comes up on systems that
+support amd-pstate and compiled in both drivers:
+`WTF driver: amd-pstate`
 
-'echo disabled > .../thermal_zoneX/mode' will disable the thermal core's
-polling mechanism to check for threshold trips. However, tsens supports
-an interrupt mechanism to receive notification of trips, implemented in
-commit 634e11d5b450 ("drivers: thermal: tsens: Add interrupt support").
-This is used sometimes to run performance test cases.
+The systems that support powernow-k8 will not support amd-pstate,
+so re-order the checks to validate the CPU model number first to
+avoid this warning being displayed on modern SOCs.
 
-Currently the thermal zone mode that's set by userspace does not control
-threshold trip events from IRQs. Let's fix this to restore the abilty to
-disable thermal throttling at runtime.
-
-====================
-
-Tested on MSM8939 running 5.17. This platform has 8 cores; the first four
-thermal zones control cpu0-3 and the last zone is for the other four CPUs
-together.
-
-  for f in /sys/class/thermal/thermal_zone*; do
-    echo "disabled" > $f/mode
-    echo $f | paste - $f/type $f/mode
-  done
-
-/sys/class/thermal/thermal_zone0        cpu0-thermal    disabled
-/sys/class/thermal/thermal_zone1        cpu1-thermal    disabled
-/sys/class/thermal/thermal_zone2        cpu2-thermal    disabled
-/sys/class/thermal/thermal_zone3        cpu3-thermal    disabled
-/sys/class/thermal/thermal_zone4        cpu4567-thermal disabled
-
-With mitigation thresholds at 75 degC and load running, we can now cruise
-past temp=75000 without CPU throttling kicking in.
-
-  watch -n 1 "grep '' /sys/class/thermal/*/temp
-      /sys/class/thermal/*/cur_state
-      /sys/bus/cpu/devices/cpu*/cpufreq/cpuinfo_cur_freq"
-
-/sys/class/thermal/thermal_zone0/temp:82000
-/sys/class/thermal/thermal_zone1/temp:84000
-/sys/class/thermal/thermal_zone2/temp:87000
-/sys/class/thermal/thermal_zone3/temp:84000
-/sys/class/thermal/thermal_zone4/temp:84000
-/sys/class/thermal/cooling_device0/cur_state:0
-/sys/class/thermal/cooling_device1/cur_state:0
-/sys/bus/cpu/devices/cpu0/cpufreq/cpuinfo_cur_freq:1113600
-/sys/bus/cpu/devices/cpu1/cpufreq/cpuinfo_cur_freq:1113600
-/sys/bus/cpu/devices/cpu2/cpufreq/cpuinfo_cur_freq:1113600
-/sys/bus/cpu/devices/cpu3/cpufreq/cpuinfo_cur_freq:1113600
-/sys/bus/cpu/devices/cpu4/cpufreq/cpuinfo_cur_freq:800000
-/sys/bus/cpu/devices/cpu5/cpufreq/cpuinfo_cur_freq:800000
-/sys/bus/cpu/devices/cpu6/cpufreq/cpuinfo_cur_freq:800000
-/sys/bus/cpu/devices/cpu7/cpufreq/cpuinfo_cur_freq:800000
-
-Reported-by: Zac Crosby <zac@squareup.com>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Benjamin Li <benl@squareup.com>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
- drivers/thermal/qcom/tsens.c | 43 ++++++++++++++++++++++++++++++++++--
- drivers/thermal/qcom/tsens.h |  4 ++++
- 2 files changed, 45 insertions(+), 2 deletions(-)
+ drivers/cpufreq/powernow-k8.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index 99a8d9f3e03c..d5263436f959 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -564,8 +564,12 @@ static int tsens_set_trips(void *_sensor, int low, int high)
- 	/* Write the new thresholds and clear the status */
- 	regmap_field_write(priv->rf[LOW_THRESH_0 + hw_id], low_val);
- 	regmap_field_write(priv->rf[UP_THRESH_0 + hw_id], high_val);
--	tsens_set_interrupt(priv, hw_id, LOWER, true);
--	tsens_set_interrupt(priv, hw_id, UPPER, true);
-+	s->trips_configured = true;
-+
-+	if (s->enable_irqs) {
-+		tsens_set_interrupt(priv, hw_id, LOWER, true);
-+		tsens_set_interrupt(priv, hw_id, UPPER, true);
-+	}
- 
- 	spin_unlock_irqrestore(&priv->ul_lock, flags);
- 
-@@ -575,6 +579,40 @@ static int tsens_set_trips(void *_sensor, int low, int high)
- 	return 0;
- }
- 
-+static int tsens_change_mode(void *_sensor, enum thermal_device_mode mode)
-+{
-+	struct tsens_sensor *s = _sensor;
-+	struct tsens_priv *priv = s->priv;
-+	u32 hw_id = s->hw_id;
-+	bool enable = (mode == THERMAL_DEVICE_ENABLED);
-+	unsigned long flags;
-+
-+	if (tsens_version(priv) < VER_0_1) {
-+		/* Pre v0.1 IP had a single register for each type of interrupt
-+		 * and threshold, so we can't support individual enable/disable.
-+		 */
-+		hw_id = 0;
-+		enable = true;
-+	}
-+
-+	spin_lock_irqsave(&priv->ul_lock, flags);
-+
-+	/* During sensor registration, thermal core calls change_mode(ENABLED)
-+	 * before it calls set_trips(low, high). To avoid enabling threshold
-+	 * interrupts before thresholds are configured, let's let set_trips do
-+	 * the first enable.
-+	 */
-+	if (s->trips_configured) {
-+		tsens_set_interrupt(priv, hw_id, LOWER, enable);
-+		tsens_set_interrupt(priv, hw_id, UPPER, enable);
-+	}
-+	s->enable_irqs = enable;
-+
-+	spin_unlock_irqrestore(&priv->ul_lock, flags);
-+
-+	return 0;
-+}
-+
- static int tsens_enable_irq(struct tsens_priv *priv)
- {
+diff --git a/drivers/cpufreq/powernow-k8.c b/drivers/cpufreq/powernow-k8.c
+index 12ab4014af71..d289036beff2 100644
+--- a/drivers/cpufreq/powernow-k8.c
++++ b/drivers/cpufreq/powernow-k8.c
+@@ -1172,14 +1172,14 @@ static int powernowk8_init(void)
+ 	unsigned int i, supported_cpus = 0;
  	int ret;
-@@ -1002,6 +1040,7 @@ static const struct thermal_zone_of_device_ops tsens_of_ops = {
- 	.get_temp = tsens_get_temp,
- 	.get_trend = tsens_get_trend,
- 	.set_trips = tsens_set_trips,
-+	.change_mode = tsens_change_mode,
- };
  
- static int tsens_register_irq(struct tsens_priv *priv, char *irqname,
-diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-index 1471a2c00f15..1a835d7688e0 100644
---- a/drivers/thermal/qcom/tsens.h
-+++ b/drivers/thermal/qcom/tsens.h
-@@ -45,6 +45,8 @@ enum tsens_irq_type {
-  * @offset: offset of temperature adjustment curve
-  * @hw_id: HW ID can be used in case of platform-specific IDs
-  * @slope: slope of temperature adjustment curve
-+ * @trips_configured: whether this sensor's upper/lower thresholds are set
-+ * @enable_irqs: whether this sensor's threshold IRQs should be enabled
-  * @status: 8960-specific variable to track 8960 and 8660 status register offset
-  */
- struct tsens_sensor {
-@@ -53,6 +55,8 @@ struct tsens_sensor {
- 	int				offset;
- 	unsigned int			hw_id;
- 	int				slope;
-+	bool				trips_configured;
-+	bool				enable_irqs;
- 	u32				status;
- };
++	if (!x86_match_cpu(powernow_k8_ids))
++		return -ENODEV;
++
+ 	if (boot_cpu_has(X86_FEATURE_HW_PSTATE)) {
+ 		__request_acpi_cpufreq();
+ 		return -ENODEV;
+ 	}
  
+-	if (!x86_match_cpu(powernow_k8_ids))
+-		return -ENODEV;
+-
+ 	cpus_read_lock();
+ 	for_each_online_cpu(i) {
+ 		smp_call_function_single(i, check_supported_cpu, &ret, 1);
 -- 
-2.17.1
+2.34.1
 
