@@ -2,66 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6E44DB94A
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Mar 2022 21:24:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E924DB9F7
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Mar 2022 22:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353663AbiCPU0D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Mar 2022 16:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
+        id S1358137AbiCPVLt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Mar 2022 17:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347769AbiCPU0C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Mar 2022 16:26:02 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6A42B186
-        for <linux-pm@vger.kernel.org>; Wed, 16 Mar 2022 13:24:47 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id z66so2835144qke.10
-        for <linux-pm@vger.kernel.org>; Wed, 16 Mar 2022 13:24:47 -0700 (PDT)
+        with ESMTP id S1358094AbiCPVLo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Mar 2022 17:11:44 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6140E48E77
+        for <linux-pm@vger.kernel.org>; Wed, 16 Mar 2022 14:10:25 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id b8so3217305pjb.4
+        for <linux-pm@vger.kernel.org>; Wed, 16 Mar 2022 14:10:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ivPqLyiNJbnmJk4hxBVjVwg3q4Q1FQmH/sEVySOJZBA=;
-        b=l3sm7SDMmEOTusOKnBZMsCiPIMD62w6xc8H5g36QNSKU64kg3uK6rKuNYHwnyHvee3
-         vjADlXIj187GklEXa/0ioE+lTl0Wnku6ATX9T/1iyRujJ65k3/hyaowS9+W/ZPPSDs5i
-         sEWCYPD0dA7PDny7HOwkV65vKCMFcuaWmNSEs/jB9oyo0dFx1ErFNeeRd755/mHP6Uw5
-         9mBf+D2qonlRg2tuGv5nlhLXrOLmwgDSC9BaehHl4AuojRjaggs8qMdAVAz1mDd114nT
-         NQ9Z3zou3lO5w6oN/4rQ0/A51xGDEjKJTKV2JJArXf30iD1sglK3paYigUNXj5go6mxW
-         4WXQ==
+        d=squareup.com; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=A6cOxdUaG1A86kAtWaCIf07+aXGBjHiOUH8wcQkHkjE=;
+        b=TjOnIiyszh7cP5J8N0RqNG9sx+4l3KYhzHYTAvRuldydNoM5hA7bqJDoN0u8cG8lPS
+         xmPxH2lwD4DW466GeuWuezsrVQjQnMuCdy1P3dATg2yFshWYKPLFNwjWH2C0T2z/pO4L
+         +F7zv//JFDverjj7xHns6RBHNrf5JIsvbkMMo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ivPqLyiNJbnmJk4hxBVjVwg3q4Q1FQmH/sEVySOJZBA=;
-        b=HJXiWbPvedxgYj0+j1IHeFheztGigpvkjArBCtoXG6Oo2UEsxd0A0OyZvvUgLvVj/C
-         iRxlbbpXtYsjKhjd0pusbOSfM8JAeZ2EMRfnilT3onsqVsY+Zxce51ysYAFoeB95Tk0j
-         /mWUHP7oTbN5zD3c1JEvZD6omjBHmUfKfyqvN0XqbhbtX3WC6BQ6PIatDzXhQgTl6sLx
-         xvVMPaCexC3xd4w0nRiF4sa7VJ4in+lTXVCW7DL1YriOWsbTSsLiE1U6HtthBIc65HFh
-         u3TsLijCGCan1Kig2Tn6btMWrPyjViS05PwdoUVLjBoHxyum0CJ+JAOvDQsdTp8QjNaK
-         7afg==
-X-Gm-Message-State: AOAM532pRjWUtcTi6xFSsVwtptKx1crIRW0KtvWmWK8g219BKSF/LCO3
-        UZxW4OXxHTDTRiiYeZCQyDHOyNvC1b/6UuTpi4cs3/Jdotc=
-X-Google-Smtp-Source: ABdhPJzqwlApxyq7lsWK+22acdlSBDDtBs7AEx7TtXUuEivO4VgVtHuDW20tK1Qk+3mgq1yJYe1/hzvMNuILSgh/WQA=
-X-Received: by 2002:a05:620a:28c7:b0:67d:6d4e:16ee with SMTP id
- l7-20020a05620a28c700b0067d6d4e16eemr965648qkp.59.1647462286423; Wed, 16 Mar
- 2022 13:24:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220316180322.88132-1-bjorn.andersson@linaro.org>
-In-Reply-To: <20220316180322.88132-1-bjorn.andersson@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 16 Mar 2022 23:24:35 +0300
-Message-ID: <CAA8EJpotanjL_EHYr1-YQAXDOT--HGhGW2RH-0fO5189CEpB1Q@mail.gmail.com>
-Subject: Re: [PATCH] thermal/drivers/qcom/lmh: Fix irq handler return value
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=A6cOxdUaG1A86kAtWaCIf07+aXGBjHiOUH8wcQkHkjE=;
+        b=sAzybachj11ZQuyOrQckrnQ/s1oJasOMOzaIbedYpfzj5BkKf3baEuC65ZM+s6EXqP
+         P83Hw/ua/X9WvjS92pZJx6bMXlcQwDt9WFqjE92bSYfiXyqoVQAmUDvuJ3Hpl7/faE5b
+         WUc8hOptq5JbiCGj3oTLhDeMgfsDvuoDUMvEDOv14lY/2PAfx9maWlE6lTt9e5E6m3At
+         FQ8/Tk10iJyvc2sDArXIqV8XJzAd8BkeDzs1vewy7Q6hL0VBn5w+rPHDlXxGgy3uLN1q
+         /OUQie6X7TTo2nQTAaCluSWvNJjiMg/nMWgjZSeMYetNa/jMGt7kRwWFRDN8hW4pKUwF
+         rluQ==
+X-Gm-Message-State: AOAM530MVMWM4xctEOkBqew4AssVJ831nArPbA8CfAcMF3XKdwNr6PXO
+        ixB06D9DexmSKVExWDF83ZVQDg==
+X-Google-Smtp-Source: ABdhPJzb5vzfkKFyarFdtMtfUhu+EIlpoWuPTm+nXYoeixxrBzfHa8F64Rja2IagUyaJIoRZgNy+TQ==
+X-Received: by 2002:a17:902:bd89:b0:14d:93b4:71a9 with SMTP id q9-20020a170902bd8900b0014d93b471a9mr1505304pls.98.1647465024771;
+        Wed, 16 Mar 2022 14:10:24 -0700 (PDT)
+Received: from localhost ([135.84.132.250])
+        by smtp.gmail.com with ESMTPSA id u10-20020a63b54a000000b00380ea901cd2sm3341246pgo.6.2022.03.16.14.10.22
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 16 Mar 2022 14:10:23 -0700 (PDT)
+From:   Benjamin Li <benl@squareup.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Zac Crosby <zac@squareup.com>, Benjamin Li <benl@squareup.com>,
+        Andy Gross <agross@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] thermal: thermal_of: pass-through change_mode & implement for tsens
+Date:   Wed, 16 Mar 2022 14:09:43 -0700
+Message-Id: <20220316210946.6935-1-benl@squareup.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,40 +66,43 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 16 Mar 2022 at 21:01, Bjorn Andersson
-<bjorn.andersson@linaro.org> wrote:
->
-> After enough invocations the LMh irq is eventually reported as bad, because the
-> handler doesn't return IRQ_HANDLED, fix this.
->
-> Fixes: 53bca371cdf7 ("thermal/drivers/qcom: Add support for LMh driver")
-> Reported-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Plumb through the change_mode callback from thermal core into thermal_of,
+and implement change_mode for the Qualcomm tsens driver.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Supersedes "[PATCH v3] drivers: thermal: tsens: respect thermal_device_mode
+in threshold irq reporting". Changelog for that patchset:
 
-> ---
->  drivers/thermal/qcom/lmh.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
-> index c7f91cbdccc7..af9f0872614f 100644
-> --- a/drivers/thermal/qcom/lmh.c
-> +++ b/drivers/thermal/qcom/lmh.c
-> @@ -45,7 +45,7 @@ static irqreturn_t lmh_handle_irq(int hw_irq, void *data)
->         if (irq)
->                 generic_handle_irq(irq);
->
-> -       return 0;
-> +       return IRQ_HANDLED;
->  }
->
->  static void lmh_enable_interrupt(struct irq_data *d)
-> --
-> 2.33.1
->
+Changes in v3:
+- Upgraded logging to dev_info_ratelimited and revised log message.
+- Remove unrelated hunk.
 
+Some drivers that support thermal zone disabling implement a set_mode
+operation and simply disable the sensor or the relevant IRQ(s), so they
+actually don't log anything when zones are disabled. These drivers are
+imx_thermal.c, intel_quark_dts_thermal.c, and int3400_thermal.c.
+
+For tsens.c, implementing a change_mode would require migrating the driver
+from devm_thermal_zone_of_sensor_register to thermal_zone_device_register
+(or updating thermal_of.c to add a change_mode operation in thermal_zone_
+of_device_ops).
+
+stm_thermal.c seems to use this patch's model of not disabling IRQs when
+the zone is disabled (they still perform the thermal_zone_device_update
+upon IRQ, but return -EAGAIN from their get_temp).
+
+Changes in v2:
+- Reordered sentences in first part of commit message to make sense.
+
+Benjamin Li (2):
+  thermal: thermal_of: add pass-through change_mode to ops struct
+  drivers: thermal: tsens: implement change_mode to disable sensor IRQs
+
+ drivers/thermal/qcom/tsens.c | 43 ++++++++++++++++++++++++++++++++++--
+ drivers/thermal/qcom/tsens.h |  4 ++++
+ drivers/thermal/thermal_of.c | 14 ++++++++++++
+ include/linux/thermal.h      |  2 ++
+ 4 files changed, 61 insertions(+), 2 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+2.17.1
+
