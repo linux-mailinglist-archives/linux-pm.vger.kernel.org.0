@@ -2,87 +2,214 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E994DC7CE
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Mar 2022 14:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC134DC811
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Mar 2022 14:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233029AbiCQNqj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Mar 2022 09:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47520 "EHLO
+        id S233208AbiCQN7x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Mar 2022 09:59:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231247AbiCQNqj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Mar 2022 09:46:39 -0400
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C2EDEB96;
-        Thu, 17 Mar 2022 06:45:23 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id l2so10285628ybe.8;
-        Thu, 17 Mar 2022 06:45:23 -0700 (PDT)
+        with ESMTP id S234164AbiCQN7w (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Mar 2022 09:59:52 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1320F124C00
+        for <linux-pm@vger.kernel.org>; Thu, 17 Mar 2022 06:58:34 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id b28so9168023lfc.4
+        for <linux-pm@vger.kernel.org>; Thu, 17 Mar 2022 06:58:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vtfU7ZmSyzu0aIBlObVJRVKPE0I4koFlCCs17r3YyMg=;
+        b=DDSztKNogamfDkI/8FN/2Q7CWAH/YpMKFlMSmdPCvL5xSGqxZnFXMG9h6eZzuZlQ1Q
+         kMBPFLEXq0ZlD+UWe1D0x50yC67tAV4cbypxlEj2/KsTqCqmvyEXqFBWFfgz6r4lpDJk
+         SDFZrc15uvgJypei0HBIxFI+IF7t4SRzKb/2wRLCq9R9cvy/iClxahc3KfWppKYpPwyG
+         ZbPjGaeZoXjv0JSq/nx4Se6XSufJWDy3qlDsXojULbJFHsY2EL6Z1l1ETpHEaQQMEdcq
+         fWZcRkogTVIrkdjQE4ZVunEIyVa94x3+4uxM2hJcSboirfjkK3NKI38jF6OPyFiRR7qv
+         9pAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=iPkA9tWXGYSPfTkvzhOngjgt6GqV+PZtcZByWXDH0PM=;
-        b=1/iO2RCInkV3rhF/DbTZqvuFQgmbXPWT+s0fXqBrlbn39rnJ2EckyldzY2ic3yR5i5
-         71gJsdLnoKMDn+MmgqgeTrYIKCxcV9yGj/0b7GizTDS3V49wfh22XDlAwjVUSK0fUDJp
-         KkGcYzn+rHPvsw4FELmAV1A7SjM1NLESzR/NVdI1agrk24Fgiz/Kvc0KXvoJ3N55XQlm
-         U/5NNQ/eoJ00fWQQMmfDjw+8qVcvE7NEG9EgfY+VLMbRIx5HmB9IZ/1KpyM6qga1Qhna
-         FBrJfgTh7D5rto7WZtLh75FU/k6A76x2e/Dk+Qpk7jAP8jzDYoGjh9rFRFWnLCFZUMYN
-         iRnQ==
-X-Gm-Message-State: AOAM530sAF7ao7h0W1ZRJua7k1IpsjgVX7Stz/1q59WvGks0ZU5dp/KS
-        l6H7u5kf1xDDEaHUyVdgu0J3B5iX6gxZF42hiJ4=
-X-Google-Smtp-Source: ABdhPJwOGOZbUy+HA0zjr99J3BqTy7SnKUJf0UQ7rf44mwXAJU0ylPDrV/TF0wNiU6KHSW1fQ9vIXEVRqIbbDcN8beQ=
-X-Received: by 2002:a25:fe10:0:b0:625:262f:e792 with SMTP id
- k16-20020a25fe10000000b00625262fe792mr4852801ybe.365.1647524722391; Thu, 17
- Mar 2022 06:45:22 -0700 (PDT)
+        bh=vtfU7ZmSyzu0aIBlObVJRVKPE0I4koFlCCs17r3YyMg=;
+        b=Q+WpQLsY/3oFDpRIdYniV/HdNe9qKzxZBUA7wGym8lt/i9X4vsmeJacpX/07gTVgWW
+         JRERPDxVI9koWFuCwgdq0gKRhExOyz6QcT5gZnBm+FaH+Cgj5XoPwFOVVCo/f2G7lCdW
+         BfmtXaIa50+d8MKvW//duamF+qVMMtEEBAOfgTC65QqSDL/fS4Lif8+iO5LQMJ6RM5BU
+         XZtIvfYJfSYlpiGMkNVDbcvRpqCP/+cTj2Cl3T6uoST+7kdZASddP1H2lgx/3jYihP+R
+         JxnIm05OhI20VxVoPLZG1BXw6RmK7hCerR0uZt9pFCR1RtmZSHcP9jgQGpdV1Rf3FGpO
+         U/JA==
+X-Gm-Message-State: AOAM532HAZnnKncHgx/5XX4xbL8OPqQLXoNNL9hKFPYcgcOPXenRpQnR
+        S1iWTa3lfYJOamN649Tlq1TbdeihKIQBrUwD67Hh4A==
+X-Google-Smtp-Source: ABdhPJxwM07ramt53nvtfTEItNjtOoMd+PViBjYZslXdZDbaTdxFE81LFojy8Y/m0ML35fiGgPCh1OOWQSncpXwBOkg=
+X-Received: by 2002:a05:6512:10d4:b0:448:9691:435e with SMTP id
+ k20-20020a05651210d400b004489691435emr2857526lfg.465.1647525512185; Thu, 17
+ Mar 2022 06:58:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220312043624.40732-1-dacohen@pm.me>
-In-Reply-To: <20220312043624.40732-1-dacohen@pm.me>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 17 Mar 2022 14:45:11 +0100
-Message-ID: <CAJZ5v0gqpQTuNN0WpnEd4dAQmnR=BXSoH_w7kkAxOG7xkftW6Q@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: fix dynamic debug within pm_pr_debug()
-To:     David Cohen <dacohen@pm.me>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
+ <CAAYoRsW4LqNvSZ3Et5fqeFcHQ9j9-0u9Y-LN9DmpCS3wG3+NWg@mail.gmail.com>
+ <20220228041228.GH4548@shbuild999.sh.intel.com> <11956019.O9o76ZdvQC@kreacher>
+ <20220301055255.GI4548@shbuild999.sh.intel.com> <CAJZ5v0jWUR__zn0=SDDecFct86z-=Y6v5fi37mMyW+zOBi7oWw@mail.gmail.com>
+ <CAAYoRsVLOcww0z4mp9TtGCKdrgeEiL_=FgrUO=rwkZAok4sQdg@mail.gmail.com>
+ <CAJZ5v0hK4zoOtgNQNFkJHC0XOiGsPGUPphHU5og44e_K4kGU9g@mail.gmail.com>
+ <CAAYoRsWN-h+fBAoocGmUFHDkOv2PL+6U59_ASBYH74j0orHaCQ@mail.gmail.com>
+ <CAJZ5v0iOOmRY3uC1-ZGQ30VysMuAjGum=Lt4tkqNUjop+ikqZw@mail.gmail.com>
+ <CAAYoRsVs_CB-dBGShksmXATRP3oGnD6uU-xQdSPjkRER+j6fTQ@mail.gmail.com>
+ <CAAYoRsVnPa-aiKCju7Nz+cznyOo2sbioFks+gU7W7dqWyO8JJw@mail.gmail.com>
+ <CAAYoRsU=SjE2zpQPjxrE6aDzEk6+AZy9DUAJ4Vv2qimbiJ2ySQ@mail.gmail.com> <CAJZ5v0hTOD8Y-ft0jo8KO+RW33ow7_Lm+6gAWA0BpM7o-u4vyQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hTOD8Y-ft0jo8KO+RW33ow7_Lm+6gAWA0BpM7o-u4vyQ@mail.gmail.com>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Thu, 17 Mar 2022 06:58:25 -0700
+Message-ID: <CAAYoRsU-e70mDpKrO_dqdPJTRrPMD8cKmFnyHVoXGEVTFotvUQ@mail.gmail.com>
+Subject: Re: CPU excessively long times between frequency scaling driver calls
+ - bisected
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        dsmythies <dsmythies@telus.net>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Mar 12, 2022 at 5:37 AM David Cohen <dacohen@pm.me> wrote:
+On Thu, Mar 17, 2022 at 5:30 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> On Wed, Mar 16, 2022 at 4:55 PM Doug Smythies <dsmythies@telus.net> wrote:
+> >
+> > Readers: So that graphs and large attachments could be used, I have
+> > been on an off-list branch of this thread with Srinivas, and copied a
+> > couple of others. While now returning to this on-list thread, I'll
+> > only take up Rafael's proposed patch.
+> >
+> > Hi Rafael,
+> >
+> > So far all work has been done with: HWP disabled; intel_pstate; powersave.
+> > The reason was that it is, by far, the best way to obtain good trace data
+> > using the intel_pstate_tracer.py utility.
+> >
+> > I always intended to try/test: HWP disabled; intel_cpufreq; schedutil.
+> > There is an issue with the proposed patch and schedutil.
+> >
+> > If any CPU ever requests a pstate > the max non turbo pstate
+> > then it will stay at that request forever. Ultimately the idle
+> > power goes to about 5.7 watts (verses 1.4 watts expected).
+> > IRQs go very high, as the tick never turns off.
+> > Actually, one knows how many CPUs are stuck requesting a high
+> > pstate just by looking at IRQs.
 >
-> Currently, pm_pr_debug() and pm_deferred_pr_debug() use __pm_pr_debug()
-> to filter pm debug messages based on pm_debug_messages_on flag.
-> According to __pm_pr_debug() implementation, pm_deferred_pr_debug()
-> indirectly calls printk_deferred() within __pm_pr_debug() which doesn't
-> support dynamic debug, but pm_pr_debug() indirectly calls pr_debug()
+> That may be because INTEL_CPUFREQ_TRANSITION_DELAY is too small.
+>
+> Please try to increase
+> /sys/devices/system/cpu/cpufreq/schedutil/rate_limit_us to 10000 and
+> see what difference this makes.
 
-I'm not sure what you mean by pm_pr_debug().  There's no such thing in
-the kernel tree.
+Changing rate_limit_us to 10000, or even 20000, makes no difference.
 
-Assuming that it means pm_pr_dbg(), it doesn't call pr_debug():
+see a slight clarification to yesterday's email in-line below.
 
-#define pm_pr_dbg(fmt, ...) __pm_pr_dbg(false, fmt, ##__VA_ARGS__)
+> > Trace is useless because it virtually never gets called.
+> > So I have been reading the IA32_PERF_CTL MSR
+> > directly.
+> >
+> > Example:
+> >
+> > Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
+> > 6 cores, 12 CPUs
+> > min pstate 8
+> > max non-turbo pstate 41
+> > max turbo pstate 48
+> > The system is idle.
+> >
+> > doug@s19:~$ sudo
+> > /home/doug/kernel/linux/tools/power/x86/turbostat/turbostat --Summary
+> > --quiet --show Busy%,Bzy_MHz,IRQ,PkgWatt --interval 10
+> > Busy%   Bzy_MHz IRQ     PkgWatt
+> > 0.11    800     844     1.33
+> > 0.01    800     231     1.33
+> > 0.11    800     723     1.33 <<< Powersave governor
+> > 0.03    889     440     1.33
+> > 0.17    4418    21511   4.31 <<< Schedutil governor
+> > 0.12    4101    30153   4.48 <<< 3 CPUs are > pstate 41
+> > 0.22    4347    34226   4.75
+> > 0.17    4101    43554   4.78
+> > 0.29    4300    50565   4.94
+> > 0.21    4098    50297   4.76 <<< 5 CPUs are > pstate 41
+> > 0.29    4298    50532   4.84
+> > 0.20    4101    50126   4.63
+> > 0.20    4101    50149   4.62
+> > 0.29    4297    50623   4.76
+> > 0.20    4101    50203   4.72
+> > 0.29    4295    50642   4.78
+> > 0.20    4101    50223   4.68
+> > 0.29    4292    50597   4.88
+> > 0.20    4101    50208   4.73
+> > 0.29    4296    50519   4.84
+> > 0.20    4101    50167   4.80
+> > 0.20    4101    50242   4.76
+> > 0.29    4302    50625   4.94
+> > 0.20    4101    50233   4.73
+> > 0.29    4296    50613   4.78
+> > 0.20    4101    50231   4.70
+> > 0.29    4292    50802   4.93
+> > 1.46    4669    65610   8.36
+> > 0.41    4225    80701   5.48
+> > 0.33    4101    80219   5.36 <<< 8 CPUs are > ptstate 41
+> > 0.34    4098    80313   5.38
+> > 0.41    4228    80689   5.56
+> > 0.33    4101    80252   5.46
+> >
+> > And the related MSR reads:
+> >
+> > 3 CPUs are > pstate 41:
+> > root@s19:/home/doug# c/msr-decoder | grep IA32_PERF_CTL
+> > 9.) 0x199: IA32_PERF_CTL        : CPU 0-11 :  30 :   8 :   8 :  48 :
+> > 48 :  48 :   8 :  30 :  31 :   8 :   8 :   8 :
+> >
+> > 5 CPUs are > psate 41:
+> > root@s19:/home/doug# c/msr-decoder | grep IA32_PERF_CTL
+> > 9.) 0x199: IA32_PERF_CTL        : CPU 0-11 :  44 :  30 :  31 :  48 :
+> > 48 :  48 :   8 :   8 :   8 :   8 :  48 :   8 :
+> >
+> > 8 CPUs are > pstate 41:
+> > root@s19:/home/doug# c/msr-decoder | grep IA32_PERF_CTL
+> > 9.) 0x199: IA32_PERF_CTL        : CPU 0-11 :  45 :  48 :  48 :  48 :
+> > 48 :  48 :   8 :  30 :   8 :   8 :  48 :  42 :
+> >
+> > This issue is independent of the original patch or the suggested modification:
 
-and
+Actually, the issue threshold is as defined by the greater than condition below.
 
-void __pm_pr_dbg(bool defer, const char *fmt, ...)
-{
-...
-        if (defer)
-               printk_deferred(KERN_DEBUG "PM: %pV", &vaf);
-        else
-               printk(KERN_DEBUG "PM: %pV", &vaf);
+> >
+> > > diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> > > index f878a4545eee..94018ac0b59b 100644
+> > > --- a/drivers/cpufreq/intel_pstate.c
+> > > +++ b/drivers/cpufreq/intel_pstate.c
+> > > @@ -1980,7 +1980,7 @@ static void intel_pstate_update_perf_ctl(struct
+> > > cpudata *cpu)
+> > >          * P-states to prevent them from getting back to the high frequency
+> > >          * right away after getting out of deep idle.
+> > >          */
+> > > -       cpuidle_update_retain_tick(pstate > cpu->pstate.max_pstate);
 
-And as I said printk(KERN_DEBUG ...) is not equivalent to
-pr_debug(...), because it is not dynamic printk().
+For the above kernel the threshold is pstate 42.
 
-pm_pr_dbg() is not dynamic printk() on purpose, so they both can be
-controlled independently.
+> > > +       cpuidle_update_retain_tick(pstate > ((cpu->pstate.max_pstate +
+> > > cpu->pstate.min_pstate)/2));
+
+For the above kernel the threshold is pstate 25.
+
+> > >         wrmsrl(MSR_IA32_PERF_CTL, pstate_funcs.get_val(cpu, pstate));
+> > >  }
+> >
+> > ... Doug
