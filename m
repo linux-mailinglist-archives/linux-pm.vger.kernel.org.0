@@ -2,188 +2,332 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 988F64DC5D9
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Mar 2022 13:30:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 501E84DC7AF
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Mar 2022 14:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233574AbiCQMcI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Mar 2022 08:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58106 "EHLO
+        id S229869AbiCQNg4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Mar 2022 09:36:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232450AbiCQMcI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Mar 2022 08:32:08 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9461DDFCB;
-        Thu, 17 Mar 2022 05:30:51 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2e59939b862so55992357b3.10;
-        Thu, 17 Mar 2022 05:30:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RdSRIsJMcMTbELmRjIH9092SWXjm1j5Pn9ugkzrXeHc=;
-        b=YGN8oJiUhlq+E0Gk+RS0WfPFZFCqfhI8hW66gYJ0oVTvIHBI2lEiow/4+iEWWVJrMq
-         5t8w1wC+KnhmYHSjVIS1wn2NHrPy2N9xoVuvlrJGKHOUMlEyEOexMDqADPzIFqG8mFvf
-         XQMA5RI3FE55HzYvSBs2wfOwm7M12i1YQPAEHXq5uvVzWx1sbdaB3WqfARMnzj/PB3ML
-         CYFnjx9FQ7ZEL0uhVn0PNpgLyc015oQb76PYgd2KssK1HrDp6oeNL6orPa3ZGR3zF1uG
-         rT1ly6o1+aldlYX23Hw7ZiaJNSjmFrSJDK+dNnlMa8WSLE4xcsqmMNcBQNYg1+4dgPoB
-         z0Iw==
-X-Gm-Message-State: AOAM5306cXjPhm0IP49djheHd5TGuoN4pBZs5wn81Nv1DHlihqf5sKDm
-        LaHnotQHy4bMBnfkDY/5XEFAkrrQ/ZQXCJV4F4psaDdQp0Q=
-X-Google-Smtp-Source: ABdhPJyd81XrKccs0+WLtYrqHQXA2xz5pt2ggNNPzRgJujU6Bb4vePhJKgAlZ72/znO5eedXXje0MET65oFV/csFt8I=
-X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
- b145-20020a811b97000000b002db640f49d8mr5042332ywb.326.1647520250820; Thu, 17
- Mar 2022 05:30:50 -0700 (PDT)
+        with ESMTP id S229824AbiCQNgz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Mar 2022 09:36:55 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B42AB1DA8D7;
+        Thu, 17 Mar 2022 06:35:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6AFA61515;
+        Thu, 17 Mar 2022 06:35:38 -0700 (PDT)
+Received: from e126645.arm.com (unknown [10.57.41.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AFEB73F766;
+        Thu, 17 Mar 2022 06:35:33 -0700 (PDT)
+From:   Pierre Gondois <Pierre.Gondois@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ionela.Voinescu@arm.com, Lukasz.Luba@arm.com,
+        Morten.Rasmussen@arm.com, Dietmar.Eggemann@arm.com,
+        mka@chromium.org, daniel.lezcano@linaro.org,
+        Pierre Gondois <Pierre.Gondois@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Fuad Tabba <tabba@google.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Hector Martin <marcan@marcan.st>,
+        Rob Herring <robh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: [PATCH v1 0/3] Enable EAS for CPPC/ACPI based systems
+Date:   Thu, 17 Mar 2022 14:34:14 +0100
+Message-Id: <20220317133419.3901736-1-Pierre.Gondois@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
- <CAAYoRsW4LqNvSZ3Et5fqeFcHQ9j9-0u9Y-LN9DmpCS3wG3+NWg@mail.gmail.com>
- <20220228041228.GH4548@shbuild999.sh.intel.com> <11956019.O9o76ZdvQC@kreacher>
- <20220301055255.GI4548@shbuild999.sh.intel.com> <CAJZ5v0jWUR__zn0=SDDecFct86z-=Y6v5fi37mMyW+zOBi7oWw@mail.gmail.com>
- <CAAYoRsVLOcww0z4mp9TtGCKdrgeEiL_=FgrUO=rwkZAok4sQdg@mail.gmail.com>
- <CAJZ5v0hK4zoOtgNQNFkJHC0XOiGsPGUPphHU5og44e_K4kGU9g@mail.gmail.com>
- <CAAYoRsWN-h+fBAoocGmUFHDkOv2PL+6U59_ASBYH74j0orHaCQ@mail.gmail.com>
- <CAJZ5v0iOOmRY3uC1-ZGQ30VysMuAjGum=Lt4tkqNUjop+ikqZw@mail.gmail.com>
- <CAAYoRsVs_CB-dBGShksmXATRP3oGnD6uU-xQdSPjkRER+j6fTQ@mail.gmail.com>
- <CAAYoRsVnPa-aiKCju7Nz+cznyOo2sbioFks+gU7W7dqWyO8JJw@mail.gmail.com> <CAAYoRsU=SjE2zpQPjxrE6aDzEk6+AZy9DUAJ4Vv2qimbiJ2ySQ@mail.gmail.com>
-In-Reply-To: <CAAYoRsU=SjE2zpQPjxrE6aDzEk6+AZy9DUAJ4Vv2qimbiJ2ySQ@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 17 Mar 2022 13:30:39 +0100
-Message-ID: <CAJZ5v0hTOD8Y-ft0jo8KO+RW33ow7_Lm+6gAWA0BpM7o-u4vyQ@mail.gmail.com>
-Subject: Re: CPU excessively long times between frequency scaling driver calls
- - bisected
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Feng Tang <feng.tang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 4:55 PM Doug Smythies <dsmythies@telus.net> wrote:
->
-> Readers: So that graphs and large attachments could be used, I have
-> been on an off-list branch of this thread with Srinivas, and copied a
-> couple of others. While now returning to this on-list thread, I'll
-> only take up Rafael's proposed patch.
->
-> Hi Rafael,
->
-> So far all work has been done with: HWP disabled; intel_pstate; powersave.
-> The reason was that it is, by far, the best way to obtain good trace data
-> using the intel_pstate_tracer.py utility.
->
-> I always intended to try/test: HWP disabled; intel_cpufreq; schedutil.
-> There is an issue with the proposed patch and schedutil.
->
-> If any CPU ever requests a pstate > the max non turbo pstate
-> then it will stay at that request forever. Ultimately the idle
-> power goes to about 5.7 watts (verses 1.4 watts expected).
-> IRQs go very high, as the tick never turns off.
-> Actually, one knows how many CPUs are stuck requesting a high
-> pstate just by looking at IRQs.
+0. Overview
 
-That may be because INTEL_CPUFREQ_TRANSITION_DELAY is too small.
+The current Energy Model (EM) for CPUs requires knowledge about CPU
+performance states and their power consumption. Both of these
+information is not available for ACPI based systems.
 
-Please try to increase
-/sys/devices/system/cpu/cpufreq/schedutil/rate_limit_us to 10000 and
-see what difference this makes.
+In ACPI, describing power efficiency of CPUs can be done through the
+following arm specific field:
 
-> Trace is useless because it virtually never gets called.
-> So I have been reading the IA32_PERF_CTL MSR
-> directly.
->
-> Example:
->
-> Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
-> 6 cores, 12 CPUs
-> min pstate 8
-> max non-turbo pstate 41
-> max turbo pstate 48
-> The system is idle.
->
-> doug@s19:~$ sudo
-> /home/doug/kernel/linux/tools/power/x86/turbostat/turbostat --Summary
-> --quiet --show Busy%,Bzy_MHz,IRQ,PkgWatt --interval 10
-> Busy%   Bzy_MHz IRQ     PkgWatt
-> 0.11    800     844     1.33
-> 0.01    800     231     1.33
-> 0.11    800     723     1.33 <<< Powersave governor
-> 0.03    889     440     1.33
-> 0.17    4418    21511   4.31 <<< Schedutil governor
-> 0.12    4101    30153   4.48 <<< 3 CPUs are > pstate 41
-> 0.22    4347    34226   4.75
-> 0.17    4101    43554   4.78
-> 0.29    4300    50565   4.94
-> 0.21    4098    50297   4.76 <<< 5 CPUs are > pstate 41
-> 0.29    4298    50532   4.84
-> 0.20    4101    50126   4.63
-> 0.20    4101    50149   4.62
-> 0.29    4297    50623   4.76
-> 0.20    4101    50203   4.72
-> 0.29    4295    50642   4.78
-> 0.20    4101    50223   4.68
-> 0.29    4292    50597   4.88
-> 0.20    4101    50208   4.73
-> 0.29    4296    50519   4.84
-> 0.20    4101    50167   4.80
-> 0.20    4101    50242   4.76
-> 0.29    4302    50625   4.94
-> 0.20    4101    50233   4.73
-> 0.29    4296    50613   4.78
-> 0.20    4101    50231   4.70
-> 0.29    4292    50802   4.93
-> 1.46    4669    65610   8.36
-> 0.41    4225    80701   5.48
-> 0.33    4101    80219   5.36 <<< 8 CPUs are > ptstate 41
-> 0.34    4098    80313   5.38
-> 0.41    4228    80689   5.56
-> 0.33    4101    80252   5.46
->
-> And the related MSR reads:
->
-> 3 CPUs are > pstate 41:
-> root@s19:/home/doug# c/msr-decoder | grep IA32_PERF_CTL
-> 9.) 0x199: IA32_PERF_CTL        : CPU 0-11 :  30 :   8 :   8 :  48 :
-> 48 :  48 :   8 :  30 :  31 :   8 :   8 :   8 :
->
-> 5 CPUs are > psate 41:
-> root@s19:/home/doug# c/msr-decoder | grep IA32_PERF_CTL
-> 9.) 0x199: IA32_PERF_CTL        : CPU 0-11 :  44 :  30 :  31 :  48 :
-> 48 :  48 :   8 :   8 :   8 :   8 :  48 :   8 :
->
-> 8 CPUs are > pstate 41:
-> root@s19:/home/doug# c/msr-decoder | grep IA32_PERF_CTL
-> 9.) 0x199: IA32_PERF_CTL        : CPU 0-11 :  45 :  48 :  48 :  48 :
-> 48 :  48 :   8 :  30 :   8 :   8 :  48 :  42 :
->
-> This issue is independent of the original patch or the suggested modification:
->
-> > diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> > index f878a4545eee..94018ac0b59b 100644
-> > --- a/drivers/cpufreq/intel_pstate.c
-> > +++ b/drivers/cpufreq/intel_pstate.c
-> > @@ -1980,7 +1980,7 @@ static void intel_pstate_update_perf_ctl(struct
-> > cpudata *cpu)
-> >          * P-states to prevent them from getting back to the high frequency
-> >          * right away after getting out of deep idle.
-> >          */
-> > -       cpuidle_update_retain_tick(pstate > cpu->pstate.max_pstate);
-> > +       cpuidle_update_retain_tick(pstate > ((cpu->pstate.max_pstate +
-> > cpu->pstate.min_pstate)/2));
-> >         wrmsrl(MSR_IA32_PERF_CTL, pstate_funcs.get_val(cpu, pstate));
-> >  }
->
-> ... Doug
+ACPI 6.4, s5.2.12.14 "GIC CPU Interface (GICC) Structure",
+"Processor Power Efficiency Class field":
+Describes the relative power efficiency of the associated pro-
+cessor. Lower efficiency class numbers are more efficient than
+higher ones (e.g. efficiency class 0 should be treated as more
+efficient than efficiency class 1). However, absolute values
+of this number have no meaning: 2 isn't necessarily half as
+efficient as 1.
+
+Add an 'efficiency_class' field to describe the relative power
+efficiency of CPUs. CPUs relying on this field will have performance
+states (power and frequency values) artificially created. Such EM will
+be referred to as an artificial EM.
+
+The artificial EM is used for the CPPC driver.
+
+1. Dependencies
+
+This patch-set has a dependency on:
+ - [0/8] Introduce support for artificial Energy Model
+https://lkml.org/lkml/2022/3/16/850
+introduces a new callback in the Energy Model (EM) and prevents the
+registration of devices using power values from an EM when the EM
+is artificial. Not having this patch-set would break builds.
+ - This patch-set based on linux-next.
+
+2. Testing
+
+This patch-set has been tested on a Juno-r2 and a Pixel4. Two types
+of tests were done: energy testing, and performance testing.
+
+The energy testing was done with 2 sets of tasks:
+- homogeneous tasks (#Tasks at 5% utilization and 16ms period)
+- heterogeneous tasks (#Tasks at 5|10|15% utilization and 16ms period).
+  If a test has 3 tasks, then there is one with each utilization
+  (1 at 5%, 1 at 10%, 1 at 15%).
+Tasks spawn on the biggest CPU(s) of the platform. If there are
+multiple big CPUs, tasks spawn alternatively on big CPUs.
+
+2.1. Juno-r2 testing
+
+The Juno-r2 has 6 CPUs:
+- 4 little [0, 3-5], max_capa=383
+- 2 big [1-2], max_capa=1024
+Base kernel is v5.17-rc5.
+
+2.1.1. Energy testing
+
+The tests were done on:
+- a system using a DT and the scmi cpufreq driver. Comparison
+  is done between no-EAS and EAS.
+- a system using ACPI and the cppc cpufreq driver. Comparison
+  is done between CPPC-no-EAS and CPPC-EAS. CPPC-EAS uses
+  the artificial EM.
+
+Energy numbers come from the Juno energy counter, by summing
+little and big clusters energy spending. There has been 5 iterations
+of each test. Lower energy spending is better.
+
+2.1.1.1. Homogeneous tasks
+
+Energy results (Joules):
++--------+-------------------+-----------------------------+
+|        |            no-EAS |                         EAS |
++--------+---------+---------+-------------------+---------+
+| #Tasks |    Mean | ci(+/-) |              Mean | ci(+/-) |
++--------+---------+---------+-------------------+---------+
+|    10  |   7.89  |    0.26 |     6.99 (-11.36) |    0.49 |
+|    20  |  13.42  |    0.32 |    13.42 ( -0.02) |    0.08 |
+|    30  |  21.43  |    0.98 |    21.62 ( +0.87) |    0.63 |
+|    40  |  30.03  |    0.82 |    30.31 ( +0.94) |    0.37 |
+|    50  |  43.19  |    0.56 |    43.50 ( +0.72) |    0.52 |
++--------+---------+---------+-------------------+---------+
++--------+-------------------+-----------------------------+
+|        |       CPPC-no-EAS |                    CPPC-EAS |
++--------+---------+---------+-------------------+---------+
+| #Tasks |    Mean | ci(+/-) |              Mean | ci(+/-) |
++--------+---------+---------+-------------------+---------+
+|    10  |    7.86 |    0.37 |     5.64 (-28.23) |    0.05 |
+|    20  |   13.36 |    0.20 |    10.92 (-18.31) |    0.31 |
+|    30  |   19.28 |    0.34 |    18.30 ( -5.07) |    0.64 |
+|    40  |   28.33 |    0.59 |    27.13 ( -4.23) |    0.42 |
+|    50  |   40.78 |    0.58 |    40.77 ( -0.04) |    0.45 |
++--------+---------+---------+-------------------+---------+
+
+Missed activations were measured while comparing CPPC-no-EAS/CPPC-EAS
+energy values. They were of 0.00% for all tests and both
+configurations. Missed activations start to appear in a significant
+number starting from ~70 tasks.
+
+2.1.1.2. Heterogeneous tasks
+
+Energy results (Joules):
++--------+-------------------+-----------------------------+
+|        |            no-EAS |                         EAS |
++--------+---------+---------+-------------------+---------+
+| #Tasks |    Mean | ci(+/-) |              Mean | ci(+/-) |
++--------+---------+---------+-------------------+---------+
+|     3  |    5.25 |    0.50 |    4.58 (-12.82%) |    0.07 |
+|     9  |   12.30 |    0.28 |   11.45 ( -6.97%) |    0.34 |
+|    15  |   20.06 |    1.32 |   20.60 (  2.66%) |    1.00 |
+|    21  |   30.03 |    0.63 |   30.07 (  0.12%) |    0.41 |
++--------+---------+---------+-------------------+---------+
++--------+-------------------+-----------------------------+
+|        |       CPPC-no-EAS |                    CPPC-EAS |
++--------+---------+---------+-------------------+---------+
+| #Tasks |    Mean | ci(+/-) |              Mean | ci(+/-) |
++--------+---------+---------+-------------------+---------+
+|     3  |    4.58 |    0.31 |    3.65 (-20.31%) |    0.05 |
+|     9  |   11.53 |    0.20 |    9.23 (-19.97%) |    0.22 |
+|    15  |   19.19 |    0.16 |   18.33 ( -4.49%) |    0.71 |
+|    21  |   29.07 |    0.29 |   29.06 ( -0.01%) |    0.08 |
++--------+---------+---------+-------------------+---------+
+
+Missed activations were measured while comparing CPPC-no-EAS/CPPC-EAS
+energy values. They were of 0.00% for all tests and both
+configurations. Missed activations start to appear in a significant
+number starting from ~36 tasks.
+
+2.1.1.3. Analysis:
+
+The artificial EM often shows better energy gains than the EM,
+especially for small loads. Indeed, the artificial power values
+show a huge energy gain by placing tasks on little CPUs. The 6%
+margin is always reached, so tasks are easily placed on little
+CPUs. The margin is not always reached with real power values,
+leading to tasks staying on big CPUs.
+
+2.1.2. Performance testing
+
+10 iterations of HackBench with the "--pipe --thread" options and
+1000 loops. Compared value is the testing time in seconds. A lower
+timing is better.
++----------------+-------------------+---------------------------+
+|                |       CPPC-no-EAS |                  CPPC-EAS |
++--------+-------+---------+---------+-----------------+---------+
+| Groups | Tasks |    Mean | ci(+/-) |           Mean  | ci(+/-) |
++--------+-------+---------+---------+-----------------+---------+
+|      1 |    40 |    2.39 |    0.19 |   2.39 (-0.24%) |    0.07 |
+|      2 |    80 |    5.56 |    0.48 |   5.28 (-5.02%) |    0.42 |
+|      4 |   160 |   12.15 |    0.84 |  12.06 (-0.80%) |    0.48 |
+|      8 |   320 |   23.03 |    0.94 |  23.12 (+0.36%) |    0.70 |
++--------+-------+---------+---------+-----------------+---------+
+
+The performance is overall sligthly better, but stays in the margin
+or error.
+
+
+2.2. Pixel4 testing
+
+Pixel4 has 7 CPUs:
+- 4 little [0-3], max_capa=261
+- 3 medium [4-6], max_capa=861
+- 1 big [7], max_capa=1024
+
+Base kernel is android-10.0.0_r0.81. The performance states advertised
+in the DT were modified with performance states that would be generated
+by this patch-set.
+The artificial EM was set such as little CPUs > medium CPUs > big CPU,
+meaning little CPUs are the most energy efficient.
+Comparing the power/capacity ratio, little CPUs' performance states are
+all more energy efficient than the medium CPUs' performance states.
+This is wrong when comparing medium and big CPUs.
+
+2.2.1. Energy testing
+
+The 2 sets of tests (heterogeneous/homogeneous) were tested while
+registering battery voltage and current (power is obtained by
+multiplying them).
+Voltage is averaged over a rolling period of ~11s and current over a
+period of ~6s. Usb-C cable is plugged in but alimentation is cut.
+Pixel4 is on airplane mode. The tests lasts 120s, the first 50s and
+last 10s are trimmed as the power is slowly raising to reach a
+plateau.
+Are compared:
+- android with EAS (but NO_FIND_BEST_TARGET is set):
+  echo ENERGY_AWARE > /sys/kernel/debug/sched_features
+  echo NO_FIND_BEST_TARGET > /sys/kernel/debug/sched_features
+- android without EAS:
+  echo NO_ENERGY_AWARE > /sys/kernel/debug/sched_features
+- android with the artificial energy model
+Lower energy spending is better.
+
+2.2.1.2. Homogeneous tasks
+
+Energy results (in uW):
++--------+-------------------+-----------------------------+
+|        |       Without EAS |                    With EAS |
++--------+---------+---------+-------------------+---------+
+| #Tasks |    Mean | ci(+/-) |              Mean | ci(+/-) |
++--------+---------+---------+-------------------+---------+
+|    10  | 6.21+05 | 3.12+02 | 5.09+05 (-18.01%) | 2.18+03 |
+|    20  | 9.12+05 | 9.71+02 | 7.91+05 (-13.26%) | 9.92+02 |
+|    30  | 1.25+06 | 2.02+03 | 1.09+06 (-12.12%) | 2.00+03 |
+|    40  | 2.05+06 | 5.15+03 | 1.38+06 (-32.36%) | 1.21+03 |
+|    50  | 3.03+06 | 6.94+03 | 1.89+06 (-37.44%) | 3.21+03 |
++--------+---------+---------+-------------------+---------+
++--------+-------------------+-----------------------------+
+|        |       Without EAS |                  With patch |
++--------+---------+---------+-------------------+---------+
+| #Tasks |    Mean | ci(+/-) |              Mean | ci(+/-) |
++--------+---------+---------+-------------------+---------+
+|    10  | 6.21+05 | 3.12+02 | 4.39+05 (-29.29%) | 5.63+02 |
+|    20  | 9.12+05 | 9.71+02 | 7.30+05 (-19.90%) | 1.98+03 |
+|    30  | 1.25+06 | 2.02+03 | 1.01+06 (-18.60%) | 1.72+03 |
+|    40  | 2.05+06 | 5.15+03 | 1.38+06 (-32.60%) | 3.93+03 |
+|    50  | 3.03+06 | 6.94+03 | 2.05+06 (-32.08%) | 1.25+04 |
++--------+---------+---------+-------------------+---------+
+
+2.2.1.2. Heterogeneous tasks
+
+Energy results (in uW):
++--------+-------------------+-----------------------------+
+|        |       Without EAS |                    With EAS |
++--------+---------+---------+-------------------+---------+
+| #Tasks |    Mean | ci(+/-) |              Mean | ci(+/-) |
++--------+---------+---------+-------------------+---------+
+|     3  | 5.14+05 | 1.06+03 | 3.76+05 (-26.82%) | 4.58+02 |
+|     9  | 8.52+05 | 1.18+03 | 7.25+05 (-14.96%) | 1.39+03 |
+|    15  | 1.42+06 | 3.14+03 | 1.20+06 (-15.41%) | 1.06+04 |
+|    21  | 2.73+06 | 3.49+03 | 1.49+06 (-45.47%) | 3.43+03 |
+|    27  | 3.17+06 | 6.92+03 | 2.42+06 (-23.77%) | 8.43+03 |
++--------+---------+---------+-------------------+---------+
++--------+-------------------+-----------------------------+
+|        |       Without EAS |                  With patch |
++--------+---------+---------+-------------------+---------+
+| #Tasks |    Mean | ci(+/-) |              Mean | ci(+/-) |
++--------+---------+---------+-------------------+---------+
+|     3  | 5.14+05 | 1.06+03 | 3.82+05 (-25.70%) | 7.67+02 |
+|     9  | 8.52+05 | 1.18+03 | 7.05+05 (-17.30%) | 9.79+02 |
+|    15  | 1.42+06 | 3.14+03 | 1.05+06 (-26.00%) | 1.15+03 |
+|    21  | 2.73+06 | 3.49+03 | 1.53+06 (-43.68%) | 2.23+03 |
+|    27  | 3.17+06 | 6.92+03 | 2.86+06 ( -9.77%) | 4.26+03 |
++--------+---------+---------+-------------------+---------+
+
+2.2.1.2. Analysis
+
+Similarly to Juno, the artificial performance states show a huge
+gain to place tasks on small CPUs, leading to better energy results.
+
+2.2.2. Performance testing
+
+10 iterations of PcMark. Compared value is the final score
+(PcmaWorkv3Score). A bigger score is better.
++----------------+-------------------------+-------------------------+
+|    Without EAS |                With EAS |              With patch |
++------+---------+---------------+---------+---------------+---------+
+| Mean | ci(+/-) |          Mean | ci(+/-) |          Mean | ci(+/-) |
++------+---------+---------------+---------+---------------+---------+
+| 8026 |      86 |          8003 |      74 | 7840 (-2.00%) |     104 |
++------+---------+---------------+---------+---------------+---------+
+
+Performance is lower, but still in the margin of error.
+
+
+3. Summary
+
+The artificial performance states show overall better energy results
+and a small performance decrease. They lead to a more aggressive task
+placement on the most energy efficient CPUs, and this explains the
+results.
+
+ arch/arm64/kernel/smp.c        |   1 +
+ drivers/cpufreq/cppc_cpufreq.c | 212 +++++++++++++++++++++++++++++++++
+ 2 files changed, 213 insertions(+)
+
+-- 
+2.25.1
+
