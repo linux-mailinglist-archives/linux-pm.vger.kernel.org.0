@@ -2,48 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF604DC7A8
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Mar 2022 14:34:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E994DC7CE
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Mar 2022 14:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234606AbiCQNft (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Mar 2022 09:35:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57010 "EHLO
+        id S233029AbiCQNqj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Mar 2022 09:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234604AbiCQNfs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Mar 2022 09:35:48 -0400
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4637E1D8327;
-        Thu, 17 Mar 2022 06:34:32 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id m67so10263636ybm.4;
-        Thu, 17 Mar 2022 06:34:32 -0700 (PDT)
+        with ESMTP id S231247AbiCQNqj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Mar 2022 09:46:39 -0400
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C2EDEB96;
+        Thu, 17 Mar 2022 06:45:23 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id l2so10285628ybe.8;
+        Thu, 17 Mar 2022 06:45:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=bVTYHCw+sIjTpGlaPwKVewFptDurXIS2uuawHeJHLLA=;
-        b=BAtPILSFs0nOVFUgxIJXGVA8Vn2gs6IHJTl3UVn2oIYb07qBdvEcM+TxzOBQ0GUKyl
-         PYwl10DDAgfPGI3peyrO21r47edXNngbEqLCpOS6lD7zBR9viMXpi4SxSMI5FYYLbybj
-         yXfCxOj3QhZFyJFmIxsB3aLRjKHkHx0vSyBMohfyYNXR9lUwfxrisNCittoZAJpcmXsq
-         MWy7dl5KV1R4TgfXyCrrF9hgHrOoh1jnLWxYBX+DPgySFJ7oWOnVmpBx4shF/ShP74n5
-         iSkyc9MjSoT6ojrItTnPxRvzlIITWLjjIKfZTMBiCFtbw3kd7Nm1KYiEGaV8LfJQ3MuF
-         JCsg==
-X-Gm-Message-State: AOAM532mF7MR/mLo83auoMzkIy8EMx5E+Bj5cL9f5rP0GXZkHCBTav1J
-        XKAwrpHxr3/crNABaPsFduh1W6/lvSllth6czm4=
-X-Google-Smtp-Source: ABdhPJy6DKisf5GePZUAUsw10mXzY76VFI0VY63YMwwR6uG1gCWv7s4+Qd2m05v8v17o1iGhmVwXH1okd/5VI0MkbZc=
-X-Received: by 2002:a25:3a41:0:b0:628:86a2:dbc with SMTP id
- h62-20020a253a41000000b0062886a20dbcmr4619617yba.633.1647524071539; Thu, 17
- Mar 2022 06:34:31 -0700 (PDT)
+        bh=iPkA9tWXGYSPfTkvzhOngjgt6GqV+PZtcZByWXDH0PM=;
+        b=1/iO2RCInkV3rhF/DbTZqvuFQgmbXPWT+s0fXqBrlbn39rnJ2EckyldzY2ic3yR5i5
+         71gJsdLnoKMDn+MmgqgeTrYIKCxcV9yGj/0b7GizTDS3V49wfh22XDlAwjVUSK0fUDJp
+         KkGcYzn+rHPvsw4FELmAV1A7SjM1NLESzR/NVdI1agrk24Fgiz/Kvc0KXvoJ3N55XQlm
+         U/5NNQ/eoJ00fWQQMmfDjw+8qVcvE7NEG9EgfY+VLMbRIx5HmB9IZ/1KpyM6qga1Qhna
+         FBrJfgTh7D5rto7WZtLh75FU/k6A76x2e/Dk+Qpk7jAP8jzDYoGjh9rFRFWnLCFZUMYN
+         iRnQ==
+X-Gm-Message-State: AOAM530sAF7ao7h0W1ZRJua7k1IpsjgVX7Stz/1q59WvGks0ZU5dp/KS
+        l6H7u5kf1xDDEaHUyVdgu0J3B5iX6gxZF42hiJ4=
+X-Google-Smtp-Source: ABdhPJwOGOZbUy+HA0zjr99J3BqTy7SnKUJf0UQ7rf44mwXAJU0ylPDrV/TF0wNiU6KHSW1fQ9vIXEVRqIbbDcN8beQ=
+X-Received: by 2002:a25:fe10:0:b0:625:262f:e792 with SMTP id
+ k16-20020a25fe10000000b00625262fe792mr4852801ybe.365.1647524722391; Thu, 17
+ Mar 2022 06:45:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <2630560.mvXUDI8C0e@kreacher> <5558236.DvuYhMxLoT@kreacher>
-In-Reply-To: <5558236.DvuYhMxLoT@kreacher>
+References: <20220312043624.40732-1-dacohen@pm.me>
+In-Reply-To: <20220312043624.40732-1-dacohen@pm.me>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 17 Mar 2022 14:34:20 +0100
-Message-ID: <CAJZ5v0jEFdDdw3TLAFwwSjHrruk9ak4KNXjzZjcXz-7jyVFrxg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] cpuidle: intel_idle: Update intel_idle() kerneldoc comment
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
+Date:   Thu, 17 Mar 2022 14:45:11 +0100
+Message-ID: <CAJZ5v0gqpQTuNN0WpnEd4dAQmnR=BXSoH_w7kkAxOG7xkftW6Q@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: fix dynamic debug within pm_pr_debug()
+To:     David Cohen <dacohen@pm.me>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -55,34 +56,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 15, 2022 at 8:37 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+On Sat, Mar 12, 2022 at 5:37 AM David Cohen <dacohen@pm.me> wrote:
 >
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> Commit bf9282dc26e7 ("cpuidle: Make CPUIDLE_FLAG_TLB_FLUSHED generic")
-> moved the leave_mm() call away from intel_idle(), but it didn't update
-> its kerneldoc comment accordingly, so do that now.
->
-> Fixes: bf9282dc26e7 ("cpuidle: Make CPUIDLE_FLAG_TLB_FLUSHED generic")
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/idle/intel_idle.c |    3 ---
->  1 file changed, 3 deletions(-)
->
-> Index: linux-pm/drivers/idle/intel_idle.c
-> ===================================================================
-> --- linux-pm.orig/drivers/idle/intel_idle.c
-> +++ linux-pm/drivers/idle/intel_idle.c
-> @@ -122,9 +122,6 @@ static unsigned int mwait_substates __in
->   * If the local APIC timer is not known to be reliable in the target idle state,
->   * enable one-shot tick broadcasting for the target CPU before executing MWAIT.
->   *
-> - * Optionally call leave_mm() for the target CPU upfront to avoid wakeups due to
-> - * flushing user TLBs.
-> - *
->   * Must be called under local_irq_disable().
->   */
->  static __cpuidle int intel_idle(struct cpuidle_device *dev,
->
+> Currently, pm_pr_debug() and pm_deferred_pr_debug() use __pm_pr_debug()
+> to filter pm debug messages based on pm_debug_messages_on flag.
+> According to __pm_pr_debug() implementation, pm_deferred_pr_debug()
+> indirectly calls printk_deferred() within __pm_pr_debug() which doesn't
+> support dynamic debug, but pm_pr_debug() indirectly calls pr_debug()
 
-Assuming no objections, so applied.
+I'm not sure what you mean by pm_pr_debug().  There's no such thing in
+the kernel tree.
+
+Assuming that it means pm_pr_dbg(), it doesn't call pr_debug():
+
+#define pm_pr_dbg(fmt, ...) __pm_pr_dbg(false, fmt, ##__VA_ARGS__)
+
+and
+
+void __pm_pr_dbg(bool defer, const char *fmt, ...)
+{
+...
+        if (defer)
+               printk_deferred(KERN_DEBUG "PM: %pV", &vaf);
+        else
+               printk(KERN_DEBUG "PM: %pV", &vaf);
+
+And as I said printk(KERN_DEBUG ...) is not equivalent to
+pr_debug(...), because it is not dynamic printk().
+
+pm_pr_dbg() is not dynamic printk() on purpose, so they both can be
+controlled independently.
