@@ -2,59 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 820684DCF42
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Mar 2022 21:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27EED4DD106
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Mar 2022 00:04:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiCQUZ2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Mar 2022 16:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
+        id S230037AbiCQXFP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Mar 2022 19:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiCQUZ0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Mar 2022 16:25:26 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56844147ADA;
-        Thu, 17 Mar 2022 13:24:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1647548649; x=1679084649;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=MOtqzX44K7xovyzpcLbuLP0GmRokcStiiAIRKVkO/C0=;
-  b=F4vJZK1tfD4ST/VrdmHZKLtJcw4HF8nP9iAtr48ZTfMlspgruvsClowe
-   9aiel6gaZBqvMOr/59MlSD+GF1YXI8KLULgrGPiwQEhUykX+vQumL2mvp
-   SPBBQKr6Dw0aPWXv+iFEssvDDtQns/G3wAwb9uNYeZeVMmEdBSJpor5ED
-   CwhccA6B4js0V6BFDG0IWu2DuL0onBoG34v0aJt6tT77WzNF+qB7FW6sf
-   dYKQ2T85jOTK4oh2Tv9XtRztfJbZ6tbKk50bwBDZvwVc87QQjnWjq5mHq
-   368XtXslGbg3eGpd9CvurCIe5KWlNaAdo7KLQ9UQsRLfzKY3mGgb7KZMv
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="343410519"
-X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
-   d="scan'208";a="343410519"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 13:24:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
-   d="scan'208";a="513570295"
-Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 17 Mar 2022 13:24:06 -0700
-Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nUwfF-000E19-NM; Thu, 17 Mar 2022 20:24:05 +0000
-Date:   Fri, 18 Mar 2022 04:23:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 1887e35ee99cdab28fdd1cfd97412b10926fc1e9
-Message-ID: <623398b7.7mbh7dQqlrypt/a9%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229820AbiCQXFO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Mar 2022 19:05:14 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B616C220339
+        for <linux-pm@vger.kernel.org>; Thu, 17 Mar 2022 16:03:56 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id g24so7999481lja.7
+        for <linux-pm@vger.kernel.org>; Thu, 17 Mar 2022 16:03:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=aKa0E4vOM6XoErNr1Xiu6o5gCsnymkd7sAmW4KaQ+iA=;
+        b=EQQ6F7sYc1Ye6/74Io/KKl31RQWQ/PjVx7woJjhZ5YD6ceEXNQz8PymRx8D8GVXJdE
+         gealtedFZimlzccdfpOURcO16gPenpmY+G4zzpOwVPa5juQvnlBqFnjOok/vCmxT58pp
+         QJfweg/xmMooF/eR6OqNW2ZM/SSQCqy6YB7tBSZBs9sTYmqbWH6KO0OCeWcogXgZ5ABc
+         l8csxA2dGrmezP+8/4m+aa4t4LXL4HOQOGyoWMCEsdPexGN0WJuA8uOiDpX9zIdUiAwz
+         PDe5TtHHnA6XPovcjFgSnap9+UEhUKiI8qu/GqWi9ZaJrytElJIVeTvWwBzxMRwVmQTO
+         /pAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=aKa0E4vOM6XoErNr1Xiu6o5gCsnymkd7sAmW4KaQ+iA=;
+        b=ONPL5pVjha4h0CytODmkZRsljOgIBq6lKm9Yhp6hweOotP28MSgu82Sm7DvKmdwIHw
+         u6mL6nO8XJOgbVGnu3aQe7/2JjMcyGpURjiGOpa2SHe5BpoDRVpkDfGmNeqispvqrXYA
+         mp8Kh8jPJU80O84Kzvu6qzufleNrpkI2spm5xQkwhzwb5KeC8W0Nsq6mdU8UGXOgVI0N
+         jKjJulnXyEZLYcPbidampRNlHUd8u7Rk0kLtDAK+P59PFIBhDAs1L7+arxMPZJwk4CQP
+         Sm2u6gHK7PNCRJACz81eEBS/XYo3IqzxdDE6nxBYsHFp0wfSemt7CMgM15IRJiaAQos+
+         jLIg==
+X-Gm-Message-State: AOAM530IxU8ixCMsu/DYRaww5nR05gYBWHNelQf34vW02gY7vIzvq7jJ
+        UVa3BFw3Yof7GlSS+2B/fuHvr7m4yvprGd55
+X-Google-Smtp-Source: ABdhPJxAAY/Pk2SqceL1+NfftMV+b1rXLlo7NjhthxiXqJU7gi935PAMCSKDSRKBfcxOTAQknU8pxg==
+X-Received: by 2002:a05:651c:1a22:b0:249:1ef2:e4c7 with SMTP id by34-20020a05651c1a2200b002491ef2e4c7mr4335490ljb.15.1647558234993;
+        Thu, 17 Mar 2022 16:03:54 -0700 (PDT)
+Received: from [192.168.1.102] (88-113-46-102.elisa-laajakaista.fi. [88.113.46.102])
+        by smtp.gmail.com with ESMTPSA id k11-20020ac2456b000000b004482043aac1sm571485lfm.263.2022.03.17.16.03.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Mar 2022 16:03:54 -0700 (PDT)
+Subject: Re: [PATCH v2 1/4] cpufreq: qcom-hw: drop affinity hint before
+ freeing the IRQ
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        Thara Gopinath <thara.gopinath@gmail.com>
+References: <20220309223938.3819715-1-dmitry.baryshkov@linaro.org>
+ <20220309223938.3819715-2-dmitry.baryshkov@linaro.org>
+From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Message-ID: <d9fbc710-1bea-b6e9-4358-ab2ef0e941fa@linaro.org>
+Date:   Fri, 18 Mar 2022 01:03:54 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <20220309223938.3819715-2-dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,130 +79,70 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 1887e35ee99cdab28fdd1cfd97412b10926fc1e9  Merge branch 'thermal-int340x' into bleeding-edge
+Hi Dmitry,
 
-elapsed time: 731m
+On 3/10/22 12:39 AM, Dmitry Baryshkov wrote:
+> Drop affinity hint before freeing the throttling IRQ to fix the
+> following trace. One is not allowed to call free_irq() with an affinity
+> hint in place (which was set by qcom_cpufreq_hw_lmh_init()).
+> 
+> [  185.114773] ------------[ cut here ]------------
+> [  185.119517] WARNING: CPU: 7 PID: 43 at kernel/irq/manage.c:1887 free_irq+0x3a4/0x3dc
+> [  185.127474] Modules linked in:
+> [  185.130618] CPU: 7 PID: 43 Comm: cpuhp/7 Tainted: G S      W         5.17.0-rc6-00386-g67382a5b705d-dirty #690
+> [  185.147125] pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [  185.154269] pc : free_irq+0x3a4/0x3dc
+> [  185.158031] lr : free_irq+0x33c/0x3dc
+> [  185.161792] sp : ffff80000841bc90
+> [  185.165195] x29: ffff80000841bc90 x28: ffffa6edc5c3d000 x27: ffff6d93729e5908
+> [  185.172515] x26: 0000000000000000 x25: ffff6d910109fc00 x24: ffff6d91011490e0
+> [  185.179838] x23: ffff6d9101149218 x22: 0000000000000080 x21: 0000000000000000
+> [  185.187163] x20: ffff6d9101149000 x19: ffff6d910ab61500 x18: ffffffffffffffff
+> [  185.194487] x17: 2e35202020202020 x16: 2020202020202020 x15: ffff80008841b9a7
+> [  185.201805] x14: 00000000000003c9 x13: 0000000000000001 x12: 0000000000000040
+> [  185.209135] x11: ffff6d91005aab58 x10: ffff6d91005aab5a x9 : ffffc6a5ad1c5408
+> [  185.216455] x8 : ffff6d91005adb88 x7 : 0000000000000000 x6 : ffffc6a5ab5a91f4
+> [  185.223776] x5 : 0000000000000000 x4 : ffff6d91011490a8 x3 : ffffc6a5ad266108
+> [  185.231098] x2 : 0000000013033204 x1 : ffff6d9101149000 x0 : ffff6d910a9cc000
+> [  185.238421] Call trace:
+> [  185.240932]  free_irq+0x3a4/0x3dc
+> [  185.244334]  qcom_cpufreq_hw_cpu_exit+0x78/0xcc
+> [  185.248985]  cpufreq_offline.isra.0+0x228/0x270
+> [  185.253639]  cpuhp_cpufreq_offline+0x10/0x20
+> [  185.258027]  cpuhp_invoke_callback+0x16c/0x2b0
+> [  185.262592]  cpuhp_thread_fun+0x190/0x250
+> [  185.266710]  smpboot_thread_fn+0x12c/0x230
+> [  185.270914]  kthread+0xfc/0x100
+> [  185.274145]  ret_from_fork+0x10/0x20
+> [  185.277820] irq event stamp: 212
+> [  185.281136] hardirqs last  enabled at (211): [<ffffc6a5ac57973c>] _raw_spin_unlock_irqrestore+0x8c/0xa0
+> [  185.290775] hardirqs last disabled at (212): [<ffffc6a5ac572100>] __schedule+0x710/0xa10
+> [  185.299081] softirqs last  enabled at (0): [<ffffc6a5ab50f7b0>] copy_process+0x7d0/0x1a14
+> [  185.307475] softirqs last disabled at (0): [<0000000000000000>] 0x0
+> 
+> Fixes: 275157b367f4 ("cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support")
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>   drivers/cpufreq/qcom-cpufreq-hw.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index 618e436018c0..44d46e52baea 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -427,6 +427,7 @@ static void qcom_cpufreq_hw_lmh_exit(struct qcom_cpufreq_data *data)
+>   	mutex_unlock(&data->throttle_lock);
+>   
+>   	cancel_delayed_work_sync(&data->throttle_work);
+> +	irq_set_affinity_hint(data->throttle_irq, NULL);
+>   	free_irq(data->throttle_irq, data);
+>   }
+>   
+> 
 
-configs tested: 109
-configs skipped: 4
+Tested-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                               defconfig
-arm                              allmodconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-i386                          randconfig-c001
-arm                            zeus_defconfig
-arm                         lubbock_defconfig
-sh                             espt_defconfig
-powerpc                      bamboo_defconfig
-ia64                             alldefconfig
-mips                           jazz_defconfig
-arc                              alldefconfig
-arm                        clps711x_defconfig
-m68k                       m5208evb_defconfig
-sh                          rsk7201_defconfig
-arm                      jornada720_defconfig
-alpha                            alldefconfig
-sh                        dreamcast_defconfig
-arm                        cerfcube_defconfig
-arm                           stm32_defconfig
-sh                          sdk7780_defconfig
-arm                  randconfig-c002-20220317
-ia64                             allmodconfig
-ia64                             allyesconfig
-ia64                                defconfig
-m68k                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-csky                                defconfig
-alpha                               defconfig
-nds32                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-nds32                             allnoconfig
-nios2                               defconfig
-arc                              allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-parisc64                            defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-i386                             allyesconfig
-i386                              debian-10.3
-i386                   debian-10.3-kselftests
-i386                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-i386                          randconfig-a003
-i386                          randconfig-a001
-i386                          randconfig-a005
-x86_64                        randconfig-a015
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arc                  randconfig-r043-20220317
-riscv                randconfig-r042-20220317
-s390                 randconfig-r044-20220317
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                                  kexec
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                    rhel-8.3-kselftests
-
-clang tested configs:
-mips                           ip28_defconfig
-powerpc                 mpc832x_rdb_defconfig
-mips                       lemote2f_defconfig
-powerpc                      ppc64e_defconfig
-powerpc                    gamecube_defconfig
-powerpc                       ebony_defconfig
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-x86_64                        randconfig-a016
-x86_64                        randconfig-a014
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220317
-hexagon              randconfig-r041-20220317
-
----
-0-DAY CI Kernel Test Service
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+--
+Best wishes,
+Vladimir
