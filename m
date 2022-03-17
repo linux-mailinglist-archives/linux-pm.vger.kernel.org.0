@@ -2,69 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A46994DBE2A
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Mar 2022 06:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA32D4DBEA4
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Mar 2022 06:47:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbiCQFXm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Mar 2022 01:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
+        id S229379AbiCQFsV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Mar 2022 01:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbiCQFXl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Mar 2022 01:23:41 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403BDE3884
-        for <linux-pm@vger.kernel.org>; Wed, 16 Mar 2022 22:15:05 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id mm4-20020a17090b358400b001c68e836fa6so71589pjb.3
-        for <linux-pm@vger.kernel.org>; Wed, 16 Mar 2022 22:15:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=N7smyLFvHz2Kxey0W+Yi7oN5ICRziKPJC1LjV5NQwwk=;
-        b=KemArhaWTIVubPvMsIMQ8OlKGpoQDmo1ZZvhcN6gDYzj3bp37U2sI8SYEvB8h546r+
-         v/fcNlo0HEBe40u5ftBopH13Nu3Ut74gyGyves4UQhGZw0afG849ELCeT51K7OphAgxE
-         MqHUnL/WaDThCJiDKVvXKnIiUH+93YEPokJS5k+KtgyZyjwXoYsjDgQLMrT6jmXkNwKF
-         26hlKxTWIR6aGsUm+DPNf35VJS7ZmekGDLbdXbIFGL9/1jvwblv93a4DbEZ/nyDGsr89
-         +vh+jLwe4L6/KAodk4fycFAbdpUbkbJ+Ooi2JZSZ5dL4UHaTblChfnfNBuM8vjdIDyWq
-         94HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=N7smyLFvHz2Kxey0W+Yi7oN5ICRziKPJC1LjV5NQwwk=;
-        b=MA9UMvGac1Ggy5v8eYDVJX6diy5aOzzRAYIE9Ru5xKLPfK8F9twUsKyCFCnPBadl36
-         roqMHvwidjHVPk8+8R104oeXICZzMF8mbqsQ6S4APiLs9IRp4DMW1Z/DjDNXu9qcd9aV
-         ktqxjOrmEVSNJDk1sRZ31N1eOhxaWTLVapZBsQIZfuGSrv7bBwkq0+C3HWD5s75fzEBS
-         GmfoVCMHHFlC4EKSjvkdjnLo61kePg040VpQt6/39L2orYg/pdF1LQWK8wu3hYOQTWvC
-         s9Ax4uMAUWpN5eOhiAdiuA9SZy5BI3BeyG/D644T/Um7JDqXbG3h11WY2WNqjSegiWDo
-         CGrA==
-X-Gm-Message-State: AOAM530QqCQAu5wyxu5nhEAsg9zqmArEirLkYzDWkNiUYqpo3UQ5CvJw
-        vN7YC8SQsqe5HL5yOY+XixtY2fPnDSl6Zg==
-X-Google-Smtp-Source: ABdhPJyGO6HDpoqeNPuTMyPE4VKjjOoL2RhB+3LchyawYMdBOmrYAbi19m1JeKQ8UBgHzgLUX1tdPA==
-X-Received: by 2002:a17:903:1c9:b0:153:6e7:d505 with SMTP id e9-20020a17090301c900b0015306e7d505mr3138053plh.69.1647489839811;
-        Wed, 16 Mar 2022 21:03:59 -0700 (PDT)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id b5-20020a056a000cc500b004f6ff0f51f4sm4883441pfv.5.2022.03.16.21.03.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Mar 2022 21:03:59 -0700 (PDT)
-Date:   Thu, 17 Mar 2022 09:33:57 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "open list:CPU FREQUENCY SCALING FRAMEWORK" 
-        <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, Ray.Huang@amd.com
-Subject: Re: [PATCH] cpufreq: powernow-k8: Re-order the init checks
-Message-ID: <20220317040357.l4k6h5oh5awwxicn@vireshk-i7>
-References: <20220316215548.6013-1-mario.limonciello@amd.com>
+        with ESMTP id S229437AbiCQFsV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Mar 2022 01:48:21 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DFF265E9D;
+        Wed, 16 Mar 2022 22:18:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647494319; x=1679030319;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pZQu34NZppkJa6YMn9JUKxZUUg6QdFsPgHLjcQxd89s=;
+  b=cx3acKJXSxQZVDRAO4e6Xef3FMfHTSLoGSgd5bS0/g9p0dUgsxIdyqXM
+   6JDX8agYs+I7Dw14N9Mndi7dduzlA6bVdyJHeDwm/QPTSxPrlQqmjVSh7
+   iHZPG58ZyFOriU48iRxeBuqP/+oMB6OvxGg3NHeCMu+su5p3ZLJDhee8j
+   0o/v+GMGr5oavlzzg2MrDovX13qk9ggUCply45tg1Zf1N/WHh4xKqT4r7
+   r+CZuHgPlCqSkZHgr7rYyHNxg0QjvJabkqZEUIdz6rD0EQ60Tw1rJQdLc
+   u3mmfarzlpDJ7ZJ44erS+M1duYZgXYkkZt63GrOUkjgUEaafJhW/XlNtO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10288"; a="317503267"
+X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
+   d="scan'208";a="317503267"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2022 22:18:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,188,1643702400"; 
+   d="scan'208";a="690828957"
+Received: from lkp-server02.sh.intel.com (HELO 89b41b6ae01c) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 16 Mar 2022 22:18:36 -0700
+Received: from kbuild by 89b41b6ae01c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1nUiWx-000DJq-SX; Thu, 17 Mar 2022 05:18:35 +0000
+Date:   Thu, 17 Mar 2022 13:17:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 26f31e5a7e645b72dbd9cb1add8c94c49cbbd488
+Message-ID: <6232c47f.tBigSHloJLnffHAy%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220316215548.6013-1-mario.limonciello@amd.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,48 +62,131 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16-03-22, 16:55, Mario Limonciello wrote:
-> The powernow-k8 driver will do checks at startup that the current
-> active driver is acpi-cpufreq and show a warning when they're not
-> expected.
-> 
-> Because of this the following warning comes up on systems that
-> support amd-pstate and compiled in both drivers:
-> `WTF driver: amd-pstate`
-> 
-> The systems that support powernow-k8 will not support amd-pstate,
-> so re-order the checks to validate the CPU model number first to
-> avoid this warning being displayed on modern SOCs.
-> 
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  drivers/cpufreq/powernow-k8.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/powernow-k8.c b/drivers/cpufreq/powernow-k8.c
-> index 12ab4014af71..d289036beff2 100644
-> --- a/drivers/cpufreq/powernow-k8.c
-> +++ b/drivers/cpufreq/powernow-k8.c
-> @@ -1172,14 +1172,14 @@ static int powernowk8_init(void)
->  	unsigned int i, supported_cpus = 0;
->  	int ret;
->  
-> +	if (!x86_match_cpu(powernow_k8_ids))
-> +		return -ENODEV;
-> +
->  	if (boot_cpu_has(X86_FEATURE_HW_PSTATE)) {
->  		__request_acpi_cpufreq();
->  		return -ENODEV;
->  	}
->  
-> -	if (!x86_match_cpu(powernow_k8_ids))
-> -		return -ENODEV;
-> -
->  	cpus_read_lock();
->  	for_each_online_cpu(i) {
->  		smp_call_function_single(i, check_supported_cpu, &ret, 1);
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 26f31e5a7e645b72dbd9cb1add8c94c49cbbd488  Merge branch 'pm-docs-next' into bleeding-edge
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+elapsed time: 725m
 
--- 
-viresh
+configs tested: 110
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm                              allmodconfig
+arm                              allyesconfig
+arm64                               defconfig
+arm64                            allyesconfig
+i386                 randconfig-c001-20220314
+powerpc                  storcenter_defconfig
+sh                           sh2007_defconfig
+powerpc                     tqm8548_defconfig
+parisc                generic-64bit_defconfig
+xtensa                           alldefconfig
+powerpc                     ep8248e_defconfig
+sh                              ul2_defconfig
+arc                      axs103_smp_defconfig
+arm                           sunxi_defconfig
+arm                        multi_v7_defconfig
+m68k                       bvme6000_defconfig
+sh                        apsh4ad0a_defconfig
+ia64                          tiger_defconfig
+openrisc                 simple_smp_defconfig
+xtensa                         virt_defconfig
+arm                  randconfig-c002-20220313
+arm                  randconfig-c002-20220314
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+csky                                defconfig
+alpha                               defconfig
+nds32                               defconfig
+nios2                            allyesconfig
+alpha                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+parisc                              defconfig
+parisc64                            defconfig
+s390                             allmodconfig
+s390                                defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+i386                             allyesconfig
+i386                              debian-10.3
+i386                   debian-10.3-kselftests
+i386                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+nds32                             allnoconfig
+nios2                               defconfig
+arc                              allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+i386                          randconfig-a003
+i386                          randconfig-a001
+i386                          randconfig-a005
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+x86_64                        randconfig-a006
+x86_64                        randconfig-a002
+x86_64                        randconfig-a004
+s390                 randconfig-r044-20220313
+arc                  randconfig-r043-20220313
+riscv                randconfig-r042-20220313
+arc                  randconfig-r043-20220314
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                                  kexec
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+
+clang tested configs:
+mips                       rbtx49xx_defconfig
+arm                       mainstone_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64               randconfig-a011-20220314
+x86_64               randconfig-a013-20220314
+x86_64               randconfig-a012-20220314
+x86_64               randconfig-a015-20220314
+x86_64               randconfig-a016-20220314
+x86_64               randconfig-a014-20220314
+i386                          randconfig-a013
+i386                          randconfig-a015
+i386                          randconfig-a011
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+hexagon              randconfig-r045-20220313
+hexagon              randconfig-r045-20220314
+hexagon              randconfig-r041-20220313
+s390                 randconfig-r044-20220314
+hexagon              randconfig-r041-20220314
+riscv                randconfig-r042-20220314
+
+---
+0-DAY CI Kernel Test Service
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
