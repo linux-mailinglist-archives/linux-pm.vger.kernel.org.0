@@ -2,65 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA354DD657
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Mar 2022 09:40:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 969DB4DD6BA
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Mar 2022 10:00:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233877AbiCRImC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Mar 2022 04:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32808 "EHLO
+        id S234065AbiCRJBE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Mar 2022 05:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233881AbiCRImB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Mar 2022 04:42:01 -0400
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AC517C412;
-        Fri, 18 Mar 2022 01:40:41 -0700 (PDT)
-Received: by mail-lf1-f46.google.com with SMTP id p6so5797139lfh.1;
-        Fri, 18 Mar 2022 01:40:41 -0700 (PDT)
+        with ESMTP id S229497AbiCRJBD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Mar 2022 05:01:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E98DB1F89D8
+        for <linux-pm@vger.kernel.org>; Fri, 18 Mar 2022 01:59:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1647593984;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LNiAdfgE3Nl/NVyJMxU8/mXL5a6p2DA33RjxNuB2/iY=;
+        b=W1G/jVZ6RnAfyZtXjfdJmuwcFnEDBQiSC7LtIRd5yRfqWoUZ8LkEPJNqs9gPC3u66v0OWq
+        zEarq5FdgWvwZuypxZcA0t1QdVeLPZSjSDvpXiExOa6B4GQdxgsZV9qofWns5NqcGY5UCW
+        3xtqFlk7tajRT8LZ0nVlcUefi2EFvm4=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-333-IEk97MfXPZOJYY1E2amEpA-1; Fri, 18 Mar 2022 04:59:42 -0400
+X-MC-Unique: IEk97MfXPZOJYY1E2amEpA-1
+Received: by mail-ed1-f70.google.com with SMTP id x1-20020a50f181000000b00418f6d4bccbso2815492edl.12
+        for <linux-pm@vger.kernel.org>; Fri, 18 Mar 2022 01:59:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=x+aZsSUA8MQf/8QzgnABXBDq4WnY5Owhm5CoPJ80F7g=;
-        b=rJ3HldNqM/0pOtfNWGam+zcNph+gB7N5l0i0tz8VZhwjl8TREYRCFctMjV83GG8Yfz
-         s/CZMua9xIeL3/7IUNS/zvrJHQ5fxMiSfKaDCda8ww1Ib5nm+FL/zriNLjePM5usgfjJ
-         TRY6vO/MXUwPdcZTcy+UoEWy6QbjU2fgqXZBN6c13RIWfLQTwqVru0RT4PfGs/F7MmRI
-         xldA0FoGSF3hul37rfOHRkqIR0hqm8CyL6q6qPalT7cVPdj39eRB5yQwtwIm8uLsSLxo
-         5wo4CdX42R3Sd2hIIuId4BjU/x2RSTuJBKBxF//UkpM+0n9K5mQMocaDLGA4/YPiu7wi
-         TvLw==
-X-Gm-Message-State: AOAM531CJWrV8G+DUUfaGd5p6MytEO47v48S4FxElMKbk3I2YBqRS5Z3
-        5W50BjId6AdPwWPayu93wt0=
-X-Google-Smtp-Source: ABdhPJx7het/ER7SMI1T3LzCDB2G6vbr12KVLeWnqK0CSFgjlBYzApaS2EZB1CbIacc4hryCrLsDWg==
-X-Received: by 2002:a05:6512:3192:b0:448:6ef9:12f2 with SMTP id i18-20020a056512319200b004486ef912f2mr5280424lfe.483.1647592839934;
-        Fri, 18 Mar 2022 01:40:39 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id i24-20020a2e8658000000b0024806af7079sm840430ljj.43.2022.03.18.01.40.38
+        bh=LNiAdfgE3Nl/NVyJMxU8/mXL5a6p2DA33RjxNuB2/iY=;
+        b=bNz3mRmh5mWS7M1svoeI48FoMgoeKgtvQHsYyWJTujMst9ohi1ulI4mh0glltTIXel
+         nUREJD12ggjMvjeyewx+Ugl8bBJ44kt15HJSMm5qhGv5Mw2IFAl9Lvn/I74WAF+yQ8Uq
+         StRqT1LBp/2RjjAi5t0RLgeZEQmmCl9mQ2bRjgiFi+ek3nLlLF7g2WeNzFvl+xtnALrK
+         LNC/THbPNOF3pLr14Bh+ye7vfHmwNCD7hLSByQFDk3ZDBmVrRowNlIbBI2g2C856Mtbl
+         n8qNJVewfDNwliddTA/JDHNiE0cXRsZmehT3iYWOATculeT0cQzf27RhY8bG2y8ep+uj
+         DC2g==
+X-Gm-Message-State: AOAM530hZWI2+cJ2cxdKVpn815+mV5QUogn6V8/cq4ObL4Qg4PgwzBdM
+        rGyg/lgJ2XDGJja4sjOSjhJb8OsqWhbvU2bk4vMiBY00g8fFT1G2J0zkdnoH0lJjvT5W8UunD00
+        DDFOFtsHwzk7eSOm6H9Q=
+X-Received: by 2002:a50:d711:0:b0:410:a51a:77c5 with SMTP id t17-20020a50d711000000b00410a51a77c5mr8403777edi.154.1647593981718;
+        Fri, 18 Mar 2022 01:59:41 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwO7mabwLFukZI7CdYqOZ1/S9UWU062HG91YFS95yyYMOXazcxgyJ2b4LUaZpL3mHXOBcMbtA==
+X-Received: by 2002:a50:d711:0:b0:410:a51a:77c5 with SMTP id t17-20020a50d711000000b00410a51a77c5mr8403763edi.154.1647593981460;
+        Fri, 18 Mar 2022 01:59:41 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:cdb2:2781:c55:5db0? (2001-1c00-0c1e-bf00-cdb2-2781-0c55-5db0.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:cdb2:2781:c55:5db0])
+        by smtp.gmail.com with ESMTPSA id u23-20020a17090626d700b006cfcd39645fsm3429595ejc.88.2022.03.18.01.59.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Mar 2022 01:40:39 -0700 (PDT)
-Message-ID: <354ec362-0883-ccfe-9e19-7897318e5e08@kernel.org>
-Date:   Fri, 18 Mar 2022 09:40:36 +0100
+        Fri, 18 Mar 2022 01:59:40 -0700 (PDT)
+Message-ID: <30e7417e-43f3-5858-6663-9280f78e3af1@redhat.com>
+Date:   Fri, 18 Mar 2022 09:59:40 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 4/4] power: supply: max17042_battery: read battery
- properties from device tree
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 1/4] power: supply: max17042_battery: Add unit conversion
+ macros
 Content-Language: en-US
 To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-        Hans de Goede <hdegoede@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
 Cc:     Purism Kernel Team <kernel@puri.sm>, Rob Herring <robh@kernel.org>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 References: <20220318001048.20922-1-sebastian.krzyszkowiak@puri.sm>
- <20220318001048.20922-5-sebastian.krzyszkowiak@puri.sm>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220318001048.20922-5-sebastian.krzyszkowiak@puri.sm>
+ <20220318001048.20922-2-sebastian.krzyszkowiak@puri.sm>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220318001048.20922-2-sebastian.krzyszkowiak@puri.sm>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,93 +86,183 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18/03/2022 01:10, Sebastian Krzyszkowiak wrote:
-> So far configuring the gauge was only possible using platform data,
-> with no way to provide the configuration on device tree-based platforms.
-> 
-> Change that by looking up the configuration values from monitored-battery
-> property. This is especially useful on models implementing ModelGauge m5 EZ
-> algorithm, such as MAX17055, as all the required configuration can be
-> derived from a "simple-battery" DT node there.
-> 
-> In order to be able to access power supply framework in get_of_pdata,
-> move devm_power_supply_register earlier in max17042_probe.
+Hi,
+
+On 3/18/22 01:10, Sebastian Krzyszkowiak wrote:
+> Instead of sprinkling the code with magic numbers, put the unit
+> definitions used by the gauge into a set of macros. Macros are
+> used instead of simple defines in order to not require floating
+> point operations for divisions.
 > 
 > Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
 > ---
->  drivers/power/supply/max17042_battery.c | 50 +++++++++++++++++++------
->  include/linux/power/max17042_battery.h  |  1 +
->  2 files changed, 40 insertions(+), 11 deletions(-)
+>  drivers/power/supply/max17042_battery.c | 40 +++++++++++++++----------
+>  1 file changed, 24 insertions(+), 16 deletions(-)
 > 
 > diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-> index c39250349a1d..4c33565802d5 100644
+> index ab031bbfbe78..c019d6c52363 100644
 > --- a/drivers/power/supply/max17042_battery.c
 > +++ b/drivers/power/supply/max17042_battery.c
-> @@ -937,7 +937,9 @@ max17042_get_of_pdata(struct max17042_chip *chip)
->  	struct device *dev = &chip->client->dev;
->  	struct device_node *np = dev->of_node;
->  	u32 prop;
-> +	u64 data64;
->  	struct max17042_platform_data *pdata;
-> +	struct power_supply_battery_info *info;
+> @@ -51,6 +51,15 @@
 >  
->  	pdata = devm_kzalloc(dev, sizeof(*pdata), GFP_KERNEL);
->  	if (!pdata)
-> @@ -961,6 +963,32 @@ max17042_get_of_pdata(struct max17042_chip *chip)
->  	if (of_property_read_s32(np, "maxim,over-volt", &pdata->vmax))
->  		pdata->vmax = INT_MAX;
+>  #define MAX17042_VMAX_TOLERANCE		50 /* 50 mV */
 >  
-> +	if (pdata->enable_current_sense &&
-> +	    power_supply_get_battery_info(chip->battery, &info) == 0) {
-> +		pdata->config_data = devm_kzalloc(dev, sizeof(*pdata->config_data), GFP_KERNEL);
-> +		if (!pdata->config_data)
-> +			return NULL;
+> +#define MAX17042_CURRENT_LSB		1562500ll /* µV */
+> +#define MAX17042_CURRENT_RSENSE(x)	(x * MAX17042_CURRENT_LSB) /* µV */
+> +#define MAX17042_CAPACITY_LSB		5000000ll /* µVh */
+> +#define MAX17042_CAPACITY_RSENSE(x)	(x * MAX17042_CAPACITY_LSB) /* µVh */
+> +#define MAX17042_TIME(x)		(x * 5625 / 1000) /* s */
+> +#define MAX17042_VOLTAGE(x)		(x * 625 / 8) /* µV */
+> +#define MAX17042_RESISTANCE(x)		(x / 4096) /* Ω */
+> +#define MAX17042_TEMPERATURE(x)		(x / 256) /* °C */
 > +
-> +		if (info->charge_full_design_uah != -EINVAL) {
-> +			data64 = (u64)info->charge_full_design_uah * pdata->r_sns;
-> +			do_div(data64, MAX17042_CAPACITY_LSB);
-> +			pdata->config_data->design_cap = (u16)data64;
-> +			pdata->enable_por_init = true;
-> +		}
-> +		if (info->charge_term_current_ua != -EINVAL) {
-> +			data64 = (u64)info->charge_term_current_ua * pdata->r_sns;
-> +			do_div(data64, MAX17042_CURRENT_LSB);
-> +			pdata->config_data->ichgt_term = (u16)data64;
-> +			pdata->enable_por_init = true;
-> +		}
-> +		if (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17055) {
-> +			if (info->voltage_max_design_uv > 4250000) {
-> +				pdata->config_data->model_cfg = MAX17055_MODELCFG_VCHG_BIT;
-> +				pdata->enable_por_init = true;
-> +			}
-> +		}
-> +	}
-> +
->  	return pdata;
+>  struct max17042_chip {
+>  	struct i2c_client *client;
+>  	struct regmap *regmap;
+> @@ -103,8 +112,7 @@ static int max17042_get_temperature(struct max17042_chip *chip, int *temp)
+>  
+>  	*temp = sign_extend32(data, 15);
+>  	/* The value is converted into deci-centigrade scale */
+> -	/* Units of LSB = 1 / 256 degree Celsius */
+> -	*temp = *temp * 10 / 256;
+> +	*temp = MAX17042_TEMPERATURE(*temp * 10);
+
+Shouldn't the "* 10"  be part of the macro?
+
+Otherwise this looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
+>  	return 0;
 >  }
->  #endif
-> @@ -1092,16 +1120,23 @@ static int max17042_probe(struct i2c_client *client,
->  		return -EINVAL;
->  	}
 >  
-> +	i2c_set_clientdata(client, chip);
-> +	psy_cfg.drv_data = chip;
-> +	psy_cfg.of_node = dev->of_node;
-> +
-> +	chip->battery = devm_power_supply_register(&client->dev, max17042_desc,
-> +						   &psy_cfg);
-> +	if (IS_ERR(chip->battery)) {
-> +		dev_err(&client->dev, "failed: power supply register\n");
-> +		return PTR_ERR(chip->battery);
-> +	}
+> @@ -161,7 +169,7 @@ static int max17042_get_status(struct max17042_chip *chip, int *status)
+>  		return ret;
+>  
+>  	avg_current = sign_extend32(data, 15);
+> -	avg_current *= 1562500 / chip->pdata->r_sns;
+> +	avg_current *= MAX17042_CURRENT_LSB / chip->pdata->r_sns;
+>  
+>  	if (avg_current > 0)
+>  		*status = POWER_SUPPLY_STATUS_CHARGING;
+> @@ -181,7 +189,7 @@ static int max17042_get_battery_health(struct max17042_chip *chip, int *health)
+>  		goto health_error;
+>  
+>  	/* bits [0-3] unused */
+> -	vavg = val * 625 / 8;
+> +	vavg = MAX17042_VOLTAGE(val);
+>  	/* Convert to millivolts */
+>  	vavg /= 1000;
+>  
+> @@ -190,7 +198,7 @@ static int max17042_get_battery_health(struct max17042_chip *chip, int *health)
+>  		goto health_error;
+>  
+>  	/* bits [0-3] unused */
+> -	vbatt = val * 625 / 8;
+> +	vbatt = MAX17042_VOLTAGE(val);
+>  	/* Convert to millivolts */
+>  	vbatt /= 1000;
+>  
+> @@ -297,21 +305,21 @@ static int max17042_get_property(struct power_supply *psy,
+>  		if (ret < 0)
+>  			return ret;
+>  
+> -		val->intval = data * 625 / 8;
+> +		val->intval = MAX17042_VOLTAGE(data);
+>  		break;
+>  	case POWER_SUPPLY_PROP_VOLTAGE_AVG:
+>  		ret = regmap_read(map, MAX17042_AvgVCELL, &data);
+>  		if (ret < 0)
+>  			return ret;
+>  
+> -		val->intval = data * 625 / 8;
+> +		val->intval = MAX17042_VOLTAGE(data);
+>  		break;
+>  	case POWER_SUPPLY_PROP_VOLTAGE_OCV:
+>  		ret = regmap_read(map, MAX17042_OCVInternal, &data);
+>  		if (ret < 0)
+>  			return ret;
+>  
+> -		val->intval = data * 625 / 8;
+> +		val->intval = MAX17042_VOLTAGE(data);
+>  		break;
+>  	case POWER_SUPPLY_PROP_CAPACITY:
+>  		if (chip->pdata->enable_current_sense)
+> @@ -328,7 +336,7 @@ static int max17042_get_property(struct power_supply *psy,
+>  		if (ret < 0)
+>  			return ret;
+>  
+> -		data64 = data * 5000000ll;
+> +		data64 = MAX17042_CAPACITY_RSENSE(data);
+>  		do_div(data64, chip->pdata->r_sns);
+>  		val->intval = data64;
+>  		break;
+> @@ -337,7 +345,7 @@ static int max17042_get_property(struct power_supply *psy,
+>  		if (ret < 0)
+>  			return ret;
+>  
+> -		data64 = data * 5000000ll;
+> +		data64 = MAX17042_CAPACITY_RSENSE(data);
+>  		do_div(data64, chip->pdata->r_sns);
+>  		val->intval = data64;
+>  		break;
+> @@ -346,7 +354,7 @@ static int max17042_get_property(struct power_supply *psy,
+>  		if (ret < 0)
+>  			return ret;
+>  
+> -		data64 = data * 5000000ll;
+> +		data64 = MAX17042_CAPACITY_RSENSE(data);
+>  		do_div(data64, chip->pdata->r_sns);
+>  		val->intval = data64;
+>  		break;
+> @@ -355,7 +363,7 @@ static int max17042_get_property(struct power_supply *psy,
+>  		if (ret < 0)
+>  			return ret;
+>  
+> -		data64 = sign_extend64(data, 15) * 5000000ll;
+> +		data64 = MAX17042_CAPACITY_RSENSE(sign_extend64(data, 15));
+>  		val->intval = div_s64(data64, chip->pdata->r_sns);
+>  		break;
+>  	case POWER_SUPPLY_PROP_TEMP:
+> @@ -397,7 +405,7 @@ static int max17042_get_property(struct power_supply *psy,
+>  			if (ret < 0)
+>  				return ret;
+>  
+> -			data64 = sign_extend64(data, 15) * 1562500ll;
+> +			data64 = MAX17042_CURRENT_RSENSE(sign_extend64(data, 15));
+>  			val->intval = div_s64(data64, chip->pdata->r_sns);
+>  		} else {
+>  			return -EINVAL;
+> @@ -409,7 +417,7 @@ static int max17042_get_property(struct power_supply *psy,
+>  			if (ret < 0)
+>  				return ret;
+>  
+> -			data64 = sign_extend64(data, 15) * 1562500ll;
+> +			data64 = MAX17042_CURRENT_RSENSE(sign_extend64(data, 15));
+>  			val->intval = div_s64(data64, chip->pdata->r_sns);
+>  		} else {
+>  			return -EINVAL;
+> @@ -420,7 +428,7 @@ static int max17042_get_property(struct power_supply *psy,
+>  		if (ret < 0)
+>  			return ret;
+>  
+> -		data64 = data * 1562500ll;
+> +		data64 = MAX17042_CURRENT_RSENSE(data);
+>  		val->intval = div_s64(data64, chip->pdata->r_sns);
+>  		break;
+>  	case POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW:
+> @@ -428,7 +436,7 @@ static int max17042_get_property(struct power_supply *psy,
+>  		if (ret < 0)
+>  			return ret;
+>  
+> -		val->intval = data * 5625 / 1000;
+> +		val->intval = MAX17042_TIME(data);
+>  		break;
+>  	default:
+>  		return -EINVAL;
 
-I don't think it is correct. You register power supply, thus making it
-available for system, before configuring most of the data. For short
-time the chip might report to the system bogus results and events.
-
-Instead I think you should split it into two parts - init which happens
-before registering power supply and after.
-
-
-Best regards,
-Krzysztof
