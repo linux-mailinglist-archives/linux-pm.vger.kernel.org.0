@@ -2,167 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 366A44DD1B0
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Mar 2022 01:11:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC184DD2CD
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Mar 2022 03:09:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbiCRAMi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Mar 2022 20:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45284 "EHLO
+        id S231676AbiCRCK7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Mar 2022 22:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbiCRAMi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Mar 2022 20:12:38 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A183139CED;
-        Thu, 17 Mar 2022 17:11:20 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 757F8E0063;
-        Thu, 17 Mar 2022 17:11:20 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id iedwKpeVX3pq; Thu, 17 Mar 2022 17:11:19 -0700 (PDT)
-From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Cc:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-        Purism Kernel Team <kernel@puri.sm>,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH 4/4] power: supply: max17042_battery: read battery properties from device tree
-Date:   Fri, 18 Mar 2022 01:10:48 +0100
-Message-Id: <20220318001048.20922-5-sebastian.krzyszkowiak@puri.sm>
-In-Reply-To: <20220318001048.20922-1-sebastian.krzyszkowiak@puri.sm>
-References: <20220318001048.20922-1-sebastian.krzyszkowiak@puri.sm>
+        with ESMTP id S230202AbiCRCK7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Mar 2022 22:10:59 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1427625F66B;
+        Thu, 17 Mar 2022 19:09:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1647569382; x=1679105382;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=bcvdTm8vTC17tTtaKL6TbtagXdFa7r13SD1OdJ96w6M=;
+  b=meuZUM6a2CSYrm7VW+WrI585lKBNNW8HcQWtf+aSOp5r8/EPf/fWMw1k
+   5zOYKseYyod3t0SYFwiE18dbufEJPYJALTaN7LhMmdWqtHWLV75usxe6n
+   p8sV2XtX0X/mohvU6sJroXmFkwkRYmtExQwX4WFxr+LU1FK74HkOU9vbA
+   svEe/4kdFpdg2HgsRj0HFwS+WcbJCR3tVUc2Z1+lObdRYKfJjds85XmzT
+   65S88g//vwRo81CAD62e7VN1jCCjNJuBQW0191rmUQSMDiM3cVPvHYZWX
+   yhHAl44dMIVidBBeUTYfzD7tJeF13dPjSdOdPj8PFq9muYZQmXLgVokPi
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10289"; a="239191312"
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="239191312"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2022 19:09:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,190,1643702400"; 
+   d="scan'208";a="691143655"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga001.fm.intel.com with ESMTP; 17 Mar 2022 19:09:41 -0700
+Received: from mzaid-MOBL1.amr.corp.intel.com (mzaid-MOBL1.amr.corp.intel.com [10.255.228.81])
+        by linux.intel.com (Postfix) with ESMTP id F1664580A5D;
+        Thu, 17 Mar 2022 19:09:40 -0700 (PDT)
+Message-ID: <117f781f5bf8d1c3cee5f8580fb0c9bf8d049cc7.camel@linux.intel.com>
+Subject: Re: [PATCH v2 1/2] PCI/PM: refactor pci_pm_suspend_noirq()
+From:   "David E. Box" <david.e.box@linux.intel.com>
+Reply-To: david.e.box@linux.intel.com
+To:     Rajvi Jingar <rajvi.jingar@intel.com>, rafael.j.wysocki@intel.com,
+        bhelgaas@google.com
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Date:   Thu, 17 Mar 2022 19:09:40 -0700
+In-Reply-To: <20220317233153.2617938-1-rajvi.jingar@intel.com>
+References: <20220317233153.2617938-1-rajvi.jingar@intel.com>
+Organization: David E. Box
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-So far configuring the gauge was only possible using platform data,
-with no way to provide the configuration on device tree-based platforms.
+Hi Rajvi,
 
-Change that by looking up the configuration values from monitored-battery
-property. This is especially useful on models implementing ModelGauge m5 EZ
-algorithm, such as MAX17055, as all the required configuration can be
-derived from a "simple-battery" DT node there.
+On Thu, 2022-03-17 at 16:31 -0700, Rajvi Jingar wrote:
+> The state of the device is saved during pci_pm_suspend_noirq(), if it
+> has not already been saved, regardless of the skip_bus_pm flag value. So
+> skip_bus_pm check is removed before saving the device state.
+> 
+> v2: add comments to the changes
 
-In order to be able to access power supply framework in get_of_pdata,
-move devm_power_supply_register earlier in max17042_probe.
+...
 
-Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
----
- drivers/power/supply/max17042_battery.c | 50 +++++++++++++++++++------
- include/linux/power/max17042_battery.h  |  1 +
- 2 files changed, 40 insertions(+), 11 deletions(-)
+> 
+> Signed-off-by: Rajvi Jingar <rajvi.jingar@intel.com>
+> Suggested-by: David E. Box <david.e.box@linux.intel.com>
+> ---
 
-diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-index c39250349a1d..4c33565802d5 100644
---- a/drivers/power/supply/max17042_battery.c
-+++ b/drivers/power/supply/max17042_battery.c
-@@ -937,7 +937,9 @@ max17042_get_of_pdata(struct max17042_chip *chip)
- 	struct device *dev = &chip->client->dev;
- 	struct device_node *np = dev->of_node;
- 	u32 prop;
-+	u64 data64;
- 	struct max17042_platform_data *pdata;
-+	struct power_supply_battery_info *info;
- 
- 	pdata = devm_kzalloc(dev, sizeof(*pdata), GFP_KERNEL);
- 	if (!pdata)
-@@ -961,6 +963,32 @@ max17042_get_of_pdata(struct max17042_chip *chip)
- 	if (of_property_read_s32(np, "maxim,over-volt", &pdata->vmax))
- 		pdata->vmax = INT_MAX;
- 
-+	if (pdata->enable_current_sense &&
-+	    power_supply_get_battery_info(chip->battery, &info) == 0) {
-+		pdata->config_data = devm_kzalloc(dev, sizeof(*pdata->config_data), GFP_KERNEL);
-+		if (!pdata->config_data)
-+			return NULL;
-+
-+		if (info->charge_full_design_uah != -EINVAL) {
-+			data64 = (u64)info->charge_full_design_uah * pdata->r_sns;
-+			do_div(data64, MAX17042_CAPACITY_LSB);
-+			pdata->config_data->design_cap = (u16)data64;
-+			pdata->enable_por_init = true;
-+		}
-+		if (info->charge_term_current_ua != -EINVAL) {
-+			data64 = (u64)info->charge_term_current_ua * pdata->r_sns;
-+			do_div(data64, MAX17042_CURRENT_LSB);
-+			pdata->config_data->ichgt_term = (u16)data64;
-+			pdata->enable_por_init = true;
-+		}
-+		if (chip->chip_type == MAXIM_DEVICE_TYPE_MAX17055) {
-+			if (info->voltage_max_design_uv > 4250000) {
-+				pdata->config_data->model_cfg = MAX17055_MODELCFG_VCHG_BIT;
-+				pdata->enable_por_init = true;
-+			}
-+		}
-+	}
-+
- 	return pdata;
- }
- #endif
-@@ -1092,16 +1120,23 @@ static int max17042_probe(struct i2c_client *client,
- 		return -EINVAL;
- 	}
- 
-+	i2c_set_clientdata(client, chip);
-+	psy_cfg.drv_data = chip;
-+	psy_cfg.of_node = dev->of_node;
-+
-+	chip->battery = devm_power_supply_register(&client->dev, max17042_desc,
-+						   &psy_cfg);
-+	if (IS_ERR(chip->battery)) {
-+		dev_err(&client->dev, "failed: power supply register\n");
-+		return PTR_ERR(chip->battery);
-+	}
-+
- 	chip->pdata = max17042_get_pdata(chip);
- 	if (!chip->pdata) {
- 		dev_err(&client->dev, "no platform data provided\n");
- 		return -EINVAL;
- 	}
- 
--	i2c_set_clientdata(client, chip);
--	psy_cfg.drv_data = chip;
--	psy_cfg.of_node = dev->of_node;
--
- 	/* When current is not measured,
- 	 * CURRENT_NOW and CURRENT_AVG properties should be invisible. */
- 	if (!chip->pdata->enable_current_sense)
-@@ -1122,13 +1157,6 @@ static int max17042_probe(struct i2c_client *client,
- 		regmap_write(chip->regmap, MAX17042_LearnCFG, 0x0007);
- 	}
- 
--	chip->battery = devm_power_supply_register(&client->dev, max17042_desc,
--						   &psy_cfg);
--	if (IS_ERR(chip->battery)) {
--		dev_err(&client->dev, "failed: power supply register\n");
--		return PTR_ERR(chip->battery);
--	}
--
- 	if (client->irq) {
- 		unsigned int flags = IRQF_ONESHOT;
- 
-diff --git a/include/linux/power/max17042_battery.h b/include/linux/power/max17042_battery.h
-index 6943921cab5e..367620800e7e 100644
---- a/include/linux/power/max17042_battery.h
-+++ b/include/linux/power/max17042_battery.h
-@@ -23,6 +23,7 @@
- 
- #define MAX17042_CHARACTERIZATION_DATA_SIZE 48
- 
-+#define MAX17055_MODELCFG_VCHG_BIT	BIT(10)
- #define MAX17055_MODELCFG_REFRESH_BIT	BIT(15)
- 
- enum max17042_register {
--- 
-2.35.1
+Patch changelogs aren't kept in the commit message. Place them here after the
+"---" line. In this location, it won't affect applying the patch.
+
+David
+
+>  drivers/pci/pci-driver.c | 18 ++++++------------
+>  1 file changed, 6 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> index 588588cfda48..ffe76f238d7e 100644
+> --- a/drivers/pci/pci-driver.c
+> +++ b/drivers/pci/pci-driver.c
+> @@ -834,20 +834,14 @@ static int pci_pm_suspend_noirq(struct device *dev)
+>  		}
+>  	}
+>  
+> -	if (pci_dev->skip_bus_pm) {
+> +	if (!pci_dev->state_saved) {
+> +		pci_save_state(pci_dev);
+>  		/*
+> -		 * Either the device is a bridge with a child in D0 below it, or
+> -		 * the function is running for the second time in a row without
+> -		 * going through full resume, which is possible only during
+> -		 * suspend-to-idle in a spurious wakeup case.  The device should
+> -		 * be in D0 at this point, but if it is a bridge, it may be
+> -		 * necessary to save its state.
+> +		 * If the device is a bridge with a child in D0 below it, it
+> needs to
+> +		 * stay in D0, so check skip_bus_pm to avoid putting it into a
+> +		 * low-power state in that case.
+>  		 */
+> -		if (!pci_dev->state_saved)
+> -			pci_save_state(pci_dev);
+> -	} else if (!pci_dev->state_saved) {
+> -		pci_save_state(pci_dev);
+> -		if (pci_power_manageable(pci_dev))
+> +		if (!pci_dev->skip_bus_pm && pci_power_manageable(pci_dev))
+>  			pci_prepare_to_sleep(pci_dev);
+>  	}
+>  
 
