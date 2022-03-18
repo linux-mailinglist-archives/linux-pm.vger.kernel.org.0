@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C10AE4DE212
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Mar 2022 21:01:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66BF14DE21C
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Mar 2022 21:07:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240448AbiCRT7w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Mar 2022 15:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34976 "EHLO
+        id S235524AbiCRUIz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Mar 2022 16:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240452AbiCRT7v (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Mar 2022 15:59:51 -0400
+        with ESMTP id S229792AbiCRUIy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Mar 2022 16:08:54 -0400
 Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D832818CD30;
-        Fri, 18 Mar 2022 12:58:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B45220827E;
+        Fri, 18 Mar 2022 13:07:35 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id E55F4DF9DE;
-        Fri, 18 Mar 2022 12:58:29 -0700 (PDT)
+        by comms.puri.sm (Postfix) with ESMTP id 1FEA2DFE54;
+        Fri, 18 Mar 2022 13:07:05 -0700 (PDT)
 Received: from comms.puri.sm ([127.0.0.1])
         by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id udOeLCim9yMm; Fri, 18 Mar 2022 12:58:29 -0700 (PDT)
+        with ESMTP id xqDTUhigpXzr; Fri, 18 Mar 2022 13:07:04 -0700 (PDT)
 From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-To:     Hans de Goede <hdegoede@redhat.com>,
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
         Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>
+        Hans de Goede <hdegoede@redhat.com>
 Cc:     Purism Kernel Team <kernel@puri.sm>, Rob Herring <robh@kernel.org>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/4] power: supply: max17042_battery: use ModelCfg refresh on max17055
-Date:   Fri, 18 Mar 2022 20:58:24 +0100
-Message-ID: <7080597.aeNJFYEL58@pliszka>
-In-Reply-To: <facf5551-bfc7-aeb4-daed-5bfcb8a36475@kernel.org>
-References: <20220318001048.20922-1-sebastian.krzyszkowiak@puri.sm> <20220318001048.20922-3-sebastian.krzyszkowiak@puri.sm> <facf5551-bfc7-aeb4-daed-5bfcb8a36475@kernel.org>
+Subject: Re: [PATCH 1/4] power: supply: max17042_battery: Add unit conversion macros
+Date:   Fri, 18 Mar 2022 21:06:59 +0100
+Message-ID: <7342538.iIbC2pHGDl@pliszka>
+In-Reply-To: <1c4a7088-bcef-ca5c-ff3e-efd1049dc402@redhat.com>
+References: <20220318001048.20922-1-sebastian.krzyszkowiak@puri.sm> <f15c415a-ad08-ae4f-c79c-574964ab9cb0@kernel.org> <1c4a7088-bcef-ca5c-ff3e-efd1049dc402@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart7086655.44csPzL39Z"; micalg="pgp-sha256"; protocol="application/pgp-signature"
+Content-Type: multipart/signed; boundary="nextPart12830340.CDJkKcVGEf"; micalg="pgp-sha256"; protocol="application/pgp-signature"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -43,107 +43,135 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---nextPart7086655.44csPzL39Z
+--nextPart12830340.CDJkKcVGEf
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="UTF-8"; protected-headers="v1"
 From: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-Date: Fri, 18 Mar 2022 20:58:24 +0100
-Message-ID: <7080597.aeNJFYEL58@pliszka>
-In-Reply-To: <facf5551-bfc7-aeb4-daed-5bfcb8a36475@kernel.org>
+Date: Fri, 18 Mar 2022 21:06:59 +0100
+Message-ID: <7342538.iIbC2pHGDl@pliszka>
+In-Reply-To: <1c4a7088-bcef-ca5c-ff3e-efd1049dc402@redhat.com>
 
-On pi=C4=85tek, 18 marca 2022 09:22:16 CET Krzysztof Kozlowski wrote:
-> On 18/03/2022 01:10, Sebastian Krzyszkowiak wrote:
-> > Unlike other models, max17055 doesn't require cell characterization
-> > data and operates on smaller amount of input variables (DesignCap,
-> > VEmpty, IChgTerm and ModelCfg). Input data can already be filled in
-> > by max17042_override_por_values, however model refresh bit has to be
-> > set after adjusting input variables in order to make them apply.
-> >=20
-> > Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-> > ---
-> >=20
-> >  drivers/power/supply/max17042_battery.c | 73 +++++++++++++++----------
-> >  include/linux/power/max17042_battery.h  |  3 +
-> >  2 files changed, 48 insertions(+), 28 deletions(-)
-> >=20
-> > diff --git a/drivers/power/supply/max17042_battery.c
-> > b/drivers/power/supply/max17042_battery.c index
-> > c019d6c52363..c39250349a1d 100644
-> > --- a/drivers/power/supply/max17042_battery.c
-> > +++ b/drivers/power/supply/max17042_battery.c
-> > @@ -806,6 +806,13 @@ static inline void
-> > max17042_override_por_values(struct max17042_chip *chip)>=20
-> >  	    (chip->chip_type =3D=3D MAXIM_DEVICE_TYPE_MAX17055)) {
-> >  	=09
-> >  		max17042_override_por(map, MAX17047_V_empty, config-
->vempty);
-> >  =09
-> >  	}
-> >=20
-> > +
-> > +	if (chip->chip_type =3D=3D MAXIM_DEVICE_TYPE_MAX17055) {
-> > +		max17042_override_por(map, MAX17055_ModelCfg, config-
->model_cfg);
-> > +		// VChg is 1 by default, so allow it to be set to 0
->=20
-> Consistent comment, so /* */
->=20
-> I actually do not understand fully the comment and the code. You write
-> entire model_cfg to MAX17055_ModelCfg and then immediately do it again,
-> but with smaller mask. Why?
+Hi Krzysztof, hi Hans,
 
-That's because VChg is 1 on POR, and max17042_override_por doesn't do anyth=
-ing=20
-when value equals 0 - which means that if the whole config->model_cfg is 0,=
+thanks for the review!
+
+On pi=C4=85tek, 18 marca 2022 10:51:26 CET Hans de Goede wrote:
+> Hi,
+>=20
+> On 3/18/22 10:06, Krzysztof Kozlowski wrote:
+> > On 18/03/2022 10:00, Hans de Goede wrote:
+> >> Hi,
+> >>=20
+> >> On 3/18/22 09:16, Krzysztof Kozlowski wrote:
+> >>> On 18/03/2022 01:10, Sebastian Krzyszkowiak wrote:
+> >>>> Instead of sprinkling the code with magic numbers, put the unit
+> >>>> definitions used by the gauge into a set of macros. Macros are
+> >>>> used instead of simple defines in order to not require floating
+> >>>> point operations for divisions.
+> >>>>=20
+> >>>> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.s=
+m>
+> >>>> ---
+> >>>>=20
+> >>>>  drivers/power/supply/max17042_battery.c | 40 +++++++++++++++-------=
+=2D--
+> >>>>  1 file changed, 24 insertions(+), 16 deletions(-)
+> >>>>=20
+> >>>> diff --git a/drivers/power/supply/max17042_battery.c
+> >>>> b/drivers/power/supply/max17042_battery.c index
+> >>>> ab031bbfbe78..c019d6c52363 100644
+> >>>> --- a/drivers/power/supply/max17042_battery.c
+> >>>> +++ b/drivers/power/supply/max17042_battery.c
+> >>>> @@ -51,6 +51,15 @@
+> >>>>=20
+> >>>>  #define MAX17042_VMAX_TOLERANCE		50 /* 50 mV */
+> >>>>=20
+> >>>> +#define MAX17042_CURRENT_LSB		1562500ll /* =C2=B5V */
+> >>>=20
+> >>> Is this really long long? The usage in max17042_get_status() is with =
+int
+> >>> operand and result.
+> >>=20
+> >> The "ll" is part of the original code which these macros replace,
+> >> dropping the "ll" is IMHO out of scope for this patch, it would
+> >> clearly break the only change 1 thing per patch/commit rule.
+> >=20
+> > Not in max17042_get_status(). The usage there is without ll. Three other
+> > places use it in 64-bit context (result is 64-bit), so there indeed. But
+> > in max17042_get_status() this is now different.
+>=20
+> Ah, good catch and there is a reason why it is not a ll there, a divide
+> is done on it, which is now a 64 bit divide which will break on 32 bit
+> builds...
+>=20
+> Note that e.g. this existing block:
+>=20
+>         case POWER_SUPPLY_PROP_CURRENT_NOW:
+>                 if (chip->pdata->enable_current_sense) {
+>                         ret =3D regmap_read(map, MAX17042_Current, &data);
+>                         if (ret < 0)
+>                                 return ret;
+>=20
+>                         data64 =3D sign_extend64(data, 15) * 1562500ll;
+>                         val->intval =3D div_s64(data64, chip->pdata->r_sn=
+s);
+>                 } else {
+>                         return -EINVAL;
+>                 }
+>                 break;
+>=20
+> Solves this by using the div_s64 helper. So the code in
+> max17042_get_status() needs to be fixed to do the same.
+>=20
+> The "ll" is necessary because 32768 * 1562500 =3D 51200000000 which does =
+not
+> fit in a 32 bit integer.
+>=20
+> So fixing max17042_get_status() to use sign_extend64 + div_s64 fixes
+> a potential bug there and as such that really should be done in
+> a separate preparation patch with a Cc stable.
+>=20
+> Regards,
+>=20
+> Hans
+
+Yes, I've already noticed that max17042_get_status was broken, but it manag=
+ed=20
+to slip out of my mind before sending the series - although I haven't caugh=
+t=20
+that I'm introducing a yet another breakage there :) I've actually thought=
 =20
-VChg won't get unset (which is needed for 4.2V batteries).
+about removing the unit conversion from this place whatsoever, because this=
+=20
+function only ever cares about the sign of what's in MAX17042_Current, so i=
+t=20
+doesn't really need to do any division at all.
 
-This could actually be replaced with a single regmap_write.
-
-> > +		regmap_update_bits(map, MAX17055_ModelCfg,
-> > +				MAX17055_MODELCFG_VCHG_BIT,=20
-config->model_cfg);
->=20
-> Can you align the continued line with previous line? Same in other
-> places if it is not aligned.
->=20
-> > +	}
-> >=20
-> >  }
-> > =20
-> >  static int max17042_init_chip(struct max17042_chip *chip)
-> >=20
-> > @@ -814,44 +821,54 @@ static int max17042_init_chip(struct max17042_chip
-> > *chip)>=20
-> >  	int ret;
->=20
-> Best regards,
-> Krzysztof
-
-
---nextPart7086655.44csPzL39Z
+Best regards,
+Sebastian
+--nextPart12830340.CDJkKcVGEf
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: This is a digitally signed message part.
 Content-Transfer-Encoding: 7Bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEIt2frgBqEUNYNmF86PI1zzvbw/8FAmI05GAACgkQ6PI1zzvb
-w/+wJA/9GMBU1aHb9AcTnFkoZwyhIAeAKz+4/cb9YhRzCr3XnC73PBmVXkYh67T1
-I7x+reLYD3loA2p5BLp90Tpi892mnB18KdrzUDA4Ho0irsHVlC7vVcJRu7MgKHH/
-LfbQH7b9vvBY3v5WvbZkb2K1FOCr63/3KpLyn3LwtuRODnr48w6SyfiSONwsT3N4
-JAqg7kBriOCVBI8Wo0MWiJE+8DiVqqTMTgQhgx32pEk14AhUh63F//RqyDUHvVG4
-HmVoQWz8y+w1x/hJ9ISAWcA00rkFL14xyTt5EJf3RM3oREy4xMWeCaus8UOpS7je
-w+SZpuGFpbHwj3NPRtWfLzWudQfjV2fbLAyktWwMhVLwHAf5fbyHMP1sIJ9lZDlM
-b0sZzGlt3MwLpgNXYU7pK+8i53f46dNNcY2jDRbu/cNxA4sF+xyHlka6pjv/kohp
-SmHt2c5gysBeVD4UpvmOTarpxAWAaya5Tn9Gj4fcsQW7SaxmbHksgnmLm+WilLM7
-lmKrSQ4OYV578LDqi4A5GhVUJyauZlwiX5gbf1WJDpANQiM+7DWPsXOie+k0/Mhj
-hJ6fezC/ka+t5LEmPz/CjRSU2QnDmsVLXqXiLRtK94Y/xiBTGkVHF2FQngZJ3cwe
-o9SugyfZ4CLLtOH5YW+SrNnzl1RX5ES32j7fwjJrkp5jETKuDdI=
-=CbGF
+iQIzBAABCAAdFiEEIt2frgBqEUNYNmF86PI1zzvbw/8FAmI05mMACgkQ6PI1zzvb
+w/+rMBAAs2N32NouV7IdL8UY0uvxI9Xd9yWLCfcSd3fIYvQG0fgFAm5DLfL5L/3X
+kVB8Pu7zp59c4aDKDwHbRrufJAQ8LyMwKZ8dIWQBsrOTxY1BrEnlXM+kYQxYMCPX
+7q82qeyAtSgOzXQjAeT03owx1VxgHxsvnQ2EcRygie42lJnnzA7Oaq6bAHKikhWf
+jUPEYgCBnLzo85HFB+/QWORlpi1pOggGa/rJziMn3VE4lYl7CcDFxLPjqnsFtCqr
+gdUCuMQbcJB9BrNtOw0IfFyCAb9W9iXZVWS7xT7FtelpG38FuwqgAJpuGW13JrEO
+bvpohLMZx2J3aEklXgCc8zEnXaEtEC94s6z98Ms4i9gccfx7ItAmWxjEJGgxgpPJ
+PxN7Wq6jbEdx0zIgCas+w4cxWyoTskFxxBVdGoRhPVixh37NAFfNWISoL5QFVA6/
+RzuO3xlAll/ulmbJinlgQsDEsUSyYVEJJpPfWIBUgYTanJF+z4d/xvuQBUFKE9LR
+ivB/S9KEZyzzZ8UhOB1wDaku8HMY58BZDjtoYHDyUf3v2d0ICHoXTXJhWyLJf3zQ
+sftWx1KKRv9HtSxRh9ZQlSMcB26YGFCgK8fWTndqfngPzFNFy4h483xYVSMEp0Hr
+Ete62DQNo8C8TxpAs/ArWFVm0S0hswuDXK2N9xw/d46//7wOVUY=
+=52Ex
 -----END PGP SIGNATURE-----
 
---nextPart7086655.44csPzL39Z--
+--nextPart12830340.CDJkKcVGEf--
 
 
 
