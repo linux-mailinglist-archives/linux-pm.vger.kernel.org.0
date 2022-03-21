@@ -2,44 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01AE4E2736
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Mar 2022 14:07:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B1C4E273A
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Mar 2022 14:08:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347497AbiCUNIx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Mar 2022 09:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
+        id S243574AbiCUNJX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Mar 2022 09:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243574AbiCUNIw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Mar 2022 09:08:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2919C5938F
-        for <linux-pm@vger.kernel.org>; Mon, 21 Mar 2022 06:07:26 -0700 (PDT)
+        with ESMTP id S1347717AbiCUNJW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Mar 2022 09:09:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AA366611
+        for <linux-pm@vger.kernel.org>; Mon, 21 Mar 2022 06:07:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A45FD61189
-        for <linux-pm@vger.kernel.org>; Mon, 21 Mar 2022 13:07:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0F7F5C340E8
-        for <linux-pm@vger.kernel.org>; Mon, 21 Mar 2022 13:07:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B647B8118D
+        for <linux-pm@vger.kernel.org>; Mon, 21 Mar 2022 13:07:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 22CD4C340ED
+        for <linux-pm@vger.kernel.org>; Mon, 21 Mar 2022 13:07:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1647868045;
-        bh=j/IiLivNUH51Mh9Bw8lEm0dIQ0A6/AXUsS0te36MkHo=;
-        h=From:To:Subject:Date:From;
-        b=S7cf60XNYVyihU7rBpqImq3eP0F1cbYPH3U4v0Vhn8+5oAnLIIfuI/OC6u7TEcUq/
-         5073lx6SvAwJ3e+NqPESn+i3x46+jJjSV8TVK7xJBl0gxN1Kaq7HMMWIjRDmPJQoM4
-         Cm7tPW/j712/VwuHP5ddVaLRARiGrnLk3iu2LdlsmswN2Bc08KU6zu7t/KaJWygJaG
-         B8VrxtvC57JxQ5GDsRoLSJJdzmiTZHmgHcUiy5acUwL/MB7tKGpYKteKtf54WeLqrM
-         Qe4taQkX3XOsc5ZFBeRaiqKrTnMXx7tiyuCTaNIQawdLfe34ZZx38gnZET9jfqRW1i
-         Oc+dUtDQsp4iA==
+        s=k20201202; t=1647868075;
+        bh=SkX5HrgXAaYEUpkAiPk0EtRa2b2vqZaBC24ODE96F4A=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=OAx7ffKtUkmkdyf59uRDJhEKJiSG2oIOzBypSXDd52QHdq1xTKhbUKUvOTv34ghqb
+         Hp8foNUi6or15tgIuteV2El1+kYbAtcBhAKVtz2nhdtmC71ze62HphKmBFZXzkb1pK
+         y4VtHsJ+0lFuhtHlCgMX4PFqJg0rKKaXHmPMTlkoD2YEDfaWhfLWuU/2ytofKGsyB+
+         3Sw69nER0HsaohRcWKF/rBLnt6c/OyZ2581w4pkiO1s4tSHclVVdMPeVr1gZDVwF7A
+         VBCI3FBKyGzAbK8B0GrF3xc+zK4wQIDudMYPtt8CgslUgDRdQRhXViXoK9iEt5ipTy
+         fm8Mpr+935Fsw==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id F1A4AC05FD5; Mon, 21 Mar 2022 13:07:24 +0000 (UTC)
+        id 0FF10C05FD5; Mon, 21 Mar 2022 13:07:55 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [Bug 215714] New: A huge unnecessary power consumption with
- CONFIG_X86_ACPI_CPUFREQ
-Date:   Mon, 21 Mar 2022 13:07:24 +0000
+Subject: [Bug 215714] A huge unnecessary power consumption with
+ CONFIG_X86_ACPI_CPUFREQ and ondemand governor
+Date:   Mon, 21 Mar 2022 13:07:54 +0000
 X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
 X-Bugzilla-Product: Power Management
 X-Bugzilla-Component: cpufreq
@@ -52,10 +52,10 @@ X-Bugzilla-Resolution:
 X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
- priority component assigned_to reporter cf_regression
-Message-ID: <bug-215714-137361@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: short_desc
+Message-ID: <bug-215714-137361-gp5P2HRA0e@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215714-137361@https.bugzilla.kernel.org/>
+References: <bug-215714-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Bugzilla-URL: https://bugzilla.kernel.org/
@@ -73,43 +73,14 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D215714
 
-            Bug ID: 215714
-           Summary: A huge unnecessary power consumption with
-                    CONFIG_X86_ACPI_CPUFREQ
-           Product: Power Management
-           Version: 2.5
-    Kernel Version: 5.17
-          Hardware: x86-64
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: high
-          Priority: P1
-         Component: cpufreq
-          Assignee: linux-pm@vger.kernel.org
-          Reporter: aros@gmx.com
-        Regression: No
+Artem S. Tashkinov (aros@gmx.com) changed:
 
-So, here's the situation.
-
-I have a Ryzen 5800X CPU.
-
-Whenever I watch a 4K youtube video (VP9 codec, Mozilla Firefox, no GPU
-acceleration, decoded and rendered solely by the CPU) with the ACPI_CPUFREQ
-driver the power consumption stays around 50-55 Watts while the CPU is
-constantly hitting or staying around the maximum turbo frequency (~4.75GHz).
-
-Whenever I disable Turbo Boost (echo 0 >
-/sys/devices/system/cpu/cpufreq/boost), the power consumption instantly
-deceases to around 39W with no difference in video decoding, i.e. frames are
-not dropped, decoding is smooth and steady.
-
-We are talking about a staggering 30% decrease in power consumption just by
-disabling Turbo Boost and limiting CPU frequency to 3.8GHz.
-
-I suppose this is not right and should be fixed/addressed.
-
-I'm using the ondemand governor with default settings.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+            Summary|A huge unnecessary power    |A huge unnecessary power
+                   |consumption with            |consumption with
+                   |CONFIG_X86_ACPI_CPUFREQ     |CONFIG_X86_ACPI_CPUFREQ and
+                   |                            |ondemand governor
 
 --=20
 You may reply to this email to add a comment.
