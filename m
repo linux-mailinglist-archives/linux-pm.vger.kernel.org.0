@@ -2,49 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46AA4E5A4B
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Mar 2022 22:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CBB74E5A88
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Mar 2022 22:17:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240848AbiCWVCZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Mar 2022 17:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51232 "EHLO
+        id S1344867AbiCWVTW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Mar 2022 17:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238959AbiCWVCY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Mar 2022 17:02:24 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A8C580FA
-        for <linux-pm@vger.kernel.org>; Wed, 23 Mar 2022 14:00:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=c00BJuGXr4akEio78w/+ArASFVc4fkGTNW6ATgU6EjU=; b=DHanVfBblbYshur0qvJghbnl0c
-        2GW9+H33C+aM/rcUIfi40NXdnwhwJ3dYD71W2ySnL5Y7qS3zJ0zhMc84dptOCoX4D5OA53EupJRH6
-        Sov3yl2lp8Uj/lCEdyhubpA3rsUZd5v+/hPODWNcnDh37KZsy4hoGexzZEDXDEUWPbYuFLfwBp8to
-        ewblzXJTYF43g3ot/iVyYEPk7oQsEUzyY0gWiu7t4ay4Mu7B0f4G247MYKweWj10x+3GqLDvj9XnS
-        LKqJP11dtcT9KVwVamKTLB2mWik4vxkpWkAj0BWJLjdqdr/NWwLpjpypmr6ExM4Is0MJpfZD1euEs
-        K6u2uFcg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nX861-00CqHV-4P; Wed, 23 Mar 2022 21:00:45 +0000
-Message-ID: <ffe84a5e-9788-773a-6326-c9c10f79cf10@infradead.org>
-Date:   Wed, 23 Mar 2022 14:00:40 -0700
+        with ESMTP id S1344864AbiCWVTV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Mar 2022 17:19:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC3385644;
+        Wed, 23 Mar 2022 14:17:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EFA6616E0;
+        Wed, 23 Mar 2022 21:17:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9643FC340EE;
+        Wed, 23 Mar 2022 21:17:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648070269;
+        bh=IFzak4etS5b+TZUCLXmkFg0fNbP7CdQrVm5pDLCsKkc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=q+qrQoYwYyK3fIL7uHv5AHHKNdnjT4xIQQst4KM9/AbQXVOUpJXH+gyqhfVk1BUCt
+         4pIDybJYO2LN3HCC86JgXhblINWXYfmOJva1zMcZHh19Sf4CtFJRbq7n29gW0pYfwZ
+         pRscui9wVBZmH3nMu39X9Z3qxjiYrbH65IeGsdVQ7tChj5RszFzbqCaWi8B+oidcng
+         bjOj3iDRkZDQZq3IvodyZ/hVOSZb5fpkPmJImmn+ao0N5DvwHbFpmtjRdBAqYxH9uC
+         mTB65w/fxZi9mlvYO955du+T4TwPlwSJWpspFpIk7GoFc9TEbziBFzqnpi0gwqgjPi
+         fwGg0rIEYL80Q==
+Received: by earth.universe (Postfix, from userid 1000)
+        id 19D353C0CBC; Mon, 21 Mar 2022 19:03:24 +0100 (CET)
+Date:   Mon, 21 Mar 2022 19:03:24 +0100
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [GIT PULL] power-supply changes for 5.18
+Message-ID: <20220321180324.aruy3fhiopzjkr32@earth.universe>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] Documentation: amd-pstate: grammar and sentence structure
- updates
-Content-Language: en-US
-To:     Jan Engelhardt <jengelh@inai.de>, ray.huang@amd.com
-Cc:     rafael.j.wysocki@intel.com, linux-pm@vger.kernel.org
-References: <20220323102602.29259-1-jengelh@inai.de>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220323102602.29259-1-jengelh@inai.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="arho6uem3puskgsi"
+Content-Disposition: inline
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,498 +53,315 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi--
 
-On 3/23/22 03:26, Jan Engelhardt wrote:
-> Signed-off-by: Jan Engelhardt <jengelh@inai.de>
-> ---
-> basis is v5.17
->=20
->  Documentation/admin-guide/pm/amd-pstate.rst | 135 ++++++++++----------=
+--arho6uem3puskgsi
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->  1 file changed, 67 insertions(+), 68 deletions(-)
->=20
-> diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentatio=
-n/admin-guide/pm/amd-pstate.rst
-> index 2f066df4ee9c..c83db37695da 100644
-> --- a/Documentation/admin-guide/pm/amd-pstate.rst
-> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
-> @@ -19,7 +19,7 @@ Linux kernel. The new mechanism is based on Collabora=
-tive Processor
->  Performance Control (CPPC) which provides finer grain frequency manage=
-ment
->  than legacy ACPI hardware P-States. Current AMD CPU/APU platforms are =
-using
->  the ACPI P-states driver to manage CPU frequency and clocks with switc=
-hing
-> -only in 3 P-states. CPPC replaces the ACPI P-states controls, allows a=
+Hi Linus,
 
-> +only in 3 P-states. CPPC replaces the ACPI P-states controls and allow=
-s a
->  flexible, low-latency interface for the Linux kernel to directly
->  communicate the performance hints to hardware.
-> =20
-> @@ -27,7 +27,7 @@ communicate the performance hints to hardware.
->  ``ondemand``, etc. to manage the performance hints which are provided =
-by
->  CPPC hardware functionality that internally follows the hardware
->  specification (for details refer to AMD64 Architecture Programmer's Ma=
-nual
-> -Volume 2: System Programming [1]_). Currently ``amd-pstate`` supports =
-basic
-> +Volume 2: System Programming [1]_). Currently, ``amd-pstate`` supports=
- basic
->  frequency control function according to kernel governors on some of th=
-e
->  Zen2 and Zen3 processors, and we will implement more AMD specific func=
-tions
->  in future after we verify them on the hardware and SBIOS.
-> @@ -41,9 +41,9 @@ continuous, abstract, and unit-less performance value=
- in a scale that is
->  not tied to a specific performance state / frequency. This is an ACPI
->  standard [2]_ which software can specify application performance goals=
- and
->  hints as a relative target to the infrastructure limits. AMD processor=
-s
-> -provides the low latency register model (MSR) instead of AML code
-> +provide the low latency register model (MSR) instead of an AML code
->  interpreter for performance adjustments. ``amd-pstate`` will initializ=
-e a
-> -``struct cpufreq_driver`` instance ``amd_pstate_driver`` with the call=
-backs
-> +``struct cpufreq_driver`` instance, ``amd_pstate_driver``, with the ca=
-llbacks
->  to manage each performance update behavior. ::
-> =20
->   Highest Perf ------>+-----------------------+                        =
- +-----------------------+
-> @@ -91,26 +91,26 @@ AMD CPPC Performance Capability
->  Highest Performance (RO)
->  .........................
-> =20
-> -It is the absolute maximum performance an individual processor may rea=
-ch,
-> +This is the absolute maximum performance an individual processor may r=
-each,
->  assuming ideal conditions. This performance level may not be sustainab=
-le
->  for long durations and may only be achievable if other platform compon=
-ents
-> -are in a specific state; for example, it may require other processors =
-be in
-> +are in a specific state; for example, it may require other processors =
-to be in
->  an idle state. This would be equivalent to the highest frequencies
->  supported by the processor.
-> =20
->  Nominal (Guaranteed) Performance (RO)
->  ......................................
-> =20
-> -It is the maximum sustained performance level of the processor, assumi=
+This time two merge conflicts have been reported for my tree:
+
+1. conflict between driver-core and power-supply. Solution is
+to ignore the change from Greg as the modified code has been
+deleted in my tree.
+
+2. conflict between extcon and power-supply. That one should
+also be obvious. The patch from extcon does and the patch in
+my tree change different lines, but within the diff scope.
+
+Otherwise things are business as usual, so please pull :)
+
+Thanks,
+
+-- Sebastian
+
+The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+
+  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+
+are available in the Git repository at:
+
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-su=
+pply.git tags/for-v5.18
+
+for you to fetch changes up to c22fca40522e2be8af168f3087d87d85e404ea72:
+
+  power: ab8500_chargalg: Use CLOCK_MONOTONIC (2022-03-14 17:24:52 +0100)
+
+----------------------------------------------------------------
+power supply and reset changes for the v5.18 series
+
+power-supply core:
+ - Introduce "Bypass" charging type used by USB PPS standard
+ - Refactor power_supply_set_input_current_limit_from_supplier()
+ - Add fwnode support to power_supply_get_battery_info()
+
+Drivers:
+ - ab8500: continue migrating towards using standard core APIs
+ - axp288 fuel-gauge: refactor driver to be fully resource managed
+ - battery-samsung-sdi: new in-kernel provider for (constant) Samsung batte=
+ry info
+ - bq24190: disable boost regulator on shutdown
+ - bq24190: add support for battery-info on ACPI based systems
+ - bq25890: prepare driver for usage on ACPI based systems
+ - bq25890: add boost regulator support
+ - cpcap-battery: add NVMEM based battery detection support
+ - injoinic ip5xxx: new driver for power bank IC
+ - upi ug3105: new battery driver
+ - misc. small improvements and fixes
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      power: supply: core: Use device_property_string_array_count()
+
+Carl Philipp Klemm (1):
+      power: supply: cpcap-battery: Add battery type auto detection for map=
+phone devices
+
+Changcheng Deng (1):
+      power: supply: ab8500: Remove unneeded variable
+
+Christophe JAILLET (6):
+      power: supply: core: Simplify hwmon memory allocation
+      power: supply: max17042_battery: Use devm_work_autocancel()
+      power: supply: sbs-charger: Don't cancel work that is not initialized
+      power: supply: da9150-fg: Use devm_delayed_work_autocancel()
+      power: supply: max14656: Use devm_work_autocancel()
+      power: supply: max8997_charger: Use devm_work_autocancel()
+
+Colin Ian King (2):
+      power: supply: axp288_fuel_gauge: Fix spelling mistake "resisitor" ->=
+ "resistor"
+      power: supply: ab8500: fix a handful of spelling mistakes
+
+Daisuke Nojiri (1):
+      power: supply: PCHG: Use MKBP for device event handling
+
+Evgeny Boger (1):
+      power: supply: axp20x_battery: properly report current when dischargi=
 ng
-> -ideal operating conditions. In absence of an external constraint (powe=
-r,
-> -thermal, etc.) this is the performance level the processor is expected=
- to
-> +This is the maximum sustained performance level of the processor, assu=
-ming
-> +ideal operating conditions. In the absence of an external constraint (=
-power,
-> +thermal, etc.), this is the performance level the processor is expecte=
-d to
->  be able to maintain continuously. All cores/processors are expected to=
- be
->  able to sustain their nominal performance state simultaneously.
-> =20
->  Lowest non-linear Performance (RO)
->  ...................................
-> =20
-> -It is the lowest performance level at which nonlinear power savings ar=
-e
-> +This is the lowest performance level at which nonlinear power savings =
-are
->  achieved, for example, due to the combined effects of voltage and freq=
-uency
->  scaling. Above this threshold, lower performance levels should be gene=
-rally
->  more energy efficient than higher performance levels. This register
-> @@ -119,7 +119,7 @@ effectively conveys the most efficient performance =
-level to ``amd-pstate``.
->  Lowest Performance (RO)
->  ........................
-> =20
-> -It is the absolute lowest performance level of the processor. Selectin=
-g a
-> +This is the absolute lowest performance level of the processor. Select=
-ing a
->  performance level lower than the lowest nonlinear performance level ma=
-y
->  cause an efficiency penalty but should reduce the instantaneous power
->  consumption of the processor.
-> @@ -149,14 +149,14 @@ a relative number. This can be expressed as perce=
-ntage of nominal
->  performance (infrastructure max). Below the nominal sustained performa=
-nce
->  level, desired performance expresses the average performance level of =
-the
->  processor subject to hardware. Above the nominal performance level,
-> -processor must provide at least nominal performance requested and go h=
-igher
-> +the processor must provide at least nominal performance requested and =
-go higher
->  if current operating conditions allow.
-> =20
->  Energy Performance Preference (EPP) (RW)
->  .........................................
-> =20
-> -Provides a hint to the hardware if software wants to bias toward perfo=
-rmance
-> -(0x0) or energy efficiency (0xff).
-> +This attribute provides a hint to the hardware if software wants to bi=
-as
-> +toward performance (0x0) or energy efficiency (0xff).
 
-Would be nice to say something here like (if this is correct):
+Gustavo A. R. Silva (1):
+      power: supply: cros_usbpd: Use struct_size() helper in kzalloc()
 
-This value can be anywhere in the range [0x00, 0x7f]. E.g., 0x80 means
-no bias -- performance and energy efficieny are equally important.
+Hans de Goede (37):
+      power: supply: axp288_fuel_gauge: Add dev helper var to probe()
+      power: supply: axp288_fuel_gauge: Add axp288_fuel_gauge_read_initial_=
+regs()
+      power: supply: axp288_fuel_gauge: Use devm_add_action_or_reset() for =
+iio chan release
+      power: supply: axp288_fuel_gauge: Use devm_power_supply_register()
+      power: supply: axp288_fuel_gauge: Refactor IRQ initialization
+      power: supply: axp288_fuel_gauge: Take lock before updating the valid=
+ flag
+      power: supply: axp288_fuel_gauge: Add a no_current_sense_res module_p=
+aram
+      power: supply: core: Refactor power_supply_set_input_current_limit_fr=
+om_supplier()
+      power: supply: bq25890: Add a bq25890_rw_init_data() helper
+      power: supply: bq25890: Add support to skip reset at probe() / remove=
+()
+      power: supply: bq25890: Add support to read back the settings from th=
+e chip
+      power: supply: bq25890: Enable charging on boards where we skip reset
+      power: supply: bq25890: Drop dev->platform_data =3D=3D NULL check
+      power: supply: bq25890: Add bq25890_set_otg_cfg() helper
+      power: supply: bq25890: Add support for registering the Vbus boost co=
+nverter as a regulator
+      power: supply: bq25890: On the bq25892 set the IINLIM based on extern=
+al charger detection
+      power: supply: bq25890: Use the devm_regmap_field_bulk_alloc() helper
+      mfd: intel_soc_pmic_chtwc: Add cht_wc_model data to struct intel_soc_=
+pmic
+      i2c: cht-wc: Make charger i2c-client instantiation board/device-model=
+ specific
+      extcon: intel-cht-wc: Use new cht_wc_model intel_soc_pmic field
+      extcon: intel-cht-wc: Support devs with Micro-B / USB-2 only Type-C c=
+onnectors
+      extcon: intel-cht-wc: Refactor cht_wc_extcon_get_charger()
+      extcon: intel-cht-wc: Add support for registering a power_supply clas=
+s-device
+      extcon: intel-cht-wc: Report RID_A for ACA adapters
+      power: supply: core: Use fwnode_property_*() in power_supply_get_batt=
+ery_info()
+      power: supply: core: Add support for generic fwnodes to power_supply_=
+get_battery_info()
+      power: supply: bq24190_charger: Turn off 5V boost regulator on shutdo=
+wn
+      power: supply: bq24190_charger: Always call power_supply_get_battery_=
+info()
+      power: supply: bq24190_charger: Store ichg-max and vreg-max in bq2419=
+0_dev_info
+      power: supply: bq24190_charger: Program charger with fwnode supplied =
+ccc_ireg and cvc_vreg
+      power: supply: bq24190_charger: Disallow ccc_ireg and cvc_vreg to be =
+higher then the fwnode values
+      power: supply: ug3105_battery: Add driver for uPI uG3105 battery moni=
+tor
+      power: supply: axp288-charger: Set Vhold to 4.4V
+      power: supply: axp288_charger: Use acpi_quirk_skip_acpi_ac_and_batter=
+y()
+      power: supply: axp288_fuel_gauge: Use acpi_quirk_skip_acpi_ac_and_bat=
+tery()
+      power: supply: bq24190_charger: Fix bq24190_vbus_is_enabled() wrong f=
+alse return
+      power: supply: bq24190_charger: Delay applying charge_type changes wh=
+en OTG 5V Vbus boost is on
 
-> =20
-> =20
->  Key Governors Support
-> @@ -173,35 +173,34 @@ operating frequencies supported by the hardware. =
-Users can check the
->  ``amd-pstate`` mainly supports ``schedutil`` and ``ondemand`` for dyna=
-mic
->  frequency control. It is to fine tune the processor configuration on
->  ``amd-pstate`` to the ``schedutil`` with CPU CFS scheduler. ``amd-psta=
-te``
-> -registers adjust_perf callback to implement the CPPC similar performan=
-ce
-> -update behavior. It is initialized by ``sugov_start`` and then populat=
-e the
-> -CPU's update_util_data pointer to assign ``sugov_update_single_perf`` =
-as
-> -the utilization update callback function in CPU scheduler. CPU schedul=
-er
-> -will call ``cpufreq_update_util`` and assign the target performance
-> -according to the ``struct sugov_cpu`` that utilization update belongs =
-to.
-> -Then ``amd-pstate`` updates the desired performance according to the C=
-PU
-> +registers the adjust_perf callback to implement performance update beh=
-avior
-> +similar to CPPC. It is initialized by ``sugov_start`` and then populat=
-es the
-> +CPU's update_util_data pointer to assign ``sugov_update_single_perf`` =
-as the
-> +utilization update callback function in the CPU scheduler. The CPU sch=
-eduler
-> +will call ``cpufreq_update_util`` and assigns the target performance a=
-ccording
-> +to the ``struct sugov_cpu`` that the utilization update belongs to.
-> +Then, ``amd-pstate`` updates the desired performance according to the =
-CPU
->  scheduler assigned.
-> =20
-> =20
->  Processor Support
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> =20
-> -The ``amd-pstate`` initialization will fail if the _CPC in ACPI SBIOS =
-is
-> -not existed at the detected processor, and it uses ``acpi_cpc_valid`` =
-to
-> -check the _CPC existence. All Zen based processors support legacy ACPI=
+Hong Peng (1):
+      power: supply: ab8500_charger: Fix spelling typo
 
-> -hardware P-States function, so while the ``amd-pstate`` fails to be
-> -initialized, the kernel will fall back to initialize ``acpi-cpufreq``
-> -driver.
-> +The ``amd-pstate`` initialization will fail if the ``_CPC`` entry in t=
-he ACPI
-> +SBIOS does not exist in the detected processor. It uses ``acpi_cpc_val=
-id``
-> +to check the existence of ``_CPC``. All Zen based processors support t=
-he legacy
-> +ACPI hardware P-States function, so when ``amd-pstate`` fails initiali=
-zation,
-> +the kernel will fall back to initialize the ``acpi-cpufreq`` driver.
-> =20
->  There are two types of hardware implementations for ``amd-pstate``: on=
-e is
->  `Full MSR Support <perf_cap_>`_ and another is `Shared Memory Support
-> -<perf_cap_>`_. It can use :c:macro:`X86_FEATURE_CPPC` feature flag (fo=
-r
-> -details refer to Processor Programming Reference (PPR) for AMD Family
-> -19h Model 51h, Revision A1 Processors [3]_) to indicate the different
-> -types. ``amd-pstate`` is to register different ``static_call`` instanc=
-es
-> -for different hardware implementations.
-> +<perf_cap_>`_. It can use the :c:macro:`X86_FEATURE_CPPC` feature flag=
- to
+Jiasheng Jiang (2):
+      power: supply: wm8350-power: Handle error for wm8350_register_irq
+      power: supply: wm8350-power: Add missing free in free_charger_irq
 
-So there are 2 types, but both of them have references to <perf_cap_> ?
-Hm, looks like almost everything references <perf_cap_>.
+Linus Walleij (20):
+      power: supply: ab8500: Drop BATCTRL thermal mode
+      power: supply: ab8500: Swap max and overvoltage
+      power: supply: ab8500: Integrate thermal zone
+      power: supply: ab8500_fg: Break loop for measurement
+      power: supply: ab8500_fg: Break out load compensated voltage
+      power: supply: ab8500_fg: Safeguard compensated voltage
+      power: supply: ab8500_fg: Drop useless parameter
+      power: supply: ab8500_chargalg: Drop charging step
+      power: supply: ab8500_chargalg: Drop enable/disable sysfs
+      power: supply: ab8500_charger: Restrict ADC retrieveal
+      power: supply: ab8500_charger: Fix VBAT interval check
+      power: supply: ab8500: Standardize maintenance charging
+      power: supply: ab8500: Standardize alert mode charging
+      power: supply: ab8500: Standardize BTI resistance
+      power: supply: Support VBAT-to-Ri lookup tables
+      power: supply: ab8500_fg: Use VBAT-to-Ri if possible
+      power: supply: Static data for Samsung batteries
+      dt-bindings: power: supply: ab8500_fg: Add line impedance
+      power: supply: ab8500_fg: Account for line impedance
+      power: ab8500_chargalg: Use CLOCK_MONOTONIC
 
-What is "It" in "It can use" ?
+Mark Brown (1):
+      power: supply: Use an rbtree rather than flat register cache
 
-> +indicate the different types. (For details, refer to the Processor Pro=
-gramming
-> +Reference (PPR) for AMD Family 19h Model 51h, Revision A1 Processors [=
-3]_.)
-> +``amd-pstate`` is to register different ``static_call`` instances for =
-different
+Miaoqian Lin (2):
+      power: reset: gemini-poweroff: Fix IRQ check in gemini_poweroff_probe
+      power: supply: ab8500: Fix memory leak in ab8500_fg_sysfs_init
 
-                  will register different
-or                registers different
-?
+Micha=C5=82 Miros=C5=82aw (2):
+      power: supply: ltc2941: simplify Qlsb calculation
+      power: supply: ltc2941: clean up error messages
 
-> +hardware implementations.
-> =20
-> -Currently, some of Zen2 and Zen3 processors support ``amd-pstate``. In=
- the
-> +Currently, some of the Zen2 and Zen3 processors support ``amd-pstate``=
-=2E In the
->  future, it will be supported on more and more AMD processors.
-> =20
->  Full MSR Support
-> @@ -210,18 +209,18 @@ Full MSR Support
->  Some new Zen3 processors such as Cezanne provide the MSR registers dir=
-ectly
->  while the :c:macro:`X86_FEATURE_CPPC` CPU feature flag is set.
->  ``amd-pstate`` can handle the MSR register to implement the fast switc=
-h
-> -function in ``CPUFreq`` that can shrink latency of frequency control o=
-n the
-> -interrupt context. The functions with ``pstate_xxx`` prefix represent =
-the
-> -operations of MSR registers.
-> +function in ``CPUFreq`` that can reduce the latency of frequency contr=
-ol in
-> +interrupt context. The functions with a ``pstate_xxx`` prefix represen=
-t the
-> +operations on MSR registers.
-> =20
->  Shared Memory Support
->  ----------------------
-> =20
-> -If :c:macro:`X86_FEATURE_CPPC` CPU feature flag is not set, that means=
- the
-> -processor supports shared memory solution. In this case, ``amd-pstate`=
-`
-> +If the :c:macro:`X86_FEATURE_CPPC` CPU feature flag is not set, the
-> +processor supports the shared memory solution. In this case, ``amd-pst=
-ate``
->  uses the ``cppc_acpi`` helper methods to implement the callback functi=
-ons
-> -that defined on ``static_call``. The functions with ``cppc_xxx`` prefi=
-x
-> -represent the operations of acpi cppc helpers for shared memory soluti=
-on.
-> +that are defined on ``static_call``. The functions with the ``cppc_xxx=
-`` prefix
-> +represent the operations of ACPI CPPC helpers for the shared memory so=
-lution.
-> =20
-> =20
->  AMD P-States and ACPI hardware P-States always can be supported in one=
+Ricardo Rivera-Matos (3):
+      power: supply: Introduces bypass charging property
+      power: supply: bq25980: Implements POWER_SUPPLY_CHARGE_TYPE_BYPASS
+      ABI: testing: sysfs-class-power: Adds "Long Life" entry
 
-> @@ -234,7 +233,7 @@ User Space Interface in ``sysfs``
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> =20
->  ``amd-pstate`` exposes several global attributes (files) in ``sysfs`` =
-to
-> -control its functionality at the system level. They located in the
-> +control its functionality at the system level. They are located in the=
+Samuel Holland (3):
+      dt-bindings: vendor-prefixes: Add Injoinic
+      dt-bindings: trivial-devices: Add Injoinic power bank ICs
+      power: supply: Add a driver for Injoinic power bank ICs
 
->  ``/sys/devices/system/cpu/cpufreq/policyX/`` directory and affect all =
-CPUs. ::
-> =20
->   root@hr-test1:/home/ray# ls /sys/devices/system/cpu/cpufreq/policy0/*=
-amd*
-> @@ -246,38 +245,38 @@ control its functionality at the system level. Th=
-ey located in the
->  ``amd_pstate_highest_perf / amd_pstate_max_freq``
-> =20
->  Maximum CPPC performance and CPU frequency that the driver is allowed =
-to
-> -set in percent of the maximum supported CPPC performance level (the hi=
-ghest
-> +set, in percent of the maximum supported CPPC performance level (the h=
-ighest
->  performance supported in `AMD CPPC Performance Capability <perf_cap_>`=
-_).
-> -In some of ASICs, the highest CPPC performance is not the one in the _=
-CPC
-> -table, so we need to expose it to sysfs. If boost is not active but
-> -supported, this maximum frequency will be larger than the one in
-> +In some ASICs, the highest CPPC performance is not the one in the ``_C=
-PC``
-> +table, so we need to expose it to sysfs. If boost is not active, but
-> +still supported, this maximum frequency will be larger than the one in=
+Sebastian Reichel (1):
+      Merge tag 'psy-extcon-i2c-mfd-for-v5.18-signed' into psy-next
 
->  ``cpuinfo``.
->  This attribute is read-only.
-> =20
->  ``amd_pstate_lowest_nonlinear_freq``
-> =20
-> -The lowest non-linear CPPC CPU frequency that the driver is allowed to=
- set
-> -in percent of the maximum supported CPPC performance level (Please see=
- the
-> +The lowest non-linear CPPC CPU frequency that the driver is allowed to=
- set,
-> +in percent of the maximum supported CPPC performance level. (Please se=
-e the
->  lowest non-linear performance in `AMD CPPC Performance Capability
-> -<perf_cap_>`_).
-> +<perf_cap_>`_.)
->  This attribute is read-only.
-> =20
-> -For other performance and frequency values, we can read them back from=
+Sergey Shtylyov (1):
+      power: supply: mp2629_charger: use platform_get_irq()
 
-> +Other performance and frequency values can be read back from
->  ``/sys/devices/system/cpu/cpuX/acpi_cppc/``, see :ref:`cppc_sysfs`.
-> =20
-> =20
->  ``amd-pstate`` vs ``acpi-cpufreq``
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> =20
-> -On majority of AMD platforms supported by ``acpi-cpufreq``, the ACPI t=
-ables
-> -provided by the platform firmware used for CPU performance scaling, bu=
-t
-> -only provides 3 P-states on AMD processors.
-> -However, on modern AMD APU and CPU series, it provides the collaborati=
-ve
-> -processor performance control according to ACPI protocol and customize=
- this
-> -for AMD platforms. That is fine-grain and continuous frequency range
-> +On the majority of AMD platforms supported by ``acpi-cpufreq``, the AC=
-PI tables
-> +provided by the platform firmware are used for CPU performance scaling=
-, but
-> +only provide 3 P-states on AMD processors.
-> +However, on modern AMD APU and CPU series, hardware provides the Colla=
-borative
-> +Processor Performance Control according to the ACPI protocol and custo=
-mizes this
-> +for AMD platforms. That is, fine-grained and continuous frequency rang=
-es
->  instead of the legacy hardware P-states. ``amd-pstate`` is the kernel
-> -module which supports the new AMD P-States mechanism on most of future=
- AMD
-> -platforms. The AMD P-States mechanism will be the more performance and=
- energy
-> +module which supports the new AMD P-States mechanism on most of the fu=
-ture AMD
-> +platforms. The AMD P-States mechanism is the more performance and ener=
-gy
->  efficiency frequency management method on AMD processors.
-> =20
->  Kernel Module Options for ``amd-pstate``
-> @@ -287,25 +286,25 @@ Kernel Module Options for ``amd-pstate``
->  Use a module param (shared_mem) to enable related processors manually =
-with
->  **amd_pstate.shared_mem=3D1**.
->  Due to the performance issue on the processors with `Shared Memory Sup=
-port
-> -<perf_cap_>`_, so we disable it for the moment and will enable this by=
- default
-> -once we address performance issue on this solution.
-> +<perf_cap_>`_, we disable it presently and will re-enable this by defa=
-ult
-> +once we address performance issue with this solution.
-> =20
-> -The way to check whether current processor is `Full MSR Support <perf_=
-cap_>`_
-> +To check whether the current processor is using `Full MSR Support <per=
-f_cap_>`_
->  or `Shared Memory Support <perf_cap_>`_ : ::
-> =20
->    ray@hr-test1:~$ lscpu | grep cppc
->    Flags:                           fpu vme de pse tsc msr pae mce cx8 =
-apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall=
- nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl nonstop_=
-tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx1=
-6 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp=
-_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw i=
-bs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwait=
-x cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgsbase b=
-mi1 avx2 smep bmi2 erms invpcid cqm rdt_a rdseed adx smap clflushopt clwb=
- sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_tota=
-l cqm_mbm_local clzero irperf xsaveerptr rdpru wbnoinvd cppc arat npt lbr=
-v svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pause=
-filter pfthreshold avic v_vmsave_vmload vgif v_spec_ctrl umip pku ospke v=
-aes vpclmulqdq rdpid overflow_recov succor smca fsrm
-> =20
-> -If CPU Flags have cppc, then this processor supports `Full MSR Support=
+Souptick Joarder (HPE) (1):
+      power: supply: ab8500: Remove unused variable
 
-> -<perf_cap_>`_. Otherwise it supports `Shared Memory Support <perf_cap_=
->`_.
-> +If the CPU flags have ``cppc``, then this processor supports `Full MSR=
- Support
-> +<perf_cap_>`_. Otherwise, it supports `Shared Memory Support <perf_cap=
-_>`_.
-> =20
-> =20
->  ``cpupower`` tool support for ``amd-pstate``
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> =20
-> -``amd-pstate`` is supported on ``cpupower`` tool that can be used to d=
-ump the frequency
-> -information. And it is in progress to support more and more operations=
- for new
-> -``amd-pstate`` module with this tool. ::
-> +``amd-pstate`` is supported by the ``cpupower`` tool, which can be use=
-d to dump
-> +frequency information. Development is in progress to support more and =
-more
-> +operations for the new ``amd-pstate`` module with this tool. ::
-> =20
->   root@hr-test1:/home/ray# cpupower frequency-info
->   analyzing CPU 0:
-> @@ -336,10 +335,10 @@ Trace Events
->  --------------
-> =20
->  There are two static trace events that can be used for ``amd-pstate``
-> -diagnostics.  One of them is the cpu_frequency trace event generally u=
-sed
-> +diagnostics. One of them is the ``cpu_frequency`` trace event generall=
-y used
->  by ``CPUFreq``, and the other one is the ``amd_pstate_perf`` trace eve=
-nt
->  specific to ``amd-pstate``.  The following sequence of shell commands =
-can
-> -be used to enable them and see their output (if the kernel is generall=
-y
-> +be used to enable them and see their output (if the kernel is
->  configured to support event tracing). ::
-> =20
->   root@hr-test1:/home/ray# cd /sys/kernel/tracing/
-> @@ -364,7 +363,7 @@ configured to support event tracing). ::
->            <idle>-0       [003] d.s..  4995.980971: amd_pstate_perf: am=
-d_min_perf=3D85 amd_des_perf=3D85 amd_max_perf=3D166 cpu_id=3D3 changed=3D=
-false fast_switch=3Dtrue
->            <idle>-0       [011] d.s..  4995.980996: amd_pstate_perf: am=
-d_min_perf=3D85 amd_des_perf=3D85 amd_max_perf=3D166 cpu_id=3D11 changed=3D=
-false fast_switch=3Dtrue
-> =20
-> -The cpu_frequency trace event will be triggered either by the ``schedu=
-til`` scaling
-> +The ``cpu_frequency`` trace event will be triggered either by the ``sc=
-hedutil`` scaling
->  governor (for the policies it is attached to), or by the ``CPUFreq`` c=
-ore (for the
->  policies with other scaling governors).
-> =20
+Uwe Kleine-K=C3=B6nig (1):
+      power: supply: rt9455: Don't pass an error code in remove callback
 
-Anyway, this is a big improvement. Thanks.
+Yang Li (1):
+      power: supply: da9150-fg: Remove unnecessary print function dev_err()
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Yauhen Kharuzhy (3):
+      power: supply: bq25890: Rename IILIM field to IINLIM
+      power: supply: bq25890: Reduce reported CONSTANT_CHARGE_CURRENT_MAX f=
+or low temperatures
+      power: supply: bq25890: Support higher charging voltages through Pump=
+ Express+ protocol
 
---=20
-~Randy
+Yihao Han (2):
+      power: supply: axp20x_ac_power: fix platform_get_irq.cocci warning
+      power: supply: axp20x_usb_power: fix platform_get_irq.cocci warnings
+
+ Documentation/ABI/testing/sysfs-class-power        |   8 +-
+ .../power/supply/stericsson,ab8500-fg.yaml         |   5 +
+ .../devicetree/bindings/trivial-devices.yaml       |   8 +
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ MAINTAINERS                                        |   5 +
+ drivers/extcon/Kconfig                             |   2 +
+ drivers/extcon/extcon-intel-cht-wc.c               | 240 +++++-
+ drivers/i2c/busses/i2c-cht-wc.c                    | 120 ++-
+ drivers/mfd/intel_soc_pmic_chtwc.c                 |  40 +
+ drivers/power/reset/gemini-poweroff.c              |   4 +-
+ drivers/power/supply/Kconfig                       |  35 +-
+ drivers/power/supply/Makefile                      |   3 +
+ drivers/power/supply/ab8500-bm.h                   |  79 --
+ drivers/power/supply/ab8500_bmdata.c               |  86 +-
+ drivers/power/supply/ab8500_btemp.c                | 342 +-------
+ drivers/power/supply/ab8500_chargalg.c             | 418 ++--------
+ drivers/power/supply/ab8500_charger.c              |  47 +-
+ drivers/power/supply/ab8500_fg.c                   | 145 ++--
+ drivers/power/supply/axp20x_ac_power.c             |   6 +-
+ drivers/power/supply/axp20x_battery.c              |  13 +-
+ drivers/power/supply/axp20x_usb_power.c            |   6 +-
+ drivers/power/supply/axp288_charger.c              |  21 +-
+ drivers/power/supply/axp288_fuel_gauge.c           | 273 +++---
+ drivers/power/supply/bq24190_charger.c             | 158 +++-
+ drivers/power/supply/bq25890_charger.c             | 396 +++++++--
+ drivers/power/supply/bq25980_charger.c             |   2 +-
+ drivers/power/supply/cpcap-battery.c               | 118 ++-
+ drivers/power/supply/cros_peripheral_charger.c     |  37 +-
+ drivers/power/supply/cros_usbpd-charger.c          |   2 +-
+ drivers/power/supply/da9150-fg.c                   |  35 +-
+ drivers/power/supply/ip5xxx_power.c                | 638 ++++++++++++++
+ drivers/power/supply/ltc2941-battery-gauge.c       |  61 +-
+ drivers/power/supply/max14656_charger_detector.c   |  15 +-
+ drivers/power/supply/max17042_battery.c            |  12 +-
+ drivers/power/supply/max8997_charger.c             |  12 +-
+ drivers/power/supply/mp2629_charger.c              |   6 +-
+ drivers/power/supply/power_supply_core.c           | 294 +++++--
+ drivers/power/supply/power_supply_hwmon.c          |  15 +-
+ drivers/power/supply/power_supply_sysfs.c          |   1 +
+ drivers/power/supply/rt9455_charger.c              |   2 +-
+ drivers/power/supply/samsung-sdi-battery.c         | 918 +++++++++++++++++=
+++++
+ drivers/power/supply/samsung-sdi-battery.h         |  13 +
+ drivers/power/supply/sbs-charger.c                 |  18 +-
+ drivers/power/supply/smb347-charger.c              |   3 +-
+ drivers/power/supply/ug3105_battery.c              | 486 +++++++++++
+ drivers/power/supply/wm8350_power.c                |  97 ++-
+ include/linux/mfd/intel_soc_pmic.h                 |   8 +
+ include/linux/platform_data/cros_ec_commands.h     |  64 ++
+ include/linux/power/bq25890_charger.h              |  15 +
+ include/linux/power_supply.h                       | 213 ++++-
+ 50 files changed, 4118 insertions(+), 1429 deletions(-)
+ create mode 100644 drivers/power/supply/ip5xxx_power.c
+ create mode 100644 drivers/power/supply/samsung-sdi-battery.c
+ create mode 100644 drivers/power/supply/samsung-sdi-battery.h
+ create mode 100644 drivers/power/supply/ug3105_battery.c
+ create mode 100644 include/linux/power/bq25890_charger.h
+
+--arho6uem3puskgsi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmI4vegACgkQ2O7X88g7
++przmhAApksmbtMLb002Leqyu9msKgUYoTbQtHacaTNUE5bhck5TZmSYRsRXiZ1A
+L+4Gb6ggO3tknN5SP8UyRKyBf0pH9hdEOWIVUmAFhPXQLOT4/IlS0tiNpOYkonmK
+zvASN6+tWKIrVVfothsziENezoF2p942NyF5VZ8VbymUdRFUuMxuGSvB1sBCNbbJ
++84aLekX7lln2Jx0y/8b79Qj8TxaaUAG9uVkTGQhEtWLWKgeFNEhmzT4+0+T6wN8
+QyMwKQzBZpRzLcmeIovzDG3DvReLZ5pZiBLWOLz1GpaSs31gJvQ7RKxaccbQLLbw
+3eygefZgvons7XP+BVa2zc/OSBhk9z7j1NrAf4xNgj72tUK86vXTpDMmhfCdXgWY
+uikjWrFcm7Hx0IJMc8okmF7IBxfiJPxD/er3WlHVwUYnnuQsRxcErUwfznnKXIcl
+spiErpTAP6p9WtYqrR/FF28fpQ4EZPI9y6ek8WOjSn58Luul+JwZDbet9WZ8sxeJ
++BdRs9n75EOpvsrXtSzDlyxoF0loj490EaxyEr5dpicil2vrLZ4LgewPr0hV3Eok
+X2SMsPXqiItJfG5IiF8qNs9p/7VISOVlnBZuVFc4iq7X7c0SIn3AnvSmMvGSwyAD
++G10um/NZAICPDrSI3+1+zZYKwOMQqbyNJrfJ99ZRo7bkpWLjUk=
+=fq9Y
+-----END PGP SIGNATURE-----
+
+--arho6uem3puskgsi--
