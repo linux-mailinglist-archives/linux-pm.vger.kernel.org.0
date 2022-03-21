@@ -2,157 +2,212 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6BCE4E1EAF
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Mar 2022 02:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D3A4E1F42
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Mar 2022 04:14:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343968AbiCUB0g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 20 Mar 2022 21:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44752 "EHLO
+        id S243731AbiCUDQE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 20 Mar 2022 23:16:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232538AbiCUB0f (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 20 Mar 2022 21:26:35 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2048B275DE;
-        Sun, 20 Mar 2022 18:25:11 -0700 (PDT)
-Received: from fsav314.sakura.ne.jp (fsav314.sakura.ne.jp [153.120.85.145])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 22L1OQ9W020821;
-        Mon, 21 Mar 2022 10:24:26 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav314.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav314.sakura.ne.jp);
- Mon, 21 Mar 2022 10:24:26 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav314.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 22L1OOpR020816
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 21 Mar 2022 10:24:25 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <49925af7-78a8-a3dd-bce6-cfc02e1a9236@I-love.SAKURA.ne.jp>
-Date:   Mon, 21 Mar 2022 10:24:23 +0900
+        with ESMTP id S243478AbiCUDQD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 20 Mar 2022 23:16:03 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568CB2315F
+        for <linux-pm@vger.kernel.org>; Sun, 20 Mar 2022 20:14:37 -0700 (PDT)
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220321031432epoutp016a43db86373223ab10dbfaca46744822~eRucZjZhc1205112051epoutp015
+        for <linux-pm@vger.kernel.org>; Mon, 21 Mar 2022 03:14:32 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220321031432epoutp016a43db86373223ab10dbfaca46744822~eRucZjZhc1205112051epoutp015
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1647832472;
+        bh=+sXwCEW3mW2sBV52D5/Cek7rU4aPA8/VK9Jgbz0yWmE=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=n1cS5VMMlHXdNMkagq5PD5WkZXz66jJr7NLOV6Tq5Tmn93Ka1zbuT03WcO1wx35K6
+         7DhP8p6BXjHLzqkHF7e86FVFi1qb0xks/mC6esfyxeP1mzVhmmofcctKNibGXz4PAe
+         QVHbcTGLfeLY4zNIEivoYxx1RyM6u1psq8S8w/Cc=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20220321031431epcas1p32f0935dc303f7369ceae86585dd9eed3~eRub3yE4x0183401834epcas1p3U;
+        Mon, 21 Mar 2022 03:14:31 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.36.135]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4KMKTt1Dzpz4x9QB; Mon, 21 Mar
+        2022 03:14:26 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        3D.C5.21932.29DE7326; Mon, 21 Mar 2022 12:14:26 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220321031425epcas1p21cc0552e9712818d95b39747cfc3166a~eRuV55cd11508815088epcas1p20;
+        Mon, 21 Mar 2022 03:14:25 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220321031425epsmtrp2bc3634279bd20ef71f9c17652dd7160d~eRuV5EIzW1070910709epsmtrp2-;
+        Mon, 21 Mar 2022 03:14:25 +0000 (GMT)
+X-AuditID: b6c32a38-929ff700000255ac-d3-6237ed92eba0
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D4.17.29871.09DE7326; Mon, 21 Mar 2022 12:14:24 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220321031424epsmtip26ce8e671a406bff7abd96a260df92c06~eRuVsX4lV1929219292epsmtip2K;
+        Mon, 21 Mar 2022 03:14:24 +0000 (GMT)
+Subject: Re: [PATCH v4 00/15] rk3399: Clean up and enable DDR DVFS
+To:     Brian Norris <briannorris@chromium.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     Derek Basehore <dbasehore@chromium.org>,
+        devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Lin Huang <hl@rock-chips.com>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <c909b9ce-d787-e5fe-6a92-473cd24d0858@samsung.com>
+Date:   Mon, 21 Mar 2022 12:39:38 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
+In-Reply-To: <20220308190901.3144566-1-briannorris@chromium.org>
 Content-Language: en-US
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: An announcement for kernel-global workqueue users.
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,RCVD_IN_SBL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrNJsWRmVeSWpSXmKPExsWy7bCmru6kt+ZJBjMWcFhs+vie1eLV5j1s
+        FvOPnGO1+P/oNavFjw2nmC3ONr1ht9j0+BqrxeVdc9gsPvceYbT49OA/s8XtxhVsFq17j7A7
+        8HjMbrjI4rFpVSebx+Yl9R5/Z+1n8ejbsorRY/u1ecwenzfJBbBHZdtkpCampBYppOYl56dk
+        5qXbKnkHxzvHm5oZGOoaWlqYKynkJeam2iq5+AToumXmAB2qpFCWmFMKFApILC5W0rezKcov
+        LUlVyMgvLrFVSi1IySkwLdArTswtLs1L18tLLbEyNDAwMgUqTMjOWP//N3PBM/GK5ktXmBsY
+        W4S7GDk5JARMJN7fvs8CYgsJ7GCUONPi0MXIBWR/YpRof9vEAuF8Y5Q42XmDHabj+aYXrBCJ
+        vYwSOxoamSCc94wSn87uYwOpEhZwkpj0diMziC0icJxR4vjvPJAiZoF3jBKrm76DFbEJaEns
+        f3EDzOYXUJS4+uMxI4jNK2AnMWPaHiCbg4NFQFXi2rFCkLCoQJjEyW0tUCWCEidnPgG7m1PA
+        QeLEt0tg1zELiEvcejKfCcKWl9j+dg4zyF4JgQscEsv2dTFBvOAicfjYdihbWOLV8S1Qr0lJ
+        fH63lw2ioZlRouHFbUYIp4dR4uizPhaIKmOJ/UsnM4FcxyygKbF+lz5EWFFi5++5jBCb+STe
+        fe1hBSmREOCV6GgTgihRlrj84C7UXkmJxe2dbBMYlWYh+WcWkh9mIflhFsKyBYwsqxjFUguK
+        c9NTiw0LTODRnZyfu4kRnIq1LHYwzn37Qe8QIxMH4yFGCQ5mJRHef7+Nk4R4UxIrq1KL8uOL
+        SnNSiw8xmgIDeCKzlGhyPjAb5JXEG5pYGpiYGRmbWBiaGSqJ8/ZOPZ0oJJCeWJKanZpakFoE
+        08fEwSnVwFRwf8G3MPnlAhoqP/a3JcR7TJzK9Y/z3NeYmmYOU7UZJ6s//CjLLF71d1PfySym
+        vbFJ8pKy4Qu8omWnaJ1fdcCzdUmCk6SJo3J008MqxsIJjxcvm2u1Y1W1lv6r6c/vVv8+s+K1
+        8Jyj8UqTr2xdzlTv36p05dGNIHMXqedHarvjrnbM2Ncn+FNPJlW55qLO6+vrn3J9fb/2s1HU
+        Bc2SYttVpemnK92Sq+eY/5u6l9N0tYx3Rf6FtPYsK1c9zwepIuVvzcSjHmi2eeW/6tk9uTfh
+        aceeAC3P2slxV/QONXy9JfBsU9HUg/mKFUlzu2ynP2R5tvSzUszEfeLyG38tbXHVviRVlXXQ
+        V3meOkv6QSWW4oxEQy3mouJEABK45UlOBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMIsWRmVeSWpSXmKPExsWy7bCSvO6Et+ZJBvcO2Fhs+vie1eLV5j1s
+        FvOPnGO1+P/oNavFjw2nmC3ONr1ht9j0+BqrxeVdc9gsPvceYbT49OA/s8XtxhVsFq17j7A7
+        8HjMbrjI4rFpVSebx+Yl9R5/Z+1n8ejbsorRY/u1ecwenzfJBbBHcdmkpOZklqUW6dslcGWs
+        //+bueCZeEXzpSvMDYwtwl2MnBwSAiYSzze9YAWxhQR2M0qsPOoHEZeUmHbxKHMXIweQLSxx
+        +HBxFyMXUMlbRonlfxYwgdQICzhJTHq7kRnEFhE4ySix4pUQiM0s8I5RYuH3LIiGyYwSbw6f
+        AGtgE9CS2P/iBhuIzS+gKHH1x2NGEJtXwE5ixrQ9jCDLWARUJa4dKwQJiwqESexc8pgJokRQ
+        4uTMJywgNqeAg8SJb5fYIXapS/yZd4kZwhaXuPVkPhOELS+x/e0c5gmMwrOQtM9C0jILScss
+        JC0LGFlWMUqmFhTnpucWGxYY5qWW6xUn5haX5qXrJefnbmIEx6OW5g7G7as+6B1iZOJgPMQo
+        wcGsJML777dxkhBvSmJlVWpRfnxRaU5q8SFGaQ4WJXHeC10n44UE0hNLUrNTUwtSi2CyTByc
+        Ug1Mez4HP5mq+bIrXNRWLkj5trvPKsNFZ2UDu3mzJT77V/yrr5N5nekkJPo2pa3uxoVbAT/m
+        3ll1Rkwpwln98+TGOydZxeTbNEuzDx0XfWT68YH13puBNelNC4Tj6x3u763LWBN37/JE6Z/v
+        GB7civp6+/vM/QJLxIolH5m6zQjkuXSqvt1uxYRtkU61p8zM//1Y5mSZvE/eXH/TiUtJWeUq
+        CQoF4ssrI37Uv8jOKe0QnNrxgtGvtCFkzmuZAIZzvx9+36d0oe6ttPmk5btlLxUJ7ImZZ3el
+        LeY0N2tCvEOh3eFj2i8uez0WU//91dRox//+Hw8lflV+XHbnXGvelGUN23LuRE6KX/Y+btqc
+        PF03JZbijERDLeai4kQAdAGeuTYDAAA=
+X-CMS-MailID: 20220321031425epcas1p21cc0552e9712818d95b39747cfc3166a
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220308190916epcas1p1baf4361cc5f33a90b38b01be7ffa748d
+References: <CGME20220308190916epcas1p1baf4361cc5f33a90b38b01be7ffa748d@epcas1p1.samsung.com>
+        <20220308190901.3144566-1-briannorris@chromium.org>
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello.
+Hi Brian,
 
-The Linux kernel provides kernel-global WQs (namely, system_wq, system_highpri_wq,
-system_long_wq, system_unbound_wq, system_freezable_wq, system_power_efficient_wq
-and system_freezable_power_efficient_wq). But since attempt to flush kernel-global
-WQs has possibility of deadlock, Tejun Heo thinks that we should stop calling
-flush_scheduled_work() and flush_workqueue(system_*). Such callers as of Linux 5.17
-are listed below.
 
-----------
-$ git grep -nF 'flush_scheduled_work()'
-drivers/acpi/osl.c:1182:         * invoke flush_scheduled_work()/acpi_os_wait_events_complete() to flush
-drivers/acpi/osl.c:1575:        flush_scheduled_work();
-drivers/block/aoe/aoedev.c:324: flush_scheduled_work();
-drivers/block/aoe/aoedev.c:523: flush_scheduled_work();
-drivers/crypto/atmel-ecc.c:401: flush_scheduled_work();
-drivers/crypto/atmel-sha204a.c:162:     flush_scheduled_work();
-drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c:2606:       flush_scheduled_work();
-drivers/gpu/drm/bridge/lontium-lt9611uxc.c:985: flush_scheduled_work();
-drivers/gpu/drm/i915/display/intel_display.c:10790:     flush_scheduled_work();
-drivers/gpu/drm/i915/gt/selftest_execlists.c:87:        flush_scheduled_work();
-drivers/iio/light/tsl2563.c:811:        flush_scheduled_work();
-drivers/infiniband/hw/mlx4/cm.c:511:            flush_scheduled_work();
-drivers/infiniband/hw/mlx4/cm.c:543:            flush_scheduled_work(); /* make sure all timers were flushed */
-drivers/infiniband/ulp/isert/ib_isert.c:2639:   flush_scheduled_work();
-drivers/input/mouse/psmouse-smbus.c:320:        flush_scheduled_work();
-drivers/md/dm.c:229:    flush_scheduled_work();
-drivers/message/fusion/mptscsih.c:1234: flush_scheduled_work();
-drivers/net/phy/phy.c:1060:     /* Cannot call flush_scheduled_work() here as desired because
-drivers/net/usb/lan78xx.c:3240:  * can't flush_scheduled_work() until we drop rtnl (later),
-drivers/net/usb/usbnet.c:853:    * can't flush_scheduled_work() until we drop rtnl (later),
-drivers/net/wireless/ath/ath6kl/usb.c:481:      flush_scheduled_work();
-drivers/net/wwan/wwan_hwsim.c:537:      flush_scheduled_work();         /* Wait deletion works completion */
-drivers/nvme/target/configfs.c:1557:    flush_scheduled_work();
-drivers/nvme/target/rdma.c:1587:                flush_scheduled_work();
-drivers/nvme/target/rdma.c:2056:        flush_scheduled_work();
-drivers/nvme/target/tcp.c:1818:         flush_scheduled_work();
-drivers/nvme/target/tcp.c:1879: flush_scheduled_work();
-drivers/nvme/target/tcp.c:1884: flush_scheduled_work();
-drivers/platform/surface/surface_acpi_notify.c:863:     flush_scheduled_work();
-drivers/power/supply/ab8500_btemp.c:975:        flush_scheduled_work();
-drivers/power/supply/ab8500_chargalg.c:1993:    flush_scheduled_work();
-drivers/power/supply/ab8500_charger.c:3400:     flush_scheduled_work();
-drivers/power/supply/ab8500_fg.c:3021:  flush_scheduled_work();
-drivers/rapidio/devices/tsi721.c:2944:  flush_scheduled_work();
-drivers/rtc/dev.c:99:                   flush_scheduled_work();
-drivers/scsi/mpt3sas/mpt3sas_scsih.c:12409:     flush_scheduled_work();
-drivers/scsi/qla2xxx/qla_target.c:1568:         flush_scheduled_work();
-drivers/staging/olpc_dcon/olpc_dcon.c:386:      flush_scheduled_work();
-sound/soc/intel/atom/sst/sst.c:363:     flush_scheduled_work();
-$ git grep -nF 'flush_workqueue(system_'
-drivers/block/rnbd/rnbd-clt.c:1776:     flush_workqueue(system_long_wq);
-drivers/infiniband/core/device.c:2857:  flush_workqueue(system_unbound_wq);
-include/linux/workqueue.h:592:  flush_workqueue(system_wq);
-----------
+On 3/9/22 4:08 AM, Brian Norris wrote:
+> This series covers 2 primary tasks:
+> 
+> 1) Resubmit prior work:
+> 
+> [RESEND PATCH v5 3/4] arm64: dts: rockchip: Enable dmc and dfi nodes on gru.
+> https://lore.kernel.org/lkml/20210308233858.24741-2-daniel.lezcano@linaro.org/
+> [RESEND PATCH v5 2/4] arm64: dts: rk3399: Add dfi and dmc nodes.
+> https://lore.kernel.org/lkml/20210308233858.24741-3-daniel.lezcano@linaro.org/
+> 
+> This series was partially merged a while back, but the remaining 2
+> patches were blocked mostly on stylistic grounds (alpha/numerical
+> ordering).
+> 
+> 2) Integrate many updates, bugfixes, and clarifications that were done
+> by Rockchip and Google engineers when first launching this platform.
+> Many of these were not integrated in the earlier series (e.g., the OPPs
+> changed before production; earlier patchsets used pre-production
+> numbers).
+> 
+> Along the way, it seemed worthwhile to convert the binding docs to a
+> schema. Among other reasons, it actually helped catch several errors and
+> omissions in translation between downstream device trees and the version
+> that actually landed upstream.
+> 
+> See the patches for further details.
+> 
+> Regards,
+> Brian
+> 
+> Changes in v4:
+>  * Update .yaml to use more "default" entries, instead of free-form text
+>  * s/phandle-array/phandle/
+>  * Move to .../memory-controllers, update filename
+> 
+> Changes in v3:
+>  * Add |maxItems| for devfreq-events
+>  * Improve deprecation notes
+>  * Add Reviewed-by tags
+>  * Collect some Acked/Reviewed tags
+> 
+> Changes in v2:
+>  * Fix yamllint issues
+>  * Adapt to various review comments (use of *-hz, hyphens, node naming)
+>  * Add a few new bugfixes
+>  * Add some new properties (ported from downstream kernels) required for
+>    stability
+>  * Convert more properties from "cycles" to "nanoseconds"
+> 
+> Brian Norris (13):
+>   dt-bindings: devfreq: rk3399_dmc: Convert to YAML
+>   dt-bindings: devfreq: rk3399_dmc: Deprecate unused/redundant
+>     properties
+>   dt-bindings: devfreq: rk3399_dmc: Fix Hz units
+>   dt-bindings: devfreq: rk3399_dmc: Specify idle params in nanoseconds
+>   dt-bindings: devfreq: rk3399_dmc: Add more disable-freq properties
+>   PM / devfreq: rk3399_dmc: Drop undocumented ondemand DT props
+>   PM / devfreq: rk3399_dmc: Drop excess timing properties
+>   PM / devfreq: rk3399_dmc: Use bitfield macro definitions for ODT_PD
+>   PM / devfreq: rk3399_dmc: Support new disable-freq properties
+>   PM / devfreq: rk3399_dmc: Support new *-ns properties
+>   PM / devfreq: rk3399_dmc: Disable edev on remove()
+>   PM / devfreq: rk3399_dmc: Use devm_pm_opp_of_add_table()
+>   PM / devfreq: rk3399_dmc: Avoid static (reused) profile
+> 
+> Lin Huang (2):
+>   arm64: dts: rk3399: Add dfi and dmc nodes
+>   arm64: dts: rockchip: Enable dmc and dfi nodes on gru
 
-I tried to send a patch that emits a warning when flushing kernel-global WQs is attempted
-( https://lkml.kernel.org/r/2efd5461-fccd-f1d9-7138-0a6767cbf5fe@I-love.SAKURA.ne.jp ).
-But Linus does not want such patch
-( https://lkml.kernel.org/r/CAHk-=whWreGjEQ6yasspzBrNnS7EQiL+SknToWt=SzUh4XomyQ@mail.gmail.com ).
 
-Steps for converting kernel-global WQs into module's local WQs are shown below.
-But since an oversight in Step 4 results in breakage, I think that this conversion
-should be carefully handled by maintainers/developers of each module who are
-familiar with that module. (This is why I'm sending this mail than sending patches,
-in order to ask for your cooperation.)
+Applied them except for patch11/patch12 about dts patches.
 
-----------
-Step 0: Consider if flushing kernel-global WQs is unavoidable.
+Thanks for your work.
+Chanwoo Choi
 
-    For example, commit 081bdc9fe05bb232 ("RDMA/ib_srp: Fix a deadlock")
-    simply removed flush_workqueue(system_long_wq) call.
 
-    For another example, schedule_on_each_cpu() does not need to call
-    flush_scheduled_work() because schedule_on_each_cpu() knows the list
-    of all "struct work_struct" instances which need to be flushed using
-    flush_work() call.
 
-    If flushing kernel-global WQs is still unavoidable, please proceed to
-    the following steps.
 
-Step 1: Declare a variable for your module.
-
-    struct workqueue_struct *my_wq;
-
-Step 2: Create a WQ for your module from __init function. The same flags
-        used by corresponding kernel-global WQ can be used when creating
-        the WQ for your module.
-
-    my_wq = alloc_workqueue("my_wq_name", 0, 0);
-
-Step 3: Destroy the WQ created in Step 2 from __exit function (and the error
-        handling path of __init function if __init function may fail after
-        creating the WQ).
-
-    destroy_workqueue(my_wq);
-
-Step 4: Replace e.g. schedule_work() call with corresponding queue_work() call
-        throughout your module which should be handled by the WQ for your module.
-
-Step 5: Replace flush_scheduled_work() and flush_workqueue(system_*) calls
-        with flush_workqueue() of the WQ for your module.
-
-    flush_workqueue(my_wq);
-----------
-
-Regards.
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
