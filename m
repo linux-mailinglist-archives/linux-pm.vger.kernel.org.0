@@ -2,57 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F9F4E38B7
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Mar 2022 07:09:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE03B4E38BB
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Mar 2022 07:15:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236810AbiCVGKc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Mar 2022 02:10:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39640 "EHLO
+        id S236847AbiCVGPe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Mar 2022 02:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiCVGKa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Mar 2022 02:10:30 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE422BC1
-        for <linux-pm@vger.kernel.org>; Mon, 21 Mar 2022 23:09:03 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id c2so11902478pga.10
-        for <linux-pm@vger.kernel.org>; Mon, 21 Mar 2022 23:09:03 -0700 (PDT)
+        with ESMTP id S236852AbiCVGPd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Mar 2022 02:15:33 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50A347544
+        for <linux-pm@vger.kernel.org>; Mon, 21 Mar 2022 23:14:06 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id m22so14884117pja.0
+        for <linux-pm@vger.kernel.org>; Mon, 21 Mar 2022 23:14:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:mime-version:content-disposition
          :user-agent;
-        bh=GSbZcuOD5pRC90w/2obz0vWK+vjjty0o/jT3+9bN2xI=;
-        b=M137y45Bp7Y3gNdXiAcgnqZPFghfw9ddFZK7XxIOfTN/hJAC+3sQ/urt3Ov1FJxEiu
-         xKL5KMBZtHE3cVxvQ9f4O3CkO2wySB2aTd/1ip6+6oEG10TVEqykDUGPH227t9dckUjN
-         5rCW3dw8XoNPeN3cqJzJKUwYkue5dsRhcaYA9UOVq3qUR23vKeUDbTZ78mur2/gceWDz
-         5beEXAJYqzExP5y2nsNfRuB2fgBZQvFOh2yGM4keP884xMfib5T8Iba5tH/CrXQk6kwW
-         3E4xutG5SBfSi7TXZCsuE2kk7g2aLtkKUnnSvqNeezEnotHKPbMs/U6+5RIGzYqHv/fr
-         Opng==
+        bh=T4r3kSycPG+Qr5qHkDwYYevefpEEwvGWy8QwKMoNwmQ=;
+        b=EuIlNHAqv5NC+VJERib+Z0TvkKK+l9oZC6j3uzeuMucfqTu1TLCzGc9UvyzozuNn6v
+         waeC+B3/FZ9yCkCdIwibvz0vTfWzDG9+g6Xw6hXmqEbEIxGKWb60jAjxFz6gcMgYMzMg
+         FOyUnfgwGjL3h9qnN/PLAZBzj/pE5yzssjSAjMIVr8imOeTH2E0uauykpcESjcv6wx5p
+         FDijJtq/jROSP5edW0GOgTbtm3xo8Y3iV138bQd5m+qk62debJw4+Rp+56FGY3fWMX3X
+         3CWYqFDv65pqjP37oM54kuoyCWIAECKSSLoceLRs3uOYQQVgxarUA2dgczw+rAz4G7y2
+         71YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-disposition:user-agent;
-        bh=GSbZcuOD5pRC90w/2obz0vWK+vjjty0o/jT3+9bN2xI=;
-        b=JLmJO5VRtVhfTc1UwqkXYtZhxWlFi15NEGH+rj24h2Mmz6MDIahBC1vx1y8pPJ9/BV
-         +NL0jkeT3NHGCnalpwkcVYLdYg6IYKV8SXNfrIe2GzSkfesCVoZ3K3pl6+qXtjbWPjx8
-         JlaKboUjgZEQVVLwZ7+xArwh2K9qe31JIQUPss2fiDx9UEKvzLQkzPkAcXVbe3y1cE9A
-         KJwsCJHsreyflBeZFYDM0mnPYu2wQZ3EkHTVebpFLgSj/Kwv2LbEibYfnvJ9COjW+/nw
-         UrjGQTfoj1FivJbDia2HHC+pc3IYO8wrageoul4glU2C4fYaHn3mXkyfXkFnLukgme5V
-         n2Xw==
-X-Gm-Message-State: AOAM530d+I5IzHywgEJiNNgCvxqyNkPy7Gs/CxvmQpVHAOA++QuVh3/m
-        f8hc5fi/HNrsmOf2qt0/jWc0p7cOgjO3fQ==
-X-Google-Smtp-Source: ABdhPJzUXoywQO30thfm2vTm9aroefT39JOtwXP4Cg2QQiIQyyzYUhh8WDMDk2B1nMhmiOA3HFNWHA==
-X-Received: by 2002:a63:1918:0:b0:382:1cfa:eefa with SMTP id z24-20020a631918000000b003821cfaeefamr17874450pgl.510.1647929343302;
-        Mon, 21 Mar 2022 23:09:03 -0700 (PDT)
+        bh=T4r3kSycPG+Qr5qHkDwYYevefpEEwvGWy8QwKMoNwmQ=;
+        b=ZjVC9VWVRQSqf1s8tJnFy2Ksi/VdkoaRyES46JZ5eaGfN/8iD/lkIUyAvYaT6OHntI
+         guiDwpEeru8B6M17h12nAbNnFioHtsTsGjcSmJyRlYdy++Zine8RtuzrmVsqOpnZvkkw
+         3mWv3pxNulZcDCxJHQ0H2hhPytlKP2ZZLZ771+Jp/sd2Fiaa4VQECL6Gruji23TKTy+S
+         wjiXRXLUKjRgf2+dVfGgD2FcS4FlbDDQcexY8M5dXjxCKfeAv1L4aK6Rw52Xn+HbPkCF
+         Mao0ID6ieLZO+taBjAVMT5fhF3+DVQKdHOKWucc1VMRUW/L91mlb814iTHDCElLd7EDG
+         uz6Q==
+X-Gm-Message-State: AOAM530VBTFSah4cgKh7yja5oWrfxnZYLFknrtaKOis9/n2qeEVXYagc
+        7JqdN0pqxAQb1/OGjBLqLLJ4AA==
+X-Google-Smtp-Source: ABdhPJwbhZdMPtCNAHrvx92kYcgG8aZUsKEvKsICILwKmRhIL6LVaCjxckGoFvDl/WjXelLxN9ip7Q==
+X-Received: by 2002:a17:90b:3e88:b0:1bf:3a96:54c1 with SMTP id rj8-20020a17090b3e8800b001bf3a9654c1mr3136118pjb.244.1647929646202;
+        Mon, 21 Mar 2022 23:14:06 -0700 (PDT)
 Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id 3-20020a17090a1a0300b001c5d05622fbsm1294792pjk.33.2022.03.21.23.09.02
+        by smtp.gmail.com with ESMTPSA id x39-20020a056a0018a700b004fa7e6ceafesm11950255pfh.169.2022.03.21.23.14.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 23:09:02 -0700 (PDT)
-Date:   Tue, 22 Mar 2022 11:39:00 +0530
+        Mon, 21 Mar 2022 23:14:05 -0700 (PDT)
+Date:   Tue, 22 Mar 2022 11:44:04 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] OPP updates for 5.18
-Message-ID: <20220322060900.jbghsxop4xe7x6wi@vireshk-i7>
+Subject: [GIT PULL] cpufreq/arm updates for 5.18
+Message-ID: <20220322061404.bqrg2ztb5ibdf6dw@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -69,79 +69,71 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Rafael,
 
-Please pull OPP changes for 5.18. The request:
+This pull request:
 
-- introduces opp-microwatt property to the OPP core, bindings, etc (Lukasz Luba).
+- adds per core dvfs support for qcom Soc (Bjorn Andersson), convert to yaml
+  binding (Manivannan Sadhasivam) and various other fixes to the qcom drivers
+  (Luca Weiss).
 
-- Converts DT bindings to schema format and various related fixes (Yassine
-  Oudjana).
+- adds OPP table for imx7s SoC (Denys Drozdov) and minor fixes (Stefan Agner).
 
-- Expose OPP's OF node in debugfs (Viresh Kumar).
+- fix CPPC driver's freq/performance conversions (Pierre Gondois).
+
+- minor generic cleanups (Yury Norov).
 
 Thanks.
 
 -------------------------8<-------------------------
 
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
+The following changes since commit ef8ee1cb8fc8976a68f5e89cd5f7b6f7de80c66f:
 
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
+  cpufreq: qcom-hw: Delay enabling throttle_irq (2022-02-09 13:18:49 +0530)
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
 
-for you to fetch changes up to f48a0c475c2aec8f2274703e1dc7be503f40f7cc:
+for you to fetch changes up to b7f2b0d3511a6bbf9387f08f370f9125663e18d8:
 
-  Documentation: EM: Describe new registration method using DT (2022-03-03 09:35:04 +0530)
+  dt-bindings: cpufreq: cpufreq-qcom-hw: Convert to YAML bindings (2022-03-11 09:00:26 +0530)
 
 ----------------------------------------------------------------
-Lukasz Luba (5):
-      dt-bindings: opp: Add "opp-microwatt" entry in the OPP
-      OPP: Add "opp-microwatt" supporting code
-      PM: EM: add macro to set .active_power() callback conditionally
-      OPP: Add support of "opp-microwatt" for EM registration
-      Documentation: EM: Describe new registration method using DT
+Bjorn Andersson (2):
+      cpufreq: qcom-hw: Add support for per-core-dcvs
+      cpufreq: blocklist Qualcomm sc8280xp and sa8540p in cpufreq-dt-platdev
 
-Viresh Kumar (1):
-      opp: Expose of-node's name in debugfs
+Denys Drozdov (1):
+      ARM: dts: imx7s: Define operating points table for cpufreq
 
-Yassine Oudjana (7):
-      dt-bindings: arm: qcom: Add msm8996 and apq8096 compatibles
-      arm64: dts: qcom: msm8996-mtp: Add msm8996 compatible
-      dt-bindings: opp: qcom-opp: Convert to DT schema
-      dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema
-      arm64: dts: qcom: msm8996: Rename cluster OPP tables
-      arm64: dts: qcom: qcs404: Rename CPU and CPR OPP tables
-      dt-bindings: power: avs: qcom,cpr: Convert to DT schema
+Luca Weiss (1):
+      cpufreq: qcom-cpufreq-nvmem: fix reading of PVS Valid fuse
 
- Documentation/devicetree/bindings/arm/qcom.yaml    |  16 +-
- .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml       | 166 +++++
- .../devicetree/bindings/opp/opp-v2-base.yaml       |  23 +
- .../devicetree/bindings/opp/opp-v2-kryo-cpu.yaml   | 257 +++++++
- .../devicetree/bindings/opp/opp-v2-qcom-level.yaml |  60 ++
- .../devicetree/bindings/opp/qcom-nvmem-cpufreq.txt | 796 ---------------------
- Documentation/devicetree/bindings/opp/qcom-opp.txt |  19 -
- .../devicetree/bindings/power/avs/qcom,cpr.txt     | 130 ----
- .../devicetree/bindings/power/avs/qcom,cpr.yaml    | 160 +++++
- Documentation/power/energy-model.rst               |  10 +
- MAINTAINERS                                        |   5 +-
- arch/arm64/boot/dts/qcom/msm8996-mtp.dts           |   2 +-
- arch/arm64/boot/dts/qcom/msm8996.dtsi              |   4 +-
- arch/arm64/boot/dts/qcom/qcs404.dtsi               |   4 +-
- drivers/opp/core.c                                 |  25 +
- drivers/opp/debugfs.c                              |   8 +
- drivers/opp/of.c                                   | 108 ++-
- drivers/opp/opp.h                                  |   1 +
- include/linux/energy_model.h                       |   2 +
- include/linux/pm_opp.h                             |  12 +-
- 20 files changed, 851 insertions(+), 957 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
- create mode 100644 Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
- create mode 100644 Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
- delete mode 100644 Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
- delete mode 100644 Documentation/devicetree/bindings/opp/qcom-opp.txt
- delete mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.txt
- create mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml
+Manivannan Sadhasivam (2):
+      dt-bindings: dvfs: Use MediaTek CPUFREQ HW as an example
+      dt-bindings: cpufreq: cpufreq-qcom-hw: Convert to YAML bindings
+
+Pierre Gondois (1):
+      cpufreq: CPPC: Fix performance/frequency conversion
+
+Stefan Agner (1):
+      cpufreq: Add i.MX7S to cpufreq-dt-platdev blocklist
+
+Yury Norov (1):
+      cpufreq: replace cpumask_weight with cpumask_empty where appropriate
+
+ .../bindings/cpufreq/cpufreq-qcom-hw.txt           | 172 ------------------
+ .../bindings/cpufreq/cpufreq-qcom-hw.yaml          | 201 +++++++++++++++++++++
+ .../bindings/dvfs/performance-domain.yaml          |  14 +-
+ arch/arm/boot/dts/imx7s.dtsi                       |  16 ++
+ drivers/cpufreq/cppc_cpufreq.c                     |  43 +++--
+ drivers/cpufreq/cpufreq-dt-platdev.c               |   3 +
+ drivers/cpufreq/qcom-cpufreq-hw.c                  |  20 +-
+ drivers/cpufreq/qcom-cpufreq-nvmem.c               |   2 +-
+ drivers/cpufreq/scmi-cpufreq.c                     |   2 +-
+ 9 files changed, 272 insertions(+), 201 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+
 
 -- 
 viresh
