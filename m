@@ -2,102 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A34E84E3B4A
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Mar 2022 09:57:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8CD4E3D6D
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Mar 2022 12:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232020AbiCVI6K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Mar 2022 04:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56200 "EHLO
+        id S234112AbiCVLV6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Mar 2022 07:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232056AbiCVI5w (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Mar 2022 04:57:52 -0400
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F49729C9C;
-        Tue, 22 Mar 2022 01:56:25 -0700 (PDT)
-Received: by mail-wr1-f52.google.com with SMTP id b19so23899725wrh.11;
-        Tue, 22 Mar 2022 01:56:25 -0700 (PDT)
+        with ESMTP id S231368AbiCVLV5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Mar 2022 07:21:57 -0400
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC197EA36
+        for <linux-pm@vger.kernel.org>; Tue, 22 Mar 2022 04:20:29 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id u103so32991475ybi.9
+        for <linux-pm@vger.kernel.org>; Tue, 22 Mar 2022 04:20:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4IDTqc3vS0homRb5egEok1VAKstmLtnVq0FuLPeo1/I=;
-        b=fI0YkxoYnWriJDzISwKrT/RUs0HreSjLl54+DnfaZU9yUYEj0At0eYTRKlYY6DBuON
-         yW8138Vff/Q/YaHWa3a28iqMCFYbfqEHVDka6hSOCjA9qdY+f05BN0IVDMytta9619as
-         qJE9KWOEWfLlr/jGCJHQYQDgHYNJuMD1w/WHPqlZe9x1Uw77G/AUBw97IybkTWnNS/pu
-         y+IH2h1vTZZHXW1N1t9V0FpuJZgoT2bFymQgbNaRxPYJlMrgqQZD7YQ87TOx6hR90w5u
-         fIOA/v8SAZaij4bxq+H+62F36G5+cD9UnAOdu9Y8sKN4t0X4/vFVhXaw2AmqdDsEye5H
-         3KtQ==
-X-Gm-Message-State: AOAM531qnKnc4cM4h+azfwENRI9Mo9nFm1XiFVdqiNds7I6Ro5uHPRaS
-        hxW9DW6EB+Bkz7biM2AJHnY=
-X-Google-Smtp-Source: ABdhPJw3LqEXSODpm7x6a7J1hW37RYctIUsVBlf4FNn9sxGpKqFJ02EMCbHoSiDm/MN0asiqrU6/hg==
-X-Received: by 2002:a5d:588b:0:b0:204:1c1a:965d with SMTP id n11-20020a5d588b000000b002041c1a965dmr4922405wrf.669.1647939383900;
-        Tue, 22 Mar 2022 01:56:23 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id l9-20020a5d6d89000000b00203d62072c4sm16804387wrs.43.2022.03.22.01.56.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 01:56:23 -0700 (PDT)
-Message-ID: <870f8623-8a99-09b6-56c6-0f8c010af237@kernel.org>
-Date:   Tue, 22 Mar 2022 09:56:22 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AEc3Tx075iMsi9ykdazvsmlWTJGzU3Xq/yTfkHQ2YOo=;
+        b=Cc6nHBKJAapRnJtT9+tiOtR6TQ1OzhbYYRNSb2xyVnC0WaBAxwRc5Yl1HYRdTGg3Vy
+         pKiYsXZ2ARQ6gBCuw3xjHqw50yl6FvImig08ibQ5opBawuF3Yw962pV6z2xHY6y5b07S
+         YDzFDncTU/U9XNxfSzHf5/gCTXYLDGzsNtgJ8OYPB5oYKvzB9YyiBIWP8z144Tuxi12/
+         eFWg5fuKxlue+J7QkbJGedsy4G8d5jM7tJoXS6eZckm3oq3+ui2+oU5RQdYZM+NiFWWK
+         E4IzqnSVG4DwirJ13gSE3QomPlg54CxfjeKnoZJShTcnYldUabwlFrH6oV82jaHHanbH
+         cPdw==
+X-Gm-Message-State: AOAM531Yw58PYgZc9zNDhGM6q4AfVnGUHDZipwGEfia6bAbSy5U6YVN6
+        EkKByT7K63DhKMPzgMFW0LoOgAZV74k6MzEZO2yVGjFv
+X-Google-Smtp-Source: ABdhPJzpQq36IgAfurW/1JnzeXggxY9+BwehsqShzBbPWV/eSzBx1QgsYp9EeRv07NTtcYZFBlnauDRJ5Sq0XN7D7aQ=
+X-Received: by 2002:a25:fe10:0:b0:625:262f:e792 with SMTP id
+ k16-20020a25fe10000000b00625262fe792mr25881621ybe.365.1647948028952; Tue, 22
+ Mar 2022 04:20:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5 1/2] thermal: Add thermal driver for Sunplus SP7021
-Content-Language: en-US
-To:     =?UTF-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>,
-        Li-hao Kuo <lhjeff911@gmail.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "amitk@kernel.org" <amitk@kernel.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-References: <cover.1647399369.git.lhjeff911@gmail.com>
- <a658d7513a62e067086d8e2a73920bb892293569.1647399369.git.lhjeff911@gmail.com>
- <9b263f80-15df-efd3-2682-0adda06f5b5f@canonical.com>
- <4c05e7767bfe401b8c139e159855fe77@sphcmbx02.sunplus.com.tw>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <4c05e7767bfe401b8c139e159855fe77@sphcmbx02.sunplus.com.tw>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220322061404.bqrg2ztb5ibdf6dw@vireshk-i7>
+In-Reply-To: <20220322061404.bqrg2ztb5ibdf6dw@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 22 Mar 2022 12:20:16 +0100
+Message-ID: <CAJZ5v0i+U_p7JE6vte-0nZmbZMtYYvt+D0TpYk5cM-e1MSw0Yg@mail.gmail.com>
+Subject: Re: [GIT PULL] cpufreq/arm updates for 5.18
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22/03/2022 03:55, Lh Kuo 郭力豪 wrote:
->>> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->>> +	if (IS_ERR(res))
->>> +		return dev_err_probe(&pdev->dev, PTR_ERR(res), "resource get
->>> +fail\n");
->>> +
->>> +	sp_data->regs = devm_ioremap(&pdev->dev, res->start, resource_size(res));
->>> +	if (IS_ERR(sp_data->regs))
->>> +		return dev_err_probe(&pdev->dev, PTR_ERR(sp_data->regs), "mas_base
->>> +get fail\n");
->>
->> Use devm_platform_ioremap_resource() instead.
->>
-> 
-> Other drivers must also access these registers.
-> Warning when using devm_platform_ioremap_resource
-> Can I keep the original settings?
+On Tue, Mar 22, 2022 at 7:14 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> Hi Rafael,
+>
+> This pull request:
+>
+> - adds per core dvfs support for qcom Soc (Bjorn Andersson), convert to yaml
+>   binding (Manivannan Sadhasivam) and various other fixes to the qcom drivers
+>   (Luca Weiss).
+>
+> - adds OPP table for imx7s SoC (Denys Drozdov) and minor fixes (Stefan Agner).
+>
+> - fix CPPC driver's freq/performance conversions (Pierre Gondois).
+>
+> - minor generic cleanups (Yury Norov).
+>
+> Thanks.
+>
+> -------------------------8<-------------------------
+>
+> The following changes since commit ef8ee1cb8fc8976a68f5e89cd5f7b6f7de80c66f:
+>
+>   cpufreq: qcom-hw: Delay enabling throttle_irq (2022-02-09 13:18:49 +0530)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
+>
+> for you to fetch changes up to b7f2b0d3511a6bbf9387f08f370f9125663e18d8:
+>
+>   dt-bindings: cpufreq: cpufreq-qcom-hw: Convert to YAML bindings (2022-03-11 09:00:26 +0530)
+>
+> ----------------------------------------------------------------
+> Bjorn Andersson (2):
+>       cpufreq: qcom-hw: Add support for per-core-dcvs
+>       cpufreq: blocklist Qualcomm sc8280xp and sa8540p in cpufreq-dt-platdev
+>
+> Denys Drozdov (1):
+>       ARM: dts: imx7s: Define operating points table for cpufreq
+>
+> Luca Weiss (1):
+>       cpufreq: qcom-cpufreq-nvmem: fix reading of PVS Valid fuse
+>
+> Manivannan Sadhasivam (2):
+>       dt-bindings: dvfs: Use MediaTek CPUFREQ HW as an example
+>       dt-bindings: cpufreq: cpufreq-qcom-hw: Convert to YAML bindings
+>
+> Pierre Gondois (1):
+>       cpufreq: CPPC: Fix performance/frequency conversion
+>
+> Stefan Agner (1):
+>       cpufreq: Add i.MX7S to cpufreq-dt-platdev blocklist
+>
+> Yury Norov (1):
+>       cpufreq: replace cpumask_weight with cpumask_empty where appropriate
+>
+>  .../bindings/cpufreq/cpufreq-qcom-hw.txt           | 172 ------------------
+>  .../bindings/cpufreq/cpufreq-qcom-hw.yaml          | 201 +++++++++++++++++++++
+>  .../bindings/dvfs/performance-domain.yaml          |  14 +-
+>  arch/arm/boot/dts/imx7s.dtsi                       |  16 ++
+>  drivers/cpufreq/cppc_cpufreq.c                     |  43 +++--
+>  drivers/cpufreq/cpufreq-dt-platdev.c               |   3 +
+>  drivers/cpufreq/qcom-cpufreq-hw.c                  |  20 +-
+>  drivers/cpufreq/qcom-cpufreq-nvmem.c               |   2 +-
+>  drivers/cpufreq/scmi-cpufreq.c                     |   2 +-
+>  9 files changed, 272 insertions(+), 201 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+>
+>
+> --
 
-You should not map one region twice. How do you guarantee
-synchronization during for example updates of specific registers? In
-such case you need to use regmap and share it via syscon (although this
-does not solve synchronization on higher level - avoiding conflicting
-changes to same registers)
-
-
-Best regards,
-Krzysztof
+Pulled, thanks!
