@@ -2,136 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D7A4E3DAC
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Mar 2022 12:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD5E4E3E15
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Mar 2022 13:06:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234226AbiCVLfz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Mar 2022 07:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56972 "EHLO
+        id S233414AbiCVMIB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Mar 2022 08:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232890AbiCVLfy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Mar 2022 07:35:54 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D28A9FEC
-        for <linux-pm@vger.kernel.org>; Tue, 22 Mar 2022 04:34:27 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2e6650cde1bso34746947b3.12
-        for <linux-pm@vger.kernel.org>; Tue, 22 Mar 2022 04:34:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rQdvCLHyPXsUW6sY4nTv0pUYi5vO70uw/5ERO6ejFyM=;
-        b=uFM6QNpbdGKKRuLryKKNBaC+bQ7DFCrTErIGLdPmR6B6ClnOfL9VRo14irpDEdhgv1
-         ctdhPhUeuqYdkVMgI2mF/PxctMd2pVcd0Tr5VUujhJAoHqP5me4IW+tCfq2NAFZHP2tn
-         kdaGdRhRQNlhri2Kr6KQeL9Wi7Q+xXoW4o+EiXUPuqO7PsKeLvMsnqCF97VfP29qHqIt
-         9x4n8TL125ceWAid2MjXNEaPwqwYoLiPRFa2J9XdgLVIJaZ9Mgc8gVfmHUbVE8xbjZmJ
-         T1I8LDqcRfxc5ia4iSDCWpV2WM8ZFAZoodWWelynC4e/bd8ic/4iJQoWCutQA/dc09PR
-         5Dhg==
-X-Gm-Message-State: AOAM531FABG8D4Ae3PdJoEnETk6f4s+Ji4+p1nGPdSb+gJXbqPx9QSdq
-        Aex3xX65hkGge0P0L+2JFnnfBrCLd4wUgGrbgn3m2x0P
-X-Google-Smtp-Source: ABdhPJyy1SBfxihZ4s3gG1uCtYhBfQioVwcW2uiG5yIZcPAM8l5PIr1SfoVMcf/gMynJ0Uu9wpT3MQqdIrXit+rfCQc=
-X-Received: by 2002:a81:5cf:0:b0:2e5:7477:168e with SMTP id
- 198-20020a8105cf000000b002e57477168emr28495323ywf.149.1647948866859; Tue, 22
- Mar 2022 04:34:26 -0700 (PDT)
+        with ESMTP id S229881AbiCVMIA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Mar 2022 08:08:00 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2067.outbound.protection.outlook.com [40.107.243.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A75883019;
+        Tue, 22 Mar 2022 05:06:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Vg0GZ8nVMKAXfcr61Ca17CGfwAPDmVe0jlX9g3apMERQp9TDY4INFs4x+pc9PyDQ7D9c3iCiA1+7IqavDxz+TkJW8H+9HPFAvUEO4QF/AUFbI7TxugTw9MLdq/6B26IilM1SPiaR6c3bzrPtJZX5xYtzq7c1phdUv1Tcl1HUNVQaCRymwkWfSSzjEnCAYib0c7lr1waKz0wQ17aLiSL5Fq8SCwXlUCg5Ir4mnLaeExrHylh98MXnwN6AaPVEfPebh2kn1SibFdFAYgMyq6DMAxkpucAEZnvkXenI1LGvUJZOWsYDGdKKtrbtcEtHq0VBEvBeCv6YAiPaKv76W2Q5FA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hhzVdp7E8myfiPE6dttt5qQF6Yo1x0+0Wv60Gj+utNY=;
+ b=OAayw5/COxBS2Ns/H2BSqkVdpCgu3KkGNHr8M9zlx7ojOLh65/UlwNTLcFj7/V8XTXyQ1xgsvJMlfEUXcm+dYOrAvLamA0cE/YL27OAdavdDjdW/EnoyIg7BzNDuWfZ0GoiORBevz4UExGn18cf6CzPrNUkuumvb122UNWiABED/MLAf+en8i9CNu494JnAQOuUmQAEjW+/nYADrbIyUEclVebmqRo8HVdQjBch/iK7i0I+pR/cT5uZiEL0dL0lh0g4XC+kvBQIXmUYg1PJpJUhZ3NxAbdaUBwL2xtMqYuqmXdoYwEEtUdN3bmaZpUz3R9PpP5s+jS8dfolM9FpdXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hhzVdp7E8myfiPE6dttt5qQF6Yo1x0+0Wv60Gj+utNY=;
+ b=NNlStCaq/tWAAE5FzWWWNkNgD9i8k7dD6w3XfbIYnG5qd5X1Denfhmyvf/FfteWx+xDSLxF5zsxYjyA1Yc7zYQ8J6Ukzk4o0znkut/4qKRc1UmPw+uBruSlH3K866vxchq+zn1fdZ3NOajOCDtbcx66b/jqY4fEucEBcTCL7n+oUM4J+6VmCWKvcMnm4K3IWjAV0Xorz+xaHB7yeZQ3TKk7jRbOdA/gaVfiUWRTQzLQCVw8Iy6zMSIHpucdJOs8ZcDIg2KlrhDzP73MeqY7DzHLOzCXD4TyTSH7eYLkA/p6hxqCN/xJSSKI7+K1fKIK1lSj5sOr87knetbNJaDvwcQ==
+Received: from BN9PR03CA0392.namprd03.prod.outlook.com (2603:10b6:408:111::7)
+ by DM6PR12MB2794.namprd12.prod.outlook.com (2603:10b6:5:48::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.16; Tue, 22 Mar
+ 2022 12:06:31 +0000
+Received: from BN8NAM11FT017.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:111:cafe::d0) by BN9PR03CA0392.outlook.office365.com
+ (2603:10b6:408:111::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.18 via Frontend
+ Transport; Tue, 22 Mar 2022 12:06:31 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.236) by
+ BN8NAM11FT017.mail.protection.outlook.com (10.13.177.93) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5081.14 via Frontend Transport; Tue, 22 Mar 2022 12:06:30 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 22 Mar
+ 2022 12:06:10 +0000
+Received: from [10.41.21.79] (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 22 Mar
+ 2022 05:06:06 -0700
+Message-ID: <bf4eccf5-6db5-c837-a29d-b75ab1ded607@nvidia.com>
+Date:   Tue, 22 Mar 2022 17:36:04 +0530
 MIME-Version: 1.0
-References: <20220322060900.jbghsxop4xe7x6wi@vireshk-i7>
-In-Reply-To: <20220322060900.jbghsxop4xe7x6wi@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 22 Mar 2022 12:34:14 +0100
-Message-ID: <CAJZ5v0i8-YE+qOqFt_wR0WhbCe_gsO1giA61rm7pToKCbY26wA@mail.gmail.com>
-Subject: Re: [GIT PULL] OPP updates for 5.18
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [Patch v1 3/3] cpufreq: tegra194: Add support for Tegra234
+Content-Language: en-US
 To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+CC:     <rafael@kernel.org>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <treding@nvidia.com>, <jonathanh@nvidia.com>,
+        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <ksitaraman@nvidia.com>, <sanjayc@nvidia.com>, <bbasu@nvidia.com>,
+        Sumit Gupta <sumitg@nvidia.com>
+References: <20220316135831.900-1-sumitg@nvidia.com>
+ <20220316135831.900-4-sumitg@nvidia.com>
+ <20220322055012.oewlqykxb4dlkhbr@vireshk-i7>
+From:   Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <20220322055012.oewlqykxb4dlkhbr@vireshk-i7>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.231.35]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: dc30a1b4-1762-4368-3dd1-08da0bfc66c1
+X-MS-TrafficTypeDiagnostic: DM6PR12MB2794:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB27943BC18FC7A6EE8B18BE78B9179@DM6PR12MB2794.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: etFmBjlqc/3MXL7XBCRaby2/jyDEx0hAV+FldPeqtw9Sbq3789RdgJrR6K461MulyiqTQIEcINUc+Ovr0xF73XQW2uywY+U+Xh/QAHp8AVb4QSbrwBip49nPeaDhaz/Q6ZQSmFSgVktVgHbJHaK6cT7tnJcQZwRhBcr6M892aZsGHvkXROZXhiKYzJ1ueRfzPD7h7DUlC/PB1yBrqpqCuRiErpsjUWmgS71aWyjpZZ6AkyHXsBkXYg2kehLe7J0EOuYkXIJApuvKe2dRarXWKIM5OQYtfmk4pPYz3aDHnzwKhpbPT75VVuHfcQ8DwVrsW9q1PYCfnMP2hWq+shB0aXEcMMA1YpnyLEW7AcCWAWSmeorC6mwNK/rc1kmqzcG+gLjeu8o9zuZP8M/hZ/czMoaR274P7wAjgwoOTXLJPt03uvZTuO6Kzym9UqyDfng1BH1afW/QLi4xtscRXTxvUHSdkgkl0poc/P8/sbFlLF/Zj3mbhU97L+GYyRNe5bm1IX8W7GXkYS/m2B128Vyn/Wt42LaSBfV06PfViIU1OX0aHLmf+cU1KQgACUa1TCcUPZomBxhw1csrjy0fC6JY4mxdFP9wXUWTH+qlELPcDqfOvG6g4o/S8nDl/J5X97HlN3hYvWWa93FpO1y8yn1YyRg94jd1tJLuBOHfszEAJTg0IVZaxxMnBl6uKJhzPUT0hYNBYIdW8w6ggjMU+OHcpeuY9NYaUVann/EV1gUzKcrGxHmTZR9wiji2B4N3Uj8M
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(83380400001)(36860700001)(2906002)(86362001)(508600001)(47076005)(8936002)(5660300002)(31686004)(336012)(70206006)(186003)(316002)(26005)(16526019)(2616005)(426003)(4326008)(36756003)(107886003)(54906003)(16576012)(6916009)(82310400004)(31696002)(53546011)(40460700003)(8676002)(81166007)(356005)(70586007)(36900700001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Mar 2022 12:06:30.7294
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc30a1b4-1762-4368-3dd1-08da0bfc66c1
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT017.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2794
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 7:09 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> Hi Rafael,
->
-> Please pull OPP changes for 5.18. The request:
->
-> - introduces opp-microwatt property to the OPP core, bindings, etc (Lukasz Luba).
->
-> - Converts DT bindings to schema format and various related fixes (Yassine
->   Oudjana).
->
-> - Expose OPP's OF node in debugfs (Viresh Kumar).
->
-> Thanks.
->
-> -------------------------8<-------------------------
->
-> The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
->
->   Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
->
-> for you to fetch changes up to f48a0c475c2aec8f2274703e1dc7be503f40f7cc:
->
->   Documentation: EM: Describe new registration method using DT (2022-03-03 09:35:04 +0530)
->
-> ----------------------------------------------------------------
-> Lukasz Luba (5):
->       dt-bindings: opp: Add "opp-microwatt" entry in the OPP
->       OPP: Add "opp-microwatt" supporting code
->       PM: EM: add macro to set .active_power() callback conditionally
->       OPP: Add support of "opp-microwatt" for EM registration
->       Documentation: EM: Describe new registration method using DT
->
-> Viresh Kumar (1):
->       opp: Expose of-node's name in debugfs
->
-> Yassine Oudjana (7):
->       dt-bindings: arm: qcom: Add msm8996 and apq8096 compatibles
->       arm64: dts: qcom: msm8996-mtp: Add msm8996 compatible
->       dt-bindings: opp: qcom-opp: Convert to DT schema
->       dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema
->       arm64: dts: qcom: msm8996: Rename cluster OPP tables
->       arm64: dts: qcom: qcs404: Rename CPU and CPR OPP tables
->       dt-bindings: power: avs: qcom,cpr: Convert to DT schema
->
->  Documentation/devicetree/bindings/arm/qcom.yaml    |  16 +-
->  .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml       | 166 +++++
->  .../devicetree/bindings/opp/opp-v2-base.yaml       |  23 +
->  .../devicetree/bindings/opp/opp-v2-kryo-cpu.yaml   | 257 +++++++
->  .../devicetree/bindings/opp/opp-v2-qcom-level.yaml |  60 ++
->  .../devicetree/bindings/opp/qcom-nvmem-cpufreq.txt | 796 ---------------------
->  Documentation/devicetree/bindings/opp/qcom-opp.txt |  19 -
->  .../devicetree/bindings/power/avs/qcom,cpr.txt     | 130 ----
->  .../devicetree/bindings/power/avs/qcom,cpr.yaml    | 160 +++++
->  Documentation/power/energy-model.rst               |  10 +
->  MAINTAINERS                                        |   5 +-
->  arch/arm64/boot/dts/qcom/msm8996-mtp.dts           |   2 +-
->  arch/arm64/boot/dts/qcom/msm8996.dtsi              |   4 +-
->  arch/arm64/boot/dts/qcom/qcs404.dtsi               |   4 +-
->  drivers/opp/core.c                                 |  25 +
->  drivers/opp/debugfs.c                              |   8 +
->  drivers/opp/of.c                                   | 108 ++-
->  drivers/opp/opp.h                                  |   1 +
->  include/linux/energy_model.h                       |   2 +
->  include/linux/pm_opp.h                             |  12 +-
->  20 files changed, 851 insertions(+), 957 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
->  create mode 100644 Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
->  create mode 100644 Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
->  delete mode 100644 Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt
->  delete mode 100644 Documentation/devicetree/bindings/opp/qcom-opp.txt
->  delete mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.txt
->  create mode 100644 Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml
->
-> --
 
-Pulled, thanks!
+
+On 22/03/22 11:20, Viresh Kumar wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> On 16-03-22, 19:28, Sumit Gupta wrote:
+>> @@ -442,6 +538,13 @@ static int tegra194_cpufreq_probe(struct platform_device *pdev)
+>>        if (!data->tables)
+>>                return -ENOMEM;
+>>
+>> +     if (of_device_is_compatible(pdev->dev.of_node, "nvidia,tegra234-ccplex-cluster")) {
+> 
+> Since you have soc specific data, that should be used here to know if you need
+> to map registers or not. You shouldn't use device-compatible here again.
+SoC data struct has 'actmon_cntr_base' field which will be populated for 
+SoC's using MMIO. Will use this to check before doing ioremap and add 
+the change in v2.
+
+struct tegra_cpufreq_soc {
+         struct tegra_cpufreq_ops *ops;
+         int maxcpus_per_cluster;
+         phys_addr_t actmon_cntr_base;
+};
+
+if (soc->actmon_cntr_base) {
+  /* mmio registers are used for frequency request and re-construction */
+         data->regs = devm_platform_ioremap_resource(pdev, 0);
+         if (IS_ERR(data->regs))
+                 return PTR_ERR(data->regs);
+}
+
+> 
+>> +             /* mmio registers are used for frequency request and re-construction */
+>> +             data->regs = devm_platform_ioremap_resource(pdev, 0);
+>> +             if (IS_ERR(data->regs))
+>> +                     return PTR_ERR(data->regs);
+>> +     }
+>> +
+>>        platform_set_drvdata(pdev, data);
+>>
+>>        bpmp = tegra_bpmp_get(&pdev->dev);
+>> @@ -486,6 +589,7 @@ static int tegra194_cpufreq_remove(struct platform_device *pdev)
+>>
+>>   static const struct of_device_id tegra194_cpufreq_of_match[] = {
+>>        { .compatible = "nvidia,tegra194-ccplex", .data = &tegra194_cpufreq_soc },
+>> +     { .compatible = "nvidia,tegra234-ccplex-cluster", .data = &tegra234_cpufreq_soc },
+>>        { /* sentinel */ }
+>>   };
+>>
+>> --
+>> 2.17.1
+> 
+> --
+> viresh
