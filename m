@@ -2,88 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4F24E4581
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Mar 2022 18:51:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4194E46C8
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Mar 2022 20:37:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239896AbiCVRxF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Mar 2022 13:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57416 "EHLO
+        id S231592AbiCVTij (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Mar 2022 15:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239895AbiCVRxE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Mar 2022 13:53:04 -0400
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D138CD89;
-        Tue, 22 Mar 2022 10:51:35 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id z92so21693012ede.13;
-        Tue, 22 Mar 2022 10:51:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vZ/ZwDND2DM7W3zO7/91P5DQk072Qyyap8DYUvTWLHg=;
-        b=FjLnjC2emab4rOZhrdPuYjxr5zNtB620yJSQAsRtKiofHJ62zFE0Q+DOZbn4Hp4xof
-         KDR2UDd+LI2lzOgUlCDYBsAkqP801vSUKQ70Hkrb3nr8T6Ga0LlFL/kHFx/7WXon5yy8
-         IkBjiOSzf1TMGYJkRMAxHGN4VTdTUuuDqsc90h6utIOhdXa54npgYb0DTjwjKlsIIHp6
-         U7TV7YCwp8fdLK4R1P+3E8fz5KFdOU7EPj9u+wdIQV15Ey0FTr1cXa5TP8Z2pgEM1tj/
-         /UOtLi/Yd/mX+grU0PZiRAgcsUDjJUWxIIzKpcD5s4WqBDIIeMC2U54Kxhi7yLuQyiMG
-         +sEA==
-X-Gm-Message-State: AOAM532C2EgCYJrxxcqZ/YEFKL4wEDnr45t8HQpEtmnQh18WPnQBEB2G
-        0OA3mtfM/E5B9vc8yRkL/z6XDT0LXGY=
-X-Google-Smtp-Source: ABdhPJzA/0REXywCUbR+lRzR+Yv1EhYQ71lr10sQZ9QR9zkrdf6Gy0wWv0YrWg4hPXs7CE+OgS4pjQ==
-X-Received: by 2002:a05:6402:4414:b0:408:4dc0:3ee9 with SMTP id y20-20020a056402441400b004084dc03ee9mr29953899eda.203.1647971494344;
-        Tue, 22 Mar 2022 10:51:34 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.googlemail.com with ESMTPSA id b11-20020a170906728b00b006df8494d384sm8419729ejl.122.2022.03.22.10.51.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Mar 2022 10:51:33 -0700 (PDT)
-Message-ID: <7f3a0b7b-96d3-2d6b-308b-2e9cca13663b@kernel.org>
-Date:   Tue, 22 Mar 2022 18:51:32 +0100
+        with ESMTP id S229782AbiCVTii (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Mar 2022 15:38:38 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7888A6C8;
+        Tue, 22 Mar 2022 12:37:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=GNyzORUx4GXTT7/hj1mCmOnIXmKv2J5yosWB9fpbDWg=; b=MdScEsmNUv8CYjaq6xyKA/QxN9
+        99HtzcD8C5Luv02SuH8KKYzNXG2/z9eoPR6F+Of7b2lajNndvnQgTFYcmirKYEOKIl7Se9JldmMm5
+        E/263AwsHbY1LjLCfck+kKyE6/+BtsVrjFp+MPte5dcSxYvDzYluqVmur6voqTxcLZcU/xVskTKBX
+        Rnv8nuDMz3n95ftN044wXbdf+9PPcPf2/ifZZPTxINFS9hvFes7ZlPcS7C7k6pCnwJElIJDlz3crP
+        egdH6e1Il32660Qsnf7ExebqC9Kk7y4mHrwW7K5cop+zlkCe1y9/jFjb5XLJZ52VLs82F0v5GP/LB
+        LQ5sxRaA==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nWkJR-003Y0z-FU; Tue, 22 Mar 2022 19:37:01 +0000
+Message-ID: <adfeb8bb-50b3-7ff3-a55f-19fc23cd1121@infradead.org>
+Date:   Tue, 22 Mar 2022 12:36:52 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 1/2] dt-bindings: thermal: Add ARTPEC-8 compatible string
- for exynos-thermal
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] Docs: admin/kernel-parameters: edit a few boot options
 Content-Language: en-US
-To:     hypmean.kim@samsung.com, "bzolnier@gmail.com" <bzolnier@gmail.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "amitk@kernel.org" <amitk@kernel.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220322075617.109855-1-hypmean.kim@samsung.com>
- <CGME20220322075557epcas2p26c9dcb578e9c5f68a23f7fe1bdf35f65@epcms2p5>
- <20220322081928epcms2p5c426f8eebbc5251a294ab08ae869e487@epcms2p5>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20220322081928epcms2p5c426f8eebbc5251a294ab08ae869e487@epcms2p5>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-s390@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-ia64@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <lenb@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+References: <20220321012216.23724-1-rdunlap@infradead.org>
+ <CAJZ5v0jBFOWZZrGuBb0GyJa3rKRwSYXrMFOtGu8jLnQ+OPtXHw@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CAJZ5v0jBFOWZZrGuBb0GyJa3rKRwSYXrMFOtGu8jLnQ+OPtXHw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22/03/2022 09:19, Sang Min Kim wrote:
-> Extend the exynos-thermal dt bindings document to include compatible
-> string supporting ARTPEC-8 SoC
->  
-> Signed-off-by: sangmin kim <hypmean.kim@samsung.com>
 
-This does not look complete. Your driver uses different binding...
 
-Best regards,
-Krzysztof
+On 3/22/22 10:41, Rafael J. Wysocki wrote:
+> On Mon, Mar 21, 2022 at 2:22 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>> Clean up some of admin-guide/kernel-parameters.txt:
+>>
+>> a. "smt" should be "smt=" (S390)
+>> b. add "smt-enabled" for POWERPC
+>> c. Sparc supports the vdso= boot option
+>> d. make the tp_printk options (2) formatting similar to other options
+>>    by adding spacing
+>> e. add "trace_clock=" with a reference to Documentation/trace/ftrace.rst
+>> f. use [IA-64] as documented instead of [ia64]
+>> g. fix formatting and text for test_suspend=
+> This ->
+> 
+>> h. fix formatting for swapaccount=
+>> i. fix formatting and grammar for video.brightness_switch_enabled=
+> -> and the last one are fine with me, but I suppose that there will be a v2?
+
+Yes, there will be a v2.
+
+thanks.
+
+-- 
+~Randy
