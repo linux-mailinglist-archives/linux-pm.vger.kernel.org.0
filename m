@@ -2,76 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EDDA4E4A6E
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Mar 2022 02:21:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 311494E4ABB
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Mar 2022 03:09:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241111AbiCWBW6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Mar 2022 21:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35168 "EHLO
+        id S231695AbiCWCL0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Mar 2022 22:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241108AbiCWBW5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Mar 2022 21:22:57 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A416A013
-        for <linux-pm@vger.kernel.org>; Tue, 22 Mar 2022 18:21:28 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id F06C45C05A9;
-        Tue, 22 Mar 2022 21:21:27 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 22 Mar 2022 21:21:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=S+iu6Z
-        Ib/LKvE8rf+ENQtEacTbCXCd4zjEwhqBC+6c8=; b=fvzdipVfPdgCQpNPy9gEHa
-        bVW/zrcBD7/4EZD7BLsfWqD8JKr6V/LP9N1FeTKErpQSP4doGIM+/2pjmgo1BUD4
-        neG2bt6s6meWAkCgVFKT/GpZ6EgEKZ6Nom1Cns7rWsNmZMWNErKK+eJQ7+F1Zp/3
-        Ary6IRNu/H7fATTh9r/7AQohYoVddLt7bDgLke2tKfncioXE63+f2YN7js2oJofR
-        UQ5K4QneYWUaBcdWeFFVaybcKeDr+X4CuYbIMuXgCRKVeyY11WurNerznRd5eFEj
-        c9OlY2g2j504H6daMezN+uYIXsbPqTdyweZYikSa6jfOyzLqJkUd8JU59wntII4w
-        ==
-X-ME-Sender: <xms:F3Y6Ys0IoJjShYiCX1z2PkQajDxVjenBKLS-QQJzY3iC9JK9xm3ITeeW>
-    <xme:F3Y6YnEJ_u4u5VQZfyq-oDT67VO0S-CWfbFXjaEFWCj-1SxHLBzwuI7f0eaiBMhxH
-    BUzBo68gqeQke4>
-X-ME-Received: <xmr:F3Y6Yk7jMaiu_Apfy5aweP7wlf2WevVW-vO4p8XMb_o9jarfpBO_fqdL5IOUMqD9EvQFCoN0gg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudegiedgfeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffogggtgfesthekredtredtjeenucfhrhhomheplfgrkhhusgcu
-    mfmnugiiihholhhkrgcuoehnihgvugiivghjkhhosgesihhnvhhishhisghlvghthhhinh
-    hgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpeefgedvleeiteeigfefvdduheef
-    geefieehvdekheeuteekheeigeetfffgffetgfenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehnihgvugiivghjkhhosgesihhnvhhishhisghl
-    vghthhhinhhgshhlrggsrdgtohhm
-X-ME-Proxy: <xmx:F3Y6Yl1IQeTeX6fNe-82kMLvlGO-98dfVkVmg-_ebb4Sqfjr0W3SWA>
-    <xmx:F3Y6YvEhz27Frokss767QjvssOkIY9nxXGKiSCDn1sZnxhX1qaq1Sg>
-    <xmx:F3Y6Yu-Vwg-oBLmUigK3yRn81FRFlGRQeOYRKeSwRnm9Pe4zHjdsBg>
-    <xmx:F3Y6Yu3RMEQuP2jknAZX4yC3Ao2m3LgFTbZpMR1BnuBCgz6g5sxrUw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 22 Mar 2022 21:21:26 -0400 (EDT)
-From:   =?UTF-8?q?Jakub=20K=C4=85dzio=C5=82ka?= 
-        <niedzejkob@invisiblethingslab.com>
-To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        xen-devel@lists.xenproject.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        linux-pm@vger.kernel.org
-Cc:     =?UTF-8?q?Jakub=20K=C4=85dzio=C5=82ka?= 
-        <niedzejkob@invisiblethingslab.com>,
-        marmarek@invisiblethingslab.com
-Subject: [PATCH] xen: don't hang when resuming PCI device
-Date:   Wed, 23 Mar 2022 02:21:03 +0100
-Message-Id: <20220323012103.2537-1-niedzejkob@invisiblethingslab.com>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S231596AbiCWCLZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Mar 2022 22:11:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91972580C7
+        for <linux-pm@vger.kernel.org>; Tue, 22 Mar 2022 19:09:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 344CF614AA
+        for <linux-pm@vger.kernel.org>; Wed, 23 Mar 2022 02:09:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 92967C36AE2
+        for <linux-pm@vger.kernel.org>; Wed, 23 Mar 2022 02:09:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648001395;
+        bh=TGByKuChoT4UH/eNjvUJXqaiNNJLzPXPKK2+u++CBOI=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=BSZ3dSBm9vucC7mklL8cfDZjFp9zdzmt8/SasQpMZM90Reza7PWLlgHA5DD407tyy
+         ae2jBY/9mHzfRamEq3DsnFCJdiX5g5AlEOTApPcjaTXhzvjW1+ej8FCvXUwYu2WTXB
+         xCLyrcMiuqq7RD5jWupqpiqrAwRvK4vhgL9RbM41mp4RSA8E89ooTFrdX9fsO2z/6c
+         7a9wbw3L6lcUMc8ja0d+S3/Iog17/BstfKRwqLXd3Lpa5HkvnmxdcLsADmzgWQYKbc
+         oI0utSYCCEjE0zcaTE/NSkscheeS+BYfyVuSpYmuqoBtMvSja7OH4rDvl83n82jnX2
+         E/CgPnmsB6Rfw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 764C9C05FE2; Wed, 23 Mar 2022 02:09:55 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 215729] amd-pstate driver has a much higher idle power
+ consumption for a desktop Zen 3 CPU
+Date:   Wed, 23 Mar 2022 02:09:55 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: huangrui@mail.ustc.edu.cn
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-215729-137361-qzrr3AfEal@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215729-137361@https.bugzilla.kernel.org/>
+References: <bug-215729-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,47 +71,44 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-If a xen domain with at least two VCPUs has a PCI device attached which
-enters the D3hot state during suspend, the kernel may hang while
-resuming, depending on the core on which an async resume task gets
-scheduled.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215729
 
-The bug occurs because xen's do_suspend calls dpm_resume_start while
-only the timer of the boot CPU has been resumed (when xen_suspend called
-syscore_resume), before calling xen_arch_suspend to resume the timers of
-the other CPUs. This breaks pci_dev_d3_sleep.
+Huang Rui (huangrui@mail.ustc.edu.cn) changed:
 
-Thus this patch moves the call to xen_arch_resume before the call to
-dpm_resume_start, eliminating the hangs and restoring the stack-like
-structure of the suspend/restore procedure.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |huangrui@mail.ustc.edu.cn
 
-Signed-off-by: Jakub Kądziołka <niedzejkob@invisiblethingslab.com>
----
- drivers/xen/manage.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+--- Comment #3 from Huang Rui (huangrui@mail.ustc.edu.cn) ---
+(In reply to Artem S. Tashkinov from comment #0)
+> I have a Ryzen 7 5800X CPU.
+>=20
+> With the acpi-cpufreq driver the CPU idles around 20W, frequencies are in
+> the range of 2.2-2.8GHz.
+>=20
+> The very same system with the amd-pstate driver idles around 25W frequenc=
+ies
+> are in the range of 3.9-4.75GHz.
+>=20
+> This doesn't look right.
+>=20
+> Changing governor from ondemand to powersave reduces idle power consumpti=
+on
+> to around 21.5W (still higher than with acpi-cpufreq) but this obvious
+> completely destroys performance.
 
-diff --git a/drivers/xen/manage.c b/drivers/xen/manage.c
-index 374d36de7f5a..3d5a384d65f7 100644
---- a/drivers/xen/manage.c
-+++ b/drivers/xen/manage.c
-@@ -141,6 +141,8 @@ static void do_suspend(void)
- 
- 	raw_notifier_call_chain(&xen_resume_notifier, 0, NULL);
- 
-+	xen_arch_resume();
-+
- 	dpm_resume_start(si.cancelled ? PMSG_THAW : PMSG_RESTORE);
- 
- 	if (err) {
-@@ -148,8 +150,6 @@ static void do_suspend(void)
- 		si.cancelled = 1;
- 	}
- 
--	xen_arch_resume();
--
- out_resume:
- 	if (!si.cancelled)
- 		xs_resume();
--- 
-2.30.2
+Thanks to report the issue. Could you please dump the print of "lscpu" and =
+use
+the latest bleeding-edge source code include the CPUPower support
+(https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=
+=3Dbleeding-edge)
+to print "cpupower frequency-info"?
 
+Thanks,
+Ray
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
