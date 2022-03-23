@@ -2,318 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 110B14E5AA5
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Mar 2022 22:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9125B4E5AB8
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Mar 2022 22:33:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344903AbiCWV1t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Mar 2022 17:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
+        id S238839AbiCWVfB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Mar 2022 17:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231886AbiCWV1s (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Mar 2022 17:27:48 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2072.outbound.protection.outlook.com [40.107.236.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD6069498;
-        Wed, 23 Mar 2022 14:26:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eMOedaMgpfxuTkmRhvodDkP7RRt5d7DYQZqRV6ClgutcigHpEcg2bZ7vz2LqCtAGQKwp+0/udN54/PEaC0mR6L+gqUQ9eoTP3rHuO2zvCqNsC6NI0Kulp31x7e3BLbkYyfWsV0a4NWjwaAb9aw/eWMZP81/93BHsiR6WzluxciQDPvQZtuRxzVecKY3apYCKvb7WpprAByCvP4zqKrEhZ0O1nj7ApraIRpjDZ9MjmxIqPFtDV9Enxt5QukoXgFWkbCNdcdwQdokp4BAcHzwdqWimy9A3IOa7JJyqWCfOfrLn1U8DAaReX9XBg/MnHO7qpgavZKxnW518Cd8D2i+4jw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NLv+hzR2fqkT+PEMUZo6Nn+FbU5+phNm79gTlEFUZqo=;
- b=ZvtFNf8VKwjYEr32HjmE/eVkNjwGy/HtiFxPXvnldc0qRu/10htqmbISd5uPPNHwOhhMRx5qyaD0W2rnjqsOrzKk2PsJBGQPVfapDfQug5CeN4Nt3LlIlRPnZ11CtGx5zhGxSJALBnsnP+kTX0t6za4LUgQhgKa38+X3CsAn4iap6EROJfLGjr3aHHe8Y8XIMRkSi0sS50tI2Ww80uVNcFYbMAstqI4cKtYKxH+YkAQx3i8ZmIBJyCxLRt7EVNioy4P5oWtf0RQpaA+ft2iSjCvBYFu+4DynkqQ3uR0T+MilBzYjF7QGN1BJHxbKQeJ3bpdQenYihJ8KqKUi7ohhFA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NLv+hzR2fqkT+PEMUZo6Nn+FbU5+phNm79gTlEFUZqo=;
- b=nGV8WsgCbDdFpyRW+p8EkpIOyTtotV/DxygN6UWb6IvhO4kny6gffb4rCvF/gxBKUyjUxQbFt/c1rm/a6GjJrQ9X47++qm1O7hx1jtbTlVSZn92XSjsJx97u+V4cjut1btEwqSs3RrW8wXK6a8Gum1xLkKgsqbc5Tk+q6hSFbyc=
-Received: from BL1PR12MB5157.namprd12.prod.outlook.com (2603:10b6:208:308::15)
- by CH2PR12MB4024.namprd12.prod.outlook.com (2603:10b6:610:2a::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Wed, 23 Mar
- 2022 21:26:16 +0000
-Received: from BL1PR12MB5157.namprd12.prod.outlook.com
- ([fe80::70d6:f6dd:3e14:3c2d]) by BL1PR12MB5157.namprd12.prod.outlook.com
- ([fe80::70d6:f6dd:3e14:3c2d%5]) with mapi id 15.20.5102.016; Wed, 23 Mar 2022
- 21:26:16 +0000
-From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     Bjorn Helgaas <bhelgaas@google.com>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Mehta, Sanju" <Sanju.Mehta@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: RE: [PATCH v4] PCI / ACPI: Assume `HotPlugSupportInD3` only if device
- can wake from D3
-Thread-Topic: [PATCH v4] PCI / ACPI: Assume `HotPlugSupportInD3` only if
- device can wake from D3
-Thread-Index: AQHYOIH4cjkXql1VyUKxzqcCT79LiazApEsAgAAAXoCADIi5gIAAUUqAgAAEXdA=
-Date:   Wed, 23 Mar 2022 21:26:15 +0000
-Message-ID: <BL1PR12MB5157F0111915C81F284762DAE2189@BL1PR12MB5157.namprd12.prod.outlook.com>
-References: <83aee1d8-5700-d2bb-fae5-d952240c6fb8@amd.com>
- <20220323205201.GA1320371@bhelgaas>
-In-Reply-To: <20220323205201.GA1320371@bhelgaas>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-03-23T21:13:17Z;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=5f51b90a-c5f7-4adc-a1e3-d310ab42dbd5;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-03-23T21:26:14Z
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 81b59954-7f5a-457d-90ab-e4b431246251
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b6c8d6b3-7f88-4c73-2085-08da0d13c37e
-x-ms-traffictypediagnostic: CH2PR12MB4024:EE_
-x-microsoft-antispam-prvs: <CH2PR12MB4024F1D003402546DA8484F6E2189@CH2PR12MB4024.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: nQGm21aYyzIrEQZeMcNmff458LfKSloymXHS7zo6/uDKNogN0OunuzWD+i2BdH3Nt4bq/QFlKxk/ePJaiSn5i7BvAYJjSywAmgNlgxuG+iccyEJaOTsqrldEGs/cNq8859QrXgDNkOHifI8uhJNAE5bpirjAAMhq2DkrjII0mFPIna9rvRK5+t3hpE9ywWARs5N1VjMrU3dTiu+Xo6t3+fxVrdZ95m7HXUAT7oXm1F0MueHIhmwKOlpGR976fsx1gKHGLT9qYdl6J562xBmtTfR3l8EeHuE+mV9AJdYxlLBnglNPAyFNuYUN5oPMCe4EeFq/QkdIUfL0ZzZGnRvo5SvVY71whvJAMG7Up1skT8+eZMrQm/jumfSZGlqqm2YO7pU4F/YuiFMPC9UTbfUY0KafUnq3OseyBNvz4UfxnLLAgET7d9BsP0Abq7pALXgN3Gis5JMXbpRW+yhemrFVdF9o/XhgiB7azYLvjdyitGzj56WKSUSyM8011HjhFSDozTmCaN+uzURaTFqsoGOZli6+6zkprY7O2PX0MXyeNygITUWa6ge4z0lADj7Q65QIkwexjcxgD4A3W+HyszEUAT6OjJsByfHNktAWFZII4zpCKLM6xjhxz+2N7pJuNjPBzaMS28Yic3XdHYHj+gZTuqUeJm1d9Jj+FiF5WJv7F8AsVqOiSb4twZjQNlHaeTi6Yrsl1NyjPyhcAx67WtR8rZ1Mnl941qzcQ8QJuusnoyoZFbkcsCk+NzIFbrSx7Dh0s8fO5xhMHSZxH5UP4swbzdjKlvzzUiJQHJUqrhTSsNRuhylE/dGY72ZXD0pa9LtfaGZ+05uuYG0VbxDr+6y+tAxiK318mbiEmhbPImzLGQQ=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5157.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(6029001)(4636009)(366004)(83380400001)(966005)(508600001)(53546011)(54906003)(45080400002)(9686003)(66556008)(26005)(8676002)(4326008)(66476007)(76116006)(66446008)(64756008)(66946007)(7696005)(6916009)(186003)(86362001)(55016003)(122000001)(71200400001)(52536014)(38100700002)(8936002)(38070700005)(6506007)(316002)(33656002)(2906002)(5660300002)(81973001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?VN3InF999EV6NJAaXzDJt2MpTgDCs2S5O/HxFcHbHBEYIJlYon6FYQQm0fet?=
- =?us-ascii?Q?Us+K7MLJjADzTkuKzRYiCXbyQkoZIb9ygIj6/ae5d2jp7r+6WWVY7WU7woMa?=
- =?us-ascii?Q?HFmwM078RJgHLgxFEIYp97KUbCS8SDATIffLlbCzI+SOWQlpHeuk/R44TlWw?=
- =?us-ascii?Q?wqgEAkCRTQg9xGKxxeDJIp+qKbxyxUweFiB5M3pXK3aD9c19RI126rGnx6ji?=
- =?us-ascii?Q?+zb1l3zgn+iaiuW5hWajSOYU/QAayGcyBEsre3AlrmqAQUV3VwCcFajt1Ydl?=
- =?us-ascii?Q?8pW7IesiftNhlPp8d7NaxSi98p85N+x7i+gV1du0V2WfXt1eySYNOQJH5M0T?=
- =?us-ascii?Q?xKGkAc++WPFkdUDEN7qRN6lm5XjzoqPRcvW57Jzbgj/1YHrd+B579N6pJUY0?=
- =?us-ascii?Q?k6Rwh8PoTmTNhSCj352yHoF35V6O/WhRy4ixJKPyU+swCDPClopsiFyLem1S?=
- =?us-ascii?Q?u7AmzxazIGDTnsttkzcWg97WH5qTjKc7nDeqAAaajGrmJKaiVpWE+0J/L9Ra?=
- =?us-ascii?Q?SmrKiuWLizsdchkcegjn2OP67WLIPWb81/nqjeOB+iNvrh1u/R06Fsaezthv?=
- =?us-ascii?Q?y8HuHByVD2ueGWHU8AcbHfdSpbY6rhDHVl1bfiY20kQniSmPK+sDOoB5ZYis?=
- =?us-ascii?Q?SY5ReOjQcpvnhcIDrC1TNhyWHUI66jwA1yw+twW6mL0HeTCuBCoVPPIXc/mH?=
- =?us-ascii?Q?aFOzikrZmPzkIvPk9fNgcNAbwjZb/d3hfMzI0B494RPtWuteMOnplDHXhyZR?=
- =?us-ascii?Q?/pNkCGwDL+P+Z+sFPbNdVG+9Ljzfhw7Gmoye49q06GL/LuT9VDohSr9KJiw5?=
- =?us-ascii?Q?+8DJVGlMI7DZTAXinGmglC19UN8H3z+htWTb9TMlRmZ2rBa3Bb9im9isMZYK?=
- =?us-ascii?Q?GzuJOPI2+VPmuwTW2Z+2isbWBlAWt0P4w33+pDv2TNTgOvr4jSA3lnAznrwi?=
- =?us-ascii?Q?5RtdIfOAK6SPiEEWXh6rcBL452pbklo3J5tfoA3RIfExN+MUFX02AqoceRmP?=
- =?us-ascii?Q?2QOO4+1MYvbjp9lUKuKw09E4uDIBYX05tUaSZwI825czDKLo/C7bUjOBc0xh?=
- =?us-ascii?Q?2w3lLfd1Szsz03CqNWJtzsktk4uoxlll01CXfE7dtEamcHmDXZiWRooxEu7V?=
- =?us-ascii?Q?9PXLa8lL8UhEwtmwy/YmlO1hIgP66bybsyiiGZNDl9IatAASz/V9jql75Arm?=
- =?us-ascii?Q?NO9Y5KpU12t1UIVgh1MH0qbiIpverCKdizYhrFkncTl6J2Bnta637adGyRBu?=
- =?us-ascii?Q?2dPjiQ/ImgYHQnWGi85h6W7crawAlBLJ3FFRUfiAspuzFhrRk+8UXjuTXYiI?=
- =?us-ascii?Q?88hpPnyOR7JGq8SyReOW4I7yIS+PeELOsAmFSWBx4KN8Qg1JXKPWvMKISjJi?=
- =?us-ascii?Q?0QowwBpLP2xYmIXJ38IPrCLBrSwg3JlHA+M87n+qDPR8wru1dGzQ1p/ulXwZ?=
- =?us-ascii?Q?10JK1nYsiAk=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S243919AbiCWVfA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Mar 2022 17:35:00 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D4C26AFC
+        for <linux-pm@vger.kernel.org>; Wed, 23 Mar 2022 14:33:29 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id v4so2990779pjh.2
+        for <linux-pm@vger.kernel.org>; Wed, 23 Mar 2022 14:33:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:date:message-id:mime-version;
+        bh=2LhMk9zJI14VlAHepOXbNN8GLBArCKtkLBl/JZencgQ=;
+        b=NQREswWAuJqXlrTwtsO9W0l5FL1ZGF9oNGaqoVnzvn7QYtZJLsrRRxLVJyewSPbhLl
+         Vd2dx5/5lPVgOrMzSekExBniLmwbqDIldBU5dJHwI7PJBlw6K7QvKjy7ekckiPZqDaIv
+         edrg9/mJCTjdULdwcA/jj1topOuPK4AEo2TsJ71o0y7R5hZSDSNZ+d/eXkq4geieI4w0
+         ZH386zhFMVuB+L0Q7pb7z28eUC4subqepAamKhN/sVYolu905s2O7+6EEKKj43X+heAO
+         Mevi1ryPZl2KLilEG9+76+huEUmhyXzU6LMB3sUXRtwL8CeIBUr/6mWjbNGP/Taq9aUu
+         M2tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:date:message-id
+         :mime-version;
+        bh=2LhMk9zJI14VlAHepOXbNN8GLBArCKtkLBl/JZencgQ=;
+        b=DSkm8uuDZkhrRDwr4QJXkYk+3mWUtW4wuiGWrUYh+Kktc9WFlDyH47QHKAY9E1k7j3
+         58fbATqJDXyciM3zISbRIieF9y7vjZyoHOsyQHiiHzNcRzwv+X0skmTNkfy7+aD68L2U
+         YEIwdkpuID3KJXk2Yz+Y496PMQj9L13nFjEVkHn+Cj4zSV9rr7my7xbBiZCV0V539TF2
+         CR+JtN0U8E2woNRHZkppn5or3UOTCpEm6L+HgZxdqIe+9zZW62FXLQdkpGdM4tsDV9fw
+         ghECnRQaJeHQto7lC8ZR7Z3P5EbgsmTllqh9m2Lk3rfoVEEZc6Bb/uLgEWRTgMovsI21
+         EH5A==
+X-Gm-Message-State: AOAM5300CZBBe5pInrGsdOGPtuI90iqMpKNYMS6m0m/bB9I2Naq5aJiO
+        CajUHatAc1IXekVGPCCGreHfww==
+X-Google-Smtp-Source: ABdhPJxCPBAivJPBjtl5b1if01CCcldTJ4n2shqfNkjDe8ptep3xT6vuvGG/4TxR2sr99SptDot3Xw==
+X-Received: by 2002:a17:902:a3cb:b0:151:e52e:fa0c with SMTP id q11-20020a170902a3cb00b00151e52efa0cmr2200676plb.70.1648071208748;
+        Wed, 23 Mar 2022 14:33:28 -0700 (PDT)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id w24-20020a639358000000b00385fcbf8e55sm653826pgm.28.2022.03.23.14.33.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Mar 2022 14:33:28 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Eduardo Valentin <eduval@amazon.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        daniel.lezcano@linaro.org
+Cc:     rafael@kernel.org, rui.zhang@intel.com, amitk@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ben.tseng@mediatek.com, mka@chromium.org
+Subject: Re: [PATCH 0/2] thermal: Add support of multiple sensors
+In-Reply-To: <20220225235203.GH10536@uf8f119305bce5e.ant.amazon.com>
+Date:   Wed, 23 Mar 2022 14:33:27 -0700
+Message-ID: <7hlex0s6ag.fsf@baylibre.com>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5157.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b6c8d6b3-7f88-4c73-2085-08da0d13c37e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Mar 2022 21:26:16.0303
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uBmFFTZizPvGdw8bd9MYtfuzqPHA76cQJP21HWS5qOdTNKOGcrqMkkiFl+hIUHZx8piuOdX3DkdZi4BDZ2QTrQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4024
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[Public]
+Hi Eduardo, Daniel,
 
->=20
-> On Wed, Mar 23, 2022 at 11:01:05AM -0500, Mario Limonciello wrote:
-> > On 3/15/22 11:36, Rafael J. Wysocki wrote:
-> > > On Tue, Mar 15, 2022 at 5:35 PM Rafael J. Wysocki <rafael@kernel.org>
-> wrote:
-> > > >
-> > > > On Tue, Mar 15, 2022 at 4:33 PM Mario Limonciello
-> > > > <mario.limonciello@amd.com> wrote:
-> > > > >
-> > > > > According to the Microsoft spec the _DSD `HotPlugSupportInD3` is
-> > > > > indicates the ability for a bridge to be able to wakeup from D3:
-> > > > >
-> > > > >    This ACPI object [HotPlugSupportInD3] enables the operating sy=
-stem
-> > > > >    to identify and power manage PCIe Root Ports that are capable =
-of
-> > > > >    handling hot plug events while in D3 state.
-> > > > >
-> > > > > This however is static information in the ACPI table at BIOS comp=
-ilation
-> > > > > time and on some platforms it's possible to configure the firmwar=
-e at
-> boot
-> > > > > up such that _S0W returns "0" indicating the inability to wake up=
- the
-> > > > > device from D3 as explained in the ACPI specification:
-> > > > >
-> > > > >    7.3.20 _S0W (S0 Device Wake State)
-> > > > >
-> > > > >    This object evaluates to an integer that conveys to OSPM the d=
-eepest
-> > > > >    D-state supported by this device in the S0 system sleeping sta=
-te
-> > > > >    where the device can wake itself.
-> > > > >
-> > > > > This mismatch may lead to being unable to enumerate devices behin=
-d the
-> > > > > hotplug bridge when a device is plugged in. To remedy these situa=
-tions
-> > > > > that `HotPlugSupportInD3` is specified by _S0W returns 0, explici=
-tly
-> > > > > check that the ACPI companion has returned _S0W greater than or e=
-qual
-> > > > > to 3 and the device has a GPE allowing the device to generate wak=
-eup
-> > > > > signals handled by the platform in `acpi_pci_bridge_d3`.
-> > > > >
-> > > > > Windows 10 and Windows 11 both will prevent the bridge from going=
- in
-> D3
-> > > > > when the firmware is configured this way and this changes aligns =
-the
-> > > > > handling of the situation to be the same.
-> > > > >
-> > > > > Link:
-> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fuefi.=
-org
-> %2Fhtmlspecs%2FACPI_Spec_6_4_html%2F07_Power_and_Performance_Mgmt
-> %2Fdevice-power-management-objects.html%3Fhighlight%3Ds0w%23s0w-s0-
-> device-wake-
-> state&amp;data=3D04%7C01%7Cmario.limonciello%40amd.com%7C1f96c7aa37a
-> c47640d6208da0d0efd67%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0
-> %7C637836655281536690%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAw
-> MDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata
-> =3DCw1OTYiX9BD3gh8eN3Zyz6%2FK8YFgqbn6bgi9%2FjNsnrM%3D&amp;reserved
-> =3D0
-> > > > > Link:
-> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fdocs.=
-mi
-> crosoft.com%2Fen-us%2Fwindows-hardware%2Fdrivers%2Fpci%2Fdsd-for-pcie-
-> root-ports%23identifying-pcie-root-ports-supporting-hot-plug-in-
-> d3&amp;data=3D04%7C01%7Cmario.limonciello%40amd.com%7C1f96c7aa37ac4
-> 7640d6208da0d0efd67%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%
-> 7C637836655281536690%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwM
-> DAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=3D
-> UkB5lmz1QBUzWVM6%2BuNzJsleP%2Fi%2BDCJJuSgINiNbymo%3D&amp;reserv
-> ed=3D0
-> > > > > Fixes: 26ad34d510a87 ("PCI / ACPI: Whitelist D3 for more PCIe hot=
-plug
-> ports")
-> > > > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > > >
-> > > > No more comments from me:
-> > > >
-> > > > Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > Or please let me know if I should pick it up.
-> >
-> > Bjorn,
-> >
-> > Friendly reminder on this one.
->=20
-> Thanks; we're in the middle of the merge window now, so I'll wait till
-> that's over unless this is an emergency.
+Eduardo Valentin <eduval@amazon.com> writes:
 
-Actually it's a pretty important problem.  We waffled on the nuts and
-bolts of this commit during the 5.17 RC's, but I didn't think we would
-make it out to the merge window before it got picked.  I guess I should
-have spoke up on the urgency earlier.
+> On Fri, Feb 18, 2022 at 09:46:02AM +0100, Alexandre Bailon wrote:
+>> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+>> 
+>> 
+>> 
+>> Following this comment [1], this updates thermal_of to support multiple
+>> sensors.
+>> 
+>> This has some limitations:
+>> - A sensor must have its own termal zone, even if it is also registered
+>>   inside a thermal zone supporting multiple sensors.
+>> - Some callbacks (such as of_thermal_set_trips) have been updated to support
+>>   multiple sensors but I don't know if this really make sense.
+>> - of_thermal_get_trend have not been updated to support multiple sensors.
+>>   This would probably make sense to support it but I am not sure how to do it,
+>>   especially for the average.
+>
+> Great to see this having somewhat a form now!
+>
+> Overall the idea is sane and aligned to what I had in mind back during the 2019 Linux plumbers: one thermal zone should have multiple sensor inputs.
+> https://lpc.events/event/4/page/34-accepted-microconferences#PMSummary
+>
+> In fact, that is aligned to what I originally wrote in the thermal device tree bindings:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/thermal/thermal-zones.yaml#n79
+>
+> The only major concern with your series is the usage of of-thermal to achieve the multiple sensors per thermal zone.
+> While that solves the problem, it has the following limitations:
+> (1) limited to devices described in device tree. everybody else is left out.
+> (2) it keeps extending the code duplication in of-thermal. 
+>
+> My suggestion here is have the thermal core aware of the multiple sensors per thermal zone.
+>
+> That has the advantage of:
+> (a) cleanup the sensor handling within of-thermal
+> (b) expand the multi sensor per zone to all types of thermal drivers
+> (c) standardize the way to handle the multi sensor.
 
->=20
-> IIUC the bug this fixes is that "when a bridge is in D3cold, we don't
-> notice when a device is hot-added below it," right?  So we need to
-> avoid putting the bridge in D3cold?
+This cleanup all sounds like the right direction to be headed, but since
+this has been planned since 2019 and nothing has happended, what is the
+level of urgency is for this of-thermal -> thermal core cleanup/rework?
 
-When the ASL has been configured this way (to return 0 for _S0W) the
-lower level hardware implementation will lead to hotplugged devices
-not being detected.
-Without this commit the hardware will expect to be in D0, but the kernel
-will select D3hot.  So yes; the outcome is that hotplugged PCIe devices
-don't work.
+In $SUBJECT series, we have a fully functional series that solves an
+existing problem and takes a big step in the right long-term direction.
+While it indeed has the has limitations you mention, I don't think that
+should block the merging of this series.  More importantly, there are
+existing drivers[1] as well as forthcoming ones from MTK that depend on
+this series. Those are blocked if you require the of-thermal -> core
+move first.
 
->=20
-> Is there a typical scenario where this bites users?  I don't think we
-> ever saw an actual problem report?
+As a maintainer also, I fully understand that maintainer bandwith is
+limited, and it's always nice to have contributors do core framework
+development when possible, but IMO, in this case I don't think it should
+be a prerequisite since a follow-up series to do the core work would not
+affect any functionality or bindings etc.  I don't see any reasons not
+do to this incrementally.
 
-This is the common way that these systems are being shipped.  I have
-plenty of private reports related to this, but nothing public to link to.
+So I would kindly request (read: beg, plead & grovel) that you seriously
+consider merging this series as a first phase and the of-thermal -> core
+change be done as a second phase.  Yes, I fully understand that punting
+this to a second phase means it might not get done soon.  But it's been
+waiting for years already, so it seems the urgency is low.  Meanwhile,
+there are OF users that are ready to use this feature today.
 
-FYI: the earlier version of this was:
-https://patchwork.kernel.org/project/linux-usb/patch/1646658319-59532-1-git=
--send-email-Sanju.Mehta@amd.com/
-This is basically to intentionally pull the device out of D3hot when a
-tunnel is created.
+Thanks for considering,
 
->=20
-> > > > > ---
-> > > > > changes from v3->v4:
-> > > > >   * rework comment
-> > > > >   * only evaluate _S0W if necessary
-> > > > >   * drop static function with only one caller
-> > > > >
-> > > > >   drivers/pci/pci-acpi.c | 17 ++++++++++++++++-
-> > > > >   1 file changed, 16 insertions(+), 1 deletion(-)
-> > > > >
-> > > > > diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
-> > > > > index a42dbf448860..e535dab2c888 100644
-> > > > > --- a/drivers/pci/pci-acpi.c
-> > > > > +++ b/drivers/pci/pci-acpi.c
-> > > > > @@ -977,6 +977,7 @@ bool acpi_pci_bridge_d3(struct pci_dev *dev)
-> > > > >          const union acpi_object *obj;
-> > > > >          struct acpi_device *adev;
-> > > > >          struct pci_dev *rpdev;
-> > > > > +       unsigned long long ret;
-> > > > >
-> > > > >          if (acpi_pci_disabled || !dev->is_hotplug_bridge)
-> > > > >                  return false;
-> > > > > @@ -1003,7 +1004,21 @@ bool acpi_pci_bridge_d3(struct pci_dev *de=
-v)
-> > > > >                                     ACPI_TYPE_INTEGER, &obj) < 0)
-> > > > >                  return false;
-> > > > >
-> > > > > -       return obj->integer.value =3D=3D 1;
-> > > > > +       if (!obj->integer.value)
-> > > > > +               return false;
-> > > > > +
-> > > > > +       /*
-> > > > > +        * If 'HotPlugSupportInD3' is set, but wakeup is not actu=
-ally
-> supported,
-> > > > > +        * the former cannot be trusted anyway, so validate it by=
- verifying
-> the
-> > > > > +        * latter.
-> > > > > +        */
-> > > > > +       if (!adev->wakeup.flags.valid)
-> > > > > +               return false;
-> > > > > +
-> > > > > +       if (ACPI_FAILURE(acpi_evaluate_integer(adev->handle, "_S0=
-W",
-> NULL, &ret)))
-> > > > > +               return false;
-> > > > > +
-> > > > > +       return ret >=3D ACPI_STATE_D3_HOT;
-> > > > >   }
-> > > > >
-> > > > >   int acpi_pci_set_power_state(struct pci_dev *dev, pci_power_t s=
-tate)
-> > > > > --
-> > > > > 2.34.1
-> > > > >
-> >
+Kevin
+
+[1] https://lore.kernel.org/linux-mediatek/20210617114707.10618-1-ben.tseng@mediatek.com/
