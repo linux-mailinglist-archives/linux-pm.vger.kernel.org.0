@@ -2,108 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A735C4E4B25
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Mar 2022 03:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8121D4E4D21
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Mar 2022 08:15:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231998AbiCWC4Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Mar 2022 22:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33476 "EHLO
+        id S242091AbiCWHRP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Mar 2022 03:17:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231958AbiCWC4Z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Mar 2022 22:56:25 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2074.outbound.protection.outlook.com [40.107.96.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1141F4DF47;
-        Tue, 22 Mar 2022 19:54:56 -0700 (PDT)
+        with ESMTP id S239229AbiCWHRN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Mar 2022 03:17:13 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2052.outbound.protection.outlook.com [40.107.94.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC356E8CC;
+        Wed, 23 Mar 2022 00:15:43 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NXNGYRhzv2pBsQ1sZ27xjhxaRpH2rzU80Mtnpt9TdDTWL8+r5H/otpyW1G1ddEfXZDAI1lN3RTH3VTeC48H61CNXAy30jRkcmARHCRuOSRZiNhCQlLylFCAktrG3B4scBdd5npQ1+yRRyJLXXWxorIZUG289lgRh4S1hpOS/8uytQlVo2APTsNy2ERyRctmBWGKSxCC6mGURR8n4SdIwQURM3aKoRx8o1+dhBXFrTL1xrRn8GpFthOTKBX/Ex00wNAUw+c6US3/ftjM1+k3nQ++B6rChU0/tWpvyLovHDj8K+UVh6f3MGXBZAmVcH+B9rsP4qZzLTiJ/XooEA45/TQ==
+ b=FY183ZnwsuDSX5AoukjHeahvVmGSWijFJs39Z3kMBiDF8wjfFfi5tT9hCbLxqwdoO+nZqCRLOQr0Er40+/sMRSEwOZVRQR9fe8H8Hz9UyobC6Pn85LrHwbQTPBgjU72vt1VMprWRHc4zuiXaz8aF1bMV33I573jFNMasAsq4unYoamS4ZJiEiRkqR9BSp620WGh9ridU5ip7gdNDEZYcJ6eYkktvQjDVXSfZqEdjyrHLB7obUKjPPiBXfuwvalTXS/6ivyMkojeHATbJpU1plbD5wcmCvhkaXShgM9vvlFxsPS1iea3eE96JEWc9hujNIM0GP3mefXZhV+uNpPIzHg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nMX/Ik8PPpy5uQzicOn4uk3426OkAK/6kTGwwiit2mM=;
- b=fj6FaJKG6dKl/SwE3sDUQm6I03PHwUD8F1Y0ilSFOLQC6+4xhSmkHfTuM6K5jrsQEB3co+G1UW0B7UoZfbLQbGeEZorgZFzY/GVpaBqUOjx/vLG5ygj42s34nSiOJDkEs+xSMDJOYiRV1fXk8ODwmZPyziWzQAYtjNSjQcc8r5HgBUKqupg6KV+Pu4v06HK15vp0XngZ2wZ2uuj/ZaE3px18JMqHtzeL/8NRIxPqtQCVlvRt20mXi9WrcncUdZ2Z97Ovgr1DYu6GzX/Sx1NaIsczHLY/8ThrxrS97IBT1uIhBQ5yxztO4SxIY56TBfLrIQ3LVU3nrldxoEo74AfzPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
+ bh=5pflCF1dJ/WrvbFgbX656iqhyo0Zjg9uiNHjlbQWQ70=;
+ b=haDpclOISm+cQkYZYdkmwjW6wVwcNv/HhBk0qe2V28bc0/x2VjTZp5wrVRe7zRh9cbNLc1sVTGqNPjbn7is1HKUmiYBNzpU2Sw/ECf+FvWKEyrbufWIvq3qCyRGerDSbSieE5A4nWk/T+g560vyciGVelLjbmgEJMqY49dyHeDYFlgeavutCztJcC5iCFaAV3u6JM66wqNZrD13eTc64daxGGxBijUl8hMS1dnIhnnxV0pcExJvd8EnbuamZMVYBTJ4lnAqxGrkESJxqL74VRGP/cimRlmnem+EsnxElMhqVmyzNxczpLTKm0JGRoPpOgCz+lxqZOrf9LKcheRAD4A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nMX/Ik8PPpy5uQzicOn4uk3426OkAK/6kTGwwiit2mM=;
- b=jIkg8IATTdy8dGJ1HC3p6pobr3TNbgdLqxaiq9/8R4i8A71vcqckGmoQxgSLUPgyO32/iMrFBpAuVbL9yL3V+/2LDB1zUF6Q9R46tm8XeLRvyuygiWDUyHxwkDyoQZIZHrCcj/dkR7oc5HqbZpOzpMsOT0JKEfAkN9QE+W0cxCE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
- DM6PR12MB4452.namprd12.prod.outlook.com (2603:10b6:5:2a4::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5102.16; Wed, 23 Mar 2022 02:54:54 +0000
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::38da:2ef6:d863:3c90]) by DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::38da:2ef6:d863:3c90%6]) with mapi id 15.20.5102.016; Wed, 23 Mar 2022
- 02:54:54 +0000
-Date:   Wed, 23 Mar 2022 10:54:33 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>
-Subject: Re: [PATCH v1 0/2] ACPI: CPPC: acpi_cppc_processor_probe() fix and
- cleanup
-Message-ID: <YjqL6d/IEfVcnu7D@amd.com>
-References: <5552457.DvuYhMxLoT@kreacher>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5552457.DvuYhMxLoT@kreacher>
-X-ClientProxiedBy: HKAPR04CA0014.apcprd04.prod.outlook.com
- (2603:1096:203:d0::24) To DM5PR12MB2504.namprd12.prod.outlook.com
- (2603:10b6:4:b5::19)
+ bh=5pflCF1dJ/WrvbFgbX656iqhyo0Zjg9uiNHjlbQWQ70=;
+ b=QUso4/rMGtViek5YXbZkfcxC9CslZZG1+TSV8tg/8HTK88GaeY9JfAmw+OWdJL9pxNrJrhgqCmhjOqD+ygL7So7naNAVLDZaSc56AbCK/cRJPzBk2/esZJp7n8P0pSYf2vTvFeDfieyH1Hog1LEUhJgXnxKhq2dItSVv33VTahM=
+Received: from DM5PR20CA0041.namprd20.prod.outlook.com (2603:10b6:3:13d::27)
+ by DM6PR12MB3897.namprd12.prod.outlook.com (2603:10b6:5:1ca::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.19; Wed, 23 Mar
+ 2022 07:15:41 +0000
+Received: from DM6NAM11FT022.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:3:13d:cafe::e7) by DM5PR20CA0041.outlook.office365.com
+ (2603:10b6:3:13d::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17 via Frontend
+ Transport; Wed, 23 Mar 2022 07:15:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT022.mail.protection.outlook.com (10.13.172.210) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5102.17 via Frontend Transport; Wed, 23 Mar 2022 07:15:40 +0000
+Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 23 Mar
+ 2022 02:15:36 -0500
+From:   Meng Li <li.meng@amd.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>, <linux-pm@vger.kernel.org>
+CC:     Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        "Mario Limonciello" <mario.limonciello@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        "Viresh Kumar" <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, <linux-kernel@vger.kernel.org>,
+        Meng Li <li.meng@amd.com>
+Subject: [PATCH 0/3] Add unit test module for AMD P-State driver
+Date:   Wed, 23 Mar 2022 15:14:59 +0800
+Message-ID: <20220323071502.2674156-1-li.meng@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5964ef4c-9496-47b0-3203-08da0c7881de
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4452:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB4452A5C9BA97D7404156107FEC189@DM6PR12MB4452.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: abb10339-d318-4074-1200-08da0c9ceff9
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3897:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB38971DB93ACF69398AD8974AF7189@DM6PR12MB3897.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wLgRx9hlVqvfTFojuVL7I8waJiuHzR25x+I4BHEdYg6Cq6YQCcXvRNkYu0qrm7zVRz2BO1uUbwks8BbG380dFkJjrSWLjK9qeqb/bN788+Hs3hz8LwuU+mV0y3qWlM29+gW9vCZfZYlYJhGZDFNQsztRHftma6WgQSdXrgayug74/XcQ4U8AKo0QvbVpOHTEKtvqF3Lnzby7n6l3dBO8LDBVUTNZFYnFlyofzAHFdA3Lj0V3bRR37KwYFU5UD93hdQlV4CCUxsFY57C2CbZjhf2bpEo7IuPFxWqHUtFBWAkAlDtkJLEIWzjodu/xnYUjhY3qMCJ2LeefwWqJoOtKvv/+2KsVdfRnKXBm9tCKy0jFdi6o9KGmlvMbEGks42qpgseAiS9RxNQrYJMvRxTtF5/O6wyq/aHm8uHDQ2KSL9O/I9+fN+AOsNBdTcRQ1xeQlAVuI9bZcvAu4zNdo/uYrPr/Hh6OGE654I2FRi1wHIXBGUcaTbp1gnRcOuYHPujvzuC8mqBRnh6gbo3HySvzTKsFHl/b7nqiHqUKeRJCVr704P4PLp6wkBI2HZ70ZimVFiVgy8voamNNArG1bSRCgy8RIHM6jtmyOeFbGS9osnIzVujhsRYX9uzvopBZbgNUK8N9c8H48mjrfMP+tsJ6Ow==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(86362001)(66556008)(66476007)(4326008)(8676002)(2906002)(38100700002)(36756003)(316002)(6512007)(6916009)(54906003)(4744005)(26005)(186003)(83380400001)(8936002)(6506007)(508600001)(6486002)(2616005)(6666004)(5660300002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Mw/ViYiWaKkCewo6Wtk3enIKoAWJDjTEM78oqscO7pS6pn13FIXXcIyXRtr8?=
- =?us-ascii?Q?P7zLEbZNSXSxJhwsEQ4yQAMxTJYejqk81/jaJuBeNTxN05sHdbMXfKf5fp0i?=
- =?us-ascii?Q?3cwJ/sTMoJKSp2MwdrjpeH2AZmrx39j4iyboVLN6842wWbkJj4FcLF578yGt?=
- =?us-ascii?Q?J/9k5SEXyxu+PQQXMlzfVGwRcap7lDzYLFhXcQ/BlQZ1caweFdv3/DbSPnVe?=
- =?us-ascii?Q?3HkOxApMcx4fZ6w5h5YTwF/aNaTCGTO0Fnih66h2m/Cvm6MVEG/ayjcHraXZ?=
- =?us-ascii?Q?4H1w0yyX7QyAngsjFnqLYvbfJNtC7vN3YA7m4ZhkrVKjftxAQMUf9GICskGd?=
- =?us-ascii?Q?gcC6L/D20xrP6RJN2N7yapbirfIEsd/Cx4l8tnJndLo16t9tvlr1DAdv6/x9?=
- =?us-ascii?Q?oYFJh3rWt+xSYZYgiBvUhoRwKw7KcX1RU9S91qnip1b9jXuFL0ARWncTQkMT?=
- =?us-ascii?Q?/fkGKu6/4ZesHxCylfbJ+KqfxP91VMhxyhyYt41G+bHs3Fi1mQNStGcoaOCu?=
- =?us-ascii?Q?fHz2d+O9oCzxAwhQN5/dNoUnBc4jay41Zmh6b6heWzivOBLGzaRsM2Ydycb8?=
- =?us-ascii?Q?KT85tIzSCLkLp+yh6UO1kxD12iUff0x6IN5Pn5RdBg9rGQfo8KmMZpuanInD?=
- =?us-ascii?Q?tOJbrissLMR2YKL7eWiuf1HdYFKm8XcRqp0RgggizsnrY2+0UTQAi/wJw+FI?=
- =?us-ascii?Q?Lv5hsm1Uw4zXVnCrRrOYdqSE/3O83WL0Wost+8yGEqWJd1/c0anxqDg1xCCS?=
- =?us-ascii?Q?1lgQtopClaQIHxqRbQtyk5Om8atTGhL0v5NdL85WZSs56KeVLyysqH84ArXx?=
- =?us-ascii?Q?KCOWO5r8Ualpzv80NK08ZCaAbsCSIWx03++XLelkBWoJwCHB0SMoQbvwYVS1?=
- =?us-ascii?Q?Ijot0CWvHzqs/ZZLNOHiPh/WtTto6HGc+VhI9rczC8mVm/5RnW6Uvb4+LzgU?=
- =?us-ascii?Q?oJzAvz0qRx/3atqVP2ntflpGmbMy4GRFXPhD52ajLpFCdHws5Lm53oWr7XNi?=
- =?us-ascii?Q?UE6QyF5hn0Wn/YbawdcKj21FGcHuC3kaDD0vdOWUWT2lDgwCxq7fwCF0dAI2?=
- =?us-ascii?Q?mzxplmj7/CrcSY7wuwOW42NeYuwetcJAWOy5oLdqOQw+PbdDfHSbEKYzKdU6?=
- =?us-ascii?Q?fcYBrjGjkjnZyoDsBo3UTPpMzegU+PkqmZC1nhLZECs2vVcxwtwgy81FdFgy?=
- =?us-ascii?Q?gYi1d27vKVl3O/4MzAO0/fbbtNfnI5lrAkZboKgOzQCKasZQoJ0Ndgaci4D/?=
- =?us-ascii?Q?vN5EykKOQ4Ex97RCeAo2uO3fjwt+z/o2MK1eosWh5FQFVwZyv0WrhjNo9i/p?=
- =?us-ascii?Q?++5FrRXjRNTZexsJIva07f7KCeBUsQQ5qDBr/7PRumvzrA20i5ZsmkK+Y5qw?=
- =?us-ascii?Q?tEnwFpaqyHqbXGdcp/nswsWedu+8qsv0dcXIyD23koD4OewqepH5W3GAcCXr?=
- =?us-ascii?Q?jsgUizievDi7qQeU4D42kjB4fYy4q+TD?=
+X-Microsoft-Antispam-Message-Info: z0crCpXmUd4W8EXDzBu3+VFFTLlCD4rQD5HFzdE4XL1SC6hE6+y8+Z9wwQcKAAUsbtoEz/6UdTcXO/3s7mkhL6M5z10roOuZi3mB5iSb7akwF9IghUQo7EbWXg5au8fru10dTgRfxvpdH8BfilUfEaEqvCquSRKghOlJ5GgnPcwUrGlj8t1TnhYQYPeADzNufuyaJgryMOVTbcifOnZ30VioIz5oF96NggB1sHufoKuh6G7KiF223xVlH42g9He7BTFy6AmxImdCD3ZllVrm779Iez0FpUmUVbSCDXQaNge5lYHeW6q0kh/ypO/whzunyPxXWQLp1jcRlitHZI68VLqGSOl2tebZZ6iBIKOdSZHYbGRfPZQ4SAKr0dXBHjZY9NNl51S1soviSn2qheYqxPsHjPF+HPunxn8vebC5Ni1+EdVUAYVwtkAA9GR8Be529JjDrkjt7ZQkEgPbPyz5QoC7sgYpYAdJKz2XuKzs7Oty/6VA3DQ1MN5Ti4NCBa4pnUygrPsuJ20AehrXFe489kXKQu4x1AUtk7xAG/+zXgiJTIa9iflB9KIb/LU8V2Pw8zo5eFlQh83T2eYKIRu6QqqU4WYaJM6ahoEwZJVGY0iY/eBSpqVJkUw1QN6X8ZB4hiM6+ODZ12UTcYaAJ5x78CvpOeccFrc7nr3+A1dehcegjMrPi52wxiwUH9ogG37XMfxILh7ZMu82VBNyFSWA9w==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(5660300002)(8936002)(7696005)(82310400004)(86362001)(81166007)(6666004)(356005)(2906002)(8676002)(4326008)(70206006)(47076005)(70586007)(426003)(336012)(110136005)(1076003)(83380400001)(36756003)(40460700003)(2616005)(36860700001)(54906003)(316002)(26005)(16526019)(186003)(508600001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5964ef4c-9496-47b0-3203-08da0c7881de
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2022 02:54:54.5308
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Mar 2022 07:15:40.5918
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Network-Message-Id: abb10339-d318-4074-1200-08da0c9ceff9
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AIyl8VZtjRHhf/sVQUltnQbWxKQPmMEZkk3A58SqhqCpFtAuND9j6NUUviLM7p+hQRRDoMB/9f7WWyFYBunQhw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4452
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT022.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3897
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -114,13 +107,59 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Mar 22, 2022 at 05:00:27PM +0100, Rafael J. Wysocki wrote:
-> Hi All,
-> 
-> This series of two patches addresses a possible out-of-bounds array access
-> in acpi_cppc_processor_probe() [1/2] and clean up some of it [2/2].
-> 
-> Please refer to the patch changelogs for details.
-> 
+Hi all:
 
-Series are Reviewed-by: Huang Rui <ray.huang@amd.com>
+AMD P-State unit test(amd-pstate-ut) is a kernel module for testing the
+functions of amd-pstate.
+It could import as a module to launch some test tasks.
+
+We upstream out AMD P-state driver into Linux kernel and use this unit
+test module to verify the required conditions and basic functions of
+amd-pstate before integration test.
+
+When you test all the test cases, you will get the following test results.
+The status "P" is pass, "F" is fail.
+jasmine@jasmine:/sys/module/amd_pstate_ut/parameters$ cat
+unit_test
+Index    Test cases              Status
+0        stop                    [ ]
+1        all                     [P]
+2        x86_vendor              [P]
+3        acpi_cpc_valid          [P]
+4        modprobed_driver        [P]
+5        capability_check        [P]
+6        enable                  [P]
+7        init_perf               [P]
+8        support_boost           [P]
+9        clear_status            [ ]
+------------------------------------------
+begin_index = 1 end_index= 8
+
+For exmaple: The test case acpi_cpc_valid is used to check whether the
+_CPC object is exist in SBIOS.
+The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is
+not existed at the detected processor, so it is a necessary condition.
+
+At present, its test cases are very simple, and the corresponding test
+cases will continue to be added later to improve the test coverage.
+
+Thanks,
+Jasmine
+
+Meng Li (3):
+  cpufreq: amd-pstate: Expose struct amd_cpudata
+  cpupower: Introduce a new unit test module for AMD P-State driver
+  Documentation: amd-pstate: Add unit test introduction
+
+ Documentation/admin-guide/pm/amd-pstate.rst   | 221 +++++++
+ drivers/cpufreq/amd-pstate.c                  |  60 +-
+ include/linux/amd-pstate.h                    |  74 +++
+ tools/power/cpupower/debug/kernel/Makefile    |  10 +-
+ .../cpupower/debug/kernel/amd-pstate-ut.c     | 618 ++++++++++++++++++
+ 5 files changed, 923 insertions(+), 60 deletions(-)
+ create mode 100644 include/linux/amd-pstate.h
+ create mode 100644 tools/power/cpupower/debug/kernel/amd-pstate-ut.c
+
+-- 
+2.25.1
+
