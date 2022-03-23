@@ -2,42 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66EFC4E5581
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Mar 2022 16:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD044E55CC
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Mar 2022 16:58:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238108AbiCWPmy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Mar 2022 11:42:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60294 "EHLO
+        id S245298AbiCWQAD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Mar 2022 12:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233403AbiCWPmy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Mar 2022 11:42:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E51B5642D
-        for <linux-pm@vger.kernel.org>; Wed, 23 Mar 2022 08:41:25 -0700 (PDT)
+        with ESMTP id S231529AbiCWQAC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Mar 2022 12:00:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B836F4A3
+        for <linux-pm@vger.kernel.org>; Wed, 23 Mar 2022 08:58:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6869B81F55
-        for <linux-pm@vger.kernel.org>; Wed, 23 Mar 2022 15:41:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 764D5C340F2
-        for <linux-pm@vger.kernel.org>; Wed, 23 Mar 2022 15:41:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 835B06181B
+        for <linux-pm@vger.kernel.org>; Wed, 23 Mar 2022 15:58:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D9807C340F2
+        for <linux-pm@vger.kernel.org>; Wed, 23 Mar 2022 15:58:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648050082;
-        bh=JqUJkYQkKblT0CD6rICHLTHn5LfqraBGDGSEAx4d0r8=;
+        s=k20201202; t=1648051110;
+        bh=8cP17Lu0/zLGt6wHd/FabDWAXhId7dfrExLBZtsZxnM=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=FWFUProwY9jX2x6tZjh5kZXBtWG2P46IGpgRu7cnhS4OTnAMvObsu3yUwMPxAVuk2
-         zZIlzXbknFuO+qGXWm8wwrXmOFCWq1R5T6zIcclPpRYJlkdcI9ZtQ1p2BURF1Bitjh
-         NihskIRgOozIuKDZh5u3Xu5Vv5DokUKCSkrkCzhtKXb9eHhodr+jlkP14Fhbul6Mjm
-         jZaHQYfL+Fu7l/Bjt8M2N6zwazDUq0rG0eaiSQfvG398vFnMmCPcDgGHwZll6W4Vpl
-         LZm7k96/bITTUPCf65Lje3hcGyRfJO+FYjsIIJa/6yWUKq2bRgp9DcW95Fl4HPaDlt
-         lCZSy2B9sxgMQ==
+        b=Mjp100SaXaR55nUHGhpQEpwCn6Z9UaXHfogKCv2FsiP3SzM6fVzVShRfn7zBNPH6F
+         HS0ovqERF/r+51h3aSKdwyZltTtyzXAyVVfkMQnphqr3R8S/GhTdSw6DtaYTvfJeXD
+         Eb4Yk24J9IeQr18jSxf1Hh2mq51IWy8YAkCA6zUYciKLyuVLoW7tWwEJda7jkSy3Pu
+         kmvPPQBLtOIP1ESvjtbGtNPHPxruvZxD2XXsFoEe6tHfw3OEGX/Y5KzplxW+VY3q10
+         MQIdJRaPxoDzRbLub+nBn3U4IqfcGbtbQ4i+2U1An8Ex043nXrNuSXn/Fu6SC2CaRQ
+         D++5Uk7ieMj6g==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 58B9ACAC6E2; Wed, 23 Mar 2022 15:41:22 +0000 (UTC)
+        id BD696C05FD6; Wed, 23 Mar 2022 15:58:30 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-pm@vger.kernel.org
 Subject: [Bug 215729] amd-pstate driver has a much higher idle power
  consumption for a desktop Zen 3 CPU
-Date:   Wed, 23 Mar 2022 15:41:22 +0000
+Date:   Wed, 23 Mar 2022 15:58:30 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -53,7 +53,7 @@ X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215729-137361-q1SfV5pMyN@https.bugzilla.kernel.org/>
+Message-ID: <bug-215729-137361-v3CuNhVnWI@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-215729-137361@https.bugzilla.kernel.org/>
 References: <bug-215729-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -73,41 +73,32 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D215729
 
---- Comment #5 from Artem S. Tashkinov (aros@gmx.com) ---
-Under amd-pstate:
+--- Comment #6 from Artem S. Tashkinov (aros@gmx.com) ---
+After rebooting again with amd-pstate the situation has kinda improved:
 
-# lscpu
+Max CPU frequency in idle is now around 1.2GHz with occasional spikes to
+2.2GHz.
 
-    Frequency boost:     enabled
-    CPU max MHz:         4929.0000
-    CPU min MHz:         550.0000
-    BogoMIPS:            7599.66
+Power consumption is now around 23W - not a big difference with acpi-cpufreq
+but I was under the impression that amd-pstate should be more power efficie=
+nt,
+not less.
 
-(everything else is obviously the same)
+'Minimum' governor is now at around ~20W in idle which matches acpi-cpufreq.
 
-# ./cpupower frequency-info
-analyzing CPU 0:
-  driver: amd-pstate
-  CPUs which run at the same hardware frequency: 0
-  CPUs which need to have their frequency coordinated by software: 0
-  maximum transition latency: 131 us
-  hardware limits: 550 MHz - 4.93 GHz
-  available cpufreq governors: conservative ondemand userspace powersave
-performance schedutil
-  current policy: frequency should be within 550 MHz and 4.93 GHz.
-                  The governor "ondemand" may decide which speed to use
-                  within this range.
-  current CPU frequency: Unable to call hardware
-  current CPU frequency: 903 MHz (asserted by call to kernel)
-  boost state support:
-    Supported: yes
-    Active: yes
-    AMD PSTATE Highest Performance: 166. Maximum Frequency: 4.93 GHz.
-    AMD PSTATE Nominal Performance: 128. Nominal Frequency: 3.80 GHz.
-    AMD PSTATE Lowest Non-linear Performance: 59. Lowest Non-linear Frequen=
-cy:
-1.75 GHz.
-    AMD PSTATE Lowest Performance: 19. Lowest Frequency: 550 MHz.
+----
+
+Here's the most important thing:
+
+The ondemand governor in idle makes the CPU consume around 23.5W
+
+The performance governor in idle makes the CPU consume around 20.5W which is
+near perfect.
+
+So, it looks like the ondemand governor falters with amd-pstate for some
+reasons. Maybe it does more work than necessary, maybe it gets called far t=
+oo
+often, I've no idea.
 
 --=20
 You may reply to this email to add a comment.
