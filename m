@@ -2,141 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9125B4E5AB8
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Mar 2022 22:33:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8575E4E5AC8
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Mar 2022 22:42:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238839AbiCWVfB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Mar 2022 17:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
+        id S234033AbiCWVoN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Mar 2022 17:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243919AbiCWVfA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Mar 2022 17:35:00 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D4C26AFC
-        for <linux-pm@vger.kernel.org>; Wed, 23 Mar 2022 14:33:29 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id v4so2990779pjh.2
-        for <linux-pm@vger.kernel.org>; Wed, 23 Mar 2022 14:33:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:date:message-id:mime-version;
-        bh=2LhMk9zJI14VlAHepOXbNN8GLBArCKtkLBl/JZencgQ=;
-        b=NQREswWAuJqXlrTwtsO9W0l5FL1ZGF9oNGaqoVnzvn7QYtZJLsrRRxLVJyewSPbhLl
-         Vd2dx5/5lPVgOrMzSekExBniLmwbqDIldBU5dJHwI7PJBlw6K7QvKjy7ekckiPZqDaIv
-         edrg9/mJCTjdULdwcA/jj1topOuPK4AEo2TsJ71o0y7R5hZSDSNZ+d/eXkq4geieI4w0
-         ZH386zhFMVuB+L0Q7pb7z28eUC4subqepAamKhN/sVYolu905s2O7+6EEKKj43X+heAO
-         Mevi1ryPZl2KLilEG9+76+huEUmhyXzU6LMB3sUXRtwL8CeIBUr/6mWjbNGP/Taq9aUu
-         M2tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:date:message-id
-         :mime-version;
-        bh=2LhMk9zJI14VlAHepOXbNN8GLBArCKtkLBl/JZencgQ=;
-        b=DSkm8uuDZkhrRDwr4QJXkYk+3mWUtW4wuiGWrUYh+Kktc9WFlDyH47QHKAY9E1k7j3
-         58fbATqJDXyciM3zISbRIieF9y7vjZyoHOsyQHiiHzNcRzwv+X0skmTNkfy7+aD68L2U
-         YEIwdkpuID3KJXk2Yz+Y496PMQj9L13nFjEVkHn+Cj4zSV9rr7my7xbBiZCV0V539TF2
-         CR+JtN0U8E2woNRHZkppn5or3UOTCpEm6L+HgZxdqIe+9zZW62FXLQdkpGdM4tsDV9fw
-         ghECnRQaJeHQto7lC8ZR7Z3P5EbgsmTllqh9m2Lk3rfoVEEZc6Bb/uLgEWRTgMovsI21
-         EH5A==
-X-Gm-Message-State: AOAM5300CZBBe5pInrGsdOGPtuI90iqMpKNYMS6m0m/bB9I2Naq5aJiO
-        CajUHatAc1IXekVGPCCGreHfww==
-X-Google-Smtp-Source: ABdhPJxCPBAivJPBjtl5b1if01CCcldTJ4n2shqfNkjDe8ptep3xT6vuvGG/4TxR2sr99SptDot3Xw==
-X-Received: by 2002:a17:902:a3cb:b0:151:e52e:fa0c with SMTP id q11-20020a170902a3cb00b00151e52efa0cmr2200676plb.70.1648071208748;
-        Wed, 23 Mar 2022 14:33:28 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id w24-20020a639358000000b00385fcbf8e55sm653826pgm.28.2022.03.23.14.33.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 14:33:28 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Eduardo Valentin <eduval@amazon.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        daniel.lezcano@linaro.org
-Cc:     rafael@kernel.org, rui.zhang@intel.com, amitk@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ben.tseng@mediatek.com, mka@chromium.org
-Subject: Re: [PATCH 0/2] thermal: Add support of multiple sensors
-In-Reply-To: <20220225235203.GH10536@uf8f119305bce5e.ant.amazon.com>
-Date:   Wed, 23 Mar 2022 14:33:27 -0700
-Message-ID: <7hlex0s6ag.fsf@baylibre.com>
+        with ESMTP id S239441AbiCWVoN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Mar 2022 17:44:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E6F887A8;
+        Wed, 23 Mar 2022 14:42:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55DE761724;
+        Wed, 23 Mar 2022 21:42:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73316C340ED;
+        Wed, 23 Mar 2022 21:42:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648071761;
+        bh=wsIqftMGY9krai5FhixbqBkvOF7Y3pLzRH+cCNrsi3U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=YKe5rUr1L5vpFH9QGI1XeoTAuxUwJHN711B5bwy9mVBq5JF0D/ml1S0oCMpXUGZOn
+         63bskfwCvJO/ouxsTWeRvRiJ0zJIaGaPFLuNhyFhxGlQxcD+6/9AyuUqNfh1IrnrkR
+         AYJlYw5ioIJ+SZOtB3KCAdAIYdSD4m/ozRA3x/DbUDDT/n4ifnx3FAKoiGpPK6fGbP
+         YOSgzc6LhFjKOdFKf6cK67JX2Zk0LYr/bfCJjMY5EG7riQjroLum9HPeQg/RU6wv7W
+         UbCXrt5PGih66LBpVdL5Ta6jmp1EhYFkXQhRpwE9lepmM4TDLrEeDziwvK0EQnu5sv
+         FqZMvqNUMtftA==
+Date:   Wed, 23 Mar 2022 16:42:39 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Mehta, Sanju" <Sanju.Mehta@amd.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v4] PCI / ACPI: Assume `HotPlugSupportInD3` only if
+ device can wake from D3
+Message-ID: <20220323214239.GA1373960@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BL1PR12MB5157F0111915C81F284762DAE2189@BL1PR12MB5157.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Eduardo, Daniel,
+On Wed, Mar 23, 2022 at 09:26:15PM +0000, Limonciello, Mario wrote:
+> [Public]
+> 
+> > 
+> > On Wed, Mar 23, 2022 at 11:01:05AM -0500, Mario Limonciello wrote:
+> > > On 3/15/22 11:36, Rafael J. Wysocki wrote:
+> > > > On Tue, Mar 15, 2022 at 5:35 PM Rafael J. Wysocki <rafael@kernel.org>
+> > wrote:
+> > > > >
+> > > > > On Tue, Mar 15, 2022 at 4:33 PM Mario Limonciello
+> > > > > <mario.limonciello@amd.com> wrote:
+> > > > > >
+> > > > > > According to the Microsoft spec the _DSD `HotPlugSupportInD3` is
+> > > > > > indicates the ability for a bridge to be able to wakeup from D3:
+> > > > > >
+> > > > > >    This ACPI object [HotPlugSupportInD3] enables the operating system
+> > > > > >    to identify and power manage PCIe Root Ports that are capable of
+> > > > > >    handling hot plug events while in D3 state.
+> > > > > >
+> > > > > > This however is static information in the ACPI table at BIOS compilation
+> > > > > > time and on some platforms it's possible to configure the firmware at
+> > boot
+> > > > > > up such that _S0W returns "0" indicating the inability to wake up the
+> > > > > > device from D3 as explained in the ACPI specification:
+> > > > > >
+> > > > > >    7.3.20 _S0W (S0 Device Wake State)
+> > > > > >
+> > > > > >    This object evaluates to an integer that conveys to OSPM the deepest
+> > > > > >    D-state supported by this device in the S0 system sleeping state
+> > > > > >    where the device can wake itself.
+> > > > > >
+> > > > > > This mismatch may lead to being unable to enumerate devices behind the
+> > > > > > hotplug bridge when a device is plugged in. To remedy these situations
+> > > > > > that `HotPlugSupportInD3` is specified by _S0W returns 0, explicitly
+> > > > > > check that the ACPI companion has returned _S0W greater than or equal
+> > > > > > to 3 and the device has a GPE allowing the device to generate wakeup
+> > > > > > signals handled by the platform in `acpi_pci_bridge_d3`.
+> > > > > >
+> > > > > > Windows 10 and Windows 11 both will prevent the bridge from going in
+> > D3
+> > > > > > when the firmware is configured this way and this changes aligns the
+> > > > > > handling of the situation to be the same.
+> > > > > >
+> > > > > > Link:
+> > https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fuefi.org
+> > %2Fhtmlspecs%2FACPI_Spec_6_4_html%2F07_Power_and_Performance_Mgmt
+> > %2Fdevice-power-management-objects.html%3Fhighlight%3Ds0w%23s0w-s0-
+> > device-wake-
+> > state&amp;data=04%7C01%7Cmario.limonciello%40amd.com%7C1f96c7aa37a
+> > c47640d6208da0d0efd67%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0
+> > %7C637836655281536690%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAw
+> > MDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata
+> > =Cw1OTYiX9BD3gh8eN3Zyz6%2FK8YFgqbn6bgi9%2FjNsnrM%3D&amp;reserved
+> > =0
+> > > > > > Link:
+> > https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fdocs.mi
+> > crosoft.com%2Fen-us%2Fwindows-hardware%2Fdrivers%2Fpci%2Fdsd-for-pcie-
+> > root-ports%23identifying-pcie-root-ports-supporting-hot-plug-in-
+> > d3&amp;data=04%7C01%7Cmario.limonciello%40amd.com%7C1f96c7aa37ac4
+> > 7640d6208da0d0efd67%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%
+> > 7C637836655281536690%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwM
+> > DAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=
+> > UkB5lmz1QBUzWVM6%2BuNzJsleP%2Fi%2BDCJJuSgINiNbymo%3D&amp;reserv
+> > ed=0
+> > > > > > Fixes: 26ad34d510a87 ("PCI / ACPI: Whitelist D3 for more PCIe hotplug
+> > ports")
+> > > > > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> > > > >
+> > > > > No more comments from me:
+> > > > >
+> > > > > Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > >
+> > > > Or please let me know if I should pick it up.
+> > >
+> > > Bjorn,
+> > >
+> > > Friendly reminder on this one.
+> > 
+> > Thanks; we're in the middle of the merge window now, so I'll wait till
+> > that's over unless this is an emergency.
+> 
+> Actually it's a pretty important problem.  We waffled on the nuts and
+> bolts of this commit during the 5.17 RC's, but I didn't think we would
+> make it out to the merge window before it got picked.  I guess I should
+> have spoke up on the urgency earlier.
+> 
+> > IIUC the bug this fixes is that "when a bridge is in D3cold, we don't
+> > notice when a device is hot-added below it," right?  So we need to
+> > avoid putting the bridge in D3cold?
+> 
+> When the ASL has been configured this way (to return 0 for _S0W) the
+> lower level hardware implementation will lead to hotplugged devices
+> not being detected.
+> Without this commit the hardware will expect to be in D0, but the kernel
+> will select D3hot.  So yes; the outcome is that hotplugged PCIe devices
+> don't work.
+> 
+> > Is there a typical scenario where this bites users?  I don't think we
+> > ever saw an actual problem report?
+> 
+> This is the common way that these systems are being shipped.  I have
+> plenty of private reports related to this, but nothing public to link to.
 
-Eduardo Valentin <eduval@amazon.com> writes:
+I still have no clue how many people this affects, what kernel
+versions, etc.  If there are no public reports, it suggests that it
+doesn't affect distro kernels or production machines yet.
 
-> On Fri, Feb 18, 2022 at 09:46:02AM +0100, Alexandre Bailon wrote:
->> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
->> 
->> 
->> 
->> Following this comment [1], this updates thermal_of to support multiple
->> sensors.
->> 
->> This has some limitations:
->> - A sensor must have its own termal zone, even if it is also registered
->>   inside a thermal zone supporting multiple sensors.
->> - Some callbacks (such as of_thermal_set_trips) have been updated to support
->>   multiple sensors but I don't know if this really make sense.
->> - of_thermal_get_trend have not been updated to support multiple sensors.
->>   This would probably make sense to support it but I am not sure how to do it,
->>   especially for the average.
->
-> Great to see this having somewhat a form now!
->
-> Overall the idea is sane and aligned to what I had in mind back during the 2019 Linux plumbers: one thermal zone should have multiple sensor inputs.
-> https://lpc.events/event/4/page/34-accepted-microconferences#PMSummary
->
-> In fact, that is aligned to what I originally wrote in the thermal device tree bindings:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/thermal/thermal-zones.yaml#n79
->
-> The only major concern with your series is the usage of of-thermal to achieve the multiple sensors per thermal zone.
-> While that solves the problem, it has the following limitations:
-> (1) limited to devices described in device tree. everybody else is left out.
-> (2) it keeps extending the code duplication in of-thermal. 
->
-> My suggestion here is have the thermal core aware of the multiple sensors per thermal zone.
->
-> That has the advantage of:
-> (a) cleanup the sensor handling within of-thermal
-> (b) expand the multi sensor per zone to all types of thermal drivers
-> (c) standardize the way to handle the multi sensor.
+Can we at least list some common scenarios?  E.g., it affects kernels
+after commit X, or it affects machines with CPUs newer than Y, or it
+affects a certain kind of tunneling, etc?  Distros need this
+information so they can figure whether and how far to backport things
+like this.
 
-This cleanup all sounds like the right direction to be headed, but since
-this has been planned since 2019 and nothing has happended, what is the
-level of urgency is for this of-thermal -> thermal core cleanup/rework?
-
-In $SUBJECT series, we have a fully functional series that solves an
-existing problem and takes a big step in the right long-term direction.
-While it indeed has the has limitations you mention, I don't think that
-should block the merging of this series.  More importantly, there are
-existing drivers[1] as well as forthcoming ones from MTK that depend on
-this series. Those are blocked if you require the of-thermal -> core
-move first.
-
-As a maintainer also, I fully understand that maintainer bandwith is
-limited, and it's always nice to have contributors do core framework
-development when possible, but IMO, in this case I don't think it should
-be a prerequisite since a follow-up series to do the core work would not
-affect any functionality or bindings etc.  I don't see any reasons not
-do to this incrementally.
-
-So I would kindly request (read: beg, plead & grovel) that you seriously
-consider merging this series as a first phase and the of-thermal -> core
-change be done as a second phase.  Yes, I fully understand that punting
-this to a second phase means it might not get done soon.  But it's been
-waiting for years already, so it seems the urgency is low.  Meanwhile,
-there are OF users that are ready to use this feature today.
-
-Thanks for considering,
-
-Kevin
-
-[1] https://lore.kernel.org/linux-mediatek/20210617114707.10618-1-ben.tseng@mediatek.com/
+> FYI: the earlier version of this was:
+> https://patchwork.kernel.org/project/linux-usb/patch/1646658319-59532-1-git-send-email-Sanju.Mehta@amd.com/
+> This is basically to intentionally pull the device out of D3hot when a
+> tunnel is created.
