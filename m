@@ -2,366 +2,318 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CBB74E5A88
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Mar 2022 22:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 110B14E5AA5
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Mar 2022 22:26:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344867AbiCWVTW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Mar 2022 17:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34380 "EHLO
+        id S1344903AbiCWV1t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Mar 2022 17:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344864AbiCWVTV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Mar 2022 17:19:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC3385644;
-        Wed, 23 Mar 2022 14:17:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EFA6616E0;
-        Wed, 23 Mar 2022 21:17:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9643FC340EE;
-        Wed, 23 Mar 2022 21:17:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648070269;
-        bh=IFzak4etS5b+TZUCLXmkFg0fNbP7CdQrVm5pDLCsKkc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=q+qrQoYwYyK3fIL7uHv5AHHKNdnjT4xIQQst4KM9/AbQXVOUpJXH+gyqhfVk1BUCt
-         4pIDybJYO2LN3HCC86JgXhblINWXYfmOJva1zMcZHh19Sf4CtFJRbq7n29gW0pYfwZ
-         pRscui9wVBZmH3nMu39X9Z3qxjiYrbH65IeGsdVQ7tChj5RszFzbqCaWi8B+oidcng
-         bjOj3iDRkZDQZq3IvodyZ/hVOSZb5fpkPmJImmn+ao0N5DvwHbFpmtjRdBAqYxH9uC
-         mTB65w/fxZi9mlvYO955du+T4TwPlwSJWpspFpIk7GoFc9TEbziBFzqnpi0gwqgjPi
-         fwGg0rIEYL80Q==
-Received: by earth.universe (Postfix, from userid 1000)
-        id 19D353C0CBC; Mon, 21 Mar 2022 19:03:24 +0100 (CET)
-Date:   Mon, 21 Mar 2022 19:03:24 +0100
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [GIT PULL] power-supply changes for 5.18
-Message-ID: <20220321180324.aruy3fhiopzjkr32@earth.universe>
+        with ESMTP id S231886AbiCWV1s (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Mar 2022 17:27:48 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2072.outbound.protection.outlook.com [40.107.236.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD6069498;
+        Wed, 23 Mar 2022 14:26:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eMOedaMgpfxuTkmRhvodDkP7RRt5d7DYQZqRV6ClgutcigHpEcg2bZ7vz2LqCtAGQKwp+0/udN54/PEaC0mR6L+gqUQ9eoTP3rHuO2zvCqNsC6NI0Kulp31x7e3BLbkYyfWsV0a4NWjwaAb9aw/eWMZP81/93BHsiR6WzluxciQDPvQZtuRxzVecKY3apYCKvb7WpprAByCvP4zqKrEhZ0O1nj7ApraIRpjDZ9MjmxIqPFtDV9Enxt5QukoXgFWkbCNdcdwQdokp4BAcHzwdqWimy9A3IOa7JJyqWCfOfrLn1U8DAaReX9XBg/MnHO7qpgavZKxnW518Cd8D2i+4jw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NLv+hzR2fqkT+PEMUZo6Nn+FbU5+phNm79gTlEFUZqo=;
+ b=ZvtFNf8VKwjYEr32HjmE/eVkNjwGy/HtiFxPXvnldc0qRu/10htqmbISd5uPPNHwOhhMRx5qyaD0W2rnjqsOrzKk2PsJBGQPVfapDfQug5CeN4Nt3LlIlRPnZ11CtGx5zhGxSJALBnsnP+kTX0t6za4LUgQhgKa38+X3CsAn4iap6EROJfLGjr3aHHe8Y8XIMRkSi0sS50tI2Ww80uVNcFYbMAstqI4cKtYKxH+YkAQx3i8ZmIBJyCxLRt7EVNioy4P5oWtf0RQpaA+ft2iSjCvBYFu+4DynkqQ3uR0T+MilBzYjF7QGN1BJHxbKQeJ3bpdQenYihJ8KqKUi7ohhFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NLv+hzR2fqkT+PEMUZo6Nn+FbU5+phNm79gTlEFUZqo=;
+ b=nGV8WsgCbDdFpyRW+p8EkpIOyTtotV/DxygN6UWb6IvhO4kny6gffb4rCvF/gxBKUyjUxQbFt/c1rm/a6GjJrQ9X47++qm1O7hx1jtbTlVSZn92XSjsJx97u+V4cjut1btEwqSs3RrW8wXK6a8Gum1xLkKgsqbc5Tk+q6hSFbyc=
+Received: from BL1PR12MB5157.namprd12.prod.outlook.com (2603:10b6:208:308::15)
+ by CH2PR12MB4024.namprd12.prod.outlook.com (2603:10b6:610:2a::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5081.14; Wed, 23 Mar
+ 2022 21:26:16 +0000
+Received: from BL1PR12MB5157.namprd12.prod.outlook.com
+ ([fe80::70d6:f6dd:3e14:3c2d]) by BL1PR12MB5157.namprd12.prod.outlook.com
+ ([fe80::70d6:f6dd:3e14:3c2d%5]) with mapi id 15.20.5102.016; Wed, 23 Mar 2022
+ 21:26:16 +0000
+From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+CC:     Bjorn Helgaas <bhelgaas@google.com>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Mehta, Sanju" <Sanju.Mehta@amd.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: RE: [PATCH v4] PCI / ACPI: Assume `HotPlugSupportInD3` only if device
+ can wake from D3
+Thread-Topic: [PATCH v4] PCI / ACPI: Assume `HotPlugSupportInD3` only if
+ device can wake from D3
+Thread-Index: AQHYOIH4cjkXql1VyUKxzqcCT79LiazApEsAgAAAXoCADIi5gIAAUUqAgAAEXdA=
+Date:   Wed, 23 Mar 2022 21:26:15 +0000
+Message-ID: <BL1PR12MB5157F0111915C81F284762DAE2189@BL1PR12MB5157.namprd12.prod.outlook.com>
+References: <83aee1d8-5700-d2bb-fae5-d952240c6fb8@amd.com>
+ <20220323205201.GA1320371@bhelgaas>
+In-Reply-To: <20220323205201.GA1320371@bhelgaas>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-03-23T21:13:17Z;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=5f51b90a-c5f7-4adc-a1e3-d310ab42dbd5;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-03-23T21:26:14Z
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 81b59954-7f5a-457d-90ab-e4b431246251
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b6c8d6b3-7f88-4c73-2085-08da0d13c37e
+x-ms-traffictypediagnostic: CH2PR12MB4024:EE_
+x-microsoft-antispam-prvs: <CH2PR12MB4024F1D003402546DA8484F6E2189@CH2PR12MB4024.namprd12.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nQGm21aYyzIrEQZeMcNmff458LfKSloymXHS7zo6/uDKNogN0OunuzWD+i2BdH3Nt4bq/QFlKxk/ePJaiSn5i7BvAYJjSywAmgNlgxuG+iccyEJaOTsqrldEGs/cNq8859QrXgDNkOHifI8uhJNAE5bpirjAAMhq2DkrjII0mFPIna9rvRK5+t3hpE9ywWARs5N1VjMrU3dTiu+Xo6t3+fxVrdZ95m7HXUAT7oXm1F0MueHIhmwKOlpGR976fsx1gKHGLT9qYdl6J562xBmtTfR3l8EeHuE+mV9AJdYxlLBnglNPAyFNuYUN5oPMCe4EeFq/QkdIUfL0ZzZGnRvo5SvVY71whvJAMG7Up1skT8+eZMrQm/jumfSZGlqqm2YO7pU4F/YuiFMPC9UTbfUY0KafUnq3OseyBNvz4UfxnLLAgET7d9BsP0Abq7pALXgN3Gis5JMXbpRW+yhemrFVdF9o/XhgiB7azYLvjdyitGzj56WKSUSyM8011HjhFSDozTmCaN+uzURaTFqsoGOZli6+6zkprY7O2PX0MXyeNygITUWa6ge4z0lADj7Q65QIkwexjcxgD4A3W+HyszEUAT6OjJsByfHNktAWFZII4zpCKLM6xjhxz+2N7pJuNjPBzaMS28Yic3XdHYHj+gZTuqUeJm1d9Jj+FiF5WJv7F8AsVqOiSb4twZjQNlHaeTi6Yrsl1NyjPyhcAx67WtR8rZ1Mnl941qzcQ8QJuusnoyoZFbkcsCk+NzIFbrSx7Dh0s8fO5xhMHSZxH5UP4swbzdjKlvzzUiJQHJUqrhTSsNRuhylE/dGY72ZXD0pa9LtfaGZ+05uuYG0VbxDr+6y+tAxiK318mbiEmhbPImzLGQQ=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5157.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(6029001)(4636009)(366004)(83380400001)(966005)(508600001)(53546011)(54906003)(45080400002)(9686003)(66556008)(26005)(8676002)(4326008)(66476007)(76116006)(66446008)(64756008)(66946007)(7696005)(6916009)(186003)(86362001)(55016003)(122000001)(71200400001)(52536014)(38100700002)(8936002)(38070700005)(6506007)(316002)(33656002)(2906002)(5660300002)(81973001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?VN3InF999EV6NJAaXzDJt2MpTgDCs2S5O/HxFcHbHBEYIJlYon6FYQQm0fet?=
+ =?us-ascii?Q?Us+K7MLJjADzTkuKzRYiCXbyQkoZIb9ygIj6/ae5d2jp7r+6WWVY7WU7woMa?=
+ =?us-ascii?Q?HFmwM078RJgHLgxFEIYp97KUbCS8SDATIffLlbCzI+SOWQlpHeuk/R44TlWw?=
+ =?us-ascii?Q?wqgEAkCRTQg9xGKxxeDJIp+qKbxyxUweFiB5M3pXK3aD9c19RI126rGnx6ji?=
+ =?us-ascii?Q?+zb1l3zgn+iaiuW5hWajSOYU/QAayGcyBEsre3AlrmqAQUV3VwCcFajt1Ydl?=
+ =?us-ascii?Q?8pW7IesiftNhlPp8d7NaxSi98p85N+x7i+gV1du0V2WfXt1eySYNOQJH5M0T?=
+ =?us-ascii?Q?xKGkAc++WPFkdUDEN7qRN6lm5XjzoqPRcvW57Jzbgj/1YHrd+B579N6pJUY0?=
+ =?us-ascii?Q?k6Rwh8PoTmTNhSCj352yHoF35V6O/WhRy4ixJKPyU+swCDPClopsiFyLem1S?=
+ =?us-ascii?Q?u7AmzxazIGDTnsttkzcWg97WH5qTjKc7nDeqAAaajGrmJKaiVpWE+0J/L9Ra?=
+ =?us-ascii?Q?SmrKiuWLizsdchkcegjn2OP67WLIPWb81/nqjeOB+iNvrh1u/R06Fsaezthv?=
+ =?us-ascii?Q?y8HuHByVD2ueGWHU8AcbHfdSpbY6rhDHVl1bfiY20kQniSmPK+sDOoB5ZYis?=
+ =?us-ascii?Q?SY5ReOjQcpvnhcIDrC1TNhyWHUI66jwA1yw+twW6mL0HeTCuBCoVPPIXc/mH?=
+ =?us-ascii?Q?aFOzikrZmPzkIvPk9fNgcNAbwjZb/d3hfMzI0B494RPtWuteMOnplDHXhyZR?=
+ =?us-ascii?Q?/pNkCGwDL+P+Z+sFPbNdVG+9Ljzfhw7Gmoye49q06GL/LuT9VDohSr9KJiw5?=
+ =?us-ascii?Q?+8DJVGlMI7DZTAXinGmglC19UN8H3z+htWTb9TMlRmZ2rBa3Bb9im9isMZYK?=
+ =?us-ascii?Q?GzuJOPI2+VPmuwTW2Z+2isbWBlAWt0P4w33+pDv2TNTgOvr4jSA3lnAznrwi?=
+ =?us-ascii?Q?5RtdIfOAK6SPiEEWXh6rcBL452pbklo3J5tfoA3RIfExN+MUFX02AqoceRmP?=
+ =?us-ascii?Q?2QOO4+1MYvbjp9lUKuKw09E4uDIBYX05tUaSZwI825czDKLo/C7bUjOBc0xh?=
+ =?us-ascii?Q?2w3lLfd1Szsz03CqNWJtzsktk4uoxlll01CXfE7dtEamcHmDXZiWRooxEu7V?=
+ =?us-ascii?Q?9PXLa8lL8UhEwtmwy/YmlO1hIgP66bybsyiiGZNDl9IatAASz/V9jql75Arm?=
+ =?us-ascii?Q?NO9Y5KpU12t1UIVgh1MH0qbiIpverCKdizYhrFkncTl6J2Bnta637adGyRBu?=
+ =?us-ascii?Q?2dPjiQ/ImgYHQnWGi85h6W7crawAlBLJ3FFRUfiAspuzFhrRk+8UXjuTXYiI?=
+ =?us-ascii?Q?88hpPnyOR7JGq8SyReOW4I7yIS+PeELOsAmFSWBx4KN8Qg1JXKPWvMKISjJi?=
+ =?us-ascii?Q?0QowwBpLP2xYmIXJ38IPrCLBrSwg3JlHA+M87n+qDPR8wru1dGzQ1p/ulXwZ?=
+ =?us-ascii?Q?10JK1nYsiAk=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="arho6uem3puskgsi"
-Content-Disposition: inline
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5157.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b6c8d6b3-7f88-4c73-2085-08da0d13c37e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Mar 2022 21:26:16.0303
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: uBmFFTZizPvGdw8bd9MYtfuzqPHA76cQJP21HWS5qOdTNKOGcrqMkkiFl+hIUHZx8piuOdX3DkdZi4BDZ2QTrQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4024
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+[Public]
 
---arho6uem3puskgsi
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+>=20
+> On Wed, Mar 23, 2022 at 11:01:05AM -0500, Mario Limonciello wrote:
+> > On 3/15/22 11:36, Rafael J. Wysocki wrote:
+> > > On Tue, Mar 15, 2022 at 5:35 PM Rafael J. Wysocki <rafael@kernel.org>
+> wrote:
+> > > >
+> > > > On Tue, Mar 15, 2022 at 4:33 PM Mario Limonciello
+> > > > <mario.limonciello@amd.com> wrote:
+> > > > >
+> > > > > According to the Microsoft spec the _DSD `HotPlugSupportInD3` is
+> > > > > indicates the ability for a bridge to be able to wakeup from D3:
+> > > > >
+> > > > >    This ACPI object [HotPlugSupportInD3] enables the operating sy=
+stem
+> > > > >    to identify and power manage PCIe Root Ports that are capable =
+of
+> > > > >    handling hot plug events while in D3 state.
+> > > > >
+> > > > > This however is static information in the ACPI table at BIOS comp=
+ilation
+> > > > > time and on some platforms it's possible to configure the firmwar=
+e at
+> boot
+> > > > > up such that _S0W returns "0" indicating the inability to wake up=
+ the
+> > > > > device from D3 as explained in the ACPI specification:
+> > > > >
+> > > > >    7.3.20 _S0W (S0 Device Wake State)
+> > > > >
+> > > > >    This object evaluates to an integer that conveys to OSPM the d=
+eepest
+> > > > >    D-state supported by this device in the S0 system sleeping sta=
+te
+> > > > >    where the device can wake itself.
+> > > > >
+> > > > > This mismatch may lead to being unable to enumerate devices behin=
+d the
+> > > > > hotplug bridge when a device is plugged in. To remedy these situa=
+tions
+> > > > > that `HotPlugSupportInD3` is specified by _S0W returns 0, explici=
+tly
+> > > > > check that the ACPI companion has returned _S0W greater than or e=
+qual
+> > > > > to 3 and the device has a GPE allowing the device to generate wak=
+eup
+> > > > > signals handled by the platform in `acpi_pci_bridge_d3`.
+> > > > >
+> > > > > Windows 10 and Windows 11 both will prevent the bridge from going=
+ in
+> D3
+> > > > > when the firmware is configured this way and this changes aligns =
+the
+> > > > > handling of the situation to be the same.
+> > > > >
+> > > > > Link:
+> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fuefi.=
+org
+> %2Fhtmlspecs%2FACPI_Spec_6_4_html%2F07_Power_and_Performance_Mgmt
+> %2Fdevice-power-management-objects.html%3Fhighlight%3Ds0w%23s0w-s0-
+> device-wake-
+> state&amp;data=3D04%7C01%7Cmario.limonciello%40amd.com%7C1f96c7aa37a
+> c47640d6208da0d0efd67%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0
+> %7C637836655281536690%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAw
+> MDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata
+> =3DCw1OTYiX9BD3gh8eN3Zyz6%2FK8YFgqbn6bgi9%2FjNsnrM%3D&amp;reserved
+> =3D0
+> > > > > Link:
+> https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fdocs.=
+mi
+> crosoft.com%2Fen-us%2Fwindows-hardware%2Fdrivers%2Fpci%2Fdsd-for-pcie-
+> root-ports%23identifying-pcie-root-ports-supporting-hot-plug-in-
+> d3&amp;data=3D04%7C01%7Cmario.limonciello%40amd.com%7C1f96c7aa37ac4
+> 7640d6208da0d0efd67%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%
+> 7C637836655281536690%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwM
+> DAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=3D
+> UkB5lmz1QBUzWVM6%2BuNzJsleP%2Fi%2BDCJJuSgINiNbymo%3D&amp;reserv
+> ed=3D0
+> > > > > Fixes: 26ad34d510a87 ("PCI / ACPI: Whitelist D3 for more PCIe hot=
+plug
+> ports")
+> > > > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> > > >
+> > > > No more comments from me:
+> > > >
+> > > > Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > Or please let me know if I should pick it up.
+> >
+> > Bjorn,
+> >
+> > Friendly reminder on this one.
+>=20
+> Thanks; we're in the middle of the merge window now, so I'll wait till
+> that's over unless this is an emergency.
 
-Hi Linus,
+Actually it's a pretty important problem.  We waffled on the nuts and
+bolts of this commit during the 5.17 RC's, but I didn't think we would
+make it out to the merge window before it got picked.  I guess I should
+have spoke up on the urgency earlier.
 
-This time two merge conflicts have been reported for my tree:
+>=20
+> IIUC the bug this fixes is that "when a bridge is in D3cold, we don't
+> notice when a device is hot-added below it," right?  So we need to
+> avoid putting the bridge in D3cold?
 
-1. conflict between driver-core and power-supply. Solution is
-to ignore the change from Greg as the modified code has been
-deleted in my tree.
+When the ASL has been configured this way (to return 0 for _S0W) the
+lower level hardware implementation will lead to hotplugged devices
+not being detected.
+Without this commit the hardware will expect to be in D0, but the kernel
+will select D3hot.  So yes; the outcome is that hotplugged PCIe devices
+don't work.
 
-2. conflict between extcon and power-supply. That one should
-also be obvious. The patch from extcon does and the patch in
-my tree change different lines, but within the diff scope.
+>=20
+> Is there a typical scenario where this bites users?  I don't think we
+> ever saw an actual problem report?
 
-Otherwise things are business as usual, so please pull :)
+This is the common way that these systems are being shipped.  I have
+plenty of private reports related to this, but nothing public to link to.
 
-Thanks,
+FYI: the earlier version of this was:
+https://patchwork.kernel.org/project/linux-usb/patch/1646658319-59532-1-git=
+-send-email-Sanju.Mehta@amd.com/
+This is basically to intentionally pull the device out of D3hot when a
+tunnel is created.
 
--- Sebastian
-
-The following changes since commit e783362eb54cd99b2cac8b3a9aeac942e6f6ac07:
-
-  Linux 5.17-rc1 (2022-01-23 10:12:53 +0200)
-
-are available in the Git repository at:
-
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-su=
-pply.git tags/for-v5.18
-
-for you to fetch changes up to c22fca40522e2be8af168f3087d87d85e404ea72:
-
-  power: ab8500_chargalg: Use CLOCK_MONOTONIC (2022-03-14 17:24:52 +0100)
-
-----------------------------------------------------------------
-power supply and reset changes for the v5.18 series
-
-power-supply core:
- - Introduce "Bypass" charging type used by USB PPS standard
- - Refactor power_supply_set_input_current_limit_from_supplier()
- - Add fwnode support to power_supply_get_battery_info()
-
-Drivers:
- - ab8500: continue migrating towards using standard core APIs
- - axp288 fuel-gauge: refactor driver to be fully resource managed
- - battery-samsung-sdi: new in-kernel provider for (constant) Samsung batte=
-ry info
- - bq24190: disable boost regulator on shutdown
- - bq24190: add support for battery-info on ACPI based systems
- - bq25890: prepare driver for usage on ACPI based systems
- - bq25890: add boost regulator support
- - cpcap-battery: add NVMEM based battery detection support
- - injoinic ip5xxx: new driver for power bank IC
- - upi ug3105: new battery driver
- - misc. small improvements and fixes
-
-----------------------------------------------------------------
-Andy Shevchenko (1):
-      power: supply: core: Use device_property_string_array_count()
-
-Carl Philipp Klemm (1):
-      power: supply: cpcap-battery: Add battery type auto detection for map=
-phone devices
-
-Changcheng Deng (1):
-      power: supply: ab8500: Remove unneeded variable
-
-Christophe JAILLET (6):
-      power: supply: core: Simplify hwmon memory allocation
-      power: supply: max17042_battery: Use devm_work_autocancel()
-      power: supply: sbs-charger: Don't cancel work that is not initialized
-      power: supply: da9150-fg: Use devm_delayed_work_autocancel()
-      power: supply: max14656: Use devm_work_autocancel()
-      power: supply: max8997_charger: Use devm_work_autocancel()
-
-Colin Ian King (2):
-      power: supply: axp288_fuel_gauge: Fix spelling mistake "resisitor" ->=
- "resistor"
-      power: supply: ab8500: fix a handful of spelling mistakes
-
-Daisuke Nojiri (1):
-      power: supply: PCHG: Use MKBP for device event handling
-
-Evgeny Boger (1):
-      power: supply: axp20x_battery: properly report current when dischargi=
-ng
-
-Gustavo A. R. Silva (1):
-      power: supply: cros_usbpd: Use struct_size() helper in kzalloc()
-
-Hans de Goede (37):
-      power: supply: axp288_fuel_gauge: Add dev helper var to probe()
-      power: supply: axp288_fuel_gauge: Add axp288_fuel_gauge_read_initial_=
-regs()
-      power: supply: axp288_fuel_gauge: Use devm_add_action_or_reset() for =
-iio chan release
-      power: supply: axp288_fuel_gauge: Use devm_power_supply_register()
-      power: supply: axp288_fuel_gauge: Refactor IRQ initialization
-      power: supply: axp288_fuel_gauge: Take lock before updating the valid=
- flag
-      power: supply: axp288_fuel_gauge: Add a no_current_sense_res module_p=
-aram
-      power: supply: core: Refactor power_supply_set_input_current_limit_fr=
-om_supplier()
-      power: supply: bq25890: Add a bq25890_rw_init_data() helper
-      power: supply: bq25890: Add support to skip reset at probe() / remove=
-()
-      power: supply: bq25890: Add support to read back the settings from th=
-e chip
-      power: supply: bq25890: Enable charging on boards where we skip reset
-      power: supply: bq25890: Drop dev->platform_data =3D=3D NULL check
-      power: supply: bq25890: Add bq25890_set_otg_cfg() helper
-      power: supply: bq25890: Add support for registering the Vbus boost co=
-nverter as a regulator
-      power: supply: bq25890: On the bq25892 set the IINLIM based on extern=
-al charger detection
-      power: supply: bq25890: Use the devm_regmap_field_bulk_alloc() helper
-      mfd: intel_soc_pmic_chtwc: Add cht_wc_model data to struct intel_soc_=
-pmic
-      i2c: cht-wc: Make charger i2c-client instantiation board/device-model=
- specific
-      extcon: intel-cht-wc: Use new cht_wc_model intel_soc_pmic field
-      extcon: intel-cht-wc: Support devs with Micro-B / USB-2 only Type-C c=
-onnectors
-      extcon: intel-cht-wc: Refactor cht_wc_extcon_get_charger()
-      extcon: intel-cht-wc: Add support for registering a power_supply clas=
-s-device
-      extcon: intel-cht-wc: Report RID_A for ACA adapters
-      power: supply: core: Use fwnode_property_*() in power_supply_get_batt=
-ery_info()
-      power: supply: core: Add support for generic fwnodes to power_supply_=
-get_battery_info()
-      power: supply: bq24190_charger: Turn off 5V boost regulator on shutdo=
-wn
-      power: supply: bq24190_charger: Always call power_supply_get_battery_=
-info()
-      power: supply: bq24190_charger: Store ichg-max and vreg-max in bq2419=
-0_dev_info
-      power: supply: bq24190_charger: Program charger with fwnode supplied =
-ccc_ireg and cvc_vreg
-      power: supply: bq24190_charger: Disallow ccc_ireg and cvc_vreg to be =
-higher then the fwnode values
-      power: supply: ug3105_battery: Add driver for uPI uG3105 battery moni=
-tor
-      power: supply: axp288-charger: Set Vhold to 4.4V
-      power: supply: axp288_charger: Use acpi_quirk_skip_acpi_ac_and_batter=
-y()
-      power: supply: axp288_fuel_gauge: Use acpi_quirk_skip_acpi_ac_and_bat=
-tery()
-      power: supply: bq24190_charger: Fix bq24190_vbus_is_enabled() wrong f=
-alse return
-      power: supply: bq24190_charger: Delay applying charge_type changes wh=
-en OTG 5V Vbus boost is on
-
-Hong Peng (1):
-      power: supply: ab8500_charger: Fix spelling typo
-
-Jiasheng Jiang (2):
-      power: supply: wm8350-power: Handle error for wm8350_register_irq
-      power: supply: wm8350-power: Add missing free in free_charger_irq
-
-Linus Walleij (20):
-      power: supply: ab8500: Drop BATCTRL thermal mode
-      power: supply: ab8500: Swap max and overvoltage
-      power: supply: ab8500: Integrate thermal zone
-      power: supply: ab8500_fg: Break loop for measurement
-      power: supply: ab8500_fg: Break out load compensated voltage
-      power: supply: ab8500_fg: Safeguard compensated voltage
-      power: supply: ab8500_fg: Drop useless parameter
-      power: supply: ab8500_chargalg: Drop charging step
-      power: supply: ab8500_chargalg: Drop enable/disable sysfs
-      power: supply: ab8500_charger: Restrict ADC retrieveal
-      power: supply: ab8500_charger: Fix VBAT interval check
-      power: supply: ab8500: Standardize maintenance charging
-      power: supply: ab8500: Standardize alert mode charging
-      power: supply: ab8500: Standardize BTI resistance
-      power: supply: Support VBAT-to-Ri lookup tables
-      power: supply: ab8500_fg: Use VBAT-to-Ri if possible
-      power: supply: Static data for Samsung batteries
-      dt-bindings: power: supply: ab8500_fg: Add line impedance
-      power: supply: ab8500_fg: Account for line impedance
-      power: ab8500_chargalg: Use CLOCK_MONOTONIC
-
-Mark Brown (1):
-      power: supply: Use an rbtree rather than flat register cache
-
-Miaoqian Lin (2):
-      power: reset: gemini-poweroff: Fix IRQ check in gemini_poweroff_probe
-      power: supply: ab8500: Fix memory leak in ab8500_fg_sysfs_init
-
-Micha=C5=82 Miros=C5=82aw (2):
-      power: supply: ltc2941: simplify Qlsb calculation
-      power: supply: ltc2941: clean up error messages
-
-Ricardo Rivera-Matos (3):
-      power: supply: Introduces bypass charging property
-      power: supply: bq25980: Implements POWER_SUPPLY_CHARGE_TYPE_BYPASS
-      ABI: testing: sysfs-class-power: Adds "Long Life" entry
-
-Samuel Holland (3):
-      dt-bindings: vendor-prefixes: Add Injoinic
-      dt-bindings: trivial-devices: Add Injoinic power bank ICs
-      power: supply: Add a driver for Injoinic power bank ICs
-
-Sebastian Reichel (1):
-      Merge tag 'psy-extcon-i2c-mfd-for-v5.18-signed' into psy-next
-
-Sergey Shtylyov (1):
-      power: supply: mp2629_charger: use platform_get_irq()
-
-Souptick Joarder (HPE) (1):
-      power: supply: ab8500: Remove unused variable
-
-Uwe Kleine-K=C3=B6nig (1):
-      power: supply: rt9455: Don't pass an error code in remove callback
-
-Yang Li (1):
-      power: supply: da9150-fg: Remove unnecessary print function dev_err()
-
-Yauhen Kharuzhy (3):
-      power: supply: bq25890: Rename IILIM field to IINLIM
-      power: supply: bq25890: Reduce reported CONSTANT_CHARGE_CURRENT_MAX f=
-or low temperatures
-      power: supply: bq25890: Support higher charging voltages through Pump=
- Express+ protocol
-
-Yihao Han (2):
-      power: supply: axp20x_ac_power: fix platform_get_irq.cocci warning
-      power: supply: axp20x_usb_power: fix platform_get_irq.cocci warnings
-
- Documentation/ABI/testing/sysfs-class-power        |   8 +-
- .../power/supply/stericsson,ab8500-fg.yaml         |   5 +
- .../devicetree/bindings/trivial-devices.yaml       |   8 +
- .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
- MAINTAINERS                                        |   5 +
- drivers/extcon/Kconfig                             |   2 +
- drivers/extcon/extcon-intel-cht-wc.c               | 240 +++++-
- drivers/i2c/busses/i2c-cht-wc.c                    | 120 ++-
- drivers/mfd/intel_soc_pmic_chtwc.c                 |  40 +
- drivers/power/reset/gemini-poweroff.c              |   4 +-
- drivers/power/supply/Kconfig                       |  35 +-
- drivers/power/supply/Makefile                      |   3 +
- drivers/power/supply/ab8500-bm.h                   |  79 --
- drivers/power/supply/ab8500_bmdata.c               |  86 +-
- drivers/power/supply/ab8500_btemp.c                | 342 +-------
- drivers/power/supply/ab8500_chargalg.c             | 418 ++--------
- drivers/power/supply/ab8500_charger.c              |  47 +-
- drivers/power/supply/ab8500_fg.c                   | 145 ++--
- drivers/power/supply/axp20x_ac_power.c             |   6 +-
- drivers/power/supply/axp20x_battery.c              |  13 +-
- drivers/power/supply/axp20x_usb_power.c            |   6 +-
- drivers/power/supply/axp288_charger.c              |  21 +-
- drivers/power/supply/axp288_fuel_gauge.c           | 273 +++---
- drivers/power/supply/bq24190_charger.c             | 158 +++-
- drivers/power/supply/bq25890_charger.c             | 396 +++++++--
- drivers/power/supply/bq25980_charger.c             |   2 +-
- drivers/power/supply/cpcap-battery.c               | 118 ++-
- drivers/power/supply/cros_peripheral_charger.c     |  37 +-
- drivers/power/supply/cros_usbpd-charger.c          |   2 +-
- drivers/power/supply/da9150-fg.c                   |  35 +-
- drivers/power/supply/ip5xxx_power.c                | 638 ++++++++++++++
- drivers/power/supply/ltc2941-battery-gauge.c       |  61 +-
- drivers/power/supply/max14656_charger_detector.c   |  15 +-
- drivers/power/supply/max17042_battery.c            |  12 +-
- drivers/power/supply/max8997_charger.c             |  12 +-
- drivers/power/supply/mp2629_charger.c              |   6 +-
- drivers/power/supply/power_supply_core.c           | 294 +++++--
- drivers/power/supply/power_supply_hwmon.c          |  15 +-
- drivers/power/supply/power_supply_sysfs.c          |   1 +
- drivers/power/supply/rt9455_charger.c              |   2 +-
- drivers/power/supply/samsung-sdi-battery.c         | 918 +++++++++++++++++=
-++++
- drivers/power/supply/samsung-sdi-battery.h         |  13 +
- drivers/power/supply/sbs-charger.c                 |  18 +-
- drivers/power/supply/smb347-charger.c              |   3 +-
- drivers/power/supply/ug3105_battery.c              | 486 +++++++++++
- drivers/power/supply/wm8350_power.c                |  97 ++-
- include/linux/mfd/intel_soc_pmic.h                 |   8 +
- include/linux/platform_data/cros_ec_commands.h     |  64 ++
- include/linux/power/bq25890_charger.h              |  15 +
- include/linux/power_supply.h                       | 213 ++++-
- 50 files changed, 4118 insertions(+), 1429 deletions(-)
- create mode 100644 drivers/power/supply/ip5xxx_power.c
- create mode 100644 drivers/power/supply/samsung-sdi-battery.c
- create mode 100644 drivers/power/supply/samsung-sdi-battery.h
- create mode 100644 drivers/power/supply/ug3105_battery.c
- create mode 100644 include/linux/power/bq25890_charger.h
-
---arho6uem3puskgsi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmI4vegACgkQ2O7X88g7
-+przmhAApksmbtMLb002Leqyu9msKgUYoTbQtHacaTNUE5bhck5TZmSYRsRXiZ1A
-L+4Gb6ggO3tknN5SP8UyRKyBf0pH9hdEOWIVUmAFhPXQLOT4/IlS0tiNpOYkonmK
-zvASN6+tWKIrVVfothsziENezoF2p942NyF5VZ8VbymUdRFUuMxuGSvB1sBCNbbJ
-+84aLekX7lln2Jx0y/8b79Qj8TxaaUAG9uVkTGQhEtWLWKgeFNEhmzT4+0+T6wN8
-QyMwKQzBZpRzLcmeIovzDG3DvReLZ5pZiBLWOLz1GpaSs31gJvQ7RKxaccbQLLbw
-3eygefZgvons7XP+BVa2zc/OSBhk9z7j1NrAf4xNgj72tUK86vXTpDMmhfCdXgWY
-uikjWrFcm7Hx0IJMc8okmF7IBxfiJPxD/er3WlHVwUYnnuQsRxcErUwfznnKXIcl
-spiErpTAP6p9WtYqrR/FF28fpQ4EZPI9y6ek8WOjSn58Luul+JwZDbet9WZ8sxeJ
-+BdRs9n75EOpvsrXtSzDlyxoF0loj490EaxyEr5dpicil2vrLZ4LgewPr0hV3Eok
-X2SMsPXqiItJfG5IiF8qNs9p/7VISOVlnBZuVFc4iq7X7c0SIn3AnvSmMvGSwyAD
-+G10um/NZAICPDrSI3+1+zZYKwOMQqbyNJrfJ99ZRo7bkpWLjUk=
-=fq9Y
------END PGP SIGNATURE-----
-
---arho6uem3puskgsi--
+>=20
+> > > > > ---
+> > > > > changes from v3->v4:
+> > > > >   * rework comment
+> > > > >   * only evaluate _S0W if necessary
+> > > > >   * drop static function with only one caller
+> > > > >
+> > > > >   drivers/pci/pci-acpi.c | 17 ++++++++++++++++-
+> > > > >   1 file changed, 16 insertions(+), 1 deletion(-)
+> > > > >
+> > > > > diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+> > > > > index a42dbf448860..e535dab2c888 100644
+> > > > > --- a/drivers/pci/pci-acpi.c
+> > > > > +++ b/drivers/pci/pci-acpi.c
+> > > > > @@ -977,6 +977,7 @@ bool acpi_pci_bridge_d3(struct pci_dev *dev)
+> > > > >          const union acpi_object *obj;
+> > > > >          struct acpi_device *adev;
+> > > > >          struct pci_dev *rpdev;
+> > > > > +       unsigned long long ret;
+> > > > >
+> > > > >          if (acpi_pci_disabled || !dev->is_hotplug_bridge)
+> > > > >                  return false;
+> > > > > @@ -1003,7 +1004,21 @@ bool acpi_pci_bridge_d3(struct pci_dev *de=
+v)
+> > > > >                                     ACPI_TYPE_INTEGER, &obj) < 0)
+> > > > >                  return false;
+> > > > >
+> > > > > -       return obj->integer.value =3D=3D 1;
+> > > > > +       if (!obj->integer.value)
+> > > > > +               return false;
+> > > > > +
+> > > > > +       /*
+> > > > > +        * If 'HotPlugSupportInD3' is set, but wakeup is not actu=
+ally
+> supported,
+> > > > > +        * the former cannot be trusted anyway, so validate it by=
+ verifying
+> the
+> > > > > +        * latter.
+> > > > > +        */
+> > > > > +       if (!adev->wakeup.flags.valid)
+> > > > > +               return false;
+> > > > > +
+> > > > > +       if (ACPI_FAILURE(acpi_evaluate_integer(adev->handle, "_S0=
+W",
+> NULL, &ret)))
+> > > > > +               return false;
+> > > > > +
+> > > > > +       return ret >=3D ACPI_STATE_D3_HOT;
+> > > > >   }
+> > > > >
+> > > > >   int acpi_pci_set_power_state(struct pci_dev *dev, pci_power_t s=
+tate)
+> > > > > --
+> > > > > 2.34.1
+> > > > >
+> >
