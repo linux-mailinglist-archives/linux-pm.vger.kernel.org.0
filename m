@@ -2,237 +2,229 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFFE14E6791
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Mar 2022 18:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADCA74E6884
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Mar 2022 19:17:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241807AbiCXRQa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Mar 2022 13:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40166 "EHLO
+        id S237995AbiCXSTL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Mar 2022 14:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240788AbiCXRQ3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Mar 2022 13:16:29 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2040.outbound.protection.outlook.com [40.107.212.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1FD633B;
-        Thu, 24 Mar 2022 10:14:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bHo/brhxj7W/0mqPxkenLY8Avm1P50HQErzVWAeyQmA9qeCIhvewTBPldtmzilADXbAv4zbNM/FMuKDZ1tRQ9dt77EURCJ+sm/h0dykEAmRNgNKyzK5gNVAUSFZ9CjJ/+RCQBXudeB+D/IhESJQ1R7uwpB6VCmbY/AlcHHKKdAPbSWCS3QkYD5nUirRpKrNTA0VCJKq6cdbhGanR7ioNkzCt+10h6gm2Q1tUvpxzoMtefYuUSIZ+ElCeWwLZrt9dAviFoAZoPBnwcqfS4W33mQ6gc3i/2eBBsvWSbJwapTxISs8LaBh2N01SpnX7lMFtfxSsvcoZnrua4tp7ynOymw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JyueCCPLhddYCPoCcjqrj2U3QPe0wlAtDWXkiX5JgkI=;
- b=d3XHmNQpHVqjjeTgTO+Opwbi2jJ7iZMnQYIK8TWvgOFyZske4r03Dnd7qjwST8IKpbaBOOEWXsEVQwt55AXP724DJ5Gnqvr+UTQw0Xg93IoKQMXSBwVctheldBSm0YDZXUCbndO5rWsgN5tQi0OROcttYlkoTOOF/TqP5ZJyhK+REJ7GFY4lj78UAdB7ZVq2jvoLnnKm/0/XA4XK9cGVlqEwlSqM6736SsqkGNuSEYFs0z0pzzE1/Z0dfAalqmRCbbsWUnLf6DT38kXkgfLGwMDYheSqAyXN5SG00FYxm+vc4GgWPSLEJMRw4y9gzmEA6DY/6cx/2ONRUiQmHew32g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JyueCCPLhddYCPoCcjqrj2U3QPe0wlAtDWXkiX5JgkI=;
- b=A1uzlW8ex/EyKds4q+81dd0chWQCyGQHX0JR2elPONFrUksTXJv34xWpWtPs4GjBGzP/cC6qCzbIVUYiK6bDdYLJ+h9n0PqXMzkMq8wdn9KepjZYexligTem0KWKRNTr9W5PF8ZGeJqGzp63auyGB0i2vib/rMFVp9n/ozz29pg=
-Received: from BL1PR12MB5157.namprd12.prod.outlook.com (2603:10b6:208:308::15)
- by BN8PR12MB3201.namprd12.prod.outlook.com (2603:10b6:408:6c::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.17; Thu, 24 Mar
- 2022 17:14:53 +0000
-Received: from BL1PR12MB5157.namprd12.prod.outlook.com
- ([fe80::70d6:f6dd:3e14:3c2d]) by BL1PR12MB5157.namprd12.prod.outlook.com
- ([fe80::70d6:f6dd:3e14:3c2d%5]) with mapi id 15.20.5102.019; Thu, 24 Mar 2022
- 17:14:53 +0000
-From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-CC:     Bjorn Helgaas <bhelgaas@google.com>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Mehta, Sanju" <Sanju.Mehta@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: RE: [PATCH v4] PCI / ACPI: Assume `HotPlugSupportInD3` only if device
- can wake from D3
-Thread-Topic: [PATCH v4] PCI / ACPI: Assume `HotPlugSupportInD3` only if
- device can wake from D3
-Thread-Index: AQHYOIH4cjkXql1VyUKxzqcCT79LiazApEsAgAAAXoCADIi5gIAAUUqAgAAEXdCAAAnIgIAAAD8ggAE8GACAAAJrUA==
-Date:   Thu, 24 Mar 2022 17:14:53 +0000
-Message-ID: <BL1PR12MB515720B6EE3EC337081FBFDDE2199@BL1PR12MB5157.namprd12.prod.outlook.com>
-References: <BL1PR12MB51575C7E6979A60E2637CC82E2189@BL1PR12MB5157.namprd12.prod.outlook.com>
- <20220324163452.GA1449620@bhelgaas>
-In-Reply-To: <20220324163452.GA1449620@bhelgaas>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-03-24T16:43:33Z;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=faac0088-094b-4ed0-a7c6-2c4f85b91324;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-03-24T17:14:51Z
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 9440d33b-2b2e-40af-b64b-b54e8d9ec693
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 240ff71f-a4c4-417e-15a8-08da0db9d000
-x-ms-traffictypediagnostic: BN8PR12MB3201:EE_
-x-microsoft-antispam-prvs: <BN8PR12MB3201DF36972CDCEDE8347813E2199@BN8PR12MB3201.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Zh9fZAg1nSoQ8qgJenNjGJaWHGhFpD9YJpWkZ1A/+FMFt20VgqpF2G5fk+O6I8eqzbeJG1AigylcgoKnvx1VL9Se+8fDXUAsfhfMq2vUcjfBwqISj48XNuos1umQvX4SfOeNnRxF8JruMNvWFp+n8w6D+HOULAYLlvnS1Bvgb1IApZMspZD9EfviptMoMoJ6G6U0BscEh99+q9R4H/EBEeGhIHKCDPuWQBReSK/Z+07AalVx7fqfLrWStGHAJv6MQGtDYVGFh5mx7FYg6CQgLYSssrs/JJOzvSfBJnno/qyjJMkoiGMykJqCq5aeBdNb7ssExeyiv4d4WhghXebsoC6IIc/ZhV3FPUooshaj4KCpWlt1fNl2Qx0+YAFY6ICiC7Bk694HhMFV+p1dct9JumZseW4ubGv1+eVCzHPfY8cS6JtVyhiQr21h+6wNqnDnadXbP/QvNCM2LMEQtcS89IUm05UsR3M1R+VLJ36ldPn6tYkagf/ZKoq2gH9DqEiHba/pe+uU2vqpi6Ud4d+cpU0vC9j722JenH2F6blYbNywlSOMLL6e7FrmbdaHH9GfEjbtqmVYDEFUUhOewWhqcrDrJa1UbLQspeGMdLDOjlUu3Sb5qHIHBU3ykeU/uHbfQOSz0F+Xuj+gV5akFMLcQ29UjoOYQ6oDrgglUQ15dYWZfDqHjfX+VACupbt75c1E/78ByCnPZS5CuGP4qwTms+K9jbM++MchokwXQpIMH+o=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5157.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(6029001)(4636009)(366004)(7696005)(6506007)(122000001)(9686003)(2906002)(33656002)(186003)(38100700002)(53546011)(55016003)(71200400001)(45080400002)(86362001)(52536014)(8936002)(19627235002)(508600001)(38070700005)(8676002)(4326008)(54906003)(64756008)(66446008)(66476007)(66556008)(5660300002)(6916009)(66946007)(76116006)(316002)(83380400001)(81973001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?v3ZrpUtyuL50FdtIbad9pqfcG82c350Jjn8asJjRaFPU+jMsIK4/hq68BqIK?=
- =?us-ascii?Q?B7MjGmgXXYtFNt4JnZ36LosmEYvUil4Ko3+ZqSIB1OII03G1DEbogN9yOY2+?=
- =?us-ascii?Q?ity0gK7Pvrz+BnP6uf3+WRUZlhkw1lcmlR0CG1MY8h41VCC/CCsIJknFr1Ti?=
- =?us-ascii?Q?czMZPRVNmr8xMfL90v3OG1sswm/OxgL7LZUtOl0ZQu5X5tNpYaU8lAOy9cwL?=
- =?us-ascii?Q?maIDftqO/LRHoUYXoGPsJPPbEgC/6phZzrjzJVrDlN2jmvlbl+Af73nPcC/K?=
- =?us-ascii?Q?8J42S986Uy46sSX6eB1Yodkd8eUtN/M1Uncpd2h9jCUCCU4ebJGGWJbLSZ+F?=
- =?us-ascii?Q?q/g0d+Tg9vHAnNQ+8pcKxSoJB1Y/4C1ITW+DBrgLyYCGWcyLgM1FFnZL5G+k?=
- =?us-ascii?Q?wWkV3s3Z9mT7vydwXZYDzm18QaOowxxMYiH0ZhiwPVd+8T2hLdpls0/DhVfj?=
- =?us-ascii?Q?pxqbup38HYGdABrhEGZxZH6js3iwObImMar+StYdaaAqiRzucYNJ0W6ip2dZ?=
- =?us-ascii?Q?6jVgPAkNR5/nj6X0V7GY6O+2EFp305otnwk45y+jyQbVxDYT2CY4hqn1OP26?=
- =?us-ascii?Q?RgItkzWTKKaDmUfJPkiA5SvDHZHkgq+w39zwbVcZo1UnrkSPd63C1P3npcyI?=
- =?us-ascii?Q?CDfePRdfouzOGVGJdYjFtJquEyj8dVzGYWM39wn7/vuuC133qX986jqduXxy?=
- =?us-ascii?Q?YEXSqFvdIh5/RmdKeKThk7ln06eVpBSn1rpsQ2gDTa1zX71sT+TyGqiHcN14?=
- =?us-ascii?Q?QJ7ZdmJCR2y03qHtVaoAVo/dcB8BAmD+bD3EsbLu7SaexPG8psmuyaOnR/MZ?=
- =?us-ascii?Q?xEnET2brQBDL+Agu16uXtKe96YNK88aLQe8GWukQG1chEItTtF20Swhw2Z9F?=
- =?us-ascii?Q?I6927fQY9j9t6MIWnD7ccIFCPTypw9J3fDNmpEXx2sgEXus2qmhU1GxZtYKI?=
- =?us-ascii?Q?drPMAKB8GK9qKovaktJdkGLXLyvLgf3yvBib83De690XHYlA6ECb8Z9em57s?=
- =?us-ascii?Q?gW5tKVLuhQ86+JTNiJRdcJUmNGfbbRHKpfvvc0cyruzDDYnQ1VNzZeaOLXWp?=
- =?us-ascii?Q?+AiWUCMX5gTFnuqno2L4mlHfWOdZYnBNVq+nj+GOoxqjA/FLeknJVEHSSt+9?=
- =?us-ascii?Q?nR+szKA3uisMVkryhOYTch3DfrcAaPdyy6lyH8v2tg+jMVKB913tbo+N4Gu1?=
- =?us-ascii?Q?Z+fUr5zlo2sIIOCjeZXMeD0dWe30tfeRGShV7UPFQxMt2ZhFU2Vy+T/Ih4eA?=
- =?us-ascii?Q?5irCHEf3mof2OB1FkSnwrEHehEaEo4dvMJmUwYrjJC7Gz0HxNxtBGRmjappB?=
- =?us-ascii?Q?a2BxX5A8u1R8d0002uVm+XVbvgVRiLPS36HrU4TWyM6Ox8VvLrvDVn8xXLn6?=
- =?us-ascii?Q?zUG1N8vYqZ7H+x/X70DiS2WAe80AMr2tbXtRY0/3jochb53mK955IJqljUSg?=
- =?us-ascii?Q?rdrtsEB8oeH5LJPdw6mfsumXnkILUaXZSSOkmdI4VV5jY0NlpE2MRJSmiiZs?=
- =?us-ascii?Q?P8UrT/r5YI9cxW77iSDRprSyn0Lkaf7/2qWLFt2pFununiqn0pFI/Gw8Oq39?=
- =?us-ascii?Q?WILJlL8cCS6+jdLKb9ETMt84toNO7Xno16s4mb2cUUy8ibd7AiW/vq0YxDgs?=
- =?us-ascii?Q?axu9DXStDiP3vjvedHDpaQQjxqxLW2ibvtSAXdYXbKpUROo94iUs8BnvXzll?=
- =?us-ascii?Q?y5WUz5+k2vhXEitNG1Akt+lz2uF2wh4iqEn7ELxTSIpmha2/arOnQ79A0JJB?=
- =?us-ascii?Q?LEHbgQ/Oq7u6YcuRmg/3LTIQv6uvJef3KyB6M3jHbJ0hMCnIqoWx?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S1352249AbiCXSTJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Mar 2022 14:19:09 -0400
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BFCB7176;
+        Thu, 24 Mar 2022 11:17:36 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2e6ceb45174so20094837b3.8;
+        Thu, 24 Mar 2022 11:17:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4xfMIwGR0jxuAgp/8KZatF+Imb8NkFkv6/D9HuOyjQA=;
+        b=plIXAR2bfHTGsiGO7IcyriE2sc1f3oQc2bvFxxAW3WSXIDNvCoOVnLC7PalraA4ZN/
+         VIMB9gg/kg+kJ75Od95EzOR0TEvKhi7wQMlTrVD6lGjzEq2+IBxnjnWWxdGrEYFp9BFE
+         AaNRzYe2H4nupCi+BbfmjrmjlAaLx8pgZ/5DlF7Ds7cWT4sgPydjje4B6AP762qfAARl
+         39eTwRF2Wz4nexbLstEoZGUBUkffdB98fGFJXwEDzWh6JpPh60zFahwqtNce709J9LKv
+         ifnuefv5SCMIfx437Xuy2/RKpLWzlW8LBoDraw7/iDo7+ya/1oN4CM6Adgv7Iaf5pm+d
+         cyFA==
+X-Gm-Message-State: AOAM531impXMliW9zyvNF2qJUs5YjhoEST9YSxwpzfb6m6iSHX+Z4sHE
+        5w6/OJKGprxDpSI6ZUwGut3ksY2WP5sBNiG587g=
+X-Google-Smtp-Source: ABdhPJxZVOfiY8yYounnuJpUi5kPJGXX1P8bo1E5m+mb1tjWzN+7f0n8KWcARdqrO9G+qe+Ipg6FEvGLwgU9p7SzlcQ=
+X-Received: by 2002:a81:36cf:0:b0:2e5:2597:a026 with SMTP id
+ d198-20020a8136cf000000b002e52597a026mr6187255ywa.301.1648145855764; Thu, 24
+ Mar 2022 11:17:35 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5157.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 240ff71f-a4c4-417e-15a8-08da0db9d000
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Mar 2022 17:14:53.4874
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Oo3hw2i3sjUinAdG8W3zmaVYOHR379V87/f5YgzNRCUPe28QMKF/zsNiWYtZ9ViyCoEDTaOxZB7F5fUTdY7ggA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3201
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
+ <CAAYoRsW4LqNvSZ3Et5fqeFcHQ9j9-0u9Y-LN9DmpCS3wG3+NWg@mail.gmail.com>
+ <20220228041228.GH4548@shbuild999.sh.intel.com> <11956019.O9o76ZdvQC@kreacher>
+ <20220301055255.GI4548@shbuild999.sh.intel.com> <CAJZ5v0jWUR__zn0=SDDecFct86z-=Y6v5fi37mMyW+zOBi7oWw@mail.gmail.com>
+ <CAAYoRsVLOcww0z4mp9TtGCKdrgeEiL_=FgrUO=rwkZAok4sQdg@mail.gmail.com>
+ <CAJZ5v0hK4zoOtgNQNFkJHC0XOiGsPGUPphHU5og44e_K4kGU9g@mail.gmail.com>
+ <CAAYoRsWN-h+fBAoocGmUFHDkOv2PL+6U59_ASBYH74j0orHaCQ@mail.gmail.com>
+ <CAJZ5v0iOOmRY3uC1-ZGQ30VysMuAjGum=Lt4tkqNUjop+ikqZw@mail.gmail.com>
+ <CAAYoRsVs_CB-dBGShksmXATRP3oGnD6uU-xQdSPjkRER+j6fTQ@mail.gmail.com>
+ <CAAYoRsVnPa-aiKCju7Nz+cznyOo2sbioFks+gU7W7dqWyO8JJw@mail.gmail.com>
+ <CAAYoRsU=SjE2zpQPjxrE6aDzEk6+AZy9DUAJ4Vv2qimbiJ2ySQ@mail.gmail.com>
+ <CAJZ5v0hTOD8Y-ft0jo8KO+RW33ow7_Lm+6gAWA0BpM7o-u4vyQ@mail.gmail.com>
+ <CAAYoRsU-e70mDpKrO_dqdPJTRrPMD8cKmFnyHVoXGEVTFotvUQ@mail.gmail.com> <CAAYoRsXm1giy5yeQcAJmDnwFOQ+U-vYXaiTb-xTm2Ur2hLPxQA@mail.gmail.com>
+In-Reply-To: <CAAYoRsXm1giy5yeQcAJmDnwFOQ+U-vYXaiTb-xTm2Ur2hLPxQA@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 24 Mar 2022 19:17:24 +0100
+Message-ID: <CAJZ5v0is=Jvr12XYT9BmdJJmUWjuD8iq2T4Udem4FC3vV-nobQ@mail.gmail.com>
+Subject: Re: CPU excessively long times between frequency scaling driver calls
+ - bisected
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Feng Tang <feng.tang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[Public]
+Hi Doug,
 
-> -----Original Message-----
-> From: Bjorn Helgaas <helgaas@kernel.org>
-> Sent: Thursday, March 24, 2022 11:35
-> To: Limonciello, Mario <Mario.Limonciello@amd.com>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>; open list:PCI SUBSYSTEM <linux-
-> pci@vger.kernel.org>; Linux PM <linux-pm@vger.kernel.org>; Mehta, Sanju
-> <Sanju.Mehta@amd.com>; Rafael J. Wysocki <rafael@kernel.org>; Mika
-> Westerberg <mika.westerberg@linux.intel.com>
-> Subject: Re: [PATCH v4] PCI / ACPI: Assume `HotPlugSupportInD3` only if
-> device can wake from D3
->=20
-> [+cc Mika, "HotPlugSupportInD3" scope question below]
+On Thu, Mar 24, 2022 at 3:04 PM Doug Smythies <dsmythies@telus.net> wrote:
+>
+> Hi Rafael,
+>
+> Do you have any suggestions for the proposed patch?
 
-FYI - Mika had approved some earlier versions of this, so I expect conceptu=
-al
-Alignment at least with the latest one.
+Not really.
 
-<snip>
+It looks like the avoidance to stop the scheduler tick is sufficient
+to bump up the PELT signal for this workload in such a way that it
+doesn't fall below a certain level at all which in turn causes
+schedutil to ask for higher frequencies.
 
-> > > Can we at least list some common scenarios?  E.g., it affects
-> > > kernels after commit X, or it affects machines with CPUs newer
-> > > than Y, or it affects a certain kind of tunneling, etc?  Distros
-> > > need this information so they can figure whether and how far to
-> > > backport things like this.
+An alternative approach appears to be necessary, but I need some more
+time for that.
+
+> I have tried to figure out what is wrong but haven't been able to.
+>
+> ... Doug
+>
+> On Thu, Mar 17, 2022 at 6:58 AM Doug Smythies <dsmythies@telus.net> wrote:
 > >
-> > It's going to affect any retail machine with the SOC we refer to in
-> > the kernel as "Yellow Carp".  This is one of the first non-Intel
-> > USB4 hosts and will be using the USB4 SW CM in the kernel.
+> > On Thu, Mar 17, 2022 at 5:30 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > On Wed, Mar 16, 2022 at 4:55 PM Doug Smythies <dsmythies@telus.net> wrote:
+> > > >
+> > > > Readers: So that graphs and large attachments could be used, I have
+> > > > been on an off-list branch of this thread with Srinivas, and copied a
+> > > > couple of others. While now returning to this on-list thread, I'll
+> > > > only take up Rafael's proposed patch.
+> > > >
+> > > > Hi Rafael,
+> > > >
+> > > > So far all work has been done with: HWP disabled; intel_pstate; powersave.
+> > > > The reason was that it is, by far, the best way to obtain good trace data
+> > > > using the intel_pstate_tracer.py utility.
+> > > >
+> > > > I always intended to try/test: HWP disabled; intel_cpufreq; schedutil.
+> > > > There is an issue with the proposed patch and schedutil.
+> > > >
+> > > > If any CPU ever requests a pstate > the max non turbo pstate
+> > > > then it will stay at that request forever. Ultimately the idle
+> > > > power goes to about 5.7 watts (verses 1.4 watts expected).
+> > > > IRQs go very high, as the tick never turns off.
+> > > > Actually, one knows how many CPUs are stuck requesting a high
+> > > > pstate just by looking at IRQs.
+> > >
+> > > That may be because INTEL_CPUFREQ_TRANSITION_DELAY is too small.
+> > >
+> > > Please try to increase
+> > > /sys/devices/system/cpu/cpufreq/schedutil/rate_limit_us to 10000 and
+> > > see what difference this makes.
 > >
-> > Without this change, effectively PCIe tunneling will not work when
-> > any downstream PCIe device is hotplugged.  In the right
-> > circumstances it might work if it's coldbooted (if the paths
-> > selected by the pre-boot firmware connection manager are identical
-> > to that selected by SW CM).
->=20
-> Thanks a lot for this context!  As far as I can tell from grubbing
-> through the git history, there are no PCI, USB4, or Thunderbolt
-> changes related to Yellow Carp, so I assume this has to do with Yellow
-> Carp firmware doing things differently than previous platforms.
-
-There have been a variety of Thunderbolt/USB4 changes as a result of
-Yellow Carp development and findings, but they have not been quirks;
-they have been done as generic changes that still make sense for all
-USB4 devices.
-
-Sanju (on CC) has submitted a majority of these, so if you want to see
-a sense of what these are you can look for his commits in drivers/thunderbo=
-lt.
-
->=20
-> Previously, if a Root Port implemented the HotPlugSupportInD3
-> property, we assumed that the Root Port and any downstream bridges
-> could handle hot-plug events while in D3hot.
->=20
-> I guess the difference here is that on Yellow Carp firmware, even if
-> there is a HotPlugSupportInD3 property on the Root Port, the Root Port
-> cannot handle hot-plug events in D3hot UNLESS there is also an _S0W
-> method AND that _S0W says the Root Port can wakeup from D3hot or
-> D3cold, right?
-
-Yes, correct!
-
->=20
-> I have some heartburn about this that's only partly related to this
-> patch.  The Microsoft doc clearly says "HotPlugSupportInD3" must be
-> implemented on Root Ports and its presence tells us that the *Root
-> Port* can handle hot-plug events while in D3.
->=20
-> But acpi_pci_bridge_d3() looks up the Root Port at the top of the
-> hierarchy and assume that its "HotPlugSupportInD3" applies to any
-> switch ports that may be below that Root Port (added by 26ad34d510a8
-> ("PCI / ACPI: Whitelist D3 for more PCIe hotplug ports") [1]).
->=20
-> That seems wrong to me.  How can the platform firmware know how
-> downstream switches behave?
-
-Mika might be able to better answer this than me.
-
->=20
-> I have the same question about this patch because it looks for _S0W on
-> the Root Port, even if acpi_pci_bridge_d3() was called for some switch
-> port below the root.
->=20
-> > Yellow carp isn't supported in the kernel until 5.14, so should this
-> > be backported it shouldn't need to go any further than 5.14.
-> > (Realistically though no distro should be on 5.14, they should have
-> > gone to the 5.15 LTS).
->=20
-> The question of moving from v5.14 to v5.15 is outside the scope of
-> this patch.  I think we just have to mention Yellow Carp and the way
-> its firmware differs from previous practice, and distros can make
-> their own decisions.
->=20
-
-OK.
+> > Changing rate_limit_us to 10000, or even 20000, makes no difference.
+> >
+> > see a slight clarification to yesterday's email in-line below.
+> >
+> > > > Trace is useless because it virtually never gets called.
+> > > > So I have been reading the IA32_PERF_CTL MSR
+> > > > directly.
+> > > >
+> > > > Example:
+> > > >
+> > > > Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
+> > > > 6 cores, 12 CPUs
+> > > > min pstate 8
+> > > > max non-turbo pstate 41
+> > > > max turbo pstate 48
+> > > > The system is idle.
+> > > >
+> > > > doug@s19:~$ sudo
+> > > > /home/doug/kernel/linux/tools/power/x86/turbostat/turbostat --Summary
+> > > > --quiet --show Busy%,Bzy_MHz,IRQ,PkgWatt --interval 10
+> > > > Busy%   Bzy_MHz IRQ     PkgWatt
+> > > > 0.11    800     844     1.33
+> > > > 0.01    800     231     1.33
+> > > > 0.11    800     723     1.33 <<< Powersave governor
+> > > > 0.03    889     440     1.33
+> > > > 0.17    4418    21511   4.31 <<< Schedutil governor
+> > > > 0.12    4101    30153   4.48 <<< 3 CPUs are > pstate 41
+> > > > 0.22    4347    34226   4.75
+> > > > 0.17    4101    43554   4.78
+> > > > 0.29    4300    50565   4.94
+> > > > 0.21    4098    50297   4.76 <<< 5 CPUs are > pstate 41
+> > > > 0.29    4298    50532   4.84
+> > > > 0.20    4101    50126   4.63
+> > > > 0.20    4101    50149   4.62
+> > > > 0.29    4297    50623   4.76
+> > > > 0.20    4101    50203   4.72
+> > > > 0.29    4295    50642   4.78
+> > > > 0.20    4101    50223   4.68
+> > > > 0.29    4292    50597   4.88
+> > > > 0.20    4101    50208   4.73
+> > > > 0.29    4296    50519   4.84
+> > > > 0.20    4101    50167   4.80
+> > > > 0.20    4101    50242   4.76
+> > > > 0.29    4302    50625   4.94
+> > > > 0.20    4101    50233   4.73
+> > > > 0.29    4296    50613   4.78
+> > > > 0.20    4101    50231   4.70
+> > > > 0.29    4292    50802   4.93
+> > > > 1.46    4669    65610   8.36
+> > > > 0.41    4225    80701   5.48
+> > > > 0.33    4101    80219   5.36 <<< 8 CPUs are > ptstate 41
+> > > > 0.34    4098    80313   5.38
+> > > > 0.41    4228    80689   5.56
+> > > > 0.33    4101    80252   5.46
+> > > >
+> > > > And the related MSR reads:
+> > > >
+> > > > 3 CPUs are > pstate 41:
+> > > > root@s19:/home/doug# c/msr-decoder | grep IA32_PERF_CTL
+> > > > 9.) 0x199: IA32_PERF_CTL        : CPU 0-11 :  30 :   8 :   8 :  48 :
+> > > > 48 :  48 :   8 :  30 :  31 :   8 :   8 :   8 :
+> > > >
+> > > > 5 CPUs are > psate 41:
+> > > > root@s19:/home/doug# c/msr-decoder | grep IA32_PERF_CTL
+> > > > 9.) 0x199: IA32_PERF_CTL        : CPU 0-11 :  44 :  30 :  31 :  48 :
+> > > > 48 :  48 :   8 :   8 :   8 :   8 :  48 :   8 :
+> > > >
+> > > > 8 CPUs are > pstate 41:
+> > > > root@s19:/home/doug# c/msr-decoder | grep IA32_PERF_CTL
+> > > > 9.) 0x199: IA32_PERF_CTL        : CPU 0-11 :  45 :  48 :  48 :  48 :
+> > > > 48 :  48 :   8 :  30 :   8 :   8 :  48 :  42 :
+> > > >
+> > > > This issue is independent of the original patch or the suggested modification:
+> >
+> > Actually, the issue threshold is as defined by the greater than condition below.
+> >
+> > > >
+> > > > > diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> > > > > index f878a4545eee..94018ac0b59b 100644
+> > > > > --- a/drivers/cpufreq/intel_pstate.c
+> > > > > +++ b/drivers/cpufreq/intel_pstate.c
+> > > > > @@ -1980,7 +1980,7 @@ static void intel_pstate_update_perf_ctl(struct
+> > > > > cpudata *cpu)
+> > > > >          * P-states to prevent them from getting back to the high frequency
+> > > > >          * right away after getting out of deep idle.
+> > > > >          */
+> > > > > -       cpuidle_update_retain_tick(pstate > cpu->pstate.max_pstate);
+> >
+> > For the above kernel the threshold is pstate 42.
+> >
+> > > > > +       cpuidle_update_retain_tick(pstate > ((cpu->pstate.max_pstate +
+> > > > > cpu->pstate.min_pstate)/2));
+> >
+> > For the above kernel the threshold is pstate 25.
+> >
+> > > > >         wrmsrl(MSR_IA32_PERF_CTL, pstate_funcs.get_val(cpu, pstate));
+> > > > >  }
+> > > >
+> > > > ... Doug
