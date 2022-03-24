@@ -2,68 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADCA74E6884
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Mar 2022 19:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 029324E68B3
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Mar 2022 19:32:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237995AbiCXSTL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Mar 2022 14:19:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34086 "EHLO
+        id S1352648AbiCXSdl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Mar 2022 14:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352249AbiCXSTJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Mar 2022 14:19:09 -0400
+        with ESMTP id S1347538AbiCXSdk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Mar 2022 14:33:40 -0400
 Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BFCB7176;
-        Thu, 24 Mar 2022 11:17:36 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2e6ceb45174so20094837b3.8;
-        Thu, 24 Mar 2022 11:17:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36604B0D34;
+        Thu, 24 Mar 2022 11:32:08 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2e5827a76f4so60245597b3.6;
+        Thu, 24 Mar 2022 11:32:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4xfMIwGR0jxuAgp/8KZatF+Imb8NkFkv6/D9HuOyjQA=;
-        b=plIXAR2bfHTGsiGO7IcyriE2sc1f3oQc2bvFxxAW3WSXIDNvCoOVnLC7PalraA4ZN/
-         VIMB9gg/kg+kJ75Od95EzOR0TEvKhi7wQMlTrVD6lGjzEq2+IBxnjnWWxdGrEYFp9BFE
-         AaNRzYe2H4nupCi+BbfmjrmjlAaLx8pgZ/5DlF7Ds7cWT4sgPydjje4B6AP762qfAARl
-         39eTwRF2Wz4nexbLstEoZGUBUkffdB98fGFJXwEDzWh6JpPh60zFahwqtNce709J9LKv
-         ifnuefv5SCMIfx437Xuy2/RKpLWzlW8LBoDraw7/iDo7+ya/1oN4CM6Adgv7Iaf5pm+d
-         cyFA==
-X-Gm-Message-State: AOAM531impXMliW9zyvNF2qJUs5YjhoEST9YSxwpzfb6m6iSHX+Z4sHE
-        5w6/OJKGprxDpSI6ZUwGut3ksY2WP5sBNiG587g=
-X-Google-Smtp-Source: ABdhPJxZVOfiY8yYounnuJpUi5kPJGXX1P8bo1E5m+mb1tjWzN+7f0n8KWcARdqrO9G+qe+Ipg6FEvGLwgU9p7SzlcQ=
-X-Received: by 2002:a81:36cf:0:b0:2e5:2597:a026 with SMTP id
- d198-20020a8136cf000000b002e52597a026mr6187255ywa.301.1648145855764; Thu, 24
- Mar 2022 11:17:35 -0700 (PDT)
+        bh=jQqbs6kTpfRwGjko3DN/P6DCOtM/TIsNyfTND6KAXY8=;
+        b=e7de5krULehcRREK1TVoqfPZuMLIycKAKGrjTWxo/vKBsDOxC5xVhAVeZG/uze0nFA
+         bjk9W1DXx5st9JJ7VMZ7cbBL3n54kFQNP0BVk76UpN0c2l3ucsQV+D2nlfCBP4qajxBP
+         cpa+et7NQgUpIN6Pnx77g2FBrzBLIBI1KGfBAaL7OrR9taz7qQLPc1Q6FbclnB0UXMS5
+         OlGu8q6EDaCRq+DJOR9zt3Ef3IQewG4ZTl1O0w0s16VzxwfECOmhdnLMIhQhLtGxb2wJ
+         BrpVykFeKxC5BYXyErQYBy6ccnrq98FUOFFMHYZfOtbDT9WWGqrIYzpBNtdT2jwTU9+P
+         2a6w==
+X-Gm-Message-State: AOAM532ymLSy1uZ0namjvSnaBER0PUnZV9BHnbLvwNF7Bo75j4XniUj5
+        qyN67H/0kyOPEDBqw7wj9FQBXSPU6GCB3qhm1TQT4zvkqfs=
+X-Google-Smtp-Source: ABdhPJxdvY/5aM1TrmIrMzyvhYCyyNiqbpo3hJNCceCWmO8Uea2zzPLg8DAetcVVZ7GP0VikXvprr/AI7FeWcGH8+5w=
+X-Received: by 2002:a81:bc5:0:b0:2e6:dcfe:bfcb with SMTP id
+ 188-20020a810bc5000000b002e6dcfebfcbmr897492ywl.19.1648146727448; Thu, 24 Mar
+ 2022 11:32:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAAYoRsXkyWf0vmEE2HvjF6pzCC4utxTF=7AFx1PJv4Evh=C+Ow@mail.gmail.com>
- <CAAYoRsW4LqNvSZ3Et5fqeFcHQ9j9-0u9Y-LN9DmpCS3wG3+NWg@mail.gmail.com>
- <20220228041228.GH4548@shbuild999.sh.intel.com> <11956019.O9o76ZdvQC@kreacher>
- <20220301055255.GI4548@shbuild999.sh.intel.com> <CAJZ5v0jWUR__zn0=SDDecFct86z-=Y6v5fi37mMyW+zOBi7oWw@mail.gmail.com>
- <CAAYoRsVLOcww0z4mp9TtGCKdrgeEiL_=FgrUO=rwkZAok4sQdg@mail.gmail.com>
- <CAJZ5v0hK4zoOtgNQNFkJHC0XOiGsPGUPphHU5og44e_K4kGU9g@mail.gmail.com>
- <CAAYoRsWN-h+fBAoocGmUFHDkOv2PL+6U59_ASBYH74j0orHaCQ@mail.gmail.com>
- <CAJZ5v0iOOmRY3uC1-ZGQ30VysMuAjGum=Lt4tkqNUjop+ikqZw@mail.gmail.com>
- <CAAYoRsVs_CB-dBGShksmXATRP3oGnD6uU-xQdSPjkRER+j6fTQ@mail.gmail.com>
- <CAAYoRsVnPa-aiKCju7Nz+cznyOo2sbioFks+gU7W7dqWyO8JJw@mail.gmail.com>
- <CAAYoRsU=SjE2zpQPjxrE6aDzEk6+AZy9DUAJ4Vv2qimbiJ2ySQ@mail.gmail.com>
- <CAJZ5v0hTOD8Y-ft0jo8KO+RW33ow7_Lm+6gAWA0BpM7o-u4vyQ@mail.gmail.com>
- <CAAYoRsU-e70mDpKrO_dqdPJTRrPMD8cKmFnyHVoXGEVTFotvUQ@mail.gmail.com> <CAAYoRsXm1giy5yeQcAJmDnwFOQ+U-vYXaiTb-xTm2Ur2hLPxQA@mail.gmail.com>
-In-Reply-To: <CAAYoRsXm1giy5yeQcAJmDnwFOQ+U-vYXaiTb-xTm2Ur2hLPxQA@mail.gmail.com>
+References: <BL1PR12MB51575C7E6979A60E2637CC82E2189@BL1PR12MB5157.namprd12.prod.outlook.com>
+ <20220324163452.GA1449620@bhelgaas> <BL1PR12MB515720B6EE3EC337081FBFDDE2199@BL1PR12MB5157.namprd12.prod.outlook.com>
+In-Reply-To: <BL1PR12MB515720B6EE3EC337081FBFDDE2199@BL1PR12MB5157.namprd12.prod.outlook.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 24 Mar 2022 19:17:24 +0100
-Message-ID: <CAJZ5v0is=Jvr12XYT9BmdJJmUWjuD8iq2T4Udem4FC3vV-nobQ@mail.gmail.com>
-Subject: Re: CPU excessively long times between frequency scaling driver calls
- - bisected
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Feng Tang <feng.tang@intel.com>
+Date:   Thu, 24 Mar 2022 19:31:56 +0100
+Message-ID: <CAJZ5v0hVFkKXTJcrFqRR4FoK5v_k3zCacKPmurWm=sozt7GPiQ@mail.gmail.com>
+Subject: Re: [PATCH v4] PCI / ACPI: Assume `HotPlugSupportInD3` only if device
+ can wake from D3
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Mehta, Sanju" <Sanju.Mehta@amd.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -75,156 +61,94 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Doug,
-
-On Thu, Mar 24, 2022 at 3:04 PM Doug Smythies <dsmythies@telus.net> wrote:
+On Thu, Mar 24, 2022 at 6:15 PM Limonciello, Mario
+<Mario.Limonciello@amd.com> wrote:
 >
-> Hi Rafael,
+> [Public]
 >
-> Do you have any suggestions for the proposed patch?
+> > -----Original Message-----
+> > From: Bjorn Helgaas <helgaas@kernel.org>
+> > Sent: Thursday, March 24, 2022 11:35
+> > To: Limonciello, Mario <Mario.Limonciello@amd.com>
+> > Cc: Bjorn Helgaas <bhelgaas@google.com>; open list:PCI SUBSYSTEM <linux-
+> > pci@vger.kernel.org>; Linux PM <linux-pm@vger.kernel.org>; Mehta, Sanju
+> > <Sanju.Mehta@amd.com>; Rafael J. Wysocki <rafael@kernel.org>; Mika
+> > Westerberg <mika.westerberg@linux.intel.com>
+> > Subject: Re: [PATCH v4] PCI / ACPI: Assume `HotPlugSupportInD3` only if
+> > device can wake from D3
+> >
+> > [+cc Mika, "HotPlugSupportInD3" scope question below]
+>
+> FYI - Mika had approved some earlier versions of this, so I expect conceptual
+> Alignment at least with the latest one.
+>
+> <snip>
+>
+> > > > Can we at least list some common scenarios?  E.g., it affects
+> > > > kernels after commit X, or it affects machines with CPUs newer
+> > > > than Y, or it affects a certain kind of tunneling, etc?  Distros
+> > > > need this information so they can figure whether and how far to
+> > > > backport things like this.
+> > >
+> > > It's going to affect any retail machine with the SOC we refer to in
+> > > the kernel as "Yellow Carp".  This is one of the first non-Intel
+> > > USB4 hosts and will be using the USB4 SW CM in the kernel.
+> > >
+> > > Without this change, effectively PCIe tunneling will not work when
+> > > any downstream PCIe device is hotplugged.  In the right
+> > > circumstances it might work if it's coldbooted (if the paths
+> > > selected by the pre-boot firmware connection manager are identical
+> > > to that selected by SW CM).
+> >
+> > Thanks a lot for this context!  As far as I can tell from grubbing
+> > through the git history, there are no PCI, USB4, or Thunderbolt
+> > changes related to Yellow Carp, so I assume this has to do with Yellow
+> > Carp firmware doing things differently than previous platforms.
+>
+> There have been a variety of Thunderbolt/USB4 changes as a result of
+> Yellow Carp development and findings, but they have not been quirks;
+> they have been done as generic changes that still make sense for all
+> USB4 devices.
+>
+> Sanju (on CC) has submitted a majority of these, so if you want to see
+> a sense of what these are you can look for his commits in drivers/thunderbolt.
+>
+> >
+> > Previously, if a Root Port implemented the HotPlugSupportInD3
+> > property, we assumed that the Root Port and any downstream bridges
+> > could handle hot-plug events while in D3hot.
+> >
+> > I guess the difference here is that on Yellow Carp firmware, even if
+> > there is a HotPlugSupportInD3 property on the Root Port, the Root Port
+> > cannot handle hot-plug events in D3hot UNLESS there is also an _S0W
+> > method AND that _S0W says the Root Port can wakeup from D3hot or
+> > D3cold, right?
+>
+> Yes, correct!
+>
+> >
+> > I have some heartburn about this that's only partly related to this
+> > patch.  The Microsoft doc clearly says "HotPlugSupportInD3" must be
+> > implemented on Root Ports and its presence tells us that the *Root
+> > Port* can handle hot-plug events while in D3.
+> >
+> > But acpi_pci_bridge_d3() looks up the Root Port at the top of the
+> > hierarchy and assume that its "HotPlugSupportInD3" applies to any
+> > switch ports that may be below that Root Port (added by 26ad34d510a8
+> > ("PCI / ACPI: Whitelist D3 for more PCIe hotplug ports") [1]).
 
 Not really.
 
-It looks like the avoidance to stop the scheduler tick is sufficient
-to bump up the PELT signal for this workload in such a way that it
-doesn't fall below a certain level at all which in turn causes
-schedutil to ask for higher frequencies.
+"HotPlugSupportInD3" applies to the root port only and the platform
+firmware may not know about any ports below it.
 
-An alternative approach appears to be necessary, but I need some more
-time for that.
+However, the presence of "HotPlugSupportInD3" is used as an indicator
+that the entire hierarchy is "D3cold-aware", so to speak.
+Essentially, this boils down to the "Is the hardware modern enough?"
+consideration and the answer is assumed to be "yes" if the property in
+question is present for the root port.
 
-> I have tried to figure out what is wrong but haven't been able to.
->
-> ... Doug
->
-> On Thu, Mar 17, 2022 at 6:58 AM Doug Smythies <dsmythies@telus.net> wrote:
-> >
-> > On Thu, Mar 17, 2022 at 5:30 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > On Wed, Mar 16, 2022 at 4:55 PM Doug Smythies <dsmythies@telus.net> wrote:
-> > > >
-> > > > Readers: So that graphs and large attachments could be used, I have
-> > > > been on an off-list branch of this thread with Srinivas, and copied a
-> > > > couple of others. While now returning to this on-list thread, I'll
-> > > > only take up Rafael's proposed patch.
-> > > >
-> > > > Hi Rafael,
-> > > >
-> > > > So far all work has been done with: HWP disabled; intel_pstate; powersave.
-> > > > The reason was that it is, by far, the best way to obtain good trace data
-> > > > using the intel_pstate_tracer.py utility.
-> > > >
-> > > > I always intended to try/test: HWP disabled; intel_cpufreq; schedutil.
-> > > > There is an issue with the proposed patch and schedutil.
-> > > >
-> > > > If any CPU ever requests a pstate > the max non turbo pstate
-> > > > then it will stay at that request forever. Ultimately the idle
-> > > > power goes to about 5.7 watts (verses 1.4 watts expected).
-> > > > IRQs go very high, as the tick never turns off.
-> > > > Actually, one knows how many CPUs are stuck requesting a high
-> > > > pstate just by looking at IRQs.
-> > >
-> > > That may be because INTEL_CPUFREQ_TRANSITION_DELAY is too small.
-> > >
-> > > Please try to increase
-> > > /sys/devices/system/cpu/cpufreq/schedutil/rate_limit_us to 10000 and
-> > > see what difference this makes.
-> >
-> > Changing rate_limit_us to 10000, or even 20000, makes no difference.
-> >
-> > see a slight clarification to yesterday's email in-line below.
-> >
-> > > > Trace is useless because it virtually never gets called.
-> > > > So I have been reading the IA32_PERF_CTL MSR
-> > > > directly.
-> > > >
-> > > > Example:
-> > > >
-> > > > Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
-> > > > 6 cores, 12 CPUs
-> > > > min pstate 8
-> > > > max non-turbo pstate 41
-> > > > max turbo pstate 48
-> > > > The system is idle.
-> > > >
-> > > > doug@s19:~$ sudo
-> > > > /home/doug/kernel/linux/tools/power/x86/turbostat/turbostat --Summary
-> > > > --quiet --show Busy%,Bzy_MHz,IRQ,PkgWatt --interval 10
-> > > > Busy%   Bzy_MHz IRQ     PkgWatt
-> > > > 0.11    800     844     1.33
-> > > > 0.01    800     231     1.33
-> > > > 0.11    800     723     1.33 <<< Powersave governor
-> > > > 0.03    889     440     1.33
-> > > > 0.17    4418    21511   4.31 <<< Schedutil governor
-> > > > 0.12    4101    30153   4.48 <<< 3 CPUs are > pstate 41
-> > > > 0.22    4347    34226   4.75
-> > > > 0.17    4101    43554   4.78
-> > > > 0.29    4300    50565   4.94
-> > > > 0.21    4098    50297   4.76 <<< 5 CPUs are > pstate 41
-> > > > 0.29    4298    50532   4.84
-> > > > 0.20    4101    50126   4.63
-> > > > 0.20    4101    50149   4.62
-> > > > 0.29    4297    50623   4.76
-> > > > 0.20    4101    50203   4.72
-> > > > 0.29    4295    50642   4.78
-> > > > 0.20    4101    50223   4.68
-> > > > 0.29    4292    50597   4.88
-> > > > 0.20    4101    50208   4.73
-> > > > 0.29    4296    50519   4.84
-> > > > 0.20    4101    50167   4.80
-> > > > 0.20    4101    50242   4.76
-> > > > 0.29    4302    50625   4.94
-> > > > 0.20    4101    50233   4.73
-> > > > 0.29    4296    50613   4.78
-> > > > 0.20    4101    50231   4.70
-> > > > 0.29    4292    50802   4.93
-> > > > 1.46    4669    65610   8.36
-> > > > 0.41    4225    80701   5.48
-> > > > 0.33    4101    80219   5.36 <<< 8 CPUs are > ptstate 41
-> > > > 0.34    4098    80313   5.38
-> > > > 0.41    4228    80689   5.56
-> > > > 0.33    4101    80252   5.46
-> > > >
-> > > > And the related MSR reads:
-> > > >
-> > > > 3 CPUs are > pstate 41:
-> > > > root@s19:/home/doug# c/msr-decoder | grep IA32_PERF_CTL
-> > > > 9.) 0x199: IA32_PERF_CTL        : CPU 0-11 :  30 :   8 :   8 :  48 :
-> > > > 48 :  48 :   8 :  30 :  31 :   8 :   8 :   8 :
-> > > >
-> > > > 5 CPUs are > psate 41:
-> > > > root@s19:/home/doug# c/msr-decoder | grep IA32_PERF_CTL
-> > > > 9.) 0x199: IA32_PERF_CTL        : CPU 0-11 :  44 :  30 :  31 :  48 :
-> > > > 48 :  48 :   8 :   8 :   8 :   8 :  48 :   8 :
-> > > >
-> > > > 8 CPUs are > pstate 41:
-> > > > root@s19:/home/doug# c/msr-decoder | grep IA32_PERF_CTL
-> > > > 9.) 0x199: IA32_PERF_CTL        : CPU 0-11 :  45 :  48 :  48 :  48 :
-> > > > 48 :  48 :   8 :  30 :   8 :   8 :  48 :  42 :
-> > > >
-> > > > This issue is independent of the original patch or the suggested modification:
-> >
-> > Actually, the issue threshold is as defined by the greater than condition below.
-> >
-> > > >
-> > > > > diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> > > > > index f878a4545eee..94018ac0b59b 100644
-> > > > > --- a/drivers/cpufreq/intel_pstate.c
-> > > > > +++ b/drivers/cpufreq/intel_pstate.c
-> > > > > @@ -1980,7 +1980,7 @@ static void intel_pstate_update_perf_ctl(struct
-> > > > > cpudata *cpu)
-> > > > >          * P-states to prevent them from getting back to the high frequency
-> > > > >          * right away after getting out of deep idle.
-> > > > >          */
-> > > > > -       cpuidle_update_retain_tick(pstate > cpu->pstate.max_pstate);
-> >
-> > For the above kernel the threshold is pstate 42.
-> >
-> > > > > +       cpuidle_update_retain_tick(pstate > ((cpu->pstate.max_pstate +
-> > > > > cpu->pstate.min_pstate)/2));
-> >
-> > For the above kernel the threshold is pstate 25.
-> >
-> > > > >         wrmsrl(MSR_IA32_PERF_CTL, pstate_funcs.get_val(cpu, pstate));
-> > > > >  }
-> > > >
-> > > > ... Doug
+But if "HotPlugSupportInD3" is not consistent with the other pieces of
+information regarding the root port available from the firmware (_PRW
+and _S0W in this particular case), the presence of it is questionable
+in the first place, so IMO the approach here makes sense.
