@@ -2,165 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1184E68E1
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Mar 2022 19:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEA004E6918
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Mar 2022 20:10:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352686AbiCXSyQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Mar 2022 14:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
+        id S1352847AbiCXTLu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Mar 2022 15:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347682AbiCXSyM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Mar 2022 14:54:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC83B8211;
-        Thu, 24 Mar 2022 11:52:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S243979AbiCXTLq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Mar 2022 15:11:46 -0400
+Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026BC19C23;
+        Thu, 24 Mar 2022 12:10:13 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 77D8B123380;
+        Thu, 24 Mar 2022 19:10:11 +0000 (UTC)
+Received: from pdx1-sub0-mail-a219.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id DA2EC123025;
+        Thu, 24 Mar 2022 19:10:10 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1648149011; a=rsa-sha256;
+        cv=none;
+        b=spJtR+hcxoFnLVGEh7a9DH5ZBo+YFCqxFC/VNhUyLgDzVnHwuK1V1LKQdDCiJ8optrbPNY
+        CipbUZeSp7QLBz4t2RwpII98bCea9qaPgTef+VRp2O98YrNueCyi5IB2Jk9RvzG+HbfRSa
+        dfB7LisLiyvzHKiPsM5e6EOr23DS3sMvX9FiXO4h6itqZhyFRR0hcYNNw1+1lji3ORdQB9
+        i6Hix49LAuapbZJ0zS4C0Z/VTomwDNh0JsTPfeD+YLcaFKFe2jVW69N59MXV8sbDLNxUCm
+        Ko6+t4ym5yfiZcNxjnFnle0HhUwIZt+EMK1VwBvzIGtSS6FllRhU5LiMW2jiVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1648149011;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:dkim-signature;
+        bh=pwKmYV1RoBxtzxKSXEKwAB9rqJlPOZrgOiJgt8hxgy4=;
+        b=j7cKh35g5HOmBxVr5lI/luzslM1XGWa4ME8GBht/ttPo231t3lb9qE0NhVwl6CTjbxweZH
+        8ZmJLIyJ7MKf6b3Op6g24sJhtM3vQq5JAd15go8TgITV+kxW1nUwYYFpuuCfGJM/RPWuJc
+        KEgZ6rqrh7tKUu0ZuJjy9Eav9+bFnex6frWIKfN2cMfMVkR56LZv5LcMM7MAXdBBgP+ONj
+        R3QnfNtUa0QeHzpQ8sM/nCkvkD322dHa+E0ysYAwf12NGFC9gFrkSIJcaQjt/EIsNljqTQ
+        ZJtdGWW5Z4dWzmazdm2/3Aj01L1S4B/4Fa6flnJBAGHpFhc+OzkUSkYQED2OsQ==
+ARC-Authentication-Results: i=1;
+        rspamd-7b6f4d8d7c-jlxm8;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from pdx1-sub0-mail-a219.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.124.238.100 (trex/6.5.3);
+        Thu, 24 Mar 2022 19:10:11 +0000
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Fearful-Cooing: 1fede5b91cd265e9_1648149011319_3734797825
+X-MC-Loop-Signature: 1648149011319:4135960393
+X-MC-Ingress-Time: 1648149011319
+Received: from localhost.localdomain (unknown [104.36.25.8])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE97261AF5;
-        Thu, 24 Mar 2022 18:52:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0659DC340EC;
-        Thu, 24 Mar 2022 18:52:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648147959;
-        bh=J1U967edacUKqsMOKaKTNbYO0SoILVgjhb70YrFL3as=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=auaHy3c8Otw2WdRSmxl1N4gBKDbSbDhKVwz3MIYICZzPwJvySaB2a6jKxWGch5wHE
-         PZ6AUteMeTK0ribzXyhwA271qdxGvdtBxzQay53SZdxwDsNgD+AgJtgH14p9x1qB5+
-         1G9v/H0ShFfOC+n9mC6LawOhZsmOmYmaUuZKenou1VjM8ilBq5C6iT0L8Cq32bTt23
-         jhC94Sz/Le/BPDndzW/wCujaFEC1b0slSPYuRsHZppE/rOT+BKcKHVVLq8hV2YcP/B
-         hoHSrHgIGelxGZtxfqSosyX5VBC4RsTcX8KK/ayMbVKysc6m1K2bbxE+moi3CkGZn3
-         I+NvRtSQsv1PQ==
-Date:   Thu, 24 Mar 2022 13:52:37 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Mehta, Sanju" <Sanju.Mehta@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH v4] PCI / ACPI: Assume `HotPlugSupportInD3` only if
- device can wake from D3
-Message-ID: <20220324185237.GA1466503@bhelgaas>
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a219.dreamhost.com (Postfix) with ESMTPSA id 4KPZYC3PYNz3n;
+        Thu, 24 Mar 2022 12:10:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1648149009;
+        bh=pwKmYV1RoBxtzxKSXEKwAB9rqJlPOZrgOiJgt8hxgy4=;
+        h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
+        b=IpFB7+2K5Is8rvgQFUMnKvBjMs/w1DyQAUqZ5HBNz1nWzlzxlWUeXLdad1u26op46
+         Wjzvh8RX/qtkvRptkje6TaFZlo3Hw+5kfkwAAIXAXhNYy53fvmsmwMRPJwaJikFc/Y
+         sDZtf/AkPnMq4HQS5v4OLdqU8PpU6obOg3yL5ETpr9tnTPA/2o363eO0DFqNMZh+Cd
+         TPYgB2YVPe9Jfmz2HxD+SvcZ5NVZGNBeyFCuN3fM682G92MVG51viFy51RwneWkUKp
+         Ee0CQXiXv8gPkgmKI72FAjPLtatYgUsgE2B4Pno8kJL0Mts4R/F/klqoVeLbOo7959
+         Q1svvRAGf9V8w==
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     rafael@kernel.org
+Cc:     daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dave@stgolabs.net
+Subject: [PATCH 0/3] thermal: int340x: Misc acpi_buffer handling updates
+Date:   Thu, 24 Mar 2022 12:09:47 -0700
+Message-Id: <20220324190950.70486-1-dave@stgolabs.net>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hVFkKXTJcrFqRR4FoK5v_k3zCacKPmurWm=sozt7GPiQ@mail.gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 07:31:56PM +0100, Rafael J. Wysocki wrote:
-> On Thu, Mar 24, 2022 at 6:15 PM Limonciello, Mario
-> <Mario.Limonciello@amd.com> wrote:
-> > > -----Original Message-----
-> > > From: Bjorn Helgaas <helgaas@kernel.org>
-> > > Sent: Thursday, March 24, 2022 11:35
-> > > To: Limonciello, Mario <Mario.Limonciello@amd.com>
-> > > Cc: Bjorn Helgaas <bhelgaas@google.com>; open list:PCI SUBSYSTEM <linux-
-> > > pci@vger.kernel.org>; Linux PM <linux-pm@vger.kernel.org>; Mehta, Sanju
-> > > <Sanju.Mehta@amd.com>; Rafael J. Wysocki <rafael@kernel.org>; Mika
-> > > Westerberg <mika.westerberg@linux.intel.com>
-> > > Subject: Re: [PATCH v4] PCI / ACPI: Assume `HotPlugSupportInD3` only if
-> > > device can wake from D3
-> > >
-> > > [+cc Mika, "HotPlugSupportInD3" scope question below]
-> >
-> > FYI - Mika had approved some earlier versions of this, so I expect conceptual
-> > Alignment at least with the latest one.
-> >
-> > <snip>
-> >
-> > > > > Can we at least list some common scenarios?  E.g., it affects
-> > > > > kernels after commit X, or it affects machines with CPUs newer
-> > > > > than Y, or it affects a certain kind of tunneling, etc?  Distros
-> > > > > need this information so they can figure whether and how far to
-> > > > > backport things like this.
-> > > >
-> > > > It's going to affect any retail machine with the SOC we refer to in
-> > > > the kernel as "Yellow Carp".  This is one of the first non-Intel
-> > > > USB4 hosts and will be using the USB4 SW CM in the kernel.
-> > > >
-> > > > Without this change, effectively PCIe tunneling will not work when
-> > > > any downstream PCIe device is hotplugged.  In the right
-> > > > circumstances it might work if it's coldbooted (if the paths
-> > > > selected by the pre-boot firmware connection manager are identical
-> > > > to that selected by SW CM).
-> > >
-> > > Thanks a lot for this context!  As far as I can tell from grubbing
-> > > through the git history, there are no PCI, USB4, or Thunderbolt
-> > > changes related to Yellow Carp, so I assume this has to do with Yellow
-> > > Carp firmware doing things differently than previous platforms.
-> >
-> > There have been a variety of Thunderbolt/USB4 changes as a result of
-> > Yellow Carp development and findings, but they have not been quirks;
-> > they have been done as generic changes that still make sense for all
-> > USB4 devices.
-> >
-> > Sanju (on CC) has submitted a majority of these, so if you want to see
-> > a sense of what these are you can look for his commits in drivers/thunderbolt.
-> >
-> > > Previously, if a Root Port implemented the HotPlugSupportInD3
-> > > property, we assumed that the Root Port and any downstream bridges
-> > > could handle hot-plug events while in D3hot.
-> > >
-> > > I guess the difference here is that on Yellow Carp firmware, even if
-> > > there is a HotPlugSupportInD3 property on the Root Port, the Root Port
-> > > cannot handle hot-plug events in D3hot UNLESS there is also an _S0W
-> > > method AND that _S0W says the Root Port can wakeup from D3hot or
-> > > D3cold, right?
-> >
-> > Yes, correct!
-> >
-> > > I have some heartburn about this that's only partly related to this
-> > > patch.  The Microsoft doc clearly says "HotPlugSupportInD3" must be
-> > > implemented on Root Ports and its presence tells us that the *Root
-> > > Port* can handle hot-plug events while in D3.
-> > >
-> > > But acpi_pci_bridge_d3() looks up the Root Port at the top of the
-> > > hierarchy and assume that its "HotPlugSupportInD3" applies to any
-> > > switch ports that may be below that Root Port (added by 26ad34d510a8
-> > > ("PCI / ACPI: Whitelist D3 for more PCIe hotplug ports") [1]).
-> 
-> Not really.
-> 
-> "HotPlugSupportInD3" applies to the root port only and the platform
-> firmware may not know about any ports below it.
-> 
-> However, the presence of "HotPlugSupportInD3" is used as an indicator
-> that the entire hierarchy is "D3cold-aware", so to speak.
-> Essentially, this boils down to the "Is the hardware modern enough?"
-> consideration and the answer is assumed to be "yes" if the property in
-> question is present for the root port.
+Hello,
 
-Seems weird to me since we're talking about a hot-plug Root Port and
-anything at all could be plugged into it.  We're basically saying that
-we can assume a property of an arbitrary downstream device based on
-something we know about the upstream device.  I'm still not
-comfortable with that.
+The following is a fallout of eyeballing _OSC handling in the driver.
+These changes have only been compile-tested. Patch 1 is a fix and the
+other two are cleanups.
 
-At a minimum we should add a comment about this assumption.  The
-existing "... we know the hierarchy behind it supports D3 just fine"
-seems a little too strong.
+Thanks!
 
-> But if "HotPlugSupportInD3" is not consistent with the other pieces of
-> information regarding the root port available from the firmware (_PRW
-> and _S0W in this particular case), the presence of it is questionable
-> in the first place, so IMO the approach here makes sense.
+Davidlohr Bueso (3):
+  thermal: int340x: Fix bogus acpi_buffer pointer freeing
+  thermal: int340x: Consolidate freeing of acpi_buffer pointer
+  thermal: int340x: Cleanup osc context init
 
-This part seems reasonable to me, as long as we have good confidence
-that requiring "HotPlugSupportInD3" + _PRW + _S0W where we used to
-require only "HotPlugSupportInD3" is unlikely to break anything.
+ .../intel/int340x_thermal/int3400_thermal.c   | 24 +++++++------------
+ 1 file changed, 9 insertions(+), 15 deletions(-)
 
-I can't judge that, but I assume you know that we don't use the
-acpi_pci_bridge_d3() result unless _PRW and _S0W exist, so I'll take
-your word for it :)
+--
+2.26.2
 
-Bjorn
