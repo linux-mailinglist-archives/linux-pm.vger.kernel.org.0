@@ -2,387 +2,227 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB7B4E7CB9
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Mar 2022 01:22:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28AE54E7C3D
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Mar 2022 01:21:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbiCYTbk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 25 Mar 2022 15:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49430 "EHLO
+        id S229556AbiCYT1X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Mar 2022 15:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiCYTbd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Mar 2022 15:31:33 -0400
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978E33CC065
-        for <linux-pm@vger.kernel.org>; Fri, 25 Mar 2022 12:26:26 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id m67so15748944ybm.4
-        for <linux-pm@vger.kernel.org>; Fri, 25 Mar 2022 12:26:26 -0700 (PDT)
+        with ESMTP id S229557AbiCYT1S (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Mar 2022 15:27:18 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF7425D5ED
+        for <linux-pm@vger.kernel.org>; Fri, 25 Mar 2022 12:00:28 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id h11so11490059ljb.2
+        for <linux-pm@vger.kernel.org>; Fri, 25 Mar 2022 12:00:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=V+mqdl/8yeQYl/IuysCLzhmn9y/CpmqU+8Go5SfPM1w=;
+        b=xIWQ/+DTLejUwomBZ0gLI3Na0Yst9Q5CF47xgJzx4QyFvzcSJ80q1ptsiEho7rbcf0
+         /sdy4W66Z4Z0xunh+lMqJObMWzwj1O100nCROYZTsPeF1p5JEwZOWUO0ZqNutqWfJDiu
+         YG0tAvndqF1zSLveQC2i3jsd+NZvUbJCE5/usAzkQ73VwMpqQVPyyrb5s54UxA5MDucP
+         /tqYPRnaivPNrXoUcl7zD7Ronm7hjQKtqCKIRL6gpNOb6+engVawD0oUkXvgBA4026ao
+         d9huTAptGjD+/ybRzBgP5TC4lAruiiILOMumnLDrC3E0ukHz0SdAmyKYrm7l6yOQtPdl
+         uSNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=qsfu3TaDc+kIisG7Ty5A0gyIxTe21mt8ZfufQHZSiNc=;
-        b=FogZLqfZ0gN7TbMjwHawN9ifbvquSO9sMUuWTn9wHY3nXCj2Upg2i71cAHUXSmG6qI
-         /wHU+UyEBQnawBhgIriRb5BmBjlQgNoG9Pje/1rzBPKNVkVzVP5UQNMz3JNoOTaNmBDn
-         0yqAdGT8FV9wv0tWIfNR/Q9lS+FIw6WUiM6ogYIQwkll2kAWeMuXoXlMJwOz8GTDrMfV
-         g6cCJgYAM1Mfg3677CZXQ661WLsFlE2/MtGKpE5xV2MeG/KtTu3sO5IzCusf3SVuhbh/
-         zDVRmUzxv6vEmllorTafhrYpYEMEeeAUEp9gQb4wJu7WykM1DtizrwFZpJfdZfMZCVq/
-         s3/A==
-X-Gm-Message-State: AOAM533ay7Gz/DNW6LzoK3zPFL3w9greLSB+6KAOGOuzeRAXXcZuwXIG
-        XSt4SCxEVshzsbMnpuLnu76HDYlc9NXd6slBW9e1Fu3i
-X-Google-Smtp-Source: ABdhPJyRz/ZxzIOAoAjlfKrO53HKWylXjV9hmrZsuP4KNNPfCAKxJFvne8qAbZMLW5p+mTXUfnWA4OXmHviCBzZcFGE=
-X-Received: by 2002:a25:fe10:0:b0:625:262f:e792 with SMTP id
- k16-20020a25fe10000000b00625262fe792mr10730082ybe.365.1648229497992; Fri, 25
- Mar 2022 10:31:37 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=V+mqdl/8yeQYl/IuysCLzhmn9y/CpmqU+8Go5SfPM1w=;
+        b=PW2a1wur233yi+s9gMGzF5Fw8kF5Rxrc+tfXg0U36V6gpeMB7vkroNtXGvAqnVaAHU
+         0ZC6lfkIxZp9wY4bWDi3iFXEsNEUy66iGpbgjowN803RULPvH5cI7MVEj8o0HTIDchf8
+         EdftjkkZ8YRJ18RrhS2bwBk6HWwsSREWQZaV+BFIjkjsK95KRabEaC2BT3fge8dcFb82
+         4+MIiZ0XtnCQzbglqCYpJHU0geHgZqFnYovsu7csgJj1gtUFoGyAqnjODpSgYxGWh0Ff
+         lguUC9cwhMkTYcUgh+zW6V0e3KoooItGa+/BL3xOZVSr+ybtkhi+x9uDKcUgmeNOJ33I
+         5ecw==
+X-Gm-Message-State: AOAM530uGHQqSgQS/Jckow8HmLu6tQja46dZXl0CdUVnabw2bxGGrZxT
+        mt6kn7StZQQ1I5wmhWRDYrRCLc0nN08NfA==
+X-Google-Smtp-Source: ABdhPJy4+0fo8WFN/jfJd8qX8ZRY8Ouo8jbMZ/1RHx1QyBjtR7ao7I4CHYfeYCcfYjaiQF/lzscWXA==
+X-Received: by 2002:ac2:5ff2:0:b0:448:7f69:889d with SMTP id s18-20020ac25ff2000000b004487f69889dmr8780218lfg.202.1648234352533;
+        Fri, 25 Mar 2022 11:52:32 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id r9-20020ac25f89000000b0044a1008c5d7sm790323lfe.234.2022.03.25.11.52.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 25 Mar 2022 11:52:31 -0700 (PDT)
+Message-ID: <d7966059-c003-d49a-a5ce-bff1e0604b58@linaro.org>
+Date:   Fri, 25 Mar 2022 21:52:31 +0300
 MIME-Version: 1.0
-References: <20220323102602.29259-1-jengelh@inai.de> <ffe84a5e-9788-773a-6326-c9c10f79cf10@infradead.org>
-In-Reply-To: <ffe84a5e-9788-773a-6326-c9c10f79cf10@infradead.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 25 Mar 2022 18:31:27 +0100
-Message-ID: <CAJZ5v0iB99UtayOzP94fayB=moE7dDL9Bnr13RRmEYXtSFJ8eA@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: amd-pstate: grammar and sentence structure updates
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Jan Engelhardt <jengelh@inai.de>
-Cc:     Huang Rui <ray.huang@amd.com>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 2/4] cpufreq: qcom-hw: fix the race between LMH worker
+ and cpuhp
+Content-Language: en-GB
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        Thara Gopinath <thara.gopinath@gmail.com>
+References: <20220309223938.3819715-1-dmitry.baryshkov@linaro.org>
+ <20220309223938.3819715-3-dmitry.baryshkov@linaro.org>
+ <YjyVgx08RiFDYwT5@ripper>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <YjyVgx08RiFDYwT5@ripper>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 23, 2022 at 10:00 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> Hi--
->
-> On 3/23/22 03:26, Jan Engelhardt wrote:
-> > Signed-off-by: Jan Engelhardt <jengelh@inai.de>
-> > ---
-> > basis is v5.17
-> >
-> >  Documentation/admin-guide/pm/amd-pstate.rst | 135 ++++++++++----------
-> >  1 file changed, 67 insertions(+), 68 deletions(-)
-> >
-> > diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-> > index 2f066df4ee9c..c83db37695da 100644
-> > --- a/Documentation/admin-guide/pm/amd-pstate.rst
-> > +++ b/Documentation/admin-guide/pm/amd-pstate.rst
-> > @@ -19,7 +19,7 @@ Linux kernel. The new mechanism is based on Collaborative Processor
-> >  Performance Control (CPPC) which provides finer grain frequency management
-> >  than legacy ACPI hardware P-States. Current AMD CPU/APU platforms are using
-> >  the ACPI P-states driver to manage CPU frequency and clocks with switching
-> > -only in 3 P-states. CPPC replaces the ACPI P-states controls, allows a
-> > +only in 3 P-states. CPPC replaces the ACPI P-states controls and allows a
-> >  flexible, low-latency interface for the Linux kernel to directly
-> >  communicate the performance hints to hardware.
-> >
-> > @@ -27,7 +27,7 @@ communicate the performance hints to hardware.
-> >  ``ondemand``, etc. to manage the performance hints which are provided by
-> >  CPPC hardware functionality that internally follows the hardware
-> >  specification (for details refer to AMD64 Architecture Programmer's Manual
-> > -Volume 2: System Programming [1]_). Currently ``amd-pstate`` supports basic
-> > +Volume 2: System Programming [1]_). Currently, ``amd-pstate`` supports basic
-> >  frequency control function according to kernel governors on some of the
-> >  Zen2 and Zen3 processors, and we will implement more AMD specific functions
-> >  in future after we verify them on the hardware and SBIOS.
-> > @@ -41,9 +41,9 @@ continuous, abstract, and unit-less performance value in a scale that is
-> >  not tied to a specific performance state / frequency. This is an ACPI
-> >  standard [2]_ which software can specify application performance goals and
-> >  hints as a relative target to the infrastructure limits. AMD processors
-> > -provides the low latency register model (MSR) instead of AML code
-> > +provide the low latency register model (MSR) instead of an AML code
-> >  interpreter for performance adjustments. ``amd-pstate`` will initialize a
-> > -``struct cpufreq_driver`` instance ``amd_pstate_driver`` with the callbacks
-> > +``struct cpufreq_driver`` instance, ``amd_pstate_driver``, with the callbacks
-> >  to manage each performance update behavior. ::
-> >
-> >   Highest Perf ------>+-----------------------+                         +-----------------------+
-> > @@ -91,26 +91,26 @@ AMD CPPC Performance Capability
-> >  Highest Performance (RO)
-> >  .........................
-> >
-> > -It is the absolute maximum performance an individual processor may reach,
-> > +This is the absolute maximum performance an individual processor may reach,
-> >  assuming ideal conditions. This performance level may not be sustainable
-> >  for long durations and may only be achievable if other platform components
-> > -are in a specific state; for example, it may require other processors be in
-> > +are in a specific state; for example, it may require other processors to be in
-> >  an idle state. This would be equivalent to the highest frequencies
-> >  supported by the processor.
-> >
-> >  Nominal (Guaranteed) Performance (RO)
-> >  ......................................
-> >
-> > -It is the maximum sustained performance level of the processor, assuming
-> > -ideal operating conditions. In absence of an external constraint (power,
-> > -thermal, etc.) this is the performance level the processor is expected to
-> > +This is the maximum sustained performance level of the processor, assuming
-> > +ideal operating conditions. In the absence of an external constraint (power,
-> > +thermal, etc.), this is the performance level the processor is expected to
-> >  be able to maintain continuously. All cores/processors are expected to be
-> >  able to sustain their nominal performance state simultaneously.
-> >
-> >  Lowest non-linear Performance (RO)
-> >  ...................................
-> >
-> > -It is the lowest performance level at which nonlinear power savings are
-> > +This is the lowest performance level at which nonlinear power savings are
-> >  achieved, for example, due to the combined effects of voltage and frequency
-> >  scaling. Above this threshold, lower performance levels should be generally
-> >  more energy efficient than higher performance levels. This register
-> > @@ -119,7 +119,7 @@ effectively conveys the most efficient performance level to ``amd-pstate``.
-> >  Lowest Performance (RO)
-> >  ........................
-> >
-> > -It is the absolute lowest performance level of the processor. Selecting a
-> > +This is the absolute lowest performance level of the processor. Selecting a
-> >  performance level lower than the lowest nonlinear performance level may
-> >  cause an efficiency penalty but should reduce the instantaneous power
-> >  consumption of the processor.
-> > @@ -149,14 +149,14 @@ a relative number. This can be expressed as percentage of nominal
-> >  performance (infrastructure max). Below the nominal sustained performance
-> >  level, desired performance expresses the average performance level of the
-> >  processor subject to hardware. Above the nominal performance level,
-> > -processor must provide at least nominal performance requested and go higher
-> > +the processor must provide at least nominal performance requested and go higher
-> >  if current operating conditions allow.
-> >
-> >  Energy Performance Preference (EPP) (RW)
-> >  .........................................
-> >
-> > -Provides a hint to the hardware if software wants to bias toward performance
-> > -(0x0) or energy efficiency (0xff).
-> > +This attribute provides a hint to the hardware if software wants to bias
-> > +toward performance (0x0) or energy efficiency (0xff).
->
-> Would be nice to say something here like (if this is correct):
->
-> This value can be anywhere in the range [0x00, 0x7f]. E.g., 0x80 means
-> no bias -- performance and energy efficieny are equally important.
->
-> >
-> >
-> >  Key Governors Support
-> > @@ -173,35 +173,34 @@ operating frequencies supported by the hardware. Users can check the
-> >  ``amd-pstate`` mainly supports ``schedutil`` and ``ondemand`` for dynamic
-> >  frequency control. It is to fine tune the processor configuration on
-> >  ``amd-pstate`` to the ``schedutil`` with CPU CFS scheduler. ``amd-pstate``
-> > -registers adjust_perf callback to implement the CPPC similar performance
-> > -update behavior. It is initialized by ``sugov_start`` and then populate the
-> > -CPU's update_util_data pointer to assign ``sugov_update_single_perf`` as
-> > -the utilization update callback function in CPU scheduler. CPU scheduler
-> > -will call ``cpufreq_update_util`` and assign the target performance
-> > -according to the ``struct sugov_cpu`` that utilization update belongs to.
-> > -Then ``amd-pstate`` updates the desired performance according to the CPU
-> > +registers the adjust_perf callback to implement performance update behavior
-> > +similar to CPPC. It is initialized by ``sugov_start`` and then populates the
-> > +CPU's update_util_data pointer to assign ``sugov_update_single_perf`` as the
-> > +utilization update callback function in the CPU scheduler. The CPU scheduler
-> > +will call ``cpufreq_update_util`` and assigns the target performance according
-> > +to the ``struct sugov_cpu`` that the utilization update belongs to.
-> > +Then, ``amd-pstate`` updates the desired performance according to the CPU
-> >  scheduler assigned.
-> >
-> >
-> >  Processor Support
-> >  =======================
-> >
-> > -The ``amd-pstate`` initialization will fail if the _CPC in ACPI SBIOS is
-> > -not existed at the detected processor, and it uses ``acpi_cpc_valid`` to
-> > -check the _CPC existence. All Zen based processors support legacy ACPI
-> > -hardware P-States function, so while the ``amd-pstate`` fails to be
-> > -initialized, the kernel will fall back to initialize ``acpi-cpufreq``
-> > -driver.
-> > +The ``amd-pstate`` initialization will fail if the ``_CPC`` entry in the ACPI
-> > +SBIOS does not exist in the detected processor. It uses ``acpi_cpc_valid``
-> > +to check the existence of ``_CPC``. All Zen based processors support the legacy
-> > +ACPI hardware P-States function, so when ``amd-pstate`` fails initialization,
-> > +the kernel will fall back to initialize the ``acpi-cpufreq`` driver.
-> >
-> >  There are two types of hardware implementations for ``amd-pstate``: one is
-> >  `Full MSR Support <perf_cap_>`_ and another is `Shared Memory Support
-> > -<perf_cap_>`_. It can use :c:macro:`X86_FEATURE_CPPC` feature flag (for
-> > -details refer to Processor Programming Reference (PPR) for AMD Family
-> > -19h Model 51h, Revision A1 Processors [3]_) to indicate the different
-> > -types. ``amd-pstate`` is to register different ``static_call`` instances
-> > -for different hardware implementations.
-> > +<perf_cap_>`_. It can use the :c:macro:`X86_FEATURE_CPPC` feature flag to
->
-> So there are 2 types, but both of them have references to <perf_cap_> ?
-> Hm, looks like almost everything references <perf_cap_>.
->
-> What is "It" in "It can use" ?
->
-> > +indicate the different types. (For details, refer to the Processor Programming
-> > +Reference (PPR) for AMD Family 19h Model 51h, Revision A1 Processors [3]_.)
-> > +``amd-pstate`` is to register different ``static_call`` instances for different
->
->                   will register different
-> or                registers different
-> ?
->
-> > +hardware implementations.
-> >
-> > -Currently, some of Zen2 and Zen3 processors support ``amd-pstate``. In the
-> > +Currently, some of the Zen2 and Zen3 processors support ``amd-pstate``. In the
-> >  future, it will be supported on more and more AMD processors.
-> >
-> >  Full MSR Support
-> > @@ -210,18 +209,18 @@ Full MSR Support
-> >  Some new Zen3 processors such as Cezanne provide the MSR registers directly
-> >  while the :c:macro:`X86_FEATURE_CPPC` CPU feature flag is set.
-> >  ``amd-pstate`` can handle the MSR register to implement the fast switch
-> > -function in ``CPUFreq`` that can shrink latency of frequency control on the
-> > -interrupt context. The functions with ``pstate_xxx`` prefix represent the
-> > -operations of MSR registers.
-> > +function in ``CPUFreq`` that can reduce the latency of frequency control in
-> > +interrupt context. The functions with a ``pstate_xxx`` prefix represent the
-> > +operations on MSR registers.
-> >
-> >  Shared Memory Support
-> >  ----------------------
-> >
-> > -If :c:macro:`X86_FEATURE_CPPC` CPU feature flag is not set, that means the
-> > -processor supports shared memory solution. In this case, ``amd-pstate``
-> > +If the :c:macro:`X86_FEATURE_CPPC` CPU feature flag is not set, the
-> > +processor supports the shared memory solution. In this case, ``amd-pstate``
-> >  uses the ``cppc_acpi`` helper methods to implement the callback functions
-> > -that defined on ``static_call``. The functions with ``cppc_xxx`` prefix
-> > -represent the operations of acpi cppc helpers for shared memory solution.
-> > +that are defined on ``static_call``. The functions with the ``cppc_xxx`` prefix
-> > +represent the operations of ACPI CPPC helpers for the shared memory solution.
-> >
-> >
-> >  AMD P-States and ACPI hardware P-States always can be supported in one
-> > @@ -234,7 +233,7 @@ User Space Interface in ``sysfs``
-> >  ==================================
-> >
-> >  ``amd-pstate`` exposes several global attributes (files) in ``sysfs`` to
-> > -control its functionality at the system level. They located in the
-> > +control its functionality at the system level. They are located in the
-> >  ``/sys/devices/system/cpu/cpufreq/policyX/`` directory and affect all CPUs. ::
-> >
-> >   root@hr-test1:/home/ray# ls /sys/devices/system/cpu/cpufreq/policy0/*amd*
-> > @@ -246,38 +245,38 @@ control its functionality at the system level. They located in the
-> >  ``amd_pstate_highest_perf / amd_pstate_max_freq``
-> >
-> >  Maximum CPPC performance and CPU frequency that the driver is allowed to
-> > -set in percent of the maximum supported CPPC performance level (the highest
-> > +set, in percent of the maximum supported CPPC performance level (the highest
-> >  performance supported in `AMD CPPC Performance Capability <perf_cap_>`_).
-> > -In some of ASICs, the highest CPPC performance is not the one in the _CPC
-> > -table, so we need to expose it to sysfs. If boost is not active but
-> > -supported, this maximum frequency will be larger than the one in
-> > +In some ASICs, the highest CPPC performance is not the one in the ``_CPC``
-> > +table, so we need to expose it to sysfs. If boost is not active, but
-> > +still supported, this maximum frequency will be larger than the one in
-> >  ``cpuinfo``.
-> >  This attribute is read-only.
-> >
-> >  ``amd_pstate_lowest_nonlinear_freq``
-> >
-> > -The lowest non-linear CPPC CPU frequency that the driver is allowed to set
-> > -in percent of the maximum supported CPPC performance level (Please see the
-> > +The lowest non-linear CPPC CPU frequency that the driver is allowed to set,
-> > +in percent of the maximum supported CPPC performance level. (Please see the
-> >  lowest non-linear performance in `AMD CPPC Performance Capability
-> > -<perf_cap_>`_).
-> > +<perf_cap_>`_.)
-> >  This attribute is read-only.
-> >
-> > -For other performance and frequency values, we can read them back from
-> > +Other performance and frequency values can be read back from
-> >  ``/sys/devices/system/cpu/cpuX/acpi_cppc/``, see :ref:`cppc_sysfs`.
-> >
-> >
-> >  ``amd-pstate`` vs ``acpi-cpufreq``
-> >  ======================================
-> >
-> > -On majority of AMD platforms supported by ``acpi-cpufreq``, the ACPI tables
-> > -provided by the platform firmware used for CPU performance scaling, but
-> > -only provides 3 P-states on AMD processors.
-> > -However, on modern AMD APU and CPU series, it provides the collaborative
-> > -processor performance control according to ACPI protocol and customize this
-> > -for AMD platforms. That is fine-grain and continuous frequency range
-> > +On the majority of AMD platforms supported by ``acpi-cpufreq``, the ACPI tables
-> > +provided by the platform firmware are used for CPU performance scaling, but
-> > +only provide 3 P-states on AMD processors.
-> > +However, on modern AMD APU and CPU series, hardware provides the Collaborative
-> > +Processor Performance Control according to the ACPI protocol and customizes this
-> > +for AMD platforms. That is, fine-grained and continuous frequency ranges
-> >  instead of the legacy hardware P-states. ``amd-pstate`` is the kernel
-> > -module which supports the new AMD P-States mechanism on most of future AMD
-> > -platforms. The AMD P-States mechanism will be the more performance and energy
-> > +module which supports the new AMD P-States mechanism on most of the future AMD
-> > +platforms. The AMD P-States mechanism is the more performance and energy
-> >  efficiency frequency management method on AMD processors.
-> >
-> >  Kernel Module Options for ``amd-pstate``
-> > @@ -287,25 +286,25 @@ Kernel Module Options for ``amd-pstate``
-> >  Use a module param (shared_mem) to enable related processors manually with
-> >  **amd_pstate.shared_mem=1**.
-> >  Due to the performance issue on the processors with `Shared Memory Support
-> > -<perf_cap_>`_, so we disable it for the moment and will enable this by default
-> > -once we address performance issue on this solution.
-> > +<perf_cap_>`_, we disable it presently and will re-enable this by default
-> > +once we address performance issue with this solution.
-> >
-> > -The way to check whether current processor is `Full MSR Support <perf_cap_>`_
-> > +To check whether the current processor is using `Full MSR Support <perf_cap_>`_
-> >  or `Shared Memory Support <perf_cap_>`_ : ::
-> >
-> >    ray@hr-test1:~$ lscpu | grep cppc
-> >    Flags:                           fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local clzero irperf xsaveerptr rdpru wbnoinvd cppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif v_spec_ctrl umip pku ospke vaes vpclmulqdq rdpid overflow_recov succor smca fsrm
-> >
-> > -If CPU Flags have cppc, then this processor supports `Full MSR Support
-> > -<perf_cap_>`_. Otherwise it supports `Shared Memory Support <perf_cap_>`_.
-> > +If the CPU flags have ``cppc``, then this processor supports `Full MSR Support
-> > +<perf_cap_>`_. Otherwise, it supports `Shared Memory Support <perf_cap_>`_.
-> >
-> >
-> >  ``cpupower`` tool support for ``amd-pstate``
-> >  ===============================================
-> >
-> > -``amd-pstate`` is supported on ``cpupower`` tool that can be used to dump the frequency
-> > -information. And it is in progress to support more and more operations for new
-> > -``amd-pstate`` module with this tool. ::
-> > +``amd-pstate`` is supported by the ``cpupower`` tool, which can be used to dump
-> > +frequency information. Development is in progress to support more and more
-> > +operations for the new ``amd-pstate`` module with this tool. ::
-> >
-> >   root@hr-test1:/home/ray# cpupower frequency-info
-> >   analyzing CPU 0:
-> > @@ -336,10 +335,10 @@ Trace Events
-> >  --------------
-> >
-> >  There are two static trace events that can be used for ``amd-pstate``
-> > -diagnostics.  One of them is the cpu_frequency trace event generally used
-> > +diagnostics. One of them is the ``cpu_frequency`` trace event generally used
-> >  by ``CPUFreq``, and the other one is the ``amd_pstate_perf`` trace event
-> >  specific to ``amd-pstate``.  The following sequence of shell commands can
-> > -be used to enable them and see their output (if the kernel is generally
-> > +be used to enable them and see their output (if the kernel is
-> >  configured to support event tracing). ::
-> >
-> >   root@hr-test1:/home/ray# cd /sys/kernel/tracing/
-> > @@ -364,7 +363,7 @@ configured to support event tracing). ::
-> >            <idle>-0       [003] d.s..  4995.980971: amd_pstate_perf: amd_min_perf=85 amd_des_perf=85 amd_max_perf=166 cpu_id=3 changed=false fast_switch=true
-> >            <idle>-0       [011] d.s..  4995.980996: amd_pstate_perf: amd_min_perf=85 amd_des_perf=85 amd_max_perf=166 cpu_id=11 changed=false fast_switch=true
-> >
-> > -The cpu_frequency trace event will be triggered either by the ``schedutil`` scaling
-> > +The ``cpu_frequency`` trace event will be triggered either by the ``schedutil`` scaling
-> >  governor (for the policies it is attached to), or by the ``CPUFreq`` core (for the
-> >  policies with other scaling governors).
-> >
->
-> Anyway, this is a big improvement. Thanks.
->
-> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+On 24/03/2022 19:00, Bjorn Andersson wrote:
+> On Wed 09 Mar 14:39 PST 2022, Dmitry Baryshkov wrote:
+> 
+>> qcom_lmh_dcvs_poll() can be running when the cpu is being put offline.
+>> This results in the following warnings and an oops. The driver would
+>> disable the worker, but it happens closer to the end of
+>> cpufreq_offline(). Change the locking in the qcom_lmh_dcvs_poll(), so
+>> that the worker can not run in parallel with cpufreq_offline() call.
+>>
+>> [   55.650435] (NULL device *): dev_pm_opp_find_freq_floor: Invalid argument freq=00000000709ccbf9
+>> [   55.659420] (NULL device *): Can't find the OPP for throttling: -EINVAL!
+>> [   55.666329] Unable to handle kernel paging request at virtual address ffffadfba4bb6d81
+>> [   55.674491] Mem abort info:
+>> [   55.677363]   ESR = 0x96000004
+>> [   55.680527]   EC = 0x25: DABT (current EL), IL = 32 bits
+>> [   55.686001]   SET = 0, FnV = 0
+>> [   55.689164]   EA = 0, S1PTW = 0
+>> [   55.692418]   FSC = 0x04: level 0 translation fault
+>> [   55.697449] Data abort info:
+>> [   55.700426]   ISV = 0, ISS = 0x00000004
+>> [   55.704383]   CM = 0, WnR = 0
+>> [   55.707455] swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000000a98e9000
+>> [   55.714354] [ffffadfba4bb6d81] pgd=0000000000000000, p4d=0000000000000000
+>> [   55.721388] Internal error: Oops: 96000004 [#1] SMP
+>> [   55.726397] Modules linked in:
+>> [   55.729542] CPU: 7 PID: 162 Comm: kworker/7:1H Tainted: G S      W         5.17.0-rc6-00100-g04890a1d9672 #724
+>> [   55.746066] Workqueue: events_highpri qcom_lmh_dcvs_poll
+>> [   55.751527] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>> [   55.758669] pc : cpufreq_cpu_get_raw+0x20/0x44
+>> [   55.763233] lr : qcom_cpufreq_hw_get+0x10/0x64
+>> [   55.767799] sp : ffff800009983d10
+>> [   55.771207] x29: ffff800009983d10 x28: ffffaa13a4f2b000 x27: ffff7b31329f9305
+>> [   55.778530] x26: ffffaa13a4f30af8 x25: ffffaa13a4f4e4c8 x24: ffff7b2ec2eda000
+>> [   55.785851] x23: ffffffffffffffea x22: ffff7b2ec2e9fc18 x21: ffff7b2ec2e9fc00
+>> [   55.793170] x20: 0000000000000100 x19: ffff7b2ec2e9fcc0 x18: ffffffffffffffff
+>> [   55.800490] x17: 726620746e656d75 x16: 6772612064696c61 x15: ffff8000899839c7
+>> [   55.807812] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+>> [   55.815140] x11: ffff7b2ec2e9fc80 x10: ffffaa13a59a1a70 x9 : 0000000000000000
+>> [   55.822468] x8 : ffff7b2eca6917c0 x7 : ffffaa13a528b000 x6 : 0000000000000001
+>> [   55.829788] x5 : 0000000000040000 x4 : 000000000000024f x3 : 0000000000000000
+>> [   55.837116] x2 : 0000000000000100 x1 : ffffaa13a4bb6d80 x0 : 000003e800000001
+>> [   55.844439] Call trace:
+>> [   55.846951]  cpufreq_cpu_get_raw+0x20/0x44
+> 
+> While I don't have the line numbers, I presume this would be cause by
+> policy->cpus being empty and:
+> 
+>     int cpu = cpumask_first(policy->cpus);
+> 
+> returning >= nr_cpu_ids, which means that the get_cpu_device(cpu); on
+> the next line will return NULL and then we keep playing opp on that
+> NULL?
+> 
+> 
+> Seems like this would be exactly the same mistake as I did wrt
+> policy->cpus vs policy->related_cpus and we don't actually need the
+> specific CPU, we just need a cpu device in the frequency domain.
+> 
+> As such we should actually do cpumaks_first(policy->related_cpus)
+> instead.
+> 
+>> [   55.851155]  qcom_lmh_dcvs_poll+0x104/0x160
+>> [   55.855452]  process_one_work+0x288/0x69c
+>> [   55.859574]  worker_thread+0x74/0x470
+>> [   55.863336]  kthread+0xfc/0x100
+>> [   55.866568]  ret_from_fork+0x10/0x20
+>> [   55.870246] Code: b00065c1 91360021 d503233f f8625800 (f8616800)
+>> [   55.876501] ---[ end trace 0000000000000000 ]---
+>>
+>> Fixes: 275157b367f4 ("cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support")
+>> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>> ---
+>>   drivers/cpufreq/qcom-cpufreq-hw.c | 24 +++++++++++++++++++++---
+>>   1 file changed, 21 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+>> index 44d46e52baea..7c1bb002e1c3 100644
+>> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+>> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+>> @@ -296,6 +296,23 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+>>   	struct dev_pm_opp *opp;
+>>   	unsigned int freq;
+>>   
+>> +	/*
+>> +	 * Synchronize against CPU going offline.
+>> +	 * cpufreq_offline() will get the write lock on policy->rwsem.
+>> +	 */
+>> +retry:
+>> +	if (unlikely(!down_read_trylock(&policy->rwsem))) {
+>> +		mutex_lock(&data->throttle_lock);
+>> +		if (data->cancel_throttle) {
+>> +			mutex_unlock(&data->throttle_lock);
+>> +			return;
+>> +		}
+>> +
+>> +		mutex_unlock(&data->throttle_lock);
+>> +
+>> +		schedule();
+>> +		goto retry;
+>> +	}
+> 
+> And doing that instead would remove the need for doing this crazy
+> locking between the cpufreq core and qcom driver.
 
-Applied as 5.18-rc material, thanks!
+I didn't like the idea that the notifier is running in parallel with the 
+cpufreq code modifying the policy. We can check if that's an issue 
+separately.
+
+> 
+> Above change would be trivial and -rc material.
+> 
+> Regards,
+> Bjorn
+> 
+>>   	/*
+>>   	 * Get the h/w throttled frequency, normalize it using the
+>>   	 * registered opp table and use it to calculate thermal pressure.
+>> @@ -314,9 +331,10 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+>>   
+>>   	/*
+>>   	 * In the unlikely case policy is unregistered do not enable
+>> -	 * polling or h/w interrupt
+>> +	 * polling or h/w interrupt.
+>> +	 * If we are here, we have the policy->rwsem read lock,
+>> +	 * cancel_throttle can be toggled only with the write lock.
+>>   	 */
+>> -	mutex_lock(&data->throttle_lock);
+>>   	if (data->cancel_throttle)
+>>   		goto out;
+>>   
+>> @@ -331,7 +349,7 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+>>   				 msecs_to_jiffies(10));
+>>   
+>>   out:
+>> -	mutex_unlock(&data->throttle_lock);
+>> +	up_read(&policy->rwsem);
+>>   }
+>>   
+>>   static void qcom_lmh_dcvs_poll(struct work_struct *work)
+>> -- 
+>> 2.34.1
+>>
+
+
+-- 
+With best wishes
+Dmitry
