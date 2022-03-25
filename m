@@ -2,67 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A46644E7C23
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Mar 2022 01:21:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F7E4E7BBF
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Mar 2022 01:21:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbiCYT64 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Mar 2022 15:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34104 "EHLO
+        id S231876AbiCYT65 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Mar 2022 15:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232599AbiCYT6S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Mar 2022 15:58:18 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261A12A4FA0
+        with ESMTP id S232615AbiCYT6T (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Mar 2022 15:58:19 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9187A2A4FB8
         for <linux-pm@vger.kernel.org>; Fri, 25 Mar 2022 12:47:37 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id bu29so15163871lfb.0
+Received: by mail-lf1-x12f.google.com with SMTP id bu29so15163924lfb.0
         for <linux-pm@vger.kernel.org>; Fri, 25 Mar 2022 12:47:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lgpBZVT3N397yNEIE8syFhUaj9YB16F6AhosJ5tOLW8=;
-        b=N6mHXveQOoSZhABGQi8E7MEKTtsoXwSmYElE3MIh3BF5uZa3BYVcgqX7p08SdfaJj1
-         vvQ+fxNfu25M+hlQG08ku6H5eTq8nShwNPKMdparpEIK+UVB4/BeB/+UCtGdrJ1NUS1p
-         Xl1bMLPf92nO+oqq3G4iXBwfYORC23Fs3KUTaBe16bY6icyTegq6gqGDazL6VFfOex7k
-         SyoGN9Xr+nQayHMSNpi11Zn1enUtJTwKMiFi0kf/O4CCtXGKFVFqBNMb/zHYMVR+27EQ
-         6+PhmcHTrUUkuzD9oIEtQYuJFiGNDXyNlFJP48t3YW7307s7WgVSde2+ADZnEEEte29B
-         nBpg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Eb8mEZgW6Pv9eJz7v3yw4vSszcng2DvogIPFiCFHPAM=;
+        b=aKeGBUPk09EJXojsPdgOWcm8XDVpZxU8/bRDzD4JU87NfWIY8JTZWaLZxKOlx7N9qV
+         rKcgKVNWbfnLJq5cSUmIhpzB16IFHb5dd+KBLiaS4ALtRUN1/rGtkjOOuuHwEtbVWwKw
+         a/WNRqppZaSXtKZXHOyLzez5QJDyhQCSx/ZQWdFb1FK0M+OBP+uNbo0tSWWS9UUmqxh4
+         wtulv/zkr8cmwbBVIIrZrG3cMvvzHZkZSlNJu//MUzGxVtsiAd8QR02K88MWFKQDnzBJ
+         CjuhGoiFO2KFa2QlI5/pAb2cIvGoz9HvBf/i23TX2lZ3PHMdSVXGFJyBWMyo8XPsO7G+
+         nj7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lgpBZVT3N397yNEIE8syFhUaj9YB16F6AhosJ5tOLW8=;
-        b=KWi2BwTasPYsoojgI0D0BRIlm2637V5QSufNdBVFKiE6koNsVh3P6jV80PxVVvSYi0
-         /QMJC96aMnjW3KF7RaQqRJ880w83gxV7f+5YC6D9d/pI1LHeGy4LCb1KsB1KljWD6NY2
-         5FOZR7vwp+kzq5Gg4pwHH2sB0QDGsAFCEe5NYR5XVs/9A+uJrj9pcMCKBpvNQ2IZaKIQ
-         qyE9ZcR6oUdA/ryEwMUBUrHJFDEhtw8qiat/Wi9D7ckAvXZa8AXd/hjkGy0UzDPP2sOw
-         jDg1eIg72CV/94iJyIc4OGUc/29JlydX/8FdSrZPHPcQRKS3G0bi0kTTZLFQQ7sXUXFf
-         iO9Q==
-X-Gm-Message-State: AOAM531tZxJ4bp8xKuCBBLeJ4NAGgKeYRhMNsfOMbqwFGjAXaC/9eePo
-        Bp3Ov1TjmEnm4Ta8nRTjASEyyg==
-X-Google-Smtp-Source: ABdhPJyyhGwSHZvtiF6X9rzM53uUfZpOgpSMKroyqWiYthwPRq1lZ5oii1oKgclzonhQgtuLYK/ZSQ==
-X-Received: by 2002:a05:6512:4014:b0:44a:2b77:bed6 with SMTP id br20-20020a056512401400b0044a2b77bed6mr8691672lfb.381.1648237643246;
-        Fri, 25 Mar 2022 12:47:23 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Eb8mEZgW6Pv9eJz7v3yw4vSszcng2DvogIPFiCFHPAM=;
+        b=fg6Cbx8n+0oL1n8zf4Y6O7TQ5k+3UzuIkbf+umO7BkIcmQzDUBJS9cq/INFMoPsJja
+         fPQmKHmpaWsL0OXpH9bQRvJqAE0ZUzj01spJob7WsRae8gZYmEgrsNNz5M3uRiBhRFpA
+         6kVJcgGmp3o4100fUT3pue6FkzIpoC01mketaOjrbKnpz8eEFzql98D9+ecrxgXlzNYz
+         m8GHbCC+3afdLOMaQz30FuqUgFNIkxDNRsbjz9pEwIWoNAFu8cZR7Jc8pu7s+dWs3M/A
+         n1sV/H+vkMwUlriG7OenelLqmupirYSZqF/E9b75ALlfe3Is+E5ESzgJGWYhwMk8TuXm
+         Gw2w==
+X-Gm-Message-State: AOAM530qkvhQ4Nt+9jcwD7MJvX0wU+WjA2hKHU51eU1MWxo7/5jCWnCO
+        lYjQUZQgH1Rekj9H/AkOPUuS4A==
+X-Google-Smtp-Source: ABdhPJwePWLrKcmTvghcHWwedAQ062YlBtJQOLwjhn3VT2BsuLy6E3Nt4O/lUUjoMpOICaFTDQ4NGw==
+X-Received: by 2002:a05:6512:3fa:b0:44a:2d3e:e9d0 with SMTP id n26-20020a05651203fa00b0044a2d3ee9d0mr9018952lfq.412.1648237644050;
+        Fri, 25 Mar 2022 12:47:24 -0700 (PDT)
 Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id u16-20020ac25190000000b004433b80c1d3sm802014lfi.182.2022.03.25.12.47.22
+        by smtp.gmail.com with ESMTPSA id u16-20020ac25190000000b004433b80c1d3sm802014lfi.182.2022.03.25.12.47.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Mar 2022 12:47:22 -0700 (PDT)
+        Fri, 25 Mar 2022 12:47:23 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        Thara Gopinath <thara.gopinath@gmail.com>
-Subject: [PATCH v3 0/4] cpufreq: qcom-hw: Fixes for cpu hotplug support
-Date:   Fri, 25 Mar 2022 22:47:17 +0300
-Message-Id: <20220325194721.2263571-1-dmitry.baryshkov@linaro.org>
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Subject: [PATCH v3 1/4] cpufreq: qcom-hw: drop affinity hint before freeing the IRQ
+Date:   Fri, 25 Mar 2022 22:47:18 +0300
+Message-Id: <20220325194721.2263571-2-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220325194721.2263571-1-dmitry.baryshkov@linaro.org>
+References: <20220325194721.2263571-1-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,39 +73,64 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patchseries aims at fixing and improving CPU hotplug support on
-Qualcomm platforms. First three patches are the fixes for the LMH
-support in the cpufreq driver. The last patch adds support for
-lightweight offline() and online() callbacks which are used instead of
-exit() and init() each time the CPU is put offline or back online.
+Drop affinity hint before freeing the throttling IRQ to fix the
+following trace:
 
-Patches 1-3 being pure simple fixes can be applied during the -rc
-stage, while patch 4 is targeting next development cycle
+[  185.114773] ------------[ cut here ]------------
+[  185.119517] WARNING: CPU: 7 PID: 43 at kernel/irq/manage.c:1887 free_irq+0x3a4/0x3dc
+[  185.127474] Modules linked in:
+[  185.130618] CPU: 7 PID: 43 Comm: cpuhp/7 Tainted: G S      W         5.17.0-rc6-00386-g67382a5b705d-dirty #690
+[  185.147125] pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  185.154269] pc : free_irq+0x3a4/0x3dc
+[  185.158031] lr : free_irq+0x33c/0x3dc
+[  185.161792] sp : ffff80000841bc90
+[  185.165195] x29: ffff80000841bc90 x28: ffffa6edc5c3d000 x27: ffff6d93729e5908
+[  185.172515] x26: 0000000000000000 x25: ffff6d910109fc00 x24: ffff6d91011490e0
+[  185.179838] x23: ffff6d9101149218 x22: 0000000000000080 x21: 0000000000000000
+[  185.187163] x20: ffff6d9101149000 x19: ffff6d910ab61500 x18: ffffffffffffffff
+[  185.194487] x17: 2e35202020202020 x16: 2020202020202020 x15: ffff80008841b9a7
+[  185.201805] x14: 00000000000003c9 x13: 0000000000000001 x12: 0000000000000040
+[  185.209135] x11: ffff6d91005aab58 x10: ffff6d91005aab5a x9 : ffffc6a5ad1c5408
+[  185.216455] x8 : ffff6d91005adb88 x7 : 0000000000000000 x6 : ffffc6a5ab5a91f4
+[  185.223776] x5 : 0000000000000000 x4 : ffff6d91011490a8 x3 : ffffc6a5ad266108
+[  185.231098] x2 : 0000000013033204 x1 : ffff6d9101149000 x0 : ffff6d910a9cc000
+[  185.238421] Call trace:
+[  185.240932]  free_irq+0x3a4/0x3dc
+[  185.244334]  qcom_cpufreq_hw_cpu_exit+0x78/0xcc
+[  185.248985]  cpufreq_offline.isra.0+0x228/0x270
+[  185.253639]  cpuhp_cpufreq_offline+0x10/0x20
+[  185.258027]  cpuhp_invoke_callback+0x16c/0x2b0
+[  185.262592]  cpuhp_thread_fun+0x190/0x250
+[  185.266710]  smpboot_thread_fn+0x12c/0x230
+[  185.270914]  kthread+0xfc/0x100
+[  185.274145]  ret_from_fork+0x10/0x20
+[  185.277820] irq event stamp: 212
+[  185.281136] hardirqs last  enabled at (211): [<ffffc6a5ac57973c>] _raw_spin_unlock_irqrestore+0x8c/0xa0
+[  185.290775] hardirqs last disabled at (212): [<ffffc6a5ac572100>] __schedule+0x710/0xa10
+[  185.299081] softirqs last  enabled at (0): [<ffffc6a5ab50f7b0>] copy_process+0x7d0/0x1a14
+[  185.307475] softirqs last disabled at (0): [<0000000000000000>] 0x0
 
-Changes since v2:
-- Point Fixes tag from the first patch to the correct commit
-- Replace huge patch 2 with one-liner thanks to being able to use
-  policy->related_cpus instead of policy->cpus
+Fixes: 3ed6dfbd3bb98 ("cpufreq: qcom-hw: Set CPU affinity of dcvsh interrupts")
+Tested-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+ drivers/cpufreq/qcom-cpufreq-hw.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Changes since v1:
-- Update commit message for the first patch to describe why dropping
-  affinity hint is required (before calling free_irq()),
-- Fixed commit message for the second patch to include messages
-  generated using the mainline kernel w/o additional patches,
-- Changed third patch to use dev_warn_ratelimited(),
-- Reworked last patch to move request_irq/free_irq to online()/offline()
-  to make sure that the IRQ isn't left enabled after the CPU has been
-  put offline.
-
-Dmitry Baryshkov (4):
-  cpufreq: qcom-hw: drop affinity hint before freeing the IRQ
-  cpufreq: qcom-hw: fix the race between LMH worker and cpuhp
-  cpufreq: qcom-hw: fix the opp entries refcounting
-  cpufreq: qcom-hw: provide online/offline operations
-
- drivers/cpufreq/qcom-cpufreq-hw.c | 43 ++++++++++++++++++++++++++-----
- 1 file changed, 36 insertions(+), 7 deletions(-)
-
+diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+index 618e436018c0..44d46e52baea 100644
+--- a/drivers/cpufreq/qcom-cpufreq-hw.c
++++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+@@ -427,6 +427,7 @@ static void qcom_cpufreq_hw_lmh_exit(struct qcom_cpufreq_data *data)
+ 	mutex_unlock(&data->throttle_lock);
+ 
+ 	cancel_delayed_work_sync(&data->throttle_work);
++	irq_set_affinity_hint(data->throttle_irq, NULL);
+ 	free_irq(data->throttle_irq, data);
+ }
+ 
 -- 
 2.35.1
 
