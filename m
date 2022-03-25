@@ -2,47 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA28C4E717A
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Mar 2022 11:43:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9599F4E7205
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Mar 2022 12:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244664AbiCYKpN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Mar 2022 06:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36506 "EHLO
+        id S1355603AbiCYLJQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Mar 2022 07:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244975AbiCYKpM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Mar 2022 06:45:12 -0400
-Received: from out28-76.mail.aliyun.com (out28-76.mail.aliyun.com [115.124.28.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9506C967;
-        Fri, 25 Mar 2022 03:43:36 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436321|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_news_journal|0.00648115-0.000568538-0.99295;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047211;MF=kant@allwinnertech.com;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.NCMngfK_1648205012;
-Received: from 172.30.10.142(mailfrom:kant@allwinnertech.com fp:SMTPD_---.NCMngfK_1648205012)
-          by smtp.aliyun-inc.com(33.13.197.192);
-          Fri, 25 Mar 2022 18:43:34 +0800
-Message-ID: <a8c5008a-31f7-953d-22c8-203a2a14d432@allwinnertech.com>
-Date:   Fri, 25 Mar 2022 18:43:31 +0800
+        with ESMTP id S1355278AbiCYLIm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Mar 2022 07:08:42 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09A0D4455
+        for <linux-pm@vger.kernel.org>; Fri, 25 Mar 2022 04:07:04 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9C0F81F38D;
+        Fri, 25 Mar 2022 11:07:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1648206423; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6dlQyIm7e45K6hZyNwbiQdtlzsub6YFFyMnNbfLv4OY=;
+        b=He/o7GejqjVLVUFZxtd1FdK0Dz0DmhC5Yw0P7b0sK1bMY3Y+Z9gBr2OCZWIn1gdDjDNDD0
+        X9cPwBghRbBoFPQonhDHgsBAyWYZ5xCKI1c0EFAFE2KCTqO1MRlAi4QIVCv6bnOQy4R7YQ
+        sW3fIF2UPy7ECMTUId+648F/Uh6HFq8=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3B6AE1332D;
+        Fri, 25 Mar 2022 11:07:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id hGq8DFeiPWIcMgAAMHmgww
+        (envelope-from <jgross@suse.com>); Fri, 25 Mar 2022 11:07:03 +0000
+Message-ID: <edb66fd3-cf2f-0780-145a-953936e59beb@suse.com>
+Date:   Fri, 25 Mar 2022 12:07:02 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] thermal: devfreq_cooling: use local ops instead of global
- ops
-Content-Language: en-GB
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "supporter:THERMAL" <rafael@kernel.org>,
-        "supporter:THERMAL" <daniel.lezcano@linaro.org>,
-        allwinner-opensource-support 
-        <allwinner-opensource-support@allwinnertech.com>
-References: <20220312045922.9779-1-kant@allwinnertech.com>
- <8529a647-6127-539f-20ba-271be293fe2f@arm.com>
-From:   Kant Fan <kant@allwinnertech.com>
-In-Reply-To: <8529a647-6127-539f-20ba-271be293fe2f@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Subject: Re: [PATCH] xen: don't hang when resuming PCI device
+Content-Language: en-US
+To:     =?UTF-8?B?SmFrdWIgS8SFZHppb8WCa2E=?= 
+        <niedzejkob@invisiblethingslab.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        xen-devel@lists.xenproject.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-pm@vger.kernel.org
+Cc:     marmarek@invisiblethingslab.com
+References: <20220323012103.2537-1-niedzejkob@invisiblethingslab.com>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20220323012103.2537-1-niedzejkob@invisiblethingslab.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------volcTpjXkFt6gV3L8XUSIXdD"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,135 +70,122 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14/03/2022 21:41, Lukasz Luba wrote:
-> Hi Kant,
-> 
-> On 3/12/22 04:59, Kant Fan wrote:
->> Fix access illegal address problem in following condition:
->> There are muti devfreq cooling devices in system, some of them has
->> em model but other does not, energy model ops such as state2power will
->> append to global devfreq_cooling_ops when the cooling device with
->> em model register. It makes the cooling device without em model
->> also use devfreq_cooling_ops after appending when register later by
->> of_devfreq_cooling_register_power() or of_devfreq_cooling_register().
->>
->> IPA governor regards the cooling devices without em model as a power 
->> actor
->> because they also have energy model ops, and will access illegal address
->> at dfc->em_pd when execute cdev->ops->get_requested_power,
->> cdev->ops->state2power or cdev->ops->power2state.
->>
->> Signed-off-by: Kant Fan <kant@allwinnertech.com>
-> 
-> Thank you for finding this issue. This was also an issue since the
-> beginning of that code. The modified global ops after first registration
-> which went through, was also previously there. Thus, we would need two
-> different patches for stable kernels.
-> 
-> For this one, please add the tag:
-> Fixes: 615510fe13bd2 ("thermal: devfreq_cooling: remove old power model 
-> and use EM")
-> 
-> This patch would also go via stable tree for kernels v5.11+
-> Please read the process how to send a patch which will be merged to the
-> stable tree.
-> 
-> There will be a need to create another patch(es) for stable kernels with
-> Fixes: a76caf55e5b35 ("thermal: Add devfreq cooling")
-> In those kernels also the global ops is modified and might not support
-> properly many cooling devices. It's present in other stable kernels:
-> v5.10 and older
-> 
->> ---
->>   drivers/thermal/devfreq_cooling.c | 25 ++++++++++++++++++-------
->>   1 file changed, 18 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/thermal/devfreq_cooling.c 
->> b/drivers/thermal/devfreq_cooling.c
->> index 4310cb342a9f..d38a80adec73 100644
->> --- a/drivers/thermal/devfreq_cooling.c
->> +++ b/drivers/thermal/devfreq_cooling.c
->> @@ -358,21 +358,28 @@ of_devfreq_cooling_register_power(struct 
->> device_node *np, struct devfreq *df,
->>       struct thermal_cooling_device *cdev;
->>       struct device *dev = df->dev.parent;
->>       struct devfreq_cooling_device *dfc;
->> +    struct thermal_cooling_device_ops *ops;
->>       char *name;
->>       int err, num_opps;
->> -    dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
->> -    if (!dfc)
->> +    ops = kmemdup(&devfreq_cooling_ops, sizeof(*ops), GFP_KERNEL);
->> +    if (!ops)
->>           return ERR_PTR(-ENOMEM);
->> +    dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
->> +    if (!dfc) {
->> +        err = -ENOMEM;
->> +        goto free_ops;
->> +    }
->> +
->>       dfc->devfreq = df;
->>       dfc->em_pd = em_pd_get(dev);
->>       if (dfc->em_pd) {
->> -        devfreq_cooling_ops.get_requested_power =
->> +        ops->get_requested_power =
->>               devfreq_cooling_get_requested_power;
->> -        devfreq_cooling_ops.state2power = devfreq_cooling_state2power;
->> -        devfreq_cooling_ops.power2state = devfreq_cooling_power2state;
->> +        ops->state2power = devfreq_cooling_state2power;
->> +        ops->power2state = devfreq_cooling_power2state;
->>           dfc->power_ops = dfc_power;
->> @@ -407,8 +414,7 @@ of_devfreq_cooling_register_power(struct 
->> device_node *np, struct devfreq *df,
->>       if (!name)
->>           goto remove_qos_req;
->> -    cdev = thermal_of_cooling_device_register(np, name, dfc,
->> -                          &devfreq_cooling_ops);
->> +    cdev = thermal_of_cooling_device_register(np, name, dfc, ops);
->>       kfree(name);
->>       if (IS_ERR(cdev)) {
->> @@ -429,6 +435,8 @@ of_devfreq_cooling_register_power(struct 
->> device_node *np, struct devfreq *df,
->>       kfree(dfc->freq_table);
->>   free_dfc:
->>       kfree(dfc);
->> +free_ops:
->> +    kfree(ops);
->>       return ERR_PTR(err);
->>   }
->> @@ -510,11 +518,13 @@ EXPORT_SYMBOL_GPL(devfreq_cooling_em_register);
->>   void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
->>   {
->>       struct devfreq_cooling_device *dfc;
->> +    const struct thermal_cooling_device_ops *ops;
->>       struct device *dev;
->>       if (IS_ERR_OR_NULL(cdev))
->>           return;
->> +    ops = cdev->ops;
->>       dfc = cdev->devdata;
->>       dev = dfc->devfreq->dev.parent;
->> @@ -525,5 +535,6 @@ void devfreq_cooling_unregister(struct 
->> thermal_cooling_device *cdev)
->>       kfree(dfc->freq_table);
->>       kfree(dfc);
->> +    kfree(ops);
->>   }
->>   EXPORT_SYMBOL_GPL(devfreq_cooling_unregister);
-> 
-> The fix looks good.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------volcTpjXkFt6gV3L8XUSIXdD
+Content-Type: multipart/mixed; boundary="------------e6ya7KAFsFXbgUSIlzA2g2W7";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: =?UTF-8?B?SmFrdWIgS8SFZHppb8WCa2E=?= <niedzejkob@invisiblethingslab.com>,
+ Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+ Stefano Stabellini <sstabellini@kernel.org>, xen-devel@lists.xenproject.org,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
+ Pavel Machek <pavel@ucw.cz>, linux-pm@vger.kernel.org
+Cc: marmarek@invisiblethingslab.com
+Message-ID: <edb66fd3-cf2f-0780-145a-953936e59beb@suse.com>
+Subject: Re: [PATCH] xen: don't hang when resuming PCI device
+References: <20220323012103.2537-1-niedzejkob@invisiblethingslab.com>
+In-Reply-To: <20220323012103.2537-1-niedzejkob@invisiblethingslab.com>
 
-Hi Lukasz,
-Thanks for your advice. According to that, I made two separate patches 
-for mainline and the stable trees:
-The first patch (patchwork.kernel.org: Message ID: 
-20220325073030.91919-1-kant@allwinnertech.com) is for mainline. I added 
-the 'fix' tag and 'Cc: stable@vger.kernel.org # 5.13+' to remind which 
-stable trees should be back-ported.
-The second patch (patchwork.kernel.org: Message ID: 
-20220325094436.101419-1-kant@allwinnertech.com) is for stable tree v5.10 
-and older. I added an upstream commit ID to indicate where the patch 
-comes from. I also added 'Cc: stable@vger.kernel.org # 4.4+' to remind 
-which stable trees should be back-ported.
-Please check if they are correct. Thank you.
+--------------e6ya7KAFsFXbgUSIlzA2g2W7
+Content-Type: multipart/mixed; boundary="------------cS18eG8fIhED6cPUakhnN6jb"
 
-Kant Fan
+--------------cS18eG8fIhED6cPUakhnN6jb
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+
+T24gMjMuMDMuMjIgMDI6MjEsIEpha3ViIEvEhWR6aW/FgmthIHdyb3RlOg0KPiBJZiBhIHhl
+biBkb21haW4gd2l0aCBhdCBsZWFzdCB0d28gVkNQVXMgaGFzIGEgUENJIGRldmljZSBhdHRh
+Y2hlZCB3aGljaA0KPiBlbnRlcnMgdGhlIEQzaG90IHN0YXRlIGR1cmluZyBzdXNwZW5kLCB0
+aGUga2VybmVsIG1heSBoYW5nIHdoaWxlDQo+IHJlc3VtaW5nLCBkZXBlbmRpbmcgb24gdGhl
+IGNvcmUgb24gd2hpY2ggYW4gYXN5bmMgcmVzdW1lIHRhc2sgZ2V0cw0KPiBzY2hlZHVsZWQu
+DQo+IA0KPiBUaGUgYnVnIG9jY3VycyBiZWNhdXNlIHhlbidzIGRvX3N1c3BlbmQgY2FsbHMg
+ZHBtX3Jlc3VtZV9zdGFydCB3aGlsZQ0KPiBvbmx5IHRoZSB0aW1lciBvZiB0aGUgYm9vdCBD
+UFUgaGFzIGJlZW4gcmVzdW1lZCAod2hlbiB4ZW5fc3VzcGVuZCBjYWxsZWQNCj4gc3lzY29y
+ZV9yZXN1bWUpLCBiZWZvcmUgY2FsbGluZyB4ZW5fYXJjaF9zdXNwZW5kIHRvIHJlc3VtZSB0
+aGUgdGltZXJzIG9mDQo+IHRoZSBvdGhlciBDUFVzLiBUaGlzIGJyZWFrcyBwY2lfZGV2X2Qz
+X3NsZWVwLg0KPiANCj4gVGh1cyB0aGlzIHBhdGNoIG1vdmVzIHRoZSBjYWxsIHRvIHhlbl9h
+cmNoX3Jlc3VtZSBiZWZvcmUgdGhlIGNhbGwgdG8NCj4gZHBtX3Jlc3VtZV9zdGFydCwgZWxp
+bWluYXRpbmcgdGhlIGhhbmdzIGFuZCByZXN0b3JpbmcgdGhlIHN0YWNrLWxpa2UNCj4gc3Ry
+dWN0dXJlIG9mIHRoZSBzdXNwZW5kL3Jlc3RvcmUgcHJvY2VkdXJlLg0KPiANCj4gU2lnbmVk
+LW9mZi1ieTogSmFrdWIgS8SFZHppb8WCa2EgPG5pZWR6ZWprb2JAaW52aXNpYmxldGhpbmdz
+bGFiLmNvbT4NCg0KUmV2aWV3ZWQtYnk6IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNv
+bT4NCg0KDQpKdWVyZ2VuDQo=
+--------------cS18eG8fIhED6cPUakhnN6jb
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------cS18eG8fIhED6cPUakhnN6jb--
+
+--------------e6ya7KAFsFXbgUSIlzA2g2W7--
+
+--------------volcTpjXkFt6gV3L8XUSIXdD
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmI9olYFAwAAAAAACgkQsN6d1ii/Ey82
+MwgAgY498LKBIzA2iVodDE36CWaBs9UKjV8V2MLhRqduZrtbsh22DtJ6IxlYqPWwqv0oDvvB0OJZ
+TBp8H9ePSOxwJsGqzKwsVoZD7G585xsnVFihwd4NBsircO9pyuifwKE0Cm66U/wU8A2AhMs3Oox/
+SMtg37sLk8tCzIe2YL1f67QXHgw9GYOZq+uNTYAnh9FSCy9d+yXAEmxLaIj/pz6QQ9TM74p0aTTO
+yQwVpknmaCDTEWpa+3orzu4sT+YFTE1bzTntxQ2gWjdjuMBoGiaDM5DuY1+r9B+NY4/uqfP97VQa
+mYajPBurHjZXIXtwv5UcZl8ohzO+syb59eYIeOHQIw==
+=fyGN
+-----END PGP SIGNATURE-----
+
+--------------volcTpjXkFt6gV3L8XUSIXdD--
