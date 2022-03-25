@@ -2,141 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFFA4E7175
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Mar 2022 11:43:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA28C4E717A
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Mar 2022 11:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236476AbiCYKpB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Mar 2022 06:45:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36024 "EHLO
+        id S244664AbiCYKpN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Mar 2022 06:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243185AbiCYKpA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Mar 2022 06:45:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BCD589FE6
-        for <linux-pm@vger.kernel.org>; Fri, 25 Mar 2022 03:43:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1648205005;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SyWiTIMiSmG4u6YzwD4u0xt7w+vIGYOcYZHs6UnFBQE=;
-        b=O3rOUBGZX38+C80h/geLo+8KWs9+kNG3btlacSYa6cJAdweikO2tqVcFu1tYtSfg8thNxW
-        n+wGJpfEsPH93nrfuWAkMBXM8IZboy06Knjnx7a3dTwJkZaMJdKXem+LDWy3v7u6kJhRPc
-        KiOBUF9eekPYqykncFSCiEDh8WpRGBI=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-265-zVY8jz9PMOKNp5wuyqPyEA-1; Fri, 25 Mar 2022 06:43:24 -0400
-X-MC-Unique: zVY8jz9PMOKNp5wuyqPyEA-1
-Received: by mail-ej1-f71.google.com with SMTP id gx12-20020a1709068a4c00b006df7e8181ceso3915802ejc.10
-        for <linux-pm@vger.kernel.org>; Fri, 25 Mar 2022 03:43:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=SyWiTIMiSmG4u6YzwD4u0xt7w+vIGYOcYZHs6UnFBQE=;
-        b=lpZQZyExaOoBdZf0GSFRLXi1OHp2WIzqCzlcZEpMVxyPCOHCdyfVMjs3i7FPnOHBCM
-         GKYHQh1xUhlmbe4ky6FdcHqsIwcLPWN0IxYzeOeSmCpbCd7TBS05pMQrxRtw43xnT73u
-         GDgUR+4CZ4jngThmKH5tsx51p6IYzFcnkKPOe8qDwJF7wUOsvahkX8cpzxO394hSL3Kp
-         75DFm8QPqBTFq1c3WCbv2Oa7aWm4hcFN6ObJFB1QJViu0T1xbmt7yCnxcuy20dz6Q19O
-         IINpOdHa4pfEOBUT0Wm3YCs8ZKe/A73f1PCs0HrihAEC/2Zu4py+RSPVQCr8P/mKr6LQ
-         C6Fg==
-X-Gm-Message-State: AOAM533kuNPwjdmgDyR4o7sfxHKgYnmWTIHMUUpujsOzAlfod1sLHNPs
-        wh6fPSM6IO+VwVKJUfYcDtDWY7bUv464E1UgKXcPS5/5pkFbB0rnlFeCNmYBR67NNUCFoHbnrtY
-        I0s+nW+QycpmratWJoEk=
-X-Received: by 2002:a17:907:7f0b:b0:6e0:a336:a3f5 with SMTP id qf11-20020a1709077f0b00b006e0a336a3f5mr2269065ejc.541.1648205003494;
-        Fri, 25 Mar 2022 03:43:23 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzn7dUpU6RhGkH+cmx02L2Lt5GssfkfC3amGgQ/83AFggV0T8LFHEtxdXiKDxurycDIh0lMlg==
-X-Received: by 2002:a17:907:7f0b:b0:6e0:a336:a3f5 with SMTP id qf11-20020a1709077f0b00b006e0a336a3f5mr2269046ejc.541.1648205003312;
-        Fri, 25 Mar 2022 03:43:23 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:cdb2:2781:c55:5db0? (2001-1c00-0c1e-bf00-cdb2-2781-0c55-5db0.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:cdb2:2781:c55:5db0])
-        by smtp.gmail.com with ESMTPSA id d23-20020aa7d5d7000000b00418f7b2f1dbsm2658310eds.71.2022.03.25.03.43.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Mar 2022 03:43:22 -0700 (PDT)
-Message-ID: <5c372eb8-d1f6-a001-fad2-fe11e0b37575@redhat.com>
-Date:   Fri, 25 Mar 2022 11:43:22 +0100
+        with ESMTP id S244975AbiCYKpM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Mar 2022 06:45:12 -0400
+Received: from out28-76.mail.aliyun.com (out28-76.mail.aliyun.com [115.124.28.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9506C967;
+        Fri, 25 Mar 2022 03:43:36 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436321|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_news_journal|0.00648115-0.000568538-0.99295;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047211;MF=kant@allwinnertech.com;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.NCMngfK_1648205012;
+Received: from 172.30.10.142(mailfrom:kant@allwinnertech.com fp:SMTPD_---.NCMngfK_1648205012)
+          by smtp.aliyun-inc.com(33.13.197.192);
+          Fri, 25 Mar 2022 18:43:34 +0800
+Message-ID: <a8c5008a-31f7-953d-22c8-203a2a14d432@allwinnertech.com>
+Date:   Fri, 25 Mar 2022 18:43:31 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH 1/3] Documentation/ABI: sysfs-driver-aspeed-uart-routing:
- Fix sphinx warning
-Content-Language: en-US
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Huang Jianan <huangjianan@oppo.com>,
-        Chia-Wei Wang <chiawei_wang@aspeedtech.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Amit Kucheria <amitk@kernel.org>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20220324165918.22005-1-hdegoede@redhat.com>
- <20220324165918.22005-2-hdegoede@redhat.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220324165918.22005-2-hdegoede@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] thermal: devfreq_cooling: use local ops instead of global
+ ops
+Content-Language: en-GB
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "supporter:THERMAL" <rafael@kernel.org>,
+        "supporter:THERMAL" <daniel.lezcano@linaro.org>,
+        allwinner-opensource-support 
+        <allwinner-opensource-support@allwinnertech.com>
+References: <20220312045922.9779-1-kant@allwinnertech.com>
+ <8529a647-6127-539f-20ba-271be293fe2f@arm.com>
+From:   Kant Fan <kant@allwinnertech.com>
+In-Reply-To: <8529a647-6127-539f-20ba-271be293fe2f@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-On 3/24/22 17:59, Hans de Goede wrote:
-> Fix the following warning from "make htmldocs":
+On 14/03/2022 21:41, Lukasz Luba wrote:
+> Hi Kant,
 > 
-> Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing:2:
->   WARNING: Inline emphasis start-string without end-string.
+> On 3/12/22 04:59, Kant Fan wrote:
+>> Fix access illegal address problem in following condition:
+>> There are muti devfreq cooling devices in system, some of them has
+>> em model but other does not, energy model ops such as state2power will
+>> append to global devfreq_cooling_ops when the cooling device with
+>> em model register. It makes the cooling device without em model
+>> also use devfreq_cooling_ops after appending when register later by
+>> of_devfreq_cooling_register_power() or of_devfreq_cooling_register().
+>>
+>> IPA governor regards the cooling devices without em model as a power 
+>> actor
+>> because they also have energy model ops, and will access illegal address
+>> at dfc->em_pd when execute cdev->ops->get_requested_power,
+>> cdev->ops->state2power or cdev->ops->power2state.
+>>
+>> Signed-off-by: Kant Fan <kant@allwinnertech.com>
 > 
-> This is caused by the used of '*' in the example cat command,
-> mark the command as code to fix this.
+> Thank you for finding this issue. This was also an issue since the
+> beginning of that code. The modified global ops after first registration
+> which went through, was also previously there. Thus, we would need two
+> different patches for stable kernels.
 > 
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-
-I see that this was already fixed by escaping the '*' with a '\',
-apologies.
-
-So this patch can be ignored / dropped.
-
-Regards,
-
-Hans
-
-
-
-> ---
->  Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+> For this one, please add the tag:
+> Fixes: 615510fe13bd2 ("thermal: devfreq_cooling: remove old power model 
+> and use EM")
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing b/Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing
-> index b363827da437..1e25cd2cacc1 100644
-> --- a/Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing
-> +++ b/Documentation/ABI/testing/sysfs-driver-aspeed-uart-routing
-> @@ -8,9 +8,10 @@ Description:	Selects the RX source of the UARTx device.
->  		selected option marked by brackets "[]". The list of available options
->  		depends on the selected file.
->  
-> -		e.g.
-> -		cat /sys/bus/platform/drivers/aspeed-uart-routing/*.uart_routing/uart1
-> -		[io1] io2 io3 io4 uart2 uart3 uart4 io6
-> +		e.g.::
-> +
-> +			# cat /sys/bus/platform/drivers/aspeed-uart-routing/*.uart_routing/uart1
-> +			[io1] io2 io3 io4 uart2 uart3 uart4 io6
->  
->  		In this case, UART1 gets its input from IO1 (physical serial port 1).
->  
+> This patch would also go via stable tree for kernels v5.11+
+> Please read the process how to send a patch which will be merged to the
+> stable tree.
+> 
+> There will be a need to create another patch(es) for stable kernels with
+> Fixes: a76caf55e5b35 ("thermal: Add devfreq cooling")
+> In those kernels also the global ops is modified and might not support
+> properly many cooling devices. It's present in other stable kernels:
+> v5.10 and older
+> 
+>> ---
+>>   drivers/thermal/devfreq_cooling.c | 25 ++++++++++++++++++-------
+>>   1 file changed, 18 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/thermal/devfreq_cooling.c 
+>> b/drivers/thermal/devfreq_cooling.c
+>> index 4310cb342a9f..d38a80adec73 100644
+>> --- a/drivers/thermal/devfreq_cooling.c
+>> +++ b/drivers/thermal/devfreq_cooling.c
+>> @@ -358,21 +358,28 @@ of_devfreq_cooling_register_power(struct 
+>> device_node *np, struct devfreq *df,
+>>       struct thermal_cooling_device *cdev;
+>>       struct device *dev = df->dev.parent;
+>>       struct devfreq_cooling_device *dfc;
+>> +    struct thermal_cooling_device_ops *ops;
+>>       char *name;
+>>       int err, num_opps;
+>> -    dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
+>> -    if (!dfc)
+>> +    ops = kmemdup(&devfreq_cooling_ops, sizeof(*ops), GFP_KERNEL);
+>> +    if (!ops)
+>>           return ERR_PTR(-ENOMEM);
+>> +    dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
+>> +    if (!dfc) {
+>> +        err = -ENOMEM;
+>> +        goto free_ops;
+>> +    }
+>> +
+>>       dfc->devfreq = df;
+>>       dfc->em_pd = em_pd_get(dev);
+>>       if (dfc->em_pd) {
+>> -        devfreq_cooling_ops.get_requested_power =
+>> +        ops->get_requested_power =
+>>               devfreq_cooling_get_requested_power;
+>> -        devfreq_cooling_ops.state2power = devfreq_cooling_state2power;
+>> -        devfreq_cooling_ops.power2state = devfreq_cooling_power2state;
+>> +        ops->state2power = devfreq_cooling_state2power;
+>> +        ops->power2state = devfreq_cooling_power2state;
+>>           dfc->power_ops = dfc_power;
+>> @@ -407,8 +414,7 @@ of_devfreq_cooling_register_power(struct 
+>> device_node *np, struct devfreq *df,
+>>       if (!name)
+>>           goto remove_qos_req;
+>> -    cdev = thermal_of_cooling_device_register(np, name, dfc,
+>> -                          &devfreq_cooling_ops);
+>> +    cdev = thermal_of_cooling_device_register(np, name, dfc, ops);
+>>       kfree(name);
+>>       if (IS_ERR(cdev)) {
+>> @@ -429,6 +435,8 @@ of_devfreq_cooling_register_power(struct 
+>> device_node *np, struct devfreq *df,
+>>       kfree(dfc->freq_table);
+>>   free_dfc:
+>>       kfree(dfc);
+>> +free_ops:
+>> +    kfree(ops);
+>>       return ERR_PTR(err);
+>>   }
+>> @@ -510,11 +518,13 @@ EXPORT_SYMBOL_GPL(devfreq_cooling_em_register);
+>>   void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
+>>   {
+>>       struct devfreq_cooling_device *dfc;
+>> +    const struct thermal_cooling_device_ops *ops;
+>>       struct device *dev;
+>>       if (IS_ERR_OR_NULL(cdev))
+>>           return;
+>> +    ops = cdev->ops;
+>>       dfc = cdev->devdata;
+>>       dev = dfc->devfreq->dev.parent;
+>> @@ -525,5 +535,6 @@ void devfreq_cooling_unregister(struct 
+>> thermal_cooling_device *cdev)
+>>       kfree(dfc->freq_table);
+>>       kfree(dfc);
+>> +    kfree(ops);
+>>   }
+>>   EXPORT_SYMBOL_GPL(devfreq_cooling_unregister);
+> 
+> The fix looks good.
 
+Hi Lukasz,
+Thanks for your advice. According to that, I made two separate patches 
+for mainline and the stable trees:
+The first patch (patchwork.kernel.org: Message ID: 
+20220325073030.91919-1-kant@allwinnertech.com) is for mainline. I added 
+the 'fix' tag and 'Cc: stable@vger.kernel.org # 5.13+' to remind which 
+stable trees should be back-ported.
+The second patch (patchwork.kernel.org: Message ID: 
+20220325094436.101419-1-kant@allwinnertech.com) is for stable tree v5.10 
+and older. I added an upstream commit ID to indicate where the patch 
+comes from. I also added 'Cc: stable@vger.kernel.org # 4.4+' to remind 
+which stable trees should be back-ported.
+Please check if they are correct. Thank you.
+
+Kant Fan
