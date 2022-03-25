@@ -2,117 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8128F4E6C33
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Mar 2022 02:46:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F634E6C6E
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Mar 2022 03:15:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357589AbiCYBre (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Mar 2022 21:47:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
+        id S1344860AbiCYCRO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Mar 2022 22:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357619AbiCYBr0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Mar 2022 21:47:26 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D609A991;
-        Thu, 24 Mar 2022 18:44:20 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0V87ClCa_1648172657;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0V87ClCa_1648172657)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 25 Mar 2022 09:44:18 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     rafael@kernel.org
-Cc:     pavel@ucw.cz, len.brown@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] kernel/power: Fix some kernel-doc comments
-Date:   Fri, 25 Mar 2022 09:44:15 +0800
-Message-Id: <20220325014415.110740-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S240632AbiCYCRN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Mar 2022 22:17:13 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F068AC077;
+        Thu, 24 Mar 2022 19:15:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648174540; x=1679710540;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=o4sz/LKzGpYOK1X2HGP165kUrHUS9uWa1kxmjabLul8=;
+  b=KpLspLNqq4uUqa4thGGhgtILVofx4Ggwkbp1igLcTw2Aiz2LTOMC8E9o
+   q5PDf9tyzmsVhkgBBazjR88LW5TfxVGHXoKgarZaYzdYXlMv/jW558TPo
+   gDGP3ybCYhI1wUhty+/WljySyvpAl5+n9w4mwBjtYP3lvH+OfgygK9E04
+   SA3QI3lAMyqui4wGJDEqX188vGhGtfmY7m19E4b7isvkSmWqjOYGwwN5n
+   ifrCfW4p1pQHCTcM4be6tQb+oZAdLpCh6SrbXZZ3JDcuROFXZz/xxJKus
+   Slv8My/ByOWPqLGYsduuRa6WOUe9EdmCFUxXVtsTGPNnDNPSyk+o9y6fC
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10296"; a="238475911"
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="238475911"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 19:15:40 -0700
+X-IronPort-AV: E=Sophos;i="5.90,209,1643702400"; 
+   d="scan'208";a="561639626"
+Received: from sijiali-mobl1.ccr.corp.intel.com ([10.255.28.92])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Mar 2022 19:15:37 -0700
+Message-ID: <1c5b8eb88d8c59949a6bbd3e763c820db462979f.camel@intel.com>
+Subject: Re: [PATCH 0/3] thermal: int340x: Misc acpi_buffer handling updates
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Davidlohr Bueso <dave@stgolabs.net>, rafael@kernel.org
+Cc:     daniel.lezcano@linaro.org, amitk@kernel.org,
+        srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 25 Mar 2022 10:15:34 +0800
+In-Reply-To: <20220324190950.70486-1-dave@stgolabs.net>
+References: <20220324190950.70486-1-dave@stgolabs.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add parameter description in alloc_rtree_node()  kernel-doc
-comment and fix several inconsistent function name descriptions.
+Acked-by: Zhang Rui <rui.zhang@intel.com>
 
-Remove some warnings found by running scripts/kernel-doc,
-which is caused by using 'make W=1'.
+for the whole patch series.
 
-kernel/power/snapshot.c:438: warning: Function parameter or member
-'gfp_mask' not described in 'alloc_rtree_node'
-kernel/power/snapshot.c:438: warning: Function parameter or member
-'safe_needed' not described in 'alloc_rtree_node'
-kernel/power/snapshot.c:438: warning: Function parameter or member 'ca'
-not described in 'alloc_rtree_node'
-kernel/power/snapshot.c:438: warning: Function parameter or member
-'list' not described in 'alloc_rtree_node'
-kernel/power/snapshot.c:916: warning: expecting prototype for
-memory_bm_rtree_next_pfn(). Prototype was for memory_bm_next_pfn()
-instead
-kernel/power/snapshot.c:1947: warning: expecting prototype for
-alloc_highmem_image_pages(). Prototype was for alloc_highmem_pages()
-instead
-kernel/power/snapshot.c:2230: warning: expecting prototype for load
-header(). Prototype was for load_header() instead
+thanks,
+rui
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- kernel/power/snapshot.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index 330d49937692..89c8f9df9fdc 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -427,6 +427,12 @@ struct memory_bitmap {
- 
- /**
-  * alloc_rtree_node - Allocate a new node and add it to the radix tree.
-+ * @gfp_mask: GFP mask for the allocation.
-+ * @safe_needed: Get pages that were not used before hibernation
-+ *		 (restore only)
-+ * @ca: used for allocating small objects out of a linked list of pages
-+ *	called 'the chain'.
-+ * @list: the inner node or leave of Radix Tree to add.
-  *
-  * This function is used to allocate inner nodes as well as the
-  * leave nodes of the radix tree. It also adds the node to the
-@@ -902,7 +908,7 @@ static bool rtree_next_node(struct memory_bitmap *bm)
- }
- 
- /**
-- * memory_bm_rtree_next_pfn - Find the next set bit in a memory bitmap.
-+ * memory_bm_next_pfn - Find the next set bit in a memory bitmap.
-  * @bm: Memory bitmap.
-  *
-  * Starting from the last returned position this function searches for the next
-@@ -1937,7 +1943,7 @@ static inline int get_highmem_buffer(int safe_needed)
- }
- 
- /**
-- * alloc_highmem_image_pages - Allocate some highmem pages for the image.
-+ * alloc_highmem_pages - Allocate some highmem pages for the image.
-  *
-  * Try to allocate as many pages as needed, but if the number of free highmem
-  * pages is less than that, allocate them all.
-@@ -2224,7 +2230,7 @@ static int check_header(struct swsusp_info *info)
- }
- 
- /**
-- * load header - Check the image header and copy the data from it.
-+ * load_header - Check the image header and copy the data from it.
-  */
- static int load_header(struct swsusp_info *info)
- {
--- 
-2.20.1.7.g153144c
+On Thu, 2022-03-24 at 12:09 -0700, Davidlohr Bueso wrote:
+> Hello,
+> 
+> The following is a fallout of eyeballing _OSC handling in the driver.
+> These changes have only been compile-tested. Patch 1 is a fix and the
+> other two are cleanups.
+> 
+> Thanks!
+> 
+> Davidlohr Bueso (3):
+>   thermal: int340x: Fix bogus acpi_buffer pointer freeing
+>   thermal: int340x: Consolidate freeing of acpi_buffer pointer
+>   thermal: int340x: Cleanup osc context init
+> 
+>  .../intel/int340x_thermal/int3400_thermal.c   | 24 +++++++--------
+> ----
+>  1 file changed, 9 insertions(+), 15 deletions(-)
+> 
+> --
+> 2.26.2
+> 
 
