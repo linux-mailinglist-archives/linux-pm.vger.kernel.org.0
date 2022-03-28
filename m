@@ -2,113 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A4C4E8F3C
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Mar 2022 09:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 052934E8F5C
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Mar 2022 09:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235980AbiC1HpM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Mar 2022 03:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34670 "EHLO
+        id S233217AbiC1HzZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Mar 2022 03:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233529AbiC1HpM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Mar 2022 03:45:12 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D632752E18;
-        Mon, 28 Mar 2022 00:43:31 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id n7-20020a17090aab8700b001c6aa871860so14655947pjq.2;
-        Mon, 28 Mar 2022 00:43:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=5F0vPMEUiwjxuq5pjTLwGQrsLXzqAZhWm21dKQena8E=;
-        b=Pp5hdQtvybkoE7iXCBGqw92+FFCxtS0gcrDzWSM1XbdfogwH6IUPx9/+LqG9FedtVM
-         86lC/5AznmmTN+ZUSDXmPb1Wp6XyGRyx1sBuKEpeWIFH13EM48Sgy49hjQn8KC+tCRkw
-         Fxpxt5chztOHglhRcRYwAt0RIZduYDp7n1cbh7DDnbl/LZYYKN3eCPI7x4eXEgo16zVz
-         tZvv8PHSpn5ur7nF1XxuOPXBXzeeNf0H/x/YEtIErf3KsZyJ0og5EGXQOIga9nOLAXNB
-         vpOnB38wzG8gtJu1vjIQKUPJJI8oJ7CsbkiQEJHohouuFqZJK+Dwlsa+HOjX6AYIZYCB
-         l+eA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=5F0vPMEUiwjxuq5pjTLwGQrsLXzqAZhWm21dKQena8E=;
-        b=dE2gnF5WyM/VkhExXQ7q00VKaSlE6Hz2Zv3TFK7zhbvTnyzn9mjWL4iJrX0XrFXI7E
-         nx0SPLyQMM3vr/dC+UMFOoTRdvTCRFYA2u4XYNlgS5YkvWYS91R0T4XevcqDAmswJelg
-         Q0+BkWgnJZRMUHY/YnoyUxik+KtB4tHuMYAedZGCOxACsFJ45oKz11jnX9gEQo4s3QR0
-         Y8xB6jbDSqlM9V0lfgz/88JJg0AvzwQFOQaGjT9dq8OClbCdeZkks7Rp9NxfY7UL6+SF
-         gFPeyTtojEKBK/5BVQ3elglNH844XBhi/jzP6JdXt3Ct9TsrTMepUyiayk6VzPK+yemz
-         Ppcg==
-X-Gm-Message-State: AOAM532TdtL2llhlI3k0YV6Ss45ccmAgrkyFL9pPkS58XHZtb3wwGEF8
-        SJHY3OvEPau72BpYX9OvTZw=
-X-Google-Smtp-Source: ABdhPJyO4+ufZp/SIAWh+2kglfewOd/M/i3FDRBuWVxR+N7p90doKEWl81dY+fiOrjG6cVxA9k0AfQ==
-X-Received: by 2002:a17:902:8644:b0:153:9f01:2090 with SMTP id y4-20020a170902864400b001539f012090mr24200102plt.101.1648453411437;
-        Mon, 28 Mar 2022 00:43:31 -0700 (PDT)
-Received: from ubuntu.huawei.com ([119.3.119.18])
-        by smtp.googlemail.com with ESMTPSA id f30-20020a63755e000000b00381f6b7ef30sm12082098pgn.54.2022.03.28.00.43.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 00:43:30 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     viresh.kumar@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, nm@ti.com,
-        rafael.j.wysocki@intel.com, sboyd@kernel.org,
-        stable@vger.kernel.org, vireshk@kernel.org, xiam0nd.tong@gmail.com
-Subject: Re: [PATCH] opp: fix a missing check on list iterator
-Date:   Mon, 28 Mar 2022 15:43:22 +0800
-Message-Id: <20220328074322.25349-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220328031739.72togwws2u2rlluo@vireshk-i7>
-References: <20220328031739.72togwws2u2rlluo@vireshk-i7>
+        with ESMTP id S235343AbiC1HzY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Mar 2022 03:55:24 -0400
+X-Greylist: delayed 375 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 28 Mar 2022 00:53:43 PDT
+Received: from mail.ourpartnership.pl (mail.ourpartnership.pl [80.211.82.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF0D65EC
+        for <linux-pm@vger.kernel.org>; Mon, 28 Mar 2022 00:53:43 -0700 (PDT)
+Received: by mail.ourpartnership.pl (Postfix, from userid 1001)
+        id 7990C61532; Mon, 28 Mar 2022 08:46:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ourpartnership.pl;
+        s=mail; t=1648453646;
+        bh=M1ZVeu3q6Upppe+FUx/3rgI7MKJXh389NZDbgCK1SX4=;
+        h=Date:From:To:Subject:From;
+        b=VdYZIFrgbIg+zLEkU9r1Ilvq7YKIolp/28kNyKqKAvfjSymITevRurhvJBeNJ2dl1
+         8rnpuBX/BGop2X2PzP9MHKEfhCV8Q4/d14Da7s0tIJVK3SbNruF9t12d35eKB7Ly6V
+         0HTvPE8b796/e5XnyLUAjKdvW8EBw70Y+rV/rJQCjo9OSYxB6iiKPWy+NJgwhG8/K0
+         qTKfSY0BLkW6GcNuZ7U4Pe50xSJqAafTzrz/6Q50O5qwDWIYmZtlSeHWp68IR7k1wN
+         hF8a/ia3s9d3lwSEKdrLq4/2QEJ4ucFV4hGD1KkzHUVX8p/QdzwhuzZRFybmOZh1mS
+         RwEBNZJnoSH9g==
+Received: by mail.ourpartnership.pl for <linux-pm@vger.kernel.org>; Mon, 28 Mar 2022 07:46:04 GMT
+Message-ID: <20220328074501-0.1.9.29zx.0.gy8xcn80i0@ourpartnership.pl>
+Date:   Mon, 28 Mar 2022 07:46:04 GMT
+From:   =?UTF-8?Q? "Arkadiusz_Soko=C5=82owski" ?= 
+        <arkadiusz.sokolowski@ourpartnership.pl>
+To:     <linux-pm@vger.kernel.org>
+Subject: Koszty instalacji fotowoltaicznej
+X-Mailer: mail.ourpartnership.pl
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 28 Mar 2022 08:47:39 +0530, Viresh Kumar wrote:
-> > diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
-> > index 596c185b5dda..a4476985e4ce 100644
-> > --- a/drivers/opp/debugfs.c
-> > +++ b/drivers/opp/debugfs.c
-> > @@ -187,14 +187,19 @@ void opp_debug_register(struct opp_device *opp_dev, struct opp_table *opp_table)
-> >  static void opp_migrate_dentry(struct opp_device *opp_dev,
-> >  			       struct opp_table *opp_table)
-> >  {
-> > -	struct opp_device *new_dev;
-> > +	struct opp_device *new_dev = NULL, *iter;
-> >  	const struct device *dev;
-> >  	struct dentry *dentry;
-> >  
-> >  	/* Look for next opp-dev */
-> > -	list_for_each_entry(new_dev, &opp_table->dev_list, node)
-> > -		if (new_dev != opp_dev)
-> > +	list_for_each_entry(iter, &opp_table->dev_list, node)
-> > +		if (iter != opp_dev) {
-> > +			new_dev = iter;
-> >  			break;
-> > +		}
-> > +
-> > +	if (!new_dev)
-> > +		return;
-> 
-> I think you missed this check in the parent function ?
-> 
-> 		if (!list_is_singular(&opp_table->dev_list)) {
-> 
-> 
-> i.e. this bug can never happen.
->
+Dzie=C5=84 dobry,
 
-No. the conditon to call opp_migrate_dentry(opp_dev, opp_table); is:
-if (!list_is_singular(&opp_table->dev_list)), 
+stworzyli=C5=9Bmy specjaln=C4=85 ofert=C4=99 dla firm, na kompleksow=C4=85=
+ obs=C5=82ug=C4=99 inwestycji w fotowoltaik=C4=99. =20
 
-while list_is_singlular is: !list_empty(head) && (head->next == head->prev);
+Specjalizujemy si=C4=99 w zakresie doboru, monta=C5=BCu i serwisie instal=
+acji fotowoltaicznych, dysponujemy najnowocze=C5=9Bniejszymi rozwi=C4=85z=
+ania, kt=C3=B3re zapewni=C4=85 Pa=C5=84stwu oczekiwane rezultaty.
 
-so the condition is: list_empty(head) || (head->next != head->prev)
+Mo=C5=BCemy przygotowa=C4=87 dla Pa=C5=84stwa wst=C4=99pn=C4=85 kalkulacj=
+=C4=99 i przeanalizowa=C4=87 efekty mo=C5=BCliwe do osi=C4=85gni=C4=99cia=
+=2E
 
-if the list is empty, the bug can be triggered.
+Czy s=C4=85 Pa=C5=84stwo otwarci na wst=C4=99pn=C4=85 rozmow=C4=99 w tym =
+temacie?
 
---
-Xiaomeng Tong
+
+Pozdrawiam
+Arkadiusz Soko=C5=82owski
