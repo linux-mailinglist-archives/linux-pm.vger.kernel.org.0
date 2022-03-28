@@ -2,142 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A514E952D
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Mar 2022 13:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B99184E983A
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Mar 2022 15:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239440AbiC1Lkv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Mar 2022 07:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57858 "EHLO
+        id S243239AbiC1NfN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Mar 2022 09:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243689AbiC1Lgr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Mar 2022 07:36:47 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3550B1BEBA
-        for <linux-pm@vger.kernel.org>; Mon, 28 Mar 2022 04:28:42 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id bt26so24137252lfb.3
-        for <linux-pm@vger.kernel.org>; Mon, 28 Mar 2022 04:28:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=alkm6GAWo2f9KK0udr6YqOnxDL3wRG7VC8zZzqw/UA0=;
-        b=C5qKK5COQt2vcAc0rnvS5bZFeoWGxCzJAq7CaTUZ2pzdsH66opPE+nHoCq8cSuKk4F
-         cnYHLhyt/luVE7n5FBubfWOQVCYwhoO2SpUFGEPbAzUcVcqCdVYa/JGRgd2etiYjwlSd
-         kS6+BUfHW2j6DTKPUCR4RskPRlnXwtm1PuX1Rgwgjr1kuDgnywxhYgepzCJ1KzTVHT8D
-         FGLgefVnDRdH+XuuyKryvaFCQllHXBdtha86k9bBW24aqXmKSTcTUqCDOnxsYFKYYlbZ
-         cFLP7QfVe8bnYfLWd2g5RPr/114apDHHBuzBeZbd8SkLWvOxVEzrtlU1Zghmm0TgRxn+
-         gdOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=alkm6GAWo2f9KK0udr6YqOnxDL3wRG7VC8zZzqw/UA0=;
-        b=dgT2IVXczpVAb4a6piX7jb02uRVSJTMln4Wjo4oiG+/rrTPQjPODtSxrAKey4pOEqI
-         Na85au0DVZQN2eqfBnOlCGda7/0EDHgELPzZEHwTsBlOhCqtbLZtoTOAHvZ5ZdEnqSIA
-         6fpr0pv0Tl6TKSfiICg9KCLdEuhd1QbvgaIl6ry+GOGrXVc1HcCP7Zujt1IZsiGvWC5H
-         G3BXTXsLLZzP+aj/06tRqBzoEW66d/DmK+QaxWfSuwlESIHwxonvffmjRMw8Bn1CTQJk
-         frYRiFJ3YRoYE0i81PT8GdemvA0I4euMVQ8rQK8nnsJkCByen94MDkfP6fJQZ/xMOEhV
-         /MhQ==
-X-Gm-Message-State: AOAM531rlnBpEXavnGHUBcXQaW5ozf2Zwf80HaBtWwKGJthIcr3uQkcA
-        fNX3Hgb+IeHuPQlkiiEwkdJqZg==
-X-Google-Smtp-Source: ABdhPJzCbBGvm5ABKxgC0QMItHLeB7ll+t5pmGeZX5KAly8LAdVOG6WyvFpK9/KbNMKu93Cdw3kiIg==
-X-Received: by 2002:a05:6512:689:b0:44a:3b4c:8bf3 with SMTP id t9-20020a056512068900b0044a3b4c8bf3mr19052511lfe.378.1648466920750;
-        Mon, 28 Mar 2022 04:28:40 -0700 (PDT)
-Received: from localhost.localdomain (88-113-46-102.elisa-laajakaista.fi. [88.113.46.102])
-        by smtp.gmail.com with ESMTPSA id l4-20020a2e9084000000b00244cb29e3e4sm1700373ljg.133.2022.03.28.04.28.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Mar 2022 04:28:40 -0700 (PDT)
-From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH 2/2] cpufreq: qcom-cpufreq-hw: Fix throttle frequency value on EPSS platforms
-Date:   Mon, 28 Mar 2022 14:28:36 +0300
-Message-Id: <20220328112836.2464486-3-vladimir.zapolskiy@linaro.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220328112836.2464486-1-vladimir.zapolskiy@linaro.org>
-References: <20220328112836.2464486-1-vladimir.zapolskiy@linaro.org>
+        with ESMTP id S235088AbiC1NfM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Mar 2022 09:35:12 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6005DB1A;
+        Mon, 28 Mar 2022 06:33:31 -0700 (PDT)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nYpUu-0005IN-90; Mon, 28 Mar 2022 15:33:28 +0200
+Message-ID: <ad13371f-2883-bcf2-a62c-78104bfd615c@leemhuis.info>
+Date:   Mon, 28 Mar 2022 15:33:25 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Content-Language: en-US
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Bug 215715 - PCI device (iwlwifi) is not working due to PCI power
+ state change issues
+To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1648474411;4bf31efa;
+X-HE-SMSGID: 1nYpUu-0005IN-90
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On QCOM platforms with EPSS flavour of cpufreq IP a throttled frequency is
-obtained from another register REG_DOMAIN_STATE, thus the helper function
-qcom_lmh_get_throttle_freq() should be modified accordingly, as for now
-it returns gibberish since .reg_current_vote is unset for EPSS hardware.
+Hi, this is your Linux kernel regression tracker.
 
-Fixes: 275157b367f4 ("cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support")
-Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
----
- drivers/cpufreq/qcom-cpufreq-hw.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+Rafael, I noticed a regression report in bugzilla.kernel.org that afaics
+nobody acted upon since it was reported about a week ago, that's why I
+decided to forward it to the lists, maintainers, and the author of the
+culprit. To quote from
+https://bugzilla.kernel.org/show_bug.cgi?id=215715 :
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 53954e5086e0..3156d79ef39e 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -30,6 +30,7 @@
- 
- struct qcom_cpufreq_soc_data {
- 	u32 reg_enable;
-+	u32 reg_domain_state;
- 	u32 reg_dcvs_ctrl;
- 	u32 reg_freq_lut;
- 	u32 reg_volt_lut;
-@@ -283,11 +284,16 @@ static void qcom_get_related_cpus(int index, struct cpumask *m)
- 	}
- }
- 
--static unsigned int qcom_lmh_get_throttle_freq(struct qcom_cpufreq_data *data)
-+static unsigned long qcom_lmh_get_throttle_freq(struct qcom_cpufreq_data *data)
- {
--	unsigned int val = readl_relaxed(data->base + data->soc_data->reg_current_vote);
-+	unsigned int lval;
- 
--	return (val & 0x3FF) * 19200;
-+	if (data->soc_data->reg_current_vote)
-+		lval = readl_relaxed(data->base + data->soc_data->reg_current_vote) & 0x3ff;
-+	else
-+		lval = readl_relaxed(data->base + data->soc_data->reg_domain_state) & 0xff;
-+
-+	return lval * xo_rate;
- }
- 
- static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
-@@ -297,14 +303,12 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
- 	struct device *dev = get_cpu_device(cpu);
- 	unsigned long freq_hz, throttled_freq;
- 	struct dev_pm_opp *opp;
--	unsigned int freq;
- 
- 	/*
- 	 * Get the h/w throttled frequency, normalize it using the
- 	 * registered opp table and use it to calculate thermal pressure.
- 	 */
--	freq = qcom_lmh_get_throttle_freq(data);
--	freq_hz = freq * HZ_PER_KHZ;
-+	freq_hz = qcom_lmh_get_throttle_freq(data);
- 
- 	opp = dev_pm_opp_find_freq_floor(dev, &freq_hz);
- 	if (IS_ERR(opp) && PTR_ERR(opp) == -ERANGE)
-@@ -371,6 +375,7 @@ static const struct qcom_cpufreq_soc_data qcom_soc_data = {
- 
- static const struct qcom_cpufreq_soc_data epss_soc_data = {
- 	.reg_enable = 0x0,
-+	.reg_domain_state = 0x20,
- 	.reg_dcvs_ctrl = 0xb0,
- 	.reg_freq_lut = 0x100,
- 	.reg_volt_lut = 0x200,
+>  Stefan Gottwald 2022-03-21 13:31:43 UTC
+> 
+> Created attachment 300589 [details]
+> dmesg output from error case
+> 
+> We got a Elo AIO i2 device which most current BIOS where WiFi was working with Kernel 5.12.x but stopped working since Kernel 5.13.19 and newer (5.17.0-rc5).
+> 
+> The kernel error message is:
+> 
+> [    3.419766] iwlwifi 0000:01:00.0: can't change power state from D3cold to D0 (config space inaccessible)
+> [    3.419781] iwlwifi 0000:01:00.0: can't change power state from D3cold to D0 (config space inaccessible)
+> [    3.419975] iwlwifi 0000:01:00.0: HW_REV=0xFFFFFFFF, PCI issues?
+> [    3.420911] iwlwifi: probe of 0000:01:00.0 failed with error -5
+> 
+> The issue can be solved by adding the iwlwifi driver to the initramfs so it is loaded much earlier and seems to work.
+> 
+> To narrow down the issue I did an git bisect between v5.13.18 and v5.13.19 mainline kernel version which got me to following commit which if reverted fix the issue on this device.
+> 
+> Reverting commit d0660d8ab123ea471064f0828f290bec9593e16b : PCI: Use pci_update_current_state() in pci_enable_device_flags()
+
+FWIW, that afaics is d0660d8ab123 ("PCI: Use pci_update_current_state()
+in pci_enable_device_flags()") in mainline.
+
+> resolve the issue also in the newer kernels. Seems like the function platform_pci_get_power_state is always returning PCI_D3cold on this device also if this is not true.
+
+Could somebody take a look into this? Or was this discussed somewhere
+else already? Or even fixed?
+
+Anyway, to get this tracked:
+
+#regzbot introduced: d0660d8ab123ea471064f0828f290bec9593e16b
+#regzbot from: Stefan Gottwald <gottwald@igel.com>
+#regzbot title: pci/iwlwifi: wifi is not working due to PCI power state
+change issues
+#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215715
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+reports on my table. I can only look briefly into most of them and lack
+knowledge about most of the areas they concern. I thus unfortunately
+will sometimes get things wrong or miss something important. I hope
+that's not the case here; if you think it is, don't hesitate to tell me
+in a public reply, it's in everyone's interest to set the public record
+straight.
+
 -- 
-2.33.0
+Additional information about regzbot:
+
+If you want to know more about regzbot, check out its web-interface, the
+getting start guide, and the references documentation:
+
+https://linux-regtracking.leemhuis.info/regzbot/
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The last two documents will explain how you can interact with regzbot
+yourself if your want to.
+
+Hint for reporters: when reporting a regression it's in your interest to
+CC the regression list and tell regzbot about the issue, as that ensures
+the regression makes it onto the radar of the Linux kernel's regression
+tracker -- that's in your interest, as it ensures your report won't fall
+through the cracks unnoticed.
+
+Hint for developers: you normally don't need to care about regzbot once
+it's involved. Fix the issue as you normally would, just remember to
+include 'Link:' tag in the patch descriptions pointing to all reports
+about the issue. This has been expected from developers even before
+regzbot showed up for reasons explained in
+'Documentation/process/submitting-patches.rst' and
+'Documentation/process/5.Posting.rst'.
 
