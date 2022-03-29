@@ -2,101 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F164EACA9
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Mar 2022 13:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 813E54EAE7F
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Mar 2022 15:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232733AbiC2LwS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Mar 2022 07:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47332 "EHLO
+        id S237320AbiC2Nbe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Mar 2022 09:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236106AbiC2LwS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Mar 2022 07:52:18 -0400
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325982498B3;
-        Tue, 29 Mar 2022 04:50:34 -0700 (PDT)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-df0940c4eeso4936687fac.8;
-        Tue, 29 Mar 2022 04:50:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=Asq1gr+EClGnhk914HvUDEJ2f/aYCxusbmU0iqu5d+k=;
-        b=HqhSYR9OX1Ehho2Qd7PCbmuzFOoJl0ac/fHCruq6yEijuG6a+Spdkc9EoVqOgzphOn
-         5VMN57OQz8D9hnXcR36RvLo6X+uIE5AiR+Rq+7caplXoZ1iA/XA0+PA44FJC969IKCLA
-         ZX8nqDdOjj7Ouv7uENaVxSUQcw40DYftOHza3UUANX/p4oRd4npyhOya1GaPkI+ZInla
-         iBSd0ysm3dmwKyFowG4B8+UmXDl//AHWQlx56sbceKo7glWvPx7iUuqpF8ujs85tMpBB
-         hJtQ05IksBpQP4x4m52J8Wbk/u2HDqRN5+gRemA8e0JwsFfEsUUXSxu7rcGw0DFgTyOJ
-         sJzw==
-X-Gm-Message-State: AOAM531dB+vbGxVnzBDT3q1bMVWLDx013++iICRCHtOzv4578zPpDiwR
-        F43maePF/YPTQf6Q2Zj8WA==
-X-Google-Smtp-Source: ABdhPJwhXc/RcfACLDL7HBgskD+zZRsxdYTdp0owC7QOUhyQPnfvmfacgZDo4zTnaIfsjFP54TlaFQ==
-X-Received: by 2002:a05:6870:8327:b0:d7:8685:5129 with SMTP id p39-20020a056870832700b000d786855129mr1861270oae.75.1648554633457;
-        Tue, 29 Mar 2022 04:50:33 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id fz16-20020a056870ed9000b000dde87bcdfdsm7911413oab.53.2022.03.29.04.50.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 04:50:32 -0700 (PDT)
-Received: (nullmailer pid 350366 invoked by uid 1000);
-        Tue, 29 Mar 2022 11:50:29 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Li-hao Kuo <lhjeff911@gmail.com>
-Cc:     daniel.lezcano@linaro.org, devicetree@vger.kernel.org,
-        rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, amitk@kernel.org,
-        krzysztof.kozlowski@canonical.com, lh.kuo@sunplus.com,
-        robh+dt@kernel.org, linux-pm@vger.kernel.org, wells.lu@sunplus.com
-In-Reply-To: <5c3d0ab5baa9126b544a8f54ac5c773269ee1944.1648531197.git.lhjeff911@gmail.com>
-References: <cover.1648531197.git.lhjeff911@gmail.com> <5c3d0ab5baa9126b544a8f54ac5c773269ee1944.1648531197.git.lhjeff911@gmail.com>
-Subject: Re: [PATCH v6 2/2] dt-bindings:thermal: Add Sunplus SP7021 schema
-Date:   Tue, 29 Mar 2022 06:50:29 -0500
-Message-Id: <1648554629.886096.350365.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S237304AbiC2Nbc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Mar 2022 09:31:32 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C50A01C119;
+        Tue, 29 Mar 2022 06:29:49 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3B8E323A;
+        Tue, 29 Mar 2022 06:29:49 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3AC0C3F73B;
+        Tue, 29 Mar 2022 06:29:47 -0700 (PDT)
+Date:   Tue, 29 Mar 2022 14:29:45 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
+        viresh.kumar@linaro.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+        mka@chromium.org, nm@ti.com, sboyd@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, sudeep.holla@arm.com,
+        matthias.bgg@gmail.com
+Subject: Re: [0/8] Introduce support for artificial Energy Model
+Message-ID: <YkMJyRblpNMnv8ub@e120937-lin>
+References: <20220316235211.29370-1-lukasz.luba@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220316235211.29370-1-lukasz.luba@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 29 Mar 2022 13:24:32 +0800, Li-hao Kuo wrote:
-> Add bindings for Sunplus SP7021 thermal driver
-> 
-> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
-> ---
-> Changes in v6:
->  - Modify yaml file.
->  - Addressed comments from Mr. Krzysztof Kozlowski
-> 
->  .../bindings/thermal/sunplus-thermal.yaml          | 43 ++++++++++++++++++++++
->  MAINTAINERS                                        |  1 +
->  2 files changed, 44 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/sunplus-thermal.yaml
+On Wed, Mar 16, 2022 at 11:52:03PM +0000, Lukasz Luba wrote:
+> Hi all,
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Hi Lukasz,
 
-yamllint warnings/errors:
+> This patch set adds new callback and support for artificial Energy Model (EM).
+> The new EMs have artificially generated performance states.
+> Such EMs can be created from lean information sources, such
+> as the relative energy efficiency between CPUs. The ACPI based
+> platforms provide this information
+> (ACPI 6.4, s5.2.12.14 'GIC CPU Interface (GICC) Structure'
+> 'Processor Power efficiency Class' field).
+> 
+> Artificial EMs might require to directly provide the 'cost' of
+> the generated performance state. This patch set adds a new callback
+> .get_cost() for this. The EM framework does not force any model
+> or formula, it's up to the platform code.
+> 
+> Artificial EMs aim to leverage the Energy Aware Scheduler
+> (EAS). Other frameworks relying on performance states
+> information (i.e. IPA/DTPM) must be informed of the
+> EM type and might be prevented from using it. This patch
+> sets also does this by introducing a new flag:
+> EM_PERF_DOMAIN_ARTIFICIAL.
+> 
+> The patch set is based on current linux-next, where some
+> changes to OPP & EM are queuing.
+> 
+> The patch set also contains (patch 7/8 and patch 8/8) logic which prevents
+> two EM's client frameworks from using this new EM type. Some other approach,
+> using 'milli-watts', has been proposed and discussed, but refused [1].
+> This new flag is more precised and should not leave space for
+> wrong interpretation.
+> 
+> Shortly after this patch set you will see a patch set implementing the
+> platform code and registering this new EM.
+> 
 
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/thermal/sunplus-thermal.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/thermal/sunplus-thermal.yaml#
+Just to let you know that in the few days I'm going to post the first
+chunk of some SCMIv3.1 additions that includes also (as you probably
+know) the SCMI Perf protocol support for reporting perf_domain costs in
+micro-watts and not only in milli-watts.
 
-doc reference errors (make refcheckdocs):
+Given that it does not seem that as of now the em_ API used by the SCMI
+cpufreq driver can make use of this new scale (and being not at all
+familiar with EM/EAS for sure :P), the SCMIv3.1 'Perf micro-watts' patch
+which I will post (I'll CC you) does NOT expose any new interface but only
+takes care to store the new micro-watts capability internally in a flag
+(if advertised by an SCMIv3.1 backend server), so that, basically, you'll
+keep seeing from the SCMI cpufreq driver that the scale is milli-watt
+(when milli-watts are used of course) or non-milli-watt (for abstract and
+micro-watts scales).
 
-See https://patchwork.ozlabs.org/patch/1610480
+This is intended to be of course a first step, laying out just the bare
+minimum commmon internal SCMI support, until we figure out how to properly
+expose this from the SCMI Perf in order to make it usable for EM.
+(if neeeded at all).
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+Thanks,
+Cristian
 
