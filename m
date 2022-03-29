@@ -2,124 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC564EAEA3
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Mar 2022 15:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F9B4EB1B3
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Mar 2022 18:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237410AbiC2Nlh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Mar 2022 09:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
+        id S239552AbiC2QVw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Mar 2022 12:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237412AbiC2Nlg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Mar 2022 09:41:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF8BD1FA54;
-        Tue, 29 Mar 2022 06:39:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7055D23A;
-        Tue, 29 Mar 2022 06:39:53 -0700 (PDT)
-Received: from [10.57.7.161] (unknown [10.57.7.161])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8AC333F73B;
-        Tue, 29 Mar 2022 06:39:50 -0700 (PDT)
-Message-ID: <85f6a95e-24c3-0119-d43f-e57a3996280d@arm.com>
-Date:   Tue, 29 Mar 2022 14:39:48 +0100
+        with ESMTP id S238816AbiC2QVv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Mar 2022 12:21:51 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CDB1AD1D3
+        for <linux-pm@vger.kernel.org>; Tue, 29 Mar 2022 09:20:07 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2ea1b9b3813so84075407b3.2
+        for <linux-pm@vger.kernel.org>; Tue, 29 Mar 2022 09:20:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=w+cPcA1MdpcxCl1Fud3F8uMJqpHFql9isbi4TC94PVI=;
+        b=xN8WgVCiCYwFm8ilUQje8wkU7kxFCkNusS7kydKR96hcg/btmQgA4JM4cIjX/qC6zK
+         OeGMX1SHe/xltwW9/kCA6xoRRVl5ZQA8cruG/WRJSAIUAk0ZLGarCoSnLdsX5JiivA0H
+         7U8DvX+AxGkuzzvANWmVO9VTRuAOkQzjrJqVlKjXCvhUqxZC7cfHAaTW6KIGPLTDj53K
+         gs5GjT9aSxUpRSfZ4Yr4KynImdRk8VlP9H6vUhHpN28VwPdinfq85owKeJxO3Xa9o/0e
+         Vu06YgaIHCAc+cwoEkCGNsFxC51BKdNvkpukCXFdeme19KUAt2HnFs8TqbOPVAlR5G+X
+         C3ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w+cPcA1MdpcxCl1Fud3F8uMJqpHFql9isbi4TC94PVI=;
+        b=wcdhPLc6sLDPRh2dKZa9/1AaiQjqZuZ5IzJdV/PX1DhksRM0C148YTfw2RTBKAlTKa
+         w61TTieEECi31jcy+S7bXb8on+nJ1VqHR6E8W+MG65mX2Nh/TwbvxoiHBPgDQxC5VHgK
+         H13SuDmCa+TeAgygAcBbA4dLIEtW3Y+DOndcC2C0OCbwKh0xVeQinb70jE092bqIrNdT
+         ao1Roe7+fOCMtlwVi1P1NKszUgBZ5+MLNYmvD+Xd8E+ge1Vy938HaauQSj7bM4glm+y/
+         f0pCwcZdz4cERacOt7ElfJtF4VxeCLaCWkmP368Gh9Pnsmlq9Hn1cb/p5q2P31SvkyI1
+         wEmA==
+X-Gm-Message-State: AOAM530mSUUWy03IJnML6G8sIEY/+JFxJJL8vG9F5e3Kl9h0B5N2EHcy
+        n2tJxK0BMGeyD4duPIFt4GuHY8rjZ9a3oNDSbHa7Ug==
+X-Google-Smtp-Source: ABdhPJySCueyNElcU6iBARblDBGTj6cLFwcu/NFFhKAV32k64Aq1Ty4XbqqFM45LeF6b7WU4KU65JrtsLzWyNvxACbc=
+X-Received: by 2002:a81:b50d:0:b0:2e5:b653:7e97 with SMTP id
+ t13-20020a81b50d000000b002e5b6537e97mr33216518ywh.140.1648570807014; Tue, 29
+ Mar 2022 09:20:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [0/8] Introduce support for artificial Energy Model
-Content-Language: en-US
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
-        viresh.kumar@linaro.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-        mka@chromium.org, nm@ti.com, sboyd@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, sudeep.holla@arm.com,
-        matthias.bgg@gmail.com
-References: <20220316235211.29370-1-lukasz.luba@arm.com>
- <YkMJyRblpNMnv8ub@e120937-lin>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <YkMJyRblpNMnv8ub@e120937-lin>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220329033226.535475-1-y.oudjana@protonmail.com>
+In-Reply-To: <20220329033226.535475-1-y.oudjana@protonmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 29 Mar 2022 18:19:55 +0200
+Message-ID: <CACRpkdaakmGHo_VWNJsf2ph-EcFY_G_NMVfVFFK7oVUR7Bj_DQ@mail.gmail.com>
+Subject: Re: [PATCH] power: supply: Reset err after not finding static battery
+To:     Yassine Oudjana <y.oudjana@protonmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Cristian,
+On Tue, Mar 29, 2022 at 5:34 AM Yassine Oudjana
+<y.oudjana@protonmail.com> wrote:
 
-On 3/29/22 14:29, Cristian Marussi wrote:
-> On Wed, Mar 16, 2022 at 11:52:03PM +0000, Lukasz Luba wrote:
->> Hi all,
->>
-> 
-> Hi Lukasz,
-> 
->> This patch set adds new callback and support for artificial Energy Model (EM).
->> The new EMs have artificially generated performance states.
->> Such EMs can be created from lean information sources, such
->> as the relative energy efficiency between CPUs. The ACPI based
->> platforms provide this information
->> (ACPI 6.4, s5.2.12.14 'GIC CPU Interface (GICC) Structure'
->> 'Processor Power efficiency Class' field).
->>
->> Artificial EMs might require to directly provide the 'cost' of
->> the generated performance state. This patch set adds a new callback
->> .get_cost() for this. The EM framework does not force any model
->> or formula, it's up to the platform code.
->>
->> Artificial EMs aim to leverage the Energy Aware Scheduler
->> (EAS). Other frameworks relying on performance states
->> information (i.e. IPA/DTPM) must be informed of the
->> EM type and might be prevented from using it. This patch
->> sets also does this by introducing a new flag:
->> EM_PERF_DOMAIN_ARTIFICIAL.
->>
->> The patch set is based on current linux-next, where some
->> changes to OPP & EM are queuing.
->>
->> The patch set also contains (patch 7/8 and patch 8/8) logic which prevents
->> two EM's client frameworks from using this new EM type. Some other approach,
->> using 'milli-watts', has been proposed and discussed, but refused [1].
->> This new flag is more precised and should not leave space for
->> wrong interpretation.
->>
->> Shortly after this patch set you will see a patch set implementing the
->> platform code and registering this new EM.
->>
-> 
-> Just to let you know that in the few days I'm going to post the first
-> chunk of some SCMIv3.1 additions that includes also (as you probably
-> know) the SCMI Perf protocol support for reporting perf_domain costs in
-> micro-watts and not only in milli-watts.
-> 
-> Given that it does not seem that as of now the em_ API used by the SCMI
-> cpufreq driver can make use of this new scale (and being not at all
-> familiar with EM/EAS for sure :P), the SCMIv3.1 'Perf micro-watts' patch
-> which I will post (I'll CC you) does NOT expose any new interface but only
-> takes care to store the new micro-watts capability internally in a flag
-> (if advertised by an SCMIv3.1 backend server), so that, basically, you'll
-> keep seeing from the SCMI cpufreq driver that the scale is milli-watt
-> (when milli-watts are used of course) or non-milli-watt (for abstract and
-> micro-watts scales).
+> Otherwise power_supply_get_battery_info always returns -ENODEV
+> on devices that do not have a static battery, even when a simple
+> battery is found.
+>
+> Fixes: c8aee3f41cb8 ("power: supply: Static data for Samsung batteries")
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
 
-Sounds good!
+Quick and nice fix, thanks a lot!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-> 
-> This is intended to be of course a first step, laying out just the bare
-> minimum commmon internal SCMI support, until we figure out how to properly
-> expose this from the SCMI Perf in order to make it usable for EM.
-> (if neeeded at all).
-> 
-
-I had such a patch for the EM, to keep the power in micro-Watts.
-We can glue these two layers (high level EM and low layer SCMI
-perf). Let's sort it out.
-
-Regards,
-Lukasz
+Yours,
+Linus Walleij
