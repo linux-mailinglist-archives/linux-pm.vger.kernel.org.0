@@ -2,71 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 320964EAC2D
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Mar 2022 13:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09F164EACA9
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Mar 2022 13:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235228AbiC2L0p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Mar 2022 07:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52330 "EHLO
+        id S232733AbiC2LwS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Mar 2022 07:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234942AbiC2L0o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Mar 2022 07:26:44 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15B70198960;
-        Tue, 29 Mar 2022 04:25:02 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9A98A23A;
-        Tue, 29 Mar 2022 04:25:01 -0700 (PDT)
-Received: from [10.57.7.161] (unknown [10.57.7.161])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C3D003F66F;
-        Tue, 29 Mar 2022 04:24:58 -0700 (PDT)
-Message-ID: <cebde4f1-b3ec-dc46-dd17-a7162316aeb2@arm.com>
-Date:   Tue, 29 Mar 2022 12:24:56 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] thermal: devfreq_cooling: use local ops instead of global
- ops
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Kant Fan <kant@allwinnertech.com>
-Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        javi.merino@kernel.org, edubezval@gmail.com, orjan.eide@arm.com,
-        amitk@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        allwinner-opensource-support@allwinnertech.com,
-        stable@vger.kernel.org
-References: <20220325094436.101419-1-kant@allwinnertech.com>
- <YkLrZ9OkJz2R8tU6@kroah.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <YkLrZ9OkJz2R8tU6@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S236106AbiC2LwS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Mar 2022 07:52:18 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325982498B3;
+        Tue, 29 Mar 2022 04:50:34 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-df0940c4eeso4936687fac.8;
+        Tue, 29 Mar 2022 04:50:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=Asq1gr+EClGnhk914HvUDEJ2f/aYCxusbmU0iqu5d+k=;
+        b=HqhSYR9OX1Ehho2Qd7PCbmuzFOoJl0ac/fHCruq6yEijuG6a+Spdkc9EoVqOgzphOn
+         5VMN57OQz8D9hnXcR36RvLo6X+uIE5AiR+Rq+7caplXoZ1iA/XA0+PA44FJC969IKCLA
+         ZX8nqDdOjj7Ouv7uENaVxSUQcw40DYftOHza3UUANX/p4oRd4npyhOya1GaPkI+ZInla
+         iBSd0ysm3dmwKyFowG4B8+UmXDl//AHWQlx56sbceKo7glWvPx7iUuqpF8ujs85tMpBB
+         hJtQ05IksBpQP4x4m52J8Wbk/u2HDqRN5+gRemA8e0JwsFfEsUUXSxu7rcGw0DFgTyOJ
+         sJzw==
+X-Gm-Message-State: AOAM531dB+vbGxVnzBDT3q1bMVWLDx013++iICRCHtOzv4578zPpDiwR
+        F43maePF/YPTQf6Q2Zj8WA==
+X-Google-Smtp-Source: ABdhPJwhXc/RcfACLDL7HBgskD+zZRsxdYTdp0owC7QOUhyQPnfvmfacgZDo4zTnaIfsjFP54TlaFQ==
+X-Received: by 2002:a05:6870:8327:b0:d7:8685:5129 with SMTP id p39-20020a056870832700b000d786855129mr1861270oae.75.1648554633457;
+        Tue, 29 Mar 2022 04:50:33 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id fz16-20020a056870ed9000b000dde87bcdfdsm7911413oab.53.2022.03.29.04.50.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Mar 2022 04:50:32 -0700 (PDT)
+Received: (nullmailer pid 350366 invoked by uid 1000);
+        Tue, 29 Mar 2022 11:50:29 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Li-hao Kuo <lhjeff911@gmail.com>
+Cc:     daniel.lezcano@linaro.org, devicetree@vger.kernel.org,
+        rui.zhang@intel.com, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, amitk@kernel.org,
+        krzysztof.kozlowski@canonical.com, lh.kuo@sunplus.com,
+        robh+dt@kernel.org, linux-pm@vger.kernel.org, wells.lu@sunplus.com
+In-Reply-To: <5c3d0ab5baa9126b544a8f54ac5c773269ee1944.1648531197.git.lhjeff911@gmail.com>
+References: <cover.1648531197.git.lhjeff911@gmail.com> <5c3d0ab5baa9126b544a8f54ac5c773269ee1944.1648531197.git.lhjeff911@gmail.com>
+Subject: Re: [PATCH v6 2/2] dt-bindings:thermal: Add Sunplus SP7021 schema
+Date:   Tue, 29 Mar 2022 06:50:29 -0500
+Message-Id: <1648554629.886096.350365.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 3/29/22 12:20, Greg KH wrote:
-> On Fri, Mar 25, 2022 at 05:44:36PM +0800, Kant Fan wrote:
->> commit 7b62935828266658714f81d4e9176edad808dc70 upstream.
+On Tue, 29 Mar 2022 13:24:32 +0800, Li-hao Kuo wrote:
+> Add bindings for Sunplus SP7021 thermal driver
 > 
-> I do not see this commit in Linus's tree :(
+> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+> ---
+> Changes in v6:
+>  - Modify yaml file.
+>  - Addressed comments from Mr. Krzysztof Kozlowski
 > 
-> confused,
+>  .../bindings/thermal/sunplus-thermal.yaml          | 43 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  1 +
+>  2 files changed, 44 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/sunplus-thermal.yaml
 > 
-> greg k-h
 
-My apologies Greg, I missed that.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-We need to first get the patch [1] into upstream.
-Kant would resend this patch after that happen.
+yamllint warnings/errors:
 
-[1] 
-https://lore.kernel.org/linux-pm/20220325073030.91919-1-kant@allwinnertech.com/
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/thermal/sunplus-thermal.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/thermal/sunplus-thermal.yaml#
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1610480
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+
