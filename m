@@ -2,110 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 813E54EAE7F
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Mar 2022 15:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E52BB4EAE92
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Mar 2022 15:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237320AbiC2Nbe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Mar 2022 09:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51280 "EHLO
+        id S237359AbiC2Ng3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Mar 2022 09:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237304AbiC2Nbc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Mar 2022 09:31:32 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C50A01C119;
-        Tue, 29 Mar 2022 06:29:49 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3B8E323A;
-        Tue, 29 Mar 2022 06:29:49 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3AC0C3F73B;
-        Tue, 29 Mar 2022 06:29:47 -0700 (PDT)
-Date:   Tue, 29 Mar 2022 14:29:45 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
-        viresh.kumar@linaro.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-        mka@chromium.org, nm@ti.com, sboyd@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, sudeep.holla@arm.com,
-        matthias.bgg@gmail.com
-Subject: Re: [0/8] Introduce support for artificial Energy Model
-Message-ID: <YkMJyRblpNMnv8ub@e120937-lin>
-References: <20220316235211.29370-1-lukasz.luba@arm.com>
+        with ESMTP id S237362AbiC2Ng1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Mar 2022 09:36:27 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C3D22500;
+        Tue, 29 Mar 2022 06:34:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1648560884; x=1680096884;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/EGHJPKzQdz3iS6a0HGD7FNUtM2u9pCw7nlJatrvxuY=;
+  b=NF1i6yLrzKkhpZvYprK1VBBhPl/YrWfocl8r7LHf36D5W2Kxkdrod9SQ
+   J2wp5ss2mZz+bKWrF39YdctMoIgPvP9pUEpU0/VKDwlj0oeyIT5bG3K34
+   iy1ItfRSr2aE/Ub0bVMun1AOWQL6UWnYlWY7pLY3K1qLGEmzhQHVpDuDS
+   Sv16FeJBxgdebFp+A858x2/4xlwZztt80BvVe88PoDpyDn+tTqc4Ak4/+
+   2Un4sj304AESar7C0+uDj5GXxUOOx9iC5GHcBDuJ/zwL5oBK6Yx8+OL5x
+   L2gZONpl3clA3ABt/mVtZN+sXnQmnAB7Tg/LCGw1zS3fJDl36qfKgbIek
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10300"; a="322434844"
+X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
+   d="scan'208";a="322434844"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Mar 2022 06:34:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,220,1643702400"; 
+   d="scan'208";a="546386851"
+Received: from dev2 (HELO DEV2.igk.intel.com) ([10.237.148.94])
+  by orsmga007.jf.intel.com with ESMTP; 29 Mar 2022 06:34:41 -0700
+From:   =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+To:     x86@kernel.org, "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>
+Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+Subject: [PATCH v2] x86/acpi: Preserve ACPI-table override during hibernation
+Date:   Tue, 29 Mar 2022 15:33:52 +0200
+Message-Id: <20220329133352.3361248-1-amadeuszx.slawinski@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220316235211.29370-1-lukasz.luba@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 11:52:03PM +0000, Lukasz Luba wrote:
-> Hi all,
-> 
+When overriding NHLT ACPI-table tests show that on some platforms
+there is problem that NHLT contains garbage after hibernation/resume
+cycle.
 
-Hi Lukasz,
+Problem stems from the fact that ACPI override performs early memory
+allocation using memblock_phys_alloc_range() in
+memblock_phys_alloc_range(). This memory block is later being marked as
+ACPI memory block in arch_reserve_mem_area(). Later when memory areas
+are considered for hibernation it is being marked as nosave in
+e820__register_nosave_regions().
 
-> This patch set adds new callback and support for artificial Energy Model (EM).
-> The new EMs have artificially generated performance states.
-> Such EMs can be created from lean information sources, such
-> as the relative energy efficiency between CPUs. The ACPI based
-> platforms provide this information
-> (ACPI 6.4, s5.2.12.14 'GIC CPU Interface (GICC) Structure'
-> 'Processor Power efficiency Class' field).
-> 
-> Artificial EMs might require to directly provide the 'cost' of
-> the generated performance state. This patch set adds a new callback
-> .get_cost() for this. The EM framework does not force any model
-> or formula, it's up to the platform code.
-> 
-> Artificial EMs aim to leverage the Energy Aware Scheduler
-> (EAS). Other frameworks relying on performance states
-> information (i.e. IPA/DTPM) must be informed of the
-> EM type and might be prevented from using it. This patch
-> sets also does this by introducing a new flag:
-> EM_PERF_DOMAIN_ARTIFICIAL.
-> 
-> The patch set is based on current linux-next, where some
-> changes to OPP & EM are queuing.
-> 
-> The patch set also contains (patch 7/8 and patch 8/8) logic which prevents
-> two EM's client frameworks from using this new EM type. Some other approach,
-> using 'milli-watts', has been proposed and discussed, but refused [1].
-> This new flag is more precised and should not leave space for
-> wrong interpretation.
-> 
-> Shortly after this patch set you will see a patch set implementing the
-> platform code and registering this new EM.
-> 
+Fix this by marking ACPI override memory area as ACPI NVS
+(Non-Volatile-Sleeping), which according to specification needs to be
+saved on entering S4 and restored when leaving and is implemented as
+such in kernel.
 
-Just to let you know that in the few days I'm going to post the first
-chunk of some SCMIv3.1 additions that includes also (as you probably
-know) the SCMI Perf protocol support for reporting perf_domain costs in
-micro-watts and not only in milli-watts.
+Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+---
 
-Given that it does not seem that as of now the em_ API used by the SCMI
-cpufreq driver can make use of this new scale (and being not at all
-familiar with EM/EAS for sure :P), the SCMIv3.1 'Perf micro-watts' patch
-which I will post (I'll CC you) does NOT expose any new interface but only
-takes care to store the new micro-watts capability internally in a flag
-(if advertised by an SCMIv3.1 backend server), so that, basically, you'll
-keep seeing from the SCMI cpufreq driver that the scale is milli-watt
-(when milli-watts are used of course) or non-milli-watt (for abstract and
-micro-watts scales).
+Changes in v2:
+ * Changed approach as method used in v1 introduced potential for memory
+   corruption, which was caught by tests.
+ * Adjusted commit message describing above change in approach.
 
-This is intended to be of course a first step, laying out just the bare
-minimum commmon internal SCMI support, until we figure out how to properly
-expose this from the SCMI Perf in order to make it usable for EM.
-(if neeeded at all).
+---
+ arch/x86/kernel/acpi/boot.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-Cristian
+diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+index 0d01e7f5078c..2eeca97b730b 100644
+--- a/arch/x86/kernel/acpi/boot.c
++++ b/arch/x86/kernel/acpi/boot.c
+@@ -1772,7 +1772,7 @@ int __acpi_release_global_lock(unsigned int *lock)
+ 
+ void __init arch_reserve_mem_area(acpi_physical_address addr, size_t size)
+ {
+-	e820__range_add(addr, size, E820_TYPE_ACPI);
++	e820__range_add(addr, size, E820_TYPE_NVS);
+ 	e820__update_table_print();
+ }
+ 
+-- 
+2.25.1
 
