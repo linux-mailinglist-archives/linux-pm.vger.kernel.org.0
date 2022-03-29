@@ -2,36 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 540AC4EAA44
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Mar 2022 11:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3BA34EAAD6
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Mar 2022 11:56:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234543AbiC2JQq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Mar 2022 05:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
+        id S234219AbiC2J5h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Mar 2022 05:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234542AbiC2JQp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Mar 2022 05:16:45 -0400
-Received: from out28-52.mail.aliyun.com (out28-52.mail.aliyun.com [115.124.28.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168379BAE9;
-        Tue, 29 Mar 2022 02:15:01 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07702377|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00585561-0.00836691-0.985777;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047187;MF=kant@allwinnertech.com;NM=1;PH=DS;RN=6;RT=6;SR=0;TI=SMTPD_---.NFILkml_1648545298;
-Received: from sunxibot.allwinnertech.com(mailfrom:kant@allwinnertech.com fp:SMTPD_---.NFILkml_1648545298)
-          by smtp.aliyun-inc.com(33.37.68.114);
-          Tue, 29 Mar 2022 17:14:59 +0800
-From:   Kant Fan <kant@allwinnertech.com>
-To:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        allwinner-opensource-support@allwinnertech.com
-Subject: [RESEND] devfreq: governor: Save void *data in the governor userspace
-Date:   Tue, 29 Mar 2022 17:14:49 +0800
-Message-Id: <20220329091449.105308-1-kant@allwinnertech.com>
-X-Mailer: git-send-email 2.29.0
+        with ESMTP id S233494AbiC2J5g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Mar 2022 05:57:36 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFC0CD32E
+        for <linux-pm@vger.kernel.org>; Tue, 29 Mar 2022 02:55:53 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id y142so30603566ybe.11
+        for <linux-pm@vger.kernel.org>; Tue, 29 Mar 2022 02:55:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=seLvwV9K1rKjqDKzTYYrfJvgdmbON2mz+sCwvBatE6U=;
+        b=N2aQhTcckK8j0kgax8UOJaSl9vIq+bCtr+YCmBa/K04DpCBxZF+aorgGmjF4YpYchh
+         4+rumO+5Ikdk9UxTJ7NxHs37P90FMKMrXFN2m9tr3G3mfRM7DQT6bVaBHoK/Dg/i9u2e
+         rI88kjDBxcJ3zzBz/0wTBCXCTu03qQi+Vvy66QR+yTjCrNk8sGCkDDrN9QBxeiCMjHBc
+         nKdSF84dR0ME3QmNLzs5jvmL4Ux3JxPCXCztz9SKIxeqzdQjCa4deVYqMDJm87PJ3IDC
+         Lnnf5ZPUVrVOVgGnrTUndoUfUccnJy8aOM1MX+5UBzfwQX/RzLOOrGc+q/w5vNfYMgwK
+         9z9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=seLvwV9K1rKjqDKzTYYrfJvgdmbON2mz+sCwvBatE6U=;
+        b=t3ZR6LvO9mOuG+48tLzOFiEvpkA9+0sKsaE570EhA4jd+h4xL0jjSO1hrI5SAMvViz
+         8yypiOYwbUvpfH/AfoAFiL7xJcQQfDNEETKalW5mRPYAusthTG+IQv4+egjj/CKyJAjA
+         zHC0TDpE+5cE8+FwzrF0lZQa1HXLqiy7bjvC5Vl5vguMao3fBYBgmU2nv5wlElJGPsTb
+         PJAFOVMpmCPr2rxTLqGND+7tlbxJZ0gyHTXpg+T6WUojv0NZvPv22vn8xK3R3leRpAwP
+         Gy4XoEv/K9jN+xS1r26byzvoeD1GSKoS/DRg7z4QeURrQN3+nbDT1AJLW9ithYPvgMIo
+         vlpQ==
+X-Gm-Message-State: AOAM531MeFNNn+OcBI/tm/NohUKlrm84wHvhz7hk1KrZZArgJ7XfYPLu
+        s0j4MoTtDJ9MWMf44tBPtMEG3nxPiTel2RcIMyzdVw==
+X-Google-Smtp-Source: ABdhPJw3M7ngRhmwpCEwH06Bjj18TCkgEw8hISsF7Db3BTNyk7X5KvpCHeJxG5P1CohWFi4CUFMvMyOMN51uhjQj35I=
+X-Received: by 2002:a5b:848:0:b0:633:716f:1fb0 with SMTP id
+ v8-20020a5b0848000000b00633716f1fb0mr25313155ybq.522.1648547753072; Tue, 29
+ Mar 2022 02:55:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+References: <1641749107-31979-1-git-send-email-quic_mkshah@quicinc.com> <164369277345.3095904.10944386444643776011.b4-ty@linaro.org>
+In-Reply-To: <164369277345.3095904.10944386444643776011.b4-ty@linaro.org>
+From:   Amit Pundir <amit.pundir@linaro.org>
+Date:   Tue, 29 Mar 2022 15:25:16 +0530
+Message-ID: <CAMi1Hd2Sngya_2m2odkjq4fdV8OiiXsFMEX1bb807cWMC7H-sg@mail.gmail.com>
+Subject: Re: (subset) [PATCH 00/10] Add APSS RSC to Cluster power domain
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     ulf.hansson@linaro.org, Maulik Shah <quic_mkshah@quicinc.com>,
+        quic_rjendra@quicinc.com, daniel.lezcano@linaro.org,
+        quic_lsrao@quicinc.com, rafael@kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -39,77 +68,43 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The member void *data in the structure devfreq can be overwrite
-by governor_userspace. For example:
-1. The device driver assigned the devfreq governor to simple_ondemand
-by the function devfreq_add_device() and init the devfreq member
-void *data to a pointer of a static structure devfreq_simple_ondemand_data
-by the function devfreq_add_device().
-2. The user changed the devfreq governor to userspace by the command
-"echo userspace > /sys/class/devfreq/.../governor".
-3. The governor userspace alloced a dynamic memory for the struct
-userspace_data and assigend the member void *data of devfreq to
-this memory by the function userspace_init().
-4. The user changed the devfreq governor back to simple_ondemand
-by the command "echo simple_ondemand > /sys/class/devfreq/.../governor".
-5. The governor userspace exited and assigned the member void *data
-in the structure devfreq to NULL by the function userspace_exit().
-6. The governor simple_ondemand fetched the static information of
-devfreq_simple_ondemand_data in the function
-devfreq_simple_ondemand_func() but the member void *data of devfreq was
-assigned to NULL by the function userspace_exit().
-7. The information of upthreshold and downdifferential is lost
-and the governor simple_ondemand can't work correctly.
+On Tue, 1 Feb 2022 at 10:52, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
+>
+> On Sun, 9 Jan 2022 22:54:57 +0530, Maulik Shah wrote:
+> > This series patches 1 to 4 adds/corrects the cpuidle states/
+> > apps_rsc TCS configuration to make it same as downstream kernel.
+> >
+> > The patches 5, 6 and 7 adds apps_rsc device to cluster power domain such
+> > that when cluster is going to power down the cluster pre off notification
+> > will program the 'sleep' and 'wake' votes in SLEEP TCS and WAKE TCSes.
+> >
+> > [...]
+>
+> Applied, thanks!
+>
+> [01/10] arm64: dts: qcom: sm8150: Correct TCS configuration for apps rsc
+>         commit: 17ac8af678b6da6a8f1df7da8ebf2c5198741827
+> [02/10] arm64: dts: qcom: sm8250: Add cpuidle states
+>         commit: 32bc936d732171d48c9c8f96c4fa25ac3ed7e1c7
 
-The member void *data in the structure devfreq is designed for
-a static pointer used in a governor and inited by the function
-devfreq_add_device(). So if a governor want to use void *data
-to do some other things, it must save void *data in the init()
-function and restore void *data in the exit() function.
+Hi, These patches landed upstream and I see a boot regression on RB5
+with this sm8250 patch:
 
-Signed-off-by: Kant Fan <kant@allwinnertech.com>
----
- drivers/devfreq/governor_userspace.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+[    T1] vreg_l11c_3p3: failed to enable: -ETIMEDOUT
+[    T1] qcom-rpmh-regulator 18200000.rsc:pm8150l-rpmh-regulators:
+ldo11: devm_regulator_register() failed, ret=-110
+[    T1] qcom-rpmh-regulator: probe of
+18200000.rsc:pm8150l-rpmh-regulators failed with error -110
 
-diff --git a/drivers/devfreq/governor_userspace.c b/drivers/devfreq/governor_userspace.c
-index ab9db7adb3ad..dbbb448dcbcf 100644
---- a/drivers/devfreq/governor_userspace.c
-+++ b/drivers/devfreq/governor_userspace.c
-@@ -17,6 +17,7 @@
- struct userspace_data {
- 	unsigned long user_frequency;
- 	bool valid;
-+	void *saved_data;
- };
- 
- static int devfreq_userspace_func(struct devfreq *df, unsigned long *freq)
-@@ -91,6 +92,7 @@ static int userspace_init(struct devfreq *devfreq)
- 		goto out;
- 	}
- 	data->valid = false;
-+	data->saved_data = devfreq->data;
- 	devfreq->data = data;
- 
- 	err = sysfs_create_group(&devfreq->dev.kobj, &dev_attr_group);
-@@ -100,6 +102,8 @@ static int userspace_init(struct devfreq *devfreq)
- 
- static void userspace_exit(struct devfreq *devfreq)
- {
-+	struct userspace_data *data = devfreq->data;
-+	void *saved_data = data->saved_data;
- 	/*
- 	 * Remove the sysfs entry, unless this is being called after
- 	 * device_del(), which should have done this already via kobject_del().
-@@ -108,7 +112,7 @@ static void userspace_exit(struct devfreq *devfreq)
- 		sysfs_remove_group(&devfreq->dev.kobj, &dev_attr_group);
- 
- 	kfree(devfreq->data);
--	devfreq->data = NULL;
-+	devfreq->data = saved_data;
- }
- 
- static int devfreq_userspace_handler(struct devfreq *devfreq,
--- 
-2.29.0
+Doesn't regress everytime but It is fairly reproducible. RB5 fails to
+boot on every alternate reboot or so. But the device boots everytime
+if I revert this patch.
 
+> [03/10] arm64: dts: qcom: sm8350: Correct TCS configuration for apps rsc
+>         commit: a131255e4ad1ef8d4873ecba21561ba272b2547a
+> [04/10] arm64: dts: qcom: sm8450: Update cpuidle states parameters
+>         commit: 6574702b0d394d2acc9ff808c4a79df8b9999173
+>
+> Best regards,
+> --
+> Bjorn Andersson <bjorn.andersson@linaro.org>
