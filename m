@@ -2,185 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E762F4EB288
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Mar 2022 19:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC39D4EB2DE
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Mar 2022 19:42:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240082AbiC2RQ7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Mar 2022 13:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51722 "EHLO
+        id S238385AbiC2Roc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Mar 2022 13:44:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240095AbiC2RQ7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Mar 2022 13:16:59 -0400
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E258E888E3;
-        Tue, 29 Mar 2022 10:15:15 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id m67so32706167ybm.4;
-        Tue, 29 Mar 2022 10:15:15 -0700 (PDT)
+        with ESMTP id S233032AbiC2Rob (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Mar 2022 13:44:31 -0400
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A07241B41;
+        Tue, 29 Mar 2022 10:42:46 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2e6ceb45174so152116737b3.8;
+        Tue, 29 Mar 2022 10:42:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=hCIFXZipoBsdOpVRO6RduZXXCWSQTLTSQ0IE1wabs0A=;
-        b=WDtbJwVcIQ4LQfna3wNBsAsEG+6MRixKtmwTNCQDWM4skr1PzNPNucBwezIC+x5ceF
-         BxyvKSjmvVgFehH2jTbTdzjPgVOvP3+K5T0J54OCkjwcCPilF7T1Nzk79RajeSGc2ecP
-         md42fYDV8HwokMJLU1bacXf5Dnxvv3wAhZjFCkEsTNLiriwjKZSFwCnTia7RahW2MAaR
-         3tXjGl67xgImXdKeLy5o8aAxAhfyXfUtD7t8PJDariS7eJrv3qKnM6r0VK+LQb+C/Xn6
-         QE5s+KIC7bfNtJFvN9CMKwfgVAhhBN9My3N4dq2qgz2xIXBTH4F0ZCrTWCCw0GpijIUo
-         hBRg==
-X-Gm-Message-State: AOAM532LohMFqizrmpXcVZVsO2QpA8t5TEyuvktNkHuDiJG6hlDU3VXa
-        nlSjqhLxcs7P8A1VCqtpz0nyGHwzzbKwZqigEmKKa6D9lj8=
-X-Google-Smtp-Source: ABdhPJzY95ifSFitlViYzjHhb1fRJq4JPah4sK+UeRp1CBFDqFSJsU6iAiA3gQmU1Vtui2W396Y/twq6Fia0H4wU+4g=
-X-Received: by 2002:a25:bbc1:0:b0:610:b4ce:31db with SMTP id
- c1-20020a25bbc1000000b00610b4ce31dbmr29285037ybk.482.1648574114688; Tue, 29
- Mar 2022 10:15:14 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AJXMMgvpvdXkeVHlSYm/0JRtdhSL15VbRYdhQ9gVfCg=;
+        b=LloscU5gnTaweuy2xhexeLJvsE/0jLAOXMuv+WP64uMeqWgCyk6DF9WEQZSESIlIEz
+         5EvJPQtraWZExyiM/pAH5W2CpviGIg0N74edPBwbFCM2PHVydbuIpIRoaSBuRf9is04c
+         Yydxl4dmtmKtzoCjTk8a2emXW+L93dxTIEvaVK6uyD+WVkh/PKDRuodetdZGlIYSG8Ts
+         PE8D5Mook2UbQt7pHkv1EXVjZc0evEvjQXUIkXAlPgN2d9YALCAoXdoeGaDsKXehKHHH
+         BJq7S/FGXiWhwbTKtpmLqOMBKZjcpE0Z2U5TpP8S39a34wlVdeZAhmPy3GnMD7VeG8zP
+         JYfQ==
+X-Gm-Message-State: AOAM530HANUdnDU6KHCPFu4mbqHWjgVLIvydcvQ0+vvT93x9iXhpSU1U
+        veq7O+1aYdMkPd8/Mt3i0xsjDeNJArVxLFTRazg=
+X-Google-Smtp-Source: ABdhPJyZlDnEpwReCMzcOAElpRHV+WsJfUfWYH4Ci5dPdO5TT7zL122F3R2ywvBUaIMAOORIrQORAFpYmAt1X+5glbk=
+X-Received: by 2002:a81:bc5:0:b0:2e6:dcfe:bfcb with SMTP id
+ 188-20020a810bc5000000b002e6dcfebfcbmr28263841ywl.19.1648575765728; Tue, 29
+ Mar 2022 10:42:45 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220325022219.829-1-chang.seok.bae@intel.com> <20220325022219.829-4-chang.seok.bae@intel.com>
+In-Reply-To: <20220325022219.829-4-chang.seok.bae@intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 29 Mar 2022 19:15:03 +0200
-Message-ID: <CAJZ5v0jcQownj7hRpai9XQ+yLW4KJcdEhKz7ANYus-bubQ0wpw@mail.gmail.com>
-Subject: [GIT PULL] More power management updates for v5.18-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Tue, 29 Mar 2022 19:42:34 +0200
+Message-ID: <CAJZ5v0iysvXEs-+L0PuBj1RH+ByGPNotOSgT21TYnUuiwK+hSQ@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] intel_idle: Add a new flag to initialize the AMX state
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+On Fri, Mar 25, 2022 at 3:30 AM Chang S. Bae <chang.seok.bae@intel.com> wrote:
+>
+> The non-initialized AMX state can be the cause of C-state demotion from C6
+> to C1E. This low-power idle state may improve power savings and thus result
+> in a higher available turbo frequency budget.
+>
+> This behavior is implementation-specific. Initialize the state for the C6
+> entrance of Sapphire Rapids as needed.
+>
+> Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+> Tested-by : Zhang Rui <rui.zhang@intel.com>
+> Cc: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
 
-Please pull from the tag
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-5.18-rc1-2
+and I'm expecting this to be routed along with the rest of the series.
 
-with top-most commit 3b65dd5be3c72b9d2013bfe6e9261e2b06222fa9
-
- Merge branch 'pm-docs'
-
-on top of commit 02b82b02c34321dde10d003aafcd831a769b2a8a
-
- Merge tag 'pm-5.18-rc1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
-
-to receive more power management updates for 5.18-rc1.
-
-These update ARM cpufreq drivers, the OPP (Operating Performance
-Points) library and the power management documentation.
-
-Specifics:
-
- - Add per core DVFS support for QCom SoC (Bjorn Andersson), convert
-   to yaml binding (Manivannan Sadhasivam) and various other fixes
-   to the QCom drivers (Luca Weiss).
-
- - Add OPP table for imx7s SoC (Denys Drozdov) and minor fixes (Stefan
-   Agner).
-
- - Fix CPPC driver's freq/performance conversions (Pierre Gondois).
-
- - Minor generic cleanups (Yury Norov).
-
- - Introduce opp-microwatt property to the OPP core, bindings, etc
-   (Lukasz Luba).
-
- - Convert DT bindings to schema format and various related fixes
-   (Yassine Oudjana).
-
- - Expose OPP's OF node in debugfs (Viresh Kumar).
-
- - Add Intel uncore frequency scaling documentation file to its
-   MAINTAINERS entry (Srinivas Pandruvada).
-
- - Clean up the AMD P-state driver documentation (Jan Engelhardt).
-
-Thanks!
-
-
----------------
-
-Bjorn Andersson (2):
-      cpufreq: qcom-hw: Add support for per-core-dcvs
-      cpufreq: blocklist Qualcomm sc8280xp and sa8540p in cpufreq-dt-platdev
-
-Denys Drozdov (1):
-      ARM: dts: imx7s: Define operating points table for cpufreq
-
-Jan Engelhardt (1):
-      Documentation: amd-pstate: grammar and sentence structure updates
-
-Luca Weiss (1):
-      cpufreq: qcom-cpufreq-nvmem: fix reading of PVS Valid fuse
-
-Lukasz Luba (5):
-      dt-bindings: opp: Add "opp-microwatt" entry in the OPP
-      OPP: Add "opp-microwatt" supporting code
-      PM: EM: add macro to set .active_power() callback conditionally
-      OPP: Add support of "opp-microwatt" for EM registration
-      Documentation: EM: Describe new registration method using DT
-
-Manivannan Sadhasivam (2):
-      dt-bindings: dvfs: Use MediaTek CPUFREQ HW as an example
-      dt-bindings: cpufreq: cpufreq-qcom-hw: Convert to YAML bindings
-
-Pierre Gondois (1):
-      cpufreq: CPPC: Fix performance/frequency conversion
-
-Srinivas Pandruvada (1):
-      MAINTAINERS: Add additional file to uncore frequency control
-
-Stefan Agner (1):
-      cpufreq: Add i.MX7S to cpufreq-dt-platdev blocklist
-
-Viresh Kumar (1):
-      opp: Expose of-node's name in debugfs
-
-Yassine Oudjana (7):
-      dt-bindings: arm: qcom: Add msm8996 and apq8096 compatibles
-      arm64: dts: qcom: msm8996-mtp: Add msm8996 compatible
-      dt-bindings: opp: qcom-opp: Convert to DT schema
-      dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema
-      arm64: dts: qcom: msm8996: Rename cluster OPP tables
-      arm64: dts: qcom: qcs404: Rename CPU and CPR OPP tables
-      dt-bindings: power: avs: qcom,cpr: Convert to DT schema
-
-Yury Norov (1):
-      cpufreq: replace cpumask_weight with cpumask_empty where appropriate
-
----------------
-
- Documentation/admin-guide/pm/amd-pstate.rst        | 135 ++--
- Documentation/devicetree/bindings/arm/qcom.yaml    |  16 +-
- .../bindings/cpufreq/cpufreq-qcom-hw.txt           | 172 -----
- .../bindings/cpufreq/cpufreq-qcom-hw.yaml          | 201 ++++++
- .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml       | 166 +++++
- .../bindings/dvfs/performance-domain.yaml          |  14 +-
- .../devicetree/bindings/opp/opp-v2-base.yaml       |  23 +
- .../devicetree/bindings/opp/opp-v2-kryo-cpu.yaml   | 257 +++++++
- .../devicetree/bindings/opp/opp-v2-qcom-level.yaml |  60 ++
- .../devicetree/bindings/opp/qcom-nvmem-cpufreq.txt | 796 ---------------------
- Documentation/devicetree/bindings/opp/qcom-opp.txt |  19 -
- .../devicetree/bindings/power/avs/qcom,cpr.txt     | 130 ----
- .../devicetree/bindings/power/avs/qcom,cpr.yaml    | 160 +++++
- Documentation/power/energy-model.rst               |  10 +
- MAINTAINERS                                        |   6 +-
- arch/arm/boot/dts/imx7s.dtsi                       |  16 +
- arch/arm64/boot/dts/qcom/msm8996-mtp.dts           |   2 +-
- arch/arm64/boot/dts/qcom/msm8996.dtsi              |   4 +-
- arch/arm64/boot/dts/qcom/qcs404.dtsi               |   4 +-
- drivers/cpufreq/cppc_cpufreq.c                     |  43 +-
- drivers/cpufreq/cpufreq-dt-platdev.c               |   3 +
- drivers/cpufreq/qcom-cpufreq-hw.c                  |  20 +-
- drivers/cpufreq/qcom-cpufreq-nvmem.c               |   2 +-
- drivers/cpufreq/scmi-cpufreq.c                     |   2 +-
- drivers/opp/core.c                                 |  25 +
- drivers/opp/debugfs.c                              |   8 +
- drivers/opp/of.c                                   | 108 ++-
- drivers/opp/opp.h                                  |   1 +
- include/linux/energy_model.h                       |   2 +
- include/linux/pm_opp.h                             |  12 +-
- 30 files changed, 1191 insertions(+), 1226 deletions(-)
+> ---
+> Changes from v2:
+> * Remove an unnecessary backslash (Rafael Wysocki).
+>
+> Changes from v1:
+> * Simplify the code with a new flag (Rui).
+> * Rebase on Artem's patches for SPR intel_idle.
+> * Massage the changelog.
+> ---
+>  drivers/idle/intel_idle.c | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index b7640cfe0020..d35790890a3f 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -54,6 +54,7 @@
+>  #include <asm/intel-family.h>
+>  #include <asm/mwait.h>
+>  #include <asm/msr.h>
+> +#include <asm/fpu/api.h>
+>
+>  #define INTEL_IDLE_VERSION "0.5.1"
+>
+> @@ -100,6 +101,11 @@ static unsigned int mwait_substates __initdata;
+>   */
+>  #define CPUIDLE_FLAG_ALWAYS_ENABLE     BIT(15)
+>
+> +/*
+> + * Initialize large xstate for the C6-state entrance.
+> + */
+> +#define CPUIDLE_FLAG_INIT_XSTATE       BIT(16)
+> +
+>  /*
+>   * MWAIT takes an 8-bit "hint" in EAX "suggesting"
+>   * the C-state (top nibble) and sub-state (bottom nibble)
+> @@ -134,6 +140,9 @@ static __cpuidle int intel_idle(struct cpuidle_device *dev,
+>         if (state->flags & CPUIDLE_FLAG_IRQ_ENABLE)
+>                 local_irq_enable();
+>
+> +       if (state->flags & CPUIDLE_FLAG_INIT_XSTATE)
+> +               fpu_idle_fpregs();
+> +
+>         mwait_idle_with_hints(eax, ecx);
+>
+>         return index;
+> @@ -154,8 +163,12 @@ static __cpuidle int intel_idle(struct cpuidle_device *dev,
+>  static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
+>                                        struct cpuidle_driver *drv, int index)
+>  {
+> -       unsigned long eax = flg2MWAIT(drv->states[index].flags);
+>         unsigned long ecx = 1; /* break on interrupt flag */
+> +       struct cpuidle_state *state = &drv->states[index];
+> +       unsigned long eax = flg2MWAIT(state->flags);
+> +
+> +       if (state->flags & CPUIDLE_FLAG_INIT_XSTATE)
+> +               fpu_idle_fpregs();
+>
+>         mwait_idle_with_hints(eax, ecx);
+>
+> @@ -790,7 +803,8 @@ static struct cpuidle_state spr_cstates[] __initdata = {
+>         {
+>                 .name = "C6",
+>                 .desc = "MWAIT 0x20",
+> -               .flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED,
+> +               .flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED |
+> +                                          CPUIDLE_FLAG_INIT_XSTATE,
+>                 .exit_latency = 290,
+>                 .target_residency = 800,
+>                 .enter = &intel_idle,
+> --
+> 2.17.1
+>
