@@ -2,284 +2,189 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7DA4EBE2B
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Mar 2022 11:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7FE54EBE4C
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Mar 2022 12:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238419AbiC3KBJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Mar 2022 06:01:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
+        id S235220AbiC3KGm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Mar 2022 06:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240583AbiC3KBI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Mar 2022 06:01:08 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F361B0A53;
-        Wed, 30 Mar 2022 02:59:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648634363; x=1680170363;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=VfBiVolvCJHl5eMtmZtvm1ki1KZT8OJLshIN1GcLDMY=;
-  b=iy3GxxR1c4o8akhO1GsR9XQKD3rtxqFoCYhQxOy27zoTE6l/R3F0RcIF
-   R7xDzElwuUI0ZFZ0dwz46uxmnONaYFE85TAFXdFlQOavRpQjWlhjZzj3V
-   eQRih/Mil90uuBW85BjQabfazaKATgyQKxj+1T4zHY/0nDswhq+S8GzOI
-   8K3jq8aEStf6EdMxmZo+93o5DQqHLTTDIdJzWZIDQlhtJ8Ihxr1nATeE+
-   AR2fwM0tSgbTREDBR21WQGIAT7lw8Hr5y+8hKX+DDXXUFtG1sa9F0Qs0h
-   ZvGi/14Y0GArSC4hcfExCySQPHu+OsKPSxWxwDhZ1Z74h5IuyWxmGNqOR
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10301"; a="320203544"
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="320203544"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2022 02:59:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,222,1643702400"; 
-   d="scan'208";a="521832879"
-Received: from lkp-server02.sh.intel.com (HELO 7a008980c4ea) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 30 Mar 2022 02:59:18 -0700
-Received: from kbuild by 7a008980c4ea with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1nZV6k-0000G7-0g; Wed, 30 Mar 2022 09:59:18 +0000
-Date:   Wed, 30 Mar 2022 17:59:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- bd19672308663b45ebecd8010fa1c51515719dc4
-Message-ID: <624429f0.RenlGNGiIterGGxW%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S245130AbiC3KGl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Mar 2022 06:06:41 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06ADCDAFC5
+        for <linux-pm@vger.kernel.org>; Wed, 30 Mar 2022 03:04:56 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id b19so28469733wrh.11
+        for <linux-pm@vger.kernel.org>; Wed, 30 Mar 2022 03:04:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5nM4nXFUdqosmsuyckEfB3BKyVpqwLHkB/6ppkQnz40=;
+        b=uMq9xwyAOLfuw+I1C5mm/XMFFYfU90zueZVqRwglADw2pWXARSdzaqWDPU9/jIP095
+         5StQ4PpFZ2qgImWAAJ9w9uL5mbfIr4+8s7vqL5buEEPET6fmuYgPTy11NkAECQ0HJDza
+         rykpzkbGtYXIRqS4+l+eJmxKORrgxaov+0WDM9dFXl3Rsqoz0LF1rtWO1xPg82ZbUMvM
+         b8DRWr/SYXvz+BywQGATi/j8vV4sB8N6bU3FsKqHMcZE0VsO49zUTYFt/l1jmh9UPnz2
+         PYFs4euADtJH/MTwJ5OVwW7MNBQ8T7u5jypLwzVcvzsqmeql7DJkY7N7LgHV35Tqh8h9
+         170Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5nM4nXFUdqosmsuyckEfB3BKyVpqwLHkB/6ppkQnz40=;
+        b=nfTL3arWk7mDypv9OGTjHexMI6i4uX8Wz/FVIFUpSvZXBerZPGvxPJ9qgCuE5GlErX
+         B6ZmYHIYeu+7X8vc57hQOP2pwqTdar1e2A0TSFVztdu9ZErK0A8w/kNXXyDMC87oRhAC
+         3R7SoFCTTA7Eo5QGaA24ElXe/1xmA+E2NVf0jCU1X5mkmcatBHtalUCbceG75Zg+mfsQ
+         VKx0ifY98TnQJje8lZXs7+jJXHoVMdYQE1n3F6H1l/gG3P+u+sRrHP8yabz21jcS6COy
+         QUKiwv7B7yRPUzdtmg6TzFSInJb/quJLiphpmGvY1isO98AShpeJkFBM1J+ApSTVeJW8
+         jEuQ==
+X-Gm-Message-State: AOAM531cEYHLF0QSHXGL4jZF+oddSdrxlVEXDAWvbmjZuKm6HzNk4kD0
+        XZmnHK/wvNaclP1FrBN1Hyot8A==
+X-Google-Smtp-Source: ABdhPJwp+5KHPDEsHaBvVPiKA8kh08lLLsuF0Tw/LaWK9aAP6BSnLl66vS+kTs5ymIGWQ/jfHhph2Q==
+X-Received: by 2002:adf:fad0:0:b0:205:ad54:e51e with SMTP id a16-20020adffad0000000b00205ad54e51emr26182631wrs.650.1648634694428;
+        Wed, 30 Mar 2022 03:04:54 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e34:ed2f:f020:8f92:3217:a3c6:3ee8])
+        by smtp.gmail.com with ESMTPSA id p8-20020a5d4e08000000b002054b5437f2sm16542743wrt.115.2022.03.30.03.04.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 03:04:53 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     srinivas.pandruvada@linux.intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v2 0/4] tools/thermal: thermal library and tools
+Date:   Wed, 30 Mar 2022 12:04:40 +0200
+Message-Id: <20220330100444.3846661-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: bd19672308663b45ebecd8010fa1c51515719dc4  Merge branch 'pm-docs' into linux-next
+These changes are providing the following tools and library:
 
-elapsed time: 739m
+ - A thermal library doing the netlink abstraction from the kernel in
+   order to make the userspace thermal implementation easier. Having
+   the library integrated with the kernel tree is also a guarantee to
+   keep the message format and their encoding/decoding aligned
+                                                                                                                                                                                                                                                                               
+ - A thermal tools library providing a set of functions to deal with
+   usual features like the log, the mainloop and the time. This
+   library is used by the provided tools below
 
-configs tested: 198
-configs skipped: 4
+ - An data acquisition program to capture the temperature of the
+   different thermal zone during an amount of time or during the
+   execution of an application. The output is formated to be easily
+   parsed by gnuplot, a spreadsheet program or a statistical command
+   line utility. The timestamp is based on the system uptime, thus
+   giving an indication of when a thermal event happened, that can
+   help to spot or reproduce thermal issue in the long run
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+ - A thermal monitoring program based on the thermal library. It gives
+   a skeleton to build any logic on top of it and shows how to use the
+   thermal library. It does nothing except discovering the thermal
+   zones, their trip points and listening for events like cooling
+   devices state changes or trip point crossed
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                          randconfig-c001
-mips                 randconfig-c004-20220329
-m68k                             allyesconfig
-m68k                             allmodconfig
-s390                             allmodconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-s390                             allyesconfig
-sh                          landisk_defconfig
-sh                        edosk7760_defconfig
-powerpc                     rainier_defconfig
-um                             i386_defconfig
-xtensa                    smp_lx200_defconfig
-arm                        mini2440_defconfig
-arm                      integrator_defconfig
-sh                           se7751_defconfig
-sh                            migor_defconfig
-arm                        clps711x_defconfig
-arm                            xcep_defconfig
-arm                          badge4_defconfig
-m68k                            q40_defconfig
-nios2                         10m50_defconfig
-mips                      fuloong2e_defconfig
-sh                         microdev_defconfig
-arc                        nsim_700_defconfig
-arm                         nhk8815_defconfig
-powerpc                    sam440ep_defconfig
-mips                            ar7_defconfig
-arm                            hisi_defconfig
-ia64                            zx1_defconfig
-sh                         ecovec24_defconfig
-arm                             pxa_defconfig
-arc                                 defconfig
-i386                                defconfig
-mips                           xway_defconfig
-xtensa                       common_defconfig
-sh                            hp6xx_defconfig
-arc                          axs101_defconfig
-sparc                       sparc32_defconfig
-parisc                           alldefconfig
-h8300                       h8s-sim_defconfig
-sh                     magicpanelr2_defconfig
-parisc                generic-32bit_defconfig
-m68k                       m5275evb_defconfig
-mips                         cobalt_defconfig
-arm                        trizeps4_defconfig
-sh                          lboxre2_defconfig
-sh                         ap325rxa_defconfig
-arm                            lart_defconfig
-arm                          lpd270_defconfig
-powerpc                      ppc40x_defconfig
-m68k                       m5249evb_defconfig
-arm                            pleb_defconfig
-arm                         s3c6400_defconfig
-mips                        vocore2_defconfig
-sh                   sh7724_generic_defconfig
-mips                         bigsur_defconfig
-sh                        sh7757lcr_defconfig
-arm                            qcom_defconfig
-mips                         db1xxx_defconfig
-sh                          sdk7786_defconfig
-powerpc                         wii_defconfig
-powerpc                 mpc85xx_cds_defconfig
-arm                  randconfig-c002-20220329
-arm                  randconfig-c002-20220327
-arm                  randconfig-c002-20220330
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64               randconfig-a001-20220328
-x86_64               randconfig-a003-20220328
-x86_64               randconfig-a004-20220328
-x86_64               randconfig-a002-20220328
-x86_64               randconfig-a005-20220328
-x86_64               randconfig-a006-20220328
-i386                          randconfig-a003
-i386                          randconfig-a001
-i386                          randconfig-a005
-i386                 randconfig-a001-20220328
-i386                 randconfig-a003-20220328
-i386                 randconfig-a006-20220328
-i386                 randconfig-a005-20220328
-i386                 randconfig-a004-20220328
-i386                 randconfig-a002-20220328
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-riscv                randconfig-r042-20220330
-s390                 randconfig-r044-20220330
-arc                  randconfig-r043-20220330
-arc                  randconfig-r043-20220329
-s390                 randconfig-r044-20220327
-arc                  randconfig-r043-20220328
-arc                  randconfig-r043-20220327
-riscv                randconfig-r042-20220329
-s390                 randconfig-r044-20220329
-riscv                randconfig-r042-20220327
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                                  kexec
+ Changelog:
 
-clang tested configs:
-mips                 randconfig-c004-20220329
-x86_64                        randconfig-c007
-mips                 randconfig-c004-20220327
-arm                  randconfig-c002-20220327
-arm                  randconfig-c002-20220329
-riscv                randconfig-c006-20220327
-powerpc              randconfig-c003-20220327
-powerpc              randconfig-c003-20220329
-riscv                randconfig-c006-20220329
-i386                          randconfig-c001
-s390                 randconfig-c005-20220327
-s390                 randconfig-c005-20220329
-mips                 randconfig-c004-20220330
-powerpc              randconfig-c003-20220330
-riscv                randconfig-c006-20220330
-arm                  randconfig-c002-20220330
-powerpc                 mpc8313_rdb_defconfig
-mips                           mtx1_defconfig
-mips                     cu1830-neo_defconfig
-powerpc                    socrates_defconfig
-mips                           rs90_defconfig
-powerpc                     mpc5200_defconfig
-arm                     am200epdkit_defconfig
-mips                   sb1250_swarm_defconfig
-powerpc                   lite5200b_defconfig
-powerpc                     kilauea_defconfig
-riscv                            alldefconfig
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64               randconfig-a016-20220328
-x86_64               randconfig-a012-20220328
-x86_64               randconfig-a011-20220328
-x86_64               randconfig-a014-20220328
-x86_64               randconfig-a013-20220328
-x86_64               randconfig-a015-20220328
-i386                 randconfig-a012-20220328
-i386                 randconfig-a016-20220328
-i386                 randconfig-a015-20220328
-i386                 randconfig-a011-20220328
-i386                 randconfig-a013-20220328
-i386                 randconfig-a014-20220328
-i386                          randconfig-a011
-i386                          randconfig-a013
-i386                          randconfig-a015
-riscv                randconfig-r042-20220328
-hexagon              randconfig-r045-20220329
-hexagon              randconfig-r045-20220328
-hexagon              randconfig-r045-20220327
-hexagon              randconfig-r041-20220327
-hexagon              randconfig-r045-20220330
-hexagon              randconfig-r041-20220329
-hexagon              randconfig-r041-20220328
-hexagon              randconfig-r041-20220330
-s390                 randconfig-r044-20220328
+ v1: Initial post after a RFC
+
+ v2:
+
+  - Fixed all trailing whitespaces and some other checkpatch
+    warnings. Some warnings remain but they can be considered as false
+    positive
+
+  - Added in the thermometer tool:
+    - Usage/help option as well as a man page
+    - The ability to execute a program
+    - The capture duration
+    - Create the output directory if it does not exist
+
+  - Add in the thermal-engine tool:
+    - A usage/help option
+    - A message telling the userspace it is waiting for events
+    - A daemonize option
+
+  - Minor bug fixes here and there, as well as typos
+
+Daniel Lezcano (4):
+  tools/lib/thermal: Add a thermal library
+  tools/thermal: Add util library
+  tools/thermal: A temperature capture tool
+  tools/thermal: Add thermal daemon skeleton
+
+ MAINTAINERS                                   |   1 +
+ tools/Makefile                                |  36 +-
+ tools/lib/thermal/.gitignore                  |   2 +
+ tools/lib/thermal/Build                       |   5 +
+ tools/lib/thermal/Makefile                    | 165 ++++++
+ tools/lib/thermal/commands.c                  | 349 +++++++++++
+ tools/lib/thermal/events.c                    | 164 +++++
+ tools/lib/thermal/include/thermal.h           | 142 +++++
+ tools/lib/thermal/libthermal.map              |  25 +
+ tools/lib/thermal/libthermal.pc.template      |  12 +
+ tools/lib/thermal/sampling.c                  |  75 +++
+ tools/lib/thermal/thermal.c                   | 126 ++++
+ tools/lib/thermal/thermal_nl.c                | 215 +++++++
+ tools/lib/thermal/thermal_nl.h                |  46 ++
+ tools/thermal/lib/Build                       |   3 +
+ tools/thermal/lib/Makefile                    | 158 +++++
+ .../thermal/lib/libthermal_tools.pc.template  |  12 +
+ tools/thermal/lib/log.c                       |  77 +++
+ tools/thermal/lib/log.h                       |  31 +
+ tools/thermal/lib/mainloop.c                  | 120 ++++
+ tools/thermal/lib/mainloop.h                  |  15 +
+ tools/thermal/lib/thermal-tools.h             |  10 +
+ tools/thermal/lib/uptimeofday.c               |  40 ++
+ tools/thermal/lib/uptimeofday.h               |  12 +
+ tools/thermal/thermal-engine/Build            |   2 +
+ tools/thermal/thermal-engine/Makefile         |  28 +
+ tools/thermal/thermal-engine/thermal-engine.c | 326 ++++++++++
+ tools/thermal/thermometer/Build               |   2 +
+ tools/thermal/thermometer/Makefile            |  26 +
+ tools/thermal/thermometer/thermometer.8       |  93 +++
+ tools/thermal/thermometer/thermometer.c       | 558 ++++++++++++++++++
+ tools/thermal/thermometer/thermometer.conf    |   5 +
+ 32 files changed, 2878 insertions(+), 3 deletions(-)
+ create mode 100644 tools/lib/thermal/.gitignore
+ create mode 100644 tools/lib/thermal/Build
+ create mode 100644 tools/lib/thermal/Makefile
+ create mode 100644 tools/lib/thermal/commands.c
+ create mode 100644 tools/lib/thermal/events.c
+ create mode 100644 tools/lib/thermal/include/thermal.h
+ create mode 100644 tools/lib/thermal/libthermal.map
+ create mode 100644 tools/lib/thermal/libthermal.pc.template
+ create mode 100644 tools/lib/thermal/sampling.c
+ create mode 100644 tools/lib/thermal/thermal.c
+ create mode 100644 tools/lib/thermal/thermal_nl.c
+ create mode 100644 tools/lib/thermal/thermal_nl.h
+ create mode 100644 tools/thermal/lib/Build
+ create mode 100644 tools/thermal/lib/Makefile
+ create mode 100644 tools/thermal/lib/libthermal_tools.pc.template
+ create mode 100644 tools/thermal/lib/log.c
+ create mode 100644 tools/thermal/lib/log.h
+ create mode 100644 tools/thermal/lib/mainloop.c
+ create mode 100644 tools/thermal/lib/mainloop.h
+ create mode 100644 tools/thermal/lib/thermal-tools.h
+ create mode 100644 tools/thermal/lib/uptimeofday.c
+ create mode 100644 tools/thermal/lib/uptimeofday.h
+ create mode 100644 tools/thermal/thermal-engine/Build
+ create mode 100644 tools/thermal/thermal-engine/Makefile
+ create mode 100644 tools/thermal/thermal-engine/thermal-engine.c
+ create mode 100644 tools/thermal/thermometer/Build
+ create mode 100644 tools/thermal/thermometer/Makefile
+ create mode 100644 tools/thermal/thermometer/thermometer.8
+ create mode 100644 tools/thermal/thermometer/thermometer.c
+ create mode 100644 tools/thermal/thermometer/thermometer.conf
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
