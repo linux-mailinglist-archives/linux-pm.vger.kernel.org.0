@@ -2,161 +2,229 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A025C4ECDE1
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Mar 2022 22:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09C0A4ECF97
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Mar 2022 00:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbiC3UZT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Mar 2022 16:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
+        id S1351550AbiC3W0J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Mar 2022 18:26:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231191AbiC3UZR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Mar 2022 16:25:17 -0400
-X-Greylist: delayed 1271 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Mar 2022 13:23:31 PDT
-Received: from gateway22.websitewelcome.com (gateway22.websitewelcome.com [192.185.47.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658976378
-        for <linux-pm@vger.kernel.org>; Wed, 30 Mar 2022 13:23:31 -0700 (PDT)
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway22.websitewelcome.com (Postfix) with ESMTP id AEE4114D38
-        for <linux-pm@vger.kernel.org>; Wed, 30 Mar 2022 15:02:19 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id ZeWJnjAjVHnotZeWJnaRDO; Wed, 30 Mar 2022 15:02:19 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=DrUu3f6Vg70A9S/e0ENsULeFLvIkUNgEiXVJ565JLzM=; b=dDDchv22UZx7S9aVL6BuhPFHoX
-        K+2861O1HC8rPmzN2ZaiTGoflxh53IzGBZ5EdHlqW5L6ICtftxsebDPSzuFktdght6c9yH2mECk3o
-        hLsWYXTJn9H3SwYhiHZfPPOXC/1lXTRDSYoEX9pJoM8dxdCPLPVLqms0Qt098Vul4I53VkR3nQVHI
-        wOMhdbWDZT9nLBtwTF0hK4AV+ZtXbiviUIGWNDFCZsx/+6f8zcp0aGaHlMR2wswTvg4dBO+7CezGy
-        6Ss2GnHToaslE/5DM42PTv+ri9c94/USznJ3FiAGdSgbE30796l7gzBBI1tqHXmOyusJoumjPqycM
-        5A2964cA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54582)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nZeWI-001X75-Mk; Wed, 30 Mar 2022 20:02:18 +0000
-Message-ID: <45acc349-8fea-f755-065c-c561949c45af@roeck-us.net>
-Date:   Wed, 30 Mar 2022 13:02:16 -0700
+        with ESMTP id S244671AbiC3W0J (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Mar 2022 18:26:09 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680BB4E3B0
+        for <linux-pm@vger.kernel.org>; Wed, 30 Mar 2022 15:24:22 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id n63-20020a1c2742000000b0038d0c31db6eso906243wmn.1
+        for <linux-pm@vger.kernel.org>; Wed, 30 Mar 2022 15:24:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Z8/F2Ft2+T4lT3wAALTeq2gwW+36osrTF5QO+aQqWdo=;
+        b=kwlcKITS/BmYPMU5CHF54WWHWDPKilXtemeTeUqPdTbTwmC3ORMjBcobxvQuWuQ37T
+         DjE9ZvbKtJuSVe+jK7pvHRjSNgExcMAjhf7kZoHOtHojii1NdOHJm3ieu9L2ONZ/r23M
+         7W+zHJhg/rOjT3eVAlikf3/qY15czQOT1G8xM5jIE7vz7uVhhnSMByybp2UyNpdDZXU0
+         QZ4xLhZVWn4Yf55KOBWWG/kRnaG96l1XIheN9GVZhFj1I8kkHPZ2VxpcCEaBm32suvXh
+         1MGh6lyP+DJwQKsly0d6YZLNymyE7gZRyLmpuDYQrnL7OyBKNtAobm3+5U782bPkTAQw
+         Vhng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Z8/F2Ft2+T4lT3wAALTeq2gwW+36osrTF5QO+aQqWdo=;
+        b=pKiVvncks+OEdJKK1AwjwMA/35V75CFXKYZEpJHExUm3oALXd4p5XiLKexR1zc7kYs
+         JudWKy/wxxrtLy3hNZh7uzsa2LFyxm2yIXXcor6vWIN/AnI/mPnlFt3IfrK6PvBXhTBC
+         zSqlC0z6DIUrJy4YzPAapmUvilHksHhFKNAOZIXKpWAOGQDLCbXFvFmtYhHMZMHAW6B0
+         +qHFgacEzTF3SmuziQpVeDG3YdDDOwFCO8NIsymdEWjID6t4w+4fYr4Z+jSxIOw+FiBK
+         5DWs5ZCNmvd1QJXwaMlqgWgqRZClxPuCrMGS5v5PO14AIFGJEqxGj0YM/tDMyc7OphcF
+         zyGA==
+X-Gm-Message-State: AOAM5324JRXViYvTl/nZ57ZXdntBKdXJFuHtAV+3bCS46nYHsI8pWDtP
+        cU1yZ4ePB4jGfEmTD3ZI/PntVs2VUNzd/g==
+X-Google-Smtp-Source: ABdhPJy9pB9/UxuJHLX3uDDO6tQkFDellKduiHDiaaEvMPAu01JV1V7bqfLZoSz4XizYxAjwxXWG8Q==
+X-Received: by 2002:a05:600c:3785:b0:38c:9b55:a477 with SMTP id o5-20020a05600c378500b0038c9b55a477mr1697117wmr.164.1648679060825;
+        Wed, 30 Mar 2022 15:24:20 -0700 (PDT)
+Received: from ?IPV6:2a01:e34:ed2f:f020:8f92:3217:a3c6:3ee8? ([2a01:e34:ed2f:f020:8f92:3217:a3c6:3ee8])
+        by smtp.googlemail.com with ESMTPSA id h9-20020a5d4309000000b00205b90434e2sm11231590wrq.114.2022.03.30.15.24.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Mar 2022 15:24:20 -0700 (PDT)
+Message-ID: <faf9e24f-4419-cdbb-573f-4cf2d9e506e2@linaro.org>
+Date:   Thu, 31 Mar 2022 00:24:18 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v20 1/4] mfd: silergy,sy7636a: Add config option
+Subject: Re: Thermal notifications without setting thermal governor to
+ userspace?
 Content-Language: en-US
-To:     Alistair Francis <alistair@alistair23.me>, lgirdwood@gmail.com,
-        robh+dt@kernel.org, kernel@pengutronix.de, lee.jones@linaro.org,
-        broonie@kernel.org
-Cc:     linux-hwmon@vger.kernel.org, geert@linux-m68k.org,
-        linux-kernel@vger.kernel.org, shawnguo@kernel.org,
-        alistair23@gmail.com, s.hauer@pengutronix.de, andreas@kemnade.info,
-        rui.zhang@intel.com, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-imx@nxp.com, amitk@kernel.org
-References: <20220330094126.30252-1-alistair@alistair23.me>
- <20220330094126.30252-2-alistair@alistair23.me>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220330094126.30252-2-alistair@alistair23.me>
+To:     Chris Down <chris@chrisdown.name>, linux-pm@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>
+References: <YkR6/KnH/f9U+2qf@chrisdown.name>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <YkR6/KnH/f9U+2qf@chrisdown.name>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nZeWI-001X75-Mk
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54582
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 11
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 3/30/22 02:41, Alistair Francis wrote:
-> Add a specific MFD_SY7636A config option.
-> 
-> As part of this change we can use MFD_SY7636A as a dependency for all
-> SY7636a components and also remove the name from MFD_SIMPLE_MFD_I2C as
-> it no longer needs to be selectable.
-> 
-> Signed-off-by: Alistair Francis <alistair@alistair23.me>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Hi Chris,
 
-> ---
->   drivers/hwmon/Kconfig     |  1 +
->   drivers/mfd/Kconfig       | 12 +++++++++++-
->   drivers/regulator/Kconfig |  1 +
->   3 files changed, 13 insertions(+), 1 deletion(-)
+On 30/03/2022 17:45, Chris Down wrote:
+> Hey thermal folks,
 > 
-> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> index 68a8a27ab3b7..74b60d24e740 100644
-> --- a/drivers/hwmon/Kconfig
-> +++ b/drivers/hwmon/Kconfig
-> @@ -1693,6 +1693,7 @@ config SENSORS_SIS5595
->   
->   config SENSORS_SY7636A
->   	tristate "Silergy SY7636A"
-> +	depends on MFD_SY7636A
->   	help
->   	  If you say yes here you get support for the thermistor readout of
->   	  the Silergy SY7636A PMIC.
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 3b59456f5545..c47cb755757b 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1095,6 +1095,16 @@ config MFD_SPMI_PMIC
->   	  Say M here if you want to include support for the SPMI PMIC
->   	  series as a module.  The module will be called "qcom-spmi-pmic".
->   
-> +config MFD_SY7636A
-> +	tristate "Silergy SY7636A voltage regulator"
-> +	depends on I2C
-> +	select MFD_SIMPLE_MFD_I2C
-> +	help
-> +	  Enable support for Silergy SY7636A voltage regulator.
-> +
-> +	  To enable support for building sub-devices as modules,
-> +	  choose M here.
-> +
->   config MFD_RDC321X
->   	tristate "RDC R-321x southbridge"
->   	select MFD_CORE
-> @@ -1202,7 +1212,7 @@ config MFD_SI476X_CORE
->   	  module will be called si476x-core.
->   
->   config MFD_SIMPLE_MFD_I2C
-> -	tristate "Simple Multi-Functional Device support (I2C)"
-> +	tristate
->   	depends on I2C
->   	select MFD_CORE
->   	select REGMAP_I2C
-> diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-> index 5ef2306fce04..c8ce6e5eea24 100644
-> --- a/drivers/regulator/Kconfig
-> +++ b/drivers/regulator/Kconfig
-> @@ -1219,6 +1219,7 @@ config REGULATOR_STW481X_VMMC
->   
->   config REGULATOR_SY7636A
->   	tristate "Silergy SY7636A voltage regulator"
-> +	depends on MFD_SY7636A
->   	help
->   	  This driver supports Silergy SY3686A voltage regulator.
->   
+> I'm hoping that you'll be able to provide some guidance on what options 
+> are available for getting thermal notifications without changing the 
+> policy to userspace control.
 
+That is now possible with the netlink notifications mechanism.
+
+https://www.linaro.org/blog/thermal-notifications-with-netlink/
+
+> To be clear, my intent is to have a userspace daemon which can set 
+> multiple temperature trips at runtime on which it can receive a 
+> notification (preferably by a simple mechanism like uevents), and to be 
+> able to distinguish which threshold was tripped. For example, to be able 
+> to set trips at 50C, 70C, and 90C, getting events both when the 
+> temperature exceeds that and when it dips back under the specified 
+> threshold.
+
+For that it would require to setup a trip point from the firmware 
+dedicated to userspace management along with the writable trip point 
+kernel config option.
+
+On embedded systems, the trip point can be added easily in the device tree.
+
+You would end up with:
+
+  - one passive trip point : writable and used by userspace
+
+  - one passive trip point to protect the system tied with a cooling 
+device and handled by the kernel
+
+  - one hot trip point to notify the userspace critical is about to be reach
+
+  - one critical trip point to reboot the system
+
+ From the userspace, you change the trip temp to 50°C, 70°C and 90°C 
+when crossing the way up or the way down.
+
+The sensor should implement the set_trip in order to program the 
+register to fire the interrupt at the specified temperature. Otherwise, 
+monitoring will be needed.
+
+On ACPI, except hacking the table and reload from the kernel I don't see 
+how to do that.
+
+
+> Right now I am polling /sys/class/thermal/thermal_zone*/temp but this 
+> can be expensive, especially for the ACPI thermal zone.
+> 
+> As it is, I see four options:
+> 
+> 1. Set thermal_zone to use user_space governor and use uevents
+> 
+> As I understand it, this means that the default critical temperature 
+> will no longer be respected and user space is now responsible for taking 
+> action to control thermal events.
+
+The userspace governor is marked deprecated and will be removed soon. 
+The decision was because this governor was only used for the sake of 
+having the notification but at the cost of losing the in-kernel control 
+of the thermal zone.
+
+The netlink notification solving that, the userspace governor is no 
+longer needed.
+
+> If that's correct, then it seems dangerous to set it to user_space for 
+> userspace applications which only want to monitor their own trip 
+> temperatures, but not take direct action.
+
+Right
+
+> 2. Use hwmon thermal events
+> 
+> I see that commit 1597b374af22 ("hwmon: Add notification support") adds 
+> notification support to hwmon, but as far as I can tell this is based on 
+> statically defined trip temperatures from ACPI or similar inputs. I see 
+> you can change it with the thermal.crt boot option, but that's too early 
+> for a normal userspace daemon to do anything (and it doesn't allow any 
+> dynamic reconfiguration).
+> 
+> 3. Use thermal over netlink
+> 
+> I see that commit 1ce50e7d408e ("thermal: core: genetlink support for 
+> events/cmd/sampling") which was merged a couple of years ago adds 
+> support for thermal netlink events.
+> 
+> I also see articles suggesting that support for this new netlink 
+> interface will be or was added to libnl, but I can't seem to find 
+> anything about it in the libnl sources.
+> 
+> Is this mature enough to use? If so, does one have to hack up their own 
+> userspace netlink library for now, or what's the plan there?
+
+
+For the record, everything is here:
+
+https://lore.kernel.org/all/20220330100444.3846661-1-daniel.lezcano@linaro.org/
+
+
+> In general I would prefer something simpler that fits into the existing 
+> strong tooling around uevents/etc though, this looks useful, but it does 
+> a lot more than I need and requires adding another userspace dependency 
+> on libnl.
+
+
+Yeah, that is the drawback.
+
+
+> 4. Poll /sys/class/thermal/thermal_zone*/temp or hwmon
+> 
+> This is what I'm currently doing. It's slow, and often unnecessarily 
+> costly on weaker systems.
+
+If the sensor backend drivers has the set_trip ops working and setting 
+the interrupt for the next threshold, that should be solved with the 
+writable trip point.
+
+Otherwise, the netlink sampling channel can be used with the in-kernel 
+monitoring. The cost of a back and forth netlink message is 14us on a 
+Cortex-A75@2.8GHz (the half if just getting a notification or sampling)
+
+> Are there other options I'm not considering here that might help me out 
+> here?
+
+Yes, I assume the daemon gets notification but has to do an action. 
+Usually, it acts on the cooling device and that is bad.
+
+There is a power capping framework called DTPM which aims to provide a 
+way to set a power limitation on the device. As it is very new, it is 
+only supporting ARM with an energy model for CPU and any devfreq device 
+(eg. GPU and memory).
+
+More details here:
+
+https://resources.linaro.org/en/resource/oyFSkedFn1RPeSLKhcQ1T3
+
+
+Hope that helped
+
+   -- Daniel
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
