@@ -2,64 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0244EC8B0
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Mar 2022 17:45:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7414EC9B5
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Mar 2022 18:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347415AbiC3Pqt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Mar 2022 11:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37588 "EHLO
+        id S1348832AbiC3Qfr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Mar 2022 12:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345538AbiC3Pqs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Mar 2022 11:46:48 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C13D3CFDC
-        for <linux-pm@vger.kernel.org>; Wed, 30 Mar 2022 08:45:03 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id lr4so33923523ejb.11
-        for <linux-pm@vger.kernel.org>; Wed, 30 Mar 2022 08:45:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=ldsl3d/m65WqjxPhfzfiRyXz5uTXf2P6C5lw5IWz+2c=;
-        b=SHBefDbuCenbZPAn7PSuQqxLAo8DscyjaiwclCBVX+0uhNfsBYFP66V9GnI3HhLnrN
-         Y+nqow/PDOSGbPlG3pAE/X9TUKv8EnOr8CBbUZYJaCaNeI4J/2G3NzGcj3puKXxWAQGZ
-         UTQiUdK48Sn68PLOTQBeR8HRArkEq3vA4aYxk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=ldsl3d/m65WqjxPhfzfiRyXz5uTXf2P6C5lw5IWz+2c=;
-        b=qSv044cpsldMhB5WduEj9+qxLLaDixNs4BdKzjsZJ1CzSXQ8g+s16j+gDKNzbrh7PD
-         mK1TKu4arvwYa+l1JdmMZwHtRKnjBtIyJs7q1e0V2PDeH8VNX5IeTCdppaNhonju4IBQ
-         Tf3Xs4KdezT66kkO0SovzBhWDO9rVn+u5cfebVo17ipssKxZxQ1v6UybaU/F0tREQWq/
-         YjE2+p+xLW1yaHownbtlkcnWcsGke4WmtKpz82msGN2vghw74KpLRsOIVI5ZbD5SCnJU
-         SoGqb6heSGr8hn4sHvd2H5tweW69F8YpNZnG1GMlBMMtGdSb7AmwcLVo2ar/FG1/cXwL
-         BjTg==
-X-Gm-Message-State: AOAM5301JqR5iGmxpflZ0ZghnRgv7gvh7CsWerDMjfOqqQAShfePYY1F
-        kipUOPghNi0LOqLaFO8IiZbuAYMWmqaJZA==
-X-Google-Smtp-Source: ABdhPJyd5sovDcZEVzukj0VS5orHwE7ckwNXSD0E77jc44TfajsUyUMXbqAp0r9V1ZdEAly9MinKcg==
-X-Received: by 2002:a17:906:794f:b0:6e1:2c94:160f with SMTP id l15-20020a170906794f00b006e12c94160fmr78598ejo.635.1648655101588;
-        Wed, 30 Mar 2022 08:45:01 -0700 (PDT)
-Received: from localhost ([2620:10d:c093:400::5:c1bb])
-        by smtp.gmail.com with ESMTPSA id a4-20020a170906274400b006da9456e802sm8393435ejd.102.2022.03.30.08.45.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 08:45:01 -0700 (PDT)
-Date:   Wed, 30 Mar 2022 16:45:00 +0100
-From:   Chris Down <chris@chrisdown.name>
-To:     linux-pm@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Thermal notifications without setting thermal governor to userspace?
-Message-ID: <YkR6/KnH/f9U+2qf@chrisdown.name>
+        with ESMTP id S1348711AbiC3Qfq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Mar 2022 12:35:46 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED15E2;
+        Wed, 30 Mar 2022 09:34:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1648658021;
+        bh=Aw52GudjzfV6DBA1f+n4H6s9lkEEzRPi45KdcBXLxZ0=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=LNkfa0reL5HBrPFyXfSnVY+Aw2Bl3LXKaR5hv9nJ4c1sBBUxk/ni44ICmOMbHgAQT
+         ll/vxykhy0Y2bfO9uTxDmEsuTbj9IosozgHiqKm7GmA4VTqR4PZwOJ7GiEikkc25CC
+         txrSR15lgDefdi3dsU0wV9YC8nDi5Bh4eqlI8oes=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1Mj8qd-1oCFXN3IxR-00f9s0; Wed, 30 Mar 2022 18:33:40 +0200
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     pali@kernel.org
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (dell-smm) Add cooling device support
+Date:   Wed, 30 Mar 2022 18:33:24 +0200
+Message-Id: <20220330163324.572437-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-User-Agent: Mutt/2.2.2 (aa28abe8) (2022-03-25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:tbSqy/9T9ZBldJcHFKXCEAyFh5LU2EBIRmdONn/JNv3Z+98KbMw
+ Izfpr/J+cJWyUOdsRgMG1s96WSJqu7tXUs+KJYpVBRnvfSYS+t9X9KMY+xf4UX43vJEOTWo
+ BqeSxpbPmfKf0OdqDU7VQbdDNQQ0rJGM1guQ8CilLwHhd4zfnTXP5nbYuXpF+L5ghIrMT2Q
+ BvjnI+P7WBuZ+sW6RI43Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:TX1inUXOY+g=:Q4a1QCJ8KXVnRJYHeHMC3g
+ Ykq5Na8Y+mjHCtCePKOaLFLWPpBPtB/BjW6dGXuKB9IkUS1wTinJGdy4gO4Ev6oh2PA8vbHEa
+ 6Z+eWhlNNRbM2s5uVQiNafbwfjgdHS/bpxpTwN1KB70pkfJdZ6UPNbQUBCZ8C2Ydog1/ZtQAt
+ vqnjml3b9Py8MmqtK9qwscRW1CjfUvGBArmi1PB5+GL+SUzmcszm5d1JIhDwgEQjJVF8khSO5
+ Gp2WUEmCft0Vv5B3AFbyvapphQfEPCb3k6gkGqX8aK2qJB8qWWcjjamSKVr6svgpMoYNxjW/G
+ xkTy/iXcLbFHK5jId/MLrXa6ife3tUNNIoqH0030GXABcepnjJLfXYNJaweZzLAqI1vi1dv3B
+ NCPoAAvQTAZ6+JQnZf1tP51VN+0e5Qs/89tR7X20JG4rTc9fYKKh75JGNb7mjOvedLcqxM/HZ
+ Y84Lj/aBZKt7+81S/UFiIAPeLsHcuYq50jXNxo+CSVHqj9zd9pTAJ67/R2nJcJLQAGxomGZqf
+ XaU5GbMvtm6FKCTFs3BgU33aCMTZEvQey7Fy5wiOQoNCzeJ/VEH1So6Ge0FHu5w4mLbNHtBNB
+ a4QzvIX4UqGjfiy/ZYtdzsIhYY43XMk/0D+Ok0nveJDQj6j6m/BHEdF+h0qAFFie5Qfjc44ng
+ ZQjUGZ186KnI4OjGWd7iykx6ZStrWlEJAbp+hZIv/zJmojY3TNpPaxC7CrXOL+c/wYvYCu9Dk
+ gERIsF2pfYkspJEqqhYL4NKNKvV/V7Q6fpKGcolEWc+YnHRa3J2v6dLUvDgEOo12QcN21NCyf
+ 4b0SpR+yIgfyz7URxc0nq3VdrjTMmmhdp+85NuaKPbqWP4yFls3K8i3apqLDipXpbhimOUAfP
+ F+qogR1vxdF8/EeVOOkjG/LJCbFhJw+NitOaBoUhVJiQu+YuxIx5kjCLOjvbYVKuPYNnTxh5J
+ pC+jA26vYBMlGj7xyAnFwKUIyhU4Go5FUfGT20ixP+IFhXGZMb6/vpcORhDRAE12EUPyGxJWB
+ TaQBYvjIYYgXxhqdwBtTM82j4+0nrE5kfCfTMyUUiPpMX7feZfdda69GD2l9ivAAF1ikBo9zw
+ 27corAm0O1RiGA=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,67 +67,200 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hey thermal folks,
+Until now, only the temperature sensors where exported thru
+the thermal subsystem. Export the fans as "dell-smm-fan[1-3]" too
+to make them available as cooling devices.
+Also update Documentation.
 
-I'm hoping that you'll be able to provide some guidance on what options are 
-available for getting thermal notifications without changing the policy to 
-userspace control.
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ Documentation/hwmon/dell-smm-hwmon.rst |  7 ++
+ drivers/hwmon/Kconfig                  |  1 +
+ drivers/hwmon/dell-smm-hwmon.c         | 94 +++++++++++++++++++++++++-
+ 3 files changed, 99 insertions(+), 3 deletions(-)
 
-To be clear, my intent is to have a userspace daemon which can set multiple 
-temperature trips at runtime on which it can receive a notification (preferably 
-by a simple mechanism like uevents), and to be able to distinguish which 
-threshold was tripped. For example, to be able to set trips at 50C, 70C, and 
-90C, getting events both when the temperature exceeds that and when it dips 
-back under the specified threshold.
+diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/=
+dell-smm-hwmon.rst
+index d3323a96665d..41839b7de2c1 100644
+=2D-- a/Documentation/hwmon/dell-smm-hwmon.rst
++++ b/Documentation/hwmon/dell-smm-hwmon.rst
+@@ -86,6 +86,13 @@ probe the BIOS on your machine and discover the appropr=
+iate codes.
 
-Right now I am polling /sys/class/thermal/thermal_zone*/temp but this can be 
-expensive, especially for the ACPI thermal zone.
+ Again, when you find new codes, we'd be happy to have your patches!
 
-As it is, I see four options:
++``thermal`` interface
++---------------------------
++
++The driver also exports the fans as thermal cooling devices with
++``type`` set to ``dell-smm-fan[1-3]``. This allows for easy fan control
++using one of the thermal governors.
++
+ Module parameters
+ -----------------
 
-1. Set thermal_zone to use user_space governor and use uevents
+diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+index 9ab4e9b3d27b..1175b8e38c45 100644
+=2D-- a/drivers/hwmon/Kconfig
++++ b/drivers/hwmon/Kconfig
+@@ -498,6 +498,7 @@ config SENSORS_DS1621
+ config SENSORS_DELL_SMM
+ 	tristate "Dell laptop SMM BIOS hwmon driver"
+ 	depends on X86
++	imply THERMAL
+ 	help
+ 	  This hwmon driver adds support for reporting temperature of different
+ 	  sensors and controls the fans on Dell laptops via System Management
+diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon=
+.c
+index 84cb1ede7bc0..0c29386f4bd3 100644
+=2D-- a/drivers/hwmon/dell-smm-hwmon.c
++++ b/drivers/hwmon/dell-smm-hwmon.c
+@@ -21,6 +21,7 @@
+ #include <linux/errno.h>
+ #include <linux/hwmon.h>
+ #include <linux/init.h>
++#include <linux/kconfig.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+@@ -29,6 +30,7 @@
+ #include <linux/seq_file.h>
+ #include <linux/string.h>
+ #include <linux/smp.h>
++#include <linux/thermal.h>
+ #include <linux/types.h>
+ #include <linux/uaccess.h>
 
-As I understand it, this means that the default critical temperature will no 
-longer be respected and user space is now responsible for taking action to 
-control thermal events.
+@@ -80,6 +82,11 @@ struct dell_smm_data {
+ 	int *fan_nominal_speed[DELL_SMM_NO_FANS];
+ };
 
-If that's correct, then it seems dangerous to set it to user_space for 
-userspace applications which only want to monitor their own trip temperatures, 
-but not take direct action.
++struct dell_smm_cooling_data {
++	u8 fan_num;
++	struct dell_smm_data *data;
++};
++
+ MODULE_AUTHOR("Massimo Dal Zotto (dz@debian.org)");
+ MODULE_AUTHOR("Pali Roh=C3=A1r <pali@kernel.org>");
+ MODULE_DESCRIPTION("Dell laptop SMM BIOS hwmon driver");
+@@ -638,9 +645,50 @@ static void __init i8k_init_procfs(struct device *dev=
+)
 
-2. Use hwmon thermal events
+ #endif
 
-I see that commit 1597b374af22 ("hwmon: Add notification support") adds 
-notification support to hwmon, but as far as I can tell this is based on 
-statically defined trip temperatures from ACPI or similar inputs. I see you can 
-change it with the thermal.crt boot option, but that's too early for a normal 
-userspace daemon to do anything (and it doesn't allow any dynamic 
-reconfiguration).
+-/*
+- * Hwmon interface
+- */
++static int dell_smm_get_max_state(struct thermal_cooling_device *dev, uns=
+igned long *state)
++{
++	struct dell_smm_cooling_data *cdata =3D dev->devdata;
++
++	*state =3D cdata->data->i8k_fan_max;
++
++	return 0;
++}
++
++static int dell_smm_get_cur_state(struct thermal_cooling_device *dev, uns=
+igned long *state)
++{
++	struct dell_smm_cooling_data *cdata =3D dev->devdata;
++	int ret;
++
++	ret =3D i8k_get_fan_status(cdata->data, cdata->fan_num);
++	if (ret < 0)
++		return ret;
++
++	*state =3D ret;
++
++	return 0;
++}
++
++static int dell_smm_set_cur_state(struct thermal_cooling_device *dev, uns=
+igned long state)
++{
++	struct dell_smm_cooling_data *cdata =3D dev->devdata;
++	struct dell_smm_data *data =3D cdata->data;
++	int ret;
++
++	if (state > data->i8k_fan_max)
++		return -EINVAL;
++
++	mutex_lock(&data->i8k_mutex);
++	ret =3D i8k_set_fan(data, cdata->fan_num, (int)state);
++	mutex_unlock(&data->i8k_mutex);
++
++	return ret;
++}
++
++static const struct thermal_cooling_device_ops dell_smm_cooling_ops =3D {
++	.get_max_state =3D dell_smm_get_max_state,
++	.get_cur_state =3D dell_smm_get_cur_state,
++	.set_cur_state =3D dell_smm_set_cur_state,
++};
 
-3. Use thermal over netlink
+ static umode_t dell_smm_is_visible(const void *drvdata, enum hwmon_sensor=
+_types type, u32 attr,
+ 				   int channel)
+@@ -941,6 +989,37 @@ static const struct hwmon_chip_info dell_smm_chip_inf=
+o =3D {
+ 	.info =3D dell_smm_info,
+ };
 
-I see that commit 1ce50e7d408e ("thermal: core: genetlink support for 
-events/cmd/sampling") which was merged a couple of years ago adds support for 
-thermal netlink events.
++static int __init dell_smm_init_cdev(struct device *dev, u8 fan_num)
++{
++	struct dell_smm_data *data =3D dev_get_drvdata(dev);
++	struct thermal_cooling_device *cdev;
++	struct dell_smm_cooling_data *cdata;
++	int ret =3D 0;
++	char *name;
++
++	name =3D kasprintf(GFP_KERNEL, "dell-smm-fan%u", fan_num + 1);
++	if (!name)
++		return -ENOMEM;
++
++	cdata =3D devm_kmalloc(dev, sizeof(*cdata), GFP_KERNEL);
++	if (cdata) {
++		cdata->fan_num =3D fan_num;
++		cdata->data =3D data;
++		cdev =3D devm_thermal_of_cooling_device_register(dev, NULL, name, cdata=
+,
++							       &dell_smm_cooling_ops);
++		if (IS_ERR(cdev)) {
++			devm_kfree(dev, cdata);
++			ret =3D PTR_ERR(cdev);
++		}
++	} else {
++		ret =3D -ENOMEM;
++	}
++
++	kfree(name);
++
++	return ret;
++}
++
+ static int __init dell_smm_init_hwmon(struct device *dev)
+ {
+ 	struct dell_smm_data *data =3D dev_get_drvdata(dev);
+@@ -967,6 +1046,15 @@ static int __init dell_smm_init_hwmon(struct device =
+*dev)
+ 			continue;
 
-I also see articles suggesting that support for this new netlink interface will 
-be or was added to libnl, but I can't seem to find anything about it in the 
-libnl sources.
+ 		data->fan[i] =3D true;
++
++		/* the cooling device it not critical, ignore failures */
++		if (IS_REACHABLE(CONFIG_THERMAL)) {
++			err =3D dell_smm_init_cdev(dev, i);
++			if (err < 0)
++				dev_err(dev, "Failed to register cooling device for fan %u\n",
++					i + 1);
++		}
++
+ 		data->fan_nominal_speed[i] =3D devm_kmalloc_array(dev, data->i8k_fan_ma=
+x + 1,
+ 								sizeof(*data->fan_nominal_speed[i]),
+ 								GFP_KERNEL);
+=2D-
+2.30.2
 
-Is this mature enough to use? If so, does one have to hack up their own 
-userspace netlink library for now, or what's the plan there?
-
-In general I would prefer something simpler that fits into the existing strong 
-tooling around uevents/etc though, this looks useful, but it does a lot more 
-than I need and requires adding another userspace dependency on libnl.
-
-4. Poll /sys/class/thermal/thermal_zone*/temp or hwmon
-
-This is what I'm currently doing. It's slow, and often unnecessarily costly on 
-weaker systems.
-
-Are there other options I'm not considering here that might help me out here?
-
-Thanks,
-
-Chris
