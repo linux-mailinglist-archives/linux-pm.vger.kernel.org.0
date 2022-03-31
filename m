@@ -2,1139 +2,389 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D294EE190
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Mar 2022 21:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2833E4EE1BF
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Mar 2022 21:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233544AbiCaTWn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Mar 2022 15:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
+        id S240672AbiCaTfN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Mar 2022 15:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiCaTWm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Mar 2022 15:22:42 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C5D49F25
-        for <linux-pm@vger.kernel.org>; Thu, 31 Mar 2022 12:20:52 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-de48295467so340590fac.2
-        for <linux-pm@vger.kernel.org>; Thu, 31 Mar 2022 12:20:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BVFv5aeCfN7Pc+wDmRJok7aT7ANJ2Gc5ZyVd/UMgC7s=;
-        b=ZFZJH18Ih7hw8aJfwNRait3V4fpiVV1wxTnoYMcFDRkTUJkqn639F7Askn0Z8vmbT6
-         dvXIpfoJxCO+UAk3DsON+Kg40WNM565IAWqx5LN7ZfPIAla0ujp4pr+H7izliKmeHhL4
-         Aa0hYTZ4noSZtjj8EHuHvXNUrYgFti0IyVNyCjg7UEX0UAwrFLjbDtuxxkvRkZ74MIBQ
-         R4SpBZSQvzIAEPCJj3AByNVGvBFIr6vZjYwjJ00+PqJ6f/PUM/5NpzDN/Ke7qr3Hjf1U
-         IunOIQoffQEgNZK4cuQQVBDXZR5xizRHvg/kksK7G0yCT/uP7waoX18SmI7l7aDPZiZ8
-         kjUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BVFv5aeCfN7Pc+wDmRJok7aT7ANJ2Gc5ZyVd/UMgC7s=;
-        b=kDdHMCYdAsR6AyrbSUoHtKjvCYN3xcTK2wQGUDLj7m2kgSq7KjPGNvo9DXGY/mv4OH
-         ZmJuEl05ccxBRUUiB5LyJquf7q1Q4AYhUGTO+zaMm0gQZTlNRuCsisYhQ5ESfQtNo1l9
-         dFq/8ILO71jQEGGtMxZXEiU5HwgwPezoC3z9I1tOU5d2nkSA82pqxnnywTYuyKSBHPEO
-         5MEbBU05oWu89JPFW9v17jmk9Y9uVewIpg14+Nk7Q+EqVmkJHU0GdWi5WwndfkVRzoSC
-         odIurHR1Atdj+9pG4fORYDy0rbkuss+9kpTmwbX9hW/wZTY7CljZTvMyw3OALjJLjtMv
-         b2kg==
-X-Gm-Message-State: AOAM530C/G6z22X3YctnDG8dGy6OEQm4wybK9b7EOKNEJupNmIRPtyYj
-        YpReY6v5fkNmEEgELMW4358=
-X-Google-Smtp-Source: ABdhPJxkPSwdi4d4euX/XkgOAlJncLEKk4ZyCRZmAuqBtXCVKFoy0/YuXve3t3YREMiCUt9lhtZIZg==
-X-Received: by 2002:a05:6870:ea82:b0:dd:e192:89a6 with SMTP id s2-20020a056870ea8200b000dde19289a6mr3322222oap.261.1648754451780;
-        Thu, 31 Mar 2022 12:20:51 -0700 (PDT)
-Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
-        by smtp.gmail.com with ESMTPSA id f11-20020a05680814cb00b002f76803a208sm146401oiw.47.2022.03.31.12.20.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Mar 2022 12:20:51 -0700 (PDT)
-Date:   Thu, 31 Mar 2022 14:20:45 -0500
-From:   Chris Morgan <macroalpha82@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Marcus Cooper <codekipper@gmail.com>, linux-pm@vger.kernel.org,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Subject: Re: [PATCH 6/6 v3] power: supply: Static data for Samsung batteries
-Message-ID: <20220331192045.GA21680@wintermute.localdomain>
-References: <20220225001314.1881549-1-linus.walleij@linaro.org>
- <20220225001314.1881549-7-linus.walleij@linaro.org>
+        with ESMTP id S240654AbiCaTfK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Mar 2022 15:35:10 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2087.outbound.protection.outlook.com [40.107.96.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A788EB90;
+        Thu, 31 Mar 2022 12:33:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Dew7680S77FQsPsCMemx6+pcUPbRTHSR64QpDE1s1JQ1gqoqQIWnYC/N+SLIR9ALacbBxrkbeSZ1/PtPjB2L/WqEKyzU2Sf02asg7Fwmh8j+92GitT+VipqJ3srM6G2YmAP0bMaHtB+ZHMYhYflFwmui/uEsN5b2bCnJX4pxYAhf2E1LqsNtlPvHoyaZCbHS+eGL57iCe1yB6ySlWocc+nK7LiXCJd7gREx/+q+ZiRjqLFwsdj0pQUilSyXabNRAw8pHG75nFcjs289xctahcu68K2ArpYAc7zLe1m63QuqCDkdpHuTkFtLYbvgA9q3gd7e+TdaxVOZcvY+uBQHrcA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=o/sFnGKai+X/ZwS5+AiLWjOCcW79LHlVL2xCJ2XlL6k=;
+ b=SULNcm385YvFxMldHeU1NHxshlU3nS08hFg+0F8EdYzgwrlessXDvezOFJdJUlcJfrU/E0dmWtJCZ0hiLW4EyvjKTI2Yq4Yn89LEnqv9RjPDupHUkbKvj29mkxUmvG6eqTWedpZ15rHWBt9vgIerGEZbWCM8Ew/gDCA98vZiw7rGPpBhA+BEJFREmDSt3T6Ry7zr5RzCkEDYxh4FDtALb+qyBMmIqt2SWannULNmsu7vOfkMuov8gUCV9u1oT9fwWAQK0HY45uazuYY7Ri3Vhs80i9QOsT25tlNLkr86bY+XCu6vZVwCRjY67/r9RbYUlQvOtjgeFS+8wuO735/3lQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=o/sFnGKai+X/ZwS5+AiLWjOCcW79LHlVL2xCJ2XlL6k=;
+ b=GavvkEGeRd7TjK5Pu/0d89/wKl97obLggdNgGCOtuedomCb6+lkivME9abjB5HLrbJsQzHFnq1i7hQcGkm7KbMtGze8glTfYj0qXmASGdmI+v1mdXIvYGMf0t+C4hh6gQjv2HSQ0RgGHLkneO20b1So0hQNvd+NbKIMh9ydGnCE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BL1PR12MB5157.namprd12.prod.outlook.com (2603:10b6:208:308::15)
+ by BYAPR12MB2856.namprd12.prod.outlook.com (2603:10b6:a03:136::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5102.21; Thu, 31 Mar
+ 2022 19:33:14 +0000
+Received: from BL1PR12MB5157.namprd12.prod.outlook.com
+ ([fe80::70d6:f6dd:3e14:3c2d]) by BL1PR12MB5157.namprd12.prod.outlook.com
+ ([fe80::70d6:f6dd:3e14:3c2d%5]) with mapi id 15.20.5123.019; Thu, 31 Mar 2022
+ 19:33:14 +0000
+Message-ID: <729648c2-6e2c-7076-b5a1-3155ce4fa924@amd.com>
+Date:   Thu, 31 Mar 2022 14:33:12 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v5 1/2] PCI / ACPI: Assume `HotPlugSupportInD3` only if
+ device can wake from D3
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        linux-pm@vger.kernel.org, Sanju.Mehta@amd.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+References: <20220331190446.GA12929@bhelgaas>
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <20220331190446.GA12929@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA0PR11CA0102.namprd11.prod.outlook.com
+ (2603:10b6:806:d1::17) To BL1PR12MB5157.namprd12.prod.outlook.com
+ (2603:10b6:208:308::15)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220225001314.1881549-7-linus.walleij@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: bcb58f83-dba8-4550-a591-08da134d4c8a
+X-MS-TrafficTypeDiagnostic: BYAPR12MB2856:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB28564ECFF1E851EDED42BB55E2E19@BYAPR12MB2856.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bGiPlAcj6QCvPNVxk7H6RLYd2X1kOlbbe1S++u3Hve9L2FvhlRBIxPe/JfCI8K3iuZRPvOHTZpDtSYngMSrQeQsgQ3UrhZi56zKQyNpGoFoFzMO9n7sB4ezzPxXz9NEW7VsC2nXddeOhQ2w2/FXQPoNeCM+oNB0bvPii08+swocGQXoMZthQVYXFfRiYBQHaosNMDJqBgG4sGQmgSzRRKu2xfQT8e0BdOmIB5BnLHnAXcwyWGIKB9wCcID5p0ObfPXfFdJKNvWx7o7H4B/hgCRsjjKlB4n9RKg+KhHXJ16Trrwi5SfEKFrfbAnuujtbmBnbVY9y8Gi3ZyAEyKMVF13dyBKHYVqGPb2UhB7x9waIO45rCOLC9YkS2pfpUJ4tIIffKZxXxxAhS0ecW8OvQ4PxoJigegGmIL78bXKLBlNc0V8GLo5VW+JUv8GMewsVo+B66I8YFVbiG2iW8PHYFJkH7MhnoEeMHZ51eJgAfuydV40WFGiOiYZgzgCtRFmLUPA4QgEdwFnlz1HjRaGzx8cr1yWmxyDsow/YPJV/hUUxJLCE+9jpIC5UhPXUPfzhdPSJJVYI7FRJTU7YNEYuVNSQycrj2Pf7rBwvNFmvpKKiVyALaDJvXBVH/EDxS+u//SFHbEATs5+Nx14OJlwKOtqL32H1gLEJ68TxgP4CWXwHjlm/zEOiOrmSI1dkeGmaYDddS72Y5Cxc2krYgVSCaI09/ojXVCyMm2Sycie9ak4pze4uHWNgpVvjKnqz71avq/eCIqEX4DOvaMazgGkTFRMx8P0HLIN+eYwT9dVtJYhYWZ8iM9w90CUs9wMe/tMFMPk3TLipf0MyK8c4PltUdnqhyFp4KssO71GRGuowKlIsONzLcZCsmBOK5TJUpDgmv
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5157.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(6029001)(4636009)(366004)(2906002)(8676002)(66556008)(4326008)(38100700002)(8936002)(54906003)(6916009)(316002)(19627235002)(66476007)(5660300002)(66946007)(966005)(508600001)(83380400001)(6486002)(36756003)(31696002)(45080400002)(6512007)(2616005)(6506007)(53546011)(186003)(31686004)(86362001)(26005)(81973001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dzZTYkpMMm14T3RjdjBPdTQrRElYS21FT1hvTE9vUVFFdVYwRVFzOXN2TnJV?=
+ =?utf-8?B?MEVNcG5JWXg5em9hSFNLVjZVU2ViTlFKdFNIMzVkK0NGVm9sTlNyWll3K28x?=
+ =?utf-8?B?V3JTSlF4RjFPTWRnYW9wN05LdDJmMW9aR09NZE1ybFNqeWVpQUxkTXd3WWdF?=
+ =?utf-8?B?U1Zucno2VnRZRVZBM0FIZDE4UG9sRmNtY282aXh4UEY2M0JmVkxoSjJhVG82?=
+ =?utf-8?B?SXVLZ1pPbUpudmJLdnQ5RktMSTZPdVRsb2ZaMWFlLzBjclNhYUtPeFQybnV6?=
+ =?utf-8?B?NnVWdHFXS1FQc2NyVkU2M1FqRGZJbFA3NUJjUTZzODQvcHhaaWt4dVdDRWZl?=
+ =?utf-8?B?VzQ0M1pNaFFCTFYzZG5SM3FaYmhmQlJrNG5oV2pCZGs1TTgrMWhnLzBqYWln?=
+ =?utf-8?B?K3Q3V0FYZ2MyQVRQV29XVnUzRDVJU0hkMUVRYU1IODNYK1pCbklzaW0rcUlz?=
+ =?utf-8?B?eXEydU1YdmNqdUlEZWUyVEptMnFmZkFWUzFOUHFMQzJQN2RxM2llRUFTZHh4?=
+ =?utf-8?B?WDcxK2EyeFpTSXhnRGI1WHNIcGVGa3cwclZoV0tKR3NoVlQ3akpYVXF1T2NM?=
+ =?utf-8?B?QkxnaHF3SUFkSWpxS0FadVNmbjRmaFdBbHFKODg2RlgyOEwwRnE1Zyt1VDR5?=
+ =?utf-8?B?TC9ia1dmeldCNG05dXE1Y1pHbGd2a21idnVkM0owOHBXMDc3d2w4bWR6SE4r?=
+ =?utf-8?B?QmI4TjJsQU9UNE9Gc3RUYTJxWEdzQnFRVFYrYWpkTUhDWGRnTmhUemZBNm01?=
+ =?utf-8?B?QklDdnJpdTRtYk9yb0RVVUZtcU15RVFUZzFEUGxrQTBIYzNCMlBldEdTNWJi?=
+ =?utf-8?B?N3JLWWFZRytzNFpscERXQVMzS0FlS3VXTUZTTUFHZ0NCOTY2cW1BRFlreHZp?=
+ =?utf-8?B?RVREa0hzMkJnMEFIWENzREFLZlhJUU4rRVd5ZFM5ditiV29uRk5iS0Z3amQ4?=
+ =?utf-8?B?b01yNGpmUTJ4bEdwZEF1ZE5uUGt5WUlWazJIL0tUTlRiWjhwM2pqeE9ZYXFr?=
+ =?utf-8?B?SGxzMjZiWDhtTFJCTlpGNVRnUVZrMjNKYkg0VDJVMEJKSGg2cTlrV2VLMHJJ?=
+ =?utf-8?B?S3h3ZnAvaWloYW9OWFg0c1JzT2t6eFZ5UXQ4UXYvZjJQZmZXMHFhQXNwcDln?=
+ =?utf-8?B?SnB6QjB6OWptYXlWdFR3N1MzRDZmalVib2tzT2pKd3V2SDV0bW9kV2VZM0tE?=
+ =?utf-8?B?UUtRSUVqL2JlaTkxSjQ1NXVwVDhjMWY5bGF5bVRLd2pDOUVEMW5tZE9janpW?=
+ =?utf-8?B?WFNoVHV5N3lHQzUzRW4xTUV5NWlSYUlYVkVsOTRxZ2xJNG0xb3BJU2F3R2Qr?=
+ =?utf-8?B?K1E0YU5BUkttWjZzZURQTm1lZGttMGJveWpLWWYyUkVqdlRkWEcrR2h5OXRq?=
+ =?utf-8?B?QWpXWlJPMUZtRHRRellTcXJ2VzY5QVQ4NUc3MlpMeklEdVAyUXhWVUNob05B?=
+ =?utf-8?B?VjRSazNLSTU3alJtbTV1TW5aL09uQWhTbjR6OXBjYlF1SkN6MFM3SCtIempn?=
+ =?utf-8?B?dXc0d2FNc2IrOGdGWVlBanQzUnlhb2VvV0tOd2xLNE03ZUc2R3BnZUE4V3dR?=
+ =?utf-8?B?RjloVmVEdG1kK1luK09IYVJaOTNSSE1oZXdLZDdLL0lXMTRUbjBpc1BqWElw?=
+ =?utf-8?B?SmF4RUk0ekcxZWZpdlhyN0R3UUpIb0VlS2c3K1g1THIvbzFIbXpDS1VpNGhT?=
+ =?utf-8?B?ZXJLN0k4S1Q3aFBac0htWHJ3bzRPNVM5cFpqSkJkSkpHUGZUS3ZlWDh1SjFR?=
+ =?utf-8?B?Y2huanhBWjV3ZmZmNnBpTjJGWE1ranB0M3Nza2N0dXFIVGFkbnIwVXVCL0hw?=
+ =?utf-8?B?MjdpZlprTCtWV3p5NDVXM1VwU2diZ050Tks5cHY3K0k4ZUw1SlNVRVBNb1lR?=
+ =?utf-8?B?TXdFNGozZ0VqZC9Da3dzTVNwUHdoQ1VYQ1VqdFpmQ2ZHakF6cWFrYk14dDNF?=
+ =?utf-8?B?TEdoQ243dmRwSk84RnJHMW9RMURRSko1UjhrRURScFp4N2haRFMzTzRHbktx?=
+ =?utf-8?B?SjJLc1AvcnBKQXowZlZGcVp1c0MxaXhTQyt4WnJtMzNadlVsbWVGK2o5NDVL?=
+ =?utf-8?B?YmZyNmE0TEU4VXV3YXFtcnVpWUVRdWNaRHp2aWFSSm8xRzN0UURrNDNLelBH?=
+ =?utf-8?B?bWVmY2FXYnB6NytySmE3bWswL2xyVWQrK0pNcTVVUEtUL2xETDJjTGNnVDA2?=
+ =?utf-8?B?NGQxWFhORTZCNEs1ZHRtem9YK1dpUEVkSzdsNDJ5MGxhMGljemJXWFkzZVpi?=
+ =?utf-8?B?VjJwaHlFazVIQWpHWUF1VjI0elVQSlU3VGNYSUpQR1IzZ0kweDVBMW9CN0VK?=
+ =?utf-8?B?dEpoa3BxMjlkV1J2Z3hlNTFTVFMycVRxZ2x1UjZJR2Y5ekhOQWJadz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bcb58f83-dba8-4550-a591-08da134d4c8a
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5157.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2022 19:33:14.5328
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7xFy+P4JYEKrLDgPRS9lv7inNHjOnfQzqaKUwlG8wb5arkGf2E62PNs3PtLq48/iHsN1+DesR1Mo004j6V4cqw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2856
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Feb 25, 2022 at 01:13:14AM +0100, Linus Walleij wrote:
-> If we detect a Samsung SDI battery, we return a static
-> struct power_supply_battery_info and avoid looking further.
+On 3/31/2022 14:04, Bjorn Helgaas wrote:
+> [+cc Rafael, Mika, linux-pm]
 > 
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
-
-I'm afraid this patch breaks my (currently work-in-progress) battery
-driver for the rk817. I am not sure but I believe it might cause other
-issues too for other downstream drivers (I don't have a device to test,
-but I think maybe the ingenic driver looks like it could be affected
-too).
-
-> ChangeLog v2->v3:
-> - Fix a whole bunch of tables after realizing that completely
->   different battery data was used if CONFIG_SAMSUNG_BATTERY
->   was set for Golden, Kyle, Codina and Skomer.
-> ChangeLog v1->v2:
-> - Bump tolerance to 40% on all BTI resistances
-> - Change config option to bool, as we are calling OUT from
->   the supply core this cannot be compiled into a module
-> - Augment data to support low/high temperature charge current
->   and voltages. Sadly the vendor tree just provide one and the
->   same current and voltage for all of these.
-> ---
->  drivers/power/supply/Kconfig               |   6 +
->  drivers/power/supply/Makefile              |   1 +
->  drivers/power/supply/power_supply_core.c   |  28 +-
->  drivers/power/supply/samsung-sdi-battery.c | 919 +++++++++++++++++++++
->  drivers/power/supply/samsung-sdi-battery.h |  13 +
->  5 files changed, 957 insertions(+), 10 deletions(-)
->  create mode 100644 drivers/power/supply/samsung-sdi-battery.c
->  create mode 100644 drivers/power/supply/samsung-sdi-battery.h
+> On Mon, Mar 28, 2022 at 03:55:18PM -0500, Mario Limonciello wrote:
+>> According to the Microsoft spec the _DSD `HotPlugSupportInD3` is
+>> indicates the ability for a bridge to be able to wakeup from D3:
+>>
+>>    This ACPI object [HotPlugSupportInD3] enables the operating system
+>>    to identify and power manage PCIe Root Ports that are capable of
+>>    handling hot plug events while in D3 state.
+>>
+>> This however is static information in the ACPI table at BIOS compilation
+>> time and on some platforms it's possible to configure the firmware at boot
+>> up such that _S0W returns "0" indicating the inability to wake up the
+>> device from D3 as explained in the ACPI specification:
+>>
+>>    7.3.20 _S0W (S0 Device Wake State)
+>>
+>>    This object evaluates to an integer that conveys to OSPM the deepest
+>>    D-state supported by this device in the S0 system sleeping state
+>>    where the device can wake itself.
+>>
+>> This mismatch may lead to being unable to enumerate devices behind the
+>> hotplug bridge when a device is plugged in. To remedy these situations
+>> that `HotPlugSupportInD3` is specified by _S0W returns 0, explicitly
+>> check that the ACPI companion has returned _S0W greater than or equal
+>> to 3 and the device has a GPE allowing the device to generate wakeup
+>> signals handled by the platform in `acpi_pci_bridge_d3`.
 > 
-> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-> index 6815e5a4c0bd..e9df4151f2e0 100644
-> --- a/drivers/power/supply/Kconfig
-> +++ b/drivers/power/supply/Kconfig
-> @@ -181,6 +181,12 @@ config BATTERY_OLPC
->  	help
->  	  Say Y to enable support for the battery on the OLPC laptop.
->  
-> +config BATTERY_SAMSUNG_SDI
-> +	bool "Samsung SDI batteries"
-> +	help
-> +	  Say Y to enable support for Samsung SDI battery data.
-> +	  These batteries are used in Samsung mobile phones.
-> +
->  config BATTERY_TOSA
->  	tristate "Sharp SL-6000 (tosa) battery"
->  	depends on MACH_TOSA && MFD_TC6393XB && TOUCHSCREEN_WM97XX
-> diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-> index 2c1b264b2046..ebcd2f5fe26d 100644
-> --- a/drivers/power/supply/Makefile
-> +++ b/drivers/power/supply/Makefile
-> @@ -34,6 +34,7 @@ obj-$(CONFIG_BATTERY_GOLDFISH)	+= goldfish_battery.o
->  obj-$(CONFIG_BATTERY_LEGO_EV3)	+= lego_ev3_battery.o
->  obj-$(CONFIG_BATTERY_PMU)	+= pmu_battery.o
->  obj-$(CONFIG_BATTERY_OLPC)	+= olpc_battery.o
-> +obj-$(CONFIG_BATTERY_SAMSUNG_SDI)	+= samsung-sdi-battery.o
->  obj-$(CONFIG_BATTERY_TOSA)	+= tosa_battery.o
->  obj-$(CONFIG_BATTERY_COLLIE)	+= collie_battery.o
->  obj-$(CONFIG_BATTERY_INGENIC)	+= ingenic-battery.o
-> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-> index 1c0b1be22067..43c66214bedf 100644
-> --- a/drivers/power/supply/power_supply_core.c
-> +++ b/drivers/power/supply/power_supply_core.c
-> @@ -23,6 +23,7 @@
->  #include <linux/thermal.h>
->  #include <linux/fixp-arith.h>
->  #include "power_supply.h"
-> +#include "samsung-sdi-battery.h"
->  
->  /* exported for the APM Power driver, APM emulation */
->  struct class *power_supply_class;
-> @@ -573,6 +574,23 @@ int power_supply_get_battery_info(struct power_supply *psy,
->  	int err, len, index;
->  	const __be32 *list;
->  
-> +	if (!psy->of_node) {
-> +		dev_warn(&psy->dev, "%s currently only supports devicetree\n",
-> +			 __func__);
-> +		return -ENXIO;
-> +	}
-> +
-> +	battery_np = of_parse_phandle(psy->of_node, "monitored-battery", 0);
-> +	if (!battery_np)
-> +		return -ENODEV;
-> +
-> +	/* Try static batteries first */
-> +	err = samsung_sdi_battery_get_info(&psy->dev, battery_np, &info);
-If the device isn't a Samsung battery this puts -ENODEV in the err variable.
-For my case I have a simple-battery that isn't a Samsung battery, and it
-is causing power_supply_get_battery_info to return an error.
+> acpi_pci_bridge_d3() currently depends only on HotPlugSupportInD3 for
+> the Root Port.  This patch adds dependencies on _S0W (if it exists)
+> and _PRW.  The _PRW connection is indirect; this patch tests
+> device->wakeup.flags.valid, which is only set in this path:
+> 
+>    acpi_add_single_object
+>      acpi_bus_get_wakeup_device_flags
+>        if (!acpi_has_method(device->handle, "_PRW"))
+> 	return;
+>        acpi_bus_extract_wakeup_device_power_package
+> 	acpi_evaluate_object("_PRW")
+> 	if (package)
+> 	  wakeup->gpe_device = ...
+> 	  wakeup->gpe_number = ...
+>        device->wakeup.flags.valid = acpi_wakeup_gpe_init(device);
+> 
+> So IIUC the proposed logic here is:
+> 
+>    - If Root Port has no _PRW, we can't put this device in D3 (this is
+>      new).
+> 
+>    - If Root Port has _S0W that says wake is not supported in D3hot
+>      (Linux sets OSC_SB_PR3_SUPPORT), we can't put this device in D3
+>      (this is also new).
+> 
+>    - If Root Port has HotPlugSupportInD3, we can put this device in D3
+>      (this is the existing behavior).
 
-> +	if (!err) {
-> +		*info_out = info;
-> +		return err;
-> +	}
+Correct.
+
+> 
+> Proposed text:
+> 
+>    acpi_pci_bridge_d3(dev) returns "true" if "dev" is a hotplug bridge
+>    that can handle hotplug events while in D3.  Previously this meant:
+> 
+>      1) "dev" has a _PS0 or _PR0 method, or
+> 
+>      2) The Root Port above "dev" has a _DSD with a
+>         "HotPlugSupportInD3" property with value 1.
+> 
+>    This did not consider_S0W, which tells us the deepest D-state from
+>    which a device can wake itself (ACPI v6.4, sec 7.3.20).
+> 
+>    On some platforms, e.g., AMD Yellow Carp, firmware may supply
+>    "HotPlugSupportInD3" even though _S0W tells us the device cannot
+>    wake from D3hot.  With the previous code, these devices could be put
+>    in D3hot and hotplugged devices would not be recognized.
+> 
+>    If _S0W exists and says the Root Port cannot wake itself from D3hot,
+>    return "false" to indicate that "dev" cannot handle hotplug events
+>    while in D3.
+> 
+>      1) "dev" has a _PS0 or _PR0 method, or
+> 
+>      2a) The Root Port above "dev" has _PRW and
+> 
+>      2b) If the Root Port above "dev" has _S0W, it can wake from D3hot or
+>          D3cold and
+> 
+>      2c) The Root Port above "dev" has a _DSD with a
+>          "HotPlugSupportInD3" property with value 1.
+
+Very well, I'll incorporate into the commit message and scrap some of 
+the old stuff.
+
+> 
+> The _S0W part makes sense to me.  The _PRW part hasn't been explained
+> yet.  We didn't depend on it before, but we think it's safe to depend
+> on it now?
+
+An earlier version of this patch actually was only checking this rather 
+than _S0W alone.  It was suggested that both should be checked together 
+by Rafael.
+
+https://lore.kernel.org/linux-pci/CAJZ5v0grj=vE1wGJpMxh-Hy7=ommfFUh5hw++nmQdLVxVtCSWw@mail.gmail.com/
+
+FWIW at least some earlier versions Rafael and Mika both agreed towards 
+that direction (and presumably weren't worried about existing systems 
+that this code was used for).
+
+> 
+> In the commit log and comments, can we be more explicit about whether
+> "D3" means "D3hot" or "D3cold"?
+
+The check for _S0W return is looking for "3", so it's really D3hot "or" 
+D3cold.  In the problematic case on Yellow Carp, it was D3hot.  I'll add 
+this detail.
+
+
+> 
+>> Windows 10 and Windows 11 both will prevent the bridge from going in D3
+>> when the firmware is configured this way and this changes aligns the
+>> handling of the situation to be the same.
+>>
+>> Link: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fuefi.org%2Fhtmlspecs%2FACPI_Spec_6_4_html%2F07_Power_and_Performance_Mgmt%2Fdevice-power-management-objects.html%3Fhighlight%3Ds0w%23s0w-s0-device-wake-state&amp;data=04%7C01%7Cmario.limonciello%40amd.com%7Cdc09192c789f4da990f108da1349553d%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637843502933651021%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=RxmXRsx7df1c1x%2FDqHNxG6iRpy798Aok%2Fl0vhs32D18%3D&amp;reserved=0
+>> Link: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fwindows-hardware%2Fdrivers%2Fpci%2Fdsd-for-pcie-root-ports%23identifying-pcie-root-ports-supporting-hot-plug-in-d3&amp;data=04%7C01%7Cmario.limonciello%40amd.com%7Cdc09192c789f4da990f108da1349553d%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637843502933651021%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=DN%2FfHQTayYZHCDY1NC3cG%2ByrgImwMVMlMhGGcb2ozWk%3D&amp;reserved=0
+>> Fixes: 26ad34d510a87 ("PCI / ACPI: Whitelist D3 for more PCIe hotplug ports")
+>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>> ---
+>> v4-v5:
+>>   * Don't fail if _S0W is missing
+>>   drivers/pci/pci-acpi.c | 17 ++++++++++++++++-
+>>   1 file changed, 16 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+>> index 1f15ab7eabf8..91c165ea4346 100644
+>> --- a/drivers/pci/pci-acpi.c
+>> +++ b/drivers/pci/pci-acpi.c
+>> @@ -977,6 +977,7 @@ bool acpi_pci_bridge_d3(struct pci_dev *dev)
+>>   	const union acpi_object *obj;
+>>   	struct acpi_device *adev;
+>>   	struct pci_dev *rpdev;
+>> +	unsigned long long ret;
+>>   
+>>   	if (acpi_pci_disabled || !dev->is_hotplug_bridge)
+>>   		return false;
+>> @@ -1003,7 +1004,21 @@ bool acpi_pci_bridge_d3(struct pci_dev *dev)
+>>   				   ACPI_TYPE_INTEGER, &obj) < 0)
+>>   		return false;
+>>   
+>> -	return obj->integer.value == 1;
+>> +	if (!obj->integer.value)
+>> +		return false;
+>> +
+>> +	/*
+>> +	 * If 'HotPlugSupportInD3' is set, but wakeup is not actually supported,
+>> +	 * the former cannot be trusted anyway, so validate it by verifying the
+>> +	 * latter.
+>> +	 */
+>> +	if (!adev->wakeup.flags.valid)
+>> +		return false;
+>> +
+>> +	if (ACPI_SUCCESS(acpi_evaluate_integer(adev->handle, "_S0W", NULL, &ret)))
+>> +		return ret >= ACPI_STATE_D3_HOT;
+> 
+> I think it would make more sense to move the generic easy tests
+> earlier, before acpi_dev_get_property(), since there's no need to look
+> up the property if we might fail later.  E.g., something like the
+> patch below, so it's:
+> 
+>    if (!adev->wakeup.flags.valid)
+>      return false;
+> 
+>    status = acpi_evaluate_integer(adev->handle, "_S0W", NULL, &state);
+>    if (ACPI_SUCCESS(status) && state < ACPI_STATE_D3_HOT)
+>      return false;
+> 
+>    if (!acpi_dev_get_property(adev, "HotPlugSupportInD3",
+>                               ACPI_TYPE_INTEGER, &obj) &&
+>        obj->integer.value == 1)
+>      return true;
+> 
+>    return false;
+> >> +
+>> +	return true;
+>>   }
+> 
+> diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+> index 1f15ab7eabf8..9959bfdc0746 100644
+> --- a/drivers/pci/pci-acpi.c
+> +++ b/drivers/pci/pci-acpi.c
+> @@ -974,9 +974,11 @@ bool acpi_pci_power_manageable(struct pci_dev *dev)
+>   
+>   bool acpi_pci_bridge_d3(struct pci_dev *dev)
+>   {
+> -	const union acpi_object *obj;
+> -	struct acpi_device *adev;
+>   	struct pci_dev *rpdev;
+> +	struct acpi_device *adev;
+> +	acpi_status status;
+> +	unsigned long long state;
+> +	const union acpi_object *obj;
+>   
+>   	if (acpi_pci_disabled || !dev->is_hotplug_bridge)
+>   		return false;
+> @@ -985,25 +987,37 @@ bool acpi_pci_bridge_d3(struct pci_dev *dev)
+>   	if (acpi_pci_power_manageable(dev))
+>   		return true;
+>   
+> +	rpdev = pcie_find_root_port(dev);
+> +	if (!rpdev)
+> +		return false;
 > +
->  	info = devm_kmalloc(&psy->dev, sizeof(*info), GFP_KERNEL);
->  	if (!info)
->  		return -ENOMEM;
-> @@ -612,16 +630,6 @@ int power_supply_get_battery_info(struct power_supply *psy,
->  		info->ocv_table_size[index]  = -EINVAL;
->  	}
->  
-> -	if (!psy->of_node) {
-> -		dev_warn(&psy->dev, "%s currently only supports devicetree\n",
-> -			 __func__);
-> -		return -ENXIO;
-> -	}
+> +	adev = ACPI_COMPANION(&rpdev->dev);
+> +	if (!adev)
+> +		return false;
+> +
+> +	/*
+> +	 * If the bridge can't wake from D3hot, it can't signal hotplug
+> +	 * events in D3hot.
+> +	 */
+> +	if (!adev->wakeup.flags.valid)
+> +		return false;
+> +
+> +	status = acpi_evaluate_integer(adev->handle, "_S0W", NULL, &state);
+> +	if (ACPI_SUCCESS(status) && state < ACPI_STATE_D3_HOT)
+> +		return false;
+> +
+>   	/*
+>   	 * The ACPI firmware will provide the device-specific properties through
+>   	 * _DSD configuration object. Look for the 'HotPlugSupportInD3' property
+>   	 * for the root port and if it is set we know the hierarchy behind it
+>   	 * supports D3 just fine.
+>   	 */
+> -	rpdev = pcie_find_root_port(dev);
+> -	if (!rpdev)
+> -		return false;
+> +	if (!acpi_dev_get_property(adev, "HotPlugSupportInD3",
+> +				   ACPI_TYPE_INTEGER, &obj) &&
+> +	    obj->integer.value == 1)
+> +		return true;
+>   
+> -	adev = ACPI_COMPANION(&rpdev->dev);
+> -	if (!adev)
+> -		return false;
 > -
-> -	battery_np = of_parse_phandle(psy->of_node, "monitored-battery", 0);
-> -	if (!battery_np)
-> -		return -ENODEV;
+> -	if (acpi_dev_get_property(adev, "HotPlugSupportInD3",
+> -				   ACPI_TYPE_INTEGER, &obj) < 0)
+> -		return false;
 > -
->  	err = of_property_read_string(battery_np, "compatible", &value);
->  	if (err)
->  		goto out_put_node;
-> diff --git a/drivers/power/supply/samsung-sdi-battery.c b/drivers/power/supply/samsung-sdi-battery.c
-> new file mode 100644
-> index 000000000000..8e718f0fc2b5
-> --- /dev/null
-> +++ b/drivers/power/supply/samsung-sdi-battery.c
-> @@ -0,0 +1,919 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +/*
-> + * Battery data and characteristics for Samsung SDI (Samsung Digital Interface)
-> + * batteries. The data is retrieved automatically into drivers using
-> + * the power_supply_get_battery_info() call.
-> + *
-> + * The BTI (battery type indicator) resistance in the code drops was very
-> + * unreliable. The resistance listed here was obtained by simply measuring
-> + * the BTI resistance with a multimeter on the battery.
-> + */
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/power_supply.h>
-> +#include "samsung-sdi-battery.h"
-> +
-> +struct samsung_sdi_battery {
-> +	char *compatible;
-> +	char *name;
-> +	struct power_supply_battery_info info;
-> +};
-> +
-> +/*
-> + * Voltage to internal resistance tables. The internal resistance varies
-> + * depending on the VBAT voltage, so look this up from a table. Different
-> + * tables apply depending on whether we are charging or not.
-> + */
-> +
-> +struct power_supply_vbat_ri_table samsung_vbat2res_discharging_eb_l1m7flu[] = {
-> +	{ .vbat_uv = 4240000, .ri_uohm = 160000 },
-> +	{ .vbat_uv = 4210000, .ri_uohm = 179000 },
-> +	{ .vbat_uv = 4180000, .ri_uohm = 183000 },
-> +	{ .vbat_uv = 4160000, .ri_uohm = 184000 },
-> +	{ .vbat_uv = 4140000, .ri_uohm = 191000 },
-> +	{ .vbat_uv = 4120000, .ri_uohm = 204000 },
-> +	{ .vbat_uv = 4076000, .ri_uohm = 220000 },
-> +	{ .vbat_uv = 4030000, .ri_uohm = 227000 },
-> +	{ .vbat_uv = 3986000, .ri_uohm = 215000 },
-> +	{ .vbat_uv = 3916000, .ri_uohm = 221000 },
-> +	{ .vbat_uv = 3842000, .ri_uohm = 259000 },
-> +	{ .vbat_uv = 3773000, .ri_uohm = 287000 },
-> +	{ .vbat_uv = 3742000, .ri_uohm = 283000 },
-> +	{ .vbat_uv = 3709000, .ri_uohm = 277000 },
-> +	{ .vbat_uv = 3685000, .ri_uohm = 297000 },
-> +	{ .vbat_uv = 3646000, .ri_uohm = 310000 },
-> +	{ .vbat_uv = 3616000, .ri_uohm = 331000 },
-> +	{ .vbat_uv = 3602000, .ri_uohm = 370000 },
-> +	{ .vbat_uv = 3578000, .ri_uohm = 350000 },
-> +	{ .vbat_uv = 3553000, .ri_uohm = 321000 },
-> +	{ .vbat_uv = 3503000, .ri_uohm = 322000 },
-> +	{ .vbat_uv = 3400000, .ri_uohm = 269000 },
-> +	{ .vbat_uv = 3360000, .ri_uohm = 328000 },
-> +	{ .vbat_uv = 3330000, .ri_uohm = 305000 },
-> +	{ .vbat_uv = 3300000, .ri_uohm = 339000 },
-> +};
-> +
-> +struct power_supply_vbat_ri_table samsung_vbat2res_charging_eb_l1m7flu[] = {
-> +	{ .vbat_uv = 4302000, .ri_uohm = 230000 },
-> +	{ .vbat_uv = 4276000, .ri_uohm = 345000 },
-> +	{ .vbat_uv = 4227000, .ri_uohm = 345000 },
-> +	{ .vbat_uv = 4171000, .ri_uohm = 346000 },
-> +	{ .vbat_uv = 4134000, .ri_uohm = 311000 },
-> +	{ .vbat_uv = 4084000, .ri_uohm = 299000 },
-> +	{ .vbat_uv = 4052000, .ri_uohm = 316000 },
-> +	{ .vbat_uv = 4012000, .ri_uohm = 309000 },
-> +	{ .vbat_uv = 3961000, .ri_uohm = 303000 },
-> +	{ .vbat_uv = 3939000, .ri_uohm = 280000 },
-> +	{ .vbat_uv = 3904000, .ri_uohm = 261000 },
-> +	{ .vbat_uv = 3850000, .ri_uohm = 212000 },
-> +	{ .vbat_uv = 3800000, .ri_uohm = 232000 },
-> +	{ .vbat_uv = 3750000, .ri_uohm = 177000 },
-> +	{ .vbat_uv = 3712000, .ri_uohm = 164000 },
-> +	{ .vbat_uv = 3674000, .ri_uohm = 161000 },
-> +	{ .vbat_uv = 3590000, .ri_uohm = 164000 },
-> +};
-> +
-> +struct power_supply_vbat_ri_table samsung_vbat2res_discharging_eb425161la[] = {
-> +	{ .vbat_uv = 4240000, .ri_uohm = 160000 },
-> +	{ .vbat_uv = 4210000, .ri_uohm = 179000 },
-> +	{ .vbat_uv = 4180000, .ri_uohm = 183000 },
-> +	{ .vbat_uv = 4160000, .ri_uohm = 184000 },
-> +	{ .vbat_uv = 4140000, .ri_uohm = 191000 },
-> +	{ .vbat_uv = 4120000, .ri_uohm = 204000 },
-> +	{ .vbat_uv = 4080000, .ri_uohm = 200000 },
-> +	{ .vbat_uv = 4027000, .ri_uohm = 202000 },
-> +	{ .vbat_uv = 3916000, .ri_uohm = 221000 },
-> +	{ .vbat_uv = 3842000, .ri_uohm = 259000 },
-> +	{ .vbat_uv = 3800000, .ri_uohm = 262000 },
-> +	{ .vbat_uv = 3742000, .ri_uohm = 263000 },
-> +	{ .vbat_uv = 3709000, .ri_uohm = 277000 },
-> +	{ .vbat_uv = 3685000, .ri_uohm = 312000 },
-> +	{ .vbat_uv = 3668000, .ri_uohm = 258000 },
-> +	{ .vbat_uv = 3660000, .ri_uohm = 247000 },
-> +	{ .vbat_uv = 3636000, .ri_uohm = 293000 },
-> +	{ .vbat_uv = 3616000, .ri_uohm = 331000 },
-> +	{ .vbat_uv = 3600000, .ri_uohm = 349000 },
-> +	{ .vbat_uv = 3593000, .ri_uohm = 345000 },
-> +	{ .vbat_uv = 3585000, .ri_uohm = 344000 },
-> +	{ .vbat_uv = 3572000, .ri_uohm = 336000 },
-> +	{ .vbat_uv = 3553000, .ri_uohm = 321000 },
-> +	{ .vbat_uv = 3517000, .ri_uohm = 336000 },
-> +	{ .vbat_uv = 3503000, .ri_uohm = 322000 },
-> +	{ .vbat_uv = 3400000, .ri_uohm = 269000 },
-> +	{ .vbat_uv = 3360000, .ri_uohm = 328000 },
-> +	{ .vbat_uv = 3330000, .ri_uohm = 305000 },
-> +	{ .vbat_uv = 3300000, .ri_uohm = 339000 },
-> +};
-> +
-> +struct power_supply_vbat_ri_table samsung_vbat2res_charging_eb425161la[] = {
-> +	{ .vbat_uv = 4345000, .ri_uohm = 230000 },
-> +	{ .vbat_uv = 4329000, .ri_uohm = 238000 },
-> +	{ .vbat_uv = 4314000, .ri_uohm = 225000 },
-> +	{ .vbat_uv = 4311000, .ri_uohm = 239000 },
-> +	{ .vbat_uv = 4294000, .ri_uohm = 235000 },
-> +	{ .vbat_uv = 4264000, .ri_uohm = 229000 },
-> +	{ .vbat_uv = 4262000, .ri_uohm = 228000 },
-> +	{ .vbat_uv = 4252000, .ri_uohm = 236000 },
-> +	{ .vbat_uv = 4244000, .ri_uohm = 234000 },
-> +	{ .vbat_uv = 4235000, .ri_uohm = 234000 },
-> +	{ .vbat_uv = 4227000, .ri_uohm = 238000 },
-> +	{ .vbat_uv = 4219000, .ri_uohm = 242000 },
-> +	{ .vbat_uv = 4212000, .ri_uohm = 239000 },
-> +	{ .vbat_uv = 4206000, .ri_uohm = 231000 },
-> +	{ .vbat_uv = 4201000, .ri_uohm = 231000 },
-> +	{ .vbat_uv = 4192000, .ri_uohm = 224000 },
-> +	{ .vbat_uv = 4184000, .ri_uohm = 238000 },
-> +	{ .vbat_uv = 4173000, .ri_uohm = 245000 },
-> +	{ .vbat_uv = 4161000, .ri_uohm = 244000 },
-> +	{ .vbat_uv = 4146000, .ri_uohm = 244000 },
-> +	{ .vbat_uv = 4127000, .ri_uohm = 228000 },
-> +	{ .vbat_uv = 4119000, .ri_uohm = 218000 },
-> +	{ .vbat_uv = 4112000, .ri_uohm = 215000 },
-> +	{ .vbat_uv = 4108000, .ri_uohm = 209000 },
-> +	{ .vbat_uv = 4102000, .ri_uohm = 214000 },
-> +	{ .vbat_uv = 4096000, .ri_uohm = 215000 },
-> +	{ .vbat_uv = 4090000, .ri_uohm = 215000 },
-> +	{ .vbat_uv = 4083000, .ri_uohm = 219000 },
-> +	{ .vbat_uv = 4078000, .ri_uohm = 208000 },
-> +	{ .vbat_uv = 4071000, .ri_uohm = 205000 },
-> +	{ .vbat_uv = 4066000, .ri_uohm = 208000 },
-> +	{ .vbat_uv = 4061000, .ri_uohm = 210000 },
-> +	{ .vbat_uv = 4055000, .ri_uohm = 212000 },
-> +	{ .vbat_uv = 4049000, .ri_uohm = 215000 },
-> +	{ .vbat_uv = 4042000, .ri_uohm = 212000 },
-> +	{ .vbat_uv = 4032000, .ri_uohm = 217000 },
-> +	{ .vbat_uv = 4027000, .ri_uohm = 220000 },
-> +	{ .vbat_uv = 4020000, .ri_uohm = 210000 },
-> +	{ .vbat_uv = 4013000, .ri_uohm = 214000 },
-> +	{ .vbat_uv = 4007000, .ri_uohm = 219000 },
-> +	{ .vbat_uv = 4003000, .ri_uohm = 229000 },
-> +	{ .vbat_uv = 3996000, .ri_uohm = 246000 },
-> +	{ .vbat_uv = 3990000, .ri_uohm = 245000 },
-> +	{ .vbat_uv = 3984000, .ri_uohm = 242000 },
-> +	{ .vbat_uv = 3977000, .ri_uohm = 236000 },
-> +	{ .vbat_uv = 3971000, .ri_uohm = 231000 },
-> +	{ .vbat_uv = 3966000, .ri_uohm = 229000 },
-> +	{ .vbat_uv = 3952000, .ri_uohm = 226000 },
-> +	{ .vbat_uv = 3946000, .ri_uohm = 222000 },
-> +	{ .vbat_uv = 3941000, .ri_uohm = 222000 },
-> +	{ .vbat_uv = 3936000, .ri_uohm = 217000 },
-> +	{ .vbat_uv = 3932000, .ri_uohm = 217000 },
-> +	{ .vbat_uv = 3928000, .ri_uohm = 212000 },
-> +	{ .vbat_uv = 3926000, .ri_uohm = 214000 },
-> +	{ .vbat_uv = 3922000, .ri_uohm = 209000 },
-> +	{ .vbat_uv = 3917000, .ri_uohm = 215000 },
-> +	{ .vbat_uv = 3914000, .ri_uohm = 212000 },
-> +	{ .vbat_uv = 3912000, .ri_uohm = 220000 },
-> +	{ .vbat_uv = 3910000, .ri_uohm = 226000 },
-> +	{ .vbat_uv = 3903000, .ri_uohm = 226000 },
-> +	{ .vbat_uv = 3891000, .ri_uohm = 222000 },
-> +	{ .vbat_uv = 3871000, .ri_uohm = 221000 },
-> +	{ .vbat_uv = 3857000, .ri_uohm = 219000 },
-> +	{ .vbat_uv = 3850000, .ri_uohm = 216000 },
-> +	{ .vbat_uv = 3843000, .ri_uohm = 212000 },
-> +	{ .vbat_uv = 3835000, .ri_uohm = 206000 },
-> +	{ .vbat_uv = 3825000, .ri_uohm = 217000 },
-> +	{ .vbat_uv = 3824000, .ri_uohm = 220000 },
-> +	{ .vbat_uv = 3820000, .ri_uohm = 237000 },
-> +	{ .vbat_uv = 3800000, .ri_uohm = 232000 },
-> +	{ .vbat_uv = 3750000, .ri_uohm = 177000 },
-> +	{ .vbat_uv = 3712000, .ri_uohm = 164000 },
-> +	{ .vbat_uv = 3674000, .ri_uohm = 161000 },
-> +	{ .vbat_uv = 3590000, .ri_uohm = 164000 },
-> +};
-> +
-> +struct power_supply_vbat_ri_table samsung_vbat2res_discharging_eb425161lu[] = {
-> +	{ .vbat_uv = 4240000, .ri_uohm = 160000 },
-> +	{ .vbat_uv = 4210000, .ri_uohm = 179000 },
-> +	{ .vbat_uv = 4180000, .ri_uohm = 183000 },
-> +	{ .vbat_uv = 4160000, .ri_uohm = 184000 },
-> +	{ .vbat_uv = 4140000, .ri_uohm = 191000 },
-> +	{ .vbat_uv = 4120000, .ri_uohm = 204000 },
-> +	{ .vbat_uv = 4080000, .ri_uohm = 200000 },
-> +	{ .vbat_uv = 4027000, .ri_uohm = 202000 },
-> +	{ .vbat_uv = 3916000, .ri_uohm = 221000 },
-> +	{ .vbat_uv = 3842000, .ri_uohm = 259000 },
-> +	{ .vbat_uv = 3800000, .ri_uohm = 262000 },
-> +	{ .vbat_uv = 3742000, .ri_uohm = 263000 },
-> +	{ .vbat_uv = 3708000, .ri_uohm = 277000 },
-> +	{ .vbat_uv = 3684000, .ri_uohm = 272000 },
-> +	{ .vbat_uv = 3664000, .ri_uohm = 278000 },
-> +	{ .vbat_uv = 3655000, .ri_uohm = 285000 },
-> +	{ .vbat_uv = 3638000, .ri_uohm = 261000 },
-> +	{ .vbat_uv = 3624000, .ri_uohm = 259000 },
-> +	{ .vbat_uv = 3616000, .ri_uohm = 266000 },
-> +	{ .vbat_uv = 3597000, .ri_uohm = 278000 },
-> +	{ .vbat_uv = 3581000, .ri_uohm = 281000 },
-> +	{ .vbat_uv = 3560000, .ri_uohm = 287000 },
-> +	{ .vbat_uv = 3527000, .ri_uohm = 289000 },
-> +	{ .vbat_uv = 3512000, .ri_uohm = 286000 },
-> +	{ .vbat_uv = 3494000, .ri_uohm = 282000 },
-> +	{ .vbat_uv = 3400000, .ri_uohm = 269000 },
-> +	{ .vbat_uv = 3360000, .ri_uohm = 328000 },
-> +	{ .vbat_uv = 3330000, .ri_uohm = 305000 },
-> +	{ .vbat_uv = 3300000, .ri_uohm = 339000 },
-> +};
-> +
-> +struct power_supply_vbat_ri_table samsung_vbat2res_charging_eb425161lu[] = {
-> +	{ .vbat_uv = 4346000, .ri_uohm = 293000 },
-> +	{ .vbat_uv = 4336000, .ri_uohm = 290000 },
-> +	{ .vbat_uv = 4315000, .ri_uohm = 274000 },
-> +	{ .vbat_uv = 4310000, .ri_uohm = 264000 },
-> +	{ .vbat_uv = 4275000, .ri_uohm = 275000 },
-> +	{ .vbat_uv = 4267000, .ri_uohm = 274000 },
-> +	{ .vbat_uv = 4227000, .ri_uohm = 262000 },
-> +	{ .vbat_uv = 4186000, .ri_uohm = 282000 },
-> +	{ .vbat_uv = 4136000, .ri_uohm = 246000 },
-> +	{ .vbat_uv = 4110000, .ri_uohm = 242000 },
-> +	{ .vbat_uv = 4077000, .ri_uohm = 249000 },
-> +	{ .vbat_uv = 4049000, .ri_uohm = 238000 },
-> +	{ .vbat_uv = 4017000, .ri_uohm = 268000 },
-> +	{ .vbat_uv = 3986000, .ri_uohm = 261000 },
-> +	{ .vbat_uv = 3962000, .ri_uohm = 252000 },
-> +	{ .vbat_uv = 3940000, .ri_uohm = 235000 },
-> +	{ .vbat_uv = 3930000, .ri_uohm = 237000 },
-> +	{ .vbat_uv = 3924000, .ri_uohm = 255000 },
-> +	{ .vbat_uv = 3910000, .ri_uohm = 244000 },
-> +	{ .vbat_uv = 3889000, .ri_uohm = 231000 },
-> +	{ .vbat_uv = 3875000, .ri_uohm = 249000 },
-> +	{ .vbat_uv = 3850000, .ri_uohm = 212000 },
-> +	{ .vbat_uv = 3800000, .ri_uohm = 232000 },
-> +	{ .vbat_uv = 3750000, .ri_uohm = 177000 },
-> +	{ .vbat_uv = 3712000, .ri_uohm = 164000 },
-> +	{ .vbat_uv = 3674000, .ri_uohm = 161000 },
-> +	{ .vbat_uv = 3590000, .ri_uohm = 164000 },
-> +};
-> +
-> +struct power_supply_vbat_ri_table samsung_vbat2res_discharging_eb485159lu[] = {
-> +	{ .vbat_uv = 4240000, .ri_uohm = 160000 },
-> +	{ .vbat_uv = 4210000, .ri_uohm = 179000 },
-> +	{ .vbat_uv = 4180000, .ri_uohm = 183000 },
-> +	{ .vbat_uv = 4160000, .ri_uohm = 184000 },
-> +	{ .vbat_uv = 4140000, .ri_uohm = 191000 },
-> +	{ .vbat_uv = 4120000, .ri_uohm = 204000 },
-> +	{ .vbat_uv = 4080000, .ri_uohm = 200000 },
-> +	{ .vbat_uv = 4027000, .ri_uohm = 202000 },
-> +	{ .vbat_uv = 3916000, .ri_uohm = 221000 },
-> +	{ .vbat_uv = 3842000, .ri_uohm = 259000 },
-> +	{ .vbat_uv = 3800000, .ri_uohm = 262000 },
-> +	{ .vbat_uv = 3715000, .ri_uohm = 340000 },
-> +	{ .vbat_uv = 3700000, .ri_uohm = 300000 },
-> +	{ .vbat_uv = 3682000, .ri_uohm = 233000 },
-> +	{ .vbat_uv = 3655000, .ri_uohm = 246000 },
-> +	{ .vbat_uv = 3639000, .ri_uohm = 260000 },
-> +	{ .vbat_uv = 3621000, .ri_uohm = 254000 },
-> +	{ .vbat_uv = 3583000, .ri_uohm = 266000 },
-> +	{ .vbat_uv = 3536000, .ri_uohm = 274000 },
-> +	{ .vbat_uv = 3502000, .ri_uohm = 300000 },
-> +	{ .vbat_uv = 3465000, .ri_uohm = 245000 },
-> +	{ .vbat_uv = 3438000, .ri_uohm = 225000 },
-> +	{ .vbat_uv = 3330000, .ri_uohm = 305000 },
-> +	{ .vbat_uv = 3300000, .ri_uohm = 339000 },
-> +};
-> +
-> +struct power_supply_vbat_ri_table samsung_vbat2res_charging_eb485159lu[] = {
-> +	{ .vbat_uv = 4302000, .ri_uohm = 200000 },
-> +	{ .vbat_uv = 4258000, .ri_uohm = 206000 },
-> +	{ .vbat_uv = 4200000, .ri_uohm = 231000 },
-> +	{ .vbat_uv = 4150000, .ri_uohm = 198000 },
-> +	{ .vbat_uv = 4134000, .ri_uohm = 268000 },
-> +	{ .vbat_uv = 4058000, .ri_uohm = 172000 },
-> +	{ .vbat_uv = 4003000, .ri_uohm = 227000 },
-> +	{ .vbat_uv = 3972000, .ri_uohm = 241000 },
-> +	{ .vbat_uv = 3953000, .ri_uohm = 244000 },
-> +	{ .vbat_uv = 3950000, .ri_uohm = 213000 },
-> +	{ .vbat_uv = 3900000, .ri_uohm = 225000 },
-> +	{ .vbat_uv = 3850000, .ri_uohm = 212000 },
-> +	{ .vbat_uv = 3800000, .ri_uohm = 232000 },
-> +	{ .vbat_uv = 3750000, .ri_uohm = 177000 },
-> +	{ .vbat_uv = 3712000, .ri_uohm = 164000 },
-> +	{ .vbat_uv = 3674000, .ri_uohm = 161000 },
-> +	{ .vbat_uv = 3590000, .ri_uohm = 164000 },
-> +};
-> +
-> +struct power_supply_vbat_ri_table samsung_vbat2res_discharging_eb535151vu[] = {
-> +	{ .vbat_uv = 4071000, .ri_uohm = 158000 },
-> +	{ .vbat_uv = 4019000, .ri_uohm = 187000 },
-> +	{ .vbat_uv = 3951000, .ri_uohm = 191000 },
-> +	{ .vbat_uv = 3901000, .ri_uohm = 193000 },
-> +	{ .vbat_uv = 3850000, .ri_uohm = 273000 },
-> +	{ .vbat_uv = 3800000, .ri_uohm = 305000 },
-> +	{ .vbat_uv = 3750000, .ri_uohm = 205000 },
-> +	{ .vbat_uv = 3700000, .ri_uohm = 290000 },
-> +	{ .vbat_uv = 3650000, .ri_uohm = 262000 },
-> +	{ .vbat_uv = 3618000, .ri_uohm = 290000 },
-> +	{ .vbat_uv = 3505000, .ri_uohm = 235000 },
-> +	{ .vbat_uv = 3484000, .ri_uohm = 253000 },
-> +	{ .vbat_uv = 3413000, .ri_uohm = 243000 },
-> +	{ .vbat_uv = 3393000, .ri_uohm = 285000 },
-> +	{ .vbat_uv = 3361000, .ri_uohm = 281000 },
-> +	{ .vbat_uv = 3302000, .ri_uohm = 286000 },
-> +	{ .vbat_uv = 3280000, .ri_uohm = 250000 },
-> +};
-> +
-> +struct power_supply_vbat_ri_table samsung_vbat2res_charging_eb535151vu[] = {
-> +	{ .vbat_uv = 4190000, .ri_uohm = 214000 },
-> +	{ .vbat_uv = 4159000, .ri_uohm = 252000 },
-> +	{ .vbat_uv = 4121000, .ri_uohm = 245000 },
-> +	{ .vbat_uv = 4069000, .ri_uohm = 228000 },
-> +	{ .vbat_uv = 4046000, .ri_uohm = 229000 },
-> +	{ .vbat_uv = 4026000, .ri_uohm = 233000 },
-> +	{ .vbat_uv = 4007000, .ri_uohm = 240000 },
-> +	{ .vbat_uv = 3982000, .ri_uohm = 291000 },
-> +	{ .vbat_uv = 3945000, .ri_uohm = 276000 },
-> +	{ .vbat_uv = 3924000, .ri_uohm = 266000 },
-> +	{ .vbat_uv = 3910000, .ri_uohm = 258000 },
-> +	{ .vbat_uv = 3900000, .ri_uohm = 271000 },
-> +	{ .vbat_uv = 3844000, .ri_uohm = 279000 },
-> +	{ .vbat_uv = 3772000, .ri_uohm = 217000 },
-> +	{ .vbat_uv = 3673000, .ri_uohm = 208000 },
-> +	{ .vbat_uv = 3571000, .ri_uohm = 208000 },
-> +	{ .vbat_uv = 3510000, .ri_uohm = 228000 },
-> +};
-> +
-> +struct power_supply_vbat_ri_table samsung_vbat2res_discharging_eb585157lu[] = {
-> +	{ .vbat_uv = 4194000, .ri_uohm = 121000 },
-> +	{ .vbat_uv = 4169000, .ri_uohm = 188000 },
-> +	{ .vbat_uv = 4136000, .ri_uohm = 173000 },
-> +	{ .vbat_uv = 4108000, .ri_uohm = 158000 },
-> +	{ .vbat_uv = 4064000, .ri_uohm = 143000 },
-> +	{ .vbat_uv = 3956000, .ri_uohm = 160000 },
-> +	{ .vbat_uv = 3847000, .ri_uohm = 262000 },
-> +	{ .vbat_uv = 3806000, .ri_uohm = 280000 },
-> +	{ .vbat_uv = 3801000, .ri_uohm = 266000 },
-> +	{ .vbat_uv = 3794000, .ri_uohm = 259000 },
-> +	{ .vbat_uv = 3785000, .ri_uohm = 234000 },
-> +	{ .vbat_uv = 3779000, .ri_uohm = 227000 },
-> +	{ .vbat_uv = 3772000, .ri_uohm = 222000 },
-> +	{ .vbat_uv = 3765000, .ri_uohm = 221000 },
-> +	{ .vbat_uv = 3759000, .ri_uohm = 216000 },
-> +	{ .vbat_uv = 3754000, .ri_uohm = 206000 },
-> +	{ .vbat_uv = 3747000, .ri_uohm = 212000 },
-> +	{ .vbat_uv = 3743000, .ri_uohm = 208000 },
-> +	{ .vbat_uv = 3737000, .ri_uohm = 212000 },
-> +	{ .vbat_uv = 3733000, .ri_uohm = 200000 },
-> +	{ .vbat_uv = 3728000, .ri_uohm = 203000 },
-> +	{ .vbat_uv = 3722000, .ri_uohm = 207000 },
-> +	{ .vbat_uv = 3719000, .ri_uohm = 208000 },
-> +	{ .vbat_uv = 3715000, .ri_uohm = 209000 },
-> +	{ .vbat_uv = 3712000, .ri_uohm = 211000 },
-> +	{ .vbat_uv = 3709000, .ri_uohm = 210000 },
-> +	{ .vbat_uv = 3704000, .ri_uohm = 216000 },
-> +	{ .vbat_uv = 3701000, .ri_uohm = 218000 },
-> +	{ .vbat_uv = 3698000, .ri_uohm = 222000 },
-> +	{ .vbat_uv = 3694000, .ri_uohm = 218000 },
-> +	{ .vbat_uv = 3692000, .ri_uohm = 215000 },
-> +	{ .vbat_uv = 3688000, .ri_uohm = 224000 },
-> +	{ .vbat_uv = 3686000, .ri_uohm = 224000 },
-> +	{ .vbat_uv = 3683000, .ri_uohm = 228000 },
-> +	{ .vbat_uv = 3681000, .ri_uohm = 228000 },
-> +	{ .vbat_uv = 3679000, .ri_uohm = 229000 },
-> +	{ .vbat_uv = 3676000, .ri_uohm = 232000 },
-> +	{ .vbat_uv = 3675000, .ri_uohm = 229000 },
-> +	{ .vbat_uv = 3673000, .ri_uohm = 229000 },
-> +	{ .vbat_uv = 3672000, .ri_uohm = 223000 },
-> +	{ .vbat_uv = 3669000, .ri_uohm = 224000 },
-> +	{ .vbat_uv = 3666000, .ri_uohm = 224000 },
-> +	{ .vbat_uv = 3663000, .ri_uohm = 221000 },
-> +	{ .vbat_uv = 3660000, .ri_uohm = 218000 },
-> +	{ .vbat_uv = 3657000, .ri_uohm = 215000 },
-> +	{ .vbat_uv = 3654000, .ri_uohm = 212000 },
-> +	{ .vbat_uv = 3649000, .ri_uohm = 215000 },
-> +	{ .vbat_uv = 3644000, .ri_uohm = 215000 },
-> +	{ .vbat_uv = 3636000, .ri_uohm = 215000 },
-> +	{ .vbat_uv = 3631000, .ri_uohm = 206000 },
-> +	{ .vbat_uv = 3623000, .ri_uohm = 205000 },
-> +	{ .vbat_uv = 3616000, .ri_uohm = 193000 },
-> +	{ .vbat_uv = 3605000, .ri_uohm = 193000 },
-> +	{ .vbat_uv = 3600000, .ri_uohm = 198000 },
-> +	{ .vbat_uv = 3597000, .ri_uohm = 198000 },
-> +	{ .vbat_uv = 3592000, .ri_uohm = 203000 },
-> +	{ .vbat_uv = 3591000, .ri_uohm = 188000 },
-> +	{ .vbat_uv = 3587000, .ri_uohm = 188000 },
-> +	{ .vbat_uv = 3583000, .ri_uohm = 177000 },
-> +	{ .vbat_uv = 3577000, .ri_uohm = 170000 },
-> +	{ .vbat_uv = 3568000, .ri_uohm = 135000 },
-> +	{ .vbat_uv = 3552000, .ri_uohm = 54000 },
-> +	{ .vbat_uv = 3526000, .ri_uohm = 130000 },
-> +	{ .vbat_uv = 3501000, .ri_uohm = 48000 },
-> +	{ .vbat_uv = 3442000, .ri_uohm = 183000 },
-> +	{ .vbat_uv = 3326000, .ri_uohm = 372000 },
-> +	{ .vbat_uv = 3161000, .ri_uohm = 452000 },
-> +};
-> +
-> +struct power_supply_vbat_ri_table samsung_vbat2res_charging_eb585157lu[] = {
-> +	{ .vbat_uv = 4360000, .ri_uohm = 128000 },
-> +	{ .vbat_uv = 4325000, .ri_uohm = 130000 },
-> +	{ .vbat_uv = 4316000, .ri_uohm = 148000 },
-> +	{ .vbat_uv = 4308000, .ri_uohm = 162000 },
-> +	{ .vbat_uv = 4301000, .ri_uohm = 162000 },
-> +	{ .vbat_uv = 4250000, .ri_uohm = 162000 },
-> +	{ .vbat_uv = 4230000, .ri_uohm = 164000 },
-> +	{ .vbat_uv = 4030000, .ri_uohm = 164000 },
-> +	{ .vbat_uv = 4000000, .ri_uohm = 193000 },
-> +	{ .vbat_uv = 3950000, .ri_uohm = 204000 },
-> +	{ .vbat_uv = 3850000, .ri_uohm = 210000 },
-> +	{ .vbat_uv = 3800000, .ri_uohm = 230000 },
-> +	{ .vbat_uv = 3790000, .ri_uohm = 240000 },
-> +	{ .vbat_uv = 3780000, .ri_uohm = 311000 },
-> +	{ .vbat_uv = 3760000, .ri_uohm = 420000 },
-> +	{ .vbat_uv = 3700000, .ri_uohm = 504000 },
-> +	{ .vbat_uv = 3600000, .ri_uohm = 565000 },
-> +};
-> +
-> +/*
-> + * Temperature to internal resistance scaling tables.
-> + *
-> + * "resistance" is the percentage of the resistance determined from the voltage
-> + * so this represents the capacity ratio at different temperatures.
-> + *
-> + * FIXME: the proper table is missing: Samsung does not provide the necessary
-> + * temperature compensation tables so we just state 100% for every temperature.
-> + * If you have the datasheets, please provide these tables.
-> + */
-> +static struct power_supply_resistance_temp_table samsung_temp2res[] = {
-> +	{ .temp = 50, .resistance = 100 },
-> +	{ .temp = 40, .resistance = 100 },
-> +	{ .temp = 30, .resistance = 100 },
-> +	{ .temp = 20, .resistance = 100 },
-> +	{ .temp = 10, .resistance = 100 },
-> +	{ .temp = 00, .resistance = 100 },
-> +	{ .temp = -10, .resistance = 100 },
-> +	{ .temp = -20, .resistance = 100 },
-> +};
-> +
-> +/*
-> + * Capacity tables for different Open Circuit Voltages (OCV).
-> + * These must be sorted by falling OCV value.
-> + */
-> +
-> +static struct power_supply_battery_ocv_table samsung_ocv_cap_eb485159lu[] = {
-> +	{ .ocv = 4330000, .capacity = 100},
-> +	{ .ocv = 4320000, .capacity = 99},
-> +	{ .ocv = 4283000, .capacity = 95},
-> +	{ .ocv = 4246000, .capacity = 92},
-> +	{ .ocv = 4211000, .capacity = 89},
-> +	{ .ocv = 4167000, .capacity = 85},
-> +	{ .ocv = 4146000, .capacity = 83},
-> +	{ .ocv = 4124000, .capacity = 81},
-> +	{ .ocv = 4062000, .capacity = 75},
-> +	{ .ocv = 4013000, .capacity = 70},
-> +	{ .ocv = 3977000, .capacity = 66},
-> +	{ .ocv = 3931000, .capacity = 60},
-> +	{ .ocv = 3914000, .capacity = 58},
-> +	{ .ocv = 3901000, .capacity = 57},
-> +	{ .ocv = 3884000, .capacity = 56},
-> +	{ .ocv = 3870000, .capacity = 55},
-> +	{ .ocv = 3862000, .capacity = 54},
-> +	{ .ocv = 3854000, .capacity = 53},
-> +	{ .ocv = 3838000, .capacity = 50},
-> +	{ .ocv = 3823000, .capacity = 47},
-> +	{ .ocv = 3813000, .capacity = 45},
-> +	{ .ocv = 3807000, .capacity = 43},
-> +	{ .ocv = 3800000, .capacity = 41},
-> +	{ .ocv = 3795000, .capacity = 40},
-> +	{ .ocv = 3786000, .capacity = 37},
-> +	{ .ocv = 3783000, .capacity = 35},
-> +	{ .ocv = 3773000, .capacity = 30},
-> +	{ .ocv = 3758000, .capacity = 25},
-> +	{ .ocv = 3745000, .capacity = 22},
-> +	{ .ocv = 3738000, .capacity = 20},
-> +	{ .ocv = 3733000, .capacity = 19},
-> +	{ .ocv = 3716000, .capacity = 17},
-> +	{ .ocv = 3709000, .capacity = 16},
-> +	{ .ocv = 3698000, .capacity = 15},
-> +	{ .ocv = 3687000, .capacity = 14},
-> +	{ .ocv = 3684000, .capacity = 13},
-> +	{ .ocv = 3684000, .capacity = 12},
-> +	{ .ocv = 3678000, .capacity = 10},
-> +	{ .ocv = 3671000, .capacity = 9},
-> +	{ .ocv = 3665000, .capacity = 8},
-> +	{ .ocv = 3651000, .capacity = 7},
-> +	{ .ocv = 3634000, .capacity = 6},
-> +	{ .ocv = 3601000, .capacity = 5},
-> +	{ .ocv = 3564000, .capacity = 4},
-> +	{ .ocv = 3516000, .capacity = 3},
-> +	{ .ocv = 3456000, .capacity = 2},
-> +	{ .ocv = 3381000, .capacity = 1},
-> +	{ .ocv = 3300000, .capacity = 0},
-> +};
-> +
-> +/* Same capacity table is used by eb-l1m7flu, eb425161la, eb425161lu */
-> +static struct power_supply_battery_ocv_table samsung_ocv_cap_1500mah[] = {
-> +	{ .ocv = 4328000, .capacity = 100},
-> +	{ .ocv = 4299000, .capacity = 99},
-> +	{ .ocv = 4281000, .capacity = 98},
-> +	{ .ocv = 4241000, .capacity = 95},
-> +	{ .ocv = 4183000, .capacity = 90},
-> +	{ .ocv = 4150000, .capacity = 87},
-> +	{ .ocv = 4116000, .capacity = 84},
-> +	{ .ocv = 4077000, .capacity = 80},
-> +	{ .ocv = 4068000, .capacity = 79},
-> +	{ .ocv = 4058000, .capacity = 77},
-> +	{ .ocv = 4026000, .capacity = 75},
-> +	{ .ocv = 3987000, .capacity = 72},
-> +	{ .ocv = 3974000, .capacity = 69},
-> +	{ .ocv = 3953000, .capacity = 66},
-> +	{ .ocv = 3933000, .capacity = 63},
-> +	{ .ocv = 3911000, .capacity = 60},
-> +	{ .ocv = 3900000, .capacity = 58},
-> +	{ .ocv = 3873000, .capacity = 55},
-> +	{ .ocv = 3842000, .capacity = 52},
-> +	{ .ocv = 3829000, .capacity = 50},
-> +	{ .ocv = 3810000, .capacity = 45},
-> +	{ .ocv = 3793000, .capacity = 40},
-> +	{ .ocv = 3783000, .capacity = 35},
-> +	{ .ocv = 3776000, .capacity = 30},
-> +	{ .ocv = 3762000, .capacity = 25},
-> +	{ .ocv = 3746000, .capacity = 20},
-> +	{ .ocv = 3739000, .capacity = 18},
-> +	{ .ocv = 3715000, .capacity = 15},
-> +	{ .ocv = 3700000, .capacity = 12},
-> +	{ .ocv = 3690000, .capacity = 10},
-> +	{ .ocv = 3680000, .capacity = 9},
-> +	{ .ocv = 3670000, .capacity = 7},
-> +	{ .ocv = 3656000, .capacity = 5},
-> +	{ .ocv = 3634000, .capacity = 4},
-> +	{ .ocv = 3614000, .capacity = 3},
-> +	{ .ocv = 3551000, .capacity = 2},
-> +	{ .ocv = 3458000, .capacity = 1},
-> +	{ .ocv = 3300000, .capacity = 0},
-> +};
-> +
-> +static struct power_supply_battery_ocv_table samsung_ocv_cap_eb535151vu[] = {
-> +	{ .ocv = 4178000, .capacity = 100},
-> +	{ .ocv = 4148000, .capacity = 99},
-> +	{ .ocv = 4105000, .capacity = 95},
-> +	{ .ocv = 4078000, .capacity = 92},
-> +	{ .ocv = 4057000, .capacity = 89},
-> +	{ .ocv = 4013000, .capacity = 85},
-> +	{ .ocv = 3988000, .capacity = 82},
-> +	{ .ocv = 3962000, .capacity = 77},
-> +	{ .ocv = 3920000, .capacity = 70},
-> +	{ .ocv = 3891000, .capacity = 65},
-> +	{ .ocv = 3874000, .capacity = 62},
-> +	{ .ocv = 3839000, .capacity = 59},
-> +	{ .ocv = 3816000, .capacity = 55},
-> +	{ .ocv = 3798000, .capacity = 50},
-> +	{ .ocv = 3778000, .capacity = 40},
-> +	{ .ocv = 3764000, .capacity = 30},
-> +	{ .ocv = 3743000, .capacity = 25},
-> +	{ .ocv = 3711000, .capacity = 20},
-> +	{ .ocv = 3691000, .capacity = 18},
-> +	{ .ocv = 3685000, .capacity = 15},
-> +	{ .ocv = 3680000, .capacity = 12},
-> +	{ .ocv = 3662000, .capacity = 10},
-> +	{ .ocv = 3638000, .capacity = 9},
-> +	{ .ocv = 3593000, .capacity = 7},
-> +	{ .ocv = 3566000, .capacity = 6},
-> +	{ .ocv = 3497000, .capacity = 4},
-> +	{ .ocv = 3405000, .capacity = 2},
-> +	{ .ocv = 3352000, .capacity = 1},
-> +	{ .ocv = 3300000, .capacity = 0},
-> +};
-> +
-> +static struct power_supply_battery_ocv_table samsung_ocv_cap_eb585157lu[] = {
-> +	{ .ocv = 4320000, .capacity = 100},
-> +	{ .ocv = 4296000, .capacity = 99},
-> +	{ .ocv = 4283000, .capacity = 98},
-> +	{ .ocv = 4245000, .capacity = 95},
-> +	{ .ocv = 4185000, .capacity = 90},
-> +	{ .ocv = 4152000, .capacity = 87},
-> +	{ .ocv = 4119000, .capacity = 84},
-> +	{ .ocv = 4077000, .capacity = 80},
-> +	{ .ocv = 4057000, .capacity = 78},
-> +	{ .ocv = 4048000, .capacity = 77},
-> +	{ .ocv = 4020000, .capacity = 74},
-> +	{ .ocv = 4003000, .capacity = 72},
-> +	{ .ocv = 3978000, .capacity = 69},
-> +	{ .ocv = 3955000, .capacity = 66},
-> +	{ .ocv = 3934000, .capacity = 63},
-> +	{ .ocv = 3912000, .capacity = 60},
-> +	{ .ocv = 3894000, .capacity = 58},
-> +	{ .ocv = 3860000, .capacity = 55},
-> +	{ .ocv = 3837000, .capacity = 52},
-> +	{ .ocv = 3827000, .capacity = 50},
-> +	{ .ocv = 3806000, .capacity = 45},
-> +	{ .ocv = 3791000, .capacity = 40},
-> +	{ .ocv = 3779000, .capacity = 35},
-> +	{ .ocv = 3770000, .capacity = 30},
-> +	{ .ocv = 3758000, .capacity = 25},
-> +	{ .ocv = 3739000, .capacity = 20},
-> +	{ .ocv = 3730000, .capacity = 18},
-> +	{ .ocv = 3706000, .capacity = 15},
-> +	{ .ocv = 3684000, .capacity = 13},
-> +	{ .ocv = 3675000, .capacity = 10},
-> +	{ .ocv = 3673000, .capacity = 9},
-> +	{ .ocv = 3665000, .capacity = 7},
-> +	{ .ocv = 3649000, .capacity = 5},
-> +	{ .ocv = 3628000, .capacity = 4},
-> +	{ .ocv = 3585000, .capacity = 3},
-> +	{ .ocv = 3525000, .capacity = 2},
-> +	{ .ocv = 3441000, .capacity = 1},
-> +	{ .ocv = 3300000, .capacity = 0},
-> +};
-> +
-> +struct power_supply_maintenance_charge_table samsung_maint_charge_table[] = {
-> +	{
-> +		/* Maintenance charging phase A, 60 hours */
-> +		.charge_current_max_ua = 600000,
-> +		.charge_voltage_max_uv = 4150000,
-> +		.charge_safety_timer_minutes = 60*60,
-> +	},
-> +	{
-> +		/* Maintenance charging phase B, 200 hours */
-> +		.charge_current_max_ua = 600000,
-> +		.charge_voltage_max_uv = 4100000,
-> +		.charge_safety_timer_minutes = 200*60,
-> +	}
-> +};
-> +
-> +struct samsung_sdi_battery samsung_sdi_batteries[] = {
-> +	{
-> +		/*
-> +		 * Used in Samsung GT-I8190 "Golden"
-> +		 * Data from vendor boardfile board-golden-[bm|battery].c
-> +		 */
-> +		.compatible = "samsung,eb-l1m7flu",
-> +		.name = "EB-L1M7FLU",
-> +		.info = {
-> +			.charge_full_design_uah = 1500000,
-> +			.technology = POWER_SUPPLY_TECHNOLOGY_LION,
-> +			.factory_internal_resistance_uohm = 100000,
-> +			.factory_internal_resistance_charging_uohm = 200000,
-> +			/* If you have data on this fix the min_design_uv */
-> +			.voltage_min_design_uv = 3320000,
-> +			.voltage_max_design_uv = 4340000,
-> +			.overvoltage_limit_uv = 4500000,
-> +			.constant_charge_current_max_ua = 900000,
-> +			.constant_charge_voltage_max_uv = 4320000,
-> +			.charge_term_current_ua = 200000,
-> +			.charge_restart_voltage_uv = 4300000,
-> +			.maintenance_charge = samsung_maint_charge_table,
-> +			.maintenance_charge_size = ARRAY_SIZE(samsung_maint_charge_table),
-> +			.alert_low_temp_charge_current_ua = 300000,
-> +			.alert_low_temp_charge_voltage_uv = 4000000,
-> +			.alert_high_temp_charge_current_ua = 300000,
-> +			.alert_high_temp_charge_voltage_uv = 4000000,
-> +			.temp_min = -50,
-> +			.temp_alert_min = 0,
-> +			.temp_alert_max = 40,
-> +			.temp_max = 60,
-> +			.resist_table = samsung_temp2res,
-> +			.resist_table_size = ARRAY_SIZE(samsung_temp2res),
-> +			/* If you have tables for more temperatures, add them */
-> +			.ocv_temp[0] = 25,
-> +			.ocv_table[0] = samsung_ocv_cap_1500mah,
-> +			.ocv_table_size[0] = ARRAY_SIZE(samsung_ocv_cap_1500mah),
-> +			.vbat2ri_discharging = samsung_vbat2res_discharging_eb_l1m7flu,
-> +			.vbat2ri_discharging_size = ARRAY_SIZE(samsung_vbat2res_discharging_eb_l1m7flu),
-> +			.vbat2ri_charging = samsung_vbat2res_charging_eb_l1m7flu,
-> +			.vbat2ri_charging_size = ARRAY_SIZE(samsung_vbat2res_charging_eb_l1m7flu),
-> +			.bti_resistance_ohm = 2400,
-> +			.bti_resistance_tolerance = 40,
-> +		},
-> +	},
-> +	{
-> +		/*
-> +		 * Used in Samsung SGH-T599 "Codina TMO" and SGH-I407 "Kyle"
-> +		 * Data from vendor boardfile board-kyle-[bm|battery].c
-> +		 */
-> +		.compatible = "samsung,eb425161la",
-> +		.name = "EB425161LA",
-> +		.info = {
-> +			.charge_full_design_uah = 1500000,
-> +			.technology = POWER_SUPPLY_TECHNOLOGY_LION,
-> +			.factory_internal_resistance_uohm = 136000,
-> +			.factory_internal_resistance_charging_uohm = 200000,
-> +			/* If you have data on this fix the min_design_uv */
-> +			.voltage_min_design_uv = 3320000,
-> +			.voltage_max_design_uv = 4340000,
-> +			.overvoltage_limit_uv = 4500000,
-> +			.constant_charge_current_max_ua = 900000,
-> +			.constant_charge_voltage_max_uv = 4320000,
-> +			.charge_term_current_ua = 200000,
-> +			.charge_restart_voltage_uv = 4270000,
-> +			.maintenance_charge = samsung_maint_charge_table,
-> +			.maintenance_charge_size = ARRAY_SIZE(samsung_maint_charge_table),
-> +			.alert_low_temp_charge_current_ua = 300000,
-> +			.alert_low_temp_charge_voltage_uv = 4000000,
-> +			.alert_high_temp_charge_current_ua = 300000,
-> +			.alert_high_temp_charge_voltage_uv = 4000000,
-> +			.temp_min = -30,
-> +			.temp_alert_min = 0,
-> +			.temp_alert_max = 40,
-> +			.temp_max = 47,
-> +			.resist_table = samsung_temp2res,
-> +			.resist_table_size = ARRAY_SIZE(samsung_temp2res),
-> +			/* If you have tables for more temperatures, add them */
-> +			.ocv_temp[0] = 25,
-> +			.ocv_table[0] = samsung_ocv_cap_1500mah,
-> +			.ocv_table_size[0] = ARRAY_SIZE(samsung_ocv_cap_1500mah),
-> +			.vbat2ri_discharging = samsung_vbat2res_discharging_eb425161la,
-> +			.vbat2ri_discharging_size = ARRAY_SIZE(samsung_vbat2res_discharging_eb425161la),
-> +			.vbat2ri_charging = samsung_vbat2res_charging_eb425161la,
-> +			.vbat2ri_charging_size = ARRAY_SIZE(samsung_vbat2res_charging_eb425161la),
-> +			.bti_resistance_ohm = 2400,
-> +			.bti_resistance_tolerance = 40,
-> +		},
-> +	},
-> +	{
-> +		/*
-> +		 * Used in Samsung GT-I8160 "Codina"
-> +		 * Data from vendor boardfile board-codina-[bm|battery].c
-> +		 */
-> +		.compatible = "samsung,eb425161lu",
-> +		.name = "EB425161LU",
-> +		.info = {
-> +			.charge_full_design_uah = 1500000,
-> +			.technology = POWER_SUPPLY_TECHNOLOGY_LION,
-> +			.factory_internal_resistance_uohm = 100000,
-> +			.factory_internal_resistance_charging_uohm = 200000,
-> +			/* If you have data on this fix the min_design_uv */
-> +			.voltage_min_design_uv = 3320000,
-> +			.voltage_max_design_uv = 4350000,
-> +			.overvoltage_limit_uv = 4500000,
-> +			.constant_charge_current_max_ua = 900000,
-> +			.constant_charge_voltage_max_uv = 4340000,
-> +			.charge_term_current_ua = 200000,
-> +			.charge_restart_voltage_uv = 4280000,
-> +			.maintenance_charge = samsung_maint_charge_table,
-> +			.maintenance_charge_size = ARRAY_SIZE(samsung_maint_charge_table),
-> +			.alert_low_temp_charge_current_ua = 300000,
-> +			.alert_low_temp_charge_voltage_uv = 4000000,
-> +			.alert_high_temp_charge_current_ua = 300000,
-> +			.alert_high_temp_charge_voltage_uv = 4000000,
-> +			.temp_min = -50,
-> +			.temp_alert_min = 0,
-> +			.temp_alert_max = 43,
-> +			.temp_max = 49,
-> +			.resist_table = samsung_temp2res,
-> +			.resist_table_size = ARRAY_SIZE(samsung_temp2res),
-> +			/* If you have tables for more temperatures, add them */
-> +			.ocv_temp[0] = 25,
-> +			.ocv_table[0] = samsung_ocv_cap_1500mah,
-> +			.ocv_table_size[0] = ARRAY_SIZE(samsung_ocv_cap_1500mah),
-> +			.vbat2ri_discharging = samsung_vbat2res_discharging_eb425161lu,
-> +			.vbat2ri_discharging_size = ARRAY_SIZE(samsung_vbat2res_discharging_eb425161lu),
-> +			.vbat2ri_charging = samsung_vbat2res_charging_eb425161lu,
-> +			.vbat2ri_charging_size = ARRAY_SIZE(samsung_vbat2res_charging_eb425161lu),
-> +			.bti_resistance_ohm = 2400,
-> +			.bti_resistance_tolerance = 40,
-> +		},
-> +	},
-> +	{
-> +		/*
-> +		 * Used in Samsung GT-S7710 "Skomer"
-> +		 * Data from vendor boardfile board-skomer-[bm|battery].c
-> +		 */
-> +		.compatible = "samsung,eb485159lu",
-> +		.name = "EB485159LU",
-> +		.info = {
-> +			.charge_full_design_uah = 1700000,
-> +			.technology = POWER_SUPPLY_TECHNOLOGY_LION,
-> +			.factory_internal_resistance_uohm = 100000,
-> +			.factory_internal_resistance_charging_uohm = 200000,
-> +			.voltage_min_design_uv = 3320000,
-> +			.voltage_max_design_uv = 4350000,
-> +			.overvoltage_limit_uv = 4500000,
-> +			.constant_charge_current_max_ua = 900000,
-> +			.constant_charge_voltage_max_uv = 4340000,
-> +			.charge_term_current_ua = 200000,
-> +			.charge_restart_voltage_uv = 4300000,
-> +			.maintenance_charge = samsung_maint_charge_table,
-> +			.maintenance_charge_size = ARRAY_SIZE(samsung_maint_charge_table),
-> +			.alert_low_temp_charge_current_ua = 300000,
-> +			.alert_low_temp_charge_voltage_uv = 4000000,
-> +			.alert_high_temp_charge_current_ua = 300000,
-> +			.alert_high_temp_charge_voltage_uv = 4000000,
-> +			.temp_min = -50,
-> +			.temp_alert_min = 0,
-> +			.temp_alert_max = 40,
-> +			.temp_max = 60,
-> +			.resist_table = samsung_temp2res,
-> +			.resist_table_size = ARRAY_SIZE(samsung_temp2res),
-> +			/* If you have tables for more temperatures, add them */
-> +			.ocv_temp[0] = 25,
-> +			.ocv_table[0] = samsung_ocv_cap_eb485159lu,
-> +			.ocv_table_size[0] = ARRAY_SIZE(samsung_ocv_cap_eb485159lu),
-> +			/* CHECKME: vendor uses the 1500 mAh table, check against datasheet */
-> +			.vbat2ri_discharging = samsung_vbat2res_discharging_eb485159lu,
-> +			.vbat2ri_discharging_size = ARRAY_SIZE(samsung_vbat2res_discharging_eb485159lu),
-> +			.vbat2ri_charging = samsung_vbat2res_charging_eb485159lu,
-> +			.vbat2ri_charging_size = ARRAY_SIZE(samsung_vbat2res_charging_eb485159lu),
-> +			.bti_resistance_ohm = 2400,
-> +			.bti_resistance_tolerance = 40,
-> +		},
-> +	},
-> +	{
-> +		/*
-> +		 * Used in Samsung GT-I9070 "Janice"
-> +		 * Data from vendor boardfile board-janice-bm.c
-> +		 */
-> +		.compatible = "samsung,eb535151vu",
-> +		.name = "EB535151VU",
-> +		.info = {
-> +			.charge_full_design_uah = 1500000,
-> +			.technology = POWER_SUPPLY_TECHNOLOGY_LION,
-> +			.factory_internal_resistance_uohm = 100000,
-> +			.factory_internal_resistance_charging_uohm = 200000,
-> +			/* If you have data on this fix the min_design_uv */
-> +			.voltage_min_design_uv = 3300000,
-> +			.voltage_max_design_uv = 4180000,
-> +			.overvoltage_limit_uv = 4500000,
-> +			.constant_charge_current_max_ua = 900000,
-> +			.constant_charge_voltage_max_uv = 4200000,
-> +			.charge_term_current_ua = 200000,
-> +			.maintenance_charge = samsung_maint_charge_table,
-> +			.maintenance_charge_size = ARRAY_SIZE(samsung_maint_charge_table),
-> +			.alert_low_temp_charge_current_ua = 300000,
-> +			.alert_low_temp_charge_voltage_uv = 4000000,
-> +			.alert_high_temp_charge_current_ua = 300000,
-> +			.alert_high_temp_charge_voltage_uv = 4000000,
-> +			.temp_min = -5,
-> +			.temp_alert_min = 0,
-> +			.temp_alert_max = 40,
-> +			.temp_max = 60,
-> +			.resist_table = samsung_temp2res,
-> +			.resist_table_size = ARRAY_SIZE(samsung_temp2res),
-> +			/* If you have tables for more temperatures, add them */
-> +			.ocv_temp[0] = 25,
-> +			.ocv_table[0] = samsung_ocv_cap_eb585157lu,
-> +			.ocv_table_size[0] = ARRAY_SIZE(samsung_ocv_cap_eb535151vu),
-> +			.vbat2ri_discharging = samsung_vbat2res_discharging_eb535151vu,
-> +			.vbat2ri_discharging_size = ARRAY_SIZE(samsung_vbat2res_discharging_eb535151vu),
-> +			.vbat2ri_charging = samsung_vbat2res_charging_eb535151vu,
-> +			.vbat2ri_charging_size = ARRAY_SIZE(samsung_vbat2res_charging_eb535151vu),
-> +			.bti_resistance_ohm = 1500,
-> +			.bti_resistance_tolerance = 40,
-> +		},
-> +	},
-> +	{
-> +		/*
-> +		 * Used in Samsung GT-I8530 "Gavini"
-> +		 * Data from vendor boardfile board-gavini-bm.c
-> +		 */
-> +		.compatible = "samsung,eb585157lu",
-> +		.name = "EB585157LU",
-> +		.info = {
-> +			.charge_full_design_uah = 2000000,
-> +			.technology = POWER_SUPPLY_TECHNOLOGY_LION,
-> +			.factory_internal_resistance_uohm = 105000,
-> +			.factory_internal_resistance_charging_uohm = 160000,
-> +			/* If you have data on this fix the min_design_uv */
-> +			.voltage_min_design_uv = 3300000,
-> +			.voltage_max_design_uv = 4320000,
-> +			.overvoltage_limit_uv = 4500000,
-> +			.constant_charge_current_max_ua = 1500000,
-> +			.constant_charge_voltage_max_uv = 4350000,
-> +			.charge_term_current_ua = 120000,
-> +			.maintenance_charge = samsung_maint_charge_table,
-> +			.maintenance_charge_size = ARRAY_SIZE(samsung_maint_charge_table),
-> +			.alert_low_temp_charge_current_ua = 300000,
-> +			.alert_low_temp_charge_voltage_uv = 4000000,
-> +			.alert_high_temp_charge_current_ua = 300000,
-> +			.alert_high_temp_charge_voltage_uv = 4000000,
-> +			.temp_min = -5,
-> +			.temp_alert_min = 0,
-> +			.temp_alert_max = 40,
-> +			.temp_max = 60,
-> +			.resist_table = samsung_temp2res,
-> +			.resist_table_size = ARRAY_SIZE(samsung_temp2res),
-> +			/* If you have tables for more temperatures, add them */
-> +			.ocv_temp[0] = 25,
-> +			.ocv_table[0] = samsung_ocv_cap_eb585157lu,
-> +			.ocv_table_size[0] = ARRAY_SIZE(samsung_ocv_cap_eb585157lu),
-> +			.vbat2ri_discharging = samsung_vbat2res_discharging_eb585157lu,
-> +			.vbat2ri_discharging_size = ARRAY_SIZE(samsung_vbat2res_discharging_eb585157lu),
-> +			.vbat2ri_charging = samsung_vbat2res_charging_eb585157lu,
-> +			.vbat2ri_charging_size = ARRAY_SIZE(samsung_vbat2res_charging_eb585157lu),
-> +			.bti_resistance_ohm = 2400,
-> +			.bti_resistance_tolerance = 40,
-> +		},
-> +	},
-> +};
-> +
-> +int samsung_sdi_battery_get_info(struct device *dev,
-> +				 struct device_node *np,
-> +				 struct power_supply_battery_info **info)
-> +{
-> +	struct samsung_sdi_battery *batt;
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(samsung_sdi_batteries); i++) {
-> +		batt = &samsung_sdi_batteries[i];
-> +		if (of_device_is_compatible(np, batt->compatible))
-> +			break;
-> +	}
-> +
-> +	if (i == ARRAY_SIZE(samsung_sdi_batteries))
-> +		return -ENODEV;
-> +
-> +	*info = &batt->info;
-> +	dev_info(dev, "Samsung SDI %s battery %d mAh\n",
-> +		 batt->name, batt->info.charge_full_design_uah / 1000);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(samsung_sdi_battery_get_info);
-> diff --git a/drivers/power/supply/samsung-sdi-battery.h b/drivers/power/supply/samsung-sdi-battery.h
-> new file mode 100644
-> index 000000000000..08783847dfcb
-> --- /dev/null
-> +++ b/drivers/power/supply/samsung-sdi-battery.h
-> @@ -0,0 +1,13 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#if IS_ENABLED(CONFIG_BATTERY_SAMSUNG_SDI)
-> +extern int samsung_sdi_battery_get_info(struct device *dev,
-> +				struct device_node *np,
-> +				struct power_supply_battery_info **info);
-> +#else
-> +static inline int samsung_sdi_battery_get_info(struct device *dev,
-> +				struct device_node *np,
-> +				struct power_supply_battery_info **info)
-> +{
-> +	return -ENODEV;
-> +}
-> +#endif
-> -- 
-> 2.34.1
-> 
+> -	return obj->integer.value == 1;
+> +	return false;
+>   }
+>   
+>   int acpi_pci_set_power_state(struct pci_dev *dev, pci_power_t state)
+
+Sure, I'll move them around.
