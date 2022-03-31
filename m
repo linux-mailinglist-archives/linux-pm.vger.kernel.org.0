@@ -2,219 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2974ED512
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Mar 2022 09:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA994ED569
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Mar 2022 10:23:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbiCaIAX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Mar 2022 04:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41940 "EHLO
+        id S232169AbiCaIZQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Mar 2022 04:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232422AbiCaIAS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Mar 2022 04:00:18 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2068.outbound.protection.outlook.com [40.107.223.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2C01402B;
-        Thu, 31 Mar 2022 00:58:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LolAmc/H5JW8WmmvFbetK5WjFGNzERsXvfeFFm+EhhHPpTiydKXa0O0SehPdBQICurQe35ceZro6NKBzP9dQv2ynMujJxc1ozvLVsCtd0dkfxL4aHPsUlz98mCAi9voooT8V4vHN7G6Qe4j6lnCTG0m4UVPqCLuDiyY8h8TaZ7IhrygulmmTAyAowQB0InKSJ0dmjUjaCYX/v/AR6a8tQmLhIc1oEDKbC0PQ45MR/5bUBH9N7SbX4mwBZbIt5GpuHKGHoJiCyN0ojjqFW6ySh7b4VU/uXMqlDeK+YK7cwad9J+O7PLoQWzsuVVVqMIK9ipw1v+6uh4oG8tbV/rfnfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=i+026ONd9VEBhKGbI2RtjtU9J8DfdB27nUZS56jqlsk=;
- b=YrVRMeOc42EwXPAXLSBm0ywsMvWlQBbl1x+WeVsqgbV7j2erwxjBqJsUdONvJKj1Yy2+NzfddjJCxO31413IGq1xl81ipN1x5PxeNO9lqkCrQzm7dbKCFnn2kxh2MNmissq9S2uc9L27FbvBRPgnA2YL3YVqyC9922E5UdYqZxbJrxFhCwVJ9memDMFlkdzCZosI6S4zbYw1OlrT/lk0WK8VBvm9xPJz+YAS4zYAaXanIcUwM0uQO7tzOxHHSs6NqO30ECLd3LXPm6yvZCnw00byEf2H7Ff41+FheI09TcS6cqIkTOttvjwHK9R7vmsaPJRVFR8+zdNfTNGYff1+mQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.235) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=i+026ONd9VEBhKGbI2RtjtU9J8DfdB27nUZS56jqlsk=;
- b=TaT6mFpDIOwjlIFixLAuYunQSAUwqfqcpi+DH7tuQHsLA9g3je/y60Y6KSJ9rUlkpeX24GRFdPKSJm3R+MinG1MoiAlTC1h7eHlHh/FCmiJLzKxQ0tW2X86mRJDf3mJNlHJ3OLAsW6gLTh1271fDcBUb+PJ2mgRCTpUtwSwF67XkOh9FXtERWWywuWfzVUiOPA70CJeSZ3Yf2pCnsRwPX/mlUNGVAp+PDch0Vftn6uzhl3h9UrYlcY8qPc3sax0cCPpZR/DhTtfm/Iafpk4dvAHV7ZwG1Wezqji//95IDS482W/T6u+fyqCyOc/hWJgjard25MNLOJzB8NK5x4vK0g==
-Received: from BN6PR18CA0001.namprd18.prod.outlook.com (2603:10b6:404:121::11)
- by MN2PR12MB4550.namprd12.prod.outlook.com (2603:10b6:208:24e::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.17; Thu, 31 Mar
- 2022 07:58:27 +0000
-Received: from BN8NAM11FT066.eop-nam11.prod.protection.outlook.com
- (2603:10b6:404:121:cafe::ec) by BN6PR18CA0001.outlook.office365.com
- (2603:10b6:404:121::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.22 via Frontend
- Transport; Thu, 31 Mar 2022 07:58:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.235; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.235) by
- BN8NAM11FT066.mail.protection.outlook.com (10.13.177.138) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5123.19 via Frontend Transport; Thu, 31 Mar 2022 07:58:27 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Thu, 31 Mar
- 2022 07:58:26 +0000
-Received: from [10.41.21.79] (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 31 Mar
- 2022 00:58:22 -0700
-Message-ID: <512f17bd-b252-462e-ec2f-32983d92356d@nvidia.com>
-Date:   Thu, 31 Mar 2022 13:28:20 +0530
+        with ESMTP id S232625AbiCaIZN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Mar 2022 04:25:13 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E52EC6253
+        for <linux-pm@vger.kernel.org>; Thu, 31 Mar 2022 01:23:26 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id yy13so46503906ejb.2
+        for <linux-pm@vger.kernel.org>; Thu, 31 Mar 2022 01:23:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Dq8MH9owPalNoE790NJ78mjvgtH3i7GUOFDcmGYkiNI=;
+        b=zC8J+jsCP8GBgIV1dg4280d051BMUkw14jvIAPX6FX74XfgmGOMhC/3EvKZ4n/D2Ev
+         ifoEWb6tBG0tjvI6DVcScsUdHXd+vPk//ix25xmT9zRiE6RPIdeWGDZxRD8KdKx8w7y8
+         Okuav+yBIaSWElVnAFlvdB2jE1ik2unSGchHkh3fKOn03GEul2H/42YENDooCXCX881E
+         Et+tIpD8Bwzpkubd2mON0a+dfgIgKYz4okqH+J1bLpYztup6hDh9EutizHteTXeY2gmz
+         H66kJZptha0LGozRz9qClrRQTCCMd7GO9/JmG+rfnzzWmJOmalus3xD/zjF9wVbBhN5j
+         rPJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Dq8MH9owPalNoE790NJ78mjvgtH3i7GUOFDcmGYkiNI=;
+        b=TBfAY9UJd0R7g5BG2GwTkdzgnfBuk69sWzp/DYklGaBM+6smKQ+vW7J/Y2z4zOEFLf
+         yUYQ9XzSIzkksjrpWSJr7jkz1KQiy+X/OsWyggb+5Htsz1QbGCiW3SP30i/7YN273KZ/
+         vnPWhgDLIixq3yR8GaVNOKCgJG4+9dBkkGQYkO3tNMgwMiDbyCyIkwLp3pBgSx9YCgdL
+         JbyBShKAZXtB2oLbIn/P8HHrO0o+Sm2PpYmKPfIFFi264iHf4MnnTuuGUL2KY24HK9fQ
+         paZ8MwcTMKUHxHBx3pwatFRhhqr7aC4T/TYQtmRpXcr6OeyQs7j/ClonpHVZcTdjaTZm
+         YpeQ==
+X-Gm-Message-State: AOAM530bSmJmwau+3uNU2KN/ovyOQlvwIEcr+tWQu5ThQy/sZQCJwDFO
+        Nnuj9LRRkUfi2YdWZ5O/fsAudA==
+X-Google-Smtp-Source: ABdhPJxa9OvJVcjcn0Ko1P15Ke3xBtXhTgUulbtKmsRbDdYifKKquk9+NHcrPDRyT7IoQqmrxLFOMQ==
+X-Received: by 2002:a17:907:3f07:b0:6e0:2fa0:2482 with SMTP id hq7-20020a1709073f0700b006e02fa02482mr3857385ejc.766.1648715004854;
+        Thu, 31 Mar 2022 01:23:24 -0700 (PDT)
+Received: from [192.168.0.165] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id bx5-20020a0564020b4500b00418fca53406sm10709564edb.27.2022.03.31.01.23.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 31 Mar 2022 01:23:24 -0700 (PDT)
+Message-ID: <15b3d34f-2a91-6dd3-8335-9ccd0d5ec70e@linaro.org>
+Date:   Thu, 31 Mar 2022 10:23:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [Patch v2 2/4] dt-bindings: arm: tegra: Add bindins for
- nvidia,tegra-ccplex-cluster
+Subject: Re: [PATCH v2] thermal: exynos: fix masking value for exynos7
+ temp_error
 Content-Language: en-US
-To:     Jon Hunter <jonathanh@nvidia.com>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
-        <krzk+dt@kernel.org>, <treding@nvidia.com>,
-        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <ksitaraman@nvidia.com>, <sanjayc@nvidia.com>, <bbasu@nvidia.com>,
-        "Sumit Gupta" <sumitg@nvidia.com>
-References: <20220330143819.27476-1-sumitg@nvidia.com>
- <20220330143819.27476-3-sumitg@nvidia.com>
- <cfc6a2ac-1489-e221-f262-aab0ad5b701c@nvidia.com>
-From:   Sumit Gupta <sumitg@nvidia.com>
-In-Reply-To: <cfc6a2ac-1489-e221-f262-aab0ad5b701c@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     hypmean.kim@samsung.com, "bzolnier@gmail.com" <bzolnier@gmail.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "amitk@kernel.org" <amitk@kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "edubezval@gmail.com" <edubezval@gmail.com>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220331071833.115732-1-hypmean.kim@samsung.com>
+ <CGME20220331071809epcas2p472298073d4aed0a8026d4b08967c5de5@epcms2p5>
+ <20220331072843epcms2p5c9e7ee4756d1aa267cf4af56b0ca22fc@epcms2p5>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220331072843epcms2p5c9e7ee4756d1aa267cf4af56b0ca22fc@epcms2p5>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9233e860-5293-425a-4e50-08da12ec3d54
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4550:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB4550FF60B0A6FCB7B759C6D6B9E19@MN2PR12MB4550.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XwdRFLjGiON47d3LHdQYQLD6pnMCQh1cfSaDMC+nPVNUNCsmfqnodL1Pvv+ld4Sps5KDBA0dKrxwVnX1k20PbvRlmM3VUyRi5zp4X+P9C9o3Qrl/w5/HbizgHdILbiqhI/d9hEWi4KV6FndxP9MGpyYizZ7/8LDwKTMbZJLLtKmC2sOOcopv8X69nBn2S5debZodtLbRhl1RfHJmPJL8/xVCAnwMsJGKbKkzIeUhIaqbwzerbEpfV0NcqFHiBkDI1z3nvvpH7UQoKYmB7qKBS68eLIThyC70MJUpiVp5DMYNbb2SmSQ6+H7YT4LQFtIlYAbsRLambH4P+gDK/qSjv3dWoeNKMy5kStkPvoJMMAPnWXqUrlRKNv3yKajwXj4PR5ryFkiXPHo9Wr6h1rI1k+jjb0VzE2iVrbO4ExBrGlyhMA1Dqyr/GbbRyJA1lUXxMZ+Augh7NMupD4afyCcYozfUPJ07iPrIegqgULlbawss2RpuHsWrIh55X/yuSUv16wi8CrZrjoX3rJ7CKtAIbktugt/DoZvoUQVfwuOWTR/vj55SmdPH86P2iZ9HaW2KsH77hCz6oK6lUPgGitLye3Q9gWJjMtRMLfnCqEq7lTXx/vE/wO4OZVxqNoA2jXLof40fB4N1ITEv38On+sQcwxc5xVPlunnDgXntPdWJw0NXaS24cavxg8jinHX+c5xNHDtCls2hCon+MM21yBCNPf1CElyXQPeixOMf11S9upEZ/dHoN2hokMBOQcT4c+mDtLvOwYcp8xFIEVvzbPh3F8i89aAjXRnZlJc/L9TWiafD7j3/YyKvLKpmalEgCw1r+z6EXI+i5+OhhV15knW5N3xhGl8G85TdrCzecnIEHcXgbWBvP503JFIXs4XUHDmB9IqVZTHThAT7HPP1z8CoVA==
-X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(921005)(45080400002)(508600001)(2616005)(81166007)(26005)(426003)(336012)(186003)(40460700003)(31686004)(2906002)(8936002)(47076005)(16526019)(356005)(107886003)(36860700001)(53546011)(316002)(70586007)(31696002)(36756003)(86362001)(4326008)(16576012)(110136005)(5660300002)(70206006)(54906003)(83380400001)(82310400004)(8676002)(43740500002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Mar 2022 07:58:27.5144
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9233e860-5293-425a-4e50-08da12ec3d54
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT066.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4550
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 31/03/2022 09:28, Sang Min Kim wrote:
+>  
 
+Unneeded empty line at beginning of msg.
 
-On 31/03/22 12:30, Jon Hunter wrote:
-> Please update the subject to be something like ...
-> 
-> "dt-bindings: Document Tegra CCPLEX Cluster"
-Ok. will do the change and send v3.
+> Modify mask value for the temp_error in the sanitize_temp_error() function.
+>  
+> Fixes: aef27b658b43 ("thermal: exynos: use sanitize_temp_error() in exynos7_tmu_initialize()")
+> masked temp_error2 with EXYNOS_TMU_TEMP_MASK(0xff) value even in the case
+> of EXYNOS7.
+> In addition, when entering the if statement, both temp_error1 and 2 are
+> masked with EXYNOS_TMU_TEMP_MASK(0xff).
+>  
+> By modifying to use the previously declared local variable tmu_temp_mask,
+> the mask value suitable for the SOC can be applied.
+>  
 
-> 
-> On 30/03/2022 15:38, Sumit Gupta wrote:
->> The Tegra CCPLEX_CLUSTER area contains memory-mapped
-> 
-> Here you have CCPLEX_CLUSTER and ...
-> 
->> registers that initiate CPU frequency/voltage transitions.
->>
->> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
->> ---
->>   .../tegra/nvidia,tegra-ccplex-cluster.yaml    | 52 +++++++++++++++++++
->>   1 file changed, 52 insertions(+)
->>   create mode 100644 
->> Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml 
->>
->>
->> diff --git 
->> a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml 
->> b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml 
->>
->> new file mode 100644
->> index 000000000000..74afa06f695e
->> --- /dev/null
->> +++ 
->> b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml 
->>
->> @@ -0,0 +1,52 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: 
->> "https://nam11.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetree.org%2Fschemas%2Farm%2Ftegra%2Fnvidia%2Ctegra-ccplex-cluster.yaml%23&amp;data=04%7C01%7Csumitg%40nvidia.com%7C15234587dd2e46ad722108da12e42b88%7C43083d15727340c1b7db39efd9ccc17a%7C0%7C0%7C637843068437808995%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=tDheliQYxde7WJ5hqLYUz7dsq4tsUnFe3gHlaTRa7i4%3D&amp;reserved=0" 
->>
->> +$schema: 
->> "https://nam11.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetree.org%2Fmeta-schemas%2Fcore.yaml%23&amp;data=04%7C01%7Csumitg%40nvidia.com%7C15234587dd2e46ad722108da12e42b88%7C43083d15727340c1b7db39efd9ccc17a%7C0%7C0%7C637843068437808995%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=%2BWDvqJkJKdG0z85Bfn%2F3AMejwHVvi02cVLarmKbZ0iE%3D&amp;reserved=0" 
->>
->> +
->> +title: NVIDIA Tegra CPU_CLUSTER area device tree bindings
-> 
-> ... here we have "CPU_CLUSTER" and ...
-> 
->> +
->> +maintainers:
->> +  - Sumit Gupta <sumitg@nvidia.com>
->> +  - Mikko Perttunen <mperttunen@nvidia.com>
->> +  - Jon Hunter <jonathanh@nvidia.com>
->> +  - Thierry Reding <thierry.reding@gmail.com>
->> +
->> +description: |+
->> +  The Tegra CCPLEX_CLUSTER area contains memory-mapped
-> 
-> .. then we have CCPLEX_CLUSTER again. Let's have a consistent name such 
-> as 'CPU COMPLEX CLUSTER' (admittedly a mouthful but that is what is 
-> means). I don't think we need the '_' in the name.
-Sure. will update all places to 'CPU COMPLEX CLUSTER' in v3.
+Fixes tag goes next to other tags, so usually before Signed-off-by.
+Check some existing commits for examples.
 
-> 
->> +  registers that initiate CPU frequency/voltage transitions.
->> +
->> +properties:
->> +  $nodename:
->> +    pattern: "ccplex@([0-9a-f]+)$"
->> +
->> +  compatible:
->> +    enum:
->> +      - nvidia,tegra186-ccplex-cluster
->> +      - nvidia,tegra234-ccplex-cluster
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  nvidia,bpmp:
->> +    $ref: '/schemas/types.yaml#/definitions/phandle'
->> +    description: |
->> +      Specifies the bpmp node that needs to be queried to get
-> 
-> s/bpmp/BPMP
-> 
->> +      operating point data for all CPUs.
->> +
->> +additionalProperties: true
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - nvidia,bpmp
->> +  - status
->> +
->> +examples:
->> +  - |
->> +    ccplex@e000000 {
->> +      compatible = "nvidia,tegra234-ccplex-cluster";
->> +      reg = <0x0 0x0e000000 0x0 0x5ffff>;
->> +      nvidia,bpmp = <&bpmp>;
->> +      status = "okay";
->> +    };
-> 
+> Signed-off-by: sangmin kim <hypmean.kim@samsung.com>
+
+You received by Reviewed-by tag, so you should include it in v2. Don't
+skip them.
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+> ---
+>  V1 -> V2: Add fixes tag
+>  
+>  drivers/thermal/samsung/exynos_tmu.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>  
+
+Best regards,
+Krzysztof
