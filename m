@@ -2,119 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E204ED1CC
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Mar 2022 04:36:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C840A4ED1F1
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Mar 2022 04:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbiCaCiG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Mar 2022 22:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
+        id S229555AbiCaCyh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Mar 2022 22:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiCaCiC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Mar 2022 22:38:02 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7672590FC5;
-        Wed, 30 Mar 2022 19:36:16 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id w8so22173589pll.10;
-        Wed, 30 Mar 2022 19:36:16 -0700 (PDT)
+        with ESMTP id S229552AbiCaCyf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Mar 2022 22:54:35 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F23B111DDC
+        for <linux-pm@vger.kernel.org>; Wed, 30 Mar 2022 19:52:43 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id z16so20654549pfh.3
+        for <linux-pm@vger.kernel.org>; Wed, 30 Mar 2022 19:52:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=IJdXXyb/GkLLA9e58AhYrCbqtG5A+hvlprgfy9C7ST0=;
-        b=Kr512raOP2MXtPHF/h/yqp8TJjhFf5c1TsfQH29QQ9/7x0j1Un0PZjLZoTKuz5KpJO
-         JRbX6xlw8bAVoALIcwaozRvxQv7KDmk1S7AiNBBk7ZaMoKAs1c0SuYGuteWTmDEIvcts
-         MBPm1oZ1jJ6WB5bycbnEYbVVqd3gmtfujU+adRSkAKlDqZdVsI3+vMC7blsTa64n9x5r
-         d849LUGNZmwr7Hep1h630ULQiGIbe4AnkPd4/QQBQVBiKueMC7MHQ/97+Efx5zdD5CEO
-         UTHlCY957krtpQMg/7bVvziGQcr3Ww9slu53oZAECan+oDHv8zhMBl3R8zd8sZ6FKoK2
-         mfkA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=PYuCQIvuD74pqIke58Nyk48QUD+/IoXOla1cm+PGYVY=;
+        b=hOOvNdihbsPP0Nxr6SkheJbdoeJzJ/yyoY42Rvw6MwDxI6QRNXPYLThSsB8bvTWCyo
+         HjaXt9EW3kae+oo+kV1WgcwFd3HufMJHM0S5YiBrmA2fOSvo0EWOyR6TnsOUEXdOKPVw
+         GalyzJgwVeeHR9Jm+wILSPvJxFQ9hnS/IkwgoVemWNaeQv4/gthiXm7QSrAEQHWozUfm
+         eukbz83KDu6zo8KyCwipjDAWhA9wzjDy9ZZ+JoxSmPi8ANT3h3MROsQyakvoDMldSEEx
+         DqlDDn822DjnOUbVguWqaxZZ6ESmv/GTJEd2uASr8mxZpZxe1bwOvnmK2lwbnIdzj7Rx
+         4NFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=IJdXXyb/GkLLA9e58AhYrCbqtG5A+hvlprgfy9C7ST0=;
-        b=5ep0eznsIDAA4mDYNHpxtcBmljxX2KRLMVyad+NccXnr9pYTCMssG/moqd58Srl+b/
-         WRsqzuonSC0MpGHxSSfuB6s7Y+hwXBnrrNQuNIFSm23ZPLN4FFFgCQ5D4okiilJcye3v
-         bMzu9XKDcQHFcQXOKbNEkOWdwqLpgjy74O3FhGSMFecwbdmDG+64ckNCbneEsvf47Brq
-         dGvQa8Tm4TrNe4P22nI8GlEAkO1qkbqELmLQTQxt94ydW3U6pP7rqjln980m3gJrrEAZ
-         XYu5v2A/CXQmvMo6XqI1uofKPBCEqb8eu7eN3UDuACFsif/cZdSTZi2fzHO8PXXTbtmY
-         Nc9w==
-X-Gm-Message-State: AOAM530+eussr++4dgPsu8CZwe0makgBtq3BIXL60BJ+1NwvPL9KMVuQ
-        oWshBfZ9ccfja/tqVvKzJhQ=
-X-Google-Smtp-Source: ABdhPJwnHK2+B/0xSy67qJM4F2VvfxGA/X2CHseqxeIaVfp1Zxdi1mah3QAzI0HzXPF2oCwn2TxRug==
-X-Received: by 2002:a17:90b:4f41:b0:1c7:928d:196e with SMTP id pj1-20020a17090b4f4100b001c7928d196emr3429778pjb.47.1648694175872;
-        Wed, 30 Mar 2022 19:36:15 -0700 (PDT)
-Received: from ubuntu.huawei.com ([119.3.119.18])
-        by smtp.googlemail.com with ESMTPSA id bx22-20020a056a00429600b004fa936a64b0sm23569807pfb.196.2022.03.30.19.36.13
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=PYuCQIvuD74pqIke58Nyk48QUD+/IoXOla1cm+PGYVY=;
+        b=hHrus9jkUjZksHlWIr4lVCmnwAXqs/n56vVg7Di9IoK64GRXKrrRN/S4GLtD+I60ek
+         mKo30NC+N6l9XdQOjFOd+q3gLfcVNnZhEp4KKz36Z5qehMkX0CA9ftub1NyP73itj6qZ
+         hsEiSm0AAh56sk+H4SddxN6yj4YjJWaC3RFfceGkiOkLF1lMBZUDr9xkzLKuHj1frGjy
+         bIbOd0gfnWjPhur1HhunM6BB5KC0zQtbKWqGz6QRL2f5LO2VcXpwLws3TzGyHbcuX3I7
+         NkWpdXco4k3X/HVaWfbtyPC9yC0Du7QucnNswOI1FTqIzkumDRfgh5Yw+oJn4lEge4gn
+         io1w==
+X-Gm-Message-State: AOAM531co2stfMYA66iKk53/C2gxIp9PE3VnshUf0xIZYdloHc3Juce4
+        LQamYHqtcOrIVAsUl4wprnRZDQ==
+X-Google-Smtp-Source: ABdhPJwRX/OnGSaAmRsG3TAjUqrDjnoNgZl+Dw9mNkJ2g2ay234Usz0Um3HtxwAWBPxWy1BU9pQK3w==
+X-Received: by 2002:a63:770c:0:b0:386:361f:ecce with SMTP id s12-20020a63770c000000b00386361feccemr8852405pgc.202.1648694949570;
+        Wed, 30 Mar 2022 19:49:09 -0700 (PDT)
+Received: from localhost ([223.184.83.228])
+        by smtp.gmail.com with ESMTPSA id p10-20020a056a0026ca00b004fb44e0cb17sm14937316pfw.116.2022.03.30.19.49.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Mar 2022 19:36:15 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Subject: [PATCH v2] opp: use list iterator only inside the loop
-Date:   Thu, 31 Mar 2022 10:36:08 +0800
-Message-Id: <20220331023608.30497-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 30 Mar 2022 19:49:09 -0700 (PDT)
+Date:   Thu, 31 Mar 2022 08:19:07 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] opp: use list iterator only inside the loop
+Message-ID: <20220331024906.i7ucvoxrkkfpb6w5@vireshk-i7>
+References: <20220331023608.30497-1-xiam0nd.tong@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220331023608.30497-1-xiam0nd.tong@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The list iterator 'new_dev' will point to a bogus position containing
-HEAD if any one of these conditions is possible: the list is empty or
-no element is found, thus can potentially lead to an invalid memory
-access in 'dev = new_dev->dev;'.
+On 31-03-22, 10:36, Xiaomeng Tong wrote:
+> The list iterator 'new_dev' will point to a bogus position containing
+> HEAD if any one of these conditions is possible: the list is empty or
+> no element is found, thus can potentially lead to an invalid memory
+> access in 'dev = new_dev->dev;'.
 
-As discussed before, we should avoid to use a list iterator variable
-outside the loop which is considered harmful[1].
+There is no such bug as I explained earlier, why you added this again
+despite being discussed ?
 
-In this case, use a new variable 'iter' as the list iterator, while
-use the old variable 'new_dev' as a dedicated pointer to point to the
-found entry. And BUG_ON(!new_dev);.
+> As discussed before,
 
-[1]:  https://lkml.org/lkml/2022/2/17/1032
+I just told you not to use such language as this will go in logs, but
+you still chose to add it :(
 
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
----
+> we should avoid to use a list iterator variable
+> outside the loop which is considered harmful[1].
+> 
+> In this case, use a new variable 'iter' as the list iterator, while
+> use the old variable 'new_dev' as a dedicated pointer to point to the
+> found entry. And BUG_ON(!new_dev);.
 
-changes since v1:
- - use BUG_ON(!new_dev); instead of return; (Viresh Kumar)
+Please look at this on how to write the log, which fixes a very
+similar problem.
 
-v1: https://lore.kernel.org/lkml/20220331015818.28045-1-xiam0nd.tong@gmail.com/
+https://lore.kernel.org/all/20220324071815.61405-1-jakobkoschel@gmail.com/
 
----
- drivers/opp/debugfs.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> [1]:  https://lkml.org/lkml/2022/2/17/1032
+> 
+> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+> ---
+> 
+> changes since v1:
+>  - use BUG_ON(!new_dev); instead of return; (Viresh Kumar)
+> 
+> v1: https://lore.kernel.org/lkml/20220331015818.28045-1-xiam0nd.tong@gmail.com/
+> 
+> ---
+>  drivers/opp/debugfs.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
+> index 596c185b5dda..81b2bc4b5f43 100644
+> --- a/drivers/opp/debugfs.c
+> +++ b/drivers/opp/debugfs.c
+> @@ -187,14 +187,18 @@ void opp_debug_register(struct opp_device *opp_dev, struct opp_table *opp_table)
+>  static void opp_migrate_dentry(struct opp_device *opp_dev,
+>  			       struct opp_table *opp_table)
+>  {
+> -	struct opp_device *new_dev;
+> +	struct opp_device *new_dev = NULL, *iter;
+>  	const struct device *dev;
+>  	struct dentry *dentry;
+>  
+>  	/* Look for next opp-dev */
+> -	list_for_each_entry(new_dev, &opp_table->dev_list, node)
+> -		if (new_dev != opp_dev)
+> +	list_for_each_entry(iter, &opp_table->dev_list, node)
+> +		if (iter != opp_dev) {
+> +			new_dev = iter;
+>  			break;
+> +		}
+> +
+> +	BUG_ON(!new_dev);
+>  
+>  	/* new_dev is guaranteed to be valid here */
+>  	dev = new_dev->dev;
+> -- 
+> 2.17.1
 
-diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
-index 596c185b5dda..81b2bc4b5f43 100644
---- a/drivers/opp/debugfs.c
-+++ b/drivers/opp/debugfs.c
-@@ -187,14 +187,18 @@ void opp_debug_register(struct opp_device *opp_dev, struct opp_table *opp_table)
- static void opp_migrate_dentry(struct opp_device *opp_dev,
- 			       struct opp_table *opp_table)
- {
--	struct opp_device *new_dev;
-+	struct opp_device *new_dev = NULL, *iter;
- 	const struct device *dev;
- 	struct dentry *dentry;
- 
- 	/* Look for next opp-dev */
--	list_for_each_entry(new_dev, &opp_table->dev_list, node)
--		if (new_dev != opp_dev)
-+	list_for_each_entry(iter, &opp_table->dev_list, node)
-+		if (iter != opp_dev) {
-+			new_dev = iter;
- 			break;
-+		}
-+
-+	BUG_ON(!new_dev);
- 
- 	/* new_dev is guaranteed to be valid here */
- 	dev = new_dev->dev;
 -- 
-2.17.1
-
+viresh
