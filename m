@@ -2,45 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5338C4EDF79
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Mar 2022 19:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A69844EDF8E
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Mar 2022 19:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbiCaRS7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Mar 2022 13:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56914 "EHLO
+        id S229897AbiCaRXT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Mar 2022 13:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiCaRSz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Mar 2022 13:18:55 -0400
+        with ESMTP id S229843AbiCaRXP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Mar 2022 13:23:15 -0400
 Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B608E0E2;
-        Thu, 31 Mar 2022 10:17:08 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2e5e176e1b6so5319817b3.13;
-        Thu, 31 Mar 2022 10:17:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4091F0C96;
+        Thu, 31 Mar 2022 10:21:26 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2e68c95e0f9so6742647b3.0;
+        Thu, 31 Mar 2022 10:21:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=Bi64VQ+Khg5UK1gSOPf2RqNXb/UgNoMXBN9uv9DgbzQ=;
-        b=wL2XuTZ/ZYrXoHN/ea3tZmKvPyqfNbuwdoWposBHiHm2hq6oWGyebTgV2rzvs2wFco
-         LCbJEMK8DTBYwOFOc73C/8pqJd6MreldVCMzzYrzWjDE1TP80lCSURrwWv4nlaSAzTMo
-         jhx9Tm8flQRq2M1gHm4Scgowjcy19ej+W8YUrxAiwZD55XC8nIHz8Ai/e3P++YEU/uqV
-         fEEmEJ5/O83aCe5gAXmF90rugNN8d+K4yhcV6cJb4XBHQ8TLZvXijkUhQ+dJI3i+GMIl
-         QbBVqdQowVPv/mnWpbzAEc6IxmxOy2tYI0xPvdWILxGS4arJlO/tPtKWnndMq5zZO0gM
-         km7w==
-X-Gm-Message-State: AOAM530BoGO1Nvh4fVCqyqoup2qAncUIkRg/aPCMF/fgtQC9ZCkbAFoG
-        SDoEhJ/pVU84M/eBk8nBDNPx8gjCVNqlSDIy0ciFDNXHsc0=
-X-Google-Smtp-Source: ABdhPJxq3HfUPuua8v/lJf49OO3v7vDilX+C+f+juAjPZ/drrEh/EOFycgrf3bXJvgpitqxN8aCEG3LQeanA44bgQCY=
-X-Received: by 2002:a81:6887:0:b0:2e6:126d:3102 with SMTP id
- d129-20020a816887000000b002e6126d3102mr5995555ywc.7.1648747027545; Thu, 31
- Mar 2022 10:17:07 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2DEwBC1O2sWIMQ/yd+TC2ZcExUMwvMfzRcdpkpoM5EA=;
+        b=LDzUpFG8LvhaNRogfQHiSCJ+2CrCL4i9GAeLOCO4oo0hSmPpU0MMP+bT3qtQgFW3Di
+         /jfV7OvfNg6STYOujNso5YENa3/IuJrmEtpri1N1xwXRu8Hvmv79slnrJFlKCJprj5UN
+         lv4F0FmbWAvmDBrtoLhESTlftbv9d9mSVlxZXXGJARRKAFQ3NROYeAFHdA5z/YIcwwZ6
+         MHB+21r9nkJFg0yG1WywaA0X1OdaeGfyulEKDYcKw0dTGBd5z43O0vZ1SH+bgUEDpbP+
+         HLuosdMayeawiHXR3lllASU5WXJOCneVMAyde1QMZjD3tKxSnR8nGxlzaoABf97pLxKp
+         gQgg==
+X-Gm-Message-State: AOAM532wLnM0b2OcC97jMnf/Ii8UbFGP7Dwdta3JNYY/79AAFtehMZVE
+        iKl05G98ffg0/hd/A6zTVA9YC8+A+L7cLfu3OSk=
+X-Google-Smtp-Source: ABdhPJy9u2Dob6LDT/bQELypzvObVEXznR0ktRZIzvkuXclo2fZryJ3gwusyAUDjrxGo/jBNHqU1jlmMKM1Ll5uuRYg=
+X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
+ b145-20020a811b97000000b002db640f49d8mr5804359ywb.326.1648747285718; Thu, 31
+ Mar 2022 10:21:25 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220220181522.541718-1-jic23@kernel.org> <20220220181522.541718-3-jic23@kernel.org>
+ <6cd17744-d060-1094-098d-e30a10f96600@intel.com> <20220227114628.219c7055@jic23-huawei>
+ <CAJZ5v0iwFJizKf-SEr10M-8HFirMzH8=LkONLvtZ30pfEk4AOA@mail.gmail.com>
+ <20220301113145.00004ce4@Huawei.com> <20220330133037.000044b2@Huawei.com>
+In-Reply-To: <20220330133037.000044b2@Huawei.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 31 Mar 2022 19:16:56 +0200
-Message-ID: <CAJZ5v0hGTCBsbrFt7xcS_J+X1hG1qOAL=UecfGyHuhAcHjZ0eQ@mail.gmail.com>
-Subject: [GIT PULL] More ACPI updates for v5.18-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Thu, 31 Mar 2022 19:21:14 +0200
+Message-ID: <CAJZ5v0j47Ub=kXU5ZB_JF35xwBtUuLCwiFyEw-+B=r5z-Ac78Q@mail.gmail.com>
+Subject: Re: [PATCH 2/8] PM: core: Add NS varients of EXPORT[_GPL]_SIMPLE_DEV_PM_OPS
+ and runtime pm equiv
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-iio@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Tomasz Duszynski <tomasz.duszynski@octakon.com>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -52,62 +63,67 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+Hi Jonathan,
 
-Please pull from the tag
+On Wed, Mar 30, 2022 at 2:30 PM Jonathan Cameron
+<Jonathan.Cameron@huawei.com> wrote:
+>
+> On Tue, 1 Mar 2022 11:31:45 +0000
+> Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+>
+> > On Mon, 28 Feb 2022 21:13:25 +0100
+> > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+> >
+> > > On Sun, Feb 27, 2022 at 12:39 PM Jonathan Cameron <jic23@kernel.org> wrote:
+> > > >
+> > > > On Mon, 21 Feb 2022 20:37:57 +0100
+> > > > "Rafael J. Wysocki" <rafael.j.wysocki@intel.com> wrote:
+> > > >
+> > > > Hi Rafael,
+> > > > > CC: linux-pm
+> > > >
+> > > > Oops. Stupid omission on my part, sorry about that!
+> > > >
+> > > > >
+> > > > > On 2/20/2022 7:15 PM, Jonathan Cameron wrote:
+> > > > > > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > > > > >
+> > > > > > As more drivers start to use namespaces, we need to have varients of these
+> > > > > > useful macros that allow the export to be in a particular namespace.
+> > > > > >
+> > > > > > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > > > > > Cc: Paul Cercueil <paul@crapouillou.net>
+> > > > > > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > >
+> > > > > I'd rather route this through linux-pm unless you have dependent changes.
+> > > >
+> > > > Ok.
+> > > >
+> > > > The kxsd9 patch (4) is dependent on other changes queued for
+> > > > the merge window in IIO. If we want to do it through linux-pm I'd
+> > > > love it if we can manage to get the ground work in for the coming merge window.
+> > > >
+> > > > So options are:
+> > > >
+> > > > 1) This patch alone via linux-pm and I queue the users up for next cycle
+> > > >    Fine by me but always awkward to have infrastructure with no users.
+> > > > 2) First 3 patches via linux-pm so we have a user (scd30) in a low churn
+> > > >    driver and I'll queue the rest for 5.19.  Fine by me as well.
+> > > >    That goes on cleanly on 5.17-rc1 and there is nothing else in my review
+> > > >    queue touching that driver.
+> > >
+> > > That would work for me.
+> >
+> > Great.  Let's do that then.  Are you fine picking them from this thread, or
+> > would you like me to resend with just those 3 patches as a fresh series?
+> Hi Rafael,
+>
+> I've not heard back from you, so have been assuming you'd pick those first
+> 3 patches up from this series.  Is that a correct assumption?
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- acpi-5.18-rc1-2
+This was my intention, but then I lost track of them and now I can't
+find them in the linux-pm Patchwork.  Sorry about this.
 
-with top-most commit 4a13e559af0b177eb934c39338f100a9f692a37b
-
- Merge branches 'acpi-ipmi', 'acpi-tables' and 'acpi-apei'
-
-on top of commit 242ba6656d604aa8dc87451fc08143cb28d5a587
-
- Merge tag 'acpi-5.18-rc1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
-
-to receive more ACPI updates for 5.18-rc1.
-
-These are fixes and cleanup on top of the previously merged ACPI
-material for 5.18-rc1.
-
-Specifics:
-
- - Avoid out-of-bounds access when parsing _CPC data (Rafael Wysocki).
-
- - Change default error code and clean up debug messages in ACPI CPPC
-   probe (Rafael Wysocki).
-
- - Replace usage of found with a dedicated list iterator variable in
-   the ACPI IPMI driver (Jakob Koschel).
-
- - Clean up variable name confusion in APEI (Jakob Koschel).
-
- - Make LAPIC_ADDR_OVR address readable in a message parsed during
-   MADT parsing (Vasant Hegde).
+Can you please resend just the 3 patches?
 
 Thanks!
-
-
----------------
-
-Jakob Koschel (2):
-      ACPI, APEI: Use the correct variable for sizeof()
-      ACPI: IPMI: replace usage of found with dedicated list iterator variable
-
-Rafael J. Wysocki (2):
-      ACPI: CPPC: Avoid out of bounds access when parsing _CPC data
-      ACPI: CPPC: Change default error code and clean up debug messages in probe
-
-Vasant Hegde (1):
-      ACPI: tables: Make LAPIC_ADDR_OVR address readable in message
-
----------------
-
- drivers/acpi/acpi_ipmi.c      | 39 ++++++++++++++++++---------------------
- drivers/acpi/apei/apei-base.c |  2 +-
- drivers/acpi/cppc_acpi.c      | 32 ++++++++++++++++++++------------
- drivers/acpi/tables.c         |  4 ++--
- 4 files changed, 41 insertions(+), 36 deletions(-)
