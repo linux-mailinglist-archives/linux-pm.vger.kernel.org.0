@@ -2,123 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA994ED569
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Mar 2022 10:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D10354ED5A4
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Mar 2022 10:30:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232169AbiCaIZQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Mar 2022 04:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
+        id S231276AbiCaIcT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Mar 2022 04:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232625AbiCaIZN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Mar 2022 04:25:13 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E52EC6253
-        for <linux-pm@vger.kernel.org>; Thu, 31 Mar 2022 01:23:26 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id yy13so46503906ejb.2
-        for <linux-pm@vger.kernel.org>; Thu, 31 Mar 2022 01:23:26 -0700 (PDT)
+        with ESMTP id S232847AbiCaIcS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Mar 2022 04:32:18 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7023A3983A;
+        Thu, 31 Mar 2022 01:30:31 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id m18so17862841plx.3;
+        Thu, 31 Mar 2022 01:30:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Dq8MH9owPalNoE790NJ78mjvgtH3i7GUOFDcmGYkiNI=;
-        b=zC8J+jsCP8GBgIV1dg4280d051BMUkw14jvIAPX6FX74XfgmGOMhC/3EvKZ4n/D2Ev
-         ifoEWb6tBG0tjvI6DVcScsUdHXd+vPk//ix25xmT9zRiE6RPIdeWGDZxRD8KdKx8w7y8
-         Okuav+yBIaSWElVnAFlvdB2jE1ik2unSGchHkh3fKOn03GEul2H/42YENDooCXCX881E
-         Et+tIpD8Bwzpkubd2mON0a+dfgIgKYz4okqH+J1bLpYztup6hDh9EutizHteTXeY2gmz
-         H66kJZptha0LGozRz9qClrRQTCCMd7GO9/JmG+rfnzzWmJOmalus3xD/zjF9wVbBhN5j
-         rPJA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=ivXMvvbs5/EJ/cA1YNvCsYZ5GhYYP7s+w/OiMvQ9vdM=;
+        b=dmMQkLUbRxIWiMemllk8m4UN5qUqRLS4xMLW3zx/IMoev0AfAe/IRmrzEsLeT52WpK
+         u6hvbrMY9LBPWcExkvT7L6xVN7G313RRkCpyCvKij0TeehtUKT9WxFWRzSg8uIe0RsLX
+         vmDAlz8RBpAbFcvtABS+KkCsG+rxt6YPDuk1qw0F6KmGr/tFBc+wa8rfgY2HbaCftkoq
+         YzdeHZL6bMmGEeWraSOrQEsPVaQ/m/8TsHJT2h5omb8lYnUdZTQn3yJF+J8M4zsJzlWG
+         4dpPtfFBCsyE/15rZmbFjoQ4q0C59+QraJ2NelKF7xBwH/is8h6+l9IgWAFhUeDBN+DO
+         gZ/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Dq8MH9owPalNoE790NJ78mjvgtH3i7GUOFDcmGYkiNI=;
-        b=TBfAY9UJd0R7g5BG2GwTkdzgnfBuk69sWzp/DYklGaBM+6smKQ+vW7J/Y2z4zOEFLf
-         yUYQ9XzSIzkksjrpWSJr7jkz1KQiy+X/OsWyggb+5Htsz1QbGCiW3SP30i/7YN273KZ/
-         vnPWhgDLIixq3yR8GaVNOKCgJG4+9dBkkGQYkO3tNMgwMiDbyCyIkwLp3pBgSx9YCgdL
-         JbyBShKAZXtB2oLbIn/P8HHrO0o+Sm2PpYmKPfIFFi264iHf4MnnTuuGUL2KY24HK9fQ
-         paZ8MwcTMKUHxHBx3pwatFRhhqr7aC4T/TYQtmRpXcr6OeyQs7j/ClonpHVZcTdjaTZm
-         YpeQ==
-X-Gm-Message-State: AOAM530bSmJmwau+3uNU2KN/ovyOQlvwIEcr+tWQu5ThQy/sZQCJwDFO
-        Nnuj9LRRkUfi2YdWZ5O/fsAudA==
-X-Google-Smtp-Source: ABdhPJxa9OvJVcjcn0Ko1P15Ke3xBtXhTgUulbtKmsRbDdYifKKquk9+NHcrPDRyT7IoQqmrxLFOMQ==
-X-Received: by 2002:a17:907:3f07:b0:6e0:2fa0:2482 with SMTP id hq7-20020a1709073f0700b006e02fa02482mr3857385ejc.766.1648715004854;
-        Thu, 31 Mar 2022 01:23:24 -0700 (PDT)
-Received: from [192.168.0.165] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id bx5-20020a0564020b4500b00418fca53406sm10709564edb.27.2022.03.31.01.23.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 31 Mar 2022 01:23:24 -0700 (PDT)
-Message-ID: <15b3d34f-2a91-6dd3-8335-9ccd0d5ec70e@linaro.org>
-Date:   Thu, 31 Mar 2022 10:23:23 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] thermal: exynos: fix masking value for exynos7
- temp_error
-Content-Language: en-US
-To:     hypmean.kim@samsung.com, "bzolnier@gmail.com" <bzolnier@gmail.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "amitk@kernel.org" <amitk@kernel.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "edubezval@gmail.com" <edubezval@gmail.com>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220331071833.115732-1-hypmean.kim@samsung.com>
- <CGME20220331071809epcas2p472298073d4aed0a8026d4b08967c5de5@epcms2p5>
- <20220331072843epcms2p5c9e7ee4756d1aa267cf4af56b0ca22fc@epcms2p5>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220331072843epcms2p5c9e7ee4756d1aa267cf4af56b0ca22fc@epcms2p5>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=ivXMvvbs5/EJ/cA1YNvCsYZ5GhYYP7s+w/OiMvQ9vdM=;
+        b=DGFVjN/WjVnmCJT5tWrD5XWi4X7WTtiagIm41oD6aWuufNw0bKXhKEVcDPpZuYILqP
+         WwP3KiQPS4gA8vGMEW26YH271/S7KJ+Qr6zAqiJtQkdaUdR/FJUsyqiRCuhsLOp7AW/s
+         7eYs+kZ4BGkMLnbvWH54Qla+0zV+fnTfL/pKFDZUmjSHSlqBe5UDG6W8Xccd0wxfK4qX
+         MQgl3cWQprTgb7A/mLsaGhT9gsmBPF0OHvomsf0y3T/hK+ps3k+22Tubz26XRyIVoqL+
+         DSHz+l7RSBQ0HY4JGl0eOnVjDo5gEEVYqo8lQ7FwJKoDGd7pJeKqssOQqvVYIt1jqvVE
+         Vo7Q==
+X-Gm-Message-State: AOAM530OrrtnHMTXNd1DOGG7bRkaXfaJzEdLOgk2v/Nm3Pa/bDQ77Yc+
+        pZ9A2bD/FibhaK/nZoXTA3A=
+X-Google-Smtp-Source: ABdhPJwyXgHtVxQarjOg5ftr1g/409/SafG6TRxjZhAqQaz8fVpUoKM+MSv+EvwnfibqtJWpqfIlkQ==
+X-Received: by 2002:a17:90a:b307:b0:1bd:37f3:f0fc with SMTP id d7-20020a17090ab30700b001bd37f3f0fcmr4946733pjr.132.1648715430845;
+        Thu, 31 Mar 2022 01:30:30 -0700 (PDT)
+Received: from ubuntu.huawei.com ([119.3.119.18])
+        by smtp.googlemail.com with ESMTPSA id j70-20020a638b49000000b003985b5ddaa1sm10950655pge.49.2022.03.31.01.30.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Mar 2022 01:30:30 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Subject: [PATCH v2] opp: use list iterator only inside the loop
+Date:   Thu, 31 Mar 2022 16:30:18 +0800
+Message-Id: <20220331083018.31995-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 31/03/2022 09:28, Sang Min Kim wrote:
->  
+To move the list iterator variable into the list_for_each_entry_*()
+macro in the future it should be avoided to use the list iterator
+variable after the loop body.
 
-Unneeded empty line at beginning of msg.
+To *never* use the list iterator variable after the loop it was
+concluded to use a separate dedicated pointer variable [1].
 
-> Modify mask value for the temp_error in the sanitize_temp_error() function.
->  
-> Fixes: aef27b658b43 ("thermal: exynos: use sanitize_temp_error() in exynos7_tmu_initialize()")
-> masked temp_error2 with EXYNOS_TMU_TEMP_MASK(0xff) value even in the case
-> of EXYNOS7.
-> In addition, when entering the if statement, both temp_error1 and 2 are
-> masked with EXYNOS_TMU_TEMP_MASK(0xff).
->  
-> By modifying to use the previously declared local variable tmu_temp_mask,
-> the mask value suitable for the SOC can be applied.
->  
+In this case, use a new variable 'iter' as the list iterator, while
+use the old variable 'new_dev' as a dedicated pointer to point to the
+found entry. And BUG_ON(!new_dev);.
 
-Fixes tag goes next to other tags, so usually before Signed-off-by.
-Check some existing commits for examples.
+[1]: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
 
-> Signed-off-by: sangmin kim <hypmean.kim@samsung.com>
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+---
 
-You received by Reviewed-by tag, so you should include it in v2. Don't
-skip them.
+changes since v1:
+ - use BUG_ON(!new_dev); instead of return; (Viresh Kumar)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+v1: https://lore.kernel.org/lkml/20220331015818.28045-1-xiam0nd.tong@gmail.com/
 
-> ---
->  V1 -> V2: Add fixes tag
->  
->  drivers/thermal/samsung/exynos_tmu.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->  
+---
+ drivers/opp/debugfs.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
+index 596c185b5dda..81b2bc4b5f43 100644
+--- a/drivers/opp/debugfs.c
++++ b/drivers/opp/debugfs.c
+@@ -187,14 +187,18 @@ void opp_debug_register(struct opp_device *opp_dev, struct opp_table *opp_table)
+ static void opp_migrate_dentry(struct opp_device *opp_dev,
+ 			       struct opp_table *opp_table)
+ {
+-	struct opp_device *new_dev;
++	struct opp_device *new_dev = NULL, *iter;
+ 	const struct device *dev;
+ 	struct dentry *dentry;
+ 
+ 	/* Look for next opp-dev */
+-	list_for_each_entry(new_dev, &opp_table->dev_list, node)
+-		if (new_dev != opp_dev)
++	list_for_each_entry(iter, &opp_table->dev_list, node)
++		if (iter != opp_dev) {
++			new_dev = iter;
+ 			break;
++		}
++
++	BUG_ON(!new_dev);
+ 
+ 	/* new_dev is guaranteed to be valid here */
+ 	dev = new_dev->dev;
+-- 
+2.17.1
+
