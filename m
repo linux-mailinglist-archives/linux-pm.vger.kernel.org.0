@@ -2,229 +2,200 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C0A4ECF97
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Mar 2022 00:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 478CE4ED0C4
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Mar 2022 02:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351550AbiC3W0J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Mar 2022 18:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56220 "EHLO
+        id S1352062AbiCaASd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Mar 2022 20:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244671AbiC3W0J (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Mar 2022 18:26:09 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680BB4E3B0
-        for <linux-pm@vger.kernel.org>; Wed, 30 Mar 2022 15:24:22 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id n63-20020a1c2742000000b0038d0c31db6eso906243wmn.1
-        for <linux-pm@vger.kernel.org>; Wed, 30 Mar 2022 15:24:22 -0700 (PDT)
+        with ESMTP id S1345857AbiCaASc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Mar 2022 20:18:32 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2230A45520
+        for <linux-pm@vger.kernel.org>; Wed, 30 Mar 2022 17:16:46 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id o3-20020a17090a3d4300b001c6bc749227so1922064pjf.1
+        for <linux-pm@vger.kernel.org>; Wed, 30 Mar 2022 17:16:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Z8/F2Ft2+T4lT3wAALTeq2gwW+36osrTF5QO+aQqWdo=;
-        b=kwlcKITS/BmYPMU5CHF54WWHWDPKilXtemeTeUqPdTbTwmC3ORMjBcobxvQuWuQ37T
-         DjE9ZvbKtJuSVe+jK7pvHRjSNgExcMAjhf7kZoHOtHojii1NdOHJm3ieu9L2ONZ/r23M
-         7W+zHJhg/rOjT3eVAlikf3/qY15czQOT1G8xM5jIE7vz7uVhhnSMByybp2UyNpdDZXU0
-         QZ4xLhZVWn4Yf55KOBWWG/kRnaG96l1XIheN9GVZhFj1I8kkHPZ2VxpcCEaBm32suvXh
-         1MGh6lyP+DJwQKsly0d6YZLNymyE7gZRyLmpuDYQrnL7OyBKNtAobm3+5U782bPkTAQw
-         Vhng==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hV5Vaha8m52Fl/sbC+q84uMk9aQkw6LUqtUCcgndF8M=;
+        b=CV+r1o6zChs5P5InM9X1qElR7wUi9znFVzk+BTEw9wbkC5GpnAL32a0JlFZ5IDVGEs
+         VX2dMQ+caneEvjqT0ygPK6CJf2NcwPcVFDb9GtiAYvNrHg1ZDhFz72fD34Y1a8hbQ6RI
+         nL2QkUrZrHGMidBFNqIBJdRoKs0Zy261sw1wIyJ9CJngYZCqaX+WVLtzebLvwAe2pHYw
+         5Y5mAuJGZPm6WtoZzG7mpZahhtAS8MS8TSND9TArgR+796jXSrne0Lh6wgDOmPulJYNl
+         ozTTy8BOxKZ1SSj/if+fYPGeZhmUpBi7gD2PZF1hx9FQk6uFLTkDrLwRMEv3o1Ggo8gH
+         JDAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Z8/F2Ft2+T4lT3wAALTeq2gwW+36osrTF5QO+aQqWdo=;
-        b=pKiVvncks+OEdJKK1AwjwMA/35V75CFXKYZEpJHExUm3oALXd4p5XiLKexR1zc7kYs
-         JudWKy/wxxrtLy3hNZh7uzsa2LFyxm2yIXXcor6vWIN/AnI/mPnlFt3IfrK6PvBXhTBC
-         zSqlC0z6DIUrJy4YzPAapmUvilHksHhFKNAOZIXKpWAOGQDLCbXFvFmtYhHMZMHAW6B0
-         +qHFgacEzTF3SmuziQpVeDG3YdDDOwFCO8NIsymdEWjID6t4w+4fYr4Z+jSxIOw+FiBK
-         5DWs5ZCNmvd1QJXwaMlqgWgqRZClxPuCrMGS5v5PO14AIFGJEqxGj0YM/tDMyc7OphcF
-         zyGA==
-X-Gm-Message-State: AOAM5324JRXViYvTl/nZ57ZXdntBKdXJFuHtAV+3bCS46nYHsI8pWDtP
-        cU1yZ4ePB4jGfEmTD3ZI/PntVs2VUNzd/g==
-X-Google-Smtp-Source: ABdhPJy9pB9/UxuJHLX3uDDO6tQkFDellKduiHDiaaEvMPAu01JV1V7bqfLZoSz4XizYxAjwxXWG8Q==
-X-Received: by 2002:a05:600c:3785:b0:38c:9b55:a477 with SMTP id o5-20020a05600c378500b0038c9b55a477mr1697117wmr.164.1648679060825;
-        Wed, 30 Mar 2022 15:24:20 -0700 (PDT)
-Received: from ?IPV6:2a01:e34:ed2f:f020:8f92:3217:a3c6:3ee8? ([2a01:e34:ed2f:f020:8f92:3217:a3c6:3ee8])
-        by smtp.googlemail.com with ESMTPSA id h9-20020a5d4309000000b00205b90434e2sm11231590wrq.114.2022.03.30.15.24.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Mar 2022 15:24:20 -0700 (PDT)
-Message-ID: <faf9e24f-4419-cdbb-573f-4cf2d9e506e2@linaro.org>
-Date:   Thu, 31 Mar 2022 00:24:18 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: Thermal notifications without setting thermal governor to
- userspace?
-Content-Language: en-US
-To:     Chris Down <chris@chrisdown.name>, linux-pm@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>
-References: <YkR6/KnH/f9U+2qf@chrisdown.name>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <YkR6/KnH/f9U+2qf@chrisdown.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=hV5Vaha8m52Fl/sbC+q84uMk9aQkw6LUqtUCcgndF8M=;
+        b=JMAmwWPLiblMJNzv6OyB75z19/rGBUyce5Zz1/H2UYnIgU4mNnC9CawM8gJPZZOkg8
+         aceCrM76Zc92zYZ0eUTpxn3AW5hvB73texu6SzyZ+UWmGwlVhlsZsREL8NFhJaiwyPin
+         zR6TnrJKwk9IDBDbJAgJTapLn0Zc6bQqBsKjGnGQV969MhkPzwO5CTD90/vxEt8qxasH
+         b/vb676R7s1kADdxYoLKk5A5BrXrfgSgINnqbGfuXCPUwRvev51DQzgoKsPtCDvkR1sQ
+         oOW0JLWAb1sMbkxL0kH8XVXFaI5MKbtqG+udDCP5c+urbSaCT+Q0JPU4mFY8sAlm9KrG
+         SOXQ==
+X-Gm-Message-State: AOAM533Wf+/LpLz9f4OmP4aGtma42+Ps1V8nE3fU4babR4VzgTqh7Ls+
+        OlmonbP0Cm5+nYzNIruQZURwHA==
+X-Google-Smtp-Source: ABdhPJz3Vbz6dsNGCNsUCpmIHgTM0rvC4Z04UHGBv/6dn0xozsPKDxJlOJ9mtUs2fY8yqbbfl4uTuQ==
+X-Received: by 2002:a17:903:206:b0:153:ebab:a52f with SMTP id r6-20020a170903020600b00153ebaba52fmr2479213plh.118.1648685805530;
+        Wed, 30 Mar 2022 17:16:45 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004f1111c66afsm27292172pfl.148.2022.03.30.17.16.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Mar 2022 17:16:44 -0700 (PDT)
+Date:   Wed, 30 Mar 2022 17:16:44 -0700 (PDT)
+X-Google-Original-Date: Wed, 30 Mar 2022 17:16:33 PDT (-0700)
+Subject:     Re: [PATCH v11 0/8] RISC-V CPU Idle Support
+In-Reply-To: <20220210054947.170134-1-apatel@ventanamicro.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        daniel.lezcano@linaro.org, ulf.hansson@linaro.org,
+        rjw@rjwysocki.net, pavel@ucw.cz, robh+dt@kernel.org,
+        milun.tripathy@gmail.com, atishp@atishpatra.org,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        liush@allwinnertech.com, anup@brainfault.org,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvm-riscv@lists.infradead.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     apatel@ventanamicro.com
+Message-ID: <mhng-ed3c61a2-45a5-4cc4-b1ec-26e25f92c0a3@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, 09 Feb 2022 21:49:39 PST (-0800), apatel@ventanamicro.com wrote:
+> From: Anup Patel <anup.patel@wdc.com>
+>
+> This series adds RISC-V CPU Idle support using SBI HSM suspend function.
+> The RISC-V SBI CPU idle driver added by this series is highly inspired
+> from the ARM PSCI CPU idle driver.
+>
+> At high-level, this series includes the following changes:
+> 1) Preparatory arch/riscv patches (Patches 1 to 3)
+> 2) Defines for RISC-V SBI HSM suspend (Patch 4)
+> 3) Preparatory patch to share code between RISC-V SBI CPU idle driver
+>    and ARM PSCI CPU idle driver (Patch 5)
+> 4) RISC-V SBI CPU idle driver and related DT bindings (Patches 6 to 7)
+>
+> These patches can be found in riscv_sbi_hsm_suspend_v11 branch of
+> https://github.com/avpatel/linux.git
+>
+> Special thanks Sandeep Tripathy for providing early feeback on SBI HSM
+> support in all above projects (RISC-V SBI specification, OpenSBI, and
+> Linux RISC-V).
+>
+> Changes since v10:
+>  - Rebased on Linux-5.17-rc3
+>  - Typo fix in commit description of PATCH6
+>
+> Changes since v9:
+>  - Rebased on Linux-5.17-rc1
+>
+> Changes since v8:
+>  - Rebased on Linux-5.15-rc5
+>  - Fixed DT schema check errors in PATCH7
+>
+> Changes since v7:
+>  - Rebased on Linux-5.15-rc3
+>  - Renamed cpuidle-sbi.c to cpuidle-riscv-sbi.c in PATCH6
+>
+> Changes since v6:
+>  - Fixed error reported by "make DT_CHECKER_FLAGS=-m dt_binding_check"
+>
+> Changes since v5:
+>  - Rebased on Linux-5.13-rc5
+>  - Removed unnecessary exports from PATCH5
+>  - Removed stray ";" from PATCH5
+>  - Moved sbi_cpuidle_pd_power_off() under "#ifdef CONFIG_DT_IDLE_GENPD"
+>    in PATCH6
+>
+> Changes since v4:
+>  - Rebased on Linux-5.13-rc2
+>  - Renamed all dt_idle_genpd functions to have "dt_idle_" prefix
+>  - Added MAINTAINERS file entry for dt_idle_genpd
+>
+> Changes since v3:
+>  - Rebased on Linux-5.13-rc2
+>  - Fixed __cpu_resume_enter() which was broken due to XIP kernel support
+>  - Removed "struct dt_idle_genpd_ops" abstraction which simplifies code
+>    sharing between ARM PSCI and RISC-V SBI drivers in PATCH5
+>
+> Changes since v2:
+>  - Rebased on Linux-5.12-rc3
+>  - Updated PATCH7 to add common DT bindings for both ARM and RISC-V
+>    idle states
+>  - Added "additionalProperties = false" for both idle-states node and
+>    child nodes in PATCH7
+>
+> Changes since v1:
+>  - Fixex minor typo in PATCH1
+>  - Use just "idle-states" as DT node name for CPU idle states
+>  - Added documentation for "cpu-idle-states" DT property in
+>    devicetree/bindings/riscv/cpus.yaml
+>  - Added documentation for "riscv,sbi-suspend-param" DT property in
+>    devicetree/bindings/riscv/idle-states.yaml
+>
+> Anup Patel (8):
+>   RISC-V: Enable CPU_IDLE drivers
+>   RISC-V: Rename relocate() and make it global
+>   RISC-V: Add arch functions for non-retentive suspend entry/exit
+>   RISC-V: Add SBI HSM suspend related defines
+>   cpuidle: Factor-out power domain related code from PSCI domain driver
+>   cpuidle: Add RISC-V SBI CPU idle driver
+>   dt-bindings: Add common bindings for ARM and RISC-V idle states
+>   RISC-V: Enable RISC-V SBI CPU Idle driver for QEMU virt machine
+>
+>  .../bindings/arm/msm/qcom,idle-state.txt      |   2 +-
+>  .../devicetree/bindings/arm/psci.yaml         |   2 +-
+>  .../bindings/{arm => cpu}/idle-states.yaml    | 228 ++++++-
+>  .../devicetree/bindings/riscv/cpus.yaml       |   6 +
+>  MAINTAINERS                                   |  14 +
+>  arch/riscv/Kconfig                            |   7 +
+>  arch/riscv/Kconfig.socs                       |   3 +
+>  arch/riscv/configs/defconfig                  |   2 +
+>  arch/riscv/configs/rv32_defconfig             |   2 +
+>  arch/riscv/include/asm/asm.h                  |  27 +
+>  arch/riscv/include/asm/cpuidle.h              |  24 +
+>  arch/riscv/include/asm/sbi.h                  |  27 +-
+>  arch/riscv/include/asm/suspend.h              |  36 +
+>  arch/riscv/kernel/Makefile                    |   2 +
+>  arch/riscv/kernel/asm-offsets.c               |   3 +
+>  arch/riscv/kernel/cpu_ops_sbi.c               |   2 +-
+>  arch/riscv/kernel/head.S                      |  28 +-
+>  arch/riscv/kernel/process.c                   |   3 +-
+>  arch/riscv/kernel/suspend.c                   |  87 +++
+>  arch/riscv/kernel/suspend_entry.S             | 124 ++++
+>  arch/riscv/kvm/vcpu_sbi_hsm.c                 |   4 +-
+>  drivers/cpuidle/Kconfig                       |   9 +
+>  drivers/cpuidle/Kconfig.arm                   |   1 +
+>  drivers/cpuidle/Kconfig.riscv                 |  15 +
+>  drivers/cpuidle/Makefile                      |   5 +
+>  drivers/cpuidle/cpuidle-psci-domain.c         | 138 +---
+>  drivers/cpuidle/cpuidle-psci.h                |  15 +-
+>  drivers/cpuidle/cpuidle-riscv-sbi.c           | 627 ++++++++++++++++++
+>  drivers/cpuidle/dt_idle_genpd.c               | 178 +++++
+>  drivers/cpuidle/dt_idle_genpd.h               |  50 ++
+>  30 files changed, 1484 insertions(+), 187 deletions(-)
+>  rename Documentation/devicetree/bindings/{arm => cpu}/idle-states.yaml (74%)
+>  create mode 100644 arch/riscv/include/asm/cpuidle.h
+>  create mode 100644 arch/riscv/include/asm/suspend.h
+>  create mode 100644 arch/riscv/kernel/suspend.c
+>  create mode 100644 arch/riscv/kernel/suspend_entry.S
+>  create mode 100644 drivers/cpuidle/Kconfig.riscv
+>  create mode 100644 drivers/cpuidle/cpuidle-riscv-sbi.c
+>  create mode 100644 drivers/cpuidle/dt_idle_genpd.c
+>  create mode 100644 drivers/cpuidle/dt_idle_genpd.h
 
-Hi Chris,
-
-On 30/03/2022 17:45, Chris Down wrote:
-> Hey thermal folks,
-> 
-> I'm hoping that you'll be able to provide some guidance on what options 
-> are available for getting thermal notifications without changing the 
-> policy to userspace control.
-
-That is now possible with the netlink notifications mechanism.
-
-https://www.linaro.org/blog/thermal-notifications-with-netlink/
-
-> To be clear, my intent is to have a userspace daemon which can set 
-> multiple temperature trips at runtime on which it can receive a 
-> notification (preferably by a simple mechanism like uevents), and to be 
-> able to distinguish which threshold was tripped. For example, to be able 
-> to set trips at 50C, 70C, and 90C, getting events both when the 
-> temperature exceeds that and when it dips back under the specified 
-> threshold.
-
-For that it would require to setup a trip point from the firmware 
-dedicated to userspace management along with the writable trip point 
-kernel config option.
-
-On embedded systems, the trip point can be added easily in the device tree.
-
-You would end up with:
-
-  - one passive trip point : writable and used by userspace
-
-  - one passive trip point to protect the system tied with a cooling 
-device and handled by the kernel
-
-  - one hot trip point to notify the userspace critical is about to be reach
-
-  - one critical trip point to reboot the system
-
- From the userspace, you change the trip temp to 50°C, 70°C and 90°C 
-when crossing the way up or the way down.
-
-The sensor should implement the set_trip in order to program the 
-register to fire the interrupt at the specified temperature. Otherwise, 
-monitoring will be needed.
-
-On ACPI, except hacking the table and reload from the kernel I don't see 
-how to do that.
-
-
-> Right now I am polling /sys/class/thermal/thermal_zone*/temp but this 
-> can be expensive, especially for the ACPI thermal zone.
-> 
-> As it is, I see four options:
-> 
-> 1. Set thermal_zone to use user_space governor and use uevents
-> 
-> As I understand it, this means that the default critical temperature 
-> will no longer be respected and user space is now responsible for taking 
-> action to control thermal events.
-
-The userspace governor is marked deprecated and will be removed soon. 
-The decision was because this governor was only used for the sake of 
-having the notification but at the cost of losing the in-kernel control 
-of the thermal zone.
-
-The netlink notification solving that, the userspace governor is no 
-longer needed.
-
-> If that's correct, then it seems dangerous to set it to user_space for 
-> userspace applications which only want to monitor their own trip 
-> temperatures, but not take direct action.
-
-Right
-
-> 2. Use hwmon thermal events
-> 
-> I see that commit 1597b374af22 ("hwmon: Add notification support") adds 
-> notification support to hwmon, but as far as I can tell this is based on 
-> statically defined trip temperatures from ACPI or similar inputs. I see 
-> you can change it with the thermal.crt boot option, but that's too early 
-> for a normal userspace daemon to do anything (and it doesn't allow any 
-> dynamic reconfiguration).
-> 
-> 3. Use thermal over netlink
-> 
-> I see that commit 1ce50e7d408e ("thermal: core: genetlink support for 
-> events/cmd/sampling") which was merged a couple of years ago adds 
-> support for thermal netlink events.
-> 
-> I also see articles suggesting that support for this new netlink 
-> interface will be or was added to libnl, but I can't seem to find 
-> anything about it in the libnl sources.
-> 
-> Is this mature enough to use? If so, does one have to hack up their own 
-> userspace netlink library for now, or what's the plan there?
-
-
-For the record, everything is here:
-
-https://lore.kernel.org/all/20220330100444.3846661-1-daniel.lezcano@linaro.org/
-
-
-> In general I would prefer something simpler that fits into the existing 
-> strong tooling around uevents/etc though, this looks useful, but it does 
-> a lot more than I need and requires adding another userspace dependency 
-> on libnl.
-
-
-Yeah, that is the drawback.
-
-
-> 4. Poll /sys/class/thermal/thermal_zone*/temp or hwmon
-> 
-> This is what I'm currently doing. It's slow, and often unnecessarily 
-> costly on weaker systems.
-
-If the sensor backend drivers has the set_trip ops working and setting 
-the interrupt for the next threshold, that should be solved with the 
-writable trip point.
-
-Otherwise, the netlink sampling channel can be used with the in-kernel 
-monitoring. The cost of a back and forth netlink message is 14us on a 
-Cortex-A75@2.8GHz (the half if just getting a notification or sampling)
-
-> Are there other options I'm not considering here that might help me out 
-> here?
-
-Yes, I assume the daemon gets notification but has to do an action. 
-Usually, it acts on the cooling device and that is bad.
-
-There is a power capping framework called DTPM which aims to provide a 
-way to set a power limitation on the device. As it is very new, it is 
-only supporting ARM with an energy model for CPU and any devfreq device 
-(eg. GPU and memory).
-
-More details here:
-
-https://resources.linaro.org/en/resource/oyFSkedFn1RPeSLKhcQ1T3
-
-
-Hope that helped
-
-   -- Daniel
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Thanks, these are on for-next.
