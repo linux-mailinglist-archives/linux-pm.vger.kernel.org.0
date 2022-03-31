@@ -2,128 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69844EDF8E
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Mar 2022 19:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6834EDFCA
+	for <lists+linux-pm@lfdr.de>; Thu, 31 Mar 2022 19:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbiCaRXT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Mar 2022 13:23:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41358 "EHLO
+        id S231477AbiCaRko (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Mar 2022 13:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbiCaRXP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Mar 2022 13:23:15 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4091F0C96;
-        Thu, 31 Mar 2022 10:21:26 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2e68c95e0f9so6742647b3.0;
-        Thu, 31 Mar 2022 10:21:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2DEwBC1O2sWIMQ/yd+TC2ZcExUMwvMfzRcdpkpoM5EA=;
-        b=LDzUpFG8LvhaNRogfQHiSCJ+2CrCL4i9GAeLOCO4oo0hSmPpU0MMP+bT3qtQgFW3Di
-         /jfV7OvfNg6STYOujNso5YENa3/IuJrmEtpri1N1xwXRu8Hvmv79slnrJFlKCJprj5UN
-         lv4F0FmbWAvmDBrtoLhESTlftbv9d9mSVlxZXXGJARRKAFQ3NROYeAFHdA5z/YIcwwZ6
-         MHB+21r9nkJFg0yG1WywaA0X1OdaeGfyulEKDYcKw0dTGBd5z43O0vZ1SH+bgUEDpbP+
-         HLuosdMayeawiHXR3lllASU5WXJOCneVMAyde1QMZjD3tKxSnR8nGxlzaoABf97pLxKp
-         gQgg==
-X-Gm-Message-State: AOAM532wLnM0b2OcC97jMnf/Ii8UbFGP7Dwdta3JNYY/79AAFtehMZVE
-        iKl05G98ffg0/hd/A6zTVA9YC8+A+L7cLfu3OSk=
-X-Google-Smtp-Source: ABdhPJy9u2Dob6LDT/bQELypzvObVEXznR0ktRZIzvkuXclo2fZryJ3gwusyAUDjrxGo/jBNHqU1jlmMKM1Ll5uuRYg=
-X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
- b145-20020a811b97000000b002db640f49d8mr5804359ywb.326.1648747285718; Thu, 31
- Mar 2022 10:21:25 -0700 (PDT)
+        with ESMTP id S229718AbiCaRkn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Mar 2022 13:40:43 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31523C683A;
+        Thu, 31 Mar 2022 10:38:54 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 2a8c18b096afa850; Thu, 31 Mar 2022 19:38:52 +0200
+Received: from kreacher.localnet (unknown [213.134.162.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id E4BC466BBEB;
+        Thu, 31 Mar 2022 19:38:51 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PCI <linux-pci@vger.kernel.org>
+Cc:     Stefan Gottwald <gottwald@igel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH] PCI: PM: Quirk bridge D3 on Elo i2
+Date:   Thu, 31 Mar 2022 19:38:51 +0200
+Message-ID: <11980172.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-References: <20220220181522.541718-1-jic23@kernel.org> <20220220181522.541718-3-jic23@kernel.org>
- <6cd17744-d060-1094-098d-e30a10f96600@intel.com> <20220227114628.219c7055@jic23-huawei>
- <CAJZ5v0iwFJizKf-SEr10M-8HFirMzH8=LkONLvtZ30pfEk4AOA@mail.gmail.com>
- <20220301113145.00004ce4@Huawei.com> <20220330133037.000044b2@Huawei.com>
-In-Reply-To: <20220330133037.000044b2@Huawei.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 31 Mar 2022 19:21:14 +0200
-Message-ID: <CAJZ5v0j47Ub=kXU5ZB_JF35xwBtUuLCwiFyEw-+B=r5z-Ac78Q@mail.gmail.com>
-Subject: Re: [PATCH 2/8] PM: core: Add NS varients of EXPORT[_GPL]_SIMPLE_DEV_PM_OPS
- and runtime pm equiv
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-iio@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Tomasz Duszynski <tomasz.duszynski@octakon.com>,
-        Linux PM <linux-pm@vger.kernel.org>
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-CLIENT-IP: 213.134.162.2
+X-CLIENT-HOSTNAME: 213.134.162.2
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudeigedgudduhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdevgfetueetheekudeuvdduteelvefftdfftdejjeeukeffteeikefgiefghedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddufedrudefgedrudeivddrvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduiedvrddvpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehgohhtthifrghlugesihhgvghlrdgtohhmpdhrtghpthhtohephhgvlhhgrggrsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhikhgrrdifvghsthgvrhgsvghrgheslhhinhhugidrihhnthgvlhdrtgho
+ mhdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Jonathan,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-On Wed, Mar 30, 2022 at 2:30 PM Jonathan Cameron
-<Jonathan.Cameron@huawei.com> wrote:
->
-> On Tue, 1 Mar 2022 11:31:45 +0000
-> Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
->
-> > On Mon, 28 Feb 2022 21:13:25 +0100
-> > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> >
-> > > On Sun, Feb 27, 2022 at 12:39 PM Jonathan Cameron <jic23@kernel.org> wrote:
-> > > >
-> > > > On Mon, 21 Feb 2022 20:37:57 +0100
-> > > > "Rafael J. Wysocki" <rafael.j.wysocki@intel.com> wrote:
-> > > >
-> > > > Hi Rafael,
-> > > > > CC: linux-pm
-> > > >
-> > > > Oops. Stupid omission on my part, sorry about that!
-> > > >
-> > > > >
-> > > > > On 2/20/2022 7:15 PM, Jonathan Cameron wrote:
-> > > > > > From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > > > >
-> > > > > > As more drivers start to use namespaces, we need to have varients of these
-> > > > > > useful macros that allow the export to be in a particular namespace.
-> > > > > >
-> > > > > > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > > > > Cc: Paul Cercueil <paul@crapouillou.net>
-> > > > > > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > >
-> > > > > I'd rather route this through linux-pm unless you have dependent changes.
-> > > >
-> > > > Ok.
-> > > >
-> > > > The kxsd9 patch (4) is dependent on other changes queued for
-> > > > the merge window in IIO. If we want to do it through linux-pm I'd
-> > > > love it if we can manage to get the ground work in for the coming merge window.
-> > > >
-> > > > So options are:
-> > > >
-> > > > 1) This patch alone via linux-pm and I queue the users up for next cycle
-> > > >    Fine by me but always awkward to have infrastructure with no users.
-> > > > 2) First 3 patches via linux-pm so we have a user (scd30) in a low churn
-> > > >    driver and I'll queue the rest for 5.19.  Fine by me as well.
-> > > >    That goes on cleanly on 5.17-rc1 and there is nothing else in my review
-> > > >    queue touching that driver.
-> > >
-> > > That would work for me.
-> >
-> > Great.  Let's do that then.  Are you fine picking them from this thread, or
-> > would you like me to resend with just those 3 patches as a fresh series?
-> Hi Rafael,
->
-> I've not heard back from you, so have been assuming you'd pick those first
-> 3 patches up from this series.  Is that a correct assumption?
+If one of the PCIe root ports on Elo i2 is put into D3cold and then
+back into D0, the downstream device becomes permanently inaccessible,
+so add a bridge D3 DMI quirk for that system.
 
-This was my intention, but then I lost track of them and now I can't
-find them in the linux-pm Patchwork.  Sorry about this.
+This was exposed by commit 14858dcc3b35 ("PCI: Use
+pci_update_current_state() in pci_enable_device_flags()"), but before
+that commit the root port in question had never been put into D3cold
+for real due to a mismatch between its power state retrieved from the
+PCI_PM_CTRL register (which was accessible even though the platform
+firmware indicated that the port was in D3cold) and the state of an
+ACPI power resource involved in its power management.
 
-Can you please resend just the 3 patches?
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215715
+Reported-by: Stefan Gottwald <gottwald@igel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/pci/pci.c |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Thanks!
+Index: linux-pm/drivers/pci/pci.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci.c
++++ linux-pm/drivers/pci/pci.c
+@@ -2920,6 +2920,16 @@ static const struct dmi_system_id bridge
+ 			DMI_MATCH(DMI_BOARD_VENDOR, "Gigabyte Technology Co., Ltd."),
+ 			DMI_MATCH(DMI_BOARD_NAME, "X299 DESIGNARE EX-CF"),
+ 		},
++		/*
++		 * Downstream device is not accessible after putting a root port
++		 * into D3cold and back into D0 on Elo i2.
++		 */
++		.ident = "Elo i2",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Elo Touch Solutions"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "Elo i2"),
++			DMI_MATCH(DMI_PRODUCT_VERSION, "RevB"),
++		},
+ 	},
+ #endif
+ 	{ }
+
+
+
