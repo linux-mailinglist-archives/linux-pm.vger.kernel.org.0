@@ -2,55 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAFFA4EED70
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Apr 2022 14:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4344EEE0C
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Apr 2022 15:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345972AbiDAMuY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Apr 2022 08:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
+        id S235174AbiDAN2E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Apr 2022 09:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345974AbiDAMuX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Apr 2022 08:50:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4668717041;
-        Fri,  1 Apr 2022 05:48:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52FAD61A27;
-        Fri,  1 Apr 2022 12:48:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61C74C3410F;
-        Fri,  1 Apr 2022 12:48:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648817308;
-        bh=04zyeDsZ6CNbvQr7rW+IhI8pPOVuT9A45/e25mj++TA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=bI6yf39YJKo9McA4h6YHBK7oVRqv+L2OJDugPhUl7+yu5KHctX7vgaqrqL3uXPZAN
-         121BtaVVRpUN1qhqd6wAjqi2B0lBVsZZZ2E91uRztR+0vGVtIueesq4N/XSoE9FwKl
-         5zZON9+16Um6lNjSZ9vTkvNfpWtSvQz4dL826FOFFxhoo3/doxKD2aZD1+aKZf2ijH
-         70N3eEDFO7W6SB9fdpL9tnaNqriXAMxRY6MdctRZTknpTzIgxDL/z0dEfbi/awL0Qo
-         igmpUvHtD52bAV+nOJyMLYeGl5NTXHtTHDtYLKHOs4zkTC73bjaLbaehpRgjCbGDTh
-         KKGxcge5BNLBQ==
-Date:   Fri, 1 Apr 2022 07:48:26 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Mehta, Sanju" <Sanju.Mehta@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>
-Subject: Re: [PATCH v6] PCI / ACPI: Assume "HotPlugSupportInD3" only if
- device can wake from D3
-Message-ID: <20220401124826.GA89698@bhelgaas>
+        with ESMTP id S234879AbiDAN2D (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Apr 2022 09:28:03 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7760D1E5A76;
+        Fri,  1 Apr 2022 06:26:09 -0700 (PDT)
+X-UUID: dee1b64c61124726bc8e9091fbac4a30-20220401
+X-UUID: dee1b64c61124726bc8e9091fbac4a30-20220401
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <jia-wei.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1610955157; Fri, 01 Apr 2022 21:26:03 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 1 Apr 2022 21:26:02 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 1 Apr
+ 2022 21:26:00 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 1 Apr 2022 21:26:00 +0800
+Message-ID: <de1751bb13fb14b591fbe046ff274530ad62162e.camel@mediatek.com>
+Subject: Re: [PATCH 1/4] dt-bindings: cpufreq: mediatek: transform
+ cpufreq-mediatek into yaml
+From:   Jia-Wei Chang <jia-wei.chang@mediatek.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <fan.chen@mediatek.com>,
+        <louis.yu@mediatek.com>, <roger.lu@mediatek.com>,
+        <Allen-yy.Lin@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <hsinyi@google.com>,
+        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
+Date:   Fri, 1 Apr 2022 21:26:00 +0800
+In-Reply-To: <96a823a2-f3b6-9fb7-c9d6-f1315f6056fd@kernel.org>
+References: <20220307122151.11666-1-jia-wei.chang@mediatek.com>
+         <20220307122151.11666-2-jia-wei.chang@mediatek.com>
+         <ee98d248-b2cd-e975-84df-448917a79287@canonical.com>
+         <2cf526d400c011b5172ba4fc2c3f03b4a4f371dc.camel@mediatek.com>
+         <96a823a2-f3b6-9fb7-c9d6-f1315f6056fd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <34612803-5038-f727-f12a-8f71929301ac@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,122 +71,135 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 07:32:58AM -0500, Limonciello, Mario wrote:
-> On 4/1/2022 07:29, Bjorn Helgaas wrote:
-> > On Fri, Apr 01, 2022 at 01:44:42PM +0200, Rafael J. Wysocki wrote:
-> > > On Fri, Apr 1, 2022 at 5:40 AM Mario Limonciello
-> > > <mario.limonciello@amd.com> wrote:
-> > > > 
-> > > > acpi_pci_bridge_d3(dev) returns "true" if "dev" is a hotplug bridge
-> > > > that can handle hotplug events while in D3.  Previously this meant:
-> > > > 
-> > > >   1) "dev" has a _PS0 or _PR0 method, or
-> > > > 
-> > > >   2) The Root Port above "dev" has a _DSD with a "HotPlugSupportInD3"
-> > > >      property with value 1.
-> > > > 
-> > > > This did not consider_S0W, which tells us the deepest D-state from
-> > > > which a device can wake itself (ACPI v6.4, sec 7.3.20).
-> > > > 
-> > > > On some platforms, e.g., AMD Yellow Carp, firmware may supply
-> > > > "HotPlugSupportInD3" even though the platform does not supply power
-> > > > resources through _PRW and _S0W tells us the device cannot wake from
+On Thu, 2022-03-24 at 11:33 +0100, Krzysztof Kozlowski wrote:
+> On 24/03/2022 10:38, Jia-Wei Chang wrote:
 > > > 
-> > > More importantly, it doesn't supply a wakeup GPE number through _PRW,
-> > > so from the ACPI perspective the bridge has no way of generating
-> > > wakeup signals.
+> > > > 
+> > > > diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-
+> > > > mediatek.yaml
+> > > > b/Documentation/devicetree/bindings/cpufreq/cpufreq-
+> > > > mediatek.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..584946eb3790
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-
+> > > > mediatek.yaml
+> > > > @@ -0,0 +1,131 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: 
+> > > > 
+https://urldefense.com/v3/__http://devicetree.org/schemas/cpufreq/cpufreq-mediatek.yaml*__;Iw!!CTRNKA9wMg0ARbw!xbKG4TgD0MRpMLyGJVBZEGpZFrNOclrcxOCx_APKo5Nmg8nF2x5PcBdE0unvL2NdpChkMA$
+> > > >  
+> > > > +$schema: 
+> > > > 
+https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!xbKG4TgD0MRpMLyGJVBZEGpZFrNOclrcxOCx_APKo5Nmg8nF2x5PcBdE0unvL2O8T_oxCQ$
+> > > >  
+> > > > +
+> > > > +title: Mediatek CPUFREQ driver Device Tree Bindings
+> > > 
+> > > Please remove "driver Device Tree Bindings" because the title
+> > > should
+> > > describe the hardware. Therefore it could be something like
+> > > "Mediatek
+> > > SoC CPU frequency and voltage scaling".
 > > 
-> > Perfect, thanks.  That's the missing piece about _PRW.
-> > 
-> > > > D3hot.  With the previous code, these devices could be put in D3hot
-> > > > and hotplugged devices would not be recognized without manually
-> > > > rescanning.
-> > > > 
-> > > > If _S0W exists and says the Root Port cannot wake itself from D3hot,
-> > > > return "false" to indicate that "dev" cannot handle hotplug events
-> > > > while in D3.
-> > > > 
-> > > >   1) "dev" has a _PS0 or _PR0 method, or
-> > > > 
-> > > >   2a) The Root Port above "dev" has _PRW and
-> > > > 
-> > > >   2b) If the Root Port above "dev" has _S0W, it can wake from D3hot or
-> > > >       D3cold and
-> > > > 
-> > > >   2c) The Root Port above "dev" has a _DSD with a
-> > > >       "HotPlugSupportInD3" property with value 1.
-> > > > 
-> > > > Windows 10 and Windows 11 both will prevent the bridge from going in D3
-> > > > when the firmware is configured this way and this change aligns the
-> > > > handling of the situation to be the same.
-> > > > 
-> > > > Link: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fuefi.org%2Fhtmlspecs%2FACPI_Spec_6_4_html%2F07_Power_and_Performance_Mgmt%2Fdevice-power-management-objects.html%3Fhighlight%3Ds0w%23s0w-s0-device-wake-state&amp;data=04%7C01%7Cmario.limonciello%40amd.com%7Cc8ff8ac0568049a166bd08da13db41f3%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637844129686586061%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=bjd5NnFaGslXcSVvShZMRHzuedEx8VgGnEnCGlWZ%2F2Q%3D&amp;reserved=0
-> > > > Link: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fwindows-hardware%2Fdrivers%2Fpci%2Fdsd-for-pcie-root-ports%23identifying-pcie-root-ports-supporting-hot-plug-in-d3&amp;data=04%7C01%7Cmario.limonciello%40amd.com%7Cc8ff8ac0568049a166bd08da13db41f3%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637844129686586061%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=r11UKOwL6SvGv4VCxaDyH0k15dsJib%2BJvRCS2MRobUQ%3D&amp;reserved=0
-> > > > Fixes: 26ad34d510a87 ("PCI / ACPI: Whitelist D3 for more PCIe hotplug ports")
-> > > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > > > --
-> > > > v5->v6:
-> > > >   * Re-order checks to only check for _DSD if necessary as suggested by Bjorn.
-> > > >   * Adjust commit message wording
-> > > >   * Drop rewording comment patch, just apply it while moving text to avoid
-> > > >     ping-ponging the same lines in the commits.
-> > > > v4-v5:
-> > > >   * Don't fail if _S0W is missing
-> > > > ---
-> > > >   drivers/pci/pci-acpi.c | 25 +++++++++++++++++++------
-> > > >   1 file changed, 19 insertions(+), 6 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
-> > > > index 1f15ab7eabf8..5ab797e2709d 100644
-> > > > --- a/drivers/pci/pci-acpi.c
-> > > > +++ b/drivers/pci/pci-acpi.c
-> > > > @@ -976,7 +976,9 @@ bool acpi_pci_bridge_d3(struct pci_dev *dev)
-> > > >   {
-> > > >          const union acpi_object *obj;
-> > > >          struct acpi_device *adev;
-> > > > +       unsigned long long state;
-> > > >          struct pci_dev *rpdev;
-> > > > +       acpi_status status;
-> > > > 
-> > > >          if (acpi_pci_disabled || !dev->is_hotplug_bridge)
-> > > >                  return false;
-> > > > @@ -985,12 +987,6 @@ bool acpi_pci_bridge_d3(struct pci_dev *dev)
-> > > >          if (acpi_pci_power_manageable(dev))
-> > > >                  return true;
-> > > > 
-> > > > -       /*
-> > > > -        * The ACPI firmware will provide the device-specific properties through
-> > > > -        * _DSD configuration object. Look for the 'HotPlugSupportInD3' property
-> > > > -        * for the root port and if it is set we know the hierarchy behind it
-> > > > -        * supports D3 just fine.
-> > > > -        */
-> > > >          rpdev = pcie_find_root_port(dev);
-> > > >          if (!rpdev)
-> > > >                  return false;
-> > > > @@ -999,6 +995,23 @@ bool acpi_pci_bridge_d3(struct pci_dev *dev)
-> > > >          if (!adev)
-> > > >                  return false;
-> > > > 
-> > > > +       /*
-> > > > +        * If the bridge can't wake from D3hot, it can't signal hotplug
-> > > > +        * events in D3hot.
-> > > 
-> > > I would say "If the bridge cannot signal wakeup signals at all, it
-> > > cannot signal hotplug events from low-power states including D3hot and
-> > > D3cold."
-> > > 
-> > > With the two above remarks addressed, please feel free to add
-> > > 
-> > > Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > 
-> > Great, thanks!
+> > Thanks for your suggestion of title.
+> > Or should I use the origin title "Binding for MediaTek's CPUFreq
+> > driver"?
 > 
-> Bjorn,
+> Mediatek CPUFREQ
+> or
+> Mediatek CPU frequency scaling
+
+Ok, I will choose one of it.
+
 > 
-> Please let me know if you want me to send up a v7 with the minor remark
-> updates, or if you can just fix those up while committing.
+> > 
+> > > 
+> > > How is it related to cpufreq-mediatek-hw.yaml? The names/title
+> > > look
+> > > unfortunately too similar.
+> > 
+> > No, mediatek-cpufreq is performing in kernel driver rather than on
+> > hardware.
+> > On the other hand, mediatek-cpufreq-hw is performing on hardware.
+> > That's why "hw" is present in its name.
+> 
+> Unfortunately, I do not get it. The bindings are only about hardware,
+> so
+> how bindings could be about CPU frequency scaling not in hardware?
 
-Fixing those up right now.  I'll post the updates shortly so you can
-make sure I didn't make it worse.
+Sorry, let me correct my statements.
 
-Bjorn
+For mediatek-cpufreq here, the required hardware are clock and
+regulator which have to be under control of mediatek-cpufreq. That's
+the reason why it needs bindings.
+
+mediatek-cpufreq scales up and down voltage and frequency via kernel
+framework of clock and regulator, however, mediatek-cpufreq-hw delegate
+the voltage and frequency control to a hardware agent instead.
+
+> 
+> > 
+> > > 
+> > > In general this does not look like proper bindings (see also
+> > > below
+> > > lack
+> > > of compatible). Bindings describe the hardware, so what is
+> > > exactly
+> > > the
+> > > hardware here?
+> > 
+> > Except for SoC, there's no requirement of hardware binding for
+> > mediatek-cpufreq.
+> > mediatek-cpufreq recognizes the compatible of Mediatek SoC while
+> > probing.
+> 
+> What is the hardware here? If there is no requirement for bindings
+> for
+> mediate-cpufreq, why do we have this patch here?
+
+Sorry, that's my mistake.
+Clock and regulator are required hardware for mediatek-cpufreq.
+
+> 
+> > 
+> > > 
+> > > > +
+> > > > +maintainers:
+> > > > +  - Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> > > > +
+> > > > +description: |
+> > > > +  CPUFREQ is used for scaling clock frequency of CPUs.
+> > > > +  The module cooperates with CCI DEVFREQ to manage frequency
+> > > > for
+> > > > some Mediatek
+> > > > +  SoCs.
+> > > > +
+> > > > +properties:
+> > > 
+> > > How is this schema going to be applied? I don't see here select
+> > > neither
+> > > compatible.
+> > 
+> > As mentioned above, only compatible of SoC is required for
+> > mediatek-
+> > cpufreq.
+> 
+> It does not answer my questions. How the schema is going to be
+> applied?
+
+Currently, we do use compatible of SoC to probe mediatek-cpufreq.
+
+If the better way is using clock and regulator opp, do you have a
+suggestion to approach that?
+I mean I can't find a good example from other vendors trying to do that
+way. Or maybe I miss something?
+
+> 
+> 
+> Best regards,
+> Krzysztof
+
