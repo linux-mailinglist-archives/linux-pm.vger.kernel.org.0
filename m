@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D63A04EE8E8
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Apr 2022 09:14:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A93904EE8E7
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Apr 2022 09:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343771AbiDAHQ0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Apr 2022 03:16:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33220 "EHLO
+        id S242968AbiDAHQZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Apr 2022 03:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343769AbiDAHQ0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Apr 2022 03:16:26 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4269493190
-        for <linux-pm@vger.kernel.org>; Fri,  1 Apr 2022 00:14:36 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id y36so353727lfa.6
-        for <linux-pm@vger.kernel.org>; Fri, 01 Apr 2022 00:14:35 -0700 (PDT)
+        with ESMTP id S1343768AbiDAHQY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Apr 2022 03:16:24 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7505F62BDE
+        for <linux-pm@vger.kernel.org>; Fri,  1 Apr 2022 00:14:34 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id s13so2720191ljd.5
+        for <linux-pm@vger.kernel.org>; Fri, 01 Apr 2022 00:14:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=se1WsznpofUY5alulIL6V0fVeQduefquDyJntWc5gYE=;
-        b=LpJ+SHKdSKR9knLES20AxuK7StRZ899txeFOxS58+eNYIMsiac+iq8/YBG7su2Bid7
-         Rk6vf8s6EJIbwN8hayGSykK7dgWXnmJ/zeQemk94QGS0t/GM+hD3T4sdNnQ/uY/GpLWM
-         8XNRl0RGZ/RCOszS/Le33s/9zTLvhpC97sfqWu/DJzokgPDn8htBXNtzCL8DFMV/g/3w
-         7ovXNYi81q0lpnG40HqftMxTTJ+l7pSfR9AjkDjWQQB9mz2J3KegFKpeJYqjcg5fY0fm
-         nNJWpFHXtdFa8y4nnzdoN0jzbeX17kIYEE6leM8oSXcVXiEhHfTH99a/FBTlxWYQDJ53
-         jGHQ==
+        bh=tGeNl+xMbN6e3y7sevLAkMzx2EbUUwjt8wbP2wC15+c=;
+        b=rW6PzAxGcHKiwiTur4l9ABiVdyGIFGcDNw2/6ZbY50AMDTtvy7nxzlO9sylUnKN9LV
+         p3lfSpgJRE1AJ0D85s1oCADe5UcAGF9+lSpR9SZGMza81I6q8dI2QGba5c+qi8eN3p4e
+         oG63+dm4hwa7XDuSVUF5pjBAyMCQ9oWlOEG+NAW4sSBSCHuPYy2qO4k84rwzcPhQ4yUi
+         s+Qz2U5Gjw1bTwZup+z+JCwNy/cxPq2j+AsnHKQqu2OBFUKlAVpmo1Esynh8RmZHwm4u
+         QgMb5ZG+dEhSEY1gJy7qRgmxgq85xw3YB1bmYh2K2VqM1Qk7nKD4nUPvv4Z9rAmCMgm8
+         S/EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=se1WsznpofUY5alulIL6V0fVeQduefquDyJntWc5gYE=;
-        b=I0IV8c4vXEtk/XPvh+QsYQxe0jOEmPFbkveHXHzU11U/Gaph5t0PLPi2PBynndkIbE
-         jptIKr37wmLGHKwSUBb2v8s8BXtJQSYo6w21HzhsvfIbLO3h8LcvRWEF+qRk8L8Ew+cw
-         ArZF8er2aDVypVmSb94R4ZZuD6djNvsSTt4WEdI0rJJV3KJvCOAFH1zXW1wH6GVG4UKl
-         uJuawgpebljf0rSb6IxYvRr1V6jReAF/hwY0dNM0fzPqipJ1GIESj9OtNdC23/ffI0gZ
-         sJf7GcZa817dJpil7RMJk9FuwBP684LO8vEsy9TXMeherJH75CNrJT/JI4HezzUMv/M6
-         cAUw==
-X-Gm-Message-State: AOAM532VpLFipCcznWVF0Mq8N9Fr0mkHq12rOrMeLPmHNjg6Drmj2wR0
-        Yu/LD8eZUyLZ6tWFnsFD7yAsRA==
-X-Google-Smtp-Source: ABdhPJwokTq7YdlJEaAnvN+Wz8DTOqYtf2JPq1DWjcz+2CmIvnuyAxp1efdRIi2v7RK3iQ6JKabqFQ==
-X-Received: by 2002:a05:6512:1116:b0:44a:834c:e70e with SMTP id l22-20020a056512111600b0044a834ce70emr12619838lfg.155.1648797271020;
+        bh=tGeNl+xMbN6e3y7sevLAkMzx2EbUUwjt8wbP2wC15+c=;
+        b=e5dkJFWMUMfjUjhSTlWqtWuwQOK4vijEQxywzBgdU/wLV2PGhWQBfzfRBdsYhrzcsa
+         zwOOejN0uiT3+tvHMLvPg5ZyMl3+xtfgEp1PpKjCreDlX6T7ovpzhYC1r4NeeSYyceLD
+         TlfCT3Qqs4haUDl0zHKdOVdTwOHxnkIwPf9yowwo0E72VPwNm1T/7k9bNTnB2SHeplz3
+         BFClRq6Hmq4A9fPNxw7Tkh4vqujdw4w243whzMgbCd0BRG1hcQ/GAzZUoS8ZsI4ytLza
+         5bvt62Glm+90PCaRbu0TS0K3Kn3/9iv62CXxPkQHFzV1XEx2x16iX+Ls+L6pgPXyWIKT
+         EjlQ==
+X-Gm-Message-State: AOAM530H++ojImN8EkMp8oO+3FglPXpVXREjii0/UZ26T+GyJ6Sc5X6y
+        JsodNleneJl9866DeaGEOvEDNfMFAPLaVk+1
+X-Google-Smtp-Source: ABdhPJwX1IK/r0hK2qHoyP79yr3/YSAlRT5oaBZ4y9G5flj00Oy4XFjOI3xxRVTuGcgngOb4i30DOQ==
+X-Received: by 2002:a05:651c:17a1:b0:247:dc02:69b9 with SMTP id bn33-20020a05651c17a100b00247dc0269b9mr12243134ljb.437.1648797271942;
         Fri, 01 Apr 2022 00:14:31 -0700 (PDT)
 Received: from localhost.localdomain (88-113-46-102.elisa-laajakaista.fi. [88.113.46.102])
-        by smtp.gmail.com with ESMTPSA id x28-20020a19e01c000000b0044a3aca1c39sm152198lfg.255.2022.04.01.00.14.30
+        by smtp.gmail.com with ESMTPSA id x28-20020a19e01c000000b0044a3aca1c39sm152198lfg.255.2022.04.01.00.14.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 00:14:30 -0700 (PDT)
+        Fri, 01 Apr 2022 00:14:31 -0700 (PDT)
 From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 To:     Viresh Kumar <viresh.kumar@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH v2 1/2] cpufreq: qcom-cpufreq-hw: Clear dcvs interrupts
-Date:   Fri,  1 Apr 2022 10:14:23 +0300
-Message-Id: <20220401071424.2869057-2-vladimir.zapolskiy@linaro.org>
+Subject: [PATCH v2 2/2] cpufreq: qcom-cpufreq-hw: Fix throttle frequency value on EPSS platforms
+Date:   Fri,  1 Apr 2022 10:14:24 +0300
+Message-Id: <20220401071424.2869057-3-vladimir.zapolskiy@linaro.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220401071424.2869057-1-vladimir.zapolskiy@linaro.org>
 References: <20220401071424.2869057-1-vladimir.zapolskiy@linaro.org>
@@ -71,72 +71,81 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-It's noted that dcvs interrupts are not self-clearing, thus an interrupt
-handler runs constantly, which leads to a severe regression in runtime.
-To fix the problem an explicit write to clear interrupt register is
-required.
+On QCOM platforms with EPSS flavour of cpufreq IP a throttled frequency is
+obtained from another register REG_DOMAIN_STATE, thus the helper function
+qcom_lmh_get_throttle_freq() should be modified accordingly, as for now
+it returns gibberish since .reg_current_vote is unset for EPSS hardware.
+
+To exclude a hardcoded magic number 19200 it is replaced by "xo" clock rate
+in KHz.
 
 Fixes: 275157b367f4 ("cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support")
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 ---
 Changes from v1 to v2:
-* added a check for pending interrupt status before its handling,
-  thanks to Bjorn for review
+* added a comment about a replaced 19200 number in the code, thanks
+  to Bjorn for suggestion and review.
 
- drivers/cpufreq/qcom-cpufreq-hw.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/cpufreq/qcom-cpufreq-hw.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index f9d593ff4718..e17413a6f120 100644
+index e17413a6f120..d5ede769b09a 100644
 --- a/drivers/cpufreq/qcom-cpufreq-hw.c
 +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -24,6 +24,8 @@
- #define CLK_HW_DIV			2
- #define LUT_TURBO_IND			1
- 
-+#define GT_IRQ_STATUS			BIT(2)
-+
- #define HZ_PER_KHZ			1000
+@@ -30,6 +30,7 @@
  
  struct qcom_cpufreq_soc_data {
-@@ -31,6 +33,8 @@ struct qcom_cpufreq_soc_data {
+ 	u32 reg_enable;
++	u32 reg_domain_state;
  	u32 reg_dcvs_ctrl;
  	u32 reg_freq_lut;
  	u32 reg_volt_lut;
-+	u32 reg_intr_clr;
-+	u32 reg_intr_status;
- 	u32 reg_current_vote;
- 	u32 reg_perf_state;
- 	u8 lut_row_size;
-@@ -345,11 +349,19 @@ static void qcom_lmh_dcvs_poll(struct work_struct *work)
- static irqreturn_t qcom_lmh_dcvs_handle_irq(int irq, void *data)
- {
- 	struct qcom_cpufreq_data *c_data = data;
-+	u32 val;
-+
-+	val = readl_relaxed(c_data->base + c_data->soc_data->reg_intr_status);
-+	if (!(val & GT_IRQ_STATUS))
-+		return IRQ_HANDLED;
- 
- 	/* Disable interrupt and enable polling */
- 	disable_irq_nosync(c_data->throttle_irq);
- 	schedule_delayed_work(&c_data->throttle_work, 0);
- 
-+	writel_relaxed(GT_IRQ_STATUS,
-+		       c_data->base + c_data->soc_data->reg_intr_clr);
-+
- 	return IRQ_HANDLED;
+@@ -284,11 +285,16 @@ static void qcom_get_related_cpus(int index, struct cpumask *m)
+ 	}
  }
  
-@@ -368,6 +380,8 @@ static const struct qcom_cpufreq_soc_data epss_soc_data = {
+-static unsigned int qcom_lmh_get_throttle_freq(struct qcom_cpufreq_data *data)
++static unsigned long qcom_lmh_get_throttle_freq(struct qcom_cpufreq_data *data)
+ {
+-	unsigned int val = readl_relaxed(data->base + data->soc_data->reg_current_vote);
++	unsigned int lval;
+ 
+-	return (val & 0x3FF) * 19200;
++	if (data->soc_data->reg_current_vote)
++		lval = readl_relaxed(data->base + data->soc_data->reg_current_vote) & 0x3ff;
++	else
++		lval = readl_relaxed(data->base + data->soc_data->reg_domain_state) & 0xff;
++
++	return lval * xo_rate;
+ }
+ 
+ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+@@ -298,14 +304,12 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
+ 	struct device *dev = get_cpu_device(cpu);
+ 	unsigned long freq_hz, throttled_freq;
+ 	struct dev_pm_opp *opp;
+-	unsigned int freq;
+ 
+ 	/*
+ 	 * Get the h/w throttled frequency, normalize it using the
+ 	 * registered opp table and use it to calculate thermal pressure.
+ 	 */
+-	freq = qcom_lmh_get_throttle_freq(data);
+-	freq_hz = freq * HZ_PER_KHZ;
++	freq_hz = qcom_lmh_get_throttle_freq(data);
+ 
+ 	opp = dev_pm_opp_find_freq_floor(dev, &freq_hz);
+ 	if (IS_ERR(opp) && PTR_ERR(opp) == -ERANGE)
+@@ -377,6 +381,7 @@ static const struct qcom_cpufreq_soc_data qcom_soc_data = {
+ 
+ static const struct qcom_cpufreq_soc_data epss_soc_data = {
+ 	.reg_enable = 0x0,
++	.reg_domain_state = 0x20,
  	.reg_dcvs_ctrl = 0xb0,
  	.reg_freq_lut = 0x100,
  	.reg_volt_lut = 0x200,
-+	.reg_intr_clr = 0x308,
-+	.reg_intr_status = 0x30c,
- 	.reg_perf_state = 0x320,
- 	.lut_row_size = 4,
- };
 -- 
 2.33.0
 
