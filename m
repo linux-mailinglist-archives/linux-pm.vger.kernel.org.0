@@ -2,76 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 522494EEEF6
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Apr 2022 16:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AF114EEF07
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Apr 2022 16:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346723AbiDAONi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Apr 2022 10:13:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46306 "EHLO
+        id S1346752AbiDAOOj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Apr 2022 10:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346724AbiDAONb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Apr 2022 10:13:31 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B030D217973
-        for <linux-pm@vger.kernel.org>; Fri,  1 Apr 2022 07:11:41 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id h11so4123149ljb.2
-        for <linux-pm@vger.kernel.org>; Fri, 01 Apr 2022 07:11:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+mT7DozH0I+kyrJvkjL2P2dEm61K2NFLYH90tYVa51o=;
-        b=P7c4fDPcdG/p6IDbn6XygyqieRQwUZhlzkE+5K1NmkEbE4nBBTsJDkJPg9D8E8pAu4
-         9ETDlnCnoW27jEd3/9JE2NVFZSCcFSaavPEe04CxJhnt6xl7IGYtRjcbYZ2uqxm4yc97
-         151x3IIqAzoJLcwfNBz0Dry5Lab0/okslV9lDKgLV3C5f2bEEJMrgVH4jOF80Ut9lPmB
-         UuyClcUBsUdMxA2mztVPVxsjUWDwL6+HiNIVkbRQsAwMzmnYBqRi4s1wXkRBI1tmiuzo
-         W7inJ9GMeM+3W8VdsmjmOGHz36wfnRBgB7QX7Y0o4M+XmSJfT6IHm4AIKtOyr9aupyEd
-         wdsA==
+        with ESMTP id S1346742AbiDAOOi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Apr 2022 10:14:38 -0400
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6634619B07A;
+        Fri,  1 Apr 2022 07:12:49 -0700 (PDT)
+Received: by mail-oi1-f178.google.com with SMTP id e4so2945876oif.2;
+        Fri, 01 Apr 2022 07:12:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+mT7DozH0I+kyrJvkjL2P2dEm61K2NFLYH90tYVa51o=;
-        b=xoonHMgotXqgkHYdDn8U3c0pAHfNBZ3oHudYVjltuDa0lTgyAX7l/m2yGKKp+QRamr
-         qTGU6J6N82bDkviy8gV9hIoL4fJfmqrv+mEN84MNZu8w6P08Clxtqc3TRdC8/9LuWaJI
-         hw3AVgKuacZrV4OoeqjZtY0+4p1Z2tRvWpL2h8vLxG8zEMJmWMotm2QSttQoomGqL8bU
-         PbOQppVj/P4imyA+hMaymM+9h426F+c3sOpSbl00JNcg5NvPkPRWCxdXUsm7iGr3hwl+
-         VCQEYqmMZulEFueDgqxsgtvGdQ3mLCJzY3gIBJqUMDmfQRfJDN5HOhlQ9wncTUHt5rET
-         8IFQ==
-X-Gm-Message-State: AOAM531/R855+x8lzm+Vy3HVY8Fd2vhXNzZLuw2qwAC/GTodyPwim98B
-        FNT2VXUrsnQKn1al3xbInZWgFg==
-X-Google-Smtp-Source: ABdhPJzPNIzR8o/fTHBpIIc5TQRIQ6skrKM1Hx35yicn83dRV3rC2APQINhmpRQugY4tPM0ZnstwXg==
-X-Received: by 2002:a2e:9045:0:b0:249:78ba:fbf8 with SMTP id n5-20020a2e9045000000b0024978bafbf8mr13484220ljg.218.1648822299947;
-        Fri, 01 Apr 2022 07:11:39 -0700 (PDT)
-Received: from localhost.localdomain (h-98-128-181-154.NA.cust.bahnhof.se. [98.128.181.154])
-        by smtp.gmail.com with ESMTPSA id 16-20020ac24d50000000b0044a255c8d3bsm251926lfp.116.2022.04.01.07.11.37
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jow2eA+MI6HdTKLrJxjfgwwcafk9Rc4cTIw/I0CdChY=;
+        b=dXdgFdlvIHyz3WTU36xfgFAcqof98XisB+wBhig27gWnEfiStbggNfPHnt4vKgcLrr
+         ht4aMa/6+brmlYZXA4Ju5+4Aq5OXSP/7flzEjgdFU5xF43Di0THakXV0twJl28zwOGEv
+         iGXXC/P4jGlhGc5BnWAaB2xbxCWHPZbLtUFwmgt73TplpZKZ+O13D/kuPuBAFAYR+EEg
+         jP3G8JzoLEn2loH2F/1oovAZRyxPBpp/qlNPX711BXTVkC5nPYD2gA63zmnT96aAm/0I
+         0SeXcQszIC24ByKN8b8YgxI5QfyshWOcniiv6pFnpgKTyGuO/M4gaJf7f2m/x2aXaDN0
+         gM2w==
+X-Gm-Message-State: AOAM530TRgoCD5crNIJf61IVuITVUKQVflBu1GedNo8PN4HqvYe2aa9K
+        C3y8T6GNIT7y0YOMSE0FYQ==
+X-Google-Smtp-Source: ABdhPJwOZ6ZR8VxrolMyYpaGXgl8mDv6WoiaUUXqkNSXOh4+MeSeNSLAbSpT7zsDvb7yXs+2T2nw9A==
+X-Received: by 2002:aca:e004:0:b0:2da:850a:966d with SMTP id x4-20020acae004000000b002da850a966dmr4748771oig.61.1648822368657;
+        Fri, 01 Apr 2022 07:12:48 -0700 (PDT)
+Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.googlemail.com with ESMTPSA id n128-20020a4a4086000000b0032118eda64bsm1029758ooa.38.2022.04.01.07.12.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 07:11:38 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Fri, 01 Apr 2022 07:12:48 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        - <patches@opensource.cirrus.com>, linux-media@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-gpio@vger.kernel.org,
         linux-pm@vger.kernel.org
-Cc:     Maulik Shah <quic_mkshah@quicinc.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 2/2] cpuidle: psci: Improve support for suspend-to-ram for PSCI OSI mode
-Date:   Fri,  1 Apr 2022 16:11:24 +0200
-Message-Id: <20220401141124.27272-3-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220401141124.27272-1-ulf.hansson@linaro.org>
-References: <20220401141124.27272-1-ulf.hansson@linaro.org>
+Subject: [PATCH] dt-bindings: Fix 'enum' lists with duplicate entries
+Date:   Fri,  1 Apr 2022 09:12:47 -0500
+Message-Id: <20220401141247.2993925-1-robh@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,101 +68,110 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When PSCI OSI mode is supported the syscore flag is set for the CPU devices
-that becomes attached to their PM domains (genpds). In the suspend-to-idle
-case, we call dev_pm_genpd_suspend|resume() to allow genpd to properly
-manage the power-off/on operations (pick an idlestate and manage the on/off
-notifications).
+There's no reason to list the same value twice in an 'enum'. Fix all the
+occurrences in the tree. A meta-schema change will catch future ones.
 
-For suspend-to-ram, dev_pm_genpd_suspend|resume() is currently not being
-called, which causes a problem that the genpd on/off notifiers do not get
-sent as expected. This prevents the platform-specific operations from being
-executed, typically needed just before/after the boot CPU is being turned
-off/on.
-
-To deal with this problem, let's register a syscore ops for cpuidle-psci
-when PSCI OSI mode is being used and call dev_pm_genpd_suspend|resume()
-from them. In this way, genpd regains control of the PM domain topology and
-then sends the on/off notifications when it's appropriate.
-
-Reported-by: Maulik Shah <quic_mkshah@quicinc.com>
-Suggested-by: Maulik Shah <quic_mkshah@quicinc.com>
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc: Thierry Reding <thierry.reding@gmail.com>
+Cc: Jonathan Hunter <jonathanh@nvidia.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Sebastian Reichel <sre@kernel.org>
+Cc: Tony Lindgren <tony@atomide.com>
+Cc: Yunfei Dong <yunfei.dong@mediatek.com>
+Cc: - <patches@opensource.cirrus.com>
+Cc: linux-media@vger.kernel.org
+Cc: alsa-devel@alsa-project.org
+Cc: linux-gpio@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/cpuidle/cpuidle-psci.c | 46 ++++++++++++++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+There's also one other occurrence in snps,dwmac.yaml I didn't fix as 
+there's a patch[1] for it which prompted this patch.
 
-diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-index b51b5df08450..540105ca0781 100644
---- a/drivers/cpuidle/cpuidle-psci.c
-+++ b/drivers/cpuidle/cpuidle-psci.c
-@@ -23,6 +23,7 @@
- #include <linux/pm_runtime.h>
- #include <linux/slab.h>
- #include <linux/string.h>
-+#include <linux/syscore_ops.h>
+Rob
+
+[1] https://lore.kernel.org/r/20220401030847epcms1p8cf7a8e1d8cd7d325dacf30f78da36328@epcms1p8
+
+ .../bindings/arm/tegra/nvidia,tegra20-pmc.yaml        |  1 -
+ Documentation/devicetree/bindings/bus/ti-sysc.yaml    |  1 -
+ .../bindings/media/mediatek,vcodec-encoder.yaml       |  1 -
+ .../devicetree/bindings/pinctrl/cirrus,madera.yaml    | 11 +++++------
+ .../devicetree/bindings/power/supply/bq2415x.yaml     |  1 -
+ 5 files changed, 5 insertions(+), 10 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
+index 0afec83cc723..564ae6aaccf7 100644
+--- a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
++++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
+@@ -13,7 +13,6 @@ maintainers:
+ properties:
+   compatible:
+     enum:
+-      - nvidia,tegra20-pmc
+       - nvidia,tegra20-pmc
+       - nvidia,tegra30-pmc
+       - nvidia,tegra114-pmc
+diff --git a/Documentation/devicetree/bindings/bus/ti-sysc.yaml b/Documentation/devicetree/bindings/bus/ti-sysc.yaml
+index bd40213302da..fced4082b047 100644
+--- a/Documentation/devicetree/bindings/bus/ti-sysc.yaml
++++ b/Documentation/devicetree/bindings/bus/ti-sysc.yaml
+@@ -34,7 +34,6 @@ properties:
+     oneOf:
+       - items:
+           - enum:
+-              - ti,sysc-omap2
+               - ti,sysc-omap2
+               - ti,sysc-omap4
+               - ti,sysc-omap4-simple
+diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
+index e7b65a91c92c..df7df06c378f 100644
+--- a/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
++++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-encoder.yaml
+@@ -106,7 +106,6 @@ allOf:
+           enum:
+             - mediatek,mt8173-vcodec-enc
+             - mediatek,mt8192-vcodec-enc
+-            - mediatek,mt8173-vcodec-enc
  
- #include <asm/cpuidle.h>
+     then:
+       properties:
+diff --git a/Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml b/Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml
+index 8a90d8273767..6bd42e43cdab 100644
+--- a/Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/cirrus,madera.yaml
+@@ -48,13 +48,12 @@ properties:
+               Name of one pin group to configure.
+             enum: [ aif1, aif2, aif3, aif4, mif1, mif2, mif3, pdmspk1,
+                     pdmspk2, dmic4, dmic5, dmic6, gpio1, gpio2, gpio3,
+-                    gpio4, gpio5, gpio6, gpio7, gpio7, gpio8, gpio9,
++                    gpio4, gpio5, gpio6, gpio7, gpio8, gpio9,
+                     gpio10, gpio11, gpio12, gpio13, gpio14, gpio15,
+-                    gpio16, gpio17, gpio17, gpio18, gpio19, gpio20,
+-                    gpio21, gpio22, gpio23, gpio24, gpio25, gpio26,
+-                    gpio27, gpio27, gpio28, gpio29, gpio30, gpio31,
+-                    gpio32, gpio33, gpio34, gpio35, gpio36, gpio37,
+-                    gpio37, gpio38, gpio39 ]
++                    gpio16, gpio17, gpio18, gpio19, gpio20, gpio21,
++                    gpio22, gpio23, gpio24, gpio25, gpio26, gpio27,
++                    gpio28, gpio29, gpio30, gpio31, gpio32, gpio33,
++                    gpio34, gpio35, gpio36, gpio37, gpio38, gpio39 ]
  
-@@ -131,6 +132,49 @@ static int psci_idle_cpuhp_down(unsigned int cpu)
- 	return 0;
- }
- 
-+static void psci_idle_syscore_switch(bool suspend)
-+{
-+	bool cleared = false;
-+	struct device *dev;
-+	int cpu;
-+
-+	for_each_possible_cpu(cpu) {
-+		dev = per_cpu_ptr(&psci_cpuidle_data, cpu)->dev;
-+
-+		if (dev && suspend) {
-+			dev_pm_genpd_suspend(dev);
-+		} else if (dev) {
-+			dev_pm_genpd_resume(dev);
-+
-+			/* Account for userspace having offlined a CPU. */
-+			if (pm_runtime_status_suspended(dev))
-+				pm_runtime_set_active(dev);
-+
-+			/* Clear domain state to re-start fresh. */
-+			if (!cleared) {
-+				psci_set_domain_state(0);
-+				cleared = true;
-+			}
-+		}
-+	}
-+}
-+
-+static int psci_idle_syscore_suspend(void)
-+{
-+	psci_idle_syscore_switch(true);
-+	return 0;
-+}
-+
-+static void psci_idle_syscore_resume(void)
-+{
-+	psci_idle_syscore_switch(false);
-+}
-+
-+static struct syscore_ops psci_idle_syscore_ops = {
-+	.suspend = psci_idle_syscore_suspend,
-+	.resume = psci_idle_syscore_resume,
-+};
-+
- static void psci_idle_init_cpuhp(void)
- {
- 	int err;
-@@ -138,6 +182,8 @@ static void psci_idle_init_cpuhp(void)
- 	if (!psci_cpuidle_use_cpuhp)
- 		return;
- 
-+	register_syscore_ops(&psci_idle_syscore_ops);
-+
- 	err = cpuhp_setup_state_nocalls(CPUHP_AP_CPU_PM_STARTING,
- 					"cpuidle/psci:online",
- 					psci_idle_cpuhp_up,
+           function:
+             description:
+diff --git a/Documentation/devicetree/bindings/power/supply/bq2415x.yaml b/Documentation/devicetree/bindings/power/supply/bq2415x.yaml
+index f8461f06e6f4..118cf484cc69 100644
+--- a/Documentation/devicetree/bindings/power/supply/bq2415x.yaml
++++ b/Documentation/devicetree/bindings/power/supply/bq2415x.yaml
+@@ -16,7 +16,6 @@ allOf:
+ properties:
+   compatible:
+     enum:
+-      - ti,bq24150
+       - ti,bq24150
+       - ti,bq24150a
+       - ti,bq24151
 -- 
-2.25.1
+2.32.0
 
