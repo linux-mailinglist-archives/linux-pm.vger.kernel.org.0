@@ -2,143 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA044EE39E
-	for <lists+linux-pm@lfdr.de>; Thu, 31 Mar 2022 23:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C50144EE559
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Apr 2022 02:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242078AbiCaV7V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 31 Mar 2022 17:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49146 "EHLO
+        id S243529AbiDAA3v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 31 Mar 2022 20:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242150AbiCaV7Q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Mar 2022 17:59:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E66A243702;
-        Thu, 31 Mar 2022 14:57:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05445B82256;
-        Thu, 31 Mar 2022 21:57:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D07CC340ED;
-        Thu, 31 Mar 2022 21:57:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648763840;
-        bh=Zb+U9RFZbesFveucEGN5xYerY69ut491T1TB9y+Q8tI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Z6ztIPgXXwcsdnKhOzupVpmZejIJQRW6H7Maubf+hIQILhUQrPMqXy6yn0BUW4YEs
-         LJ6jx5NzgN44PuiQirfYBs7vkz3slGoqFPIZfuBEPdeATx7zqacrPTJhjg9EgvPqN1
-         27oKqvOtnQWIR0yRpGRKatOfuUADpjLNh81TA24wu8EJ4TDWd+M/4ss8FKPDSlExis
-         QXAqkkSdGPrjxuFJ3Nmg09szZmsJDa9x3HH29AxbToLJKkclSCHAw7cN830LsH62/I
-         N/rJUIYas8GZgWe283X9B2xB7WqQ46e0wWA4efcoXUfx+/3mtaRApSoAqC/qKgE/27
-         +i5IpG19CfegA==
-Date:   Thu, 31 Mar 2022 16:57:16 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PCI <linux-pci@vger.kernel.org>,
-        Stefan Gottwald <gottwald@igel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] PCI: PM: Quirk bridge D3 on Elo i2
-Message-ID: <20220331215716.GA27368@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <11980172.O9o76ZdvQC@kreacher>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S242832AbiDAA3u (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 31 Mar 2022 20:29:50 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4742724CEDC
+        for <linux-pm@vger.kernel.org>; Thu, 31 Mar 2022 17:28:01 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220401002759epoutp029b7d3e197e43a66e3cd194835ab2201c~hnjKp505x0275302753epoutp02h
+        for <linux-pm@vger.kernel.org>; Fri,  1 Apr 2022 00:27:59 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220401002759epoutp029b7d3e197e43a66e3cd194835ab2201c~hnjKp505x0275302753epoutp02h
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1648772879;
+        bh=MgIWLzmWSIBnYNBZNrfdV7dlNnG66lL3CZXpX7HACIw=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=vJtwTK4+qhxUUNHtfi36ovXZ3hqrghgGrL5PXFhb1KFmIYlK99DMrV28TzxXj2ly2
+         c8CaGAvpCepFgW5vpcbyRTUKja2QOeWHgWNvav1oPgXFNsCaNkRVXqWAuXhIs1+U4i
+         NssBvhvNRT4oVHP0zCR2xlctAr7123Ukqy+V6njM=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20220401002758epcas2p2515ee6f68b75f93997992f9b05d73934~hnjKHCy-r1219212192epcas2p2I;
+        Fri,  1 Apr 2022 00:27:58 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.89]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4KV1Gg09Rrz4x9QF; Fri,  1 Apr
+        2022 00:27:55 +0000 (GMT)
+X-AuditID: b6c32a45-513ff700000228cc-9e-62464709dea1
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        9F.7A.10444.90746426; Fri,  1 Apr 2022 09:27:53 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v3] thermal: exynos: fix masking value for exynos7
+ temp_error
+Reply-To: hypmean.kim@samsung.com
+Sender: Sang Min Kim <hypmean.kim@samsung.com>
+From:   Sang Min Kim <hypmean.kim@samsung.com>
+To:     "bzolnier@gmail.com" <bzolnier@gmail.com>,
+        "krzk@kernel.org" <krzk@kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "amitk@kernel.org" <amitk@kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "edubezval@gmail.com" <edubezval@gmail.com>
+CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20220401002153.62648-1-hypmean.kim@samsung.com>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220401002753epcms2p6cd5882f4909247461434f42e933591af@epcms2p6>
+Date:   Fri, 01 Apr 2022 09:27:53 +0900
+X-CMS-MailID: 20220401002753epcms2p6cd5882f4909247461434f42e933591af
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOJsWRmVeSWpSXmKPExsWy7bCmqS6nu1uSwfqluhYP5m1jszg8v8Li
+        +5brTBYvD2lazPssazH/yjVWi/PnN7BbbHoMZF3eNYfN4nPvEUaLGef3MVnM/TKV2eLJwz42
+        B16PnbPusnss3vOSyWPTqk42jzvX9rB5bF5S79G3ZRWjx+dNcgHsUdk2GamJKalFCql5yfkp
+        mXnptkrewfHO8aZmBoa6hpYW5koKeYm5qbZKLj4Bum6ZOUCnKimUJeaUAoUCEouLlfTtbIry
+        S0tSFTLyi0tslVILUnIKzAv0ihNzi0vz0vXyUkusDA0MjEyBChOyM1b/ustU8EWp4uq0d+wN
+        jA1KXYycHBICJhI/tnxjB7GFBHYwSvRdYupi5ODgFRCU+LtDGCQsLOAvcenpcWaIEkWJlzu2
+        M0PE9SRubvwM1somoCPxuPU+UCsXh4jAEyaJ89/PMoI4zAIzmCTOdp1ghVjGKzGj/SkLhC0t
+        sX35VkaQZZwCthKH11dChDUkfizrZYawRSVurn7LDmO/PzafEcIWkWi9dxaqRlDiwc/dUHFJ
+        iU2Ht0PVV0vc2ricFeQGCYEGRonWb03MILskBPQldlw3hvjRV2L5X1+QchYBVYk/m+ayQVS4
+        SOxucwYJMwtoSyxb+BqskVlAU2L9Ln2ICmWJI7dYYF5q2PibHZ3NLMAn0XH4L1x8x7wnTBC2
+        qsTOTd3sExiVZyGCeRaSXbMQdi1gZF7FKJZaUJybnlpsVGAIj9jk/NxNjOAUq+W6g3Hy2w96
+        hxiZOBgPMUpwMCuJ8F6NdU0S4k1JrKxKLcqPLyrNSS0+xGgK9OREZinR5Hxgks8riTc0sTQw
+        MTMzNDcyNTBXEuf1StmQKCSQnliSmp2aWpBaBNPHxMEp1cB0tjrINr/lwE4h/rkXFlnNM9ol
+        8+uZ07azkWv4Hy4vWXv+6LFdqVkzfZIFrvx9KaTmovAx6J8mMI6yWRasm9Uv/Fz0nZJO5o1C
+        htdmhz37Dp+YJXpw0ZN0/rJ5SZc+PGXJPr7pTEdxeY3dnfmrg95qO+/e5t7ku38O05X+6wY/
+        pP5PcDn4+st82Zd134xWS+7arXDJxkql2YbHvidSR/N5qvOpWcd+Cb/dxMFjF5zymnNxTYZM
+        28ukb04Fd11vr9m4fR/rA+G+8Lts+qvv66fPYDKYmnH3SPGmQm7uM8q7NlnFxs2elCO8dduq
+        W2pHXGT2aXJ+75/1lXeWXbKRenX0ueeXW3nZnN+2N8Sc9t+mxFKckWioxVxUnAgAZtSfJzoE
+        AAA=
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220401002131epcas2p320f8513a9bd1413af0ace6c20f2caba6
+References: <20220401002153.62648-1-hypmean.kim@samsung.com>
+        <CGME20220401002131epcas2p320f8513a9bd1413af0ace6c20f2caba6@epcms2p6>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
-
-On Thu, Mar 31, 2022 at 07:38:51PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> If one of the PCIe root ports on Elo i2 is put into D3cold and then
-> back into D0, the downstream device becomes permanently inaccessible,
-> so add a bridge D3 DMI quirk for that system.
-> 
-> This was exposed by commit 14858dcc3b35 ("PCI: Use
-> pci_update_current_state() in pci_enable_device_flags()"), but before
-> that commit the root port in question had never been put into D3cold
-> for real due to a mismatch between its power state retrieved from the
-> PCI_PM_CTRL register (which was accessible even though the platform
-> firmware indicated that the port was in D3cold) and the state of an
-> ACPI power resource involved in its power management.
-
-In the bug report you suspect a firmware issue.  Any idea what that
-might be?  It looks like a Gemini Lake Root Port, so I wouldn't think
-it would be a hardware issue.
-
-Weird how things come in clumps.  Was just looking at Mario's patch,
-which also has to do with bridges and D3.
-
-Do we need a Fixes line?  E.g.,
-
-  Fixes: 14858dcc3b35 ("PCI: Use pci_update_current_state() in pci_enable_device_flags()")
-
-> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215715
-> Reported-by: Stefan Gottwald <gottwald@igel.com>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/pci/pci.c |   10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> Index: linux-pm/drivers/pci/pci.c
-> ===================================================================
-> --- linux-pm.orig/drivers/pci/pci.c
-> +++ linux-pm/drivers/pci/pci.c
-> @@ -2920,6 +2920,16 @@ static const struct dmi_system_id bridge
->  			DMI_MATCH(DMI_BOARD_VENDOR, "Gigabyte Technology Co., Ltd."),
->  			DMI_MATCH(DMI_BOARD_NAME, "X299 DESIGNARE EX-CF"),
->  		},
-> +		/*
-> +		 * Downstream device is not accessible after putting a root port
-> +		 * into D3cold and back into D0 on Elo i2.
-> +		 */
-> +		.ident = "Elo i2",
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Elo Touch Solutions"),
-> +			DMI_MATCH(DMI_PRODUCT_NAME, "Elo i2"),
-> +			DMI_MATCH(DMI_PRODUCT_VERSION, "RevB"),
-> +		},
-
-Is this bridge_d3_blacklist[] similar to the PCI_DEV_FLAGS_NO_D3 bit?
-Could they be folded together?  We have a lot of bits that seem
-similar but maybe not exactly the same (dev->bridge_d3,
-dev->no_d3cold, dev->d3cold_allowed, dev->runtime_d3cold,
-PCI_DEV_FLAGS_NO_D3, pci_bridge_d3_force, etc.)  Ugh.
-
-bridge_d3_blacklist[] itself was added by 85b0cae89d52 ("PCI:
-Blacklist power management of Gigabyte X299 DESIGNARE EX PCIe ports"),
-which honestly looks kind of random, i.e., it doesn't seem to be
-working around a hardware or even a firmware defect.
-
-Apparently the X299 issue is that 00:1c.4 is connected to a
-Thunderbolt controller, and the BIOS keeps the Thunderbolt controller
-powered off unless something is attached to it?  At least, 00:1c.4
-leads to bus 05, and in the dmesg log attached to [1] shows no devices
-on bus 05.
-
-It also says the platform doesn't support PCIe native hotplug, which
-matches what Mika said about it using ACPI hotplug.  If a system is
-using ACPI hotplug, it seems like maybe *that* should prevent us from
-putting things in D3cold?  How can we know whether ACPI hotplug
-depends on a certain power state?
-
-Bjorn
-
-[1] https://bugzilla.kernel.org/show_bug.cgi?id=202031
-
->  	},
->  #endif
->  	{ }
-> 
-> 
-> 
+Modify=C2=A0mask=C2=A0value=C2=A0for=C2=A0the=C2=A0temp_error=C2=A0in=C2=A0=
+the=C2=A0sanitize_temp_error()=C2=A0function.=0D=0A=C2=A0=0D=0Asanitize_tem=
+p_error=C2=A0masks=C2=A0temp_error2=C2=A0with=C2=A0EXYNOS_TMU_TEMP_MASK(0xf=
+f)=C2=A0value=0D=0Aeven=C2=A0in=C2=A0the=C2=A0case=C2=A0of=C2=A0EXYNOS7.=C2=
+=A0In=C2=A0addition,=C2=A0when=C2=A0entering=C2=A0the=C2=A0if=C2=A0statemen=
+t,=0D=0Aboth=C2=A0temp_error1=C2=A0and=C2=A02=C2=A0are=C2=A0masked=C2=A0wit=
+h=C2=A0EXYNOS_TMU_TEMP_MASK(0xff).=0D=0ABy=C2=A0modifying=C2=A0to=C2=A0use=
+=C2=A0the=C2=A0previously=C2=A0declared=C2=A0local=C2=A0variable=C2=A0tmu_t=
+emp_mask,=0D=0Athe=C2=A0mask=C2=A0value=C2=A0suitable=C2=A0for=C2=A0the=C2=
+=A0SOC=C2=A0can=C2=A0be=C2=A0applied.=0D=0A=C2=A0=0D=0AFixes:=C2=A0aef27b65=
+8b43=C2=A0(=22thermal:=C2=A0exynos:=C2=A0use=C2=A0sanitize_temp_error()=C2=
+=A0in=C2=A0exynos7_tmu_initialize()=22)=0D=0ASigned-off-by:=C2=A0sangmin=C2=
+=A0kim=C2=A0<hypmean.kim=40samsung.com>=0D=0AReviewed-by:=C2=A0Krzysztof=C2=
+=A0Kozlowski=C2=A0<krzysztof.kozlowski=40linaro.org>=0D=0A---=0D=0A=C2=A0V2=
+=C2=A0->=C2=A0V3:=C2=A0Modify=C2=A0the=C2=A0location=C2=A0of=C2=A0fixes=C2=
+=A0tag=C2=A0and=C2=A0add=C2=A0reviewed=C2=A0tag=0D=0A=C2=A0V1=C2=A0->=C2=A0=
+V2:=C2=A0Add=C2=A0fixes=C2=A0tag=0D=0A=C2=A0=0D=0A=C2=A0drivers/thermal/sam=
+sung/exynos_tmu.c=C2=A0=7C=C2=A06=C2=A0+++---=0D=0A=C2=A01=C2=A0file=C2=A0c=
+hanged,=C2=A03=C2=A0insertions(+),=C2=A03=C2=A0deletions(-)=0D=0A=C2=A0=0D=
+=0Adiff=C2=A0--git=C2=A0a/drivers/thermal/samsung/exynos_tmu.c=C2=A0b/drive=
+rs/thermal/samsung/exynos_tmu.c=0D=0Aindex=C2=A0f4ab4c5b4b62..08c63fe5566e=
+=C2=A0100644=0D=0A---=C2=A0a/drivers/thermal/samsung/exynos_tmu.c=0D=0A+++=
+=C2=A0b/drivers/thermal/samsung/exynos_tmu.c=0D=0A=40=40=C2=A0-243,17=C2=A0=
++243,17=C2=A0=40=40=C2=A0static=C2=A0void=C2=A0sanitize_temp_error(struct=
+=C2=A0exynos_tmu_data=C2=A0*data,=C2=A0u32=C2=A0trim_info)=0D=0A=C2=A0=0D=
+=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0data->temp_error1=
+=C2=A0=3D=C2=A0trim_info=C2=A0&=C2=A0tmu_temp_mask;=0D=0A=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0data->temp_error2=C2=A0=3D=C2=A0((trim_=
+info=C2=A0>>=C2=A0EXYNOS_TRIMINFO_85_SHIFT)=C2=A0&=0D=0A-=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0EXYNOS_TMU_TEMP_MASK);=0D=0A+=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0tmu_temp_mask);=0D=0A=C2=A0=0D=0A=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(=21data->temp_error1=C2=A0=7C=7C=
+=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0(data->min_efuse_value=C2=A0>=C2=A0data->temp_error1)=C2=A0=7C=7C=
+=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0(data->temp_error1=C2=A0>=C2=A0data->max_efuse_value))=0D=0A-=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0data->temp_error1=C2=A0=3D=C2=A0data->efuse_value=C2=A0&=
+=C2=A0EXYNOS_TMU_TEMP_MASK;=0D=0A+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0data->temp_error1=
+=C2=A0=3D=C2=A0data->efuse_value=C2=A0&=C2=A0tmu_temp_mask;=0D=0A=C2=A0=0D=
+=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if=C2=A0(=21data->=
+temp_error2)=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0data->temp_error2=C2=A0=3D=0D=
+=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0(data->efuse_value=C2=A0>>=C2=A0EXYNOS_TRIMINFO_85_SHIFT)=C2=A0&=0D=0A-=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0EXYNOS=
+_TMU_TEMP_MASK;=0D=0A+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0tmu_temp_mask;=0D=0A=C2=A0=7D=0D=0A=C2=A0=0D=0A=C2=A0stat=
+ic=C2=A0int=C2=A0exynos_tmu_initialize(struct=C2=A0platform_device=C2=A0*pd=
+ev)=0D=0A--=0D=0A2.9.5=0D=0A=C2=A0=0D=0A=C2=A0
