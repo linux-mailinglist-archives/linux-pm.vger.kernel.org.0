@@ -2,101 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9487A4EF6ED
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Apr 2022 17:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1F74EF6E9
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Apr 2022 17:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237947AbiDAPrC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Apr 2022 11:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57236 "EHLO
+        id S1345236AbiDAPq6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Apr 2022 11:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352878AbiDAPUM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Apr 2022 11:20:12 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E121D833C;
-        Fri,  1 Apr 2022 08:02:39 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 231CJbL4008410;
-        Fri, 1 Apr 2022 10:02:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=PdYyuppgFyyHYAEkB/pCVaPIbFP1vk2s7gMdjvDUBi4=;
- b=f5Y3eL2wKH9irysVBEy3+mjnCENUWDETwnm1up4R1WbiMHyCEfXoCAt7cSQ6173TADjD
- mDGf01jJnd6Bc7PjHkq4b46O/5GXYPBCVO9xjsbdiyHlhV3CosrNcaJOBoe4B8uD8OzX
- GAzncZec1Pv6uIFqjgOGXLGfHDlyjMcIEBsLwdckEoH85qs/1mncCAZErEXlCj9e6sIg
- ZKIaOwYXwgQ8Nzr5Oytg9IsCKI0viJFi7SwBNOYrANUfA2WXkYFuHlmd8MuAl4EuAbbs
- 4HJ500afQQmrPUHkWD/9V4VnSRDzSXKuG5i/9p4h+ZuVb7vXFLUS+lMLsLxU9/SzfEt4 3g== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3f2081jg3u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 01 Apr 2022 10:02:18 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 1 Apr
- 2022 16:02:16 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
- Transport; Fri, 1 Apr 2022 16:02:16 +0100
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id B32C211D1;
-        Fri,  1 Apr 2022 15:02:16 +0000 (UTC)
-Date:   Fri, 1 Apr 2022 15:02:16 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        - <patches@opensource.cirrus.com>, <linux-media@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-gpio@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] dt-bindings: Fix 'enum' lists with duplicate entries
-Message-ID: <20220401150216.GK38351@ediswmail.ad.cirrus.com>
-References: <20220401141247.2993925-1-robh@kernel.org>
+        with ESMTP id S1351322AbiDAPom (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Apr 2022 11:44:42 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B254A103BAF
+        for <linux-pm@vger.kernel.org>; Fri,  1 Apr 2022 08:19:07 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id bi13-20020a05600c3d8d00b0038c2c33d8f3so3703429wmb.4
+        for <linux-pm@vger.kernel.org>; Fri, 01 Apr 2022 08:19:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1NdprsVhjM+s7BsGf7u7DDEuZ12Z3WnLtb7OSPBuoMg=;
+        b=ZUGfuwiDrHqDp/g+ojAICJE50HXT1l3XtK+fv1OSahrfDPU2Zt2RQYWbq8A0w2lJNL
+         +sFt75rhKvamqqTn9JSXBy0AGr/bXt6MctiPhJE1UJpI7289KVTr2PVoYbQ1V/AEfN6s
+         RWU4nOaG50fRhtQkLcZtGcNb/OQh3z/WgWnwOtaZ6O4bJ9MtGgjhNu0gAUFFpLH9gNKj
+         HBijFXOL8QbQrLkRQ6xHoo5k7D8l/qN8bLf0nDmLeAFQ7L5oxEksIWIhLNI5+xGC4Uzj
+         sKMDrryt7KtIUF5W469O6wmCAiK9Cz9jj7iqxJIWCt7nnmxjsGOvS0UUDP8qQlgqF33a
+         ZsbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1NdprsVhjM+s7BsGf7u7DDEuZ12Z3WnLtb7OSPBuoMg=;
+        b=yzlXP1GaeeVfZQjGUKtwMCfSxvLTrVRfitvHcxl99ELwtxwFzxABmiwESsCUfBqyBN
+         A6yCIgAsJghxRNkcPUQlTIX7JeFyrneWDQeu+kH4c9TkVkn+6nhgcQewoawwQiJkFJGl
+         hb1fJGdO7xXRpgunC1xnPFYTZw+7nMKLOX7JVtoHAA5rhjLe6JG7f7PdunRA2izpwTxb
+         Id0ZqAZaG29ulIBhjPT+lkoR04c2KJBL39Q7oIuAgkRImTGUtis+0fSZIo0D/wZp5QkF
+         f1jduPgfUWBtdvKX+6wUiyBHcugBO2uYFgAe9TJr7UMkjizvhOP0gdtNsP/msnzH6HTt
+         kpSw==
+X-Gm-Message-State: AOAM5334ddp0XdORWOs91PRPxeWPKHReDb5OMmniIgZQjwy58sqq0n9a
+        Zo1pKdigLn8UrlvfkdOGe0E=
+X-Google-Smtp-Source: ABdhPJxWdEWV/WBcQuJBXwUksy9heBFiyV/941WD4rUO4S72+XqTeSc9/wX+CbzvXnE6ozc/uQQqNA==
+X-Received: by 2002:a05:600c:4408:b0:388:a042:344f with SMTP id u8-20020a05600c440800b00388a042344fmr9024136wmn.52.1648826345742;
+        Fri, 01 Apr 2022 08:19:05 -0700 (PDT)
+Received: from localhost.localdomain ([37.164.133.248])
+        by smtp.gmail.com with ESMTPSA id g6-20020a5d5406000000b001f049726044sm2276101wrv.79.2022.04.01.08.19.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 08:19:05 -0700 (PDT)
+From:   Massimiliano Minella <massimiliano.minella@gmail.com>
+X-Google-Original-From: Massimiliano Minella <massimiliano.minella@se.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Massimiliano Minella <massimiliano.minella@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
+Subject: [PATCH v2] thermal: k3: Add hwmon support
+Date:   Fri,  1 Apr 2022 17:13:51 +0200
+Message-Id: <20220401151656.913166-1-massimiliano.minella@se.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220401141247.2993925-1-robh@kernel.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-ORIG-GUID: foSJCjKXTi2Rwva_dqLI1GjRicTPaoII
-X-Proofpoint-GUID: foSJCjKXTi2Rwva_dqLI1GjRicTPaoII
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 09:12:47AM -0500, Rob Herring wrote:
-> There's no reason to list the same value twice in an 'enum'. Fix all the
-> occurrences in the tree. A meta-schema change will catch future ones.
-> 
-> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Jonathan Hunter <jonathanh@nvidia.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Charles Keepax <ckeepax@opensource.cirrus.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Tony Lindgren <tony@atomide.com>
-> Cc: Yunfei Dong <yunfei.dong@mediatek.com>
-> Cc: - <patches@opensource.cirrus.com>
-> Cc: linux-media@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
+From: Massimiliano Minella <massimiliano.minella@gmail.com>
 
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Expose the thermal sensors on K3 AM654 as hwmon devices, so that
+temperatures could be read using lm-sensors.
 
-Thanks,
-Charles
+Signed-off-by: Massimiliano Minella <massimiliano.minella@gmail.com>
+---
+Changes in v2:
+ * use devm_thermal_add_hwmon_sysfs instead of devm_add_action_or_reset
+
+ drivers/thermal/k3_bandgap.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/thermal/k3_bandgap.c b/drivers/thermal/k3_bandgap.c
+index 35f41e8a0b75..5d0b3ffc6f46 100644
+--- a/drivers/thermal/k3_bandgap.c
++++ b/drivers/thermal/k3_bandgap.c
+@@ -16,6 +16,8 @@
+ #include <linux/thermal.h>
+ #include <linux/types.h>
+ 
++#include "thermal_hwmon.h"
++
+ #define K3_VTM_DEVINFO_PWR0_OFFSET		0x4
+ #define K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK	0xf0
+ #define K3_VTM_TMPSENS0_CTRL_OFFSET	0x80
+@@ -219,6 +221,9 @@ static int k3_bandgap_probe(struct platform_device *pdev)
+ 			ret = PTR_ERR(data[id].tzd);
+ 			goto err_alloc;
+ 		}
++
++		if (devm_thermal_add_hwmon_sysfs(data[id].tzd))
++			dev_warn(dev, "Failed to add hwmon sysfs attributes\n");
+ 	}
+ 
+ 	platform_set_drvdata(pdev, bgp);
+
+base-commit: 31035f3e20af4ede5f1c8162068327ea0b35a96e
+-- 
+2.25.1
+
