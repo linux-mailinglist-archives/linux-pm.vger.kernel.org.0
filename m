@@ -2,110 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC26C4EEEDA
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Apr 2022 16:07:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1E54EEEF2
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Apr 2022 16:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243139AbiDAOJL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Apr 2022 10:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60156 "EHLO
+        id S242191AbiDAON2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Apr 2022 10:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239154AbiDAOJL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Apr 2022 10:09:11 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472A3276801;
-        Fri,  1 Apr 2022 07:07:22 -0700 (PDT)
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KVMQM3DNMz67m6h;
-        Fri,  1 Apr 2022 22:05:47 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 1 Apr 2022 16:07:20 +0200
-Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
- lhreml710-chm.china.huawei.com (10.201.108.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 1 Apr 2022 15:07:19 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        <linux-iio@vger.kernel.org>
-CC:     Paul Cercueil <paul@crapouillou.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: [PATCH v2 3/3] iio: chemical: scd30: Move symbol exports into IIO_SCD30 namespace
-Date:   Fri, 1 Apr 2022 15:06:05 +0100
-Message-ID: <20220401140605.31871-4-Jonathan.Cameron@huawei.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220401140605.31871-1-Jonathan.Cameron@huawei.com>
-References: <20220401140605.31871-1-Jonathan.Cameron@huawei.com>
+        with ESMTP id S1346709AbiDAON1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Apr 2022 10:13:27 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806911D67C5
+        for <linux-pm@vger.kernel.org>; Fri,  1 Apr 2022 07:11:37 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id bx37so358455ljb.4
+        for <linux-pm@vger.kernel.org>; Fri, 01 Apr 2022 07:11:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=65EJ553a/pHY2zs7jhqKI2f0MTjS1Oa9vXvePJIMBXc=;
+        b=ZDH/40/1jwtbB3XOcS0sARQxa3Fs//EiF1bVzcL2P6fCZR0Qj+IciGF+Lp3beZZ83P
+         vixQb1d4T93WO1qnRCRvni2Noms4HVRoTvGU9WLYr92NC9Ja+WecvehF2IUYRislzo2C
+         ETSGF72aBrFQMb7HPvBVgr3n50dwEWvcdPjNMC+eO0ZnB2vQWGKQZe1GDbxty+K7nkn6
+         Ohs01cmqxqPRem9T+XuVMoL7dP0a/5OlaGPpJ7O+KFwl0+NuPyN4U/kbaifeMe9ctpGe
+         KPC3WNY1KAVQ5zMiUqm8UrqYj9tu1O2DAH8KQS5/GirVrYASxpyhdMbagUriGiOor8B/
+         gZyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=65EJ553a/pHY2zs7jhqKI2f0MTjS1Oa9vXvePJIMBXc=;
+        b=vt+hMY8RDPifJVrVtsk0K1R82646gZU+TpFTgTALBhU6Et/PcCkVMunXkWLR2/kwma
+         02k0D0X3UfxqEIJUmjwxOaFemS4G5oT7PNVCMo8SBDv6hI31UoiFf4jXj4kRVgPvwJub
+         3ygqA2GR+HjEN0M591raooSr82MhX5HKCV+5qqcLGQXHgob/ZpRV1G1sxXNjCW2pZfGZ
+         psUqffvBDlDqVpRNdYVYoO7N/nFr+1dJOJMgOWKeVvvSt4ipMl3Lk9okgzv++NASwbpe
+         5UN0x1u94rjVCiSODcUMaAV1Ty1sITsnX/4IaiYLppOdJZHicfDMQu5xmDvl/0p2LN87
+         zEjA==
+X-Gm-Message-State: AOAM530w72IIUJ2gBv9FCe7NM0B5wduPaYJQFnyzXOksK7SCIAv66Aap
+        YXgST87P4jODirNsVsX9CDx3VHya9GBj/A==
+X-Google-Smtp-Source: ABdhPJyq4o18Yi37xxLcbgHuUKp7UO1lOFjt+CTdroBRFBc0/cssgxEwSWccEGWFuSuSJqTF1rDecQ==
+X-Received: by 2002:a2e:9886:0:b0:24a:c13b:5337 with SMTP id b6-20020a2e9886000000b0024ac13b5337mr13576470ljj.409.1648822295116;
+        Fri, 01 Apr 2022 07:11:35 -0700 (PDT)
+Received: from localhost.localdomain (h-98-128-181-154.NA.cust.bahnhof.se. [98.128.181.154])
+        by smtp.gmail.com with ESMTPSA id 16-20020ac24d50000000b0044a255c8d3bsm251926lfp.116.2022.04.01.07.11.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Apr 2022 07:11:34 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        linux-pm@vger.kernel.org
+Cc:     Maulik Shah <quic_mkshah@quicinc.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 0/2] PM: runtime/cpuidle: Improve suspend-to-ram support for cpuidle-psci
+Date:   Fri,  1 Apr 2022 16:11:22 +0200
+Message-Id: <20220401141124.27272-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.122.247.231]
-X-ClientProxiedBy: lhreml717-chm.china.huawei.com (10.201.108.68) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Avoid unnecessary pollution of the global symbol namespace by
-moving library functions in to a specific namespace and import
-that into the drivers that make use of the functions.
+Maulik Shah reported a problem with suspend-to-ram for one of the Qualcomm
+platforms that is using PSCI OSI mode. Briefly described, the genpd on/off
+notifiers doesn't get sent when the boot CPU is turned on/off, which prevents
+the needed platform specific operations to be executed.
 
-For more info: https://lwn.net/Articles/760045/
+This series intends to solve these problems.
 
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: Tomasz Duszynski <tomasz.duszynski@octakon.com>
----
- drivers/iio/chemical/scd30_core.c   | 4 ++--
- drivers/iio/chemical/scd30_i2c.c    | 1 +
- drivers/iio/chemical/scd30_serial.c | 1 +
- 3 files changed, 4 insertions(+), 2 deletions(-)
+Note that, I have tested this on Dragonboard 410c, with some local hacks to the
+PSCI firmware driver. This was needed because the PSCI firmware didn't support
+SYSTEM_SUSPEND, so I basically made psci_system_suspend_enter() to call
+cpu_do_idle() and forced a suspend ops to be registered.
 
-diff --git a/drivers/iio/chemical/scd30_core.c b/drivers/iio/chemical/scd30_core.c
-index 6c6c11c2772a..682fca39d14d 100644
---- a/drivers/iio/chemical/scd30_core.c
-+++ b/drivers/iio/chemical/scd30_core.c
-@@ -543,7 +543,7 @@ static int scd30_resume(struct device *dev)
- 	return scd30_command_write(state, CMD_START_MEAS, state->pressure_comp);
- }
- 
--EXPORT_SIMPLE_DEV_PM_OPS(scd30_pm_ops, scd30_suspend, scd30_resume);
-+EXPORT_NS_SIMPLE_DEV_PM_OPS(scd30_pm_ops, scd30_suspend, scd30_resume, IIO_SCD30);
- 
- static void scd30_stop_meas(void *data)
- {
-@@ -759,7 +759,7 @@ int scd30_probe(struct device *dev, int irq, const char *name, void *priv,
- 
- 	return devm_iio_device_register(dev, indio_dev);
- }
--EXPORT_SYMBOL(scd30_probe);
-+EXPORT_SYMBOL_NS(scd30_probe, IIO_SCD30);
- 
- MODULE_AUTHOR("Tomasz Duszynski <tomasz.duszynski@octakon.com>");
- MODULE_DESCRIPTION("Sensirion SCD30 carbon dioxide sensor core driver");
-diff --git a/drivers/iio/chemical/scd30_i2c.c b/drivers/iio/chemical/scd30_i2c.c
-index 7c332e4e8e46..bae479a4721f 100644
---- a/drivers/iio/chemical/scd30_i2c.c
-+++ b/drivers/iio/chemical/scd30_i2c.c
-@@ -137,3 +137,4 @@ module_i2c_driver(scd30_i2c_driver);
- MODULE_AUTHOR("Tomasz Duszynski <tomasz.duszynski@octakon.com>");
- MODULE_DESCRIPTION("Sensirion SCD30 carbon dioxide sensor i2c driver");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS(IIO_SCD30);
-diff --git a/drivers/iio/chemical/scd30_serial.c b/drivers/iio/chemical/scd30_serial.c
-index 8664f3ce6b33..3c519103d30b 100644
---- a/drivers/iio/chemical/scd30_serial.c
-+++ b/drivers/iio/chemical/scd30_serial.c
-@@ -261,3 +261,4 @@ module_serdev_device_driver(scd30_serdev_driver);
- MODULE_AUTHOR("Tomasz Duszynski <tomasz.duszynski@octakon.com>");
- MODULE_DESCRIPTION("Sensirion SCD30 carbon dioxide sensor serial driver");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS(IIO_SCD30);
+Maulik, can you please test this at your setup?
+
+Kind regards
+Ulf Hansson
+
+
+Ulf Hansson (2):
+  PM: runtime: Allow to call __pm_runtime_set_status() from atomic
+    context
+  cpuidle: psci: Improve support for suspend-to-ram for PSCI OSI mode
+
+ drivers/base/power/runtime.c   |  9 ++++---
+ drivers/cpuidle/cpuidle-psci.c | 46 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 51 insertions(+), 4 deletions(-)
+
 -- 
-2.32.0
+2.25.1
 
