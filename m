@@ -2,69 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254204EFD0B
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Apr 2022 01:19:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1124EFD11
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Apr 2022 01:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349188AbiDAXVD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Apr 2022 19:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
+        id S1353184AbiDAX01 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Apr 2022 19:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348462AbiDAXVB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Apr 2022 19:21:01 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872F91A770E;
-        Fri,  1 Apr 2022 16:19:11 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id g6-20020a17090a128600b001ca5c2477cbso80524pja.0;
-        Fri, 01 Apr 2022 16:19:11 -0700 (PDT)
+        with ESMTP id S237030AbiDAX00 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Apr 2022 19:26:26 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD4A6579D;
+        Fri,  1 Apr 2022 16:24:36 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id q142so1709152pgq.9;
+        Fri, 01 Apr 2022 16:24:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:from:to:cc
-         :subject:content-transfer-encoding;
-        bh=JzoLiDpzKa7W1p5akpLIliye1Kl0aJ+omhs1Hnbktzk=;
-        b=PJ60DbjAxo2h7nAn2P5hX4dp48iJ8MUHuiyTIu0io/RxZwUbM3zHQNvg/IfCifRpH8
-         Y/Pjljz9+3b8flZvrPwKC4XW6G5mVfWSZumxr3sz2r1SsFNUPJSfauvSs0KaJXqZ8i6L
-         OWsh4D7F6NA9FlpiFQuk3pjoJG7vmRdwwfxFcBGb/OSiXsRng9EbpcLKFXUf3BqLk44q
-         YNaWNu8u5Jc/T3rwwzDVofV5uAJKeGsEnd21C7xltBkBFPyNNGhVkV9fJ7O8WW73AQZ8
-         eCjbfXNqOs/K7b3jXkfYVRwJcFuNyIl4xppQo/lqVH/SERU8m4/Pl6hHlDMnvXzZvt1w
-         nA5g==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Qw1VtOJVK96ToOzSzjlnaE5teuYd/QDuV0K0QqZa/bY=;
+        b=O5q1kx0MRLqY2BVj4+j+eIthVn+OuoDgWOknFPwmHmtqpm/Tob9kAyqvOXLJoI9DcT
+         oCqv/XyCymE00tA04a2nAZ0E06nXqqZJpafUFRFABJRW2FODMs1uI3tuVuCWVEjILJOr
+         B2JRZ9n5gTqpCga/JegOZaKaWFZ3mX9gGe4nu0K8i6P+Iv8vx21rbGBjY/lufkc19Jrt
+         i3GN3N85vxPqspXy1agY4SFOBNKgmdVdFINfcxiYsJ2vNGYfs9KkLNxTiFqTGQigCSUZ
+         3P1zZ4Wvobu64Gg9HgvvhMD7uFRmNmTeJljnjyr9ZFyzRu8nXLQXCqLOklTwDjM+DY5g
+         mM+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:from:to:cc:subject:content-transfer-encoding;
-        bh=JzoLiDpzKa7W1p5akpLIliye1Kl0aJ+omhs1Hnbktzk=;
-        b=li0FtBSYSL18IlBfz6mpvZqSgkiYm4l4adLm53VRaJ0zz41gTaPcgtiTkRvm0x/TQv
-         X61UZL1DEAA1F36wHwGgOJJ9ekh58FPH/7DfeTvNmpc8AviFNTexP3fMfeu1kOH34NiX
-         6pTBXGjXos0mhSwh/5sLtKs98uoRbCQKBdCrNjUOI0kuHxcoamMUfwQlWDgj+wZhj4HU
-         wss/EOVjQLX7MwUwGS8dXdJqLzTs5qbikyCo9XTdLj4vUcPFjYWwP1MjZn+zOKJA/KSR
-         qGNhaXJtGj0M1X1JL5r0haSNQDRPZNuJVcewwnWMJr2lssRWlyehgpnJdywyAaAjKLGr
-         PaBA==
-X-Gm-Message-State: AOAM530VHG1w+nCRQ2u6MhEUGFTq7uEHUgyBG74CBxu3fCYXGB39BmuV
-        MrFO3hQjnWyt0HDeojhftiPt8TROiC4=
-X-Google-Smtp-Source: ABdhPJwh8ywVm2q2SwIysx0eYKOkTQWmHo3y/y+rk9yEaBsDtdXMF90J/p0T4RSTLU9F7u6l0+hveg==
-X-Received: by 2002:a17:902:d4c8:b0:154:2416:218b with SMTP id o8-20020a170902d4c800b001542416218bmr12868799plg.139.1648855151012;
-        Fri, 01 Apr 2022 16:19:11 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Qw1VtOJVK96ToOzSzjlnaE5teuYd/QDuV0K0QqZa/bY=;
+        b=owFCdA9qR760drIKS767Dy78F8gAVEiWmzGk9T2n2Mk6xKaICWYFC10UPfVFHSccPU
+         24sxY6aAOXK+ZgVJiWwB2dDO6mGo9kjOcX2f1IDzLHkf4rRsTpfR2RstqDtk2uxyIrUR
+         uBXauhvyhn8Shbwly9+d/3TmKa1dEGrq3XMRwLnB8KTGrD5pkya0HYoQuyCFGWOLyNyV
+         hPZbYHjA9UhfGk2uh9TxhVD6CCaY0ho9GaPJsaWH+1duUMMbdqsuwqhlwybp10+9z3Eu
+         5fSpTIx2a9WK3wmYdf8A3sPs3x9jenp4sw00Eg0LsPk1l8VT67p4L9sZc6hFw/KaFQvv
+         Q6mw==
+X-Gm-Message-State: AOAM533TfJ/I7tUqdBWUpVYzKPMSK+g5W2s2PHrMi/j8zPjV8z2Np53y
+        8jKMPwtwetq+rseTEegZ5OjujP8X3nA=
+X-Google-Smtp-Source: ABdhPJyH33MBgDtn1fAI/YTEAB+deVUk5lTQr0H/hzjU0VkFQFXto1diYSzOJdMRWlXg5dnw2EpsoA==
+X-Received: by 2002:a05:6a00:24cd:b0:4fd:9038:8aa4 with SMTP id d13-20020a056a0024cd00b004fd90388aa4mr20145650pfv.78.1648855476255;
+        Fri, 01 Apr 2022 16:24:36 -0700 (PDT)
 Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id y63-20020a638a42000000b0039870096849sm3339369pgd.63.2022.04.01.16.19.08
+        by smtp.gmail.com with ESMTPSA id lx13-20020a17090b4b0d00b001c9989c721esm15056241pjb.17.2022.04.01.16.24.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Apr 2022 16:19:10 -0700 (PDT)
-Message-ID: <fffa1d50-f155-b6a4-bf58-22e395d7401c@gmail.com>
-Date:   Sat, 2 Apr 2022 08:19:05 +0900
+        Fri, 01 Apr 2022 16:24:35 -0700 (PDT)
+Message-ID: <fa03e4ea-774a-b7a5-71f1-9ed3b576b00a@gmail.com>
+Date:   Sat, 2 Apr 2022 08:24:32 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
+Subject: Re: [PATCH -pm] docs: driver-api/thermal/intel_dptf: Include
+ isonum.txt
 Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-pm@vger.kernel.org, linux-doc@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Randy Dunlap <rdunlap@infradead.org>, linux-pm@vger.kernel.org,
-        linux-doc@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
-Subject: [PATCH -pm v2] docs: driver-api/thermal/intel_dptf: Use copyright
- symbol
+References: <e06542af-aa8b-0885-37a3-bb7bc5fafa1e@gmail.com>
+ <87y20oyigv.fsf@meer.lwn.net>
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <87y20oyigv.fsf@meer.lwn.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,48 +77,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Using a substitution pattern of "|copy|" without including
-isonum.txt causes a doc build warning.
+On Fri, 01 Apr 2022 08:41:04 -0600,
+Jonathan Corbet wrote:
+[...]
+> Interesting...I don't think that was always necessary.
+>=20
+> I have to ask, though: is this worth it?  It adds up to a fair amount o=
+f
+> clutter to get one symbol - =C2=A9 - that can also just be inserted dir=
+ectly
+> if we really think we need it.
 
-Using the symbol "=C2=A9" itself is a better choice for those
-who read .rst sources.
+Good point.  The motto here is "Be nice to readers of .rst files".
+Just sent out a v2.
 
-Fixes: 16c02447f3e1 ("Documentation: thermal: DPTF Documentation")
-Reported by: Randy Dunlap <rdunlap@infradead.org>
-Suggested-by: Jonathan Corbet <corbet@lwn.net>
-Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: linux-pm@vger.kernel.org
-Cc: linux-doc@vger.kernel.org
----
-Changes since v1 [1]:
+>                                 I'd vote for doing a global s/|copy|/=C2=
+=A9/
+> instead.
 
-  - Use =C2=A9 instead of including isonum.txt (Jon).
-  - Amend title and changelog.
+I leave those cleanups to someone who can spare one's energy
+and time.
 
-v1 [1]: https://lore.kernel.org/r/e06542af-aa8b-0885-37a3-bb7bc5fafa1e@gm=
-ail.com/
----
- Documentation/driver-api/thermal/intel_dptf.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+        Thanks, Akira
 
-diff --git a/Documentation/driver-api/thermal/intel_dptf.rst b/Documentat=
-ion/driver-api/thermal/intel_dptf.rst
-index 96668dca753a..372bdb4d04c6 100644
---- a/Documentation/driver-api/thermal/intel_dptf.rst
-+++ b/Documentation/driver-api/thermal/intel_dptf.rst
-@@ -4,7 +4,7 @@
- Intel(R) Dynamic Platform and Thermal Framework Sysfs Interface
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
--:Copyright: |copy| 2022 Intel Corporation
-+:Copyright: =C2=A9 2022 Intel Corporation
-=20
- :Author: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-=20
---=20
-2.25.1
-
+>=20
+> Thanks,
+>=20
+> jon
