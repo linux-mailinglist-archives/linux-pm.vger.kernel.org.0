@@ -2,44 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18FBD4EF2F7
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Apr 2022 17:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9312A4EF320
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Apr 2022 17:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345703AbiDAO4b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Apr 2022 10:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54906 "EHLO
+        id S1349488AbiDAO40 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Apr 2022 10:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351270AbiDAOsi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Apr 2022 10:48:38 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D9926A945;
-        Fri,  1 Apr 2022 07:39:25 -0700 (PDT)
+        with ESMTP id S1351859AbiDAOti (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Apr 2022 10:49:38 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B912B04C4;
+        Fri,  1 Apr 2022 07:40:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id F19A8CE2585;
-        Fri,  1 Apr 2022 14:38:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84C12C340EE;
-        Fri,  1 Apr 2022 14:38:45 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C2302CE2586;
+        Fri,  1 Apr 2022 14:39:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57A3BC340F2;
+        Fri,  1 Apr 2022 14:39:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648823926;
-        bh=Vb9jK5l2dL7OUkRHwt1xmUNIYgFrzM1D1PHHrhDfYeM=;
+        s=k20201202; t=1648823986;
+        bh=LY9RsvrfVBQFrwrtSbWIidsZi96BvSQXyVJXHcA9wk4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ECSoWF4rgFaQHV36NsXEvXhvA5r3UEjtVUsYwHda6UFMAcdie733W/lp/4OHVnNBW
-         aTAJEcx1c4txpt+nWX9u0t84Dda3eXXoLVQGl08k3vXyT/HREf6RG30WyXg22YluSf
-         IQaOZEIPR3vHWqsjGhLROCwnBH6pZLgiHL4/4/HfWk91F8RSre7LKgZQLfEH9zXayZ
-         pza73XZB5rhIKLhm7I5FAgNN97gVLIIQP7zIn7SKI448EcpI/+bX7TabMpbQXHyuAK
-         PiImuKMo0fjRaq3vBDehjjqge71hwi6EJkSEz5yOQfRJmYa3eGbnBosW4Q/C/nnJVP
-         022jPNpo6azbw==
+        b=q66x8fGh9wn/MRoVKOTyCmmM/TM36KjKjkHDrG11a8Ndtv7uCq6NvuAESM9qCEC8J
+         w/Q7zsm83mWOgw3PVy+1lP1SJYqREvf+8t6eOo0D+/oD1Y2wYsOV0FvMBHfB828hhS
+         pc+or4m99u883K3Cq1vkvNOLNIgFeul5IF5CXnSADBiT14BRS5HrZbqeDJGLE0ru9H
+         fpdm1JO+PXdu+0GpyVwdbRpehcDK52yv4uvyo/EDBKyZs7tiOeCn/5wElJhNLOgdcR
+         DIGwzSeRMXrHdUVf5KZwe0haZi0/2UB1WA4dQePZQFzCQswsfVizxfa+4YKcpifQLF
+         +2RjHfmL1eukw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Evgeny Boger <boger@wirenboard.com>, Chen-Yu Tsai <wens@csie.org>,
+Cc:     Hans de Goede <hdegoede@redhat.com>,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sasha Levin <sashal@kernel.org>, sre@kernel.org,
+        Sasha Levin <sashal@kernel.org>, sre@kernel.org, wens@csie.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 22/98] power: supply: axp20x_battery: properly report current when discharging
-Date:   Fri,  1 Apr 2022 10:36:26 -0400
-Message-Id: <20220401143742.1952163-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 41/98] power: supply: axp288-charger: Set Vhold to 4.4V
+Date:   Fri,  1 Apr 2022 10:36:45 -0400
+Message-Id: <20220401143742.1952163-41-sashal@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220401143742.1952163-1-sashal@kernel.org>
 References: <20220401143742.1952163-1-sashal@kernel.org>
@@ -57,60 +57,83 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Evgeny Boger <boger@wirenboard.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit d4f408cdcd26921c1268cb8dcbe8ffb6faf837f3 ]
+[ Upstream commit 5ac121b81b4051e7fc83d5b3456a5e499d5bd147 ]
 
-As stated in [1], negative current values are used for discharging
-batteries.
+The AXP288's recommended and factory default Vhold value (minimum
+input voltage below which the input current draw will be reduced)
+is 4.4V. This lines up with other charger IC's such as the TI
+bq2419x/bq2429x series which use 4.36V or 4.44V.
 
-AXP PMICs internally have two different ADC channels for shunt current
-measurement: one used during charging and one during discharging.
-The values reported by these ADCs are unsigned.
-While the driver properly selects ADC channel to get the data from,
-it doesn't apply negative sign when reporting discharging current.
+For some reason some BIOS-es initialize Vhold to 4.6V or even 4.7V
+which combined with the typical voltage drop over typically low
+wire gauge micro-USB cables leads to the input-current getting
+capped below 1A (with a 2A capable dedicated charger) based on Vhold.
 
-[1] Documentation/ABI/testing/sysfs-class-power
+This leads to slow charging, or even to the device slowly discharging
+if the device is in heavy use.
 
-Signed-off-by: Evgeny Boger <boger@wirenboard.com>
-Acked-by: Chen-Yu Tsai <wens@csie.org>
+As the Linux AXP288 drivers use the builtin BC1.2 charger detection
+and send the input-current-limit according to the detected charger
+there really is no reason not to use the recommended 4.4V Vhold.
+
+Set Vhold to 4.4V to fix the slow charging issue on various devices.
+
+There is one exception, the special-case of the HP X2 2-in-1s which
+combine this BC1.2 capable PMIC with a Type-C port and a 5V/3A factory
+provided charger with a Type-C plug which does not do BC1.2. These
+have their input-current-limit hardcoded to 3A (like under Windows)
+and use a higher Vhold on purpose to limit the current when used
+with other chargers. To avoid touching Vhold on these HP X2 laptops
+the code setting Vhold is added to an else branch of the if checking
+for these models.
+
+Note this also fixes the sofar unused VBUS_ISPOUT_VHOLD_SET_MASK
+define, which was wrong.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/axp20x_battery.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/power/supply/axp288_charger.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
-index 18a9db0df4b1..335e12cc5e2f 100644
---- a/drivers/power/supply/axp20x_battery.c
-+++ b/drivers/power/supply/axp20x_battery.c
-@@ -186,7 +186,6 @@ static int axp20x_battery_get_prop(struct power_supply *psy,
- 				   union power_supply_propval *val)
- {
- 	struct axp20x_batt_ps *axp20x_batt = power_supply_get_drvdata(psy);
--	struct iio_channel *chan;
- 	int ret = 0, reg, val1;
+diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply/axp288_charger.c
+index b9553be9bed5..fb9db7f43895 100644
+--- a/drivers/power/supply/axp288_charger.c
++++ b/drivers/power/supply/axp288_charger.c
+@@ -41,11 +41,11 @@
+ #define VBUS_ISPOUT_CUR_LIM_1500MA	0x1	/* 1500mA */
+ #define VBUS_ISPOUT_CUR_LIM_2000MA	0x2	/* 2000mA */
+ #define VBUS_ISPOUT_CUR_NO_LIM		0x3	/* 2500mA */
+-#define VBUS_ISPOUT_VHOLD_SET_MASK	0x31
++#define VBUS_ISPOUT_VHOLD_SET_MASK	0x38
+ #define VBUS_ISPOUT_VHOLD_SET_BIT_POS	0x3
+ #define VBUS_ISPOUT_VHOLD_SET_OFFSET	4000	/* 4000mV */
+ #define VBUS_ISPOUT_VHOLD_SET_LSB_RES	100	/* 100mV */
+-#define VBUS_ISPOUT_VHOLD_SET_4300MV	0x3	/* 4300mV */
++#define VBUS_ISPOUT_VHOLD_SET_4400MV	0x4	/* 4400mV */
+ #define VBUS_ISPOUT_VBUS_PATH_DIS	BIT(7)
  
- 	switch (psp) {
-@@ -266,12 +265,12 @@ static int axp20x_battery_get_prop(struct power_supply *psy,
- 		if (ret)
+ #define CHRG_CCCV_CC_MASK		0xf		/* 4 bits */
+@@ -744,6 +744,16 @@ static int charger_init_hw_regs(struct axp288_chrg_info *info)
+ 		ret = axp288_charger_vbus_path_select(info, true);
+ 		if (ret < 0)
  			return ret;
- 
--		if (reg & AXP20X_PWR_STATUS_BAT_CHARGING)
--			chan = axp20x_batt->batt_chrg_i;
--		else
--			chan = axp20x_batt->batt_dischrg_i;
--
--		ret = iio_read_channel_processed(chan, &val->intval);
-+		if (reg & AXP20X_PWR_STATUS_BAT_CHARGING) {
-+			ret = iio_read_channel_processed(axp20x_batt->batt_chrg_i, &val->intval);
-+		} else {
-+			ret = iio_read_channel_processed(axp20x_batt->batt_dischrg_i, &val1);
-+			val->intval = -val1;
++	} else {
++		/* Set Vhold to the factory default / recommended 4.4V */
++		val = VBUS_ISPOUT_VHOLD_SET_4400MV << VBUS_ISPOUT_VHOLD_SET_BIT_POS;
++		ret = regmap_update_bits(info->regmap, AXP20X_VBUS_IPSOUT_MGMT,
++					 VBUS_ISPOUT_VHOLD_SET_MASK, val);
++		if (ret < 0) {
++			dev_err(&info->pdev->dev, "register(%x) write error(%d)\n",
++				AXP20X_VBUS_IPSOUT_MGMT, ret);
++			return ret;
 +		}
- 		if (ret)
- 			return ret;
+ 	}
  
+ 	/* Read current charge voltage and current limit */
 -- 
 2.34.1
 
