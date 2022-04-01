@@ -2,238 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185E84EF84F
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Apr 2022 18:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF824EF8E2
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Apr 2022 19:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349364AbiDAQr3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Apr 2022 12:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
+        id S1349939AbiDAR0c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Apr 2022 13:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349510AbiDAQrO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Apr 2022 12:47:14 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E1F17B0F7
-        for <linux-pm@vger.kernel.org>; Fri,  1 Apr 2022 09:32:15 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id dr20so6931202ejc.6
-        for <linux-pm@vger.kernel.org>; Fri, 01 Apr 2022 09:32:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=jxwsv/tK/OR4aZvoT2efCdL/z7ltygvpIDrQHk7UAeg=;
-        b=dQ7NaD4ErcjM4rk/CAt9aSek5NQW1Z67YLnC1elXBDk0QCJTneOWHBYv3PAEziPh3c
-         v09UBoe54h9qLZvflDz268s6U+lU/K78WvEncHMu6XGJ1H5GbvO8RMyzhSbMEGIJ9x8Y
-         p3FW9mugKO9SDgnzqZEn7oru+uDhIFRukc6x52V/nTMbsnIwrrpFSRRB5rwyvUW+HzXG
-         1/yOJqKkj0225DsOjnqW4JPUvXfDJbay8FmZrxbWSUlUBRtEETsQLDhUoP+v1gFJvwZp
-         xOjsDoy3NqND1GgK10yoe1xWS1C0o4nwB/ER71FkP757tLGGZfi5RZTTZTVnRdYSZ3WD
-         3SKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jxwsv/tK/OR4aZvoT2efCdL/z7ltygvpIDrQHk7UAeg=;
-        b=xGw8Y3C9UC4MkBieXqKs1wt89x3V162LQVevNDzmPuotrDj8mJpAiUuRfKxtWxtPEX
-         dgmD6f5//XuUwHuDqodm821glSCOHglzJd2LKddV/1YkP7cU4k4Oo1ill5XAi7rTozav
-         StuGn0o8gGaEfffiT59S8Tm/sn/LDBnQGXHvz1l5LuxcCiE397SfPtS40hon+TX5rp4W
-         kERZoaKstCVIpMWSaLM9atv7lQjHikzU2LwDD4wNqmbaBOS49Y4ouOfpSorAU1T8buWU
-         /+ZANHIGkcQxRyu9NnSNvcyeYw/APqdVtPILMhyexrvBIdO080WgBBb1lpDQD66fWY/l
-         q4kw==
-X-Gm-Message-State: AOAM530JYivftJUgp94Wcy1C7vEv4izYUmB16Z2R1cNsapyXa/L9fefP
-        ydQa3E4x13ucL1KR8GWklB3LJA==
-X-Google-Smtp-Source: ABdhPJwXp/PWCtXCv3kqxNIkREk9755IcXW/iVBmukMqjgiMu5JSpqtF4NfLyi6tJAhzvVLKlfTqrw==
-X-Received: by 2002:a17:907:1ca4:b0:6da:86a4:1ec7 with SMTP id nb36-20020a1709071ca400b006da86a41ec7mr567316ejc.556.1648830733527;
-        Fri, 01 Apr 2022 09:32:13 -0700 (PDT)
-Received: from [192.168.0.170] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id c14-20020a170906340e00b006ce98f2581asm1175799ejb.205.2022.04.01.09.32.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Apr 2022 09:32:12 -0700 (PDT)
-Message-ID: <56c5870e-bc41-39be-6b53-785396d8812b@linaro.org>
-Date:   Fri, 1 Apr 2022 18:32:11 +0200
+        with ESMTP id S1344008AbiDAR0b (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Apr 2022 13:26:31 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625C11B8FF0;
+        Fri,  1 Apr 2022 10:24:41 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KVRqr0ZQbz9sRy;
+        Fri,  1 Apr 2022 19:24:40 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 4qjzDkK5GQhv; Fri,  1 Apr 2022 19:24:39 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KVRqq6mdHz9sRx;
+        Fri,  1 Apr 2022 19:24:39 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id D64128B87E;
+        Fri,  1 Apr 2022 19:24:39 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id fvM4XEFXo0GL; Fri,  1 Apr 2022 19:24:39 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.82])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 8931B8B879;
+        Fri,  1 Apr 2022 19:24:39 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 231HOSh9665353
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 1 Apr 2022 19:24:28 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 231HOS1i665352;
+        Fri, 1 Apr 2022 19:24:28 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] cpufreq: Prepare cleanup of powerpc's asm/prom.h
+Date:   Fri,  1 Apr 2022 19:24:28 +0200
+Message-Id: <4cb0c4573cce165657ad1f7275c4b3852cbcd115.1648833416.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/4] dt-bindings: cpufreq: mediatek: transform
- cpufreq-mediatek into yaml
-Content-Language: en-US
-To:     Jia-Wei Chang <jia-wei.chang@mediatek.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, fan.chen@mediatek.com,
-        louis.yu@mediatek.com, roger.lu@mediatek.com,
-        Allen-yy.Lin@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        hsinyi@google.com,
-        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
-References: <20220307122151.11666-1-jia-wei.chang@mediatek.com>
- <20220307122151.11666-2-jia-wei.chang@mediatek.com>
- <ee98d248-b2cd-e975-84df-448917a79287@canonical.com>
- <2cf526d400c011b5172ba4fc2c3f03b4a4f371dc.camel@mediatek.com>
- <96a823a2-f3b6-9fb7-c9d6-f1315f6056fd@kernel.org>
- <de1751bb13fb14b591fbe046ff274530ad62162e.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <de1751bb13fb14b591fbe046ff274530ad62162e.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1648833867; l=2544; s=20211009; h=from:subject:message-id; bh=6HFH5vctb4CM6TLdbxSxVP3cPSYLITg6N2oWHo7zycc=; b=0BIt3RnuB6YZdFU81km55wIzh5IeKiTLNExtM96tTDNPAiacFInZhJksD8Sq0ZMwePxp99ntZew9 Hm4h1wLFBvHEscGH+LPDl3CXVt+ySx0rXVo7e8M5zhqzah87dCkJ
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/04/2022 15:26, Jia-Wei Chang wrote:
-> On Thu, 2022-03-24 at 11:33 +0100, Krzysztof Kozlowski wrote:
->> On 24/03/2022 10:38, Jia-Wei Chang wrote:
->>>>
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-
->>>>> mediatek.yaml
->>>>> b/Documentation/devicetree/bindings/cpufreq/cpufreq-
->>>>> mediatek.yaml
->>>>> new file mode 100644
->>>>> index 000000000000..584946eb3790
->>>>> --- /dev/null
->>>>> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-
->>>>> mediatek.yaml
->>>>> @@ -0,0 +1,131 @@
->>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>>> +%YAML 1.2
->>>>> +---
->>>>> +$id: 
->>>>>
-> https://urldefense.com/v3/__http://devicetree.org/schemas/cpufreq/cpufreq-mediatek.yaml*__;Iw!!CTRNKA9wMg0ARbw!xbKG4TgD0MRpMLyGJVBZEGpZFrNOclrcxOCx_APKo5Nmg8nF2x5PcBdE0unvL2NdpChkMA$
->>>>>  
->>>>> +$schema: 
->>>>>
-> https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!xbKG4TgD0MRpMLyGJVBZEGpZFrNOclrcxOCx_APKo5Nmg8nF2x5PcBdE0unvL2O8T_oxCQ$
->>>>>  
->>>>> +
->>>>> +title: Mediatek CPUFREQ driver Device Tree Bindings
->>>>
->>>> Please remove "driver Device Tree Bindings" because the title
->>>> should
->>>> describe the hardware. Therefore it could be something like
->>>> "Mediatek
->>>> SoC CPU frequency and voltage scaling".
->>>
->>> Thanks for your suggestion of title.
->>> Or should I use the origin title "Binding for MediaTek's CPUFreq
->>> driver"?
->>
->> Mediatek CPUFREQ
->> or
->> Mediatek CPU frequency scaling
-> 
-> Ok, I will choose one of it.
-> 
->>
->>>
->>>>
->>>> How is it related to cpufreq-mediatek-hw.yaml? The names/title
->>>> look
->>>> unfortunately too similar.
->>>
->>> No, mediatek-cpufreq is performing in kernel driver rather than on
->>> hardware.
->>> On the other hand, mediatek-cpufreq-hw is performing on hardware.
->>> That's why "hw" is present in its name.
->>
->> Unfortunately, I do not get it. The bindings are only about hardware,
->> so
->> how bindings could be about CPU frequency scaling not in hardware?
-> 
-> Sorry, let me correct my statements.
-> 
-> For mediatek-cpufreq here, the required hardware are clock and
-> regulator which have to be under control of mediatek-cpufreq. That's
-> the reason why it needs bindings.
-> 
-> mediatek-cpufreq scales up and down voltage and frequency via kernel
-> framework of clock and regulator, however, mediatek-cpufreq-hw delegate
-> the voltage and frequency control to a hardware agent instead.
+powerpc's asm/prom.h brings some headers that it doesn't
+need itself.
 
-OK, that makes sense, thanks for explanation.
+In order to clean it up, first add missing headers in
+users of asm/prom.h
 
-> 
->>
->>>
->>>>
->>>> In general this does not look like proper bindings (see also
->>>> below
->>>> lack
->>>> of compatible). Bindings describe the hardware, so what is
->>>> exactly
->>>> the
->>>> hardware here?
->>>
->>> Except for SoC, there's no requirement of hardware binding for
->>> mediatek-cpufreq.
->>> mediatek-cpufreq recognizes the compatible of Mediatek SoC while
->>> probing.
->>
->> What is the hardware here? If there is no requirement for bindings
->> for
->> mediate-cpufreq, why do we have this patch here?
-> 
-> Sorry, that's my mistake.
-> Clock and regulator are required hardware for mediatek-cpufreq.
-> 
->>
->>>
->>>>
->>>>> +
->>>>> +maintainers:
->>>>> +  - Jia-Wei Chang <jia-wei.chang@mediatek.com>
->>>>> +
->>>>> +description: |
->>>>> +  CPUFREQ is used for scaling clock frequency of CPUs.
->>>>> +  The module cooperates with CCI DEVFREQ to manage frequency
->>>>> for
->>>>> some Mediatek
->>>>> +  SoCs.
->>>>> +
->>>>> +properties:
->>>>
->>>> How is this schema going to be applied? I don't see here select
->>>> neither
->>>> compatible.
->>>
->>> As mentioned above, only compatible of SoC is required for
->>> mediatek-
->>> cpufreq.
->>
->> It does not answer my questions. How the schema is going to be
->> applied?
-> 
-> Currently, we do use compatible of SoC to probe mediatek-cpufreq.
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ drivers/cpufreq/pasemi-cpufreq.c      | 1 -
+ drivers/cpufreq/pmac32-cpufreq.c      | 2 +-
+ drivers/cpufreq/pmac64-cpufreq.c      | 2 +-
+ drivers/cpufreq/ppc_cbe_cpufreq.c     | 1 -
+ drivers/cpufreq/ppc_cbe_cpufreq_pmi.c | 2 +-
+ 5 files changed, 3 insertions(+), 5 deletions(-)
 
-Probing and binding to compatible is correct, but there is no compatible
-here, so the schema is a no-op. Does nothing.
+diff --git a/drivers/cpufreq/pasemi-cpufreq.c b/drivers/cpufreq/pasemi-cpufreq.c
+index 815645170c4d..039a66bbe1be 100644
+--- a/drivers/cpufreq/pasemi-cpufreq.c
++++ b/drivers/cpufreq/pasemi-cpufreq.c
+@@ -18,7 +18,6 @@
+ 
+ #include <asm/hw_irq.h>
+ #include <asm/io.h>
+-#include <asm/prom.h>
+ #include <asm/time.h>
+ #include <asm/smp.h>
+ 
+diff --git a/drivers/cpufreq/pmac32-cpufreq.c b/drivers/cpufreq/pmac32-cpufreq.c
+index 4f20c6a9108d..20f64a8b0a35 100644
+--- a/drivers/cpufreq/pmac32-cpufreq.c
++++ b/drivers/cpufreq/pmac32-cpufreq.c
+@@ -24,7 +24,7 @@
+ #include <linux/device.h>
+ #include <linux/hardirq.h>
+ #include <linux/of_device.h>
+-#include <asm/prom.h>
++
+ #include <asm/machdep.h>
+ #include <asm/irq.h>
+ #include <asm/pmac_feature.h>
+diff --git a/drivers/cpufreq/pmac64-cpufreq.c b/drivers/cpufreq/pmac64-cpufreq.c
+index d7542a106e6b..ba9c31d98bd6 100644
+--- a/drivers/cpufreq/pmac64-cpufreq.c
++++ b/drivers/cpufreq/pmac64-cpufreq.c
+@@ -22,7 +22,7 @@
+ #include <linux/completion.h>
+ #include <linux/mutex.h>
+ #include <linux/of_device.h>
+-#include <asm/prom.h>
++
+ #include <asm/machdep.h>
+ #include <asm/irq.h>
+ #include <asm/sections.h>
+diff --git a/drivers/cpufreq/ppc_cbe_cpufreq.c b/drivers/cpufreq/ppc_cbe_cpufreq.c
+index c58abb4cca3a..e3313ce63b38 100644
+--- a/drivers/cpufreq/ppc_cbe_cpufreq.c
++++ b/drivers/cpufreq/ppc_cbe_cpufreq.c
+@@ -12,7 +12,6 @@
+ #include <linux/of_platform.h>
+ 
+ #include <asm/machdep.h>
+-#include <asm/prom.h>
+ #include <asm/cell-regs.h>
+ 
+ #include "ppc_cbe_cpufreq.h"
+diff --git a/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c b/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c
+index 037fe23bc6ed..4fba3637b115 100644
+--- a/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c
++++ b/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c
+@@ -13,9 +13,9 @@
+ #include <linux/init.h>
+ #include <linux/of_platform.h>
+ #include <linux/pm_qos.h>
++#include <linux/slab.h>
+ 
+ #include <asm/processor.h>
+-#include <asm/prom.h>
+ #include <asm/pmi.h>
+ #include <asm/cell-regs.h>
+ 
+-- 
+2.35.1
 
-> If the better way is using clock and regulator opp, do you have a
-> suggestion to approach that?
-> I mean I can't find a good example from other vendors trying to do that
-> way. Or maybe I miss something?
-
-One other way (proper) is to use cpufreq-dt and existing bindings. I
-understand that maybe you need some specific bindings here, but I fail
-to see how they would work. IOW, you don't have the compatible, no
-select, so nothing can use these bindings. Also bindings do not refer to
-any specific hardware, like SoC model.
-
-It's good that you try to convert existing bindings to DT schema, but
-with that they should be probably fixed/updated to match proper bindings.
-
-Best regards,
-Krzysztof
