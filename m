@@ -2,97 +2,238 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 633D04EF7EC
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Apr 2022 18:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 185E84EF84F
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Apr 2022 18:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343749AbiDAQa3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Apr 2022 12:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
+        id S1349364AbiDAQr3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Apr 2022 12:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344678AbiDAQaA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Apr 2022 12:30:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C32182AF9;
-        Fri,  1 Apr 2022 09:03:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 766F761AF8;
-        Fri,  1 Apr 2022 16:03:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83596C2BBE4;
-        Fri,  1 Apr 2022 16:03:07 +0000 (UTC)
-Date:   Fri, 1 Apr 2022 12:03:05 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        linux-s390@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-        linux-ia64@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <lenb@kernel.org>,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 1/3 v2] Docs: admin/kernel-parameters: edit a few boot
- options
-Message-ID: <20220401120305.00076d14@gandalf.local.home>
-In-Reply-To: <20220401030927.12023-2-rdunlap@infradead.org>
-References: <20220401030927.12023-1-rdunlap@infradead.org>
-        <20220401030927.12023-2-rdunlap@infradead.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S1349510AbiDAQrO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Apr 2022 12:47:14 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E1F17B0F7
+        for <linux-pm@vger.kernel.org>; Fri,  1 Apr 2022 09:32:15 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id dr20so6931202ejc.6
+        for <linux-pm@vger.kernel.org>; Fri, 01 Apr 2022 09:32:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=jxwsv/tK/OR4aZvoT2efCdL/z7ltygvpIDrQHk7UAeg=;
+        b=dQ7NaD4ErcjM4rk/CAt9aSek5NQW1Z67YLnC1elXBDk0QCJTneOWHBYv3PAEziPh3c
+         v09UBoe54h9qLZvflDz268s6U+lU/K78WvEncHMu6XGJ1H5GbvO8RMyzhSbMEGIJ9x8Y
+         p3FW9mugKO9SDgnzqZEn7oru+uDhIFRukc6x52V/nTMbsnIwrrpFSRRB5rwyvUW+HzXG
+         1/yOJqKkj0225DsOjnqW4JPUvXfDJbay8FmZrxbWSUlUBRtEETsQLDhUoP+v1gFJvwZp
+         xOjsDoy3NqND1GgK10yoe1xWS1C0o4nwB/ER71FkP757tLGGZfi5RZTTZTVnRdYSZ3WD
+         3SKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jxwsv/tK/OR4aZvoT2efCdL/z7ltygvpIDrQHk7UAeg=;
+        b=xGw8Y3C9UC4MkBieXqKs1wt89x3V162LQVevNDzmPuotrDj8mJpAiUuRfKxtWxtPEX
+         dgmD6f5//XuUwHuDqodm821glSCOHglzJd2LKddV/1YkP7cU4k4Oo1ill5XAi7rTozav
+         StuGn0o8gGaEfffiT59S8Tm/sn/LDBnQGXHvz1l5LuxcCiE397SfPtS40hon+TX5rp4W
+         kERZoaKstCVIpMWSaLM9atv7lQjHikzU2LwDD4wNqmbaBOS49Y4ouOfpSorAU1T8buWU
+         /+ZANHIGkcQxRyu9NnSNvcyeYw/APqdVtPILMhyexrvBIdO080WgBBb1lpDQD66fWY/l
+         q4kw==
+X-Gm-Message-State: AOAM530JYivftJUgp94Wcy1C7vEv4izYUmB16Z2R1cNsapyXa/L9fefP
+        ydQa3E4x13ucL1KR8GWklB3LJA==
+X-Google-Smtp-Source: ABdhPJwXp/PWCtXCv3kqxNIkREk9755IcXW/iVBmukMqjgiMu5JSpqtF4NfLyi6tJAhzvVLKlfTqrw==
+X-Received: by 2002:a17:907:1ca4:b0:6da:86a4:1ec7 with SMTP id nb36-20020a1709071ca400b006da86a41ec7mr567316ejc.556.1648830733527;
+        Fri, 01 Apr 2022 09:32:13 -0700 (PDT)
+Received: from [192.168.0.170] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id c14-20020a170906340e00b006ce98f2581asm1175799ejb.205.2022.04.01.09.32.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Apr 2022 09:32:12 -0700 (PDT)
+Message-ID: <56c5870e-bc41-39be-6b53-785396d8812b@linaro.org>
+Date:   Fri, 1 Apr 2022 18:32:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/4] dt-bindings: cpufreq: mediatek: transform
+ cpufreq-mediatek into yaml
+Content-Language: en-US
+To:     Jia-Wei Chang <jia-wei.chang@mediatek.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, fan.chen@mediatek.com,
+        louis.yu@mediatek.com, roger.lu@mediatek.com,
+        Allen-yy.Lin@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        hsinyi@google.com,
+        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
+References: <20220307122151.11666-1-jia-wei.chang@mediatek.com>
+ <20220307122151.11666-2-jia-wei.chang@mediatek.com>
+ <ee98d248-b2cd-e975-84df-448917a79287@canonical.com>
+ <2cf526d400c011b5172ba4fc2c3f03b4a4f371dc.camel@mediatek.com>
+ <96a823a2-f3b6-9fb7-c9d6-f1315f6056fd@kernel.org>
+ <de1751bb13fb14b591fbe046ff274530ad62162e.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <de1751bb13fb14b591fbe046ff274530ad62162e.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 31 Mar 2022 20:09:25 -0700
-Randy Dunlap <rdunlap@infradead.org> wrote:
+On 01/04/2022 15:26, Jia-Wei Chang wrote:
+> On Thu, 2022-03-24 at 11:33 +0100, Krzysztof Kozlowski wrote:
+>> On 24/03/2022 10:38, Jia-Wei Chang wrote:
+>>>>
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-
+>>>>> mediatek.yaml
+>>>>> b/Documentation/devicetree/bindings/cpufreq/cpufreq-
+>>>>> mediatek.yaml
+>>>>> new file mode 100644
+>>>>> index 000000000000..584946eb3790
+>>>>> --- /dev/null
+>>>>> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-
+>>>>> mediatek.yaml
+>>>>> @@ -0,0 +1,131 @@
+>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>>>> +%YAML 1.2
+>>>>> +---
+>>>>> +$id: 
+>>>>>
+> https://urldefense.com/v3/__http://devicetree.org/schemas/cpufreq/cpufreq-mediatek.yaml*__;Iw!!CTRNKA9wMg0ARbw!xbKG4TgD0MRpMLyGJVBZEGpZFrNOclrcxOCx_APKo5Nmg8nF2x5PcBdE0unvL2NdpChkMA$
+>>>>>  
+>>>>> +$schema: 
+>>>>>
+> https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!xbKG4TgD0MRpMLyGJVBZEGpZFrNOclrcxOCx_APKo5Nmg8nF2x5PcBdE0unvL2O8T_oxCQ$
+>>>>>  
+>>>>> +
+>>>>> +title: Mediatek CPUFREQ driver Device Tree Bindings
+>>>>
+>>>> Please remove "driver Device Tree Bindings" because the title
+>>>> should
+>>>> describe the hardware. Therefore it could be something like
+>>>> "Mediatek
+>>>> SoC CPU frequency and voltage scaling".
+>>>
+>>> Thanks for your suggestion of title.
+>>> Or should I use the origin title "Binding for MediaTek's CPUFreq
+>>> driver"?
+>>
+>> Mediatek CPUFREQ
+>> or
+>> Mediatek CPU frequency scaling
+> 
+> Ok, I will choose one of it.
+> 
+>>
+>>>
+>>>>
+>>>> How is it related to cpufreq-mediatek-hw.yaml? The names/title
+>>>> look
+>>>> unfortunately too similar.
+>>>
+>>> No, mediatek-cpufreq is performing in kernel driver rather than on
+>>> hardware.
+>>> On the other hand, mediatek-cpufreq-hw is performing on hardware.
+>>> That's why "hw" is present in its name.
+>>
+>> Unfortunately, I do not get it. The bindings are only about hardware,
+>> so
+>> how bindings could be about CPU frequency scaling not in hardware?
+> 
+> Sorry, let me correct my statements.
+> 
+> For mediatek-cpufreq here, the required hardware are clock and
+> regulator which have to be under control of mediatek-cpufreq. That's
+> the reason why it needs bindings.
+> 
+> mediatek-cpufreq scales up and down voltage and frequency via kernel
+> framework of clock and regulator, however, mediatek-cpufreq-hw delegate
+> the voltage and frequency control to a hardware agent instead.
 
-> @@ -5908,6 +5910,8 @@
->  	trace_buf_size=nn[KMG]
->  			[FTRACE] will set tracing buffer size on each cpu.
->  
-> +	trace_clock=	[FTRACE] See Documentation/trace/ftrace.rst
+OK, that makes sense, thanks for explanation.
 
-	trace_clock=	[FTRACE] Set the clock used for tracing events
-			at boot up.
-			local - Use the per CPU time stamp counter
-				(converted into nanoseconds). Fast, but
-				depending on the architecture, may not be
-				in sync between CPUs.
-			global - Event time stamps are synchronize across
-				CPUs. May be slower than the local clock,
-				but better for some race conditions.
-			counter - Simple counting of events (1, 2, ..)
-				note, some counts may be skipped due to the
-				infrastructure grabbing the clock more than
-				once per event.
-			uptime - Use jiffies as the time stamp.
-			perf - Use the same clock that perf uses.
-			mono - Use ktime_get_mono_fast_ns() for time stamps.
-			mono_raw - Use ktime_get_raw_fast_ns() for time
-				stamps.
-			boot - Use ktime_get_boot_fast_ns() for time stamps.
-			Architectures may add more clocks. See
-			Documentation/trace/ftrace.rst for more details.
+> 
+>>
+>>>
+>>>>
+>>>> In general this does not look like proper bindings (see also
+>>>> below
+>>>> lack
+>>>> of compatible). Bindings describe the hardware, so what is
+>>>> exactly
+>>>> the
+>>>> hardware here?
+>>>
+>>> Except for SoC, there's no requirement of hardware binding for
+>>> mediatek-cpufreq.
+>>> mediatek-cpufreq recognizes the compatible of Mediatek SoC while
+>>> probing.
+>>
+>> What is the hardware here? If there is no requirement for bindings
+>> for
+>> mediate-cpufreq, why do we have this patch here?
+> 
+> Sorry, that's my mistake.
+> Clock and regulator are required hardware for mediatek-cpufreq.
+> 
+>>
+>>>
+>>>>
+>>>>> +
+>>>>> +maintainers:
+>>>>> +  - Jia-Wei Chang <jia-wei.chang@mediatek.com>
+>>>>> +
+>>>>> +description: |
+>>>>> +  CPUFREQ is used for scaling clock frequency of CPUs.
+>>>>> +  The module cooperates with CCI DEVFREQ to manage frequency
+>>>>> for
+>>>>> some Mediatek
+>>>>> +  SoCs.
+>>>>> +
+>>>>> +properties:
+>>>>
+>>>> How is this schema going to be applied? I don't see here select
+>>>> neither
+>>>> compatible.
+>>>
+>>> As mentioned above, only compatible of SoC is required for
+>>> mediatek-
+>>> cpufreq.
+>>
+>> It does not answer my questions. How the schema is going to be
+>> applied?
+> 
+> Currently, we do use compatible of SoC to probe mediatek-cpufreq.
 
--- Steve
+Probing and binding to compatible is correct, but there is no compatible
+here, so the schema is a no-op. Does nothing.
 
+> If the better way is using clock and regulator opp, do you have a
+> suggestion to approach that?
+> I mean I can't find a good example from other vendors trying to do that
+> way. Or maybe I miss something?
 
-> +
->  	trace_event=[event-list]
->  			[FTRACE] Set and start specified trace events in order
->  			to facilitate early boot debugging. The event-list is a
+One other way (proper) is to use cpufreq-dt and existing bindings. I
+understand that maybe you need some specific bindings here, but I fail
+to see how they would work. IOW, you don't have the compatible, no
+select, so nothing can use these bindings. Also bindings do not refer to
+any specific hardware, like SoC model.
+
+It's good that you try to convert existing bindings to DT schema, but
+with that they should be probably fixed/updated to match proper bindings.
+
+Best regards,
+Krzysztof
