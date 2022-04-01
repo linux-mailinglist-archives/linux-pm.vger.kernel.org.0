@@ -2,185 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C71E44EFCF4
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Apr 2022 01:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 254204EFD0B
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Apr 2022 01:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352141AbiDAXFy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 1 Apr 2022 19:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
+        id S1349188AbiDAXVD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 1 Apr 2022 19:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231869AbiDAXFx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Apr 2022 19:05:53 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F2417337E;
-        Fri,  1 Apr 2022 16:04:01 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 4D6D21F47E32
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1648854239;
-        bh=Zf4/W8ZkSiud0d32XUvUEMHUjsk++IGQrm8gV1GEolk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NZKLEOOlx4hJsK/bJUWnbWB9ipw5XTL7NS4BldrvaDTaiwrOzuNz6CXXqYGbs0dUZ
-         mAn0tiWUqA/nPPuimbR+qB7Zcdwiu62oVpH1y0ewXQME4TPr3bBwbErdhgV9/EWMfH
-         W8+YhbCuG/x78UaVUgCWHt8+628CW5Ar8xThDFTnRiHqofpGwk2pPwtX9snvvvm7RK
-         nJs1Bj8nLplirk81vcKRQuHbprwM4VIgensHvb4qLQoI2Rgu0sYu8y70k5s/h6SHDX
-         NSs6mHnWfGSe62hCwfXFKwRNozb8SEuW5wLCNAl8R7U9326o/KGQFF73z8zGcgHy7Q
-         b5bqClftr8oZg==
-Received: by mercury (Postfix, from userid 1000)
-        id AAF2C1060582; Sat,  2 Apr 2022 01:03:56 +0200 (CEST)
-Date:   Sat, 2 Apr 2022 01:03:56 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Caleb Connolly <caleb.connolly@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Subject: Re: [PATCH 6/6] dt-bindings: power: supply: qcom,smb2: add bindings
- for smb2 driver
-Message-ID: <20220401230356.w7obr3nxl6673mig@mercury.elektranox.org>
-References: <20220401202643.877609-1-caleb.connolly@linaro.org>
- <20220401202643.877609-7-caleb.connolly@linaro.org>
+        with ESMTP id S1348462AbiDAXVB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 1 Apr 2022 19:21:01 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 872F91A770E;
+        Fri,  1 Apr 2022 16:19:11 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id g6-20020a17090a128600b001ca5c2477cbso80524pja.0;
+        Fri, 01 Apr 2022 16:19:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:from:to:cc
+         :subject:content-transfer-encoding;
+        bh=JzoLiDpzKa7W1p5akpLIliye1Kl0aJ+omhs1Hnbktzk=;
+        b=PJ60DbjAxo2h7nAn2P5hX4dp48iJ8MUHuiyTIu0io/RxZwUbM3zHQNvg/IfCifRpH8
+         Y/Pjljz9+3b8flZvrPwKC4XW6G5mVfWSZumxr3sz2r1SsFNUPJSfauvSs0KaJXqZ8i6L
+         OWsh4D7F6NA9FlpiFQuk3pjoJG7vmRdwwfxFcBGb/OSiXsRng9EbpcLKFXUf3BqLk44q
+         YNaWNu8u5Jc/T3rwwzDVofV5uAJKeGsEnd21C7xltBkBFPyNNGhVkV9fJ7O8WW73AQZ8
+         eCjbfXNqOs/K7b3jXkfYVRwJcFuNyIl4xppQo/lqVH/SERU8m4/Pl6hHlDMnvXzZvt1w
+         nA5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:from:to:cc:subject:content-transfer-encoding;
+        bh=JzoLiDpzKa7W1p5akpLIliye1Kl0aJ+omhs1Hnbktzk=;
+        b=li0FtBSYSL18IlBfz6mpvZqSgkiYm4l4adLm53VRaJ0zz41gTaPcgtiTkRvm0x/TQv
+         X61UZL1DEAA1F36wHwGgOJJ9ekh58FPH/7DfeTvNmpc8AviFNTexP3fMfeu1kOH34NiX
+         6pTBXGjXos0mhSwh/5sLtKs98uoRbCQKBdCrNjUOI0kuHxcoamMUfwQlWDgj+wZhj4HU
+         wss/EOVjQLX7MwUwGS8dXdJqLzTs5qbikyCo9XTdLj4vUcPFjYWwP1MjZn+zOKJA/KSR
+         qGNhaXJtGj0M1X1JL5r0haSNQDRPZNuJVcewwnWMJr2lssRWlyehgpnJdywyAaAjKLGr
+         PaBA==
+X-Gm-Message-State: AOAM530VHG1w+nCRQ2u6MhEUGFTq7uEHUgyBG74CBxu3fCYXGB39BmuV
+        MrFO3hQjnWyt0HDeojhftiPt8TROiC4=
+X-Google-Smtp-Source: ABdhPJwh8ywVm2q2SwIysx0eYKOkTQWmHo3y/y+rk9yEaBsDtdXMF90J/p0T4RSTLU9F7u6l0+hveg==
+X-Received: by 2002:a17:902:d4c8:b0:154:2416:218b with SMTP id o8-20020a170902d4c800b001542416218bmr12868799plg.139.1648855151012;
+        Fri, 01 Apr 2022 16:19:11 -0700 (PDT)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id y63-20020a638a42000000b0039870096849sm3339369pgd.63.2022.04.01.16.19.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Apr 2022 16:19:10 -0700 (PDT)
+Message-ID: <fffa1d50-f155-b6a4-bf58-22e395d7401c@gmail.com>
+Date:   Sat, 2 Apr 2022 08:19:05 +0900
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ug4hpksr7eokrzoi"
-Content-Disposition: inline
-In-Reply-To: <20220401202643.877609-7-caleb.connolly@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Randy Dunlap <rdunlap@infradead.org>, linux-pm@vger.kernel.org,
+        linux-doc@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
+Subject: [PATCH -pm v2] docs: driver-api/thermal/intel_dptf: Use copyright
+ symbol
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Using a substitution pattern of "|copy|" without including
+isonum.txt causes a doc build warning.
 
---ug4hpksr7eokrzoi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Using the symbol "=C2=A9" itself is a better choice for those
+who read .rst sources.
 
-Hi,
+Fixes: 16c02447f3e1 ("Documentation: thermal: DPTF Documentation")
+Reported by: Randy Dunlap <rdunlap@infradead.org>
+Suggested-by: Jonathan Corbet <corbet@lwn.net>
+Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: linux-pm@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+---
+Changes since v1 [1]:
 
-On Fri, Apr 01, 2022 at 09:26:43PM +0100, Caleb Connolly wrote:
-> Add devicetree bindings for the Qualcomm PMI8998/PM660 SMB2 charger
-> drivers.
->=20
-> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
-> ---
->  .../bindings/power/supply/qcom,smb2.yaml      | 68 +++++++++++++++++++
->  1 file changed, 68 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/qcom,s=
-mb2.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/power/supply/qcom,smb2.yam=
-l b/Documentation/devicetree/bindings/power/supply/qcom,smb2.yaml
-> new file mode 100644
-> index 000000000000..1bea1fef78b8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/qcom,smb2.yaml
-> @@ -0,0 +1,68 @@
-> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/supply/qcom,smb2.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm PMI8998/PM660 Switch-Mode Battery Charger "2"
-> +
-> +maintainers:
-> +  - Caleb Connolly <caleb.connolly@linaro.org>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,pmi8998-smb2
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    items:
-> +      - description: usb plugin
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: usb-plugin
-> +
-> +  io-channels:
-> +    items:
-> +      - description: USB in current in uA
-> +      - description: USB in voltage in uV
-> +
-> +  io-channel-names:
-> +    items:
-> +      - const: usbin_i
-> +      - const: usbin_v
+  - Use =C2=A9 instead of including isonum.txt (Jon).
+  - Amend title and changelog.
 
-Is there a good reason to use usbin_ instead of usb_in_?
+v1 [1]: https://lore.kernel.org/r/e06542af-aa8b-0885-37a3-bb7bc5fafa1e@gm=
+ail.com/
+---
+ Documentation/driver-api/thermal/intel_dptf.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- Sebastian
+diff --git a/Documentation/driver-api/thermal/intel_dptf.rst b/Documentat=
+ion/driver-api/thermal/intel_dptf.rst
+index 96668dca753a..372bdb4d04c6 100644
+--- a/Documentation/driver-api/thermal/intel_dptf.rst
++++ b/Documentation/driver-api/thermal/intel_dptf.rst
+@@ -4,7 +4,7 @@
+ Intel(R) Dynamic Platform and Thermal Framework Sysfs Interface
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+=20
+-:Copyright: |copy| 2022 Intel Corporation
++:Copyright: =C2=A9 2022 Intel Corporation
+=20
+ :Author: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+=20
+--=20
+2.25.1
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - interrupt-names
-> +  - io-channels
-> +  - io-channel-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    pmic {
-> +      #address-cells =3D <1>;
-> +      #size-cells =3D <0>;
-> +      #interrupt-cells =3D <4>;
-> +
-> +      smb2@1000 {
-> +        compatible =3D "qcom,pmi8998-smb2";
-> +        reg =3D <0x1000>;
-> +
-> +        interrupts =3D <0x2 0x13 0x4 IRQ_TYPE_EDGE_BOTH>;
-> +        interrupt-names =3D "usb-plugin";
-> +
-> +        io-channels =3D <&pmi8998_rradc 3>,
-> +                      <&pmi8998_rradc 4>;
-> +        io-channel-names =3D "usbin_i",
-> +                           "usbin_v";
-> +      };
-> +    };
-> --=20
-> 2.35.1
->=20
-
---ug4hpksr7eokrzoi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmJHhNUACgkQ2O7X88g7
-+prg8w/9GK7RzA2mPafvhUeYbyRQBj+1grwrYt5QBCUw9MSYJFAxoeViL4xgF5KX
-aVG7hbymkgL2XiPo9J2AvY6DMkXfJTgvHeLS8uTZCRLd1NeXUL/M6LGoDz3w4f1U
-rv9oI9pz7QMnK5DThAKqxlaV7BALW/2KUnNgK3Cfi7Qm0updbfN3Pq2fh4yiCM2t
-7Nveg5d2Uf6IhTxVRANyKcNKJuwbdTFzFASIj88H8JPxbH9Wb7eL77D031pu1szp
-oj72j8mW9lU18Ovm3Cft0zOzRe9Uk2X4BmTEGhsJZrnN6SbsBHpmH9dVg0yXcHWp
-Q81iVNrFWG7ROsM6YcU5F0w/Unx1UkJtpqRCeKd+ZzoZcxABuRBT2tAV9CmBCMY6
-bw/0s+UWN6bck4ji3gYbu/7MTOyjwxw+FoTCLe/MMRX4WY0N3hVyMZnDNdaWrXUo
-jlsi9r6q7iMemBaelThQdHUX9FHBndj2IMo4kCdn4RRoCkWTYMfAnTzrqmJ3kJo6
-+iTLK1wQLf13IUaLT8DTou4swFgAKaBdyyT4YsTQ4zVpQXCDLvor7NjBsV/bgjeK
-LQZyRWm+xVKWa7HfY9D/nSGBnM62gvIiFAOzGgS42VXCW3x8GyqnVH3oLFCkDUs5
-sydsVOkIc8ENWYgrH/kMC9LlltzdRd5fgtlVc2Hth7ylUofr15o=
-=66Jf
------END PGP SIGNATURE-----
-
---ug4hpksr7eokrzoi--
