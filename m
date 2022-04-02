@@ -2,92 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0BE4EFF27
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Apr 2022 08:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AA1E4F0115
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Apr 2022 13:32:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbiDBG0j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 2 Apr 2022 02:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51698 "EHLO
+        id S1345230AbiDBLd0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 2 Apr 2022 07:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiDBG0i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 Apr 2022 02:26:38 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32C65006E;
-        Fri,  1 Apr 2022 23:24:46 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id s72so3975409pgc.5;
-        Fri, 01 Apr 2022 23:24:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=OWpfUOyThc7LArwewOiHCOHI8uXy/pwCBjcxkPQ5nkg=;
-        b=gKmS//GkAbvcxWrNqvbM61ubaXxXErDvbMjllwiKsNgqMd6zNKkTpfeBPzRKR66br7
-         Y5G7wqTW1m+7dl2Gnqqd1QzIs6dxZIeSXhySCNQHFni8GSZvfUeXpP5GZLudd8xMGcLW
-         xI9naEr3xSXWvEKJ2JD3UK9v0vdEk1MvC2OmQIwQKfDU50Vp5ctJFr/zuicmXoHLp7y0
-         K5QZA5nfR3EBecitV2lkb/xF281yADm9oG3CflOgSHCxi6D5iS6o+CqGKDSMDStvV/aa
-         tjiLPWAlW+7FGllI74o96D5qljRCpp9NJnjiKvNUMPUFqPLtyjcaRMRgaKOmG0rg7i8H
-         sN9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OWpfUOyThc7LArwewOiHCOHI8uXy/pwCBjcxkPQ5nkg=;
-        b=uNThoOAlf/yilLwx2pfs17go29Lrk/5sJ2uK8QAOmwCGvIb/3oWDobFBOh+pCAcqP1
-         VNxXnyxMUAjPQ5+r9QZYKLUG8vjqxm29XVH38L9jZ51BvwxFvkIrgXqfC52oNyWdIIl9
-         vTYgmlkJ7+3UuSzL6YkZpc7+ghYTYdv5/2h9qP2YCT24yqtWk5RYSvFCKCor/hQDhPTi
-         yMujzqLfJG5++aRjq8vzxyBjorISLwNK9hCL/5CuC4JfjE3x6KIm/YKh4NeqVuLaqgCB
-         M1LsAoDSEJdBN7MiMcGhCuE5ZIymymjd9wzdC3Wq3VJZGgQmQqbse3f8QWkJmvIhY/Pe
-         FhGQ==
-X-Gm-Message-State: AOAM530kqBO4VOZxFxM1MUAeJohK5fqvt1fbbvg9jadEi6ryRkFVgefN
-        wyPc2XxvCnskbPgooUs+dVcmTwe95Vv2eg==
-X-Google-Smtp-Source: ABdhPJxtCRIFD7zxVumioDxpCN3lIDhVvtSfNNQksNPRIsNajPrUE7Nh25hsWDs6FwDAmy5NQklrVw==
-X-Received: by 2002:a63:fc01:0:b0:398:d3fe:20bb with SMTP id j1-20020a63fc01000000b00398d3fe20bbmr7277256pgi.174.1648880686383;
-        Fri, 01 Apr 2022 23:24:46 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-29.three.co.id. [180.214.232.29])
-        by smtp.gmail.com with ESMTPSA id k11-20020a056a00168b00b004f7e1555538sm4937553pfc.190.2022.04.01.23.24.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Apr 2022 23:24:45 -0700 (PDT)
-Message-ID: <6773799d-57b1-8c74-d936-f7723b302ef7@gmail.com>
-Date:   Sat, 2 Apr 2022 13:24:40 +0700
+        with ESMTP id S241104AbiDBLd0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 Apr 2022 07:33:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95B14A3E4;
+        Sat,  2 Apr 2022 04:31:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B974B8075A;
+        Sat,  2 Apr 2022 11:31:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22C65C340EC;
+        Sat,  2 Apr 2022 11:31:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1648899092;
+        bh=hHiaN9oQ8ExvCLuAqHVX8GhGvr0JDcc8KoNUT7YzQeQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XKuIRDL43MpBpxr/RptIaKZKJR6EGeGWNkYtaNMCtIGwGXVqzA5i57XwxM54tVZ2N
+         SjEfIUs8wDBMf81/FJiWI633TR1Bqh5IbwxY44eD1obDH5wSpDPvoGug1iLEbJ9zl9
+         dF1SrQrFYf4IhpClRUs2MejERVXmb/nr9GW+YaBI2kfjIx6xNg5XE/DEuHkTwCKDZb
+         O2itFS38dngcTS/XWun70RifGDQFMBuryMyU/DyVxwpJ040NeR7+L9eAfaXo8lFnrU
+         4E+xDrArOnbh4T5cLQkNUSgcuoNZyvBWF1OM+aRt90V9CuznkyCNGqjf2JwyKD3IEg
+         jiimG0s8JPYjw==
+Message-ID: <ac0e3336-f9eb-def9-68ea-ab49e2c467a1@kernel.org>
+Date:   Sat, 2 Apr 2022 13:31:22 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH -pm v2] docs: driver-api/thermal/intel_dptf: Use copyright
- symbol
+Subject: Re: [PATCH 1/3] dt-bindings: devfreq: mediatek: add mtk cci devfreq
+ dt-bindings
 Content-Language: en-US
-To:     Akira Yokosawa <akiyks@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Randy Dunlap <rdunlap@infradead.org>, linux-pm@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <fffa1d50-f155-b6a4-bf58-22e395d7401c@gmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <fffa1d50-f155-b6a4-bf58-22e395d7401c@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+To:     Jia-Wei Chang <jia-wei.chang@mediatek.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        fan.chen@mediatek.com, louis.yu@mediatek.com,
+        roger.lu@mediatek.com, Allen-yy.Lin@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        hsinyi@google.com,
+        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
+References: <20220307122513.11822-1-jia-wei.chang@mediatek.com>
+ <20220307122513.11822-2-jia-wei.chang@mediatek.com>
+ <bf418e08-2e32-5e61-abd8-abb0d8f5c080@canonical.com>
+ <13482b1b4244df5c0c0a4d6a60cdb2a7ba88500a.camel@mediatek.com>
+ <aa34eccf-ef08-4a8f-7a6c-7fbd05bd54b6@kernel.org>
+ <126e0905c2eb9f22a0be46dd7aa8ac891622346d.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <126e0905c2eb9f22a0be46dd7aa8ac891622346d.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02/04/22 06.19, Akira Yokosawa wrote:
-> Using a substitution pattern of "|copy|" without including
-> isonum.txt causes a doc build warning.
+On 01/04/2022 15:39, Jia-Wei Chang wrote:
+>>>>
+>>>>> +
+>>>>> +  operating-points-v2:
+>>>>> +    description:
+>>>>> +      For details, please refer to
+>>>>> +      Documentation/devicetree/bindings/opp/opp-v2.yaml
+>>>>> +
+>>>>> +  opp-table: true
+>>>>
+>>>> Same comments as your CPU freq bindings apply.
+>>>
+>>> mtk-cci-devfreq is a new driver and its arch is same as mediatek-
+>>> cpufreq so that the properties of mtk-cci are refer to mediatek-
+>>> cpufreq 
+>>> bindings.
+>>> operating-point-v2 is used to determine the voltage and frequency
+>>> of
+>>> dvfs which is further utilized by mtk-cci-devfreq.
+>>
+>> "operating-point-v2" is understood, but the same as in cpufreq
+>> bindings,
+>> I am questioning why do you have "opp-table: true". It's a bit
+>> confusing, so maybe I miss something?
 > 
-> Using the symbol "©" itself is a better choice for those
-> who read .rst sources.
-> 
+> Yes, you're correct.
+> "opp-table: true" should be removed.
+> I messed it up.
 
-Hmm, where is isonum.txt as you mentioned?
+No, I think I was wrong. The opp-table pretty frequently is embedded in
+the the device node itself. The operating-points-v2 references it.
 
-Why not (c) instead?
+You don't use it in the example, but it might be a valid usage, so it
+can stay. Sorry for the confusion, it passed some time since I looked at
+OPP bindings.
 
--- 
-An old man doll... just what I always wanted! - Clara
+
+Best regards,
+Krzysztof
