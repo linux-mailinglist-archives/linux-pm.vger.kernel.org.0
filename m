@@ -2,114 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA1E4F0115
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Apr 2022 13:32:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5AF4F0134
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Apr 2022 13:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345230AbiDBLd0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 2 Apr 2022 07:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59978 "EHLO
+        id S241375AbiDBLly (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 2 Apr 2022 07:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241104AbiDBLd0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 Apr 2022 07:33:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95B14A3E4;
-        Sat,  2 Apr 2022 04:31:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B974B8075A;
-        Sat,  2 Apr 2022 11:31:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22C65C340EC;
-        Sat,  2 Apr 2022 11:31:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648899092;
-        bh=hHiaN9oQ8ExvCLuAqHVX8GhGvr0JDcc8KoNUT7YzQeQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=XKuIRDL43MpBpxr/RptIaKZKJR6EGeGWNkYtaNMCtIGwGXVqzA5i57XwxM54tVZ2N
-         SjEfIUs8wDBMf81/FJiWI633TR1Bqh5IbwxY44eD1obDH5wSpDPvoGug1iLEbJ9zl9
-         dF1SrQrFYf4IhpClRUs2MejERVXmb/nr9GW+YaBI2kfjIx6xNg5XE/DEuHkTwCKDZb
-         O2itFS38dngcTS/XWun70RifGDQFMBuryMyU/DyVxwpJ040NeR7+L9eAfaXo8lFnrU
-         4E+xDrArOnbh4T5cLQkNUSgcuoNZyvBWF1OM+aRt90V9CuznkyCNGqjf2JwyKD3IEg
-         jiimG0s8JPYjw==
-Message-ID: <ac0e3336-f9eb-def9-68ea-ab49e2c467a1@kernel.org>
-Date:   Sat, 2 Apr 2022 13:31:22 +0200
+        with ESMTP id S241324AbiDBLlx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 Apr 2022 07:41:53 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A628CD9D
+        for <linux-pm@vger.kernel.org>; Sat,  2 Apr 2022 04:39:58 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id r64so3139563wmr.4
+        for <linux-pm@vger.kernel.org>; Sat, 02 Apr 2022 04:39:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=awaGy3AgEjkVWY5viWVsdcdecgWlX4P5wwqKYqVk47A=;
+        b=OCcipaDDf9yd6e+SAB1jG2Pu61JoysxDu7Xh5IkBfEfV05Id7giu2MWVGfJbIVxAS1
+         Th2jEi6XkBu2cMKGD4NsXCEKll//buTp90ViuTWQz2PwHFxNXRnDs/fbiZRJx8H2El1a
+         bnI/bcRXXX+qnUIpXHuQkuqHi4a92Afi1tt5Q4NaWcdG8fPkjWX9+tMImm4tOgk9rEfJ
+         1PPmJDDVxDUCB4m++M4Wjqdk3FmQNoDIwG+hBcjX5HwMwm8bqdDMVFbKBqXN1wDxhAco
+         zrl7Ye1RcfFnVg1LYOosi4oSQK536Tzr6AwePFy50YA0V10RNJ2lsGlU0TzaTGDPdh4M
+         kAVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=awaGy3AgEjkVWY5viWVsdcdecgWlX4P5wwqKYqVk47A=;
+        b=qDFnHTDAtu4RWoJ4+9+kqDN2QahpL/6ghaIxeTaFj69fsdHnhIoNpCGSL1ljJJnMrz
+         hAlc58zgrxvLnGV1CGUx8DB5BJoTeUv3oCBoclPs4NQHaTSFlOH8YzfAF4MoQikGw94J
+         nHmAGPmXm67RQjtAplaFkV0h+dKiIrcAhnVhppOWuq+7R8/8T6Rl4eKPRgwCtU12MsSD
+         wYrKQH/hOu9vDQvL5eVnDgRHmOdjwXUteqx4cdDQ4Rvl4X95LR1aF70PwcAuvdD9LGm4
+         6i58O9EfDrRkAk3eOs6MMuiG5jemuT83YsQTnbygVsP0SNhB9Y1UJLdJCLYmRUZZUsAm
+         Zt5w==
+X-Gm-Message-State: AOAM533k78x8c0LBOEPokPRFRu6xxMg6dfLJfVBm76P+jPF8laEicg1b
+        xy+rhzqmmv655/qTPBwGLPX1Bw==
+X-Google-Smtp-Source: ABdhPJxgPwxQ3TFzbEw3GEzSFdVxepamnd3EAiTRzIuDXOYZeDHeEn98CWlqmTuyc43WWvkuoedIEw==
+X-Received: by 2002:a7b:cd01:0:b0:38c:9142:2006 with SMTP id f1-20020a7bcd01000000b0038c91422006mr12362990wmj.4.1648899596890;
+        Sat, 02 Apr 2022 04:39:56 -0700 (PDT)
+Received: from [192.168.0.171] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id o9-20020a1c4d09000000b0038ca75056e2sm16692104wmh.45.2022.04.02.04.39.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Apr 2022 04:39:56 -0700 (PDT)
+Message-ID: <6d1353c4-7ecc-c65f-73c0-5f856b72d25e@linaro.org>
+Date:   Sat, 2 Apr 2022 13:39:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 1/3] dt-bindings: devfreq: mediatek: add mtk cci devfreq
- dt-bindings
+Subject: Re: [PATCH] dt-bindings: Fix 'enum' lists with duplicate entries
 Content-Language: en-US
-To:     Jia-Wei Chang <jia-wei.chang@mediatek.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fan.chen@mediatek.com, louis.yu@mediatek.com,
-        roger.lu@mediatek.com, Allen-yy.Lin@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        hsinyi@google.com,
-        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
-References: <20220307122513.11822-1-jia-wei.chang@mediatek.com>
- <20220307122513.11822-2-jia-wei.chang@mediatek.com>
- <bf418e08-2e32-5e61-abd8-abb0d8f5c080@canonical.com>
- <13482b1b4244df5c0c0a4d6a60cdb2a7ba88500a.camel@mediatek.com>
- <aa34eccf-ef08-4a8f-7a6c-7fbd05bd54b6@kernel.org>
- <126e0905c2eb9f22a0be46dd7aa8ac891622346d.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <126e0905c2eb9f22a0be46dd7aa8ac891622346d.camel@mediatek.com>
+To:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        - <patches@opensource.cirrus.com>, linux-media@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-gpio@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20220401141247.2993925-1-robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220401141247.2993925-1-robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/04/2022 15:39, Jia-Wei Chang wrote:
->>>>
->>>>> +
->>>>> +  operating-points-v2:
->>>>> +    description:
->>>>> +      For details, please refer to
->>>>> +      Documentation/devicetree/bindings/opp/opp-v2.yaml
->>>>> +
->>>>> +  opp-table: true
->>>>
->>>> Same comments as your CPU freq bindings apply.
->>>
->>> mtk-cci-devfreq is a new driver and its arch is same as mediatek-
->>> cpufreq so that the properties of mtk-cci are refer to mediatek-
->>> cpufreq 
->>> bindings.
->>> operating-point-v2 is used to determine the voltage and frequency
->>> of
->>> dvfs which is further utilized by mtk-cci-devfreq.
->>
->> "operating-point-v2" is understood, but the same as in cpufreq
->> bindings,
->> I am questioning why do you have "opp-table: true". It's a bit
->> confusing, so maybe I miss something?
+On 01/04/2022 16:12, Rob Herring wrote:
+> There's no reason to list the same value twice in an 'enum'. Fix all the
+> occurrences in the tree. A meta-schema change will catch future ones.
 > 
-> Yes, you're correct.
-> "opp-table: true" should be removed.
-> I messed it up.
+> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Jonathan Hunter <jonathanh@nvidia.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Charles Keepax <ckeepax@opensource.cirrus.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: Yunfei Dong <yunfei.dong@mediatek.com>
+> Cc: - <patches@opensource.cirrus.com>
+> Cc: linux-media@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> There's also one other occurrence in snps,dwmac.yaml I didn't fix as 
+> there's a patch[1] for it which prompted this patch.
+> 
+> Rob
+> 
+> [1] https://lore.kernel.org/r/20220401030847epcms1p8cf7a8e1d8cd7d325dacf30f78da36328@epcms1p8
+> 
+>  .../bindings/arm/tegra/nvidia,tegra20-pmc.yaml        |  1 -
+>  Documentation/devicetree/bindings/bus/ti-sysc.yaml    |  1 -
+>  .../bindings/media/mediatek,vcodec-encoder.yaml       |  1 -
+>  .../devicetree/bindings/pinctrl/cirrus,madera.yaml    | 11 +++++------
+>  .../devicetree/bindings/power/supply/bq2415x.yaml     |  1 -
+>  5 files changed, 5 insertions(+), 10 deletions(-)
+> 
 
-No, I think I was wrong. The opp-table pretty frequently is embedded in
-the the device node itself. The operating-points-v2 references it.
-
-You don't use it in the example, but it might be a valid usage, so it
-can stay. Sorry for the confusion, it passed some time since I looked at
-OPP bindings.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
 Best regards,
