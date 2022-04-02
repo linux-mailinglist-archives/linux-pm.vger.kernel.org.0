@@ -2,77 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5AF4F0134
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Apr 2022 13:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B1A4F03E3
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Apr 2022 16:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241375AbiDBLly (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 2 Apr 2022 07:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59744 "EHLO
+        id S243657AbiDBOYQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 2 Apr 2022 10:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241324AbiDBLlx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 Apr 2022 07:41:53 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A628CD9D
-        for <linux-pm@vger.kernel.org>; Sat,  2 Apr 2022 04:39:58 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id r64so3139563wmr.4
-        for <linux-pm@vger.kernel.org>; Sat, 02 Apr 2022 04:39:58 -0700 (PDT)
+        with ESMTP id S238873AbiDBOYP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 Apr 2022 10:24:15 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7606713CA1B
+        for <linux-pm@vger.kernel.org>; Sat,  2 Apr 2022 07:22:23 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id x34so6060770ede.8
+        for <linux-pm@vger.kernel.org>; Sat, 02 Apr 2022 07:22:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=awaGy3AgEjkVWY5viWVsdcdecgWlX4P5wwqKYqVk47A=;
-        b=OCcipaDDf9yd6e+SAB1jG2Pu61JoysxDu7Xh5IkBfEfV05Id7giu2MWVGfJbIVxAS1
-         Th2jEi6XkBu2cMKGD4NsXCEKll//buTp90ViuTWQz2PwHFxNXRnDs/fbiZRJx8H2El1a
-         bnI/bcRXXX+qnUIpXHuQkuqHi4a92Afi1tt5Q4NaWcdG8fPkjWX9+tMImm4tOgk9rEfJ
-         1PPmJDDVxDUCB4m++M4Wjqdk3FmQNoDIwG+hBcjX5HwMwm8bqdDMVFbKBqXN1wDxhAco
-         zrl7Ye1RcfFnVg1LYOosi4oSQK536Tzr6AwePFy50YA0V10RNJ2lsGlU0TzaTGDPdh4M
-         kAVw==
+        bh=AMgcOOw5r9mv38XuA+c8CRwaFDTkeUsZRRq+V0PdcsY=;
+        b=ndRjC0RhMOJGBf5NZc9mOkR/bHebZ8B8V39sgXEZvBTOMKfN380968Na2TPAfrha+l
+         ZI9WodBoHES0w0Bp3iahPcQvrSvLGyEdKN9nzlOXYAno8LFwZbSXtL+Lc/tAJqOwEg1l
+         c+zclPub3nlJoZhvRhuCtyRf+bRdwySxsoovuLIJFRXx6ZDcMEoTBdzqNo267URsQr5J
+         7Sf8LB6qW65GLnhp6kQmzqluNbDqQxS41UCAI/nSNGTt8Wgzg19qt+gXBvZEupBKpxYx
+         IhHDskUw5bYaqEZWs8fz0XJt1vP+kkRC7pCQCmYequPos6I4Ouk9G9NfRueZhZHJ7Lq8
+         sFtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=awaGy3AgEjkVWY5viWVsdcdecgWlX4P5wwqKYqVk47A=;
-        b=qDFnHTDAtu4RWoJ4+9+kqDN2QahpL/6ghaIxeTaFj69fsdHnhIoNpCGSL1ljJJnMrz
-         hAlc58zgrxvLnGV1CGUx8DB5BJoTeUv3oCBoclPs4NQHaTSFlOH8YzfAF4MoQikGw94J
-         nHmAGPmXm67RQjtAplaFkV0h+dKiIrcAhnVhppOWuq+7R8/8T6Rl4eKPRgwCtU12MsSD
-         wYrKQH/hOu9vDQvL5eVnDgRHmOdjwXUteqx4cdDQ4Rvl4X95LR1aF70PwcAuvdD9LGm4
-         6i58O9EfDrRkAk3eOs6MMuiG5jemuT83YsQTnbygVsP0SNhB9Y1UJLdJCLYmRUZZUsAm
-         Zt5w==
-X-Gm-Message-State: AOAM533k78x8c0LBOEPokPRFRu6xxMg6dfLJfVBm76P+jPF8laEicg1b
-        xy+rhzqmmv655/qTPBwGLPX1Bw==
-X-Google-Smtp-Source: ABdhPJxgPwxQ3TFzbEw3GEzSFdVxepamnd3EAiTRzIuDXOYZeDHeEn98CWlqmTuyc43WWvkuoedIEw==
-X-Received: by 2002:a7b:cd01:0:b0:38c:9142:2006 with SMTP id f1-20020a7bcd01000000b0038c91422006mr12362990wmj.4.1648899596890;
-        Sat, 02 Apr 2022 04:39:56 -0700 (PDT)
+        bh=AMgcOOw5r9mv38XuA+c8CRwaFDTkeUsZRRq+V0PdcsY=;
+        b=wI92Oh3IeYFstzyr5KsexEkSWbwdFyygage0dsp19kkstumWzzJ3wlcrLTWd3mFjJ0
+         pr6q+/NfCJWgI/EOYMSfzjPgqIsBgO4d3t+D3LQfQXLE1aSNYJobXM8BpaSEO1+6QMh0
+         fV0RT48nqA/w/ynkpzOnEduOYnADXMa2Klswzb52rwYgBfiMCxMq3OXB0pwixM+bzqkG
+         nh/R4jyK2uj41oWAfNNm1x6CC2349cfvFghTdcJpF+avq1hKsPTbj1zgGlbl6NDeduBV
+         HWXHFh+hEJieS9wCqhRlu3UM2mdJ5ELHbaf1NA7nTE3rDjsnuNCBizUU90iiTUtVUvY5
+         hEeA==
+X-Gm-Message-State: AOAM5338jmtgn9iupiIThxuPaSkNyX78ICzMo2qcdAIUiPEC6qzdhd1s
+        LK2nyhXbJGatx8DnmSR2nP5GQQ==
+X-Google-Smtp-Source: ABdhPJyO41m5nOt35fQMdoxrpqwQOe/Hbl42lUbDUic9chKbI6pE3cOvTVsoxLEMtoeouWLa4B+qbw==
+X-Received: by 2002:aa7:d517:0:b0:419:16c0:f313 with SMTP id y23-20020aa7d517000000b0041916c0f313mr25542499edq.379.1648909342042;
+        Sat, 02 Apr 2022 07:22:22 -0700 (PDT)
 Received: from [192.168.0.171] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id o9-20020a1c4d09000000b0038ca75056e2sm16692104wmh.45.2022.04.02.04.39.55
+        by smtp.gmail.com with ESMTPSA id h30-20020a056402095e00b00412b81dd96esm2461485edz.29.2022.04.02.07.22.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Apr 2022 04:39:56 -0700 (PDT)
-Message-ID: <6d1353c4-7ecc-c65f-73c0-5f856b72d25e@linaro.org>
-Date:   Sat, 2 Apr 2022 13:39:55 +0200
+        Sat, 02 Apr 2022 07:22:21 -0700 (PDT)
+Message-ID: <f737fd47-e557-45af-035b-af29a88e22e6@linaro.org>
+Date:   Sat, 2 Apr 2022 16:22:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH] dt-bindings: Fix 'enum' lists with duplicate entries
+Subject: Re: [PATCH 6/6] dt-bindings: power: supply: qcom,smb2: add bindings
+ for smb2 driver
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+To:     Caleb Connolly <caleb.connolly@linaro.org>,
         Sebastian Reichel <sre@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        - <patches@opensource.cirrus.com>, linux-media@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20220401141247.2993925-1-robh@kernel.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Cc:     Amit Pundir <amit.pundir@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+References: <20220401202643.877609-1-caleb.connolly@linaro.org>
+ <20220401202643.877609-7-caleb.connolly@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220401141247.2993925-1-robh@kernel.org>
+In-Reply-To: <20220401202643.877609-7-caleb.connolly@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,42 +82,95 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/04/2022 16:12, Rob Herring wrote:
-> There's no reason to list the same value twice in an 'enum'. Fix all the
-> occurrences in the tree. A meta-schema change will catch future ones.
+On 01/04/2022 22:26, Caleb Connolly wrote:
+> Add devicetree bindings for the Qualcomm PMI8998/PM660 SMB2 charger
+> drivers.
 > 
-> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Jonathan Hunter <jonathanh@nvidia.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Charles Keepax <ckeepax@opensource.cirrus.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Tony Lindgren <tony@atomide.com>
-> Cc: Yunfei Dong <yunfei.dong@mediatek.com>
-> Cc: - <patches@opensource.cirrus.com>
-> Cc: linux-media@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
 > ---
-> There's also one other occurrence in snps,dwmac.yaml I didn't fix as 
-> there's a patch[1] for it which prompted this patch.
+>  .../bindings/power/supply/qcom,smb2.yaml      | 68 +++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/qcom,smb2.yaml
 > 
-> Rob
-> 
-> [1] https://lore.kernel.org/r/20220401030847epcms1p8cf7a8e1d8cd7d325dacf30f78da36328@epcms1p8
-> 
->  .../bindings/arm/tegra/nvidia,tegra20-pmc.yaml        |  1 -
->  Documentation/devicetree/bindings/bus/ti-sysc.yaml    |  1 -
->  .../bindings/media/mediatek,vcodec-encoder.yaml       |  1 -
->  .../devicetree/bindings/pinctrl/cirrus,madera.yaml    | 11 +++++------
->  .../devicetree/bindings/power/supply/bq2415x.yaml     |  1 -
->  5 files changed, 5 insertions(+), 10 deletions(-)
-> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/qcom,smb2.yaml b/Documentation/devicetree/bindings/power/supply/qcom,smb2.yaml
+> new file mode 100644
+> index 000000000000..1bea1fef78b8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/qcom,smb2.yaml
+> @@ -0,0 +1,68 @@
+> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/qcom,smb2.yaml#
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hi,
+
+Are you sure "smb2" is a real Qualcomm versioning? IOW, is there going
+to be smb3 in the future? If not, better to just name the file according
+to model, so like compatible and like other existing schemas from Qualcomm.
+
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm PMI8998/PM660 Switch-Mode Battery Charger "2"
+> +
+> +maintainers:
+> +  - Caleb Connolly <caleb.connolly@linaro.org>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,pmi8998-smb2
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    items:
+> +      - description: usb plugin
+
+Just maxItems:1 (description is obvious and matches names).
+
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: usb-plugin
+> +
+> +  io-channels:
+> +    items:
+> +      - description: USB in current in uA
+> +      - description: USB in voltage in uV
+> +
+> +  io-channel-names:
+> +    items:
+> +      - const: usbin_i
+> +      - const: usbin_v
+> +
+
+What about monitored-battery? How do you configure the battery
+characteristics?
+
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - interrupt-names
+> +  - io-channels
+> +  - io-channel-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    pmic {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +      #interrupt-cells = <4>;
+> +
+> +      smb2@1000 {
+
+Generic node name please, so "charger".
+
 
 
 Best regards,
