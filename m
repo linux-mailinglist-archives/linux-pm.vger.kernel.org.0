@@ -2,70 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 487BF4F06F1
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Apr 2022 05:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 942234F0713
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Apr 2022 05:14:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232272AbiDCDIT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 2 Apr 2022 23:08:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52858 "EHLO
+        id S231288AbiDCDP4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 2 Apr 2022 23:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231309AbiDCDHy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 Apr 2022 23:07:54 -0400
-X-Greylist: delayed 338 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 02 Apr 2022 20:06:01 PDT
-Received: from mta-out-05.alice.it (mta-out-05.alice.it [217.169.118.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF63231208
-        for <linux-pm@vger.kernel.org>; Sat,  2 Apr 2022 20:06:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alice.it; s=20211207; t=1648955161; 
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        h=Reply-To:From:To:Date:Message-ID:MIME-Version;
-        b=C9TnFlYhAOXVlxVZo7DwF9MJJkYABUpQ3qD/YxJ0hiorseT8a3dSu8wI2QyqwhldXui0QYJGwaHXCYfpMq/cvYppXK5OexShpr56QETe9Tt228ftNga4XiOgUYIBjS6w7UaLoZI7EQtLkbJg3vyr03BDuoq0N2AERXGTHoBOKZwoMMwGzYPM4c2JjUOeY1VsaxWEQQUUkumFXYtx+3uk9AgQWbYSJ47kzmrADkPMA3gaqRyv704axADv5FH6YgMPMz/ZrJNcNb1ONu/jXoJ3AKHXLjGb9BvGqtbgjrhLzwklepXOz9USGrvc5NNVTrBIp2uC7D/YjZUKyAOcpTkg8Q==
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvvddrudeiledgiedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuvffgnffgvefqoffkvfetnffktedpqfgfvfenuceurghilhhouhhtmecufedtudenucfgmhhpthihuchsuhgsjhgvtghtucdluddtmdengfhmphhthicusghougihucdlhedtmdenucfjughrpehrhffvfffkggestddtfedttddttdenucfhrhhomhephggvuchhrghvvgcurghnuchofhhfvghruchtohcuihhnvhgvshhtuchinhcuhihouhhrucgtohhunhhtrhihuchunhguvghrucgruchjohhinhhtuchvvghnthhurhgvuchprghrthhnvghrshhhihhpuchplhgvrghsvgcurhgvphhlhicufhhorhcumhhorhgvucguvghtrghilhhsuceofhgpphgvnhhnrgesrghlihgtvgdrihhtqeenucggtffrrghtthgvrhhnpeehjeetgefhleetiedtkeelfffgjeeugeegleekueffgfegtdekkeeifedvvdffteenucfkphepudejiedrvddvjedrvdegvddrudeltdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegrlhhitggvrdhithdpihhnvghtpedujeeirddvvdejrddvgedvrdduledtpdhmrghilhhfrhhomhepfhgpphgvnhhnrgesrghlihgtvgdrihhtpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-RazorGate-Vade-Verdict: clean 60
-X-RazorGate-Vade-Classification: clean
-Received: from alice.it (176.227.242.190) by mta-out-05.alice.it (5.8.807.04) (authenticated as f_penna@alice.it)
-        id 623DD3C500EA8667 for linux-pm@vger.kernel.org; Sun, 3 Apr 2022 05:00:21 +0200
-Reply-To: dougfield20@inbox.lv
-From:   We have an offer to invest in your country under a
-         joint venture partnership please reply for more
-         details <f_penna@alice.it>
-To:     linux-pm@vger.kernel.org
-Date:   02 Apr 2022 20:00:20 -0700
-Message-ID: <20220402200020.4FE7F0924B978443@alice.it>
+        with ESMTP id S231280AbiDCDPz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 2 Apr 2022 23:15:55 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5191E12A88;
+        Sat,  2 Apr 2022 20:13:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=45+PtY2KxLSf5ox+zJPh8dG5t1TTtpukHGJp11Nd5pA=; b=YSSNmTVTKaN8rHdY0ufjHHfZfp
+        b4ja/MhUhjU1AqLmOKgiKgLRjmctKLE257t18zSYl7tIqjsyNuTo8mhEdSsBWheEL47yIlWPwkZbu
+        642lWTGiV31EZtDnMlW+fHV9fVuzoLTUuXFVZ7pG/t5g28nMiHmYGFahSDpFs8WcCpNdU90pw6vbb
+        czc5wUKXD/PcD/a0S8Pa4mJfn4UXSPE56TxZGw/RYJI0/6O0rmRERYVJS/pAGyT4vQ53jJzO0GdiO
+        yK/hD05h0aXVfyNGT9bWuDXGCh44Wvl+9bj+fm2BYVDoocCphJkJo4QHH9U7CMxdyVDpqslOEz3n4
+        geeGXQSg==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1naqge-00AZ3b-Je; Sun, 03 Apr 2022 03:13:56 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Subject: [PATCH -next] cpuidle: riscv: support non-SMP config
+Date:   Sat,  2 Apr 2022 20:13:55 -0700
+Message-Id: <20220403031355.20894-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,BODY_EMPTY,
-        DKIM_INVALID,DKIM_SIGNED,EMPTY_MESSAGE,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,MISSING_SUBJECT,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L4,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.7 RCVD_IN_DNSWL_LOW RBL: Sender listed at https://www.dnswl.org/,
-        *       low trust
-        *      [217.169.118.11 listed in list.dnswl.org]
-        *  0.0 RCVD_IN_MSPIKE_L4 RBL: Bad reputation (-4)
-        *      [217.169.118.11 listed in bl.mailspike.net]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5035]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [f_penna[at]alice.it]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [dougfield20[at]inbox.lv]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  2.3 EMPTY_MESSAGE Message appears to have no textual parts and no
-        *      Subject: text
-        *  1.8 MISSING_SUBJECT Missing Subject: header
-        *  0.1 DKIM_INVALID DKIM or DK signature exists, but is not valid
-        *  0.0 RCVD_IN_MSPIKE_BL Mailspike blacklisted
-        *  0.0 BODY_EMPTY No body text in message
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Add <asm/smp.h> for cpuid_to_hartid_map etc.
+This is needed for both SMP and non-SMP builds, but not having it
+causes a build error for non-SMP:
+
+drivers/cpuidle/cpuidle-riscv-sbi.c: In function 'sbi_cpuidle_init_cpu':
+drivers/cpuidle/cpuidle-riscv-sbi.c:350:26: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror=implicit-function-declaration]
+
+Fixes: 6abf32f1d9c5 ("cpuidle: Add RISC-V SBI CPU idle driver")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Anup Patel <anup.patel@wdc.com>
+Cc: Anup Patel <anup@brainfault.org>
+Cc: Anup Patel <apatel@ventanamicro.com>
+Cc: Atish Patra <atishp@rivosinc.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pm@vger.kernel.org
+Cc: linux-riscv@lists.infradead.org
+Cc: Palmer Dabbelt <palmer@rivosinc.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+---
+ drivers/cpuidle/cpuidle-riscv-sbi.c |    1 +
+ 1 file changed, 1 insertion(+)
+
+--- linux-next-20220401.orig/drivers/cpuidle/cpuidle-riscv-sbi.c
++++ linux-next-20220401/drivers/cpuidle/cpuidle-riscv-sbi.c
+@@ -22,6 +22,7 @@
+ #include <linux/pm_runtime.h>
+ #include <asm/cpuidle.h>
+ #include <asm/sbi.h>
++#include <asm/smp.h>
+ #include <asm/suspend.h>
+ 
+ #include "dt_idle_states.h"
