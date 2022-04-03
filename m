@@ -2,229 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 701DB4F07EE
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Apr 2022 07:48:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EBCB4F083C
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Apr 2022 09:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240896AbiDCFuY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 3 Apr 2022 01:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39222 "EHLO
+        id S237774AbiDCHQ3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 3 Apr 2022 03:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240151AbiDCFuW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Apr 2022 01:50:22 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCF0BCC;
-        Sat,  2 Apr 2022 22:48:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=WQNoMJjopelVAEED89ffOV+of291eaLHpcsVbmVHuRQ=; b=0es1+Ejv35t67D4PBnvSGY/rZV
-        sJrcHTVDcmzHeR/+6K+lfakLc/aI1HB5TCGmW2QfOxFshZaHOM9tBYnyq1dKNQVwIh1RbuLidkD/w
-        AKpCI1yVgPrc8TMLHLgaISKIp/FvU0QNPAa/TT8DhzcpnF/Xv18GC6R+sKr0LmPgtSuKJxfrwzXoh
-        95PZe1xZM8K/4VwRIi7niem8fIJVOee8liypxnGE3mA8ppSNpdEkDK9Y/zz1FnmlrXWdqZR5UauPn
-        kKFTLTTBEW3/3kTLqSt8Y949sWFATGlnXJo2RVOYvfrXw6JAwEP0VRLASyk/EDnEiKidW/mwKeGse
-        8CkrguFA==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nat68-00Amnh-OU; Sun, 03 Apr 2022 05:48:24 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        linux-s390@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-        linux-ia64@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <lenb@kernel.org>,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH 1/3 v3] Docs: admin/kernel-parameters: edit a few boot options
-Date:   Sat,  2 Apr 2022 22:48:20 -0700
-Message-Id: <20220403054822.16868-2-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220403054822.16868-1-rdunlap@infradead.org>
-References: <20220403054822.16868-1-rdunlap@infradead.org>
+        with ESMTP id S232126AbiDCHQ2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Apr 2022 03:16:28 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0CE2A240;
+        Sun,  3 Apr 2022 00:14:34 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id s8so6161883pfk.12;
+        Sun, 03 Apr 2022 00:14:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=79ZQ4/IBxoYZy6JMRBmsM+bMHL7GqptUlX0BzrwDfvE=;
+        b=I/ZvNlzZbFxrEu+M79OVcq8VYhyZQJXkrAXGGdRSnK5ghgvcX81I8xhdbyxRfFsRBz
+         i8eH3kcRYCN6aOARAG+mSDL46r2b0w1qyCaptBvxbr43e/9GyZR2v3DoPN7qAB6GCaAR
+         Jd7DOvOoqYXojGrlPQxBCE3hpf2SE3U3J6zbXs3PZQeWBgyLJ43PbmPiQevWvGun5wzk
+         THH8FTR0vOkwJa2ydhylMPoxdYYnK5x0b/Z4WsT7qa15yQdijvkSZ6KLB6/MIpnjJnR3
+         3mrU0BVBcfrIAXu/IPwbs+/pqj4c+TSZ7iDpdlDUQ8dRt5z0VSObZ2+zOLFfKoo+m/5e
+         2SuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=79ZQ4/IBxoYZy6JMRBmsM+bMHL7GqptUlX0BzrwDfvE=;
+        b=SjpMR8WizKZs9JAd5gkIXusBIW4scY65ClqbmKfC6nVA7pOYoIT6fLliMDPiJNmJsG
+         gMxK9PuE4UfGd9ln4qkXWxaFHeeNWXHZeQXCBBsRwzA8grgLWbDyfB+XjJbofyAg/uiC
+         Y1uKKKGMO0Ilp6ChdqcDUqJfv7SYQukvMrL3iV0UtvOWzc2aiRzJcyjOKDNdMV5uBii2
+         YyvOmfobToe3WnmWYMxuAstA9wnUHmy65KhTvcusiaARUypyu45aAsfOXe9e0T/J+/y5
+         D6PYtDZDcGhcW3AJXs+nxTAbE+Hqx/GWaO8MWFtH6V9+4naDhOXqFLvrCGWwfnchgzwc
+         iyHQ==
+X-Gm-Message-State: AOAM532dPxNh3yRS6+x6zGLZqHzFYpP6y8spR34Sr06Aj4nnm2vMRt5z
+        mv7Fm5N3+FjMzjdxsfEnuUi/MPPMTigZ3g==
+X-Google-Smtp-Source: ABdhPJxxLH5zEbxbEHe1+UDmlUduwVo27h+uiYdpReWNlzu4hDee9cH5o8oadLg00I6k7WqFuGXe9g==
+X-Received: by 2002:a63:2cd5:0:b0:398:997f:a440 with SMTP id s204-20020a632cd5000000b00398997fa440mr20280038pgs.344.1648970073719;
+        Sun, 03 Apr 2022 00:14:33 -0700 (PDT)
+Received: from 9a2d8922b8f1 ([122.161.51.18])
+        by smtp.gmail.com with ESMTPSA id ot17-20020a17090b3b5100b001c746bfba10sm18324045pjb.35.2022.04.03.00.14.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Apr 2022 00:14:33 -0700 (PDT)
+Date:   Sun, 3 Apr 2022 12:44:26 +0530
+From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
+To:     Caleb Connolly <caleb.connolly@linaro.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Subject: Re: [PATCH 6/6] dt-bindings: power: supply: qcom,smb2: add bindings
+ for smb2 driver
+Message-ID: <20220403071426.GA49153@9a2d8922b8f1>
+References: <20220401202643.877609-1-caleb.connolly@linaro.org>
+ <20220401202643.877609-7-caleb.connolly@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220401202643.877609-7-caleb.connolly@linaro.org>
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Clean up some of admin-guide/kernel-parameters.txt:
+On Fri, Apr 01, 2022 at 09:26:43PM +0100, Caleb Connolly wrote:
+> Add devicetree bindings for the Qualcomm PMI8998/PM660 SMB2 charger
+> drivers.
+> 
+> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
+> ---
+>  .../bindings/power/supply/qcom,smb2.yaml      | 68 +++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/qcom,smb2.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/qcom,smb2.yaml b/Documentation/devicetree/bindings/power/supply/qcom,smb2.yaml
+> new file mode 100644
+> index 000000000000..1bea1fef78b8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/qcom,smb2.yaml
+> @@ -0,0 +1,68 @@
+> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/qcom,smb2.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm PMI8998/PM660 Switch-Mode Battery Charger "2"
+> +
+> +maintainers:
+> +  - Caleb Connolly <caleb.connolly@linaro.org>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,pmi8998-smb2
 
-a. "smt" should be "smt=" (S390)
-b. (dropped)
-c. Sparc supports the vdso= boot option
-d. make the tp_printk options (2) formatting similar to other options
-   by adding spacing
-e. add "trace_clock=" with a reference to Documentation/trace/ftrace.rst
-f. use [IA-64] as documented instead of [ia64]
-g. fix formatting and text for test_suspend=
-h. fix formatting for swapaccount=
-i. fix formatting and grammar for video.brightness_switch_enabled=
+Since there's only 1 entry, please use const.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc: Sven Schnelle <svens@linux.ibm.com>
-Cc: linux-s390@vger.kernel.org
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: sparclinux@vger.kernel.org
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: linux-ia64@vger.kernel.org
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Len Brown <lenb@kernel.org>
-Cc: linux-pm@vger.kernel.org
-Cc: linux-acpi@vger.kernel.org
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: linux-doc@vger.kernel.org
----
-v3: add trace_clock= specifics (Steven)
-v2: drop "smt-enabled" for arch/powerpc/ (Michael)
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    items:
+> +      - description: usb plugin
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: usb-plugin
+> +
+> +  io-channels:
+> +    items:
+> +      - description: USB in current in uA
+> +      - description: USB in voltage in uV
+> +
+> +  io-channel-names:
+> +    items:
+> +      - const: usbin_i
+> +      - const: usbin_v
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - interrupt-names
+> +  - io-channels
+> +  - io-channel-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
 
- Documentation/admin-guide/kernel-parameters.txt |   47 ++++++++++----
- 1 file changed, 36 insertions(+), 11 deletions(-)
+New line here. Looks nice.
 
---- linux-next-20220331.orig/Documentation/admin-guide/kernel-parameters.txt
-+++ linux-next-20220331/Documentation/admin-guide/kernel-parameters.txt
-@@ -2814,7 +2814,7 @@
- 			different yeeloong laptops.
- 			Example: machtype=lemote-yeeloong-2f-7inch
- 
--	max_addr=nn[KMG]	[KNL,BOOT,ia64] All physical memory greater
-+	max_addr=nn[KMG]	[KNL,BOOT,IA-64] All physical memory greater
- 			than or equal to this physical address is ignored.
- 
- 	maxcpus=	[SMP] Maximum number of processors that	an SMP kernel
-@@ -3057,7 +3057,7 @@
- 
- 	mga=		[HW,DRM]
- 
--	min_addr=nn[KMG]	[KNL,BOOT,ia64] All physical memory below this
-+	min_addr=nn[KMG]	[KNL,BOOT,IA-64] All physical memory below this
- 			physical address is ignored.
- 
- 	mini2440=	[ARM,HW,KNL]
-@@ -5388,7 +5388,7 @@
- 				1: Fast pin select (default)
- 				2: ATC IRMode
- 
--	smt		[KNL,S390] Set the maximum number of threads (logical
-+	smt=		[KNL,S390] Set the maximum number of threads (logical
- 			CPUs) to use per physical CPU on systems capable of
- 			symmetric multithreading (SMT). Will be capped to the
- 			actual hardware limit.
-@@ -5774,8 +5774,9 @@
- 			This parameter controls use of the Protected
- 			Execution Facility on pSeries.
- 
--	swapaccount=[0|1]
--			[KNL] Enable accounting of swap in memory resource
-+	swapaccount=	[KNL]
-+			Format: [0|1]
-+			Enable accounting of swap in memory resource
- 			controller if no parameter or 1 is given or disable
- 			it if 0 is given (See Documentation/admin-guide/cgroup-v1/memory.rst)
- 
-@@ -5821,7 +5822,8 @@
- 
- 	tdfx=		[HW,DRM]
- 
--	test_suspend=	[SUSPEND][,N]
-+	test_suspend=	[SUSPEND]
-+			Format: { "mem" | "standby" | "freeze" }[,N]
- 			Specify "mem" (for Suspend-to-RAM) or "standby" (for
- 			standby suspend) or "freeze" (for suspend type freeze)
- 			as the system sleep state during system startup with
-@@ -5908,6 +5910,28 @@
- 	trace_buf_size=nn[KMG]
- 			[FTRACE] will set tracing buffer size on each cpu.
- 
-+	trace_clock=	[FTRACE] Set the clock used for tracing events
-+			at boot up.
-+			local - Use the per CPU time stamp counter
-+				(converted into nanoseconds). Fast, but
-+				depending on the architecture, may not be
-+				in sync between CPUs.
-+			global - Event time stamps are synchronize across
-+				CPUs. May be slower than the local clock,
-+				but better for some race conditions.
-+			counter - Simple counting of events (1, 2, ..)
-+				note, some counts may be skipped due to the
-+				infrastructure grabbing the clock more than
-+				once per event.
-+			uptime - Use jiffies as the time stamp.
-+			perf - Use the same clock that perf uses.
-+			mono - Use ktime_get_mono_fast_ns() for time stamps.
-+			mono_raw - Use ktime_get_raw_fast_ns() for time
-+				stamps.
-+			boot - Use ktime_get_boot_fast_ns() for time stamps.
-+			Architectures may add more clocks. See
-+			Documentation/trace/ftrace.rst for more details.
-+
- 	trace_event=[event-list]
- 			[FTRACE] Set and start specified trace events in order
- 			to facilitate early boot debugging. The event-list is a
-@@ -5930,7 +5954,7 @@
- 			See also Documentation/trace/ftrace.rst "trace options"
- 			section.
- 
--	tp_printk[FTRACE]
-+	tp_printk	[FTRACE]
- 			Have the tracepoints sent to printk as well as the
- 			tracing ring buffer. This is useful for early boot up
- 			where the system hangs or reboots and does not give the
-@@ -5952,7 +5976,7 @@
- 			frequency tracepoints such as irq or sched, can cause
- 			the system to live lock.
- 
--	tp_printk_stop_on_boot[FTRACE]
-+	tp_printk_stop_on_boot [FTRACE]
- 			When tp_printk (above) is set, it can cause a lot of noise
- 			on the console. It may be useful to only include the
- 			printing of events during boot up, as user space may
-@@ -6301,7 +6325,7 @@
- 					HIGHMEM regardless of setting
- 					of CONFIG_HIGHPTE.
- 
--	vdso=		[X86,SH]
-+	vdso=		[X86,SH,SPARC]
- 			On X86_32, this is an alias for vdso32=.  Otherwise:
- 
- 			vdso=1: enable VDSO (the default)
-@@ -6327,11 +6351,12 @@
- 	video=		[FB] Frame buffer configuration
- 			See Documentation/fb/modedb.rst.
- 
--	video.brightness_switch_enabled= [0,1]
-+	video.brightness_switch_enabled= [ACPI]
-+			Format: [0|1]
- 			If set to 1, on receiving an ACPI notify event
- 			generated by hotkey, video driver will adjust brightness
- 			level and then send out the event to user space through
--			the allocated input device; If set to 0, video driver
-+			the allocated input device. If set to 0, video driver
- 			will only send out the event without touching backlight
- 			brightness level.
- 			default: 1
+> +    pmic {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +      #interrupt-cells = <4>;
+> +
+> +      smb2@1000 {
+> +        compatible = "qcom,pmi8998-smb2";
+> +        reg = <0x1000>;
+> +
+> +        interrupts = <0x2 0x13 0x4 IRQ_TYPE_EDGE_BOTH>;
+> +        interrupt-names = "usb-plugin";
+> +
+
+In-between new lines may not be required.
+And DTs use tabs instead of 2 spaces, we can follow that here also.
+
+> +        io-channels = <&pmi8998_rradc 3>,
+> +                      <&pmi8998_rradc 4>;
+> +        io-channel-names = "usbin_i",
+> +                           "usbin_v";
+
+Channel-names can be written in one line.
+
+> +      };
+> +    };
+> -- 
+> 2.35.1
+> 
