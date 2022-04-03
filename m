@@ -2,141 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D24C24F0AA5
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Apr 2022 17:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A39E4F0B44
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Apr 2022 18:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239319AbiDCPcG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 3 Apr 2022 11:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47422 "EHLO
+        id S239112AbiDCQji (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 3 Apr 2022 12:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235145AbiDCPcF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Apr 2022 11:32:05 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43585393DE
-        for <linux-pm@vger.kernel.org>; Sun,  3 Apr 2022 08:30:10 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id u3so10963995wrg.3
-        for <linux-pm@vger.kernel.org>; Sun, 03 Apr 2022 08:30:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=g/pOdUoD+aSLxOxunI/HD3X3dn118+KcjklCC+A61c0=;
-        b=KiRNvDwwTy7V/nXZ51s+7PKUgpf7mFtIMQ1I7yvBHvWorPgiupKGZgboDKlU0bycRG
-         zhCmA9IuNbrJbX5Ziyy0JodN4D6xJeZE1AxUpGEQyRd3sZEZyH0hC0WMIiFkMoNd1dm8
-         mxR3odG/lCPYWhk4Ncixk/5MXMBub4wCE/jytzG//QrD+ggjRmNUtaLfPQhJXwKmHpCN
-         hgllZLArzcs3h+mseXpNju2E9sMzdo3DxVj3YqZFSREbpQSkhLWXcEakjevm8YmH7Wts
-         vyw7p+Ft4793ob07zsV91d7ja40sQ0LxxnySXcGcy4YdqGeeE4XIsv8vtMKMviw4ik9E
-         9C5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=g/pOdUoD+aSLxOxunI/HD3X3dn118+KcjklCC+A61c0=;
-        b=0gU5+sOnCpJOs0RnieZKcF+wr5ZVWV66NSCxn/vvLIZAaMF7CMMVzQ4qP3iVYPaL7F
-         dXTvSeCUyiTLWzLHhKdIWOfI/3dN7MpH0RBUSVUGfnXME92ta/s8L2FRlD+OtOKTrASj
-         2estjo6W9jtJDJyHLTdlU6np0cubollA0zPEBThjJXPElT4H8zJaEhD+HVx6VtC1pVjs
-         SwCHRk9iMItuHTmoTUV+FyVZRYZ5MXz1HTfc8KKy/8tuJ53/MYle0wpAyCoIhIDD9AA+
-         fldbBzLeQkFnyCN+qLGKWRQcidpns7UMDC32UuSkSeoGtWWFJ8fypQjDzuLTEo0JzbqH
-         pkvg==
-X-Gm-Message-State: AOAM530/nDAmKIaRCQ2XMJ2dg/oIacAwn52bHeUY4AR/hU6nsAAKpVNU
-        Np+3pO6K9tv5mrV021Op9VFRSg==
-X-Google-Smtp-Source: ABdhPJwwB+OVtGxMkpj7zQX5eTLsSBfBcwUVIx+fSag8zqpUp3Pma2boS8iBSUv1j9j0vft+N7t+Lw==
-X-Received: by 2002:adf:e0ce:0:b0:1ef:706d:d6b9 with SMTP id m14-20020adfe0ce000000b001ef706dd6b9mr14723279wri.71.1648999808830;
-        Sun, 03 Apr 2022 08:30:08 -0700 (PDT)
-Received: from [192.168.0.172] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id r14-20020a0560001b8e00b00205918bd86esm7025492wru.78.2022.04.03.08.30.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 03 Apr 2022 08:30:08 -0700 (PDT)
-Message-ID: <99f1181b-fde2-43a5-9b6a-c0c3a8b3933f@linaro.org>
-Date:   Sun, 3 Apr 2022 17:30:07 +0200
+        with ESMTP id S233614AbiDCQjh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Apr 2022 12:39:37 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DDE1401C;
+        Sun,  3 Apr 2022 09:37:42 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649003861;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eS+UiMhA8iNM6xa0w2K4AD9ghFBWI8GSz6jHOKEqkHs=;
+        b=GVgZC5UJw/g4D+6k+FOVt826rgBPkHy6UWjV/T2XcE3bkgl1ijRsd1lx/dWwDzY1lue5pN
+        yTs5bFL+wMYed0AysYWtK8Tq9k3gl3l080/wgjBerz8QajfZzLsDh/KvkzTXnqUlUNoEHv
+        E/TkuFPQPdZNWpwuyxw6ZCp+4Tt02ZxYue7FVRMVCeQ5eEK1J74hxBwkvz8vymwI4dgNfQ
+        oWVz2dJoYRVb0wUwH4lEhHrxi/Nv9cAT+VSjsuZhqZcCcoTFF+Zr+kdDZ1+xZU1kzfsddO
+        LrUSeTFyuLBmgUSS+GeTs+i3lJJN4sWkr2vrvqSfgfxxr3qPIxIGdNCJRdqWog==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649003861;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eS+UiMhA8iNM6xa0w2K4AD9ghFBWI8GSz6jHOKEqkHs=;
+        b=fNACQNkKyMDVclM89e5Xk72Ur5ULilHWF3O8aUr7zcowwB0cjZvboSRXA0EKgUnPQ3nIfI
+        wZ9e+yVMRSn5kSBQ==
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     dave.hansen@linux.intel.com, peterz@infradead.org, bp@alien8.de,
+        rafael@kernel.org, ravi.v.shankar@intel.com,
+        chang.seok.bae@intel.com
+Subject: Re: [PATCH v3 2/3] x86/fpu: Add a helper to prepare AMX state for
+ low-power CPU idle
+In-Reply-To: <20220325022219.829-3-chang.seok.bae@intel.com>
+References: <20220325022219.829-1-chang.seok.bae@intel.com>
+ <20220325022219.829-3-chang.seok.bae@intel.com>
+Date:   Sun, 03 Apr 2022 18:37:40 +0200
+Message-ID: <8735ium8bv.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 6/6] dt-bindings: power: supply: qcom,smb2: add bindings
- for smb2 driver
-Content-Language: en-US
-To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>
-Cc:     Caleb Connolly <caleb.connolly@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-References: <20220401202643.877609-1-caleb.connolly@linaro.org>
- <20220401202643.877609-7-caleb.connolly@linaro.org>
- <20220403071426.GA49153@9a2d8922b8f1>
- <798f0244-95dd-cf2d-7bc5-02c72c7fa327@linaro.org>
- <20220403133122.GA49428@9a2d8922b8f1>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220403133122.GA49428@9a2d8922b8f1>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/04/2022 15:31, Kuldeep Singh wrote:
-> On Sun, Apr 03, 2022 at 09:56:25AM +0200, Krzysztof Kozlowski wrote:
->> On 03/04/2022 09:14, Kuldeep Singh wrote:
->>> On Fri, Apr 01, 2022 at 09:26:43PM +0100, Caleb Connolly wrote:
->>>> Add devicetree bindings for the Qualcomm PMI8998/PM660 SMB2 charger
->>>> drivers.
->>>>
->>
->> (...)
->>
->>>
->>>> +    pmic {
->>>> +      #address-cells = <1>;
->>>> +      #size-cells = <0>;
->>>> +      #interrupt-cells = <4>;
->>>> +
->>>> +      smb2@1000 {
->>>> +        compatible = "qcom,pmi8998-smb2";
->>>> +        reg = <0x1000>;
->>>> +
->>>> +        interrupts = <0x2 0x13 0x4 IRQ_TYPE_EDGE_BOTH>;
->>>> +        interrupt-names = "usb-plugin";
->>>> +
->>>
->>> In-between new lines may not be required.
->>> And DTs use tabs instead of 2 spaces, we can follow that here also.
->>
->> The DT examples in bindings use spaces. Either two (like YAML) or four
->> (for easier reading).
-> 
-> ok, since example snippet is taken from DT that's why I said four
-> spaces(tab) as it will be closest to actual env.
+On Thu, Mar 24 2022 at 19:22, Chang S. Bae wrote:
+> When a CPU enters an idle state, non-initialized states left in large
+> registers may be the cause of preventing deeper low-power states.
+>
+> The new helper ensures the AMX state is initialized to make the CPU
+> ready for low-power states. It will be used by the intel idle driver.
 
-You said "use tabs", which is 8 spaces in Linux. So to clarify - we do
-not use tabs here, so do not use tabs.
+What about AVX...AVX512? Are they harmless in that regard?
 
->>>> +        io-channels = <&pmi8998_rradc 3>,
->>>> +                      <&pmi8998_rradc 4>;
->>>> +        io-channel-names = "usbin_i",
->>>> +                           "usbin_v";
->>>
->>> Channel-names can be written in one line.
->>
->> They match the format of io-channels, so this is quite readable.
-> 
-> io-channels doesn't exceed max characters in line(i.e 75) even after
-> being clubbed. Won't be better if kept in one line?
-> This might be personal perspective but I thought it's worth mentioning.
+If so, then the first sentence above is confusing and should clearly
+spell out that it's AMX which causes that problem.
 
-I find current code readable. The other option would be fine as well,
-kind of does not matter to me much.
+In not, then why are we not putting them into init too?
 
-Best regards,
-Krzysztof
+Thanks,
+
+        tglx
