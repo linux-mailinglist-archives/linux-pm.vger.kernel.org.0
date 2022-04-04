@@ -2,146 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2098E4F0DBF
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 05:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D0424F0F57
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 08:26:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349334AbiDDDlc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 3 Apr 2022 23:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47222 "EHLO
+        id S229571AbiDDG2W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Apr 2022 02:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiDDDlc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 3 Apr 2022 23:41:32 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECFE53981C
-        for <linux-pm@vger.kernel.org>; Sun,  3 Apr 2022 20:39:36 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id d3so1675484wrb.7
-        for <linux-pm@vger.kernel.org>; Sun, 03 Apr 2022 20:39:36 -0700 (PDT)
+        with ESMTP id S1377538AbiDDG2Q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 02:28:16 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2063A1D0E3
+        for <linux-pm@vger.kernel.org>; Sun,  3 Apr 2022 23:26:21 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id g15-20020a17090adb0f00b001caa9a230c7so679336pjv.5
+        for <linux-pm@vger.kernel.org>; Sun, 03 Apr 2022 23:26:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=U8/aVwpSbq6P9VWydiIc4i/5KLXIXBAm03QUmehMn90=;
-        b=lvqfyewAeZVZqnq38NmTEFXQ21z8cKjlNzK3dv5woldXyrCqvq1J7jEQEA5dPfELwR
-         DI8ctTyRcE/aoMdkRHYV0PCd0WM99O9wl2WEI7ZO613MqLOz7aXq8C/JTpJXdvL4piF5
-         BJTr6R9edkG1Aj9Yj9vLqS/hGQVmverEBL88kWQPvnGPhUFIF0VTDuZHXqjZhjfd10qy
-         kgifni6hKujgSDPN3/ita0Px+guu9OHnsDxggxD9jXZqhEY4aUu9zYucgbed9Lnen2Cx
-         JaqtT0skohJQtlUlwTjTLPPogHDPuS90d9c5XEoNzSL2sfknfpvo6smUyrBNJyXzBcJt
-         UPlQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=KPWZKT7rXbxTEd/WteLFqRFnq+3UMovg6ND4Ll5auQE=;
+        b=ArE7uCB4oI7KA/Xm0VWivXvesffRt5PfmkswBMybP8XGWfZ+IUf8+UemrsSrrjs0pZ
+         vM3NL+Jjbaca4eCqdHvLCdLgS5/SI/pNV7mx9L6h5JxPbL8eEKThL7es0w75hOFyvFJO
+         uNQyWvkr2xFnKz5BV5vmDKkw9y8cc63mXOvHl51yZnbITJqHhCQCnRNijw0ZkNlqhmrj
+         XHbdLB0HHlZ1PXUgchSh7z4Q897BWWl91z+x8g2M0lN8HrmZExZbEEi5V0m/qMYoLmPe
+         A/Ggl7B+eZt6odteT/2UtZk5C78j7vDrQ7itYJCxgZku1XKWGWcg3iCeLK3pqZ2fhWJN
+         8SdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=U8/aVwpSbq6P9VWydiIc4i/5KLXIXBAm03QUmehMn90=;
-        b=BCedJtKfQD1FaeZOvzq6SVEQsvaMgyg91dWM7czRxsERu9QFzr8Nr5JIEeKyL933Vh
-         PEfLsRpSTYLQJsUaL1i+Lq4I8QJAMkwpGEP1ELLCVo27BTtkoA6tgPWynLAEoQuELysb
-         uzUwXKVCvfA5ONnSncZpj+pJtWBCkKBPsK1TKFJ4y8+XrVzWqJgSsH+/LbqMOGEWs4qx
-         IaEklRNJ4IRszWyugoJZ6TIFFV2SFieUnplUvb9CYV47/3uNvcUFQDaOUcUozucH6UQk
-         SwB9idtf/rAODQki94JTAQL2sowX/df9wuPL8GeV21DBVB65dcXwnPRn4hD87OD0eHzM
-         MGjg==
-X-Gm-Message-State: AOAM530KVx2SelEfi1O+h02cysUnGS9ilNPPWkpcmIvuJVR9Wys1eC+d
-        KxbZlMsDGiipy1AQYNjuNeN3TLK+cQhxrm8/hZaRxQ==
-X-Google-Smtp-Source: ABdhPJzq3a5wx76W4hZJ3J/Mqk4N79e3BhGOpuIKHRDsBWV6w0TtjQ7B7qXfQE/JSCz5Zy3uS6iFbskTIXO+XI2G6I4=
-X-Received: by 2002:adf:db86:0:b0:205:bccf:8cbf with SMTP id
- u6-20020adfdb86000000b00205bccf8cbfmr15183666wri.346.1649043575307; Sun, 03
- Apr 2022 20:39:35 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=KPWZKT7rXbxTEd/WteLFqRFnq+3UMovg6ND4Ll5auQE=;
+        b=auQlWjzh+qGJKp0zV0pRjvVBXfFcZz4Dj+1dmmQ12JqseTIP+5Ff8dHF5EIR70k8Sj
+         MqKynYkiWBDh6jRC8FHVrX+W1Gm797Ld4pfkuR87AI/sCDVDQXWKdEAVicGbzs92gut2
+         C1FxTzyIc3unmCiRxJj/4OFPQIedO8+pXSQEwB2oGf6R2qUaZ2N4OacYURn9qlNsZQoL
+         15u8zZUT2Yd61BCmckb6YhijG6ji7FUE3bMaQph/dsjGF8l2YlNc+hLLS5qCcq5+kWE5
+         Ef1ywtO5TXan1a76qfddlWPSQ0rxUag/41tksZDaNR3wXbOOU1uudveHI5lSNEIe32oF
+         3JYQ==
+X-Gm-Message-State: AOAM533b65PabciZCtO8k3DTcs7OOISOhZe1+WxKT9ppXqw4y1mpZE/A
+        h5nG+/4CQItIuMEmovORXU2vYw==
+X-Google-Smtp-Source: ABdhPJz6cI5D7xsRDpGQlH79Z1TQVxkxjBug0u1YG+hYqnUYnZnstMAOSG3iJoZYFOpJhIneFEDZCw==
+X-Received: by 2002:a17:90b:3ecb:b0:1c7:74f6:ae73 with SMTP id rm11-20020a17090b3ecb00b001c774f6ae73mr24746094pjb.236.1649053580563;
+        Sun, 03 Apr 2022 23:26:20 -0700 (PDT)
+Received: from localhost ([223.184.83.228])
+        by smtp.gmail.com with ESMTPSA id x14-20020aa784ce000000b004fa79973c94sm10250228pfn.165.2022.04.03.23.26.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Apr 2022 23:26:19 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 11:56:18 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PM: opp: Fix NULL pointer exception on a v2 table
+ combined with v1 opps
+Message-ID: <20220404062618.jtqlb4cfkerctpas@vireshk-i7>
+References: <20220401120325.820763-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <20220403031355.20894-1-rdunlap@infradead.org> <CAAhSdy2CJMeD_JhvwkEKShtYxyLGVRme8rE4cmCcDFfO90_D-Q@mail.gmail.com>
- <61196f88-7306-058d-7b9b-21e32f1fca92@infradead.org>
-In-Reply-To: <61196f88-7306-058d-7b9b-21e32f1fca92@infradead.org>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Mon, 4 Apr 2022 09:08:25 +0530
-Message-ID: <CAAhSdy3w2tXVtD9jBO7xFx8F_CbhKZDs6PfFF44CRhVfXmBbNg@mail.gmail.com>
-Subject: Re: [PATCH -next] cpuidle: riscv: support non-SMP config
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220401120325.820763-1-krzysztof.kozlowski@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Apr 4, 2022 at 9:07 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->
->
->
-> On 4/3/22 20:05, Anup Patel wrote:
-> > (Removed my WDC email because it does not exist anymore)
-> >
-> > On Sun, Apr 3, 2022 at 8:44 AM Randy Dunlap <rdunlap@infradead.org> wrote:
-> >>
-> >> Add <asm/smp.h> for cpuid_to_hartid_map etc.
-> >> This is needed for both SMP and non-SMP builds, but not having it
-> >> causes a build error for non-SMP:
-> >>
-> >> drivers/cpuidle/cpuidle-riscv-sbi.c: In function 'sbi_cpuidle_init_cpu':
-> >> drivers/cpuidle/cpuidle-riscv-sbi.c:350:26: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror=implicit-function-declaration]
-> >>
-> >> Fixes: 6abf32f1d9c5 ("cpuidle: Add RISC-V SBI CPU idle driver")
-> >> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> >> Reported-by: kernel test robot <lkp@intel.com>
-> >> Cc: Anup Patel <anup.patel@wdc.com>
-> >> Cc: Anup Patel <anup@brainfault.org>
-> >> Cc: Anup Patel <apatel@ventanamicro.com>
-> >> Cc: Atish Patra <atishp@rivosinc.com>
-> >> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> >> Cc: linux-pm@vger.kernel.org
-> >> Cc: linux-riscv@lists.infradead.org
-> >> Cc: Palmer Dabbelt <palmer@rivosinc.com>
-> >> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> >> Cc: Albert Ou <aou@eecs.berkeley.edu>
-> >> ---
-> >>  drivers/cpuidle/cpuidle-riscv-sbi.c |    1 +
-> >>  1 file changed, 1 insertion(+)
-> >>
-> >> --- linux-next-20220401.orig/drivers/cpuidle/cpuidle-riscv-sbi.c
-> >> +++ linux-next-20220401/drivers/cpuidle/cpuidle-riscv-sbi.c
-> >> @@ -22,6 +22,7 @@
-> >>  #include <linux/pm_runtime.h>
-> >>  #include <asm/cpuidle.h>
-> >>  #include <asm/sbi.h>
-> >> +#include <asm/smp.h>
-> >
-> > I suggest include linux/smp.h here instead of asm/smp.h
-> >
-> > Otherwise it looks good to me.
-> >
-> > Reviewed-by: Anup Patel <anup@brainfault.org>
-> >
->
-> Yeah, checkpatch also suggested that but it does not work.
-> Yes, I tested it.
->
-> linux/smp.h only #includes <asm/smp.h> if CONFIG_SMP is enabled,
-> and this patch needs <asm/smp.h> for the non-SMP case.
+On 01-04-22, 14:03, Krzysztof Kozlowski wrote:
+> dev_pm_opp_add() adds a v1 OPP.  If the Devicetree contains an OPP v2
+> table with required-opps, but the driver uses dev_pm_opp_add(), the
+> table might have required_opp_count!=0 but the opp->required_opps will
+> be NULL.
 
-Okay, sounds good to me.
+This use-case isn't supported currently, as either all OPPs should
+have required-opp or none. This kind of scenario may end up breaking
+at other places later on, as I have designed this stuff with the
+above assumption.
 
-No changes needed in this patch.
-
-Regards,
-Anup
-
->
-> >
-> >>  #include <asm/suspend.h>
-> >>
-> >>  #include "dt_idle_states.h"
->
-> thanks.
-> --
-> ~Randy
+-- 
+viresh
