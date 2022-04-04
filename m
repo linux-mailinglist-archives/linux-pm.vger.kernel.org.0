@@ -2,150 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 769334F1A6E
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 23:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A48B74F1A72
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 23:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378927AbiDDVSY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Apr 2022 17:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
+        id S1378942AbiDDVSa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Apr 2022 17:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379014AbiDDQT7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 12:19:59 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5660331922
-        for <linux-pm@vger.kernel.org>; Mon,  4 Apr 2022 09:18:03 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id k124-20020a1ca182000000b0038c9cf6e2a6so5955391wme.0
-        for <linux-pm@vger.kernel.org>; Mon, 04 Apr 2022 09:18:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=YATu+tfw31GSz41b5CTKhB5HbxvgHUcP6Ebg25sVMHI=;
-        b=mA0W820ViwlJyrK0ssBga0gNu7FmrwKbBiRzKR1++FD6ONeK32Nsz3ERwR+hlqgNyW
-         8AfIh2spcx57WDyTwjearqZOreDolImi1mIhZL8T3x/Rhgq3ugbA+bwaopt/TxfyQX+d
-         dOpBHc3hmkA13c2eg+Qx1N/dKFsFPc5UPz3Tb3RpA8bcEH/6unqRqkkt2vvjXZcvokCI
-         tapKQJCDvYsl25ONAYf5FPUgAXchSpJnVjOb5HcbCDo65ScuFHBGSj88s9mF+uaiZ6ym
-         nLRQ78vFeiFuOH1f3wamgEdseP6hhLtHS3uVAA7R8/4LS+HV1LBH0Naz0vsteQ/0S7mC
-         zQbA==
+        with ESMTP id S1379039AbiDDQXD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 12:23:03 -0400
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A24BC0B;
+        Mon,  4 Apr 2022 09:21:07 -0700 (PDT)
+Received: by mail-oo1-f47.google.com with SMTP id w20-20020a4ae9f4000000b003243aa2c71aso1843365ooc.0;
+        Mon, 04 Apr 2022 09:21:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=YATu+tfw31GSz41b5CTKhB5HbxvgHUcP6Ebg25sVMHI=;
-        b=VDGeUtzfcekcoD1Qmzn0zc8hnKu+ERkfLYZvWyOYpFBQSxZVHQ+7o5hy2PF9rP7/ZV
-         Nb3a/ZosBEv15HTX+naBo11ha9oq9cIGDMefZXIcObM7VOJuoUdSq3IhVkoLgS7EGTu2
-         yF9WZZFg8vaED81RZp3/oYrVtdjb+6quyaJrzcdilYQgsjfgnEpaY1W/ro/Lc7kMJdJw
-         DHvfjAlrWnwCgDGmJkGsfI9zKniQhTLn4ogFi4EQBu/4cy1vI/GnHoQPGbb2DSR9Svm5
-         IfNJeWOK5n2NMTdqzaYzIDBQ2oxSwtE0J4iCG0/WvlwKrSffITq3E1AtORwL+c9bIwcC
-         b5sA==
-X-Gm-Message-State: AOAM532PtcwXDCUvnzNlejkfwERl1fHylkCu29hyWdu/vLpeDHmPJe50
-        /FWPjduLvYGJZz0fsAGpCXUUHaJamn5X6A==
-X-Google-Smtp-Source: ABdhPJwyBvT+oh6DiTmWDVwxmFuqBqBH+x5MSl0FCvRxTnjB5WvMT0v95hh2fzNKBWqkgfFvlx3QdA==
-X-Received: by 2002:a05:600c:1910:b0:38d:1403:da8b with SMTP id j16-20020a05600c191000b0038d1403da8bmr20204357wmq.3.1649089081631;
-        Mon, 04 Apr 2022 09:18:01 -0700 (PDT)
-Received: from ?IPV6:2a01:e34:ed2f:f020:9cdc:22ce:6a8e:1fc8? ([2a01:e34:ed2f:f020:9cdc:22ce:6a8e:1fc8])
-        by smtp.googlemail.com with ESMTPSA id i3-20020adffc03000000b0020616ee90dbsm1908053wrr.42.2022.04.04.09.18.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 09:18:00 -0700 (PDT)
-Message-ID: <8f1428c7-cf0e-b2cc-c898-09935a9017da@linaro.org>
-Date:   Mon, 4 Apr 2022 18:17:59 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=r0w3/IM/DK8MLze3NA1pY1MLeIm5PKANbh8od1nv6a8=;
+        b=4mP9vbh5nbMmPCqmNPaZBRonRx5Tdx0wBIN7/kONuYAz/Rx+88VFPo2hetx5WeSgOU
+         4bIYZbuRojDGY8fmx1Yc70rvFMRAwGRm3tVqL8whcmg9s25d1tyi0z6//zziu3kxJ6w6
+         tyLnx7a+SWCTRIdxOqC+8jPLNhyHtpbGQ8kyC4STCOV7P8vzZSyMye5wIFKmD4g7KGNO
+         jlX6B5WS9TsHskznIb654GTrwOrEI6HfkftOJ80IkizHM7wqeATh7bD46mgrwqJBwcgT
+         qEWdduRKw6DlKuMY3hfYIAq7GBPvxzR54dyBqokQyNPvomMuuyw17S1fU1mKj/BTj1Pi
+         Nr7A==
+X-Gm-Message-State: AOAM531YQLzA25DRSP3RyT3wJGgHBKYgOet7KmkCt4sSKhXRYAcLYcol
+        YknM9M1wt2yfHDCfIhEmUg==
+X-Google-Smtp-Source: ABdhPJxZ2lRegJdMFkA7tUuOd3c5O6j+eHuUYGOmr3EKlhr7AoxqAk3be7/vjFqAeCZEN/co7BV85A==
+X-Received: by 2002:a4a:3e02:0:b0:320:fdab:dcfd with SMTP id t2-20020a4a3e02000000b00320fdabdcfdmr149477oot.16.1649089266803;
+        Mon, 04 Apr 2022 09:21:06 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q203-20020acad9d4000000b002f8ee3f69e2sm4391548oig.52.2022.04.04.09.21.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 09:21:06 -0700 (PDT)
+Received: (nullmailer pid 1458009 invoked by uid 1000);
+        Mon, 04 Apr 2022 16:21:05 -0000
+Date:   Mon, 4 Apr 2022 11:21:05 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     rafael@kernel.org, viresh.kumar@linaro.org, krzk+dt@kernel.org,
+        treding@nvidia.com, jonathanh@nvidia.com, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ksitaraman@nvidia.com,
+        sanjayc@nvidia.com, bbasu@nvidia.com
+Subject: Re: [Patch v3 1/4] dt-bindings: Document Tegra CCPLEX Cluster
+Message-ID: <Yksa8cvCvB2Zn7tn@robh.at.kernel.org>
+References: <20220404121713.22461-1-sumitg@nvidia.com>
+ <20220404121713.22461-2-sumitg@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: Thermal notifications without setting thermal governor to
- userspace?
-Content-Language: en-US
-To:     Chris Down <chris@chrisdown.name>
-Cc:     linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>
-References: <YkR6/KnH/f9U+2qf@chrisdown.name>
- <faf9e24f-4419-cdbb-573f-4cf2d9e506e2@linaro.org>
- <YksL8a+cINo7K/xX@chrisdown.name>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <YksL8a+cINo7K/xX@chrisdown.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220404121713.22461-2-sumitg@nvidia.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-Hi Chris,
-
-On 04/04/2022 17:17, Chris Down wrote:
-> Hey Daniel,
+On Mon, Apr 04, 2022 at 05:47:10PM +0530, Sumit Gupta wrote:
+> The Tegra CPU COMPLEX CLUSTER area contains memory-mapped
+> registers that initiate CPU frequency/voltage transitions.
 > 
-> Thanks a lot for getting back!
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> ---
+
+Changes from v2? None perhaps because you ignored my comments there.
+
+>  .../tegra/nvidia,tegra-ccplex-cluster.yaml    | 52 +++++++++++++++++++
+>  1 file changed, 52 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
 > 
-> Daniel Lezcano writes:
->> For that it would require to setup a trip point from the firmware 
->> dedicated to userspace management along with the writable trip point 
->> kernel config option.
->>
->> On embedded systems, the trip point can be added easily in the device 
->> tree.
->>
->> You would end up with:
->>
->> - one passive trip point : writable and used by userspace
->>
->> - one passive trip point to protect the system tied with a cooling 
->> device and handled by the kernel
->>
->> - one hot trip point to notify the userspace critical is about to be 
->> reach
->>
->> - one critical trip point to reboot the system
->>
->> From the userspace, you change the trip temp to 50°C, 70°C and 90°C 
->> when crossing the way up or the way down.
->>
->> The sensor should implement the set_trip in order to program the 
->> register to fire the interrupt at the specified temperature. 
->> Otherwise, monitoring will be needed.
->>
->> On ACPI, except hacking the table and reload from the kernel I don't 
->> see how to do that.
+> diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
+> new file mode 100644
+> index 000000000000..d89457e0bd7d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
+> @@ -0,0 +1,52 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/arm/tegra/nvidia,tegra-ccplex-cluster.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: NVIDIA Tegra CPU COMPLEX CLUSTER area device tree bindings
+> +
+> +maintainers:
+> +  - Sumit Gupta <sumitg@nvidia.com>
+> +  - Mikko Perttunen <mperttunen@nvidia.com>
+> +  - Jon Hunter <jonathanh@nvidia.com>
+> +  - Thierry Reding <thierry.reding@gmail.com>
+> +
+> +description: |+
+> +  The Tegra CPU COMPLEX CLUSTER area contains memory-mapped
+> +  registers that initiate CPU frequency/voltage transitions.
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "ccplex@([0-9a-f]+)$"
+> +
+> +  compatible:
+> +    enum:
+> +      - nvidia,tegra186-ccplex-cluster
+> +      - nvidia,tegra234-ccplex-cluster
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  nvidia,bpmp:
+> +    $ref: '/schemas/types.yaml#/definitions/phandle'
+> +    description: |
+> +      Specifies the BPMP node that needs to be queried to get
+> +      operating point data for all CPUs.
+> +
+> +additionalProperties: true
+
+Additionally, true is only allowed for incomplete, common bindings which 
+this is not.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - nvidia,bpmp
+> +  - status
+> +
+> +examples:
+> +  - |
+> +    ccplex@e000000 {
+> +      compatible = "nvidia,tegra234-ccplex-cluster";
+> +      reg = <0x0 0x0e000000 0x0 0x5ffff>;
+> +      nvidia,bpmp = <&bpmp>;
+> +      status = "okay";
+> +    };
+> -- 
+> 2.17.1
 > 
-> In my case I'm dealing with "normal" desktop machines and a distribution 
-> kernel, so it isn't possible to have fine grained control over the 
-> kernel configuration or device tree (especially since ideally this would 
-> be usable as an unprivileged user).
 > 
-> Is it still possible to use this in such a scenario?
-
-Well on regular desktop, the thermal is managed under the hood by the 
-firmware/hardware, few sensors are exported AFAICT. I don't think a 
-thermal daemon would have a benefit on these platforms.
-
-Anyway. The temperature is not moving so quickly with all the heat sinks 
-on the desktop components usually, so monitoring the temperature with a 
-pid loop and increase the sampling when getting closer to a temperature 
-should be fine.
-
-Just to clarify, userspace should not manage the thermal zones but the 
-overall temperature by acting on the different heating sources' 
-performance indexes.
-
-Regarding the unprivileged access, it is not possible to act on the 
-performance state of the different components for non-root users. It 
-would require to setup the file capabilities for your program which is 
-probably what you want.
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
