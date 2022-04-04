@@ -2,212 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A884F1A65
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 23:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 888BF4F1F44
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Apr 2022 00:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378935AbiDDVS2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Apr 2022 17:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43426 "EHLO
+        id S237904AbiDDWri (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Apr 2022 18:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380665AbiDDUwD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 16:52:03 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB2022516
-        for <linux-pm@vger.kernel.org>; Mon,  4 Apr 2022 13:50:05 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id h4so16289177wrc.13
-        for <linux-pm@vger.kernel.org>; Mon, 04 Apr 2022 13:50:04 -0700 (PDT)
+        with ESMTP id S1345396AbiDDWq4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 18:46:56 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376AB381B2;
+        Mon,  4 Apr 2022 14:58:05 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id i11-20020a9d4a8b000000b005cda3b9754aso8127321otf.12;
+        Mon, 04 Apr 2022 14:58:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=Ug5WnBDc3P5A59NStXcLW76bV1O5G7jLmAJ0qT91Vr8=;
-        b=Psvi4KNCfYcWukoDJp1UHZnge3+IpXsV7j+7Ig4sUvdU0x58GF2YqlL5l1HnCaVQdg
-         szl6R4e7e7qC+RBztBwJA2Q3pM1gFxRn7HvNyV8Gawy52cd5xJNy6BP1wzm89XK31SwH
-         ElUgu0Z69ymAvrzKenzk/tS26fxyT4Soh1vZM=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+425n+823c6MPZV7nk0SKDFGg4SE61xIiVxspYwInXE=;
+        b=oGKcuZA32wussQCmvJJTxirZwwAwPMk1TWARCef+uIw0puFG4UC8BHrHIX2OCuLjrt
+         4ZyJdoqn5d8GYSxvViac/z+6EgoBDInT2sBfEy37UXMXTXAhH4PE3MMe/FUXas3V3cZY
+         6qPvKtvYta42co/ZFgKTyfbhZakOhWOR8FLtumw4O96k/E5C4ZLBUYzOtakw6vPpCzHU
+         FXexdd21cZEN0SwDUAQFuIX0mMlvm2dH76T/oFKWegybg+DoHWkOsp1lG64yNmc8Yn0P
+         YGidriX6cKmL7y9+drLq39S250Csge6e4UVLY51O/3QRXWPQYxWolNEmOOxkqPmCAcHR
+         d+Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=Ug5WnBDc3P5A59NStXcLW76bV1O5G7jLmAJ0qT91Vr8=;
-        b=AC6MEzfO4gLIK4gLb+/FZPGWJPAXT6fvPu54vd6KRvnZab6KdzcBtz/VlasyoyOmP4
-         vJfLyJulBHxdJuZtYCOSP2ZS4K50StzdX0LxbtIbxxHFRkY71e8jtO3URcPzU1/J0VBk
-         dWKUJiAPux6OZr5BIMrbOuI+15yYr4878Fy6eg+MZziZSuyuu5pXu9Pvwgz3MlLltvj3
-         YZo8rRD6+Knft3erqda5t11v/81VlthbZ9WYuRTMIA015wIZevVnTlWAR5+P97JXQT81
-         Upjkjnlent+mk6OXhLRMFDoALgdcP5WEDVElHmUFOn0J+daNdgJDkPAKQpid/rGWTr+F
-         I2jg==
-X-Gm-Message-State: AOAM530Zyqc6F4ZC9nzJKe/h7aPj0QmGI7+L9vzhlf+4/f05/LOmsmuu
-        zuFXy8NGxnEg90bjhMMect8uzw==
-X-Google-Smtp-Source: ABdhPJy3W6ySd/l6UPTknEmb5EGDRfL0LaoDa959altgntgg0dvXn5YvyzRvuUBf8BXd4j4kk9knSA==
-X-Received: by 2002:a05:6000:1687:b0:205:80b7:afca with SMTP id y7-20020a056000168700b0020580b7afcamr28822wrd.665.1649105403427;
-        Mon, 04 Apr 2022 13:50:03 -0700 (PDT)
-Received: from localhost ([2620:10d:c092:400::4:521a])
-        by smtp.gmail.com with ESMTPSA id x13-20020adfec0d000000b00203ff46f802sm14205902wrn.36.2022.04.04.13.50.02
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+425n+823c6MPZV7nk0SKDFGg4SE61xIiVxspYwInXE=;
+        b=ZTlSPxWYGaGIitrGyS58Dp/VC/IcUh870y6BAJ+qt5hrKoNaJ3VR0ZWyg4PON7/bfo
+         uuS7w4Wk+WA4dkgs+TYqd6BlNWk/p2+iICP98OGCMC5iUfv+17puozKI2cTmbEtEJWTF
+         NpZYZfURk3uPdVc1qZPTWLpnzdZ9YmXUIVMemmSiFjOr4Wj0UDwWpGAdy0uAgSVAvlfU
+         nRIZtstx+XVkjC2NfoZWoPNb501D6hB46tqAIatF8S3UvcaWyvGx8Sm46/qIuOcXDPI+
+         w6HFo5qtnFv3yVCOtUGIE23SL39l0c5sJO5Sa0B2yIacjc8ruvhBOi41VwuODSXilNPi
+         +ALg==
+X-Gm-Message-State: AOAM533z6bEKfS6aVR0CKVH4f94/HuGqbFF0iVg6yFMi6oSze+a0zZpM
+        Hq40jjr+LcE5jzpl6JtGBekpByG/ZaA=
+X-Google-Smtp-Source: ABdhPJwumvcXkxofJekXw/aZRO2NgDQHAf4uX5R/O6ZrJAsHIOpc9jrXlcuPcVPVwf+upE/bI+Crog==
+X-Received: by 2002:a05:6830:1681:b0:5cd:b61f:aff3 with SMTP id k1-20020a056830168100b005cdb61faff3mr140035otr.228.1649109484168;
+        Mon, 04 Apr 2022 14:58:04 -0700 (PDT)
+Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
+        by smtp.gmail.com with ESMTPSA id r3-20020aca4403000000b002ecf4d70c83sm4646402oia.27.2022.04.04.14.58.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 13:50:02 -0700 (PDT)
-Date:   Mon, 4 Apr 2022 21:50:01 +0100
-From:   Chris Down <chris@chrisdown.name>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: Thermal notifications without setting thermal governor to
- userspace?
-Message-ID: <YktZ+ebgm0TzU/qL@chrisdown.name>
-References: <YkR6/KnH/f9U+2qf@chrisdown.name>
- <faf9e24f-4419-cdbb-573f-4cf2d9e506e2@linaro.org>
- <YksL8a+cINo7K/xX@chrisdown.name>
- <8f1428c7-cf0e-b2cc-c898-09935a9017da@linaro.org>
- <YksoQ62CObN1R/oG@chrisdown.name>
- <e9d0f787-b23e-1266-c31a-60f9c1643a10@linaro.org>
+        Mon, 04 Apr 2022 14:58:03 -0700 (PDT)
+From:   Chris Morgan <macroalpha82@gmail.com>
+To:     linux-pm@vger.kernel.org
+Cc:     linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        zhangqing@rock-chips.com, zyw@rock-chips.com,
+        jon.lin@rock-chips.com, maccraft123mc@gmail.com, sre@kernel.org,
+        heiko@sntech.de, krzk+dt@kernel.org, robh+dt@kernel.org,
+        lee.jones@linaro.org, Chris Morgan <macromorgan@hotmail.com>
+Subject: [PATCH 0/4 v5] power: supply: Add Support for RK817 Charger
+Date:   Mon,  4 Apr 2022 16:57:50 -0500
+Message-Id: <20220404215754.30126-1-macroalpha82@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e9d0f787-b23e-1266-c31a-60f9c1643a10@linaro.org>
-User-Agent: Mutt/2.2.2 (aa28abe8) (2022-03-25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Daniel Lezcano writes:
->On 04/04/2022 19:17, Chris Down wrote:
->>Daniel Lezcano writes:
->>>Well on regular desktop, the thermal is managed under the hood by 
->>>the firmware/hardware, few sensors are exported AFAICT. I don't 
->>>think a thermal daemon would have a benefit on these platforms.
->>
->>Maybe we have different expectations? On my laptop, a Thinkpad T14s, 
->>things seem not too bad:
->
->That is not a desktop but a laptop, it is different :)
+From: Chris Morgan <macromorgan@hotmail.com>
 
-Oh, I see :-) I misread the distinction as embedded vs. consumer-facing.
+This series is to add support for the Rockchip rk817 battery charger
+which is present in all Rockchip RK817 PMICs. The driver was written
+as a joint effort by Maya Matuszczyk <maccraft123mc@gmail.com> and
+myself Chris Morgan <macromorgan@hotmail.com>.
 
->Can you give the content of:
->
->cat /sys/class/thermal/thermal_zone*/type
->cat /sys/class/thermal/thermal_zone*/trip_*type
->
->and
->
->cat /sys/class/thermal/cooling_device*/type
+The driver requires some basic parameters be described about the
+battery in the devicetree such as the maximum capacity, the minimum
+and maximum voltage for the battery, the maximum charge current, the
+maximum charge voltage, and the value of sample resistors and sleep
+currents.
 
-   % grep . /sys/class/thermal/thermal_zone*/type
-   /sys/class/thermal/thermal_zone0/type:acpitz
-   /sys/class/thermal/thermal_zone1/type:INT3400 Thermal
-   /sys/class/thermal/thermal_zone2/type:SEN1
-   /sys/class/thermal/thermal_zone3/type:SEN2
-   /sys/class/thermal/thermal_zone4/type:TCPU
-   /sys/class/thermal/thermal_zone5/type:iwlwifi_1
-   /sys/class/thermal/thermal_zone6/type:x86_pkg_temp
-   % grep . /sys/class/thermal/thermal_zone*/trip_*type
-   /sys/class/thermal/thermal_zone0/trip_point_0_type:critical
-   /sys/class/thermal/thermal_zone2/trip_point_0_type:critical
-   /sys/class/thermal/thermal_zone2/trip_point_1_type:hot
-   /sys/class/thermal/thermal_zone2/trip_point_2_type:passive
-   /sys/class/thermal/thermal_zone3/trip_point_0_type:critical
-   /sys/class/thermal/thermal_zone3/trip_point_1_type:hot
-   /sys/class/thermal/thermal_zone3/trip_point_2_type:passive
-   /sys/class/thermal/thermal_zone4/trip_point_0_type:critical
-   /sys/class/thermal/thermal_zone4/trip_point_1_type:hot
-   /sys/class/thermal/thermal_zone4/trip_point_2_type:passive
-   /sys/class/thermal/thermal_zone5/trip_point_0_type:passive
-   /sys/class/thermal/thermal_zone5/trip_point_1_type:passive
-   /sys/class/thermal/thermal_zone5/trip_point_2_type:passive
-   /sys/class/thermal/thermal_zone5/trip_point_3_type:passive
-   /sys/class/thermal/thermal_zone5/trip_point_4_type:passive
-   /sys/class/thermal/thermal_zone5/trip_point_5_type:passive
-   /sys/class/thermal/thermal_zone5/trip_point_6_type:passive
-   /sys/class/thermal/thermal_zone5/trip_point_7_type:passive
-   /sys/class/thermal/thermal_zone6/trip_point_0_type:passive
-   /sys/class/thermal/thermal_zone6/trip_point_1_type:passive
-   % grep . /sys/class/thermal/cooling_device*/type
-   /sys/class/thermal/cooling_device0/type:Processor
-   /sys/class/thermal/cooling_device1/type:Processor
-   /sys/class/thermal/cooling_device2/type:Processor
-   /sys/class/thermal/cooling_device3/type:Processor
-   /sys/class/thermal/cooling_device4/type:Processor
-   /sys/class/thermal/cooling_device5/type:Processor
-   /sys/class/thermal/cooling_device6/type:Processor
-   /sys/class/thermal/cooling_device7/type:Processor
-   /sys/class/thermal/cooling_device8/type:intel_powerclamp
-   /sys/class/thermal/cooling_device9/type:TCC Offset
+The hardware itself contains an ADC capable of measuring the voltage,
+current, and temperature of the battery (though my implementation of an
+Odroid Go Advance lacks a thermistor for temperature). It also contains
+a columb counter, registers for tracking the measured voltage and
+current at boot, and a few bytes of nvram for storing data.
 
->
->?
->
->
->>     % printf '%s\n' /sys/class/hwmon/hwmon*/temp*_input
->>     /sys/class/hwmon/hwmon1/temp1_input
->>     /sys/class/hwmon/hwmon2/temp1_input
->>     /sys/class/hwmon/hwmon2/temp2_input
->>     /sys/class/hwmon/hwmon2/temp3_input
->>     /sys/class/hwmon/hwmon4/temp1_input
->>     /sys/class/hwmon/hwmon4/temp2_input
->>     /sys/class/hwmon/hwmon4/temp3_input
->>     /sys/class/hwmon/hwmon4/temp4_input
->>     /sys/class/hwmon/hwmon4/temp5_input
->>     /sys/class/hwmon/hwmon4/temp6_input
->>     /sys/class/hwmon/hwmon4/temp7_input
->>     /sys/class/hwmon/hwmon4/temp8_input
->>     /sys/class/hwmon/hwmon6/temp1_input
->>     /sys/class/hwmon/hwmon8/temp1_input
->>     /sys/class/hwmon/hwmon8/temp2_input
->>     /sys/class/hwmon/hwmon8/temp3_input
->>     /sys/class/hwmon/hwmon8/temp4_input
->>     /sys/class/hwmon/hwmon8/temp5_input
->>
->>There are working temperature sensors out of the box for the CPU, 
->>wifi card, ACPI thermal zone, and extended sensors from 
->>thinkpad_acpi.
->>
->>In my case, I'd like to get notifications in userspace when certain 
->>temperatures are reached.
->>
->>So if I understood correctly, there's no way to dynamically 
->>configure temperature thresholds and get breach events even as root, 
->>even with the new netlink solution?
->
->There is a way but you need:
->
->1. A programmable trip point
->
->
->https://uefi.org/specs/ACPI/6.4/11_Thermal_Management/thermal-control.html#dynamically-changing-cooling-temperature-trip-points
->
->1.1 A passive trip point dedicated for userspace (no cooling device 
->associated)
->
->1.2 Writable kernel config option
->
->The trip point will be writable in sysfs
->
->2. Get trip point crossed
->
->Use the netlink
->
->But you don't need to monitor all these thermal zones, it is up to the 
->in-kernel thermal framework to deal with the trip point individually 
->and protect the system.
->
->The userspace should monitor what is considered as the 'case' sensor 
->or 'skin' sensor. The temperature on those sensor moves very slowly, 
->so monitoring them by getting the temperature every second should be 
->enough.
+Changes from V4:
+ - Massively redesigned the battery driver to improve measurement
+   accuracy and reliability. Driver now checks values every 8
+   seconds (mimicking BSP driver behavior), or whenever a plug event
+   is detected.
+ - Removed OCV, boot voltage, and boot current as values were found
+   to be unreliable.
+ - Updated first-boot behavior to perform a "best guess" at capacity.
+ - Added ability to calibrate columb counter to full state of charge
+   when charger reports full, and added ability calibrate full charge
+   capacity when battery discharges from full charge to minimum
+   voltage.
+ - Expose state of charge as capacity (in percents).
+ - Updated storing of values to nvram to preserve compatibility with
+   BSP kernel.
 
-I see. I suspect this is probably too much to get from a distro kernel and 
-myriad hardware, so I guess I'm consigned to using polling for the timebeing 
-then.
+Changes from V3:
 
-Thanks a lot for chiming in with your knowledge :-)
+ - Corrected issues in device tree documentation.
+ - Added additional logic to battery to correct for columb counter
+   drift when the device stays plugged in at a full charge state.
 
-Chris
+Changes from V2:
+
+ - Updated devicetree bindings to use common property units.
+ - Removed unneeded includes.
+ - Updated rk817_chg_cur_to_reg to make more legible.
+ - Simplified formula for displaying calibrated voltage.
+ - Updated power supply type to POWER_SUPPLY_TYPE_USB.
+ - Implemented get/put_unaligned macros for bulk reads and writes.
+ - Changed numerous dev_err() to dev_err_probe().
+ - Call power_supply_put_battery_info() at end of probe function.
+ - Removed unneeded whitespace.
+
+Changes from V1:
+
+ - Fixed a CLANG warning regarding an uninitalized variable.
+ - Fixed a CLANG warning regarding a pointer as a bool value always
+   returning as true.
+ - Added Maya Matuszczyk to the Signed-off-by.
+
+Chris Morgan (4):
+  dt-bindings: Add Rockchip rk817 battery charger support
+  mfd: Add Rockchip rk817 battery charger support
+  power: supply: Add charger driver for Rockchip RK817
+  arm64: dts: rockchip: add rk817 chg to Odroid Go Advance
+
+ .../bindings/mfd/rockchip,rk817.yaml          |   48 +
+ .../boot/dts/rockchip/rk3326-odroid-go2.dts   |   26 +
+ drivers/mfd/rk808.c                           |   16 +-
+ drivers/power/supply/Kconfig                  |    6 +
+ drivers/power/supply/Makefile                 |    1 +
+ drivers/power/supply/rk817_charger.c          | 1157 +++++++++++++++++
+ include/linux/mfd/rk808.h                     |   91 ++
+ 7 files changed, 1344 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/power/supply/rk817_charger.c
+
+-- 
+2.25.1
+
