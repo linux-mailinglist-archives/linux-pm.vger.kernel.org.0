@@ -2,69 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAA1D4F1A86
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 23:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6AE44F1A70
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 23:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378993AbiDDVSd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Apr 2022 17:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
+        id S1378936AbiDDVS3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Apr 2022 17:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379416AbiDDRKT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 13:10:19 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B09F40A23
-        for <linux-pm@vger.kernel.org>; Mon,  4 Apr 2022 10:08:22 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id bh17so21328933ejb.8
-        for <linux-pm@vger.kernel.org>; Mon, 04 Apr 2022 10:08:22 -0700 (PDT)
+        with ESMTP id S1379511AbiDDRTz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 13:19:55 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FAB013F77
+        for <linux-pm@vger.kernel.org>; Mon,  4 Apr 2022 10:17:58 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id d3so4730243wrb.7
+        for <linux-pm@vger.kernel.org>; Mon, 04 Apr 2022 10:17:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LXXr7F0cW3RTrkA8M6uuznqZSvmvR1TGt0LOYkCfNSQ=;
-        b=wBUWd1KOHSXpqah/8BaOgmo8qLPdZf1sdgt0au6YhBPtGFBBh2rBCHyFSGtQaXNZe7
-         khGltgNxaO32X6qwHt4slyv3JWF+NX5P+dHNeemg4Dp4Rj2oEKD1T3M7L+jBkvG0cEaj
-         XWzBID2cjpeX8s/+1fc7UvWjmeXe7cRskPgFVjXw5x5VHbcBDjc3bg59jDMUgbQMp0QD
-         LFBiJ6j2JSV6MBnkz8TAYalVInVz6tEnJZIX0E2/DYb+fBpSM+arJRv+VD6RXlRi6b5Y
-         Ek8TgLsFU9b5Qf6uMfaf/Q6xTn5QkVOkUzkmJD5P8m3DccA+TDLPfosr3ptDA05BQWii
-         dHCQ==
+        d=chrisdown.name; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=WNtaKQ/W4kzlxVZJxxV5vPIWkgcFCTJx+RZDk2ENwjY=;
+        b=TZTG+Vp4kCH9znGmLVIxLa4TCaXoBaTMn5zfghJruKdi0VUxnnRWqSeSdFrknFklEp
+         CHjUtx+MaATarJeDVSsoCOANc6cuqtS7e3eb7PB7Hls2F6I5xH8kuEfv8janjrikHHnD
+         oggCFme7Ji6SEIR/UaJGTCC3YNcCN0WUOG9TQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LXXr7F0cW3RTrkA8M6uuznqZSvmvR1TGt0LOYkCfNSQ=;
-        b=K8fMIyeVbs+DLOvCjS/6EJzzWN+cZJVGjDfVwqXYRNFfI3OqeNIi/XN5F6jO2BoRQo
-         oWVLlDVTcyYAz1YqIn02s0qiPHMHvOBhUf1OW+WvcxFZ/J1cv7JzVsD+5xfjq4lZaLUG
-         Y2ZEgtmp7XRWVPB73P0fqRG71aemJ7ZAOqXrHZxMaUSA2crJnhTRkMuTnpEsgn1O14Vh
-         B9C3+qyHID2qf7tVVQ2VQ95NBTBzwRVaRzzy+jGJ7y3/hWZtLMH8IQ0Y0edOwDm0t9YH
-         QYwp5cjj6YSpG/mQYKOdeCRxGezKo9KeqOFRldLBVjfPOC4EobqJkjxF+dmcR1hQ/sBl
-         1f7g==
-X-Gm-Message-State: AOAM532zJOF07TzY/VlP8QH2XrGVJ7BLS4g8Cy+cKCDmQc7tyaMjyhk9
-        S6XB/zPTjmwMcTsIVyTqF1x9TeUK930mTv2/
-X-Google-Smtp-Source: ABdhPJx2qo4HGcrJqr114ZtIIY4ckwTEFuRMwUlvOaFJCAC2pEj4AzRRvX7sa3sEZVcPo8HyRUAHlA==
-X-Received: by 2002:a17:907:a41e:b0:6e7:9ea9:8350 with SMTP id sg30-20020a170907a41e00b006e79ea98350mr1021136ejc.377.1649092101002;
-        Mon, 04 Apr 2022 10:08:21 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id u25-20020a170906b11900b006e08588afedsm4565827ejy.132.2022.04.04.10.08.20
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=WNtaKQ/W4kzlxVZJxxV5vPIWkgcFCTJx+RZDk2ENwjY=;
+        b=b5aWghOG2D+d1jja/OpGJtlkVmgBY0K1cilLG0ZMhLlweh7lrW9CPh4HzIJKemK9Ak
+         6eIPX6A/jfqkVQPIAl8zIZ0iazDVl1H8VUWLYRiuX3WHoi4ub0WQ31vdl/8qu0PQ+7gV
+         kludrvUORMrMfjBSSP959DG2CyErvprqiMKfGAkYCq2uomnT1Rkg6E1/FbVXvTMjOYjE
+         lwhb0wn1p4YlL64ZzY/ifrB1jBf5HY4XCD/+OnPioST3cNAGkM1DLc6Ja8bDBEKuw7eL
+         4MhvuvsVu4hKYMKVC9/E9ALzNcanjZ0GI9avMVd6rOcrCBUgmL4uQx6/g0fOgyRLR2IE
+         16zg==
+X-Gm-Message-State: AOAM532viOlR0o+L+w6iCeFFwdZObWHDjQ3tChoxidmseeh7QWir5CPG
+        KEGNlplzEM0z6i5DzxJUmKpSy8xBbsfrOT8f
+X-Google-Smtp-Source: ABdhPJxdJrmlXUKqL74JeB1HzZ0cdk0um+2davLItplVQxLZjJH5eQ4hPcUrX9RzKjd8DkvpL5xAcg==
+X-Received: by 2002:adf:d081:0:b0:1ef:9378:b7cc with SMTP id y1-20020adfd081000000b001ef9378b7ccmr564031wrh.407.1649092676958;
+        Mon, 04 Apr 2022 10:17:56 -0700 (PDT)
+Received: from localhost ([2620:10d:c092:400::4:521a])
+        by smtp.gmail.com with ESMTPSA id p16-20020a5d48d0000000b00205cf199abcsm9755918wrs.46.2022.04.04.10.17.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 10:08:20 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-samsung-soc@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] memory: samsung: exynos5422-dmc: Avoid some over memory allocation
-Date:   Mon,  4 Apr 2022 19:08:14 +0200
-Message-Id: <164909209237.1690243.6125620782539753539.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <69d7e69346986e2fdb994d4382954c932f9f0993.1647760213.git.christophe.jaillet@wanadoo.fr>
-References: <69d7e69346986e2fdb994d4382954c932f9f0993.1647760213.git.christophe.jaillet@wanadoo.fr>
+        Mon, 04 Apr 2022 10:17:56 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 18:17:55 +0100
+From:   Chris Down <chris@chrisdown.name>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: Thermal notifications without setting thermal governor to
+ userspace?
+Message-ID: <YksoQ62CObN1R/oG@chrisdown.name>
+References: <YkR6/KnH/f9U+2qf@chrisdown.name>
+ <faf9e24f-4419-cdbb-573f-4cf2d9e506e2@linaro.org>
+ <YksL8a+cINo7K/xX@chrisdown.name>
+ <8f1428c7-cf0e-b2cc-c898-09935a9017da@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <8f1428c7-cf0e-b2cc-c898-09935a9017da@linaro.org>
+User-Agent: Mutt/2.2.2 (aa28abe8) (2022-03-25)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -75,23 +73,44 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 20 Mar 2022 08:10:30 +0100, Christophe JAILLET wrote:
-> 'dmc->counter' is a 'struct devfreq_event_dev **', so there is some
-> over memory allocation. 'counters_size' should be computed with
-> 'sizeof(struct devfreq_event_dev *)'.
-> 
-> Use 'sizeof(*dmc->counter)' instead to fix it.
-> 
-> While at it, use devm_kcalloc() instead of devm_kzalloc()+open coded
-> multiplication.
-> 
-> [...]
+Daniel Lezcano writes:
+>Well on regular desktop, the thermal is managed under the hood by the 
+>firmware/hardware, few sensors are exported AFAICT. I don't think a 
+>thermal daemon would have a benefit on these platforms.
 
-Applied, thanks!
+Maybe we have different expectations? On my laptop, a Thinkpad T14s, things 
+seem not too bad:
 
-[1/1] memory: samsung: exynos5422-dmc: Avoid some over memory allocation
-      commit: 56653827f0d7bc7c2d8bac0e119fd1521fa9990a
+     % printf '%s\n' /sys/class/hwmon/hwmon*/temp*_input
+     /sys/class/hwmon/hwmon1/temp1_input
+     /sys/class/hwmon/hwmon2/temp1_input
+     /sys/class/hwmon/hwmon2/temp2_input
+     /sys/class/hwmon/hwmon2/temp3_input
+     /sys/class/hwmon/hwmon4/temp1_input
+     /sys/class/hwmon/hwmon4/temp2_input
+     /sys/class/hwmon/hwmon4/temp3_input
+     /sys/class/hwmon/hwmon4/temp4_input
+     /sys/class/hwmon/hwmon4/temp5_input
+     /sys/class/hwmon/hwmon4/temp6_input
+     /sys/class/hwmon/hwmon4/temp7_input
+     /sys/class/hwmon/hwmon4/temp8_input
+     /sys/class/hwmon/hwmon6/temp1_input
+     /sys/class/hwmon/hwmon8/temp1_input
+     /sys/class/hwmon/hwmon8/temp2_input
+     /sys/class/hwmon/hwmon8/temp3_input
+     /sys/class/hwmon/hwmon8/temp4_input
+     /sys/class/hwmon/hwmon8/temp5_input
 
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+There are working temperature sensors out of the box for the CPU, wifi card, 
+ACPI thermal zone, and extended sensors from thinkpad_acpi.
+
+In my case, I'd like to get notifications in userspace when certain 
+temperatures are reached.
+
+So if I understood correctly, there's no way to dynamically configure 
+temperature thresholds and get breach events even as root, even with the new 
+netlink solution?
+
+Thanks again for your help!
+
+Chris
