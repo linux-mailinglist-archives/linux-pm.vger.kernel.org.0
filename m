@@ -2,121 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 248134F1A54
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 23:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EBBF4F1A5D
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 23:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242427AbiDDVSU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Apr 2022 17:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44082 "EHLO
+        id S1378908AbiDDVSW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Apr 2022 17:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380203AbiDDTOO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 15:14:14 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69215377E0
-        for <linux-pm@vger.kernel.org>; Mon,  4 Apr 2022 12:12:17 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id i23-20020a9d6117000000b005cb58c354e6so7879293otj.10
-        for <linux-pm@vger.kernel.org>; Mon, 04 Apr 2022 12:12:17 -0700 (PDT)
+        with ESMTP id S1380260AbiDDTXW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 15:23:22 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6DD13B033
+        for <linux-pm@vger.kernel.org>; Mon,  4 Apr 2022 12:21:25 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id z16so9916589pfh.3
+        for <linux-pm@vger.kernel.org>; Mon, 04 Apr 2022 12:21:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=HaBSCtvM0Wy0SP5zUFXCSh2FNwBC2ZpaaXakEoGwFXA=;
-        b=QRbaJLGqfSytgeLDMDaMo3pFIvgnJhK7msg48BshQ/1jFwC2lmeFIpeANmoKV1C0Dh
-         QmZjrgbS5ILg8xTOkr/r9cRrhri5vMI0bOo6Sj7Zhay+EAnjeM5tHaAHiSDnO6ippfYC
-         SNuYSPC01YTnGkFxL2M9JzpVppdEvEyc1sd+n9sMfgFDDEeH2msq14bKRtHb3gUfpuM4
-         j6QBQ4pB3LUxFwi1zJmuMLj30FRsqd1iGipjHqua8F0j9obgvzV+H8yVvYb1Y/IOSpCd
-         KL37R65BysmpaksgZOIkWdkcLEcTXU0SFFWmWBDUrla9NhEuBcGpoqSgC+Rh7RKfq7M7
-         GAyA==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=qj+08UoQ81QXCJIQ0FgNKcu3iX45S9pwm2TaiMUsPUQ=;
+        b=Tx0DLhaT35SVhaJtjG4RXEwT5NbflW1Jt4AWotrHS+8I2nrLgPXhlBoQPp7FOcIg/o
+         6g4m0TFBv4yYDTPnxW10XYNsnQKkiBSqQCxeDxTEgYRdpbBd9S4IBwuIwMh3C2avrbfV
+         tC+c10ZJr1IfIAgXXkNhso96P1k7m1apAK4bDBaFhJejdOTn2dLEK3yeqOPGFocs090V
+         Zotsj412wDVwYr+x5QIkkxySFMhSsQNLoTuaLaYFTfn/g+MlyMmGWQ/PXS/SK+y8pHy6
+         o/bfJJXnmLfiCm4eV1jl7XwkEd1vni/7h4k9cRPwO9N9kJSkzThqOBF0bJq/V1x8Lgu3
+         ZRpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=HaBSCtvM0Wy0SP5zUFXCSh2FNwBC2ZpaaXakEoGwFXA=;
-        b=F7AnAbNBMPthSWnr03exc4lJ5dL/zCBZXjdLzcCQSfHuAEqLqBE1sA2X6ilKs0dQu/
-         ajY4Ffxn5eXXn+2L2XVPlw2IiMkmRklTmIvQ4Aep0l0QdUVFAz74tCSg6VGuAMBLngm9
-         cDeq6kF+8IowRVGyQt07D6LDnJPJZNf4XQOwhTXNBEA+L7DK6kaVCHPkq40jUAijsB7K
-         mJqnbzpT2wjV4A+5edRHLSzCSW/s7pCy1T2z0OwUwreab3odrx8Cws0ufNXF7yiUWHJb
-         vTY6AL6PiAmaXLZQIOKXqHxqz8CfRADXTrvK8uwCAofIo76m2Uty/0opOSd4ZLvAUqFI
-         oMYw==
-X-Gm-Message-State: AOAM531CCpsUHHkc0JRhwbR81w2TdFhEbUdHiMDgJEiYNxGB2JuVh80R
-        8+xg7JZ/1j+D57iFLfFedDNnUaqGYjD/Y6rUYxQ2qs8BaULRzg==
-X-Google-Smtp-Source: ABdhPJx53qVjugPFtagCZ/vg5SciUqxZhWJ8+WqD50ec1zmxvdqxeCVjEmx4wXSm3ZFYN/d0UAvZ/O81KzKS1ewGUc0=
-X-Received: by 2002:a9d:1729:0:b0:5b2:3828:c84c with SMTP id
- i41-20020a9d1729000000b005b23828c84cmr406189ota.362.1649099535465; Mon, 04
- Apr 2022 12:12:15 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=qj+08UoQ81QXCJIQ0FgNKcu3iX45S9pwm2TaiMUsPUQ=;
+        b=T0r0Zi4tJqfOaqPHvuWK2Nq7mi9AHSXT6gb2e8v2Xl15umNO8M3CO7cjZETaKibG0j
+         ciJgItmEHO1CeadFRy1gQtGm5pEdo8KvJBA0SlVudylA89eTyI/Owx+IkUyGxgOK4M4t
+         X8fLon7YCxBPFWPqXDzn2/1iRXf6Gnbnpedy0YmReDOrGOQq2u49J+ZDZ+yOxKgc2EeK
+         77hEnMPy/9mf1uORLIkKDlEE4Af/kx6jXLLUakMOadSyNQ1jGyn/GqvUKMoHUQEQ9PvU
+         VRjjomvT8I5jZE2M3RSSINlFQy2Zmv1MZsHxR6yxWEHGYULnCHZw4uQ9cfM+6AVj7icC
+         BFmQ==
+X-Gm-Message-State: AOAM533BicTnpn9CPYvNtbiFgmCegnewA9mECPmzAo2vRhpuQ7L14aPJ
+        YN12vImvsrOPfuHpM68dngGrPA==
+X-Google-Smtp-Source: ABdhPJzfkpiR1DiTFs9IhkKAfUS4XW1JV3sMxAekA1ytB46matysNGdlufGvuouYsjDplKQfd5pClA==
+X-Received: by 2002:a62:38d1:0:b0:4fa:80ad:bf5e with SMTP id f200-20020a6238d1000000b004fa80adbf5emr1211036pfa.69.1649100085168;
+        Mon, 04 Apr 2022 12:21:25 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id j63-20020a636e42000000b003987df110edsm11184329pgc.42.2022.04.04.12.21.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 12:21:24 -0700 (PDT)
+Message-ID: <624b4534.1c69fb81.7c30c.d324@mx.google.com>
+Date:   Mon, 04 Apr 2022 12:21:24 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-From:   Evan Green <evgreen@google.com>
-Date:   Mon, 4 Apr 2022 12:11:39 -0700
-Message-ID: <CAE=gft4a-QL82iFJE_xRQ3JrMmz-KZKWREtz=MghhjFbJeK=8A@mail.gmail.com>
-Subject: Lost MSIs during hibernate
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Rajat Jain <rajatja@chromium.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v5.18-rc1
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.18-rc1)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Thomas et al,
-To my surprise, I'm back with another MSI problem, and hoping to get
-some advice on how to approach fixing it.
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.18-rc1)
 
-Summary: I think MSIs are lost across the hibernate freeze/thaw
-transition on the way down because __pci_write_msi_msg() drops the
-write if the device is not in D0.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+18-rc1/
 
-Details:
-I've been playing with hibernation on an Alderlake device, and have
-been running into problems where the freeze/thaw transition that
-should generate the hibernate image ends up hanging (eg before we even
-start writing the image out to disk). When it hangs I find it in
-usb_kill_urb(), an error path that comes out of a failed attempt to
-send a control packet to a hub port coming from usb_resume().
-Occasionally, I see the classic "HC died; cleaning up" message
-instead. XHCI in general appears to be very sensitive to lost MSIs, so
-I started down that road.
+Tree: pm
+Branch: testing
+Git Describe: v5.18-rc1
+Git Commit: 3123109284176b1532874591f7c81f3837bbdc17
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-I printed the three major paths through __pci_write_msi_msg() so I
-could see what the XHCI controller was ending up with when it hung.
-You can see a full boot and hibernate attempt sequence that results in
-a hang here (sorry there's other cruft in there):
+Warnings Detected:
 
-https://pastebin.com/PFd3x1k0
+arc:
 
-What worries me is those IRQ "no longer affine" messages, as well as
-my "EVAN don't touch hw" prints, indicating that requests to change
-the MSI are being dropped. These ignored requests are coming in when
-we try to migrate all IRQs off of the non-boot CPU, and they get
-ignored because all devices are "frozen" at this point, and presumably
-not in D0.
+arm64:
 
-So my theory is XHCI for whatever reason boots affinitized to a
-non-boot CPU. We go through pci_pm_freeze(), then try to take the
-non-boot CPUs down. The request to move the MSI off of the dead CPU is
-ignored, and then XHCI generates an interrupt during the period while
-that non-boot CPU is dead.
+arm:
 
-To further try and prove that theory, I wrote a script to do the
-hibernate prepare image step in a loop, but messed with XHCI's IRQ
-affinity beforehand. If I move the IRQ to core 0, so far I have never
-seen a hang. But if I move it to another core, I can usually get a
-hang in the first attempt. I also very occasionally see wifi splats
-when trying this, and those "no longer affine" prints are all the wifi
-queue IRQs. So I think a wifi packet coming in at the wrong time can
-do the same thing.
+i386:
 
-I wanted to see what thoughts you might have on this. Should I try to
-make a patch that moves all IRQs to CPU 0 *before* the devices all
-freeze? Sounds a little unpleasant. Or should PCI be doing something
-different to avoid this combination of "you're not allowed to modify
-my MSIs, but I might still generate interrupts that must not be lost"?
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
 
--Evan
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
