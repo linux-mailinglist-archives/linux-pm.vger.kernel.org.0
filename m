@@ -2,145 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A48B74F1A72
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 23:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED20F4F1A5B
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 23:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378942AbiDDVSa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Apr 2022 17:18:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44714 "EHLO
+        id S1378902AbiDDVSV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Apr 2022 17:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379039AbiDDQXD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 12:23:03 -0400
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A24BC0B;
-        Mon,  4 Apr 2022 09:21:07 -0700 (PDT)
-Received: by mail-oo1-f47.google.com with SMTP id w20-20020a4ae9f4000000b003243aa2c71aso1843365ooc.0;
-        Mon, 04 Apr 2022 09:21:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=r0w3/IM/DK8MLze3NA1pY1MLeIm5PKANbh8od1nv6a8=;
-        b=4mP9vbh5nbMmPCqmNPaZBRonRx5Tdx0wBIN7/kONuYAz/Rx+88VFPo2hetx5WeSgOU
-         4bIYZbuRojDGY8fmx1Yc70rvFMRAwGRm3tVqL8whcmg9s25d1tyi0z6//zziu3kxJ6w6
-         tyLnx7a+SWCTRIdxOqC+8jPLNhyHtpbGQ8kyC4STCOV7P8vzZSyMye5wIFKmD4g7KGNO
-         jlX6B5WS9TsHskznIb654GTrwOrEI6HfkftOJ80IkizHM7wqeATh7bD46mgrwqJBwcgT
-         qEWdduRKw6DlKuMY3hfYIAq7GBPvxzR54dyBqokQyNPvomMuuyw17S1fU1mKj/BTj1Pi
-         Nr7A==
-X-Gm-Message-State: AOAM531YQLzA25DRSP3RyT3wJGgHBKYgOet7KmkCt4sSKhXRYAcLYcol
-        YknM9M1wt2yfHDCfIhEmUg==
-X-Google-Smtp-Source: ABdhPJxZ2lRegJdMFkA7tUuOd3c5O6j+eHuUYGOmr3EKlhr7AoxqAk3be7/vjFqAeCZEN/co7BV85A==
-X-Received: by 2002:a4a:3e02:0:b0:320:fdab:dcfd with SMTP id t2-20020a4a3e02000000b00320fdabdcfdmr149477oot.16.1649089266803;
-        Mon, 04 Apr 2022 09:21:06 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q203-20020acad9d4000000b002f8ee3f69e2sm4391548oig.52.2022.04.04.09.21.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 09:21:06 -0700 (PDT)
-Received: (nullmailer pid 1458009 invoked by uid 1000);
-        Mon, 04 Apr 2022 16:21:05 -0000
-Date:   Mon, 4 Apr 2022 11:21:05 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     rafael@kernel.org, viresh.kumar@linaro.org, krzk+dt@kernel.org,
-        treding@nvidia.com, jonathanh@nvidia.com, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ksitaraman@nvidia.com,
-        sanjayc@nvidia.com, bbasu@nvidia.com
-Subject: Re: [Patch v3 1/4] dt-bindings: Document Tegra CCPLEX Cluster
-Message-ID: <Yksa8cvCvB2Zn7tn@robh.at.kernel.org>
-References: <20220404121713.22461-1-sumitg@nvidia.com>
- <20220404121713.22461-2-sumitg@nvidia.com>
+        with ESMTP id S1379085AbiDDQdD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 12:33:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9006436E0C;
+        Mon,  4 Apr 2022 09:31:07 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 520B3D6E;
+        Mon,  4 Apr 2022 09:31:07 -0700 (PDT)
+Received: from [10.57.8.9] (unknown [10.57.8.9])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 65D843F73B;
+        Mon,  4 Apr 2022 09:31:04 -0700 (PDT)
+Message-ID: <74a2f038-50dd-91e5-227d-a1c633a87184@arm.com>
+Date:   Mon, 4 Apr 2022 17:31:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220404121713.22461-2-sumitg@nvidia.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RESEND][PATCH 5/8] PM: EM: Remove old debugfs files and print
+ all 'flags'
+Content-Language: en-US
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        Pierre.Gondois@arm.com, viresh.kumar@linaro.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+        mka@chromium.org, nm@ti.com, sboyd@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, cristian.marussi@arm.com,
+        sudeep.holla@arm.com, matthias.bgg@gmail.com
+References: <20220321095729.20655-1-lukasz.luba@arm.com>
+ <20220321095729.20655-6-lukasz.luba@arm.com> <YksWj8GhZWUimF74@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <YksWj8GhZWUimF74@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 05:47:10PM +0530, Sumit Gupta wrote:
-> The Tegra CPU COMPLEX CLUSTER area contains memory-mapped
-> registers that initiate CPU frequency/voltage transitions.
-> 
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
+Hi Ionela,
 
-Changes from v2? None perhaps because you ignored my comments there.
+Thank you for reviewing these patches.
 
->  .../tegra/nvidia,tegra-ccplex-cluster.yaml    | 52 +++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
+On 4/4/22 17:02, Ionela Voinescu wrote:
+> Hi Lukasz,
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
-> new file mode 100644
-> index 000000000000..d89457e0bd7d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
-> @@ -0,0 +1,52 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/arm/tegra/nvidia,tegra-ccplex-cluster.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: NVIDIA Tegra CPU COMPLEX CLUSTER area device tree bindings
-> +
-> +maintainers:
-> +  - Sumit Gupta <sumitg@nvidia.com>
-> +  - Mikko Perttunen <mperttunen@nvidia.com>
-> +  - Jon Hunter <jonathanh@nvidia.com>
-> +  - Thierry Reding <thierry.reding@gmail.com>
-> +
-> +description: |+
-> +  The Tegra CPU COMPLEX CLUSTER area contains memory-mapped
-> +  registers that initiate CPU frequency/voltage transitions.
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "ccplex@([0-9a-f]+)$"
-> +
-> +  compatible:
-> +    enum:
-> +      - nvidia,tegra186-ccplex-cluster
-> +      - nvidia,tegra234-ccplex-cluster
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  nvidia,bpmp:
-> +    $ref: '/schemas/types.yaml#/definitions/phandle'
-> +    description: |
-> +      Specifies the BPMP node that needs to be queried to get
-> +      operating point data for all CPUs.
-> +
-> +additionalProperties: true
+> IMO the debugfs files were fine as they were:
+>   - They offered information on units and inefficiencies without having
+>     to dig into the code to see which bit is for which flag.
+>   - I believe the artificial EM power values fit under bogoWatts as unit,
+>     so that part would still be correct.
+> 
+> On the other hand, your new file offers more information: we'd be able
+> to see in debugfs whether we're dealing with an artificial EM, despite
+> needing a bit more looking over the code to understand the output.
 
-Additionally, true is only allowed for incomplete, common bindings which 
-this is not.
+I have consolidated them, so we would support more features in the flag
+automatically when there will be a need.
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - nvidia,bpmp
-> +  - status
-> +
-> +examples:
-> +  - |
-> +    ccplex@e000000 {
-> +      compatible = "nvidia,tegra234-ccplex-cluster";
-> +      reg = <0x0 0x0e000000 0x0 0x5ffff>;
-> +      nvidia,bpmp = <&bpmp>;
-> +      status = "okay";
-> +    };
-> -- 
-> 2.17.1
+In Android kernel we don't have unfortunately the debugfs compiled-in,
+so this information is still only for kernel testing with some Linux
+distro.
+
+I have been thinking to switch into sysfs interface, so we could
+have it in Android as well. This patch change adding a generic 'flags'
+which would be more 'stable' (which is a requirement for sysfs contract)
+is also a closer step into that direction. But that is for longer
+discussion and not for this $subject.
+
 > 
+> I don't have a strong opinion and the code looks fine, so:
 > 
+> Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
+> 
+
