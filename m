@@ -2,88 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED20F4F1A5B
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 23:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 241D74F1BE7
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 23:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378902AbiDDVSV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Apr 2022 17:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
+        id S1378950AbiDDVSb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Apr 2022 17:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379085AbiDDQdD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 12:33:03 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9006436E0C;
-        Mon,  4 Apr 2022 09:31:07 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 520B3D6E;
-        Mon,  4 Apr 2022 09:31:07 -0700 (PDT)
-Received: from [10.57.8.9] (unknown [10.57.8.9])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 65D843F73B;
-        Mon,  4 Apr 2022 09:31:04 -0700 (PDT)
-Message-ID: <74a2f038-50dd-91e5-227d-a1c633a87184@arm.com>
-Date:   Mon, 4 Apr 2022 17:31:02 +0100
+        with ESMTP id S1379391AbiDDRES (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 13:04:18 -0400
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2687140A22;
+        Mon,  4 Apr 2022 10:02:22 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id q129so10701409oif.4;
+        Mon, 04 Apr 2022 10:02:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KnM/3DeRUkghGL3B228lv8tjJAJo66tZo/nzV6jVUL8=;
+        b=woe382QyJMhl9DaVmJVTx67a5NzPogC7+6pfXXLFKQcIQwagapfi0LCRzNCsJ8hVVn
+         rp8m5FJ7/vohg747dNQ0s8hxMe0f4APnpVxpZm73WxCrkrv5rZBhmx4jJKF+36b1h9bP
+         +m663ZgDm09R3bt0QW212tlvzQRFx7IaPaRBUM6c4+qTnw+/Cj8AkLTJi5b+0v4tNvZR
+         dyXGiX4KmQcWUJrbFeXr4JSD99f6LvU/s9zbfc7Rb54iyWvDCoh7DLylB6SG+UpSsDDo
+         aJJkP+im1EoyySgsxVHYln/G2vLUMfk9ESKJ/a8P+6xshBN5n3j8a408TfoAE8q7g1sm
+         yIvA==
+X-Gm-Message-State: AOAM533mlrFkfObwvFKtL7oG0x1y9RrBF/+E0llbgMl9/IKK+EV8wxzf
+        uuhKkr8u2qqvd7Tm9OzM0tac9U28xg==
+X-Google-Smtp-Source: ABdhPJwjAxbJ3KU0l9+VXRjxGhhRZm4agoSKxhMj4f9qcCrMs2dDJ+nBsX6ziJpkXNEm3ZrMKCAzUA==
+X-Received: by 2002:a05:6808:2008:b0:2da:5b12:83ff with SMTP id q8-20020a056808200800b002da5b1283ffmr47508oiw.216.1649091740535;
+        Mon, 04 Apr 2022 10:02:20 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t3-20020a05680800c300b002f935a7daa9sm4403437oic.19.2022.04.04.10.02.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 10:02:19 -0700 (PDT)
+Received: (nullmailer pid 1527750 invoked by uid 1000);
+        Mon, 04 Apr 2022 17:02:19 -0000
+Date:   Mon, 4 Apr 2022 12:02:19 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tony Lindgren <tony@atomide.com>, linux-pm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, - <patches@opensource.cirrus.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        alsa-devel@alsa-project.org,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-media@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>
+Subject: Re: [PATCH] dt-bindings: Fix 'enum' lists with duplicate entries
+Message-ID: <Ykskm27aWyHMGk5v@robh.at.kernel.org>
+References: <20220401141247.2993925-1-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RESEND][PATCH 5/8] PM: EM: Remove old debugfs files and print
- all 'flags'
-Content-Language: en-US
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        Pierre.Gondois@arm.com, viresh.kumar@linaro.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-        mka@chromium.org, nm@ti.com, sboyd@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, cristian.marussi@arm.com,
-        sudeep.holla@arm.com, matthias.bgg@gmail.com
-References: <20220321095729.20655-1-lukasz.luba@arm.com>
- <20220321095729.20655-6-lukasz.luba@arm.com> <YksWj8GhZWUimF74@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <YksWj8GhZWUimF74@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220401141247.2993925-1-robh@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Ionela,
-
-Thank you for reviewing these patches.
-
-On 4/4/22 17:02, Ionela Voinescu wrote:
-> Hi Lukasz,
+On Fri, 01 Apr 2022 09:12:47 -0500, Rob Herring wrote:
+> There's no reason to list the same value twice in an 'enum'. Fix all the
+> occurrences in the tree. A meta-schema change will catch future ones.
 > 
-> IMO the debugfs files were fine as they were:
->   - They offered information on units and inefficiencies without having
->     to dig into the code to see which bit is for which flag.
->   - I believe the artificial EM power values fit under bogoWatts as unit,
->     so that part would still be correct.
+> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Jonathan Hunter <jonathanh@nvidia.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Charles Keepax <ckeepax@opensource.cirrus.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: Yunfei Dong <yunfei.dong@mediatek.com>
+> Cc: - <patches@opensource.cirrus.com>
+> Cc: linux-media@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> There's also one other occurrence in snps,dwmac.yaml I didn't fix as
+> there's a patch[1] for it which prompted this patch.
 > 
-> On the other hand, your new file offers more information: we'd be able
-> to see in debugfs whether we're dealing with an artificial EM, despite
-> needing a bit more looking over the code to understand the output.
-
-I have consolidated them, so we would support more features in the flag
-automatically when there will be a need.
-
-In Android kernel we don't have unfortunately the debugfs compiled-in,
-so this information is still only for kernel testing with some Linux
-distro.
-
-I have been thinking to switch into sysfs interface, so we could
-have it in Android as well. This patch change adding a generic 'flags'
-which would be more 'stable' (which is a requirement for sysfs contract)
-is also a closer step into that direction. But that is for longer
-discussion and not for this $subject.
-
+> Rob
 > 
-> I don't have a strong opinion and the code looks fine, so:
+> [1] https://lore.kernel.org/r/20220401030847epcms1p8cf7a8e1d8cd7d325dacf30f78da36328@epcms1p8
 > 
-> Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
+>  .../bindings/arm/tegra/nvidia,tegra20-pmc.yaml        |  1 -
+>  Documentation/devicetree/bindings/bus/ti-sysc.yaml    |  1 -
+>  .../bindings/media/mediatek,vcodec-encoder.yaml       |  1 -
+>  .../devicetree/bindings/pinctrl/cirrus,madera.yaml    | 11 +++++------
+>  .../devicetree/bindings/power/supply/bq2415x.yaml     |  1 -
+>  5 files changed, 5 insertions(+), 10 deletions(-)
 > 
 
+Applied, thanks!
