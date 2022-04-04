@@ -2,69 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 241D74F1BE7
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 23:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C2474F1A6A
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 23:16:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378950AbiDDVSb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Apr 2022 17:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
+        id S1356184AbiDDVSZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Apr 2022 17:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379391AbiDDRES (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 13:04:18 -0400
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2687140A22;
-        Mon,  4 Apr 2022 10:02:22 -0700 (PDT)
-Received: by mail-oi1-f176.google.com with SMTP id q129so10701409oif.4;
-        Mon, 04 Apr 2022 10:02:22 -0700 (PDT)
+        with ESMTP id S1379395AbiDDREZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 13:04:25 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3345640A27
+        for <linux-pm@vger.kernel.org>; Mon,  4 Apr 2022 10:02:29 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id k23so17853506ejd.3
+        for <linux-pm@vger.kernel.org>; Mon, 04 Apr 2022 10:02:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=AZy7e16Ig1JG7qj3MBTWcZiECGvCR3TfCcY9SM2k7uA=;
+        b=TkwLryzG8xq8ZJgUcCjQo23owBZZxVZFlkUrfEjVt10WatBuovqiDNcaYbAr25omCj
+         d/kdNNsblDqCmWG5ynrU8fhTXwQ/8Ch/9Es+pyux5G6XK9KlilWd6omMRts4Qr5EVCOD
+         vT85iI2i9IE/qPYUVU9NmGMmM53GkB4/i/SaTw9UAzzF0fYfcXY5EVrC8qm7/w4jB6DI
+         iI0q2d55LAvT0MvFWh0m8iwFkBjqZ4+uErSypFFgzJUqqdQ3WSZwOkiq1AaAApg8LADP
+         LOsfRO1HtVp7I2biiAyX3xEtqSmtatDXPSIpc592+g14AaVuhm+poLEgUDxFYxX8L/xy
+         9UqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KnM/3DeRUkghGL3B228lv8tjJAJo66tZo/nzV6jVUL8=;
-        b=woe382QyJMhl9DaVmJVTx67a5NzPogC7+6pfXXLFKQcIQwagapfi0LCRzNCsJ8hVVn
-         rp8m5FJ7/vohg747dNQ0s8hxMe0f4APnpVxpZm73WxCrkrv5rZBhmx4jJKF+36b1h9bP
-         +m663ZgDm09R3bt0QW212tlvzQRFx7IaPaRBUM6c4+qTnw+/Cj8AkLTJi5b+0v4tNvZR
-         dyXGiX4KmQcWUJrbFeXr4JSD99f6LvU/s9zbfc7Rb54iyWvDCoh7DLylB6SG+UpSsDDo
-         aJJkP+im1EoyySgsxVHYln/G2vLUMfk9ESKJ/a8P+6xshBN5n3j8a408TfoAE8q7g1sm
-         yIvA==
-X-Gm-Message-State: AOAM533mlrFkfObwvFKtL7oG0x1y9RrBF/+E0llbgMl9/IKK+EV8wxzf
-        uuhKkr8u2qqvd7Tm9OzM0tac9U28xg==
-X-Google-Smtp-Source: ABdhPJwjAxbJ3KU0l9+VXRjxGhhRZm4agoSKxhMj4f9qcCrMs2dDJ+nBsX6ziJpkXNEm3ZrMKCAzUA==
-X-Received: by 2002:a05:6808:2008:b0:2da:5b12:83ff with SMTP id q8-20020a056808200800b002da5b1283ffmr47508oiw.216.1649091740535;
-        Mon, 04 Apr 2022 10:02:20 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t3-20020a05680800c300b002f935a7daa9sm4403437oic.19.2022.04.04.10.02.19
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=AZy7e16Ig1JG7qj3MBTWcZiECGvCR3TfCcY9SM2k7uA=;
+        b=N+mIRr5uomUwtBqPz0eiida/Bmi22UnDTa2+C5kdzO8XTAKz1art82vk38dxaKF93K
+         bGK36ZzVO06tdXpScV9UsCKXoy7vliTuNHUHHeIJz7f7QEFY1YOmiglm0rRm0mv/2kj5
+         Kh5SQQcXS8NadbRuPc7VKhX2D0/EjUimXCBfeD/gqgFx5hP4YRXYC24inVYRQHsJG3Fp
+         e8jZ1ZOdCUiIJ6BYKQfiQkD6yg7/uTVKAnme1ZHfDrNNCN8xrqr+mOW+5kJaj9ahewbn
+         Ir4813EhQlEbfm6M0ZqTn050u+apzAySFmtftqaa6KfeMaLp3sjrcqunPpYOnvMuyozv
+         WVpA==
+X-Gm-Message-State: AOAM532FPjbwi3j7APMImbPNaqyRShuMgAgCZoMWhw+wDqNvr6a7gXb3
+        8/fbnpaJmik+cCCvm6uPsoSnDg==
+X-Google-Smtp-Source: ABdhPJw30fbKCfQKHVKnmx6muF5fQbHs2yESn5RWTv0aghy4f7F4Sy0XYE4R1cIxrr0pe2nLy7vXTQ==
+X-Received: by 2002:a17:907:7205:b0:6e7:ee50:ea94 with SMTP id dr5-20020a170907720500b006e7ee50ea94mr1050231ejc.351.1649091747789;
+        Mon, 04 Apr 2022 10:02:27 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id hs12-20020a1709073e8c00b006dfdfdac005sm4588927ejc.174.2022.04.04.10.02.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 10:02:19 -0700 (PDT)
-Received: (nullmailer pid 1527750 invoked by uid 1000);
-        Mon, 04 Apr 2022 17:02:19 -0000
-Date:   Mon, 4 Apr 2022 12:02:19 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tony Lindgren <tony@atomide.com>, linux-pm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, - <patches@opensource.cirrus.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        alsa-devel@alsa-project.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-media@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>
-Subject: Re: [PATCH] dt-bindings: Fix 'enum' lists with duplicate entries
-Message-ID: <Ykskm27aWyHMGk5v@robh.at.kernel.org>
-References: <20220401141247.2993925-1-robh@kernel.org>
+        Mon, 04 Apr 2022 10:02:27 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: (subset) [PATCH v3 8/8] ARM: dts: exynos: remove deprecated unit address for LPDDR3 timings on Odroid
+Date:   Mon,  4 Apr 2022 19:02:24 +0200
+Message-Id: <164909174137.1688710.5639682730055944531.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220206135918.211990-1-krzysztof.kozlowski@canonical.com>
+References: <20220206135807.211767-1-krzysztof.kozlowski@canonical.com> <20220206135918.211990-1-krzysztof.kozlowski@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220401141247.2993925-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,39 +76,17 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 01 Apr 2022 09:12:47 -0500, Rob Herring wrote:
-> There's no reason to list the same value twice in an 'enum'. Fix all the
-> occurrences in the tree. A meta-schema change will catch future ones.
+On Sun, 6 Feb 2022 14:59:18 +0100, Krzysztof Kozlowski wrote:
+> Passing maximum frequency of LPDDR3 memory timings as unit address was
+> deprecated in favor of 'max-freq' property.
 > 
-> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Jonathan Hunter <jonathanh@nvidia.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Charles Keepax <ckeepax@opensource.cirrus.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Tony Lindgren <tony@atomide.com>
-> Cc: Yunfei Dong <yunfei.dong@mediatek.com>
-> Cc: - <patches@opensource.cirrus.com>
-> Cc: linux-media@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> There's also one other occurrence in snps,dwmac.yaml I didn't fix as
-> there's a patch[1] for it which prompted this patch.
-> 
-> Rob
-> 
-> [1] https://lore.kernel.org/r/20220401030847epcms1p8cf7a8e1d8cd7d325dacf30f78da36328@epcms1p8
-> 
->  .../bindings/arm/tegra/nvidia,tegra20-pmc.yaml        |  1 -
->  Documentation/devicetree/bindings/bus/ti-sysc.yaml    |  1 -
->  .../bindings/media/mediatek,vcodec-encoder.yaml       |  1 -
->  .../devicetree/bindings/pinctrl/cirrus,madera.yaml    | 11 +++++------
->  .../devicetree/bindings/power/supply/bq2415x.yaml     |  1 -
->  5 files changed, 5 insertions(+), 10 deletions(-)
 > 
 
 Applied, thanks!
+
+[8/8] ARM: dts: exynos: remove deprecated unit address for LPDDR3 timings on Odroid
+      commit: c3d3727c8531ba78fc725995ce34cf948ebf1dae
+
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
