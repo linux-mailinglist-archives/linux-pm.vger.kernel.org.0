@@ -2,104 +2,365 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 012754F14F7
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 14:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A40D14F14FC
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 14:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346164AbiDDMhi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Apr 2022 08:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40210 "EHLO
+        id S239289AbiDDMkA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Apr 2022 08:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344547AbiDDMhh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 08:37:37 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE4B52717F;
-        Mon,  4 Apr 2022 05:35:40 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 51424D6E;
-        Mon,  4 Apr 2022 05:35:40 -0700 (PDT)
-Received: from [10.57.8.9] (unknown [10.57.8.9])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2074F3F5A1;
-        Mon,  4 Apr 2022 05:35:36 -0700 (PDT)
-Message-ID: <76230a1c-73b8-c471-c62e-3ec9b33461a6@arm.com>
-Date:   Mon, 4 Apr 2022 13:35:35 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RESEND][PATCH 0/8] Introduce support for artificial Energy Model
-Content-Language: en-US
-To:     rafael@kernel.org
-Cc:     dietmar.eggemann@arm.com, Pierre.Gondois@arm.com,
-        ionela.voinescu@arm.com, viresh.kumar@linaro.org,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-        mka@chromium.org, nm@ti.com, sboyd@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, cristian.marussi@arm.com,
-        sudeep.holla@arm.com, matthias.bgg@gmail.com,
+        with ESMTP id S1344788AbiDDMj6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 08:39:58 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A30F286E2
+        for <linux-pm@vger.kernel.org>; Mon,  4 Apr 2022 05:38:01 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id yy13so19654641ejb.2
+        for <linux-pm@vger.kernel.org>; Mon, 04 Apr 2022 05:38:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IxazKNWdZmuxHrWhtc+LApD4KGO8WGpvem9++wDs/cs=;
+        b=O1qLrl6rgLys895swTs9ijWBtJBWy4DbAvI6mMhsteXwdBuz5pihoZstlg2p/ED3XN
+         RpLKFVRLXLABDuveV9c00Mb8SVCdQ+DEIaFXLOocSfpW7nlbeT8IKESIGsEeU2u3yvIc
+         ItRIklQP9IwgCenucKyCTYV7cTBUytF2IoQ64t9egvULBv0JODzjdmJ+oFgoO+iOPnqy
+         CiYZvnJnTmRsFXgreiBHyR+3gOpCd+tAMdENoGzllXqq97VQiff3LzIwFLKkNoqUKAee
+         VO/j28Eowzv+XZExpZZj9kQvbvc0whVeT4FcPx6FKYYF86Mzy7Esf/FHQzR+u1H84DEM
+         Lx6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IxazKNWdZmuxHrWhtc+LApD4KGO8WGpvem9++wDs/cs=;
+        b=vUNgJA2i8y7WhM5PEMOTlKPXx9NW96Se0SJ6Defjwz/Ss3GneywYkj8IFz+GrETLl9
+         EZiBlpV7EeDFx2y+kvvGCWgrk3eAURUcBalfFV6aeqj85GXbBEesq4Ms+MgEAUDlr2GZ
+         zKYRCBQW6uNWfKp/Uo4MSh/Ahx23uYtVSLSH02twk66uUEId1SxVQvtrlM1drml+BbUv
+         47JxOBnN2YxSYB+SAFMM0ODOQwJTGP81QbwUWReHHwvUwbywnR2xeTbBtfdDbfwZHgMP
+         +sk4QMLv2kCCp0AP/K+I5sIQmjivUkl163mHh/fCJfUuZziOLMEsCd1gSTVJ/7CodSRb
+         w/jQ==
+X-Gm-Message-State: AOAM5339YKza5t+0rI/Kg1Gt6ikYMW8EMST5p+z4rn9LWnpYKksVX22Y
+        xP2lFm7SDU6h4ZfvKqAnUiuPSg==
+X-Google-Smtp-Source: ABdhPJxIkjveHM7OqjZ5YObsOBiucW6Soy/YCP9ws9nXkbzZODaT0Td0Tg61RuzkuG1DN60qHkt17w==
+X-Received: by 2002:a17:906:3918:b0:6e0:5bbd:bf33 with SMTP id f24-20020a170906391800b006e05bbdbf33mr10262205eje.764.1649075879997;
+        Mon, 04 Apr 2022 05:37:59 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id j24-20020a170906255800b006e7f44d46fesm924463ejb.222.2022.04.04.05.37.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 05:37:59 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220321095729.20655-1-lukasz.luba@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220321095729.20655-1-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2] PM: opp: Fix NULL pointer exception on a v2 table combined with v1 opps
+Date:   Mon,  4 Apr 2022 14:37:57 +0200
+Message-Id: <20220404123757.798917-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+dev_pm_opp_add() adds a v1 OPP.  If the Devicetree contains an OPP v2
+table with required-opps, but the driver uses dev_pm_opp_add(), the
+table might have required_opp_count!=0 but the opp->required_opps will
+be NULL.  This leads to NULL pointer exception, e.g. with ufs-qcom.c
+driver and v2 OPP table in DTS:
 
+  Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+  ...
+  Call trace:
+   _required_opps_available+0x20/0x80
+   _opp_add_v1+0xa8/0x110
+   dev_pm_opp_add+0x54/0xcc
+   ufshcd_async_scan+0x190/0x31c
+   async_run_entry_fn+0x38/0x144
 
-The patch set has been on LKML for quite a while and got one ACK,
-for the code touching something outside the EM (thermal cooling).
+The case of mixing v1 and v2 OPP tables is not supported.  Add a version
+field to the OPP table to handle such cases:
+1. Disallow mixing v1 and v2 OPPs,
+2. Skip parsing required opps when dealing with a v1 OPP table.
 
-AFAICS there is no interest and objections from others for this code.
+Fixes: cf65948d62c6 ("opp: Filter out OPPs based on availability of a required-OPP")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Therefore, I have a question:
-What would be be process to have merge this code?
-(We had internally a few reviews of this code)
+---
 
-On 3/21/22 09:57, Lukasz Luba wrote:
-> Hi all,
-> 
-> This patch set adds new callback and support for artificial Energy Model (EM).
-> The new EMs have artificially generated performance states.
-> Such EMs can be created from lean information sources, such
-> as the relative energy efficiency between CPUs. The ACPI based
-> platforms provide this information
-> (ACPI 6.4, s5.2.12.14 'GIC CPU Interface (GICC) Structure'
-> 'Processor Power efficiency Class' field).
-> 
-> Artificial EMs might require to directly provide the 'cost' of
-> the generated performance state. This patch set adds a new callback
-> .get_cost() for this. The EM framework does not force any model
-> or formula, it's up to the platform code.
-> 
-> Artificial EMs aim to leverage the Energy Aware Scheduler
-> (EAS). Other frameworks relying on performance states
-> information (i.e. IPA/DTPM) must be informed of the
-> EM type and might be prevented from using it. This patch
-> sets also does this by introducing a new flag:
-> EM_PERF_DOMAIN_ARTIFICIAL.
-> 
-> The patch set is based on current linux-next, where some
-> changes to OPP & EM are queuing.
-> 
-> The patch set also contains (patch 7/8 and patch 8/8) logic which prevents
-> two EM's client frameworks from using this new EM type. Some other approach,
-> using 'milli-watts', has been proposed and discussed, but refused [1].
-> This new flag is more precised and should not leave space for
-> wrong interpretation.
-> 
-> Shortly after this patch set you will see a patch set implementing the
-> platform code and registering this new EM.
-> 
+Changes since v1:
+1. Add version field.
+2. Skip allocating required fields in _opp_table_alloc_required_tables()
+   instead of iterating over it later.
+---
+ drivers/opp/core.c | 35 +++++++++++++++++++++++------------
+ drivers/opp/of.c   | 22 +++++++++++++++++++++-
+ drivers/opp/opp.h  | 12 +++++++++++-
+ 3 files changed, 55 insertions(+), 14 deletions(-)
 
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 740407252298..0b5357b9d342 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -1227,7 +1227,8 @@ struct opp_device *_add_opp_dev(const struct device *dev,
+ 	return opp_dev;
+ }
+ 
+-static struct opp_table *_allocate_opp_table(struct device *dev, int index)
++static struct opp_table *_allocate_opp_table(struct device *dev, int index,
++					     enum opp_table_version version)
+ {
+ 	struct opp_table *opp_table;
+ 	struct opp_device *opp_dev;
+@@ -1248,6 +1249,7 @@ static struct opp_table *_allocate_opp_table(struct device *dev, int index)
+ 
+ 	/* Mark regulator count uninitialized */
+ 	opp_table->regulator_count = -1;
++	opp_table->version = version;
+ 
+ 	opp_dev = _add_opp_dev(dev, opp_table);
+ 	if (!opp_dev) {
+@@ -1332,7 +1334,8 @@ static struct opp_table *_update_opp_table_clk(struct device *dev,
+  * of adding an OPP table and others should wait for it to finish.
+  */
+ struct opp_table *_add_opp_table_indexed(struct device *dev, int index,
+-					 bool getclk)
++					 bool getclk,
++					 enum opp_table_version version)
+ {
+ 	struct opp_table *opp_table;
+ 
+@@ -1367,7 +1370,7 @@ struct opp_table *_add_opp_table_indexed(struct device *dev, int index,
+ 
+ 		mutex_lock(&opp_table_lock);
+ 	} else {
+-		opp_table = _allocate_opp_table(dev, index);
++		opp_table = _allocate_opp_table(dev, index, version);
+ 
+ 		mutex_lock(&opp_table_lock);
+ 		if (!IS_ERR(opp_table))
+@@ -1382,9 +1385,10 @@ struct opp_table *_add_opp_table_indexed(struct device *dev, int index,
+ 	return _update_opp_table_clk(dev, opp_table, getclk);
+ }
+ 
+-static struct opp_table *_add_opp_table(struct device *dev, bool getclk)
++static struct opp_table *_add_opp_table(struct device *dev, bool getclk,
++					enum opp_table_version version)
+ {
+-	return _add_opp_table_indexed(dev, 0, getclk);
++	return _add_opp_table_indexed(dev, 0, getclk, version);
+ }
+ 
+ struct opp_table *dev_pm_opp_get_opp_table(struct device *dev)
+@@ -1794,6 +1798,13 @@ int _opp_add_v1(struct opp_table *opp_table, struct device *dev,
+ 	unsigned long tol;
+ 	int ret;
+ 
++	if (opp_table->version != OPP_TABLE_VERSION_UNKNOWN &&
++	    opp_table->version != OPP_TABLE_VERSION_1) {
++		dev_warn(dev, "%s: Mixing v1 and v2 OPP bindings not supported (%lu)\n",
++			 __func__, freq);
++		return -EINVAL;
++	}
++
+ 	new_opp = _opp_allocate(opp_table);
+ 	if (!new_opp)
+ 		return -ENOMEM;
+@@ -1844,7 +1855,7 @@ struct opp_table *dev_pm_opp_set_supported_hw(struct device *dev,
+ {
+ 	struct opp_table *opp_table;
+ 
+-	opp_table = _add_opp_table(dev, false);
++	opp_table = _add_opp_table(dev, false, OPP_TABLE_VERSION_2);
+ 	if (IS_ERR(opp_table))
+ 		return opp_table;
+ 
+@@ -1932,7 +1943,7 @@ struct opp_table *dev_pm_opp_set_prop_name(struct device *dev, const char *name)
+ {
+ 	struct opp_table *opp_table;
+ 
+-	opp_table = _add_opp_table(dev, false);
++	opp_table = _add_opp_table(dev, false, OPP_TABLE_VERSION_2);
+ 	if (IS_ERR(opp_table))
+ 		return opp_table;
+ 
+@@ -1994,7 +2005,7 @@ struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
+ 	struct regulator *reg;
+ 	int ret, i;
+ 
+-	opp_table = _add_opp_table(dev, false);
++	opp_table = _add_opp_table(dev, false, OPP_TABLE_VERSION_UNKNOWN);
+ 	if (IS_ERR(opp_table))
+ 		return opp_table;
+ 
+@@ -2149,7 +2160,7 @@ struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name)
+ 	struct opp_table *opp_table;
+ 	int ret;
+ 
+-	opp_table = _add_opp_table(dev, false);
++	opp_table = _add_opp_table(dev, false, OPP_TABLE_VERSION_UNKNOWN);
+ 	if (IS_ERR(opp_table))
+ 		return opp_table;
+ 
+@@ -2247,7 +2258,7 @@ struct opp_table *dev_pm_opp_register_set_opp_helper(struct device *dev,
+ 	if (!set_opp)
+ 		return ERR_PTR(-EINVAL);
+ 
+-	opp_table = _add_opp_table(dev, false);
++	opp_table = _add_opp_table(dev, false, OPP_TABLE_VERSION_UNKNOWN);
+ 	if (IS_ERR(opp_table))
+ 		return opp_table;
+ 
+@@ -2380,7 +2391,7 @@ struct opp_table *dev_pm_opp_attach_genpd(struct device *dev,
+ 	int index = 0, ret = -EINVAL;
+ 	const char * const *name = names;
+ 
+-	opp_table = _add_opp_table(dev, false);
++	opp_table = _add_opp_table(dev, false, OPP_TABLE_VERSION_UNKNOWN);
+ 	if (IS_ERR(opp_table))
+ 		return opp_table;
+ 
+@@ -2637,7 +2648,7 @@ int dev_pm_opp_add(struct device *dev, unsigned long freq, unsigned long u_volt)
+ 	struct opp_table *opp_table;
+ 	int ret;
+ 
+-	opp_table = _add_opp_table(dev, true);
++	opp_table = _add_opp_table(dev, true, OPP_TABLE_VERSION_1);
+ 	if (IS_ERR(opp_table))
+ 		return PTR_ERR(opp_table);
+ 
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index 440ab5a03df9..aa757f73277a 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -169,6 +169,9 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
+ 		return;
+ 	}
+ 
++	if (opp_table->version == OPP_TABLE_VERSION_1)
++		goto skip_required_opp;
++
+ 	count = of_count_phandle_with_args(np, "required-opps", NULL);
+ 	if (count <= 0)
+ 		goto put_np;
+@@ -193,6 +196,7 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
+ 			lazy = true;
+ 	}
+ 
++skip_required_opp:
+ 	/* Let's do the linking later on */
+ 	if (lazy)
+ 		list_add(&opp_table->lazy, &lazy_opp_tables);
+@@ -883,6 +887,13 @@ static struct dev_pm_opp *_opp_add_static_v2(struct opp_table *opp_table,
+ 	int ret;
+ 	bool rate_not_available = false;
+ 
++	if (opp_table->version != OPP_TABLE_VERSION_UNKNOWN &&
++	    opp_table->version != OPP_TABLE_VERSION_2) {
++		dev_warn(dev, "%s: Mixing v1 and v2 OPP bindings not supported\n",
++			 __func__);
++		return ERR_PTR(-EINVAL);
++	}
++
+ 	new_opp = _opp_allocate(opp_table);
+ 	if (!new_opp)
+ 		return ERR_PTR(-ENOMEM);
+@@ -985,6 +996,9 @@ static int _of_add_opp_table_v2(struct device *dev, struct opp_table *opp_table)
+ 	opp_table->parsed_static_opps = 1;
+ 	mutex_unlock(&opp_table->lock);
+ 
++	WARN_ON(opp_table->version != OPP_TABLE_VERSION_UNKNOWN);
++	opp_table->version = OPP_TABLE_VERSION_2;
++
+ 	/* We have opp-table node now, iterate over it and add OPPs */
+ 	for_each_available_child_of_node(opp_table->np, np) {
+ 		opp = _opp_add_static_v2(opp_table, dev, np);
+@@ -1020,6 +1034,7 @@ static int _of_add_opp_table_v2(struct device *dev, struct opp_table *opp_table)
+ 
+ remove_static_opp:
+ 	_opp_remove_all_static(opp_table);
++	opp_table->version = OPP_TABLE_VERSION_UNKNOWN;
+ 
+ 	return ret;
+ }
+@@ -1041,6 +1056,9 @@ static int _of_add_opp_table_v1(struct device *dev, struct opp_table *opp_table)
+ 	opp_table->parsed_static_opps = 1;
+ 	mutex_unlock(&opp_table->lock);
+ 
++	WARN_ON(opp_table->version != OPP_TABLE_VERSION_UNKNOWN);
++	opp_table->version = OPP_TABLE_VERSION_1;
++
+ 	prop = of_find_property(dev->of_node, "operating-points", NULL);
+ 	if (!prop) {
+ 		ret = -ENODEV;
+@@ -1080,6 +1098,7 @@ static int _of_add_opp_table_v1(struct device *dev, struct opp_table *opp_table)
+ 
+ remove_static_opp:
+ 	_opp_remove_all_static(opp_table);
++	opp_table->version = OPP_TABLE_VERSION_UNKNOWN;
+ 
+ 	return ret;
+ }
+@@ -1100,7 +1119,8 @@ static int _of_add_table_indexed(struct device *dev, int index, bool getclk)
+ 			index = 0;
+ 	}
+ 
+-	opp_table = _add_opp_table_indexed(dev, index, getclk);
++	opp_table = _add_opp_table_indexed(dev, index, getclk,
++					   OPP_TABLE_VERSION_UNKNOWN);
+ 	if (IS_ERR(opp_table))
+ 		return PTR_ERR(opp_table);
+ 
+diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+index 45e3a55239a1..bd8349f8c7b0 100644
+--- a/drivers/opp/opp.h
++++ b/drivers/opp/opp.h
+@@ -124,6 +124,12 @@ enum opp_table_access {
+ 	OPP_TABLE_ACCESS_SHARED = 2,
+ };
+ 
++enum opp_table_version {
++	OPP_TABLE_VERSION_UNKNOWN = 0,
++	OPP_TABLE_VERSION_1 = 1,
++	OPP_TABLE_VERSION_2 = 2,
++};
++
+ /**
+  * struct opp_table - Device opp structure
+  * @node:	table node - contains the devices with OPPs that
+@@ -138,6 +144,7 @@ enum opp_table_access {
+  * @clock_latency_ns_max: Max clock latency in nanoseconds.
+  * @parsed_static_opps: Count of devices for which OPPs are initialized from DT.
+  * @shared_opp: OPP is shared between multiple devices.
++ * @version: OPP bindings version to disallow mixing (e.g. v1 and v2).
+  * @current_rate: Currently configured frequency.
+  * @current_opp: Currently configured OPP for the table.
+  * @suspend_opp: Pointer to OPP to be used during device suspend.
+@@ -188,6 +195,7 @@ struct opp_table {
+ 
+ 	unsigned int parsed_static_opps;
+ 	enum opp_table_access shared_opp;
++	enum opp_table_version version;
+ 	unsigned long current_rate;
+ 	struct dev_pm_opp *current_opp;
+ 	struct dev_pm_opp *suspend_opp;
+@@ -232,7 +240,9 @@ int _opp_compare_key(struct dev_pm_opp *opp1, struct dev_pm_opp *opp2);
+ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp, struct opp_table *opp_table, bool rate_not_available);
+ int _opp_add_v1(struct opp_table *opp_table, struct device *dev, unsigned long freq, long u_volt, bool dynamic);
+ void _dev_pm_opp_cpumask_remove_table(const struct cpumask *cpumask, int last_cpu);
+-struct opp_table *_add_opp_table_indexed(struct device *dev, int index, bool getclk);
++struct opp_table *_add_opp_table_indexed(struct device *dev, int index,
++					 bool getclk,
++					 enum opp_table_version version);
+ void _put_opp_list_kref(struct opp_table *opp_table);
+ void _required_opps_available(struct dev_pm_opp *opp, int count);
+ 
+-- 
+2.32.0
 
-No one from Arm is an official maintainer of the EM code.
-
-Regards,
-Lukasz
