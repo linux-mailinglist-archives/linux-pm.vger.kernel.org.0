@@ -2,118 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 285794F18AA
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 17:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07ACE4F1915
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 18:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378636AbiDDPof (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Apr 2022 11:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
+        id S1378886AbiDDQDP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Apr 2022 12:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347003AbiDDPoe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 11:44:34 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0831393F5;
-        Mon,  4 Apr 2022 08:42:37 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 663112fc46d070d8; Mon, 4 Apr 2022 17:42:36 +0200
-Received: from kreacher.localnet (unknown [213.134.181.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 3F1BC66BCD3;
-        Mon,  4 Apr 2022 17:42:35 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PCI <linux-pci@vger.kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH v1 2/2] PCI: PM: Resume bus after putting the bridge into D0 entirely
-Date:   Mon, 04 Apr 2022 17:42:27 +0200
-Message-ID: <1807986.atdPhlSkOF@kreacher>
-In-Reply-To: <4198163.ejJDZkT8p0@kreacher>
-References: <4198163.ejJDZkT8p0@kreacher>
+        with ESMTP id S1378808AbiDDQCq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 12:02:46 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5AA4A245A5;
+        Mon,  4 Apr 2022 09:00:50 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E3756D6E;
+        Mon,  4 Apr 2022 09:00:49 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 888053F73B;
+        Mon,  4 Apr 2022 09:00:49 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 17:00:47 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        Pierre.Gondois@arm.com, viresh.kumar@linaro.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+        mka@chromium.org, nm@ti.com, sboyd@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, cristian.marussi@arm.com,
+        sudeep.holla@arm.com, matthias.bgg@gmail.com
+Subject: Re: [RESEND][PATCH 1/8] PM: EM: Add .get_cost() callback
+Message-ID: <YksWL2cWQDXPCuKv@arm.com>
+References: <20220321095729.20655-1-lukasz.luba@arm.com>
+ <20220321095729.20655-2-lukasz.luba@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.181.62
-X-CLIENT-HOSTNAME: 213.134.181.62
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejvddgkeejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepvddufedrudefgedrudekuddriedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekuddriedvpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhk
- rgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321095729.20655-2-lukasz.luba@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Monday 21 Mar 2022 at 09:57:22 (+0000), Lukasz Luba wrote:
+> The Energy Model (EM) supports devices which report abstract power scale,
+> not only real Watts. The primary goal for EM is to enable the Energy Aware
+> Scheduler (EAS) for a given platform. Some of the platforms might not be
+> able to deliver proper power values. The only information that they might
+> have is the relative efficiency between CPU types.
+> 
+> Thus, it makes sense to remove some restrictions in the EM framework and
+> introduce a mechanism which would support those platforms. What is crucial
+> for EAS to operate is the 'cost' field in the EM. The 'cost' is calculated
+> internally in EM framework based on knowledge from 'power' values.
+> The 'cost' values must be strictly increasing. The existing API with its
+> 'power' value size restrictions cannot guarantee that the 'cost' will meet
+> this requirement.
+> 
+> Since the platform is missing this detailed information, but has only
+> efficiency details, introduce a new custom callback in the EM framework.
+> The new callback would allow to provide the 'cost' values which reflect
+> efficiency of the CPUs. This would allow to provide EAS information which
+> has different relation than what would be forced by the EM internal
+> formulas calculating 'cost' values. Thanks to this new callback it is
+> possible to create a system view for EAS which has no overlapping
+> performance states across many Performance Domains.
+> 
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>  include/linux/energy_model.h | 24 +++++++++++++++++++++++-
+>  1 file changed, 23 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+> index 9f3c400bc52d..0a3a5663177b 100644
+> --- a/include/linux/energy_model.h
+> +++ b/include/linux/energy_model.h
+> @@ -114,9 +114,30 @@ struct em_data_callback {
+>  	 */
+>  	int (*active_power)(unsigned long *power, unsigned long *freq,
+>  			    struct device *dev);
+> +
+> +	/**
+> +	 * get_cost() - Provide the cost at the given performance state of
+> +	 *		a device
+> +	 * @dev		: Device for which we do this operation (can be a CPU)
+> +	 * @freq	: Frequency at the performance state in kHz
+> +	 * @cost	: The cost value for the performance state
+> +	 *		(modified)
+> +	 *
+> +	 * In case of CPUs, the cost is the one of a single CPU in the domain.
+> +	 * It is expected to fit in the [0, EM_MAX_POWER] range due to internal
+> +	 * usage in EAS calculation.
+> +	 *
+> +	 * Return 0 on success, or appropriate error value in case of failure.
+> +	 */
+> +	int (*get_cost)(struct device *dev, unsigned long freq,
+> +			unsigned long *cost);
+>  };
+> -#define EM_DATA_CB(_active_power_cb) { .active_power = &_active_power_cb }
+>  #define EM_SET_ACTIVE_POWER_CB(em_cb, cb) ((em_cb).active_power = cb)
+> +#define EM_ADV_DATA_CB(_active_power_cb, _cost_cb)	\
+> +	{ .active_power = _active_power_cb,		\
+> +	  .get_cost = _cost_cb }
+> +#define EM_DATA_CB(_active_power_cb)			\
+> +		EM_ADV_DATA_CB(_active_power_cb, NULL)
+>  
+>  struct em_perf_domain *em_cpu_get(int cpu);
+>  struct em_perf_domain *em_pd_get(struct device *dev);
+> @@ -264,6 +285,7 @@ static inline int em_pd_nr_perf_states(struct em_perf_domain *pd)
+>  
+>  #else
+>  struct em_data_callback {};
+> +#define EM_ADV_DATA_CB(_active_power_cb, _cost_cb) { }
+>  #define EM_DATA_CB(_active_power_cb) { }
+>  #define EM_SET_ACTIVE_POWER_CB(em_cb, cb) do { } while (0)
+>  
 
-It is rather counter-intuitive to attempt to resume devices on a bus
-segment before completing a transition of their parent bridge into
-D0, so do that when the transition is complete.
+Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
 
-This matters especially when the transition in question is not
-successful, in which case it doesn't make sense to even try to
-resume the child devices at all.
+Thanks,
+Ionela.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/pci/pci.c |   21 +++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
-
-Index: linux-pm/drivers/pci/pci.c
-===================================================================
---- linux-pm.orig/drivers/pci/pci.c
-+++ linux-pm/drivers/pci/pci.c
-@@ -1310,15 +1310,24 @@ static int pci_dev_wait(struct pci_dev *
- int pci_power_up(struct pci_dev *dev)
- {
- 	pci_power_t old_state = dev->current_state;
-+	int ret;
- 
- 	pci_platform_power_transition(dev, PCI_D0);
-+	/*
-+	 * For transitions from D3hot or deeper (including unknown), force
-+	 * PCI_PM_CTRL register write, D3*->D0 transition delay and BARS
-+	 * restoration.
-+	 */
-+	if (old_state >= PCI_D3hot)
-+		dev->current_state = PCI_D3hot;
- 
-+	ret = pci_raw_set_power_state(dev, PCI_D0);
- 	/*
- 	 * Mandatory power management transition delays are handled in
- 	 * pci_pm_resume_noirq() and pci_pm_runtime_resume() of the
- 	 * corresponding bridge.
- 	 */
--	if (dev->runtime_d3cold) {
-+	if (!ret && dev->runtime_d3cold) {
- 		/*
- 		 * When powering on a bridge from D3cold, the whole hierarchy
- 		 * may be powered on into D0uninitialized state, resume them to
-@@ -1327,15 +1336,7 @@ int pci_power_up(struct pci_dev *dev)
- 		pci_resume_bus(dev->subordinate);
- 	}
- 
--	/*
--	 * For transitions from D3hot or deeper and initial power-up, force
--	 * PCI_PM_CTRL register write, D3*->D0 transition delay and BARS
--	 * restoration.
--	 */
--	if (old_state >= PCI_D3hot)
--		dev->current_state = PCI_D3hot;
--
--	return pci_raw_set_power_state(dev, PCI_D0);
-+	return ret;
- }
- 
- /**
-
-
-
+> -- 
+> 2.17.1
+> 
