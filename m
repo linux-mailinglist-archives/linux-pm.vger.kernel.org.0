@@ -2,113 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DED4F181C
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 17:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 207AD4F184D
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 17:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352482AbiDDPTG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Apr 2022 11:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
+        id S1378561AbiDDP1U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Apr 2022 11:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359409AbiDDPTF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 11:19:05 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBF528E34
-        for <linux-pm@vger.kernel.org>; Mon,  4 Apr 2022 08:17:08 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id k23so2449336wrd.8
-        for <linux-pm@vger.kernel.org>; Mon, 04 Apr 2022 08:17:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=b7ChT65i4gfSCcnFk9aDuZ6e2KPwh8t9VhJlJc/QWaA=;
-        b=TG5SILvJHyXcUIPe/gwH7o2nBcmVkdnfnqA36DXF4bnPHyVQp4gZXkXjM/p0c6/f2z
-         7cWGoLT0NEERZIf0bKMy+1Ku6Gs00Suo2HzUHGrB9h8DL3Cz4vb9BEsAirbHFVYnOGSi
-         V6JQZ+Ne/eNx4TaWJJOYH0PHSWQvaac9sOngY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=b7ChT65i4gfSCcnFk9aDuZ6e2KPwh8t9VhJlJc/QWaA=;
-        b=CHIQfc6G+pUwv0ldGqjEYB1+2QAEPIwm5O+Y1ShjMpnnoN9eGES8VrW4cdnU4afhnd
-         OrsCMSQKHuxNwqZ7t18a5Lg5w+IQfElre1GP7VwK2hNLMv5z4c7DnjVQ7TRlbuo3nH7u
-         r8bSv1NSBlDSeUTil8XUi/ykqT8kpjKO1psTc+gohsRxlBuxFI91rjz6H8b3y1mWRkY1
-         ljL6vwu6H4Su5E15ex5G0zmGH0R70PECSTV/+vrWXSlIn+EeVxamIjiSXXQueYZNNp0y
-         im+F2+i3xzv9iz/wN10MQOE3ijY19zYxOZXUMoSZxvnC1/Y9s5IMFtDiO45RJTBovN8w
-         7wGQ==
-X-Gm-Message-State: AOAM533lovgce4f+fLw2nT58Vz0ldmbzwMZVdSYvkeYXQJfPLlNKRXyO
-        XcoLKldsaD99c2f1ufmWDQP1LA==
-X-Google-Smtp-Source: ABdhPJwr/YeRHQxnWj/lgz5qSlwUax/Ei60CfNy2RK6WxJD55ianFx2iA63Qjou20himxKxGHdLkJg==
-X-Received: by 2002:a5d:6c67:0:b0:204:ff0:87a8 with SMTP id r7-20020a5d6c67000000b002040ff087a8mr127181wrz.627.1649085426989;
-        Mon, 04 Apr 2022 08:17:06 -0700 (PDT)
-Received: from localhost ([2620:10d:c092:400::4:521a])
-        by smtp.gmail.com with ESMTPSA id 2-20020a1c1902000000b00380d3873d6asm9813971wmz.43.2022.04.04.08.17.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 08:17:06 -0700 (PDT)
-Date:   Mon, 4 Apr 2022 16:17:05 +0100
-From:   Chris Down <chris@chrisdown.name>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: Thermal notifications without setting thermal governor to
- userspace?
-Message-ID: <YksL8a+cINo7K/xX@chrisdown.name>
-References: <YkR6/KnH/f9U+2qf@chrisdown.name>
- <faf9e24f-4419-cdbb-573f-4cf2d9e506e2@linaro.org>
+        with ESMTP id S1378547AbiDDP1R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 11:27:17 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 002FF1E3F2;
+        Mon,  4 Apr 2022 08:25:20 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 3153a6bc5aa3f00f; Mon, 4 Apr 2022 17:25:19 +0200
+Received: from kreacher.localnet (unknown [213.134.181.62])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 3FFD466BCD2;
+        Mon,  4 Apr 2022 17:25:18 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH v1 0/3] ACPI: PCI: PM: Power up PCI devices with ACPI companions upfront
+Date:   Mon, 04 Apr 2022 17:20:30 +0200
+Message-ID: <21439956.EfDdHjke4D@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <faf9e24f-4419-cdbb-573f-4cf2d9e506e2@linaro.org>
-User-Agent: Mutt/2.2.2 (aa28abe8) (2022-03-25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.181.62
+X-CLIENT-HOSTNAME: 213.134.181.62
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejvddgkeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefhgedtffejheekgeeljeevvedtuefgffeiieejuddutdekgfejvdehueejjeetvdenucfkphepvddufedrudefgedrudekuddriedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekuddriedvpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphht
+ thhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hey Daniel,
+Hi All,
 
-Thanks a lot for getting back!
+There are cases in which the power state of a PCI device depends on an ACPI
+power resource (or more of them) in such a way that when the given power
+resource is in the "off" state, the PCI device depending on it is in D3cold.
 
-Daniel Lezcano writes:
->For that it would require to setup a trip point from the firmware 
->dedicated to userspace management along with the writable trip point 
->kernel config option.
->
->On embedded systems, the trip point can be added easily in the device tree.
->
->You would end up with:
->
-> - one passive trip point : writable and used by userspace
->
-> - one passive trip point to protect the system tied with a cooling 
->device and handled by the kernel
->
-> - one hot trip point to notify the userspace critical is about to be reach
->
-> - one critical trip point to reboot the system
->
->From the userspace, you change the trip temp to 50°C, 70°C and 90°C 
->when crossing the way up or the way down.
->
->The sensor should implement the set_trip in order to program the 
->register to fire the interrupt at the specified temperature. 
->Otherwise, monitoring will be needed.
->
->On ACPI, except hacking the table and reload from the kernel I don't 
->see how to do that.
+On some systems, the initial state of these power resources is "off", so the
+kernel should not access the config space of PCI devices depending on them,
+until the power resources in question are turned "on", but currently that is
+not respected during PCI device enumeration.  Namely, the PCI device
+enumeration code walks the entire bus and enumerates all of the devices it
+can find, including the ones whose initial power state in principle depends on
+the ACPI power resources in the "off" state.
 
-In my case I'm dealing with "normal" desktop machines and a distribution 
-kernel, so it isn't possible to have fine grained control over the kernel 
-configuration or device tree (especially since ideally this would be 
-usable as an unprivileged user).
+Apparently, most of the time, the config space of such devices is accessible
+regardless of the state of the ACPI power resource associated with the PCI
+device, so the device enumeration is successful, but there are two potential
+issues related to this behavior.  First off, even if the given PCI device
+is accessible when the ACPI power resource depended on by it is "off",
+changing its configuration may confuse the platform firmware and lead to
+problems when the ACPI power resource in question is turned "on".  Second,
+the PCI device may not be actually accessible at all when the ACPI power
+resource depended on by it is "off", in which case it won't be found during
+the PCI enumeration of devices.
 
-Is it still possible to use this in such a scenario?
+This patch series addresses that problem by turning "on" all ACPI power
+resources depended on by PCI devices before attempting to access the config
+space of those devices for the first time.
+
+The first two patches introduce the requisite machinery and the actual change
+of behavior is done in the last patch.
+
+Thanks!
+
+
+
+
