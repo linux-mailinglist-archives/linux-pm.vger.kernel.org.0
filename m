@@ -2,207 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F074F14F1
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 14:34:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 012754F14F7
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 14:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345989AbiDDMg0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Apr 2022 08:36:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36692 "EHLO
+        id S1346164AbiDDMhi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Apr 2022 08:37:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344547AbiDDMgZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 08:36:25 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC04275C0
-        for <linux-pm@vger.kernel.org>; Mon,  4 Apr 2022 05:34:29 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id q68so664461ljb.3
-        for <linux-pm@vger.kernel.org>; Mon, 04 Apr 2022 05:34:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ymmdaZ9ag/KbyUT2AA2pYd23UzF6p1u5S+K3tUsMVzc=;
-        b=IzaE0n0FaQpM5p9P9AfnkThA9e4CxrrbmRBeB4s2BiBSCXG1rcC8ge9NQehY6R9cnw
-         rBABhfokCBbogkHAFF8zGEQKPrfEjcS2bWrHfMNHE94BUTjJZax09Dh8xhdiBQbhDPBS
-         ULby4QmBePv0aHAxCt+4S2Q7PgK8bg6lyI/RgrdX5a3k16FaVDaqA87eDUOxmukKiTMX
-         sNnnagVfZOzOhNvuN8CRsExU3u31laJASLKOuFbBtF2UjL+9iEZV+NN070MF+y8J+Edk
-         EdielVhWytWZldnHTS/bRT66q7gxSCdA7o2UliRV2/wSG83yIRMcl2+IoyVcfn8QYj0Q
-         DsKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ymmdaZ9ag/KbyUT2AA2pYd23UzF6p1u5S+K3tUsMVzc=;
-        b=DS+See/3ah/eUYUpVI1bLFAg7VSm6YWr9HrNhefoyHRbLe0RgB6NWOxOZpxDFCyc4T
-         Zr7dtyITOxZhWL+T/7vOUP4OPzHiKFoh0bJzp66Tg4HNts2s/CKXxiETzkUsfZPvpUCV
-         MnDrya5oboQzbkqJm+8QIvKrMUH4kuMnP5mcnUGvW8EooAe+gjf4z5WFaZAvrzIGLn6J
-         Ic6Wx8/zmpaPNtLHBBipRT2sHEuAig/xNNqA/ZJVG2qeihQaDUFOVBp2jUpvFLw8tzcR
-         Ud6OBglZ6dpI87BdyXnXB4mEysdaqWKaygl2DUU7mRqx+Uha6L65rbIQoc//n/nMViOZ
-         NxGQ==
-X-Gm-Message-State: AOAM533pksILCYKBl+Ww50x46IQcXDskVgYXpEHg1ky9dENikX9UEOWF
-        w8dkw+214e8WEEd1iz9e4IUXAg==
-X-Google-Smtp-Source: ABdhPJyy7QFvQqfT20vdzM6US3LYJIxObR57gm9VJM2knlpLs4Yl8qA3YBA/p46TAjBW6DZ9zvW0wA==
-X-Received: by 2002:a2e:874b:0:b0:24b:41f:c2fe with SMTP id q11-20020a2e874b000000b0024b041fc2femr9352350ljj.302.1649075667257;
-        Mon, 04 Apr 2022 05:34:27 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id f26-20020a056512323a00b0044a6d058d37sm1121984lfe.262.2022.04.04.05.34.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 05:34:26 -0700 (PDT)
-Message-ID: <3c7b7b39-8886-9221-3f2a-a4b26c62c405@linaro.org>
-Date:   Mon, 4 Apr 2022 15:34:25 +0300
+        with ESMTP id S1344547AbiDDMhh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 08:37:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE4B52717F;
+        Mon,  4 Apr 2022 05:35:40 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 51424D6E;
+        Mon,  4 Apr 2022 05:35:40 -0700 (PDT)
+Received: from [10.57.8.9] (unknown [10.57.8.9])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2074F3F5A1;
+        Mon,  4 Apr 2022 05:35:36 -0700 (PDT)
+Message-ID: <76230a1c-73b8-c471-c62e-3ec9b33461a6@arm.com>
+Date:   Mon, 4 Apr 2022 13:35:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/2] cpufreq: qcom-cpufreq-hw: Clear dcvs interrupts
-Content-Language: en-GB
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20220401071424.2869057-1-vladimir.zapolskiy@linaro.org>
- <20220401071424.2869057-2-vladimir.zapolskiy@linaro.org>
- <Ykd7kwxwTxFjiNT0@ripper>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <Ykd7kwxwTxFjiNT0@ripper>
+ Thunderbird/91.5.0
+Subject: Re: [RESEND][PATCH 0/8] Introduce support for artificial Energy Model
+Content-Language: en-US
+To:     rafael@kernel.org
+Cc:     dietmar.eggemann@arm.com, Pierre.Gondois@arm.com,
+        ionela.voinescu@arm.com, viresh.kumar@linaro.org,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+        mka@chromium.org, nm@ti.com, sboyd@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, cristian.marussi@arm.com,
+        sudeep.holla@arm.com, matthias.bgg@gmail.com,
+        linux-kernel@vger.kernel.org
+References: <20220321095729.20655-1-lukasz.luba@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220321095729.20655-1-lukasz.luba@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02/04/2022 01:24, Bjorn Andersson wrote:
-> On Fri 01 Apr 00:14 PDT 2022, Vladimir Zapolskiy wrote:
+Hi Rafael,
+
+
+The patch set has been on LKML for quite a while and got one ACK,
+for the code touching something outside the EM (thermal cooling).
+
+AFAICS there is no interest and objections from others for this code.
+
+Therefore, I have a question:
+What would be be process to have merge this code?
+(We had internally a few reviews of this code)
+
+On 3/21/22 09:57, Lukasz Luba wrote:
+> Hi all,
 > 
->> It's noted that dcvs interrupts are not self-clearing, thus an interrupt
->> handler runs constantly, which leads to a severe regression in runtime.
->> To fix the problem an explicit write to clear interrupt register is
->> required.
->>
->> Fixes: 275157b367f4 ("cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support")
->> Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
->> ---
->> Changes from v1 to v2:
->> * added a check for pending interrupt status before its handling,
->>    thanks to Bjorn for review
->>
->>   drivers/cpufreq/qcom-cpufreq-hw.c | 14 ++++++++++++++
->>   1 file changed, 14 insertions(+)
->>
->> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
->> index f9d593ff4718..e17413a6f120 100644
->> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
->> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
->> @@ -24,6 +24,8 @@
->>   #define CLK_HW_DIV			2
->>   #define LUT_TURBO_IND			1
->>   
->> +#define GT_IRQ_STATUS			BIT(2)
->> +
->>   #define HZ_PER_KHZ			1000
->>   
->>   struct qcom_cpufreq_soc_data {
->> @@ -31,6 +33,8 @@ struct qcom_cpufreq_soc_data {
->>   	u32 reg_dcvs_ctrl;
->>   	u32 reg_freq_lut;
->>   	u32 reg_volt_lut;
->> +	u32 reg_intr_clr;
->> +	u32 reg_intr_status;
->>   	u32 reg_current_vote;
->>   	u32 reg_perf_state;
->>   	u8 lut_row_size;
->> @@ -345,11 +349,19 @@ static void qcom_lmh_dcvs_poll(struct work_struct *work)
->>   static irqreturn_t qcom_lmh_dcvs_handle_irq(int irq, void *data)
->>   {
->>   	struct qcom_cpufreq_data *c_data = data;
->> +	u32 val;
->> +
-
-Following the discussion below (regarding reg_int_clr), the driver 
-should also check that soc_data->reg_intr_status is not 0.
-
->> +	val = readl_relaxed(c_data->base + c_data->soc_data->reg_intr_status);
+> This patch set adds new callback and support for artificial Energy Model (EM).
+> The new EMs have artificially generated performance states.
+> Such EMs can be created from lean information sources, such
+> as the relative energy efficiency between CPUs. The ACPI based
+> platforms provide this information
+> (ACPI 6.4, s5.2.12.14 'GIC CPU Interface (GICC) Structure'
+> 'Processor Power efficiency Class' field).
 > 
-> Seems reasonable to read the INTR_STATUS register and bail early if
-> there's no interrupt.
+> Artificial EMs might require to directly provide the 'cost' of
+> the generated performance state. This patch set adds a new callback
+> .get_cost() for this. The EM framework does not force any model
+> or formula, it's up to the platform code.
 > 
->> +	if (!(val & GT_IRQ_STATUS))
->> +		return IRQ_HANDLED;
+> Artificial EMs aim to leverage the Energy Aware Scheduler
+> (EAS). Other frameworks relying on performance states
+> information (i.e. IPA/DTPM) must be informed of the
+> EM type and might be prevented from using it. This patch
+> sets also does this by introducing a new flag:
+> EM_PERF_DOMAIN_ARTIFICIAL.
 > 
-> But if we in the interrupt handler realize that there's no interrupt
-> pending for us, shouldn't we return IRQ_NONE?
-
-Initially I wanted to agree with Vladimir. However after giving a 
-thought, returning IRQ_HANDLED here can hide other status bits being set 
-(e.g. on the other platforms using EPSS). If we return IRQ_NONE here, 
-we'll get the "IRQ: nobody cared" message and will know that some bits 
-from status are unhandled.
-
-However, a separate thing. We discussed this with Vladimir. I agree with 
-him that this chunk is not directly related to the fix for the issue.
-I'd suggest to split this patch into two patches:
-
-- writel_relaxed to clear the interrupt (which can be picked up into the 
--rc branch and into stable kernels)
-
-- a check for the GT_IRQ_STATUS which is not strictly necessary, so it 
-can come through the plain -next process.
-
+> The patch set is based on current linux-next, where some
+> changes to OPP & EM are queuing.
 > 
->>   
->>   	/* Disable interrupt and enable polling */
->>   	disable_irq_nosync(c_data->throttle_irq);
->>   	schedule_delayed_work(&c_data->throttle_work, 0);
->>   
->> +	writel_relaxed(GT_IRQ_STATUS,
->> +		       c_data->base + c_data->soc_data->reg_intr_clr);
+> The patch set also contains (patch 7/8 and patch 8/8) logic which prevents
+> two EM's client frameworks from using this new EM type. Some other approach,
+> using 'milli-watts', has been proposed and discussed, but refused [1].
+> This new flag is more precised and should not leave space for
+> wrong interpretation.
 > 
-> And in OSM (i.e. not epss_soc_data), both reg_intr_status and
-> reg_intr_clr will be 0, so we end up reading and writing the wrong
-> register.
+> Shortly after this patch set you will see a patch set implementing the
+> platform code and registering this new EM.
 > 
-> You need to do:
-> 	if (c_data->soc_data->reg_intr_clr)
-> 		writel_relaxed(..., reg_intr_clr);
-
-I'd second this. Despite this chunk being called from the path in which 
-reg_int_clr is always set, I'd still prefer to have a check. I do not 
-like the idea of writing to an optional register without an explicit 
-check (or without a comment that this function should be used only when 
-reg_int_clr/reg_intr_status are defined).
-
-> 
-> But according to the downstream driver, this is supposed to be done in
-> the polling function, right before you do enable_irq().
-> 
-> Regards,
-> Bjorn
-> 
->> +
->>   	return IRQ_HANDLED;
->>   }
->>   
->> @@ -368,6 +380,8 @@ static const struct qcom_cpufreq_soc_data epss_soc_data = {
->>   	.reg_dcvs_ctrl = 0xb0,
->>   	.reg_freq_lut = 0x100,
->>   	.reg_volt_lut = 0x200,
->> +	.reg_intr_clr = 0x308,
->> +	.reg_intr_status = 0x30c,
->>   	.reg_perf_state = 0x320,
->>   	.lut_row_size = 4,
->>   };
->> -- 
->> 2.33.0
->>
 
 
--- 
-With best wishes
-Dmitry
+No one from Arm is an official maintainer of the EM code.
+
+Regards,
+Lukasz
