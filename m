@@ -2,101 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024514F0F67
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 08:32:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8977F4F1099
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 10:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356348AbiDDGeC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Apr 2022 02:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35994 "EHLO
+        id S232757AbiDDISG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Apr 2022 04:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352888AbiDDGeC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 02:34:02 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D7837BD8
-        for <linux-pm@vger.kernel.org>; Sun,  3 Apr 2022 23:32:07 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id c11so7525331pgu.11
-        for <linux-pm@vger.kernel.org>; Sun, 03 Apr 2022 23:32:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=trCjLQ34/8K4vS3Gt3GYWJs9bJFpowByYX2NTsK/Ir4=;
-        b=M4uqlSVrofPluiMngt4qfcktYblCdgZ5P4PjAbSZU9m1N5IqPKpqTP/6Q8HwBFiyne
-         fE6GAjXGFbAz6fjpeiHyCyt31E5wtCFmvrIp3dS0lKNtCvql5slW95UZmswc6UuV0z8X
-         5SRh9OFb5aWTK9W54Z/zI6nVloyO5syqkDym0w6BDMvkMtQ3c/YVYACKNBoowSDxlsa8
-         2AzbSphJW+uC8gR3RQW05roBGyP2oS7BTN9jSbd6mielWAgrL3zbm5jCOK2JRsk/SJs3
-         ww8fWQ7qkYcI++QnAJwLvMfeUDlP12mCiTcjvvnAFKtrvmhin1U9yyMR8+FAOAoQBoo5
-         xG8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=trCjLQ34/8K4vS3Gt3GYWJs9bJFpowByYX2NTsK/Ir4=;
-        b=g71a07ANEq/oRFkRxXF3NDdf/C/y2pd/W+lrGIrErKJPYmo6jazYKGa1YxHPvzxLcg
-         ls0Fj5wYpGrQJNlPHm4I0fV0BlKr8CmKP8w7KIVfJMIwE37R/qH/r5Pre8dZoY+vGrUq
-         qRmU9YrF5WNM8ZMysQa94k2sW8IQ71kMJumMrY0OLitS/aw7vvh97WdyPFL2F++ymWK2
-         j1RnbmCQ67LX2Xq7zFrPsnOBKysZ2qStkCDA7WTFSgq/w4ekDZ8ZD74TvGDQUFwI2iXb
-         mW+Od07eygps3Z15x+QtK5171lwDKzqMn32yJa9VYlo/vd/sKBfhdalNvzM5mR/2N1Z1
-         2peA==
-X-Gm-Message-State: AOAM530BbO2lFVeSak3DrqaUUXKzsZkpq1prDBgAN/PHCNQBD9SFB3AJ
-        Xsq8kaG5r3M24u920lj2hkxlTA==
-X-Google-Smtp-Source: ABdhPJxLwONeIQOcIW/pFFL1GoOhjWw+M56cxi0uGtg5P0gM0sw3YjOtfWa9vGHtX9WN5h4DS6rYtQ==
-X-Received: by 2002:a63:6f85:0:b0:398:3e74:bdd8 with SMTP id k127-20020a636f85000000b003983e74bdd8mr24733958pgc.423.1649053926318;
-        Sun, 03 Apr 2022 23:32:06 -0700 (PDT)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id v63-20020a638942000000b00398dde2120bsm8934451pgd.5.2022.04.03.23.32.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 23:32:05 -0700 (PDT)
-Date:   Mon, 4 Apr 2022 12:02:04 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] cpufreq: qcom-cpufreq-hw: Fix throttle frequency
- value on EPSS platforms
-Message-ID: <20220404063204.43zfnky5khr7h5qs@vireshk-i7>
-References: <20220401071424.2869057-1-vladimir.zapolskiy@linaro.org>
- <20220401071424.2869057-3-vladimir.zapolskiy@linaro.org>
- <Ykd8FUgLhGb0x7VI@ripper>
+        with ESMTP id S230460AbiDDISF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 04:18:05 -0400
+X-Greylist: delayed 440 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 04 Apr 2022 01:16:10 PDT
+Received: from mail.coredeal.pl (mail.coredeal.pl [51.75.73.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFDE3525F
+        for <linux-pm@vger.kernel.org>; Mon,  4 Apr 2022 01:16:10 -0700 (PDT)
+Received: by mail.coredeal.pl (Postfix, from userid 1002)
+        id BD68FA1B99; Mon,  4 Apr 2022 08:06:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=coredeal.pl; s=mail;
+        t=1649059601; bh=9KGuIG62LgzC9aYmjKxzocuYLRCVghXg6v9Q1q2LHec=;
+        h=Date:From:To:Subject:From;
+        b=jH2A2XqwCZWSpd6KZ/ahKKuJYAE5KMEDJVY/U/PHUTFlMdKdVnYOLWtbXVfEM9vU1
+         MjD5fZy+tTYfkPwAsHuJd9jkF+6hYNKlHicYyUga04iPk7f/e3XL9iqgUBCc5QBcev
+         gj9yKxHTFNzh3F+Gw0/ukI8R8hQmG7NMTeXDgsHVUbV1Yy7Mf0IaOOgZH4T+GA+bP/
+         CrviqCKiQwXcN7/z5WW50BhJcbjVi6Qru3FA4GUbqiHEucx5kvj/3sFJesA+Y55KrV
+         BH5LypeBG5VQY8eqooxVYMu8fylmnSSf+OUE1FkevtxGoOb60ToeP9salxM8062BhK
+         qkAAZiRqDdEJA==
+Received: by mail.coredeal.pl for <linux-pm@vger.kernel.org>; Mon,  4 Apr 2022 08:05:41 GMT
+Message-ID: <20220404064500-0.1.2c.c84o.0.rryjdyf705@coredeal.pl>
+Date:   Mon,  4 Apr 2022 08:05:41 GMT
+From:   "Krzysztof Maj" <krzysztof.maj@coredeal.pl>
+To:     <linux-pm@vger.kernel.org>
+Subject: Biznesowy angielski
+X-Mailer: mail.coredeal.pl
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ykd8FUgLhGb0x7VI@ripper>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01-04-22, 15:26, Bjorn Andersson wrote:
-> On Fri 01 Apr 00:14 PDT 2022, Vladimir Zapolskiy wrote:
-> 
-> > On QCOM platforms with EPSS flavour of cpufreq IP a throttled frequency is
-> > obtained from another register REG_DOMAIN_STATE, thus the helper function
-> > qcom_lmh_get_throttle_freq() should be modified accordingly, as for now
-> > it returns gibberish since .reg_current_vote is unset for EPSS hardware.
-> > 
-> > To exclude a hardcoded magic number 19200 it is replaced by "xo" clock rate
-> > in KHz.
-> > 
-> > Fixes: 275157b367f4 ("cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support")
-> > Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-> 
-> This could have been picked up by the maintainer already in the previous
-> version, if it wasn't the second patch in the series. Please send it
-> separately, or as the first patch of the two, so we can ask Viresh to
-> pick it up (just in case we don't reach an agreement of your next
-> version of the other patch).
+Dzie=C5=84 dobry,=20
 
-I have applied 2/2 now. I hope it doesn't break anything.
+czy rozwa=C5=BCali Pa=C5=84stwo rozw=C3=B3j kwalifikacji j=C4=99zykowych =
+swoich pracownik=C3=B3w?
 
--- 
-viresh
+Opracowali=C5=9Bmy kursy j=C4=99zykowe dla r=C3=B3=C5=BCnych bran=C5=BC, =
+w kt=C3=B3rych koncentrujemy si=C4=99 na podniesieniu poziomu s=C5=82owni=
+ctwa i jako=C5=9Bci komunikacji wykorzystuj=C4=85c autorsk=C4=85 metod=C4=
+=99, stworzon=C4=85 specjalnie dla wymagaj=C4=85cego biznesu.=20
+
+Niestandardowy kurs on-line, dopasowany do profilu firmy i obszar=C3=B3w =
+=C5=9Bwiadczonych us=C5=82ug, w szybkim czasie przyniesie efekty, kt=C3=B3=
+re zwi=C4=99ksz=C4=85 komfort i jako=C5=9B=C4=87 pracy, rozwijaj=C4=85c m=
+o=C5=BCliwo=C5=9Bci biznesowe.=20
+
+Zdalne szkolenie j=C4=99zykowe to m.in. zaj=C4=99cia z native speakerami,=
+ kt=C3=B3re w szybkim czasie naucz=C4=85 pracownik=C3=B3w rozmawia=C4=87 =
+za pomoc=C4=85 jasnego i zwi=C4=99z=C5=82ego j=C4=99zyka Business English=
+=2E
+
+Czy m=C3=B3g=C5=82bym przedstawi=C4=87 wi=C4=99cej szczeg=C3=B3=C5=82=C3=B3=
+w i opowiedzie=C4=87 jak dzia=C5=82amy?=20
+
+
+Pozdrawiam
+Krzysztof Maj
