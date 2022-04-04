@@ -2,155 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBBF4F1A5D
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 23:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C941A4F1A61
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Apr 2022 23:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378908AbiDDVSW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 4 Apr 2022 17:18:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58840 "EHLO
+        id S1378921AbiDDVSX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 4 Apr 2022 17:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380260AbiDDTXW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 15:23:22 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6DD13B033
-        for <linux-pm@vger.kernel.org>; Mon,  4 Apr 2022 12:21:25 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id z16so9916589pfh.3
-        for <linux-pm@vger.kernel.org>; Mon, 04 Apr 2022 12:21:25 -0700 (PDT)
+        with ESMTP id S1380563AbiDDU3p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 4 Apr 2022 16:29:45 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472442DAB8
+        for <linux-pm@vger.kernel.org>; Mon,  4 Apr 2022 13:27:48 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id d3so5466170wrb.7
+        for <linux-pm@vger.kernel.org>; Mon, 04 Apr 2022 13:27:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=qj+08UoQ81QXCJIQ0FgNKcu3iX45S9pwm2TaiMUsPUQ=;
-        b=Tx0DLhaT35SVhaJtjG4RXEwT5NbflW1Jt4AWotrHS+8I2nrLgPXhlBoQPp7FOcIg/o
-         6g4m0TFBv4yYDTPnxW10XYNsnQKkiBSqQCxeDxTEgYRdpbBd9S4IBwuIwMh3C2avrbfV
-         tC+c10ZJr1IfIAgXXkNhso96P1k7m1apAK4bDBaFhJejdOTn2dLEK3yeqOPGFocs090V
-         Zotsj412wDVwYr+x5QIkkxySFMhSsQNLoTuaLaYFTfn/g+MlyMmGWQ/PXS/SK+y8pHy6
-         o/bfJJXnmLfiCm4eV1jl7XwkEd1vni/7h4k9cRPwO9N9kJSkzThqOBF0bJq/V1x8Lgu3
-         ZRpg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XynzE6reIDw0ntgLHGWyU1PpLfFWXIFA6RBKvGsJOBc=;
+        b=s1jp3WpRqKvo/gbJr/QjpC4Gi1j8Ut51pEL7WKMdx6+D5xuJcIdRdoYluu/vIRUIw7
+         qGFGQszup9G9+8gjP7C/NHbZFdsCy+8iYLzXJtsVwpAE8w6oFS6DS7bSqzsjZ6Q82XNJ
+         eTIHK9Nwmamwb2jJiuDYS6jYI5hBcDpil+8xP4FIO2aZwTGwEavn25c4uZba+u8SMN0f
+         J592ngpszHwIjLzBwPKsSATSuKd+yQW/S4qbVtfJfj6Z/ytsqBD5X0mv8YXOQWcWK5Uy
+         2HkKL2pvh339PkjnytDHqvLmNOhTI3GzMK07fvRuqRdlEGx9FFML/4S2HGOwsrGDJnRg
+         F+sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=qj+08UoQ81QXCJIQ0FgNKcu3iX45S9pwm2TaiMUsPUQ=;
-        b=T0r0Zi4tJqfOaqPHvuWK2Nq7mi9AHSXT6gb2e8v2Xl15umNO8M3CO7cjZETaKibG0j
-         ciJgItmEHO1CeadFRy1gQtGm5pEdo8KvJBA0SlVudylA89eTyI/Owx+IkUyGxgOK4M4t
-         X8fLon7YCxBPFWPqXDzn2/1iRXf6Gnbnpedy0YmReDOrGOQq2u49J+ZDZ+yOxKgc2EeK
-         77hEnMPy/9mf1uORLIkKDlEE4Af/kx6jXLLUakMOadSyNQ1jGyn/GqvUKMoHUQEQ9PvU
-         VRjjomvT8I5jZE2M3RSSINlFQy2Zmv1MZsHxR6yxWEHGYULnCHZw4uQ9cfM+6AVj7icC
-         BFmQ==
-X-Gm-Message-State: AOAM533BicTnpn9CPYvNtbiFgmCegnewA9mECPmzAo2vRhpuQ7L14aPJ
-        YN12vImvsrOPfuHpM68dngGrPA==
-X-Google-Smtp-Source: ABdhPJzfkpiR1DiTFs9IhkKAfUS4XW1JV3sMxAekA1ytB46matysNGdlufGvuouYsjDplKQfd5pClA==
-X-Received: by 2002:a62:38d1:0:b0:4fa:80ad:bf5e with SMTP id f200-20020a6238d1000000b004fa80adbf5emr1211036pfa.69.1649100085168;
-        Mon, 04 Apr 2022 12:21:25 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id j63-20020a636e42000000b003987df110edsm11184329pgc.42.2022.04.04.12.21.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 12:21:24 -0700 (PDT)
-Message-ID: <624b4534.1c69fb81.7c30c.d324@mx.google.com>
-Date:   Mon, 04 Apr 2022 12:21:24 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XynzE6reIDw0ntgLHGWyU1PpLfFWXIFA6RBKvGsJOBc=;
+        b=DYN0HnldTAeSjqVPmd4kcW+p99cN5n5lUoC6aZdzQK7Ow6AgShzm667+lrPF47PnQc
+         bgt+lM7/oI6jWRt/JzxvWiNSIGpjRxm8qehp8GCuW0T+AEghKet8/gNrs9d6F/PF3ltG
+         HWM/+X9rMD9xsL5b232akl2Eui3+EFjdpneNtpZZX4AwiZoUuyGLR/YCLDoIO+hXOe4p
+         NZnlKEOSs/9KeuaJHuEm6SKPqGk7H6Zgx0wZHn6qyrkc5xJM5536Pyf6rlvJ/pzd2x/j
+         Qt8Y0EQCbJoXcs4/2kliolXu3/6T4QXsuhT/t7uNUtixDIGK+Qplzjb4DIY+pbElYhVY
+         C1Ig==
+X-Gm-Message-State: AOAM530GSN7MIkHEd95NX+g4onV8IRHgsCNEHlj20LrLjj0S/5jlqr7G
+        hclMe/78d5QzFHuq5KEk2V3poA==
+X-Google-Smtp-Source: ABdhPJwz6IvnJfhpgvW2CeEv7UEht3Rziq/qyzZEpwjd6DhJzX6L66Vj8kKLQRErCOhpdzDNIzakkg==
+X-Received: by 2002:a5d:5987:0:b0:204:1f21:6a29 with SMTP id n7-20020a5d5987000000b002041f216a29mr286wri.716.1649104066683;
+        Mon, 04 Apr 2022 13:27:46 -0700 (PDT)
+Received: from ?IPV6:2a01:e34:ed2f:f020:9cdc:22ce:6a8e:1fc8? ([2a01:e34:ed2f:f020:9cdc:22ce:6a8e:1fc8])
+        by smtp.googlemail.com with ESMTPSA id a11-20020a5d456b000000b0020406ce0e06sm10165995wrc.94.2022.04.04.13.27.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Apr 2022 13:27:45 -0700 (PDT)
+Message-ID: <e9d0f787-b23e-1266-c31a-60f9c1643a10@linaro.org>
+Date:   Mon, 4 Apr 2022 22:27:43 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v5.18-rc1
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.18-rc1)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: Thermal notifications without setting thermal governor to
+ userspace?
+Content-Language: en-US
+To:     Chris Down <chris@chrisdown.name>
+Cc:     linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>
+References: <YkR6/KnH/f9U+2qf@chrisdown.name>
+ <faf9e24f-4419-cdbb-573f-4cf2d9e506e2@linaro.org>
+ <YksL8a+cINo7K/xX@chrisdown.name>
+ <8f1428c7-cf0e-b2cc-c898-09935a9017da@linaro.org>
+ <YksoQ62CObN1R/oG@chrisdown.name>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <YksoQ62CObN1R/oG@chrisdown.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.18-rc1)
+On 04/04/2022 19:17, Chris Down wrote:
+> Daniel Lezcano writes:
+>> Well on regular desktop, the thermal is managed under the hood by the 
+>> firmware/hardware, few sensors are exported AFAICT. I don't think a 
+>> thermal daemon would have a benefit on these platforms.
+> 
+> Maybe we have different expectations? On my laptop, a Thinkpad T14s, 
+> things seem not too bad:
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-18-rc1/
+That is not a desktop but a laptop, it is different :)
 
-Tree: pm
-Branch: testing
-Git Describe: v5.18-rc1
-Git Commit: 3123109284176b1532874591f7c81f3837bbdc17
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+Can you give the content of:
 
-Warnings Detected:
+cat /sys/class/thermal/thermal_zone*/type
+cat /sys/class/thermal/thermal_zone*/trip_*type
 
-arc:
+and
 
-arm64:
+cat /sys/class/thermal/cooling_device*/type
 
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
+?
 
 
-Warnings summary:
+>      % printf '%s\n' /sys/class/hwmon/hwmon*/temp*_input
+>      /sys/class/hwmon/hwmon1/temp1_input
+>      /sys/class/hwmon/hwmon2/temp1_input
+>      /sys/class/hwmon/hwmon2/temp2_input
+>      /sys/class/hwmon/hwmon2/temp3_input
+>      /sys/class/hwmon/hwmon4/temp1_input
+>      /sys/class/hwmon/hwmon4/temp2_input
+>      /sys/class/hwmon/hwmon4/temp3_input
+>      /sys/class/hwmon/hwmon4/temp4_input
+>      /sys/class/hwmon/hwmon4/temp5_input
+>      /sys/class/hwmon/hwmon4/temp6_input
+>      /sys/class/hwmon/hwmon4/temp7_input
+>      /sys/class/hwmon/hwmon4/temp8_input
+>      /sys/class/hwmon/hwmon6/temp1_input
+>      /sys/class/hwmon/hwmon8/temp1_input
+>      /sys/class/hwmon/hwmon8/temp2_input
+>      /sys/class/hwmon/hwmon8/temp3_input
+>      /sys/class/hwmon/hwmon8/temp4_input
+>      /sys/class/hwmon/hwmon8/temp5_input
+> 
+> There are working temperature sensors out of the box for the CPU, wifi 
+> card, ACPI thermal zone, and extended sensors from thinkpad_acpi.
+> 
+> In my case, I'd like to get notifications in userspace when certain 
+> temperatures are reached.
+> 
+> So if I understood correctly, there's no way to dynamically configure 
+> temperature thresholds and get breach events even as root, even with the 
+> new netlink solution?
 
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
+There is a way but you need:
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+1. A programmable trip point
 
-Detailed per-defconfig build reports:
+ 
+https://uefi.org/specs/ACPI/6.4/11_Thermal_Management/thermal-control.html#dynamically-changing-cooling-temperature-trip-points
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
+1.1 A passive trip point dedicated for userspace (no cooling device 
+associated)
 
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
+1.2 Writable kernel config option
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+The trip point will be writable in sysfs
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+2. Get trip point crossed
 
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
+Use the netlink
 
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
+But you don't need to monitor all these thermal zones, it is up to the 
+in-kernel thermal framework to deal with the trip point individually and 
+protect the system.
 
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
+The userspace should monitor what is considered as the 'case' sensor or 
+'skin' sensor. The temperature on those sensor moves very slowly, so 
+monitoring them by getting the temperature every second should be enough.
 
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
 
----
-For more info write to <info@kernelci.org>
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
