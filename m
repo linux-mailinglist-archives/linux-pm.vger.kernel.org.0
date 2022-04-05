@@ -2,223 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2D64F4896
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 02:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD664F4889
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 02:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381864AbiDEVmr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Apr 2022 17:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
+        id S232294AbiDEVlo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Apr 2022 17:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573177AbiDESJJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Apr 2022 14:09:09 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE461F623
-        for <linux-pm@vger.kernel.org>; Tue,  5 Apr 2022 11:07:09 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-df22f50e0cso242368fac.3
-        for <linux-pm@vger.kernel.org>; Tue, 05 Apr 2022 11:07:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=p23li6dT00AJl3hRn5GLCpGGZV7Mde/F/ZC6fP/JEqE=;
-        b=BADiZnSp78f9ZfxjlasetO+C2Swva/fEryHvZCHweafMOdoIX0m57hfulFwzprUsBB
-         5NO3j0ERJTi0OIIihE8sjSrXI/ueYUhpzuyzUvDnj/rraSlSTYcBjV3vc+GP9NtnhzkI
-         VM96wegARllDkf3644nEdixuvBQTRlgo0J5z3sG6cbiClK2MFU5FQEMNxQ3kr0ozGy8b
-         H0v0wy7xBeY27WgEwcBToKdEfjz5/a8PRSTPfNS/C9WTKMFTLaYVjUzE1+aWoW7GlT8m
-         l9irSkp9XsXAqCpbUokn14g9EtjANf+Eja8ATrFsehV0xTGHq1NWrkarTq4fmuMSRcMt
-         X6iw==
+        with ESMTP id S1573211AbiDESVW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Apr 2022 14:21:22 -0400
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90D92558F;
+        Tue,  5 Apr 2022 11:19:23 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2eb43ad7909so1134637b3.2;
+        Tue, 05 Apr 2022 11:19:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=p23li6dT00AJl3hRn5GLCpGGZV7Mde/F/ZC6fP/JEqE=;
-        b=WpvXPGRFjUB3s92Du8KvN+opGej+AspONp+wNWf7pVLBvyQ+g0DXBEdjHV9KiywlOq
-         yORm1K2fzpQV/vylyAtlKacgY9LqxK9awUd4bQSuLshosfyZlVQxWZmUQ2R8nodM6ezn
-         FOjjMpstogf5b4C4qNQ3/RBuIVo5IpwG4q8Om+hRfCccLyQChzrgcP5fR+Vts1RE7hks
-         GruNtCOkCxnaREKwCok/kXq70S3U6EL9yYRx+Mi1nksg6L8awMxsJThVlGhdMIZ/TjZH
-         Az0H2neQvltl/mrJHeuRU8dzj56XvNrAnRf4NfrNxcOvfctFq8I8+GJB7pKJ8XDT5uIl
-         oJMg==
-X-Gm-Message-State: AOAM533ykA6yHkbfa1/1I1t4FsKJ4iixBS3B3Un2vh6a+SEiQlye+Ecq
-        GxQ0vYaA3oAPavpup17kBWMAYbhXYqds3n1uTgN46A==
-X-Google-Smtp-Source: ABdhPJwYioIcf3roWcw+7eBY8YdFqDjjHYzBDCjQs9Td/wpB5Go+w8ufPzRoqDbMsrdiR1b646s6qcFXd+sb+pgP2sE=
-X-Received: by 2002:a05:6870:1709:b0:e1:ea02:2001 with SMTP id
- h9-20020a056870170900b000e1ea022001mr2164491oae.241.1649182028168; Tue, 05
- Apr 2022 11:07:08 -0700 (PDT)
+        bh=wp5BQRPZX31Tau7Z/BAzOvMpyk9uV0bPZM8M4VsBras=;
+        b=gE0BaAvZ9okEO2GPTdjhpnnNT3Sz+VQw7q3NppHwMa0HdA6WbutUKUDRKSdsrUZoHK
+         tg7bznR2ssbZgEl9skhQTnFHTyWdcCNBL4VAx5zE59AmNpSo99Hk+5ztBpOaWFoi6r/O
+         n12ko5TTY8PhyIuCC+aWvdCEx1lf+wf5+XyZf5lby6F7F/fbPb7Ub/kQR/7LYlHZ8aOr
+         EAEKQ3YeI9qtPalaINQYLOfo5XWtPFSw+66fOwD6WLp6Yz2QnttgQvKOW7bkII6TBpJs
+         vz+AmptSE7Vm+SiuKTy11bV0FfLajEODRmzW0NJypL5Gke9tpSOCNktJIZNaiOxLi//b
+         2qww==
+X-Gm-Message-State: AOAM531OK7vT+NwPwVAa0oKRi7ZmbZTz5yxtubxWwM7J/pB/aIAzCXUa
+        1IpW3mf9tQND99Tl4SfA+LLNPw7CwhMJIjpEzQvbslYc
+X-Google-Smtp-Source: ABdhPJxgCOYicaGfabBQSX1TtzVkx4wjUpVl5764g8J8U/cZkdTPkmlBdt3znmSbx1ACV5tSfliK7lhe83x3Kk2vnAs=
+X-Received: by 2002:a81:bc5:0:b0:2e6:dcfe:bfcb with SMTP id
+ 188-20020a810bc5000000b002e6dcfebfcbmr3974299ywl.19.1649182762847; Tue, 05
+ Apr 2022 11:19:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAE=gft4a-QL82iFJE_xRQ3JrMmz-KZKWREtz=MghhjFbJeK=8A@mail.gmail.com>
- <87a6cz39qd.ffs@tglx>
-In-Reply-To: <87a6cz39qd.ffs@tglx>
-From:   Evan Green <evgreen@google.com>
-Date:   Tue, 5 Apr 2022 11:06:31 -0700
-Message-ID: <CAE=gft521_W6uaCBovjr5RJ-RV3vVE2Ex0OV91FxpnuXThYHLA@mail.gmail.com>
-Subject: Re: Lost MSIs during hibernate
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Rajat Jain <rajatja@chromium.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+References: <20220401140605.31871-1-Jonathan.Cameron@huawei.com> <20220401140605.31871-2-Jonathan.Cameron@huawei.com>
+In-Reply-To: <20220401140605.31871-2-Jonathan.Cameron@huawei.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 5 Apr 2022 20:19:11 +0200
+Message-ID: <CAJZ5v0gUECCmFJoVnmR8SK-pBg5v4QrtLgeKT7VTmgdykuZAzA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] iio: chemical: scd30: Export dev_pm_ops instead of
+ suspend() and resume()
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-iio@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 7:06 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+On Fri, Apr 1, 2022 at 4:06 PM Jonathan Cameron
+<Jonathan.Cameron@huawei.com> wrote:
 >
-> Evan!
+> Whilst here move to the new infrastructure using pm_sleep_ptr()
+> and EXPORT_DEV_PM_OPS() so as to let the compiler remove the unused
+> code if CONFIG_SLEEP is not defined.
 >
-> On Mon, Apr 04 2022 at 12:11, Evan Green wrote:
-> > To my surprise, I'm back with another MSI problem, and hoping to get
-> > some advice on how to approach fixing it.
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Cc: Tomasz Duszynski <tomasz.duszynski@octakon.com>
+> ---
+>  drivers/iio/chemical/scd30.h        | 5 +----
+>  drivers/iio/chemical/scd30_core.c   | 8 ++++----
+>  drivers/iio/chemical/scd30_i2c.c    | 2 +-
+>  drivers/iio/chemical/scd30_serial.c | 2 +-
+>  4 files changed, 7 insertions(+), 10 deletions(-)
 >
-> Why am I not surprised?
+> diff --git a/drivers/iio/chemical/scd30.h b/drivers/iio/chemical/scd30.h
+> index f60127bfe0f4..1ac9f3f79271 100644
+> --- a/drivers/iio/chemical/scd30.h
+> +++ b/drivers/iio/chemical/scd30.h
+> @@ -68,10 +68,7 @@ struct scd30_state {
+>         scd30_command_t command;
+>  };
+>
+> -int scd30_suspend(struct device *dev);
+> -int scd30_resume(struct device *dev);
+> -
+> -static __maybe_unused SIMPLE_DEV_PM_OPS(scd30_pm_ops, scd30_suspend, scd30_resume);
+> +extern const struct dev_pm_ops scd30_pm_ops;
+>
+>  int scd30_probe(struct device *dev, int irq, const char *name, void *priv, scd30_command_t command);
+>
+> diff --git a/drivers/iio/chemical/scd30_core.c b/drivers/iio/chemical/scd30_core.c
+> index 9fe6bbe9ee04..6c6c11c2772a 100644
+> --- a/drivers/iio/chemical/scd30_core.c
+> +++ b/drivers/iio/chemical/scd30_core.c
+> @@ -517,7 +517,7 @@ static const struct iio_chan_spec scd30_channels[] = {
+>         IIO_CHAN_SOFT_TIMESTAMP(3),
+>  };
+>
+> -int __maybe_unused scd30_suspend(struct device *dev)
+> +static int scd30_suspend(struct device *dev)
+>  {
+>         struct iio_dev *indio_dev = dev_get_drvdata(dev);
+>         struct scd30_state *state  = iio_priv(indio_dev);
+> @@ -529,9 +529,8 @@ int __maybe_unused scd30_suspend(struct device *dev)
+>
+>         return regulator_disable(state->vdd);
+>  }
+> -EXPORT_SYMBOL(scd30_suspend);
+>
+> -int __maybe_unused scd30_resume(struct device *dev)
+> +static int scd30_resume(struct device *dev)
+>  {
+>         struct iio_dev *indio_dev = dev_get_drvdata(dev);
+>         struct scd30_state *state = iio_priv(indio_dev);
+> @@ -543,7 +542,8 @@ int __maybe_unused scd30_resume(struct device *dev)
+>
+>         return scd30_command_write(state, CMD_START_MEAS, state->pressure_comp);
+>  }
+> -EXPORT_SYMBOL(scd30_resume);
+> +
+> +EXPORT_SIMPLE_DEV_PM_OPS(scd30_pm_ops, scd30_suspend, scd30_resume);
+>
+>  static void scd30_stop_meas(void *data)
+>  {
+> diff --git a/drivers/iio/chemical/scd30_i2c.c b/drivers/iio/chemical/scd30_i2c.c
+> index 875892a070ee..7c332e4e8e46 100644
+> --- a/drivers/iio/chemical/scd30_i2c.c
+> +++ b/drivers/iio/chemical/scd30_i2c.c
+> @@ -128,7 +128,7 @@ static struct i2c_driver scd30_i2c_driver = {
+>         .driver = {
+>                 .name = KBUILD_MODNAME,
+>                 .of_match_table = scd30_i2c_of_match,
+> -               .pm = &scd30_pm_ops,
+> +               .pm = pm_sleep_ptr(&scd30_pm_ops),
+>         },
+>         .probe_new = scd30_i2c_probe,
+>  };
+> diff --git a/drivers/iio/chemical/scd30_serial.c b/drivers/iio/chemical/scd30_serial.c
+> index 568b34486c44..8664f3ce6b33 100644
+> --- a/drivers/iio/chemical/scd30_serial.c
+> +++ b/drivers/iio/chemical/scd30_serial.c
+> @@ -252,7 +252,7 @@ static struct serdev_device_driver scd30_serdev_driver = {
+>         .driver = {
+>                 .name = KBUILD_MODNAME,
+>                 .of_match_table = scd30_serdev_of_match,
+> -               .pm = &scd30_pm_ops,
+> +               .pm = pm_sleep_ptr(&scd30_pm_ops),
+>         },
+>         .probe = scd30_serdev_probe,
+>  };
+> --
 
-I swear I don't intersect with this stuff that often. Maybe the
-reality is I always intersect with this stuff, it just usually works
-perfectly :)
+Applied as 5.19 material along with the [2-3/3].
 
->
-> > What worries me is those IRQ "no longer affine" messages, as well as
-> > my "EVAN don't touch hw" prints, indicating that requests to change
-> > the MSI are being dropped. These ignored requests are coming in when
-> > we try to migrate all IRQs off of the non-boot CPU, and they get
-> > ignored because all devices are "frozen" at this point, and presumably
-> > not in D0.
->
-> They are disabled at that point.
->
-> > To further try and prove that theory, I wrote a script to do the
-> > hibernate prepare image step in a loop, but messed with XHCI's IRQ
-> > affinity beforehand. If I move the IRQ to core 0, so far I have never
-> > seen a hang. But if I move it to another core, I can usually get a
-> > hang in the first attempt. I also very occasionally see wifi splats
-> > when trying this, and those "no longer affine" prints are all the wifi
-> > queue IRQs. So I think a wifi packet coming in at the wrong time can
-> > do the same thing.
-> >
-> > I wanted to see what thoughts you might have on this. Should I try to
-> > make a patch that moves all IRQs to CPU 0 *before* the devices all
-> > freeze? Sounds a little unpleasant. Or should PCI be doing something
-> > different to avoid this combination of "you're not allowed to modify
-> > my MSIs, but I might still generate interrupts that must not be lost"?
->
-> PCI cannot do much here and moving interrupts around is papering over
-> the underlying problem.
->
-> xhci_hcd 0000:00:0d.0: EVAN Write MSI 0 fee1e000 4023
->
->   This sets up the interrupt when the driver is loaded
->
-> xhci_hcd 0000:00:14.0: EVAN Write MSI 0 fee01000 4024
->
->   Ditto
->
-> xhci_hcd 0000:00:0d.0: calling pci_pm_freeze+0x0/0xad @ 423, parent: pci0000:00
-> xhci_hcd 0000:00:14.0: calling pci_pm_freeze+0x0/0xad @ 4644, parent: pci0000:00
-> xhci_hcd 0000:00:14.0: pci_pm_freeze+0x0/0xad returned 0 after 0 usecs
-> xhci_hcd 0000:00:0d.0: EVAN Write MSI 0 fee1e000 4023
-> xhci_hcd 0000:00:0d.0: pci_pm_freeze+0x0/0xad returned 0 after 196000 usecs
->
-> Those freeze() calls end up in xhci_suspend(), which tears down the XHCI
-> and ensures that no interrupts are on flight.
+Please let me know if you need a non-mutable branch to pull from in
+order to base other work on these commits.
 
-Your hint here about xhci_suspend() was helpful. It turns out this is
-not called in the freeze path, usb_hcd_pci_pm_ops just calls
-check_root_hub_suspended(). The documentation in devices.rst is pretty
-clear about this:
-
-```
-The ``->freeze`` methods should quiesce the device so that it doesn't
-generate IRQs or DMA
-```
-
-So I think you're right that the PM layer is doing everything right
-(though with a bit of a footgun that if you mess up and generate an
-interrupt after freeze it may just be gone forever), and usb core is
-at fault here. I've been testing with this patch (mangled in email),
-and so far the issue seems to be gone:
-
-@@ -614,10 +622,10 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
-        .suspend_noirq  = hcd_pci_suspend_noirq,
-        .resume_noirq   = hcd_pci_resume_noirq,
-        .resume         = hcd_pci_resume,
--       .freeze         = check_root_hub_suspended,
--       .freeze_noirq   = check_root_hub_suspended,
--       .thaw_noirq     = NULL,
--       .thaw           = NULL,
-+       .freeze         = hcd_pci_suspend,
-+       .freeze_noirq   = hcd_pci_suspend_noirq,
-+       .thaw_noirq     = hcd_pci_resume_noirq,
-+       .thaw           = hcd_pci_resume,
-        .poweroff       = hcd_pci_suspend,
-        .poweroff_noirq = hcd_pci_suspend_noirq,
-        .restore_noirq  = hcd_pci_resume_noirq,
-
-
-As an aside, one might wonder "why don't we see this everywhere
-then?". I think that's because Intel missed a patch enabling runtime
-pm on one of these XHCI controllers (8086:51ed). See the quirks below,
-that missing 2 on 00:14.0 is XHCI_DEFAULT_PM_RUNTIME_ALLOW:
-# dmesg | grep quirks
-[    2.804073] xhci_hcd 0000:00:0d.0: hcc params 0x20007fc1 hci
-version 0x120 quirks 0x0000000200009810
-[    3.108045] xhci_hcd 0000:00:14.0: hcc params 0x20007fc1 hci
-version 0x120 quirks 0x0000000000009810
-
-If the XHCI controller were usually in runtime suspend when freeze()
-got called, it would be fully quiesced and would not lose its
-interrupt. I had noticed this earlier, and it did reduce the repro
-rate, but did not reduce it to zero. Now it makes sense why.
-
-I think I have enough info to go make a USB patch now. Thank you for you help!
--Evan
-
->
-> xhci_hcd 0000:00:0d.0: calling pci_pm_freeze_noirq+0x0/0xb2 @ 4645, parent: pci0000:00
-> xhci_hcd 0000:00:0d.0: pci_pm_freeze_noirq+0x0/0xb2 returned 0 after 30 usecs
-> xhci_hcd 0000:00:14.0: calling pci_pm_freeze_noirq+0x0/0xb2 @ 4644, parent: pci0000:00
-> xhci_hcd 0000:00:14.0: pci_pm_freeze_noirq+0x0/0xb2 returned 0 after 3118 usecs
->
->    Now the devices are disabled and not accessible
->
-> xhci_hcd 0000:00:14.0: EVAN Don't touch hw 0 fee00000 4024
-> xhci_hcd 0000:00:0d.0: EVAN Don't touch hw 0 fee1e000 4045
-> xhci_hcd 0000:00:0d.0: EVAN Don't touch hw 0 fee00000 4045
-> xhci_hcd 0000:00:14.0: calling pci_pm_thaw_noirq+0x0/0x70 @ 9, parent: pci0000:00
-> xhci_hcd 0000:00:14.0: EVAN Write MSI 0 fee00000 4024
->
->    This is the early restore _before_ the XHCI resume code is called
->    This interrupt is targeted at CPU0 (it's the one which could not be
->    written above).
->
-> xhci_hcd 0000:00:14.0: pci_pm_thaw_noirq+0x0/0x70 returned 0 after 5272 usecs
-> xhci_hcd 0000:00:0d.0: calling pci_pm_thaw_noirq+0x0/0x70 @ 1123, parent: pci0000:00
-> xhci_hcd 0000:00:0d.0: EVAN Write MSI 0 fee00000 4045
->
->    Ditto
->
-> xhci_hcd 0000:00:0d.0: pci_pm_thaw_noirq+0x0/0x70 returned 0 after 623 usecs
-> xhci_hcd 0000:00:14.0: calling pci_pm_thaw+0x0/0x7c @ 3856, parent: pci0000:00
-> xhci_hcd 0000:00:14.0: pci_pm_thaw+0x0/0x7c returned 0 after 0 usecs
-> xhci_hcd 0000:00:0d.0: calling pci_pm_thaw+0x0/0x7c @ 4664, parent: pci0000:00
-> xhci_hcd 0000:00:0d.0: pci_pm_thaw+0x0/0x7c returned 0 after 0 usecs
->
-> That means the suspend/resume logic is doing the right thing.
->
-> How the XHCI ends up being confused here is a mystery. Cc'ed a few more folks.
->
-> Thanks,
->
->         tglx
->
->
+Thanks!
