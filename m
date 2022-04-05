@@ -2,171 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 246EA4F3EFD
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Apr 2022 22:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AED54F4113
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Apr 2022 23:26:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238932AbiDEOrx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Apr 2022 10:47:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52810 "EHLO
+        id S234845AbiDEOrd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Apr 2022 10:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379324AbiDENNn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Apr 2022 09:13:43 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABD6366B6;
-        Tue,  5 Apr 2022 05:14:52 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id DB32E1F42AF3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649160890;
-        bh=5htqzeboi78pw+EZSDMSeRcR1q+P7L+C7qMifFBCIkg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Bwg80AKVhxXtveM6MoDiSFvGSKmbnOcjJT9oyUjIkBzLWKj2Z4ENiBNWEpciMwmxM
-         Bztv6v0Xd8NraKnqMsJLeGVP+p9/kfkureZOEqQf1HQ0nM072ezuYyzGEWfYRMqHlp
-         YFRaQFcGWB3XoDRNOoshBi8QWLQxrfOSvtluSGGYN0wHeHJ9bBblII9nEQg49ZyowC
-         Vqu7VJKBEbADrq7EqsTHx13njjGUmwjRIQmiGG2QaBlrXGuJvXE5Q1pmNwyn6R3Cxe
-         0S4G2WJKxdqrc/I0i/JV5WzxhFu86RESUM3v9HS1SyojOV8xRpx7o477YJ7Y6H30bz
-         ggiyeeqYr4EXw==
-Message-ID: <b627639a-d050-66af-31d3-c6a6c04eb4e0@collabora.com>
-Date:   Tue, 5 Apr 2022 14:14:47 +0200
+        with ESMTP id S1382329AbiDEORP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Apr 2022 10:17:15 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2076.outbound.protection.outlook.com [40.107.92.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E45C160FC0;
+        Tue,  5 Apr 2022 06:01:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HfqsIMMfeC26reLatD9MokTwYecrPrj1vG/HCvzSOO2HrguiZh34GFZ0IWf5zdNDuR7+nGy5t5zpgv/qZmSnT8d/nsAYjzB9+fUTKTywZy9lX6nlAMjw0/cy5FDAjmuBO/oyawRjW8R0Q8OR9ejNZghJ/wocQ1QjQTgyuVDF8I/rfeI17JcbzaqL7hY8Q5obWj5sUz1a7dZKv+YKpcETCCJBhEZXHiWMGjojboTJLyX4ZC7kAQk0oYhgVJkekqdDh7m5nJZ08OBG/4LWYBqbmYfud8k0jPyx+wR/Y6jj7KmrSh2KHaA2XT6edoaFSAEYINcPcyohzKEHfSdgThDE+g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G3P71ftXVbLa28033q3i+TL9rdfyovrIovSeQLq6P2A=;
+ b=luBZZ6wkeYLJfT2ZdX4bNfMVm47U7nVaXT2WnshIU0AscnZGC1UrFDrB9vW1clci1GaeIQN5z6FYYymRbbFWzktkurPgLmotPJOi7Zs8YOFyoCI55VmY9ay5hhCF+ksaXJM9V2zCPzsM0Bve7r5Rqqdx2mWAJVE7GNamAsrtaSJaes2+Ik7CCT0u9V4RXRGSTBWHTB+OCQXGxRnhMwInBk5/pYZ302u9qYaZxMZCLwA7rbvMzH6yxIBGaKBV3s7NrUPegB2wDCrmPRzpwb0nP0bJEvpQMe4OtBU9fMn3MuDKzc93JSd+TokWt+GW42+03qlhcVaXECYCKpNQoVOEDg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.238) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=G3P71ftXVbLa28033q3i+TL9rdfyovrIovSeQLq6P2A=;
+ b=J8REqfiQWsqQOhOwsZm+6N0lKqrM1ZeQSQJcJZ/Wi9UtAz2MJPrSAYmUtH6GEv3xBOiRjoH9YVgYOxdGwETwq9G1a9K/odhGWeGrnMQoW6LroGuCe/D6f74gqiEJ/Yx3TGDFzG4iIPrn3Gp6R48U4JekQ4u7LHPTROMNpJLUKZ1wqMTow2BtS0my8qDoj7RuXRLPsS2RKUDPeCXtakY4WdS+zHYy09w/8e5rMIaZ5PqkjcPDhdHo6b4KzPWj73+Sndb2j9ldSE0VrOlbJan9EIuiToJAtFe/7dEaksnwnkFULqOgeZz3ESNiXqjIKdfsNOaepJMHSp8ZuADijbxreg==
+Received: from MW4PR04CA0371.namprd04.prod.outlook.com (2603:10b6:303:81::16)
+ by DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Tue, 5 Apr
+ 2022 13:01:43 +0000
+Received: from CO1NAM11FT038.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:81:cafe::5) by MW4PR04CA0371.outlook.office365.com
+ (2603:10b6:303:81::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31 via Frontend
+ Transport; Tue, 5 Apr 2022 13:01:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.238) by
+ CO1NAM11FT038.mail.protection.outlook.com (10.13.174.231) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5123.19 via Frontend Transport; Tue, 5 Apr 2022 13:01:43 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by DRHQMAIL105.nvidia.com
+ (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 5 Apr
+ 2022 13:01:27 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 5 Apr 2022
+ 06:01:27 -0700
+Received: from sumitg-l4t.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server id 15.2.986.22 via Frontend
+ Transport; Tue, 5 Apr 2022 06:01:23 -0700
+From:   Sumit Gupta <sumitg@nvidia.com>
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>, <treding@nvidia.com>,
+        <jonathanh@nvidia.com>, <linux-pm@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <ksitaraman@nvidia.com>, <sanjayc@nvidia.com>, <bbasu@nvidia.com>,
+        <sumitg@nvidia.com>
+Subject: [Patch v4 0/4] Tegra234 cpufreq driver support 
+Date:   Tue, 5 Apr 2022 18:31:15 +0530
+Message-ID: <20220405130119.4697-1-sumitg@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 0/2] thermal: Add support of multiple sensors
-Content-Language: en-US
-To:     Kevin Hilman <khilman@baylibre.com>,
-        Eduardo Valentin <eduval@amazon.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        daniel.lezcano@linaro.org
-Cc:     rafael@kernel.org, rui.zhang@intel.com, amitk@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ben.tseng@mediatek.com, mka@chromium.org,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-References: <7hlex0s6ag.fsf@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <7hlex0s6ag.fsf@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: dd9903c4-f605-4ea8-7a23-08da17046ec7
+X-MS-TrafficTypeDiagnostic: DS7PR12MB5744:EE_
+X-Microsoft-Antispam-PRVS: <DS7PR12MB574482380735D416182509C9B9E49@DS7PR12MB5744.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: npBzCHpycYkXM61lBIOplqHuVkOoYDAHDyPUZdJbwLBySHEagV4TEia0kB44lyHl3npfwJBtahYP5pLcjYZopvjlwYnyETM+I71fhXDlDK1wnDWlxsJMXRrcOUrDhUozLyTGeLuT6QG0EW7CBgHT3I2/CmlOxjKg/CVNJViHoMeNy5bvMxeAT6t7z865DGHb/28ajsqcRHWVB/RI1hyPe2pbqjd+69oyOuFmE/vQWdcXW326rMclFte7J1wwOQT4MiE9oZ2TReoNfpW8FiBmlMLjfb4gLiAx3gODnNF/eM5OrYkDK6xP8AeCYfQ0pqLFcx9hJbWy6T4Dg76L4SehiactXCIk6sEhklNmIz8dsI0ks3ptPWKf8qKXKGDebtEmBKyeReZK3VJcKy0ZL9mfOuhzbWUt9MMF8UBbH6lO6SMSnNcLI8ztJRjolJNET20JyAChKFmeAOy2wwj18N1VAW8V7wlD4fhYUeOcVheLW9m74jRFbZk3Ro+dQjamfaRx0vFwUk4x1Xb28d9C+hXP6qzZu4Tgca3LsxB8P60OaZOF3Xeb1wIDQ1I1ZJDZWv//UrE5dj6rcbrGr4Z4m2lg3IxVkLgvJuDKULb9VGiArqhOvLy4us4gu3PAufhRpqtQMx56FBl/tAApyqdgHldMyGqDPBNF+04eXCNSN0xywQfCGJlZHapynRCn5x+lSY8D0dsn2r2vKLDL8K2AIF+4AHIdNguP2Ip3JDfquREl4yo=
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(8936002)(36860700001)(40460700003)(2616005)(356005)(921005)(82310400005)(83380400001)(4743002)(54906003)(1076003)(81166007)(26005)(36756003)(2906002)(336012)(426003)(110136005)(5660300002)(86362001)(508600001)(8676002)(70586007)(107886003)(4326008)(47076005)(70206006)(7696005)(6666004)(316002)(186003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2022 13:01:43.1127
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: dd9903c4-f605-4ea8-7a23-08da17046ec7
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT038.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5744
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 23/03/22 22:33, Kevin Hilman ha scritto:
-> Hi Eduardo, Daniel,
-> 
-> Eduardo Valentin <eduval@amazon.com> writes:
-> 
->> On Fri, Feb 18, 2022 at 09:46:02AM +0100, Alexandre Bailon wrote:
->>> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
->>>
->>>
->>>
->>> Following this comment [1], this updates thermal_of to support multiple
->>> sensors.
->>>
->>> This has some limitations:
->>> - A sensor must have its own termal zone, even if it is also registered
->>>    inside a thermal zone supporting multiple sensors.
->>> - Some callbacks (such as of_thermal_set_trips) have been updated to support
->>>    multiple sensors but I don't know if this really make sense.
->>> - of_thermal_get_trend have not been updated to support multiple sensors.
->>>    This would probably make sense to support it but I am not sure how to do it,
->>>    especially for the average.
->>
->> Great to see this having somewhat a form now!
->>
->> Overall the idea is sane and aligned to what I had in mind back during the 2019 Linux plumbers: one thermal zone should have multiple sensor inputs.
->> https://lpc.events/event/4/page/34-accepted-microconferences#PMSummary
->>
->> In fact, that is aligned to what I originally wrote in the thermal device tree bindings:
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/thermal/thermal-zones.yaml#n79
->>
->> The only major concern with your series is the usage of of-thermal to achieve the multiple sensors per thermal zone.
->> While that solves the problem, it has the following limitations:
->> (1) limited to devices described in device tree. everybody else is left out.
->> (2) it keeps extending the code duplication in of-thermal.
->>
->> My suggestion here is have the thermal core aware of the multiple sensors per thermal zone.
->>
->> That has the advantage of:
->> (a) cleanup the sensor handling within of-thermal
->> (b) expand the multi sensor per zone to all types of thermal drivers
->> (c) standardize the way to handle the multi sensor.
-> 
-> This cleanup all sounds like the right direction to be headed, but since
-> this has been planned since 2019 and nothing has happended, what is the
-> level of urgency is for this of-thermal -> thermal core cleanup/rework?
-> 
-> In $SUBJECT series, we have a fully functional series that solves an
-> existing problem and takes a big step in the right long-term direction.
-> While it indeed has the has limitations you mention, I don't think that
-> should block the merging of this series.  More importantly, there are
-> existing drivers[1] as well as forthcoming ones from MTK that depend on
-> this series. Those are blocked if you require the of-thermal -> core
-> move first.
-> 
-> As a maintainer also, I fully understand that maintainer bandwith is
-> limited, and it's always nice to have contributors do core framework
-> development when possible, but IMO, in this case I don't think it should
-> be a prerequisite since a follow-up series to do the core work would not
-> affect any functionality or bindings etc.  I don't see any reasons not
-> do to this incrementally.
-> 
-> So I would kindly request (read: beg, plead & grovel) that you seriously
-> consider merging this series as a first phase and the of-thermal -> core
-> change be done as a second phase.  Yes, I fully understand that punting
-> this to a second phase means it might not get done soon.  But it's been
-> waiting for years already, so it seems the urgency is low.  Meanwhile,
-> there are OF users that are ready to use this feature today.
-> 
-> Thanks for considering,
-> 
-> Kevin
-> 
-> [1] https://lore.kernel.org/linux-mediatek/20210617114707.10618-1-ben.tseng@mediatek.com/
-> 
-> 
+This patchset adds driver support for Tegra234 cpufreq.
+Also, added soc data and ops to support multiple SoC's and variants
+which have similar logic to {get|set} cpu frequency as Tegra194 in
+the same driver.
+From cpufreq point, main difference between Tegra194 and Tegra234 are:
+ 1) Tegra234 uses MMIO for frequency requests and not sysreg like T194.
+ 2) MPIDR affinity info in Tegra234 is different from Tegra194.
+ 3) Register bits of pllp_clk_count and core_clk_count are swapped.
+So, added ops hooks for Tegra234.
 
-Hello Eduardo, Kevin,
+---
+v3-> v4:
+- fixed reg property too long error and set additionalProperties to
+  false in the binding document.
 
-I would like to add that this series is not only benefitting MediaTek platforms,
-and not only Chromebooks.
-On some Qualcomm SoCs (from SDM845 onwards, if I'm not wrong!), downstream, there
-is some "qti virtual sensor" driver, which is addressing this kind of situation:
-on these platforms, averaging, min and max (and some interpolation too, but that's
-another story, I guess) is happening and that's used as some advanced way to
-ensure that both performance stays high and that the device is safe to operate.
-On these platforms, this is done by evaluating CPU, GPU, Hexagon DSPs, modem, wifi
-and (modem,wifi)PA IPs and deciding on a thermal throttling strategy.
+v2 -> v3:
+- used CPU COMPLEX CLUSTER name in binding document.
+- reordered the patches.
 
-You understand that, while this is not "excessively" important for a Chromebook,
-which is a laptop, it may become even a safety concern in devices of other form
-factor, like smartphones, where there is a very strict thermal headroom (hence
-requiring a fine grained thermal management).
+v1 -> v2:
+- added nvidia,tegra-ccplex-cluster.yaml binding doc
+- changed compatible check to 'soc->actmon_cntr_base' field of soc data
 
-Even though, on MediaTek, I guess that the primary usecase is Chromebooks and this
-kind of mechanism is required primarily for the LVTS sensors that are used for SVS
-calculations (read: better power efficiency), the Linux community is huge - and,
-with this kept in mind, there will probably be someone that will like to upstream
-their MTK smartphone for a reason or another (I think! This happened with Qualcomm
-so I guess that it's going to happen with "any other thing")... and that adds up
-to this problem being a safety concern to fix.
+Sumit Gupta (4):
+  dt-bindings: Document Tegra CCPLEX Cluster
+  cpufreq: tegra194: add soc data to support multiple soc
+  cpufreq: tegra194: Add support for Tegra234
+  arm64: tegra: add node for tegra234 cpufreq
 
-Of course, I agree with you, Eduardo, about the needed cleanup but, for all of
-the aforementioned reasons - mine and Kevin's, like him, I would also beg, plead
-and grovel that you consider merging this series as a first phase, and accept the
-cleanup and use-case expansion as a second phase.
+ .../tegra/nvidia,tegra-ccplex-cluster.yaml    |  52 ++++
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi      |   7 +
+ drivers/cpufreq/tegra194-cpufreq.c            | 246 +++++++++++++++---
+ 3 files changed, 268 insertions(+), 37 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
 
-P.S.: I'm adding Marijn and Konrad to the loop, as people interested to the
-       Qualcomm side of things, and mainly upstreaming smartphones.
+-- 
+2.17.1
 
-Kind regards,
-Angelo
