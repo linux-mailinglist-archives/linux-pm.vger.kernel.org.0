@@ -2,106 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55FB44F41E3
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Apr 2022 23:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 246EA4F3EFD
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Apr 2022 22:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237113AbiDEOqr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Apr 2022 10:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55920 "EHLO
+        id S238932AbiDEOrx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Apr 2022 10:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349825AbiDENGH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Apr 2022 09:06:07 -0400
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8800175625;
-        Tue,  5 Apr 2022 05:07:16 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id g9so22971564ybf.1;
-        Tue, 05 Apr 2022 05:07:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=knCnV41xjhnnJ0VL0WEqN+kHikKWH8noX35ww6a147E=;
-        b=O7lckBcjELkuaLNv/vx9Zk/dwxb9uNuvdTAK9RfD2UeFpLI+xa1ocEs2O+vfLgUcsy
-         E6lMViABScXgrmVNn0UwQsQhGsBMZjx2E+J1SF4r6LWvm47xalDPaI0XJ2x+wI7/O4VW
-         hLWnU8IchmREOD59IjWNEVY3v3AhTniApfIMW+33/WKIqoHL00Cc5FpHrYpe82q0Sw5f
-         yYlqC0H9t+ZUIzWY9yhWmmJlA9jlW+JvfvfUm1iPBPJBlGqg44x1XmHa5Mx2jl+5l5Nx
-         YtKYSoqyZDYZ+I2EUT8bGKLtTFar7nvRsKdGKsStiFkHJo53hRUX/Zyy2PYRi16wMF4W
-         oWMw==
-X-Gm-Message-State: AOAM531oN2BMuSlLOg4c+fubzN47QHtqt6CXO/IXNgKM6WoRUnL+NEHf
-        dOMvpaK3MYr/99JV7bZnf1StMsg1GNX/S5tJN+ueJseC
-X-Google-Smtp-Source: ABdhPJzm72VVZWMJatZlptDAM3D3/uPEoLzUPr4PBmAZeVrej6UKEUv7t6NBnltKTsOgvbQB0rfxyKF5TOgeLVOvss8=
-X-Received: by 2002:a25:cc08:0:b0:63d:2c6d:162 with SMTP id
- l8-20020a25cc08000000b0063d2c6d0162mr2240396ybf.137.1649160435809; Tue, 05
- Apr 2022 05:07:15 -0700 (PDT)
+        with ESMTP id S1379324AbiDENNn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Apr 2022 09:13:43 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AABD6366B6;
+        Tue,  5 Apr 2022 05:14:52 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id DB32E1F42AF3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649160890;
+        bh=5htqzeboi78pw+EZSDMSeRcR1q+P7L+C7qMifFBCIkg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Bwg80AKVhxXtveM6MoDiSFvGSKmbnOcjJT9oyUjIkBzLWKj2Z4ENiBNWEpciMwmxM
+         Bztv6v0Xd8NraKnqMsJLeGVP+p9/kfkureZOEqQf1HQ0nM072ezuYyzGEWfYRMqHlp
+         YFRaQFcGWB3XoDRNOoshBi8QWLQxrfOSvtluSGGYN0wHeHJ9bBblII9nEQg49ZyowC
+         Vqu7VJKBEbADrq7EqsTHx13njjGUmwjRIQmiGG2QaBlrXGuJvXE5Q1pmNwyn6R3Cxe
+         0S4G2WJKxdqrc/I0i/JV5WzxhFu86RESUM3v9HS1SyojOV8xRpx7o477YJ7Y6H30bz
+         ggiyeeqYr4EXw==
+Message-ID: <b627639a-d050-66af-31d3-c6a6c04eb4e0@collabora.com>
+Date:   Tue, 5 Apr 2022 14:14:47 +0200
 MIME-Version: 1.0
-References: <21439956.EfDdHjke4D@kreacher> <YkwQAKcFU4CzYX5E@lahna>
-In-Reply-To: <YkwQAKcFU4CzYX5E@lahna>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 5 Apr 2022 14:07:03 +0200
-Message-ID: <CAJZ5v0ja5OKUh004wEMhrgVtk-yp_Dzvmk33xNhabjDqzV0JsQ@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] ACPI: PCI: PM: Power up PCI devices with ACPI
- companions upfront
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 0/2] thermal: Add support of multiple sensors
+Content-Language: en-US
+To:     Kevin Hilman <khilman@baylibre.com>,
+        Eduardo Valentin <eduval@amazon.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        daniel.lezcano@linaro.org
+Cc:     rafael@kernel.org, rui.zhang@intel.com, amitk@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ben.tseng@mediatek.com, mka@chromium.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+References: <7hlex0s6ag.fsf@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <7hlex0s6ag.fsf@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 1:45 PM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> Hi Rafael,
->
-> On Mon, Apr 04, 2022 at 05:20:30PM +0200, Rafael J. Wysocki wrote:
-> > Hi All,
-> >
-> > There are cases in which the power state of a PCI device depends on an ACPI
-> > power resource (or more of them) in such a way that when the given power
-> > resource is in the "off" state, the PCI device depending on it is in D3cold.
-> >
-> > On some systems, the initial state of these power resources is "off", so the
-> > kernel should not access the config space of PCI devices depending on them,
-> > until the power resources in question are turned "on", but currently that is
-> > not respected during PCI device enumeration.  Namely, the PCI device
-> > enumeration code walks the entire bus and enumerates all of the devices it
-> > can find, including the ones whose initial power state in principle depends on
-> > the ACPI power resources in the "off" state.
->
-> I guess these devices do not have _PRE() method either.
+Il 23/03/22 22:33, Kevin Hilman ha scritto:
+> Hi Eduardo, Daniel,
+> 
+> Eduardo Valentin <eduval@amazon.com> writes:
+> 
+>> On Fri, Feb 18, 2022 at 09:46:02AM +0100, Alexandre Bailon wrote:
+>>> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+>>>
+>>>
+>>>
+>>> Following this comment [1], this updates thermal_of to support multiple
+>>> sensors.
+>>>
+>>> This has some limitations:
+>>> - A sensor must have its own termal zone, even if it is also registered
+>>>    inside a thermal zone supporting multiple sensors.
+>>> - Some callbacks (such as of_thermal_set_trips) have been updated to support
+>>>    multiple sensors but I don't know if this really make sense.
+>>> - of_thermal_get_trend have not been updated to support multiple sensors.
+>>>    This would probably make sense to support it but I am not sure how to do it,
+>>>    especially for the average.
+>>
+>> Great to see this having somewhat a form now!
+>>
+>> Overall the idea is sane and aligned to what I had in mind back during the 2019 Linux plumbers: one thermal zone should have multiple sensor inputs.
+>> https://lpc.events/event/4/page/34-accepted-microconferences#PMSummary
+>>
+>> In fact, that is aligned to what I originally wrote in the thermal device tree bindings:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/thermal/thermal-zones.yaml#n79
+>>
+>> The only major concern with your series is the usage of of-thermal to achieve the multiple sensors per thermal zone.
+>> While that solves the problem, it has the following limitations:
+>> (1) limited to devices described in device tree. everybody else is left out.
+>> (2) it keeps extending the code duplication in of-thermal.
+>>
+>> My suggestion here is have the thermal core aware of the multiple sensors per thermal zone.
+>>
+>> That has the advantage of:
+>> (a) cleanup the sensor handling within of-thermal
+>> (b) expand the multi sensor per zone to all types of thermal drivers
+>> (c) standardize the way to handle the multi sensor.
+> 
+> This cleanup all sounds like the right direction to be headed, but since
+> this has been planned since 2019 and nothing has happended, what is the
+> level of urgency is for this of-thermal -> thermal core cleanup/rework?
+> 
+> In $SUBJECT series, we have a fully functional series that solves an
+> existing problem and takes a big step in the right long-term direction.
+> While it indeed has the has limitations you mention, I don't think that
+> should block the merging of this series.  More importantly, there are
+> existing drivers[1] as well as forthcoming ones from MTK that depend on
+> this series. Those are blocked if you require the of-thermal -> core
+> move first.
+> 
+> As a maintainer also, I fully understand that maintainer bandwith is
+> limited, and it's always nice to have contributors do core framework
+> development when possible, but IMO, in this case I don't think it should
+> be a prerequisite since a follow-up series to do the core work would not
+> affect any functionality or bindings etc.  I don't see any reasons not
+> do to this incrementally.
+> 
+> So I would kindly request (read: beg, plead & grovel) that you seriously
+> consider merging this series as a first phase and the of-thermal -> core
+> change be done as a second phase.  Yes, I fully understand that punting
+> this to a second phase means it might not get done soon.  But it's been
+> waiting for years already, so it seems the urgency is low.  Meanwhile,
+> there are OF users that are ready to use this feature today.
+> 
+> Thanks for considering,
+> 
+> Kevin
+> 
+> [1] https://lore.kernel.org/linux-mediatek/20210617114707.10618-1-ben.tseng@mediatek.com/
+> 
+> 
 
-Personally, I haven't seen any ACPI tables containing any _PRE yet.
+Hello Eduardo, Kevin,
 
-> > Apparently, most of the time, the config space of such devices is accessible
-> > regardless of the state of the ACPI power resource associated with the PCI
-> > device, so the device enumeration is successful, but there are two potential
-> > issues related to this behavior.  First off, even if the given PCI device
-> > is accessible when the ACPI power resource depended on by it is "off",
-> > changing its configuration may confuse the platform firmware and lead to
-> > problems when the ACPI power resource in question is turned "on".  Second,
-> > the PCI device may not be actually accessible at all when the ACPI power
-> > resource depended on by it is "off", in which case it won't be found during
-> > the PCI enumeration of devices.
-> >
-> > This patch series addresses that problem by turning "on" all ACPI power
-> > resources depended on by PCI devices before attempting to access the config
-> > space of those devices for the first time.
->
-> Makes sense.
->
-> For the series,
->
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+I would like to add that this series is not only benefitting MediaTek platforms,
+and not only Chromebooks.
+On some Qualcomm SoCs (from SDM845 onwards, if I'm not wrong!), downstream, there
+is some "qti virtual sensor" driver, which is addressing this kind of situation:
+on these platforms, averaging, min and max (and some interpolation too, but that's
+another story, I guess) is happening and that's used as some advanced way to
+ensure that both performance stays high and that the device is safe to operate.
+On these platforms, this is done by evaluating CPU, GPU, Hexagon DSPs, modem, wifi
+and (modem,wifi)PA IPs and deciding on a thermal throttling strategy.
 
-Thanks!
+You understand that, while this is not "excessively" important for a Chromebook,
+which is a laptop, it may become even a safety concern in devices of other form
+factor, like smartphones, where there is a very strict thermal headroom (hence
+requiring a fine grained thermal management).
+
+Even though, on MediaTek, I guess that the primary usecase is Chromebooks and this
+kind of mechanism is required primarily for the LVTS sensors that are used for SVS
+calculations (read: better power efficiency), the Linux community is huge - and,
+with this kept in mind, there will probably be someone that will like to upstream
+their MTK smartphone for a reason or another (I think! This happened with Qualcomm
+so I guess that it's going to happen with "any other thing")... and that adds up
+to this problem being a safety concern to fix.
+
+Of course, I agree with you, Eduardo, about the needed cleanup but, for all of
+the aforementioned reasons - mine and Kevin's, like him, I would also beg, plead
+and grovel that you consider merging this series as a first phase, and accept the
+cleanup and use-case expansion as a second phase.
+
+P.S.: I'm adding Marijn and Konrad to the loop, as people interested to the
+       Qualcomm side of things, and mainly upstreaming smartphones.
+
+Kind regards,
+Angelo
