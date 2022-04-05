@@ -2,250 +2,223 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE8674F48A5
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 02:09:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2D64F4896
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 02:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383510AbiDEVpH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Apr 2022 17:45:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46066 "EHLO
+        id S1381864AbiDEVmr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Apr 2022 17:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457862AbiDEQwx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Apr 2022 12:52:53 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BE5326E6;
-        Tue,  5 Apr 2022 09:50:52 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id b583b31e156ca061; Tue, 5 Apr 2022 18:50:50 +0200
-Received: from kreacher.localnet (unknown [213.134.181.136])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 81B8F66BCB7;
-        Tue,  5 Apr 2022 18:50:49 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Abhishek Sahu <abhsahu@nvidia.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH] PCI: Fix the ACPI power state during runtime resume
-Date:   Tue, 05 Apr 2022 18:50:48 +0200
-Message-ID: <2632919.mvXUDI8C0e@kreacher>
-In-Reply-To: <469a9db5-9868-cb17-dd5c-96ef29193fda@nvidia.com>
-References: <20220204233219.GA228585@bhelgaas> <8f89131c-41a2-02e4-1427-8a5b1704e0ea@nvidia.com> <469a9db5-9868-cb17-dd5c-96ef29193fda@nvidia.com>
+        with ESMTP id S1573177AbiDESJJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Apr 2022 14:09:09 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE461F623
+        for <linux-pm@vger.kernel.org>; Tue,  5 Apr 2022 11:07:09 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-df22f50e0cso242368fac.3
+        for <linux-pm@vger.kernel.org>; Tue, 05 Apr 2022 11:07:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=p23li6dT00AJl3hRn5GLCpGGZV7Mde/F/ZC6fP/JEqE=;
+        b=BADiZnSp78f9ZfxjlasetO+C2Swva/fEryHvZCHweafMOdoIX0m57hfulFwzprUsBB
+         5NO3j0ERJTi0OIIihE8sjSrXI/ueYUhpzuyzUvDnj/rraSlSTYcBjV3vc+GP9NtnhzkI
+         VM96wegARllDkf3644nEdixuvBQTRlgo0J5z3sG6cbiClK2MFU5FQEMNxQ3kr0ozGy8b
+         H0v0wy7xBeY27WgEwcBToKdEfjz5/a8PRSTPfNS/C9WTKMFTLaYVjUzE1+aWoW7GlT8m
+         l9irSkp9XsXAqCpbUokn14g9EtjANf+Eja8ATrFsehV0xTGHq1NWrkarTq4fmuMSRcMt
+         X6iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=p23li6dT00AJl3hRn5GLCpGGZV7Mde/F/ZC6fP/JEqE=;
+        b=WpvXPGRFjUB3s92Du8KvN+opGej+AspONp+wNWf7pVLBvyQ+g0DXBEdjHV9KiywlOq
+         yORm1K2fzpQV/vylyAtlKacgY9LqxK9awUd4bQSuLshosfyZlVQxWZmUQ2R8nodM6ezn
+         FOjjMpstogf5b4C4qNQ3/RBuIVo5IpwG4q8Om+hRfCccLyQChzrgcP5fR+Vts1RE7hks
+         GruNtCOkCxnaREKwCok/kXq70S3U6EL9yYRx+Mi1nksg6L8awMxsJThVlGhdMIZ/TjZH
+         Az0H2neQvltl/mrJHeuRU8dzj56XvNrAnRf4NfrNxcOvfctFq8I8+GJB7pKJ8XDT5uIl
+         oJMg==
+X-Gm-Message-State: AOAM533ykA6yHkbfa1/1I1t4FsKJ4iixBS3B3Un2vh6a+SEiQlye+Ecq
+        GxQ0vYaA3oAPavpup17kBWMAYbhXYqds3n1uTgN46A==
+X-Google-Smtp-Source: ABdhPJwYioIcf3roWcw+7eBY8YdFqDjjHYzBDCjQs9Td/wpB5Go+w8ufPzRoqDbMsrdiR1b646s6qcFXd+sb+pgP2sE=
+X-Received: by 2002:a05:6870:1709:b0:e1:ea02:2001 with SMTP id
+ h9-20020a056870170900b000e1ea022001mr2164491oae.241.1649182028168; Tue, 05
+ Apr 2022 11:07:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <CAE=gft4a-QL82iFJE_xRQ3JrMmz-KZKWREtz=MghhjFbJeK=8A@mail.gmail.com>
+ <87a6cz39qd.ffs@tglx>
+In-Reply-To: <87a6cz39qd.ffs@tglx>
+From:   Evan Green <evgreen@google.com>
+Date:   Tue, 5 Apr 2022 11:06:31 -0700
+Message-ID: <CAE=gft521_W6uaCBovjr5RJ-RV3vVE2Ex0OV91FxpnuXThYHLA@mail.gmail.com>
+Subject: Re: Lost MSIs during hibernate
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatja@chromium.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.181.136
-X-CLIENT-HOSTNAME: 213.134.181.136
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejgedguddtudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepteeggfelteegudehueegieekveduleeuledvueefjeefffegfeejudfgteefhefhnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddufedrudefgedrudekuddrudefieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurddufeeipdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheprggshhhsrghhuhesnhhvihguihgrrdgtohhmpdhrtghpthhtohephhgvlhhgrggrsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsghhvghlghgrrghssehgohhoghhlvgdrtghomhdprhgtphhtthhopehlihhnuhigqdhptghisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghp
- thhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhikhgrrdifvghsthgvrhgsvghrgheslhhinhhugidrihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tuesday, April 5, 2022 6:36:34 PM CEST Abhishek Sahu wrote:
-> On 2/8/2022 4:00 PM, Abhishek Sahu wrote:
-> > On 2/8/2022 12:28 AM, Rafael J. Wysocki wrote:
-> >> On Saturday, February 5, 2022 12:32:19 AM CET Bjorn Helgaas wrote:
-> >>> [+cc Rafael, hoping for your review :)
-> >>
-> >> +Mika
-> >>
-> >>> Wonder if we should add something like this to MAINTAINERS so you get
-> >>> cc'd on power-related things:
-> >>>
-> >>> diff --git a/MAINTAINERS b/MAINTAINERS
-> >>> index ea3e6c914384..3d9a211cad5d 100644
-> >>> --- a/MAINTAINERS
-> >>> +++ b/MAINTAINERS
-> >>> @@ -15422,6 +15422,7 @@ F:    include/linux/pm.h
-> >>>  F:   include/linux/pm_*
-> >>>  F:   include/linux/powercap.h
-> >>>  F:   kernel/configs/nopm.config
-> >>> +K:   pci_[a-z_]*power[a-z_]*\(
-> >>
-> >> It seems so, but generally PM patches should be CCed to linux-pm anyway.
-> >>
-> >>>
-> >>>  DYNAMIC THERMAL POWER MANAGEMENT (DTPM)
-> >>>  M:   Daniel Lezcano <daniel.lezcano@kernel.org>
-> >>> ]
-> >>>
-> >>> On Mon, Jan 24, 2022 at 05:51:07PM +0530, Abhishek Sahu wrote:
-> >>>> Consider the following sequence during PCI device runtime
-> >>>> suspend/resume:
-> >>>>
-> >>>> 1. PCI device goes into runtime suspended state. The PCI state
-> >>>>    will be changed to PCI_D0 and then pci_platform_power_transition()
-> >>>>    will be called which changes the ACPI state to ACPI_STATE_D3_HOT.
-> >>
-> >> You mean PCI_D3hot I suppose?
-> >>
-> > 
-> >  Yes. It should be PCI_D3hot here. 
-> > 
-> >>>> 2. Parent bridge goes into runtime suspended state. If parent
-> >>>>    bridge supports D3cold, then it will change the power state of all its
-> >>>>    children to D3cold state and the power will be removed.
-> >>>>
-> >>>> 3. During wake-up time, the bridge will be runtime resumed first
-> >>>>    and pci_power_up() will be called for the bridge. Now, the power
-> >>>>    supply will be resumed.
-> >>>>
-> >>>> 4. pci_resume_bus() will be called which will internally invoke
-> >>>>    pci_restore_standard_config(). pci_update_current_state()
-> >>>>    will read PCI_PM_CTRL register and the current_state will be
-> >>>>    updated to D0.
-> >>>>
-> >>>> In the above process, at step 4, the ACPI device state will still be
-> >>>> ACPI_STATE_D3_HOT since pci_platform_power_transition() is not being
-> >>>> invoked.
-> >>
-> >> I'm not quite following.
-> >>
-> >> I'm assuming that this description applies to the endpoint device that was
-> >> previously put into D3_hot.
-> >>
-> > 
-> >  Yes. This is applicable for endpoint devices which was previously put
-> >  into D3hot.
-> > 
-> >> Since its current state is D3_hot, it is not D0 (in particular) and the
-> >> pci_set_power_state() in pci_restore_standard_config() should put int into
-> >> D0 proper, including the platform firmware part.
-> >>
-> > 
-> >  The pci_restore_standard_config() for endpoint devices are being called
-> >  internally during wake-up of upstream bridge. 
-> > 
-> >  pci_power_up(struct pci_dev *dev)
-> >  {
-> >       ...
-> >       if (dev->runtime_d3cold) {
-> >         /*
-> >          * When powering on a bridge from D3cold, the whole hierarchy
-> >          * may be powered on into D0uninitialized state, resume them to
-> >          * give them a chance to suspend again
-> >          */
-> >         pci_resume_bus(dev->subordinate);
-> >     }
-> >     ...
-> >  }
-> > 
-> >  For the upstream bridge, the above code will trigger the wake-up of
-> >  endpoint devices and then following code will be executed for the
-> >  endpoint devices:
-> > 
-> >  pci_update_current_state(struct pci_dev *dev, pci_power_t state)
-> >  {
-> >     if (platform_pci_get_power_state(dev) == PCI_D3cold ||
-> >         !pci_device_is_present(dev)) {
-> >         dev->current_state = PCI_D3cold;
-> >     } else if (dev->pm_cap) {
-> >         u16 pmcsr;
-> > 
-> >         pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-> >         dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
-> >     } else {
-> >         dev->current_state = state;
-> >     }
-> >  }
-> > 
-> >  In the above code, the current_state will be set to D0 for the
-> >  endpoint devices since it will go into second block where
-> >  it will read the PM_CTRL register.
-> >  
-> >>>> We need call the pci_platform_power_transition() with state
-> >>>> D0 to change the ACPI state to ACPI_STATE_D0.
-> >>>>
-> >>>> This patch calls pci_power_up() if current power state is D0 inside
-> >>>> pci_restore_standard_config(). This pci_power_up() will change the
-> >>>> ACPI state to ACPI_STATE_D0.
-> >>>>
-> >>>> Following are the steps to confirm:
-> >>>>
-> >>>> Enable the debug prints in acpi_pci_set_power_state()
-> >>>>
-> >>>> 0000:01:00.0 is PCI device and 0000:00:01.0 is parent bridge device
-> >>>>
-> >>>> Before:
-> >>>>
-> >>>> 0000:01:00.0: power state changed by ACPI to D3hot
-> >>>> 0000:00:01.0: power state changed by ACPI to D3cold
-> >>>> 0000:00:01.0: power state changed by ACPI to D0
-> >>>>
-> >>>> After:
-> >>>>
-> >>>> 0000:01:00.0: power state changed by ACPI to D3hot
-> >>>> 0000:00:01.0: power state changed by ACPI to D3cold
-> >>>> 0000:00:01.0: power state changed by ACPI to D0
-> >>>> 0000:01:00.0: power state changed by ACPI to D0
-> >>>>
-> >>>> So with this patch, the PCI device ACPI state is also being
-> >>>> changed to D0.
-> >>>>
-> >>>> Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
-> >>>> ---
-> >>>>  drivers/pci/pci-driver.c | 14 +++++++++++---
-> >>>>  1 file changed, 11 insertions(+), 3 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-> >>>> index 588588cfda48..64e0cca12f16 100644
-> >>>> --- a/drivers/pci/pci-driver.c
-> >>>> +++ b/drivers/pci/pci-driver.c
-> >>>> @@ -521,14 +521,22 @@ static void pci_device_shutdown(struct device *dev)
-> >>>>   */
-> >>>>  static int pci_restore_standard_config(struct pci_dev *pci_dev)
-> >>>>  {
-> >>>> +   int error = 0;
-> >>>>     pci_update_current_state(pci_dev, PCI_UNKNOWN);
-> >>>>
-> >>>>     if (pci_dev->current_state != PCI_D0) {
-> >>>> -           int error = pci_set_power_state(pci_dev, PCI_D0);
-> >>>> -           if (error)
-> >>>> -                   return error;
-> >>>> +           error = pci_set_power_state(pci_dev, PCI_D0);
-> >>>> +   } else {
-> >>>> +           /*
-> >>>> +            * The platform power state can still be non-D0, so this is
-> >>>> +            * required to change the platform power state to D0.
-> >>>> +            */
-> >>
-> >> This really isn't expected to happen.
-> >>
-> >> If the device's power state has been changed to D3hot by ACPI, it is not in D0.
-> >>
-> >> It looks like the state tracking is not working here.
-> >>
-> > 
-> >  The state setting to D0 is happening due to the current logic present in
-> >  pci_update_current_state(). If we can fix the logic in
-> >  pci_update_current_state() to detect this condition and return state D3hot,
-> >  then it should also fix the issue. 
-> > 
-> >  Thanks,
-> >  Abhishek
-> > 
-> 
->  Hi Rafael/Mika,
-> 
->  Could you please help regarding the correct way to fix this issue.
->  I can update the patch accordingly.
+On Tue, Apr 5, 2022 at 7:06 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> Evan!
+>
+> On Mon, Apr 04 2022 at 12:11, Evan Green wrote:
+> > To my surprise, I'm back with another MSI problem, and hoping to get
+> > some advice on how to approach fixing it.
+>
+> Why am I not surprised?
 
-I think you can try one of the patches posted recently:
+I swear I don't intersect with this stuff that often. Maybe the
+reality is I always intersect with this stuff, it just usually works
+perfectly :)
 
-https://patchwork.kernel.org/project/linux-pm/patch/3623886.MHq7AAxBmi@kreacher/
+>
+> > What worries me is those IRQ "no longer affine" messages, as well as
+> > my "EVAN don't touch hw" prints, indicating that requests to change
+> > the MSI are being dropped. These ignored requests are coming in when
+> > we try to migrate all IRQs off of the non-boot CPU, and they get
+> > ignored because all devices are "frozen" at this point, and presumably
+> > not in D0.
+>
+> They are disabled at that point.
+>
+> > To further try and prove that theory, I wrote a script to do the
+> > hibernate prepare image step in a loop, but messed with XHCI's IRQ
+> > affinity beforehand. If I move the IRQ to core 0, so far I have never
+> > seen a hang. But if I move it to another core, I can usually get a
+> > hang in the first attempt. I also very occasionally see wifi splats
+> > when trying this, and those "no longer affine" prints are all the wifi
+> > queue IRQs. So I think a wifi packet coming in at the wrong time can
+> > do the same thing.
+> >
+> > I wanted to see what thoughts you might have on this. Should I try to
+> > make a patch that moves all IRQs to CPU 0 *before* the devices all
+> > freeze? Sounds a little unpleasant. Or should PCI be doing something
+> > different to avoid this combination of "you're not allowed to modify
+> > my MSIs, but I might still generate interrupts that must not be lost"?
+>
+> PCI cannot do much here and moving interrupts around is papering over
+> the underlying problem.
+>
+> xhci_hcd 0000:00:0d.0: EVAN Write MSI 0 fee1e000 4023
+>
+>   This sets up the interrupt when the driver is loaded
+>
+> xhci_hcd 0000:00:14.0: EVAN Write MSI 0 fee01000 4024
+>
+>   Ditto
+>
+> xhci_hcd 0000:00:0d.0: calling pci_pm_freeze+0x0/0xad @ 423, parent: pci0000:00
+> xhci_hcd 0000:00:14.0: calling pci_pm_freeze+0x0/0xad @ 4644, parent: pci0000:00
+> xhci_hcd 0000:00:14.0: pci_pm_freeze+0x0/0xad returned 0 after 0 usecs
+> xhci_hcd 0000:00:0d.0: EVAN Write MSI 0 fee1e000 4023
+> xhci_hcd 0000:00:0d.0: pci_pm_freeze+0x0/0xad returned 0 after 196000 usecs
+>
+> Those freeze() calls end up in xhci_suspend(), which tears down the XHCI
+> and ensures that no interrupts are on flight.
 
-Thanks!
+Your hint here about xhci_suspend() was helpful. It turns out this is
+not called in the freeze path, usb_hcd_pci_pm_ops just calls
+check_root_hub_suspended(). The documentation in devices.rst is pretty
+clear about this:
+
+```
+The ``->freeze`` methods should quiesce the device so that it doesn't
+generate IRQs or DMA
+```
+
+So I think you're right that the PM layer is doing everything right
+(though with a bit of a footgun that if you mess up and generate an
+interrupt after freeze it may just be gone forever), and usb core is
+at fault here. I've been testing with this patch (mangled in email),
+and so far the issue seems to be gone:
+
+@@ -614,10 +622,10 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
+        .suspend_noirq  = hcd_pci_suspend_noirq,
+        .resume_noirq   = hcd_pci_resume_noirq,
+        .resume         = hcd_pci_resume,
+-       .freeze         = check_root_hub_suspended,
+-       .freeze_noirq   = check_root_hub_suspended,
+-       .thaw_noirq     = NULL,
+-       .thaw           = NULL,
++       .freeze         = hcd_pci_suspend,
++       .freeze_noirq   = hcd_pci_suspend_noirq,
++       .thaw_noirq     = hcd_pci_resume_noirq,
++       .thaw           = hcd_pci_resume,
+        .poweroff       = hcd_pci_suspend,
+        .poweroff_noirq = hcd_pci_suspend_noirq,
+        .restore_noirq  = hcd_pci_resume_noirq,
 
 
+As an aside, one might wonder "why don't we see this everywhere
+then?". I think that's because Intel missed a patch enabling runtime
+pm on one of these XHCI controllers (8086:51ed). See the quirks below,
+that missing 2 on 00:14.0 is XHCI_DEFAULT_PM_RUNTIME_ALLOW:
+# dmesg | grep quirks
+[    2.804073] xhci_hcd 0000:00:0d.0: hcc params 0x20007fc1 hci
+version 0x120 quirks 0x0000000200009810
+[    3.108045] xhci_hcd 0000:00:14.0: hcc params 0x20007fc1 hci
+version 0x120 quirks 0x0000000000009810
 
+If the XHCI controller were usually in runtime suspend when freeze()
+got called, it would be fully quiesced and would not lose its
+interrupt. I had noticed this earlier, and it did reduce the repro
+rate, but did not reduce it to zero. Now it makes sense why.
+
+I think I have enough info to go make a USB patch now. Thank you for you help!
+-Evan
+
+>
+> xhci_hcd 0000:00:0d.0: calling pci_pm_freeze_noirq+0x0/0xb2 @ 4645, parent: pci0000:00
+> xhci_hcd 0000:00:0d.0: pci_pm_freeze_noirq+0x0/0xb2 returned 0 after 30 usecs
+> xhci_hcd 0000:00:14.0: calling pci_pm_freeze_noirq+0x0/0xb2 @ 4644, parent: pci0000:00
+> xhci_hcd 0000:00:14.0: pci_pm_freeze_noirq+0x0/0xb2 returned 0 after 3118 usecs
+>
+>    Now the devices are disabled and not accessible
+>
+> xhci_hcd 0000:00:14.0: EVAN Don't touch hw 0 fee00000 4024
+> xhci_hcd 0000:00:0d.0: EVAN Don't touch hw 0 fee1e000 4045
+> xhci_hcd 0000:00:0d.0: EVAN Don't touch hw 0 fee00000 4045
+> xhci_hcd 0000:00:14.0: calling pci_pm_thaw_noirq+0x0/0x70 @ 9, parent: pci0000:00
+> xhci_hcd 0000:00:14.0: EVAN Write MSI 0 fee00000 4024
+>
+>    This is the early restore _before_ the XHCI resume code is called
+>    This interrupt is targeted at CPU0 (it's the one which could not be
+>    written above).
+>
+> xhci_hcd 0000:00:14.0: pci_pm_thaw_noirq+0x0/0x70 returned 0 after 5272 usecs
+> xhci_hcd 0000:00:0d.0: calling pci_pm_thaw_noirq+0x0/0x70 @ 1123, parent: pci0000:00
+> xhci_hcd 0000:00:0d.0: EVAN Write MSI 0 fee00000 4045
+>
+>    Ditto
+>
+> xhci_hcd 0000:00:0d.0: pci_pm_thaw_noirq+0x0/0x70 returned 0 after 623 usecs
+> xhci_hcd 0000:00:14.0: calling pci_pm_thaw+0x0/0x7c @ 3856, parent: pci0000:00
+> xhci_hcd 0000:00:14.0: pci_pm_thaw+0x0/0x7c returned 0 after 0 usecs
+> xhci_hcd 0000:00:0d.0: calling pci_pm_thaw+0x0/0x7c @ 4664, parent: pci0000:00
+> xhci_hcd 0000:00:0d.0: pci_pm_thaw+0x0/0x7c returned 0 after 0 usecs
+>
+> That means the suspend/resume logic is doing the right thing.
+>
+> How the XHCI ends up being confused here is a mystery. Cc'ed a few more folks.
+>
+> Thanks,
+>
+>         tglx
+>
+>
