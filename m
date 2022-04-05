@@ -2,42 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 081BE4F4582
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 00:48:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD754F45C5
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 00:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234274AbiDEMzM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Apr 2022 08:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44100 "EHLO
+        id S241155AbiDEMzb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Apr 2022 08:55:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382392AbiDEMPE (ORCPT
+        with ESMTP id S1382415AbiDEMPE (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Apr 2022 08:15:04 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2324BB0A6F;
-        Tue,  5 Apr 2022 04:25:31 -0700 (PDT)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69EFBAFAFA;
+        Tue,  5 Apr 2022 04:25:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649157932; x=1680693932;
+  t=1649157934; x=1680693934;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=8n2YxQNWVhdkwtjAv52Li27hbMlbmN6l6OeLTPUnnGY=;
-  b=rQy1fe6rIbmakySXGVive3IJs0OraO33Hp+VDkVqRTe7O7zKN9QGTdfh
-   c3pEAuIiZJqMw9t/5Zo5M6AKDaMByHN9qJMi93gWkccB2OJS0D0Tpur0d
-   nHnsdD2uuWFHabcH8iLEN0Fp074O6oVo1ndSOzCOaqYTZhsE3WnBSSNC1
-   k4vEMqznnLRUIXWOm/1+AcgN0oIpMOU4kmAeTPhnPJW5aUAf1hDsuJkUG
-   aNcorcFza29cbcgIIsxmqHZkc6pZtVjv1v/gUXLTjFNhdIT1vr0RH3U9a
-   1H4U1qZSXGQ2rms8UnvHH9VGgqHR7pQlXx54cC1lxE1E7yWGDPRFUdues
-   g==;
+  bh=B3e5nwQfZpposlIlxa12xtU2rD09+R4h9VUHhMbRZHs=;
+  b=S4g8iLAs0kMb193fq9FPnwUL7YXH8BLFyYETy/LB4PUdDRP+oN8Dn+Y0
+   57sW9x2/gwkAuzq0ufKWOisdEZ+ljg39ux5yC6g0kO9FooukiSYYYDVy/
+   S3nNQD5hv7hr3t37FmjLzIMZE/B86GtRfX0cPnN7bxhRIOXUCK1Sn7Gr0
+   gMQjFWj1Z/wvST6Ig+OF/D4SrKxKTQLwVqTXV7k5ICHsVdSG3qTYvERop
+   NWIY5L8NHrY+7qfUz0BQpOVfe6GpkLOu2gYDaa6d67JNsBa1zcier3U5g
+   6gSwwumkI/eOmpCmE2SPZJiJg3yUdyox+4HMdra7a88NG8VhgNbeuwBw3
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.90,236,1643698800"; 
-   d="scan'208";a="151544594"
+   d="scan'208";a="158916331"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Apr 2022 04:25:31 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Apr 2022 04:25:33 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 5 Apr 2022 04:25:29 -0700
+ 15.1.2375.17; Tue, 5 Apr 2022 04:25:32 -0700
 Received: from localhost.localdomain (10.10.115.15) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Tue, 5 Apr 2022 04:25:27 -0700
+ 15.1.2375.17 via Frontend Transport; Tue, 5 Apr 2022 04:25:30 -0700
 From:   Claudiu Beznea <claudiu.beznea@microchip.com>
 To:     <robh+dt@kernel.org>, <nicolas.ferre@microchip.com>,
         <alexandre.belloni@bootlin.com>, <p.zabel@pengutronix.de>,
@@ -46,9 +46,9 @@ CC:     <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-pm@vger.kernel.org>,
         Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH 3/8] dt-bindings: reset: atmel,at91sam9260-reset: add sama7g5 bindings
-Date:   Tue, 5 Apr 2022 14:27:19 +0300
-Message-ID: <20220405112724.2760905-4-claudiu.beznea@microchip.com>
+Subject: [PATCH 4/8] dt-bindings: reset: add sama7g5 definitions
+Date:   Tue, 5 Apr 2022 14:27:20 +0300
+Message-ID: <20220405112724.2760905-5-claudiu.beznea@microchip.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220405112724.2760905-1-claudiu.beznea@microchip.com>
 References: <20220405112724.2760905-1-claudiu.beznea@microchip.com>
@@ -65,70 +65,31 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add documentation for SAMA7G5 reset controller. Compared with previous
-versions of reset controllers this one contains support for resetting
-in SoC devices (e.g. USB PHYs).
+Add reset bindings for SAMA7G5. At the moment only USB PHYs are
+included.
 
 Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 ---
- .../reset/atmel,at91sam9260-reset.yaml        | 23 +++++++++++++++++--
- 1 file changed, 21 insertions(+), 2 deletions(-)
+ include/dt-bindings/reset/sama7g5-reset.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+ create mode 100644 include/dt-bindings/reset/sama7g5-reset.h
 
-diff --git a/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml b/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
-index 92936c987c9a..a165c10ae474 100644
---- a/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
-+++ b/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
-@@ -10,7 +10,8 @@ maintainers:
-   - Claudiu Beznea <claudiu.beznea@gmail.com>
- 
- description: |
--  The system reset controller can be used to reset the CPU.
-+  The system reset controller can be used to reset the CPU. In case of
-+  SAMA7G5 it can also reset some devices (e.g. USB PHYs).
- 
- properties:
-   compatible:
-@@ -21,21 +22,39 @@ properties:
-               - atmel,at91sam9g45-rstc
-               - atmel,sama5d3-rstc
-               - microchip,sam9x60-rstc
-+              - microchip,sama7g5-rstc
-       - items:
-           - const: atmel,sama5d3-rstc
-           - const: atmel,at91sam9g45-rstc
- 
-   reg:
--    maxItems: 1
-+    minItems: 1
-+    items:
-+      - description: base registers for system reset control
-+      - description: registers for device specific reset control
- 
-   clocks:
-     maxItems: 1
- 
-+  "#reset-cells":
-+    const: 1
+diff --git a/include/dt-bindings/reset/sama7g5-reset.h b/include/dt-bindings/reset/sama7g5-reset.h
+new file mode 100644
+index 000000000000..670d8075f463
+--- /dev/null
++++ b/include/dt-bindings/reset/sama7g5-reset.h
+@@ -0,0 +1,10 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
 +
- required:
-   - compatible
-   - reg
-   - clocks
- 
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - microchip,sama7g5-rstc
-+    then:
-+      required:
-+        - "#reset-cells"
++#ifndef __DT_BINDINGS_RESET_SAMA7G5_H
++#define __DT_BINDINGS_RESET_SAMA7G5_H
 +
- additionalProperties: false
- 
- examples:
++#define RESET_USB_PHY1		4
++#define RESET_USB_PHY2		5
++#define RESET_USB_PHY3		6
++
++#endif /* __DT_BINDINGS_RESET_SAMA7G5_H */
 -- 
 2.32.0
 
