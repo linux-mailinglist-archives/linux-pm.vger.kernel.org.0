@@ -2,148 +2,243 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77FEB4F48A9
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 02:09:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 478AF4F48A3
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 02:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383585AbiDEVpW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Apr 2022 17:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
+        id S1379800AbiDEVow (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Apr 2022 17:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444822AbiDEPmE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Apr 2022 11:42:04 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADAE318B258;
-        Tue,  5 Apr 2022 07:06:52 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649167611;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=i81MASCCDw38dcKZylteUy/3pg50r3ulw2eAeBX1oQs=;
-        b=blb33Z/hkJODAWD0H0EQS/ucph9bnmTVwHRBaB8faYgOxdQiY1v+iBJaTHaNRuekJOtKPN
-        ftfSFYAe47v1dSNmihMBBH1Uu2xNTQVJdwHgnmhPTKiUEX4R9aGzzLCR0dShjccozOAAxp
-        oUI31XXjZk6cepgUaDwHHR6kYrdPUEy1C/4NzSt243SIacCu3JMKAXrZWqTLmqCAfJKtyt
-        Qwqz8k+Xo9itZXJ/J3gtQ2OzmHnvTghPeHmofW/8CsWy0Qp+5G+OH+2EC+BLPl1vpolf5d
-        LVWC3JV9vCMAYgjfutiivuCw3TVl2I1CqCzViZal/pBka4S7ZXg5GBCAdH3Oxg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649167611;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=i81MASCCDw38dcKZylteUy/3pg50r3ulw2eAeBX1oQs=;
-        b=6qOMCJYfbs8XtKREWwkNMmyZpa/kppvHyluNeM4S50mmbUr3N+rkt67nQ6cuHWbR+xWQR8
-        crbdlICxoSpd+BDQ==
-To:     Evan Green <evgreen@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Rajat Jain <rajatja@chromium.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: Lost MSIs during hibernate
-In-Reply-To: <CAE=gft4a-QL82iFJE_xRQ3JrMmz-KZKWREtz=MghhjFbJeK=8A@mail.gmail.com>
-Date:   Tue, 05 Apr 2022 16:06:50 +0200
-Message-ID: <87a6cz39qd.ffs@tglx>
+        with ESMTP id S1446274AbiDEPoY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Apr 2022 11:44:24 -0400
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A92E6C78;
+        Tue,  5 Apr 2022 07:13:10 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2eb43ad7909so85992257b3.2;
+        Tue, 05 Apr 2022 07:13:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0m0X8qD7jgaOpFhSCX1pI9/lBF4aFgFkK0POJ3FtM5M=;
+        b=oop02PYzQjf4I81Lgk4YHXpzi42n6WQveIpvF1+LxhlRXlBzom659lzoHZVZW8RA4f
+         i9VrfhAx+htfKK6+HHav6cGsfp4pSaozu8Y6va4FPwBKBNMvEfW+HIzvD+s/5zv6kcAW
+         VScgyYuKNHatNNWNwYAwo6vDB7QMJuXlQTtcVWaNAvf6kQ8oldpg8FL6M4jmKQigbaMn
+         ef4nPOFy981kzrUeawhcNAkHuyoSdOROd6truwdQ7qTV638O5j5Cy3JEpNKaudeHfSxw
+         yZyz733yGUe1tlEMIjAQ2fw6FmB5P7yGvYAP4M9tiFmwZcQlN/RSGjWE5DSu/pPna7AN
+         D3tA==
+X-Gm-Message-State: AOAM533eKEhvmfbZ+W3FKVOMlBuGOh9pe6H4UDEObRCxRmXaINPnLL0u
+        s0AWfQ4CEYNywmH6p/kDPe/lNr1oHF8ud6O3NpwSivjT
+X-Google-Smtp-Source: ABdhPJxwMh75H+q2lMm7lfhlZkhQSxK3Xl3vxLiAsuHwCOepfUfgE7YhAm+UQ8tjNWYOfmUWiErC4e6KhAn6L+k5ZXk=
+X-Received: by 2002:a81:1257:0:b0:2eb:97cf:a4a2 with SMTP id
+ 84-20020a811257000000b002eb97cfa4a2mr2865951yws.149.1649167989258; Tue, 05
+ Apr 2022 07:13:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220403054822.16868-1-rdunlap@infradead.org> <20220403054822.16868-2-rdunlap@infradead.org>
+In-Reply-To: <20220403054822.16868-2-rdunlap@infradead.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 5 Apr 2022 16:12:58 +0200
+Message-ID: <CAJZ5v0gZvd_Uw02_K7fWGYFtTncSTxdeoR6z=PQ5e0DM255k8A@mail.gmail.com>
+Subject: Re: [PATCH 1/3 v3] Docs: admin/kernel-parameters: edit a few boot options
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-s390@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        sparclinux@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        linux-ia64@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <lenb@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Evan!
-
-On Mon, Apr 04 2022 at 12:11, Evan Green wrote:
-> To my surprise, I'm back with another MSI problem, and hoping to get
-> some advice on how to approach fixing it.
-
-Why am I not surprised?
-
-> What worries me is those IRQ "no longer affine" messages, as well as
-> my "EVAN don't touch hw" prints, indicating that requests to change
-> the MSI are being dropped. These ignored requests are coming in when
-> we try to migrate all IRQs off of the non-boot CPU, and they get
-> ignored because all devices are "frozen" at this point, and presumably
-> not in D0.
-
-They are disabled at that point.
-
-> To further try and prove that theory, I wrote a script to do the
-> hibernate prepare image step in a loop, but messed with XHCI's IRQ
-> affinity beforehand. If I move the IRQ to core 0, so far I have never
-> seen a hang. But if I move it to another core, I can usually get a
-> hang in the first attempt. I also very occasionally see wifi splats
-> when trying this, and those "no longer affine" prints are all the wifi
-> queue IRQs. So I think a wifi packet coming in at the wrong time can
-> do the same thing.
+On Sun, Apr 3, 2022 at 7:48 AM Randy Dunlap <rdunlap@infradead.org> wrote:
 >
-> I wanted to see what thoughts you might have on this. Should I try to
-> make a patch that moves all IRQs to CPU 0 *before* the devices all
-> freeze? Sounds a little unpleasant. Or should PCI be doing something
-> different to avoid this combination of "you're not allowed to modify
-> my MSIs, but I might still generate interrupts that must not be lost"?
+> Clean up some of admin-guide/kernel-parameters.txt:
+>
+> a. "smt" should be "smt=" (S390)
+> b. (dropped)
+> c. Sparc supports the vdso= boot option
+> d. make the tp_printk options (2) formatting similar to other options
+>    by adding spacing
+> e. add "trace_clock=" with a reference to Documentation/trace/ftrace.rst
+> f. use [IA-64] as documented instead of [ia64]
+> g. fix formatting and text for test_suspend=
+> h. fix formatting for swapaccount=
+> i. fix formatting and grammar for video.brightness_switch_enabled=
+>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Heiko Carstens <hca@linux.ibm.com>
+> Cc: Vasily Gorbik <gor@linux.ibm.com>
+> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+> Cc: Sven Schnelle <svens@linux.ibm.com>
+> Cc: linux-s390@vger.kernel.org
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: sparclinux@vger.kernel.org
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: linux-ia64@vger.kernel.org
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-acpi@vger.kernel.org
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
 
-PCI cannot do much here and moving interrupts around is papering over
-the underlying problem.
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-xhci_hcd 0000:00:0d.0: EVAN Write MSI 0 fee1e000 4023
+for the test_suspend and ACPI video pieces.
 
-  This sets up the interrupt when the driver is loaded
-
-xhci_hcd 0000:00:14.0: EVAN Write MSI 0 fee01000 4024
-
-  Ditto
-
-xhci_hcd 0000:00:0d.0: calling pci_pm_freeze+0x0/0xad @ 423, parent: pci0000:00
-xhci_hcd 0000:00:14.0: calling pci_pm_freeze+0x0/0xad @ 4644, parent: pci0000:00
-xhci_hcd 0000:00:14.0: pci_pm_freeze+0x0/0xad returned 0 after 0 usecs
-xhci_hcd 0000:00:0d.0: EVAN Write MSI 0 fee1e000 4023
-xhci_hcd 0000:00:0d.0: pci_pm_freeze+0x0/0xad returned 0 after 196000 usecs
-
-Those freeze() calls end up in xhci_suspend(), which tears down the XHCI
-and ensures that no interrupts are on flight.
-
-xhci_hcd 0000:00:0d.0: calling pci_pm_freeze_noirq+0x0/0xb2 @ 4645, parent: pci0000:00
-xhci_hcd 0000:00:0d.0: pci_pm_freeze_noirq+0x0/0xb2 returned 0 after 30 usecs
-xhci_hcd 0000:00:14.0: calling pci_pm_freeze_noirq+0x0/0xb2 @ 4644, parent: pci0000:00
-xhci_hcd 0000:00:14.0: pci_pm_freeze_noirq+0x0/0xb2 returned 0 after 3118 usecs
-
-   Now the devices are disabled and not accessible
-
-xhci_hcd 0000:00:14.0: EVAN Don't touch hw 0 fee00000 4024
-xhci_hcd 0000:00:0d.0: EVAN Don't touch hw 0 fee1e000 4045
-xhci_hcd 0000:00:0d.0: EVAN Don't touch hw 0 fee00000 4045
-xhci_hcd 0000:00:14.0: calling pci_pm_thaw_noirq+0x0/0x70 @ 9, parent: pci0000:00
-xhci_hcd 0000:00:14.0: EVAN Write MSI 0 fee00000 4024
-
-   This is the early restore _before_ the XHCI resume code is called
-   This interrupt is targeted at CPU0 (it's the one which could not be
-   written above).
-
-xhci_hcd 0000:00:14.0: pci_pm_thaw_noirq+0x0/0x70 returned 0 after 5272 usecs
-xhci_hcd 0000:00:0d.0: calling pci_pm_thaw_noirq+0x0/0x70 @ 1123, parent: pci0000:00
-xhci_hcd 0000:00:0d.0: EVAN Write MSI 0 fee00000 4045
-
-   Ditto
-
-xhci_hcd 0000:00:0d.0: pci_pm_thaw_noirq+0x0/0x70 returned 0 after 623 usecs
-xhci_hcd 0000:00:14.0: calling pci_pm_thaw+0x0/0x7c @ 3856, parent: pci0000:00
-xhci_hcd 0000:00:14.0: pci_pm_thaw+0x0/0x7c returned 0 after 0 usecs
-xhci_hcd 0000:00:0d.0: calling pci_pm_thaw+0x0/0x7c @ 4664, parent: pci0000:00
-xhci_hcd 0000:00:0d.0: pci_pm_thaw+0x0/0x7c returned 0 after 0 usecs
-
-That means the suspend/resume logic is doing the right thing.
-
-How the XHCI ends up being confused here is a mystery. Cc'ed a few more folks.
-
-Thanks,
-
-        tglx
-
-
+> ---
+> v3: add trace_clock= specifics (Steven)
+> v2: drop "smt-enabled" for arch/powerpc/ (Michael)
+>
+>  Documentation/admin-guide/kernel-parameters.txt |   47 ++++++++++----
+>  1 file changed, 36 insertions(+), 11 deletions(-)
+>
+> --- linux-next-20220331.orig/Documentation/admin-guide/kernel-parameters.txt
+> +++ linux-next-20220331/Documentation/admin-guide/kernel-parameters.txt
+> @@ -2814,7 +2814,7 @@
+>                         different yeeloong laptops.
+>                         Example: machtype=lemote-yeeloong-2f-7inch
+>
+> -       max_addr=nn[KMG]        [KNL,BOOT,ia64] All physical memory greater
+> +       max_addr=nn[KMG]        [KNL,BOOT,IA-64] All physical memory greater
+>                         than or equal to this physical address is ignored.
+>
+>         maxcpus=        [SMP] Maximum number of processors that an SMP kernel
+> @@ -3057,7 +3057,7 @@
+>
+>         mga=            [HW,DRM]
+>
+> -       min_addr=nn[KMG]        [KNL,BOOT,ia64] All physical memory below this
+> +       min_addr=nn[KMG]        [KNL,BOOT,IA-64] All physical memory below this
+>                         physical address is ignored.
+>
+>         mini2440=       [ARM,HW,KNL]
+> @@ -5388,7 +5388,7 @@
+>                                 1: Fast pin select (default)
+>                                 2: ATC IRMode
+>
+> -       smt             [KNL,S390] Set the maximum number of threads (logical
+> +       smt=            [KNL,S390] Set the maximum number of threads (logical
+>                         CPUs) to use per physical CPU on systems capable of
+>                         symmetric multithreading (SMT). Will be capped to the
+>                         actual hardware limit.
+> @@ -5774,8 +5774,9 @@
+>                         This parameter controls use of the Protected
+>                         Execution Facility on pSeries.
+>
+> -       swapaccount=[0|1]
+> -                       [KNL] Enable accounting of swap in memory resource
+> +       swapaccount=    [KNL]
+> +                       Format: [0|1]
+> +                       Enable accounting of swap in memory resource
+>                         controller if no parameter or 1 is given or disable
+>                         it if 0 is given (See Documentation/admin-guide/cgroup-v1/memory.rst)
+>
+> @@ -5821,7 +5822,8 @@
+>
+>         tdfx=           [HW,DRM]
+>
+> -       test_suspend=   [SUSPEND][,N]
+> +       test_suspend=   [SUSPEND]
+> +                       Format: { "mem" | "standby" | "freeze" }[,N]
+>                         Specify "mem" (for Suspend-to-RAM) or "standby" (for
+>                         standby suspend) or "freeze" (for suspend type freeze)
+>                         as the system sleep state during system startup with
+> @@ -5908,6 +5910,28 @@
+>         trace_buf_size=nn[KMG]
+>                         [FTRACE] will set tracing buffer size on each cpu.
+>
+> +       trace_clock=    [FTRACE] Set the clock used for tracing events
+> +                       at boot up.
+> +                       local - Use the per CPU time stamp counter
+> +                               (converted into nanoseconds). Fast, but
+> +                               depending on the architecture, may not be
+> +                               in sync between CPUs.
+> +                       global - Event time stamps are synchronize across
+> +                               CPUs. May be slower than the local clock,
+> +                               but better for some race conditions.
+> +                       counter - Simple counting of events (1, 2, ..)
+> +                               note, some counts may be skipped due to the
+> +                               infrastructure grabbing the clock more than
+> +                               once per event.
+> +                       uptime - Use jiffies as the time stamp.
+> +                       perf - Use the same clock that perf uses.
+> +                       mono - Use ktime_get_mono_fast_ns() for time stamps.
+> +                       mono_raw - Use ktime_get_raw_fast_ns() for time
+> +                               stamps.
+> +                       boot - Use ktime_get_boot_fast_ns() for time stamps.
+> +                       Architectures may add more clocks. See
+> +                       Documentation/trace/ftrace.rst for more details.
+> +
+>         trace_event=[event-list]
+>                         [FTRACE] Set and start specified trace events in order
+>                         to facilitate early boot debugging. The event-list is a
+> @@ -5930,7 +5954,7 @@
+>                         See also Documentation/trace/ftrace.rst "trace options"
+>                         section.
+>
+> -       tp_printk[FTRACE]
+> +       tp_printk       [FTRACE]
+>                         Have the tracepoints sent to printk as well as the
+>                         tracing ring buffer. This is useful for early boot up
+>                         where the system hangs or reboots and does not give the
+> @@ -5952,7 +5976,7 @@
+>                         frequency tracepoints such as irq or sched, can cause
+>                         the system to live lock.
+>
+> -       tp_printk_stop_on_boot[FTRACE]
+> +       tp_printk_stop_on_boot [FTRACE]
+>                         When tp_printk (above) is set, it can cause a lot of noise
+>                         on the console. It may be useful to only include the
+>                         printing of events during boot up, as user space may
+> @@ -6301,7 +6325,7 @@
+>                                         HIGHMEM regardless of setting
+>                                         of CONFIG_HIGHPTE.
+>
+> -       vdso=           [X86,SH]
+> +       vdso=           [X86,SH,SPARC]
+>                         On X86_32, this is an alias for vdso32=.  Otherwise:
+>
+>                         vdso=1: enable VDSO (the default)
+> @@ -6327,11 +6351,12 @@
+>         video=          [FB] Frame buffer configuration
+>                         See Documentation/fb/modedb.rst.
+>
+> -       video.brightness_switch_enabled= [0,1]
+> +       video.brightness_switch_enabled= [ACPI]
+> +                       Format: [0|1]
+>                         If set to 1, on receiving an ACPI notify event
+>                         generated by hotkey, video driver will adjust brightness
+>                         level and then send out the event to user space through
+> -                       the allocated input device; If set to 0, video driver
+> +                       the allocated input device. If set to 0, video driver
+>                         will only send out the event without touching backlight
+>                         brightness level.
+>                         default: 1
