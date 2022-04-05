@@ -2,168 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 448F34F4605
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 00:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7004F43D0
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 00:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236432AbiDEMzQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 5 Apr 2022 08:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39692 "EHLO
+        id S238842AbiDEOrr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 5 Apr 2022 10:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349394AbiDEMmU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Apr 2022 08:42:20 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F99E10781D
-        for <linux-pm@vger.kernel.org>; Tue,  5 Apr 2022 04:48:14 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nbhfB-0004q9-7F; Tue, 05 Apr 2022 13:47:57 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nbhfB-001DEo-FU; Tue, 05 Apr 2022 13:47:56 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nbhf9-00054N-7F; Tue, 05 Apr 2022 13:47:55 +0200
-Message-ID: <0ff9a7cd2e6261a0de32db3bf16901e3737efef8.camel@pengutronix.de>
-Subject: Re: [PATCH 6/8] power: reset: at91-reset: add reset_controller_dev
- support
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>, robh+dt@kernel.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        sre@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Date:   Tue, 05 Apr 2022 13:47:55 +0200
-In-Reply-To: <20220405112724.2760905-7-claudiu.beznea@microchip.com>
-References: <20220405112724.2760905-1-claudiu.beznea@microchip.com>
-         <20220405112724.2760905-7-claudiu.beznea@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.38.3-1 
+        with ESMTP id S1382375AbiDEORR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 5 Apr 2022 10:17:17 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2057.outbound.protection.outlook.com [40.107.220.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF51511BCF9;
+        Tue,  5 Apr 2022 06:01:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Mv+UgOlWnHKuY8eIzzJH+Dkbio0qMDcVxRFPILH7tHzXNXexipOk+FEDg0H5F3XfjwcVrWp/v4scquDwdpw6n0dw9h5fuLaq5b7tLtvYY6+hKVeUJceEr2YCh1hB0si70ZEaHRx3ciQKSvEYoU2F/WJ0uFsds8jr0FoqxFcwFvBD+07UKPSWxdA83gRgTcFYvR7L1TCc4ukIuZTgnlkJDTU3Vp53sZLwEopj5RmYBKhvwV0U22PJb2Y3z2BZx9fF3hFxeWpLo414ka/cviJIuA9lKbtaHwSUCu8S/ps6kq3OWDDxTgUXglb4+Vs4F6AkbiYRy6YYoXRT7uk55ih0eQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0jiZqiuA4bL/Xl4sXyXV/fFxhFrzn1JlNSbgW6WB1YI=;
+ b=bxVexal4p09bNddM+nieVgV3IPeYlyvokKeUjCnBKtBvDQBXwTetPuVx6XkXu0Oj63wBYWYRB8fzydAZSe8JIhw1XEVW77KFDVHn7EHJs1V0YCYSHJXjrPZgb6+hBTSqyru+x9hWAqWvUSUF9nLHXtLukn3YwtiCXeBVAZjRnABVgfuUoLCeuwVSuPSDPjC5e2sRElFbzAnFJb6jVgIPNtdkUCIZLL4jgYaQsvEh26c4YP/YZjmwRIWOFp+BZSaPrSIRj4JPZRgyuRKlj8Xmie3gltsCbipuHVvHprjhEft/5fZ262+1QalcqzON3KBdlT3LVkUttqFhOm/Yl9JT2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0jiZqiuA4bL/Xl4sXyXV/fFxhFrzn1JlNSbgW6WB1YI=;
+ b=VnoZZwyYL1GXk65Cch0NN3n49Zo8Pkqr9nG0LzKWwW+6ZLCsS570JgDkoU8cgrG462sm6bwF3d7t3i7n0AklWJPKrGL/PsABxlsAW9LZUFtowujQgnrAft6wKn4MucjfxbkP83Zc7n1O//5uuxGxb8vqej0mCFHorWZ1WRFzz4k7BjkWxJd94CYnlSK+P50ivLTeqfeGz6dPerHdE/LIHR2Z78j0IVO8JhaiEMFhvWVsZYv38+vK8E33rPsgUyxnBfYQXh7rOt8P1BMHdJgmeM35Hq3Vy5Aux4XG9xvFTb+JKwjOnLxMV9Z7XQSoEGMpwXZtNKSkzqRwAirSQMcBAw==
+Received: from DS7P222CA0005.NAMP222.PROD.OUTLOOK.COM (2603:10b6:8:2e::17) by
+ MWHPR12MB1806.namprd12.prod.outlook.com (2603:10b6:300:10d::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Tue, 5 Apr
+ 2022 13:01:48 +0000
+Received: from DM6NAM11FT032.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:2e:cafe::76) by DS7P222CA0005.outlook.office365.com
+ (2603:10b6:8:2e::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.13 via Frontend
+ Transport; Tue, 5 Apr 2022 13:01:48 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.235) by
+ DM6NAM11FT032.mail.protection.outlook.com (10.13.173.93) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5123.19 via Frontend Transport; Tue, 5 Apr 2022 13:01:47 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 5 Apr
+ 2022 13:01:47 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 5 Apr 2022
+ 06:01:46 -0700
+Received: from sumitg-l4t.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server id 15.2.986.22 via Frontend
+ Transport; Tue, 5 Apr 2022 06:01:43 -0700
+From:   Sumit Gupta <sumitg@nvidia.com>
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>, <treding@nvidia.com>,
+        <jonathanh@nvidia.com>, <linux-pm@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <ksitaraman@nvidia.com>, <sanjayc@nvidia.com>, <bbasu@nvidia.com>,
+        <sumitg@nvidia.com>
+Subject: [Patch v4 4/4] arm64: tegra: add node for tegra234 cpufreq
+Date:   Tue, 5 Apr 2022 18:31:19 +0530
+Message-ID: <20220405130119.4697-5-sumitg@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220405130119.4697-1-sumitg@nvidia.com>
+References: <20220405130119.4697-1-sumitg@nvidia.com>
+X-NVConfidentiality: public
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5a0d1af0-1579-4906-61da-08da170471a0
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1806:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR12MB18069EBEED38796CF50FAA56B9E49@MWHPR12MB1806.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Zw321ry2odIqITdbSssDdazv89WR6VAk7H4lecQsmHTIzGQ+PMKEtXilrCcNE4dhK0+bWrwJHgGchpJKDI5UIGmB3nZ2A0Cvobfif/adjeTvh8Es/3DPD1wykxYxSiIeF+SSYsYjx3LTpByO80OIzpQHHURvi1xhxYTAISKqO62x0yz+QIyFSEWPlrQ1cj4UzaCdAefddhNijxzwXRPTTvfO3Nf/zgWqhP3CprM6fldqPfOB8psJw9vklyPABZviSuyXQCQwrz2Y521KQbthQFvmnTBMfnpGdduNZ0pt7VLZPRN0uU+Ti3x/MjxllapJJG/kMrWE2yWlEk9/MZDf2efNM2VAAVkhIU8mrLXKACm5cXGtyepyM/GsZbjmujKvHlVhHLLkCqGqQexu1w1ZE4QCLtGoJ4YIQYZptymKOhhcwH9bqtHIz0GN8Cv91rxmOXISKsVWSg3iti1wI3bvnb1dGqb6AnZCBY5v6hHf4k1vE7VzyiNCQQ6I9IozXX2U3UW/jEPJBm4nezTxPJ0L1jrZjLW+fkdp931v+vTCqO9+Gk3v2KLiFscyyPoae7wJ95vz7CoKAzdpp/0aq5g2H1a+ZXduVKx/+Q1Krb8eE8Wk6jO0fZYMq7nT+YdUec3udUQoSBcLRM2YhMI4lNBBbOZaF4FKuYFN6Iv+HotqUB9vl99ITzHgseoy6f2fyDzS4eHfYdieRzkZ80PD12Wfy7ZX8wGNZ9WanzAvjy/62SY=
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(2616005)(5660300002)(1076003)(107886003)(2906002)(36860700001)(82310400005)(8936002)(921005)(7696005)(4744005)(356005)(47076005)(36756003)(86362001)(316002)(4326008)(70586007)(70206006)(83380400001)(40460700003)(6666004)(81166007)(8676002)(186003)(26005)(426003)(54906003)(336012)(508600001)(110136005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2022 13:01:47.8740
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a0d1af0-1579-4906-61da-08da170471a0
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT032.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1806
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGkgQ2xhdWRpdSwKCk9uIERpLCAyMDIyLTA0LTA1IGF0IDE0OjI3ICswMzAwLCBDbGF1ZGl1IEJl
-em5lYSB3cm90ZToKPiBTQU1BN0c1IHJlc2V0IGNvbnRyb2xsZXIgaGFzIDUgZXh0cmEgbGluZXMg
-dGhhdCBnb2VzIHRvIGRpZmZlcmVudAo+IGRldmljZXMKPiAoMyBsaW5lcyB0byBVU0IgUEhZcywg
-MSBsaW5lIHRvIEREUiBjb250cm9sbGVyLCBvbmUgbGluZSBERFIgUEhZCj4gY29udHJvbGxlciku
-IFRoZXNlIHJlc2V0IGxpbmVzIGNvdWxkIGJlIHJlcXVlc3RlZCBieSBkaWZmZXJlbnQKPiBjb250
-cm9sbGVyCj4gZHJpdmVycyAoZS5nLiBVU0IgUEhZIGRyaXZlcikgYW5kIHRoZXNlIGNvbnRyb2xs
-ZXJzJyBkcml2ZXJzIGNvdWxkCj4gYXNzZXJ0L2RlYXNzZXJ0IHRoZXNlIGxpbmVzIHdoZW4gbmVj
-ZXNzYXJ5LiBUaHVzIGFkZCBzdXBwb3J0IGZvcgo+IHJlc2V0X2NvbnRyb2xsZXJfZGV2IHdoaWNo
-IGJyaW5ncyB0aGlzIGZ1bmN0aW9uYWxpdHkuCj4gCj4gU2lnbmVkLW9mZi1ieTogQ2xhdWRpdSBC
-ZXpuZWEgPGNsYXVkaXUuYmV6bmVhQG1pY3JvY2hpcC5jb20+Cj4gLS0tCj4gwqBkcml2ZXJzL3Bv
-d2VyL3Jlc2V0L2F0OTEtcmVzZXQuYyB8IDkyCj4gKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrLS0KPiDCoDEgZmlsZSBjaGFuZ2VkLCA4OCBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygt
-KQo+IAo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3Bvd2VyL3Jlc2V0L2F0OTEtcmVzZXQuYwo+IGIv
-ZHJpdmVycy9wb3dlci9yZXNldC9hdDkxLXJlc2V0LmMKPiBpbmRleCAwZDcyMWUyN2Y1NDUuLmIw
-NGRmNTRjMTVkMiAxMDA2NDQKPiAtLS0gYS9kcml2ZXJzL3Bvd2VyL3Jlc2V0L2F0OTEtcmVzZXQu
-Ywo+ICsrKyBiL2RyaXZlcnMvcG93ZXIvcmVzZXQvYXQ5MS1yZXNldC5jCj4gQEAgLTE3LDYgKzE3
-LDcgQEAKPiDCoCNpbmNsdWRlIDxsaW51eC9vZl9hZGRyZXNzLmg+Cj4gwqAjaW5jbHVkZSA8bGlu
-dXgvcGxhdGZvcm1fZGV2aWNlLmg+Cj4gwqAjaW5jbHVkZSA8bGludXgvcmVib290Lmg+Cj4gKyNp
-bmNsdWRlIDxsaW51eC9yZXNldC1jb250cm9sbGVyLmg+Cj4gwqAKPiDCoCNpbmNsdWRlIDxzb2Mv
-YXQ5MS9hdDkxc2FtOV9kZHJzZHIuaD4KPiDCoCNpbmNsdWRlIDxzb2MvYXQ5MS9hdDkxc2FtOV9z
-ZHJhbWMuaD4KPiBAQCAtNTMsMTIgKzU0LDE2IEBAIGVudW0gcmVzZXRfdHlwZSB7Cj4gwqBzdHJ1
-Y3QgYXQ5MV9yZXNldCB7Cj4gwqDCoMKgwqDCoMKgwqDCoHZvaWQgX19pb21lbSAqcnN0Y19iYXNl
-Owo+IMKgwqDCoMKgwqDCoMKgwqB2b2lkIF9faW9tZW0gKnJhbWNfYmFzZVsyXTsKPiArwqDCoMKg
-wqDCoMKgwqB2b2lkIF9faW9tZW0gKmRldl9iYXNlOwo+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCBy
-ZXNldF9jb250cm9sbGVyX2RldiByY2RldjsKPiDCoMKgwqDCoMKgwqDCoMKgc3RydWN0IGNsayAq
-c2NsazsKPiDCoMKgwqDCoMKgwqDCoMKgc3RydWN0IG5vdGlmaWVyX2Jsb2NrIG5iOwo+IMKgwqDC
-oMKgwqDCoMKgwqB1MzIgYXJnczsKPiDCoMKgwqDCoMKgwqDCoMKgdTMyIHJhbWNfbHByOwo+IMKg
-fTsKPiDCoAo+ICsjZGVmaW5lIHRvX2F0OTFfcmVzZXQocinCoMKgwqDCoMKgwqDCoGNvbnRhaW5l
-cl9vZihyLCBzdHJ1Y3QgYXQ5MV9yZXNldCwgcmNkZXYpCj4gKwo+IMKgc3RydWN0IGF0OTFfcmVz
-ZXRfZGF0YSB7Cj4gwqDCoMKgwqDCoMKgwqDCoHUzMiByZXNldF9hcmdzOwo+IMKgwqDCoMKgwqDC
-oMKgwqB1MzIgbl9kZXZpY2VfcmVzZXQ7Cj4gQEAgLTE5MSw2ICsxOTYsNzkgQEAgc3RhdGljIGNv
-bnN0IHN0cnVjdCBvZl9kZXZpY2VfaWQKPiBhdDkxX3Jlc2V0X29mX21hdGNoW10gPSB7Cj4gwqB9
-Owo+IMKgTU9EVUxFX0RFVklDRV9UQUJMRShvZiwgYXQ5MV9yZXNldF9vZl9tYXRjaCk7Cj4gwqAK
-PiArc3RhdGljIGludCBhdDkxX3Jlc2V0X3VwZGF0ZShzdHJ1Y3QgcmVzZXRfY29udHJvbGxlcl9k
-ZXYgKnJjZGV2LAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgdW5zaWduZWQgbG9uZyBpZCwgYm9vbCBhc3NlcnQpCj4gK3sKPiArwqDCoMKg
-wqDCoMKgwqBzdHJ1Y3QgYXQ5MV9yZXNldCAqcmVzZXQgPSB0b19hdDkxX3Jlc2V0KHJjZGV2KTsK
-PiArwqDCoMKgwqDCoMKgwqB1MzIgdmFsOwo+ICsKPiArwqDCoMKgwqDCoMKgwqB2YWwgPSByZWFk
-bF9yZWxheGVkKHJlc2V0LT5kZXZfYmFzZSk7Cj4gK8KgwqDCoMKgwqDCoMKgaWYgKGFzc2VydCkK
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdmFsIHw9IEJJVChpZCk7Cj4gK8KgwqDC
-oMKgwqDCoMKgZWxzZQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB2YWwgJj0gfkJJ
-VChpZCk7Cj4gK8KgwqDCoMKgwqDCoMKgd3JpdGVsX3JlbGF4ZWQodmFsLCByZXNldC0+ZGV2X2Jh
-c2UpOwoKVGhpcyByZWFkLW1vZGlmeS11cGRhdGUgc2hvdWxkIGJlIHByb3RlY3RlZCBieSBhIHNw
-aW5sb2NrLgoKPiArCj4gK8KgwqDCoMKgwqDCoMKgcmV0dXJuIDA7Cj4gK30KPiArCj4gK3N0YXRp
-YyBpbnQgYXQ5MV9yZXNldF9hc3NlcnQoc3RydWN0IHJlc2V0X2NvbnRyb2xsZXJfZGV2ICpyY2Rl
-diwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIHVuc2lnbmVkIGxvbmcgaWQpCj4gK3sKPiArwqDCoMKgwqDCoMKgwqByZXR1cm4gYXQ5MV9y
-ZXNldF91cGRhdGUocmNkZXYsIGlkLCB0cnVlKTsKPiArfQo+ICsKPiArc3RhdGljIGludCBhdDkx
-X3Jlc2V0X2RlYXNzZXJ0KHN0cnVjdCByZXNldF9jb250cm9sbGVyX2RldiAqcmNkZXYsCj4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-dW5zaWduZWQgbG9uZyBpZCkKPiArewo+ICvCoMKgwqDCoMKgwqDCoHJldHVybiBhdDkxX3Jlc2V0
-X3VwZGF0ZShyY2RldiwgaWQsIGZhbHNlKTsKPiArfQo+ICsKPiArc3RhdGljIGludCBhdDkxX3Jl
-c2V0X2Rldl9zdGF0dXMoc3RydWN0IHJlc2V0X2NvbnRyb2xsZXJfZGV2ICpyY2RldiwKPiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgdW5zaWduZWQgbG9uZyBpZCkKPiArewo+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCBhdDkxX3Jl
-c2V0ICpyZXNldCA9IHRvX2F0OTFfcmVzZXQocmNkZXYpOwo+ICvCoMKgwqDCoMKgwqDCoHUzMiB2
-YWw7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoHZhbCA9IHJlYWRsX3JlbGF4ZWQocmVzZXQtPmRldl9i
-YXNlKTsKPiArCj4gK8KgwqDCoMKgwqDCoMKgcmV0dXJuICEhKHZhbCAmIEJJVChpZCkpOwo+ICt9
-Cj4gKwo+ICtzdGF0aWMgY29uc3Qgc3RydWN0IHJlc2V0X2NvbnRyb2xfb3BzIGF0OTFfcmVzZXRf
-b3BzID0gewo+ICvCoMKgwqDCoMKgwqDCoC5hc3NlcnQgPSBhdDkxX3Jlc2V0X2Fzc2VydCwKPiAr
-wqDCoMKgwqDCoMKgwqAuZGVhc3NlcnQgPSBhdDkxX3Jlc2V0X2RlYXNzZXJ0LAo+ICvCoMKgwqDC
-oMKgwqDCoC5zdGF0dXMgPSBhdDkxX3Jlc2V0X2Rldl9zdGF0dXMsCj4gK307Cj4gKwo+ICtzdGF0
-aWMgaW50IGF0OTFfcmVzZXRfb2ZfeGxhdGUoc3RydWN0IHJlc2V0X2NvbnRyb2xsZXJfZGV2ICpy
-Y2RldiwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoCBjb25zdCBzdHJ1Y3Qgb2ZfcGhhbmRsZV9hcmdzICpyZXNldF9zcGVjKQo+ICt7
-Cj4gK8KgwqDCoMKgwqDCoMKgcmV0dXJuIHJlc2V0X3NwZWMtPmFyZ3NbMF07Cj4gK30KCkZvciAx
-OjEgbWFwcGluZ3MgdGhlcmUgaXMgbm8gbmVlZCBmb3IgYSBjdXN0b20gb2ZfeGxhdGUgaGFuZGxl
-ci4gSnVzdApsZWF2ZSBvZl94bGF0ZSBhbmQgb2ZfcmVzZXRfbl9jZWxscyBlbXB0eS4KCj4gKwo+
-ICtzdGF0aWMgaW50IGF0OTFfcmNkZXZfaW5pdChzdHJ1Y3QgYXQ5MV9yZXNldCAqcmVzZXQsCj4g
-K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNvbnN0
-IHN0cnVjdCBhdDkxX3Jlc2V0X2RhdGEgKmRhdGEsCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYp
-Cj4gK3sKPiArwqDCoMKgwqDCoMKgwqBpZiAoIWRhdGEtPm5fZGV2aWNlX3Jlc2V0KQo+ICvCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gMDsKPiArCj4gK8KgwqDCoMKgwqDCoMKg
-cmVzZXQtPmRldl9iYXNlID0gZGV2bV9vZl9pb21hcCgmcGRldi0+ZGV2LCBwZGV2LT5kZXYub2Zf
-bm9kZSwgMSwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgTlVMTCk7Cj4gK8KgwqDCoMKgwqDCoMKg
-aWYgKElTX0VSUihyZXNldC0+cnN0Y19iYXNlKSkKClNob3VsZCBjaGVjayByZXNldC0+ZGV2X2Jh
-c2UgaGVyZS4KCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiAtRU5PREVW
-Owo+ICsKPiArwqDCoMKgwqDCoMKgwqByZXNldC0+cmNkZXYub3BzID0gJmF0OTFfcmVzZXRfb3Bz
-Owo+ICvCoMKgwqDCoMKgwqDCoHJlc2V0LT5yY2Rldi5vd25lciA9IFRISVNfTU9EVUxFOwo+ICvC
-oMKgwqDCoMKgwqDCoHJlc2V0LT5yY2Rldi5vZl9ub2RlID0gcGRldi0+ZGV2Lm9mX25vZGU7Cj4g
-K8KgwqDCoMKgwqDCoMKgcmVzZXQtPnJjZGV2Lm5yX3Jlc2V0cyA9IGRhdGEtPm5fZGV2aWNlX3Jl
-c2V0Owo+ICvCoMKgwqDCoMKgwqDCoHJlc2V0LT5yY2Rldi5vZl9yZXNldF9uX2NlbGxzID0gMTsK
-PiArwqDCoMKgwqDCoMKgwqByZXNldC0+cmNkZXYub2ZfeGxhdGUgPSBhdDkxX3Jlc2V0X29mX3hs
-YXRlOwo+ICsKPiArwqDCoMKgwqDCoMKgwqByZXR1cm4gZGV2bV9yZXNldF9jb250cm9sbGVyX3Jl
-Z2lzdGVyKCZwZGV2LT5kZXYsICZyZXNldC0+cmNkZXYpOwo+ICt9Cj4gKwo+IMKgc3RhdGljIGlu
-dCBfX2luaXQgYXQ5MV9yZXNldF9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQo+
-IMKgewo+IMKgwqDCoMKgwqDCoMKgwqBjb25zdCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkICptYXRjaDsK
-PiBAQCAtMjQ0LDYgKzMyMiwxMCBAQCBzdGF0aWMgaW50IF9faW5pdCBhdDkxX3Jlc2V0X3Byb2Jl
-KHN0cnVjdAo+IHBsYXRmb3JtX2RldmljZSAqcGRldikKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqBw
-bGF0Zm9ybV9zZXRfZHJ2ZGF0YShwZGV2LCByZXNldCk7Cj4gwqAKPiArwqDCoMKgwqDCoMKgwqBy
-ZXQgPSBhdDkxX3JjZGV2X2luaXQocmVzZXQsIGRhdGEsIHBkZXYpOwo+ICvCoMKgwqDCoMKgwqDC
-oGlmIChyZXQpCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGdvdG8gZGlzYWJsZV9j
-bGs7Cj4gKwo+IMKgwqDCoMKgwqDCoMKgwqBpZiAob2ZfZGV2aWNlX2lzX2NvbXBhdGlibGUocGRl
-di0+ZGV2Lm9mX25vZGUsCj4gIm1pY3JvY2hpcCxzYW05eDYwLXJzdGMiKSkgewo+IMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdTMyIHZhbCA9IHJlYWRsKHJlc2V0LT5yc3RjX2Jhc2Ug
-KyBBVDkxX1JTVENfTVIpOwo+IMKgCj4gQEAgLTI1MiwxNCArMzM0LDE2IEBAIHN0YXRpYyBpbnQg
-X19pbml0IGF0OTFfcmVzZXRfcHJvYmUoc3RydWN0Cj4gcGxhdGZvcm1fZGV2aWNlICpwZGV2KQo+
-IMKgwqDCoMKgwqDCoMKgwqB9Cj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgcmV0ID0gcmVnaXN0ZXJf
-cmVzdGFydF9oYW5kbGVyKCZyZXNldC0+bmIpOwo+IC3CoMKgwqDCoMKgwqDCoGlmIChyZXQpIHsK
-PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY2xrX2Rpc2FibGVfdW5wcmVwYXJlKHJl
-c2V0LT5zY2xrKTsKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIHJldDsK
-PiAtwqDCoMKgwqDCoMKgwqB9Cj4gK8KgwqDCoMKgwqDCoMKgaWYgKHJldCkKPiArwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgZ290byBkaXNhYmxlX2NsazsKPiDCoAo+IMKgwqDCoMKgwqDC
-oMKgwqBhdDkxX3Jlc2V0X3N0YXR1cyhwZGV2LCByZXNldC0+cnN0Y19iYXNlKTsKPiDCoAo+IMKg
-wqDCoMKgwqDCoMKgwqByZXR1cm4gMDsKPiArCj4gK2Rpc2FibGVfY2xrOgo+ICvCoMKgwqDCoMKg
-wqDCoGNsa19kaXNhYmxlX3VucHJlcGFyZShyZXNldC0+c2Nsayk7Cj4gK8KgwqDCoMKgwqDCoMKg
-cmV0dXJuIHJldDsKPiDCoH0KPiDCoAo+IMKgc3RhdGljIGludCBfX2V4aXQgYXQ5MV9yZXNldF9y
-ZW1vdmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKCnJlZ2FyZHMKUGhpbGlwcAo=
+Adding cclpex node to represent Tegra234 cpufreq.
+Tegra234 uses some of the CRAB (Control Register Access Bus)
+registers for cpu frequency requests. These registers are
+memory mapped to CCPLEX_MMCRAB_ARM region. In this node, mapping
+the range of MMCRAB registers required only for cpu frequency info.
+
+Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+---
+ arch/arm64/boot/dts/nvidia/tegra234.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+index aaace605bdaa..610207f3f967 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
++++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+@@ -1258,6 +1258,13 @@
+ 		};
+ 	};
+ 
++	ccplex@e000000 {
++		compatible = "nvidia,tegra234-ccplex-cluster";
++		reg = <0x0 0x0e000000 0x0 0x5ffff>;
++		nvidia,bpmp = <&bpmp>;
++		status = "okay";
++	};
++
+ 	sram@40000000 {
+ 		compatible = "nvidia,tegra234-sysram", "mmio-sram";
+ 		reg = <0x0 0x40000000 0x0 0x80000>;
+-- 
+2.17.1
 
