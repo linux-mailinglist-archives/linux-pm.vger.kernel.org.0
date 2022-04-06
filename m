@@ -2,73 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F644F5640
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 08:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F364F59FA
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 11:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232663AbiDFFiI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Apr 2022 01:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60354 "EHLO
+        id S1347171AbiDFJbK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Apr 2022 05:31:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1577539AbiDFEQe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Apr 2022 00:16:34 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54122B519C
-        for <linux-pm@vger.kernel.org>; Tue,  5 Apr 2022 17:26:55 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id h11so1173134ljb.2
-        for <linux-pm@vger.kernel.org>; Tue, 05 Apr 2022 17:26:55 -0700 (PDT)
+        with ESMTP id S1580388AbiDFJUz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Apr 2022 05:20:55 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75500140DFE
+        for <linux-pm@vger.kernel.org>; Tue,  5 Apr 2022 19:26:44 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id yy13so1435709ejb.2
+        for <linux-pm@vger.kernel.org>; Tue, 05 Apr 2022 19:26:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=TglhxcqR03STbzjibn+QFjr2IBk8TX9fGS7Is5dPqiA=;
-        b=VSOqfRZSyi2bDhEqMpwfhmUTxSpO93QuNf1r2r1kA8vmU1PFcwGo+5dcE1XmU8vDZr
-         0VXJjErh2A4aB/N5wyqkJOD29EU0WIzLOdkfb0O4Z7679woH7vS1h7jwQkEWQpAbUV9W
-         pKl/SseGLKhfsi+jq8P7CF94l/eRFT++tmbWGyN44JfaENT3ab80aYN51LlueeQq1Ptm
-         +V6sqXG5ZU0nFjyHJY1r6VxaFXr9CaqPuOBMjiTr4GYiFv5GAjjDjmETbpThnaQyZkTs
-         +T4TyUR21XW+d/8XJD63icnUkayvjQwtvs5OwHVaFNHgPdnd22De5Usm1JBN1nOBcXPE
-         YgbQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wVrhTvL07JA+qLuxrHPB76KlfjN/HKd1U84mtNSDmA0=;
+        b=T0BGJvEhCp1XVdquKEt/pKpKuXICocX/83Jn1wmpWHLF+zAcgvEjroM6jN40LltZzX
+         eMGubAQqVa1BAfUAJ6zJ44VHTiXyP35A/O3aT2a9JHsAVd9eFDNtGArHLbyUm08Qfrok
+         /pQJpFIXc2NeHopH7wDHcDYOA8JpjD92gDXmQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=TglhxcqR03STbzjibn+QFjr2IBk8TX9fGS7Is5dPqiA=;
-        b=fA2zqYGI3lZZSEhkNPdZRlGxHanJU7yuO5XjEQjAiw/qmYxGb+IZDdDkWGd+E3lohb
-         mcYrKN4DzYXmwGsZThmBXlPRrqgQ3l5C92OIlps82Fgbw0cpDuhfeE2x7LwrR9NAAQjO
-         tklsGGpbwBVKiEBqxmL5Rk8HqNK3L0T020es3Pgl5ozuzW4MCZK/aR9xrT0PWNQkSgdU
-         LEOzgmnaCiMANZIoMmsg5s9bdNjrDsYuqpg9EDfIXER6ih8uOkHcVkEOOigaVW7FnaaZ
-         d+EEXBL79GOgd3y/La6RZKak0LJFvwCNvTv6nUnFfWKzztImELWQqy52tvmfI/CWtbTA
-         7RUQ==
-X-Gm-Message-State: AOAM530p6MMTS7W/on+eH7JcWamygmIPAUnIaHhgNyHQhUBLIJD3J/f0
-        4zouTlKDnXfkNDF96lKzwJGk2w==
-X-Google-Smtp-Source: ABdhPJzI/P+YX2UHUE6J2gC82zaz6t4+duksND2A3MAe65Wf5eLzAtmgNvF6Z1tG2I0qNw9uEzOSwQ==
-X-Received: by 2002:a2e:82c5:0:b0:247:e81f:8b02 with SMTP id n5-20020a2e82c5000000b00247e81f8b02mr3684529ljh.90.1649204814030;
-        Tue, 05 Apr 2022 17:26:54 -0700 (PDT)
-Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id c21-20020a056512239500b0044aa21dadeasm1660270lfv.60.2022.04.05.17.26.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 17:26:53 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v2 4/4] arm: dts: qcom-apq8064: create tsens device node
-Date:   Wed,  6 Apr 2022 03:26:48 +0300
-Message-Id: <20220406002648.393486-5-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220406002648.393486-1-dmitry.baryshkov@linaro.org>
-References: <20220406002648.393486-1-dmitry.baryshkov@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wVrhTvL07JA+qLuxrHPB76KlfjN/HKd1U84mtNSDmA0=;
+        b=pU/03RKbz1tOXHVIXKsE6MFFE0g+os3582zoW/pNPq/gEzj/rjCcY+7o9sGXLHW72s
+         KNa29+Eax+MNwwwIiWXjr3+BqUO8V47RhYQs2hRYlk9kLycOKua7X3LMC8m6J2PQfOyc
+         3AYi3We+/gUQz5BYqU8z5NDEbOd6pB2cU+X/AwSRFY8r3+u4wXpiR3gRG/OloYk2J6dD
+         EJhvRhL2ckypKYkT3e/2lS0gAf0u3REXQo2XoMsrwMnO4lmy1CljSenWp8OuhRnh0mKt
+         H4BFtvyZtgRT5FTTsEgEi5r2dEVX4PbEVSe6kHlfJF8EJl4kT7+tpGw18hLTObThTGjP
+         UAhg==
+X-Gm-Message-State: AOAM532DEtmEbhyvMdzfCCdzlleM8+SWLSzC5ptTX4kxKKgMHfTS1Nbq
+        dr73x2yqztW2KKH0S/Ie+ehojew2vBzzVEqRrkg=
+X-Google-Smtp-Source: ABdhPJxwaI+6tyok/dibu+sKhHJrHZ62liOwd0VlYhnrFC6o9slb/NwffOs+z6HkAecqKWQPIcyUDg==
+X-Received: by 2002:a17:907:868a:b0:6e5:e35f:3b99 with SMTP id qa10-20020a170907868a00b006e5e35f3b99mr6381947ejc.33.1649212002678;
+        Tue, 05 Apr 2022 19:26:42 -0700 (PDT)
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
+        by smtp.gmail.com with ESMTPSA id mp19-20020a1709071b1300b006dfdfe15cf8sm6201142ejc.196.2022.04.05.19.26.42
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 19:26:42 -0700 (PDT)
+Received: by mail-wr1-f44.google.com with SMTP id b19so1050187wrh.11
+        for <linux-pm@vger.kernel.org>; Tue, 05 Apr 2022 19:26:42 -0700 (PDT)
+X-Received: by 2002:adf:e591:0:b0:206:1202:214 with SMTP id
+ l17-20020adfe591000000b0020612020214mr4789813wrm.342.1649212001620; Tue, 05
+ Apr 2022 19:26:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220406014842.2771799-1-briannorris@chromium.org> <20220405184816.RFC.2.I2d73b403944f0b8b5871a77585b73f31ccc62999@changeid>
+In-Reply-To: <20220405184816.RFC.2.I2d73b403944f0b8b5871a77585b73f31ccc62999@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 5 Apr 2022 19:26:28 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Wdp5ax_MhGg-=ocSPS=cs1nUCRcz+E81Z2V-w_YVuzUw@mail.gmail.com>
+Message-ID: <CAD=FV=Wdp5ax_MhGg-=ocSPS=cs1nUCRcz+E81Z2V-w_YVuzUw@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/2] PM / devfreq: rk3399_dmc: Block PMU during transitions
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,82 +79,22 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Create separate device node for thermal sensors on apq8064 platform.
-Move related properties to the newly created device tree node.
+Hi,
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- arch/arm/boot/dts/qcom-apq8064.dtsi | 25 +++++++++++++++++--------
- 1 file changed, 17 insertions(+), 8 deletions(-)
+On Tue, Apr 5, 2022 at 6:49 PM Brian Norris <briannorris@chromium.org> wrote:
+>
+> See the previous patch ("soc: rockchip: power-domain: Manage resource
+> conflicts with firmware") for a thorough explanation of the conflicts.
+> While ARM Trusted Firmware may be modifying memory controller and
+> power-domain states, we need to block the kernel's power-domain driver.
+>
+> If the power-domain driver is disabled, there is no resource conflict
+> and this becomes a no-op.
+>
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> ---
+>
+>  drivers/devfreq/rk3399_dmc.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 
-diff --git a/arch/arm/boot/dts/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom-apq8064.dtsi
-index b9e9a9f9d3e2..40c65c921f96 100644
---- a/arch/arm/boot/dts/qcom-apq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom-apq8064.dtsi
-@@ -105,7 +105,7 @@ cpu0-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 
--			thermal-sensors = <&gcc 7>;
-+			thermal-sensors = <&tsens 7>;
- 			coefficients = <1199 0>;
- 
- 			trips {
-@@ -126,7 +126,7 @@ cpu1-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 
--			thermal-sensors = <&gcc 8>;
-+			thermal-sensors = <&tsens 8>;
- 			coefficients = <1132 0>;
- 
- 			trips {
-@@ -147,7 +147,7 @@ cpu2-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 
--			thermal-sensors = <&gcc 9>;
-+			thermal-sensors = <&tsens 9>;
- 			coefficients = <1199 0>;
- 
- 			trips {
-@@ -168,7 +168,7 @@ cpu3-thermal {
- 			polling-delay-passive = <250>;
- 			polling-delay = <1000>;
- 
--			thermal-sensors = <&gcc 10>;
-+			thermal-sensors = <&tsens 10>;
- 			coefficients = <1132 0>;
- 
- 			trips {
-@@ -810,14 +810,23 @@ tsens_backup: backup_calib {
- 		};
- 
- 		gcc: clock-controller@900000 {
--			compatible = "qcom,gcc-apq8064";
-+			compatible = "qcom,gcc-apq8064", "syscon";
- 			reg = <0x00900000 0x4000>;
--			nvmem-cells = <&tsens_calib>, <&tsens_backup>;
--			nvmem-cell-names = "calib", "calib_backup";
- 			#clock-cells = <1>;
- 			#power-domain-cells = <1>;
- 			#reset-cells = <1>;
--			#thermal-sensor-cells = <1>;
-+
-+			tsens: thermal-sensor@900000 {
-+				compatible = "qcom,msm8960-tsens";
-+
-+				nvmem-cells = <&tsens_calib>, <&tsens_backup>;
-+				nvmem-cell-names = "calib", "calib_backup";
-+				interrupts = <GIC_SPI 178 IRQ_TYPE_LEVEL_HIGH>;
-+				interrupt-names = "uplow";
-+
-+				#qcom,sensors = <11>;
-+				#thermal-sensor-cells = <1>;
-+			};
- 		};
- 
- 		lcc: clock-controller@28000000 {
--- 
-2.35.1
-
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
