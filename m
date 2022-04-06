@@ -2,77 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 817834F5B26
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 12:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF1C4F5B93
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 12:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345694AbiDFKIf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Apr 2022 06:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
+        id S1354285AbiDFKQ0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Apr 2022 06:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354349AbiDFKIB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Apr 2022 06:08:01 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949F6140DF2
-        for <linux-pm@vger.kernel.org>; Tue,  5 Apr 2022 19:26:38 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id r10so983022eda.1
-        for <linux-pm@vger.kernel.org>; Tue, 05 Apr 2022 19:26:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=L0kN2mvmwQNNtvPp2RShdfNb1tA7tCIbp7VBq6LYez4=;
-        b=iPWy6+0V6Z7cYgmmqI81g4OAUUB8MRCno8hqy8BW/l7BT+hJFxKv+kJ1Pp2pI2iqOi
-         zZHGQFsQesezNZsU4vTt3FAJeWqK8SEJaV27yBct6SWfpbWOQyF5AlxEeWean9Zu1Mxe
-         pQBKHHykj8FBi66czv7qJa4Lf7zoYv5WNgJc0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=L0kN2mvmwQNNtvPp2RShdfNb1tA7tCIbp7VBq6LYez4=;
-        b=EqJZWeXhatuvIAs4yRMCFBXM6F1jlSpjeQJYTpD9jb3g0p9EhgHEVBh750bUzPADb9
-         EMeHs3qqszKSMJXvmR3tI9WVitxuFkaxF/0zLioC7Rq4rjOYoQ06ieRMX7BDcx+5BsDh
-         w1cyv+RcKweqC35ed8Xb60oipWvmlgQ1a+B/wYP3C6R0lBPWtWVo22aNfGCwraK6iNJ/
-         2T3O+71lGAJ0vqgW8E++YBSK/KPLt59O/Xk+K3S1hSstC6vvdR8th7vaMwl2IJLhuv2T
-         bWlZdp7Lx8y9PD5nT6sI1WyeMsnf+YiLnrll+yzPGw6BPjonT5Q1j6BI8Po/SescJb76
-         QvmA==
-X-Gm-Message-State: AOAM532o7VjIyyhQh45+iu8CviaPmViw4+v/gM/cH0Ov9T6+7+CUh+xc
-        t+C2oRQZ6czwOpXsI+E23UMW/r/kdzJvyR1huwY=
-X-Google-Smtp-Source: ABdhPJwcUxiq1bB/EQTK1Fao0wjMP39hD0j+yPoPA4FGyOVzUQhmGZunqIekRF4OgdbfC4KE/EFHcg==
-X-Received: by 2002:aa7:d1d0:0:b0:41c:c19e:a0d6 with SMTP id g16-20020aa7d1d0000000b0041cc19ea0d6mr6489768edp.179.1649211996867;
-        Tue, 05 Apr 2022 19:26:36 -0700 (PDT)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
-        by smtp.gmail.com with ESMTPSA id o18-20020a170906769200b006e7fc91251esm2301500ejm.215.2022.04.05.19.26.35
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 19:26:35 -0700 (PDT)
-Received: by mail-wm1-f47.google.com with SMTP id r11-20020a1c440b000000b0038ccb70e239so2735010wma.3
-        for <linux-pm@vger.kernel.org>; Tue, 05 Apr 2022 19:26:35 -0700 (PDT)
-X-Received: by 2002:a1c:7518:0:b0:37c:7eb:f255 with SMTP id
- o24-20020a1c7518000000b0037c07ebf255mr5314285wmc.29.1649211994685; Tue, 05
- Apr 2022 19:26:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220406014842.2771799-1-briannorris@chromium.org> <20220405184816.RFC.1.Ib865f199d15221eab4ff77f70bd7e9e2eb04d32f@changeid>
-In-Reply-To: <20220405184816.RFC.1.Ib865f199d15221eab4ff77f70bd7e9e2eb04d32f@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 5 Apr 2022 19:26:22 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Xz+KLySeUBHe1CXEbMrjeT97HvCOdiRRG7wGcwbjQX8A@mail.gmail.com>
-Message-ID: <CAD=FV=Xz+KLySeUBHe1CXEbMrjeT97HvCOdiRRG7wGcwbjQX8A@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] soc: rockchip: power-domain: Manage resource
- conflicts with firmware
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        with ESMTP id S239848AbiDFKPf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Apr 2022 06:15:35 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937203BD257;
+        Tue,  5 Apr 2022 20:32:24 -0700 (PDT)
+X-UUID: ee9315ccb60b4dfa9d5938f31a8092b2-20220406
+X-UUID: ee9315ccb60b4dfa9d5938f31a8092b2-20220406
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <jia-wei.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1518079559; Wed, 06 Apr 2022 11:32:19 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 6 Apr 2022 11:32:18 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 6 Apr 2022 11:32:18 +0800
+Message-ID: <41781640ceee45e763bb0f3d6c765fea76826fa5.camel@mediatek.com>
+Subject: Re: [PATCH 1/3] dt-bindings: devfreq: mediatek: add mtk cci devfreq
+ dt-bindings
+From:   Jia-Wei Chang <jia-wei.chang@mediatek.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
         Chanwoo Choi <cw00.choi@samsung.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Elaine Zhang <zhangqing@rock-chips.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fan.chen@mediatek.com>,
+        <louis.yu@mediatek.com>, <roger.lu@mediatek.com>,
+        <Allen-yy.Lin@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <hsinyi@google.com>,
+        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
+Date:   Wed, 6 Apr 2022 11:32:18 +0800
+In-Reply-To: <ac0e3336-f9eb-def9-68ea-ab49e2c467a1@kernel.org>
+References: <20220307122513.11822-1-jia-wei.chang@mediatek.com>
+         <20220307122513.11822-2-jia-wei.chang@mediatek.com>
+         <bf418e08-2e32-5e61-abd8-abb0d8f5c080@canonical.com>
+         <13482b1b4244df5c0c0a4d6a60cdb2a7ba88500a.camel@mediatek.com>
+         <aa34eccf-ef08-4a8f-7a6c-7fbd05bd54b6@kernel.org>
+         <126e0905c2eb9f22a0be46dd7aa8ac891622346d.camel@mediatek.com>
+         <ac0e3336-f9eb-def9-68ea-ab49e2c467a1@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,97 +71,59 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Sat, 2022-04-02 at 13:31 +0200, Krzysztof Kozlowski wrote:
+> On 01/04/2022 15:39, Jia-Wei Chang wrote:
+> > > > > 
+> > > > > > +
+> > > > > > +  operating-points-v2:
+> > > > > > +    description:
+> > > > > > +      For details, please refer to
+> > > > > > +      Documentation/devicetree/bindings/opp/opp-v2.yaml
+> > > > > > +
+> > > > > > +  opp-table: true
+> > > > > 
+> > > > > Same comments as your CPU freq bindings apply.
+> > > > 
+> > > > mtk-cci-devfreq is a new driver and its arch is same as
+> > > > mediatek-
+> > > > cpufreq so that the properties of mtk-cci are refer to
+> > > > mediatek-
+> > > > cpufreq 
+> > > > bindings.
+> > > > operating-point-v2 is used to determine the voltage and
+> > > > frequency
+> > > > of
+> > > > dvfs which is further utilized by mtk-cci-devfreq.
+> > > 
+> > > "operating-point-v2" is understood, but the same as in cpufreq
+> > > bindings,
+> > > I am questioning why do you have "opp-table: true". It's a bit
+> > > confusing, so maybe I miss something?
+> > 
+> > Yes, you're correct.
+> > "opp-table: true" should be removed.
+> > I messed it up.
+> 
+> No, I think I was wrong. The opp-table pretty frequently is embedded
+> in
+> the the device node itself. The operating-points-v2 references it.
+> 
+> You don't use it in the example, but it might be a valid usage, so it
+> can stay. Sorry for the confusion, it passed some time since I looked
+> at
+> OPP bindings.
 
-On Tue, Apr 5, 2022 at 6:49 PM Brian Norris <briannorris@chromium.org> wrote:
->
-> On RK3399 platforms, power domains are managed mostly by the kernel
-> (drivers/soc/rockchip/pm_domains.c), but there are a few exceptions
-> where ARM Trusted Firmware has to be involved:
->
-> (1) system suspend/resume
-> (2) DRAM DVFS (a.k.a., "ddrfreq")
->
-> Exception (1) does not cause much conflict, since the kernel has
-> quiesced itself by the time we make the relevant PSCI call.
->
-> Exception (2) can cause conflict, because of two actions:
->
-> (a) ARM Trusted Firmware needs to read/modify/write the PMU_BUS_IDLE_REQ
->     register to idle the memory controller domain; the kernel driver
->     also has to touch this register for other domains.
-> (b) ARM Trusted Firmware needs to manage the clocks associated with
->     these domains.
->
-> To elaborate on (b): idling a power domain has always required ungating
-> an array of clocks; see this old explanation from Rockchip:
-> https://lore.kernel.org/linux-arm-kernel/54503C19.9060607@rock-chips.com/
->
-> Historically, ARM Trusted Firmware has avoided this issue by using a
-> special PMU_CRU_GATEDIS_CON0 register -- this register ungates all the
-> necessary clocks -- when idling the memory controller. Unfortunately,
-> we've found that this register is not 100% sufficient; it does not turn
-> the relevant PLLs on [0].
->
-> So it's possible to trigger issues with something like the following:
->
-> 1. enable a power domain (e.g., RK3399_PD_VDU) -- kernel will
->    temporarily enable relevant clocks/PLLs, then turn them back off
->    2. a PLL (e.g., PLL_NPLL) is part of the clock tree for
->       RK3399_PD_VDU's clocks but otherwise unused; NPLL is disabled
-> 3. perform a ddrfreq transition (rk3399_dmcfreq_target() -> ...
->    drivers/clk/rockchip/clk-ddr.c / ROCKCHIP_SIP_DRAM_FREQ)
->    4. ARM Trusted Firmware unagates VDU clocks (via PMU_CRU_GATEDIS_CON0)
->    5. ARM Trusted firmware idles the memory controller domain
->    6. Step 5 waits on the VDU domain/clocks, but NPLL is still off
->
-> i.e., we hang the system.
->
-> So for (b), we need to at a minimum manage the relevant PLLs on behalf
-> of firmware. It's easier to simply manage the whole clock tree, in a
-> similar way we do in rockchip_pd_power().
->
-> For (a), we need to provide mutual exclusion betwen rockchip_pd_power()
-> and firmware. To resolve that, we simply grab the PMU mutex and release
-> it when ddrfreq is done.
->
-> The Chromium OS kernel has been carrying versions of part of this hack
-> for a while, based on some new custom notifiers [1]. I've rewritten as a
-> simple function call between the drivers, which is OK because:
->
->  * the PMU driver isn't enabled, and we don't have this problem at all
->    (the firmware should have left us in an OK state, and there are no
->    runtime conflicts); or
->  * the PMU driver is present, and is a single instance.
->
-> And the power-domain driver cannot be removed, so there's no lifetime
-> management to worry about.
->
-> For completeness, there's a 'dmc_pmu_mutex' to guard (likely
-> theoretical?) probe()-time races. It's OK for the memory controller
-> driver to start running before the PMU, because the PMU will avoid any
-> critical actions during the block() sequence.
->
-> [0] The RK3399 TRM for PMU_CRU_GATEDIS_CON0 only talks about ungating
->     clocks. Based on experimentation, we've found that it does not power
->     up the necessary PLLs.
->
-> [1] CHROMIUM: soc: rockchip: power-domain: Add notifier to dmc driver
->     https://chromium-review.googlesource.com/q/I242dbd706d352f74ff706f5cbf42ebb92f9bcc60
->     Notably, the Chromium solution only handled conflict (a), not (b).
->     In practice, item (b) wasn't a problem in many cases because we
->     never managed to fully power off PLLs. Now that the (upstream) video
->     decoder driver performs runtime clock management, we often power off
->     NPLL.
->
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
-> ---
->
->  drivers/soc/rockchip/pm_domains.c | 118 ++++++++++++++++++++++++++++++
->  include/soc/rockchip/pm_domains.h |  25 +++++++
->  2 files changed, 143 insertions(+)
+You remind me of "opp-table: true" and the reason why I use it here is
+exactly as you mentioned. Sorry I was not familiar enough with this to
+respond it clearly and confidently.
 
-I've already done several pre-review of a few versions of this, so at
-this point I'm pretty happy with where things are. Feel free to add:
+I think it is proper to keep "opp-table: true" and add a complete opp
+table information in dts example here as well.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Thanks for your comments.
+
+> 
+> 
+> Best regards,
+> Krzysztof
+
