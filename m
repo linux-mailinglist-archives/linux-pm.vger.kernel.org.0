@@ -2,77 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2F44F5D1A
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 14:19:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE6E4F5DC2
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 14:22:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232530AbiDFMRQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Apr 2022 08:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34084 "EHLO
+        id S232743AbiDFMWX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Apr 2022 08:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232743AbiDFMQu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Apr 2022 08:16:50 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656DBD4CB8
-        for <linux-pm@vger.kernel.org>; Wed,  6 Apr 2022 00:57:12 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id k23so2556895ejd.3
-        for <linux-pm@vger.kernel.org>; Wed, 06 Apr 2022 00:57:12 -0700 (PDT)
+        with ESMTP id S232570AbiDFMWO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Apr 2022 08:22:14 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A58BF521
+        for <linux-pm@vger.kernel.org>; Wed,  6 Apr 2022 01:00:28 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id i6-20020a1c3b06000000b0038e710da2dcso3087358wma.1
+        for <linux-pm@vger.kernel.org>; Wed, 06 Apr 2022 01:00:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Lgaeg90DwLQ6gMU7dGLk1ZzcdKthnoLHKe6InPXfXDk=;
-        b=EVLVsFt+v9FiQndBvyg6btu/++XBLApugoc8dkKYRaoGG6R3yk7NexVbif8WbPTuIN
-         mpbt0K/6Z4g81Ws7E1gIFYEctVO5vdr6TEGxjCroTYFJMCBxg6b0HzUmLm9wSuBWDhgS
-         gWcWyH/fPz6iSQz5B6altfILVNyEDi/En6xh+P+mUr5K0NuHinyw4pmbxwET+QMVSb9r
-         SgOlVhcVEqFYqeLgdQQEupwtuwKqaadanXJ9eJQKINxm5IUl9EN3nBRP16CpQLiRWKN2
-         AIz4NAWkORy4f4st2l2jqfJ7SfhW+B5SpcXEp1I+6TYFHhYMBlZt6qPGpgtcTCbb0L3R
-         lNlw==
+        bh=3CWJoajGROo+VFwvzgEegMB4GcuwlyDmSWZ5URHb0Ag=;
+        b=DqaqMNzJzj1mGrjxPhOo5IyJ8mFICRglbcOdQKfbcWuajDLjyQlsSDp+4G8kEBwgyJ
+         YOpqOPu34bnaloDtL8hXfp5i600OfbwBLcVQFXgtL55xHomu3+w2EVdjdpGRQmRFZJRX
+         3HX5KQJkwZueF2Mm8pfnFesaW6dViwDrqBvoAhUA+hJsWhDme5QCg3QBQiHk+qVS+DqP
+         kBsJAeyqVbNgyu20RnI2cR7XUue/EZWEhEKDTgrQWmeIGX2o316C9Nfv3hy9Jxt+tCF2
+         xArQUtKOpIWx2/risIDqDAPfHWH/WcW/0Sti3YNUBq/bBpaHy1N24WuFSYGxP2hbDsif
+         TYkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Lgaeg90DwLQ6gMU7dGLk1ZzcdKthnoLHKe6InPXfXDk=;
-        b=FvNiQy4naUQSuWm2q8OYOPlWiTZVUJxqIXF0TczaIcUh3Dj+oZOEMtd03I7y5zddBI
-         e25FnGiMfU8G4AI5GK6vkJ6n9lkxwtOwO6Ujtss5sYNuKKdunBY/4PNklr3/bdMtL+ny
-         frVhw3yUzWLUqvDVJO3ciJd+kWlAHkmlcBaaSqoc3qO0yazstB2ABF/iMa5rIvvsYXDs
-         SDq0NBAt1Sop2dajV4vuAtsoDb1l6mW2OgdBbhL1Wl9VuPIxo3alOFHOLefmm1w0n6k6
-         6a78JGER1SWiBg5ne2USp4Qjx7Jij9x5qEuQ/fkuNEm6CtSfwUw3GerPbpmqDs1pLd+q
-         VTDQ==
-X-Gm-Message-State: AOAM530rhqEhzE8pOaWYRHhli/CEaTq66oyIahTlRm4+ae/JveTedPUn
-        vRN3s9TGAdzzeEhWsQglkvYHNg==
-X-Google-Smtp-Source: ABdhPJzM2GS1m5w5uaCYdoAnIQr9z7V3X28rV0NWIIOY9kmC1Y/tvBxPOOnL2Nr7WJp0uMqxAyzxTw==
-X-Received: by 2002:a17:907:3e8b:b0:6df:f199:6aa3 with SMTP id hs11-20020a1709073e8b00b006dff1996aa3mr6930973ejc.410.1649231831042;
-        Wed, 06 Apr 2022 00:57:11 -0700 (PDT)
-Received: from [192.168.0.182] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id a18-20020a1709063e9200b006e0527baa77sm6300035ejj.92.2022.04.06.00.57.10
+        bh=3CWJoajGROo+VFwvzgEegMB4GcuwlyDmSWZ5URHb0Ag=;
+        b=py2gzEAuJyRL+IFHbKK56uNU7D7vx3SOjvxiwVMZ4sekAKX1A59Sys7HBiVoE2J4tq
+         nwnjD02M5ZvRYrIAGzFCDqosRyHvSq6Mp85TH9l3RzsP15vRHoOE+O7qSD6pC4BX4LYx
+         l+1Il8hMFE6uGV5dzKphlFBUF/h+0t7LZdcZ0l0oYKoyTKQivMMrfLyGoEwbJDd+OyQk
+         MLQCmC3yA+JBunBFyklyU9AEaHc8+1T43MTKbBtGTaCDcsbqQhWlkjoaGflGSkIcYCIU
+         q12EpLoyqyDjbRYkWEWxg8+HTBlOgtAwMdjge1fmP20WwXa5/9hDYt6TVCtC8tvpuVD8
+         1a3g==
+X-Gm-Message-State: AOAM530T6KWHKYgSgBgkOfH/lku9cm1BLmmDntbViCJeTc/EkI2q0ZBW
+        3myaEkU4dRo/bo5lUU4J8PSL7Q==
+X-Google-Smtp-Source: ABdhPJyUHJds9tzNi/hUOJ3tIpyNPFbPf3UWyJ4l7kTkS8TsUGjYX+gKXMHFqOUmfPmZD9+g9z89QQ==
+X-Received: by 2002:a7b:c844:0:b0:38e:7c92:a9e3 with SMTP id c4-20020a7bc844000000b0038e7c92a9e3mr6245631wml.140.1649232027233;
+        Wed, 06 Apr 2022 01:00:27 -0700 (PDT)
+Received: from ?IPV6:2a01:e34:ed2f:f020:261f:c14c:d23b:d177? ([2a01:e34:ed2f:f020:261f:c14c:d23b:d177])
+        by smtp.googlemail.com with ESMTPSA id x17-20020a5d4451000000b002061a0a9a13sm4851747wrr.1.2022.04.06.01.00.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Apr 2022 00:57:10 -0700 (PDT)
-Message-ID: <337d2994-e250-ecb3-4d44-a2f242fd6456@linaro.org>
-Date:   Wed, 6 Apr 2022 09:57:09 +0200
+        Wed, 06 Apr 2022 01:00:25 -0700 (PDT)
+Message-ID: <f526d227-ffbb-4ac0-ceb6-c793ab912559@linaro.org>
+Date:   Wed, 6 Apr 2022 10:00:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/4] dt-bindings: thermal: qcom-tsens.yaml: add msm8960
- compat string
+Subject: Re: [PATCH v2 0/4] tools/thermal: thermal library and tools
 Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org
-References: <20220406002648.393486-1-dmitry.baryshkov@linaro.org>
- <20220406002648.393486-2-dmitry.baryshkov@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220406002648.393486-2-dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     rafael@kernel.org
+Cc:     srinivas.pandruvada@linux.intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20220330100444.3846661-1-daniel.lezcano@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220330100444.3846661-1-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -83,18 +73,138 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/04/2022 02:26, Dmitry Baryshkov wrote:
-> Add compatibility string for the thermal sensors on MSM8960/APQ8064
-> platforms.
+
+Hi,
+
+if there is no comment for the series, shall I pick it so we can go 
+forward ?
+
+
+
+On 30/03/2022 12:04, Daniel Lezcano wrote:
+> These changes are providing the following tools and library:
 > 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>   - A thermal library doing the netlink abstraction from the kernel in
+>     order to make the userspace thermal implementation easier. Having
+>     the library integrated with the kernel tree is also a guarantee to
+>     keep the message format and their encoding/decoding aligned
+>                                                                                                                                                                                                                                                                                 
+>   - A thermal tools library providing a set of functions to deal with
+>     usual features like the log, the mainloop and the time. This
+>     library is used by the provided tools below
+> 
+>   - An data acquisition program to capture the temperature of the
+>     different thermal zone during an amount of time or during the
+>     execution of an application. The output is formated to be easily
+>     parsed by gnuplot, a spreadsheet program or a statistical command
+>     line utility. The timestamp is based on the system uptime, thus
+>     giving an indication of when a thermal event happened, that can
+>     help to spot or reproduce thermal issue in the long run
+> 
+>   - A thermal monitoring program based on the thermal library. It gives
+>     a skeleton to build any logic on top of it and shows how to use the
+>     thermal library. It does nothing except discovering the thermal
+>     zones, their trip points and listening for events like cooling
+>     devices state changes or trip point crossed
+> 
+>   Changelog:
+> 
+>   v1: Initial post after a RFC
+> 
+>   v2:
+> 
+>    - Fixed all trailing whitespaces and some other checkpatch
+>      warnings. Some warnings remain but they can be considered as false
+>      positive
+> 
+>    - Added in the thermometer tool:
+>      - Usage/help option as well as a man page
+>      - The ability to execute a program
+>      - The capture duration
+>      - Create the output directory if it does not exist
+> 
+>    - Add in the thermal-engine tool:
+>      - A usage/help option
+>      - A message telling the userspace it is waiting for events
+>      - A daemonize option
+> 
+>    - Minor bug fixes here and there, as well as typos
+> 
+> Daniel Lezcano (4):
+>    tools/lib/thermal: Add a thermal library
+>    tools/thermal: Add util library
+>    tools/thermal: A temperature capture tool
+>    tools/thermal: Add thermal daemon skeleton
+> 
+>   MAINTAINERS                                   |   1 +
+>   tools/Makefile                                |  36 +-
+>   tools/lib/thermal/.gitignore                  |   2 +
+>   tools/lib/thermal/Build                       |   5 +
+>   tools/lib/thermal/Makefile                    | 165 ++++++
+>   tools/lib/thermal/commands.c                  | 349 +++++++++++
+>   tools/lib/thermal/events.c                    | 164 +++++
+>   tools/lib/thermal/include/thermal.h           | 142 +++++
+>   tools/lib/thermal/libthermal.map              |  25 +
+>   tools/lib/thermal/libthermal.pc.template      |  12 +
+>   tools/lib/thermal/sampling.c                  |  75 +++
+>   tools/lib/thermal/thermal.c                   | 126 ++++
+>   tools/lib/thermal/thermal_nl.c                | 215 +++++++
+>   tools/lib/thermal/thermal_nl.h                |  46 ++
+>   tools/thermal/lib/Build                       |   3 +
+>   tools/thermal/lib/Makefile                    | 158 +++++
+>   .../thermal/lib/libthermal_tools.pc.template  |  12 +
+>   tools/thermal/lib/log.c                       |  77 +++
+>   tools/thermal/lib/log.h                       |  31 +
+>   tools/thermal/lib/mainloop.c                  | 120 ++++
+>   tools/thermal/lib/mainloop.h                  |  15 +
+>   tools/thermal/lib/thermal-tools.h             |  10 +
+>   tools/thermal/lib/uptimeofday.c               |  40 ++
+>   tools/thermal/lib/uptimeofday.h               |  12 +
+>   tools/thermal/thermal-engine/Build            |   2 +
+>   tools/thermal/thermal-engine/Makefile         |  28 +
+>   tools/thermal/thermal-engine/thermal-engine.c | 326 ++++++++++
+>   tools/thermal/thermometer/Build               |   2 +
+>   tools/thermal/thermometer/Makefile            |  26 +
+>   tools/thermal/thermometer/thermometer.8       |  93 +++
+>   tools/thermal/thermometer/thermometer.c       | 558 ++++++++++++++++++
+>   tools/thermal/thermometer/thermometer.conf    |   5 +
+>   32 files changed, 2878 insertions(+), 3 deletions(-)
+>   create mode 100644 tools/lib/thermal/.gitignore
+>   create mode 100644 tools/lib/thermal/Build
+>   create mode 100644 tools/lib/thermal/Makefile
+>   create mode 100644 tools/lib/thermal/commands.c
+>   create mode 100644 tools/lib/thermal/events.c
+>   create mode 100644 tools/lib/thermal/include/thermal.h
+>   create mode 100644 tools/lib/thermal/libthermal.map
+>   create mode 100644 tools/lib/thermal/libthermal.pc.template
+>   create mode 100644 tools/lib/thermal/sampling.c
+>   create mode 100644 tools/lib/thermal/thermal.c
+>   create mode 100644 tools/lib/thermal/thermal_nl.c
+>   create mode 100644 tools/lib/thermal/thermal_nl.h
+>   create mode 100644 tools/thermal/lib/Build
+>   create mode 100644 tools/thermal/lib/Makefile
+>   create mode 100644 tools/thermal/lib/libthermal_tools.pc.template
+>   create mode 100644 tools/thermal/lib/log.c
+>   create mode 100644 tools/thermal/lib/log.h
+>   create mode 100644 tools/thermal/lib/mainloop.c
+>   create mode 100644 tools/thermal/lib/mainloop.h
+>   create mode 100644 tools/thermal/lib/thermal-tools.h
+>   create mode 100644 tools/thermal/lib/uptimeofday.c
+>   create mode 100644 tools/thermal/lib/uptimeofday.h
+>   create mode 100644 tools/thermal/thermal-engine/Build
+>   create mode 100644 tools/thermal/thermal-engine/Makefile
+>   create mode 100644 tools/thermal/thermal-engine/thermal-engine.c
+>   create mode 100644 tools/thermal/thermometer/Build
+>   create mode 100644 tools/thermal/thermometer/Makefile
+>   create mode 100644 tools/thermal/thermometer/thermometer.8
+>   create mode 100644 tools/thermal/thermometer/thermometer.c
+>   create mode 100644 tools/thermal/thermometer/thermometer.conf
 > 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Best regards,
-Krzysztof
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
