@@ -2,69 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA854F6C49
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 23:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CE364F6DAB
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Apr 2022 00:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235015AbiDFVN6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Apr 2022 17:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44988 "EHLO
+        id S236250AbiDFWKY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Apr 2022 18:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236330AbiDFVNA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Apr 2022 17:13:00 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8151BB804
-        for <linux-pm@vger.kernel.org>; Wed,  6 Apr 2022 12:57:42 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id kd21so3158026qvb.6
-        for <linux-pm@vger.kernel.org>; Wed, 06 Apr 2022 12:57:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KUZUtAp0dNwDr70/3lwG/QXaTgnWDHbJ/WL9ZfSGWRk=;
-        b=QbEWGQvz8QdfpaSSWzt2ahUaFClQusByq1H7eAXIihyrMv69CUSc0Obwe9mDIEr+oq
-         NVWT1dMj8rWahYjX3IMWk05Ru6cZtKqAjPdMbDTslI8oP6q38LzSn9KvbFLG82O0eNLk
-         nz3dUf6pE/rhl9TEzuuT5wZJiYKG1jTyA8zUQMMPF8d5hExV6C24zDjKWnELb7k4bqMo
-         DQGpCIhtv25SC5mskEG2mecROEJIZo4OJZIlx09IKRBVlYVeXc0BT4p4NA8jU/npMJxs
-         Kd9v1vP26RIrHpzdWT89Mj8lmCH62Y+loDYx6ml3LCJFpfxLaYcMX2ww4Z5yBdrkl+mE
-         Dxsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KUZUtAp0dNwDr70/3lwG/QXaTgnWDHbJ/WL9ZfSGWRk=;
-        b=CIFifLVqGyMipOjpUgCcdaCEPFawkvx3pB9rxMIRadQYQYdLMrWGDZqHjtXZRjopXH
-         Hm/vjP975RAtvUcTVKQejTVdqebrjXkeaXctBxs2arJftn5vTKphtL6U/9rU9ndODOlf
-         wO+q0SdmsMfTsAq3S5TkQRd0v/rE30QFGQd0BbqFK5KdEv/u9YvqaT99yvZhCWgq2tu2
-         ltV94VEt8oY2dwhj3P9buDIb9S4IzJyscO9WhR0xR6Cdksbf/E3B0YVDw73BbBfcJsgL
-         nJR7zeg7KFhRsrpiyZX1uXWsH6tiwn4awgRqsM8+VEtQixfqlJ1/CtcKuDNkhy3Wji1T
-         DkQQ==
-X-Gm-Message-State: AOAM53252ttabZMyXcuwMNOBvD65bF3qNCagKIL7Vh6OtMtTZPELCwN5
-        SK/GrZh9zxcVEE66wMqbbvlou3c0RuzhXaRIgl3+Zw==
-X-Google-Smtp-Source: ABdhPJwW5Y59IRMz9jgyY9HfpNawpulXkvT7vk6Ukk08ydzcarQ2XkfE97k98h2L3Ubtj03m63GiXZksPtvgTMY9kOk=
-X-Received: by 2002:a05:6214:20e4:b0:441:7bed:5ccd with SMTP id
- 4-20020a05621420e400b004417bed5ccdmr8928927qvk.119.1649275061386; Wed, 06 Apr
- 2022 12:57:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220406002648.393486-1-dmitry.baryshkov@linaro.org> <20220406154028.EC897C385A3@smtp.kernel.org>
-In-Reply-To: <20220406154028.EC897C385A3@smtp.kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 6 Apr 2022 22:57:30 +0300
-Message-ID: <CAA8EJpod2cNOYr3g+DmdWo_2Ujv7-pW39fBKqcpCPvtVgP5-NQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] arm: qcom: qcom-apq8064: add separate device node
- for tsens
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Amit Kucheria <amitk@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        with ESMTP id S229763AbiDFWKX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Apr 2022 18:10:23 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71BB312D0B6;
+        Wed,  6 Apr 2022 15:08:25 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3B69112FC;
+        Wed,  6 Apr 2022 15:08:25 -0700 (PDT)
+Received: from e123648.arm.com (unknown [10.57.9.217])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 4CC4A3F5A1;
+        Wed,  6 Apr 2022 15:08:23 -0700 (PDT)
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     lukasz.luba@arm.com, dietmar.eggemann@arm.com,
+        viresh.kumar@linaro.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        amit.kachhap@gmail.com, linux-pm@vger.kernel.org
+Subject: [RFC PATCH v3 0/5] Introduce Cpufreq Active Stats
+Date:   Wed,  6 Apr 2022 23:08:04 +0100
+Message-Id: <20220406220809.22555-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,19 +39,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 6 Apr 2022 at 18:40, Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Dmitry Baryshkov (2022-04-05 17:26:44)
-> > Currently gcc-msm8960 driver manually creates tsens device. Instantiate
-> > the device using DT node instead. This follow the IPQ8064 device tree
-> > schema.
->
-> Why can't the schema be changed?
+Hi all,
 
-But these commits change the schema. They make apq8064 follow more
-logical scheme of ipq8064.
+This is the 3rd version of patch set which tries to address issues which are
+due to missing proper information about CPU performance in time.
 
+The issue description:
+1. "Cpufreq statistics cover the time when CPUs are in idle states, so they
+   are not suitable for certain purposes, like thermal control." Rafael [2]
+2. Thermal governor Intelligent Power Allocation (IPA) has to estimate power,
+   for the last period, e.g. 100ms, for each CPU in the Cluster, to grant new
+   power and set max possible frequency. Currently in some cases it gets big
+   error, when the frequency of CPU changed in the middle. It is due to the
+   fact that IPA reads the current frequency for the CPU, not aware of all
+   other frequencies which were actively (not in idle) used in the last 100ms.
+
+This code focuses on tracking the events of idle entry/exit for each CPU
+and combine them with the frequency tracked statistics inside internal
+statistics arrays (per-CPU). In the old cpufreq stats we have one shared
+statistics array for the policy (all CPUs) and not take into account
+periods when each CPU was in idle.
+
+Sometimes the IPA error between old estimation signal and reality is quite
+big (>50%).
+
+changelog:
+v3:
+- moved the core implementation into the cpufreq and not
+  creating a new framework (as sugested by Rafael)
+- updated all function names and APIs
+v2 [1]
+
+
+Regards,
+Lukasz Luba
+
+[1] https://lore.kernel.org/all/20210706131828.22309-1-lukasz.luba@arm.com/
+[2] https://lore.kernel.org/all/CAJZ5v0gzpfT__EyrVuZSr32ms7-YJZw7qEok0WZECv1iDRRvWA@mail.gmail.com/
+
+Lukasz Luba (5):
+  cpufreq: stats: Introduce Cpufreq Active Stats
+  cpuidle: Add Cpufreq Active Stats calls tracking idle entry/exit
+  thermal: Add interface to cooling devices to handle governor change
+  thermal: power allocator: Prepare power actors and calm down when not
+    used
+  thermal: cpufreq_cooling: Improve power estimation using Cpufreq
+    Active Stats
+
+ MAINTAINERS                           |   2 +-
+ drivers/cpufreq/cpufreq_stats.c       | 872 ++++++++++++++++++++++++++
+ drivers/cpuidle/cpuidle.c             |   5 +
+ drivers/thermal/cpufreq_cooling.c     | 131 ++++
+ drivers/thermal/gov_power_allocator.c |  71 +++
+ include/linux/cpufreq_stats.h         | 131 ++++
+ include/linux/thermal.h               |   1 +
+ 7 files changed, 1212 insertions(+), 1 deletion(-)
+ create mode 100644 include/linux/cpufreq_stats.h
 
 -- 
-With best wishes
-Dmitry
+2.17.1
+
