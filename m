@@ -2,300 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F404F62EC
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 17:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF064F6359
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 17:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235668AbiDFPNP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Apr 2022 11:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
+        id S235869AbiDFP2W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Apr 2022 11:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236251AbiDFPNE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Apr 2022 11:13:04 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0B4633A17;
-        Wed,  6 Apr 2022 05:14:22 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 64dfcd7fc68f3766; Wed, 6 Apr 2022 14:06:39 +0200
-Received: from kreacher.localnet (unknown [213.134.186.238])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 3AAC166BD30;
-        Wed,  6 Apr 2022 14:06:38 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Abhishek Sahu <abhsahu@nvidia.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH] PCI: Fix the ACPI power state during runtime resume
-Date:   Wed, 06 Apr 2022 14:06:37 +0200
-Message-ID: <11967527.O9o76ZdvQC@kreacher>
-In-Reply-To: <67fa293b-7957-df11-dd86-7d8d6d9802df@nvidia.com>
-References: <20220204233219.GA228585@bhelgaas> <2632919.mvXUDI8C0e@kreacher> <67fa293b-7957-df11-dd86-7d8d6d9802df@nvidia.com>
+        with ESMTP id S236726AbiDFP2K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Apr 2022 11:28:10 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC43B65123D
+        for <linux-pm@vger.kernel.org>; Wed,  6 Apr 2022 05:27:55 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id b19so2935153wrh.11
+        for <linux-pm@vger.kernel.org>; Wed, 06 Apr 2022 05:27:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=h8e9c9TFI1Ly317ektcSlehbJcZeEtFyP3Jc0716Rsg=;
+        b=LV6wALCpMHHr46kiK8gkmcvr2YLzPCAKmsaVuq5XqGfKVJXSyOhh/YEsG7xInDy6+z
+         W0+3pgyAvv4l2G//HgfffD3nJfgfvItnx0vctg/6reEx7Uh96dD0jMTreTFVcH7sHzzv
+         6wgIq0sXTa0Zf6jHsItnXFWRXJ4jXcF7JJPpT7mMXpMLd6RRZRTIxNclr7FyPRDBnp6N
+         FDjl8WsySRKECNtwO4KGzFt/KEKhjPQd6hU50fNEpsKsQwIAwc6grgw6hWZJUmDNsv+W
+         cY1+mwvaemjyxZmm0MnZniahMOzye+1unzb7c9xCmnkv98aufrT/NNxLLM2xzQ869YfX
+         VnKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=h8e9c9TFI1Ly317ektcSlehbJcZeEtFyP3Jc0716Rsg=;
+        b=agPXmsAkEk3yzXlZI+Yeb261JnijBzuuf6SuEjiS8HAjNFyzGqU4wZ+gfmRMAaF2RI
+         Q8hKE9kVflcqU7GfLdKIvFk83z6uzEJum17OEIfblmQekZX3fx0BAzdZQkgQeV1XuTj7
+         qYIZA+89DasqyJO/onC+3T2gaLUnVSCjFcx2DwvDnJpD6ptGAcCZhEdIa/3U1Oa4G0k8
+         4RfZNeGKcXOdOeMe4KE+H9OJedZJp4CzsMfjvEPapLOM0e0i95pfy9vtKeBRL78eJ8O9
+         sk+dOL8/QQadVbFtQ1Sv6OlK6zTMoLr2KE7SOZ+jFhpCY0Wd6YnMxF6lJnsC6JrdDWLw
+         ZO1g==
+X-Gm-Message-State: AOAM5334RKex2jk6zSx7XVkznVIWTCqiTwBpFvMAQKWI4vcozoaKbwJI
+        LTCLsrpRUvXfb4wDJBztFvqXRQ==
+X-Google-Smtp-Source: ABdhPJy/OzQ9KZJRJ6ogkuMUdiWA0ngNr+hQxdEQ1m/9ZsRyly6QpHYTlpGwFvGEqTI2jU8aIJ7ngQ==
+X-Received: by 2002:adf:f10e:0:b0:206:1837:b5a9 with SMTP id r14-20020adff10e000000b002061837b5a9mr6334860wro.347.1649248071925;
+        Wed, 06 Apr 2022 05:27:51 -0700 (PDT)
+Received: from ?IPV6:2a01:e34:ed2f:f020:261f:c14c:d23b:d177? ([2a01:e34:ed2f:f020:261f:c14c:d23b:d177])
+        by smtp.googlemail.com with ESMTPSA id v8-20020a1cf708000000b0034d7b5f2da0sm4809146wmh.33.2022.04.06.05.27.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Apr 2022 05:27:51 -0700 (PDT)
+Message-ID: <a422b297-45ea-1e9c-65a9-817b8dae796e@linaro.org>
+Date:   Wed, 6 Apr 2022 14:27:49 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.186.238
-X-CLIENT-HOSTNAME: 213.134.186.238
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejiedggeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefhudetieeugeetgfeiteetffevheehgfeileekudejkefhtedtgfdvleevveekgeenucffohhmrghinhepohhuthhlohhokhdrtghomhdpkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrddukeeirddvfeeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekiedrvdefkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepjedprhgtphhtthhopegrsghhshgrhhhusehnvhhiughirgdrtghomhdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopegshhgvlhhgrggrshesghhoohhglhgvrdgtohhmpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghr
- nhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RESEND PATCH V5 0/4] thermal: qcom: Add support for PMIC5 Gen2
+ ADC_TM
+Content-Language: en-US
+To:     Jishnu Prakash <quic_jprakash@quicinc.com>, agross@kernel.org,
+        bjorn.andersson@linaro.org, devicetree@vger.kernel.org,
+        mka@chromium.org, dmitry.baryshkov@linaro.org, robh+dt@kernel.org,
+        linus.walleij@linaro.org, quic_aghayal@quicinc.com,
+        rui.zhang@intel.com, quic_subbaram@quicinc.com, jic23@kernel.org,
+        amitk@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm-owner@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <1648991869-20899-1-git-send-email-quic_jprakash@quicinc.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <1648991869-20899-1-git-send-email-quic_jprakash@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday, April 6, 2022 7:32:45 AM CEST Abhishek Sahu wrote:
-> On 4/5/2022 10:20 PM, Rafael J. Wysocki wrote:
-> > On Tuesday, April 5, 2022 6:36:34 PM CEST Abhishek Sahu wrote:
-> >> On 2/8/2022 4:00 PM, Abhishek Sahu wrote:
-> >>> On 2/8/2022 12:28 AM, Rafael J. Wysocki wrote:
-> >>>> On Saturday, February 5, 2022 12:32:19 AM CET Bjorn Helgaas wrote:
-> >>>>> [+cc Rafael, hoping for your review :)
-> >>>>
-> >>>> +Mika
-> >>>>
-> >>>>> Wonder if we should add something like this to MAINTAINERS so you get
-> >>>>> cc'd on power-related things:
-> >>>>>
-> >>>>> diff --git a/MAINTAINERS b/MAINTAINERS
-> >>>>> index ea3e6c914384..3d9a211cad5d 100644
-> >>>>> --- a/MAINTAINERS
-> >>>>> +++ b/MAINTAINERS
-> >>>>> @@ -15422,6 +15422,7 @@ F:    include/linux/pm.h
-> >>>>>  F:   include/linux/pm_*
-> >>>>>  F:   include/linux/powercap.h
-> >>>>>  F:   kernel/configs/nopm.config
-> >>>>> +K:   pci_[a-z_]*power[a-z_]*\(
-> >>>>
-> >>>> It seems so, but generally PM patches should be CCed to linux-pm anyway.
-> >>>>
-> >>>>>
-> >>>>>  DYNAMIC THERMAL POWER MANAGEMENT (DTPM)
-> >>>>>  M:   Daniel Lezcano <daniel.lezcano@kernel.org>
-> >>>>> ]
-> >>>>>
-> >>>>> On Mon, Jan 24, 2022 at 05:51:07PM +0530, Abhishek Sahu wrote:
-> >>>>>> Consider the following sequence during PCI device runtime
-> >>>>>> suspend/resume:
-> >>>>>>
-> >>>>>> 1. PCI device goes into runtime suspended state. The PCI state
-> >>>>>>    will be changed to PCI_D0 and then pci_platform_power_transition()
-> >>>>>>    will be called which changes the ACPI state to ACPI_STATE_D3_HOT.
-> >>>>
-> >>>> You mean PCI_D3hot I suppose?
-> >>>>
-> >>>
-> >>>  Yes. It should be PCI_D3hot here.
-> >>>
-> >>>>>> 2. Parent bridge goes into runtime suspended state. If parent
-> >>>>>>    bridge supports D3cold, then it will change the power state of all its
-> >>>>>>    children to D3cold state and the power will be removed.
-> >>>>>>
-> >>>>>> 3. During wake-up time, the bridge will be runtime resumed first
-> >>>>>>    and pci_power_up() will be called for the bridge. Now, the power
-> >>>>>>    supply will be resumed.
-> >>>>>>
-> >>>>>> 4. pci_resume_bus() will be called which will internally invoke
-> >>>>>>    pci_restore_standard_config(). pci_update_current_state()
-> >>>>>>    will read PCI_PM_CTRL register and the current_state will be
-> >>>>>>    updated to D0.
-> >>>>>>
-> >>>>>> In the above process, at step 4, the ACPI device state will still be
-> >>>>>> ACPI_STATE_D3_HOT since pci_platform_power_transition() is not being
-> >>>>>> invoked.
-> >>>>
-> >>>> I'm not quite following.
-> >>>>
-> >>>> I'm assuming that this description applies to the endpoint device that was
-> >>>> previously put into D3_hot.
-> >>>>
-> >>>
-> >>>  Yes. This is applicable for endpoint devices which was previously put
-> >>>  into D3hot.
-> >>>
-> >>>> Since its current state is D3_hot, it is not D0 (in particular) and the
-> >>>> pci_set_power_state() in pci_restore_standard_config() should put int into
-> >>>> D0 proper, including the platform firmware part.
-> >>>>
-> >>>
-> >>>  The pci_restore_standard_config() for endpoint devices are being called
-> >>>  internally during wake-up of upstream bridge.
-> >>>
-> >>>  pci_power_up(struct pci_dev *dev)
-> >>>  {
-> >>>       ...
-> >>>       if (dev->runtime_d3cold) {
-> >>>         /*
-> >>>          * When powering on a bridge from D3cold, the whole hierarchy
-> >>>          * may be powered on into D0uninitialized state, resume them to
-> >>>          * give them a chance to suspend again
-> >>>          */
-> >>>         pci_resume_bus(dev->subordinate);
-> >>>     }
-> >>>     ...
-> >>>  }
-> >>>
-> >>>  For the upstream bridge, the above code will trigger the wake-up of
-> >>>  endpoint devices and then following code will be executed for the
-> >>>  endpoint devices:
-> >>>
-> >>>  pci_update_current_state(struct pci_dev *dev, pci_power_t state)
-> >>>  {
-> >>>     if (platform_pci_get_power_state(dev) == PCI_D3cold ||
-> >>>         !pci_device_is_present(dev)) {
-> >>>         dev->current_state = PCI_D3cold;
-> >>>     } else if (dev->pm_cap) {
-> >>>         u16 pmcsr;
-> >>>
-> >>>         pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-> >>>         dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
-> >>>     } else {
-> >>>         dev->current_state = state;
-> >>>     }
-> >>>  }
-> >>>
-> >>>  In the above code, the current_state will be set to D0 for the
-> >>>  endpoint devices since it will go into second block where
-> >>>  it will read the PM_CTRL register.
-> >>>
-> >>>>>> We need call the pci_platform_power_transition() with state
-> >>>>>> D0 to change the ACPI state to ACPI_STATE_D0.
-> >>>>>>
-> >>>>>> This patch calls pci_power_up() if current power state is D0 inside
-> >>>>>> pci_restore_standard_config(). This pci_power_up() will change the
-> >>>>>> ACPI state to ACPI_STATE_D0.
-> >>>>>>
-> >>>>>> Following are the steps to confirm:
-> >>>>>>
-> >>>>>> Enable the debug prints in acpi_pci_set_power_state()
-> >>>>>>
-> >>>>>> 0000:01:00.0 is PCI device and 0000:00:01.0 is parent bridge device
-> >>>>>>
-> >>>>>> Before:
-> >>>>>>
-> >>>>>> 0000:01:00.0: power state changed by ACPI to D3hot
-> >>>>>> 0000:00:01.0: power state changed by ACPI to D3cold
-> >>>>>> 0000:00:01.0: power state changed by ACPI to D0
-> >>>>>>
-> >>>>>> After:
-> >>>>>>
-> >>>>>> 0000:01:00.0: power state changed by ACPI to D3hot
-> >>>>>> 0000:00:01.0: power state changed by ACPI to D3cold
-> >>>>>> 0000:00:01.0: power state changed by ACPI to D0
-> >>>>>> 0000:01:00.0: power state changed by ACPI to D0
-> >>>>>>
-> >>>>>> So with this patch, the PCI device ACPI state is also being
-> >>>>>> changed to D0.
-> >>>>>>
-> >>>>>> Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
-> >>>>>> ---
-> >>>>>>  drivers/pci/pci-driver.c | 14 +++++++++++---
-> >>>>>>  1 file changed, 11 insertions(+), 3 deletions(-)
-> >>>>>>
-> >>>>>> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-> >>>>>> index 588588cfda48..64e0cca12f16 100644
-> >>>>>> --- a/drivers/pci/pci-driver.c
-> >>>>>> +++ b/drivers/pci/pci-driver.c
-> >>>>>> @@ -521,14 +521,22 @@ static void pci_device_shutdown(struct device *dev)
-> >>>>>>   */
-> >>>>>>  static int pci_restore_standard_config(struct pci_dev *pci_dev)
-> >>>>>>  {
-> >>>>>> +   int error = 0;
-> >>>>>>     pci_update_current_state(pci_dev, PCI_UNKNOWN);
-> >>>>>>
-> >>>>>>     if (pci_dev->current_state != PCI_D0) {
-> >>>>>> -           int error = pci_set_power_state(pci_dev, PCI_D0);
-> >>>>>> -           if (error)
-> >>>>>> -                   return error;
-> >>>>>> +           error = pci_set_power_state(pci_dev, PCI_D0);
-> >>>>>> +   } else {
-> >>>>>> +           /*
-> >>>>>> +            * The platform power state can still be non-D0, so this is
-> >>>>>> +            * required to change the platform power state to D0.
-> >>>>>> +            */
-> >>>>
-> >>>> This really isn't expected to happen.
-> >>>>
-> >>>> If the device's power state has been changed to D3hot by ACPI, it is not in D0.
-> >>>>
-> >>>> It looks like the state tracking is not working here.
-> >>>>
-> >>>
-> >>>  The state setting to D0 is happening due to the current logic present in
-> >>>  pci_update_current_state(). If we can fix the logic in
-> >>>  pci_update_current_state() to detect this condition and return state D3hot,
-> >>>  then it should also fix the issue.
-> >>>
-> >>>  Thanks,
-> >>>  Abhishek
-> >>>
-> >>
-> >>  Hi Rafael/Mika,
-> >>
-> >>  Could you please help regarding the correct way to fix this issue.
-> >>  I can update the patch accordingly.
-> > 
-> > I think you can try one of the patches posted recently:
-> > 
-> > https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpatchwork.kernel.org%2Fproject%2Flinux-pm%2Fpatch%2F3623886.MHq7AAxBmi%40kreacher%2F&amp;data=04%7C01%7Cabhsahu%40nvidia.com%7Cae4c8574f5a44973514a08da172471d6%7C43083d15727340c1b7db39efd9ccc17a%7C0%7C0%7C637847743178405297%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=aasJ79EICVnlJQ4EbXA2AtZFW0qnRsMkHEZRI8mnDI8%3D&amp;reserved=0
-> > 
-> > Thanks!
-> > 
-> > 
-> > 
+On 03/04/2022 15:17, Jishnu Prakash wrote:
+> Resending patch series to thermal tree.
 > 
->  Thanks Rafael.
->  I have applied both the changes and still the issue which I mentioned is happening.
+> Changes in v5:
+> Fixed some compilation errors in patch 4.
 > 
->  Following are the prints:
+> Changes in v4:
+> Addressed comments given by Jonathan (for using put_unaligned_le16)
+> and by Dmitry (for using separate init function and correcting args_count)
+> for qcom-spmi-adc-tm5.c in patch 4.
+> Added init function in patch 3.
 > 
->  0000:01:00.0: power state changed by ACPI to D3hot
->  0000:00:01.0: power state changed by ACPI to D3cold
->  0000:00:01.0: power state changed by ACPI to D0
+> Changes in v3:
+> Addressed comments given by Jonathan for qcom-spmi-adc-tm5.yaml.
+> Addressed comments given by Dmitry and Jonathan for qcom-spmi-adc-tm5.c.
+> Split patch for qcom-spmi-adc-tm5.c into two parts, one to refactor
+> code to support multiple device generations and the second to add
+> actual Gen2 ADC_TM changes.
 > 
->  So ACPI state change is still not happening for PCI endpoint devices.
+> Changes in v2:
+> Split IIO file changes into separate patch.
+> Addressed comments given by Dmitry for qcom-spmi-adc-tm5.c.
 > 
->  Also, the I checked the code and the pci_power_up() will not be called
->  for endpoint devices. For endpoints, pci_restore_standard_config() will
->  be called first where the current state will come as D0.
+> Changes in v1:
+> PMIC5 Gen2 ADC_TM is supported on PMIC7 chips and is a close
+> counterpart of PMIC7 ADC. It has the same functionality as
+> PMIC5 ADC_TM, to support generating interrupts on ADC value
+> crossing upper or lower thresholds for monitored channels.
+> 
+> Jishnu Prakash (4):
+>    dt-bindings: thermal: qcom: add PMIC5 Gen2 ADC_TM bindings
+>    iio: adc: qcom-vadc-common: add reverse scaling for PMIC5 Gen2 ADC_TM
+>    thermal: qcom: Add support for multiple generations of devices
+>    thermal: qcom: add support for PMIC5 Gen2 ADCTM
+> 
+>   .../bindings/thermal/qcom-spmi-adc-tm5.yaml        | 110 ++++-
+>   drivers/iio/adc/qcom-vadc-common.c                 |  11 +
+>   drivers/thermal/qcom/qcom-spmi-adc-tm5.c           | 486 +++++++++++++++++++--
+>   include/linux/iio/adc/qcom-vadc-common.h           |   2 +
+>   4 files changed, 569 insertions(+), 40 deletions(-)
 
-OK, I see.
-
-The problem is that if the PCI device goes to D0 because of the bridge power-up,
-it's ACPI companion's power state may not follow, which means that we really
-want to do a full power-up in there.
-
-Please test the appended patch with the patch from
-
-https://patchwork.kernel.org/project/linux-pm/patch/3623886.MHq7AAxBmi@kreacher/
-
-still applied.
-
----
- drivers/pci/pci-driver.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-Index: linux-pm/drivers/pci/pci-driver.c
-===================================================================
---- linux-pm.orig/drivers/pci/pci-driver.c
-+++ linux-pm/drivers/pci/pci-driver.c
-@@ -1312,7 +1312,7 @@ static int pci_pm_runtime_resume(struct
- 	 * to a driver because although we left it in D0, it may have gone to
- 	 * D3cold when the bridge above it runtime suspended.
- 	 */
--	pci_restore_standard_config(pci_dev);
-+	pci_pm_default_resume_early(pci_dev);
- 
- 	if (!pci_dev->driver)
- 		return 0;
+Applied, thanks
 
 
 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
