@@ -2,70 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5854F5B7C
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 12:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65FC04F5BAD
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 12:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244241AbiDFKGJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Apr 2022 06:06:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51488 "EHLO
+        id S231738AbiDFJjP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Apr 2022 05:39:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348531AbiDFKF3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Apr 2022 06:05:29 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0E242CA49
-        for <linux-pm@vger.kernel.org>; Tue,  5 Apr 2022 18:49:26 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id m16so702637plx.3
-        for <linux-pm@vger.kernel.org>; Tue, 05 Apr 2022 18:49:26 -0700 (PDT)
+        with ESMTP id S1585099AbiDFJgP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Apr 2022 05:36:15 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1763399CE
+        for <linux-pm@vger.kernel.org>; Tue,  5 Apr 2022 19:05:50 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id e4so1049224oif.2
+        for <linux-pm@vger.kernel.org>; Tue, 05 Apr 2022 19:05:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0FW336dtHK89fvl3u7JvXc/X8Vjn0tSLcri6guFx7q0=;
-        b=Sm9XupWe/onCfaGAwkmriGjGwohqfs7tWqDVDN3hrzuBMaoUOGdAEyO1VLSUAtATA8
-         Ft0TJTt8T8ciBNG6tsVOxsv8tvLCqPvaXb7mzPcJpEZFilTlFRXoZAoBamloOY0jZhkv
-         9D62OHjZGQyqzrj1XG9hW8jNlQ6K+qMVy3crY=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/B6OEeKNYPJ4Ptjy67RysQjps4ixI/LDrWNN950F0R4=;
+        b=LOFD1TB5DHCmdfFhLMSs0KFUQCTqjO1cUH6JeNgY3rqhZKF4HwlfE5cVVqI7+9FwI3
+         1nWfuNTNewIPCUr2fopefsiatrMpzcGWOywnhsuJ1QCvvzT/rigzes5gu0xjmGk6RTbj
+         91zvAhi3vAWNLCyc3+P49DKDOOP9IICYV9kwc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0FW336dtHK89fvl3u7JvXc/X8Vjn0tSLcri6guFx7q0=;
-        b=VivfOXCoHtN/CQkuUs9tXWtcpaygCoPOXCDo2CCms48PBhgLr4Zo97jDLQCdeisWbf
-         k6461Pg1uTxJ30G9SA/VjZNSWmcqNsZandEWgp5s8nk9X3JF68fA/9JBOpvxlcF0DSjz
-         gCkki4j2raj3GTTz/2/BqjcGPfP8pANHHYnQbj/W8KAXAjYnHuqLNtgbtUfCPmakwir3
-         Rsn8jA6CKgaws7lOSceglE9d38lLnFsvEL+Q/ddFBPk7z/sFhnSUIJaIbT+WRvRJV3ZR
-         YdjuAaSRPgxFhiUKSpa3+4xF6c7EDDagQt99zubCbfXmRV2Tm4pE4zYHWsPvOrFuo6Ea
-         oQUg==
-X-Gm-Message-State: AOAM530Lx3ThBjuDTLF1V71MNsj87naXA35BGzF2lLsnYjnuUr6DG780
-        YiWKymjmEBC1vHt2eTqpsinePQ==
-X-Google-Smtp-Source: ABdhPJxPnqmvxiqZo+frZDwXl2WoTFYWCfoh8Unlghz4i8m3sD7L7wbxSmmeVCG/tSr91GVENxFv1Q==
-X-Received: by 2002:a17:902:db03:b0:155:cb6a:7c8e with SMTP id m3-20020a170902db0300b00155cb6a7c8emr6492519plx.125.1649209765864;
-        Tue, 05 Apr 2022 18:49:25 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:6903:769c:e1f5:9c25])
-        by smtp.gmail.com with UTF8SMTPSA id bg13-20020a17090b0d8d00b001caa8f51098sm3475575pjb.9.2022.04.05.18.49.24
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/B6OEeKNYPJ4Ptjy67RysQjps4ixI/LDrWNN950F0R4=;
+        b=kFQ3bNQ89FZ1IiDETXjArjPmo+wzeGcX7zvQXBMokuUJnWsOr4EwjXwz0GByGU/aMf
+         ZIQu0f8p/NvdAKXub9QwGfkOs7Ggs6fODgzpVai0KBeX3cUCJdH5uPI6WK+a6Jihi+sD
+         x2DDuWO4TlMpKhwcFa1e6mgoeR3aYK44bQjgEEt52YjP0eWHivKAOBAdvgTTFkENE5Zy
+         pjkU17mevwF8t2fUy7lBjgW0CNaMViTQCk3pHHkN9t9NZwKnYRzTg+yMq/P18zi5/BK8
+         HO7Zpvc6qn9vPNgdU+erjKJKcCEGllxsN8ZCiGnocMh6JV6eUOiudHcQfwUtZOv/jvp3
+         ot4Q==
+X-Gm-Message-State: AOAM530iBzfdW4JCzEBumAbGS74PvU5vJWdkaXHVSji//spO8lO4hTze
+        vGC8wnWRTDHFEnD2j11CtHpbV6aQBFZKAQ==
+X-Google-Smtp-Source: ABdhPJwIrL4SbxRtLmHD9MxvHfdYcyoD0zMd4avpuAKBu7B/a82MHaM5OF3m48H0CLMyaS8M00PhPg==
+X-Received: by 2002:a05:6808:11ca:b0:2d4:6861:2a9e with SMTP id p10-20020a05680811ca00b002d468612a9emr2739050oiv.114.1649210748698;
+        Tue, 05 Apr 2022 19:05:48 -0700 (PDT)
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com. [209.85.160.45])
+        by smtp.gmail.com with ESMTPSA id n35-20020a05687055a300b000e1e2ab91e4sm4160245oao.39.2022.04.05.19.05.45
+        for <linux-pm@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 18:49:25 -0700 (PDT)
+        Tue, 05 Apr 2022 19:05:45 -0700 (PDT)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-de48295467so1462704fac.2
+        for <linux-pm@vger.kernel.org>; Tue, 05 Apr 2022 19:05:45 -0700 (PDT)
+X-Received: by 2002:a05:6870:c142:b0:dd:d5a3:767c with SMTP id
+ g2-20020a056870c14200b000ddd5a3767cmr2910063oad.291.1649210744492; Tue, 05
+ Apr 2022 19:05:44 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220127230727.3369358-1-briannorris@chromium.org>
+ <20220127150615.v2.12.I3a5c7f21ecd8221b42c2dbcd618386bce7b3e9a6@changeid> <CAMdYzYo9Y_pEAAtreQU0B9DVzGsbUgpTA2g7HGRyUXcSBjMy4g@mail.gmail.com>
+In-Reply-To: <CAMdYzYo9Y_pEAAtreQU0B9DVzGsbUgpTA2g7HGRyUXcSBjMy4g@mail.gmail.com>
 From:   Brian Norris <briannorris@chromium.org>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+Date:   Tue, 5 Apr 2022 19:05:33 -0700
+X-Gmail-Original-Message-ID: <CA+ASDXP46bVqZAyzgUQkZAqqVf6Yc5Zg9CZ_1k0XCYUSYq_QLg@mail.gmail.com>
+Message-ID: <CA+ASDXP46bVqZAyzgUQkZAqqVf6Yc5Zg9CZ_1k0XCYUSYq_QLg@mail.gmail.com>
+Subject: Re: [PATCH v2 12/15] arm64: dts: rockchip: Enable dmc and dfi nodes
+ on gru
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
         Chanwoo Choi <cw00.choi@samsung.com>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Elaine Zhang <zhangqing@rock-chips.com>,
-        linux-pm@vger.kernel.org, Doug Anderson <dianders@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        Brian Norris <briannorris@chromium.org>
-Subject: [RFC PATCH 2/2] PM / devfreq: rk3399_dmc: Block PMU during transitions
-Date:   Tue,  5 Apr 2022 18:48:42 -0700
-Message-Id: <20220405184816.RFC.2.I2d73b403944f0b8b5871a77585b73f31ccc62999@changeid>
-X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-In-Reply-To: <20220406014842.2771799-1-briannorris@chromium.org>
-References: <20220406014842.2771799-1-briannorris@chromium.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Rob Herring <robh+dt@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Lin Huang <hl@rock-chips.com>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Derek Basehore <dbasehore@chromium.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-pm <linux-pm@vger.kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        =?UTF-8?B?R2HDq2wgUE9SVEFZ?= <gael.portay@collabora.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,58 +87,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-See the previous patch ("soc: rockchip: power-domain: Manage resource
-conflicts with firmware") for a thorough explanation of the conflicts.
-While ARM Trusted Firmware may be modifying memory controller and
-power-domain states, we need to block the kernel's power-domain driver.
+Hello again Peter,
 
-If the power-domain driver is disabled, there is no resource conflict
-and this becomes a no-op.
+On Fri, Mar 4, 2022 at 6:47 AM Peter Geis <pgwipeout@gmail.com> wrote:
+> Transitions anywhere from the default 800mhz cause a lock.
+>
+> I'm digging deeper, but I'm hoping you can answer some questions in
+> the meantime:
+> 1. Does this require something from firmware that isn't available on
+> Mainline ATF? (AKA special firmware to the Chromebook line)
+> 2. If not, do you have any recommendations off the top of your head?
 
-Signed-off-by: Brian Norris <briannorris@chromium.org>
----
+I may have a better answer for you now. In the intervening time
+period, I've discovered a potentially-relevant bug, involving
+interactions between the kernel power-domain driver and ATF. See this
+series for my current fixes:
 
- drivers/devfreq/rk3399_dmc.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+https://lore.kernel.org/linux-rockchip/20220406014842.2771799-1-briannorris@chromium.org/
+[RFC PATCH 0/2] rockchip / devfreq: Coordinate DRAM controller
+resources between ATF and kernel
 
-diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
-index e494d1497d60..daff40702615 100644
---- a/drivers/devfreq/rk3399_dmc.c
-+++ b/drivers/devfreq/rk3399_dmc.c
-@@ -21,6 +21,7 @@
- #include <linux/rwsem.h>
- #include <linux/suspend.h>
- 
-+#include <soc/rockchip/pm_domains.h>
- #include <soc/rockchip/rk3399_grf.h>
- #include <soc/rockchip/rockchip_sip.h>
- 
-@@ -93,6 +94,16 @@ static int rk3399_dmcfreq_target(struct device *dev, unsigned long *freq,
- 
- 	mutex_lock(&dmcfreq->lock);
- 
-+	/*
-+	 * Ensure power-domain transitions don't interfere with ARM Trusted
-+	 * Firmware power-domain idling.
-+	 */
-+	err = rockchip_pmu_block();
-+	if (err) {
-+		dev_err(dev, "Failed to block PMU: %d\n", err);
-+		goto out_unlock;
-+	}
-+
- 	/*
- 	 * Some idle parameters may be based on the DDR controller clock, which
- 	 * is half of the DDR frequency.
-@@ -198,6 +209,8 @@ static int rk3399_dmcfreq_target(struct device *dev, unsigned long *freq,
- 	dmcfreq->volt = target_volt;
- 
- out:
-+	rockchip_pmu_unblock();
-+out_unlock:
- 	mutex_unlock(&dmcfreq->lock);
- 	return err;
- }
--- 
-2.35.1.1094.g7c7d902a7c-goog
+If that happens to help you (it may help, for instance, if your system
+was toggling NPLL off/on like mine was; it also may help if you're
+hitting a race on PMU_BUS_IDLE_REQ like noticed in patch 1), I'd love
+your feedback there.
 
+It's still possible your problems are completely unrelated though.
+
+Regards,
+Brian
