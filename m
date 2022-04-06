@@ -2,114 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E29964F6376
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 17:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8FC64F63BB
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 17:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236338AbiDFPgX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Apr 2022 11:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45064 "EHLO
+        id S236374AbiDFPtE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Apr 2022 11:49:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236342AbiDFPgM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Apr 2022 11:36:12 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6596C44A4D2;
-        Wed,  6 Apr 2022 05:50:27 -0700 (PDT)
-X-UUID: 3e7fdf788b5b4bceaaa07a2a1ac9796e-20220406
-X-UUID: 3e7fdf788b5b4bceaaa07a2a1ac9796e-20220406
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <jia-wei.chang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1457013016; Wed, 06 Apr 2022 20:49:33 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 6 Apr 2022 20:49:32 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 6 Apr 2022 20:49:32 +0800
-Message-ID: <bf6d645d9c8d0cc0ada530d9a3ebf27df838cc52.camel@mediatek.com>
-Subject: Re: [PATCH 2/4] dt-bindings: cpufreq: mediatek: add mt8186 cpufreq
- dt-bindings
-From:   Jia-Wei Chang <jia-wei.chang@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <fan.chen@mediatek.com>,
-        <louis.yu@mediatek.com>, <roger.lu@mediatek.com>,
-        <Allen-yy.Lin@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <hsinyi@google.com>,
-        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
-Date:   Wed, 6 Apr 2022 20:49:32 +0800
-In-Reply-To: <YipjOXdCNUxdy+ey@robh.at.kernel.org>
-References: <20220307122151.11666-1-jia-wei.chang@mediatek.com>
-         <20220307122151.11666-3-jia-wei.chang@mediatek.com>
-         <YipjOXdCNUxdy+ey@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S236493AbiDFPs1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Apr 2022 11:48:27 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7A44BC585;
+        Wed,  6 Apr 2022 06:09:40 -0700 (PDT)
+Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KYPsB5dFhz67sbK;
+        Wed,  6 Apr 2022 21:06:06 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 6 Apr 2022 15:09:04 +0200
+Received: from localhost (10.202.226.41) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 6 Apr
+ 2022 14:09:03 +0100
+Date:   Wed, 6 Apr 2022 14:09:02 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     <linux-iio@vger.kernel.org>, Paul Cercueil <paul@crapouillou.net>,
+        "Linux PM" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] iio: chemical: scd30: Export dev_pm_ops instead
+ of suspend() and resume()
+Message-ID: <20220406140902.0000021a@Huawei.com>
+In-Reply-To: <CAJZ5v0gUECCmFJoVnmR8SK-pBg5v4QrtLgeKT7VTmgdykuZAzA@mail.gmail.com>
+References: <20220401140605.31871-1-Jonathan.Cameron@huawei.com>
+        <20220401140605.31871-2-Jonathan.Cameron@huawei.com>
+        <CAJZ5v0gUECCmFJoVnmR8SK-pBg5v4QrtLgeKT7VTmgdykuZAzA@mail.gmail.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.202.226.41]
+X-ClientProxiedBy: lhreml720-chm.china.huawei.com (10.201.108.71) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 2022-03-10 at 14:44 -0600, Rob Herring wrote:
-> On Mon, Mar 07, 2022 at 08:21:49PM +0800, Tim Chang wrote:
-> > 1. add cci property.
-> > 2. add example of MT8186.
-> > 
-> > Signed-off-by: Jia-Wei Chang <
-> > jia-wei.chang@mediatek.corp-partner.google.com>
+On Tue, 5 Apr 2022 20:19:11 +0200
+"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+
+> On Fri, Apr 1, 2022 at 4:06 PM Jonathan Cameron
+> <Jonathan.Cameron@huawei.com> wrote:
+> >
+> > Whilst here move to the new infrastructure using pm_sleep_ptr()
+> > and EXPORT_DEV_PM_OPS() so as to let the compiler remove the unused
+> > code if CONFIG_SLEEP is not defined.
+> >
+> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > Cc: Tomasz Duszynski <tomasz.duszynski@octakon.com>
 > > ---
-> >  .../bindings/cpufreq/cpufreq-mediatek.yaml    | 41
-> > +++++++++++++++++++
-> >  1 file changed, 41 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-
-> > mediatek.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-
-> > mediatek.yaml
-> > index 584946eb3790..d3ce17fd8fcf 100644
-> > --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-
-> > mediatek.yaml
-> > +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-
-> > mediatek.yaml
-> > @@ -48,6 +48,10 @@ properties:
-> >        When absent, the voltage scaling flow is handled by
-> > hardware, hence no
-> >        software "voltage tracking" is needed.
-> >  
-> > +  cci:
-> > +    description:
-> > +      Phandle of the cci to be linked with the phandle of CPU if
-> > present.
-> 
-> We already have a binding for this. See cci-control-port.
-
-Hi Rob,
-
-Pardon me for my late reply.
-
-It seems that "cci-control-port" is hardware IP from ARM.
-But mediatek-cpufreq uses MTK internal CCI hardware IP.
-I think I should keep this change here.
-
-Thanks.
-
-> 
+> >  drivers/iio/chemical/scd30.h        | 5 +----
+> >  drivers/iio/chemical/scd30_core.c   | 8 ++++----
+> >  drivers/iio/chemical/scd30_i2c.c    | 2 +-
+> >  drivers/iio/chemical/scd30_serial.c | 2 +-
+> >  4 files changed, 7 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/drivers/iio/chemical/scd30.h b/drivers/iio/chemical/scd30.h
+> > index f60127bfe0f4..1ac9f3f79271 100644
+> > --- a/drivers/iio/chemical/scd30.h
+> > +++ b/drivers/iio/chemical/scd30.h
+> > @@ -68,10 +68,7 @@ struct scd30_state {
+> >         scd30_command_t command;
+> >  };
+> >
+> > -int scd30_suspend(struct device *dev);
+> > -int scd30_resume(struct device *dev);
+> > -
+> > -static __maybe_unused SIMPLE_DEV_PM_OPS(scd30_pm_ops, scd30_suspend, scd30_resume);
+> > +extern const struct dev_pm_ops scd30_pm_ops;
+> >
+> >  int scd30_probe(struct device *dev, int irq, const char *name, void *priv, scd30_command_t command);
+> >
+> > diff --git a/drivers/iio/chemical/scd30_core.c b/drivers/iio/chemical/scd30_core.c
+> > index 9fe6bbe9ee04..6c6c11c2772a 100644
+> > --- a/drivers/iio/chemical/scd30_core.c
+> > +++ b/drivers/iio/chemical/scd30_core.c
+> > @@ -517,7 +517,7 @@ static const struct iio_chan_spec scd30_channels[] = {
+> >         IIO_CHAN_SOFT_TIMESTAMP(3),
+> >  };
+> >
+> > -int __maybe_unused scd30_suspend(struct device *dev)
+> > +static int scd30_suspend(struct device *dev)
+> >  {
+> >         struct iio_dev *indio_dev = dev_get_drvdata(dev);
+> >         struct scd30_state *state  = iio_priv(indio_dev);
+> > @@ -529,9 +529,8 @@ int __maybe_unused scd30_suspend(struct device *dev)
+> >
+> >         return regulator_disable(state->vdd);
+> >  }
+> > -EXPORT_SYMBOL(scd30_suspend);
+> >
+> > -int __maybe_unused scd30_resume(struct device *dev)
+> > +static int scd30_resume(struct device *dev)
+> >  {
+> >         struct iio_dev *indio_dev = dev_get_drvdata(dev);
+> >         struct scd30_state *state = iio_priv(indio_dev);
+> > @@ -543,7 +542,8 @@ int __maybe_unused scd30_resume(struct device *dev)
+> >
+> >         return scd30_command_write(state, CMD_START_MEAS, state->pressure_comp);
+> >  }
+> > -EXPORT_SYMBOL(scd30_resume);
 > > +
-> >    "#cooling-cells":
-> >      description:
-> >        For details, please refer to
+> > +EXPORT_SIMPLE_DEV_PM_OPS(scd30_pm_ops, scd30_suspend, scd30_resume);
+> >
+> >  static void scd30_stop_meas(void *data)
+> >  {
+> > diff --git a/drivers/iio/chemical/scd30_i2c.c b/drivers/iio/chemical/scd30_i2c.c
+> > index 875892a070ee..7c332e4e8e46 100644
+> > --- a/drivers/iio/chemical/scd30_i2c.c
+> > +++ b/drivers/iio/chemical/scd30_i2c.c
+> > @@ -128,7 +128,7 @@ static struct i2c_driver scd30_i2c_driver = {
+> >         .driver = {
+> >                 .name = KBUILD_MODNAME,
+> >                 .of_match_table = scd30_i2c_of_match,
+> > -               .pm = &scd30_pm_ops,
+> > +               .pm = pm_sleep_ptr(&scd30_pm_ops),
+> >         },
+> >         .probe_new = scd30_i2c_probe,
+> >  };
+> > diff --git a/drivers/iio/chemical/scd30_serial.c b/drivers/iio/chemical/scd30_serial.c
+> > index 568b34486c44..8664f3ce6b33 100644
+> > --- a/drivers/iio/chemical/scd30_serial.c
+> > +++ b/drivers/iio/chemical/scd30_serial.c
+> > @@ -252,7 +252,7 @@ static struct serdev_device_driver scd30_serdev_driver = {
+> >         .driver = {
+> >                 .name = KBUILD_MODNAME,
+> >                 .of_match_table = scd30_serdev_of_match,
+> > -               .pm = &scd30_pm_ops,
+> > +               .pm = pm_sleep_ptr(&scd30_pm_ops),
+> >         },
+> >         .probe = scd30_serdev_probe,
+> >  };
+> > --  
+> 
+> Applied as 5.19 material along with the [2-3/3].
+> 
+> Please let me know if you need a non-mutable branch to pull from in
+> order to base other work on these commits.
+
+Yes please.  A non-mutable branch would be great.
+
+Thanks,
+
+Jonathan
+
+> 
+> Thanks!
 
