@@ -2,167 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FC64F63BB
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 17:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1504F6428
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 18:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236374AbiDFPtE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Apr 2022 11:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51936 "EHLO
+        id S232040AbiDFQIv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Apr 2022 12:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236493AbiDFPs1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Apr 2022 11:48:27 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7A44BC585;
-        Wed,  6 Apr 2022 06:09:40 -0700 (PDT)
-Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KYPsB5dFhz67sbK;
-        Wed,  6 Apr 2022 21:06:06 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 6 Apr 2022 15:09:04 +0200
-Received: from localhost (10.202.226.41) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 6 Apr
- 2022 14:09:03 +0100
-Date:   Wed, 6 Apr 2022 14:09:02 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     <linux-iio@vger.kernel.org>, Paul Cercueil <paul@crapouillou.net>,
-        "Linux PM" <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] iio: chemical: scd30: Export dev_pm_ops instead
- of suspend() and resume()
-Message-ID: <20220406140902.0000021a@Huawei.com>
-In-Reply-To: <CAJZ5v0gUECCmFJoVnmR8SK-pBg5v4QrtLgeKT7VTmgdykuZAzA@mail.gmail.com>
-References: <20220401140605.31871-1-Jonathan.Cameron@huawei.com>
-        <20220401140605.31871-2-Jonathan.Cameron@huawei.com>
-        <CAJZ5v0gUECCmFJoVnmR8SK-pBg5v4QrtLgeKT7VTmgdykuZAzA@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        with ESMTP id S237177AbiDFQHY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Apr 2022 12:07:24 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403D0432D6C
+        for <linux-pm@vger.kernel.org>; Tue,  5 Apr 2022 21:47:08 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id j83so1293620oih.6
+        for <linux-pm@vger.kernel.org>; Tue, 05 Apr 2022 21:47:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=NW58TngHF2iGAMKYPwCczd/NajU2Zo1ovbXcFt5HfVg=;
+        b=HbEFFFNDXGE1evlb0UhGkovo3mQz8rrsjMrZ0rgXuwXs/AsmlxLjIo0Y/JJoBSEaQ/
+         XsZtm/oRIVWvTKK38RZ5aNicioktfbqpFBo+Sjlu2WX5W20YXu3GB6KXtrAJN9vyxhav
+         C18wFUMX1doDa1fxtMwdq+D3EQkj1WUoF1cXc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=NW58TngHF2iGAMKYPwCczd/NajU2Zo1ovbXcFt5HfVg=;
+        b=Ck4esUuUdsCiyimdbFZR+eCXQhZ7h3vx0ZGXRdGv1yyXEuYGdqDRFngST1OsG9KSFP
+         d3dOY6jk2n2jehmyXHAMGszjpYA1LYmLlHU+SKMmF58w3FLNrZr1EbL3xkzgmrWzXb/r
+         UQ96Vc+FRxGifZvC4durE44yDN+zK6VF94PBlr2+u0v4k5j8sD2qto1pWNdjjKmRf1h+
+         G1QILuRYY/0sxOHrX+2YNn0vi6ilxp7xFKjJqiV5GVCnyIwj8EXdtHaFJ5WeB30DrPBt
+         YeJ4idyn8cOY3+Jfimp0qlHLjjTslwCkBw1o5e7WLLZIyNF2tZzLrMTIOdCYu0XD5oVM
+         CG8g==
+X-Gm-Message-State: AOAM533uUcSkKLsnWC9jJdUTOgFhtSCONr3oLP08aIzO0fpFqiOyZGzS
+        fDUBxnISfp84aEiBQJboOVeKr/d/gYOaSl/13C3omw==
+X-Google-Smtp-Source: ABdhPJznEpRzhYei7BQOzmtrp7K7kVlyM+t3hMHY0+2YiIUtrVJ/MLs5xc2bsd5dbee7S/GYtq5ePSIQqXJlseQIpxc=
+X-Received: by 2002:aca:a9c8:0:b0:2da:45b6:b796 with SMTP id
+ s191-20020acaa9c8000000b002da45b6b796mr2700245oie.193.1649220427524; Tue, 05
+ Apr 2022 21:47:07 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 5 Apr 2022 21:47:07 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.41]
-X-ClientProxiedBy: lhreml720-chm.china.huawei.com (10.201.108.71) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAE-0n51xeigKFS9Zek44HZGD9cdc4Em91aQ5HHzuy7P1FBmfFg@mail.gmail.com>
+References: <20211125174751.25317-1-djakov@kernel.org> <CAE-0n51xeigKFS9Zek44HZGD9cdc4Em91aQ5HHzuy7P1FBmfFg@mail.gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Tue, 5 Apr 2022 21:47:07 -0700
+Message-ID: <CAE-0n52xQ+SbwpDfzuW-tMLJP17Z2qog2s_pS=XBTULLNpUkLg@mail.gmail.com>
+Subject: Re: [PATCH v3] interconnect: qcom: icc-rpmh: Add BCMs to commit list
+ in pre_aggregate
+To:     Alex Elder <elder@linaro.org>, djakov@kernel.org,
+        okukatla@codeaurora.org, quic_mdtipton@quicinc.com
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org,
+        dianders@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 5 Apr 2022 20:19:11 +0200
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+Quoting Stephen Boyd (2022-04-05 16:00:55)
+> Quoting Georgi Djakov (2021-11-25 09:47:51)
+> > From: Mike Tipton <mdtipton@codeaurora.org>
+> >
+> > We're only adding BCMs to the commit list in aggregate(), but there are
+> > cases where pre_aggregate() is called without subsequently calling
+> > aggregate(). In particular, in icc_sync_state() when a node with initial
+> > BW has zero requests. Since BCMs aren't added to the commit list in
+> > these cases, we don't actually send the zero BW request to HW. So the
+> > resources remain on unnecessarily.
+> >
+> > Add BCMs to the commit list in pre_aggregate() instead, which is always
+> > called even when there are no requests.
+> >
+> > Signed-off-by: Mike Tipton <mdtipton@codeaurora.org>
+> > [georgi: remove icc_sync_state for platforms with incomplete support]
+> > Signed-off-by: Georgi Djakov <djakov@kernel.org>
+>
+> This patch fixes suspend/resume for me on sc7180-trogdor-lazor. Without
+> it I can't achieve XO shutdown. It seems that it fixes the sync_state
+> support that was added in commit b1d681d8d324 ("interconnect: Add sync
+> state support"). Before that commit suspend worked because the
+> interconnect wasn't maxed out at boot. After that commit we started
+> maxing out the interconnect state and never dropping it.
 
-> On Fri, Apr 1, 2022 at 4:06 PM Jonathan Cameron
-> <Jonathan.Cameron@huawei.com> wrote:
-> >
-> > Whilst here move to the new infrastructure using pm_sleep_ptr()
-> > and EXPORT_DEV_PM_OPS() so as to let the compiler remove the unused
-> > code if CONFIG_SLEEP is not defined.
-> >
-> > Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Cc: Tomasz Duszynski <tomasz.duszynski@octakon.com>
-> > ---
-> >  drivers/iio/chemical/scd30.h        | 5 +----
-> >  drivers/iio/chemical/scd30_core.c   | 8 ++++----
-> >  drivers/iio/chemical/scd30_i2c.c    | 2 +-
-> >  drivers/iio/chemical/scd30_serial.c | 2 +-
-> >  4 files changed, 7 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/drivers/iio/chemical/scd30.h b/drivers/iio/chemical/scd30.h
-> > index f60127bfe0f4..1ac9f3f79271 100644
-> > --- a/drivers/iio/chemical/scd30.h
-> > +++ b/drivers/iio/chemical/scd30.h
-> > @@ -68,10 +68,7 @@ struct scd30_state {
-> >         scd30_command_t command;
-> >  };
-> >
-> > -int scd30_suspend(struct device *dev);
-> > -int scd30_resume(struct device *dev);
-> > -
-> > -static __maybe_unused SIMPLE_DEV_PM_OPS(scd30_pm_ops, scd30_suspend, scd30_resume);
-> > +extern const struct dev_pm_ops scd30_pm_ops;
-> >
-> >  int scd30_probe(struct device *dev, int irq, const char *name, void *priv, scd30_command_t command);
-> >
-> > diff --git a/drivers/iio/chemical/scd30_core.c b/drivers/iio/chemical/scd30_core.c
-> > index 9fe6bbe9ee04..6c6c11c2772a 100644
-> > --- a/drivers/iio/chemical/scd30_core.c
-> > +++ b/drivers/iio/chemical/scd30_core.c
-> > @@ -517,7 +517,7 @@ static const struct iio_chan_spec scd30_channels[] = {
-> >         IIO_CHAN_SOFT_TIMESTAMP(3),
-> >  };
-> >
-> > -int __maybe_unused scd30_suspend(struct device *dev)
-> > +static int scd30_suspend(struct device *dev)
-> >  {
-> >         struct iio_dev *indio_dev = dev_get_drvdata(dev);
-> >         struct scd30_state *state  = iio_priv(indio_dev);
-> > @@ -529,9 +529,8 @@ int __maybe_unused scd30_suspend(struct device *dev)
-> >
-> >         return regulator_disable(state->vdd);
-> >  }
-> > -EXPORT_SYMBOL(scd30_suspend);
-> >
-> > -int __maybe_unused scd30_resume(struct device *dev)
-> > +static int scd30_resume(struct device *dev)
-> >  {
-> >         struct iio_dev *indio_dev = dev_get_drvdata(dev);
-> >         struct scd30_state *state = iio_priv(indio_dev);
-> > @@ -543,7 +542,8 @@ int __maybe_unused scd30_resume(struct device *dev)
-> >
-> >         return scd30_command_write(state, CMD_START_MEAS, state->pressure_comp);
-> >  }
-> > -EXPORT_SYMBOL(scd30_resume);
-> > +
-> > +EXPORT_SIMPLE_DEV_PM_OPS(scd30_pm_ops, scd30_suspend, scd30_resume);
-> >
-> >  static void scd30_stop_meas(void *data)
-> >  {
-> > diff --git a/drivers/iio/chemical/scd30_i2c.c b/drivers/iio/chemical/scd30_i2c.c
-> > index 875892a070ee..7c332e4e8e46 100644
-> > --- a/drivers/iio/chemical/scd30_i2c.c
-> > +++ b/drivers/iio/chemical/scd30_i2c.c
-> > @@ -128,7 +128,7 @@ static struct i2c_driver scd30_i2c_driver = {
-> >         .driver = {
-> >                 .name = KBUILD_MODNAME,
-> >                 .of_match_table = scd30_i2c_of_match,
-> > -               .pm = &scd30_pm_ops,
-> > +               .pm = pm_sleep_ptr(&scd30_pm_ops),
-> >         },
-> >         .probe_new = scd30_i2c_probe,
-> >  };
-> > diff --git a/drivers/iio/chemical/scd30_serial.c b/drivers/iio/chemical/scd30_serial.c
-> > index 568b34486c44..8664f3ce6b33 100644
-> > --- a/drivers/iio/chemical/scd30_serial.c
-> > +++ b/drivers/iio/chemical/scd30_serial.c
-> > @@ -252,7 +252,7 @@ static struct serdev_device_driver scd30_serdev_driver = {
-> >         .driver = {
-> >                 .name = KBUILD_MODNAME,
-> >                 .of_match_table = scd30_serdev_of_match,
-> > -               .pm = &scd30_pm_ops,
-> > +               .pm = pm_sleep_ptr(&scd30_pm_ops),
-> >         },
-> >         .probe = scd30_serdev_probe,
-> >  };
-> > --  
-> 
-> Applied as 5.19 material along with the [2-3/3].
-> 
-> Please let me know if you need a non-mutable branch to pull from in
-> order to base other work on these commits.
+I'm also wondering if this means suspend doesn't work without sync_state
+support? Does this mean that device links are required? And device links
+are only made if fw_devlink is enabled? I don't see any devlinks made in
+drivers/interconnect so I worry that we have to use fw_devlink to get
+device links made to make sync_state happen to remove the max votes that
+are put in at boot.
 
-Yes please.  A non-mutable branch would be great.
+>
+> It would be good to pick this back to stable kernels so we have a
+> working suspend/resume on LTS kernels. I tried picking it back to
+> 5.10.109 (latest 5.10 LTS) and booting it on my Lazor w/ LTE device but
+> it crashes at boot pretty reliably in the IPA driver. Interestingly I
+> can't get it to crash on 5.15.32 when I pick it back, so maybe something
+> has changed between 5.10 and 5.15 for IPA? I'll try to bisect it.
 
-Thanks,
-
-Jonathan
-
-> 
-> Thanks!
-
+Bisecting pointed to commit 1aac309d3207 ("net: ipa: use autosuspend")
+as fixing it. I think before that commit we weren't enabling some
+interconnect, but now we're booting, runtime suspending, and then
+runtime resuming again. With the sync state patch I suspect the
+interconnect bandwidth is dropped and IPA needs to use runtime PM to
+actually turn resources back on because it assumed that resources are on
+when it probes.
