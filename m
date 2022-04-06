@@ -2,49 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC5D4F5FFB
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 15:30:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D014F606C
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Apr 2022 15:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232217AbiDFNNx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Apr 2022 09:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
+        id S233595AbiDFNpA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Apr 2022 09:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232874AbiDFNM0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Apr 2022 09:12:26 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1825F6704;
-        Wed,  6 Apr 2022 02:45:59 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (117.145-247-81.adsl-dyn.isp.belgacom.be [81.247.145.117])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 001FB482;
-        Wed,  6 Apr 2022 11:45:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1649238352;
-        bh=jlDjIElqodWntU54EXI4PqRLKycv+S7VoD7sYNoZ+MA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W/4BgXPUOHhX425m+MUkUHTOJZ45pthLQY5exomOvPagRPNTOoixOROTXVejXykNY
-         JTHxEcMc1RDoJyDuy+NjENLMxURYmt2REHtcadnDFN/AGveelgYU/hkOi5xyeONJyO
-         9WYMmaLMmi583OJrj5XwmZlQzBzkZfhW5dYxz0vw=
-Date:   Wed, 6 Apr 2022 12:45:48 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, l.stach@pengutronix.de,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 5/5] soc: imx: imx8mp-blk-ctrl: introduce HSIO blk ctrl
- noc settings
-Message-ID: <Yk1hTNYYY47Pau8/@pendragon.ideasonboard.com>
-References: <20220406082330.2681591-1-peng.fan@oss.nxp.com>
- <20220406082330.2681591-6-peng.fan@oss.nxp.com>
+        with ESMTP id S233481AbiDFNow (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Apr 2022 09:44:52 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3286B2F1B;
+        Wed,  6 Apr 2022 03:52:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649242335; x=1680778335;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sCbndmvVFeuFOpdMRm7H6hoHwI9EpwMyrkrA0NqeNzs=;
+  b=j0yAbH0xJHJA1zpptmh7zq5rLBRUC/VIajL2qA9eBhZJZ+lN8BUhJVz1
+   tiJccnhXE0dEiVYH//tzJir/33pOj29WH2yzdBb4Sq4sQzcQxeQliysy+
+   4pwcgE3WGC2/CbfJFhEiWXA3HR7UBZpSaEBVOqHRWmGK6VOm5cyzVc7nN
+   fi0iIPkQdQ8gYJkl5jrAiOcufEUGp32WJsD+ON5RF9uAURUShBamjwNl0
+   4b5KIdm9Zz71NLaFyyrDqPRtJZWQjoNFMw1557B6YCTNviUySd6qFFQnY
+   ulnWqwCmCA1NyS25BpJ5Bz0Be2JroR/9jITaRwN84D4EdmlxUAM1SuYsg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="248535971"
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="248535971"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Apr 2022 03:52:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,239,1643702400"; 
+   d="scan'208";a="608846945"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 06 Apr 2022 03:51:58 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nc3GX-0004K2-V1;
+        Wed, 06 Apr 2022 10:51:57 +0000
+Date:   Wed, 06 Apr 2022 18:51:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ bfb13c25fad240c3fd1601e8deff642389e903e8
+Message-ID: <624d70bb.IDPV7PFlNd1OW6GM%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220406082330.2681591-6-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,192 +63,114 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Peng,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: bfb13c25fad240c3fd1601e8deff642389e903e8  Merge branch 'thermal-int340x' into bleeding-edge
 
-Thank you for the patch.
+elapsed time: 976m
 
-On Wed, Apr 06, 2022 at 04:23:30PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> The out of reset value of HSIO NoC is not a valid value, we need
-> set it to a correct value. We only need to set it after power on.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/soc/imx/imx8mp-blk-ctrl.c | 74 +++++++++++++++++++++++++++++++
->  1 file changed, 74 insertions(+)
-> 
-> diff --git a/drivers/soc/imx/imx8mp-blk-ctrl.c b/drivers/soc/imx/imx8mp-blk-ctrl.c
-> index e832c007b063..929fd9b770ae 100644
-> --- a/drivers/soc/imx/imx8mp-blk-ctrl.c
-> +++ b/drivers/soc/imx/imx8mp-blk-ctrl.c
-> @@ -12,6 +12,7 @@
->  #include <linux/pm_domain.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/regmap.h>
-> +#include <linux/mfd/syscon.h>
->  
->  #include <dt-bindings/power/imx8mp-power.h>
->  
-> @@ -26,14 +27,24 @@ struct imx8mp_hsio_blk_ctrl {
->  	struct notifier_block power_nb;
->  	struct device *bus_power_dev;
->  	struct regmap *regmap;
-> +	struct regmap *noc_regmap;
->  	struct imx8mp_hsio_blk_ctrl_domain *domains;
->  	struct genpd_onecell_data onecell_data;
->  };
->  
-> +struct imx8mp_hsio_blk_ctrl_noc_data {
-> +	u32 off;
-> +	u32 priority;
-> +	u32 mode;
-> +	u32 extctrl;
-> +};
+configs tested: 93
+configs skipped: 4
 
-Maybe the data structure, and possibly the imx8mp_hsio_noc_set()
-function, could be shared with imx8m-blk-ctrl.c ? It's much code, so if
-it causes too much trouble, feel free to ignore.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-The other comments on patch 4/5 apply to this one too.
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+arm                                 defconfig
+arm                              allmodconfig
+i386                          randconfig-c001
+sh                          sdk7786_defconfig
+arc                          axs101_defconfig
+m68k                        m5407c3_defconfig
+mips                         mpc30x_defconfig
+openrisc                  or1klitex_defconfig
+xtensa                  nommu_kc705_defconfig
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+alpha                               defconfig
+csky                                defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+parisc64                            defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+s390                             allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                                defconfig
+i386                             allyesconfig
+sparc                               defconfig
+sparc                            allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a015
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+arc                  randconfig-r043-20220405
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allyesconfig
+riscv                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                                  kexec
+x86_64                          rhel-8.3-func
+x86_64                               rhel-8.3
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
 
-> +
-> +#define DOMAIN_MAX_NOC	2
->  struct imx8mp_hsio_blk_ctrl_domain_data {
->  	const char *name;
->  	const char *clk_name;
->  	const char *gpc_name;
-> +	const struct imx8mp_hsio_blk_ctrl_noc_data *noc_data[DOMAIN_MAX_NOC];
->  };
->  
->  struct imx8mp_hsio_blk_ctrl_domain {
-> @@ -41,6 +52,7 @@ struct imx8mp_hsio_blk_ctrl_domain {
->  	struct clk *clk;
->  	struct device *power_dev;
->  	struct imx8mp_hsio_blk_ctrl *bc;
-> +	const struct imx8mp_hsio_blk_ctrl_domain_data *data;
->  	int id;
->  };
->  
-> @@ -50,6 +62,27 @@ to_imx8mp_hsio_blk_ctrl_domain(struct generic_pm_domain *genpd)
->  	return container_of(genpd, struct imx8mp_hsio_blk_ctrl_domain, genpd);
->  }
->  
-> +static int imx8mp_hsio_noc_set(struct imx8mp_hsio_blk_ctrl_domain *domain)
-> +{
-> +	const struct imx8mp_hsio_blk_ctrl_domain_data *data = domain->data;
-> +	struct imx8mp_hsio_blk_ctrl *bc = domain->bc;
-> +	struct regmap *regmap = bc->noc_regmap;
-> +	int i;
-> +
-> +	if (!data || !regmap)
-> +		return 0;
-> +
-> +	for (i = 0; i < DOMAIN_MAX_NOC; i++) {
-> +		if (!data->noc_data[i])
-> +			continue;
-> +		regmap_write(regmap, data->noc_data[i]->off + 0x8, data->noc_data[i]->priority);
-> +		regmap_write(regmap, data->noc_data[i]->off + 0xc, data->noc_data[i]->mode);
-> +		regmap_write(regmap, data->noc_data[i]->off + 0x18, data->noc_data[i]->extctrl);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int imx8mp_hsio_blk_ctrl_power_on(struct generic_pm_domain *genpd)
->  {
->  	struct imx8mp_hsio_blk_ctrl_domain *domain =
-> @@ -89,6 +122,8 @@ static int imx8mp_hsio_blk_ctrl_power_on(struct generic_pm_domain *genpd)
->  		goto clk_disable;
->  	}
->  
-> +	imx8mp_hsio_noc_set(domain);
-> +
->  	return 0;
->  
->  clk_disable:
-> @@ -143,11 +178,39 @@ imx8m_blk_ctrl_xlate(struct of_phandle_args *args, void *data)
->  
->  static struct lock_class_key blk_ctrl_genpd_lock_class;
->  
-> +#define IMX8MP_HSIOBLK_NOC_PCIE	0
-> +#define IMX8MP_HSIOBLK_USB1	1
-> +#define IMX8MP_HSIOBLK_USB2	2
-> +#define IMX8MP_HSIOBLK_PCIE	3
-> +
-> +static const struct imx8mp_hsio_blk_ctrl_noc_data imx8mp_hsio_noc_data[] = {
-> +	[IMX8MP_HSIOBLK_NOC_PCIE] = {
-> +		.off = 0x780,
-> +		.priority = 0x80000303,
-> +	},
-> +	[IMX8MP_HSIOBLK_USB1] = {
-> +		.off = 0x800,
-> +		.priority = 0x80000303,
-> +	},
-> +	[IMX8MP_HSIOBLK_USB2] = {
-> +		.off = 0x880,
-> +		.priority = 0x80000303,
-> +	},
-> +	[IMX8MP_HSIOBLK_PCIE] = {
-> +		.off = 0x900,
-> +		.priority = 0x80000303,
-> +	},
-> +};
-> +
->  static const struct imx8mp_hsio_blk_ctrl_domain_data imx8mp_hsio_domain_data[] = {
->  	[IMX8MP_HSIOBLK_PD_USB] = {
->  		.name = "hsioblk-usb",
->  		.clk_name = "usb",
->  		.gpc_name = "usb",
-> +		.noc_data = {
-> +			&imx8mp_hsio_noc_data[IMX8MP_HSIOBLK_USB1],
-> +			&imx8mp_hsio_noc_data[IMX8MP_HSIOBLK_USB2]
-> +		},
->  	},
->  	[IMX8MP_HSIOBLK_PD_USB_PHY1] = {
->  		.name = "hsioblk-usb-phy1",
-> @@ -161,6 +224,10 @@ static const struct imx8mp_hsio_blk_ctrl_domain_data imx8mp_hsio_domain_data[] =
->  		.name = "hsioblk-pcie",
->  		.clk_name = "pcie",
->  		.gpc_name = "pcie",
-> +		.noc_data = {
-> +			&imx8mp_hsio_noc_data[IMX8MP_HSIOBLK_NOC_PCIE],
-> +			&imx8mp_hsio_noc_data[IMX8MP_HSIOBLK_PCIE]
-> +		},
->  	},
->  	[IMX8MP_HSIOBLK_PD_PCIE_PHY] = {
->  		.name = "hsioblk-pcie-phy",
-> @@ -215,6 +282,7 @@ static int imx8mp_hsio_blk_ctrl_probe(struct platform_device *pdev)
->  	int num_domains = ARRAY_SIZE(imx8mp_hsio_domain_data);
->  	struct device *dev = &pdev->dev;
->  	struct imx8mp_hsio_blk_ctrl *bc;
-> +	struct regmap *regmap;
->  	void __iomem *base;
->  	int i, ret;
->  
-> @@ -259,11 +327,17 @@ static int imx8mp_hsio_blk_ctrl_probe(struct platform_device *pdev)
->  		return dev_err_probe(dev, PTR_ERR(bc->bus_power_dev),
->  				     "failed to attach bus power domain\n");
->  
-> +	regmap = syscon_regmap_lookup_by_compatible("fsl,imx8m-noc");
-> +	if (!IS_ERR(regmap))
-> +		bc->noc_regmap = regmap;
-> +
->  	for (i = 0; i < num_domains; i++) {
->  		const struct imx8mp_hsio_blk_ctrl_domain_data *data =
->  				&imx8mp_hsio_domain_data[i];
->  		struct imx8mp_hsio_blk_ctrl_domain *domain = &bc->domains[i];
->  
-> +		domain->data = data;
-> +
->  		if (data->clk_name) {
->  			domain->clk = devm_clk_get(dev, data->clk_name);
->  			if (IS_ERR(domain->clk)) {
-> -- 
-> 2.25.1
-> 
+clang tested configs:
+arm                          pcm027_defconfig
+mips                           mtx1_defconfig
+arm                        neponset_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a014
+x86_64                        randconfig-a012
+x86_64                        randconfig-a016
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+hexagon              randconfig-r041-20220405
+hexagon              randconfig-r045-20220405
+s390                 randconfig-r044-20220405
+riscv                randconfig-r042-20220405
 
 -- 
-Regards,
-
-Laurent Pinchart
+0-DAY CI Kernel Test Service
+https://01.org/lkp
