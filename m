@@ -2,89 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB9B4F7A5F
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Apr 2022 10:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF18B4F7AF2
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Apr 2022 11:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243443AbiDGIxZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Apr 2022 04:53:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42298 "EHLO
+        id S237220AbiDGJEl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Apr 2022 05:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243563AbiDGIxQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Apr 2022 04:53:16 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAEB2ACD;
-        Thu,  7 Apr 2022 01:51:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649321476; x=1680857476;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rvvRdha+qpxn4dQmcryB8CJAVWXcpexk0ryCTlfgnEM=;
-  b=M7RcDyUJ8/zzkWPSzZUJ0vXtK90kP2GO9rH+/AGbzKUkk56Vi+KZz7GP
-   EvZtKbhTCoJyz11aM/aK0h87S2XPr+ywhmka/zOJWGSiWOKTdgpLZbCh/
-   20nShUHl+Mmf29NZdJFdx5Wa9tv/KAExK1o5ZEhS4s4Wa3vyrgIk6H8+s
-   WDnyLZ/MOEqjuPUAtFsTBpd84WjsN7j7yYEidPsmEIv1Cm9B0ps+RFc4c
-   lgmw5aPt4BUZ/u65q+HyjT2NqjjOfeZqyq7aeydFPfjmhNYugvRKx7kgj
-   8t/my32LeBI1Ibx5nwdf0m7l57tD37Re+qSDZe+F4FOCwnlGPECtRTyJZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10309"; a="241860122"
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="241860122"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 01:51:13 -0700
-X-IronPort-AV: E=Sophos;i="5.90,241,1643702400"; 
-   d="scan'208";a="570963311"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 01:51:10 -0700
-Received: by lahna (sSMTP sendmail emulation); Thu, 07 Apr 2022 11:50:46 +0300
-Date:   Thu, 7 Apr 2022 11:50:46 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PCI <linux-pci@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v1] PCI: PM: Power up all devices during runtime resume
-Message-ID: <Yk6l5riEX3WJLZfT@lahna>
-References: <4412361.LvFx2qVVIh@kreacher>
+        with ESMTP id S243613AbiDGJEd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Apr 2022 05:04:33 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAAADFFFA4
+        for <linux-pm@vger.kernel.org>; Thu,  7 Apr 2022 02:02:28 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id q19so6821585wrc.6
+        for <linux-pm@vger.kernel.org>; Thu, 07 Apr 2022 02:02:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=USC7C7RCVNx7KuEUt+BY/YKNIMEfhL2JjE70IEcuxEE=;
+        b=RG94Ae0RY0Ql8bXpoWaw7oEdKOADumRFMHqZyC8iQGSeS9kOIbxXBGx9jEKZL4+ZnE
+         Dw5kxlQPY5pu0NDZ01Y5tOgZXeQOf/bzU5O1b96B0uyRHFv8GouQsMlYIOtojCErkI8X
+         3eYdOpp4takmZCE++lSBbtRR549fY3PeDHvTbdEMi3l/22aM+r2YZt9jXtBSvTzg9vKR
+         l5MQoYKuMxlE3w5/a8X6aYyH8f1KJu1yIUN4ySD7joybh1a3DbDjbJWxFgZKJzzbOryL
+         y8lKxQyhMWVGIRzxGDFwXYkiJs3yn2Eo74Y1OOoIIjMn6tpQbXPKzud3d7l6F+lNqs+A
+         nPsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=USC7C7RCVNx7KuEUt+BY/YKNIMEfhL2JjE70IEcuxEE=;
+        b=0M250H0tQVgFLii5qaGvhP5pYtfDjtqw+AUx8swms/Ho5CW0NNYKYCxuGxjN8/6nX+
+         IXRM8a8LMgQF+3rbu8RXruqZa+WT51a8FtatthvxYXjd7mLKjjVKUTmpVWIEjJkdwRWg
+         03HHAiKTA4MS4069ooaXZLe7diqEm68AuTsnv/+xPF/JiVh1hJSNMNCgWaiFvl3MqPfu
+         Bhd4zHuTdJXLK7Fmsu8BPkVI6znDjXzpanGuC1WGKhsZ5r2EBCmFU3Pz4xZOec6Z/flI
+         noaEiK4F49Ir5I+yzH+hEam+pfRyzuvYq7T0Ky2EsHb6PM2ZQEchMVayIxTy6skcTv2z
+         HI8Q==
+X-Gm-Message-State: AOAM531z5Jpu6LRDOYOYw8tUjNEGYHOlYj4EQmFQObzp9FEjL7yU3qYY
+        8oF1/ydFVGmAkS2wkwl2Ki9Mlw==
+X-Google-Smtp-Source: ABdhPJzF7coRnBfWLLqluJRervg9467q13ZsvflHJDge79gXpqC21tQ1cPoa/MFzvvpqmqoXL6xn1w==
+X-Received: by 2002:a5d:64eb:0:b0:205:d418:4798 with SMTP id g11-20020a5d64eb000000b00205d4184798mr10078636wri.11.1649322146858;
+        Thu, 07 Apr 2022 02:02:26 -0700 (PDT)
+Received: from ?IPV6:2a01:e34:ed2f:f020:f2a2:7d81:4e67:6c1c? ([2a01:e34:ed2f:f020:f2a2:7d81:4e67:6c1c])
+        by smtp.googlemail.com with ESMTPSA id f13-20020a05600c4e8d00b0038c949ef0d5sm8640927wmq.8.2022.04.07.02.02.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 02:02:25 -0700 (PDT)
+Message-ID: <66db272d-0bc0-8c77-a106-327cd0bd3405@linaro.org>
+Date:   Thu, 7 Apr 2022 11:02:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4412361.LvFx2qVVIh@kreacher>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/4] dt-bindings: thermal: qcom-tsens.yaml: add msm8960
+ compat string
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20220406002648.393486-1-dmitry.baryshkov@linaro.org>
+ <20220406002648.393486-2-dmitry.baryshkov@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220406002648.393486-2-dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 09:00:52PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 06/04/2022 02:26, Dmitry Baryshkov wrote:
+> Add compatibility string for the thermal sensors on MSM8960/APQ8064
+> platforms.
 > 
-> Currently, endpoint devices may not be powered up entirely during
-> runtime resume that follows a D3hot -> D0 transition of the parent
-> bridge.
-> 
-> Namely, even if the power state of an endpoint device, as indicated
-> by its PCI_PM_CTRL register, is D0 after powering up its parent
-> bridge, it may be still necessary to bring its ACPI companion into
-> D0 and that should be done before accessing it.  However, the current
-> code assumes that reading the PCI_PM_CTRL register is sufficient to
-> establish the endpoint device's power state, which may lead to
-> problems.
-> 
-> Address that by forcing a power-up of all PCI devices, including the
-> platform firmware part of it, during runtime resume.
-> 
-> Link: https://lore.kernel.org/linux-pm/11967527.O9o76ZdvQC@kreacher
-> Fixes: 5775b843a619 ("PCI: Restore config space on runtime resume despite being unbound")
-> Reported-by: Abhishek Sahu <abhsahu@nvidia.com>
-> Tested-by: Abhishek Sahu <abhsahu@nvidia.com>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Applied, thanks
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
