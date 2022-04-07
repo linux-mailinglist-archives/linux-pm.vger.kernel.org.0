@@ -2,263 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 996754F6DB3
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Apr 2022 00:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 921024F6F09
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Apr 2022 02:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237053AbiDFWKi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 6 Apr 2022 18:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33692 "EHLO
+        id S229601AbiDGAUh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 6 Apr 2022 20:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237097AbiDFWKf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Apr 2022 18:10:35 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC71B1D12FF;
-        Wed,  6 Apr 2022 15:08:36 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9AE9812FC;
-        Wed,  6 Apr 2022 15:08:36 -0700 (PDT)
-Received: from e123648.arm.com (unknown [10.57.9.217])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AE7613F5A1;
-        Wed,  6 Apr 2022 15:08:34 -0700 (PDT)
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     lukasz.luba@arm.com, dietmar.eggemann@arm.com,
-        viresh.kumar@linaro.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        amit.kachhap@gmail.com, linux-pm@vger.kernel.org
-Subject: [RFC PATCH v3 5/5] thermal: cpufreq_cooling: Improve power estimation using Cpufreq Active Stats
-Date:   Wed,  6 Apr 2022 23:08:09 +0100
-Message-Id: <20220406220809.22555-6-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220406220809.22555-1-lukasz.luba@arm.com>
-References: <20220406220809.22555-1-lukasz.luba@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229491AbiDGAUg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 6 Apr 2022 20:20:36 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A63B235752;
+        Wed,  6 Apr 2022 17:18:38 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id x131so6858619ybe.11;
+        Wed, 06 Apr 2022 17:18:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZtOF1nVWWzBfSRUWOWe7k3Yt8TMXFfwKhuj0f8PfubU=;
+        b=EO5VUUX/W80B+fBVBJsYEDOCsFaQiNMDW5beaVeF9HSLky0j1AS9GTxVJheOdMOmc1
+         e/YsuilJIpJgpKvlE3bhGyG/BoK3T1QmAUvesn40GV6dArXl0Ji+HMvymm+6OZF1QIui
+         4gKNuBn1B3ag4M2qJFi5LWntGs+gRmnFOdTOVqppF6ynv0O6+lh/BYwJzRyXjF3JZYQ4
+         GHmF676qHtNSB14Ee/jsNZc2nzC3Xukq0DGB5s8mOlBxgAS7nkBQVnOl+hNTSrSSBYHS
+         1/IVCQtj1+d5ryZJqWVHkr/zGCESn9s62AF2hVf6Gn/nNkNzi6A4zreq7lwRYLYzbxlS
+         ZkOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZtOF1nVWWzBfSRUWOWe7k3Yt8TMXFfwKhuj0f8PfubU=;
+        b=eMAbJo2OOQqfuYXSZC86JCD1UkfLcPt2UiyGNpFuvN0gKJdDy35mCeLQdpNtpMf5yN
+         C7vIa4UMiHyQInoBgw7g3POEGNmVIozbm/+1JYjyxyzEuOhhbNqOm3VNPbFxqrwA4PCH
+         CuyvMv+GKRxJyqA4hlF/xMVsF3t5JzsqqbAcIbgw19SsEVSP7bJLgI+skyIMqNRUIsfB
+         22RaNAPUBq/eQTZ3y89VH80/T5yfiR+kSQo3fLOig7/eqQg7uWRownBbHVMblWbdGQzl
+         Dpme/qP2z0A0CKmyb+dg+cZeZU7eWZMZ4JA/NnUTvHpsQ+jhLS4v+u1mVy3PWRDz5mal
+         +DVg==
+X-Gm-Message-State: AOAM530gC8KuqYk27GBfkqOdO63VXri3KO6vIus1gFVUmb/MeSSOim2W
+        AXm4eP2EgrRMB26U/S/2tqhH6gYlkOCp1aX6UKc=
+X-Google-Smtp-Source: ABdhPJwGTD192XDItbqnehwipWiszl88YKBj1/cCr8hW4ZcNNOR8Sh6kCNkZIWb8KmZt+rOlkcFI2tjFSvu2qaUleTw=
+X-Received: by 2002:a25:fc27:0:b0:634:65f8:a757 with SMTP id
+ v39-20020a25fc27000000b0063465f8a757mr8121122ybd.228.1649290717522; Wed, 06
+ Apr 2022 17:18:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220127230727.3369358-1-briannorris@chromium.org>
+ <20220127150615.v2.12.I3a5c7f21ecd8221b42c2dbcd618386bce7b3e9a6@changeid>
+ <CAMdYzYo9Y_pEAAtreQU0B9DVzGsbUgpTA2g7HGRyUXcSBjMy4g@mail.gmail.com> <CA+ASDXP46bVqZAyzgUQkZAqqVf6Yc5Zg9CZ_1k0XCYUSYq_QLg@mail.gmail.com>
+In-Reply-To: <CA+ASDXP46bVqZAyzgUQkZAqqVf6Yc5Zg9CZ_1k0XCYUSYq_QLg@mail.gmail.com>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Wed, 6 Apr 2022 20:18:26 -0400
+Message-ID: <CAMdYzYqvjin-S0mKFZJ5pwe4yNhG9ZH77-VMNpnL3W2HSQ6gNQ@mail.gmail.com>
+Subject: Re: [PATCH v2 12/15] arm64: dts: rockchip: Enable dmc and dfi nodes
+ on gru
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Lin Huang <hl@rock-chips.com>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Derek Basehore <dbasehore@chromium.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-pm <linux-pm@vger.kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        =?UTF-8?B?R2HDq2wgUE9SVEFZ?= <gael.portay@collabora.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The cpufreq_cooling has dedicated APIs for thermal governor called
-Intelligent Power Allocation (IPA). IPA needs the CPUs power used by the
-devices in the past.  Based on this, IPA tries to estimate the power
-budget, allocate new budget and split it across cooling devices for the
-next period (keeping the system in the thermal envelope).  When the input
-power estimated value has big error, the whole mechanism does not work
-properly. The old power estimation assumes constant CPU frequency during
-the whole IPA period (e.g. 100ms). This can cause big error in the power
-estimation, especially when SchedUtil governor and Uclamp is used and
-frequency is often adjusted to the current need. This can be visible in
+On Tue, Apr 5, 2022 at 10:05 PM Brian Norris <briannorris@chromium.org> wrote:
+>
+> Hello again Peter,
+>
+> On Fri, Mar 4, 2022 at 6:47 AM Peter Geis <pgwipeout@gmail.com> wrote:
+> > Transitions anywhere from the default 800mhz cause a lock.
+> >
+> > I'm digging deeper, but I'm hoping you can answer some questions in
+> > the meantime:
+> > 1. Does this require something from firmware that isn't available on
+> > Mainline ATF? (AKA special firmware to the Chromebook line)
+> > 2. If not, do you have any recommendations off the top of your head?
+>
+> I may have a better answer for you now. In the intervening time
+> period, I've discovered a potentially-relevant bug, involving
+> interactions between the kernel power-domain driver and ATF. See this
+> series for my current fixes:
+>
+> https://lore.kernel.org/linux-rockchip/20220406014842.2771799-1-briannorris@chromium.org/
+> [RFC PATCH 0/2] rockchip / devfreq: Coordinate DRAM controller
+> resources between ATF and kernel
+>
+> If that happens to help you (it may help, for instance, if your system
+> was toggling NPLL off/on like mine was; it also may help if you're
+> hitting a race on PMU_BUS_IDLE_REQ like noticed in patch 1), I'd love
+> your feedback there.
+>
+> It's still possible your problems are completely unrelated though.
 
-Thus, introduce a new mechanism which solves the CPU frequency sampling
-problem and missing proper residency. Use Cpufreq Active Stats calculate
-the CPU power used for a given IPA period.
+Thank you, that is certainly possible to be the problem here as well.
+I won't have time to test them till this weekend, but you can count on
+my feedback as soon as I get the time to do so.
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
- drivers/thermal/cpufreq_cooling.c | 131 ++++++++++++++++++++++++++++++
- 1 file changed, 131 insertions(+)
-
-diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-index 0bfb8eebd126..a609bd55ed80 100644
---- a/drivers/thermal/cpufreq_cooling.c
-+++ b/drivers/thermal/cpufreq_cooling.c
-@@ -12,6 +12,7 @@
-  */
- #include <linux/cpu.h>
- #include <linux/cpufreq.h>
-+#include <linux/cpufreq_stats.h>
- #include <linux/cpu_cooling.h>
- #include <linux/device.h>
- #include <linux/energy_model.h>
-@@ -61,6 +62,7 @@ struct time_in_idle {
-  * @policy: cpufreq policy.
-  * @idle_time: idle time stats
-  * @qos_req: PM QoS contraint to apply
-+ * @ast_mon: Cpufreq Active Stats Monitor array of pointers
-  *
-  * This structure is required for keeping information of each registered
-  * cpufreq_cooling_device.
-@@ -75,6 +77,9 @@ struct cpufreq_cooling_device {
- 	struct time_in_idle *idle_time;
- #endif
- 	struct freq_qos_request qos_req;
-+#ifdef CONFIG_CPU_FREQ_STAT
-+	struct cpufreq_active_stats_monitor **ast_mon;
-+#endif
- };
- 
- #ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
-@@ -124,6 +129,106 @@ static u32 cpu_power_to_freq(struct cpufreq_cooling_device *cpufreq_cdev,
- 	return cpufreq_cdev->em->table[i].frequency;
- }
- 
-+#ifdef CONFIG_CPU_FREQ_STAT
-+static u32 account_cpu_power(struct cpufreq_active_stats_monitor *ast_mon,
-+			     struct em_perf_domain *em)
-+{
-+	u64 single_power, residency, total_time;
-+	struct cpufreq_active_stats_state *result;
-+	u32 power = 0;
-+	int i;
-+
-+	mutex_lock(&ast_mon->lock);
-+	result = ast_mon->snapshot.result;
-+	total_time = ast_mon->local_period;
-+
-+	for (i = 0; i < ast_mon->states_count; i++) {
-+		residency = result->residency[i];
-+		single_power = em->table[i].power * residency;
-+		single_power = div64_u64(single_power, total_time);
-+		power += (u32)single_power;
-+	}
-+
-+	mutex_unlock(&ast_mon->lock);
-+
-+	return power;
-+}
-+
-+static u32 get_power_est(struct cpufreq_cooling_device *cdev)
-+{
-+	int num_cpus, ret, i;
-+	u32 total_power = 0;
-+
-+	num_cpus = cpumask_weight(cdev->policy->related_cpus);
-+
-+	for (i = 0; i < num_cpus; i++) {
-+		ret = cpufreq_active_stats_cpu_update_monitor(cdev->ast_mon[i]);
-+		if (ret)
-+			return 0;
-+
-+		total_power += account_cpu_power(cdev->ast_mon[i], cdev->em);
-+	}
-+
-+	return total_power;
-+}
-+
-+static int cpufreq_get_requested_power(struct thermal_cooling_device *cdev,
-+				       u32 *power)
-+{
-+	struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
-+	struct cpufreq_policy *policy = cpufreq_cdev->policy;
-+
-+	*power = get_power_est(cpufreq_cdev);
-+
-+	trace_thermal_power_cpu_get_power(policy->related_cpus, 0, 0, 0,
-+					  *power);
-+
-+	return 0;
-+}
-+
-+static void clean_cpu_monitoring(struct cpufreq_cooling_device *cdev)
-+{
-+	int num_cpus, i;
-+
-+	if (!cdev->ast_mon)
-+		return;
-+
-+	num_cpus = cpumask_weight(cdev->policy->related_cpus);
-+
-+	for (i = 0; i < num_cpus; i++)
-+		cpufreq_active_stats_cpu_free_monitor(cdev->ast_mon[i++]);
-+
-+	kfree(cdev->ast_mon);
-+	cdev->ast_mon = NULL;
-+}
-+
-+static int setup_cpu_monitoring(struct cpufreq_cooling_device *cdev)
-+{
-+	int cpu, cpus, i = 0;
-+
-+	if (cdev->ast_mon)
-+		return 0;
-+
-+	cpus = cpumask_weight(cdev->policy->related_cpus);
-+
-+	cdev->ast_mon = kcalloc(cpus, sizeof(cdev->ast_mon), GFP_KERNEL);
-+	if (!cdev->ast_mon)
-+		return -ENOMEM;
-+
-+	for_each_cpu(cpu, cdev->policy->related_cpus) {
-+		cdev->ast_mon[i] = cpufreq_active_stats_setup(cpu);
-+		if (IS_ERR_OR_NULL(cdev->ast_mon[i++]))
-+			goto cleanup;
-+	}
-+
-+	return 0;
-+
-+cleanup:
-+	clean_cpu_monitoring(cdev);
-+	return -EINVAL;
-+}
-+#else /* !CONFIG_CPU_FREQ_STATS */
-+
- /**
-  * get_load() - get load for a cpu
-  * @cpufreq_cdev: struct cpufreq_cooling_device for the cpu
-@@ -184,6 +289,15 @@ static u32 get_dynamic_power(struct cpufreq_cooling_device *cpufreq_cdev,
- 	return (raw_cpu_power * cpufreq_cdev->last_load) / 100;
- }
- 
-+static void clean_cpu_monitoring(struct cpufreq_cooling_device *cpufreq_cdev)
-+{
-+}
-+
-+static int setup_cpu_monitoring(struct cpufreq_cooling_device *cpufreq_cdev)
-+{
-+	return 0;
-+}
-+
- /**
-  * cpufreq_get_requested_power() - get the current power
-  * @cdev:	&thermal_cooling_device pointer
-@@ -252,6 +366,7 @@ static int cpufreq_get_requested_power(struct thermal_cooling_device *cdev,
- 
- 	return 0;
- }
-+#endif
- 
- /**
-  * cpufreq_state2power() - convert a cpu cdev state to power consumed
-@@ -323,6 +438,20 @@ static int cpufreq_power2state(struct thermal_cooling_device *cdev,
- 	return 0;
- }
- 
-+static int cpufreq_change_governor(struct thermal_cooling_device *cdev,
-+				   bool governor_up)
-+{
-+	struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
-+	int ret = 0;
-+
-+	if (governor_up)
-+		ret = setup_cpu_monitoring(cpufreq_cdev);
-+	else
-+		clean_cpu_monitoring(cpufreq_cdev);
-+
-+	return ret;
-+}
-+
- static inline bool em_is_sane(struct cpufreq_cooling_device *cpufreq_cdev,
- 			      struct em_perf_domain *em) {
- 	struct cpufreq_policy *policy;
-@@ -562,6 +691,7 @@ __cpufreq_cooling_register(struct device_node *np,
- 		cooling_ops->get_requested_power = cpufreq_get_requested_power;
- 		cooling_ops->state2power = cpufreq_state2power;
- 		cooling_ops->power2state = cpufreq_power2state;
-+		cooling_ops->change_governor = cpufreq_change_governor;
- 	} else
- #endif
- 	if (policy->freq_table_sorted == CPUFREQ_TABLE_UNSORTED) {
-@@ -686,6 +816,7 @@ void cpufreq_cooling_unregister(struct thermal_cooling_device *cdev)
- 
- 	thermal_cooling_device_unregister(cdev);
- 	freq_qos_remove_request(&cpufreq_cdev->qos_req);
-+	clean_cpu_monitoring(cpufreq_cdev);
- 	free_idle_time(cpufreq_cdev);
- 	kfree(cpufreq_cdev);
- }
--- 
-2.17.1
-
+>
+> Regards,
+> Brian
