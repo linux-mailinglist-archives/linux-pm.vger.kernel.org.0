@@ -2,117 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 277B64F869B
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Apr 2022 19:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 812594F879E
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Apr 2022 21:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346626AbiDGRxR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 7 Apr 2022 13:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
+        id S233936AbiDGTEM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 7 Apr 2022 15:04:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346630AbiDGRxP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Apr 2022 13:53:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29B722EB35;
-        Thu,  7 Apr 2022 10:51:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C510B82901;
-        Thu,  7 Apr 2022 17:51:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05E26C385A0;
-        Thu,  7 Apr 2022 17:51:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649353869;
-        bh=cmP0BZ3fNUvcP7KxHKtR0yiNgwGpwH3espXWf6j0OxA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Ib2H7AYJZPo72aQsw1/OYImofH7OAeCmw1QztjPZCt5O7vxkDFE3uXOi5E3ORoV/K
-         GHIbKSEdMghvbX/hZBM7JZxdjReU0uda2rUmEpwYxyRgZNtv7daLjG0NvC53UhnWSO
-         lOr+jHVCnKOJR19X1z+r2NAlMzRtN6UzKqfxz+4AHbnWalXuJHl8a3CvsmJf65gXHc
-         TrLgEGJD3Vgwv7EvremvCWzqboi9Tod94Y4FAGtJ+ICkXc7fNGUr0nEfJWkiW+ADSk
-         Nz9CghzPAtZZ0CpoFIfYZEeKMvooc/1zoVfFxKkP64oNi7RFkuEYDDXui6ZlspGzxs
-         K9/WHcmwdmfLQ==
-Date:   Thu, 7 Apr 2022 12:51:07 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH v1 3/3] PCI: ACPI: PM: Power up devices in D3cold before
- scanning them
-Message-ID: <20220407175107.GA252647@bhelgaas>
+        with ESMTP id S229736AbiDGTEM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 7 Apr 2022 15:04:12 -0400
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5F722EB16;
+        Thu,  7 Apr 2022 12:02:11 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2db2add4516so72800737b3.1;
+        Thu, 07 Apr 2022 12:02:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZGD1/P1eXCqhTH9MB1Py6yMHa/YFvYh5c7tHdx0u8Pk=;
+        b=av2WMsDE+fRA9olKRhATLjT5Jk7jMYeOKORh97SxOTh1so26WXzl5GII3FenxgV3Uy
+         Ootd3G2R+KrWK1CeuPFw+5CwzpHhiM6mN0IL1bbt9N4DJW1r0v35dYWbLDXKeuDyjjtg
+         2sSFVskr5dkuyumzObRxsm6UM8a8PC4odSwVkh5/Kjp1vKc34oIy50gVPN6VGRwRWy+J
+         5w/5CNTRvqiUgRt+VMDrDauNEdTHURK1Hx748MBGwCRhm0x9ywKcIpD8L3N0EDD9D+hW
+         eUIDHCOOmPZrhJ22rZUUgP5RL1Uwbf2gnYeg8lO5E1bklLQPo3dD+lF3axA5vHYt4xSd
+         BE9w==
+X-Gm-Message-State: AOAM531kTnVV+HB5JGeF0l/nYr+pbH1C4yIlCuCKnj4qnXSgNF4vsL5E
+        EkS+Z/geVXsuCHRdb8wuYG/vuCiOOUzepk/Tt04=
+X-Google-Smtp-Source: ABdhPJyPrwbHxRUQ/BZZDOo8gYVEpwEzdjyOfqe28o/yvRJgz1r6QhQB1JhX9AoyLAi7nmXy69UlHGSXkvsWBvPq4Dk=
+X-Received: by 2002:a81:1549:0:b0:2eb:3dc7:bd16 with SMTP id
+ 70-20020a811549000000b002eb3dc7bd16mr12995239ywv.7.1649358130411; Thu, 07 Apr
+ 2022 12:02:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5729439.MhkbZ0Pkbq@kreacher>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <4198163.ejJDZkT8p0@kreacher> <3623886.MHq7AAxBmi@kreacher> <YkwRjI0KvpmiJjvK@lahna>
+In-Reply-To: <YkwRjI0KvpmiJjvK@lahna>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 7 Apr 2022 21:01:59 +0200
+Message-ID: <CAJZ5v0go9hLqv6Mcc5Ko770AU7sTYJQvgyjhGJ36AO1kURUnYA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] PCI: PM: Avoid leaving devices in D0-uninitialized
+ in pci_power_up()
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 05:25:04PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> The initial configuration of ACPI power resources on some systems
-> implies that some PCI devices on them are initially in D3cold.
-> 
-> In some cases, especially for PCIe Root Ports, this is a "logical"
-> D3cold, meaning that the configuration space of the device is
-> accessible, but some of its functionality may be missing, but it
-> very well may be real D3cold, in which case the device will not
-> be accessible at all.  However, the PCI bus type driver will need
-> to access its configuration space in order to enumerate it.
-> 
-> To prevent possible device enumeration failures that may ensue as
-> a result of ACPI power resources being initially in the "off"
-> state, power up all children of the host bridge ACPI device object
-> that hold valid _ADR objects (which indicates that they will be
-> enumerated by the PCI bus type driver) and do that to all children
-> of the ACPI device objects corresponding to PCI bridges (including
-> PCIe ports).
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Tue, Apr 5, 2022 at 1:45 PM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> On Mon, Apr 04, 2022 at 05:41:13PM +0200, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > In theory, pci_power_up() may leave a device in D0-uninitialized
+> > during a transition from D3cold to D0.
+> >
+> > Say, a PCIe device depending on some ACPI power resources is put into
+> > D3cold, so the power resources in question are all turned off.  Then,
+> > pci_power_up() is called to put it into D0.
+> >
+> > It first calls pci_platform_power_transition() which invokes
+> > platform_pci_set_power_state() to turn on the ACPI power resources
+> > depended on by the device and, if that is successful, it calls
+> > pci_update_current_state() to update the current_state field of
+> > the PCI device object.  If the device's configuration space is
+> > accessible at this point, which is the case if
+> > platform_pci_set_power_state() leaves it in D0-uninitialized (and
+> > there's nothing to prevent it from doing so), current_state will be
+> > set to PCI_D0 and the pci_raw_set_power_state() called subsequently
+> > will notice that the device is in D0 already and do nothing.
+> > However, that is not correct, because it may be still necessary to
+> > restore the device's BARs at this point.
+> >
+> > To address this issue, set current_state temporarily to PCI_D3hot
+> > in the cases in which pci_raw_set_power_state() may need to do more
+> > than just changing the power state of the device.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+Thanks, but on second thought, I'm not sure if this is the best way to
+address the issue.
 
-> ---
->  drivers/acpi/pci_root.c |    2 ++
->  drivers/pci/pci-acpi.c  |    3 +++
->  2 files changed, 5 insertions(+)
-> 
-> Index: linux-pm/drivers/acpi/pci_root.c
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/pci_root.c
-> +++ linux-pm/drivers/acpi/pci_root.c
-> @@ -927,6 +927,8 @@ struct pci_bus *acpi_pci_root_create(str
->  		host_bridge->preserve_config = 1;
->  	ACPI_FREE(obj);
->  
-> +	acpi_dev_power_up_children_with_adr(device);
-> +
->  	pci_scan_child_bus(bus);
->  	pci_set_host_bridge_release(host_bridge, acpi_pci_root_release_info,
->  				    info);
-> Index: linux-pm/drivers/pci/pci-acpi.c
-> ===================================================================
-> --- linux-pm.orig/drivers/pci/pci-acpi.c
-> +++ linux-pm/drivers/pci/pci-acpi.c
-> @@ -1374,6 +1374,9 @@ void pci_acpi_setup(struct device *dev,
->  
->  	acpi_pci_wakeup(pci_dev, false);
->  	acpi_device_power_add_dependent(adev, dev);
-> +
-> +	if (pci_is_bridge(pci_dev))
-> +		acpi_dev_power_up_children_with_adr(adev);
->  }
->  
->  void pci_acpi_cleanup(struct device *dev, struct acpi_device *adev)
-> 
-> 
-> 
+Basically, pci_power_up() is called in two places, in
+pci_set_power_state() (for the transitions to D0) and in
+pci_pm_default_resume_early().  In the latter case,
+pci_restore_state() is called right after it and that covers BARs
+restoration, so nothing more needs to be done in that case.
+
+This means that pci_set_power_state() is the only place needing to
+restore the BARs when going into D0 from D3hot or deeper and it is
+better to move BARs restoration directly into it.  I'll update the
+series accordingly and resend.
+
+I also think that the mandatory delay is not needed at all when
+pci_raw_set_power_state() is called for transitions D3cold -> D0,
+because in that case either the device has been powered up via
+platform_pci_set_power_state(), or via the bridge resume which takes
+the delay into account.
