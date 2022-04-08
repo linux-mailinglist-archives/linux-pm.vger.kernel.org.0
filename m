@@ -2,128 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 303E94F92DA
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Apr 2022 12:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B4044F9381
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Apr 2022 13:09:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232223AbiDHK1C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Apr 2022 06:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33800 "EHLO
+        id S232080AbiDHLLe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Apr 2022 07:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232210AbiDHK1B (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Apr 2022 06:27:01 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4590025F651;
-        Fri,  8 Apr 2022 03:24:53 -0700 (PDT)
-X-UUID: e076817dd6434f348d7a6e4cc24b21cb-20220408
-X-UUID: e076817dd6434f348d7a6e4cc24b21cb-20220408
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1050780404; Fri, 08 Apr 2022 18:24:48 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 8 Apr 2022 18:24:47 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 8 Apr 2022 18:24:47 +0800
-Message-ID: <8d466903d42dbc823f4d0a245378d983ab904435.camel@mediatek.com>
-Subject: Re: [PATCH V2 01/15] dt-bindings: cpufreq: mediatek: Add MediaTek
- CCI property
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <robh+dt@kernel.org>, <krzk+dt@kernel.org>
-CC:     <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
-        <roger.lu@mediatek.com>, <hsinyi@google.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 8 Apr 2022 18:24:47 +0800
-In-Reply-To: <a171f33c-cda1-8602-ac67-93076b676578@linaro.org>
-References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
-         <20220408045908.21671-2-rex-bc.chen@mediatek.com>
-         <a171f33c-cda1-8602-ac67-93076b676578@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S229487AbiDHLLd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Apr 2022 07:11:33 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052711F9
+        for <linux-pm@vger.kernel.org>; Fri,  8 Apr 2022 04:09:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1649416169; x=1680952169;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IqnIPBsHWhvZbm8kM51kc2kEYT//7sWoxLqS4RXRUXI=;
+  b=dfxjDe5ct3P7tSET9ZTcKWvchDS5rWD1FvZ8IWdKgXgS8wAME/IhXFpc
+   VwgYosknbPyEcur/Gw7vc6cd1BJ0Fb52j+iaZ8hJtFbsECkfDYvILB9sT
+   PoVIEz1GIaxpMa2Jqqbg324luj+YSYPgE6G+YO1UnKu3fpAzZ1VWe+hKA
+   COWWDoaxHTd00PyjDpiHeuDkVv5QOHmd/NjhkU0HMTdiiVI2hxbkPPwBF
+   oLhTegi2Oi9U6y3VRWcQc7UED+GpNNUmv/Bx9DJLhbUIkw1sq6GI+rinI
+   0P51KHTmbBQyOtxs0xYVbIP4Zl5hGIVX0XTveKD6aXuMxFMQGqHJUMD63
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,244,1643670000"; 
+   d="scan'208";a="23186343"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 08 Apr 2022 13:09:25 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Fri, 08 Apr 2022 13:09:25 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Fri, 08 Apr 2022 13:09:25 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1649416165; x=1680952165;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IqnIPBsHWhvZbm8kM51kc2kEYT//7sWoxLqS4RXRUXI=;
+  b=GjUw6kxmTc5yuEhvC4CFnvowXbhuug0+2HRAncY0MhS30maYSWXCjPeq
+   PmQ2KiIh41ULg3j28VSSZRdetACwPhetnNcRg+/WVXi1pzFqPqykx5zt+
+   4cBskVtTq9kOK79kOwg2YUCNskukyTZR7FBmY0QJj0np1c+gP8eqskEOy
+   +pce9mAii/ecFI7NygB8oTMkB9xyVHyWlD9tloDu5d4WdaGmxMNiAoeWe
+   veRllRES6RmtDr1/xQTq4TzpjNzMJcRFXEvUi9E5YxnN3vEXdH/4b4D/5
+   u9kcyFgwAE3vA/GoSGEFelnSmhAxw+uKywpRLzbmriiQLkeZMafZ2w/dD
+   g==;
+X-IronPort-AV: E=Sophos;i="5.90,244,1643670000"; 
+   d="scan'208";a="23186342"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 08 Apr 2022 13:09:25 +0200
+Received: from steina-w.tq-net.de (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 3095E280070;
+        Fri,  8 Apr 2022 13:09:25 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 1/2] thermal: imx8mm: Add hwmon support
+Date:   Fri,  8 Apr 2022 13:09:19 +0200
+Message-Id: <20220408110920.3809225-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 2022-04-08 at 10:10 +0200, Krzysztof Kozlowski wrote:
-> On 08/04/2022 06:58, Rex-BC Chen wrote:
-> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > 
-> > MediaTek Cache Coherent Interconnect (CCI) uses software devfreq
-> > module
-> > for scaling clock frequency and adjust voltage.
-> > The phandle could be linked between CPU and MediaTek CCI for some
-> > MediaTek SoCs, like MT8183 and MT8186.
-> > Therefore, we add this property in cpufreq-mediatek.txt.
-> > 
-> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >  .../devicetree/bindings/cpufreq/cpufreq-mediatek.txt          | 4
-> > ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-
-> > mediatek.txt b/Documentation/devicetree/bindings/cpufreq/cpufreq-
-> > mediatek.txt
-> > index b8233ec91d3d..d1b3d430c25c 100644
-> > --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-
-> > mediatek.txt
-> > +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-
-> > mediatek.txt
-> > @@ -20,6 +20,10 @@ Optional properties:
-> >  	       Vsram to fit SoC specific needs. When absent, the
-> > voltage scaling
-> >  	       flow is handled by hardware, hence no software "voltage
-> > tracking" is
-> >  	       needed.
-> > +- cci: MediaTek Cache Coherent Interconnect uses software devfreq
-> > module for scaling
-> > +       clock frequency and adjust voltage.
-> 
-> You need to describe the type. I am a bit confused whether this is a
-> cci
-> (so cci-control-port property?) or an interconnect (so interconnect
-> property)... It does not look like a generic property, so you need
-> vendor prefix.
+Expose thermal sensors as HWMON devices.
 
-Hello Krzysztof,
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+---
+ drivers/thermal/imx8mm_thermal.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thanks for your review.
-
-Yes, this cci is not arm's cci (cci-control-port property), and it's
-mediatek's cci. I will revise this name to "mtk-cci" in next version.
-
-> 
-> > +       For details, please refer to
-> > +       Documentation/devicetree/bindings/devfreq/mtk-cci.yaml
-> 
-> Such file does not exist.
-
-This mediatek cci is still upstreaming in this patch:
-message-id:20220408052150.22536-2-johnson.wang@mediatek.com
-
-Do you have suggestion that I should put this reference?
-Or I just remove it and describe the mediatek cci in detail?
-
-BRs,
-Rex
-> 
-> 
-> Best regards,
-> Krzysztof
+diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
+index af666bd9e8d4..ca8e2c393030 100644
+--- a/drivers/thermal/imx8mm_thermal.c
++++ b/drivers/thermal/imx8mm_thermal.c
+@@ -16,6 +16,7 @@
+ #include <linux/thermal.h>
+ 
+ #include "thermal_core.h"
++#include "thermal_hwmon.h"
+ 
+ #define TER			0x0	/* TMU enable */
+ #define TPS			0x4
+@@ -176,6 +177,9 @@ static int imx8mm_tmu_probe(struct platform_device *pdev)
+ 			goto disable_clk;
+ 		}
+ 		tmu->sensors[i].hw_id = i;
++
++		if (devm_thermal_add_hwmon_sysfs(tmu->sensors[i].tzd))
++			dev_warn(&pdev->dev, "failed to add hwmon sysfs attributes\n");
+ 	}
+ 
+ 	platform_set_drvdata(pdev, tmu);
+-- 
+2.25.1
 
