@@ -2,182 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743724F90A2
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Apr 2022 10:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2260A4F90A9
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Apr 2022 10:22:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231567AbiDHIXh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Apr 2022 04:23:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57212 "EHLO
+        id S231559AbiDHIYk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Apr 2022 04:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231564AbiDHIXg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Apr 2022 04:23:36 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020B2A185
-        for <linux-pm@vger.kernel.org>; Fri,  8 Apr 2022 01:21:33 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id p15so15771719ejc.7
-        for <linux-pm@vger.kernel.org>; Fri, 08 Apr 2022 01:21:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xeGOI+hxBRRDCw8I69VJZGllvVRkuKM+GL1fDWIHwuE=;
-        b=NMOd190nGhnmVD60Zvn3Etf8Z3SwRZPaQ5AoYH685WmUKlO2nsX2vBdXYbwKFp7kBt
-         TnwPNJCpPNbyvcZ8DgooR2RwHXwCIGH0jjrpplV+2dXG3+5EG6COoOUKwCvaqtwHRVU8
-         5xYd4miMtAlzUCEVLxlb4c/wJIWGq7lTjOHae6o30zQR9HKPnF7ZQrFe0hA1TgmU6Rv2
-         nOSLc7T/jA4pEN6xIGT5KSKrYgffDkt+jyl+GTUg6QTufXdaFDkUauaazQh4JzPc2j9e
-         1bd5Q4SMrlmFLquHIC/yu5wBpDHT4DjZp+ga2ugrHX21UlOv//t8rtAqWIWSrOD1nkFg
-         31iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xeGOI+hxBRRDCw8I69VJZGllvVRkuKM+GL1fDWIHwuE=;
-        b=D8kET7N+ii/OfGc5EazZrURFFfu25DGRgEs6hlQoGmV4yvDeUAhyxnvt/N14T/vwV2
-         RopIwpqEGlttccFu7/hEwOPvmeh+uDkzhQY19e9rkAryAZmrIO2UZxVxyFAG97VOyWNR
-         q8XwkfegvhnFqzNkz+oDKUhgoHKhFZlopNirgMONBVowrd6K0LLIFjKRbPj5tbHcEPuS
-         OgJzJ33sRxA5GFyXPZx+D976J6rFFKc6amZlE2LFSTj47dooOwm7pDxTIilOAgo52TWz
-         UEje5Kz//vAtYp7sZJu1ehPmnwgtClVKCl7Cn8Rnk4Th6To0AnAIcc3VYKN56RVRRjx4
-         TOYw==
-X-Gm-Message-State: AOAM533wv9n8jt1NhbmMhtWCroyHgrRLvFLzWsBpvEg3JOnKBoMF4rAy
-        kSezanlGu0XaMZb6UQXMThFcqQ==
-X-Google-Smtp-Source: ABdhPJyECBMXetuRDQC9zHM+ji1UA36sURAIRNcwnY01yfNVSOdRrknMnly6epCHA8osgRfsPfiH+Q==
-X-Received: by 2002:a17:906:2f97:b0:6ce:3ef6:94be with SMTP id w23-20020a1709062f9700b006ce3ef694bemr17650508eji.136.1649406091573;
-        Fri, 08 Apr 2022 01:21:31 -0700 (PDT)
-Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id ke11-20020a17090798eb00b006e7fbf53398sm4764031ejc.129.2022.04.08.01.21.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Apr 2022 01:21:31 -0700 (PDT)
-Message-ID: <76d58182-2f56-32b2-42e9-2ecbdd09ba3d@linaro.org>
-Date:   Fri, 8 Apr 2022 10:21:30 +0200
+        with ESMTP id S231613AbiDHIYj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Apr 2022 04:24:39 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43BA713987B;
+        Fri,  8 Apr 2022 01:22:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=p4al6XE4mZf5FhF4BRGqvM8RxBNfhw6xzIpON9k8hEs=; b=BtTKjOwVnmC70zpA2wmxiLVUrY
+        2GqbJP2uJ5AnaVEFYp32h6BnHTvF/k8v3TC654jmKq6R0KCIgW3APXRpPoSrDLQfSRrhzEQzKZ2SH
+        1q602T47W5Xf4Yhjzu8b6CrL/q2WbF+9y9B7jrRJTnsselr3QZVjQoQIyrc5fnX3tBVIvWZs8K6KD
+        zS7H38MJcIMF5d8P/BPtybsrmyWM2qxsld4E+gf+x6qmX/7XlmOh8ugR1lbXcf2X40QbiS+owubQX
+        i9qiOqF6ZpEKadSVPXr4fZIs3HEjd+sVbq00oXGnZtsls0xus6l2jCMBQCYOMgywq8RPqAwY1N7Zu
+        5lF00ONg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ncjsw-009deL-Dk; Fri, 08 Apr 2022 08:22:26 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BFB149862CF; Fri,  8 Apr 2022 10:22:25 +0200 (CEST)
+Date:   Fri, 8 Apr 2022 10:22:25 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Len Brown <len.brown@intel.com>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Chen Yu <yu.chen.surf@gmail.com>, linux-kernel@vger.kernel.org,
+        Zhang Rui <rui.zhang@intel.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Handle no_turbo in frequency
+ invariance
+Message-ID: <20220408082225.GN2731@worktop.programming.kicks-ass.net>
+References: <20220407234258.569681-1-yu.c.chen@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/2] PM / devfreq: mediatek: Introduce MediaTek CCI
- devfreq driver
-Content-Language: en-US
-To:     Johnson Wang <johnson.wang@mediatek.com>, cw00.choi@samsung.com,
-        krzk+dt@kernel.org, robh+dt@kernel.org, kyungmin.park@samsung.com
-Cc:     khilman@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220408052150.22536-1-johnson.wang@mediatek.com>
- <20220408052150.22536-3-johnson.wang@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220408052150.22536-3-johnson.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220407234258.569681-1-yu.c.chen@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/04/2022 07:21, Johnson Wang wrote:
-> We introduce a devfreq driver for the MediaTek Cache Coherent Interconnect
-> (CCI) used by some MediaTek SoCs.
+On Fri, Apr 08, 2022 at 07:42:58AM +0800, Chen Yu wrote:
+> Problem statement:
+> Once the user has disabled turbo frequency by
+> echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo,
+> the cfs_rq's util_avg becomes quite small when compared with
+> CPU capacity.
 > 
-(...)
+> Step to reproduce:
+> 
+> echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo
+> 
+> ./x86_cpuload --count 1 --start 3 --timeout 100 --busy 99
+> would launch 1 thread and bind it to CPU3, lasting for 100 seconds,
+> with a CPU utilization of 99%. [1]
+> 
+> top result:
+> %Cpu3  : 98.4 us,  0.0 sy,  0.0 ni,  1.6 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+> 
+> check util_avg:
+> cat /sys/kernel/debug/sched/debug | grep "cfs_rq\[3\]" -A 20 | grep util_avg
+>   .util_avg                      : 611
+> 
+> So the util_avg/cpu capacity is 611/1024, which is much smaller than
+> 98.4% shown in the top result.
+> 
+> This might impact some logic in the scheduler. For example, group_is_overloaded()
+> would compare the group_capacity and group_util in the sched group, to
+> check if this sched group is overloaded or not. With this gap, even
+> when there is a nearly 100% workload, the sched group will not be regarded
+> as overloaded. Besides group_is_overloaded(), there are also other victims.
+> There is a ongoing work that aims to optimize the task wakeup in a LLC domain.
+> The main idea is to stop searching idle CPUs if the sched domain is overloaded[2].
+> This proposal also relies on the util_avg/CPU capacity to decide whether the LLC
+> domain is overloaded.
+> 
+> Analysis:
+> CPU frequency invariance has caused this difference. In summary,
+> the util_sum of cfs rq would decay quite fast when the CPU is in
+> idle, when the CPU frequency invariance is enabled.
+> 
+> The detail is as followed:
+> 
+> As depicted in update_rq_clock_pelt(), when the frequency invariance
+> is enabled, there would be two clock variables on each rq, clock_task
+> and clock_pelt:
+> 
+>    The clock_pelt scales the time to reflect the effective amount of
+>    computation done during the running delta time but then syncs back to
+>    clock_task when rq is idle.
+> 
+>    absolute time    | 1| 2| 3| 4| 5| 6| 7| 8| 9|10|11|12|13|14|15|16
+>    @ max frequency  ------******---------------******---------------
+>    @ half frequency ------************---------************---------
+>    clock pelt       | 1| 2|    3|    4| 7| 8| 9|   10|   11|14|15|16
+> 
+> The fast decay of util_sum during idle is due to:
+> 1. rq->clock_pelt is always behind rq->clock_task
+> 2. rq->last_update is updated to rq->clock_pelt' after invoking ___update_load_sum()
+> 3. Then the CPU becomes idle, the rq->clock_pelt' would be suddenly increased
+>    a lot to rq->clock_task
+> 4. Enters ___update_load_sum() again, the idle period is calculated by
+>    rq->clock_task - rq->last_update, AKA, rq->clock_task - rq->clock_pelt'.
+>    The lower the CPU frequency is, the larger the delta =
+>    rq->clock_task - rq->clock_pelt' will be. Since the idle period will be
+>    used to decay the util_sum only, the util_sum drops significantly during
+>    idle period.
+> 
+> Proposal:
+> This symptom is not only caused by disabling turbo frequency, but it
+> would also appear if the user limits the max frequency at runtime. Because
+> if the frequency is always lower than the max frequency,
+> CPU frequency invariance would decay the util_sum quite fast during idle.
+> 
+> As some end users would disable turbo after boot up, this patch aims to
+> present this symptom and deals with turbo scenarios for now. It might
+> be ideal if CPU frequency invariance is aware of the max CPU frequency
+> (user specified) at runtime in the future.
+> 
+> [Previous patch seems to be lost on LKML, this is a resend, sorry for any
+> inconvenience]
+> 
+> Link: https://github.com/yu-chen-surf/x86_cpuload.git #1
+> Link: https://lore.kernel.org/lkml/20220310005228.11737-1-yu.c.chen@intel.com/ #2
+> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
 
-> index 87eb2b837e68..d985597f343f 100644
-> --- a/drivers/devfreq/Kconfig
-> +++ b/drivers/devfreq/Kconfig
-> @@ -120,6 +120,16 @@ config ARM_TEGRA_DEVFREQ
->  	  It reads ACTMON counters of memory controllers and adjusts the
->  	  operating frequencies and voltages with OPP support.
->  
-> +config ARM_MEDIATEK_CCI_DEVFREQ
-> +	tristate "MEDIATEK CCI DEVFREQ Driver"
-> +	depends on ARM_MEDIATEK_CPUFREQ
-
-|| COMPILE_TEST? And check if it test compiles.
-
-(...)
-
-> +
-> +static int mtk_ccifreq_remove(struct platform_device *pdev)
-> +{
-> +	struct device *cci_dev = &pdev->dev;
-
-s/cci_dev/dev/
-Everywhere.
-
-> +	struct mtk_ccifreq_drv *drv;
-> +
-> +	drv = platform_get_drvdata(pdev);
-> +
-> +	dev_pm_opp_unregister_notifier(cci_dev, &drv->opp_nb);
-> +	dev_pm_opp_of_remove_table(cci_dev);
-> +	clk_disable_unprepare(drv->inter_clk);
-> +	clk_disable_unprepare(drv->cci_clk);
-> +	regulator_disable(drv->proc_reg);
-> +	if (!IS_ERR(drv->sram_reg))
-> +		regulator_disable(drv->sram_reg);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct mtk_ccifreq_platform_data mt8183_platform_data = {
-> +	.min_volt_shift = 100000,
-> +	.max_volt_shift = 200000,
-> +	.proc_max_volt = 1150000,
-> +	.sram_min_volt = 0,
-> +	.sram_max_volt = 1150000,
-> +};
-> +
-> +static const struct mtk_ccifreq_platform_data mt8186_platform_data = {
-> +	.min_volt_shift = 100000,
-> +	.max_volt_shift = 250000,
-> +	.proc_max_volt = 1118750,
-> +	.sram_min_volt = 850000,
-> +	.sram_max_volt = 1118750,
-> +};
-> +
-> +static const struct of_device_id mtk_ccifreq_machines[] = {
-> +	{ .compatible = "mediatek,mt8183-cci", .data = &mt8183_platform_data },
-> +	{ .compatible = "mediatek,mt8186-cci", .data = &mt8186_platform_data },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, mtk_ccifreq_machines);
-> +
-> +static struct platform_driver mtk_ccifreq_platdrv = {
-> +	.probe	= mtk_ccifreq_probe,
-> +	.remove	= mtk_ccifreq_remove,
-> +	.driver = {
-> +		.name = "mtk-ccifreq",
-> +		.of_match_table = of_match_ptr(mtk_ccifreq_machines),
-
-You use of_match_ptr() so is it possible to build it without OF? If so,
-then mtk_ccifreq_machines needs maybe_unused.
-
-> +	},
-> +};
-> +
-> +static int __init mtk_ccifreq_platdrv_init(void)
-> +{
-> +	return platform_driver_register(&mtk_ccifreq_platdrv);
-> +}
-> +module_init(mtk_ccifreq_platdrv_init)
-> +
-> +static void __exit mtk_ccifreq_platdrv_exit(void)
-> +{
-> +	platform_driver_unregister(&mtk_ccifreq_platdrv);
-> +}
-> +module_exit(mtk_ccifreq_platdrv_exit)
-
-Why not module_platform_driver()?
-
-> +
-> +MODULE_DESCRIPTION("MediaTek CCI devfreq driver");
-> +MODULE_AUTHOR("Jia-Wei Chang <jia-wei.chang@mediatek.com>");
-> +MODULE_LICENSE("GPL v2");
-
-
-Best regards,
-Krzysztof
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
