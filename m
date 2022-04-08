@@ -2,62 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A36F34F938B
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Apr 2022 13:11:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B664F93F3
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Apr 2022 13:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbiDHLNH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Apr 2022 07:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35128 "EHLO
+        id S233526AbiDHL1p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Apr 2022 07:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiDHLNF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Apr 2022 07:13:05 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043CEAAB56
-        for <linux-pm@vger.kernel.org>; Fri,  8 Apr 2022 04:10:58 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id r10so9662513eda.1
-        for <linux-pm@vger.kernel.org>; Fri, 08 Apr 2022 04:10:57 -0700 (PDT)
+        with ESMTP id S234866AbiDHL1d (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Apr 2022 07:27:33 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A3DA27FB
+        for <linux-pm@vger.kernel.org>; Fri,  8 Apr 2022 04:25:29 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a6so16795274ejk.0
+        for <linux-pm@vger.kernel.org>; Fri, 08 Apr 2022 04:25:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5VOm2ulUjp1Xi1EM6XOot3oLjmozwpYPnlt3ttE49zY=;
-        b=tS9CzrFtVjxXZ5AUABo+Hp5gaupgQk1rM5KYHUfJpQH+SwzoLg7dMBEYCSw5fRMYJO
-         s6SUxVvYy287fjN6Ee/+7OaB062Kak4Xz1knuC/xG4aJpq/oS2HGr45t2IQUoIZRmgVW
-         RXDNNWfiqLpX1QdVHJjUP2u/oTZI6f0mbIB72UUHoN+i0LocnXGOA5F9iqJOJ6IevxYz
-         TtaDjzSyxEuAimVIxPcSDoDgHgUdgnnadsO1NKPyfUpmrYOH1Di6qa+Bh33+wQrDXsPq
-         Ho0DGWjgkIXu24Vbc+vpbAV4ZLq8tBmtXBFCZNqjZUQIFJinX5tO0ltngvJC/E9+LSXs
-         G/nA==
+        d=fairphone.com; s=fair;
+        h=mime-version:content-transfer-encoding:date:message-id:cc:subject
+         :from:to:references:in-reply-to;
+        bh=fq/K4JNV15oSFxy2NseTqwYWn1DV3eYrSDISuIsrfjY=;
+        b=gS3p0Nm6TFQkDgli679VWBZD/2P9mr04tsUkL37/VstyIDdKRmc8C5aKwlpIyQGm6B
+         bnv88XZrC4g5oK9cjGlkBdZIdAbfi7yrwv8buadDnFeEfPk/dGG+rS7PAr1AcAHx07nX
+         WR0g/K6SpetZYe2wQsetONgUrSorQ3OmC3eCJesipeoRBW6OjrMRb3873ycB3VolfVRg
+         9U9FL2DACMpecMb2ULtRNEz4yYMOD71Utato5rdq+NJzF50u+xJ5k0MAlFZCFLGdLVGK
+         gJwr91VI6b0CsrDQM8ldeEraQz1amXaU9bd7a9PyesSZAw1bprEA8TemdIUGWXS5RHX8
+         XfWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5VOm2ulUjp1Xi1EM6XOot3oLjmozwpYPnlt3ttE49zY=;
-        b=3SSauqroHnx2wvcbNhCE06/x/Efz1LDRFvLPhWqqAN7WQhkhyXC1xnaQKSqLUZi28L
-         xfZay+nMxrsJV87GgZ97/ZnC1yofFAcfm6MiL1kz4leP72ZtdzQbqnfkZimfEo++7C9d
-         L+M7IJqXBNxCK9LMHNKmugQjs/ehodsYYVs0FQbhMkYz6GcxaXgzPDlkvnp7qu58NEgF
-         9uT5xFXBhEJFfFze2x8grbEWdhk8bPafDaiMQFZhSP+y6eJKVUtZPAg2llfXoRGwOgU2
-         wJcr0W6CpLVEMUI8Qkd7ybdZpZ+8SnMmPra4r2RCxAP8DiVJHXlyv12KxXQ/wNVmcdD3
-         AElQ==
-X-Gm-Message-State: AOAM531eTzNCn2jY6mGCrTtUAJtwyuVmhuNVFVaPl0tyxUZKV3tPpCl5
-        0fsO3/Y5JqB3YBJXXj8IKh/azQ==
-X-Google-Smtp-Source: ABdhPJwlRL2pj3USgiBDJNsWlJmMwWSM7zPTKm3FNdz3np8qsvzP2oXBbKL3aRuSZOA0aHXMY5syhg==
-X-Received: by 2002:a05:6402:4407:b0:419:3859:697e with SMTP id y7-20020a056402440700b004193859697emr18850638eda.400.1649416256599;
-        Fri, 08 Apr 2022 04:10:56 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id lj11-20020a170906f9cb00b006e8402c3379sm1219058ejb.58.2022.04.08.04.10.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 04:10:55 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] PM: opp: simplify with dev_err_probe()
-Date:   Fri,  8 Apr 2022 13:10:52 +0200
-Message-Id: <20220408111052.381603-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:mime-version:content-transfer-encoding:date
+         :message-id:cc:subject:from:to:references:in-reply-to;
+        bh=fq/K4JNV15oSFxy2NseTqwYWn1DV3eYrSDISuIsrfjY=;
+        b=pR4P3uqd93wnulnbk2nYIA0i6NTUp+8TFZIMVUOAT/7SCwP1LrV3fI1JPw1nX+O7L0
+         YjTr4voY2yiagyf17yW2az7pDjFQCvtnmulSh9spTS1dkYa6E7NzRz26v6h3bdhd+xc5
+         aLaWlDOPSLSCHuhBCoHIISCOJrT0+urjt4Nn5wz1IcwtRIapmMdtkQObcXoRDVV57A0M
+         elQNleHxtZiJ2A+8vM5AOkoulFYzW6xt0ZEC29cKcwmvZv5FJAHqSVcaCrlimf9aJoc0
+         Lwh0rmRxP1Qeqj99hHR/hs9yX7pGtcse7BiQ0au47snJiW5BarTUiDNUGDw4wNplkV39
+         Lbvw==
+X-Gm-Message-State: AOAM531TjYhdVqfVAXqeQ/qsU35Gv/BLxxc7JO51UdXDRrFNQaxrMHLD
+        sHjFioAzf4Dy2bwx2LXBFy4d0g==
+X-Google-Smtp-Source: ABdhPJyeiuA6W53n6q0nTKiH0iz4FzlTJpMeID7G1rR7HGiuE6Z5+rJk9xaGb2yFLvehiheSF8RWjA==
+X-Received: by 2002:a17:906:32cf:b0:6d5:83bc:e962 with SMTP id k15-20020a17090632cf00b006d583bce962mr18531651ejk.108.1649417128191;
+        Fri, 08 Apr 2022 04:25:28 -0700 (PDT)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id j12-20020a50e0cc000000b0041cd813ac01sm6365666edl.28.2022.04.08.04.25.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 04:25:27 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 08 Apr 2022 13:25:26 +0200
+Message-Id: <CJ4TKNHK955X.2YYNAV248UMK8@otso>
+Cc:     "Konrad Dybcio" <konrad.dybcio@somainline.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        <linux-arm-msm@vger.kernel.org>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        "Amit Kucheria" <amitk@kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Zhang Rui" <rui.zhang@intel.com>, <devicetree@vger.kernel.org>,
+        "Thara Gopinath" <thara.gopinath@linaro.org>,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+        <linux-pm@vger.kernel.org>, <phone-devel@vger.kernel.org>,
+        "Andy Gross" <agross@kernel.org>
+Subject: Re: [PATCH 05/10] dt-bindings: thermal: tsens: Add SM6350
+ compatible
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Rob Herring" <robh@kernel.org>
+References: <20211213082614.22651-1-luca.weiss@fairphone.com>
+ <20211213082614.22651-6-luca.weiss@fairphone.com>
+ <YbpLqwFJI/nfvxd9@robh.at.kernel.org>
+In-Reply-To: <YbpLqwFJI/nfvxd9@robh.at.kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -68,46 +82,23 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Common pattern of handling deferred probe can be simplified with
-dev_err_probe().  Less code and the error value gets printed.
+Hi all,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/opp/core.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+On Wed Dec 15, 2021 at 9:10 PM CET, Rob Herring wrote:
+> On Mon, 13 Dec 2021 09:26:06 +0100, Luca Weiss wrote:
+> > Add devicetree compatible for tsens on SM6350 SoC.
+> >=20
+> > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> > Acked-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> > ---
+> >  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+> >  1 file changed, 1 insertion(+)
+> >=20
+>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 0b5357b9d342..ed72df835f8c 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -2030,10 +2030,9 @@ struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
- 	for (i = 0; i < count; i++) {
- 		reg = regulator_get_optional(dev, names[i]);
- 		if (IS_ERR(reg)) {
--			ret = PTR_ERR(reg);
--			if (ret != -EPROBE_DEFER)
--				dev_err(dev, "%s: no regulator (%s) found: %d\n",
--					__func__, names[i], ret);
-+			ret = dev_err_probe(dev, PTR_ERR(reg),
-+					    "%s: no regulator (%s) found\n",
-+					    __func__, names[i]);
- 			goto free_regulators;
- 		}
- 
-@@ -2179,11 +2178,8 @@ struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name)
- 	/* Find clk for the device */
- 	opp_table->clk = clk_get(dev, name);
- 	if (IS_ERR(opp_table->clk)) {
--		ret = PTR_ERR(opp_table->clk);
--		if (ret != -EPROBE_DEFER) {
--			dev_err(dev, "%s: Couldn't find clock: %d\n", __func__,
--				ret);
--		}
-+		ret = dev_err_probe(dev, PTR_ERR(opp_table->clk),
-+				    "%s: Couldn't find clock\n", __func__);
- 		goto err;
- 	}
- 
--- 
-2.32.0
+It looks like this patch hasn't been applied yet. Could the responsible
+maintainer please pick it up?
 
+Regards
+Luca
