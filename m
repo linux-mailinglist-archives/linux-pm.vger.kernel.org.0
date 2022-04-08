@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF9B4F9090
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Apr 2022 10:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 743724F90A2
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Apr 2022 10:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbiDHITe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Apr 2022 04:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39870 "EHLO
+        id S231567AbiDHIXh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Apr 2022 04:23:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231390AbiDHITd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Apr 2022 04:19:33 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D3467D09
-        for <linux-pm@vger.kernel.org>; Fri,  8 Apr 2022 01:17:29 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id x24so4204377edl.2
-        for <linux-pm@vger.kernel.org>; Fri, 08 Apr 2022 01:17:29 -0700 (PDT)
+        with ESMTP id S231564AbiDHIXg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Apr 2022 04:23:36 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020B2A185
+        for <linux-pm@vger.kernel.org>; Fri,  8 Apr 2022 01:21:33 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id p15so15771719ejc.7
+        for <linux-pm@vger.kernel.org>; Fri, 08 Apr 2022 01:21:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=yuQFl788i69gkuHZnfVhALt8fZsIexOSaYwO7DsFL54=;
-        b=gx8vkxt3S763Ala7vzwT1kODYsT4g6h9F/zXUPb23Kp7SxBqah2MLv/qepESsLFEk6
-         I0ssg1XGAfLpTdDwbWD4XOyGCf1OaXP7MTUwFge2EkjWfCqDuI9cbnBKQghpKTSNb+FZ
-         qQiXqB5C+6GD7/kuW52bYq8t0iaiLUOwEH2Gy5BwrGYXzXXkp7NTwGQcZ2MpnvUUOoRE
-         8UllVY1p3GkIjUo9lvPFKOrk+3+oTIFWk3jYgmGy2leoAdfs+MGwaRimWw+KYJ0Gamjn
-         j+cp3u90dmMQdHjdkVO7f2J+JL8VKRUppRdrEM545wEFGS7/HXzUyxt2c1TjJNQuTQQ1
-         yHtA==
+        bh=xeGOI+hxBRRDCw8I69VJZGllvVRkuKM+GL1fDWIHwuE=;
+        b=NMOd190nGhnmVD60Zvn3Etf8Z3SwRZPaQ5AoYH685WmUKlO2nsX2vBdXYbwKFp7kBt
+         TnwPNJCpPNbyvcZ8DgooR2RwHXwCIGH0jjrpplV+2dXG3+5EG6COoOUKwCvaqtwHRVU8
+         5xYd4miMtAlzUCEVLxlb4c/wJIWGq7lTjOHae6o30zQR9HKPnF7ZQrFe0hA1TgmU6Rv2
+         nOSLc7T/jA4pEN6xIGT5KSKrYgffDkt+jyl+GTUg6QTufXdaFDkUauaazQh4JzPc2j9e
+         1bd5Q4SMrlmFLquHIC/yu5wBpDHT4DjZp+ga2ugrHX21UlOv//t8rtAqWIWSrOD1nkFg
+         31iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=yuQFl788i69gkuHZnfVhALt8fZsIexOSaYwO7DsFL54=;
-        b=3cbFQwvrPh25nzbxStfb0LKhaNZbh1tbQtCVYM+pvtT4KJDDtTiANFCM3DajSYw+4J
-         nNS6klUeWzN/XudWINrjnT5qvI8tqkQNcsI6a9HEeDk0yUSb0+VzL5paaytROR7avtsU
-         2O2xDztBLl5oA/bzFG7YgumomOfIFSXfVsM2UYK48mGdlzG8qqfESsMsD+c2WxBlBQfs
-         mD2Y1EXRB4UQLNeis7wGwsOSLhxU6moOOR8HMhLACYwy/tusPr7FCyc6G4ElE8k6hJoJ
-         65rbt9ZxtGjFQsxR8IlBqNxCFDvnWrywgFd9hb54wiPR+5Ahiox3wUySfb9d5AT2xMYZ
-         pdGQ==
-X-Gm-Message-State: AOAM531n6xBMbsnrGmf7e11s0/dj219vxNOl4VHP1sRouOiRbFpc/8gk
-        6YzfYk3mIpmRq6ALaEDFEpouJQ==
-X-Google-Smtp-Source: ABdhPJx+VdDdTFo570Fvyfw4GeKW7zvLGZVHe5kAq6tSIeQZxQjNGhr1a2UD5tZKmhXqwhMA9rkmDA==
-X-Received: by 2002:aa7:d287:0:b0:41d:79:73ca with SMTP id w7-20020aa7d287000000b0041d007973camr8932500edq.142.1649405848011;
-        Fri, 08 Apr 2022 01:17:28 -0700 (PDT)
+        bh=xeGOI+hxBRRDCw8I69VJZGllvVRkuKM+GL1fDWIHwuE=;
+        b=D8kET7N+ii/OfGc5EazZrURFFfu25DGRgEs6hlQoGmV4yvDeUAhyxnvt/N14T/vwV2
+         RopIwpqEGlttccFu7/hEwOPvmeh+uDkzhQY19e9rkAryAZmrIO2UZxVxyFAG97VOyWNR
+         q8XwkfegvhnFqzNkz+oDKUhgoHKhFZlopNirgMONBVowrd6K0LLIFjKRbPj5tbHcEPuS
+         OgJzJ33sRxA5GFyXPZx+D976J6rFFKc6amZlE2LFSTj47dooOwm7pDxTIilOAgo52TWz
+         UEje5Kz//vAtYp7sZJu1ehPmnwgtClVKCl7Cn8Rnk4Th6To0AnAIcc3VYKN56RVRRjx4
+         TOYw==
+X-Gm-Message-State: AOAM533wv9n8jt1NhbmMhtWCroyHgrRLvFLzWsBpvEg3JOnKBoMF4rAy
+        kSezanlGu0XaMZb6UQXMThFcqQ==
+X-Google-Smtp-Source: ABdhPJyECBMXetuRDQC9zHM+ji1UA36sURAIRNcwnY01yfNVSOdRrknMnly6epCHA8osgRfsPfiH+Q==
+X-Received: by 2002:a17:906:2f97:b0:6ce:3ef6:94be with SMTP id w23-20020a1709062f9700b006ce3ef694bemr17650508eji.136.1649406091573;
+        Fri, 08 Apr 2022 01:21:31 -0700 (PDT)
 Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id h26-20020a170906111a00b006e778bd4fc8sm6167691eja.38.2022.04.08.01.17.26
+        by smtp.gmail.com with ESMTPSA id ke11-20020a17090798eb00b006e7fbf53398sm4764031ejc.129.2022.04.08.01.21.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Apr 2022 01:17:27 -0700 (PDT)
-Message-ID: <855d7daa-45d1-d6d8-32bd-51778cf58392@linaro.org>
-Date:   Fri, 8 Apr 2022 10:17:26 +0200
+        Fri, 08 Apr 2022 01:21:31 -0700 (PDT)
+Message-ID: <76d58182-2f56-32b2-42e9-2ecbdd09ba3d@linaro.org>
+Date:   Fri, 8 Apr 2022 10:21:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: devfreq: mediatek: Add mtk cci
- devfreq dt-bindings
+Subject: Re: [PATCH v2 2/2] PM / devfreq: mediatek: Introduce MediaTek CCI
+ devfreq driver
 Content-Language: en-US
 To:     Johnson Wang <johnson.wang@mediatek.com>, cw00.choi@samsung.com,
         krzk+dt@kernel.org, robh+dt@kernel.org, kyungmin.park@samsung.com
@@ -64,15 +64,15 @@ Cc:     khilman@kernel.org, linux-pm@vger.kernel.org,
         linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20220408052150.22536-1-johnson.wang@mediatek.com>
- <20220408052150.22536-2-johnson.wang@mediatek.com>
+ <20220408052150.22536-3-johnson.wang@mediatek.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220408052150.22536-2-johnson.wang@mediatek.com>
+In-Reply-To: <20220408052150.22536-3-johnson.wang@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,84 +80,104 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 08/04/2022 07:21, Johnson Wang wrote:
-> Add devicetree binding of mtk cci devfreq on MediaTek SoC.
+> We introduce a devfreq driver for the MediaTek Cache Coherent Interconnect
+> (CCI) used by some MediaTek SoCs.
 > 
+(...)
 
-Thank you for your patch. There is something to discuss/improve.
+> index 87eb2b837e68..d985597f343f 100644
+> --- a/drivers/devfreq/Kconfig
+> +++ b/drivers/devfreq/Kconfig
+> @@ -120,6 +120,16 @@ config ARM_TEGRA_DEVFREQ
+>  	  It reads ACTMON counters of memory controllers and adjusts the
+>  	  operating frequencies and voltages with OPP support.
+>  
+> +config ARM_MEDIATEK_CCI_DEVFREQ
+> +	tristate "MEDIATEK CCI DEVFREQ Driver"
+> +	depends on ARM_MEDIATEK_CPUFREQ
 
-> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
-> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> ---
->  .../devicetree/bindings/devfreq/mtk-cci.yaml  | 72 +++++++++++++++++++
->  1 file changed, 72 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/devfreq/mtk-cci.yaml
+|| COMPILE_TEST? And check if it test compiles.
 
-Filename with vendor prefix, so something like:
-
-mediatek,cci.yaml
-
-Also please put it in the "interconnect" directory.
-
-> 
-> diff --git a/Documentation/devicetree/bindings/devfreq/mtk-cci.yaml b/Documentation/devicetree/bindings/devfreq/mtk-cci.yaml
-> new file mode 100644
-> index 000000000000..ef4ea951025c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/devfreq/mtk-cci.yaml
-> @@ -0,0 +1,72 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/devfreq/mtk-cci.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek Cache Coherent Interconnect (CCI) frequency and voltage scaling
-> +
-> +maintainers:
-> +  - Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> +
-> +description: |
-> +  MediaTek Cache Coherent Interconnect (CCI) uses the software devfreq module
-
-Do not reference software implementation (devfreq).
-
-> +  to scale the clock frequency and adjust the voltage. MediaTek CCI shares
-> +  the same power supplies with CPU, so the scheduling involves with CPUfreq.
-
-The same - cpufreq.
-
-Instead, focus on the hardware, what do you describe here?
+(...)
 
 > +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt8183-cci
-> +      - mediatek,mt8186-cci
-> +
-> +  clocks:
-> +    items:
-> +      - description:
-> +          The multiplexer for clock input of CPU cluster.
-> +      - description:
-> +          A parent of "cpu" clock which is used as an intermediate clock source
-> +          when the original CPU is under transition and not stable yet.
-> +
-> +  clock-names:
-> +    items:
-> +      - const: cci
-> +      - const: intermediate
-> +
-> +  operating-points-v2:
-> +    description:
-> +      For details, please refer to
-> +      Documentation/devicetree/bindings/opp/opp-v2.yaml
+> +static int mtk_ccifreq_remove(struct platform_device *pdev)
+> +{
+> +	struct device *cci_dev = &pdev->dev;
 
-No need for description. Just "operating-points-v2: true".
+s/cci_dev/dev/
+Everywhere.
 
-"opp-table:true" could stay. My previous comment about its removal was a
-wrong advice, because opp-table is used for a table being a children of
-this device node.
+> +	struct mtk_ccifreq_drv *drv;
+> +
+> +	drv = platform_get_drvdata(pdev);
+> +
+> +	dev_pm_opp_unregister_notifier(cci_dev, &drv->opp_nb);
+> +	dev_pm_opp_of_remove_table(cci_dev);
+> +	clk_disable_unprepare(drv->inter_clk);
+> +	clk_disable_unprepare(drv->cci_clk);
+> +	regulator_disable(drv->proc_reg);
+> +	if (!IS_ERR(drv->sram_reg))
+> +		regulator_disable(drv->sram_reg);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct mtk_ccifreq_platform_data mt8183_platform_data = {
+> +	.min_volt_shift = 100000,
+> +	.max_volt_shift = 200000,
+> +	.proc_max_volt = 1150000,
+> +	.sram_min_volt = 0,
+> +	.sram_max_volt = 1150000,
+> +};
+> +
+> +static const struct mtk_ccifreq_platform_data mt8186_platform_data = {
+> +	.min_volt_shift = 100000,
+> +	.max_volt_shift = 250000,
+> +	.proc_max_volt = 1118750,
+> +	.sram_min_volt = 850000,
+> +	.sram_max_volt = 1118750,
+> +};
+> +
+> +static const struct of_device_id mtk_ccifreq_machines[] = {
+> +	{ .compatible = "mediatek,mt8183-cci", .data = &mt8183_platform_data },
+> +	{ .compatible = "mediatek,mt8186-cci", .data = &mt8186_platform_data },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, mtk_ccifreq_machines);
+> +
+> +static struct platform_driver mtk_ccifreq_platdrv = {
+> +	.probe	= mtk_ccifreq_probe,
+> +	.remove	= mtk_ccifreq_remove,
+> +	.driver = {
+> +		.name = "mtk-ccifreq",
+> +		.of_match_table = of_match_ptr(mtk_ccifreq_machines),
+
+You use of_match_ptr() so is it possible to build it without OF? If so,
+then mtk_ccifreq_machines needs maybe_unused.
+
+> +	},
+> +};
+> +
+> +static int __init mtk_ccifreq_platdrv_init(void)
+> +{
+> +	return platform_driver_register(&mtk_ccifreq_platdrv);
+> +}
+> +module_init(mtk_ccifreq_platdrv_init)
+> +
+> +static void __exit mtk_ccifreq_platdrv_exit(void)
+> +{
+> +	platform_driver_unregister(&mtk_ccifreq_platdrv);
+> +}
+> +module_exit(mtk_ccifreq_platdrv_exit)
+
+Why not module_platform_driver()?
+
+> +
+> +MODULE_DESCRIPTION("MediaTek CCI devfreq driver");
+> +MODULE_AUTHOR("Jia-Wei Chang <jia-wei.chang@mediatek.com>");
+> +MODULE_LICENSE("GPL v2");
+
 
 Best regards,
 Krzysztof
