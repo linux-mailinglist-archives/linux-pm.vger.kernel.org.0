@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 540684F9ED2
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Apr 2022 23:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8922F4F9EF1
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Apr 2022 23:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbiDHVKo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Apr 2022 17:10:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48688 "EHLO
+        id S239772AbiDHVMx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Apr 2022 17:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238510AbiDHVKn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Apr 2022 17:10:43 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992E63A5F5
-        for <linux-pm@vger.kernel.org>; Fri,  8 Apr 2022 14:08:37 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id r66so8800843pgr.3
-        for <linux-pm@vger.kernel.org>; Fri, 08 Apr 2022 14:08:37 -0700 (PDT)
+        with ESMTP id S239764AbiDHVMw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Apr 2022 17:12:52 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5F7181796
+        for <linux-pm@vger.kernel.org>; Fri,  8 Apr 2022 14:10:47 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id h5so7842550pgc.7
+        for <linux-pm@vger.kernel.org>; Fri, 08 Apr 2022 14:10:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=HoLWT/EythxVH1YT+vEjLN2TXDPwfF5xPPqMajsg97o=;
-        b=6DqRW4gK+PKLqJfJdAd0TGTO95Ya7KDB3mBZJjKMlL0nxZLtgxfpl+75BDL9PpUtD/
-         D8sxCCmecY9A1jNHsGn59jfaYAYVcw0MXiJZsMdhW9Hgaj2eegEWYZqhsHZZ8RViFFh8
-         g/mUJ5pRz/mDzFZbqiAMFiy2sA1QwSdm7uJ+N0EWGsnS9ZjEVfmjTnqFmuhMnW10Edv7
-         uODRBJwh1af7cUiTZDMOJnhCYENwjfab4lz7/KYYJOcswfmpJxqrQ5/bp0tB9mIV7ZMt
-         Kceie9MXCbkN4vkioRj3xK49n2u3J7v+iyzNlDM+Hsx6W8Dz7u6YcGhollnP1Te9u94x
-         iUtQ==
+        bh=NGL7uIJYy64vRyv+WyTds0iR2sbu1H6xVYp+rBwYsq0=;
+        b=0goe0SNyqeqNy9wKzBOTFC+7DmniXqC3vl6B6Ja5dbVTVTC/BZKzxTot9QUgRHj3YF
+         TX9uws+8EDjls/VkPD49zygJEFl3fLPDh7wOGrUaQQ8Yi9manuILnBLXpKiJbDtK6wkd
+         GBiXXLaiaTeyvR6B0bEboiCWp+bmK6fpIW/N2D87y5kKLuBdCDygGdepx6sOGFnlnlPU
+         f25f1FkaVYI5MTYGDfi/LHNLH7gGp3EbDDCmm+zhZ3uyTsz7D43liONM+N5RJmkiJYTt
+         63QBbMSvZi3/thOx0tR9I1AIZtqdN8wPSiaDxF/GgO4azda9Ys9eZDXwB5bc14UwGZJd
+         PrcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
          :message-id:mime-version;
-        bh=HoLWT/EythxVH1YT+vEjLN2TXDPwfF5xPPqMajsg97o=;
-        b=50tz6Rf51gGG4oSMLH1C5hV/vF/ps1Ka2Tr8oU07yWUNopO7+x55lZN/jkZyORKbO3
-         B0b80cUZ7oCjQIgAQ9HZupg9q3Xum8S8Qwk8K+JyyvGfuPUCfF2QQrt5ZtRuqBiV5PuX
-         bLooPaYlXRrtiYLXborwxL8LVl7uNKbCHeO94kWhG0kZSd4369Tpb1qkUPMWTWTWjJWv
-         pR+2Phgv7AxRBEAGKDFYjZ7hmLZJcuz7sevrXk/xXhJzE68sV8tDs/kQiFmi9okLV8hk
-         LBbqvk+iLxo6W7xknZcL00xV6hvoKU3fYgZEDMZULYSiMNDAlElYjTEZBLofb1jEeCP7
-         nYWg==
-X-Gm-Message-State: AOAM533NwPa82oL2A+sx0BXRrpzMsQmzsCUhRpZazDMxtViUajV9eLPD
-        xreSFyLiJ/dSu56Lh3k2V8KxdQ==
-X-Google-Smtp-Source: ABdhPJyvhkTmr6m8xOSTjNCBilnTlNxx+TZTy+ro007JGG5u+GpijdOFdlxjLZjwIoz7WZTYTZhnOg==
-X-Received: by 2002:a63:c015:0:b0:385:fe06:eb86 with SMTP id h21-20020a63c015000000b00385fe06eb86mr16908387pgg.132.1649452117075;
-        Fri, 08 Apr 2022 14:08:37 -0700 (PDT)
+        bh=NGL7uIJYy64vRyv+WyTds0iR2sbu1H6xVYp+rBwYsq0=;
+        b=Bl1eJWSEpA22PuXyDNFMZxOJ5QtYOhLdhiROU3PH4CeIhhUhhEFXloXklvBnwifh4g
+         bbOqGUaVriS2w4Y4RXjdqcIkb4UzqCQHE3eBF4pLok25n93kT+rzMLiV89fY67NKPF0w
+         iWzNN8y2NcQGuonNKHibomKQGD8fyYCpM32cX9kO06nxdBK/rdvmL5z/E+KAD8Chuu2n
+         UsuNOs4Nt73a3qJMqETrXkXkqfOfjeVvdUQftbm3MmAXtwlCDJnirGizX9TsCpSPuX3h
+         suddyPNgKsDnP/axOJmf7R8EilZEmqT2y+ovmv4KejWRu+y8jcL77zM/NArkNTzJ6IsD
+         J41g==
+X-Gm-Message-State: AOAM532L8Dc4iIfaT87SrCzr9qorgUC/FM+HNAqm78g+0t5FNIYUReDl
+        P/bPQ73MLtvKjUYXp+CROSSGoQ==
+X-Google-Smtp-Source: ABdhPJw5mutMPEroFwzVQlx6BF6zMMQsdO7eg6KiAaxV8KEQBMyUxgjwuUVnLSqBovjUXQR6fpGbkw==
+X-Received: by 2002:a63:4f0d:0:b0:399:5115:ff48 with SMTP id d13-20020a634f0d000000b003995115ff48mr17296204pgb.235.1649452247397;
+        Fri, 08 Apr 2022 14:10:47 -0700 (PDT)
 Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id s10-20020a63924a000000b00399571b2f99sm12120792pgn.57.2022.04.08.14.08.36
+        by smtp.gmail.com with ESMTPSA id v4-20020a17090a00c400b001cb4f242c92sm2330393pjd.26.2022.04.08.14.10.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 14:08:36 -0700 (PDT)
+        Fri, 08 Apr 2022 14:10:47 -0700 (PDT)
 From:   Kevin Hilman <khilman@baylibre.com>
 To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
         viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org
@@ -55,14 +55,14 @@ Cc:     matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH V2 11/15] cpufreq: mediatek: Update logic of
- voltage_tracking()
-In-Reply-To: <20220408045908.21671-12-rex-bc.chen@mediatek.com>
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: Re: [PATCH V2 14/15] cpufreq: mediatek: Add support for MT8186
+In-Reply-To: <20220408045908.21671-15-rex-bc.chen@mediatek.com>
 References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
- <20220408045908.21671-12-rex-bc.chen@mediatek.com>
-Date:   Fri, 08 Apr 2022 14:08:36 -0700
-Message-ID: <7hczhr5lm3.fsf@baylibre.com>
+ <20220408045908.21671-15-rex-bc.chen@mediatek.com>
+Date:   Fri, 08 Apr 2022 14:10:46 -0700
+Message-ID: <7h8rsf5lih.fsf@baylibre.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,17 +78,13 @@ Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
 
 > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
 >
-> - Remove VOLT_TOL because CCI may share the same sram and vproc
->   regulators with CPU. Therefore, set the max voltage in
->   regulator_set_voltage() to the proc{sram}_max_volt.
+> The platform data of MT8186 is different from previous MediaTek SoCs,
+> so we add a new compatible and platform data for it.
+>
+> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
 
-This could you a bit more detailed explanation.  Why does VOLT_TOL get
-in the way when regulators are shared between CPU & CCI?
-
-> - Move comparison of new and old voltages to
->   mtk_cpufreq_voltage_tracking().
-
-Why?  And how is this related to the above change?  Seems to me that it
-belongs in a separate patch.
+There's no upstream DT for MT8186, so I"m curious how this was
+tested/valiated with upstream?
 
 Kevin
