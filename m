@@ -2,246 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D36C4F947E
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Apr 2022 13:51:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6E84F95F7
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Apr 2022 14:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233734AbiDHLx4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Apr 2022 07:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49416 "EHLO
+        id S234032AbiDHMpa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Apr 2022 08:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbiDHLxv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Apr 2022 07:53:51 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07C92FF6FE;
-        Fri,  8 Apr 2022 04:51:47 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 9D3E51F46F37
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649418706;
-        bh=KtaScPcryeGL4YO+TROmabwM6wlLQsjfQXBw+PYHmfc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QCegWv3XIxeXvrTldnlY815OlT5zriWKUeupvOczZb1bDGA3cpKvuqkuTS8PBeS74
-         3/wC92JYMgDLC46HjGwXvzpyLXcRiawkzcSQj7DFSy0OIqXTJ1OFYoaKodebVU7pKr
-         UlVrSLQmKtGqzrqFhSfa3yOjImEuJF9iQt4ZrcxQj6pDU+WVglD9csBHVf5zLUWCTp
-         4TC24h8lLZZj9RyaH2UIhtKvVQnY4IUVALFiDE2zZqx7AjGvZGdWAARZAcO5HgTpNi
-         R9OcU0fCktBrpG/UD05xAkVKX/6DM9ccgnpOItqm3ftIrXpX0G3UL/3+VsuE5UJXbn
-         AHi3nCn/kVkkg==
-Message-ID: <7dde78c6-efc6-cc67-19ac-28f8640c2c8c@collabora.com>
-Date:   Fri, 8 Apr 2022 13:51:43 +0200
+        with ESMTP id S232498AbiDHMp2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Apr 2022 08:45:28 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA9B329AF;
+        Fri,  8 Apr 2022 05:43:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649421804; x=1680957804;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=shRsTxOu6z1fDTWKAhDb9aMsN+c5kKMrzbCJid69zTk=;
+  b=Udwj9oiZf10ZVTP7hjVPkBB7s5gb9I5Ol5/MwZqVsfhmod5axAXNogWf
+   35cmTD2/jVx8oqTXrCNW7xBBzCuACQDZna0RaPUW0aWMfvVJfChCHl8ma
+   BAWj/y0wjMYOyhyeUsFIe2hBoxMR4Y5od23CD+DgpXKA2jqExxUV3IL9I
+   yBFTb2tpC5T8Pkp3dlqdinYgZTtM5mX/Yo/zDokhScyzRxC0Q+PAr6QKQ
+   RxMxwZpo4pzusfNZtztE2hH8egT/2UKHdSa45rQsFBk7uqUJ5ToMAlusd
+   hN++pSLaNNjc7Qy8+73m1axWC2Y7iS6FHLJyOXrDxshIhIHPO/BJrLQws
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="260417696"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="260417696"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 05:43:24 -0700
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="550489494"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 05:43:21 -0700
+Received: by lahna (sSMTP sendmail emulation); Fri, 08 Apr 2022 15:43:18 +0300
+Date:   Fri, 8 Apr 2022 15:43:18 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Subject: Re: [PATCH v1 1/2] PCI: PM: Avoid leaving devices in
+ D0-uninitialized in pci_power_up()
+Message-ID: <YlAt5he5B1SlORMh@lahna>
+References: <4198163.ejJDZkT8p0@kreacher>
+ <3623886.MHq7AAxBmi@kreacher>
+ <YkwRjI0KvpmiJjvK@lahna>
+ <CAJZ5v0go9hLqv6Mcc5Ko770AU7sTYJQvgyjhGJ36AO1kURUnYA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/2] PM / devfreq: mediatek: Introduce MediaTek CCI
- devfreq driver
-Content-Language: en-US
-To:     Johnson Wang <johnson.wang@mediatek.com>, cw00.choi@samsung.com,
-        krzk+dt@kernel.org, robh+dt@kernel.org, kyungmin.park@samsung.com
-Cc:     khilman@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220408052150.22536-1-johnson.wang@mediatek.com>
- <20220408052150.22536-3-johnson.wang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220408052150.22536-3-johnson.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0go9hLqv6Mcc5Ko770AU7sTYJQvgyjhGJ36AO1kURUnYA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 08/04/22 07:21, Johnson Wang ha scritto:
-> We introduce a devfreq driver for the MediaTek Cache Coherent Interconnect
-> (CCI) used by some MediaTek SoCs.
+Hi Rafael,
+
+On Thu, Apr 07, 2022 at 09:01:59PM +0200, Rafael J. Wysocki wrote:
+> On Tue, Apr 5, 2022 at 1:45 PM Mika Westerberg
+> <mika.westerberg@linux.intel.com> wrote:
+> >
+> > On Mon, Apr 04, 2022 at 05:41:13PM +0200, Rafael J. Wysocki wrote:
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > In theory, pci_power_up() may leave a device in D0-uninitialized
+> > > during a transition from D3cold to D0.
+> > >
+> > > Say, a PCIe device depending on some ACPI power resources is put into
+> > > D3cold, so the power resources in question are all turned off.  Then,
+> > > pci_power_up() is called to put it into D0.
+> > >
+> > > It first calls pci_platform_power_transition() which invokes
+> > > platform_pci_set_power_state() to turn on the ACPI power resources
+> > > depended on by the device and, if that is successful, it calls
+> > > pci_update_current_state() to update the current_state field of
+> > > the PCI device object.  If the device's configuration space is
+> > > accessible at this point, which is the case if
+> > > platform_pci_set_power_state() leaves it in D0-uninitialized (and
+> > > there's nothing to prevent it from doing so), current_state will be
+> > > set to PCI_D0 and the pci_raw_set_power_state() called subsequently
+> > > will notice that the device is in D0 already and do nothing.
+> > > However, that is not correct, because it may be still necessary to
+> > > restore the device's BARs at this point.
+> > >
+> > > To address this issue, set current_state temporarily to PCI_D3hot
+> > > in the cases in which pci_raw_set_power_state() may need to do more
+> > > than just changing the power state of the device.
+> > >
+> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 > 
-> In this driver, we use the passive devfreq driver to get target frequencies
-> and adjust voltages accordingly. In MT8183 and MT8186, the MediaTek CCI
-> is supplied by the same regulators with the little core CPUs.
+> Thanks, but on second thought, I'm not sure if this is the best way to
+> address the issue.
 > 
-> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
-> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> ---
-> This patch depends on "devfreq-testing"[1].
-> [1]https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing
-> ---
->   drivers/devfreq/Kconfig           |  10 +
->   drivers/devfreq/Makefile          |   1 +
->   drivers/devfreq/mtk-cci-devfreq.c | 479 ++++++++++++++++++++++++++++++
->   3 files changed, 490 insertions(+)
->   create mode 100644 drivers/devfreq/mtk-cci-devfreq.c
-> 
-> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-> index 87eb2b837e68..d985597f343f 100644
-> --- a/drivers/devfreq/Kconfig
-> +++ b/drivers/devfreq/Kconfig
-> @@ -120,6 +120,16 @@ config ARM_TEGRA_DEVFREQ
->   	  It reads ACTMON counters of memory controllers and adjusts the
->   	  operating frequencies and voltages with OPP support.
->   
-> +config ARM_MEDIATEK_CCI_DEVFREQ
-> +	tristate "MEDIATEK CCI DEVFREQ Driver"
-> +	depends on ARM_MEDIATEK_CPUFREQ
-> +	select DEVFREQ_GOV_PASSIVE
-> +	help
-> +	  This adds a devfreq driver for MediaTek Cache Coherent Interconnect
-> +	  which is shared the same regulators with the cpu cluster. It can track
-> +	  buck voltages and update a proper CCI frequency. Use the notification
-> +	  to get the regulator status.
-> +
->   config ARM_RK3399_DMC_DEVFREQ
->   	tristate "ARM RK3399 DMC DEVFREQ Driver"
->   	depends on (ARCH_ROCKCHIP && HAVE_ARM_SMCCC) || \
-> diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
-> index 0b6be92a25d9..bf40d04928d0 100644
-> --- a/drivers/devfreq/Makefile
-> +++ b/drivers/devfreq/Makefile
-> @@ -11,6 +11,7 @@ obj-$(CONFIG_DEVFREQ_GOV_PASSIVE)	+= governor_passive.o
->   obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)	+= exynos-bus.o
->   obj-$(CONFIG_ARM_IMX_BUS_DEVFREQ)	+= imx-bus.o
->   obj-$(CONFIG_ARM_IMX8M_DDRC_DEVFREQ)	+= imx8m-ddrc.o
-> +obj-$(CONFIG_ARM_MEDIATEK_CCI_DEVFREQ)	+= mtk-cci-devfreq.o
->   obj-$(CONFIG_ARM_RK3399_DMC_DEVFREQ)	+= rk3399_dmc.o
->   obj-$(CONFIG_ARM_SUN8I_A33_MBUS_DEVFREQ)	+= sun8i-a33-mbus.o
->   obj-$(CONFIG_ARM_TEGRA_DEVFREQ)		+= tegra30-devfreq.o
-> diff --git a/drivers/devfreq/mtk-cci-devfreq.c b/drivers/devfreq/mtk-cci-devfreq.c
-> new file mode 100644
-> index 000000000000..53a28e2c88bd
-> --- /dev/null
-> +++ b/drivers/devfreq/mtk-cci-devfreq.c
-> @@ -0,0 +1,479 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2022 MediaTek Inc.
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/devfreq.h>
-> +#include <linux/minmax.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_opp.h>
-> +#include <linux/regulator/consumer.h>
-> +
-> +struct mtk_ccifreq_platform_data {
-> +	int min_volt_shift;
-> +	int max_volt_shift;
-> +	int proc_max_volt;
-> +	int sram_min_volt;
-> +	int sram_max_volt;
-> +};
-> +
-> +struct mtk_ccifreq_drv {
-> +	struct device *cci_dev;
-> +	struct devfreq *devfreq;
-> +	struct regulator *proc_reg;
-> +	struct regulator *sram_reg;
-> +	struct clk *cci_clk;
-> +	struct clk *inter_clk;
-> +	int inter_voltage;
-> +	int old_voltage;
-> +	unsigned long old_freq;
-> +	bool need_voltage_tracking;
-> +	/* Avoid race condition for regulators between notify and policy */
-> +	struct mutex reg_lock;
-> +	struct notifier_block opp_nb;
-> +	const struct mtk_ccifreq_platform_data *soc_data;
-> +};
-> +
-> +static int mtk_ccifreq_voltage_tracking(struct mtk_ccifreq_drv *drv,
-> +					int new_voltage)
-> +{
-> +	const struct mtk_ccifreq_platform_data *soc_data = drv->soc_data;
-> +	struct device *dev = drv->cci_dev;
-> +	struct regulator *proc_reg = drv->proc_reg;
-> +	struct regulator *sram_reg = drv->sram_reg;
-> +	int old_voltage, old_vsram, new_vsram, vsram, voltage, ret;
-> +
-> +	old_voltage = regulator_get_voltage(proc_reg);
-> +	if (old_voltage < 0) {
-> +		dev_err(dev, "invalid vproc value: %d\n", old_voltage);
-> +		return old_voltage;
-> +	}
-> +
-> +	old_vsram = regulator_get_voltage(sram_reg);
-> +	if (old_vsram < 0) {
-> +		dev_err(dev, "invalid vsram value: %d\n", old_vsram);
-> +		return old_vsram;
-> +	}
-> +
-> +	new_vsram = clamp(new_voltage + soc_data->min_volt_shift,
-> +			  soc_data->sram_min_volt, soc_data->sram_max_volt);
-> +
-> +	do {
-> +		if (old_voltage <= new_voltage) {
-> +			vsram = clamp(old_voltage + soc_data->max_volt_shift,
-> +				      soc_data->sram_min_volt, new_vsram);
-> +			ret = regulator_set_voltage(sram_reg, vsram,
-> +						    soc_data->sram_max_volt);
-> +			if (ret)
-> +				return ret;
-> +
-> +			if (vsram == soc_data->sram_max_volt ||
-> +			    new_vsram == soc_data->sram_min_volt)
-> +				voltage = new_voltage;
-> +			else
-> +				voltage = vsram - soc_data->min_volt_shift;
-> +
-> +			ret = regulator_set_voltage(proc_reg, voltage,
-> +						    soc_data->proc_max_volt);
-> +			if (ret) {
-> +				regulator_set_voltage(sram_reg, old_vsram,
-> +						      soc_data->sram_max_volt);
-> +				return ret;
-> +			}
-> +		} else if (old_voltage > new_voltage) {
-> +			voltage = max(new_voltage,
-> +				      old_vsram - soc_data->max_volt_shift);
-> +			ret = regulator_set_voltage(proc_reg, voltage,
-> +						    soc_data->proc_max_volt);
-> +			if (ret)
-> +				return ret;
-> +
-> +			if (voltage == new_voltage)
-> +				vsram = new_vsram;
-> +			else
-> +				vsram = max(new_vsram,
-> +					    voltage + soc_data->min_volt_shift);
-> +
-> +			ret = regulator_set_voltage(sram_reg, vsram,
-> +						    soc_data->sram_max_volt);
-> +			if (ret) {
-> +				regulator_set_voltage(proc_reg, old_voltage,
-> +						      soc_data->proc_max_volt);
-> +				return ret;
-> +			}
-> +		}
-> +
-> +		old_voltage = voltage;
-> +		old_vsram = vsram;
-> +	} while (voltage != new_voltage || vsram != new_vsram);
+> Basically, pci_power_up() is called in two places, in
+> pci_set_power_state() (for the transitions to D0) and in
+> pci_pm_default_resume_early().  In the latter case,
+> pci_restore_state() is called right after it and that covers BARs
+> restoration, so nothing more needs to be done in that case.
 
-Hello Johnson,
+I see.
 
-are you extremely sure that there will *always* be a way out of this while loop?
+> This means that pci_set_power_state() is the only place needing to
+> restore the BARs when going into D0 from D3hot or deeper and it is
+> better to move BARs restoration directly into it.  I'll update the
+> series accordingly and resend.
 
-For safety purposes, I would set an iteration limit in order to avoid getting
-an infinite loop here.
-Probably, something like twice or thrice the expected number of iterations will
-also be fine.
+Okay sounds good.
 
-P.S.: Krzysztof's review also contains exactly all the rest of what I would
-       also say here (thanks!).
+> I also think that the mandatory delay is not needed at all when
+> pci_raw_set_power_state() is called for transitions D3cold -> D0,
+> because in that case either the device has been powered up via
+> platform_pci_set_power_state(), or via the bridge resume which takes
+> the delay into account.
 
-Regards,
-Angelo
+I agree.
