@@ -2,49 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D51C24F9B4D
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Apr 2022 19:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 804644F9C73
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Apr 2022 20:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233036AbiDHRHc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Apr 2022 13:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
+        id S238541AbiDHSXW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Apr 2022 14:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231408AbiDHRHb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Apr 2022 13:07:31 -0400
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4EE954A5;
-        Fri,  8 Apr 2022 10:05:27 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2e5e9025c20so103262397b3.7;
-        Fri, 08 Apr 2022 10:05:27 -0700 (PDT)
+        with ESMTP id S230348AbiDHSXV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Apr 2022 14:23:21 -0400
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC82360437;
+        Fri,  8 Apr 2022 11:21:17 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2ebdf6ebd29so34699217b3.2;
+        Fri, 08 Apr 2022 11:21:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=45ajIdk2l2c0M5NveToHn951KWa5S8n2FWsDAPcmgKU=;
-        b=0klrK9fRKPYWMBs3PBjLWWwqAcJqTt0olnO57GYtz+8yUowj2Z5DHfOEt6cIQoAv19
-         saSsmdwlK3zFXC2vpClmqZB0WcrskONg+mBGiyXUkW+S7+qNpvTo+KoXHgAK0iCSQ85K
-         ru2TXJRwc9YKP7O8a85GVYAld+xv+zmKnzqVpgNFZlqf4D1piM+E9cotfdlMqTQ5LpVP
-         1Yoq2qni7Ht9qoAAO5pqHhgJwmOCVHjk/nwMB9M5c9g/ji/5bu1neqqxgiNp955tfnaC
-         M+R1KiOekJuldhk/NE92//TpVrIS/MqjY5zFeFlh/tkSm7aWk3qrIdJmTcrpeN/cNGaO
-         VEAw==
-X-Gm-Message-State: AOAM533ES3EIfLKVrSzw2cq2Apd+5RI3WpJSwO5tWF/hJfQibRVq2onc
-        9Hozd04LPJOyiVLYkoPTHwlNj84uU4Lup8zF1CtGglCe
-X-Google-Smtp-Source: ABdhPJwzJmUXNZljhLVAbirtIjqZ86JwGDWwbosbLX/f9YRBll8DfQDLxg3nGM8wY9C3iEuhCi1/SpLszEZSvG8phR8=
+        bh=lCVpHEZAuFYpT8MoYL/wQ4fDYm6F2aWVl7tmD78GJ5A=;
+        b=yTdG7iM0rTMFQvDClGza8PQw9GrLpjlYWIfN5vMUi1SM8GpH225/CF+n5bSVpLBfNS
+         FiGq7bveFnVFvAV+jVbFI2LUrXnVymDYRRaOKu7a9NEz96xbyGf8qmer/fuaTr/W5zDH
+         m5KoVRvnVICOxRmElz2Wuti+6p++rnJSRaIempnXJ/sGNV/J92vuOgMjDFJPkn8aB4Kg
+         mLu/7H67XqpDTXmEGnHxIQrdEfIRhdczD8/GOoNv9XyVPevbrZC6TltPxtFUHS8n5WhK
+         yEz6ONbxAkG+aX5meV1dzQMVWEHFlLxmhkjyAaylqO1Oc4oBjK88Cnib/kUBS1B31KWh
+         +Dvg==
+X-Gm-Message-State: AOAM530ApCRRZxBkUGFDNTnSpHs/oyA6snI5ytx4LmYLDVldpJpgKMKY
+        YRt1cuGR1uzHZPgmGBvmoMi/nuORPQ103xi64bGMrMjv
+X-Google-Smtp-Source: ABdhPJzGh+iKXmN5NP9Y/+KpdVxbwKsYfj7oFxaxISg2qW8gZjldXVGjXW/suZ2XAiJyRtuNMMgiDnTN939LblH5yaw=
 X-Received: by 2002:a81:7c45:0:b0:2eb:4759:cc32 with SMTP id
- x66-20020a817c45000000b002eb4759cc32mr16984331ywc.515.1649437526843; Fri, 08
- Apr 2022 10:05:26 -0700 (PDT)
+ x66-20020a817c45000000b002eb4759cc32mr17293086ywc.515.1649442076610; Fri, 08
+ Apr 2022 11:21:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <1836398.tdWV9SEqCh@kreacher> <CAPDyKFoop_mtWV0i+fH8GSmaxbPCyCPmOeNi6GuK5Qrj7ZVo1g@mail.gmail.com>
-In-Reply-To: <CAPDyKFoop_mtWV0i+fH8GSmaxbPCyCPmOeNi6GuK5Qrj7ZVo1g@mail.gmail.com>
+References: <4412361.LvFx2qVVIh@kreacher> <20220407154901.GA239301@bhelgaas>
+In-Reply-To: <20220407154901.GA239301@bhelgaas>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 8 Apr 2022 19:05:16 +0200
-Message-ID: <CAJZ5v0geG77Npdy_Ae7XnpWukPPSJ1nE0DFF-vbJViKj6GtCWA@mail.gmail.com>
-Subject: Re: [PATCH v1] PM: runtime: Avoid device usage count underflows
-To:     Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 8 Apr 2022 20:21:05 +0200
+Message-ID: <CAJZ5v0hC1Z6TrRtG8nkDJ4uk=qg=PQ1m6k4W_ho6G2YR2iZ0LQ@mail.gmail.com>
+Subject: Re: [PATCH v1] PCI: PM: Power up all devices during runtime resume
+To:     Bjorn Helgaas <helgaas@kernel.org>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -56,81 +58,56 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 4:05 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+On Thu, Apr 7, 2022 at 5:49 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
 >
-> On Wed, 6 Apr 2022 at 21:03, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> >
+> On Wed, Apr 06, 2022 at 09:00:52PM +0200, Rafael J. Wysocki wrote:
 > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > >
-> > A PM-runtime device usage count underflow is potentially critical,
-> > because it may cause a device to be suspended when it is expected to
-> > be operational.
->
-> I get the point. Although, perhaps we should also state that it's a
-> programming problem that we would like to catch and warn about?
-
-OK, I can add that to the changelog.
-
+> > Currently, endpoint devices may not be powered up entirely during
+> > runtime resume that follows a D3hot -> D0 transition of the parent
+> > bridge.
 > >
-> > For this reason, (1) make rpm_check_suspend_allowed() return an error
-> > when the device usage count is negative to prevent devices from being
-> > suspended in that case, (2) introduce rpm_drop_usage_count() that will
-> > detect device usage count underflows, warn about them and fix them up,
-> > and (3) use it to drop the usage count in a few places instead of
-> > atomic_dec_and_test().
+> > Namely, even if the power state of an endpoint device, as indicated
+> > by its PCI_PM_CTRL register, is D0 after powering up its parent
+> > bridge, it may be still necessary to bring its ACPI companion into
+> > D0 and that should be done before accessing it.  However, the current
+> > code assumes that reading the PCI_PM_CTRL register is sufficient to
+> > establish the endpoint device's power state, which may lead to
+> > problems.
 > >
+> > Address that by forcing a power-up of all PCI devices, including the
+> > platform firmware part of it, during runtime resume.
+> >
+> > Link: https://lore.kernel.org/linux-pm/11967527.O9o76ZdvQC@kreacher
+> > Fixes: 5775b843a619 ("PCI: Restore config space on runtime resume despite being unbound")
+> > Reported-by: Abhishek Sahu <abhsahu@nvidia.com>
+> > Tested-by: Abhishek Sahu <abhsahu@nvidia.com>
 > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Applied with Mika's reviewed-by to pci/pm for v5.19, thanks!
+
+This doesn't compile when CONFIG_PM_SLEEP in uset, sorry about this.
+
+I'll send a v2, but if you prefer an incremental fix, please let me know.
+
+>
 > > ---
-> >  drivers/base/power/runtime.c |   44 ++++++++++++++++++++++++++++++++++++-------
-> >  1 file changed, 37 insertions(+), 7 deletions(-)
+> >  drivers/pci/pci-driver.c |    2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
 > >
-> > Index: linux-pm/drivers/base/power/runtime.c
+> > Index: linux-pm/drivers/pci/pci-driver.c
 > > ===================================================================
-> > --- linux-pm.orig/drivers/base/power/runtime.c
-> > +++ linux-pm/drivers/base/power/runtime.c
-> > @@ -263,7 +263,7 @@ static int rpm_check_suspend_allowed(str
-> >                 retval = -EINVAL;
-> >         else if (dev->power.disable_depth > 0)
-> >                 retval = -EACCES;
-> > -       else if (atomic_read(&dev->power.usage_count) > 0)
-> > +       else if (atomic_read(&dev->power.usage_count))
-> >                 retval = -EAGAIN;
-> >         else if (!dev->power.ignore_children &&
-> >                         atomic_read(&dev->power.child_count))
-> > @@ -1039,13 +1039,33 @@ int pm_schedule_suspend(struct device *d
-> >  }
-> >  EXPORT_SYMBOL_GPL(pm_schedule_suspend);
+> > --- linux-pm.orig/drivers/pci/pci-driver.c
+> > +++ linux-pm/drivers/pci/pci-driver.c
+> > @@ -1312,7 +1312,7 @@ static int pci_pm_runtime_resume(struct
+> >        * to a driver because although we left it in D0, it may have gone to
+> >        * D3cold when the bridge above it runtime suspended.
+> >        */
+> > -     pci_restore_standard_config(pci_dev);
+> > +     pci_pm_default_resume_early(pci_dev);
 > >
-> > +static int rpm_drop_usage_count(struct device *dev)
-> > +{
-> > +       int ret;
-> > +
-> > +       ret = atomic_sub_return(1, &dev->power.usage_count);
-> > +       if (ret >= 0)
-> > +               return ret;
-> > +
-> > +       /*
-> > +        * Because rpm_resume() does not check the usage counter, it will resume
-> > +        * the device even if the usage counter is 0 or negative, so it is
-> > +        * sufficient to increment the usage counter here to reverse the change
-> > +        * made above.
-> > +        */
-> > +       atomic_inc(&dev->power.usage_count);
->
-> Rather than this two-step process, couldn't we just do an
-> "atomic_add_unless(&dev->power.usage_count, -1, 0)" - and check the
-> return value?
-
-No, we couldn't, because atomic_add_unless() returns a bool and we
-need to know the new counter value (and in particular whether or not
-it is 0).
-
-I thought that it would be better to do the extra access in the
-failing case only.
-
-> > +       dev_warn(dev, "Runtime PM usage count underflow!\n");
-> > +       return -EINVAL;
-> > +}
-> > +
->
-> [...]
+> >       if (!pci_dev->driver)
+> >               return 0;
+> >
+> >
+> >
