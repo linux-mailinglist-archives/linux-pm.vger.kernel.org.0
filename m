@@ -2,137 +2,182 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 560DE4F979D
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Apr 2022 16:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B45F4F97EB
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Apr 2022 16:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230484AbiDHOHY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Apr 2022 10:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39130 "EHLO
+        id S236828AbiDHOYg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Apr 2022 10:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbiDHOHX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Apr 2022 10:07:23 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE7817DC9B
-        for <linux-pm@vger.kernel.org>; Fri,  8 Apr 2022 07:05:19 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id b21so15280282lfb.5
-        for <linux-pm@vger.kernel.org>; Fri, 08 Apr 2022 07:05:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=veQUvkDdzWhR8nicSgShJIzbzfet3GlWn/x9JD2dO50=;
-        b=aRhq899TwsyNIUbE9EOcdEH8JKGgrvMMUkBisv/L4hk8U0NwLT6ab+jGnruJ8rfPkI
-         464VZzLA+PcfQ9oCIFTylRZN1dC/ChrQ+np48nzoay705WLA05KfJxeiACgCTM0/BAbJ
-         z2SpZWEuHq4lgRa7cDyPp0voG6v+og2blf5JacRDdB5aSnXV7eetVO7N3Y+Z0OqsPBFG
-         5SgTJjdC65h7fKIzu579v72bBkVw+nIksf4hpuYmO7paVBboQx2Nx4/xjN89aLVndNEG
-         s3biwn1bNMTaOHcPTigJ6PU1gSaMIcVrUBmMuzhf1TFT++gSwAGk/V1e4cJr8xP41DlG
-         6Ecw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=veQUvkDdzWhR8nicSgShJIzbzfet3GlWn/x9JD2dO50=;
-        b=Ha9KXGsZNtYfGLKGaYkh5wQD1GlkKbRWJWOrLVCuXr1Z1buTJcFJWXWQOhk9LT4XW9
-         +Xi7Rw9tAcAbiA/jU1UQwOf40OpgH8843j9gNxkSF53R+Ga4LIGTTC9tIXWmTy0iJQn8
-         LIrm5tjUjk26kaeNlfCuLNmHOG5gHpY1T2+oVvL9rR4vYYMAFcIiB0VBY5t2kHRZF2yg
-         igiUm4g1yv3O+iBezoVyn5vC6jQLRSEnMWNKa57dW5O4rDIuXdUt9naRXzhpXPPxyHko
-         fhmXFzkbibYu9W+L6aakb76uXmXdbF2pl4weTx5+6HxAf4ht0OKXuJn5qD3JiAXp5we5
-         rZtQ==
-X-Gm-Message-State: AOAM531BQhSVSIsmMaVDyfx6B20OkexzuxVdWTpdVPvZL4YyzcKAFQk+
-        gSsAXOo3NIaSsIgx7FT1F8mzw3IfxOrXTLL7Nurb3A==
-X-Google-Smtp-Source: ABdhPJzA2ibYfqWpb3xN2DuDt2LnVxoBWJn6QzJJ3Q+P15fDe8e3G6g0Ok0a2NR4jxmTWyPi7y3cC+TVoPmlWSp4BTA=
-X-Received: by 2002:ac2:47e9:0:b0:46a:38a2:b0f4 with SMTP id
- b9-20020ac247e9000000b0046a38a2b0f4mr3523940lfp.71.1649426717296; Fri, 08 Apr
- 2022 07:05:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <1836398.tdWV9SEqCh@kreacher>
-In-Reply-To: <1836398.tdWV9SEqCh@kreacher>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 8 Apr 2022 16:04:41 +0200
-Message-ID: <CAPDyKFoop_mtWV0i+fH8GSmaxbPCyCPmOeNi6GuK5Qrj7ZVo1g@mail.gmail.com>
-Subject: Re: [PATCH v1] PM: runtime: Avoid device usage count underflows
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
+        with ESMTP id S235567AbiDHOYf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Apr 2022 10:24:35 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F7692311;
+        Fri,  8 Apr 2022 07:22:31 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id CA7AE1F85F;
+        Fri,  8 Apr 2022 14:22:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1649427749; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TQuvLLv/oeqhE1CFTiwRDAEpyUiaiX3r+MFr/YL55+k=;
+        b=HjF+Xs/zPrhU4cNitPg5DsPChj7UhJDLgQj/IgT1KdVHo6AJjfKFcYvIcOW7NzfzzJHIqn
+        RHCFRlBS6cjDb4Dl7VHQ7a4rsN6PNbXXEKoFOPWlUmhhlcP9Y71BxP+eVL2DdtSoW5cexU
+        UaIvZDkxm00yjMnXmqJTnmuY/X/os0A=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1649427749;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TQuvLLv/oeqhE1CFTiwRDAEpyUiaiX3r+MFr/YL55+k=;
+        b=lox00S8KJWJgx+0pGdbpMnk7zIC2Qob68THbWF7T/MPGQiT545T6NmhJdOCKAtCiQkJaql
+        MsIbB7O9JbAv5oDg==
+Received: from [10.163.29.78] (unknown [10.163.29.78])
+        by relay2.suse.de (Postfix) with ESMTP id 98B36A3B94;
+        Fri,  8 Apr 2022 14:22:29 +0000 (UTC)
+Message-ID: <36982e082159a77154cfc8a78039e4ce9e3b4770.camel@suse.cz>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Handle no_turbo in frequency
+ invariance
+From:   Giovanni Gherdovich <ggherdovich@suse.cz>
+To:     Chen Yu <yu.c.chen@intel.com>, linux-pm@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Len Brown <len.brown@intel.com>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Chen Yu <yu.chen.surf@gmail.com>, linux-kernel@vger.kernel.org,
+        Zhang Rui <rui.zhang@intel.com>
+Date:   Fri, 08 Apr 2022 16:22:28 +0200
+In-Reply-To: <20220407234258.569681-1-yu.c.chen@intel.com>
+References: <20220407234258.569681-1-yu.c.chen@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.34.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 6 Apr 2022 at 21:03, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> A PM-runtime device usage count underflow is potentially critical,
-> because it may cause a device to be suspended when it is expected to
-> be operational.
+On Fri, 2022-04-08 at 07:42 +0800, Chen Yu wrote:
+> Problem statement:
+> Once the user has disabled turbo frequency by
+> echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo,
+> the cfs_rq's util_avg becomes quite small when compared with
+> CPU capacity.
+> 
+> Step to reproduce:
+> 
+> echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo
+> 
+> ./x86_cpuload --count 1 --start 3 --timeout 100 --busy 99
+> would launch 1 thread and bind it to CPU3, lasting for 100 seconds,
+> with a CPU utilization of 99%. [1]
+> 
+> top result:
+> %Cpu3  : 98.4 us,  0.0 sy,  0.0 ni,  1.6 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+> 
+> check util_avg:
+> cat /sys/kernel/debug/sched/debug | grep "cfs_rq\[3\]" -A 20 | grep util_avg
+>   .util_avg                      : 611
+> 
+> So the util_avg/cpu capacity is 611/1024, which is much smaller than
+> 98.4% shown in the top result.
+> 
+> This might impact some logic in the scheduler. For example, group_is_overloaded()
+> would compare the group_capacity and group_util in the sched group, to
+> check if this sched group is overloaded or not. With this gap, even
+> when there is a nearly 100% workload, the sched group will not be regarded
+> as overloaded. Besides group_is_overloaded(), there are also other victims.
+> There is a ongoing work that aims to optimize the task wakeup in a LLC domain.
+> The main idea is to stop searching idle CPUs if the sched domain is overloaded[2].
+> This proposal also relies on the util_avg/CPU capacity to decide whether the LLC
+> domain is overloaded.
+> 
+> Analysis:
+> CPU frequency invariance has caused this difference. In summary,
+> the util_sum of cfs rq would decay quite fast when the CPU is in
+> idle, when the CPU frequency invariance is enabled.
+> 
+> The detail is as followed:
+> 
+> As depicted in update_rq_clock_pelt(), when the frequency invariance
+> is enabled, there would be two clock variables on each rq, clock_task
+> and clock_pelt:
+> 
+>    The clock_pelt scales the time to reflect the effective amount of
+>    computation done during the running delta time but then syncs back to
+>    clock_task when rq is idle.
+> 
+>    absolute time    | 1| 2| 3| 4| 5| 6| 7| 8| 9|10|11|12|13|14|15|16
+>    @ max frequency  ------******---------------******---------------
+>    @ half frequency ------************---------************---------
+>    clock pelt       | 1| 2|    3|    4| 7| 8| 9|   10|   11|14|15|16
+> 
+> The fast decay of util_sum during idle is due to:
+> 1. rq->clock_pelt is always behind rq->clock_task
+> 2. rq->last_update is updated to rq->clock_pelt' after invoking ___update_load_sum()
+> 3. Then the CPU becomes idle, the rq->clock_pelt' would be suddenly increased
+>    a lot to rq->clock_task
+> 4. Enters ___update_load_sum() again, the idle period is calculated by
+>    rq->clock_task - rq->last_update, AKA, rq->clock_task - rq->clock_pelt'.
+>    The lower the CPU frequency is, the larger the delta =
+>    rq->clock_task - rq->clock_pelt' will be. Since the idle period will be
+>    used to decay the util_sum only, the util_sum drops significantly during
+>    idle period.
+> 
+> Proposal:
+> This symptom is not only caused by disabling turbo frequency, but it
+> would also appear if the user limits the max frequency at runtime. Because
+> if the frequency is always lower than the max frequency,
+> CPU frequency invariance would decay the util_sum quite fast during idle.
+> 
+> As some end users would disable turbo after boot up, this patch aims to
+> present this symptom and deals with turbo scenarios for now. It might
+> be ideal if CPU frequency invariance is aware of the max CPU frequency
+> (user specified) at runtime in the future.
+> 
+> [Previous patch seems to be lost on LKML, this is a resend, sorry for any
+> inconvenience]
+> 
+> Link: https://github.com/yu-chen-surf/x86_cpuload.git #1
+> Link: https://lore.kernel.org/lkml/20220310005228.11737-1-yu.c.chen@intel.com/ #2
+> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
 
-I get the point. Although, perhaps we should also state that it's a
-programming problem that we would like to catch and warn about?
+Reviewed-by: Giovanni Gherdovich <ggherdovich@suse.cz>
 
->
-> For this reason, (1) make rpm_check_suspend_allowed() return an error
-> when the device usage count is negative to prevent devices from being
-> suspended in that case, (2) introduce rpm_drop_usage_count() that will
-> detect device usage count underflows, warn about them and fix them up,
-> and (3) use it to drop the usage count in a few places instead of
-> atomic_dec_and_test().
->
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+You're right, when turbo is disabled, the frequency invariance code needs to
+know about it; it calculates freq_curr/freq_max and thinks that freq_max is
+some turbo level. For example commit 918229cdd5ab ("x86/intel_pstate: Handle
+runtime turbo disablement/enablement in frequency invariance") takes care of
+this when global.turbo_disabled changes, but before your patch nothing checks
+if the user disabled turbo from sysfs. Thanks for the fix!
+
+Giovanni
+
 > ---
->  drivers/base/power/runtime.c |   44 ++++++++++++++++++++++++++++++++++++-------
->  1 file changed, 37 insertions(+), 7 deletions(-)
->
-> Index: linux-pm/drivers/base/power/runtime.c
-> ===================================================================
-> --- linux-pm.orig/drivers/base/power/runtime.c
-> +++ linux-pm/drivers/base/power/runtime.c
-> @@ -263,7 +263,7 @@ static int rpm_check_suspend_allowed(str
->                 retval = -EINVAL;
->         else if (dev->power.disable_depth > 0)
->                 retval = -EACCES;
-> -       else if (atomic_read(&dev->power.usage_count) > 0)
-> +       else if (atomic_read(&dev->power.usage_count))
->                 retval = -EAGAIN;
->         else if (!dev->power.ignore_children &&
->                         atomic_read(&dev->power.child_count))
-> @@ -1039,13 +1039,33 @@ int pm_schedule_suspend(struct device *d
->  }
->  EXPORT_SYMBOL_GPL(pm_schedule_suspend);
->
-> +static int rpm_drop_usage_count(struct device *dev)
-> +{
-> +       int ret;
-> +
-> +       ret = atomic_sub_return(1, &dev->power.usage_count);
-> +       if (ret >= 0)
-> +               return ret;
-> +
-> +       /*
-> +        * Because rpm_resume() does not check the usage counter, it will resume
-> +        * the device even if the usage counter is 0 or negative, so it is
-> +        * sufficient to increment the usage counter here to reverse the change
-> +        * made above.
-> +        */
-> +       atomic_inc(&dev->power.usage_count);
+>  drivers/cpufreq/intel_pstate.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index 846bb3a78788..2216b24b6f84 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -1322,6 +1322,7 @@ static ssize_t store_no_turbo(struct kobject *a, struct kobj_attribute *b,
+>  	mutex_unlock(&intel_pstate_limits_lock);
+>  
+>  	intel_pstate_update_policies();
+> +	arch_set_max_freq_ratio(global.no_turbo);
+>  
+>  	mutex_unlock(&intel_pstate_driver_lock);
+>  
 
-Rather than this two-step process, couldn't we just do an
-"atomic_add_unless(&dev->power.usage_count, -1, 0)" - and check the
-return value?
-
-> +       dev_warn(dev, "Runtime PM usage count underflow!\n");
-> +       return -EINVAL;
-> +}
-> +
-
-[...]
-
-Kind regards
-Uffe
