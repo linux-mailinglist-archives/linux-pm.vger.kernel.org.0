@@ -2,133 +2,352 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 161EF4F9F19
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Apr 2022 23:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B064E4F9F50
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Apr 2022 23:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239215AbiDHVXj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Apr 2022 17:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43190 "EHLO
+        id S234834AbiDHVsW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Apr 2022 17:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237562AbiDHVXh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Apr 2022 17:23:37 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE6C6568;
-        Fri,  8 Apr 2022 14:21:32 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id e189so10104548oia.8;
-        Fri, 08 Apr 2022 14:21:32 -0700 (PDT)
+        with ESMTP id S231585AbiDHVsV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Apr 2022 17:48:21 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D071480C1
+        for <linux-pm@vger.kernel.org>; Fri,  8 Apr 2022 14:46:16 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-d39f741ba0so11052228fac.13
+        for <linux-pm@vger.kernel.org>; Fri, 08 Apr 2022 14:46:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=vAncHnLBpOlRUc0OOfu8cfX5QtgUJCxxL9tQZFajpgg=;
-        b=eBrJh77ttbk7uak8/KwhrN0FgVTJhtQBH37Uvro0w1QPQSCdWGUFWk+Hoy5kAmN6/3
-         9D14l10vBYL6DzGyxJinf5N8HJMfvNtO2Y4M8uz7g+pbFoezv3fwOhYR0v0o0cBOUKEk
-         iaMMMQF2Vh0CRsh673U2cCcXjczsQocMyeU6pn6zL23yRM/iFmcQeFSGMVWf8uvsMuZ3
-         q1LDicFiQB3VudXZnnuFQ7ylqWuC3dEMLOvyZvHISPz8E9Ckx3+JdoG0wOuexBcA4RXD
-         FJhMR7FLx8lNc1VSXjLpEmeKRS09eE5uTOhwB6cEmgk+ruLSIkONrYtMJvA61kKf/S4e
-         f6jA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tzhZjvEhF/Gmp0TQ3rspjmAiTAiuaXngv+PeF1pYfuc=;
+        b=cwBl5y4y14jFbhJ3KjYt2WeCgWBFS5ltcOiZnmzWlXL7StWqiWwJJO4syi8SP1rQ2w
+         cituhgfybyAiij3dROau9a5AWb4OFYLxTERg3qLdYoQPRUbyFuaGlJCZXyMBYRvO+e+B
+         kMLJbLStPs9R63ZLwI57Fps5bDw/fyZ/kyYaRkXtOG1wzFL6wIc5uwNPNmQR1hTjnxjh
+         R6y0/WReJC3VM66xN8G9P+TC2UpuPiLQiLT3YcNfirsphvyYDe89ubyrvP5QCEOg4oae
+         CrPyXM95NLl76B42CJCnHzT7dntWL7S9Qst7wXKK1oW8SxJJFeVu2jC0YcB8QuXH47mR
+         F1HA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vAncHnLBpOlRUc0OOfu8cfX5QtgUJCxxL9tQZFajpgg=;
-        b=wSnQPo0Wo9vgbiydaxUB+dxoQx/QAep6AiJCLU5dcSTqWnD0J1fL1MFAwRyXogYduQ
-         WZoZfbndCu0xqenLyD+QoNx3i9y4HZ0tSKNB9ZZ4Hcd2OFkj4Uxu9EWRdOrM8j96bWll
-         ckUtS4qAAztRjQ4C66kGlBLmkZeiVT5OTGIaoT0fMTNRNx9O1rzQmI6TPJ8ZxKHbNrIR
-         TGQYT0GHof9XDK74e7XFsYUymlvvTV5oZ68VqRD+voX84XY5DvclNsUta1p3MEnBzS82
-         jqBKBLEayZ+FQzZQ/+KdAfUT9FphVhBTWIU20gXduHYVC54fQdUS4e3vU77gdlssa3l1
-         XWJw==
-X-Gm-Message-State: AOAM530Cev/atXOtI1LFr0+p2WH37urZ8UGByzkU1SULTvjbMd0Kk/G7
-        3+4j26ET1oK+y71PdSBFAdmOmr1fzeQ=
-X-Google-Smtp-Source: ABdhPJwaBfTYmCbKEOtZhUm8UpxJ14O2ovNkTUdcFOP4pDItDbSIOkT/gs/Pww3s+6KRvrqny58tnA==
-X-Received: by 2002:a05:6808:23cd:b0:2ec:f109:689a with SMTP id bq13-20020a05680823cd00b002ecf109689amr785881oib.280.1649452891755;
-        Fri, 08 Apr 2022 14:21:31 -0700 (PDT)
-Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
-        by smtp.gmail.com with ESMTPSA id ep36-20020a056870a9a400b000de98fe4869sm9950375oab.35.2022.04.08.14.21.30
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tzhZjvEhF/Gmp0TQ3rspjmAiTAiuaXngv+PeF1pYfuc=;
+        b=2rXf/xUWTK0IW9pa6V5qYi0TkPV422B/pPQhPQ6k9VnwACduIHU4+gDIx3Nf6rgjZv
+         ST3rkKCZzNcPaqjPo8VQd4pPZwzNy8ebhOvaeK5+qXoBDGQUtp2HKSe8lhArGfECjnVK
+         5XcxSrgYrDMnlGKkenTY6b5Myvhi526HPDEpw+xOk/s2j4IsI/2BdNcORPJdopR+as3n
+         pHGZT3KiGpa6oaWIoyQ/m3QCjImmowWsaH3eoEolVWowntZu8CJ4ReKaPfwclGA50OCG
+         QJBfHL4VHxNuOJFc4mkpLJZ47VjjlM5pq3KkeCmmjaVuO9ed3Bk3L6OTWwoObCbsDEOG
+         nDRQ==
+X-Gm-Message-State: AOAM530SMwH6Pz0CPr7dYoC/g0lBd83X63zU+Le6Y4GxMHsLx7wE3mKn
+        cwgluu0s/jXpyk2k6MJTDeDqtA==
+X-Google-Smtp-Source: ABdhPJz5pARrEan3E68M7K/Se6UGuNAKt92VbcJ69atLMvKHYpBPvPEuy6ZMiVH9E0rblS17hYco2Q==
+X-Received: by 2002:a05:6870:b417:b0:d4:547c:7a76 with SMTP id x23-20020a056870b41700b000d4547c7a76mr9763121oap.65.1649454375684;
+        Fri, 08 Apr 2022 14:46:15 -0700 (PDT)
+Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id w7-20020a9d6387000000b005b2265711fcsm9569530otk.16.2022.04.08.14.46.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 14:21:31 -0700 (PDT)
-From:   Chris Morgan <macroalpha82@gmail.com>
-To:     linux-pm@vger.kernel.org
-Cc:     linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        zhangqing@rock-chips.com, zyw@rock-chips.com,
-        maccraft123mc@gmail.com, jon.lin@rock-chips.com, sre@kernel.org,
-        heiko@sntech.de, krzk+dt@kernel.org, robh+dt@kernel.org,
-        lee.jones@linaro.org, Chris Morgan <macromorgan@hotmail.com>
-Subject: [PATCH 4/4 v6] arm64: dts: rockchip: add rk817 chg to Odroid Go Advance
-Date:   Fri,  8 Apr 2022 16:21:21 -0500
-Message-Id: <20220408212121.9368-5-macroalpha82@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220408212121.9368-1-macroalpha82@gmail.com>
-References: <20220408212121.9368-1-macroalpha82@gmail.com>
+        Fri, 08 Apr 2022 14:46:15 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: [PATCH v2 1/2] dt-bindings: interconnect: qcom: Add sc8280xp binding
+Date:   Fri,  8 Apr 2022 14:48:34 -0700
+Message-Id: <20220408214835.624494-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Chris Morgan <macromorgan@hotmail.com>
+The Qualcomm SC8280XP platform has the usual set of busses, add a
+binding for these interconnect providers and port definitions to allow
+interconnect paths to be expressed in the sc8280xp DeviceTree.
 
-Add the new rk817 charger driver to the Odroid Go Advance. Create a
-monitored battery node as well for the charger to use. All values
-from monitored battery are gathered from the BSP kernel for the
-Odroid Go Advance provided by HardKernel.
-
-Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
- .../boot/dts/rockchip/rk3326-odroid-go2.dts   | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
-index ea0695b51ecd..ba72e6716e8c 100644
---- a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
-@@ -52,6 +52,25 @@ backlight: backlight {
- 		pwms = <&pwm1 0 25000 0>;
- 	};
- 
-+	battery: battery {
-+		compatible = "simple-battery";
-+		charge-full-design-microamp-hours = <3000000>;
-+		charge-term-current-microamp = <300000>;
-+		constant-charge-current-max-microamp = <2000000>;
-+		constant-charge-voltage-max-microvolt = <4200000>;
-+		factory-internal-resistance-micro-ohms = <180000>;
-+		voltage-max-design-microvolt = <4100000>;
-+		voltage-min-design-microvolt = <3500000>;
+Changes since v1:
+- Dual license include file
+- Replaced '_' with '-' in compatibles.
+
+ .../bindings/interconnect/qcom,rpmh.yaml      |  12 +
+ .../dt-bindings/interconnect/qcom,sc8280xp.h  | 232 ++++++++++++++++++
+ 2 files changed, 244 insertions(+)
+ create mode 100644 include/dt-bindings/interconnect/qcom,sc8280xp.h
+
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+index 5a911be0c2ea..0286f40fdc44 100644
+--- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
++++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+@@ -60,6 +60,18 @@ properties:
+       - qcom,sc8180x-mc-virt
+       - qcom,sc8180x-mmss-noc
+       - qcom,sc8180x-system-noc
++      - qcom,sc8280xp-aggre1-noc
++      - qcom,sc8280xp-aggre2-noc
++      - qcom,sc8280xp-clk-virt
++      - qcom,sc8280xp-config-noc
++      - qcom,sc8280xp-dc-noc
++      - qcom,sc8280xp-gem-noc
++      - qcom,sc8280xp-lpass-ag-noc
++      - qcom,sc8280xp-mc-virt
++      - qcom,sc8280xp-mmss-noc
++      - qcom,sc8280xp-nspa-noc
++      - qcom,sc8280xp-nspb-noc
++      - qcom,sc8280xp-system-noc
+       - qcom,sdm845-aggre1-noc
+       - qcom,sdm845-aggre2-noc
+       - qcom,sdm845-config-noc
+diff --git a/include/dt-bindings/interconnect/qcom,sc8280xp.h b/include/dt-bindings/interconnect/qcom,sc8280xp.h
+new file mode 100644
+index 000000000000..a3e5fda7c127
+--- /dev/null
++++ b/include/dt-bindings/interconnect/qcom,sc8280xp.h
+@@ -0,0 +1,232 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Copyright (c) 2021, The Linux Foundation. All rights reserved.
++ * Copyright (c) 2022, Linaro Ltd.
++ */
 +
-+		ocv-capacity-celsius = <20>;
-+		ocv-capacity-table-0 =	<4046950 100>, <4001920 95>, <3967900 90>, <3919950 85>,
-+					<3888450 80>, <3861850 75>, <3831540 70>, <3799130 65>,
-+					<3768190 60>, <3745650 55>, <3726610 50>, <3711630 45>,
-+					<3696720 40>, <3685660 35>, <3674950 30>, <3663050 25>,
-+					<3649470 20>, <3635260 15>, <3616920 10>, <3592440 5>,
-+					<3574170 0>;
-+	};
++#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_SC8280XP_H
++#define __DT_BINDINGS_INTERCONNECT_QCOM_SC8280XP_H
 +
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 		pinctrl-names = "default";
-@@ -472,6 +491,13 @@ usb_midu: BOOST {
- 			};
- 		};
- 
-+		rk817_charger: charger {
-+			monitored-battery = <&battery>;
-+			rockchip,resistor-sense-micro-ohms = <10000>;
-+			rockchip,sleep-enter-current-microamp = <300000>;
-+			rockchip,sleep-filter-current-microamp = <100000>;
-+		};
++/* aggre1_noc */
++#define MASTER_QSPI_0			0
++#define MASTER_QUP_1			1
++#define MASTER_QUP_2			2
++#define MASTER_A1NOC_CFG		3
++#define MASTER_IPA			4
++#define MASTER_EMAC_1			5
++#define MASTER_SDCC_4			6
++#define MASTER_UFS_MEM			7
++#define MASTER_USB3_0			8
++#define MASTER_USB3_1			9
++#define MASTER_USB3_MP			10
++#define MASTER_USB4_0			11
++#define MASTER_USB4_1			12
++#define SLAVE_A1NOC_SNOC		13
++#define SLAVE_USB_NOC_SNOC		14
++#define SLAVE_SERVICE_A1NOC		15
 +
- 		rk817_codec: codec {
- 			rockchip,mic-in-differential;
- 		};
++/* aggre2_noc */
++#define MASTER_QDSS_BAM			0
++#define MASTER_QUP_0			1
++#define MASTER_A2NOC_CFG		2
++#define MASTER_CRYPTO			3
++#define MASTER_SENSORS_PROC		4
++#define MASTER_SP			5
++#define MASTER_EMAC			6
++#define MASTER_PCIE_0			7
++#define MASTER_PCIE_1			8
++#define MASTER_PCIE_2A			9
++#define MASTER_PCIE_2B			10
++#define MASTER_PCIE_3A			11
++#define MASTER_PCIE_3B			12
++#define MASTER_PCIE_4			13
++#define MASTER_QDSS_ETR			14
++#define MASTER_SDCC_2			15
++#define MASTER_UFS_CARD			16
++#define SLAVE_A2NOC_SNOC		17
++#define SLAVE_ANOC_PCIE_GEM_NOC		18
++#define SLAVE_SERVICE_A2NOC		19
++
++/* clk_virt */
++#define MASTER_IPA_CORE			0
++#define MASTER_QUP_CORE_0		1
++#define MASTER_QUP_CORE_1		2
++#define MASTER_QUP_CORE_2		3
++#define SLAVE_IPA_CORE			4
++#define SLAVE_QUP_CORE_0		5
++#define SLAVE_QUP_CORE_1		6
++#define SLAVE_QUP_CORE_2		7
++
++/* config_noc */
++#define MASTER_GEM_NOC_CNOC		0
++#define MASTER_GEM_NOC_PCIE_SNOC	1
++#define SLAVE_AHB2PHY_0			2
++#define SLAVE_AHB2PHY_1			3
++#define SLAVE_AHB2PHY_2			4
++#define SLAVE_AOSS			5
++#define SLAVE_APPSS			6
++#define SLAVE_CAMERA_CFG		7
++#define SLAVE_CLK_CTL			8
++#define SLAVE_CDSP_CFG			9
++#define SLAVE_CDSP1_CFG			10
++#define SLAVE_RBCPR_CX_CFG		11
++#define SLAVE_RBCPR_MMCX_CFG		12
++#define SLAVE_RBCPR_MX_CFG		13
++#define SLAVE_CPR_NSPCX			14
++#define SLAVE_CRYPTO_0_CFG		15
++#define SLAVE_CX_RDPM			16
++#define SLAVE_DCC_CFG			17
++#define SLAVE_DISPLAY_CFG		18
++#define SLAVE_DISPLAY1_CFG		19
++#define SLAVE_EMAC_CFG			20
++#define SLAVE_EMAC1_CFG			21
++#define SLAVE_GFX3D_CFG			22
++#define SLAVE_HWKM			23
++#define SLAVE_IMEM_CFG			24
++#define SLAVE_IPA_CFG			25
++#define SLAVE_IPC_ROUTER_CFG		26
++#define SLAVE_LPASS			27
++#define SLAVE_MX_RDPM			28
++#define SLAVE_MXC_RDPM			29
++#define SLAVE_PCIE_0_CFG		30
++#define SLAVE_PCIE_1_CFG		31
++#define SLAVE_PCIE_2A_CFG		32
++#define SLAVE_PCIE_2B_CFG		33
++#define SLAVE_PCIE_3A_CFG		34
++#define SLAVE_PCIE_3B_CFG		35
++#define SLAVE_PCIE_4_CFG		36
++#define SLAVE_PCIE_RSC_CFG		37
++#define SLAVE_PDM			38
++#define SLAVE_PIMEM_CFG			39
++#define SLAVE_PKA_WRAPPER_CFG		40
++#define SLAVE_PMU_WRAPPER_CFG		41
++#define SLAVE_QDSS_CFG			42
++#define SLAVE_QSPI_0			43
++#define SLAVE_QUP_0			44
++#define SLAVE_QUP_1			45
++#define SLAVE_QUP_2			46
++#define SLAVE_SDCC_2			47
++#define SLAVE_SDCC_4			48
++#define SLAVE_SECURITY			49
++#define SLAVE_SMMUV3_CFG		50
++#define SLAVE_SMSS_CFG			51
++#define SLAVE_SPSS_CFG			52
++#define SLAVE_TCSR			53
++#define SLAVE_TLMM			54
++#define SLAVE_UFS_CARD_CFG		55
++#define SLAVE_UFS_MEM_CFG		56
++#define SLAVE_USB3_0			57
++#define SLAVE_USB3_1			58
++#define SLAVE_USB3_MP			59
++#define SLAVE_USB4_0			60
++#define SLAVE_USB4_1			61
++#define SLAVE_VENUS_CFG			62
++#define SLAVE_VSENSE_CTRL_CFG		63
++#define SLAVE_VSENSE_CTRL_R_CFG		64
++#define SLAVE_A1NOC_CFG			65
++#define SLAVE_A2NOC_CFG			66
++#define SLAVE_ANOC_PCIE_BRIDGE_CFG	67
++#define SLAVE_DDRSS_CFG			68
++#define SLAVE_CNOC_MNOC_CFG		69
++#define SLAVE_SNOC_CFG			70
++#define SLAVE_SNOC_SF_BRIDGE_CFG	71
++#define SLAVE_IMEM			72
++#define SLAVE_PIMEM			73
++#define SLAVE_SERVICE_CNOC		74
++#define SLAVE_PCIE_0			75
++#define SLAVE_PCIE_1			76
++#define SLAVE_PCIE_2A			77
++#define SLAVE_PCIE_2B			78
++#define SLAVE_PCIE_3A			79
++#define SLAVE_PCIE_3B			80
++#define SLAVE_PCIE_4			81
++#define SLAVE_QDSS_STM			82
++#define SLAVE_SMSS			83
++#define SLAVE_TCU			84
++
++/* dc_noc */
++#define MASTER_CNOC_DC_NOC		0
++#define SLAVE_LLCC_CFG			1
++#define SLAVE_GEM_NOC_CFG		2
++
++/* gem_noc */
++#define MASTER_GPU_TCU			0
++#define MASTER_PCIE_TCU			1
++#define MASTER_SYS_TCU			2
++#define MASTER_APPSS_PROC		3
++#define MASTER_COMPUTE_NOC		4
++#define MASTER_COMPUTE_NOC_1		5
++#define MASTER_GEM_NOC_CFG		6
++#define MASTER_GFX3D			7
++#define MASTER_MNOC_HF_MEM_NOC		8
++#define MASTER_MNOC_SF_MEM_NOC		9
++#define MASTER_ANOC_PCIE_GEM_NOC	10
++#define MASTER_SNOC_GC_MEM_NOC		11
++#define MASTER_SNOC_SF_MEM_NOC		12
++#define SLAVE_GEM_NOC_CNOC		13
++#define SLAVE_LLCC			14
++#define SLAVE_GEM_NOC_PCIE_CNOC		15
++#define SLAVE_SERVICE_GEM_NOC_1		16
++#define SLAVE_SERVICE_GEM_NOC_2		17
++#define SLAVE_SERVICE_GEM_NOC		18
++
++/* lpass_ag_noc */
++#define MASTER_CNOC_LPASS_AG_NOC	0
++#define MASTER_LPASS_PROC		1
++#define SLAVE_LPASS_CORE_CFG		2
++#define SLAVE_LPASS_LPI_CFG		3
++#define SLAVE_LPASS_MPU_CFG		4
++#define SLAVE_LPASS_TOP_CFG		5
++#define SLAVE_LPASS_SNOC		6
++#define SLAVE_SERVICES_LPASS_AML_NOC	7
++#define SLAVE_SERVICE_LPASS_AG_NOC	8
++
++/* mc_virt */
++#define MASTER_LLCC			0
++#define SLAVE_EBI1			1
++
++/*mmss_noc */
++#define MASTER_CAMNOC_HF		0
++#define MASTER_MDP0			1
++#define MASTER_MDP1			2
++#define MASTER_MDP_CORE1_0		3
++#define MASTER_MDP_CORE1_1		4
++#define MASTER_CNOC_MNOC_CFG		5
++#define MASTER_ROTATOR			6
++#define MASTER_ROTATOR_1		7
++#define MASTER_VIDEO_P0			8
++#define MASTER_VIDEO_P1			9
++#define MASTER_VIDEO_PROC		10
++#define MASTER_CAMNOC_ICP		11
++#define MASTER_CAMNOC_SF		12
++#define SLAVE_MNOC_HF_MEM_NOC		13
++#define SLAVE_MNOC_SF_MEM_NOC		14
++#define SLAVE_SERVICE_MNOC		15
++
++/* nspa_noc */
++#define MASTER_CDSP_NOC_CFG		0
++#define MASTER_CDSP_PROC		1
++#define SLAVE_CDSP_MEM_NOC		2
++#define SLAVE_NSP_XFR			3
++#define SLAVE_SERVICE_NSP_NOC		4
++
++/* nspb_noc */
++#define MASTER_CDSPB_NOC_CFG		0
++#define MASTER_CDSP_PROC_B		1
++#define SLAVE_CDSPB_MEM_NOC		2
++#define SLAVE_NSPB_XFR			3
++#define SLAVE_SERVICE_NSPB_NOC		4
++
++/* system_noc */
++#define MASTER_A1NOC_SNOC		0
++#define MASTER_A2NOC_SNOC		1
++#define MASTER_USB_NOC_SNOC		2
++#define MASTER_LPASS_ANOC		3
++#define MASTER_SNOC_CFG			4
++#define MASTER_PIMEM			5
++#define MASTER_GIC			6
++#define SLAVE_SNOC_GEM_NOC_GC		7
++#define SLAVE_SNOC_GEM_NOC_SF		8
++#define SLAVE_SERVICE_SNOC		9
++
++#endif
 -- 
-2.25.1
+2.35.1
 
