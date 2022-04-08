@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E484F9E2D
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Apr 2022 22:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C3E4F9E39
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Apr 2022 22:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239473AbiDHUbR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Apr 2022 16:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42300 "EHLO
+        id S230514AbiDHUey (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 8 Apr 2022 16:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236631AbiDHUbQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Apr 2022 16:31:16 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FE61DA8C8
-        for <linux-pm@vger.kernel.org>; Fri,  8 Apr 2022 13:29:12 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id k13so3674288plk.12
-        for <linux-pm@vger.kernel.org>; Fri, 08 Apr 2022 13:29:12 -0700 (PDT)
+        with ESMTP id S239515AbiDHUey (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Apr 2022 16:34:54 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C6B31DC1
+        for <linux-pm@vger.kernel.org>; Fri,  8 Apr 2022 13:32:46 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id s8so9355171pfk.12
+        for <linux-pm@vger.kernel.org>; Fri, 08 Apr 2022 13:32:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=HD9KWxYgHovL4d+swYpmuaTcGaPIaYm36t/rSV4RSvg=;
-        b=Q0KeoqDnCa8t9t7sVZPbYG3qKLWKWSwjPdVPsqLNyYAIkNInfvFrnib1WBJF0cFwPV
-         cS88dBGtsAWScifpLSaO+kVpUGO8xGswNZgPNdhGOFmClE5dE1T/mSRm+cmRZvX03LET
-         vP9besdhVUGIMppcb/yOkqKHoE8YUfnOTbgL48zbFm+MKrKJlL59Z62zG0lP5qZKbd8C
-         P8ZQUoDvx7UGRpcUIa7VokvDC02Y2wGLGOTj7/BGPLKFLWg/j4a4j3DqqtljU//u7sps
-         iKvkuYkzerCCmTAseaxt4wrz8EffCcexE6DaU0McLwY4AdgJaXXMFUzw3XUhZEHLN3IZ
-         sYwQ==
+        bh=/KqnrdwGzlf8oEa0IfTyQSFrKPtPSsWbAmTKt3bSBaw=;
+        b=bSYtEQV1SVOIaMYMd8qMkOclqEVBABfaNJlBzEMuOT07Jj6QOZBwk67GOGexYFR84m
+         ndUhCgL1deArCVZGdwjeqJzf8sQTr8MRRwF2SOxL+hALaDyFAyDuBiF4MWTp4nPycDbo
+         Ry1rpQkerNLg2JQQ3a9isIbV9drUt3IkbdStl9geLCm6aU84Z4GPBY/8gft5IL6+09EF
+         KSvsrzYOc6JobpCyz/IEPAq3VVxQ6gpejTEgxSLKTbj7j5BGbXdirX9IhS3ShGW9sfG3
+         SQrRtEXLmcbciHcoBkGvrJiR9/QGJpe6ByS0EoBU0s4fUG1bP5qw5+/GS/pw4oqE2k3/
+         fvsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
          :message-id:mime-version;
-        bh=HD9KWxYgHovL4d+swYpmuaTcGaPIaYm36t/rSV4RSvg=;
-        b=bttVz3Jiq5f2MW/OhGo8zhmU1MGz7Z/lgQKEonxlWE0QPJJ+pU4t6xm0SmcPjIxbT/
-         9FYPcgEnpxwmHqM2XJVAnuNlPeTiOOQvzTWBO//a2TztZrWMFIgx2O3Z4kgjKGECLNmK
-         CWvuOVCeEHkvdslmkPNhtRNj/shkcexEkPzwS+6rMNWK7ouDGFgDFTvhnEBPUv/ojb1u
-         h9029UvNCG4bQSkiy1klnbYeOhsH8BCG0dg4uUInHnW1xEC/s472DQvwghul1XUG+Ln9
-         UjNsJNsUqnSzmnNcqCJH08904ZryP7tq6iwVr3yv84UGIENZgq7ES1kt/iHQIXr725ai
-         rJuQ==
-X-Gm-Message-State: AOAM5306QgJxsnbn09DCDTX6u8q0IZw1/RcsRJO+kmJh6sb6pt5TmhtM
-        sGBk6bpxLsWC13yjHmZaFem3bg==
-X-Google-Smtp-Source: ABdhPJz1t8RKOgx1OockyWLTtqK9N64BneuYukw0ht7tEOMRQDgSerOayaO2vT0LBXJsp4/C/ABSyw==
-X-Received: by 2002:a17:90b:4f8e:b0:1c7:3652:21bc with SMTP id qe14-20020a17090b4f8e00b001c7365221bcmr23626082pjb.38.1649449751645;
-        Fri, 08 Apr 2022 13:29:11 -0700 (PDT)
+        bh=/KqnrdwGzlf8oEa0IfTyQSFrKPtPSsWbAmTKt3bSBaw=;
+        b=u3vXmIF/SRqicUgkAuZT65kPpbMOnafFnFBLykxcpbAeU8wWugRsUwnEZ3fJEQ96bB
+         HZFOmmpMK+ICi7sd+hU+WoqvjChSPWNJjHuIEU14ii3a5XRPeSDD63fnRF+IcKxQXmWz
+         wVIePP3rukNdlQR25bRpS4IAGkDCBB+sg8VEOrwt42WUFAjjXH9iWGWY++70ekz8uHo1
+         0/r8Pup/A8oWbs4Q41yToQKPa7FuhDkPefb/Vev47RiRMKyerb+DMe+OhhpqzkIMP9Vr
+         NKUKVJ95G1wFs5S92zbY++1Ya7iiMBWzyZKsschF5Edvea8OuylkBfvvmQZBDHFHP6iI
+         3UoA==
+X-Gm-Message-State: AOAM531Jv8h3BhOfQ90+Iup1Vbea4kyMwaP8iaCBIlE0vl/eaayqPURB
+        NIkB2R58hdwlS2lzgfJSxZK+Cw==
+X-Google-Smtp-Source: ABdhPJw94bMJVltpaabJ4ZxqAt+yzYzf77Fd6sm1altDdMxSl7h9RT/pzr2JplWj0K9ai+ylxhumng==
+X-Received: by 2002:a63:214c:0:b0:381:1a27:fe1 with SMTP id s12-20020a63214c000000b003811a270fe1mr16619582pgm.328.1649449965655;
+        Fri, 08 Apr 2022 13:32:45 -0700 (PDT)
 Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id x8-20020aa784c8000000b0050577c51d38sm3849034pfn.20.2022.04.08.13.29.11
+        by smtp.gmail.com with ESMTPSA id k92-20020a17090a4ce500b001ca69b5c034sm12627141pjh.46.2022.04.08.13.32.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 13:29:11 -0700 (PDT)
+        Fri, 08 Apr 2022 13:32:45 -0700 (PDT)
 From:   Kevin Hilman <khilman@baylibre.com>
 To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
         viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org
@@ -55,16 +55,13 @@ Cc:     matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Subject: Re: [PATCH V2 07/15] cpufreq: mediatek: Add opp notification for
- SVS support
-In-Reply-To: <20220408045908.21671-8-rex-bc.chen@mediatek.com>
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH V2 10/15] cpufreq: mediatek: Make sram regulator optional
+In-Reply-To: <20220408045908.21671-11-rex-bc.chen@mediatek.com>
 References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
- <20220408045908.21671-8-rex-bc.chen@mediatek.com>
-Date:   Fri, 08 Apr 2022 13:29:10 -0700
-Message-ID: <7hsfqn5nft.fsf@baylibre.com>
+ <20220408045908.21671-11-rex-bc.chen@mediatek.com>
+Date:   Fri, 08 Apr 2022 13:32:44 -0700
+Message-ID: <7ho81b5n9v.fsf@baylibre.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,30 +75,33 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
 
-> From: "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
+> From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
 >
-> The Smart Voltage Scaling (SVS) is a hardware which calculates suitable
-> SVS bank voltages to OPP voltage table.
+> For some MediaTek SoCs, like MT8186, it's possible that the sram regulator
+> is shared between CPU and CCI.
 >
-> When the SVS is enabled, cpufreq should listen to opp notification and do
-> proper actions when receiving events of disable and voltage adjustment.
+> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
 
-So listenting for OPP notifications should be done only when SVS is enabled...
+nit: missing your sign-off.
 
-[...]
-
->  static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
->  {
->  	struct device *cpu_dev;
-> @@ -392,6 +455,17 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
->  	info->intermediate_voltage = dev_pm_opp_get_voltage(opp);
->  	dev_pm_opp_put(opp);
+> ---
+>  drivers/cpufreq/mediatek-cpufreq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+> index 9e9bce0ff235..8f688d47e64b 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> @@ -435,7 +435,7 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
+>  	}
 >  
-> +	info->opp_cpu = cpu;
-> +	info->opp_nb.notifier_call = mtk_cpufreq_opp_notifier;
-> +	ret = dev_pm_opp_register_notifier(cpu_dev, &info->opp_nb);
+>  	/* Both presence and absence of sram regulator are valid cases. */
+> -	info->sram_reg = regulator_get_exclusive(cpu_dev, "sram");
+> +	info->sram_reg = regulator_get_optional(cpu_dev, "sram");
 
-...but here youlisten to OPP notifications unconditionally.  Seems there
-should be a check whether SVS is enabled before deciding to register.
+The changelog says that this regulator may be shared with CCI, so I
+understand it's no longer exclusive.  But here you make it optional,
+which should be explained in the changelog.  If it's not actually
+optional, then it should just be normal "get".
 
 Kevin
