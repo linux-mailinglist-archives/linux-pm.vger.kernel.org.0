@@ -2,133 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A4B4FA1F9
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Apr 2022 05:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3206C4FA22A
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Apr 2022 06:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235926AbiDIDhW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 8 Apr 2022 23:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
+        id S235897AbiDIEDt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 9 Apr 2022 00:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233780AbiDIDhV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 8 Apr 2022 23:37:21 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6085BBBA
-        for <linux-pm@vger.kernel.org>; Fri,  8 Apr 2022 20:35:13 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id 12so10720623oix.12
-        for <linux-pm@vger.kernel.org>; Fri, 08 Apr 2022 20:35:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NhYLnZjSBj3vGUK1h2W/q7E9jlIzGMped+bnp/r8ylc=;
-        b=WHVpb8hi7JLuhz2Zor+MoULlhOCIpVXQZs5W+ydESh5QlFHxXdfquBsTXSVjcpNT8/
-         MrqOr2JpiL1nodleQMUITY4Epp+3bfaiTGmuq7ulVvp57sFykjfzGsI+n2k9G796KlN+
-         JFqQ9z406TQiqnk4ZADdYM3mDCuqqofoxbAB0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NhYLnZjSBj3vGUK1h2W/q7E9jlIzGMped+bnp/r8ylc=;
-        b=7R9ceULmffWEJASx8MIb+TPrZG0MQFjjn/Xutub4UcRMoyd/RuZsDsb/RH0B4LXR87
-         4bbf7JJvNam99pKLztMPt26wBxJnB+AZ5uRncSXIGLbE9x5jciJBO7eKfQJOkSmzqGfa
-         uagbpS7xzsUHY183PxZtUhg5pDHTg1007iWJFk0GKaKxtPONpDSREx3vC3rxV0bCC/WO
-         lE1HpzHfqdeXF/ivTVkCADDqTd7kZUTEQ3DnYwyyoLuGkET2brqIklF5WSYmKYGpCdxa
-         kLXcpkYnh0Zt9kND7fPn3LF3tg/pE7LE/VKBeiVXQSJwoV0S9ArKcJV0o+3kwuEs28xd
-         gJ7w==
-X-Gm-Message-State: AOAM531Ff4ojglvJdPEc9jjvmPCPb28Q6fOIDBSXiOC3To9HHdiIzLPe
-        MsS4aAPHTCF2EOoHgfaA4vvT8PEqBBx/Ug==
-X-Google-Smtp-Source: ABdhPJwu8dzfHkBnYtHg1wfF7t23bxZImXoS2cx7gq/0cHGndNzqv1EqQVM+WzCkSsNFchxigwz2Uw==
-X-Received: by 2002:a05:6808:152b:b0:2ec:f48f:8120 with SMTP id u43-20020a056808152b00b002ecf48f8120mr1291841oiw.58.1649475312380;
-        Fri, 08 Apr 2022 20:35:12 -0700 (PDT)
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com. [209.85.210.42])
-        by smtp.gmail.com with ESMTPSA id q11-20020a05683033cb00b005e686fd52d6sm6608238ott.17.2022.04.08.20.35.11
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Apr 2022 20:35:11 -0700 (PDT)
-Received: by mail-ot1-f42.google.com with SMTP id y3-20020a056830070300b005cd9c4d03feso7408265ots.3
-        for <linux-pm@vger.kernel.org>; Fri, 08 Apr 2022 20:35:11 -0700 (PDT)
-X-Received: by 2002:a05:6830:1041:b0:5cd:b09b:2164 with SMTP id
- b1-20020a056830104100b005cdb09b2164mr7808516otp.186.1649475310609; Fri, 08
- Apr 2022 20:35:10 -0700 (PDT)
+        with ESMTP id S235550AbiDIEDs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Apr 2022 00:03:48 -0400
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0F5CF4AF;
+        Fri,  8 Apr 2022 21:01:41 -0700 (PDT)
+Date:   Sat, 09 Apr 2022 04:01:27 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail; t=1649476892;
+        bh=wMncmnY+rrP3Pvn94fRUXX8ko1xmtHWn5l07vjpjZUA=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
+         Subject:Reply-To:Feedback-ID:Message-ID;
+        b=HLKP4Xwd4zfZ6loQiXG3sbR9NuEW5LCougG4m+/QeQth+6QAL3tEsOt/T/WlZpkfy
+         IcxOhPOR3GLkBr12Q3XlUFabin2n1SUEAFdX8qHV//zANuYTbk34sO6hbZKb5C0zi0
+         KrB26sNehSsL1TJdZ+3OFN7RHnMGM+OPrPvpb6j5rt39AaJMRlddWJBpQjzjeQWQmb
+         Gt8fJxDLrxf8UDmhS5dMpzDIPmJrN2nHwts86sWRhq+1L/0FQB0oSQcUhdPPcr1jUq
+         wChKjrVpsWiHPCdZ7NpEpJ6gVoaU3g5WM2P2qfSgCEx2FwT2RwbLT3/jNU5LShFP6V
+         p4qgIjjSGJk2Q==
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+From:   Yassine Oudjana <y.oudjana@protonmail.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
+Subject: [PATCH v2 0/9] Add support for MSM8996 Pro
+Message-ID: <20220409035804.9192-1-y.oudjana@protonmail.com>
 MIME-Version: 1.0
-References: <20220406014842.2771799-1-briannorris@chromium.org>
- <CGME20220406094558epcas1p4fa0c77a5acd6b73c192f6b19136cd5f9@epcas1p4.samsung.com>
- <20220405184816.RFC.1.Ib865f199d15221eab4ff77f70bd7e9e2eb04d32f@changeid> <c8664eae-4a10-bd1a-8898-01b96c05331e@samsung.com>
-In-Reply-To: <c8664eae-4a10-bd1a-8898-01b96c05331e@samsung.com>
-From:   Brian Norris <briannorris@chromium.org>
-Date:   Fri, 8 Apr 2022 20:34:59 -0700
-X-Gmail-Original-Message-ID: <CA+ASDXNx+nwVKuisMAsHEKLfd=hqBzZmhFxphcYUF=bamqN2kA@mail.gmail.com>
-Message-ID: <CA+ASDXNx+nwVKuisMAsHEKLfd=hqBzZmhFxphcYUF=bamqN2kA@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] soc: rockchip: power-domain: Manage resource
- conflicts with firmware
-To:     Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        Elaine Zhang <zhangqing@rock-chips.com>,
-        linux-pm <linux-pm@vger.kernel.org>,
-        Doug Anderson <dianders@chromium.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Chanwoo,
+MSM8996 Pro (also known as MSM8996SG) is a newer revision of MSM8996
+with different CPU/CBF/GPU frequencies and CPR parameters. Its CBF clock
+also has a different divisor.
 
-On Wed, Apr 6, 2022 at 9:38 PM Chanwoo Choi <cw00.choi@samsung.com> wrote:
-> Instead of adding the specific function for only rockchip,
-> how about adding new function pointer (like block/unblock or start/stop and others)
-> into 'struct generic_pm_domain'? And add new pm_genpd_* function
-> to control the power domain.
+This series handles the difference in the CBF clock and adds a new DTSI for
+MSM8996 Pro with CPU and GPU OPPs. It also removes reading msm-id from SMEM
+in qcom-cpufreq-nvmem as it becomes no longer necessary with the introducti=
+on.
+of a separate device tree. Separating MSM8996 and MSM8996 Pro will help wit=
+h
+implementing CBF scaling and CPR; as they have different CPR parameters
+and CPU:CBF OPP mapping which is difficult to implement in the same cluster
+OPP tables.
 
-I suppose that is technically possible, but I'm not sure it makes a
-ton of sense.
+Dependencies:
+- clk: qcom: msm8996-cpu: Add CBF support
+  https://lore.kernel.org/linux-arm-msm/20210528192541.1120703-1-konrad.dyb=
+cio@somainline.org/#t
+- arm64: dts: qcom: msm8996: Add support for the CBF clock
+  https://lore.kernel.org/linux-arm-msm/20210528192541.1120703-2-konrad.dyb=
+cio@somainline.org/
 
-First, genpd doesn't seem to typically expose operations directly to
-client device drivers. It's mostly about abstract handling of the
-dependencies of "how do I power on this device?" behind the scenes of
-things like pm_runtime_*(). I guess maybe something like
-dev_pm_genpd_set_performance_state() is an approximately similar API
-though (i.e., a genpd operation exposed to client drivers)? I could
-try to go that route, if the genpd maintainers think this makes sense.
+Changes since v1:
+- Rebase DT changes on already merged patches[1][2].
+- Add more details to commit messages.
+- Split removing MSM8996 Pro speed bin bits from opp-supported-hw into
+  a separate patch.
+- Rename msm8996-xiaomi-scorpio.dts to msm8996pro-xiaomi-scorpio.dts
 
-But secondly, this isn't exactly an operation on one power domain.
-It's an operation on the entire power controller. I suppose I could
-make a new domain here for the memory controller, and teach that
-domain to implicitly manipulate all the other domains provided by the
-PMU, but that feels like a fake abstraction to me.
+[1] https://lore.kernel.org/linux-arm-msm/20220203072226.51482-1-y.oudjana@=
+protonmail.com/T/#m6e1341ccfa50d11d221ba8c618f73c21a83b8acb
+[2] https://lore.kernel.org/linux-arm-msm/20220203072226.51482-1-y.oudjana@=
+protonmail.com/T/#m36f194cd9da1fee7058a88412985aab10c499fa7
 
-Lastly, and perhaps least importantly: this likely would require a
-device tree binding change. So far, the memory controller hasn't had
-its own power domain. I guess one could argue that it has some
-similarities to a power domain, albeit one that is managed in firmware
--- so maybe this is a reasonable "bug" to fix, if it really comes down
-to it.
+Yassine Oudjana (9):
+  dt-bindings: clk: qcom: msm8996-apcc: Add CBF
+  dt-bindings: clk: qcom: msm8996-apcc: Add MSM8996 Pro compatible
+  clk: qcom: msm8996-cpu: Add MSM8996 Pro CBF support
+  cpufreq: qcom_cpufreq_nvmem: Simplify reading kryo speedbin
+  dt-bindings: opp: opp-v2-kryo-cpu: Remove SMEM
+  arm64: dts: qcom: msm8996: Remove MSM8996 Pro speed bins from cluster
+    OPP tables
+  dt-bindings: arm: qcom: Add MSM8996 Pro compatible
+  arm64: dts: qcom: msm8996: Add MSM8996 Pro support
+  arm64: dts: qcom: msm8996-xiaomi-scorpio: Use MSM8996 Pro
 
-> Because it is better to use subsystem interface.
+ .../devicetree/bindings/arm/qcom.yaml         |   5 +
+ .../bindings/clock/qcom,msm8996-apcc.yaml     |  11 +-
+ .../bindings/opp/opp-v2-kryo-cpu.yaml         |  56 ++--
+ arch/arm64/boot/dts/qcom/Makefile             |   2 +-
+ .../boot/dts/qcom/msm8996-xiaomi-common.dtsi  |   3 -
+ .../boot/dts/qcom/msm8996-xiaomi-gemini.dts   |   1 +
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |  82 ++---
+ ...rpio.dts =3D> msm8996pro-xiaomi-scorpio.dts} |   4 +-
+ arch/arm64/boot/dts/qcom/msm8996pro.dtsi      | 281 ++++++++++++++++++
+ drivers/clk/qcom/clk-cpu-8996.c               |  61 ++--
+ drivers/cpufreq/Kconfig.arm                   |   1 -
+ drivers/cpufreq/qcom-cpufreq-nvmem.c          |  75 +----
+ 12 files changed, 410 insertions(+), 172 deletions(-)
+ rename arch/arm64/boot/dts/qcom/{msm8996-xiaomi-scorpio.dts =3D> msm8996pr=
+o-xiaomi-scorpio.dts} (99%)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8996pro.dtsi
 
-I don't agree this is universally true. It makes sense when there are
-truly abstract concepts represented, which are likely to appear across
-multiple implementations. Or maybe if the object model is complex. But
-this operation seems very SoC-specific to me, and it's pretty simple
-to implement this way. Or, do you think this is really something that
-others will need -- pausing (and powering) a power controller so
-another entity can manage it?
+--
+2.35.1
 
-I guess I'd also like some thoughts from the genpd maintainers (CC'd),
-of whether this seems like a good fit for a new genpd callback and
-API.
 
-Brian
