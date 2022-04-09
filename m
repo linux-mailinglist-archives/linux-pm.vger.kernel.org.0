@@ -2,30 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA4124FA256
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Apr 2022 06:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C9B4FA25C
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Apr 2022 06:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbiDIESk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 9 Apr 2022 00:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55290 "EHLO
+        id S240748AbiDIETX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 9 Apr 2022 00:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236785AbiDIESk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Apr 2022 00:18:40 -0400
-Received: from mail-4027.protonmail.ch (mail-4027.protonmail.ch [185.70.40.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123A3D95C7;
-        Fri,  8 Apr 2022 21:16:33 -0700 (PDT)
-Date:   Sat, 09 Apr 2022 04:16:23 +0000
+        with ESMTP id S240742AbiDIETX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 9 Apr 2022 00:19:23 -0400
+Received: from mail-40140.protonmail.ch (mail-40140.protonmail.ch [185.70.40.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1D7D7932
+        for <linux-pm@vger.kernel.org>; Fri,  8 Apr 2022 21:17:16 -0700 (PDT)
+Date:   Sat, 09 Apr 2022 04:17:08 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1649477792;
-        bh=PLnzwPi3wobQJZvgYgU3hAEMYfY5R2OUYfDH1i69U58=;
+        s=protonmail; t=1649477834;
+        bh=gC2D3uYjVBhkCwgNw3OoZdjOU5tGxtwsCPqWNVYkFgE=;
         h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
          Subject:Reply-To:Feedback-ID:Message-ID;
-        b=zFmisFP8KTAe3SPBQ7qM8WLI5HpKsalVJ5s+2xRZ+wabJ1DLwQdIG2lLF2nfMHnhj
-         wOB034zy0gKjuUQx3U9xP7kQTZsV1HdCAAex9J+urpNBjDO3bjgHk3SjUGt9ho/QkV
-         xYKI0HQ4Ci/yFrvONJ4OptmEXTPLNEZolMOfv6qCXMpgAwKm1S6F8sPvyyEWs+BGL2
-         i7YUuqSrhrvL2aFfOcuD5IMgVG83dpBmq+qzsD5jSOb2Ik10/7QTRP3y+TRT8Xmxun
-         n+CEOY+pxUN3h4vaQE4RYqOBxMvpWfEDxeZjX0gGHOQdlImUQu0uUlRjhujr3aBZ66
-         c+RsuMf7yOlQg==
+        b=AYENJ+zBJklbKWilpmUGy1KcZs+MxUUWqGGGqabR8SaWcdxdy2qBDWrSuu7ViKXjs
+         O8+M7VUxNaYsdvm2QKtTl5Je+axEHBM1EZ8fewvJi5EQ8gh7/h5BBT7K1aewcYXH53
+         jQY0qIYlY80NZmVMCvt4mrduVSVRUqHYsvoI0+cIRVwMoub08/1jYC3jUNlgksZSSj
+         U110Cd2V1H4rF8XRTlWhCgTw0gg4fdU/vLDuMejMaUcs1ZmZydoH1OeIVNfqjXJQSi
+         3pfga3mEmbcfpO9ls5KhlzzDh0GFDFB9g4PKjNF25gHtKcawjiCx1SgMLFkbdMRksJ
+         nMaP73Py5TV5Q==
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -44,13 +44,13 @@ Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-pm@vger.kernel.org
 Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: [PATCH v2 3/9] clk: qcom: msm8996-cpu: Add MSM8996 Pro CBF support
-Message-ID: <kXrAkKv7RZct22X0wivLWqOAiLKpFuDCAY1KY_KSx649kn7BNmJ2IFFMrsYPAyDlcxIjbQCQ1PHb5KaNFawm9IGIXUbch-DI9OI_l73BAaM=@protonmail.com>
+Subject: [PATCH v2 4/9] cpufreq: qcom_cpufreq_nvmem: Simplify reading kryo speedbin
+Message-ID: <Y9dBnONptyKSAfxkDMNrHE0ZnxoXPbMswY6JV-anlE_BALCes8hTJnFMtfTEtss09rNPE3v1Wvz9ZDO2NK0WPH42Ld5Wiw6ukm7Jy3wa5SQ=@protonmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H4,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H5,
         RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,183 +59,166 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-MSM8996 Pro (MSM8996SG) has a /4 divisor on the CBF clock
-instead of /2. This allows it to reach a lower minimum frequency
-of 192000000Hz compared to 307200000Hz on regular MSM8996.
-Add support for setting the CBF clock divisor to /4 for MSM8996 Pro.
+MSM8996 and MSM8996 Pro have different OPPs with different dependencies on
+CPR and CBF levels. Sharing the same OPP tables will make implementing CPR
+and CBF scaling quite difficult, as it will become necessary to use
+opp-supported-hw not only to choose CPU OPPs, but to also choose their
+required CPR and CBF OPPs which are different on the same CPU OPP between
+MSM8996 and MSM8996 Pro. The best solution would be to make a new device
+tree for MSM8996 Pro which would override the OPP tables from the existing
+MSM8996 device tree.
+
+In preparation for adding a separate device tree for MSM8996 Pro, skip
+reading msm-id from smem and just read the speedbin efuse.
 
 Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 ---
- drivers/clk/qcom/clk-cpu-8996.c | 61 +++++++++++++++++++++------------
- 1 file changed, 40 insertions(+), 21 deletions(-)
+ drivers/cpufreq/Kconfig.arm          |  1 -
+ drivers/cpufreq/qcom-cpufreq-nvmem.c | 75 +++-------------------------
+ 2 files changed, 6 insertions(+), 70 deletions(-)
 
-diff --git a/drivers/clk/qcom/clk-cpu-8996.c b/drivers/clk/qcom/clk-cpu-899=
-6.c
-index 8afc271f92d0..231d8224fa16 100644
---- a/drivers/clk/qcom/clk-cpu-8996.c
-+++ b/drivers/clk/qcom/clk-cpu-8996.c
-@@ -70,11 +70,11 @@ enum _pmux_input {
+diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+index 954749afb5fe..7d9798bc5753 100644
+--- a/drivers/cpufreq/Kconfig.arm
++++ b/drivers/cpufreq/Kconfig.arm
+@@ -154,7 +154,6 @@ config ARM_QCOM_CPUFREQ_NVMEM
+ =09tristate "Qualcomm nvmem based CPUFreq"
+ =09depends on ARCH_QCOM
+ =09depends on QCOM_QFPROM
+-=09depends on QCOM_SMEM
+ =09select PM_OPP
+ =09help
+ =09  This adds the CPUFreq driver for Qualcomm Kryo SoC based boards.
+diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cp=
+ufreq-nvmem.c
+index 6dfa86971a75..a2b895a930cb 100644
+--- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
++++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+@@ -9,8 +9,8 @@
+  * based on the silicon variant in use. Qualcomm Process Voltage Scaling T=
+ables
+  * defines the voltage and frequency value based on the msm-id in SMEM
+  * and speedbin blown in the efuse combination.
+- * The qcom-cpufreq-nvmem driver reads the msm-id and efuse value from the=
+ SoC
+- * to provide the OPP framework with required information.
++ * The qcom-cpufreq-nvmem driver reads efuse value from the SoC to provide=
+ the
++ * OPP framework with required information.
+  * This is used to determine the voltage and frequency value for each OPP =
+of
+  * operating-points-v2 table when it is parsed by the OPP framework.
+  */
+@@ -27,22 +27,6 @@
+ #include <linux/pm_domain.h>
+ #include <linux/pm_opp.h>
+ #include <linux/slab.h>
+-#include <linux/soc/qcom/smem.h>
+-
+-#define MSM_ID_SMEM=09137
+-
+-enum _msm_id {
+-=09MSM8996V3 =3D 0xF6ul,
+-=09APQ8096V3 =3D 0x123ul,
+-=09MSM8996SG =3D 0x131ul,
+-=09APQ8096SG =3D 0x138ul,
+-};
+-
+-enum _msm8996_version {
+-=09MSM8996_V3,
+-=09MSM8996_SG,
+-=09NUM_OF_MSM8996_VERSIONS,
+-};
 
- enum {
- =09CBF_PLL_INDEX =3D 1,
--=09CBF_DIV_2_INDEX,
-+=09CBF_DIV_INDEX,
- =09CBF_SAFE_INDEX
- };
+ struct qcom_cpufreq_drv;
 
--#define DIV_2_THRESHOLD=09=09600000000
-+#define DIV_THRESHOLD=09=09600000000
- #define PWRCL_REG_OFFSET 0x0
- #define PERFCL_REG_OFFSET 0x80000
- #define MUX_OFFSET=090x40
-@@ -142,6 +142,17 @@ static const struct alpha_pll_config cbfpll_config =3D=
+@@ -142,35 +126,6 @@ static void get_krait_bin_format_b(struct device *cpu_=
+dev,
+ =09dev_dbg(cpu_dev, "PVS version: %d\n", *pvs_ver);
+ }
+
+-static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
+-{
+-=09size_t len;
+-=09u32 *msm_id;
+-=09enum _msm8996_version version;
+-
+-=09msm_id =3D qcom_smem_get(QCOM_SMEM_HOST_ANY, MSM_ID_SMEM, &len);
+-=09if (IS_ERR(msm_id))
+-=09=09return NUM_OF_MSM8996_VERSIONS;
+-
+-=09/* The first 4 bytes are format, next to them is the actual msm-id */
+-=09msm_id++;
+-
+-=09switch ((enum _msm_id)*msm_id) {
+-=09case MSM8996V3:
+-=09case APQ8096V3:
+-=09=09version =3D MSM8996_V3;
+-=09=09break;
+-=09case MSM8996SG:
+-=09case APQ8096SG:
+-=09=09version =3D MSM8996_SG;
+-=09=09break;
+-=09default:
+-=09=09version =3D NUM_OF_MSM8996_VERSIONS;
+-=09}
+-
+-=09return version;
+-}
+-
+ static int qcom_cpufreq_kryo_name_version(struct device *cpu_dev,
+ =09=09=09=09=09  struct nvmem_cell *speedbin_nvmem,
+ =09=09=09=09=09  char **pvs_name,
+@@ -178,30 +133,13 @@ static int qcom_cpufreq_kryo_name_version(struct devi=
+ce *cpu_dev,
  {
- =09.early_output_mask =3D BIT(3),
- };
+ =09size_t len;
+ =09u8 *speedbin;
+-=09enum _msm8996_version msm8996_version;
+ =09*pvs_name =3D NULL;
 
-+static const struct alpha_pll_config cbfpll_config_pro =3D {
-+=09.l =3D 72,
-+=09.config_ctl_val =3D 0x200d4aa8,
-+=09.config_ctl_hi_val =3D 0x006,
-+=09.pre_div_mask =3D BIT(12),
-+=09.post_div_mask =3D 0x3 << 8,
-+=09.post_div_val =3D 0x3 << 8,
-+=09.main_output_mask =3D BIT(0),
-+=09.early_output_mask =3D BIT(3),
-+};
-+
- static struct clk_alpha_pll perfcl_pll =3D {
- =09.offset =3D PERFCL_REG_OFFSET,
- =09.regs =3D prim_pll_regs,
-@@ -230,7 +241,8 @@ struct clk_cpu_8996_mux {
- =09u8=09width;
- =09struct notifier_block nb;
- =09struct clk_hw=09*pll;
--=09struct clk_hw=09*pll_div_2;
-+=09struct clk_hw=09*pll_div;
-+=09u8 div;
- =09struct clk_regmap clkr;
- };
+-=09msm8996_version =3D qcom_cpufreq_get_msm_id();
+-=09if (NUM_OF_MSM8996_VERSIONS =3D=3D msm8996_version) {
+-=09=09dev_err(cpu_dev, "Not Snapdragon 820/821!");
+-=09=09return -ENODEV;
+-=09}
+-
+ =09speedbin =3D nvmem_cell_read(speedbin_nvmem, &len);
+ =09if (IS_ERR(speedbin))
+ =09=09return PTR_ERR(speedbin);
 
-@@ -280,11 +292,11 @@ static int clk_cpu_8996_mux_determine_rate(struct clk=
-_hw *hw,
- =09struct clk_cpu_8996_mux *cpuclk =3D to_clk_cpu_8996_mux_hw(hw);
- =09struct clk_hw *parent =3D cpuclk->pll;
+-=09switch (msm8996_version) {
+-=09case MSM8996_V3:
+-=09=09drv->versions =3D 1 << (unsigned int)(*speedbin);
+-=09=09break;
+-=09case MSM8996_SG:
+-=09=09drv->versions =3D 1 << ((unsigned int)(*speedbin) + 4);
+-=09=09break;
+-=09default:
+-=09=09BUG();
+-=09=09break;
+-=09}
++=09drv->versions =3D 1 << (unsigned int)(*speedbin);
 
--=09if (cpuclk->pll_div_2 && req->rate < DIV_2_THRESHOLD) {
--=09=09if (req->rate < (DIV_2_THRESHOLD / 2))
-+=09if (cpuclk->pll_div && req->rate < DIV_THRESHOLD) {
-+=09=09if (req->rate < (DIV_THRESHOLD / cpuclk->div))
- =09=09=09return -EINVAL;
+ =09kfree(speedbin);
+ =09return 0;
+@@ -464,10 +402,9 @@ static const struct of_device_id qcom_cpufreq_match_li=
+st[] __initconst =3D {
+ MODULE_DEVICE_TABLE(of, qcom_cpufreq_match_list);
 
--=09=09parent =3D cpuclk->pll_div_2;
-+=09=09parent =3D cpuclk->pll_div;
- =09}
-
- =09req->best_parent_rate =3D clk_hw_round_rate(parent, req->rate);
-@@ -336,7 +348,8 @@ static struct clk_cpu_8996_mux pwrcl_pmux =3D {
- =09.shift =3D 0,
- =09.width =3D 2,
- =09.pll =3D &pwrcl_pll.clkr.hw,
--=09.pll_div_2 =3D &pwrcl_smux.clkr.hw,
-+=09.pll_div =3D &pwrcl_smux.clkr.hw,
-+=09.div =3D 2,
- =09.nb.notifier_call =3D cpu_clk_notifier_cb,
- =09.clkr.hw.init =3D &(struct clk_init_data) {
- =09=09.name =3D "pwrcl_pmux",
-@@ -358,7 +371,8 @@ static struct clk_cpu_8996_mux perfcl_pmux =3D {
- =09.shift =3D 0,
- =09.width =3D 2,
- =09.pll =3D &perfcl_pll.clkr.hw,
--=09.pll_div_2 =3D &perfcl_smux.clkr.hw,
-+=09.pll_div =3D &perfcl_smux.clkr.hw,
-+=09.div =3D 2,
- =09.nb.notifier_call =3D cpu_clk_notifier_cb,
- =09.clkr.hw.init =3D &(struct clk_init_data) {
- =09=09.name =3D "perfcl_pmux",
-@@ -481,19 +495,23 @@ static int qcom_cbf_clk_msm8996_register_clks(struct =
-device *dev,
- =09=09=09=09=09      struct regmap *regmap)
+ /*
+- * Since the driver depends on smem and nvmem drivers, which may
+- * return EPROBE_DEFER, all the real activity is done in the probe,
+- * which may be defered as well. The init here is only registering
+- * the driver and the platform device.
++ * Since the driver depends on the nvmem driver, which may return EPROBE_D=
+EFER,
++ * all the real activity is done in the probe, which may be defered as wel=
+l.
++ * The init here is only registering the driver and the platform device.
+  */
+ static int __init qcom_cpufreq_init(void)
  {
- =09int ret;
-+=09bool is_pro =3D of_device_is_compatible(dev->of_node, "qcom,msm8996pro-=
-apcc");
-
--=09cbf_mux.pll_div_2 =3D clk_hw_register_fixed_factor(dev, "cbf_pll_main",
--=09=09=09=09=09=09      "cbf_pll", CLK_SET_RATE_PARENT,
--=09=09=09=09=09=09      1, 2);
--=09if (IS_ERR(cbf_mux.pll_div_2)) {
-+=09cbf_mux.div =3D is_pro ? 4 : 2;
-+=09cbf_mux.pll_div =3D clk_hw_register_fixed_factor(dev, "cbf_pll_main",
-+=09=09=09=09=09=09       "cbf_pll", CLK_SET_RATE_PARENT,
-+=09=09=09=09=09=09       1, cbf_mux.div);
-+
-+=09if (IS_ERR(cbf_mux.pll_div)) {
- =09=09dev_err(dev, "Failed to initialize cbf_pll_main\n");
--=09=09return PTR_ERR(cbf_mux.pll_div_2);
-+=09=09return PTR_ERR(cbf_mux.pll_div);
- =09}
-
- =09ret =3D devm_clk_register_regmap(dev, cbf_msm8996_clks[0]);
- =09ret =3D devm_clk_register_regmap(dev, cbf_msm8996_clks[1]);
-
--=09clk_alpha_pll_configure(&cbf_pll, regmap, &cbfpll_config);
-+=09clk_alpha_pll_configure(&cbf_pll, regmap, is_pro ?
-+=09=09=09=09&cbfpll_config_pro : &cbfpll_config);
- =09clk_set_rate(cbf_pll.clkr.hw.clk, 614400000);
- =09clk_prepare_enable(cbf_pll.clkr.hw.clk);
- =09clk_notifier_register(cbf_mux.clkr.hw.clk, &cbf_mux.nb);
-@@ -575,7 +593,7 @@ static int cpu_clk_notifier_cb(struct notifier_block *n=
-b, unsigned long event,
- =09=09qcom_cpu_clk_msm8996_acd_init(base);
- =09=09break;
- =09case POST_RATE_CHANGE:
--=09=09if (cnd->new_rate < DIV_2_THRESHOLD)
-+=09=09if (cnd->new_rate < DIV_THRESHOLD)
- =09=09=09ret =3D clk_cpu_8996_mux_set_parent(&cpuclk->clkr.hw,
- =09=09=09=09=09=09=09  DIV_2_INDEX);
- =09=09else
-@@ -600,15 +618,15 @@ static int cbf_clk_notifier_cb(struct notifier_block =
-*nb, unsigned long event,
-
- =09switch (event) {
- =09case PRE_RATE_CHANGE:
--=09=09parent =3D clk_hw_get_parent_by_index(&cbfclk->clkr.hw, CBF_DIV_2_IN=
-DEX);
--=09=09ret =3D clk_cpu_8996_mux_set_parent(&cbfclk->clkr.hw, CBF_DIV_2_INDE=
-X);
-+=09=09parent =3D clk_hw_get_parent_by_index(&cbfclk->clkr.hw, CBF_DIV_INDE=
-X);
-+=09=09ret =3D clk_cpu_8996_mux_set_parent(&cbfclk->clkr.hw, CBF_DIV_INDEX)=
-;
-
--=09=09if (cnd->old_rate > DIV_2_THRESHOLD && cnd->new_rate < DIV_2_THRESHO=
-LD)
--=09=09=09ret =3D clk_set_rate(parent->clk, cnd->old_rate / 2);
-+=09=09if (cnd->old_rate > DIV_THRESHOLD && cnd->new_rate < DIV_THRESHOLD)
-+=09=09=09ret =3D clk_set_rate(parent->clk, cnd->old_rate / cbfclk->div);
- =09=09break;
- =09case POST_RATE_CHANGE:
--=09=09if (cnd->new_rate < DIV_2_THRESHOLD)
--=09=09=09ret =3D clk_cpu_8996_mux_set_parent(&cbfclk->clkr.hw, CBF_DIV_2_I=
-NDEX);
-+=09=09if (cnd->new_rate < DIV_THRESHOLD)
-+=09=09=09ret =3D clk_cpu_8996_mux_set_parent(&cbfclk->clkr.hw, CBF_DIV_IND=
-EX);
- =09=09else {
- =09=09=09parent =3D clk_hw_get_parent_by_index(&cbfclk->clkr.hw, CBF_PLL_I=
-NDEX);
- =09=09=09ret =3D clk_set_rate(parent->clk, cnd->new_rate);
-@@ -676,6 +694,7 @@ static int qcom_cpu_clk_msm8996_driver_remove(struct pl=
-atform_device *pdev)
-
- static const struct of_device_id qcom_cpu_clk_msm8996_match_table[] =3D {
- =09{ .compatible =3D "qcom,msm8996-apcc" },
-+=09{ .compatible =3D "qcom,msm8996pro-apcc" },
- =09{}
- };
- MODULE_DEVICE_TABLE(of, qcom_cpu_clk_msm8996_match_table);
 --
 2.35.1
 
