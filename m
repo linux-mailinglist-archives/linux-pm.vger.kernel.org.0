@@ -2,45 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C008F4FAD09
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Apr 2022 11:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 835DF4FAD1F
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Apr 2022 12:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236144AbiDJJTD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 Apr 2022 05:19:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52214 "EHLO
+        id S230306AbiDJKLD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 10 Apr 2022 06:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236116AbiDJJTD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Apr 2022 05:19:03 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4837E644E7;
-        Sun, 10 Apr 2022 02:16:52 -0700 (PDT)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1ndTgg-0004FQ-IP; Sun, 10 Apr 2022 11:16:50 +0200
-Message-ID: <b24daa29-ae7c-6e24-ebdc-2fe8e0576a9d@leemhuis.info>
-Date:   Sun, 10 Apr 2022 11:16:50 +0200
+        with ESMTP id S229545AbiDJKLC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Apr 2022 06:11:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9830056742;
+        Sun, 10 Apr 2022 03:08:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 140B860EFD;
+        Sun, 10 Apr 2022 10:08:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F52DC385A4;
+        Sun, 10 Apr 2022 10:08:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649585329;
+        bh=5hnhj8lRLwppHniJP4Ld6iOLqg92e97n3QjacjSZxyg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MspoahMdWZaxNi2eaHZFxKy2ApJ7h4AttsBZqB1XHVDKMMH288fI4IIdYvuG1YWRx
+         EXEA1EE47u53HudY30bNRRk3HBMk9WDuqw/MQoRTS02PLIPnho70QjHj3Kyi81rbT0
+         L5Str++WG516zHgO19LuCpoQWWtYTHgORmYykPS433U854mdJt0tg7ZBBErLjCOI9A
+         ToSosVqfaQMWcVqa/8qUrVpAgIFW5IYKZntiOlLV/tSujMUgpYInc4yVQ9DjSG6/yi
+         l+9Xoq3pZuQ9/5MurFgHj6ApRrZy3yfR5lzwJEv7jXHRst3tzatuLQ6Uv13F2eokMA
+         OIJWimajKD1WA==
+Received: by pali.im (Postfix)
+        id E80717EE; Sun, 10 Apr 2022 12:08:45 +0200 (CEST)
+Date:   Sun, 10 Apr 2022 12:08:45 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (dell-smm) Add cooling device support
+Message-ID: <20220410100845.2isvctcw643yfp7n@pali>
+References: <20220330163324.572437-1-W_Armin@gmx.de>
+ <757b30ef-e250-063f-7523-030f56b1d0b8@gmx.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] PCI: PM: Quirk bridge D3 on Elo i2
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Linux PCI <linux-pci@vger.kernel.org>,
-        Stefan Gottwald <gottwald@igel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <CAJZ5v0g9cg=nJ0yr5-a_phNnJLiU74KrfsULsAEsWBKeRr7HCQ@mail.gmail.com>
- <20220408195342.GA339430@bhelgaas>
- <CAJZ5v0g6ahvQrCKPXTgQANiUYJNByDUvJZ8Zsp7anqeM7EBAXw@mail.gmail.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <CAJZ5v0g6ahvQrCKPXTgQANiUYJNByDUvJZ8Zsp7anqeM7EBAXw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1649582212;bf5f48ec;
-X-HE-SMSGID: 1ndTgg-0004FQ-IP
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <757b30ef-e250-063f-7523-030f56b1d0b8@gmx.de>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,151 +58,196 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09.04.22 15:35, Rafael J. Wysocki wrote:
-> On Fri, Apr 8, 2022 at 9:53 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->>
->> On Mon, Apr 04, 2022 at 04:46:14PM +0200, Rafael J. Wysocki wrote:
->>> On Fri, Apr 1, 2022 at 1:34 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->>>> On Thu, Mar 31, 2022 at 11:57 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->>>>> On Thu, Mar 31, 2022 at 07:38:51PM +0200, Rafael J. Wysocki wrote:
->>>>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>>>>
->>>>>> If one of the PCIe root ports on Elo i2 is put into D3cold and then
->>>>>> back into D0, the downstream device becomes permanently inaccessible,
->>>>>> so add a bridge D3 DMI quirk for that system.
->>>>>>
->>>>>> This was exposed by commit 14858dcc3b35 ("PCI: Use
->>>>>> pci_update_current_state() in pci_enable_device_flags()"), but before
->>>>>> that commit the root port in question had never been put into D3cold
->>>>>> for real due to a mismatch between its power state retrieved from the
->>>>>> PCI_PM_CTRL register (which was accessible even though the platform
->>>>>> firmware indicated that the port was in D3cold) and the state of an
->>>>>> ACPI power resource involved in its power management.
->>>>>
->>>>> In the bug report you suspect a firmware issue.  Any idea what that
->>>>> might be?  It looks like a Gemini Lake Root Port, so I wouldn't think
->>>>> it would be a hardware issue.
->>>>
->>>> The _ON method of the ACPI power resource associated with the root
->>>> port doesn't work correctly.
->>>>
->>>>> Weird how things come in clumps.  Was just looking at Mario's patch,
->>>>> which also has to do with bridges and D3.
->>>>>
->>>>> Do we need a Fixes line?  E.g.,
->>>>>
->>>>>   Fixes: 14858dcc3b35 ("PCI: Use pci_update_current_state() in pci_enable_device_flags()")
->>>>
->>>> Strictly speaking, it is not a fix for the above commit.
->>>>
->>>> It is a workaround for a firmware issue uncovered by it which wasn't
->>>> visible, because power management was not used correctly on the
->>>> affected system because of another firmware problem addressed by
->>>> 14858dcc3b35.  It wouldn't have worked anyway had it been attempted
->>>> AFAICS.
->>>>
->>>> I was thinking about CCing this change to -stable instead.
->>
->> Makes sense, thanks.
->>
->>>>>> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215715
->>>>>> Reported-by: Stefan Gottwald <gottwald@igel.com>
->>>>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>>>> ---
->>>>>>  drivers/pci/pci.c |   10 ++++++++++
->>>>>>  1 file changed, 10 insertions(+)
->>>>>>
->>>>>> Index: linux-pm/drivers/pci/pci.c
->>>>>> ===================================================================
->>>>>> --- linux-pm.orig/drivers/pci/pci.c
->>>>>> +++ linux-pm/drivers/pci/pci.c
->>>>>> @@ -2920,6 +2920,16 @@ static const struct dmi_system_id bridge
->>>>>>                       DMI_MATCH(DMI_BOARD_VENDOR, "Gigabyte Technology Co., Ltd."),
->>>>>>                       DMI_MATCH(DMI_BOARD_NAME, "X299 DESIGNARE EX-CF"),
->>>>>>               },
->>>>>> +             /*
->>>>>> +              * Downstream device is not accessible after putting a root port
->>>>>> +              * into D3cold and back into D0 on Elo i2.
->>>>>> +              */
->>>>>> +             .ident = "Elo i2",
->>>>>> +             .matches = {
->>>>>> +                     DMI_MATCH(DMI_SYS_VENDOR, "Elo Touch Solutions"),
->>>>>> +                     DMI_MATCH(DMI_PRODUCT_NAME, "Elo i2"),
->>>>>> +                     DMI_MATCH(DMI_PRODUCT_VERSION, "RevB"),
->>>>>> +             },
->>>>>
->>>>> Is this bridge_d3_blacklist[] similar to the PCI_DEV_FLAGS_NO_D3 bit?
->>>>
->>>> Not really.  The former applies to the entire platform and not to an
->>>> individual device.
->>>>
->>>>> Could they be folded together?  We have a lot of bits that seem
->>>>> similar but maybe not exactly the same (dev->bridge_d3,
->>>>> dev->no_d3cold, dev->d3cold_allowed, dev->runtime_d3cold,
->>>>> PCI_DEV_FLAGS_NO_D3, pci_bridge_d3_force, etc.)  Ugh.
->>>>
->>>> Yes, I agree that this needs to be cleaned up.
->>>>
->>>>> bridge_d3_blacklist[] itself was added by 85b0cae89d52 ("PCI:
->>>>> Blacklist power management of Gigabyte X299 DESIGNARE EX PCIe ports"),
->>>>> which honestly looks kind of random, i.e., it doesn't seem to be
->>>>> working around a hardware or even a firmware defect.
->>>>>
->>>>> Apparently the X299 issue is that 00:1c.4 is connected to a
->>>>> Thunderbolt controller, and the BIOS keeps the Thunderbolt controller
->>>>> powered off unless something is attached to it?  At least, 00:1c.4
->>>>> leads to bus 05, and in the dmesg log attached to [1] shows no devices
->>>>> on bus 05.
->>>>>
->>>>> It also says the platform doesn't support PCIe native hotplug, which
->>>>> matches what Mika said about it using ACPI hotplug.  If a system is
->>>>> using ACPI hotplug, it seems like maybe *that* should prevent us from
->>>>> putting things in D3cold?  How can we know whether ACPI hotplug
->>>>> depends on a certain power state?
->>>>
->>>> We have this check in pci_bridge_d3_possible():
->>>>
->>>> if (bridge->is_hotplug_bridge && !pciehp_is_native(bridge))
->>>>             return false;
->>>>
->>>> but this only applies to the case when the particular bridge itself is
->>>> a hotplug one using ACPI hotplug.
->>>>
->>>> If ACPI hotplug is used, it generally is unsafe to put PCIe ports into
->>>> D3cold, because in that case it is unclear what the platform
->>>> firmware's assumptions regarding control of the config space are.
->>>>
->>>> However, I'm not sure how this is related to the patch at hand.
->>>
->>> So I'm not sure how you want to proceed here.
->>>
->>> The platform is quirky, so the quirk for it will need to be added this
->>> way or another.  The $subject patch adds it using the existing
->>> mechanism, which is the least intrusive way.
->>>
->>> You seem to be thinking that the existing mechanism may not be
->>> adequate, but I'm not sure for what reason and anyway I think that it
->>> can be adjusted after adding the quirk.
->>>
->>> Please let me know what you think.
->>
->> I don't understand all that's going on here, but I applied it to
->> pci/pm for v5.19, thanks!
-> Thank you!
+On Saturday 09 April 2022 17:33:48 Armin Wolf wrote:
+> Am 30.03.22 um 18:33 schrieb Armin Wolf:
+> 
+> > Until now, only the temperature sensors where exported thru
+> > the thermal subsystem. Export the fans as "dell-smm-fan[1-3]" too
+> > to make them available as cooling devices.
+> > Also update Documentation.
+> > 
+> > Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+> > ---
+> >   Documentation/hwmon/dell-smm-hwmon.rst |  7 ++
+> >   drivers/hwmon/Kconfig                  |  1 +
+> >   drivers/hwmon/dell-smm-hwmon.c         | 94 +++++++++++++++++++++++++-
+> >   3 files changed, 99 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/Documentation/hwmon/dell-smm-hwmon.rst b/Documentation/hwmon/dell-smm-hwmon.rst
+> > index d3323a96665d..41839b7de2c1 100644
+> > --- a/Documentation/hwmon/dell-smm-hwmon.rst
+> > +++ b/Documentation/hwmon/dell-smm-hwmon.rst
+> > @@ -86,6 +86,13 @@ probe the BIOS on your machine and discover the appropriate codes.
+> > 
+> >   Again, when you find new codes, we'd be happy to have your patches!
+> > 
+> > +``thermal`` interface
+> > +---------------------------
+> > +
+> > +The driver also exports the fans as thermal cooling devices with
+> > +``type`` set to ``dell-smm-fan[1-3]``. This allows for easy fan control
+> > +using one of the thermal governors.
+> > +
+> >   Module parameters
+> >   -----------------
+> > 
+> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> > index 9ab4e9b3d27b..1175b8e38c45 100644
+> > --- a/drivers/hwmon/Kconfig
+> > +++ b/drivers/hwmon/Kconfig
+> > @@ -498,6 +498,7 @@ config SENSORS_DS1621
+> >   config SENSORS_DELL_SMM
+> >   	tristate "Dell laptop SMM BIOS hwmon driver"
+> >   	depends on X86
+> > +	imply THERMAL
+> >   	help
+> >   	  This hwmon driver adds support for reporting temperature of different
+> >   	  sensors and controls the fans on Dell laptops via System Management
+> > diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
+> > index 84cb1ede7bc0..0c29386f4bd3 100644
+> > --- a/drivers/hwmon/dell-smm-hwmon.c
+> > +++ b/drivers/hwmon/dell-smm-hwmon.c
+> > @@ -21,6 +21,7 @@
+> >   #include <linux/errno.h>
+> >   #include <linux/hwmon.h>
+> >   #include <linux/init.h>
+> > +#include <linux/kconfig.h>
+> >   #include <linux/kernel.h>
+> >   #include <linux/module.h>
+> >   #include <linux/mutex.h>
+> > @@ -29,6 +30,7 @@
+> >   #include <linux/seq_file.h>
+> >   #include <linux/string.h>
+> >   #include <linux/smp.h>
+> > +#include <linux/thermal.h>
+> >   #include <linux/types.h>
+> >   #include <linux/uaccess.h>
+> > 
+> > @@ -80,6 +82,11 @@ struct dell_smm_data {
+> >   	int *fan_nominal_speed[DELL_SMM_NO_FANS];
+> >   };
+> > 
+> > +struct dell_smm_cooling_data {
+> > +	u8 fan_num;
+> > +	struct dell_smm_data *data;
+> > +};
+> > +
+> >   MODULE_AUTHOR("Massimo Dal Zotto (dz@debian.org)");
+> >   MODULE_AUTHOR("Pali Rohár <pali@kernel.org>");
+> >   MODULE_DESCRIPTION("Dell laptop SMM BIOS hwmon driver");
+> > @@ -638,9 +645,50 @@ static void __init i8k_init_procfs(struct device *dev)
+> > 
+> >   #endif
+> > 
+> > -/*
+> > - * Hwmon interface
+> > - */
+> > +static int dell_smm_get_max_state(struct thermal_cooling_device *dev, unsigned long *state)
+> > +{
+> > +	struct dell_smm_cooling_data *cdata = dev->devdata;
+> > +
+> > +	*state = cdata->data->i8k_fan_max;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int dell_smm_get_cur_state(struct thermal_cooling_device *dev, unsigned long *state)
+> > +{
+> > +	struct dell_smm_cooling_data *cdata = dev->devdata;
+> > +	int ret;
+> > +
+> > +	ret = i8k_get_fan_status(cdata->data, cdata->fan_num);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	*state = ret;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int dell_smm_set_cur_state(struct thermal_cooling_device *dev, unsigned long state)
+> > +{
+> > +	struct dell_smm_cooling_data *cdata = dev->devdata;
+> > +	struct dell_smm_data *data = cdata->data;
+> > +	int ret;
+> > +
+> > +	if (state > data->i8k_fan_max)
+> > +		return -EINVAL;
+> > +
+> > +	mutex_lock(&data->i8k_mutex);
+> > +	ret = i8k_set_fan(data, cdata->fan_num, (int)state);
+> > +	mutex_unlock(&data->i8k_mutex);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static const struct thermal_cooling_device_ops dell_smm_cooling_ops = {
+> > +	.get_max_state = dell_smm_get_max_state,
+> > +	.get_cur_state = dell_smm_get_cur_state,
+> > +	.set_cur_state = dell_smm_set_cur_state,
+> > +};
+> > 
+> >   static umode_t dell_smm_is_visible(const void *drvdata, enum hwmon_sensor_types type, u32 attr,
+> >   				   int channel)
+> > @@ -941,6 +989,37 @@ static const struct hwmon_chip_info dell_smm_chip_info = {
+> >   	.info = dell_smm_info,
+> >   };
+> > 
+> > +static int __init dell_smm_init_cdev(struct device *dev, u8 fan_num)
+> > +{
+> > +	struct dell_smm_data *data = dev_get_drvdata(dev);
+> > +	struct thermal_cooling_device *cdev;
+> > +	struct dell_smm_cooling_data *cdata;
+> > +	int ret = 0;
+> > +	char *name;
+> > +
+> > +	name = kasprintf(GFP_KERNEL, "dell-smm-fan%u", fan_num + 1);
+> > +	if (!name)
+> > +		return -ENOMEM;
+> > +
+> > +	cdata = devm_kmalloc(dev, sizeof(*cdata), GFP_KERNEL);
+> > +	if (cdata) {
+> > +		cdata->fan_num = fan_num;
+> > +		cdata->data = data;
+> > +		cdev = devm_thermal_of_cooling_device_register(dev, NULL, name, cdata,
+> > +							       &dell_smm_cooling_ops);
+> > +		if (IS_ERR(cdev)) {
+> > +			devm_kfree(dev, cdata);
+> > +			ret = PTR_ERR(cdev);
+> > +		}
+> > +	} else {
+> > +		ret = -ENOMEM;
+> > +	}
+> > +
+> > +	kfree(name);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> >   static int __init dell_smm_init_hwmon(struct device *dev)
+> >   {
+> >   	struct dell_smm_data *data = dev_get_drvdata(dev);
+> > @@ -967,6 +1046,15 @@ static int __init dell_smm_init_hwmon(struct device *dev)
+> >   			continue;
+> > 
+> >   		data->fan[i] = true;
+> > +
+> > +		/* the cooling device it not critical, ignore failures */
+> > +		if (IS_REACHABLE(CONFIG_THERMAL)) {
+> > +			err = dell_smm_init_cdev(dev, i);
+> > +			if (err < 0)
+> > +				dev_err(dev, "Failed to register cooling device for fan %u\n",
+> > +					i + 1);
+> > +		}
+> > +
+> >   		data->fan_nominal_speed[i] = devm_kmalloc_array(dev, data->i8k_fan_max + 1,
+> >   								sizeof(*data->fan_nominal_speed[i]),
+> >   								GFP_KERNEL);
+> > --
+> > 2.30.2
+> > 
+> Any thoughts on this? I tested it on a Dell Inspiron 3505, so i can prove it works.
 
-Sorry, but this made me wonder: why v5.19? It's a regression exposed in
-v5.15, so it afaics would be good to get this in this cycle -- and also
-backported to v5.15.y, but it seem a tag to take care of that is
-missing. :-/
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I'm getting a lot of
-reports on my table. I can only look briefly into most of them and lack
-knowledge about most of the areas they concern. I thus unfortunately
-will sometimes get things wrong or miss something important. I hope
-that's not the case here; if you think it is, don't hesitate to tell me
-in a public reply, it's in everyone's interest to set the public record
-straight.
-
-
+Hello! If hwmon maintainers are happy with this approach and this new
+API then I'm fine with it. Maybe one thing to discuss, should not be
+dell_smm_init_cdev() fatal on error?
