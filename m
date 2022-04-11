@@ -2,136 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D234FBC1A
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Apr 2022 14:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 262004FBC29
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Apr 2022 14:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234971AbiDKMdx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Apr 2022 08:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
+        id S1346113AbiDKMfi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Apr 2022 08:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234322AbiDKMdw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Apr 2022 08:33:52 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7DF26ED;
-        Mon, 11 Apr 2022 05:31:36 -0700 (PDT)
-X-UUID: c9bd375bd5254f299a47637b00ef07f7-20220411
-X-UUID: c9bd375bd5254f299a47637b00ef07f7-20220411
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1664485756; Mon, 11 Apr 2022 20:31:31 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 11 Apr 2022 20:31:31 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 11 Apr
- 2022 20:31:30 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 11 Apr 2022 20:31:30 +0800
-Message-ID: <bc6dd020a1cc3f00f5be2bf2929046b9116bbeef.camel@mediatek.com>
-Subject: Re: [PATCH V2 13/15] cpufreq: mediatek: Link CCI device to CPU
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Kevin Hilman <khilman@baylibre.com>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
-        <krzk+dt@kernel.org>
-CC:     <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
-        <roger.lu@mediatek.com>, <hsinyi@google.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 11 Apr 2022 20:31:30 +0800
-In-Reply-To: <7hfsmn5m9f.fsf@baylibre.com>
-References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
-         <20220408045908.21671-14-rex-bc.chen@mediatek.com>
-         <7hfsmn5m9f.fsf@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S230231AbiDKMfh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Apr 2022 08:35:37 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F27041319
+        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 05:33:23 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id bq30so13584806lfb.3
+        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 05:33:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OsswnPSPXub36sV27s63KdEV9u3Nc46OaI/VdIunfIY=;
+        b=nacSmEU90Z28U9Lo9QsaAtJzu5RtbYx3FHMucZRgfaW1vDSY9I+G7LCU7Ar+Twu6Z5
+         BjziRv6TGWlLl3ppx/vX6MfsESbe/KVMTghgOAMNzAMxbj0rWjqbDO6wJ6gxWuK+bW13
+         qmv2sjgtNOAzM4NHrIsSf6PslmWpoCzKX//19tQePjv92BE/4Jcb7/6Uwnks0VXAnYjh
+         iXaCVpKHnKT3OX8XV7/is1KxcE/dhdSWbIuJnlRJ8qab0LkRwPlJ6JfvyQ9gs9xt2Bfh
+         d18+IosnSbAH+FIETShNuVwikb4gJavQTSvMLE8h6aadktpB0ArWj+HUGHwZa2Uzv9fW
+         qpBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OsswnPSPXub36sV27s63KdEV9u3Nc46OaI/VdIunfIY=;
+        b=kI/xb/dk2Cr8QCfdeI8Bb+3i2Ji5+y6qL82FGXQmxvd1aTjwQMEzMJIzuQ61X/aWgS
+         nCE/HUokVLO5ZMHXKkbcO+XhuBQ+ABfyD0AyWmQtSkp8PkxhjJ1VQiEyuYKVhHf9uY+8
+         Lw7f8VCKNSyeTK9o5QqZuSs8kyAhcQmQyjbxbVbw2Y6Fve+z5WCPFfL+h93w8BF4VmaB
+         rHe5zhrcy35sMpMWkf+PquljEXNWW5+olQd5dT8PE/nMVSbHTYYHQwATWXkvwIMCrH8j
+         f3iv30A6hTrM5GNoYTo6QT3JH64oxsOaZuNQ85/CremiTk/nW6tOAxXbzBgkoLlQJUuE
+         iPFg==
+X-Gm-Message-State: AOAM5334KzfUjYNzBVY41GNZkm0NMaBmvTvzzoKtWI4AbzjarySMsr7e
+        nKFQS/235WQZGafoxfUuPPZEiSKaUPEEusv1FPRu/A==
+X-Google-Smtp-Source: ABdhPJz8kUWpLqIjtiML9FtVp8iwQ8JIdK3FxyBY/eLAJO5tiLcOHIbU3PpsAHYuyudWDNFWhApGedtxPrnqSwU6avA=
+X-Received: by 2002:a19:e007:0:b0:44a:a22d:2d49 with SMTP id
+ x7-20020a19e007000000b0044aa22d2d49mr8496790lfg.254.1649680401433; Mon, 11
+ Apr 2022 05:33:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1836398.tdWV9SEqCh@kreacher> <CAPDyKFoop_mtWV0i+fH8GSmaxbPCyCPmOeNi6GuK5Qrj7ZVo1g@mail.gmail.com>
+ <CAJZ5v0geG77Npdy_Ae7XnpWukPPSJ1nE0DFF-vbJViKj6GtCWA@mail.gmail.com>
+ <CAPDyKFo9t__WV00yp5gt+M0BhYtgJU2HmKXF2fXEDtjvSEUhhw@mail.gmail.com> <CAJZ5v0jFA0Yi-4L6WQmcX5A-4_t1PTtEyFU7JRceKjr8UXgj_g@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jFA0Yi-4L6WQmcX5A-4_t1PTtEyFU7JRceKjr8UXgj_g@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 11 Apr 2022 14:32:44 +0200
+Message-ID: <CAPDyKFr6zXcruPHqM2gyLwNPmitXZwRwR7WWyB91Ube1HmtpSg@mail.gmail.com>
+Subject: Re: [PATCH v1] PM: runtime: Avoid device usage count underflows
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 2022-04-08 at 13:54 -0700, Kevin Hilman wrote:
-> Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
-> 
-> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > 
-> > In some MediaTek SoCs, like MT8183, CPU and CCI share the same
-> > power
-> > supplies. Cpufreq needs to check if CCI devfreq exists and wait
-> > until
-> > CCI devfreq ready before scaling frequency.
-> > 
-> > - Add is_ccifreq_ready() to link CCI device to CPI, and CPU will
-> > start
-> >   DVFS when CCI is ready.
-> > - Add platform data for MT8183.
-> > 
-> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> 
-> The checks here are not enough, and will lead to unexpected behavior.
-> IIUC, before doing DVFS, you're checking:
-> 
-> 1) if the "cci" DT node is present and
-> 2) if the driver for that device is bound
-> 
-> If both those conditions are not met, you don't actually fail, you
-> just
-> silently do nothing in ->set_target().  As Angelo pointed out also,
-> this
-> is not a good idea, and will be rather confusing to users.
-> 
-> The same thing would happen if the cci DT node was present, but the
-> CCI
-> devfreq driver was disabled.  Silent failure would also be quite
-> unexpected behavior.  Similarily, if the cci DT node is not present
-> at
-> all (like it is in current upstream DT), this CPUfreq driver will
-> silently do nothing.  Not good.
-> 
-> So, this patch needs to handle several scenarios:
-> 
-> 1) CCI DT node not present
-> 
-> In this case, the driver should still operate normally.  With no CCI
-> node, or driver there's no conflict.
-> 
-> 2) CCI DT present/enabled but not yet bound
-> 
-> In this case, you could return -EAGAIN as suggested by Angelo, or
-> maybe
-> better, it should do a deferred probe.
-> 
-> 3) CCI DT present, but driver disabled
-> 
-> This case is similar to (1), this driver should continue to work.
-> 
-> Kevin
+On Mon, 11 Apr 2022 at 13:29, Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Mon, Apr 11, 2022 at 12:36 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >
+> > On Fri, 8 Apr 2022 at 19:05, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > >
+> > > On Fri, Apr 8, 2022 at 4:05 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > > >
+> > > > On Wed, 6 Apr 2022 at 21:03, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> > > > >
+> > > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > >
+> > > > > A PM-runtime device usage count underflow is potentially critical,
+> > > > > because it may cause a device to be suspended when it is expected to
+> > > > > be operational.
+> > > >
+> > > > I get the point. Although, perhaps we should also state that it's a
+> > > > programming problem that we would like to catch and warn about?
+> > >
+> > > OK, I can add that to the changelog.
+> > >
+> > > > >
+> > > > > For this reason, (1) make rpm_check_suspend_allowed() return an error
+> > > > > when the device usage count is negative to prevent devices from being
+> > > > > suspended in that case, (2) introduce rpm_drop_usage_count() that will
+> > > > > detect device usage count underflows, warn about them and fix them up,
+> > > > > and (3) use it to drop the usage count in a few places instead of
+> > > > > atomic_dec_and_test().
+> > > > >
+> > > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > > ---
+> > > > >  drivers/base/power/runtime.c |   44 ++++++++++++++++++++++++++++++++++++-------
+> > > > >  1 file changed, 37 insertions(+), 7 deletions(-)
+> > > > >
+> > > > > Index: linux-pm/drivers/base/power/runtime.c
+> > > > > ===================================================================
+> > > > > --- linux-pm.orig/drivers/base/power/runtime.c
+> > > > > +++ linux-pm/drivers/base/power/runtime.c
+> > > > > @@ -263,7 +263,7 @@ static int rpm_check_suspend_allowed(str
+> > > > >                 retval = -EINVAL;
+> > > > >         else if (dev->power.disable_depth > 0)
+> > > > >                 retval = -EACCES;
+> > > > > -       else if (atomic_read(&dev->power.usage_count) > 0)
+> > > > > +       else if (atomic_read(&dev->power.usage_count))
+> > > > >                 retval = -EAGAIN;
+> > > > >         else if (!dev->power.ignore_children &&
+> > > > >                         atomic_read(&dev->power.child_count))
+> > > > > @@ -1039,13 +1039,33 @@ int pm_schedule_suspend(struct device *d
+> > > > >  }
+> > > > >  EXPORT_SYMBOL_GPL(pm_schedule_suspend);
+> > > > >
+> > > > > +static int rpm_drop_usage_count(struct device *dev)
+> > > > > +{
+> > > > > +       int ret;
+> > > > > +
+> > > > > +       ret = atomic_sub_return(1, &dev->power.usage_count);
+> > > > > +       if (ret >= 0)
+> > > > > +               return ret;
+> > > > > +
+> > > > > +       /*
+> > > > > +        * Because rpm_resume() does not check the usage counter, it will resume
+> > > > > +        * the device even if the usage counter is 0 or negative, so it is
+> > > > > +        * sufficient to increment the usage counter here to reverse the change
+> > > > > +        * made above.
+> > > > > +        */
+> > > > > +       atomic_inc(&dev->power.usage_count);
+> > > >
+> > > > Rather than this two-step process, couldn't we just do an
+> > > > "atomic_add_unless(&dev->power.usage_count, -1, 0)" - and check the
+> > > > return value?
+> > >
+> > > No, we couldn't, because atomic_add_unless() returns a bool and we
+> > > need to know the new counter value (and in particular whether or not
+> > > it is 0).
+> >
+> > atomic_add_unless(&dev->power.usage_count, -1, 0) would return true as
+> > long as the counter value is greater than 0.
+>
+> Yes, and it in particular, when the current value of the counter is 1
+> before the operation IIUC.
+>
+> So after the operation it is 0 and true will be returned, won't it?
+> But that's exactly the case we want to catch.
+>
+> > If the counter has become 0, atomic_add_unless() would return false
+> > and not continue to decrease the value below zero. Isn't this exactly
+> > what we want?
+>
+> Not really.
+>
+> We want to detect transitions from 0 to 1 which is the case when the
+> device can be suspended.
 
-Hello Kevin and Angelo,
+I assume you mean from 1 to 0. In any case, I see what you mean by
+now, sorry for the noise.
 
-In my review, if we do not get the link or the link status is not
-correct between cci and cpufreq in target_index, I think it will never
-established again for this link.
-Because it's not checked in probe stage.
+Then feel free to add:
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-So I think we just need to deal with the issue without cci device, and
-don't expect the link between cci and cpufreq will be connected again.
-
-If I am wrong, please correct me.
-Thanks.
-
-BRs,
-Rex
-
+Kind regards
+Uffe
