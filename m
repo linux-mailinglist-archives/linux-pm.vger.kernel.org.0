@@ -2,107 +2,188 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754A54FBB16
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Apr 2022 13:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB254FBB50
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Apr 2022 13:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235875AbiDKLkS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Apr 2022 07:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33588 "EHLO
+        id S1343703AbiDKLw3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Apr 2022 07:52:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232426AbiDKLkR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Apr 2022 07:40:17 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11504457BB;
-        Mon, 11 Apr 2022 04:38:02 -0700 (PDT)
-X-UUID: 015305930e034de79ebfd34af5134c87-20220411
-X-UUID: 015305930e034de79ebfd34af5134c87-20220411
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        with ESMTP id S242979AbiDKLwZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Apr 2022 07:52:25 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99422338A8;
+        Mon, 11 Apr 2022 04:50:10 -0700 (PDT)
+X-UUID: 5ac3e574fb744c4f8d5ef478c0b669f9-20220411
+X-UUID: 5ac3e574fb744c4f8d5ef478c0b669f9-20220411
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
         (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 83393646; Mon, 11 Apr 2022 19:37:55 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 534694944; Mon, 11 Apr 2022 19:50:04 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
  mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 11 Apr 2022 19:37:54 +0800
+ Mon, 11 Apr 2022 19:50:03 +0800
 Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 11 Apr 2022 19:37:54 +0800
-Message-ID: <664e31f0449533b41cd50f9d2fc68ec79ca9dfa3.camel@mediatek.com>
-Subject: Re: [PATCH V2 00/15] cpufreq: mediatek: Cleanup and support MT8183
- and MT8186
+ Transport; Mon, 11 Apr 2022 19:50:03 +0800
+Message-ID: <7920cc153930ab1e724fe65df370fc70f6cbe3db.camel@mediatek.com>
+Subject: Re: [PATCH V2 13/15] cpufreq: mediatek: Link CCI device to CPU
 From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Hsin-Yi Wang <hsinyi@google.com>,
-        Kevin Hilman <khilman@baylibre.com>
-CC:     <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tim Chang <jia-wei.chang@mediatek.com>,
-        <roger.lu@mediatek.com>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
+        <krzk+dt@kernel.org>
+CC:     <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
+        <roger.lu@mediatek.com>, <hsinyi@google.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 11 Apr 2022 19:37:54 +0800
-In-Reply-To: <CACb=7PVu6Rt3giBW78LWtkM=9xV6JzZgFSKOmUNx_26O0Wvowg@mail.gmail.com>
+Date:   Mon, 11 Apr 2022 19:50:03 +0800
+In-Reply-To: <dc18d877-effb-1286-341d-1792ea6fcc05@collabora.com>
 References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
-         <7h5ynj5lhc.fsf@baylibre.com>
-         <CACb=7PVu6Rt3giBW78LWtkM=9xV6JzZgFSKOmUNx_26O0Wvowg@mail.gmail.com>
+         <20220408045908.21671-14-rex-bc.chen@mediatek.com>
+         <dc18d877-effb-1286-341d-1792ea6fcc05@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 2022-04-09 at 09:05 +0800, Hsin-Yi Wang wrote:
-> On Sat, Apr 9, 2022 at 5:11 AM Kevin Hilman <khilman@baylibre.com>
-> wrote:
+On Fri, 2022-04-08 at 15:37 +0200, AngeloGioacchino Del Regno wrote:
+> Il 08/04/22 06:59, Rex-BC Chen ha scritto:
+> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
 > > 
-> > Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
+> > In some MediaTek SoCs, like MT8183, CPU and CCI share the same
+> > power
+> > supplies. Cpufreq needs to check if CCI devfreq exists and wait
+> > until
+> > CCI devfreq ready before scaling frequency.
 > > 
-> > > Cpufreq is a DVFS driver used for power saving to scale the clock
-> > > frequency
-> > > and supply the voltage for CPUs. This series do some cleanup for
-> > > MediaTek
-> > > cpufreq drivers and add support for MediaTek SVS[2] and MediaTek
-> > > CCI
-> > > devfreq[3] which are supported in MT8183 and MT8186.
+> > - Add is_ccifreq_ready() to link CCI device to CPI, and CPU will
+> > start
+> >    DVFS when CCI is ready.
+> > - Add platform data for MT8183.
 > > 
-> > There's no upstream DT for MT8186 and there are no OPPs defined in
-> > the
-> > upstream DT for MT8183.
+> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> > ---
+> >   drivers/cpufreq/mediatek-cpufreq.c | 69
+> > +++++++++++++++++++++++++++++-
+> >   1 file changed, 68 insertions(+), 1 deletion(-)
 > > 
-> > In order to test this on mainline, could you provide a patch for
-> > MT8183
-> > that adds OPPs to the DT so this can be tested with mainline?
-> > 
+> > diff --git a/drivers/cpufreq/mediatek-cpufreq.c
+> > b/drivers/cpufreq/mediatek-cpufreq.c
+> > index b08ab7c14818..cebe5af2ef5d 100644
+> > --- a/drivers/cpufreq/mediatek-cpufreq.c
+> > +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> > @@ -22,6 +22,7 @@ struct mtk_cpufreq_platform_data {
+> >   	int proc_max_volt;
+> >   	int sram_min_volt;
+> >   	int sram_max_volt;
+> > +	bool is_ccifreq_support;
 > 
-> The DT change used in the downstream kernel is from here:
-> 
-https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-mediatek/patch/1616499241-4906-9-git-send-email-andrew-sh.cheng@mediatek.com/__;!!CTRNKA9wMg0ARbw!ykRlVJPl8TZWMCfnAzLnqhtn3iqXeHh8f6tMBWpneZuJPPmJTGEDIiEgv-R_Q4gVunnp$
->  
-> Might need some update (eg. add the cci property in cpu) though.
-> Rex, you can also include the 8183 DT change in the next version
-> since
-> most of the mt8183 dts are in the mainline.
-> 
-> Thanks
-> 
-> > Thanks,
-> > 
-> > Kevin
+> bool ccifreq_supported; looks better.
 
-Hello Kevin and Hsinyi,
+Hello Angelo,
 
-OK I will add dts part of cpufreq for MT8183 in next version.
-And I think the cci part will be upstreamed in cci seriues.
+Thanks for your review.
+
+OK, I will modify this in next version.
+
+> 
+> >   };
+> >   
+> >   /*
+> > @@ -38,6 +39,7 @@ struct mtk_cpufreq_platform_data {
+> >   struct mtk_cpu_dvfs_info {
+> >   	struct cpumask cpus;
+> >   	struct device *cpu_dev;
+> > +	struct device *cci_dev;
+> >   	struct regulator *proc_reg;
+> >   	struct regulator *sram_reg;
+> >   	struct clk *cpu_clk;
+> > @@ -52,6 +54,7 @@ struct mtk_cpu_dvfs_info {
+> >   	int opp_cpu;
+> >   	unsigned long opp_freq;
+> >   	const struct mtk_cpufreq_platform_data *soc_data;
+> > +	bool is_ccifreq_bounded;
+> 
+> bool ccifreq_bound; looks better.
+> 
+
+OK, I will modify this in next version.
+
+> >   };
+> >   
+> >   static struct platform_device *cpufreq_pdev;
+> > @@ -171,6 +174,29 @@ static int mtk_cpufreq_set_voltage(struct
+> > mtk_cpu_dvfs_info *info, int vproc)
+> >   	return ret;
+> >   }
+> >   
+> > +static bool is_ccifreq_ready(struct mtk_cpu_dvfs_info *info)
+> > +{
+> > +	struct device_link *sup_link;
+> > +
+> > +	if (info->is_ccifreq_bounded)
+> > +		return true;
+> > +
+> > +	sup_link = device_link_add(info->cpu_dev, info->cci_dev,
+> > +				   DL_FLAG_AUTOREMOVE_CONSUMER);
+> > +	if (!sup_link) {
+> > +		dev_err(info->cpu_dev, "cpu%d: sup_link is NULL\n",
+> > +			info->opp_cpu);
+> 
+> Please, don't break this line: 84 columns are ok.
+> 
+
+OK, I will modify this in next version.
+
+> > +		return false;
+> > +	}
+> > +
+> > +	if (sup_link->supplier->links.status != DL_DEV_DRIVER_BOUND)
+> > +		return false;
+> > +
+> > +	info->is_ccifreq_bounded = true;
+> > +
+> > +	return true;
+> > +}
+> > +
+> >   static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
+> >   				  unsigned int index)
+> >   {
+> > @@ -183,6 +209,9 @@ static int mtk_cpufreq_set_target(struct
+> > cpufreq_policy *policy,
+> >   	long freq_hz, old_freq_hz;
+> >   	int vproc, old_vproc, inter_vproc, target_vproc, ret;
+> >   
+> > +	if (info->soc_data->is_ccifreq_support &&
+> > !is_ccifreq_ready(info))
+> > +		return 0;
+> 
+> Honestly, I think that pretending that everything is alright and
+> faking
+> set_target success is *not* a good idea...
+> 
+> You should return -EAGAIN here, not zero.
+> 
+> Regards,
+> Angelo
+> 
+
+As metioneded by Kevin, I will review these three situations.
+Thanks for your suggestion.
 
 BRs,
 Rex
