@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006294FC14C
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Apr 2022 17:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C99414FC135
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Apr 2022 17:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348169AbiDKPqn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Apr 2022 11:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
+        id S1348152AbiDKPq1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Apr 2022 11:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348151AbiDKPqV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Apr 2022 11:46:21 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77409DDA
-        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 08:44:05 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id s18so9287276ejr.0
-        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 08:44:05 -0700 (PDT)
+        with ESMTP id S1348164AbiDKPqY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Apr 2022 11:46:24 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D091035
+        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 08:44:07 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id bh17so31728689ejb.8
+        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 08:44:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=COpNw57lgu0himePeZKRGKWRjP8G0QfB49lG6bBArPo=;
-        b=KijVpViNNcNMkejFTsh0iTzo1brscJx+JZ8eFgBlDRWQVtq4SZbHS5MNvUYGEU/MxN
-         L0OGthoesxBuvzQyg0Cnl9iT5+5qP9g5jBm8ogfos9ZGsB79pSpWkKOCtnQKAm9bUhdh
-         eP55Hmmlrqntt8SZjlMbut6phumsVchdb0lSgUxnPcTN7Qc1oa+2tqi2JLQ9v3AHQGV9
-         evAjYVYW1IV/xOGj/nJG+UOCZClv19IRVB6bOVlirDbVucpLC6IPI0uWrHBK6XGrF7Hg
-         qi+3QsbPeauFFmkw/Jjq0hz+qedquY0EjzKX3vwbECO2uvl/ZKNaZNn3KDsAc0CsX81O
-         7ESg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=IfKH2CI9M//LkZvjQ2ovL0RNbL5cFQ7ZiAOaiFFFhfo=;
+        b=ibV3kGQKwcinaS1/iTDMsTIAihVjTtojxDgUre25vi954+OrzzCXK8ImxtuxVEAkb2
+         Hg9OL2s+Yf0sIU3ag62n4Ww/agXCDQNz5u+5hwgF3rM8FvjzAS/cv77t3QdhbGi2/mD+
+         0XAUrkKofi8LF/r3ulNzcVqr+YwXdWMoGhBIYA87ahdPZYM6pBWZKbmdU4Nkd0MRshwZ
+         TA5ctc+Tgvmf8HPMTDqH+EPOlDdJv554KFI0zXq3pxu6zIQCOA1h93UhRBD5MSLmuJeD
+         KvMLtcYHgtnubwq5Kasz3jHltnu7vd9PdyRo1xU3wl4I2ZXZnDcU9HfKbs2KU2m5cEhV
+         LH3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=COpNw57lgu0himePeZKRGKWRjP8G0QfB49lG6bBArPo=;
-        b=DoGjZbNDSZ040Kr8AjE8O1uOdLDNqiqsbeV1D4SighIFbtbNxYPQcnSv8ZZnpSvICl
-         HFSl6CpGm5Asi0n7QuS1xxxLms3sLoUbTyCcGtR3J8zYxDdLj/ZYyRmHmjg5b+3YDeY9
-         bSd4lxML944YSH8d33Rcx/sBuEFg8ivEBfhr0Ye/LHz8GSw1pLr8jpJdhd5Mojtx6Do5
-         yhaSt4mB38zb0fK/FeZvVonY7Rzn4j3dzQ1lNZ1leISb/wN/ojoUa4pR/JukLjxBHrvR
-         T5emJFYYYlkypIhIi034vOYAf1abdoHCl7SWybXvmT9/fXFK/stzkgko3jr/rB7UN2pl
-         8Ugg==
-X-Gm-Message-State: AOAM532m1xNxHjjYQpvUKiRPvoZZ68zSB3nM0x8hLkW2nW2yJEyBzDu+
-        8fE2VqhhbiBHH3rzgI+jpHK83Q==
-X-Google-Smtp-Source: ABdhPJwMBgmWhN9Jcvz1+nkn4w/kwhwjVuDaMN+onbQcbN0Ysm3OfM9jnty6wEdQqJ/ZbGYwYFTzIA==
-X-Received: by 2002:a17:907:9720:b0:6e8:3613:6224 with SMTP id jg32-20020a170907972000b006e836136224mr20084190ejc.421.1649691844019;
-        Mon, 11 Apr 2022 08:44:04 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=IfKH2CI9M//LkZvjQ2ovL0RNbL5cFQ7ZiAOaiFFFhfo=;
+        b=vHdXi3Eq9KAISomd4FrvupPBOED7RhaoLpALqomLm+7cURZ+GpCXIvy8x44MVRl+Bk
+         kCahrUTuyXRvTlTarf9sYMN1vyJ7cJnDA95ZCXjpuyZEyiuME+UBdFFQ2hchJ9itK0Mq
+         CelLKhhTK7PGMLOb/kkoAJJ1DbdOHi4Wr8Fajzoutvde4SZlXYYJXpVAsmMhr7RQWrK/
+         1/tR/5v7iM0a+ou5kU+1LPE1OVff5vtVSUIhwKNOr/7gF4i5cd2ohZQbMvKGRfLB2aAr
+         PN7QFYLS4uOX/dvVUDlMWJNIA6XK/Jg+GVwcQf6Dz8pz6olSm4XPL6sXVQ0VpmUBCXET
+         fqlA==
+X-Gm-Message-State: AOAM533FjSew81QM54Xr9PIhGrDOvn+NRpcczpvQv9CC66FeTOkqUY35
+        dJSHzM16ouw2Rq+T2bUcwLautA==
+X-Google-Smtp-Source: ABdhPJxV0mCjni3ixH3ficisiO0VgzkFHoIXlralC8ju8qT8Yv+egeY0tlkfaqMPsRNcX8XOEFMyjg==
+X-Received: by 2002:a17:907:628e:b0:6d9:c6fa:6168 with SMTP id nd14-20020a170907628e00b006d9c6fa6168mr30508428ejc.132.1649691845390;
+        Mon, 11 Apr 2022 08:44:05 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id t14-20020a170906608e00b006d1455acc62sm12173177ejj.74.2022.04.11.08.44.02
+        by smtp.gmail.com with ESMTPSA id t14-20020a170906608e00b006d1455acc62sm12173177ejj.74.2022.04.11.08.44.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 08:44:03 -0700 (PDT)
+        Mon, 11 Apr 2022 08:44:04 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -65,10 +65,12 @@ To:     Andy Gross <agross@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [RFC PATCH v2 0/6] ufs: set power domain performance state when scaling gears
-Date:   Mon, 11 Apr 2022 17:43:41 +0200
-Message-Id: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
+Subject: [RFC PATCH v2 1/6] dt-bindings: clock: qcom,gcc-sdm845: add parent power domain
+Date:   Mon, 11 Apr 2022 17:43:42 +0200
+Message-Id: <20220411154347.491396-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
+References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,47 +83,28 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Allow Qualcomm GCC to register its parent power domain (e.g. RPMHPD) to
+properly pass performance state from children.
 
-This is a proof-of-concept/RFC for changing the performance state
-of power rails when scaling gears.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Changes since v1
-================
-1. Patch #1 qcom,gcc-sdm845: fix typo (Stephen).
-2. Patch #2 ufs dt-bindings: not adding Rob's review because patch
-   changed significantly.
-3. PM: add new code for handling multiple clocks.
-4. UFS: deprecate freq-table-hz property and use PM opps instead.
-
-Dependencies
-============
-The UFS patch depends on PM opp adding multiple clock support.
-
-Best regards,
-Krzysztof
-
-Krzysztof Kozlowski (6):
-  dt-bindings: clock: qcom,gcc-sdm845: add parent power domain
-  dt-bindings: opp: accept array of frequencies
-  dt-bindings: ufs: common: add OPP table
-  PM: opp: allow control of multiple clocks
-  ufs: use PM OPP when scaling gears
-  arm64: dts: qcom: sdm845: control RPMHPD performance states with UFS
-
- .../bindings/clock/qcom,gcc-sdm845.yaml       |   3 +
- .../devicetree/bindings/opp/opp-v2-base.yaml  |   8 +
- .../devicetree/bindings/ufs/ufs-common.yaml   |  34 ++-
- arch/arm64/boot/dts/qcom/sdm845.dtsi          |  43 +++-
- drivers/opp/core.c                            | 205 ++++++++++++++----
- drivers/opp/of.c                              |  48 ++++
- drivers/opp/opp.h                             |   9 +-
- drivers/scsi/ufs/ufshcd-pltfrm.c              |  69 ++++++
- drivers/scsi/ufs/ufshcd.c                     | 115 +++++++---
- drivers/scsi/ufs/ufshcd.h                     |   4 +
- include/linux/pm_opp.h                        |  23 ++
- 11 files changed, 475 insertions(+), 86 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+index d902f137ab17..daf7906ebc40 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+@@ -43,6 +43,9 @@ properties:
+   '#reset-cells':
+     const: 1
+ 
++  power-domains:
++    maxItems: 1
++
+   '#power-domain-cells':
+     const: 1
+ 
 -- 
 2.32.0
 
