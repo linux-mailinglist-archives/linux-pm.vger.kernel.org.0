@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F464FC149
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Apr 2022 17:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86E644FC13D
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Apr 2022 17:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348170AbiDKPql (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Apr 2022 11:46:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44458 "EHLO
+        id S1348184AbiDKPqh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Apr 2022 11:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348173AbiDKPqY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Apr 2022 11:46:24 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E4860F7
-        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 08:44:08 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id lc2so11184277ejb.12
-        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 08:44:08 -0700 (PDT)
+        with ESMTP id S1348157AbiDKPqZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Apr 2022 11:46:25 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793AC625F
+        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 08:44:09 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id bh17so31728872ejb.8
+        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 08:44:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=K/VH4iXX/HSvKxY6FnWRf9tFEMBnPZdBMAJ6em5xnqg=;
-        b=UGGTSUjSAL9NJgQLtybygrDJb4vXO3cNduQvPayzRK+bZW0CJAg/czgJYYpwUkCkz/
-         g2sVarYA4gjU4dM3pX/7gZQJJV0Rf3mP673DCCsOSXT2a5wv0OR+lDBY9UIbgVk5fPEj
-         Hmj11yCdw1n7nlh2Iptx3Bjw3oUf27qh5v2nVFKVdT/bcBzwz9jxxJMW1goeUwzgyVa6
-         y8+HnYKi19tDgn18Vk6ieukuQVPeLbijXrNeTGVZNoCKcKPqFQbTUD3bGT/6AxqcrEyj
-         n/nv/lqpTOcTxkcfHs6oaiA3R65VSov7sb/iBdypQzoO4eb+tGYdvmQt4gF5v0KXsvjD
-         Grbw==
+        bh=mbNpbkkEChotn+zfIrEUISzZtq6Ebit9E8w1dEveKi4=;
+        b=aYr0ukfkZGIsCt/4FT/QKR69G8IU6TdAGT0VhxtNMxD/ZM2av3R60rfzy0Lr+z2jqX
+         RNffGh7JAzN/ky5V6U8TCJAnWdy3iGs3KhP04uuK3EugGOnpLwwcGZ2fTIgLFM56bQaF
+         tbuWxvmlORJFEJxu81ME/WoTRcDnrFtKZ4M8HuZecRxEPgqPKITFt+ju1BeHb2YcHKUa
+         iR8iLpWXca6o/Mwk8EvwYFqlUBxH0JRF0IUfHs1g6bPNU08wkfwWhQOP7w/whgOjQjfI
+         YX1kzMwC0NEyR+1iPz3swS1o1S5TWeDzVAip9VKO1Jfd+vnYpKHzQSkH5s+HiHLRM0Jw
+         MFvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=K/VH4iXX/HSvKxY6FnWRf9tFEMBnPZdBMAJ6em5xnqg=;
-        b=bbmbes6IFw/0itYLHY4ex3Y5cBVblqiSg4BzP/4KodBHFktJ843k8MfP/RTPSY+fLQ
-         +dDKMHalmiptdujNnrGdiMmhO1AUDvssFbq3t2tPb6ZPFATDP7Q+PoemMWIWHqTOsbjI
-         +W8olKFZ0n4wqkh+9xd0smz8fD9zKbNjzYZtFL269lV8VU4yGxWbtCFbCsP36/o0lsU9
-         bx3OtWsC6SU9gr63i2d0kGvY6QLqclFWY3zUBJWfTB/mi+r/HMbmbObAfdC2rS2hIDlL
-         /q6AbkCEnbd7ye6tQe3f1MHX4oSWZW8ZO/CxcSCW+VbnrnaN4ODY1V3A5MYpANt39T0P
-         UD2g==
-X-Gm-Message-State: AOAM53328/KjS0At2q8xya8Mz8XgebHiTmtXYWBnoD74NBMbmSqyNbY7
-        5pq2dKTv31SwFE0isZUTDFPktw==
-X-Google-Smtp-Source: ABdhPJyyTzBko5kSxEeXxWHuBtOf1c1YnoIFTwVmCQmEzWG+0S2JVR3bspyNTYSGSf/bPjPbl7Ff2Q==
-X-Received: by 2002:a17:907:7ea3:b0:6e8:92eb:3dcc with SMTP id qb35-20020a1709077ea300b006e892eb3dccmr5019092ejc.75.1649691846674;
-        Mon, 11 Apr 2022 08:44:06 -0700 (PDT)
+        bh=mbNpbkkEChotn+zfIrEUISzZtq6Ebit9E8w1dEveKi4=;
+        b=x6kCA/iUbxwshfYJVn5se5f4tam3SqTsMQhikObPHI6EXCEVU6oYBL3VJnDb//Qbiu
+         nEp7zd16APwwjXuygovy5g9j2coeySBoZzySkAe9mRcRUxG8FIX5fuJWFT9IkAjyBbI5
+         wv0a9cK7B4P15WLM/BJE4MZUZT1ZOFDb6XQWO3VpzcqVTaKy4OnYlr5lhMe0GFdFvXHA
+         2W/3yYNyaZylKiSHakVlUkvsV9GkeqHU1FNEhdZLPFo4TfZyi/pcz0+ppxG97xuVnoFG
+         4igVsvN0nEL3BhtRm1XVbURnuzYLPVM+qg7SrRrz6c0dXH3bG/VcDI96dK0fP40PgIa7
+         BN7w==
+X-Gm-Message-State: AOAM530zEIFgjlHePNY/q/X25frdmJGMHcrkaGjj4Cdqf+2pKn479P8F
+        TtKhfiBI3FM2/bHd46knQqcqXg==
+X-Google-Smtp-Source: ABdhPJwrK+vLq5FHXsKcsbi/1tugMQSwYKotl7aV7TAwegLV/VGDWOX0mMt4H3we7pNjfWm9PA2Pzg==
+X-Received: by 2002:a17:906:d108:b0:6e8:7765:a70b with SMTP id b8-20020a170906d10800b006e87765a70bmr8961267ejz.436.1649691847786;
+        Mon, 11 Apr 2022 08:44:07 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id t14-20020a170906608e00b006d1455acc62sm12173177ejj.74.2022.04.11.08.44.05
+        by smtp.gmail.com with ESMTPSA id t14-20020a170906608e00b006d1455acc62sm12173177ejj.74.2022.04.11.08.44.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 08:44:06 -0700 (PDT)
+        Mon, 11 Apr 2022 08:44:07 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -65,9 +65,9 @@ To:     Andy Gross <agross@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [RFC PATCH v2 2/6] dt-bindings: opp: accept array of frequencies
-Date:   Mon, 11 Apr 2022 17:43:43 +0200
-Message-Id: <20220411154347.491396-3-krzysztof.kozlowski@linaro.org>
+Subject: [RFC PATCH v2 3/6] dt-bindings: ufs: common: add OPP table
+Date:   Mon, 11 Apr 2022 17:43:44 +0200
+Message-Id: <20220411154347.491396-4-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
 References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
@@ -83,34 +83,79 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Devices might need to control several clocks when scaling the frequency
-and voltage.  Allow passing array of clock frequencies, similarly to the
-voltages.
+Except scaling UFS and bus clocks, it's necessary to scale also the
+voltages of regulators or power domain performance state levels.  Adding
+Operating Performance Points table allows to adjust power domain
+performance state, depending on the UFS clock speed.
+
+OPPv2 deprecates previous property limited to clock scaling:
+freq-table-hz.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 8 ++++++++
- 1 file changed, 8 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-index 76c8acd981b3..1d7216008f95 100644
---- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-+++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-@@ -50,6 +50,14 @@ patternProperties:
-           property to uniquely identify the OPP nodes exists. Devices like power
-           domains must have another (implementation dependent) property.
- 
-+          This can be also an array of frequencies for each clock provided to the
-+          device.  In such case value of 0 means the clock frequency should not
-+          be configured for given clock.
-+        minItems: 1
-+        maxItems: 16
-+        items:
-+          maxItems: 1
+---
+
+Not adding Rob's review tag because patch changed significantly.
+---
+ .../devicetree/bindings/ufs/ufs-common.yaml   | 34 +++++++++++++++++--
+ 1 file changed, 31 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/ufs/ufs-common.yaml b/Documentation/devicetree/bindings/ufs/ufs-common.yaml
+index 47a4e9e1a775..d7d2c8a136bb 100644
+--- a/Documentation/devicetree/bindings/ufs/ufs-common.yaml
++++ b/Documentation/devicetree/bindings/ufs/ufs-common.yaml
+@@ -20,11 +20,24 @@ properties:
+       items:
+         - description: Minimum frequency for given clock in Hz
+         - description: Maximum frequency for given clock in Hz
++    deprecated: true
+     description: |
++      Preferred is operating-points-v2.
 +
-       opp-microvolt:
-         description: |
-           Voltage for the OPP
+       Array of <min max> operating frequencies in Hz stored in the same order
+-      as the clocks property. If this property is not defined or a value in the
+-      array is "0" then it is assumed that the frequency is set by the parent
+-      clock or a fixed rate clock source.
++      as the clocks property. If either this property or operating-points-v2 is
++      not defined or a value in the array is "0" then it is assumed that the
++      frequency is set by the parent clock or a fixed rate clock source.
++
++  operating-points-v2:
++    description:
++      Preferred over freq-table-hz.
++      If present, each OPP must contain array of frequencies stored in the same
++      order for each clock.  If clock frequency in the array is "0" then it is
++      assumed that the frequency is set by the parent clock or a fixed rate
++      clock source.
++
++  opp-table: true
+ 
+   interrupts:
+     maxItems: 1
+@@ -75,8 +88,23 @@ properties:
+ 
+ dependencies:
+   freq-table-hz: [ 'clocks' ]
++  operating-points-v2: [ 'clocks', 'clock-names' ]
+ 
+ required:
+   - interrupts
+ 
++allOf:
++  - if:
++      required:
++        - freq-table-hz
++    then:
++      properties:
++        operating-points-v2: false
++  - if:
++      required:
++        - operating-points-v2
++    then:
++      properties:
++        freq-table-hz: false
++
+ additionalProperties: true
 -- 
 2.32.0
 
