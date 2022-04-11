@@ -2,89 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF06D4FB490
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Apr 2022 09:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6FC4FB66C
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Apr 2022 10:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235043AbiDKH0U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Apr 2022 03:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53278 "EHLO
+        id S1343953AbiDKIzP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Apr 2022 04:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbiDKH0T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Apr 2022 03:26:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21B532A
-        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 00:24:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1CED1B80EEB
-        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 07:24:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BE5B6C385A3
-        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 07:24:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649661840;
-        bh=7V1EET/psA0wflZcnUEsHYUQ5ldEyzrzQCyARuzUo8k=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=CUF2QSKI3YY9Fdvvh/QsjIkeGTd2GNk9NQgyYTB3Fln5r86t4poRoV66MBBmMLhpp
-         Uconvu+Czu58Aj19vIHEsveD5Lt5vGxI/30nEpv5D2xRlBmYqFbHQinJlBF1XF5i1b
-         AvwxPC42lRWXoQOTyQRIFoSdYL1Atr0vizmWy92QSAS2hEGQasS0XnCkwRrfelc5SU
-         LsUxJRHRsTzximtYVKcadU3sESQ1QOjG9mVcJEQo9C3NX6Xi9lepmb8CrvjQn7mZVq
-         F5dF5aD2z6osXcSQejHRwONUbzLqpiB4dhfQtrBxJ4zUf+wWled5sCy3TOA36yxnKR
-         hm8Ja7ekzZ9FQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 9B0E4C05F98; Mon, 11 Apr 2022 07:24:00 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 206307] AMD Ryzen CPU frequency monitoring subsystem is
- insufficient
-Date:   Mon, 11 Apr 2022 07:23:59 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: aros@gmx.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: CODE_FIX
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-206307-137361-LVaGvFIcQZ@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-206307-137361@https.bugzilla.kernel.org/>
-References: <bug-206307-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S1343950AbiDKIzK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Apr 2022 04:55:10 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526F53EBA8;
+        Mon, 11 Apr 2022 01:52:51 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id b2-20020a17090a010200b001cb0c78db57so12900874pjb.2;
+        Mon, 11 Apr 2022 01:52:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=Q/paJW9ie5DNXM/d6p+1m3onX+nRzXcgKkbIti8bjJE=;
+        b=KpDoUUVC50cOsIuyNJpgW+RFycUibIju6u/aEuTTHZ1ih8p56PAxFHD069Q0peRT8b
+         JVGYHmne4rEMsecWIxD4tq9E5kBIe3rPN09VeBiEJEzYAMtC/Ic/LL0J0QbrB0aYhfI3
+         89bVV8MgpS2Zej8E0movu8gY3YxoRZ+3EI+aIwADCxS0Q9RA4dlD6w4OHlfW3SFcCtH/
+         c2F1pxqJDbfsK8E6x6czEjqFMlwZRjl55pQpFvYIdlnuHYOH9eHexGnbjKcm4oCOeiij
+         cSoo7orH84EFgAY8Tldl4OC49PoCkr5Qg31IhAZ5ywHtA+pzJLKcLOSJiWMOekpAaT+f
+         9/uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Q/paJW9ie5DNXM/d6p+1m3onX+nRzXcgKkbIti8bjJE=;
+        b=UxfDEle8K5R651EmL5BUc5VDrvVPsghr0V49+LXYbULpdcC9vRLPcZosWZcQf7zAF6
+         7UNcJMGSEBPNc3Tbc6ckxcDU/kDcIWRaMobCSKboVLt4oGAoTAWnfuROXR5MmZ6nw8gz
+         I4OecH39fq754JGyNYtQc1u4p8Z4M6htkq9J4uHhUBSCb8bo+eTJ9iyj+0jWN2tN8Ekh
+         5c5WspGlnDbLt37QY/duBNrv5TEWGUbkuP0tDBahKaUhka5WE+RWYtjcY3HFdPVOIPTW
+         z+f8HYYchHOQ8IWoJbak8ixvLGzRPbyKlSSodqnew4d3PzDwA91TiSqFaBpyibiIwnsS
+         I6lA==
+X-Gm-Message-State: AOAM5327RwVLcFcvbnLsNfwrPLFxRCHag7lG/xq2cEzY9ivvpOJ6p6Q7
+        4Og5C+3mO4ZGdMo//N/dLOI=
+X-Google-Smtp-Source: ABdhPJzkbQcsfDV7LTEJJnM7W8CweM0vo8LWRIcDEFHzuxiT8wwTp34XuevjvN3nh6DXvFzYiQnoYA==
+X-Received: by 2002:a17:902:b183:b0:14f:c266:20d5 with SMTP id s3-20020a170902b18300b0014fc26620d5mr31472235plr.136.1649667170595;
+        Mon, 11 Apr 2022 01:52:50 -0700 (PDT)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id b16-20020a17090a011000b001cb4815d135sm10054057pjb.9.2022.04.11.01.52.47
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 11 Apr 2022 01:52:50 -0700 (PDT)
+From:   Li-hao Kuo <lhjeff911@gmail.com>
+To:     krzk@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
+        amitk@kernel.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     wells.lu@sunplus.com, lh.kuo@sunplus.com,
+        Li-hao Kuo <lhjeff911@gmail.com>
+Subject: [PATCH v7 0/2] Add thermal control driver for Sunplus SP7021 SoC
+Date:   Mon, 11 Apr 2022 16:52:38 +0800
+Message-Id: <cover.1649662002.git.lhjeff911@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D206307
+This is a patch series for thermal driver for Sunplus SP7021 SoC.
 
-Artem S. Tashkinov (aros@gmx.com) changed:
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |CODE_FIX
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
---- Comment #4 from Artem S. Tashkinov (aros@gmx.com) ---
-amd-pstate does that.
+Li-hao Kuo (2):
+  thermal: Add thermal driver for Sunplus SP7021
+  dt-bindings:thermal: Add Sunplus SP7021 schema
 
---=20
-You may reply to this email to add a comment.
+ .../bindings/thermal/sunplus-thermal.yaml          |  43 +++++++
+ MAINTAINERS                                        |   7 ++
+ drivers/thermal/Kconfig                            |  10 ++
+ drivers/thermal/Makefile                           |   1 +
+ drivers/thermal/sunplus_thermal.c                  | 139 +++++++++++++++++++++
+ 5 files changed, 200 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/sunplus-thermal.yaml
+ create mode 100644 drivers/thermal/sunplus_thermal.c
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+-- 
+2.7.4
+
