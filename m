@@ -2,152 +2,255 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4A94FC3E5
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Apr 2022 20:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1504FC4B5
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Apr 2022 21:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245626AbiDKSP3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Apr 2022 14:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49630 "EHLO
+        id S1349445AbiDKTJb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Apr 2022 15:09:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235843AbiDKSP3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Apr 2022 14:15:29 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0A1B85C
-        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 11:13:14 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id s137so12175315pgs.5
-        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 11:13:14 -0700 (PDT)
+        with ESMTP id S233117AbiDKTIn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Apr 2022 15:08:43 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF47E369E2
+        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 12:06:22 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id b188so16779644oia.13
+        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 12:06:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=Jw2w5fc9s7LYCxNyjF4Anw/31mGnF1Xnlp2YCJojif4=;
-        b=zYUmChAbevCzMKAOteYpCt8iCZnXii2/ZAqbsWsSzdO+W6XUiXCDFOfEFJO4LuI29J
-         GRfLdTG71rNc/4fdqQ6qUxbUXZRjAg/2nBe3XM+bYVDggr68EsmbxVGph1uscr1XvI7I
-         H9thhM8YlDLthSuyIVx3oKcri5EMQCZNH7Nx7iBufxmFnXpJjfMSVZ1CC/4i58B1ZoSZ
-         pt68xA/6LSO9ec+sEYg8O1wBSGS4tPWSCfCz0lyB+uncZ0kG0QoNZkTTEmpHD+r/98yR
-         ppY5AdTcH52vSTE6T7ECEiu34gSQpmbib1ZrOqRGx9VPczLU12Rjrt+V9ksp8ODe2T0+
-         LRjQ==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=RdbC5zZXK0Z4kBByxzvgYOMlUHgPAJvUgEWB8Fum0Hc=;
+        b=Ym8Fal3cYlNCBLVdzfE20kPQyKyhsTo96BrRzYwKRtgPDso/8SVHyyvUWtudn9JVVp
+         +6iQeiM14p1K90i2N7kqrjAgNGGAT4fV5qQPfsZ0kTMY89bK5vFxrIv6EW7ytmG3SDge
+         QKP5D0ON66P+E5Lm/S70IF0R27OL9hbyiOXz0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=Jw2w5fc9s7LYCxNyjF4Anw/31mGnF1Xnlp2YCJojif4=;
-        b=7oOsP42XMCYK85c22rlpetc9CKbzlWpmPjYIJpKoi72FKyTvFa3GV8CCLBp8DRQdCD
-         0jgZ/MFuuQxRu5Oj2Infafv1IZznXfJat9PALhwOMo/2suLMTwAbFnvcuBwmssrSA6s7
-         2tW9mW4YNEiRq00fQrjj87ywl0ZUQmKDRlyC6EQPWpjTAylqoo1CqPXZbbF0smh1TRpo
-         bY6qKveWXW+e5W7ATA1zpKst7WaJxyrmdcfR4+hmez8gX8z+AbAeyr/qvTgKgWhlfm3o
-         mbryGNJxCCXrFSb3gH3JN0INlIRm12+SkR5MXH7QDBLRQimADPaLE4FFlwEujDI4UjXT
-         HtAw==
-X-Gm-Message-State: AOAM5338LCI+1VOs2vKDKOqyJza7YcoazqwXxtxwiBEMJLHNMFs5wqwn
-        JogSOy3hI0lfMwGA98sn9ZJiJg==
-X-Google-Smtp-Source: ABdhPJwFnQOXCSv95jf3Mtp1Xp4D95v+w5pquv+GUaB8VSDncNnmKQidKvtg+7Fpe/4FvzhLFVMuQw==
-X-Received: by 2002:a63:6e07:0:b0:398:1337:d99e with SMTP id j7-20020a636e07000000b003981337d99emr27022351pgc.23.1649700793750;
-        Mon, 11 Apr 2022 11:13:13 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id x5-20020aa79a45000000b00504a1c8b75asm17752885pfj.165.2022.04.11.11.13.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 11:13:13 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org
-Cc:     matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
-        roger.lu@mediatek.com, hsinyi@google.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH V2 13/15] cpufreq: mediatek: Link CCI device to CPU
-In-Reply-To: <bc6dd020a1cc3f00f5be2bf2929046b9116bbeef.camel@mediatek.com>
-References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
- <20220408045908.21671-14-rex-bc.chen@mediatek.com>
- <7hfsmn5m9f.fsf@baylibre.com>
- <bc6dd020a1cc3f00f5be2bf2929046b9116bbeef.camel@mediatek.com>
-Date:   Mon, 11 Apr 2022 11:13:12 -0700
-Message-ID: <7hwnfv4hfr.fsf@baylibre.com>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=RdbC5zZXK0Z4kBByxzvgYOMlUHgPAJvUgEWB8Fum0Hc=;
+        b=P6mkOlnyrj5ZYC7wc9G5QikMeF0/RLMpSFee5R4/8pdpN7ue3CrcZOIWxs8bkCcyxM
+         Xy2fllA9Rts8C9hdmfkNhzKlclya/MMrpde6NpWneEHBXv4nYkcYdctY6+vlhDH4ZLbg
+         UzTVmnXcZaoPPbZu6p3xz/b1RPH2BoaWFnppxceX7XZYaAFEEyyJRjhtVVzvoDEUNXbm
+         RfjOmG3NlQS/COxrkgS+AAUAPjYfXHFUIakFGzRF3WT4UPX8MifGKlCkCYiaXZgszEGg
+         VTN3ua/+/nEYXv7pdvI4C5u9jhK+4dwbE639Sz6AJGPD9MnOzAbI4my19hHVPUH7mTba
+         /SVA==
+X-Gm-Message-State: AOAM531XWjC0sMlgEXz7L++jqgoGQOiuuOmgEavfNpXccauBKv0KHaxn
+        OunHYci/LOIwTXc7p4ymRNrgvsN1Nse79JIoq8/kmA==
+X-Google-Smtp-Source: ABdhPJwlBI/fFYx01i38B5hEvQXoeEWMkBRWkDrBkzl4iwCNeX1GWbC4RdmhHPzCP/ubzgsGtJGFozK8iNyTRy06Fyo=
+X-Received: by 2002:aca:bd41:0:b0:2ec:ff42:814f with SMTP id
+ n62-20020acabd41000000b002ecff42814fmr268281oif.63.1649703980184; Mon, 11 Apr
+ 2022 12:06:20 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 11 Apr 2022 12:06:19 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a96a010d-9bd7-f760-3c03-d842feef41aa@linaro.org>
+References: <20211125174751.25317-1-djakov@kernel.org> <CAE-0n51xeigKFS9Zek44HZGD9cdc4Em91aQ5HHzuy7P1FBmfFg@mail.gmail.com>
+ <a96a010d-9bd7-f760-3c03-d842feef41aa@linaro.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Mon, 11 Apr 2022 12:06:19 -0700
+Message-ID: <CAE-0n51-hpG_5O11FbGrHaMr_mN0ZAky8CVzZNmDj29aK8wGog@mail.gmail.com>
+Subject: Re: [PATCH v3] interconnect: qcom: icc-rpmh: Add BCMs to commit list
+ in pre_aggregate
+To:     Alex Elder <elder@linaro.org>, djakov@kernel.org,
+        okukatla@codeaurora.org, quic_mdtipton@quicinc.com
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Mike Tipton <mdtipton@codeaurora.org>, mka@chromium.org,
+        dianders@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
+Quoting Alex Elder (2022-04-11 08:59:07)
+> On 4/5/22 6:00 PM, Stephen Boyd wrote:
+> > Quoting Georgi Djakov (2021-11-25 09:47:51)
+> >> From: Mike Tipton <mdtipton@codeaurora.org>
+> >>
+> >> We're only adding BCMs to the commit list in aggregate(), but there are
+> >> cases where pre_aggregate() is called without subsequently calling
+> >> aggregate(). In particular, in icc_sync_state() when a node with initial
+> >> BW has zero requests. Since BCMs aren't added to the commit list in
+> >> these cases, we don't actually send the zero BW request to HW. So the
+> >> resources remain on unnecessarily.
+> >>
+> >> Add BCMs to the commit list in pre_aggregate() instead, which is always
+> >> called even when there are no requests.
+> >>
+> >> Signed-off-by: Mike Tipton <mdtipton@codeaurora.org>
+> >> [georgi: remove icc_sync_state for platforms with incomplete support]
+> >> Signed-off-by: Georgi Djakov <djakov@kernel.org>
+>
+> I'm back from vacation and am finally giving proper attention to
+> this.  I want to make sure I understand the problem, because there
+> are (at least) two parts to it.
+>
+> - The first problem you observe is that you are not seeing XO
+>    shutdown on suspend on a Lazor device.
+> - You didn't say this directly but I think you are seeing this
+>    on Linux v5.15.y (the 5.15 LTS branch), or perhaps on something
+>    derived from that branch.
 
-> On Fri, 2022-04-08 at 13:54 -0700, Kevin Hilman wrote:
->> Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
->> 
->> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
->> > 
->> > In some MediaTek SoCs, like MT8183, CPU and CCI share the same
->> > power
->> > supplies. Cpufreq needs to check if CCI devfreq exists and wait
->> > until
->> > CCI devfreq ready before scaling frequency.
->> > 
->> > - Add is_ccifreq_ready() to link CCI device to CPI, and CPU will
->> > start
->> >   DVFS when CCI is ready.
->> > - Add platform data for MT8183.
->> > 
->> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
->> 
->> The checks here are not enough, and will lead to unexpected behavior.
->> IIUC, before doing DVFS, you're checking:
->> 
->> 1) if the "cci" DT node is present and
->> 2) if the driver for that device is bound
->> 
->> If both those conditions are not met, you don't actually fail, you
->> just
->> silently do nothing in ->set_target().  As Angelo pointed out also,
->> this
->> is not a good idea, and will be rather confusing to users.
->> 
->> The same thing would happen if the cci DT node was present, but the
->> CCI
->> devfreq driver was disabled.  Silent failure would also be quite
->> unexpected behavior.  Similarily, if the cci DT node is not present
->> at
->> all (like it is in current upstream DT), this CPUfreq driver will
->> silently do nothing.  Not good.
->> 
->> So, this patch needs to handle several scenarios:
->> 
->> 1) CCI DT node not present
->> 
->> In this case, the driver should still operate normally.  With no CCI
->> node, or driver there's no conflict.
->> 
->> 2) CCI DT present/enabled but not yet bound
->> 
->> In this case, you could return -EAGAIN as suggested by Angelo, or
->> maybe
->> better, it should do a deferred probe.
->> 
->> 3) CCI DT present, but driver disabled
->> 
->> This case is similar to (1), this driver should continue to work.
->> 
->> Kevin
->
-> Hello Kevin and Angelo,
->
-> In my review, if we do not get the link or the link status is not
-> correct between cci and cpufreq in target_index, I think it will never
-> established again for this link.
-> Because it's not checked in probe stage.
->
-> So I think we just need to deal with the issue without cci device, and
-> don't expect the link between cci and cpufreq will be connected again.
->
-> If I am wrong, please correct me.
+Yes.
 
-I don't fully understand your questions, but I think what your getting
-at suggest that you might need to use deferred probe to handle the case
-where the ordering of CCI and cpufreq probing is not predictable.
+> - You find that if you back-port (or cherry-pick?) the commit
+>    that landed upstream as b95b668eaaa2 ("interconnect: qcom:
+>    icc-rpmh: Add BCMs to commit list in pre_aggregate
+> "), you
+>    *do* see XO shutdown on suspend, as desired.
 
-Kevin
+Correct.
+
+>
+> Here's what I understand that commit to do:
+> - In some cases, the bus clock managers (BCMs) are configured
+>    by the boot loader so that some interconnects have non-zero
+>    initial bandwidth.
+> - There is no sense in keeping an interconnect active if Linux
+>    has nothing that requires its use.  So we would like Linux to
+>    ensure the configured bandwidth for an *unused* interconnect
+>    is zero.
+> - Prior to that commit, BCM-managed hardware was only queued
+>    to update its configuration when the ->aggregate interconnect
+>    provider function was called.  After that commit, updates were
+>    queued by the ->pre_aggregate provider function.
+
+Also before that commit interconnects are maxed out, which doesn't
+really matter for XO shutdown but it means that we're running faster
+than what the bootloader configures if boot is slower.
+
+> - Unlike the ->aggregate callback, the ->pre_aggregate provider
+>    function queues updates to the hardware configuration whether
+>    or not they have active users.
+> - The result of this commit is that the hardware configuration
+>    for all defined BCM-managed interconnects is updated, and in
+>    particular, the configured bandwidth for unused interconnects
+>    is set to zero.
+
+Yep.
+
+>
+> When unused interconnects are configured for zero bandwidth, they
+> do not require an active main XO clock, and so with this commit
+> it becomes possible for the XO clock to be shut down.
+>
+> And that's why this commit addresses your XO shutdown problem on
+> the Linux 5.15 LTS branch.
+>
+> Is the above an accurate description?
+
+Yeah pretty much. Without the interconnect patch I can't get XO
+shutdown.
+
+>
+> Looking at that branch, I see this commit:  f753067494c27
+> ("Revert "interconnect: qcom: icc-rpmh: Add BCMs to commit
+> list in pre_aggregate"
+> ").  Which shows that an attempt was made
+> to include this commit in the 5.15 LTS branch, but it caused
+> some *other* regressions.  That suggests this might not be
+> easy to fix.
+
+Indeed. The commit was reverted because it broke reboot for me. I see it
+was reintroduced a few months later though when I was eating
+Thanksgiving dinner and I didn't notice until now. Interestingly the
+reboot issue is gone. Here's the crash from back then.
+
+ SError Interrupt on CPU6, code 0xbe000411 -- SError
+ CPU: 6 PID: 8772 Comm: reboot Not tainted 5.14.0-rc5-next-20210810+ #1
+ Hardware name: Google Lazor (rev3+) with KB Backlight (DT)
+ pstate: 004000c9 (nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+ pc : el1_interrupt+0x20/0x60
+ lr : el1h_64_irq_handler+0x18/0x24
+ sp : ffffffc0114139c0
+ x29: ffffffc0114139c0 x28: ffffff808a8b2240 x27: 0000000000000000
+ x26: ffffff80817ec018 x25: ffffffd79e8f0000 x24: ffffffd79e957000
+ x23: 0000000000400009 x22: ffffffd79dac527c x21: ffffffc011413b40
+ x20: ffffffd79d6100f8 x19: ffffffc0114139f0 x18: 0000000000022a07
+ x17: 0000000000000000 x16: ffffffd79dac52e4 x15: ffffff80d291fe80
+ x14: 0000000000000580 x13: 000000000000300c x12: ffffff80b4f7ed10
+ x11: 0000000000000003 x10: 00000000c0000000 x9 : 0000000000000003
+ x8 : 00000000000000c0 x7 : bbbbbbbbbbbbbbbb x6 : 0000000000000001
+ x5 : 0000000000170006 x4 : ffffff80d291bcc0 x3 : ffffffd79e429b41
+ x2 : 0000000000000002 x1 : ffffffd79d6100f8 x0 : ffffffc0114139f0
+ Kernel panic - not syncing: Asynchronous SError Interrupt
+ CPU: 6 PID: 8772 Comm: reboot Not tainted 5.14.0-rc5-next-20210810+ #1
+ Hardware name: Google Lazor (rev3+) with KB Backlight (DT)
+ Call trace:
+  dump_backtrace+0x0/0x1d4
+  show_stack+0x24/0x30
+  dump_stack_lvl+0x64/0x7c
+  dump_stack+0x18/0x38
+  panic+0x150/0x38c
+  nmi_panic+0x88/0xa0
+  arm64_serror_panic+0x74/0x80
+  is_valid_bugaddr+0x0/0x1c
+  el1h_64_error_handler+0x30/0x48
+  el1h_64_error+0x78/0x7c
+  el1_interrupt+0x20/0x60
+  el1h_64_irq_handler+0x18/0x24
+  el1h_64_irq+0x78/0x7c
+  refcount_dec_not_one+0x48/0xb0
+  refcount_dec_and_mutex_lock+0x1c/0xb4
+  ipa_clock_put+0x34/0x74 [ipa]
+  ipa_uc_deconfig+0x4c/0x5c [ipa]
+  ipa_deconfig+0x30/0x90 [ipa]
+  ipa_remove+0xbc/0x11c [ipa]
+  platform_shutdown+0x30/0x3c
+  device_shutdown+0x150/0x208
+  kernel_restart_prepare+0x44/0x50
+
+>
+> ---
+>
+> The second problem you have is exhibited by the IPA driver if
+> the "fix" commit (upstream b95b668eaaa2) is back-ported to the
+> Linux 5.10.y LTS branch (along with some other prerequisite
+> commits).  We can conclude that applying the above commit
+> makes the bandwidth for an unused interconnect (or perhaps
+> the rate for the IPA core clock) get set to zero.  And in that
+> case, an attempt to access IPA hardware leads to the crash you
+> observed.
+>
+> The IPA driver does not implement runtime power management
+> until Linux v5.15.  You later said you thought enabling that
+> might ensure the clock and interconnects were active when
+> needed by the IPA driver, and I concur (but there could be a
+> little more to it).
+
+Is the runtime PM patch series necessary to enable the IPA clk and
+interconnects? Things don't look good on 5.10.y and I'm not sure it will
+be workable. Commit b1d681d8d324 ("interconnect: Add sync state
+support") was introduced in v5.10 and that seems to be the commit that
+broke suspend on Lazor.
+
+>
+> In any case, based on the time stamp in your log, it seems
+> this problem is likely occurring upon the first access to IPA
+> hardware.
+>
+> I have a hunch about what might be happening here.  There is
+> some synchronization that must occur between the AP and modem
+> when IPA is starting up.  Until that synchronization step has
+> completed, we can't allow the IPA network device to be opened.
+
+Is there a commit that implements this? Or how is the synchronization
+done? I can debug more and see if that synchronization is happening.
+
+> In later kernels I think this is precluded, but perhaps in
+> Linux v5.10 it isn't.  Until I look a little more closely I'm
+> not sure what would happen, but it *could* be this.
+>
+> I'm going to look a little how the particular access that
+> caused the crash is prevented in newer kernels.  It could
+> be that back-porting that (or re-implementing it for the
+> older kernel) will address the crash you're seeing.
+>
