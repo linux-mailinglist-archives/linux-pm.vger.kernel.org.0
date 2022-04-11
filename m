@@ -2,160 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3094FB9D3
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Apr 2022 12:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E49E74FBA91
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Apr 2022 13:11:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345642AbiDKKid (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Apr 2022 06:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40446 "EHLO
+        id S244345AbiDKLNh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Apr 2022 07:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345629AbiDKKi3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Apr 2022 06:38:29 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C43343AFC
-        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 03:36:14 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id b21so31053ljf.4
-        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 03:36:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lWbA8BxSlOYVP3LVwiIDtHxC35MchtX1bQhiwUUgIBM=;
-        b=wQZ5G4wbP6asggk3xfZw8FnN5ffLC093ppWdL3I2U0Ii5eh+cP2bkUc5jPU/z/n8VP
-         6fTLvwZu/vYB7UOXSZJipSL1SLu/3fP5wrA5YJQLwpIRaCL0ritC/xdeoKq6Jt8F1dix
-         6t/H2rlxbAH0hAj+8GioML/2lI/jlw94KbL4csTtPG59Whl4ZFO0GnGjWDGBxtiMv2/N
-         vpWW4Qy01T02tBh4jWiNanQKhMgnZ+IPhEKXUfwOvXQxF4m/I6yr0/rnV/w7n8szSz4u
-         2PJnK185zzerZKxrK6on34Ww6HIEwIIMrdL9e2sMg10IbXiJlhLWVVM1qwtSH1HX5D2K
-         q8jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lWbA8BxSlOYVP3LVwiIDtHxC35MchtX1bQhiwUUgIBM=;
-        b=Ok6KX8MqncsG8thABVBxwvuqaUFBJoiQ6aur40f6bhTN/eT+7FpbviSNIfp+t+QPzY
-         rAkfE1UVZS3+Hj3+SUzJERNb9eKvNL0aUxqW9eQ6DyqvAKsPUKUcZPH7sVd7TSGFR/uE
-         6yluXNEWksJoceTvP2Wlh9NPva8EMdtpTAi2EI2XneI2qWF6AW1Fg/VEbp8Zyhz8E1B6
-         9bRAPO6z7nq0hiGAUWfb2jn8OgH1bryg4qOFgMw+2pn3+QkN2UwyQEAYDSpWM9UUKht8
-         mN2SvIaygoLXe8iYOstz4Hw6lZwcIvyq3cZAN8NAZoI7zB1Jlhj0aXByd/R2H1kIPIBV
-         FMMQ==
-X-Gm-Message-State: AOAM530LmV3bznnxp+CUivNSkGBV8jddwNN7itjp8B21yzQfz/JB63M/
-        XyUF7RuEi9q1WyAkyx0sH9XebWoaZbQujCkEGpo6BQ==
-X-Google-Smtp-Source: ABdhPJzMSB6szqj7+JrFClK5+oBXYA0BTO3VojX36KJWRQfEbbmK9WnDf60M+AqYlDUEuv1kX2aRaWUgyewAkiIWS94=
-X-Received: by 2002:a2e:9048:0:b0:249:78bb:375e with SMTP id
- n8-20020a2e9048000000b0024978bb375emr20336046ljg.229.1649673372244; Mon, 11
- Apr 2022 03:36:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <1836398.tdWV9SEqCh@kreacher> <CAPDyKFoop_mtWV0i+fH8GSmaxbPCyCPmOeNi6GuK5Qrj7ZVo1g@mail.gmail.com>
- <CAJZ5v0geG77Npdy_Ae7XnpWukPPSJ1nE0DFF-vbJViKj6GtCWA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0geG77Npdy_Ae7XnpWukPPSJ1nE0DFF-vbJViKj6GtCWA@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 11 Apr 2022 12:35:35 +0200
-Message-ID: <CAPDyKFo9t__WV00yp5gt+M0BhYtgJU2HmKXF2fXEDtjvSEUhhw@mail.gmail.com>
-Subject: Re: [PATCH v1] PM: runtime: Avoid device usage count underflows
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
+        with ESMTP id S1346023AbiDKLNA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Apr 2022 07:13:00 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2173BE34;
+        Mon, 11 Apr 2022 04:09:52 -0700 (PDT)
+X-UUID: 4d1ee65a5a024114b512a6064079f27b-20220411
+X-UUID: 4d1ee65a5a024114b512a6064079f27b-20220411
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1431660548; Mon, 11 Apr 2022 19:09:46 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 11 Apr 2022 19:09:45 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 11 Apr 2022 19:09:44 +0800
+Message-ID: <5c6dc5ed28c64f62b66e7b68b54c342b63e42d42.camel@mediatek.com>
+Subject: Re: [PATCH V2 15/15] cpufreq: mediatek: Use device print to show
+ logs
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <rafael@kernel.org>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
+        <roger.lu@mediatek.com>, <hsinyi@google.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Mon, 11 Apr 2022 19:09:44 +0800
+In-Reply-To: <20220411032922.yj4p42is5ky6bgau@vireshk-i7>
+References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
+         <20220408045908.21671-16-rex-bc.chen@mediatek.com>
+         <20220411032922.yj4p42is5ky6bgau@vireshk-i7>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 8 Apr 2022 at 19:05, Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Fri, Apr 8, 2022 at 4:05 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> >
-> > On Wed, 6 Apr 2022 at 21:03, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> > >
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > A PM-runtime device usage count underflow is potentially critical,
-> > > because it may cause a device to be suspended when it is expected to
-> > > be operational.
-> >
-> > I get the point. Although, perhaps we should also state that it's a
-> > programming problem that we would like to catch and warn about?
->
-> OK, I can add that to the changelog.
->
-> > >
-> > > For this reason, (1) make rpm_check_suspend_allowed() return an error
-> > > when the device usage count is negative to prevent devices from being
-> > > suspended in that case, (2) introduce rpm_drop_usage_count() that will
-> > > detect device usage count underflows, warn about them and fix them up,
-> > > and (3) use it to drop the usage count in a few places instead of
-> > > atomic_dec_and_test().
-> > >
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > ---
-> > >  drivers/base/power/runtime.c |   44 ++++++++++++++++++++++++++++++++++++-------
-> > >  1 file changed, 37 insertions(+), 7 deletions(-)
-> > >
-> > > Index: linux-pm/drivers/base/power/runtime.c
-> > > ===================================================================
-> > > --- linux-pm.orig/drivers/base/power/runtime.c
-> > > +++ linux-pm/drivers/base/power/runtime.c
-> > > @@ -263,7 +263,7 @@ static int rpm_check_suspend_allowed(str
-> > >                 retval = -EINVAL;
-> > >         else if (dev->power.disable_depth > 0)
-> > >                 retval = -EACCES;
-> > > -       else if (atomic_read(&dev->power.usage_count) > 0)
-> > > +       else if (atomic_read(&dev->power.usage_count))
-> > >                 retval = -EAGAIN;
-> > >         else if (!dev->power.ignore_children &&
-> > >                         atomic_read(&dev->power.child_count))
-> > > @@ -1039,13 +1039,33 @@ int pm_schedule_suspend(struct device *d
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(pm_schedule_suspend);
-> > >
-> > > +static int rpm_drop_usage_count(struct device *dev)
-> > > +{
-> > > +       int ret;
-> > > +
-> > > +       ret = atomic_sub_return(1, &dev->power.usage_count);
-> > > +       if (ret >= 0)
-> > > +               return ret;
-> > > +
-> > > +       /*
-> > > +        * Because rpm_resume() does not check the usage counter, it will resume
-> > > +        * the device even if the usage counter is 0 or negative, so it is
-> > > +        * sufficient to increment the usage counter here to reverse the change
-> > > +        * made above.
-> > > +        */
-> > > +       atomic_inc(&dev->power.usage_count);
-> >
-> > Rather than this two-step process, couldn't we just do an
-> > "atomic_add_unless(&dev->power.usage_count, -1, 0)" - and check the
-> > return value?
->
-> No, we couldn't, because atomic_add_unless() returns a bool and we
-> need to know the new counter value (and in particular whether or not
-> it is 0).
+On Mon, 2022-04-11 at 08:59 +0530, Viresh Kumar wrote:
+> On 08-04-22, 12:59, Rex-BC Chen wrote:
+> > Replace pr_* with dev_* to show logs.
+> > 
+> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >  drivers/cpufreq/mediatek-cpufreq.c | 41 +++++++++++++++++---------
+> > ----
+> >  1 file changed, 23 insertions(+), 18 deletions(-)
+> 
+> One should always arrange the patches in this form:
+> 
+> - Fix bugs first (since they need to be applied first and need to go
+>   to stable kernels too).
+> 
+> - Trivial fixes next, like this one which you chose to be present at
+>   15/15. I would have applied this one right away, if it wasn't he
+>   last one, because of which we have conflicts now.
+> 
+> - Non-trivial patches later, so reviews on them don't affect other
+>   patches.
+> 
+Hello Viresh,
 
-atomic_add_unless(&dev->power.usage_count, -1, 0) would return true as
-long as the counter value is greater than 0.
+Thanks for your review and suggestions.
+I will put this patch to first in next version.
 
-If the counter has become 0, atomic_add_unless() would return false
-and not continue to decrease the value below zero. Isn't this exactly
-what we want?
+BRs,
+Rex
 
->
-> I thought that it would be better to do the extra access in the
-> failing case only.
->
-> > > +       dev_warn(dev, "Runtime PM usage count underflow!\n");
-> > > +       return -EINVAL;
-> > > +}
-> > > +
-> >
-> > [...]
-
-Kind regards
-Uffe
