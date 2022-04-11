@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B46C04FB22A
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Apr 2022 05:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 507584FB22F
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Apr 2022 05:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239871AbiDKDMg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 10 Apr 2022 23:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
+        id S241451AbiDKDOw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 10 Apr 2022 23:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244484AbiDKDMb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Apr 2022 23:12:31 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9194C2F396
-        for <linux-pm@vger.kernel.org>; Sun, 10 Apr 2022 20:10:18 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id s137so10281401pgs.5
-        for <linux-pm@vger.kernel.org>; Sun, 10 Apr 2022 20:10:18 -0700 (PDT)
+        with ESMTP id S236397AbiDKDOw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 10 Apr 2022 23:14:52 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501522F3A9
+        for <linux-pm@vger.kernel.org>; Sun, 10 Apr 2022 20:12:34 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id p25so6680609pfn.13
+        for <linux-pm@vger.kernel.org>; Sun, 10 Apr 2022 20:12:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=CVRkw5t01Nmk7+snBxeMb6nwWxRUV60F+573FtVvM4g=;
-        b=rW8dhQVTF8QXZlGn920I+WmVa8D4tfousyRnOKkpTEyItN4m8iub7IdWlSPz3yhhX4
-         Av5Z01m90bIWD2j18yFGtIKqUPH7vPASznvVdTGPPj08sv7TFQibmQlIm6vU02f+iu6s
-         e5zZCICOyquFz9LECrvqnLGIiQKNq1hnAnOCfs7T7Umqf9Ta4gdljRbKwVEoz7MwuKMr
-         omgbvQC12sHZSjdSBuJS5865uamehhxSvk8z9x/pmH7YUuobSXms14+vRkoY8LVTdXxY
-         VFj3Tb7r0rFOV8tmMePPd2fkmdo5ecWjKwg4/C/jWEwrHIDi2gp9ketaR6tk1zOa+mBF
-         0asA==
+        bh=4FweITrSlHFF8T41iquggp7nE6Dquo+9YQPpdFHzPKU=;
+        b=GypPvonW5HGwxDqfRdhsoR1pu48eFklX/yZx/MWagF00T97pzhDJFsYlGg5f+KTFgh
+         WOfXaeIsWYi7uatvo49iSW4In4/Pfq8IRvB5tbHHsYynEFiHsRUtC+u4tGyICoCVYICo
+         VTSkgS3tIqAuuQFQGBYBoYKbdFGVeIvVfnfMGfCLNZDEPCt/FZi/fBJpEyLy1/gysQGr
+         rDS+p2nGWZnOmqj0i8MQvCh3wFZ9du22HrXFl0rg7LMubWskvX9nFQU9anCx2HasXbWe
+         mKhYebrkQ9d3tadepeR347AY/xF39yXmgyfjll5DsXS0L8ACKF6KPR5pA3PTeulyLsg0
+         eF4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=CVRkw5t01Nmk7+snBxeMb6nwWxRUV60F+573FtVvM4g=;
-        b=1gL3sXS8MSY04Q27r4zfeVL/SylSIYA66bntkLWP6hYvHfDv7P7KNN0r5eKOJvWVzJ
-         h9EjayKRtFzAtom1T1io6kD1JEICvKnX4+CJx3tGJMM8S4oi1knYb3ri2MAhVwH7zAkK
-         c9Hb6EWPMkbEeUlfyxW9Od4/so6uwusSoszCftrZR2XLAjyA3vhT/f1+u6dlxmi89xE+
-         7f/dyd9ylM5ZUcOyezmpKox6mgez+C91kSnnip+2uIA6H/DxzTxYeQr2dhHlA+nO2P0t
-         oKR/1cpzUyIKHKSBAr10BNO/V4ufkQkKLaizqVC6yeo4FuVDZIdZUeyB9T04qvnNlr2P
-         pOxg==
-X-Gm-Message-State: AOAM531kx1UhZtte3bAZsngLY6fPr+mAQMSnZ5ACYECBI9cwY2nTKRkF
-        PTFY6ey/TbYOdtdgItooEQGuuQ==
-X-Google-Smtp-Source: ABdhPJxg4yYcjh2Dq5/RErpsuz/VEb4T1OWkzBJyXOmI8/phcTmcB+ZGdOOv6tCpGAqTuazx/k7KXw==
-X-Received: by 2002:a05:6a02:19c:b0:399:3007:c8fb with SMTP id bj28-20020a056a02019c00b003993007c8fbmr24674158pgb.571.1649646617709;
-        Sun, 10 Apr 2022 20:10:17 -0700 (PDT)
+        bh=4FweITrSlHFF8T41iquggp7nE6Dquo+9YQPpdFHzPKU=;
+        b=FPgv2EhZVy774Z6LySos7GapPSZ4DYLCW0z0+LpaU/A/QkEi1S+AKA0b/4TFC7cO4Z
+         qJ9K+q4a9aejTJ05NLe0/HIvp64nmAF6/REDamrleOyhhzjlRvo4LVO5XJxLt1nQuJ5k
+         yRUW1vOL+Jqsur9uvPCdgBGd4OMhYKjwtAVWM0A70hH8RR25IEZ9fdDUg9zRHzYk5i1B
+         zrcww+z63zPpvvD/Kd/QmJTnGyjCPaopWwOoE9NER1eEo6rEKFaJTGExOP60AinygVj+
+         GfZHxqECROJaccBsNMrJhTAypQrpoNftw7BgqRWs5BiLoul7ak5eJsHm03sfOofV/9tF
+         Dk5Q==
+X-Gm-Message-State: AOAM533xOl/uiocbXMyfx9AsyYgNiJHaDgXA71cOsy2lMfeAUHMISL5b
+        0qL1CTQ2bTuYLt6oKYCmejaoCA==
+X-Google-Smtp-Source: ABdhPJxsiF8kac/tEGtYUkxNeBvi1f3kf2zTQbgI7Om4gzBJmOXMynu40++VGaL6JdsziqdX0aE4Ng==
+X-Received: by 2002:a05:6a00:174a:b0:4fd:ac35:6731 with SMTP id j10-20020a056a00174a00b004fdac356731mr30705575pfc.71.1649646753375;
+        Sun, 10 Apr 2022 20:12:33 -0700 (PDT)
 Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id g14-20020a65580e000000b0039ce0873289sm9445205pgr.84.2022.04.10.20.10.16
+        by smtp.gmail.com with ESMTPSA id t69-20020a638148000000b0039822f39a40sm26348013pgd.25.2022.04.10.20.12.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Apr 2022 20:10:17 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 08:40:15 +0530
+        Sun, 10 Apr 2022 20:12:32 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 08:42:31 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Pierre Gondois <pierre.gondois@arm.com>
 Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
@@ -56,24 +56,26 @@ Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
         Ard Biesheuvel <ardb@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Fuad Tabba <tabba@google.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
         Rob Herring <robh@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] cpufreq: CPPC: Add cppc_cpufreq_search_cpu_data
-Message-ID: <20220411031015.skh3dw6vcbtn5f4u@vireshk-i7>
+Subject: Re: [PATCH v2 3/3] cpufreq: CPPC: Register EM based on efficiency
+ class information
+Message-ID: <20220411031231.noq5yprp5oui3lsx@vireshk-i7>
 References: <20220407081620.1662192-1-pierre.gondois@arm.com>
- <20220407081620.1662192-2-pierre.gondois@arm.com>
+ <20220407081620.1662192-4-pierre.gondois@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220407081620.1662192-2-pierre.gondois@arm.com>
+In-Reply-To: <20220407081620.1662192-4-pierre.gondois@arm.com>
 User-Agent: NeoMutt/20180716-391-311a52
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,61 +84,49 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 07-04-22, 10:16, Pierre Gondois wrote:
-> From: Pierre Gondois <Pierre.Gondois@arm.com>
-> 
-> cppc_cpufreq_get_cpu_data() allocates a new struct cppc_cpudata
-> for the input CPU at each call.
-> 
-> To search the struct associated with a cpu without allocating
-> a new one, add cppc_cpufreq_search_cpu_data().
-> Also add an early prototype.
-> 
-> This will be used in a later patch, when generating artificial
-> performance states to register an artificial Energy Model in the
-> cppc_cpufreq driver and enable the Energy Aware Scheduler for ACPI
-> based systems.
-> 
-> Signed-off-by: Pierre Gondois <Pierre.Gondois@arm.com>
-> ---
->  drivers/cpufreq/cppc_cpufreq.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index 82d370ae6a4a..ffcd9704add2 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -41,6 +41,8 @@
->   */
->  static LIST_HEAD(cpu_data_list);
->  
-> +static struct cppc_cpudata *cppc_cpufreq_search_cpu_data(unsigned int cpu);
-> +
->  static bool boost_supported;
->  
->  struct cppc_workaround_oem_info {
-> @@ -479,6 +481,19 @@ static void cppc_cpufreq_put_cpu_data(struct cpufreq_policy *policy)
->  	policy->driver_data = NULL;
->  }
->  
-> +static struct cppc_cpudata *
-> +cppc_cpufreq_search_cpu_data(unsigned int cpu)
+> +static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
 > +{
-> +	struct cppc_cpudata *iter, *tmp;
+> +	struct cppc_cpudata *cpu_data;
+> +	struct em_data_callback em_cb =
+> +		EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
 > +
-> +	list_for_each_entry_safe(iter, tmp, &cpu_data_list, node) {
-> +		if (cpumask_test_cpu(cpu, iter->shared_cpu_map))
-> +			return iter;
-> +	}
+> +	if (!efficiency_class_populated)
+
+Instead of a new variable for this, what about setting
+cppc_cpufreq_driver.register_em = cppc_cpufreq_register_em, only if
+you were able to populate the efficiency class in the first place ?
+
+> +		return;
 > +
-> +	return NULL;
+> +	cpu_data = cppc_cpufreq_search_cpu_data(policy->cpu);
+> +	em_dev_register_perf_domain(get_cpu_device(policy->cpu),
+> +			get_perf_level_count(policy), &em_cb,
+> +			cpu_data->shared_cpu_map, 0);
 > +}
-
-Did you miss this in cppc_cpufreq_cpu_init() ?
-
-	policy->driver_data = cpu_data;
-
-The data is saved inside the policy and it shouldn't be difficult to
-fetch it from there, instead of going through the list.
+> +
+>  #else
+>  
+>  static unsigned int cppc_cpufreq_get_transition_delay_us(unsigned int cpu)
+> @@ -471,6 +609,9 @@ static int populate_efficiency_class(void)
+>  {
+>  	return 0;
+>  }
+> +static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
+> +{
+> +}
+>  #endif
+>  
+>  
+> @@ -742,6 +883,7 @@ static struct cpufreq_driver cppc_cpufreq_driver = {
+>  	.init = cppc_cpufreq_cpu_init,
+>  	.exit = cppc_cpufreq_cpu_exit,
+>  	.set_boost = cppc_cpufreq_set_boost,
+> +	.register_em = cppc_cpufreq_register_em,
+>  	.attr = cppc_cpufreq_attr,
+>  	.name = "cppc_cpufreq",
+>  };
+> -- 
+> 2.25.1
 
 -- 
 viresh
