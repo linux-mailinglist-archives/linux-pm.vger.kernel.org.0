@@ -2,84 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4714FBF26
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Apr 2022 16:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4924FBFE4
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Apr 2022 17:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347321AbiDKOgQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Apr 2022 10:36:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40586 "EHLO
+        id S241159AbiDKPMH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Apr 2022 11:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347292AbiDKOgP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Apr 2022 10:36:15 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEBF3B2A3;
-        Mon, 11 Apr 2022 07:33:59 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 048c88d2ce66b26f; Mon, 11 Apr 2022 16:33:57 +0200
-Received: from kreacher.localnet (unknown [213.134.175.113])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id CF32266BDED;
-        Mon, 11 Apr 2022 16:33:56 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PCI <linux-pci@vger.kernel.org>
+        with ESMTP id S1347598AbiDKPMG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Apr 2022 11:12:06 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4342DD71;
+        Mon, 11 Apr 2022 08:09:51 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id bh17so31513927ejb.8;
+        Mon, 11 Apr 2022 08:09:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Jk6M0DbfHBN0zLnudjgrB69c9HcXkYUuA3+BM6Jtrw4=;
+        b=A9SlVEDpcfZWlKCkgW4Ii0W+8+t2na/CW7KYHuT3p8rKlo8pXuQjWY1ZB4TlwTOttb
+         YhfsZv0Rv9AKamOEw5VZi8vGk+K1V5OADFVzP8bm6N5PlC9ckXnUnq1ZstXu0KOYPujp
+         iFl0c0DeLRHY+VHguqXnK9wwQbTtGTLbZVD2iHG/lH+yX1x/CxvBhe1F130seUI6TsRY
+         MbslGLrWiyFZdx+VTcwsuixiWtu7+hQwV2XH0AsAVnMHCdprNIFRQN/+cMSx9OhcwHBy
+         uf7QYc1oSUzePBewqV+lPl4wwSLqBjA0UYuYARHMwdHdXNGcbR7HTJItgEYYi798FGro
+         ZlGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Jk6M0DbfHBN0zLnudjgrB69c9HcXkYUuA3+BM6Jtrw4=;
+        b=DdG3ci9BD+bhHZMRMADM0YfT+1u919lQNHyZe0rGGT5DYM6MSsQricCiejCUpn7Jk/
+         n8sbVyJ5cypBgKIBZ+9a9I71+0MWqRWc5QrZY4QSC4FnoztP0m9El78XbsSMRg6CFj1u
+         JIXe34jpgKRcNEfIue03ojjOZvdV3qqKHSIDvX1MV+voOeDN5uezSVR8WXMPrmDCAzLS
+         nFHYgZDDIx2zDP3YZsY+Ah8q8xwAYQSf3z0xIBoZYCz5FsQsgQhfPBgCnQY7/h8wBSrp
+         7Ms4vQg07kiahzMfehM9pRupiD5PyH4l+xyNBS1ytaQ8+MgKKaSNU6PMBQe8GGiBh/h5
+         PEAQ==
+X-Gm-Message-State: AOAM530KtLIaXr3wQS3OJqF6n9lyxbaDfJviA+gh9Vfnr8nnMLM2QvKu
+        5ZlXp2c+6cAidXS0Ee4V5YF0zpSTzOpqmqWrFzf15RLLiD3z9A==
+X-Google-Smtp-Source: ABdhPJzTliG/iioOIcrQyniSG2pOQ+CpW+KIB1/ppsWIrMr0hnnOshu4TzUdgVPi8gVXv+q1QUKI11gbfTJ3e7M3wqU=
+X-Received: by 2002:a17:907:968e:b0:6db:aed5:43c8 with SMTP id
+ hd14-20020a170907968e00b006dbaed543c8mr30659865ejc.636.1649689790278; Mon, 11
+ Apr 2022 08:09:50 -0700 (PDT)
+MIME-Version: 1.0
+References: <1836398.tdWV9SEqCh@kreacher>
+In-Reply-To: <1836398.tdWV9SEqCh@kreacher>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 11 Apr 2022 18:05:37 +0300
+Message-ID: <CAHp75Vc2Lci4ewdosqX4Thm6ME7pKjKw+C+wtUsq2esRM-eXjg@mail.gmail.com>
+Subject: Re: [PATCH v1] PM: runtime: Avoid device usage count underflows
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc:     Linux PM <linux-pm@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH v2 0/9] PCI/PM: Improvements related to device transitions into D0
-Date:   Mon, 11 Apr 2022 16:33:44 +0200
-Message-ID: <8108357.NyiUUSuA9g@kreacher>
-In-Reply-To: <11975904.O9o76ZdvQC@kreacher>
-References: <4419002.LvFx2qVVIh@kreacher> <11975904.O9o76ZdvQC@kreacher>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.175.113
-X-CLIENT-HOSTNAME: 213.134.175.113
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudekiedgjeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeetgefgleetgeduheeugeeikeevudelueelvdeufeejfeffgeefjedugfetfeehhfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrddujeehrdduudefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudejhedruddufedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhptghisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhgvlhhgrggrshes
- khgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhikhgrrdifvghsthgvrhgsvghrgheslhhinhhugidrihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Monday, April 11, 2022 4:17:41 PM CEST Rafael J. Wysocki wrote:
-> Hi All,
-> 
-> On Saturday, April 9, 2022 3:03:14 PM CEST Rafael J. Wysocki wrote:
-> > Hi All,
-> > 
-> > This series supersedes the one at
-> > 
-> > https://lore.kernel.org/linux-pm/4198163.ejJDZkT8p0@kreacher
-> > 
-> > It addresses some potential issues related to PCI device transitions from
-> > low-power states into D0 and makes the related code more straightforward
-> > and so easier to follow.
-> > 
-> > Please refer to the patch changelogs for details.
-> 
-> Here's a v2 of this patch series which is being sent, because I realized that
-> one of the checks in pci_power_up()
+On Wed, Apr 6, 2022 at 11:49 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> A PM-runtime device usage count underflow is potentially critical,
+> because it may cause a device to be suspended when it is expected to
+> be operational.
+>
+> For this reason, (1) make rpm_check_suspend_allowed() return an error
+> when the device usage count is negative to prevent devices from being
+> suspended in that case, (2) introduce rpm_drop_usage_count() that will
+> detect device usage count underflows, warn about them and fix them up,
+> and (3) use it to drop the usage count in a few places instead of
+> atomic_dec_and_test().
 
-This should be pci_set_low_power_state(), sorry for the confusion.
+...
 
-> added by patch [4/7] in v1 was redundant
-> and can be dropped, but that affected the last 3 patches in the series and
-> then I noticed that more improvements were possible and hence the new patches
-> [2/9].
-> 
-> Thanks!
-> 
+> +               retval = rpm_drop_usage_count(dev);
+> +               if (retval > 0) {
+>                         trace_rpm_usage_rcuidle(dev, rpmflags);
+>                         return 0;
+> +               } else if (retval < 0) {
+> +                       return retval;
+>                 }
 
+Can be written in a form
 
+               if (retval < 0)
+                       return retval;
+               if (retval > 0) {
+                       trace_rpm_usage_rcuidle(dev, rpmflags);
+                       return 0;
+               }
 
+...
+
+> +               if (retval > 0) {
+>                         trace_rpm_usage_rcuidle(dev, rpmflags);
+>                         return 0;
+> +               } else if (retval < 0) {
+> +                       return retval;
+>                 }
+
+Ditto.
+
+-- 
+With Best Regards,
+Andy Shevchenko
