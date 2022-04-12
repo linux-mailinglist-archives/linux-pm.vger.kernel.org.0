@@ -2,75 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8EC4FDF78
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Apr 2022 14:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27CBF4FE017
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Apr 2022 14:30:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353671AbiDLMQT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Apr 2022 08:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41304 "EHLO
+        id S1354253AbiDLMVV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Apr 2022 08:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353041AbiDLMPw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Apr 2022 08:15:52 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E788B6DF
-        for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 04:16:23 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id g18so11682509ejc.10
-        for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 04:16:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QftC8yM+rUi2GOJON22Vc2R4NpEgVxs6x2hJpLqwdnc=;
-        b=YiJgoYeBRq9Y21t33IryYjiuDLJTAioEQ2GbYTsR5cTeWCcL0+egkZjsFoKqqyqASX
-         mvHPFm3DGmrcyc2GLutxiyEiei0hcCNw0m7mJS/7wONYLuKhZJ41ReUF9bT9Rd5GQ46f
-         vA2PUVZkMTkeRSLxhIMy9Nz+STf5OG0321tjqe2J0RkqP/io4YuwP2teVrs8ff0xGHjl
-         TG1uklojBCOUxFJTYjSm5gPs6jrn2Ag62gYS5mGZQOXIKVe4HVGxWG8kwYCA3ObVgWC7
-         jEnFQGavM7LdDGKtyWjQVFSWmV7afJq/d/G1C+r4mNp7DUYpvJ30Z3P5LBI/eUFidqvd
-         dDHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QftC8yM+rUi2GOJON22Vc2R4NpEgVxs6x2hJpLqwdnc=;
-        b=TyvTOiNDbR6c5SulNJBi3Hw0opQVpXNGuLdNdfqHs+7v0pxV3sw2agPSgToxY/oDMR
-         vjTZFTp1caD/xjYZnXC88BaNQ6yZbM+bdMwO7Sob99gXtT6xum1rdPSiKVolpt5vMGsR
-         4t0JQQ5RmsT1dNL1s7Rc87RxLuQ5ADT9gBvfdFXeKgpkRelrXpYsOYLgMfp5C/pRjus6
-         ydjJ7BNIrq02HHS4MaMvlIjyW4/AAP3ILVD0UG6LASyeZwNHZ6f6UzzGOtXNpW/1HH9x
-         tlTYlWVEwlS/8fxCaxPwwjRjg2/bN7EUEcQpbIwH7oqavfRnvEJPD+2NZ5+4PMlGwVz7
-         omnA==
-X-Gm-Message-State: AOAM531qqzfuS6lg4yUcTxV3Cjoh0LxWpjXZk3rB0runjly0bq7Nc83t
-        kwhoC9wxHPRPS014GD/v/y/+hTxA+wYFuis6
-X-Google-Smtp-Source: ABdhPJwTG/0ht3PfH8/lq8uPzYm/e2Ao+H/Xa4o6fo8AnoydrKmhd5cCF0GGtULh9uSw1g9jUUd7OA==
-X-Received: by 2002:a17:906:b107:b0:6e0:a25a:af6e with SMTP id u7-20020a170906b10700b006e0a25aaf6emr34159552ejy.359.1649762181893;
-        Tue, 12 Apr 2022 04:16:21 -0700 (PDT)
-Received: from [192.168.0.194] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id e19-20020a056402105300b004162d0b4cbbsm16534904edu.93.2022.04.12.04.16.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 04:16:21 -0700 (PDT)
-Message-ID: <d74cd447-ac2f-92d5-f845-ee62d48cbd3b@linaro.org>
-Date:   Tue, 12 Apr 2022 13:16:20 +0200
+        with ESMTP id S1356222AbiDLMTj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Apr 2022 08:19:39 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB4222F;
+        Tue, 12 Apr 2022 04:24:07 -0700 (PDT)
+X-UUID: d52c9a3afb984682af61dc8ceae6b463-20220412
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:da2e59b6-cda6-484b-ab3f-d7ca1d2f473f,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.4,REQID:da2e59b6-cda6-484b-ab3f-d7ca1d2f473f,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:faefae9,CLOUDID:7baee6a8-d103-4e36-82b9-b0e86991b3df,C
+        OID:IGNORED,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,File:ni
+        l,QS:0,BEC:nil
+X-UUID: d52c9a3afb984682af61dc8ceae6b463-20220412
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 615625054; Tue, 12 Apr 2022 19:24:03 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 12 Apr 2022 19:24:02 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 12 Apr 2022 19:24:02 +0800
+Message-ID: <cc41bd1fba599acf937e73762ae196432f8c72bf.camel@mediatek.com>
+Subject: Re: [PATCH V2 12/15] cpufreq: mediatek: Use maximum voltage in init
+ stage
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
+        <krzk+dt@kernel.org>
+CC:     <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
+        <roger.lu@mediatek.com>, <hsinyi@google.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 12 Apr 2022 19:24:02 +0800
+In-Reply-To: <5f788a8f-7092-19ca-8499-d3626c4a386d@collabora.com>
+References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
+         <20220408045908.21671-13-rex-bc.chen@mediatek.com>
+         <5f788a8f-7092-19ca-8499-d3626c4a386d@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 2/2] interconnect: qcom: Add SDX65 interconnect provider
- driver
-Content-Language: en-US
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        bjorn.andersson@linaro.org, djakov@kernel.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org
-Cc:     manivannan.sadhasivam@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1649740053-14507-1-git-send-email-quic_rohiagar@quicinc.com>
- <1649740053-14507-3-git-send-email-quic_rohiagar@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1649740053-14507-3-git-send-email-quic_rohiagar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,94 +71,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/04/2022 07:07, Rohit Agarwal wrote:
-> Add driver for the Qualcomm interconnect buses found in SDX65 based
-> platforms.
+On Fri, 2022-04-08 at 15:37 +0200, AngeloGioacchino Del Regno wrote:
+> Il 08/04/22 06:59, Rex-BC Chen ha scritto:
+> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> > 
+> > Two or more clients may use the same regulator, and it could cause
+> > the
+> > issue of high-freqeuncy-low-voltage.
+> > To prevent this, we use maximum voltage in
+> > mtk_cpu_dvfs_info_init().
+> > 
+> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> 
+> Is this happening for proc-supply (proc_reg)?
+> ...because it looks like it is, so you should send this commit
+> separately
+> and with an appropriate Fixes: tag.
 
-Thank you for your patch. There is something to discuss/improve.
+Hello Angelo,
 
-> +
-> +static struct qcom_icc_bcm *system_noc_bcms[] = {
+The commit message is not clear.
+The clients are cpufreq and mediatek cci.
+I think there is no any error before introducing mediatek cci into
+cpufreq.
 
-It can be array of const pointers, if you rebase on this:
-"interconnect: qcom: constify icc_node pointers"
-(I just sent it but I am not sure if it made it to the lists)
+The order of this patch should be after "cpufreq: mediatek: Link CCI
+device to CPU".
 
-> +	&bcm_ce0,
-> +	&bcm_pn0,
-> +	&bcm_pn1,
-> +	&bcm_pn2,
-> +	&bcm_pn3,
-> +	&bcm_pn4,
-> +	&bcm_sn0,
-> +	&bcm_sn1,
-> +	&bcm_sn2,
-> +	&bcm_sn3,
-> +	&bcm_sn5,
-> +	&bcm_sn6,
-> +	&bcm_sn7,
-> +	&bcm_sn8,
-> +	&bcm_sn9,
-> +	&bcm_sn10,
-> +};
-> +
-> +static struct qcom_icc_node *system_noc_nodes[] = {
+If so, I will also correct the commit message in next version.
 
-The same.
+BRs,
+Rex
 
-
-> +	[MASTER_AUDIO] = &qhm_audio,
-> +	[MASTER_BLSP_1] = &qhm_blsp1,
-> +	[MASTER_QDSS_BAM] = &qhm_qdss_bam,
-> +	[MASTER_QPIC] = &qhm_qpic,
-> +	[MASTER_SNOC_CFG] = &qhm_snoc_cfg,
-> +	[MASTER_SPMI_FETCHER] = &qhm_spmi_fetcher1,
-> +	[MASTER_ANOC_SNOC] = &qnm_aggre_noc,
-> +	[MASTER_IPA] = &qnm_ipa,
-> +	[MASTER_MEM_NOC_SNOC] = &qnm_memnoc,
-> +	[MASTER_MEM_NOC_PCIE_SNOC] = &qnm_memnoc_pcie,
-> +	[MASTER_CRYPTO] = &qxm_crypto,
-> +	[MASTER_IPA_PCIE] = &xm_ipa2pcie_slv,
-> +	[MASTER_PCIE_0] = &xm_pcie,
-> +	[MASTER_QDSS_ETR] = &xm_qdss_etr,
-> +	[MASTER_SDCC_1] = &xm_sdc1,
-> +	[MASTER_USB3] = &xm_usb3,
-> +	[SLAVE_AOSS] = &qhs_aoss,
-> +	[SLAVE_APPSS] = &qhs_apss,
-> +	[SLAVE_AUDIO] = &qhs_audio,
-> +	[SLAVE_BLSP_1] = &qhs_blsp1,
-> +	[SLAVE_CLK_CTL] = &qhs_clk_ctl,
-> +	[SLAVE_CRYPTO_0_CFG] = &qhs_crypto0_cfg,
-> +	[SLAVE_CNOC_DDRSS] = &qhs_ddrss_cfg,
-> +	[SLAVE_ECC_CFG] = &qhs_ecc_cfg,
-> +	[SLAVE_IMEM_CFG] = &qhs_imem_cfg,
-> +	[SLAVE_IPA_CFG] = &qhs_ipa,
-> +	[SLAVE_CNOC_MSS] = &qhs_mss_cfg,
-> +	[SLAVE_PCIE_PARF] = &qhs_pcie_parf,
-> +	[SLAVE_PDM] = &qhs_pdm,
-> +	[SLAVE_PRNG] = &qhs_prng,
-> +	[SLAVE_QDSS_CFG] = &qhs_qdss_cfg,
-> +	[SLAVE_QPIC] = &qhs_qpic,
-> +	[SLAVE_SDCC_1] = &qhs_sdc1,
-> +	[SLAVE_SNOC_CFG] = &qhs_snoc_cfg,
-> +	[SLAVE_SPMI_FETCHER] = &qhs_spmi_fetcher,
-> +	[SLAVE_SPMI_VGI_COEX] = &qhs_spmi_vgi_coex,
-> +	[SLAVE_TCSR] = &qhs_tcsr,
-> +	[SLAVE_TLMM] = &qhs_tlmm,
-> +	[SLAVE_USB3] = &qhs_usb3,
-> +	[SLAVE_USB3_PHY_CFG] = &qhs_usb3_phy,
-> +	[SLAVE_ANOC_SNOC] = &qns_aggre_noc,
-> +	[SLAVE_SNOC_MEM_NOC_GC] = &qns_snoc_memnoc,
-> +	[SLAVE_IMEM] = &qxs_imem,
-> +	[SLAVE_SERVICE_SNOC] = &srvc_snoc,
-> +	[SLAVE_PCIE_0] = &xs_pcie,
-> +	[SLAVE_QDSS_STM] = &xs_qdss_stm,
-> +	[SLAVE_TCU] = &xs_sys_tcu_cfg,
-> +};
-> +
-> +static struct qcom_icc_desc sdx65_system_noc = {
-
-All these structures can be const.
-
-Best regards,
-Krzysztof
