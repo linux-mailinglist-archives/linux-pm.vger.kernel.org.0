@@ -2,166 +2,241 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 718D04FEB2F
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 01:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C61CB4FEB9B
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 01:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiDLXXP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Apr 2022 19:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51722 "EHLO
+        id S229469AbiDLXtU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Apr 2022 19:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiDLXWK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Apr 2022 19:22:10 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874F9B7C53
-        for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 15:54:34 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id g21so3738iom.13
-        for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 15:54:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=MaajJ7zkusbdyV+RdrDWlPFgB58TUS+DORUYk8eoF/g=;
-        b=TpMgOcPtmuIEVvJX34jqYwBQYhcPH4AwL++lPtPYrkCRFm0qyCX22W/igvzfTVH6GB
-         VzYY3AENRPq9ySRLJLGfFhPfdusH887EgeBWOdxzzyC4DZLzPq3BbzMoZOmWY19HaVJb
-         wJddEZjtM1WV/aQSeMCx7bqCYubjb+JjDfK17lLjXpP3+Oq3o+t+FuzotOsPIqVVUtqO
-         um5r4T561F+7sDEm1aOCydynELHNNSqN0XFrMWuiGx64Yry9cnYcVyjmNqQrycTXepDI
-         4PfsGLt95uzX9LcJpsEE2GsM7LtUFnAYiG81jVc2xVev1QO3SUTu16WUUJwuHZFDRZeR
-         a+/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MaajJ7zkusbdyV+RdrDWlPFgB58TUS+DORUYk8eoF/g=;
-        b=mxSPzQec1ragWLHShNKEm7wesa8SqtvKmEbdu+fR99wdRCwSFTl5UyoP8c7DSL9vAD
-         Ws3XhcecBoqeGSgKE12UQ2L0m3hrqDkLG5I69zRlN5kVoQOv55iqK0lPvE7VnfZIPsAv
-         CbJPSKDnTiV8svnx+Yi5Tg+DDhklF5jXeEIRbmF8+R68l6fPV00D92RNBC3VQ4SVCBSS
-         ePq4HSyrgM/7tC7fGI3pNOKiWXxupTY1x9tqH8Y62HYrFWDXfN22m7gq592p0v4R711j
-         0GhKoVh93S5TewRDOWKCET1DjXNG8lp1j71PyCq+nds4HXpERadtMvW3Of9nRjL9fhoq
-         l8NQ==
-X-Gm-Message-State: AOAM530P0pwR2f299L4wf7+9YgfxBFCm/XHV1neVNUDPcMlAfa2Ntabj
-        HhLeZLhs1BJ/uonQDdjHaoGOrQ==
-X-Google-Smtp-Source: ABdhPJynMnh8eNdL98xX4EGcrl1aaCQc33c+Db4cAoy4ethF1nhI+kebfx0eGyR/bfWBZ5djz+A8FA==
-X-Received: by 2002:a02:c019:0:b0:326:15e9:c97e with SMTP id y25-20020a02c019000000b0032615e9c97emr8299003jai.158.1649804073909;
-        Tue, 12 Apr 2022 15:54:33 -0700 (PDT)
-Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id h24-20020a6bfb18000000b006497692016bsm22522527iog.15.2022.04.12.15.54.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 15:54:33 -0700 (PDT)
-Message-ID: <9e92bd27-c7b8-b3c2-6db5-09fe56bbc84e@linaro.org>
-Date:   Tue, 12 Apr 2022 17:54:31 -0500
+        with ESMTP id S231473AbiDLXs7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Apr 2022 19:48:59 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A564A15A0E;
+        Tue, 12 Apr 2022 16:44:05 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23CNi0Hw051029;
+        Tue, 12 Apr 2022 18:44:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1649807041;
+        bh=oc+HIh97XfczM9ecJOWeQVZz2RDSA8zgm3GE8d06OmM=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=DlBdKv2q02c0VTjJEKmcvt3g5TKP22WKCUxl9FvtuZ9uJMMp9oTh+nGeO62Pak96u
+         gMHdR/fd1OGtxe2IZdfJRlZNkg04QM3w38kxNC21UgpnN9ZMpBJEh5ciOMQAGYK09d
+         vaIF3N6yLT61U73WOiv8gk9fv/qzFS2/tsNY7cII=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23CNi0af047739
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 12 Apr 2022 18:44:00 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 12
+ Apr 2022 18:44:00 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 12 Apr 2022 18:44:00 -0500
+Received: from [10.250.234.106] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23CNhvxL019743;
+        Tue, 12 Apr 2022 18:43:58 -0500
+Message-ID: <88c59d74-f251-b444-7b99-71e3fe428482@ti.com>
+Date:   Wed, 13 Apr 2022 05:13:56 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 2/2] interconnect: qcom: sdx55: Drop IP0 interconnects
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v5 2/4] arm64: dts: ti: j721e: Add VTM node
 Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Mike Tipton <quic_mdtipton@quicinc.com>
-References: <20220412220033.1273607-1-swboyd@chromium.org>
- <20220412220033.1273607-3-swboyd@chromium.org>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <20220412220033.1273607-3-swboyd@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Vignesh Raghavendra <vigneshr@ti.com>, <robh+dt@kernel.org>,
+        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <amitk@kernel.org>, <kristo@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220412101409.7980-1-j-keerthy@ti.com>
+ <20220412101409.7980-3-j-keerthy@ti.com>
+ <c1c2dc5b-5958-2b34-a963-6248e2817ca7@ti.com>
+From:   "J, KEERTHY" <j-keerthy@ti.com>
+In-Reply-To: <c1c2dc5b-5958-2b34-a963-6248e2817ca7@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 4/12/22 5:00 PM, Stephen Boyd wrote:
-> Similar to the sc7180 commit, let's drop the IP0 interconnects here
-> because the IP0 resource is also used in the clk-rpmh driver on sdx55.
-> It's bad to have the clk framework and interconnect framework control
-> the same RPMh resource without any coordination. The rpmh driver in the
-> kernel doesn't aggregate resources between clients either, so leaving
-> control to clk-rpmh avoids any issues with unused interconnects turning
-> off IP0 behind the back of the clk framework.
+
+
+On 4/12/2022 10:39 PM, Vignesh Raghavendra wrote:
+> Hi Keerthy
 > 
-> Cc: Alex Elder <elder@linaro.org>
-> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Taniya Das <quic_tdas@quicinc.com>
-> Cc: Mike Tipton <quic_mdtipton@quicinc.com>
-> Fixes: b2150cab9a97 ("clk: qcom: rpmh: add support for SDX55 rpmh IPA clock")
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-
-Looks good.
-
-Reviewed-by: Alex Elder <elder@linaro.org>
-
-> ---
->   drivers/interconnect/qcom/sdx55.c | 21 ---------------------
->   1 file changed, 21 deletions(-)
+> On 12/04/22 3:44 pm, Keerthy wrote:
+>> VTM stands for Voltage Thermal Management
+>>
+>> Signed-off-by: Keerthy <j-keerthy@ti.com>
+>> ---
+>>   .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |  9 +++
+>>   arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi  | 73 +++++++++++++++++++
+>>   arch/arm64/boot/dts/ti/k3-j721e.dtsi          |  4 +
+>>   3 files changed, 86 insertions(+)
+>>   create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
+>>
+>> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
+>> index b4972dfb7da8..6290f563b8e7 100644
+>> --- a/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
+>> +++ b/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
+>> @@ -418,4 +418,13 @@
+>>   		interrupt-names = "int0", "int1";
+>>   		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
+>>   	};
+>> +
+>> +	wkup_vtm0: wkup_vtm0@42040000 {
+>> +		compatible = "ti,j721e-vtm";
+>> +		reg = <0x0 0x42040000 0x0 0x350>,
+>> +			<0x0 0x42050000 0x0 0x350>,
+>> +			<0x0 0x43000300 0x0 0x10>;
 > 
-> diff --git a/drivers/interconnect/qcom/sdx55.c b/drivers/interconnect/qcom/sdx55.c
-> index 03d604f84cc5..e3ac25a997b7 100644
-> --- a/drivers/interconnect/qcom/sdx55.c
-> +++ b/drivers/interconnect/qcom/sdx55.c
-> @@ -18,7 +18,6 @@
->   #include "icc-rpmh.h"
->   #include "sdx55.h"
->   
-> -DEFINE_QNODE(ipa_core_master, SDX55_MASTER_IPA_CORE, 1, 8, SDX55_SLAVE_IPA_CORE);
->   DEFINE_QNODE(llcc_mc, SDX55_MASTER_LLCC, 4, 4, SDX55_SLAVE_EBI_CH0);
->   DEFINE_QNODE(acm_tcu, SDX55_MASTER_TCU_0, 1, 8, SDX55_SLAVE_LLCC, SDX55_SLAVE_MEM_NOC_SNOC, SDX55_SLAVE_MEM_NOC_PCIE_SNOC);
->   DEFINE_QNODE(qnm_snoc_gc, SDX55_MASTER_SNOC_GC_MEM_NOC, 1, 8, SDX55_SLAVE_LLCC);
-> @@ -40,7 +39,6 @@ DEFINE_QNODE(xm_pcie, SDX55_MASTER_PCIE, 1, 8, SDX55_SLAVE_ANOC_SNOC);
->   DEFINE_QNODE(xm_qdss_etr, SDX55_MASTER_QDSS_ETR, 1, 8, SDX55_SLAVE_SNOC_CFG, SDX55_SLAVE_EMAC_CFG, SDX55_SLAVE_USB3, SDX55_SLAVE_AOSS, SDX55_SLAVE_SPMI_FETCHER, SDX55_SLAVE_QDSS_CFG, SDX55_SLAVE_PDM, SDX55_SLAVE_SNOC_MEM_NOC_GC, SDX55_SLAVE_TCSR, SDX55_SLAVE_CNOC_DDRSS, SDX55_SLAVE_SPMI_VGI_COEX, SDX55_SLAVE_QPIC, SDX55_SLAVE_OCIMEM, SDX55_SLAVE_IPA_CFG, SDX55_SLAVE_USB3_PHY_CFG, SDX55_SLAVE_AOP, SDX55_SLAVE_BLSP_1, SDX55_SLAVE_SDCC_1, SDX55_SLAVE_CNOC_MSS, SDX55_SLAVE_PCIE_PARF, SDX55_SLAVE_ECC_CFG, SDX55_SLAVE_AUDIO, SDX55_SLAVE_AOSS, SDX55_SLAVE_PRNG, SDX55_SLAVE_CRYPTO_0_CFG, SDX55_SLAVE_TCU, SDX55_SLAVE_CLK_CTL, SDX55_SLAVE_IMEM_CFG);
->   DEFINE_QNODE(xm_sdc1, SDX55_MASTER_SDCC_1, 1, 8, SDX55_SLAVE_AOSS, SDX55_SLAVE_IPA_CFG, SDX55_SLAVE_ANOC_SNOC, SDX55_SLAVE_AOP, SDX55_SLAVE_AUDIO);
->   DEFINE_QNODE(xm_usb3, SDX55_MASTER_USB3, 1, 8, SDX55_SLAVE_ANOC_SNOC);
-> -DEFINE_QNODE(ipa_core_slave, SDX55_SLAVE_IPA_CORE, 1, 8);
->   DEFINE_QNODE(ebi, SDX55_SLAVE_EBI_CH0, 1, 4);
->   DEFINE_QNODE(qns_llcc, SDX55_SLAVE_LLCC, 1, 16, SDX55_SLAVE_EBI_CH0);
->   DEFINE_QNODE(qns_memnoc_snoc, SDX55_SLAVE_MEM_NOC_SNOC, 1, 8, SDX55_MASTER_MEM_NOC_SNOC);
-> @@ -82,7 +80,6 @@ DEFINE_QNODE(xs_sys_tcu_cfg, SDX55_SLAVE_TCU, 1, 8);
->   DEFINE_QBCM(bcm_mc0, "MC0", true, &ebi);
->   DEFINE_QBCM(bcm_sh0, "SH0", true, &qns_llcc);
->   DEFINE_QBCM(bcm_ce0, "CE0", false, &qxm_crypto);
-> -DEFINE_QBCM(bcm_ip0, "IP0", false, &ipa_core_slave);
->   DEFINE_QBCM(bcm_pn0, "PN0", false, &qhm_snoc_cfg);
->   DEFINE_QBCM(bcm_sh3, "SH3", false, &xm_apps_rdwr);
->   DEFINE_QBCM(bcm_sh4, "SH4", false, &qns_memnoc_snoc, &qns_sys_pcie);
-> @@ -219,22 +216,6 @@ static const struct qcom_icc_desc sdx55_system_noc = {
->   	.num_bcms = ARRAY_SIZE(system_noc_bcms),
->   };
->   
-> -static struct qcom_icc_bcm *ipa_virt_bcms[] = {
-> -	&bcm_ip0,
-> -};
-> -
-> -static struct qcom_icc_node *ipa_virt_nodes[] = {
-> -	[MASTER_IPA_CORE] = &ipa_core_master,
-> -	[SLAVE_IPA_CORE] = &ipa_core_slave,
-> -};
-> -
-> -static const struct qcom_icc_desc sdx55_ipa_virt = {
-> -	.nodes = ipa_virt_nodes,
-> -	.num_nodes = ARRAY_SIZE(ipa_virt_nodes),
-> -	.bcms = ipa_virt_bcms,
-> -	.num_bcms = ARRAY_SIZE(ipa_virt_bcms),
-> -};
-> -
->   static const struct of_device_id qnoc_of_match[] = {
->   	{ .compatible = "qcom,sdx55-mc-virt",
->   	  .data = &sdx55_mc_virt},
-> @@ -242,8 +223,6 @@ static const struct of_device_id qnoc_of_match[] = {
->   	  .data = &sdx55_mem_noc},
->   	{ .compatible = "qcom,sdx55-system-noc",
->   	  .data = &sdx55_system_noc},
-> -	{ .compatible = "qcom,sdx55-ipa-virt",
-> -	  .data = &sdx55_ipa_virt},
->   	{ }
->   };
->   MODULE_DEVICE_TABLE(of, qnoc_of_match);
+> Please follow convention of using 0x00 as rest of the file:
 
+Okay.
+
+> 
+> 		reg = <0x00 0x42040000 0x00 0x350>,
+> 		....
+> 
+>> +		power-domains = <&k3_pds 154 TI_SCI_PD_EXCLUSIVE>;
+>> +		#thermal-sensor-cells = <1>;
+>> +	};
+>>   };
+>> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
+>> new file mode 100644
+>> index 000000000000..e922042f356f
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
+>> @@ -0,0 +1,73 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +
+>> +#include <dt-bindings/thermal/thermal.h>
+>> +
+>> +wkup_thermal: wkup_thermal {
+>> +	polling-delay-passive = <250>; /* milliseconds */
+>> +	polling-delay = <500>; /* milliseconds */
+>> +	thermal-sensors = <&wkup_vtm0 0>;
+>> +
+>> +	trips {
+>> +		wkup_crit: wkup_crit {
+> 
+> 
+> Here and elsewhere no "-" in node names please.
+
+I believe you meant no "_" ?
+
+> 
+> You can use:
+> 
+> https://github.com/nmenon/kernel_patch_verify
+> kpv -C -n <no of commits>
+> 
+> This catches most issues like above
+
+Okay
+
+> 
+>> +			temperature = <125000>; /* milliCelsius */
+>> +			hysteresis = <2000>; /* milliCelsius */
+>> +			type = "critical";
+>> +		};
+>> +	};
+>> +};
+>> +
+>> +mpu_thermal: mpu_thermal {
+>> +	polling-delay-passive = <250>; /* milliseconds */
+>> +	polling-delay = <500>; /* milliseconds */
+>> +	thermal-sensors = <&wkup_vtm0 1>;
+>> +
+>> +	trips {
+>> +		mpu_crit: mpu_crit {
+>> +			temperature = <125000>; /* milliCelsius */
+>> +			hysteresis = <2000>; /* milliCelsius */
+>> +			type = "critical";
+>> +		};
+>> +	};
+>> +};
+>> +
+>> +c7x_thermal: c7x_thermal {
+>> +	polling-delay-passive = <250>; /* milliseconds */
+>> +	polling-delay = <500>; /* milliseconds */
+>> +	thermal-sensors = <&wkup_vtm0 2>;
+>> +
+>> +	trips {
+>> +		c7x_crit: c7x_crit {
+>> +			temperature = <125000>; /* milliCelsius */
+>> +			hysteresis = <2000>; /* milliCelsius */
+>> +			type = "critical";
+>> +		};
+>> +	};
+>> +};
+>> +
+>> +gpu_thermal: gpu_thermal {
+>> +	polling-delay-passive = <250>; /* milliseconds */
+>> +	polling-delay = <500>; /* milliseconds */
+>> +	thermal-sensors = <&wkup_vtm0 3>;
+>> +
+>> +	trips {
+>> +		gpu_crit: gpu_crit {
+>> +			temperature = <125000>; /* milliCelsius */
+>> +			hysteresis = <2000>; /* milliCelsius */
+>> +			type = "critical";
+>> +		};
+>> +	};
+>> +};
+>> +
+>> +r5f_thermal: r5f_thermal {
+>> +	polling-delay-passive = <250>; /* milliseconds */
+>> +	polling-delay = <500>; /* milliseconds */
+>> +	thermal-sensors = <&wkup_vtm0 4>;
+>> +
+>> +	trips {
+>> +		r5f_crit: r5f_crit {
+>> +			temperature = <125000>; /* milliCelsius */
+>> +			hysteresis = <2000>; /* milliCelsius */
+>> +			type = "critical";
+>> +		};
+>> +	};
+>> +};
+>> diff --git a/arch/arm64/boot/dts/ti/k3-j721e.dtsi b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+>> index 0e23886c9fd1..6979863eb500 100644
+>> --- a/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+>> +++ b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+>> @@ -181,6 +181,10 @@
+>>   				 <0x07 0x00000000 0x07 0x00000000 0x01 0x00000000>; /* FSS OSPI1 data region 3*/
+>>   		};
+>>   	};
+>> +
+>> +	thermal_zones: thermal-zones {
+>> +		#include "k3-j721e-thermal.dtsi"
+>> +	};
+> 
+> Bit weird representation, any reason why thermal-zones {} cannot be
+> moved into k3-j721e-thermal.dtsi?
+
+Okay. This could be moved. This is typically done when we have different 
+zones defined under different dtsi files. Like in the case of 
+omap5/dra7. The same was followed here. You are right this could be 
+moved as we have all the zones under one dtsi.
+
+Regards,
+Keerthy
+
+> 
+>>   };
+>>   
+>>   /* Now include the peripherals for each bus segments */
+> 
+> 
+> Regards
+> Vignesh
