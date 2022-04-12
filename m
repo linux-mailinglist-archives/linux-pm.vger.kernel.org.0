@@ -2,77 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 487394FCC5A
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Apr 2022 04:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3814FCD08
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Apr 2022 05:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234484AbiDLCXJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 11 Apr 2022 22:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56052 "EHLO
+        id S243610AbiDLD2A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 11 Apr 2022 23:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbiDLCXI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Apr 2022 22:23:08 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6832DD6D
-        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 19:20:52 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id 9so20866161iou.5
-        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 19:20:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=XhnTklp0fQG5pWOShkm/danr9fm3RkxrfyE711IIN7k=;
-        b=U+1PDjTuoCGYknyL7HpFT/+ttl3I5qlCt/8Mw0EsMBgbZbMJ6dY9XpX0AEDK/+ckiv
-         m+cjSCPj7jOrvat0rklcSnY5jOA/wzz/ufNzlNGRXlzcn4CsWC5NEicUGTo+Rwf6F8zd
-         FRdcufcaJ38zz9IMVSNqOof4U8mVxnENoHykvzkzePsZydnb1iBTQCQr2rK7KZ65sjgL
-         UOnhFDCDAGpGXtTc5bYEWnD6avl+i3GZ65Fgo+IV2hSMaiTF1lWtcuim7/yYPKP8Rhoa
-         1+CbeQ6uCFEVCaMYFfI9CbOjoH1R91hjUfE9+ZXYCzhQYurJoO+i6e/ALGqKb0WfKU1G
-         5q2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XhnTklp0fQG5pWOShkm/danr9fm3RkxrfyE711IIN7k=;
-        b=XeLftFnRWMspTAkcuHx0LqPgSFeYVeZgT68NwooLpoetjvbL9YSkLdJML3+e9DdDLI
-         FYPhMeLr2AxPWpj2GoDFuCVAx10jx5XyEtmAmdsGEUHRsLSLHj6xlP9NoPd9Cb/FDd0F
-         mwUqoOuk7QhDWE7vck4P8KLOz49xENbKaE3vN3j2PndEIelzJuy+zRDNU+Hla7FdgxJo
-         T6Fdkt2zVTxxXe3EyvL/mhJC+ceiAAjQnpfuM3/1ry6cVfGNjbqn6iKdyymOMeBvjvEs
-         5Q2dmTSzckvhkTRTXr6U9Q3RaXlOlP/6/EJy3sqRmaVw1LOe6m2LTgriANLiRqG3ItAV
-         hJFA==
-X-Gm-Message-State: AOAM531GYFD0lHWyXYlvgM53f4WQi498BaAgyf21ioH1/iVWT8BFYz0m
-        sATOB0+b4Hs8SNZ9HZWXQmZ9OQ==
-X-Google-Smtp-Source: ABdhPJzhpeEsiMfRJacURjg0vZNsByvJdMIjOgp3eU1Kxs8hl8gYMXtT8CDzZ9u90TPydF5CXiMnxQ==
-X-Received: by 2002:a05:6602:134f:b0:63c:a7ba:e8d with SMTP id i15-20020a056602134f00b0063ca7ba0e8dmr15081382iov.180.1649730051372;
-        Mon, 11 Apr 2022 19:20:51 -0700 (PDT)
-Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id a5-20020a056e020e0500b002caca72891fsm654390ilk.27.2022.04.11.19.20.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 19:20:50 -0700 (PDT)
-Message-ID: <d39cc8a1-ca52-e902-e761-35e06a67aba9@linaro.org>
-Date:   Mon, 11 Apr 2022 21:20:49 -0500
+        with ESMTP id S238657AbiDLD17 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 11 Apr 2022 23:27:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1072E9D4
+        for <linux-pm@vger.kernel.org>; Mon, 11 Apr 2022 20:25:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3859CB81996
+        for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 03:25:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D593FC385AA
+        for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 03:25:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649733939;
+        bh=0AeTsdn5JUlYy+mumSOkOuv+4Y7iySPU+LMX1NV9T9U=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=IBUFwR0THcfvbLWI9tkRl69/vlA69XqDMMtqb4rCh94s6tuFB+LQAByi2zKu+Cy3+
+         Y44dXdYiohcrnjEE8rPCOIyKCfhbWwJRzk0F9L9eiLgydT6j4Vn+a46sZxdWnDTwUs
+         aMDxPnzXi1JT04SwjTHDP1r5YIJu5yrRvJp9RhAR1AddB8GXtwJfwppxGrWsLa/9Tj
+         xGhwN7EEQcC1lSOkcZlQFVF8H4KurKFJF8DHZAT1SliMJpPV8AgWXCqJJz2S9XCNDa
+         MLi9hgVFZrYOlIHJ+wcuqqzvqmSvmdLL3cMs/iEalclYob0ur6NHlLAb/hUp1vuadq
+         o6ynUAeriPB3w==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id BC0ACC05FCE; Tue, 12 Apr 2022 03:25:39 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 215800] amd-pstate does not allow to set arbitrary maximum CPU
+ frequency above 2200MHz for a desktop Zen 3 CPU
+Date:   Tue, 12 Apr 2022 03:25:39 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: sujinzhou2008@126.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-215800-137361-pfEsWNqvqx@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215800-137361@https.bugzilla.kernel.org/>
+References: <bug-215800-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3] interconnect: qcom: icc-rpmh: Add BCMs to commit list
- in pre_aggregate
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>, djakov@kernel.org,
-        okukatla@codeaurora.org, quic_mdtipton@quicinc.com
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mike Tipton <mdtipton@codeaurora.org>, mka@chromium.org,
-        dianders@chromium.org
-References: <20211125174751.25317-1-djakov@kernel.org>
- <CAE-0n51xeigKFS9Zek44HZGD9cdc4Em91aQ5HHzuy7P1FBmfFg@mail.gmail.com>
- <a96a010d-9bd7-f760-3c03-d842feef41aa@linaro.org>
- <CAE-0n51-hpG_5O11FbGrHaMr_mN0ZAky8CVzZNmDj29aK8wGog@mail.gmail.com>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <CAE-0n51-hpG_5O11FbGrHaMr_mN0ZAky8CVzZNmDj29aK8wGog@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,20 +71,23 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 4/11/22 2:06 PM, Stephen Boyd wrote:
->> I have a hunch about what might be happening here.  There is
->> some synchronization that must occur between the AP and modem
->> when IPA is starting up.  Until that synchronization step has
->> completed, we can't allow the IPA network device to be opened.
-> Is there a commit that implements this? Or how is the synchronization
-> done? I can debug more and see if that synchronization is happening.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215800
 
-After testing today it seems maybe my hunch wasn't
-the root cause.  If you disagree and I'm missing
-something, say so.  I will take a look at that
-though--my hunch--to see if the thing I thought
-could be causing a problem can actually occur.
-If so, I'll figure out a fix.
+Joe (sujinzhou2008@126.com) changed:
 
-					-Alex
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |sujinzhou2008@126.com
 
+--- Comment #5 from Joe (sujinzhou2008@126.com) ---
+"I've tried to fix the issue by `cat cpuinfo_max_freq > scaling_max_freq` b=
+ut
+that didn't work. "
+
+cat does not work. Please use "echo $number > scaling_max_freq".
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
