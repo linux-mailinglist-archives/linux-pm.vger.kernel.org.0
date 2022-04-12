@@ -2,117 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F171A4FD942
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Apr 2022 12:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54EE24FDA91
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Apr 2022 12:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352997AbiDLHhC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Apr 2022 03:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
+        id S1352267AbiDLHox (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Apr 2022 03:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351840AbiDLHNA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Apr 2022 03:13:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C5C117E1D;
-        Mon, 11 Apr 2022 23:53:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AC5691570;
-        Mon, 11 Apr 2022 23:53:23 -0700 (PDT)
-Received: from [10.57.11.184] (unknown [10.57.11.184])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 137983F73B;
-        Mon, 11 Apr 2022 23:53:20 -0700 (PDT)
-Message-ID: <55d4a19d-15d4-4d15-8430-8a8ed8149497@arm.com>
-Date:   Tue, 12 Apr 2022 07:53:19 +0100
+        with ESMTP id S1355164AbiDLH1M (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Apr 2022 03:27:12 -0400
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A0A48310;
+        Tue, 12 Apr 2022 00:07:07 -0700 (PDT)
+Received: by mail-oi1-f170.google.com with SMTP id q129so18154845oif.4;
+        Tue, 12 Apr 2022 00:07:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=G5mglcYZA42FcZWexfT//Na3N8U+QShWNDx9HhSMVxo=;
+        b=kKJ3nUEWMsvrLSEjjffpnmiZNTAKv4on5YariZdK09oUTFOOJbZgu5tA8vQBAtZ18r
+         E6+Qe32az2p2EwxkK9oA6ePWtoGjE9TH4px3ydOd0WeV+0op0Bd5IGPncnasrC2wKODI
+         XAVk01tIA0D4Nf6u79H0lCf8YKJLt4ka3SqsukAN5aBC6LlNhYZYF8EQNWa2+HxY1EV8
+         cyQmoiJUPBvSfAp1f93p+HrJEHl3CPPt/YpcmaEwE8NROh4cxi7nTZYnY2NdvgO4eQBW
+         EwBgsDhtUy0/k+Oqkn6ck6Nes7LsIXLcms7SD81Cl41lekQ+RqseMzrcZRKQi3GL7BLY
+         UBNA==
+X-Gm-Message-State: AOAM532Gum91u170rACXcmlIBzrzy9KmXNpCRz3aU0vGcRwzZEMgiOSG
+        z2ER9oFvaFzXpGSJ43yLVTvkqZpwxi9zAxu9
+X-Google-Smtp-Source: ABdhPJyY2799smUiwIFdgvJoeCM6WpcXcNi2SOOE90czIXyqPS95bARZpvHXARvzQOeftsWIVQC/BQ==
+X-Received: by 2002:a05:6808:bc2:b0:2ec:e1c2:bd3f with SMTP id o2-20020a0568080bc200b002ece1c2bd3fmr1212821oik.161.1649747226236;
+        Tue, 12 Apr 2022 00:07:06 -0700 (PDT)
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com. [209.85.210.50])
+        by smtp.gmail.com with ESMTPSA id p16-20020a05680811d000b002d72ec3a921sm12272220oiv.21.2022.04.12.00.07.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 00:07:05 -0700 (PDT)
+Received: by mail-ot1-f50.google.com with SMTP id a17-20020a9d3e11000000b005cb483c500dso12828738otd.6;
+        Tue, 12 Apr 2022 00:07:05 -0700 (PDT)
+X-Received: by 2002:a25:c049:0:b0:634:6751:e8d2 with SMTP id
+ c70-20020a25c049000000b006346751e8d2mr25945732ybf.6.1649747214062; Tue, 12
+ Apr 2022 00:06:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [RESEND][PATCH 0/8] Introduce support for artificial Energy Model
-Content-Language: en-US
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     rafael@kernel.org
-Cc:     dietmar.eggemann@arm.com, Pierre.Gondois@arm.com,
-        ionela.voinescu@arm.com, viresh.kumar@linaro.org,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-        mka@chromium.org, nm@ti.com, sboyd@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, cristian.marussi@arm.com,
-        sudeep.holla@arm.com, matthias.bgg@gmail.com,
-        linux-kernel@vger.kernel.org
-References: <20220321095729.20655-1-lukasz.luba@arm.com>
- <76230a1c-73b8-c471-c62e-3ec9b33461a6@arm.com>
-In-Reply-To: <76230a1c-73b8-c471-c62e-3ec9b33461a6@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
+In-Reply-To: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 12 Apr 2022 09:06:42 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVfOpGvF5FR6vFD-3a1h-7Kc_yAKQzWV71PD6mDy6BmZw@mail.gmail.com>
+Message-ID: <CAMuHMdVfOpGvF5FR6vFD-3a1h-7Kc_yAKQzWV71PD6mDy6BmZw@mail.gmail.com>
+Subject: Re: [PATCH v7 00/20] Introduce power-off+restart call chain API
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+Hi Dmitry,
 
-gentle ping. If you need some help with this maintenance,
-we can help.
+On Tue, Apr 12, 2022 at 1:38 AM Dmitry Osipenko
+<dmitry.osipenko@collabora.com> wrote:
+> Problem
+> -------
+>
+> SoC devices require power-off call chaining functionality from kernel.
+> We have a widely used restart chaining provided by restart notifier API,
+> but nothing for power-off.
 
-Regards,
-Lukasz
+> Changelog:
+>
+> v7: - Rebased on a recent linux-next. Dropped the recently removed
+>       NDS32 architecture. Only SH and x86 arches left un-acked.
+>
+>     - Added acks from Thomas Bogendoerfer and Krzysztof Kozlowski
+>       to the MIPS and memory/emif patches respectively.
 
-On 4/4/22 13:35, Lukasz Luba wrote:
-> Hi Rafael,
-> 
-> 
-> The patch set has been on LKML for quite a while and got one ACK,
-> for the code touching something outside the EM (thermal cooling).
-> 
-> AFAICS there is no interest and objections from others for this code.
-> 
-> Therefore, I have a question:
-> What would be be process to have merge this code?
-> (We had internally a few reviews of this code)
-> 
-> On 3/21/22 09:57, Lukasz Luba wrote:
->> Hi all,
->>
->> This patch set adds new callback and support for artificial Energy 
->> Model (EM).
->> The new EMs have artificially generated performance states.
->> Such EMs can be created from lean information sources, such
->> as the relative energy efficiency between CPUs. The ACPI based
->> platforms provide this information
->> (ACPI 6.4, s5.2.12.14 'GIC CPU Interface (GICC) Structure'
->> 'Processor Power efficiency Class' field).
->>
->> Artificial EMs might require to directly provide the 'cost' of
->> the generated performance state. This patch set adds a new callback
->> .get_cost() for this. The EM framework does not force any model
->> or formula, it's up to the platform code.
->>
->> Artificial EMs aim to leverage the Energy Aware Scheduler
->> (EAS). Other frameworks relying on performance states
->> information (i.e. IPA/DTPM) must be informed of the
->> EM type and might be prevented from using it. This patch
->> sets also does this by introducing a new flag:
->> EM_PERF_DOMAIN_ARTIFICIAL.
->>
->> The patch set is based on current linux-next, where some
->> changes to OPP & EM are queuing.
->>
->> The patch set also contains (patch 7/8 and patch 8/8) logic which 
->> prevents
->> two EM's client frameworks from using this new EM type. Some other 
->> approach,
->> using 'milli-watts', has been proposed and discussed, but refused [1].
->> This new flag is more precised and should not leave space for
->> wrong interpretation.
->>
->> Shortly after this patch set you will see a patch set implementing the
->> platform code and registering this new EM.
->>
-> 
-> 
-> No one from Arm is an official maintainer of the EM code.
-> 
-> Regards,
-> Lukasz
+Looks like you forgot to add the actual acks?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
