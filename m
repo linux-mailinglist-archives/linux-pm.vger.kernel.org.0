@@ -2,71 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E364FDEF5
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Apr 2022 14:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8EC4FDF78
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Apr 2022 14:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344689AbiDLMCT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Apr 2022 08:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41512 "EHLO
+        id S1353671AbiDLMQT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Apr 2022 08:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344748AbiDLMCK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Apr 2022 08:02:10 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18403673DA;
-        Tue, 12 Apr 2022 03:57:13 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2ed65e63afcso37161307b3.9;
-        Tue, 12 Apr 2022 03:57:13 -0700 (PDT)
+        with ESMTP id S1353041AbiDLMPw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Apr 2022 08:15:52 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E788B6DF
+        for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 04:16:23 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id g18so11682509ejc.10
+        for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 04:16:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=QftC8yM+rUi2GOJON22Vc2R4NpEgVxs6x2hJpLqwdnc=;
+        b=YiJgoYeBRq9Y21t33IryYjiuDLJTAioEQ2GbYTsR5cTeWCcL0+egkZjsFoKqqyqASX
+         mvHPFm3DGmrcyc2GLutxiyEiei0hcCNw0m7mJS/7wONYLuKhZJ41ReUF9bT9Rd5GQ46f
+         vA2PUVZkMTkeRSLxhIMy9Nz+STf5OG0321tjqe2J0RkqP/io4YuwP2teVrs8ff0xGHjl
+         TG1uklojBCOUxFJTYjSm5gPs6jrn2Ag62gYS5mGZQOXIKVe4HVGxWG8kwYCA3ObVgWC7
+         jEnFQGavM7LdDGKtyWjQVFSWmV7afJq/d/G1C+r4mNp7DUYpvJ30Z3P5LBI/eUFidqvd
+         dDHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FaflxtjiKkxyQsuVHjWDitjpj4rR193VNQfbaSulm+s=;
-        b=69zQX/d8z1w1b30EETIqSMYqlqtkdJ+Rkve2oyhQSpNvc+A10ZH3cPnRfwgBsjOKYz
-         Rbl8zxjA8d6IljjYDsPnQrF66aF6BOJRsjU0xXcMuC8+CWVNiY4+lfJrUTFfqVVO9N1u
-         /Gco4mWVift0Cn7NQuaXc7hPq7W6lnlOGjLAzb2uNKHMdh7jnQNCYul1aU3vd+znshAo
-         pYCwvU227ikf2DPB0WWJjwHsE2koad3ikabWRDanbrjleWlkQrOaV6Vq7N6JifXPkwK2
-         AsnazcZboq5j/yUW9InhATSpKRfvWfu9fCHObMkKQuGgjbOJEIBjR0KBNW/q/I23H6PU
-         Uofw==
-X-Gm-Message-State: AOAM532Iega3dPX8rzkodURY+D9orrGipYG2f7mlbyS6rhCxniCtVPQr
-        0JhSZ++4JPBCTl52LDYyDOAH0JkeRXYXQ/mEXE8=
-X-Google-Smtp-Source: ABdhPJz1z+xluyOTJtty+XCL5wZ0FrG6XQd1t4Tc/ElfX3ah4G+SIm4TesoFz04aTAkcK/J0gGIgDdonVP25C4VEhg4=
-X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
- b145-20020a811b97000000b002db640f49d8mr28631839ywb.326.1649761032367; Tue, 12
- Apr 2022 03:57:12 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QftC8yM+rUi2GOJON22Vc2R4NpEgVxs6x2hJpLqwdnc=;
+        b=TyvTOiNDbR6c5SulNJBi3Hw0opQVpXNGuLdNdfqHs+7v0pxV3sw2agPSgToxY/oDMR
+         vjTZFTp1caD/xjYZnXC88BaNQ6yZbM+bdMwO7Sob99gXtT6xum1rdPSiKVolpt5vMGsR
+         4t0JQQ5RmsT1dNL1s7Rc87RxLuQ5ADT9gBvfdFXeKgpkRelrXpYsOYLgMfp5C/pRjus6
+         ydjJ7BNIrq02HHS4MaMvlIjyW4/AAP3ILVD0UG6LASyeZwNHZ6f6UzzGOtXNpW/1HH9x
+         tlTYlWVEwlS/8fxCaxPwwjRjg2/bN7EUEcQpbIwH7oqavfRnvEJPD+2NZ5+4PMlGwVz7
+         omnA==
+X-Gm-Message-State: AOAM531qqzfuS6lg4yUcTxV3Cjoh0LxWpjXZk3rB0runjly0bq7Nc83t
+        kwhoC9wxHPRPS014GD/v/y/+hTxA+wYFuis6
+X-Google-Smtp-Source: ABdhPJwTG/0ht3PfH8/lq8uPzYm/e2Ao+H/Xa4o6fo8AnoydrKmhd5cCF0GGtULh9uSw1g9jUUd7OA==
+X-Received: by 2002:a17:906:b107:b0:6e0:a25a:af6e with SMTP id u7-20020a170906b10700b006e0a25aaf6emr34159552ejy.359.1649762181893;
+        Tue, 12 Apr 2022 04:16:21 -0700 (PDT)
+Received: from [192.168.0.194] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id e19-20020a056402105300b004162d0b4cbbsm16534904edu.93.2022.04.12.04.16.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 04:16:21 -0700 (PDT)
+Message-ID: <d74cd447-ac2f-92d5-f845-ee62d48cbd3b@linaro.org>
+Date:   Tue, 12 Apr 2022 13:16:20 +0200
 MIME-Version: 1.0
-References: <4419002.LvFx2qVVIh@kreacher> <11975904.O9o76ZdvQC@kreacher>
- <4721615.GXAFRqVoOG@kreacher> <YlVJorXPD1EoqVCB@lahna>
-In-Reply-To: <YlVJorXPD1EoqVCB@lahna>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 12 Apr 2022 12:56:59 +0200
-Message-ID: <CAJZ5v0jbTh13tf_Kv9+8BgsQSrNX0KhR6EWJEiWuMuDpG6a-Bg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/9] PCI/PM: Rearrange pci_update_current_state()
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/2] interconnect: qcom: Add SDX65 interconnect provider
+ driver
+Content-Language: en-US
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
+        bjorn.andersson@linaro.org, djakov@kernel.org, robh+dt@kernel.org,
+        krzk+dt@kernel.org
+Cc:     manivannan.sadhasivam@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1649740053-14507-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1649740053-14507-3-git-send-email-quic_rohiagar@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1649740053-14507-3-git-send-email-quic_rohiagar@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 12:54 PM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> On Mon, Apr 11, 2022 at 04:21:04PM +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Save one config space access in pci_update_current_state() by
-> > testing the retireved PCI_PM_CTRL register value against
->               ^^^^^^^^^
-> retrieved
+On 12/04/2022 07:07, Rohit Agarwal wrote:
+> Add driver for the Qualcomm interconnect buses found in SDX65 based
+> platforms.
 
-Yup, thanks!
+Thank you for your patch. There is something to discuss/improve.
+
+> +
+> +static struct qcom_icc_bcm *system_noc_bcms[] = {
+
+It can be array of const pointers, if you rebase on this:
+"interconnect: qcom: constify icc_node pointers"
+(I just sent it but I am not sure if it made it to the lists)
+
+> +	&bcm_ce0,
+> +	&bcm_pn0,
+> +	&bcm_pn1,
+> +	&bcm_pn2,
+> +	&bcm_pn3,
+> +	&bcm_pn4,
+> +	&bcm_sn0,
+> +	&bcm_sn1,
+> +	&bcm_sn2,
+> +	&bcm_sn3,
+> +	&bcm_sn5,
+> +	&bcm_sn6,
+> +	&bcm_sn7,
+> +	&bcm_sn8,
+> +	&bcm_sn9,
+> +	&bcm_sn10,
+> +};
+> +
+> +static struct qcom_icc_node *system_noc_nodes[] = {
+
+The same.
+
+
+> +	[MASTER_AUDIO] = &qhm_audio,
+> +	[MASTER_BLSP_1] = &qhm_blsp1,
+> +	[MASTER_QDSS_BAM] = &qhm_qdss_bam,
+> +	[MASTER_QPIC] = &qhm_qpic,
+> +	[MASTER_SNOC_CFG] = &qhm_snoc_cfg,
+> +	[MASTER_SPMI_FETCHER] = &qhm_spmi_fetcher1,
+> +	[MASTER_ANOC_SNOC] = &qnm_aggre_noc,
+> +	[MASTER_IPA] = &qnm_ipa,
+> +	[MASTER_MEM_NOC_SNOC] = &qnm_memnoc,
+> +	[MASTER_MEM_NOC_PCIE_SNOC] = &qnm_memnoc_pcie,
+> +	[MASTER_CRYPTO] = &qxm_crypto,
+> +	[MASTER_IPA_PCIE] = &xm_ipa2pcie_slv,
+> +	[MASTER_PCIE_0] = &xm_pcie,
+> +	[MASTER_QDSS_ETR] = &xm_qdss_etr,
+> +	[MASTER_SDCC_1] = &xm_sdc1,
+> +	[MASTER_USB3] = &xm_usb3,
+> +	[SLAVE_AOSS] = &qhs_aoss,
+> +	[SLAVE_APPSS] = &qhs_apss,
+> +	[SLAVE_AUDIO] = &qhs_audio,
+> +	[SLAVE_BLSP_1] = &qhs_blsp1,
+> +	[SLAVE_CLK_CTL] = &qhs_clk_ctl,
+> +	[SLAVE_CRYPTO_0_CFG] = &qhs_crypto0_cfg,
+> +	[SLAVE_CNOC_DDRSS] = &qhs_ddrss_cfg,
+> +	[SLAVE_ECC_CFG] = &qhs_ecc_cfg,
+> +	[SLAVE_IMEM_CFG] = &qhs_imem_cfg,
+> +	[SLAVE_IPA_CFG] = &qhs_ipa,
+> +	[SLAVE_CNOC_MSS] = &qhs_mss_cfg,
+> +	[SLAVE_PCIE_PARF] = &qhs_pcie_parf,
+> +	[SLAVE_PDM] = &qhs_pdm,
+> +	[SLAVE_PRNG] = &qhs_prng,
+> +	[SLAVE_QDSS_CFG] = &qhs_qdss_cfg,
+> +	[SLAVE_QPIC] = &qhs_qpic,
+> +	[SLAVE_SDCC_1] = &qhs_sdc1,
+> +	[SLAVE_SNOC_CFG] = &qhs_snoc_cfg,
+> +	[SLAVE_SPMI_FETCHER] = &qhs_spmi_fetcher,
+> +	[SLAVE_SPMI_VGI_COEX] = &qhs_spmi_vgi_coex,
+> +	[SLAVE_TCSR] = &qhs_tcsr,
+> +	[SLAVE_TLMM] = &qhs_tlmm,
+> +	[SLAVE_USB3] = &qhs_usb3,
+> +	[SLAVE_USB3_PHY_CFG] = &qhs_usb3_phy,
+> +	[SLAVE_ANOC_SNOC] = &qns_aggre_noc,
+> +	[SLAVE_SNOC_MEM_NOC_GC] = &qns_snoc_memnoc,
+> +	[SLAVE_IMEM] = &qxs_imem,
+> +	[SLAVE_SERVICE_SNOC] = &srvc_snoc,
+> +	[SLAVE_PCIE_0] = &xs_pcie,
+> +	[SLAVE_QDSS_STM] = &xs_qdss_stm,
+> +	[SLAVE_TCU] = &xs_sys_tcu_cfg,
+> +};
+> +
+> +static struct qcom_icc_desc sdx65_system_noc = {
+
+All these structures can be const.
+
+Best regards,
+Krzysztof
