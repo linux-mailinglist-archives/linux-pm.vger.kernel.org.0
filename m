@@ -2,219 +2,238 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380EF4FE691
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Apr 2022 19:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0BF4FE69B
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Apr 2022 19:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350498AbiDLRMZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Apr 2022 13:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58072 "EHLO
+        id S1357995AbiDLRPk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Apr 2022 13:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344490AbiDLRMY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Apr 2022 13:12:24 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085FA3EB8B;
-        Tue, 12 Apr 2022 10:10:05 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23CH9x06054349;
-        Tue, 12 Apr 2022 12:09:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1649783399;
-        bh=gkbreXK02oGII3XSANbrgsHYHJuMvjntCaE/6UPrzPQ=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=BVLg3whoHh6uRCPNNRpmKSaUvdI9+05dXnq+edvvEUCFcI/OHrInIYQ/YgcB7Gwg/
-         3PCv2XJLGv4k7ajn2RZ4VKfL8WzaDa8jmVdk7zmQl/lpZjRXnsONBhmJ95MViYQ7NZ
-         0x5WTH1BXc/0QvxLKJGaWL09XopS99rB/Hytqr4c=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23CH9x92017606
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 12 Apr 2022 12:09:59 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 12
- Apr 2022 12:09:59 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 12 Apr 2022 12:09:59 -0500
-Received: from [10.250.235.115] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23CH9tS0017746;
-        Tue, 12 Apr 2022 12:09:56 -0500
-Message-ID: <c1c2dc5b-5958-2b34-a963-6248e2817ca7@ti.com>
-Date:   Tue, 12 Apr 2022 22:39:54 +0530
+        with ESMTP id S229704AbiDLRPj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Apr 2022 13:15:39 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97B060AB8
+        for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 10:13:20 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-de3eda6b5dso21487242fac.0
+        for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 10:13:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=TDPbcSp/vDTixVI6qzYrMBMUYnORkP5HblVB6RjbSwM=;
+        b=r0SjzZOBYNqLp6nRCKLDf8cy3mSN1YDPUqcvXb/qYRZMDOcLrLiyzOd25flwgCl3Jz
+         w+ewN48LvT8QrAYQTcAryJzLLdsDU4VhEk0xa+xeqn4tA5olHz/Irmqw6wowx5d49PGp
+         uLytBhUEF2EyN4b364eb7jvp6zxqPxlFzEetCZC8+fwnbq3HIstDQApbRZ8rBKCOGt2D
+         AuojgPgEZFXxHxJOhm6q0Lhs+UjmEyUwtVm8ixwgB0uetUPgwpybq3i/ZOWZn76lWkfN
+         rkBwMDsEbVWE7wpGisL/Dzg3Si+usBnvAupPSrjmglLn9Uz4kkNOKLtazFTjhBQ+R07l
+         u68w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TDPbcSp/vDTixVI6qzYrMBMUYnORkP5HblVB6RjbSwM=;
+        b=V1c+XiatHcMZsPXiliF5TCSV4+lDHmm0sYMeHIeesdsjlXAU0IXOMwRK3f05wt3Ax9
+         7b91YolrOLgsbkcDSrIQmoQIHgjMQ9alNtBtRgWIa5nI9IFiWaaZNFjkFrk5zT6EQKy1
+         HqyJdUvaJKU9GMZ/WkBh24DVs5XgQXFPODTTtUUBVa79skTwcthUfpntQPDvdT2gI4tg
+         TgyUuFVH5UXqYiKm4T1r59kE12CwYb3LnBFJqP2DYvij5qVZswe1aO/lLM61tHkmzr9u
+         +9XdZK1eYLC7YQ16DxfMzqudS7w4/PqbxzIeUKNEtJvjEninrREwOTNu2FgGFP+PboNL
+         Nrfw==
+X-Gm-Message-State: AOAM530NnUUKYKn7/431vk1IhqGcsgdNMBPLOTQeATWTzAlopS9YFrJt
+        vgyQjHUKW7Wg5aPOQBpXJcjxTw==
+X-Google-Smtp-Source: ABdhPJwpxs1FgqJej6N6Ii8DouynWEV8uS72s+flB0CU1W3DfVPueaybQVWOAV+BCWqU0iB/5DfddA==
+X-Received: by 2002:a05:6870:738a:b0:de:e1b7:2371 with SMTP id z10-20020a056870738a00b000dee1b72371mr2586315oam.176.1649783599875;
+        Tue, 12 Apr 2022 10:13:19 -0700 (PDT)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id c30-20020a056830349e00b005b272587f47sm13824595otu.38.2022.04.12.10.13.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 10:13:19 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 10:15:33 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
+Message-ID: <YlWztZknl4OBmekp@ripper>
+References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
+ <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v5 2/4] arm64: dts: ti: j721e: Add VTM node
-Content-Language: en-US
-To:     Keerthy <j-keerthy@ti.com>, <robh+dt@kernel.org>,
-        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <amitk@kernel.org>, <kristo@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220412101409.7980-1-j-keerthy@ti.com>
- <20220412101409.7980-3-j-keerthy@ti.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20220412101409.7980-3-j-keerthy@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Keerthy
+On Mon 11 Apr 08:43 PDT 2022, Krzysztof Kozlowski wrote:
 
-On 12/04/22 3:44 pm, Keerthy wrote:
-> VTM stands for Voltage Thermal Management
+> Devices might need to control several clocks when scaling the frequency
+> and voltage.  Example is the Universal Flash Storage (UFS) which scales
+> several independent clocks with change of performance levels.
 > 
-> Signed-off-by: Keerthy <j-keerthy@ti.com>
+> Add parsing of multiple clocks and clock names and scale all of them,
+> when needed.  If only one clock is provided, the code should behave the
+> same as before.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |  9 +++
->  arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi  | 73 +++++++++++++++++++
->  arch/arm64/boot/dts/ti/k3-j721e.dtsi          |  4 +
->  3 files changed, 86 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
+>  drivers/opp/core.c     | 205 ++++++++++++++++++++++++++++++++---------
+>  drivers/opp/of.c       |  48 ++++++++++
+>  drivers/opp/opp.h      |   9 +-
+>  include/linux/pm_opp.h |  23 +++++
+>  4 files changed, 242 insertions(+), 43 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
-> index b4972dfb7da8..6290f563b8e7 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
-> @@ -418,4 +418,13 @@
->  		interrupt-names = "int0", "int1";
->  		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
->  	};
-> +
-> +	wkup_vtm0: wkup_vtm0@42040000 {
-> +		compatible = "ti,j721e-vtm";
-> +		reg = <0x0 0x42040000 0x0 0x350>,
-> +			<0x0 0x42050000 0x0 0x350>,
-> +			<0x0 0x43000300 0x0 0x10>;
-
-Please follow convention of using 0x00 as rest of the file:
-
-		reg = <0x00 0x42040000 0x00 0x350>,
-		....
-
-> +		power-domains = <&k3_pds 154 TI_SCI_PD_EXCLUSIVE>;
-> +		#thermal-sensor-cells = <1>;
-> +	};
->  };
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
-> new file mode 100644
-> index 000000000000..e922042f356f
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
-> @@ -0,0 +1,73 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <dt-bindings/thermal/thermal.h>
-> +
-> +wkup_thermal: wkup_thermal {
-> +	polling-delay-passive = <250>; /* milliseconds */
-> +	polling-delay = <500>; /* milliseconds */
-> +	thermal-sensors = <&wkup_vtm0 0>;
-> +
-> +	trips {
-> +		wkup_crit: wkup_crit {
-
-
-Here and elsewhere no "-" in node names please.
-
-You can use:
-
-https://github.com/nmenon/kernel_patch_verify
-kpv -C -n <no of commits>
-
-This catches most issues like above
-
-> +			temperature = <125000>; /* milliCelsius */
-> +			hysteresis = <2000>; /* milliCelsius */
-> +			type = "critical";
-> +		};
-> +	};
-> +};
-> +
-> +mpu_thermal: mpu_thermal {
-> +	polling-delay-passive = <250>; /* milliseconds */
-> +	polling-delay = <500>; /* milliseconds */
-> +	thermal-sensors = <&wkup_vtm0 1>;
-> +
-> +	trips {
-> +		mpu_crit: mpu_crit {
-> +			temperature = <125000>; /* milliCelsius */
-> +			hysteresis = <2000>; /* milliCelsius */
-> +			type = "critical";
-> +		};
-> +	};
-> +};
-> +
-> +c7x_thermal: c7x_thermal {
-> +	polling-delay-passive = <250>; /* milliseconds */
-> +	polling-delay = <500>; /* milliseconds */
-> +	thermal-sensors = <&wkup_vtm0 2>;
-> +
-> +	trips {
-> +		c7x_crit: c7x_crit {
-> +			temperature = <125000>; /* milliCelsius */
-> +			hysteresis = <2000>; /* milliCelsius */
-> +			type = "critical";
-> +		};
-> +	};
-> +};
-> +
-> +gpu_thermal: gpu_thermal {
-> +	polling-delay-passive = <250>; /* milliseconds */
-> +	polling-delay = <500>; /* milliseconds */
-> +	thermal-sensors = <&wkup_vtm0 3>;
-> +
-> +	trips {
-> +		gpu_crit: gpu_crit {
-> +			temperature = <125000>; /* milliCelsius */
-> +			hysteresis = <2000>; /* milliCelsius */
-> +			type = "critical";
-> +		};
-> +	};
-> +};
-> +
-> +r5f_thermal: r5f_thermal {
-> +	polling-delay-passive = <250>; /* milliseconds */
-> +	polling-delay = <500>; /* milliseconds */
-> +	thermal-sensors = <&wkup_vtm0 4>;
-> +
-> +	trips {
-> +		r5f_crit: r5f_crit {
-> +			temperature = <125000>; /* milliCelsius */
-> +			hysteresis = <2000>; /* milliCelsius */
-> +			type = "critical";
-> +		};
-> +	};
-> +};
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e.dtsi b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
-> index 0e23886c9fd1..6979863eb500 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721e.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
-> @@ -181,6 +181,10 @@
->  				 <0x07 0x00000000 0x07 0x00000000 0x01 0x00000000>; /* FSS OSPI1 data region 3*/
->  		};
->  	};
-> +
-> +	thermal_zones: thermal-zones {
-> +		#include "k3-j721e-thermal.dtsi"
-> +	};
-
-Bit weird representation, any reason why thermal-zones {} cannot be
-moved into k3-j721e-thermal.dtsi?
-
->  };
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+[..]
+> @@ -1295,21 +1344,32 @@ static struct opp_table *_update_opp_table_clk(struct device *dev,
+>  	 * Return early if we don't need to get clk or we have already tried it
+>  	 * earlier.
+>  	 */
+> -	if (!getclk || IS_ERR(opp_table) || opp_table->clk)
+> +	if (!getclk || IS_ERR(opp_table) || opp_table->clks)
+>  		return opp_table;
 >  
->  /* Now include the peripherals for each bus segments */
+> +	opp_table->clks = kmalloc_array(1, sizeof(*opp_table->clks),
+> +					GFP_KERNEL);
 
+This seems to be 81 chars long, perhaps worth not line breaking?
 
-Regards
-Vignesh
+> +	if (!opp_table->clks)
+> +		return ERR_PTR(-ENOMEM);
+> +
+>  	/* Find clk for the device */
+> -	opp_table->clk = clk_get(dev, NULL);
+> +	opp_table->clks[0] = clk_get(dev, NULL);
+>  
+> -	ret = PTR_ERR_OR_ZERO(opp_table->clk);
+> -	if (!ret)
+> +	ret = PTR_ERR_OR_ZERO(opp_table->clks[0]);
+> +	if (!ret) {
+> +		opp_table->clk_count = 1;
+>  		return opp_table;
+> +	}
+[..]
+> +struct opp_table *dev_pm_opp_set_clknames(struct device *dev,
+> +					  const char * const names[],
+> +					  unsigned int count)
+>  {
+>  	struct opp_table *opp_table;
+> -	int ret;
+> +	struct clk *clk;
+> +	int ret, i;
+>  
+>  	opp_table = _add_opp_table(dev, false);
+>  	if (IS_ERR(opp_table))
+> @@ -2159,70 +2259,92 @@ struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name)
+>  	}
+>  
+>  	/* clk shouldn't be initialized at this point */
+> -	if (WARN_ON(opp_table->clk)) {
+> +	if (WARN_ON(opp_table->clks)) {
+>  		ret = -EBUSY;
+>  		goto err;
+>  	}
+>  
+> -	/* Find clk for the device */
+> -	opp_table->clk = clk_get(dev, name);
+> -	if (IS_ERR(opp_table->clk)) {
+> -		ret = dev_err_probe(dev, PTR_ERR(opp_table->clk),
+> -				    "%s: Couldn't find clock\n", __func__);
+> +	opp_table->clks = kmalloc_array(count, sizeof(*opp_table->clks),
+> +					GFP_KERNEL);
+> +	if (!opp_table->clks) {
+> +		ret = -ENOMEM;
+>  		goto err;
+>  	}
+>  
+> +	for (i = 0; i < count; i++) {
+> +		clk = clk_get(dev, names[i]);
+> +		if (IS_ERR(clk)) {
+> +			ret =  dev_err_probe(dev, PTR_ERR(clk),
+> +					     "%s: Couldn't find clock %s\n",
+> +					     __func__, names[i]);
+> +			goto free_clks;
+> +		}
+> +
+> +		opp_table->clks[i] = clk;
+> +	}
+
+Wouldn't it be convenient to make clks a struct clk_bulk_data array
+and use clk_bulk_get()/clk_bulk_put() instead?
+
+> +
+> +	opp_table->clk_count = count;
+> +
+>  	return opp_table;
+>  
+> +free_clks:
+> +	while (i != 0)
+> +		clk_put(opp_table->clks[--i]);
+> +
+> +	kfree(opp_table->clks);
+> +	opp_table->clks = NULL;
+> +	opp_table->clk_count = -1;
+>  err:
+>  	dev_pm_opp_put_opp_table(opp_table);
+>  
+>  	return ERR_PTR(ret);
+>  }
+> -EXPORT_SYMBOL_GPL(dev_pm_opp_set_clkname);
+> +EXPORT_SYMBOL_GPL(dev_pm_opp_set_clknames);
+[..]
+> +static int _read_clocks(struct dev_pm_opp *opp, struct opp_table *opp_table,
+> +			struct device_node *np)
+> +{
+> +	int count, ret;
+> +	u64 *freq;
+> +
+> +	count = of_property_count_u64_elems(np, "opp-hz");
+> +	if (count < 0) {
+> +		pr_err("%s: Invalid %s property (%d)\n",
+> +			__func__, of_node_full_name(np), count);
+
+Wouldn't %pOF be convenient to use here, seems like it becomes short
+enough that you don't have to wrap this line then.
+
+> +		return count;
+> +	}
+> +
+> +	if (count != opp_table->clk_count) {
+> +		pr_err("%s: number of rates %d does not match number of clocks %d in %s\n",
+> +		       __func__, count, opp_table->clk_count,
+> +		       of_node_full_name(np));
+> +		return -EINVAL;
+> +	}
+> +
+> +	freq = kmalloc_array(count, sizeof(*freq), GFP_KERNEL);
+> +	if (!freq)
+> +		return -ENOMEM;
+> +
+> +	ret = of_property_read_u64_array(np, "opp-hz", freq, count);
+> +	if (ret) {
+> +		pr_err("%s: error parsing %s: %d\n", __func__,
+> +		       of_node_full_name(np), ret);
+> +		ret = -EINVAL;
+> +		goto free_freq;
+> +	}
+
+Regards,
+Bjorn
