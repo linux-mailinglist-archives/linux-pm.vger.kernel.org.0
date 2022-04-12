@@ -2,67 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0BE4FDC1D
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Apr 2022 13:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D4754FDC22
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Apr 2022 13:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350109AbiDLKOe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Apr 2022 06:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39358 "EHLO
+        id S1357176AbiDLKOl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Apr 2022 06:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351758AbiDLJmd (ORCPT
+        with ESMTP id S1351976AbiDLJmd (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Apr 2022 05:42:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA07B517DB
-        for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 01:50:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5AD16B81B66
-        for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 08:50:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1EBCFC385A6
-        for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 08:50:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649753445;
-        bh=3ZqdZ3DEgrUmw984qgZvplBrpWBxlLiAY8kBIw4hJ+w=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=gbgQRtQ76zfM+MaEusQ1Ny31OLHGTXeFxO8EFNrPQWc/0dRA4uE7NexzJ33BopIGq
-         Tv2iMcLx6+KQ0sOmLffuOAs0KI2d7MWzkQj/HSRUV75eFjxnxiDk3OKExsLKEOrqSD
-         JCzQXQxMLVpUmnPx263yNvwR88YNasCSuJK3J2F1NZn5W5j/Ef41M8jIkatadkhiPi
-         EkM+roI23ohqDO3FP2yYexBCqtqB09eNIug+81icPHv+DFyEM45Me7DGl2sQ/8/0Gk
-         jqgFUuk+39VSSrcn1d5eynSr45F/jysrbkUk7mcgGbPVK6bZar+byotEXJlxAiSeMX
-         dfp19b34J4NNA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 06622C05FCE; Tue, 12 Apr 2022 08:50:45 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 215800] amd-pstate does not allow to set arbitrary maximum CPU
- frequency above 2200MHz for a desktop Zen 3 CPU
-Date:   Tue, 12 Apr 2022 08:50:44 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: aros@gmx.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215800-137361-U8EFvraSCi@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215800-137361@https.bugzilla.kernel.org/>
-References: <bug-215800-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4263ADE81
+        for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 01:51:32 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id g20so21489377edw.6
+        for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 01:51:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=VyKuoVOFtbJpQqYL42DYs7vEqjn6TG+3AG+tuB3ScVs=;
+        b=R4JpCrbTrv7VPod1/4uHIpPG60WwEs6xdg5RD47te/xuroYSMJV17AJ9kTj+IjCRfl
+         1vvR6A9B+eDfXxQpkBMMoUr1qtN8ZykBYccQDCshfgpuJSIW6r2x+qMueE6JZN8/31sv
+         NyxM36AjZiwkWybsHCh+WNLUkZD/m+HTzhkVN5d3GsSnz+TOnW+oZ6DWwlnQHfFNEKt9
+         8gi6kCzc/6dfh+pI59Xll/cqC4SVrUG0AYHSAy1sC30xGWHvUIYFVVrzPJp0NTKtNUrU
+         FC70CNLpMPZ8gckRC69enVnqUIZkm5W9p4O3G3x5WYY7IOVJDDiJcmOAAI8CsfkInQX8
+         5p5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=VyKuoVOFtbJpQqYL42DYs7vEqjn6TG+3AG+tuB3ScVs=;
+        b=M6il1IKKuRiq1bWnl3+7ILZ+b7YIBZRXCVQf+4TMK07/zaXS7AIx2Xky5o6MnBx/s1
+         jp4O0lJrX2FjgeDS+7WHDsIB94YBTEWzIaYXSHQPV0GBKYcgRRn64TGHwXBe4wmxvtMk
+         KHSDPPgzrdmLPhzWr7Dlj1qoErm8p56mcwQSR5mVDtUXMF23ALEmQbASktPJw9ocfuhf
+         i83YXOS5tBb/OQ0BB8I/XV2o9FvVGA6mkJPslz86pe+cELRbS2Mb9Zn0RTSEW+BS0cur
+         sh84+oTD2X16iMy0atxjB7pKZ+zxbv/Js8aqemZTzRHGKNYT5XtQVzjG/ktiRcvRCGyv
+         c4wQ==
+X-Gm-Message-State: AOAM531nO7Xhj558ssWsGDFwZC1H22DtSoFr1/f2taTFLt84Bc8G+X7k
+        c516PXayqlTiDnGBz3pfEj/ZMQ==
+X-Google-Smtp-Source: ABdhPJzhgwKUzzSz6he1cnlPJJ1RdVI6ilJSVC2f6gsXEHJNEA9nt9WQDY78OnBYwejeXogZpjSQFA==
+X-Received: by 2002:aa7:cac4:0:b0:418:85b7:adec with SMTP id l4-20020aa7cac4000000b0041885b7adecmr37427381edt.231.1649753490825;
+        Tue, 12 Apr 2022 01:51:30 -0700 (PDT)
+Received: from [192.168.0.194] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id g2-20020a50bf42000000b0041cc5233252sm13505771edk.57.2022.04.12.01.51.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 01:51:30 -0700 (PDT)
+Message-ID: <ad2c72e8-4608-9527-146d-43aa006e1306@linaro.org>
+Date:   Tue, 12 Apr 2022 10:51:29 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 2/2] PM / devfreq: mediatek: Introduce MediaTek CCI
+ devfreq driver
+Content-Language: en-US
+To:     Johnson Wang <johnson.wang@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        cw00.choi@samsung.com, krzk+dt@kernel.org, robh+dt@kernel.org,
+        kyungmin.park@samsung.com
+Cc:     khilman@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220408052150.22536-1-johnson.wang@mediatek.com>
+ <20220408052150.22536-3-johnson.wang@mediatek.com>
+ <76d58182-2f56-32b2-42e9-2ecbdd09ba3d@linaro.org>
+ <d900f8181bddb20a56231310d46b9427c40e77b8.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <d900f8181bddb20a56231310d46b9427c40e77b8.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,29 +83,29 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215800
+On 12/04/2022 10:39, Johnson Wang wrote:
+>>> +static struct platform_driver mtk_ccifreq_platdrv = {
+>>> +	.probe	= mtk_ccifreq_probe,
+>>> +	.remove	= mtk_ccifreq_remove,
+>>> +	.driver = {
+>>> +		.name = "mtk-ccifreq",
+>>> +		.of_match_table = of_match_ptr(mtk_ccifreq_machines),
+>>
+>> You use of_match_ptr() so is it possible to build it without OF? If
+>> so,
+>> then mtk_ccifreq_machines needs maybe_unused.
+>>
+> 
+> No, this driver must be built with OF due to our CPU arch.
 
---- Comment #10 from Artem S. Tashkinov (aros@gmx.com) ---
-Even restoring scaling_max_freq by setting it to cpuinfo_max_freq doesn't f=
-ix
-the issue.
+COMPILE_TEST does not use your arch... There are stubs for most of
+of-like functions, so !OF should build anyway.
 
-Again, I'm repeating what I already said in the original bug report.
+> Should I add some dependencies in Kconfig to ensure OF is enabled?
 
+There are different ways to solve it and it depends on what goal do you
+want to achieve? One ways is to use maybe_unused and of_match_ptr. Other
+way is to do not use them (skip both).
 
-
-> For my Ryzen 7 5800X I've tried (under root) numbers from 600 000 to 2 200
-> 000 and they all work:
->=20
-> echo $number | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_max_freq
->=20
-> However anything above 2 200 000 instead makes **the CPU stay at 2.2GHz**.
-
-Don't mind scaling_max_freq, it's scaling_cur_freq that never exceeds 2.2GH=
-z!
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
+Best regards,
+Krzysztof
