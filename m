@@ -2,284 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B528B4FDFBB
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Apr 2022 14:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 889F94FE066
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Apr 2022 14:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245566AbiDLMaL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Apr 2022 08:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43084 "EHLO
+        id S1352916AbiDLMd2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Apr 2022 08:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353443AbiDLM2I (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Apr 2022 08:28:08 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA15B267;
-        Tue, 12 Apr 2022 04:38:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649763495; x=1681299495;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=m72jmhgC7YfsqgqgAoeS8Cl15fMwSujr/+aPK65oKdA=;
-  b=gKZJI3sKvlkv8dHzMjaH12CysDbctMcZ/5semIIrcJ/5T48k42Se4f9l
-   gFu1ALfRNEFzQIxa0sqCI8ZIwDa7XybGiWOY4z0O6GKgsROJJo4L2mvl6
-   MfBIAywEBhCvBMcjFu2IOIUO1iZaMTahuYOhHgnFfDTKbhjZcTonvmN6l
-   bU5lmsxtWt1i+AwUeukJENMP/Pl4m9JTo3Bh8ysWVziTYuxBhE/z8kEGl
-   GeueLADaQOqhPIh2HOhgXGgol7RrCDQ5cIOlQL1NPVCQZ5PX+TGt8tyMV
-   zLOZOGLgrSOjxYsIsPOez/LL84tE3Cx8BUfHewjL6CMQovPa95iYozNUx
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="287371255"
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="287371255"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 04:38:15 -0700
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="526006766"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 04:38:12 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 12 Apr 2022 14:38:10 +0300
-Date:   Tue, 12 Apr 2022 14:38:10 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Subject: Re: [PATCH v2 4/9] PCI/PM: Rework changing power states of PCI
- devices
-Message-ID: <YlVkojhMtirzzlFy@lahna>
-References: <4419002.LvFx2qVVIh@kreacher>
- <11975904.O9o76ZdvQC@kreacher>
- <13011315.uLZWGnKmhe@kreacher>
- <YlVNzZRHW58QRD3c@lahna>
- <CAJZ5v0iKnzHZnx-96CBaeMvz29ezoCBH=F60gM7uAkoBazUzFA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0iKnzHZnx-96CBaeMvz29ezoCBH=F60gM7uAkoBazUzFA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S242619AbiDLMdS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Apr 2022 08:33:18 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3306E5A148;
+        Tue, 12 Apr 2022 04:51:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=QpiJQfWHbBnBAAsAw08p4CUh7MIO02xp7lOV7zzMMvs=; b=OiXNRx0CqOS6fYgnuGbrwnOtga
+        oTsOVpfVk14kqLP293KTqLwon1/RU1f0V62LbmzjmL7imP82ltol1wjoLfaK5t6/mY7Qs3HYWrjCh
+        Z5n+mPYMAE3achGsb0prut357sV8BXJQztUV/snpOSALGUfOOSuJhtjkf8m57kQJsKhHFVlbDpcQk
+        lGGfxabNbuS2WgwCRGEByKRCHhJZPawwuQVrl5wRqvyXnYTpdxrbeV45Csqkrv75mKq8zlPQZb0+T
+        t2NnmHCc7N3W2eNEryJ2vUHgiBcI/JOUHyTiMW7zMbqcjpb/zO/VtRMyQFBQBvjE8/ERk+9jG/ylS
+        VbeeYf+Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1neF2o-004JiZ-Iz; Tue, 12 Apr 2022 11:50:51 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6236F3001AE;
+        Tue, 12 Apr 2022 13:50:47 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 3BA8B3017997D; Tue, 12 Apr 2022 13:50:47 +0200 (CEST)
+Message-ID: <20220412114421.691372568@infradead.org>
+User-Agent: quilt/0.66
+Date:   Tue, 12 Apr 2022 13:44:21 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, ebiederm@xmission.com,
+        bigeasy@linutronix.de, Will Deacon <will@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org, tj@kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH 0/5] ptrace-vs-PREEMPT_RT and freezer rewrite
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Hi all,
 
-On Tue, Apr 12, 2022 at 01:31:57PM +0200, Rafael J. Wysocki wrote:
-> On Tue, Apr 12, 2022 at 1:17 PM Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> >
-> > On Mon, Apr 11, 2022 at 04:25:12PM +0200, Rafael J. Wysocki wrote:
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > There are some issues related to changing power states of PCI
-> > > devices, mostly related to carrying out unnecessary actions in some
-> > > places, and the code is generally hard to follow.
-> > >
-> > >  1. pci_power_up() has two callers, pci_set_power_state() and
-> > >     pci_pm_default_resume_early().  The latter updates the current
-> > >     power state of the device right after calling pci_power_up()
-> > >     and it restores the entire config space of the device right
-> > >     after that, so pci_power_up() itself need not read the
-> > >     PCI_PM_CTRL register or restore the BARs after programming the
-> > >     device into D0 in that case.
-> > >
-> > >  2. It is generally hard to get a clear view of the pci_power_up()
-> > >     code flow, especially in some corner cases, due to all of the
-> > >     involved PCI_PM_CTRL register reads and writes occurring in
-> > >     pci_platform_power_transition() and in pci_raw_set_power_state(),
-> > >     some of which are redundant.
-> > >
-> > >  3. The transitions from low-power states to D0 and the other way
-> > >     around are unnecessarily tangled in pci_raw_set_power_state()
-> > >     which causes it to use a redundant local variable and makes it
-> > >     rather hard to follow.
-> > >
-> > > To address the above shortcomings, make the following changes:
-> > >
-> > >  a. Remove the code handling transitions into D0
-> >
-> > Should this be D3?
-> 
-> No.  Transitions into D0 will be handled by pci_power_up() directly,
-> so they need not be handled by pci_raw_set_power_state().
+Reviving the freezer rewrite that was languishing, reinvigorated by the
+recent ptrace-vs-PREEMPT_RT trouble.
 
-OK.
+The first patch adds additional state to signal/ptrace stop states, this state
+is then used to fix the PREEMPT_RT issue (patch #2) and allow the new freezer
+to recover the special stop states (patch #5).
 
-> > >     from pci_raw_set_power_state() and rename it as
-> > >     pci_set_low_power_state().
-> > >
-> > >  b. Add the code handling transitions into D0 directly
-> > >     to pci_power_up() and to a new wrapper function
-> > >     pci_set_full_power_state() calling it internally that is
-> > >     only used in pci_set_power_state().
-> > >
-> > >  c. Make pci_power_up() avoid redundant PCI_PM_CTRL register reads
-> > >     and make it work in the same way for transitions from any
-> > >     low-power states (transitions from D1 and D2 are handled
-> > >     slightly differently before the change).
-> > >
-> > >  d. Put the restoration of the BARs and the PCI_PM_CTRL
-> > >     register read confirming the power state change into
-> > >     pci_set_full_power_state() to avoid doing that in
-> > >     pci_pm_default_resume_early() unnecessarily.
-> > >
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > ---
-> > >
-> > > v1 -> v2:
-> > >    * Do not add a redundant check to pci_set_low_power_state().
-> > >
-> > > ---
-> > >  drivers/pci/pci.c |  154 +++++++++++++++++++++++++++++++++++-------------------
-> > >  1 file changed, 101 insertions(+), 53 deletions(-)
-> > >
-> > > Index: linux-pm/drivers/pci/pci.c
-> > > ===================================================================
-> > > --- linux-pm.orig/drivers/pci/pci.c
-> > > +++ linux-pm/drivers/pci/pci.c
-> > > @@ -1068,10 +1068,9 @@ static inline bool platform_pci_bridge_d
-> > >  }
-> > >
-> > >  /**
-> > > - * pci_raw_set_power_state - Use PCI PM registers to set the power state of
-> > > - *                        given PCI device
-> > > + * pci_set_low_power_state - Program the given device into a low-power state
-> > >   * @dev: PCI device to handle.
-> > > - * @state: PCI power state (D0, D1, D2, D3hot) to put the device into.
-> > > + * @state: PCI power state (D1, D2, D3hot) to put the device into.
-> > >   *
-> > >   * RETURN VALUE:
-> > >   * -EINVAL if the requested state is invalid.
-> > > @@ -1080,10 +1079,9 @@ static inline bool platform_pci_bridge_d
-> > >   * 0 if device already is in the requested state.
-> > >   * 0 if device's power state has been successfully changed.
-> > >   */
-> > > -static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
-> > > +static int pci_set_low_power_state(struct pci_dev *dev, pci_power_t state)
-> > >  {
-> > >       u16 pmcsr;
-> > > -     bool need_restore = false;
-> > >
-> > >       /* Check if we're already there */
-> > >       if (dev->current_state == state)
-> > > @@ -1092,7 +1090,7 @@ static int pci_raw_set_power_state(struc
-> > >       if (!dev->pm_cap)
-> > >               return -EIO;
-> > >
-> > > -     if (state < PCI_D0 || state > PCI_D3hot)
-> > > +     if (state < PCI_D1 || state > PCI_D3hot)
-> > >               return -EINVAL;
-> > >
-> > >       /*
-> > > @@ -1101,8 +1099,7 @@ static int pci_raw_set_power_state(struc
-> > >        * we can go from D1 to D3, but we can't go directly from D3 to D1;
-> > >        * we'd have to go from D3 to D0, then to D1.
-> > >        */
-> > > -     if (state != PCI_D0 && dev->current_state <= PCI_D3cold
-> > > -         && dev->current_state > state) {
-> > > +     if (dev->current_state <= PCI_D3cold && dev->current_state > state) {
-> > >               pci_err(dev, "invalid power transition (from %s to %s)\n",
-> > >                       pci_power_name(dev->current_state),
-> > >                       pci_power_name(state));
-> > > @@ -1122,29 +1119,8 @@ static int pci_raw_set_power_state(struc
-> > >               return -EIO;
-> > >       }
-> > >
-> > > -     /*
-> > > -      * If we're (effectively) in D3, force entire word to 0.
-> > > -      * This doesn't affect PME_Status, disables PME_En, and
-> > > -      * sets PowerState to 0.
-> > > -      */
-> > > -     switch (dev->current_state) {
-> > > -     case PCI_D0:
-> > > -     case PCI_D1:
-> > > -     case PCI_D2:
-> > > -             pmcsr &= ~PCI_PM_CTRL_STATE_MASK;
-> > > -             pmcsr |= state;
-> > > -             break;
-> > > -     case PCI_D3hot:
-> > > -     case PCI_D3cold:
-> > > -     case PCI_UNKNOWN: /* Boot-up */
-> > > -             if ((pmcsr & PCI_PM_CTRL_STATE_MASK) == PCI_D3hot
-> > > -              && !(pmcsr & PCI_PM_CTRL_NO_SOFT_RESET))
-> > > -                     need_restore = true;
-> > > -             fallthrough;    /* force to D0 */
-> > > -     default:
-> > > -             pmcsr = 0;
-> > > -             break;
-> > > -     }
-> > > +     pmcsr &= ~PCI_PM_CTRL_STATE_MASK;
-> > > +     pmcsr |= state;
-> > >
-> > >       /* Enter specified state */
-> > >       pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, pmcsr);
-> > > @@ -1153,9 +1129,9 @@ static int pci_raw_set_power_state(struc
-> > >        * Mandatory power management transition delays; see PCI PM 1.1
-> > >        * 5.6.1 table 18
-> > >        */
-> > > -     if (state == PCI_D3hot || dev->current_state == PCI_D3hot)
-> > > +     if (state == PCI_D3hot)
-> > >               pci_dev_d3_sleep(dev);
-> > > -     else if (state == PCI_D2 || dev->current_state == PCI_D2)
-> > > +     else if (state == PCI_D2)
-> > >               udelay(PCI_PM_D2_DELAY);
-> > >
-> > >       pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-> > > @@ -1165,22 +1141,6 @@ static int pci_raw_set_power_state(struc
-> > >                        pci_power_name(dev->current_state),
-> > >                        pci_power_name(state));
-> > >
-> > > -     /*
-> > > -      * According to section 5.4.1 of the "PCI BUS POWER MANAGEMENT
-> > > -      * INTERFACE SPECIFICATION, REV. 1.2", a device transitioning
-> > > -      * from D3hot to D0 _may_ perform an internal reset, thereby
-> > > -      * going to "D0 Uninitialized" rather than "D0 Initialized".
-> > > -      * For example, at least some versions of the 3c905B and the
-> > > -      * 3c556B exhibit this behaviour.
-> > > -      *
-> > > -      * At least some laptop BIOSen (e.g. the Thinkpad T21) leave
-> > > -      * devices in a D3hot state at boot.  Consequently, we need to
-> > > -      * restore at least the BARs so that the device will be
-> > > -      * accessible to its driver.
-> > > -      */
-> > > -     if (need_restore)
-> > > -             pci_restore_bars(dev);
-> > > -
-> > >       if (dev->bus->self)
-> > >               pcie_aspm_pm_state_change(dev->bus->self);
-> > >
-> > > @@ -1312,8 +1272,54 @@ static int pci_dev_wait(struct pci_dev *
-> > >   */
-> > >  int pci_power_up(struct pci_dev *dev)
-> > >  {
-> > > -     pci_platform_power_transition(dev, PCI_D0);
-> > > -     return pci_raw_set_power_state(dev, PCI_D0);
-> > > +     int ret;
-> > > +
-> > > +     ret = pci_platform_power_transition(dev, PCI_D0);
-> > > +     if (ret) {
-> >
-> > Here pci_platform_power_transition() returned an error so we go and read
-> > back the PM_CTRL to check in which power state the device is in? Perhaps
-> > add a comment here explaining why we need to do this?
-> 
-> That's the comment below, but I gather it is insufficient as is.
-> Please let me know if rephrasing it this way would help:
-> 
-> "Since pci_platform_power_transition() has returned an error, the
-> PCI_PM_CTRL register has not been read by it and the current power
-> state of the device is unknown. Read the PCI_PM_CTRL register now and
-> bail out if that fails."
+I'm not completely happy with the ptrace solution, but I think it solves all
+the various issues I found. I still dislike wait_task_inactive() and now we
+have a second copy of that :/
 
-Yes, that's better, thanks!
+Please consider carefully..
 
-> And I've just realized that pm_cap should be checked here, because it
-> is not guaranteed to be set.
+---
+ drivers/acpi/x86/s2idle.c         |  12 +-
+ drivers/android/binder.c          |   4 +-
+ drivers/media/pci/pt3/pt3.c       |   4 +-
+ drivers/scsi/scsi_transport_spi.c |   7 +-
+ fs/cifs/inode.c                   |   4 +-
+ fs/cifs/transport.c               |   5 +-
+ fs/coredump.c                     |   5 +-
+ fs/nfs/file.c                     |   3 +-
+ fs/nfs/inode.c                    |  12 +-
+ fs/nfs/nfs3proc.c                 |   3 +-
+ fs/nfs/nfs4proc.c                 |  14 +--
+ fs/nfs/nfs4state.c                |   3 +-
+ fs/nfs/pnfs.c                     |   4 +-
+ fs/xfs/xfs_trans_ail.c            |   8 +-
+ include/linux/completion.h        |   1 +
+ include/linux/freezer.h           | 244 ++------------------------------------
+ include/linux/sched.h             |  49 ++++----
+ include/linux/sched/jobctl.h      |   8 ++
+ include/linux/sched/signal.h      |  15 ++-
+ include/linux/sunrpc/sched.h      |   7 +-
+ include/linux/suspend.h           |   8 +-
+ include/linux/umh.h               |   9 +-
+ include/linux/wait.h              |  40 ++++++-
+ init/do_mounts_initrd.c           |  10 +-
+ kernel/cgroup/legacy_freezer.c    |  23 ++--
+ kernel/exit.c                     |   4 +-
+ kernel/fork.c                     |   5 +-
+ kernel/freezer.c                  | 139 ++++++++++++++++------
+ kernel/futex/waitwake.c           |   8 +-
+ kernel/hung_task.c                |   4 +-
+ kernel/power/hibernate.c          |  35 ++++--
+ kernel/power/main.c               |  18 +--
+ kernel/power/process.c            |  10 +-
+ kernel/power/suspend.c            |  12 +-
+ kernel/power/user.c               |  24 ++--
+ kernel/ptrace.c                   | 185 +++++++++++++++++++++++------
+ kernel/sched/completion.c         |   9 ++
+ kernel/sched/core.c               |  24 ++--
+ kernel/signal.c                   |  23 ++--
+ kernel/time/hrtimer.c             |   4 +-
+ kernel/umh.c                      |  18 ++-
+ mm/khugepaged.c                   |   4 +-
+ net/sunrpc/sched.c                |  12 +-
+ net/unix/af_unix.c                |   8 +-
+ 44 files changed, 541 insertions(+), 507 deletions(-)
 
-Good point.
