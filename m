@@ -2,93 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 029524FDE46
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Apr 2022 13:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A5674FDDE4
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Apr 2022 13:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351013AbiDLL0U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Apr 2022 07:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52006 "EHLO
+        id S1347521AbiDLLfi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Apr 2022 07:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352781AbiDLLZl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Apr 2022 07:25:41 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52743275F5;
-        Tue, 12 Apr 2022 03:08:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649758109; x=1681294109;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pC4oMCwiVQJHi/ouQqRKkAncvNZ0T2XkSEgopnaDXwk=;
-  b=OqL8dcoBrZnmxoe5yZIC/ltuXWtxg83ePG33r/EHXJxf8tP6EnxDekhy
-   CEqIOoaZyepPuarkxBzJcTHbNDYOCLDGOFqxe58dwJF/g2nBZKT5LZnsx
-   FzhKNTLDg1UqSHVky6EuqTEQoYEeEPbdf01chRgjxWuUR+IT4c9yPIwAM
-   cttTzqqZHru79BvdVzltwxGM9a6KGMURo8kAEMemmfJSgfWbzlGLMi4HO
-   rSKujCi3+Zaxe/hzRdNc8vYFfdv/jwRQ4onoUGMniAlYH5gPUaaFIIsX5
-   M5ZQauDlSbZesS/Tf7FbZ1ADhzsWAVTYv9nTgp1h7ujgAvkiFvTDzX5kk
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="262517009"
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="262517009"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 03:08:09 -0700
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="802174815"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 03:08:06 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 12 Apr 2022 13:08:04 +0300
-Date:   Tue, 12 Apr 2022 13:08:04 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Subject: Re: [PATCH v2 0/9] PCI/PM: Improvements related to device
- transitions into D0
-Message-ID: <YlVPhCLcFVbFPN36@lahna>
-References: <4419002.LvFx2qVVIh@kreacher>
- <11975904.O9o76ZdvQC@kreacher>
+        with ESMTP id S1352820AbiDLLfX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Apr 2022 07:35:23 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C4813F78;
+        Tue, 12 Apr 2022 03:14:28 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23CAENQc014341;
+        Tue, 12 Apr 2022 05:14:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1649758463;
+        bh=ipQpcgHXpfbJcelLyl6HL6bFtANq2NPuGwT1Zv7GR7s=;
+        h=From:To:CC:Subject:Date;
+        b=X41862wbNGiNWnnv9sSegH48kEYfCpdGYJpO4nmuVMJLowjNNvNSyjdvAQqRO8KM+
+         Pa7P12vjmp799tGzDGmbxuqqhFPp4C0mfQCRYDA5WqfTme7dq0esZwkeaWGfEwhG4Q
+         ASAkJsuknoD+gYPxH4jhAanGw9zofsLp3XB0lE3A=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23CAENLd037774
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 12 Apr 2022 05:14:23 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 12
+ Apr 2022 05:14:23 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 12 Apr 2022 05:14:23 -0500
+Received: from keerthy.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23CAEJmN122452;
+        Tue, 12 Apr 2022 05:14:20 -0500
+From:   Keerthy <j-keerthy@ti.com>
+To:     <robh+dt@kernel.org>, <daniel.lezcano@linaro.org>,
+        <rui.zhang@intel.com>, <amitk@kernel.org>, <kristo@kernel.org>
+CC:     <j-keerthy@ti.com>, <linux-pm@vger.kernel.org>, <vigneshr@ti.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5 0/4] thermal: k3_j72xx_bandgap: Add the bandgap driver support
+Date:   Tue, 12 Apr 2022 15:44:05 +0530
+Message-ID: <20220412101409.7980-1-j-keerthy@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <11975904.O9o76ZdvQC@kreacher>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+Add VTM thermal support. In the Voltage Thermal Management
+Module(VTM), K3 J72XX supplies a voltage reference and a temperature
+sensor feature that are gathered in the band gap voltage and
+temperature sensor (VBGAPTS) module. The band gap provides current and
+voltage reference for its internal circuits and other analog IP
+blocks. The analog-to-digital converter (ADC) produces an output value
+that is proportional to the silicon temperature.
 
-On Mon, Apr 11, 2022 at 04:17:41PM +0200, Rafael J. Wysocki wrote:
-> Hi All,
-> 
-> On Saturday, April 9, 2022 3:03:14 PM CEST Rafael J. Wysocki wrote:
-> > Hi All,
-> > 
-> > This series supersedes the one at
-> > 
-> > https://lore.kernel.org/linux-pm/4198163.ejJDZkT8p0@kreacher
-> > 
-> > It addresses some potential issues related to PCI device transitions from
-> > low-power states into D0 and makes the related code more straightforward
-> > and so easier to follow.
-> > 
-> > Please refer to the patch changelogs for details.
-> 
-> Here's a v2 of this patch series which is being sent, because I realized that
-> one of the checks in pci_power_up() added by patch [4/7] in v1 was redundant
-> and can be dropped, but that affected the last 3 patches in the series and
-> then I noticed that more improvements were possible and hence the new patches
-> [2/9].
+Currently reading temperatures only is supported.  There are no
+active/passive cooling agent supported.
 
-I sent a few minor nits separately. The series looks good to me in
-general and certainly improves readability :)
+J721e SoCs have errata i2128: https://www.ti.com/lit/pdf/sprz455
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+The series also incorporates workaround for Errata i2128.
+
+Daniel,
+
+Apologies for the long silence on this!
+
+- Keerthy
+
+Changes in v5:
+
+  * Fixed all the comments on v4.
+  * Simplified the computation of the table.
+  * Removed unnecessary members in the structures.
+
+Changes in v4:
+
+  * Fixed compilation warning with W=1.
+
+Changes in v3:
+
+  * Removed static look up tables & added functions to dynamically generate them.
+
+Changes in v2:
+
+  * Fixed DT binding errors.
+
+Keerthy (4):
+  dt-bindings: thermal: k3-j72xx: Add VTM bindings documentation
+  arm64: dts: ti: j721e: Add VTM node
+  arm64: dts: ti: j7200: Add VTM node
+  thermal: k3_j72xx_bandgap: Add the bandgap driver support
+
+ .../bindings/thermal/ti,j72xx-thermal.yaml    |  62 ++
+ .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      |   9 +
+ arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi  |  45 ++
+ arch/arm64/boot/dts/ti/k3-j7200.dtsi          |   4 +
+ .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |   9 +
+ arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi  |  73 ++
+ arch/arm64/boot/dts/ti/k3-j721e.dtsi          |   4 +
+ drivers/thermal/Makefile                      |   2 +-
+ drivers/thermal/k3_j72xx_bandgap.c            | 623 ++++++++++++++++++
+ 9 files changed, 830 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
+ create mode 100644 drivers/thermal/k3_j72xx_bandgap.c
+
+-- 
+2.17.1
+
