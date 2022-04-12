@@ -2,82 +2,250 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C6C14FD964
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Apr 2022 12:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F924FDC21
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Apr 2022 13:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354531AbiDLHsE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Apr 2022 03:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
+        id S1353533AbiDLKOj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Apr 2022 06:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359872AbiDLHnt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Apr 2022 03:43:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4934504F
-        for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 00:26:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F0990614FA
-        for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 07:26:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 63753C385A8
-        for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 07:26:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649748395;
-        bh=lE1yoAe4JM8MtQFRGZCzsy3O5t+1jodlIk/tbyA0dyA=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=dKIY1SAdMpcSKsV5a90txGCX6lwp1cLcgf69Vdvbtbqwr4mFTKRVs5PRM8nwpKRg9
-         D5QVDVs+8WcswHYmXIwgG8D87dZ7hfo9jhZ46/sktmImBlZiLXkVMgTtYpQIltUtaE
-         CtFfHgyVFqcBLCsCUhFFf52dWvpwid5pkyXa9gVx4U5/sj6ga6asQIwZhXFrYoa0q5
-         hdyb4zNU3IfR9RDZJ6xjhaIHTF8T8iDJ/OEzHnU52/50RPTQSP0AlMB8snQ32jQ4ha
-         PFzZYS76YNexdmEP+6SK3EOKdMHzVX7x4R4dsyoRo2w4uwUQZmHzjbr/ZoHS0csSTg
-         EoX0LM/Ixt6BQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 3C8E0C05FCE; Tue, 12 Apr 2022 07:26:35 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 215800] amd-pstate does not allow to set arbitrary maximum CPU
- frequency above 2200MHz for a desktop Zen 3 CPU
-Date:   Tue, 12 Apr 2022 07:26:34 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: sujinzhou2008@126.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215800-137361-poeFlnrtZP@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215800-137361@https.bugzilla.kernel.org/>
-References: <bug-215800-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S1389223AbiDLJXa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Apr 2022 05:23:30 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 268085371F;
+        Tue, 12 Apr 2022 01:30:48 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id g12-20020a17090a640c00b001cb59d7a57cso1416751pjj.1;
+        Tue, 12 Apr 2022 01:30:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zIBPosMAgbB2iLSLb65e2fki5qW2rWW5YIt3KN8UYiE=;
+        b=lU+RSHml5ogJw30N7Dr3+lxm5yOvxAh9UXTV5mSghYPFv7VPsv+/4Nd3jm4VT517QX
+         dtyNRHGpw5WgNS01DCKj32ht9PWxAvpMVJdhmS4YXMAn0oIKgfRonCADZjNY5GGMLeMp
+         TG6IyOVMdtHFN3QPzCk1RIJ68LUUb1BsJ4Rt/83zQAOQ6wsIZiNghJ7ZXc3KNVUZAi1B
+         Bo2d87wQ3zV+3UCN6TSchOIAnO5T9PXoqU22D7fRKSeRikCyO/4SKezFCYoGb8PSpnpR
+         o5K9vX2Loe48ni0rn4kQb9XC2RqHzhJ8oqvvBj2xFqoB1qrYw498y4JHiBn/ShIGztso
+         YPFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zIBPosMAgbB2iLSLb65e2fki5qW2rWW5YIt3KN8UYiE=;
+        b=OYJB8B6Ji3JcXcPeNYVqB1m5+vqFKUhweK5Rz0uW2tmDfU5pL0WkQwwFZd06kd+8ol
+         hhcaBJrluWNh/Qi9YsQdbg3BswrtxiaWOo2OKhRktipmOT2bT7NXuZ7LlAAtI5Wqrtd8
+         ny5ljs1tyudbExdgIUFYrk0wPPfa+jhIG3gLPTXt5hY0HlOd87I6g34H2yW3yLIAyzPy
+         UyL0urPnuGMYDHRe8I9PXDbWGV5vi2lpqz20dt8Tn0ZrJu/uw/PvbKuFu14Ym/CLM2Wi
+         8dy1Zb2OOGqZ19oirVVPVZ+05w/NIIWXgRQPbD0rXje+xHld+/A/0MMjJYHoC4BDPURB
+         CbZA==
+X-Gm-Message-State: AOAM530xV4cQiTCcqFChYeWZ6EaVd+h/GVrKNVEnp12f2rb5rhcjte7x
+        cUIb13D3u+9GPgi6sNIeo60=
+X-Google-Smtp-Source: ABdhPJz74d87MjEnNJWjBPaDHdoKaveWj771z1rKM/fMObTm8wuoIP/lfmwYyX8X4XkN3pJNxUar9w==
+X-Received: by 2002:a17:90a:cc0b:b0:1cb:8351:a47e with SMTP id b11-20020a17090acc0b00b001cb8351a47emr3760156pju.67.1649752247638;
+        Tue, 12 Apr 2022 01:30:47 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id oo17-20020a17090b1c9100b001bf0ccc59c2sm2050299pjb.16.2022.04.12.01.30.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 01:30:47 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     sre@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] power: supply: bq24190_charger: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+Date:   Tue, 12 Apr 2022 08:30:44 +0000
+Message-Id: <20220412083044.2532773-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215800
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
---- Comment #8 from Joe (sujinzhou2008@126.com) ---
-Attach is the operation step on my side. It works with root privilege.
+Using pm_runtime_resume_and_get is more appropriate
+for simplifing code
 
---=20
-You may reply to this email to add a comment.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/power/supply/bq24190_charger.c | 63 +++++++++-----------------
+ 1 file changed, 21 insertions(+), 42 deletions(-)
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
+index aa1a589eb9f2..27f5c7648617 100644
+--- a/drivers/power/supply/bq24190_charger.c
++++ b/drivers/power/supply/bq24190_charger.c
+@@ -455,11 +455,9 @@ static ssize_t bq24190_sysfs_show(struct device *dev,
+ 	if (!info)
+ 		return -EINVAL;
+ 
+-	ret = pm_runtime_get_sync(bdi->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(bdi->dev);
++	ret = pm_runtime_resume_and_get(bdi->dev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	ret = bq24190_read_mask(bdi, info->reg, info->mask, info->shift, &v);
+ 	if (ret)
+@@ -490,11 +488,9 @@ static ssize_t bq24190_sysfs_store(struct device *dev,
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = pm_runtime_get_sync(bdi->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(bdi->dev);
++	ret = pm_runtime_resume_and_get(bdi->dev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	ret = bq24190_write_mask(bdi, info->reg, info->mask, info->shift, v);
+ 	if (ret)
+@@ -512,10 +508,9 @@ static int bq24190_set_otg_vbus(struct bq24190_dev_info *bdi, bool enable)
+ 	union power_supply_propval val = { .intval = bdi->charge_type };
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(bdi->dev);
++	ret = pm_runtime_resume_and_get(bdi->dev);
+ 	if (ret < 0) {
+ 		dev_warn(bdi->dev, "pm_runtime_get failed: %i\n", ret);
+-		pm_runtime_put_noidle(bdi->dev);
+ 		return ret;
+ 	}
+ 
+@@ -551,10 +546,9 @@ static int bq24190_vbus_is_enabled(struct regulator_dev *dev)
+ 	int ret;
+ 	u8 val;
+ 
+-	ret = pm_runtime_get_sync(bdi->dev);
++	ret = pm_runtime_resume_and_get(bdi->dev);
+ 	if (ret < 0) {
+ 		dev_warn(bdi->dev, "pm_runtime_get failed: %i\n", ret);
+-		pm_runtime_put_noidle(bdi->dev);
+ 		return ret;
+ 	}
+ 
+@@ -1128,11 +1122,9 @@ static int bq24190_charger_get_property(struct power_supply *psy,
+ 
+ 	dev_dbg(bdi->dev, "prop: %d\n", psp);
+ 
+-	ret = pm_runtime_get_sync(bdi->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(bdi->dev);
++	ret = pm_runtime_resume_and_get(bdi->dev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	switch (psp) {
+ 	case POWER_SUPPLY_PROP_CHARGE_TYPE:
+@@ -1204,11 +1196,9 @@ static int bq24190_charger_set_property(struct power_supply *psy,
+ 
+ 	dev_dbg(bdi->dev, "prop: %d\n", psp);
+ 
+-	ret = pm_runtime_get_sync(bdi->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(bdi->dev);
++	ret = pm_runtime_resume_and_get(bdi->dev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	switch (psp) {
+ 	case POWER_SUPPLY_PROP_ONLINE:
+@@ -1477,11 +1467,9 @@ static int bq24190_battery_get_property(struct power_supply *psy,
+ 	dev_warn(bdi->dev, "warning: /sys/class/power_supply/bq24190-battery is deprecated\n");
+ 	dev_dbg(bdi->dev, "prop: %d\n", psp);
+ 
+-	ret = pm_runtime_get_sync(bdi->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(bdi->dev);
++	ret = pm_runtime_resume_and_get(bdi->dev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	switch (psp) {
+ 	case POWER_SUPPLY_PROP_STATUS:
+@@ -1525,11 +1513,9 @@ static int bq24190_battery_set_property(struct power_supply *psy,
+ 	dev_warn(bdi->dev, "warning: /sys/class/power_supply/bq24190-battery is deprecated\n");
+ 	dev_dbg(bdi->dev, "prop: %d\n", psp);
+ 
+-	ret = pm_runtime_get_sync(bdi->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(bdi->dev);
++	ret = pm_runtime_resume_and_get(bdi->dev);
++	if (ret < 0)
+ 		return ret;
+-	}
+ 
+ 	switch (psp) {
+ 	case POWER_SUPPLY_PROP_ONLINE:
+@@ -1683,10 +1669,9 @@ static irqreturn_t bq24190_irq_handler_thread(int irq, void *data)
+ 	int error;
+ 
+ 	bdi->irq_event = true;
+-	error = pm_runtime_get_sync(bdi->dev);
++	error = pm_runtime_resume_and_get(bdi->dev);
+ 	if (error < 0) {
+ 		dev_warn(bdi->dev, "pm_runtime_get failed: %i\n", error);
+-		pm_runtime_put_noidle(bdi->dev);
+ 		return IRQ_NONE;
+ 	}
+ 	bq24190_check_status(bdi);
+@@ -1921,11 +1906,9 @@ static int bq24190_remove(struct i2c_client *client)
+ 	struct bq24190_dev_info *bdi = i2c_get_clientdata(client);
+ 	int error;
+ 
+-	error = pm_runtime_get_sync(bdi->dev);
+-	if (error < 0) {
++	error = pm_runtime_resume_and_get(bdi->dev);
++	if (error < 0)
+ 		dev_warn(bdi->dev, "pm_runtime_get failed: %i\n", error);
+-		pm_runtime_put_noidle(bdi->dev);
+-	}
+ 
+ 	bq24190_register_reset(bdi);
+ 	if (bdi->battery)
+@@ -1982,11 +1965,9 @@ static __maybe_unused int bq24190_pm_suspend(struct device *dev)
+ 	struct bq24190_dev_info *bdi = i2c_get_clientdata(client);
+ 	int error;
+ 
+-	error = pm_runtime_get_sync(bdi->dev);
+-	if (error < 0) {
++	error = pm_runtime_resume_and_get(bdi->dev);
++	if (error < 0)
+ 		dev_warn(bdi->dev, "pm_runtime_get failed: %i\n", error);
+-		pm_runtime_put_noidle(bdi->dev);
+-	}
+ 
+ 	bq24190_register_reset(bdi);
+ 
+@@ -2007,11 +1988,9 @@ static __maybe_unused int bq24190_pm_resume(struct device *dev)
+ 	bdi->f_reg = 0;
+ 	bdi->ss_reg = BQ24190_REG_SS_VBUS_STAT_MASK; /* impossible state */
+ 
+-	error = pm_runtime_get_sync(bdi->dev);
+-	if (error < 0) {
++	error = pm_runtime_resume_and_get(bdi->dev);
++	if (error < 0)
+ 		dev_warn(bdi->dev, "pm_runtime_get failed: %i\n", error);
+-		pm_runtime_put_noidle(bdi->dev);
+-	}
+ 
+ 	bq24190_register_reset(bdi);
+ 	bq24190_set_config(bdi);
+-- 
+2.25.1
+
