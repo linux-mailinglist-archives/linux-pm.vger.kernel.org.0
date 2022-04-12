@@ -2,72 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87F94FDD17
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Apr 2022 13:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D58B4FDD75
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Apr 2022 13:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377535AbiDLK4k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Apr 2022 06:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53716 "EHLO
+        id S244815AbiDLLKW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Apr 2022 07:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356946AbiDLKpq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Apr 2022 06:45:46 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89D659A67;
-        Tue, 12 Apr 2022 02:43:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649756593; x=1681292593;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=spVnMM+QgRSZn4l/UJxMcwljw0gQjm7dBFN3KL2Wmu8=;
-  b=BfLNBKW+Jcc1kgjbSGKCgzpa6M4ePK4vkyxGpKsttfXbFHfeldet2MJz
-   0tZtk4uMNgaoosGVD+X8slIPrLAXuBMGXblWAm60DXPQjuzcxnOFLOLox
-   xQJIYhKrFdaGm+4auynV+E/RUnbV968//oFVGN2KB2sTdOnahFjVuix2d
-   y3vWf4tadhqYdyLgFVXCJM3aX5HC+Y2bglXx45ULwW5O+JdRBnglB5+q1
-   U0l8JXNlv2s/gvCn36cQLQeFfoEq4tR3YLyJmHFe9F1GiEPdjmfMgSyvn
-   iVUjb+rJmMe81a54sreW7zn9IuEEZRbTS0kiAUsOoXEXwfaC8ZRatjpcf
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261771070"
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="261771070"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 02:43:03 -0700
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="572683971"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 02:43:01 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 12 Apr 2022 12:42:58 +0300
-Date:   Tue, 12 Apr 2022 12:42:58 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Subject: Re: [PATCH v2 3/9] PCI/PM: Rearrange pci_update_current_state()
-Message-ID: <YlVJorXPD1EoqVCB@lahna>
-References: <4419002.LvFx2qVVIh@kreacher>
- <11975904.O9o76ZdvQC@kreacher>
- <4721615.GXAFRqVoOG@kreacher>
+        with ESMTP id S1353858AbiDLLFA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Apr 2022 07:05:00 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A13D6548F;
+        Tue, 12 Apr 2022 02:55:39 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id 1E1521F43F0C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649757337;
+        bh=L7sIocVMVJFFf6pt5kvonBwHJBi8ufG5aawNMHgSOk0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=S7aa0qukIEifv3VA3CuUR35b2mrfJnR/HsoJXzpmjRJMCbhxox8PyYd3y4yAh2cci
+         fkdP6WhWpX2fTNoSalTPD6PO9LosH8R/uIddoXqmSbAGkyMpOv7gtxoyhkm7Vdt7Po
+         VE+FMV4P/sBi8qGDGbVNV7G1cE0QQC1Psgi2NgDN4gF7AuPhmOvrPWztAg0OKxrhYx
+         ZY0kqCMPGfjI965JP3tWKRvKNwoFqex5VZBw8ei+llxHp+CnMQUlR0C0Mb9omyZuyR
+         pQwj21iO0qbnTtEuCeKQh+DA2pdqBpS/Tpsp0jFVlk3igIjJYKAd36t5EZ0tHXKfa6
+         Nz+EAW2F2/bCw==
+Message-ID: <24a38d79-b52e-387b-5ef2-954aef05a49d@collabora.com>
+Date:   Tue, 12 Apr 2022 12:55:30 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4721615.GXAFRqVoOG@kreacher>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v7 00/20] Introduce power-off+restart call chain API
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+References: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
+ <CAMuHMdVfOpGvF5FR6vFD-3a1h-7Kc_yAKQzWV71PD6mDy6BmZw@mail.gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <CAMuHMdVfOpGvF5FR6vFD-3a1h-7Kc_yAKQzWV71PD6mDy6BmZw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 04:21:04PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 4/12/22 10:06, Geert Uytterhoeven wrote:
+> Hi Dmitry,
 > 
-> Save one config space access in pci_update_current_state() by
-> testing the retireved PCI_PM_CTRL register value against
-              ^^^^^^^^^
-retrieved
+> On Tue, Apr 12, 2022 at 1:38 AM Dmitry Osipenko
+> <dmitry.osipenko@collabora.com> wrote:
+>> Problem
+>> -------
+>>
+>> SoC devices require power-off call chaining functionality from kernel.
+>> We have a widely used restart chaining provided by restart notifier API,
+>> but nothing for power-off.
+> 
+>> Changelog:
+>>
+>> v7: - Rebased on a recent linux-next. Dropped the recently removed
+>>       NDS32 architecture. Only SH and x86 arches left un-acked.
+>>
+>>     - Added acks from Thomas Bogendoerfer and Krzysztof Kozlowski
+>>       to the MIPS and memory/emif patches respectively.
+> 
+> Looks like you forgot to add the actual acks?
+
+Good catch, thank you! Indeed, I sent out the version without the acks,
+but luckily it's only the acks that are missing, the code is fine.
