@@ -2,173 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A42CD4FF16F
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 10:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F9C64FF2E5
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 11:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233685AbiDMIKZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Apr 2022 04:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
+        id S230198AbiDMJI4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Apr 2022 05:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233570AbiDMIKY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 04:10:24 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB343135A
-        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 01:08:03 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id ay36-20020a05600c1e2400b0038ebc885115so2368071wmb.1
-        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 01:08:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=lVcO1/lC7e7USSSpiAYT+piKROxqG4y5tiLaA2XBQrE=;
-        b=xp86yr6Vj8c3yGnWzdMbXhYA9IABVafmRxPBYWZDA66yn/TT9oE1TxwiMBfSIowTE+
-         7swhRvEGEieoD/NxJr2V7NaNLxDUBaJ2SuvKCUQa15NixdStDES21jlu9XQMNpgwTD+3
-         sblkIeFTErHZZ8ilgxWd/632xzly4MGYq+PB+uhBQt0guKyKY2lol3PBFUOUejKdOsNF
-         dxVBz+exvq5Z3KyhAwRWQrdZTy2DYOKdwbsDZZOAd7siIp1AivN0DX1nFNFL97EZmEHx
-         Nb9knnh1vMm5V+n0eqxw2W7CUzCXx2XgwjmnjjR22LL761Q+t8Nc8YMUlU3j0UnPQZCR
-         KnTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=lVcO1/lC7e7USSSpiAYT+piKROxqG4y5tiLaA2XBQrE=;
-        b=nOW7IW83OrklVCG4rBFmgfTldpjEt82Nm/RjY5JwRM1SkUmwoClb5Zu2jp0KMfdn/h
-         u5/BB+l32IqYD1ysnLlgTzSyjViw+FLapK2IcUugPzcbYKq5Xbx60OKUbX0Ykdq7x1Ks
-         8+JbmlsDX8tIA7NY5vnXWSgzswOZ/Ek1tupyYAbeCyY2wW1f89wVP+fcLHcl3doPBZZj
-         cXoQDuOWjShGVv+1NJ6G1nJgk/53qkbBTyewFN1dGRyEwIQn5zVNHTTVkM90fnd17WpL
-         fsXOWMJ01vwj0ftLNJ/M5wMzOqJJNzBdSNtbTsh8siAVwYjaLIfTqurIy/l4zs2Sfyl2
-         rQyQ==
-X-Gm-Message-State: AOAM530rtIA9hykoI6st/XVtgr2bNsEosCW7/emBPc3sy3NHLrOO7ofX
-        cme6AI7NDci1n4bzqHhlhe5x4A==
-X-Google-Smtp-Source: ABdhPJyUAS0tkOnj0v7VsHut18QbcF8WjHXmfN7pryvAb2cvBZUa+xjKvFVwLKZrLKTNpq/yna5l3g==
-X-Received: by 2002:a05:600c:1d9d:b0:38e:c8e0:209f with SMTP id p29-20020a05600c1d9d00b0038ec8e0209fmr6642680wms.43.1649837281955;
-        Wed, 13 Apr 2022 01:08:01 -0700 (PDT)
-Received: from ?IPV6:2a01:e34:ed2f:f020:8949:72f1:7713:24f8? ([2a01:e34:ed2f:f020:8949:72f1:7713:24f8])
-        by smtp.googlemail.com with ESMTPSA id n68-20020a1c2747000000b0038e6b4d5395sm1776807wmn.16.2022.04.13.01.08.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Apr 2022 01:08:01 -0700 (PDT)
-Message-ID: <d470c4dc-6e16-1bb4-379e-250e2adf3e5f@linaro.org>
-Date:   Wed, 13 Apr 2022 10:07:59 +0200
+        with ESMTP id S230012AbiDMJIz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 05:08:55 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2080.outbound.protection.outlook.com [40.107.92.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41CB43482;
+        Wed, 13 Apr 2022 02:06:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NbshP1ne1P+iTTVNIoTvesStC7ZgA4qb6e0KW4tI7hB3G1rsAQH6bdsHrAOJOeHs4+DotsA54SnOo92f7+mR6zUCVRppFjVV5yfHZcn7dhI8VneBP5M5FHPCeOyBEtnp6xQCxGS7mZMeQ7GvM2lIA0id3Lz6CaHwYz3twTJ3MNTHKXCi716pEaHfNNzDA4feh0atFRqTIKdWlzQ7nsVHM9nM7WdQ4Dp+V1onGrh32tnEyNHsZrW4KD+uUduP+VfoQ7BfmW8Z7ti3ePLxJ6sFmyCVEtKY0f+LSWrWZnyLSPELLiZK06y5CBYBaVag63hlRhA95V4hzng9WAzPmOXMVw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iOxZgj1Rryj5h8ieJHaxmuru+/F8V1Vt9g+DzmGJRWc=;
+ b=Nfs0w3jJJdGbnjorc9W5pNiW/pIXyniLC3c8hBHPxpq9d/9Oz6J49X/HQosuduW0dCSq5tkZxYkn4b27fioc1vJZUVPf9grCpDU7AFf8PJnhNHz8Y4MXSicU8q5PYEVaUUduMQ/XYACud/XPEvlSC+klLDaAFTqjVKmnQTXpoERSK00TMg6cROVWe9pPAw2W/J7ntdtfTr/MwBynt23aMUewJsYZFKlPk+W2tAK++LOJH59YneaJNR2DppNjrzv5F1CnPjL2fytFYJZ2dXUe4EXTSwAswO0kBvLMayAb+whBDfJvsjfXZolJOJy2RgIRVTk4IWLqGY0ekR9/j+lyvg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iOxZgj1Rryj5h8ieJHaxmuru+/F8V1Vt9g+DzmGJRWc=;
+ b=A1rCGxgzX7YY3DIoSKFZ+HlolULZ9pzdVo3tAxMWuHZlAqwZ7slEYmmSMTfv2NSN6bjNijTicrAVEWG4RArbznxngNVyxl94OlGD2RxfkC5UWKNIEmBMPuTN/OS8OV0TmwRnckvDBi3mjbOHBO6309D5B2gI7PwxcwPTPPOikGU=
+Received: from BN9PR03CA0416.namprd03.prod.outlook.com (2603:10b6:408:111::31)
+ by MN2PR12MB4224.namprd12.prod.outlook.com (2603:10b6:208:1dd::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Wed, 13 Apr
+ 2022 09:06:32 +0000
+Received: from BN8NAM11FT067.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:111:cafe::13) by BN9PR03CA0416.outlook.office365.com
+ (2603:10b6:408:111::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.18 via Frontend
+ Transport; Wed, 13 Apr 2022 09:06:32 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT067.mail.protection.outlook.com (10.13.177.159) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5164.19 via Frontend Transport; Wed, 13 Apr 2022 09:06:32 +0000
+Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 13 Apr
+ 2022 04:06:22 -0500
+From:   Meng Li <li.meng@amd.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>, <linux-pm@vger.kernel.org>
+CC:     Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        "Mario Limonciello" <mario.limonciello@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        "Viresh Kumar" <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, <linux-kernel@vger.kernel.org>,
+        Meng Li <li.meng@amd.com>
+Subject: [PATCH v2 0/3] Add unit test module for AMD P-State driver
+Date:   Wed, 13 Apr 2022 17:05:07 +0800
+Message-ID: <20220413090510.4039589-1-li.meng@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v5 1/4] dt-bindings: thermal: k3-j72xx: Add VTM bindings
- documentation
-Content-Language: en-US
-To:     Keerthy <j-keerthy@ti.com>, robh+dt@kernel.org,
-        rui.zhang@intel.com, amitk@kernel.org, kristo@kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     linux-pm@vger.kernel.org, vigneshr@ti.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220412101409.7980-1-j-keerthy@ti.com>
- <20220412101409.7980-2-j-keerthy@ti.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220412101409.7980-2-j-keerthy@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 65cc074b-f586-4113-a411-08da1d2ce75d
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4224:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB42246F490C782411F3EA763DF7EC9@MN2PR12MB4224.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: d0ULeXJhde603sWLy30WNwU1h2SLwRiUicZiGwdVMEQX+fQZ1h3W9f6/e/y3qkkGdVKqV6hi7VCPAmAA7TBsvIRPSrgJwB/YmvheG1PmolnyrvaODCTFbLIlYQSTaLstqMARLdsHj/JOBeu+PI7P2BsqG66V0OR3Op/hykeC8a9EXJiA/kty/mzoP/8xyvlRKWsVQ1bPRpJjDTpPVM4JtqlHQXJ/kQ0fZdT3YlnxXw4JJDJOJXCv/PSbivFWmw8GQBybnF+bl1ILkxkKjYtMWrK9nqjokxaFpBPy9RGPOAmfNjn61TJD/fxz/+KZzGIZNRP7V3UczJ6jTFjjptVTo6n52/mpsppHTqTs6fRw7dPzpGJWim9fSQXaaqlIXWnswNzhtFa2MC4PGCzpBmIOgQA8W7hemhMg2mtq/5v9AjlBESh7GJwwxzi8j3QEzkhGu0OZqTHwiJbfN1/s1KZ0DKP8CuYKEY8UtG7UlurnY9kskbozpmJXKT2+/fcowV1YvS81nEEiUF/8kR52FexbJH7EW47kBY5+aEFEAMempe0uG7jEXjtum6n01XyVmIqOJ3EboiQY2B1mpjlIDPvuTEhyQn2OoVrtaoCFIVOg1Kaam1Z7HqWaNG9Pnr4P+B20xIK6cyI8EmNWuJ4xL9w4gHNWSTbAgvUl4b1vRy8TNwtz9orAk2e10wvGVsvcrxKSKrFKoG+caijhI9VWkYYpLlOr+RWPV420Q493FANEFAS1P4IK9NCYcpmBqtP3vEuMRQKOEWts+muxEsHm3hRQkCnGxg33CrCdPxKN5DDs314=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(5660300002)(70586007)(70206006)(86362001)(8936002)(186003)(83380400001)(8676002)(336012)(356005)(4326008)(40460700003)(81166007)(966005)(47076005)(82310400005)(16526019)(2906002)(36756003)(426003)(26005)(1076003)(508600001)(316002)(7696005)(6666004)(54906003)(36860700001)(110136005)(2616005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Apr 2022 09:06:32.3161
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 65cc074b-f586-4113-a411-08da1d2ce75d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT067.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4224
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi all:
 
-Adding Krzysztof
+AMD P-State unit test(amd_pstate_testmod) is a kernel module for testing
+the functions of amd-pstate driver.
+It could import as a module to launch some test tasks.
 
-On 12/04/2022 12:14, Keerthy wrote:
-> Add VTM bindings documentation. In the Voltage Thermal
-> Management Module(VTM), K3 J72XX supplies a voltage
-> reference and a temperature sensor feature that are gathered in the band
-> gap voltage and temperature sensor (VBGAPTS) module. The band
-> gap provides current and voltage reference for its internal
-> circuits and other analog IP blocks. The analog-to-digital
-> converter (ADC) produces an output value that is proportional
-> to the silicon temperature.
-> 
-> Signed-off-by: Keerthy <j-keerthy@ti.com>
-> ---
->   .../bindings/thermal/ti,j72xx-thermal.yaml    | 62 +++++++++++++++++++
->   1 file changed, 62 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-> new file mode 100644
-> index 000000000000..8483c495cb9a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-> @@ -0,0 +1,62 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/ti,j72xx-thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Texas Instruments J72XX VTM (DTS) binding
-> +
-> +maintainers:
-> +  - Keerthy <j-keerthy@ti.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: ti,j721e-vtm
-> +    oneOf:
-> +      - enum:
-> +          - ti,j721e-vtm
-> +          - ti,j7200-vtm
-> +
-> +  reg:
-> +    maxItems: 3
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  "#thermal-sensor-cells":
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - power-domains
-> +  - "#thermal-sensor-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/soc/ti,sci_pm_domain.h>
-> +    wkup_vtm0: wkup_vtm0@42040000 {
-> +        compatible = "ti,j721e-vtm";
-> +        reg = <0x42040000 0x350>,
-> +            <0x42050000 0x350>,
-> +            <0x43000300 0x10>;
-> +        power-domains = <&k3_pds 154 TI_SCI_PD_EXCLUSIVE>;
-> +        #thermal-sensor-cells = <1>;
-> +    };
-> +
-> +    mpu_thermal: mpu_thermal {
-> +        polling-delay-passive = <250>; /* milliseconds */
-> +        polling-delay = <500>; /* milliseconds */
-> +        thermal-sensors = <&wkup_vtm0 0>;
-> +
-> +        trips {
-> +                mpu_crit: mpu_crit {
-> +                        temperature = <125000>; /* milliCelsius */
-> +                        hysteresis = <2000>; /* milliCelsius */
-> +                        type = "critical";
-> +                };
-> +        };
-> +    };
-> +...
+We upstream out AMD P-state driver into Linux kernel and use this unit
+test module to verify the required conditions and basic functions of
+amd-pstate before integration test.
 
+We use test module in the kselftest frameworks to implement it.
+We create amd_pstate_testmod module and tie it into kselftest.
+
+For exmaple: The test case aput_acpi_cpc is used to check whether the
+_CPC object is exist in SBIOS.
+The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is
+not existed at the detected processor, so it is a necessary condition.
+
+At present, its test cases are very simple, and the corresponding test
+cases will continue to be added later to improve the test coverage.
+
+See patch series in below git repo:
+V1: https://lore.kernel.org/linux-pm/20220323071502.2674156-1-li.meng@amd.com/
+
+Changes from V1 -> V2:
+- cpufreq: amd-pstate:
+- - add a trailing of amd-pstate.h to MAINTAINER AMD PSTATE DRIVER
+- selftests: cpufreq
+- - add a wrapper shell script for the amd_pstate_testmod module
+- selftests: cpufreq:
+- - remove amd_pstate_testmod kernel module to .../cpufreq/amd_pstate_testmod
+- Documentation: amd-pstate:
+- - amd_pstate_testmod rst document is not provided at present.
+
+Thanks,
+Jasmine
+
+Meng Li (3):
+  cpufreq: amd-pstate: Expose struct amd_cpudata
+  selftests: cpufreq: Add wapper script for test AMD P-State
+  selftests: cpufreq: Add amd_pstate_testmod kernel module for testing
+
+ MAINTAINERS                                   |   1 +
+ drivers/cpufreq/amd-pstate.c                  |  60 +---
+ include/linux/amd-pstate.h                    |  74 +++++
+ tools/testing/selftests/cpufreq/Makefile      |   2 +-
+ .../selftests/cpufreq/amd_pstate_testmod.sh   |   4 +
+ .../cpufreq/amd_pstate_testmod/Makefile       |  20 ++
+ .../amd_pstate_testmod/amd_pstate_testmod.c   | 302 ++++++++++++++++++
+ tools/testing/selftests/cpufreq/config        |   1 +
+ 8 files changed, 404 insertions(+), 60 deletions(-)
+ create mode 100644 include/linux/amd-pstate.h
+ create mode 100755 tools/testing/selftests/cpufreq/amd_pstate_testmod.sh
+ create mode 100644 tools/testing/selftests/cpufreq/amd_pstate_testmod/Makefile
+ create mode 100644 tools/testing/selftests/cpufreq/amd_pstate_testmod/amd_pstate_testmod.c
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.25.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
