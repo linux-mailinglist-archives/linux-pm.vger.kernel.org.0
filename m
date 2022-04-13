@@ -2,157 +2,273 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E33B4FFC45
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 19:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 090694FFC49
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 19:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237255AbiDMRXK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Apr 2022 13:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59060 "EHLO
+        id S232894AbiDMRYK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Apr 2022 13:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235752AbiDMRXJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 13:23:09 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C012062BE5
-        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 10:20:47 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id c23so2558871plo.0
-        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 10:20:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=8ADwkKjxDJozF17IqN9N4HQa8Gjbxx1i43g6WbYLDow=;
-        b=sLADV1iyZOPR98VR4mcmIcD9uBHZPPZ5qoYf2d30VRvppdRtNRDmDm9lgsaaq8SMwD
-         NxZHfJjmEMt9+Cp6nrMglSuYTblb9HV516VtUGdMrbV+gMcNl5M4SDhXJQID7UAVg+ql
-         8nRc6yBKkLCxCmG4LYb29Qr2pLmAPxfIBpO5YWmD5MXy+VQ72tOBVxoLm5IDxcvE/tQx
-         J4AFGTjBsqW4zImeuJczRkIo4K3GoWWU9w2uT65CFjYkteeecZfAv5b+Dk5RFDZYmyR8
-         jUAOdQMLwF+uK9CKQ4tsmrnbkHZlE3nFEa6WS4K1Z+BIQPH23IAmO6XL9zkLJmq6rxLx
-         7Q2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=8ADwkKjxDJozF17IqN9N4HQa8Gjbxx1i43g6WbYLDow=;
-        b=PKj1YwGZYutJNQwwPR98TvpCCqEWHth5kj5HDNZwPA4CgRVfpnxVZVYXi6Om4xpt6J
-         MjMtg3TLhvVZ2JNL07UKi30yAkEcOCS77s8nKCsTc7I/Ir/MdL1cCcWZsLZQvjY1HiI0
-         cLCmednH62Jj7vSvfMuHN9Lf7qgUPnrhScp9/K8ZUFZr3yhOpBOFY5RshlqpXE37Pi8g
-         wS/KTcCTpCEzOzaL7Cl+iOQPl2SYchn/raYf6ieF4qf06DlmbYhIJjpNkEzG4ncHZL8W
-         L7RhQaW21nE06X57Os6WyIcbW0lpESSFRQkS4/bOF/ZNjK6njlYQl+miuZTTcGbYn5hL
-         zc7Q==
-X-Gm-Message-State: AOAM5339/QFwMorJ9X9kb6xgcj0Na2tS4329er/L9F0pBILyBEqyZbF7
-        kkt52zeDHk1WPIX2Uzzq6sbCEQ==
-X-Google-Smtp-Source: ABdhPJzbAwyD4e40yOhdZ2j3/AKvmtmy3iS5YKeEZHDMy80DD5PZiyERJb1gGLUAuHaIlfrmEz3Jsg==
-X-Received: by 2002:a17:903:41c5:b0:158:6bde:1d8b with SMTP id u5-20020a17090341c500b001586bde1d8bmr15025877ple.74.1649870447257;
-        Wed, 13 Apr 2022 10:20:47 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id bm27-20020a656e9b000000b0039e5d327f78sm62116pgb.44.2022.04.13.10.20.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Apr 2022 10:20:46 -0700 (PDT)
-Message-ID: <6257066e.1c69fb81.52621.039f@mx.google.com>
-Date:   Wed, 13 Apr 2022 10:20:46 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229540AbiDMRYK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 13:24:10 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A6C62C8C;
+        Wed, 13 Apr 2022 10:21:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649870507; x=1681406507;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=hj5kneNXt9GQIiug/+hb6huww6UsvPYM41YmQxPGypE=;
+  b=SS3xYGR4zGzbnNSG4fzC/NB6AzIL7fkdyOdSlBZ8AaJAwnLgm7w4UjfZ
+   aUTalm+Ri9hf/qH4Ic069wvWVGSo4NbwJholCCs3+4XPwqzwwHBvqe9SX
+   6cWiA3x52gauiPwRS1tYYuTbPbGmtCtZwo8ZDAmH2mPTYJQG1bjiic51n
+   gC/zZH1cD0OfA7JaITBlGx+SriPqqE6PuUG2o1Rsb44sdjOjP9wekBc5s
+   NdcQBsjq3fs+9Tzh9YjhSWRv8bVtj8iwABLGuMr66g5gNKdJc6R1HYmHI
+   nB8kshuRda9M9DAFUsjwBeJitRhZe22xIkdhSYqbTp1jEmY1o1CEi7Gfd
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="349161021"
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="349161021"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 10:21:47 -0700
+X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
+   d="scan'208";a="508059205"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 10:21:47 -0700
+Message-ID: <0181977f5843fb9df4eae7d397d96c890846a0db.camel@linux.intel.com>
+Subject: Re: [PATCH v2 0/4] tools/thermal: thermal library and tools
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Date:   Wed, 13 Apr 2022 10:21:47 -0700
+In-Reply-To: <CAJZ5v0hrRuVz8pgD6-m7EhVdHPPn67O4ajx_7vkOOOYdTkv2BQ@mail.gmail.com>
+References: <20220330100444.3846661-1-daniel.lezcano@linaro.org>
+         <f526d227-ffbb-4ac0-ceb6-c793ab912559@linaro.org>
+         <5380fef6d45f2f7a0b8a5f681934f02943d5e138.camel@linux.intel.com>
+         <9ccb342b-2f20-6efd-a668-96d593aa921e@linaro.org>
+         <CAJZ5v0hrRuVz8pgD6-m7EhVdHPPn67O4ajx_7vkOOOYdTkv2BQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v5.18-rc2-13-g781d19cfe317e
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (v5.18-rc2-13-g781d19cfe317e)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.18-rc2-13-g78=
-1d19cfe317e)
+On Wed, 2022-04-13 at 17:06 +0200, Rafael J. Wysocki wrote:
+> On Wed, Apr 6, 2022 at 4:44 PM Daniel Lezcano <
+> daniel.lezcano@linaro.org> wrote:
+> > 
+> > On 06/04/2022 16:28, srinivas pandruvada wrote:
+> > > Hi Daniel,
+> > > 
+> > > On Wed, 2022-04-06 at 10:00 +0200, Daniel Lezcano wrote:
+> > > > 
+> > > > Hi,
+> > > > 
+> > > > if there is no comment for the series, shall I pick it so we
+> > > > can go
+> > > > forward ?
+> > > Didn't get time to check yet. It will still be for the next merge
+> > > window, correct?
+> > 
+> > Right, but I would like to continue adding more features, scripts
+> > and
+> > tests. Iteratively.
+> 
+> Srinivas, if you can give this a go, please, it will help.
+> 
+> Otherwise, I think that all of your comments so far have been
+> addressed, or have I missed anything?
+> 
+I will provide by the end of this week.
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-18-rc2-13-g781d19cfe317e/
-
-Tree: pm
-Branch: testing
-Git Describe: v5.18-rc2-13-g781d19cfe317e
-Git Commit: 781d19cfe317ed1ef69f192771ea9a714dd75289
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
+Thanks,
+Srinivas
 
 
-Warnings summary:
+> > 
+> > > > 
+> > > > On 30/03/2022 12:04, Daniel Lezcano wrote:
+> > > > > These changes are providing the following tools and library:
+> > > > > 
+> > > > >    - A thermal library doing the netlink abstraction from the
+> > > > > kernel
+> > > > > in
+> > > > >      order to make the userspace thermal implementation
+> > > > > easier.
+> > > > > Having
+> > > > >      the library integrated with the kernel tree is also a
+> > > > > guarantee
+> > > > > to
+> > > > >      keep the message format and their encoding/decoding
+> > > > > aligned
+> > > > > 
+> > > > > 
+> > > > > 
+> > > > > 
+> > > > > 
+> > > > >    - A thermal tools library providing a set of functions to
+> > > > > deal
+> > > > > with
+> > > > >      usual features like the log, the mainloop and the time.
+> > > > > This
+> > > > >      library is used by the provided tools below
+> > > > > 
+> > > > >    - An data acquisition program to capture the temperature
+> > > > > of the
+> > > > >      different thermal zone during an amount of time or
+> > > > > during the
+> > > > >      execution of an application. The output is formated to
+> > > > > be
+> > > > > easily
+> > > > >      parsed by gnuplot, a spreadsheet program or a
+> > > > > statistical
+> > > > > command
+> > > > >      line utility. The timestamp is based on the system
+> > > > > uptime, thus
+> > > > >      giving an indication of when a thermal event happened,
+> > > > > that can
+> > > > >      help to spot or reproduce thermal issue in the long run
+> > > > > 
+> > > > >    - A thermal monitoring program based on the thermal
+> > > > > library. It
+> > > > > gives
+> > > > >      a skeleton to build any logic on top of it and shows how
+> > > > > to use
+> > > > > the
+> > > > >      thermal library. It does nothing except discovering the
+> > > > > thermal
+> > > > >      zones, their trip points and listening for events like
+> > > > > cooling
+> > > > >      devices state changes or trip point crossed
+> > > > > 
+> > > > >    Changelog:
+> > > > > 
+> > > > >    v1: Initial post after a RFC
+> > > > > 
+> > > > >    v2:
+> > > > > 
+> > > > >     - Fixed all trailing whitespaces and some other
+> > > > > checkpatch
+> > > > >       warnings. Some warnings remain but they can be
+> > > > > considered as
+> > > > > false
+> > > > >       positive
+> > > > > 
+> > > > >     - Added in the thermometer tool:
+> > > > >       - Usage/help option as well as a man page
+> > > > >       - The ability to execute a program
+> > > > >       - The capture duration
+> > > > >       - Create the output directory if it does not exist
+> > > > > 
+> > > > >     - Add in the thermal-engine tool:
+> > > > >       - A usage/help option
+> > > > >       - A message telling the userspace it is waiting for
+> > > > > events
+> > > > >       - A daemonize option
+> > > > > 
+> > > > >     - Minor bug fixes here and there, as well as typos
+> > > > > 
+> > > > > Daniel Lezcano (4):
+> > > > >     tools/lib/thermal: Add a thermal library
+> > > > >     tools/thermal: Add util library
+> > > > >     tools/thermal: A temperature capture tool
+> > > > >     tools/thermal: Add thermal daemon skeleton
+> > > > > 
+> > > > >    MAINTAINERS                                   |   1 +
+> > > > >    tools/Makefile                                |  36 +-
+> > > > >    tools/lib/thermal/.gitignore                  |   2 +
+> > > > >    tools/lib/thermal/Build                       |   5 +
+> > > > >    tools/lib/thermal/Makefile                    | 165 ++++++
+> > > > >    tools/lib/thermal/commands.c                  | 349
+> > > > > +++++++++++
+> > > > >    tools/lib/thermal/events.c                    | 164 +++++
+> > > > >    tools/lib/thermal/include/thermal.h           | 142 +++++
+> > > > >    tools/lib/thermal/libthermal.map              |  25 +
+> > > > >    tools/lib/thermal/libthermal.pc.template      |  12 +
+> > > > >    tools/lib/thermal/sampling.c                  |  75 +++
+> > > > >    tools/lib/thermal/thermal.c                   | 126 ++++
+> > > > >    tools/lib/thermal/thermal_nl.c                | 215
+> > > > > +++++++
+> > > > >    tools/lib/thermal/thermal_nl.h                |  46 ++
+> > > > >    tools/thermal/lib/Build                       |   3 +
+> > > > >    tools/thermal/lib/Makefile                    | 158 +++++
+> > > > >    .../thermal/lib/libthermal_tools.pc.template  |  12 +
+> > > > >    tools/thermal/lib/log.c                       |  77 +++
+> > > > >    tools/thermal/lib/log.h                       |  31 +
+> > > > >    tools/thermal/lib/mainloop.c                  | 120 ++++
+> > > > >    tools/thermal/lib/mainloop.h                  |  15 +
+> > > > >    tools/thermal/lib/thermal-tools.h             |  10 +
+> > > > >    tools/thermal/lib/uptimeofday.c               |  40 ++
+> > > > >    tools/thermal/lib/uptimeofday.h               |  12 +
+> > > > >    tools/thermal/thermal-engine/Build            |   2 +
+> > > > >    tools/thermal/thermal-engine/Makefile         |  28 +
+> > > > >    tools/thermal/thermal-engine/thermal-engine.c | 326
+> > > > > ++++++++++
+> > > > >    tools/thermal/thermometer/Build               |   2 +
+> > > > >    tools/thermal/thermometer/Makefile            |  26 +
+> > > > >    tools/thermal/thermometer/thermometer.8       |  93 +++
+> > > > >    tools/thermal/thermometer/thermometer.c       | 558
+> > > > > ++++++++++++++++++
+> > > > >    tools/thermal/thermometer/thermometer.conf    |   5 +
+> > > > >    32 files changed, 2878 insertions(+), 3 deletions(-)
+> > > > >    create mode 100644 tools/lib/thermal/.gitignore
+> > > > >    create mode 100644 tools/lib/thermal/Build
+> > > > >    create mode 100644 tools/lib/thermal/Makefile
+> > > > >    create mode 100644 tools/lib/thermal/commands.c
+> > > > >    create mode 100644 tools/lib/thermal/events.c
+> > > > >    create mode 100644 tools/lib/thermal/include/thermal.h
+> > > > >    create mode 100644 tools/lib/thermal/libthermal.map
+> > > > >    create mode 100644
+> > > > > tools/lib/thermal/libthermal.pc.template
+> > > > >    create mode 100644 tools/lib/thermal/sampling.c
+> > > > >    create mode 100644 tools/lib/thermal/thermal.c
+> > > > >    create mode 100644 tools/lib/thermal/thermal_nl.c
+> > > > >    create mode 100644 tools/lib/thermal/thermal_nl.h
+> > > > >    create mode 100644 tools/thermal/lib/Build
+> > > > >    create mode 100644 tools/thermal/lib/Makefile
+> > > > >    create mode 100644
+> > > > > tools/thermal/lib/libthermal_tools.pc.template
+> > > > >    create mode 100644 tools/thermal/lib/log.c
+> > > > >    create mode 100644 tools/thermal/lib/log.h
+> > > > >    create mode 100644 tools/thermal/lib/mainloop.c
+> > > > >    create mode 100644 tools/thermal/lib/mainloop.h
+> > > > >    create mode 100644 tools/thermal/lib/thermal-tools.h
+> > > > >    create mode 100644 tools/thermal/lib/uptimeofday.c
+> > > > >    create mode 100644 tools/thermal/lib/uptimeofday.h
+> > > > >    create mode 100644 tools/thermal/thermal-engine/Build
+> > > > >    create mode 100644 tools/thermal/thermal-engine/Makefile
+> > > > >    create mode 100644 tools/thermal/thermal-engine/thermal-
+> > > > > engine.c
+> > > > >    create mode 100644 tools/thermal/thermometer/Build
+> > > > >    create mode 100644 tools/thermal/thermometer/Makefile
+> > > > >    create mode 100644 tools/thermal/thermometer/thermometer.8
+> > > > >    create mode 100644 tools/thermal/thermometer/thermometer.c
+> > > > >    create mode 100644
+> > > > > tools/thermal/thermometer/thermometer.conf
+> > > > > 
+> > > > 
+> > > > 
+> > > 
+> > > 
+> > 
+> > 
+> > --
+> > <http://www.linaro.org/> Linaro.org │ Open source software for ARM
+> > SoCs
+> > 
+> > Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> > <http://twitter.com/#!/linaroorg> Twitter |
+> > <http://www.linaro.org/linaro-blog/> Blog
 
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
