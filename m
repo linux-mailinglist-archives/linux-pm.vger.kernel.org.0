@@ -2,63 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B938E4FF1FF
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 10:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A42CD4FF16F
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 10:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233837AbiDMIfM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Apr 2022 04:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39052 "EHLO
+        id S233685AbiDMIKZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Apr 2022 04:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233845AbiDMIfK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 04:35:10 -0400
-X-Greylist: delayed 86411 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 13 Apr 2022 01:32:44 PDT
-Received: from mail.growthmindset24.pl (mail.growthmindset24.pl [212.237.36.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA0B4E391
-        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 01:32:43 -0700 (PDT)
-Received: by mail.growthmindset24.pl (Postfix, from userid 1001)
-        id 9F5E58618C; Tue, 12 Apr 2022 08:52:49 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=growthmindset24.pl;
-        s=mail; t=1649750093;
-        bh=FDuFY3XQoq0gMX1b2gxgT7Py2p4Sxl0PJZYZ4NVaPho=;
-        h=Date:From:To:Subject:From;
-        b=RiusPS4oLgDYkNrGOZDRzBanexoWinMfNNAd14iXDQX09Tbt6DOAAYz6aHOmCe9aP
-         8ZA6P+foU3/ZO+gBLVI2CSYoqeAbm0ptrqkL3t8Z1nCRHwI+NOSoE0ZDNLDM+s1LuO
-         xwYVpelZYYT9UCtdh+n9IkIhmugWHth0w+ydbtHYCEyTSL9Fkyw9qBNsUl/cNZ2jp3
-         5fjA7da1elW6sMjreCuUPciP+0BGYeOMexQ+VabF87b2vWhvB8WzB5ocB1qrTWvts2
-         DZFkzCQlkJAk1TJTxiMz+VTj6wclRjykiCm+BOLqBjj2fp5TQbmXhcfavuNLpuE0Ey
-         up0Gxj+LOFbmg==
-Received: by mail.growthmindset24.pl for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 07:50:49 GMT
-Message-ID: <20220412073001-0.1.2w.d7ms.0.90416a2alt@growthmindset24.pl>
-Date:   Tue, 12 Apr 2022 07:50:49 GMT
-From:   =?UTF-8?Q? "Przemys=C5=82aw_Wr=C3=B3blewski" ?= 
-        <przemyslaw.wroblewski@growthmindset24.pl>
-To:     <linux-pm@vger.kernel.org>
-Subject: Wycena paneli fotowoltaicznych
-X-Mailer: mail.growthmindset24.pl
+        with ESMTP id S233570AbiDMIKY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 04:10:24 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB343135A
+        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 01:08:03 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id ay36-20020a05600c1e2400b0038ebc885115so2368071wmb.1
+        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 01:08:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=lVcO1/lC7e7USSSpiAYT+piKROxqG4y5tiLaA2XBQrE=;
+        b=xp86yr6Vj8c3yGnWzdMbXhYA9IABVafmRxPBYWZDA66yn/TT9oE1TxwiMBfSIowTE+
+         7swhRvEGEieoD/NxJr2V7NaNLxDUBaJ2SuvKCUQa15NixdStDES21jlu9XQMNpgwTD+3
+         sblkIeFTErHZZ8ilgxWd/632xzly4MGYq+PB+uhBQt0guKyKY2lol3PBFUOUejKdOsNF
+         dxVBz+exvq5Z3KyhAwRWQrdZTy2DYOKdwbsDZZOAd7siIp1AivN0DX1nFNFL97EZmEHx
+         Nb9knnh1vMm5V+n0eqxw2W7CUzCXx2XgwjmnjjR22LL761Q+t8Nc8YMUlU3j0UnPQZCR
+         KnTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=lVcO1/lC7e7USSSpiAYT+piKROxqG4y5tiLaA2XBQrE=;
+        b=nOW7IW83OrklVCG4rBFmgfTldpjEt82Nm/RjY5JwRM1SkUmwoClb5Zu2jp0KMfdn/h
+         u5/BB+l32IqYD1ysnLlgTzSyjViw+FLapK2IcUugPzcbYKq5Xbx60OKUbX0Ykdq7x1Ks
+         8+JbmlsDX8tIA7NY5vnXWSgzswOZ/Ek1tupyYAbeCyY2wW1f89wVP+fcLHcl3doPBZZj
+         cXoQDuOWjShGVv+1NJ6G1nJgk/53qkbBTyewFN1dGRyEwIQn5zVNHTTVkM90fnd17WpL
+         fsXOWMJ01vwj0ftLNJ/M5wMzOqJJNzBdSNtbTsh8siAVwYjaLIfTqurIy/l4zs2Sfyl2
+         rQyQ==
+X-Gm-Message-State: AOAM530rtIA9hykoI6st/XVtgr2bNsEosCW7/emBPc3sy3NHLrOO7ofX
+        cme6AI7NDci1n4bzqHhlhe5x4A==
+X-Google-Smtp-Source: ABdhPJyUAS0tkOnj0v7VsHut18QbcF8WjHXmfN7pryvAb2cvBZUa+xjKvFVwLKZrLKTNpq/yna5l3g==
+X-Received: by 2002:a05:600c:1d9d:b0:38e:c8e0:209f with SMTP id p29-20020a05600c1d9d00b0038ec8e0209fmr6642680wms.43.1649837281955;
+        Wed, 13 Apr 2022 01:08:01 -0700 (PDT)
+Received: from ?IPV6:2a01:e34:ed2f:f020:8949:72f1:7713:24f8? ([2a01:e34:ed2f:f020:8949:72f1:7713:24f8])
+        by smtp.googlemail.com with ESMTPSA id n68-20020a1c2747000000b0038e6b4d5395sm1776807wmn.16.2022.04.13.01.08.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 01:08:01 -0700 (PDT)
+Message-ID: <d470c4dc-6e16-1bb4-379e-250e2adf3e5f@linaro.org>
+Date:   Wed, 13 Apr 2022 10:07:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v5 1/4] dt-bindings: thermal: k3-j72xx: Add VTM bindings
+ documentation
+Content-Language: en-US
+To:     Keerthy <j-keerthy@ti.com>, robh+dt@kernel.org,
+        rui.zhang@intel.com, amitk@kernel.org, kristo@kernel.org,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     linux-pm@vger.kernel.org, vigneshr@ti.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220412101409.7980-1-j-keerthy@ti.com>
+ <20220412101409.7980-2-j-keerthy@ti.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220412101409.7980-2-j-keerthy@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dzie=C5=84 dobry,
 
-dostrzegam mo=C5=BCliwo=C5=9B=C4=87 wsp=C3=B3=C5=82pracy z Pa=C5=84stwa f=
-irm=C4=85.
+Adding Krzysztof
 
-=C5=9Awiadczymy kompleksow=C4=85 obs=C5=82ug=C4=99 inwestycji w fotowolta=
-ik=C4=99, kt=C3=B3ra obni=C5=BCa koszty energii elektrycznej nawet o 90%.
+On 12/04/2022 12:14, Keerthy wrote:
+> Add VTM bindings documentation. In the Voltage Thermal
+> Management Module(VTM), K3 J72XX supplies a voltage
+> reference and a temperature sensor feature that are gathered in the band
+> gap voltage and temperature sensor (VBGAPTS) module. The band
+> gap provides current and voltage reference for its internal
+> circuits and other analog IP blocks. The analog-to-digital
+> converter (ADC) produces an output value that is proportional
+> to the silicon temperature.
+> 
+> Signed-off-by: Keerthy <j-keerthy@ti.com>
+> ---
+>   .../bindings/thermal/ti,j72xx-thermal.yaml    | 62 +++++++++++++++++++
+>   1 file changed, 62 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+> new file mode 100644
+> index 000000000000..8483c495cb9a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+> @@ -0,0 +1,62 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/ti,j72xx-thermal.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Texas Instruments J72XX VTM (DTS) binding
+> +
+> +maintainers:
+> +  - Keerthy <j-keerthy@ti.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: ti,j721e-vtm
+> +    oneOf:
+> +      - enum:
+> +          - ti,j721e-vtm
+> +          - ti,j7200-vtm
+> +
+> +  reg:
+> +    maxItems: 3
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  "#thermal-sensor-cells":
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - power-domains
+> +  - "#thermal-sensor-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/soc/ti,sci_pm_domain.h>
+> +    wkup_vtm0: wkup_vtm0@42040000 {
+> +        compatible = "ti,j721e-vtm";
+> +        reg = <0x42040000 0x350>,
+> +            <0x42050000 0x350>,
+> +            <0x43000300 0x10>;
+> +        power-domains = <&k3_pds 154 TI_SCI_PD_EXCLUSIVE>;
+> +        #thermal-sensor-cells = <1>;
+> +    };
+> +
+> +    mpu_thermal: mpu_thermal {
+> +        polling-delay-passive = <250>; /* milliseconds */
+> +        polling-delay = <500>; /* milliseconds */
+> +        thermal-sensors = <&wkup_vtm0 0>;
+> +
+> +        trips {
+> +                mpu_crit: mpu_crit {
+> +                        temperature = <125000>; /* milliCelsius */
+> +                        hysteresis = <2000>; /* milliCelsius */
+> +                        type = "critical";
+> +                };
+> +        };
+> +    };
+> +...
 
-Czy s=C4=85 Pa=C5=84stwo zainteresowani weryfikacj=C4=85 wst=C4=99pnych p=
-ropozycji?
 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Pozdrawiam,
-Przemys=C5=82aw Wr=C3=B3blewski
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
