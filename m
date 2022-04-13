@@ -2,273 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 090694FFC49
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 19:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 916434FFE28
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 20:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232894AbiDMRYK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Apr 2022 13:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
+        id S237821AbiDMSuz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Apr 2022 14:50:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiDMRYK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 13:24:10 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A6C62C8C;
-        Wed, 13 Apr 2022 10:21:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649870507; x=1681406507;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hj5kneNXt9GQIiug/+hb6huww6UsvPYM41YmQxPGypE=;
-  b=SS3xYGR4zGzbnNSG4fzC/NB6AzIL7fkdyOdSlBZ8AaJAwnLgm7w4UjfZ
-   aUTalm+Ri9hf/qH4Ic069wvWVGSo4NbwJholCCs3+4XPwqzwwHBvqe9SX
-   6cWiA3x52gauiPwRS1tYYuTbPbGmtCtZwo8ZDAmH2mPTYJQG1bjiic51n
-   gC/zZH1cD0OfA7JaITBlGx+SriPqqE6PuUG2o1Rsb44sdjOjP9wekBc5s
-   NdcQBsjq3fs+9Tzh9YjhSWRv8bVtj8iwABLGuMr66g5gNKdJc6R1HYmHI
-   nB8kshuRda9M9DAFUsjwBeJitRhZe22xIkdhSYqbTp1jEmY1o1CEi7Gfd
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="349161021"
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="349161021"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 10:21:47 -0700
-X-IronPort-AV: E=Sophos;i="5.90,257,1643702400"; 
-   d="scan'208";a="508059205"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 10:21:47 -0700
-Message-ID: <0181977f5843fb9df4eae7d397d96c890846a0db.camel@linux.intel.com>
-Subject: Re: [PATCH v2 0/4] tools/thermal: thermal library and tools
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Date:   Wed, 13 Apr 2022 10:21:47 -0700
-In-Reply-To: <CAJZ5v0hrRuVz8pgD6-m7EhVdHPPn67O4ajx_7vkOOOYdTkv2BQ@mail.gmail.com>
-References: <20220330100444.3846661-1-daniel.lezcano@linaro.org>
-         <f526d227-ffbb-4ac0-ceb6-c793ab912559@linaro.org>
-         <5380fef6d45f2f7a0b8a5f681934f02943d5e138.camel@linux.intel.com>
-         <9ccb342b-2f20-6efd-a668-96d593aa921e@linaro.org>
-         <CAJZ5v0hrRuVz8pgD6-m7EhVdHPPn67O4ajx_7vkOOOYdTkv2BQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+        with ESMTP id S231590AbiDMSuy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 14:50:54 -0400
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50A75DA0F;
+        Wed, 13 Apr 2022 11:48:32 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-2ec04a2ebadso32319057b3.12;
+        Wed, 13 Apr 2022 11:48:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=J1rErWVySlUxlEFN2u18NGS5Qm0qvXYHGlMsYpGhhEY=;
+        b=o889vKxSZtxv8BEV2OoNHeUSIVSxACJe8n0x+KvpxDr0kg3lDSg1g8LoUE9Bu4dAAe
+         I0iUyDRgqQM+YxT7ev9JMk18DB7xCsm0NBYY0yKziHMpPBVYhoEIuHPE0y3+tOiIghU0
+         QHrGU+pFLYAbtd6x535V+cs7nmE3stGixEEx91f8SUrxCGmEZ0B4NPXCTsEfdbCexJso
+         vN1rL0p+hRNdjj6uBwjtVnohxcEFxd7GQNFhlNHOO2UF1hIvohxjUdbrpOBY+8T8/y0d
+         BY3aa+4w9VV3v6CY9Vt8NvvoNMllq5JBLzAtEZiZR4w9pAAAbivq/5mzW1QjjZn3A3Ob
+         eqpg==
+X-Gm-Message-State: AOAM532UuvfMXcYmQn930+JWT3B73Q7VMEmbT5Qiq10V4IGHVmHDg4AO
+        YQUeiVjdulu07zQKtE0HLZsgtYUCjcWXGlEgZG4=
+X-Google-Smtp-Source: ABdhPJz9BfsA7QIGi43YRDlzzrWhVjbeGEMJOs01j9nA3vXXWXOOPKhq5d8EhdtGHqqQ5dYXQmK91VGL/RQnfnI1jKs=
+X-Received: by 2002:a81:7c45:0:b0:2eb:4759:cc32 with SMTP id
+ x66-20020a817c45000000b002eb4759cc32mr224284ywc.515.1649875711933; Wed, 13
+ Apr 2022 11:48:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220411233832.391817-1-dmitry.osipenko@collabora.com> <20220411233832.391817-4-dmitry.osipenko@collabora.com>
+In-Reply-To: <20220411233832.391817-4-dmitry.osipenko@collabora.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 13 Apr 2022 20:48:20 +0200
+Message-ID: <CAJZ5v0gf1J+yPW14TAdLGLGfO+-2s=r0DDP7d+Rgop3=dB0gaQ@mail.gmail.com>
+Subject: Re: [PATCH v7 03/20] reboot: Print error message if restart handler
+ has duplicated priority
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2022-04-13 at 17:06 +0200, Rafael J. Wysocki wrote:
-> On Wed, Apr 6, 2022 at 4:44 PM Daniel Lezcano <
-> daniel.lezcano@linaro.org> wrote:
-> > 
-> > On 06/04/2022 16:28, srinivas pandruvada wrote:
-> > > Hi Daniel,
-> > > 
-> > > On Wed, 2022-04-06 at 10:00 +0200, Daniel Lezcano wrote:
-> > > > 
-> > > > Hi,
-> > > > 
-> > > > if there is no comment for the series, shall I pick it so we
-> > > > can go
-> > > > forward ?
-> > > Didn't get time to check yet. It will still be for the next merge
-> > > window, correct?
-> > 
-> > Right, but I would like to continue adding more features, scripts
-> > and
-> > tests. Iteratively.
-> 
-> Srinivas, if you can give this a go, please, it will help.
-> 
-> Otherwise, I think that all of your comments so far have been
-> addressed, or have I missed anything?
-> 
-I will provide by the end of this week.
+On Tue, Apr 12, 2022 at 1:39 AM Dmitry Osipenko
+<dmitry.osipenko@collabora.com> wrote:
+>
+> Add sanity check which ensures that there are no two restart handlers
+> registered using the same priority. This requirement will become mandatory
+> once all drivers will be converted to the new API and such errors will be
+> fixed.
+>
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 
-Thanks,
-Srinivas
+The first two patches in the series are fine with me and there's only
+one minor nit regarding this one (below).
 
+> ---
+>  kernel/reboot.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+>
+> diff --git a/kernel/reboot.c b/kernel/reboot.c
+> index ed4e6dfb7d44..acdae4e95061 100644
+> --- a/kernel/reboot.c
+> +++ b/kernel/reboot.c
+> @@ -182,6 +182,21 @@ static ATOMIC_NOTIFIER_HEAD(restart_handler_list);
+>   */
+>  int register_restart_handler(struct notifier_block *nb)
+>  {
+> +       int ret;
+> +
+> +       ret = atomic_notifier_chain_register_unique_prio(&restart_handler_list, nb);
+> +       if (ret != -EBUSY)
+> +               return ret;
+> +
+> +       /*
+> +        * Handler must have unique priority. Otherwise call order is
+> +        * determined by registration order, which is unreliable.
+> +        *
+> +        * This requirement will become mandatory once all drivers
+> +        * will be converted to use new sys-off API.
+> +        */
+> +       pr_err("failed to register restart handler using unique priority\n");
 
-> > 
-> > > > 
-> > > > On 30/03/2022 12:04, Daniel Lezcano wrote:
-> > > > > These changes are providing the following tools and library:
-> > > > > 
-> > > > >    - A thermal library doing the netlink abstraction from the
-> > > > > kernel
-> > > > > in
-> > > > >      order to make the userspace thermal implementation
-> > > > > easier.
-> > > > > Having
-> > > > >      the library integrated with the kernel tree is also a
-> > > > > guarantee
-> > > > > to
-> > > > >      keep the message format and their encoding/decoding
-> > > > > aligned
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > >    - A thermal tools library providing a set of functions to
-> > > > > deal
-> > > > > with
-> > > > >      usual features like the log, the mainloop and the time.
-> > > > > This
-> > > > >      library is used by the provided tools below
-> > > > > 
-> > > > >    - An data acquisition program to capture the temperature
-> > > > > of the
-> > > > >      different thermal zone during an amount of time or
-> > > > > during the
-> > > > >      execution of an application. The output is formated to
-> > > > > be
-> > > > > easily
-> > > > >      parsed by gnuplot, a spreadsheet program or a
-> > > > > statistical
-> > > > > command
-> > > > >      line utility. The timestamp is based on the system
-> > > > > uptime, thus
-> > > > >      giving an indication of when a thermal event happened,
-> > > > > that can
-> > > > >      help to spot or reproduce thermal issue in the long run
-> > > > > 
-> > > > >    - A thermal monitoring program based on the thermal
-> > > > > library. It
-> > > > > gives
-> > > > >      a skeleton to build any logic on top of it and shows how
-> > > > > to use
-> > > > > the
-> > > > >      thermal library. It does nothing except discovering the
-> > > > > thermal
-> > > > >      zones, their trip points and listening for events like
-> > > > > cooling
-> > > > >      devices state changes or trip point crossed
-> > > > > 
-> > > > >    Changelog:
-> > > > > 
-> > > > >    v1: Initial post after a RFC
-> > > > > 
-> > > > >    v2:
-> > > > > 
-> > > > >     - Fixed all trailing whitespaces and some other
-> > > > > checkpatch
-> > > > >       warnings. Some warnings remain but they can be
-> > > > > considered as
-> > > > > false
-> > > > >       positive
-> > > > > 
-> > > > >     - Added in the thermometer tool:
-> > > > >       - Usage/help option as well as a man page
-> > > > >       - The ability to execute a program
-> > > > >       - The capture duration
-> > > > >       - Create the output directory if it does not exist
-> > > > > 
-> > > > >     - Add in the thermal-engine tool:
-> > > > >       - A usage/help option
-> > > > >       - A message telling the userspace it is waiting for
-> > > > > events
-> > > > >       - A daemonize option
-> > > > > 
-> > > > >     - Minor bug fixes here and there, as well as typos
-> > > > > 
-> > > > > Daniel Lezcano (4):
-> > > > >     tools/lib/thermal: Add a thermal library
-> > > > >     tools/thermal: Add util library
-> > > > >     tools/thermal: A temperature capture tool
-> > > > >     tools/thermal: Add thermal daemon skeleton
-> > > > > 
-> > > > >    MAINTAINERS                                   |   1 +
-> > > > >    tools/Makefile                                |  36 +-
-> > > > >    tools/lib/thermal/.gitignore                  |   2 +
-> > > > >    tools/lib/thermal/Build                       |   5 +
-> > > > >    tools/lib/thermal/Makefile                    | 165 ++++++
-> > > > >    tools/lib/thermal/commands.c                  | 349
-> > > > > +++++++++++
-> > > > >    tools/lib/thermal/events.c                    | 164 +++++
-> > > > >    tools/lib/thermal/include/thermal.h           | 142 +++++
-> > > > >    tools/lib/thermal/libthermal.map              |  25 +
-> > > > >    tools/lib/thermal/libthermal.pc.template      |  12 +
-> > > > >    tools/lib/thermal/sampling.c                  |  75 +++
-> > > > >    tools/lib/thermal/thermal.c                   | 126 ++++
-> > > > >    tools/lib/thermal/thermal_nl.c                | 215
-> > > > > +++++++
-> > > > >    tools/lib/thermal/thermal_nl.h                |  46 ++
-> > > > >    tools/thermal/lib/Build                       |   3 +
-> > > > >    tools/thermal/lib/Makefile                    | 158 +++++
-> > > > >    .../thermal/lib/libthermal_tools.pc.template  |  12 +
-> > > > >    tools/thermal/lib/log.c                       |  77 +++
-> > > > >    tools/thermal/lib/log.h                       |  31 +
-> > > > >    tools/thermal/lib/mainloop.c                  | 120 ++++
-> > > > >    tools/thermal/lib/mainloop.h                  |  15 +
-> > > > >    tools/thermal/lib/thermal-tools.h             |  10 +
-> > > > >    tools/thermal/lib/uptimeofday.c               |  40 ++
-> > > > >    tools/thermal/lib/uptimeofday.h               |  12 +
-> > > > >    tools/thermal/thermal-engine/Build            |   2 +
-> > > > >    tools/thermal/thermal-engine/Makefile         |  28 +
-> > > > >    tools/thermal/thermal-engine/thermal-engine.c | 326
-> > > > > ++++++++++
-> > > > >    tools/thermal/thermometer/Build               |   2 +
-> > > > >    tools/thermal/thermometer/Makefile            |  26 +
-> > > > >    tools/thermal/thermometer/thermometer.8       |  93 +++
-> > > > >    tools/thermal/thermometer/thermometer.c       | 558
-> > > > > ++++++++++++++++++
-> > > > >    tools/thermal/thermometer/thermometer.conf    |   5 +
-> > > > >    32 files changed, 2878 insertions(+), 3 deletions(-)
-> > > > >    create mode 100644 tools/lib/thermal/.gitignore
-> > > > >    create mode 100644 tools/lib/thermal/Build
-> > > > >    create mode 100644 tools/lib/thermal/Makefile
-> > > > >    create mode 100644 tools/lib/thermal/commands.c
-> > > > >    create mode 100644 tools/lib/thermal/events.c
-> > > > >    create mode 100644 tools/lib/thermal/include/thermal.h
-> > > > >    create mode 100644 tools/lib/thermal/libthermal.map
-> > > > >    create mode 100644
-> > > > > tools/lib/thermal/libthermal.pc.template
-> > > > >    create mode 100644 tools/lib/thermal/sampling.c
-> > > > >    create mode 100644 tools/lib/thermal/thermal.c
-> > > > >    create mode 100644 tools/lib/thermal/thermal_nl.c
-> > > > >    create mode 100644 tools/lib/thermal/thermal_nl.h
-> > > > >    create mode 100644 tools/thermal/lib/Build
-> > > > >    create mode 100644 tools/thermal/lib/Makefile
-> > > > >    create mode 100644
-> > > > > tools/thermal/lib/libthermal_tools.pc.template
-> > > > >    create mode 100644 tools/thermal/lib/log.c
-> > > > >    create mode 100644 tools/thermal/lib/log.h
-> > > > >    create mode 100644 tools/thermal/lib/mainloop.c
-> > > > >    create mode 100644 tools/thermal/lib/mainloop.h
-> > > > >    create mode 100644 tools/thermal/lib/thermal-tools.h
-> > > > >    create mode 100644 tools/thermal/lib/uptimeofday.c
-> > > > >    create mode 100644 tools/thermal/lib/uptimeofday.h
-> > > > >    create mode 100644 tools/thermal/thermal-engine/Build
-> > > > >    create mode 100644 tools/thermal/thermal-engine/Makefile
-> > > > >    create mode 100644 tools/thermal/thermal-engine/thermal-
-> > > > > engine.c
-> > > > >    create mode 100644 tools/thermal/thermometer/Build
-> > > > >    create mode 100644 tools/thermal/thermometer/Makefile
-> > > > >    create mode 100644 tools/thermal/thermometer/thermometer.8
-> > > > >    create mode 100644 tools/thermal/thermometer/thermometer.c
-> > > > >    create mode 100644
-> > > > > tools/thermal/thermometer/thermometer.conf
-> > > > > 
-> > > > 
-> > > > 
-> > > 
-> > > 
-> > 
-> > 
-> > --
-> > <http://www.linaro.org/> Linaro.org │ Open source software for ARM
-> > SoCs
-> > 
-> > Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> > <http://twitter.com/#!/linaroorg> Twitter |
-> > <http://www.linaro.org/linaro-blog/> Blog
+I would use pr_info() here, because this is not a substantial error AFAICS.
 
-
+> +
+>         return atomic_notifier_chain_register(&restart_handler_list, nb);
+>  }
+>  EXPORT_SYMBOL(register_restart_handler);
+> --
