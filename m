@@ -2,198 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 975034FFA82
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 17:41:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2996E4FFA87
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 17:42:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbiDMPnw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Apr 2022 11:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56120 "EHLO
+        id S236649AbiDMPoT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Apr 2022 11:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiDMPnv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 11:43:51 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76C1449CB2;
-        Wed, 13 Apr 2022 08:41:29 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 42E681576;
-        Wed, 13 Apr 2022 08:41:29 -0700 (PDT)
-Received: from [10.57.8.248] (unknown [10.57.8.248])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 81BA53F5A1;
-        Wed, 13 Apr 2022 08:41:27 -0700 (PDT)
-Message-ID: <a931a51f-ea43-846c-0075-086da283ad74@arm.com>
-Date:   Wed, 13 Apr 2022 16:41:26 +0100
+        with ESMTP id S236646AbiDMPoS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 11:44:18 -0400
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F17F4A93D;
+        Wed, 13 Apr 2022 08:41:56 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2eafabbc80aso26634217b3.11;
+        Wed, 13 Apr 2022 08:41:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SHFzz4Adk6Spcagd3aayb+Zwmj10ffSyTl1fyLat03Y=;
+        b=0hM4BBnQj8mKRciCIxsYmRXevg7mX/vZc41s6r7iMVB35m4VqK9y9ACQsO43BjagJE
+         Ng5yLYZjL/JtLDmDzPIoox/whb7CzsdfpVeezuRHOksp9xTjPiBNBipE9aXiHTGP+pGu
+         JMPLfSpskjeh9bLyJysr/j1q6tqXpnGNZWtIs3mm+tRlZbBPZDFzMv064ZO+vTMz0v/a
+         zqStqFSvdMovx1c/c+JZpguGkWqZM2KIUdEAUgNjpD1xji95qY5MYmwaj0r+gl27YrnC
+         /6SLBZuMadCRk/QOIeB/Dx48LqWzBWG0fybt51XhYdd7quKKzsfWiiosLr1xr5dhIZ0U
+         fXqg==
+X-Gm-Message-State: AOAM530hpxRgEXG8jQZ1BO2ZbWSE10ANPeOkZ91/UdiOlX0mS7Z5sfkw
+        PgE4aTTIcf/LP7Uw9VL8GxcI7z6d85iD0bL/w4c=
+X-Google-Smtp-Source: ABdhPJz7T/J691Cv/mz1W3q3MZT3b4qfkZuWp3RXQM50EElAZhvyBpcUCEMrPY4T2qJ0YYjoOjsVKL3iXD/skfMzYlc=
+X-Received: by 2002:a81:4b8e:0:b0:2ef:5240:69fc with SMTP id
+ y136-20020a814b8e000000b002ef524069fcmr1407551ywa.19.1649864515666; Wed, 13
+ Apr 2022 08:41:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] thermal: devfreq_cooling: use local ops instead of
- global ops
-Content-Language: en-US
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Amit Kucheria <amitk@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
+References: <20220413090510.4039589-1-li.meng@amd.com>
+In-Reply-To: <20220413090510.4039589-1-li.meng@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 13 Apr 2022 17:41:44 +0200
+Message-ID: <CAJZ5v0jFXhfL=2TwBfzzfEdyKUwYDCxo8OKZuYtJjASKE5Oqfw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] Add unit test module for AMD P-State driver
+To:     Meng Li <li.meng@amd.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        allwinner-opensource-support@allwinnertech.com,
-        Stable <stable@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Kant Fan <kant@allwinnertech.com>
-References: <20220325073030.91919-1-kant@allwinnertech.com>
- <c881de5f-5a1e-19ff-0ae6-f68032c79f03@arm.com>
- <CAJZ5v0j9O4mnUtNNtaQ7SZ1_N8GUOJ0CeSzZOwcJ18BKU9yKqQ@mail.gmail.com>
- <af2c9715-b085-ac84-22fe-c3f082f889a0@arm.com>
-In-Reply-To: <af2c9715-b085-ac84-22fe-c3f082f889a0@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Apr 13, 2022 at 11:06 AM Meng Li <li.meng@amd.com> wrote:
+>
+> Hi all:
+>
+> AMD P-State unit test(amd_pstate_testmod) is a kernel module for testing
+> the functions of amd-pstate driver.
+> It could import as a module to launch some test tasks.
+>
+> We upstream out AMD P-state driver into Linux kernel and use this unit
+> test module to verify the required conditions and basic functions of
+> amd-pstate before integration test.
+>
+> We use test module in the kselftest frameworks to implement it.
+> We create amd_pstate_testmod module and tie it into kselftest.
+>
+> For exmaple: The test case aput_acpi_cpc is used to check whether the
+> _CPC object is exist in SBIOS.
+> The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is
+> not existed at the detected processor, so it is a necessary condition.
+>
+> At present, its test cases are very simple, and the corresponding test
+> cases will continue to be added later to improve the test coverage.
+>
+> See patch series in below git repo:
+> V1: https://lore.kernel.org/linux-pm/20220323071502.2674156-1-li.meng@amd.com/
+>
+> Changes from V1 -> V2:
+> - cpufreq: amd-pstate:
+> - - add a trailing of amd-pstate.h to MAINTAINER AMD PSTATE DRIVER
+> - selftests: cpufreq
+> - - add a wrapper shell script for the amd_pstate_testmod module
+> - selftests: cpufreq:
+> - - remove amd_pstate_testmod kernel module to .../cpufreq/amd_pstate_testmod
+> - Documentation: amd-pstate:
+> - - amd_pstate_testmod rst document is not provided at present.
+>
+> Thanks,
+> Jasmine
+>
+> Meng Li (3):
+>   cpufreq: amd-pstate: Expose struct amd_cpudata
 
+Please collect an ACK from Ray for this one as per MAINTAINERS and I
+will leave the series to Shuah as it is selftests mostly.
 
-On 4/13/22 16:06, Lukasz Luba wrote:
-> 
-> 
-> On 4/13/22 15:58, Rafael J. Wysocki wrote:
->> On Fri, Mar 25, 2022 at 10:02 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>
->>> Hi Kant,
->>>
->>> On 3/25/22 07:30, Kant Fan wrote:
->>>> Fix access illegal address problem in following condition:
->>>> There are muti devfreq cooling devices in system, some of them has
->>>> em model but other does not, energy model ops such as state2power will
->>>> append to global devfreq_cooling_ops when the cooling device with
->>>> em model register. It makes the cooling device without em model
->>>> also use devfreq_cooling_ops after appending when register later by
->>>> of_devfreq_cooling_register_power() or of_devfreq_cooling_register().
->>>>
->>>> IPA governor regards the cooling devices without em model as a power 
->>>> actor
->>>> because they also have energy model ops, and will access illegal 
->>>> address
->>>> at dfc->em_pd when execute cdev->ops->get_requested_power,
->>>> cdev->ops->state2power or cdev->ops->power2state.
->>>>
->>>> Fixes: 615510fe13bd2 ("thermal: devfreq_cooling: remove old power 
->>>> model and use EM")
->>>> Cc: stable@vger.kernel.org # 5.13+
->>>> Signed-off-by: Kant Fan <kant@allwinnertech.com>
->>>> ---
->>>>    drivers/thermal/devfreq_cooling.c | 25 ++++++++++++++++++-------
->>>>    1 file changed, 18 insertions(+), 7 deletions(-)
->>>>
->>>> diff --git a/drivers/thermal/devfreq_cooling.c 
->>>> b/drivers/thermal/devfreq_cooling.c
->>>> index 4310cb342a9f..d38a80adec73 100644
->>>> --- a/drivers/thermal/devfreq_cooling.c
->>>> +++ b/drivers/thermal/devfreq_cooling.c
->>>> @@ -358,21 +358,28 @@ of_devfreq_cooling_register_power(struct 
->>>> device_node *np, struct devfreq *df,
->>>>        struct thermal_cooling_device *cdev;
->>>>        struct device *dev = df->dev.parent;
->>>>        struct devfreq_cooling_device *dfc;
->>>> +     struct thermal_cooling_device_ops *ops;
->>>>        char *name;
->>>>        int err, num_opps;
->>>>
->>>> -     dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
->>>> -     if (!dfc)
->>>> +     ops = kmemdup(&devfreq_cooling_ops, sizeof(*ops), GFP_KERNEL);
->>>> +     if (!ops)
->>>>                return ERR_PTR(-ENOMEM);
->>>>
->>>> +     dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
->>>> +     if (!dfc) {
->>>> +             err = -ENOMEM;
->>>> +             goto free_ops;
->>>> +     }
->>>> +
->>>>        dfc->devfreq = df;
->>>>
->>>>        dfc->em_pd = em_pd_get(dev);
->>>>        if (dfc->em_pd) {
->>>> -             devfreq_cooling_ops.get_requested_power =
->>>> +             ops->get_requested_power =
->>>>                        devfreq_cooling_get_requested_power;
->>>> -             devfreq_cooling_ops.state2power = 
->>>> devfreq_cooling_state2power;
->>>> -             devfreq_cooling_ops.power2state = 
->>>> devfreq_cooling_power2state;
->>>> +             ops->state2power = devfreq_cooling_state2power;
->>>> +             ops->power2state = devfreq_cooling_power2state;
->>>>
->>>>                dfc->power_ops = dfc_power;
->>>>
->>>> @@ -407,8 +414,7 @@ of_devfreq_cooling_register_power(struct 
->>>> device_node *np, struct devfreq *df,
->>>>        if (!name)
->>>>                goto remove_qos_req;
->>>>
->>>> -     cdev = thermal_of_cooling_device_register(np, name, dfc,
->>>> -                                               &devfreq_cooling_ops);
->>>> +     cdev = thermal_of_cooling_device_register(np, name, dfc, ops);
->>>>        kfree(name);
->>>>
->>>>        if (IS_ERR(cdev)) {
->>>> @@ -429,6 +435,8 @@ of_devfreq_cooling_register_power(struct 
->>>> device_node *np, struct devfreq *df,
->>>>        kfree(dfc->freq_table);
->>>>    free_dfc:
->>>>        kfree(dfc);
->>>> +free_ops:
->>>> +     kfree(ops);
->>>>
->>>>        return ERR_PTR(err);
->>>>    }
->>>> @@ -510,11 +518,13 @@ EXPORT_SYMBOL_GPL(devfreq_cooling_em_register);
->>>>    void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
->>>>    {
->>>>        struct devfreq_cooling_device *dfc;
->>>> +     const struct thermal_cooling_device_ops *ops;
->>>>        struct device *dev;
->>>>
->>>>        if (IS_ERR_OR_NULL(cdev))
->>>>                return;
->>>>
->>>> +     ops = cdev->ops;
->>>>        dfc = cdev->devdata;
->>>>        dev = dfc->devfreq->dev.parent;
->>>>
->>>> @@ -525,5 +535,6 @@ void devfreq_cooling_unregister(struct 
->>>> thermal_cooling_device *cdev)
->>>>
->>>>        kfree(dfc->freq_table);
->>>>        kfree(dfc);
->>>> +     kfree(ops);
->>>>    }
->>>>    EXPORT_SYMBOL_GPL(devfreq_cooling_unregister);
->>>
->>>
->>> Thank you for updating it, LGTM
->>>
->>> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
->>
->> Applied as 5.19 material.
->>
->> Lukasz, this had a conflict with your EM series, please double check
->> if my resolution in the bleeding-edge branch is correct.
-> 
-> OK, I'll let you know after I fetch and build that branch.
+Thanks!
 
-I've read the code and confirm you've do this correctly.
-I've also built that branch with ENERGY_MODEL and DEVFREQ_COOLING
-configs set - no issues observed.
-Later this week I would use it for some other development
-so I will test it as well.
-
-Thank you for solving this!
-
-Regards,
-Lukasz
+>   selftests: cpufreq: Add wapper script for test AMD P-State
+>   selftests: cpufreq: Add amd_pstate_testmod kernel module for testing
+>
+>  MAINTAINERS                                   |   1 +
+>  drivers/cpufreq/amd-pstate.c                  |  60 +---
+>  include/linux/amd-pstate.h                    |  74 +++++
+>  tools/testing/selftests/cpufreq/Makefile      |   2 +-
+>  .../selftests/cpufreq/amd_pstate_testmod.sh   |   4 +
+>  .../cpufreq/amd_pstate_testmod/Makefile       |  20 ++
+>  .../amd_pstate_testmod/amd_pstate_testmod.c   | 302 ++++++++++++++++++
+>  tools/testing/selftests/cpufreq/config        |   1 +
+>  8 files changed, 404 insertions(+), 60 deletions(-)
+>  create mode 100644 include/linux/amd-pstate.h
+>  create mode 100755 tools/testing/selftests/cpufreq/amd_pstate_testmod.sh
+>  create mode 100644 tools/testing/selftests/cpufreq/amd_pstate_testmod/Makefile
+>  create mode 100644 tools/testing/selftests/cpufreq/amd_pstate_testmod/amd_pstate_testmod.c
+>
+> --
+> 2.25.1
+>
