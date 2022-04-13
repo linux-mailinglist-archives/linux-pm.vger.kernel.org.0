@@ -2,58 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9771B4FF9D5
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 17:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 185874FF9E6
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 17:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234754AbiDMPTK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Apr 2022 11:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34200 "EHLO
+        id S236404AbiDMPWw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Apr 2022 11:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233894AbiDMPTK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 11:19:10 -0400
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC45252AD
-        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 08:16:49 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id e71so4313473ybf.8
-        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 08:16:49 -0700 (PDT)
+        with ESMTP id S234689AbiDMPWq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 11:22:46 -0400
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7A6E0D2;
+        Wed, 13 Apr 2022 08:20:23 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id t67so4391091ybi.2;
+        Wed, 13 Apr 2022 08:20:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=o9DqIC2bHmQHNK2I7tJoTIp/jQ3ba+WlywWXlfKyZlY=;
-        b=YKWnCjtjT+XLN2lzRe6Q2I6oVsdNQKKnlccFppaDbUljjzRGYEFPPAXmf1V6Tdv/gp
-         Vqk6RbSMciffS0te75E3Wnz43D2kbinxwAaV4S5Ra6tWl5fuqeLJxylETNh89ZhTnY27
-         74Vrf09R1gOJ41zqH/dGchv64s2L3m8bQr3wRYIAI/pbfixfE2EVHEPiggeTZUYWxveL
-         htMcFkwVaXWVwwj5qXtSfTDYuY70JFUBleGGpOuONEOLLlL99VxySv3b4Ighf/CURuAo
-         0T3rs+1CgnTXq3F0T+LJC3z+NW2Kbrj9ei5TJM8f5CnWi2AXexKPXlFAf9XGMuH+3dpI
-         gi3Q==
-X-Gm-Message-State: AOAM532/VKDkt0RksB7Kb4Fe7bpJ4IBaeKoJu62X5QDrFjWH/dT7iQPO
-        7zY+D13aqiaZdAtdqN62piQwKY2R3RDmV+VzNNs=
-X-Google-Smtp-Source: ABdhPJyHv+JSlsItq+c52Arc06WnvW4WnM5vinuvjvkMaQoR9rPCfl8WFYQaND0hc8yRJTVGT+ASPK2g7TeTEdmuVxY=
-X-Received: by 2002:a25:ac9b:0:b0:641:3c32:bee7 with SMTP id
- x27-20020a25ac9b000000b006413c32bee7mr11903048ybi.633.1649863008269; Wed, 13
- Apr 2022 08:16:48 -0700 (PDT)
+        bh=w2Lgy0xxZ/kq35mN9jTEDe99/KAY+dTqIri9HO0ska8=;
+        b=fIsxeVdjGUPOzAQXIwLuR+jgjLcl2Nrnnj8+9Z914QnpKIvCpeQJXeVhkHxZQvUgt2
+         egyVB6fU9ORmBo1UtIrq42qHIua3FRY8UUcjwRiZeXqioUPvEL+ILQ1BDj+6LeixDo0+
+         yPanUDtk0YFqPQ7CHpTlcMgJO5ffYl2rh+3C/J4pXOtOvWymChyD6O0d/THAvUzjEAoU
+         nvwasDRCliYTcobmT19eA8yr4Q3BPxsX/4ooSIFF3U2y0KW3tKcE2CqnqnFRROoPHlZl
+         Fzafsto+xPGtymXLqLbxCjxk1KLvCqkqXvwfCzBJfnafwJY+wZG0YYH+gR3yL0CHpUVG
+         +2OA==
+X-Gm-Message-State: AOAM533NsEvun26aZwsFmt6MzsF4aBVtF9IZx1guPFwdk5QbnGgZ7N5h
+        wvyzyUEOmclYrLlvc+BnQPOTuepdNGPSmXY6KFXDSvWw
+X-Google-Smtp-Source: ABdhPJwOIpKOGRh6wLe+b2eqyMIagCZXSSwKkMG4Q0iaM3xYCmKqKl32u8IbpWSAjNHIgVdbn8Ltt5Bh6VA0YsVmI+o=
+X-Received: by 2002:a25:3cc3:0:b0:63e:6ee9:4840 with SMTP id
+ j186-20020a253cc3000000b0063e6ee94840mr22598626yba.153.1649863222281; Wed, 13
+ Apr 2022 08:20:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220401141124.27272-1-ulf.hansson@linaro.org>
-In-Reply-To: <20220401141124.27272-1-ulf.hansson@linaro.org>
+References: <4cb0c4573cce165657ad1f7275c4b3852cbcd115.1648833416.git.christophe.leroy@csgroup.eu>
+ <20220404062710.m6bzpg5gsx4x7tm5@vireshk-i7>
+In-Reply-To: <20220404062710.m6bzpg5gsx4x7tm5@vireshk-i7>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 13 Apr 2022 17:16:37 +0200
-Message-ID: <CAJZ5v0gt0L-6TNTqD15LvLfpHfn2GZr2EMSxfaiXGeOqjkx4XQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] PM: runtime/cpuidle: Improve suspend-to-ram support
- for cpuidle-psci
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Maulik Shah <quic_mkshah@quicinc.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Date:   Wed, 13 Apr 2022 17:20:11 +0200
+Message-ID: <CAJZ5v0itEsDDWPYPYJkY5xbs1t97uMx3P3pL1Qg_jrA63aXw_Q@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Prepare cleanup of powerpc's asm/prom.h
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -65,36 +58,91 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 1, 2022 at 4:11 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+On Mon, Apr 4, 2022 at 8:27 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> Maulik Shah reported a problem with suspend-to-ram for one of the Qualcomm
-> platforms that is using PSCI OSI mode. Briefly described, the genpd on/off
-> notifiers doesn't get sent when the boot CPU is turned on/off, which prevents
-> the needed platform specific operations to be executed.
+> On 01-04-22, 19:24, Christophe Leroy wrote:
+> > powerpc's asm/prom.h brings some headers that it doesn't
+> > need itself.
+> >
+> > In order to clean it up, first add missing headers in
+> > users of asm/prom.h
+> >
+> > Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > ---
+> >  drivers/cpufreq/pasemi-cpufreq.c      | 1 -
+> >  drivers/cpufreq/pmac32-cpufreq.c      | 2 +-
+> >  drivers/cpufreq/pmac64-cpufreq.c      | 2 +-
+> >  drivers/cpufreq/ppc_cbe_cpufreq.c     | 1 -
+> >  drivers/cpufreq/ppc_cbe_cpufreq_pmi.c | 2 +-
+> >  5 files changed, 3 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/pasemi-cpufreq.c b/drivers/cpufreq/pasemi-cpufreq.c
+> > index 815645170c4d..039a66bbe1be 100644
+> > --- a/drivers/cpufreq/pasemi-cpufreq.c
+> > +++ b/drivers/cpufreq/pasemi-cpufreq.c
+> > @@ -18,7 +18,6 @@
+> >
+> >  #include <asm/hw_irq.h>
+> >  #include <asm/io.h>
+> > -#include <asm/prom.h>
+> >  #include <asm/time.h>
+> >  #include <asm/smp.h>
+> >
+> > diff --git a/drivers/cpufreq/pmac32-cpufreq.c b/drivers/cpufreq/pmac32-cpufreq.c
+> > index 4f20c6a9108d..20f64a8b0a35 100644
+> > --- a/drivers/cpufreq/pmac32-cpufreq.c
+> > +++ b/drivers/cpufreq/pmac32-cpufreq.c
+> > @@ -24,7 +24,7 @@
+> >  #include <linux/device.h>
+> >  #include <linux/hardirq.h>
+> >  #include <linux/of_device.h>
+> > -#include <asm/prom.h>
+> > +
+> >  #include <asm/machdep.h>
+> >  #include <asm/irq.h>
+> >  #include <asm/pmac_feature.h>
+> > diff --git a/drivers/cpufreq/pmac64-cpufreq.c b/drivers/cpufreq/pmac64-cpufreq.c
+> > index d7542a106e6b..ba9c31d98bd6 100644
+> > --- a/drivers/cpufreq/pmac64-cpufreq.c
+> > +++ b/drivers/cpufreq/pmac64-cpufreq.c
+> > @@ -22,7 +22,7 @@
+> >  #include <linux/completion.h>
+> >  #include <linux/mutex.h>
+> >  #include <linux/of_device.h>
+> > -#include <asm/prom.h>
+> > +
+> >  #include <asm/machdep.h>
+> >  #include <asm/irq.h>
+> >  #include <asm/sections.h>
+> > diff --git a/drivers/cpufreq/ppc_cbe_cpufreq.c b/drivers/cpufreq/ppc_cbe_cpufreq.c
+> > index c58abb4cca3a..e3313ce63b38 100644
+> > --- a/drivers/cpufreq/ppc_cbe_cpufreq.c
+> > +++ b/drivers/cpufreq/ppc_cbe_cpufreq.c
+> > @@ -12,7 +12,6 @@
+> >  #include <linux/of_platform.h>
+> >
+> >  #include <asm/machdep.h>
+> > -#include <asm/prom.h>
+> >  #include <asm/cell-regs.h>
+> >
+> >  #include "ppc_cbe_cpufreq.h"
+> > diff --git a/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c b/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c
+> > index 037fe23bc6ed..4fba3637b115 100644
+> > --- a/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c
+> > +++ b/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c
+> > @@ -13,9 +13,9 @@
+> >  #include <linux/init.h>
+> >  #include <linux/of_platform.h>
+> >  #include <linux/pm_qos.h>
+> > +#include <linux/slab.h>
+> >
+> >  #include <asm/processor.h>
+> > -#include <asm/prom.h>
+> >  #include <asm/pmi.h>
+> >  #include <asm/cell-regs.h>
 >
-> This series intends to solve these problems.
->
-> Note that, I have tested this on Dragonboard 410c, with some local hacks to the
-> PSCI firmware driver. This was needed because the PSCI firmware didn't support
-> SYSTEM_SUSPEND, so I basically made psci_system_suspend_enter() to call
-> cpu_do_idle() and forced a suspend ops to be registered.
->
-> Maulik, can you please test this at your setup?
->
-> Kind regards
-> Ulf Hansson
->
->
-> Ulf Hansson (2):
->   PM: runtime: Allow to call __pm_runtime_set_status() from atomic
->     context
->   cpuidle: psci: Improve support for suspend-to-ram for PSCI OSI mode
->
->  drivers/base/power/runtime.c   |  9 ++++---
->  drivers/cpuidle/cpuidle-psci.c | 46 ++++++++++++++++++++++++++++++++++
->  2 files changed, 51 insertions(+), 4 deletions(-)
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Both patches applied as 5.19 material (in the PM-sleep category,
-because they really are system-wide suspend support material).
+Applied as 5.19 material.
 
-Thanks!
+If the powerpc folks decide to take it, I can drop it, so please let me know.
