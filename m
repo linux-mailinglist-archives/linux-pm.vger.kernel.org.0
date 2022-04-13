@@ -2,77 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 543754FEFDB
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 08:33:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 100644FF020
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 08:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiDMGgN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Apr 2022 02:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
+        id S232583AbiDMGxQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Apr 2022 02:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231724AbiDMGgN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 02:36:13 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B8F35A94
-        for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 23:33:51 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id bh17so1864847ejb.8
-        for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 23:33:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=B9VurXrzWDcHBP3YwtMgGNsuU+C/4Y9iM5TWxk/3L3M=;
-        b=ycRBiD9wAE+M9Edv6Se/KC+bLDnd1iLsbmKfq46RV6Q+OuW/CSbm0/N4z4/qgO154b
-         iQVJSp27zFiX16zXkdqKmolM8dkoRwZ71N9eHxvaQz0pl7JHC8A8u3J0dRL07eI9Nf5k
-         EjnWWUJ3aMsaw7SzsWZE39KKwjd5/eQtsLheoEBRHslndbNfYc7ltq5KlB5H/p7kxjmg
-         zDtxd8mt6KtbJfgsL9OEHGycl4LNMvtzJbDXbnY82NzzeuiM8yINxQ4h+t4LkfGAVlHm
-         Y6m84zmRWLxkxsw2vbweZKCYprru2mKdOeTdxDRjkNL4PY0SJqUN/FHxFjfV+IfgFOS9
-         R27g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=B9VurXrzWDcHBP3YwtMgGNsuU+C/4Y9iM5TWxk/3L3M=;
-        b=vJR/U4XfIacBFKJrYZYEmhy0W8VBf/ee+syjWhKV0PQ1U4hRppDHVNKWtmcLxlf8E+
-         lqE5HtMe6iFdYTu/VG6jPW5vTju63j9ugZR+yP6BYLNRm1wnh12xnH8Ik6XyY4eHDss9
-         lRELDlv6yZLXRlWGCq5YBU8aqRR3Wr1c3EOjqTeBYa7Ii889X+oRCQu6oRYolx1KNb8D
-         FIsZZc0Pm5M6XPCjRUhNFXAP41DSgpg8PmlOCpdi0+4BGZHuwmJDT2jr4B627wTnA6zZ
-         x/gdQb295IEr2pkknmsOEYZEW1+rarf8LIsu4dM/rSV5GcczFkAapGuqlQOT1W9eLEaF
-         JdrA==
-X-Gm-Message-State: AOAM533rzS6W+rIsLlbf1sEra7m8Yysg2+oYxh10Ir2T0jweFdlkXv+f
-        jAHVdA/CpXxs3hOkVxbDW2Q0Cg==
-X-Google-Smtp-Source: ABdhPJwOnqt0JLVcT6WOM+GcWxpNTvgDJnvEMjc5YWYSL30QMfsE1pGVyFDUIiphoMfLJNLMGuskpQ==
-X-Received: by 2002:a17:906:3042:b0:6cd:20ed:7c5c with SMTP id d2-20020a170906304200b006cd20ed7c5cmr36575407ejd.241.1649831629820;
-        Tue, 12 Apr 2022 23:33:49 -0700 (PDT)
-Received: from [192.168.0.201] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id k14-20020a170906128e00b006e4b67514a1sm13968216ejb.179.2022.04.12.23.33.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 23:33:49 -0700 (PDT)
-Message-ID: <89ad9e08-e0b2-d163-b089-c96ce70509b3@linaro.org>
-Date:   Wed, 13 Apr 2022 08:33:48 +0200
+        with ESMTP id S229490AbiDMGxQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 02:53:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E80610F2
+        for <linux-pm@vger.kernel.org>; Tue, 12 Apr 2022 23:50:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1013BB8207A
+        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 06:50:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8EB19C385AC
+        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 06:50:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649832653;
+        bh=2vhSm9E3+eA2YiC50KoY4t4OwffjyvN/xQOtz924EBw=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=M95NOFb/A1sW6VrHBTTaVn7Cr8WvQx1J8jb3kfeFhr9XZoDRgXmOfQPlU9XNLVtBP
+         ksdwizCfqxGKJyNezyyhZy563Zz8WjMGQ5CoGOj7vzdSTjXVJnlcDE9fC1RBS5pXE8
+         aoQWzGIOGHCiesXxYlXm1JWR82+1vIjv/62MzDY1dHLpq763PkKmTrpGZR3E6xS3rI
+         Y9Qxxc8t+5Rnl/LydVGKwNC19rTmSwiQPQRY+0wIlpQdGuH6fkxhj9hkFmanUKp2xY
+         0CHQkyXIojV9LSf9OG6fg921M1MkhGgOJKjmsIHFMVTQbwRkKNal3CbPm/IPfJyAil
+         M1hj4GQUiY+jQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 736ADC05FD2; Wed, 13 Apr 2022 06:50:53 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 215800] amd-pstate does not allow to set arbitrary maximum CPU
+ frequency above 2200MHz for a desktop Zen 3 CPU
+Date:   Wed, 13 Apr 2022 06:50:53 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: sujinzhou2008@126.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215800-137361-GqjPXilLW9@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215800-137361@https.bugzilla.kernel.org/>
+References: <bug-215800-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] dt-bindings: interconnect: Add Qualcomm SDX65 DT
- bindings
-Content-Language: en-US
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        bjorn.andersson@linaro.org, djakov@kernel.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org
-Cc:     manivannan.sadhasivam@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1649740053-14507-1-git-send-email-quic_rohiagar@quicinc.com>
- <1649740053-14507-2-git-send-email-quic_rohiagar@quicinc.com>
- <7e1e6c10-c02a-c8da-44c0-ba3abef1950e@linaro.org>
- <99e49c61-4a6a-69c6-810c-581ee0ce5008@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <99e49c61-4a6a-69c6-810c-581ee0ce5008@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,26 +71,23 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13/04/2022 08:29, Rohit Agarwal wrote:
-> On 4/12/2022 2:52 PM, Krzysztof Kozlowski wrote:
->> On 12/04/2022 07:07, Rohit Agarwal wrote:
->>> Add interconnect IDs for Qualcomm SDX65 platform.
->>>
->>> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
->> (...)
->>
->>> diff --git a/include/dt-bindings/interconnect/qcom,sdx65.h b/include/dt-bindings/interconnect/qcom,sdx65.h
->>> new file mode 100644
->>> index 0000000..8d02c79
->>> --- /dev/null
->>> +++ b/include/dt-bindings/interconnect/qcom,sdx65.h
->>> @@ -0,0 +1,67 @@
->>> +/* SPDX-License-Identifier: GPL-2.0-only */
->> Is it possible to license it the same as bindings (GPL-2.0 OR BSD-2-Clause)?
-> 
-> The qcom related code are marked as GPL 2.0 license
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215800
 
-This I see here, unless you meant some other qcom related code?
+--- Comment #11 from Joe (sujinzhou2008@126.com) ---
+OK, so it seems you change the scaling_max_freq to 2.2G, after that, even y=
+ou
+change back to 3G or cpuinfo_max_freq, the scaling_cur_freq is still less t=
+han
+2.2GHz.
 
-Best regards,
-Krzysztof
+I tried 2 devices on my local, can not reproduce this issue.
+
+After you set scaling_max_freq to 3G or higher, You can try to run "stress
+--cpu 128" with increasing the workload to check if the scaling_cur_freq can
+exceeds 2.2GHz.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
