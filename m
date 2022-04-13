@@ -2,241 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C61CB4FEB9B
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 01:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D66D74FEC94
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 03:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbiDLXtU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 12 Apr 2022 19:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42122 "EHLO
+        id S231387AbiDMByW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 12 Apr 2022 21:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231473AbiDLXs7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Apr 2022 19:48:59 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A564A15A0E;
-        Tue, 12 Apr 2022 16:44:05 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23CNi0Hw051029;
-        Tue, 12 Apr 2022 18:44:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1649807041;
-        bh=oc+HIh97XfczM9ecJOWeQVZz2RDSA8zgm3GE8d06OmM=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=DlBdKv2q02c0VTjJEKmcvt3g5TKP22WKCUxl9FvtuZ9uJMMp9oTh+nGeO62Pak96u
-         gMHdR/fd1OGtxe2IZdfJRlZNkg04QM3w38kxNC21UgpnN9ZMpBJEh5ciOMQAGYK09d
-         vaIF3N6yLT61U73WOiv8gk9fv/qzFS2/tsNY7cII=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23CNi0af047739
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 12 Apr 2022 18:44:00 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 12
- Apr 2022 18:44:00 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 12 Apr 2022 18:44:00 -0500
-Received: from [10.250.234.106] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23CNhvxL019743;
-        Tue, 12 Apr 2022 18:43:58 -0500
-Message-ID: <88c59d74-f251-b444-7b99-71e3fe428482@ti.com>
-Date:   Wed, 13 Apr 2022 05:13:56 +0530
+        with ESMTP id S229959AbiDMByW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 12 Apr 2022 21:54:22 -0400
+X-Greylist: delayed 142 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Apr 2022 18:52:00 PDT
+Received: from mg.sunplus.com (mswedge1.sunplus.com [60.248.182.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79DC52C651;
+        Tue, 12 Apr 2022 18:52:00 -0700 (PDT)
+X-MailGates: (compute_score:DELIVER,40,3)
+Received: from 172.17.9.112
+        by mg01.sunplus.com with MailGates ESMTP Server V5.0(27729:0:AUTH_RELAY)
+        (envelope-from <lh.Kuo@sunplus.com>); Wed, 13 Apr 2022 09:49:15 +0800 (CST)
+Received: from sphcmbx02.sunplus.com.tw (172.17.9.112) by
+ sphcmbx02.sunplus.com.tw (172.17.9.112) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.26; Wed, 13 Apr 2022 09:49:11 +0800
+Received: from sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd]) by
+ sphcmbx02.sunplus.com.tw ([fe80::fd3d:ad1a:de2a:18bd%14]) with mapi id
+ 15.00.1497.026; Wed, 13 Apr 2022 09:49:11 +0800
+From:   =?utf-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Li-hao Kuo <lhjeff911@gmail.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "amitk@kernel.org" <amitk@kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     =?utf-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+Subject: RE: [PATCH v7 2/2] dt-bindings:thermal: Add Sunplus SP7021 schema
+Thread-Topic: [PATCH v7 2/2] dt-bindings:thermal: Add Sunplus SP7021 schema
+Thread-Index: AQHYTYGRBrvPBaFpFkWb1HIe0r3aqqzrcwCAgAGhdOA=
+Date:   Wed, 13 Apr 2022 01:49:11 +0000
+Message-ID: <15d27f6131994b2d981b3fcaebdfbb3b@sphcmbx02.sunplus.com.tw>
+References: <cover.1649662002.git.lhjeff911@gmail.com>
+ <f24781413a8a305b28a1e9c3861263975eebaee6.1649662002.git.lhjeff911@gmail.com>
+ <36b7de46-7e8b-fbb5-6eeb-89180d358d84@kernel.org>
+In-Reply-To: <36b7de46-7e8b-fbb5-6eeb-89180d358d84@kernel.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.25.108.51]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v5 2/4] arm64: dts: ti: j721e: Add VTM node
-Content-Language: en-US
-To:     Vignesh Raghavendra <vigneshr@ti.com>, <robh+dt@kernel.org>,
-        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <amitk@kernel.org>, <kristo@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220412101409.7980-1-j-keerthy@ti.com>
- <20220412101409.7980-3-j-keerthy@ti.com>
- <c1c2dc5b-5958-2b34-a963-6248e2817ca7@ti.com>
-From:   "J, KEERTHY" <j-keerthy@ti.com>
-In-Reply-To: <c1c2dc5b-5958-2b34-a963-6248e2817ca7@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 4/12/2022 10:39 PM, Vignesh Raghavendra wrote:
-> Hi Keerthy
-> 
-> On 12/04/22 3:44 pm, Keerthy wrote:
->> VTM stands for Voltage Thermal Management
->>
->> Signed-off-by: Keerthy <j-keerthy@ti.com>
->> ---
->>   .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |  9 +++
->>   arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi  | 73 +++++++++++++++++++
->>   arch/arm64/boot/dts/ti/k3-j721e.dtsi          |  4 +
->>   3 files changed, 86 insertions(+)
->>   create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
->>
->> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
->> index b4972dfb7da8..6290f563b8e7 100644
->> --- a/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
->> +++ b/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
->> @@ -418,4 +418,13 @@
->>   		interrupt-names = "int0", "int1";
->>   		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
->>   	};
->> +
->> +	wkup_vtm0: wkup_vtm0@42040000 {
->> +		compatible = "ti,j721e-vtm";
->> +		reg = <0x0 0x42040000 0x0 0x350>,
->> +			<0x0 0x42050000 0x0 0x350>,
->> +			<0x0 0x43000300 0x0 0x10>;
-> 
-> Please follow convention of using 0x00 as rest of the file:
-
-Okay.
-
-> 
-> 		reg = <0x00 0x42040000 0x00 0x350>,
-> 		....
-> 
->> +		power-domains = <&k3_pds 154 TI_SCI_PD_EXCLUSIVE>;
->> +		#thermal-sensor-cells = <1>;
->> +	};
->>   };
->> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
->> new file mode 100644
->> index 000000000000..e922042f356f
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
->> @@ -0,0 +1,73 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +
->> +#include <dt-bindings/thermal/thermal.h>
->> +
->> +wkup_thermal: wkup_thermal {
->> +	polling-delay-passive = <250>; /* milliseconds */
->> +	polling-delay = <500>; /* milliseconds */
->> +	thermal-sensors = <&wkup_vtm0 0>;
->> +
->> +	trips {
->> +		wkup_crit: wkup_crit {
-> 
-> 
-> Here and elsewhere no "-" in node names please.
-
-I believe you meant no "_" ?
-
-> 
-> You can use:
-> 
-> https://github.com/nmenon/kernel_patch_verify
-> kpv -C -n <no of commits>
-> 
-> This catches most issues like above
-
-Okay
-
-> 
->> +			temperature = <125000>; /* milliCelsius */
->> +			hysteresis = <2000>; /* milliCelsius */
->> +			type = "critical";
->> +		};
->> +	};
->> +};
->> +
->> +mpu_thermal: mpu_thermal {
->> +	polling-delay-passive = <250>; /* milliseconds */
->> +	polling-delay = <500>; /* milliseconds */
->> +	thermal-sensors = <&wkup_vtm0 1>;
->> +
->> +	trips {
->> +		mpu_crit: mpu_crit {
->> +			temperature = <125000>; /* milliCelsius */
->> +			hysteresis = <2000>; /* milliCelsius */
->> +			type = "critical";
->> +		};
->> +	};
->> +};
->> +
->> +c7x_thermal: c7x_thermal {
->> +	polling-delay-passive = <250>; /* milliseconds */
->> +	polling-delay = <500>; /* milliseconds */
->> +	thermal-sensors = <&wkup_vtm0 2>;
->> +
->> +	trips {
->> +		c7x_crit: c7x_crit {
->> +			temperature = <125000>; /* milliCelsius */
->> +			hysteresis = <2000>; /* milliCelsius */
->> +			type = "critical";
->> +		};
->> +	};
->> +};
->> +
->> +gpu_thermal: gpu_thermal {
->> +	polling-delay-passive = <250>; /* milliseconds */
->> +	polling-delay = <500>; /* milliseconds */
->> +	thermal-sensors = <&wkup_vtm0 3>;
->> +
->> +	trips {
->> +		gpu_crit: gpu_crit {
->> +			temperature = <125000>; /* milliCelsius */
->> +			hysteresis = <2000>; /* milliCelsius */
->> +			type = "critical";
->> +		};
->> +	};
->> +};
->> +
->> +r5f_thermal: r5f_thermal {
->> +	polling-delay-passive = <250>; /* milliseconds */
->> +	polling-delay = <500>; /* milliseconds */
->> +	thermal-sensors = <&wkup_vtm0 4>;
->> +
->> +	trips {
->> +		r5f_crit: r5f_crit {
->> +			temperature = <125000>; /* milliCelsius */
->> +			hysteresis = <2000>; /* milliCelsius */
->> +			type = "critical";
->> +		};
->> +	};
->> +};
->> diff --git a/arch/arm64/boot/dts/ti/k3-j721e.dtsi b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
->> index 0e23886c9fd1..6979863eb500 100644
->> --- a/arch/arm64/boot/dts/ti/k3-j721e.dtsi
->> +++ b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
->> @@ -181,6 +181,10 @@
->>   				 <0x07 0x00000000 0x07 0x00000000 0x01 0x00000000>; /* FSS OSPI1 data region 3*/
->>   		};
->>   	};
->> +
->> +	thermal_zones: thermal-zones {
->> +		#include "k3-j721e-thermal.dtsi"
->> +	};
-> 
-> Bit weird representation, any reason why thermal-zones {} cannot be
-> moved into k3-j721e-thermal.dtsi?
-
-Okay. This could be moved. This is typically done when we have different 
-zones defined under different dtsi files. Like in the case of 
-omap5/dra7. The same was followed here. You are right this could be 
-moved as we have all the zones under one dtsi.
-
-Regards,
-Keerthy
-
-> 
->>   };
->>   
->>   /* Now include the peripherals for each bus segments */
-> 
-> 
-> Regards
-> Vignesh
+SGkgTXIuIEtyenlzenRvZg0KDQpJJ20gc29ycnkgZm9yIHRoYXQuIEkgbWlzdW5kZXJzdG9vZCBh
+dCB0aGUgYmVnaW5uaW5nDQoNCkkgd2lsbCBjaGFuZ2UgdGhlIG5hbWUgdG8gc3VucGx1cyx0aGVy
+bWFsLnlhbWwgaW4gdGhlIG5leHQgY29tbWl0Lg0KDQpUaGFua3MgZm9yIHlvdXIgY29tbWVudC4N
+Cg0KQmVzdCByZWdhcmRzLA0KTGkgSGFvIEt1bw0KDQo+IFlvdSBzZW50IHY2IHdpdGhvdXQgaW1w
+bGVtZW50aW5nIHRoZSBjaGFuZ2VzLiBJIHBvaW50ZWQgb3V0IHRoYXQgeW91IGRpZCBub3QgZm9s
+bG93IHdoYXQgSSBhc2tlZCBmb3IuDQo+IE5vdyB5b3Ugc2VudCB2NyBhbHNvIHdpdGhvdXQgaW1w
+bGVtZW50aW5nIHRoZXNlIGNoYW5nZXMsIGFnYWluLg0KPiANCj4gWW91IGFsc28gZGlkIG5vdCBk
+aXNjdXNzIGl0IHdpdGggbWUsIGRpZCBub3QgY29tZSB3aXRoIGNvdW50ZXIgYXJndW1lbnRzLCBv
+dGhlciBwcm9wb3NhbHMuIFRoZXJlZm9yZSBpdA0KPiBsb29rcyBsaWtlIGVpdGhlciB5b3UgbWlz
+dW5kZXJzdG9vZCBtZSBvciB5b3UgaWdub3JlZCBteSBjb21tZW50cy4NCj4gDQo+IExldCdzIGFz
+c3VtZSBmaXJzdCBjYXNlLCBzbyBJIHdpbGwgcmVwZWF0LiBOYW1lIHNob3VsZCBiZSBvbmUgb2Y6
+DQo+IDEuIHN1bnBsdXMsdGhlcm1hbC55YW1sDQo+IDIuIHN1bnBsdXMsc3A3MDIxLXRoZXJtYWwu
+eWFtbA0KDQoNCg0KDQoNCg==
