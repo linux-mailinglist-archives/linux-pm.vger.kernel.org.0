@@ -2,207 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE934FF5BE
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 13:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B554FF662
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 14:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234550AbiDMLe5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Apr 2022 07:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60492 "EHLO
+        id S235249AbiDMMGu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Apr 2022 08:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231624AbiDMLet (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 07:34:49 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6112256771;
-        Wed, 13 Apr 2022 04:32:28 -0700 (PDT)
-X-UUID: b54ff230c3ee4e99bcbf987630a4296f-20220413
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:48a9d69a-2cc3-4772-860a-db1f1b927fcd,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.4,REQID:48a9d69a-2cc3-4772-860a-db1f1b927fcd,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:faefae9,CLOUDID:899806a9-d103-4e36-82b9-b0e86991b3df,C
-        OID:IGNORED,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,File:ni
-        l,QS:0,BEC:nil
-X-UUID: b54ff230c3ee4e99bcbf987630a4296f-20220413
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1870945164; Wed, 13 Apr 2022 19:32:23 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 13 Apr 2022 19:32:22 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 13 Apr 2022 19:32:22 +0800
-Message-ID: <98957e61b040b6c5b6a6b39e6eb661e07e510277.camel@mediatek.com>
-Subject: Re: [PATCH V2 13/15] cpufreq: mediatek: Link CCI device to CPU
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Kevin Hilman <khilman@baylibre.com>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
-        <krzk+dt@kernel.org>
-CC:     <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
-        <roger.lu@mediatek.com>, <hsinyi@google.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 13 Apr 2022 19:32:22 +0800
-In-Reply-To: <7h5yne3zlx.fsf@baylibre.com>
-References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
-         <20220408045908.21671-14-rex-bc.chen@mediatek.com>
-         <7hfsmn5m9f.fsf@baylibre.com>
-         <bc6dd020a1cc3f00f5be2bf2929046b9116bbeef.camel@mediatek.com>
-         <7hwnfv4hfr.fsf@baylibre.com>
-         <f00e3df2e270e5edc160f8ff1bd8c52a49bf71d5.camel@mediatek.com>
-         <7h5yne3zlx.fsf@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S232932AbiDMMGt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 08:06:49 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7523E3B3C9;
+        Wed, 13 Apr 2022 05:04:28 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23DC4OWu013789;
+        Wed, 13 Apr 2022 07:04:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1649851464;
+        bh=gobsrbTaF6iGktYshKMY61Cs4Kh/V+HFA6hA46GsKXo=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=p3K7nyTBqW4ejijlYFTiZsa9tQdYnX56DMmwnEscnf+8Q20aubi7J1Cb2FuUbww5e
+         8y4B+JiH04qpYhw7JLAXn7NAYsCLIIdcnpJJSOO3X5HhV1pQ42V3P7y3KTMYUCFSmn
+         bI30dUEQnlYdDFuthX0cvAmWjQxqPFPS5WYBAh5Y=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23DC4OLT028970
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 13 Apr 2022 07:04:24 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 13
+ Apr 2022 07:04:24 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 13 Apr 2022 07:04:24 -0500
+Received: from [172.24.223.48] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23DC4KIN067598;
+        Wed, 13 Apr 2022 07:04:21 -0500
+Message-ID: <54d597e9-5cad-fc44-954d-7de45018fdcf@ti.com>
+Date:   Wed, 13 Apr 2022 17:34:20 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v5 1/4] dt-bindings: thermal: k3-j72xx: Add VTM bindings
+ documentation
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <robh+dt@kernel.org>, <daniel.lezcano@linaro.org>,
+        <rui.zhang@intel.com>, <amitk@kernel.org>, <kristo@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <vigneshr@ti.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220412101409.7980-1-j-keerthy@ti.com>
+ <20220412101409.7980-2-j-keerthy@ti.com>
+ <17474b72-d823-e1ff-9831-c5f9f887fccd@linaro.org>
+From:   "J, KEERTHY" <j-keerthy@ti.com>
+In-Reply-To: <17474b72-d823-e1ff-9831-c5f9f887fccd@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2022-04-12 at 11:50 -0700, Kevin Hilman wrote:
-> Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
-> 
-> [...]
-> 
-> > I can summary what I got now:
-> > 
-> > 1. Why we need cci for cpufreq in MT8183 and MT8186:
-> >    a. CCI is a mediatek hw module.
-> >    b. For mediatek SoCs before MT8183, like MT8173, the CCI hw
-> >       is not introduced.
-> >    c. The frequency for cci and cpufreq are determined could
-> >       be configed at bootloader stage, so the frequency when
-> >       entering kernel is unknown.
-> >    d. Cpu little core and cci are using the same regulator.
-> >    e. If we do not control CCI and just adjust the voltage in
-> >       cpufreq driver.
-> >       When we adjust the voltage smaller because we need to reduce
-> >       the frequency, the CCI could run in high frequency which is
-> >       set in bootloader.
-> >       This will cause some problem, the cci could crash.
-> > 
-> >       Use MT8186 for a example, the bootloader set cci freq as
-> >       1.385GHz and cpufreq as 2GHz.
-> >       If entering kernel and we only adjust the cpufreq voltage, if
-> >       the cpufreq is under 1.618GHz, the cci will be out of spec.
-> > 
-> >    f. If cpufreq driver wait cci ready, regulator framework will
-> > take
-> >       the highest voltage requests from cci and cpufreq as output
-> >       so that it prevents from high freqeuncy low voltage crash.
-> > 
-> >    d. Therefore, I think it's not a good idea to bypass cci device
-> > if
-> >       the ccifreq_supported is true in MT8183 and MT8186.
-> 
-> I do not propose to bypass CCI device.  What both Angelo and I are
-> saying is just that you need a better way to handle the cases when
-> CCI
-> is not (yet) enabled.  The current way in the propsed patch is not
-> good
-> enough.
-> 
-> I fully understand the potential problems with high frequency & low
-> voltage when using a shared regulator.  But, I think the problem
-> we're
-> trying to solve here is specific to the initial boot of the platform,
-> while we are waiting for the CCI driver to be loaded.
-> 
-> The root of the problem is that the CCI bus has constraints on the
-> voltage regulator that are not defined anywhere until the CCI driver
-> is
-> loaded.  So to fix that, you need to either:
-> 
-> 1) not allow any voltage changes
-> 2) register the CCI device constraints
-> 
-> In the current patch, you attempt to do (1).  There's nothing wrong
-> with
-> the idea, we just pointed out problems in your implementation,
-> especially the fact that it does nothing, but it "succeeds" so the
-> CPUfreq framework will think the OPPs are different from what they
-> actually are.
-> 
-> Just an idea, but another option could be (2).  While waiting for the
-> CCI device to be ready, the CPUfreq driver could check the current
-> CCI
-> freq/voltage and set min/max constraints on the regulator that
-> prevent
-> CCI from breaking.  These constraints would stay in place until the
-> CCI
-> driver is ready.  Once the real CCI driver is ready/registerd these
-> contraints would be removed.
-> 
-> Another version of this same idea would be to check the CCI
-> freq/voltage
-> and then limit the OPPs available to CPUfreq to only the ones that
-> would
-> not break CCI.  Then, when CCI is ready/registered, you remove the
-> limits.
-> 
-> > 2. Check the device link status is DL_DEV_DRIVER_BOUND is used for
-> >    promising the cci is probed done.
-> > 
-> > 3. About the cpufreq_driver->target_index
-> >    a. When I trace the common drivers, I found if the return value
-> > is
-> >       not zero, it will be BUG_ON.
-> >       ref:
-> > 
-https://urldefense.com/v3/__https://elixir.bootlin.com/linux/latest/source/drivers/cpufreq/cpufreq.c*L1471__;Iw!!CTRNKA9wMg0ARbw!wgawOs1JSuJihgxA1nxhbd2Ekoys_bPCAlIH9YJhe2N9ckG6O1mDB-7zqSf6x2MhCfXo$
-> >  
-> 
-> Right, you should not try to do deferred probe in the ->set_target()
-> callback.  Deferred probe is meant for init/probe time.
-> 
-> >    b. I also try to move is_ccifreq_ready() to other place, like
-> >       cpufreq_driver->init and cpufreq probe function.
-> >       There will be new issue. Do you have any suggetion that we
-> > can
-> >       retern value of DEFER_PROBE?
-> 
-> The only appropriate place is in the probe function.
-> 
-> Kevin
 
-Hello Kevin,
 
-From the Chanwoo's devfreq passive govonor series, it's impossible to
-let cci devreq probed done before cpufreq because the passive govonor
-will search for cpufreq node and use it.
+On 4/13/2022 3:43 PM, Krzysztof Kozlowski wrote:
+> On 12/04/2022 12:14, Keerthy wrote:
+>> Add VTM bindings documentation. In the Voltage Thermal
+>> Management Module(VTM), K3 J72XX supplies a voltage
+>> reference and a temperature sensor feature that are gathered in the band
+>> gap voltage and temperature sensor (VBGAPTS) module. The band
+>> gap provides current and voltage reference for its internal
+>> circuits and other analog IP blocks. The analog-to-digital
+>> converter (ADC) produces an output value that is proportional
+>> to the silicon temperature.
+>>
+>> Signed-off-by: Keerthy <j-keerthy@ti.com>
+>> ---
+>>   .../bindings/thermal/ti,j72xx-thermal.yaml    | 62 +++++++++++++++++++
+>>   1 file changed, 62 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+>> new file mode 100644
+>> index 000000000000..8483c495cb9a
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+>> @@ -0,0 +1,62 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/thermal/ti,j72xx-thermal.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Texas Instruments J72XX VTM (DTS) binding
+>> +
+>> +maintainers:
+>> +  - Keerthy <j-keerthy@ti.com>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: ti,j721e-vtm
+>> +    oneOf:
+>> +      - enum:
+>> +          - ti,j721e-vtm
+>> +          - ti,j7200-vtm
+> 
+> It seems you resent this ignoring all of Rob's comments. In changelog of
+> cover letter you wrote "Fixed all the comments on v4" but it's not true.
+> Maybe you sent us old patch?
+> 
+> Anyway, you need to follow Rob's comments.
 
-Ref: function: cpufreq_passive_register_notifier()
+Krzysztof,
 
-https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/commit/?h=devfreq-testing&id=b670978ddc43eb0c60735c3af6e4a370603ab673
+Apologies. Some issues with my mailbox. Rob's response didn't reach me 
+for some reason.
 
-After I discuss with Angelo and Jia-wei, we think we are keeping the
-function in target_index and if the cci is not ready we will use the
-voltage which is set by bootloader to prevent high freqeuncy low
-voltage crash. And then we can keep seting the target frequency.
+I am now seeing them on the web: 
+https://lore.kernel.org/lkml/YY7HvCyJ90Ge8mr7@robh.at.kernel.org/
 
-We assume the setting of bootloader is correct and we can do this.
+It wasn't deliberate to ignore comments. Apologies.
 
-For the SoCs that including ci hardware (8183 and 8186), we think it's
-not ok if we don't probe cci correctly.
-If we failed to get cci node, I think we sould return -ENODEV and the
-probe of cpufreq failed.
+I will fix them in v6.
 
-What do you think the solution?
+Thanks for the quick feedback.
 
-BRs,
-Rex
+- Keerthy
 
+
+> 
+> 
+> Best regards,
+> Krzysztof
