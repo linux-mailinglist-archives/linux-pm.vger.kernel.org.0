@@ -2,42 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4233B4FF05C
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 09:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 674BF4FF062
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 09:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232641AbiDMHJH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Apr 2022 03:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54198 "EHLO
+        id S231781AbiDMHO1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Apr 2022 03:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231782AbiDMHJG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 03:09:06 -0400
+        with ESMTP id S233231AbiDMHO0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 03:14:26 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373C71C901
-        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 00:06:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7ACC35A9C
+        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 00:12:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5A6F60B9C
-        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 07:06:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 33F62C385AB
-        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 07:06:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7363960C20
+        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 07:12:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D55D1C385AA
+        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 07:12:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649833605;
-        bh=UeHH8PlKMMTqh171vQFdH50aOTSV+Ffvp3hmgYndxnI=;
+        s=k20201202; t=1649833925;
+        bh=mFE64K869x2U70rt1u67yvGeIWyrd3J99pUFwM9pmis=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=CqeUxyZq3p/y/2iJzyVO79NpCQ2ffArRjh4vD8EUCp7+ohQF3wSCg4c9Cy7qZtfeR
-         HPxbm9Pq0VFrsiIG5lVGusN+NLGOREcFnE2Nt1S8VfM5ZM6Zw3D1+JioyNtusetgZJ
-         FiFm6bgmPV4IvXwwIWNNg1aRlFIQc68+gcbw5P95neqmK5IyFtuXRj6ZMrYebK410Z
-         xohEaBJ4HkBI+CGsBq79es3iBqjKmncX/zk7DRH+Wmg+bZJ61Ne0O7qHOkGhpytAZA
-         RlvPPAnMZOBlCYxJnFHXab//Ur4sHAYqR3SwXAojdEFIvdpSAlFmFOJ7V/v38kiaKy
-         aYQSWTxCrkX8w==
+        b=fEE1X25jD88HcWpt2ekqCTYG0ROa2Ihmws7QN+IZZ0sb14iEtMoUoLCjhhKMvmVnu
+         HXebTRMbygaWcMe8gDSSgBdD2DuY/wXOAKnBqQYEKt5JSLUkm9QIQzwAiFLfOEh5Zv
+         BTdeNY/clgI40D1EQSO7AOnwyxxnPfAIAxTaLJr5sqCANgoarwy0EEh1sjSLeFD7qz
+         xmw8n8vfyWXn+Lrc20IE+/aY8PSQVjMSiqs3Rv5Q0V9ELwXoqP5K6Ktt+KJKj7SRv6
+         hPcO6HV4+QEJmjHFHzL+4Aw1rIG19RniomVMWOZO9fYC17eSUK3yAcb+zA4zsIF9MZ
+         V2TjeeKlZjhQQ==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 1266FC05FCE; Wed, 13 Apr 2022 07:06:45 +0000 (UTC)
+        id AF0AFCC13AD; Wed, 13 Apr 2022 07:12:05 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-pm@vger.kernel.org
 Subject: [Bug 215800] amd-pstate does not allow to set arbitrary maximum CPU
  frequency above 2200MHz for a desktop Zen 3 CPU
-Date:   Wed, 13 Apr 2022 07:06:44 +0000
+Date:   Wed, 13 Apr 2022 07:12:04 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -52,8 +52,8 @@ X-Bugzilla-Resolution:
 X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215800-137361-BovomeINv9@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-215800-137361-2AqdNtyEip@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-215800-137361@https.bugzilla.kernel.org/>
 References: <bug-215800-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -73,27 +73,13 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D215800
 
---- Comment #12 from Artem S. Tashkinov (aros@gmx.com) ---
-(In reply to Joe from comment #11)
-> OK, so it seems you change the scaling_max_freq to 2.2G, after that, even
-> you change back to 3G or cpuinfo_max_freq, the scaling_cur_freq is still
-> less than 2.2GHz.
->=20
-> I tried 2 devices on my local, can not reproduce this issue.
->=20
-> After you set scaling_max_freq to 3G or higher, You can try to run "stress
-> --cpu 128" with increasing the workload to check if the scaling_cur_freq =
-can
-> exceeds 2.2GHz.
+--- Comment #13 from Artem S. Tashkinov (aros@gmx.com) ---
+Created attachment 300750
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D300750&action=3Dedit
+/sys/devices/system/cpu/cpufreq
 
-I've run tests now a dozen times already: once I change cpuinfo_max_freq my=
- CPU
-never goes above 2.2GHz no matter what I do even if I restore the value sto=
-red
-in this variable/file.
-
-This is further corroborated by more than halved performance and decreased
-power consumption - it doesn't go above ~55W.
+The entire /sys/devices/system/cpu/cpufreq tar.bz2'ed after running an
+intensive MT task for a few minutes.
 
 --=20
 You may reply to this email to add a comment.
