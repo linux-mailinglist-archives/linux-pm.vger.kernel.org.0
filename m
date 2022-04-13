@@ -2,57 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E8A4FF98E
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 16:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7364FF9A2
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 17:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235573AbiDMPBU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Apr 2022 11:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48754 "EHLO
+        id S233236AbiDMPFB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 13 Apr 2022 11:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234367AbiDMPBT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 11:01:19 -0400
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0CFE0DD;
-        Wed, 13 Apr 2022 07:58:58 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id m132so4250374ybm.4;
-        Wed, 13 Apr 2022 07:58:58 -0700 (PDT)
+        with ESMTP id S230492AbiDMPFB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 11:05:01 -0400
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E5BBCB7;
+        Wed, 13 Apr 2022 08:02:39 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id t67so4291200ybi.2;
+        Wed, 13 Apr 2022 08:02:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ICXFv2vFTWA/EfToNSXNFej0aDLg/UzwH2y+FUBsnf8=;
-        b=ucIfUPnhBBucUyxJsRIMkWlhPT+08Y0+VrishMUN8nPab1K9E9FNLRfMIZL4UmA9NI
-         UpqDWU9M/AlkR+8F96trf371dMVK5zVRxHfs1Y2fjvdHZ3lE/sBDhvXPTRUCdO0B3+HV
-         vc7b7w9RAv8JeNj/kNpSO4swPPKqPjvcRYj3ZaK2sVp5g5egMtUqLIrtPqrygGwNHwq3
-         XMvlcWHCXtmTUk4KDOa91Zuo5Vw+XVwySf8MdNj5HqUrEGjQ5PoxUb2bzZlRoRZEFgXy
-         wlYrkIO+O07Bqlw78P+15UAUMZL85x1OYIfAg9T5nM4AqGpqSmdNnxUaHgqwOmsnFQt3
-         9ZkA==
-X-Gm-Message-State: AOAM531qWG859WEmlLFuR84KWzdhPM9EjqK0uHkx9FrAcfqQfYyZXJKx
-        Y8BqGVxXtsf/G/zDO9UBlxv0q8pIAsn2lG5FDG4=
-X-Google-Smtp-Source: ABdhPJwhNhjILTyonCwIgTOvkt4W+DqQjlYGmtX7ajI4SbcsIQhtTDyxJTnK5iHWVJydm2nWxnq4HLeNnvFojeev2io=
-X-Received: by 2002:a05:6902:352:b0:63e:94c:883c with SMTP id
- e18-20020a056902035200b0063e094c883cmr28647821ybs.365.1649861937643; Wed, 13
- Apr 2022 07:58:57 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=o9E/Fd7er8vrzR0hoxKbsRBehNgp7Hi5w+aGqta8LVo=;
+        b=ZlRSDXEc2BnD8fX8ZA/Kt5qnOc/F89MunXvVsKcLuxTmaSX7/2V+LtgkuDwD6KTFHS
+         QaloyzY+RuRM8Kdq4sDB8sNF1SpKhf2eOdR3XD1CZiAG+wDL1gCgldGB52bBq6hy2rmX
+         DcdOkrATFiQyzy9Rukkv2Q7vVo2+43ZeDWVs/n6tOhut/T2YC4igX4h7yop0oQBxEp3U
+         4u6y8QtmPycgkWGSo88Qu9YCwkeUzeyJ+imgdiEbge2SWzS55wIhnA4Vom3Kvhg74YP9
+         3hwvy6ZE6y71SYNsNv4ArdfZL72bYhXZ1iQ9qOAqcA7B1IG3SbFtNYArQq9jL7Txyicq
+         gZDQ==
+X-Gm-Message-State: AOAM532hFMJNUij5gF2uhlrTR2auH/JyhLPsA0ql8jCeRdGkRMCVvL9a
+        J2Kk8xMIjwp3t7HE/0nnCVI/JR295pB8Qt6aa/k=
+X-Google-Smtp-Source: ABdhPJyEGX14UDKo8czX2MQtVCMfjLlzPCs/cxWXrYPZSQhX828ml81Ny+JhQpUIMZ+gx6t7TX2I5RY3aj0P3sPzYO0=
+X-Received: by 2002:a25:e082:0:b0:641:cf5:b91f with SMTP id
+ x124-20020a25e082000000b006410cf5b91fmr18025246ybg.482.1649862158896; Wed, 13
+ Apr 2022 08:02:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220325073030.91919-1-kant@allwinnertech.com> <c881de5f-5a1e-19ff-0ae6-f68032c79f03@arm.com>
-In-Reply-To: <c881de5f-5a1e-19ff-0ae6-f68032c79f03@arm.com>
+References: <20220329133352.3361248-1-amadeuszx.slawinski@linux.intel.com>
+In-Reply-To: <20220329133352.3361248-1-amadeuszx.slawinski@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 13 Apr 2022 16:58:46 +0200
-Message-ID: <CAJZ5v0j9O4mnUtNNtaQ7SZ1_N8GUOJ0CeSzZOwcJ18BKU9yKqQ@mail.gmail.com>
-Subject: Re: [PATCH v2] thermal: devfreq_cooling: use local ops instead of
- global ops
-To:     Lukasz Luba <lukasz.luba@arm.com>,
-        Kant Fan <kant@allwinnertech.com>
-Cc:     Amit Kucheria <amitk@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
+Date:   Wed, 13 Apr 2022 17:02:28 +0200
+Message-ID: <CAJZ5v0h2MceA7RMnWYNYjkwtpEupzuSEb_-_YpcUAY7v2gWtmw@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/acpi: Preserve ACPI-table override during hibernation
+To:     =?UTF-8?B?QW1hZGV1c3ogU8WCYXdpxYRza2k=?= 
+        <amadeuszx.slawinski@linux.intel.com>
+Cc:     "the arch/x86 maintainers" <x86@kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        allwinner-opensource-support@allwinnertech.com,
-        Stable <stable@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ionela Voinescu <ionela.voinescu@arm.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
@@ -63,118 +64,50 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 10:02 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+On Tue, Mar 29, 2022 at 3:34 PM Amadeusz Sławiński
+<amadeuszx.slawinski@linux.intel.com> wrote:
 >
-> Hi Kant,
+> When overriding NHLT ACPI-table tests show that on some platforms
+> there is problem that NHLT contains garbage after hibernation/resume
+> cycle.
 >
-> On 3/25/22 07:30, Kant Fan wrote:
-> > Fix access illegal address problem in following condition:
-> > There are muti devfreq cooling devices in system, some of them has
-> > em model but other does not, energy model ops such as state2power will
-> > append to global devfreq_cooling_ops when the cooling device with
-> > em model register. It makes the cooling device without em model
-> > also use devfreq_cooling_ops after appending when register later by
-> > of_devfreq_cooling_register_power() or of_devfreq_cooling_register().
-> >
-> > IPA governor regards the cooling devices without em model as a power actor
-> > because they also have energy model ops, and will access illegal address
-> > at dfc->em_pd when execute cdev->ops->get_requested_power,
-> > cdev->ops->state2power or cdev->ops->power2state.
-> >
-> > Fixes: 615510fe13bd2 ("thermal: devfreq_cooling: remove old power model and use EM")
-> > Cc: stable@vger.kernel.org # 5.13+
-> > Signed-off-by: Kant Fan <kant@allwinnertech.com>
-> > ---
-> >   drivers/thermal/devfreq_cooling.c | 25 ++++++++++++++++++-------
-> >   1 file changed, 18 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
-> > index 4310cb342a9f..d38a80adec73 100644
-> > --- a/drivers/thermal/devfreq_cooling.c
-> > +++ b/drivers/thermal/devfreq_cooling.c
-> > @@ -358,21 +358,28 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
-> >       struct thermal_cooling_device *cdev;
-> >       struct device *dev = df->dev.parent;
-> >       struct devfreq_cooling_device *dfc;
-> > +     struct thermal_cooling_device_ops *ops;
-> >       char *name;
-> >       int err, num_opps;
-> >
-> > -     dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
-> > -     if (!dfc)
-> > +     ops = kmemdup(&devfreq_cooling_ops, sizeof(*ops), GFP_KERNEL);
-> > +     if (!ops)
-> >               return ERR_PTR(-ENOMEM);
-> >
-> > +     dfc = kzalloc(sizeof(*dfc), GFP_KERNEL);
-> > +     if (!dfc) {
-> > +             err = -ENOMEM;
-> > +             goto free_ops;
-> > +     }
-> > +
-> >       dfc->devfreq = df;
-> >
-> >       dfc->em_pd = em_pd_get(dev);
-> >       if (dfc->em_pd) {
-> > -             devfreq_cooling_ops.get_requested_power =
-> > +             ops->get_requested_power =
-> >                       devfreq_cooling_get_requested_power;
-> > -             devfreq_cooling_ops.state2power = devfreq_cooling_state2power;
-> > -             devfreq_cooling_ops.power2state = devfreq_cooling_power2state;
-> > +             ops->state2power = devfreq_cooling_state2power;
-> > +             ops->power2state = devfreq_cooling_power2state;
-> >
-> >               dfc->power_ops = dfc_power;
-> >
-> > @@ -407,8 +414,7 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
-> >       if (!name)
-> >               goto remove_qos_req;
-> >
-> > -     cdev = thermal_of_cooling_device_register(np, name, dfc,
-> > -                                               &devfreq_cooling_ops);
-> > +     cdev = thermal_of_cooling_device_register(np, name, dfc, ops);
-> >       kfree(name);
-> >
-> >       if (IS_ERR(cdev)) {
-> > @@ -429,6 +435,8 @@ of_devfreq_cooling_register_power(struct device_node *np, struct devfreq *df,
-> >       kfree(dfc->freq_table);
-> >   free_dfc:
-> >       kfree(dfc);
-> > +free_ops:
-> > +     kfree(ops);
-> >
-> >       return ERR_PTR(err);
-> >   }
-> > @@ -510,11 +518,13 @@ EXPORT_SYMBOL_GPL(devfreq_cooling_em_register);
-> >   void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
-> >   {
-> >       struct devfreq_cooling_device *dfc;
-> > +     const struct thermal_cooling_device_ops *ops;
-> >       struct device *dev;
-> >
-> >       if (IS_ERR_OR_NULL(cdev))
-> >               return;
-> >
-> > +     ops = cdev->ops;
-> >       dfc = cdev->devdata;
-> >       dev = dfc->devfreq->dev.parent;
-> >
-> > @@ -525,5 +535,6 @@ void devfreq_cooling_unregister(struct thermal_cooling_device *cdev)
-> >
-> >       kfree(dfc->freq_table);
-> >       kfree(dfc);
-> > +     kfree(ops);
-> >   }
-> >   EXPORT_SYMBOL_GPL(devfreq_cooling_unregister);
+> Problem stems from the fact that ACPI override performs early memory
+> allocation using memblock_phys_alloc_range() in
+> memblock_phys_alloc_range(). This memory block is later being marked as
+> ACPI memory block in arch_reserve_mem_area(). Later when memory areas
+> are considered for hibernation it is being marked as nosave in
+> e820__register_nosave_regions().
 >
+> Fix this by marking ACPI override memory area as ACPI NVS
+> (Non-Volatile-Sleeping), which according to specification needs to be
+> saved on entering S4 and restored when leaving and is implemented as
+> such in kernel.
 >
-> Thank you for updating it, LGTM
+> Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+> ---
 >
-> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+> Changes in v2:
+>  * Changed approach as method used in v1 introduced potential for memory
+>    corruption, which was caught by tests.
+>  * Adjusted commit message describing above change in approach.
+>
+> ---
+>  arch/x86/kernel/acpi/boot.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+> index 0d01e7f5078c..2eeca97b730b 100644
+> --- a/arch/x86/kernel/acpi/boot.c
+> +++ b/arch/x86/kernel/acpi/boot.c
+> @@ -1772,7 +1772,7 @@ int __acpi_release_global_lock(unsigned int *lock)
+>
+>  void __init arch_reserve_mem_area(acpi_physical_address addr, size_t size)
+>  {
+> -       e820__range_add(addr, size, E820_TYPE_ACPI);
+> +       e820__range_add(addr, size, E820_TYPE_NVS);
+>         e820__update_table_print();
+>  }
+>
+> --
 
-Applied as 5.19 material.
-
-Lukasz, this had a conflict with your EM series, please double check
-if my resolution in the bleeding-edge branch is correct.
-
-Thanks!
+Given the lack of objections or concerns, applied as 5.19 material, thanks!
