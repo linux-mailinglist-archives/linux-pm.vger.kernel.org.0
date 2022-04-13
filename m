@@ -2,134 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2996E4FFA87
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 17:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9128D4FFBB1
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 18:48:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236649AbiDMPoT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Apr 2022 11:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
+        id S232543AbiDMQuZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Apr 2022 12:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236646AbiDMPoS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 11:44:18 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F17F4A93D;
-        Wed, 13 Apr 2022 08:41:56 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2eafabbc80aso26634217b3.11;
-        Wed, 13 Apr 2022 08:41:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SHFzz4Adk6Spcagd3aayb+Zwmj10ffSyTl1fyLat03Y=;
-        b=0hM4BBnQj8mKRciCIxsYmRXevg7mX/vZc41s6r7iMVB35m4VqK9y9ACQsO43BjagJE
-         Ng5yLYZjL/JtLDmDzPIoox/whb7CzsdfpVeezuRHOksp9xTjPiBNBipE9aXiHTGP+pGu
-         JMPLfSpskjeh9bLyJysr/j1q6tqXpnGNZWtIs3mm+tRlZbBPZDFzMv064ZO+vTMz0v/a
-         zqStqFSvdMovx1c/c+JZpguGkWqZM2KIUdEAUgNjpD1xji95qY5MYmwaj0r+gl27YrnC
-         /6SLBZuMadCRk/QOIeB/Dx48LqWzBWG0fybt51XhYdd7quKKzsfWiiosLr1xr5dhIZ0U
-         fXqg==
-X-Gm-Message-State: AOAM530hpxRgEXG8jQZ1BO2ZbWSE10ANPeOkZ91/UdiOlX0mS7Z5sfkw
-        PgE4aTTIcf/LP7Uw9VL8GxcI7z6d85iD0bL/w4c=
-X-Google-Smtp-Source: ABdhPJz7T/J691Cv/mz1W3q3MZT3b4qfkZuWp3RXQM50EElAZhvyBpcUCEMrPY4T2qJ0YYjoOjsVKL3iXD/skfMzYlc=
-X-Received: by 2002:a81:4b8e:0:b0:2ef:5240:69fc with SMTP id
- y136-20020a814b8e000000b002ef524069fcmr1407551ywa.19.1649864515666; Wed, 13
- Apr 2022 08:41:55 -0700 (PDT)
+        with ESMTP id S229707AbiDMQuY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 12:50:24 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6664692A9;
+        Wed, 13 Apr 2022 09:48:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+waI7v+dCVZ0vufSFv8wG18VEgKuZfF8rc6E2PHXDds=; b=NRP5c3rg1/dIRn19tmuiu6tNPb
+        IYkF5PrnTXyG6aDtCnfNMaEY0PpgYrzziNNS372OQYIXLE9paPNR3R2aVNz2xZAV8yBPvP6mB3aL0
+        eSM1306WwBXXAdU0PtpkVXyWgekkGURowKf5fejrY9k5Nx+wEU8jtGjmHBObdsvzA6QQZ6ASwSCHJ
+        iuSEOK/NOKrinsjwBdZBn3ZyURFEGKoOx5P3Y1pOii1jrNNOmqE0OIrXkOLUsvTKf4oPlfwGvPfjM
+        bLD+KRDcphuZcEVWuPUG+qpCR4DrD/oP6OG7n3QY/MLA83Ri78FWr+tV1wJ8Ogv81I38ud1aIkQ2a
+        hK1GlbkA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1neg9d-00EPWT-TN; Wed, 13 Apr 2022 16:47:41 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9442B30027B;
+        Wed, 13 Apr 2022 18:47:40 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6E8592659F051; Wed, 13 Apr 2022 18:47:40 +0200 (CEST)
+Date:   Wed, 13 Apr 2022 18:47:40 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        ebiederm@xmission.com, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        tj@kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 1/5] sched,signal,ptrace: Rework TASK_TRACED,
+ TASK_STOPPED state
+Message-ID: <Ylb+rNNUmZdamb/U@hirez.programming.kicks-ass.net>
+References: <20220412114421.691372568@infradead.org>
+ <20220412114853.782838521@infradead.org>
+ <20220413132922.GB27281@redhat.com>
 MIME-Version: 1.0
-References: <20220413090510.4039589-1-li.meng@amd.com>
-In-Reply-To: <20220413090510.4039589-1-li.meng@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 13 Apr 2022 17:41:44 +0200
-Message-ID: <CAJZ5v0jFXhfL=2TwBfzzfEdyKUwYDCxo8OKZuYtJjASKE5Oqfw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] Add unit test module for AMD P-State driver
-To:     Meng Li <li.meng@amd.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220413132922.GB27281@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 11:06 AM Meng Li <li.meng@amd.com> wrote:
->
-> Hi all:
->
-> AMD P-State unit test(amd_pstate_testmod) is a kernel module for testing
-> the functions of amd-pstate driver.
-> It could import as a module to launch some test tasks.
->
-> We upstream out AMD P-state driver into Linux kernel and use this unit
-> test module to verify the required conditions and basic functions of
-> amd-pstate before integration test.
->
-> We use test module in the kselftest frameworks to implement it.
-> We create amd_pstate_testmod module and tie it into kselftest.
->
-> For exmaple: The test case aput_acpi_cpc is used to check whether the
-> _CPC object is exist in SBIOS.
-> The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is
-> not existed at the detected processor, so it is a necessary condition.
->
-> At present, its test cases are very simple, and the corresponding test
-> cases will continue to be added later to improve the test coverage.
->
-> See patch series in below git repo:
-> V1: https://lore.kernel.org/linux-pm/20220323071502.2674156-1-li.meng@amd.com/
->
-> Changes from V1 -> V2:
-> - cpufreq: amd-pstate:
-> - - add a trailing of amd-pstate.h to MAINTAINER AMD PSTATE DRIVER
-> - selftests: cpufreq
-> - - add a wrapper shell script for the amd_pstate_testmod module
-> - selftests: cpufreq:
-> - - remove amd_pstate_testmod kernel module to .../cpufreq/amd_pstate_testmod
-> - Documentation: amd-pstate:
-> - - amd_pstate_testmod rst document is not provided at present.
->
-> Thanks,
-> Jasmine
->
-> Meng Li (3):
->   cpufreq: amd-pstate: Expose struct amd_cpudata
+On Wed, Apr 13, 2022 at 03:29:22PM +0200, Oleg Nesterov wrote:
+> On 04/12, Peter Zijlstra wrote:
+> >
+> > @@ -475,8 +483,10 @@ static int ptrace_attach(struct task_str
+> >  	 * in and out of STOPPED are protected by siglock.
+> >  	 */
+> >  	if (task_is_stopped(task) &&
+> > -	    task_set_jobctl_pending(task, JOBCTL_TRAP_STOP | JOBCTL_TRAPPING))
+> > +	    task_set_jobctl_pending(task, JOBCTL_TRAP_STOP | JOBCTL_TRAPPING)) {
+> > +		task->jobctl &= ~JOBCTL_STOPPED;
+> >  		signal_wake_up_state(task, __TASK_STOPPED);
+> 
+> OK, but just for record before I forget...
+> 
+> It seems that we can s/JOBCTL_STOPPED/JOBCTL_TRACED/ instead, and kill the
+> nasty wait_on_bit(JOBCTL_TRAPPING_BIT) along with JOBCTL_TRAPPING_BIT. Sure,
+> this doesn't belong to this series.
 
-Please collect an ACK from Ray for this one as per MAINTAINERS and I
-will leave the series to Shuah as it is selftests mostly.
-
-Thanks!
-
->   selftests: cpufreq: Add wapper script for test AMD P-State
->   selftests: cpufreq: Add amd_pstate_testmod kernel module for testing
->
->  MAINTAINERS                                   |   1 +
->  drivers/cpufreq/amd-pstate.c                  |  60 +---
->  include/linux/amd-pstate.h                    |  74 +++++
->  tools/testing/selftests/cpufreq/Makefile      |   2 +-
->  .../selftests/cpufreq/amd_pstate_testmod.sh   |   4 +
->  .../cpufreq/amd_pstate_testmod/Makefile       |  20 ++
->  .../amd_pstate_testmod/amd_pstate_testmod.c   | 302 ++++++++++++++++++
->  tools/testing/selftests/cpufreq/config        |   1 +
->  8 files changed, 404 insertions(+), 60 deletions(-)
->  create mode 100644 include/linux/amd-pstate.h
->  create mode 100755 tools/testing/selftests/cpufreq/amd_pstate_testmod.sh
->  create mode 100644 tools/testing/selftests/cpufreq/amd_pstate_testmod/Makefile
->  create mode 100644 tools/testing/selftests/cpufreq/amd_pstate_testmod/amd_pstate_testmod.c
->
-> --
-> 2.25.1
->
+I'm afraid I didn't look hard enough at that part to really understand
+it, but some cleanup around there sounds lovely.
