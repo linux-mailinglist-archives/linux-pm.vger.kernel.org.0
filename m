@@ -2,61 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D004FF8F1
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 16:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C23A74FF90E
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 16:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234283AbiDMOcS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Apr 2022 10:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
+        id S230230AbiDMOiY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Apr 2022 10:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233793AbiDMOcR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 10:32:17 -0400
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8083EF19;
-        Wed, 13 Apr 2022 07:29:55 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id t67so4099235ybi.2;
-        Wed, 13 Apr 2022 07:29:55 -0700 (PDT)
+        with ESMTP id S235589AbiDMOiX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 10:38:23 -0400
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923F060CC7;
+        Wed, 13 Apr 2022 07:36:01 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2ef5380669cso7717467b3.9;
+        Wed, 13 Apr 2022 07:36:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=P6HqlanCyPSwncb4shZm76Hg2UdOq2aV2/+OAl9p+/g=;
-        b=NMP0IWxZfJse6iT27NVOPoj7/t3UtTKGwibRMRnREJaHei+/pHWm+yJtJL7toiqir9
-         R5r1CVqeaPKvUsTc2SyDEjob3iyvdkqz7HnCnwTIlEdtKDgsR5f2/omdsM7Gak4XIZVr
-         M8PNAf9gAt1nF2SZ5GfPqM2oWKn6Ycp5AfSoRGDjRLhBloyFtIrDQq/6KNf0fHHWRCr2
-         YARgSD8a6pAkgfMecLyl5sLp7sKtqzOSEZx+tIQ4dCfGsbv6LT/RQZ2kDbeeTOTQe1YC
-         ysk7VsozITI6ug1X9T6aSLN06Mmc96putFFCvOMCpLLcQO/GX885GZFE2o7Ny7Eq2Pee
-         EmoA==
-X-Gm-Message-State: AOAM531pZY1V4I+jhnPf5stobmqkpuXxxF19/Vq/hos5fngWtc5dNNLC
-        siiPNh+HX13x6OSaADnk1KeH7Xvf/P7DTqljX+4=
-X-Google-Smtp-Source: ABdhPJyIEe6g/M5R+wfhGO1Tn2f6GQ9LY3zIVdu915DAN1BxmCSF3smK/dPKs7NrgvevM6qmuH0nezgz/sviDNUop8I=
-X-Received: by 2002:a05:6902:1544:b0:63d:d3a7:8cc4 with SMTP id
- r4-20020a056902154400b0063dd3a78cc4mr31215822ybu.622.1649860195288; Wed, 13
- Apr 2022 07:29:55 -0700 (PDT)
+        bh=HkFKvLI0J6quLQdPqpOX0Tj5KDs3UD15ORpTF0qg2e4=;
+        b=6hQpGirc2ucrJ9JNE7jYo5jl4SHtx/ANBT6uAt77bprdZYH5y2kuYkbDNSdKxI19CO
+         Vks0rWB1uTjTdodn/qlTfbCQVmWC+auMgUXSsCm1uDowqWiAfkjNk1wx3pPf/Jf13Rdp
+         vJdxE1OakSQ8tZTf8K9n8bjDgFxY8HGcvchTBCCDOU025JxLoeIyH2JskpbFwcviPeq3
+         b5AKzC0IikRHezcfNsEWBkYWPZdNXtpb+37gHglnBKY/I7b2JwLbL4LwZzWowJ4+vRd6
+         LWo2Ii3M9hEJJ0c60NZUXgFSjHU79QljZ2vb5uyH4PwKWXatABeSm5n5boSyfGRy5e5H
+         hiKA==
+X-Gm-Message-State: AOAM530ou+RJYTXA4bif6i9JDwSLIrPYtnvMNtPeAXQZQDUR7aQxGKvt
+        bU2k5tWOgbxLLNE1lp7sMUojoJj5GVt0Y0jaT9KWsRXp
+X-Google-Smtp-Source: ABdhPJznRcpigdB/Ir4yWmRFfF/hE4YWrrX33xtGTbB1mSjJwf3cB1Z/dbSo3oLnkmCEfqHiC41UZjsnNi4mMw7TUVA=
+X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
+ b145-20020a811b97000000b002db640f49d8mr33491323ywb.326.1649860560856; Wed, 13
+ Apr 2022 07:36:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220321095729.20655-1-lukasz.luba@arm.com> <76230a1c-73b8-c471-c62e-3ec9b33461a6@arm.com>
- <55d4a19d-15d4-4d15-8430-8a8ed8149497@arm.com>
-In-Reply-To: <55d4a19d-15d4-4d15-8430-8a8ed8149497@arm.com>
+References: <20220324080653.454333-1-dacohen@pm.me>
+In-Reply-To: <20220324080653.454333-1-dacohen@pm.me>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 13 Apr 2022 16:29:44 +0200
-Message-ID: <CAJZ5v0g5vcC7aS4KS-uN+fHmbrKCmA-MVbJEKOnPgEyDDfqSRw@mail.gmail.com>
-Subject: Re: [RESEND][PATCH 0/8] Introduce support for artificial Energy Model
-To:     Lukasz Luba <lukasz.luba@arm.com>
+Date:   Wed, 13 Apr 2022 16:35:50 +0200
+Message-ID: <CAJZ5v0jDEau14RF4-pEc0HiWG+Cg7f93oMmhBXZULCXpOJFVaw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] PM: refactor pm_pr_dbg() to support dynamic debug
+To:     David Cohen <dacohen@pm.me>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Pierre Gondois <Pierre.Gondois@arm.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -69,18 +56,28 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-On Tue, Apr 12, 2022 at 8:53 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+On Thu, Mar 24, 2022 at 9:07 AM David Cohen <dacohen@pm.me> wrote:
 >
-> Hi Rafael,
+> Hi,
 >
-> gentle ping. If you need some help with this maintenance,
-> we can help.
+> I am currently debugging an issue with s2idle on my laptop where in a
+> rare occasion instead of sleeping, it gets stuck in an infinite loop.
+> The pm_pr_dbg() is placed on very useful functions and it helps me to
+> debug it, but the current all or nothing enabling mechanism with
+> pm_debug_messages_on flag is causing the suspending mechanism to be
+> disturbed with so many debug messages to the point it becomes extremely
+> difficult to reproduce the issue I'm debugging. More granularity when
+> enabling pm_pr_dbg() in this case is very welcome.
+>
+> These patches I'm sending introduce dynamic debug support to pm_pr_dbg()
+> while still maintaining the pm_debug_messages_on flag behavior if
+> dynamic debug is not used.
+>
+> Regards, David
+>
+> ---
+> David Cohen (2):
+>   PM: narrow down -DDEBUG on kernel/power/ files
+>   PM: enable dynamic debug support within pm_pr_dbg()
 
-Sorry for the delay.
-
-Given the lack of objections or concerns, I've applied the whole
-series as 5.19 material.
-
-Thanks!
+Both patches applied as 5.19 material, thanks!
