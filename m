@@ -2,151 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6C84FFBE8
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 18:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0494FFBFC
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Apr 2022 19:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232990AbiDMRAy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Apr 2022 13:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34032 "EHLO
+        id S235624AbiDMRDq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Apr 2022 13:03:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232667AbiDMRAx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 13:00:53 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C97F6A03F;
-        Wed, 13 Apr 2022 09:58:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fxcWXxliDVwtHEu/Qyoy3uW0J2eshHKocZ5Ssyd/xp4=; b=NGOURvw/Qob+Io9Ag0qQDxY8sT
-        7whgw2h8Vwk1YG4wiBtwcZX0WaK+Afn2KxNXYN7FUT2+1RH+6it8748YYTEDquppLMXvaxuA3ICVq
-        0Q8I+T1iXCvjsV0gi8U1NyPi6+wJxnVMlL5vKLXKGQorpnDeFTcX0F7mCPUy3mo63EGE0zAzwA3bW
-        5SfDwCtqfa4KAONzS0ZJVLxSRBmjg5z3/U7ecOZINY+NefSgpAMyrYIYd5vXcE5n68iQ+goimEzNm
-        4soyWMmaqaDg6RgsKQLwbwDYwYDo6lozyADBjNis0l77DiLdRoClh5NXueyQAFLTN7KnLE0RwGYx6
-        hVPe+PfA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1negJu-00EPsM-0N; Wed, 13 Apr 2022 16:58:18 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8821830031E;
-        Wed, 13 Apr 2022 18:58:17 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 43A0629DC9F64; Wed, 13 Apr 2022 18:58:17 +0200 (CEST)
-Date:   Wed, 13 Apr 2022 18:58:17 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        ebiederm@xmission.com, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/5] sched,ptrace: Fix ptrace_check_attach() vs PREEMPT_RT
-Message-ID: <YlcBKQvp524p0KRY@hirez.programming.kicks-ass.net>
-References: <20220412114421.691372568@infradead.org>
- <20220412114853.842942162@infradead.org>
- <20220413132451.GA27281@redhat.com>
+        with ESMTP id S237173AbiDMRDp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 13:03:45 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6660A6A056
+        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 10:01:23 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id n22so2190786pfa.0
+        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 10:01:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=VWp1weXzZ3bgjyBCOs8IUs3xAXx94RSN9bjrxALf5u8=;
+        b=csEMxCUF4W/Sf/PDve78Hu+y5gbo1eEMYXl1runK1SsqQIDS13STZRMrMy0EbBeUAx
+         PXztheGndRA26RHOeb/keE1MzPymqUwkGgGOyuSiQQu7BVGmiriqPpYhH12TmLPNeLf+
+         16b+ZNj3ef+2RU0Fk5dWybqfrJ73xvGwMQ3cmra8GmQUMAabBpy4L7AerYyDT7GIEefx
+         Z4e2f/4hYhs9YVe5QeYEPYMPZDKt6xOmhNsND38MeVovtweG899CSxQyrxMe49wnh5MS
+         hbZZQKFZ0Pwh5d8yVWITaAwEVMjp1GEp1BkEml0h2j0Ho35jCeVmHWKoWMgKLyDcpJl9
+         AOtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=VWp1weXzZ3bgjyBCOs8IUs3xAXx94RSN9bjrxALf5u8=;
+        b=w68d/OPZPSYURZZeFxZYxrsJGiT5r1hDtPtydH8/SuZs6vPHq1pGCYEQW8S5A1tFa+
+         dq1o3AFihtUMDPn9PQdLS1E4e4CKXWaOka9ah2wHBWpytChyOkK9RsGMC7ADejgcz58b
+         7GVj91Kr+iYgoy/kP/FI4FfvEgZUTpT40hEn2M/LfV0lLik1h6OqzsXas3OJz4ekZmLg
+         SBBlPc53cFC5LGIt2snTMyvOiuSDgLvNSMMeGNV2/+4OQPU/YQTr/66z1i8+YPfclVmo
+         rQCmlFKLGxR215QecjdNZUd2Mxf5Da+qpPwzpWL9QZUivOliV8iQK2yHuQBTa6nqrH+h
+         d2JA==
+X-Gm-Message-State: AOAM532NySZ/XdWEqL/XS38tBDJAR5+YYHwSnLFE3kPtcJR4mNZiaJep
+        6CayiAKCIJUbi4mE4rIBxEw=
+X-Google-Smtp-Source: ABdhPJz4dc7T0Vn+5iV23TlICmCKKaqpb5MwUhs1K8lC3IGPTvl7FffLYUvI3eI7Z6q4N1sEGlVZdg==
+X-Received: by 2002:a05:6a00:238f:b0:4f7:78b1:2f6b with SMTP id f15-20020a056a00238f00b004f778b12f6bmr44328969pfc.17.1649869282905;
+        Wed, 13 Apr 2022 10:01:22 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id d8-20020a17090a114800b001cb95a92bd7sm3450463pje.13.2022.04.13.10.01.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 10:01:22 -0700 (PDT)
+Message-ID: <194b63ba-0961-88e0-daf5-2c7ad3094194@gmail.com>
+Date:   Wed, 13 Apr 2022 10:01:20 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220413132451.GA27281@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] thermal: bcm2711_thermal: Don't clamp temperature at zero
+Content-Language: en-US
+To:     Stefan Wahren <stefan.wahren@i2se.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        linux-pm@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20220412195423.104511-1-stefan.wahren@i2se.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220412195423.104511-1-stefan.wahren@i2se.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 03:24:52PM +0200, Oleg Nesterov wrote:
-> Hi Peter,
-> 
-> I like 1-2 but I need to read them (and other patches) again, a
-> couple of nits right now.
-> 
-> On 04/12, Peter Zijlstra wrote:
-> >
-> > +static int __ptrace_freeze_cond(struct task_struct *p)
-> > +{
-> > +	if (!task_is_traced(p))
-> > +		return -ESRCH;
-> 
-> 	if (!task_is_traced(p) || p->parent != current)
-> 		return -ESRCH;
-> 
-> we should not spin/sleep if it is traced by another task
 
-Yes, fair enough. And I suppose doing this test without holding siglock
-is safe enough.
 
-> > +static int __ptrace_freeze(struct task_struct *p, void *arg)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret = __ptrace_freeze_cond(p);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/*
-> > +	 * Task scheduled between __ptrace_pre_freeze() and here, not our task
-> > +	 * anymore.
-> > +	 */
-> > +	if (*(unsigned long *)arg != p->nvcsw)
-> > +		return -ESRCH;
-> > +
-> > +	if (looks_like_a_spurious_pid(p))
-> > +		return -ESRCH;
+On 4/12/2022 12:54 PM, Stefan Wahren wrote:
+> The thermal sensor on BCM2711 is capable of negative temperatures, so don't
+> clamp the measurements at zero. Since this was the only use for variable t,
+> drop it.
 > 
-> Oh, I do not think __ptrace_freeze() should check for spurious pid...
-> looks_like_a_spurious_pid() should be called once in ptrace_check_attach()
-> before task_call_func(__ptrace_freeze).
+> This change based on a patch by Dom Cobley, who also tested the fix.
+> 
+> Fixes: 59b781352dc4 ("thermal: Add BCM2711 thermal driver")
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 
-I can certainly do that, but since that needs be done with siglock held,
-and the __ptrace_freeze call is a one-time affair, I didn't really see
-the point in making the code more complicated.
-
-Something like so then?
-
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -222,7 +222,7 @@ static void ptrace_unfreeze_traced(struc
-  */
- static int __ptrace_freeze_cond(struct task_struct *p)
- {
--	if (!task_is_traced(p))
-+	if (!task_is_traced(p) || p->parent != current)
- 		return -ESRCH;
- 
- 	if (task_curr(p))
-@@ -283,9 +283,6 @@ static int __ptrace_freeze(struct task_s
- 	if (*(unsigned long *)arg != p->nvcsw)
- 		return -ESRCH;
- 
--	if (looks_like_a_spurious_pid(p))
--		return -ESRCH;
--
- 	if (__fatal_signal_pending(p))
- 		return -ESRCH;
- 
-@@ -378,6 +375,9 @@ static int ptrace_check_attach(struct ta
- 		 * does ptrace_unlink() before __exit_signal().
- 		 */
- 		spin_lock_irq(&child->sighand->siglock);
-+		if (looks_like_a_spurious_pid(child))
-+			goto unlock_sig;
-+
- 		ret = task_call_func(child, __ptrace_freeze, &nvcsw);
- 		if (ret) {
- 			/*
-@@ -386,6 +386,7 @@ static int ptrace_check_attach(struct ta
- 			 */
- 			ret = -ESRCH;
- 		}
-+unlock_sig:
- 		spin_unlock_irq(&child->sighand->siglock);
- 	}
- unlock:
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
