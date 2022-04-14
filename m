@@ -2,179 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D003500450
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Apr 2022 04:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 508F3500432
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Apr 2022 04:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236465AbiDNCfC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Apr 2022 22:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54630 "EHLO
+        id S232752AbiDNCdH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Apr 2022 22:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237639AbiDNCfB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 22:35:01 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347C93193E;
-        Wed, 13 Apr 2022 19:32:34 -0700 (PDT)
-X-UUID: 50fd56eeb8ca4a7a98dcc5b707929fc3-20220414
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:0af9424a-3ad4-438b-875e-02c45679f611,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.4,REQID:0af9424a-3ad4-438b-875e-02c45679f611,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:faefae9,CLOUDID:d24d14a9-d103-4e36-82b9-b0e86991b3df,C
-        OID:IGNORED,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,File:ni
-        l,QS:0,BEC:nil
-X-UUID: 50fd56eeb8ca4a7a98dcc5b707929fc3-20220414
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1189990021; Thu, 14 Apr 2022 10:32:31 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 14 Apr 2022 10:32:29 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 14 Apr 2022 10:32:29 +0800
-Message-ID: <12c630946ce9d7b8c80143615496238759323981.camel@mediatek.com>
-Subject: Re: [PATCH V2 13/15] cpufreq: mediatek: Link CCI device to CPU
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Kevin Hilman <khilman@baylibre.com>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
-        <krzk+dt@kernel.org>
-CC:     <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
-        <roger.lu@mediatek.com>, <hsinyi@google.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 14 Apr 2022 10:32:29 +0800
-In-Reply-To: <7hlew83blk.fsf@baylibre.com>
-References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
-         <20220408045908.21671-14-rex-bc.chen@mediatek.com>
-         <7hfsmn5m9f.fsf@baylibre.com>
-         <bc6dd020a1cc3f00f5be2bf2929046b9116bbeef.camel@mediatek.com>
-         <7hwnfv4hfr.fsf@baylibre.com>
-         <f00e3df2e270e5edc160f8ff1bd8c52a49bf71d5.camel@mediatek.com>
-         <7h5yne3zlx.fsf@baylibre.com>
-         <98957e61b040b6c5b6a6b39e6eb661e07e510277.camel@mediatek.com>
-         <7hlew83blk.fsf@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S229759AbiDNCdG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 22:33:06 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C63CC23
+        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 19:30:43 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-dacc470e03so3960712fac.5
+        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 19:30:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7X6E8VDuzQ2F6uzfOyPSrPGa6oXVkDPvWJCmwSR7mdo=;
+        b=bo0blbPqgTEVW7RMqPw1KP4Oe7hINNAR2sPuU9TD3hbvp0BU91R9sK8aymt3DNT2Jp
+         rRzKFRc9bN6xdz90wo2eRfib4wtO/vJiaUo3cVBDS5vE0YPOM/aATj19OSP2hJRmUG8r
+         +sf0T52pDSmqXnBkg0B9xO3lzgCm/6spBgrrYC6Bt0/UrX01eanO/OwXa2S7GqXDB9eg
+         AjfeZxHetIo+V684w7eCscmFr05tON/5YOi8/SHSKEOL2O1U99fIidbNOriMptDljSZ4
+         jFN5menkSvIy44jD/eAowSrcmDTLW1L0X+6Pe02O0vGmiLNcUZTY0llEqJDByhGUpbCK
+         zKVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7X6E8VDuzQ2F6uzfOyPSrPGa6oXVkDPvWJCmwSR7mdo=;
+        b=M/BW5ogYxFt3DQntID6BDhw3/sfiEQKBtSDHR+CPiN2FPPTzG3BgVIk2t1YrdPHC79
+         e7N8If8CbwK1z8D54uMdLB1QPdGwKoeUDJvitTUW+L/rzhiRPdTB6fyrvVLf/WzcVF9a
+         6rZcloDzJARi6X2WG3nUsSEgUsuVOu0RYflUk8QHK8q7R91m5C5nrPCSHXcuEGzmYcMb
+         21CqcYYJWXPuv+43QQP4c1msBdSxZV3sdSLaGQfMCQP+WywYQolibr6bEx1ddchYFMRW
+         vUKKDozP4H00isUDh17Qxf0iMdOuAMNo3t3NR7ekzWHLHqtU10KgigHTgaFhEUv6a5mq
+         5qVA==
+X-Gm-Message-State: AOAM530jJ331ytjS1OBy0JE3SNzotIYcaqPcqm0Uevfhfw/mFaOEqrDo
+        xrU6UVIK2Q0nOM1XGXen6IIRVA==
+X-Google-Smtp-Source: ABdhPJzUtEe+aXzU9LlPHKE08voE5cBhh6v8HbXuxYfmuSt7QTqtLUQm5R5Mwd3zhNzmSqC17u65TA==
+X-Received: by 2002:a05:6870:9604:b0:de:a876:fbba with SMTP id d4-20020a056870960400b000dea876fbbamr670561oaq.239.1649903442911;
+        Wed, 13 Apr 2022 19:30:42 -0700 (PDT)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id d17-20020a056830045100b005e9d02b0be2sm285463otc.58.2022.04.13.19.30.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 19:30:42 -0700 (PDT)
+Date:   Wed, 13 Apr 2022 19:32:55 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Georgi Djakov <djakov@kernel.org>, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, Alex Elder <elder@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Mike Tipton <quic_mdtipton@quicinc.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: Re: [PATCH 0/2] interconnect: qcom: Remove IP0 resource
+Message-ID: <YleH1+V9RCtMGege@ripper>
+References: <20220412220033.1273607-1-swboyd@chromium.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220412220033.1273607-1-swboyd@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2022-04-13 at 14:41 -0700, Kevin Hilman wrote:
-> Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
-> 
-> [...]
-> 
-> > From the Chanwoo's devfreq passive govonor series, it's impossible
-> > to
-> > let cci devreq probed done before cpufreq because the passive
-> > govonor
-> > will search for cpufreq node and use it.
-> > 
-> > Ref: function: cpufreq_passive_register_notifier()
-> > 
-> > 
-https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/commit/?h=devfreq-testing&id=b670978ddc43eb0c60735c3af6e4a370603ab673__;!!CTRNKA9wMg0ARbw!z58Lc1p9REo88oHn-NkxroN_fBd0TsHYmhscNZwnWwT71ecRkTeqZ6vFl5l7HpkTdM6t$
-> >  
-> 
-> Well this is a problem, because CCI depends on CPUfreq, but CPUfreq
-> depends on CCI, so one of them has to load and then wait for the
-> other.
-> 
-> > After I discuss with Angelo and Jia-wei, we think we are keeping
-> > the
-> > function in target_index and if the cci is not ready we will use
-> > the
-> > voltage which is set by bootloader to prevent high freqeuncy low
-> > voltage crash. And then we can keep seting the target frequency.
-> > 
-> 
->  > We assume the setting of bootloader is correct and we can do this.
-> 
-> I'm still not crazy about this because you're lying to the CPUfreq
-> framework.  It's requesting one OPP, but you're not setting that,
-> you're
-> just keeping the bootloader frequency.
-> 
-> In my earlier reply, I gave two other options for handling this.
-> 
-> 1) set a (temporary) constraint on the voltage regulator so that it
-> cannot change.
-> 
-> or more clean, IMO:
-> 
-> 2) set a CPUfreq policy that restricts available OPPs to ones that
-> will
-> not break CCI.
-> 
-> Either of these solutions allow you to load the CPUfreq driver early,
-> and then wait for the CCI driver to be ready before removing the
-> restrictions.
+On Tue 12 Apr 15:00 PDT 2022, Stephen Boyd wrote:
 
-Hello Kevin,
-
-I think I do not describe this clearly.
-The proposal is:
-
-In cpufreq probe:
-we record the voltage value which is set by bootloader.
-
-In mtk_cpufreq_set_target():
-We do NOT directly return 0.
-Instead, we will find the voltage of target cpufreq and use the value
-max(booting voltage, target cpufreq voltage)
-
-mtk_cpufreq_set_target() {
-	/* NOT return 0 if !is_ccifreq_ready */
-	....
-	vproc = get voltage of target cpufreq from opp.
-
-	if (ccifreq_supported && !is_ccifreq_ready)
-		vproc = max(vproc, vproc_on_boot)
-
-	//setting voltage and target frequency
-	....
-}
-
+> These two patches remove the IP0 interconnect used for IPA because
+> they're also present in the clk-rpmh driver. I see there are some more
+> IP0 usages in the interconnect drivers, but I don't see a corresponding
+> IPA clk in clk-rpmh, so I left these out. We can remove all of them if
+> desired, but the sc7180 patch is most important to me as it fixes
+> boot on my trogdor lazor device.
+>  
+> Stephen Boyd (2):
+>   interconnect: qcom: sc7180: Drop IP0 interconnects
+>   interconnect: qcom: sdx55: Drop IP0 interconnects
 > 
-> > For the SoCs that including ci hardware (8183 and 8186), we think
-> > it's
-> > not ok if we don't probe cci correctly.
-> > If we failed to get cci node, I think we sould return -ENODEV and
-> > the
-> > probe of cpufreq failed.
-> > 
-> > What do you think the solution?
+>  drivers/interconnect/qcom/sc7180.c | 21 ---------------------
+>  drivers/interconnect/qcom/sdx55.c  | 21 ---------------------
+>  2 files changed, 42 deletions(-)
 > 
-> I think it would be better if CPUfreq probes sucessfully, but
-> restricts
-> the OPPs available until CCI is ready.  If CCI fails to probe/load,
-> you
-> still have a working CPUfreq driver, it just has a restricted set of
-> OPPs.
+> Cc: Alex Elder <elder@linaro.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Taniya Das <quic_tdas@quicinc.com>
+> Cc: Mike Tipton <quic_mdtipton@quicinc.com>
+> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > 
-> Kevin
 
-If we can use the solution.
-I think it will be ok for this situation.
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Thanks!
-
-BRs,
-Rex
-
+> base-commit: 3123109284176b1532874591f7c81f3837bbdc17
+> -- 
+> https://chromeos.dev
+> 
