@@ -2,306 +2,210 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 947AB501B24
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Apr 2022 20:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA20501D4C
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Apr 2022 23:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239827AbiDNShL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Apr 2022 14:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57434 "EHLO
+        id S1346459AbiDNVVX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Apr 2022 17:21:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245402AbiDNShK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Apr 2022 14:37:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A14BBD7D3
-        for <linux-pm@vger.kernel.org>; Thu, 14 Apr 2022 11:34:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649961284;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9WUBXMQHoFSBEKqjJQdcISiO6Pf1S+dASm5LXOQppI8=;
-        b=N1yPz2LcN27bMYJhJ+uWm16T0ZCWiQwRQyXKQ7X7ykR1HtZ8obpExSMctoYRHb0TB/8k1e
-        OARZ1S9f+PVs6muPItBKGm/T3O2sCQX/aJUUAMi1JGxgydz4AMdqHIvdz379eXlIPaBJcf
-        o7t9aTEWIsHzkrtim6gBe7BSSuDIhYM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-617-fAXynIJoOaG5N-QA6ORb2Q-1; Thu, 14 Apr 2022 14:34:38 -0400
-X-MC-Unique: fAXynIJoOaG5N-QA6ORb2Q-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E6E5029AB3E6;
-        Thu, 14 Apr 2022 18:34:37 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.193.235])
-        by smtp.corp.redhat.com (Postfix) with SMTP id D169C141512F;
-        Thu, 14 Apr 2022 18:34:34 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Thu, 14 Apr 2022 20:34:37 +0200 (CEST)
-Date:   Thu, 14 Apr 2022 20:34:33 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        ebiederm@xmission.com, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/5] sched,ptrace: Fix ptrace_check_attach() vs PREEMPT_RT
-Message-ID: <20220414183433.GC32752@redhat.com>
-References: <20220412114421.691372568@infradead.org>
- <20220412114853.842942162@infradead.org>
- <20220413132451.GA27281@redhat.com>
- <20220413185704.GA30360@redhat.com>
- <20220413185909.GB30360@redhat.com>
- <20220413192053.GY2731@worktop.programming.kicks-ass.net>
- <20220413195612.GC2762@worktop.programming.kicks-ass.net>
- <20220414115410.GA32752@redhat.com>
+        with ESMTP id S245378AbiDNVVW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Apr 2022 17:21:22 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B97E6169
+        for <linux-pm@vger.kernel.org>; Thu, 14 Apr 2022 14:18:56 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id r18so7628480ljp.0
+        for <linux-pm@vger.kernel.org>; Thu, 14 Apr 2022 14:18:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ufxYIOwf0J693O+/j0nztdscn7O3zFr17OcsXCTFd2A=;
+        b=Zk6oHfUomwUd26LNJQK4KaU2ifbDnt/zijM3TxgAahrDWK010devX3SknCi4s/XrEH
+         oy4r8mL84+4zTzAU8VSaWWH5qeRz42KVA783zXnCpTQOlFiG7JkiWfboSGbgaD/PbFuZ
+         Iqv2z1Fwk5hdYim/ya0Pv56zidniWDo88+0xuGJThORubgRolgqNlJtvZxGgYY1N/6wC
+         OjV7LoJiYUq5ZlAOO2jgRUu26sEDg4IWZNskZkc/sUyWFx7N9SSMGLTkfX5ZuSd5Wool
+         pMjJh3Ky2x1xckyyh/zLmbO7BajES4LvZxc5GNrGI2BeQJcRpCYLctVdR+BicaFjigOw
+         u95w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ufxYIOwf0J693O+/j0nztdscn7O3zFr17OcsXCTFd2A=;
+        b=qj/GjCieP+a25vK78yg09DDlpU/dGsQ6GiSeRaUiGgceFCZx4z9z9/RWWs/m3cwX0F
+         iySBWEfqs3+3/BEURqIG+Tgez4kDbKJyfw+Z5kox6KPIgSN9mUUWYe53nGf3lAk4lMVO
+         0Dn3CuPkAbdDXvtWXL8OhlsVZlOzSfawEM8CAwsOeSGG3ztGtpscEzlYKgDwf6RixSTg
+         EFqP//SctpZiiG9PctsJes1CPJdAz5QiAx6j8+/BXXoc3dOhoGDJvN100vgKW1YCB5cA
+         SA9iZYzB9GQ+K8b/0P+i9HG0okidoN4+wbTBP5F3Ll0CHPOZmsTZUN198W2AIvz+7YK+
+         UbFg==
+X-Gm-Message-State: AOAM531tcEBeyoLZHY8Qkzl+qHD2oxhEvyscEy65kLCAPGvJbFxUuQ1U
+        bmT57jOj4IduthjM9liyQE0Wcg==
+X-Google-Smtp-Source: ABdhPJyIPE/Lbzs1ZBnIcuuv9dXN0SCDY55qJ+MFI/XPq9gB4WFlhElfu5uB1F9JSt//Cy5lkYATKw==
+X-Received: by 2002:a05:651c:893:b0:249:4023:3818 with SMTP id d19-20020a05651c089300b0024940233818mr2748589ljq.44.1649971134550;
+        Thu, 14 Apr 2022 14:18:54 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id s6-20020ac25fa6000000b0044313e88020sm111871lfe.202.2022.04.14.14.18.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Apr 2022 14:18:54 -0700 (PDT)
+Message-ID: <d9afa206-7f57-81bb-8c69-5928dccd41b5@linaro.org>
+Date:   Fri, 15 Apr 2022 00:18:53 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414115410.GA32752@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v5 3/5] input: misc: pm8941-pwrkey: add support for PON
+ GEN3 base addresses
+Content-Language: en-GB
+To:     Anjelique Melendez <quic_amelende@quicinc.com>,
+        dmitry.torokhov@gmail.com, corbet@lwn.net, sre@kernel.org,
+        robh+dt@kernel.org
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, collinsd@codeaurora.org,
+        bjorn.andersson@linaro.org, swboyd@chromium.org,
+        skakit@codeaurora.org, linux-doc@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220411200506.22891-1-quic_amelende@quicinc.com>
+ <20220411200506.22891-4-quic_amelende@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220411200506.22891-4-quic_amelende@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/14, Oleg Nesterov wrote:
->
-> OK, let me think about it. Thanks!
+On 11/04/2022 23:05, Anjelique Melendez wrote:
+> Currently, PON address is read from the "reg" property. For PON GEN3,
+> which starts with PMK8350, the "reg" property will have both the PON
+> HLOS and PON PBS addesses defined. Add support so that all PON
+> generations can be configured.
+> 
+> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>   drivers/input/misc/pm8941-pwrkey.c | 31 +++++++++++++++++++++++-------
+>   1 file changed, 24 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/input/misc/pm8941-pwrkey.c b/drivers/input/misc/pm8941-pwrkey.c
+> index e0240db12d4f..43106e4cfd23 100644
+> --- a/drivers/input/misc/pm8941-pwrkey.c
+> +++ b/drivers/input/misc/pm8941-pwrkey.c
+> @@ -12,6 +12,7 @@
+>   #include <linux/log2.h>
+>   #include <linux/module.h>
+>   #include <linux/of.h>
+> +#include <linux/of_address.h>
+>   #include <linux/of_device.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/reboot.h>
+> @@ -44,6 +45,7 @@ struct pm8941_data {
+>   	unsigned int	status_bit;
+>   	bool		supports_ps_hold_poff_config;
+>   	bool		supports_debounce_config;
+> +	bool		has_pon_pbs;
+>   	const char	*name;
+>   	const char	*phys;
+>   };
+> @@ -52,6 +54,7 @@ struct pm8941_pwrkey {
+>   	struct device *dev;
+>   	int irq;
+>   	u32 baseaddr;
+> +	u32 pon_pbs_baseaddr;
+>   	struct regmap *regmap;
+>   	struct input_dev *input;
+>   
+> @@ -167,6 +170,8 @@ static int pm8941_pwrkey_probe(struct platform_device *pdev)
+>   	struct pm8941_pwrkey *pwrkey;
+>   	bool pull_up;
+>   	struct device *parent;
+> +	struct device_node *regmap_node;
+> +	const __be32 *addr;
+>   	u32 req_delay;
+>   	int error;
+>   
+> @@ -188,8 +193,10 @@ static int pm8941_pwrkey_probe(struct platform_device *pdev)
+>   	pwrkey->data = of_device_get_match_data(&pdev->dev);
+>   
+>   	parent = pdev->dev.parent;
+> +	regmap_node = pdev->dev.of_node;
+>   	pwrkey->regmap = dev_get_regmap(parent, NULL);
+>   	if (!pwrkey->regmap) {
+> +		regmap_node = parent->of_node;
+>   		/*
+>   		 * We failed to get regmap for parent. Let's see if we are
+>   		 * a child of pon node and read regmap and reg from its
+> @@ -200,15 +207,21 @@ static int pm8941_pwrkey_probe(struct platform_device *pdev)
+>   			dev_err(&pdev->dev, "failed to locate regmap\n");
+>   			return -ENODEV;
+>   		}
+> +	}
+>   
+> -		error = of_property_read_u32(parent->of_node,
+> -					     "reg", &pwrkey->baseaddr);
+> -	} else {
+> -		error = of_property_read_u32(pdev->dev.of_node, "reg",
+> -					     &pwrkey->baseaddr);
+> +	addr = of_get_address(regmap_node, 0, NULL, NULL);
+> +	if (!addr) {
+> +		dev_err(&pdev->dev, "reg property missing\n");
+> +		return -EINVAL;
+> +	}
+> +	pwrkey->baseaddr = be32_to_cpup(addr);
+> +
+> +	if (pwrkey->data->has_pon_pbs) {
+> +		/* PON_PBS base address is optional */
+> +		addr = of_get_address(regmap_node, 1, NULL, NULL);
+> +		if (addr)
+> +			pwrkey->pon_pbs_baseaddr = be32_to_cpup(addr);
+>   	}
+> -	if (error)
+> -		return error;
+>   
+>   	pwrkey->irq = platform_get_irq(pdev, 0);
+>   	if (pwrkey->irq < 0)
+> @@ -316,6 +329,7 @@ static const struct pm8941_data pwrkey_data = {
+>   	.phys = "pm8941_pwrkey/input0",
+>   	.supports_ps_hold_poff_config = true,
+>   	.supports_debounce_config = true,
+> +	.has_pon_pbs = false,
+>   };
+>   
+>   static const struct pm8941_data resin_data = {
+> @@ -325,6 +339,7 @@ static const struct pm8941_data resin_data = {
+>   	.phys = "pm8941_resin/input0",
+>   	.supports_ps_hold_poff_config = true,
+>   	.supports_debounce_config = true,
+> +	.has_pon_pbs = false,
 
-So. what do you think about the patch below?
+No need to declare that a field is false. Just skip this completely.
 
-If it can work, then 1/5 needs some changes, I think. In particular,
-it should not introduce JOBCTL_TRACED_FROZEN until 5/5, and perhaps
-we can avoid this flag altogether...
+>   };
+>   
+>   static const struct pm8941_data pon_gen3_pwrkey_data = {
+> @@ -333,6 +348,7 @@ static const struct pm8941_data pon_gen3_pwrkey_data = {
+>   	.phys = "pmic_pwrkey/input0",
+>   	.supports_ps_hold_poff_config = false,
+>   	.supports_debounce_config = false,
+> +	.has_pon_pbs = true,
+>   };
+>   
+>   static const struct pm8941_data pon_gen3_resin_data = {
+> @@ -341,6 +357,7 @@ static const struct pm8941_data pon_gen3_resin_data = {
+>   	.phys = "pmic_resin/input0",
+>   	.supports_ps_hold_poff_config = false,
+>   	.supports_debounce_config = false,
+> +	.has_pon_pbs = true,
+>   };
+>   
+>   static const struct of_device_id pm8941_pwr_key_id_table[] = {
 
-This is how ptrace_check_attach() looks with the patch applied:
 
-	static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
-	{
-		int traced;
-		/*
-		 * We take the read lock around doing both checks to close a
-		 * possible race where someone else attaches or detaches our
-		 * natural child.
-		 */
-		read_lock(&tasklist_lock);
-		traced = child->ptrace && child->parent == current;
-		read_unlock(&tasklist_lock);
-
-		if (!traced)
-			return -ESRCH;
-
-		WARN_ON(READ_ONCE(child->__state) == __TASK_TRACED);
-		if (ignore_state)
-			return 0;
-
-		for (;;) {
-			if (fatal_signal_pending(current))
-				return -EINTR;
-			set_current_state(TASK_KILLABLE);
-			if (!(READ_ONCE(child->jobctl) & JOBCTL_TRACED)) {
-				__set_current_state(TASK_RUNNING);
-				break;
-			}
-			schedule();
-		}
-
-		if (!wait_task_inactive(child, TASK_TRACED) ||
-		    !ptrace_freeze_traced(child))
-			return -ESRCH;
-
-		return 0;
-	}
-
-Oleg.
----
-
-diff --git a/include/linux/sched/jobctl.h b/include/linux/sched/jobctl.h
-index ec8b312f7506..1b5a57048e13 100644
---- a/include/linux/sched/jobctl.h
-+++ b/include/linux/sched/jobctl.h
-@@ -22,7 +22,8 @@ struct task_struct;
- 
- #define JOBCTL_STOPPED_BIT	24
- #define JOBCTL_TRACED_BIT	25
--#define JOBCTL_TRACED_FROZEN_BIT 26
-+#define JOBCTL_TRACED_XXX_BIT	25
-+#define JOBCTL_TRACED_FROZEN_BIT 27
- 
- #define JOBCTL_STOP_DEQUEUED	(1UL << JOBCTL_STOP_DEQUEUED_BIT)
- #define JOBCTL_STOP_PENDING	(1UL << JOBCTL_STOP_PENDING_BIT)
-@@ -35,6 +36,7 @@ struct task_struct;
- 
- #define JOBCTL_STOPPED		(1UL << JOBCTL_STOPPED_BIT)
- #define JOBCTL_TRACED		(1UL << JOBCTL_TRACED_BIT)
-+#define JOBCTL_TRACED_XXX	(1UL << JOBCTL_TRACED_XXX_BIT)
- #define JOBCTL_TRACED_FROZEN	(1UL << JOBCTL_TRACED_FROZEN_BIT)
- 
- #define JOBCTL_TRAP_MASK	(JOBCTL_TRAP_STOP | JOBCTL_TRAP_NOTIFY)
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index 626f96d275c7..5a03ae5cb0c0 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -193,20 +193,22 @@ static bool looks_like_a_spurious_pid(struct task_struct *task)
-  */
- static bool ptrace_freeze_traced(struct task_struct *task)
- {
-+	unsigned long flags;
- 	bool ret = false;
- 
- 	/* Lockless, nobody but us can set this flag */
- 	if (task->jobctl & JOBCTL_LISTENING)
- 		return ret;
-+	if (!lock_task_sighand(task, &flags))
-+		return ret;
- 
--	spin_lock_irq(&task->sighand->siglock);
- 	if (task_is_traced(task) && !looks_like_a_spurious_pid(task) &&
- 	    !__fatal_signal_pending(task)) {
- 		task->jobctl |= JOBCTL_TRACED_FROZEN;
- 		WRITE_ONCE(task->__state, __TASK_TRACED);
- 		ret = true;
- 	}
--	spin_unlock_irq(&task->sighand->siglock);
-+	unlock_task_sighand(task, &flags);
- 
- 	return ret;
- }
-@@ -253,40 +255,39 @@ static void ptrace_unfreeze_traced(struct task_struct *task)
-  */
- static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
- {
--	int ret = -ESRCH;
--
-+	int traced;
- 	/*
- 	 * We take the read lock around doing both checks to close a
--	 * possible race where someone else was tracing our child and
--	 * detached between these two checks.  After this locked check,
--	 * we are sure that this is our traced child and that can only
--	 * be changed by us so it's not changing right after this.
-+	 * possible race where someone else attaches or detaches our
-+	 * natural child.
- 	 */
- 	read_lock(&tasklist_lock);
--	if (child->ptrace && child->parent == current) {
--		WARN_ON(READ_ONCE(child->__state) == __TASK_TRACED);
--		/*
--		 * child->sighand can't be NULL, release_task()
--		 * does ptrace_unlink() before __exit_signal().
--		 */
--		if (ignore_state || ptrace_freeze_traced(child))
--			ret = 0;
--	}
-+	traced = child->ptrace && child->parent == current;
- 	read_unlock(&tasklist_lock);
- 
--	if (!ret && !ignore_state) {
--		if (!wait_task_inactive(child, __TASK_TRACED)) {
--			/*
--			 * This can only happen if may_ptrace_stop() fails and
--			 * ptrace_stop() changes ->state back to TASK_RUNNING,
--			 * so we should not worry about leaking __TASK_TRACED.
--			 */
--			WARN_ON(READ_ONCE(child->__state) == __TASK_TRACED);
--			ret = -ESRCH;
-+	if (!traced)
-+		return -ESRCH;
-+
-+	WARN_ON(READ_ONCE(child->__state) == __TASK_TRACED);
-+	if (ignore_state)
-+		return 0;
-+
-+	for (;;) {
-+		if (fatal_signal_pending(current))
-+			return -EINTR;
-+		set_current_state(TASK_KILLABLE);
-+		if (!(READ_ONCE(child->jobctl) & JOBCTL_TRACED)) {
-+			__set_current_state(TASK_RUNNING);
-+			break;
- 		}
-+		schedule();
- 	}
- 
--	return ret;
-+	if (!wait_task_inactive(child, TASK_TRACED) ||
-+	    !ptrace_freeze_traced(child))
-+		return -ESRCH;
-+
-+	return 0;
- }
- 
- static bool ptrace_has_cap(struct user_namespace *ns, unsigned int mode)
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 0aea3f0a8002..684f0a0e9c71 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -2182,6 +2182,14 @@ static void do_notify_parent_cldstop(struct task_struct *tsk,
- 	spin_unlock_irqrestore(&sighand->siglock, flags);
- }
- 
-+static void clear_traced_xxx(void)
-+{
-+	spin_lock_irq(&current->sighand->siglock);
-+	current->jobctl &= ~JOBCTL_TRACED_XXX;
-+	spin_unlock_irq(&current->sighand->siglock);
-+	wake_up_state(current->parent, TASK_KILLABLE);
-+}
-+
- /*
-  * This must be called with current->sighand->siglock held.
-  *
-@@ -2220,7 +2228,7 @@ static int ptrace_stop(int exit_code, int why, int clear_code,
- 	 * schedule() will not sleep if there is a pending signal that
- 	 * can awaken the task.
- 	 */
--	current->jobctl |= JOBCTL_TRACED;
-+	current->jobctl |= JOBCTL_TRACED | JOBCTL_TRACED_XXX;
- 	set_special_state(TASK_TRACED);
- 
- 	/*
-@@ -2282,6 +2290,7 @@ static int ptrace_stop(int exit_code, int why, int clear_code,
- 		if (gstop_done && ptrace_reparented(current))
- 			do_notify_parent_cldstop(current, false, why);
- 
-+		clear_traced_xxx();
- 		/*
- 		 * Don't want to allow preemption here, because
- 		 * sys_ptrace() needs this task to be inactive.
-@@ -2296,9 +2305,6 @@ static int ptrace_stop(int exit_code, int why, int clear_code,
- 		cgroup_leave_frozen(true);
- 	} else {
- 		/*
--		 * By the time we got the lock, our tracer went away.
--		 * Don't drop the lock yet, another tracer may come.
--		 *
- 		 * If @gstop_done, the ptracer went away between group stop
- 		 * completion and here.  During detach, it would have set
- 		 * JOBCTL_STOP_PENDING on us and we'll re-enter
-@@ -2307,13 +2313,14 @@ static int ptrace_stop(int exit_code, int why, int clear_code,
- 		 */
- 		if (gstop_done)
- 			do_notify_parent_cldstop(current, false, why);
-+		clear_traced_xxx();
-+		read_unlock(&tasklist_lock);
- 
--		/* tasklist protects us from ptrace_freeze_traced() */
-+		/* JOBCTL_TRACED_XXX protects us from ptrace_freeze_traced() */
- 		__set_current_state(TASK_RUNNING);
- 		read_code = false;
- 		if (clear_code)
- 			exit_code = 0;
--		read_unlock(&tasklist_lock);
- 	}
- 
- 	/*
-
+-- 
+With best wishes
+Dmitry
