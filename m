@@ -2,127 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D19501892
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Apr 2022 18:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86A4150198B
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Apr 2022 19:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239368AbiDNQ0K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Apr 2022 12:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57324 "EHLO
+        id S242886AbiDNRGH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Apr 2022 13:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245730AbiDNQOR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Apr 2022 12:14:17 -0400
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EC3C31F2;
-        Thu, 14 Apr 2022 08:57:25 -0700 (PDT)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-dacc470e03so5686062fac.5;
-        Thu, 14 Apr 2022 08:57:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=m/HgJFU5eyBdqThPB7Gif/3NbbgBxIgCKOJJWS03GxI=;
-        b=h4zUXu3avlhZ8qSHZhOr5ForkeDLpTq09ixAxVLBvIGtEpJqxmnuLoKGZ8VGBOkbxg
-         tijkkAhzgo/tFPqWvDv0KzhJX/+ov/95v5zRQm9Nio+xtH+gG1RacpY2Yi5chJ0l9PED
-         Kno78itgn7apNHbcV8pCUWmwEFTteLTN8KxQPoTynFgEZucnlM7D1wEKhK5NCd/zSU4n
-         AaA/NHgH+LSGsbiXcJf2vKADrjB9r+HVaAq7uZ9E0G9YYbaSb9/naso5G4ixMFrHVr8m
-         nIHH9H1ChBAtdP7HiP8LFEsLX769vc5cn1UdInAJZ7Qgf+SVB4r2yvW9M7QTYonZgAUN
-         uqcA==
-X-Gm-Message-State: AOAM530YId9DWhiijYjRa8y97cyDo9JWR6oxUb7B5KPf/1HJJahlnc1m
-        69SZvjc0c96itAPtXDlBwg==
-X-Google-Smtp-Source: ABdhPJyQchtfSX/mwpYjIzUd1rTj7rtUPQjMM1F1iQB/k7vCs37gybUojwv5hvsA8UyY6S1hVlutSg==
-X-Received: by 2002:a05:6870:f2a9:b0:e5:8106:4486 with SMTP id u41-20020a056870f2a900b000e581064486mr1102887oap.109.1649951843522;
-        Thu, 14 Apr 2022 08:57:23 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id c19-20020a9d7853000000b005cdbc0f02ccsm144090otm.68.2022.04.14.08.57.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 08:57:23 -0700 (PDT)
-Received: (nullmailer pid 2129759 invoked by uid 1000);
-        Thu, 14 Apr 2022 15:57:22 -0000
-Date:   Thu, 14 Apr 2022 10:57:22 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     "J, KEERTHY" <j-keerthy@ti.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com, amitk@kernel.org,
-        kristo@kernel.org, linux-pm@vger.kernel.org, vigneshr@ti.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/4] dt-bindings: thermal: k3-j72xx: Add VTM bindings
- documentation
-Message-ID: <YlhEYq8pGsuoA2mv@robh.at.kernel.org>
-References: <20220412101409.7980-1-j-keerthy@ti.com>
- <20220412101409.7980-2-j-keerthy@ti.com>
- <17474b72-d823-e1ff-9831-c5f9f887fccd@linaro.org>
- <54d597e9-5cad-fc44-954d-7de45018fdcf@ti.com>
+        with ESMTP id S244956AbiDNRFp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Apr 2022 13:05:45 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2043.outbound.protection.outlook.com [40.107.92.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CD14B404;
+        Thu, 14 Apr 2022 09:48:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WpttIjVeKs3+t0BgDMICf5feUoJKhx0XrO0uX/chvD5WXxOzyJsGsVBsd4j34AS5Y0zBglzb2qfLgRI6lvhfOSwjn9WZ1vnLnd/kkmh07po5L+QHAFrYu7imzBeECfKziHn3WWhKDOvAzTqF4NV7et9aYbo9eeU1yJC7ytCR+VfJPJnWFbHkTgHvhurTsEaIA3vscAmm0+boBzv1Uz0HEZALEPl3QyNsrf90vG+DmhpDxZpjmjbstUl1uBCMIrApJ/fI4tXlCP9LqKK7DvOFV+E5+qmETSGgJmxgtaWH1xBQ34/Z0WGOgg7j4nFByoNfnbjmTNosj/GqduC2+wiNVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=R/XRSrXUeXyaJHAJgD1WJ9FnTtw0VhYx7EtixnJ6jk0=;
+ b=T9hgI3f8wGxhX6pm01O8/5OquoXxsCh7LmQMUzB9f72wfofilquPBSOlpSgzMqvGpWGSK+Gr6v8BxLi7OymkAIR0mCadsVd3dxfiFTUqEQutExOrkgOYQ57tHwcS2QFXu0fvDVe5IsAuJvJ+eD3klW2AHordYhcIc9kenQNtXGaXYnPKxaPvzhIlh++umGiB0rdRB7JssjUQUau44hPbq7zjl5DGLIOnGNVOESzfdu0BoYXkdQrwGvnkOz79uIV0YKn5FkqYM8TMxzRuTezDht0uTMAZBBMPHqgLoRNLBeTPLbOnMcR/O3Ache1RBCCeDYgGaCwwVg+grg+kphcZMg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=R/XRSrXUeXyaJHAJgD1WJ9FnTtw0VhYx7EtixnJ6jk0=;
+ b=a5VN18WxqChRMKIFVLxD9/Km4GmQWKNW2Oo1ToQOh5gbmeTGTfogvfrLoSShVQd6gumsmpr7l47t4QEEPy9OwnkhZEWvXrKqR8ClqeMjfEKXN0jOiOIQGChgzyI6fnko/PaxKpFIW0/yszJJyvF4bO9K0yyRNDrJRGw2L3w/GHU=
+Received: from BN9PR03CA0780.namprd03.prod.outlook.com (2603:10b6:408:13a::35)
+ by MW2PR12MB2571.namprd12.prod.outlook.com (2603:10b6:907:10::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Thu, 14 Apr
+ 2022 16:48:13 +0000
+Received: from BN8NAM11FT017.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:13a:cafe::51) by BN9PR03CA0780.outlook.office365.com
+ (2603:10b6:408:13a::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.18 via Frontend
+ Transport; Thu, 14 Apr 2022 16:48:13 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT017.mail.protection.outlook.com (10.13.177.93) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5164.19 via Frontend Transport; Thu, 14 Apr 2022 16:48:12 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 14 Apr
+ 2022 11:48:07 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Rui Huang <ray.huang@amd.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+CC:     "open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "Mario Limonciello" <mario.limonciello@amd.com>
+Subject: [PATCH v3 0/6] Improve usability for amd-pstate
+Date:   Thu, 14 Apr 2022 11:47:55 -0500
+Message-ID: <20220414164801.1051-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <54d597e9-5cad-fc44-954d-7de45018fdcf@ti.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b18cdf78-41e4-4293-e6e7-08da1e36909a
+X-MS-TrafficTypeDiagnostic: MW2PR12MB2571:EE_
+X-Microsoft-Antispam-PRVS: <MW2PR12MB2571FC997BBF09B3C9870169E2EF9@MW2PR12MB2571.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: d7uzFdYaqD5hFNwiOAXVq4XNWFHqOWb3rm6DIQIsRtx49Q1cc1iprjvqeST60QXwJFKDzo+5hNRmKh9qF52gAAfoEStGS1+Qs7l39z6DFZktVK5i4GCbGk67qrOiQNvyLv7kfU4BPOx9hu5y8pr6UZKwrsKYcfDT3HuszGoTSbHcTRBANQMeJO4Sh3R2t0pZEfx4xC6uoA2jjLXo0svuHzvpPMYIkdBcTTMOoJYR6gec0NrMm6xRbL+cfNMofD/MAkQ278oSX5ZsRrxQQv+SGsoCKmgDxK3N4VEfCAd4qAXIqclf97l4JfKXVlKIQMNpUm8ZjADyr/fOBSNOw2sA0Su2lDABvcmChYl/Jhn5mEdQtPSJCyKpKVC+Y4a7TdCgrJcEXwoej2gZ+70PxgCx4VKPXjy2/6G4egpL97bNRRiWRSvzpeoaJWiWbZTUbI0E2JJM4Mv8ie35bXQRGWSIi1OjR1l2dwwABoe8miTYZD54u2A8UJJtPt/KA/MGGnZTRmHmVX04NfQKBUedeJaDnjSKM+3bSqrdZDcBdnca1DLcySRJtqhRyJMJhjOZi8n7B7VYx/lCSBO5B0mj1RSER7YyhgnQm5MmGRn7aWp60qeaCZH+4sXXE6z4jG2ZDFWvMTL2bugmWFlI9H2cE51hBPrLwTxxwCs1QqOX0KJ47D8p77B7n2Re1+634HVQNLH+vyLmxaWMV3rLfvDvRCKjiA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(7696005)(54906003)(316002)(47076005)(6666004)(336012)(36860700001)(86362001)(36756003)(40460700003)(81166007)(356005)(110136005)(82310400005)(83380400001)(426003)(508600001)(1076003)(2906002)(44832011)(70206006)(16526019)(70586007)(5660300002)(8676002)(186003)(8936002)(4326008)(26005)(2616005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2022 16:48:12.8859
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b18cdf78-41e4-4293-e6e7-08da1e36909a
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT017.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR12MB2571
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 05:34:20PM +0530, J, KEERTHY wrote:
-> 
-> 
-> On 4/13/2022 3:43 PM, Krzysztof Kozlowski wrote:
-> > On 12/04/2022 12:14, Keerthy wrote:
-> > > Add VTM bindings documentation. In the Voltage Thermal
-> > > Management Module(VTM), K3 J72XX supplies a voltage
-> > > reference and a temperature sensor feature that are gathered in the band
-> > > gap voltage and temperature sensor (VBGAPTS) module. The band
-> > > gap provides current and voltage reference for its internal
-> > > circuits and other analog IP blocks. The analog-to-digital
-> > > converter (ADC) produces an output value that is proportional
-> > > to the silicon temperature.
-> > > 
-> > > Signed-off-by: Keerthy <j-keerthy@ti.com>
-> > > ---
-> > >   .../bindings/thermal/ti,j72xx-thermal.yaml    | 62 +++++++++++++++++++
-> > >   1 file changed, 62 insertions(+)
-> > >   create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-> > > new file mode 100644
-> > > index 000000000000..8483c495cb9a
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-> > > @@ -0,0 +1,62 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/thermal/ti,j72xx-thermal.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Texas Instruments J72XX VTM (DTS) binding
-> > > +
-> > > +maintainers:
-> > > +  - Keerthy <j-keerthy@ti.com>
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    const: ti,j721e-vtm
-> > > +    oneOf:
-> > > +      - enum:
-> > > +          - ti,j721e-vtm
-> > > +          - ti,j7200-vtm
-> > 
-> > It seems you resent this ignoring all of Rob's comments. In changelog of
-> > cover letter you wrote "Fixed all the comments on v4" but it's not true.
-> > Maybe you sent us old patch?
-> > 
-> > Anyway, you need to follow Rob's comments.
-> 
-> Krzysztof,
-> 
-> Apologies. Some issues with my mailbox. Rob's response didn't reach me for
-> some reason.
+There has recently been some news coverage about `amd-pstate` being in
+5.17, but this news also mentioned that it's a bit difficult to use.
 
-Maybe because I'm still banned by TI. Just had another bounce a few days 
-ago.
+You need to either block init calls, or compile the module into the kernel
+to force it to take precedence over acpi-cpufreq.
 
-Rob
+This series aims to improve the usability of amd-pstate so that distros
+can compile as a module, but users can still use it (relatively) easily.
+
+A new module parameter is included that will force amd-pstate to take
+precedence and a module table to let it load automatically on such
+systems.
+
+By default with this series it will replace acpi-cpufreq no matter the
+module load order.  If users want to prefer acpi-cpufreq when amd-pstate
+is a module they can make a modprobe configuration file.
+
+/etc/modprobe.d/amd-pstate.conf:
+
+options amd-pstate replace=0
+
+Mario Limonciello (6):
+  cpufreq: Export acpu_cpufreq_exit for other drivers to call
+  cpufreq: amd-pstate: Only show shared memory solution message once
+  cpufreq: amd-pstate: Move cpufreq driver check later
+  cpufreq: amd-pstate: Allow replacing acpi-cpufreq when loaded
+  cpufreq: amd-pstate: Add a module device table
+  cpufreq: amd-pstate: Default to replace acpi-cpufreq
+
+ drivers/cpufreq/acpi-cpufreq.c | 10 +++++++--
+ drivers/cpufreq/amd-pstate.c   | 39 +++++++++++++++++++++++++++++-----
+ include/linux/cpufreq.h        |  3 +++
+ 3 files changed, 45 insertions(+), 7 deletions(-)
+
+-- 
+2.34.1
+
