@@ -2,57 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BBEC50025E
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Apr 2022 01:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B76F500350
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Apr 2022 02:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234395AbiDMXQ3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 13 Apr 2022 19:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34388 "EHLO
+        id S239232AbiDNBCF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 13 Apr 2022 21:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238982AbiDMXQ2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 19:16:28 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D4025C64
-        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 16:14:05 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id e4so3686425oif.2
-        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 16:14:05 -0700 (PDT)
+        with ESMTP id S229680AbiDNBCE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 13 Apr 2022 21:02:04 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1B635859
+        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 17:59:40 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id b16so3838167ioz.3
+        for <linux-pm@vger.kernel.org>; Wed, 13 Apr 2022 17:59:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=dorfVU/xJSabHsQtVBWrq/Iqc9CAJtp4oOExMJgEUDQ=;
-        b=m+OmSD/e4we/K+vygGa6butFRkA8E+g/p2ckEiZ/uW+cVdyspvoJRGw+9FyyXam5cq
-         tKUR+8UFC5n7VmwCQP8rHi/+hQ5PDk//cvhjT5HtpMvvW9ER33VqwEDQkbDEFxhsM7hb
-         z5Yse8JE+ZpUXuCYKRHbRXAPEJQEZ0GE9T76A=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zgsbBJZkETT0T4G/ueHuTUOQ6+Pb56JNHVRc8ZA6wiM=;
+        b=h6aCTyM6FGlhXQAJtWqJNW6VuJC9v8fnE/94b/W0u7BOpJ8xSgcPjb+fuQbJV+H8P5
+         MT85ReN9aTHg+Tan++dYOGLjSIrwYqRhkQJmiRPVnAdjzP33iMqQ6KpRPzHioaBeNcmB
+         01QX2PYvCsZ1RzbLi6XMlaCemVqFXN4vcGhRJ1+5zznv0I83UG8yYPmNxn8z+GSzCwdk
+         zKaWtf4dq9jSZiY117kwXuZpzf5u7nPWDg11sDx9jtpZyD5fUxikL5f76oJP3uURVurU
+         GPcSQdwFsKmc+awmlSADWgW9DYd/szfOzAtV780aCu31YjPdQQ3FRUoMm2l0upAHzFxy
+         ghrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=dorfVU/xJSabHsQtVBWrq/Iqc9CAJtp4oOExMJgEUDQ=;
-        b=O6mEDlA/I9wEPDw2pDGM0w7FvoJ5WYtvSHVVN9LAIDke4Q9x/cqtNZtZZIPO1x7rat
-         8rrqssISrjRI9rsPqGtfOIdKy0TDrjSm/fJx2K54fm/YMuURtF4umKp7oWOymqGCrKPB
-         yvYMbIs3w2slyQWRg/36MP9/9Iwf/mC1UYEFBXi1Rn6hkdcW5Vh8lTZu0gF29p9McicU
-         6UFt6zP6PM1Z87u2sYJqdR11rr1/tI8GFwNk8au24aByYVzFeI/WdRPeQt0howFXsY+v
-         FkrjFve7+5gHMju0z7Qb5Ltz+E/zhOCNgd/x3f7fvn0xWxcwJ0yEHTv0CpHBZaJTwkat
-         6jQg==
-X-Gm-Message-State: AOAM532P768pM1uvJYz2IXaHuA2T7KA8ek+YG09M/Svy4Eyy1elAy74y
-        kcNLruNz+sm8bU3t4/BE4S+ast3QSGo+/L4OxX/2mQ==
-X-Google-Smtp-Source: ABdhPJy/y7cGBki5XtEew+aPGYslTH0aAHoZeAOee7B/n9e30cebHJofLtYmhLy+51DqypLaLc+k7XKo3IKWa8yDq70=
-X-Received: by 2002:aca:bd41:0:b0:2ec:ff42:814f with SMTP id
- n62-20020acabd41000000b002ecff42814fmr195472oif.63.1649891644404; Wed, 13 Apr
- 2022 16:14:04 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 13 Apr 2022 16:14:02 -0700
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zgsbBJZkETT0T4G/ueHuTUOQ6+Pb56JNHVRc8ZA6wiM=;
+        b=NWlxxjOE0fXH473txzVOOyrN11KTPNtFltM/7HsTbs68eEpfNJP07CfvzbkXujChN4
+         h64IRCYQxpNCD3uSICPqwnkbNgcjcgxCgyOOJVFisRtC8VrWwlU4knE5fYuLz06RFIUp
+         8+9kcRkwcRyfpQh840k6kgxUKOGQcCStEWw6c3bZdsKcHJKgcjEHu4KQc5v4UtPA2wrP
+         sJWlvOUY1aJQ6CZOEtdJ5pd811AyX6zZtXlTi72OZjoBYjLgKdWbF39IYTC4dwcr24+H
+         pe+sIjFOAT1eIwvmUw9I9cfl+RFqZVkHEyZYsCOGqaa1dEdG0PqTqLZCVP/kKpPAvozi
+         M6Lw==
+X-Gm-Message-State: AOAM532E8M0AhkUXua/J21JOZHZaAozJFjnxwXsRqhHG13yijHtwGCZT
+        jvqrbpHIiuY7xcAp4FfGvii/gw==
+X-Google-Smtp-Source: ABdhPJyWahwxvucjjkEGSAhpTl3vClrpDhozag1zQo9Of9HtltZCGt9GdEiRwIkIBr2xIVICUJu/bQ==
+X-Received: by 2002:a05:6602:1409:b0:5e7:487:133c with SMTP id t9-20020a056602140900b005e70487133cmr159722iov.196.1649897979377;
+        Wed, 13 Apr 2022 17:59:39 -0700 (PDT)
+Received: from [172.22.22.26] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id n12-20020a92dd0c000000b002cac22690b6sm284770ilm.0.2022.04.13.17.59.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Apr 2022 17:59:38 -0700 (PDT)
+Message-ID: <a293481e-3454-74fd-7183-973a9b80acc0@linaro.org>
+Date:   Wed, 13 Apr 2022 19:59:37 -0500
 MIME-Version: 1.0
-In-Reply-To: <d80ece40-fdd7-f304-3989-47ae152d5ac9@linaro.org>
-References: <20220412220033.1273607-1-swboyd@chromium.org> <20220412220033.1273607-2-swboyd@chromium.org>
- <CAD=FV=UFbOhs0ggxDbVwKM_8x=ELT85zFd-Wk6dJ_M+Awz+Pxw@mail.gmail.com> <d80ece40-fdd7-f304-3989-47ae152d5ac9@linaro.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 13 Apr 2022 16:14:02 -0700
-Message-ID: <CAE-0n53kebRHTogSkiAOcA4tMpA+EcXQHtNX0Zzut-xE2vCkpw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
 Subject: Re: [PATCH 1/2] interconnect: qcom: sc7180: Drop IP0 interconnects
-To:     Alex Elder <elder@linaro.org>,
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>,
         Doug Anderson <dianders@chromium.org>
 Cc:     Georgi Djakov <djakov@kernel.org>,
         LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
@@ -61,9 +64,17 @@ Cc:     Georgi Djakov <djakov@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Taniya Das <quic_tdas@quicinc.com>,
         Mike Tipton <quic_mdtipton@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20220412220033.1273607-1-swboyd@chromium.org>
+ <20220412220033.1273607-2-swboyd@chromium.org>
+ <CAD=FV=UFbOhs0ggxDbVwKM_8x=ELT85zFd-Wk6dJ_M+Awz+Pxw@mail.gmail.com>
+ <d80ece40-fdd7-f304-3989-47ae152d5ac9@linaro.org>
+ <CAE-0n53kebRHTogSkiAOcA4tMpA+EcXQHtNX0Zzut-xE2vCkpw@mail.gmail.com>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <CAE-0n53kebRHTogSkiAOcA4tMpA+EcXQHtNX0Zzut-xE2vCkpw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,63 +83,19 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Alex Elder (2022-04-13 14:02:00)
-> On 4/13/22 3:55 PM, Doug Anderson wrote:
-> > Hi,
-> >
-> > On Tue, Apr 12, 2022 at 4:20 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> >>
-> >> @@ -519,8 +500,6 @@ static const struct of_device_id qnoc_of_match[] = {
-> >>            .data = &sc7180_dc_noc},
-> >>          { .compatible = "qcom,sc7180-gem-noc",
-> >>            .data = &sc7180_gem_noc},
-> >> -       { .compatible = "qcom,sc7180-ipa-virt",
-> >> -         .data = &sc7180_ipa_virt},
-> >>          { .compatible = "qcom,sc7180-mc-virt",
-> >>            .data = &sc7180_mc_virt},
-> >>          { .compatible = "qcom,sc7180-mmss-noc",
-> >
-> > I have no objection to ${SUBJECT} change landing and based on all your
-> > research and Alex's review/testing I think it's good to go.
-> >
-> > However, now that you're removed the driver that cared about
-> > "qcom,sc7180-ipa-virt", should we also be removing it from the
-> > `bindings/interconnect/qcom,rpmh.yaml` file and the `sc7180.dtsi`
-> > file? I think that removing it from _either_ the driver (like your
-> > patch here does) _or_ the sc7180.dtsi file would fix the bug, right?
-> > ...and then removing it from the yaml would just be cleanup...
+On 4/13/22 6:14 PM, Stephen Boyd wrote:
+>> Stephen, I think you should re-spin the series and add the
+>> proper change to the binding.  You can keep the tags I gave
+>> before.
+> I will not combine the removal of the binding from this patch. This
+> patch is good as is and fixes the problem while ignoring the DT binding
+> and that larger discussion.
 
-Yes, but that's mostly a cleanup. I didn't include it in this series
-because DTB is supposed to be "stable" and thus backporting a fix to the
-kernel by removing something from DT is sort of wrong. I don't know or
-expect that the kernel DTS files will be used from the stable kernels.
-It's better to fix the kernel C code. We can of course remove the
-binding, but there's a part of me that would prefer that we put the IPA
-clk back into the interconnect driver, so leaving the binding is another
-motivator for me to hopefully excise the IPA clk from the rpmh-clk
-driver in the future.
+OK, and I concur it's better to make the change in the kernel only,
+without changing the DTB.  It doesn't hurt to permit (define) those
+other definitions in the binding, even if we agree to never use them.
 
-Anyway, I'm happy to remove the compatible string from the binding if
-folks want that. Having the DT node is wasteful because the kernel makes
-a device so we can certainly remove that as well. I'll send another
-patch for that if this patch is accepted by Georgi.
+					-Alex
 
->
-> That's a good point, I hadn't thought about that but you're right.
->
-> I think we were too pleased about identifying the problem and
-> proving it could happen (and cause a crash), so we didn't think
-> hard enough about this other piece.
->
-> Stephen, I think you should re-spin the series and add the
-> proper change to the binding.  You can keep the tags I gave
-> before.
 
-I will not combine the removal of the binding from this patch. This
-patch is good as is and fixes the problem while ignoring the DT binding
-and that larger discussion.
 
->
-> I've got a note to follow up with similar changes to other
-> platforms where the interconnect driver includes resource "IP0"
-> and will plan to do what Doug suggests there too.
