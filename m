@@ -2,288 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40646500562
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Apr 2022 07:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 451C8500690
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Apr 2022 09:07:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233901AbiDNFWD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Apr 2022 01:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53426 "EHLO
+        id S240224AbiDNHJq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Apr 2022 03:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232614AbiDNFWC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Apr 2022 01:22:02 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302A2CE1;
-        Wed, 13 Apr 2022 22:19:32 -0700 (PDT)
-X-UUID: abb50882470341829025300df91289dd-20220414
-X-UUID: abb50882470341829025300df91289dd-20220414
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <johnson.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1264350114; Thu, 14 Apr 2022 13:19:26 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 14 Apr 2022 13:19:25 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 14 Apr 2022 13:19:25 +0800
-Message-ID: <d387e02a84d05650990f4efdb4d7ece297ca101d.camel@mediatek.com>
-Subject: Re: [PATCH v2 2/2] PM / devfreq: mediatek: Introduce MediaTek CCI
- devfreq driver
-From:   Johnson Wang <johnson.wang@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, <cw00.choi@samsung.com>,
-        <krzk+dt@kernel.org>, <robh+dt@kernel.org>,
-        <kyungmin.park@samsung.com>
-CC:     <khilman@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <jia-wei.chang@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 14 Apr 2022 13:19:25 +0800
-In-Reply-To: <7dde78c6-efc6-cc67-19ac-28f8640c2c8c@collabora.com>
-References: <20220408052150.22536-1-johnson.wang@mediatek.com>
-         <20220408052150.22536-3-johnson.wang@mediatek.com>
-         <7dde78c6-efc6-cc67-19ac-28f8640c2c8c@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S240221AbiDNHJp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Apr 2022 03:09:45 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3058E3A72D
+        for <linux-pm@vger.kernel.org>; Thu, 14 Apr 2022 00:07:20 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 21so5216656edv.1
+        for <linux-pm@vger.kernel.org>; Thu, 14 Apr 2022 00:07:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=N59VpskwVzxKvrwhY6+QNdNZxdpuBQRHq8FPB+3/fNY=;
+        b=V1rTg1vM2pH5UT/dmwyv12wBruW0s5c72LNfIVSnl31+6Daq5+wA1Wfcx7PTEsK8/E
+         jEhpU7fQw2TV8ov0/70msTwUsCz++T6sxGF+AJ+S3K1x1dwX0WIoEj98YeUgldpEhPJ4
+         8ipRFssbu1ExGGEdIriOaks65x1NrDVea64Itvx6YYRky2JydYFXRCidvgIvj1HqZ0sE
+         okIAQHdvzLZx2uynd7ea0Rzufe12K7Kx+AFpDK/cbCrIng/FjpfnCPH5hC5E3WtGaArU
+         6uhdaUZFgDdzne239bw57hT8MXslYXF06PDPNQgFP8PY9mgAbZSQVtD+k+9Y8gq/J1YT
+         tAbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=N59VpskwVzxKvrwhY6+QNdNZxdpuBQRHq8FPB+3/fNY=;
+        b=f3a/l2cGkxsnpzsuMy9WGLDZ9aVASWngadtWmUpe3pcPozfATwhNAAumULGKWQ9+A2
+         tXxji2KOcknF5BxpkoAFuUW1gVmJEIDy5J4qtDazKIyChT3JeC7rbOEobJUs+aOQAOjl
+         JTFsuhuws5IrxIaJovY9mSdkNcHBgtyPax9P/RYY8KUTE+TPx4yMr4EFhgNBtrRn3WWW
+         HZXcNZQHU0zCgyn/yzbyvs/4YRs9RdBKHtKrZ7qTaZKvCO/xccgGFkaJur+IPILfaWI8
+         a2wEwcVb1wmkwuK3NCbWKeKMuzUVVv6MGbmElgSJmtuSysAeGIp23Rzyo29v3rUYD7Fl
+         lloA==
+X-Gm-Message-State: AOAM532z+IU4MIZImjV2MnefSG5DqZ5gYwAi98ysl13vtjAEK6zSTHor
+        7FsTnDXM90uFgEEzwc3Du8s+Gw==
+X-Google-Smtp-Source: ABdhPJzInxt/pldRqvrXl3OI1n1SZfZ22+rbQStVtA37uKDx5GjqIyzOwuCsVR6yIHoUVd75Lfl5uQ==
+X-Received: by 2002:aa7:cac8:0:b0:410:cc6c:6512 with SMTP id l8-20020aa7cac8000000b00410cc6c6512mr1462205edt.408.1649920038730;
+        Thu, 14 Apr 2022 00:07:18 -0700 (PDT)
+Received: from [192.168.0.209] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id o3-20020a170906774300b006e79ea98369sm349759ejn.151.2022.04.14.00.07.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Apr 2022 00:07:18 -0700 (PDT)
+Message-ID: <b7718ca1-c502-67a1-993c-460a6c55cc5e@linaro.org>
+Date:   Thu, 14 Apr 2022 09:07:16 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 4/4] dt-bindings: soc: qcom,rpmh-rsc: convert to dtschema
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vamsi krishna Lanka <quic_vamslank@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220411085935.130072-1-krzysztof.kozlowski@linaro.org>
+ <20220411085935.130072-4-krzysztof.kozlowski@linaro.org>
+ <Yldyccqaqgcj/Kvc@robh.at.kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Yldyccqaqgcj/Kvc@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 2022-04-08 at 13:51 +0200, AngeloGioacchino Del Regno wrote:
-> Il 08/04/22 07:21, Johnson Wang ha scritto:
-> > We introduce a devfreq driver for the MediaTek Cache Coherent
-> > Interconnect
-> > (CCI) used by some MediaTek SoCs.
-> > 
-> > In this driver, we use the passive devfreq driver to get target
-> > frequencies
-> > and adjust voltages accordingly. In MT8183 and MT8186, the MediaTek
-> > CCI
-> > is supplied by the same regulators with the little core CPUs.
-> > 
-> > Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
-> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > ---
-> > This patch depends on "devfreq-testing"[1].
-> > [1]
-> > https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing__;!!CTRNKA9wMg0ARbw!zNCF7FI5uFmzlA1V1-Pp8ht2HtUk8_oRRDoqzzBcXm0Mo8JOOoVbPPqa5xg4WuYPnKNF$
-> >  
-> > ---
-> >   drivers/devfreq/Kconfig           |  10 +
-> >   drivers/devfreq/Makefile          |   1 +
-> >   drivers/devfreq/mtk-cci-devfreq.c | 479
-> > ++++++++++++++++++++++++++++++
-> >   3 files changed, 490 insertions(+)
-> >   create mode 100644 drivers/devfreq/mtk-cci-devfreq.c
-> > 
-> > diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-> > index 87eb2b837e68..d985597f343f 100644
-> > --- a/drivers/devfreq/Kconfig
-> > +++ b/drivers/devfreq/Kconfig
-> > @@ -120,6 +120,16 @@ config ARM_TEGRA_DEVFREQ
-> >   	  It reads ACTMON counters of memory controllers and adjusts
-> > the
-> >   	  operating frequencies and voltages with OPP support.
-> >   
-> > +config ARM_MEDIATEK_CCI_DEVFREQ
-> > +	tristate "MEDIATEK CCI DEVFREQ Driver"
-> > +	depends on ARM_MEDIATEK_CPUFREQ
-> > +	select DEVFREQ_GOV_PASSIVE
-> > +	help
-> > +	  This adds a devfreq driver for MediaTek Cache Coherent
-> > Interconnect
-> > +	  which is shared the same regulators with the cpu cluster. It
-> > can track
-> > +	  buck voltages and update a proper CCI frequency. Use the
-> > notification
-> > +	  to get the regulator status.
-> > +
-> >   config ARM_RK3399_DMC_DEVFREQ
-> >   	tristate "ARM RK3399 DMC DEVFREQ Driver"
-> >   	depends on (ARCH_ROCKCHIP && HAVE_ARM_SMCCC) || \
-> > diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
-> > index 0b6be92a25d9..bf40d04928d0 100644
-> > --- a/drivers/devfreq/Makefile
-> > +++ b/drivers/devfreq/Makefile
-> > @@ -11,6 +11,7 @@ obj-$(CONFIG_DEVFREQ_GOV_PASSIVE)	+=
-> > governor_passive.o
-> >   obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)	+= exynos-bus.o
-> >   obj-$(CONFIG_ARM_IMX_BUS_DEVFREQ)	+= imx-bus.o
-> >   obj-$(CONFIG_ARM_IMX8M_DDRC_DEVFREQ)	+= imx8m-ddrc.o
-> > +obj-$(CONFIG_ARM_MEDIATEK_CCI_DEVFREQ)	+= mtk-cci-devfreq.o
-> >   obj-$(CONFIG_ARM_RK3399_DMC_DEVFREQ)	+= rk3399_dmc.o
-> >   obj-$(CONFIG_ARM_SUN8I_A33_MBUS_DEVFREQ)	+= sun8i-a33-mbus.o
-> >   obj-$(CONFIG_ARM_TEGRA_DEVFREQ)		+= tegra30-devfreq.o
-> > diff --git a/drivers/devfreq/mtk-cci-devfreq.c
-> > b/drivers/devfreq/mtk-cci-devfreq.c
-> > new file mode 100644
-> > index 000000000000..53a28e2c88bd
-> > --- /dev/null
-> > +++ b/drivers/devfreq/mtk-cci-devfreq.c
-> > @@ -0,0 +1,479 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Copyright (C) 2022 MediaTek Inc.
-> > + */
-> > +
-> > +#include <linux/clk.h>
-> > +#include <linux/devfreq.h>
-> > +#include <linux/minmax.h>
-> > +#include <linux/module.h>
-> > +#include <linux/of.h>
-> > +#include <linux/of_device.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/pm_opp.h>
-> > +#include <linux/regulator/consumer.h>
-> > +
-> > +struct mtk_ccifreq_platform_data {
-> > +	int min_volt_shift;
-> > +	int max_volt_shift;
-> > +	int proc_max_volt;
-> > +	int sram_min_volt;
-> > +	int sram_max_volt;
-> > +};
-> > +
-> > +struct mtk_ccifreq_drv {
-> > +	struct device *cci_dev;
-> > +	struct devfreq *devfreq;
-> > +	struct regulator *proc_reg;
-> > +	struct regulator *sram_reg;
-> > +	struct clk *cci_clk;
-> > +	struct clk *inter_clk;
-> > +	int inter_voltage;
-> > +	int old_voltage;
-> > +	unsigned long old_freq;
-> > +	bool need_voltage_tracking;
-> > +	/* Avoid race condition for regulators between notify and
-> > policy */
-> > +	struct mutex reg_lock;
-> > +	struct notifier_block opp_nb;
-> > +	const struct mtk_ccifreq_platform_data *soc_data;
-> > +};
-> > +
-> > +static int mtk_ccifreq_voltage_tracking(struct mtk_ccifreq_drv
-> > *drv,
-> > +					int new_voltage)
-> > +{
-> > +	const struct mtk_ccifreq_platform_data *soc_data = drv-
-> > >soc_data;
-> > +	struct device *dev = drv->cci_dev;
-> > +	struct regulator *proc_reg = drv->proc_reg;
-> > +	struct regulator *sram_reg = drv->sram_reg;
-> > +	int old_voltage, old_vsram, new_vsram, vsram, voltage, ret;
-> > +
-> > +	old_voltage = regulator_get_voltage(proc_reg);
-> > +	if (old_voltage < 0) {
-> > +		dev_err(dev, "invalid vproc value: %d\n", old_voltage);
-> > +		return old_voltage;
-> > +	}
-> > +
-> > +	old_vsram = regulator_get_voltage(sram_reg);
-> > +	if (old_vsram < 0) {
-> > +		dev_err(dev, "invalid vsram value: %d\n", old_vsram);
-> > +		return old_vsram;
-> > +	}
-> > +
-> > +	new_vsram = clamp(new_voltage + soc_data->min_volt_shift,
-> > +			  soc_data->sram_min_volt, soc_data-
-> > >sram_max_volt);
-> > +
-> > +	do {
-> > +		if (old_voltage <= new_voltage) {
-> > +			vsram = clamp(old_voltage + soc_data-
-> > >max_volt_shift,
-> > +				      soc_data->sram_min_volt,
-> > new_vsram);
-> > +			ret = regulator_set_voltage(sram_reg, vsram,
-> > +						    soc_data-
-> > >sram_max_volt);
-> > +			if (ret)
-> > +				return ret;
-> > +
-> > +			if (vsram == soc_data->sram_max_volt ||
-> > +			    new_vsram == soc_data->sram_min_volt)
-> > +				voltage = new_voltage;
-> > +			else
-> > +				voltage = vsram - soc_data-
-> > >min_volt_shift;
-> > +
-> > +			ret = regulator_set_voltage(proc_reg, voltage,
-> > +						    soc_data-
-> > >proc_max_volt);
-> > +			if (ret) {
-> > +				regulator_set_voltage(sram_reg,
-> > old_vsram,
-> > +						      soc_data-
-> > >sram_max_volt);
-> > +				return ret;
-> > +			}
-> > +		} else if (old_voltage > new_voltage) {
-> > +			voltage = max(new_voltage,
-> > +				      old_vsram - soc_data-
-> > >max_volt_shift);
-> > +			ret = regulator_set_voltage(proc_reg, voltage,
-> > +						    soc_data-
-> > >proc_max_volt);
-> > +			if (ret)
-> > +				return ret;
-> > +
-> > +			if (voltage == new_voltage)
-> > +				vsram = new_vsram;
-> > +			else
-> > +				vsram = max(new_vsram,
-> > +					    voltage + soc_data-
-> > >min_volt_shift);
-> > +
-> > +			ret = regulator_set_voltage(sram_reg, vsram,
-> > +						    soc_data-
-> > >sram_max_volt);
-> > +			if (ret) {
-> > +				regulator_set_voltage(proc_reg,
-> > old_voltage,
-> > +						      soc_data-
-> > >proc_max_volt);
-> > +				return ret;
-> > +			}
-> > +		}
-> > +
-> > +		old_voltage = voltage;
-> > +		old_vsram = vsram;
-> > +	} while (voltage != new_voltage || vsram != new_vsram);
+On 14/04/2022 03:01, Rob Herring wrote:
+>> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
+>> new file mode 100644
+>> index 000000000000..f5ecf4a8c377
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
+>> @@ -0,0 +1,272 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only
 > 
-> Hello Johnson,
-> 
-> are you extremely sure that there will *always* be a way out of this
-> while loop?
-> 
-> For safety purposes, I would set an iteration limit in order to avoid
-> getting
-> an infinite loop here.
-> Probably, something like twice or thrice the expected number of
-> iterations will
-> also be fine.
-> 
-> P.S.: Krzysztof's review also contains exactly all the rest of what I
-> would
->        also say here (thanks!).
-> 
-> Regards,
-> Angelo
+> Surely this file was all QCom or QCom LT authors and can be dual 
+> licensed. After all, it was QCom that complained to me about GPL only 
+> DT licensing...
 
-Hello Angelo,
+I'll work on this.
 
-Thanks for your suggestion!
-Actually, we are going to add an iteration limit inside the while loop.
-
-BRs,
-Johnson Wang
-
+Best regards,
+Krzysztof
