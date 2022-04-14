@@ -2,104 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87A6500C2E
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Apr 2022 13:30:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70CD8500C7A
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Apr 2022 13:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbiDNLc5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Apr 2022 07:32:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53344 "EHLO
+        id S242512AbiDNL4v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Apr 2022 07:56:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbiDNLc4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Apr 2022 07:32:56 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766473B554;
-        Thu, 14 Apr 2022 04:30:28 -0700 (PDT)
-X-UUID: 07e456226ac141088f6f5809255d7a44-20220414
-X-UUID: 07e456226ac141088f6f5809255d7a44-20220414
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1569299293; Thu, 14 Apr 2022 19:30:22 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 14 Apr 2022 19:30:21 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 14 Apr
- 2022 19:30:20 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 14 Apr 2022 19:30:20 +0800
-Message-ID: <4374e31115bbcbd783003cd5c648163a1f4ff0d1.camel@mediatek.com>
-Subject: Re: [PATCH V2 11/15] cpufreq: mediatek: Update logic of
- voltage_tracking()
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Kevin Hilman <khilman@baylibre.com>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
-        <krzk+dt@kernel.org>
-CC:     <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
-        <roger.lu@mediatek.com>, <hsinyi@google.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 14 Apr 2022 19:30:20 +0800
-In-Reply-To: <7hczhr5lm3.fsf@baylibre.com>
-References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
-         <20220408045908.21671-12-rex-bc.chen@mediatek.com>
-         <7hczhr5lm3.fsf@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S235031AbiDNL4s (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Apr 2022 07:56:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D9774F39
+        for <linux-pm@vger.kernel.org>; Thu, 14 Apr 2022 04:54:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649937260;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OQBMvEl7TG/AErRLlCgZmZf9IXOWECBGWVuV+R4YE1k=;
+        b=hE0kuTmheN0tAJeQ5pVFtsGVTXB42krmkhagxjUCz31modDRgl5hjLvjZPrRC8+Ba6DGZF
+        BikHVcK9PPPHTVtGC/vJLb1TivLX8wOgEOu1eowAg1ZpMDtfGBCPyf5C5/kJsK9fzX/WQQ
+        xhoZLvfIi39lCCMOVjHJUQnQ88xcSyU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-575-25F8uyOHM2SzyhDdigj-zA-1; Thu, 14 Apr 2022 07:54:17 -0400
+X-MC-Unique: 25F8uyOHM2SzyhDdigj-zA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 97063296A61C;
+        Thu, 14 Apr 2022 11:54:16 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.193.235])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 9AF4040EC010;
+        Thu, 14 Apr 2022 11:54:13 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu, 14 Apr 2022 13:54:15 +0200 (CEST)
+Date:   Thu, 14 Apr 2022 13:54:12 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        ebiederm@xmission.com, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        tj@kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/5] sched,ptrace: Fix ptrace_check_attach() vs PREEMPT_RT
+Message-ID: <20220414115410.GA32752@redhat.com>
+References: <20220412114421.691372568@infradead.org>
+ <20220412114853.842942162@infradead.org>
+ <20220413132451.GA27281@redhat.com>
+ <20220413185704.GA30360@redhat.com>
+ <20220413185909.GB30360@redhat.com>
+ <20220413192053.GY2731@worktop.programming.kicks-ass.net>
+ <20220413195612.GC2762@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220413195612.GC2762@worktop.programming.kicks-ass.net>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 2022-04-08 at 14:08 -0700, Kevin Hilman wrote:
-> Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
-> 
-> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > 
-> > - Remove VOLT_TOL because CCI may share the same sram and vproc
-> >   regulators with CPU. Therefore, set the max voltage in
-> >   regulator_set_voltage() to the proc{sram}_max_volt.
-> 
-> This could you a bit more detailed explanation.  Why does VOLT_TOL
-> get
-> in the way when regulators are shared between CPU & CCI?
+On 04/13, Peter Zijlstra wrote:
+>
+> On Wed, Apr 13, 2022 at 09:20:53PM +0200, Peter Zijlstra wrote:
+> > On Wed, Apr 13, 2022 at 08:59:10PM +0200, Oleg Nesterov wrote:
+> >
+> >
+> > > +		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+> > > +		// wrong, needs siglock
+> > > +		current->jobctl &= ~JOBCTL_TRACED_XXX;
+> > > +		wake_up_bit(&current->jobctl, ~JOBCTL_TRACED_XXX_BIT);
+> > 		  __wake_up_common_lock()
+> > 		    spin_lock_irqsave()
+> > 		      current_save_and_set_rtlock_wait_state();
 
-Hello Kevin,
+OOPS, thanks.
 
-Here we use 'sram_min_volt' and 'sram_max_volt' to determine the
-voltage boundary of sram regulator.
-And use (sram_min_volt - min_volt_shift) and 'proc_max_volt' to
-determine the voltage boundary of vproc regulator.
-We use them as platform data to replace VOLT_TOL (voltage tolerance)
-when determing the voltage boundary and invoking regulator_set_voltage.
+> Something that might work; since there's only the one ptracer, is to
+> instead do something like:
+>
+> 	current->jobctl &= ~JOBCTL_TRACED_XXX; // siglock
+> 	if (current->ptrace)
+> 		wake_up_process(current->parent);
+> 	preempt_enable_no_resched();
+> 	schedule();
+>
+>
+> vs
+>
+> 	for (;;) {
+> 		set_current_state(TASK_UNINTERRUPTIBLE);
+> 		if (!(p->jobctl & JOBCTL_TRACED_XXX))
+> 			break;
+> 		schedule();
 
-I will add this to commit message in next version.
+Yes, thanks... this is racy, see below, but probably fixeable.
 
-> 
-> > - Move comparison of new and old voltages to
-> >   mtk_cpufreq_voltage_tracking().
-> 
-> Why?  And how is this related to the above change?  Seems to me that
-> it
-> belongs in a separate patch.
-> 
-> Kevin
+> ptrace_detach() needs some additional magic as well I think, but this
+> might just work.
 
-I think there are some mistake for this.
-I will remove this commit message in next version.
+I don't think so, JOBCTL_TRACED_XXX must be always cleared in ptrace_stop()
+and ptrace_detach() implies ptrace_check_attach().
 
-BRs,
-Rex
+
+Lets forget about the proble above for the moment. There is another problem
+with my patch,
+
+	if (!(child->ptrace && child->parent == current))
+		return ret;
+
+this check is racy without tasklist, we can race with another task attaching
+to our natural child (so that child->parent == current), ptrace_attach() sets
+task->ptrace = flags first and changes child->parent after that.
+
+In this case:
+
+	if (ignore_state)
+		return 0;
+
+this is just wrong,
+
+	if (wait_on_bit(&task->jobctl, JOBCTL_TRACED_XXX_BIT, TASK_KILLABLE))
+		return -EINTR;
+
+this is fine,
+
+	if (!wait_task_inactive(child, __TASK_TRACED))
+
+this not right too. wait_task_inactive() can loop "forever" doing schedule_hrtimeout()
+if the actual debugger stops/resumes the tracee continuously. This is pure theoretical,
+but still.
+
+And this also means that the code above needs some changes too, we can rely on
+wake_up_process(current->parent).
+
+OK, let me think about it. Thanks!
+
+Oleg.
 
