@@ -2,123 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E23C9501856
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Apr 2022 18:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D19501892
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Apr 2022 18:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234725AbiDNQKW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Apr 2022 12:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48866 "EHLO
+        id S239368AbiDNQ0K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Apr 2022 12:26:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344086AbiDNPxm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Apr 2022 11:53:42 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DAE9FC113;
-        Thu, 14 Apr 2022 08:34:07 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-df22f50e0cso5624157fac.3;
-        Thu, 14 Apr 2022 08:34:06 -0700 (PDT)
+        with ESMTP id S245730AbiDNQOR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Apr 2022 12:14:17 -0400
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EC3C31F2;
+        Thu, 14 Apr 2022 08:57:25 -0700 (PDT)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-dacc470e03so5686062fac.5;
+        Thu, 14 Apr 2022 08:57:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=XgRBiTVC/FFWfC6f7VFIlxavcDc/C7IkOvLYm4Mfzvs=;
-        b=QQ2vRYRmlckrTL2uohmikWroCLGEKLv0jKTlcPyESt926PPnpwMcTeFzlpWehuNSTA
-         tflGx73ggnfWtCf6c07p7TFZ1CVVxqQcZhqcEhCZ55OCx4Mp3eLY0X+mW5bWx11g8RQE
-         jm//i5g41NtucMGPNs2z2rjn4QxE0Y4ZrWp6pVGNcHsmg5AWMECHdD+0ggFQTOsmPiHR
-         bQU2cvhqzbLzle/L9M7aOVB3Y/7KrukGrBCJxB/FFvg/iDnhH93ZGN2vnnVx5mxz3d/f
-         uVtG2LtyzFoxQjlK0WNUxzmO9nugzThEUg4HQx6GEy/OVnLlVs1ggHm/kjHm8CEHJeS+
-         6QjA==
-X-Gm-Message-State: AOAM532mhJzNiOj+41uxL2P01P3UkUGOxiY96GmtfB0szSeanPpnGO/c
-        /FxYjxmCzhDIIf5MNheDEA==
-X-Google-Smtp-Source: ABdhPJxO41UyWKPRLV35Yj+ApQ4PFF6XoQyq8uSctU7sQmGIJXL6DxUImc9X9hOqKaDbOcuZF4s6Kw==
-X-Received: by 2002:a05:6870:434f:b0:bf:9f2a:26f0 with SMTP id x15-20020a056870434f00b000bf9f2a26f0mr1521011oah.40.1649950446230;
-        Thu, 14 Apr 2022 08:34:06 -0700 (PDT)
+        bh=m/HgJFU5eyBdqThPB7Gif/3NbbgBxIgCKOJJWS03GxI=;
+        b=h4zUXu3avlhZ8qSHZhOr5ForkeDLpTq09ixAxVLBvIGtEpJqxmnuLoKGZ8VGBOkbxg
+         tijkkAhzgo/tFPqWvDv0KzhJX/+ov/95v5zRQm9Nio+xtH+gG1RacpY2Yi5chJ0l9PED
+         Kno78itgn7apNHbcV8pCUWmwEFTteLTN8KxQPoTynFgEZucnlM7D1wEKhK5NCd/zSU4n
+         AaA/NHgH+LSGsbiXcJf2vKADrjB9r+HVaAq7uZ9E0G9YYbaSb9/naso5G4ixMFrHVr8m
+         nIHH9H1ChBAtdP7HiP8LFEsLX769vc5cn1UdInAJZ7Qgf+SVB4r2yvW9M7QTYonZgAUN
+         uqcA==
+X-Gm-Message-State: AOAM530YId9DWhiijYjRa8y97cyDo9JWR6oxUb7B5KPf/1HJJahlnc1m
+        69SZvjc0c96itAPtXDlBwg==
+X-Google-Smtp-Source: ABdhPJyQchtfSX/mwpYjIzUd1rTj7rtUPQjMM1F1iQB/k7vCs37gybUojwv5hvsA8UyY6S1hVlutSg==
+X-Received: by 2002:a05:6870:f2a9:b0:e5:8106:4486 with SMTP id u41-20020a056870f2a900b000e581064486mr1102887oap.109.1649951843522;
+        Thu, 14 Apr 2022 08:57:23 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id h8-20020a056830400800b005cdceb42261sm120283ots.66.2022.04.14.08.34.05
+        by smtp.gmail.com with ESMTPSA id c19-20020a9d7853000000b005cdbc0f02ccsm144090otm.68.2022.04.14.08.57.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 08:34:05 -0700 (PDT)
-Received: (nullmailer pid 2095983 invoked by uid 1000);
-        Thu, 14 Apr 2022 15:34:04 -0000
-Date:   Thu, 14 Apr 2022 10:34:04 -0500
+        Thu, 14 Apr 2022 08:57:23 -0700 (PDT)
+Received: (nullmailer pid 2129759 invoked by uid 1000);
+        Thu, 14 Apr 2022 15:57:22 -0000
+Date:   Thu, 14 Apr 2022 10:57:22 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Anjelique Melendez <quic_amelende@quicinc.com>
-Cc:     dmitry.torokhov@gmail.com, corbet@lwn.net, sre@kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, collinsd@codeaurora.org,
-        bjorn.andersson@linaro.org, swboyd@chromium.org,
-        skakit@codeaurora.org, linux-doc@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        David Collins <quic_collinsd@quicinc.com>
-Subject: Re: [PATCH v5 1/5] dt-bindings: power: reset: qcom-pon: update "reg"
- property details
-Message-ID: <Ylg+7MVRS4sKbOFb@robh.at.kernel.org>
-References: <20220411200506.22891-1-quic_amelende@quicinc.com>
- <20220411200506.22891-2-quic_amelende@quicinc.com>
+To:     "J, KEERTHY" <j-keerthy@ti.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, amitk@kernel.org,
+        kristo@kernel.org, linux-pm@vger.kernel.org, vigneshr@ti.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/4] dt-bindings: thermal: k3-j72xx: Add VTM bindings
+ documentation
+Message-ID: <YlhEYq8pGsuoA2mv@robh.at.kernel.org>
+References: <20220412101409.7980-1-j-keerthy@ti.com>
+ <20220412101409.7980-2-j-keerthy@ti.com>
+ <17474b72-d823-e1ff-9831-c5f9f887fccd@linaro.org>
+ <54d597e9-5cad-fc44-954d-7de45018fdcf@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220411200506.22891-2-quic_amelende@quicinc.com>
+In-Reply-To: <54d597e9-5cad-fc44-954d-7de45018fdcf@ti.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 01:05:03PM -0700, Anjelique Melendez wrote:
-> From: David Collins <quic_collinsd@quicinc.com>
+On Wed, Apr 13, 2022 at 05:34:20PM +0530, J, KEERTHY wrote:
 > 
-> Update the description of "reg" property to add the PON_PBS base
-> address along with PON_HLOS base address.  Also add "reg-names"
-> property description.
 > 
-> Signed-off-by: David Collins <quic_collinsd@quicinc.com>
-> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
-> ---
->  .../bindings/power/reset/qcom,pon.yaml | 20 +++++++++++++++++++-
->  1 file changed, 19 insertions(+), 1 deletion(-)
+> On 4/13/2022 3:43 PM, Krzysztof Kozlowski wrote:
+> > On 12/04/2022 12:14, Keerthy wrote:
+> > > Add VTM bindings documentation. In the Voltage Thermal
+> > > Management Module(VTM), K3 J72XX supplies a voltage
+> > > reference and a temperature sensor feature that are gathered in the band
+> > > gap voltage and temperature sensor (VBGAPTS) module. The band
+> > > gap provides current and voltage reference for its internal
+> > > circuits and other analog IP blocks. The analog-to-digital
+> > > converter (ADC) produces an output value that is proportional
+> > > to the silicon temperature.
+> > > 
+> > > Signed-off-by: Keerthy <j-keerthy@ti.com>
+> > > ---
+> > >   .../bindings/thermal/ti,j72xx-thermal.yaml    | 62 +++++++++++++++++++
+> > >   1 file changed, 62 insertions(+)
+> > >   create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+> > > new file mode 100644
+> > > index 000000000000..8483c495cb9a
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+> > > @@ -0,0 +1,62 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/thermal/ti,j72xx-thermal.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Texas Instruments J72XX VTM (DTS) binding
+> > > +
+> > > +maintainers:
+> > > +  - Keerthy <j-keerthy@ti.com>
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    const: ti,j721e-vtm
+> > > +    oneOf:
+> > > +      - enum:
+> > > +          - ti,j721e-vtm
+> > > +          - ti,j7200-vtm
+> > 
+> > It seems you resent this ignoring all of Rob's comments. In changelog of
+> > cover letter you wrote "Fixed all the comments on v4" but it's not true.
+> > Maybe you sent us old patch?
+> > 
+> > Anyway, you need to follow Rob's comments.
 > 
-> diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-> index 353f155d..542200b2 100644
-> --- a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-> +++ b/Documentation/bindings/power/reset/qcom,pon.yaml
-> @@ -26,7 +26,25 @@ properties:
->        - qcom,pm8998-pon
->  
->    reg:
-> -    maxItems: 1
-> +    description: |
-> +      Specifies the SPMI base address for the PON (power-on) peripheral.  For
-> +      PMICs that have the PON peripheral (GEN3) split into PON_HLOS and PON_PBS
-> +      (e.g. PMK8350), this can hold addresses of both PON_HLOS and PON_PBS
-> +      peripherals.  In that case, the PON_PBS address needs to be specified to
-> +      facilitate software debouncing on some PMICs.
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +  reg-names:
-> +    description: |
-> +      For PON GEN1 and GEN2, it should be "pon".  For PON GEN3 it should include
-> +      "pon_hlos" and optionally "pon_pbs".
-> +    minItems: 1
-> +    maxItems: 2
-> +    items:
-> +      - const: pon_hlos
-> +      - const: pon_pbs
-> +      - const: pon
+> Krzysztof,
+> 
+> Apologies. Some issues with my mailbox. Rob's response didn't reach me for
+> some reason.
 
-This says there are 3 entries, but you limited to 2. The schema also 
-doesn't match what the description says. Entries should be extended by 
-adding new entries to the end and keeping optional entries last. So like 
-this:
-
-minItems: 1
-items:
-  - const: pon
-  - const: pon_hlos
-  - const: pon_pbs
+Maybe because I'm still banned by TI. Just had another bounce a few days 
+ago.
 
 Rob
