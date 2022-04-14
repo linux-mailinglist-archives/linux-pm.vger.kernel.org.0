@@ -2,76 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 658545006F5
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Apr 2022 09:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4771E500779
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Apr 2022 09:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240370AbiDNHhe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Apr 2022 03:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53900 "EHLO
+        id S240797AbiDNHqX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Apr 2022 03:46:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239510AbiDNHhe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Apr 2022 03:37:34 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA521C901
-        for <linux-pm@vger.kernel.org>; Thu, 14 Apr 2022 00:35:10 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id k22so5713038wrd.2
-        for <linux-pm@vger.kernel.org>; Thu, 14 Apr 2022 00:35:10 -0700 (PDT)
+        with ESMTP id S240813AbiDNHqL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Apr 2022 03:46:11 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA3660CC6
+        for <linux-pm@vger.kernel.org>; Thu, 14 Apr 2022 00:42:03 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id m14so5725846wrb.6
+        for <linux-pm@vger.kernel.org>; Thu, 14 Apr 2022 00:42:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=DNIbEELKcSpMpiph6ypcATO4awYaZfOYo0bLVgeuDKw=;
-        b=Dil8VNzay0OnSQ7BZIP3dNRDAru2vo9yoS3Fsff6fLejYTGsaOCULL5xeE6xj4A+V6
-         ZEIjxFizbFv7uykfVVMeLSIJ1lUHkwQYQlRk5UGis0pCJGekPR2iFotDJxOuYzWRbwc3
-         JTrSf+b2nUTsKz4HpLzwe0P3fT5AApD2wFCtGbaYbKisov5S2xzmhGgLZLyL8ZfFISG9
-         i798Yqf2AqnKn35+cuI2SVWsMbUEh6miE2Z+bdLdYswtfhN7IHU0wDS8YWuOhxYPrPMa
-         6LMbFQD7o8AD+fKRMMNNpkmuMSQjm9utvl1JmJCA8ctCp92hLxVoE04DDLE/aMWigonS
-         iE8w==
+        bh=wXL/FLXJjbsCX0S4WtQaLaMwmMlertvo/nGS0JKpv+g=;
+        b=jZRSFCQHl8B8+IHjwqdy0iEeXh84zus7J1ebKC6Liq6Hw20IpG0YCsAZxl80iBfNZf
+         eJdFDY8Y1rXA8LUW1maZ+RIM//Bv/IA+YowQvi10K2PMXpTLvVXNJ9XCuYJaI9A2n9Im
+         4YL+Za/pehPUcfDVIH6tFFGcd+TKT6gWeLV2bnwvh3NMVOzIhEB1mniDjiMp/4v9fBaf
+         Pe0FLIrukireUxeLZGye5dk+LgXeG8FcIuJMGiDmy9mNemQHHU8aCBGAgKlHQI3BVrZ5
+         tKfeMClFZ0QFRce9P+yIgtkw/Ol+LT1wyliNzXHVVuKaitD5iOzM744UiP1Wnoj4LE5R
+         RaJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=DNIbEELKcSpMpiph6ypcATO4awYaZfOYo0bLVgeuDKw=;
-        b=1j+Bo/liPhWHKs4M65OgO2ZFLFLl3AB2VIMKQMDCRJv2NB18PDM9KnEhTidGIaOkP0
-         XCLAUMxQZJulZ2WWTAsMTeAcjheezg010QuLorXBJLpu8PgzT+plocsfg3vfn+hzxTiP
-         ndiy4BB2ntMvzO9HDkWg6zau3nY6mn6jz/uQ9nEeKSwObNlMJCwiTAq8jMvLrRPcjMuz
-         5c7drx4bADdXf/OGXug6TeKPny5FawwGEC5frZdn17aDLHNwkQ5I2SpbfldE5FUecyp7
-         lukDguiciTECOeISuLLQC36CHQ57aUUlkHDDlUhripi4//BDnAMOWk6uEdpyABB5L9hC
-         GbfQ==
-X-Gm-Message-State: AOAM5335NuQsNeztvCGdIs9RxOBljzb4x1wtgY4fFyIcaRe/C5uduvmJ
-        b0pBByaaQHfD/Pfa5Q4X4DEzZA==
-X-Google-Smtp-Source: ABdhPJxfK/Yb5uAPmt1SHXxzzFdfxJCKVXL3/TLTDVww2H3OPiZyLLIZEj/GDbC6Y2MVTH6piH2DAA==
-X-Received: by 2002:a05:6000:178c:b0:204:670:5b20 with SMTP id e12-20020a056000178c00b0020406705b20mr1065886wrg.637.1649921708584;
-        Thu, 14 Apr 2022 00:35:08 -0700 (PDT)
+        bh=wXL/FLXJjbsCX0S4WtQaLaMwmMlertvo/nGS0JKpv+g=;
+        b=R3f8iB7s9tcjE0ctOSTk5bjV6lBs++5MqdrJaSL9MDJWUOXSdKGB7tWmy87PA+HKGB
+         X6AaC5OFx1y0/xLq+PQEGTxAw3VQegaIe/AM5blEM5hvkdOGGFKzvTquSnooGFeP++mN
+         CLy6H3Ul5b3FXQEo4ILz2V2ZpwFWB96dse11NZucdA/KbSw2a5QOKPzpaYfAF9o38F9f
+         guMRDXbxm5MygFBjQ2KdFtXwv5jIvvcYdPA1rvJzxcSphKRy0MSBSP3BHVfC2UMkpF85
+         3InsBTibrO6os3smNcZd6eb0kaUkVyMfCfz9D39+jA/fTX2eAA4S7gA9cY94wI7PGbLC
+         CfKQ==
+X-Gm-Message-State: AOAM531P2J58dD6H/1wSC8VtlYPy1Gc4Rpw1zn4d0eJCnYLR+ochVxBm
+        QE8H7CfTQG2xCJPhVag5kCnN9g==
+X-Google-Smtp-Source: ABdhPJz5AfWKmdXuoZrULNxOfDYOoVflfMymsZWBulEYwj8w6Php6ilkbuuiH6mMHLl/snQ46lPQqQ==
+X-Received: by 2002:a05:6000:8b:b0:207:b80e:c711 with SMTP id m11-20020a056000008b00b00207b80ec711mr1074827wrx.178.1649922121839;
+        Thu, 14 Apr 2022 00:42:01 -0700 (PDT)
 Received: from [192.168.1.41] (176-182-171-101.abo.bbox.fr. [176.182.171.101])
-        by smtp.googlemail.com with ESMTPSA id 10-20020a5d47aa000000b00207afc4bd39sm1475063wrb.18.2022.04.14.00.35.07
+        by smtp.googlemail.com with ESMTPSA id e16-20020a05600c2dd000b0038ed449cbdbsm4643142wmh.3.2022.04.14.00.42.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 00:35:08 -0700 (PDT)
-Message-ID: <82d08ff0-41bf-d249-1216-0da3f0cdc5b9@linaro.org>
-Date:   Thu, 14 Apr 2022 09:35:06 +0200
+        Thu, 14 Apr 2022 00:42:01 -0700 (PDT)
+Message-ID: <df69e901-8e50-852f-84de-4158e97e653b@linaro.org>
+Date:   Thu, 14 Apr 2022 09:42:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 2/2] thermal/drivers/thermal_helpers: Adjust output format
+Subject: Re: [PATCH v3] thermal: exynos: fix masking value for exynos7
+ temp_error
 Content-Language: en-US
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220408110920.3809225-1-alexander.stein@ew.tq-group.com>
- <20220408110920.3809225-2-alexander.stein@ew.tq-group.com>
+To:     hypmean.kim@samsung.com, "bzolnier@gmail.com" <bzolnier@gmail.com>,
+        "krzk@kernel.org" <krzk@kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "amitk@kernel.org" <amitk@kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "edubezval@gmail.com" <edubezval@gmail.com>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220401002153.62648-1-hypmean.kim@samsung.com>
+ <CGME20220401002131epcas2p320f8513a9bd1413af0ace6c20f2caba6@epcms2p6>
+ <20220401002753epcms2p6cd5882f4909247461434f42e933591af@epcms2p6>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220408110920.3809225-2-alexander.stein@ew.tq-group.com>
+In-Reply-To: <20220401002753epcms2p6cd5882f4909247461434f42e933591af@epcms2p6>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,50 +86,72 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/04/2022 13:09, Alexander Stein wrote:
-> Outputs like this where -1 is printed as unsigned is somewhat misleading
->   thermal thermal_zone1: Trip3[type=0,temp=48000]:trend=4,throttle=1
->   thermal cooling_device3: cur_state=1
->   thermal cooling_device3: old_target=-1, target=2
->   thermal cooling_device3: zone1->target=1
->   thermal cooling_device3: zone1->target=2
->   thermal cooling_device3: zone1->target=18446744073709551615
->   thermal cooling_device3: set to state 2
-> 
-> With THERMAL_NO_TARGET assigning -1 as unsigned it make sense to print
-> the target as signed integer, even if the type is actually unsigned.
-> 
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> ---
-> An alternative would be to change thermal_instance::target from unsigned
-> long to long, but this would entail a lot of API & driver changes as well
-> which looks less intriguing.
-> 
->   drivers/thermal/thermal_helpers.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/thermal_helpers.c b/drivers/thermal/thermal_helpers.c
-> index 3edd047e144f..0d0da6670267 100644
-> --- a/drivers/thermal/thermal_helpers.c
-> +++ b/drivers/thermal/thermal_helpers.c
-> @@ -199,7 +199,7 @@ void __thermal_cdev_update(struct thermal_cooling_device *cdev)
+
+Hi,
+
+I'm unable to apply your patch, whatever the method:
+
+git b4 20220401002753epcms2p6cd5882f4909247461434f42e933591af@epcms2p6
+
+Applying: thermal: exynos: fix masking value for exynos7 temp_error
+error: unrecognized input
+Patch failed at 0001 thermal: exynos: fix masking value for exynos7 
+temp_error
+hint: Use 'git am --show-current-patch' to see the failed patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
+
+
+
+On 01/04/2022 02:27, Sang Min Kim wrote:
+> Modify mask value for the temp_error in the sanitize_temp_error() function.
 >   
->   	/* Make sure cdev enters the deepest cooling state */
->   	list_for_each_entry(instance, &cdev->thermal_instances, cdev_node) {
-> -		dev_dbg(&cdev->device, "zone%d->target=%lu\n",
-> +		dev_dbg(&cdev->device, "zone%d->target=%ld\n",
->   			instance->tz->id, instance->target);
->   		if (instance->target == THERMAL_NO_TARGET)
->   			continue;
-
-Actually you pointed out something fuzzy in the target values.
-
-The unsigned long type for the target and THERMAL_NO_TARGET are not 
-compatible.
-
-It would be much simpler to have THERMAL_NO_TARGET = 0 which 
-semantically makes more sense than a negative value.
-
+> sanitize_temp_error masks temp_error2 with EXYNOS_TMU_TEMP_MASK(0xff) value
+> even in the case of EXYNOS7. In addition, when entering the if statement,
+> both temp_error1 and 2 are masked with EXYNOS_TMU_TEMP_MASK(0xff).
+> By modifying to use the previously declared local variable tmu_temp_mask,
+> the mask value suitable for the SOC can be applied.
+>   
+> Fixes: aef27b658b43 ("thermal: exynos: use sanitize_temp_error() in exynos7_tmu_initialize()")
+> Signed-off-by: sangmin kim <hypmean.kim@samsung.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   V2 -> V3: Modify the location of fixes tag and add reviewed tag
+>   V1 -> V2: Add fixes tag
+>   
+>   drivers/thermal/samsung/exynos_tmu.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+>   
+> diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
+> index f4ab4c5b4b62..08c63fe5566e 100644
+> --- a/drivers/thermal/samsung/exynos_tmu.c
+> +++ b/drivers/thermal/samsung/exynos_tmu.c
+> @@ -243,17 +243,17 @@ static void sanitize_temp_error(struct exynos_tmu_data *data, u32 trim_info)
+>   
+>           data->temp_error1 = trim_info & tmu_temp_mask;
+>           data->temp_error2 = ((trim_info >> EXYNOS_TRIMINFO_85_SHIFT) &
+> -                                EXYNOS_TMU_TEMP_MASK);
+> +                                tmu_temp_mask);
+>   
+>           if (!data->temp_error1 ||
+>               (data->min_efuse_value > data->temp_error1) ||
+>               (data->temp_error1 > data->max_efuse_value))
+> -                data->temp_error1 = data->efuse_value & EXYNOS_TMU_TEMP_MASK;
+> +                data->temp_error1 = data->efuse_value & tmu_temp_mask;
+>   
+>           if (!data->temp_error2)
+>                   data->temp_error2 =
+>                           (data->efuse_value >> EXYNOS_TRIMINFO_85_SHIFT) &
+> -                        EXYNOS_TMU_TEMP_MASK;
+> +                        tmu_temp_mask;
+>   }
+>   
+>   static int exynos_tmu_initialize(struct platform_device *pdev)
+> --
+> 2.9.5
+>   
+>   
 
 
 -- 
