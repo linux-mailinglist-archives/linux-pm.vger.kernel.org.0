@@ -2,42 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 533B4500E31
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Apr 2022 14:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AAE5500F6D
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Apr 2022 15:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243046AbiDNNBP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Apr 2022 09:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55054 "EHLO
+        id S244325AbiDNN1T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 14 Apr 2022 09:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238742AbiDNNBP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Apr 2022 09:01:15 -0400
+        with ESMTP id S232326AbiDNN0l (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Apr 2022 09:26:41 -0400
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2C59284E;
-        Thu, 14 Apr 2022 05:58:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303F49F6C9;
+        Thu, 14 Apr 2022 06:20:02 -0700 (PDT)
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 87cc61afc5c5b63a; Thu, 14 Apr 2022 14:58:46 +0200
+ id ff2d205ac2d432a1; Thu, 14 Apr 2022 15:20:01 +0200
 Received: from kreacher.localnet (unknown [213.134.181.101])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id D684B66BE14;
-        Thu, 14 Apr 2022 14:58:43 +0200 (CEST)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 9843966BE86;
+        Thu, 14 Apr 2022 15:20:00 +0200 (CEST)
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: [PATCH] ACPI: PM: Always print final debug message in acpi_device_set_power()
-Date:   Thu, 14 Apr 2022 14:58:42 +0200
-Message-ID: <11985385.O9o76ZdvQC@kreacher>
+To:     Linux PCI <linux-pci@vger.kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH v3 2/9] PCI/PM: Drop the runtime_d3cold device flag
+Date:   Thu, 14 Apr 2022 15:04:27 +0200
+Message-ID: <8077784.T7Z3S40VBb@kreacher>
+In-Reply-To: <5838942.lOV4Wx5bFT@kreacher>
+References: <4419002.LvFx2qVVIh@kreacher> <11975904.O9o76ZdvQC@kreacher> <5838942.lOV4Wx5bFT@kreacher>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 213.134.181.101
 X-CLIENT-HOSTNAME: 213.134.181.101
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudelfedgheekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpefhgedtffejheekgeeljeevvedtuefgffeiieejuddutdekgfejvdehueejjeetvdenucfkphepvddufedrudefgedrudekuddruddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurddutddupdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudelfedgieegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepvddufedrudefgedrudekuddruddtudenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurddutddupdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehm
+ ihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -49,75 +54,70 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-acpi_device_set_power() prints debug messages regarding its outcome
-(whether or not the power state has been changed and how) in all
-cases except when the device whose power state is being changed to D0
-is in that power state already.
-
-Make acpi_device_set_power() print a final debug message in that case
-too and while at it, fix the indentation of the "end" label in this
-function.
+This flag is not needed any more, so drop it.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/acpi/device_pm.c |   18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
 
-Index: linux-pm/drivers/acpi/device_pm.c
+v1 -> v3:
+   * Added R-by from Mika.
+
+---
+ drivers/pci/pci-driver.c |    2 --
+ drivers/pci/pci.c        |    3 ---
+ include/linux/pci.h      |    4 ----
+ 3 files changed, 9 deletions(-)
+
+Index: linux-pm/drivers/pci/pci-driver.c
 ===================================================================
---- linux-pm.orig/drivers/acpi/device_pm.c
-+++ linux-pm/drivers/acpi/device_pm.c
-@@ -173,11 +173,8 @@ int acpi_device_set_power(struct acpi_de
- 	/* Make sure this is a valid target state */
+--- linux-pm.orig/drivers/pci/pci-driver.c
++++ linux-pm/drivers/pci/pci-driver.c
+@@ -1337,8 +1337,6 @@ static int pci_pm_runtime_resume(struct
+ 	if (pm && pm->runtime_resume)
+ 		error = pm->runtime_resume(dev);
  
- 	/* There is a special case for D0 addressed below. */
--	if (state > ACPI_STATE_D0 && state == device->power.state) {
--		acpi_handle_debug(device->handle, "Already in %s\n",
--				  acpi_power_state_string(state));
--		return 0;
--	}
-+	if (state > ACPI_STATE_D0 && state == device->power.state)
-+		goto no_change;
- 
- 	if (state == ACPI_STATE_D3_COLD) {
- 		/*
-@@ -249,7 +246,7 @@ int acpi_device_set_power(struct acpi_de
- 
- 			/* Nothing to do here if _PSC is not present. */
- 			if (!device->power.flags.explicit_get)
--				return 0;
-+				goto no_change;
- 
- 			/*
- 			 * The power state of the device was set to D0 last
-@@ -264,13 +261,13 @@ int acpi_device_set_power(struct acpi_de
- 			 */
- 			result = acpi_dev_pm_explicit_get(device, &psc);
- 			if (result || psc == ACPI_STATE_D0)
--				return 0;
-+				goto no_change;
- 		}
- 
- 		result = acpi_dev_pm_explicit_set(device, ACPI_STATE_D0);
- 	}
- 
-- end:
-+end:
- 	if (result) {
- 		acpi_handle_debug(device->handle,
- 				  "Failed to change power state to %s\n",
-@@ -282,6 +279,11 @@ int acpi_device_set_power(struct acpi_de
- 	}
- 
- 	return result;
-+
-+no_change:
-+	acpi_handle_debug(device->handle, "Already in %s\n",
-+			  acpi_power_state_string(state));
-+	return 0;
+-	pci_dev->runtime_d3cold = false;
+-
+ 	return error;
  }
- EXPORT_SYMBOL(acpi_device_set_power);
  
+Index: linux-pm/drivers/pci/pci.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci.c
++++ linux-pm/drivers/pci/pci.c
+@@ -2703,8 +2703,6 @@ int pci_finish_runtime_suspend(struct pc
+ 	if (target_state == PCI_POWER_ERROR)
+ 		return -EIO;
+ 
+-	dev->runtime_d3cold = target_state == PCI_D3cold;
+-
+ 	/*
+ 	 * There are systems (for example, Intel mobile chips since Coffee
+ 	 * Lake) where the power drawn while suspended can be significantly
+@@ -2722,7 +2720,6 @@ int pci_finish_runtime_suspend(struct pc
+ 	if (error) {
+ 		pci_enable_wake(dev, target_state, false);
+ 		pci_restore_ptm_state(dev);
+-		dev->runtime_d3cold = false;
+ 	}
+ 
+ 	return error;
+Index: linux-pm/include/linux/pci.h
+===================================================================
+--- linux-pm.orig/include/linux/pci.h
++++ linux-pm/include/linux/pci.h
+@@ -379,10 +379,6 @@ struct pci_dev {
+ 	unsigned int	mmio_always_on:1;	/* Disallow turning off io/mem
+ 						   decoding during BAR sizing */
+ 	unsigned int	wakeup_prepared:1;
+-	unsigned int	runtime_d3cold:1;	/* Whether go through runtime
+-						   D3cold, not set for devices
+-						   powered on/off by the
+-						   corresponding bridge */
+ 	unsigned int	skip_bus_pm:1;	/* Internal: Skip bus-level PM */
+ 	unsigned int	ignore_hotplug:1;	/* Ignore hotplug events */
+ 	unsigned int	hotplug_user_indicators:1; /* SlotCtl indicators
 
 
 
