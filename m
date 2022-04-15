@@ -2,259 +2,233 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A88650277D
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Apr 2022 11:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 782EB502810
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Apr 2022 12:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245380AbiDOJmx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Apr 2022 05:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55544 "EHLO
+        id S1352170AbiDOKTj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Apr 2022 06:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351817AbiDOJmm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Apr 2022 05:42:42 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8CE48E64
-        for <linux-pm@vger.kernel.org>; Fri, 15 Apr 2022 02:40:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650015614; x=1681551614;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=EEotf8IKq/O/8p3FOnKNP1mpSFh6XYPpYfaCDwbfS7E=;
-  b=lg/VEh1zSucgXMKGba2Ii5wrjq1I2wjBE6Gncea3yFPkwbtPUiwc+unt
-   Lef5iex0iz48LJrwASWFXLnS3JMefAdVA8qk00jH8gs3lbRKy44Ix0VZI
-   NRxhrbDlc1L3reDKG4APM14rsD+KO7uDkZ0cD03qELp1LC1e8/ZVEZS6G
-   T2yxtYA9D3e2pwWDQmx/PUctvMBJCh+A7KM5lVjGsITygWS9jKeckJlSv
-   nOs1Mz+vqPalzuC5Z1GXTxkL7TPU4vjetuTU9sAVdWLyrdXcUmVXoKSgC
-   Uj9E8/LBIvR/r8tOq8vxO6FX8fWBeXyHHw1qPelrxc6c9LB6sEcPiOXP5
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="250427006"
-X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
-   d="scan'208";a="250427006"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 02:40:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
-   d="scan'208";a="553086853"
-Received: from rzhang1-dev.sh.intel.com ([10.239.48.43])
-  by orsmga007.jf.intel.com with ESMTP; 15 Apr 2022 02:40:12 -0700
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     rjw@rjwysocki.net, linux-pm@vger.kernel.org
-Cc:     artem.bityutskiy@linux.intel.com
-Subject: [PATCH] intel_idle: add AlderLake support
-Date:   Fri, 15 Apr 2022 17:39:51 +0800
-Message-Id: <20220415093951.2677170-1-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.27.0
+        with ESMTP id S1352163AbiDOKTf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Apr 2022 06:19:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9023ABA339
+        for <linux-pm@vger.kernel.org>; Fri, 15 Apr 2022 03:17:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650017826;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SW3+pTZzJmwPiUjPG7sYRQA2iIBjDVKXN/85OokF02U=;
+        b=MkLx6nt3ZEAW/IIx3qfjsGvNdfyrOADlXXL4dUTzrV3vitYqtG5kbi/Q3rngRcvMEaFp18
+        BiH1hSVKl5mSt0U+rJXjJXd8eDLccJDp4J1zg6X4/h1AY7+fyx7C+gaYrSoxQwAeWd7hkB
+        JBcJGXGWWU34u0IH9Mdb1JQdlltq358=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-577-XejZnFfoOW2rBE4VXbgNAQ-1; Fri, 15 Apr 2022 06:16:50 -0400
+X-MC-Unique: XejZnFfoOW2rBE4VXbgNAQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A94D11014A6F;
+        Fri, 15 Apr 2022 10:16:49 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.163])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 7AAC6145B97B;
+        Fri, 15 Apr 2022 10:16:46 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Fri, 15 Apr 2022 12:16:48 +0200 (CEST)
+Date:   Fri, 15 Apr 2022 12:16:44 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        ebiederm@xmission.com, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        tj@kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/5] sched,ptrace: Fix ptrace_check_attach() vs PREEMPT_RT
+Message-ID: <20220415101644.GA10421@redhat.com>
+References: <20220412114421.691372568@infradead.org>
+ <20220412114853.842942162@infradead.org>
+ <20220413132451.GA27281@redhat.com>
+ <20220413185704.GA30360@redhat.com>
+ <20220413185909.GB30360@redhat.com>
+ <20220413192053.GY2731@worktop.programming.kicks-ass.net>
+ <20220413195612.GC2762@worktop.programming.kicks-ass.net>
+ <20220414115410.GA32752@redhat.com>
+ <20220414183433.GC32752@redhat.com>
+ <YlikBjA3kL3XEQP5@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YlikBjA3kL3XEQP5@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Similar to SPR, the C1 and C1E states on ADL are mutually exclusive.
-Only one of them can be enabled at one time.
-But contrast to SPR, which usually has a strong latency requirement as a
-Xeon processor, C1E is preferred on ADL from the power' perspective of
-view.
+On 04/15, Peter Zijlstra wrote:
+>
+> On Thu, Apr 14, 2022 at 08:34:33PM +0200, Oleg Nesterov wrote:
+>
+> > If it can work, then 1/5 needs some changes, I think. In particular,
+> > it should not introduce JOBCTL_TRACED_FROZEN until 5/5, and perhaps
+>
+> That TRACED_FROZEN was to distinguish the TASK_TRACED and __TASK_TRACED
+> state, and isn't related to the freezer.
 
-This patch adds both C1 and C1E states in the custom table, and
-1. enables the "C1E promotion" bit in 'MSR_IA32_POWER_CTL' and mark C1
-   with the "CPUIDLE_FLAG_UNUSABLE" flag, thus C1 is not available by
-   default from both hardware and software.
-2. adds support for "preferred_cstates" module parameter, so that user
-   can choose C1 instead of C1E by booting with
-   "intel_idle.preferred_cstates=2".
+Lets forget about 3-5 which I didn't read carefully yet. So why do we
+need TRACED_FROZEN?
 
-Plus, separate custom cstate tables are introduced for the ADL mobile and
-desktop processors, because of the latency differences between these two
-processors, especially in PC10.
+From 1/5:
 
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
----
- drivers/idle/intel_idle.c | 137 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 137 insertions(+)
+	 static inline void signal_wake_up(struct task_struct *t, bool resume)
+	 {
+	+	lockdep_assert_held(&t->sighand->siglock);
+	+
+	+	if (resume && !(t->jobctl & JOBCTL_TRACED_FROZEN))
+	+		t->jobctl &= ~(JOBCTL_STOPPED | JOBCTL_TRACED);
+	+
+		signal_wake_up_state(t, resume ? TASK_WAKEKILL : 0);
+	 }
+	+
+	 static inline void ptrace_signal_wake_up(struct task_struct *t, bool resume)
+	 {
+	+	lockdep_assert_held(&t->sighand->siglock);
+	+
+	+	if (resume)
+	+		t->jobctl &= ~JOBCTL_TRACED;
+	+
+		signal_wake_up_state(t, resume ? __TASK_TRACED : 0);
+	 }
 
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index b7640cfe0020..f738d08dc961 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -759,6 +759,106 @@ static struct cpuidle_state icx_cstates[] __initdata = {
- 		.enter = NULL }
- };
- 
-+/*
-+ * On AlderLake C1 has to be disabled if C1E is enabled, and vice versa.
-+ * C1E is enabled only if "C1E promotion" bit is set in MSR_IA32_POWER_CTL.
-+ * But in this case there is effectively no C1, because C1 requests are
-+ * promoted to C1E. If the "C1E promotion" bit is cleared, then both C1
-+ * and C1E requests end up with C1, so there is effectively no C1E.
-+ *
-+ * By default we enable C1E and disable C1 by marking it with
-+ * 'CPUIDLE_FLAG_UNUSABLE'.
-+ */
-+static struct cpuidle_state adl_cstates[] __initdata = {
-+	{
-+		.name = "C1",
-+		.desc = "MWAIT 0x00",
-+		.flags = MWAIT2flg(0x00) | CPUIDLE_FLAG_UNUSABLE,
-+		.exit_latency = 1,
-+		.target_residency = 1,
-+		.enter = &intel_idle,
-+		.enter_s2idle = intel_idle_s2idle, },
-+	{
-+		.name = "C1E",
-+		.desc = "MWAIT 0x01",
-+		.flags = MWAIT2flg(0x01) | CPUIDLE_FLAG_ALWAYS_ENABLE,
-+		.exit_latency = 2,
-+		.target_residency = 4,
-+		.enter = &intel_idle,
-+		.enter_s2idle = intel_idle_s2idle, },
-+	{
-+		.name = "C6",
-+		.desc = "MWAIT 0x20",
-+		.flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED,
-+		.exit_latency = 220,
-+		.target_residency = 600,
-+		.enter = &intel_idle,
-+		.enter_s2idle = intel_idle_s2idle, },
-+	{
-+		.name = "C8",
-+		.desc = "MWAIT 0x40",
-+		.flags = MWAIT2flg(0x40) | CPUIDLE_FLAG_TLB_FLUSHED,
-+		.exit_latency = 280,
-+		.target_residency = 800,
-+		.enter = &intel_idle,
-+		.enter_s2idle = intel_idle_s2idle, },
-+	{
-+		.name = "C10",
-+		.desc = "MWAIT 0x60",
-+		.flags = MWAIT2flg(0x60) | CPUIDLE_FLAG_TLB_FLUSHED,
-+		.exit_latency = 680,
-+		.target_residency = 2000,
-+		.enter = &intel_idle,
-+		.enter_s2idle = intel_idle_s2idle, },
-+	{
-+		.enter = NULL }
-+};
-+
-+static struct cpuidle_state adl_l_cstates[] __initdata = {
-+	{
-+		.name = "C1",
-+		.desc = "MWAIT 0x00",
-+		.flags = MWAIT2flg(0x00) | CPUIDLE_FLAG_UNUSABLE,
-+		.exit_latency = 1,
-+		.target_residency = 1,
-+		.enter = &intel_idle,
-+		.enter_s2idle = intel_idle_s2idle, },
-+	{
-+		.name = "C1E",
-+		.desc = "MWAIT 0x01",
-+		.flags = MWAIT2flg(0x01) | CPUIDLE_FLAG_ALWAYS_ENABLE,
-+		.exit_latency = 2,
-+		.target_residency = 4,
-+		.enter = &intel_idle,
-+		.enter_s2idle = intel_idle_s2idle, },
-+	{
-+		.name = "C6",
-+		.desc = "MWAIT 0x20",
-+		.flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED,
-+		.exit_latency = 170,
-+		.target_residency = 500,
-+		.enter = &intel_idle,
-+		.enter_s2idle = intel_idle_s2idle, },
-+	{
-+		.name = "C8",
-+		.desc = "MWAIT 0x40",
-+		.flags = MWAIT2flg(0x40) | CPUIDLE_FLAG_TLB_FLUSHED,
-+		.exit_latency = 200,
-+		.target_residency = 600,
-+		.enter = &intel_idle,
-+		.enter_s2idle = intel_idle_s2idle, },
-+	{
-+		.name = "C10",
-+		.desc = "MWAIT 0x60",
-+		.flags = MWAIT2flg(0x60) | CPUIDLE_FLAG_TLB_FLUSHED,
-+		.exit_latency = 230,
-+		.target_residency = 700,
-+		.enter = &intel_idle,
-+		.enter_s2idle = intel_idle_s2idle, },
-+	{
-+		.enter = NULL }
-+};
-+
- /*
-  * On Sapphire Rapids Xeon C1 has to be disabled if C1E is enabled, and vice
-  * versa. On SPR C1E is enabled only if "C1E promotion" bit is set in
-@@ -1142,6 +1242,14 @@ static const struct idle_cpu idle_cpu_icx __initconst = {
- 	.use_acpi = true,
- };
- 
-+static const struct idle_cpu idle_cpu_adl __initconst = {
-+	.state_table = adl_cstates,
-+};
-+
-+static const struct idle_cpu idle_cpu_adl_l __initconst = {
-+	.state_table = adl_l_cstates,
-+};
-+
- static const struct idle_cpu idle_cpu_spr __initconst = {
- 	.state_table = spr_cstates,
- 	.disable_promotion_to_c1e = true,
-@@ -1210,6 +1318,8 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
- 	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_X,		&idle_cpu_skx),
- 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,		&idle_cpu_icx),
- 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,		&idle_cpu_icx),
-+	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE,		&idle_cpu_adl),
-+	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,		&idle_cpu_adl_l),
- 	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,	&idle_cpu_spr),
- 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL,	&idle_cpu_knl),
- 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,	&idle_cpu_knl),
-@@ -1570,6 +1680,29 @@ static void __init skx_idle_state_table_update(void)
- 	}
- }
- 
-+/**
-+ * adl_idle_state_table_update - Adjust AlderLake idle states table.
-+ */
-+static void __init adl_idle_state_table_update(void)
-+{
-+	/* Check if user prefers C1 over C1E. */
-+	if (preferred_states_mask & BIT(1)) {
-+		if (preferred_states_mask & BIT(2))
-+			/* Both can't be enabled, stick to the defaults. */
-+			goto end;
-+
-+		cpuidle_state_table[0].flags &= ~CPUIDLE_FLAG_UNUSABLE;
-+		cpuidle_state_table[1].flags |= CPUIDLE_FLAG_UNUSABLE;
-+
-+		/* Disable C1E by clearing the "C1E promotion" bit. */
-+		disable_promotion_to_c1e = true;
-+		return;
-+	}
-+end:
-+	/* Make sure C1E is enabled by default */
-+	c1e_promotion_enable();
-+}
-+
- /**
-  * spr_idle_state_table_update - Adjust Sapphire Rapids idle states table.
-  */
-@@ -1642,6 +1775,10 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
- 	case INTEL_FAM6_SAPPHIRERAPIDS_X:
- 		spr_idle_state_table_update();
- 		break;
-+	case INTEL_FAM6_ALDERLAKE:
-+	case INTEL_FAM6_ALDERLAKE_L:
-+		adl_idle_state_table_update();
-+		break;
- 	}
- 
- 	for (cstate = 0; cstate < CPUIDLE_STATE_MAX; ++cstate) {
--- 
-2.17.1
+Can't we simply change signal_wake_up_state(),
+
+	void signal_wake_up_state(struct task_struct *t, unsigned int state)
+	{
+		set_tsk_thread_flag(t, TIF_SIGPENDING);
+		/*
+		 * TASK_WAKEKILL also means wake it up in the stopped/traced/killable
+		 * case. We don't check t->state here because there is a race with it
+		 * executing another processor and just now entering stopped state.
+		 * By using wake_up_state, we ensure the process will wake up and
+		 * handle its death signal.
+		 */
+		if (wake_up_state(t, state | TASK_INTERRUPTIBLE))
+			t->jobctl &= ~(JOBCTL_STOPPED | JOBCTL_TRACED);
+		else
+			kick_process(t);
+	}
+
+?
+
+> > 		/*
+> > 		 * We take the read lock around doing both checks to close a
+> > 		 * possible race where someone else attaches or detaches our
+> > 		 * natural child.
+> > 		 */
+> > 		read_lock(&tasklist_lock);
+> > 		traced = child->ptrace && child->parent == current;
+> > 		read_unlock(&tasklist_lock);
+> >
+> > 		if (!traced)
+> > 			return -ESRCH;
+>
+> The thing being, that if it is our ptrace child, it won't be going away
+> since we're running this code and not ptrace_detach().  Right?
+
+Yes. and nobody else can detach it.
+
+Another tracer can't attach until child->ptrace is cleared, but this can
+only happen if a) this child is killed and b) another thread does wait()
+and reaps it; but after that attach() is obviously impossible.
+
+But since this child can go away, the patch changes ptrace_freeze_traced()
+to use lock_task_sighand().
+
+> > 		for (;;) {
+> > 			if (fatal_signal_pending(current))
+> > 				return -EINTR;
+>
+> What if signal_wake_up(.resume=true) happens here? In that case we miss
+> the fatal pending, and task state isn't changed yet so we'll happily go
+> sleep.
+
+No, it won't sleep, see the signal_pending_state() check in schedule().
+
+> > 			set_current_state(TASK_KILLABLE);
+
+And let me explain TASK_KILLABLE just in case... We could just use
+TASK_UNINTERRUPTIBLE and avoid the signal_pending() check, but KILLABLE
+looks "safer" to me. If the tracer hangs because of some bug, at least
+it can be killed from userspace.
+
+
+> > 			if (!(READ_ONCE(child->jobctl) & JOBCTL_TRACED)) {
+>
+>   TRACED_XXX ?
+
+oops ;)
+
+> > -	spin_lock_irq(&task->sighand->siglock);
+> >  	if (task_is_traced(task) && !looks_like_a_spurious_pid(task) &&
+> >  	    !__fatal_signal_pending(task)) {
+> >  		task->jobctl |= JOBCTL_TRACED_FROZEN;
+> >  		WRITE_ONCE(task->__state, __TASK_TRACED);
+> >  		ret = true;
+> >  	}
+>
+> I would feel much better if this were still a task_func_call()
+> validating !->on_rq && !->on_cpu.
+
+Well, but "on_rq || on_cpu" would mean that wait_task_inactive() is buggy ?
+
+But! I forgot to make anothet change in this code. I do not think it should
+rely on task_is_traced(). We are going to abuse task->__state, so I think
+it should check task->__state == TASK_TRACED directly. Say,
+
+	if (READ_ONCE(task->__state) == TASK_TRACED && ...) {
+		WRITE_ONCE(task->__state, __TASK_TRACED);
+		WARN_ON_ONCE(!task_is_traced(task));
+		ret = true;
+	}
+
+looks more clean to me. What do you think?
+
+> > @@ -2307,13 +2313,14 @@ static int ptrace_stop(int exit_code, int why, int clear_code,
+> >  		 */
+> >  		if (gstop_done)
+> >  			do_notify_parent_cldstop(current, false, why);
+> > +		clear_traced_xxx();
+> > +		read_unlock(&tasklist_lock);
+> >
+> > -		/* tasklist protects us from ptrace_freeze_traced() */
+> > +		/* JOBCTL_TRACED_XXX protects us from ptrace_freeze_traced() */
+>
+> But... TRACED_XXX has just been cleared ?!
+
+Cough ;) OK, I'll move __set_current_state() back under tasklist.
+
+And in this case we do not need wake_up(parent), so we can shift it from
+clear_traced_xxx() into another branch.
+
+OK, so far it seems that this patch needs a couple of simple fixes you
+pointed out, but before I send V2:
+
+	- do you agree we can avoid JOBCTL_TRACED_FROZEN in 1-2 ?
+
+	- will you agree if I change ptrace_freeze_traced() to rely
+	  on __state == TASK_TRACED rather than task_is_traced() ?
+
+Thanks,
+
+Oleg.
 
