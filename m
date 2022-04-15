@@ -2,196 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28C90502F39
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Apr 2022 21:21:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11399502F96
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Apr 2022 22:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349276AbiDOTWu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Apr 2022 15:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37702 "EHLO
+        id S1351512AbiDOUOJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Apr 2022 16:14:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349450AbiDOTWf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Apr 2022 15:22:35 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2128449CB7;
-        Fri, 15 Apr 2022 12:20:06 -0700 (PDT)
-Message-ID: <20220415161206.934040006@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650050404;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=/7LOTx5hx+68ftEvKF2Kc2mzFZcFNFGa3+VDAnNipgs=;
-        b=GaUoxDIsPqmzxlXffXRK+ealpE55XymsmTSL/XJsrOjViIeYvJ37JvNgZgVlK7gv+dOIW7
-        qWQEMSwdB/NaheS/wdMHBDJpnKAjNKYw80HWKv1DcD3LrAm2npH7ZHbzd/m/wuvf/vUTjW
-        vIXCCav3r6fzk2s/JA5R9hlKbpSqV+OSfAG5PL5Bbt+Hsdf6rGtfsedPGrc6PEr+uctYLQ
-        3Bf2i0wdffu/Xn9oOzvRL+chJZUYrlZ0G8hx33AynsTSVUMGb2QyVl2tt4McIxiOHRH9Hz
-        tCABN3rlmuV9yjmzKatydBi5Oiff9Z1P/wse2hNahQu6Snj9HtLpy3KvmpBlrA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650050404;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=/7LOTx5hx+68ftEvKF2Kc2mzFZcFNFGa3+VDAnNipgs=;
-        b=dAza+VAiQGEv5S45kUuVVsNj3+xxkX4pyoGiKm1qRfoTV/b9TE6V0A9YEQK8Tm6uvfYIoT
-        AglGamnDJTRveqBA==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-pm@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [patch 10/10] x86/aperfmperf: Replace arch_freq_get_on_cpu()
-References: <20220415133356.179706384@linutronix.de>
+        with ESMTP id S240248AbiDOUOJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Apr 2022 16:14:09 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB770D7901
+        for <linux-pm@vger.kernel.org>; Fri, 15 Apr 2022 13:11:39 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id r11so5383199ila.1
+        for <linux-pm@vger.kernel.org>; Fri, 15 Apr 2022 13:11:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0h4kOw13GPXSZXPL1aFf+vHZzuFNnu2SrOyKDVhlRIA=;
+        b=NlhPZwWCO7FasxaGZw/zJ09wLrjrr7u1BX1PCAWm9lk+27gpfhHcbV8F1yi2OAQAeM
+         x76MUCMVaJxluw5Rkb2kNQtgksV9v7BP7p3jJNjQv4LONZLzoHA8iXPqTHGZ9FMg4aWs
+         cAd74g+dn65csQAY0aCQzKINt37eihgLEm5gnZv68kVe8VuLXKTO+SgQlw6zuy7cJks4
+         LTa0omUHRU7t4tZ8XyMMLsoMGNelEs+PbRIiWvtlobkSUQfpksDDsy2FYIAHtOS+0Rtd
+         bk5pZk9Q1Pi9d6yN4zOHNWVuwym8wWlfMC49tnyH+a2Mu2Y1SZkxZUX4DaPDah5zfjR3
+         G9bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0h4kOw13GPXSZXPL1aFf+vHZzuFNnu2SrOyKDVhlRIA=;
+        b=q6JSXyVBVJAdguL/VXoC6vh/Ig0SYIscoqHV5YwUUuZTsSGZg2xT9Ddi06QC36J+Cj
+         /ba95YDZcEYn5s+RkJ9yakZb00iH5iqW4QE4d904USuc9GnphhX2WscxReMQhqwBwQc0
+         lOQLEiVAnDYPm3iLF0CfoKUhkqOya0DPlZmrycX6s0Tql+TaImg0UuatqG6NManqHEyN
+         OKn0OoD+awXU+ZLVeDrMxO1aIb/HheSUFn1WTOFx4bR7VQ0VeSm4ajf5KC/7tG9Qzn+h
+         m63JV6biBTITzJXCDml0SSs31Y+/0fLDOW47VjRJcxOFZKgb2PAu7tJUmbDewocns+LM
+         SgWQ==
+X-Gm-Message-State: AOAM533zsjcagfhLglevFOWdFCvu1lFid3CuQzRVYQVSYwymLbzmnlTS
+        KByM8hcFxeO6uj0PtblIXtBsjg==
+X-Google-Smtp-Source: ABdhPJyTBoYl3cMDgpDoRgLgnManLiP13mZe+WlzTYZ9CFELNXvXNBHNOWQZnOFkuViPHCIJuHoTIQ==
+X-Received: by 2002:a05:6e02:1445:b0:2ca:becb:94fd with SMTP id p5-20020a056e02144500b002cabecb94fdmr200511ilo.98.1650053499173;
+        Fri, 15 Apr 2022 13:11:39 -0700 (PDT)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id w20-20020a056e0213f400b002cac6dfd465sm3107473ilj.69.2022.04.15.13.11.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Apr 2022 13:11:38 -0700 (PDT)
+Message-ID: <efd1815f-54fd-3035-4583-a74601ccce71@linaro.org>
+Date:   Fri, 15 Apr 2022 15:11:37 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 15 Apr 2022 21:20:04 +0200 (CEST)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 3/2] arm64: dts: qcom: sc7180: Remove ipa interconnect
+ node
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        Doug Anderson <dianders@chromium.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Mike Tipton <quic_mdtipton@quicinc.com>,
+        Georgi Djakov <djakov@kernel.org>
+References: <20220412220033.1273607-1-swboyd@chromium.org>
+ <20220415005828.1980055-1-swboyd@chromium.org>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <20220415005828.1980055-1-swboyd@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Reading the current CPU frequency from /sys/..../scaling_cur_freq involves
-in the worst case two IPIs due to the ad hoc sampling.
+On 4/14/22 7:58 PM, Stephen Boyd wrote:
+> This device node is unused now that we've removed the driver that
+> consumed it in the kernel. Drop the unused node to save some space.
+> 
+> Cc: Alex Elder <elder@linaro.org>
+> Cc: Taniya Das <quic_tdas@quicinc.com>
+> Cc: Mike Tipton <quic_mdtipton@quicinc.com>
+> Cc: Georgi Djakov <djakov@kernel.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 
-The frequency invariance infrastructure provides the APERF/MPERF samples
-already. Utilize them and consolidate this with the /proc/cpuinfo readout.
+Looks good to me.
 
-The sample is considered valid for 20ms. So for idle or isolated NOHZ full
-CPUs the function returns 0, which is matching the previous behaviour.
+Reviewed-by: Alex Elder <elder@linaro.org>
 
-The resulting text size vs. the original APERF/MPERF plus the separate
-frequency invariance code:
 
-  text:		2411	->   723
-  init.text:	   0	->   767
-
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
- arch/x86/kernel/cpu/aperfmperf.c |   94 ---------------------------------------
- arch/x86/kernel/cpu/proc.c       |    2 
- 2 files changed, 2 insertions(+), 94 deletions(-)
-
---- a/arch/x86/kernel/cpu/aperfmperf.c
-+++ b/arch/x86/kernel/cpu/aperfmperf.c
-@@ -35,98 +35,6 @@ static DEFINE_PER_CPU_SHARED_ALIGNED(str
- 	.seq = SEQCNT_ZERO(cpu_samples.seq)
- };
- 
--struct aperfmperf_sample {
--	unsigned int	khz;
--	atomic_t	scfpending;
--	ktime_t	time;
--	u64	aperf;
--	u64	mperf;
--};
--
--static DEFINE_PER_CPU(struct aperfmperf_sample, samples);
--
--#define APERFMPERF_CACHE_THRESHOLD_MS	10
--#define APERFMPERF_REFRESH_DELAY_MS	10
--#define APERFMPERF_STALE_THRESHOLD_MS	1000
--
--/*
-- * aperfmperf_snapshot_khz()
-- * On the current CPU, snapshot APERF, MPERF, and jiffies
-- * unless we already did it within 10ms
-- * calculate kHz, save snapshot
-- */
--static void aperfmperf_snapshot_khz(void *dummy)
--{
--	u64 aperf, aperf_delta;
--	u64 mperf, mperf_delta;
--	struct aperfmperf_sample *s = this_cpu_ptr(&samples);
--	unsigned long flags;
--
--	local_irq_save(flags);
--	rdmsrl(MSR_IA32_APERF, aperf);
--	rdmsrl(MSR_IA32_MPERF, mperf);
--	local_irq_restore(flags);
--
--	aperf_delta = aperf - s->aperf;
--	mperf_delta = mperf - s->mperf;
--
--	/*
--	 * There is no architectural guarantee that MPERF
--	 * increments faster than we can read it.
--	 */
--	if (mperf_delta == 0)
--		return;
--
--	s->time = ktime_get();
--	s->aperf = aperf;
--	s->mperf = mperf;
--	s->khz = div64_u64((cpu_khz * aperf_delta), mperf_delta);
--	atomic_set_release(&s->scfpending, 0);
--}
--
--static bool aperfmperf_snapshot_cpu(int cpu, ktime_t now, bool wait)
--{
--	s64 time_delta = ktime_ms_delta(now, per_cpu(samples.time, cpu));
--	struct aperfmperf_sample *s = per_cpu_ptr(&samples, cpu);
--
--	/* Don't bother re-computing within the cache threshold time. */
--	if (time_delta < APERFMPERF_CACHE_THRESHOLD_MS)
--		return true;
--
--	if (!atomic_xchg(&s->scfpending, 1) || wait)
--		smp_call_function_single(cpu, aperfmperf_snapshot_khz, NULL, wait);
--
--	/* Return false if the previous iteration was too long ago. */
--	return time_delta <= APERFMPERF_STALE_THRESHOLD_MS;
--}
--
--unsigned int arch_freq_get_on_cpu(int cpu)
--{
--	struct aperfmperf_sample *s = per_cpu_ptr(&samples, cpu);
--
--	if (!cpu_khz)
--		return 0;
--
--	if (!boot_cpu_has(X86_FEATURE_APERFMPERF))
--		return 0;
--
--	if (!housekeeping_cpu(cpu, HK_TYPE_MISC))
--		return 0;
--
--	if (rcu_is_idle_cpu(cpu))
--		return 0;
--
--	if (aperfmperf_snapshot_cpu(cpu, ktime_get(), true))
--		return per_cpu(samples.khz, cpu);
--
--	msleep(APERFMPERF_REFRESH_DELAY_MS);
--	atomic_set(&s->scfpending, 1);
--	smp_mb(); /* ->scfpending before smp_call_function_single(). */
--	smp_call_function_single(cpu, aperfmperf_snapshot_khz, NULL, 1);
--
--	return per_cpu(samples.khz, cpu);
--}
--
- static void init_counter_refs(void)
- {
- 	u64 aperf, mperf;
-@@ -493,7 +401,7 @@ void arch_scale_freq_tick(void)
-  */
- #define MAX_SAMPLE_AGE	((unsigned long)HZ / 50)
- 
--unsigned int aperfmperf_get_khz(int cpu)
-+unsigned int arch_freq_get_on_cpu(int cpu)
- {
- 	struct aperfmperf *s = per_cpu_ptr(&cpu_samples, cpu);
- 	unsigned long last;
---- a/arch/x86/kernel/cpu/proc.c
-+++ b/arch/x86/kernel/cpu/proc.c
-@@ -84,7 +84,7 @@ static int show_cpuinfo(struct seq_file
- 		seq_printf(m, "microcode\t: 0x%x\n", c->microcode);
- 
- 	if (cpu_has(c, X86_FEATURE_TSC)) {
--		unsigned int freq = aperfmperf_get_khz(cpu);
-+		unsigned int freq = arch_freq_get_on_cpu(cpu);
- 
- 		if (!freq)
- 			freq = cpufreq_quick_get(cpu);
+> ---
+>   arch/arm64/boot/dts/qcom/sc7180.dtsi | 7 -------
+>   1 file changed, 7 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> index e1c46b80f14a..1ff96ef30e3f 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> @@ -1421,13 +1421,6 @@ mmss_noc: interconnect@1740000 {
+>   			qcom,bcm-voters = <&apps_bcm_voter>;
+>   		};
+>   
+> -		ipa_virt: interconnect@1e00000 {
+> -			compatible = "qcom,sc7180-ipa-virt";
+> -			reg = <0 0x01e00000 0 0x1000>;
+> -			#interconnect-cells = <2>;
+> -			qcom,bcm-voters = <&apps_bcm_voter>;
+> -		};
+> -
+>   		ipa: ipa@1e40000 {
+>   			compatible = "qcom,sc7180-ipa";
+>   
 
