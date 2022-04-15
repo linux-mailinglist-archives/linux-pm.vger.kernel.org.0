@@ -2,54 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2292D502082
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Apr 2022 04:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D39C5502509
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Apr 2022 07:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348694AbiDOCd7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 14 Apr 2022 22:33:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
+        id S1350134AbiDOGBz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Apr 2022 02:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348706AbiDOCd4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 14 Apr 2022 22:33:56 -0400
+        with ESMTP id S1347761AbiDOGBy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Apr 2022 02:01:54 -0400
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB393A5F0;
-        Thu, 14 Apr 2022 19:31:26 -0700 (PDT)
-X-UUID: 149aa723d4ab405889f2674279dab145-20220415
-X-UUID: 149aa723d4ab405889f2674279dab145-20220415
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A3F25D3;
+        Thu, 14 Apr 2022 22:59:25 -0700 (PDT)
+X-UUID: ac4f6bc4d73541fd8e970f4724cef24e-20220415
+X-UUID: ac4f6bc4d73541fd8e970f4724cef24e-20220415
 Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
         (envelope-from <rex-bc.chen@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2035343171; Fri, 15 Apr 2022 10:31:19 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 15 Apr 2022 10:31:18 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 15 Apr
- 2022 10:31:18 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+        with ESMTP id 533823461; Fri, 15 Apr 2022 13:59:19 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 15 Apr 2022 13:59:18 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 15 Apr 2022 10:31:18 +0800
-Message-ID: <3fc36d6b803ff3e1bef601839aaca3f4f03e62ad.camel@mediatek.com>
-Subject: Re: [PATCH V2 13/15] cpufreq: mediatek: Link CCI device to CPU
+ Transport; Fri, 15 Apr 2022 13:59:18 +0800
 From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Kevin Hilman <khilman@baylibre.com>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
-        <krzk+dt@kernel.org>
-CC:     <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
-        <roger.lu@mediatek.com>, <hsinyi@google.com>,
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <matthias.bgg@gmail.com>
+CC:     <jia-wei.chang@mediatek.com>, <roger.lu@mediatek.com>,
+        <hsinyi@google.com>, <khilman@baylibre.com>,
+        <angelogioacchino.delregno@collabora.com>,
         <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 15 Apr 2022 10:31:18 +0800
-In-Reply-To: <7hbkx3fiac.fsf@baylibre.com>
-References: <7hbkx3fiac.fsf@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH V3 00/15] cpufreq: mediatek: Cleanup and support MT8183 and MT8186
+Date:   Fri, 15 Apr 2022 13:59:01 +0800
+Message-ID: <20220415055916.28350-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 X-MTK:  N
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
@@ -60,206 +55,69 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 2022-04-14 at 14:48 -0700, Kevin Hilman wrote:
-> Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
-> 
-> > On Wed, 2022-04-13 at 14:41 -0700, Kevin Hilman wrote:
-> > > Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
-> > > 
-> > > [...]
-> > > 
-> > > > From the Chanwoo's devfreq passive govonor series, it's
-> > > > impossible
-> > > > to
-> > > > let cci devreq probed done before cpufreq because the passive
-> > > > govonor
-> > > > will search for cpufreq node and use it.
-> > > > 
-> > > > Ref: function: cpufreq_passive_register_notifier()
-> > > > 
-> > > > 
-> > 
-> > 
-https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/commit/?h=devfreq-testing&id=b670978ddc43eb0c60735c3af6e4a370603ab673__;!!CTRNKA9wMg0ARbw!z58Lc1p9REo88oHn-NkxroN_fBd0TsHYmhscNZwnWwT71ecRkTeqZ6vFl5l7HpkTdM6t$
-> > > >  
-> > > 
-> > > Well this is a problem, because CCI depends on CPUfreq, but
-> > > CPUfreq
-> > > depends on CCI, so one of them has to load and then wait for the
-> > > other.
-> > > 
-> > > > After I discuss with Angelo and Jia-wei, we think we are
-> > > > keeping
-> > > > the
-> > > > function in target_index and if the cci is not ready we will
-> > > > use
-> > > > the
-> > > > voltage which is set by bootloader to prevent high freqeuncy
-> > > > low
-> > > > voltage crash. And then we can keep seting the target
-> > > > frequency.
-> > > > 
-> > > 
-> > >  > We assume the setting of bootloader is correct and we can do
-> > > this.
-> > > 
-> > > I'm still not crazy about this because you're lying to the
-> > > CPUfreq
-> > > framework.  It's requesting one OPP, but you're not setting that,
-> > > you're
-> > > just keeping the bootloader frequency.
-> > > 
-> > > In my earlier reply, I gave two other options for handling this.
-> > > 
-> > > 1) set a (temporary) constraint on the voltage regulator so that
-> > > it
-> > > cannot change.
-> > > 
-> > > or more clean, IMO:
-> > > 
-> > > 2) set a CPUfreq policy that restricts available OPPs to ones
-> > > that
-> > > will
-> > > not break CCI.
-> > > 
-> > > Either of these solutions allow you to load the CPUfreq driver
-> > > early,
-> > > and then wait for the CCI driver to be ready before removing the
-> > > restrictions.
-> > 
-> > Hello Kevin,
-> > 
-> > I think I do not describe this clearly.
-> > The proposal is:
-> > 
-> > In cpufreq probe:
-> > we record the voltage value which is set by bootloader.
-> > 
-> > In mtk_cpufreq_set_target():
-> > We do NOT directly return 0.
-> > Instead, we will find the voltage of target cpufreq and use the
-> > value
-> > max(booting voltage, target cpufreq voltage)
-> > 
-> > mtk_cpufreq_set_target() {
-> > 	/* NOT return 0 if !is_ccifreq_ready */
-> > 	....
-> > 	vproc = get voltage of target cpufreq from opp.
-> > 
-> > 	if (ccifreq_supported && !is_ccifreq_ready)
-> > 		vproc = max(vproc, vproc_on_boot)
-> > 
-> > 	//setting voltage and target frequency
-> > 	....
-> > }
-> 
-> You explained this well, but it's still not an appropriate solution
-> IMO,
-> because you're still not setting the target that is requested by the
-> CPUfreq core.
-> 
-> The job of ->set_target() is to set the frequency *requested by
-> CPUfreq
-> core*.  If you cannot do that, you should return failure.  What you
-> posted
-> in the original patch and what you're proposing here is to ignore the
-> frequency passed to ->set_target() and do something else.  In the
-> orignal patch, you propose do to nothing.  Now, you're ignoring the 
-> target passed in and setting something else.  In both cases, the
-> CPUfreq
-> core things you have successfuly set the frequency requested, but you
-> have not.  This means there's a mismatch between what the CPUfreq
-> core &
-> governer things the frequency is and what is actually set.  *This* is
-> the part that I think is wrong.
-> 
-> Instead, the proper way of restricting available frequencies is to
-> use
-> governors or policies.  This ensures that the core & governors are
-> aligned with what the platform driver actually does.
-> 
-> As I proposed earlier, I think a clean solution to this problem is to
-> create a temporary policy at probe time that restricts the available
-> OPPs based on what the current CCI freq/voltage are.  Once CCI driver
-> is
-> loaded and working, this policy can be removed.
-> 
-> Kevin
-> 
-> 
+Cpufreq is a DVFS driver used for power saving to scale the clock frequency
+and supply the voltage for CPUs. This series do some cleanup for MediaTek
+cpufreq drivers and add support for MediaTek SVS[2] and MediaTek CCI
+devfreq[3] which are supported in MT8183 and MT8186.
 
-Hello Kevin,
+Changes for V3:
+1. Rebased to linux-next-20220414.
+2. Drop accepted patches.
+3. Drop "cpufreq: mediatek: Use maximum voltage in init stage" because we
+   make sure the voltage we set is safe for both mediatek cci and cpufreq.
+4. Rename cci property to mediatek,cci.
+5. Adjust order of cleanup patches.
+6. Add new patches for cleanup, handle infinite loop and MT8183 dts.
+7. Revise drivers from reviewers' suggestion.
+8. Revise commit message of some patches to avoid confusion and misunderstand.
+9. Revise "cpufreq: mediatek: Link CCI device to CPU".
+   We do not return successful to pretend we set the target frequency done
+   when cci is not ready. Instead, we find and set a safe voltage so that we
+   can set the target cpufrequency.
 
-In new proposal, we DO set the cpufreq passed by cpufreq core.
-We just not set the corresponding voltage of target frequency which
-is lookedup from opp table.
-Actually, because of the shared regulator, corresponding voltage is
-not always set.
+Changes for V2:
+1. Drop the modification of transforming cpufreq-mediatek into yaml and
+   only add the MediaTek CCI property for MediaTek cpufreq.
+2. Split the original patches into several patches.
 
-I take this for example:
-----------
-Assumption:
-- The opp table and voltage in this example are just a example,
-  and it is not for any actual SoCs.
-- We just use one regulator instead of two. (like proc and sram)
-- cpufreq and mediatek cci devfreq share the same regulator_0.
+Reference series:
+[1]: V1 of this series is present by Jia-Wei Chang.
+     message-id:20220307122151.11666-1-jia-wei.chang@mediatek.com
 
-OPP table for cpufreq:
-target freq => min reguired voltage
-2.0GHz => 1.0V
-1.8GHZ => 0.9V
-1.5GHz => 0.6V
+[2]: The MediaTek CCI devfreq driver is introduced in another series.
+     message-id:20220408052150.22536-1-johnson.wang@mediatek.com
 
-OPP table for mediatek cci devfreq:
-target freq => min reguired voltage
-1.4GHz => 1.2V
-1.0GHz => 0.8V
+[3]: The MediaTek SVS driver is introduced in another series.
+     message-id:20220221063939.14969-1-roger.lu@mediatek.com
 
-1. For normal case:
-   (regulator_0 is already registered by cpufreq and cci)
-   - When the cpufreq want to adjust to 1.5GHz, from the opp table the
-     voltage sholud be 0.6V.
-   - When the cci want to adjust to 1.4GHz, from the opp table the
-     voltage sholud be 1.2V.
-   - cpufreq driver use the regulator_set_voltage() to set the
-     voltage, but the function will use 1.2V(ref:[1])
+Andrew-sh.Cheng (1):
+  cpufreq: mediatek: Add opp notification support
 
-2. For our new proposed solution:
-   (regulator_0 is registered by cpufreq but is not registered by cci)
-   - Assume the freqs when booting to kernel are:
-     1.8GHz for cpufreq (min 0.9V) and 1.0GHz for cci (min 0.8V).
-     The voltage when booting to kernel(voltage_on_boot) should be 0.9V
-	 to let cpufreq and cci work correctly.
-   - When cpufreq want to set target freq to 1.5GHz the voltage from
-     opp table is 0.6V and we compare this voltage with
-voltage_on_boot(0.9V).
-	 We will choose the max voltage 0.9V to prevent crash issue.
-	 (This is original covered by regulator_set_voltage()
-	  if regulator_0 is registered by both cci and cpufre.)
-	- When the voltage is choosed, we will set the cpufreq to
-1.5GHz while
-	  the voltage is safe for both cpufreq and cci.
-----------
+Jia-Wei Chang (8):
+  dt-bindings: cpufreq: mediatek: Add MediaTek CCI property
+  cpufreq: mediatek: Record previous target vproc value
+  cpufreq: mediatek: Move voltage limits to platform data
+  cpufreq: mediatek: Add .get function
+  cpufreq: mediatek: Make sram regulator optional
+  cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()
+  cpufreq: mediatek: Link CCI device to CPU
+  cpufreq: mediatek: Add support for MT8186
 
-In summary, we think it's a proper solution to cover the situation
-when cci is not probed.
+Rex-BC Chen (6):
+  cpufreq: mediatek: Use device print to show logs
+  cpufreq: mediatek: Replace old_* with pre_*
+  cpufreq: mediatek: Add counter to prevent infinite loop when tracking voltage
+  arm64: dts: mediatek: Add opp table and clock property for MT8183 cpufreq
+  arm64: dts: mediatek: Add MediaTek CCI node for MT8183
+  arm64: dts: mediatek: Add mediatek,cci property for MT8183 cpufreq
 
-I think there is something to improve:
-We can choose to lookup cci opp table using cci freq to determine
-the voltage instead of voltage_on_boot.
-But IMO, it's not neccessary to register cci opp table inside cpufreq
-driver just for the short period.
+ .../bindings/cpufreq/cpufreq-mediatek.txt     |   5 +
+ arch/arm64/boot/dts/mediatek/mt8183-evb.dts   |  36 ++
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   4 +
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      | 285 ++++++++++
+ drivers/cpufreq/mediatek-cpufreq.c            | 497 ++++++++++++------
+ 5 files changed, 664 insertions(+), 163 deletions(-)
 
-Because I finish to prepare other patches and I think we also can
-take a look at other patches which are including some cleanup, I will
-send next version today.
-If there is any concern and question, we can discuss in next version.
-
-Thanks for your big support!
-
-[1]:
-https://elixir.bootlin.com/linux/latest/source/drivers/regulator/core.c#L4022
-
-BRs,
-Rex
+-- 
+2.18.0
 
