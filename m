@@ -2,146 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15F48502532
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Apr 2022 08:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 012A650254D
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Apr 2022 08:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350319AbiDOGCF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Apr 2022 02:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
+        id S243431AbiDOGJF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Apr 2022 02:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350194AbiDOGB5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Apr 2022 02:01:57 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF496B842;
-        Thu, 14 Apr 2022 22:59:29 -0700 (PDT)
-X-UUID: b4862574795d4448981254f2a8751af7-20220415
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:ffeb35f2-6b98-45a7-b736-b3f3b644d2b0,OB:0,LO
-        B:90,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,A
-        CTION:release,TS:100
-X-CID-INFO: VERSION:1.1.4,REQID:ffeb35f2-6b98-45a7-b736-b3f3b644d2b0,OB:0,LOB:
-        90,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,A
-        CTION:quarantine,TS:100
-X-CID-META: VersionHash:faefae9,CLOUDID:4c997678-0afa-4dca-bdec-ca54c998425a,C
-        OID:FAIL,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil,Q
-        S:0,BEC:nil
-X-UUID: b4862574795d4448981254f2a8751af7-20220415
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 719029688; Fri, 15 Apr 2022 13:59:21 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 15 Apr 2022 13:59:20 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 15 Apr 2022 13:59:20 +0800
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-        <matthias.bgg@gmail.com>
-CC:     <jia-wei.chang@mediatek.com>, <roger.lu@mediatek.com>,
-        <hsinyi@google.com>, <khilman@baylibre.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Subject: [PATCH V3 15/15] arm64: dts: mediatek: Add mediatek,cci property for MT8183 cpufreq
-Date:   Fri, 15 Apr 2022 13:59:16 +0800
-Message-ID: <20220415055916.28350-16-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220415055916.28350-1-rex-bc.chen@mediatek.com>
-References: <20220415055916.28350-1-rex-bc.chen@mediatek.com>
+        with ESMTP id S242876AbiDOGJE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Apr 2022 02:09:04 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DB9AAB6A
+        for <linux-pm@vger.kernel.org>; Thu, 14 Apr 2022 23:06:37 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id c125so274066iof.9
+        for <linux-pm@vger.kernel.org>; Thu, 14 Apr 2022 23:06:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EjdPQf7qMEmsnQdH9Lsin89rXivDvbUmZSVyW8V6lRQ=;
+        b=erKpGsHFd5Sf9kS9SBDMU6QT8/q3BhnoONJ7PogKQu44iphr3NmgCTbUu+235pDAum
+         VEBQFxa9m9zXu1dqSlPlXwJ68Jx2bHdW2ql9b6ieFJ7EWjUsNzEO9RimzV/WWOTTOc/O
+         DltZ34da7CLDFx9Vx11twYDGL0VG7ea1pRLckFXvjgI7VZ//rPV5PyPR90uZ8TajWXoP
+         EOBLnKU7jpXCxt+j3XklhjfOB+yhUlj5a43BEe0GAzfghknM6GHrSQYLpYJaLmyDtLXZ
+         R+f4cWein/LjrsYMSqsAwnjgA1/IMCrkDnArIdnFrUn9xKnfqBW06l8cW8it9Wh50BJ8
+         KjOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EjdPQf7qMEmsnQdH9Lsin89rXivDvbUmZSVyW8V6lRQ=;
+        b=BloStJ4qNgjJS2wu4Fmc5Atd/NnoUCwvuiQ5t+DofZnVp8JZIDqJ39Q0zxdewIocVf
+         mQEAEVdrSEkRo/rsmNjhXq0fyGeiIXE6SgLbrzAbAE7KtMgeo9gS0ZrQUms1/PnyQ1tl
+         WKS72bFg3FVLI+nnuJfjATLX/fOHb3v0d69RITGFT6hCZ7kwS40RMZh5RfvBB8VneHn3
+         IAYkFqGFPd6HHsxmlEWp12NtcLMyWHsh3TkA0J4aDQ398QxfqncxX6y6VVeMQRrOZQQ6
+         enPYHhujLIrgsvCwkyStNs6PrMIja8fsIgPYjQRv8G5nNRwzk+8zhbmwx9tUCOF7yimb
+         uOJw==
+X-Gm-Message-State: AOAM5315D63mMI78Ov1CPaQWpkuqNupe/UD2yFhUusEmuwFEliYuvKWT
+        3qJ14EXmpj3LGrGzUqof63J/LLZFQgJeFZDNxURtqQ==
+X-Google-Smtp-Source: ABdhPJyjRqRUmRRe3KwbqxZCJb6fy3VByM/fYMcpxwZINn7YjR12Uuc+96kV22moycRPWDOAIcATyEFMgg6Uiu0fTSY=
+X-Received: by 2002:a05:6638:2402:b0:326:5418:f73a with SMTP id
+ z2-20020a056638240200b003265418f73amr3094380jat.170.1650002796757; Thu, 14
+ Apr 2022 23:06:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220415055916.28350-1-rex-bc.chen@mediatek.com> <20220415055916.28350-15-rex-bc.chen@mediatek.com>
+In-Reply-To: <20220415055916.28350-15-rex-bc.chen@mediatek.com>
+From:   Hsin-Yi Wang <hsinyi@google.com>
+Date:   Fri, 15 Apr 2022 14:06:10 +0800
+Message-ID: <CACb=7PXmA_n-xAb+ZkRJdTXu=Enbf6NbyxVa3VC1zmJwsrgQ1w@mail.gmail.com>
+Subject: Re: [PATCH V3 14/15] arm64: dts: mediatek: Add MediaTek CCI node for MT8183
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     rafael@kernel.org, Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, krzk+dt@kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tim Chang <jia-wei.chang@mediatek.com>, roger.lu@mediatek.com,
+        Kevin Hilman <khilman@baylibre.com>,
+        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        "Andrew-sh . Cheng" <andrew-sh.cheng@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add mediatek,cci property to support MediaTek CCI feature.
+On Fri, Apr 15, 2022 at 1:59 PM Rex-BC Chen <rex-bc.chen@mediatek.com> wrote:
+>
+> Add MediaTek CCI devfreq node for MT8183.
+>
+> Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> ---
+>  arch/arm64/boot/dts/mediatek/mt8183-evb.dts    | 4 ++++
+>  arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 4 ++++
+>  arch/arm64/boot/dts/mediatek/mt8183.dtsi       | 7 +++++++
+>  3 files changed, 15 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
+> index 8953dbf84f3e..7ac9864db9de 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
+> @@ -412,6 +412,10 @@
+>
+>  };
+>
+> +&cci {
+> +       proc-supply = <&mt6358_vproc12_reg>;
+> +};
+> +
+>  &cpu0 {
+>         proc-supply = <&mt6358_vproc12_reg>;
+>  };
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+> index 0f9480f91261..4786a32ee975 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+> @@ -230,6 +230,10 @@
+>         status = "okay";
+>  };
+>
+> +&cci {
+> +       proc-supply = <&mt6358_vproc12_reg>;
+> +};
+> +
+>  &cpu0 {
+>         proc-supply = <&mt6358_vproc12_reg>;
+>  };
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> index 4ae3305d16d2..334728413582 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> @@ -280,6 +280,13 @@
+>                 };
+>         };
+>
+> +       cci: cci {
+> +               compatible = "mediatek,mt8183-cci";
+> +               clocks = <&apmixedsys CLK_APMIXED_CCIPLL>;
+> +               clock-names = "cci_clock";
+> +               operating-points-v2 = <&cci_opp>;
 
-Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
----
- arch/arm64/boot/dts/mediatek/mt8183.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+hi Rex,
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 334728413582..03b5941796d9 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -336,6 +336,7 @@
- 			operating-points-v2 = <&cluster0_opp>;
- 			dynamic-power-coefficient = <84>;
- 			#cooling-cells = <2>;
-+			mediatek,cci = <&cci>;
- 		};
- 
- 		cpu1: cpu@1 {
-@@ -351,6 +352,7 @@
- 			operating-points-v2 = <&cluster0_opp>;
- 			dynamic-power-coefficient = <84>;
- 			#cooling-cells = <2>;
-+			mediatek,cci = <&cci>;
- 		};
- 
- 		cpu2: cpu@2 {
-@@ -366,6 +368,7 @@
- 			operating-points-v2 = <&cluster0_opp>;
- 			dynamic-power-coefficient = <84>;
- 			#cooling-cells = <2>;
-+			mediatek,cci = <&cci>;
- 		};
- 
- 		cpu3: cpu@3 {
-@@ -381,6 +384,7 @@
- 			operating-points-v2 = <&cluster0_opp>;
- 			dynamic-power-coefficient = <84>;
- 			#cooling-cells = <2>;
-+			mediatek,cci = <&cci>;
- 		};
- 
- 		cpu4: cpu@100 {
-@@ -396,6 +400,7 @@
- 			operating-points-v2 = <&cluster1_opp>;
- 			dynamic-power-coefficient = <211>;
- 			#cooling-cells = <2>;
-+			mediatek,cci = <&cci>;
- 		};
- 
- 		cpu5: cpu@101 {
-@@ -411,6 +416,7 @@
- 			operating-points-v2 = <&cluster1_opp>;
- 			dynamic-power-coefficient = <211>;
- 			#cooling-cells = <2>;
-+			mediatek,cci = <&cci>;
- 		};
- 
- 		cpu6: cpu@102 {
-@@ -426,6 +432,7 @@
- 			operating-points-v2 = <&cluster1_opp>;
- 			dynamic-power-coefficient = <211>;
- 			#cooling-cells = <2>;
-+			mediatek,cci = <&cci>;
- 		};
- 
- 		cpu7: cpu@103 {
-@@ -441,6 +448,7 @@
- 			operating-points-v2 = <&cluster1_opp>;
- 			dynamic-power-coefficient = <211>;
- 			#cooling-cells = <2>;
-+			mediatek,cci = <&cci>;
- 		};
- 
- 		idle-states {
--- 
-2.18.0
+cci_opp is not defined in dts.
 
+> +       };
+> +
+>         cpus {
+>                 #address-cells = <1>;
+>                 #size-cells = <0>;
+> --
+> 2.18.0
+>
