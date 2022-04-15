@@ -2,77 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1BC502F9E
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Apr 2022 22:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76629502FD2
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Apr 2022 22:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351868AbiDOURy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Apr 2022 16:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46602 "EHLO
+        id S1350531AbiDOUlN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Apr 2022 16:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351859AbiDOURx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Apr 2022 16:17:53 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205AA3B034
-        for <linux-pm@vger.kernel.org>; Fri, 15 Apr 2022 13:15:24 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id cp8so3534276qtb.6
-        for <linux-pm@vger.kernel.org>; Fri, 15 Apr 2022 13:15:24 -0700 (PDT)
+        with ESMTP id S232478AbiDOUlN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Apr 2022 16:41:13 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F0272441
+        for <linux-pm@vger.kernel.org>; Fri, 15 Apr 2022 13:38:43 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id u19so15581890lff.4
+        for <linux-pm@vger.kernel.org>; Fri, 15 Apr 2022 13:38:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=AVlaJ3+JyBV6uy3xWobzUMDIswV9zZwop66b5nDrPzo=;
-        b=wSdp3PScNWgt43IiKr/hciI5s/OwStC/qks/OfNtWzDi5vqCFYT1i4FUnT/yyo45y7
-         I2QnHgsoHk/9Fon0tTmegIm+Qk1aHed2P7V1tJgFrNo+gP8syAbBrI5XUouhDZ8LkI67
-         LAzOTg08807jITxKhC2Ikja3M7B9BJd9GeGIelqA3Px1WYCFkdvhPdxPO3l2A3sdMgpR
-         gY2kU4MnkUGQLd6uiuPhOkILltUAsVyS8zuvC9tjKksHf1+t0DX7rgHNUTSbza/xKkQ+
-         mYTONn6lSMFITX2u4+9HlpWlOa3t88u1ui9j/fiiUtPhA2GtctviRH9RO0i1vweJNzyp
-         60tQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EhELGrOOVgPcFGtEJejZf0g2WHh5ZLOtbqA5koG44Zk=;
+        b=HDu27UTTZdHUtpoBv1b3CepLj+1upxM+qaiL2dsqgFof9mEk2bRlhAHGCQfDNcB6a+
+         4092ggnSe1P8PMZwVxtgBfO3U1Wnf1NxXdkYP/xb9vZ4UNl/deOQvahLEnZ7iFeNI57O
+         rjuRRG/AenvrSI+l9qrXfihHoWFBnE5ZJ2PyxvA+4+u+4K2ydjTKpjxo6afGZ7lB9tjp
+         TY6DMofa+gr4bvLywZOgph45YKBnq2yE+U2Bd9qrAhDKtjX7uFmh4cXvb6YuywuZV2wb
+         TCcQD8riGj0VJlQCQqujuOoTS6bu8Y3d4IgyJvx68GSk3DVfA+Dw7EZK+5lFRg7NiLuN
+         MvJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=AVlaJ3+JyBV6uy3xWobzUMDIswV9zZwop66b5nDrPzo=;
-        b=j9whdILm1XK4h78jAcr3vPhPAmMIjUi+ou/5OKZke00XsYqHTR3AHO1WMCY3kgNgCx
-         hCQznQS0ibEhPw4HkJKArHEwvT0kB9weeBjyoWFFUHsRwUxbl8NOsd1Roo9O/U4BEegP
-         ATdu4Qc9PBAj6h8pIYkqb3mSf8Dv056ZPPU+PiNuD0aPRhyZdn9EDmUxbXtydzJuFzDh
-         mM5ikvnSyRDtFvXKioeOmUnYgaMq2kKcSvdb6U4Sj2UkHbQ8C0SCmyHbwQZsuuCWdgQp
-         hSOrioCBH/NH7U0fmwT/GGRGKYaD5JCqj88DGc1AEgDtamxq7g7DvG4D4rvjV/tgfBkM
-         pNJw==
-X-Gm-Message-State: AOAM531NtxnA9tDRywBcyy37YXGub2xsI7+NMizkPiQjuVwpFp6DDCu8
-        q8d+JVyjFzlCx0k43/jaUkBSgg==
-X-Google-Smtp-Source: ABdhPJyeAw9SUhcl+oEJ0iNchLSf6F+3IxtcHl+vy/czuU6D6/1++E3JAQBfCLpeJMs+r5OYN919yg==
-X-Received: by 2002:a05:622a:1987:b0:2f1:df49:44fa with SMTP id u7-20020a05622a198700b002f1df4944famr588791qtc.125.1650053723200;
-        Fri, 15 Apr 2022 13:15:23 -0700 (PDT)
-Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id y15-20020a05620a09cf00b0069c80404de6sm2168915qky.31.2022.04.15.13.15.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 13:15:22 -0700 (PDT)
-Message-ID: <d32fc9f8-65cd-a30f-cdf2-f019bbe7cd69@linaro.org>
-Date:   Fri, 15 Apr 2022 15:15:21 -0500
+        bh=EhELGrOOVgPcFGtEJejZf0g2WHh5ZLOtbqA5koG44Zk=;
+        b=m0ccUXovKtCE9pIg+764h+fzXBZ+HbVTvzS3njnZKyFtdFrYcDTXUtYBquQ3rXe+xU
+         oyMvaHqgvcQxRWGqOwpXet5e0v4RnignG/tLpwte7okCD2aIXp+BkAeneyeS0rDA8K7G
+         1AL2NHa1z7QyRw2AlVuli1nZf5oR1PGEL4UjYcGtYqnb6T7Z4HuT9soNqlpebvYEKXR+
+         BoKZVTBqpueCW8oKwXm7pAzm8kJ6ax7AgDxjYzqBvzfXVZlJz6xc9XbQLYXHE+MM1ibM
+         cYL9Age621AhQX0oh5kXfr5lQlfr4oykcKc7CnRqyDtpqFBznS2WUd8Adl6miB33VM2q
+         RqLw==
+X-Gm-Message-State: AOAM531OumuRCm6/9jvgrElhZd4DPkt4LXGeimw5r2UpCaFhkmqBFwiL
+        sRRZrQMTsF56Gciu3gSM4oAWExhiuOnp0g==
+X-Google-Smtp-Source: ABdhPJwi0qhXhfOHOcJgoD32uFe8VmPnylacVML1fpXFs/DOS0TtjISzM5TfDUaN0DhWk6FaHkOnMg==
+X-Received: by 2002:a19:505e:0:b0:46d:12df:d6b3 with SMTP id z30-20020a19505e000000b0046d12dfd6b3mr428121lfj.111.1650055122076;
+        Fri, 15 Apr 2022 13:38:42 -0700 (PDT)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id r9-20020a2e94c9000000b0024b4c2a1346sm375318ljh.123.2022.04.15.13.38.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 13:38:41 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Marcus Cooper <codekipper@gmail.com>
+Cc:     linux-pm@vger.kernel.org,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 1/2] power: supply: ab8500: Respect charge_restart_voltage_uv
+Date:   Fri, 15 Apr 2022 22:36:37 +0200
+Message-Id: <20220415203638.361074-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 5/2] dt-bindings: interconnect: Remove sc7180/sdx55 ipa
- compatibles
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        Doug Anderson <dianders@chromium.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Mike Tipton <quic_mdtipton@quicinc.com>
-References: <20220412220033.1273607-1-swboyd@chromium.org>
- <20220415005828.1980055-1-swboyd@chromium.org>
- <20220415005828.1980055-3-swboyd@chromium.org>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <20220415005828.1980055-3-swboyd@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,51 +69,67 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 4/14/22 7:58 PM, Stephen Boyd wrote:
-> These interconnects are modeled as clks, not interconnects, therefore
-> remove the compatibles from the binding as they're unused.
-> 
-> Cc: Alex Elder <elder@linaro.org>
-> Cc: Taniya Das <quic_tdas@quicinc.com>
-> Cc: Mike Tipton <quic_mdtipton@quicinc.com>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+The battery info contains a voltage indicating when the voltage
+is so low that it is time to restart the CC/CV charging.
+Make the AB8500 respect and prioritize this setting over the
+hardcoded 95% threshold.
 
-What's the proper thing to do for properties that stop being
-used?  Do we delete them, like this, or deprecate them somehow?
-Old DTBs might define the values that are deleted here.
+Break out the check into its own function and add some safeguards
+so we do not run into unpredictable side effects.
 
-Shouldn't devicetree@vger.kernel.org
-  be copied on this and
-the other DTS patches?
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ drivers/power/supply/ab8500_chargalg.c | 30 +++++++++++++++++++++++++-
+ 1 file changed, 29 insertions(+), 1 deletion(-)
 
-					-Alex
-
-> ---
-> 
-> I don't know who should apply this. Probably whoever takes the dtsi
-> patches, Bjorn?, because otherwise dt_bindings_check will fail.
-> 
->   Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> index 5a911be0c2ea..ab859150c7f7 100644
-> --- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> @@ -31,7 +31,6 @@ properties:
->         - qcom,sc7180-config-noc
->         - qcom,sc7180-dc-noc
->         - qcom,sc7180-gem-noc
-> -      - qcom,sc7180-ipa-virt
->         - qcom,sc7180-mc-virt
->         - qcom,sc7180-mmss-noc
->         - qcom,sc7180-npu-noc
-> @@ -68,7 +67,6 @@ properties:
->         - qcom,sdm845-mem-noc
->         - qcom,sdm845-mmss-noc
->         - qcom,sdm845-system-noc
-> -      - qcom,sdx55-ipa-virt
->         - qcom,sdx55-mc-virt
->         - qcom,sdx55-mem-noc
->         - qcom,sdx55-system-noc
+diff --git a/drivers/power/supply/ab8500_chargalg.c b/drivers/power/supply/ab8500_chargalg.c
+index 94c22fdfe963..b9622eb9fc72 100644
+--- a/drivers/power/supply/ab8500_chargalg.c
++++ b/drivers/power/supply/ab8500_chargalg.c
+@@ -1216,6 +1216,34 @@ static void ab8500_chargalg_external_power_changed(struct power_supply *psy)
+ 		queue_work(di->chargalg_wq, &di->chargalg_work);
+ }
+ 
++/**
++ * ab8500_chargalg_time_to_restart() - time to restart CC/CV charging?
++ * @di: charging algorithm state
++ *
++ * This checks if the voltage or capacity of the battery has fallen so
++ * low that we need to restart the CC/CV charge cycle.
++ */
++static bool ab8500_chargalg_time_to_restart(struct ab8500_chargalg *di)
++{
++	struct power_supply_battery_info *bi = di->bm->bi;
++
++	/* Sanity check - these need to have some reasonable values */
++	if (!di->batt_data.volt_uv || !di->batt_data.percent)
++		return false;
++
++	/* Some batteries tell us at which voltage we should restart charging */
++	if (bi->charge_restart_voltage_uv > 0) {
++		if (di->batt_data.volt_uv <= bi->charge_restart_voltage_uv)
++			return true;
++		/* Else we restart as we reach a certain capacity */
++	} else {
++		if (di->batt_data.percent <= AB8500_RECHARGE_CAP)
++			return true;
++	}
++
++	return false;
++}
++
+ /**
+  * ab8500_chargalg_algorithm() - Main function for the algorithm
+  * @di:		pointer to the ab8500_chargalg structure
+@@ -1459,7 +1487,7 @@ static void ab8500_chargalg_algorithm(struct ab8500_chargalg *di)
+ 		fallthrough;
+ 
+ 	case STATE_WAIT_FOR_RECHARGE:
+-		if (di->batt_data.percent <= AB8500_RECHARGE_CAP)
++		if (ab8500_chargalg_time_to_restart(di))
+ 			ab8500_chargalg_state_to(di, STATE_NORMAL_INIT);
+ 		break;
+ 
+-- 
+2.35.1
 
