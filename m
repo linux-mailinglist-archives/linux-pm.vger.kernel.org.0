@@ -2,103 +2,273 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E9C502FD6
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Apr 2022 22:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E040E5032F5
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Apr 2022 07:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351342AbiDOUni (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Apr 2022 16:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49348 "EHLO
+        id S1356697AbiDPAHN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Apr 2022 20:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242926AbiDOUnh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Apr 2022 16:43:37 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED721D53
-        for <linux-pm@vger.kernel.org>; Fri, 15 Apr 2022 13:41:06 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id u19so15588837lff.4
-        for <linux-pm@vger.kernel.org>; Fri, 15 Apr 2022 13:41:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qHbjb2TfBARbvzWbfKXkyTdL+m7r0LW5kyFk/mbRIr0=;
-        b=j0FtftBhi2NFsxyP4jfwVArQH+8y7k11/NbXRLe7+Pbq3ISI3Br+t5tB+isMn4vCla
-         uz+CbEv2XKKCgkDMiyEo1jgHSicVG9gjM2Q+dSNGTLzwlzKJkHJWuvVY9+XEAVi6IgJ8
-         fIt2F3YefNfPKUnRsSoow1mkAJ6aqL2Af9pRDKuH3iWGJXAlWd/rEtzuwOnmJS5JpTYr
-         pESD0rotVwS5y+HzoT8cHPJ0yf7HlLl0xGdOVJwgjBpfTYZaQzzp+mIQuz1Q3JBYrT4K
-         2047bFi7+0SU7KBjuljytxU91zGhv66DltrxOzCj4istpWTvFdo3RCQz/DX9tok3csnU
-         RgAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qHbjb2TfBARbvzWbfKXkyTdL+m7r0LW5kyFk/mbRIr0=;
-        b=kQW2LOoe+/1TCN2rzW2CT9y8N6hvetqNB9MRJ75kOvBO/FmJ3GjsBZw3JUIbCioPM5
-         udEGeD7fprM1xA4mLMx/QJvsWARdaHBC0gJRE+RiMnhTkAoz7gKGI3v6bbxmqLHWrBMF
-         rB4CF0O9yoVeKQ6dkPWKoMT8/fx2Bj2VBusAEYjjdKk/tLgEsUXAxKbVzInfottpg7Kg
-         C0oi8FZYtjK96bMhwRsvQ354mx+NhlpSVJrIUERXBoWZ9IGaDBaQtv9bqNWkNlcGRZpB
-         Wa4Jt7olYzIeF+lp5lpOaLV62/LDRlzYt0hrlD7v8t2DyNuSZt6FLgiONw+yxlBpi23C
-         M2ow==
-X-Gm-Message-State: AOAM532X1IKDU6BtTkdBqrbKS+xUwmGmW2oKBVB+qOGgmTUZ9KrtDBl3
-        vczS24U6NmLB9q/vu7PbBZ6TkQ==
-X-Google-Smtp-Source: ABdhPJwN+LiMi6/3kdcPIWeT8wScHX4Z94ASjXKDegavFXwlHS+8YBYEb5Zkk0iHssnH1lcfKNfD8Q==
-X-Received: by 2002:a05:6512:13a6:b0:44a:3b54:42cd with SMTP id p38-20020a05651213a600b0044a3b5442cdmr432932lfa.73.1650055265269;
-        Fri, 15 Apr 2022 13:41:05 -0700 (PDT)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id i8-20020a196d08000000b0046d09ac99e0sm448144lfc.107.2022.04.15.13.41.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 13:41:04 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Marcus Cooper <codekipper@gmail.com>
-Cc:     linux-pm@vger.kernel.org,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH] power: supply: samsung: Add missing charge restart voltages
-Date:   Fri, 15 Apr 2022 22:39:02 +0200
-Message-Id: <20220415203902.361177-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S1356693AbiDPAHM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Apr 2022 20:07:12 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDA3220CB;
+        Fri, 15 Apr 2022 17:04:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650067482; x=1681603482;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HSZPWAGVL0OCHmyMupnEy3BzizzwkFnuvdX77ziaNz8=;
+  b=Ir16WKRlr25IdrMClswg0mvskXKBc9Xze0wVjOu9EPCldeo/clF7gspc
+   lRoSANgqz2sUlb75uNMj5hq6Frd7DFiTK9PtyFeNehTf0hm2uIYvO4w9O
+   k9te6B4JQEND67dMLEVWKMiiy0A6GLflK5Wsb1cplq8GLsKm3Y1LaxL07
+   T2Yk7lF1f/ZD8IA79tBLokSHNsobPPHMRddO/EtZvfRePYXCHM/jsT7U1
+   S1CVf9+r5UgKFwh/+D9ny09DeWrG1YGJ5FC+/SqGIDQIXVV2lT3voB6b/
+   dX/8FVoJpUMEFsrz33bCGAf5gjJn3Ycy5AG00q0miTlWJXE2sbovD3tkK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="262712083"
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="262712083"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 17:04:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="509115384"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 15 Apr 2022 17:04:40 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nfVvb-0002Yz-JJ;
+        Sat, 16 Apr 2022 00:04:39 +0000
+Date:   Sat, 16 Apr 2022 08:04:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 5675fd487f2b221a27a44f6ac78bdb2e5f235052
+Message-ID: <625a0814.ppOYLNShBLe1ZHKS%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Two of the batteries were missing charging restart voltages,
-meaning they can drain if the algorithm relies on restarting
-charging at this voltage. Fix it up.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 5675fd487f2b221a27a44f6ac78bdb2e5f235052  Merge branch 'thermal-misc' into linux-next
 
-Fixes: c8aee3f41cb8 ("power: supply: Static data for Samsung batteries")
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/power/supply/samsung-sdi-battery.c | 2 ++
- 1 file changed, 2 insertions(+)
+elapsed time: 1802m
 
-diff --git a/drivers/power/supply/samsung-sdi-battery.c b/drivers/power/supply/samsung-sdi-battery.c
-index 9d59f277f519..b33daab798b9 100644
---- a/drivers/power/supply/samsung-sdi-battery.c
-+++ b/drivers/power/supply/samsung-sdi-battery.c
-@@ -824,6 +824,7 @@ static struct samsung_sdi_battery samsung_sdi_batteries[] = {
- 			.constant_charge_current_max_ua = 900000,
- 			.constant_charge_voltage_max_uv = 4200000,
- 			.charge_term_current_ua = 200000,
-+			.charge_restart_voltage_uv = 4170000,
- 			.maintenance_charge = samsung_maint_charge_table,
- 			.maintenance_charge_size = ARRAY_SIZE(samsung_maint_charge_table),
- 			.alert_low_temp_charge_current_ua = 300000,
-@@ -867,6 +868,7 @@ static struct samsung_sdi_battery samsung_sdi_batteries[] = {
- 			.constant_charge_current_max_ua = 1500000,
- 			.constant_charge_voltage_max_uv = 4350000,
- 			.charge_term_current_ua = 120000,
-+			.charge_restart_voltage_uv = 4300000,
- 			.maintenance_charge = samsung_maint_charge_table,
- 			.maintenance_charge_size = ARRAY_SIZE(samsung_maint_charge_table),
- 			.alert_low_temp_charge_current_ua = 300000,
+configs tested: 185
+configs skipped: 4
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+powerpc              randconfig-c003-20220415
+powerpc              randconfig-c003-20220414
+sh                   secureedge5410_defconfig
+powerpc                   motionpro_defconfig
+arc                     haps_hs_smp_defconfig
+arc                          axs103_defconfig
+m68k                        stmark2_defconfig
+arm                         lpc18xx_defconfig
+mips                     loongson1b_defconfig
+arm                        spear6xx_defconfig
+sh                         ecovec24_defconfig
+powerpc                 mpc837x_mds_defconfig
+powerpc                      cm5200_defconfig
+sparc                       sparc64_defconfig
+sh                          rsk7264_defconfig
+mips                           xway_defconfig
+xtensa                       common_defconfig
+powerpc                     taishan_defconfig
+arc                           tb10x_defconfig
+m68k                           sun3_defconfig
+arm                       imx_v6_v7_defconfig
+sh                               j2_defconfig
+powerpc64                           defconfig
+powerpc                      bamboo_defconfig
+microblaze                          defconfig
+sparc                            allyesconfig
+arm                          pxa910_defconfig
+arm                         lubbock_defconfig
+arm                           tegra_defconfig
+ia64                                defconfig
+powerpc                         wii_defconfig
+arc                        vdk_hs38_defconfig
+mips                           jazz_defconfig
+sh                           se7724_defconfig
+arm                           imxrt_defconfig
+arm                            mps2_defconfig
+arm                             rpc_defconfig
+sh                   sh7770_generic_defconfig
+powerpc                 mpc834x_mds_defconfig
+arm                          lpd270_defconfig
+powerpc                        warp_defconfig
+i386                                defconfig
+powerpc                       eiger_defconfig
+arm                       multi_v4t_defconfig
+powerpc                     mpc83xx_defconfig
+sh                        sh7757lcr_defconfig
+mips                      maltasmvp_defconfig
+sh                                  defconfig
+alpha                            allyesconfig
+mips                            gpr_defconfig
+riscv             nommu_k210_sdcard_defconfig
+powerpc64                        alldefconfig
+arm                     eseries_pxa_defconfig
+sh                   sh7724_generic_defconfig
+powerpc                 mpc85xx_cds_defconfig
+sh                           se7722_defconfig
+i386                             alldefconfig
+powerpc                      ppc6xx_defconfig
+x86_64                              defconfig
+arm                         axm55xx_defconfig
+arm                          pxa3xx_defconfig
+alpha                            alldefconfig
+powerpc                     ep8248e_defconfig
+arc                        nsim_700_defconfig
+xtensa                  cadence_csp_defconfig
+xtensa                  nommu_kc705_defconfig
+sh                         microdev_defconfig
+mips                         bigsur_defconfig
+m68k                          atari_defconfig
+sh                           se7712_defconfig
+mips                     decstation_defconfig
+s390                          debug_defconfig
+um                                  defconfig
+powerpc                     tqm8555_defconfig
+s390                                defconfig
+sh                           se7343_defconfig
+sh                          rsk7269_defconfig
+arm                  randconfig-c002-20220414
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220415
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+alpha                               defconfig
+csky                                defconfig
+nios2                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                randconfig-r042-20220415
+arc                  randconfig-r043-20220415
+s390                 randconfig-r044-20220415
+arc                  randconfig-r043-20220414
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+
+clang tested configs:
+x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220414
+arm                  randconfig-c002-20220414
+i386                          randconfig-c001
+riscv                randconfig-c006-20220414
+mips                      malta_kvm_defconfig
+powerpc                    gamecube_defconfig
+hexagon                             defconfig
+mips                         tb0287_defconfig
+x86_64                           allyesconfig
+mips                           ip28_defconfig
+arm                           omap1_defconfig
+arm                            dove_defconfig
+powerpc                      acadia_defconfig
+powerpc                 mpc8313_rdb_defconfig
+riscv                             allnoconfig
+powerpc                     kmeter1_defconfig
+arm                       mainstone_defconfig
+mips                       rbtx49xx_defconfig
+arm                      tct_hammer_defconfig
+powerpc                     tqm5200_defconfig
+arm                        multi_v5_defconfig
+mips                           mtx1_defconfig
+arm                        spear3xx_defconfig
+arm                       aspeed_g4_defconfig
+powerpc                    ge_imp3a_defconfig
+powerpc                      obs600_defconfig
+arm                        vexpress_defconfig
+arm                          collie_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+riscv                randconfig-r042-20220414
+hexagon              randconfig-r041-20220414
+hexagon              randconfig-r045-20220414
+s390                 randconfig-r044-20220414
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
