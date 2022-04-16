@@ -2,145 +2,329 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE595033DC
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Apr 2022 07:48:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42E845033A5
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Apr 2022 07:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbiDPDNT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Apr 2022 23:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
+        id S229812AbiDPDxZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Apr 2022 23:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbiDPDNS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Apr 2022 23:13:18 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB9F11BE75
-        for <linux-pm@vger.kernel.org>; Fri, 15 Apr 2022 20:10:46 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id s14-20020a17090a880e00b001caaf6d3dd1so13063631pjn.3
-        for <linux-pm@vger.kernel.org>; Fri, 15 Apr 2022 20:10:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ifMOAfHLNN7DfaZZqh9MgNejy76ce9ngnv0s3Ahi1Mg=;
-        b=ggfdvgfSjlld23cULp92DrBodIrBWoYraPLq+y0nf51pyOxV23MK6HA7k5KLqVjHAP
-         1gzmHtMPYeMczmgRqby0gDpH5lF3PAz8JPHRsoomma1Ky3zqd9eZPikkyfAr2nTarEg9
-         nc1/8HoiQ4pjnGisNsqivEqysPJ9wsW1KpUa1cbS+q2LM47CAaODl2A7NIQIobEhO/vt
-         eBXhr67bSojdbdKfwVwKfTWS4g9la8y3nvex8LJ1VGVZXjXCRzl4Jh0ZoVUpkYoUQbE9
-         LJP9hfLwdADTNt+gqBb6ovzSJuLRxX/tsKh44dVugIRf89D9jNrYTygA2GqcUc9whaN0
-         97Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ifMOAfHLNN7DfaZZqh9MgNejy76ce9ngnv0s3Ahi1Mg=;
-        b=LEADgPN4dsBHv/jaWeJ3NAbyVTHQ1smbQorN8QDv5055a4MqS0M6NwPNCJRI2e8Zeh
-         RRXCvpsGm3RWpv/NGfyyVapMuwcG7zSXO9QD11XDDXLTB34ggfeF6U02oJMnWQQcC7YM
-         +hufp9Cs7yHk4I2AaA2Gzb73nteJBHQyd4xD4DxeiRDFrYFdntV2JUub2ZLAB5rNmYr8
-         77h0i8WTg+C7QBgPl764IrqWTIT2VweUsNTnROw6RCIrPUMnTiljFyEgOpWE22mD5CFu
-         FQcmDKFfyvC+bmYHKpG6H1Kh8DqE+RIP53+8UTGaKSAUqaqFBb/UOS01CHtWuZmAmDzM
-         tRXw==
-X-Gm-Message-State: AOAM530dTFzkPatQwnr0dUC/jK4HDpmSrLei4+rU9aCXTwKaLXbJDKwG
-        QamHipROyunSvegx+rN5HEDMtw==
-X-Google-Smtp-Source: ABdhPJzNYBTinusU0OgY+Velu6hlMRdEzPZKTz9Hw5w+nSmt9+1pZS1W+li8ZfZzaqFPQxNZwKU8cQ==
-X-Received: by 2002:a17:902:8347:b0:158:9224:1a80 with SMTP id z7-20020a170902834700b0015892241a80mr1919291pln.23.1650078646345;
-        Fri, 15 Apr 2022 20:10:46 -0700 (PDT)
-Received: from localhost.localdomain ([134.195.101.46])
-        by smtp.gmail.com with ESMTPSA id f33-20020a631021000000b0039dbae3fce0sm5719120pgl.43.2022.04.15.20.10.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 20:10:45 -0700 (PDT)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v1 2/2] interconnect: qcom: icc-rpm: Cache every clock rate
-Date:   Sat, 16 Apr 2022 11:10:29 +0800
-Message-Id: <20220416031029.693211-3-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220416031029.693211-1-leo.yan@linaro.org>
-References: <20220416031029.693211-1-leo.yan@linaro.org>
+        with ESMTP id S229725AbiDPDxZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Apr 2022 23:53:25 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE28B188F;
+        Fri, 15 Apr 2022 20:50:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650081054; x=1681617054;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ogZX2b924NuGCSN9o0JBJmcogyXOOseUXNPp6IwNy6g=;
+  b=QOnS2PedfBtVmfmj38Zun0Wkz0Bc6QP0H8V2RjX02+zCH45cATf5gzTi
+   5TNiBcsFecvGVgg1ripMVyiac8TPLi2xtnFpEp6sd1L8Uob05ggoPs4Pk
+   h8DD4gwH/VV23mW4ahO6E9BS//azdQ0Og6WQUFsuK15STSsaefxEUqrdz
+   6usrdPrDWMFfQemSXTGFwCu6JTEB2Z+CEJouMGrnGyQKC/BK86FbVAjUP
+   iTx++qaPVxX2FhLI7MWu44QJuOvseQOfwoHrtqC6UIDlCB+KPKcIH7uTb
+   HyAZTK9eedomHzTqfs/w0HZz0MIVcyW2MzelpF3IhA32BtCX0Zz2IZyvX
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="262726567"
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="262726567"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 20:50:54 -0700
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="591830634"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 20:50:54 -0700
+Message-ID: <f1d2b1c7a9691c64ece07fbc1fc5a2d4e70aa00a.camel@linux.intel.com>
+Subject: Re: [PATCH v2 0/4] tools/thermal: thermal library and tools
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Date:   Fri, 15 Apr 2022 20:50:53 -0700
+In-Reply-To: <0181977f5843fb9df4eae7d397d96c890846a0db.camel@linux.intel.com>
+References: <20220330100444.3846661-1-daniel.lezcano@linaro.org>
+         <f526d227-ffbb-4ac0-ceb6-c793ab912559@linaro.org>
+         <5380fef6d45f2f7a0b8a5f681934f02943d5e138.camel@linux.intel.com>
+         <9ccb342b-2f20-6efd-a668-96d593aa921e@linaro.org>
+         <CAJZ5v0hrRuVz8pgD6-m7EhVdHPPn67O4ajx_7vkOOOYdTkv2BQ@mail.gmail.com>
+         <0181977f5843fb9df4eae7d397d96c890846a0db.camel@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The cached clock rate is used for all bus clocks, thus it has the
-assumption that all interconnect clock rates are always same, this
-causes trouble if we want to set different clock rates separately.
+On Wed, 2022-04-13 at 10:21 -0700, srinivas pandruvada wrote:
+> On Wed, 2022-04-13 at 17:06 +0200, Rafael J. Wysocki wrote:
+> > On Wed, Apr 6, 2022 at 4:44 PM Daniel Lezcano <
+> > daniel.lezcano@linaro.org> wrote:
+> > > 
+> > > On 06/04/2022 16:28, srinivas pandruvada wrote:
+> > > > Hi Daniel,
+> > > > 
+> > > > On Wed, 2022-04-06 at 10:00 +0200, Daniel Lezcano wrote:
+> > > > > 
+> > > > > Hi,
+> > > > > 
+> > > > > if there is no comment for the series, shall I pick it so we
+> > > > > can go
+> > > > > forward ?
+> > > > Didn't get time to check yet. It will still be for the next merge
+> > > > window, correct?
+> > > 
+> > > Right, but I would like to continue adding more features, scripts
+> > > and
+> > > tests. Iteratively.
+> > 
+> > Srinivas, if you can give this a go, please, it will help.
+> > 
+> > Otherwise, I think that all of your comments so far have been
+> > addressed, or have I missed anything?
+> > 
+> I will provide by the end of this week.
 
-This patch is to allocate a clock rate array to cache every clock
-rate.
+1. Some warnings in applying patch
 
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
----
- drivers/interconnect/qcom/icc-rpm.c | 14 +++++++++-----
- drivers/interconnect/qcom/icc-rpm.h |  2 +-
- 2 files changed, 10 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index e0309e246523..45d23aaeabf6 100644
---- a/drivers/interconnect/qcom/icc-rpm.c
-+++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -274,20 +274,19 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- 	do_div(rate, qn->buswidth);
- 	rate = min_t(u64, rate, LONG_MAX);
- 
--	if (qp->bus_clk_rate == rate)
--		return 0;
--
- 	for (i = 0; i < qp->num_clks; i++) {
-+		if (qp->bus_clk_rate[i] == rate)
-+			continue;
+Applying: tools/lib/thermal: Add a thermal library
+Applying: tools/thermal: Add util library
+Applying: tools/thermal: A temperature capture tool
+.git/rebase-apply/patch:795: space before tab in indent.
+	      	polling = 100; }
+.git/rebase-apply/patch:90: new blank line at EOF.
 +
- 		ret = clk_set_rate(qp->bus_clks[i].clk, rate);
- 		if (ret) {
- 			pr_err("%s clk_set_rate error: %d\n",
- 			       qp->bus_clks[i].id, ret);
- 			return ret;
- 		}
-+		qp->bus_clk_rate[i] = rate;
- 	}
- 
--	qp->bus_clk_rate = rate;
--
- 	return 0;
- }
- 
-@@ -332,6 +331,11 @@ int qnoc_probe(struct platform_device *pdev)
- 	if (!qp)
- 		return -ENOMEM;
- 
-+	qp->bus_clk_rate = devm_kcalloc(dev, cd_num, sizeof(*qp->bus_clk_rate),
-+					GFP_KERNEL);
-+	if (!qp->bus_clk_rate)
-+		return -ENOMEM;
+.git/rebase-apply/patch:221: new blank line at EOF.
 +
- 	data = devm_kzalloc(dev, struct_size(data, nodes, num_nodes),
- 			    GFP_KERNEL);
- 	if (!data)
-diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
-index 4457fcc5b84c..f6c4ac960102 100644
---- a/drivers/interconnect/qcom/icc-rpm.h
-+++ b/drivers/interconnect/qcom/icc-rpm.h
-@@ -34,7 +34,7 @@ struct qcom_icc_provider {
- 	enum qcom_icc_type type;
- 	struct regmap *regmap;
- 	unsigned int qos_offset;
--	u64 bus_clk_rate;
-+	u64 *bus_clk_rate;
- 	struct clk_bulk_data bus_clks[];
- };
- 
--- 
-2.25.1
+warning: 3 lines add whitespace errors.
+Applying: tools/thermal: Add thermal daemon skeleton
+.git/rebase-apply/patch:86: new blank line at EOF.
++
+warning: 1 line adds whitespace errors.
+
+2. Thermometer is fine
+
+3. segfault for thermal-engine
+
+LD_LIBRARY_PATH=../lib:../../lib/thermal:$LD_LIBRARY_pATH ./thermal-
+engine
+Segmentation fault (core dumped)
+root@srinivas-otcpl-icl-u:~/development/linux/tools/thermal/thermal-
+engine# LD_LIBRARY_PATH=../lib:../../lib/thermal:$LD_LIBRARY_pATH
+./thermal-engine --help
+thermal-engine : A thermal monitoring engine based on notifications
+Usage: thermal-engine [options]
+	-h, --help		this help
+	-d, --daemonize	capture duration
+	-l <level>, --loglevel <level>	log level: DEBUG, INFO,
+NOTICE, WARN, ERROR
+	-s, --syslog		output to syslog
+
+root@srinivas-otcpl-icl-u:~/development/linux/tools/thermal/thermal-
+engine# LD_LIBRARY_PATH=../lib:../../lib/thermal:$LD_LIBRARY_pATH
+./thermal-engine -l DEBUG
+Segmentation fault (core dumped)
+root@srinivas-otcpl-icl-u:~/development/linux/tools/thermal/thermal-
+engine# LD_LIBRARY_PATH=../lib:../../lib/thermal:$LD_LIBRARY_pATH
+./thermal-engine --loglevel DEBUG
+Segmentation fault (core dumped)
+root@srinivas-otcpl-icl-u:~/development/linux/tools/thermal/thermal-
+engine# LD_LIBRARY_PATH=../lib:../../lib/thermal:$LD_LIBRARY_pATH
+./thermal-engine -s
+Segmentation fault (core dumped)
+
+Thanks,
+Srinivas
+
+> 
+> Thanks,
+> Srinivas
+> 
+> 
+> > > 
+> > > > > 
+> > > > > On 30/03/2022 12:04, Daniel Lezcano wrote:
+> > > > > > These changes are providing the following tools and library:
+> > > > > > 
+> > > > > >    - A thermal library doing the netlink abstraction from the
+> > > > > > kernel
+> > > > > > in
+> > > > > >      order to make the userspace thermal implementation
+> > > > > > easier.
+> > > > > > Having
+> > > > > >      the library integrated with the kernel tree is also a
+> > > > > > guarantee
+> > > > > > to
+> > > > > >      keep the message format and their encoding/decoding
+> > > > > > aligned
+> > > > > > 
+> > > > > > 
+> > > > > > 
+> > > > > > 
+> > > > > > 
+> > > > > >    - A thermal tools library providing a set of functions to
+> > > > > > deal
+> > > > > > with
+> > > > > >      usual features like the log, the mainloop and the time.
+> > > > > > This
+> > > > > >      library is used by the provided tools below
+> > > > > > 
+> > > > > >    - An data acquisition program to capture the temperature
+> > > > > > of the
+> > > > > >      different thermal zone during an amount of time or
+> > > > > > during the
+> > > > > >      execution of an application. The output is formated to
+> > > > > > be
+> > > > > > easily
+> > > > > >      parsed by gnuplot, a spreadsheet program or a
+> > > > > > statistical
+> > > > > > command
+> > > > > >      line utility. The timestamp is based on the system
+> > > > > > uptime, thus
+> > > > > >      giving an indication of when a thermal event happened,
+> > > > > > that can
+> > > > > >      help to spot or reproduce thermal issue in the long run
+> > > > > > 
+> > > > > >    - A thermal monitoring program based on the thermal
+> > > > > > library. It
+> > > > > > gives
+> > > > > >      a skeleton to build any logic on top of it and shows how
+> > > > > > to use
+> > > > > > the
+> > > > > >      thermal library. It does nothing except discovering the
+> > > > > > thermal
+> > > > > >      zones, their trip points and listening for events like
+> > > > > > cooling
+> > > > > >      devices state changes or trip point crossed
+> > > > > > 
+> > > > > >    Changelog:
+> > > > > > 
+> > > > > >    v1: Initial post after a RFC
+> > > > > > 
+> > > > > >    v2:
+> > > > > > 
+> > > > > >     - Fixed all trailing whitespaces and some other
+> > > > > > checkpatch
+> > > > > >       warnings. Some warnings remain but they can be
+> > > > > > considered as
+> > > > > > false
+> > > > > >       positive
+> > > > > > 
+> > > > > >     - Added in the thermometer tool:
+> > > > > >       - Usage/help option as well as a man page
+> > > > > >       - The ability to execute a program
+> > > > > >       - The capture duration
+> > > > > >       - Create the output directory if it does not exist
+> > > > > > 
+> > > > > >     - Add in the thermal-engine tool:
+> > > > > >       - A usage/help option
+> > > > > >       - A message telling the userspace it is waiting for
+> > > > > > events
+> > > > > >       - A daemonize option
+> > > > > > 
+> > > > > >     - Minor bug fixes here and there, as well as typos
+> > > > > > 
+> > > > > > Daniel Lezcano (4):
+> > > > > >     tools/lib/thermal: Add a thermal library
+> > > > > >     tools/thermal: Add util library
+> > > > > >     tools/thermal: A temperature capture tool
+> > > > > >     tools/thermal: Add thermal daemon skeleton
+> > > > > > 
+> > > > > >    MAINTAINERS                                   |   1 +
+> > > > > >    tools/Makefile                                |  36 +-
+> > > > > >    tools/lib/thermal/.gitignore                  |   2 +
+> > > > > >    tools/lib/thermal/Build                       |   5 +
+> > > > > >    tools/lib/thermal/Makefile                    | 165 ++++++
+> > > > > >    tools/lib/thermal/commands.c                  | 349
+> > > > > > +++++++++++
+> > > > > >    tools/lib/thermal/events.c                    | 164 +++++
+> > > > > >    tools/lib/thermal/include/thermal.h           | 142 +++++
+> > > > > >    tools/lib/thermal/libthermal.map              |  25 +
+> > > > > >    tools/lib/thermal/libthermal.pc.template      |  12 +
+> > > > > >    tools/lib/thermal/sampling.c                  |  75 +++
+> > > > > >    tools/lib/thermal/thermal.c                   | 126 ++++
+> > > > > >    tools/lib/thermal/thermal_nl.c                | 215
+> > > > > > +++++++
+> > > > > >    tools/lib/thermal/thermal_nl.h                |  46 ++
+> > > > > >    tools/thermal/lib/Build                       |   3 +
+> > > > > >    tools/thermal/lib/Makefile                    | 158 +++++
+> > > > > >    .../thermal/lib/libthermal_tools.pc.template  |  12 +
+> > > > > >    tools/thermal/lib/log.c                       |  77 +++
+> > > > > >    tools/thermal/lib/log.h                       |  31 +
+> > > > > >    tools/thermal/lib/mainloop.c                  | 120 ++++
+> > > > > >    tools/thermal/lib/mainloop.h                  |  15 +
+> > > > > >    tools/thermal/lib/thermal-tools.h             |  10 +
+> > > > > >    tools/thermal/lib/uptimeofday.c               |  40 ++
+> > > > > >    tools/thermal/lib/uptimeofday.h               |  12 +
+> > > > > >    tools/thermal/thermal-engine/Build            |   2 +
+> > > > > >    tools/thermal/thermal-engine/Makefile         |  28 +
+> > > > > >    tools/thermal/thermal-engine/thermal-engine.c | 326
+> > > > > > ++++++++++
+> > > > > >    tools/thermal/thermometer/Build               |   2 +
+> > > > > >    tools/thermal/thermometer/Makefile            |  26 +
+> > > > > >    tools/thermal/thermometer/thermometer.8       |  93 +++
+> > > > > >    tools/thermal/thermometer/thermometer.c       | 558
+> > > > > > ++++++++++++++++++
+> > > > > >    tools/thermal/thermometer/thermometer.conf    |   5 +
+> > > > > >    32 files changed, 2878 insertions(+), 3 deletions(-)
+> > > > > >    create mode 100644 tools/lib/thermal/.gitignore
+> > > > > >    create mode 100644 tools/lib/thermal/Build
+> > > > > >    create mode 100644 tools/lib/thermal/Makefile
+> > > > > >    create mode 100644 tools/lib/thermal/commands.c
+> > > > > >    create mode 100644 tools/lib/thermal/events.c
+> > > > > >    create mode 100644 tools/lib/thermal/include/thermal.h
+> > > > > >    create mode 100644 tools/lib/thermal/libthermal.map
+> > > > > >    create mode 100644
+> > > > > > tools/lib/thermal/libthermal.pc.template
+> > > > > >    create mode 100644 tools/lib/thermal/sampling.c
+> > > > > >    create mode 100644 tools/lib/thermal/thermal.c
+> > > > > >    create mode 100644 tools/lib/thermal/thermal_nl.c
+> > > > > >    create mode 100644 tools/lib/thermal/thermal_nl.h
+> > > > > >    create mode 100644 tools/thermal/lib/Build
+> > > > > >    create mode 100644 tools/thermal/lib/Makefile
+> > > > > >    create mode 100644
+> > > > > > tools/thermal/lib/libthermal_tools.pc.template
+> > > > > >    create mode 100644 tools/thermal/lib/log.c
+> > > > > >    create mode 100644 tools/thermal/lib/log.h
+> > > > > >    create mode 100644 tools/thermal/lib/mainloop.c
+> > > > > >    create mode 100644 tools/thermal/lib/mainloop.h
+> > > > > >    create mode 100644 tools/thermal/lib/thermal-tools.h
+> > > > > >    create mode 100644 tools/thermal/lib/uptimeofday.c
+> > > > > >    create mode 100644 tools/thermal/lib/uptimeofday.h
+> > > > > >    create mode 100644 tools/thermal/thermal-engine/Build
+> > > > > >    create mode 100644 tools/thermal/thermal-engine/Makefile
+> > > > > >    create mode 100644 tools/thermal/thermal-engine/thermal-
+> > > > > > engine.c
+> > > > > >    create mode 100644 tools/thermal/thermometer/Build
+> > > > > >    create mode 100644 tools/thermal/thermometer/Makefile
+> > > > > >    create mode 100644 tools/thermal/thermometer/thermometer.8
+> > > > > >    create mode 100644 tools/thermal/thermometer/thermometer.c
+> > > > > >    create mode 100644
+> > > > > > tools/thermal/thermometer/thermometer.conf
+> > > > > > 
+> > > > > 
+> > > > > 
+> > > > 
+> > > > 
+> > > 
+> > > 
+> > > --
+> > > <http://www.linaro.org/> Linaro.org │ Open source software for ARM
+> > > SoCs
+> > > 
+> > > Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> > > <http://twitter.com/#!/linaroorg> Twitter |
+> > > <http://www.linaro.org/linaro-blog/> Blog
+> 
+> 
+
 
