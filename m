@@ -2,75 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 298A750341E
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Apr 2022 07:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C1D05033EC
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Apr 2022 07:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiDPCtX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 15 Apr 2022 22:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53456 "EHLO
+        id S229531AbiDPDBN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 15 Apr 2022 23:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbiDPCtW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Apr 2022 22:49:22 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BA9F59;
-        Fri, 15 Apr 2022 19:46:52 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 11so6771666edw.0;
-        Fri, 15 Apr 2022 19:46:52 -0700 (PDT)
+        with ESMTP id S229481AbiDPDBM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 15 Apr 2022 23:01:12 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17990D5F;
+        Fri, 15 Apr 2022 19:58:40 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id g18so18129155ejc.10;
+        Fri, 15 Apr 2022 19:58:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=BB7JqP0IMspOiNPtVlkKz2TQYIOLmMUJSaWVZFfwwsk=;
-        b=FTSjMdedlTHpjpaBmiowrdJqQOdk5PnHCUoQ0z9y9btrmozxk21CFf1ctaA1wN/l1U
-         J6AUNpDVYoKLfI0EwZsDuePfxmzdqxFSoOGnCYO53hGTHZv9t3rYNSgxFthfExer9Aei
-         kz9ybr830iPIQrRlzMuVb/AwJou+JoKRFnzlklNqZYoBaHxmT7UcQLD4xWnaoFwT1iP0
-         z7QuRCRWEtaeJHiTa9fKtksuRpqUWufufFyWCgpUu9+OCKlYPaVwY5X3FUWYe/DcOG9u
-         kW8OkmHRySVaDgNN/j5GvuTDgRElA4vljY027Z5ezft3lY8I4aU+TM9Z5sdfIe5xTwpT
-         5aXA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xXwXtnkkynlf3OpFEL2MaE3G+9L74/QRDs/KqCc+vz8=;
+        b=NSNbWsgohv9oHu/RpiT2zekHIhOQEZl6CrfvUaGxjzco1wyFBSttQIidkzq3IazBkC
+         0+Fva2HN+4q9JhswjZMjdep4/GWg18/k+vdTXM+5VRtORMqTBPR1qB/KCWJeQPqc8osS
+         2iLlDVWE1LXbBGFXDs7wiDf3aTLuHwakk/eqxlPQXlpzgPGO4D0IAFfd+yYWexuMHL8S
+         5gYhJhPNBFxaZbDohyFe4fDAKLli55+Th99dUb/svX4c+cjWwJw5FsVFHyc25FXl+LKF
+         kvn9q1oPq/kZZEJT0vZBZT/bf01oJlxKIwm2M7VTTTBtYlrPHqEfE05+vMZJ2P+b/51e
+         xS0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=BB7JqP0IMspOiNPtVlkKz2TQYIOLmMUJSaWVZFfwwsk=;
-        b=IJQCL9KIhtA53lzm4dafOj8lJXQYOSQVErXE2IgeISg9KRrdC1ayEIjNzffVqEyzY0
-         HZfJyWDsrvHKDt9CmC9+CFmxF9oca78bmguemGAvn5CJWa07jIE7MalWOrX9RhZ6O7O4
-         Ko6lcFxxALFL/oGt9CXa9rK2B5tFrp/MEhdQ0vFR4oNCjfg6Ng5DyocldiZdELCFwYTm
-         YEJeGN9SRN+S+GQF3gpfq4Uwsl2g606peqlHYxjaWrOJWP4pQDaWJZ7rOYiwPl2w0MCR
-         bSA9t3NtaZKfYaM8XkQ7uPUlA/oeitwEQxp/mefVCfs1aPiS1nitPMx6zd7bjLZV7tHi
-         wuZw==
-X-Gm-Message-State: AOAM531jmcgC5X4qoaIT31VC+tA5/1FIrKkYRvPcALFYOdkKIOikMyMk
-        x1lrmWCng6Rx6Ybc6fNY148=
-X-Google-Smtp-Source: ABdhPJzgALX8qBpfCgXIoetMUkzbdqo/rgoL1gLeekTBHUkDx/L3I7E21koDur5nLC8yaCHwjUF4OA==
-X-Received: by 2002:a05:6402:210:b0:41c:9ca7:7660 with SMTP id t16-20020a056402021000b0041c9ca77660mr1944732edv.145.1650077210700;
-        Fri, 15 Apr 2022 19:46:50 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xXwXtnkkynlf3OpFEL2MaE3G+9L74/QRDs/KqCc+vz8=;
+        b=C8SQkGmfqPfWaWKn8ZwM0q0ho7Lae9Il3lcGsiwMAmem019C1d9ZpvCbL457OTNlIV
+         NIBd9MkktAeVaQzOtK9jIHnxEMiEQloRoa1+bZatXCzwddFyaAe9L5izzP7a61RFiYet
+         1K6sR4kjpSl0/XlWHigigd67wTebas8tR5r+iwQOyKb62bjc4rNC+53bsWpsp0pNKakt
+         nM2tmltgf9K3rke9TPO1sf6p3IJBP46h6wn9L4pvKlik+VgBeDqdcc3BXTsWZdJyKOqx
+         g9xqAR1iKKPguj3X378/VJtm6CJxvFMDpx86F+eBkSce/U8F2n/QAyzV42tj5dD8t1VS
+         hjZQ==
+X-Gm-Message-State: AOAM530+/uPuoXscqgD+A6n4X//mHeT2a0dWrE306gAIsNAhrNdebAVb
+        u3H7LjyhV2DrThhDwSgeruE=
+X-Google-Smtp-Source: ABdhPJynHEAo+1wTM34aauaYVhPQLnhbFqp351AQHwEmwbcdYXSJesrayye6Cb6KzCFaFYW1jKB2Aw==
+X-Received: by 2002:a17:907:ea1:b0:6e8:917b:6b6f with SMTP id ho33-20020a1709070ea100b006e8917b6b6fmr1320790ejc.409.1650077918706;
+        Fri, 15 Apr 2022 19:58:38 -0700 (PDT)
 Received: from localhost.localdomain ([138.199.7.159])
-        by smtp.gmail.com with ESMTPSA id v8-20020a1709063bc800b006e898cfd926sm2197718ejf.134.2022.04.15.19.46.47
+        by smtp.gmail.com with ESMTPSA id oz20-20020a170906cd1400b006e872188edbsm2200915ejb.104.2022.04.15.19.58.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 19:46:50 -0700 (PDT)
+        Fri, 15 Apr 2022 19:58:38 -0700 (PDT)
 From:   Yassine Oudjana <yassine.oudjana@gmail.com>
 X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Yassine Oudjana <yassine.oudjana@gmail.com>,
-        Andy Gross <agross@kernel.org>,
+To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Ilia Lin <ilia.lin@kernel.org>,
         Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Loic Poulain <loic.poulain@linaro.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 0/9] Add support for MSM8996 Pro
-Date:   Sat, 16 Apr 2022 06:44:31 +0400
-Message-Id: <20220416024431.82110-1-y.oudjana@protonmail.com>
+        linux-pm@vger.kernel.org,
+        Yassine Oudjana <y.oudjana@protonmail.com>
+Subject: [PATCH RESEND v2 0/9] Add support for MSM8996 Pro
+Date:   Sat, 16 Apr 2022 06:56:28 +0400
+Message-Id: <20220416025637.83484-1-y.oudjana@protonmail.com>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220412191750.0C00DC385A1@smtp.kernel.org>
-References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,26 +81,62 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Yassine Oudjana <yassine.oudjana@gmail.com>
+MSM8996 Pro (also known as MSM8996SG) is a newer revision of MSM8996
+with different CPU/CBF/GPU frequencies and CPR parameters. Its CBF clock
+also has a different divisor.
 
-On Tue, 12 Apr 2022 12:17:48 -0700, Stephen Boyd wrote:
-> Quoting Yassine Oudjana (2022-04-08 21:01:27)
-> > MSM8996 Pro (also known as MSM8996SG) is a newer revision of MSM8996
-> > with different CPU/CBF/GPU frequencies and CPR parameters. Its CBF clock
-> > also has a different divisor.
-> >
-> > This series handles the difference in the CBF clock and adds a new DTSI for
-> > MSM8996 Pro with CPU and GPU OPPs. It also removes reading msm-id from SMEM
-> > in qcom-cpufreq-nvmem as it becomes no longer necessary with the introduction.
-> > of a separate device tree. Separating MSM8996 and MSM8996 Pro will help with
-> > implementing CBF scaling and CPR; as they have different CPR parameters
-> > and CPU:CBF OPP mapping which is difficult to implement in the same cluster
-> > OPP tables.
->
-> Some of the patches are encrypted? Please resend.
+This series handles the difference in the CBF clock and adds a new DTSI for
+MSM8996 Pro with CPU and GPU OPPs. It also removes reading msm-id from SMEM
+in qcom-cpufreq-nvmem as it becomes no longer necessary with the introduction.
+of a separate device tree. Separating MSM8996 and MSM8996 Pro will help with
+implementing CBF scaling and CPR; as they have different CPR parameters
+and CPU:CBF OPP mapping which is difficult to implement in the same cluster
+OPP tables.
 
-Sorry about that, I had some issues with the SMTP bridge I use with Protonmail
-and had to use the web client, which apparently did something funny.
+Dependencies:
+- clk: qcom: msm8996-cpu: Add CBF support
+  https://lore.kernel.org/linux-arm-msm/20210528192541.1120703-1-konrad.dybcio@somainline.org/#t
+- arm64: dts: qcom: msm8996: Add support for the CBF clock
+  https://lore.kernel.org/linux-arm-msm/20210528192541.1120703-2-konrad.dybcio@somainline.org/
 
-I'll resend through a different provider with git send-email.
+Changes since v1:
+- Rebase DT changes on already merged patches[1][2].
+- Add more details to commit messages.
+- Split removing MSM8996 Pro speed bin bits from opp-supported-hw into
+  a separate patch.
+- Rename msm8996-xiaomi-scorpio.dts to msm8996pro-xiaomi-scorpio.dts
+
+[1] https://lore.kernel.org/linux-arm-msm/20220203072226.51482-1-y.oudjana@protonmail.com/T/#m6e1341ccfa50d11d221ba8c618f73c21a83b8acb
+[2] https://lore.kernel.org/linux-arm-msm/20220203072226.51482-1-y.oudjana@protonmail.com/T/#m36f194cd9da1fee7058a88412985aab10c499fa7
+
+Yassine Oudjana (9):
+  dt-bindings: clk: qcom: msm8996-apcc: Add CBF
+  dt-bindings: clk: qcom: msm8996-apcc: Add MSM8996 Pro compatible
+  clk: qcom: msm8996-cpu: Add MSM8996 Pro CBF support
+  cpufreq: qcom_cpufreq_nvmem: Simplify reading kryo speedbin
+  dt-bindings: opp: opp-v2-kryo-cpu: Remove SMEM
+  arm64: dts: qcom: msm8996: Remove MSM8996 Pro speed bins from cluster
+    OPP tables
+  dt-bindings: arm: qcom: Add MSM8996 Pro compatible
+  arm64: dts: qcom: msm8996: Add MSM8996 Pro support
+  arm64: dts: qcom: msm8996-xiaomi-scorpio: Use MSM8996 Pro
+
+ .../devicetree/bindings/arm/qcom.yaml         |   5 +
+ .../bindings/clock/qcom,msm8996-apcc.yaml     |  11 +-
+ .../bindings/opp/opp-v2-kryo-cpu.yaml         |  56 ++--
+ arch/arm64/boot/dts/qcom/Makefile             |   2 +-
+ .../boot/dts/qcom/msm8996-xiaomi-common.dtsi  |   3 -
+ .../boot/dts/qcom/msm8996-xiaomi-gemini.dts   |   1 +
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |  82 ++---
+ ...rpio.dts => msm8996pro-xiaomi-scorpio.dts} |   4 +-
+ arch/arm64/boot/dts/qcom/msm8996pro.dtsi      | 281 ++++++++++++++++++
+ drivers/clk/qcom/clk-cpu-8996.c               |  61 ++--
+ drivers/cpufreq/Kconfig.arm                   |   1 -
+ drivers/cpufreq/qcom-cpufreq-nvmem.c          |  75 +----
+ 12 files changed, 410 insertions(+), 172 deletions(-)
+ rename arch/arm64/boot/dts/qcom/{msm8996-xiaomi-scorpio.dts => msm8996pro-xiaomi-scorpio.dts} (99%)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8996pro.dtsi
+
+-- 
+2.35.1
 
