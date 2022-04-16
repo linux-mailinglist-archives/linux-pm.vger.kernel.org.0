@@ -2,106 +2,175 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B9F5034FA
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Apr 2022 09:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D12650350B
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Apr 2022 09:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbiDPHwy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 Apr 2022 03:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
+        id S230356AbiDPH57 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 Apr 2022 03:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbiDPHwZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Apr 2022 03:52:25 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B58410074A
-        for <linux-pm@vger.kernel.org>; Sat, 16 Apr 2022 00:49:38 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id t13so10079972pgn.8
-        for <linux-pm@vger.kernel.org>; Sat, 16 Apr 2022 00:49:38 -0700 (PDT)
+        with ESMTP id S230298AbiDPH56 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Apr 2022 03:57:58 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49EC865CA
+        for <linux-pm@vger.kernel.org>; Sat, 16 Apr 2022 00:55:23 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id w4so12897535wrg.12
+        for <linux-pm@vger.kernel.org>; Sat, 16 Apr 2022 00:55:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
-        b=bJd2DIgtyK+bZCVQpMa9XLiI7bVnFQgVFeGzbZ6bXamjrEFIUCNaIDR9YpvR5iTRQC
-         EoRjHn2hxdGgHpTmUXoJLhLdkz8kw8CpdMkf+RjOM2yxgJf0M2w5tnzpw0NiczM9cGQm
-         aTRY2J48j2+AVBVM6ZplapTERLwB7sqpQHn0KTPy+GATyEE1HlWbU25nZewZyTln9PiO
-         eb2iuPe3VcoLkYjZ6tmC44EeIcF1BzRiek/y+/+gg720T1wEvd/5m2iOgdTIUS3isI5Z
-         q2z1OdX/gYACU6OexrbNcXzEKBC+MKUq0Bm7V68HpmeyS3D5tFhEEP1iOfnkPKJo7x6w
-         XtNg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0Z/W81aibCi7sL0/StQ7Jt11jrZjdA1d8v+1Q33ahWI=;
+        b=X1awk6DHUaoooLVFABP0ldTMOEPsD2YHIGSk6gDRxFgvhONqyBosWnnkfRL91EZ0K3
+         8s8l4atfe1UGhlscpBFIZMUHxp4dWns53SgtvzNMxs2poN9KzS//dYJKi2nDhjeNAw2H
+         MFqDhZ65oQH1cn74nPyErsr0u8Rmkxo0uzlnzPPlo2Ctts4liVIURSEjHcTc+MwmR2j6
+         y9I9K9FkOrnQBu2aiw10lWGRHuwSsZsXIrhqztViKe8OztcY09tJJyB3O3cqVudLchTG
+         UVQZS2SXcorYKlqNg3Gbs4QT4cjLTpq3G+ulZblPxZSllu67bE1rnV2p7Z/uSnWPU/dZ
+         up3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
-        b=ExgPCqwloELDlV6M2TEawVeBxZb5HHiIKhZuCqjiiDT2/kAOTvGtL2p/tI7C0mf0Zs
-         tkS+50L0s8H0M9z3tDfcae0MV6Pq1hyV5bVrB3B7IWPqfqJ2Sj/4IGu6Z+e5YRoCKTX0
-         Fw3eXAhCb6zs9G5G1/+s3Z5ETcu4wsolVv++aCvYcGBwHmJOFAIwAPC99PYYlsS2hDiH
-         RqgWeWLm168504laB643WQNfLZDTbOVBP14qCFdjSSgMG6ClsKRp1E2tJvGzAtvn1xGi
-         TAPlQyD3dyKX/IOfTwe0yOYu88s0Xnw9Er5RLEbMgn1gYp9HaolwFrTuUUHJA5mkH+EB
-         gx1Q==
-X-Gm-Message-State: AOAM53199BOeX/Ulci++ZHh2hjebpY5wqsIgKh5g/f1pAPb7eZNzhbDL
-        NcAx2dOWKys3OmCrdPJJOvSCwy7JWpqCieYudDDAzM4I2/k=
-X-Google-Smtp-Source: ABdhPJzPQ782jxaaybf4v05kBQtFRTzv0MMrux20NcZ4Q10XmGrK6dnUIabFDBNBmBOv8fFyQY5zqzYAgf4Cnc3KaCc=
-X-Received: by 2002:a92:508:0:b0:2cb:ebd8:a76b with SMTP id
- q8-20020a920508000000b002cbebd8a76bmr1009500ile.156.1650095366830; Sat, 16
- Apr 2022 00:49:26 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0Z/W81aibCi7sL0/StQ7Jt11jrZjdA1d8v+1Q33ahWI=;
+        b=iGAj0YHF2tGXCTZgCyXc8Ricplvcw/W0Qcq90J5i6tsHMqdDr7P/ZVr6dLj7Eu4UQh
+         dbJmf3QY3PaGs3V42GAT0NzDLbm+gWEA8wSn1rcAnDxC5vd9/1FLYGnTkjkrSFmAwmVD
+         +Ip64ktHhbaj1B815QPBmPcCooedcWNvAa86u11ZHYsaRlIWOE0jJWR5IK1KhcPERmYT
+         7vN6KjafnsiYkVhcaKbY/HCdTohZbb9XyVOHJT+Ur/fwoINyX0ZJMcGnxW89BST+CjJA
+         q99FHVm7lvBQ8/o4zmUfeFltPzogHcWRTJmsFmKm5sQ9B0HLe9EQXwGtrHqO3HuGjv7V
+         AEuQ==
+X-Gm-Message-State: AOAM530OpOflOHkrhuJHIFBMY2G6aE5+sO9UW3Nvbc7Q2GT4slyob/D0
+        Yny/5U9rklX51/rf3aoLQeYtkw==
+X-Google-Smtp-Source: ABdhPJwB+cZviGHllZV9G2s8X+fYEb1nevgdh5ALPNUcbDAriRZ/2fj5T/hzd7ARt3+v4IyzJqX6Tw==
+X-Received: by 2002:adf:efc1:0:b0:207:8436:20ab with SMTP id i1-20020adfefc1000000b00207843620abmr1771660wrp.622.1650095721626;
+        Sat, 16 Apr 2022 00:55:21 -0700 (PDT)
+Received: from [192.168.0.46] (sju31-1-78-210-255-2.fbx.proxad.net. [78.210.255.2])
+        by smtp.googlemail.com with ESMTPSA id x16-20020a5d4450000000b00207a459ca80sm6402035wrr.99.2022.04.16.00.55.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 16 Apr 2022 00:55:20 -0700 (PDT)
+Message-ID: <916d2e4c-7224-f824-f3cf-5c1dee411ed1@linaro.org>
+Date:   Sat, 16 Apr 2022 09:55:19 +0200
 MIME-Version: 1.0
-Received: by 2002:a05:6638:1309:0:0:0:0 with HTTP; Sat, 16 Apr 2022 00:49:26
- -0700 (PDT)
-Reply-To: daniel.seyba@yahoo.com
-From:   Seyba Daniel <royhalton13@gmail.com>
-Date:   Sat, 16 Apr 2022 09:49:26 +0200
-Message-ID: <CALSxb2w9zQYotuLcRSCPns53ksvT9UrEMVx-1Cp1f8RE7er3cA@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 0/4] tools/thermal: thermal library and tools
+Content-Language: en-US
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+References: <20220330100444.3846661-1-daniel.lezcano@linaro.org>
+ <f526d227-ffbb-4ac0-ceb6-c793ab912559@linaro.org>
+ <5380fef6d45f2f7a0b8a5f681934f02943d5e138.camel@linux.intel.com>
+ <9ccb342b-2f20-6efd-a668-96d593aa921e@linaro.org>
+ <CAJZ5v0hrRuVz8pgD6-m7EhVdHPPn67O4ajx_7vkOOOYdTkv2BQ@mail.gmail.com>
+ <0181977f5843fb9df4eae7d397d96c890846a0db.camel@linux.intel.com>
+ <f1d2b1c7a9691c64ece07fbc1fc5a2d4e70aa00a.camel@linux.intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <f1d2b1c7a9691c64ece07fbc1fc5a2d4e70aa00a.camel@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:541 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [royhalton13[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [royhalton13[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
 
-I am so sorry contacting you in this means especially when we have never
-met before. I urgently seek your service to represent me in investing in
-your region / country and you will be rewarded for your service without
-affecting your present job with very little time invested in it.
+Hi Srinivas,
 
-My interest is in buying real estate, private schools or companies with
-potentials for rapid growth in long terms.
 
-So please confirm interest by responding back.
+On 16/04/2022 05:50, srinivas pandruvada wrote:
+> On Wed, 2022-04-13 at 10:21 -0700, srinivas pandruvada wrote:
+>> On Wed, 2022-04-13 at 17:06 +0200, Rafael J. Wysocki wrote:
+>>> On Wed, Apr 6, 2022 at 4:44 PM Daniel Lezcano <
+>>> daniel.lezcano@linaro.org> wrote:
+>>>>
+>>>> On 06/04/2022 16:28, srinivas pandruvada wrote:
+>>>>> Hi Daniel,
+>>>>>
+>>>>> On Wed, 2022-04-06 at 10:00 +0200, Daniel Lezcano wrote:
+>>>>>>
+>>>>>> Hi,
+>>>>>>
+>>>>>> if there is no comment for the series, shall I pick it so we
+>>>>>> can go
+>>>>>> forward ?
+>>>>> Didn't get time to check yet. It will still be for the next merge
+>>>>> window, correct?
+>>>>
+>>>> Right, but I would like to continue adding more features, scripts
+>>>> and
+>>>> tests. Iteratively.
+>>>
+>>> Srinivas, if you can give this a go, please, it will help.
+>>>
+>>> Otherwise, I think that all of your comments so far have been
+>>> addressed, or have I missed anything?
+>>>
+>> I will provide by the end of this week.
+> 
+> 1. Some warnings in applying patch
+> 
+> Applying: tools/lib/thermal: Add a thermal library
+> Applying: tools/thermal: Add util library
+> Applying: tools/thermal: A temperature capture tool
+> .git/rebase-apply/patch:795: space before tab in indent.
+> 	      	polling = 100; }
+> .git/rebase-apply/patch:90: new blank line at EOF.
+> +
+> .git/rebase-apply/patch:221: new blank line at EOF.
+> +
+> warning: 3 lines add whitespace errors.
+> Applying: tools/thermal: Add thermal daemon skeleton
+> .git/rebase-apply/patch:86: new blank line at EOF.
+> +
+> warning: 1 line adds whitespace errors.
 
-My dearest regards
+Strange, I did not have those but I'll try to reproduce
 
-Seyba Daniel
+> 2. Thermometer is fine
+> 
+> 3. segfault for thermal-engine
+> 
+> LD_LIBRARY_PATH=../lib:../../lib/thermal:$LD_LIBRARY_pATH ./thermal-
+> engine
+> Segmentation fault (core dumped)
+> root@srinivas-otcpl-icl-u:~/development/linux/tools/thermal/thermal-
+> engine# LD_LIBRARY_PATH=../lib:../../lib/thermal:$LD_LIBRARY_pATH
+> ./thermal-engine --help
+> thermal-engine : A thermal monitoring engine based on notifications
+> Usage: thermal-engine [options]
+> 	-h, --help		this help
+> 	-d, --daemonize	capture duration
+> 	-l <level>, --loglevel <level>	log level: DEBUG, INFO,
+> NOTICE, WARN, ERROR
+> 	-s, --syslog		output to syslog
+> 
+> root@srinivas-otcpl-icl-u:~/development/linux/tools/thermal/thermal-
+> engine# LD_LIBRARY_PATH=../lib:../../lib/thermal:$LD_LIBRARY_pATH
+> ./thermal-engine -l DEBUG
+> Segmentation fault (core dumped)
+> root@srinivas-otcpl-icl-u:~/development/linux/tools/thermal/thermal-
+> engine# LD_LIBRARY_PATH=../lib:../../lib/thermal:$LD_LIBRARY_pATH
+> ./thermal-engine --loglevel DEBUG
+> Segmentation fault (core dumped)
+> root@srinivas-otcpl-icl-u:~/development/linux/tools/thermal/thermal-
+> engine# LD_LIBRARY_PATH=../lib:../../lib/thermal:$LD_LIBRARY_pATH
+> ./thermal-engine -s
+> Segmentation fault (core dumped)
+
+Is CONFIG_THERMAL_NETLINK set ?
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
