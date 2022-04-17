@@ -2,205 +2,318 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D955F5045EF
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Apr 2022 03:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AD75504600
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Apr 2022 04:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233152AbiDQBlv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 16 Apr 2022 21:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42838 "EHLO
+        id S233265AbiDQCMw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 16 Apr 2022 22:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232729AbiDQBlu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Apr 2022 21:41:50 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2062.outbound.protection.outlook.com [40.107.243.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502E42DCB;
-        Sat, 16 Apr 2022 18:39:15 -0700 (PDT)
+        with ESMTP id S233264AbiDQCMv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 16 Apr 2022 22:12:51 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2051.outbound.protection.outlook.com [40.107.92.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC2C329A4;
+        Sat, 16 Apr 2022 19:10:15 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ClEObw7Iv1tNHImPfW/Pz0ox6jyQM2J+ivFCsNeg54sZKEwA//WoqYVZjKK6A+z2zWODaR6asLOb25+Kwqh94rExN+q2GmHK9lMZh3Xb5bELQTT4pvBS+6PxoYcXNVUDOtA/elZvpyRcNAPuM4dlmK8QvOGLcuzBwXaUihC4cUpMP6XobSgxUrBa4H2c+cB7VcJfWr4Al1uP4X9JGl7meQaZ6XpLFwZI2EovfuEnexM480adLh7YR7hfNM18hoDTRKmG289ceFysqrFVL9329JMCUjcKCHP1qT8NIg4XcmkfeMJ7+VbmSOaJvw46c3NqgeuGtk9KAPctqJgwTSwrfw==
+ b=Gcq8vPvwYIlH2F4Ejun9Hk2g67P1qpjkJT2jtl4nXNMuIKavxUnVdkiKr7x7aIEioMMOIX1fo5vWCcqRnhr8C4OhGoEEL9AU6lbaUWpf/4veMbNoNrfJt3Q0LXB1N9bmGE8OWYhbRWsD5F1whPO+cVpc0LufooZ2Q5dDqew5kj+pVWmP4f+SRMeL+oO4PDq3PVG6gcv+OShrWToxd9kVTeFpDDR3VSd8w47USqAXFu7S4l8+/fSuwWnDgZfHuQN/wtr5cGYFvfi5mJEuOQJqKzehLl80mgTBrGeG0sxMb7D6hN7c4qrrj0HQf2ThOQ9OtEdbV8RCZ80mSNbno1wkqg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CaTUAVqKQxUvsfBf8BYkPaEpPspbSQwn/EPiRdHwXsU=;
- b=QbSLzUwmiDqNXJX0rsXoxRX3PsjvCW9xeOb4+OfI90nWZtRkOwM29SFBik6NYZrAhRssU53mXWllD7xoPY8j+ww1soaiNz/MPJFcYF6JFDGEbW/kz26TRV0UQ1H5nApIgdf1z0PFZyaOFgfTIUGYjMGpY+EWe8JF8aLDvkCiYdZhtTm4DImQ3d38+8iUNXF2QuOMCtTQZc5sDpCm+TjwRND7QuLcgOM/q1ANStfmZd69k4TZSRbaEGYBUGmvS5WQXCtH4Xrkar/dtb2O1f/laxhykjiSAW06a3QQIOuPDrsAtoenZDClEmmkGr7oTM8cNhzuDuC42fEXmwC4QD6qDw==
+ bh=GL8lTbwD6Eb7G+BAtPNEXHnYpmq4jP76qxAT2SPcZAc=;
+ b=Ckvd2LTI5wjHhmfF4h9LUyu7koL1pjioaSVHVh3vwVcnz0NQVi3+5Xe/whj5rb3HyKGt9rTLXi4K0MffCPPLcnVq+owuApOYnchNsoU4UKHJTpkphf7BzrpEJx20fVodmPelto1vCdyhlH4T7kUAFOwxg0x8sn8lSHRzyywbZ1NRDc9v/j8Fw4AFfkmQtXJ2PW/VfJy/FggOv5FlEF9Nkae2oKcpueVlcdRfjKGvD1I1lmifnTWOtTUBfwWl0EIALEkjMudgWSFoRQFRMT506Tni4FA7cs9LpdZS6B+EJqF1T4ff8iH1ysWIMRBKNqdiRZZzONrKCHZU/TrAEbWNGg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CaTUAVqKQxUvsfBf8BYkPaEpPspbSQwn/EPiRdHwXsU=;
- b=nTOCInvv3Zl3ApzA1jAeH37bigOmHyjHIgOxSSNA6IP6DU4v2ul4Yx5raONvmQthQ4ujCl69fq4li0Re69kHkrAmLEhwGholYq8O/x+BH/AXvHF7495AaPRUTY5cdf88qe7A1uT1lnV5V83k/fiJDN7iUtKXnubNmc9taUP4LCk=
+ bh=GL8lTbwD6Eb7G+BAtPNEXHnYpmq4jP76qxAT2SPcZAc=;
+ b=rLtdzCkY58cZmUTE1LHgaN61RF/5W+wSHd9LcZGrLWQCgMMQCEao2a1X3ba6KQJqQW2JCx7Jmu0O03Ef2bk+XhvvmO6sDWqCrhYfKt9WAwljPTA3tvnxYwWgp0L9Pm5ymGajlXKDo4c47kElkYTGD3eDZyazFtc5WuOLSOmn3q0=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
- CH2PR12MB4198.namprd12.prod.outlook.com (2603:10b6:610:7e::23) with Microsoft
+ SJ0PR12MB5453.namprd12.prod.outlook.com (2603:10b6:a03:37f::9) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5164.18; Sun, 17 Apr 2022 01:39:11 +0000
+ 15.20.5164.18; Sun, 17 Apr 2022 02:10:09 +0000
 Received: from DM5PR12MB2504.namprd12.prod.outlook.com
  ([fe80::2c60:61b2:4a7c:2d7e]) by DM5PR12MB2504.namprd12.prod.outlook.com
  ([fe80::2c60:61b2:4a7c:2d7e%5]) with mapi id 15.20.5164.020; Sun, 17 Apr 2022
- 01:39:10 +0000
-Date:   Sun, 17 Apr 2022 09:38:47 +0800
+ 02:10:09 +0000
+Date:   Sun, 17 Apr 2022 10:09:47 +0800
 From:   Huang Rui <ray.huang@amd.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>
+To:     Meng Li <li.meng@amd.com>
 Cc:     Shuah Khan <skhan@linuxfoundation.org>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        linux-pm@vger.kernel.org,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 0/3] Add unit test module for AMD P-State driver
-Message-ID: <YltvpwYslWfq9Sgm@amd.com>
+        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] cpufreq: amd-pstate: Expose struct amd_cpudata
+Message-ID: <Ylt264e1r3r/ddQb@amd.com>
 References: <20220413090510.4039589-1-li.meng@amd.com>
- <CAJZ5v0jFXhfL=2TwBfzzfEdyKUwYDCxo8OKZuYtJjASKE5Oqfw@mail.gmail.com>
+ <20220413090510.4039589-2-li.meng@amd.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jFXhfL=2TwBfzzfEdyKUwYDCxo8OKZuYtJjASKE5Oqfw@mail.gmail.com>
-X-ClientProxiedBy: HKAPR04CA0004.apcprd04.prod.outlook.com
- (2603:1096:203:d0::14) To DM5PR12MB2504.namprd12.prod.outlook.com
+In-Reply-To: <20220413090510.4039589-2-li.meng@amd.com>
+X-ClientProxiedBy: HK0PR03CA0116.apcprd03.prod.outlook.com
+ (2603:1096:203:b0::32) To DM5PR12MB2504.namprd12.prod.outlook.com
  (2603:10b6:4:b5::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9ec8b6fe-21e6-43d9-2d2e-08da2013120d
-X-MS-TrafficTypeDiagnostic: CH2PR12MB4198:EE_
-X-Microsoft-Antispam-PRVS: <CH2PR12MB41980656FABE41C48601DD93ECF09@CH2PR12MB4198.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 54018266-a54c-4743-8143-08da201765c3
+X-MS-TrafficTypeDiagnostic: SJ0PR12MB5453:EE_
+X-Microsoft-Antispam-PRVS: <SJ0PR12MB545343A9187E2D8BE83A90FBECF09@SJ0PR12MB5453.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AiY/LOxj5ZY/lJSrmIyedgTPhEo/pJwapPXOei+UdZaLOmN/julL2hWUU7wXNn/09q+K+YXab6276LGNbg5Qgz47yjmMlJ6ei8VlS+Y7dqPhuUjI7lvg7NYywFJYoS1AvEJQ190q06ScvoHeHpeMamWEwto1q/sAFNqd/c/2pTnBJRGstwBb0WGk+X3g+MquJKy7qLLgdKV/O9gLEnGHSlT1UiXCkCvjLAR4bZOQ1QJaLU7FSxemSEakkjRRyw8QO41yg+LyOzZadSoSOPBv7EuFZQ19v9MHuzYdqsT5r1+rYta8Y+ZiEdxF/f0JigRKc7p8ZByfwWQTqk+mklCS2j8Od/yEVDybFCak4W7kY2IjF1zNM3iNMVG+Wb1AipHdRdVFVN5ZSVk62kXS5IiyLCuGVi7l1yD0JUEXxXgRM+CepuE54GeKdP52iSXH5qfi1Z95QHlcBwePnWjaaOgcgmKOQXIB0bGVMwAGta+zT/zVO3BmfCpMvjQlc+3awP6Znfbsb7pPKs2Ncp5mTJCSvjvl/RTF15jBxOEDzKOglEPB5A/gdbn5WOVsExG1Pxa5F6QIpJy81lR8BhlYyBhTftDxq+rGdFNGvKQuF2xBN96WtJE63Ig8HHuHIt88sX30g4QhNJC0fdeeVaBSPZP/pv7QWTaTo/pCt8VMl/Jamm9HwUtDD3GX1ArGzBu/0mVp4WySTbJUC+CTmgex3+f6ejG0wxDf/dCLr8KddSNRH7M=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(38100700002)(66476007)(8936002)(36756003)(5660300002)(2906002)(66556008)(6512007)(316002)(53546011)(54906003)(110136005)(6506007)(6636002)(6666004)(6486002)(508600001)(966005)(45080400002)(2616005)(86362001)(186003)(26005)(8676002)(4326008)(83380400001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Iu1h0LBB59LeC0wlEjPVieW28Ulv2Ff/02uN4rboTBHVbiHVhyeAIcV0cui8CFqyWhmymlOJ10WDIQynVNTSwh0ksWlkfUp+u4hhM5TWWTh9/mvYsNY7g5Ab5VTYXHsf9UYmLdUm1FUs8zR178uYa8D83EobhyTZTpHd8KgpcoPor4QyehZJM0B02pcrq/Kq9NI6r6YUzrE6UkqKBavq4QkfjCZtsJ/fptsAX0LFIY1ChXDOrI3EDYwTEQkzMdaDiePmFczm5wRGZxEODCVfhjDVty3F6E15R5egV0YnyJNdgU0BCKs2ez2Gs6+w5cqvR8E+F/Ete5BIS+QYl2smPY7IHCvN8lC461fUhKKQ4vVZSxtjPD5yOTixRroR1ZaiLJoyP7CM2JQU5ffsY1LIvcpD8MLapFKmk+TsKeldKbBlig82uuNSnOZj7o6w2n30nX933GkT44wtdNx8KDGpXzHtPHezr4yuFUy9zsU1Exl7l1VHlHfCwWF4uI2agZ/CHV5xkhk+9FTgOgqkohqHPVOHtGIfQ/gztJr1JRX9V12ZIkXpU/npANTnoAzU+k2mPtqxPXjzchw6yachbKYPAVQG9xF/AFoFlN3Ml1oFTzyQkJwtslcS/Hhjo5JCkxLm+w58RXkfZ3gAJeQb3rqjzw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(6666004)(38100700002)(6506007)(6636002)(6512007)(37006003)(54906003)(8936002)(4326008)(316002)(66476007)(66556008)(2906002)(83380400001)(6862004)(8676002)(86362001)(6486002)(2616005)(66946007)(508600001)(186003)(26005)(36756003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QMko6g/SkiipMJNNVEUu6N1fQpEVkFNSaYhMEk+AmCy8ZNQrFuxq91iyFfc+?=
- =?us-ascii?Q?yjNk3uZFvfgmALqEnHDg76oCdl9vjvWmlTKDKgBoQsNhleTuX0ZVHq9tqreG?=
- =?us-ascii?Q?1194EIj5BOMNoITE/4mQnl/xnj1l6+5XPazVwhXfwOqRbEBPcpD1Eypj5eBi?=
- =?us-ascii?Q?UBv9WSLdQzuMDzjZZni92OTs3Zg5onrkQ3Cbx1Ew8rqr7MkFm1FIWTf1dUoA?=
- =?us-ascii?Q?ctqjcP0gVRzii66mMnMaEDW7RPquqrZ/w7E2V/BARo1dbLwka0nnisF4AdJ1?=
- =?us-ascii?Q?UQN4oO1TgIA5M8rX2lcmu/umep5tqYolt36/m9YQuL6m58ZLbtFLHcDW5VNI?=
- =?us-ascii?Q?Blz3KgHNMJ77r2XcyBeCDIRdVoDp4ozQiJHDFkL5mZ+UcaXPnY9B/8doFNZG?=
- =?us-ascii?Q?ifTQGLaZD3RGeUfQjSQu2ZiFiw7VTjS5zLhFwP/jIl7or8iKmukCkXCvS9lX?=
- =?us-ascii?Q?5TB0kLMWT/lfYLCt7k+JPJ4MtKrExRPpwJHRAKdy4VnKgmT7kR3YPK5jqsys?=
- =?us-ascii?Q?KaGXc0ltFLMiyq7girxt0J0SQLe6sSGMjKc3h3npbOCZR/jbnSNSOrN7jkQ2?=
- =?us-ascii?Q?3jZOK3eUzPJWvfeabEYRfL76zifGT8EMx0Yr6umcexNWCadTHeuSzPRUebjd?=
- =?us-ascii?Q?thLjrfWypJjsD+Wc0VvzmXC8KwV0dCqoQzuqFfpU+ZV/HlpZMPlL+2Y2/gxq?=
- =?us-ascii?Q?9u+NOgywgmfuZyXaY37+/vdEEv3gZHkYnwyGCOx1hvYUHa5iMDgNwuWMRln4?=
- =?us-ascii?Q?0dQXNUIYkYeyvC5H6XaUUxGgk890QqRm4/l0rHVs5fwxL+IReJcBTYlUic0j?=
- =?us-ascii?Q?HPM/Sny/qUxgbrJBa5vNeVO1V2mOsmnw61zNYZ1N+4nLGMp/dVUXyAcKH7Jx?=
- =?us-ascii?Q?/pneKH1Jdt3+ET3xVvfmJcNCLmEblyAk1TQiwb/4uphyqK9twxsJumbs1Skc?=
- =?us-ascii?Q?20D/Vh9ugV//sxGkxYL52gJo9SOfUOQgB7S27q23CDWDyqsGeRsYfbH9qTpu?=
- =?us-ascii?Q?+g1Z76YqSD2HJZ0ITuJuKAPBdxZeEhxdAOqy6XReGmXFMyrKZwkHCY/AfEON?=
- =?us-ascii?Q?CWee5Wj4S29jA7XMV2PqtZ9GB1L7NsdDsDmX6mYCBDHaAM2hCsgYFQ68Vo+E?=
- =?us-ascii?Q?vBXmuwVf/pyUnCAQKOkYrxqL1dvnzd00R4i74RLw8gyxdxqUCp6wl94yDMNZ?=
- =?us-ascii?Q?H9Nrjv7Hmhcn0n3tcVedago3+pO0JL22WAXJxIShl1QT/o+ixeygT83VfBJd?=
- =?us-ascii?Q?YBIH3s9Cou55Z2NAxo31Cl8QIiUncbusUfUvynQWAzqXPGoe0PaMoECcg06w?=
- =?us-ascii?Q?qPc6jKzkoT521Gh11M3ZV5ud12iUmweeVHqU7vWBF63FNoKazkPzKIA4alON?=
- =?us-ascii?Q?FwbQQzSgRiCLj+8mPv0GvRTRHFTZHJXq8MceIFl0TLQ09fS1DwKyQhVByRlA?=
- =?us-ascii?Q?7SUjyGCvYmqCtj9QGHbiON7AryohPiVqK8V+1oC2y5GS4osSPUkWbRHosmww?=
- =?us-ascii?Q?zBNkor9ToVJCA78RIg1QeUMkmgtMx4UJwCBJVAmsWkxKVEbxX45CzDKkgU0D?=
- =?us-ascii?Q?PZ2s7gubLp+KpwILaXM/R/jl/WyRPosHtqCcL6fF/1+L1cdn4WOV23LFhCll?=
- =?us-ascii?Q?rxHIt+ZxlXttZdYPtyVh5Rz3hkJHAWwJbVPqSbzTJuNYOCOSY6LD7m3L0DYv?=
- =?us-ascii?Q?/toCP9qPrAM3IESGipZps3OaBAvPLngJfcIR0vpU3o8uNVbL6ATZoOPe1gmb?=
- =?us-ascii?Q?S41hXyGBBw=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?czYiT1zskVXhNXEmncG0OWBWPtDOpZOcJ0wbfgEr9BjTSEZUuCl3UHF3eXUa?=
+ =?us-ascii?Q?y3x5PibJvX2MJSusGW68xU813Pn3w2lMCDNL8A6Pqfa9eMv0dMtf97CqdSmx?=
+ =?us-ascii?Q?abbVwP+h01qaFih9QcFzw4u0hyCej3A6UgQB8dzvOGkKm6Dc2ZxX43mleeDR?=
+ =?us-ascii?Q?p6mvZ7q1oF91mSCJTG3HmL8bB3fF9WHSntb6VdyKVfpFTp+mqTMx/SOeUFQe?=
+ =?us-ascii?Q?b+WZKSdBleh1Ka+nWddYjRNT+PQG7SmhsCsjsCZVjBp3mG0QHg0Xcv7kNAMj?=
+ =?us-ascii?Q?79Gkv2WtG5Q9FrGHoNr/O4RDDIoCOr6t7cZFO703ePDt4/SPhungtY/Nya6Y?=
+ =?us-ascii?Q?P3qpmJMajmxiK/p5XtSyIQ8v6u0VH+zO/gmiEGQ36dysKLqlCk62r2RuKW1t?=
+ =?us-ascii?Q?eRygsBUISQYG4pyRb1zgoHLVpdAd1kUrgA+L+BvV/m1QJOI7lRpsXYwY7mvn?=
+ =?us-ascii?Q?7a95gL0oXrNomJpffJPpKZgZqVOlSaWp4pHNGsIjFIRhCyVuCLtnl78Z7Uox?=
+ =?us-ascii?Q?Px+6275jOrQYOIJRPBBfxVMn7qPibHQuYMfhDvBxvFGyhC2TIgGBLObbQZWO?=
+ =?us-ascii?Q?N9MNJs3Edlwgr+CsrK7rQrQj+yi6gWNnkAX+SfqRvTB9vXOV/WgTiRjdSOn9?=
+ =?us-ascii?Q?0J4tm7meVnx9vH1RPvc204H5cyH4QlQJrouUkqKtXA/NzluPebz8FA1aVVXh?=
+ =?us-ascii?Q?IH6obL4ZSNi9YVtKbduKZIskQ1fhtP275n9F1vFbc37DKF2Ih3UgVMEoED5x?=
+ =?us-ascii?Q?N3yKb4VUBgs2rmsv//PXpS++pTWuoRfATl6ljx5Y1BopzJHkAeoRg4RvHWyC?=
+ =?us-ascii?Q?rKhOKRFXXYyXVjYCJKLvy7RHC1+8oVxWRprGlT6IqTLYAyXmVZDjoBiysLi1?=
+ =?us-ascii?Q?xWi1a/Hqc1wFq41qydkgpcGQ7hEmWPz4pOQA5zZVPSab+mBi8ksE/CsLN9iv?=
+ =?us-ascii?Q?cgr3RbbiDwpRW6vkQ+/Svqg/Rgo7lVgZAzB1moWTmUq17SI+md6nd7pFkzyZ?=
+ =?us-ascii?Q?7xY7lcM2B5O+FIhcFnr1WmQl9ctOUKjSxTHoGYnBk3dQm/TJfDJX3LLEzWN7?=
+ =?us-ascii?Q?Vifun0Oep0S3mzkogcXac6mh0ZGSHw01yF3ATb2Z20lYGWZDikCxA2wa3/mP?=
+ =?us-ascii?Q?g4b/2qbmwWNgvdw+pFZWUBS3HAIw14X56B37Jt9OxEJOLtd6PXmGwcQ75QIK?=
+ =?us-ascii?Q?eZpdF9toXx18I6EzhS//JJC8l/Kz5r/1+EvTek+Ms6q7xx1g40LwX3X54yGr?=
+ =?us-ascii?Q?/QElLQv36xsFXFJbSEml4VJNthX2eP2BUo6j3nCNy5B90I6oC24DrV579jTk?=
+ =?us-ascii?Q?eHjky4xoxxMRvm/yYXEomDWNnBH4MijHEwcPJE9sEuSntrcC6vgQn48WraXb?=
+ =?us-ascii?Q?oetSdG3r9z6PRK5EoiDdAGJeWECU9h/S/yS8U23RN/zalMXfPLIwqYZecBuh?=
+ =?us-ascii?Q?StcSrMBbnhd1eHR9CX7mtPYvSzlRpmk/zMcADCrD4FUi2shTKFmlDpKuu9MD?=
+ =?us-ascii?Q?OU+XBeH3WkKyuD9nA7Hhkg6qdAlVCMAcy8Q/l/yIOUVfR2zYvogeWG8m3T8q?=
+ =?us-ascii?Q?ggeclKGf5JeuhRh26EMV4PRX/aRAS0VBq04TlIrpLWJKqa2P+6h7uVaYUVhm?=
+ =?us-ascii?Q?MAAIWxaXTye2vqBwBBCkM69IhHK5/PahXQAbDImITWp2Tzv6MSp8OVA5iuHM?=
+ =?us-ascii?Q?ddkez+rr52nCXJOXnm5mrtNyuw4W4HwlKjl/lw4k3tqwRbdvCd5G5RhNTrME?=
+ =?us-ascii?Q?RTvH2Ch4XQ=3D=3D?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9ec8b6fe-21e6-43d9-2d2e-08da2013120d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54018266-a54c-4743-8143-08da201765c3
 X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2022 01:39:10.7542
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2022 02:10:09.1244
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sGawCbhhmeUM2ASxH82T26y73V32pVMPZIgCz2Blp7qBwD2uWWS5N47jXXZsX0QCV0qgE4lqW2ZsGhEavYbNLA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4198
+X-MS-Exchange-CrossTenant-UserPrincipalName: vNVZCld01tRglLVecamweiZy9KwIWaZNDiFoip6rnVVwyzMm1r8tQH0dEFxpvf4d7MRkb6DOwk5STrJs9VT3cw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5453
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 11:41:44PM +0800, Rafael J. Wysocki wrote:
-> On Wed, Apr 13, 2022 at 11:06 AM Meng Li <li.meng@amd.com> wrote:
-> >
-> > Hi all:
-> >
-> > AMD P-State unit test(amd_pstate_testmod) is a kernel module for testing
-> > the functions of amd-pstate driver.
-> > It could import as a module to launch some test tasks.
-> >
-> > We upstream out AMD P-state driver into Linux kernel and use this unit
-> > test module to verify the required conditions and basic functions of
-> > amd-pstate before integration test.
-> >
-> > We use test module in the kselftest frameworks to implement it.
-> > We create amd_pstate_testmod module and tie it into kselftest.
-> >
-> > For exmaple: The test case aput_acpi_cpc is used to check whether the
-> > _CPC object is exist in SBIOS.
-> > The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is
-> > not existed at the detected processor, so it is a necessary condition.
-> >
-> > At present, its test cases are very simple, and the corresponding test
-> > cases will continue to be added later to improve the test coverage.
-> >
-> > See patch series in below git repo:
-> > V1: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flinux-pm%2F20220323071502.2674156-1-li.meng%40amd.com%2F&amp;data=04%7C01%7Cray.huang%40amd.com%7C7a5d4998e2ca413a215b08da1d6425e4%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637854613222577975%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=8fAzN5hea4sVO5E7%2B9Uh9VSsyt29gM2%2FCkMXHS0%2FfP4%3D&amp;reserved=0
-> >
-> > Changes from V1 -> V2:
-> > - cpufreq: amd-pstate:
-> > - - add a trailing of amd-pstate.h to MAINTAINER AMD PSTATE DRIVER
-> > - selftests: cpufreq
-> > - - add a wrapper shell script for the amd_pstate_testmod module
-> > - selftests: cpufreq:
-> > - - remove amd_pstate_testmod kernel module to .../cpufreq/amd_pstate_testmod
-> > - Documentation: amd-pstate:
-> > - - amd_pstate_testmod rst document is not provided at present.
-> >
-> > Thanks,
-> > Jasmine
-> >
-> > Meng Li (3):
-> >   cpufreq: amd-pstate: Expose struct amd_cpudata
+On Wed, Apr 13, 2022 at 05:05:08PM +0800, Meng Li wrote:
+> Expose struct amd_cpudata to AMD P-State unit test module.
 > 
-> Please collect an ACK from Ray for this one as per MAINTAINERS and I
-> will leave the series to Shuah as it is selftests mostly.
+> This data struct will be used on the following AMD P-State unit test
+> (amd-pstate-ut) module. The amd-pstate-ut module can get some AMD
+> infomations by this data struct. For example: highest perf,
+> nominal perf, boost supported etc.
 > 
-> Thanks!
+> Signed-off-by: Meng Li <li.meng@amd.com>
+
+Acked-by: Huang Rui <ray.huang@amd.com>
+
+> ---
+>  MAINTAINERS                  |  1 +
+>  drivers/cpufreq/amd-pstate.c | 60 +----------------------------
+>  include/linux/amd-pstate.h   | 74 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 76 insertions(+), 59 deletions(-)
+>  create mode 100644 include/linux/amd-pstate.h
 > 
-
-Thanks, Rafael!
-
-Jassmine, I think you can mark all patches as "v2" not only the cover
-letter. Then we can separate these series easily.
-
-Thanks,
-Ray
-
-> >   selftests: cpufreq: Add wapper script for test AMD P-State
-> >   selftests: cpufreq: Add amd_pstate_testmod kernel module for testing
-> >
-> >  MAINTAINERS                                   |   1 +
-> >  drivers/cpufreq/amd-pstate.c                  |  60 +---
-> >  include/linux/amd-pstate.h                    |  74 +++++
-> >  tools/testing/selftests/cpufreq/Makefile      |   2 +-
-> >  .../selftests/cpufreq/amd_pstate_testmod.sh   |   4 +
-> >  .../cpufreq/amd_pstate_testmod/Makefile       |  20 ++
-> >  .../amd_pstate_testmod/amd_pstate_testmod.c   | 302 ++++++++++++++++++
-> >  tools/testing/selftests/cpufreq/config        |   1 +
-> >  8 files changed, 404 insertions(+), 60 deletions(-)
-> >  create mode 100644 include/linux/amd-pstate.h
-> >  create mode 100755 tools/testing/selftests/cpufreq/amd_pstate_testmod.sh
-> >  create mode 100644 tools/testing/selftests/cpufreq/amd_pstate_testmod/Makefile
-> >  create mode 100644 tools/testing/selftests/cpufreq/amd_pstate_testmod/amd_pstate_testmod.c
-> >
-> > --
-> > 2.25.1
-> >
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 9832b607e2e2..f108e83ba851 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -1003,6 +1003,7 @@ S:	Supported
+>  F:	Documentation/admin-guide/pm/amd-pstate.rst
+>  F:	drivers/cpufreq/amd-pstate*
+>  F:	tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
+> +F:	include/linux/amd-pstate.h
+>  
+>  AMD PTDMA DRIVER
+>  M:	Sanjay R Mehta <sanju.mehta@amd.com>
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 7be38bc6a673..5f7a00a64f76 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -36,6 +36,7 @@
+>  #include <linux/delay.h>
+>  #include <linux/uaccess.h>
+>  #include <linux/static_call.h>
+> +#include <linux/amd-pstate.h>
+>  
+>  #include <acpi/processor.h>
+>  #include <acpi/cppc_acpi.h>
+> @@ -65,65 +66,6 @@ MODULE_PARM_DESC(shared_mem,
+>  
+>  static struct cpufreq_driver amd_pstate_driver;
+>  
+> -/**
+> - * struct  amd_aperf_mperf
+> - * @aperf: actual performance frequency clock count
+> - * @mperf: maximum performance frequency clock count
+> - * @tsc:   time stamp counter
+> - */
+> -struct amd_aperf_mperf {
+> -	u64 aperf;
+> -	u64 mperf;
+> -	u64 tsc;
+> -};
+> -
+> -/**
+> - * struct amd_cpudata - private CPU data for AMD P-State
+> - * @cpu: CPU number
+> - * @req: constraint request to apply
+> - * @cppc_req_cached: cached performance request hints
+> - * @highest_perf: the maximum performance an individual processor may reach,
+> - *		  assuming ideal conditions
+> - * @nominal_perf: the maximum sustained performance level of the processor,
+> - *		  assuming ideal operating conditions
+> - * @lowest_nonlinear_perf: the lowest performance level at which nonlinear power
+> - *			   savings are achieved
+> - * @lowest_perf: the absolute lowest performance level of the processor
+> - * @max_freq: the frequency that mapped to highest_perf
+> - * @min_freq: the frequency that mapped to lowest_perf
+> - * @nominal_freq: the frequency that mapped to nominal_perf
+> - * @lowest_nonlinear_freq: the frequency that mapped to lowest_nonlinear_perf
+> - * @cur: Difference of Aperf/Mperf/tsc count between last and current sample
+> - * @prev: Last Aperf/Mperf/tsc count value read from register
+> - * @freq: current cpu frequency value
+> - * @boost_supported: check whether the Processor or SBIOS supports boost mode
+> - *
+> - * The amd_cpudata is key private data for each CPU thread in AMD P-State, and
+> - * represents all the attributes and goals that AMD P-State requests at runtime.
+> - */
+> -struct amd_cpudata {
+> -	int	cpu;
+> -
+> -	struct	freq_qos_request req[2];
+> -	u64	cppc_req_cached;
+> -
+> -	u32	highest_perf;
+> -	u32	nominal_perf;
+> -	u32	lowest_nonlinear_perf;
+> -	u32	lowest_perf;
+> -
+> -	u32	max_freq;
+> -	u32	min_freq;
+> -	u32	nominal_freq;
+> -	u32	lowest_nonlinear_freq;
+> -
+> -	struct amd_aperf_mperf cur;
+> -	struct amd_aperf_mperf prev;
+> -
+> -	u64 freq;
+> -	bool	boost_supported;
+> -};
+> -
+>  static inline int pstate_enable(bool enable)
+>  {
+>  	return wrmsrl_safe(MSR_AMD_CPPC_ENABLE, enable);
+> diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
+> new file mode 100644
+> index 000000000000..790b04c9000b
+> --- /dev/null
+> +++ b/include/linux/amd-pstate.h
+> @@ -0,0 +1,74 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * linux/include/linux/amd-pstate.h
+> + *
+> + * Copyright (C) 2007-2010 Advanced Micro Devices, Inc.
+> + * Author: Meng Li <li.meng@amd.com>
+> + */
+> +#ifndef _LINUX_AMD_PSTATE_H
+> +#define _LINUX_AMD_PSTATE_H
+> +
+> +#include <linux/pm_qos.h>
+> +/*********************************************************************
+> + *                        AMD P-state INTERFACE                       *
+> + *********************************************************************/
+> +/**
+> + * struct  amd_aperf_mperf
+> + * @aperf: actual performance frequency clock count
+> + * @mperf: maximum performance frequency clock count
+> + * @tsc:   time stamp counter
+> + */
+> +struct amd_aperf_mperf {
+> +	u64 aperf;
+> +	u64 mperf;
+> +	u64 tsc;
+> +};
+> +
+> +/**
+> + * struct amd_cpudata - private CPU data for AMD P-State
+> + * @cpu: CPU number
+> + * @req: constraint request to apply
+> + * @cppc_req_cached: cached performance request hints
+> + * @highest_perf: the maximum performance an individual processor may reach,
+> + *		  assuming ideal conditions
+> + * @nominal_perf: the maximum sustained performance level of the processor,
+> + *		  assuming ideal operating conditions
+> + * @lowest_nonlinear_perf: the lowest performance level at which nonlinear power
+> + *			   savings are achieved
+> + * @lowest_perf: the absolute lowest performance level of the processor
+> + * @max_freq: the frequency that mapped to highest_perf
+> + * @min_freq: the frequency that mapped to lowest_perf
+> + * @nominal_freq: the frequency that mapped to nominal_perf
+> + * @lowest_nonlinear_freq: the frequency that mapped to lowest_nonlinear_perf
+> + * @cur: Difference of Aperf/Mperf/tsc count between last and current sample
+> + * @prev: Last Aperf/Mperf/tsc count value read from register
+> + * @freq: current cpu frequency value
+> + * @boost_supported: check whether the Processor or SBIOS supports boost mode
+> + *
+> + * The amd_cpudata is key private data for each CPU thread in AMD P-State, and
+> + * represents all the attributes and goals that AMD P-State requests at runtime.
+> + */
+> +struct amd_cpudata {
+> +	int	cpu;
+> +
+> +	struct	freq_qos_request req[2];
+> +	u64	cppc_req_cached;
+> +
+> +	u32	highest_perf;
+> +	u32	nominal_perf;
+> +	u32	lowest_nonlinear_perf;
+> +	u32	lowest_perf;
+> +
+> +	u32	max_freq;
+> +	u32	min_freq;
+> +	u32	nominal_freq;
+> +	u32	lowest_nonlinear_freq;
+> +
+> +	struct amd_aperf_mperf cur;
+> +	struct amd_aperf_mperf prev;
+> +
+> +	u64	freq;
+> +	bool	boost_supported;
+> +};
+> +
+> +#endif /* _LINUX_AMD_PSTATE_H */
+> -- 
+> 2.25.1
+> 
