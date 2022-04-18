@@ -2,60 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3EF6505C5C
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Apr 2022 18:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17984505C5D
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Apr 2022 18:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346113AbiDRQZK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Apr 2022 12:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55678 "EHLO
+        id S1346116AbiDRQZL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Apr 2022 12:25:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346111AbiDRQZJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Apr 2022 12:25:09 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D962ED5C
-        for <linux-pm@vger.kernel.org>; Mon, 18 Apr 2022 09:22:30 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id e21so19101279wrc.8
-        for <linux-pm@vger.kernel.org>; Mon, 18 Apr 2022 09:22:30 -0700 (PDT)
+        with ESMTP id S1346111AbiDRQZK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Apr 2022 12:25:10 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FBF2ED66
+        for <linux-pm@vger.kernel.org>; Mon, 18 Apr 2022 09:22:31 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id g18so19079090wrb.10
+        for <linux-pm@vger.kernel.org>; Mon, 18 Apr 2022 09:22:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=87fivufv+so6yKZtxUBhcGonieGouXYN8K2+TCVK0ss=;
-        b=PeItOQ6+HTRiACn1qDrDWjBev3e8pjsy0JJwE69tnHzKfIlask4Y2mJf5Ok/6OHPvJ
-         wKJKH//k8pTKkAGqWfM7dh2HXdpjX64qz1CoccHT1Q5uSph7HWJQ1CEyxEqXGeeno7e0
-         HSfcvWIuRCbipz9k4bDuqRwJcEMjLT1JUGOTd9iBL093bLskSExhM9lg7XHebMU+Kgge
-         wJ4RzTRn3IGhPoiRGFoztzRXQfsZz6L5nS6c8Je9ZecmRgQIai5i1t1WsH403y2/iSxW
-         3PBD6GiNSOcPF86XyzhaNo1pvZcNwoK37mg0CtrCGxNaKKpTzGGBmKY2oEkezCFG6KJ4
-         JZlw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=5UcOXVNhBqW5Ks+E6zq9WwfA0YmdX2BW7sLm1qI65JQ=;
+        b=fGFN0H643ROtLz8qHmRmxJWVMRhktrnJwhqSBz1hS2zhknCdiljTZ4iYpfPpWy6M7n
+         sNmYTOitPwTDB2Qo/6nueM4ni7dNKqjS7JftAp7uD3EKdONUUGHm/wXxDsGneKhMNnBF
+         1+QzhA+hmcnFMHDwce0RwYIxpGBkVg8G+jLwaF+8VPRKfj51PmdpKAPxMYehxYE7M9p1
+         3rXY2gPuxmKcsyTpKbFcIAWhHr0RhrUOQpnCJbK9FGdi07oAg5yVx5FmReLKvJEkIH9z
+         8De9e5Qe479M3DV6MKqate+O7SwFcO/vBNprWj+eZWy9qAkzGiZzdE9tvLBuEGJaSRDY
+         LBjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=87fivufv+so6yKZtxUBhcGonieGouXYN8K2+TCVK0ss=;
-        b=7+rVBh73cuRLCn3ktRhQr8WGx6xY5Ps0cdvrg85yjVXRmWcK+PByE/jpHpZ4tQ1aKW
-         F4/JfCmPL/awD1yB04+OAYluPDX+biEVaEwENYqg+0BA7AHzg1uwEeOoLxlV+e+aZn64
-         3NfYRtHiXSLo/1fUgDqOYTthijjcNmMdFQZrotsZsEIeXkgs7R/lLl+u66WL2freJ8Jf
-         CC02kT8D2V77E2J/RXUb8C4jGPWU3HR3//tX3JqY/Md/v7Fuca21MN6CW8QwDph+/eve
-         5qq/x24UdcpXb3ad03r4TTA36M6LSg4vzTtasXqtAjoNqXbTz5ZnyJ350xAUzceW68H8
-         U9Mw==
-X-Gm-Message-State: AOAM533czOHEVLYHmnSS3RoCK3i6UR/Y6gV1OMpqHRM8/kdvr7YWGD6R
-        hf4E4c9dEjO6O5xi4sK4kSYGOw==
-X-Google-Smtp-Source: ABdhPJwQc9dV88o70RWZPUPICkBZwssgDGng+SnWVz63m3b3vZJ87go4O1jhRoU9FYgVh+pDubEWoA==
-X-Received: by 2002:a5d:5487:0:b0:20a:8f45:8f34 with SMTP id h7-20020a5d5487000000b0020a8f458f34mr6361256wrv.699.1650298948651;
-        Mon, 18 Apr 2022 09:22:28 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=5UcOXVNhBqW5Ks+E6zq9WwfA0YmdX2BW7sLm1qI65JQ=;
+        b=JaRzgdrfphzr1vGBPc0lmel0VHgTSy/dRzvY4LvNQe3Hnf+n1TM/BTbkGE2hlPT1x5
+         gQjX+lGxVP0WMALaOMUhMDEK+Gvfl6aSar0R20es4jjQUV+rz27U0jTKggvcK3cIYvxh
+         mZayyz3qmiEwd8lZUnhyfEynLLq5VA/Ve8cSTPvPeilYT+eYBlKalIVb4YxD8h7Y5oDs
+         9CqsG5lqX+RMfUick5DmUoUZ0XSZa2j8sAlc+LuwGEwVahWIkedMKMtIC+WR/lFMaCaU
+         rKE68nRP5k0L9pRif0hI0eHeWrbHC8VjvxLpHe5csrvpYocm8td0gcYBGFiKgjx3c2xM
+         XZ+Q==
+X-Gm-Message-State: AOAM532PVktwvjqe2pkTWRULrxLiubWJ1wxwjd4OIJRp7zty8m2LGBas
+        QzJ9807Lhxx4PsfTnJdmVTQyZ6mdC4XYmA==
+X-Google-Smtp-Source: ABdhPJySd/Kb215eN49sj4XVWZxJBPqGLwcgslKA9jNnheiw0gNvYOhdZpU20D8ACs/emVjmAiuJXg==
+X-Received: by 2002:adf:fd50:0:b0:207:9f29:1dc2 with SMTP id h16-20020adffd50000000b002079f291dc2mr8459212wrs.135.1650298949702;
+        Mon, 18 Apr 2022 09:22:29 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id 205-20020a1c02d6000000b003928c42d02asm8460853wmc.23.2022.04.18.09.22.27
+        by smtp.gmail.com with ESMTPSA id 205-20020a1c02d6000000b003928c42d02asm8460853wmc.23.2022.04.18.09.22.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 09:22:28 -0700 (PDT)
+        Mon, 18 Apr 2022 09:22:29 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     agross@kernel.org, bjorn.andersson@linaro.org, ilia.lin@kernel.org,
         rafael@kernel.org
 Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        bryan.odonoghue@linaro.org
-Subject: [PATCH 0/5] qcom-cpufreq-nvmem: Add msm8939 with some fixups
-Date:   Mon, 18 Apr 2022 17:22:21 +0100
-Message-Id: <20220418162226.2983117-1-bryan.odonoghue@linaro.org>
+        bryan.odonoghue@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH 1/5] dt-bindings: opp: Add missing compat devices
+Date:   Mon, 18 Apr 2022 17:22:22 +0100
+Message-Id: <20220418162226.2983117-2-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220418162226.2983117-1-bryan.odonoghue@linaro.org>
+References: <20220418162226.2983117-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,21 +71,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fix up some missing compat strings for the qcom-cpufreq-nvmem yaml.
-Add in msm8939 as a compatible qcom-cpufreq-nvmem.
+A number of devices listed in drivers/cpufreq/qcom-cpufreq-nvmem.c appear
+to be missing from the compatible list.
 
-Bryan O'Donoghue (5):
-  dt-bindings: opp: Add missing compat devices
-  dt-bindings: opp: Add msm8939 to the compatible list
-  cpufreq: blocklist Qualcomm msm8939 in cpufreq-dt-platdev
-  cpufreq: qcom-cpufreq-nvmem: Rename qcs404 data to cpr_genpd
-  cpufreq: qcom-cpufreq-nvmem: Add msm8939 as cpr_genpd
+Cc: ilia.lin@kernel.org
+Cc: robh+dt@kernel.org
+Cc: krzk+dt@kernel.org
+Cc: devicetree@vger.kernel.org
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+---
+ .../devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml     | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- .../devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 8 ++++++++
- drivers/cpufreq/cpufreq-dt-platdev.c                     | 1 +
- drivers/cpufreq/qcom-cpufreq-nvmem.c                     | 9 +++++----
- 3 files changed, 14 insertions(+), 4 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+index a9a776da5505..5eb1dba13fe2 100644
+--- a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
++++ b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+@@ -22,6 +22,12 @@ select:
+     compatible:
+       contains:
+         enum:
++          - qcom,apq8064
++          - qcom,apq8096
++          - qcom,ipq8064
++          - qcom,msm8960
++          - qcom,msm8974
++          - qcom,msm8996
+           - qcom,qcs404
+   required:
+     - compatible
 -- 
 2.35.1
 
