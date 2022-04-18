@@ -2,72 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A11F505D72
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Apr 2022 19:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33BA2505DC0
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Apr 2022 19:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240855AbiDRRWv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Apr 2022 13:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
+        id S230194AbiDRRyV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 18 Apr 2022 13:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346994AbiDRRWi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Apr 2022 13:22:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D092725C6F
-        for <linux-pm@vger.kernel.org>; Mon, 18 Apr 2022 10:19:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650302398;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BOeDwm19QZU5bj1yBihjhswrckaR7N4xxWK6qgyPxIA=;
-        b=agF6wIzLCHobxV58TYAoaWEsTOY5um5S9kcPGeXGW+0mMFX3sT4wxLD/QNBjtxSAIYcf/u
-        2I/oARXEHZR/Pj2WuZ9yW9mS8pPPknpq/OLs0j0leGCFrGEpK1aCxgfZLBZ9QsqCaxwvqv
-        A6NikqH8ndrukiftjMrKrCK59FWYNAk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-437-7tjVyLDfNhGYyJThbh6otQ-1; Mon, 18 Apr 2022 13:19:52 -0400
-X-MC-Unique: 7tjVyLDfNhGYyJThbh6otQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4AC56811E78;
-        Mon, 18 Apr 2022 17:19:46 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.13])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 34F3840FD37C;
-        Mon, 18 Apr 2022 17:19:43 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Mon, 18 Apr 2022 19:19:45 +0200 (CEST)
-Date:   Mon, 18 Apr 2022 19:19:42 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        ebiederm@xmission.com, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/5] sched,ptrace: Fix ptrace_check_attach() vs PREEMPT_RT
-Message-ID: <20220418171941.GB16199@redhat.com>
-References: <20220413185909.GB30360@redhat.com>
- <20220413192053.GY2731@worktop.programming.kicks-ass.net>
- <20220413195612.GC2762@worktop.programming.kicks-ass.net>
- <20220414115410.GA32752@redhat.com>
- <20220414183433.GC32752@redhat.com>
- <YlikBjA3kL3XEQP5@hirez.programming.kicks-ass.net>
- <20220415101644.GA10421@redhat.com>
- <20220415105755.GA15217@redhat.com>
- <Yllep6B8eva2VURJ@hirez.programming.kicks-ass.net>
- <20220418170104.GA16199@redhat.com>
+        with ESMTP id S233654AbiDRRyU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Apr 2022 13:54:20 -0400
+X-Greylist: delayed 400 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 18 Apr 2022 10:51:40 PDT
+Received: from mellanox.co.il (mail-il-dmz.mellanox.com [193.47.165.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3890A326E7
+        for <linux-pm@vger.kernel.org>; Mon, 18 Apr 2022 10:51:39 -0700 (PDT)
+Received: from Internal Mail-Server by MTLPINE1 (envelope-from asmaa@mellanox.com)
+        with SMTP; 18 Apr 2022 20:44:59 +0300
+Received: from farm-0002.mtbu.labs.mlnx (farm-0002.mtbu.labs.mlnx [10.15.2.32])
+        by mtbu-labmailer.labs.mlnx (8.14.4/8.14.4) with ESMTP id 23IHirUX030638;
+        Mon, 18 Apr 2022 13:44:55 -0400
+Received: (from asmaa@localhost)
+        by farm-0002.mtbu.labs.mlnx (8.14.7/8.13.8/Submit) id 23IHir2J004378;
+        Mon, 18 Apr 2022 13:44:53 -0400
+From:   Asmaa Mnebhi <asmaa@nvidia.com>
+To:     sre@kernel.org, linux-pm@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Cc:     Asmaa Mnebhi <asmaa@nvidia.com>, linus.walleij@linaro.org
+Subject: [PATCH v1 1/1] Support power control driver for BlueField SoCs.
+Date:   Mon, 18 Apr 2022 13:44:50 -0400
+Message-Id: <20220418174450.4304-1-asmaa@nvidia.com>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220418170104.GA16199@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,24 +43,151 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/18, Oleg Nesterov wrote:
->
->  static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
->  {
-...
-> +	if (!traced)
-> +		return -ESRCH;
-> +
-> +	WARN_ON(READ_ONCE(child->__state) == __TASK_TRACED);
-> +	if (ignore_state)
-> +		return 0;
-> +
-> +	if (!task_is_traced(child))
-> +		return -ESRCH;
+This patch supports handling 2 BlueField power states controlled by GPIO interrupts:
+1) chip reset and
+2) low power mode
 
-This is the new check V1 didn't have, we need it to unsure that check_attach
-can't miss the change in child->jobctl and call wait_task_inactive() before
-the child marks itself as "traced" and clears JOBCTL_TRACED_XXX.
+This driver is dependent and should be loaded after the gpio-mlxbf2.c driver,
+which is the gpio and interrupt controller.
 
-Oleg.
+Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
+---
+ drivers/power/reset/Kconfig     |   6 ++
+ drivers/power/reset/Makefile    |   1 +
+ drivers/power/reset/pwr-mlxbf.c | 100 ++++++++++++++++++++++++++++++++
+ 3 files changed, 107 insertions(+)
+ create mode 100644 drivers/power/reset/pwr-mlxbf.c
+
+diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+index 4b563db3ab3e..a8c46ba5878f 100644
+--- a/drivers/power/reset/Kconfig
++++ b/drivers/power/reset/Kconfig
+@@ -297,4 +297,10 @@ config NVMEM_REBOOT_MODE
+ 	  then the bootloader can read it and take different
+ 	  action according to the mode.
+ 
++config POWER_MLXBF
++	tristate "Mellanox BlueField power handling driver"
++	depends on (GPIO_MLXBF2 && ACPI)
++	help
++	  This driver supports reset or low power mode handling for Mellanox BlueField.
++
+ endif
+diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+index f606a2f60539..0a39424fc558 100644
+--- a/drivers/power/reset/Makefile
++++ b/drivers/power/reset/Makefile
+@@ -35,3 +35,4 @@ obj-$(CONFIG_REBOOT_MODE) += reboot-mode.o
+ obj-$(CONFIG_SYSCON_REBOOT_MODE) += syscon-reboot-mode.o
+ obj-$(CONFIG_POWER_RESET_SC27XX) += sc27xx-poweroff.o
+ obj-$(CONFIG_NVMEM_REBOOT_MODE) += nvmem-reboot-mode.o
++obj-$(CONFIG_POWER_MLXBF) += pwr-mlxbf.o
+diff --git a/drivers/power/reset/pwr-mlxbf.c b/drivers/power/reset/pwr-mlxbf.c
+new file mode 100644
+index 000000000000..30b3ba13be75
+--- /dev/null
++++ b/drivers/power/reset/pwr-mlxbf.c
+@@ -0,0 +1,100 @@
++// SPDX-License-Identifier: GPL-2.0-only or BSD-3-Clause
++
++/*
++ *  Copyright (c) 2022 NVIDIA CORPORATION & AFFILIATES.
++ */
++
++#include <linux/acpi.h>
++#include <linux/device.h>
++#include <linux/interrupt.h>
++#include <linux/kernel.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/pm.h>
++#include <linux/reboot.h>
++#include <linux/types.h>
++
++const char *rst_pwr_hid = "MLNXBF24";
++const char *low_pwr_hid = "MLNXBF29";
++
++struct pwr_mlxbf {
++	struct work_struct send_work;
++	const char *hid;
++};
++
++static void pwr_mlxbf_send_work(struct work_struct *work)
++{
++	acpi_bus_generate_netlink_event("button/power.*", "Power Button", 0x80, 1);
++}
++
++static irqreturn_t pwr_mlxbf_irq(int irq, void *ptr)
++{
++	struct pwr_mlxbf *priv = ptr;
++
++	if (!strncmp(priv->hid, rst_pwr_hid, 8))
++		emergency_restart();
++
++	if (!strncmp(priv->hid, low_pwr_hid, 8))
++		schedule_work(&priv->send_work);
++
++	return IRQ_HANDLED;
++}
++
++static int
++pwr_mlxbf_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct acpi_device *adev;
++	struct pwr_mlxbf *priv;
++	const char *hid;
++	int irq, err;
++
++	priv = devm_kzalloc(dev, sizeof(struct pwr_mlxbf), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	adev = ACPI_COMPANION(dev);
++	if (!adev)
++		return -ENXIO;
++
++	hid = acpi_device_hid(adev);
++	priv->hid = hid;
++
++	irq = acpi_dev_gpio_irq_get(ACPI_COMPANION(&pdev->dev), 0);
++	if (irq == -EPROBE_DEFER) {
++		return -EPROBE_DEFER;
++	} else if (irq < 0) {
++		dev_err(&pdev->dev, "Error getting %s irq.\n", priv->hid);
++		return -ENXIO;
++	}
++
++	INIT_WORK(&priv->send_work, pwr_mlxbf_send_work);
++
++	err = devm_request_irq(&pdev->dev, irq, pwr_mlxbf_irq, 0, hid, priv);
++	if (err)
++		dev_err(&pdev->dev, "Failed request of %s irq\n", priv->hid);
++
++	return err;
++}
++
++static const struct acpi_device_id __maybe_unused pwr_mlxbf_acpi_match[] = {
++	{ "MLNXBF24", 0 },
++	{ "MLNXBF29", 0 },
++	{},
++};
++MODULE_DEVICE_TABLE(acpi, pwr_mlxbf_acpi_match);
++
++static struct platform_driver pwr_mlxbf_driver = {
++	.driver = {
++		.name = "pwr_mlxbf",
++		.acpi_match_table = pwr_mlxbf_acpi_match,
++	},
++	.probe    = pwr_mlxbf_probe,
++};
++
++module_platform_driver(pwr_mlxbf_driver);
++
++MODULE_DESCRIPTION("Mellanox BlueField power driver");
++MODULE_AUTHOR("Asmaa Mnebhi <asmaa@nvidia.com>");
++MODULE_LICENSE("Dual BSD/GPL");
+-- 
+2.30.1
 
