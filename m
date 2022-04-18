@@ -2,105 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74481504A77
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Apr 2022 03:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC16504A8A
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Apr 2022 03:37:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235578AbiDRBcV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 17 Apr 2022 21:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43450 "EHLO
+        id S235559AbiDRBkb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 17 Apr 2022 21:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232905AbiDRBcR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Apr 2022 21:32:17 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFBB17068;
-        Sun, 17 Apr 2022 18:29:38 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 77A9B1F44320
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650245376;
-        bh=Ajn7d9ehxuO5NknWvmo0k/aIhgzNt/YPk9MMAC0rgK4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=H6wbrzdvBv8/q0QMxBBTynYiA8MocDKNi6pPzdbeah1TBS0sfobjoYMeVHdywDKJa
-         YOMseWFehs7fKiS1bqLxpLaRV3E2gVJ6NGmAk/kK7Tkj7SOk+d7kIA+pVboML+0znZ
-         oBB6ZdZaJe8q4CuDbVjC8i5gSLP4M7dhUJeJhWywSpYx0y55HsGlo0NSg/sn82x813
-         XAZwVlD5NoEcUOWKl8ezQsrDqxJrPlOK3xiszEQs//fITbMqaQ95IAUW03Xr4Fzay/
-         IWbATXa2Chl0Jy2VqKMQd994g2oQEgzNvPwVOvB9VgKGF8p+Y8PjFoazCNalTfgpXO
-         TGCe7ZBTJXzKg==
-Message-ID: <fa20ae2f-e265-c713-493d-5b2ebcdf7f0a@collabora.com>
-Date:   Mon, 18 Apr 2022 04:29:30 +0300
+        with ESMTP id S232339AbiDRBka (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 17 Apr 2022 21:40:30 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12846B87C;
+        Sun, 17 Apr 2022 18:37:52 -0700 (PDT)
+X-UUID: 1227b60080594bb489291a5e9899a0b5-20220418
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:a9652940-7633-4f59-b913-3764e1a50e25,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.4,REQID:a9652940-7633-4f59-b913-3764e1a50e25,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:faefae9,CLOUDID:430f2eef-06b0-4305-bfbf-554bfc9d151a,C
+        OID:IGNORED,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,File:ni
+        l,QS:0,BEC:nil
+X-UUID: 1227b60080594bb489291a5e9899a0b5-20220418
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 731530093; Mon, 18 Apr 2022 09:37:46 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 18 Apr 2022 09:37:45 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 18 Apr
+ 2022 09:37:45 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 18 Apr 2022 09:37:45 +0800
+Message-ID: <3a1fe42adace3a1355b6a95fbd55abc724c1053d.camel@mediatek.com>
+Subject: Re: [PATCH V3 04/15] cpufreq: mediatek: Record previous target
+ vproc value
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
+        <krzk+dt@kernel.org>, <matthias.bgg@gmail.com>
+CC:     <jia-wei.chang@mediatek.com>, <roger.lu@mediatek.com>,
+        <hsinyi@google.com>, <khilman@baylibre.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "Andrew-sh . Cheng" <andrew-sh.cheng@mediatek.com>
+Date:   Mon, 18 Apr 2022 09:37:45 +0800
+In-Reply-To: <9751622e-f969-c025-2a39-efcc9a612392@collabora.com>
+References: <20220415055916.28350-1-rex-bc.chen@mediatek.com>
+         <20220415055916.28350-5-rex-bc.chen@mediatek.com>
+         <9751622e-f969-c025-2a39-efcc9a612392@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v7 03/20] reboot: Print error message if restart handler
- has duplicated priority
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-References: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
- <20220411233832.391817-4-dmitry.osipenko@collabora.com>
- <CAJZ5v0gf1J+yPW14TAdLGLGfO+-2s=r0DDP7d+Rgop3=dB0gaQ@mail.gmail.com>
- <af51d9d0-26ba-fc66-05f1-d92ef7172730@collabora.com>
- <CAJZ5v0jFQi1x1Fnfk04n+HTTirz19-_xW2NgJtpOYyPgVh3Afw@mail.gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <CAJZ5v0jFQi1x1Fnfk04n+HTTirz19-_xW2NgJtpOYyPgVh3Afw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -109,81 +74,93 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 4/14/22 14:19, Rafael J. Wysocki wrote:
-> On Thu, Apr 14, 2022 at 12:24 AM Dmitry Osipenko
-> <dmitry.osipenko@collabora.com> wrote:
->>
->> On 4/13/22 21:48, Rafael J. Wysocki wrote:
->>> On Tue, Apr 12, 2022 at 1:39 AM Dmitry Osipenko
->>> <dmitry.osipenko@collabora.com> wrote:
->>>>
->>>> Add sanity check which ensures that there are no two restart handlers
->>>> registered using the same priority. This requirement will become mandatory
->>>> once all drivers will be converted to the new API and such errors will be
->>>> fixed.
->>>>
->>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
->>>
->>> The first two patches in the series are fine with me and there's only
->>> one minor nit regarding this one (below).
->>>
->>>> ---
->>>>  kernel/reboot.c | 15 +++++++++++++++
->>>>  1 file changed, 15 insertions(+)
->>>>
->>>> diff --git a/kernel/reboot.c b/kernel/reboot.c
->>>> index ed4e6dfb7d44..acdae4e95061 100644
->>>> --- a/kernel/reboot.c
->>>> +++ b/kernel/reboot.c
->>>> @@ -182,6 +182,21 @@ static ATOMIC_NOTIFIER_HEAD(restart_handler_list);
->>>>   */
->>>>  int register_restart_handler(struct notifier_block *nb)
->>>>  {
->>>> +       int ret;
->>>> +
->>>> +       ret = atomic_notifier_chain_register_unique_prio(&restart_handler_list, nb);
->>>> +       if (ret != -EBUSY)
->>>> +               return ret;
->>>> +
->>>> +       /*
->>>> +        * Handler must have unique priority. Otherwise call order is
->>>> +        * determined by registration order, which is unreliable.
->>>> +        *
->>>> +        * This requirement will become mandatory once all drivers
->>>> +        * will be converted to use new sys-off API.
->>>> +        */
->>>> +       pr_err("failed to register restart handler using unique priority\n");
->>>
->>> I would use pr_info() here, because this is not a substantial error AFAICS.
->>
->> It's indeed not a substantial error so far, but it will become
->> substantial later on once only unique priorities will be allowed. The
->> pr_warn() could be a good compromise here, pr_info() is too mild, IMO.
+On Fri, 2022-04-15 at 14:24 +0200, AngeloGioacchino Del Regno wrote:
+> Il 15/04/22 07:59, Rex-BC Chen ha scritto:
+> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> > 
+> > We found the buck voltage may not be exactly the same with what we
+> > set
+> > because CPU may share the same buck with other module.
+> > Therefore, we need to record the previous desired value instead of
+> > reading
+> > it from regulators.
+> > 
+> > Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
+> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >   drivers/cpufreq/mediatek-cpufreq.c | 17 +++++++++++++----
+> >   1 file changed, 13 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/cpufreq/mediatek-cpufreq.c
+> > b/drivers/cpufreq/mediatek-cpufreq.c
+> > index ff27f77e8ee6..fa8b193bf27b 100644
+> > --- a/drivers/cpufreq/mediatek-cpufreq.c
+> > +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> > @@ -40,6 +40,7 @@ struct mtk_cpu_dvfs_info {
+> >   	struct list_head list_head;
+> >   	int intermediate_voltage;
+> >   	bool need_voltage_tracking;
+> > +	int pre_vproc;
+> >   };
+> >   
+> >   static LIST_HEAD(dvfs_info_list);
+> > @@ -191,11 +192,17 @@ static int
+> > mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+> >   
+> >   static int mtk_cpufreq_set_voltage(struct mtk_cpu_dvfs_info
+> > *info, int vproc)
+> >   {
+> > +	int ret;
+> > +
+> >   	if (info->need_voltage_tracking)
+> > -		return mtk_cpufreq_voltage_tracking(info, vproc);
+> > +		ret = mtk_cpufreq_voltage_tracking(info, vproc);
+> >   	else
+> > -		return regulator_set_voltage(info->proc_reg, vproc,
+> > -					     vproc + VOLT_TOL);
+> > +		ret = regulator_set_voltage(info->proc_reg, vproc,
+> > +					    MAX_VOLT_LIMIT);
+> > +	if (!ret)
+> > +		info->pre_vproc = vproc;
+> > +
+> > +	return ret;
+> >   }
+> >   
+> >   static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
+> > @@ -213,7 +220,9 @@ static int mtk_cpufreq_set_target(struct
+> > cpufreq_policy *policy,
+> >   	inter_vproc = info->intermediate_voltage;
+> >   
+> >   	pre_freq_hz = clk_get_rate(cpu_clk);
+> > -	pre_vproc = regulator_get_voltage(info->proc_reg);
+> > +	pre_vproc = info->pre_vproc;
+> > +	if (pre_vproc <= 0)
+> > +		pre_vproc = regulator_get_voltage(info->proc_reg);
 > 
-> Well, I'm still unconvinced about requiring all of the users of this
-> interface to use unique priorities.
+> I would do it like that, instead:
 > 
-> Arguably, there are some of them who don't really care about the
-> ordering, so could there be an option for them to specify the lack of
-> care by, say, passing 0 as the priority that would be regarded as a
-> special case?
+> 	if (unlikely(info->pre_vproc <= 0))
+> 		pre_vproc = regulator_get_voltage(info->proc_reg);
+> 	else
+> 		pre_vproc = info->pre_vproc;
 > 
-> IOW, if you pass 0, you'll be run along the others who've also passed
-> 0, but if you pass anything different from 0, it must be unique.  What
-> do you think?
+> ....as even though it is indeed possible that info->pre_vproc is <=
+> 0, it is
+> very unlikely to happen ;-)
+> This also solves a 'pre_vproc' double assignment issue, by the way.
+> 
+> Cheers,
+> Angelo
+> 
+> 
+> 
 
-There are indeed cases where ordering is unimportant. Like a case of
-PMIC and watchdog restart handlers for example, both handlers will
-produce equal effect from a user's perspective. Perhaps indeed it's more
-practical to have at least one shared level.
+Hello Angelo,
 
-In this patchset the level 0 is specified as an alias to the default
-level 128. If one user registers handler using unique level 128 and the
-other user uses non-unique level 0, then we have ambiguity.
+OK, I will add this in next version.
+Thanks for your suggestion.
 
-One potential option is to make the whole default level 128 non-unique.
-This will allow users to not care about the uniqueness by default like
-they always did it previously, but it will hide potential problems for
-users who actually need unique level and don't know about it yet due to
-a lucky registration ordering that they have today. Are you okay with
-this option?
+BRs,
+Rex
+
