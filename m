@@ -2,81 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBD55075EC
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 19:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A78C6507670
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 19:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355276AbiDSRHX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Apr 2022 13:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52838 "EHLO
+        id S1353159AbiDSR0Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Apr 2022 13:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355658AbiDSRG5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 13:06:57 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF676248
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 10:01:59 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id n33-20020a17090a5aa400b001d28f5ee3f9so2483017pji.4
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 10:01:59 -0700 (PDT)
+        with ESMTP id S1355762AbiDSR0V (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 13:26:21 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C9D3CFE0
+        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 10:23:26 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id x3so11112740wmj.5
+        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 10:23:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7tg2thbpjG8qne+4AvhFIxe4oVq+0BmdiSDtYmXz0E4=;
-        b=fVImPcRy28zjcv6Hhr7sYV+fKd+K4VIlNnF8vveu6Omn+qLPmn4owgVYzXyZwg88nf
-         FDPrO5MeaV45WRozHDs+02jhaWToBFLORvvHjvMBZtDyxeAp0O0u8doJ9Ruo5/PanlVd
-         0WtB3NXpyNASs3+VYca59jtnMmQUBcSMdtELTGtgif7F2EepmZZQa3DcaUmlv9IVadE6
-         eiSCEtbTE89UCHezniW/c4QinHpxDZa/qu1xM6xea+h/5NeSQJn/dAtgWrlfmwOskxVz
-         PUv6mSj3x2sUAYbVS7WuAu2LvsDfF0KoMMOxYeNL6DodEb4tmSDPxnzoOPoaEooJBCgu
-         g8FQ==
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=kXvSKXWClajeK1qES+zdMMc7Jyz9N8shBliP+K3BmWg=;
+        b=k+UAvNDjaCv9Q9oQs2JwtpFZjtNcIm36E6OR2YYD/cF3bPg7LUbh2hj/QgQCCPhPH3
+         grpTBuuyxMKhAk4iR0hRyhr+bRHkWlC2w7Y9InHd4+O6LSyOfhtdYOW6JMfIS3wL7D8k
+         4GP70l5KSRZ9mOlyBA4IMZGehQ1EQAhZWe3VNW7Zr8YercxW9ygtUKmgdMv0TUZPK00c
+         WhePf7FW25Dm1VVAuW2L1rl7t1RHwCpp941JiaWdX9ocVp8e35V55wQdU7MhTIjYUPs4
+         2t7bqdiaWLiQLxOx7l/nPk+rgvESIIT5/v19HU4BuAWBvBXQKsMvAYoUE+6A5XHQw8I9
+         5QOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7tg2thbpjG8qne+4AvhFIxe4oVq+0BmdiSDtYmXz0E4=;
-        b=cL17Z2PMHs14r10s5dsRm5biFz9T9jghUE8DvduN2R31wAyu2MTMiLwOxQ0VwxTSSp
-         5AUgWJ8S37BAkmrDYSeHJsol0RCzWlDrntZ+tgaCdkCz8iQn+TjAVyMnwwh4AT3S0jUR
-         JoEuT2k/YsU7uNUjNRLpJlUUnGm0lTcnp0dPKj8/ODVQ5xnqaK5vyrD8xQ2FqrvQYRsC
-         //ZspN2zKargQ6B7YGa41tZ2UR3ixaCG3zxCmyCAdseuLwhmQX64Dxcqxf3REB0hSeXE
-         xt8qydYq3e+PB0kbHcmARxBiyAh87B7AGh+eeEBNE3USIWv8Mjc/l/x45K2fY8VDi3Qr
-         uq8g==
-X-Gm-Message-State: AOAM533BJ2ibySoPTMiloRl6fkk1GDADIt1T9Zp7u77ZX9z1owd+zpum
-        +s98TV+nddQKnP2RXKHuR1rK
-X-Google-Smtp-Source: ABdhPJyIjAlCeSutoPh/iCcE6wFr0OlMv9ZJKKFpe+TnNksBFfGwsV6m96ls/fdomVssNA9kYzqLFQ==
-X-Received: by 2002:a17:902:6acb:b0:158:8923:86df with SMTP id i11-20020a1709026acb00b00158892386dfmr16703296plt.144.1650387719145;
-        Tue, 19 Apr 2022 10:01:59 -0700 (PDT)
-Received: from thinkpad ([117.202.186.149])
-        by smtp.gmail.com with ESMTPSA id w123-20020a623081000000b005056a4d71e3sm16852618pfw.77.2022.04.19.10.01.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 10:01:58 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 22:31:49 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [RFC PATCH v2 5/6] ufs: use PM OPP when scaling gears
-Message-ID: <20220419170149.GB8699@thinkpad>
-References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
- <20220411154347.491396-6-krzysztof.kozlowski@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=kXvSKXWClajeK1qES+zdMMc7Jyz9N8shBliP+K3BmWg=;
+        b=R66Lncy8LyHY0bnpAhE5E7uCKpMBPafZSL/YqLyCrHzSqoZq/ESp6Cp0WEUi+ve8QI
+         H5B818t0b4wcS0j7jX9jksigytqncuJVB1lrib/WtUBuLmUogZHkUGwyqqw4vwGv1JFO
+         2IIqoltI70YldD5dxa4TL9IYt2NfRxqe06RMjiMKkMsijFifV+7/6wWpoOrCI9ojs/js
+         hP4oet7M1JWFzl2nN52R4UN3hEGFAKWartjZWM4VCuAEbcyW0J9kKi3wQ/y3fEwX/brX
+         Se1Fg8R1diSWVaQcfcLvf43xXSdTivAivtw4ca5OrDdWiTsBt4mDQnuamBhXue8hbNLS
+         UBKg==
+X-Gm-Message-State: AOAM5335KkZ0eHyQvOuaSpDlcu+iMlF1VzoMpBT3io+wL+J1zohz/QD5
+        tjBOIa+/Txe1/X8XofHg0NHwsQ==
+X-Google-Smtp-Source: ABdhPJzh5du4e3tPb0Cc7Asfdx839bAY3gH8FQ39qaw4IgF/TIdnFr7APykqhGCLEOiOkrFJWZQYkw==
+X-Received: by 2002:a1c:4c05:0:b0:38e:b736:350 with SMTP id z5-20020a1c4c05000000b0038eb7360350mr21553329wmf.65.1650389004743;
+        Tue, 19 Apr 2022 10:23:24 -0700 (PDT)
+Received: from [192.168.1.41] (176-182-171-101.abo.bbox.fr. [176.182.171.101])
+        by smtp.googlemail.com with ESMTPSA id p18-20020adfba92000000b001e4ae791663sm13150740wrg.62.2022.04.19.10.23.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 10:23:23 -0700 (PDT)
+Message-ID: <0af9a609-ff21-2aca-26dd-8c92e197a2b7@linaro.org>
+Date:   Tue, 19 Apr 2022 19:23:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220411154347.491396-6-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: Re: [PATCH v5 4/4] thermal: k3_j72xx_bandgap: Add the bandgap driver
+ support
+To:     Keerthy <j-keerthy@ti.com>, robh+dt@kernel.org,
+        rui.zhang@intel.com, amitk@kernel.org, kristo@kernel.org
+Cc:     linux-pm@vger.kernel.org, vigneshr@ti.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220412101409.7980-1-j-keerthy@ti.com>
+ <20220412101409.7980-5-j-keerthy@ti.com>
+Content-Language: en-US
+In-Reply-To: <20220412101409.7980-5-j-keerthy@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,431 +76,403 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 05:43:46PM +0200, Krzysztof Kozlowski wrote:
-> Scaling gears requires not only scaling clocks, but also voltage levels,
-> e.g. via performance states.
-> 
-> Use the provided OPP table, to set proper OPP frequency which through
-> required-opps will trigger performance state change.  This deprecates
-> the old freq-table-hz Devicetree property and old clock scaling method
-> in favor of PM core code.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  drivers/scsi/ufs/ufshcd-pltfrm.c |  69 +++++++++++++++++++
->  drivers/scsi/ufs/ufshcd.c        | 115 +++++++++++++++++++++++--------
->  drivers/scsi/ufs/ufshcd.h        |   4 ++
->  3 files changed, 158 insertions(+), 30 deletions(-)
-> 
-> diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
-> index c1d8b6f46868..edba585db0c1 100644
-> --- a/drivers/scsi/ufs/ufshcd-pltfrm.c
-> +++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
-> @@ -107,6 +107,69 @@ static int ufshcd_parse_clock_info(struct ufs_hba *hba)
->  	return ret;
->  }
->  
-> +static int ufshcd_parse_operating_points(struct ufs_hba *hba)
+
+Hi Kheerty,
+
+On 12/04/2022 12:14, Keerthy wrote:
+
+
+[ ... ]
+
+> +/**
+> + * struct err_values - structure containing error/reference values
+> + * @refs: reference error values for -40C, 30C, 125C & 150C
+> + * @errs: Actual error values for -40C, 30C, 125C & 150C read from the efuse
+> + */
+> +struct err_values {
+> +	int refs[4];
+> +	int errs[4];
+> +};
+> +
+> +static void create_table_segments(struct err_values *err_vals, int seg,
+> +				  int *ref_table)
 > +{
-> +	struct device *dev = hba->dev;
-> +	struct device_node *np = dev->of_node;
-> +	struct ufs_clk_info *clki;
-> +	const char *names[16];
-> +	bool clocks_done;
-
-Maybe freq_table?
-
-> +	int cnt, i, ret;
+> +	int m = 0, c, num, den, i, err, idx1, idx2, err1, err2, ref1, ref2;
 > +
-> +	if (!of_find_property(dev->of_node, "operating-points-v2", NULL))
-> +		return 0;
+> +	if (seg == 0)
+> +		idx1 = 0;
+> +	else
+> +		idx1 = err_vals->refs[seg];
 > +
-> +	cnt = of_property_count_strings(np, "clock-names");
-> +	if (cnt <= 0) {
-> +		dev_warn(dev, "%s: Missing clock-names\n",
-> +			 __func__);
+> +	idx2 = err_vals->refs[seg + 1];
+> +	err1 = err_vals->errs[seg];
+> +	err2 = err_vals->errs[seg + 1];
+> +	ref1 = err_vals->refs[seg];
+> +	ref2 = err_vals->refs[seg + 1];
+> +
+> +	/*
+> +	 * Calculate the slope with adc values read from the register
+> +	 * as the y-axis param and err in adc value as x-axis param
+> +	 */
+> +	num = ref2 - ref1;
+> +	den = err2 - err1;
+> +	if (den)
+> +		m = num / den;
+> +	c = ref2 - m * err2;
+> +
+> +	/*
+> +	 * Take care of divide by zero error if error values are same
+> +	 * Or when the slope is 0
+> +	 */
+> +	if (den != 0 && m != 0) {
+> +		for (i = idx1; i <= idx2; i++) {
+> +			err = (i - c) / m;
+> +			if (((i + err1) < 0) || ((i + err1) > 1023))
+> +				continue;
+
+Should the test being against 'err' not 'err1' ?
+
+> +			derived_table[i] = ref_table[i + err];
+> +		}
+> +	} else { /* Constant error take care of divide by zero */
+> +		for (i = idx1; i <= idx2; i++) {
+> +			if (((i + err1) < 0) || ((i + err1) > 1023))
+> +				continue;
+> +			derived_table[i] = ref_table[i + err1];
+> +		}
+> +	}
+> +}
+> +
+> +static int prep_lookup_table(struct err_values *err_vals, int *ref_table)
+> +{
+> +	int inc, i, seg;
+> +
+> +	/*
+> +	 * Fill up the lookup table under 3 segments
+> +	 * region -40C to +30C
+> +	 * region +30C to +125C
+> +	 * region +125C to +150C
+> +	 */
+> +	for (seg = 0; seg < 3; seg++)
+> +		create_table_segments(err_vals, seg, ref_table);
+> +
+> +	/* Get to the first valid temperature */
+> +	i = 0;
+> +	while (!derived_table[i])
+> +		i++;
+> +
+> +	/*
+> +	 * Get to the last zero index and back fill the temperature for
+> +	 * sake of continuity
+> +	 */
+> +	if (i) {
+> +		/* 300 milli celsius steps */
+> +		while (i--)
+> +			derived_table[i] = derived_table[i + 1] - 300;
+> +		/* case 0 */
+> +		derived_table[i] = derived_table[i + 1] - 300;
+> +	}
+
+memset ?
+
+> +
+> +	/*
+> +	 * Fill the last trailing 0s which are unfilled with increments of
+> +	 * 100 milli celsius till 1023 code
+> +	 */
+> +	i = 1023;
+> +	while (!derived_table[i])
+> +		i--;
+
+All those loop can be replaced by addresses variant IMO. Up to you if 
+you want to use mem* variants.
+
+eg. void *flz = memrchr(derived_table, 0, size); /* find last zero */
+
+> +
+> +	i++;
+> +	inc = 1;
+> +	while (i < 1024) {
+> +		derived_table[i] = derived_table[i - 1] + inc * 100;
+> +		i++;
+> +	}
+> +
+> +	return 0;
+> +}
+
+Please replace all the 1024-ish literals everywhere by a macro
+
+> +struct k3_thermal_data;
+> +
+> +struct k3_j72xx_bandgap {
+> +	struct device *dev;
+> +	void __iomem *base;
+> +	void __iomem *cfg2_base;
+> +	void __iomem *fuse_base;
+> +	struct k3_thermal_data *ts_data[K3_VTM_MAX_NUM_TS];
+> +};
+> +
+> +/* common data structures */
+> +struct k3_thermal_data {
+> +	struct k3_j72xx_bandgap *bgp;
+> +	u32 ctrl_offset;
+> +	u32 stat_offset;
+> +};
+> +
+> +static int two_cmp(int tmp, int mask)
+> +{
+> +	tmp = ~(tmp);
+> +	tmp &= mask;
+> +	tmp += 1;
+> +
+> +	/* Return negative value */
+> +	return (0 - tmp);
+> +}
+> +
+> +static unsigned int vtm_get_best_value(unsigned int s0, unsigned int s1,
+> +				       unsigned int s2)
+> +{
+> +	int d01 = abs(s0 - s1);
+> +	int d02 = abs(s0 - s2);
+> +	int d12 = abs(s1 - s2);
+> +
+> +	if (d01 <= d02 && d01 <= d12)
+> +		return (s0 + s1) / 2;
+> +
+> +	if (d02 <= d01 && d02 <= d12)
+> +		return (s0 + s2) / 2;
+> +
+> +	return (s1 + s2) / 2;
+> +}
+> +
+> +static inline int k3_bgp_read_temp(struct k3_thermal_data *devdata,
+> +				   int *temp)
+> +{
+> +	struct k3_j72xx_bandgap *bgp;
+> +	unsigned int dtemp, s0, s1, s2;
+> +
+> +	bgp = devdata->bgp;
+> +	/*
+> +	 * Errata is applicable for am654 pg 1.0 silicon/J7ES. There
+> +	 * is a variation of the order for certain degree centigrade on AM654.
+> +	 * Work around that by getting the average of two closest
+> +	 * readings out of three readings everytime we want to
+> +	 * report temperatures.
+> +	 *
+> +	 * Errata workaround.
+> +	 */
+> +	s0 = readl(bgp->base + devdata->stat_offset) &
+> +		K3_VTM_TS_STAT_DTEMP_MASK;
+> +	s1 = readl(bgp->base + devdata->stat_offset) &
+> +		K3_VTM_TS_STAT_DTEMP_MASK;
+> +	s2 = readl(bgp->base + devdata->stat_offset) &
+> +		K3_VTM_TS_STAT_DTEMP_MASK;
+> +	dtemp = vtm_get_best_value(s0, s1, s2);
+> +
+> +	if (dtemp < 0 || dtemp > 1023)
 > +		return -EINVAL;
-> +	}
 > +
-> +	if (cnt > ARRAY_SIZE(names)) {
-> +		dev_info(dev, "%s: Too many clock-names\n",  __func__);
-> +		return -EINVAL;
-> +	}
-
-How did you come up with 16 as the max clock count? Is this check necessary?
-
-> +
-> +	/* clocks parsed by ufshcd_parse_clock_info() */
-> +	clocks_done = !!of_find_property(np, "freq-table-hz", NULL);
-
-freq-table-hz and opp-table are mutually exclusive, isn't it?
-
-> +
-> +	for (i = 0; i < cnt; i++) {
-> +		ret = of_property_read_string_index(np, "clock-names", i,
-> +						    &names[i]);
-> +		if (ret)
-> +			return ret;
-> +
-> +		if (clocks_done)
-> +			continue;
-> +
-> +		clki = devm_kzalloc(dev, sizeof(*clki), GFP_KERNEL);
-> +		if (!clki)
-> +			return -ENOMEM;
-> +
-> +		clki->name = devm_kstrdup(dev, names[i], GFP_KERNEL);
-> +		if (!clki->name)
-> +			return -ENOMEM;
-> +
-> +		if (!strcmp(names[i], "ref_clk"))
-> +			clki->keep_link_active = true;
-> +
-> +		list_add_tail(&clki->list, &hba->clk_list_head);
-> +	}
-> +
-> +	ret = devm_pm_opp_set_clknames(dev, names, i);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = devm_pm_opp_of_add_table(dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	hba->use_pm_opp = true;
+> +	*temp = derived_table[dtemp];
 > +
 > +	return 0;
 > +}
 > +
->  #define MAX_PROP_SIZE 32
->  static int ufshcd_populate_vreg(struct device *dev, const char *name,
->  		struct ufs_vreg **out_vreg)
-> @@ -360,6 +423,12 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
->  		goto dealloc_host;
->  	}
->  
-> +	err = ufshcd_parse_operating_points(hba);
-> +	if (err) {
-> +		dev_err(dev, "%s: OPP parse failed %d\n", __func__, err);
-> +		goto dealloc_host;
+> +/* Get temperature callback function for thermal zone */
+> +static int k3_thermal_get_temp(void *devdata, int *temp)
+> +{
+> +	struct k3_thermal_data *data = devdata;
+> +	int ret = 0;
+> +
+> +	ret = k3_bgp_read_temp(data, temp);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct thermal_zone_of_device_ops k3_of_thermal_ops = {
+> +	.get_temp = k3_thermal_get_temp,
+> +};
+> +
+> +static int k3_j72xx_bandgap_temp_to_adc_code(int temp)
+> +{
+> +	int low = 0, high = 1023, mid;
+> +
+> +	if (temp > 160000 || temp < -50000)
+> +		return -EINVAL;
+> +
+> +	/* Binary search to find the adc code */
+> +	while (low < (high - 1)) {
+> +		mid = (low + high) / 2;
+> +		if (temp <= derived_table[mid])
+> +			high = mid;
+> +		else
+> +			low = mid;
 > +	}
 > +
->  	ufshcd_init_lanes_per_dir(hba);
->  
->  	err = ufshcd_init(hba, mmio_base, irq);
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> index 5bfa62fa288a..aec7da18a550 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -1022,6 +1022,9 @@ static int ufshcd_scale_clks(struct ufs_hba *hba, bool scale_up)
->  	int ret = 0;
->  	ktime_t start = ktime_get();
->  
-> +	if (hba->use_pm_opp)
-> +		return 0;
+> +	return mid;
+> +}
 > +
+> +static void get_efuse_values(int id, struct k3_thermal_data *data, int *err,
+> +			     struct k3_j72xx_bandgap *bgp)
+> +{
+> +	int i, tmp, pow;
+> +	int ct_offsets[K3_VTM_CORRECTION_TEMP_CNT];
+> +	int ct_bm[K3_VTM_CORRECTION_TEMP_CNT];
+> +
+> +	/* Populate efuse reg offsets & Bit masks for -40C, 30C, 125C */
+> +	switch (id) {
+> +	case 0:
+> +		ct_offsets[0] = 0x0;
+> +		ct_offsets[1] = 0x8;
+> +		ct_offsets[2] = 0x4;
+> +		ct_bm[0] = 0x3f;
+> +		ct_bm[1] = 0x1fe000;
+> +		ct_bm[2] = 0x1ff;
+> +		break;
+> +
+> +	case 1:
+> +		ct_offsets[0] = 0x0;
+> +		ct_offsets[1] = 0x8;
+> +		ct_offsets[2] = 0x4;
+> +		ct_bm[0] = 0xfc0;
+> +		ct_bm[1] = 0x1fe00000;
+> +		ct_bm[2] = 0x3fe00;
+> +		break;
+> +
+> +	case 2:
+> +		ct_offsets[0] = 0x0;
+> +		ct_offsets[1] = -1;
+> +		ct_offsets[2] = 0x4;
+> +		ct_bm[0] = 0x3f000;
+> +		ct_bm[1] = 0x7f800000;
+> +		ct_bm[2] = 0x7fc0000;
+> +		break;
+> +
+> +	case 3:
+> +		ct_offsets[0] = 0x0;
+> +		ct_offsets[1] = 0xC;
+> +		ct_offsets[2] = -1; /* Spread across 2 registers */
+> +		ct_bm[0] = 0xfc0000;
+> +		ct_bm[1] = 0x1fe0;
+> +		ct_bm[2] = 0x1f800000;
+> +		break;
+> +
+> +	case 4:
+> +		ct_offsets[0] = 0x0;
+> +		ct_offsets[1] = 0xc;
+> +		ct_offsets[2] = 0x8;
+> +		ct_bm[0] = 0x3f000000;
+> +		ct_bm[1] = 0x1fe000;
+> +		ct_bm[2] = 0x1ff0;
+> +		break;
+> +	}
 
-So you don't need pre and post clock changes below?
+The way this is initialized looks strange to me
 
-Thanks,
-Mani
+Why not:
 
->  	ret = ufshcd_vops_clk_scale_notify(hba, scale_up, PRE_CHANGE);
->  	if (ret)
->  		goto out;
-> @@ -1044,11 +1047,13 @@ static int ufshcd_scale_clks(struct ufs_hba *hba, bool scale_up)
->  /**
->   * ufshcd_is_devfreq_scaling_required - check if scaling is required or not
->   * @hba: per adapter instance
-> + * @freq: Target frequency
->   * @scale_up: True if scaling up and false if scaling down
->   *
->   * Returns true if scaling is required, false otherwise.
->   */
->  static bool ufshcd_is_devfreq_scaling_required(struct ufs_hba *hba,
-> +					       unsigned long freq,
->  					       bool scale_up)
->  {
->  	struct ufs_clk_info *clki;
-> @@ -1057,6 +1062,9 @@ static bool ufshcd_is_devfreq_scaling_required(struct ufs_hba *hba,
->  	if (list_empty(head))
->  		return false;
->  
-> +	if (hba->use_pm_opp)
-> +		return freq != hba->clk_scaling.target_freq;
+int ct_offsets[][] = {
+	{ 0x0, 0x8, 0x4 },
+	{ 0x0, 0x8, 0x4 },
+	{ 0x0, -1,  0x4 },
+	{ 0x0, 0xC, -1 }
+	{ 0x0, 0xc, 0x8 }
+  };
+
+int ct_bm[][] = {
+	{ 0x3f, 0x1fe000, 0x1ff },
+	{ 0xfc0, 0x1fe000, 0x3fe00 },
+	{ 0x3f000, 0x7f800000, 0x7fc0000 },
+	{ 0xfc0000, 0x1fe0, 0x1f800000 },
+	{ 0x3f000000, 0x1fe000, 0x1ff0 }
+};
+
+And then : ct_offsets[id][i] below ?
+
+> +	for (i = 0; i < 3; i++) {
+
+ARRAY_SIZE on ct_offsets ?
+
+> +		/* Extract the offset value using bit-mask */
+> +		if (ct_offsets[i] == -1 && i == 1) {
+> +			/* 25C offset Case of Sensor 2 split between 2 regs */
+> +			tmp = (readl(bgp->fuse_base + 0x8) & 0xE0000000) >> (29);
+> +			tmp |= ((readl(bgp->fuse_base + 0xC) & 0x1F) << 3);
+> +			pow = tmp & 0x80;
+> +		} else if (ct_offsets[i] == -1 && i == 2) {
+> +			/* 125C Case of Sensor 3 split between 2 regs */
+> +			tmp = (readl(bgp->fuse_base + 0x4) & 0xF8000000) >> (27);
+> +			tmp |= ((readl(bgp->fuse_base + 0x8) & 0xF) << 5);
+> +			pow = tmp & 0x100;
+> +		} else {
+> +			tmp = readl(bgp->fuse_base + ct_offsets[i]);
+> +			tmp &= ct_bm[i];
+> +			tmp = tmp >> __ffs(ct_bm[i]);
 > +
->  	list_for_each_entry(clki, head, list) {
->  		if (!IS_ERR_OR_NULL(clki->clk)) {
->  			if (scale_up && clki->max_freq) {
-> @@ -1155,13 +1163,15 @@ static int ufshcd_wait_for_doorbell_clr(struct ufs_hba *hba,
->  /**
->   * ufshcd_scale_gear - scale up/down UFS gear
->   * @hba: per adapter instance
-> + * @freq: Target frequency
->   * @scale_up: True for scaling up gear and false for scaling down
->   *
->   * Returns 0 for success,
->   * Returns -EBUSY if scaling can't happen at this time
->   * Returns non-zero for any other errors
->   */
-> -static int ufshcd_scale_gear(struct ufs_hba *hba, bool scale_up)
-> +static int ufshcd_scale_gear(struct ufs_hba *hba, unsigned long freq,
-> +			     bool scale_up)
->  {
->  	int ret = 0;
->  	struct ufs_pa_layer_attr new_pwr_info;
-> @@ -1186,6 +1196,12 @@ static int ufshcd_scale_gear(struct ufs_hba *hba, bool scale_up)
->  		}
->  	}
->  
-> +	if (hba->use_pm_opp && scale_up) {
-> +		ret = dev_pm_opp_set_rate(hba->dev, freq);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
->  	/* check if the power mode needs to be changed or not? */
->  	ret = ufshcd_config_pwr_mode(hba, &new_pwr_info);
->  	if (ret)
-> @@ -1194,6 +1210,11 @@ static int ufshcd_scale_gear(struct ufs_hba *hba, bool scale_up)
->  			hba->pwr_info.gear_tx, hba->pwr_info.gear_rx,
->  			new_pwr_info.gear_tx, new_pwr_info.gear_rx);
->  
-> +	if (ret && hba->use_pm_opp && scale_up)
-> +		dev_pm_opp_set_rate(hba->dev, hba->devfreq->previous_freq);
-> +	else if (hba->use_pm_opp && !scale_up)
-> +		ret = dev_pm_opp_set_rate(hba->dev, freq);
-> +
->  	return ret;
->  }
->  
-> @@ -1236,13 +1257,15 @@ static void ufshcd_clock_scaling_unprepare(struct ufs_hba *hba, bool writelock)
->  /**
->   * ufshcd_devfreq_scale - scale up/down UFS clocks and gear
->   * @hba: per adapter instance
-> + * @freq: Target frequency
->   * @scale_up: True for scaling up and false for scalin down
->   *
->   * Returns 0 for success,
->   * Returns -EBUSY if scaling can't happen at this time
->   * Returns non-zero for any other errors
->   */
-> -static int ufshcd_devfreq_scale(struct ufs_hba *hba, bool scale_up)
-> +static int ufshcd_devfreq_scale(struct ufs_hba *hba, unsigned long freq,
-> +				bool scale_up)
->  {
->  	int ret = 0;
->  	bool is_writelock = true;
-> @@ -1253,7 +1276,7 @@ static int ufshcd_devfreq_scale(struct ufs_hba *hba, bool scale_up)
->  
->  	/* scale down the gear before scaling down clocks */
->  	if (!scale_up) {
-> -		ret = ufshcd_scale_gear(hba, false);
-> +		ret = ufshcd_scale_gear(hba, freq, false);
->  		if (ret)
->  			goto out_unprepare;
->  	}
-> @@ -1261,13 +1284,14 @@ static int ufshcd_devfreq_scale(struct ufs_hba *hba, bool scale_up)
->  	ret = ufshcd_scale_clks(hba, scale_up);
->  	if (ret) {
->  		if (!scale_up)
-> -			ufshcd_scale_gear(hba, true);
-> +			ufshcd_scale_gear(hba, hba->clk_scaling.target_freq,
-> +					  true);
->  		goto out_unprepare;
->  	}
->  
->  	/* scale up the gear after scaling up clocks */
->  	if (scale_up) {
-> -		ret = ufshcd_scale_gear(hba, true);
-> +		ret = ufshcd_scale_gear(hba, freq, true);
->  		if (ret) {
->  			ufshcd_scale_clks(hba, false);
->  			goto out_unprepare;
-> @@ -1332,9 +1356,20 @@ static int ufshcd_devfreq_target(struct device *dev,
->  	if (!ufshcd_is_clkscaling_supported(hba))
->  		return -EINVAL;
->  
-> -	clki = list_first_entry(&hba->clk_list_head, struct ufs_clk_info, list);
->  	/* Override with the closest supported frequency */
-> -	*freq = (unsigned long) clk_round_rate(clki->clk, *freq);
-> +	if (hba->use_pm_opp) {
-> +		struct dev_pm_opp *opp;
-> +
-> +		opp = devfreq_recommended_opp(dev, freq, flags);
-> +		if (IS_ERR(opp))
-> +			return PTR_ERR(opp);
-> +		dev_pm_opp_put(opp);
-> +	} else {
-> +		clki = list_first_entry(&hba->clk_list_head, struct ufs_clk_info,
-> +					list);
-> +		*freq =	(unsigned long) clk_round_rate(clki->clk, *freq);
-> +	}
-> +
->  	spin_lock_irqsave(hba->host->host_lock, irq_flags);
->  	if (ufshcd_eh_in_progress(hba)) {
->  		spin_unlock_irqrestore(hba->host->host_lock, irq_flags);
-> @@ -1350,11 +1385,11 @@ static int ufshcd_devfreq_target(struct device *dev,
->  	}
->  
->  	/* Decide based on the rounded-off frequency and update */
-> -	scale_up = (*freq == clki->max_freq) ? true : false;
-> -	if (!scale_up)
-> +	scale_up = (*freq > hba->clk_scaling.target_freq) ? true : false;
-> +	if (!hba->use_pm_opp && !scale_up)
->  		*freq = clki->min_freq;
->  	/* Update the frequency */
-> -	if (!ufshcd_is_devfreq_scaling_required(hba, scale_up)) {
-> +	if (!ufshcd_is_devfreq_scaling_required(hba, *freq, scale_up)) {
->  		spin_unlock_irqrestore(hba->host->host_lock, irq_flags);
->  		ret = 0;
->  		goto out; /* no state change required */
-> @@ -1362,7 +1397,9 @@ static int ufshcd_devfreq_target(struct device *dev,
->  	spin_unlock_irqrestore(hba->host->host_lock, irq_flags);
->  
->  	start = ktime_get();
-> -	ret = ufshcd_devfreq_scale(hba, scale_up);
-> +	ret = ufshcd_devfreq_scale(hba, *freq, scale_up);
-> +	if (!ret)
-> +		hba->clk_scaling.target_freq = *freq;
->  
->  	trace_ufshcd_profile_clk_scaling(dev_name(hba->dev),
->  		(scale_up ? "up" : "down"),
-> @@ -1382,8 +1419,6 @@ static int ufshcd_devfreq_get_dev_status(struct device *dev,
->  	struct ufs_hba *hba = dev_get_drvdata(dev);
->  	struct ufs_clk_scaling *scaling = &hba->clk_scaling;
->  	unsigned long flags;
-> -	struct list_head *clk_list = &hba->clk_list_head;
-> -	struct ufs_clk_info *clki;
->  	ktime_t curr_t;
->  
->  	if (!ufshcd_is_clkscaling_supported(hba))
-> @@ -1396,13 +1431,20 @@ static int ufshcd_devfreq_get_dev_status(struct device *dev,
->  	if (!scaling->window_start_t)
->  		goto start_window;
->  
-> -	clki = list_first_entry(clk_list, struct ufs_clk_info, list);
-> -	/*
-> -	 * If current frequency is 0, then the ondemand governor considers
-> -	 * there's no initial frequency set. And it always requests to set
-> -	 * to max. frequency.
-> -	 */
-> -	stat->current_frequency = clki->curr_freq;
-> +	if (hba->use_pm_opp) {
-> +		stat->current_frequency = hba->clk_scaling.target_freq;
-> +	} else {
-> +		struct list_head *clk_list = &hba->clk_list_head;
-> +		struct ufs_clk_info *clki;
-> +
-> +		clki = list_first_entry(clk_list, struct ufs_clk_info, list);
-> +		/*
-> +		 * If current frequency is 0, then the ondemand governor considers
-> +		 * there's no initial frequency set. And it always requests to set
-> +		 * to max. frequency.
-> +		 */
-> +		stat->current_frequency = clki->curr_freq;
-> +	}
->  	if (scaling->is_busy_started)
->  		scaling->tot_busy_t += ktime_us_delta(curr_t,
->  				scaling->busy_start_t);
-> @@ -1435,9 +1477,11 @@ static int ufshcd_devfreq_init(struct ufs_hba *hba)
->  	if (list_empty(clk_list))
->  		return 0;
->  
-> -	clki = list_first_entry(clk_list, struct ufs_clk_info, list);
-> -	dev_pm_opp_add(hba->dev, clki->min_freq, 0);
-> -	dev_pm_opp_add(hba->dev, clki->max_freq, 0);
-> +	if (!hba->use_pm_opp) {
-> +		clki = list_first_entry(clk_list, struct ufs_clk_info, list);
-> +		dev_pm_opp_add(hba->dev, clki->min_freq, 0);
-> +		dev_pm_opp_add(hba->dev, clki->max_freq, 0);
-> +	}
->  
->  	ufshcd_vops_config_scaling_param(hba, &hba->vps->devfreq_profile,
->  					 &hba->vps->ondemand_data);
-> @@ -1449,8 +1493,10 @@ static int ufshcd_devfreq_init(struct ufs_hba *hba)
->  		ret = PTR_ERR(devfreq);
->  		dev_err(hba->dev, "Unable to register with devfreq %d\n", ret);
->  
-> -		dev_pm_opp_remove(hba->dev, clki->min_freq);
-> -		dev_pm_opp_remove(hba->dev, clki->max_freq);
-> +		if (!hba->use_pm_opp) {
-> +			dev_pm_opp_remove(hba->dev, clki->min_freq);
-> +			dev_pm_opp_remove(hba->dev, clki->max_freq);
+> +			/* Obtain the sign bit pow*/
+> +			pow = ct_bm[i] >> __ffs(ct_bm[i]);
+> +			pow += 1;
+> +			pow /= 2;
 > +		}
->  		return ret;
->  	}
->  
-> @@ -1462,7 +1508,6 @@ static int ufshcd_devfreq_init(struct ufs_hba *hba)
->  static void ufshcd_devfreq_remove(struct ufs_hba *hba)
->  {
->  	struct list_head *clk_list = &hba->clk_list_head;
-> -	struct ufs_clk_info *clki;
->  
->  	if (!hba->devfreq)
->  		return;
-> @@ -1470,9 +1515,13 @@ static void ufshcd_devfreq_remove(struct ufs_hba *hba)
->  	devfreq_remove_device(hba->devfreq);
->  	hba->devfreq = NULL;
->  
-> -	clki = list_first_entry(clk_list, struct ufs_clk_info, list);
-> -	dev_pm_opp_remove(hba->dev, clki->min_freq);
-> -	dev_pm_opp_remove(hba->dev, clki->max_freq);
-> +	if (!hba->use_pm_opp) {
-> +		struct ufs_clk_info *clki;
 > +
-> +		clki = list_first_entry(clk_list, struct ufs_clk_info, list);
-> +		dev_pm_opp_remove(hba->dev, clki->min_freq);
-> +		dev_pm_opp_remove(hba->dev, clki->max_freq);
+> +		/* Check for negative value */
+> +		if (tmp & pow) {
+> +			/* 2's complement value */
+> +			tmp = two_cmp(tmp, ct_bm[i] >> __ffs(ct_bm[i]));
+> +		}
+> +		err[i] = tmp;
 > +	}
->  }
->  
->  static void __ufshcd_suspend_clkscaling(struct ufs_hba *hba)
-> @@ -1556,8 +1605,14 @@ static ssize_t ufshcd_clkscale_enable_store(struct device *dev,
->  	if (value) {
->  		ufshcd_resume_clkscaling(hba);
->  	} else {
-> +		struct dev_pm_opp *opp;
-> +		unsigned long freq = ULONG_MAX;
 > +
-> +		opp = dev_pm_opp_find_freq_floor(dev, &freq);
-> +		dev_pm_opp_put(opp);
+> +	/* Err value for 150C is set to 0 */
+> +	err[i] = 0;
+> +}
 > +
->  		ufshcd_suspend_clkscaling(hba);
-> -		err = ufshcd_devfreq_scale(hba, true);
-> +		err = ufshcd_devfreq_scale(hba, freq, true);
->  		if (err)
->  			dev_err(hba->dev, "%s: failed to scale clocks up %d\n",
->  					__func__, err);
-> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-> index 1a8f7b8977e6..c224a55fd9ee 100644
-> --- a/drivers/scsi/ufs/ufshcd.h
-> +++ b/drivers/scsi/ufs/ufshcd.h
-> @@ -443,6 +443,7 @@ struct ufs_clk_scaling {
->  	bool is_initialized;
->  	bool is_busy_started;
->  	bool is_suspended;
-> +	unsigned long target_freq;
->  };
->  
->  #define UFS_EVENT_HIST_LENGTH 8
-> @@ -776,6 +777,8 @@ struct ufs_hba_monitor {
->   * @auto_bkops_enabled: to track whether bkops is enabled in device
->   * @vreg_info: UFS device voltage regulator information
->   * @clk_list_head: UFS host controller clocks list node head
-> + * @use_pm_opp: whether OPP table is provided and scaling gears should trigger
-> + *              setting OPP
->   * @pwr_info: holds current power mode
->   * @max_pwr_info: keeps the device max valid pwm
->   * @clk_scaling_lock: used to serialize device commands and clock scaling
-> @@ -892,6 +895,7 @@ struct ufs_hba {
->  	bool auto_bkops_enabled;
->  	struct ufs_vreg_info vreg_info;
->  	struct list_head clk_list_head;
-> +	bool use_pm_opp;
->  
->  	/* Number of requests aborts */
->  	int req_abort_count;
-> -- 
-> 2.32.0
-> 
+> +static void print_look_up_table(struct device *dev, int *ref_table)
+> +{
+> +	int i;
+> +
+> +	dev_dbg(dev, "The contents of derived array\n");
+> +	dev_dbg(dev, "Code   Temperaturei\n");
+
+Typo: "Temperaturei"
+
+> +	for (i = 0; i <= 1023; i++)
+> +		dev_dbg(dev, "%d       %d %d\n", i, derived_table[i], ref_table[i]);
+> +}
+> +
+> +static const struct of_device_id of_k3_j72xx_bandgap_match[];
+
+Pointless forward declaration
+
+> +
+> +struct k3_j72xx_bandgap_data {
+> +	unsigned int has_errata_i2128;
+> +};
+> +
+> +static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
+> +{
+> +	int ret = 0, cnt, val, id, table_size = 1024;
+
+table_size to be replaced by the macro mentioned above
+
+> +	int high_max, low_temp;
+> +	struct resource *res;
+> +	struct device *dev = &pdev->dev;
+> +	struct k3_j72xx_bandgap *bgp;
+> +	struct k3_thermal_data *data;
+> +	int workaround_needed = 0;
+> +	const struct k3_j72xx_bandgap_data *driver_data;
+> +	struct thermal_zone_device *ti_thermal;
+> +	int *ref_table;
+> +	struct err_values err_vals;
+
+[ ... ]
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
