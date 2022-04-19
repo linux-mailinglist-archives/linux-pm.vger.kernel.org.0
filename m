@@ -2,72 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A78C6507670
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 19:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEDDC50767B
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 19:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353159AbiDSR0Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Apr 2022 13:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
+        id S1352618AbiDSRcI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Apr 2022 13:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355762AbiDSR0V (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 13:26:21 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C9D3CFE0
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 10:23:26 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id x3so11112740wmj.5
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 10:23:26 -0700 (PDT)
+        with ESMTP id S1352895AbiDSRcG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 13:32:06 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BDFB1F4
+        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 10:29:22 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id w1so7253360lfa.4
+        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 10:29:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :references:content-language:in-reply-to:content-transfer-encoding;
-        bh=kXvSKXWClajeK1qES+zdMMc7Jyz9N8shBliP+K3BmWg=;
-        b=k+UAvNDjaCv9Q9oQs2JwtpFZjtNcIm36E6OR2YYD/cF3bPg7LUbh2hj/QgQCCPhPH3
-         grpTBuuyxMKhAk4iR0hRyhr+bRHkWlC2w7Y9InHd4+O6LSyOfhtdYOW6JMfIS3wL7D8k
-         4GP70l5KSRZ9mOlyBA4IMZGehQ1EQAhZWe3VNW7Zr8YercxW9ygtUKmgdMv0TUZPK00c
-         WhePf7FW25Dm1VVAuW2L1rl7t1RHwCpp941JiaWdX9ocVp8e35V55wQdU7MhTIjYUPs4
-         2t7bqdiaWLiQLxOx7l/nPk+rgvESIIT5/v19HU4BuAWBvBXQKsMvAYoUE+6A5XHQw8I9
-         5QOg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=oQabVMdNZY/kAVQ/7p9MbSanGy4zyHtBTZqygFLt8XM=;
+        b=U3as7frbJxtDTwATnnjDXC+5uvjqxgsYm3icnagtE05SIeou3sQoh4gFmkLbq9a5vb
+         sHhD2vuo8i8PmxeK/ebuFgwtg15Zk2e2vqdUJ1jI0DvHuxBzXXowAsm+Tlw+a4rR5uxu
+         rNNbmr1PgdtNNV7Sh1olMXcGWrM7pxu4yYS91ikG8c0rFOeXu/koLtHpMwPEip9kEEtG
+         d7usws1oHeOadOTPaoqaSRoeEHHEgoBIjFfDdbuyBmLEmn9Gjy6rCB0rmvJ/ZmZ5krul
+         QSr/gxzj+IO8LJgnwZtQkgz1B+FlPLJuNPhOpk/7aqZFeaQvKh7OGGro7RJaWINW2Y+R
+         xgeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:references:content-language:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=kXvSKXWClajeK1qES+zdMMc7Jyz9N8shBliP+K3BmWg=;
-        b=R66Lncy8LyHY0bnpAhE5E7uCKpMBPafZSL/YqLyCrHzSqoZq/ESp6Cp0WEUi+ve8QI
-         H5B818t0b4wcS0j7jX9jksigytqncuJVB1lrib/WtUBuLmUogZHkUGwyqqw4vwGv1JFO
-         2IIqoltI70YldD5dxa4TL9IYt2NfRxqe06RMjiMKkMsijFifV+7/6wWpoOrCI9ojs/js
-         hP4oet7M1JWFzl2nN52R4UN3hEGFAKWartjZWM4VCuAEbcyW0J9kKi3wQ/y3fEwX/brX
-         Se1Fg8R1diSWVaQcfcLvf43xXSdTivAivtw4ca5OrDdWiTsBt4mDQnuamBhXue8hbNLS
-         UBKg==
-X-Gm-Message-State: AOAM5335KkZ0eHyQvOuaSpDlcu+iMlF1VzoMpBT3io+wL+J1zohz/QD5
-        tjBOIa+/Txe1/X8XofHg0NHwsQ==
-X-Google-Smtp-Source: ABdhPJzh5du4e3tPb0Cc7Asfdx839bAY3gH8FQ39qaw4IgF/TIdnFr7APykqhGCLEOiOkrFJWZQYkw==
-X-Received: by 2002:a1c:4c05:0:b0:38e:b736:350 with SMTP id z5-20020a1c4c05000000b0038eb7360350mr21553329wmf.65.1650389004743;
-        Tue, 19 Apr 2022 10:23:24 -0700 (PDT)
-Received: from [192.168.1.41] (176-182-171-101.abo.bbox.fr. [176.182.171.101])
-        by smtp.googlemail.com with ESMTPSA id p18-20020adfba92000000b001e4ae791663sm13150740wrg.62.2022.04.19.10.23.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 10:23:23 -0700 (PDT)
-Message-ID: <0af9a609-ff21-2aca-26dd-8c92e197a2b7@linaro.org>
-Date:   Tue, 19 Apr 2022 19:23:22 +0200
+        bh=oQabVMdNZY/kAVQ/7p9MbSanGy4zyHtBTZqygFLt8XM=;
+        b=lSdznKHXEdR2v7upvaDkxD+GVU2BY8DNnEEjR6M/cSrprWRfv2LUYlQJpsnNhMJlO2
+         ZuW9nm7MDam+yFuhZXUK0edp8ikQlz7VPf8z+Zv7Mg8vEdyWoOYJTEsxew9fcSTkqMfm
+         sTGkfoIAv4CD1SSNBemRjGPLxjm2T3TqwHuzPLUrzkfHtr2OMAcwJCpIbn1xYFkVTn76
+         fJ6fE3F4xoxqpIZWial4TT4Is+DahZgMEkvqC+hxUf35EgyDBBUCDcLrVSaN98t4mg5n
+         /yUu1SCBNTpn/Tbdmg1tKG56NpTHRMg9pwyHWsXNBesZs7zLYusGWT6kMKssALRPeciU
+         mK+w==
+X-Gm-Message-State: AOAM530ACdMZ0bBQ8RbKupadLpYwnFjSaAHADl0J7ov/D+cAC6vZtWMA
+        tEvSjdUdAANiEaO6et18gRhQ+Q==
+X-Google-Smtp-Source: ABdhPJw8zdKzfEsDdZ5EUtT4jdyuj/HF/9Jk6hCtf74n7mnWGqeb0zeDBoaKP8MFSStObudkqPnhFA==
+X-Received: by 2002:a05:6512:1045:b0:44a:5e41:b25f with SMTP id c5-20020a056512104500b0044a5e41b25fmr11274319lfb.245.1650389360670;
+        Tue, 19 Apr 2022 10:29:20 -0700 (PDT)
+Received: from localhost.localdomain (h-98-128-181-154.NA.cust.bahnhof.se. [98.128.181.154])
+        by smtp.gmail.com with ESMTPSA id o7-20020a05651c050700b0024b70ccbdd5sm1490573ljp.36.2022.04.19.10.29.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 10:29:19 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Cc:     Kevin Hilman <khilman@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] PM: domains: Move genpd's time-accounting to ktime_get_mono_fast_ns()
+Date:   Tue, 19 Apr 2022 19:29:16 +0200
+Message-Id: <20220419172916.440055-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: Re: [PATCH v5 4/4] thermal: k3_j72xx_bandgap: Add the bandgap driver
- support
-To:     Keerthy <j-keerthy@ti.com>, robh+dt@kernel.org,
-        rui.zhang@intel.com, amitk@kernel.org, kristo@kernel.org
-Cc:     linux-pm@vger.kernel.org, vigneshr@ti.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220412101409.7980-1-j-keerthy@ti.com>
- <20220412101409.7980-5-j-keerthy@ti.com>
-Content-Language: en-US
-In-Reply-To: <20220412101409.7980-5-j-keerthy@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,403 +71,189 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+To move towards a more consistent behaviour between genpd and the runtime
+PM core, let's start by converting genpd's time-accounting from ktime_get()
+into ktime_get_mono_fast_ns().
 
-Hi Kheerty,
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ drivers/base/power/domain.c | 77 +++++++++++++++++++++----------------
+ include/linux/pm_domain.h   |  6 +--
+ 2 files changed, 46 insertions(+), 37 deletions(-)
 
-On 12/04/2022 12:14, Keerthy wrote:
-
-
-[ ... ]
-
-> +/**
-> + * struct err_values - structure containing error/reference values
-> + * @refs: reference error values for -40C, 30C, 125C & 150C
-> + * @errs: Actual error values for -40C, 30C, 125C & 150C read from the efuse
-> + */
-> +struct err_values {
-> +	int refs[4];
-> +	int errs[4];
-> +};
-> +
-> +static void create_table_segments(struct err_values *err_vals, int seg,
-> +				  int *ref_table)
-> +{
-> +	int m = 0, c, num, den, i, err, idx1, idx2, err1, err2, ref1, ref2;
-> +
-> +	if (seg == 0)
-> +		idx1 = 0;
-> +	else
-> +		idx1 = err_vals->refs[seg];
-> +
-> +	idx2 = err_vals->refs[seg + 1];
-> +	err1 = err_vals->errs[seg];
-> +	err2 = err_vals->errs[seg + 1];
-> +	ref1 = err_vals->refs[seg];
-> +	ref2 = err_vals->refs[seg + 1];
-> +
-> +	/*
-> +	 * Calculate the slope with adc values read from the register
-> +	 * as the y-axis param and err in adc value as x-axis param
-> +	 */
-> +	num = ref2 - ref1;
-> +	den = err2 - err1;
-> +	if (den)
-> +		m = num / den;
-> +	c = ref2 - m * err2;
-> +
-> +	/*
-> +	 * Take care of divide by zero error if error values are same
-> +	 * Or when the slope is 0
-> +	 */
-> +	if (den != 0 && m != 0) {
-> +		for (i = idx1; i <= idx2; i++) {
-> +			err = (i - c) / m;
-> +			if (((i + err1) < 0) || ((i + err1) > 1023))
-> +				continue;
-
-Should the test being against 'err' not 'err1' ?
-
-> +			derived_table[i] = ref_table[i + err];
-> +		}
-> +	} else { /* Constant error take care of divide by zero */
-> +		for (i = idx1; i <= idx2; i++) {
-> +			if (((i + err1) < 0) || ((i + err1) > 1023))
-> +				continue;
-> +			derived_table[i] = ref_table[i + err1];
-> +		}
-> +	}
-> +}
-> +
-> +static int prep_lookup_table(struct err_values *err_vals, int *ref_table)
-> +{
-> +	int inc, i, seg;
-> +
-> +	/*
-> +	 * Fill up the lookup table under 3 segments
-> +	 * region -40C to +30C
-> +	 * region +30C to +125C
-> +	 * region +125C to +150C
-> +	 */
-> +	for (seg = 0; seg < 3; seg++)
-> +		create_table_segments(err_vals, seg, ref_table);
-> +
-> +	/* Get to the first valid temperature */
-> +	i = 0;
-> +	while (!derived_table[i])
-> +		i++;
-> +
-> +	/*
-> +	 * Get to the last zero index and back fill the temperature for
-> +	 * sake of continuity
-> +	 */
-> +	if (i) {
-> +		/* 300 milli celsius steps */
-> +		while (i--)
-> +			derived_table[i] = derived_table[i + 1] - 300;
-> +		/* case 0 */
-> +		derived_table[i] = derived_table[i + 1] - 300;
-> +	}
-
-memset ?
-
-> +
-> +	/*
-> +	 * Fill the last trailing 0s which are unfilled with increments of
-> +	 * 100 milli celsius till 1023 code
-> +	 */
-> +	i = 1023;
-> +	while (!derived_table[i])
-> +		i--;
-
-All those loop can be replaced by addresses variant IMO. Up to you if 
-you want to use mem* variants.
-
-eg. void *flz = memrchr(derived_table, 0, size); /* find last zero */
-
-> +
-> +	i++;
-> +	inc = 1;
-> +	while (i < 1024) {
-> +		derived_table[i] = derived_table[i - 1] + inc * 100;
-> +		i++;
-> +	}
-> +
-> +	return 0;
-> +}
-
-Please replace all the 1024-ish literals everywhere by a macro
-
-> +struct k3_thermal_data;
-> +
-> +struct k3_j72xx_bandgap {
-> +	struct device *dev;
-> +	void __iomem *base;
-> +	void __iomem *cfg2_base;
-> +	void __iomem *fuse_base;
-> +	struct k3_thermal_data *ts_data[K3_VTM_MAX_NUM_TS];
-> +};
-> +
-> +/* common data structures */
-> +struct k3_thermal_data {
-> +	struct k3_j72xx_bandgap *bgp;
-> +	u32 ctrl_offset;
-> +	u32 stat_offset;
-> +};
-> +
-> +static int two_cmp(int tmp, int mask)
-> +{
-> +	tmp = ~(tmp);
-> +	tmp &= mask;
-> +	tmp += 1;
-> +
-> +	/* Return negative value */
-> +	return (0 - tmp);
-> +}
-> +
-> +static unsigned int vtm_get_best_value(unsigned int s0, unsigned int s1,
-> +				       unsigned int s2)
-> +{
-> +	int d01 = abs(s0 - s1);
-> +	int d02 = abs(s0 - s2);
-> +	int d12 = abs(s1 - s2);
-> +
-> +	if (d01 <= d02 && d01 <= d12)
-> +		return (s0 + s1) / 2;
-> +
-> +	if (d02 <= d01 && d02 <= d12)
-> +		return (s0 + s2) / 2;
-> +
-> +	return (s1 + s2) / 2;
-> +}
-> +
-> +static inline int k3_bgp_read_temp(struct k3_thermal_data *devdata,
-> +				   int *temp)
-> +{
-> +	struct k3_j72xx_bandgap *bgp;
-> +	unsigned int dtemp, s0, s1, s2;
-> +
-> +	bgp = devdata->bgp;
-> +	/*
-> +	 * Errata is applicable for am654 pg 1.0 silicon/J7ES. There
-> +	 * is a variation of the order for certain degree centigrade on AM654.
-> +	 * Work around that by getting the average of two closest
-> +	 * readings out of three readings everytime we want to
-> +	 * report temperatures.
-> +	 *
-> +	 * Errata workaround.
-> +	 */
-> +	s0 = readl(bgp->base + devdata->stat_offset) &
-> +		K3_VTM_TS_STAT_DTEMP_MASK;
-> +	s1 = readl(bgp->base + devdata->stat_offset) &
-> +		K3_VTM_TS_STAT_DTEMP_MASK;
-> +	s2 = readl(bgp->base + devdata->stat_offset) &
-> +		K3_VTM_TS_STAT_DTEMP_MASK;
-> +	dtemp = vtm_get_best_value(s0, s1, s2);
-> +
-> +	if (dtemp < 0 || dtemp > 1023)
-> +		return -EINVAL;
-> +
-> +	*temp = derived_table[dtemp];
-> +
-> +	return 0;
-> +}
-> +
-> +/* Get temperature callback function for thermal zone */
-> +static int k3_thermal_get_temp(void *devdata, int *temp)
-> +{
-> +	struct k3_thermal_data *data = devdata;
-> +	int ret = 0;
-> +
-> +	ret = k3_bgp_read_temp(data, temp);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct thermal_zone_of_device_ops k3_of_thermal_ops = {
-> +	.get_temp = k3_thermal_get_temp,
-> +};
-> +
-> +static int k3_j72xx_bandgap_temp_to_adc_code(int temp)
-> +{
-> +	int low = 0, high = 1023, mid;
-> +
-> +	if (temp > 160000 || temp < -50000)
-> +		return -EINVAL;
-> +
-> +	/* Binary search to find the adc code */
-> +	while (low < (high - 1)) {
-> +		mid = (low + high) / 2;
-> +		if (temp <= derived_table[mid])
-> +			high = mid;
-> +		else
-> +			low = mid;
-> +	}
-> +
-> +	return mid;
-> +}
-> +
-> +static void get_efuse_values(int id, struct k3_thermal_data *data, int *err,
-> +			     struct k3_j72xx_bandgap *bgp)
-> +{
-> +	int i, tmp, pow;
-> +	int ct_offsets[K3_VTM_CORRECTION_TEMP_CNT];
-> +	int ct_bm[K3_VTM_CORRECTION_TEMP_CNT];
-> +
-> +	/* Populate efuse reg offsets & Bit masks for -40C, 30C, 125C */
-> +	switch (id) {
-> +	case 0:
-> +		ct_offsets[0] = 0x0;
-> +		ct_offsets[1] = 0x8;
-> +		ct_offsets[2] = 0x4;
-> +		ct_bm[0] = 0x3f;
-> +		ct_bm[1] = 0x1fe000;
-> +		ct_bm[2] = 0x1ff;
-> +		break;
-> +
-> +	case 1:
-> +		ct_offsets[0] = 0x0;
-> +		ct_offsets[1] = 0x8;
-> +		ct_offsets[2] = 0x4;
-> +		ct_bm[0] = 0xfc0;
-> +		ct_bm[1] = 0x1fe00000;
-> +		ct_bm[2] = 0x3fe00;
-> +		break;
-> +
-> +	case 2:
-> +		ct_offsets[0] = 0x0;
-> +		ct_offsets[1] = -1;
-> +		ct_offsets[2] = 0x4;
-> +		ct_bm[0] = 0x3f000;
-> +		ct_bm[1] = 0x7f800000;
-> +		ct_bm[2] = 0x7fc0000;
-> +		break;
-> +
-> +	case 3:
-> +		ct_offsets[0] = 0x0;
-> +		ct_offsets[1] = 0xC;
-> +		ct_offsets[2] = -1; /* Spread across 2 registers */
-> +		ct_bm[0] = 0xfc0000;
-> +		ct_bm[1] = 0x1fe0;
-> +		ct_bm[2] = 0x1f800000;
-> +		break;
-> +
-> +	case 4:
-> +		ct_offsets[0] = 0x0;
-> +		ct_offsets[1] = 0xc;
-> +		ct_offsets[2] = 0x8;
-> +		ct_bm[0] = 0x3f000000;
-> +		ct_bm[1] = 0x1fe000;
-> +		ct_bm[2] = 0x1ff0;
-> +		break;
-> +	}
-
-The way this is initialized looks strange to me
-
-Why not:
-
-int ct_offsets[][] = {
-	{ 0x0, 0x8, 0x4 },
-	{ 0x0, 0x8, 0x4 },
-	{ 0x0, -1,  0x4 },
-	{ 0x0, 0xC, -1 }
-	{ 0x0, 0xc, 0x8 }
-  };
-
-int ct_bm[][] = {
-	{ 0x3f, 0x1fe000, 0x1ff },
-	{ 0xfc0, 0x1fe000, 0x3fe00 },
-	{ 0x3f000, 0x7f800000, 0x7fc0000 },
-	{ 0xfc0000, 0x1fe0, 0x1f800000 },
-	{ 0x3f000000, 0x1fe000, 0x1ff0 }
-};
-
-And then : ct_offsets[id][i] below ?
-
-> +	for (i = 0; i < 3; i++) {
-
-ARRAY_SIZE on ct_offsets ?
-
-> +		/* Extract the offset value using bit-mask */
-> +		if (ct_offsets[i] == -1 && i == 1) {
-> +			/* 25C offset Case of Sensor 2 split between 2 regs */
-> +			tmp = (readl(bgp->fuse_base + 0x8) & 0xE0000000) >> (29);
-> +			tmp |= ((readl(bgp->fuse_base + 0xC) & 0x1F) << 3);
-> +			pow = tmp & 0x80;
-> +		} else if (ct_offsets[i] == -1 && i == 2) {
-> +			/* 125C Case of Sensor 3 split between 2 regs */
-> +			tmp = (readl(bgp->fuse_base + 0x4) & 0xF8000000) >> (27);
-> +			tmp |= ((readl(bgp->fuse_base + 0x8) & 0xF) << 5);
-> +			pow = tmp & 0x100;
-> +		} else {
-> +			tmp = readl(bgp->fuse_base + ct_offsets[i]);
-> +			tmp &= ct_bm[i];
-> +			tmp = tmp >> __ffs(ct_bm[i]);
-> +
-> +			/* Obtain the sign bit pow*/
-> +			pow = ct_bm[i] >> __ffs(ct_bm[i]);
-> +			pow += 1;
-> +			pow /= 2;
-> +		}
-> +
-> +		/* Check for negative value */
-> +		if (tmp & pow) {
-> +			/* 2's complement value */
-> +			tmp = two_cmp(tmp, ct_bm[i] >> __ffs(ct_bm[i]));
-> +		}
-> +		err[i] = tmp;
-> +	}
-> +
-> +	/* Err value for 150C is set to 0 */
-> +	err[i] = 0;
-> +}
-> +
-> +static void print_look_up_table(struct device *dev, int *ref_table)
-> +{
-> +	int i;
-> +
-> +	dev_dbg(dev, "The contents of derived array\n");
-> +	dev_dbg(dev, "Code   Temperaturei\n");
-
-Typo: "Temperaturei"
-
-> +	for (i = 0; i <= 1023; i++)
-> +		dev_dbg(dev, "%d       %d %d\n", i, derived_table[i], ref_table[i]);
-> +}
-> +
-> +static const struct of_device_id of_k3_j72xx_bandgap_match[];
-
-Pointless forward declaration
-
-> +
-> +struct k3_j72xx_bandgap_data {
-> +	unsigned int has_errata_i2128;
-> +};
-> +
-> +static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
-> +{
-> +	int ret = 0, cnt, val, id, table_size = 1024;
-
-table_size to be replaced by the macro mentioned above
-
-> +	int high_max, low_temp;
-> +	struct resource *res;
-> +	struct device *dev = &pdev->dev;
-> +	struct k3_j72xx_bandgap *bgp;
-> +	struct k3_thermal_data *data;
-> +	int workaround_needed = 0;
-> +	const struct k3_j72xx_bandgap_data *driver_data;
-> +	struct thermal_zone_device *ti_thermal;
-> +	int *ref_table;
-> +	struct err_values err_vals;
-
-[ ... ]
-
-
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 1ee878d126fd..18cd7965e5d6 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -225,24 +225,23 @@ static void genpd_debug_remove(struct generic_pm_domain *genpd)
+ 
+ static void genpd_update_accounting(struct generic_pm_domain *genpd)
+ {
+-	ktime_t delta, now;
++	u64 delta, now;
+ 
+-	now = ktime_get();
+-	delta = ktime_sub(now, genpd->accounting_time);
++	now = ktime_get_mono_fast_ns();
++	if (now <= genpd->accounting_time)
++		return;
++
++	delta = now - genpd->accounting_time;
+ 
+ 	/*
+ 	 * If genpd->status is active, it means we are just
+ 	 * out of off and so update the idle time and vice
+ 	 * versa.
+ 	 */
+-	if (genpd->status == GENPD_STATE_ON) {
+-		int state_idx = genpd->state_idx;
+-
+-		genpd->states[state_idx].idle_time =
+-			ktime_add(genpd->states[state_idx].idle_time, delta);
+-	} else {
+-		genpd->on_time = ktime_add(genpd->on_time, delta);
+-	}
++	if (genpd->status == GENPD_STATE_ON)
++		genpd->states[genpd->state_idx].idle_time += delta;
++	else
++		genpd->on_time += delta;
+ 
+ 	genpd->accounting_time = now;
+ }
+@@ -1999,7 +1998,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+ 	genpd->max_off_time_changed = true;
+ 	genpd->provider = NULL;
+ 	genpd->has_provider = false;
+-	genpd->accounting_time = ktime_get();
++	genpd->accounting_time = ktime_get_mono_fast_ns();
+ 	genpd->domain.ops.runtime_suspend = genpd_runtime_suspend;
+ 	genpd->domain.ops.runtime_resume = genpd_runtime_resume;
+ 	genpd->domain.ops.prepare = genpd_prepare;
+@@ -3163,6 +3162,7 @@ static int sub_domains_show(struct seq_file *s, void *data)
+ static int idle_states_show(struct seq_file *s, void *data)
+ {
+ 	struct generic_pm_domain *genpd = s->private;
++	u64 now, delta, idle_time = 0;
+ 	unsigned int i;
+ 	int ret = 0;
+ 
+@@ -3173,17 +3173,19 @@ static int idle_states_show(struct seq_file *s, void *data)
+ 	seq_puts(s, "State          Time Spent(ms) Usage          Rejected\n");
+ 
+ 	for (i = 0; i < genpd->state_count; i++) {
+-		ktime_t delta = 0;
+-		s64 msecs;
++		idle_time += genpd->states[i].idle_time;
+ 
+-		if ((genpd->status == GENPD_STATE_OFF) &&
+-				(genpd->state_idx == i))
+-			delta = ktime_sub(ktime_get(), genpd->accounting_time);
++		if (genpd->status == GENPD_STATE_OFF && genpd->state_idx == i) {
++			now = ktime_get_mono_fast_ns();
++			if (now > genpd->accounting_time) {
++				delta = now - genpd->accounting_time;
++				idle_time += delta;
++			}
++		}
+ 
+-		msecs = ktime_to_ms(
+-			ktime_add(genpd->states[i].idle_time, delta));
+-		seq_printf(s, "S%-13i %-14lld %-14llu %llu\n", i, msecs,
+-			      genpd->states[i].usage, genpd->states[i].rejected);
++		do_div(idle_time, NSEC_PER_MSEC);
++		seq_printf(s, "S%-13i %-14llu %-14llu %llu\n", i, idle_time,
++			   genpd->states[i].usage, genpd->states[i].rejected);
+ 	}
+ 
+ 	genpd_unlock(genpd);
+@@ -3193,18 +3195,22 @@ static int idle_states_show(struct seq_file *s, void *data)
+ static int active_time_show(struct seq_file *s, void *data)
+ {
+ 	struct generic_pm_domain *genpd = s->private;
+-	ktime_t delta = 0;
++	u64 now, on_time, delta = 0;
+ 	int ret = 0;
+ 
+ 	ret = genpd_lock_interruptible(genpd);
+ 	if (ret)
+ 		return -ERESTARTSYS;
+ 
+-	if (genpd->status == GENPD_STATE_ON)
+-		delta = ktime_sub(ktime_get(), genpd->accounting_time);
++	if (genpd->status == GENPD_STATE_ON) {
++		now = ktime_get_mono_fast_ns();
++		if (now > genpd->accounting_time)
++			delta = now - genpd->accounting_time;
++	}
+ 
+-	seq_printf(s, "%lld ms\n", ktime_to_ms(
+-				ktime_add(genpd->on_time, delta)));
++	on_time = genpd->on_time + delta;
++	do_div(on_time, NSEC_PER_MSEC);
++	seq_printf(s, "%llu ms\n", on_time);
+ 
+ 	genpd_unlock(genpd);
+ 	return ret;
+@@ -3213,7 +3219,7 @@ static int active_time_show(struct seq_file *s, void *data)
+ static int total_idle_time_show(struct seq_file *s, void *data)
+ {
+ 	struct generic_pm_domain *genpd = s->private;
+-	ktime_t delta = 0, total = 0;
++	u64 now, delta, total = 0;
+ 	unsigned int i;
+ 	int ret = 0;
+ 
+@@ -3222,16 +3228,19 @@ static int total_idle_time_show(struct seq_file *s, void *data)
+ 		return -ERESTARTSYS;
+ 
+ 	for (i = 0; i < genpd->state_count; i++) {
++		total += genpd->states[i].idle_time;
+ 
+-		if ((genpd->status == GENPD_STATE_OFF) &&
+-				(genpd->state_idx == i))
+-			delta = ktime_sub(ktime_get(), genpd->accounting_time);
+-
+-		total = ktime_add(total, genpd->states[i].idle_time);
++		if (genpd->status == GENPD_STATE_OFF && genpd->state_idx == i) {
++			now = ktime_get_mono_fast_ns();
++			if (now > genpd->accounting_time) {
++				delta = now - genpd->accounting_time;
++				total += delta;
++			}
++		}
+ 	}
+-	total = ktime_add(total, delta);
+ 
+-	seq_printf(s, "%lld ms\n", ktime_to_ms(total));
++	do_div(total, NSEC_PER_MSEC);
++	seq_printf(s, "%llu ms\n", total);
+ 
+ 	genpd_unlock(genpd);
+ 	return ret;
+diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+index 67017c9390c8..043d48e4420a 100644
+--- a/include/linux/pm_domain.h
++++ b/include/linux/pm_domain.h
+@@ -98,7 +98,7 @@ struct genpd_power_state {
+ 	u64 usage;
+ 	u64 rejected;
+ 	struct fwnode_handle *fwnode;
+-	ktime_t idle_time;
++	u64 idle_time;
+ 	void *data;
+ };
+ 
+@@ -149,8 +149,8 @@ struct generic_pm_domain {
+ 			    unsigned int state_count);
+ 	unsigned int state_count; /* number of states */
+ 	unsigned int state_idx; /* state that genpd will go to when off */
+-	ktime_t on_time;
+-	ktime_t accounting_time;
++	u64 on_time;
++	u64 accounting_time;
+ 	const struct genpd_lock_ops *lock_ops;
+ 	union {
+ 		struct mutex mlock;
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.25.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
