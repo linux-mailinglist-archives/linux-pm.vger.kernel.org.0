@@ -2,45 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B445072C0
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 18:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C5C85072DA
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 18:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346527AbiDSQSu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Apr 2022 12:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
+        id S245745AbiDSQXM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Apr 2022 12:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354500AbiDSQSu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 12:18:50 -0400
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AE038BCE;
-        Tue, 19 Apr 2022 09:16:07 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id d19so3529942ybc.5;
-        Tue, 19 Apr 2022 09:16:07 -0700 (PDT)
+        with ESMTP id S239383AbiDSQXI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 12:23:08 -0400
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4A019C35;
+        Tue, 19 Apr 2022 09:20:26 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id f17so31915900ybj.10;
+        Tue, 19 Apr 2022 09:20:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=RdJkQFegCpx/QCihmoNqss9vW3lewnxP27ekVArKHfw=;
-        b=ofpT7J+qkBpnLPhWNfQIOaHgKNILGpmIIkFiX8aeotW2Dfo46DK+xwvo03Tnws9ijo
-         YQS6fQL7hgGZBOPcZzzKQU7m8DrwKGLv678Opyv/u5x6QiUv1GC3O6+SK7/8nFHtOMqc
-         6IGxsWYtUMDhfw0NJspspuoI11F7wkJmahvnIie8yyJQQsbC8xIx/Ax8FYpdOT7JB5DO
-         Vrz4QuRwhG7/uFSGPjZOOYq5lmVzP6s+5VNhsIs+0Vesloe+eRiCK3Y/XClYH3mYM0A1
-         2pXJAahmSTTELndIEsEY4mg4Qb1UYoP/S5R69LD3pg4OXKLd5+HIx93bAeU8h6SkxSs2
-         YLAA==
-X-Gm-Message-State: AOAM5324cMemcSlYI2pyTt9sczPHRXNX5DUR1UntDjop5TnUTqgaux4L
-        EtQEyG5IzmOZ4CNmYqcDkajElrjvMnhpU9ouSbo=
-X-Google-Smtp-Source: ABdhPJxiVNde9jKEH2NeYbLowMGmePdDc0ZZQ/YbGNZnXsT0SNO4zMDbDEtbXKHc6MfCIBnc7cwq1XpjeOZWIgEewrU=
-X-Received: by 2002:a05:6902:1543:b0:642:3fd:316c with SMTP id
- r3-20020a056902154300b0064203fd316cmr15328475ybu.622.1650384966773; Tue, 19
- Apr 2022 09:16:06 -0700 (PDT)
+        bh=lPxp0QI2/nvg9xCByE9gIxfF0d3G+NntnF3jQ+l2Pfc=;
+        b=GbEhwVpPvWTuopsxPqXQfMBHuZt06KYgHCRUpVLjX2F5iJWihxTqWWPrdWsyMdEXtE
+         l107kp3dHG/C8nFEZcpsUnbdsdLv08mul/5Y5TV5FMhOAmfGBsjhqzSY2P4xFU93MVPM
+         S2F7blK8jG0guE/UJtjoMKVC6VNTTfKLg+vEqn3RLAr+UA9G2F64Hdl6Vlwu7qMFdeq5
+         pCdpEXOFrpEAw55ID7O68SfO3Su7WS07lUi0ywNUk2txhVpVLMVShN+0OOf0zf97dyYN
+         FpL8q9kAARfvRS6NjFcWguaV9iBfgX3PZFph0xrhwgpaVB7j0wDT51PFQ/mV1hBF6ehV
+         p5jQ==
+X-Gm-Message-State: AOAM5333SbKTlUG7b+J5ahl/BajvpSc+IkY1UobDkQa5eZBCadqLrK8E
+        btGOUKUN6sj9wZL2riWUT4KynOF4+Gf4TaqF51tfX+6s
+X-Google-Smtp-Source: ABdhPJwwjxvi6MkelW+kIqhBfD671mIGrXxCsHweWDrfM45Gfm/hjPC13hhov6Lj835jBHs5R7MtItbtZCN9qD50WuI=
+X-Received: by 2002:a25:ac9b:0:b0:641:3c32:bee7 with SMTP id
+ x27-20020a25ac9b000000b006413c32bee7mr14618920ybi.633.1650385225389; Tue, 19
+ Apr 2022 09:20:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220415133356.179706384@linutronix.de> <20220415161206.648485667@linutronix.de>
-In-Reply-To: <20220415161206.648485667@linutronix.de>
+References: <20220415133356.179706384@linutronix.de> <20220415161206.706185092@linutronix.de>
+In-Reply-To: <20220415161206.706185092@linutronix.de>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 19 Apr 2022 18:15:56 +0200
-Message-ID: <CAJZ5v0hLn9APoLL13eEjTDKZNr0o5JnvTZrit793R2dAtvj79w@mail.gmail.com>
-Subject: Re: [patch 05/10] x86/aperfmperf: Put frequency invariance
- aperf/mperf data into a struct
+Date:   Tue, 19 Apr 2022 18:20:14 +0200
+Message-ID: <CAJZ5v0hWoY9r-8nyo82tVg1hOdEqCditBaGuWtFonkQUZVTXMw@mail.gmail.com>
+Subject: Re: [patch 06/10] x86/aperfmperf: Restructure arch_scale_freq_tick()
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         "the arch/x86 maintainers" <x86@kernel.org>,
@@ -59,7 +58,7 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 9:19 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+On Fri, Apr 15, 2022 at 9:20 PM Thomas Gleixner <tglx@linutronix.de> wrote:
 >
 > Preparation for sharing code with the CPU frequency portion of the
 > aperf/mperf code.
@@ -73,71 +72,58 @@ All good AFAICS:
 Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
 > ---
->  arch/x86/kernel/cpu/aperfmperf.c |   26 +++++++++++++++-----------
->  1 file changed, 15 insertions(+), 11 deletions(-)
+>  arch/x86/kernel/cpu/aperfmperf.c |   36 +++++++++++++++++++++---------------
+>  1 file changed, 21 insertions(+), 15 deletions(-)
 >
 > --- a/arch/x86/kernel/cpu/aperfmperf.c
 > +++ b/arch/x86/kernel/cpu/aperfmperf.c
-> @@ -22,6 +22,13 @@
+> @@ -477,22 +477,9 @@ static DECLARE_WORK(disable_freq_invaria
 >
->  #include "cpu.h"
+>  DEFINE_PER_CPU(unsigned long, arch_freq_scale) = SCHED_CAPACITY_SCALE;
 >
-> +struct aperfmperf {
-> +       u64             aperf;
-> +       u64             mperf;
-> +};
-> +
-> +static DEFINE_PER_CPU_SHARED_ALIGNED(struct aperfmperf, cpu_samples);
-> +
->  struct aperfmperf_sample {
->         unsigned int    khz;
->         atomic_t        scfpending;
-> @@ -194,8 +201,6 @@ unsigned int arch_freq_get_on_cpu(int cp
->
->  DEFINE_STATIC_KEY_FALSE(arch_scale_freq_key);
->
-> -static DEFINE_PER_CPU(u64, arch_prev_aperf);
-> -static DEFINE_PER_CPU(u64, arch_prev_mperf);
->  static u64 arch_turbo_freq_ratio = SCHED_CAPACITY_SCALE;
->  static u64 arch_max_freq_ratio = SCHED_CAPACITY_SCALE;
->
-> @@ -407,8 +412,8 @@ static void init_counter_refs(void)
->         rdmsrl(MSR_IA32_APERF, aperf);
->         rdmsrl(MSR_IA32_MPERF, mperf);
->
-> -       this_cpu_write(arch_prev_aperf, aperf);
-> -       this_cpu_write(arch_prev_mperf, mperf);
-> +       this_cpu_write(cpu_samples.aperf, aperf);
-> +       this_cpu_write(cpu_samples.mperf, mperf);
->  }
->
->  #ifdef CONFIG_PM_SLEEP
-> @@ -474,9 +479,8 @@ DEFINE_PER_CPU(unsigned long, arch_freq_
->
->  void arch_scale_freq_tick(void)
+> -void arch_scale_freq_tick(void)
+> +static void scale_freq_tick(u64 acnt, u64 mcnt)
 >  {
-> -       u64 freq_scale;
-> -       u64 aperf, mperf;
-> -       u64 acnt, mcnt;
-> +       struct aperfmperf *s = this_cpu_ptr(&cpu_samples);
-> +       u64 aperf, mperf, acnt, mcnt, freq_scale;
->
->         if (!arch_scale_freq_invariant())
->                 return;
-> @@ -484,11 +488,11 @@ void arch_scale_freq_tick(void)
->         rdmsrl(MSR_IA32_APERF, aperf);
->         rdmsrl(MSR_IA32_MPERF, mperf);
->
-> -       acnt = aperf - this_cpu_read(arch_prev_aperf);
-> -       mcnt = mperf - this_cpu_read(arch_prev_mperf);
-> +       acnt = aperf - s->aperf;
-> +       mcnt = mperf - s->mperf;
->
-> -       this_cpu_write(arch_prev_aperf, aperf);
-> -       this_cpu_write(arch_prev_mperf, mperf);
-> +       s->aperf = aperf;
-> +       s->mperf = mperf;
+> -       struct aperfmperf *s = this_cpu_ptr(&cpu_samples);
+> -       u64 aperf, mperf, acnt, mcnt, freq_scale;
+> -
+> -       if (!arch_scale_freq_invariant())
+> -               return;
+> -
+> -       rdmsrl(MSR_IA32_APERF, aperf);
+> -       rdmsrl(MSR_IA32_MPERF, mperf);
+> -
+> -       acnt = aperf - s->aperf;
+> -       mcnt = mperf - s->mperf;
+> -
+> -       s->aperf = aperf;
+> -       s->mperf = mperf;
+> +       u64 freq_scale;
 >
 >         if (check_shl_overflow(acnt, 2*SCHED_CAPACITY_SHIFT, &acnt))
 >                 goto error;
+> @@ -514,4 +501,23 @@ void arch_scale_freq_tick(void)
+>         pr_warn("Scheduler frequency invariance went wobbly, disabling!\n");
+>         schedule_work(&disable_freq_invariance_work);
+>  }
+> +
+> +void arch_scale_freq_tick(void)
+> +{
+> +       struct aperfmperf *s = this_cpu_ptr(&cpu_samples);
+> +       u64 acnt, mcnt, aperf, mperf;
+> +
+> +       if (!arch_scale_freq_invariant())
+> +               return;
+> +
+> +       rdmsrl(MSR_IA32_APERF, aperf);
+> +       rdmsrl(MSR_IA32_MPERF, mperf);
+> +       acnt = aperf - s->aperf;
+> +       mcnt = mperf - s->mperf;
+> +
+> +       s->aperf = aperf;
+> +       s->mperf = mperf;
+> +
+> +       scale_freq_tick(acnt, mcnt);
+> +}
+>  #endif /* CONFIG_X86_64 && CONFIG_SMP */
 >
