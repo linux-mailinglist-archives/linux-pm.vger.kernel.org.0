@@ -2,59 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5CE5075EE
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 19:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFBD55075EC
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 19:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237814AbiDSRIc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Apr 2022 13:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
+        id S1355276AbiDSRHX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Apr 2022 13:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355889AbiDSRCp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 13:02:45 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64983CFDC;
-        Tue, 19 Apr 2022 09:52:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650387164; x=1681923164;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0eiWzT86/lbXfzWNlN+Vul7m6CHrSxIYiXYV0a9Dip4=;
-  b=CvVVUfwUl3MrDVahrwzdFLGK+39EgLOQVkc18XSQjYWFeOOuFhN7LsE1
-   13Mqv13PRzNAOoVSpGWs+LxfiikLWrxl5PSeN72Clh0ad5wTH6Afd7D5g
-   aTkKcIAAruMfDZzrWGfd9UfcXSxb2KxdSL8kEenyZWQyiIR+GH85Br2S3
-   RYRxDBN9t3gJXF4fW669oTq7ORgzWp4kdLHIn/4Y8+P6G1ywB0O7MPdLb
-   9V0RdeLpKrUJYM2mV3xrqNVR7oyN0mzB2uPu5DePV0T8m/zgxXM40nvVi
-   Ky69P8vgl8CkHWbIkLHsuXZFmnM/IdJsq2wQIdtFo8guKzdxNfKdiluN7
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="326714903"
-X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="326714903"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 09:52:44 -0700
-X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="657708530"
-Received: from jcrode-mobl.amr.corp.intel.com (HELO guptapa-desk) ([10.252.132.175])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 09:52:43 -0700
-Date:   Tue, 19 Apr 2022 09:52:41 -0700
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        with ESMTP id S1355658AbiDSRG5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 13:06:57 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF676248
+        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 10:01:59 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id n33-20020a17090a5aa400b001d28f5ee3f9so2483017pji.4
+        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 10:01:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=7tg2thbpjG8qne+4AvhFIxe4oVq+0BmdiSDtYmXz0E4=;
+        b=fVImPcRy28zjcv6Hhr7sYV+fKd+K4VIlNnF8vveu6Omn+qLPmn4owgVYzXyZwg88nf
+         FDPrO5MeaV45WRozHDs+02jhaWToBFLORvvHjvMBZtDyxeAp0O0u8doJ9Ruo5/PanlVd
+         0WtB3NXpyNASs3+VYca59jtnMmQUBcSMdtELTGtgif7F2EepmZZQa3DcaUmlv9IVadE6
+         eiSCEtbTE89UCHezniW/c4QinHpxDZa/qu1xM6xea+h/5NeSQJn/dAtgWrlfmwOskxVz
+         PUv6mSj3x2sUAYbVS7WuAu2LvsDfF0KoMMOxYeNL6DodEb4tmSDPxnzoOPoaEooJBCgu
+         g8FQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7tg2thbpjG8qne+4AvhFIxe4oVq+0BmdiSDtYmXz0E4=;
+        b=cL17Z2PMHs14r10s5dsRm5biFz9T9jghUE8DvduN2R31wAyu2MTMiLwOxQ0VwxTSSp
+         5AUgWJ8S37BAkmrDYSeHJsol0RCzWlDrntZ+tgaCdkCz8iQn+TjAVyMnwwh4AT3S0jUR
+         JoEuT2k/YsU7uNUjNRLpJlUUnGm0lTcnp0dPKj8/ODVQ5xnqaK5vyrD8xQ2FqrvQYRsC
+         //ZspN2zKargQ6B7YGa41tZ2UR3ixaCG3zxCmyCAdseuLwhmQX64Dxcqxf3REB0hSeXE
+         xt8qydYq3e+PB0kbHcmARxBiyAh87B7AGh+eeEBNE3USIWv8Mjc/l/x45K2fY8VDi3Qr
+         uq8g==
+X-Gm-Message-State: AOAM533BJ2ibySoPTMiloRl6fkk1GDADIt1T9Zp7u77ZX9z1owd+zpum
+        +s98TV+nddQKnP2RXKHuR1rK
+X-Google-Smtp-Source: ABdhPJyIjAlCeSutoPh/iCcE6wFr0OlMv9ZJKKFpe+TnNksBFfGwsV6m96ls/fdomVssNA9kYzqLFQ==
+X-Received: by 2002:a17:902:6acb:b0:158:8923:86df with SMTP id i11-20020a1709026acb00b00158892386dfmr16703296plt.144.1650387719145;
+        Tue, 19 Apr 2022 10:01:59 -0700 (PDT)
+Received: from thinkpad ([117.202.186.149])
+        by smtp.gmail.com with ESMTPSA id w123-20020a623081000000b005056a4d71e3sm16852618pfw.77.2022.04.19.10.01.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 10:01:58 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 22:31:49 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Pelton, Kyle D" <kyle.d.pelton@intel.com>
-Subject: [PATCH] x86/cpu: Load microcode during restore_processor_state()
-Message-ID: <4350dfbf785cd482d3fafa72b2b49c83102df3ce.1650386317.git.pawan.kumar.gupta@linux.intel.com>
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [RFC PATCH v2 5/6] ufs: use PM OPP when scaling gears
+Message-ID: <20220419170149.GB8699@thinkpad>
+References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
+ <20220411154347.491396-6-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220411154347.491396-6-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,133 +84,431 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+On Mon, Apr 11, 2022 at 05:43:46PM +0200, Krzysztof Kozlowski wrote:
+> Scaling gears requires not only scaling clocks, but also voltage levels,
+> e.g. via performance states.
+> 
+> Use the provided OPP table, to set proper OPP frequency which through
+> required-opps will trigger performance state change.  This deprecates
+> the old freq-table-hz Devicetree property and old clock scaling method
+> in favor of PM core code.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  drivers/scsi/ufs/ufshcd-pltfrm.c |  69 +++++++++++++++++++
+>  drivers/scsi/ufs/ufshcd.c        | 115 +++++++++++++++++++++++--------
+>  drivers/scsi/ufs/ufshcd.h        |   4 ++
+>  3 files changed, 158 insertions(+), 30 deletions(-)
+> 
+> diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
+> index c1d8b6f46868..edba585db0c1 100644
+> --- a/drivers/scsi/ufs/ufshcd-pltfrm.c
+> +++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
+> @@ -107,6 +107,69 @@ static int ufshcd_parse_clock_info(struct ufs_hba *hba)
+>  	return ret;
+>  }
+>  
+> +static int ufshcd_parse_operating_points(struct ufs_hba *hba)
+> +{
+> +	struct device *dev = hba->dev;
+> +	struct device_node *np = dev->of_node;
+> +	struct ufs_clk_info *clki;
+> +	const char *names[16];
+> +	bool clocks_done;
 
-When resuming from system sleep state, restore_processor_state()
-restores the boot CPU MSRs. These MSRs could be emulated by the
-microcode. If microcode is not loaded yet, writing to emulated MSRs
-leads to unchecked MSR access error:
+Maybe freq_table?
 
-  [   28.702947] PM: Calling lapic_suspend+0x0/0x210
-  [   28.703345] unchecked MSR access error: WRMSR to 0x10f (tried to write 0=x0000000000000000) at rIP: 0xffffffff9b2819e4 (native_write_msr+0x4/0x20)
-  [   28.703357] Call Trace:
-  [   28.703359]  <TASK>
-  [   28.703361]  ? restore_processor_state+0x255/0x2d0
-  [   28.703369]  x86_acpi_suspend_lowlevel+0x11f/0x170
-  [   28.703374]  acpi_suspend_enter+0x4f/0x1f0
-  [   28.703379]  suspend_devices_and_enter+0x6e0/0x7d0
-  [   28.703384]  pm_suspend.cold+0x35c/0x3a7
-  [   28.703388]  state_store+0x81/0xe0
-  [   28.703392]  kobj_attr_store+0x12/0x20
-  [   28.703396]  sysfs_kf_write+0x3f/0x50
-  [   28.703399]  kernfs_fop_write_iter+0x13b/0x1d0
-  [   28.703403]  new_sync_write+0x101/0x180
-  [   28.703408]  vfs_write+0x217/0x2a0
-  [   28.703413]  ksys_write+0x67/0xe0
-  [   28.703417]  __x64_sys_write+0x1a/0x20
-  [   28.703421]  do_syscall_64+0x3b/0x90
-  [   28.703426]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-  [   28.703429] RIP: 0033:0x7fda13c260a7
-  [   28.703434] Code: 64 89 02 48 c7 c0 ff ff ff ff eb bb 0f 1f 80 00 00 00 =
-  00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 01 00 00 00 0f 05 <48=
-  > 3d 00 f0 ff ff 77 51 c3 48 83 ec 28 48 89 54 24 18 48 89 74 24
-  [   28.703437] RSP: 002b:00007fffa4060268 EFLAGS: 00000246 ORIG_RAX: 000000=0000000001
-  [   28.703441] RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007fda13c=260a7
-  [   28.703443] RDX: 0000000000000004 RSI: 000055a41f65a570 RDI: 00000000000=00004
-  [   28.703444] RBP: 000055a41f65a570 R08: 0000000000000000 R09: 00000000000=00004
-  [   28.703446] R10: 000055a41f0cc2a6 R11: 0000000000000246 R12: 00000000000=00004
-  [   28.703447] R13: 000055a41f657510 R14: 00007fda13d014a0 R15: 00007fda13d=008a0
+> +	int cnt, i, ret;
+> +
+> +	if (!of_find_property(dev->of_node, "operating-points-v2", NULL))
+> +		return 0;
+> +
+> +	cnt = of_property_count_strings(np, "clock-names");
+> +	if (cnt <= 0) {
+> +		dev_warn(dev, "%s: Missing clock-names\n",
+> +			 __func__);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (cnt > ARRAY_SIZE(names)) {
+> +		dev_info(dev, "%s: Too many clock-names\n",  __func__);
+> +		return -EINVAL;
+> +	}
 
-To ensure microcode emulated MSRs are available for restoration, load
-the microcode for boot CPU before restoring these MSRs.
+How did you come up with 16 as the max clock count? Is this check necessary?
 
-Reported-by: Kyle D. Pelton <kyle.d.pelton@intel.com>
-Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215841
-Fixes: e2a1256b17b1 ("x86/speculation: Restore speculation related MSRs during S3 resume")
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Tested-by: Kyle D. Pelton <kyle.d.pelton@intel.com>
-Cc: stable@vger.kernel.org
----
- arch/x86/include/asm/microcode.h     |  2 ++
- arch/x86/kernel/cpu/microcode/core.c |  6 +++---
- arch/x86/power/cpu.c                 | 10 +++++++++-
- 3 files changed, 14 insertions(+), 4 deletions(-)
+> +
+> +	/* clocks parsed by ufshcd_parse_clock_info() */
+> +	clocks_done = !!of_find_property(np, "freq-table-hz", NULL);
 
-diff --git a/arch/x86/include/asm/microcode.h b/arch/x86/include/asm/microcode.h
-index d6bfdfb0f0af..0c3d3440fe27 100644
---- a/arch/x86/include/asm/microcode.h
-+++ b/arch/x86/include/asm/microcode.h
-@@ -131,10 +131,12 @@ extern void __init load_ucode_bsp(void);
- extern void load_ucode_ap(void);
- void reload_early_microcode(void);
- extern bool initrd_gone;
-+void microcode_bsp_resume(void);
- #else
- static inline void __init load_ucode_bsp(void)			{ }
- static inline void load_ucode_ap(void)				{ }
- static inline void reload_early_microcode(void)			{ }
-+static inline void microcode_bsp_resume(void)			{ }
- #endif
- 
- #endif /* _ASM_X86_MICROCODE_H */
-diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-index f955d25076ba..239ff5fcec6a 100644
---- a/arch/x86/kernel/cpu/microcode/core.c
-+++ b/arch/x86/kernel/cpu/microcode/core.c
-@@ -758,9 +758,9 @@ static struct subsys_interface mc_cpu_interface = {
- };
- 
- /**
-- * mc_bp_resume - Update boot CPU microcode during resume.
-+ * microcode_bsp_resume - Update boot CPU microcode during resume.
-  */
--static void mc_bp_resume(void)
-+void microcode_bsp_resume(void)
- {
- 	int cpu = smp_processor_id();
- 	struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
-@@ -772,7 +772,7 @@ static void mc_bp_resume(void)
- }
- 
- static struct syscore_ops mc_syscore_ops = {
--	.resume			= mc_bp_resume,
-+	.resume			= microcode_bsp_resume,
- };
- 
- static int mc_cpu_starting(unsigned int cpu)
-diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
-index 3822666fb73d..bb176c72891c 100644
---- a/arch/x86/power/cpu.c
-+++ b/arch/x86/power/cpu.c
-@@ -25,6 +25,7 @@
- #include <asm/cpu.h>
- #include <asm/mmu_context.h>
- #include <asm/cpu_device_id.h>
-+#include <asm/microcode.h>
- 
- #ifdef CONFIG_X86_32
- __visible unsigned long saved_context_ebx;
-@@ -262,11 +263,18 @@ static void notrace __restore_processor_state(struct saved_context *ctxt)
- 	x86_platform.restore_sched_clock_state();
- 	mtrr_bp_restore();
- 	perf_restore_debug_store();
--	msr_restore_context(ctxt);
- 
- 	c = &cpu_data(smp_processor_id());
- 	if (cpu_has(c, X86_FEATURE_MSR_IA32_FEAT_CTL))
- 		init_ia32_feat_ctl(c);
-+
-+	microcode_bsp_resume();
-+
-+	/*
-+	 * This needs to happen after the microcode has been updated upon resume
-+	 * because some of the MSRs are "emulated" in microcode.
-+	 */
-+	msr_restore_context(ctxt);
- }
- 
- /* Needed by apm.c */
--- 
-2.35.1
+freq-table-hz and opp-table are mutually exclusive, isn't it?
 
+> +
+> +	for (i = 0; i < cnt; i++) {
+> +		ret = of_property_read_string_index(np, "clock-names", i,
+> +						    &names[i]);
+> +		if (ret)
+> +			return ret;
+> +
+> +		if (clocks_done)
+> +			continue;
+> +
+> +		clki = devm_kzalloc(dev, sizeof(*clki), GFP_KERNEL);
+> +		if (!clki)
+> +			return -ENOMEM;
+> +
+> +		clki->name = devm_kstrdup(dev, names[i], GFP_KERNEL);
+> +		if (!clki->name)
+> +			return -ENOMEM;
+> +
+> +		if (!strcmp(names[i], "ref_clk"))
+> +			clki->keep_link_active = true;
+> +
+> +		list_add_tail(&clki->list, &hba->clk_list_head);
+> +	}
+> +
+> +	ret = devm_pm_opp_set_clknames(dev, names, i);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = devm_pm_opp_of_add_table(dev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	hba->use_pm_opp = true;
+> +
+> +	return 0;
+> +}
+> +
+>  #define MAX_PROP_SIZE 32
+>  static int ufshcd_populate_vreg(struct device *dev, const char *name,
+>  		struct ufs_vreg **out_vreg)
+> @@ -360,6 +423,12 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
+>  		goto dealloc_host;
+>  	}
+>  
+> +	err = ufshcd_parse_operating_points(hba);
+> +	if (err) {
+> +		dev_err(dev, "%s: OPP parse failed %d\n", __func__, err);
+> +		goto dealloc_host;
+> +	}
+> +
+>  	ufshcd_init_lanes_per_dir(hba);
+>  
+>  	err = ufshcd_init(hba, mmio_base, irq);
+> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+> index 5bfa62fa288a..aec7da18a550 100644
+> --- a/drivers/scsi/ufs/ufshcd.c
+> +++ b/drivers/scsi/ufs/ufshcd.c
+> @@ -1022,6 +1022,9 @@ static int ufshcd_scale_clks(struct ufs_hba *hba, bool scale_up)
+>  	int ret = 0;
+>  	ktime_t start = ktime_get();
+>  
+> +	if (hba->use_pm_opp)
+> +		return 0;
+> +
+
+So you don't need pre and post clock changes below?
+
+Thanks,
+Mani
+
+>  	ret = ufshcd_vops_clk_scale_notify(hba, scale_up, PRE_CHANGE);
+>  	if (ret)
+>  		goto out;
+> @@ -1044,11 +1047,13 @@ static int ufshcd_scale_clks(struct ufs_hba *hba, bool scale_up)
+>  /**
+>   * ufshcd_is_devfreq_scaling_required - check if scaling is required or not
+>   * @hba: per adapter instance
+> + * @freq: Target frequency
+>   * @scale_up: True if scaling up and false if scaling down
+>   *
+>   * Returns true if scaling is required, false otherwise.
+>   */
+>  static bool ufshcd_is_devfreq_scaling_required(struct ufs_hba *hba,
+> +					       unsigned long freq,
+>  					       bool scale_up)
+>  {
+>  	struct ufs_clk_info *clki;
+> @@ -1057,6 +1062,9 @@ static bool ufshcd_is_devfreq_scaling_required(struct ufs_hba *hba,
+>  	if (list_empty(head))
+>  		return false;
+>  
+> +	if (hba->use_pm_opp)
+> +		return freq != hba->clk_scaling.target_freq;
+> +
+>  	list_for_each_entry(clki, head, list) {
+>  		if (!IS_ERR_OR_NULL(clki->clk)) {
+>  			if (scale_up && clki->max_freq) {
+> @@ -1155,13 +1163,15 @@ static int ufshcd_wait_for_doorbell_clr(struct ufs_hba *hba,
+>  /**
+>   * ufshcd_scale_gear - scale up/down UFS gear
+>   * @hba: per adapter instance
+> + * @freq: Target frequency
+>   * @scale_up: True for scaling up gear and false for scaling down
+>   *
+>   * Returns 0 for success,
+>   * Returns -EBUSY if scaling can't happen at this time
+>   * Returns non-zero for any other errors
+>   */
+> -static int ufshcd_scale_gear(struct ufs_hba *hba, bool scale_up)
+> +static int ufshcd_scale_gear(struct ufs_hba *hba, unsigned long freq,
+> +			     bool scale_up)
+>  {
+>  	int ret = 0;
+>  	struct ufs_pa_layer_attr new_pwr_info;
+> @@ -1186,6 +1196,12 @@ static int ufshcd_scale_gear(struct ufs_hba *hba, bool scale_up)
+>  		}
+>  	}
+>  
+> +	if (hba->use_pm_opp && scale_up) {
+> +		ret = dev_pm_opp_set_rate(hba->dev, freq);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>  	/* check if the power mode needs to be changed or not? */
+>  	ret = ufshcd_config_pwr_mode(hba, &new_pwr_info);
+>  	if (ret)
+> @@ -1194,6 +1210,11 @@ static int ufshcd_scale_gear(struct ufs_hba *hba, bool scale_up)
+>  			hba->pwr_info.gear_tx, hba->pwr_info.gear_rx,
+>  			new_pwr_info.gear_tx, new_pwr_info.gear_rx);
+>  
+> +	if (ret && hba->use_pm_opp && scale_up)
+> +		dev_pm_opp_set_rate(hba->dev, hba->devfreq->previous_freq);
+> +	else if (hba->use_pm_opp && !scale_up)
+> +		ret = dev_pm_opp_set_rate(hba->dev, freq);
+> +
+>  	return ret;
+>  }
+>  
+> @@ -1236,13 +1257,15 @@ static void ufshcd_clock_scaling_unprepare(struct ufs_hba *hba, bool writelock)
+>  /**
+>   * ufshcd_devfreq_scale - scale up/down UFS clocks and gear
+>   * @hba: per adapter instance
+> + * @freq: Target frequency
+>   * @scale_up: True for scaling up and false for scalin down
+>   *
+>   * Returns 0 for success,
+>   * Returns -EBUSY if scaling can't happen at this time
+>   * Returns non-zero for any other errors
+>   */
+> -static int ufshcd_devfreq_scale(struct ufs_hba *hba, bool scale_up)
+> +static int ufshcd_devfreq_scale(struct ufs_hba *hba, unsigned long freq,
+> +				bool scale_up)
+>  {
+>  	int ret = 0;
+>  	bool is_writelock = true;
+> @@ -1253,7 +1276,7 @@ static int ufshcd_devfreq_scale(struct ufs_hba *hba, bool scale_up)
+>  
+>  	/* scale down the gear before scaling down clocks */
+>  	if (!scale_up) {
+> -		ret = ufshcd_scale_gear(hba, false);
+> +		ret = ufshcd_scale_gear(hba, freq, false);
+>  		if (ret)
+>  			goto out_unprepare;
+>  	}
+> @@ -1261,13 +1284,14 @@ static int ufshcd_devfreq_scale(struct ufs_hba *hba, bool scale_up)
+>  	ret = ufshcd_scale_clks(hba, scale_up);
+>  	if (ret) {
+>  		if (!scale_up)
+> -			ufshcd_scale_gear(hba, true);
+> +			ufshcd_scale_gear(hba, hba->clk_scaling.target_freq,
+> +					  true);
+>  		goto out_unprepare;
+>  	}
+>  
+>  	/* scale up the gear after scaling up clocks */
+>  	if (scale_up) {
+> -		ret = ufshcd_scale_gear(hba, true);
+> +		ret = ufshcd_scale_gear(hba, freq, true);
+>  		if (ret) {
+>  			ufshcd_scale_clks(hba, false);
+>  			goto out_unprepare;
+> @@ -1332,9 +1356,20 @@ static int ufshcd_devfreq_target(struct device *dev,
+>  	if (!ufshcd_is_clkscaling_supported(hba))
+>  		return -EINVAL;
+>  
+> -	clki = list_first_entry(&hba->clk_list_head, struct ufs_clk_info, list);
+>  	/* Override with the closest supported frequency */
+> -	*freq = (unsigned long) clk_round_rate(clki->clk, *freq);
+> +	if (hba->use_pm_opp) {
+> +		struct dev_pm_opp *opp;
+> +
+> +		opp = devfreq_recommended_opp(dev, freq, flags);
+> +		if (IS_ERR(opp))
+> +			return PTR_ERR(opp);
+> +		dev_pm_opp_put(opp);
+> +	} else {
+> +		clki = list_first_entry(&hba->clk_list_head, struct ufs_clk_info,
+> +					list);
+> +		*freq =	(unsigned long) clk_round_rate(clki->clk, *freq);
+> +	}
+> +
+>  	spin_lock_irqsave(hba->host->host_lock, irq_flags);
+>  	if (ufshcd_eh_in_progress(hba)) {
+>  		spin_unlock_irqrestore(hba->host->host_lock, irq_flags);
+> @@ -1350,11 +1385,11 @@ static int ufshcd_devfreq_target(struct device *dev,
+>  	}
+>  
+>  	/* Decide based on the rounded-off frequency and update */
+> -	scale_up = (*freq == clki->max_freq) ? true : false;
+> -	if (!scale_up)
+> +	scale_up = (*freq > hba->clk_scaling.target_freq) ? true : false;
+> +	if (!hba->use_pm_opp && !scale_up)
+>  		*freq = clki->min_freq;
+>  	/* Update the frequency */
+> -	if (!ufshcd_is_devfreq_scaling_required(hba, scale_up)) {
+> +	if (!ufshcd_is_devfreq_scaling_required(hba, *freq, scale_up)) {
+>  		spin_unlock_irqrestore(hba->host->host_lock, irq_flags);
+>  		ret = 0;
+>  		goto out; /* no state change required */
+> @@ -1362,7 +1397,9 @@ static int ufshcd_devfreq_target(struct device *dev,
+>  	spin_unlock_irqrestore(hba->host->host_lock, irq_flags);
+>  
+>  	start = ktime_get();
+> -	ret = ufshcd_devfreq_scale(hba, scale_up);
+> +	ret = ufshcd_devfreq_scale(hba, *freq, scale_up);
+> +	if (!ret)
+> +		hba->clk_scaling.target_freq = *freq;
+>  
+>  	trace_ufshcd_profile_clk_scaling(dev_name(hba->dev),
+>  		(scale_up ? "up" : "down"),
+> @@ -1382,8 +1419,6 @@ static int ufshcd_devfreq_get_dev_status(struct device *dev,
+>  	struct ufs_hba *hba = dev_get_drvdata(dev);
+>  	struct ufs_clk_scaling *scaling = &hba->clk_scaling;
+>  	unsigned long flags;
+> -	struct list_head *clk_list = &hba->clk_list_head;
+> -	struct ufs_clk_info *clki;
+>  	ktime_t curr_t;
+>  
+>  	if (!ufshcd_is_clkscaling_supported(hba))
+> @@ -1396,13 +1431,20 @@ static int ufshcd_devfreq_get_dev_status(struct device *dev,
+>  	if (!scaling->window_start_t)
+>  		goto start_window;
+>  
+> -	clki = list_first_entry(clk_list, struct ufs_clk_info, list);
+> -	/*
+> -	 * If current frequency is 0, then the ondemand governor considers
+> -	 * there's no initial frequency set. And it always requests to set
+> -	 * to max. frequency.
+> -	 */
+> -	stat->current_frequency = clki->curr_freq;
+> +	if (hba->use_pm_opp) {
+> +		stat->current_frequency = hba->clk_scaling.target_freq;
+> +	} else {
+> +		struct list_head *clk_list = &hba->clk_list_head;
+> +		struct ufs_clk_info *clki;
+> +
+> +		clki = list_first_entry(clk_list, struct ufs_clk_info, list);
+> +		/*
+> +		 * If current frequency is 0, then the ondemand governor considers
+> +		 * there's no initial frequency set. And it always requests to set
+> +		 * to max. frequency.
+> +		 */
+> +		stat->current_frequency = clki->curr_freq;
+> +	}
+>  	if (scaling->is_busy_started)
+>  		scaling->tot_busy_t += ktime_us_delta(curr_t,
+>  				scaling->busy_start_t);
+> @@ -1435,9 +1477,11 @@ static int ufshcd_devfreq_init(struct ufs_hba *hba)
+>  	if (list_empty(clk_list))
+>  		return 0;
+>  
+> -	clki = list_first_entry(clk_list, struct ufs_clk_info, list);
+> -	dev_pm_opp_add(hba->dev, clki->min_freq, 0);
+> -	dev_pm_opp_add(hba->dev, clki->max_freq, 0);
+> +	if (!hba->use_pm_opp) {
+> +		clki = list_first_entry(clk_list, struct ufs_clk_info, list);
+> +		dev_pm_opp_add(hba->dev, clki->min_freq, 0);
+> +		dev_pm_opp_add(hba->dev, clki->max_freq, 0);
+> +	}
+>  
+>  	ufshcd_vops_config_scaling_param(hba, &hba->vps->devfreq_profile,
+>  					 &hba->vps->ondemand_data);
+> @@ -1449,8 +1493,10 @@ static int ufshcd_devfreq_init(struct ufs_hba *hba)
+>  		ret = PTR_ERR(devfreq);
+>  		dev_err(hba->dev, "Unable to register with devfreq %d\n", ret);
+>  
+> -		dev_pm_opp_remove(hba->dev, clki->min_freq);
+> -		dev_pm_opp_remove(hba->dev, clki->max_freq);
+> +		if (!hba->use_pm_opp) {
+> +			dev_pm_opp_remove(hba->dev, clki->min_freq);
+> +			dev_pm_opp_remove(hba->dev, clki->max_freq);
+> +		}
+>  		return ret;
+>  	}
+>  
+> @@ -1462,7 +1508,6 @@ static int ufshcd_devfreq_init(struct ufs_hba *hba)
+>  static void ufshcd_devfreq_remove(struct ufs_hba *hba)
+>  {
+>  	struct list_head *clk_list = &hba->clk_list_head;
+> -	struct ufs_clk_info *clki;
+>  
+>  	if (!hba->devfreq)
+>  		return;
+> @@ -1470,9 +1515,13 @@ static void ufshcd_devfreq_remove(struct ufs_hba *hba)
+>  	devfreq_remove_device(hba->devfreq);
+>  	hba->devfreq = NULL;
+>  
+> -	clki = list_first_entry(clk_list, struct ufs_clk_info, list);
+> -	dev_pm_opp_remove(hba->dev, clki->min_freq);
+> -	dev_pm_opp_remove(hba->dev, clki->max_freq);
+> +	if (!hba->use_pm_opp) {
+> +		struct ufs_clk_info *clki;
+> +
+> +		clki = list_first_entry(clk_list, struct ufs_clk_info, list);
+> +		dev_pm_opp_remove(hba->dev, clki->min_freq);
+> +		dev_pm_opp_remove(hba->dev, clki->max_freq);
+> +	}
+>  }
+>  
+>  static void __ufshcd_suspend_clkscaling(struct ufs_hba *hba)
+> @@ -1556,8 +1605,14 @@ static ssize_t ufshcd_clkscale_enable_store(struct device *dev,
+>  	if (value) {
+>  		ufshcd_resume_clkscaling(hba);
+>  	} else {
+> +		struct dev_pm_opp *opp;
+> +		unsigned long freq = ULONG_MAX;
+> +
+> +		opp = dev_pm_opp_find_freq_floor(dev, &freq);
+> +		dev_pm_opp_put(opp);
+> +
+>  		ufshcd_suspend_clkscaling(hba);
+> -		err = ufshcd_devfreq_scale(hba, true);
+> +		err = ufshcd_devfreq_scale(hba, freq, true);
+>  		if (err)
+>  			dev_err(hba->dev, "%s: failed to scale clocks up %d\n",
+>  					__func__, err);
+> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+> index 1a8f7b8977e6..c224a55fd9ee 100644
+> --- a/drivers/scsi/ufs/ufshcd.h
+> +++ b/drivers/scsi/ufs/ufshcd.h
+> @@ -443,6 +443,7 @@ struct ufs_clk_scaling {
+>  	bool is_initialized;
+>  	bool is_busy_started;
+>  	bool is_suspended;
+> +	unsigned long target_freq;
+>  };
+>  
+>  #define UFS_EVENT_HIST_LENGTH 8
+> @@ -776,6 +777,8 @@ struct ufs_hba_monitor {
+>   * @auto_bkops_enabled: to track whether bkops is enabled in device
+>   * @vreg_info: UFS device voltage regulator information
+>   * @clk_list_head: UFS host controller clocks list node head
+> + * @use_pm_opp: whether OPP table is provided and scaling gears should trigger
+> + *              setting OPP
+>   * @pwr_info: holds current power mode
+>   * @max_pwr_info: keeps the device max valid pwm
+>   * @clk_scaling_lock: used to serialize device commands and clock scaling
+> @@ -892,6 +895,7 @@ struct ufs_hba {
+>  	bool auto_bkops_enabled;
+>  	struct ufs_vreg_info vreg_info;
+>  	struct list_head clk_list_head;
+> +	bool use_pm_opp;
+>  
+>  	/* Number of requests aborts */
+>  	int req_abort_count;
+> -- 
+> 2.32.0
+> 
