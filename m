@@ -2,96 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E424506C9B
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 14:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BFB506F82
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 15:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241928AbiDSMnY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Apr 2022 08:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60710 "EHLO
+        id S1346248AbiDSN5O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Apr 2022 09:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbiDSMnY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 08:43:24 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F302E6BC
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 05:40:41 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id lc2so32575740ejb.12
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 05:40:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=3mFrRGZ2hFvP8O4X+CuKmWb2rkzJm3vVXdrSrkWv/zg=;
-        b=cjosF7poiXNd0rfz6mXjywOG7hZq92kjmu1s+0SRlGUO40CwLaZs+070XiXHG1VFrY
-         FstDX8T0mZC39VkKY3v7X1GlDDNf7+WXE/HsHLCgvlnVSZA5BoVqsB2mTn4GzIkNVDNy
-         ck549tq8tRuD64t9SqYw0ylLLrbpUt4Z0Ahro0UmxfCPapgYV5RfrBwTfyJAouDLjP9D
-         UBMUrIpbMOTAlrLfhclT7EV2go8Hdksg+au2fp/2NQmccKopHUGbttF8J3YWzHpwixCB
-         OWxfod8jJpW6VRFmfAOheAnDv2VTBh7kX/wl3meQ8vvP+w9GGNuvYuz3ZfGjxwTgCM7o
-         kjMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3mFrRGZ2hFvP8O4X+CuKmWb2rkzJm3vVXdrSrkWv/zg=;
-        b=3CQGH++GVrEAQvTzCJkgaSGebfe+FJrTVqgTSIENL9xdhDdq0wd1yazfqPam4eejFN
-         uKvxrfU6sUUchBrtDZ+0avU5ZwUUhKfUTx0n//rZW89dN6/rNsgWIm/1kvj3aBmXq6uQ
-         YQbxhC4c+B3fE9Rku9ibm6CVUfu6Y0IDN+D8FOZg5Y9kS1+wFdRx5RyQTX7f+5/R/Kk+
-         tPUx8WciXLW64gQHj4nj0krEyuNWVK23GkzVvYwUaV0KzDL6NzwyCXuWvNLB4qLKy/o+
-         Q/ob0DGNRjXCdYykEv/KczasZlzvX/1ft/4qeST8VTvGPjt1QKAL73lPgb0YFS8RRnO0
-         T2iw==
-X-Gm-Message-State: AOAM530b5JkC5Qgi6lmJ0ERcI2b7ShyG/gBg7D9iVQu4WZ3NLqmwYxc8
-        MIiCLc+HfVFjAS6hvj4hNdlxcr9m6Zpusg==
-X-Google-Smtp-Source: ABdhPJyVbGwvledAKMJPoCayIO5+opfeoj4KbZI87HqtQiKuhBGcWMaL+ILbHZfyTw5IwfsSlLDNWg==
-X-Received: by 2002:a17:907:96a8:b0:6ef:6a93:2e55 with SMTP id hd40-20020a17090796a800b006ef6a932e55mr13389481ejc.603.1650372040259;
-        Tue, 19 Apr 2022 05:40:40 -0700 (PDT)
-Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g1-20020a170906348100b006efc26c7b1dsm1572142ejb.195.2022.04.19.05.40.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 05:40:39 -0700 (PDT)
-Message-ID: <e9815733-3b65-d1ad-9af9-ca32e656f643@linaro.org>
-Date:   Tue, 19 Apr 2022 14:40:38 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] PM: opp: Fix NULL pointer exception on a v2 table
- combined with v1 opps
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220404123757.798917-1-krzysztof.kozlowski@linaro.org>
- <20220411024915.7zmoyphgongzorci@vireshk-i7>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220411024915.7zmoyphgongzorci@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8
+        with ESMTP id S1344219AbiDSN5N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 09:57:13 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F64FC8;
+        Tue, 19 Apr 2022 06:54:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650376471; x=1681912471;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=h8Z+PjLHQQIwzYm6YM3AVAlGFVl+kGFKlyja/ixPPxE=;
+  b=hIkUnG6wwIcFi/al60jF5Tty1sxeD+PbF1oWUEeXbJGKEoBfUsDLJGM0
+   TfVsxrFikWom4mia0cYNm8KmVEsoDm6nzRh7xCn4UDL13ogvc+LrVA1m8
+   TPtxnGEJKxw7L3ZVo4Z34bV37lxZEFkDNG8T3fl+QKJx0S4Ktt7lOw1/g
+   WheJesiBGws8rxIWFWyI2O7+0fsehWMo/w6ccaOkEIUWPxW8VPC9Om2yk
+   IrVU/6WUsnuxnaQoi3Axi5/rfbH2c0d4TDSO8W5/+A0p1PD8RuR5vWHvi
+   Z0JgWUJIWwNQ3H01EozqlURbNHvF74QM32Df+I22LIujCeMTbXZ0o0YQC
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="288866668"
+X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
+   d="scan'208";a="288866668"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 06:54:31 -0700
+X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
+   d="scan'208";a="576109589"
+Received: from majiangy-mobl.ccr.corp.intel.com ([10.249.173.141])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 06:54:28 -0700
+Message-ID: <df7e04d86dd64dc85125d536434d93bab3d6314d.camel@intel.com>
+Subject: Re: [PATCH v1] thermal/core: change mm alloc method to avoid kernel
+ warning
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Junwen Wu <wudaemon@163.com>, rafael@kernel.org,
+        amitk@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Date:   Tue, 19 Apr 2022 21:54:26 +0800
+In-Reply-To: <01f72a07-6adc-4854-eae2-286786d33aab@linaro.org>
+References: <20220417125601.18535-1-wudaemon@163.com>
+         <a7861e9a6a311f09c03b2e6e47dd4d3283cb58e2.camel@intel.com>
+         <01f72a07-6adc-4854-eae2-286786d33aab@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/04/2022 04:49, Viresh Kumar wrote:
-> On 04-04-22, 14:37, Krzysztof Kozlowski wrote:
->> dev_pm_opp_add() adds a v1 OPP.
+CC Viresh.
+
+On Tue, 2022-04-19 at 11:14 +0200, Daniel Lezcano wrote:
+> On 19/04/2022 10:48, Zhang Rui wrote:
+> > On Sun, 2022-04-17 at 12:56 +0000, Junwen Wu wrote:
+> > > Very high cooling device max state value makes cooling device
+> > > stats
+> > > buffer allocation fails,like below.Using kzvalloc instead of
+> > > kzalloc
+> > > can avoid this issue.
+> > 
+> > When a cooling device has big max_state, this patch can get ride of
+> > the
+> > warning here, but still we end up with the read failure of the
+> > trans_table in sysfs because it is larger than PAGE_SIZE.
+> > 
+> > $ cat /sys/class/thermal/cooling_device8/stats/trans_table
+> > cat: /sys/class/thermal/cooling_device8/stats/trans_table: File too
+> > large
+> > 
+> > IMO, unless we can fix both places, I'd suggest we skip allocating
+> > and
+> > creating the broken trans_table attr. Like a prototype patch below
 > 
-> That's not correct, it adds a simpler version of OPP and doesn't
-> support complex types. A opp v2 table with just freq and voltage
-> should be supported by dev_pm_opp_add() and we shouldn't disallow it.
-> 
-> I think all we need here is a couple of checks to make sure the
-> earlier OPPs don't have anything which the new OPP can't support. For
-> example checking required-opps field, etc.
+> Why not create a thermal debugfs with real useful information and
+> get 
+> rid of this broken code ?
 
-Would be useful to have list of such new-OPP properties somewhere. I'll
-try to rework the patch based on this.
+The idea looks good to me.
 
+thanks,
+rui
 
-Best regards,
-Krzysztof
