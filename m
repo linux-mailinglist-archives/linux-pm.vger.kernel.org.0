@@ -2,203 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F10B3507A3E
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 21:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C3C8507AF0
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 22:27:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344857AbiDSTbT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Apr 2022 15:31:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
+        id S236926AbiDSU3q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Apr 2022 16:29:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236882AbiDSTbS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 15:31:18 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44F140A1E
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 12:28:34 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id u5-20020a17090a6a8500b001d0b95031ebso2901153pjj.3
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 12:28:34 -0700 (PDT)
+        with ESMTP id S1357636AbiDSU3n (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 16:29:43 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A3E38781
+        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 13:26:59 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id m14so23959454wrb.6
+        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 13:26:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=iNAAdAA88li0fu8RNBeNfF7SajRxjd72QsbksjAx+8U=;
-        b=cEeiUx7MS51FEN/2M8INyoJLR1SRpOP07nmZVct1nzVxm595Cu0IFyEMExdcDHKYo/
-         n7Ujh8esbMgXj8CjRwIHJ1igkMONqDSCBwxDH/PsQQaVs0Y4aOXu0UXSFnnEDgCrHZOC
-         WY4vOThaWa/rb0UQek6SY4VfGVj6+NWMl/KuIAXEdoSgCcglqXMv8PkUFUIWmj2VSAFU
-         rSKKF/v+0GprmxcAMOjdONKEX+D/+mFV6Z9iKei438Td4gBKtYBxZrJJG2ScpvdS8OkH
-         K5K8r3qo0sLs9O7j8ESf1gzSwtB2E4vpC3bCtFLZWNe6drCdbd/YZaH/vUk+uskB+YQE
-         w4qw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=a+z1D78Gbz3cAV0zdLWG71fldhmePqsyHjdT7ED1WtM=;
+        b=H6eovkAEjrrUdalXqH9x5o5ANwXAYXx7CLvPnFawTQCH6SmGtjjyiOqfvqrdRtoBNI
+         RssQb1+UpVSO/YjwFkymfQ2OMs107CLvnV3Q+ExNysayQpmHX5T6YKdo3iqM5G3akcUV
+         agfHui+RXf4FsBFmQ8ZFXKc/2q6DdBGnbSwGMFnAYaKDw6jpFuvMCdJq6IHAQd+uQ4Uh
+         5v4MxG9ws8gUx9QapfOBBYWPCEDNcyWSaFoJQ9mPzBnP1VxHVpeF98OjUZZg6xkTRo4J
+         CGIiEAWLGbFbVIb/lPLFRDpBQIbf4GUZCi6HUGlEBuGk6/HyQIg5P3+mSqALyf0TIxtW
+         eiPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=iNAAdAA88li0fu8RNBeNfF7SajRxjd72QsbksjAx+8U=;
-        b=VFk0HckiiIbsFhCTtS8CIrzjDJYBsJFuRehw4Fe6d8uRw90er6NSjQT2NYm6ByXPOX
-         82jU1WSdyHolhBSQzddeNn06iMbI0n2PwqGKHp+jKnqBFNPZrGf+8tg2LOu2MbCbnPdB
-         XcyefkXr3USDzuvP7ksvOvPBlfLlN3jKcSPLfjLJzaHq95PnOBqF0tzDiTc4QjViFvBu
-         dmfSH+MMWP+uxLdDyhiT3MKwfCbEM1w6DEEx/0FHtVZefIBldLMzcSAyoN2Gwrt/8wUQ
-         thQFrPJ4Njltcb0Wi0VQJGdVvR6WgJ2fNvW5rHi+pY0lWYeCUF38yOMAWb3URvgzufRn
-         1y4g==
-X-Gm-Message-State: AOAM530kOQvp36SsJkbXv0l1z9k+pWDRU4kxsd9QhiWBBchs6tMZJDOq
-        BpM98up0XbSHmHfLy8Pnq0yNkw==
-X-Google-Smtp-Source: ABdhPJyrOwfHREPazMknqj4Dd2EN/cNMlrcLmJ7pRgtcFQH9DO+TGLEE5X4Zdyi9oWaq0/LgHZM4DQ==
-X-Received: by 2002:a17:902:c2d0:b0:15a:2344:f8a4 with SMTP id c16-20020a170902c2d000b0015a2344f8a4mr1413934pla.28.1650396514139;
-        Tue, 19 Apr 2022 12:28:34 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id j9-20020aa78009000000b004fde2dd78b0sm16482344pfi.109.2022.04.19.12.28.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 12:28:33 -0700 (PDT)
-Message-ID: <625f0d61.1c69fb81.e8813.7364@mx.google.com>
-Date:   Tue, 19 Apr 2022 12:28:33 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=a+z1D78Gbz3cAV0zdLWG71fldhmePqsyHjdT7ED1WtM=;
+        b=nlg2hoHeGMAzEp+EVrdfDqk3BUPIW16OwU02A1Y0aR+cSKtVp1G0GYouvM0g82KJi+
+         bD6MSrq6e2vECeX8D0OKauJH7bWp8K/bURtg6Ibi3uX9xwhdavg9uepRoFx+jkGPrKCz
+         0ZDpdHpn6KkMYnBALBbaEzmSbTywdPh/c1EvC9lxIr6BPprQnSLz/K2jf6ilofo+8rO+
+         XWxjkPrAo0R+RVbB1wHR3gMf/b6kOMigX2xn577Z+MsqnSwPBPEGHojkG8tl283p62da
+         J38oflqpsv7oiA/EFp1U2qfbZ95UgBkiOY+xDHA1PuOmNd9LxPoigopQIQFY9+1qGQRY
+         LrwQ==
+X-Gm-Message-State: AOAM5333VJ3udXOtWB13hv8q7QEvOFMvQBgrq+8j6DPaG6cH+lNq9WzB
+        Fj+UWOz/irUWNDVSdsKaWz1Bbw==
+X-Google-Smtp-Source: ABdhPJwadU/RPjdcz9vJPtrUlDEVudxpsmovS/6ztZj6n6p7UGQGVzfxzpSfgmyJBLoSxNrZaMeufw==
+X-Received: by 2002:adf:eed0:0:b0:207:9b35:62c4 with SMTP id a16-20020adfeed0000000b002079b3562c4mr12799484wrp.509.1650400018109;
+        Tue, 19 Apr 2022 13:26:58 -0700 (PDT)
+Received: from [192.168.1.41] (176-182-171-101.abo.bbox.fr. [176.182.171.101])
+        by smtp.googlemail.com with ESMTPSA id o10-20020a5d47ca000000b0020a992ce36esm5574680wrc.1.2022.04.19.13.26.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 13:26:57 -0700 (PDT)
+Message-ID: <51d63f20-4834-184b-2ac2-30c399bd9988@linaro.org>
+Date:   Tue, 19 Apr 2022 22:26:56 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v5.18-rc3-87-ga8a4f8e63bdfe
-X-Kernelci-Report-Type: test
-Subject: pm/testing baseline: 44 runs,
- 3 regressions (v5.18-rc3-87-ga8a4f8e63bdfe)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 0/4] tools/thermal: thermal library and tools
+Content-Language: en-US
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+References: <20220330100444.3846661-1-daniel.lezcano@linaro.org>
+ <f526d227-ffbb-4ac0-ceb6-c793ab912559@linaro.org>
+ <5380fef6d45f2f7a0b8a5f681934f02943d5e138.camel@linux.intel.com>
+ <9ccb342b-2f20-6efd-a668-96d593aa921e@linaro.org>
+ <CAJZ5v0hrRuVz8pgD6-m7EhVdHPPn67O4ajx_7vkOOOYdTkv2BQ@mail.gmail.com>
+ <0181977f5843fb9df4eae7d397d96c890846a0db.camel@linux.intel.com>
+ <f1d2b1c7a9691c64ece07fbc1fc5a2d4e70aa00a.camel@linux.intel.com>
+ <916d2e4c-7224-f824-f3cf-5c1dee411ed1@linaro.org>
+ <dc9b317f88f7d43cd30141376156c0f3eec687d8.camel@linux.intel.com>
+ <ba3cbf3d-938b-1530-1178-68b447f20a9c@linaro.org>
+ <f7e4f4604f122dfab4aa5e589d68eb2c8773e00d.camel@linux.intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <f7e4f4604f122dfab4aa5e589d68eb2c8773e00d.camel@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 44 runs, 3 regressions (v5.18-rc3-87-ga8a4f8e63bdfe)
 
-Regressions Summary
--------------------
-
-platform           | arch  | lab           | compiler | defconfig | regress=
-ions
--------------------+-------+---------------+----------+-----------+--------=
-----
-imx8mn-ddr4-evk    | arm64 | lab-baylibre  | gcc-10   | defconfig | 1      =
-    =
-
-sun50i-h6-pine-h64 | arm64 | lab-baylibre  | gcc-10   | defconfig | 1      =
-    =
-
-sun50i-h6-pine-h64 | arm64 | lab-collabora | gcc-10   | defconfig | 1      =
-    =
+Hi Srinivas,
 
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.18-rc=
-3-87-ga8a4f8e63bdfe/plan/baseline/
+On 18/04/2022 05:36, srinivas pandruvada wrote:
+> Hi Daniel,
+> 
+> The attached diff fixes the crash,
+> 
+> Also when you run in daemon mode, you need to use some pid lock file.
+> Otherwise it launches multiple daemons.
 
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.18-rc3-87-ga8a4f8e63bdfe
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      a8a4f8e63bdfeac9fafe43dcafabc27d8f2e8b8e =
+I've been thinking about it and I don't think it is a problem to have 
+multiple instances of the daemon. The netlink allows multicast and can 
+be run as non-root user.
+
+If the finality of the thermal engine is to manage the system and has 
+some code making actions on the system with the root privilege, the init 
+scripts can take care of the pid lock
 
 
 
-Test Regressions
----------------- =
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-
-
-platform           | arch  | lab           | compiler | defconfig | regress=
-ions
--------------------+-------+---------------+----------+-----------+--------=
-----
-imx8mn-ddr4-evk    | arm64 | lab-baylibre  | gcc-10   | defconfig | 1      =
-    =
-
-
-  Details:     https://kernelci.org/test/plan/id/625f066117e6e90d52ae0693
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.18-rc3-87-ga8a4f=
-8e63bdfe/arm64/defconfig/gcc-10/lab-baylibre/baseline-imx8mn-ddr4-evk.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.18-rc3-87-ga8a4f=
-8e63bdfe/arm64/defconfig/gcc-10/lab-baylibre/baseline-imx8mn-ddr4-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220411.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/625f066117e6e90d52ae0=
-694
-        new failure (last pass: v5.18-rc2-76-g5675fd487f2b2) =
-
- =
-
-
-
-platform           | arch  | lab           | compiler | defconfig | regress=
-ions
--------------------+-------+---------------+----------+-----------+--------=
-----
-sun50i-h6-pine-h64 | arm64 | lab-baylibre  | gcc-10   | defconfig | 1      =
-    =
-
-
-  Details:     https://kernelci.org/test/plan/id/625f0498484b932346ae0681
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.18-rc3-87-ga8a4f=
-8e63bdfe/arm64/defconfig/gcc-10/lab-baylibre/baseline-sun50i-h6-pine-h64.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.18-rc3-87-ga8a4f=
-8e63bdfe/arm64/defconfig/gcc-10/lab-baylibre/baseline-sun50i-h6-pine-h64.ht=
-ml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220411.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/625f0498484b932346ae0=
-682
-        failing since 4 days (last pass: v5.18-rc2-13-g781d19cfe317e, first=
- fail: v5.18-rc2-76-g5675fd487f2b2) =
-
- =
-
-
-
-platform           | arch  | lab           | compiler | defconfig | regress=
-ions
--------------------+-------+---------------+----------+-----------+--------=
-----
-sun50i-h6-pine-h64 | arm64 | lab-collabora | gcc-10   | defconfig | 1      =
-    =
-
-
-  Details:     https://kernelci.org/test/plan/id/625f0463e52336d74fae068c
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.18-rc3-87-ga8a4f=
-8e63bdfe/arm64/defconfig/gcc-10/lab-collabora/baseline-sun50i-h6-pine-h64.t=
-xt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.18-rc3-87-ga8a4f=
-8e63bdfe/arm64/defconfig/gcc-10/lab-collabora/baseline-sun50i-h6-pine-h64.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220411.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/625f0463e52336d74fae0=
-68d
-        failing since 4 days (last pass: v5.18-rc2-13-g781d19cfe317e, first=
- fail: v5.18-rc2-76-g5675fd487f2b2) =
-
- =20
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
