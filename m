@@ -2,68 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C5B505EB2
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Apr 2022 21:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1039750647E
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 08:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243249AbiDRTvC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 18 Apr 2022 15:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
+        id S1348835AbiDSGdt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Apr 2022 02:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347783AbiDRTu6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 18 Apr 2022 15:50:58 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4278129CAD
-        for <linux-pm@vger.kernel.org>; Mon, 18 Apr 2022 12:48:09 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-e5e8523fcbso3712971fac.10
-        for <linux-pm@vger.kernel.org>; Mon, 18 Apr 2022 12:48:09 -0700 (PDT)
+        with ESMTP id S1348816AbiDSGds (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 02:33:48 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CFBD24944
+        for <linux-pm@vger.kernel.org>; Mon, 18 Apr 2022 23:31:05 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id i27so30795006ejd.9
+        for <linux-pm@vger.kernel.org>; Mon, 18 Apr 2022 23:31:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=R8MVyQVH63UKDlO5ebK94G5i5p2wDyYsAtV0teKaE/s=;
-        b=ZhCqVdEkoLVNEjcGJlt+Orq1svQI51yFjZ5yzspPDulfEmlo4fFK77Zj/fvsCzAmzt
-         0PiusX7wSluCRHHd/8c0/S5RUDr6NxLnpuvBYmGj1wnGgX4lUKcRNl3DDiy3uQvqz/jj
-         ITwRwDMHccDzMO0LQuZiVYK7ZyYb3YYtHJEXE=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/rrLKvmQMfKWM71Vt4ACdmZv7rtrzaFdefyFe3yrPL0=;
+        b=TxQpED75D37zNwWP0eZ4Dppk/q0LBcVqFM6ORmD7xS3vp6VttRdoUTzqm+XP5vOFB0
+         Ctlm47B6Emw1ElvrpbN9QjQq7etONKq0Fbe+h2PELH5bpevYVaHc0zL4bcpO5Qu1e8ng
+         VBoBvyM85yJHIOcjSeDLAlGnhqt81eY9ktqQssIFMEbOujGk25Tjs0P1764K49T1dInS
+         gq25ZkM3ab/TjSjwESqF2E+Q65bRBe48H/wOBG8hMorzLyEUchddko3rhab4wIHEZ4u2
+         Ed518cl9OebJFYVdZjYw+ib48Z0+1HgqZLZwbpyFngfqIxORmv7aMQjvtzynGBzn8m9q
+         UGQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=R8MVyQVH63UKDlO5ebK94G5i5p2wDyYsAtV0teKaE/s=;
-        b=rIDFtioUBJ/CSBHVlShw7IACWv+PPsjYm62QsVoVed7tACmlGZGurc3mdhyGFqWPcD
-         IZfY6sAihr4liTXbvw6tKA7p9GYoyRjLRZCr2gkV/a1L7Kd/7sB/j/vgLYpDLuPQ0g5j
-         C0FT1T35myEK2pqwCRO0j6YF32By27KBzGUUh66ZnLFkVmkDTWDfb1CiW17muSQctk+t
-         829ljwEB3oDIGnQHlx0ovYek/ecmzVP9PQ/eVdqAIg3yXb+RhDpAXXh13ad5tQUZUqXk
-         +qyjmI0Wxo0n6YK+tmn9uIUQJhl/dOvBQULjWmeB4YE6XHgmGt9IqO0aKiJeATTY7/6I
-         Mfgw==
-X-Gm-Message-State: AOAM5314gQJVBiJEyGeIvsM7ftIxYaksP5P4fPkWgn78Qxvy+v6q2yIg
-        n0SNfDLOWmb/p+H4EvqWG/PfQmJtsavfIOuOei0/ow==
-X-Google-Smtp-Source: ABdhPJxNTgtzk/Xz7kcv1RUxdYb0jMn0kKe1rbAUme2rCqK9BQTcKgtEnt+Xs0lHTfuvKTMKV0qsQkfn2jAOY12S3mE=
-X-Received: by 2002:a05:6870:3907:b0:e5:a6fd:4047 with SMTP id
- b7-20020a056870390700b000e5a6fd4047mr4779741oap.193.1650311288551; Mon, 18
- Apr 2022 12:48:08 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 18 Apr 2022 12:48:08 -0700
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/rrLKvmQMfKWM71Vt4ACdmZv7rtrzaFdefyFe3yrPL0=;
+        b=HEvwaEnH46Tr/4dVcbx/6ulE6gYDl6IFZoNwjB6OH931mzawfnKLnGnac1QiB3NBoc
+         p5gDd1AXFuLu9683COi2ttZ/BFQXT0WpFEHP1KL37mWgYTnb1ODS0/zP2SaxTdbusmNx
+         Fzhj+/DKF0XJZlUgX1pht0/mUag4PzsDdbE8dyl51CtX/+/wtvmdXMcVjOMG6BW/uDFU
+         YaUuu3kk9kMdqeLA8QS+12ztgVzac1UBxafd2O78JzlWWq48ZnWixphDHjOAfKfe9A1L
+         5B8OY1+L/H2Rv+y6cY6Xa0hcb5DnefXWe+n3V5PfqvNBOvC99Zn0HgOzBfGsURhq3lux
+         pZIQ==
+X-Gm-Message-State: AOAM530Ga7byGgV9KQLGemIgor7jcI2QtyQtSG/ClJ6L0YruJQeKoETw
+        1148uy+RF+YkzMelBv4wm4KEow==
+X-Google-Smtp-Source: ABdhPJzYgvXLYpatm5Bb1YZMvzLwkeUp5lptQM5SS++47h8EOa4UubW5sk4ag3uCpQcwEUHKYqtY7A==
+X-Received: by 2002:a17:907:1c9b:b0:6ef:5e62:fd62 with SMTP id nb27-20020a1709071c9b00b006ef5e62fd62mr10556403ejc.686.1650349863942;
+        Mon, 18 Apr 2022 23:31:03 -0700 (PDT)
+Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id j2-20020a056402238200b0041f351a8b83sm7940834eda.43.2022.04.18.23.31.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Apr 2022 23:31:03 -0700 (PDT)
+Message-ID: <aa54cc23-e479-688c-6a3c-b9c73babd9b4@linaro.org>
+Date:   Tue, 19 Apr 2022 08:31:02 +0200
 MIME-Version: 1.0
-In-Reply-To: <d32fc9f8-65cd-a30f-cdf2-f019bbe7cd69@linaro.org>
-References: <20220412220033.1273607-1-swboyd@chromium.org> <20220415005828.1980055-1-swboyd@chromium.org>
- <20220415005828.1980055-3-swboyd@chromium.org> <d32fc9f8-65cd-a30f-cdf2-f019bbe7cd69@linaro.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Mon, 18 Apr 2022 12:48:08 -0700
-Message-ID: <CAE-0n53yggqX+mNcRQ+_iVHZhZgw-cCBVSC+ka++vwprpKMaGQ@mail.gmail.com>
-Subject: Re: [PATCH 5/2] dt-bindings: interconnect: Remove sc7180/sdx55 ipa compatibles
-To:     Alex Elder <elder@linaro.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH RESEND v2 1/9] dt-bindings: clk: qcom: msm8996-apcc: Add
+ CBF
+Content-Language: en-US
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        Doug Anderson <dianders@chromium.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Mike Tipton <quic_mdtipton@quicinc.com>,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Rob Herring <robh@kernel.org>
+References: <20220416025637.83484-1-y.oudjana@protonmail.com>
+ <20220416025637.83484-2-y.oudjana@protonmail.com>
+ <813f4a3d-255b-0ec1-cc3e-a1280e4d74ae@linaro.org>
+ <VOUJAR.IJKRF5T1P4ZE@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <VOUJAR.IJKRF5T1P4ZE@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,56 +92,66 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Alex Elder (2022-04-15 13:15:21)
-> On 4/14/22 7:58 PM, Stephen Boyd wrote:
-> > These interconnects are modeled as clks, not interconnects, therefore
-> > remove the compatibles from the binding as they're unused.
-> >
-> > Cc: Alex Elder <elder@linaro.org>
-> > Cc: Taniya Das <quic_tdas@quicinc.com>
-> > Cc: Mike Tipton <quic_mdtipton@quicinc.com>
-> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
->
-> What's the proper thing to do for properties that stop being
-> used?  Do we delete them, like this, or deprecate them somehow?
-> Old DTBs might define the values that are deleted here.
+On 18/04/2022 21:12, Yassine Oudjana wrote:
+> 
+> On Mon, Apr 18 2022 at 18:04:08 +0200, Krzysztof Kozlowski 
+> <krzysztof.kozlowski@linaro.org> wrote:
+>> On 16/04/2022 04:56, Yassine Oudjana wrote:
+>>>  Add CBF clock and reg.
+>>>
+>>>  Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+>>>  Acked-by: Rob Herring <robh@kernel.org>
+>>>  ---
+>>>   .../devicetree/bindings/clock/qcom,msm8996-apcc.yaml   | 10 
+>>> ++++++----
+>>>   1 file changed, 6 insertions(+), 4 deletions(-)
+>>>
+>>>  diff --git 
+>>> a/Documentation/devicetree/bindings/clock/qcom,msm8996-apcc.yaml 
+>>> b/Documentation/devicetree/bindings/clock/qcom,msm8996-apcc.yaml
+>>>  index a20cb10636dd..325f8aef53b2 100644
+>>>  --- a/Documentation/devicetree/bindings/clock/qcom,msm8996-apcc.yaml
+>>>  +++ b/Documentation/devicetree/bindings/clock/qcom,msm8996-apcc.yaml
+>>>  @@ -10,8 +10,8 @@ maintainers:
+>>>     - Loic Poulain <loic.poulain@linaro.org>
+>>>
+>>>   description: |
+>>>  -  Qualcomm CPU clock controller for MSM8996 CPUs, clock 0 is for 
+>>> Power cluster
+>>>  -  and clock 1 is for Perf cluster.
+>>>  +  Qualcomm CPU clock controller for MSM8996 CPUs, clock 0 is for 
+>>> Power cluster,
+>>>  +  clock 1 is for Perf cluster, and clock 2 is for Coherent bus 
+>>> fabric (CBF).
+>>>
+>>>   properties:
+>>>     compatible:
+>>>  @@ -19,7 +19,9 @@ properties:
+>>>         - qcom,msm8996-apcc
+>>>
+>>>     reg:
+>>>  -    maxItems: 1
+>>>  +    items:
+>>>  +      - description: Cluster clock registers
+>>>  +      - description: CBF clock registers
+>>
+>> This breaks the ABI (which might be okay or might be not, but was not
+>> mentioned in the commit) and breaks existing DTSes. Please fix them
+>> before this patch.
+> 
+> This is only documenting changes made in an earlier patch[1] this
+> series depends on,
 
-I think we leave them around until the last dts user stops using them.
+So this other patch breaks the ABI. Was it accepted? The patch you wrote
+here should go together with the clock change.
 
->
-> Shouldn't devicetree@vger.kernel.org
->   be copied on this and
-> the other DTS patches?
+>  and the DTSes are fixed in another patch[2] that
+> is also listed as a dependency in the cover letter (both patches
+> aren't applied yet). Shouldn't the ABI changes should be mentioned in
+> those patches instead?
 
-Sure. I added it now. Thanks.
+They should be mentioned in the clock driver or here, because usually
+they come together. :)
 
->
-> > ---
-> >
-> > I don't know who should apply this. Probably whoever takes the dtsi
-> > patches, Bjorn?, because otherwise dt_bindings_check will fail.
-> >
-> >   Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml | 2 --
-> >   1 file changed, 2 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> > index 5a911be0c2ea..ab859150c7f7 100644
-> > --- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> > +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> > @@ -31,7 +31,6 @@ properties:
-> >         - qcom,sc7180-config-noc
-> >         - qcom,sc7180-dc-noc
-> >         - qcom,sc7180-gem-noc
-> > -      - qcom,sc7180-ipa-virt
-> >         - qcom,sc7180-mc-virt
-> >         - qcom,sc7180-mmss-noc
-> >         - qcom,sc7180-npu-noc
-> > @@ -68,7 +67,6 @@ properties:
-> >         - qcom,sdm845-mem-noc
-> >         - qcom,sdm845-mmss-noc
-> >         - qcom,sdm845-system-noc
-> > -      - qcom,sdx55-ipa-virt
-> >         - qcom,sdx55-mc-virt
-> >         - qcom,sdx55-mem-noc
-> >         - qcom,sdx55-system-noc
->
+Best regards,
+Krzysztof
