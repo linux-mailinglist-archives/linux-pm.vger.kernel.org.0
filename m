@@ -2,65 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEDDC50767B
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 19:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7356250769D
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 19:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352618AbiDSRcI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Apr 2022 13:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33338 "EHLO
+        id S237072AbiDSRfX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Apr 2022 13:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352895AbiDSRcG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 13:32:06 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BDFB1F4
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 10:29:22 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id w1so7253360lfa.4
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 10:29:22 -0700 (PDT)
+        with ESMTP id S1355804AbiDSRfV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 13:35:21 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA9F39681
+        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 10:32:37 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id x80so324665pfc.1
+        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 10:32:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oQabVMdNZY/kAVQ/7p9MbSanGy4zyHtBTZqygFLt8XM=;
-        b=U3as7frbJxtDTwATnnjDXC+5uvjqxgsYm3icnagtE05SIeou3sQoh4gFmkLbq9a5vb
-         sHhD2vuo8i8PmxeK/ebuFgwtg15Zk2e2vqdUJ1jI0DvHuxBzXXowAsm+Tlw+a4rR5uxu
-         rNNbmr1PgdtNNV7Sh1olMXcGWrM7pxu4yYS91ikG8c0rFOeXu/koLtHpMwPEip9kEEtG
-         d7usws1oHeOadOTPaoqaSRoeEHHEgoBIjFfDdbuyBmLEmn9Gjy6rCB0rmvJ/ZmZ5krul
-         QSr/gxzj+IO8LJgnwZtQkgz1B+FlPLJuNPhOpk/7aqZFeaQvKh7OGGro7RJaWINW2Y+R
-         xgeA==
+        d=telus.net; s=google;
+        h=from:to:cc:references:in-reply-to:subject:date:message-id
+         :mime-version:content-transfer-encoding:content-language
+         :thread-index;
+        bh=My4F6hOEJbo2T0rj7H9Ck+cHHJ/lQGHhnjl+ec5l6gU=;
+        b=VyZaaztKCwGWZsA+sisdNZV6jQwH/KwBzqnOTmixzobnqn5kNoQbaBr2WTRMQfZbnj
+         xQ6zAJOhsdQ7JVLaefJfGnXEshS8A+s/fnweDWBr3rJ4zkivJ3WctIWU4UGonNwieHnf
+         X3AlddlqGi0mwfU44/NqIAyFHCKBC6wyVHZt1b0u1lCw7EbX9MQLkTNucUusnf7IId/5
+         x86ca7+gKpJAWbhP0vrAlKw0YCUA6D8SK6nEPP7JlxJ3PxcXoO+4iyjU1UNnPdcBh5aw
+         /EJz8M3dOBRMyZ0TFX9Gl3ypRt+BoSNvZESVos360kIe5kFtx3GEy3zgEhI4LGthoUNd
+         bXxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oQabVMdNZY/kAVQ/7p9MbSanGy4zyHtBTZqygFLt8XM=;
-        b=lSdznKHXEdR2v7upvaDkxD+GVU2BY8DNnEEjR6M/cSrprWRfv2LUYlQJpsnNhMJlO2
-         ZuW9nm7MDam+yFuhZXUK0edp8ikQlz7VPf8z+Zv7Mg8vEdyWoOYJTEsxew9fcSTkqMfm
-         sTGkfoIAv4CD1SSNBemRjGPLxjm2T3TqwHuzPLUrzkfHtr2OMAcwJCpIbn1xYFkVTn76
-         fJ6fE3F4xoxqpIZWial4TT4Is+DahZgMEkvqC+hxUf35EgyDBBUCDcLrVSaN98t4mg5n
-         /yUu1SCBNTpn/Tbdmg1tKG56NpTHRMg9pwyHWsXNBesZs7zLYusGWT6kMKssALRPeciU
-         mK+w==
-X-Gm-Message-State: AOAM530ACdMZ0bBQ8RbKupadLpYwnFjSaAHADl0J7ov/D+cAC6vZtWMA
-        tEvSjdUdAANiEaO6et18gRhQ+Q==
-X-Google-Smtp-Source: ABdhPJw8zdKzfEsDdZ5EUtT4jdyuj/HF/9Jk6hCtf74n7mnWGqeb0zeDBoaKP8MFSStObudkqPnhFA==
-X-Received: by 2002:a05:6512:1045:b0:44a:5e41:b25f with SMTP id c5-20020a056512104500b0044a5e41b25fmr11274319lfb.245.1650389360670;
-        Tue, 19 Apr 2022 10:29:20 -0700 (PDT)
-Received: from localhost.localdomain (h-98-128-181-154.NA.cust.bahnhof.se. [98.128.181.154])
-        by smtp.gmail.com with ESMTPSA id o7-20020a05651c050700b0024b70ccbdd5sm1490573ljp.36.2022.04.19.10.29.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 10:29:19 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Cc:     Kevin Hilman <khilman@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] PM: domains: Move genpd's time-accounting to ktime_get_mono_fast_ns()
-Date:   Tue, 19 Apr 2022 19:29:16 +0200
-Message-Id: <20220419172916.440055-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
+         :message-id:mime-version:content-transfer-encoding:content-language
+         :thread-index;
+        bh=My4F6hOEJbo2T0rj7H9Ck+cHHJ/lQGHhnjl+ec5l6gU=;
+        b=RXBOZN0RNOXZw/h8nN/10EKKVs3ox5ITURSZTgJ1U5DzEhMz9jDsTwEKDVK98qTUiu
+         J9O4rAwf5+uyYxTkcivNSUUSUlFPEAp8FF/0EzZ4Baos7zejWo2BqpUV5pra1E/JBolf
+         KPKqAFH3hYhPXhPoadLNn36izpwUVws2Lr1o98G6BDjDCwZzJytZoN611zqJCQ8HDAdM
+         J9B65gqEnUg3RwYyMfL1WGucPbjhpwiGRloTB7n4D9dVwgt32NaWgJ4MYOPytkoPYkR2
+         72MV4JuvQJorr1CTQJDqc3wOPeMFgiYktPh7Ir1zCzk1WnOa60HcwI2V8koy36yiHVEJ
+         QkRQ==
+X-Gm-Message-State: AOAM5328QbV5IkhDaWk9poSp4HRJsWWKdbVHB6DqCKtco0drk2KBM8Gx
+        jcXjeyDPZM5+EgUX5VxletAXfg==
+X-Google-Smtp-Source: ABdhPJyw/Zw5dX2U7VPx7JvsBghoWGkq770YcXAkj+dEYF0JoTpU3qNw17r9Mud9B3NNeS9HrjFyBg==
+X-Received: by 2002:a05:6a00:1490:b0:4fb:1544:bc60 with SMTP id v16-20020a056a00149000b004fb1544bc60mr18808006pfu.73.1650389556767;
+        Tue, 19 Apr 2022 10:32:36 -0700 (PDT)
+Received: from DougS18 (s173-180-45-4.bc.hsia.telus.net. [173.180.45.4])
+        by smtp.gmail.com with ESMTPSA id l13-20020a056a00140d00b004e13da93eaasm17595101pfu.62.2022.04.19.10.32.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 19 Apr 2022 10:32:36 -0700 (PDT)
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Thomas Gleixner'" <tglx@linutronix.de>
+Cc:     <x86@kernel.org>, "'Rafael J. Wysocki'" <rafael@kernel.org>,
+        <linux-pm@vger.kernel.org>, "'Eric Dumazet'" <edumazet@google.com>,
+        "'Paul E. McKenney'" <paulmck@kernel.org>,
+        "'LKML'" <linux-kernel@vger.kernel.org>,
+        "Doug Smythies" <dsmythies@telus.net>
+References: <20220415133356.179706384@linutronix.de>
+In-Reply-To: <20220415133356.179706384@linutronix.de>
+Subject: RE: [patch 00/10] x86/cpu: Consolidate APERF/MPERF code
+Date:   Tue, 19 Apr 2022 10:32:35 -0700
+Message-ID: <005001d85413$75e5dce0$61b196a0$@telus.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-ca
+Thread-Index: AQGAX/VhRXMrLxWmZ/QgyAMJbOz0ya2nXWjw
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -71,189 +78,142 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-To move towards a more consistent behaviour between genpd and the runtime
-PM core, let's start by converting genpd's time-accounting from ktime_get()
-into ktime_get_mono_fast_ns().
+Hi Thomas,
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- drivers/base/power/domain.c | 77 +++++++++++++++++++++----------------
- include/linux/pm_domain.h   |  6 +--
- 2 files changed, 46 insertions(+), 37 deletions(-)
+On 2022.04.15 12:20 Thomas Gleixner wrote:
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 1ee878d126fd..18cd7965e5d6 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -225,24 +225,23 @@ static void genpd_debug_remove(struct generic_pm_domain *genpd)
- 
- static void genpd_update_accounting(struct generic_pm_domain *genpd)
- {
--	ktime_t delta, now;
-+	u64 delta, now;
- 
--	now = ktime_get();
--	delta = ktime_sub(now, genpd->accounting_time);
-+	now = ktime_get_mono_fast_ns();
-+	if (now <= genpd->accounting_time)
-+		return;
-+
-+	delta = now - genpd->accounting_time;
- 
- 	/*
- 	 * If genpd->status is active, it means we are just
- 	 * out of off and so update the idle time and vice
- 	 * versa.
- 	 */
--	if (genpd->status == GENPD_STATE_ON) {
--		int state_idx = genpd->state_idx;
--
--		genpd->states[state_idx].idle_time =
--			ktime_add(genpd->states[state_idx].idle_time, delta);
--	} else {
--		genpd->on_time = ktime_add(genpd->on_time, delta);
--	}
-+	if (genpd->status == GENPD_STATE_ON)
-+		genpd->states[genpd->state_idx].idle_time += delta;
-+	else
-+		genpd->on_time += delta;
- 
- 	genpd->accounting_time = now;
- }
-@@ -1999,7 +1998,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
- 	genpd->max_off_time_changed = true;
- 	genpd->provider = NULL;
- 	genpd->has_provider = false;
--	genpd->accounting_time = ktime_get();
-+	genpd->accounting_time = ktime_get_mono_fast_ns();
- 	genpd->domain.ops.runtime_suspend = genpd_runtime_suspend;
- 	genpd->domain.ops.runtime_resume = genpd_runtime_resume;
- 	genpd->domain.ops.prepare = genpd_prepare;
-@@ -3163,6 +3162,7 @@ static int sub_domains_show(struct seq_file *s, void *data)
- static int idle_states_show(struct seq_file *s, void *data)
- {
- 	struct generic_pm_domain *genpd = s->private;
-+	u64 now, delta, idle_time = 0;
- 	unsigned int i;
- 	int ret = 0;
- 
-@@ -3173,17 +3173,19 @@ static int idle_states_show(struct seq_file *s, void *data)
- 	seq_puts(s, "State          Time Spent(ms) Usage          Rejected\n");
- 
- 	for (i = 0; i < genpd->state_count; i++) {
--		ktime_t delta = 0;
--		s64 msecs;
-+		idle_time += genpd->states[i].idle_time;
- 
--		if ((genpd->status == GENPD_STATE_OFF) &&
--				(genpd->state_idx == i))
--			delta = ktime_sub(ktime_get(), genpd->accounting_time);
-+		if (genpd->status == GENPD_STATE_OFF && genpd->state_idx == i) {
-+			now = ktime_get_mono_fast_ns();
-+			if (now > genpd->accounting_time) {
-+				delta = now - genpd->accounting_time;
-+				idle_time += delta;
-+			}
-+		}
- 
--		msecs = ktime_to_ms(
--			ktime_add(genpd->states[i].idle_time, delta));
--		seq_printf(s, "S%-13i %-14lld %-14llu %llu\n", i, msecs,
--			      genpd->states[i].usage, genpd->states[i].rejected);
-+		do_div(idle_time, NSEC_PER_MSEC);
-+		seq_printf(s, "S%-13i %-14llu %-14llu %llu\n", i, idle_time,
-+			   genpd->states[i].usage, genpd->states[i].rejected);
- 	}
- 
- 	genpd_unlock(genpd);
-@@ -3193,18 +3195,22 @@ static int idle_states_show(struct seq_file *s, void *data)
- static int active_time_show(struct seq_file *s, void *data)
- {
- 	struct generic_pm_domain *genpd = s->private;
--	ktime_t delta = 0;
-+	u64 now, on_time, delta = 0;
- 	int ret = 0;
- 
- 	ret = genpd_lock_interruptible(genpd);
- 	if (ret)
- 		return -ERESTARTSYS;
- 
--	if (genpd->status == GENPD_STATE_ON)
--		delta = ktime_sub(ktime_get(), genpd->accounting_time);
-+	if (genpd->status == GENPD_STATE_ON) {
-+		now = ktime_get_mono_fast_ns();
-+		if (now > genpd->accounting_time)
-+			delta = now - genpd->accounting_time;
-+	}
- 
--	seq_printf(s, "%lld ms\n", ktime_to_ms(
--				ktime_add(genpd->on_time, delta)));
-+	on_time = genpd->on_time + delta;
-+	do_div(on_time, NSEC_PER_MSEC);
-+	seq_printf(s, "%llu ms\n", on_time);
- 
- 	genpd_unlock(genpd);
- 	return ret;
-@@ -3213,7 +3219,7 @@ static int active_time_show(struct seq_file *s, void *data)
- static int total_idle_time_show(struct seq_file *s, void *data)
- {
- 	struct generic_pm_domain *genpd = s->private;
--	ktime_t delta = 0, total = 0;
-+	u64 now, delta, total = 0;
- 	unsigned int i;
- 	int ret = 0;
- 
-@@ -3222,16 +3228,19 @@ static int total_idle_time_show(struct seq_file *s, void *data)
- 		return -ERESTARTSYS;
- 
- 	for (i = 0; i < genpd->state_count; i++) {
-+		total += genpd->states[i].idle_time;
- 
--		if ((genpd->status == GENPD_STATE_OFF) &&
--				(genpd->state_idx == i))
--			delta = ktime_sub(ktime_get(), genpd->accounting_time);
--
--		total = ktime_add(total, genpd->states[i].idle_time);
-+		if (genpd->status == GENPD_STATE_OFF && genpd->state_idx == i) {
-+			now = ktime_get_mono_fast_ns();
-+			if (now > genpd->accounting_time) {
-+				delta = now - genpd->accounting_time;
-+				total += delta;
-+			}
-+		}
- 	}
--	total = ktime_add(total, delta);
- 
--	seq_printf(s, "%lld ms\n", ktime_to_ms(total));
-+	do_div(total, NSEC_PER_MSEC);
-+	seq_printf(s, "%llu ms\n", total);
- 
- 	genpd_unlock(genpd);
- 	return ret;
-diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index 67017c9390c8..043d48e4420a 100644
---- a/include/linux/pm_domain.h
-+++ b/include/linux/pm_domain.h
-@@ -98,7 +98,7 @@ struct genpd_power_state {
- 	u64 usage;
- 	u64 rejected;
- 	struct fwnode_handle *fwnode;
--	ktime_t idle_time;
-+	u64 idle_time;
- 	void *data;
- };
- 
-@@ -149,8 +149,8 @@ struct generic_pm_domain {
- 			    unsigned int state_count);
- 	unsigned int state_count; /* number of states */
- 	unsigned int state_idx; /* state that genpd will go to when off */
--	ktime_t on_time;
--	ktime_t accounting_time;
-+	u64 on_time;
-+	u64 accounting_time;
- 	const struct genpd_lock_ops *lock_ops;
- 	union {
- 		struct mutex mlock;
--- 
-2.25.1
+> APERF/MPERF is utilized in two ways:
+>
+>  1) Ad hoc readout of CPU frequency which requires IPIs
+>
+>  2) Frequency scale calculation for frequency invariant scheduling which
+>     reads APERF/MPERF on every tick.
+>
+> These are completely independent code parts. Eric observed long latencies
+> when reading /proc/cpuinfo which reads out CPU frequency via #1 and
+> proposed to replace the per CPU single IPI with a broadcast IPI.
+>
+> While this makes the latency smaller, it is not necessary at all because #2
+> samples APERF/MPERF periodically, except on idle or isolated NOHZ full CPUs
+> which are excluded from IPI already.
+>
+> It could be argued that not all APERF/MPERF capable systems have the
+> required BIOS information to enable frequency invariance support, but in
+> practice most of them do. So the APERF/MPERF sampling can be made
+> unconditional and just the frequency scale calculation for the scheduler
+> excluded.
+>
+> The following series consolidates that.
+
+I have used this patch set with the acpi-cpufreq, intel_cpufreq (passive),
+and intel_pstate (active) CPU frequency scaling drivers and various
+governors. Additionally, with HWP both enabled and disabled.
+
+For intel_pstate (active), both HWP enabled or disabled, the behaviour
+of scaling_cur_freq is inconsistent with prior to this patch set and other
+scaling driver governor combinations.
+
+Note there is no issue with " grep MHz /proc/cpuinfo" for any
+combination.
+
+Examples:
+
+No-HWP:
+
+active/powersave:
+doug@s19:~/freq-scalers/trace$ grep . /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq
+/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq:2300418
+/sys/devices/system/cpu/cpu10/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu11/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu1/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu2/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu3/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu4/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu5/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu6/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu7/cpufreq/scaling_cur_freq:2300006
+/sys/devices/system/cpu/cpu8/cpufreq/scaling_cur_freq:2300005
+/sys/devices/system/cpu/cpu9/cpufreq/scaling_cur_freq:0
+
+active/performance:
+doug@s19:~$ grep . /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq
+/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu10/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu11/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu1/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu2/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu3/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu4/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu5/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu6/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu7/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu8/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu9/cpufreq/scaling_cur_freq:0
+
+HWP:
+
+active/powersave:
+doug@s19:~$ grep . /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq
+/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu10/cpufreq/scaling_cur_freq:799993
+/sys/devices/system/cpu/cpu11/cpufreq/scaling_cur_freq:800069
+/sys/devices/system/cpu/cpu1/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu2/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu3/cpufreq/scaling_cur_freq:800131
+/sys/devices/system/cpu/cpu4/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu5/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu6/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu7/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu8/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu9/cpufreq/scaling_cur_freq:799844
+
+active/performance:
+
+doug@s19:~$ grep . /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq
+/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu10/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu11/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu1/cpufreq/scaling_cur_freq:4800186
+/sys/devices/system/cpu/cpu2/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu3/cpufreq/scaling_cur_freq:4800016
+/sys/devices/system/cpu/cpu4/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu5/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu6/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu7/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu8/cpufreq/scaling_cur_freq:0
+/sys/devices/system/cpu/cpu9/cpufreq/scaling_cur_freq:0 
+
+Other configurations:
+intel_cpufreq /schedutil (no HWP), for example:
+
+doug@s19:~$ grep . /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq
+/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq:800000
+/sys/devices/system/cpu/cpu10/cpufreq/scaling_cur_freq:1067573
+/sys/devices/system/cpu/cpu11/cpufreq/scaling_cur_freq:800000
+/sys/devices/system/cpu/cpu1/cpufreq/scaling_cur_freq:800000
+/sys/devices/system/cpu/cpu2/cpufreq/scaling_cur_freq:800000
+/sys/devices/system/cpu/cpu3/cpufreq/scaling_cur_freq:800011
+/sys/devices/system/cpu/cpu4/cpufreq/scaling_cur_freq:800000
+/sys/devices/system/cpu/cpu5/cpufreq/scaling_cur_freq:800109
+/sys/devices/system/cpu/cpu6/cpufreq/scaling_cur_freq:800000
+/sys/devices/system/cpu/cpu7/cpufreq/scaling_cur_freq:800000
+/sys/devices/system/cpu/cpu8/cpufreq/scaling_cur_freq:800000
+/sys/devices/system/cpu/cpu9/cpufreq/scaling_cur_freq:800000
+
+Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
+
+> Thanks,
+>
+>	tglx
+> ---
+> arch/x86/include/asm/cpu.h       |    2 
+> arch/x86/include/asm/topology.h  |   17 -
+> arch/x86/kernel/acpi/cppc.c      |   28 --
+> arch/x86/kernel/cpu/aperfmperf.c |  474 +++++++++++++++++++++++++++++++--------
+> arch/x86/kernel/cpu/proc.c       |    2 
+> arch/x86/kernel/smpboot.c        |  358 -----------------------------
+> fs/proc/cpuinfo.c                |    6 
+> include/linux/cpufreq.h          |    1 
+> 8 files changed, 405 insertions(+), 483 deletions(-)
+
 
