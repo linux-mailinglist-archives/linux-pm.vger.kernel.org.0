@@ -2,121 +2,191 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDB14507232
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 17:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1E4507293
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 18:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354071AbiDSPyu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Apr 2022 11:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52982 "EHLO
+        id S1352900AbiDSQHB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Apr 2022 12:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354069AbiDSPyt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 11:54:49 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7DB1DA7C
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 08:52:06 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id r189so12069829ybr.6
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 08:52:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=svoxI3P1MTFKEFyUdpPrcgYOwcptyW2jfm7B97EDACE=;
-        b=hqY0Brlnj/vptEt82cDudZbgfl/3pzyr/UiAK/HR09LT2qyTDendN2hCQPDULF4qRw
-         DMD2WZXHCb7MJ6aZApQPmIIYGkgKyW069+FnJ/ZD6dZVthsZUDW9dcmzZ492aVLwGFEJ
-         6l2c0JYNOrFB8mg2mlynr3gwmUfaXR24R65wX0B4FRGrmXixvPYrki9bKMc/kqhY/9H3
-         QgRcRDULdmTq/hsEt1UZDfjxOwX/1ydc8yeOfCJRu6Mkx5iP4BBjSFIrY++zZ1nJ9dS2
-         MossmJ9Bg137dn4v5St1p4jFCv/YC9o/Y71hNCY1vP+aiUG5nm1GIzZxytpjf2PIvl0g
-         8ztA==
+        with ESMTP id S244370AbiDSQG7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 12:06:59 -0400
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CBE344FF;
+        Tue, 19 Apr 2022 09:04:16 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id j2so31958364ybu.0;
+        Tue, 19 Apr 2022 09:04:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=svoxI3P1MTFKEFyUdpPrcgYOwcptyW2jfm7B97EDACE=;
-        b=d8XCUmgytbQ4NjWULKUodQCT1zxC8FXOxOHkdEkwwzCuCA4HnKM42+ZYM9nSPaYFN7
-         TUW7Q4SwNf4RGFBbW6SAHqIrir0ISDT3WmJErvR08RmmOJpx1DxJPVazEaAEarYHMX57
-         se1hZtLQQMXNpsDjDiB481e/hWbpW7K26HsLLL374S8NxP9B1Ma7XafpXcFhoofT/nS4
-         3Zplbu1H/ddMGUMqR/nmk/AIgj6OM1NM+nqw5EJNB+s9y5QJpUDKi5yPCA8NpZKv1lgX
-         7Jg1J+j3oD2A2f8AkBOHFerNFxjZGrdbtmOfe/pnazMJ2ZPtaVIHZTzBzsxtc4Rn3iU1
-         poog==
-X-Gm-Message-State: AOAM5321Q1dvU1TkZecsIElTRtGIp6P7IlomZtD5yzZR/moA5R3LEQxZ
-        Jv4upLd0xZzOTM+BLAhOd+Li6yKgVbKtNjtLicdhI/hxGmiFNw==
-X-Google-Smtp-Source: ABdhPJwN4AvAD8+aKlKRmatVjthj6YnAmVf6tJQjltNxIYx9SRXrW98T2rAdS6RIq8B0rMsZFiegW5J8TJY2hfW4B0I=
-X-Received: by 2002:a25:ea48:0:b0:644:e2e5:309 with SMTP id
- o8-20020a25ea48000000b00644e2e50309mr11576663ybe.407.1650383525468; Tue, 19
- Apr 2022 08:52:05 -0700 (PDT)
+        bh=gELaQOf9Rj6C8VNSNQ3uNKSPk0ySJbTinIMoZcK7lh4=;
+        b=Ih44qOtKjwoUqThTCkb0+nJOa7pIQ7D1itRAo047QkPoZJq7WJBZY/IGMQalPzWPuI
+         RIe0sOUdV3L6Md5DA1LbktvulzV9/4zVnJidUkqhhU1u3koApXez160rh5RV1go0XWbY
+         4cE7Zi+Bu8cK8D63lwWP8EdaNlXuEMCB0mmqRQBeH8ge6+7/m6nR8vyL0F/c092ZmnGC
+         WqBXmNqmoL7WWzOZaPUYa2hdV36rTC540I/KLkvqZllcJEjLiWyjzRCLjCLQ0TIFEiLD
+         nPA6rhjPbpBNxPICUdntmu3aV4d4RLhL+noyXOrWZNxxx4+dlmR6m/TnHVd/Gs8AS7ZW
+         rpXg==
+X-Gm-Message-State: AOAM531+2FXdPJBF6bUxJcVNXNNwW76bfVbRsHBnQXdUYORRivjTfoMp
+        vvlSAICZ7YUJDpMw49WCOJzyKU0UXwgJw8aM857Wjvd1t7U=
+X-Google-Smtp-Source: ABdhPJySdZu7kJ80ddxqUSt6NhXZwCC1tFB5mB2i3+wMcDWa0g0Nk7Pb1wIM/KMByphQnRkIzRZ+2uzUnTOqWFaVIOs=
+X-Received: by 2002:a25:230d:0:b0:641:375c:b5ad with SMTP id
+ j13-20020a25230d000000b00641375cb5admr15404846ybj.137.1650384255763; Tue, 19
+ Apr 2022 09:04:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220415133356.179706384@linutronix.de>
-In-Reply-To: <20220415133356.179706384@linutronix.de>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 19 Apr 2022 08:51:54 -0700
-Message-ID: <CANn89iL+CHRi1HJ6Mp4u=ECnfAXV2qxXZj_BsQuv+uwheAfDDw@mail.gmail.com>
-Subject: Re: [patch 00/10] x86/cpu: Consolidate APERF/MPERF code
+References: <20220415133356.179706384@linutronix.de> <20220415161206.536733494@linutronix.de>
+In-Reply-To: <20220415161206.536733494@linutronix.de>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 19 Apr 2022 18:04:04 +0200
+Message-ID: <CAJZ5v0h07hXW3WuBq673yk1HOuQLSw7-hJTntX331FDZRh1tDA@mail.gmail.com>
+Subject: Re: [patch 03/10] x86/aperfmperf: Separate AP/BP frequency invariance init
 To:     Thomas Gleixner <tglx@linutronix.de>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         "the arch/x86 maintainers" <x86@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
         "Paul E. McKenney" <paulmck@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 12:19 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+On Fri, Apr 15, 2022 at 9:19 PM Thomas Gleixner <tglx@linutronix.de> wrote:
 >
-> APERF/MPERF is utilized in two ways:
+> This code is convoluted and because it can be invoked post init via the
+> ACPI/CPPC code, all of the initialization functionality is built in instead
+> of being part of init text and init data.
 >
->   1) Ad hoc readout of CPU frequency which requires IPIs
+> As a first step create separate calls for the boot and the application
+> processors.
 >
->   2) Frequency scale calculation for frequency invariant scheduling which
->      reads APERF/MPERF on every tick.
->
-> These are completely independent code parts. Eric observed long latencies
-> when reading /proc/cpuinfo which reads out CPU frequency via #1 and
-> proposed to replace the per CPU single IPI with a broadcast IPI.
->
-> While this makes the latency smaller, it is not necessary at all because #2
-> samples APERF/MPERF periodically, except on idle or isolated NOHZ full CPUs
-> which are excluded from IPI already.
->
-> It could be argued that not all APERF/MPERF capable systems have the
-> required BIOS information to enable frequency invariance support, but in
-> practice most of them do. So the APERF/MPERF sampling can be made
-> unconditional and just the frequency scale calculation for the scheduler
-> excluded.
->
-> The following series consolidates that.
->
-
-Thanks a lot for working on that Thomas.
-
-I am not sure I will be able to backport this to a Google prodkernel,
-as I guess there will be many merge conflicts.
-
-Do you have by any chance this work available in a git branch ?
-
-Thanks.
-
-
-
-> Thanks,
->
->         tglx
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 > ---
->  arch/x86/include/asm/cpu.h       |    2
->  arch/x86/include/asm/topology.h  |   17 -
->  arch/x86/kernel/acpi/cppc.c      |   28 --
->  arch/x86/kernel/cpu/aperfmperf.c |  474 +++++++++++++++++++++++++++++++--------
->  arch/x86/kernel/cpu/proc.c       |    2
->  arch/x86/kernel/smpboot.c        |  358 -----------------------------
->  fs/proc/cpuinfo.c                |    6
->  include/linux/cpufreq.h          |    1
->  8 files changed, 405 insertions(+), 483 deletions(-)
+>  arch/x86/include/asm/topology.h  |   12 +++++-------
+>  arch/x86/kernel/acpi/cppc.c      |    3 ++-
+>  arch/x86/kernel/cpu/aperfmperf.c |   23 +++++++++++------------
+>  arch/x86/kernel/smpboot.c        |    4 ++--
+>  4 files changed, 20 insertions(+), 22 deletions(-)
 >
+> --- a/arch/x86/include/asm/topology.h
+> +++ b/arch/x86/include/asm/topology.h
+> @@ -216,14 +216,12 @@ extern void arch_scale_freq_tick(void);
+>  #define arch_scale_freq_tick arch_scale_freq_tick
+>
+>  extern void arch_set_max_freq_ratio(bool turbo_disabled);
+> -void init_freq_invariance(bool secondary, bool cppc_ready);
+> +extern void bp_init_freq_invariance(bool cppc_ready);
+> +extern void ap_init_freq_invariance(void);
+>  #else
+> -static inline void arch_set_max_freq_ratio(bool turbo_disabled)
+> -{
+> -}
+> -static inline void init_freq_invariance(bool secondary, bool cppc_ready)
+> -{
+> -}
+> +static inline void arch_set_max_freq_ratio(bool turbo_disabled) { }
+> +static inline void bp_init_freq_invariance(bool cppc_ready) { }
+> +static inline void ap_init_freq_invariance(void) { }
+>  #endif
+>
+>  #ifdef CONFIG_ACPI_CPPC_LIB
+> --- a/arch/x86/kernel/acpi/cppc.c
+> +++ b/arch/x86/kernel/acpi/cppc.c
+> @@ -96,7 +96,8 @@ void init_freq_invariance_cppc(void)
+>
+>         mutex_lock(&freq_invariance_lock);
+>
+> -       init_freq_invariance(secondary, true);
+> +       if (!secondary)
+> +               bp_init_freq_invariance(true);
+>         secondary = true;
+>
+>         mutex_unlock(&freq_invariance_lock);
+> --- a/arch/x86/kernel/cpu/aperfmperf.c
+> +++ b/arch/x86/kernel/cpu/aperfmperf.c
+> @@ -428,31 +428,24 @@ static void register_freq_invariance_sys
+>  static inline void register_freq_invariance_syscore_ops(void) {}
+>  #endif
+>
+> -void init_freq_invariance(bool secondary, bool cppc_ready)
+> +void bp_init_freq_invariance(bool cppc_ready)
+>  {
+> -       bool ret = false;
+> +       bool ret;
+>
+> -       if (!boot_cpu_has(X86_FEATURE_APERFMPERF))
+> +       if (!cpu_feature_enabled(X86_FEATURE_APERFMPERF))
+>                 return;
+>
+> -       if (secondary) {
+> -               if (static_branch_likely(&arch_scale_freq_key)) {
+> -                       init_counter_refs();
+> -               }
+> -               return;
+> -       }
+> +       init_counter_refs();
+>
+>         if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL)
+>                 ret = intel_set_max_freq_ratio();
+>         else if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD) {
+> -               if (!cppc_ready) {
+> +               if (!cppc_ready)
+>                         return;
+> -               }
+>                 ret = amd_set_max_freq_ratio(&arch_turbo_freq_ratio);
+>         }
+>
+>         if (ret) {
+> -               init_counter_refs();
+>                 static_branch_enable(&arch_scale_freq_key);
+>                 register_freq_invariance_syscore_ops();
+>                 pr_info("Estimated ratio of average max frequency by base frequency (times 1024): %llu\n", arch_max_freq_ratio);
+> @@ -461,6 +454,12 @@ void init_freq_invariance(bool secondary
+>         }
+>  }
+>
+> +void ap_init_freq_invariance(void)
+> +{
+> +       if (cpu_feature_enabled(X86_FEATURE_APERFMPERF))
+> +               init_counter_refs();
+
+This doesn't check arch_scale_freq_key now which may be a good thing
+to mention in the changelog.
+
+I don't see anything questionable in the patch, though, so
+
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+> +}
+> +
+>  static void disable_freq_invariance_workfn(struct work_struct *work)
+>  {
+>         static_branch_disable(&arch_scale_freq_key);
+> --- a/arch/x86/kernel/smpboot.c
+> +++ b/arch/x86/kernel/smpboot.c
+> @@ -186,7 +186,7 @@ static void smp_callin(void)
+>          */
+>         set_cpu_sibling_map(raw_smp_processor_id());
+>
+> -       init_freq_invariance(true, false);
+> +       ap_init_freq_invariance();
+>
+>         /*
+>          * Get our bogomips.
+> @@ -1396,7 +1396,7 @@ void __init native_smp_prepare_cpus(unsi
+>  {
+>         smp_prepare_cpus_common();
+>
+> -       init_freq_invariance(false, false);
+> +       bp_init_freq_invariance(false);
+>         smp_sanity_check();
+>
+>         switch (apic_intr_mode) {
 >
