@@ -2,133 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F57507489
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 18:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CBC350759D
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 18:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355131AbiDSQqm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Apr 2022 12:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
+        id S1355304AbiDSQvT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Apr 2022 12:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242941AbiDSQp5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 12:45:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8CD99396A3
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 09:43:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650386592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=V3ODNWfMW+rRhSokZu86v1GXhJjBricpy30YxedvS1g=;
-        b=GGC/aKc6epjyb8qz33WDzkz7vdHatLFmsDOSeJq77hCEJ6oyzCiZ0EFdOm52+mMK1ay6Ju
-        xXNCJDNzjRJ4OimnpdrBcIX9/M6OpCf18OiLh84LH/skKgzZQbYlJ55COX7O6F6g12hcBD
-        T3Tpah57XcNPKzT6ZXuaTyaIiH1NCsQ=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-447-25DxpfqtNTKVdPWj0Zj2lg-1; Tue, 19 Apr 2022 12:43:10 -0400
-X-MC-Unique: 25DxpfqtNTKVdPWj0Zj2lg-1
-Received: by mail-wm1-f69.google.com with SMTP id n37-20020a05600c502500b0038fdc1394c6so8904906wmr.6
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 09:43:10 -0700 (PDT)
+        with ESMTP id S1347137AbiDSQur (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 12:50:47 -0400
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6F62E9CE;
+        Tue, 19 Apr 2022 09:48:04 -0700 (PDT)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-e5e433d66dso6780058fac.5;
+        Tue, 19 Apr 2022 09:48:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=V3ODNWfMW+rRhSokZu86v1GXhJjBricpy30YxedvS1g=;
-        b=OMw1rVpFgnLQ6Jk3nIUKVvCdxi/IEt0i0mr3QpDm0idQeFeVY3MmkU9MAxNRdAgGQi
-         IAR0NgK2KEGRqgmWkl3fz1e3b9SbTi2/UlbKka3q1QjI6pAB0shz5T7MBL5UjJ4rUxME
-         lnJYrorA+PskO/4/ER0V5eEWnaDSQl0GKS2sq8S1pIEzSWHu25uUnpq/sPmvyInrLqL+
-         6zxnTUSTLPb2wyZ0D+suiJI+OTfdhfVs3WJGKK+e7/sYqKJ5OUCadbg0wwmctDF0fRZV
-         bwSkd11wMYkjL1mnWJDClj4TmPhuFxKFEo2TIjNmRX9XyJ5lpwIelNZ8EyhxrE18AImK
-         VODA==
-X-Gm-Message-State: AOAM533964lI7i1Hnkw7mwPMRXG5GLAROOBoPntoyG3mgYiPOI/irX1m
-        dDVlsDX9YrGYhICbFF6FME9qEpTZmg7A/Z1CphkTS+FmOisb1vMB3H3cmyQHPD0j6zfT37DloQ8
-        b4MQteK8QL7A8iHuygT0=
-X-Received: by 2002:adf:f981:0:b0:205:c3e1:9eba with SMTP id f1-20020adff981000000b00205c3e19ebamr12387509wrr.244.1650386589520;
-        Tue, 19 Apr 2022 09:43:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz/sBvEGx6+IXc/dmS3LEsLdRrH83M0si6np7xgLC//YEu1El92MuYL5XEmIp9phspX0ZKpFQ==
-X-Received: by 2002:adf:f981:0:b0:205:c3e1:9eba with SMTP id f1-20020adff981000000b00205c3e19ebamr12387485wrr.244.1650386589266;
-        Tue, 19 Apr 2022 09:43:09 -0700 (PDT)
-Received: from redhat.com ([2.53.17.80])
-        by smtp.gmail.com with ESMTPSA id v14-20020a7bcb4e000000b0034492fa24c6sm16631515wmj.34.2022.04.19.09.43.05
+        bh=X+AXNMLWD2gr4sUawt8zM45zbI7Ji8fHi+fcM1ppF9I=;
+        b=z2MPOkgQHCWqtQzrp32OVqVwA0hVbXVQ6TWfP5uv5gPCpc+lYDpjLRAHlClFxDDFvi
+         EpFayrzAI5w7TSxOymWvjLWgx6vMzJO2BinCN4QdFojjRRTCLRj7GmT2wbhuc3gf2jsp
+         OdspoCd9bVFwGDzWXtRkry6lBBfba8e9+Qg4d7zzDg2fVmGRgc9SfhEB7n7mwFpeU/yf
+         c75BeOnQxqQcPYKZPasQNvqDnPePdG4wwu1StU8gAxSwxrH5kZjeKPMKsZPcdWnr1rdz
+         mte/Xd4+ufdgeshL1BujSIaKvQkbbLGdscinvgUfZbXH3ff0aUbbxo+t2dndtvNMZnd4
+         Aa7Q==
+X-Gm-Message-State: AOAM532/M9IxqkKyN9DKGFGwVs1aaezLcInJmtxUUIkc9baWuuuLWBuE
+        lrcuoiy6PoiJCtRNE3QePRkNIXLv6Q==
+X-Google-Smtp-Source: ABdhPJz+3g6+lO0qye+IXcUEdQNPhIlO6UqTYDf3G8PQ0F8bwlBj/dLVjj64lf/Bz8frYomFDttRkA==
+X-Received: by 2002:a05:6871:b27:b0:e5:ee1a:2188 with SMTP id fq39-20020a0568710b2700b000e5ee1a2188mr4841471oab.109.1650386883998;
+        Tue, 19 Apr 2022 09:48:03 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x24-20020a056870a79800b000e2e53716fbsm5534368oao.31.2022.04.19.09.48.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 09:43:07 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 12:43:03 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Alexander Graf <graf@amazon.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        QEMU Developers <qemu-devel@nongnu.org>,
-        linux-hyperv@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        adrian@parity.io, Laszlo Ersek <lersek@redhat.com>,
-        Daniel =?iso-8859-1?Q?P=2E_Berrang=E9?= <berrange@redhat.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Jann Horn <jannh@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Colm MacCarthaigh <colmmacc@amazon.com>,
-        Theodore Ts'o <tytso@mit.edu>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: propagating vmgenid outward and upward
-Message-ID: <20220419124245-mutt-send-email-mst@kernel.org>
-References: <Yh4+9+UpanJWAIyZ@zx2c4.com>
- <c5181fb5-38fb-f261-9de5-24655be1c749@amazon.com>
- <CAHmME9rTMDkE7UA3_wg87mrDVYps+YaHw+dZwF0EbM0zC4pQQw@mail.gmail.com>
- <47137806-9162-0f60-e830-1a3731595c8c@amazon.com>
- <CAHmME9pwfKfKp_qqbmAO5tEaQSZ5srCO5COThK3vWZR4avRF1g@mail.gmail.com>
+        Tue, 19 Apr 2022 09:48:03 -0700 (PDT)
+Received: (nullmailer pid 2939567 invoked by uid 1000);
+        Tue, 19 Apr 2022 16:48:02 -0000
+Date:   Tue, 19 Apr 2022 11:48:02 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Taniya Das <tdas@codeaurora.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Andy Gross <agross@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        devicetree@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [RFC PATCH v2 2/6] dt-bindings: opp: accept array of frequencies
+Message-ID: <Yl7nwvTN2JyinAyd@robh.at.kernel.org>
+References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
+ <20220411154347.491396-3-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHmME9pwfKfKp_qqbmAO5tEaQSZ5srCO5COThK3vWZR4avRF1g@mail.gmail.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220411154347.491396-3-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 05:12:36PM +0200, Jason A. Donenfeld wrote:
-> Hey Alex,
+On Mon, 11 Apr 2022 17:43:43 +0200, Krzysztof Kozlowski wrote:
+> Devices might need to control several clocks when scaling the frequency
+> and voltage.  Allow passing array of clock frequencies, similarly to the
+> voltages.
 > 
-> On Thu, Mar 10, 2022 at 12:18 PM Alexander Graf <graf@amazon.com> wrote:
-> > I agree on the slightly racy compromise and that it's a step into the
-> > right direction. Doing this is a no brainer IMHO and I like the proc
-> > based poll approach.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
-> Alright. I'm going to email a more serious patch for that in the next
-> few hours and you can have a look. Let's do that for 5.19.
-> 
-> > I have an additional problem you might have an idea for with the poll
-> > based path. In addition to the clone notification, I'd need to know at
-> > which point everyone who was listening to a clone notification is
-> > finished acting up it. If I spawn a tiny VM to do "work", I want to know
-> > when it's safe to hand requests into it. How do I find out when that
-> > point in time is?
-> 
-> Seems tricky to solve. Even a count of current waiters and a
-> generation number won't be sufficient, since it wouldn't take into
-> account users who haven't _yet_ gotten to waiting. But maybe it's not
-> the right problem to solve? Or somehow not necessary? For example, if
-> the problem is a bit more constrained a solution becomes easier: you
-> have a fixed/known set of readers that you know about, and you
-> guarantee that they're all waiting before the fork. Then after the
-> fork, they all do something to alert you in their poll()er, and you
-> count up how many alerts you get until it matches the number of
-> expected waiters. Would that work? It seems like anything more general
-> than that is just butting heads with the racy compromise we're already
-> making.
-> 
-> Jason
 
-I have some ideas here ... but can you explain the use-case a bit more?
-
--- 
-MST
-
+Acked-by: Rob Herring <robh@kernel.org>
