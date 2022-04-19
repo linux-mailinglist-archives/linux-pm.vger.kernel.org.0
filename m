@@ -2,72 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62CB85071DC
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 17:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 008195071E4
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 17:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353830AbiDSPf1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Apr 2022 11:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
+        id S1343815AbiDSPiJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Apr 2022 11:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbiDSPf1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 11:35:27 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BCEF186E2
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 08:32:45 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="326693468"
-X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="326693468"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 08:32:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="666414427"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga004.jf.intel.com with ESMTP; 19 Apr 2022 08:32:43 -0700
-Received: from abityuts-desk1.fi.intel.com (abityuts-desk1.fi.intel.com [10.237.72.79])
-        by linux.intel.com (Postfix) with ESMTP id 4A4725807D2
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 08:32:42 -0700 (PDT)
-Message-ID: <46b99f3914347190d396dd7eecf61435c6a67bec.camel@gmail.com>
-Subject: pepc: new tool for configuring Linux PM
-From:   Artem Bityutskiy <dedekind1@gmail.com>
-To:     linux-pm@vger.kernel.org
-Date:   Tue, 19 Apr 2022 18:32:41 +0300
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+        with ESMTP id S1354055AbiDSPh5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 11:37:57 -0400
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69DAB86D;
+        Tue, 19 Apr 2022 08:35:08 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id d19so3311109ybc.5;
+        Tue, 19 Apr 2022 08:35:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cYK+mSus6lKX2J8+IsFXmSmlA2Ef7OVLzpY5/HdayQU=;
+        b=1vWRS+SKfTOMQ41+nkvzPNmMv+QmXfavjtNUEGor68WJBuAnaVv46NdV1cVX4sSSdT
+         n/fFdaEzeQle88onvg7B9xhTojuz2uY/AehxdyZ3E7rjUJGo1to0zLBSKrWA93qm70D2
+         P6dG01Swbug1DQdbcGjaBGJZ6gEckf8Zt2yybwigRF2UCH9UVtXTf1Ckm2llO0BhhuxM
+         XgNOdiJzBVdNZOJNQZdl9CRyluUpr27vYbk0cqhUYX6+VgQSS0CZH68QhjYGuUAyZ5uZ
+         fGNFnH3XZ1s18gZMgha2GMCLCQu6SAL9KPW2rgH9GrQ8PE7ZfNLCepB5SVyRiBIs2d83
+         XYqg==
+X-Gm-Message-State: AOAM531wHevyrykZ3ph+hmrAPfApqRKL1tikxYXX2kCpBKRzsZOOQFfQ
+        DQsWBRiLjQ/ihSzc9z4j4RZpuL1FgBqDdMpok+w=
+X-Google-Smtp-Source: ABdhPJwDmO9+9C24sXjAZavu7CzsApnTtTT7vU16/f1c9ZI+vpUjXzYeo8Lw4VND0xYUMo6HcRe2v4Fqm3mIsA16qcw=
+X-Received: by 2002:a25:ac9b:0:b0:641:3c32:bee7 with SMTP id
+ x27-20020a25ac9b000000b006413c32bee7mr14411799ybi.633.1650382507645; Tue, 19
+ Apr 2022 08:35:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL,
-        SPOOFED_FREEMAIL,SPOOF_GMAIL_MID,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+References: <20220415133356.179706384@linutronix.de> <20220415161206.419880163@linutronix.de>
+In-Reply-To: <20220415161206.419880163@linutronix.de>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 19 Apr 2022 17:34:56 +0200
+Message-ID: <CAJZ5v0iNhn-TYiAWrY_m5+uOCOf-g3F-rzf1RjbEzmOcU4gVsQ@mail.gmail.com>
+Subject: Re: [patch 01/10] x86/aperfmperf: Dont wake idle CPUs in arch_freq_get_on_cpu()
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Fri, Apr 15, 2022 at 9:19 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> aperfmperf_get_khz() already excludes idle CPUs from APERF/MPERF sampling
+> and that's a reasonable decision. There is no point in sending up to two
+> IPIs to an idle CPU just because someone reads a sysfs file.
+>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
-we've released a new tool for configuring various Linux power management
-aspects. The tool is called "pepc".
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Please, find the tool and its description here: https://github.com/intel/pepc
-
-Short highlights.
-
-1. BSD license.
-2. Carefully written in python3 with a lot of focus on maintainability.
-3. Makes it easy to configure P/C-states and some other PM-related aspects.
-
-In short, I deal with Linux power management a lot, and at some point I got
-tired of maintaining various little shell scripts for doing this and that (e.g.,
-enable C1 on cores 5 and 6 of package #1, and disable it on all other CPUs). So
-I started the pepc project for myself, but then it grew into a useful utility
-and we published it.
-
-We keep improving the tool and add features as we need.
-
-Artem.
-
+> ---
+>  arch/x86/kernel/cpu/aperfmperf.c |    3 +++
+>  1 file changed, 3 insertions(+)
+>
+> --- a/arch/x86/kernel/cpu/aperfmperf.c
+> +++ b/arch/x86/kernel/cpu/aperfmperf.c
+> @@ -139,6 +139,9 @@ unsigned int arch_freq_get_on_cpu(int cp
+>         if (!housekeeping_cpu(cpu, HK_TYPE_MISC))
+>                 return 0;
+>
+> +       if (rcu_is_idle_cpu(cpu))
+> +               return 0;
+> +
+>         if (aperfmperf_snapshot_cpu(cpu, ktime_get(), true))
+>                 return per_cpu(samples.khz, cpu);
+>
+>
