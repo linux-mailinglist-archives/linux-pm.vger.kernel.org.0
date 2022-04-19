@@ -2,113 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3C8507AF0
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 22:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D12C507B18
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Apr 2022 22:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236926AbiDSU3q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Apr 2022 16:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50012 "EHLO
+        id S1357660AbiDSUlx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Apr 2022 16:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357636AbiDSU3n (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 16:29:43 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A3E38781
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 13:26:59 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id m14so23959454wrb.6
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 13:26:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=a+z1D78Gbz3cAV0zdLWG71fldhmePqsyHjdT7ED1WtM=;
-        b=H6eovkAEjrrUdalXqH9x5o5ANwXAYXx7CLvPnFawTQCH6SmGtjjyiOqfvqrdRtoBNI
-         RssQb1+UpVSO/YjwFkymfQ2OMs107CLvnV3Q+ExNysayQpmHX5T6YKdo3iqM5G3akcUV
-         agfHui+RXf4FsBFmQ8ZFXKc/2q6DdBGnbSwGMFnAYaKDw6jpFuvMCdJq6IHAQd+uQ4Uh
-         5v4MxG9ws8gUx9QapfOBBYWPCEDNcyWSaFoJQ9mPzBnP1VxHVpeF98OjUZZg6xkTRo4J
-         CGIiEAWLGbFbVIb/lPLFRDpBQIbf4GUZCi6HUGlEBuGk6/HyQIg5P3+mSqALyf0TIxtW
-         eiPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=a+z1D78Gbz3cAV0zdLWG71fldhmePqsyHjdT7ED1WtM=;
-        b=nlg2hoHeGMAzEp+EVrdfDqk3BUPIW16OwU02A1Y0aR+cSKtVp1G0GYouvM0g82KJi+
-         bD6MSrq6e2vECeX8D0OKauJH7bWp8K/bURtg6Ibi3uX9xwhdavg9uepRoFx+jkGPrKCz
-         0ZDpdHpn6KkMYnBALBbaEzmSbTywdPh/c1EvC9lxIr6BPprQnSLz/K2jf6ilofo+8rO+
-         XWxjkPrAo0R+RVbB1wHR3gMf/b6kOMigX2xn577Z+MsqnSwPBPEGHojkG8tl283p62da
-         J38oflqpsv7oiA/EFp1U2qfbZ95UgBkiOY+xDHA1PuOmNd9LxPoigopQIQFY9+1qGQRY
-         LrwQ==
-X-Gm-Message-State: AOAM5333VJ3udXOtWB13hv8q7QEvOFMvQBgrq+8j6DPaG6cH+lNq9WzB
-        Fj+UWOz/irUWNDVSdsKaWz1Bbw==
-X-Google-Smtp-Source: ABdhPJwadU/RPjdcz9vJPtrUlDEVudxpsmovS/6ztZj6n6p7UGQGVzfxzpSfgmyJBLoSxNrZaMeufw==
-X-Received: by 2002:adf:eed0:0:b0:207:9b35:62c4 with SMTP id a16-20020adfeed0000000b002079b3562c4mr12799484wrp.509.1650400018109;
-        Tue, 19 Apr 2022 13:26:58 -0700 (PDT)
-Received: from [192.168.1.41] (176-182-171-101.abo.bbox.fr. [176.182.171.101])
-        by smtp.googlemail.com with ESMTPSA id o10-20020a5d47ca000000b0020a992ce36esm5574680wrc.1.2022.04.19.13.26.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 13:26:57 -0700 (PDT)
-Message-ID: <51d63f20-4834-184b-2ac2-30c399bd9988@linaro.org>
-Date:   Tue, 19 Apr 2022 22:26:56 +0200
+        with ESMTP id S239482AbiDSUlv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 16:41:51 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D744240919;
+        Tue, 19 Apr 2022 13:39:07 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1650400746;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to; bh=ACSVUlvGnqDZI2n71F28I0TraOl9Yjs3dUvYrfjMAHE=;
+        b=gjZOttOHsTC2IeAYYI8gJJsDMLeapuokRo9d3LngjStAjVCEpz9yeP4wMh3MubEibH/RYo
+        FJB46Yqw3rcAtbObntvaq/MiFTU4L3MnMQvowMGoUtfpzHbGiZMN5wH0Y99pzRScO/wvdz
+        1e0t6uHj79BlIpFfQEnOeks4CjO0uZDTfAa82mQp+/gmrM+tMhYXBDqqW9DqIe3vtyIAc3
+        kxBrJCVHLH6V7tKyiqwni2sCDJ9LMnwPxh7EYhQUD8/zvD7HjNh1W/McYT57dqKUBWvyt1
+        A0EX1iYIIxHKF/SImeyvfd3nTPrT2B05ZnTN+SFKbOk9tmY5gC9Mv143XDabLQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1650400746;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to; bh=ACSVUlvGnqDZI2n71F28I0TraOl9Yjs3dUvYrfjMAHE=;
+        b=YwiIFsSMYgXWCova882NKcGbknygqHXvKBp+PcwZxRwR9rm7PQWhBxswoKQ2Z9KyXYmNAH
+        5gpJlQe6VDxHOWDg==
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: [patch 00/10] x86/cpu: Consolidate APERF/MPERF code
+In-Reply-To: <CANn89iL+CHRi1HJ6Mp4u=ECnfAXV2qxXZj_BsQuv+uwheAfDDw@mail.gmail.com>
+Date:   Tue, 19 Apr 2022 22:39:05 +0200
+Message-ID: <87ee1svmdy.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 0/4] tools/thermal: thermal library and tools
-Content-Language: en-US
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <20220330100444.3846661-1-daniel.lezcano@linaro.org>
- <f526d227-ffbb-4ac0-ceb6-c793ab912559@linaro.org>
- <5380fef6d45f2f7a0b8a5f681934f02943d5e138.camel@linux.intel.com>
- <9ccb342b-2f20-6efd-a668-96d593aa921e@linaro.org>
- <CAJZ5v0hrRuVz8pgD6-m7EhVdHPPn67O4ajx_7vkOOOYdTkv2BQ@mail.gmail.com>
- <0181977f5843fb9df4eae7d397d96c890846a0db.camel@linux.intel.com>
- <f1d2b1c7a9691c64ece07fbc1fc5a2d4e70aa00a.camel@linux.intel.com>
- <916d2e4c-7224-f824-f3cf-5c1dee411ed1@linaro.org>
- <dc9b317f88f7d43cd30141376156c0f3eec687d8.camel@linux.intel.com>
- <ba3cbf3d-938b-1530-1178-68b447f20a9c@linaro.org>
- <f7e4f4604f122dfab4aa5e589d68eb2c8773e00d.camel@linux.intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <f7e4f4604f122dfab4aa5e589d68eb2c8773e00d.camel@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Eric,
 
-Hi Srinivas,
+On Tue, Apr 19 2022 at 08:51, Eric Dumazet wrote:
+> On Fri, Apr 15, 2022 at 12:19 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>> It could be argued that not all APERF/MPERF capable systems have the
+>> required BIOS information to enable frequency invariance support, but in
+>> practice most of them do. So the APERF/MPERF sampling can be made
+>> unconditional and just the frequency scale calculation for the scheduler
+>> excluded.
+>>
+>> The following series consolidates that.
+>>
+>
+> Thanks a lot for working on that Thomas.
+>
+> I am not sure I will be able to backport this to a Google prodkernel,
+> as I guess there will be many merge conflicts.
 
+:)
 
-On 18/04/2022 05:36, srinivas pandruvada wrote:
-> Hi Daniel,
-> 
-> The attached diff fixes the crash,
-> 
-> Also when you run in daemon mode, you need to use some pid lock file.
-> Otherwise it launches multiple daemons.
+> Do you have by any chance this work available in a git branch ?
 
-I've been thinking about it and I don't think it is a problem to have 
-multiple instances of the daemon. The netlink allows multicast and can 
-be run as non-root user.
+ git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git x86/amperf
 
-If the finality of the thermal engine is to manage the system and has 
-some code making actions on the system with the root privilege, the init 
-scripts can take care of the pid lock
+Thanks,
 
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+        tglx
