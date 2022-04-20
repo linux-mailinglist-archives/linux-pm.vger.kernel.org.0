@@ -2,140 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41105509032
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Apr 2022 21:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C1C50909F
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Apr 2022 21:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358692AbiDTTSq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Apr 2022 15:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39704 "EHLO
+        id S1381836AbiDTTpe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Apr 2022 15:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234251AbiDTTSp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Apr 2022 15:18:45 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F4C647C;
-        Wed, 20 Apr 2022 12:15:58 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id h4so1625221ilq.8;
-        Wed, 20 Apr 2022 12:15:58 -0700 (PDT)
+        with ESMTP id S1381829AbiDTTpc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Apr 2022 15:45:32 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F12917E17
+        for <linux-pm@vger.kernel.org>; Wed, 20 Apr 2022 12:42:45 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id bu29so4887811lfb.0
+        for <linux-pm@vger.kernel.org>; Wed, 20 Apr 2022 12:42:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vOudaK8u8RZc6AtXty/18V0scDsmCBhssZ3goh1YV7A=;
-        b=P5BGBaGXMvgspLe6ktrXk40s0GI2UxD6dSMsksk7uwnzfMZh4+gf0hovfAGkZ3Cb1C
-         ydnSEbIqVWq0UJUe8EYLK85BUxfnxW2S9F5qdvCnrKXhhAEJZCFic8weXuHXlnKu/H8d
-         LeAL2FB/REz6NJ/7jjwU/3KVUbnp2gY2Cf/SocLof6NRyycn7ZPXBVgupnKV871ZmafN
-         1IY7HJc1zm3l8l5eJXk2RkM9g5EzaL7xFXEOL98RzH4NxNByj4bO4wsqd/a05snyoCyl
-         r4ber8wKyflk+bOdN3i9xjFXt8vA0fFHJCMIRw87lZfCTxwE50e+Tp5ePo5alUEvN4QH
-         3cfw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=KGEWr83fJYFid7HWR+gaLqhOcbvATV54UphhKwf+0mE=;
+        b=e2gOEvq1RFDOO6FwvKal/ZpYI85ugMK8iGAshs3JVuf/8EiKqeFH59u0p2do4bblAz
+         pe4KkeRiHOc2uHz4+Wy0P3m8iQOhRf7iLWjsTyRmginjSMujFbDRxuD9jLxoLlWHW2N1
+         Tm5zfx92xYQojlugU7Qt2ihIFKd5BJ4JHYDMIcYtSq7KyY2Oy9WS7wksnqhvHNM0oUwu
+         IG0zaj/qdPelW09MbB+xbKie7MPaTmeS9i9+ofsX+osJitvJib6b0mxMrLPAg8OHhdQw
+         jqMkTt3j6Q19kfF209Y2VBS6g6DmNQu4ZdPpK5tx5tYGPuNyiNKWDBU1eIVHMlzWevEp
+         BfNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=vOudaK8u8RZc6AtXty/18V0scDsmCBhssZ3goh1YV7A=;
-        b=aWkJ3RLf2ZVGMv0at2Ikpo2G3R2v8GbYDu+TCbYBA1HSMgTo0W9XiRczc+9fvckjks
-         ENceL6vb+08PXk0KTudVMIHhPFFPXwYQOcNQX5yZy4mVrBX/u3uBZ2h2L9mN3qFTYAhH
-         sRcDflFksK8+iinY9ObqKQYtQ/EaHYv+iwqlYIgvZ2KKLSZ605fCdFJJNHhhvDq98WJt
-         cwjZ3BK0PtzbPW6ZYcBDgVMYdvoJg4dyydeZQv1s6A8I2zvvaPUsC8KLDsbHqfck9WVP
-         wzI0zx3/aY5n9Tgqz1YXEKjMsPlf9gXklCUrV1GTzwjjDbxrAYeJD5MmXfQoRasUms0w
-         NWnw==
-X-Gm-Message-State: AOAM5333y6q5TnULQ/cLWx+CfjzV+TVxOeqqdmM56zmchgTd2mQT1YUO
-        EPN7WiCy5lV0BKC+fdf2PN0=
-X-Google-Smtp-Source: ABdhPJwasSMXid+ZBWeJxd8gP8wdY75eGF7pQFjwtMcvpEUo6pZts6ETQ2KWiqu4E0GJe0a+cKjK4g==
-X-Received: by 2002:a05:6e02:c28:b0:2ca:8380:8390 with SMTP id q8-20020a056e020c2800b002ca83808390mr9350897ilg.174.1650482158192;
-        Wed, 20 Apr 2022 12:15:58 -0700 (PDT)
-Received: from localhost (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
-        by smtp.gmail.com with UTF8SMTPSA id c15-20020a5d8b4f000000b00648f75d0289sm11834873iot.6.2022.04.20.12.15.56
+        bh=KGEWr83fJYFid7HWR+gaLqhOcbvATV54UphhKwf+0mE=;
+        b=zjMb9vAS2bkz3XoMhfJ8x+wXCqVrcU1Ok3Yxc7k0RZoQqh3sbzoWup7H5gra/pceir
+         bqEcDbjxrWNZPLNNnACCNYPoKrr1yC6sKAl9VJCIiIDzcS9EE77jxFC228R40EEuRU2W
+         ZJZHgefEBnfcCqRVAjbiatKJOwhmWDMFw92OizcGnHc8/wVF/AucKbwx1wCv22A+oQ8T
+         Pl2jqZpdDHOSYbtlwaeHscD4E1G5JC/mJc/iKzT2fa2U979szV8ybFMYpjmem93P8QqT
+         dJhAP/lz/PBsZYKp3WN1B/NkCLO6qEBNv5Ym4nuhV/PmNTY83wYh2Z77iowEQSos8s5i
+         D+hg==
+X-Gm-Message-State: AOAM533/B9961fiDIfUFPcD8xMagSErsVKM66ksSQzDTLXqpdlEheH20
+        826MY5itsw16tFcm/Z0Veulczw==
+X-Google-Smtp-Source: ABdhPJykuczOT2qbM+Dv4wRIhlDo5bRAaW6Uu4X2ORIz9VPuXTm20EmJ+Kehy/f7V+xOj+Fk9vdCVQ==
+X-Received: by 2002:a05:6512:3192:b0:44a:78f2:500b with SMTP id i18-20020a056512319200b0044a78f2500bmr11507019lfe.434.1650483763507;
+        Wed, 20 Apr 2022 12:42:43 -0700 (PDT)
+Received: from [192.168.1.102] (88-113-46-102.elisa-laajakaista.fi. [88.113.46.102])
+        by smtp.gmail.com with ESMTPSA id p25-20020a056512329900b0046bc5c83fb7sm1918563lfe.148.2022.04.20.12.42.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Apr 2022 12:15:57 -0700 (PDT)
-From:   Schspa Shi <schspa@gmail.com>
-To:     rafael@kernel.org, viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        schspa@gmail.com
-Subject: [PATCH] cpufreq: fix race on cpufreq online
-Date:   Thu, 21 Apr 2022 03:15:41 +0800
-Message-Id: <20220420191541.99528-1-schspa@gmail.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+        Wed, 20 Apr 2022 12:42:43 -0700 (PDT)
+Message-ID: <c2af9682-f773-8530-9262-edea1dbe595a@linaro.org>
+Date:   Wed, 20 Apr 2022 22:42:26 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3] cpufreq: qcom-cpufreq-hw: Clear dcvs interrupts
+Content-Language: en-US
+From:   Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
+References: <20220407200919.3054189-1-vladimir.zapolskiy@linaro.org>
+In-Reply-To: <20220407200919.3054189-1-vladimir.zapolskiy@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When cpufreq online failed, policy->cpus are not empty while
-cpufreq sysfs file available, we may access some data freed.
+Hi Bjorn, Viresh,
 
-Take policy->clk as an example:
+On 4/7/22 23:09, Vladimir Zapolskiy wrote:
+> It's noted that dcvs interrupts are not self-clearing, thus an interrupt
+> handler runs constantly, which leads to a severe regression in runtime.
+> To fix the problem an explicit write to clear interrupt register is
+> required, note that on OSM platforms the register may not be present.
+> 
+> Fixes: 275157b367f4 ("cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support")
+> Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+> ---
+> Changes from v2 to v3:
+> * split the change from the series and returned to v1 state of the fix
+>    by removing a minor optimization
+> * added a check for non-zero reg_intr_clr value before writel
+> 
+> Changes from v1 to v2:
+> * added a check for pending interrupt status before its handling
+> 
+>   drivers/cpufreq/qcom-cpufreq-hw.c | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index 0ec18e1589dc..0253731d6d25 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -24,6 +24,8 @@
+>   #define CLK_HW_DIV			2
+>   #define LUT_TURBO_IND			1
+>   
+> +#define GT_IRQ_STATUS			BIT(2)
+> +
+>   #define HZ_PER_KHZ			1000
+>   
+>   struct qcom_cpufreq_soc_data {
+> @@ -32,6 +34,7 @@ struct qcom_cpufreq_soc_data {
+>   	u32 reg_dcvs_ctrl;
+>   	u32 reg_freq_lut;
+>   	u32 reg_volt_lut;
+> +	u32 reg_intr_clr;
+>   	u32 reg_current_vote;
+>   	u32 reg_perf_state;
+>   	u8 lut_row_size;
+> @@ -360,6 +363,10 @@ static irqreturn_t qcom_lmh_dcvs_handle_irq(int irq, void *data)
+>   	disable_irq_nosync(c_data->throttle_irq);
+>   	schedule_delayed_work(&c_data->throttle_work, 0);
+>   
+> +	if (c_data->soc_data->reg_intr_clr)
+> +		writel_relaxed(GT_IRQ_STATUS,
+> +			       c_data->base + c_data->soc_data->reg_intr_clr);
+> +
+>   	return IRQ_HANDLED;
+>   }
+>   
+> @@ -379,6 +386,7 @@ static const struct qcom_cpufreq_soc_data epss_soc_data = {
+>   	.reg_dcvs_ctrl = 0xb0,
+>   	.reg_freq_lut = 0x100,
+>   	.reg_volt_lut = 0x200,
+> +	.reg_intr_clr = 0x308,
+>   	.reg_perf_state = 0x320,
+>   	.lut_row_size = 4,
+>   };
 
-static int cpufreq_online(unsigned int cpu)
-{
-  ...
-  // policy->cpus != 0 at this time
-  down_write(&policy->rwsem);
-  ret = cpufreq_add_dev_interface(policy);
-  up_write(&policy->rwsem);
+I believe this fix of a critical bug is intended to be included into the next
+release, could you please share your review? Thank you in advance.
 
-  return 0;
-
-out_destroy_policy:
-	for_each_cpu(j, policy->real_cpus)
-		remove_cpu_dev_symlink(policy, get_cpu_device(j));
-    up_write(&policy->rwsem);
-...
-out_exit_policy:
-  if (cpufreq_driver->exit)
-    cpufreq_driver->exit(policy);
-      clk_put(policy->clk);
-      // policy->clk is a wild pointer
-...
-                                    ^
-                                    |
-                            Another process access
-                            __cpufreq_get
-                              cpufreq_verify_current_freq
-                                cpufreq_generic_get
-                                  // acces wild pointer of policy->clk;
-                                    |
-                                    |
-out_offline_policy:                 |
-  cpufreq_policy_free(policy);      |
-    // deleted here, and will wait for no body reference
-    cpufreq_policy_put_kobj(policy);
-}
-
-Signed-off-by: Schspa Shi <schspa@gmail.com>
----
- drivers/cpufreq/cpufreq.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 80f535cc8a75..0d58b0f8f3af 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1533,8 +1533,6 @@ static int cpufreq_online(unsigned int cpu)
- 	for_each_cpu(j, policy->real_cpus)
- 		remove_cpu_dev_symlink(policy, get_cpu_device(j));
- 
--	up_write(&policy->rwsem);
--
- out_offline_policy:
- 	if (cpufreq_driver->offline)
- 		cpufreq_driver->offline(policy);
-@@ -1543,6 +1541,9 @@ static int cpufreq_online(unsigned int cpu)
- 	if (cpufreq_driver->exit)
- 		cpufreq_driver->exit(policy);
- 
-+	cpumask_clear(policy->cpus);
-+	up_write(&policy->rwsem);
-+
- out_free_policy:
- 	cpufreq_policy_free(policy);
- 	return ret;
--- 
-2.24.3 (Apple Git-128)
-
+--
+Best wishes,
+Vladimir
