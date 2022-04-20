@@ -2,112 +2,218 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2593A507F84
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Apr 2022 05:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEDDC508021
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Apr 2022 06:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359205AbiDTDT0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Apr 2022 23:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48576 "EHLO
+        id S243127AbiDTEft (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Apr 2022 00:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349010AbiDTDTZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 23:19:25 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7109FD6;
-        Tue, 19 Apr 2022 20:16:41 -0700 (PDT)
+        with ESMTP id S236411AbiDTEft (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Apr 2022 00:35:49 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9EB10CD;
+        Tue, 19 Apr 2022 21:33:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650424601; x=1681960601;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xjxCuPU1wDXGLoKd2DsY+kJ78tcX02C4AYF3wxGy00A=;
-  b=XZ+VoGmTr0oSig5pJ7UGumJicNTfgzbIZWi1RZqQxnAoV7YCgLPXJx6t
-   innQiSHAMWp4KoG6ixP8OeOD4X+n7hzaKmpqDUeY8RWQS6D3SMBuWN32i
-   m6aal5PlbjItJUw0N42yblmqKLxMd9LTesMaVAGLvkcHTlA86xzx7HTtC
-   BInTI4BOrraqPdoNouJPtGRCDXAE4D1uHw8taT56loZu8ebV62uh+FNOl
-   Ck9oHUTbZqTBS/cduzyAeRnNb/d7UD9hCrfL6fdxKIdInusirr1+Y/VrE
-   uXgFdMCpmRUkXXcCGM5LaQ2mafFGxib/CJjTxV4Xm8IDT2Gsmh+8jSJio
+  t=1650429184; x=1681965184;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=0Swg8Fj5tNL0EuUxxXtCxT3rXCvYjGGLFsk/WfnqY8Q=;
+  b=MblOQcP7t8zhmSji3RfgcHVqpK6f+mX8eyuibaMERrWo/Pp0RgY4kU+7
+   6582GR9DqSbc+pLqFEo/kU7v9B6ZHQypRm4JgPqd+vMP2Gz2PvD8IUzBC
+   z8RMbXx0WMG8agNK44xkhR6UHfXlftGBEQvsAQAze61C/ssWtKzCeMfxk
+   hEDq4eZCu73j9xFtrQcy/32WtdnBELxWidVq1i3TWTrRPfp2zmadlIB47
+   B8yNox6JKQXJGvVnee5t4Vzqnf+F12zDG3emOzybxR442NxcwYvwxal++
+   D1NoOcH/E5vJ9RMfKBYtp8GE3xfvvWrBY8Z82ivQOa723yKnjHwLGF+qq
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="289029155"
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="263399274"
 X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
-   d="scan'208";a="289029155"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 20:16:40 -0700
+   d="scan'208";a="263399274"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 21:33:04 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
-   d="scan'208";a="529566305"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 20:16:40 -0700
-Message-ID: <b78bd722081baa4db571c0360559f105d0a7d175.camel@linux.intel.com>
-Subject: Re: [PATCH v2 0/4] tools/thermal: thermal library and tools
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Date:   Tue, 19 Apr 2022 20:16:40 -0700
-In-Reply-To: <51d63f20-4834-184b-2ac2-30c399bd9988@linaro.org>
-References: <20220330100444.3846661-1-daniel.lezcano@linaro.org>
-         <f526d227-ffbb-4ac0-ceb6-c793ab912559@linaro.org>
-         <5380fef6d45f2f7a0b8a5f681934f02943d5e138.camel@linux.intel.com>
-         <9ccb342b-2f20-6efd-a668-96d593aa921e@linaro.org>
-         <CAJZ5v0hrRuVz8pgD6-m7EhVdHPPn67O4ajx_7vkOOOYdTkv2BQ@mail.gmail.com>
-         <0181977f5843fb9df4eae7d397d96c890846a0db.camel@linux.intel.com>
-         <f1d2b1c7a9691c64ece07fbc1fc5a2d4e70aa00a.camel@linux.intel.com>
-         <916d2e4c-7224-f824-f3cf-5c1dee411ed1@linaro.org>
-         <dc9b317f88f7d43cd30141376156c0f3eec687d8.camel@linux.intel.com>
-         <ba3cbf3d-938b-1530-1178-68b447f20a9c@linaro.org>
-         <f7e4f4604f122dfab4aa5e589d68eb2c8773e00d.camel@linux.intel.com>
-         <51d63f20-4834-184b-2ac2-30c399bd9988@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+   d="scan'208";a="667709800"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 19 Apr 2022 21:33:02 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nh21V-0006YO-OK;
+        Wed, 20 Apr 2022 04:33:01 +0000
+Date:   Wed, 20 Apr 2022 12:32:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ a8a4f8e63bdfeac9fafe43dcafabc27d8f2e8b8e
+Message-ID: <625f8cc4.yxYXrt09ppdZa9T2%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: a8a4f8e63bdfeac9fafe43dcafabc27d8f2e8b8e  Merge branch 'pm-tools' into linux-next
 
-On Tue, 2022-04-19 at 22:26 +0200, Daniel Lezcano wrote:
-> 
-> Hi Srinivas,
-> 
-> 
-> On 18/04/2022 05:36, srinivas pandruvada wrote:
-> > Hi Daniel,
-> > 
-> > The attached diff fixes the crash,
-> > 
-> > Also when you run in daemon mode, you need to use some pid lock
-> > file.
-> > Otherwise it launches multiple daemons.
-> 
-> I've been thinking about it and I don't think it is a problem to have
-> multiple instances of the daemon. The netlink allows multicast and
-> can 
-> be run as non-root user.
-> 
-> If the finality of the thermal engine is to manage the system and has
-> some code making actions on the system with the root privilege, the
-> init 
-> scripts can take care of the pid lock
-> 
-If there is use case, then this is fine otherwise wasting system
-resources.
+elapsed time: 724m
 
-Thanks,
-Srinivas
+configs tested: 133
+configs skipped: 3
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+powerpc                       eiger_defconfig
+nios2                         10m50_defconfig
+arm                          pxa910_defconfig
+arm                        cerfcube_defconfig
+arm                         at91_dt_defconfig
+sh                          sdk7786_defconfig
+powerpc                 mpc834x_itx_defconfig
+powerpc                 linkstation_defconfig
+sh                            hp6xx_defconfig
+mips                           jazz_defconfig
+arc                           tb10x_defconfig
+arm                          gemini_defconfig
+mips                         cobalt_defconfig
+microblaze                          defconfig
+sh                           se7722_defconfig
+mips                            ar7_defconfig
+i386                                defconfig
+xtensa                       common_defconfig
+sh                            titan_defconfig
+sh                             shx3_defconfig
+sh                        sh7757lcr_defconfig
+csky                                defconfig
+sh                        apsh4ad0a_defconfig
+ia64                             alldefconfig
+sh                          r7785rp_defconfig
+arm                        shmobile_defconfig
+m68k                        m5307c3_defconfig
+arm                         axm55xx_defconfig
+arm                        mvebu_v7_defconfig
+powerpc                       holly_defconfig
+s390                          debug_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220419
+arm                  randconfig-c002-20220420
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+nios2                               defconfig
+arc                              allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                randconfig-r042-20220419
+s390                 randconfig-r044-20220419
+arc                  randconfig-r043-20220419
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                         rhel-8.3-kunit
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
 
+clang tested configs:
+x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220419
+arm                  randconfig-c002-20220419
+i386                          randconfig-c001
+riscv                randconfig-c006-20220419
+mips                 randconfig-c004-20220419
+s390                 randconfig-c005-20220419
+mips                           ip28_defconfig
+arm                       netwinder_defconfig
+arm                     davinci_all_defconfig
+mips                       lemote2f_defconfig
+powerpc                     ksi8560_defconfig
+arm                       mainstone_defconfig
+powerpc                 mpc832x_mds_defconfig
+powerpc                      ppc64e_defconfig
+arm                         bcm2835_defconfig
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r041-20220420
+riscv                randconfig-r042-20220420
+hexagon              randconfig-r045-20220420
+hexagon              randconfig-r041-20220419
+hexagon              randconfig-r045-20220419
 
-
-> 
-> 
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
