@@ -2,78 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 403DC508801
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Apr 2022 14:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7088D50882C
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Apr 2022 14:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378476AbiDTMYx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Apr 2022 08:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
+        id S1378558AbiDTMeT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Apr 2022 08:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353046AbiDTMYw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Apr 2022 08:24:52 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2B931DC4;
-        Wed, 20 Apr 2022 05:22:06 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id i196so1624489ioa.1;
-        Wed, 20 Apr 2022 05:22:06 -0700 (PDT)
+        with ESMTP id S1378556AbiDTMeQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Apr 2022 08:34:16 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5198E40912;
+        Wed, 20 Apr 2022 05:31:29 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id q3so2050386wrj.7;
+        Wed, 20 Apr 2022 05:31:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zIMuGelOwwNQPwE8FTN91rI+ZWWawKZ6vr/oEWb7r+g=;
-        b=L9rw5Zhh1ttkACZ/UGkE41DhurYpDRfwGSN0hXY3lcyM86w4izh9lfYEKMQA2eqfl5
-         2YnZx5keDv1+QJa5V6FjhombQD+A7uRVFdVH5in7N87ElIKD774KuDHwcEVQ3FHUwvY7
-         F1ugXlCzETRdv2V/dHui53j2ZCkbyjbv6M7XT8C859yRfW3GY8ptWYCq7Acj+NHGGDZe
-         Z8TQqJepf7XKTF9shFLSwBQ2fld+kNvCVXZyjXI2PPp2ApIYjJ6CMOsB9ayJfhKXn1E1
-         uKXVJdXz85Rmi4YVg9eRM8nW2tzIdU//ZPnPbffGTfGWcAF4XZqxMBjPaB/4YCto+tdP
-         yBSg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FgnqC9bRUlZPRTGJ0+j/kZyJEtMjStFTln7fWbmDgz4=;
+        b=mfEYirzx76v7kG+/3n79xx810Nk0iF4FjcmEpr55et8kKbA+5kPuLnQnor3t8+4WN5
+         JKWUtGNbS0EB4JlKh5F8EqFTPvmhXU2m6nQYU49r1vSStTlpToOaLP5kaq10lw5xAR/x
+         ZlA9GUST0tgLmoYghedu0mbYPyQEM79EqfkRp10rCG745FEDgFOeGzvpYXIGTxmM8HGs
+         oxVyPlTlvlpB32ez1EwZ953fz1FV5N+mUYWwm+lNTG3+HQlgZZ0eWzoGyRIyz1aVlupw
+         pWNbabDsl4Gw1407ZFz+kySGDO7BQwzEnccH6evPzWHHM2c1HuwV2ZH2mN/jqZhbl7c1
+         LKKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zIMuGelOwwNQPwE8FTN91rI+ZWWawKZ6vr/oEWb7r+g=;
-        b=XWQyAnVUXLbpkmcTd0dIvmj+mFKHD1zwGsqSzja4Iob2ZeQ4RSKySwFoC2XkdsXnsW
-         kpvmKbao+WAPLHjXmfzm/GcSNFGC89YJG+9w/gl3y73Qn3aAkIvJxxAdVQWlN+EXHDCj
-         pebegsUmdE+B5iQK/pf//1K0+d1tI94hx37Xhp3gIhWn8dBt7xZC4EQbAKLvZTXL6IAG
-         oX27Q9750NTchMxmsfR15NDuelwk5IVrskdWHHJWsyqz8gL9VWg77ME/pHs9lXb39RdQ
-         lkINPxFP+qhXHn5INHZpJNLWO2CTeOKOMlNd15se0EmWhiMVJRyHvXPJlxHNU2byLT1W
-         61uA==
-X-Gm-Message-State: AOAM533rAPMYT6vKLS7ojvgTNu51ke74Pd+a2frqmj9HuMAlgXtDwxrm
-        Q74o9KD9qSKpw8epNfMKiMREN6SHWfCkYCWz+30=
-X-Google-Smtp-Source: ABdhPJzTPl3fpisqquEunK202EZu+8nIk8CqPrym6nw4Ij8xrv+W8LHM0AuAQ5fzaPtaanpkSEYPKBd97UXjkMJwTQo=
-X-Received: by 2002:a05:6602:1c6:b0:657:2c41:7d0 with SMTP id
- w6-20020a05660201c600b006572c4107d0mr94775iot.31.1650457326295; Wed, 20 Apr
- 2022 05:22:06 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FgnqC9bRUlZPRTGJ0+j/kZyJEtMjStFTln7fWbmDgz4=;
+        b=rS9Ci/JVWvL4DPMCSBlGfehrVKF5crH0gZ8iTMpNDlRGa3Tp/mQl+BqxK7zi68HgwM
+         KxWtEZvNneAI/M5oIBa7ii6F+/WY3M8lA+J73gdEzb2lluWYD8y5j7kVZ9/GaIzZb8YC
+         9Xolru6qcReoWeEfPmebR+WvRkJ08uN01XJhsnK7RMjelpaiIb1vG/veIUv5Tfd/ou0H
+         DPrMr+qGIH3Z678AGrU9g3bL2n8sgwq7nDlGOs4SZijJ/wi5g7MhX1EE5OIHZwTyb8a3
+         q1QCh6XOOL8gVhaesJHybK6dOpdbXkgdz2I5IAMgOERF9r6qJ6j14vh9h222azDCtYTr
+         c+Tg==
+X-Gm-Message-State: AOAM530D15HuAiMMD2dCHS/vx1WbNyDpza9lG1ybRI/ZWMivCEAKwNXD
+        LWAMd1Ec5ZmVIOXkMfB/VoU=
+X-Google-Smtp-Source: ABdhPJzP1pkV5UtrWecTxbP1L1o82e4X/1/e6TahNaQTgZfRxAbn1HL/X7RCebkw34DpjMQwjMFTBg==
+X-Received: by 2002:adf:d1c6:0:b0:20a:b006:85ec with SMTP id b6-20020adfd1c6000000b0020ab00685ecmr2069283wrd.334.1650457887536;
+        Wed, 20 Apr 2022 05:31:27 -0700 (PDT)
+Received: from tpt440p.steeds.sam ([41.84.241.188])
+        by smtp.gmail.com with ESMTPSA id c12-20020a05600c0a4c00b00381141f4967sm21277277wmq.35.2022.04.20.05.31.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 05:31:26 -0700 (PDT)
+From:   "Sicelo A. Mhlongo" <absicsz@gmail.com>
+To:     pali@kernel.org, sre@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Sicelo A. Mhlongo" <absicsz@gmail.com>
+Subject: [PATCH v2 0/1] power: supply: bq27xxx: expose battery data when CI=1
+Date:   Wed, 20 Apr 2022 14:30:58 +0200
+Message-Id: <20220420123059.1206443-1-absicsz@gmail.com>
+X-Mailer: git-send-email 2.35.2
 MIME-Version: 1.0
-References: <20220330094126.30252-1-alistair@alistair23.me>
- <20220330094126.30252-2-alistair@alistair23.me> <45acc349-8fea-f755-065c-c561949c45af@roeck-us.net>
-In-Reply-To: <45acc349-8fea-f755-065c-c561949c45af@roeck-us.net>
-From:   Alistair Francis <alistair23@gmail.com>
-Date:   Wed, 20 Apr 2022 22:21:40 +1000
-Message-ID: <CAKmqyKOqjperoku_uOy4sCa6LmCUtfB7SCvhLEKxLtcwDkzRyA@mail.gmail.com>
-Subject: Re: [PATCH v20 1/4] mfd: silergy,sy7636a: Add config option
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Alistair Francis <alistair@alistair23.me>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Zhang Rui <rui.zhang@intel.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Amit Kucheria <amitk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,83 +68,28 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 6:02 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 3/30/22 02:41, Alistair Francis wrote:
-> > Add a specific MFD_SY7636A config option.
-> >
-> > As part of this change we can use MFD_SY7636A as a dependency for all
-> > SY7636a components and also remove the name from MFD_SIMPLE_MFD_I2C as
-> > it no longer needs to be selectable.
-> >
-> > Signed-off-by: Alistair Francis <alistair@alistair23.me>
->
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+We currently discard capacity information provided by the chip when the
+Capacity Inaccurate flag is set. However, in many cases, having this
+stale data is better than no information at all.
 
-Any chance of getting this in for 5.18? It would be nice to have the
-configs all sorted before the release
+Even if the chip has been fully reset, the datasheet shows that capacity
+values (NAC specifically) can be seeded by using the WRTNAC facility of
+the Control and Mode registers. After seeding, CI remains set, but the
+capacity values are as accurate as the NAC value provided to WRTNAC is.
 
-Alistair
+On the Nokia N900, such seed value can be obtained from rx51_battery,
+which reads battery data directly from the battery's BSI pin. This can
+be done in userspace via i2c access to the registers. With this patch,
+once seeded, capacity values are available through the driver.
 
->
-> > ---
-> >   drivers/hwmon/Kconfig     |  1 +
-> >   drivers/mfd/Kconfig       | 12 +++++++++++-
-> >   drivers/regulator/Kconfig |  1 +
-> >   3 files changed, 13 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> > index 68a8a27ab3b7..74b60d24e740 100644
-> > --- a/drivers/hwmon/Kconfig
-> > +++ b/drivers/hwmon/Kconfig
-> > @@ -1693,6 +1693,7 @@ config SENSORS_SIS5595
-> >
-> >   config SENSORS_SY7636A
-> >       tristate "Silergy SY7636A"
-> > +     depends on MFD_SY7636A
-> >       help
-> >         If you say yes here you get support for the thermistor readout of
-> >         the Silergy SY7636A PMIC.
-> > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> > index 3b59456f5545..c47cb755757b 100644
-> > --- a/drivers/mfd/Kconfig
-> > +++ b/drivers/mfd/Kconfig
-> > @@ -1095,6 +1095,16 @@ config MFD_SPMI_PMIC
-> >         Say M here if you want to include support for the SPMI PMIC
-> >         series as a module.  The module will be called "qcom-spmi-pmic".
-> >
-> > +config MFD_SY7636A
-> > +     tristate "Silergy SY7636A voltage regulator"
-> > +     depends on I2C
-> > +     select MFD_SIMPLE_MFD_I2C
-> > +     help
-> > +       Enable support for Silergy SY7636A voltage regulator.
-> > +
-> > +       To enable support for building sub-devices as modules,
-> > +       choose M here.
-> > +
-> >   config MFD_RDC321X
-> >       tristate "RDC R-321x southbridge"
-> >       select MFD_CORE
-> > @@ -1202,7 +1212,7 @@ config MFD_SI476X_CORE
-> >         module will be called si476x-core.
-> >
-> >   config MFD_SIMPLE_MFD_I2C
-> > -     tristate "Simple Multi-Functional Device support (I2C)"
-> > +     tristate
-> >       depends on I2C
-> >       select MFD_CORE
-> >       select REGMAP_I2C
-> > diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-> > index 5ef2306fce04..c8ce6e5eea24 100644
-> > --- a/drivers/regulator/Kconfig
-> > +++ b/drivers/regulator/Kconfig
-> > @@ -1219,6 +1219,7 @@ config REGULATOR_STW481X_VMMC
-> >
-> >   config REGULATOR_SY7636A
-> >       tristate "Silergy SY7636A voltage regulator"
-> > +     depends on MFD_SY7636A
-> >       help
-> >         This driver supports Silergy SY3686A voltage regulator.
-> >
->
+The patch was successfully tested on bq27200 on the Nokia N900.
+
+Sicelo A. Mhlongo (1):
+  power: supply: bq27xxx: expose battery data when CI=1
+
+ drivers/power/supply/bq27xxx_battery.c | 59 ++++++++++++--------------
+ 1 file changed, 27 insertions(+), 32 deletions(-)
+
+-- 
+2.35.2
+
