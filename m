@@ -2,89 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D56EC5089C2
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Apr 2022 15:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85E15508CDE
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Apr 2022 18:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379190AbiDTNv1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Apr 2022 09:51:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40622 "EHLO
+        id S1355159AbiDTQM5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Apr 2022 12:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234412AbiDTNv0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Apr 2022 09:51:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A58543493;
-        Wed, 20 Apr 2022 06:48:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03ECBB81F18;
-        Wed, 20 Apr 2022 13:48:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3157C385B0;
-        Wed, 20 Apr 2022 13:48:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650462517;
-        bh=r5gIACVwFwXfu+L0SjHY63rmQTmlBYIcuCScaOsuAjk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=E8Em2MQWztm+C2EmlV1FQe3I0FTSV2DiJcyK2iihaFQo51NM0DFE/rYOIE+wyx1wp
-         /VWN0/71ZwssYkNVh129T8UpZm6AUkLIGuMiY6fzJStQ7ZZZzsLu+YfHMjswZ9W7YM
-         mjdK3DJxHlIkGZPSUsh/8dFkbBcT5Jm8E77pDoGNiEZG4/4EPstw+51gVak16za2ga
-         dhu7kZkcOynk9SMtnhYtXUgL6zQdymwzczZfSDpnrDpvJEhYxBXYfvKUUxyNISj4vp
-         /lSN3yrqnyEcDKHRIhkxeNkjouxpUUs1/5w5lM+l5Iw8Csip1eFb3F0IQ3ctyogPeM
-         5m+eazxPFDoqg==
-Received: by mail-wr1-f44.google.com with SMTP id p18so2362232wru.5;
-        Wed, 20 Apr 2022 06:48:37 -0700 (PDT)
-X-Gm-Message-State: AOAM5314VcoKSUO2df9/UV2WWtZ74zAVJ6/84WF1Vw3vWjbKXqaEVb8b
-        SEDqrsFliZOFpFCpdAgMviERW/E84s9t8n1stW8=
-X-Google-Smtp-Source: ABdhPJwSpIclw+ZwqVR57edT/aQRpFn5BaY64Phs17aAgIE6n54XF3PED3yv14Fv9AL2uDPz7qCh2GbTzsHglUZV1DA=
-X-Received: by 2002:a5d:6389:0:b0:207:a7d8:2b64 with SMTP id
- p9-20020a5d6389000000b00207a7d82b64mr15595597wru.12.1650462515957; Wed, 20
- Apr 2022 06:48:35 -0700 (PDT)
+        with ESMTP id S1344926AbiDTQM4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Apr 2022 12:12:56 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355FA13DF8
+        for <linux-pm@vger.kernel.org>; Wed, 20 Apr 2022 09:10:09 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id o20-20020a05600c511400b0038ebbbb2ad8so1580015wms.0
+        for <linux-pm@vger.kernel.org>; Wed, 20 Apr 2022 09:10:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4AagxDjZOYaXYkTVeSJD+8nkr2dQKgd1oEypSkLfkgM=;
+        b=jXVGRegVbmClrs+10S74PNfRHe2h641HYf//7N0B9kC5CqdZpUce8QxilKp7sfdJDp
+         71FB2JPyoWONdNod9Lx7pRlRPO1bqlRJSB46Uz5U7alLcmlxmW5Vg6U/xeeXjUtwjwKz
+         Vs/Gc2tNUdby/YGUhyQKPiCcLRQhBNfFHqnerhr4Eu0cs3DjXdMSuFXj4kstUMchCrXb
+         vqGhQNF5prxB6Qw5FfigTOpHfnQtM9yfvp6qDCmQa98bk8q+CAIUbtn08MS7jCDbYIH5
+         OK9w5wfMGKUTuTtDrA+H0hK0YqbDdICxlko0QHcQjjxK2Fg97ppQAr5xgsUZEnaLcsTo
+         kANA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4AagxDjZOYaXYkTVeSJD+8nkr2dQKgd1oEypSkLfkgM=;
+        b=uP8jxQOYg2job6GRfywiEsYZwcqgCmILkdYFFl6eFmddffgetTYboLHsnw/oPatmAg
+         kf6qeJBpdUo3h11TcqlYsiMmLFP+klZLzR90wlo0tu9QyGb9GNJHEipZw222PSh0XmVM
+         HYdW1tQI8ZUQBNSc+j4tmQgMQ3qChYcLqCdUhWMupcDI625864t1YdKUWNldb1ZU11VK
+         koLGXq283ojY9JBeqTBI+TGpCholvl92xwqkjBgjTvUlB/0pwp4ydMmoZgkhybLzfZ23
+         +EV8He5uMcaIL4UvhXVRZdltH9yR6jb0bvgrbLBaij3Cp87wShTtYneHWyeqxmcKPPDN
+         zXUA==
+X-Gm-Message-State: AOAM530JgU+IqS1FjgHfmGdk4MsDc0aG+GujWS3Ld+3do8uec+26ROyU
+        DvX8otmNn1Gj0UIjYdm8yWqarw==
+X-Google-Smtp-Source: ABdhPJwRsfkE3BBucqjfpJs/m3iLruS51nCdliq/z8+daHVv6ilyRqugFwd5xHqfrgduOfn1+wNcFw==
+X-Received: by 2002:a05:600c:1c1f:b0:38e:c425:5b1a with SMTP id j31-20020a05600c1c1f00b0038ec4255b1amr4422755wms.69.1650471007726;
+        Wed, 20 Apr 2022 09:10:07 -0700 (PDT)
+Received: from localhost.localdomain (176-182-171-101.abo.bbox.fr. [176.182.171.101])
+        by smtp.gmail.com with ESMTPSA id m1-20020a1ca301000000b003929c4bf250sm244836wme.13.2022.04.20.09.10.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Apr 2022 09:10:06 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     srinivas.pandruvada@linux.intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v3 0/4] tools/thermal: thermal library and tools
+Date:   Wed, 20 Apr 2022 18:09:28 +0200
+Message-Id: <20220420160933.347088-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220419163810.2118169-41-arnd@kernel.org>
- <20220420134305.fq7pc3fsz5fxkryj@mercury.elektranox.org>
-In-Reply-To: <20220420134305.fq7pc3fsz5fxkryj@mercury.elektranox.org>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 20 Apr 2022 15:48:19 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2Mv-gUoc3hpqvCa1tzvEEwHN6wXDxmy8K5rN8sULQnMw@mail.gmail.com>
-Message-ID: <CAK8P3a2Mv-gUoc3hpqvCa1tzvEEwHN6wXDxmy8K5rN8sULQnMw@mail.gmail.com>
-Subject: Re: [PATCH 40/48] ARM: pxa: tosa: use gpio lookup for battery
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,12 +66,132 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Apr 20, 2022 at 3:43 PM Sebastian Reichel <sre@kernel.org> wrote:
-> > @@ -15,11 +15,16 @@
-> >  #include <linux/gpio.h>
->
-> This should be <linux/gpio/consumer.h> now.
->
-Fixed now, thanks!
+These changes are providing the following tools and library:
 
-     Arnd
+ - A thermal library doing the netlink abstraction from the kernel in
+   order to make the userspace thermal implementation easier. Having
+   the library integrated with the kernel tree is also a guarantee to
+   keep the message format and their encoding/decoding aligned
+                                                                                                                                                                                                                                                                               
+ - A thermal tools library providing a set of functions to deal with
+   usual features like the log, the mainloop and the time. This
+   library is used by the provided tools below
+
+ - An data acquisition program to capture the temperature of the
+   different thermal zone during an amount of time or during the
+   execution of an application. The output is formated to be easily
+   parsed by gnuplot, a spreadsheet program or a statistical command
+   line utility. The timestamp is based on the system uptime, thus
+   giving an indication of when a thermal event happened, that can
+   help to spot or reproduce thermal issue in the long run
+
+ - A thermal monitoring program based on the thermal library. It gives
+   a skeleton to build any logic on top of it and shows how to use the
+   thermal library. It does nothing except discovering the thermal
+   zones, their trip points and listening for events like cooling
+   devices state changes or trip point crossed
+
+ Changelog:
+
+ v3:
+
+  - Fixed NULL pointer reference when there is no thermal zones, trip
+    points or cooling device
+  - Kill the child process when the duration ends or if there is an
+    interruption in the thermometer
+  - Add error messages in the main body for the thermal-engine
+
+ v2:
+
+  - Fixed all trailing whitespaces and some other checkpatch
+    warnings. Some warnings remain but they can be considered as false
+    positive
+
+  - Added in the thermometer tool:
+    - Usage/help option as well as a man page
+    - The ability to execute a program
+    - The capture duration
+    - Create the output directory if it does not exist
+
+  - Add in the thermal-engine tool:
+    - A usage/help option
+    - A message telling the userspace it is waiting for events
+    - A daemonize option
+
+  - Minor bug fixes here and there, as well as typos
+
+ v1: Initial post after a RFC
+
+Daniel Lezcano (4):
+  tools/lib/thermal: Add a thermal library
+  tools/thermal: Add util library
+  tools/thermal: Add a temperature capture tool
+  tools/thermal: Add thermal daemon skeleton
+
+ MAINTAINERS                                   |   1 +
+ tools/Makefile                                |  36 +-
+ tools/lib/thermal/.gitignore                  |   2 +
+ tools/lib/thermal/Build                       |   5 +
+ tools/lib/thermal/Makefile                    | 165 +++++
+ tools/lib/thermal/commands.c                  | 349 +++++++++++
+ tools/lib/thermal/events.c                    | 164 +++++
+ tools/lib/thermal/include/thermal.h           | 142 +++++
+ tools/lib/thermal/libthermal.map              |  25 +
+ tools/lib/thermal/libthermal.pc.template      |  12 +
+ tools/lib/thermal/sampling.c                  |  75 +++
+ tools/lib/thermal/thermal.c                   | 135 +++++
+ tools/lib/thermal/thermal_nl.c                | 215 +++++++
+ tools/lib/thermal/thermal_nl.h                |  46 ++
+ tools/thermal/lib/Build                       |   3 +
+ tools/thermal/lib/Makefile                    | 158 +++++
+ .../thermal/lib/libthermal_tools.pc.template  |  12 +
+ tools/thermal/lib/log.c                       |  77 +++
+ tools/thermal/lib/log.h                       |  31 +
+ tools/thermal/lib/mainloop.c                  | 120 ++++
+ tools/thermal/lib/mainloop.h                  |  15 +
+ tools/thermal/lib/thermal-tools.h             |  10 +
+ tools/thermal/lib/uptimeofday.c               |  40 ++
+ tools/thermal/lib/uptimeofday.h               |  12 +
+ tools/thermal/thermal-engine/Build            |   2 +
+ tools/thermal/thermal-engine/Makefile         |  28 +
+ tools/thermal/thermal-engine/thermal-engine.c | 341 +++++++++++
+ tools/thermal/thermometer/Build               |   2 +
+ tools/thermal/thermometer/Makefile            |  26 +
+ tools/thermal/thermometer/thermometer.8       |  93 +++
+ tools/thermal/thermometer/thermometer.c       | 573 ++++++++++++++++++
+ tools/thermal/thermometer/thermometer.conf    |   5 +
+ 32 files changed, 2917 insertions(+), 3 deletions(-)
+ create mode 100644 tools/lib/thermal/.gitignore
+ create mode 100644 tools/lib/thermal/Build
+ create mode 100644 tools/lib/thermal/Makefile
+ create mode 100644 tools/lib/thermal/commands.c
+ create mode 100644 tools/lib/thermal/events.c
+ create mode 100644 tools/lib/thermal/include/thermal.h
+ create mode 100644 tools/lib/thermal/libthermal.map
+ create mode 100644 tools/lib/thermal/libthermal.pc.template
+ create mode 100644 tools/lib/thermal/sampling.c
+ create mode 100644 tools/lib/thermal/thermal.c
+ create mode 100644 tools/lib/thermal/thermal_nl.c
+ create mode 100644 tools/lib/thermal/thermal_nl.h
+ create mode 100644 tools/thermal/lib/Build
+ create mode 100644 tools/thermal/lib/Makefile
+ create mode 100644 tools/thermal/lib/libthermal_tools.pc.template
+ create mode 100644 tools/thermal/lib/log.c
+ create mode 100644 tools/thermal/lib/log.h
+ create mode 100644 tools/thermal/lib/mainloop.c
+ create mode 100644 tools/thermal/lib/mainloop.h
+ create mode 100644 tools/thermal/lib/thermal-tools.h
+ create mode 100644 tools/thermal/lib/uptimeofday.c
+ create mode 100644 tools/thermal/lib/uptimeofday.h
+ create mode 100644 tools/thermal/thermal-engine/Build
+ create mode 100644 tools/thermal/thermal-engine/Makefile
+ create mode 100644 tools/thermal/thermal-engine/thermal-engine.c
+ create mode 100644 tools/thermal/thermometer/Build
+ create mode 100644 tools/thermal/thermometer/Makefile
+ create mode 100644 tools/thermal/thermometer/thermometer.8
+ create mode 100644 tools/thermal/thermometer/thermometer.c
+ create mode 100644 tools/thermal/thermometer/thermometer.conf
+
+-- 
+2.25.1
+
