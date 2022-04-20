@@ -2,94 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D535085AF
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Apr 2022 12:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6495085C2
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Apr 2022 12:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349524AbiDTKXR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Apr 2022 06:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54088 "EHLO
+        id S1377573AbiDTKXr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Apr 2022 06:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377530AbiDTKXQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Apr 2022 06:23:16 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63D91D0F3;
-        Wed, 20 Apr 2022 03:20:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=BwqMSjcged9Et6HKR9YVRBXhbJxx6UdXObdCdZiFoRo=; b=C0p4jlnGWYx/e27oLwxPPQFEMm
-        e7rWh6ntsVOMdBtax8OA5valvqJ5lTOfqQRY4PVkTCkNE1FEMQQN97yo5AFtoSgahTMjSxzHLRZTJ
-        PN/GqxXAt6NZCVVrdiNjSc3qVlTE+Y2kQvVIuaLtNxewRjg7Rm8n1X7ZJkdz1ffT60HBdFKL2xg3i
-        kaP2D6xkcaizTyvSPabAw9D8RHEd0dVwAC/0pQpbI1Tg+tZx8p0I0MMKgb7md3Fqv0BPdPHqnY002
-        oHZLtn3pHeoE0j9JqyZ/6eMH5rebf80mKS6Hh2FJgn+GLVC5NcB9V0e3/l5nVExCm5iRx747CjzDc
-        tHCjUpGg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nh7RQ-003zLF-C8; Wed, 20 Apr 2022 10:20:08 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 21AA79861A4; Wed, 20 Apr 2022 12:20:06 +0200 (CEST)
-Date:   Wed, 20 Apr 2022 12:20:06 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        ebiederm@xmission.com, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/5] sched,ptrace: Fix ptrace_check_attach() vs PREEMPT_RT
-Message-ID: <20220420102006.GD2731@worktop.programming.kicks-ass.net>
-References: <20220413132451.GA27281@redhat.com>
- <20220413185704.GA30360@redhat.com>
- <20220413185909.GB30360@redhat.com>
- <20220413192053.GY2731@worktop.programming.kicks-ass.net>
- <20220413195612.GC2762@worktop.programming.kicks-ass.net>
- <20220414115410.GA32752@redhat.com>
- <20220414183433.GC32752@redhat.com>
- <YlikBjA3kL3XEQP5@hirez.programming.kicks-ass.net>
- <20220415101644.GA10421@redhat.com>
- <20220415105755.GA15217@redhat.com>
+        with ESMTP id S1377612AbiDTKXp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Apr 2022 06:23:45 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59C722BD9;
+        Wed, 20 Apr 2022 03:20:57 -0700 (PDT)
+X-UUID: e87945b3112d4a4f8bb22443e10d11b1-20220420
+X-UUID: e87945b3112d4a4f8bb22443e10d11b1-20220420
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 358565788; Wed, 20 Apr 2022 18:20:50 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 20 Apr 2022 18:20:48 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 20 Apr
+ 2022 18:20:48 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 20 Apr 2022 18:20:48 +0800
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>
+Subject: [PATCH v24 0/7] soc: mediatek: SVS: introduce MTK SVS
+Date:   Wed, 20 Apr 2022 18:20:37 +0800
+Message-ID: <20220420102044.10832-1-roger.lu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220415105755.GA15217@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 12:57:56PM +0200, Oleg Nesterov wrote:
-> On 04/15, Oleg Nesterov wrote:
-> >
-> > OK, so far it seems that this patch needs a couple of simple fixes you
-> > pointed out, but before I send V2:
-> >
-> > 	- do you agree we can avoid JOBCTL_TRACED_FROZEN in 1-2 ?
-> >
-> > 	- will you agree if I change ptrace_freeze_traced() to rely
-> > 	  on __state == TASK_TRACED rather than task_is_traced() ?
-> >
-> 
-> Forgot to say, I think 1/5 needs some changes in any case...
-> 
-> ptrace_resume() does  wake_up_state(child, __TASK_TRACED) but doesn't
-> clear JOBCTL_TRACED. The "else" branch in ptrace_stop() leaks this flag
-> too. Perhaps I missed something, I'll reread 1/5 again, but the main
-> question to me is whether 1-2 actually need the JOBCTL_TRACED_FROZEN flag.
+The Smart Voltage Scaling(SVS) engine is a piece of hardware
+which calculates suitable SVS bank voltages to OPP voltage table.
+Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
+when receiving OPP_EVENT_ADJUST_VOLTAGE.
 
-Ok, getting back to this. So I did the change to ptrace_resume(), but
-I'm not entirely sure I understand the issue with the else branch of
-ptrace_stop().
+1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
+2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
+After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
 
-My understanding is that if we hit that else branch, we've raced wth
-__ptrace_unlink(), and that will have done:
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=25cb20a212a1f989385dfe23230817e69c62bee5
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=b325ce39785b1408040d90365a6ab1aa36e94f87
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.16-next/dts64&id=a8168cebf1bca1b5269e8a7eb2626fb76814d6e2
 
-  if (... || task_is_traced(child))
-	ptrace_signal_wake_up(child, true);
+Change since v23:
+- Change wording from "Mediatek" to "MediaTek" (uppercase T) in mtk-svs.yaml.
+- Use cpuidle_pause_and_lock() to prevent system from entering cpuidle instead of applying pm_qos APIs.
+- Add kfree() at the end of svs_probe() when encountering probe fail.
+- Change MODULE_LICENSE from "GPL v2" to "GPL".
+- Add nvmem_cell_put() in error handling when nvmem_cell_read() encounters fail.
 
-Which will have done that wakeup and cleared both __state and jobctl.
+Roger Lu (7):
+  [v24,1/7] dt-bindings: soc: mediatek: add mtk svs dt-bindings
+  [v24,2/7] arm64: dts: mt8183: add svs device information
+  [v24,3/7] soc: mediatek: SVS: introduce MTK SVS engine
+  [v24,4/7] soc: mediatek: SVS: add monitor mode
+  [v24,5/7] soc: mediatek: SVS: add debug commands
+  [v24,6/7] dt-bindings: soc: mediatek: add mt8192 svs dt-bindings
+  [v24,7/7] soc: mediatek: SVS: add mt8192 SVS GPU driver
+
+ .../bindings/soc/mediatek/mtk-svs.yaml        |   91 +
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   16 +
+ drivers/soc/mediatek/Kconfig                  |   10 +
+ drivers/soc/mediatek/Makefile                 |    1 +
+ drivers/soc/mediatek/mtk-svs.c                | 2403 +++++++++++++++++
+ 5 files changed, 2521 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+ create mode 100644 drivers/soc/mediatek/mtk-svs.c
+
 
