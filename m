@@ -2,111 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E9F507DE4
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Apr 2022 03:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B15DF507F23
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Apr 2022 04:54:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351511AbiDTBKT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Apr 2022 21:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
+        id S1354014AbiDTC5A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Apr 2022 22:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348181AbiDTBKS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 21:10:18 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23891D0FB
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 18:07:33 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id n43so421753pfv.10
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 18:07:33 -0700 (PDT)
+        with ESMTP id S1352077AbiDTC47 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 22:56:59 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765D63879B
+        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 19:54:14 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id i3-20020a056830010300b00605468119c3so247088otp.11
+        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 19:54:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uh+zqoa0RmF45pIO3fKwJcIuuOmmQqr7ZHT+lq3wkxM=;
-        b=c+RLqjbokVzeFTNw9hc8x+ovEmdLmAVh+jAijGNIU2aP2z9Kn/2M5CVbWFQbp3uaYa
-         G2yJ7RQXUcZiR97mRMuENoPfBv/t0NyC1qNrxT7PvouX4a7uAeH/Z5NeKzncDrWGTu6i
-         TrenHavLMjhVjxXVbMPKEpnK76ncrbU5kyYp5qX7wLMhWx0rkgqxNEHn+4bZc+GlTcv8
-         +mkx3DmZVeCVa5ER8W4GHlhgYsPWVAXzqalQefy8VLihg0JRzIq+nfHyjd67REslJVKb
-         fOvAOnsTclyZdrMiN15qZ4vmRxI7slVgDYrjxfOPLCEIO+9GrAwgv4WnKl/Q4ba+WZeS
-         9qbg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IHAzVnuzxuYJX7ZkepRm9BZc+S59p4HkHNttGn59HI4=;
+        b=TTpsWITDGO8DJDNJxeNi3uPnZIZsEi7KOyE47yCr6VLUa14Zr/w+V1mBYLvdY7qH2G
+         snjCUL9iNcZQE2b/3/u+ez02PRD4EPz54kz1VGYjVwhnOBkFsBF/zkpZxbHLtbEbwZwM
+         P3ZbdGOCZdxxj4o9tNatcIwoGBJU39aVkflY+EzWxaKJsdGMd9zz7tZ6bvsNpKqThITd
+         k/BBZFlV4cxJpwSIPse0WC2acMv1kXV3kTvj4nSdO89cka6ntSWfVksv1icoDBpY1XYX
+         UsILoa0eFvZwKrf6pD4JNoqapYvQ5VHuJRVivcYiBuPRBrukVFLSV6UEt+EB/2vVUkp3
+         Tx6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=uh+zqoa0RmF45pIO3fKwJcIuuOmmQqr7ZHT+lq3wkxM=;
-        b=WnWwFQEevJzv9FjlQU40eNOoPcoZQJjKfEHVW2kTL0Hpyx58mINn5JUZCyEGWh1dLv
-         ox4MgJTHvCnBkp86hYv+jvCJE8NsIV3ie+C+FMiZpDXIqpYHXW5CakcboyzT6hUyRoBo
-         hiwIZfgiSTUCWDvuwHKcL2p3Y+y3EjycYH1rYtt+O8NEeoIDYfrKK5UmI+os/wrdemAR
-         mQho9rqQ9umtBDuqotmsJ+LwbuSIOHajgB+NPLZk5ZeX/5xsZkbYuRvGspEeQpTZKQZB
-         u8TakPeGswKwlXPbxhh0xCazhtMVInR5tfHnNqMOqICmyKck9yl72wrBmkWwQZyCCZrm
-         Nmow==
-X-Gm-Message-State: AOAM533U7PAu+DwIAfVnl+Z6rHiSZH+fSEMsQ6pFIYbGRKIwF901zXq9
-        IjxgX6jMY4XBw9Uftw7zK43yZA==
-X-Google-Smtp-Source: ABdhPJyBw5NXF/715OeKg6IgA5qyU6RYVd0hslcVhCUZywZ8kfoHLoOdaHJGPyf4uS10BVIJ569zzA==
-X-Received: by 2002:a63:4945:0:b0:398:efe8:3b7a with SMTP id y5-20020a634945000000b00398efe83b7amr17202310pgk.106.1650416853229;
-        Tue, 19 Apr 2022 18:07:33 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id x36-20020a634a24000000b0039cc6fff510sm17693532pga.58.2022.04.19.18.07.32
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IHAzVnuzxuYJX7ZkepRm9BZc+S59p4HkHNttGn59HI4=;
+        b=2nMvivNdYG9ga+09ffH1TAE1+WD+kTyOTSm57I6p3qfFZ8oS099GBNQUiwv/8L9oAQ
+         nHNFWIYcVtdqgmYJj9Mso4abcrCMBzY/LCGWroAfYgCOCs+J+pfK4cQq/6bJj53LhI2Q
+         U9vNyYWDdcKUmXAfXKPEdX+2lQiomgtKXLk/g6lKsZ/7e1f0EwK/3vUndPFLwfmWckWD
+         DTJXxwdVZYqQn430uAqVCZy1Btt1YEgjBlbjjK0ItMlwhmt6solKvGApsyYcYvrnvkSx
+         gnkqcKtpnhvm2zEzsBcSYM4ZWMXASbTdWv54pA3iSZ7ie+9xzmzY3J8VM8yEYXPk9SbK
+         BZWA==
+X-Gm-Message-State: AOAM532e6XqA3mp45+73qJufqxCLti259z5NjhFFTAxcbKoUgQV/Ktit
+        Kc23YZI/rC+xjNhwCwwwrlYtRQ==
+X-Google-Smtp-Source: ABdhPJwLIrIaD2Ik9Pers9+71R5BMbjnqv2e7ktsi8J2VHGUQ2C8DVItqcC/6zEs/lSLqwJxF7ub1g==
+X-Received: by 2002:a9d:3624:0:b0:5e9:5778:d0c6 with SMTP id w33-20020a9d3624000000b005e95778d0c6mr7017809otb.367.1650423253580;
+        Tue, 19 Apr 2022 19:54:13 -0700 (PDT)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id c9-20020a4a8ec9000000b0032438ba79b0sm6140956ool.0.2022.04.19.19.54.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 18:07:32 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 18:07:32 -0700 (PDT)
-X-Google-Original-Date: Tue, 19 Apr 2022 18:04:50 PDT (-0700)
-Subject:     Re: [PATCH -next] cpuidle: riscv: support non-SMP config
-In-Reply-To: <20220403031355.20894-1-rdunlap@infradead.org>
-CC:     linux-kernel@vger.kernel.org, rdunlap@infradead.org, lkp@intel.com,
-        anup@brainfault.org, anup@brainfault.org, apatel@ventanamicro.com,
-        Atish Patra <atishp@rivosinc.com>, daniel.lezcano@linaro.org,
-        rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     rdunlap@infradead.org
-Message-ID: <mhng-d1fe9967-3f64-4ec7-aa82-72571e03bef4@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 19 Apr 2022 19:54:13 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 19:56:18 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        Doug Anderson <dianders@chromium.org>,
+        Alex Elder <elder@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Mike Tipton <quic_mdtipton@quicinc.com>,
+        Georgi Djakov <djakov@kernel.org>
+Subject: Re: [PATCH 3/2] arm64: dts: qcom: sc7180: Remove ipa interconnect
+ node
+Message-ID: <Yl92UkRwlQsd71mr@ripper>
+References: <20220412220033.1273607-1-swboyd@chromium.org>
+ <20220415005828.1980055-1-swboyd@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220415005828.1980055-1-swboyd@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 02 Apr 2022 20:13:55 PDT (-0700), rdunlap@infradead.org wrote:
-> Add <asm/smp.h> for cpuid_to_hartid_map etc.
-> This is needed for both SMP and non-SMP builds, but not having it
-> causes a build error for non-SMP:
->
-> drivers/cpuidle/cpuidle-riscv-sbi.c: In function 'sbi_cpuidle_init_cpu':
-> drivers/cpuidle/cpuidle-riscv-sbi.c:350:26: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror=implicit-function-declaration]
->
-> Fixes: 6abf32f1d9c5 ("cpuidle: Add RISC-V SBI CPU idle driver")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: Anup Patel <anup.patel@wdc.com>
-> Cc: Anup Patel <anup@brainfault.org>
-> Cc: Anup Patel <apatel@ventanamicro.com>
-> Cc: Atish Patra <atishp@rivosinc.com>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-riscv@lists.infradead.org
-> Cc: Palmer Dabbelt <palmer@rivosinc.com>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Albert Ou <aou@eecs.berkeley.edu>
-> ---
->  drivers/cpuidle/cpuidle-riscv-sbi.c |    1 +
->  1 file changed, 1 insertion(+)
->
-> --- linux-next-20220401.orig/drivers/cpuidle/cpuidle-riscv-sbi.c
-> +++ linux-next-20220401/drivers/cpuidle/cpuidle-riscv-sbi.c
-> @@ -22,6 +22,7 @@
->  #include <linux/pm_runtime.h>
->  #include <asm/cpuidle.h>
->  #include <asm/sbi.h>
-> +#include <asm/smp.h>
->  #include <asm/suspend.h>
->
->  #include "dt_idle_states.h"
+On Thu 14 Apr 17:58 PDT 2022, Stephen Boyd wrote:
 
-Thanks, this is on fixes.
+> This device node is unused now that we've removed the driver that
+> consumed it in the kernel. Drop the unused node to save some space.
+> 
+
+I'm expecting that merging patch 3 and 4 will work, but cause sync_state
+to not happen until the driver changes are merged.
+
+Can you confirm my expectation? And perhaps confirm that it's fine for
+Georgi to pick the driver changes independently of the dts changes...
+
+Regards,
+Bjorn
+
+> Cc: Alex Elder <elder@linaro.org>
+> Cc: Taniya Das <quic_tdas@quicinc.com>
+> Cc: Mike Tipton <quic_mdtipton@quicinc.com>
+> Cc: Georgi Djakov <djakov@kernel.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7180.dtsi | 7 -------
+>  1 file changed, 7 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> index e1c46b80f14a..1ff96ef30e3f 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> @@ -1421,13 +1421,6 @@ mmss_noc: interconnect@1740000 {
+>  			qcom,bcm-voters = <&apps_bcm_voter>;
+>  		};
+>  
+> -		ipa_virt: interconnect@1e00000 {
+> -			compatible = "qcom,sc7180-ipa-virt";
+> -			reg = <0 0x01e00000 0 0x1000>;
+> -			#interconnect-cells = <2>;
+> -			qcom,bcm-voters = <&apps_bcm_voter>;
+> -		};
+> -
+>  		ipa: ipa@1e40000 {
+>  			compatible = "qcom,sc7180-ipa";
+>  
+> -- 
+> https://chromeos.dev
+> 
