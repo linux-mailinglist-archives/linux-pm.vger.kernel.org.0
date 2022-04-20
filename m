@@ -2,95 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDAC7508725
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Apr 2022 13:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 403DC508801
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Apr 2022 14:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353925AbiDTLiu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 20 Apr 2022 07:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
+        id S1378476AbiDTMYx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 20 Apr 2022 08:24:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354346AbiDTLil (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Apr 2022 07:38:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 289F23818C
-        for <linux-pm@vger.kernel.org>; Wed, 20 Apr 2022 04:35:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650454555;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=d4N4aySfLdtOlqYeiwulC0vSXKCn/tdHTX38ZaFwcP8=;
-        b=bAXcVBsMU3NAPO4aQ9izNGyWrF6D/MECjbJaywwszDo6kEYGTxtytQIcuC6NbUbe3sOY9t
-        3ks3GSBarKnTPKJyTbA/iTRL7mo5ffRtOW0QYiqoHOAateyuRokYGG7S3haXnmY9x44mRA
-        PnumsvnkUyfoIrB89BbbynWru8MTp0g=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-21-ohOHLoVhNe-LFcUl1gEhqw-1; Wed, 20 Apr 2022 07:35:53 -0400
-X-MC-Unique: ohOHLoVhNe-LFcUl1gEhqw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 245711C0512A;
-        Wed, 20 Apr 2022 11:35:53 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.193.5])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 282534639F6;
-        Wed, 20 Apr 2022 11:35:49 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Wed, 20 Apr 2022 13:35:52 +0200 (CEST)
-Date:   Wed, 20 Apr 2022 13:35:48 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        ebiederm@xmission.com, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/5] sched,ptrace: Fix ptrace_check_attach() vs PREEMPT_RT
-Message-ID: <20220420113547.GA16575@redhat.com>
-References: <20220413185704.GA30360@redhat.com>
- <20220413185909.GB30360@redhat.com>
- <20220413192053.GY2731@worktop.programming.kicks-ass.net>
- <20220413195612.GC2762@worktop.programming.kicks-ass.net>
- <20220414115410.GA32752@redhat.com>
- <20220414183433.GC32752@redhat.com>
- <YlikBjA3kL3XEQP5@hirez.programming.kicks-ass.net>
- <20220415101644.GA10421@redhat.com>
- <20220415105755.GA15217@redhat.com>
- <20220420102006.GD2731@worktop.programming.kicks-ass.net>
+        with ESMTP id S1353046AbiDTMYw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 20 Apr 2022 08:24:52 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2B931DC4;
+        Wed, 20 Apr 2022 05:22:06 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id i196so1624489ioa.1;
+        Wed, 20 Apr 2022 05:22:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zIMuGelOwwNQPwE8FTN91rI+ZWWawKZ6vr/oEWb7r+g=;
+        b=L9rw5Zhh1ttkACZ/UGkE41DhurYpDRfwGSN0hXY3lcyM86w4izh9lfYEKMQA2eqfl5
+         2YnZx5keDv1+QJa5V6FjhombQD+A7uRVFdVH5in7N87ElIKD774KuDHwcEVQ3FHUwvY7
+         F1ugXlCzETRdv2V/dHui53j2ZCkbyjbv6M7XT8C859yRfW3GY8ptWYCq7Acj+NHGGDZe
+         Z8TQqJepf7XKTF9shFLSwBQ2fld+kNvCVXZyjXI2PPp2ApIYjJ6CMOsB9ayJfhKXn1E1
+         uKXVJdXz85Rmi4YVg9eRM8nW2tzIdU//ZPnPbffGTfGWcAF4XZqxMBjPaB/4YCto+tdP
+         yBSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zIMuGelOwwNQPwE8FTN91rI+ZWWawKZ6vr/oEWb7r+g=;
+        b=XWQyAnVUXLbpkmcTd0dIvmj+mFKHD1zwGsqSzja4Iob2ZeQ4RSKySwFoC2XkdsXnsW
+         kpvmKbao+WAPLHjXmfzm/GcSNFGC89YJG+9w/gl3y73Qn3aAkIvJxxAdVQWlN+EXHDCj
+         pebegsUmdE+B5iQK/pf//1K0+d1tI94hx37Xhp3gIhWn8dBt7xZC4EQbAKLvZTXL6IAG
+         oX27Q9750NTchMxmsfR15NDuelwk5IVrskdWHHJWsyqz8gL9VWg77ME/pHs9lXb39RdQ
+         lkINPxFP+qhXHn5INHZpJNLWO2CTeOKOMlNd15se0EmWhiMVJRyHvXPJlxHNU2byLT1W
+         61uA==
+X-Gm-Message-State: AOAM533rAPMYT6vKLS7ojvgTNu51ke74Pd+a2frqmj9HuMAlgXtDwxrm
+        Q74o9KD9qSKpw8epNfMKiMREN6SHWfCkYCWz+30=
+X-Google-Smtp-Source: ABdhPJzTPl3fpisqquEunK202EZu+8nIk8CqPrym6nw4Ij8xrv+W8LHM0AuAQ5fzaPtaanpkSEYPKBd97UXjkMJwTQo=
+X-Received: by 2002:a05:6602:1c6:b0:657:2c41:7d0 with SMTP id
+ w6-20020a05660201c600b006572c4107d0mr94775iot.31.1650457326295; Wed, 20 Apr
+ 2022 05:22:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220420102006.GD2731@worktop.programming.kicks-ass.net>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220330094126.30252-1-alistair@alistair23.me>
+ <20220330094126.30252-2-alistair@alistair23.me> <45acc349-8fea-f755-065c-c561949c45af@roeck-us.net>
+In-Reply-To: <45acc349-8fea-f755-065c-c561949c45af@roeck-us.net>
+From:   Alistair Francis <alistair23@gmail.com>
+Date:   Wed, 20 Apr 2022 22:21:40 +1000
+Message-ID: <CAKmqyKOqjperoku_uOy4sCa6LmCUtfB7SCvhLEKxLtcwDkzRyA@mail.gmail.com>
+Subject: Re: [PATCH v20 1/4] mfd: silergy,sy7636a: Add config option
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Alistair Francis <alistair@alistair23.me>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Zhang Rui <rui.zhang@intel.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Amit Kucheria <amitk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/20, Peter Zijlstra wrote:
+On Thu, Mar 31, 2022 at 6:02 AM Guenter Roeck <linux@roeck-us.net> wrote:
 >
-> On Fri, Apr 15, 2022 at 12:57:56PM +0200, Oleg Nesterov wrote:
+> On 3/30/22 02:41, Alistair Francis wrote:
+> > Add a specific MFD_SY7636A config option.
 > >
-> > ptrace_resume() does  wake_up_state(child, __TASK_TRACED) but doesn't
-> > clear JOBCTL_TRACED. The "else" branch in ptrace_stop() leaks this flag
-> > too. Perhaps I missed something, I'll reread 1/5 again, but the main
-> > question to me is whether 1-2 actually need the JOBCTL_TRACED_FROZEN flag.
+> > As part of this change we can use MFD_SY7636A as a dependency for all
+> > SY7636a components and also remove the name from MFD_SIMPLE_MFD_I2C as
+> > it no longer needs to be selectable.
+> >
+> > Signed-off-by: Alistair Francis <alistair@alistair23.me>
 >
-> Ok, getting back to this. So I did the change to ptrace_resume(), but
-> I'm not entirely sure I understand the issue with the else branch of
-> ptrace_stop().
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+Any chance of getting this in for 5.18? It would be nice to have the
+configs all sorted before the release
+
+Alistair
+
 >
-> My understanding is that if we hit that else branch, we've raced wth
-> __ptrace_unlink(), and that will have done:
-
-Yes, thanks for correcting me, I forgot that may_ptrace_stop() has gone.
-
-Oleg.
-
+> > ---
+> >   drivers/hwmon/Kconfig     |  1 +
+> >   drivers/mfd/Kconfig       | 12 +++++++++++-
+> >   drivers/regulator/Kconfig |  1 +
+> >   3 files changed, 13 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> > index 68a8a27ab3b7..74b60d24e740 100644
+> > --- a/drivers/hwmon/Kconfig
+> > +++ b/drivers/hwmon/Kconfig
+> > @@ -1693,6 +1693,7 @@ config SENSORS_SIS5595
+> >
+> >   config SENSORS_SY7636A
+> >       tristate "Silergy SY7636A"
+> > +     depends on MFD_SY7636A
+> >       help
+> >         If you say yes here you get support for the thermistor readout of
+> >         the Silergy SY7636A PMIC.
+> > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> > index 3b59456f5545..c47cb755757b 100644
+> > --- a/drivers/mfd/Kconfig
+> > +++ b/drivers/mfd/Kconfig
+> > @@ -1095,6 +1095,16 @@ config MFD_SPMI_PMIC
+> >         Say M here if you want to include support for the SPMI PMIC
+> >         series as a module.  The module will be called "qcom-spmi-pmic".
+> >
+> > +config MFD_SY7636A
+> > +     tristate "Silergy SY7636A voltage regulator"
+> > +     depends on I2C
+> > +     select MFD_SIMPLE_MFD_I2C
+> > +     help
+> > +       Enable support for Silergy SY7636A voltage regulator.
+> > +
+> > +       To enable support for building sub-devices as modules,
+> > +       choose M here.
+> > +
+> >   config MFD_RDC321X
+> >       tristate "RDC R-321x southbridge"
+> >       select MFD_CORE
+> > @@ -1202,7 +1212,7 @@ config MFD_SI476X_CORE
+> >         module will be called si476x-core.
+> >
+> >   config MFD_SIMPLE_MFD_I2C
+> > -     tristate "Simple Multi-Functional Device support (I2C)"
+> > +     tristate
+> >       depends on I2C
+> >       select MFD_CORE
+> >       select REGMAP_I2C
+> > diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+> > index 5ef2306fce04..c8ce6e5eea24 100644
+> > --- a/drivers/regulator/Kconfig
+> > +++ b/drivers/regulator/Kconfig
+> > @@ -1219,6 +1219,7 @@ config REGULATOR_STW481X_VMMC
+> >
+> >   config REGULATOR_SY7636A
+> >       tristate "Silergy SY7636A voltage regulator"
+> > +     depends on MFD_SY7636A
+> >       help
+> >         This driver supports Silergy SY3686A voltage regulator.
+> >
+>
