@@ -2,258 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7F4507F5E
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Apr 2022 05:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2593A507F84
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Apr 2022 05:17:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359242AbiDTDIK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 19 Apr 2022 23:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36872 "EHLO
+        id S1359205AbiDTDT0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 19 Apr 2022 23:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359188AbiDTDH4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 23:07:56 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263283CA7E
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 20:04:25 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id w27-20020a056830061b00b00604cde931a0so286580oti.2
-        for <linux-pm@vger.kernel.org>; Tue, 19 Apr 2022 20:04:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bOmRDQWsh4LJc0ss61NPg8qXWsb+khLjGhqRuXFnjwU=;
-        b=bAEDSRKGCAmjsYmi9/pGay3D0pg8XPKtai9P6r0xgeBxSvo/ORnSkYRuFaosMAmpIm
-         nX0hcjiP+JLYhFwZV9lLNoDJJLxWmpnJ1bwoIl/X+JqOwSWxtgxYbmbtrjnbhCWawuiI
-         CDW+0mkGLvbIgFonVOAi23HNXaoruJtORwESlKapCUBFiCpNMjC4melyj20KJERAOozu
-         /hfgJ+4d6KBH8nfbeUEEq0OHBbGj9MAxmzSgmCV95g7a9tRJBI72nUSCX+pvbplvu7jo
-         uNJL1NrL0/ianvgdM2Pr3oVaoWnw/ozCqhzjYGz5QT6L6WZPBtJm+N75mg0Ui4cEX9/a
-         d03w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bOmRDQWsh4LJc0ss61NPg8qXWsb+khLjGhqRuXFnjwU=;
-        b=F/xwOX3D+tQxzj2T0Et1NTE1dKG0FfloolqrgysVMfYMdLt6rWRBx3r8LqX4t1Q+i3
-         xqkAsWDFmVYKB5bg4chz2O0OurJ4zc4zLz9qJgnwHmSUacqT6blLfCI4j6gXgYvaetYH
-         3spROu844xOKMXT8F4+9wvtQUwzPaE6N/s+eFwv0FUUH0q7qzUAqhEeg356Z425BEgcm
-         CxxULvt9qYVu+g9VlyG+K/EQCGTG+3vlWZl1MRPxIdt63V1Kgq4NkwuBIHBgojESzMwP
-         pXQXfZ9P6on7R0gMf707EmJ+H7FZAdBqEVRzNYHDNO0Z+fb8HYv+b01Jwu6oViEa8SvK
-         TstQ==
-X-Gm-Message-State: AOAM530VgZs3HotDvz/FyB2dttJHEMWt5fOz7UvedShU/N+UPorwyQsB
-        71tyZcHjTi9rcauQ+IMsbm+ygw==
-X-Google-Smtp-Source: ABdhPJz78HNHOCUdlI0fxzBVktGevGVhmjxibFmoHtIZNr8U2JMJL+kspGLrc1H8lG7ze5d0XHe6Gg==
-X-Received: by 2002:a9d:7685:0:b0:5e6:b452:4e9 with SMTP id j5-20020a9d7685000000b005e6b45204e9mr7073498otl.254.1650423864144;
-        Tue, 19 Apr 2022 20:04:24 -0700 (PDT)
-Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id x24-20020a056870a79800b000e2e53716fbsm6121695oao.31.2022.04.19.20.04.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 20:04:23 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 20:06:28 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
-Message-ID: <Yl94tB+FrZu/am0/@ripper>
-References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
- <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
- <YlWztZknl4OBmekp@ripper>
- <02fc797a-190f-3558-5ee1-c9c3320f3d57@linaro.org>
+        with ESMTP id S1349010AbiDTDTZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 19 Apr 2022 23:19:25 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7109FD6;
+        Tue, 19 Apr 2022 20:16:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650424601; x=1681960601;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=xjxCuPU1wDXGLoKd2DsY+kJ78tcX02C4AYF3wxGy00A=;
+  b=XZ+VoGmTr0oSig5pJ7UGumJicNTfgzbIZWi1RZqQxnAoV7YCgLPXJx6t
+   innQiSHAMWp4KoG6ixP8OeOD4X+n7hzaKmpqDUeY8RWQS6D3SMBuWN32i
+   m6aal5PlbjItJUw0N42yblmqKLxMd9LTesMaVAGLvkcHTlA86xzx7HTtC
+   BInTI4BOrraqPdoNouJPtGRCDXAE4D1uHw8taT56loZu8ebV62uh+FNOl
+   Ck9oHUTbZqTBS/cduzyAeRnNb/d7UD9hCrfL6fdxKIdInusirr1+Y/VrE
+   uXgFdMCpmRUkXXcCGM5LaQ2mafFGxib/CJjTxV4Xm8IDT2Gsmh+8jSJio
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="289029155"
+X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
+   d="scan'208";a="289029155"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 20:16:40 -0700
+X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
+   d="scan'208";a="529566305"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 20:16:40 -0700
+Message-ID: <b78bd722081baa4db571c0360559f105d0a7d175.camel@linux.intel.com>
+Subject: Re: [PATCH v2 0/4] tools/thermal: thermal library and tools
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Date:   Tue, 19 Apr 2022 20:16:40 -0700
+In-Reply-To: <51d63f20-4834-184b-2ac2-30c399bd9988@linaro.org>
+References: <20220330100444.3846661-1-daniel.lezcano@linaro.org>
+         <f526d227-ffbb-4ac0-ceb6-c793ab912559@linaro.org>
+         <5380fef6d45f2f7a0b8a5f681934f02943d5e138.camel@linux.intel.com>
+         <9ccb342b-2f20-6efd-a668-96d593aa921e@linaro.org>
+         <CAJZ5v0hrRuVz8pgD6-m7EhVdHPPn67O4ajx_7vkOOOYdTkv2BQ@mail.gmail.com>
+         <0181977f5843fb9df4eae7d397d96c890846a0db.camel@linux.intel.com>
+         <f1d2b1c7a9691c64ece07fbc1fc5a2d4e70aa00a.camel@linux.intel.com>
+         <916d2e4c-7224-f824-f3cf-5c1dee411ed1@linaro.org>
+         <dc9b317f88f7d43cd30141376156c0f3eec687d8.camel@linux.intel.com>
+         <ba3cbf3d-938b-1530-1178-68b447f20a9c@linaro.org>
+         <f7e4f4604f122dfab4aa5e589d68eb2c8773e00d.camel@linux.intel.com>
+         <51d63f20-4834-184b-2ac2-30c399bd9988@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <02fc797a-190f-3558-5ee1-c9c3320f3d57@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed 13 Apr 02:07 PDT 2022, Krzysztof Kozlowski wrote:
+Hi Daniel,
 
-> On 12/04/2022 19:15, Bjorn Andersson wrote:
-> >>  
-> >> +	opp_table->clks = kmalloc_array(1, sizeof(*opp_table->clks),
-> >> +					GFP_KERNEL);
+On Tue, 2022-04-19 at 22:26 +0200, Daniel Lezcano wrote:
+> 
+> Hi Srinivas,
+> 
+> 
+> On 18/04/2022 05:36, srinivas pandruvada wrote:
+> > Hi Daniel,
 > > 
-> > This seems to be 81 chars long, perhaps worth not line breaking?
-> 
-> I doubt that it will increase the readability:
-> 
-> 	opp_table->clks = kmalloc_array(1,
-> 					sizeof(*opp_table->clks),
-> 					GFP_KERNEL);
-> 
-> 80-character is not anymore that strict hard limit and in such case
-> using 1-2 characters longer improves the code.
-> 
-
-I was suggesting that you remove the line break
-
-	opp_table->clks = kmalloc_array(1, sizeof(*opp_table->clks), GFP_KERNEL);
-
-Seems to be 81 chars long, which is fine in my book with or without the
-80-char guideline.
-
+> > The attached diff fixes the crash,
 > > 
-> >> +	if (!opp_table->clks)
-> >> +		return ERR_PTR(-ENOMEM);
-> >> +
-> >>  	/* Find clk for the device */
-> >> -	opp_table->clk = clk_get(dev, NULL);
-> >> +	opp_table->clks[0] = clk_get(dev, NULL);
-> >>  
-> >> -	ret = PTR_ERR_OR_ZERO(opp_table->clk);
-> >> -	if (!ret)
-> >> +	ret = PTR_ERR_OR_ZERO(opp_table->clks[0]);
-> >> +	if (!ret) {
-> >> +		opp_table->clk_count = 1;
-> >>  		return opp_table;
-> >> +	}
-> > [..]
-> >> +struct opp_table *dev_pm_opp_set_clknames(struct device *dev,
-> >> +					  const char * const names[],
-> >> +					  unsigned int count)
-> >>  {
-> >>  	struct opp_table *opp_table;
-> >> -	int ret;
-> >> +	struct clk *clk;
-> >> +	int ret, i;
-> >>  
-> >>  	opp_table = _add_opp_table(dev, false);
-> >>  	if (IS_ERR(opp_table))
-> >> @@ -2159,70 +2259,92 @@ struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name)
-> >>  	}
-> >>  
-> >>  	/* clk shouldn't be initialized at this point */
-> >> -	if (WARN_ON(opp_table->clk)) {
-> >> +	if (WARN_ON(opp_table->clks)) {
-> >>  		ret = -EBUSY;
-> >>  		goto err;
-> >>  	}
-> >>  
-> >> -	/* Find clk for the device */
-> >> -	opp_table->clk = clk_get(dev, name);
-> >> -	if (IS_ERR(opp_table->clk)) {
-> >> -		ret = dev_err_probe(dev, PTR_ERR(opp_table->clk),
-> >> -				    "%s: Couldn't find clock\n", __func__);
-> >> +	opp_table->clks = kmalloc_array(count, sizeof(*opp_table->clks),
-> >> +					GFP_KERNEL);
-> >> +	if (!opp_table->clks) {
-> >> +		ret = -ENOMEM;
-> >>  		goto err;
-> >>  	}
-> >>  
-> >> +	for (i = 0; i < count; i++) {
-> >> +		clk = clk_get(dev, names[i]);
-> >> +		if (IS_ERR(clk)) {
-> >> +			ret =  dev_err_probe(dev, PTR_ERR(clk),
-> >> +					     "%s: Couldn't find clock %s\n",
-> >> +					     __func__, names[i]);
-> >> +			goto free_clks;
-> >> +		}
-> >> +
-> >> +		opp_table->clks[i] = clk;
-> >> +	}
-> > 
-> > Wouldn't it be convenient to make clks a struct clk_bulk_data array
-> > and use clk_bulk_get()/clk_bulk_put() instead?
+> > Also when you run in daemon mode, you need to use some pid lock
+> > file.
+> > Otherwise it launches multiple daemons.
 > 
-> I was thinking about this but clk_bulk_get() requires struct
-> clk_bulk_data, so the code in "get" is not actually smaller if function
-> receives array of clock names.
+> I've been thinking about it and I don't think it is a problem to have
+> multiple instances of the daemon. The netlink allows multicast and
+> can 
+> be run as non-root user.
 > 
-> OTOH, usage of clk_bulk_get() would reduce code in: _put_clocks(). Rest
-> of the code would be more-or-less the same, including all corner cases
-> when clocks are missing.
+> If the finality of the thermal engine is to manage the system and has
+> some code making actions on the system with the root privilege, the
+> init 
+> scripts can take care of the pid lock
 > 
+If there is use case, then this is fine otherwise wasting system
+resources.
 
-Fair enough, I think you're right that it's not going to be much
-difference.
-
-Regards,
-Bjorn
+Thanks,
+Srinivas
 
 
-> > 
-> >> +
-> >> +	opp_table->clk_count = count;
-> >> +
-> >>  	return opp_table;
-> >>  
-> >> +free_clks:
-> >> +	while (i != 0)
-> >> +		clk_put(opp_table->clks[--i]);
-> >> +
-> >> +	kfree(opp_table->clks);
-> >> +	opp_table->clks = NULL;
-> >> +	opp_table->clk_count = -1;
-> >>  err:
-> >>  	dev_pm_opp_put_opp_table(opp_table);
-> >>  
-> >>  	return ERR_PTR(ret);
-> >>  }
-> >> -EXPORT_SYMBOL_GPL(dev_pm_opp_set_clkname);
-> >> +EXPORT_SYMBOL_GPL(dev_pm_opp_set_clknames);
-> > [..]
-> >> +static int _read_clocks(struct dev_pm_opp *opp, struct opp_table *opp_table,
-> >> +			struct device_node *np)
-> >> +{
-> >> +	int count, ret;
-> >> +	u64 *freq;
-> >> +
-> >> +	count = of_property_count_u64_elems(np, "opp-hz");
-> >> +	if (count < 0) {
-> >> +		pr_err("%s: Invalid %s property (%d)\n",
-> >> +			__func__, of_node_full_name(np), count);
-> > 
-> > Wouldn't %pOF be convenient to use here, seems like it becomes short
-> > enough that you don't have to wrap this line then.
-> 
-> Yes, I forgot about %pOF.
-> 
-> > 
-> >> +		return count;
-> >> +	}
-> >> +
-> >> +	if (count != opp_table->clk_count) {
-> >> +		pr_err("%s: number of rates %d does not match number of clocks %d in %s\n",
-> >> +		       __func__, count, opp_table->clk_count,
-> >> +		       of_node_full_name(np));
-> >> +		return -EINVAL;
-> >> +	}
-> >> +
-> >> +	freq = kmalloc_array(count, sizeof(*freq), GFP_KERNEL);
-> >> +	if (!freq)
-> >> +		return -ENOMEM;
-> >> +
-> >> +	ret = of_property_read_u64_array(np, "opp-hz", freq, count);
-> >> +	if (ret) {
-> >> +		pr_err("%s: error parsing %s: %d\n", __func__,
-> >> +		       of_node_full_name(np), ret);
-> >> +		ret = -EINVAL;
-> >> +		goto free_freq;
-> >> +	}
-> > 
-> > Regards,
-> > Bjorn
+
+
+
 > 
 > 
-> Best regards,
-> Krzysztof
+
+
