@@ -2,188 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F218B509FEF
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Apr 2022 14:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AAF350A26D
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Apr 2022 16:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385511AbiDUMtd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Apr 2022 08:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48390 "EHLO
+        id S1389398AbiDUOaj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Apr 2022 10:30:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241750AbiDUMtc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Apr 2022 08:49:32 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA51326D6;
-        Thu, 21 Apr 2022 05:46:42 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kkcfw3M6BzFq0j;
-        Thu, 21 Apr 2022 20:44:08 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 21 Apr 2022 20:46:40 +0800
-CC:     Bjorn Helgaas <bhelgaas@google.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linuxarm <linuxarm@huawei.com>, <prime.zeng@huawei.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v3] PCI: Make sure the bus bridge powered on when scanning
- bus
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Yicong Yang <yangyicong@hisilicon.com>
-References: <20220414123736.34150-1-yangyicong@hisilicon.com>
- <20220420163249.GA1305194@bhelgaas>
- <CAJZ5v0jarkeaPsq6qPLotYVqfw9rZ_OdawxBN1-1=YhvVQAz9Q@mail.gmail.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <1a9ab733-2377-4fd2-6a3b-eade26cdf9d3@huawei.com>
-Date:   Thu, 21 Apr 2022 20:46:39 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        with ESMTP id S1389253AbiDUOaK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Apr 2022 10:30:10 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC723ED09
+        for <linux-pm@vger.kernel.org>; Thu, 21 Apr 2022 07:27:20 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id z8so5793973oix.3
+        for <linux-pm@vger.kernel.org>; Thu, 21 Apr 2022 07:27:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=Ax4avlN0oglfzD6swQB5upAnrR9vbmcO4lly1CB9MS0=;
+        b=WsC04F1RsX1JNzcannfCWEjoteFcPfSy9HqfKLlLLTSxKaAMW7vo8kPvQ7SvxIA6Az
+         9YtRXmHBaxvC9+gXLPvne/Qy+0JtquZhXTKVBz5Ea99QSDnatgl1Ir0cnm+nIHD8GLYl
+         G9lIfXbTKgztzzhNMoNW7xaq4yvZ2xzkfXXfKBRurKTXLxBCIbdsin7VitVBvUFo7fD2
+         BMLl1XY+ISNNf9Yd9ZL7WADg+zhKDnfBQ8F4wLelxoXPNzDcLlTSR0JigF5DZteMcXTd
+         9ooTO4DRB31uXzPaPfZVuBZtmL63ckMptbfxHy1rT689f4dbtNMflQ+kL9z72FB9g2rk
+         mOZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Ax4avlN0oglfzD6swQB5upAnrR9vbmcO4lly1CB9MS0=;
+        b=MzNemwRCB64wHvYCTzotB4Paqm7SxXpQmJ+eoyceD0+kLKJ4WX3u2lVD89B+46a0jn
+         TWVBqbIkcbNnCeELJzc3KLdmeQdBD5exhg9f8UA9A5AVzhvOxlj0shmDRy4zjnlHLfdi
+         FTl1LlsVN9Ds6sufJXyJ+zbTsGHcK3aSb7DkIwzFYr6DyBENBM+/TJL9H65Kge5CdC6L
+         QHe1W+Z0E8beDSX18er5W2pMeU0nIzbqtpH9mcwbrabDG22EbC24glBIM9RPcODNMzNP
+         yburzJEjDAO1J3pInt3c7Ac1w7OvXQ29d+G+rjDAvZhrA34mpCzk4HYQU0COhksEN5in
+         BmRA==
+X-Gm-Message-State: AOAM533iOtyX6xsWmWoDxSFyOb48KkzhL9pbdadaMNNcy1UczNR8KYUb
+        29zkZBlHDV+ROko75mb9XOy77fXRR65d0Gl5
+X-Google-Smtp-Source: ABdhPJwaFVAfSTDez3Zu80iJyqsv3GD/rPUN1R5xCe3IUJJdfZQU4qTP1ofMsk33NJeB4R6esgp1sQ==
+X-Received: by 2002:a05:6808:180c:b0:322:3d43:c38b with SMTP id bh12-20020a056808180c00b003223d43c38bmr4162516oib.8.1650551239426;
+        Thu, 21 Apr 2022 07:27:19 -0700 (PDT)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id s14-20020a0568302a8e00b006054e841915sm4296295otu.73.2022.04.21.07.27.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 07:27:18 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     linux-pm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Vamsi krishna Lanka <quic_vamslank@quicinc.com>
+Subject: Re: (subset) [PATCH 1/4] ARM: dts: qcom: sdx55: do not use underscore in BCM node name
+Date:   Thu, 21 Apr 2022 09:26:56 -0500
+Message-Id: <165055095989.2574292.3311309854371304681.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220411085935.130072-1-krzysztof.kozlowski@linaro.org>
+References: <20220411085935.130072-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0jarkeaPsq6qPLotYVqfw9rZ_OdawxBN1-1=YhvVQAz9Q@mail.gmail.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2022/4/21 0:42, Rafael J. Wysocki wrote:
-> On Wed, Apr 20, 2022 at 6:32 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->>
->> [+cc Rafael, linux-pm, since I'd really like his ack/review]
->>
->> On Thu, Apr 14, 2022 at 08:37:36PM +0800, Yicong Yang wrote:
->>> When the bus bridge is runtime suspended, we'll fail to rescan
->>> the devices through sysfs as we cannot access the configuration
->>> space correctly when the bridge is in D3hot.
->>> It can be reproduced like:
->>>
->>> $ echo 1 > /sys/bus/pci/devices/0000:80:00.0/0000:81:00.1/remove
->>> $ echo 1 > /sys/bus/pci/devices/0000:80:00.0/pci_bus/0000:81/rescan
->>>
->>> 0000:80:00.0 is root port and is runtime suspended and we cannot
->>> get 0000:81:00.1 after rescan.
->>>
->>> Make bridge powered on when scanning the child bus, by adding
->>> pm_runtime_get_sync()/pm_runtime_put() in pci_scan_child_bus_extend().
->>>
->>> A similar issue is met and solved by
->>> d963f6512e15 ("PCI: Power on bridges before scanning new devices")
->>> which rescan the devices through /sys/bus/pci/devices/0000:80:00.0/rescan.
->>> The callstack is like:
->>>
->>> dev_rescan_restore()
->>>   pci_rescan_bus()
->>>     pci_scan_bridge_extend()
->>>       pci_scan_child_bus_extend() /* will wake up the bridge with this patch */
->>>
->>> With this patch the issue is also resolved, so let's remove the calls of
->>> pm_runtime_*() in pci_scan_bridge_extend().
->>>
->>> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
->>> Cc: Bjorn Helgaas <bhelgaas@google.com>
->>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
->>> ---
->>> Change since v2:
->>> - just rebase it on v5.18-rc2
->>> Link: https://lore.kernel.org/linux-pci/1601029386-4928-1-git-send-email-yangyicong@hisilicon.com/
->>>
->>> Change since v1:
->>> - use an intermediate variable *bridge as suggested
->>> - remove the pm_runtime_*() calls in pci_scan_bridge_extend()
->>> Link: https://lore.kernel.org/linux-pci/1596022223-4765-1-git-send-email-yangyicong@hisilicon.com/
->>>
->>>  drivers/pci/probe.c | 21 ++++++++++++---------
->>>  1 file changed, 12 insertions(+), 9 deletions(-)
->>>
->>> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
->>> index 17a969942d37..2ca6b4b708e3 100644
->>> --- a/drivers/pci/probe.c
->>> +++ b/drivers/pci/probe.c
->>> @@ -1257,12 +1257,6 @@ static int pci_scan_bridge_extend(struct pci_bus *bus, struct pci_dev *dev,
->>>       u8 fixed_sec, fixed_sub;
->>>       int next_busnr;
->>>
->>> -     /*
->>> -      * Make sure the bridge is powered on to be able to access config
->>> -      * space of devices below it.
->>> -      */
->>> -     pm_runtime_get_sync(&dev->dev);
+On Mon, 11 Apr 2022 10:59:32 +0200, Krzysztof Kozlowski wrote:
+> Align BCM voter node with DT schema by using hyphen instead of
+> underscore.
 > 
-> I understand why this is added below, but I'm not sure why it is safe
-> to remove it from here.
-> 
-> Say the bridge is initially in D3cold and we are accessing its config
-> space below.  Why is it not necessary to power it up in that case?
 > 
 
-For the bridge in runtime D3cold we still need to power it up. I considered and tested this on the platform
-supported D3hot only. Under D3hot state the configuration space is still accessible and the brigde will be
-powered up when scanning children, but under D3cold we'll fail to read the bus number here. Will fix it.
+Applied, thanks!
 
->>> -
->>>       pci_read_config_dword(dev, PCI_PRIMARY_BUS, &buses);
->>>       primary = buses & 0xFF;
->>>       secondary = (buses >> 8) & 0xFF;
->>> @@ -1464,8 +1458,6 @@ static int pci_scan_bridge_extend(struct pci_bus *bus, struct pci_dev *dev,
->>>  out:
->>>       pci_write_config_word(dev, PCI_BRIDGE_CONTROL, bctl);
->>>
->>> -     pm_runtime_put(&dev->dev);
->>> -
->>>       return max;
->>>  }
->>>
->>> @@ -2859,11 +2851,19 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
->>>       unsigned int used_buses, normal_bridges = 0, hotplug_bridges = 0;
->>>       unsigned int start = bus->busn_res.start;
->>>       unsigned int devfn, fn, cmax, max = start;
->>> -     struct pci_dev *dev;
->>> +     struct pci_dev *dev, *bridge = bus->self;
-> 
-> I would initialize the new variable in a separate line.
-> 
+[1/4] ARM: dts: qcom: sdx55: do not use underscore in BCM node name
+      commit: 568cd3243331b6bf0702665f7bd90baa93e2b3ac
 
-will separate them.
-
-Thanks.
-
->>>       int nr_devs;
->>>
->>>       dev_dbg(&bus->dev, "scanning bus\n");
->>>
->>> +     /*
->>> +      * Make sure the bus bridge is powered on, otherwise we may not be
->>> +      * able to scan the devices as we may fail to access the configuration
->>> +      * space of subordinates.
->>> +      */
->>> +     if (bridge)
->>> +             pm_runtime_get_sync(&bridge->dev);
->>> +
->>>       /* Go find them, Rover! */
->>>       for (devfn = 0; devfn < 256; devfn += 8) {
->>>               nr_devs = pci_scan_slot(bus, devfn);
->>> @@ -2976,6 +2976,9 @@ static unsigned int pci_scan_child_bus_extend(struct pci_bus *bus,
->>>               }
->>>       }
->>>
->>> +     if (bridge)
->>> +             pm_runtime_put(&bridge->dev);
->>> +
->>>       /*
->>>        * We've scanned the bus and so we know all about what's on
->>>        * the other side of any bridges that may be on this bus plus
->>> --
-> .
-> 
+Best regards,
+-- 
+Bjorn Andersson <bjorn.andersson@linaro.org>
