@@ -2,154 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB02650A9B8
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Apr 2022 22:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE6650AB81
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Apr 2022 00:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392191AbiDUUKa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Apr 2022 16:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
+        id S234304AbiDUWbS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Apr 2022 18:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbiDUUK2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Apr 2022 16:10:28 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8034C78E;
-        Thu, 21 Apr 2022 13:07:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NdfLnn05R7fjDEiBPK6Cu9YpjR96BrxFTg+OBZR4cMU=; b=VyGfhH7nwhulIRPAAYz6O2eC8T
-        zomZ21Q665Y4fWYko1XBovWfs9G4rmXmxxIZu4wEanYOz1XKrfB2oGdCI9VIOy6oo+L7ORTzJp34l
-        LGL6IDsUPq/5oW57AJ+anM0/G4541Z68t/kWkroeXOPmj+dFAYQgQIXEXb6CDwu9B3BbpSG41ydCb
-        BJcf5m6JxtR9xG+bZCAyAzeja81a7itfYyQPT6MEXwNTdqEB4vm6YZkC/fTd/6Jz6jafIY3ZHjr+Q
-        1wXZSNVItxlWTOvwNjrUG8IcrkVP+NaNOXUnRmbPUnnGnD0uEyK79SbZz86oPKxO2tYv8Co2rT7Fd
-        JfsJfM3A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nhd5F-007VjJ-T1; Thu, 21 Apr 2022 20:07:22 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 68CB79861C1; Thu, 21 Apr 2022 22:07:21 +0200 (CEST)
-Date:   Thu, 21 Apr 2022 22:07:21 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] freezer,sched: Rewrite core freezer logic
-Message-ID: <20220421200721.GF2762@worktop.programming.kicks-ass.net>
-References: <20220421150248.667412396@infradead.org>
- <20220421150655.001952823@infradead.org>
- <878rrys5yj.fsf@email.froward.int.ebiederm.org>
- <20220421195551.GO2731@worktop.programming.kicks-ass.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220421195551.GO2731@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229775AbiDUWbS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Apr 2022 18:31:18 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E524B42C
+        for <linux-pm@vger.kernel.org>; Thu, 21 Apr 2022 15:28:26 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id q12so5784114pgj.13
+        for <linux-pm@vger.kernel.org>; Thu, 21 Apr 2022 15:28:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Z/WL4sEfilsdTNMCzpQ4AUYKUU/6fA7UgWxPOldA7e0=;
+        b=DCXNDtgEIbQlslJM2sme6aHreWG5byjxFkM19clb/BPTLe3LO+1bN8luGxz7gcFLH2
+         V8TxBt5zvjxtLWo6QtqGc5jeNy0BsSR5R0xNy7AKvReXzahuYaLSPkLjTf+Ue/17I5wx
+         81dsfmAdQFC3P71z0Hb0cx1qBab0qVQ1xwNEVrEENevqHC9SLaPohX4yodxTix65LSOl
+         7yS8Ug1GH6K7lJA9I6nbv9VQ3sst2BzrsWmk6t61DZfbBJaKHohxxlxgehgkJfsXuvCo
+         nytHu38tVwNI+SN18mZjCgcA3niWmlGT1Ly3o9boYquSP/NMt820jyG6cGjK8q6VheRE
+         vdug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=Z/WL4sEfilsdTNMCzpQ4AUYKUU/6fA7UgWxPOldA7e0=;
+        b=IIo/XcjpZCPQMBJNC+Xl+SOnsKDRWIMSn2xqSMxk4DhoBQqQGxu8i0f65v6noAXevJ
+         fEbnDbLrMkqm5DluTwUcFezqkH3ykBbljLp6VqXUTS+7hhwDOEhoKRawNqARXqbuRp8f
+         ifaI3bdHqKr/9tdp7umeA5zyA8SOYijGEim22cOsoDYpSqjIIFd1146OJRBwGffkdyN3
+         1BvxOa/Cb9VW2OJmfD8Ov3GmD8Yght1G5qNoCNCKOSrOnaUdhd/oTYrmw8x55zxMKUTz
+         f6d5X6aYUc/NkXusQ0Af1StQm8d4TOOccbXEBL9YDOTMbdenYWqfWjHJGRopn8JeHJhk
+         H/HA==
+X-Gm-Message-State: AOAM532DyAlskPh4ygFZHptll9cTuPu2bjUC3d5X+8rrZOEc6srsrCpl
+        Mab9Wfin5gf4UrGHHl4tGUKQ+g==
+X-Google-Smtp-Source: ABdhPJx+f1tHcxxGqTCOCPo1VxA+zauf4INXX/UghwWOO8s1oRB78YRFQkcmGmPLG7UJfs2EKJR2JA==
+X-Received: by 2002:a05:6a00:2343:b0:50a:7852:902f with SMTP id j3-20020a056a00234300b0050a7852902fmr1657232pfj.5.1650580106441;
+        Thu, 21 Apr 2022 15:28:26 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id a38-20020a056a001d2600b004fae885424dsm131962pfx.72.2022.04.21.15.28.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 15:28:25 -0700 (PDT)
+Date:   Thu, 21 Apr 2022 15:28:25 -0700 (PDT)
+X-Google-Original-Date: Thu, 21 Apr 2022 15:28:23 PDT (-0700)
+Subject:     Re: [PATCH] RISC-V: cpuidle: fix Kconfig select for RISCV_SBI_CPUIDLE
+In-Reply-To: <20220409225317.14332-1-rdunlap@infradead.org>
+CC:     linux-kernel@vger.kernel.org, rdunlap@infradead.org, lkp@intel.com,
+        anup@brainfault.org, apatel@ventanamicro.com, anup@brainfault.org,
+        linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     rdunlap@infradead.org
+Message-ID: <mhng-2811736b-27d0-4312-ba68-ef99947a9372@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 09:55:51PM +0200, Peter Zijlstra wrote:
-> On Thu, Apr 21, 2022 at 12:26:44PM -0500, Eric W. Biederman wrote:
-> > Peter Zijlstra <peterz@infradead.org> writes:
-> > 
-> > > --- a/kernel/ptrace.c
-> > > +++ b/kernel/ptrace.c
-> > > @@ -288,7 +288,7 @@ static int ptrace_check_attach(struct ta
-> > >  	}
-> > >  	__set_current_state(TASK_RUNNING);
-> > >  
-> > > -	if (!wait_task_inactive(child, TASK_TRACED) ||
-> > > +	if (!wait_task_inactive(child, TASK_TRACED|TASK_FREEZABLE) ||
-> > >  	    !ptrace_freeze_traced(child))
-> > >  		return -ESRCH;
-> > 
-> > Do we mind that this is going to fail if the child is frozen
-> > during ptrace_check_attach?
-> 
-> Why should this fail? wait_task_inactive() will in fact succeed if it is
-> frozen due to the added TASK_FREEZABLE and some wait_task_inactive()
-> changes elsewhere in this patch.
+On Sat, 09 Apr 2022 15:53:17 PDT (-0700), rdunlap@infradead.org wrote:
+> There can be lots of build errors when building cpuidle-riscv-sbi.o.
+> They are all caused by a kconfig problem with this warning:
+>
+> WARNING: unmet direct dependencies detected for RISCV_SBI_CPUIDLE
+>   Depends on [n]: CPU_IDLE [=y] && RISCV [=y] && RISCV_SBI [=n]
+>   Selected by [y]:
+>   - SOC_VIRT [=y] && CPU_IDLE [=y]
+>
+> so make the 'select' of RISCV_SBI_CPUIDLE also depend on RISCV_SBI.
+>
+> Fixes: c5179ef1ca0c ("RISC-V: Enable RISC-V SBI CPU Idle driver for QEMU virt machine")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Anup Patel <anup.patel@wdc.com>
+> Cc: Anup Patel <apatel@ventanamicro.com>
+> Cc: Anup Patel <anup@brainfault.org>
+> Cc: Palmer Dabbelt <palmer@rivosinc.com>
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-riscv@lists.infradead.org
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Albert Ou <aou@eecs.berkeley.edu>
+> ---
+>  arch/riscv/Kconfig.socs |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> --- a/arch/riscv/Kconfig.socs
+> +++ b/arch/riscv/Kconfig.socs
+> @@ -38,7 +38,7 @@ config SOC_VIRT
+>  	select SIFIVE_PLIC
+>  	select PM_GENERIC_DOMAINS if PM
+>  	select PM_GENERIC_DOMAINS_OF if PM && OF
+> -	select RISCV_SBI_CPUIDLE if CPU_IDLE
+> +	select RISCV_SBI_CPUIDLE if CPU_IDLE && RISCV_SBI
+>  	help
+>  	  This enables support for QEMU Virt Machine.
 
-These:
+Sorry to be slow here, I seem to remember having written this before but 
+I must have just gotted pulled into something else.
 
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3260,6 +3260,19 @@ int migrate_swap(struct task_struct *cur
- }
- #endif /* CONFIG_NUMA_BALANCING */
- 
-+static inline bool __wti_match(struct task_struct *p, unsigned int match_state)
-+{
-+	unsigned int state = READ_ONCE(p->__state);
-+
-+	if ((match_state & TASK_FREEZABLE) && state == TASK_FROZEN)
-+		return true;
-+
-+	if (state == (match_state & ~TASK_FREEZABLE))
-+		return true;
-+
-+	return false;
-+}
-+
- /*
-  * wait_task_inactive - wait for a thread to unschedule.
-  *
-@@ -3304,7 +3317,7 @@ unsigned long wait_task_inactive(struct
- 		 * is actually now running somewhere else!
- 		 */
- 		while (task_running(rq, p)) {
--			if (match_state && unlikely(READ_ONCE(p->__state) != match_state))
-+			if (match_state && !__wti_match(p, match_state))
- 				return 0;
- 			cpu_relax();
- 		}
-@@ -3319,7 +3332,7 @@ unsigned long wait_task_inactive(struct
- 		running = task_running(rq, p);
- 		queued = task_on_rq_queued(p);
- 		ncsw = 0;
--		if (!match_state || READ_ONCE(p->__state) == match_state)
-+		if (!match_state || __wti_match(p, match_state))
- 			ncsw = p->nvcsw | LONG_MIN; /* sets MSB */
- 		task_rq_unlock(rq, p, &rf);
- 
+IMO the real bug here is that Kconfig.socs is poorly designed: I 
+misunderstood how select works at the time, we should really clean all 
+this up (or maybe just remove it entirely?) so we don't have to 
+duplicate all these dependencies.
 
+That's a bigger project, though so this is on fixes -- it's way better 
+to have the build work.
 
-> And I don't see why ptrace_freeze_traced() should fail. It'll warn
-> though, I should extend/remove that WARN_ON_ONCE() looking at __state,
-> but it should work.
-
-And that looks like (after removal of the one WARN):
-
-static bool ptrace_freeze_traced(struct task_struct *task)
-{
-	unsigned long flags;
-	bool ret = false;
-
-	/* Lockless, nobody but us can set this flag */
-	if (task->jobctl & JOBCTL_LISTENING)
-		return ret;
-
-	if (!lock_task_sighand(task, &flags))
-		return ret;
-
-	if (task_is_traced(task) &&
-	    !looks_like_a_spurious_pid(task) &&
-	    !__fatal_signal_pending(task)) {
-		WARN_ON_ONCE(task->jobctl & JOBCTL_DELAY_WAKEKILL);
-		task->jobctl |= JOBCTL_DELAY_WAKEKILL;
-		ret = true;
-	}
-	unlock_task_sighand(task, &flags);
-
-	return ret;
-}
-
-And nothing there cares about ->__state.
+Thanks!
