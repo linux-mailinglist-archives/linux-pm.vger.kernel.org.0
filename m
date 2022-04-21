@@ -2,53 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB165098C1
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Apr 2022 09:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35FE4509A33
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Apr 2022 10:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385603AbiDUHOv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Apr 2022 03:14:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
+        id S1386399AbiDUIHR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Apr 2022 04:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385621AbiDUHOs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Apr 2022 03:14:48 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D39217057
-        for <linux-pm@vger.kernel.org>; Thu, 21 Apr 2022 00:12:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650525120; x=1682061120;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/cw/sNTx4EM2SSc2yheXO4pAk8iXKAFIMsAs709aLGU=;
-  b=iLWEPJP6oVpu14t38aV93oHeExWQorgQ6zYQxkB7yNL4Cf4LhGMzuX4r
-   SwcA1cDRuML0FxX1FTLAudD8RWs48PvJ0mfERIfgnxA4ssG1bWzQO8ecw
-   bklinRj8xTT/N3DoLlVI2HU/NN6m/3REUwXMl5cvkRKr4YaVLoUCpDUs5
-   VZhB6KZDSRNpyi9veClT4TfgbRkxBlvkohhyaQMCiYDsuSsngoy0TwYqM
-   8X2qpA4BUEpe/G1w5ksoGtcvaUUpnXV6I3oen6/OEn8yLebplqAb72Np3
-   PBfQV0vjCzqPCDs4JIqc2W4Tvl5oFGL49xNN08WiYnElaPTBLLZm6lrdZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="264434637"
-X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="264434637"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 00:11:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="577064194"
-Received: from rzhang1-dev.sh.intel.com ([10.239.48.43])
-  by orsmga008.jf.intel.com with ESMTP; 21 Apr 2022 00:11:54 -0700
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     rjw@rjwysocki.net
-Cc:     linux-pm@vger.kernel.org
-Subject: [PATCH] powercap: intel_rapl: add support for RaptorLake
-Date:   Thu, 21 Apr 2022 23:07:36 +0800
-Message-Id: <20220421150736.94717-1-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.27.0
+        with ESMTP id S1384066AbiDUIHQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Apr 2022 04:07:16 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3006B1DA44
+        for <linux-pm@vger.kernel.org>; Thu, 21 Apr 2022 01:04:27 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-e5e433d66dso4644132fac.5
+        for <linux-pm@vger.kernel.org>; Thu, 21 Apr 2022 01:04:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5BVjlGwH06cTyu6muXsNBsyVK6oxj3UYMa0frNggqds=;
+        b=DW5A8NyrPu5kmtG6ZlwJsLfXNpG7VuBOeXgRhetvMBOfIpBJZ74ru8E03tjXxmvd+X
+         aTPl5MB8ba9gBc2hX7NQogMvyWug9swFGeE6el5EXsMuiVASFXiATSgRsneQ7tant1Ny
+         VsMSqP+yIbaMr8wWKqnDkjIRglGy/D6RQRzmmF08jDIB2uxobioRu0OouR6mGKOfmxAx
+         3T7JXsBZoaBjSw70q6iUm5umC9UUyMIY+Rbo5405g77+oTYcx1d62W7AtAWgp2as7pnp
+         htTdHxQt54wmw5KjhS2D6TVan8zS24RfO1Bf5JTZAqX3LhusLoz4k/SaUvktAw7xycvG
+         p0eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5BVjlGwH06cTyu6muXsNBsyVK6oxj3UYMa0frNggqds=;
+        b=0NG3figTe0/FZAJqnOOXwpeVPAwJfgiCLNRrwTbApo8p15xjvMM+2817QHiZx4UsVz
+         /q+GMzrB97/E+4ksIgOPH8LhI/t2C7ZlmWIbuvv2Mf+lsUeJKicVeqvY+KzMbcNgpDjr
+         jm/biVrnkE7qRfMGijYk35mo26d86J0ayWT1w+wvezGZGzjXnjoOw8h5taXtY/FXYPHY
+         aNRt1mXoySDuzRBWRL6u1nZElog4VaCTelke0F69XIB8r3Sr5J/SSpA4i9wD4bY/naaU
+         k67C/qrjUgop5dVf20CmBVS30yzW+hH4SH8iCu0HYQCqQgjf2qnt9pnB84Ghuge5vlCW
+         RbMA==
+X-Gm-Message-State: AOAM532CpNSu3tERbblYkSUyh1jWTRW90dcbYYW1doKm6M58uAnHlE8a
+        3er4kRN+BqzP2ETcbDJIBDOb+CPkvKtNcEH02d2eLQ==
+X-Google-Smtp-Source: ABdhPJxWY3/xQrMA/LGLDcUbYJsNHYAuaDCQ0ZZwkR5qeQGTshY+L+HBii+8hjXoK0Sn1TiQp41iyOWJUdQus1maen8=
+X-Received: by 2002:a05:6870:d254:b0:db:12b5:da3 with SMTP id
+ h20-20020a056870d25400b000db12b50da3mr3327530oac.211.1650528266235; Thu, 21
+ Apr 2022 01:04:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <0000000000004ecea505c28504b9@google.com> <0000000000007b1cbd05dd1cab5a@google.com>
+In-Reply-To: <0000000000007b1cbd05dd1cab5a@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 21 Apr 2022 10:04:15 +0200
+Message-ID: <CACT4Y+ZWAFKBCnj18n8g8KsrQL9bxO7uCMmcQjk8-24G_caZHw@mail.gmail.com>
+Subject: Re: [syzbot] general protection fault in pm_qos_update_target
+To:     syzbot <syzbot+f7d9295d2565ee819d21@syzkaller.appspotmail.com>
+Cc:     alsa-devel@alsa-project.org, len.brown@intel.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        pavel@ucw.cz, perex@perex.cz, rjw@rjwysocki.net,
+        syzkaller-bugs@googlegroups.com, tiwai@suse.com, tiwai@suse.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,25 +68,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add intel_rapl support for the RaptorLake platform.
+On Wed, 20 Apr 2022 at 23:28, syzbot
+<syzbot+f7d9295d2565ee819d21@syzkaller.appspotmail.com> wrote:
+>
+> syzbot suspects this issue was fixed by commit:
+>
+> commit 3c3201f8c7bb77eb53b08a3ca8d9a4ddc500b4c0
+> Author: Takashi Iwai <tiwai@suse.de>
+> Date:   Tue Mar 22 17:07:19 2022 +0000
+>
+>     ALSA: pcm: Fix races among concurrent prepare and hw_params/hw_free calls
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=104e3034f00000
+> start commit:   dbb5afad100a ptrace: make ptrace() fail if the tracee chan..
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=91ff0467ce169bc
+> dashboard link: https://syzkaller.appspot.com/bug?extid=f7d9295d2565ee819d21
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16c75e73d00000
+>
+> If the result looks correct, please mark the issue as fixed by replying with:
+>
+> #syz fix: ALSA: pcm: Fix races among concurrent prepare and hw_params/hw_free calls
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
----
- drivers/powercap/intel_rapl_common.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-index 07611a00b78f..83da499dd6ec 100644
---- a/drivers/powercap/intel_rapl_common.c
-+++ b/drivers/powercap/intel_rapl_common.c
-@@ -1107,6 +1107,7 @@ static const struct x86_cpu_id rapl_ids[] __initconst = {
- 	X86_MATCH_INTEL_FAM6_MODEL(ROCKETLAKE,		&rapl_defaults_core),
- 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE,		&rapl_defaults_core),
- 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,		&rapl_defaults_core),
-+	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,		&rapl_defaults_core),
- 	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,	&rapl_defaults_spr_server),
- 	X86_MATCH_INTEL_FAM6_MODEL(LAKEFIELD,		&rapl_defaults_core),
- 
--- 
-2.17.1
+Looks legit, that code is in the stack trace:
 
+#syz fix:
+ALSA: pcm: Fix races among concurrent prepare and hw_params/hw_free calls
