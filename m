@@ -2,42 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C943B509C26
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Apr 2022 11:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B04AE509C5E
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Apr 2022 11:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbiDUJOp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Apr 2022 05:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49046 "EHLO
+        id S1381553AbiDUJbd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Apr 2022 05:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbiDUJOd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Apr 2022 05:14:33 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD62224970;
-        Thu, 21 Apr 2022 02:11:36 -0700 (PDT)
-X-UUID: d67f4c6c3a754be6b02c07b0c0461c6d-20220421
+        with ESMTP id S236204AbiDUJbc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Apr 2022 05:31:32 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20EC27FED;
+        Thu, 21 Apr 2022 02:28:42 -0700 (PDT)
+X-UUID: cf98e13ca3e946fe8a34fd1b5d5f830e-20220421
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:b20682e8-a8af-45fd-aee3-b8b1ef1b587a,OB:0,LO
+X-CID-O-INFO: VERSION:1.1.4,REQID:fc5ddcd6-c240-4824-9a46-f3a202e054c3,OB:0,LO
         B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
         ON:release,TS:8
-X-CID-META: VersionHash:faefae9,CLOUDID:21c9a2ef-06b0-4305-bfbf-554bfc9d151a,C
+X-CID-META: VersionHash:faefae9,CLOUDID:188379f0-da02-41b4-b6df-58f4ccd36682,C
         OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: d67f4c6c3a754be6b02c07b0c0461c6d-20220421
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+X-UUID: cf98e13ca3e946fe8a34fd1b5d5f830e-20220421
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
         (envelope-from <roger.lu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1260397824; Thu, 21 Apr 2022 17:11:28 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+        with ESMTP id 1368554041; Thu, 21 Apr 2022 17:28:37 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
  mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 21 Apr 2022 17:11:27 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 21 Apr
- 2022 17:11:26 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ 15.2.792.15; Thu, 21 Apr 2022 17:28:35 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 21 Apr 2022 17:11:26 +0800
-Message-ID: <87d953ecfae99e786b0bc3c3756816114e3af287.camel@mediatek.com>
-Subject: Re: [PATCH v24 3/7] soc: mediatek: SVS: introduce MTK SVS engine
+ Transport; Thu, 21 Apr 2022 17:28:35 +0800
+Message-ID: <3d463c8b099fdb1c9a0df9e615a8ca1d8a034120.camel@mediatek.com>
+Subject: Re: [PATCH v24 0/7] soc: mediatek: SVS: introduce MTK SVS
 From:   Roger Lu <roger.lu@mediatek.com>
 To:     Kevin Hilman <khilman@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
@@ -59,19 +56,18 @@ CC:     Fan Chen <fan.chen@mediatek.com>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Guenter Roeck <linux@roeck-us.net>,
         Jia-wei Chang <jia-wei.chang@mediatek.com>
-Date:   Thu, 21 Apr 2022 17:11:26 +0800
-In-Reply-To: <7h5yn3s3jq.fsf@baylibre.com>
+Date:   Thu, 21 Apr 2022 17:28:35 +0800
+In-Reply-To: <7hczhbe3wn.fsf@baylibre.com>
 References: <20220420102044.10832-1-roger.lu@mediatek.com>
-         <20220420102044.10832-4-roger.lu@mediatek.com>
-         <7h5yn3s3jq.fsf@baylibre.com>
+         <7hczhbe3wn.fsf@baylibre.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,9 +76,7 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Kevin,
 
-Thanks very much for the feedback.
-
-On Wed, 2022-04-20 at 17:06 -0700, Kevin Hilman wrote:
+On Wed, 2022-04-20 at 16:22 -0700, Kevin Hilman wrote:
 > Hi Roger,
 > 
 > 
@@ -93,41 +87,59 @@ On Wed, 2022-04-20 at 17:06 -0700, Kevin Hilman wrote:
 > > Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
 > > when receiving OPP_EVENT_ADJUST_VOLTAGE.
 > > 
-> > Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <
-> > angelogioacchino.delregno@collabora.com>
+> > 1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
+> > 2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by
+> > get_cpu_device().
+> > After retrieving subsys device, SVS driver calls device_link_add() to make
+> > sure probe/suspend callback priority.
+> > 
+> > [1] 
+> > https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp*linux-next&id=25cb20a212a1f989385dfe23230817e69c62bee5__;Lw!!CTRNKA9wMg0ARbw!3gWsdVuiyF0iafrmVINP9FVz7fjGB1UqTPLfMNWEhsl96RDPB-Se6Q-g3F8daK-u$
+> >  
+> > [2] 
+> > https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp*linux-next&id=b325ce39785b1408040d90365a6ab1aa36e94f87__;Lw!!CTRNKA9wMg0ARbw!3gWsdVuiyF0iafrmVINP9FVz7fjGB1UqTPLfMNWEhsl96RDPB-Se6Q-g3Lel3h4j$
+> >  
+> > [3] 
+> > https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.16-next*dts64&id=a8168cebf1bca1b5269e8a7eb2626fb76814d6e2__;Lw!!CTRNKA9wMg0ARbw!3gWsdVuiyF0iafrmVINP9FVz7fjGB1UqTPLfMNWEhsl96RDPB-Se6Q-g3KhMdm00$
+> >  
+> > 
+> > Change since v23:
+> > - Change wording from "Mediatek" to "MediaTek" (uppercase T) in mtk-
+> > svs.yaml.
+> > - Use cpuidle_pause_and_lock() to prevent system from entering cpuidle
+> > instead of applying pm_qos APIs.
+> > - Add kfree() at the end of svs_probe() when encountering probe fail.
+> > - Change MODULE_LICENSE from "GPL v2" to "GPL".
+> > - Add nvmem_cell_put() in error handling when nvmem_cell_read() encounters
+> > fail.
 > 
-> Can SVS work with one or the other clusters disabled?  It seems like it
-> should still be able to work.  However, if you disable the 2nd cluster
-> (e.g. by passing `maxcpus=4` on the kernel command-line, the SVS driver
-> will fail to probe.
+> I also gave you a reviewed-by on v23, but here it is again:
 > 
-> I dont' think it's a blocker for merging this series, but making the
-> probe a bit more robust so it can handle the cluster being disabled
-> would be nice additional fix for later.
+> Reviewed-by: Kevin Hilman <khilman@baylibre.com>
 > 
-> For example, upstream kernel on mt8183-pumpkin board is very unstable
-> with the 2nd cluster enabled (I'm still trying to debug why), but I have
-> to boot with `maxcpus=4` on the cmdline, otherwise kernel fails to boot,
-> so that's how I noticed this probe failure with SVS.
-
-On mt8183 platform, I think SVS can work with one or the other clusters
-disabled. However, SVS is supposed to be enabled after system is stable for not
-involving any power unstable concern.
-
-If we want part of SVS works at the development stage, we can disable non-
-working svs bank as below. Thanks.
-
---- a/drivers/soc/mediatek/mtk-svs.c
-+++ b/drivers/soc/mediatek/mtk-svs.c
-@@ -2164,7 +2164,7 @@ static struct svs_bank svs_mt8183_banks[] = {
-                .cpu_id                 = 4,
-                .buck_name              = "proc",
-                .volt_flags             = SVSB_INIT01_VOLT_INC_ONLY,
--               .mode_support           = SVSB_MODE_INIT01 | SVSB_MODE_INIT02,
-+               .mode_support           = SVSB_MODE_ALL_DISABLE,
-                .opp_count              = MAX_OPP_ENTRIES,
-
+> 
+> That being said, it would be really nice to see an integration tree
+> where this was all tested on mainline (e.g. v5.17, or v5.18-rc)
+> 
+> For example, I can apply this to v5.18-rc2 and boot on my mt8183-pumpkin
+> board, it fails to probe[1] because there is no CCI node in the upstream
+> mt8183.dtsi.
+> 
+> I'm assuming this series is also not very useful without the CPUfreq
+> series from Rex, so being able to test this, CCI and CPUfreq together on
+> MT8183 on a mainline kernel would be very helpful.
 > 
 > Kevin
+> 
+> [1]
+> [    0.573332] mtk-svs 1100b000.svs: cannot find cci node
+> [    0.574061] mtk-svs 1100b000.svs: error -ENODEV: svs platform probe fail
+
+Just share. I've tested this series on below two platforms and it works as
+expected.
+- mt8183-Krane (kernel-v5.10)
+- mt8192-Hayato (kernel-v5.4)
+
+Sincerely,
+Roger Lu.
 
