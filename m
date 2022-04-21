@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A5F250A99C
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Apr 2022 21:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB02650A9B8
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Apr 2022 22:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392142AbiDUUCC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Apr 2022 16:02:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59368 "EHLO
+        id S1392191AbiDUUKa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Apr 2022 16:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351747AbiDUUCB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Apr 2022 16:02:01 -0400
+        with ESMTP id S230301AbiDUUK2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Apr 2022 16:10:28 -0400
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377954D9F9;
-        Thu, 21 Apr 2022 12:59:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8034C78E;
+        Thu, 21 Apr 2022 13:07:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=HDKHu1E76IDSGv1OM3uK8i7f9RkzuL23ZGT+an3JVfA=; b=k8RHSSpPio9cut8zxiDXw+oWYN
-        nqQx7cidp5PFTX1VQvaplpGZSmPE6vshU3YO6wnnys/QSmKvZiIhsD/4Iq0av8WWK4q6JqzdjA3Oe
-        ZcpzVv+Rmg3vPhknwZ8OVIdG+JheDQW3t0vDg3C8sPD7MOnXe5jJDsIFGcnCVTnUvS1hNexAHjUky
-        SPz2+fvggaBRvrp8rJ1+vDsz67swOoxCVm5aKbo9v8VAt+t7lZ6mrTjvRQMzpy7PxJm8Ym0SlXieh
-        ZSnl9dXJXbjd83hFbFgOP74BZIDmevx8yBGKonUxuUPBUf7gKTf9e0j6yshGds151meSr92yB+c9h
-        hQYBWhmg==;
+        bh=NdfLnn05R7fjDEiBPK6Cu9YpjR96BrxFTg+OBZR4cMU=; b=VyGfhH7nwhulIRPAAYz6O2eC8T
+        zomZ21Q665Y4fWYko1XBovWfs9G4rmXmxxIZu4wEanYOz1XKrfB2oGdCI9VIOy6oo+L7ORTzJp34l
+        LGL6IDsUPq/5oW57AJ+anM0/G4541Z68t/kWkroeXOPmj+dFAYQgQIXEXb6CDwu9B3BbpSG41ydCb
+        BJcf5m6JxtR9xG+bZCAyAzeja81a7itfYyQPT6MEXwNTdqEB4vm6YZkC/fTd/6Jz6jafIY3ZHjr+Q
+        1wXZSNVItxlWTOvwNjrUG8IcrkVP+NaNOXUnRmbPUnnGnD0uEyK79SbZz86oPKxO2tYv8Co2rT7Fd
+        JfsJfM3A==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nhcx3-007VdD-1b; Thu, 21 Apr 2022 19:58:53 +0000
+        id 1nhd5F-007VjJ-T1; Thu, 21 Apr 2022 20:07:22 +0000
 Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8CAC49861C1; Thu, 21 Apr 2022 21:58:52 +0200 (CEST)
-Date:   Thu, 21 Apr 2022 21:58:52 +0200
+        id 68CB79861C1; Thu, 21 Apr 2022 22:07:21 +0200 (CEST)
+Date:   Thu, 21 Apr 2022 22:07:21 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        ebiederm@xmission.com, bigeasy@linutronix.de,
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
         Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
         tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] sched,ptrace: Fix ptrace_check_attach() vs
- PREEMPT_RT
-Message-ID: <20220421195852.GP2731@worktop.programming.kicks-ass.net>
+Subject: Re: [PATCH v2 5/5] freezer,sched: Rewrite core freezer logic
+Message-ID: <20220421200721.GF2762@worktop.programming.kicks-ass.net>
 References: <20220421150248.667412396@infradead.org>
- <20220421150654.817117821@infradead.org>
- <20220421182325.GC20402@redhat.com>
+ <20220421150655.001952823@infradead.org>
+ <878rrys5yj.fsf@email.froward.int.ebiederm.org>
+ <20220421195551.GO2731@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220421182325.GC20402@redhat.com>
+In-Reply-To: <20220421195551.GO2731@worktop.programming.kicks-ass.net>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -56,68 +56,100 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 21, 2022 at 08:23:26PM +0200, Oleg Nesterov wrote:
-> On 04/21, Peter Zijlstra wrote:
-> >
-> > Rework ptrace_check_attach() / ptrace_unfreeze_traced() to not rely on
-> > task->__state as much.
+On Thu, Apr 21, 2022 at 09:55:51PM +0200, Peter Zijlstra wrote:
+> On Thu, Apr 21, 2022 at 12:26:44PM -0500, Eric W. Biederman wrote:
+> > Peter Zijlstra <peterz@infradead.org> writes:
+> > 
+> > > --- a/kernel/ptrace.c
+> > > +++ b/kernel/ptrace.c
+> > > @@ -288,7 +288,7 @@ static int ptrace_check_attach(struct ta
+> > >  	}
+> > >  	__set_current_state(TASK_RUNNING);
+> > >  
+> > > -	if (!wait_task_inactive(child, TASK_TRACED) ||
+> > > +	if (!wait_task_inactive(child, TASK_TRACED|TASK_FREEZABLE) ||
+> > >  	    !ptrace_freeze_traced(child))
+> > >  		return -ESRCH;
+> > 
+> > Do we mind that this is going to fail if the child is frozen
+> > during ptrace_check_attach?
 > 
-> Looks good after the quick glance... but to me honest I got lost and
-> I need to apply these patches and read the code carefully.
-> 
-> However, I am not able to do this until Monday, sorry.
+> Why should this fail? wait_task_inactive() will in fact succeed if it is
+> frozen due to the added TASK_FREEZABLE and some wait_task_inactive()
+> changes elsewhere in this patch.
 
-Sure, no worries. Take your time.
+These:
 
-> Just one nit for now,
-> 
-> >  static void ptrace_unfreeze_traced(struct task_struct *task)
-> >  {
-> > -	if (READ_ONCE(task->__state) != __TASK_TRACED)
-> > +	if (!task_is_traced(task))
-> >  		return;
-> >  
-> >  	WARN_ON(!task->ptrace || task->parent != current);
-> >  
-> > -	/*
-> > -	 * PTRACE_LISTEN can allow ptrace_trap_notify to wake us up remotely.
-> > -	 * Recheck state under the lock to close this race.
-> > -	 */
-> >  	spin_lock_irq(&task->sighand->siglock);
-> > -	if (READ_ONCE(task->__state) == __TASK_TRACED) {
-> > +	if (task_is_traced(task)) {
-> 
-> I think ptrace_unfreeze_traced() should not use task_is_traced() at all.
-> I think a single lockless
-> 
-> 	if (task->jobctl & JOBCTL_DELAY_WAKEKILL)
-> 		return;
-> 
-> at the start should be enough?
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -3260,6 +3260,19 @@ int migrate_swap(struct task_struct *cur
+ }
+ #endif /* CONFIG_NUMA_BALANCING */
+ 
++static inline bool __wti_match(struct task_struct *p, unsigned int match_state)
++{
++	unsigned int state = READ_ONCE(p->__state);
++
++	if ((match_state & TASK_FREEZABLE) && state == TASK_FROZEN)
++		return true;
++
++	if (state == (match_state & ~TASK_FREEZABLE))
++		return true;
++
++	return false;
++}
++
+ /*
+  * wait_task_inactive - wait for a thread to unschedule.
+  *
+@@ -3304,7 +3317,7 @@ unsigned long wait_task_inactive(struct
+ 		 * is actually now running somewhere else!
+ 		 */
+ 		while (task_running(rq, p)) {
+-			if (match_state && unlikely(READ_ONCE(p->__state) != match_state))
++			if (match_state && !__wti_match(p, match_state))
+ 				return 0;
+ 			cpu_relax();
+ 		}
+@@ -3319,7 +3332,7 @@ unsigned long wait_task_inactive(struct
+ 		running = task_running(rq, p);
+ 		queued = task_on_rq_queued(p);
+ 		ncsw = 0;
+-		if (!match_state || READ_ONCE(p->__state) == match_state)
++		if (!match_state || __wti_match(p, match_state))
+ 			ncsw = p->nvcsw | LONG_MIN; /* sets MSB */
+ 		task_rq_unlock(rq, p, &rf);
+ 
 
-I think so. That is indeed cleaner. I'll make the change if I don't see
-anything wrong with it in the morning when the brain has woken up again
-;-)
 
-> 
-> Nobody else can set this flag. It can be cleared by the tracee if it was
-> woken up, so perhaps we can check it again but afaics this is not strictly
-> needed.
-> 
-> > +//		WARN_ON_ONCE(!(task->jobctl & JOBCTL_DELAY_WAKEKILL));
-> 
-> Did you really want to add the commented WARN_ON_ONCE?
+> And I don't see why ptrace_freeze_traced() should fail. It'll warn
+> though, I should extend/remove that WARN_ON_ONCE() looking at __state,
+> but it should work.
 
-I did that because:
+And that looks like (after removal of the one WARN):
 
-@@ -1472,8 +1479,7 @@ COMPAT_SYSCALL_DEFINE4(ptrace, compat_lo
-                                  request == PTRACE_INTERRUPT);
-        if (!ret) {
-                ret = compat_arch_ptrace(child, request, addr, data);
--               if (ret || request != PTRACE_DETACH)
--                       ptrace_unfreeze_traced(child);
-+               ptrace_unfreeze_traced(child);
-        }
+static bool ptrace_freeze_traced(struct task_struct *task)
+{
+	unsigned long flags;
+	bool ret = false;
 
-Can now call unfreeze too often. I left the comment in because I need to
-think more about why Eric did that and see if it really is needed.
+	/* Lockless, nobody but us can set this flag */
+	if (task->jobctl & JOBCTL_LISTENING)
+		return ret;
+
+	if (!lock_task_sighand(task, &flags))
+		return ret;
+
+	if (task_is_traced(task) &&
+	    !looks_like_a_spurious_pid(task) &&
+	    !__fatal_signal_pending(task)) {
+		WARN_ON_ONCE(task->jobctl & JOBCTL_DELAY_WAKEKILL);
+		task->jobctl |= JOBCTL_DELAY_WAKEKILL;
+		ret = true;
+	}
+	unlock_task_sighand(task, &flags);
+
+	return ret;
+}
+
+And nothing there cares about ->__state.
