@@ -2,192 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC51F50A837
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Apr 2022 20:38:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D1D50A840
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Apr 2022 20:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376409AbiDUSlg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Apr 2022 14:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
+        id S1391470AbiDUSn7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Apr 2022 14:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241284AbiDUSlg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Apr 2022 14:41:36 -0400
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FDDA369EA;
-        Thu, 21 Apr 2022 11:38:44 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id f38so10331637ybi.3;
-        Thu, 21 Apr 2022 11:38:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qclQva+dBU825L3ckBWzZRuhOlFUDZ8lHg/bUUIWmG4=;
-        b=IWXa/CVA/0VcgyS/GEJ236duP8q7WoWBMfHpfuQU0M7MpXzBZY4F3djxSgVjFQSfES
-         FZ8LJo49RrHj+NMZn9RA0ikFUZ03QOpYbzhkUvnGWCf15fGQgwRUxHSpKI0NYZSRzyBt
-         WVdOSJtZyeshZNvbB3bJ60UzzyeNpSwEoCs4lwDTyAg1sNFNOcNgzi1bxh80thkaI2aN
-         FkHibDzifPR6rXYmiojWUaHoVAWDcdefq8uLBqVJ7DshugOzISIeSSbIG82DomuIR5RO
-         hw7MvJIS2s3+1R6UUbYmjY5x1Q9GH+Bq0s/6PChfbLFXvoTPTzqS1+0YHhzWBH9UDwT2
-         Yflw==
-X-Gm-Message-State: AOAM531D+w2TodV4PsInmzb7k1EBfJ8mBJgBSaSHkPtvYyaLqb2G7/y0
-        ppQgvqYZftxvXy16FcaTGVEroMO67rbSMB5JKQRQeD+/0h4=
-X-Google-Smtp-Source: ABdhPJyi++2mPz3HUP/4dSNVRdExKYA+0gwyp9mYlv7e7Mb621HN6bmKfmB8oxvznC8qvNdZZ1fsx8puGqQVOGJAxXA=
-X-Received: by 2002:a25:230d:0:b0:641:375c:b5ad with SMTP id
- j13-20020a25230d000000b00641375cb5admr1073961ybj.137.1650566323920; Thu, 21
- Apr 2022 11:38:43 -0700 (PDT)
+        with ESMTP id S1391466AbiDUSn6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Apr 2022 14:43:58 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6434BBA8;
+        Thu, 21 Apr 2022 11:41:07 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:38164)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nhbjl-00GJ9M-6f; Thu, 21 Apr 2022 12:41:05 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:35232 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nhbjk-00DEDL-5X; Thu, 21 Apr 2022 12:41:04 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        tj@kernel.org, linux-pm@vger.kernel.org
+References: <20220421150248.667412396@infradead.org>
+        <20220421150654.817117821@infradead.org>
+Date:   Thu, 21 Apr 2022 13:40:57 -0500
+In-Reply-To: <20220421150654.817117821@infradead.org> (Peter Zijlstra's
+        message of "Thu, 21 Apr 2022 17:02:50 +0200")
+Message-ID: <87czhap9dy.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220414164801.1051-1-mario.limonciello@amd.com>
- <20220414164801.1051-5-mario.limonciello@amd.com> <64d7f4f7-3c05-7f37-d9eb-72d9d079f8f8@amd.com>
- <BL1PR12MB5157CC5E942986945F5EF088E2EF9@BL1PR12MB5157.namprd12.prod.outlook.com>
-In-Reply-To: <BL1PR12MB5157CC5E942986945F5EF088E2EF9@BL1PR12MB5157.namprd12.prod.outlook.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 21 Apr 2022 20:38:32 +0200
-Message-ID: <CAJZ5v0hFstH6goScEhUmZwBQ4gEnt5-tcp=UKgrW8Xb5zdZ_zg@mail.gmail.com>
-Subject: Re: [PATCH v3 4/6] cpufreq: amd-pstate: Allow replacing acpi-cpufreq
- when loaded
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Huang, Ray" <Ray.Huang@amd.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "open list:AMD PSTATE DRIVER" <linux-pm@vger.kernel.org>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nhbjk-00DEDL-5X;;;mid=<87czhap9dy.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX18PMzTGLHG+SMKtZ4xb/VVhwetJ6uYY8Rc=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Peter Zijlstra <peterz@infradead.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 452 ms - load_scoreonly_sql: 0.07 (0.0%),
+        signal_user_changed: 11 (2.3%), b_tie_ro: 9 (1.9%), parse: 1.18 (0.3%),
+         extract_message_metadata: 14 (3.2%), get_uri_detail_list: 1.36 (0.3%),
+         tests_pri_-1000: 14 (3.0%), tests_pri_-950: 1.83 (0.4%),
+        tests_pri_-900: 1.46 (0.3%), tests_pri_-90: 121 (26.7%), check_bayes:
+        117 (25.9%), b_tokenize: 8 (1.8%), b_tok_get_all: 8 (1.9%),
+        b_comp_prob: 2.7 (0.6%), b_tok_touch_all: 93 (20.7%), b_finish: 1.03
+        (0.2%), tests_pri_0: 268 (59.2%), check_dkim_signature: 1.10 (0.2%),
+        check_dkim_adsp: 4.0 (0.9%), poll_dns_idle: 0.15 (0.0%), tests_pri_10:
+        2.1 (0.5%), tests_pri_500: 14 (3.1%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v2 2/5] sched,ptrace: Fix ptrace_check_attach() vs
+ PREEMPT_RT
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 7:58 PM Limonciello, Mario
-<Mario.Limonciello@amd.com> wrote:
->
-> [Public]
->
->
->
-> > -----Original Message-----
-> > From: Fontenot, Nathan <Nathan.Fontenot@amd.com>
-> > Sent: Thursday, April 14, 2022 12:33
-> > To: Limonciello, Mario <Mario.Limonciello@amd.com>; Huang, Ray
-> > <Ray.Huang@amd.com>; Rafael J . Wysocki <rafael@kernel.org>; Viresh
-> > Kumar <viresh.kumar@linaro.org>
-> > Cc: open list:AMD PSTATE DRIVER <linux-pm@vger.kernel.org>; Yuan, Perry
-> > <Perry.Yuan@amd.com>; open list <linux-kernel@vger.kernel.org>
-> > Subject: Re: [PATCH v3 4/6] cpufreq: amd-pstate: Allow replacing acpi-
-> > cpufreq when loaded
-> >
-> > On 4/14/22 11:47, Mario Limonciello wrote:
-> > > `amd-pstate` can be compiled as a module.  This however can be a
-> > > deficiency because `acpi-cpufreq` will be loaded earlier when compiled
-> > > into the kernel meaning `amd-pstate` doesn't get a chance.
-> > > `acpi-cpufreq` is also unable to be unloaded in this circumstance.
-> > >
-> > > To better improve the usability of `amd-pstate` when compiled as a
-> > module,
-> > > add an optional module parameter that will force it to replace other
-> > > cpufreq drivers at startup.
-> > >
-> > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > > ---
-> > > v2->v3:
-> > >  * Rebase on earlier patches
-> > >  * Use IS_REACHABLE
-> > >  * Only add replace parameter if acpu-cpufreq is enabled
-> > >  * Only show info message once
-> > > v1->v2:
-> > >  * Update to changes from v1.
-> > >  * Verify the driver being matched is acpi-cpufreq.
-> > >  * Show a message letting users know they can use amd-pstate.
-> > >
-> > >  drivers/cpufreq/amd-pstate.c | 22 ++++++++++++++++++++--
-> > >  1 file changed, 20 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> > > index d323f3e3888c..8ae65a2072d6 100644
-> > > --- a/drivers/cpufreq/amd-pstate.c
-> > > +++ b/drivers/cpufreq/amd-pstate.c
-> > > @@ -63,6 +63,13 @@ module_param(shared_mem, bool, 0444);
-> > >  MODULE_PARM_DESC(shared_mem,
-> > >              "enable amd-pstate on processors with shared memory
-> > solution (false = disabled (default), true = enabled)");
-> > >
-> > > +#if defined(CONFIG_X86_ACPI_CPUFREQ) ||
-> > defined(CONFIG_X86_ACPI_CPUFREQ_MODULE)
-> > > +static bool replace = false;
-> > > +module_param(replace, bool, 0444);
-> > > +MODULE_PARM_DESC(replace,
-> > > +             "replace acpi-cpufreq driver upon init if necessary");
-> > > +#endif
-> > > +
-> > >  static struct cpufreq_driver amd_pstate_driver;
-> > >
-> > >  /**
-> > > @@ -643,6 +650,7 @@ static struct cpufreq_driver amd_pstate_driver = {
-> > >
-> > >  static int __init amd_pstate_init(void)
-> > >  {
-> > > +   const char *current_driver;
-> > >     int ret;
-> > >
-> > >     if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
-> > > @@ -666,9 +674,19 @@ static int __init amd_pstate_init(void)
-> > >             return -ENODEV;
-> > >     }
-> > >
-> > > -   /* don't keep reloading if cpufreq_driver exists */
-> > > -   if (cpufreq_get_current_driver())
-> > > +   current_driver = cpufreq_get_current_driver();
-> > > +   if (current_driver) {
-> > > +#if IS_REACHABLE(CONFIG_X86_ACPI_CPUFREQ)
-> > > +           if (replace && strcmp(current_driver, "acpi-cpufreq") == 0) {
-> > > +                   acpi_cpufreq_exit();
-> > > +           } else {
-> > > +                   pr_info_once("A processor on this system supports
-> > amd-pstate, you can enable it with amd_pstate.replace=1\n");
-> > > +                   return -EEXIST;
-> > > +           }
-> > > +#else
-> > >             return -EEXIST;
-> > > +#endif
-> > > +   }
-> >
-> > A couple of thoughts. First, should this also provide a path to restore the
-> > acpi_cpufreq driver
-> > if the amd-pstate driver fails during init some time after calling
-> > acpi_cpufreq_exit()?
->
-> I think that's a reasonable idea; it would involve exporting acpi_cpufreq_init
-> as well.
->
-> >
-> > Which leads me to wonder, should there be a more generic
-> > cpufreq_replace_driver() routine that
-> > could handle this?
->
-> If changing the API for this, my proposal would be that there is a flag used
-> in cpufreq_driver->flags to indicate that this driver should replace existing
-> drivers when calling cpufreq_register_driver rather than a new routine.
-> Then if it fails to register for any reason then the old driver can be restored.
->
-> Rafael, what are your thoughts on this?
+Peter Zijlstra <peterz@infradead.org> writes:
 
-IMV there need to be two things to make this really work.
+> Rework ptrace_check_attach() / ptrace_unfreeze_traced() to not rely on
+> task->__state as much.
+>
+> Due to how PREEMPT_RT is changing the rules vs task->__state with the
+> introduction of task->saved_state while TASK_RTLOCK_WAIT (the whole
+> blocking spinlock thing), the way ptrace freeze tries to do things no
+> longer works.
 
-First, the currently running driver needs to provide a way to tell it
-to go away.  For example, intel_pstate has the "off" mode (in which it
-doesn't do anything) for that and similar interfaces can be added to
-other drivers as needed.
 
-The reason why is because, for example, intel_pstate cannot go into
-the "off" mode when HWP is enabled, because it cannot be disabled and
-running acpi_cpufreq in that configuration wouldn't work.  So in
-general you need to know that it is OK to unregister the current
-driver.
+The problem with ptrace_stop and do_signal_stop that requires dropping
+siglock and grabbing tasklist_lock is that do_notify_parent_cldstop
+needs tasklist_lock to keep parent and real_parent stable.
 
-Second, there needs to be a mechanism for registering a driver
-"weakly" for future use, so if it cannot be used right away, it will
-be added to a list and wait until there's room for it to run.
+With just some very modest code changes it looks like we can use
+a processes own siglock to keep parent and real_parent stable.  The
+siglock is already acquired in all of those places it is just not held
+over the changing parent and real_parent.
+
+Then make a rule that a child's siglock must be grabbed before a parents
+siglock and do_notify_parent_cldstop can be always be called under the
+childs siglock.
+
+This means ptrace_stop can be significantly simplified, and the
+notifications can be moved far enough up that set_special_state
+can be called after do_notify_parent_cldstop.  With the result
+that there is simply no PREEMPT_RT issue to worry about and
+wait_task_inactive can be used as is.
+
+I remember Oleg suggesting a change something like this a long
+time ago.
+
+
+I need to handle the case where the parent and the child share
+the same sighand but that is just remembering to handle it in
+do_notify_parent_cldstop, as the handling is simply not taking
+the lock twice.
+
+I am going to play with that and see if I there are any gotcha's
+I missed when looking through the code.
+
+Eric
