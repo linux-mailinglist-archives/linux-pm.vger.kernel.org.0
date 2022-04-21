@@ -2,122 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1764350A652
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Apr 2022 18:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4B950A764
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Apr 2022 19:49:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354185AbiDUQ6C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Apr 2022 12:58:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40000 "EHLO
+        id S1390916AbiDURwB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Apr 2022 13:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390529AbiDUQ55 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Apr 2022 12:57:57 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB89BC3D
-        for <linux-pm@vger.kernel.org>; Thu, 21 Apr 2022 09:55:07 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id y14so4756003pfe.10
-        for <linux-pm@vger.kernel.org>; Thu, 21 Apr 2022 09:55:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lWrMBaaG06Rl/KqlbUnN7jouLwLObU2X9LsSayAdIEY=;
-        b=RG6zXViEotCrIPi+aqyunCe71vbxFhC/cyC2pcLO6Nnd/L7hctNT+nu9Wd/37midx4
-         CBEdx7XQHXKUvhBVjHCgDXDtj03gb0gA/FT28uXFAZtrF6FxQCdcvqGjFgu2goVERUa1
-         aBLVjrQlm+M+HHOBlhi69kBAheJbgTj97x2Ws=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lWrMBaaG06Rl/KqlbUnN7jouLwLObU2X9LsSayAdIEY=;
-        b=eKTl5yrvzOdQIVFiLCUmARNkuX73xG+v1DPy4x0IVkQQ9Gbq6II5f0hvDV8I3wCFqK
-         KjmVcVxwepCIABwMM62fvix4mJQfTgtJJQ9VvWmKWXPXk0jXrstgl2NatsiJoRepJcb9
-         dQpu4UXeF7Jx8kREqcaQJW9ZoJn4nn55/nqSWfNXmr9UsHkoJrYoZrBTqQCJ0pMPYkfX
-         5sbPs3qrwKywJHACAD251kVJ9TNCqrdqAhy8Xv0uYhauWpef2bM2fEHQcMpgBrwEWDRS
-         28SgCkkTEcmok4ltFzXQ4nR/fFa1AHa5IMRBwNYxhKONf7/dk3AUhuBOO3GLiMxbQRmD
-         n6Sw==
-X-Gm-Message-State: AOAM533Oo3msy+xdLGAe6KekTTctr0aPLM9Z7ja6zV4BImpkxTfN5IDB
-        8S9rLEIUnoREPAdETCZwCD3HPw==
-X-Google-Smtp-Source: ABdhPJybFqT9+qbX/fmptKtwh1MKt6C6LFPPlumJnR7fijXXj4514Ft/yXS+m+y8hK+j9Rd4HJauww==
-X-Received: by 2002:a05:6a00:298e:b0:50c:e384:3a16 with SMTP id cj14-20020a056a00298e00b0050ce3843a16mr610980pfb.71.1650560106692;
-        Thu, 21 Apr 2022 09:55:06 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u3-20020a626003000000b00505a38fc90bsm24888533pfb.173.2022.04.21.09.55.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 09:55:06 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        linux-pm@vger.kernel.org, Joao Moreira <joao@overdrivepizza.com>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Chuansheng Liu <chuansheng.liu@intel.com>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        Matthew Garrett <mjg59@google.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] thermal: int340x: Fix attr.show callback prototype
-Date:   Thu, 21 Apr 2022 09:55:04 -0700
-Message-Id: <20220421165504.3173244-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.32.0
+        with ESMTP id S1390904AbiDURwA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Apr 2022 13:52:00 -0400
+X-Greylist: delayed 1316 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Apr 2022 10:49:10 PDT
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB284A3F4
+        for <linux-pm@vger.kernel.org>; Thu, 21 Apr 2022 10:49:10 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:38236)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nhaaG-0075j1-0N; Thu, 21 Apr 2022 11:27:12 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:35224 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nhaaE-00CsQK-DO; Thu, 21 Apr 2022 11:27:11 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        tj@kernel.org, linux-pm@vger.kernel.org
+References: <20220421150248.667412396@infradead.org>
+        <20220421150655.001952823@infradead.org>
+Date:   Thu, 21 Apr 2022 12:26:44 -0500
+In-Reply-To: <20220421150655.001952823@infradead.org> (Peter Zijlstra's
+        message of "Thu, 21 Apr 2022 17:02:53 +0200")
+Message-ID: <878rrys5yj.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1946; h=from:subject; bh=luGT7I33b2VPSU/hRTp4Bzm5YaRlLxElO2D/HiBCrCI=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiYYxnp8ng8BLmn3BJUCmqYDM28VV2nCxsOVm2zLy+ LJp8UgqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYmGMZwAKCRCJcvTf3G3AJlOCD/ 9lztboo9y2dy0mnMoOXHcJOcK/kpeyZf11lTux/iSdVIVqNAWXfmfzQBifo15Bq4PZa9jlNoHJIvpj 2/4/xqH0Wfyr9dMmzYCdUD/tXJMQN9xW61hBX1O+Fn6obddy6jvOEsbFKIlV6W2PmmYn2j3ph0JAvb BAhgnXMb7eLsLGarKzjO55yjay/yDwM176Q4VpOaAAc4+RFYUvZIGhW010OBdwM0ut+WQ4YKdbnest uY5+p44FLL35FwQPREFU1tfg0j0gfJStm6cKA9KnO1uamR7Ds6HSqM4OPzsuAz1MUTBQWgihe0JINA +yarzxWBPEP3/d3SueddXMFyle/JYx6g/NwXYfBTvZr1Amyqmt3hsXDQB+KXuR8JsAqxahrTKDc2pu f+y8bmT60daXrqKckbnxMBQ5HPxmIok8WWWfWw3aVGfoQjxqb2UFYbkPn6f9lWSm3ixb113DSXdNvU 5JF7v8Mm7xFlnb2IYCwTNQ7eojS1+ewl20o/vNJ5xXH7r3g9HVXIXIC08Rkoc0HayOEL+pDqLVQm1m 1hiTd32fHiIPownlJp0LdE+0YhyAJHYa9X2VFnlgsTc8WA87O43yGy2Q0nkD9SiAbaLmR1IAK/6sRv ciQKq7l3+RJse92bmT3I8A4kLndMMZlzjy8c+wTpTW6zKM7wJFMSpu0USUiw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nhaaE-00CsQK-DO;;;mid=<878rrys5yj.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1/eM4M3vABt0zGjlkIS7dSJhVL77s2rIZ4=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Peter Zijlstra <peterz@infradead.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 354 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 11 (3.1%), b_tie_ro: 9 (2.7%), parse: 0.78 (0.2%),
+         extract_message_metadata: 11 (3.0%), get_uri_detail_list: 0.68 (0.2%),
+         tests_pri_-1000: 11 (3.0%), tests_pri_-950: 1.24 (0.4%),
+        tests_pri_-900: 1.00 (0.3%), tests_pri_-90: 116 (32.9%), check_bayes:
+        113 (31.8%), b_tokenize: 5.0 (1.4%), b_tok_get_all: 4.9 (1.4%),
+        b_comp_prob: 1.77 (0.5%), b_tok_touch_all: 98 (27.5%), b_finish: 0.86
+        (0.2%), tests_pri_0: 190 (53.7%), check_dkim_signature: 0.48 (0.1%),
+        check_dkim_adsp: 2.8 (0.8%), poll_dns_idle: 0.46 (0.1%), tests_pri_10:
+        2.0 (0.6%), tests_pri_500: 7 (2.1%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v2 5/5] freezer,sched: Rewrite core freezer logic
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Control Flow Integrity (CFI) instrumentation of the kernel noticed that
-the caller, dev_attr_show(), and the callback, odvp_show(), did not have
-matching function prototypes, which would cause a CFI exception to be
-raised. Correct the prototype by using struct device_attribute instead
-of struct kobj_attribute.
+Peter Zijlstra <peterz@infradead.org> writes:
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Amit Kucheria <amitk@kernel.org>
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: linux-pm@vger.kernel.org
-Reported-and-tested-by: Joao Moreira <joao@overdrivepizza.com>
-Link: https://lore.kernel.org/lkml/067ce8bd4c3968054509831fa2347f4f@overdrivepizza.com/
-Fixes: 006f006f1e5c ("thermal/int340x_thermal: Export OEM vendor variables")
-Cc: stable@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> --- a/kernel/ptrace.c
+> +++ b/kernel/ptrace.c
+> @@ -288,7 +288,7 @@ static int ptrace_check_attach(struct ta
+>  	}
+>  	__set_current_state(TASK_RUNNING);
+>  
+> -	if (!wait_task_inactive(child, TASK_TRACED) ||
+> +	if (!wait_task_inactive(child, TASK_TRACED|TASK_FREEZABLE) ||
+>  	    !ptrace_freeze_traced(child))
+>  		return -ESRCH;
 
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index 4954800b9850..d97f496bab9b 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -68,7 +68,7 @@ static int evaluate_odvp(struct int3400_thermal_priv *priv);
- struct odvp_attr {
- 	int odvp;
- 	struct int3400_thermal_priv *priv;
--	struct kobj_attribute attr;
-+	struct device_attribute attr;
- };
- 
- static ssize_t data_vault_read(struct file *file, struct kobject *kobj,
-@@ -311,7 +311,7 @@ static int int3400_thermal_get_uuids(struct int3400_thermal_priv *priv)
- 	return result;
- }
- 
--static ssize_t odvp_show(struct kobject *kobj, struct kobj_attribute *attr,
-+static ssize_t odvp_show(struct device *dev, struct device_attribute *attr,
- 			 char *buf)
- {
- 	struct odvp_attr *odvp_attr;
--- 
-2.32.0
+Do we mind that this is going to fail if the child is frozen
+during ptrace_check_attach?
 
+I think to avoid that we need to safely get this to
+wait_task_inactive(child, 0), like the coredump code uses.
+
+I would like to say that we can do without the wait_task_inactive,
+but it looks like it is necessary to ensure that all of the userspace
+registers are saved where the tracer can get at them.
+
+Eric
