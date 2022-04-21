@@ -2,126 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D32DD5097C1
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Apr 2022 08:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB165098C1
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Apr 2022 09:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347021AbiDUGlv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Apr 2022 02:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42298 "EHLO
+        id S1385603AbiDUHOv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Apr 2022 03:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiDUGlu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Apr 2022 02:41:50 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3998DDFC7;
-        Wed, 20 Apr 2022 23:39:01 -0700 (PDT)
+        with ESMTP id S1385621AbiDUHOs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Apr 2022 03:14:48 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D39217057
+        for <linux-pm@vger.kernel.org>; Thu, 21 Apr 2022 00:12:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650523141; x=1682059141;
+  t=1650525120; x=1682061120;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=tRiylTZEyGnmok4xZrcOLzssYSLSFxbagoPYNhTAEf0=;
-  b=mxCJ1lxe9kcd0nqdUx/OeRoNxhhhvF6w6AemfjmAsu4/qvsjkcFpVMkv
-   rOGxCM8N+BtvOO1H0cPytPQd/WhIDBcBNhiBGLiDl4RXH1r+WHLPEDvSX
-   vV7vZ368kzbdocbeLRhb8Z8uiIjogbBVtdGr3p0ypDEg2kr9Q5d2R/NMk
-   AckkMjStM2QUCZ6Q9jd4GfR+ygEZ0zzE5d87Z2/bzgM5iyLhmRXEyOAZA
-   S8Xv5N162XAVhkhyZEsjTDjkVQzg0zokSuHdrgmMW5BxcAYXogjjhvQ/t
-   q7Oe0Hm6PFOXs95bH5ppNejCMEoTi7kbBl4XKbmZy0pENBbhdFLr90Jgm
+  bh=/cw/sNTx4EM2SSc2yheXO4pAk8iXKAFIMsAs709aLGU=;
+  b=iLWEPJP6oVpu14t38aV93oHeExWQorgQ6zYQxkB7yNL4Cf4LhGMzuX4r
+   SwcA1cDRuML0FxX1FTLAudD8RWs48PvJ0mfERIfgnxA4ssG1bWzQO8ecw
+   bklinRj8xTT/N3DoLlVI2HU/NN6m/3REUwXMl5cvkRKr4YaVLoUCpDUs5
+   VZhB6KZDSRNpyi9veClT4TfgbRkxBlvkohhyaQMCiYDsuSsngoy0TwYqM
+   8X2qpA4BUEpe/G1w5ksoGtcvaUUpnXV6I3oen6/OEn8yLebplqAb72Np3
+   PBfQV0vjCzqPCDs4JIqc2W4Tvl5oFGL49xNN08WiYnElaPTBLLZm6lrdZ
    A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="251569452"
+X-IronPort-AV: E=McAfee;i="6400,9594,10323"; a="264434637"
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="251569452"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2022 23:39:00 -0700
+   d="scan'208";a="264434637"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 00:11:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,278,1643702400"; 
-   d="scan'208";a="670043379"
-Received: from chenyu-dev.sh.intel.com ([10.239.158.170])
-  by orsmga004.jf.intel.com with ESMTP; 20 Apr 2022 23:38:59 -0700
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     Len Brown <len.brown@intel.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Chen Yu <yu.c.chen@intel.com>,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Subject: [PATCH] tools/power turbostat: print the kernel boot commandline
-Date:   Thu, 21 Apr 2022 22:38:34 +0800
-Message-Id: <20220421143834.627841-1-yu.c.chen@intel.com>
-X-Mailer: git-send-email 2.25.1
+   d="scan'208";a="577064194"
+Received: from rzhang1-dev.sh.intel.com ([10.239.48.43])
+  by orsmga008.jf.intel.com with ESMTP; 21 Apr 2022 00:11:54 -0700
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     rjw@rjwysocki.net
+Cc:     linux-pm@vger.kernel.org
+Subject: [PATCH] powercap: intel_rapl: add support for RaptorLake
+Date:   Thu, 21 Apr 2022 23:07:36 +0800
+Message-Id: <20220421150736.94717-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
         DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-It would be handy to have cmdline in turbostat output. For example,
-according to the turbostat output, there are no C-states requested.
-In this case the user is very curious if something like
-intel_idle.max_cstate=0 was used, or may be idle=none too. It is
-also curious whether things like intel_pstate=nohwp were used.
+Add intel_rapl support for the RaptorLake platform.
 
-Print the boot command line accordingly:
-turbostat version 21.05.04 - Len Brown <lenb@kernel.org>
-Kernel command line: BOOT_IMAGE=/boot/vmlinuz-5.16.0+ root=UUID=
- b42359ed-1e05-42eb-8757-6bf2a1c19070 ro quiet splash vt.handoff=7
-
-Suggested-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 27 ++++++++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+ drivers/powercap/intel_rapl_common.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index bc5ae0872fed..bfcb6345510b 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -5976,6 +5976,29 @@ void print_version()
- 	fprintf(outf, "turbostat version 21.05.04" " - Len Brown <lenb@kernel.org>\n");
- }
- 
-+#define COMMAND_LINE_SIZE 2048
-+
-+void print_bootcmd(void)
-+{
-+	char bootcmd[COMMAND_LINE_SIZE];
-+	FILE *fp;
-+	int ret;
-+
-+	memset(bootcmd, 0, COMMAND_LINE_SIZE);
-+	fp = fopen("/proc/cmdline", "r");
-+	if (!fp)
-+		return;
-+
-+	ret = fread(bootcmd, sizeof(char), COMMAND_LINE_SIZE - 1, fp);
-+	if (ret) {
-+		bootcmd[ret] = '\0';
-+		/* the last character is already '\n' */
-+		fprintf(outf, "Kernel command line: %s", bootcmd);
-+	}
-+
-+	fclose(fp);
-+}
-+
- int add_counter(unsigned int msr_num, char *path, char *name,
- 		unsigned int width, enum counter_scope scope,
- 		enum counter_type type, enum counter_format format, int flags)
-@@ -6425,8 +6448,10 @@ int main(int argc, char **argv)
- 	outf = stderr;
- 	cmdline(argc, argv);
- 
--	if (!quiet)
-+	if (!quiet) {
- 		print_version();
-+		print_bootcmd();
-+	}
- 
- 	probe_sysfs();
+diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+index 07611a00b78f..83da499dd6ec 100644
+--- a/drivers/powercap/intel_rapl_common.c
++++ b/drivers/powercap/intel_rapl_common.c
+@@ -1107,6 +1107,7 @@ static const struct x86_cpu_id rapl_ids[] __initconst = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(ROCKETLAKE,		&rapl_defaults_core),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE,		&rapl_defaults_core),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,		&rapl_defaults_core),
++	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,		&rapl_defaults_core),
+ 	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,	&rapl_defaults_spr_server),
+ 	X86_MATCH_INTEL_FAM6_MODEL(LAKEFIELD,		&rapl_defaults_core),
  
 -- 
-2.25.1
+2.17.1
 
