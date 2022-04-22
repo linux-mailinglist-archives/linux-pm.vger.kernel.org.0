@@ -2,55 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BABB350B0FC
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Apr 2022 09:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF49150B1AE
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Apr 2022 09:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444501AbiDVHE0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Apr 2022 03:04:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
+        id S1386165AbiDVHfW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Apr 2022 03:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444426AbiDVHEZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 03:04:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB62BE21;
-        Fri, 22 Apr 2022 00:01:32 -0700 (PDT)
+        with ESMTP id S1444876AbiDVHfV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 03:35:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95775515BE;
+        Fri, 22 Apr 2022 00:32:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EBC2FB82A99;
-        Fri, 22 Apr 2022 07:01:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FDE5C385A4;
-        Fri, 22 Apr 2022 07:01:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AE5461F5A;
+        Fri, 22 Apr 2022 07:32:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63C86C385A0;
+        Fri, 22 Apr 2022 07:32:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650610889;
-        bh=21Yl4xxhiWqKplYqfS+Y99XlgN55K+6oS3DyARdUs4o=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JHv2sUfPT5E3Xt43uAbQdIR65LGFiab4UCBFrJovFH4Ar0GVM9ec8zwTyWUiHRXnY
-         xzGuwbcoLatbwti/gMFOM9cYHkdKayr9a2Gr30eliPJC3GmiLZwjp6/doleJ7Q+yfR
-         uDA30IHk5qsSoR0llts4WM1iqnxIhUODioI8bHTYK4eezUwf3N02q/cHI7oKAtJ1hZ
-         ikCBrNlyFD3lpL15W362ftXJ1oT6dyaCFrWMHjJyJ7FxlC0uihMHAIa+m5uCO8whgJ
-         t7uXmCT0wmBsYNwNL279LAq3zqmU3HDPOOSbdKhZNogr9wlgdjLAO8IBVqJyTJ2fQy
-         X0+8JcxzHvpWA==
-Message-ID: <e54804ee-15f8-36a1-bbc5-9a218a4aec56@kernel.org>
-Date:   Fri, 22 Apr 2022 10:01:24 +0300
-MIME-Version: 1.0
-Subject: Re: [PATCH 3/2] arm64: dts: qcom: sc7180: Remove ipa interconnect
- node
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        Doug Anderson <dianders@chromium.org>,
-        Alex Elder <elder@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Mike Tipton <quic_mdtipton@quicinc.com>
-References: <20220412220033.1273607-1-swboyd@chromium.org>
- <20220415005828.1980055-1-swboyd@chromium.org> <Yl92UkRwlQsd71mr@ripper>
+        s=k20201202; t=1650612747;
+        bh=UB28YGlhAkWEAuV9AeyG9g+eUkzmMf90dg+QB+rqWlA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jqttIBEWlQitOymB/4TM6jgFBEJ1Getb1PJx6UNuGLHWijmeWJs0pYENdEVOINA7X
+         hbjQr61D9B3qKkpsnO9+KufPzlPvAYyoeDGt2zjlMDnNRR/0ZWQnScvef9PglVKka7
+         aioFwBSe3MQLKNypbPiK4Z6wbn3bcFzNXU4Zn5lj8pGEOM5ZhpIyio2C9gGCuzauyd
+         S10H5IXc0K7yWJjwWEOKlzzJTZwncl+IFLUIqnZP63GS6eanxWtUZ2l0sqUFrkBWQ5
+         fl2gNnLhoOfHk4PdQbgCcTxtKY26O+FVKzcoqPq3gKYGmySEWoOFJccGqb/1GUQUz1
+         kMViTExNDBIkw==
 From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <Yl92UkRwlQsd71mr@ripper>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     gregkh@linuxfoundation.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        djakov@kernel.org
+Subject: [GIT PULL] interconnect fixes for 5.18-rc
+Date:   Fri, 22 Apr 2022 10:32:21 +0300
+Message-Id: <20220422073221.30745-1-djakov@kernel.org>
+X-Mailer: git-send-email 2.29.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,58 +50,46 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20.04.22 5:56, Bjorn Andersson wrote:
-> On Thu 14 Apr 17:58 PDT 2022, Stephen Boyd wrote:
-> 
->> This device node is unused now that we've removed the driver that
->> consumed it in the kernel. Drop the unused node to save some space.
->>
-> 
-> I'm expecting that merging patch 3 and 4 will work, but cause sync_state
-> to not happen until the driver changes are merged.
-> 
-> Can you confirm my expectation? And perhaps confirm that it's fine for
-> Georgi to pick the driver changes independently of the dts changes...
+Hello Greg,
 
-I have picked the driver changes, as the boot failure definitely needs to
-be addressed. The sync-state might not happen until we have the DT changes
-merged, as the framework is matching the count of probed drivers with the
-count of providers in DT.
-
->> Cc: Alex Elder <elder@linaro.org>
->> Cc: Taniya Das <quic_tdas@quicinc.com>
->> Cc: Mike Tipton <quic_mdtipton@quicinc.com>
->> Cc: Georgi Djakov <djakov@kernel.org>
->> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-
-Acked-by: Georgi Djakov <djakov@kernel.org>
+This pull request contains interconnect driver fixes for an issue that
+has been reported. Please pull into char-misc-linus when possible. The
+patches have been in linux-next for a week.
 
 Thanks,
 Georgi
 
->> ---
->>   arch/arm64/boot/dts/qcom/sc7180.dtsi | 7 -------
->>   1 file changed, 7 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
->> index e1c46b80f14a..1ff96ef30e3f 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
->> @@ -1421,13 +1421,6 @@ mmss_noc: interconnect@1740000 {
->>   			qcom,bcm-voters = <&apps_bcm_voter>;
->>   		};
->>   
->> -		ipa_virt: interconnect@1e00000 {
->> -			compatible = "qcom,sc7180-ipa-virt";
->> -			reg = <0 0x01e00000 0 0x1000>;
->> -			#interconnect-cells = <2>;
->> -			qcom,bcm-voters = <&apps_bcm_voter>;
->> -		};
->> -
->>   		ipa: ipa@1e40000 {
->>   			compatible = "qcom,sc7180-ipa";
->>   
->> -- 
->> https://chromeos.dev
->>
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-5.18-rc4
+
+for you to fetch changes up to 2fb251c265608636fc961b7d38e1a03937e57371:
+
+  interconnect: qcom: sdx55: Drop IP0 interconnects (2022-04-14 09:47:16 +0300)
+
+----------------------------------------------------------------
+interconnect fixes for v5.18
+
+This contains a fix for a reported issue on sc7180 platforms, where
+one of the resources has been incorrectly modelled as both clock and
+interconnect, which is causing a crash when both frameworks try to
+manage it. Fix the same issue also on another platform that appears
+to be affected by the same.
+
+- interconnect: qcom: sc7180: Drop IP0 interconnects
+- interconnect: qcom: sdx55: Drop IP0 interconnects
+
+Signed-off-by: Georgi Djakov <djakov@kernel.org>
+
+----------------------------------------------------------------
+Stephen Boyd (2):
+      interconnect: qcom: sc7180: Drop IP0 interconnects
+      interconnect: qcom: sdx55: Drop IP0 interconnects
+
+ drivers/interconnect/qcom/sc7180.c | 21 --------
+ drivers/interconnect/qcom/sdx55.c  | 21 --------
+ 2 files changed, 42 deletions(-)
