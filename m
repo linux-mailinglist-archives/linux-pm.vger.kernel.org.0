@@ -2,206 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD33D50B1EA
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Apr 2022 09:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32FDC50B24B
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Apr 2022 09:59:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240571AbiDVHoj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Apr 2022 03:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56600 "EHLO
+        id S1445100AbiDVHzx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Apr 2022 03:55:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444951AbiDVHog (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 03:44:36 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF4E506F9;
-        Fri, 22 Apr 2022 00:41:44 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id n18so9094365plg.5;
-        Fri, 22 Apr 2022 00:41:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VpD4yFy85f6C68H5ezV9yCUomr5GyphpulX5PMC3cD0=;
-        b=ELLGtchfujVWTM/NeC4LuN2XrCbrar4xH8mtZYbh6iHEbiO3i2P331R0nXpFx0rJqB
-         LB66/Gj0ZhUs28v3LCC0n0vYSIZle0YwU8AGqFzNnuQxLlzfcPz+rMtehtlkbsKdmB6I
-         s/P/48BtiQPjdzeEwzCniSaMenYGtvn2HTTKpGFsZRfeCl11ToBri4BQ617YxUabs47E
-         46AsFNn36u+f5JbQtt0qlRsKnaIvhPSVptWhe/PcakfnwmhEzyvTqgydXzGxMJda4Cif
-         UPhWuka4hHZz6pFozXizY24bhwUM5m08N/xwYFR9jfL/ok8H3jq5qe+87/oldVFSRsaI
-         K80g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VpD4yFy85f6C68H5ezV9yCUomr5GyphpulX5PMC3cD0=;
-        b=FjoH1zJhz1QPXe+JD7FcQQ5WphGtIf+3hcuE/n6IJpvW/BDB1GQ0ELkUJP5eNy5pM6
-         weoaTLwh0Jaan3lO7CZk6rNdtk5jVw0T0ydjYvW9QzDOQYN8SwBGxwZLQFcqA1d4Ujh6
-         bTWymKAu/QcFW5fZlRkSDUSZ7Xu8gNEdPT2jlh+1Qz7mhKDqiIRCXMp76UZkNn2tJk4u
-         37ha4HqSu2dAbYd5yKHof7cZInep4MCLoSuIxRsfY3wNp+kQcC9iVDU2zHXxZGpkA+hc
-         +exIUThQQchX53/Ns8ZXRgXxwOD0nQgUa0i+3mWZ2RSSwnNcBByATE0ZTBbGZhEmZVe4
-         HuGg==
-X-Gm-Message-State: AOAM532prfGbzWmELk5RfqhsuSX8g7UUiwp+WmD94zkLgtQxUIl/qCVP
-        4L+geQpqI8Nmh+8La37rPLc=
-X-Google-Smtp-Source: ABdhPJwLtZzmH8WWk1SI5WNrEToyEpODLTsWuTHrKvy7fPUi+8uUypArOjGDOM/W8CKTV+DnBN7F0g==
-X-Received: by 2002:a17:90a:930b:b0:1d5:684b:8e13 with SMTP id p11-20020a17090a930b00b001d5684b8e13mr3903809pjo.153.1650613303606;
-        Fri, 22 Apr 2022 00:41:43 -0700 (PDT)
-Received: from tj10039pcu.spreadtrum.com ([117.18.48.102])
-        by smtp.gmail.com with ESMTPSA id x17-20020a17090a531100b001cd4989feccsm5045870pjh.24.2022.04.22.00.41.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 00:41:42 -0700 (PDT)
-From:   Cixi Geng <gengcixi@gmail.com>
-To:     sre@kernel.org, orsonzhai@gmail.com, baolin.wang7@gmail.com,
-        zhang.lyra@gmail.com, chenyongzhi811@gmail.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] power: supply: Add enable the primary charger interface
-Date:   Fri, 22 Apr 2022 15:41:09 +0800
-Message-Id: <20220422074109.1709106-1-gengcixi@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S1445083AbiDVHzr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 03:55:47 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41406515A2;
+        Fri, 22 Apr 2022 00:52:52 -0700 (PDT)
+X-UUID: a3ea85c0fad94e919aaa64e283ad7b9f-20220422
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:48c58dec-f2dc-4e2b-9295-d65b9ce99c50,OB:0,LO
+        B:0,IP:0,URL:8,TC:0,Content:28,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:36
+X-CID-META: VersionHash:faefae9,CLOUDID:784fc1ef-06b0-4305-bfbf-554bfc9d151a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:3,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: a3ea85c0fad94e919aaa64e283ad7b9f-20220422
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2063175171; Fri, 22 Apr 2022 15:52:45 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 22 Apr 2022 15:52:43 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 22 Apr
+ 2022 15:52:41 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 22 Apr 2022 15:52:40 +0800
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <matthias.bgg@gmail.com>
+CC:     <jia-wei.chang@mediatek.com>, <roger.lu@mediatek.com>,
+        <hsinyi@google.com>, <khilman@baylibre.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH V4 00/14] cpufreq: mediatek: Cleanup and support MT8183 and MT8186
+Date:   Fri, 22 Apr 2022 15:52:25 +0800
+Message-ID: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Chen Yongzhi <Yongzhi.Chen@unisoc.com>
+Cpufreq is a DVFS driver used for power saving to scale the clock frequency
+and supply the voltage for CPUs. This series do some cleanup for MediaTek
+cpufreq drivers and add support for MediaTek SVS[2] and MediaTek CCI
+devfreq[3] which are supported in MT8183 and MT8186.
 
-   In the case of charging multiple charging ICs,the primary
-   charging IC often needs to be turned off in the fast
-   charging stage, and only using the charger pump to charge,
-   need to add a new power_supply_property attribute.
+Changes for V4:
+1. Revise drivers from reviewers' suggestion.
+2. Fix name of opp table issue.
 
-Signed-off-by: Chen Yongzhi <Yongzhi.Chen@unisoc.com>
----
- drivers/power/supply/sc2731_charger.c | 50 +++++++++++++++++++++++++--
- include/linux/power_supply.h          |  1 +
- 2 files changed, 49 insertions(+), 2 deletions(-)
+Changes for V3:
+1. Rebased to linux-next-20220414.
+2. Drop accepted patches.
+3. Drop "cpufreq: mediatek: Use maximum voltage in init stage" because we
+   make sure the voltage we set is safe for both mediatek cci and cpufreq.
+4. Rename cci property to mediatek,cci.
+5. Adjust order of cleanup patches.
+6. Add new patches for cleanup, handle infinite loop and MT8183 dts.
+7. Revise drivers from reviewers' suggestion.
+8. Revise commit message of some patches to avoid confusion and misunderstand.
+9. Revise "cpufreq: mediatek: Link CCI device to CPU".
+   We do not return successful to pretend we set the target frequency done
+   when cci is not ready. Instead, we find and set a safe voltage so that we
+   can set the target cpufrequency.
 
-diff --git a/drivers/power/supply/sc2731_charger.c b/drivers/power/supply/sc2731_charger.c
-index 9ac17cf7a126..64c79d5ea90f 100644
---- a/drivers/power/supply/sc2731_charger.c
-+++ b/drivers/power/supply/sc2731_charger.c
-@@ -1,5 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
--// Copyright (C) 2018 Spreadtrum Communications Inc.
-+// Copyright (C) 2022 Spreadtrum Communications Inc.
- 
- #include <linux/module.h>
- #include <linux/platform_device.h>
-@@ -146,6 +146,24 @@ static int sc2731_charger_get_status(struct sc2731_charger_info *info)
- 	return POWER_SUPPLY_STATUS_CHARGING;
- }
- 
-+static int sc2731_charger_set_status(struct sc2731_charger_info *info, int val)
-+{
-+	int ret;
-+
-+	if (!val && info->charging) {
-+		sc2731_charger_stop_charge(info);
-+		info->charging = false;
-+	} else if (val && !info->charging) {
-+		ret = sc2731_charger_start_charge(info);
-+		if (ret)
-+			dev_err(info->dev, "start charge failed\n");
-+		else
-+			info->charging = true;
-+	}
-+
-+	return ret;
-+}
-+
- static int sc2731_charger_get_current(struct sc2731_charger_info *info,
- 				      u32 *cur)
- {
-@@ -214,6 +232,12 @@ sc2731_charger_usb_set_property(struct power_supply *psy,
- 	}
- 
- 	switch (psp) {
-+	case POWER_SUPPLY_PROP_STATUS:
-+		ret = sc2731_charger_set_status(info, val->intval);
-+		if (ret < 0)
-+			dev_err(info->dev, "set charge status failed\n");
-+		break;
-+
- 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
- 		ret = sc2731_charger_set_current(info, val->intval / 1000);
- 		if (ret < 0)
-@@ -227,6 +251,15 @@ sc2731_charger_usb_set_property(struct power_supply *psy,
- 			dev_err(info->dev, "set input current limit failed\n");
- 		break;
- 
-+	case POWER_SUPPLY_PROP_CHARGE_ENABLED:
-+		if (val->intval == true) {
-+			ret = sc2731_charger_start_charge(info);
-+			if (ret)
-+				dev_err(info->dev, "start charge failed\n");
-+		} else if (val->intval == false) {
-+			sc2731_charger_stop_charge(info);
-+		}
-+		break;
- 	default:
- 		ret = -EINVAL;
- 	}
-@@ -241,7 +274,7 @@ static int sc2731_charger_usb_get_property(struct power_supply *psy,
- {
- 	struct sc2731_charger_info *info = power_supply_get_drvdata(psy);
- 	int ret = 0;
--	u32 cur;
-+	u32 cur, enabled = 0;
- 
- 	mutex_lock(&info->lock);
- 
-@@ -277,6 +310,16 @@ static int sc2731_charger_usb_get_property(struct power_supply *psy,
- 		}
- 		break;
- 
-+	case POWER_SUPPLY_PROP_CHARGE_ENABLED:
-+		ret = regmap_read(info->regmap, info->base + SC2731_CHG_CFG0, &enabled);
-+		if (ret) {
-+			dev_err(info->dev, "get sc2731 charge enabled failed\n");
-+			goto out;
-+		}
-+
-+		val->intval = enabled & SC2731_CHARGER_PD;
-+
-+		break;
- 	default:
- 		ret = -EINVAL;
- 	}
-@@ -292,8 +335,10 @@ static int sc2731_charger_property_is_writeable(struct power_supply *psy,
- 	int ret;
- 
- 	switch (psp) {
-+	case POWER_SUPPLY_PROP_STATUS:
- 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
- 	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-+	case POWER_SUPPLY_PROP_CHARGE_ENABLED:
- 		ret = 1;
- 		break;
- 
-@@ -308,6 +353,7 @@ static enum power_supply_property sc2731_usb_props[] = {
- 	POWER_SUPPLY_PROP_STATUS,
- 	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
- 	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
-+	POWER_SUPPLY_PROP_CHARGE_ENABLED,
- };
- 
- static const struct power_supply_desc sc2731_charger_desc = {
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index cb380c1d9459..1dfe194d8a5e 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -167,6 +167,7 @@ enum power_supply_property {
- 	POWER_SUPPLY_PROP_PRECHARGE_CURRENT,
- 	POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT,
- 	POWER_SUPPLY_PROP_CALIBRATE,
-+	POWER_SUPPLY_PROP_CHARGE_ENABLED,
- 	POWER_SUPPLY_PROP_MANUFACTURE_YEAR,
- 	POWER_SUPPLY_PROP_MANUFACTURE_MONTH,
- 	POWER_SUPPLY_PROP_MANUFACTURE_DAY,
+Changes for V2:
+1. Drop the modification of transforming cpufreq-mediatek into yaml and
+   only add the MediaTek CCI property for MediaTek cpufreq.
+2. Split the original patches into several patches.
+
+Reference series:
+[1]: V1 of this series is present by Jia-Wei Chang.
+     message-id:20220307122151.11666-1-jia-wei.chang@mediatek.com
+
+[2]: The MediaTek CCI devfreq driver is introduced in another series.
+     message-id:20220408052150.22536-1-johnson.wang@mediatek.com
+
+[3]: The MediaTek SVS driver is introduced in another series.
+     message-id:20220221063939.14969-1-roger.lu@mediatek.com
+
+Andrew-sh.Cheng (1):
+  cpufreq: mediatek: Add opp notification support
+
+Jia-Wei Chang (6):
+  cpufreq: mediatek: Record previous target vproc value
+  cpufreq: mediatek: Move voltage limits to platform data
+  cpufreq: mediatek: Add .get function
+  cpufreq: mediatek: Make sram regulator optional
+  cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()
+  cpufreq: mediatek: Add support for MT8186
+
+Rex-BC Chen (7):
+  dt-bindings: cpufreq: mediatek: Add MediaTek CCI property
+  cpufreq: mediatek: Use device print to show logs
+  cpufreq: mediatek: Replace old_* with pre_*
+  cpufreq: mediatek: Link CCI device to CPU
+  arm64: dts: mediatek: Add opp table and clock property for MT8183 cpufreq
+  arm64: dts: mediatek: Add MediaTek CCI node for MT8183
+  arm64: dts: mediatek: Add mediatek,cci property for MT8183 cpufreq
+
+ .../bindings/cpufreq/cpufreq-mediatek.txt     |   5 +
+ arch/arm64/boot/dts/mediatek/mt8183-evb.dts   |  36 ++
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   4 +
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      | 285 ++++++++++
+ drivers/cpufreq/mediatek-cpufreq.c            | 504 ++++++++++++------
+ 5 files changed, 670 insertions(+), 164 deletions(-)
+
 -- 
-2.25.1
+2.18.0
 
