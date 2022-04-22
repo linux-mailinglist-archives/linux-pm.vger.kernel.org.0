@@ -2,87 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A60C950C478
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Apr 2022 01:12:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBD2550C37B
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Apr 2022 01:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232775AbiDVWT6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Apr 2022 18:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57040 "EHLO
+        id S234036AbiDVXAW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Apr 2022 19:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233728AbiDVWSo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 18:18:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A044705E;
-        Fri, 22 Apr 2022 15:04:51 -0700 (PDT)
+        with ESMTP id S234056AbiDVW7w (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 18:59:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A03713AB56;
+        Fri, 22 Apr 2022 15:24:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9EC42B83272;
-        Fri, 22 Apr 2022 22:04:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 502FFC385AB;
-        Fri, 22 Apr 2022 22:04:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85047B832DD;
+        Fri, 22 Apr 2022 22:24:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0321DC385A4;
+        Fri, 22 Apr 2022 22:24:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650665089;
-        bh=zuNw6j1TShfoNbLYYIZxrZxreBGq9IdbmgqrCDzwCoE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=GJHnYGm7kS7OYKfkAu61QcQIzQsPpKgiX8ZwFOEZB2cc8bdXfKuICeePb/LdLDWns
-         VNg0u6qUYqau/LeOFrayBulaQJxkihHPe/A2FqLymKPNdePaoUDSIGdGevpo7L/zJM
-         aFPhStRd09KzzfNR1joe6PwVDpjMzpbeziX7fgPmvokEvCi/0oFrjnwBTaaGfP/BOU
-         IUNNTQDtVNPw7mpJSpA99kiRdBDjanYdKye5l82yB0eqq3zLotqrujW7fvCIf2Ejkd
-         dAqJEF/tV2gwSfcpwtPVTrB+Lh9rnVah9UvWO9BhrH9MflpU1vh20qiOa/U8KRRaYH
-         giaZNTf1zCHIw==
-Received: by mail-wm1-f47.google.com with SMTP id q20so5841606wmq.1;
-        Fri, 22 Apr 2022 15:04:49 -0700 (PDT)
-X-Gm-Message-State: AOAM5316G1Qpk56Wu+UcOt6hj2nx1VfttOXlwvZpmLGd7jHRHONmsW3f
-        STOnEHKSTHIV4MExAz+NGq4VoEiQvcmEOpiQ/uQ=
-X-Google-Smtp-Source: ABdhPJxxyzPCyBaxXq4e/OKv6ds/3UgnpcR0jFo6uX7QoEAMCxGf0GP6zkRcnylbgWRsSBmj2Bdv9puvN/pDeVMDIcQ=
-X-Received: by 2002:a05:600c:4ed4:b0:392:90a5:b7e6 with SMTP id
- g20-20020a05600c4ed400b0039290a5b7e6mr15508304wmq.33.1650665087477; Fri, 22
- Apr 2022 15:04:47 -0700 (PDT)
+        s=k20201202; t=1650666289;
+        bh=fxJN1ADA+sWdw61IyEj2dQRFCoL52sBZQvlid/cA61E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=VqtUDtOScYsh+v96PGvVuNJA4iiHe4wsX46n78PX9q4xuJr4S6lfCl6udE4phxR/u
+         sDHXMGvuAzZc6k/O/ylBMrhWqoKUnBwG7C5ApaG3dvc/NuXg1nY8RauzA29/0GmDro
+         1ICAMa6ItEkonugBzifApV07hA+ZOEtw5b0KBCMGl5070QULczZzfIXskxOEF+najl
+         aTycO/QVOeHZPtNQuDSa0R8rzenzctAjN95/NGV3u1gWS26b6FORAce58dfg65PyO/
+         ufKiRA4WAVh9U+K66a47bC89lTQwcc7r4i++WXCUnFem/zek52SNa/UNDn4q96ZeV4
+         dD7MKEizgG/SQ==
+Date:   Fri, 22 Apr 2022 17:24:46 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Rajvi Jingar <rajvi.jingar@intel.com>
+Cc:     bhelgaas@google.com, david.e.box@linux.intel.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        mika.westerberg@linux.intel.com, koba.ko@canonical.com,
+        baolu.lu@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        Russell Currey <ruscur@russell.cc>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v4 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
+Message-ID: <20220422222446.GA1522716@bhelgaas>
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
- <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com> <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net>
-In-Reply-To: <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Sat, 23 Apr 2022 00:04:31 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
-Message-ID: <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ba571993-90fb-ae67-6617-0b63571298be@intel.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -92,35 +60,51 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 10:55 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> On 4/22/22 12:16, Arnd Bergmann wrote:
-> > On Fri, Apr 22, 2022 at 7:05 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > Which machine did you hit this on? Is this on hardware or in qemu?
-> >
-> qemu, as always. borzoi, spitz, terrier, tosa, z2, and sx1 fail.
-> Also, I just noticed that the failure is not always the same.
-> z2 fails to boot from initrd, and sx1 fails to boot completely.
+[+cc other folks interested in PTM from https://lore.kernel.org/r/20220408153159.106741-1-kai.heng.feng@canonical.com]
 
-That's a lot of machines failing, I hope at least we got the same bugs more
-than once here.
+On Thu, Apr 14, 2022 at 07:54:02PM +0200, Rafael J. Wysocki wrote:
+> On 3/25/2022 8:50 PM, Rajvi Jingar wrote:
+> > For the PCIe devices (like nvme) that do not go into D3 state still need to
+> > disable PTM on PCIe root ports to allow the port to enter a lower-power PM
+> > state and the SoC to reach a lower-power idle state as a whole. Move the
+> > pci_disable_ptm() out of pci_prepare_to_sleep() as this code path is not
+> > followed for devices that do not go into D3. This patch fixes the issue
+> > seen on Dell XPS 9300 with Ice Lake CPU and Dell Precision 5530 with Coffee
+> > Lake CPU platforms to get improved residency in low power idle states.
+> > 
+> > Fixes: a697f072f5da ("PCI: Disable PTM during suspend to save power")
+> > Signed-off-by: Rajvi Jingar <rajvi.jingar@intel.com>
+> > Suggested-by: David E. Box <david.e.box@linux.intel.com>
 
-For the I/O space, I found now that PXA was not using the standard
-virtual I/O address yet, but instead used a NULL-based offset.
+> > ---
+> >   v1 -> v2: add Fixes tag in commit message
+> >   v2 -> v3: move changelog after "---" marker
+> >   v3 -> v4: add "---" marker after changelog
+> > ---
+> >   drivers/pci/pci-driver.c | 10 ++++++++++
+> >   drivers/pci/pci.c        | 10 ----------
+> >   2 files changed, 10 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> > index 8b55a90126a2..ab733374a260 100644
+> > --- a/drivers/pci/pci-driver.c
+> > +++ b/drivers/pci/pci-driver.c
+> > @@ -847,6 +847,16 @@ static int pci_pm_suspend_noirq(struct device *dev)
+> >   	if (!pci_dev->state_saved) {
+> >   		pci_save_state(pci_dev);
+> > +		/*
+> > +		 * There are systems (for example, Intel mobile chips since Coffee
+> > +		 * Lake) where the power drawn while suspended can be significantly
+> > +		 * reduced by disabling PTM on PCIe root ports as this allows the
+> > +		 * port to enter a lower-power PM state and the SoC to reach a
+> > +		 * lower-power idle state as a whole.
+> > +		 */
+> > +		if (pci_pcie_type(pci_dev) == PCI_EXP_TYPE_ROOT_PORT)
+> > +			pci_disable_ptm(pci_dev);
 
-I'm not entirely happy with this patch, but this is an outline of what
-I think we need to fix that: https://pastebin.com/3nVgQsEw
-This one is probably incomplete, at least it breaks sa1100 for now,
-and it adds a bogus CONFIG_PCI dependency. I'm also not sure
-in what way the last patch in the series triggers it, rather than the
-one that removed mach/io.h.
+Why is disabling PTM dependent on pci_dev->state_saved?  The point of
+this is to change the behavior of the device, and it seems like we
+want to do that regardless of whether the driver has used
+pci_save_state().
 
-I had sx1 booting in qemu at least, with the omap1 multiplatform series only.
-If you have a custom config for this one, make sure you get the right
-DEBUG_LL address.
-
-> I'll do another round of bisects.
-
-Thanks!
-
-       Arnd
+Bjorn
