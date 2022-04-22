@@ -2,144 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B63750BB70
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Apr 2022 17:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F73A50BBA3
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Apr 2022 17:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449301AbiDVPQq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Apr 2022 11:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
+        id S1449404AbiDVP2F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Apr 2022 11:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448890AbiDVPQq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 11:16:46 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441785D674;
-        Fri, 22 Apr 2022 08:13:51 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 036e7665410539f2; Fri, 22 Apr 2022 17:13:49 +0200
-Received: from kreacher.localnet (unknown [213.134.161.204])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id F381766BFEB;
-        Fri, 22 Apr 2022 17:13:48 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: [PATCH] ACPI: bus: Avoid non-ACPI device objects in walks over children
-Date:   Fri, 22 Apr 2022 17:13:48 +0200
-Message-ID: <11974495.O9o76ZdvQC@kreacher>
+        with ESMTP id S1449420AbiDVP2D (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 11:28:03 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFE565EB
+        for <linux-pm@vger.kernel.org>; Fri, 22 Apr 2022 08:25:07 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id t11so17000976eju.13
+        for <linux-pm@vger.kernel.org>; Fri, 22 Apr 2022 08:25:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=sa/EoVj7UXoDHkP3+ISFzh+OXFxyPRq9RG0BLiBl6eg=;
+        b=hnD+E7YuymEsEN0uCt13UTly6lbaNaHlNGDgxZoQF6Xfs+pwqxOgf6vvEnBWYGXdM7
+         dKdfK9LhCPQpZGhqdHt4WYTEk5ts7Zb3rhsmo72FeTBK3Sj2+MNsDyAsCKgXcJu+oUgD
+         zsJVl2bniZZemVA2tO4GestXoYnAeXwsST3HEsV9/MscO3kJdbNnKLavvjPZORwpf1UT
+         XjXbgQ7S8b9gb61KpNZnA3D7PVlF/7JwzCup63xsTJszS32zOoGnzSMhqnabE/swfCpH
+         tZo/JMwTtWyBnuNpoq0h2IvAHRsOk7yGYR+NKRJdE88paV7aXSVn0yLzxMbWUj7ooOtL
+         vB1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sa/EoVj7UXoDHkP3+ISFzh+OXFxyPRq9RG0BLiBl6eg=;
+        b=3FBxR+8vkXrnn8cHeVlHB9+mCyf8yz3ZxdaXJsn0lOjDEJT5Tc7/nGCxI9VjP8wSh+
+         UzSAUywMuuGUNWjymOKzU2K6WJgRuzX3Wr1fW761WKnHOfuQvtZH60vChzPmLosq3kXD
+         m0wdfZJkxfEbMnWdhbsdr7m8xXmYmd5mc12NDXFK5tr4mbe6KsdW7AidIGbfWzdpeqRt
+         tuwWoEryLMM9NzW4xchkcenbi/DZiiEgIr7oGzFdss35FX7WRg3nFRXCcN4dN7fOcLaC
+         aFK3ALtLilyrVPFOpP/lPFjScE3wKadI4tYXiFPLKAgg60AJsV835ciV/UCBnIcBokdN
+         NVzg==
+X-Gm-Message-State: AOAM532q7XZwSxmUfDUK62VFkzQJgYKjyqG0pczbqh4a34tcNPEGP/7z
+        /UePeqb7y7ThNzNgM+3GYt7LxQ==
+X-Google-Smtp-Source: ABdhPJyvnxn5qAFZghz/3D1h2x9gZV4WrjtyW7sthE7LvdhGsrfG8iMZquBRE7UxfVek29yANr+GVg==
+X-Received: by 2002:a17:907:8a20:b0:6f0:1e57:2dd1 with SMTP id sc32-20020a1709078a2000b006f01e572dd1mr4620592ejc.392.1650641105606;
+        Fri, 22 Apr 2022 08:25:05 -0700 (PDT)
+Received: from [192.168.0.232] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id cr10-20020a056402222a00b0041d918fdf99sm1008263edb.85.2022.04.22.08.25.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Apr 2022 08:25:05 -0700 (PDT)
+Message-ID: <b96fd335-df13-6657-c2ff-38ff677555a4@linaro.org>
+Date:   Fri, 22 Apr 2022 17:25:04 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.161.204
-X-CLIENT-HOSTNAME: 213.134.161.204
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrtdeggdekfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrdduiedurddvtdegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeiuddrvddtgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohephhgv
- lhhgrggrsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/3] interconnect: qcom: constify qcom_icc_desc
+Content-Language: en-US
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220412102623.227607-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220412102623.227607-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 12/04/2022 12:26, Krzysztof Kozlowski wrote:
+> struct qcom_icc_desc is not modified so it can be made const for safety.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  drivers/interconnect/qcom/msm8916.c |  6 +++---
+>  drivers/interconnect/qcom/msm8939.c |  8 ++++----
+>  drivers/interconnect/qcom/msm8974.c | 12 ++++++------
+>  drivers/interconnect/qcom/qcm2290.c | 12 ++++++------
+>  drivers/interconnect/qcom/qcs404.c  |  6 +++---
+>  drivers/interconnect/qcom/sc7180.c  | 26 +++++++++++++-------------
+>  drivers/interconnect/qcom/sc7280.c  | 24 ++++++++++++------------
+>  drivers/interconnect/qcom/sdm660.c  | 12 ++++++------
+>  drivers/interconnect/qcom/sm8150.c  | 22 +++++++++++-----------
+>  drivers/interconnect/qcom/sm8250.c  | 22 +++++++++++-----------
+>  drivers/interconnect/qcom/sm8350.c  | 20 ++++++++++----------
+>  drivers/interconnect/qcom/sm8450.c  | 22 +++++++++++-----------
 
-When walking the children of an ACPI device, take extra care to avoid
-using to_acpi_device() on the ones that are not ACPI devices, because
-that may lead to out-of-bounds access and memory corruption.
+Hi folks,
 
-While at it, make the function passed to acpi_dev_for_each_child()
-take a struct acpi_device pointer argument (instead of a struct device
-one), so it is more straightforward to use.
+Any comments here?
 
-Fixes: b7dd6298db81 ("ACPI: PM: Introduce acpi_dev_power_up_children_with_adr()")
-Reported-by: kernel test robot <oliver.sang@intel.com>
-BugLink: https://lore.kernel.org/lkml/20220420064725.GB16310@xsang-OptiPlex-9020/
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-The commit being fixed is present in linux-next.
-
----
- drivers/acpi/bus.c       |   24 ++++++++++++++++++++++--
- drivers/acpi/device_pm.c |    5 +----
- include/acpi/acpi_bus.h  |    2 +-
- 3 files changed, 24 insertions(+), 7 deletions(-)
-
-Index: linux-pm/drivers/acpi/bus.c
-===================================================================
---- linux-pm.orig/drivers/acpi/bus.c
-+++ linux-pm/drivers/acpi/bus.c
-@@ -1070,10 +1070,30 @@ int acpi_bus_for_each_dev(int (*fn)(stru
- }
- EXPORT_SYMBOL_GPL(acpi_bus_for_each_dev);
- 
-+struct acpi_dev_walk_context {
-+	int (*fn)(struct acpi_device *, void *);
-+	void *data;
-+};
-+
-+static int acpi_dev_for_one_check(struct device *dev, void *context)
-+{
-+	struct acpi_dev_walk_context *adwc = context;
-+
-+	if (dev->bus != &acpi_bus_type)
-+		return 0;
-+
-+	return adwc->fn(to_acpi_device(dev), adwc->data);
-+}
-+
- int acpi_dev_for_each_child(struct acpi_device *adev,
--			    int (*fn)(struct device *, void *), void *data)
-+			    int (*fn)(struct acpi_device *, void *), void *data)
- {
--	return device_for_each_child(&adev->dev, data, fn);
-+	struct acpi_dev_walk_context adwc = {
-+		.fn = fn,
-+		.data = data,
-+	};
-+
-+	return device_for_each_child(&adev->dev, &adwc, acpi_dev_for_one_check);
- }
- 
- /* --------------------------------------------------------------------------
-Index: linux-pm/include/acpi/acpi_bus.h
-===================================================================
---- linux-pm.orig/include/acpi/acpi_bus.h
-+++ linux-pm/include/acpi/acpi_bus.h
-@@ -482,7 +482,7 @@ extern struct bus_type acpi_bus_type;
- 
- int acpi_bus_for_each_dev(int (*fn)(struct device *, void *), void *data);
- int acpi_dev_for_each_child(struct acpi_device *adev,
--			    int (*fn)(struct device *, void *), void *data);
-+			    int (*fn)(struct acpi_device *, void *), void *data);
- 
- /*
-  * Events
-Index: linux-pm/drivers/acpi/device_pm.c
-===================================================================
---- linux-pm.orig/drivers/acpi/device_pm.c
-+++ linux-pm/drivers/acpi/device_pm.c
-@@ -429,11 +429,8 @@ bool acpi_bus_power_manageable(acpi_hand
- }
- EXPORT_SYMBOL(acpi_bus_power_manageable);
- 
--static int acpi_power_up_if_adr_present(struct device *dev, void *not_used)
-+static int acpi_power_up_if_adr_present(struct acpi_device *adev, void *not_used)
- {
--	struct acpi_device *adev;
--
--	adev = to_acpi_device(dev);
- 	if (!(adev->flags.power_manageable && adev->pnp.type.bus_address))
- 		return 0;
- 
-
-
-
+Best regards,
+Krzysztof
