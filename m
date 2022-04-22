@@ -2,164 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4342F50BB63
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Apr 2022 17:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B63750BB70
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Apr 2022 17:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449272AbiDVPNv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Apr 2022 11:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56486 "EHLO
+        id S1449301AbiDVPQq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Apr 2022 11:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354558AbiDVPNs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 11:13:48 -0400
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88325D5D1;
-        Fri, 22 Apr 2022 08:10:51 -0700 (PDT)
-Received: by mail-vk1-xa2b.google.com with SMTP id bc42so3956664vkb.12;
-        Fri, 22 Apr 2022 08:10:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oDJ25/TckqjulH3Kz4Oc6VlKVfCbM4oJIYil6OeGKgs=;
-        b=qf+tYKgkgctIGlv3XQUSJG8kmbBYRFP1CtoIpeLiC3ROiDcWqMZc5fwfeNsHvQaOIv
-         GrttfdFBuJ88iHN/2Cp+jZO1yFJQb4VBt0XkdNBuoO2QLu2GlDK0Pqaa0yGMKlV4D2pI
-         1TuyvXqOg+zlLW1zlju9UgIaZUAFphl6N1RQzBzDbQzoo4c7Vhap80K/NKLPQuRFGD2w
-         Ee8q7f3tiEQU8igesrCEsEWbPPsBQnln8TM1M0E4osrUKR7ANN2eF8Brc1J1U+bM0UBg
-         s4bYXKtR+lHbQ9s3jiEqRR10WLsQdgAY/L4zu/Y7X6tgoRMCFCpR7uSpIg0k3HQCIje9
-         6M8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oDJ25/TckqjulH3Kz4Oc6VlKVfCbM4oJIYil6OeGKgs=;
-        b=RtBJ7lq/8gARipWQj7Ce1LGSxvtKgXUSFKCnXyg6uer8Iefen8NOVOCiArAxuV23ps
-         CP/XlCSFT1pzUbld4igWzkxdW6RR2mRJ3FUsBgo5EcJEx+FhvJf1buoN+cZp3Eff6RZi
-         ohDUCeTxPB3ITtYpoCY/Vk7dG9bS2aY6PAhiesWRPba1buB8n3cv2HMR7jI66AUOwlGq
-         oXd4iBJ8ZzQWYieLVGD+HiRN296AI4lp9Ob7wlIUf6XXWPQRHGPNMoK2kquZkvR7Mhjd
-         OtOjTLT9/Zc7gIFDjCuFimBCJD33uGV+83Z9X0UQVuoWfNiwU2sAYdUDY+5oktZ46gaJ
-         E+zA==
-X-Gm-Message-State: AOAM533CZDhMQF5xLiL2pftRYQmr014GIY0fzITBLd+mLbwp0S3Si0lL
-        S5PH0WzDU9/WAiOyS+aFTlf/gQScDnklYPR4UJrw1abz
-X-Google-Smtp-Source: ABdhPJzkQoGKG2TY6Zox/4S1noDfPT/RID/EUBV3B3Lb692c42FvomcVLfSE/jve7rFcWk2x6WkDE8JAs0t3srD1/CE=
-X-Received: by 2002:a1f:2494:0:b0:348:491:d046 with SMTP id
- k142-20020a1f2494000000b003480491d046mr1967180vkk.22.1650640250738; Fri, 22
- Apr 2022 08:10:50 -0700 (PDT)
+        with ESMTP id S1448890AbiDVPQq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 11:16:46 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441785D674;
+        Fri, 22 Apr 2022 08:13:51 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 036e7665410539f2; Fri, 22 Apr 2022 17:13:49 +0200
+Received: from kreacher.localnet (unknown [213.134.161.204])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id F381766BFEB;
+        Fri, 22 Apr 2022 17:13:48 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: [PATCH] ACPI: bus: Avoid non-ACPI device objects in walks over children
+Date:   Fri, 22 Apr 2022 17:13:48 +0200
+Message-ID: <11974495.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-References: <20220420191541.99528-1-schspa@gmail.com> <CAJZ5v0guPiGx-ZnC0RcqVgDEp0bh4DcKC7QYjjO0PF_3kHdVGg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0guPiGx-ZnC0RcqVgDEp0bh4DcKC7QYjjO0PF_3kHdVGg@mail.gmail.com>
-From:   Schspa Shi <schspa@gmail.com>
-Date:   Fri, 22 Apr 2022 23:10:39 +0800
-Message-ID: <CAMA88TpEHTEYU3Z_sXFcCXmW+9q=Ks+OSkGNY3N+uAisb+G7Ow@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: fix race on cpufreq online
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CLIENT-IP: 213.134.161.204
+X-CLIENT-HOSTNAME: 213.134.161.204
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrtdeggdekfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrdduiedurddvtdegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeiuddrvddtgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohephhgv
+ lhhgrggrsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-"Rafael J. Wysocki" <rafael@kernel.org> writes:
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-> On Wed, Apr 20, 2022 at 9:16 PM Schspa Shi <schspa@gmail.com> wrote:
->>
->> When cpufreq online failed, policy->cpus are not empty while
->> cpufreq sysfs file available, we may access some data freed.
->>
->> Take policy->clk as an example:
->>
->> static int cpufreq_online(unsigned int cpu)
->> {
->>   ...
->>   // policy->cpus != 0 at this time
->>   down_write(&policy->rwsem);
->>   ret = cpufreq_add_dev_interface(policy);
->>   up_write(&policy->rwsem);
->>
->>   return 0;
->>
->> out_destroy_policy:
->>         for_each_cpu(j, policy->real_cpus)
->>                 remove_cpu_dev_symlink(policy, get_cpu_device(j));
->>     up_write(&policy->rwsem);
->> ...
->> out_exit_policy:
->>   if (cpufreq_driver->exit)
->>     cpufreq_driver->exit(policy);
->>       clk_put(policy->clk);
->>       // policy->clk is a wild pointer
->> ...
->>                                     ^
->>                                     |
->>                             Another process access
->>                             __cpufreq_get
->>                               cpufreq_verify_current_freq
->>                                 cpufreq_generic_get
->>                                   // acces wild pointer of policy->clk;
->>                                     |
->>                                     |
->> out_offline_policy:                 |
->>   cpufreq_policy_free(policy);      |
->>     // deleted here, and will wait for no body reference
->>     cpufreq_policy_put_kobj(policy);
->> }
->>
->> Signed-off-by: Schspa Shi <schspa@gmail.com>
->> ---
->>  drivers/cpufreq/cpufreq.c | 5 +++--
->>  1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
->> index 80f535cc8a75..0d58b0f8f3af 100644
->> --- a/drivers/cpufreq/cpufreq.c
->> +++ b/drivers/cpufreq/cpufreq.c
->> @@ -1533,8 +1533,6 @@ static int cpufreq_online(unsigned int cpu)
->>         for_each_cpu(j, policy->real_cpus)
->>                 remove_cpu_dev_symlink(policy, get_cpu_device(j));
->>
->> -       up_write(&policy->rwsem);
->> -
->>  out_offline_policy:
->>         if (cpufreq_driver->offline)
->>                 cpufreq_driver->offline(policy);
->> @@ -1543,6 +1541,9 @@ static int cpufreq_online(unsigned int cpu)
->>         if (cpufreq_driver->exit)
->>                 cpufreq_driver->exit(policy);
->>
->> +       cpumask_clear(policy->cpus);
->> +       up_write(&policy->rwsem);
->
-> This change is correct AFAICS, but it doesn't really fix the race,
-> because show_cpuinfo_cur_freq() uses __cpufreq_get() directly without
-> locking.
+When walking the children of an ACPI device, take extra care to avoid
+using to_acpi_device() on the ones that are not ACPI devices, because
+that may lead to out-of-bounds access and memory corruption.
 
-There is a lock outside of show_cpuinfo_cur_freq(). Please check about
-static ssize_t show(struct kobject *kobj, struct attribute *attr, char *buf)
-{
-        ......
-        down_read(&policy->rwsem);
-        ret = fattr->show(policy, buf);
-        up_read(&policy->rwsem);
+While at it, make the function passed to acpi_dev_for_each_child()
+take a struct acpi_device pointer argument (instead of a struct device
+one), so it is more straightforward to use.
 
-    ......
-}
+Fixes: b7dd6298db81 ("ACPI: PM: Introduce acpi_dev_power_up_children_with_adr()")
+Reported-by: kernel test robot <oliver.sang@intel.com>
+BugLink: https://lore.kernel.org/lkml/20220420064725.GB16310@xsang-OptiPlex-9020/
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
 
->
-> It should use cpufreq_get() instead.
->
->> +
->>  out_free_policy:
->>         cpufreq_policy_free(policy);
->>         return ret;
->> --
+The commit being fixed is present in linux-next.
 
---
-Schspa Shi
-BRs
+---
+ drivers/acpi/bus.c       |   24 ++++++++++++++++++++++--
+ drivers/acpi/device_pm.c |    5 +----
+ include/acpi/acpi_bus.h  |    2 +-
+ 3 files changed, 24 insertions(+), 7 deletions(-)
+
+Index: linux-pm/drivers/acpi/bus.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/bus.c
++++ linux-pm/drivers/acpi/bus.c
+@@ -1070,10 +1070,30 @@ int acpi_bus_for_each_dev(int (*fn)(stru
+ }
+ EXPORT_SYMBOL_GPL(acpi_bus_for_each_dev);
+ 
++struct acpi_dev_walk_context {
++	int (*fn)(struct acpi_device *, void *);
++	void *data;
++};
++
++static int acpi_dev_for_one_check(struct device *dev, void *context)
++{
++	struct acpi_dev_walk_context *adwc = context;
++
++	if (dev->bus != &acpi_bus_type)
++		return 0;
++
++	return adwc->fn(to_acpi_device(dev), adwc->data);
++}
++
+ int acpi_dev_for_each_child(struct acpi_device *adev,
+-			    int (*fn)(struct device *, void *), void *data)
++			    int (*fn)(struct acpi_device *, void *), void *data)
+ {
+-	return device_for_each_child(&adev->dev, data, fn);
++	struct acpi_dev_walk_context adwc = {
++		.fn = fn,
++		.data = data,
++	};
++
++	return device_for_each_child(&adev->dev, &adwc, acpi_dev_for_one_check);
+ }
+ 
+ /* --------------------------------------------------------------------------
+Index: linux-pm/include/acpi/acpi_bus.h
+===================================================================
+--- linux-pm.orig/include/acpi/acpi_bus.h
++++ linux-pm/include/acpi/acpi_bus.h
+@@ -482,7 +482,7 @@ extern struct bus_type acpi_bus_type;
+ 
+ int acpi_bus_for_each_dev(int (*fn)(struct device *, void *), void *data);
+ int acpi_dev_for_each_child(struct acpi_device *adev,
+-			    int (*fn)(struct device *, void *), void *data);
++			    int (*fn)(struct acpi_device *, void *), void *data);
+ 
+ /*
+  * Events
+Index: linux-pm/drivers/acpi/device_pm.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/device_pm.c
++++ linux-pm/drivers/acpi/device_pm.c
+@@ -429,11 +429,8 @@ bool acpi_bus_power_manageable(acpi_hand
+ }
+ EXPORT_SYMBOL(acpi_bus_power_manageable);
+ 
+-static int acpi_power_up_if_adr_present(struct device *dev, void *not_used)
++static int acpi_power_up_if_adr_present(struct acpi_device *adev, void *not_used)
+ {
+-	struct acpi_device *adev;
+-
+-	adev = to_acpi_device(dev);
+ 	if (!(adev->flags.power_manageable && adev->pnp.type.bus_address))
+ 		return 0;
+ 
+
+
+
