@@ -2,169 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6133950C1EC
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Apr 2022 00:07:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 415A250C47A
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Apr 2022 01:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbiDVV5p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Apr 2022 17:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
+        id S232296AbiDVWPc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Apr 2022 18:15:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbiDVV5D (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 17:57:03 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2251AFF5D;
-        Fri, 22 Apr 2022 13:39:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650659994; x=1682195994;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UMRs4BhTByG3T0yDZhW94axoO98VgNSgjnfEZMM3/as=;
-  b=lTZxpBoeWfaai/QN924GKvdQdblQhJN+yIquj7iG17bZU9wVF+ZtEATd
-   g4EzUzX2PBNfZxxxhXbdar/MlVdXpCo7G2W5cqIBafWFYEBnbkkBwjHDd
-   gQn3aOhXe9muB8XyTHcjnEDOTZVbiyQrZ32OYozuZwk6mUTB0DJn9wmGY
-   A0UdrnFc1/hLtAi3JLLwIKvnCAMIAGNwUrMmUfvDNDeozsJnFrLgynl7U
-   kAnzMs6BtMA58hC2CEiXWwQB5HFlXFRiGNsmQuEBacqMnfvRc4qRiTfW8
-   arGJCAwsyRRkCJ7ojUxgSXFNpzSj6YKQPFGAS5ajFE/wXTLWzd7hTc+zV
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="325202821"
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="325202821"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 11:17:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
-   d="scan'208";a="594251782"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 22 Apr 2022 11:16:57 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nhxpx-000ARo-9g;
-        Fri, 22 Apr 2022 18:16:57 +0000
-Date:   Sat, 23 Apr 2022 02:16:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Cixi Geng <gengcixi@gmail.com>, sre@kernel.org,
-        orsonzhai@gmail.com, baolin.wang7@gmail.com, zhang.lyra@gmail.com,
-        chenyongzhi811@gmail.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: Add enable the primary charger interface
-Message-ID: <202204230206.9TgyhSb1-lkp@intel.com>
-References: <20220422074109.1709106-1-gengcixi@gmail.com>
+        with ESMTP id S232204AbiDVWPQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 18:15:16 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD3323668D;
+        Fri, 22 Apr 2022 14:05:18 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id b17so6961114qvp.6;
+        Fri, 22 Apr 2022 14:05:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DpzKp6GQylN2DVn3Q8F44AaoMz54tuxDB2xUboNmmNk=;
+        b=pzvr3/UvSftncfosMfmgiWOYhMYbYHuIZTCgY5hDDTvmyy0dEedr9JVfuEeVSTpSm5
+         Wod5E9A0cF7e6X5SdVy8UQacTpGtFKdz/js8K/09qJ95ej2UAw2PGlDkrsu+YG2dXUGA
+         p/jEJQdqi+LBuQNomKnUI+S9NQyVkZ2ZnEbNnNiPIsX8T4w6VzABtzJx/TXysyHMCVQ+
+         ScUWgjAh3cPwFtBgN8jKf/CoS7zoCpT0JVr0YNB0YwEC8YxElSpInoxiPR7dP6Gy9x+x
+         Z2XHiikQMiTNKC8bErgRGi2i/cEQhRjtXly2a1DC44EwlTnp4zUihn+XzrUyE57MfFZT
+         LYeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DpzKp6GQylN2DVn3Q8F44AaoMz54tuxDB2xUboNmmNk=;
+        b=N+dern6iTZrA/2UvQsr6Y52jn8zymardWbbx95HxpdlyZEHU0GjMAhiSiuBcWU6ygK
+         JvfCgYSLuYmROy/fJwQDjacL8Z26faSRt/7q+beB70rfc12J3+jrUYoa3of+uVgVOn8r
+         E0I3Cha8DP6onWwoH6uDGhYrXN0tjv0lYjfsOL/h4s6rAHmkmMnRct/kEU5pURDnwn+u
+         jLIR9LJuEdROgHTQH9jEsbxMhgu77xSQKO3yBuhhcTCkBSyEq0t6vd7LJxhqOmp1tFVj
+         /fsF/Urs+Z1Da7L6xRV5AHESN3hbjFZCoDcZ475N18TUP89AJOhbCYU+21J3cifOSl/X
+         tnWQ==
+X-Gm-Message-State: AOAM533V03zKTB0KHH5xciSahmWiExG0lVdxqoqtnCrR4CoYYoVLgztQ
+        L0rfaX+MxMSzwBqpHdHMyvbxV359xb7uLrvxjhSuX17I
+X-Google-Smtp-Source: ABdhPJyDTdfYVPmGi9JCDZSwQ3dGVcvDeC8/OPyjPu7IjhwDECkrHzuq3quIB48TTMhTBLoEclHmpE49GOqp3rGJBbM=
+X-Received: by 2002:ad4:5943:0:b0:446:5c3e:2c2a with SMTP id
+ eo3-20020ad45943000000b004465c3e2c2amr4554955qvb.75.1650653101635; Fri, 22
+ Apr 2022 11:45:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422074109.1709106-1-gengcixi@gmail.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <BYAPR20MB24721F9954252BECBEF486ACBCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+In-Reply-To: <BYAPR20MB24721F9954252BECBEF486ACBCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+From:   Vasily Khoruzhick <anarsoul@gmail.com>
+Date:   Fri, 22 Apr 2022 11:44:35 -0700
+Message-ID: <CA+E=qVfMm=8aQOM_HW_3EeqqLi-Fgn1Ex3h6kor89FQ0KfTvRw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: thermal: sun8i-thermal: add binding for
+ R329 THS
+To:     icenowy@outlook.com
+Cc:     Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-linux <linux-arm-kernel@lists.infradead.org>,
+        linux-sunxi@lists.linux.dev,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Icenowy Zheng <icenowy@aosc.io>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Cixi,
+On Fri, Apr 22, 2022 at 9:12 AM <icenowy@outlook.com> wrote:
+>
+> From: Icenowy Zheng <icenowy@aosc.io>
+>
+> R329 has a thermal sensor controller that has only one sensor, and the
+> structure of it is like the H6 one.
+>
+> Add device tree binding for it.
+>
+> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+> ---
+>  .../devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml  | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+> index 6e0b110153b0..87b4103e0a5f 100644
+> --- a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+> @@ -20,6 +20,7 @@ properties:
+>        - allwinner,sun50i-a100-ths
+>        - allwinner,sun50i-h5-ths
+>        - allwinner,sun50i-h6-ths
+> +      - allwinner,sun50i-r329-ths
+>
+>    clocks:
+>      minItems: 1
+> @@ -63,6 +64,7 @@ allOf:
+>              enum:
+>                - allwinner,sun50i-a100-ths
+>                - allwinner,sun50i-h6-ths
+> +              - allwinner,sun50i-r329-ths
+>
+>      then:
+>        properties:
+> @@ -85,6 +87,7 @@ allOf:
+>          compatible:
+>            contains:
+>              const: allwinner,sun8i-h3-ths
+> +            const: allwinner,sun8i-r329-ths
+>
+>      then:
+>        properties:
 
-Thank you for the patch! Perhaps something to improve:
+There's also a check at line #99 that requires clock, clock-names and
+resets properties for thermal sensors in other Allwinner SoCs. Are
+these not required for r329?
 
-[auto build test WARNING on sre-power-supply/for-next]
-[also build test WARNING on v5.18-rc3 next-20220422]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Cixi-Geng/power-supply-Add-enable-the-primary-charger-interface/20220422-154432
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
-config: riscv-randconfig-r042-20220422 (https://download.01.org/0day-ci/archive/20220423/202204230206.9TgyhSb1-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 5bd87350a5ae429baf8f373cb226a57b62f87280)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/a566cf23ffad8453d1e1f611086b6eda3f14515d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Cixi-Geng/power-supply-Add-enable-the-primary-charger-interface/20220422-154432
-        git checkout a566cf23ffad8453d1e1f611086b6eda3f14515d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/power/supply/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/power/supply/sc2731_charger.c:156:13: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           } else if (val && !info->charging) {
-                      ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/power/supply/sc2731_charger.c:164:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/power/supply/sc2731_charger.c:156:9: note: remove the 'if' if its condition is always true
-           } else if (val && !info->charging) {
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/power/supply/sc2731_charger.c:156:13: warning: variable 'ret' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
-           } else if (val && !info->charging) {
-                      ^~~
-   drivers/power/supply/sc2731_charger.c:164:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/power/supply/sc2731_charger.c:156:13: note: remove the '&&' if its condition is always true
-           } else if (val && !info->charging) {
-                      ^~~~~~
->> drivers/power/supply/sc2731_charger.c:153:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!val && info->charging) {
-               ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/power/supply/sc2731_charger.c:164:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/power/supply/sc2731_charger.c:153:2: note: remove the 'if' if its condition is always false
-           if (!val && info->charging) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/power/supply/sc2731_charger.c:151:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   drivers/power/supply/sc2731_charger.c:255:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                   if (val->intval == true) {
-                       ^~~~~~~~~~~~~~~~~~~
-   drivers/power/supply/sc2731_charger.c:268:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/power/supply/sc2731_charger.c:255:3: note: remove the 'if' if its condition is always true
-                   if (val->intval == true) {
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/power/supply/sc2731_charger.c:225:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   4 warnings generated.
+Also are you planning to add a node for thermal sensor to r329 dtsi?
 
 
-vim +156 drivers/power/supply/sc2731_charger.c
-
-   148	
-   149	static int sc2731_charger_set_status(struct sc2731_charger_info *info, int val)
-   150	{
-   151		int ret;
-   152	
- > 153		if (!val && info->charging) {
-   154			sc2731_charger_stop_charge(info);
-   155			info->charging = false;
- > 156		} else if (val && !info->charging) {
-   157			ret = sc2731_charger_start_charge(info);
-   158			if (ret)
-   159				dev_err(info->dev, "start charge failed\n");
-   160			else
-   161				info->charging = true;
-   162		}
-   163	
-   164		return ret;
-   165	}
-   166	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> --
+> 2.35.1
+>
