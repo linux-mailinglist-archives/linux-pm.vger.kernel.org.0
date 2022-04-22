@@ -2,147 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9C750C517
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Apr 2022 01:46:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25EFF50C521
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Apr 2022 01:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbiDVXfg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Apr 2022 19:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
+        id S229587AbiDVXoa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Apr 2022 19:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiDVXf0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 19:35:26 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB6E1D83BA;
-        Fri, 22 Apr 2022 16:18:40 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id i3-20020a056830010300b00605468119c3so6494407otp.11;
-        Fri, 22 Apr 2022 16:18:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KoWXKICOXrLwboX1KRSR8wabyc5tj+p6lrbCOGJNsB0=;
-        b=WfyERyMX7R5AXo/rMMIl6y8nSXixykdVRLEdinY/MomqcCB5r5ZQbLs3BCON1JbJid
-         SYBch1vH11Gbyyr7uHnb4uKt0rpEYLwWG6jPVzGB/6YTjnfP6B6nc9E72CRX17Qo8Nv0
-         hqL9sBFF2f0anLzd4y4fWfHceVS7UFZj4OgGcGq3zFsQ1W26Ro4FtkgUsgVmFt6FTodv
-         WJhhQLAQTlQE5ybgDgtXzSu4H0hkfGnY/mdPQk846Y0PZFkSuevMtu2SOCSNLfL6QGeG
-         2/n/ZJOa7dCF4cmxGePvIEuDB/dkYth22mYrBof0ZAwoE1ogpw42s8W4hmZGYwun6WYu
-         NaHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=KoWXKICOXrLwboX1KRSR8wabyc5tj+p6lrbCOGJNsB0=;
-        b=0udM59OXTkX0qBnWg3+GL73fGaVxcVrRra3MiwovoCuQzxxCnuxt4rnE5fI87cJDSJ
-         5hJ2UtZRWZ9W0jRioEmY5Ehh4Gf3AZBrpWIuFjHTuTFEc2xY0CX13Mf95XBRpjYlbnST
-         GkOFlxxsWcRCHAwWo6NyNK5h4jIiUqU2CR9ac3QPbe8dvA3RAEucqq/PkaiInJx4nD3I
-         ad9eXdjUG6GoAVuUbilyT2ogorPZnCF8S5+wDMt9nB6wZyAULb5gUbsJuhxq6NN5OMjK
-         ZzZq9gBkRqsf1v1hHQwuEVbNrB7VXAl3fIzvpEalEqAbVUoilveIzYT5QHw5TBPKhng0
-         w2Ew==
-X-Gm-Message-State: AOAM5339xlY6pD+0oHKGHNb0Dm+jKfiKy3vE2bynMOUsa/eiVWOva+Il
-        rRsE3wldGCT8V/5DLez8bjg=
-X-Google-Smtp-Source: ABdhPJwKkrwKpAYwt9fhjngX1DM/06254YDKfs9CDiPU2Hx7eNlH3p/K4fmqYt8gQFcOM67kG0jDEA==
-X-Received: by 2002:a05:6830:14cd:b0:605:4e77:6472 with SMTP id t13-20020a05683014cd00b006054e776472mr2672213otq.94.1650669519778;
-        Fri, 22 Apr 2022 16:18:39 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f15-20020a9d5f0f000000b005e6b67945a3sm1256410oti.15.2022.04.22.16.18.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Apr 2022 16:18:38 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 22 Apr 2022 16:18:36 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-Message-ID: <20220422231836.GA3202260@roeck-us.net>
-References: <20220419163810.2118169-1-arnd@kernel.org>
- <20220422170530.GA2338209@roeck-us.net>
- <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
- <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net>
- <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
+        with ESMTP id S231539AbiDVXmh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 19:42:37 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E7C1971CF;
+        Fri, 22 Apr 2022 16:39:32 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 870A93201F1A;
+        Fri, 22 Apr 2022 19:39:30 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Fri, 22 Apr 2022 19:39:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1650670770; x=
+        1650757170; bh=TYWJpQ9HQWPCAbkcH0PjM6q5uQurr4Nv5cqpAtGIW0w=; b=E
+        FENhP/7MV9tPhgisJOFk3lrUsecxytcNQp/tyukbGkDBdRkfFICN/EAVmK4RZHH+
+        S2liZrPaDe1MzEWsYK5tM1/yY/s6/1g0Ohgi7kKAXdzeApNX2t5M4DFGlkj4Ko3x
+        yImBnxau/nt5PfpFCUAG6X9HeDJnsYEsIzsRYI0e4w3SxTePOLbStlrNSeJr2LpW
+        OG4ydRbGW/bJuXLnAMwcw27I4/x0BvA7oyZpd4c4ounHszngpnYlorHpssOtycyg
+        QA7BB8Ws79pSGhlrscoH96Fy78VlRllQcr2luZM3QtWuEtN+3MUO8QrXs7c/knQ8
+        Mgzekj+ntWHKKf0NvVtCw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1650670770; x=1650757170; bh=TYWJpQ9HQWPCA
+        bkcH0PjM6q5uQurr4Nv5cqpAtGIW0w=; b=R58i3gzzLAy2O7OM67y8+iBpFehof
+        /2k1p442uBZQ+vOwue0z8isrZLIhn+OuL9vT55ZkHIEH6cnmijNH82uz8ketc1Iz
+        tA7T0DcIsIvdzkVeLNUZFZUV47dnXrxLIh04ZW3DDKQ5EId4FVYomr9VkTFjr3sF
+        TPSO/+L1OzgWB8BzKzjYohzmPfULB3yu603HnE8C7jEgXJ6VPPVu/PVObWgb4szm
+        6n2b86PdKqv6pXshzDXB/FuwrbKlaI6A3O3n38A1nzW0i0OiMJyWG4gsuSPSAv8n
+        YPLzbMNgvb0gmyWpdMFlH2A0Uf0D9vclnIfU5tNF+4aO0tuiv7QQrlYLA==
+X-ME-Sender: <xms:sDxjYnyMEaXVFAwPvJqg02koiuV-7aeviTQcvC-uXV0UkeAVCn_YzQ>
+    <xme:sDxjYvRU9l6oDGyycx3iHTrpNjyrWciIZ2gYVRRfUyPoVkrR548C8opOVxjKLKaBk
+    aMDO4lNIHMuLcZaaw>
+X-ME-Received: <xmr:sDxjYhW8hZ_4Yh3J8HCxF3Bz_Bk0RY39vwBSCNFr05KZ7W4sOjgGbQDM3xMNHtYXDmRR1mIMn_fbVP0btNMAeiATkN3joHitRE7AJVuVjTuKmarxxeLqLTCHWg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtdehgddviecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepffdtveekvdegkeeuueetgfetffeileevudekuefhheelvdfhiedt
+    heduhfduhefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:sTxjYhhfK_Ep7s8DWrx6ltNprNcq-oELOce5i66luFweD3ylS7G03Q>
+    <xmx:sTxjYpDRSl36lwaMYrl6e03OCly2H_lIu6H7WPlYI76iIpbNy56ZBQ>
+    <xmx:sTxjYqI2yYKb3tbPE6qZWZcCVh27GL-3X6SpvYvOKBEuLpRYYTQnqg>
+    <xmx:sjxjYhZrPXTIvWEgfb8nNaAFfSITyvyqBc0H0rOs-y_3X62GigX7Ig>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 22 Apr 2022 19:39:27 -0400 (EDT)
+Subject: Re: [PATCH 2/2] thermal: sun8i: add R329 THS
+To:     Icenowy Zheng <icenowy@aosc.io>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Icenowy Zheng <icenowy@aosc.io>
+References: <20220422161156.1075227-1-icenowy@outlook.com>
+ <BYAPR20MB24720C488FD2BB42038D9825BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <f21303dd-14e2-80e6-ef07-2a1584d93b2e@sholland.org>
+Date:   Fri, 22 Apr 2022 18:39:27 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <BYAPR20MB24720C488FD2BB42038D9825BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Apr 23, 2022 at 12:04:31AM +0200, Arnd Bergmann wrote:
-> On Fri, Apr 22, 2022 at 10:55 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > On 4/22/22 12:16, Arnd Bergmann wrote:
-> > > On Fri, Apr 22, 2022 at 7:05 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > >
-> > > Which machine did you hit this on? Is this on hardware or in qemu?
-> > >
-> > qemu, as always. borzoi, spitz, terrier, tosa, z2, and sx1 fail.
-> > Also, I just noticed that the failure is not always the same.
-> > z2 fails to boot from initrd, and sx1 fails to boot completely.
+Hi Icenowy,
+
+On 4/22/22 11:11 AM, icenowy@outlook.com wrote:
+> From: Icenowy Zheng <icenowy@aosc.io>
 > 
-> That's a lot of machines failing, I hope at least we got the same bugs more
-> than once here.
+> The thermal sensor controller on R329 is similar to the one on H6, but
+> with only one sensor. Calibration method is still unknown because no
+> calibration is implemented in BSP kernel, neither is it documented in
+> the user manual.
+
+Looking at the BSP smartx-r329-tina-for-jishu-community-v0.2, I see:
+
+ths_calib: calib@14 {
+        reg = <0x14 4>;
+};
+
+And the BSP driver (drivers/thermal/sunxi_thermal-ng.c) claims that R329 uses
+the same calibration method as for H616. Maybe you are looking at an older BSP?
+
+Regards,
+Samuel
+
 > 
-> For the I/O space, I found now that PXA was not using the standard
-> virtual I/O address yet, but instead used a NULL-based offset.
+> Add its support to sun8i-thermal driver. Calibrating it is now
+> prevented.
 > 
-> I'm not entirely happy with this patch, but this is an outline of what
-> I think we need to fix that: https://pastebin.com/3nVgQsEw
-> This one is probably incomplete, at least it breaks sa1100 for now,
-> and it adds a bogus CONFIG_PCI dependency. I'm also not sure
-> in what way the last patch in the series triggers it, rather than the
-> one that removed mach/io.h.
+> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+> ---
+>  drivers/thermal/sun8i_thermal.c | 15 ++++++++++++++-
+>  1 file changed, 14 insertions(+), 1 deletion(-)
 > 
-> I had sx1 booting in qemu at least, with the omap1 multiplatform series only.
-> If you have a custom config for this one, make sure you get the right
-> DEBUG_LL address.
-> 
-> > I'll do another round of bisects.
+> diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+> index d9cd23cbb671..3a2f381005b4 100644
+> --- a/drivers/thermal/sun8i_thermal.c
+> +++ b/drivers/thermal/sun8i_thermal.c
+> @@ -312,7 +312,8 @@ static int sun8i_ths_calibrate(struct ths_device *tmdev)
+>  		goto out;
+>  	}
+>  
+> -	tmdev->chip->calibrate(tmdev, caldata, callen);
+> +	if (tmdev->chip->calibrate)
+> +		tmdev->chip->calibrate(tmdev, caldata, callen);
+>  
+>  	kfree(caldata);
+>  out:
+> @@ -628,6 +629,17 @@ static const struct ths_thermal_chip sun50i_h6_ths = {
+>  	.calc_temp = sun8i_ths_calc_temp,
+>  };
+>  
+> +static const struct ths_thermal_chip sun50i_r329_ths = {
+> +	.sensor_num = 1,
+> +	.has_bus_clk_reset = true,
+> +	.offset = 188744,
+> +	.scale = 672,
+> +	.temp_data_base = SUN50I_H6_THS_TEMP_DATA,
+> +	.init = sun50i_h6_thermal_init,
+> +	.irq_ack = sun50i_h6_irq_ack,
+> +	.calc_temp = sun8i_ths_calc_temp,
+> +};
+> +
+>  static const struct of_device_id of_ths_match[] = {
+>  	{ .compatible = "allwinner,sun8i-a83t-ths", .data = &sun8i_a83t_ths },
+>  	{ .compatible = "allwinner,sun8i-h3-ths", .data = &sun8i_h3_ths },
+> @@ -636,6 +648,7 @@ static const struct of_device_id of_ths_match[] = {
+>  	{ .compatible = "allwinner,sun50i-a100-ths", .data = &sun50i_a100_ths },
+>  	{ .compatible = "allwinner,sun50i-h5-ths", .data = &sun50i_h5_ths },
+>  	{ .compatible = "allwinner,sun50i-h6-ths", .data = &sun50i_h6_ths },
+> +	{ .compatible = "allwinner,sun50i-r329-ths", .data = &sun50i_r329_ths },
+>  	{ /* sentinel */ },
+>  };
+>  MODULE_DEVICE_TABLE(of, of_ths_match);
 > 
 
-So ... z2 bisect points to the same patch, but the error is different.
-As mentioned, it does not recognize the initrd. Oddly enough, booting
-from initrd works for the other platforms.
-
-The sx1 boot failure seems to be unrelated to your patch series. It boots
-fine if built from the tip of your branch, but fails to boot in -next.
-That will require a bisect from -next.
-
-Guenter
