@@ -2,113 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3279450BCAF
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Apr 2022 18:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7FD50BDEA
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Apr 2022 19:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377071AbiDVQPR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Apr 2022 12:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48136 "EHLO
+        id S1384888AbiDVRIb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Apr 2022 13:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377448AbiDVQPP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 12:15:15 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12olkn2064.outbound.protection.outlook.com [40.92.21.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E4F5E17D;
-        Fri, 22 Apr 2022 09:12:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iR1VQ9HarPAQGINKnH+JY+ZuXMg5uWENxmn8VH9YsHBniirmW8xgcCxET4YBDgQDc86ip8bzESDeuhBpo8SlkgVZl7d++0/2coNINMQs5qVA28dd8CpC2WgzBJ8XKTiOoJ6Y5rTdpBa7OHBahlvm+m0HOLW2mTUqbcbNIgEwFNWdtvjCrKMIERfF8iKhtMSlb7XIuvH5IOfd3AeI/86WKVE38sYjohvyWYF+H2nW+98WR8Xo6myNZYl1DGdogKvWQH0+E4xCvSnFAbxRq+VWNv8fcj0lD2w3sV4CM1wVKy+4WciBquhrj/77s13rg1Ov2GWQHclK2H8nKLaRx0tCew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yAF2HdcjwCdgr2Kjx5dH8Vy5izGEjjHNh8wXWPDzMX8=;
- b=bjnSbhjA8Ik5QVoEgMTghqKNEvEl7PM8ejRzOiQZ2FXsdDrig9w2LM9t9X0L3E7pu2Bra6GNAeiqkZdCASJJCZazPS/XaO6Q550LvidvLZ8MzFY/9UVVgRtQC+NAzQwchD36TZechXmjV1Rp/+XjLCRFcic6w5ZhnD0YcPZk89YyA5b2pbHHOhNKGZnP0o1G1tl/uVc5d/rTQAyQz0H0koUOFBTfFFpB/7bYEOI34RI9mplvdqXydb+Sccyw66ME4R7yP49TuJdKlfrqMMCG9qjdXrkHUbtRBYWgJ/5ogo8Odu/LWzFjC2cMOD7EHS4PbbN3o0T6dvw69qvq313TIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yAF2HdcjwCdgr2Kjx5dH8Vy5izGEjjHNh8wXWPDzMX8=;
- b=sjo0urha1p/LmfTjCmyp1lwsPfyFYpse2gulcjalwPTzgAJbWxZJUsOK2dzswhocxDvo+fjqyMkU+GLd2XjkJ2S0SrJMzp9AHzy9PmnC/0IChW1Bt8kDJg7CA704BFrPXNn+leUijm5nKrPawwCfm8Jy9sBtxYyNH9efbMDldafO7Qlly88QwxNJpoIVDVImupawj0XVWVwnv9HPzxkl3ISOTtJibgZzKKzV/KUzjV07AHxMAB7s7/u6FB/ZgrlPa12uKPZ65XPDSap0TTbwKMAtobGgj99FVMsZm4MapMs/J0U3bfVZWEnSU4d+8NNiHOYZrLox9hovfeoWRAmJng==
-Received: from BYAPR20MB2472.namprd20.prod.outlook.com (2603:10b6:a03:155::16)
- by CH0PR20MB3756.namprd20.prod.outlook.com (2603:10b6:610:dc::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Fri, 22 Apr
- 2022 16:12:20 +0000
-Received: from BYAPR20MB2472.namprd20.prod.outlook.com
- ([fe80::3480:160a:eb92:d6e3]) by BYAPR20MB2472.namprd20.prod.outlook.com
- ([fe80::3480:160a:eb92:d6e3%6]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
- 16:12:20 +0000
-From:   icenowy@outlook.com
-To:     Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Icenowy Zheng <icenowy@aosc.io>
-Subject: [PATCH 2/2] thermal: sun8i: add R329 THS
-Date:   Sat, 23 Apr 2022 00:11:56 +0800
-Message-ID: <BYAPR20MB24720C488FD2BB42038D9825BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220422161156.1075227-1-icenowy@outlook.com>
-References: <20220422161156.1075227-1-icenowy@outlook.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [WXW8Gh6Z9bVddR2G2K6RciEf6Wd9n7y7]
-X-ClientProxiedBy: HK0PR01CA0070.apcprd01.prod.exchangelabs.com
- (2603:1096:203:a6::34) To BYAPR20MB2472.namprd20.prod.outlook.com
- (2603:10b6:a03:155::16)
-X-Microsoft-Original-Message-ID: <20220422161156.1075227-2-icenowy@outlook.com>
+        with ESMTP id S1355052AbiDVRI3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 13:08:29 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED99079387;
+        Fri, 22 Apr 2022 10:05:34 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-e5e433d66dso9249190fac.5;
+        Fri, 22 Apr 2022 10:05:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mY0tGuFElI+pBCvZypa+uhiwZDGlD+rd5RyfMzCDiwY=;
+        b=WZlDhNUU9Bv3cLd9+2BUj8PQ0W0vdOUPUmbjOUjWVaDfQ++uQetdgsjMFfM5tQA3nH
+         sCDuOGgcoexnVdriYT7wSzZfCJbgMRVjzS/zY0sm9eBjtSMplJnXlCozOQSUZuZt/R/s
+         bd/r4UiG41dF4YE96ThOOaTA0KtRp/dsKV/PzUOQiC8g8n5LxQWGIXxcSy6NwpEaGeZd
+         8B/yftIZJl8x1Gt9EJXz5WpTY43u/pqfRC5abtUKCtKu1leMlOXnw6fNpSNlvPScI5gf
+         mdiun0U49jszbERlNzo3xDzRuqVbk/oT44mXcwf5hBePbqplV9DIZqHZjSAqPA09ahwa
+         M3kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=mY0tGuFElI+pBCvZypa+uhiwZDGlD+rd5RyfMzCDiwY=;
+        b=fAbTxITYL11oPwN049xVLEy0Ti/ZUFMhOBuJUa3k/KMxZhY254oUtzxyAxnnqu3Ujf
+         SmFrGnC7WKYziqCCfB0+YYWV5PcdFTwHLT1SwmawXQCgXUb1KKmwc564QS4TGSudGpBU
+         OY8Zaz/73rB2GdpMMY38r0yuSsDisiQuuzYkC8GlJi99Hxy2ej6ji8fYF3MmawGx2kjz
+         6Z7PwVlRrcvfFsY2sAEA/7EkRxKCHnT85g0BLoIDgsNNEkjyo8N7I/dwW/qwVW4K656c
+         A2CpTZINZJHcdoxnDgAh3kIQqcOYvj8iSlPU2duh8L86RLeHirb6iQvT2N6+I0smq4B5
+         u6iQ==
+X-Gm-Message-State: AOAM530yej6Nm4zuZOoPRTeDNJMpfu2tlv6tIcRAMqT/l6i0rCo1lhrg
+        xt9MzYTAzX0Rfxss0QNd3iI=
+X-Google-Smtp-Source: ABdhPJwyV4g1eWudYtD/hcz6EJxOYDu09EkjJlhrgLVZDzcFDGxflUVQ6LGY40Te5XJPDjVadkCTWg==
+X-Received: by 2002:a05:6870:1607:b0:de:984:496d with SMTP id b7-20020a056870160700b000de0984496dmr6469615oae.253.1650647133866;
+        Fri, 22 Apr 2022 10:05:33 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j9-20020a056808056900b0032252797ea4sm971770oig.6.2022.04.22.10.05.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Apr 2022 10:05:32 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 22 Apr 2022 10:05:30 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     robert.jarzmik@free.fr, linux-arm-kernel@lists.infradead.org,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Tomas Cech <sleep_walker@suse.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-input@vger.kernel.org,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
+Message-ID: <20220422170530.GA2338209@roeck-us.net>
+References: <20220419163810.2118169-1-arnd@kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7522bf6c-8989-4284-9a98-08da247ae073
-X-MS-TrafficTypeDiagnostic: CH0PR20MB3756:EE_
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NAHSy0aOhD+05ROBRr7bAgh5UG65RCpjH6xECWk/ERIEfLL4GD5OvDtnv4flQTINTbBoLtQoog6qOc9E9nsTvZGdHq1D4A42WKcXUWwzBxU6eXFFJ1m8CEtMSADhN+Bqs/DxAfOhmmwr3XqYDLsF8hBP3IcK1d1y73/MRIfgW7zHrkrFNulN0XrFD8VAWMEsL1o9C72j/xhBGW8VQBfnMg9zSz2cNXnSgwis0WbXShCBbDnEigWMdBAMzZwazmP1xtVWWtiAOS8tBVnW1lgQhM+kQ7usYhJDiJqjwQRinOpUgTKGa5LjRYCz360tzGQLTBZUHL1BwEE+Q1y+i+PYryeCCufPmENz5nko9N/FADNy9BcpQ75qHvJkGnt7si7l1d/605AQ0MTWKhfRDi5z4Qwe4z0ZYzT1OyE8DbWuoAJF7vMKheNhUeQaMPo29nqoUiKliLcf4gqtFdeT/CZ9VaOEsFrTDMY6dNNIsRpwWwryye73R3GiSNWUzc77D29Q9FKoZzJKr0BZFJ6/1Zjl5XYzRLfmvBaJzMa1tLbj6ArPdtBdiQFCxP7i1D0eAqwq
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5Ca7uRx60amJK+RTEjSZkfHumnkaxpXfoa+JKDeV7n6+V+gwf6jts+lMCVHL?=
- =?us-ascii?Q?96IqS5WUtOQSm+/BzW0kDMXqBV2rdRBrO6jOtdeAyEjobOH3YWvkIc7o4OuX?=
- =?us-ascii?Q?m7rvYz9UBX1z2sekm3DmyJQfK9TrsSoLIWjhI7G8UFq+Qs7yE9388ROYWDGJ?=
- =?us-ascii?Q?JDSLCilGlTAISUrSBcZ2RUBhAyb28YgTDrLCQAzkuF+eyn3/0Hk3ENRgjaV/?=
- =?us-ascii?Q?ehCtSot0rzHoBXv0WlW3FFkdPJgsKA37V10AP6Jqa3UZnm32D0mQKJt4ibjw?=
- =?us-ascii?Q?qOM1TJR1IirXNNs9JcE4mict1T7M2MtidQLOSw7HWs/vbjHTpQVXjkHi8T5c?=
- =?us-ascii?Q?ipQk4B1b1yhf08yq0VMg3V6BxmKqsADQWiUUwCTljgdZh9izSdjIAsYbNkV7?=
- =?us-ascii?Q?02NAK6yiNme3VENbOrHQsg2x4ql2jEZwXu0KItqkeB3tJ8aEhIiL0x5i2QnV?=
- =?us-ascii?Q?B0TYRehnYuua97BU2tkqqL318iChPz3boYxoK+/5j2OShVvsDckNOur6Pf1k?=
- =?us-ascii?Q?KZntEwaaM0ZQ7MQs8EDI2Hoo+U62S9YCJk8bNr8Jx5otXvcDqCRDUdXTiTnO?=
- =?us-ascii?Q?vfXQP0vB/BML92HWoJuKRrZgp6aUjJu0cag683+wqRDCXSIlo2nV9Wp1NQa8?=
- =?us-ascii?Q?G4SCzYleQb3CD5OvFQRdudU5TBsUshxTdc5enUWLz4iBoa89sWZuZBK2TZCY?=
- =?us-ascii?Q?zQC6X7gYjd3mwiSk46HIRQX8cNpXIDr9nDyD8XS0nXISK2V01kVb2Krq8CQI?=
- =?us-ascii?Q?NrCLLjIsntY+NnZpPLYhIEjnejKCRN2vvkg2hY+87YMhCdFo+lx/B2nFt7Cs?=
- =?us-ascii?Q?sIHJtsOMAU/1ftvNYYIfXa5XHU22juyEOTwKGNmwMvhSOUe3BFIEP5wXdp0A?=
- =?us-ascii?Q?VAVJ+EoaNJHFBRq+5q/J9nUuScklK9XWbDGPGTknKUp6v/tWiK85vp0tKgu4?=
- =?us-ascii?Q?rEFqYuoqQFZlyb6DU6S/22/XVtPrIbfZOr7EVF303dyPAD7fMJVtDTzDdTQv?=
- =?us-ascii?Q?Hosa64FX8rLjT/6W3R8nppkPug92hPCDJeRQbCPLtm8J/0dOmjq1AIkOlpnt?=
- =?us-ascii?Q?x4Jcla8FIBQtrD7weq5wt1vVY/bd52EFxD/M8/XsShPHtyBJvikPntFmK7oj?=
- =?us-ascii?Q?SRMgCIstc2KObN1AXTJnlKl1NLPvcpSs56aQlBo02eNoRk/nAHbwvwOBrYcg?=
- =?us-ascii?Q?FFsXqhuSVJcmPypXHRCumm/xM9ohFWHLNCv/604Ab/kQ9aPHZbALAbwJpeOL?=
- =?us-ascii?Q?fiANvQk0rHOmgIHmG8e9mscBmSOjwIFp922jMbmUP9d1882dEARyxOr+HUoD?=
- =?us-ascii?Q?27h9IxAj6vMjc0US+WuQIa7URHFvbbU3bU7b1ZLYK5blEI+YEWtKRPmCzJcK?=
- =?us-ascii?Q?EuskXAOom5/35stLUsjinsMhKB5sJmAY4NVdt8dUEra64En49c4r8sIUVlJ7?=
- =?us-ascii?Q?HWeEAmlrYaw=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7522bf6c-8989-4284-9a98-08da247ae073
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR20MB2472.namprd20.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 16:12:19.9441
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR20MB3756
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220419163810.2118169-1-arnd@kernel.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,61 +96,125 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Icenowy Zheng <icenowy@aosc.io>
+On Tue, Apr 19, 2022 at 06:37:22PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> This revisits a series I sent a few years ago:
+> 
+> https://lore.kernel.org/lkml/20191018154052.1276506-1-arnd@arndb.de/
+> 
+> All the other ARMv5 conversions are under way now, with
+> OMAP1 being the only one still not in linux-next yet,
+> and PXA completing the set.
+> 
+> Most of the patches are unchanged from before, furtunately
+> the PXA code is fairly stable. I addressed Robert's comments,
+> pulled in two patches from Dmitry, and added the last a the
+> final four patches to finish off the multiplatform conversion.
+> 
+> I hope someone is left to test these on PXA: if this works,
+> I'd like to merge it for 5.19. A git tree with these is avaialable
+> for testing at
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/log/?h=pxa-multiplatform-5.18
+> 
 
-The thermal sensor controller on R329 is similar to the one on H6, but
-with only one sensor. Calibration method is still unknown because no
-calibration is implemented in BSP kernel, neither is it documented in
-the user manual.
+Unfortunately that crashes for me when trying to boot from ide.
+Bisect points to the last patch of the series.
 
-Add its support to sun8i-thermal driver. Calibrating it is now
-prevented.
+Guenter
 
-Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
 ---
- drivers/thermal/sun8i_thermal.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+[    1.403715] 8<--- cut here ---
+[    1.403848] Unable to handle kernel paging request at virtual address feeb000e
+[    1.404097] [feeb000e] *pgd=00000000
+[    1.404400] Internal error: Oops: 805 [#1] PREEMPT ARM
+[    1.404648] Modules linked in:
+[    1.404890] CPU: 0 PID: 22 Comm: pccardd Not tainted 5.18.0-rc3-next-20220422 #1
+[    1.405159] Hardware name: SHARP Borzoi
+[    1.405319] PC is at pcmcia_init_one+0xf8/0x27c
+[    1.405476] LR is at devres_add+0x40/0x6c
+[    1.405611] pc : [<c04bdea0>]    lr : [<c044d808>]    psr: a0000113
+[    1.405846] sp : c48a5d00  ip : c15f4220  fp : 60000113
+[    1.406026] r10: 00000000  r9 : c48b000e  r8 : c48b0000
+[    1.406195] r7 : feeb0000  r6 : feeb000e  r5 : c15ec090  r4 : c15ec020
+[    1.406395] r3 : 00000002  r2 : 00000000  r1 : c15f4200  r0 : feeb000e
+[    1.406615] Flags: NzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+[    1.406847] Control: 00007977  Table: a0004000  DAC: 00000071
+[    1.407042] Register r0 information: 0-page vmalloc region starting at 0xfee00000 allocated at pci_reserve_io+0x0/0x38
+[    1.407453] Register r1 information: slab
+[    1.407721] Register r2 information: NULL pointer
+[    1.407885] Register r3 information: non-paged memory
+[    1.408047] Register r4 information: slab
+[    1.408179] Register r5 information: slab
+[    1.408310] Register r6 information: 0-page vmalloc region starting at 0xfee00000 allocated at pci_reserve_io+0x0/0x38
+[    1.408622] Register r7 information: 0-page vmalloc region starting at 0xfee00000 allocated at pci_reserve_io+0x0/0x38
+[    1.408941] Register r8 information: 0-page vmalloc region starting at 0xc48b0000 allocated at soc_pcmcia_add_one+0xf0/0x370
+[    1.409291] Register r9 information: 0-page vmalloc region starting at 0xc48b0000 allocated at soc_pcmcia_add_one+0xf0/0x370
+[    1.409617] Register r10 information: NULL pointer
+[    1.409768] Register r11 information: non-paged memory
+[    1.409924] Register r12 information: slab
+[    1.410066] Process pccardd (pid: 22, stack limit = 0x(ptrval))
+[    1.410268] Stack: (0xc48a5d00 to 0xc48a6000)
+[    1.410448] 5d00: c15ebb78 00000000 0000001a 00000110 00000000 c0ad702c ff00051a c15ec090
+[    1.410694] 5d20: c0b713ec c0b713ec c12f6048 c0b644fc 00000000 00000000 60000113 c053f6bc
+[    1.410938] 5d40: c16b3bf0 c15efa88 c09d4e48 00000001 00000007 00000200 0000000f 00000000
+[    1.411174] 5d60: 00000000 00000000 c0b71300 c0ad702c c0b644fc 00000000 c15ec090 c0b713ec
+[    1.411410] 5d80: c0b9f980 c04491a8 c15ec090 00000000 60000113 c15ec090 c0b713ec c15ec090
+[    1.411644] 5da0: 00000003 c0449530 c078a988 c0399c90 ffffff08 c0be4d7c c0b713ec c15ec090
+[    1.411882] 5dc0: 00000003 c0b644fc 00000000 00000000 60000113 c04496e0 00000001 c0b713ec
+[    1.412117] 5de0: c48a5e2c c15ec090 c0b644fc c0449aa0 00000000 c48a5e2c c04499fc c0be4d50
+[    1.412352] 5e00: c0b644fc c044702c 00000000 c12f407c c16b3bd4 c0ad702c c15ec090 00000001
+[    1.412587] 5e20: c15ec0d4 c0449030 c15ec090 c15ec090 00000001 c0ad702c c15ec090 c15ec090
+[    1.412827] 5e40: c0b77a9c c0448044 c15ec090 00000000 c12f5030 c04458bc 00000001 c009c720
+[    1.413065] 5e60: c15ec090 c04590e4 c15ec090 00000002 c12f6048 c12f6150 c15ec088 c0ad702c
+[    1.413307] 5e80: c15ec090 c15ec020 c12f6150 c12f6048 c12f6150 c15ec088 c15ec090 c12f6160
+[    1.413551] 5ea0: 60000113 c0540820 00000000 c12f6048 c12f6150 ffffffe4 c12f6178 c12f6900
+[    1.413804] 5ec0: c0bb6828 c05409e8 00000000 00000011 c12f6048 00000000 c12f6150 c0ba35c8
+[    1.414050] 5ee0: c12f6178 c12f6900 c0bb6828 c074c3a8 c48a5f04 c0ad702c c48a5f10 c074c44c
+[    1.414294] 5f00: c098de10 c09acdc0 c12f4fa0 c48a5f1c 000031d0 c0ad702c c12f6048 c12f6048
+[    1.414538] 5f20: 00000000 c12f6150 c0ba35c8 c0540af8 c12f6048 00000000 c12f6150 c053dcd4
+[    1.414791] 5f40: c12f6048 00000000 00000080 c12f6144 c12f6900 c053e704 00000000 c12f6178
+[    1.415037] 5f60: 000030d0 c0ad702c c12f6900 c12f4fe0 c12f21a0 c053e36c c12f6048 c12f6900
+[    1.415282] 5f80: c4809cc0 00000000 00000000 c004d67c c12f4fe0 c004d5a0 00000000 00000000
+[    1.415531] 5fa0: 00000000 00000000 00000000 c0008368 00000000 00000000 00000000 00000000
+[    1.415780] 5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[    1.416025] 5fe0: 00000000 00000000 00000000 00000000 00000013 00000000 00000000 00000000
+[    1.416643]  pcmcia_init_one from pcmcia_device_probe+0xe4/0x2a0
+[    1.416882]  pcmcia_device_probe from really_probe+0xc8/0x3b4
+[    1.417070]  really_probe from __driver_probe_device+0x9c/0x214
+[    1.417255]  __driver_probe_device from driver_probe_device+0x38/0xe0
+[    1.417454]  driver_probe_device from __device_attach_driver+0xa4/0x11c
+[    1.417657]  __device_attach_driver from bus_for_each_drv+0x88/0xd8
+[    1.417864]  bus_for_each_drv from __device_attach+0xf4/0x194
+[    1.418047]  __device_attach from bus_probe_device+0x8c/0x94
+[    1.418224]  bus_probe_device from device_add+0x3d0/0x894
+[    1.418395]  device_add from pcmcia_device_add+0x2ec/0x3e0
+[    1.418568]  pcmcia_device_add from pcmcia_card_add+0xd4/0x1a0
+[    1.418756]  pcmcia_card_add from pcmcia_bus_add+0x44/0x4c
+[    1.418930]  pcmcia_bus_add from socket_insert+0x12c/0x150
+[    1.419103]  socket_insert from pccardd+0x398/0x44c
+[    1.419257]  pccardd from kthread+0xdc/0x114
+[    1.419400]  kthread from ret_from_fork+0x14/0x2c
+[    1.419569] Exception stack(0xc48a5fb0 to 0xc48a5ff8)
+[    1.419735] 5fa0:                                     00000000 00000000 00000000 00000000
+[    1.419979] 5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[    1.420222] 5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+[    1.420501] Code: 13570000 e1a06000 0a000043 e3a03002 (e5c03000)
+[    1.420874] ---[ end trace 0000000000000000 ]---
 
-diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-index d9cd23cbb671..3a2f381005b4 100644
---- a/drivers/thermal/sun8i_thermal.c
-+++ b/drivers/thermal/sun8i_thermal.c
-@@ -312,7 +312,8 @@ static int sun8i_ths_calibrate(struct ths_device *tmdev)
- 		goto out;
- 	}
- 
--	tmdev->chip->calibrate(tmdev, caldata, callen);
-+	if (tmdev->chip->calibrate)
-+		tmdev->chip->calibrate(tmdev, caldata, callen);
- 
- 	kfree(caldata);
- out:
-@@ -628,6 +629,17 @@ static const struct ths_thermal_chip sun50i_h6_ths = {
- 	.calc_temp = sun8i_ths_calc_temp,
- };
- 
-+static const struct ths_thermal_chip sun50i_r329_ths = {
-+	.sensor_num = 1,
-+	.has_bus_clk_reset = true,
-+	.offset = 188744,
-+	.scale = 672,
-+	.temp_data_base = SUN50I_H6_THS_TEMP_DATA,
-+	.init = sun50i_h6_thermal_init,
-+	.irq_ack = sun50i_h6_irq_ack,
-+	.calc_temp = sun8i_ths_calc_temp,
-+};
-+
- static const struct of_device_id of_ths_match[] = {
- 	{ .compatible = "allwinner,sun8i-a83t-ths", .data = &sun8i_a83t_ths },
- 	{ .compatible = "allwinner,sun8i-h3-ths", .data = &sun8i_h3_ths },
-@@ -636,6 +648,7 @@ static const struct of_device_id of_ths_match[] = {
- 	{ .compatible = "allwinner,sun50i-a100-ths", .data = &sun50i_a100_ths },
- 	{ .compatible = "allwinner,sun50i-h5-ths", .data = &sun50i_h5_ths },
- 	{ .compatible = "allwinner,sun50i-h6-ths", .data = &sun50i_h6_ths },
-+	{ .compatible = "allwinner,sun50i-r329-ths", .data = &sun50i_r329_ths },
- 	{ /* sentinel */ },
- };
- MODULE_DEVICE_TABLE(of, of_ths_match);
--- 
-2.35.1
-
+---
+# bad: [7643a9ca9f8e08f71e15f89dd74863635e981e03] ARM: pxa: convert to multiplatform
+# good: [3123109284176b1532874591f7c81f3837bbdc17] Linux 5.18-rc1
+git bisect start 'HEAD' 'v5.18-rc1'
+# good: [9b03d7f95bd4d97101ecb8ea1e822103b81fdb2d] ARM: pxa: mainstone-wm97xx: use gpio lookup table
+git bisect good 9b03d7f95bd4d97101ecb8ea1e822103b81fdb2d
+# good: [764063eee7620ea9abb940068a7ad0e7f9efa1b6] cpufreq: pxa3: move clk register access to clk driver
+git bisect good 764063eee7620ea9abb940068a7ad0e7f9efa1b6
+# good: [5153474f0a4388b7ddb59add4be73bfb42b2007f] ARM: mmp: remove tavorevb board support
+git bisect good 5153474f0a4388b7ddb59add4be73bfb42b2007f
+# good: [2746f7c78b428c8b01b691a29a972c08101ae343] ARM: PXA: fix multi-cpu build of xsc3
+git bisect good 2746f7c78b428c8b01b691a29a972c08101ae343
+# good: [73d5106e9489464eac84362705e93bcf3b376123] ARM: pxa: remove support for MTD_XIP
+git bisect good 73d5106e9489464eac84362705e93bcf3b376123
+# first bad commit: [7643a9ca9f8e08f71e15f89dd74863635e981e03] ARM: pxa: convert to multiplatform
