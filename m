@@ -2,76 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D4C50ADBC
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Apr 2022 04:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75DF050AEDB
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Apr 2022 06:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443329AbiDVC1m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Apr 2022 22:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60794 "EHLO
+        id S1443863AbiDVESb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Apr 2022 00:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443333AbiDVC1l (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Apr 2022 22:27:41 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42ECF4B1DC;
-        Thu, 21 Apr 2022 19:24:45 -0700 (PDT)
-X-UUID: 7ceff751403c40149ff85e4986925678-20220422
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:4cd73f59-0e2d-4a4b-8407-568bd6f809ad,OB:0,LO
-        B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:53,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:61
-X-CID-INFO: VERSION:1.1.4,REQID:4cd73f59-0e2d-4a4b-8407-568bd6f809ad,OB:0,LOB:
-        0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:53,FILE:0,RULE:Spam_GS981B3D,ACT
-        ION:quarantine,TS:61
-X-CID-META: VersionHash:faefae9,CLOUDID:3f34b5ef-06b0-4305-bfbf-554bfc9d151a,C
-        OID:2261f5381ea9,Recheck:0,SF:13|15|28|16|19|48,TC:nil,Content:0,EDM:-3,Fi
-        le:nil,QS:0,BEC:nil
-X-UUID: 7ceff751403c40149ff85e4986925678-20220422
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <roger.lu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 473631616; Fri, 22 Apr 2022 10:24:40 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 22 Apr 2022 10:24:39 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 22 Apr 2022 10:24:39 +0800
-Message-ID: <d67d5f4f2ec96ade2398e7c0897dbb16bf5fb145.camel@mediatek.com>
-Subject: Re: [PATCH v24 0/7] soc: mediatek: SVS: introduce MTK SVS
-From:   Roger Lu <roger.lu@mediatek.com>
-To:     Kevin Hilman <khilman@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Nishanth Menon" <nm@ti.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jia-wei Chang <jia-wei.chang@mediatek.com>
-Date:   Fri, 22 Apr 2022 10:24:39 +0800
-In-Reply-To: <7hsfq6ql4v.fsf@baylibre.com>
-References: <20220420102044.10832-1-roger.lu@mediatek.com>
-         <7hczhbe3wn.fsf@baylibre.com>
-         <3d463c8b099fdb1c9a0df9e615a8ca1d8a034120.camel@mediatek.com>
-         <7hsfq6ql4v.fsf@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
+        with ESMTP id S230232AbiDVESb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 00:18:31 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DFE54EA30;
+        Thu, 21 Apr 2022 21:15:39 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id t13so6375788pgn.8;
+        Thu, 21 Apr 2022 21:15:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=5YJXRXKYyui83xwMrCC37m5Rl3T1JJQZ+KXGrBA8Vtc=;
+        b=ZlP9pMqZq1Mvui/C0vp/IAbEynvnrfeyx6/seFgc/jk815XaWNqNoReFUWFMfSMFdV
+         eQy+7nUvuq/sb96nuT4AKtojdZZylm4281EsVRv5CWH/VUt67kYhSfqKQ0rPPw+YnezU
+         LDXLViFOor/8hua9eCH4Xwg9KETh94Fgtn95064hfd4D1zPs/cAw7jqGLKkB4h1t3tS5
+         +LJmNAeEqFFbFy2qiY/uoUQSyEaAPFkMEU1CL0z+F0MLLdBoGvWOEyHxPUHT1EM+ImZ7
+         8w0BThi4z0seLDa424CyOpKs8cs7oDKSn/Lv5rvUNRgQcn7cufSd527ScsfRkmPkkD13
+         deNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=5YJXRXKYyui83xwMrCC37m5Rl3T1JJQZ+KXGrBA8Vtc=;
+        b=0KFVEF/RNgRXVhnkolxVrp30kb9LcXb/n0bu8b6BV+Kd1umW3oH1h0tUbFj22p94yw
+         Z/gjirydJt430I4Pu6MH44uSedp57+cmWHkL3sPPuqWuh0AjHw/M9E/FsfVGoPmoekrT
+         Xw5l7658hv0Yq9t5defjikoe9L/rIVOoNxP1AWOmJTG/fwSMcN2bhL/zCvoqpA+MDGvI
+         9V+ElzS4V4quOiCBzwLvF6QxhySO+q/Y63nksodvXBhDGfqHhhljnkhIY7IRNT5rGT2M
+         IRZOw/Pwrv05boAEBL+h7eX2dFSD3rQac19rQNP9ga2L+Ud7Gr0LGWghHnQ78WTuvaTP
+         JA5Q==
+X-Gm-Message-State: AOAM533wSWflz6cGwXhhyklDBZSR45xMkj34UPiuIxth/Bj2Tr2puP8/
+        V2T7i0e1kg+EVoyj0xKLznjk5/s+TuYHbQ==
+X-Google-Smtp-Source: ABdhPJyS3Cg+dEknuTLni4hDLcz+iQOgtwXxn4TsnOQeLPcTd+7RVDLEHGAKyY8L6o2hzsANZGetAw==
+X-Received: by 2002:a63:e307:0:b0:39c:ce49:f1ae with SMTP id f7-20020a63e307000000b0039cce49f1aemr2395200pgh.174.1650600938751;
+        Thu, 21 Apr 2022 21:15:38 -0700 (PDT)
+Received: from Negi ([68.181.16.40])
+        by smtp.gmail.com with ESMTPSA id qa16-20020a17090b4fd000b001d25dfb9d39sm4103256pjb.14.2022.04.21.21.15.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 21:15:38 -0700 (PDT)
+From:   Soumya Negi <soumya.negi97@gmail.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Soumya Negi <soumya.negi97@gmail.com>, linux-pm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Documentation: thermal: Include ReST markup standard definition file
+Date:   Thu, 21 Apr 2022 21:14:27 -0700
+Message-Id: <20220422041427.32585-1-soumya.negi97@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,70 +68,25 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Kevin,
+Fixes the documentation compile error given below:
 
-On Thu, 2022-04-21 at 12:41 -0700, Kevin Hilman wrote:
-> Hi Roger,
-> 
-> Roger Lu <roger.lu@mediatek.com> writes:
-> 
-> > On Wed, 2022-04-20 at 16:22 -0700, Kevin Hilman wrote:
-> 
-> [...]
-> 
-> > > That being said, it would be really nice to see an integration tree
-> > > where this was all tested on mainline (e.g. v5.17, or v5.18-rc)
-> > > 
-> > > For example, I can apply this to v5.18-rc2 and boot on my mt8183-pumpkin
-> > > board, it fails to probe[1] because there is no CCI node in the upstream
-> > > mt8183.dtsi.
-> > > 
-> > > I'm assuming this series is also not very useful without the CPUfreq
-> > > series from Rex, so being able to test this, CCI and CPUfreq together on
-> > > MT8183 on a mainline kernel would be very helpful.
-> > > 
-> > > Kevin
-> > > 
-> > > [1]
-> > > [    0.573332] mtk-svs 1100b000.svs: cannot find cci node
-> > > [    0.574061] mtk-svs 1100b000.svs: error -ENODEV: svs platform probe
-> > > fail
-> > 
-> > Just share. I've tested this series on below two platforms and it works as
-> > expected.
-> > - mt8183-Krane (kernel-v5.10)
-> > - mt8192-Hayato (kernel-v5.4)
-> 
-> Unfortunately testing on v5.4 and v5.10 with lots of other additional
-> out-of-tree patches does not give much confidence that this series works
-> with upstream, especially when I've given a few reasons why it will not
-> work uptream.
-> 
-> The examples I gave above for CCI and CPUs/cluster disable are good
-> examples, but another one I forgot to mention is the dependency on Mali.
-> The SVS driver will never probe because it also depens on a "mali" node,
-> which doesn't exist upstream either (but panfrost does, and acutually
-> loads/probes fine on v5.17/v5.18) so this should be fixed to work with
-> upstream panfrost.
-> 
-> IMO, in order for this to be merged upstream, it should at least have
-> some basic validation with upstream, and so far I have not even been
-> able to make it successfuly probe.  To do that, you will need to either
-> provide a list of the dependencies for testing this with mainline
-> (e.g. CCI series, CPUfreq series, any DT changes), or even better, an
-> integration tree based on recent mainline (e.g. v5.17 stable, or
-> v5.18-rc) which shows all the patches (in addition to this series) used
-> to validate this on mainline.
+ERROR: Undefined substitution referenced: "copy".
 
-No problem. We'll find a machine that can be run correctly with recent mainline
-(e.g. v5.17 stable, or v5.18-rc) and add patches (CCI series + CPUfreq series +
-any DT changes) to test this SVS series. Thanks very much.
+Signed-off-by: Soumya Negi <soumya.negi97@gmail.com>
+---
+ Documentation/driver-api/thermal/intel_dptf.rst | 1 +
+ 1 file changed, 1 insertion(+)
 
-> 
-> Thanks,
-> 
-> Kevin
-> 
-> 
-> 
+diff --git a/Documentation/driver-api/thermal/intel_dptf.rst b/Documentation/driver-api/thermal/intel_dptf.rst
+index 96668dca753a..e3c41d96d63a 100644
+--- a/Documentation/driver-api/thermal/intel_dptf.rst
++++ b/Documentation/driver-api/thermal/intel_dptf.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GPL-2.0
++.. include:: <isonum.txt>
+ 
+ ===============================================================
+ Intel(R) Dynamic Platform and Thermal Framework Sysfs Interface
+-- 
+2.17.1
 
