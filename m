@@ -2,91 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75DF050AEDB
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Apr 2022 06:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7677C50AF2D
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Apr 2022 06:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443863AbiDVESb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Apr 2022 00:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56532 "EHLO
+        id S1352660AbiDVEcA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Apr 2022 00:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbiDVESb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 00:18:31 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DFE54EA30;
-        Thu, 21 Apr 2022 21:15:39 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id t13so6375788pgn.8;
-        Thu, 21 Apr 2022 21:15:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=5YJXRXKYyui83xwMrCC37m5Rl3T1JJQZ+KXGrBA8Vtc=;
-        b=ZlP9pMqZq1Mvui/C0vp/IAbEynvnrfeyx6/seFgc/jk815XaWNqNoReFUWFMfSMFdV
-         eQy+7nUvuq/sb96nuT4AKtojdZZylm4281EsVRv5CWH/VUt67kYhSfqKQ0rPPw+YnezU
-         LDXLViFOor/8hua9eCH4Xwg9KETh94Fgtn95064hfd4D1zPs/cAw7jqGLKkB4h1t3tS5
-         +LJmNAeEqFFbFy2qiY/uoUQSyEaAPFkMEU1CL0z+F0MLLdBoGvWOEyHxPUHT1EM+ImZ7
-         8w0BThi4z0seLDa424CyOpKs8cs7oDKSn/Lv5rvUNRgQcn7cufSd527ScsfRkmPkkD13
-         deNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=5YJXRXKYyui83xwMrCC37m5Rl3T1JJQZ+KXGrBA8Vtc=;
-        b=0KFVEF/RNgRXVhnkolxVrp30kb9LcXb/n0bu8b6BV+Kd1umW3oH1h0tUbFj22p94yw
-         Z/gjirydJt430I4Pu6MH44uSedp57+cmWHkL3sPPuqWuh0AjHw/M9E/FsfVGoPmoekrT
-         Xw5l7658hv0Yq9t5defjikoe9L/rIVOoNxP1AWOmJTG/fwSMcN2bhL/zCvoqpA+MDGvI
-         9V+ElzS4V4quOiCBzwLvF6QxhySO+q/Y63nksodvXBhDGfqHhhljnkhIY7IRNT5rGT2M
-         IRZOw/Pwrv05boAEBL+h7eX2dFSD3rQac19rQNP9ga2L+Ud7Gr0LGWghHnQ78WTuvaTP
-         JA5Q==
-X-Gm-Message-State: AOAM533wSWflz6cGwXhhyklDBZSR45xMkj34UPiuIxth/Bj2Tr2puP8/
-        V2T7i0e1kg+EVoyj0xKLznjk5/s+TuYHbQ==
-X-Google-Smtp-Source: ABdhPJyS3Cg+dEknuTLni4hDLcz+iQOgtwXxn4TsnOQeLPcTd+7RVDLEHGAKyY8L6o2hzsANZGetAw==
-X-Received: by 2002:a63:e307:0:b0:39c:ce49:f1ae with SMTP id f7-20020a63e307000000b0039cce49f1aemr2395200pgh.174.1650600938751;
-        Thu, 21 Apr 2022 21:15:38 -0700 (PDT)
-Received: from Negi ([68.181.16.40])
-        by smtp.gmail.com with ESMTPSA id qa16-20020a17090b4fd000b001d25dfb9d39sm4103256pjb.14.2022.04.21.21.15.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Apr 2022 21:15:38 -0700 (PDT)
-From:   Soumya Negi <soumya.negi97@gmail.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
+        with ESMTP id S233395AbiDVEcA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 00:32:00 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDC24ECF5;
+        Thu, 21 Apr 2022 21:29:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=BfPZT2Vz3wYnbDUfmOP+6kCUY3zMCjody5z0Xni3vyQ=; b=SOGqVFANY4LXKKB37LWXkVQpcP
+        husK5EtYaQM3Sfoz/qobNozeRDzW2S9CG6yliRVfttLCgGU96MbHEwq9vhmiidIPcz+H6bir955iy
+        /mYs7jHpcv5vWJBGgTgmApy85ZQQAR25PHDhw2AA97eze/q5zCJQBhGJ4SZ9Uc75jV3HVgOvM+aJ8
+        K2mqqIGiLOVnHHC+es8HQeNmx9lHyxCyO7AyalNoMWS0OoGfgxRPyMGuqz9w+TOjZfaxur9MBVtt7
+        QaEN7k99fdVQpbebhCCZG+S2aZu/wdU0Z75nQAKM8Jz97XyK8zlbK7P2gOIgz+4gExo5hEZFbaNGb
+        cJh9KFNw==;
+Received: from [2601:1c0:6280:3f0:e65e:37ff:febd:ee53]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nhkud-007bIg-5c; Fri, 22 Apr 2022 04:28:55 +0000
+Message-ID: <0a338104-d7cf-a2e1-7d03-97667aa30537@infradead.org>
+Date:   Thu, 21 Apr 2022 21:28:48 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] Documentation: thermal: Include ReST markup standard
+ definition file
+Content-Language: en-US
+To:     Soumya Negi <soumya.negi97@gmail.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Jonathan Corbet <corbet@lwn.net>
-Cc:     Soumya Negi <soumya.negi97@gmail.com>, linux-pm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] Documentation: thermal: Include ReST markup standard definition file
-Date:   Thu, 21 Apr 2022 21:14:27 -0700
-Message-Id: <20220422041427.32585-1-soumya.negi97@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Cc:     linux-pm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220422041427.32585-1-soumya.negi97@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220422041427.32585-1-soumya.negi97@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fixes the documentation compile error given below:
+Hi--
 
-ERROR: Undefined substitution referenced: "copy".
+On 4/21/22 21:14, Soumya Negi wrote:
+> Fixes the documentation compile error given below:
+> 
+> ERROR: Undefined substitution referenced: "copy".
+> 
+> Signed-off-by: Soumya Negi <soumya.negi97@gmail.com>
+> ---
+>  Documentation/driver-api/thermal/intel_dptf.rst | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/driver-api/thermal/intel_dptf.rst b/Documentation/driver-api/thermal/intel_dptf.rst
+> index 96668dca753a..e3c41d96d63a 100644
+> --- a/Documentation/driver-api/thermal/intel_dptf.rst
+> +++ b/Documentation/driver-api/thermal/intel_dptf.rst
+> @@ -1,4 +1,5 @@
+>  .. SPDX-License-Identifier: GPL-2.0
+> +.. include:: <isonum.txt>
+>  
+>  ===============================================================
+>  Intel(R) Dynamic Platform and Thermal Framework Sysfs Interface
 
-Signed-off-by: Soumya Negi <soumya.negi97@gmail.com>
----
- Documentation/driver-api/thermal/intel_dptf.rst | 1 +
- 1 file changed, 1 insertion(+)
+linux-next and jc_docs git tree already have a patch for this:
 
-diff --git a/Documentation/driver-api/thermal/intel_dptf.rst b/Documentation/driver-api/thermal/intel_dptf.rst
-index 96668dca753a..e3c41d96d63a 100644
---- a/Documentation/driver-api/thermal/intel_dptf.rst
-+++ b/Documentation/driver-api/thermal/intel_dptf.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GPL-2.0
-+.. include:: <isonum.txt>
- 
- ===============================================================
- Intel(R) Dynamic Platform and Thermal Framework Sysfs Interface
+commit 2c2de6f2e2bc
+Author: Akira Yokosawa <akiyks@gmail.com>
+Date:   Sat Apr 2 08:19:05 2022 +0900
+
+    docs: driver-api/thermal/intel_dptf: Use copyright symbol
+
+
+thanks.
 -- 
-2.17.1
-
+~Randy
