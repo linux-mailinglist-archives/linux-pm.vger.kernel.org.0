@@ -2,54 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C10F950BC67
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Apr 2022 18:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5003550BCAB
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Apr 2022 18:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385288AbiDVQDe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Apr 2022 12:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
+        id S1358783AbiDVQPH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Apr 2022 12:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237777AbiDVQDc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 12:03:32 -0400
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B794093E;
-        Fri, 22 Apr 2022 09:00:39 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2f7bb893309so10108597b3.12;
-        Fri, 22 Apr 2022 09:00:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=m9bkzyI4UcgZkY7b6xlAg7lN+vGGFzqYyYOt4tU1Pyw=;
-        b=c+IgWHD2ofsfGvyRHIeuWRr1L9V11NprzYtXPlIwPs1H7PyEH0Zx70CsGqXWKsfVwz
-         24ug21e9/TL7nIJnSI/erLkxP+hNVb4MEkqcz24ZGplPk+Aq2InEvsJBBIhuSaLhSetd
-         jmA037XuEd1L/y7vLu4XhWk7XKyguFZ0xXHzbo9aiF0dTyYDhfuhHYrS6skBDRDxpx4B
-         W0LEmEsm/9eck3aL6qRmu+FdpPYzJsY4nMInn0Y67mGh/t7Z8SoVV1ehbB1p8D5191ZV
-         bbOTV3MPhTcZvJSeyFk5g5vA6bULn7Q0+7TMFPzSYYpN6eGSW04ly/hGsiM3m8bqyh2v
-         OAig==
-X-Gm-Message-State: AOAM5300uNYYhg8uR0KtRHipFrOiZFD/9hMwSE090wShT7VlDtXbyOCQ
-        TM/KOaZOjGWrC8RsDmoPWXXHgOfF9cP6U932FUQ=
-X-Google-Smtp-Source: ABdhPJzcTeaR74zkfAgbCOSAoahcKgBRrTmEHW+UzQAI3jblvwcpMq2LAMJBnpdtBFN9J51/C8Sop9emVbBu0WT0qjM=
-X-Received: by 2002:a0d:e645:0:b0:2f4:dbd6:261e with SMTP id
- p66-20020a0de645000000b002f4dbd6261emr5681151ywe.7.1650643238361; Fri, 22 Apr
- 2022 09:00:38 -0700 (PDT)
+        with ESMTP id S1359191AbiDVQPG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 12:15:06 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11olkn2032.outbound.protection.outlook.com [40.92.19.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C04C5C663;
+        Fri, 22 Apr 2022 09:12:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Xqqss+JS8WLPLYp+qk06/aqCAVYSi9Rl4xsWF3o0y0cTIq5dcpXQo2p2DS7jQeY1y0ag2vTQ/2j0JXRJ1lFPGAhUuIHE+lh49CRA428saQ9LcyPsTsl1/EROnLtSU2XSRS8446C+7ytCqNi+AvxdBd5qhbp9l3bKytjzURcjOD8iWPKmBm5PhxhFXd1ah0lD8vmov/ZuWq/HU/1yjFsFpF2g+h65q3rQ7PUEAfxqxOz3jJPpSkXdxow5NZ61Oows3U2B1zd4UiPyED5i3bJ6utOAF9XsAgOtPiW1Vn1i3wmMREyJpoMWrenT9//fHJ6QnPVrb3+bEYW44e7wkfhrRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OYJYWSVOlY/aFeV76qFGEuaR4R7mU1Lqs64suar0nDo=;
+ b=QVUZUbZzkglbLgorKvDMqYUKiQW1q6xDKUvHvxvTteJRWZZzdREQ3+afOJWMXR//7/HMHFAVReLic0xun8bLrr4EIbx8URoHgh6Qm5MZGenZ2H7mBYp+1XU4EgQdajnLpPky+AFAHpENYfeV2BWIO0ONgi497mlzBcQILivJtXY5t9urZroFtgK/kks/r04r2E6D5Lovg8St8WdbrgDEjPtqN/ub183VROmqN4nIPmxbb+FbXdTKeLePGwlIm3Wv+DdvZZurJ5AGMdFypx96LXV+k4rfnB3Q1RiEqn7MInioaga2Xtm07ZVPZQI/lS1wF6EuNe6IPDqCYN0EEPH1UA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OYJYWSVOlY/aFeV76qFGEuaR4R7mU1Lqs64suar0nDo=;
+ b=A0zezP13E+99eryrfj13uDWp2ZG0LODzI+o+2fOJT77G5I4RnUqzOeRMKNkCKn8c5rnVcSDq3BPhdMP8mCdn0QOj71/YhfTEbZfzvb++i4SSOT1ul1AG/grTvViR5wwoUSrpVQlsp7kBk9ivSNPeYHklEMPVEvENlbiNbnEmLII3c8UzWKCAbvS3NUShU9tcM4b7Aj20pB2vh8V+9t2mQbPFGJ5ZLmR7zVXTLDl0+YcnhnR0HKtGMrfu9RuRY8hWMCP127I1U3YUGgsPbiMOjtr4pwQuRLgktmadnYhh2TAS4EXQehmM5kvV3UVVPmt600HcbHp2NbKDVWScBQDNRA==
+Received: from BYAPR20MB2472.namprd20.prod.outlook.com (2603:10b6:a03:155::16)
+ by CH0PR20MB4187.namprd20.prod.outlook.com (2603:10b6:610:c1::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Fri, 22 Apr
+ 2022 16:12:11 +0000
+Received: from BYAPR20MB2472.namprd20.prod.outlook.com
+ ([fe80::3480:160a:eb92:d6e3]) by BYAPR20MB2472.namprd20.prod.outlook.com
+ ([fe80::3480:160a:eb92:d6e3%6]) with mapi id 15.20.5186.015; Fri, 22 Apr 2022
+ 16:12:11 +0000
+From:   icenowy@outlook.com
+To:     Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Icenowy Zheng <icenowy@aosc.io>
+Subject: [PATCH 1/2] dt-bindings: thermal: sun8i-thermal: add binding for R329 THS
+Date:   Sat, 23 Apr 2022 00:11:55 +0800
+Message-ID: <BYAPR20MB24721F9954252BECBEF486ACBCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [ZtWc14FKzJcyVoeMPRhfVOOWM8V5hk6q]
+X-ClientProxiedBy: HK0PR01CA0070.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:a6::34) To BYAPR20MB2472.namprd20.prod.outlook.com
+ (2603:10b6:a03:155::16)
+X-Microsoft-Original-Message-ID: <20220422161156.1075227-1-icenowy@outlook.com>
 MIME-Version: 1.0
-References: <11974495.O9o76ZdvQC@kreacher> <YmLJEtDFhc3HFg3/@lahna>
-In-Reply-To: <YmLJEtDFhc3HFg3/@lahna>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 22 Apr 2022 18:00:27 +0200
-Message-ID: <CAJZ5v0iA-9NFWsxrGZFN4ZeQBHDVniTNtw5HKGa+WKAdUZa02g@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: bus: Avoid non-ACPI device objects in walks over children
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c451c1f9-7f54-4548-c767-08da247adb56
+X-MS-TrafficTypeDiagnostic: CH0PR20MB4187:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GgNa5E8bGeDDsQ9uvOovpY28qxVzolB8bylIuiI+hWSNi9lmfxDR1xIk+oFM3Cdq/gvavVtG8fyOxyZJ1ZT2OaojU8RinU1ihsvv4CN61kVayMzedf3s8gzrH+/JxseDJ8Tx1HXBnromZO73ebsvuP+ya8MynDVNGCU9tFR7555ll+0XA/LKAlf33JnMQo/kYU5sUb0r0CE2/KkosOw0ib7q0kEaxU8+G9FmS4jpZaxIg1d2Hh6UQYdm5ibHEx7sve6qUOsge1Ey0BU8UTGEhjwMy2KdypN7TvHmiDVqYYgFhXQ332XnyFswSvrTCgVqX16Qr667O4iBODU6YfM0VnfE1VUoC9c4P1kbUElgvrTsTV/+yYz26nLVzgdO9rwmfGjtSS47qn8mq9tRSpzFZtUG6wWjU8Cvp4/o39HCpSjCFOl2fQ9FS42RDLjjiHFTDpBZ1Hs5b1phrubsAdgdNxNO6U0YTPnX3B6slmjkapJittGDtpF/8pmZlZo1FHdpYWwWlSN7d0L9ioB6NkMrNqoN1xL49fOJ3jNGFX/85zs3CENR5t/Jh/UTpd3sBjM0NPc7WI7RMPt7IQok9xgsTQ==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8uD+2GgjeEhNzgsHCAcuzMBOUg62rHyMTu+HjJaxKwKo+2Z171KP3p+DeEOn?=
+ =?us-ascii?Q?R9dQjzGmnE2DztMEML9G43m2JYaIPx6tV/hlg5QDQfQfJ2MYWDNG8V/6/uVQ?=
+ =?us-ascii?Q?F8KbmLUQG69tyNMqnSC0223xE+R/qCXfuHyERHv3d0NnDGSaVVB9Kqd9BChp?=
+ =?us-ascii?Q?I3egAZKm5gguwdiMLrURBI+dvj9wZS12yvxvOllCoZKnKptht7ng2zqRS+tv?=
+ =?us-ascii?Q?APP4K9rWGc1x29m8/2u+4bjr5TbqmHxn4qrTBLG/AWqq+hdS/L5F/KtHAZMT?=
+ =?us-ascii?Q?pdq2tLZMgOi8aHohYjooyvSBTatYiK0+gy9YeLuG/m46kws1P6VP0KDG6cd7?=
+ =?us-ascii?Q?ywM9t3q73daFWU+9uYgOkIeVpytN+zmiHFDys2b5sNJIJ+j8POSqALF+eOoS?=
+ =?us-ascii?Q?R5tOlsp2F+xH1k2g9p3KZu744TNPRjKoNgg+o/x20l28GvND8LO+bBfy6Vcy?=
+ =?us-ascii?Q?abTAlkQGcfmAtya+GikLbyNrJEfcGWPPDFo5v0ID4Vj84+ujVTkWR5P0OZjv?=
+ =?us-ascii?Q?FTC3k8bsycfsqfoQ10ezXNTW5NWr5K4A7ZQ254apV3KXpVLkzTtNFp4t83/s?=
+ =?us-ascii?Q?aeqaB7acWax0EwuH2URY5s4XBuLyLamXtAdMnEVvOX+4sg4PeuU+P/dPji06?=
+ =?us-ascii?Q?oocMI28VrP6xoXe5zOQRgsP1yzrjc+Cqsooz9JMjgmMhdNDGmyLPZJ4FoUE+?=
+ =?us-ascii?Q?cBN0zJHrV7f50HgWEO7ynNsR0nZxc9HOKGmOk5tHtgq4JD6qYjSm2rip/SG4?=
+ =?us-ascii?Q?Sakqy8UNDO4ORZh1e/eywyf3FLmlf05Q9ZSgDVHVxsokxny34RpA4C+y63uH?=
+ =?us-ascii?Q?pABKQ1b6yJD2Ua5T6Y50m4RFmaD9Ci2VR4e24omJiIhWwNZp45FdzbWgNDF8?=
+ =?us-ascii?Q?vVRFNVp4SE9vmII7dXO2mxvJk+i9XhynZKB56cXzgYEsAmuAcGYbH2cdp59G?=
+ =?us-ascii?Q?qFZQ5tj4iahKdCtxrMAc8ZB1iEAmkhRlY3fLR1YhSybdaNVmQKdvGJVl1SEG?=
+ =?us-ascii?Q?TpAVefoUV0Go8U9/VEs+mW5BblY3eewkGP3jMAndCAKI0T66PM/J2ixyk55b?=
+ =?us-ascii?Q?w/oOz7gXkhSkHVlKo0egOD2i1XPi8HuUtF1AabtqhsbFpj3cLxdeS2hPlEBM?=
+ =?us-ascii?Q?s3kNMKT/TqwbjW61YXfSUcKgJ528pFxxFuQtxxXXlBstoGNv8YW1n96M+TUo?=
+ =?us-ascii?Q?2WXiEI39KNercMBRKVgsjFqooxSTadCauInz20Vo/nxutp3aTvevTtm/JEm2?=
+ =?us-ascii?Q?zV48a+e0IvHtY2FmsR+jwa9ZzyB6FXkRBxs5NaMlU4aRp25LofGizkQVemiB?=
+ =?us-ascii?Q?fVq4soDg8z0efsqFwyUIrDc1dcfo6TudQNLEXEwdZ171XiXH2rsaRhOY2ScS?=
+ =?us-ascii?Q?6IBambSU1P6eIjOYOdUcdTeJtqfVpr7y3XVVfExEvkuCp4psWJVd1uawlCqc?=
+ =?us-ascii?Q?BkETjFt5d+0=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c451c1f9-7f54-4548-c767-08da247adb56
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR20MB2472.namprd20.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2022 16:12:11.6009
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR20MB4187
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,64 +114,46 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 5:27 PM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> Hi Rafael,
->
-> On Fri, Apr 22, 2022 at 05:13:48PM +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > When walking the children of an ACPI device, take extra care to avoid
-> > using to_acpi_device() on the ones that are not ACPI devices, because
-> > that may lead to out-of-bounds access and memory corruption.
-> >
-> > While at it, make the function passed to acpi_dev_for_each_child()
-> > take a struct acpi_device pointer argument (instead of a struct device
-> > one), so it is more straightforward to use.
-> >
-> > Fixes: b7dd6298db81 ("ACPI: PM: Introduce acpi_dev_power_up_children_with_adr()")
-> > Reported-by: kernel test robot <oliver.sang@intel.com>
-> > BugLink: https://lore.kernel.org/lkml/20220420064725.GB16310@xsang-OptiPlex-9020/
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >
-> > The commit being fixed is present in linux-next.
-> >
-> > ---
-> >  drivers/acpi/bus.c       |   24 ++++++++++++++++++++++--
-> >  drivers/acpi/device_pm.c |    5 +----
-> >  include/acpi/acpi_bus.h  |    2 +-
-> >  3 files changed, 24 insertions(+), 7 deletions(-)
-> >
-> > Index: linux-pm/drivers/acpi/bus.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/acpi/bus.c
-> > +++ linux-pm/drivers/acpi/bus.c
-> > @@ -1070,10 +1070,30 @@ int acpi_bus_for_each_dev(int (*fn)(stru
-> >  }
-> >  EXPORT_SYMBOL_GPL(acpi_bus_for_each_dev);
-> >
-> > +struct acpi_dev_walk_context {
-> > +     int (*fn)(struct acpi_device *, void *);
-> > +     void *data;
-> > +};
-> > +
-> > +static int acpi_dev_for_one_check(struct device *dev, void *context)
-> > +{
-> > +     struct acpi_dev_walk_context *adwc = context;
-> > +
-> > +     if (dev->bus != &acpi_bus_type)
-> > +             return 0;
->
-> I wonder if it make sense to add dev_is_acpi() that does the above
-> analoguos to dev_is_pci()?
+From: Icenowy Zheng <icenowy@aosc.io>
 
-I thought about that, but this is the only place where it would be
-needed ATM, so for now this isn't necessary.
+R329 has a thermal sensor controller that has only one sensor, and the
+structure of it is like the H6 one.
 
-> Regardless of that,
->
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Add device tree binding for it.
 
-Thanks!
+Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+---
+ .../devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml  | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+index 6e0b110153b0..87b4103e0a5f 100644
+--- a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
++++ b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+@@ -20,6 +20,7 @@ properties:
+       - allwinner,sun50i-a100-ths
+       - allwinner,sun50i-h5-ths
+       - allwinner,sun50i-h6-ths
++      - allwinner,sun50i-r329-ths
+ 
+   clocks:
+     minItems: 1
+@@ -63,6 +64,7 @@ allOf:
+             enum:
+               - allwinner,sun50i-a100-ths
+               - allwinner,sun50i-h6-ths
++              - allwinner,sun50i-r329-ths
+ 
+     then:
+       properties:
+@@ -85,6 +87,7 @@ allOf:
+         compatible:
+           contains:
+             const: allwinner,sun8i-h3-ths
++            const: allwinner,sun8i-r329-ths
+ 
+     then:
+       properties:
+-- 
+2.35.1
+
