@@ -2,217 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F2650ABED
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Apr 2022 01:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D4C50ADBC
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Apr 2022 04:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236452AbiDUXXs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 21 Apr 2022 19:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32802 "EHLO
+        id S1443329AbiDVC1m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 21 Apr 2022 22:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442454AbiDUXXr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Apr 2022 19:23:47 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9870047047;
-        Thu, 21 Apr 2022 16:20:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650583256; x=1682119256;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=z/kNNN6OUjKT9/1unsTU373a5gQ3Sy9VIFu/I6Q8lsQ=;
-  b=OjAY89nXgUGEksr4eGHp3VpOOxiTNj8zKSYm8VN+bcAoIL+rAjzJOo4T
-   FgXq8CxAtW64zAEBbLmA6GM55ppc3N/Ppd2SIwlQ5NjOaxvkCJI+9Qvd1
-   RQeh0WlEVlvKgqHFxiWg0zcW6rh04KGeK+bb+l3t2pRUgEctWMaXuYvWK
-   QFouPYRhFNhu9KUkGHkERoe/WKLZqkWahkccU3HmxpfO5A4FLviiaO9B3
-   BtNI4gC9VfZluFCvDuFgyGllB+40Q2d2nrFcvW05500Ekf1NUzCCREmZw
-   NTv5fzfF+E13dEeBRhCMuIqcp7mgx8Q1gx4F98lVPPd1M8ro8Gesin0AG
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="327419093"
-X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
-   d="scan'208";a="327419093"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 16:20:55 -0700
-X-IronPort-AV: E=Sophos;i="5.90,280,1643702400"; 
-   d="scan'208";a="593890908"
-Received: from dolaleye-mobl.amr.corp.intel.com ([10.209.117.155])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2022 16:20:54 -0700
-Date:   Thu, 21 Apr 2022 16:20:54 -0700 (PDT)
-From:   Mat Martineau <mathew.j.martineau@linux.intel.com>
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>
-cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Chen Yu <yu.c.chen@intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH mptcp-next] x86/pm: fix false positive kmemleak report
- in msr_build_context()
-In-Reply-To: <20220421161520.401946-1-matthieu.baerts@tessares.net>
-Message-ID: <99ac4b6-bea7-325e-1ca-cbf78982f5c1@linux.intel.com>
-References: <20220421161520.401946-1-matthieu.baerts@tessares.net>
+        with ESMTP id S1443333AbiDVC1l (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 21 Apr 2022 22:27:41 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42ECF4B1DC;
+        Thu, 21 Apr 2022 19:24:45 -0700 (PDT)
+X-UUID: 7ceff751403c40149ff85e4986925678-20220422
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:4cd73f59-0e2d-4a4b-8407-568bd6f809ad,OB:0,LO
+        B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:53,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:61
+X-CID-INFO: VERSION:1.1.4,REQID:4cd73f59-0e2d-4a4b-8407-568bd6f809ad,OB:0,LOB:
+        0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:53,FILE:0,RULE:Spam_GS981B3D,ACT
+        ION:quarantine,TS:61
+X-CID-META: VersionHash:faefae9,CLOUDID:3f34b5ef-06b0-4305-bfbf-554bfc9d151a,C
+        OID:2261f5381ea9,Recheck:0,SF:13|15|28|16|19|48,TC:nil,Content:0,EDM:-3,Fi
+        le:nil,QS:0,BEC:nil
+X-UUID: 7ceff751403c40149ff85e4986925678-20220422
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 473631616; Fri, 22 Apr 2022 10:24:40 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 22 Apr 2022 10:24:39 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 22 Apr 2022 10:24:39 +0800
+Message-ID: <d67d5f4f2ec96ade2398e7c0897dbb16bf5fb145.camel@mediatek.com>
+Subject: Re: [PATCH v24 0/7] soc: mediatek: SVS: introduce MTK SVS
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Kevin Hilman <khilman@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Nishanth Menon" <nm@ti.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>
+Date:   Fri, 22 Apr 2022 10:24:39 +0800
+In-Reply-To: <7hsfq6ql4v.fsf@baylibre.com>
+References: <20220420102044.10832-1-roger.lu@mediatek.com>
+         <7hczhbe3wn.fsf@baylibre.com>
+         <3d463c8b099fdb1c9a0df9e615a8ca1d8a034120.camel@mediatek.com>
+         <7hsfq6ql4v.fsf@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 21 Apr 2022, Matthieu Baerts wrote:
+Hi Kevin,
 
-> Since commit e2a1256b17b1 ("x86/speculation: Restore speculation related MSRs during S3 resume"),
-> kmemleak reports this issue:
->
->  unreferenced object 0xffff888009cedc00 (size 256):
->    comm "swapper/0", pid 1, jiffies 4294693823 (age 73.764s)
->    hex dump (first 32 bytes):
->      00 00 00 00 00 00 00 00 48 00 00 00 00 00 00 00  ........H.......
->      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->    backtrace:
->      msr_build_context (include/linux/slab.h:621)
->      pm_check_save_msr (arch/x86/power/cpu.c:520)
->      do_one_initcall (init/main.c:1298)
->      kernel_init_freeable (init/main.c:1370)
->      kernel_init (init/main.c:1504)
->      ret_from_fork (arch/x86/entry/entry_64.S:304)
->
-> It is easy to reproduce it on my side:
->
->  - boot the VM with a debug kernel config [1]
->  - wait ~1 minute
->  - start a kmemleak scan
->
-> It seems kmemleak has an issue with the array allocated in
-> msr_build_context() and assigned to a pointer in a static structure
-> (saved_context.saved_msrs->array): there is no leak then.
->
-> It looks like this is a limitation from kmemleak but that's alright,
-> kmemleak_no_leak() can be used to avoid complaining about that.
->
-> Please note that it looks like this issue is not new, e.g.
->
->  https://lore.kernel.org/all/9f1bb619-c4ee-21c4-a251-870bd4db04fa@lwfinger.net/
->  https://lore.kernel.org/all/94e48fcd-1dbd-ebd2-4c91-f39941735909@molgen.mpg.de/
->
-> But on my side, msr_build_context() is only used since:
->
->  commit e2a1256b17b1 ("x86/speculation: Restore speculation related MSRs during S3 resume").
->
-> Depending on their CPUs, others have probably the same issue since:
->
->  commit 7a9c2dd08ead ("x86/pm: Introduce quirk framework to save/restore extra MSR registers around suspend/resume"),
->
-> hence the 'Fixes' tag here below to help with the backports. But I
-> understand if someone says the origin of this issue is more on
-> kmemleak's side. What is unclear to me is why this issue was not seen by
-> other people and CIs. Maybe the kernel config [1]?
->
-> [1] https://github.com/multipath-tcp/mptcp_net-next/files/8531660/kmemleak-cpu-sched-bisect.kconfig.txt
->
+On Thu, 2022-04-21 at 12:41 -0700, Kevin Hilman wrote:
+> Hi Roger,
+> 
+> Roger Lu <roger.lu@mediatek.com> writes:
+> 
+> > On Wed, 2022-04-20 at 16:22 -0700, Kevin Hilman wrote:
+> 
+> [...]
+> 
+> > > That being said, it would be really nice to see an integration tree
+> > > where this was all tested on mainline (e.g. v5.17, or v5.18-rc)
+> > > 
+> > > For example, I can apply this to v5.18-rc2 and boot on my mt8183-pumpkin
+> > > board, it fails to probe[1] because there is no CCI node in the upstream
+> > > mt8183.dtsi.
+> > > 
+> > > I'm assuming this series is also not very useful without the CPUfreq
+> > > series from Rex, so being able to test this, CCI and CPUfreq together on
+> > > MT8183 on a mainline kernel would be very helpful.
+> > > 
+> > > Kevin
+> > > 
+> > > [1]
+> > > [    0.573332] mtk-svs 1100b000.svs: cannot find cci node
+> > > [    0.574061] mtk-svs 1100b000.svs: error -ENODEV: svs platform probe
+> > > fail
+> > 
+> > Just share. I've tested this series on below two platforms and it works as
+> > expected.
+> > - mt8183-Krane (kernel-v5.10)
+> > - mt8192-Hayato (kernel-v5.4)
+> 
+> Unfortunately testing on v5.4 and v5.10 with lots of other additional
+> out-of-tree patches does not give much confidence that this series works
+> with upstream, especially when I've given a few reasons why it will not
+> work uptream.
+> 
+> The examples I gave above for CCI and CPUs/cluster disable are good
+> examples, but another one I forgot to mention is the dependency on Mali.
+> The SVS driver will never probe because it also depens on a "mali" node,
+> which doesn't exist upstream either (but panfrost does, and acutually
+> loads/probes fine on v5.17/v5.18) so this should be fixed to work with
+> upstream panfrost.
+> 
+> IMO, in order for this to be merged upstream, it should at least have
+> some basic validation with upstream, and so far I have not even been
+> able to make it successfuly probe.  To do that, you will need to either
+> provide a list of the dependencies for testing this with mainline
+> (e.g. CCI series, CPUfreq series, any DT changes), or even better, an
+> integration tree based on recent mainline (e.g. v5.17 stable, or
+> v5.18-rc) which shows all the patches (in addition to this series) used
+> to validate this on mainline.
 
-Hi Matthieu -
+No problem. We'll find a machine that can be run correctly with recent mainline
+(e.g. v5.17 stable, or v5.18-rc) and add patches (CCI series + CPUfreq series +
+any DT changes) to test this SVS series. Thanks very much.
 
-It looks like the root cause here is alignment within the packed struct 
-saved_context (from suspend_64.h). Kmemleak only searches for pointers 
-that are aligned, but pahole shows that the saved_msrs struct member and 
-all members after it in the structure are unaligned:
+> 
+> Thanks,
+> 
+> Kevin
+> 
+> 
+> 
 
-(gcc 11.2.1, x86_64)
-
-struct saved_context {
- 	struct pt_regs             regs;                 /*     0   168 */
- 	/* --- cacheline 2 boundary (128 bytes) was 40 bytes ago --- */
- 	u16                        ds;                   /*   168     2 */
- 	u16                        es;                   /*   170     2 */
- 	u16                        fs;                   /*   172     2 */
- 	u16                        gs;                   /*   174     2 */
- 	long unsigned int          kernelmode_gs_base;   /*   176     8 */
- 	long unsigned int          usermode_gs_base;     /*   184     8 */
- 	/* --- cacheline 3 boundary (192 bytes) --- */
- 	long unsigned int          fs_base;              /*   192     8 */
- 	long unsigned int          cr0;                  /*   200     8 */
- 	long unsigned int          cr2;                  /*   208     8 */
- 	long unsigned int          cr3;                  /*   216     8 */
- 	long unsigned int          cr4;                  /*   224     8 */
- 	u64                        misc_enable;          /*   232     8 */
- 	bool                       misc_enable_saved;    /*   240     1 */
-
-/* Note odd offset values for the remainder of this struct    vvv       */
-
- 	struct saved_msrs          saved_msrs;           /*   241    16 */
- 	/* --- cacheline 4 boundary (256 bytes) was 1 bytes ago --- */
- 	long unsigned int          efer;                 /*   257     8 */
- 	u16                        gdt_pad;              /*   265     2 */
- 	struct desc_ptr            gdt_desc;             /*   267    10 */
- 	u16                        idt_pad;              /*   277     2 */
- 	struct desc_ptr            idt;                  /*   279    10 */
- 	u16                        ldt;                  /*   289     2 */
- 	u16                        tss;                  /*   291     2 */
- 	long unsigned int          tr;                   /*   293     8 */
- 	long unsigned int          safety;               /*   301     8 */
- 	long unsigned int          return_address;       /*   309     8 */
-
- 	/* size: 317, cachelines: 5, members: 25 */
- 	/* last cacheline: 61 bytes */
-} __attribute__((__packed__));
-
-If I move misc_enable_saved to the end of the struct declaration, 
-saved_msrs fits in before the cacheline 4 boundary and the kmemleak 
-warning goes away. The comment above the saved_context declaration says to 
-check wakeup_64.S and __save/__restore_processor_state() if the struct is 
-modified - looks like it's the members before misc_enable that must be 
-carefully placed.
-
-So far I've only tried this on my local machine, I'll work on getting more 
-thorough validation.
-
-Looks like struct saved_context in suspend_32.h has similar odd alignment.
-
-
-- Mat
-
-
-> Fixes: 7a9c2dd08ead ("x86/pm: Introduce quirk framework to save/restore extra MSR registers around suspend/resume")
-> Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/268
-> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-> ---
-> arch/x86/power/cpu.c | 4 ++++
-> 1 file changed, 4 insertions(+)
->
-> diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
-> index 3822666fb73d..1467c6d1a966 100644
-> --- a/arch/x86/power/cpu.c
-> +++ b/arch/x86/power/cpu.c
-> @@ -14,6 +14,7 @@
-> #include <linux/tboot.h>
-> #include <linux/dmi.h>
-> #include <linux/pgtable.h>
-> +#include <linux/kmemleak.h>
->
-> #include <asm/proto.h>
-> #include <asm/mtrr.h>
-> @@ -413,6 +414,9 @@ static int msr_build_context(const u32 *msr_id, const int num)
-> 		return -ENOMEM;
-> 	}
->
-> +	/* The pointer is going to be stored in static struct (saved_context) */
-> +	kmemleak_not_leak(msr_array);
-> +
-> 	if (saved_msrs->array) {
-> 		/*
-> 		 * Multiple callbacks can invoke this function, so copy any
-> -- 
-> 2.34.1
->
->
-
---
-Mat Martineau
-Intel
