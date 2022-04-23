@@ -2,123 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B54350CB97
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Apr 2022 17:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7831450CC94
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Apr 2022 19:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231301AbiDWPSD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 23 Apr 2022 11:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
+        id S236604AbiDWRcc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 23 Apr 2022 13:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231707AbiDWPRw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 23 Apr 2022 11:17:52 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A085E15708;
-        Sat, 23 Apr 2022 08:14:55 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id t13so9715372pgn.8;
-        Sat, 23 Apr 2022 08:14:55 -0700 (PDT)
+        with ESMTP id S236592AbiDWRcb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 23 Apr 2022 13:32:31 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0CE1773E4
+        for <linux-pm@vger.kernel.org>; Sat, 23 Apr 2022 10:29:31 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id bq30so19454989lfb.3
+        for <linux-pm@vger.kernel.org>; Sat, 23 Apr 2022 10:29:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=HaWZYkIToDpIcggCzzIREPknCIirh1Q5Ng9bwQqh7rg=;
-        b=Ha1ewV9/ZKH5gNBLigDYDJc8kBXDt5R6ECJk+Zy/i92ysyhtW8u0UPvUblw4r3AeJH
-         rDP7i+VKWYNkfzwTLJkO8aP7kpWtjEpQfeVNssBHu8Y0yU0rcDjS9K+vIHAB1JHD7MrI
-         HxIZ4ah46XdbA/0FoiPVbgQeILP15MmRpbkkWmxcnpodqBAmbVnjoJLR6Mb2RGUTS5UG
-         E7Fad/T/YPKbJ5qzENOMnpSaTeLQMs37WW1M3/s5uzk13on9gyqv9oOaTwVpuHQ7LGqk
-         Qr1dV40XjrHOhjJDkr93mgEjXcurO5bYS03bCZP0a3HUx6PcKL3/X7fcL4Lj5zekaXGT
-         Fw2Q==
+        bh=K0dNu+gsqOsxvzV6RiPi+gSx/YRNnpZCOhUTB2E6Dzg=;
+        b=degRmRrPVD/1fmRH7fyjR4dGwJ8xCTdh9hKWC1sBp87/2q71LfLfDM1gaxM/soeUrd
+         tNJqQH7SYqdBTAPR7Qk+xOBnSEJ5w91M3+s/eKzyzzrHNsyxT/UJwYHq68pUB7EgEkG4
+         +b/mYcF4lZlyzw4qEbmaCbrP7SZXT21q1BIKXVPGWar2pqiavFxqbGCUkrIikmQPWA7u
+         H9zFR9IhmWsK4nYzLgZ4968RNoCbFzAHHHiwkmKJWmJgTGZtxfvJbttrFU5ctOk8uF/S
+         uBPA6s1zWaEw+ofDIYFwyKuj34yr3V3+jBPNbGP3PqEO69ZKeI648DrQETbA83uFEgdB
+         CRfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=HaWZYkIToDpIcggCzzIREPknCIirh1Q5Ng9bwQqh7rg=;
-        b=cA/a+cXxqID6TfU3T8k1fethTscM0e/F7LG6g35VFt2gdeT4cf8ISFkKlAHcOTjLHE
-         QjVyts+3LdFLJN1600Kh8wytY9of7/Xv1LLdV3KC1GhHJZ4loCgIs3ZNiEWfwbffLvvM
-         jDMYHF53EcAH9sPgr7BYqwcWrF8tHH1ycO02MsTK/7srizPnYDTAkkSZKPmSZGj+zR/N
-         70JNc+CD8t4zPvfrtgG2HaMeHLxz8WtY8oSgVy1qA35i2Bnf9pIu3mCQh22/gYykMLwq
-         WZsqZPtJzsKTKGRmfIlayQz/0DDouRNrH7uohhyIcPIyQ1/LDRtdYqmUdrIuBxlXuZ1F
-         ZwwQ==
-X-Gm-Message-State: AOAM532nGwKVV13FrMkxxWcxQCcSuq+wD1R+LIIuwxBYp/YNF3ihYUe9
-        N9pkpABwBwvhErrlxU0mAf4=
-X-Google-Smtp-Source: ABdhPJz2ht11c+e4unTJ3LxGk1NAUDGSSEJtoxC5QD3dzyRSKhzbBCNyqHAFlQgLmXhaU9xciXNGqA==
-X-Received: by 2002:a63:f749:0:b0:3aa:361c:8827 with SMTP id f9-20020a63f749000000b003aa361c8827mr8382156pgk.361.1650726895185;
-        Sat, 23 Apr 2022 08:14:55 -0700 (PDT)
-Received: from ip-172-31-12-67.us-west-1.compute.internal (ec2-54-241-4-221.us-west-1.compute.amazonaws.com. [54.241.4.221])
-        by smtp.gmail.com with ESMTPSA id s50-20020a056a001c7200b0050acf7cadc5sm6114680pfw.112.2022.04.23.08.14.53
+        bh=K0dNu+gsqOsxvzV6RiPi+gSx/YRNnpZCOhUTB2E6Dzg=;
+        b=dK/H597EDKITWQZRepwnTkeXKHKam24OowpG8o0mC50ciVm0qFLqtdBI6lF42RFWrO
+         5aHnC6enu/AAtXipk2zI/B/94zqUiIZzX48YwiQsQ3JeQX1bGl/7GBp4eNhXLXKcrNv7
+         ZVVH85MRzB++ECUqWfrA91wO7btZMiJnkNdIvNllNl3WK8uh/ur138hcsvs3Scd2TMbd
+         FrPhv1Y3eKpqp+cheov7HD0ErHEPI4Jphy1mdSIO0z8lhi32KtA5NQmuP1KFvYV/FCCz
+         OCJYToKkJVKBIL7l2+lttKznQJMMX9CjdbXce+cC+P3bOJu3AgY93ovgBzDatviIEDds
+         F5Qw==
+X-Gm-Message-State: AOAM5329baQvQNz+L0koyP/5D7MendDluctvNgZwRJv42kEUeGG0ZUAS
+        IhJI9tygpjaB45ueibyCoTxBnBhJbC0+iQ==
+X-Google-Smtp-Source: ABdhPJxyDr9YUisZsW0MjciEFJb1IqNiS+d9KYhk3dtxXOoEbaDP+rnMZ4Iq5owNWLV3pQUAvMJMGw==
+X-Received: by 2002:a05:6512:321b:b0:44a:78f2:500b with SMTP id d27-20020a056512321b00b0044a78f2500bmr70662lfe.434.1650734969980;
+        Sat, 23 Apr 2022 10:29:29 -0700 (PDT)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id x22-20020a2e9c96000000b0024da6072587sm602331lji.80.2022.04.23.10.29.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 08:14:54 -0700 (PDT)
-From:   Xiaobing Luo <luoxiaobing0926@gmail.com>
-To:     tiny.windzz@gmail.com, rafael@kernel.org, viresh.kumar@linaro.org,
-        wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org,
-        mripard@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xiaobing Luo <luoxiaobing0926@gmail.com>
-Subject: [PATCH v2] cpufreq:fix memory leak in sun50i_cpufreq_nvmem_probe
-Date:   Sat, 23 Apr 2022 15:12:04 +0000
-Message-Id: <20220423151204.2102314-1-luoxiaobing0926@gmail.com>
-X-Mailer: git-send-email 2.36.0
+        Sat, 23 Apr 2022 10:29:29 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH] power: supply: ab8500_fg: Allocate wq in probe
+Date:   Sat, 23 Apr 2022 19:27:27 +0200
+Message-Id: <20220423172727.1197901-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---------------------------------------------
-unreferenced object 0xffff000010742a00 (size 128):
-  comm "swapper/0", pid 1, jiffies 4294902015 (age 1187.652s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000b4dfebaa>] __kmalloc+0x338/0x474
-    [<00000000d6e716db>] sun50i_cpufreq_nvmem_probe+0xc4/0x36c
-    [<000000007d6082a0>] platform_probe+0x98/0x11c
-    [<00000000c990f549>] really_probe+0x234/0x5a0
-    [<000000002d9fecc6>] __driver_probe_device+0x194/0x224
-    [<00000000cf0b94fa>] driver_probe_device+0x64/0x13c
-    [<00000000f238e4cf>] __device_attach_driver+0xf8/0x180
-    [<000000006720e418>] bus_for_each_drv+0xf8/0x160
-    [<00000000df4f14f6>] __device_attach+0x174/0x29c
-    [<00000000782002fb>] device_initial_probe+0x20/0x30
-    [<00000000c2681b06>] bus_probe_device+0xfc/0x110
-    [<00000000964cf3bd>] device_add+0x5f0/0xcd0
-    [<000000004b9264e3>] platform_device_add+0x198/0x390
-    [<00000000fa82a9d0>] platform_device_register_full+0x178/0x210
-    [<000000009a5daf13>] sun50i_cpufreq_init+0xf8/0x168
-    [<000000000377cc7c>] do_one_initcall+0xe4/0x570
---------------------------------------------
+The workqueue is allocated in bind() but all interrupts are
+registered in probe().
 
-if sun50i_cpufreq_get_efuse failed, then opp_tables leak.
-Fixes: f328584f7bff ("cpufreq: Add sun50i nvmem based CPU scaling driver")
+Some interrupts put work on the workqueue, which can have
+bad side effects.
 
-Signed-off-by: Xiaobing Luo <luoxiaobing0926@gmail.com>
+Allocate the workqueue in probe() instead, destroy it in
+.remove() and make unbind() simply flush the workqueue.
+
+Fixes: 1c1f13a006ed ("power: supply: ab8500: Move to componentized binding")
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- drivers/cpufreq/sun50i-cpufreq-nvmem.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/power/supply/ab8500_fg.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-index 2deed8d8773f..75e1bf3a08f7 100644
---- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-+++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-@@ -98,8 +98,10 @@ static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
- 		return -ENOMEM;
+diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
+index 97ac588a9e9c..ec8a404d71b4 100644
+--- a/drivers/power/supply/ab8500_fg.c
++++ b/drivers/power/supply/ab8500_fg.c
+@@ -3037,13 +3037,6 @@ static int ab8500_fg_bind(struct device *dev, struct device *master,
+ {
+ 	struct ab8500_fg *di = dev_get_drvdata(dev);
  
- 	ret = sun50i_cpufreq_get_efuse(&speed);
--	if (ret)
-+	if (ret) {
-+		kfree(opp_tables);
- 		return ret;
+-	/* Create a work queue for running the FG algorithm */
+-	di->fg_wq = alloc_ordered_workqueue("ab8500_fg_wq", WQ_MEM_RECLAIM);
+-	if (di->fg_wq == NULL) {
+-		dev_err(dev, "failed to create work queue\n");
+-		return -ENOMEM;
+-	}
+-
+ 	di->bat_cap.max_mah_design = di->bm->bi->charge_full_design_uah;
+ 	di->bat_cap.max_mah = di->bat_cap.max_mah_design;
+ 	di->vbat_nom_uv = di->bm->bi->voltage_max_design_uv;
+@@ -3067,8 +3060,7 @@ static void ab8500_fg_unbind(struct device *dev, struct device *master,
+ 	if (ret)
+ 		dev_err(dev, "failed to disable coulomb counter\n");
+ 
+-	destroy_workqueue(di->fg_wq);
+-	flush_scheduled_work();
++	flush_workqueue(di->fg_wq);
+ }
+ 
+ static const struct component_ops ab8500_fg_component_ops = {
+@@ -3117,6 +3109,13 @@ static int ab8500_fg_probe(struct platform_device *pdev)
+ 	ab8500_fg_charge_state_to(di, AB8500_FG_CHARGE_INIT);
+ 	ab8500_fg_discharge_state_to(di, AB8500_FG_DISCHARGE_INIT);
+ 
++	/* Create a work queue for running the FG algorithm */
++	di->fg_wq = alloc_ordered_workqueue("ab8500_fg_wq", WQ_MEM_RECLAIM);
++	if (di->fg_wq == NULL) {
++		dev_err(dev, "failed to create work queue\n");
++		return -ENOMEM;
 +	}
++
+ 	/* Init work for running the fg algorithm instantly */
+ 	INIT_WORK(&di->fg_work, ab8500_fg_instant_work);
  
- 	snprintf(name, MAX_NAME_LEN, "speed%d", speed);
+@@ -3227,6 +3226,8 @@ static int ab8500_fg_remove(struct platform_device *pdev)
+ {
+ 	struct ab8500_fg *di = platform_get_drvdata(pdev);
  
++	destroy_workqueue(di->fg_wq);
++	flush_scheduled_work();
+ 	component_del(&pdev->dev, &ab8500_fg_component_ops);
+ 	list_del(&di->node);
+ 	ab8500_fg_sysfs_exit(di);
 -- 
-2.36.0
+2.35.1
 
