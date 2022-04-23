@@ -2,176 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 669A950C95D
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Apr 2022 12:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A3A50CB80
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Apr 2022 17:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234849AbiDWKwV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 23 Apr 2022 06:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
+        id S231177AbiDWPEg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 23 Apr 2022 11:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiDWKwU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 23 Apr 2022 06:52:20 -0400
-Received: from out28-52.mail.aliyun.com (out28-52.mail.aliyun.com [115.124.28.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE21C8A9B;
-        Sat, 23 Apr 2022 03:49:19 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436342|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_social|0.164624-0.00134867-0.834027;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047201;MF=kant@allwinnertech.com;NM=1;PH=DS;RN=11;RT=11;SR=0;TI=SMTPD_---.NWHc4yz_1650710954;
-Received: from 192.168.110.175(mailfrom:kant@allwinnertech.com fp:SMTPD_---.NWHc4yz_1650710954)
-          by smtp.aliyun-inc.com(33.32.92.215);
-          Sat, 23 Apr 2022 18:49:16 +0800
-Message-ID: <e45f684a-7953-69bf-900a-f30dca209778@allwinnertech.com>
-Date:   Sat, 23 Apr 2022 18:49:23 +0800
+        with ESMTP id S229807AbiDWPEe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 23 Apr 2022 11:04:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B1A1668F0;
+        Sat, 23 Apr 2022 08:01:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 52267612C8;
+        Sat, 23 Apr 2022 15:01:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27BCCC385A0;
+        Sat, 23 Apr 2022 15:01:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650726095;
+        bh=uaq6jNypdiikbr84HxxnRbgSGuCdBE8n2XWA2kVi2Go=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=j4W+UeVu3/Vi110qIfDgsZqhpYu8qMnJWI5iwdqmEpz6rWP2cQz6EBroNuEBknJSt
+         Pajs7dX7YzmIgbttwC9wDbnRxYZV+ydbrIk7w/o6T8XiPN+o7fk7kKZyl6V2t8SlqS
+         y2Vp0AlB/QEOBmxSznnjFkmK1SmrVmzGqvxuDu7/4C91717uTC5+JM+2VtKVYlCLoa
+         GSn+cdsFeV7jmjOjLNH6WByptK7hTvUzISBNOpHmM/bpS34kwjP4y6d5i213GV86wT
+         X6Ml966XTBxMhEKT4pyIyNqqu8WnOMSB8q42TueLKq1HmPXKsaikWy5t2IMnOrNibw
+         xpaRC8DS/Cu/w==
+Date:   Sat, 23 Apr 2022 10:01:32 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Jingar, Rajvi" <rajvi.jingar@intel.com>
+Cc:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        "david.e.box@linux.intel.com" <david.e.box@linux.intel.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "koba.ko@canonical.com" <koba.ko@canonical.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Russell Currey <ruscur@russell.cc>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH v4 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
+Message-ID: <20220423150132.GA1552054@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] thermal: devfreq_cooling: use local ops instead of global
- ops
-Content-Language: en-GB
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     amitk@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        allwinner-opensource-support@allwinnertech.com,
-        stable@vger.kernel.org, orjan.eide@arm.com, edubezval@gmail.com,
-        javi.merino@kernel.org, daniel.lezcano@linaro.org,
-        rui.zhang@intel.com
-References: <20220325094436.101419-1-kant@allwinnertech.com>
- <4db6b25c-dd78-a6ba-02a5-ac2e49996be1@arm.com>
- <6b89fa96-07f0-19bb-2e18-22afa27554a1@allwinnertech.com>
- <281fd0f0-d2fc-95cf-d183-31ca8c25830e@arm.com>
-From:   Kant Fan <kant@allwinnertech.com>
-In-Reply-To: <281fd0f0-d2fc-95cf-d183-31ca8c25830e@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SJ0PR11MB507047C0109C5163EF20D9AE9EF69@SJ0PR11MB5070.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20/04/2022 18:32, Lukasz Luba wrote:
-> Hi Kant,
+On Sat, Apr 23, 2022 at 12:43:14AM +0000, Jingar, Rajvi wrote:
+> > -----Original Message-----
+> > From: Bjorn Helgaas <helgaas@kernel.org>
+> > On Thu, Apr 14, 2022 at 07:54:02PM +0200, Rafael J. Wysocki wrote:
+> > > On 3/25/2022 8:50 PM, Rajvi Jingar wrote:
+> > > > For the PCIe devices (like nvme) that do not go into D3 state still need to
+> > > > disable PTM on PCIe root ports to allow the port to enter a lower-power PM
+> > > > state and the SoC to reach a lower-power idle state as a whole. Move the
+> > > > pci_disable_ptm() out of pci_prepare_to_sleep() as this code path is not
+> > > > followed for devices that do not go into D3. This patch fixes the issue
+> > > > seen on Dell XPS 9300 with Ice Lake CPU and Dell Precision 5530 with Coffee
+> > > > Lake CPU platforms to get improved residency in low power idle states.
+> > > >
+> > > > Fixes: a697f072f5da ("PCI: Disable PTM during suspend to save power")
+> > > > Signed-off-by: Rajvi Jingar <rajvi.jingar@intel.com>
+> > > > Suggested-by: David E. Box <david.e.box@linux.intel.com>
+> > > > ---
+> > > >   drivers/pci/pci-driver.c | 10 ++++++++++
+> > > >   drivers/pci/pci.c        | 10 ----------
+> > > >   2 files changed, 10 insertions(+), 10 deletions(-)
+> > > >
+> > > > diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> > > > index 8b55a90126a2..ab733374a260 100644
+> > > > --- a/drivers/pci/pci-driver.c
+> > > > +++ b/drivers/pci/pci-driver.c
+> > > > @@ -847,6 +847,16 @@ static int pci_pm_suspend_noirq(struct device *dev)
+> > > >   	if (!pci_dev->state_saved) {
+> > > >   		pci_save_state(pci_dev);
+> > > > +		/*
+> > > > +		 * There are systems (for example, Intel mobile chips since
+> > Coffee
+> > > > +		 * Lake) where the power drawn while suspended can be
+> > significantly
+> > > > +		 * reduced by disabling PTM on PCIe root ports as this allows the
+> > > > +		 * port to enter a lower-power PM state and the SoC to reach a
+> > > > +		 * lower-power idle state as a whole.
+> > > > +		 */
+> > > > +		if (pci_pcie_type(pci_dev) == PCI_EXP_TYPE_ROOT_PORT)
+> > > > +			pci_disable_ptm(pci_dev);
+> > 
+> > Why is disabling PTM dependent on pci_dev->state_saved?  The point of
+> > this is to change the behavior of the device, and it seems like we
+> > want to do that regardless of whether the driver has used
+> > pci_save_state().
 > 
-> On 4/19/22 16:49, Kant Fan wrote:
->> On 29/03/2022 14:59, Lukasz Luba wrote:
->>>
->>>
->>> On 3/25/22 09:44, Kant Fan wrote:
->>>> commit 7b62935828266658714f81d4e9176edad808dc70 upstream.
->>>>
->>>> Fix access illegal address problem in following condition:
->>>> There are muti devfreq cooling devices in system, some of them register
->>>> with dfc_power but other does not, power model ops such as 
->>>> state2power will
->>>> append to global devfreq_cooling_ops when the cooling device with
->>>> dfc_power register. It makes the cooling device without dfc_power
->>>> also use devfreq_cooling_ops after appending when register later by
->>>> of_devfreq_cooling_register_power() or of_devfreq_cooling_register().
->>>>
->>>> IPA governor regards the cooling devices without dfc_power as a 
->>>> power actor
->>>> because they also have power model ops, and will access illegal 
->>>> address at
->>>> dfc->power_ops when execute cdev->ops->get_requested_power or
->>>> cdev->ops->power2state. As the calltrace below shows:
->>>>
->>>> Unable to handle kernel NULL pointer dereference at virtual address
->>>> 00000008
->>>> ...
->>>> calltrace:
->>>> [<c06e5488>] devfreq_cooling_power2state+0x24/0x184
->>>> [<c06df420>] power_actor_set_power+0x54/0xa8
->>>> [<c06e3774>] power_allocator_throttle+0x770/0x97c
->>>> [<c06dd120>] handle_thermal_trip+0x1b4/0x26c
->>>> [<c06ddb48>] thermal_zone_device_update+0x154/0x208
->>>> [<c014159c>] process_one_work+0x1ec/0x36c
->>>> [<c0141c58>] worker_thread+0x204/0x2ec
->>>> [<c0146788>] kthread+0x140/0x154
->>>> [<c01010e8>] ret_from_fork+0x14/0x2c
->>>>
->>>> Fixes: a76caf55e5b35 ("thermal: Add devfreq cooling")
->>>> Cc: stable@vger.kernel.org # 4.4+
->>>> Signed-off-by: Kant Fan <kant@allwinnertech.com>
->>>> ---
->>>>   drivers/thermal/devfreq_cooling.c | 25 ++++++++++++++++++-------
->>>>   1 file changed, 18 insertions(+), 7 deletions(-)
->>>>
->>>
->>> Looks good. So this patch should be applied for all stable
->>> kernels starting from v4.4 to v5.12 (the v5.13 and later need
->>> other patch).
->>>
->>> Next time you might use in the subject something like:
->>> [PATCH 4.4] thermal: devfreq_cooling: use local ops instead of global 
->>> ops
->>> It would be better distinguished from your other patch with the
->>> same subject, which was for mainline and v5.13+
->>
->> Hi Lukasz,
->> Thank you for the guidance. I want to know if I'm understanding you in 
->> a right way. Could you confirm the following information?
->>
->> 1. The stable patches
->> After the patch is merged into mainline later, I'll submit the 
->> following patches individually for v4.4 ~ v5.12:
-> 
-> Correct, after it gets mainline you can point to that commit hash and
-> process with those patches. I don't now which of those older stable
-> kernels are still maintained, since some of them have longer support
-> and the rest had shorter and might already ended. You can check the
-> end of life for those 'Longterm' here [1]. AFAICS the 4.4 is not in that
-> table, so you can start from 4.9, should be OK.
-> So the list of needed patches would be for those stable kernels:
-> 4.9, 4.14, 4.19, 5.4, 5.10
-> I can see that last release for 5.11.x was in May 2021, so it's probably
-> ended, similar for 5.12.x (Jul 2021). That's why I suggested that list
-> for the long support kernels.
-> 
+> Because we use the saved state to restore PTM on the root port. 
+> And it's under this condition that the root port state gets saved.
 
-Hi Lukasz,
-Thanks for figuring it out. I'll check the stable versions carefully.
+Yes, I understand that pci_restore_ptm_state() depends on a previous
+call to pci_save_ptm_state().
 
->>
->> [PATCH 4.4] thermal: devfreq_cooling: use local ops instead of global ops
->> [PATCH 4.5] thermal: devfreq_cooling: use local ops instead of global ops
->> ...
->> [PATCH 5.12] thermal: devfreq_cooling: use local ops instead of global 
->> ops
->>
->> And also the following patches individually for v5.13+ :
-> 
-> For this, you probably don't have to. You have added 'v5.13+' in the
-> original patch v2, so it will be picked correctly. It should apply
-> on those stable kernels w/o issues. If there will be, stable kernel
-> engineers will ping us.
-> 
->> [PATCH 5.13] thermal: devfreq_cooling: use local ops instead of global 
->> ops
->> [PATCH 5.14] thermal: devfreq_cooling: use local ops instead of global 
->> ops
->> ...
->> [PATCH 5.17] thermal: devfreq_cooling: use local ops instead of global 
->> ops
->>
->> 2. The mainline patch
->> I saw your mail with Rafael, seems there are conflicts... I wonder if 
->> there's anything wrong with my patch, or anything I can help?
->>
-> 
-> Thank you for offering help. Rafael solved that correctly, so it doesn't
-> need any more work.
-> 
-> Thank you for doing that work!
-> 
-> Regards,
-> Lukasz
-> 
-> [1] https://www.kernel.org/category/releases.html
+The point I'm trying to make is that pci_disable_ptm() changes the
+state of the device, and that state change should not depend on
+whether the driver has used pci_save_state().
 
-No problem. I'll submit the stable patches after the mainline patch is 
-merged.
+When we're putting a device into a low-power state, I think we want to
+disable PTM *always*, no matter what the driver did.  And I think we
+want to do it for all devices, not just Root Ports.
 
--- 
-Best Regards,
-Kant Fan
+Bjorn
