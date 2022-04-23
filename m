@@ -2,244 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C41250CCDC
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Apr 2022 20:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC96050CCE5
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Apr 2022 20:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234862AbiDWS1w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 23 Apr 2022 14:27:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48160 "EHLO
+        id S236637AbiDWSfb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 23 Apr 2022 14:35:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236748AbiDWS1o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 23 Apr 2022 14:27:44 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADCC1F7D68
-        for <linux-pm@vger.kernel.org>; Sat, 23 Apr 2022 11:24:45 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id m20so1434794ejj.10
-        for <linux-pm@vger.kernel.org>; Sat, 23 Apr 2022 11:24:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares-net.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9l5iWYC32c45NSx+NuKLzAKcOwrZzZ8GmpPgq17uhVY=;
-        b=yoCfu/jknnnwfT8OUfYAS45iONd0HBI9c/r0wWPD03OPzPGf5rvVhWBh0Af6aK0etD
-         qy2fvJ+uQO1zRYB4nwwhAR7h1h+FxgeYkmscwnXJ2dWkNHwtkNvI1F6+8L4Fa3WATAIq
-         V/kAbPgHEXpRzA+mUBO+sUckT8XPkAplVc1fOkk9rJhBXUCTwe/dfT0YfAnHDzn711Nj
-         fJU7FZyPBZk35QuJiOHPyeTv/Tticy1rp0NCOhLGTubHeWhWAh2xEKD22n2iKmZqkDA3
-         kZvnc7sIn8KQkcFgtI110JRFm889URQXrgg01NVwsg/QTGkxGcnW3kl3j0wNIaRJzTmi
-         TYUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9l5iWYC32c45NSx+NuKLzAKcOwrZzZ8GmpPgq17uhVY=;
-        b=iZIV37gE5a6yLNotBxXyYfONNqrDPju9udN5LZK6MeUtH5vkIXHg1YQKbGD7+RTiJC
-         mkzGR6tPdrU6r7bC5VIWIJvUvN/6vFq0fDThrarxZ2fW4nwHox6/RWEcK+45Bq0Z31wm
-         WcWMGQLBRJykRGmpPBY2PoDptvewjekdDNMrxLDiaBIqi20xe3tD45WLn0DLHBTTw+1a
-         GOqLOus0+7ztU5fPprfI04CU2Murpv9YS5kDJfI6aWIV4f+9pFhOmQkwuHSySGNiYZl9
-         lBw5Oj91fMH2wY4fv+j2739PtfRU36PfDLpppBu5sYwsQmBTUfbJALNubyn5P2jf5qpm
-         18NQ==
-X-Gm-Message-State: AOAM533rsDcF8iGA7hnR0RAxsdZNCP2AqjQDF+rjJHgcaM0q2zH8MqZA
-        l2iGaibQyDmn3qYmZ9fojfmtcA==
-X-Google-Smtp-Source: ABdhPJwmH1wRvO8sDWYSE3+UlD8hzh47lCTq0NAvsz1o9F6JPcEQkprIEzOjy4uG/1nYcF0C2IvN/Q==
-X-Received: by 2002:a17:907:62a6:b0:6ef:8118:d3e2 with SMTP id nd38-20020a17090762a600b006ef8118d3e2mr9062679ejc.605.1650738284337;
-        Sat, 23 Apr 2022 11:24:44 -0700 (PDT)
-Received: from tsr-vdi-mbaerts.nix.tessares.net (static.23.216.130.94.clients.your-server.de. [94.130.216.23])
-        by smtp.gmail.com with ESMTPSA id eq7-20020a056402298700b00419d8d46a8asm2358159edb.39.2022.04.23.11.24.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 11:24:43 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Chen Yu <yu.c.chen@intel.com>
-Cc:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>, linux-mm@kvack.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] x86/pm: fix false positive kmemleak report in msr_build_context()
-Date:   Sat, 23 Apr 2022 20:24:10 +0200
-Message-Id: <20220423182410.1841114-1-matthieu.baerts@tessares.net>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S235771AbiDWSf3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 23 Apr 2022 14:35:29 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EB11240CD;
+        Sat, 23 Apr 2022 11:32:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650738749; x=1682274749;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NLI6B+T+c6KcSRFcOjCP4njvCPoWm8EpOmyLtcT4jLI=;
+  b=mSZ+e72DTGydYzwgiFSjaA4RSsWAYJbatAPSZ+RHmOW352blXoy7TDkf
+   qgppa+D4DBhG4sEx+qcvIzm012pLeJ6NHgXLrLvuVJWzfz3FMfjc0/fEy
+   aB4krKoxkbvl+r3g4r2OxnLHGLbFCSJ+KxbcBNoCLX/wFAqZWKX8la411
+   ZW2GCS8A+fn+bHkvQcChRJ3rmcX8D2G3M6J0Duv7Bt0AsXrH7fBigWB36
+   CfP6zazl6sYivRBn/5H38FxVk/X1cQMeCOsiV1MXUWOpl+0fS/dX3Dac8
+   2enBOQjJ5crY/QmfnGFqBKkKI/tyASVEyE9drCKZfSKVMFsemnJaxeb2o
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="245503653"
+X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
+   d="scan'208";a="245503653"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 11:32:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,284,1643702400"; 
+   d="scan'208";a="531384294"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 23 Apr 2022 11:32:26 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1niKYT-0000LG-Es;
+        Sat, 23 Apr 2022 18:32:25 +0000
+Date:   Sun, 24 Apr 2022 02:32:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     kbuild-all@lists.01.org, linux-acpi@vger.kernel.org,
+        devel@acpica.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge 7/20] WARNING: modpost:
+ vmlinux.o(.exit.text+0xe120): Section mismatch in reference from the
+ function hsr_netlink_exit() to the variable .init.text:.L0
+Message-ID: <202204240259.PyW8hsJz-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Since commit e2a1256b17b1 ("x86/speculation: Restore speculation related MSRs during S3 resume"),
-kmemleak reports this issue:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   f23bedef4354b1e8a69a25d8c9c1201e6d8e8762
+commit: 989108f9dfffcaebab87d8b37aa7d4d9d10d2745 [7/20] Merge branch 'devprop' into linux-next
+config: riscv-buildonly-randconfig-r002-20220421 (https://download.01.org/0day-ci/archive/20220424/202204240259.PyW8hsJz-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=989108f9dfffcaebab87d8b37aa7d4d9d10d2745
+        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+        git fetch --no-tags rafael-pm bleeding-edge
+        git checkout 989108f9dfffcaebab87d8b37aa7d4d9d10d2745
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-  unreferenced object 0xffff888009cedc00 (size 256):
-    comm "swapper/0", pid 1, jiffies 4294693823 (age 73.764s)
-    hex dump (first 32 bytes):
-      00 00 00 00 00 00 00 00 48 00 00 00 00 00 00 00  ........H.......
-      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    backtrace:
-      msr_build_context (include/linux/slab.h:621)
-      pm_check_save_msr (arch/x86/power/cpu.c:520)
-      do_one_initcall (init/main.c:1298)
-      kernel_init_freeable (init/main.c:1370)
-      kernel_init (init/main.c:1504)
-      ret_from_fork (arch/x86/entry/entry_64.S:304)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-It is easy to reproduce it on my side:
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-  - boot the VM with a debug kernel config (see the 'Closes:' tag)
-  - wait ~1 minute
-  - start a kmemleak scan
+>> WARNING: modpost: vmlinux.o(.exit.text+0xe120): Section mismatch in reference from the function hsr_netlink_exit() to the variable .init.text:.L0
+The function __exit hsr_netlink_exit() references
+a variable __init .L0 .
+This is often seen when error handling in the exit function
+uses functionality in the init path.
+The fix is often to remove the __init annotation of
+.L0 so it may be used outside an init section.
+--
+>> WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .rodata:_entry.30
+FATAL: modpost: extable_entry size hasn't been discovered!
+--
+>> WARNING: modpost: vmlinux.o(.text+0x1697378): Section mismatch in reference from the function btintel_send_intel_reset() to the variable .exit.text:.L0
+The function btintel_send_intel_reset() references a variable in an exit section.
+Often the variable .L0 has valid usage outside the exit section
+and the fix is to remove the __exit annotation of .L0 .
+--
+>> WARNING: modpost: vmlinux.o(.text+0x1bf6234): Section mismatch in reference from the function sctp_sched_ops_register() to the variable .init.text:.L0
+The function sctp_sched_ops_register() references
+the variable __init .L0 .
+This is often because sctp_sched_ops_register lacks a __init
+annotation or the annotation of .L0 is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x1bf627c): Section mismatch in reference from the function sctp_sched_set_sched() to the variable .init.text:.L0
+The function sctp_sched_set_sched() references
+the variable __init .L0 .
+This is often because sctp_sched_set_sched lacks a __init
+annotation or the annotation of .L0 is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x1bf640c): Section mismatch in reference from the function sctp_sched_get_sched() to the variable .init.text:.L0
+The function sctp_sched_get_sched() references
+the variable __init .L0 .
+This is often because sctp_sched_get_sched lacks a __init
+annotation or the annotation of .L0 is wrong.
 
-It seems kmemleak has an issue with the array allocated in
-msr_build_context(). This array is assigned to a pointer in a static
-structure (saved_context.saved_msrs->array): there is no leak then.
+Note: the below error/warnings can be found in parent commit:
+<< WARNING: modpost: vmlinux.o(.text+0x66d448): Section mismatch in reference from the function nilfs_segbuf_free() to the variable .exit.text:.LVL12
+<< WARNING: modpost: vmlinux.o(.text+0x15a8b7c): Section mismatch in reference from the function bch_keybuf_init() to the variable .init.text:.LVL52
+<< WARNING: modpost: vmlinux.o(.text+0x1aa0df0): Section mismatch in reference from the function ping_seq_stop() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1aa2298): Section mismatch in reference from the function ping_common_sendmsg() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1aa2e08): Section mismatch in reference from the function ping_proc_exit() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1aeca5c): Section mismatch in reference from the function x25_limit_facilities() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .debug_loc:.LLST136
+<< WARNING: modpost: vmlinux.o(.text+0x66d448): Section mismatch in reference from the function nilfs_segbuf_free() to the variable .exit.text:.LVL12
+<< WARNING: modpost: vmlinux.o(.text+0x15a8b7c): Section mismatch in reference from the function bch_keybuf_init() to the variable .init.text:.LVL52
+<< WARNING: modpost: vmlinux.o(.text+0x1aa0df0): Section mismatch in reference from the function ping_seq_stop() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1aa2298): Section mismatch in reference from the function ping_common_sendmsg() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1aa2e08): Section mismatch in reference from the function ping_proc_exit() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1aeca5c): Section mismatch in reference from the function x25_limit_facilities() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .debug_loc:.LLST136
+<< WARNING: modpost: vmlinux.o(.text+0x66d448): Section mismatch in reference from the function nilfs_segbuf_free() to the variable .exit.text:.LVL12
+<< WARNING: modpost: vmlinux.o(.text+0x15a8b7c): Section mismatch in reference from the function bch_keybuf_init() to the variable .init.text:.LVL52
+<< WARNING: modpost: vmlinux.o(.text+0x1aa0df0): Section mismatch in reference from the function ping_seq_stop() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1aa2298): Section mismatch in reference from the function ping_common_sendmsg() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1aa2e08): Section mismatch in reference from the function ping_proc_exit() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1aeca5c): Section mismatch in reference from the function x25_limit_facilities() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .debug_loc:.LLST136
+<< WARNING: modpost: vmlinux.o(.text+0x66d448): Section mismatch in reference from the function nilfs_segbuf_free() to the variable .exit.text:.LVL12
+<< WARNING: modpost: vmlinux.o(.text+0x15a8b7c): Section mismatch in reference from the function bch_keybuf_init() to the variable .init.text:.LVL52
+<< WARNING: modpost: vmlinux.o(.text+0x1aa0df0): Section mismatch in reference from the function ping_seq_stop() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1aa2298): Section mismatch in reference from the function ping_common_sendmsg() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1aa2e08): Section mismatch in reference from the function ping_proc_exit() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1aeca5c): Section mismatch in reference from the function x25_limit_facilities() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .debug_loc:.LLST136
+<< WARNING: modpost: vmlinux.o(.text+0x66d448): Section mismatch in reference from the function nilfs_segbuf_free() to the variable .exit.text:.LVL12
+<< WARNING: modpost: vmlinux.o(.text+0x15a8b7c): Section mismatch in reference from the function bch_keybuf_init() to the variable .init.text:.LVL52
+<< WARNING: modpost: vmlinux.o(.text+0x1aa0df0): Section mismatch in reference from the function ping_seq_stop() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1aa2298): Section mismatch in reference from the function ping_common_sendmsg() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1aa2e08): Section mismatch in reference from the function ping_proc_exit() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1aeca5c): Section mismatch in reference from the function x25_limit_facilities() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .debug_loc:.LLST136
+<< WARNING: modpost: vmlinux.o(.text+0x66d448): Section mismatch in reference from the function nilfs_segbuf_free() to the variable .exit.text:.LVL12
+<< WARNING: modpost: vmlinux.o(.text+0x15a8b7c): Section mismatch in reference from the function bch_keybuf_init() to the variable .init.text:.LVL52
+<< WARNING: modpost: vmlinux.o(.text+0x1aa0df0): Section mismatch in reference from the function ping_seq_stop() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1aa2298): Section mismatch in reference from the function ping_common_sendmsg() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1aa2e08): Section mismatch in reference from the function ping_proc_exit() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1aeca5c): Section mismatch in reference from the function x25_limit_facilities() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .debug_loc:.LLST136
 
-A simple fix for this issue would be to use kmemleak_no_leak() but Mat
-noticed that the root cause here is alignment within the packed 'struct
-saved_context' (from suspend_64.h). Kmemleak only searches for pointers
-that are aligned (see how pointers are scanned in kmemleak.c), but
-pahole shows that the saved_msrs struct member and all members after it
-in the structure are unaligned:
-
-  struct saved_context {
-    struct pt_regs             regs;                 /*     0   168 */
-    /* --- cacheline 2 boundary (128 bytes) was 40 bytes ago --- */
-    u16                        ds;                   /*   168     2 */
-    u16                        es;                   /*   170     2 */
-    u16                        fs;                   /*   172     2 */
-    u16                        gs;                   /*   174     2 */
-    long unsigned int          kernelmode_gs_base;   /*   176     8 */
-    long unsigned int          usermode_gs_base;     /*   184     8 */
-    /* --- cacheline 3 boundary (192 bytes) --- */
-    long unsigned int          fs_base;              /*   192     8 */
-    long unsigned int          cr0;                  /*   200     8 */
-    long unsigned int          cr2;                  /*   208     8 */
-    long unsigned int          cr3;                  /*   216     8 */
-    long unsigned int          cr4;                  /*   224     8 */
-    u64                        misc_enable;          /*   232     8 */
-    bool                       misc_enable_saved;    /*   240     1 */
-
-   /* Note below odd offset values for the remainder of this struct */
-
-    struct saved_msrs          saved_msrs;           /*   241    16 */
-    /* --- cacheline 4 boundary (256 bytes) was 1 bytes ago --- */
-    long unsigned int          efer;                 /*   257     8 */
-    u16                        gdt_pad;              /*   265     2 */
-    struct desc_ptr            gdt_desc;             /*   267    10 */
-    u16                        idt_pad;              /*   277     2 */
-    struct desc_ptr            idt;                  /*   279    10 */
-    u16                        ldt;                  /*   289     2 */
-    u16                        tss;                  /*   291     2 */
-    long unsigned int          tr;                   /*   293     8 */
-    long unsigned int          safety;               /*   301     8 */
-    long unsigned int          return_address;       /*   309     8 */
-
-    /* size: 317, cachelines: 5, members: 25 */
-    /* last cacheline: 61 bytes */
-  } __attribute__((__packed__));
-
-By moving 'misc_enable_saved' to the end of the struct declaration,
-'saved_msrs' fits in before the cacheline 4 boundary and the kmemleak
-warning goes away.
-
-The comment above the 'saved_context' declaration says to check
-wakeup_64.S file and __save/__restore_processor_state() if the struct is
-modified: it looks like it's the members before 'misc_enable' that must
-be carefully placed.
-
-At the end, the false positive kmemleak report is due to a limitation
-from kmemleak but that's always good to avoid unaligned member for
-optimisation purposes.
-
-Please note that it looks like this issue is not new, e.g.
-
-  https://lore.kernel.org/all/9f1bb619-c4ee-21c4-a251-870bd4db04fa@lwfinger.net/
-  https://lore.kernel.org/all/94e48fcd-1dbd-ebd2-4c91-f39941735909@molgen.mpg.de/
-
-But on my side, msr_build_context() is only used since:
-
-  commit e2a1256b17b1 ("x86/speculation: Restore speculation related MSRs during S3 resume").
-
-Others probably have the same issue since:
-
-  commit 7a9c2dd08ead ("x86/pm: Introduce quirk framework to save/restore extra MSR registers around suspend/resume"),
-
-Hence the 'Fixes' tag here below to help with the backports.
-
-Fixes: 7a9c2dd08ead ("x86/pm: Introduce quirk framework to save/restore extra MSR registers around suspend/resume")
-Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/268
-Suggested-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
- arch/x86/include/asm/suspend_32.h |  2 +-
- arch/x86/include/asm/suspend_64.h | 12 ++++++++----
- 2 files changed, 9 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/include/asm/suspend_32.h b/arch/x86/include/asm/suspend_32.h
-index 7b132d0312eb..a800abb1a992 100644
---- a/arch/x86/include/asm/suspend_32.h
-+++ b/arch/x86/include/asm/suspend_32.h
-@@ -19,7 +19,6 @@ struct saved_context {
- 	u16 gs;
- 	unsigned long cr0, cr2, cr3, cr4;
- 	u64 misc_enable;
--	bool misc_enable_saved;
- 	struct saved_msrs saved_msrs;
- 	struct desc_ptr gdt_desc;
- 	struct desc_ptr idt;
-@@ -28,6 +27,7 @@ struct saved_context {
- 	unsigned long tr;
- 	unsigned long safety;
- 	unsigned long return_address;
-+	bool misc_enable_saved;
- } __attribute__((packed));
- 
- /* routines for saving/restoring kernel state */
-diff --git a/arch/x86/include/asm/suspend_64.h b/arch/x86/include/asm/suspend_64.h
-index 35bb35d28733..bb7023dbf524 100644
---- a/arch/x86/include/asm/suspend_64.h
-+++ b/arch/x86/include/asm/suspend_64.h
-@@ -14,9 +14,13 @@
-  * Image of the saved processor state, used by the low level ACPI suspend to
-  * RAM code and by the low level hibernation code.
-  *
-- * If you modify it, fix arch/x86/kernel/acpi/wakeup_64.S and make sure that
-- * __save/__restore_processor_state(), defined in arch/x86/kernel/suspend_64.c,
-- * still work as required.
-+ * If you modify it before 'misc_enable', fix arch/x86/kernel/acpi/wakeup_64.S
-+ * and make sure that __save/__restore_processor_state(), defined in
-+ * arch/x86/kernel/suspend_64.c, still work as required.
-+ *
-+ * Because the structure is packed, make sure to avoid unaligned members. For
-+ * optimisations purposes but also because tools like Kmemleak only search for
-+ * pointers that are aligned.
-  */
- struct saved_context {
- 	struct pt_regs regs;
-@@ -36,7 +40,6 @@ struct saved_context {
- 
- 	unsigned long cr0, cr2, cr3, cr4;
- 	u64 misc_enable;
--	bool misc_enable_saved;
- 	struct saved_msrs saved_msrs;
- 	unsigned long efer;
- 	u16 gdt_pad; /* Unused */
-@@ -48,6 +51,7 @@ struct saved_context {
- 	unsigned long tr;
- 	unsigned long safety;
- 	unsigned long return_address;
-+	bool misc_enable_saved;
- } __attribute__((packed));
- 
- #define loaddebug(thread,register) \
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
