@@ -2,136 +2,244 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7831450CC94
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Apr 2022 19:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C41250CCDC
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Apr 2022 20:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236604AbiDWRcc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 23 Apr 2022 13:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
+        id S234862AbiDWS1w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 23 Apr 2022 14:27:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236592AbiDWRcb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 23 Apr 2022 13:32:31 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0CE1773E4
-        for <linux-pm@vger.kernel.org>; Sat, 23 Apr 2022 10:29:31 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id bq30so19454989lfb.3
-        for <linux-pm@vger.kernel.org>; Sat, 23 Apr 2022 10:29:31 -0700 (PDT)
+        with ESMTP id S236748AbiDWS1o (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 23 Apr 2022 14:27:44 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADCC1F7D68
+        for <linux-pm@vger.kernel.org>; Sat, 23 Apr 2022 11:24:45 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id m20so1434794ejj.10
+        for <linux-pm@vger.kernel.org>; Sat, 23 Apr 2022 11:24:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=tessares-net.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=K0dNu+gsqOsxvzV6RiPi+gSx/YRNnpZCOhUTB2E6Dzg=;
-        b=degRmRrPVD/1fmRH7fyjR4dGwJ8xCTdh9hKWC1sBp87/2q71LfLfDM1gaxM/soeUrd
-         tNJqQH7SYqdBTAPR7Qk+xOBnSEJ5w91M3+s/eKzyzzrHNsyxT/UJwYHq68pUB7EgEkG4
-         +b/mYcF4lZlyzw4qEbmaCbrP7SZXT21q1BIKXVPGWar2pqiavFxqbGCUkrIikmQPWA7u
-         H9zFR9IhmWsK4nYzLgZ4968RNoCbFzAHHHiwkmKJWmJgTGZtxfvJbttrFU5ctOk8uF/S
-         uBPA6s1zWaEw+ofDIYFwyKuj34yr3V3+jBPNbGP3PqEO69ZKeI648DrQETbA83uFEgdB
-         CRfA==
+        bh=9l5iWYC32c45NSx+NuKLzAKcOwrZzZ8GmpPgq17uhVY=;
+        b=yoCfu/jknnnwfT8OUfYAS45iONd0HBI9c/r0wWPD03OPzPGf5rvVhWBh0Af6aK0etD
+         qy2fvJ+uQO1zRYB4nwwhAR7h1h+FxgeYkmscwnXJ2dWkNHwtkNvI1F6+8L4Fa3WATAIq
+         V/kAbPgHEXpRzA+mUBO+sUckT8XPkAplVc1fOkk9rJhBXUCTwe/dfT0YfAnHDzn711Nj
+         fJU7FZyPBZk35QuJiOHPyeTv/Tticy1rp0NCOhLGTubHeWhWAh2xEKD22n2iKmZqkDA3
+         kZvnc7sIn8KQkcFgtI110JRFm889URQXrgg01NVwsg/QTGkxGcnW3kl3j0wNIaRJzTmi
+         TYUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=K0dNu+gsqOsxvzV6RiPi+gSx/YRNnpZCOhUTB2E6Dzg=;
-        b=dK/H597EDKITWQZRepwnTkeXKHKam24OowpG8o0mC50ciVm0qFLqtdBI6lF42RFWrO
-         5aHnC6enu/AAtXipk2zI/B/94zqUiIZzX48YwiQsQ3JeQX1bGl/7GBp4eNhXLXKcrNv7
-         ZVVH85MRzB++ECUqWfrA91wO7btZMiJnkNdIvNllNl3WK8uh/ur138hcsvs3Scd2TMbd
-         FrPhv1Y3eKpqp+cheov7HD0ErHEPI4Jphy1mdSIO0z8lhi32KtA5NQmuP1KFvYV/FCCz
-         OCJYToKkJVKBIL7l2+lttKznQJMMX9CjdbXce+cC+P3bOJu3AgY93ovgBzDatviIEDds
-         F5Qw==
-X-Gm-Message-State: AOAM5329baQvQNz+L0koyP/5D7MendDluctvNgZwRJv42kEUeGG0ZUAS
-        IhJI9tygpjaB45ueibyCoTxBnBhJbC0+iQ==
-X-Google-Smtp-Source: ABdhPJxyDr9YUisZsW0MjciEFJb1IqNiS+d9KYhk3dtxXOoEbaDP+rnMZ4Iq5owNWLV3pQUAvMJMGw==
-X-Received: by 2002:a05:6512:321b:b0:44a:78f2:500b with SMTP id d27-20020a056512321b00b0044a78f2500bmr70662lfe.434.1650734969980;
-        Sat, 23 Apr 2022 10:29:29 -0700 (PDT)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id x22-20020a2e9c96000000b0024da6072587sm602331lji.80.2022.04.23.10.29.29
+        bh=9l5iWYC32c45NSx+NuKLzAKcOwrZzZ8GmpPgq17uhVY=;
+        b=iZIV37gE5a6yLNotBxXyYfONNqrDPju9udN5LZK6MeUtH5vkIXHg1YQKbGD7+RTiJC
+         mkzGR6tPdrU6r7bC5VIWIJvUvN/6vFq0fDThrarxZ2fW4nwHox6/RWEcK+45Bq0Z31wm
+         WcWMGQLBRJykRGmpPBY2PoDptvewjekdDNMrxLDiaBIqi20xe3tD45WLn0DLHBTTw+1a
+         GOqLOus0+7ztU5fPprfI04CU2Murpv9YS5kDJfI6aWIV4f+9pFhOmQkwuHSySGNiYZl9
+         lBw5Oj91fMH2wY4fv+j2739PtfRU36PfDLpppBu5sYwsQmBTUfbJALNubyn5P2jf5qpm
+         18NQ==
+X-Gm-Message-State: AOAM533rsDcF8iGA7hnR0RAxsdZNCP2AqjQDF+rjJHgcaM0q2zH8MqZA
+        l2iGaibQyDmn3qYmZ9fojfmtcA==
+X-Google-Smtp-Source: ABdhPJwmH1wRvO8sDWYSE3+UlD8hzh47lCTq0NAvsz1o9F6JPcEQkprIEzOjy4uG/1nYcF0C2IvN/Q==
+X-Received: by 2002:a17:907:62a6:b0:6ef:8118:d3e2 with SMTP id nd38-20020a17090762a600b006ef8118d3e2mr9062679ejc.605.1650738284337;
+        Sat, 23 Apr 2022 11:24:44 -0700 (PDT)
+Received: from tsr-vdi-mbaerts.nix.tessares.net (static.23.216.130.94.clients.your-server.de. [94.130.216.23])
+        by smtp.gmail.com with ESMTPSA id eq7-20020a056402298700b00419d8d46a8asm2358159edb.39.2022.04.23.11.24.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Apr 2022 10:29:29 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH] power: supply: ab8500_fg: Allocate wq in probe
-Date:   Sat, 23 Apr 2022 19:27:27 +0200
-Message-Id: <20220423172727.1197901-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.35.1
+        Sat, 23 Apr 2022 11:24:43 -0700 (PDT)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Chen Yu <yu.c.chen@intel.com>
+Cc:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>, linux-mm@kvack.org,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] x86/pm: fix false positive kmemleak report in msr_build_context()
+Date:   Sat, 23 Apr 2022 20:24:10 +0200
+Message-Id: <20220423182410.1841114-1-matthieu.baerts@tessares.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The workqueue is allocated in bind() but all interrupts are
-registered in probe().
+Since commit e2a1256b17b1 ("x86/speculation: Restore speculation related MSRs during S3 resume"),
+kmemleak reports this issue:
 
-Some interrupts put work on the workqueue, which can have
-bad side effects.
+  unreferenced object 0xffff888009cedc00 (size 256):
+    comm "swapper/0", pid 1, jiffies 4294693823 (age 73.764s)
+    hex dump (first 32 bytes):
+      00 00 00 00 00 00 00 00 48 00 00 00 00 00 00 00  ........H.......
+      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    backtrace:
+      msr_build_context (include/linux/slab.h:621)
+      pm_check_save_msr (arch/x86/power/cpu.c:520)
+      do_one_initcall (init/main.c:1298)
+      kernel_init_freeable (init/main.c:1370)
+      kernel_init (init/main.c:1504)
+      ret_from_fork (arch/x86/entry/entry_64.S:304)
 
-Allocate the workqueue in probe() instead, destroy it in
-.remove() and make unbind() simply flush the workqueue.
+It is easy to reproduce it on my side:
 
-Fixes: 1c1f13a006ed ("power: supply: ab8500: Move to componentized binding")
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+  - boot the VM with a debug kernel config (see the 'Closes:' tag)
+  - wait ~1 minute
+  - start a kmemleak scan
+
+It seems kmemleak has an issue with the array allocated in
+msr_build_context(). This array is assigned to a pointer in a static
+structure (saved_context.saved_msrs->array): there is no leak then.
+
+A simple fix for this issue would be to use kmemleak_no_leak() but Mat
+noticed that the root cause here is alignment within the packed 'struct
+saved_context' (from suspend_64.h). Kmemleak only searches for pointers
+that are aligned (see how pointers are scanned in kmemleak.c), but
+pahole shows that the saved_msrs struct member and all members after it
+in the structure are unaligned:
+
+  struct saved_context {
+    struct pt_regs             regs;                 /*     0   168 */
+    /* --- cacheline 2 boundary (128 bytes) was 40 bytes ago --- */
+    u16                        ds;                   /*   168     2 */
+    u16                        es;                   /*   170     2 */
+    u16                        fs;                   /*   172     2 */
+    u16                        gs;                   /*   174     2 */
+    long unsigned int          kernelmode_gs_base;   /*   176     8 */
+    long unsigned int          usermode_gs_base;     /*   184     8 */
+    /* --- cacheline 3 boundary (192 bytes) --- */
+    long unsigned int          fs_base;              /*   192     8 */
+    long unsigned int          cr0;                  /*   200     8 */
+    long unsigned int          cr2;                  /*   208     8 */
+    long unsigned int          cr3;                  /*   216     8 */
+    long unsigned int          cr4;                  /*   224     8 */
+    u64                        misc_enable;          /*   232     8 */
+    bool                       misc_enable_saved;    /*   240     1 */
+
+   /* Note below odd offset values for the remainder of this struct */
+
+    struct saved_msrs          saved_msrs;           /*   241    16 */
+    /* --- cacheline 4 boundary (256 bytes) was 1 bytes ago --- */
+    long unsigned int          efer;                 /*   257     8 */
+    u16                        gdt_pad;              /*   265     2 */
+    struct desc_ptr            gdt_desc;             /*   267    10 */
+    u16                        idt_pad;              /*   277     2 */
+    struct desc_ptr            idt;                  /*   279    10 */
+    u16                        ldt;                  /*   289     2 */
+    u16                        tss;                  /*   291     2 */
+    long unsigned int          tr;                   /*   293     8 */
+    long unsigned int          safety;               /*   301     8 */
+    long unsigned int          return_address;       /*   309     8 */
+
+    /* size: 317, cachelines: 5, members: 25 */
+    /* last cacheline: 61 bytes */
+  } __attribute__((__packed__));
+
+By moving 'misc_enable_saved' to the end of the struct declaration,
+'saved_msrs' fits in before the cacheline 4 boundary and the kmemleak
+warning goes away.
+
+The comment above the 'saved_context' declaration says to check
+wakeup_64.S file and __save/__restore_processor_state() if the struct is
+modified: it looks like it's the members before 'misc_enable' that must
+be carefully placed.
+
+At the end, the false positive kmemleak report is due to a limitation
+from kmemleak but that's always good to avoid unaligned member for
+optimisation purposes.
+
+Please note that it looks like this issue is not new, e.g.
+
+  https://lore.kernel.org/all/9f1bb619-c4ee-21c4-a251-870bd4db04fa@lwfinger.net/
+  https://lore.kernel.org/all/94e48fcd-1dbd-ebd2-4c91-f39941735909@molgen.mpg.de/
+
+But on my side, msr_build_context() is only used since:
+
+  commit e2a1256b17b1 ("x86/speculation: Restore speculation related MSRs during S3 resume").
+
+Others probably have the same issue since:
+
+  commit 7a9c2dd08ead ("x86/pm: Introduce quirk framework to save/restore extra MSR registers around suspend/resume"),
+
+Hence the 'Fixes' tag here below to help with the backports.
+
+Fixes: 7a9c2dd08ead ("x86/pm: Introduce quirk framework to save/restore extra MSR registers around suspend/resume")
+Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/268
+Suggested-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 ---
- drivers/power/supply/ab8500_fg.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+ arch/x86/include/asm/suspend_32.h |  2 +-
+ arch/x86/include/asm/suspend_64.h | 12 ++++++++----
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
-index 97ac588a9e9c..ec8a404d71b4 100644
---- a/drivers/power/supply/ab8500_fg.c
-+++ b/drivers/power/supply/ab8500_fg.c
-@@ -3037,13 +3037,6 @@ static int ab8500_fg_bind(struct device *dev, struct device *master,
- {
- 	struct ab8500_fg *di = dev_get_drvdata(dev);
+diff --git a/arch/x86/include/asm/suspend_32.h b/arch/x86/include/asm/suspend_32.h
+index 7b132d0312eb..a800abb1a992 100644
+--- a/arch/x86/include/asm/suspend_32.h
++++ b/arch/x86/include/asm/suspend_32.h
+@@ -19,7 +19,6 @@ struct saved_context {
+ 	u16 gs;
+ 	unsigned long cr0, cr2, cr3, cr4;
+ 	u64 misc_enable;
+-	bool misc_enable_saved;
+ 	struct saved_msrs saved_msrs;
+ 	struct desc_ptr gdt_desc;
+ 	struct desc_ptr idt;
+@@ -28,6 +27,7 @@ struct saved_context {
+ 	unsigned long tr;
+ 	unsigned long safety;
+ 	unsigned long return_address;
++	bool misc_enable_saved;
+ } __attribute__((packed));
  
--	/* Create a work queue for running the FG algorithm */
--	di->fg_wq = alloc_ordered_workqueue("ab8500_fg_wq", WQ_MEM_RECLAIM);
--	if (di->fg_wq == NULL) {
--		dev_err(dev, "failed to create work queue\n");
--		return -ENOMEM;
--	}
--
- 	di->bat_cap.max_mah_design = di->bm->bi->charge_full_design_uah;
- 	di->bat_cap.max_mah = di->bat_cap.max_mah_design;
- 	di->vbat_nom_uv = di->bm->bi->voltage_max_design_uv;
-@@ -3067,8 +3060,7 @@ static void ab8500_fg_unbind(struct device *dev, struct device *master,
- 	if (ret)
- 		dev_err(dev, "failed to disable coulomb counter\n");
+ /* routines for saving/restoring kernel state */
+diff --git a/arch/x86/include/asm/suspend_64.h b/arch/x86/include/asm/suspend_64.h
+index 35bb35d28733..bb7023dbf524 100644
+--- a/arch/x86/include/asm/suspend_64.h
++++ b/arch/x86/include/asm/suspend_64.h
+@@ -14,9 +14,13 @@
+  * Image of the saved processor state, used by the low level ACPI suspend to
+  * RAM code and by the low level hibernation code.
+  *
+- * If you modify it, fix arch/x86/kernel/acpi/wakeup_64.S and make sure that
+- * __save/__restore_processor_state(), defined in arch/x86/kernel/suspend_64.c,
+- * still work as required.
++ * If you modify it before 'misc_enable', fix arch/x86/kernel/acpi/wakeup_64.S
++ * and make sure that __save/__restore_processor_state(), defined in
++ * arch/x86/kernel/suspend_64.c, still work as required.
++ *
++ * Because the structure is packed, make sure to avoid unaligned members. For
++ * optimisations purposes but also because tools like Kmemleak only search for
++ * pointers that are aligned.
+  */
+ struct saved_context {
+ 	struct pt_regs regs;
+@@ -36,7 +40,6 @@ struct saved_context {
  
--	destroy_workqueue(di->fg_wq);
--	flush_scheduled_work();
-+	flush_workqueue(di->fg_wq);
- }
+ 	unsigned long cr0, cr2, cr3, cr4;
+ 	u64 misc_enable;
+-	bool misc_enable_saved;
+ 	struct saved_msrs saved_msrs;
+ 	unsigned long efer;
+ 	u16 gdt_pad; /* Unused */
+@@ -48,6 +51,7 @@ struct saved_context {
+ 	unsigned long tr;
+ 	unsigned long safety;
+ 	unsigned long return_address;
++	bool misc_enable_saved;
+ } __attribute__((packed));
  
- static const struct component_ops ab8500_fg_component_ops = {
-@@ -3117,6 +3109,13 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	ab8500_fg_charge_state_to(di, AB8500_FG_CHARGE_INIT);
- 	ab8500_fg_discharge_state_to(di, AB8500_FG_DISCHARGE_INIT);
- 
-+	/* Create a work queue for running the FG algorithm */
-+	di->fg_wq = alloc_ordered_workqueue("ab8500_fg_wq", WQ_MEM_RECLAIM);
-+	if (di->fg_wq == NULL) {
-+		dev_err(dev, "failed to create work queue\n");
-+		return -ENOMEM;
-+	}
-+
- 	/* Init work for running the fg algorithm instantly */
- 	INIT_WORK(&di->fg_work, ab8500_fg_instant_work);
- 
-@@ -3227,6 +3226,8 @@ static int ab8500_fg_remove(struct platform_device *pdev)
- {
- 	struct ab8500_fg *di = platform_get_drvdata(pdev);
- 
-+	destroy_workqueue(di->fg_wq);
-+	flush_scheduled_work();
- 	component_del(&pdev->dev, &ab8500_fg_component_ops);
- 	list_del(&di->node);
- 	ab8500_fg_sysfs_exit(di);
+ #define loaddebug(thread,register) \
 -- 
-2.35.1
+2.34.1
 
