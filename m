@@ -2,152 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2733950C7A4
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Apr 2022 07:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 669A950C95D
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Apr 2022 12:49:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233404AbiDWFe2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 23 Apr 2022 01:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43806 "EHLO
+        id S234849AbiDWKwV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 23 Apr 2022 06:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231922AbiDWFe0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 23 Apr 2022 01:34:26 -0400
-Received: from relay-us1.mymailcheap.com (relay-us1.mymailcheap.com [51.81.35.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117CF2E5
-        for <linux-pm@vger.kernel.org>; Fri, 22 Apr 2022 22:31:27 -0700 (PDT)
-Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.248.207])
-        by relay-us1.mymailcheap.com (Postfix) with ESMTPS id E3574201E6
-        for <linux-pm@vger.kernel.org>; Sat, 23 Apr 2022 05:31:26 +0000 (UTC)
-Received: from relay3.mymailcheap.com (relay3.mymailcheap.com [217.182.119.155])
-        by relay5.mymailcheap.com (Postfix) with ESMTPS id 31B84267CE;
-        Sat, 23 Apr 2022 05:31:18 +0000 (UTC)
-Received: from filter1.mymailcheap.com (filter1.mymailcheap.com [149.56.130.247])
-        by relay3.mymailcheap.com (Postfix) with ESMTPS id AED893F15F;
-        Sat, 23 Apr 2022 07:31:15 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by filter1.mymailcheap.com (Postfix) with ESMTP id 0A7472A381;
-        Sat, 23 Apr 2022 05:31:15 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at filter1.mymailcheap.com
-Received: from filter1.mymailcheap.com ([127.0.0.1])
-        by localhost (filter1.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Cl0X8p721LZJ; Sat, 23 Apr 2022 05:31:14 +0000 (UTC)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by filter1.mymailcheap.com (Postfix) with ESMTPS;
-        Sat, 23 Apr 2022 05:31:14 +0000 (UTC)
-Received: from [172.16.34.145] (unknown [121.33.114.136])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 3E0644006D;
-        Sat, 23 Apr 2022 05:31:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
-        t=1650691873; bh=w40/85VIv5BQZf+43/3bBfUU3+lju+R6jndNVZ1NoDo=;
-        h=Subject:From:To:Cc:In-Reply-To:References:Date:From;
-        b=s7mWDm4qE8QFgZ5iFz1SuzvyRKqdDicOrOnmOqccLA8xDTGTEUt3kIRvxKpwFnbjZ
-         oUh8/CivdVevTOY6GHkZvwlwHt+nhOqMbmkG3pXasQyqnxix0EbB8TJzi/MFYNhCvS
-         TEgMh7jrTC5+d3yFhjnGnrkepNXpj53Ceu0W3Ebg=
-Message-ID: <9525d336040d2fc89005d2923f0d8ee98597ac86.camel@aosc.io>
-Subject: Re: [PATCH 1/2] dt-bindings: thermal: sun8i-thermal: add binding
- for R329 THS
-From:   Icenowy Zheng <icenowy@aosc.io>
-To:     Vasily Khoruzhick <anarsoul@gmail.com>
-Cc:     Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-linux <linux-arm-kernel@lists.infradead.org>,
-        linux-sunxi@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>
-In-Reply-To: <CA+E=qVfMm=8aQOM_HW_3EeqqLi-Fgn1Ex3h6kor89FQ0KfTvRw@mail.gmail.com>
-References: <BYAPR20MB24721F9954252BECBEF486ACBCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
-         <CA+E=qVfMm=8aQOM_HW_3EeqqLi-Fgn1Ex3h6kor89FQ0KfTvRw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S229732AbiDWKwU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 23 Apr 2022 06:52:20 -0400
+Received: from out28-52.mail.aliyun.com (out28-52.mail.aliyun.com [115.124.28.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE21C8A9B;
+        Sat, 23 Apr 2022 03:49:19 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436342|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_social|0.164624-0.00134867-0.834027;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047201;MF=kant@allwinnertech.com;NM=1;PH=DS;RN=11;RT=11;SR=0;TI=SMTPD_---.NWHc4yz_1650710954;
+Received: from 192.168.110.175(mailfrom:kant@allwinnertech.com fp:SMTPD_---.NWHc4yz_1650710954)
+          by smtp.aliyun-inc.com(33.32.92.215);
+          Sat, 23 Apr 2022 18:49:16 +0800
+Message-ID: <e45f684a-7953-69bf-900a-f30dca209778@allwinnertech.com>
+Date:   Sat, 23 Apr 2022 18:49:23 +0800
 MIME-Version: 1.0
-Date:   Sat, 23 Apr 2022 07:51:54 +0800
-User-Agent: Evolution 3.40.4 
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] thermal: devfreq_cooling: use local ops instead of global
+ ops
+Content-Language: en-GB
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     amitk@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        allwinner-opensource-support@allwinnertech.com,
+        stable@vger.kernel.org, orjan.eide@arm.com, edubezval@gmail.com,
+        javi.merino@kernel.org, daniel.lezcano@linaro.org,
+        rui.zhang@intel.com
+References: <20220325094436.101419-1-kant@allwinnertech.com>
+ <4db6b25c-dd78-a6ba-02a5-ac2e49996be1@arm.com>
+ <6b89fa96-07f0-19bb-2e18-22afa27554a1@allwinnertech.com>
+ <281fd0f0-d2fc-95cf-d183-31ca8c25830e@arm.com>
+From:   Kant Fan <kant@allwinnertech.com>
+In-Reply-To: <281fd0f0-d2fc-95cf-d183-31ca8c25830e@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        T_SPF_PERMERROR,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-在 2022-04-22星期五的 11:44 -0700，Vasily Khoruzhick写道：
-> On Fri, Apr 22, 2022 at 9:12 AM <icenowy@outlook.com> wrote:
-> > 
-> > From: Icenowy Zheng <icenowy@aosc.io>
-> > 
-> > R329 has a thermal sensor controller that has only one sensor, and
-> > the
-> > structure of it is like the H6 one.
-> > 
-> > Add device tree binding for it.
-> > 
-> > Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
-> > ---
-> >  .../devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml  | 3
-> > +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git
-> > a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-
-> > ths.yaml
-> > b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-
-> > ths.yaml
-> > index 6e0b110153b0..87b4103e0a5f 100644
-> > --- a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-
-> > a83t-ths.yaml
-> > +++ b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-
-> > a83t-ths.yaml
-> > @@ -20,6 +20,7 @@ properties:
-> >        - allwinner,sun50i-a100-ths
-> >        - allwinner,sun50i-h5-ths
-> >        - allwinner,sun50i-h6-ths
-> > +      - allwinner,sun50i-r329-ths
-> > 
-> >    clocks:
-> >      minItems: 1
-> > @@ -63,6 +64,7 @@ allOf:
-> >              enum:
-> >                - allwinner,sun50i-a100-ths
-> >                - allwinner,sun50i-h6-ths
-> > +              - allwinner,sun50i-r329-ths
-> > 
-> >      then:
-> >        properties:
-> > @@ -85,6 +87,7 @@ allOf:
-> >          compatible:
-> >            contains:
-> >              const: allwinner,sun8i-h3-ths
-> > +            const: allwinner,sun8i-r329-ths
-> > 
-> >      then:
-> >        properties:
+On 20/04/2022 18:32, Lukasz Luba wrote:
+> Hi Kant,
 > 
-> There's also a check at line #99 that requires clock, clock-names and
-> resets properties for thermal sensors in other Allwinner SoCs. Are
-> these not required for r329?
-
-Thanks for this tip, I will add R329 to this check in the next
-revision.
-
+> On 4/19/22 16:49, Kant Fan wrote:
+>> On 29/03/2022 14:59, Lukasz Luba wrote:
+>>>
+>>>
+>>> On 3/25/22 09:44, Kant Fan wrote:
+>>>> commit 7b62935828266658714f81d4e9176edad808dc70 upstream.
+>>>>
+>>>> Fix access illegal address problem in following condition:
+>>>> There are muti devfreq cooling devices in system, some of them register
+>>>> with dfc_power but other does not, power model ops such as 
+>>>> state2power will
+>>>> append to global devfreq_cooling_ops when the cooling device with
+>>>> dfc_power register. It makes the cooling device without dfc_power
+>>>> also use devfreq_cooling_ops after appending when register later by
+>>>> of_devfreq_cooling_register_power() or of_devfreq_cooling_register().
+>>>>
+>>>> IPA governor regards the cooling devices without dfc_power as a 
+>>>> power actor
+>>>> because they also have power model ops, and will access illegal 
+>>>> address at
+>>>> dfc->power_ops when execute cdev->ops->get_requested_power or
+>>>> cdev->ops->power2state. As the calltrace below shows:
+>>>>
+>>>> Unable to handle kernel NULL pointer dereference at virtual address
+>>>> 00000008
+>>>> ...
+>>>> calltrace:
+>>>> [<c06e5488>] devfreq_cooling_power2state+0x24/0x184
+>>>> [<c06df420>] power_actor_set_power+0x54/0xa8
+>>>> [<c06e3774>] power_allocator_throttle+0x770/0x97c
+>>>> [<c06dd120>] handle_thermal_trip+0x1b4/0x26c
+>>>> [<c06ddb48>] thermal_zone_device_update+0x154/0x208
+>>>> [<c014159c>] process_one_work+0x1ec/0x36c
+>>>> [<c0141c58>] worker_thread+0x204/0x2ec
+>>>> [<c0146788>] kthread+0x140/0x154
+>>>> [<c01010e8>] ret_from_fork+0x14/0x2c
+>>>>
+>>>> Fixes: a76caf55e5b35 ("thermal: Add devfreq cooling")
+>>>> Cc: stable@vger.kernel.org # 4.4+
+>>>> Signed-off-by: Kant Fan <kant@allwinnertech.com>
+>>>> ---
+>>>>   drivers/thermal/devfreq_cooling.c | 25 ++++++++++++++++++-------
+>>>>   1 file changed, 18 insertions(+), 7 deletions(-)
+>>>>
+>>>
+>>> Looks good. So this patch should be applied for all stable
+>>> kernels starting from v4.4 to v5.12 (the v5.13 and later need
+>>> other patch).
+>>>
+>>> Next time you might use in the subject something like:
+>>> [PATCH 4.4] thermal: devfreq_cooling: use local ops instead of global 
+>>> ops
+>>> It would be better distinguished from your other patch with the
+>>> same subject, which was for mainline and v5.13+
+>>
+>> Hi Lukasz,
+>> Thank you for the guidance. I want to know if I'm understanding you in 
+>> a right way. Could you confirm the following information?
+>>
+>> 1. The stable patches
+>> After the patch is merged into mainline later, I'll submit the 
+>> following patches individually for v4.4 ~ v5.12:
 > 
-> Also are you planning to add a node for thermal sensor to r329 dtsi?
+> Correct, after it gets mainline you can point to that commit hash and
+> process with those patches. I don't now which of those older stable
+> kernels are still maintained, since some of them have longer support
+> and the rest had shorter and might already ended. You can check the
+> end of life for those 'Longterm' here [1]. AFAICS the 4.4 is not in that
+> table, so you can start from 4.9, should be OK.
+> So the list of needed patches would be for those stable kernels:
+> 4.9, 4.14, 4.19, 5.4, 5.10
+> I can see that last release for 5.11.x was in May 2021, so it's probably
+> ended, similar for 5.12.x (Jul 2021). That's why I suggested that list
+> for the long support kernels.
 > 
+
+Hi Lukasz,
+Thanks for figuring it out. I'll check the stable versions carefully.
+
+>>
+>> [PATCH 4.4] thermal: devfreq_cooling: use local ops instead of global ops
+>> [PATCH 4.5] thermal: devfreq_cooling: use local ops instead of global ops
+>> ...
+>> [PATCH 5.12] thermal: devfreq_cooling: use local ops instead of global 
+>> ops
+>>
+>> And also the following patches individually for v5.13+ :
 > 
-> > --
-> > 2.35.1
-> > 
+> For this, you probably don't have to. You have added 'v5.13+' in the
+> original patch v2, so it will be picked correctly. It should apply
+> on those stable kernels w/o issues. If there will be, stable kernel
+> engineers will ping us.
+> 
+>> [PATCH 5.13] thermal: devfreq_cooling: use local ops instead of global 
+>> ops
+>> [PATCH 5.14] thermal: devfreq_cooling: use local ops instead of global 
+>> ops
+>> ...
+>> [PATCH 5.17] thermal: devfreq_cooling: use local ops instead of global 
+>> ops
+>>
+>> 2. The mainline patch
+>> I saw your mail with Rafael, seems there are conflicts... I wonder if 
+>> there's anything wrong with my patch, or anything I can help?
+>>
+> 
+> Thank you for offering help. Rafael solved that correctly, so it doesn't
+> need any more work.
+> 
+> Thank you for doing that work!
+> 
+> Regards,
+> Lukasz
+> 
+> [1] https://www.kernel.org/category/releases.html
 
+No problem. I'll submit the stable patches after the mainline patch is 
+merged.
 
+-- 
+Best Regards,
+Kant Fan
