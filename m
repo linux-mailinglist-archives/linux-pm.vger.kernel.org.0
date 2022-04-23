@@ -2,181 +2,248 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDFA250C58B
-	for <lists+linux-pm@lfdr.de>; Sat, 23 Apr 2022 02:06:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD7E50C5C7
+	for <lists+linux-pm@lfdr.de>; Sat, 23 Apr 2022 02:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbiDVXvY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 22 Apr 2022 19:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50324 "EHLO
+        id S230143AbiDWAqO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 22 Apr 2022 20:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiDVXvX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 19:51:23 -0400
-X-Greylist: delayed 377 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 22 Apr 2022 16:48:28 PDT
-Received: from relay-us1.mymailcheap.com (relay-us1.mymailcheap.com [51.81.35.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832008C7EC
-        for <linux-pm@vger.kernel.org>; Fri, 22 Apr 2022 16:48:28 -0700 (PDT)
-Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.241.64])
-        by relay-us1.mymailcheap.com (Postfix) with ESMTPS id 6A34221159;
-        Fri, 22 Apr 2022 23:42:10 +0000 (UTC)
-Received: from relay2.mymailcheap.com (relay2.mymailcheap.com [217.182.113.132])
-        by relay5.mymailcheap.com (Postfix) with ESMTPS id AD68C200FE;
-        Fri, 22 Apr 2022 23:42:06 +0000 (UTC)
-Received: from filter2.mymailcheap.com (filter2.mymailcheap.com [91.134.140.82])
-        by relay2.mymailcheap.com (Postfix) with ESMTPS id 00FF13ECD9;
-        Sat, 23 Apr 2022 01:42:04 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by filter2.mymailcheap.com (Postfix) with ESMTP id DF4E52A515;
-        Fri, 22 Apr 2022 23:42:03 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at filter2.mymailcheap.com
-Received: from filter2.mymailcheap.com ([127.0.0.1])
-        by localhost (filter2.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Dvo1OGrq-QyV; Fri, 22 Apr 2022 23:42:02 +0000 (UTC)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by filter2.mymailcheap.com (Postfix) with ESMTPS;
-        Fri, 22 Apr 2022 23:42:02 +0000 (UTC)
-Received: from [172.16.34.145] (unknown [113.67.11.122])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail20.mymailcheap.com (Postfix) with ESMTPSA id EFA834006D;
-        Fri, 22 Apr 2022 23:41:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
-        t=1650670922; bh=dwsRumBLd0aj8mHwodE1g9daT4rDqqCXMqV4XFMJd3I=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=cXWi6rftuSlEvUF9RzBrnd1Sea3D1DPUJTogtnBLcyNi64VudHUVdog/cI6WvrleP
-         CRBAsydT2W3ZZO3lS8HqBfel3sLgBi+mWHheX8Ar7fSw2iOUuB+Wph4VGPq23zzqnN
-         oO5OR3fT0OySOMQHcriQDMfo+Ih4HN+Rb3v7VjE4=
-Message-ID: <a80fa962ac4a852b599ccf8e383e43e8eea7d12e.camel@aosc.io>
-Subject: Re: [PATCH 2/2] thermal: sun8i: add R329 THS
-From:   Icenowy Zheng <icenowy@aosc.io>
-To:     Samuel Holland <samuel@sholland.org>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Date:   Sat, 23 Apr 2022 07:41:51 +0800
-In-Reply-To: <f21303dd-14e2-80e6-ef07-2a1584d93b2e@sholland.org>
-References: <20220422161156.1075227-1-icenowy@outlook.com>
-         <BYAPR20MB24720C488FD2BB42038D9825BCF79@BYAPR20MB2472.namprd20.prod.outlook.com>
-         <f21303dd-14e2-80e6-ef07-2a1584d93b2e@sholland.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 
+        with ESMTP id S229944AbiDWAqN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 22 Apr 2022 20:46:13 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD491EB18A;
+        Fri, 22 Apr 2022 17:43:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650674598; x=1682210598;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=M4dnxnhrXPozsBXyfv17cINsmliZiIpCNaxDfVlZsr8=;
+  b=bHPd2o93PFk5rGO52nQbk6PD6IVskWPriXZ/82quypJy/vvEUur5i/Jx
+   f1BjGGjyZDCZGnlU4FKbI5Lb8N/eaWDjcpJFd5xAd7//zop6v/Z3Q7DPa
+   g74PhBU9hytC5USgxvuVYyO+YFU5yYoEc3FvrUHD4hcSX+bNbOBMuBwZq
+   W1RALzi90G0BU6XmGriq44BZ4kEHFdU1LXpJmRpo2k8WdhfwaEM51jC6J
+   4etDu6Og3wfhtsS769BV3YQIh7nuJ5dmARQJFiTRBp5QusN0ayM4OcpPn
+   cupTcJkkoTP2nDC6ZHkZ5Xrkjo0l3UKgwZpWwgz92lVgHo0Ny6TFXP+Ck
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10324"; a="351273951"
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="351273951"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2022 17:43:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,282,1643702400"; 
+   d="scan'208";a="556645703"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga007.jf.intel.com with ESMTP; 22 Apr 2022 17:43:17 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Fri, 22 Apr 2022 17:43:16 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Fri, 22 Apr 2022 17:43:16 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.105)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Fri, 22 Apr 2022 17:43:16 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eeR5q4Y5zFJ6XhaGJZR9kxk+0iuXFoB1H1r4LUyv1AVkcq6nqDCEkmfzNLw55nsJItOj/ySozuCTFqVfDvrbujZf5wKMo8WpXLIhN05plmgL3dfGhtmNNIO15VhijDGQFqTDSBeBT6z5eLKNMuHyrUJOgMrpuwIwlBs/Fcl7cHdjagQhaBCSE58rlOgNPcIwToD4oo1Yloyz7sFe2gVtUxe+I+P11TjEsWK50Todv446e9XGrMH395lNHjVapmzWCr317JenQTLhG6/Jb/r4w53cUaKlYk0f0YqsrwH3Yae278D6HFK3fifMw0U1U4lVsaNxHiOsAjjSiQOp8SeN8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DBBEHTLaoR7qTvas6pTTnIsUjf/8DtCZZ7Iasad58BE=;
+ b=Q0Bnrx/5w1rZiYuZ+/xVoaC6g27iJfr8Wh5xedPrpaBGpOiFlIch7sJDADjC2rsP5SFBoFQUg6lbq1YkM0kiwnowe31OH/BAZ11KlJ6gSLGP2UcBICElYCTtCY4FZb64DU3p2XWBCWqap2z2/2cvDE/eCyltUwSG8qBODZZUsNBjAFaZVseLod6Y4zUsIHJRa4FwbR8DU8eunWGa3NiS8GBZFOjKJbcXCh8Ry3YkJnrAh3ywVMJeqlnTuw4kNXzCK2lh+HAONN3I2jQSb2eldOjyPGe23lomaYa6HKg/lAoN9NJ1GCWte1Fo6mlGVyTH64Qfj9mqPZYIVpBzUt4FWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SJ0PR11MB5070.namprd11.prod.outlook.com (2603:10b6:a03:2d5::13)
+ by MW5PR11MB5812.namprd11.prod.outlook.com (2603:10b6:303:193::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.14; Sat, 23 Apr
+ 2022 00:43:14 +0000
+Received: from SJ0PR11MB5070.namprd11.prod.outlook.com
+ ([fe80::15c7:ebeb:fa0a:bbd9]) by SJ0PR11MB5070.namprd11.prod.outlook.com
+ ([fe80::15c7:ebeb:fa0a:bbd9%7]) with mapi id 15.20.5186.015; Sat, 23 Apr 2022
+ 00:43:14 +0000
+From:   "Jingar, Rajvi" <rajvi.jingar@intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+CC:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        "david.e.box@linux.intel.com" <david.e.box@linux.intel.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        "mika.westerberg@linux.intel.com" <mika.westerberg@linux.intel.com>,
+        "koba.ko@canonical.com" <koba.ko@canonical.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Russell Currey <ruscur@russell.cc>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: RE: [PATCH v4 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
+Thread-Topic: [PATCH v4 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
+Thread-Index: AQHYQIGzE0/LKKZHKkmXPRchVsogIazv0DwAgAzeSwCAACSt0A==
+Date:   Sat, 23 Apr 2022 00:43:14 +0000
+Message-ID: <SJ0PR11MB507047C0109C5163EF20D9AE9EF69@SJ0PR11MB5070.namprd11.prod.outlook.com>
+References: <ba571993-90fb-ae67-6617-0b63571298be@intel.com>
+ <20220422222446.GA1522716@bhelgaas>
+In-Reply-To: <20220422222446.GA1522716@bhelgaas>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.401.20
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: cd349aa4-95d9-4280-3b1a-08da24c2402e
+x-ms-traffictypediagnostic: MW5PR11MB5812:EE_
+x-microsoft-antispam-prvs: <MW5PR11MB5812E80A38CE7A6EAEC6BE2C9EF69@MW5PR11MB5812.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kEXOSTnyRKSUOsIPMFbn0YggF9d0NxB4y/zmfp9pv6N54l/vWsIIvDHgHn/uCd7XeglvF/g5nx4Egr9+GkaG2eqoU+MR0jJ+tTUa3BqTT5UFCxBNoeWcYWkyEwvONFJJZmL8lxOmsZBJXz+DXPsQAN4H9wRn7miziL3xbzVMsWjCeq3jR1AR/C76eJ0SWvrds6ULELGdZoob4ppSxdfEMrAMB06zwo1T1Dip3GNkgYUOBKAajQM8wFel4g32yRELluaJmdQl/Z69+minKmD/uz86bPWu0HDY7HNou1I4tN0Z6kMsANNfNpsCx+Y4IyYeCeXLd8Hy+gJX8lUEaaQK9sJQwskyx3IIcb2bHp0hN34iIIXevrq9004itUbOfil4D911BxIB1SG4s7yt/rUQms8c2eP+a3T8hn/erL3IEFtviGwqE/G9XQKXU9QMOJI2wdBZlCcJyE2ffiZTfSoTkIkimLdqc4bWYulptIbxDNdMLhOOZzfnPr2aGAugf3qTdhiKVdE6AUgrd4aHYxQ6acS/6r9ZEEVZHYTHmsLSY2JFnV81Ubl8TPYeB1ANuKiPCR2kZaSo7cJ2UQr9cv6KRzE6TBpAARzW6M2jwHYy4RyN0nBif0eKZfC6lTcQjKDcxrQXfdB3Jn/C+g3ES3UEeE08G2FLPcrbM4X4EkcaHmKX7mDthkrQwjYtc2ciMqOaFsK5ydg//j5/jZDl5Jqx8EoIW/Z8XEMRKC/7dnF0YzBvxin6laQ61a9yUD3b2RvKT7PGPmAYltoJHKzf/v6HvFIhTahePxO+8JnsqYA0Nn4=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5070.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(71200400001)(186003)(7696005)(66556008)(53546011)(76116006)(26005)(83380400001)(64756008)(8936002)(4326008)(966005)(8676002)(7416002)(66446008)(66476007)(9686003)(6506007)(66946007)(2906002)(5660300002)(33656002)(55016003)(508600001)(52536014)(38100700002)(38070700005)(54906003)(82960400001)(316002)(122000001)(6916009)(86362001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?NehV+Sw0guYNcdXrgh5iyDs5s7RXURhAlwGAFXChfTtCdoOhu+m6XxJhjAzx?=
+ =?us-ascii?Q?I70Nq7cx4vKh+TEqkw08VO5H3/o6U7xJ24K/vGEH5o77aOROv5Uy82ORzn68?=
+ =?us-ascii?Q?e8UYD4EFFcdPY4bwA0LBPhNElNg+D1AUsjwQgrqb2aoj4QEMeNtJTob7Un69?=
+ =?us-ascii?Q?BSm8wd2uWgcrJOdscqUqsfK04aMzEDVTnaP3rlyUIMnpUQRYqLdspHBMCkHP?=
+ =?us-ascii?Q?x+MNENSZGY7hJ5m2BMkmpl1ixyh00GuqZrN7PbkTzF3bsGQAcptJpDfC9MQQ?=
+ =?us-ascii?Q?KOteEq0xHrzIl9IPmutXQk1XmRai9sGDfd+NKqVBI+hLw414W6epYaX8hz1C?=
+ =?us-ascii?Q?TaPbGzhU0JlV5Z7Fbj5NU1BejOgecux8cYY2yCc5kCW6zjjgPQBRtst/rTFn?=
+ =?us-ascii?Q?G+uypTAYechIMZtHrmS8QGyYJkc0+1OmEfh5ocdBa2gGjnigR3C7uSpOeH5c?=
+ =?us-ascii?Q?aDmkmG5rFGlYUczkOtIY5CbVUSBkSHKhJLaBfAeVIFcGsBFD7OcuJgsPmz+I?=
+ =?us-ascii?Q?oOdW5lqM5i5q+gHmFYcTrw2kBwsCS2RHgmbox/z/cBUegkAGoMX2Clshpovk?=
+ =?us-ascii?Q?RIB9THJhcvZN7BGJus8ZNm3oAzaTJzhL5I5gqbUDa4wMwBsbV+/FLNFvDoF+?=
+ =?us-ascii?Q?XQSHJQuzbn8N69NUryFvp8cqRlowTbM3QEg2dT2wHw3DRh+Fet3WX9tJm6rN?=
+ =?us-ascii?Q?K2s4OO3blIf+l0cR4mVuGNy06NxcQURMD818oYgqs3BgJ8JgebHoZ/6Mpt5q?=
+ =?us-ascii?Q?+YdIGEfN3aspu/l/gFeLBSyaIau7KXgqPkZRrBLTw0tPkJnrUZ91OsuUJh7y?=
+ =?us-ascii?Q?G1cQGuWripVM1DtsXoReIi6pt3E1k2V7Hrzl9Gakw6oJd5OMmNg9xtSxKbQc?=
+ =?us-ascii?Q?qAqAOrSHAese2O4v5qPoeSQMtfZbd7aUYdFAjDlrBGJYINFdHQPjbDeOdfu2?=
+ =?us-ascii?Q?rcYkkhXaEK6d5hanfwKTW8QKYo992rLAgqXOiPJhekHaC6KHdsp6coWsDB5c?=
+ =?us-ascii?Q?7eTUev+umi6mgPSxims/Z3tKnutr6TQs1gET/U1pUA3HCXE9uoriqoNpaHez?=
+ =?us-ascii?Q?W7uhYLRyO2IaV26uTN7yEkbNwi7UqKFypa5M7MiCGreXd8AtRknm2cUzgmnI?=
+ =?us-ascii?Q?HfLBf3W3dkdmS1rKviXa+gMktA2B5e2rWFCf874rzLdk4kJzPOmxmuTWDfrA?=
+ =?us-ascii?Q?9sQ947h7qZ49r4IQeSRd4HBDx4S/YbSaNqDeZYUpIJtw3oU2mglClgjCISuH?=
+ =?us-ascii?Q?o1dwinlNwGSWtmy4KGXgXd9O8arTNBsdt1e5sF6hVfNpI8UIv2ge0GXNnlm9?=
+ =?us-ascii?Q?MOegYDs7XZ+W/F2OTh5qPpmyAjJpLV6Yj18YGonB0yzv5XjAzwodP9l30ewY?=
+ =?us-ascii?Q?OuLEEdXZdvtW98qqQbpuvkD64aNkKONV/UNM1NbkDv8r+8qCdMgo0uJR+5kE?=
+ =?us-ascii?Q?44+kJW2eLHEeGPQZO2lJhkbCfLW0s1a+bQFpIpUGzK5fParkSDsIL20xTTRF?=
+ =?us-ascii?Q?wgFfOCHWiKSj6peNZ8mZvNNH9gh/JR6LxyPbq9aotTiCoSNCDLmK3OhirGQz?=
+ =?us-ascii?Q?kzIA38LeBFNcZ2eQ1laVtst8u6Q8Htf2byF72hJ50Tp5KGGHy+lKAfkl3EOk?=
+ =?us-ascii?Q?/s0dsOzxGkQFloVDmISzh8bX2JNjh8vTYcCRXmcKirkIUvkYEGU0VPgFZKQ2?=
+ =?us-ascii?Q?mPLkW9XhpnsXCFaH9trM4M6hNsF5MmkCQLigTXLz6hesfuzMNjGMr5/8lud/?=
+ =?us-ascii?Q?hgpfHWsukw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,T_SPF_PERMERROR
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5070.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cd349aa4-95d9-4280-3b1a-08da24c2402e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Apr 2022 00:43:14.5061
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: OSFB/KD4hJVCQooDJ+tYvUkPJoLFE0PL18A+T8v1lvkB154wHH6VuU0ftaragwuydo1pL2QzQ1KZQMI2dkcQfQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR11MB5812
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-在 2022-04-22星期五的 18:39 -0500，Samuel Holland写道：
-> Hi Icenowy,
-> 
-> On 4/22/22 11:11 AM, icenowy@outlook.com wrote:
-> > From: Icenowy Zheng <icenowy@aosc.io>
-> > 
-> > The thermal sensor controller on R329 is similar to the one on H6,
-> > but
-> > with only one sensor. Calibration method is still unknown because
-> > no
-> > calibration is implemented in BSP kernel, neither is it documented
-> > in
-> > the user manual.
-> 
-> Looking at the BSP smartx-r329-tina-for-jishu-community-v0.2, I see:
-> 
-> ths_calib: calib@14 {
->         reg = <0x14 4>;
-> };
-> 
-> And the BSP driver (drivers/thermal/sunxi_thermal-ng.c) claims that
-> R329 uses
-> the same calibration method as for H616. Maybe you are looking at an
-> older BSP?
 
-Yes. All these r329 work is done the last year during my internship at
-Sipeed.
+> -----Original Message-----
+> From: Bjorn Helgaas <helgaas@kernel.org>
+> Sent: Friday, April 22, 2022 3:25 PM
+> To: Jingar, Rajvi <rajvi.jingar@intel.com>
+> Cc: bhelgaas@google.com; david.e.box@linux.intel.com; linux-
+> pci@vger.kernel.org; linux-kernel@vger.kernel.org; linux-pm@vger.kernel.o=
+rg;
+> Wysocki, Rafael J <rafael.j.wysocki@intel.com>; Kai-Heng Feng
+> <kai.heng.feng@canonical.com>; mika.westerberg@linux.intel.com;
+> koba.ko@canonical.com; baolu.lu@linux.intel.com;
+> sathyanarayanan.kuppuswamy@linux.intel.com; Russell Currey
+> <ruscur@russell.cc>; Oliver O'Halloran <oohall@gmail.com>; linuxppc-
+> dev@lists.ozlabs.org
+> Subject: Re: [PATCH v4 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable=
+ PTM
+>=20
+> [+cc other folks interested in PTM from
+> https://lore.kernel.org/r/20220408153159.106741-1-
+> kai.heng.feng@canonical.com]
+>=20
+> On Thu, Apr 14, 2022 at 07:54:02PM +0200, Rafael J. Wysocki wrote:
+> > On 3/25/2022 8:50 PM, Rajvi Jingar wrote:
+> > > For the PCIe devices (like nvme) that do not go into D3 state still n=
+eed to
+> > > disable PTM on PCIe root ports to allow the port to enter a lower-pow=
+er PM
+> > > state and the SoC to reach a lower-power idle state as a whole. Move =
+the
+> > > pci_disable_ptm() out of pci_prepare_to_sleep() as this code path is =
+not
+> > > followed for devices that do not go into D3. This patch fixes the iss=
+ue
+> > > seen on Dell XPS 9300 with Ice Lake CPU and Dell Precision 5530 with =
+Coffee
+> > > Lake CPU platforms to get improved residency in low power idle states=
+.
+> > >
+> > > Fixes: a697f072f5da ("PCI: Disable PTM during suspend to save power")
+> > > Signed-off-by: Rajvi Jingar <rajvi.jingar@intel.com>
+> > > Suggested-by: David E. Box <david.e.box@linux.intel.com>
+>=20
+> > > ---
+> > >   v1 -> v2: add Fixes tag in commit message
+> > >   v2 -> v3: move changelog after "---" marker
+> > >   v3 -> v4: add "---" marker after changelog
+> > > ---
+> > >   drivers/pci/pci-driver.c | 10 ++++++++++
+> > >   drivers/pci/pci.c        | 10 ----------
+> > >   2 files changed, 10 insertions(+), 10 deletions(-)
+> > >
+> > > diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> > > index 8b55a90126a2..ab733374a260 100644
+> > > --- a/drivers/pci/pci-driver.c
+> > > +++ b/drivers/pci/pci-driver.c
+> > > @@ -847,6 +847,16 @@ static int pci_pm_suspend_noirq(struct device *d=
+ev)
+> > >   	if (!pci_dev->state_saved) {
+> > >   		pci_save_state(pci_dev);
+> > > +		/*
+> > > +		 * There are systems (for example, Intel mobile chips since
+> Coffee
+> > > +		 * Lake) where the power drawn while suspended can be
+> significantly
+> > > +		 * reduced by disabling PTM on PCIe root ports as this allows the
+> > > +		 * port to enter a lower-power PM state and the SoC to reach a
+> > > +		 * lower-power idle state as a whole.
+> > > +		 */
+> > > +		if (pci_pcie_type(pci_dev) =3D=3D PCI_EXP_TYPE_ROOT_PORT)
+> > > +			pci_disable_ptm(pci_dev);
+>=20
+> Why is disabling PTM dependent on pci_dev->state_saved?  The point of
+> this is to change the behavior of the device, and it seems like we
+> want to do that regardless of whether the driver has used
+> pci_save_state().
+>=20
 
-I will check the newer version of BSP and if okay I will add the
-calibrate routine in the next revision.
+Because we use the saved state to restore PTM on the root port.=20
+And it's under this condition that the root port state gets saved.
 
-> 
-> Regards,
-> Samuel
-> 
-> > 
-> > Add its support to sun8i-thermal driver. Calibrating it is now
-> > prevented.
-> > 
-> > Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
-> > ---
-> >  drivers/thermal/sun8i_thermal.c | 15 ++++++++++++++-
-> >  1 file changed, 14 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/thermal/sun8i_thermal.c
-> > b/drivers/thermal/sun8i_thermal.c
-> > index d9cd23cbb671..3a2f381005b4 100644
-> > --- a/drivers/thermal/sun8i_thermal.c
-> > +++ b/drivers/thermal/sun8i_thermal.c
-> > @@ -312,7 +312,8 @@ static int sun8i_ths_calibrate(struct
-> > ths_device *tmdev)
-> >                 goto out;
-> >         }
-> >  
-> > -       tmdev->chip->calibrate(tmdev, caldata, callen);
-> > +       if (tmdev->chip->calibrate)
-> > +               tmdev->chip->calibrate(tmdev, caldata, callen);
-> >  
-> >         kfree(caldata);
-> >  out:
-> > @@ -628,6 +629,17 @@ static const struct ths_thermal_chip
-> > sun50i_h6_ths = {
-> >         .calc_temp = sun8i_ths_calc_temp,
-> >  };
-> >  
-> > +static const struct ths_thermal_chip sun50i_r329_ths = {
-> > +       .sensor_num = 1,
-> > +       .has_bus_clk_reset = true,
-> > +       .offset = 188744,
-> > +       .scale = 672,
-> > +       .temp_data_base = SUN50I_H6_THS_TEMP_DATA,
-> > +       .init = sun50i_h6_thermal_init,
-> > +       .irq_ack = sun50i_h6_irq_ack,
-> > +       .calc_temp = sun8i_ths_calc_temp,
-> > +};
-> > +
-> >  static const struct of_device_id of_ths_match[] = {
-> >         { .compatible = "allwinner,sun8i-a83t-ths", .data =
-> > &sun8i_a83t_ths },
-> >         { .compatible = "allwinner,sun8i-h3-ths", .data =
-> > &sun8i_h3_ths },
-> > @@ -636,6 +648,7 @@ static const struct of_device_id of_ths_match[]
-> > = {
-> >         { .compatible = "allwinner,sun50i-a100-ths", .data =
-> > &sun50i_a100_ths },
-> >         { .compatible = "allwinner,sun50i-h5-ths", .data =
-> > &sun50i_h5_ths },
-> >         { .compatible = "allwinner,sun50i-h6-ths", .data =
-> > &sun50i_h6_ths },
-> > +       { .compatible = "allwinner,sun50i-r329-ths", .data =
-> > &sun50i_r329_ths },
-> >         { /* sentinel */ },
-> >  };
-> >  MODULE_DEVICE_TABLE(of, of_ths_match);
-> > 
-> 
-> 
-
-
+> Bjorn
