@@ -2,133 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D7250D00B
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Apr 2022 08:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A80FE50D0A3
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Apr 2022 10:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235842AbiDXG07 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 24 Apr 2022 02:26:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47756 "EHLO
+        id S238753AbiDXIz7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 24 Apr 2022 04:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238362AbiDXG06 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Apr 2022 02:26:58 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0339D17BF96;
-        Sat, 23 Apr 2022 23:23:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650781438; x=1682317438;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YliaMT8TR9bAjexxNV1yfpqeWdYHjrzqiH1zJqBnqwo=;
-  b=fd8OLwrKKCe8lPKDU/4a7J3DEjJKSelpNArYIbisgMKl0zHhnaeA3A60
-   3ks/3cxu3yuXXIdCVnzNciLrQ2HlJYCIGDYAWRkt00Pi55ghmV1As7stD
-   IRrEs+2TnbcgUbtyqDaHxEG8x/aZf+f2cIw8ldGv6JpwSw19jUcrmzbee
-   etzj3LJ7gnMn69mrA0ZnOnnYSvnNDYDRg8FZyhVePugiB5cLu8GiXBsCg
-   +iFRivsNJ64dS7VXtJkJaxwqAUOZLpyrucu19aEglpPDmkHgxp6ht2E1r
-   V9JWtvMB8f9mC+VB/7l8BwIoR1FzNVDSfQAi9VMuGBq1pqyJPgWb/ZO+1
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="262599459"
-X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
-   d="scan'208";a="262599459"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 23:23:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
-   d="scan'208";a="729176177"
-Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 23 Apr 2022 23:23:53 -0700
-Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1niVey-00017L-R4;
-        Sun, 24 Apr 2022 06:23:52 +0000
-Date:   Sun, 24 Apr 2022 14:23:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     kbuild-all@lists.01.org, linux-acpi@vger.kernel.org,
-        devel@acpica.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge 8/20] WARNING: modpost:
- vmlinux.o(.text+0xfdc8e4): Section mismatch in reference from the function
- component_compare_dev_name() to the variable .exit.text:.LFB4478
-Message-ID: <202204241452.pAvKt2JP-lkp@intel.com>
+        with ESMTP id S234595AbiDXIz5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Apr 2022 04:55:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A587095A38;
+        Sun, 24 Apr 2022 01:52:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1003B80DDE;
+        Sun, 24 Apr 2022 08:52:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F33DC385B6;
+        Sun, 24 Apr 2022 08:52:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650790374;
+        bh=VAIS5RCD9giYhrbO5Hac6FpKh7We3My7pPHwyo54GI8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IlEUmxA7Upi/jZvwszo5tWXIcRM0EAFPHSwLNctN9Y58IvDFrOEsiQajUPCMH7Jvj
+         ffMGYU3Am1eiuRxan/QEzVGZIU4/nZDiD4I9qyEihHwFs57oDBFuZkioK/aaH82E/D
+         cafv1RJevyhRqAmfrOprDhzFhC5PdErVyqMypulLdZQgaDPE2OydWwwQC4+yvZmqbe
+         cKfnbHuByU+9iCxgB+9sW82eJWEWf6s1YXcaaJOKEOR6FMrQj52g4nRCkxQaL9o5DE
+         hRPjDgGmvEn6UrlX0oEzCHgEu1vF7VzmeRUbf/lMOXmL9MVlUAWdZQ45wrK1ipQsiq
+         1YeW3uUpHXgig==
+Received: by mail-wm1-f46.google.com with SMTP id n32-20020a05600c3ba000b00393ea7192faso338998wms.2;
+        Sun, 24 Apr 2022 01:52:54 -0700 (PDT)
+X-Gm-Message-State: AOAM530pm5LKoJ9S9zURth3ykurMGPhtGlFWlgWWk21lbp77o9sfaDGO
+        08lMtfVWNAsO9QdzyqUCGCnBOiJi5UCARkJqihE=
+X-Google-Smtp-Source: ABdhPJwWxQyFReh1xxhP87snsCB/AySgR1dxVTGy6Gpi4+Uz2ZZzeirzOgx8S2o3MdbrdLkLr/78d+DVsl9RCKwJ5Q8=
+X-Received: by 2002:a1c:f219:0:b0:38c:782c:3bb with SMTP id
+ s25-20020a1cf219000000b0038c782c03bbmr20347843wmc.94.1650790372472; Sun, 24
+ Apr 2022 01:52:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
+ <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
+ <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net> <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
+ <20220422234150.GA3442771@roeck-us.net> <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
+ <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net>
+In-Reply-To: <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Sun, 24 Apr 2022 10:52:36 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
+Message-ID: <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
+Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Tomas Cech <sleep_walker@suse.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   f23bedef4354b1e8a69a25d8c9c1201e6d8e8762
-commit: 9d66f8243f05815087050993644c46a71ffc3d04 [8/20] Merge branches 'thermal-int340x' and 'thermal-misc' into linux-next
-config: riscv-buildonly-randconfig-r002-20220421 (https://download.01.org/0day-ci/archive/20220424/202204241452.pAvKt2JP-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=9d66f8243f05815087050993644c46a71ffc3d04
-        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-        git fetch --no-tags rafael-pm bleeding-edge
-        git checkout 9d66f8243f05815087050993644c46a71ffc3d04
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+On Sun, Apr 24, 2022 at 4:09 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> On 4/23/22 12:55, Arnd Bergmann wrote:
+> > On Sat, Apr 23, 2022 at 1:41 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> >> On Sat, Apr 23, 2022 at 12:04:31AM +0200, Arnd Bergmann wrote:
+> >
+> > Odd, I can't reproduce this at all. Do you get any console output at
+> > all for this?
+> >
+> > Is this the plain omap1_defconfig, or something else?
+> >
+>
+> No, it is my own sx1 specific configuration.
+>
+> https://github.com/groeck/linux-build-test/blob/master/rootfs/arm/qemu_sx1_defconfig
+>
+> I don't recall where I got it from but ...
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Ok, that explains it, thanks!
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+I fixed all the defconfig files that come with the kernel, but for your own
+ones you have to add
 
->> WARNING: modpost: vmlinux.o(.text+0xfdc8e4): Section mismatch in reference from the function component_compare_dev_name() to the variable .exit.text:.LFB4478
-The function component_compare_dev_name() references a variable in an exit section.
-Often the variable .LFB4478 has valid usage outside the exit section
-and the fix is to remove the __exit annotation of .LFB4478.
---
->> WARNING: modpost: vmlinux.o(.text+0x15ff5e0): Section mismatch in reference from the function dm_stats_init() to the variable .init.text:.L0
-The function dm_stats_init() references
-the variable __init .L0 .
-This is often because dm_stats_init lacks a __init
-annotation or the annotation of .L0 is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x1bf624c): Section mismatch in reference from the function sctp_sched_ops_init() to the variable .init.text:.L0
-The function sctp_sched_ops_init() references
-the variable __init .L0 .
-This is often because sctp_sched_ops_init lacks a __init
-annotation or the annotation of .L0 is wrong.
+# CONFIG_ARCH_MULTI_V7 is not set
 
-Note: the below error/warnings can be found in parent commit:
-<< WARNING: modpost: vmlinux.o(.text+0xcb5b08): Section mismatch in reference from the function pci_sriov_resource_alignment() to the function .init.text:sm501fb_driver_init()
-<< WARNING: modpost: vmlinux.o(.text+0xfdc8e4): Section mismatch in reference from the function component_compare_dev_name() to the variable .exit.text:.LFE4478
-<< WARNING: modpost: vmlinux.o(.exit.text+0xe120): Section mismatch in reference from the function hsr_netlink_exit() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .rodata:_entry.30
-<< WARNING: modpost: vmlinux.o(.text+0x1697378): Section mismatch in reference from the function btintel_send_intel_reset() to the variable .exit.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x1a9f788): Section mismatch in reference from the function fib_free_table() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x1bf6234): Section mismatch in reference from the function sctp_sched_ops_register() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x1bf627c): Section mismatch in reference from the function sctp_sched_set_sched() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x1bf640c): Section mismatch in reference from the function sctp_sched_get_sched() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0xcb5b08): Section mismatch in reference from the function pci_sriov_resource_alignment() to the function .init.text:sm501fb_driver_init()
-<< WARNING: modpost: vmlinux.o(.text+0xfdc8e4): Section mismatch in reference from the function component_compare_dev_name() to the variable .exit.text:.LFE4478
-<< WARNING: modpost: vmlinux.o(.exit.text+0xe120): Section mismatch in reference from the function hsr_netlink_exit() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .rodata:_entry.30
-<< WARNING: modpost: vmlinux.o(.text+0x1697378): Section mismatch in reference from the function btintel_send_intel_reset() to the variable .exit.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x1a9f788): Section mismatch in reference from the function fib_free_table() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x1bf6234): Section mismatch in reference from the function sctp_sched_ops_register() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x1bf627c): Section mismatch in reference from the function sctp_sched_set_sched() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x1bf640c): Section mismatch in reference from the function sctp_sched_get_sched() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0xcb5b08): Section mismatch in reference from the function pci_sriov_resource_alignment() to the function .init.text:sm501fb_driver_init()
-<< WARNING: modpost: vmlinux.o(.text+0xfdc8e4): Section mismatch in reference from the function component_compare_dev_name() to the variable .exit.text:.LFE4478
-<< WARNING: modpost: vmlinux.o(.exit.text+0xe120): Section mismatch in reference from the function hsr_netlink_exit() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .rodata:_entry.30
-<< WARNING: modpost: vmlinux.o(.text+0x1697378): Section mismatch in reference from the function btintel_send_intel_reset() to the variable .exit.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x1a9f788): Section mismatch in reference from the function fib_free_table() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x1bf6234): Section mismatch in reference from the function sctp_sched_ops_register() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x1bf627c): Section mismatch in reference from the function sctp_sched_set_sched() to the variable .init.text:.L0
-<< WARNING: modpost: vmlinux.o(.text+0x1bf640c): Section mismatch in reference from the function sctp_sched_get_sched() to the variable .init.text:.L0
+into the defconfig file, otherwise the multiplatform target defaults to
+an ARMv7 instead of ARMv5 build. For an OMAP15xx as in the SX1,
+you also need to enable CONFIG_ARCH_MULTI_V4T.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+This is slightly unfortunate, but I don't see any way to avoid it, and the
+modified defconfig will still work fine with older kernel trees.
+
+> > One thing I keep having to apply myself is this snippet:
+> >
+> > diff --git a/arch/arm/mm/proc-arm925.S b/arch/arm/mm/proc-arm925.S
+> > index 0bfad62ea858..87c695703580 100644
+> > --- a/arch/arm/mm/proc-arm925.S
+> > +++ b/arch/arm/mm/proc-arm925.S
+> > @@ -441,7 +441,6 @@ __arm925_setup:
+> >
+> >   #ifdef CONFIG_CPU_DCACHE_WRITETHROUGH
+> >          mov     r0, #4                          @ disable write-back
+> > on caches explicitly
+> > -       mcr     p15, 7, r0, c15, c0, 0
+> >   #endif
+>
+> it does not have CONFIG_CPU_DCACHE_WRITETHROUGH enabled.
+
+Maybe it was disabled explicitly for the sx1_defconfig because of this
+bug. I would think that this is required for actual sx1 hardware because the
+option is default-enabled for ARM925T, and that CPU core is exclusively
+used in OMAP15xx.
+
+        Arnd
