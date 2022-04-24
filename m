@@ -2,147 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C0A50CEAC
-	for <lists+linux-pm@lfdr.de>; Sun, 24 Apr 2022 04:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0D7250D00B
+	for <lists+linux-pm@lfdr.de>; Sun, 24 Apr 2022 08:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236852AbiDXCtD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 23 Apr 2022 22:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33686 "EHLO
+        id S235842AbiDXG07 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 24 Apr 2022 02:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236819AbiDXCtA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 23 Apr 2022 22:49:00 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016FB12EB66;
-        Sat, 23 Apr 2022 19:46:01 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 375BB5C00BA;
-        Sat, 23 Apr 2022 22:46:01 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Sat, 23 Apr 2022 22:46:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1650768361; x=
-        1650854761; bh=8Q+ZFt8iLKfw6+gfcY5JTvb5tFIFfrs8cTxnzQhZJ9s=; b=c
-        gybfw8PKzGPaM5ziDhBstmzJgZD9tE6ddGyMu7qOKe2RvB4Cv5bjTUKdCIB/khBN
-        jHBUS/MLaiAS1GSlzDdpwmVZ3Mawe/ufGJCJObgoDyCOeXLqfqxAvqj2XHPlSE+B
-        K3tSvJkeHXMVj+SKPRPOC8i0nXkcwIsTh1b+bvK49Xw5f9MYd5Fm39lzoccdjwqR
-        ZapBY92I9ofh7CsBZ56NabWbWUXPhjV9KeNzDwqit0L0dxM6kosZJ5Z153lpaMoY
-        kL+J8puHGexO6qdiz8kXuvqMStl/XOLt2079x46nNfUlqmGP1D8Qlf+CVU3uS+AR
-        /pDQ8aRYvSV+KQIFy7UmA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1650768361; x=1650854761; bh=8Q+ZFt8iLKfw6
-        +gfcY5JTvb5tFIFfrs8cTxnzQhZJ9s=; b=pg2o/IZLhelFZ7d1s17VVUHpfzBFU
-        +PYgd5T/PxajgWhYPghjoX5VSEDL2aR86SOSQXSbKD2HiZc5IsGtX8ZdD3aAXx5p
-        QHvXqrRqG4suPJmkUNsXF2fZHnc7gD7miiJm33Dkm/ip8Id3Y19M7MtY36+2jUgt
-        bUPBul5fafOBbIMYEVTcrNJ3htZaez1JP4yXqFs5zZXJ5S9+MSH5K7kUmYMiUiLp
-        vG9f9dQSLyH7ZASnK2rwKDgNrAUkEuuxYrVgDeuDyLyuew0x2hOdzkeL+pgg0Pbu
-        Q2PHoVOAS1DpSUkSYfnbpASPQ88vvKR8tENPrhl/U1U/BYMq4fjGNHlDA==
-X-ME-Sender: <xms:6LlkYnt_RD6hthab-1AVaVwL3kYdw7fedR9k9_EGegDpgh5ymQLE7Q>
-    <xme:6LlkYoflDIUy216Iu2Lo3YKrLjzjuITi6DdJnyUsWyIAmD2cXtXj8wtfRMlv65Pdn
-    sPuvJr6b93930ItZw>
-X-ME-Received: <xmr:6LlkYqxcid5qNP8FoJvkBEADdyE6sjNLrLH18MZfPGmhhlGg2756sz2wqUXN89Up6a8ziF1p18nvwS9fgEZhyiTvmKEgjLUHy2WIi9RwN48Hx6EWXn5NSslAAw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrtdejgdeigecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefuvfevfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepffdtveekvdegkeeuueetgfetffeileevudekuefhheelvdfhiedt
-    heduhfduhefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:6blkYmNpMgV_CaUcws0HrxLCFwgpgDCVraQIvkEwnAvphAzKhWA6qw>
-    <xmx:6blkYn-Vrb5Y3IyXxqO_mlZcqR-uw_auyQVFblYUB787TDC7GYmpNw>
-    <xmx:6blkYmVdM5jkbMto-qQgFkd3puQJDEcIIhmMy7A9TRUbn4XsMRgpCA>
-    <xmx:6blkYuaokLQhtCUKmeuIT-kjCUlPPqQ49iCmMXaaCR3dAPjqYCIkqA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 23 Apr 2022 22:46:00 -0400 (EDT)
-Subject: Re: [PATCH v2] cpufreq:fix memory leak in sun50i_cpufreq_nvmem_probe
-To:     Xiaobing Luo <luoxiaobing0926@gmail.com>, tiny.windzz@gmail.com,
-        rafael@kernel.org, viresh.kumar@linaro.org, wens@csie.org,
-        jernej.skrabec@gmail.com, mripard@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220423151204.2102314-1-luoxiaobing0926@gmail.com>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <4ee2421f-79a8-7f4d-f7ef-33f0ccf49337@sholland.org>
-Date:   Sat, 23 Apr 2022 21:46:00 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        with ESMTP id S238362AbiDXG06 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Apr 2022 02:26:58 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0339D17BF96;
+        Sat, 23 Apr 2022 23:23:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650781438; x=1682317438;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YliaMT8TR9bAjexxNV1yfpqeWdYHjrzqiH1zJqBnqwo=;
+  b=fd8OLwrKKCe8lPKDU/4a7J3DEjJKSelpNArYIbisgMKl0zHhnaeA3A60
+   3ks/3cxu3yuXXIdCVnzNciLrQ2HlJYCIGDYAWRkt00Pi55ghmV1As7stD
+   IRrEs+2TnbcgUbtyqDaHxEG8x/aZf+f2cIw8ldGv6JpwSw19jUcrmzbee
+   etzj3LJ7gnMn69mrA0ZnOnnYSvnNDYDRg8FZyhVePugiB5cLu8GiXBsCg
+   +iFRivsNJ64dS7VXtJkJaxwqAUOZLpyrucu19aEglpPDmkHgxp6ht2E1r
+   V9JWtvMB8f9mC+VB/7l8BwIoR1FzNVDSfQAi9VMuGBq1pqyJPgWb/ZO+1
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10326"; a="262599459"
+X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
+   d="scan'208";a="262599459"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2022 23:23:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,285,1643702400"; 
+   d="scan'208";a="729176177"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 23 Apr 2022 23:23:53 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1niVey-00017L-R4;
+        Sun, 24 Apr 2022 06:23:52 +0000
+Date:   Sun, 24 Apr 2022 14:23:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     kbuild-all@lists.01.org, linux-acpi@vger.kernel.org,
+        devel@acpica.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge 8/20] WARNING: modpost:
+ vmlinux.o(.text+0xfdc8e4): Section mismatch in reference from the function
+ component_compare_dev_name() to the variable .exit.text:.LFB4478
+Message-ID: <202204241452.pAvKt2JP-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220423151204.2102314-1-luoxiaobing0926@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 4/23/22 10:12 AM, Xiaobing Luo wrote:
-> --------------------------------------------
-> unreferenced object 0xffff000010742a00 (size 128):
->   comm "swapper/0", pid 1, jiffies 4294902015 (age 1187.652s)
->   hex dump (first 32 bytes):
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<00000000b4dfebaa>] __kmalloc+0x338/0x474
->     [<00000000d6e716db>] sun50i_cpufreq_nvmem_probe+0xc4/0x36c
->     [<000000007d6082a0>] platform_probe+0x98/0x11c
->     [<00000000c990f549>] really_probe+0x234/0x5a0
->     [<000000002d9fecc6>] __driver_probe_device+0x194/0x224
->     [<00000000cf0b94fa>] driver_probe_device+0x64/0x13c
->     [<00000000f238e4cf>] __device_attach_driver+0xf8/0x180
->     [<000000006720e418>] bus_for_each_drv+0xf8/0x160
->     [<00000000df4f14f6>] __device_attach+0x174/0x29c
->     [<00000000782002fb>] device_initial_probe+0x20/0x30
->     [<00000000c2681b06>] bus_probe_device+0xfc/0x110
->     [<00000000964cf3bd>] device_add+0x5f0/0xcd0
->     [<000000004b9264e3>] platform_device_add+0x198/0x390
->     [<00000000fa82a9d0>] platform_device_register_full+0x178/0x210
->     [<000000009a5daf13>] sun50i_cpufreq_init+0xf8/0x168
->     [<000000000377cc7c>] do_one_initcall+0xe4/0x570
-> --------------------------------------------
-> 
-> if sun50i_cpufreq_get_efuse failed, then opp_tables leak.
-> Fixes: f328584f7bff ("cpufreq: Add sun50i nvmem based CPU scaling driver")
-> 
-> Signed-off-by: Xiaobing Luo <luoxiaobing0926@gmail.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   f23bedef4354b1e8a69a25d8c9c1201e6d8e8762
+commit: 9d66f8243f05815087050993644c46a71ffc3d04 [8/20] Merge branches 'thermal-int340x' and 'thermal-misc' into linux-next
+config: riscv-buildonly-randconfig-r002-20220421 (https://download.01.org/0day-ci/archive/20220424/202204241452.pAvKt2JP-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=9d66f8243f05815087050993644c46a71ffc3d04
+        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+        git fetch --no-tags rafael-pm bleeding-edge
+        git checkout 9d66f8243f05815087050993644c46a71ffc3d04
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-Two minor style issues: there should be a space after "cpufreq:" in the commit
-subject. And the blank line should come before the "Fixes:" tag, not after.
-Otherwise:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Samuel Holland <samuel@sholland.org>
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-> ---
->  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> index 2deed8d8773f..75e1bf3a08f7 100644
-> --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> @@ -98,8 +98,10 @@ static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
->  		return -ENOMEM;
->  
->  	ret = sun50i_cpufreq_get_efuse(&speed);
-> -	if (ret)
-> +	if (ret) {
-> +		kfree(opp_tables);
->  		return ret;
-> +	}
->  
->  	snprintf(name, MAX_NAME_LEN, "speed%d", speed);
->  
-> 
+>> WARNING: modpost: vmlinux.o(.text+0xfdc8e4): Section mismatch in reference from the function component_compare_dev_name() to the variable .exit.text:.LFB4478
+The function component_compare_dev_name() references a variable in an exit section.
+Often the variable .LFB4478 has valid usage outside the exit section
+and the fix is to remove the __exit annotation of .LFB4478.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x15ff5e0): Section mismatch in reference from the function dm_stats_init() to the variable .init.text:.L0
+The function dm_stats_init() references
+the variable __init .L0 .
+This is often because dm_stats_init lacks a __init
+annotation or the annotation of .L0 is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x1bf624c): Section mismatch in reference from the function sctp_sched_ops_init() to the variable .init.text:.L0
+The function sctp_sched_ops_init() references
+the variable __init .L0 .
+This is often because sctp_sched_ops_init lacks a __init
+annotation or the annotation of .L0 is wrong.
 
+Note: the below error/warnings can be found in parent commit:
+<< WARNING: modpost: vmlinux.o(.text+0xcb5b08): Section mismatch in reference from the function pci_sriov_resource_alignment() to the function .init.text:sm501fb_driver_init()
+<< WARNING: modpost: vmlinux.o(.text+0xfdc8e4): Section mismatch in reference from the function component_compare_dev_name() to the variable .exit.text:.LFE4478
+<< WARNING: modpost: vmlinux.o(.exit.text+0xe120): Section mismatch in reference from the function hsr_netlink_exit() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .rodata:_entry.30
+<< WARNING: modpost: vmlinux.o(.text+0x1697378): Section mismatch in reference from the function btintel_send_intel_reset() to the variable .exit.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1a9f788): Section mismatch in reference from the function fib_free_table() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1bf6234): Section mismatch in reference from the function sctp_sched_ops_register() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1bf627c): Section mismatch in reference from the function sctp_sched_set_sched() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1bf640c): Section mismatch in reference from the function sctp_sched_get_sched() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xcb5b08): Section mismatch in reference from the function pci_sriov_resource_alignment() to the function .init.text:sm501fb_driver_init()
+<< WARNING: modpost: vmlinux.o(.text+0xfdc8e4): Section mismatch in reference from the function component_compare_dev_name() to the variable .exit.text:.LFE4478
+<< WARNING: modpost: vmlinux.o(.exit.text+0xe120): Section mismatch in reference from the function hsr_netlink_exit() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .rodata:_entry.30
+<< WARNING: modpost: vmlinux.o(.text+0x1697378): Section mismatch in reference from the function btintel_send_intel_reset() to the variable .exit.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1a9f788): Section mismatch in reference from the function fib_free_table() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1bf6234): Section mismatch in reference from the function sctp_sched_ops_register() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1bf627c): Section mismatch in reference from the function sctp_sched_set_sched() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1bf640c): Section mismatch in reference from the function sctp_sched_get_sched() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0xcb5b08): Section mismatch in reference from the function pci_sriov_resource_alignment() to the function .init.text:sm501fb_driver_init()
+<< WARNING: modpost: vmlinux.o(.text+0xfdc8e4): Section mismatch in reference from the function component_compare_dev_name() to the variable .exit.text:.LFE4478
+<< WARNING: modpost: vmlinux.o(.exit.text+0xe120): Section mismatch in reference from the function hsr_netlink_exit() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(__ex_table+0x1260): Section mismatch in reference from the variable .L0 to the variable .rodata:_entry.30
+<< WARNING: modpost: vmlinux.o(.text+0x1697378): Section mismatch in reference from the function btintel_send_intel_reset() to the variable .exit.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1a9f788): Section mismatch in reference from the function fib_free_table() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1bf6234): Section mismatch in reference from the function sctp_sched_ops_register() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1bf627c): Section mismatch in reference from the function sctp_sched_set_sched() to the variable .init.text:.L0
+<< WARNING: modpost: vmlinux.o(.text+0x1bf640c): Section mismatch in reference from the function sctp_sched_get_sched() to the variable .init.text:.L0
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
