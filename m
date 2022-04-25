@@ -2,103 +2,207 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3695D50D9DE
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Apr 2022 09:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B198050DA13
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Apr 2022 09:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232849AbiDYHJd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Apr 2022 03:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
+        id S237020AbiDYHaU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Apr 2022 03:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233551AbiDYHJa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Apr 2022 03:09:30 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A251CB09;
-        Mon, 25 Apr 2022 00:06:27 -0700 (PDT)
-Received: from mail-wr1-f45.google.com ([209.85.221.45]) by
- mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MfHUx-1oOYTS30uZ-00gt6P; Mon, 25 Apr 2022 09:06:25 +0200
-Received: by mail-wr1-f45.google.com with SMTP id s21so4716346wrb.8;
-        Mon, 25 Apr 2022 00:06:25 -0700 (PDT)
-X-Gm-Message-State: AOAM530j6De+bIxCCXJz6PoFz4kd9jTf2VDFzI+BmlUb5TsDgfIf8QGj
-        +X4hJfyaPcPvD1dgEq2g39AJo/Ehkkt1deanA1E=
-X-Google-Smtp-Source: ABdhPJxxp6erGvmfRbmUQS+IHGGJZckdjwT0Z2vmr9ym31iDDJlb7avUOKw/eqT13DvKvO7wLaoPCBQVv9Zw+tbmHZ4=
-X-Received: by 2002:a5d:6da5:0:b0:20a:8805:6988 with SMTP id
- u5-20020a5d6da5000000b0020a88056988mr12416992wrs.317.1650870385330; Mon, 25
- Apr 2022 00:06:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220425033355.6281-1-rdunlap@infradead.org>
-In-Reply-To: <20220425033355.6281-1-rdunlap@infradead.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 25 Apr 2022 09:06:09 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a12O-Qz5PTr_nMYV+aRcxav1DD1Gk_a865QOSbga4jUKQ@mail.gmail.com>
-Message-ID: <CAK8P3a12O-Qz5PTr_nMYV+aRcxav1DD1Gk_a865QOSbga4jUKQ@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: tegra: restrict to ARCH_SUSPEND_POSSIBLE
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <treding@nvidia.com>,
+        with ESMTP id S236677AbiDYHaT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Apr 2022 03:30:19 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2A1A1B0
+        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 00:27:13 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id s14so25041823plk.8
+        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 00:27:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=rxyP1rA1NVCKi+Fqd9RTEgWTAs6MpVuSe+By3MBiK+g=;
+        b=uhHdnNiHGlo6+p+WxcM0C9NfBcZ1yMZ4ZL8lPJjCqFO59XftyiBXmxLnJ4x/8IHesk
+         Iz/e+72c+hpYYtSkpN9st79ktLRdF9ucEIcsSZFrJz8zW/33b/zII36XFlgftlgRt/Rn
+         NcV0nn+GcFItTljdcQkhhruORyaimT8Hcjdf+33DifIdLTWHRc7f4BBjOpmEow9TxUAk
+         H3AoQBVj8pg7peGOZ40pMWJPb4v77MByQ/hq2wnaWxWmitojdTlAcivhdbQ8eALivIcc
+         CxsiobTeJA1GwrggCLqf/tliVYwpbUOcyyC+5xohbYhPGazYOIMkwv+sGtPOlvneNaO1
+         ub6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=rxyP1rA1NVCKi+Fqd9RTEgWTAs6MpVuSe+By3MBiK+g=;
+        b=LdwD49/j3TVRtGkXgmMehU+N9HKu/CViL2ClLSudO800WAVPNfIADJY3c2svR+nVoz
+         kzhSt4p8eOgwtt4aX6ePwTLntNrSleaPIksOLsHtie+nuR1B+jjQhv1HjJiuNMHzrcqn
+         k2lDngbdZ8ixfxmb8brX0Wkk/HyYmz587qbRxlx18E1/+5rp5f8JjiS1IGEgT7ssuecN
+         18SE+OpsVqn9BAlu4HxDmKfLrwF/1t0WnouhErU7/gpvAC7SmkQ15ClVEiKzW51m0O7i
+         cKeusOpRnBkOdfwrxYuJ464tH8mKxjqb2DZddNYIcMKleqpJEgnmsXkMxDJ+kyGfSoCY
+         d7wA==
+X-Gm-Message-State: AOAM532lq6pmVbPmQtjk6Po0lf6aSKISOuf9NcgGEqK32se4rUeWV3dk
+        4Qzsd8sZ1cspYZX1LZ+2mdVhTQ==
+X-Google-Smtp-Source: ABdhPJxE5RcvTjEYwI71Iu772xtRFctxCEAFvy9tKFHoG9lHlSKr+lSmvTHqmcMFobuMjeZomF3jKA==
+X-Received: by 2002:a17:90b:3b46:b0:1c7:9ca8:a19e with SMTP id ot6-20020a17090b3b4600b001c79ca8a19emr29586651pjb.245.1650871632716;
+        Mon, 25 Apr 2022 00:27:12 -0700 (PDT)
+Received: from localhost ([122.171.250.232])
+        by smtp.gmail.com with ESMTPSA id p4-20020a637404000000b00375948e63d6sm8596664pgc.91.2022.04.25.00.27.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 00:27:12 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 12:57:10 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:24OFbOKd3D+Q/CoiL5rhaDXigIX8D4JOaRH8PjOycoIup+BGqOe
- JAMSCXB+Cpuu6iG3HXX2i785OCjpQMtnGbRT+eMCTN141xLRipFvRk0xG3RdUVJev8zlZNy
- t0vJkAN31VTtv7eTM1LK16kyYER7mt3Ts+J63rXHlhlGw48k0BVATvQthM6aNqUBfUIKJZH
- cV2Chw+ZW6r4jqPH8P25g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:px5XtvKeHGY=:2q4Hqx388DMiEkVaNipNGU
- ElnZ+ZviBDDWHRmxR3ZgP/7B7MRb/lCbI8xiAvjNIHMQdeHa8jikiqW0Y0AZZKa2A37D/gy98
- xPshJ2SxJpSRXj6B7Gjd4WA819pQZ6S30eo7u5rMpYL1rIThKMvKqD2pziMWXAyuQq3M29XNa
- YQcYpoUey4m5mytYPV0KBG9NHAxxOG2Npk02cLpb3Qa4vJ0uJSWzW5sdBBP+SFs7l4wgVLuKw
- WLCof5WVz8QlbKbpibajln/y8LXoY40y192TK2yWbQPIoAZanIIdHE75DCggfo/zxx5+TlrS/
- fQUCH13dtXE5zItTOhsPerBoQgDpRvS0Sn98QRDuc4aHn64J3QQe+cvP3nqEaXkcrXNdtaIdc
- hnzxo+ADRnIRO3HEOe2mM7249rk98seuCM+NzMBmlZjQhwJJHBdoOWgrHV3fpg+f9n9A5fQUK
- 8cBNeO3sApqoIwKvBohSMcE42eZgCrx5w+Xfzuc9v/m0if265PAk954BERYchzKtC0J9TlZ57
- GFcxT1YMXAJIu3r68nZJ6nJ9ARLlrxsm0DpmBQYVbSvG7IBNAsbc/SOxlSTg0afeB/VxP5Ogf
- hC0qpwuUfVc+W2+g8cIIbByGmEhN8kHK3S9W/4Qq96q0BOcz6v+4n/RvWiG6x7gLHq8pQ/rDI
- e/Az5zecRdEzQwTme+f698ceZ4tdgtw1qKa11UGpdzBvgBsiHjX5AXF0M1dbQ+W3T1cVOFFU6
- OWWu6tzTSQJbqbzuF9mC+iCiqk866yfXc89ICFUlHGDN9dLP8cIRxzA/NFB3kIO0GJhD+mTxy
- s/rkypBS4VqfAvPtyTltf0qUVCqQ9kT5S1IkHHdH77FrKzSJKw=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
+Message-ID: <20220425072710.v6gwo4gu3aouezg4@vireshk-i7>
+References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
+ <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Apr 25, 2022 at 5:33 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> Since 'select' does not follow any dependency chain (ARM_CPU_SUSPEND
-> in this case), make ARM_TEGRA_CPUIDLE depend on ARCH_SUSPEND_POSSIBLE,
-> just as ARM_CPU_SUSPEND does.
->
-> Fix this kconfig warning:
->
-> WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
->   Depends on [n]: ARCH_SUSPEND_POSSIBLE [=n]
->   Selected by [y]:
->   - ARM_TEGRA_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_TEGRA [=n] || COMPILE_TEST [=y]) && !ARM64 && MMU [=y]
->
-> and subsequent build errors:
->
-> arm-linux-gnueabi-ld: arch/arm/kernel/sleep.o: in function `__cpu_suspend':
-> (.text+0x68): undefined reference to `cpu_sa110_suspend_size'
-> arm-linux-gnueabi-ld: arch/arm/kernel/suspend.o: in function `__cpu_suspend_save':
-> suspend.c:(.text+0x478): undefined reference to `cpu_sa110_do_suspend'
-> arm-linux-gnueabi-ld: suspend.c:(.text+0x4e8): undefined reference to `cpu_sa110_do_resume'
->
-> Fixes: faae6c9f2e68 ("cpuidle: tegra: Enable compile testing")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Cc: Dmitry Osipenko <digetx@gmail.com>
-> Cc: Thierry Reding <treding@nvidia.com>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: linux-pm@vger.kernel.org
+On 11-04-22, 17:43, Krzysztof Kozlowski wrote:
+> Devices might need to control several clocks when scaling the frequency
+> and voltage.  Example is the Universal Flash Storage (UFS) which scales
+> several independent clocks with change of performance levels.
+> 
+> Add parsing of multiple clocks and clock names
 
-Looks correct to me,
+This part is fine, the OPP core should be able to do this.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> and scale all of them,
+
+This is tricky as the OPP core can't really assume the order in which the clocks
+needs to be programmed. We had the same problem with multiple regulators and the
+same is left for drivers to do via the custom-api.
+
+Either we can take the same route here, and let platforms add their own OPP
+drivers which can handle this, Or hide this all behind a basic device clock's
+driver, which you get with clk_get(dev, NULL).
+
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+
+> +static int _generic_set_opp_clks_only(struct device *dev,
+> +				      struct opp_table *opp_table,
+> +				      struct dev_pm_opp *opp)
+> +{
+> +	int i, ret;
+> +
+> +	if (!opp_table->clks)
+> +		return 0;
+> +
+> +	for (i = 0; i < opp_table->clk_count; i++) {
+> +		if (opp->rates[i]) {
+
+This should mean that we can disable that clock and it isn't required.
+
+> +			ret = _generic_set_opp_clk_only(dev, opp_table->clks[i],
+> +							opp->rates[i]);
+> +			if (ret) {
+> +				dev_err(dev, "%s: failed to set clock %pC rate: %d\n",
+> +					__func__, opp_table->clks[i], ret);
+> +				return ret;
+> +			}
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+
+As said earlier, this won't work in the core.
+
+> +
+>  static int _generic_set_opp_regulator(struct opp_table *opp_table,
+>  				      struct device *dev,
+>  				      struct dev_pm_opp *opp,
+> @@ -796,7 +835,7 @@ static int _generic_set_opp_regulator(struct opp_table *opp_table,
+>  	}
+>  
+>  	/* Change frequency */
+> -	ret = _generic_set_opp_clk_only(dev, opp_table->clk, freq);
+> +	ret = _generic_set_opp_clks_only(dev, opp_table, opp);
+>  	if (ret)
+>  		goto restore_voltage;
+>  
+> @@ -820,7 +859,7 @@ static int _generic_set_opp_regulator(struct opp_table *opp_table,
+>  	return 0;
+>  
+>  restore_freq:
+> -	if (_generic_set_opp_clk_only(dev, opp_table->clk, old_opp->rate))
+> +	if (_generic_set_opp_clks_only(dev, opp_table, old_opp))
+>  		dev_err(dev, "%s: failed to restore old-freq (%lu Hz)\n",
+>  			__func__, old_opp->rate);
+>  restore_voltage:
+> @@ -880,7 +919,7 @@ static int _set_opp_custom(const struct opp_table *opp_table,
+
+This is where we can handle it in your case, if you don't want to hide it behind
+a clk driver.
+
+>  	}
+>  
+>  	data->regulators = opp_table->regulators;
+> -	data->clk = opp_table->clk;
+> +	data->clk = (opp_table->clks ? opp_table->clks[0] : NULL);
+>  	data->dev = dev;
+>  	data->old_opp.rate = old_opp->rate;
+>  	data->new_opp.rate = freq;
+> @@ -969,8 +1008,8 @@ static void _find_current_opp(struct device *dev, struct opp_table *opp_table)
+
+I think this routine breaks as soon as we add support for multiple clocks.
+clks[0]'s frequency can be same for multiple OPPs and this won't get you the
+right OPP then.
+
+>  	struct dev_pm_opp *opp = ERR_PTR(-ENODEV);
+>  	unsigned long freq;
+>  
+> -	if (!IS_ERR(opp_table->clk)) {
+> -		freq = clk_get_rate(opp_table->clk);
+> +	if (opp_table->clks && !IS_ERR(opp_table->clks[0])) {
+> +		freq = clk_get_rate(opp_table->clks[0]);
+>  		opp = _find_freq_ceil(opp_table, &freq);
+>  	}
+>  
+> @@ -1070,7 +1109,7 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
+>  						 scaling_down);
+>  	} else {
+>  		/* Only frequency scaling */
+> -		ret = _generic_set_opp_clk_only(dev, opp_table->clk, freq);
+> +		ret = _generic_set_opp_clks_only(dev, opp_table, opp);
+>  	}
+>  
+>  	if (ret)
+> @@ -1135,11 +1174,15 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+
+This should have a BUG or WARN _ON() now if clock count is more than one. This
+routine can't be called unless custom handler is available.
+
+I skipped rest of the code as we need to work/decide on the design first.
+
+Thanks.
+
+-- 
+viresh
