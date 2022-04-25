@@ -2,137 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E3350E496
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Apr 2022 17:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F7450E4AA
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Apr 2022 17:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236285AbiDYPmw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Apr 2022 11:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59518 "EHLO
+        id S242978AbiDYPsu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Apr 2022 11:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242976AbiDYPmq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Apr 2022 11:42:46 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848DE4476C;
-        Mon, 25 Apr 2022 08:39:42 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id z99so18901709ede.5;
-        Mon, 25 Apr 2022 08:39:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=T01Vsboe7BIJvmOZnpFBnqjbW+9iDm8fcl2QrWQykBc=;
-        b=kPM/SNHsAbBB6TPmDqMIcF3+pw23OqniiDoKpyCh8WM3av7/TyIAZaj6mkSAGUIcjv
-         wFg+zJ5PJZ+OWSTcT08+l6llF1V5IgIUQ9t9PmYB8P1utoqI0nFy9Sdd2k3AgNv1l1FZ
-         QMAzyQq1xVzv7dZo/YM6MGJvSX6DHz7za/D8I82l0lzgoEB/wX1qUpMZ5UpQ7sSIAkay
-         eN5yzepL0YRYBfLDwIPqUdkAGkJswqyaldV+jhNmHzLZbiOEdgabkRZ5U26w8TJcEOHl
-         KWg4YZcX1tRWUsPoJozBH5dm9g0k5T0XGeJWULpmf/oYCe3yRJQ/UT3aBDA/kFoxJykM
-         xorg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=T01Vsboe7BIJvmOZnpFBnqjbW+9iDm8fcl2QrWQykBc=;
-        b=dg2TK1V3l+BNwoVp5HBqGyGgPqT/nie4YyEFxcgBZ5L9iNnU/wBr+2AKRr6sepWaqd
-         7T0gAzLbH/A+1U8RsROhdR2QZikL7ZjL2BikvGC8leIX/biU2JDMvpyF7JsCTka1aNle
-         apd/9DwCmN2USNA/o4Z1sJAn9jM48mxzpZ4uUwW/gRSsEvZHWJRdvauj2+N6mu5IFEOu
-         GqJ2Or9C8QgBoX9S6wzCcCAG9cvtUu4xrjzd2kK9XxJjVJWlT8sM1aODXD6D+gxY/Zqh
-         x8tLaZEutP5FkxXf3f8Agy11wu5LJ4WvI4MkjEu+MGkIQdqZVijaqwmzwt78LoOCihiH
-         1vRg==
-X-Gm-Message-State: AOAM530H1/G4B2SJVcPgxYHbU2TFDpC2588V3FV6ywNOMSCu9Y73oNnK
-        PYQc2pRISlZ18ylEo+l80R4=
-X-Google-Smtp-Source: ABdhPJzIyVAdyqYhswiICra1oKeo5UKFm4s/D+QpyQPj+7Teup4JNUsf36N9FoOwox9FncoffG3lOQ==
-X-Received: by 2002:a05:6402:909:b0:416:6f3c:5c1d with SMTP id g9-20020a056402090900b004166f3c5c1dmr19408479edz.108.1650901181156;
-        Mon, 25 Apr 2022 08:39:41 -0700 (PDT)
-Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id g6-20020a056402090600b0041d8c2f9e61sm4826215edz.31.2022.04.25.08.39.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 08:39:40 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     tiny.windzz@gmail.com, rafael@kernel.org, viresh.kumar@linaro.org,
-        wens@csie.org, samuel@sholland.org, mripard@kernel.org,
-        Xiaobing Luo <luoxiaobing0926@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xiaobing Luo <luoxiaobing0926@gmail.com>
-Subject: Re: [PATCH v3] cpufreq: fix memory leak in sun50i_cpufreq_nvmem_probe
-Date:   Mon, 25 Apr 2022 17:39:39 +0200
-Message-ID: <3099618.5fSG56mABF@kista>
-In-Reply-To: <20220425113009.2182485-1-luoxiaobing0926@gmail.com>
-References: <20220425113009.2182485-1-luoxiaobing0926@gmail.com>
+        with ESMTP id S242922AbiDYPst (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Apr 2022 11:48:49 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE7E38DA8;
+        Mon, 25 Apr 2022 08:45:45 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1650901543;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aNGctTg/goq7Sq7mhvnKDj6DW5mQC3xi+xtGEu902nA=;
+        b=4xclg1i0WuE8vnC7DCY7BDKUs0sa9ICOfob622p9cPKMqYo82Q+LT0u3zRDY1fN5eQmqpN
+        PHyf9DbhGeTFbOjdXV/2jgPJvuJGITk74JvaK3LEd7Xfmq+ry9w4bEMkwt911F05SeQIDr
+        5+ojkalAzhgfFjtLJ+LYPV6/BCwtxEt81mgEsze8moUjbItQEXCsCaloJODdA6AGm16YCF
+        GpYcPf7OuIcXTH2onSMRtlasOEAlUVX67kn6WzlH7ngXsBJTf1M0Y4/SPZt5K+4JeusTQv
+        VLiBXEjmlsKuzYJaByi8ZHSEOqbPoYeKrMomPenDjMViVLVytvjvI5ljN/ebdA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1650901543;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aNGctTg/goq7Sq7mhvnKDj6DW5mQC3xi+xtGEu902nA=;
+        b=0pVlce+Q0osyO+0+0QOLt0JFlGwYK41Pr49WOEDLlNVNHac4paS0C7dge9bywRCmYoneCP
+        RLdUK+tUk8BxS5AQ==
+To:     Doug Smythies <dsmythies@telus.net>,
+        "'Rafael J. Wysocki'" <rafael@kernel.org>
+Cc:     'the arch/x86 maintainers' <x86@kernel.org>,
+        "'Rafael J. Wysocki'" <rafael@kernel.org>,
+        'Linux PM' <linux-pm@vger.kernel.org>,
+        'Eric Dumazet' <edumazet@google.com>,
+        "'Paul E. McKenney'" <paulmck@kernel.org>,
+        'LKML' <linux-kernel@vger.kernel.org>,
+        Doug Smythies <dsmythies@telus.net>
+Subject: RE: [patch 00/10] x86/cpu: Consolidate APERF/MPERF code
+In-Reply-To: <005501d85503$3b00ca40$b1025ec0$@telus.net>
+References: <20220415133356.179706384@linutronix.de>
+ <005001d85413$75e5dce0$61b196a0$@telus.net>
+ <CAJZ5v0jf-NGa4-xaNaxehkLGPVqwhZrUhLXw2cJ1avtjgT5yPA@mail.gmail.com>
+ <87bkwwvkwa.ffs@tglx> <005501d85503$3b00ca40$b1025ec0$@telus.net>
+Date:   Mon, 25 Apr 2022 17:45:42 +0200
+Message-ID: <87pml5180p.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dne ponedeljek, 25. april 2022 ob 13:30:09 CEST je Xiaobing Luo napisal(a):
-> --------------------------------------------
-> unreferenced object 0xffff000010742a00 (size 128):
->   comm "swapper/0", pid 1, jiffies 4294902015 (age 1187.652s)
->   hex dump (first 32 bytes):
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->   backtrace:
->     [<00000000b4dfebaa>] __kmalloc+0x338/0x474
->     [<00000000d6e716db>] sun50i_cpufreq_nvmem_probe+0xc4/0x36c
->     [<000000007d6082a0>] platform_probe+0x98/0x11c
->     [<00000000c990f549>] really_probe+0x234/0x5a0
->     [<000000002d9fecc6>] __driver_probe_device+0x194/0x224
->     [<00000000cf0b94fa>] driver_probe_device+0x64/0x13c
->     [<00000000f238e4cf>] __device_attach_driver+0xf8/0x180
->     [<000000006720e418>] bus_for_each_drv+0xf8/0x160
->     [<00000000df4f14f6>] __device_attach+0x174/0x29c
->     [<00000000782002fb>] device_initial_probe+0x20/0x30
->     [<00000000c2681b06>] bus_probe_device+0xfc/0x110
->     [<00000000964cf3bd>] device_add+0x5f0/0xcd0
->     [<000000004b9264e3>] platform_device_add+0x198/0x390
->     [<00000000fa82a9d0>] platform_device_register_full+0x178/0x210
->     [<000000009a5daf13>] sun50i_cpufreq_init+0xf8/0x168
->     [<000000000377cc7c>] do_one_initcall+0xe4/0x570
-> --------------------------------------------
-> 
-> if sun50i_cpufreq_get_efuse failed, then opp_tables leak.
-> 
-> Fixes: f328584f7bff ("cpufreq: Add sun50i nvmem based CPU scaling driver")
-> Signed-off-by: Xiaobing Luo <luoxiaobing0926@gmail.com>
+On Wed, Apr 20 2022 at 15:08, Doug Smythies wrote:
+> On 2022.04.19 14:11 Thomas Gleixner wrote:
+>>> That's because after the changes in this series scaling_cur_freq
+>>> returns 0 if the given CPU is idle.
+>>
+>> Which is sensible IMO as there is really no point in waking an idle CPU
+>> just to read those MSRs, then wait 20ms wake it up again to read those
+>> MSRs again.
+>
+> I totally agree.
+> It is the inconsistency for what is displayed as a function of driver/governor
+> that is my concern.
 
-This patch was already applied (v2).
+Raphael suggested to move the show_cpuinfo() logic into the a/mperf
+code. See below.
 
-Best regards,
-Jernej
+Thanks,
 
-> ---
->  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-
-cpufreq-nvmem.c
-> index 2deed8d8773f..75e1bf3a08f7 100644
-> --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> @@ -98,8 +98,10 @@ static int sun50i_cpufreq_nvmem_probe(struct 
-platform_device *pdev)
->  		return -ENOMEM;
->  
->  	ret = sun50i_cpufreq_get_efuse(&speed);
-> -	if (ret)
-> +	if (ret) {
-> +		kfree(opp_tables);
->  		return ret;
-> +	}
->  
->  	snprintf(name, MAX_NAME_LEN, "speed%d", speed);
->  
-> -- 
-> 2.36.0
-> 
-> 
+        tglx
+---
+Subject: x86/aperfmperf: Integrate the fallback code from show_cpuinfo()
+From: Thomas Gleixner <tglx@linutronix.de>
+Date: Mon, 25 Apr 2022 15:19:29 +0200
 
+Due to the avoidance of IPIs to idle CPUs arch_freq_get_on_cpu() can return
+0 when the last sample was too long ago.
 
+show_cpuinfo() has a fallback to cpufreq_quick_get() and if that fails to
+return cpu_khz, but the readout code for the per CPU scaling frequency in
+sysfs does not.
+
+Move that fallback into arch_freq_get_on_cpu() so the behaviour is the same
+when reading /proc/cpuinfo and /sys/..../cur_scaling_freq.
+
+Suggested-by: "Rafael J. Wysocki" <rafael@kernel.org>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+---
+ arch/x86/kernel/cpu/aperfmperf.c |   10 +++++++---
+ arch/x86/kernel/cpu/proc.c       |    7 +------
+ 2 files changed, 8 insertions(+), 9 deletions(-)
+
+--- a/arch/x86/kernel/cpu/aperfmperf.c
++++ b/arch/x86/kernel/cpu/aperfmperf.c
+@@ -405,12 +405,12 @@ void arch_scale_freq_tick(void)
+ unsigned int arch_freq_get_on_cpu(int cpu)
+ {
+ 	struct aperfmperf *s = per_cpu_ptr(&cpu_samples, cpu);
++	unsigned int seq, freq;
+ 	unsigned long last;
+-	unsigned int seq;
+ 	u64 acnt, mcnt;
+ 
+ 	if (!cpu_feature_enabled(X86_FEATURE_APERFMPERF))
+-		return 0;
++		goto fallback;
+ 
+ 	do {
+ 		seq = raw_read_seqcount_begin(&s->seq);
+@@ -424,9 +424,13 @@ unsigned int arch_freq_get_on_cpu(int cp
+ 	 * which covers idle and NOHZ full CPUs.
+ 	 */
+ 	if (!mcnt || (jiffies - last) > MAX_SAMPLE_AGE)
+-		return 0;
++		goto fallback;
+ 
+ 	return div64_u64((cpu_khz * acnt), mcnt);
++
++fallback:
++	freq = cpufreq_quick_get(cpu);
++	return freq ? freq : cpu_khz;
+ }
+ 
+ static int __init bp_init_aperfmperf(void)
+--- a/arch/x86/kernel/cpu/proc.c
++++ b/arch/x86/kernel/cpu/proc.c
+@@ -86,12 +86,7 @@ static int show_cpuinfo(struct seq_file
+ 	if (cpu_has(c, X86_FEATURE_TSC)) {
+ 		unsigned int freq = arch_freq_get_on_cpu(cpu);
+ 
+-		if (!freq)
+-			freq = cpufreq_quick_get(cpu);
+-		if (!freq)
+-			freq = cpu_khz;
+-		seq_printf(m, "cpu MHz\t\t: %u.%03u\n",
+-			   freq / 1000, (freq % 1000));
++		seq_printf(m, "cpu MHz\t\t: %u.%03u\n", freq / 1000, (freq % 1000));
+ 	}
+ 
+ 	/* Cache size */
