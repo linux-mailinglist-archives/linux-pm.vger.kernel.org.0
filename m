@@ -2,94 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3513550D81E
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Apr 2022 06:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4616950D89E
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Apr 2022 07:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240982AbiDYELv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Apr 2022 00:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54786 "EHLO
+        id S241162AbiDYFJO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Apr 2022 01:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241000AbiDYELU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Apr 2022 00:11:20 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D9724091;
-        Sun, 24 Apr 2022 21:07:38 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id k29so12349053pgm.12;
-        Sun, 24 Apr 2022 21:07:38 -0700 (PDT)
+        with ESMTP id S229734AbiDYFJM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Apr 2022 01:09:12 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8DE8BF72
+        for <linux-pm@vger.kernel.org>; Sun, 24 Apr 2022 22:06:07 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id n8so24524331plh.1
+        for <linux-pm@vger.kernel.org>; Sun, 24 Apr 2022 22:06:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=T/RS4kjp9B0g3NPXTLSfahxyA66d9aAV7XBkghwCN/E=;
-        b=NDYVPJ4ex/Hk2DUN+EsX9+jTACoUSLTboNubhD0Yzyw4i7emuW01uRggF76BPPonhl
-         Xy0SA4s3wxUzh/qca11nolLu3A6/0sGBC0fHn59CNc4BsNAlifxxRcxU7XWS99/H3RQ7
-         +zRl5LnyJidg8bArhA1XzBzgMF0at59MMJBs3eImvEBF/BrRsHcpagsX/qAxDFwV6YT/
-         20rTE2rHG4k09LBmkAnFHeIR+5VhjjnvY/18Y1N2OdBgwkq08ZWbqlxd2+jOeVFsdw4O
-         cGFwb3XnMmEjHAYjKBl7pxMwW7Z+G4vIwxJ2EJuO/1hu0HIHA87xlAbVPQ5VzQLKJjcm
-         xFbg==
+         :content-disposition:in-reply-to:user-agent;
+        bh=gNvaAoMPbdbdyvNqhaTtDMGsJUQFjlXi46W57sai814=;
+        b=NKY5xGBqWdv1qptYi67G9s1QIJ57Ku3frhJzM74pZxsLSWQd3yGijZwqvpsfapeTSv
+         ciClB3KxoTrc1xQ+TglZAorvsC5xzJmyKKSXlKKHCDdqdirRKannkSUmPr9zZywT+Bz4
+         ToUJxiflwolHfGYbJiGmq6FDTq2Xxcb7eDK1qR0daTZVhI2aCIztxoAJHyoEtr158TQO
+         +WU1o2FQ3VPVx1ngQsmc0FgbIEYGWk4Hfv9u109YdchiW4PGtaPXUDEXSLjo3cbT+cp6
+         uJrsyjjetqBcXf1KxiqOadLPtU6M+ubji3ZOGb9QMjnJs45xc06rZKn5bhHuT1sW7y4s
+         kL7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=T/RS4kjp9B0g3NPXTLSfahxyA66d9aAV7XBkghwCN/E=;
-        b=aPyJSpQ0tZZZRmdJyraHYGfEOWRyPwI1Gv/89FOnOEDHHNGsXxBIjKISYvs6JOZPEA
-         N/1ULVwYRGAxv4tTJple+IoH8XLx2Z2Ufs8E5C4L1QA3LgqfOYmM1/wEWvxf/GcToPWJ
-         GU4f6S6vyax5mmcvIsBUi1WWn5V5nc9TN01b2Qq/PbQbtw1CIzCUMyhihPCfZ4P4c3yI
-         tF1IV4c1L+qOP63ukzZ6WNV/0BSISZLgqH24wuIMZze3XDG+99Zq1ZqDKHTu5QJP4apv
-         8xnR8kyFItxp7N4DKVaSop1zhUDMe0Q1aQhUodjUjS6wOyN79CnhZlRgRYkDn/zBGH5c
-         vpCA==
-X-Gm-Message-State: AOAM530L2bo7I1nomTaWC1RLGXM1J4zCvbaAjGIL4llrOLzMJSZlPqjC
-        hk1nTOw0E/5PyvgHLss4L41HViriKQc=
-X-Google-Smtp-Source: ABdhPJzcRmB19uWBDkx1hPPfE/7wMYmPC/YFu+CmSK7SgDHGMUdqjFQH3kJzkMqRynvrlqJk3J+MAw==
-X-Received: by 2002:a63:290:0:b0:3aa:8b8b:1a3d with SMTP id 138-20020a630290000000b003aa8b8b1a3dmr13179262pgc.208.1650859657997;
-        Sun, 24 Apr 2022 21:07:37 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:282a:d50e:e0fc:c145])
-        by smtp.gmail.com with ESMTPSA id r29-20020a63441d000000b003a97e8f71e7sm8147069pga.88.2022.04.24.21.07.36
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=gNvaAoMPbdbdyvNqhaTtDMGsJUQFjlXi46W57sai814=;
+        b=n/xO2WYwd8Lt4jBi4L+BJ1AMwVQhXarTRXrCGuCoxbmW6vB7aBS4EgnTAVgWjJ/jLa
+         yfiRSaybhYlIjQGYN+H2hGpZo87joxlTVAqXqz2EfXzs1EA+yX52eK+i1sYgfFUl5BrO
+         aACkmbpk7f+UuW8ULEBq+IirtdkGQbkpOP8EjGQlWgrO8y2FI2Dht+7R1LLEgtWiEpQK
+         ebSFmMmheYoiBjjDdwOjmIPvPh/qqTnI5O4hw6tEB8FPm9aSR1P+6JmdTmn0aJspm7/t
+         97TYbtCYtw5bui4HJHDjjP1OswjtzQDTVJNqulhLrAGR6WVb2kTfl/s4cp7/ch3JUw9D
+         gUCA==
+X-Gm-Message-State: AOAM531LeBs+7TM8gnLg8aAL65E//bTFyLJAbU4SHy9Ng0vrM8ToO7lc
+        bCoh4dN3J+8CKbEGVv5ESe+nAQ==
+X-Google-Smtp-Source: ABdhPJyk6HWS+uLuAV1Fn7IQFtK1dt2aoEgyN3lkCaQS7r5QtxgXFkshOgNrfrKAaTBDliwuWIE75g==
+X-Received: by 2002:a17:902:8698:b0:158:99d4:6256 with SMTP id g24-20020a170902869800b0015899d46256mr16749805plo.104.1650863167283;
+        Sun, 24 Apr 2022 22:06:07 -0700 (PDT)
+Received: from localhost ([122.171.250.232])
+        by smtp.gmail.com with ESMTPSA id l2-20020a056a0016c200b004f7e3181a41sm10159399pfc.98.2022.04.24.22.06.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 21:07:37 -0700 (PDT)
-Date:   Sun, 24 Apr 2022 21:07:34 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Anjelique Melendez <quic_amelende@quicinc.com>
-Cc:     corbet@lwn.net, sre@kernel.org, robh+dt@kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org,
-        swboyd@chromium.org, linux-doc@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        David Collins <collinsd@codeaurora.org>
-Subject: Re: [PATCH v6 5/5] input: misc: pm8941-pwrkey: simulate missed key
- press events
-Message-ID: <YmYehgw3eUdRAXYp@google.com>
-References: <20220422191239.6271-1-quic_amelende@quicinc.com>
- <20220422191239.6271-6-quic_amelende@quicinc.com>
+        Sun, 24 Apr 2022 22:06:06 -0700 (PDT)
+Date:   Mon, 25 Apr 2022 10:36:04 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Xiaobing Luo <luoxiaobing0926@gmail.com>, tiny.windzz@gmail.com,
+        rafael@kernel.org, wens@csie.org, jernej.skrabec@gmail.com,
+        mripard@kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] cpufreq:fix memory leak in sun50i_cpufreq_nvmem_probe
+Message-ID: <20220425050604.fv4f3s74jmvx6rlp@vireshk-i7>
+References: <20220423151204.2102314-1-luoxiaobing0926@gmail.com>
+ <4ee2421f-79a8-7f4d-f7ef-33f0ccf49337@sholland.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220422191239.6271-6-quic_amelende@quicinc.com>
+In-Reply-To: <4ee2421f-79a8-7f4d-f7ef-33f0ccf49337@sholland.org>
+User-Agent: NeoMutt/20180716-391-311a52
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 12:12:43PM -0700, Anjelique Melendez wrote:
-> From: David Collins <collinsd@codeaurora.org>
+On 23-04-22, 21:46, Samuel Holland wrote:
+> On 4/23/22 10:12 AM, Xiaobing Luo wrote:
+> > --------------------------------------------
+> > unreferenced object 0xffff000010742a00 (size 128):
+> >   comm "swapper/0", pid 1, jiffies 4294902015 (age 1187.652s)
+> >   hex dump (first 32 bytes):
+> >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+> >     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+> >   backtrace:
+> >     [<00000000b4dfebaa>] __kmalloc+0x338/0x474
+> >     [<00000000d6e716db>] sun50i_cpufreq_nvmem_probe+0xc4/0x36c
+> >     [<000000007d6082a0>] platform_probe+0x98/0x11c
+> >     [<00000000c990f549>] really_probe+0x234/0x5a0
+> >     [<000000002d9fecc6>] __driver_probe_device+0x194/0x224
+> >     [<00000000cf0b94fa>] driver_probe_device+0x64/0x13c
+> >     [<00000000f238e4cf>] __device_attach_driver+0xf8/0x180
+> >     [<000000006720e418>] bus_for_each_drv+0xf8/0x160
+> >     [<00000000df4f14f6>] __device_attach+0x174/0x29c
+> >     [<00000000782002fb>] device_initial_probe+0x20/0x30
+> >     [<00000000c2681b06>] bus_probe_device+0xfc/0x110
+> >     [<00000000964cf3bd>] device_add+0x5f0/0xcd0
+> >     [<000000004b9264e3>] platform_device_add+0x198/0x390
+> >     [<00000000fa82a9d0>] platform_device_register_full+0x178/0x210
+> >     [<000000009a5daf13>] sun50i_cpufreq_init+0xf8/0x168
+> >     [<000000000377cc7c>] do_one_initcall+0xe4/0x570
+> > --------------------------------------------
+> > 
+> > if sun50i_cpufreq_get_efuse failed, then opp_tables leak.
+> > Fixes: f328584f7bff ("cpufreq: Add sun50i nvmem based CPU scaling driver")
+> > 
+> > Signed-off-by: Xiaobing Luo <luoxiaobing0926@gmail.com>
 > 
-> The status of the keys connected to the KPDPWR_N and RESIN_N pins
-> is identified by reading corresponding bits in the interrupt real
-> time status register.  If the status has changed by the time that
-> the interrupt is handled then a press event will be missed.
+> Two minor style issues: there should be a space after "cpufreq:" in the commit
+> subject. And the blank line should come before the "Fixes:" tag, not after.
+> Otherwise:
 > 
-> Maintain a last known status variable to find unbalanced release
-> events and simulate press events for each accordingly.
-> 
-> Signed-off-by: David Collins <collinsd@codeaurora.org>
-> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+> Reviewed-by: Samuel Holland <samuel@sholland.org>
 
-Applied, thank you.
+Applied, thanks.
 
 -- 
-Dmitry
+viresh
