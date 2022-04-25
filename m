@@ -2,201 +2,226 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A71F50DBC4
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Apr 2022 10:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8136450DC7D
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Apr 2022 11:26:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239901AbiDYI6p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Apr 2022 04:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
+        id S235590AbiDYJ3h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Apr 2022 05:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231899AbiDYI6j (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Apr 2022 04:58:39 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C3A13D13
-        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 01:55:32 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id l18so1624958ejc.7
-        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 01:55:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IcmGf7R5oIWNJUW6YdAgXljamJfNzgr+F6RCVbOHK3E=;
-        b=lnUMKK+1OUk9P/nASz5GkwqePWMvnfPG+lQJXZnZkCmVP4gQrMoFLGORFc2hEqvtZK
-         sAb2sZQC8Fdx16dteLPlaMVwYzc07q+My98+bFhcwvZ2Tc4T7zlDoq0YuBAr5W1MeCIW
-         4HghiKVjdKGLQp+/LutqOTTazYWT1v2za6tbR00yDrK036UXNGvWVe7auEC2ckESqqwh
-         Dhz9QIdvpTrJvAJ+AMtG21UdzhQVOK56D5HzpmwzLXsAzKxwunKrBjGFXE2VfsxRbUzv
-         cv7XDo2P/2VaJtvuBDJW9PSyA3dqjQ4w/LrPHrbvk3rc+IC4oI6yB0nDHKHRS+j+Ddif
-         hAOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IcmGf7R5oIWNJUW6YdAgXljamJfNzgr+F6RCVbOHK3E=;
-        b=xeURsjzYeBIKWklTUKPiNinPoi/wDWxarvx2OQxp+1rNyo+xu3BiY5iR2gFt/fxUdE
-         J2BHtBq5SsURgFWeLlS7ikiL3cUqz9A8k1kV7982f195uDe680CQN6gvjrqTIF1MMd1K
-         bcx809lL7eovkFsKqMlq55+pG+jIL1vd5QY4tQ6YIN7RgyTYZb6hnlH8X3IBGrXtpqog
-         07VHv9pZvJgKv6W8Hsc6YVJpBkjyRhYL8d619ZWsNTIRPtxWMBTjvdGlavlESVHoWaRh
-         A3+NGmIgvFmNpBWowFqSbMLOu538yrsjpUe4e27bP3e1Ol5OBP8OWhrtd23oMEK3o0sK
-         ZPAg==
-X-Gm-Message-State: AOAM531swvo56/l312pMvwDJInBaX2tSlL/8rHvTe2IfN9LhiRPuTvWG
-        LzFopyUONIkhdU3OiAxoIJjmXA==
-X-Google-Smtp-Source: ABdhPJzVqoCmpWy0gNz3RLiWwx/wLVbIA8e6fPMteVvo0inali36p0hVI/pVtBzsJGwIy/owIIIRYw==
-X-Received: by 2002:a17:906:49d4:b0:6d6:e5ec:9a23 with SMTP id w20-20020a17090649d400b006d6e5ec9a23mr15443661ejv.79.1650876930923;
-        Mon, 25 Apr 2022 01:55:30 -0700 (PDT)
-Received: from [192.168.0.240] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id c5-20020a170906d18500b006ce371f09d4sm3368048ejz.57.2022.04.25.01.55.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 01:55:30 -0700 (PDT)
-Message-ID: <7873f0fa-25c3-191f-5096-3ceb9afd50cc@linaro.org>
-Date:   Mon, 25 Apr 2022 10:55:29 +0200
+        with ESMTP id S234881AbiDYJ3f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Apr 2022 05:29:35 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2068.outbound.protection.outlook.com [40.107.93.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED0913F75;
+        Mon, 25 Apr 2022 02:26:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Stux1L27MTK+Puy43EvOluVQbDRAeNcLIUwFfnZuWaRAOfgvIkrW8OdR9vktkitgoPe1g/zRdafxNUun1+5LgFSLuMwT0zOQVd5kaH/ZNo72pOj3603g4Mz7ZU9CHFhOv2QXR3LZFJ/da2rMQw8wEvtyK7zvn2sOtFOpL1muFPLINMq2xqKHxXLguDQclz2ANoftE3M224Q07cnT1U3hww/yVD96V2fydcRinHUk7Y07P1FyNaWKg6HNBqHocZR7yQvckBaioYsGVUqsla9ZTTWMALOSiBhRZ/BoHVVeFJmK3bBu04qK4rC1LfYSbBeP8FA7YFp49GJONiSvXecTuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NlZcgu2sketGuQtUnOhHCoD5/gw6nMrzUT3ozbRf0yY=;
+ b=oI/nYyNbEBEK9TFwVXVN6tsXKAWZF0IjMMlO7ZMGvGsjYlfzOupxc8v0jsvAzzeruAq0DwoFPp4A05KwYy/OH994Cfm8ra52YGj6tJQ7EpTXQcrVOrdSuKRgZVwYizjxStr3mauXXgc+tw7gfBX6GsfRYmFrwBtexYceAZ3B43GdmGlgs+DytukcQyASbHWxJsB7ZvaubaQKrCc2PlQAxZrnZ0ZT1xeCmUlzNl15uM02RkvCnKjZubwYruVPQh/FHLdtmc1UG3kl3QBV4f75o1qIQM6U9NEQPX+arNkqp2WUPX6LE4cyZSZdlHij48u3bzOpz1VR8YeTTShVLIvP7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.234) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NlZcgu2sketGuQtUnOhHCoD5/gw6nMrzUT3ozbRf0yY=;
+ b=j/nvlRQFFOkP/KY7Gu4dvDWQGi3Jg7aAMfImig0tl1QVNgCS9rheZBvH8X6rhVe1XHIN7Ax7Xrmf/GInpKl4BZ9+6MKrrPoGUXF5iqY+KrNm2gsH9xGIjLSvzc5P+KyTHWcI873NaWz8rq3ptOBvyanY8dEXcjiTqWJyJdjuvFJfIrj8M2LZRR3qs21rPaRu0v7oYzua4AmxXTzm4d239kptwxumovpb6nnLYHGCzf+IYO/VW8oh58jW3BCeC+5sMuFcDqAL6exZbUp8uWR/PI7CrCvN5o6u8gC/czVFQynUdej/cZlqWZBcz2vTa/+hsbY0ExebFl5Pjc2QoSxpPQ==
+Received: from DM5PR07CA0086.namprd07.prod.outlook.com (2603:10b6:4:ae::15) by
+ MW3PR12MB4554.namprd12.prod.outlook.com (2603:10b6:303:55::21) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5186.13; Mon, 25 Apr 2022 09:26:29 +0000
+Received: from DM6NAM11FT065.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:4:ae:cafe::f7) by DM5PR07CA0086.outlook.office365.com
+ (2603:10b6:4:ae::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.13 via Frontend
+ Transport; Mon, 25 Apr 2022 09:26:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.234; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.234) by
+ DM6NAM11FT065.mail.protection.outlook.com (10.13.172.109) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5186.14 via Frontend Transport; Mon, 25 Apr 2022 09:26:28 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL101.nvidia.com
+ (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Mon, 25 Apr
+ 2022 09:26:27 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 25 Apr
+ 2022 02:26:27 -0700
+Received: from nvidia-abhsahu-1.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server id 15.2.986.22 via Frontend
+ Transport; Mon, 25 Apr 2022 02:26:22 -0700
+From:   Abhishek Sahu <abhsahu@nvidia.com>
+To:     Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+CC:     Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        Abhishek Sahu <abhsahu@nvidia.com>
+Subject: [PATCH v3 0/8] vfio/pci: power management changes
+Date:   Mon, 25 Apr 2022 14:56:07 +0530
+Message-ID: <20220425092615.10133-1-abhsahu@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V4 01/14] dt-bindings: cpufreq: mediatek: Add MediaTek CCI
- property
-Content-Language: en-US
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com
-Cc:     jia-wei.chang@mediatek.com, roger.lu@mediatek.com,
-        hsinyi@google.com, khilman@baylibre.com,
-        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
- <20220422075239.16437-2-rex-bc.chen@mediatek.com>
- <f2e5a34b-ed02-91a1-bc7b-fecaa95e227e@linaro.org>
- <811bf944-a230-ab9b-583a-840e57af8a1e@linaro.org>
- <28f75ac2995b116af9b2accf760786d1d1798c93.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <28f75ac2995b116af9b2accf760786d1d1798c93.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d51f43c5-bda5-4cf2-1d50-08da269dad4f
+X-MS-TrafficTypeDiagnostic: MW3PR12MB4554:EE_
+X-Microsoft-Antispam-PRVS: <MW3PR12MB4554B3FF5DE2BDF12B741523CCF89@MW3PR12MB4554.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WATo7u+JwIpfI+y5beKnLxuT3BM4IGylk678aPxKAjCL3vAaWlp4p2PLg3j27hjUAq8gwXsiKaMRpkzza4/FqIyp0byrzDJ89e0AHbGMoC4KC4YnoRfY2OHF0aOkZ6IqWgRqAfxaWvzhM+gpzwupe9e504dXBi4kijyixMMdEGsmMcquQAgMQqt55+B2uAIDhuMedmxiA2KNUy+LQL45qYPyYK0y1LWtOAZcogdC3okRUiqlYUojnDsEWzSqZOHXcX2zwOYUQ1bU2ujaJzgW6ubsAdssXe2vc1THe/MqSrU2fUP0V/L59DNXYPJ+vdGIjrV0GXWhHh1J58NaudHI3tyWVboRCpYAGwt81vi0x8i4P0XzTZLRb09l6BDM4bVgIdcE5x4B1f8yE6qkWQJtHNfEEetTClDQ8vrtqbszesRi+xb39U2glObLz1cq2cKlK1/YfaXUnjPq+Jka056jOw25Ny2+1Tfjhbh7JytPFowt/SaPs/UYG4wcqlpxRtCqOMtt3f8d+JlvCPtG2algUlbAfyiTGatmjJhVf6lmyNrBFb0MN46J2Yw4Vn3Uu1kY4/2KvsUY7ZHrepwr7/4C7dYsV4JZlxOHDenwjv9XJDaO8vGARSKbrGePZFSWLABFx4hx7aGLTB/ITaZGhqt+EFw4WQyhYwJNVBK7Yr91MjRhN5t7nEAX0ZgvgvE2473QCO4AItYju+7wKJ2FY/QQ7F8n9SeCvZhUw1G4PX8+VLo1yR3j+jgBXJAUU9ivuGHKUd7gzOjSho3D0qCw8lWh1H5/JztIfa/6tMNSI1oHC3OP7PUrwyHUV9vT7IRNe984ZISaJ2F6eb8ECE/5Jc9dUQ==
+X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(316002)(54906003)(110136005)(2906002)(70206006)(40460700003)(7696005)(47076005)(1076003)(107886003)(6666004)(508600001)(82310400005)(86362001)(966005)(36860700001)(356005)(7416002)(70586007)(81166007)(83380400001)(36756003)(5660300002)(4326008)(8676002)(186003)(26005)(8936002)(426003)(336012)(2616005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Apr 2022 09:26:28.4304
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d51f43c5-bda5-4cf2-1d50-08da269dad4f
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT065.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4554
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25/04/2022 08:19, Rex-BC Chen wrote:
-> On Fri, 2022-04-22 at 19:34 +0200, Krzysztof Kozlowski wrote:
->> On 22/04/2022 19:26, Krzysztof Kozlowski wrote:
->>> On 22/04/2022 09:52, Rex-BC Chen wrote:
->>>> MediaTek Cache Coherent Interconnect (CCI) uses software devfreq
->>>> module
->>>> for scaling clock frequency and adjust voltage.
->>>> The phandle could be linked between CPU and MediaTek CCI for some
->>>> MediaTek SoCs, like MT8183 and MT8186.
->>>> Therefore, we add this property in cpufreq-mediatek.txt.
->>>>
->>>> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
->>>> ---
->>>>  .../devicetree/bindings/cpufreq/cpufreq-mediatek.txt         | 5
->>>> +++++
->>>>  1 file changed, 5 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-
->>>> mediatek.txt b/Documentation/devicetree/bindings/cpufreq/cpufreq-
->>>> mediatek.txt
->>>> index b8233ec91d3d..3387e1e2a2df 100644
->>>> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-
->>>> mediatek.txt
->>>> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-
->>>> mediatek.txt
->>>> @@ -20,6 +20,11 @@ Optional properties:
->>>>  	       Vsram to fit SoC specific needs. When absent, the
->>>> voltage scaling
->>>>  	       flow is handled by hardware, hence no software "voltage
->>>> tracking" is
->>>>  	       needed.
->>>> +- mediatek,cci:
->>>> +	MediaTek Cache Coherent Interconnect (CCI) uses the software
->>>> devfreq module to
->>>> +	scale the clock frequency and adjust the voltage.
->>>
->>> Devfreq is a SW mechanism, it should not be part of bindings
->>> description.
-> 
-> Hello Krzysztof,
-> 
-> The reason we want to get the "mediatek,cci":
-> We need to check the mediatek cci is ready and probed done.
-> Because cpufreq and mediatek cci are sharing the same regulator in
-> little core cpus.
-> Therefore, to prevent high frequency low voltage issue, we need to make
-> sure the mediatek cci is ready.
-> 
-> If mediatek cci is ready, cpufreq and mediatek cci will register the
-> same regulator and from regulator's implementation, if there are two
-> device using the same regulator, the framwork will make sure it's using
-> the max voltage.
+Currently, there is very limited power management support available
+in the upstream vfio-pci driver. If there is no user of vfio-pci device,
+then it will be moved into D3Hot state. Similarly, if we enable the
+runtime power management for vfio-pci device in the guest OS, then the
+device is being runtime suspended (for linux guest OS) and the PCI
+device will be put into D3hot state (in function
+vfio_pm_config_write()). If the D3cold state can be used instead of
+D3hot, then it will help in saving maximum power. The D3cold state can't
+be possible with native PCI PM. It requires interaction with platform
+firmware which is system-specific. To go into low power states
+(including D3cold), the runtime PM framework can be used which
+internally interacts with PCI and platform firmware and puts the device
+into the lowest possible D-States. This patch series registers the
+vfio-pci driver with runtime PM framework and uses the same for moving
+the physical PCI device to go into the low power state.
 
-Thanks for explanation. The property should be described with what you
-said here. The property and description should match hardware, so there
-is no place for devfreq. Instead mention that power rail is shared or
-voltage regulators are common.
+The current PM support was added with commit 6eb7018705de ("vfio-pci:
+Move idle devices to D3hot power state") where the following point was
+mentioned regarding D3cold state.
 
-However I am not sure if you solved your problem... see below:
+ "It's tempting to try to use D3cold, but we have no reason to inhibit
+  hotplug of idle devices and we might get into a loop of having the
+  device disappear before we have a chance to try to use it."
 
-> For example:
-> mediatek cci set 1.2V originally. When cpufreq want to adjust lower
-> frequency adn set voltage to 1.0V.
-> The framework will remain using 1.2V to prevent crash of mediatek cci.
+With the runtime PM, if the user want to prevent going into D3cold then
+/sys/bus/pci/devices/.../d3cold_allowed can be set to 0 for the
+devices where the above functionality is required instead of
+disallowing the D3cold state for all the cases.
 
-No, regulator_set_voltage() for proc_reg says:
-"NOTE: If the regulator is shared between several devices then the lowest
- request voltage that meets the system constraints will be used."
+Since D3cold state can't be achieved by writing PCI standard PM
+config registers, so a feature has been added in DEVICE_FEATURE IOCTL
+for low power related handling, which changes the PCI
+device from D3hot to D3cold state and then D3cold to D0 state.
+The hypervisors can implement virtual ACPI methods. For example,
+in guest linux OS if PCI device ACPI node has _PR3 and _PR0 power
+resources with _ON/_OFF method, then guest linux OS makes the _OFF call
+during D3cold transition and then _ON during D0 transition. The
+hypervisor can tap these virtual ACPI calls and then do the D3cold
+related IOCTL in vfio driver.
 
-Not the highest. So when your devfreq and cpufreq boots, calling
-regulator_set_voltage will still cause high frequency and low voltage.
+The BAR access needs to be disabled if device is in D3hot state.
+Also, there should not be any config access if device is in D3cold
+state. For SR-IOV, the PF power state should be higher than VF's power
+state.
 
-> 
-> Therefore, we need to confirm the mediatek cci is ready and register
-> the regulator.
->
->>>
->>>> +	For details, please refer to
->>>> +	Documentation/devicetree/bindings/interconnect/mediatek,cci.yam
->>>> l
->>>
->>> Since the file does not exist, I have troubles reviewing it. First
->>> of
->>> all, you already have "mediatek,cci-control" property in DT, so why
->>> using different name?
-> 
-> I am not sure where is "mediatek,cci-control". I think this name is not
-> used before.
-> 
+* Changes in v3
 
-Documentation/devicetree/bindings/net/mediatek-net.txt
+- Rebased patches on v5.18-rc3.
+- Marked this series as PATCH instead of RFC.
+- Addressed the review comments given in v2.
+- Removed the limitation to keep device in D0 state if there is any
+  access from host side. This is specific to NVIDIA use case and
+  will be handled separately.
+- Used the existing DEVICE_FEATURE IOCTL itself instead of adding new
+  IOCTL for power management.
+- Removed all custom code related with power management in runtime
+  suspend/resume callbacks and IOCTL handling. Now, the callbacks
+  contain code related with INTx handling and few other stuffs and
+  all the PCI state and platform PM handling will be done by PCI core
+  functions itself.
+- Add the support of wake-up in main vfio layer itself since now we have
+  more vfio/pci based drivers.
+- Instead of assigning the 'struct dev_pm_ops' in individual parent
+  driver, now the vfio_pci_core tself assigns the 'struct dev_pm_ops'. 
+- Added handling of power management around SR-IOV handling.
+- Moved the setting of drvdata in a separate patch.
+- Masked INTx before during runtime suspended state.
+- Changed the order of patches so that Fix related things are at beginning
+  of this patch series.
+- Removed storing the power state locally and used one new boolean to
+  track the d3 (D3cold and D3hot) power state 
+- Removed check for IO access in D3 power state.
+- Used another helper function vfio_lock_and_set_power_state() instead
+  of touching vfio_pci_set_power_state().
+- Considered the fixes made in
+  https://lore.kernel.org/lkml/20220217122107.22434-1-abhsahu@nvidia.com
+  and updated the patches accordingly.
 
->>>
->>> Second, it looks like you want to put devfreq into bindings instead
->>> of
->>> using proper interconnect bindings.
->>
->> Actually judging by the driver this looks like some
->> device-boot-time-ordering, so I wonder whether this is a proper way
->> to
->> express it.
-> 
-> Yes, we need to get the mediatek cci node and let cpufreq and mediatek
-> cci link succefully. In that case, we can know the mediatek cci is
-> ready. And we can set the voltage using the regulator framwork.
-> 
-> [1]: 
-> https://patchwork.kernel.org/project/linux-mediatek/patch/20220422075239.16437-11-rex-bc.chen@mediatek.com/
+* Changes in v2
+  (https://lore.kernel.org/lkml/20220124181726.19174-1-abhsahu@nvidia.com)
 
-Yes, I see the use case. I am not convinced yet whether this is proper
-approach...
+- Rebased patches on v5.17-rc1.
+- Included the patch to handle BAR access in D3cold.
+- Included the patch to fix memory leak.
+- Made a separate IOCTL that can be used to change the power state from
+  D3hot to D3cold and D3cold to D0.
+- Addressed the review comments given in v1.
 
+* v1
+  https://lore.kernel.org/lkml/20211115133640.2231-1-abhsahu@nvidia.com/
 
-Best regards,
-Krzysztof
+Abhishek Sahu (8):
+  vfio/pci: Invalidate mmaps and block the access in D3hot power state
+  vfio/pci: Change the PF power state to D0 before enabling VFs
+  vfio/pci: Virtualize PME related registers bits and initialize to zero
+  vfio/pci: Add support for setting driver data inside core layer
+  vfio/pci: Enable runtime PM for vfio_pci_core based drivers
+  vfio: Invoke runtime PM API for IOCTL request
+  vfio/pci: Mask INTx during runtime suspend
+  vfio/pci: Add the support for PCI D3cold state
+
+ .../vfio/pci/hisilicon/hisi_acc_vfio_pci.c    |   4 +-
+ drivers/vfio/pci/mlx5/main.c                  |   3 +-
+ drivers/vfio/pci/vfio_pci.c                   |   4 +-
+ drivers/vfio/pci/vfio_pci_config.c            |  63 ++-
+ drivers/vfio/pci/vfio_pci_core.c              | 358 +++++++++++++++---
+ drivers/vfio/pci/vfio_pci_intrs.c             |   6 +-
+ drivers/vfio/pci/vfio_pci_rdwr.c              |   6 +-
+ drivers/vfio/vfio.c                           |  44 ++-
+ include/linux/vfio_pci_core.h                 |  12 +-
+ include/uapi/linux/vfio.h                     |  18 +
+ 10 files changed, 445 insertions(+), 73 deletions(-)
+
+-- 
+2.17.1
+
