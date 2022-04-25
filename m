@@ -2,80 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73FBA50D764
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Apr 2022 05:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECBE850D794
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Apr 2022 05:34:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240474AbiDYDNx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 24 Apr 2022 23:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
+        id S237143AbiDYDhC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 24 Apr 2022 23:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239572AbiDYDNd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Apr 2022 23:13:33 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F2051334
-        for <linux-pm@vger.kernel.org>; Sun, 24 Apr 2022 20:10:28 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id g9so12273135pgc.10
-        for <linux-pm@vger.kernel.org>; Sun, 24 Apr 2022 20:10:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=vETeJvQjX0RH1IGmgZeN4JIryPyrxoAwCmbGuC0BOx0=;
-        b=Jmt8TQIIptvoAEOVITJkxviHnCha3FLobEnNYRwKrCE7YNvksMnB9gGc3HGfW2k+Dm
-         vU40K9ksXrqP8hBOToCEixzDTkB3Mr8oeUCsB+fgFQb8siFyIb4gGdqHEKArwIjGHpif
-         xIyC3KAy0EyMsY4eyiG6Y4dOMf/R60tpRWyJAxXJrRTPlmNC1RMt7zgqa4N4LBa3ALXG
-         A/CeHlJbg6ZfgSiIXWGkSvEmpNQLwt0oDEUl6j53VA0BLCGZMW/qhSDFXSkRDnmb+5Iv
-         +um/scm1ZhXoAt8JRQoGrInvFNWycjW45iK8CLHli65DRY1SKeLqPtSEx159MX8J8T49
-         O/9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=vETeJvQjX0RH1IGmgZeN4JIryPyrxoAwCmbGuC0BOx0=;
-        b=qqydVnCQImFMA8iDt03qqmcJ1j683Iysxtm49pL5r9uaajTbQxRQ3gWWEMX089Nc0E
-         F3DZFZYeQrJdEyFp+GCe33zBpifYaoG5FJtR71Q6VCRFeath8Xupswi1Ni1boq3vEzku
-         55DqLcalLB5Bv+96vtxc6wN59+sSJEHw3UsXZj9sE0leBQqUdGLfIRU0eftqrM60/WPQ
-         /27drZF0AX1U9Wr3QEiUIN3qQy6nZTXNariTMVMo6pq3JsCBHydueQ5cCqtX7syWbKIM
-         5HRSA7byfAjwvGgUdEXgrVmTAE/AwCbHf67/Sa3m0PZ33f52AQtw3+cMmhliHtWOL6SU
-         Rxrw==
-X-Gm-Message-State: AOAM5311JVGPEavfEr9wwg6qmSXKDHQOo0MezZ1sbm2kK2TDrBQ2CGCW
-        bnzCtmgwFwK6bk/nKV4uDH6NHnnF29asPQ==
-X-Google-Smtp-Source: ABdhPJzeUPYwdGHfiI4ExfiZee11IlcChs/CBZ/u64f+VZt5b/UCpOtFu1EcibqHAbA0/ZUy2GZehw==
-X-Received: by 2002:a65:6e0e:0:b0:399:26d7:a224 with SMTP id bd14-20020a656e0e000000b0039926d7a224mr13375257pgb.437.1650856227663;
-        Sun, 24 Apr 2022 20:10:27 -0700 (PDT)
-Received: from localhost ([122.171.250.232])
-        by smtp.gmail.com with ESMTPSA id k198-20020a633dcf000000b003aa9116ba17sm8023960pga.35.2022.04.24.20.10.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Apr 2022 20:10:27 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 08:40:25 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v3] cpufreq: qcom-cpufreq-hw: Clear dcvs interrupts
-Message-ID: <20220425031024.wzfp6cajlmpkgjcz@vireshk-i7>
-References: <20220407200919.3054189-1-vladimir.zapolskiy@linaro.org>
- <c2af9682-f773-8530-9262-edea1dbe595a@linaro.org>
+        with ESMTP id S234525AbiDYDhB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 24 Apr 2022 23:37:01 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE10D2CCB0;
+        Sun, 24 Apr 2022 20:33:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=+1TvpqD80KcqcXO4DlDpD3nqSxzpIXNoYfaZOHv//ro=; b=QiiJXHVzLz+WIEk6nU0Jptq3Vy
+        yk00uoEjWxSX9r5m4PtrXv9AS4SswnMqoEIov81nz1PAF4h7x6l0xNEK6jqv34b1qxdZvToigLGzT
+        yDUtrOjGqooxxqeAyKgRb/CPISFdwo7la27/bbYUlhEKScPjoE/TnYRmO/GyPYylJ/IGer9sn9gBc
+        V4+msFcayz+1hmDJMTExBmnXPJU45wNZTaZGzl+TaxcB39oO5W8Rr5Rw08Ra1kmcVJqfzNmYYICLL
+        3mVZHMe4cX+OgGT6C0CX1aquaraQVhK2XrPNinErsoTVr0O1o5i3g0o0E0OxKchEWw1SNix/tRa+4
+        ygvfCDjw==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nipU4-007ysB-HY; Mon, 25 Apr 2022 03:33:56 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <treding@nvidia.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org
+Subject: [PATCH] cpuidle: tegra: restrict to ARCH_SUSPEND_POSSIBLE
+Date:   Sun, 24 Apr 2022 20:33:55 -0700
+Message-Id: <20220425033355.6281-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c2af9682-f773-8530-9262-edea1dbe595a@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-04-22, 22:42, Vladimir Zapolskiy wrote:
-> I believe this fix of a critical bug is intended to be included into the next
-> release, could you please share your review? Thank you in advance.
+Since 'select' does not follow any dependency chain (ARM_CPU_SUSPEND
+in this case), make ARM_TEGRA_CPUIDLE depend on ARCH_SUSPEND_POSSIBLE,
+just as ARM_CPU_SUSPEND does.
 
-I was waiting for Bjorn to Ack it.
+Fix this kconfig warning:
 
--- 
-viresh
+WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
+  Depends on [n]: ARCH_SUSPEND_POSSIBLE [=n]
+  Selected by [y]:
+  - ARM_TEGRA_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_TEGRA [=n] || COMPILE_TEST [=y]) && !ARM64 && MMU [=y]
+
+and subsequent build errors:
+
+arm-linux-gnueabi-ld: arch/arm/kernel/sleep.o: in function `__cpu_suspend':
+(.text+0x68): undefined reference to `cpu_sa110_suspend_size'
+arm-linux-gnueabi-ld: arch/arm/kernel/suspend.o: in function `__cpu_suspend_save':
+suspend.c:(.text+0x478): undefined reference to `cpu_sa110_do_suspend'
+arm-linux-gnueabi-ld: suspend.c:(.text+0x4e8): undefined reference to `cpu_sa110_do_resume'
+
+Fixes: faae6c9f2e68 ("cpuidle: tegra: Enable compile testing")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Dmitry Osipenko <digetx@gmail.com>
+Cc: Thierry Reding <treding@nvidia.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: linux-pm@vger.kernel.org
+---
+ drivers/cpuidle/Kconfig.arm |    1 +
+ 1 file changed, 1 insertion(+)
+
+--- a/drivers/cpuidle/Kconfig.arm
++++ b/drivers/cpuidle/Kconfig.arm
+@@ -101,6 +101,7 @@ config ARM_MVEBU_V7_CPUIDLE
+ config ARM_TEGRA_CPUIDLE
+ 	bool "CPU Idle Driver for NVIDIA Tegra SoCs"
+ 	depends on (ARCH_TEGRA || COMPILE_TEST) && !ARM64 && MMU
++	depends on ARCH_SUSPEND_POSSIBLE
+ 	select ARCH_NEEDS_CPU_IDLE_COUPLED if SMP
+ 	select ARM_CPU_SUSPEND
+ 	help
