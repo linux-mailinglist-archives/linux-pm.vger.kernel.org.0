@@ -2,103 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6252E50D95E
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Apr 2022 08:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3695D50D9DE
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Apr 2022 09:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237416AbiDYGYO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Apr 2022 02:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42680 "EHLO
+        id S232849AbiDYHJd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Apr 2022 03:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241443AbiDYGYI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Apr 2022 02:24:08 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2C13AA63;
-        Sun, 24 Apr 2022 23:20:52 -0700 (PDT)
-X-UUID: 7d7dd1a2c46c45448383c19f538b1ff3-20220425
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:55a30fbe-1aa7-41b0-9a24-5ac3f53f736c,OB:0,LO
-        B:0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:53
-X-CID-INFO: VERSION:1.1.4,REQID:55a30fbe-1aa7-41b0-9a24-5ac3f53f736c,OB:0,LOB:
-        0,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:53
-X-CID-META: VersionHash:faefae9,CLOUDID:000ffdef-06b0-4305-bfbf-554bfc9d151a,C
-        OID:5c2a2e49368b,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,Fi
-        le:nil,QS:0,BEC:nil
-X-UUID: 7d7dd1a2c46c45448383c19f538b1ff3-20220425
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1765017538; Mon, 25 Apr 2022 14:20:48 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 25 Apr 2022 14:20:47 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 25 Apr
- 2022 14:20:47 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 25 Apr 2022 14:20:46 +0800
-Message-ID: <88b2103944768732ab813c294bce88097321f501.camel@mediatek.com>
-Subject: Re: [PATCH V4 00/14] cpufreq: mediatek: Cleanup and support MT8183
- and MT8186
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-        <matthias.bgg@gmail.com>
-CC:     <jia-wei.chang@mediatek.com>, <roger.lu@mediatek.com>,
-        <hsinyi@google.com>, <khilman@baylibre.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 25 Apr 2022 14:20:46 +0800
-In-Reply-To: <af95f353-c91d-844e-3bc1-e052f7d16e54@linaro.org>
-References: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
-         <af95f353-c91d-844e-3bc1-e052f7d16e54@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S233551AbiDYHJa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Apr 2022 03:09:30 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A251CB09;
+        Mon, 25 Apr 2022 00:06:27 -0700 (PDT)
+Received: from mail-wr1-f45.google.com ([209.85.221.45]) by
+ mrelayeu.kundenserver.de (mreue010 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MfHUx-1oOYTS30uZ-00gt6P; Mon, 25 Apr 2022 09:06:25 +0200
+Received: by mail-wr1-f45.google.com with SMTP id s21so4716346wrb.8;
+        Mon, 25 Apr 2022 00:06:25 -0700 (PDT)
+X-Gm-Message-State: AOAM530j6De+bIxCCXJz6PoFz4kd9jTf2VDFzI+BmlUb5TsDgfIf8QGj
+        +X4hJfyaPcPvD1dgEq2g39AJo/Ehkkt1deanA1E=
+X-Google-Smtp-Source: ABdhPJxxp6erGvmfRbmUQS+IHGGJZckdjwT0Z2vmr9ym31iDDJlb7avUOKw/eqT13DvKvO7wLaoPCBQVv9Zw+tbmHZ4=
+X-Received: by 2002:a5d:6da5:0:b0:20a:8805:6988 with SMTP id
+ u5-20020a5d6da5000000b0020a88056988mr12416992wrs.317.1650870385330; Mon, 25
+ Apr 2022 00:06:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220425033355.6281-1-rdunlap@infradead.org>
+In-Reply-To: <20220425033355.6281-1-rdunlap@infradead.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 25 Apr 2022 09:06:09 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a12O-Qz5PTr_nMYV+aRcxav1DD1Gk_a865QOSbga4jUKQ@mail.gmail.com>
+Message-ID: <CAK8P3a12O-Qz5PTr_nMYV+aRcxav1DD1Gk_a865QOSbga4jUKQ@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: tegra: restrict to ARCH_SUSPEND_POSSIBLE
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <treding@nvidia.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:24OFbOKd3D+Q/CoiL5rhaDXigIX8D4JOaRH8PjOycoIup+BGqOe
+ JAMSCXB+Cpuu6iG3HXX2i785OCjpQMtnGbRT+eMCTN141xLRipFvRk0xG3RdUVJev8zlZNy
+ t0vJkAN31VTtv7eTM1LK16kyYER7mt3Ts+J63rXHlhlGw48k0BVATvQthM6aNqUBfUIKJZH
+ cV2Chw+ZW6r4jqPH8P25g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:px5XtvKeHGY=:2q4Hqx388DMiEkVaNipNGU
+ ElnZ+ZviBDDWHRmxR3ZgP/7B7MRb/lCbI8xiAvjNIHMQdeHa8jikiqW0Y0AZZKa2A37D/gy98
+ xPshJ2SxJpSRXj6B7Gjd4WA819pQZ6S30eo7u5rMpYL1rIThKMvKqD2pziMWXAyuQq3M29XNa
+ YQcYpoUey4m5mytYPV0KBG9NHAxxOG2Npk02cLpb3Qa4vJ0uJSWzW5sdBBP+SFs7l4wgVLuKw
+ WLCof5WVz8QlbKbpibajln/y8LXoY40y192TK2yWbQPIoAZanIIdHE75DCggfo/zxx5+TlrS/
+ fQUCH13dtXE5zItTOhsPerBoQgDpRvS0Sn98QRDuc4aHn64J3QQe+cvP3nqEaXkcrXNdtaIdc
+ hnzxo+ADRnIRO3HEOe2mM7249rk98seuCM+NzMBmlZjQhwJJHBdoOWgrHV3fpg+f9n9A5fQUK
+ 8cBNeO3sApqoIwKvBohSMcE42eZgCrx5w+Xfzuc9v/m0if265PAk954BERYchzKtC0J9TlZ57
+ GFcxT1YMXAJIu3r68nZJ6nJ9ARLlrxsm0DpmBQYVbSvG7IBNAsbc/SOxlSTg0afeB/VxP5Ogf
+ hC0qpwuUfVc+W2+g8cIIbByGmEhN8kHK3S9W/4Qq96q0BOcz6v+4n/RvWiG6x7gLHq8pQ/rDI
+ e/Az5zecRdEzQwTme+f698ceZ4tdgtw1qKa11UGpdzBvgBsiHjX5AXF0M1dbQ+W3T1cVOFFU6
+ OWWu6tzTSQJbqbzuF9mC+iCiqk866yfXc89ICFUlHGDN9dLP8cIRxzA/NFB3kIO0GJhD+mTxy
+ s/rkypBS4VqfAvPtyTltf0qUVCqQ9kT5S1IkHHdH77FrKzSJKw=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 2022-04-22 at 19:23 +0200, Krzysztof Kozlowski wrote:
-> On 22/04/2022 09:52, Rex-BC Chen wrote:
-> > 
-> > Reference series:
-> > [1]: V1 of this series is present by Jia-Wei Chang.
-> >      message-id:20220307122151.11666-1-jia-wei.chang@mediatek.com
-> > 
-> > [2]: The MediaTek CCI devfreq driver is introduced in another
-> > series.
-> >      message-id:20220408052150.22536-1-johnson.wang@mediatek.com
-> > 
-> > [3]: The MediaTek SVS driver is introduced in another series.
-> >      message-id:20220221063939.14969-1-roger.lu@mediatek.com
-> 
-> These are not proper links. Please use lore references.
-> 
-> 
-> Best regards,
-> Krzysztof
+On Mon, Apr 25, 2022 at 5:33 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> Since 'select' does not follow any dependency chain (ARM_CPU_SUSPEND
+> in this case), make ARM_TEGRA_CPUIDLE depend on ARCH_SUSPEND_POSSIBLE,
+> just as ARM_CPU_SUSPEND does.
+>
+> Fix this kconfig warning:
+>
+> WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
+>   Depends on [n]: ARCH_SUSPEND_POSSIBLE [=n]
+>   Selected by [y]:
+>   - ARM_TEGRA_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_TEGRA [=n] || COMPILE_TEST [=y]) && !ARM64 && MMU [=y]
+>
+> and subsequent build errors:
+>
+> arm-linux-gnueabi-ld: arch/arm/kernel/sleep.o: in function `__cpu_suspend':
+> (.text+0x68): undefined reference to `cpu_sa110_suspend_size'
+> arm-linux-gnueabi-ld: arch/arm/kernel/suspend.o: in function `__cpu_suspend_save':
+> suspend.c:(.text+0x478): undefined reference to `cpu_sa110_do_suspend'
+> arm-linux-gnueabi-ld: suspend.c:(.text+0x4e8): undefined reference to `cpu_sa110_do_resume'
+>
+> Fixes: faae6c9f2e68 ("cpuidle: tegra: Enable compile testing")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Dmitry Osipenko <digetx@gmail.com>
+> Cc: Thierry Reding <treding@nvidia.com>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: linux-pm@vger.kernel.org
 
-Hello Krzysztof,
+Looks correct to me,
 
-I will use lore references in next version.
-Thanks.
-
-BRs,
-Rex
-
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
