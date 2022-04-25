@@ -2,121 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0246050EBBA
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 00:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C6A350EC8C
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 01:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236419AbiDYWYv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Apr 2022 18:24:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
+        id S232117AbiDYXX5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Apr 2022 19:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343621AbiDYVsQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Apr 2022 17:48:16 -0400
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF53E23BEF;
-        Mon, 25 Apr 2022 14:45:10 -0700 (PDT)
-Received: by mail-oi1-f177.google.com with SMTP id z8so18661916oix.3;
-        Mon, 25 Apr 2022 14:45:10 -0700 (PDT)
+        with ESMTP id S237647AbiDYXXr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Apr 2022 19:23:47 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C1B193EB
+        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 16:20:42 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 4so6215763ljw.11
+        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 16:20:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xCteESL2qJwjAahA4hmyXY9OLMALrlUpGNGW2t2pRDI=;
+        b=HT1uPZp7s66zomDLhHrQyv5sHuehalu7Po5n5ZQV7yolsfoy8auMhWPK73hglXrLs2
+         zr+cR/oLtKkYFbgxtqch5NzgxtnB9wFopVpNTgHIbeqsBNFNZlUkN37lI9dHvbki2tST
+         bIL7CrC+wlle5FUtEkt7f48OSU8OUNQe+XWl3mMlUztwS4GabtBmdR0sYooY7nM1ij/E
+         do/1WlRsK2TjiEFBKYtNgVc3uIL13DdyfKbA7v9LB1/q6HxlDld6QuTw0OOoCh/6+9Ay
+         Av3grWD8jqLDcM3bCOKAunWBGjkQAR5+DUeou3Qx6c5dLcFL/lE0Ssfg28wA3WRGdl6g
+         fgVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VZMstEGR59a6WeLJcSDZzBTL969MVFol/7kqyWovv4c=;
-        b=obXWrnqaFu91kMdRfKfdulQkxPwilw0ID+21Ett64qWaxPNy2uxP56wO5XJYositR4
-         JYKRdFty/787G2glyiFp7CU3t5wNUcGCiuiM8sEgOty3FvrKKaGmppIQTRMmjSJVUkfl
-         r/3YRJnB7JsuJz1axlyrYmzwhNLWW3Qqpc4UJu+1WXwdw1xstSP5exDmt9o783RMywPa
-         cux8yPkniuL3yrj10Gw8dl1br+4z+rWQh93G32YsX7XROWQ8k8Y28PnaqdCBlZgPKwKw
-         O/QSvb6YB+6OCESeRpjGLzQKUE2gbHy2H4ieQCD7iFYgpH2yZos3w9YOjuA3850z8QAy
-         fcDQ==
-X-Gm-Message-State: AOAM530UFRAaIHYtUyu6K+J4lfs68JMO/6ZzCPODjR3QrlpPiS3iVkmC
-        Z3Wt2+GDSOIWX3GoVeYQUg==
-X-Google-Smtp-Source: ABdhPJy/rpBx/iJkVWRVcZNGd8eAyl3X6OyANl4MITXioNcKwEoeJ12MJdt0640bsxJiI2ms7mVrhw==
-X-Received: by 2002:a05:6808:2388:b0:325:e69:4ec5 with SMTP id bp8-20020a056808238800b003250e694ec5mr5220386oib.10.1650923110270;
-        Mon, 25 Apr 2022 14:45:10 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x64-20020acae043000000b003222bb3dfb0sm4208670oig.36.2022.04.25.14.45.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 14:45:09 -0700 (PDT)
-Received: (nullmailer pid 344104 invoked by uid 1000);
-        Mon, 25 Apr 2022 21:45:09 -0000
-Date:   Mon, 25 Apr 2022 16:45:08 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Anjelique Melendez <quic_amelende@quicinc.com>
-Cc:     dmitry.torokhov@gmail.com, corbet@lwn.net, sre@kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org,
-        swboyd@chromium.org, linux-doc@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        David Collins <collinsd@quicinc.com>,
-        David Collins <quic_collinsd@quicinc.com>
-Subject: Re: [PATCH v6] dt-bindings: power: reset: qcom-pon: update "reg"
- property details
-Message-ID: <YmcWZLp2X8UYOVas@robh.at.kernel.org>
-References: <20220422191239.6271-1-quic_amelende@quicinc.com>
- <20220422191239.6271-2-quic_amelende@quicinc.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xCteESL2qJwjAahA4hmyXY9OLMALrlUpGNGW2t2pRDI=;
+        b=20QDei0ieCl8Eq99wRl7q8EYZcKB69kxJMSWBqsjvM7ca9CtuFbEWGhSG3JYiIVlm9
+         cv0SVBwcgA3CnIPqWZrAVqCWw0oK96zV/OaMig6ocakrbVLz+PKAbRtpWJS2DQwmO7sW
+         XJUG/Z/RVBdMsMP40SXAwNJJt0epdHYxxPxBD/qUHxWU9OhHShUUK8Sv2/NuYfd4Xems
+         7E1+hWrRXxhWQB2FpCGDW6ag/i1PbyHjR7g4j5QenC38EP89SaZDOmRZjLyvh74FgqP4
+         2oygoSlGqW3/R/Cc5hq0xaxvbcmPAGfbfU9DwfpOHBdqqzkutAwbPs5kP6FCxusDQyY9
+         cTQA==
+X-Gm-Message-State: AOAM5328HLLXw8MbnwA8/lzflwRRNTcPrpb4+IR3YVydwsLp/icH0MVZ
+        4VmiOpLcIMczZx1r1jiGFBUYdgyw+zbVFcN074zmTzqbLtE=
+X-Google-Smtp-Source: ABdhPJzoJOs8Y+tExvebbu0gN8AOzNrZusnpf2jwoelPtNoR3MzIxmK6nHZZScRXDF2CT6E8hE/VvvN4SyHZZLQPlFI=
+X-Received: by 2002:a2e:9b57:0:b0:24f:12ea:fd26 with SMTP id
+ o23-20020a2e9b57000000b0024f12eafd26mr3796665ljj.352.1650928840302; Mon, 25
+ Apr 2022 16:20:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220422191239.6271-2-quic_amelende@quicinc.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20220415133356.179706384@linutronix.de> <005001d85413$75e5dce0$61b196a0$@telus.net>
+ <CAJZ5v0jf-NGa4-xaNaxehkLGPVqwhZrUhLXw2cJ1avtjgT5yPA@mail.gmail.com>
+ <87bkwwvkwa.ffs@tglx> <005501d85503$3b00ca40$b1025ec0$@telus.net> <87pml5180p.ffs@tglx>
+In-Reply-To: <87pml5180p.ffs@tglx>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Mon, 25 Apr 2022 16:20:30 -0700
+Message-ID: <CAAYoRsUKCnQy6aqVp=-n81tOh3b+o0hss7ydwDHcO_AL_rNWoA@mail.gmail.com>
+Subject: Re: [patch 00/10] x86/cpu: Consolidate APERF/MPERF code
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dsmythies <dsmythies@telus.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Apr 22, 2022 at 12:12:38PM -0700, Anjelique Melendez wrote:
-> From: David Collins <collinsd@quicinc.com>
-> 
-> Update the description of "reg" property to add the PON_PBS base
-> address along with PON_HLOS base address.  Also add "reg-names"
-> property description.
-> 
-> Signed-off-by: David Collins <quic_collinsd@quicinc.com>
-> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+On Mon, Apr 25, 2022 at 8:45 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+> On Wed, Apr 20 2022 at 15:08, Doug Smythies wrote:
+>> On 2022.04.19 14:11 Thomas Gleixner wrote:
+>>>> That's because after the changes in this series scaling_cur_freq
+>>>> returns 0 if the given CPU is idle.
+>>>
+>>> Which is sensible IMO as there is really no point in waking an idle CPU
+>>> just to read those MSRs, then wait 20ms wake it up again to read those
+>>> MSRs again.
+>>
+>> I totally agree.
+>> It is the inconsistency for what is displayed as a function of driver/governor
+>> that is my concern.
+>
+> Raphael suggested to move the show_cpuinfo() logic into the a/mperf
+> code. See below.
+
+Hi Thomas,
+
+I tested the patch on top of your 10 patch set on kernel 5.18-rc3.
+It addresses my consistency concerns.
+
+Thank you
+
+... Doug
+
 > ---
->  .../bindings/power/reset/qcom,pon.yaml | 19 ++++++++++++++++++-
->  1 file changed, 18 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-> index 353f155d..65ec8197 100644
-> --- a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-> +++ b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
-> @@ -26,7 +26,24 @@ properties:
->        - qcom,pm8998-pon
->  
->    reg:
-> -    maxItems: 1
-> +    description: |
-> +      Specifies the SPMI base address for the PON (power-on) peripheral.  For
-> +      PMICs that have the PON peripheral (GEN3) split into PON_HLOS and PON_PBS
-> +      (e.g. PMK8350), this can hold addresses of both PON_HLOS and PON_PBS
-> +      peripherals.  In that case, the PON_PBS address needs to be specified to
-> +      facilitate software debouncing on some PMICs.
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +  reg-names:
-> +    description: |
-> +      For PON GEN1 and GEN2, it should be "pon".  For PON GEN3 it should include
-> +      "pon_hlos" and optionally "pon_pbs".
-> +    minItems: 1
-> +    items:
-> +      - const: pon_hlos
-> +      - const: pon_pbs
-> +      - const: pon
-
-Did you test that 'reg-names = "pon";' works? It doesn't. The schema 
-says 'pon' is the 3rd entry in reg-names.
-
-As 'reg-names' is new I thin this should be:
-
-items:
-  - const: hlos
-  - const: pbs
-
-And if there's 1 entry, then 'reg-names' should not be there.
-
-Rob
+> Subject: x86/aperfmperf: Integrate the fallback code from show_cpuinfo()
+> From: Thomas Gleixner <tglx@linutronix.de>
+> Date: Mon, 25 Apr 2022 15:19:29 +0200
+>
+...
