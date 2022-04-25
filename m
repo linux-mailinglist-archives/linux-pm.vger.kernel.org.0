@@ -2,159 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 928AA50EBBC
+	by mail.lfdr.de (Postfix) with ESMTP id 0246050EBBA
 	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 00:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236742AbiDYWYw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Apr 2022 18:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
+        id S236419AbiDYWYv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Apr 2022 18:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343531AbiDYVbD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Apr 2022 17:31:03 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0E93CA79
-        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 14:27:57 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id w19so28530174lfu.11
-        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 14:27:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oPLNTV7n0Ijb4QN5+/ZP2G9taYmSFsaYJE9s/1u9hZM=;
-        b=naJmfFn/7aQnWrxs9416P0rXLGU3UuoRg12Hd2uPQ7aG8ExsuJJ3O5N0UcqtwH1Gjr
-         D6KcqvTJmL3XaOU50e05bhYTtDlDs49JFC1bebV+ilqiPq6mrUkL2R/ar7nsfLaY51FH
-         qpVp8cyC6ZngTFZT5gxmL0I+IaCaR6cY42SEdIPYG5osUdiy6R8zwSwx/sySiV+5as5j
-         +D50vkEtXK+eWPp5fRkHt3NJXwVP+J7rQVTTYxuJvwC981dGs34YVBq5HpbS59acGsuQ
-         QPZdfcTlVHuIPXk5Xili/MiDQcAocHnGhkisRPsqs5FOG+mxscW2ee7JJ92Vgl3Y5WMJ
-         eqlQ==
+        with ESMTP id S1343621AbiDYVsQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Apr 2022 17:48:16 -0400
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF53E23BEF;
+        Mon, 25 Apr 2022 14:45:10 -0700 (PDT)
+Received: by mail-oi1-f177.google.com with SMTP id z8so18661916oix.3;
+        Mon, 25 Apr 2022 14:45:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oPLNTV7n0Ijb4QN5+/ZP2G9taYmSFsaYJE9s/1u9hZM=;
-        b=kc5hsjl8b0SREzugLvVW0A8gJwN+RQwZ/SZjByHZswBnIlJAfSQ9PdYn1VFqhnCpRa
-         FDHmc5SAonLrMicncWU59df50+/WIiTKUpfXkE8VbEhrg6UnQla5d9ED5gmaPhah8FAv
-         GwFQAKB1fIEkYR8TrvioPKxg9IMetgypv7e1EvHIGwzHUYrPotl/9nwTq3Q5gYH0h0Po
-         6yhZ7iZ1zYyxardficimBIm3H4H8QnLo4ZoCpPqdo2tCR0VFo3EqaC1Er6E0VdOzR1cN
-         hfdDcbNd4aIS3/d0C866zRgKrOFCoyegL4iHy6JDfdJiZVLuG0gsDepSVy9AnSQw5poQ
-         3whQ==
-X-Gm-Message-State: AOAM531V/KUJ/HiR/PDb7EvBbEWB2rfwN0kOnPZ/HlW5Wo1Qm5cvtESx
-        jriIMchnlzZabNE7D6qG9u1K5A==
-X-Google-Smtp-Source: ABdhPJzEO2UHb/QHosYyH0Xm5NQj8w1ENiOVLuq2H7eBIiIfNVF7f3HXW7kbOg0E9EVBQJ9SZt36WQ==
-X-Received: by 2002:ac2:4203:0:b0:448:8053:d402 with SMTP id y3-20020ac24203000000b004488053d402mr14176200lfh.687.1650922075466;
-        Mon, 25 Apr 2022 14:27:55 -0700 (PDT)
-Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id l13-20020a19494d000000b0046ba0e38750sm1533314lfj.3.2022.04.25.14.27.54
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VZMstEGR59a6WeLJcSDZzBTL969MVFol/7kqyWovv4c=;
+        b=obXWrnqaFu91kMdRfKfdulQkxPwilw0ID+21Ett64qWaxPNy2uxP56wO5XJYositR4
+         JYKRdFty/787G2glyiFp7CU3t5wNUcGCiuiM8sEgOty3FvrKKaGmppIQTRMmjSJVUkfl
+         r/3YRJnB7JsuJz1axlyrYmzwhNLWW3Qqpc4UJu+1WXwdw1xstSP5exDmt9o783RMywPa
+         cux8yPkniuL3yrj10Gw8dl1br+4z+rWQh93G32YsX7XROWQ8k8Y28PnaqdCBlZgPKwKw
+         O/QSvb6YB+6OCESeRpjGLzQKUE2gbHy2H4ieQCD7iFYgpH2yZos3w9YOjuA3850z8QAy
+         fcDQ==
+X-Gm-Message-State: AOAM530UFRAaIHYtUyu6K+J4lfs68JMO/6ZzCPODjR3QrlpPiS3iVkmC
+        Z3Wt2+GDSOIWX3GoVeYQUg==
+X-Google-Smtp-Source: ABdhPJy/rpBx/iJkVWRVcZNGd8eAyl3X6OyANl4MITXioNcKwEoeJ12MJdt0640bsxJiI2ms7mVrhw==
+X-Received: by 2002:a05:6808:2388:b0:325:e69:4ec5 with SMTP id bp8-20020a056808238800b003250e694ec5mr5220386oib.10.1650923110270;
+        Mon, 25 Apr 2022 14:45:10 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x64-20020acae043000000b003222bb3dfb0sm4208670oig.36.2022.04.25.14.45.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 14:27:54 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v3 3/3] dt-bindings: clock: qcom,gcc-apq8064: split tsens to the child node
-Date:   Tue, 26 Apr 2022 00:27:50 +0300
-Message-Id: <20220425212750.2749135-4-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220425212750.2749135-1-dmitry.baryshkov@linaro.org>
-References: <20220425212750.2749135-1-dmitry.baryshkov@linaro.org>
+        Mon, 25 Apr 2022 14:45:09 -0700 (PDT)
+Received: (nullmailer pid 344104 invoked by uid 1000);
+        Mon, 25 Apr 2022 21:45:09 -0000
+Date:   Mon, 25 Apr 2022 16:45:08 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Anjelique Melendez <quic_amelende@quicinc.com>
+Cc:     dmitry.torokhov@gmail.com, corbet@lwn.net, sre@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org,
+        swboyd@chromium.org, linux-doc@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        David Collins <collinsd@quicinc.com>,
+        David Collins <quic_collinsd@quicinc.com>
+Subject: Re: [PATCH v6] dt-bindings: power: reset: qcom-pon: update "reg"
+ property details
+Message-ID: <YmcWZLp2X8UYOVas@robh.at.kernel.org>
+References: <20220422191239.6271-1-quic_amelende@quicinc.com>
+ <20220422191239.6271-2-quic_amelende@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220422191239.6271-2-quic_amelende@quicinc.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Split tsens properties to the child node of the gcc. This follows the
-lead of ipq8064 (which also uses a separate node for tsens) and makes
-device tree closer to other platforms, where tsens is a completely
-separate device.
+On Fri, Apr 22, 2022 at 12:12:38PM -0700, Anjelique Melendez wrote:
+> From: David Collins <collinsd@quicinc.com>
+> 
+> Update the description of "reg" property to add the PON_PBS base
+> address along with PON_HLOS base address.  Also add "reg-names"
+> property description.
+> 
+> Signed-off-by: David Collins <quic_collinsd@quicinc.com>
+> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+> ---
+>  .../bindings/power/reset/qcom,pon.yaml | 19 ++++++++++++++++++-
+>  1 file changed, 18 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+> index 353f155d..65ec8197 100644
+> --- a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+> +++ b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+> @@ -26,7 +26,24 @@ properties:
+>        - qcom,pm8998-pon
+>  
+>    reg:
+> -    maxItems: 1
+> +    description: |
+> +      Specifies the SPMI base address for the PON (power-on) peripheral.  For
+> +      PMICs that have the PON peripheral (GEN3) split into PON_HLOS and PON_PBS
+> +      (e.g. PMK8350), this can hold addresses of both PON_HLOS and PON_PBS
+> +      peripherals.  In that case, the PON_PBS address needs to be specified to
+> +      facilitate software debouncing on some PMICs.
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  reg-names:
+> +    description: |
+> +      For PON GEN1 and GEN2, it should be "pon".  For PON GEN3 it should include
+> +      "pon_hlos" and optionally "pon_pbs".
+> +    minItems: 1
+> +    items:
+> +      - const: pon_hlos
+> +      - const: pon_pbs
+> +      - const: pon
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- .../bindings/clock/qcom,gcc-apq8064.yaml      | 45 +++++++------------
- 1 file changed, 17 insertions(+), 28 deletions(-)
+Did you test that 'reg-names = "pon";' works? It doesn't. The schema 
+says 'pon' is the 3rd entry in reg-names.
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
-index b867da12761e..f2762599f679 100644
---- a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
-@@ -23,47 +23,36 @@ description: |
- 
- properties:
-   compatible:
--    enum:
--      - qcom,gcc-apq8064
--      - qcom,gcc-msm8060
--
--  nvmem-cells:
--    minItems: 1
--    maxItems: 2
--    description:
--      Qualcomm TSENS (thermal sensor device) on some devices can
--      be part of GCC and hence the TSENS properties can also be part
--      of the GCC/clock-controller node.
--      For more details on the TSENS properties please refer
--      Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
--
--  nvmem-cell-names:
--    minItems: 1
-     items:
--      - const: calib
--      - const: calib_backup
--
--  '#thermal-sensor-cells':
--    const: 1
-+      - enum:
-+          - qcom,gcc-apq8064
-+          - qcom,gcc-msm8060
-+      - const: syscon
- 
- required:
-   - compatible
--  - nvmem-cells
--  - nvmem-cell-names
--  - '#thermal-sensor-cells'
- 
- unevaluatedProperties: false
- 
- examples:
-   - |
-     clock-controller@900000 {
--      compatible = "qcom,gcc-apq8064";
-+      compatible = "qcom,gcc-apq8064", "syscon";
-       reg = <0x00900000 0x4000>;
--      nvmem-cells = <&tsens_calib>, <&tsens_backup>;
--      nvmem-cell-names = "calib", "calib_backup";
-       #clock-cells = <1>;
-       #reset-cells = <1>;
-       #power-domain-cells = <1>;
--      #thermal-sensor-cells = <1>;
-+
-+      thermal-sensor {
-+        compatible = "qcom,msm8960-tsens";
-+
-+        nvmem-cells = <&tsens_calib>, <&tsens_backup>;
-+        nvmem-cell-names = "calib", "calib_backup";
-+        interrupts = <0 178 4>;
-+        interrupt-names = "uplow";
-+
-+        #qcom,sensors = <11>;
-+        #thermal-sensor-cells = <1>;
-+        };
-     };
- ...
--- 
-2.35.1
+As 'reg-names' is new I thin this should be:
 
+items:
+  - const: hlos
+  - const: pbs
+
+And if there's 1 entry, then 'reg-names' should not be there.
+
+Rob
