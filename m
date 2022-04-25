@@ -2,106 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDDDF50DD77
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Apr 2022 12:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F3E50DD92
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Apr 2022 12:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233082AbiDYKEN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Apr 2022 06:04:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37528 "EHLO
+        id S230199AbiDYKGT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Apr 2022 06:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241162AbiDYKEG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Apr 2022 06:04:06 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233A8E015
-        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 03:01:02 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id n18so25880709plg.5
-        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 03:01:02 -0700 (PDT)
+        with ESMTP id S241502AbiDYKGQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Apr 2022 06:06:16 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DDD2252B
+        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 03:03:11 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id r13so28585742ejd.5
+        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 03:03:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=PApZnh3qRXman8Ophw4OOA7A/2sG8ifMcY3MbuoLa18=;
-        b=pcQbwIzZ8x74dXgdi7OBlsMWpxbq8EDM9028htUhVGWemcyFCvsSP1XLm4Wn9i+oum
-         LYJgF3S0BjrgnyvGmCAXpd7yTc86lesWt8fXZETMqA4vNYgT4yopSZROF+Y5hTMHNUlO
-         RpIVMVboBu8c4OUzgtL0HRmXSjqwwr/rek3H978V1531j83iVL3NH+6i0rqcIP3rvzrq
-         LhvLHDu5PFV8vdQZ645/tcvXcnIKr/zZW69GPJfX4z4ZUTBu7pxPkJPog+0edRvuJDyh
-         HJ9DzKY80rW+SPmGRxKuPilEu+gGfhj0caRZb+YfR/vWhRwZeNH/3OROVsQ1sUOwe2uS
-         10rg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=2WgIrPk8Gi6VJyQTSCt7yrmHnUX10MpNP4vrR/luUsk=;
+        b=FtmLTt9nLJTfd8E53+GL35FEXD6Y2iUV/bCMkbQrdI1H1Mn+b+qjzwcSx9WoKwN1oZ
+         3ibqxm1YuE+QsJOp0cAPCUCldZX2uxaSb3Q0hBhc2DHv8QVBidVPj4A8R+h56IxQkEDK
+         la6PsdSwjHEknO4cjKbgVgXZQxYuKYffSxEuJ7UpCt0nyri7ESoqrygRVL2BWIKYtY39
+         tcr0n6yb72i7KItNmP0T1QnDjjl3r+iq1ddxZo+DYAJHff7TDwycGbc8nGDwjCkg0T/W
+         sj2WopWH2wMf4CjEDllsNO8lLi0C3dRfAfv/JdAFGE9DvVFJatS8LuGF2RKoO8+JfirJ
+         Tmiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=PApZnh3qRXman8Ophw4OOA7A/2sG8ifMcY3MbuoLa18=;
-        b=PJSx635u54iduy4CJrSypo8yKUF0kgVO10iC/7f8+Nkz/HWCFKUe3lid9LoIbCVIVg
-         NfuUfDNecf8trzLI+4iI1cdSoAIURIkXV1hcz218zkmDSj53S6FscH01hTCJMmRTiUVQ
-         1UPMlt4u5rTN+9cuGY6wK09x9C7fTx/BMqBughxtQPfLlJKoV3hNkeinutAPbWLhn922
-         NV+nWj6jK+TrWrIw/A5dR0yfx27K9C2qLc6V7wivmojPXtunhx75t+EaYEAw7cfGKVC3
-         UkLsfkH5oBxy6wWsqCrvR3zvCLN0hImo8/Z2pg/MuzRF7YSdulzYMYCViRHYtVXaGorj
-         e4ig==
-X-Gm-Message-State: AOAM531oLqvib94kAMrXyEUdz/aY0+/f0y2GbA4dHgb0TdO+Ld4V5PCp
-        AY7fxMd/COTP1OwWkXbNhgNsjQ==
-X-Google-Smtp-Source: ABdhPJzQojLiY848HqAktLkmWjk+9Gu/+RD85Df6pBBCgMUEKyHRB6p3bOCBqDrMilhn2Wj8891rlw==
-X-Received: by 2002:a17:902:b586:b0:159:684:c522 with SMTP id a6-20020a170902b58600b001590684c522mr17046705pls.39.1650880861518;
-        Mon, 25 Apr 2022 03:01:01 -0700 (PDT)
-Received: from localhost ([122.171.250.232])
-        by smtp.gmail.com with ESMTPSA id bh3-20020a056a02020300b00378b62df320sm9207671pgb.73.2022.04.25.03.01.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 03:01:01 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 15:30:58 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     rafael@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
-        roger.lu@mediatek.com, hsinyi@google.com, khilman@baylibre.com,
-        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH V4 07/14] cpufreq: mediatek: Add .get function
-Message-ID: <20220425100058.4kbvmpi63ygni6k5@vireshk-i7>
-References: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
- <20220422075239.16437-8-rex-bc.chen@mediatek.com>
- <20220425053548.72w2jh2g6lpzgz6g@vireshk-i7>
- <64c690e8edf493ec0a4a14e0fdaad2d8e88e6da7.camel@mediatek.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2WgIrPk8Gi6VJyQTSCt7yrmHnUX10MpNP4vrR/luUsk=;
+        b=zSFFsZicRENHKict7Cew1+2loXH4d+kF7km4C9LuFXgAIXaEwHt9dzTW6yMY9Hd7W7
+         5mBAMH4DejXeDgJMaOFRIhAWactZ05eNAQFsAZIKNlrrMu8S3URDeHe+zVAju4DmigKk
+         LcT9RvgVEPtWDQJEEnF4IA1NnbE55wQW+R4dK4EueHoG4K9Ci2xMiPEvaQtL5+88U434
+         jskQ2rxOwkmQeqRcQtMNu2Yuv5T9hQ/jBurm+EH9g8y463G4MBi6+RelU6KO6NJxjrAr
+         CcD9IEIHHAIW+mNTNAPXqm0q9knlqUNUPyuEpKpYV97YcRhLj/UffFphqhfpFZZuDtpp
+         fvSQ==
+X-Gm-Message-State: AOAM530vy/BujMKQCtVREkXfezEwOa5srxKfiNAVlDqoVyy1He7G6Fd8
+        kjRI+iIfRsOQUFWg/Mwwj2zGOg==
+X-Google-Smtp-Source: ABdhPJzkai7WwAl5gkr1Z6X8P9PyQmQBzG0zYuIWg22TReBOZg1vlzz5jQ1xhjuQjOsO2p5ns99SXQ==
+X-Received: by 2002:a17:907:1ca0:b0:6f3:a59c:288e with SMTP id nb32-20020a1709071ca000b006f3a59c288emr175991ejc.716.1650880990272;
+        Mon, 25 Apr 2022 03:03:10 -0700 (PDT)
+Received: from [192.168.0.241] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id g17-20020a056402425100b00425f2816b85sm381941edb.27.2022.04.25.03.03.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Apr 2022 03:03:09 -0700 (PDT)
+Message-ID: <e059bd49-a301-032a-d089-9ef6cb313089@linaro.org>
+Date:   Mon, 25 Apr 2022 12:03:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <64c690e8edf493ec0a4a14e0fdaad2d8e88e6da7.camel@mediatek.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
+Content-Language: en-US
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Nishanth Menon <nm@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        Viresh Kumar <vireshk@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
+ <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
+ <20220422234402.B66DDC385A4@smtp.kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220422234402.B66DDC385A4@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25-04-22, 17:34, Rex-BC Chen wrote:
-> We found that the pulses of cpu voltage could be observed when
-> frequency is fixed (scaling_max_freq == scaling_min_freq) if using
-> cpufreq_generic_get as '.get' callback in MT8186.
-> cpufreq framework will constantly (~ 1 sec) call 'update' if the policy
-
-Which function gets called here in that case ? I would expect
-cpufreq_driver_target() to not make a call to MTK driver in that case, after it
-finds that new and old frequency are same (it will check the corresponding freq
-from cpufreq table).
-
-> frequency is NOT equal to hardware frequency in
-> cpufreq_verify_current_freq.
-> The problem is that there might be a tiny difference between the policy
-> frequency and the hardware frequency even they are very close.
-> e.g. policy frequency is 500,000,000 Hz however, hardware frequency is
-> 499,999,726 Hz for MT8186 opp15.
+On 23/04/2022 01:44, Stephen Boyd wrote:
+> Quoting Krzysztof Kozlowski (2022-04-11 08:43:45)
+>> Devices might need to control several clocks when scaling the frequency
+>> and voltage.  Example is the Universal Flash Storage (UFS) which scales
+>> several independent clocks with change of performance levels.
+>>
+>> Add parsing of multiple clocks and clock names and scale all of them,
+>> when needed.  If only one clock is provided, the code should behave the
+>> same as before.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
 > 
-> To prevent the voltage pulses, we currently use the software cached
-> values as you pointed out.
-> I wonder is it possible to add a tolerence for checking difference
-> between policy frequency and hardware frequency in cpufreq framework so
-> that we can use cpufreq_generic_get as callback without pulse issue.
-> Or any suggestion would be appreciated.
+> I vaguely recall that scaling more than one clk with an OPP table is
+> confusing? I think it's because things like dev_pm_opp_find_freq_ceil()
+> don't make sense when there's more than one frequency table. How is that
+> handled here?
 
--- 
-viresh
+The assumption (which might need better documentation) is that first
+clock frequency is the main one:
+1. It is still in opp->rate field, so it is used everywhere when OPPs
+are compared/checked for rates.
+1. Usually is used also in opp-table nodes names.
+
+The logical explanation is that devices has some main operating
+frequency, e.g. the core clock, and this determines the performance. In
+the same time such device might not be able to scale this on core clock
+independently from others, this this patches.
+
+Best regards,
+Krzysztof
