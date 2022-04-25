@@ -2,207 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B198050DA13
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Apr 2022 09:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82E250DB94
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Apr 2022 10:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237020AbiDYHaU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 25 Apr 2022 03:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
+        id S229717AbiDYIul (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 25 Apr 2022 04:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236677AbiDYHaT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Apr 2022 03:30:19 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2A1A1B0
-        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 00:27:13 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id s14so25041823plk.8
-        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 00:27:13 -0700 (PDT)
+        with ESMTP id S232457AbiDYIuj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 25 Apr 2022 04:50:39 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669898BE1D;
+        Mon, 25 Apr 2022 01:47:32 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id ay11so9832596qtb.4;
+        Mon, 25 Apr 2022 01:47:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=rxyP1rA1NVCKi+Fqd9RTEgWTAs6MpVuSe+By3MBiK+g=;
-        b=uhHdnNiHGlo6+p+WxcM0C9NfBcZ1yMZ4ZL8lPJjCqFO59XftyiBXmxLnJ4x/8IHesk
-         Iz/e+72c+hpYYtSkpN9st79ktLRdF9ucEIcsSZFrJz8zW/33b/zII36XFlgftlgRt/Rn
-         NcV0nn+GcFItTljdcQkhhruORyaimT8Hcjdf+33DifIdLTWHRc7f4BBjOpmEow9TxUAk
-         H3AoQBVj8pg7peGOZ40pMWJPb4v77MByQ/hq2wnaWxWmitojdTlAcivhdbQ8eALivIcc
-         CxsiobTeJA1GwrggCLqf/tliVYwpbUOcyyC+5xohbYhPGazYOIMkwv+sGtPOlvneNaO1
-         ub6Q==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cfi2DfsNBfOqYWS0WCIY5y0dPTfSuxSkjNj7oMojevU=;
+        b=qlwLQXMpULHF9yQgY0567DZVhOWPvw9UizzZ4vKxCNBqyYPXZikTwElxLPmm/z5xow
+         7FduAZ2bkbRFsfIv2pEZT0HAZqbrevPRRMfIyLGmokp2s8sVFOocynTgAdTW6+q51hTw
+         MCA87jYpkYc05yDfmjpO3yIc+fhUKfNNwCODSXqsyBu16x5FoqGE7eXNmAi7yijNGT+p
+         /jAUZLn0lqt5x2xTuPDHVA0stZ1rerY0Nr1cRcGSXq+7FiwpCik14jjLvIPa/M2z0bC/
+         JRhA+dxWxHzxOj3BR/G30HWOlgpxk4koBQpEFhgvAYwCC8eYEHCu9BdC7mj6idgG5Z83
+         Ui/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=rxyP1rA1NVCKi+Fqd9RTEgWTAs6MpVuSe+By3MBiK+g=;
-        b=LdwD49/j3TVRtGkXgmMehU+N9HKu/CViL2ClLSudO800WAVPNfIADJY3c2svR+nVoz
-         kzhSt4p8eOgwtt4aX6ePwTLntNrSleaPIksOLsHtie+nuR1B+jjQhv1HjJiuNMHzrcqn
-         k2lDngbdZ8ixfxmb8brX0Wkk/HyYmz587qbRxlx18E1/+5rp5f8JjiS1IGEgT7ssuecN
-         18SE+OpsVqn9BAlu4HxDmKfLrwF/1t0WnouhErU7/gpvAC7SmkQ15ClVEiKzW51m0O7i
-         cKeusOpRnBkOdfwrxYuJ464tH8mKxjqb2DZddNYIcMKleqpJEgnmsXkMxDJ+kyGfSoCY
-         d7wA==
-X-Gm-Message-State: AOAM532lq6pmVbPmQtjk6Po0lf6aSKISOuf9NcgGEqK32se4rUeWV3dk
-        4Qzsd8sZ1cspYZX1LZ+2mdVhTQ==
-X-Google-Smtp-Source: ABdhPJxE5RcvTjEYwI71Iu772xtRFctxCEAFvy9tKFHoG9lHlSKr+lSmvTHqmcMFobuMjeZomF3jKA==
-X-Received: by 2002:a17:90b:3b46:b0:1c7:9ca8:a19e with SMTP id ot6-20020a17090b3b4600b001c79ca8a19emr29586651pjb.245.1650871632716;
-        Mon, 25 Apr 2022 00:27:12 -0700 (PDT)
-Received: from localhost ([122.171.250.232])
-        by smtp.gmail.com with ESMTPSA id p4-20020a637404000000b00375948e63d6sm8596664pgc.91.2022.04.25.00.27.11
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cfi2DfsNBfOqYWS0WCIY5y0dPTfSuxSkjNj7oMojevU=;
+        b=Vp4oerA3rJRazYU9WMCg95yPVeTrgiGMzOy6KFojqxkkFrENeccqzecZ2ZSPmSB/54
+         X4g5bKr3yQQpK/oO98b4DxoepTlMHSiVdi9kmp8mCXOS/9RVZPYPYwGFJmLnMz8Ck4iG
+         R9jt2qQe3QqVkZPo0i4OXoJycojkrgUvzryLvgVT6PeUa2BwYnW9NADX80FLKHUURDO+
+         Mo4a6J20sT0PQF54xQHDIvdqqgxrCc6a3S2bvyuiImJSbHSvQTjdgk0D27i3ebT1PLR8
+         izUd5vNJXGJaAAqzMu+iLWDBSvfcD5nRCnvAxh1lGMxZo7T7yLztBk6fx8dfHv9qPUZJ
+         p4pQ==
+X-Gm-Message-State: AOAM530KK2a7i0ixKhuzoT4Zgzj0CpHLIvYhwtsrEzcpCmE/EE/OO5HN
+        52CfVI+PvgyF8RShZrTpJ5Y=
+X-Google-Smtp-Source: ABdhPJyG7+E1LhB90Tk9cRLtz6MOxaSYSUEcsCec5XnIgx+gfKirQutnzp6ekkGVjUWBJgAWNBxPrQ==
+X-Received: by 2002:a05:622a:5d1:b0:2f3:5e7f:6c6f with SMTP id d17-20020a05622a05d100b002f35e7f6c6fmr8171460qtb.255.1650876451445;
+        Mon, 25 Apr 2022 01:47:31 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id l8-20020ac84cc8000000b002f3638c32c7sm3145177qtv.7.2022.04.25.01.47.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 00:27:12 -0700 (PDT)
-Date:   Mon, 25 Apr 2022 12:57:10 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
-Message-ID: <20220425072710.v6gwo4gu3aouezg4@vireshk-i7>
-References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
- <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
+        Mon, 25 Apr 2022 01:47:31 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     sre@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] power: supply: remove unnecessary return in switch statement
+Date:   Mon, 25 Apr 2022 08:47:23 +0000
+Message-Id: <20220425084723.3495323-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11-04-22, 17:43, Krzysztof Kozlowski wrote:
-> Devices might need to control several clocks when scaling the frequency
-> and voltage.  Example is the Universal Flash Storage (UFS) which scales
-> several independent clocks with change of performance levels.
-> 
-> Add parsing of multiple clocks and clock names
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-This part is fine, the OPP core should be able to do this.
+Since there's a return immediately after the 'break', there's no need for
+this extra 'return'.
 
-> and scale all of them,
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/power/supply/bq256xx_charger.c | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-This is tricky as the OPP core can't really assume the order in which the clocks
-needs to be programmed. We had the same problem with multiple regulators and the
-same is left for drivers to do via the custom-api.
-
-Either we can take the same route here, and let platforms add their own OPP
-drivers which can handle this, Or hide this all behind a basic device clock's
-driver, which you get with clk_get(dev, NULL).
-
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-
-> +static int _generic_set_opp_clks_only(struct device *dev,
-> +				      struct opp_table *opp_table,
-> +				      struct dev_pm_opp *opp)
-> +{
-> +	int i, ret;
-> +
-> +	if (!opp_table->clks)
-> +		return 0;
-> +
-> +	for (i = 0; i < opp_table->clk_count; i++) {
-> +		if (opp->rates[i]) {
-
-This should mean that we can disable that clock and it isn't required.
-
-> +			ret = _generic_set_opp_clk_only(dev, opp_table->clks[i],
-> +							opp->rates[i]);
-> +			if (ret) {
-> +				dev_err(dev, "%s: failed to set clock %pC rate: %d\n",
-> +					__func__, opp_table->clks[i], ret);
-> +				return ret;
-> +			}
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-
-As said earlier, this won't work in the core.
-
-> +
->  static int _generic_set_opp_regulator(struct opp_table *opp_table,
->  				      struct device *dev,
->  				      struct dev_pm_opp *opp,
-> @@ -796,7 +835,7 @@ static int _generic_set_opp_regulator(struct opp_table *opp_table,
->  	}
->  
->  	/* Change frequency */
-> -	ret = _generic_set_opp_clk_only(dev, opp_table->clk, freq);
-> +	ret = _generic_set_opp_clks_only(dev, opp_table, opp);
->  	if (ret)
->  		goto restore_voltage;
->  
-> @@ -820,7 +859,7 @@ static int _generic_set_opp_regulator(struct opp_table *opp_table,
->  	return 0;
->  
->  restore_freq:
-> -	if (_generic_set_opp_clk_only(dev, opp_table->clk, old_opp->rate))
-> +	if (_generic_set_opp_clks_only(dev, opp_table, old_opp))
->  		dev_err(dev, "%s: failed to restore old-freq (%lu Hz)\n",
->  			__func__, old_opp->rate);
->  restore_voltage:
-> @@ -880,7 +919,7 @@ static int _set_opp_custom(const struct opp_table *opp_table,
-
-This is where we can handle it in your case, if you don't want to hide it behind
-a clk driver.
-
->  	}
->  
->  	data->regulators = opp_table->regulators;
-> -	data->clk = opp_table->clk;
-> +	data->clk = (opp_table->clks ? opp_table->clks[0] : NULL);
->  	data->dev = dev;
->  	data->old_opp.rate = old_opp->rate;
->  	data->new_opp.rate = freq;
-> @@ -969,8 +1008,8 @@ static void _find_current_opp(struct device *dev, struct opp_table *opp_table)
-
-I think this routine breaks as soon as we add support for multiple clocks.
-clks[0]'s frequency can be same for multiple OPPs and this won't get you the
-right OPP then.
-
->  	struct dev_pm_opp *opp = ERR_PTR(-ENODEV);
->  	unsigned long freq;
->  
-> -	if (!IS_ERR(opp_table->clk)) {
-> -		freq = clk_get_rate(opp_table->clk);
-> +	if (opp_table->clks && !IS_ERR(opp_table->clks[0])) {
-> +		freq = clk_get_rate(opp_table->clks[0]);
->  		opp = _find_freq_ceil(opp_table, &freq);
->  	}
->  
-> @@ -1070,7 +1109,7 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
->  						 scaling_down);
->  	} else {
->  		/* Only frequency scaling */
-> -		ret = _generic_set_opp_clk_only(dev, opp_table->clk, freq);
-> +		ret = _generic_set_opp_clks_only(dev, opp_table, opp);
->  	}
->  
->  	if (ret)
-> @@ -1135,11 +1174,15 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
-
-This should have a BUG or WARN _ON() now if clock count is more than one. This
-routine can't be called unless custom handler is available.
-
-I skipped rest of the code as we need to work/decide on the design first.
-
-Thanks.
-
+diff --git a/drivers/power/supply/bq256xx_charger.c b/drivers/power/supply/bq256xx_charger.c
+index 01ad84fd147c..66d432958c84 100644
+--- a/drivers/power/supply/bq256xx_charger.c
++++ b/drivers/power/supply/bq256xx_charger.c
+@@ -878,8 +878,6 @@ static int bq256xx_set_charger_property(struct power_supply *psy,
+ 	switch (prop) {
+ 	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
+ 		ret = bq->chip_info->bq256xx_set_iindpm(bq, val->intval);
+-		if (ret)
+-			return ret;
+ 		break;
+ 
+ 	case POWER_SUPPLY_PROP_STATUS:
+@@ -887,32 +885,22 @@ static int bq256xx_set_charger_property(struct power_supply *psy,
+ 
+ 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+ 		ret = bq->chip_info->bq256xx_set_vbatreg(bq, val->intval);
+-		if (ret)
+-			return ret;
+ 		break;
+ 
+ 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+ 		ret = bq->chip_info->bq256xx_set_ichg(bq, val->intval);
+-		if (ret)
+-			return ret;
+ 		break;
+ 
+ 	case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
+ 		ret = bq->chip_info->bq256xx_set_iprechg(bq, val->intval);
+-		if (ret)
+-			return ret;
+ 		break;
+ 
+ 	case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
+ 		ret = bq->chip_info->bq256xx_set_iterm(bq, val->intval);
+-		if (ret)
+-			return ret;
+ 		break;
+ 
+ 	case POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT:
+ 		ret = bq->chip_info->bq256xx_set_vindpm(bq, val->intval);
+-		if (ret)
+-			return ret;
+ 		break;
+ 
+ 	default:
 -- 
-viresh
+2.25.1
+
