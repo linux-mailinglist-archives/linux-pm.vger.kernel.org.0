@@ -2,89 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC06510214
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 17:40:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1DED510347
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 18:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347048AbiDZPnp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Apr 2022 11:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42362 "EHLO
+        id S244014AbiDZQ1Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Apr 2022 12:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348522AbiDZPnp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 11:43:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBA9624BCA;
-        Tue, 26 Apr 2022 08:40:36 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8543B23A;
-        Tue, 26 Apr 2022 08:40:36 -0700 (PDT)
-Received: from [10.57.41.198] (unknown [10.57.41.198])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B20153F73B;
-        Tue, 26 Apr 2022 08:40:34 -0700 (PDT)
-Message-ID: <8ee5dfd0-558b-5ad6-63d2-b142550f04a3@arm.com>
-Date:   Tue, 26 Apr 2022 16:40:32 +0100
+        with ESMTP id S1345560AbiDZQ1X (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 12:27:23 -0400
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E54170344;
+        Tue, 26 Apr 2022 09:24:15 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id v59so20995072ybi.12;
+        Tue, 26 Apr 2022 09:24:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yRoS0e78MQ3Aw94WaIb6fXl1gKLeuGuUg52q3sQRmzY=;
+        b=5eWtFbfJHZ8B/YJsY/hQi40pNOdAvkl45eDJTGHQSEW5CDLKdJcf0dWyySuFPhBa2e
+         5GyLcZCBv78OHa8No3GT412AhWT9WS07XDInbOZJ5SFITX88w7h11GeG04LwBgeDdvTu
+         yy88roMGmEH9pb/tFRrJxClTYa+KAcW4B7cfgc3Q4EgdbUoHIS7qHYNVaDEEcQsXzS8n
+         c/eOoDvbO2AwSJjlU9uOVjsDJlHkroJpT77RaKQq2pNxIF6IwYTbyS2qjO9ADePZ4YYf
+         SyFXUGfmQlUIhXwLpurvb1s0s7FRI42XRar5Vvpo0QE2ENjN70UKX6CFoXkFqnY0Zocg
+         8Bbw==
+X-Gm-Message-State: AOAM533PGa4dWwo+baV7OO3+FZBuXkWqIoJX2OaPlgpcufSzJ24A6MpD
+        LsZKvvweuWKYd/m8i6OmyjwUhD18Q8jdymVA4bF8tcbR
+X-Google-Smtp-Source: ABdhPJwx/0sG065EFEG6R3FAqY53TNDROIzT+SSV1rhw4vfnS5Bq5793FT0nC8rO8MYbenwgZB7rlOBFIPJrRMSrcRY=
+X-Received: by 2002:a05:6902:352:b0:63e:94c:883c with SMTP id
+ e18-20020a056902035200b0063e094c883cmr20762254ybs.365.1650990255156; Tue, 26
+ Apr 2022 09:24:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.0
-Subject: Re: [PATCH v1] PM: EM: Decrement policy counter
-Content-Language: en-US
-To:     Pierre Gondois <pierre.gondois@arm.com>,
-        linux-kernel@vger.kernel.org
-Cc:     cristian.marussi@arm.com, Ionela.Voinescu@arm.com,
-        Dietmar.Eggemann@arm.com, "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org
-References: <20220426144448.43682-1-pierre.gondois@arm.com>
-From:   Vincent Donnefort <vincent.donnefort@arm.com>
-In-Reply-To: <20220426144448.43682-1-pierre.gondois@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220423182410.1841114-1-matthieu.baerts@tessares.net> <YmgOP1FFmidS9ecJ@zn.tnic>
+In-Reply-To: <YmgOP1FFmidS9ecJ@zn.tnic>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 26 Apr 2022 18:24:04 +0200
+Message-ID: <CAJZ5v0gzvOagiYsMxznksrjmtZFV873DaLAiOo4YHkoUq5qTTA@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/pm: fix false positive kmemleak report in msr_build_context()
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Matthieu Baerts <matthieu.baerts@tessares.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Chen Yu <yu.c.chen@intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26/04/2022 15:44, Pierre Gondois wrote:
-> From: Pierre Gondois <Pierre.Gondois@arm.com>
-> 
-> Fixes: e458716a92b57 ("PM: EM: Mark inefficiencies in CPUFreq")
-> In the above commit, cpufreq_cpu_get() is called without
-> a cpufreq_cpu_put(), permanently increasing the reference counts
-> of the policy struct.
-> Decrement the reference count once the policy struct is not used
-> anymore.
+On Tue, Apr 26, 2022 at 5:22 PM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Sat, Apr 23, 2022 at 08:24:10PM +0200, Matthieu Baerts wrote:
+> > diff --git a/arch/x86/include/asm/suspend_64.h b/arch/x86/include/asm/suspend_64.h
+> > index 35bb35d28733..bb7023dbf524 100644
+> > --- a/arch/x86/include/asm/suspend_64.h
+> > +++ b/arch/x86/include/asm/suspend_64.h
+> > @@ -14,9 +14,13 @@
+> >   * Image of the saved processor state, used by the low level ACPI suspend to
+> >   * RAM code and by the low level hibernation code.
+> >   *
+> > - * If you modify it, fix arch/x86/kernel/acpi/wakeup_64.S and make sure that
+> > - * __save/__restore_processor_state(), defined in arch/x86/kernel/suspend_64.c,
+> > - * still work as required.
+> > + * If you modify it before 'misc_enable', fix arch/x86/kernel/acpi/wakeup_64.S
+>
+> Why does before misc_enable matter?
+>
+> arch/x86/kernel/asm-offsets_64.c computes the offsets and there is a
+> member like saved_context_gdt_desc which will get moved after your
+> change but that's not a problem because the offset will get recomputed
+> at build time.
+>
+> Hm?
 
-
-Not sure if the tag there will be caught properly. Usually it goes on
-top of the Signed-off-by.
-
-While at it:
-
-Reviewed-by: Vincent Donnefort <vincent.donnefort@arm.com>
-
-Thanks for fixing this.
-
-> 
-> Tested-by: Cristian Marussi <cristian.marussi@arm.com>
-> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
-> ---
->   kernel/power/energy_model.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-> index 0153b0ca7b23..6219aaa454b5 100644
-> --- a/kernel/power/energy_model.c
-> +++ b/kernel/power/energy_model.c
-> @@ -259,6 +259,8 @@ static void em_cpufreq_update_efficiencies(struct device *dev)
->   			found++;
->   	}
->   
-> +	cpufreq_cpu_put(policy);
-> +
->   	if (!found)
->   		return;
->   
+So can the comment be dropped entirely?
