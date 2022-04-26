@@ -2,185 +2,252 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD730510A4D
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 22:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14017510A57
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 22:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354536AbiDZUYP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Apr 2022 16:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
+        id S1355060AbiDZUZK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Apr 2022 16:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355105AbiDZUX7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 16:23:59 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D084EBC99
-        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 13:20:49 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id x33so33931953lfu.1
-        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 13:20:49 -0700 (PDT)
+        with ESMTP id S1354931AbiDZUZF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 16:25:05 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA02026548
+        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 13:21:54 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id a14-20020a7bc1ce000000b00393fb52a386so1583537wmj.1
+        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 13:21:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=VeBTftEEBF4n+zC0W35RUFpsE8vBxIydsA294RvLU5U=;
-        b=dlhxKFfKur1lHnoc+nbcJrk/Ps0SWozlkk+0HPMTatI/NQMMwJL97BQUiNcOD1Oeal
-         QJFuApixc8IRyxFPLyP+BkDzQ93RcLLBvE+fLc5XlngnHHm7zZj9ZVsF/Ux911ZFApTs
-         JkOSiOYqFhFTtgTn9U409Kg+DUTgRLSPwlo7Ec2bYU+Ud25CayZOhieuTzzfuO4HRZ50
-         7NqNtvaJkgMIHRkHtHFZ4WGpOoo8PoPz2HgO8KGfORMmLHNp0ml0W4D/vBKCsWAbBXJz
-         Hvuy2gj4XX0W6SPDVMkAXjJUtb4YYIrBSxtyrDWyNEk8A3IkLu9CJ823W5eMLVLCTbQj
-         ky5w==
+        d=tessares-net.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sVY9nutpfAKFV3xZ4F3eLJ4g4dYsJo3VxdIpGHzIaFc=;
+        b=d1BFcbkPX0unVPwlcWKyiGlE++BgdUFEEcYm/YOa8lz1QnTaYZkNH+tUo24ziYy5GR
+         ELt30ol1ANU0wTk0lmbr/S7jmdQsJCKkXdOGNydiUQ/E8gQ2CP4jHcfc7N3cLtywLK9m
+         0onNgb2lQ9aRFAIQzoDk6lmmFzgte6QxSse4QOVd++dbN95pEXroxwK6JVU8Y+A365cz
+         AYiqgQSInX3OQjbvFYJ/TyDJQSIxH3rT5ADv5BHWboEory1Z8CZG0CXZIB/5rEJR8sky
+         7pnqfGtUWxWfVJpDzgPJIE/5+IzT+EAdPwbcJZ2VeseM65bl9H0C4hkbnYXq9W1QWZMX
+         gxBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=VeBTftEEBF4n+zC0W35RUFpsE8vBxIydsA294RvLU5U=;
-        b=rdSLa/zIwgH5M0cyCp0iGfEj8zkHplw7j4P9mRoEvgJuMetydLGmvGolj9XsOZ3P50
-         A474RTxqT0n5LJeP5vThihQJIzhZGwILkFSjeHiuUJWBFHq1z3xkWLPcpsq85/w1NtQz
-         Ww6YqtlMEDncjTQZrj2As466k/P9cpzKsjY6wM8cFiWYtBwJXXCXmGU/c9qSm4fvA9cG
-         UAA6szLiXIDaIe2EkOT4ZnXZ8RN+MVtuLtGRF5UJOu+kn7FYJchF8glQaOd3UAaXaUZ7
-         1lNz1y2+0s2eUtOmblUN1N7OLsp2ZtTXIV3/FUa6F7J/qc9Eg05l4PeCF8KM4UVnk5b9
-         29Uw==
-X-Gm-Message-State: AOAM531AC3lcZZht2HZHi6FmudcAT1cN0eNOAxA2Gz7h5bZMTB3TdICU
-        NsEYogr/MpSbHnogo7b/ZapkRanYWzdtog==
-X-Google-Smtp-Source: ABdhPJzwQe3J31B9Au3qGIefBxGSsd11mJQrRCRg4tWK2TaU2RtYfE+qhsPAOoHHBkhMiyRJxa92GA==
-X-Received: by 2002:a19:ac42:0:b0:448:1f15:4b18 with SMTP id r2-20020a19ac42000000b004481f154b18mr17762502lfc.32.1651004448075;
-        Tue, 26 Apr 2022 13:20:48 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id m1-20020a2e7101000000b0024f081cb0absm1169380ljc.83.2022.04.26.13.20.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 13:20:47 -0700 (PDT)
-Message-ID: <9df0eb75-0b2c-446e-ef66-1eb3ce442d0d@linaro.org>
-Date:   Tue, 26 Apr 2022 23:20:46 +0300
+        bh=sVY9nutpfAKFV3xZ4F3eLJ4g4dYsJo3VxdIpGHzIaFc=;
+        b=QGk6p8Mzn/4xbALiPnoUbr+6gA9MWF2Pd4u8G6fo6jsMmoxFyxQaYr+V1yz3BLkQeq
+         hEMx87SdnHUJPKWSPqo3v1GZ2rWSVRiWQSRFhNYRuZoA12toqqW7Ggh+sZXsD1D2TzKF
+         m5b1VZJbe9r2CyruGFdnurPLE4DfJg2mEzKMktnEnHQ35yeuk50AjoEyjIVOifelFItz
+         KuwfqvIqqIM6AAzXFV9h8+Sjq7Vor0nQPOp92RmsWz/cpoVJWw0CKHaU74u3sPIu4b6J
+         12PyGy8ZqujiovOKGLoy7oG8XHo9xoCdi8pH+DMqDKPeXvK5oOxjT3RXRTV/0mnNXqHV
+         rJ8A==
+X-Gm-Message-State: AOAM5309LaYod/d2TNTtPOAgOMX6Ovs1TvkyDqucVjwEaf6bSReLXZpr
+        sAUUMo0ZofBxoP/CFLJQgnNaA1RmkWDVE4oK
+X-Google-Smtp-Source: ABdhPJy0k2UuWe81EUEzvM+o7RtFJNoY53ad3PF4mpXzkXNOHze0Jytn6Z3TdCMZH2cJbDTrY9vOSQ==
+X-Received: by 2002:a1c:4e0b:0:b0:393:fd8f:e340 with SMTP id g11-20020a1c4e0b000000b00393fd8fe340mr1250941wmh.136.1651004513313;
+        Tue, 26 Apr 2022 13:21:53 -0700 (PDT)
+Received: from tsr-vdi-mbaerts.nix.tessares.net (static.23.216.130.94.clients.your-server.de. [94.130.216.23])
+        by smtp.gmail.com with ESMTPSA id o2-20020a5d6482000000b0020a96536fcdsm13041837wri.57.2022.04.26.13.21.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 13:21:52 -0700 (PDT)
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Chen Yu <yu.c.chen@intel.com>
+Cc:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>, linux-mm@kvack.org,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ingo Molnar <mingo@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] x86/pm: fix false positive kmemleak report in msr_build_context()
+Date:   Tue, 26 Apr 2022 22:21:37 +0200
+Message-Id: <20220426202138.498310-1-matthieu.baerts@tessares.net>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v4 3/3] dt-bindings: clock: qcom,gcc-apq8064: split tsens
- to the child node
-Content-Language: en-GB
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, quic_tdas@quicinc.com
-References: <20220426094144.2958416-1-dmitry.baryshkov@linaro.org>
- <20220426094144.2958416-4-dmitry.baryshkov@linaro.org>
- <Ymg4zFsQB2MAQ/T5@robh.at.kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <Ymg4zFsQB2MAQ/T5@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26/04/2022 21:24, Rob Herring wrote:
-> On Tue, Apr 26, 2022 at 12:41:44PM +0300, Dmitry Baryshkov wrote:
->> Split tsens properties to the child node of the gcc. This follows the
->> lead of ipq8064 (which also uses a separate node for tsens) and makes
->> device tree closer to other platforms, where tsens is a completely
->> separate device.
->>
->> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> ---
->>   .../bindings/clock/qcom,gcc-apq8064.yaml      | 45 +++++++------------
->>   1 file changed, 17 insertions(+), 28 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
->> index b867da12761e..f2762599f679 100644
->> --- a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
->> +++ b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
->> @@ -23,47 +23,36 @@ description: |
->>   
->>   properties:
->>     compatible:
->> -    enum:
->> -      - qcom,gcc-apq8064
->> -      - qcom,gcc-msm8060
->> -
->> -  nvmem-cells:
->> -    minItems: 1
->> -    maxItems: 2
->> -    description:
->> -      Qualcomm TSENS (thermal sensor device) on some devices can
->> -      be part of GCC and hence the TSENS properties can also be part
->> -      of the GCC/clock-controller node.
->> -      For more details on the TSENS properties please refer
->> -      Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
->> -
->> -  nvmem-cell-names:
->> -    minItems: 1
->>       items:
->> -      - const: calib
->> -      - const: calib_backup
->> -
->> -  '#thermal-sensor-cells':
->> -    const: 1
->> +      - enum:
->> +          - qcom,gcc-apq8064
->> +          - qcom,gcc-msm8060
->> +      - const: syscon
->>   
->>   required:
->>     - compatible
->> -  - nvmem-cells
->> -  - nvmem-cell-names
->> -  - '#thermal-sensor-cells'
->>   
->>   unevaluatedProperties: false
->>   
->>   examples:
->>     - |
->>       clock-controller@900000 {
->> -      compatible = "qcom,gcc-apq8064";
->> +      compatible = "qcom,gcc-apq8064", "syscon";
->>         reg = <0x00900000 0x4000>;
->> -      nvmem-cells = <&tsens_calib>, <&tsens_backup>;
->> -      nvmem-cell-names = "calib", "calib_backup";
->>         #clock-cells = <1>;
->>         #reset-cells = <1>;
->>         #power-domain-cells = <1>;
->> -      #thermal-sensor-cells = <1>;
->> +
->> +      thermal-sensor {
-> 
-> This should throw a warning I think as 'thermal-sensor' needs to be
-> defined. The patch didn't apply for me though.
+Since commit e2a1256b17b1 ("x86/speculation: Restore speculation related MSRs during S3 resume"),
+kmemleak reports this issue:
 
-This series depends on 
-https://lore.kernel.org/linux-arm-msm/20220426093608.2957210-1-dmitry.baryshkov@linaro.org/T/#u
+  unreferenced object 0xffff888009cedc00 (size 256):
+    comm "swapper/0", pid 1, jiffies 4294693823 (age 73.764s)
+    hex dump (first 32 bytes):
+      00 00 00 00 00 00 00 00 48 00 00 00 00 00 00 00  ........H.......
+      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    backtrace:
+      msr_build_context (include/linux/slab.h:621)
+      pm_check_save_msr (arch/x86/power/cpu.c:520)
+      do_one_initcall (init/main.c:1298)
+      kernel_init_freeable (init/main.c:1370)
+      kernel_init (init/main.c:1504)
+      ret_from_fork (arch/x86/entry/entry_64.S:304)
 
-Regarding the warnings, I think this is related to the issue Krzyshtof 
-has reported few days ago. I was not able to trigger warnings for 
-unknown properties if unevaluatedProperties:false is used.
+It is easy to reproduce it on my side:
 
-> 
->> +        compatible = "qcom,msm8960-tsens";
->> +
->> +        nvmem-cells = <&tsens_calib>, <&tsens_backup>;
->> +        nvmem-cell-names = "calib", "calib_backup";
->> +        interrupts = <0 178 4>;
->> +        interrupt-names = "uplow";
->> +
->> +        #qcom,sensors = <11>;
->> +        #thermal-sensor-cells = <1>;
->> +        };
->>       };
->>   ...
->> -- 
->> 2.35.1
->>
->>
+  - boot the VM with a debug kernel config (see the 'Closes:' tag)
+  - wait ~1 minute
+  - start a kmemleak scan
 
+It seems kmemleak has an issue with the array allocated in
+msr_build_context(). This array is assigned to a pointer in a static
+structure (saved_context.saved_msrs->array): there is no leak then.
 
+A simple fix for this issue would be to use kmemleak_no_leak() but Mat
+noticed that the root cause here is alignment within the packed 'struct
+saved_context' (from suspend_64.h). Kmemleak only searches for pointers
+that are aligned (see how pointers are scanned in kmemleak.c), but
+pahole shows that the saved_msrs struct member and all members after it
+in the structure are unaligned:
+
+  struct saved_context {
+    struct pt_regs             regs;                 /*     0   168 */
+    /* --- cacheline 2 boundary (128 bytes) was 40 bytes ago --- */
+    u16                        ds;                   /*   168     2 */
+    u16                        es;                   /*   170     2 */
+    u16                        fs;                   /*   172     2 */
+    u16                        gs;                   /*   174     2 */
+    long unsigned int          kernelmode_gs_base;   /*   176     8 */
+    long unsigned int          usermode_gs_base;     /*   184     8 */
+    /* --- cacheline 3 boundary (192 bytes) --- */
+    long unsigned int          fs_base;              /*   192     8 */
+    long unsigned int          cr0;                  /*   200     8 */
+    long unsigned int          cr2;                  /*   208     8 */
+    long unsigned int          cr3;                  /*   216     8 */
+    long unsigned int          cr4;                  /*   224     8 */
+    u64                        misc_enable;          /*   232     8 */
+    bool                       misc_enable_saved;    /*   240     1 */
+
+   /* Note below odd offset values for the remainder of this struct */
+
+    struct saved_msrs          saved_msrs;           /*   241    16 */
+    /* --- cacheline 4 boundary (256 bytes) was 1 bytes ago --- */
+    long unsigned int          efer;                 /*   257     8 */
+    u16                        gdt_pad;              /*   265     2 */
+    struct desc_ptr            gdt_desc;             /*   267    10 */
+    u16                        idt_pad;              /*   277     2 */
+    struct desc_ptr            idt;                  /*   279    10 */
+    u16                        ldt;                  /*   289     2 */
+    u16                        tss;                  /*   291     2 */
+    long unsigned int          tr;                   /*   293     8 */
+    long unsigned int          safety;               /*   301     8 */
+    long unsigned int          return_address;       /*   309     8 */
+
+    /* size: 317, cachelines: 5, members: 25 */
+    /* last cacheline: 61 bytes */
+  } __attribute__((__packed__));
+
+By moving 'misc_enable_saved' to the end of the struct declaration,
+'saved_msrs' fits in before the cacheline 4 boundary and the kmemleak
+warning goes away.
+
+The comment above the 'saved_context' declaration says to fix
+wakeup_64.S file and __save/__restore_processor_state() if the struct is
+modified: it looks like all the accesses in wakeup_64.S are done through
+offsets which are computed at build-time. This comment has been updated
+accordingly.
+
+At the end, the false positive kmemleak report is due to a limitation
+from kmemleak but that's always good to avoid unaligned member for
+optimisation purposes.
+
+Please note that it looks like this issue is not new, e.g.
+
+  https://lore.kernel.org/all/9f1bb619-c4ee-21c4-a251-870bd4db04fa@lwfinger.net/
+  https://lore.kernel.org/all/94e48fcd-1dbd-ebd2-4c91-f39941735909@molgen.mpg.de/
+
+But on my side, msr_build_context() is only used since:
+
+  commit e2a1256b17b1 ("x86/speculation: Restore speculation related MSRs during S3 resume").
+
+Others probably have the same issue since:
+
+  commit 7a9c2dd08ead ("x86/pm: Introduce quirk framework to save/restore extra MSR registers around suspend/resume"),
+
+Hence the 'Fixes' tag here below to help with the backports.
+
+Fixes: 7a9c2dd08ead ("x86/pm: Introduce quirk framework to save/restore extra MSR registers around suspend/resume")
+Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/268
+Suggested-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+---
+
+Notes:
+    v3:
+     - update the comment above 'saved_context' structure (Borislav)
+    v2:
+     - update 'saved_context' structure instead of using kmemleak_no_leak() (Mat)
+
+ arch/x86/include/asm/suspend_32.h |  2 +-
+ arch/x86/include/asm/suspend_64.h | 12 ++++++++----
+ 2 files changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/include/asm/suspend_32.h b/arch/x86/include/asm/suspend_32.h
+index 7b132d0312eb..a800abb1a992 100644
+--- a/arch/x86/include/asm/suspend_32.h
++++ b/arch/x86/include/asm/suspend_32.h
+@@ -19,7 +19,6 @@ struct saved_context {
+ 	u16 gs;
+ 	unsigned long cr0, cr2, cr3, cr4;
+ 	u64 misc_enable;
+-	bool misc_enable_saved;
+ 	struct saved_msrs saved_msrs;
+ 	struct desc_ptr gdt_desc;
+ 	struct desc_ptr idt;
+@@ -28,6 +27,7 @@ struct saved_context {
+ 	unsigned long tr;
+ 	unsigned long safety;
+ 	unsigned long return_address;
++	bool misc_enable_saved;
+ } __attribute__((packed));
+ 
+ /* routines for saving/restoring kernel state */
+diff --git a/arch/x86/include/asm/suspend_64.h b/arch/x86/include/asm/suspend_64.h
+index 35bb35d28733..0dc400fae1b2 100644
+--- a/arch/x86/include/asm/suspend_64.h
++++ b/arch/x86/include/asm/suspend_64.h
+@@ -14,9 +14,13 @@
+  * Image of the saved processor state, used by the low level ACPI suspend to
+  * RAM code and by the low level hibernation code.
+  *
+- * If you modify it, fix arch/x86/kernel/acpi/wakeup_64.S and make sure that
+- * __save/__restore_processor_state(), defined in arch/x86/kernel/suspend_64.c,
+- * still work as required.
++ * If you modify it, check how it is used in arch/x86/kernel/acpi/wakeup_64.S
++ * and make sure that __save/__restore_processor_state(), defined in
++ * arch/x86/power/cpu.c, still work as required.
++ *
++ * Because the structure is packed, make sure to avoid unaligned members. For
++ * optimisations purposes but also because tools like Kmemleak only search for
++ * pointers that are aligned.
+  */
+ struct saved_context {
+ 	struct pt_regs regs;
+@@ -36,7 +40,6 @@ struct saved_context {
+ 
+ 	unsigned long cr0, cr2, cr3, cr4;
+ 	u64 misc_enable;
+-	bool misc_enable_saved;
+ 	struct saved_msrs saved_msrs;
+ 	unsigned long efer;
+ 	u16 gdt_pad; /* Unused */
+@@ -48,6 +51,7 @@ struct saved_context {
+ 	unsigned long tr;
+ 	unsigned long safety;
+ 	unsigned long return_address;
++	bool misc_enable_saved;
+ } __attribute__((packed));
+ 
+ #define loaddebug(thread,register) \
 -- 
-With best wishes
-Dmitry
+2.34.1
+
