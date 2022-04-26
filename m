@@ -2,86 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA54950F2EE
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 09:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC8050F325
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 09:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344264AbiDZHuI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Apr 2022 03:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38090 "EHLO
+        id S234534AbiDZH5O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Apr 2022 03:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343874AbiDZHuH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 03:50:07 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70F95193F4;
-        Tue, 26 Apr 2022 00:47:00 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3AC2C23A;
-        Tue, 26 Apr 2022 00:47:00 -0700 (PDT)
-Received: from [10.57.12.108] (unknown [10.57.12.108])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AC2743F73B;
-        Tue, 26 Apr 2022 00:46:58 -0700 (PDT)
-Message-ID: <f6bb20c6-38a0-57d6-8979-d14e445da623@arm.com>
-Date:   Tue, 26 Apr 2022 08:46:57 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v3 0/5] Introduce Cpufreq Active Stats
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
+        with ESMTP id S241672AbiDZH5L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 03:57:11 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FE31132D5
+        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 00:54:05 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id k4so17902062plk.7
+        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 00:54:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=DOm03KhEQB3q11B9tWS8kXn8deLeAI3fOc4CQA04TnQ=;
+        b=HTSDobnyjLbBxZllKftkYXsvfzqgLLHT/3FIbSO0oMMW+d64ndo7wFIUThrDwJ9rKR
+         a212IzUQi3m5FAusINjRyEL7T3s6Ihk1708OHV17oJoaZA7K2bHk7u/h6x6IYRgQMHCJ
+         DSnz4Qvm0ByHn6ISBLgK2QqelcHE7zgd3sAPc1IfCBx9rI0zi1i+5AZ8rhVmLjGjEuBN
+         vto0+QWJhNjpGBhOcszPsrcR07Ie4GaulFVcYbJuST2oo2N1Ndghzi+oo7e3VNrvNp/s
+         3uxUjlhm+nUVkUD3SGGMYxe3rl1+Hrpbbn8vgeWuN5h/RX5nW43v5Q+BK/sR+qMKl3F8
+         V3Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=DOm03KhEQB3q11B9tWS8kXn8deLeAI3fOc4CQA04TnQ=;
+        b=VblXA5zAI7TBFtl39KbQXk/Zjr41rNUdI3xU+2et50zzV+UVNmGntPncd5IzxdvQTU
+         oYr4nLJor9HCQ6omn3vrDTrLeT+q11m2OnV3BHADmfFNYvplwO6NRmff0DM4lLpdohMe
+         iMfvxXu9hXBvw1ZcW9JeX+wq/7k+9SslCaXe2uIi3PyE7LQd6v0R05Wt7X4n7y8dVDLT
+         46crI6m5zBP4PxiMVvXNJkqFDc782LgPjE7SHmCsFfR1R9KV8bCgFncuc4Bb5OPQVedJ
+         1DJatHd/HDcuvyT+uGdAxUx4bVChcY/+Sa4DOt/RqXPugifyOdKAAsIzcbBDkVFzE4MD
+         UsrA==
+X-Gm-Message-State: AOAM531z61dqkku8Vhq+NVWyROVSu1+YXAKhdq9tYEs7f+xKcEDXZ0R5
+        qmLZ8Zlb5qpHOgk811uNXdMM6A==
+X-Google-Smtp-Source: ABdhPJwU0NUNJ5rv+uRj0O/DcqdMEs/4OY0PbgRfiWNl4FAee8aZWVP+X06+ln8PpIaC1DevgOhKkw==
+X-Received: by 2002:a17:90a:af98:b0:1d4:67d4:d122 with SMTP id w24-20020a17090aaf9800b001d467d4d122mr25381133pjq.166.1650959644736;
+        Tue, 26 Apr 2022 00:54:04 -0700 (PDT)
+Received: from localhost ([122.177.141.190])
+        by smtp.gmail.com with ESMTPSA id t63-20020a625f42000000b0050a7eaff8c9sm14137187pfb.189.2022.04.26.00.54.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 00:54:04 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 13:24:02 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
 Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
         rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
         rui.zhang@intel.com, amit.kachhap@gmail.com,
         linux-pm@vger.kernel.org
+Subject: Re: [RFC PATCH v3 0/5] Introduce Cpufreq Active Stats
+Message-ID: <20220426075402.qjpato6sqy2kes4x@vireshk-i7>
 References: <20220406220809.22555-1-lukasz.luba@arm.com>
  <20220426031125.ozaxwecwvuby6wo3@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220426031125.ozaxwecwvuby6wo3@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+ <f6bb20c6-38a0-57d6-8979-d14e445da623@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f6bb20c6-38a0-57d6-8979-d14e445da623@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 26-04-22, 08:46, Lukasz Luba wrote:
+> I haven't modify your current cpufreq stats, they are still counting
+> total time (idle + running) for the given frequency. I think this is
+> still useful for some userspace tools. These new proposed stats don't
+> have such sysfs interface to read them. I don't know if userspace would
+> be interested in this information (the running only time). IIRC Android
+> uses bpf mechanisms to get this information to the userspace.
 
+I saw some debugfs bits there, aren't you exposing any data via it ? I
+am just asking about, not suggesting :)
 
-On 4/26/22 04:11, Viresh Kumar wrote:
-> On 06-04-22, 23:08, Lukasz Luba wrote:
->> Hi all,
->>
->> This is the 3rd version of patch set which tries to address issues which are
->> due to missing proper information about CPU performance in time.
->>
->> The issue description:
->> 1. "Cpufreq statistics cover the time when CPUs are in idle states, so they
->>     are not suitable for certain purposes, like thermal control." Rafael [2]
->> 2. Thermal governor Intelligent Power Allocation (IPA) has to estimate power,
->>     for the last period, e.g. 100ms, for each CPU in the Cluster, to grant new
->>     power and set max possible frequency. Currently in some cases it gets big
->>     error, when the frequency of CPU changed in the middle. It is due to the
->>     fact that IPA reads the current frequency for the CPU, not aware of all
->>     other frequencies which were actively (not in idle) used in the last 100ms.
->>
->> This code focuses on tracking the events of idle entry/exit for each CPU
->> and combine them with the frequency tracked statistics inside internal
->> statistics arrays (per-CPU). In the old cpufreq stats we have one shared
->> statistics array for the policy (all CPUs) and not take into account
->> periods when each CPU was in idle.
->>
->> Sometimes the IPA error between old estimation signal and reality is quite
->> big (>50%).
-> 
-> It would have been useful to show how the stats hierarchy looks in userspace
-> now.
-> 
-
-I haven't modify your current cpufreq stats, they are still counting
-total time (idle + running) for the given frequency. I think this is
-still useful for some userspace tools. These new proposed stats don't
-have such sysfs interface to read them. I don't know if userspace would
-be interested in this information (the running only time). IIRC Android
-uses bpf mechanisms to get this information to the userspace.
+-- 
+viresh
