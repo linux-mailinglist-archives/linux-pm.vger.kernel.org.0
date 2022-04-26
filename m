@@ -2,199 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53D36510C45
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 00:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D4C3510C6B
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 01:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355892AbiDZW4b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Apr 2022 18:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38830 "EHLO
+        id S234784AbiDZXL1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Apr 2022 19:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355968AbiDZW42 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 18:56:28 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF0549F85;
-        Tue, 26 Apr 2022 15:53:11 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:60124)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1njU3S-007Fzy-R5; Tue, 26 Apr 2022 16:53:10 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:35772 helo=localhost.localdomain)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1njU3R-006ASW-E4; Tue, 26 Apr 2022 16:53:10 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     rjw@rjwysocki.net, Oleg Nesterov <oleg@redhat.com>,
-        mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
-        tj@kernel.org, linux-pm@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Date:   Tue, 26 Apr 2022 17:52:11 -0500
-Message-Id: <20220426225211.308418-9-ebiederm@xmission.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
-References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+        with ESMTP id S232200AbiDZXL0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 19:11:26 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662B24B42D;
+        Tue, 26 Apr 2022 16:08:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1651014486;
+        bh=shewSG54MMny8witZLV8cLk8Z2rcTmgZSjSmk4pCCKw=;
+        h=X-UI-Sender-Class:To:Cc:From:Subject:Date;
+        b=hJp20dF0IGMDAEW9TSMlyxW0DVWjx3SyMoeBvx4C3Itkvdydz6z/3RGX5BtdX+7I2
+         gzb4u6f98mAhR7J0TU0+uapsWUqUXTn0JuqOxr8gNsS9kKbatvKavmIg0mshAARJyD
+         DpBDnBh6aNMxKrgTw+sQ8y94e5D4CQyp18ILLWVA=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MeCpb-1oKkVt0ITv-00bN7u; Wed, 27
+ Apr 2022 01:08:06 +0200
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Armin Wolf <W_Armin@gmx.de>
+Subject: parent device of thermal cooling device
+Message-ID: <c56e3ae9-835f-4a23-f8e1-764a9a8c3e84@gmx.de>
+Date:   Wed, 27 Apr 2022 01:08:05 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1njU3R-006ASW-E4;;;mid=<20220426225211.308418-9-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX19w1+3yMGSvM4LpuQLqkwbjRk3gRrqwCXE=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:fxB2D5FqIMEIC4syizCmaHRpZY493rL2e5BBqzlzB/om8UzNKcM
+ pYHWEdJMJ+3Yc/7ahBbqJSeYen2lAtHLblwXirc7t1kUIwfrWp9cQKdQumVqPtOtwwNw0LM
+ s3KnprJWIEVPXwRqZ77PzGRO9ZxdOENylTyQSJ44jaKstPWuuaZ0KU3bSVm7shAsB1Rn+X2
+ dCXTYjb6io3fviRYpM/gw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:BTgOQA1clU4=:fHGJe8OljMfcbcMOEa3Lt3
+ 5juxfmtOhY2F//sHUAYIbKYhhbA/Eb0/eqa6uvFgbsW3KLTBidAG64x1tUHEKIOgXx4Jhgf+J
+ NSr1w6HKOrMFZmJgyy1+WiJibWDUf4iwKIjP1LESFHFhlTo9X11sU8YR91c4ZWTiXlqIs8hii
+ IWGuwlwLq7T12STYcCsZCG9FuIJ2eBOjaMfkC9OyeOle11PJ3uN8C1TNszZB2yYfyNzMargAh
+ dVvBbTQixxse5GddqkwZ4b/XV50LMHisR/eWGuD/rM1FeWQNOH7qHz3AZmTNzFf087Qa1exGZ
+ 91SWBqzNs5zRoozeiY5OIJE8xTH68zLchzSaLtntPZut6+CgA2OGbQxRzh3RAMX88BdN1Su3P
+ NywySL3amHKiFsbVqj07qF+ILZ6X5yUOgUaF8Q7iJVuwwr14F9CbwYwvZBTbGwlRA1m4SxYZR
+ v1p/WYaDPamnGYStqqRpLwrEIXJ6ZS3ahEjOAiH0/jNYoJOYW3JtBlUVAbyZw/8oqtUFy3HVp
+ PsolCAPcmFURjIqvSW8ASMkfRzojStGMCMWTNqXotKrgdJiCymYLuCby1J1y/OPsBY89q1cVc
+ BFC+bRSpKUvKdA3koulbNtNoKV0NOfErlMhgw/VlHZTsjvlwQL7iTJ6BomwlTNkU7Fsc3viln
+ M1GO3Q2J8X56K0yVA6NJQnSFOedsUO8AHlIPXssXWODqlAd4iekjruTFGugt8RjJnXOJmoYqD
+ TxALFC+T8bXq5X9yTErogIwPN9LX7EccVhv4+F5H0JYthlwCcB00cZi0YbnFG3nEodYawxVdV
+ U5s3Gnsvcs+smwfAIHFk5akcYr3mDPgG5pz5JuQmK1rnl7ru/qnYYzyu4bL5jL5KkRhgWXATB
+ 3Cy/4nytGU2usi2sCnV/uDuSc0ShjXHJcQqBXitM5wN8aQSFe/of2OZqYxwEbFU4DeBXZXOtu
+ 8SDoV59shDzEfhWotkC7UTMfsoNSIwmrA+rY6Vhm+8vi2NBlHxo9efT9xWPh05EfbhkAkc4Cw
+ AoSVYbjTFigb2l4xnCreMuPw/26voIE4kSe1rcCxxk7P4FbbTJQRwVLP4RV6CJTRaqcmZ2dT8
+ hI4ChI21ZwUDvk=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;linux-kernel@vger.kernel.org
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 561 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 3.9 (0.7%), b_tie_ro: 2.8 (0.5%), parse: 0.72
-        (0.1%), extract_message_metadata: 10 (1.8%), get_uri_detail_list: 1.75
-        (0.3%), tests_pri_-1000: 11 (2.0%), tests_pri_-950: 1.07 (0.2%),
-        tests_pri_-900: 0.84 (0.2%), tests_pri_-90: 119 (21.3%), check_bayes:
-        118 (21.1%), b_tokenize: 9 (1.7%), b_tok_get_all: 9 (1.6%),
-        b_comp_prob: 1.99 (0.4%), b_tok_touch_all: 94 (16.8%), b_finish: 0.63
-        (0.1%), tests_pri_0: 403 (71.9%), check_dkim_signature: 0.43 (0.1%),
-        check_dkim_adsp: 1.77 (0.3%), poll_dns_idle: 0.41 (0.1%),
-        tests_pri_10: 1.71 (0.3%), tests_pri_500: 7 (1.2%), rewrite_mail: 0.00
-        (0.0%)
-Subject: [PATCH 9/9] ptrace: Don't change __state
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Stop playing with tsk->__state to remove TASK_WAKEKILL while a ptrace
-command is executing.
+Hello,
 
-Instead implement a new jobtl flag JOBCTL_DELAY_WAKEKILL.  This new
-flag is set in jobctl_freeze_task and cleared when ptrace_stop is
-awoken or in jobctl_unfreeze_task (when ptrace_stop remains asleep).
+i am currently working on integrating an hwmon driver (dell_smm_hwmon) into the thermal subsystem.
+While doing that, i noticed that when registering cooling devices, the thermal subsystem
+does not allow passing a parent device, so there is no "device/" symlink being created.
 
-In signal_wake_up_state drop TASK_WAKEKILL from state if TASK_WAKEKILL
-is used while JOBCTL_DELAY_WAKEKILL is set.  This has the same effect
-as changing TASK_TRACED to __TASK_TRACED as all of the wake_ups that
-use TASK_KILLABLE go through signal_wake_up except the wake_up in
-ptrace_unfreeze_traced.
+This creates problems for example when a thermal driver is instantiated multiple times while
+creating cooling devices with the same type. Without the "device/" symlink, userspace is
+unable to tell which cooling device belongs to which device.
 
-Previously the __state value of __TASK_TRACED was changed to
-TASK_RUNNING when woken up or back to TASK_TRACED when the code was
-left in ptrace_stop.  Now when woken up ptrace_stop now clears
-JOBCTL_DELAY_WAKEKILL and when left sleeping ptrace_unfreezed_traced
-clears JOBCTL_DELAY_WAKEKILL.
+The acpi fan driver is already inserting a symlink between the cooling device and the ACPI device
+to avoid such issues, but such a symlink could be created automatically by allowing the driver
+to pass a parent device when registering with the thermal subsystem.
 
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
----
- include/linux/sched/jobctl.h |  2 ++
- include/linux/sched/signal.h |  3 ++-
- kernel/ptrace.c              | 11 +++++------
- kernel/signal.c              |  1 +
- 4 files changed, 10 insertions(+), 7 deletions(-)
+Two approaches are possible:
 
-diff --git a/include/linux/sched/jobctl.h b/include/linux/sched/jobctl.h
-index fa067de9f1a9..4e154ad8205f 100644
---- a/include/linux/sched/jobctl.h
-+++ b/include/linux/sched/jobctl.h
-@@ -19,6 +19,7 @@ struct task_struct;
- #define JOBCTL_TRAPPING_BIT	21	/* switching to TRACED */
- #define JOBCTL_LISTENING_BIT	22	/* ptracer is listening for events */
- #define JOBCTL_TRAP_FREEZE_BIT	23	/* trap for cgroup freezer */
-+#define JOBCTL_DELAY_WAKEKILL_BIT	24	/* delay killable wakeups */
- 
- #define JOBCTL_STOP_DEQUEUED	(1UL << JOBCTL_STOP_DEQUEUED_BIT)
- #define JOBCTL_STOP_PENDING	(1UL << JOBCTL_STOP_PENDING_BIT)
-@@ -28,6 +29,7 @@ struct task_struct;
- #define JOBCTL_TRAPPING		(1UL << JOBCTL_TRAPPING_BIT)
- #define JOBCTL_LISTENING	(1UL << JOBCTL_LISTENING_BIT)
- #define JOBCTL_TRAP_FREEZE	(1UL << JOBCTL_TRAP_FREEZE_BIT)
-+#define JOBCTL_DELAY_WAKEKILL	(1UL << JOBCTL_DELAY_WAKEKILL_BIT)
- 
- #define JOBCTL_TRAP_MASK	(JOBCTL_TRAP_STOP | JOBCTL_TRAP_NOTIFY)
- #define JOBCTL_PENDING_MASK	(JOBCTL_STOP_PENDING | JOBCTL_TRAP_MASK)
-diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
-index 3c8b34876744..1947c85aa9d9 100644
---- a/include/linux/sched/signal.h
-+++ b/include/linux/sched/signal.h
-@@ -437,7 +437,8 @@ extern void signal_wake_up_state(struct task_struct *t, unsigned int state);
- 
- static inline void signal_wake_up(struct task_struct *t, bool resume)
- {
--	signal_wake_up_state(t, resume ? TASK_WAKEKILL : 0);
-+	bool wakekill = resume && !(t->jobctl & JOBCTL_DELAY_WAKEKILL);
-+	signal_wake_up_state(t, wakekill ? TASK_WAKEKILL : 0);
- }
- static inline void ptrace_signal_wake_up(struct task_struct *t, bool resume)
- {
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index 842511ee9a9f..0bea74539320 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -194,7 +194,7 @@ static bool ptrace_freeze_traced(struct task_struct *task)
- 
- 	if (task_is_traced(task) && !looks_like_a_spurious_pid(task) &&
- 	    !__fatal_signal_pending(task)) {
--		WRITE_ONCE(task->__state, __TASK_TRACED);
-+		task->jobctl |= JOBCTL_DELAY_WAKEKILL;
- 		ret = true;
- 	}
- 
-@@ -203,7 +203,7 @@ static bool ptrace_freeze_traced(struct task_struct *task)
- 
- static void ptrace_unfreeze_traced(struct task_struct *task)
- {
--	if (READ_ONCE(task->__state) != __TASK_TRACED)
-+	if (!(READ_ONCE(task->jobctl) & JOBCTL_DELAY_WAKEKILL))
- 		return;
- 
- 	WARN_ON(!task->ptrace || task->parent != current);
-@@ -213,11 +213,10 @@ static void ptrace_unfreeze_traced(struct task_struct *task)
- 	 * Recheck state under the lock to close this race.
- 	 */
- 	spin_lock_irq(&task->sighand->siglock);
--	if (READ_ONCE(task->__state) == __TASK_TRACED) {
-+	if (task->jobctl & JOBCTL_DELAY_WAKEKILL) {
-+		task->jobctl &= ~JOBCTL_DELAY_WAKEKILL;
- 		if (__fatal_signal_pending(task))
- 			wake_up_state(task, __TASK_TRACED);
--		else
--			WRITE_ONCE(task->__state, TASK_TRACED);
- 	}
- 	spin_unlock_irq(&task->sighand->siglock);
- }
-@@ -253,7 +252,7 @@ static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
- 	 */
- 	if (lock_task_sighand(child, &flags)) {
- 		if (child->ptrace && child->parent == current) {
--			WARN_ON(READ_ONCE(child->__state) == __TASK_TRACED);
-+			WARN_ON(child->jobctl & JOBCTL_DELAY_WAKEKILL);
- 			/*
- 			 * child->sighand can't be NULL, release_task()
- 			 * does ptrace_unlink() before __exit_signal().
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 584d67deb3cb..2b332f89cbad 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -2307,6 +2307,7 @@ static int ptrace_stop(int exit_code, int why, int clear_code,
- 
- 	/* LISTENING can be set only during STOP traps, clear it */
- 	current->jobctl &= ~JOBCTL_LISTENING;
-+	current->jobctl &= ~JOBCTL_DELAY_WAKEKILL;
- 
- 	/*
- 	 * Queued signals ignored us while we were stopped for tracing.
--- 
-2.35.3
+1. Pass a separate device struct as parent device to __thermal_cooling_device_register().
+
+2. Replace the device tree node argument with a parent device and use the device tree node
+from this device.
+
+Which approach would be the more feasible one?
+
+Armin Wolf
 
