@@ -2,85 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E105950F134
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 08:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB0E50F153
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 08:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245433AbiDZGmF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Apr 2022 02:42:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
+        id S245615AbiDZGpj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Apr 2022 02:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231748AbiDZGmA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 02:42:00 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96671AF3E
-        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 23:38:53 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id e24so521555pjt.2
-        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 23:38:53 -0700 (PDT)
+        with ESMTP id S1343525AbiDZGo2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 02:44:28 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F8211A07
+        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 23:41:21 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id v12so17142354wrv.10
+        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 23:41:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=6pV6AUjp2V1UC4cOoLtl5XlEXuEwCEfH5h8T/x9bk1s=;
-        b=Hmq+v0Iu9XUEYI+1g/J9Ol51Ng1sNDpr9SRXE0a6waomwbD4nITRtU1TL2MQeNMjBR
-         uCPbmlFUp8wLu327lk1gbpkTH5/aBUUMRSIWRYfgbmFwhdMBYP/kxqBRsYdJmgfWqcaP
-         FeH38Tfr10wIkoay+CkyGAHTGYyTEykVIUf+pmAn36fed5XzOD/nWBN4EQOilIQl6ClE
-         MbIeVR7Lz6VvVwzRNX5d5KdS7xWchAx2kOVATgQTkGDlehTPiNoDx3YaFWlcfdSUCTZu
-         qQ9YxtvkOKA2CNcvuARwJ8VZp5ljq+XililkDbnPHrCCZhZ35q2sszDuNULxC5aHF7f1
-         1t7A==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J4tC84WDnGWKXHk8A2ip3/SUHhJiwykkygcCLy7ZG3M=;
+        b=q2dhjUAABiVeC6Em5zKVCnViGpVUUOW2I4YSRya8dguehmirQjNOmrah76tZuQBp/l
+         Bp6lyecUxlwNZfQ/zDahwkcSciiMsEMh0Y9viZfnlDhcP9pi2z7xLEzTT6oNqMuHtjKG
+         J7Kn7/NrorXbV6zvOdWoMUDca1mQqA6FncO1Ocuv8gR2dUn0rodVw1ZsJUAD6YjVM+A4
+         1G8iMH8E5RvfkFxVxMgGVTf74OCHyz/STdupWqG6vj/C106wBGuIoa6p91HtULI7jwUG
+         spaDgyOA3VqlIQ2iJU7SxeE2OFj0Rpwzj3Y9WhZ3ONWCl/VCWQ/r/5bwlhN4OdgOlad6
+         kIog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=6pV6AUjp2V1UC4cOoLtl5XlEXuEwCEfH5h8T/x9bk1s=;
-        b=69o5uQ1EvrbtZZ9/2MSOvobU9u8kv5ucXWvkHfokot6FtG3pqqxb3ddvUefTGm82un
-         9XuHfIusa/7yhKwquhdOrOTa5V0k99jkD9TRO3KDWiD3Cs1Sc6hDg3CkvRc6377/rXoY
-         uiNdtKQFPnMcwQKCpCI+9rISkPKsBCInD5wun9Tf4Dmt+tz+tSXFX7wk8mgMRnzUauhJ
-         Z6DQKL57huM4dfCGFn0TI/q+3tlC6h2kYzrXZvy8rfUcZhMMHSCKI4tUw+4Scl4jeXeA
-         V7DIVsl419EJfgeX3pa/5yvAJwBafIfiaaI0wlJy7vR7Fl8e3o/f9U53i1cXT9Tk4TUs
-         gDOw==
-X-Gm-Message-State: AOAM533IRZyZRKkQyvoyIGtj0gopc5dblB9cat23YyBat0WuD2cQwvoF
-        nWopB1eWyHQ8iI6uVXvg6leeuA==
-X-Google-Smtp-Source: ABdhPJzrYFXkv18FmVHTmLX062X8RhEqAtjZP26tpHCie3BswX1/uq501vZuyAz3S/LIowMNf08Raw==
-X-Received: by 2002:a17:90b:605:b0:1d9:b208:7507 with SMTP id gb5-20020a17090b060500b001d9b2087507mr1431242pjb.125.1650955133468;
-        Mon, 25 Apr 2022 23:38:53 -0700 (PDT)
-Received: from localhost ([122.177.141.190])
-        by smtp.gmail.com with ESMTPSA id d16-20020a056a00245000b004f771b48736sm14770838pfj.194.2022.04.25.23.38.52
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J4tC84WDnGWKXHk8A2ip3/SUHhJiwykkygcCLy7ZG3M=;
+        b=0FIQW1NLBzNInJMXhHYMEfDuCwY77vlify6TPd5KyUfIVqie8SrpZl1hzMvXn56ySm
+         0xEI7uZDi5QDEOghjsx2ATbm6cyrl39W3w94i1Pp/LIKQfLk4LaeSeOtWdUK7ljpA7Pt
+         PpRUY62LhX9A2y6yNBja1rxuxtLLJnBDY87HXyLzQXNk6LRluV4kyuQtlPM5him4b5Hf
+         jkoElcaWv/durOHdXQAdnoZOBk6CrRiUkXfQRUje5WFmq6XvGBQh7obD/CzQ9TKAztvC
+         tcBLCfVF+sbGYkzWmcV2omJ6WkJi7bqe5YrErBRAPCR545OmGa5avDvScoFLtWjrfUe4
+         zGtA==
+X-Gm-Message-State: AOAM530MSPLx9wfZoEZodiTGbhUcJTR4eMSFq+SLxQ5PHUEPAJPBDo6i
+        vcGRzu2N34+WQwm1lUk+FM8adg==
+X-Google-Smtp-Source: ABdhPJxxLdGpWyDF3ZLOHrmbGFENDP469dDaGp3hSGgRcQQz1ogYATB8V3giSHft4XpQCY4ilTfHyw==
+X-Received: by 2002:adf:eb4d:0:b0:1ed:c1f7:a951 with SMTP id u13-20020adfeb4d000000b001edc1f7a951mr16504691wrn.454.1650955279990;
+        Mon, 25 Apr 2022 23:41:19 -0700 (PDT)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id j13-20020a05600c190d00b00393ee555683sm4216157wmq.27.2022.04.25.23.41.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 23:38:52 -0700 (PDT)
-Date:   Tue, 26 Apr 2022 12:08:51 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3] cpufreq: qcom-cpufreq-hw: Clear dcvs interrupts
-Message-ID: <20220426063851.u65lyudtatnaribr@vireshk-i7>
-References: <20220407200919.3054189-1-vladimir.zapolskiy@linaro.org>
+        Mon, 25 Apr 2022 23:41:19 -0700 (PDT)
+From:   Corentin Labbe <clabbe@baylibre.com>
+To:     amitk@kernel.org, daniel.lezcano@linaro.org, rafael@kernel.org,
+        rui.zhang@intel.com
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Corentin Labbe <clabbe@baylibre.com>
+Subject: [PATCH] thermal: thermal_of: fix typo on __thermal_bind_params
+Date:   Tue, 26 Apr 2022 06:41:13 +0000
+Message-Id: <20220426064113.3787826-1-clabbe@baylibre.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407200919.3054189-1-vladimir.zapolskiy@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07-04-22, 23:09, Vladimir Zapolskiy wrote:
-> It's noted that dcvs interrupts are not self-clearing, thus an interrupt
-> handler runs constantly, which leads to a severe regression in runtime.
-> To fix the problem an explicit write to clear interrupt register is
-> required, note that on OSM platforms the register may not be present.
-> 
-> Fixes: 275157b367f4 ("cpufreq: qcom-cpufreq-hw: Add dcvs interrupt support")
-> Signed-off-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Add a missing s to __thermal_bind_param kernel doc comment.
+This fixes the following sparse warnings:
+drivers/thermal/thermal_of.c:50: warning: expecting prototype for struct __thermal_bind_param. Prototype was for struct __thermal_bind_params instead
 
-Applied. Thanks.
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+---
+ drivers/thermal/thermal_of.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index da484800906f..b65d435cb92f 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -35,7 +35,7 @@ struct __thermal_cooling_bind_param {
+ };
+ 
+ /**
+- * struct __thermal_bind_param - a match between trip and cooling device
++ * struct __thermal_bind_params - a match between trip and cooling device
+  * @tcbp: a pointer to an array of cooling devices
+  * @count: number of elements in array
+  * @trip_id: the trip point index
 -- 
-viresh
+2.35.1
+
