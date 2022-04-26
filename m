@@ -2,103 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFB525107CC
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 20:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B59551098C
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 22:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345051AbiDZTCo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Apr 2022 15:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
+        id S1349165AbiDZULQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Apr 2022 16:11:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231493AbiDZTCm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 15:02:42 -0400
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E701D198C74;
-        Tue, 26 Apr 2022 11:59:33 -0700 (PDT)
-Received: by mail-ot1-f50.google.com with SMTP id v12-20020a9d7d0c000000b006054b51c3d4so13685273otn.8;
-        Tue, 26 Apr 2022 11:59:33 -0700 (PDT)
+        with ESMTP id S1345389AbiDZULQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 16:11:16 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB7215B45E
+        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 13:08:07 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id y3so17914702ejo.12
+        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 13:08:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares-net.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tLEXJAA00IeUn92g+4KPqheiYchRzNk1CErI3hE/2ek=;
+        b=GZTVe7N8eI4UTdUZ9Tjai6ca3oa5nN6rkKqDwJU5o1VwzHSMXgIHJRjjZsQACU5uBr
+         GlkbgtWhXlTBtH3QXpvEoPAkUzhX7wHNUHEaLjFraK4Fxtf4kIrosSkKY/VWdTxIs6pf
+         5j3hctG+fUcS4QoW3bLZ0xoaJyYh9V/s3+zsgtxv2L2OcFOc1uHBT5Q7sglwvPcZZZdv
+         bavXpvLDh9qLJjqRuhTKl+u9s40qyzYO9BnYYSieFdcxtSESEFvW2YK+MMlVYbi0SMeb
+         Fc/sEvZjRZVKC3V11zRIwjbWtuJxw1dSkIWhUS+sK4rScXto270+v/jPojKThfYXG71w
+         +PLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KBAsRSlI5kfF827D6uZ20E48AKeiISaoDfHd2SYry2c=;
-        b=34hw1vCs/6W+9fV15tQq9cheJt1dZN/NVzxYjXwiFpyLiWCI1OcOaAaJQ/2zJxlM9O
-         8roSLKAeqOJ3hu4JE1+pkEhKdHOJb88QKfqJk3+km281VhtvVVnt+smCWe+T+E83vfLB
-         Q4y6QSRwQfyPjrX3jDbxNflgOVmq3Lvb0Hv9S/fFxSFFi+0/uukonOt4M8VIja+e8caU
-         7l08aIOXjTSjiFBPVFhxdy0FGgeApIDVjCY6RY4p82IS/bJ+E8X+/OOnwYHwrsGwt7zh
-         fHuplPGEhIATWXjWt8s3szyundZVS36nu37xscDw7mmKP/SOgAxQfqKPpjcNTSdF98jC
-         QE/A==
-X-Gm-Message-State: AOAM5310CRqwW4jJ1sH7uN8Nbm1Z+MJYocovK3pUy7mKfFgM0ocQuhX3
-        WKKGZ6Xr/duIKKqdxLSkhQ==
-X-Google-Smtp-Source: ABdhPJwTxcgP/rmXRz69W2nYrZhXJ4foSfebPmXAvMZ8QYnHXAV1DWgVRH8w6+rLGzU7kQWD+4exPQ==
-X-Received: by 2002:a05:6830:10d:b0:605:7db9:85f6 with SMTP id i13-20020a056830010d00b006057db985f6mr9017248otp.145.1650999573228;
-        Tue, 26 Apr 2022 11:59:33 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n18-20020a056870349200b000e686d13898sm1116146oah.50.2022.04.26.11.59.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 11:59:32 -0700 (PDT)
-Received: (nullmailer pid 2358549 invoked by uid 1000);
-        Tue, 26 Apr 2022 18:59:31 -0000
-Date:   Tue, 26 Apr 2022 13:59:31 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/5] dt-bindings: interconnect: Update property for
- icc-rpm path tag
-Message-ID: <YmhBE/JDV66qQIBv@robh.at.kernel.org>
-References: <20220416154013.1357444-1-leo.yan@linaro.org>
- <20220416154013.1357444-2-leo.yan@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tLEXJAA00IeUn92g+4KPqheiYchRzNk1CErI3hE/2ek=;
+        b=IcRtFCifEGKFkP5vEV9+1OQAzsNFDgFMEbY+FS++LkkB93GWmzI2n0PKWVMIG+Ty4s
+         kEi5Crge26arJ7M+O1gkbZUjMEhA20bmsfEp8sX/pZXT/kV1zdJJlTCWURYHudH5+/vr
+         Ci+3HSfHXakbHap/4mVM8r9SreurGe4aUDHfgzVwGIN13uEAR1helVs6R91Ym+Y3s2GS
+         /BK/1nD/RHI6a0sny6lvdX16Ycl4swKWLPnkvvTlALpU7ATJbPfwDEAh97dcZ70wdday
+         7cguO3b+v9IqS8jQ0VT6I3XjumAhRJQxyuOErKJuSziyaEVOHH4teXVKtNYu/GW6kpP5
+         HWyg==
+X-Gm-Message-State: AOAM532S7J0xkRkfGMxzaXwjUUpM4Dmht9n7LJwfRikH86FtUtORPpco
+        XS5vlKmmEViDuSipHHU1qpWsMA==
+X-Google-Smtp-Source: ABdhPJw9/fEtAIeFtCRKchGp8lfvceTRS5BAE6i9Fuu3os3IVIddM48wscmCVR8F4475NEB0tvMcPg==
+X-Received: by 2002:a17:907:62a6:b0:6ef:8118:d3e2 with SMTP id nd38-20020a17090762a600b006ef8118d3e2mr22587094ejc.605.1651003685427;
+        Tue, 26 Apr 2022 13:08:05 -0700 (PDT)
+Received: from ?IPV6:2a02:578:8593:1200:d053:7ae:ded9:ba66? ([2a02:578:8593:1200:d053:7ae:ded9:ba66])
+        by smtp.gmail.com with ESMTPSA id kt24-20020a170906aad800b006f37988318esm4074017ejb.48.2022.04.26.13.08.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 13:08:02 -0700 (PDT)
+Message-ID: <645fe7b9-4751-f94a-2ae7-37e6c1a7165a@tessares.net>
+Date:   Tue, 26 Apr 2022 22:08:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220416154013.1357444-2-leo.yan@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2] x86/pm: fix false positive kmemleak report in
+ msr_build_context()
+Content-Language: en-GB
+To:     Borislav Petkov <bp@alien8.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Chen Yu <yu.c.chen@intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220423182410.1841114-1-matthieu.baerts@tessares.net>
+ <YmgOP1FFmidS9ecJ@zn.tnic>
+ <CAJZ5v0gzvOagiYsMxznksrjmtZFV873DaLAiOo4YHkoUq5qTTA@mail.gmail.com>
+ <Ymgrn03YqecDlPOB@zn.tnic>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <Ymgrn03YqecDlPOB@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Apr 16, 2022 at 11:40:09PM +0800, Leo Yan wrote:
-> To support path tag in icc-rpm driver, the "#interconnect-cells"
-> property is updated as enumerate values: 1 or 2.  Setting to 1 means
-> it is compatible with old DT binding that interconnect path doesn't
-> contain tag, if set to 2 for "#interconnect-cells" property, then the
-> second specifier in the interconnect path indicates the voting is for
-> which buckets.
-> 
-> Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> ---
->  Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
-> index 89853b482513..7464a50804db 100644
-> --- a/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
-> @@ -118,7 +118,7 @@ allOf:
->                    - qcom,msm8939-snoc-mm
->  
->                '#interconnect-cells':
-> -                const: 1
-> +                enum: [ 1, 2 ]
+Hi Borislav, Rafael,
 
-Describe what each cell value is here.
+Thank you for your reviews!
 
->  
->                clock-names:
->                  items:
-> -- 
-> 2.25.1
+On 26/04/2022 19:27, Borislav Petkov wrote:
+> On Tue, Apr 26, 2022 at 06:24:04PM +0200, Rafael J. Wysocki wrote:
+>> So can the comment be dropped entirely?
 > 
+> Looks like it to me. All the accesses in wakeup_64.S are done through
+> those offsets which are computed at build-time so they should always be
+> valid.
 > 
+> OTOH, I wouldn't mind having there some text making any future person
+> touching this, aware of where to look when making changes.
+> 
+> Some changes like removing a struct member are nicely caught, ofc,
+> see below. But for something else which is a lot more subtle having a
+> comment say "hey, have a look at where this is used in wakeup_64.S and
+> make sure everything is still kosher" is better than having no comment
+> at all. IMHO.
+Good point, let me update the comment and the commit message in a new v3.
+
+Cheers,
+Matt
+-- 
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
