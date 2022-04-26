@@ -2,252 +2,256 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14017510A57
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 22:22:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C94510AE1
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 23:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355060AbiDZUZK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Apr 2022 16:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53480 "EHLO
+        id S1355227AbiDZVDj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Apr 2022 17:03:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354931AbiDZUZF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 16:25:05 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA02026548
-        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 13:21:54 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id a14-20020a7bc1ce000000b00393fb52a386so1583537wmj.1
-        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 13:21:54 -0700 (PDT)
+        with ESMTP id S1355223AbiDZVDh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 17:03:37 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE7F381AE
+        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 14:00:27 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id k12so9662736lfr.9
+        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 14:00:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares-net.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sVY9nutpfAKFV3xZ4F3eLJ4g4dYsJo3VxdIpGHzIaFc=;
-        b=d1BFcbkPX0unVPwlcWKyiGlE++BgdUFEEcYm/YOa8lz1QnTaYZkNH+tUo24ziYy5GR
-         ELt30ol1ANU0wTk0lmbr/S7jmdQsJCKkXdOGNydiUQ/E8gQ2CP4jHcfc7N3cLtywLK9m
-         0onNgb2lQ9aRFAIQzoDk6lmmFzgte6QxSse4QOVd++dbN95pEXroxwK6JVU8Y+A365cz
-         AYiqgQSInX3OQjbvFYJ/TyDJQSIxH3rT5ADv5BHWboEory1Z8CZG0CXZIB/5rEJR8sky
-         7pnqfGtUWxWfVJpDzgPJIE/5+IzT+EAdPwbcJZ2VeseM65bl9H0C4hkbnYXq9W1QWZMX
-         gxBw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=GSzP6uxkKYuG1R8bJVRxzgpXjWf7cw3KARY48NOzhZE=;
+        b=ZqR39PynCKwRobtW85Gl8+U6Etmd68x91oTP/DUIr3hHG9UjCCxIRW8gGWCyTDgX40
+         Pr0rox50PCYQVIMtBzG1kZ9nipQrB2Cd0YbdqjqnyIGWPLlmkunrvIRIGtv6MfTIn8RQ
+         gbhZW0AEpXZXb4xSIA/KxwVtR97+oEMXv4CtRRS9WTdTnRZ3JgSXeopmCzQhsTzcFjLk
+         lwy/AjSAtcrY3/HAjkNBX3zH7+ISVxJOFNPYWD9tlVO0FFOBdhV/dWcVGLRd8Bn1fVH8
+         HISu88wLJP6tmz++fXs5SSZ101xW2P9MGYALFdRvBkdUHveTbiAhpgY/5FLpGzPTHXCB
+         PMrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=sVY9nutpfAKFV3xZ4F3eLJ4g4dYsJo3VxdIpGHzIaFc=;
-        b=QGk6p8Mzn/4xbALiPnoUbr+6gA9MWF2Pd4u8G6fo6jsMmoxFyxQaYr+V1yz3BLkQeq
-         hEMx87SdnHUJPKWSPqo3v1GZ2rWSVRiWQSRFhNYRuZoA12toqqW7Ggh+sZXsD1D2TzKF
-         m5b1VZJbe9r2CyruGFdnurPLE4DfJg2mEzKMktnEnHQ35yeuk50AjoEyjIVOifelFItz
-         KuwfqvIqqIM6AAzXFV9h8+Sjq7Vor0nQPOp92RmsWz/cpoVJWw0CKHaU74u3sPIu4b6J
-         12PyGy8ZqujiovOKGLoy7oG8XHo9xoCdi8pH+DMqDKPeXvK5oOxjT3RXRTV/0mnNXqHV
-         rJ8A==
-X-Gm-Message-State: AOAM5309LaYod/d2TNTtPOAgOMX6Ovs1TvkyDqucVjwEaf6bSReLXZpr
-        sAUUMo0ZofBxoP/CFLJQgnNaA1RmkWDVE4oK
-X-Google-Smtp-Source: ABdhPJy0k2UuWe81EUEzvM+o7RtFJNoY53ad3PF4mpXzkXNOHze0Jytn6Z3TdCMZH2cJbDTrY9vOSQ==
-X-Received: by 2002:a1c:4e0b:0:b0:393:fd8f:e340 with SMTP id g11-20020a1c4e0b000000b00393fd8fe340mr1250941wmh.136.1651004513313;
-        Tue, 26 Apr 2022 13:21:53 -0700 (PDT)
-Received: from tsr-vdi-mbaerts.nix.tessares.net (static.23.216.130.94.clients.your-server.de. [94.130.216.23])
-        by smtp.gmail.com with ESMTPSA id o2-20020a5d6482000000b0020a96536fcdsm13041837wri.57.2022.04.26.13.21.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 13:21:52 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Chen Yu <yu.c.chen@intel.com>
-Cc:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>, linux-mm@kvack.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Ingo Molnar <mingo@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] x86/pm: fix false positive kmemleak report in msr_build_context()
-Date:   Tue, 26 Apr 2022 22:21:37 +0200
-Message-Id: <20220426202138.498310-1-matthieu.baerts@tessares.net>
-X-Mailer: git-send-email 2.34.1
+        bh=GSzP6uxkKYuG1R8bJVRxzgpXjWf7cw3KARY48NOzhZE=;
+        b=iSFYzUMlBXbyBw5oRSySmFxOuUo96Eoo+GDJuVlTc/LTZeNModJeFcEhmKaJA5hVrs
+         GcgDDolS5mJwhZhZgZCHnLXU+I4PmhQ9W+iitD0zDF3c1Cl2XyH9TZRkh6jAjqii5Dge
+         SUyYYbB2LGG5wpHVzgmA894GT3+DNx73gOWCEUgfKxpmPGoSOrbzubZorQMWihm/adLR
+         wJ7F+teEYKxzA+8nggRu60gwEYHzMtig118fMX9lcQY2FfjwCL0uUzASraC+/R0GOOMW
+         K4v94a5msYliaskG9Z4azRN+c0OIaJnXw1a9rdDGO7i+eh7PhxCt+ZGf7ETc76MmcSxA
+         4onw==
+X-Gm-Message-State: AOAM531Fn409FhoUy6upCHx0PopQzVEuqNcRKmDuMJ9lQQTt4kMkRS96
+        wBNsS9xqNSQYT84h8D0m6Qp4pQ==
+X-Google-Smtp-Source: ABdhPJxAocXmhkxgMF4RMOVxnXBY7lKs3WTWGFENrd1f2UBUWnOmGz/h1CzDIgE5DeoVSmIQNoiKCA==
+X-Received: by 2002:a05:6512:2613:b0:448:5164:689d with SMTP id bt19-20020a056512261300b004485164689dmr17737110lfb.526.1651006825775;
+        Tue, 26 Apr 2022 14:00:25 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id p6-20020a2e7406000000b0024f0b2c6dbdsm1068185ljc.71.2022.04.26.14.00.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Apr 2022 14:00:25 -0700 (PDT)
+Message-ID: <e7a8ce84-3029-ea90-628b-1072bd49baf4@linaro.org>
+Date:   Wed, 27 Apr 2022 00:00:24 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v1 2/5] interconnect: qcom: Move qcom_icc_xlate_extended()
+ to a common file
+Content-Language: en-GB
+To:     Leo Yan <leo.yan@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220416154013.1357444-1-leo.yan@linaro.org>
+ <20220416154013.1357444-3-leo.yan@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220416154013.1357444-3-leo.yan@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Since commit e2a1256b17b1 ("x86/speculation: Restore speculation related MSRs during S3 resume"),
-kmemleak reports this issue:
+On 16/04/2022 18:40, Leo Yan wrote:
+> since there have conflict between two headers icc-rpmh.h and icc-rpm.h,
+> the function qcom_icc_xlate_extended() is declared in icc-rpmh.h thus
+> it cannot be used by icc-rpm driver.
+> 
+> Move the function to a new common file icc-common.c so that allow it to
+> be called by multiple drivers.
+> 
+> Signed-off-by: Leo Yan <leo.yan@linaro.org>
 
-  unreferenced object 0xffff888009cedc00 (size 256):
-    comm "swapper/0", pid 1, jiffies 4294693823 (age 73.764s)
-    hex dump (first 32 bytes):
-      00 00 00 00 00 00 00 00 48 00 00 00 00 00 00 00  ........H.......
-      00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    backtrace:
-      msr_build_context (include/linux/slab.h:621)
-      pm_check_save_msr (arch/x86/power/cpu.c:520)
-      do_one_initcall (init/main.c:1298)
-      kernel_init_freeable (init/main.c:1370)
-      kernel_init (init/main.c:1504)
-      ret_from_fork (arch/x86/entry/entry_64.S:304)
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-It is easy to reproduce it on my side:
+> ---
+>   drivers/interconnect/qcom/Makefile     |  3 +++
+>   drivers/interconnect/qcom/icc-common.c | 34 ++++++++++++++++++++++++++
+>   drivers/interconnect/qcom/icc-common.h | 13 ++++++++++
+>   drivers/interconnect/qcom/icc-rpmh.c   | 26 +-------------------
+>   drivers/interconnect/qcom/icc-rpmh.h   |  1 -
+>   drivers/interconnect/qcom/sm8450.c     |  1 +
+>   6 files changed, 52 insertions(+), 26 deletions(-)
+>   create mode 100644 drivers/interconnect/qcom/icc-common.c
+>   create mode 100644 drivers/interconnect/qcom/icc-common.h
+> 
+> diff --git a/drivers/interconnect/qcom/Makefile b/drivers/interconnect/qcom/Makefile
+> index ceae9bb566c6..bbb3d6daaad1 100644
+> --- a/drivers/interconnect/qcom/Makefile
+> +++ b/drivers/interconnect/qcom/Makefile
+> @@ -1,5 +1,8 @@
+>   # SPDX-License-Identifier: GPL-2.0
+>   
+> +obj-$(CONFIG_INTERCONNECT_QCOM) += interconnect_qcom.o
+> +
+> +interconnect_qcom-y			:= icc-common.o
+>   icc-bcm-voter-objs			:= bcm-voter.o
+>   qnoc-msm8916-objs			:= msm8916.o
+>   qnoc-msm8939-objs			:= msm8939.o
+> diff --git a/drivers/interconnect/qcom/icc-common.c b/drivers/interconnect/qcom/icc-common.c
+> new file mode 100644
+> index 000000000000..0822ce207b5d
+> --- /dev/null
+> +++ b/drivers/interconnect/qcom/icc-common.c
+> @@ -0,0 +1,34 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2022 Linaro Ltd.
+> + */
+> +
+> +#include <linux/of.h>
+> +#include <linux/slab.h>
+> +
+> +#include "icc-common.h"
+> +
+> +struct icc_node_data *qcom_icc_xlate_extended(struct of_phandle_args *spec, void *data)
+> +{
+> +	struct icc_node_data *ndata;
+> +	struct icc_node *node;
+> +
+> +	node = of_icc_xlate_onecell(spec, data);
+> +	if (IS_ERR(node))
+> +		return ERR_CAST(node);
+> +
+> +	ndata = kzalloc(sizeof(*ndata), GFP_KERNEL);
+> +	if (!ndata)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	ndata->node = node;
+> +
+> +	if (spec->args_count == 2)
+> +		ndata->tag = spec->args[1];
+> +
+> +	if (spec->args_count > 2)
+> +		pr_warn("%pOF: Too many arguments, path tag is not parsed\n", spec->np);
+> +
+> +	return ndata;
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_icc_xlate_extended);
+> diff --git a/drivers/interconnect/qcom/icc-common.h b/drivers/interconnect/qcom/icc-common.h
+> new file mode 100644
+> index 000000000000..33bb2c38dff3
+> --- /dev/null
+> +++ b/drivers/interconnect/qcom/icc-common.h
+> @@ -0,0 +1,13 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2022 Linaro Ltd.
+> + */
+> +
+> +#ifndef __DRIVERS_INTERCONNECT_QCOM_ICC_COMMON_H__
+> +#define __DRIVERS_INTERCONNECT_QCOM_ICC_COMMON_H__
+> +
+> +#include <linux/interconnect-provider.h>
 
-  - boot the VM with a debug kernel config (see the 'Closes:' tag)
-  - wait ~1 minute
-  - start a kmemleak scan
+If it's just for the sake of the function prototype, you can replace 
+#include with forward declarations of two used structures:
 
-It seems kmemleak has an issue with the array allocated in
-msr_build_context(). This array is assigned to a pointer in a static
-structure (saved_context.saved_msrs->array): there is no leak then.
+struct icc_node_data;
+struct of_phandle_args;
 
-A simple fix for this issue would be to use kmemleak_no_leak() but Mat
-noticed that the root cause here is alignment within the packed 'struct
-saved_context' (from suspend_64.h). Kmemleak only searches for pointers
-that are aligned (see how pointers are scanned in kmemleak.c), but
-pahole shows that the saved_msrs struct member and all members after it
-in the structure are unaligned:
+> +
+> +struct icc_node_data *qcom_icc_xlate_extended(struct of_phandle_args *spec, void *data);
+> +
+> +#endif
+> diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
+> index 2c8e12549804..9a0ac85d2a84 100644
+> --- a/drivers/interconnect/qcom/icc-rpmh.c
+> +++ b/drivers/interconnect/qcom/icc-rpmh.c
+> @@ -11,6 +11,7 @@
+>   #include <linux/slab.h>
+>   
+>   #include "bcm-voter.h"
+> +#include "icc-common.h"
+>   #include "icc-rpmh.h"
+>   
+>   /**
+> @@ -100,31 +101,6 @@ int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+>   }
+>   EXPORT_SYMBOL_GPL(qcom_icc_set);
+>   
+> -struct icc_node_data *qcom_icc_xlate_extended(struct of_phandle_args *spec, void *data)
+> -{
+> -	struct icc_node_data *ndata;
+> -	struct icc_node *node;
+> -
+> -	node = of_icc_xlate_onecell(spec, data);
+> -	if (IS_ERR(node))
+> -		return ERR_CAST(node);
+> -
+> -	ndata = kzalloc(sizeof(*ndata), GFP_KERNEL);
+> -	if (!ndata)
+> -		return ERR_PTR(-ENOMEM);
+> -
+> -	ndata->node = node;
+> -
+> -	if (spec->args_count == 2)
+> -		ndata->tag = spec->args[1];
+> -
+> -	if (spec->args_count > 2)
+> -		pr_warn("%pOF: Too many arguments, path tag is not parsed\n", spec->np);
+> -
+> -	return ndata;
+> -}
+> -EXPORT_SYMBOL_GPL(qcom_icc_xlate_extended);
+> -
+>   /**
+>    * qcom_icc_bcm_init - populates bcm aux data and connect qnodes
+>    * @bcm: bcm to be initialized
+> diff --git a/drivers/interconnect/qcom/icc-rpmh.h b/drivers/interconnect/qcom/icc-rpmh.h
+> index 4bfc060529ba..84acc540a5f7 100644
+> --- a/drivers/interconnect/qcom/icc-rpmh.h
+> +++ b/drivers/interconnect/qcom/icc-rpmh.h
+> @@ -131,7 +131,6 @@ struct qcom_icc_desc {
+>   int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
+>   		       u32 peak_bw, u32 *agg_avg, u32 *agg_peak);
+>   int qcom_icc_set(struct icc_node *src, struct icc_node *dst);
+> -struct icc_node_data *qcom_icc_xlate_extended(struct of_phandle_args *spec, void *data);
+>   int qcom_icc_bcm_init(struct qcom_icc_bcm *bcm, struct device *dev);
+>   void qcom_icc_pre_aggregate(struct icc_node *node);
+>   int qcom_icc_rpmh_probe(struct platform_device *pdev);
+> diff --git a/drivers/interconnect/qcom/sm8450.c b/drivers/interconnect/qcom/sm8450.c
+> index 8d99ee6421df..23045cf17e37 100644
+> --- a/drivers/interconnect/qcom/sm8450.c
+> +++ b/drivers/interconnect/qcom/sm8450.c
+> @@ -12,6 +12,7 @@
+>   #include <dt-bindings/interconnect/qcom,sm8450.h>
+>   
+>   #include "bcm-voter.h"
+> +#include "icc-common.h"
+>   #include "icc-rpmh.h"
+>   #include "sm8450.h"
+>   
 
-  struct saved_context {
-    struct pt_regs             regs;                 /*     0   168 */
-    /* --- cacheline 2 boundary (128 bytes) was 40 bytes ago --- */
-    u16                        ds;                   /*   168     2 */
-    u16                        es;                   /*   170     2 */
-    u16                        fs;                   /*   172     2 */
-    u16                        gs;                   /*   174     2 */
-    long unsigned int          kernelmode_gs_base;   /*   176     8 */
-    long unsigned int          usermode_gs_base;     /*   184     8 */
-    /* --- cacheline 3 boundary (192 bytes) --- */
-    long unsigned int          fs_base;              /*   192     8 */
-    long unsigned int          cr0;                  /*   200     8 */
-    long unsigned int          cr2;                  /*   208     8 */
-    long unsigned int          cr3;                  /*   216     8 */
-    long unsigned int          cr4;                  /*   224     8 */
-    u64                        misc_enable;          /*   232     8 */
-    bool                       misc_enable_saved;    /*   240     1 */
 
-   /* Note below odd offset values for the remainder of this struct */
-
-    struct saved_msrs          saved_msrs;           /*   241    16 */
-    /* --- cacheline 4 boundary (256 bytes) was 1 bytes ago --- */
-    long unsigned int          efer;                 /*   257     8 */
-    u16                        gdt_pad;              /*   265     2 */
-    struct desc_ptr            gdt_desc;             /*   267    10 */
-    u16                        idt_pad;              /*   277     2 */
-    struct desc_ptr            idt;                  /*   279    10 */
-    u16                        ldt;                  /*   289     2 */
-    u16                        tss;                  /*   291     2 */
-    long unsigned int          tr;                   /*   293     8 */
-    long unsigned int          safety;               /*   301     8 */
-    long unsigned int          return_address;       /*   309     8 */
-
-    /* size: 317, cachelines: 5, members: 25 */
-    /* last cacheline: 61 bytes */
-  } __attribute__((__packed__));
-
-By moving 'misc_enable_saved' to the end of the struct declaration,
-'saved_msrs' fits in before the cacheline 4 boundary and the kmemleak
-warning goes away.
-
-The comment above the 'saved_context' declaration says to fix
-wakeup_64.S file and __save/__restore_processor_state() if the struct is
-modified: it looks like all the accesses in wakeup_64.S are done through
-offsets which are computed at build-time. This comment has been updated
-accordingly.
-
-At the end, the false positive kmemleak report is due to a limitation
-from kmemleak but that's always good to avoid unaligned member for
-optimisation purposes.
-
-Please note that it looks like this issue is not new, e.g.
-
-  https://lore.kernel.org/all/9f1bb619-c4ee-21c4-a251-870bd4db04fa@lwfinger.net/
-  https://lore.kernel.org/all/94e48fcd-1dbd-ebd2-4c91-f39941735909@molgen.mpg.de/
-
-But on my side, msr_build_context() is only used since:
-
-  commit e2a1256b17b1 ("x86/speculation: Restore speculation related MSRs during S3 resume").
-
-Others probably have the same issue since:
-
-  commit 7a9c2dd08ead ("x86/pm: Introduce quirk framework to save/restore extra MSR registers around suspend/resume"),
-
-Hence the 'Fixes' tag here below to help with the backports.
-
-Fixes: 7a9c2dd08ead ("x86/pm: Introduce quirk framework to save/restore extra MSR registers around suspend/resume")
-Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/268
-Suggested-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
-
-Notes:
-    v3:
-     - update the comment above 'saved_context' structure (Borislav)
-    v2:
-     - update 'saved_context' structure instead of using kmemleak_no_leak() (Mat)
-
- arch/x86/include/asm/suspend_32.h |  2 +-
- arch/x86/include/asm/suspend_64.h | 12 ++++++++----
- 2 files changed, 9 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/include/asm/suspend_32.h b/arch/x86/include/asm/suspend_32.h
-index 7b132d0312eb..a800abb1a992 100644
---- a/arch/x86/include/asm/suspend_32.h
-+++ b/arch/x86/include/asm/suspend_32.h
-@@ -19,7 +19,6 @@ struct saved_context {
- 	u16 gs;
- 	unsigned long cr0, cr2, cr3, cr4;
- 	u64 misc_enable;
--	bool misc_enable_saved;
- 	struct saved_msrs saved_msrs;
- 	struct desc_ptr gdt_desc;
- 	struct desc_ptr idt;
-@@ -28,6 +27,7 @@ struct saved_context {
- 	unsigned long tr;
- 	unsigned long safety;
- 	unsigned long return_address;
-+	bool misc_enable_saved;
- } __attribute__((packed));
- 
- /* routines for saving/restoring kernel state */
-diff --git a/arch/x86/include/asm/suspend_64.h b/arch/x86/include/asm/suspend_64.h
-index 35bb35d28733..0dc400fae1b2 100644
---- a/arch/x86/include/asm/suspend_64.h
-+++ b/arch/x86/include/asm/suspend_64.h
-@@ -14,9 +14,13 @@
-  * Image of the saved processor state, used by the low level ACPI suspend to
-  * RAM code and by the low level hibernation code.
-  *
-- * If you modify it, fix arch/x86/kernel/acpi/wakeup_64.S and make sure that
-- * __save/__restore_processor_state(), defined in arch/x86/kernel/suspend_64.c,
-- * still work as required.
-+ * If you modify it, check how it is used in arch/x86/kernel/acpi/wakeup_64.S
-+ * and make sure that __save/__restore_processor_state(), defined in
-+ * arch/x86/power/cpu.c, still work as required.
-+ *
-+ * Because the structure is packed, make sure to avoid unaligned members. For
-+ * optimisations purposes but also because tools like Kmemleak only search for
-+ * pointers that are aligned.
-  */
- struct saved_context {
- 	struct pt_regs regs;
-@@ -36,7 +40,6 @@ struct saved_context {
- 
- 	unsigned long cr0, cr2, cr3, cr4;
- 	u64 misc_enable;
--	bool misc_enable_saved;
- 	struct saved_msrs saved_msrs;
- 	unsigned long efer;
- 	u16 gdt_pad; /* Unused */
-@@ -48,6 +51,7 @@ struct saved_context {
- 	unsigned long tr;
- 	unsigned long safety;
- 	unsigned long return_address;
-+	bool misc_enable_saved;
- } __attribute__((packed));
- 
- #define loaddebug(thread,register) \
 -- 
-2.34.1
-
+With best wishes
+Dmitry
