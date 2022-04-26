@@ -2,93 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C21D50FF43
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 15:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E59CB510024
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 16:14:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346119AbiDZNmm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Apr 2022 09:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44496 "EHLO
+        id S1351147AbiDZORO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Apr 2022 10:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239468AbiDZNml (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 09:42:41 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A2A66AE6;
-        Tue, 26 Apr 2022 06:39:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650980374; x=1682516374;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7fuoHjFYh58bCMLDeH91TfTPQ3w0G2M79t/dH46cWVM=;
-  b=kk55sE6m9ngH5zhZlN111jJef38ZLzfv5FlpLa3wXk/eaTmdeWxfHChL
-   xQUTRX38IL78SDBiIZ9xIZ3QXUhSV6LL7I9IkNWmqPdt1J0wGRaKCrPaY
-   Uh9aBFJEIpotgaWJcKgG0bRBd55X2qcPpX8ijPagbESMlI/uXpF3B7huC
-   dpExB89eB1unPmgwo0xbk4vZYlCad05KFFgACmT6PJoHcExEVN/IUmiF/
-   xGei0lYlG/hP2fxwmZquqiS9JqtTBmDxAc3jQLT/Y/U1PLJNIdX61PyBA
-   XrCZfxxP5tEc1jkYH23m9hjGJnyCYiZyt0bGbnySP0IcME9mDXYriRThK
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="252955802"
-X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
-   d="scan'208";a="252955802"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 06:39:33 -0700
-X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
-   d="scan'208";a="579898754"
-Received: from dongyiyu-mobl1.ccr.corp.intel.com (HELO chenyu5-mobl1) ([10.249.173.93])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 06:39:30 -0700
-Date:   Tue, 26 Apr 2022 21:39:26 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tools/power turbostat: Fix file pointer leak
-Message-ID: <20220426133926.GA33188@chenyu5-mobl1>
-References: <20220426131607.1520483-1-colin.i.king@gmail.com>
+        with ESMTP id S1347711AbiDZORO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 10:17:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E945218E3B;
+        Tue, 26 Apr 2022 07:14:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 828E2617A1;
+        Tue, 26 Apr 2022 14:14:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3670C385AA;
+        Tue, 26 Apr 2022 14:14:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650982445;
+        bh=vIR/I/WOOXwUWDTjzFU2wGyQYvRoYeEp7ly2vdSZ6O4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=sx18sAHN6xtgoLtYNmnTs1Rj6iwG7aHsyGqrxqCC8/AL+ICJeYvXbJxSP7wc194FU
+         rjh5rVpDJ2wl+mqqCoTNsVP6vEubQelHsJA3uNEm711NWLCjUYXJ4oIJJK1iH80Ddx
+         ZxeyANsNGnIOtnu12u+kdjdS7KZuIQflZhUNt5L2H5PJD2OYgQO5P9At0vJSnrMBCS
+         GOvFuUXoHl+NxXKs6g/jlTeeHbZ9zoxIUFdjMRFlJUYZN+fAfB8n5kWrcfv5jXfZ3o
+         7gAmRnr/8bKFANdFtm3TQoKc+3rZjQ52ESo9kECxpAZ73nT3yet5U6draFHvyNGQWp
+         k7/OqCpxHc4IA==
+Date:   Tue, 26 Apr 2022 09:14:03 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Abhishek Sahu <abhsahu@nvidia.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>, kbuild-all@lists.01.org,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v3 1/8] vfio/pci: Invalidate mmaps and block the access
+ in D3hot power state
+Message-ID: <20220426141403.GA1723756@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220426131607.1520483-1-colin.i.king@gmail.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202204260928.TsUAxMD3-lkp@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 02:16:07PM +0100, Colin Ian King wrote:
-> Currently if a fscanf fails then an early return leaks an open
-> file pointer. Fix this by fclosing the file before the return.
-> Detected using static analysis with cppcheck:
-> 
-> tools/power/x86/turbostat/turbostat.c:2039:3: error: Resource leak: fp [resourceLeak]
-> 
-> Fixes: eae97e053fe3 ("tools/power turbostat: Support thermal throttle count print")
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  tools/power/x86/turbostat/turbostat.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-> index e6779f599a8e..db431b31c4df 100644
-> --- a/tools/power/x86/turbostat/turbostat.c
-> +++ b/tools/power/x86/turbostat/turbostat.c
-> @@ -2035,9 +2035,9 @@ int get_core_throt_cnt(int cpu, unsigned long long *cnt)
->  	if (!fp)
->  		return -1;
->  	ret = fscanf(fp, "%lld", &tmp);
-> +	fclose(fp);
->  	if (ret != 1)
->  		return -1;
-> -	fclose(fp);
->  	*cnt = tmp;
->  
->  	return 0;
-Acked-by: Chen Yu <yu.c.chen@intel.com>
+On Tue, Apr 26, 2022 at 09:42:45AM +0800, kernel test robot wrote:
+> ...
 
-Thanks for fixing it.
+> sparse warnings: (new ones prefixed by >>)
+> >> drivers/vfio/pci/vfio_pci_config.c:703:13: sparse: sparse: restricted pci_power_t degrades to integer
+>    drivers/vfio/pci/vfio_pci_config.c:703:22: sparse: sparse: restricted pci_power_t degrades to integer
 
+I dunno what Alex thinks, but we have several of these warnings in
+drivers/pci/.  I'd like to get rid of them, but we haven't figured out
+a good way yet.  So this might be something we just live with for now.
 
-Chenyu
+> vim +703 drivers/vfio/pci/vfio_pci_config.c
+> 
+>    694	
+>    695	/*
+>    696	 * It takes all the required locks to protect the access of power related
+>    697	 * variables and then invokes vfio_pci_set_power_state().
+>    698	 */
+>    699	static void
+>    700	vfio_lock_and_set_power_state(struct vfio_pci_core_device *vdev,
+>    701				      pci_power_t state)
+>    702	{
+>  > 703		if (state >= PCI_D3hot)
+>    704			vfio_pci_zap_and_down_write_memory_lock(vdev);
+>    705		else
+>    706			down_write(&vdev->memory_lock);
+>    707	
+>    708		vfio_pci_set_power_state(vdev, state);
+>    709		up_write(&vdev->memory_lock);
+>    710	}
+>    711	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
