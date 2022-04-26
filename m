@@ -2,103 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1609C50EFB0
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 06:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4CA50F075
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 07:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242846AbiDZEVF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Apr 2022 00:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
+        id S229854AbiDZFyx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Apr 2022 01:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244070AbiDZEVF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 00:21:05 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDDE2E0BF
-        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 21:17:58 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id r12so18112281iod.6
-        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 21:17:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=LkVzGmjin4oQm9POhirtBv43WQcTLvdJ9RmTDocLdTY=;
-        b=NoYQO+N+pvIAZY44NBFB4SB+4uejGoZOKH6o5lQQ8O/8xDnHcPyVm6GpfoVDB6H9rq
-         RU3G9no6Qv73tejYhiPbRchitOhg53tza5KX2DhM9hL+VRaotymOek+HMuG5B1LW20kb
-         HBOaM9HsiqQWh9/a2CHNzkqdbPYaREpPDbjnYU9cRV36+tpDTGkY+gJceYW4k6cRJxfy
-         qMXITvI71jVEL5f2GVnqbbpw06RQUbuUKRshgEYK3zOxD3NXssXv22qV18FCOzkrpKr/
-         u++E5GhCl7bSHZg9RjEyGxhoBVPXjy8Wkfo+4OiCW/48uQqVcmav0hxOFB/5k4mubSPX
-         0ovw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=LkVzGmjin4oQm9POhirtBv43WQcTLvdJ9RmTDocLdTY=;
-        b=zyd4wx8Ax1C51LjmrOHVkFu6bq5MJYf2T26VqOdaHkHuJrxFC9nQ9lDm9sySCP7XCk
-         0OcklIgtcfg7zCa2hip8WnaVKIcMHXgoy1eHIddPwQr4SfE1Vm8V7vSbKFbv3jFDAf43
-         NyeMc8s95Nhxp50iayNM9OH7xt6Ur+6A/gR0B23K8GvEDqhjlSHR2RI7cNeXeT94z+CX
-         7dDhegJjrfyKi+e8M1j9wgW2yBmHDaa//VLWTvEtGiVv1Az+nEDGdXhTmUPsdaH+Cyj1
-         3DNz6xiZoQPTSlmYO1W20nqfXgkx9BGCcZb7sETuE7E7ecBbrS7nCxb4Q7qkkBceXFBX
-         XkHg==
-X-Gm-Message-State: AOAM532lUeU56DT4Snc5N2LnInt/O7qrXyUA9d7cr1EYHlA0Rnld7awL
-        u/9o0aS6LnwNDxRHVUnecsTAfJgpKBf0DZIJ90s=
-X-Google-Smtp-Source: ABdhPJwInbbAFHLVlk7mWcgiGiLEkkW8GdQ/bRFo8XeJOJfNyghoh1XogAknmKRJsVAxP081pROOWMhf8jryeyCexro=
-X-Received: by 2002:a05:6638:1a0f:b0:32a:98bb:64e4 with SMTP id
- cd15-20020a0566381a0f00b0032a98bb64e4mr8484103jab.38.1650946677864; Mon, 25
- Apr 2022 21:17:57 -0700 (PDT)
+        with ESMTP id S229502AbiDZFyw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 01:54:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5791C68999
+        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 22:51:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650952304;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=K9Lg5luhyl9InPs/0fzK0Dw+sdTPiGM7u7co27SwQhs=;
+        b=c/zYwGDTSU4+7+637iARCb3cNqsvPXsbIxscyQuVCNUdVmm9T/LmdceYFczn9szlvdGRHk
+        PczkjlaaJRweQgF4y2s126lHfPnFN1qm/SoJhZ8iE/euZIyoLW4okrUeyLkyTuf6NNPoq0
+        V03FM9rYoNUhUEHF+QEUL9A0TJhYKWk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-361-InEJlrUuMz28BvC3F_kEng-1; Tue, 26 Apr 2022 01:51:41 -0400
+X-MC-Unique: InEJlrUuMz28BvC3F_kEng-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4E753811E90;
+        Tue, 26 Apr 2022 05:51:40 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.150])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 26184568657;
+        Tue, 26 Apr 2022 05:51:24 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Tue, 26 Apr 2022 07:51:33 +0200 (CEST)
+Date:   Tue, 26 Apr 2022 07:51:23 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, rjw@rjwysocki.net,
+        mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org, tj@kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] sched,ptrace: Fix ptrace_check_attach() vs
+ PREEMPT_RT
+Message-ID: <20220426055122.GA29684@redhat.com>
+References: <20220421150248.667412396@infradead.org>
+ <20220421150654.817117821@infradead.org>
+ <20220425143537.GA12412@redhat.com>
+ <20220425183343.GM2731@worktop.programming.kicks-ass.net>
+ <87pml4llvm.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:1946:0:0:0:0 with HTTP; Mon, 25 Apr 2022 21:17:57
- -0700 (PDT)
-Reply-To: mrskarimmikael@gmail.com
-From:   "Mrs.Karine Mikael" <tepalmer2@gmail.com>
-Date:   Mon, 25 Apr 2022 21:17:57 -0700
-Message-ID: <CAG08HJe0y9FR4QGtqh3Y3X06fpXHZ7HhLdasoy8Kdkx3bUYf-A@mail.gmail.com>
-Subject: Hello Dear
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:d2b listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5001]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [tepalmer2[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [tepalmer2[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87pml4llvm.fsf@email.froward.int.ebiederm.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello
-This is one bizarre letter all my years of existence, I got your
-e-mail address online while searching for someone reliable that will
-assist me to carry out an urgent  assignment.
+On 04/25, Eric W. Biederman wrote:
+>
+> I don't see JOBCTL_TRACED_QUIESCE being cleared "if (!current->ptrace)".
 
-I have been living with leukemia since I was 19 and fifteen years ago
-was diagnosed with serious, adrenocortical carcinoma cancer, which has
-rendered me utterly useless.
+As Peter explained, in this case we can rely on __ptrace_unlink() which
+should clear this flag.
 
-I will gladly give you more details on your responses to my  mail
-Regards
-Mrs. Karine Mikael
+Oleg.
+
