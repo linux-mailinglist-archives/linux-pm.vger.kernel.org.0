@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 254B8510BB3
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 00:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DC8510BC0
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 00:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbiDZWKs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Apr 2022 18:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36832 "EHLO
+        id S1355671AbiDZWSq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Apr 2022 18:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355645AbiDZWKo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 18:10:44 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B9B1EEFA
-        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 15:07:34 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id e24so7438344wrc.9
-        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 15:07:34 -0700 (PDT)
+        with ESMTP id S1355670AbiDZWSq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 18:18:46 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A19827CD3
+        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 15:15:36 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id n32-20020a05600c3ba000b00393ea7192faso130407wms.2
+        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 15:15:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linexp-org.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=Yy7WWv+wo0N+N8WMs6A4Tlr4aeP0/wiZ8RqZd5hVwfs=;
-        b=cTgTD0SrzGzn63KkZo0AOJqVghLtuvjREiR8Sa/hAZ5d5rVjRNMoLw01/P8wNU1n+A
-         fj84+NZlAKIa0cgAAtvVM8Am2XLv8EwTNgQaPvQr2loaEwTy8ewfTmUWfRwjaYXU62vZ
-         2vii/2I6UzbdlvyWBJHreTAfuS7gypIPfp0l6VykFqqwbT0CzOAIk99g4NELUIZv+AzW
-         SKmRKxdzxk6vY+D8cNL1RupFjRVwFzwvZZEZY/Ek7VCUKXGcYbexELYWxSkNZy0vnw+n
-         Ln/rvsYMXlp/zrKxcWpck4VhNW9tuw3fXzwrrmRQ2h/w2n/OtM0eHY/TlF2Z/ofLJrwN
-         UlQw==
+        b=F2+JGo/wJF1EjVyDmctuLU061kYEMD2S7WtwDPO2wsKkjLHekoih0n6fi1adLvK0il
+         5fAJH+B2CpCxnFx4A+AnVJDbZrf1c6pEaav0la3KsQcLBUpmiVIpbr6ASRF3ZgBVLw8p
+         9BagWguYajSUsQeEZelJdy/BaBIn8m7dlCI7hz4+eIU/FTG8996GG2oiQCCLRV8aHd8E
+         62C3NIKTPmiTJElWBC1jamIZv+CceSNC+YF4DaafdBeSxv4Xe6TrBG++N8cBDoQhSVTg
+         kEjdMJJ4tUfbBy4nRcYo2EDkMKIX5kx/N9XGoyADbpuYjyZuWse7gEcpM4AeYe/GHHpX
+         RhCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=Yy7WWv+wo0N+N8WMs6A4Tlr4aeP0/wiZ8RqZd5hVwfs=;
-        b=D86rEGm7x3E2QB1Nz2xS4zaXsr0Y32U9VrvtEQSlKprcfFdGYkyx6uEt5h5r/i4Ktt
-         Y/fUMqULOgTnabfPSDza6AJi/GJXEWBjtH0/6NjB9IIP3QABwYbewFyK/JIVt/8b3elz
-         5YddVBTvZU/vLLSDD+pZGiIAdgHvGnFbxTKb3aQgYPz93u+QViRYa70D9zF9sBj3ZDyG
-         J+h0zH24sF3Erbh6PV8qpX3anVyOtU3IAeUIdae7VabZisMPYDeQr8wf+y8vQTkrK8Ze
-         VcaHAZvNzUB1r72cT4mD7F9/V/JiTYSvKCCasoq7OkE3oFuNGeS3cpcU5muqOtfuK1L1
-         SOlw==
-X-Gm-Message-State: AOAM531qrQbYSelias6QumncZU4YsWwlw8jlKNNE+1sxnNIr3rTql73J
-        FGcNSlnJR65+FydXwgJyf6vE2JCnlefKdYF+cOo=
-X-Google-Smtp-Source: ABdhPJxvyg9Ld5uTWbOJmcZxbrbTWRxH6ggvKr0Q/daaB+MQ9bPaNy1JlivmRV0FYp/v81fCKvOsCA==
-X-Received: by 2002:a5d:584e:0:b0:20a:9122:2c3c with SMTP id i14-20020a5d584e000000b0020a91222c3cmr19873724wrf.193.1651010852928;
-        Tue, 26 Apr 2022 15:07:32 -0700 (PDT)
-Received: from localhost.localdomain (176-182-171-101.abo.bbox.fr. [176.182.171.101])
-        by smtp.gmail.com with ESMTPSA id z14-20020a7bc14e000000b00392a3e62b66sm202694wmi.33.2022.04.26.15.07.32
+        b=O6ok8UfMSAYvQ9h/B3rkpTPKiO670H97Jv2NBsL35MG92iEPHNP1J/w3hO1noUFBi1
+         ++t8yalxknZezjh+GmdXquFHifr6hGRmqjaS7vP8qNL9uax/HnwT/vkt4pMfvo0fITRv
+         IwJ4pCYaY93pdmJOiIYs7JmpJC8m+8f7mkDcCQgaPBr1l4vyxaXm/vVvwR1n/LzL511K
+         Ykv53pX0nOsjnX+ExENTVDke7Bdg/xHGuXQXK3sYdulpN66l3c7UMqWApNlE/h3rgB+G
+         64B9SdMaBIEeFzJZf0ELdSoV0YCgf0ZX9EKZEQr82IhjPyG0QSaLHVBVer9Cmh7Ke0Ms
+         SOeQ==
+X-Gm-Message-State: AOAM532eVkxWCkwPyXwxTeG67m+u9iSDi/LufpG7rFKO2A3jcdIgV+H1
+        R8OmSoweaBtI9N0DZOfrceqrWQ==
+X-Google-Smtp-Source: ABdhPJzpAwqgNJfBy4dQzMSc05Coc/72uF8qk2nF5I0kDHLYNIcxipbS5oxJsKFhBiueWbDuLYsaUA==
+X-Received: by 2002:a05:600c:600c:b0:38e:cb2f:318b with SMTP id az12-20020a05600c600c00b0038ecb2f318bmr23074902wmb.121.1651011335140;
+        Tue, 26 Apr 2022 15:15:35 -0700 (PDT)
+Received: from localhost.localdomain (static-176-182-171-101.ncc.abo.bbox.fr. [176.182.171.101])
+        by smtp.gmail.com with ESMTPSA id j19-20020adfb313000000b0020aed8ece65sm393314wrd.32.2022.04.26.15.15.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 15:07:32 -0700 (PDT)
+        Tue, 26 Apr 2022 15:15:34 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linexp.org>
 To:     rafael@kernel.org, daniel.lezcano@linaro.org
 Cc:     khilman@baylibre.com, abailon@baylibre.com,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: [PATCH 00/15] thermal OF rework
-Date:   Wed, 27 Apr 2022 00:06:54 +0200
-Message-Id: <20220426220709.3055703-1-daniel.lezcano@linexp.org>
+Date:   Wed, 27 Apr 2022 00:15:08 +0200
+Message-Id: <20220426221523.3056696-1-daniel.lezcano@linexp.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
