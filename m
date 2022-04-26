@@ -2,95 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1DED510347
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 18:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC6651039A
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 18:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244014AbiDZQ1Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Apr 2022 12:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
+        id S229800AbiDZQjy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Apr 2022 12:39:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345560AbiDZQ1X (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 12:27:23 -0400
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E54170344;
-        Tue, 26 Apr 2022 09:24:15 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id v59so20995072ybi.12;
-        Tue, 26 Apr 2022 09:24:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yRoS0e78MQ3Aw94WaIb6fXl1gKLeuGuUg52q3sQRmzY=;
-        b=5eWtFbfJHZ8B/YJsY/hQi40pNOdAvkl45eDJTGHQSEW5CDLKdJcf0dWyySuFPhBa2e
-         5GyLcZCBv78OHa8No3GT412AhWT9WS07XDInbOZJ5SFITX88w7h11GeG04LwBgeDdvTu
-         yy88roMGmEH9pb/tFRrJxClTYa+KAcW4B7cfgc3Q4EgdbUoHIS7qHYNVaDEEcQsXzS8n
-         c/eOoDvbO2AwSJjlU9uOVjsDJlHkroJpT77RaKQq2pNxIF6IwYTbyS2qjO9ADePZ4YYf
-         SyFXUGfmQlUIhXwLpurvb1s0s7FRI42XRar5Vvpo0QE2ENjN70UKX6CFoXkFqnY0Zocg
-         8Bbw==
-X-Gm-Message-State: AOAM533PGa4dWwo+baV7OO3+FZBuXkWqIoJX2OaPlgpcufSzJ24A6MpD
-        LsZKvvweuWKYd/m8i6OmyjwUhD18Q8jdymVA4bF8tcbR
-X-Google-Smtp-Source: ABdhPJwx/0sG065EFEG6R3FAqY53TNDROIzT+SSV1rhw4vfnS5Bq5793FT0nC8rO8MYbenwgZB7rlOBFIPJrRMSrcRY=
-X-Received: by 2002:a05:6902:352:b0:63e:94c:883c with SMTP id
- e18-20020a056902035200b0063e094c883cmr20762254ybs.365.1650990255156; Tue, 26
- Apr 2022 09:24:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220423182410.1841114-1-matthieu.baerts@tessares.net> <YmgOP1FFmidS9ecJ@zn.tnic>
-In-Reply-To: <YmgOP1FFmidS9ecJ@zn.tnic>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 26 Apr 2022 18:24:04 +0200
-Message-ID: <CAJZ5v0gzvOagiYsMxznksrjmtZFV873DaLAiOo4YHkoUq5qTTA@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/pm: fix false positive kmemleak report in msr_build_context()
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Matthieu Baerts <matthieu.baerts@tessares.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Chen Yu <yu.c.chen@intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        with ESMTP id S229684AbiDZQjx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 12:39:53 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB18BBC9B;
+        Tue, 26 Apr 2022 09:36:45 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="253019521"
+X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
+   d="scan'208";a="253019521"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 09:30:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,291,1643702400"; 
+   d="scan'208";a="595840747"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga001.jf.intel.com with ESMTP; 26 Apr 2022 09:30:00 -0700
+Received: from abityuts-desk1.fi.intel.com (abityuts-desk1.fi.intel.com [10.237.72.79])
+        by linux.intel.com (Postfix) with ESMTP id 56DA7580689;
+        Tue, 26 Apr 2022 09:29:58 -0700 (PDT)
+Message-ID: <47cbbe94b061d8d7b7c222a42fa80b7b4cd4b7e5.camel@gmail.com>
+Subject: Re: [RFC PATCH v3 2/5] cpuidle: Add Cpufreq Active Stats calls
+ tracking idle entry/exit
+From:   Artem Bityutskiy <dedekind1@gmail.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     dietmar.eggemann@arm.com, viresh.kumar@linaro.org,
+        rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, amit.kachhap@gmail.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 26 Apr 2022 19:29:57 +0300
+In-Reply-To: <36852629-f803-5ac9-bef5-bcfae3ed947d@arm.com>
+References: <20220406220809.22555-1-lukasz.luba@arm.com>
+         <20220406220809.22555-3-lukasz.luba@arm.com>
+         <97e7e3f5110702fab727b4df7d53511aef5c60b1.camel@gmail.com>
+         <36852629-f803-5ac9-bef5-bcfae3ed947d@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 5:22 PM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Sat, Apr 23, 2022 at 08:24:10PM +0200, Matthieu Baerts wrote:
-> > diff --git a/arch/x86/include/asm/suspend_64.h b/arch/x86/include/asm/suspend_64.h
-> > index 35bb35d28733..bb7023dbf524 100644
-> > --- a/arch/x86/include/asm/suspend_64.h
-> > +++ b/arch/x86/include/asm/suspend_64.h
-> > @@ -14,9 +14,13 @@
-> >   * Image of the saved processor state, used by the low level ACPI suspend to
-> >   * RAM code and by the low level hibernation code.
-> >   *
-> > - * If you modify it, fix arch/x86/kernel/acpi/wakeup_64.S and make sure that
-> > - * __save/__restore_processor_state(), defined in arch/x86/kernel/suspend_64.c,
-> > - * still work as required.
-> > + * If you modify it before 'misc_enable', fix arch/x86/kernel/acpi/wakeup_64.S
->
-> Why does before misc_enable matter?
->
-> arch/x86/kernel/asm-offsets_64.c computes the offsets and there is a
-> member like saved_context_gdt_desc which will get moved after your
-> change but that's not a problem because the offset will get recomputed
-> at build time.
->
-> Hm?
+On Tue, 2022-04-26 at 16:01 +0100, Lukasz Luba wrote:
+> > I am worried about adding more stuff here.
+> > 
+> > Please, consider getting the stats after interrupts are re-enabled. You may
+> > lose
+> > some "precision" because of that, but it is probably overall better that
+> > adding
+> > to idle interrupt latency.
+> 
+> Definitely. I don't need such precision, so later when interrupts are
+> re-enabled is OK for me.
 
-So can the comment be dropped entirely?
+Thanks. That is preferable in general: we do not do things with interrupts
+disabled unless there is a very good reason to.
+
+> 
+> This new call might be empty for your x86 kernels, since probably
+> you set the CONFIG_CPU_FREQ_STAT.I can add additional config
+> so platforms might still have CONFIG_CPU_FREQ_STAT but avoid this
+> new feature and additional overhead in idle exit when e.g.
+> CONFIG_CPU_FREQ_ACTIVE_STAT is not set.
+> 
+> The x86 platforms won't use IPA governor, so it's reasonable to
+> do this way.
+> 
+> Does this sounds good?
+
+I did not thoroughly read your patches so can't comment on the details.
+
+Just pointing that in general idle path is to be considered the critical path,
+especially the part before interrupts are re-enabled. Not only on x86,
+but on all platforms using cpuidle. This does not mean we can't read more
+statistics there, but it does mean that we should be very careful about added
+overhead, keep it under control, etc.
+
+Thank you!
+
