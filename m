@@ -2,93 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB0E50F153
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 08:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52CE450F185
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 08:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245615AbiDZGpj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Apr 2022 02:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
+        id S229838AbiDZGzu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Apr 2022 02:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343525AbiDZGo2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 02:44:28 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F8211A07
-        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 23:41:21 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id v12so17142354wrv.10
-        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 23:41:21 -0700 (PDT)
+        with ESMTP id S245523AbiDZGzs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 02:55:48 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7113B2B4
+        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 23:52:42 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id bo5so17128654pfb.4
+        for <linux-pm@vger.kernel.org>; Mon, 25 Apr 2022 23:52:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=J4tC84WDnGWKXHk8A2ip3/SUHhJiwykkygcCLy7ZG3M=;
-        b=q2dhjUAABiVeC6Em5zKVCnViGpVUUOW2I4YSRya8dguehmirQjNOmrah76tZuQBp/l
-         Bp6lyecUxlwNZfQ/zDahwkcSciiMsEMh0Y9viZfnlDhcP9pi2z7xLEzTT6oNqMuHtjKG
-         J7Kn7/NrorXbV6zvOdWoMUDca1mQqA6FncO1Ocuv8gR2dUn0rodVw1ZsJUAD6YjVM+A4
-         1G8iMH8E5RvfkFxVxMgGVTf74OCHyz/STdupWqG6vj/C106wBGuIoa6p91HtULI7jwUG
-         spaDgyOA3VqlIQ2iJU7SxeE2OFj0Rpwzj3Y9WhZ3ONWCl/VCWQ/r/5bwlhN4OdgOlad6
-         kIog==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=/Jn6JRL5sfoRV4Gy9LseiyMixgXx7JBmdIMlpUBj6c4=;
+        b=TDeWo+RqrUaHGKlI56zWgv/AXphWJmCnxRofyNn59emF+Ow2nqaRwkqqys655bkj07
+         7KnWsi/MYHk8eWksjb+JyQFeGzzbkD7gzbPMXtuZeaSdzLk19xTEt82QkkdqvjuOFqUy
+         n27qIsqtTh88fRW3ddi3DWdb8ldsx90TzZuXJkNZBlaIQlwYdLa0rk8O5sXwkrsNenMy
+         1kzjMdpYZbIZFL24m1BW3wDLihdn3Epkzkretr56G6CVaRyL2tur8/AnPhfLlt6LfHOM
+         LOOLW4TSRcRtEtbUSvkLC0vSYwTtl+GM54jUZJLgQxIlwuDnt+8cc8n/b0c/TC0AM3Cv
+         WCPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=J4tC84WDnGWKXHk8A2ip3/SUHhJiwykkygcCLy7ZG3M=;
-        b=0FIQW1NLBzNInJMXhHYMEfDuCwY77vlify6TPd5KyUfIVqie8SrpZl1hzMvXn56ySm
-         0xEI7uZDi5QDEOghjsx2ATbm6cyrl39W3w94i1Pp/LIKQfLk4LaeSeOtWdUK7ljpA7Pt
-         PpRUY62LhX9A2y6yNBja1rxuxtLLJnBDY87HXyLzQXNk6LRluV4kyuQtlPM5him4b5Hf
-         jkoElcaWv/durOHdXQAdnoZOBk6CrRiUkXfQRUje5WFmq6XvGBQh7obD/CzQ9TKAztvC
-         tcBLCfVF+sbGYkzWmcV2omJ6WkJi7bqe5YrErBRAPCR545OmGa5avDvScoFLtWjrfUe4
-         zGtA==
-X-Gm-Message-State: AOAM530MSPLx9wfZoEZodiTGbhUcJTR4eMSFq+SLxQ5PHUEPAJPBDo6i
-        vcGRzu2N34+WQwm1lUk+FM8adg==
-X-Google-Smtp-Source: ABdhPJxxLdGpWyDF3ZLOHrmbGFENDP469dDaGp3hSGgRcQQz1ogYATB8V3giSHft4XpQCY4ilTfHyw==
-X-Received: by 2002:adf:eb4d:0:b0:1ed:c1f7:a951 with SMTP id u13-20020adfeb4d000000b001edc1f7a951mr16504691wrn.454.1650955279990;
-        Mon, 25 Apr 2022 23:41:19 -0700 (PDT)
-Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id j13-20020a05600c190d00b00393ee555683sm4216157wmq.27.2022.04.25.23.41.19
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=/Jn6JRL5sfoRV4Gy9LseiyMixgXx7JBmdIMlpUBj6c4=;
+        b=MskS0KIySYZnv1BBntk2VnwOkVZi5cXHHojaRODWXBJNOVoFEf/Riyp+gEAa5jjjC8
+         c2/ukX322jWMj766wYUH/j+7XvEWKnJsXUpdABBPZ6SdVet85nxxa+pBUA9Aa9ZoWLmQ
+         ztrEy/JA8k/Bj3l5OWcWcJjgZJmYeNXPHMvJhOvMR9EGpC6W8a1GClpHLS1T6EPfo+0v
+         9Jj4GV+zgfSIm664/X2axQ3Cfojdbl6Nzp50zpXKdjAAkNaUm1SDug9Jbn/Fo3pAf2vc
+         o2qkMEvuFOrQTqGCf8nOt7QI+QJMnvesOeoiQdMvvKBYRfPstzpbA5uFkysX6mZDcKNA
+         FROA==
+X-Gm-Message-State: AOAM533xpVYjr04j4AV7qA5UOw9GYSLGSExk8K5E7nYdBh60RWK3I/7e
+        n1PiBYhGIggi2QyTIQOaI2JHNQ==
+X-Google-Smtp-Source: ABdhPJyHvi33/8BBGBbPBJOzp0kWz2eHET4V6m70sh+riTBclwVgEu6jDHz03xnbagsgKAPdo66vEw==
+X-Received: by 2002:a63:ed45:0:b0:399:5116:312a with SMTP id m5-20020a63ed45000000b003995116312amr17884832pgk.611.1650955961699;
+        Mon, 25 Apr 2022 23:52:41 -0700 (PDT)
+Received: from localhost ([122.177.141.190])
+        by smtp.gmail.com with ESMTPSA id la10-20020a17090b160a00b001d6a79768b6sm1506535pjb.49.2022.04.25.23.52.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 23:41:19 -0700 (PDT)
-From:   Corentin Labbe <clabbe@baylibre.com>
-To:     amitk@kernel.org, daniel.lezcano@linaro.org, rafael@kernel.org,
-        rui.zhang@intel.com
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Corentin Labbe <clabbe@baylibre.com>
-Subject: [PATCH] thermal: thermal_of: fix typo on __thermal_bind_params
-Date:   Tue, 26 Apr 2022 06:41:13 +0000
-Message-Id: <20220426064113.3787826-1-clabbe@baylibre.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 25 Apr 2022 23:52:41 -0700 (PDT)
+Date:   Tue, 26 Apr 2022 12:22:39 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>
+Subject: [GIT PULL] cpufreq/arm fixes for 5.18-rc5
+Message-ID: <20220426065239.qtho7kwvdohqnff2@vireshk-i7>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a missing s to __thermal_bind_param kernel doc comment.
-This fixes the following sparse warnings:
-drivers/thermal/thermal_of.c:50: warning: expecting prototype for struct __thermal_bind_param. Prototype was for struct __thermal_bind_params instead
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
----
- drivers/thermal/thermal_of.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index da484800906f..b65d435cb92f 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -35,7 +35,7 @@ struct __thermal_cooling_bind_param {
- };
- 
- /**
-- * struct __thermal_bind_param - a match between trip and cooling device
-+ * struct __thermal_bind_params - a match between trip and cooling device
-  * @tcbp: a pointer to an array of cooling devices
-  * @count: number of elements in array
-  * @trip_id: the trip point index
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq-arm-fixes-5.18-rc5
+
+for you to fetch changes up to e4e6448638a01905faeda9bf96aa9df7c8ef463c:
+
+  cpufreq: qcom-cpufreq-hw: Clear dcvs interrupts (2022-04-26 12:08:31 +0530)
+
+----------------------------------------------------------------
+cpufreq arm fixes for 5.18-rc5
+
+- Fix issues with the Qualcomm's cpufreq driver (Dmitry Baryshkov and
+  Vladimir Zapolskiy).
+- Fix memory leak with the Sun501 driver (Xiaobing Luo).
+
+----------------------------------------------------------------
+Dmitry Baryshkov (4):
+      cpufreq: qcom-hw: drop affinity hint before freeing the IRQ
+      cpufreq: qcom-hw: fix the race between LMH worker and cpuhp
+      cpufreq: qcom-hw: fix the opp entries refcounting
+      cpufreq: qcom-hw: provide online/offline operations
+
+Vladimir Zapolskiy (2):
+      cpufreq: qcom-cpufreq-hw: Fix throttle frequency value on EPSS platforms
+      cpufreq: qcom-cpufreq-hw: Clear dcvs interrupts
+
+Xiaobing Luo (1):
+      cpufreq: fix memory leak in sun50i_cpufreq_nvmem_probe
+
+ drivers/cpufreq/qcom-cpufreq-hw.c      | 70 +++++++++++++++++++++++++++-------
+ drivers/cpufreq/sun50i-cpufreq-nvmem.c |  4 +-
+ 2 files changed, 60 insertions(+), 14 deletions(-)
+
 -- 
-2.35.1
-
+viresh
