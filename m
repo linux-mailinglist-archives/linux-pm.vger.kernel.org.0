@@ -2,120 +2,212 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7621510AE5
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 23:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 254B8510BB3
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 00:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355232AbiDZVEH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Apr 2022 17:04:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
+        id S229833AbiDZWKs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Apr 2022 18:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344050AbiDZVEG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 17:04:06 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0461E49242
-        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 14:00:58 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id m23so151076ljc.0
-        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 14:00:57 -0700 (PDT)
+        with ESMTP id S1355645AbiDZWKo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 18:10:44 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B9B1EEFA
+        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 15:07:34 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id e24so7438344wrc.9
+        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 15:07:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=XuA29aDgLO1+KlatFYGV6z7JwaPO2b4jY6TY2nJZayc=;
-        b=A4vDo7+4PxDGEjKjEIgn9s9IAsk/3BfZlgDtU7H4lDppEgDXVNFo1glxmQIT1WSWkp
-         frFMhLxsOXIEtjSJjhRZbw/Y3o8W5DALLAi1bjh+dTwbTJOUHmUCeLgnIjQGfU628BcB
-         VRJI4BFVCCRh9qX2klDBHj9j7wjIoxmkm3NzoCuAU0831agg6XbWo7uvX8S3Vav3aRel
-         s/xmSK8DsgNs4BU7dw6nyZ860qc36dj0mWqb4kCfH9OvHb4T+T60JjcczrWjzQNoMPqS
-         5eBXcQ/P099nKR0nN5mpwRsmmpG1j58jr4asTwejJfD3V5nGqt0SIBX9ZHnEJFyzyyu7
-         u3rw==
+        d=linexp-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Yy7WWv+wo0N+N8WMs6A4Tlr4aeP0/wiZ8RqZd5hVwfs=;
+        b=cTgTD0SrzGzn63KkZo0AOJqVghLtuvjREiR8Sa/hAZ5d5rVjRNMoLw01/P8wNU1n+A
+         fj84+NZlAKIa0cgAAtvVM8Am2XLv8EwTNgQaPvQr2loaEwTy8ewfTmUWfRwjaYXU62vZ
+         2vii/2I6UzbdlvyWBJHreTAfuS7gypIPfp0l6VykFqqwbT0CzOAIk99g4NELUIZv+AzW
+         SKmRKxdzxk6vY+D8cNL1RupFjRVwFzwvZZEZY/Ek7VCUKXGcYbexELYWxSkNZy0vnw+n
+         Ln/rvsYMXlp/zrKxcWpck4VhNW9tuw3fXzwrrmRQ2h/w2n/OtM0eHY/TlF2Z/ofLJrwN
+         UlQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=XuA29aDgLO1+KlatFYGV6z7JwaPO2b4jY6TY2nJZayc=;
-        b=fV4EARR7tz75AA4Z+gtDEm0MpBZhfV96tj3T+p69wtkzOYYhUq8SZZtn3Jcsf25o6s
-         xrscTXp91AEKVFXLSmVo5Dx0fhsnugJ2bPnVjEFPQHo3K683HcctBNLVRx1dCQ/Ucf50
-         J2/ZjbGV/9Gx1L7FiP9v1B63l8P22LkVYD4R+BKFZyQsCmWpjHdzHTgswxnHspIS0NHB
-         5XFQK5VoYXJH9ex491EYCFZ4R9NkkTymZ7jLff4lMv3P2ybeiFYPg6mGzUOhgMTAf4yG
-         tAP5zLxkThpAbe7UTAFWEOwFADQ+I5qjO8Rnj7o1ZTfOwBs/Uq+a9Cjas+t+SWB30MDt
-         cmsg==
-X-Gm-Message-State: AOAM533n3TE0bQUZe44dYg+Eb7mrQcQcrsb9JcGRczErgJUV4uBRctqH
-        q3p8YdRIGuf4rDvhZoI25jPoMvRxHjltsg==
-X-Google-Smtp-Source: ABdhPJyp8jdHUf/FduZ5fKsJi96vZ13f6GkEyPMrryxQgCQ6ab/qw0G6hC4N5Z0Vj5iV4EqEBvuVAQ==
-X-Received: by 2002:a2e:b8d3:0:b0:24f:fa2:5493 with SMTP id s19-20020a2eb8d3000000b0024f0fa25493mr8447643ljp.448.1651006856329;
-        Tue, 26 Apr 2022 14:00:56 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id f14-20020a19dc4e000000b0047222c907f8sm195000lfj.33.2022.04.26.14.00.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 14:00:56 -0700 (PDT)
-Message-ID: <d46bd206-a2d3-cefb-c66a-6ed293d4d780@linaro.org>
-Date:   Wed, 27 Apr 2022 00:00:55 +0300
+        bh=Yy7WWv+wo0N+N8WMs6A4Tlr4aeP0/wiZ8RqZd5hVwfs=;
+        b=D86rEGm7x3E2QB1Nz2xS4zaXsr0Y32U9VrvtEQSlKprcfFdGYkyx6uEt5h5r/i4Ktt
+         Y/fUMqULOgTnabfPSDza6AJi/GJXEWBjtH0/6NjB9IIP3QABwYbewFyK/JIVt/8b3elz
+         5YddVBTvZU/vLLSDD+pZGiIAdgHvGnFbxTKb3aQgYPz93u+QViRYa70D9zF9sBj3ZDyG
+         J+h0zH24sF3Erbh6PV8qpX3anVyOtU3IAeUIdae7VabZisMPYDeQr8wf+y8vQTkrK8Ze
+         VcaHAZvNzUB1r72cT4mD7F9/V/JiTYSvKCCasoq7OkE3oFuNGeS3cpcU5muqOtfuK1L1
+         SOlw==
+X-Gm-Message-State: AOAM531qrQbYSelias6QumncZU4YsWwlw8jlKNNE+1sxnNIr3rTql73J
+        FGcNSlnJR65+FydXwgJyf6vE2JCnlefKdYF+cOo=
+X-Google-Smtp-Source: ABdhPJxvyg9Ld5uTWbOJmcZxbrbTWRxH6ggvKr0Q/daaB+MQ9bPaNy1JlivmRV0FYp/v81fCKvOsCA==
+X-Received: by 2002:a5d:584e:0:b0:20a:9122:2c3c with SMTP id i14-20020a5d584e000000b0020a91222c3cmr19873724wrf.193.1651010852928;
+        Tue, 26 Apr 2022 15:07:32 -0700 (PDT)
+Received: from localhost.localdomain (176-182-171-101.abo.bbox.fr. [176.182.171.101])
+        by smtp.gmail.com with ESMTPSA id z14-20020a7bc14e000000b00392a3e62b66sm202694wmi.33.2022.04.26.15.07.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 15:07:32 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linexp.org>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org
+Cc:     khilman@baylibre.com, abailon@baylibre.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 00/15] thermal OF rework
+Date:   Wed, 27 Apr 2022 00:06:54 +0200
+Message-Id: <20220426220709.3055703-1-daniel.lezcano@linexp.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v1 3/5] interconnect: qcom: icc-rpm: Change to use
- qcom_icc_xlate_extended()
-Content-Language: en-GB
-To:     Leo Yan <leo.yan@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220416154013.1357444-1-leo.yan@linaro.org>
- <20220416154013.1357444-4-leo.yan@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220416154013.1357444-4-leo.yan@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/04/2022 18:40, Leo Yan wrote:
-> This commit changes to use callback qcom_icc_xlate_extended().  This
-> is a preparation for population path tags from the interconnect DT
-> binding, it doesn't introduce functionality change for the existed DT
-> binding without path tags.
-> 
-> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+The thermal framework initialization with the device tree appears to
+be complicated and hard to make it to evolve.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+It contains duplication of almost the same thermal generic structures
+and has an assymetric initialization making hard any kind of serious
+changes for more complex features. One of them is the multiple sensors
+support per thermal zone.
 
-> ---
->   drivers/interconnect/qcom/icc-rpm.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index 45d23aaeabf6..2ffaf9ba08f9 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -16,6 +16,7 @@
->   #include <linux/slab.h>
->   
->   #include "smd-rpm.h"
-> +#include "icc-common.h"
->   #include "icc-rpm.h"
->   
->   /* QNOC QoS */
-> @@ -395,7 +396,7 @@ int qnoc_probe(struct platform_device *pdev)
->   	provider->dev = dev;
->   	provider->set = qcom_icc_set;
->   	provider->aggregate = icc_std_aggregate;
-> -	provider->xlate = of_icc_xlate_onecell;
-> +	provider->xlate_extended = qcom_icc_xlate_extended;
->   	provider->data = data;
->   
->   	ret = icc_provider_add(provider);
+In order to set the scene for the aforementioned feature with generic
+code, we need to cleanup and rework the device tree initialization.
 
+However this rework is not obvious because of the multiple components
+entering in the composition of a thermal zone and being initialized at
+different moments. For instance, a cooling device can be initialized
+before a sensor, so the thermal zones must exist before the cooling
+device as well as the sensor. This asynchonous initialization forces
+the thermal zone to be created with fake ops because they are
+mandotory and build a list of cooling devices which is used to lookup
+afterwards when the cooling device driver is registering itself.
+
+Actually, the correct behavior IMHO, would be having a sensor
+registration resulting in the thermal zone creation. If the cooling
+device is registered before, it won't find the thermal zone and should
+return -EPROBE_DEFER.
+
+As there could be a large number of changes, this first series provide
+some steps forward for a simpler device tree initialization.
+
+The first patch could appear scary as it touches a big number of files
+but it is actually just renaming a structure name
+
+Daniel Lezcano (15):
+  thermal/core: Rename thermal_zone_device to thermal_zone
+  thermal/core: Change thermal_zone_ops to thermal_sensor_ops
+  thermal/core: Add a thermal sensor structure in the thermal zone
+  thermal/core: Remove duplicate information when an error occurs
+  thermal/of: Replace device node match with device node search
+  thermal/of: Remove the device node pointer for thermal_trip
+  thermal/of: Move thermal_trip structure to thermal.h
+  thermal/core: Remove unneeded EXPORT_SYMBOLS
+  thermal/core: Move thermal_set_delay_jiffies to static
+  thermal/core: Rename trips to ntrips
+  thermal/core: Add thermal_trip in thermal_zone
+  thermal/core: Register with the trip points
+  thermal/of: Store the trips in the thermal zone
+  thermal/of: Use thermal trips stored in the thermal zone
+  thermal/of: Initialize trip points separately
+
+ .../driver-api/thermal/power_allocator.rst    |  10 +-
+ .../driver-api/thermal/sysfs-api.rst          |  28 +-
+ drivers/acpi/thermal.c                        |  46 +--
+ drivers/gpu/drm/tiny/repaper.c                |   2 +-
+ drivers/hwmon/hwmon.c                         |   6 +-
+ drivers/hwmon/scpi-hwmon.c                    |   2 +-
+ drivers/iio/adc/sun4i-gpadc-iio.c             |   2 +-
+ drivers/input/touchscreen/sun4i-ts.c          |   2 +-
+ drivers/mmc/host/sdhci-omap.c                 |   2 +-
+ drivers/net/ethernet/chelsio/cxgb4/cxgb4.h    |   2 +-
+ .../ethernet/chelsio/cxgb4/cxgb4_thermal.c    |  16 +-
+ .../ethernet/mellanox/mlxsw/core_thermal.c    |  78 ++---
+ drivers/net/wireless/intel/iwlwifi/mvm/mvm.h  |   2 +-
+ drivers/net/wireless/intel/iwlwifi/mvm/tt.c   |  20 +-
+ drivers/platform/x86/acerhdf.c                |  30 +-
+ drivers/platform/x86/gpd-pocket-fan.c         |   4 +-
+ drivers/power/supply/power_supply_core.c      |  12 +-
+ drivers/regulator/max8973-regulator.c         |   6 +-
+ drivers/thermal/amlogic_thermal.c             |   2 +-
+ drivers/thermal/armada_thermal.c              |  24 +-
+ drivers/thermal/broadcom/bcm2711_thermal.c    |   4 +-
+ drivers/thermal/broadcom/bcm2835_thermal.c    |   8 +-
+ drivers/thermal/broadcom/brcmstb_thermal.c    |   6 +-
+ drivers/thermal/broadcom/ns-thermal.c         |   2 +-
+ drivers/thermal/broadcom/sr-thermal.c         |   2 +-
+ drivers/thermal/da9062-thermal.c              |  22 +-
+ drivers/thermal/db8500_thermal.c              |   6 +-
+ drivers/thermal/dove_thermal.c                |  16 +-
+ drivers/thermal/gov_bang_bang.c               |  12 +-
+ drivers/thermal/gov_fair_share.c              |  18 +-
+ drivers/thermal/gov_power_allocator.c         |  44 +--
+ drivers/thermal/gov_step_wise.c               |  12 +-
+ drivers/thermal/gov_user_space.c              |   6 +-
+ drivers/thermal/hisi_thermal.c                |  10 +-
+ drivers/thermal/imx8mm_thermal.c              |   2 +-
+ drivers/thermal/imx_sc_thermal.c              |   2 +-
+ drivers/thermal/imx_thermal.c                 |  36 +--
+ .../intel/int340x_thermal/int3400_thermal.c   |  14 +-
+ .../intel/int340x_thermal/int3402_thermal.c   |   2 +-
+ .../intel/int340x_thermal/int3403_thermal.c   |   4 +-
+ .../int340x_thermal/int340x_thermal_zone.c    |  26 +-
+ .../int340x_thermal/int340x_thermal_zone.h    |  10 +-
+ .../processor_thermal_device.c                |   8 +-
+ .../processor_thermal_device_pci.c            |  26 +-
+ .../thermal/intel/intel_bxt_pmic_thermal.c    |   4 +-
+ drivers/thermal/intel/intel_menlow.c          |   2 +-
+ drivers/thermal/intel/intel_pch_thermal.c     |  20 +-
+ .../thermal/intel/intel_quark_dts_thermal.c   |  28 +-
+ drivers/thermal/intel/intel_soc_dts_iosf.c    |  20 +-
+ drivers/thermal/intel/intel_soc_dts_iosf.h    |   2 +-
+ drivers/thermal/intel/x86_pkg_temp_thermal.c  |  26 +-
+ drivers/thermal/k3_bandgap.c                  |   2 +-
+ drivers/thermal/kirkwood_thermal.c            |  16 +-
+ drivers/thermal/max77620_thermal.c            |   4 +-
+ drivers/thermal/mtk_thermal.c                 |   2 +-
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c      |   6 +-
+ drivers/thermal/qcom/qcom-spmi-temp-alarm.c   |   6 +-
+ drivers/thermal/qcom/tsens.c                  |   6 +-
+ drivers/thermal/qcom/tsens.h                  |   2 +-
+ drivers/thermal/qoriq_thermal.c               |   2 +-
+ drivers/thermal/rcar_gen3_thermal.c           |  16 +-
+ drivers/thermal/rcar_thermal.c                |  22 +-
+ drivers/thermal/rockchip_thermal.c            |  10 +-
+ drivers/thermal/rzg2l_thermal.c               |   4 +-
+ drivers/thermal/samsung/exynos_tmu.c          |  22 +-
+ drivers/thermal/spear_thermal.c               |  20 +-
+ drivers/thermal/sprd_thermal.c                |   8 +-
+ drivers/thermal/st/st_thermal.c               |  16 +-
+ drivers/thermal/st/st_thermal.h               |   2 +-
+ drivers/thermal/st/st_thermal_memmap.c        |   2 +-
+ drivers/thermal/st/stm_thermal.c              |   6 +-
+ drivers/thermal/sun8i_thermal.c               |   4 +-
+ drivers/thermal/tegra/soctherm.c              |  38 +--
+ drivers/thermal/tegra/tegra-bpmp-thermal.c    |   6 +-
+ drivers/thermal/tegra/tegra30-tsensor.c       |  20 +-
+ drivers/thermal/thermal-generic-adc.c         |   2 +-
+ drivers/thermal/thermal_core.c                | 246 ++++++++-------
+ drivers/thermal/thermal_core.h                |  59 ++--
+ drivers/thermal/thermal_helpers.c             |  51 ++--
+ drivers/thermal/thermal_hwmon.c               |  26 +-
+ drivers/thermal/thermal_hwmon.h               |  12 +-
+ drivers/thermal/thermal_mmio.c                |   2 +-
+ drivers/thermal/thermal_netlink.c             |  18 +-
+ drivers/thermal/thermal_of.c                  | 286 ++++++++++--------
+ drivers/thermal/thermal_sysfs.c               | 116 +++----
+ .../ti-soc-thermal/ti-thermal-common.c        |  10 +-
+ drivers/thermal/uniphier_thermal.c            |   4 +-
+ include/linux/power/charger-manager.h         |   2 +-
+ include/linux/power_supply.h                  |   2 +-
+ include/linux/thermal.h                       | 144 +++++----
+ include/trace/events/thermal.h                |   4 +-
+ .../trace/events/thermal_power_allocator.h    |   4 +-
+ 92 files changed, 988 insertions(+), 938 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+2.25.1
+
