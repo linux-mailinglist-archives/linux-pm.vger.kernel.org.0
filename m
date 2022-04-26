@@ -2,57 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F1950FE64
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 15:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDBB650FEAB
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 15:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350676AbiDZNNh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Apr 2022 09:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
+        id S1350328AbiDZNTW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Apr 2022 09:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350684AbiDZNNg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 09:13:36 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BDF3BFAF;
-        Tue, 26 Apr 2022 06:10:27 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id j15so12159488wrb.2;
-        Tue, 26 Apr 2022 06:10:27 -0700 (PDT)
+        with ESMTP id S1347403AbiDZNTV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 09:19:21 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E889232A;
+        Tue, 26 Apr 2022 06:16:09 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id e2so19152286wrh.7;
+        Tue, 26 Apr 2022 06:16:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=6GOK8GOxXZjvCSWzpBpj5pKZ6Fq3fZcQydXRFhVyOtw=;
-        b=mGxUFcSaBFGsCVExojhT7A540W1WOiCl4vceovmyDaNamYZ7gYsZxRuUON05MLN8f6
-         cXiLpQ1uZwSj804vGUbUmEeJpcPKoc34agS4/HO+Hs5drDJaU2HhV0DZartzpuqawVeE
-         7M62D9eUSEM3jh9Q118e95VpQ7D+CeXXCt8P0yxSYEhzbIL8lUPaizr9268qscrccgas
-         XOXrezVsitALJ67ra5pR3tZMxhT1hI2fdrBk69/PLjvCJkHj4706tsngiwLHKcauAC07
-         tboo/cy2vTcj4gqq0EltbeX3PFnVv2CSzs5daImV/8jlsiFMf8tludYB3LUcVRlRx+3e
-         HvGw==
+        bh=BRODyzlBTk01xvrOEks740Gzbq9VjDsaK05Mtw4QOdU=;
+        b=LkeeL3FcpVQHWGI4HG20tlBjq2GniD6HYqV+WWnn/V1HI7fUuchcwZqYj9rSfIBGyw
+         8Rzu/oxzUwMhZeGuG/B//W9XeA4L4Iw23ar+pBMj22HqAws5J0z9AT4UvTFyLyel+lbt
+         WvCU5G8IqHv9RP8mCuperVGqWyRjCu0r+Vx/pBIC0WPc9sTuQkvppcdDA/9LrPDE+BLj
+         eqkfdCHIgrtLJww7kJHM2nAjMVYxH2+oYxSQIyp/vAZVhnH+5WqWNzz3FDQOS7zTipx4
+         3YNQ+X5zEsUafrlVLZ96beo7D4sFAUfBgtTQrgL9cidnD0bBksiZnQD8Yzz33fRy8oDg
+         A9Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=6GOK8GOxXZjvCSWzpBpj5pKZ6Fq3fZcQydXRFhVyOtw=;
-        b=iMrvlvwjtTbcTZqIGact6lRW08r3/MxlR8WJd3Hh0a43D50ssQRmrrqQgmn43i+shg
-         ongH7wYJLDYpD0m+SL9+s99677bE5EdFkHV/gUP1ZuCJaR1Cy7Rcojg6jcG+l/fc+KmP
-         t+VvdFeCGnJxflAZnLWCNrPP34ZNg+UpjzK0q/8/tLuHBGiw0srFqg9Mm7O1MRR5bCoT
-         ccIzh/Gsx/zm4Rrfc69zLy+yXASt9XKLV0DhAfsTn0wj+dD29GVv/4Wp8CjWYVcjEQ48
-         k1uRZVq2JjwgA0QZSVfc0xseT60SkBcW0RGXmvuld1DincN9oGRz3JltoRkdIJ4MX8pr
-         hTQw==
-X-Gm-Message-State: AOAM531scPaS7OibXdR4KK7GV0tMJ+yd/iVetctkcOczObFECNWkS/Qv
-        wreGrZqP7VoX0TjDybvjLO4=
-X-Google-Smtp-Source: ABdhPJxkDJylNOaYYHkPyUlYZ9T2/Zn+9hpCgk1NWN0UYJ1It5pVUFOpyduFn52DBNw8FEwZaS7aeg==
-X-Received: by 2002:a5d:6dab:0:b0:20a:8684:cbc1 with SMTP id u11-20020a5d6dab000000b0020a8684cbc1mr18216057wrs.482.1650978625869;
-        Tue, 26 Apr 2022 06:10:25 -0700 (PDT)
+        bh=BRODyzlBTk01xvrOEks740Gzbq9VjDsaK05Mtw4QOdU=;
+        b=DUPjwu4FuLqSR01mZWymiuTrsgaQkKVbpMyw5J4O4z/YrGTZX1klqLi15vPIJgoytq
+         sNvxOAuVL0N5UXw/ocbQzzaOAWRxaQ33Yh/E7y/7A+wSl7/iN+8JK9yajD4ra/qNx76g
+         v3cQrb8tgyuYWygj5X2ZoFgt3DOWkhWsj15OAQaCDq33lq/tAjzxzA+MGYuRPBEKmTG2
+         UGH6RZLcbTozuf1xVv/TZiFAcuZdkeU5AtPAtVjBNUUlA6IOKzRk2CywsXmCHv6TXY2u
+         1RBmNXfxJxp9ql5hPv7EoGs8D64ORD2xu6WosEksfh9clyz8A9NWt/0TOWgRrsxBUQVr
+         oepQ==
+X-Gm-Message-State: AOAM533T09nk5SvPwC2aRnIUtMxModfpQHTvNudXkV6i137gTTr1nnzM
+        ANW+MEwxUVk8VGb1T5Hc+L74lNkxZ2Ceiw==
+X-Google-Smtp-Source: ABdhPJyb+06Sy+02im/xCvRnlgxLNVxjDn0E6dnwv0XselqjlFHkvP5mN41L7ogSN49wEZx7yHgQtw==
+X-Received: by 2002:a05:6000:86:b0:20a:d7be:e09b with SMTP id m6-20020a056000008600b0020ad7bee09bmr10430910wrx.398.1650978968341;
+        Tue, 26 Apr 2022 06:16:08 -0700 (PDT)
 Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id e9-20020a056000178900b0020a9f995a3csm12057830wrg.24.2022.04.26.06.10.25
+        by smtp.gmail.com with ESMTPSA id bg20-20020a05600c3c9400b0037fa5c422c8sm14723968wmb.48.2022.04.26.06.16.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 06:10:25 -0700 (PDT)
+        Tue, 26 Apr 2022 06:16:07 -0700 (PDT)
 From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org
+To:     Len Brown <lenb@kernel.org>, Chen Yu <yu.c.chen@intel.com>,
+        linux-pm@vger.kernel.org
 Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] tools/power turbostat: replace strncmp with single character compare
-Date:   Tue, 26 Apr 2022 14:10:24 +0100
-Message-Id: <20220426131024.1519440-1-colin.i.king@gmail.com>
+Subject: [PATCH] tools/power turbostat: Fix file pointer leak
+Date:   Tue, 26 Apr 2022 14:16:07 +0100
+Message-Id: <20220426131607.1520483-1-colin.i.king@gmail.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -67,29 +68,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Using strncmp for a single character comparison is overly complicated,
-just use a simpler single character comparison instead. Also stops
-static analyzers (such as cppcheck) from complaining about strncmp on
-non-null terminated strings.
+Currently if a fscanf fails then an early return leaks an open
+file pointer. Fix this by fclosing the file before the return.
+Detected using static analysis with cppcheck:
 
+tools/power/x86/turbostat/turbostat.c:2039:3: error: Resource leak: fp [resourceLeak]
+
+Fixes: eae97e053fe3 ("tools/power turbostat: Support thermal throttle count print")
 Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
  tools/power/x86/turbostat/turbostat.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index ede31a4287a0..e6779f599a8e 100644
+index e6779f599a8e..db431b31c4df 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -2976,7 +2976,7 @@ int get_thread_siblings(struct cpu_topology *thiscpu)
- 				}
- 			}
- 		}
--	} while (!strncmp(&character, ",", 1));
-+	} while (character == ',');
- 	fclose(filep);
+@@ -2035,9 +2035,9 @@ int get_core_throt_cnt(int cpu, unsigned long long *cnt)
+ 	if (!fp)
+ 		return -1;
+ 	ret = fscanf(fp, "%lld", &tmp);
++	fclose(fp);
+ 	if (ret != 1)
+ 		return -1;
+-	fclose(fp);
+ 	*cnt = tmp;
  
- 	return CPU_COUNT_S(size, thiscpu->put_ids);
+ 	return 0;
 -- 
 2.35.1
 
