@@ -2,112 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B768B510035
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 16:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1A255100A5
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 16:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351539AbiDZOSu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Apr 2022 10:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47110 "EHLO
+        id S1351647AbiDZOn5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Apr 2022 10:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351551AbiDZOSs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 10:18:48 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B464715A1B
-        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 07:15:35 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id n14so11473184lfu.13
-        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 07:15:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=6uWDDfHKgK8+yoOD+Pzrd9WOCbfsrsht1ynrIKudfso=;
-        b=ej4+Bx6xsGOH1fAYVCANQZk2dOz8IPnGV43ikFNr5907fDFzF+LC4hNSwjs0yUKphb
-         LlQcAqu6SYB9cIITtCLUcl14KCtEhMawPgVduTYHzdTyrwCcgKnmedX1eQzkzjB37JHO
-         zGCMPlgOhE55LQG7hJQHMcjjXWkik63SJIlvlZ6KMauZTOGgCVkgZ+yba7liNdFvAG1l
-         i139SGagphUzRBobjJet6dT0uNxatiQJ096u8Pql+KL2VIFCp9abO9Y+Lwb22wbZfyhp
-         EgtzT/D/fSyXw7+PFyCHJAWKS72toMh8bBDR7dlI2y+aoy7j2gcl8MPM8ADmiqwFN2iE
-         vXcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6uWDDfHKgK8+yoOD+Pzrd9WOCbfsrsht1ynrIKudfso=;
-        b=iuOMgO9XlAnCXXoUBA6EaDQzG6C162YySfqrTMIXmuVZlkuK/3Mbot1ktmKmZviqvs
-         09HcPgBcyCaEwiFWcxflzk8WyweREe/3RN9Y/Zweo0BeHvziDdYkB3QNzrX81gxaClg2
-         lYiwvrPjmNyIaKy6Knh9XW+rz5T4TSpooVQTAtfktmoLywVjhaoIAsc3LnK7lN6y41y0
-         KhLqHewX2/RsZMQ7QxWh7YZ4/+7DMIvxwkAJpkg/QiTiOh52ZKajv+QzI6DB8DRTiGIV
-         igLsnCrgOEvWEBPiE8DCWOziEvrIVdF/qiiLz/pj/uWkG3l2IAPdcYNcWYGt9+jaYgrg
-         LNZA==
-X-Gm-Message-State: AOAM53227GrP6Ems/yopaUKD1Hd8/ryb+pAHU76DndNwo0fEdrGMwGjJ
-        VWOA4IxFssF4CY2gTfT9nqlxVQ==
-X-Google-Smtp-Source: ABdhPJzVJYvpLNFNnLneCLs3awIMzJab4hFZqee6Y1nyrzQD/yDf8uZ2syfAyE7PbC6lRc5j5FlZkA==
-X-Received: by 2002:a19:4f53:0:b0:472:1714:61f1 with SMTP id a19-20020a194f53000000b00472171461f1mr2746170lfk.473.1650982533737;
-        Tue, 26 Apr 2022 07:15:33 -0700 (PDT)
-Received: from localhost.localdomain (h-98-128-181-154.NA.cust.bahnhof.se. [98.128.181.154])
-        by smtp.gmail.com with ESMTPSA id g23-20020a2ea4b7000000b0024f096abebdsm1043360ljm.78.2022.04.26.07.15.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 07:15:30 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Cc:     Kevin Hilman <khilman@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] PM: domain: Don't check PM_QOS_FLAG_NO_POWER_OFF in genpd
-Date:   Tue, 26 Apr 2022 16:15:07 +0200
-Message-Id: <20220426141507.89868-4-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220426141507.89868-1-ulf.hansson@linaro.org>
-References: <20220426141507.89868-1-ulf.hansson@linaro.org>
+        with ESMTP id S1351183AbiDZOn4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 10:43:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 821E613F14;
+        Tue, 26 Apr 2022 07:40:48 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A68923A;
+        Tue, 26 Apr 2022 07:40:48 -0700 (PDT)
+Received: from [10.57.12.108] (unknown [10.57.12.108])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B78D63F73B;
+        Tue, 26 Apr 2022 07:40:46 -0700 (PDT)
+Message-ID: <0bc7e213-ecb5-10f5-4c5a-b809252dac22@arm.com>
+Date:   Tue, 26 Apr 2022 15:40:45 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v3 0/5] Introduce Cpufreq Active Stats
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, amit.kachhap@gmail.com,
+        linux-pm@vger.kernel.org
+References: <20220406220809.22555-1-lukasz.luba@arm.com>
+ <20220426031125.ozaxwecwvuby6wo3@vireshk-i7>
+ <f6bb20c6-38a0-57d6-8979-d14e445da623@arm.com>
+ <20220426075402.qjpato6sqy2kes4x@vireshk-i7>
+ <9eac86b6-0221-0f62-ac4f-f9e3b1613422@arm.com>
+ <20220426080210.hvzrsa4kmxesn6dv@vireshk-i7>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220426080210.hvzrsa4kmxesn6dv@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Back in the days when genpd supported intermediate power states of its
-devices, it made sense to check the PM_QOS_FLAG_NO_POWER_OFF in
-genpd_power_off(). This because the attached devices were all being put
-into low power state together when the PM domain was also being powered
-off.
 
-At this point, the flag PM_QOS_FLAG_NO_POWER_OFF is better checked by
-drivers from their ->runtime_suspend() callbacks, like in the
-usb_port_runtime_suspend(), for example. Or perhaps an even better option
-is to set the QoS resume latency constraint for the device to zero, which
-informs the runtime PM core to prevent the device from being runtime
-suspended.
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- drivers/base/power/domain.c | 6 ------
- 1 file changed, 6 deletions(-)
+On 4/26/22 09:02, Viresh Kumar wrote:
+> On 26-04-22, 08:59, Lukasz Luba wrote:
+>> :) but I didn't dare to make it sysfs. I don't know if anything in
+>> user-space would be interested (apart from my test scripts).
+> 
+> Sure, I was talking about hierarchy in debugfs only. Will be useful if
+> you can show how it looks and what all data is exposed.
+> 
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 262bda9b56ef..5059c5d2e64a 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -648,12 +648,6 @@ static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
- 	}
- 
- 	list_for_each_entry(pdd, &genpd->dev_list, list_node) {
--		enum pm_qos_flags_status stat;
--
--		stat = dev_pm_qos_flags(pdd->dev, PM_QOS_FLAG_NO_POWER_OFF);
--		if (stat > PM_QOS_FLAGS_NONE)
--			return -EBUSY;
--
- 		/*
- 		 * Do not allow PM domain to be powered off, when an IRQ safe
- 		 * device is part of a non-IRQ safe domain.
--- 
-2.25.1
+I've created a new way for sharing such thing. Please check the rendered
+notebook at [1]. You can find raw output of that debugfs at cell 9 or
+in cell 11 as a dictionary. The residency is in ns. You can also find a
+diff from two snapshots for all cpus at cell 16. We randomly use Little
+cpus: 0,3,4,5.
 
+At the bottom you can find plots for all cpus, their active residency at
+frequencies. Cpu1 and cpu2 are big, cpu2 has been hotplug out so there
+is an empty plot (which is good).
+
+BTW, if you are interested in comparison of different input power
+estimation mechanism, you can find them here [2]. There are 4 different
+power signals. One is real from Juno power/energy meters the rest
+is SW estimations of avg power for the 100ms period. As you can see
+there in cell 25 plot, the new proposal in this patch set is better
+that two previous one used in mainline. The last plot shows real
+power signal and the new avg signal. The plot is interactive and
+supports 'Box Zoom' on the right (scroll to right to see that toolbox).
+
+Regards,
+Lukasz
+
+[1] 
+https://nbviewer.org/github/lukaszluba-arm/lisa/blob/public_tests/ipa_input_power-debugfs.ipynb
+[2] 
+https://nbviewer.org/github/lukaszluba-arm/lisa/blob/public_tests/ipa_input_power.ipynb
