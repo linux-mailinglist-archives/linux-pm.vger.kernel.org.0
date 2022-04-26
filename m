@@ -2,113 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A33C850FC0D
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 13:38:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B1950FC7B
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Apr 2022 14:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345961AbiDZLle (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Apr 2022 07:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40188 "EHLO
+        id S240362AbiDZMIq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Apr 2022 08:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238202AbiDZLld (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 07:41:33 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4355A1EEF5;
-        Tue, 26 Apr 2022 04:38:23 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id ay36-20020a05600c1e2400b0038ebc885115so953782wmb.1;
-        Tue, 26 Apr 2022 04:38:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=l7SZN+gn+w67vIMUfY98UKAbA7uOnpDqNzGrHL+gC5c=;
-        b=eoStLUnb7CeMxd9hbZy/U6QAaT5n5EugAremR3+IdPRp5H5amqgs/NWJ65/XbyxCiV
-         tA/Ghtpc2H3RiqPHoA155YmW+UXiIZtbvlw1Qn7HAk7cBCEY85vBckZprdXODtn72NX4
-         yFLxdwDX1l8JJnRUAroTga4EF3mIaMWj8lgpS9FEPmd6KtD+dFgOQ2khtMwoZ64h3mXr
-         ponXh4dwjbuGcQah0m5tJJK++QdejeORxZin/gto1x9Wsk0WTEOyaXZsO26r9WCErmcC
-         xy93F4s3SEn4/EJNvs//LAEHVpxT2SgHLGIv2xMV6+P5Cq+OsZfeDfHJbHkJtZ/rU+dF
-         zGmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=l7SZN+gn+w67vIMUfY98UKAbA7uOnpDqNzGrHL+gC5c=;
-        b=T8e1Ex1Ma2OazIOVWcznyUlRDADg/JyXHgEk2W3ne9ofSQ48Ok/Uv5oy6qJzv+/hR+
-         7/fgbs58hSLIvuHnI2ZPWyOCQRNtArqdx9alyuZs82wTyoWlrOXBauizBEj8eQ8eMiSl
-         HZw0OYDCOmvezPi8PdqCuxrj+kxGiyJJhbRcXjO37QG60PvvS2ktI3O07UJLrDZvuMvZ
-         CSCQuto61k1C5iCZl/yRsqAplsr6VG+XZ2fAgupiJVIvPLl8xV65mMZMgeG7z3Uwndlu
-         lImTpTUE6wVuUAVzrqahNz9S82BybG61NqLc/+kdhV0sGoPtj4gg3o+BfwEBcE71z4Sb
-         ykVQ==
-X-Gm-Message-State: AOAM533u6+PTvvKbleOJ4fg4O+5UKugIPGpXkPtj8zcu4kBfg423ZYR4
-        2ERbPmyodPfA1MFPAQIAeyo=
-X-Google-Smtp-Source: ABdhPJzlJ/ygsvmUV/0F3Ng+ZTbfSop588wEeRpKx1ZJ5wlB2aCBxL7+8NSqY0vDH3NutnV/DdmyJA==
-X-Received: by 2002:a1c:5401:0:b0:38e:bf1c:d25c with SMTP id i1-20020a1c5401000000b0038ebf1cd25cmr20730810wmb.119.1650973101751;
-        Tue, 26 Apr 2022 04:38:21 -0700 (PDT)
-Received: from [192.168.0.43] (static-35-180-85-188.ipcom.comunitel.net. [188.85.180.35])
-        by smtp.gmail.com with ESMTPSA id e17-20020adfa451000000b0020ada1a7c82sm5508369wra.11.2022.04.26.04.38.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Apr 2022 04:38:21 -0700 (PDT)
-Message-ID: <1e951bad-1f26-6de2-43be-b1b5dc384794@gmail.com>
-Date:   Tue, 26 Apr 2022 13:38:20 +0200
+        with ESMTP id S1346373AbiDZMIq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 08:08:46 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E66EB16C;
+        Tue, 26 Apr 2022 05:05:35 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6400,9594,10328"; a="351996298"
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="351996298"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Apr 2022 05:05:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,290,1643702400"; 
+   d="scan'208";a="538655307"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga002.jf.intel.com with ESMTP; 26 Apr 2022 05:05:35 -0700
+Received: from abityuts-desk1.fi.intel.com (abityuts-desk1.fi.intel.com [10.237.72.79])
+        by linux.intel.com (Postfix) with ESMTP id 9635558090D;
+        Tue, 26 Apr 2022 05:05:32 -0700 (PDT)
+Message-ID: <97e7e3f5110702fab727b4df7d53511aef5c60b1.camel@gmail.com>
+Subject: Re: [RFC PATCH v3 2/5] cpuidle: Add Cpufreq Active Stats calls
+ tracking idle entry/exit
+From:   Artem Bityutskiy <dedekind1@gmail.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org
+Cc:     dietmar.eggemann@arm.com, viresh.kumar@linaro.org,
+        rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, amit.kachhap@gmail.com,
+        linux-pm@vger.kernel.org
+Date:   Tue, 26 Apr 2022 15:05:31 +0300
+In-Reply-To: <20220406220809.22555-3-lukasz.luba@arm.com>
+References: <20220406220809.22555-1-lukasz.luba@arm.com>
+         <20220406220809.22555-3-lukasz.luba@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] cpufreq: mediatek: Fix NULL pointer dereference in
- mediatek-cpufreq
-Content-Language: en-US
-To:     Wan Jiabing <wanjiabing@vivo.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220426111715.627609-1-wanjiabing@vivo.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220426111715.627609-1-wanjiabing@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Lukasz,
+
+On Wed, 2022-04-06 at 23:08 +0100, Lukasz Luba wrote:
+> @@ -231,6 +232,8 @@ int cpuidle_enter_state(struct cpuidle_device *dev, struct
+> cpuidle_driver *drv,
+>         trace_cpu_idle(index, dev->cpu);
+>         time_start = ns_to_ktime(local_clock());
+>  
+> +       cpufreq_active_stats_cpu_idle_enter(time_start);
+> +
+>         stop_critical_timings();
+>         if (!(target_state->flags & CPUIDLE_FLAG_RCU_IDLE))
+>                 rcu_idle_enter();
+> @@ -243,6 +246,8 @@ int cpuidle_enter_state(struct cpuidle_device *dev, struct
+> cpuidle_driver *drv,
+>         time_end = ns_to_ktime(local_clock());
+>         trace_cpu_idle(PWR_EVENT_EXIT, dev->cpu);
+>  
+> +       cpufreq_active_stats_cpu_idle_exit(time_end);
+> +
+
+At this point the interrupts are still disabled, and they get enabled later. So
+the more code you add here and the longer it executes, the longer you delay the
+interrupts. Therefore, you are effectively increasing IRQ latency from idle by
+adding more code here.
+
+How much? I do not know, depends on how much code you need to execute. But the
+amount of code in functions like this tends to increase over time.
+
+So the risk is that we'll keep making 'cpufreq_active_stats_cpu_idle_exit()',
+and (may be unintentionally) increase idle interrupt latency.
+
+This is not ideal.
+
+We use the 'wult' tool (https://github.com/intel/wult) to measure C-states
+latency and interrupt latency on Intel platforms, and for fast C-states like
+Intel C1, we can see that even the current code between C-state exit and
+interrupt re-enabled adds measurable overhead.
+
+I am worried about adding more stuff here.
+
+Please, consider getting the stats after interrupts are re-enabled. You may lose
+some "precision" because of that, but it is probably overall better that adding
+to idle interrupt latency.
+
+>         /* The cpu is no longer idle or about to enter idle. */
+>         sched_idle_set_state(NULL);
 
 
-On 26/04/2022 13:17, Wan Jiabing wrote:
-> Fix following coccicheck error:
-> drivers/cpufreq/mediatek-cpufreq.c:464:16-23: ERROR: info is NULL but dereferenced.
-> 
-> Use pr_err instead of dev_err to avoid dereferring a NULL pointer.
-> 
-> Fixes: f52b16ba9fe4 ("cpufreq: mediatek: Use device print to show logs")
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-
-> ---
->   drivers/cpufreq/mediatek-cpufreq.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-> index bcabb3726a5b..901042e9a240 100644
-> --- a/drivers/cpufreq/mediatek-cpufreq.c
-> +++ b/drivers/cpufreq/mediatek-cpufreq.c
-> @@ -461,8 +461,8 @@ static int mtk_cpufreq_init(struct cpufreq_policy *policy)
->   
->   	info = mtk_cpu_dvfs_info_lookup(policy->cpu);
->   	if (!info) {
-> -		dev_err(info->cpu_dev,
-> -			"dvfs info for cpu%d is not initialized.\n", policy->cpu);
-> +		pr_err("dvfs info for cpu%d is not initialized.\n",
-> +			policy->cpu);
->   		return -EINVAL;
->   	}
->   
