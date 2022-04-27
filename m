@@ -2,74 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EABA8510F32
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 05:11:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BE1B510F6D
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 05:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348836AbiD0DOz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Apr 2022 23:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49998 "EHLO
+        id S244309AbiD0DVP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Apr 2022 23:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242711AbiD0DOy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 23:14:54 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463A61208E
-        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 20:11:45 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id c23so493799plo.0
-        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 20:11:45 -0700 (PDT)
+        with ESMTP id S239226AbiD0DVO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 23:21:14 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D3B13F8C
+        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 20:18:04 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id gj17-20020a17090b109100b001d8b390f77bso3880474pjb.1
+        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 20:18:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=QeLNBCirVB+9azObthHDc+zDjnH2MBnHQLYuB1xHpSg=;
-        b=LauZkNXFuJxaHO6AZzzSQgT1RBnzkVe5AbyhIWjE+cpUPZuWrYw7k821kWGkOnIuE3
-         m/JeFVATc5PxS0lQ887DbBw5TVS/eqya/BvOe3aA6XPgTag2bL9kb7jEf/kMG4bgT9+n
-         nZ4Pz/7m5DTWrrhU+lVyo01hBxzoezE3kQRPJtik54IIGjq118i9mOUrWBOOqsEzyOMX
-         ig2zp9I6b1JafAnW9a+BENcFZ4C2riyTniq/P446KJ60roW7SyNUDvtC1mYPejb7zbKT
-         sT6Q5G19soERJMdKju6fH5HpCCcnGBh6ZC1knxH5n9BRqbbiYBU6dJDqTM/+fmMdDQwv
-         rovQ==
+        bh=XTLOas78RQ0/UyRSC2YDKTpbOeiAeOZCtumqdgYp4Z4=;
+        b=mqSgWBPiZA5AOZKT6FykeD6jPdOPAmSH9NV6sFOFz8a3i0AnRvCiTCjNYuwdZ+tCCv
+         gdE8VRhUJ1oNfG49hKS+xFeQCJFqTPR+nGg32RdalHPbCtc04r2U6JmyfhYwR+z8ou5m
+         4SnX8J6xEUt2YGkfpLEX0TGC8aaSGfCSFpEE0+KmW8uI4Bb/QPUCzL+gWClk2JGHjQpz
+         cVZQCTFmoR3RKcmVKCSvRTV3H8WEBItqH9wYErn1W2xSRGex0COZsSCofAonYxX3KTtI
+         U0yxOkGL5qvKzKZ3GoAcCZ8ny3+D0vAJ2+PiStmirta8ou5U2iW+YVvBU17MqF2twsC9
+         BBVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=QeLNBCirVB+9azObthHDc+zDjnH2MBnHQLYuB1xHpSg=;
-        b=5H7wvoslaOmRxwSmWCdNzPsvajYLaos7sbmLx4rI6tczW4Gmmc3LGyOQ9Y9bjkwM7E
-         AuFeZEVFdb6nwckI7il5dCGzRzt7Wobq6emxbOnEEuJqKsG6l6sG9vraoj5a6qdedQAz
-         JzbJ5qCWpBqMqO73h5se9UZj+kulbiUWotTe66vT/zxoLJ3Gwue6ClSOUTSCVnUK8v4J
-         +34jhS+BgszoEm7vJZSBaBtUs17LdCe4rLIizdvS7+gM1+AgE2vYM56Aob/tEDGcs0gm
-         BlGwT999xtPY1v1P9J5DUtS/idEjpQrVGOLXJZeIDK0VN0cG5finupQXm5s5RIQlzhX6
-         SkjA==
-X-Gm-Message-State: AOAM532P0C3EUW6ln7ymoi1gLN2KvFFg8SHXRx5qM+vFeM66c5fwdpHL
-        P8VzphtKYT6g4osULfCwY+GotA==
-X-Google-Smtp-Source: ABdhPJzIzlWaNfocqWrXkXaX43UuhbhI/L6BzhFoDVBeU6ZHYI+09qW0rRQP2y7SIq2VIL6q5Hfmtw==
-X-Received: by 2002:a17:90a:3486:b0:1d9:3abd:42ed with SMTP id p6-20020a17090a348600b001d93abd42edmr22017909pjb.32.1651029104494;
-        Tue, 26 Apr 2022 20:11:44 -0700 (PDT)
+        bh=XTLOas78RQ0/UyRSC2YDKTpbOeiAeOZCtumqdgYp4Z4=;
+        b=AwjsujXhlMhHC74Ye16sY4PjK9KcvRTztJKNTl/ZVj99QET5xEG7LAa0aKSgZxlCWU
+         wIqqg7XRHgRvEVya4epHlk/B2I5vO/WBC0kVmO+OGk3sfDcMNIQUw9NvVgVFExfVGpwA
+         epHp0TS+MhtL9T8Qb5jCpXjkJEeH0i+O1+Sogla5E1Yo5eBjsLF/fHkKEcm4jihbvOMB
+         Qd+jnM2kLFm7z04j30ngqJ/nJqn3LELX70CxeTeWZFv5sWAD8HTwdVyhY2T0yZ2yogNA
+         RwvHbNdzawIaqCF7Q6NcdDVFCPSZsEH50G6YWeyQIgIKOMVtHqvcmOZLXwPOc01foklk
+         z4/w==
+X-Gm-Message-State: AOAM531lCo4anwqnpygufbs4A/uARf6nYFP7YdNMhLDGrMAra6qKLMPJ
+        s/8iUT4zmdnYG6Ly57zPt1XUS6NJXa2qNg==
+X-Google-Smtp-Source: ABdhPJwUEsxKcRCpJmBZnAvMHtBIhDnOJS4DjfdCieo7LC2EPJV6RP0uzxjZi6XmsQoPF1XA84D7ag==
+X-Received: by 2002:a17:90b:17c6:b0:1d2:8450:49b3 with SMTP id me6-20020a17090b17c600b001d2845049b3mr41331569pjb.246.1651029483817;
+        Tue, 26 Apr 2022 20:18:03 -0700 (PDT)
 Received: from localhost ([122.177.141.190])
-        by smtp.gmail.com with ESMTPSA id u25-20020a62ed19000000b004f140515d56sm16544735pfh.46.2022.04.26.20.11.42
+        by smtp.gmail.com with ESMTPSA id e17-20020a637451000000b003c144b70a7csm609775pgn.77.2022.04.26.20.18.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 20:11:43 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 08:41:41 +0530
+        Tue, 26 Apr 2022 20:18:03 -0700 (PDT)
+Date:   Wed, 27 Apr 2022 08:48:01 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     rafael@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
-        roger.lu@mediatek.com, hsinyi@google.com, khilman@baylibre.com,
-        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     Wan Jiabing <wanjiabing@vivo.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH V4 07/14] cpufreq: mediatek: Add .get function
-Message-ID: <20220427031141.or2owu5wrh2cadfo@vireshk-i7>
-References: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
- <20220422075239.16437-8-rex-bc.chen@mediatek.com>
- <20220425053548.72w2jh2g6lpzgz6g@vireshk-i7>
- <64c690e8edf493ec0a4a14e0fdaad2d8e88e6da7.camel@mediatek.com>
- <20220425100058.4kbvmpi63ygni6k5@vireshk-i7>
- <078b1f9b39690da98cbd3c4528ba28374a097083.camel@mediatek.com>
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] cpufreq: mediatek: Fix NULL pointer dereference in
+ mediatek-cpufreq
+Message-ID: <20220427031801.tlph5uyougr55yri@vireshk-i7>
+References: <20220426111715.627609-1-wanjiabing@vivo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <078b1f9b39690da98cbd3c4528ba28374a097083.camel@mediatek.com>
+In-Reply-To: <20220426111715.627609-1-wanjiabing@vivo.com>
 User-Agent: NeoMutt/20180716-391-311a52
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -80,32 +76,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26-04-22, 19:13, Rex-BC Chen wrote:
-> We have a non-upstream driver which tries to get frequency by
-> 'cpufreq_get'.
+On 26-04-22, 19:17, Wan Jiabing wrote:
+> Fix following coccicheck error:
+> drivers/cpufreq/mediatek-cpufreq.c:464:16-23: ERROR: info is NULL but dereferenced.
+> 
+> Use pr_err instead of dev_err to avoid dereferring a NULL pointer.
+> 
+> Fixes: f52b16ba9fe4 ("cpufreq: mediatek: Use device print to show logs")
+> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> ---
+>  drivers/cpufreq/mediatek-cpufreq.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+> index bcabb3726a5b..901042e9a240 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> @@ -461,8 +461,8 @@ static int mtk_cpufreq_init(struct cpufreq_policy *policy)
+>  
+>  	info = mtk_cpu_dvfs_info_lookup(policy->cpu);
+>  	if (!info) {
+> -		dev_err(info->cpu_dev,
+> -			"dvfs info for cpu%d is not initialized.\n", policy->cpu);
+> +		pr_err("dvfs info for cpu%d is not initialized.\n",
+> +			policy->cpu);
+>  		return -EINVAL;
+>  	}
 
-This is the right thing to do there.
-
-> When we use that non-upstream driver, 'cpufreq_verify_current_freq'
-> will be further invoked by 'cpufreq_get' and it would cause voltage
-> pulse issue as I described previously.
-
-I see this will eventually resolve to __cpufreq_driver_target(), which
-should return without any frequency updates.
-
-What do you mean by "voltage pulse" here? What actually happens which
-you want to avoid.
-
-> Therefore, we apply the solution in this series.
-
-I won't call it a solution but a Bug as .get() is supposed to read
-real freq of the hardware.
-
-> Recently, we found that using 'cpufreq_generic_get' directly in our
-> non-upstream driver can do the same thing without pulse issue.
-
-That would be an abuse of the cpufreq_generic_get() API. It is ONLY
-allowed to be used while setting .get callback in the driver.
+Applied. Thanks.
 
 -- 
 viresh
