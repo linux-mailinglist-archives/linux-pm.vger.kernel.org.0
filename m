@@ -2,244 +2,288 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1DBD511407
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 11:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E87E511561
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 13:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231753AbiD0JGG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Apr 2022 05:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46128 "EHLO
+        id S231254AbiD0LAy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Apr 2022 07:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiD0JGG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Apr 2022 05:06:06 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A5311C98C;
-        Wed, 27 Apr 2022 02:02:45 -0700 (PDT)
+        with ESMTP id S231869AbiD0LAT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Apr 2022 07:00:19 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C313C1093;
+        Wed, 27 Apr 2022 03:38:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651050165; x=1682586165;
+  t=1651055880; x=1682591880;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=3/wGqdZEGCmi4VUJP2w+KBYIsRrkHRBi4b2f3O4JXoA=;
-  b=Lw/798PqrUf12Bos4+escT7qy0xkn00j1qhoaVoaWp6baIkCldJJxaOq
-   mzD5sfKLzb6NZ6f7gpOdRZ5Z60z+viNiIvXLacGIf5hKZ11L8NpRD91WF
-   uv+kegx8BSQoY34hxQ6BYp/Am8m/vqN+OYplJjeu+mNY8/tHzAN1Sgz7d
-   66vfxUFREz0ZPOzuHkgCP/yYWuFVfjGa05gXDNNFdBLbKLRFkjsKg7zc6
-   129RTNoimPeIHFb868JSny+P0Px2OHmNCBGbrAULX0R3kC0AG73ms166v
-   gLw57efRbV95uoXevHC823GZmW3LLYwV4sOTPfxE5sNhhQz0PNG1JYN9P
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="291017843"
+  bh=MEdpCvTbebSfftKt7KRsTDu5tKkUZCjAgldDSUjcCVk=;
+  b=VTVlxI1BplZrwXD1IjhCykkZrZc7C0duoWIXFVUqSbeaObezt077eji7
+   lxYAqOUi7C0zD/87Ym4aQeRURIJPSQHlMS77y9czEuhEJwH/QQN8XBaaU
+   PWZDv3qM3QC4tWmCb+prfP6OC7DI83N3k2jUlki8s9Uz3rBUZ0Kohn/0C
+   pYvYff2zxUU5ezkUghonDBPhX5Ip4t55jbCjyDBNQNXa2PDjPYye7/3fB
+   6GaRObUg4Fb/CBg/FZfv+yuu1eKAjIBMuKNNLjMfdlO9ApVH/2kHTtkxA
+   PLR4A7MoXZ8ppS6EQXJuOx8DXxwc46EQlWDGZ7ZEB2Psmdy8MYWFu9K/D
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10329"; a="326363844"
 X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="291017843"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 02:02:37 -0700
+   d="scan'208";a="326363844"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2022 02:26:39 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,292,1643702400"; 
-   d="scan'208";a="807942526"
+   d="scan'208";a="539773403"
 Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 27 Apr 2022 02:02:34 -0700
+  by orsmga002.jf.intel.com with ESMTP; 27 Apr 2022 02:26:35 -0700
 Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1njdZB-0004X7-Vk;
-        Wed, 27 Apr 2022 09:02:33 +0000
-Date:   Wed, 27 Apr 2022 17:01:52 +0800
+        id 1njdwR-0004YM-0M;
+        Wed, 27 Apr 2022 09:26:35 +0000
+Date:   Wed, 27 Apr 2022 17:25:49 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>, rafael@kernel.org,
-        daniel.lezcano@linaro.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        khilman@baylibre.com, abailon@baylibre.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 15/15] thermal/of: Initialize trip points separately
-Message-ID: <202204271620.h0RD5aZy-lkp@intel.com>
-References: <20220426221523.3056696-16-daniel.lezcano@linexp.org>
+To:     Johnson Wang <johnson.wang@mediatek.com>, cw00.choi@samsung.com,
+        krzk+dt@kernel.org, robh+dt@kernel.org, kyungmin.park@samsung.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, khilman@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Johnson Wang <johnson.wang@mediatek.com>
+Subject: Re: [PATCH v3 2/2] PM / devfreq: mediatek: Introduce MediaTek CCI
+ devfreq driver
+Message-ID: <202204271737.oAuTwqZH-lkp@intel.com>
+References: <20220425125546.4129-3-johnson.wang@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220426221523.3056696-16-daniel.lezcano@linexp.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220425125546.4129-3-johnson.wang@mediatek.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+Hi Johnson,
 
-I love your patch! Perhaps something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test WARNING on tegra/for-next]
-[also build test WARNING on sre-power-supply/for-next linus/master v5.18-rc4]
-[cannot apply to rafael-pm/thermal next-20220427]
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on linus/master v5.18-rc4 next-20220427]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-OF-rework/20220427-061937
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git for-next
-config: i386-randconfig-a004-20220425 (https://download.01.org/0day-ci/archive/20220427/202204271620.h0RD5aZy-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Johnson-Wang/Introduce-MediaTek-CCI-devfreq-driver/20220425-205820
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220427/202204271737.oAuTwqZH-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 1cddcfdc3c683b393df1a5c9063252eb60e52818)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/b446fa392d1d9fa791ca672608b0860fe37e040f
+        # https://github.com/intel-lab-lkp/linux/commit/98b34c0587837b0e5b880b11a52433f8f0eee19f
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Lezcano/thermal-OF-rework/20220427-061937
-        git checkout b446fa392d1d9fa791ca672608b0860fe37e040f
+        git fetch --no-tags linux-review Johnson-Wang/Introduce-MediaTek-CCI-devfreq-driver/20220425-205820
+        git checkout 98b34c0587837b0e5b880b11a52433f8f0eee19f
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/thermal/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash block/partitions/ drivers/devfreq/ drivers/iio/imu/ drivers/misc/lkdtm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/thermal/thermal_of.c:965:2: warning: variable 'gchild' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (!tz->tbps) {
-           ^~~~~~~~~~~~~~
-   include/linux/compiler.h:56:28: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/thermal/thermal_of.c:996:14: note: uninitialized use occurs here
-           of_node_put(gchild);
-                       ^~~~~~
-   drivers/thermal/thermal_of.c:965:2: note: remove the 'if' if its condition is always false
-           if (!tz->tbps) {
-           ^~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:23: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                         ^
-   drivers/thermal/thermal_of.c:905:43: note: initialize the variable 'gchild' to silence this warning
-           struct device_node *child = NULL, *gchild;
-                                                    ^
-                                                     = NULL
-   1 warning generated.
+   drivers/devfreq/mtk-cci-devfreq.c:372:16: error: no member named 'parent_type' in 'struct devfreq_passive_data'
+           passive_data->parent_type = CPUFREQ_PARENT_DEV;
+           ~~~~~~~~~~~~  ^
+   drivers/devfreq/mtk-cci-devfreq.c:372:30: error: use of undeclared identifier 'CPUFREQ_PARENT_DEV'
+           passive_data->parent_type = CPUFREQ_PARENT_DEV;
+                                       ^
+>> drivers/devfreq/mtk-cci-devfreq.c:379:4: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
+                           PTR_ERR(drv->devfreq));
+                           ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                  ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ~~~    ^~~~~~~~~~~
+   1 warning and 2 errors generated.
 
 
-vim +965 drivers/thermal/thermal_of.c
+vim +379 drivers/devfreq/mtk-cci-devfreq.c
 
-b446fa392d1d9f drivers/thermal/thermal_of.c Daniel Lezcano     2022-04-27   887  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   888  /**
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   889   * thermal_of_build_thermal_zone - parse and fill one thermal zone data
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   890   * @np: DT node containing a thermal zone node
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   891   *
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   892   * This function parses a thermal zone type of node represented by
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   893   * @np parameter and fills the read data into a __thermal_zone data structure
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   894   * and return this pointer.
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   895   *
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   896   * TODO: Missing properties to parse: thermal-sensor-names
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   897   *
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   898   * Return: On success returns a valid struct __thermal_zone,
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   899   * otherwise, it returns a corresponding ERR_PTR(). Caller must
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   900   * check the return value with help of IS_ERR() helper.
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   901   */
-c0ff8aaae36955 drivers/thermal/of-thermal.c Julia Lawall       2016-04-19   902  static struct __thermal_zone
-c0ff8aaae36955 drivers/thermal/of-thermal.c Julia Lawall       2016-04-19   903  __init *thermal_of_build_thermal_zone(struct device_node *np)
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   904  {
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   905  	struct device_node *child = NULL, *gchild;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   906  	struct __thermal_zone *tz;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   907  	int ret, i;
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   908  	u32 prop, coef[2];
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   909  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   910  	if (!np) {
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   911  		pr_err("no thermal zone np\n");
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   912  		return ERR_PTR(-EINVAL);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   913  	}
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   914  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   915  	tz = kzalloc(sizeof(*tz), GFP_KERNEL);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   916  	if (!tz)
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   917  		return ERR_PTR(-ENOMEM);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   918  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   919  	ret = of_property_read_u32(np, "polling-delay-passive", &prop);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   920  	if (ret < 0) {
-3079f340caa72a drivers/thermal/of-thermal.c Amit Kucheria      2019-01-21   921  		pr_err("%pOFn: missing polling-delay-passive property\n", np);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   922  		goto free_tz;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   923  	}
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   924  	tz->passive_delay = prop;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   925  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   926  	ret = of_property_read_u32(np, "polling-delay", &prop);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   927  	if (ret < 0) {
-3079f340caa72a drivers/thermal/of-thermal.c Amit Kucheria      2019-01-21   928  		pr_err("%pOFn: missing polling-delay property\n", np);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   929  		goto free_tz;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   930  	}
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   931  	tz->polling_delay = prop;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   932  
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   933  	/*
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   934  	 * REVIST: for now, the thermal framework supports only
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   935  	 * one sensor per thermal zone. Thus, we are considering
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   936  	 * only the first two values as slope and offset.
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   937  	 */
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   938  	ret = of_property_read_u32_array(np, "coefficients", coef, 2);
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   939  	if (ret == 0) {
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   940  		tz->slope = coef[0];
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   941  		tz->offset = coef[1];
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   942  	} else {
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   943  		tz->slope = 1;
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   944  		tz->offset = 0;
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   945  	}
-a46dbae8abe5cd drivers/thermal/of-thermal.c Eduardo Valentin   2015-05-11   946  
-b446fa392d1d9f drivers/thermal/thermal_of.c Daniel Lezcano     2022-04-27   947  	tz->trips = thermal_of_trips_init(np, &tz->ntrips);
-b446fa392d1d9f drivers/thermal/thermal_of.c Daniel Lezcano     2022-04-27   948  	if (IS_ERR(tz->trips)) {
-b446fa392d1d9f drivers/thermal/thermal_of.c Daniel Lezcano     2022-04-27   949  		ret = PTR_ERR(tz->trips);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   950  		goto finish;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   951  	}
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   952  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   953  	/* cooling-maps */
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   954  	child = of_get_child_by_name(np, "cooling-maps");
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   955  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   956  	/* cooling-maps not provided */
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   957  	if (!child)
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   958  		goto finish;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   959  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   960  	tz->num_tbps = of_get_child_count(child);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   961  	if (tz->num_tbps == 0)
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   962  		goto finish;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   963  
-6396bb221514d2 drivers/thermal/of-thermal.c Kees Cook          2018-06-12   964  	tz->tbps = kcalloc(tz->num_tbps, sizeof(*tz->tbps), GFP_KERNEL);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  @965  	if (!tz->tbps) {
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   966  		ret = -ENOMEM;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   967  		goto free_trips;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   968  	}
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   969  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   970  	i = 0;
-ca9521b770c988 drivers/thermal/of-thermal.c Stephen Boyd       2014-06-18   971  	for_each_child_of_node(child, gchild) {
-b446fa392d1d9f drivers/thermal/thermal_of.c Daniel Lezcano     2022-04-27   972  		ret = thermal_of_populate_bind_params(np, gchild, &tz->tbps[i++]);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   973  		if (ret)
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   974  			goto free_tbps;
-ca9521b770c988 drivers/thermal/of-thermal.c Stephen Boyd       2014-06-18   975  	}
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   976  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   977  finish:
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   978  	of_node_put(child);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   979  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   980  	return tz;
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   981  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   982  free_tbps:
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   983  	for (i = i - 1; i >= 0; i--) {
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   984  		struct __thermal_bind_params *tbp = tz->tbps + i;
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   985  		int j;
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   986  
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   987  		for (j = 0; j < tbp->count; j++)
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   988  			of_node_put(tbp->tcbp[j].cooling_device);
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   989  
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   990  		kfree(tbp->tcbp);
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   991  	}
-a92bab8919e3fb drivers/thermal/of-thermal.c Viresh Kumar       2018-08-08   992  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   993  	kfree(tz->tbps);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   994  free_trips:
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   995  	kfree(tz->trips);
-c2aad93c7edd5e drivers/thermal/of-thermal.c Vladimir Zapolskiy 2014-09-29   996  	of_node_put(gchild);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   997  free_tz:
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   998  	kfree(tz);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03   999  	of_node_put(child);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1000  
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1001  	return ERR_PTR(ret);
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1002  }
-4e5e4705bf69ea drivers/thermal/of-thermal.c Eduardo Valentin   2013-07-03  1003  
+   255	
+   256	static int mtk_ccifreq_probe(struct platform_device *pdev)
+   257	{
+   258		struct device *dev = &pdev->dev;
+   259		struct mtk_ccifreq_drv *drv;
+   260		struct devfreq_passive_data *passive_data;
+   261		struct dev_pm_opp *opp;
+   262		unsigned long rate, opp_volt;
+   263		int ret;
+   264	
+   265		drv = devm_kzalloc(dev, sizeof(*drv), GFP_KERNEL);
+   266		if (!drv)
+   267			return -ENOMEM;
+   268	
+   269		drv->dev = dev;
+   270		drv->soc_data = (const struct mtk_ccifreq_platform_data *)
+   271					of_device_get_match_data(&pdev->dev);
+   272		mutex_init(&drv->reg_lock);
+   273		platform_set_drvdata(pdev, drv);
+   274	
+   275		drv->cci_clk = devm_clk_get(dev, "cci");
+   276		if (IS_ERR(drv->cci_clk)) {
+   277			ret = PTR_ERR(drv->cci_clk);
+   278			return dev_err_probe(dev, ret,
+   279					     "failed to get cci clk: %d\n", ret);
+   280		}
+   281	
+   282		drv->inter_clk = devm_clk_get(dev, "intermediate");
+   283		if (IS_ERR(drv->inter_clk)) {
+   284			ret = PTR_ERR(drv->inter_clk);
+   285			dev_err_probe(dev, ret,
+   286				      "failed to get intermediate clk: %d\n", ret);
+   287			goto out_free_resources;
+   288		}
+   289	
+   290		drv->proc_reg = devm_regulator_get_optional(dev, "proc");
+   291		if (IS_ERR(drv->proc_reg)) {
+   292			ret = PTR_ERR(drv->proc_reg);
+   293			dev_err_probe(dev, ret,
+   294				      "failed to get proc regulator: %d\n", ret);
+   295			goto out_free_resources;
+   296		}
+   297	
+   298		ret = regulator_enable(drv->proc_reg);
+   299		if (ret) {
+   300			dev_err(dev, "failed to enable proc regulator\n");
+   301			goto out_free_resources;
+   302		}
+   303	
+   304		drv->sram_reg = regulator_get_optional(dev, "sram");
+   305		if (IS_ERR(drv->sram_reg))
+   306			drv->sram_reg = NULL;
+   307		else {
+   308			ret = regulator_enable(drv->sram_reg);
+   309			if (ret) {
+   310				dev_err(dev, "failed to enable sram regulator\n");
+   311				goto out_free_resources;
+   312			}
+   313		}
+   314	
+   315		/*
+   316		 * We assume min voltage is 0 and tracking target voltage using
+   317		 * min_volt_shift for each iteration.
+   318		 * The retry_max is 3 times of expeted iteration count.
+   319		 */
+   320		drv->vtrack_max = 3 * DIV_ROUND_UP(max(drv->soc_data->sram_max_volt,
+   321						       drv->soc_data->proc_max_volt),
+   322						   drv->soc_data->min_volt_shift);
+   323	
+   324		ret = clk_prepare_enable(drv->cci_clk);
+   325		if (ret)
+   326			goto out_free_resources;
+   327	
+   328		ret = clk_prepare_enable(drv->inter_clk);
+   329		if (ret)
+   330			goto out_disable_cci_clk;
+   331	
+   332		ret = dev_pm_opp_of_add_table(dev);
+   333		if (ret) {
+   334			dev_err(dev, "failed to add opp table: %d\n", ret);
+   335			goto out_disable_inter_clk;
+   336		}
+   337	
+   338		rate = clk_get_rate(drv->inter_clk);
+   339		opp = dev_pm_opp_find_freq_ceil(dev, &rate);
+   340		if (IS_ERR(opp)) {
+   341			ret = PTR_ERR(opp);
+   342			dev_err(dev, "failed to get intermediate opp: %d\n", ret);
+   343			goto out_remove_opp_table;
+   344		}
+   345		drv->inter_voltage = dev_pm_opp_get_voltage(opp);
+   346		dev_pm_opp_put(opp);
+   347	
+   348		rate = U32_MAX;
+   349		opp = dev_pm_opp_find_freq_floor(drv->dev, &rate);
+   350		if (IS_ERR(opp)) {
+   351			dev_err(dev, "failed to get opp\n");
+   352			ret = PTR_ERR(opp);
+   353			goto out_remove_opp_table;
+   354		}
+   355	
+   356		opp_volt = dev_pm_opp_get_voltage(opp);
+   357		dev_pm_opp_put(opp);
+   358		ret = mtk_ccifreq_set_voltage(drv, opp_volt);
+   359		if (ret) {
+   360			dev_err(dev, "failed to scale to highest voltage %lu in proc_reg\n",
+   361				opp_volt);
+   362			goto out_remove_opp_table;
+   363		}
+   364	
+   365		passive_data = devm_kzalloc(dev, sizeof(struct devfreq_passive_data),
+   366					    GFP_KERNEL);
+   367		if (!passive_data) {
+   368			ret = -ENOMEM;
+   369			goto out_remove_opp_table;
+   370		}
+   371	
+   372		passive_data->parent_type = CPUFREQ_PARENT_DEV;
+   373		drv->devfreq = devm_devfreq_add_device(dev, &mtk_ccifreq_profile,
+   374						       DEVFREQ_GOV_PASSIVE,
+   375						       passive_data);
+   376		if (IS_ERR(drv->devfreq)) {
+   377			ret = -EPROBE_DEFER;
+   378			dev_err(dev, "failed to add devfreq device: %d\n",
+ > 379				PTR_ERR(drv->devfreq));
+   380			goto out_remove_opp_table;
+   381		}
+   382	
+   383		drv->opp_nb.notifier_call = mtk_ccifreq_opp_notifier;
+   384		ret = dev_pm_opp_register_notifier(dev, &drv->opp_nb);
+   385		if (ret) {
+   386			dev_err(dev, "failed to register opp notifier: %d\n", ret);
+   387			goto out_remove_devfreq_device;
+   388		}
+   389		return 0;
+   390	
+   391	out_remove_devfreq_device:
+   392		devm_devfreq_remove_device(dev, drv->devfreq);
+   393	
+   394	out_remove_opp_table:
+   395		dev_pm_opp_of_remove_table(dev);
+   396	
+   397	out_disable_inter_clk:
+   398		clk_disable_unprepare(drv->inter_clk);
+   399	
+   400	out_disable_cci_clk:
+   401		clk_disable_unprepare(drv->cci_clk);
+   402	
+   403	out_free_resources:
+   404		if (regulator_is_enabled(drv->proc_reg))
+   405			regulator_disable(drv->proc_reg);
+   406		if (drv->sram_reg && regulator_is_enabled(drv->sram_reg))
+   407			regulator_disable(drv->sram_reg);
+   408	
+   409		if (!IS_ERR(drv->proc_reg))
+   410			regulator_put(drv->proc_reg);
+   411		if (!IS_ERR(drv->sram_reg))
+   412			regulator_put(drv->sram_reg);
+   413		if (!IS_ERR(drv->cci_clk))
+   414			clk_put(drv->cci_clk);
+   415		if (!IS_ERR(drv->inter_clk))
+   416			clk_put(drv->inter_clk);
+   417	
+   418		return ret;
+   419	}
+   420	
 
 -- 
 0-DAY CI Kernel Test Service
