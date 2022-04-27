@@ -2,73 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BABAB5119B8
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 16:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7231511923
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 16:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235001AbiD0M5n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Apr 2022 08:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37974 "EHLO
+        id S235178AbiD0NCy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Apr 2022 09:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235013AbiD0M5l (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Apr 2022 08:57:41 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33FC4B416
-        for <linux-pm@vger.kernel.org>; Wed, 27 Apr 2022 05:54:29 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id y19so2505190ljd.4
-        for <linux-pm@vger.kernel.org>; Wed, 27 Apr 2022 05:54:29 -0700 (PDT)
+        with ESMTP id S235182AbiD0NCy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Apr 2022 09:02:54 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C861850457
+        for <linux-pm@vger.kernel.org>; Wed, 27 Apr 2022 05:59:42 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id g20so1845013edw.6
+        for <linux-pm@vger.kernel.org>; Wed, 27 Apr 2022 05:59:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=CD6s+CKM0qw483KM9f77QNJM9WemRPJ6px/m7jRW/JI=;
-        b=JqSGjqzr+hLzEjeT8lRdBlb+lQbIBMJk3Djd7jAaByG5X0CnnndLP2ekAHxEyrn1uO
-         9+0wZT+vD2gcFiG8ON3U/jBvcN8uu+Si74EzQNzwq/lvJMX0okn+NvA7OFPgcwQeVMdS
-         6AZunO/0y38ceCcIovCShPqcanNOMn7jGF2LiY7Wu3HRK1mssM50Wi896+SRgiKjlxQM
-         jnJmrug1qfF8uscs5+y8Vk9Zi7c1bwp5S07x+UucjqzJ1rPK3VH+vCwPhCP/DReLXhr0
-         VwbUBrnFG4kxTLGGCezvsT98Ek880HH+CIPhp6en01L2LtnSkTm3O6BiNU28b5ngQvXa
-         AMqg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=T0hxnuRgL9NeQFiMioCyH45+WQ2S28ZgAPm0mFEWbLE=;
+        b=MeiX9AY/6qkAvXGxzi5UU0gh6sd8cIlgkzkD94AXxkdyAlmdyQSYgjUWZavU45/Ec/
+         3W5w5HbpX17VdLQJmVnJ0/7FqlFICHRSCqmeZrOeYyKEOjsD8x2JcvpSlp2CMpL2kc6N
+         k+8J9IM3w4OD6AklioYFEHQJLaxOFYx/lI7xBlGxH1mj0y8USlaPjY3CWtok1kX2CzmM
+         ufVfmXOznt9/E/vVMrgfhXP2N9xmw5lTNvluvgNu6uX9PMaoZLSSJvo2mhURlQzzpP8H
+         HrQrGbb/hpOltrE6Luh6bfq4SaleG59aU/lu1QPvdCak6tCKZ7x5Nj3mM5m4g9/5bD8g
+         g1/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=CD6s+CKM0qw483KM9f77QNJM9WemRPJ6px/m7jRW/JI=;
-        b=yJutcV0NfPylcTvhCN+hagFcNB6+U+kZUMCPZxCr4NecgF0mIYBMgysoFo1wEStXG0
-         ZpHCUR1FJeRzVkSZ+PcxuJGBUTmUU+qpoy3tmSLRcShMlipH2fnoSBq+NWBweYOdvvgi
-         Je2BnzK8zD5gfrLcwmLvb49wN4cUEL2kY2wcWv7yn8ydsc38m2YvIF2aF1y7QItRtv82
-         ABvIybX3iaKHOKu9kDVad/iYhzi94kfSOYNNfmwt/SHK75d2y9ZEfltoU/PtAZmkwZv8
-         6VnVB3F24qS9/t5BAKUEX0LNr6xwiAAnQ/j+clRkDN0Ja8J0uMFriFDyc58L/5pZ9syl
-         IWwg==
-X-Gm-Message-State: AOAM533FixkOwe7i+GXUF3c+8MpvK+K/qBhAgrqdgfo+DwC87N9K24Z+
-        +QQhAhskEph60XtfaWn9QeSHOg==
-X-Google-Smtp-Source: ABdhPJyUxaSp9cwghU8x3E1eI7nUbeicLMufXu7FXUagMLiRmRhwtqKcQoEEZWJTTvlJeWZomS4qIQ==
-X-Received: by 2002:a2e:bf25:0:b0:247:d216:43fc with SMTP id c37-20020a2ebf25000000b00247d21643fcmr17916153ljr.520.1651064067761;
-        Wed, 27 Apr 2022 05:54:27 -0700 (PDT)
-Received: from eriador.lan ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id r9-20020a2e94c9000000b0024b4c2a1346sm1827445ljh.123.2022.04.27.05.54.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 05:54:27 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        quic_tdas@quicinc.com
-Subject: [PATCH v5 3/3] dt-bindings: clock: qcom,gcc-apq8064: split tsens to the child node
-Date:   Wed, 27 Apr 2022 15:54:23 +0300
-Message-Id: <20220427125423.3166138-4-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220427125423.3166138-1-dmitry.baryshkov@linaro.org>
-References: <20220427125423.3166138-1-dmitry.baryshkov@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=T0hxnuRgL9NeQFiMioCyH45+WQ2S28ZgAPm0mFEWbLE=;
+        b=7Mm5KFIyMunsXmUh+lrwa6I5JFORPUDPDZ/95aMmrSGBANgYV9Qc/oAc6bTXISggCu
+         o565TiXhZ0e9jh4OXXlJ/XjCj8EmZca2PO46llgzLveAsKHWzEBqq9+SUSSAlBksqhoI
+         4ZcClPdNJW/J4Tln1vSaZPuQihHbzbv21tO4toI6bEvnulrAm/MIomjxNZQy/19xg8dw
+         ckOdphw6yJZ2icdxeiOHHvgAEEWwlDw7AHUTXu7U9O8ZK9jxc0HDHwZfSJU7rzW5PfJS
+         lVQmGAMUAmCdW68VBpQCKNLhPlMX+ZeBJ/wwmSDyeEJoIFBCZQEa1Rp/IK1boPxHN/Ju
+         tIOw==
+X-Gm-Message-State: AOAM5307Z3UuC1CFkDtv9TfgC+UF5xje0CiJuzwP5AXo94swUSnCyNA8
+        LaFIc1T4ru7dl1AR58OdWFg5RmyXC46sDQ==
+X-Google-Smtp-Source: ABdhPJz98Md50Ai8wsdX8vX3fIUcCf+jcYhugjdBDzvzUy2U50EWkV+3GUFmIxe2wv2oo/XH6r1d3A==
+X-Received: by 2002:a05:6402:5201:b0:426:124:a40b with SMTP id s1-20020a056402520100b004260124a40bmr6090702edd.198.1651064381331;
+        Wed, 27 Apr 2022 05:59:41 -0700 (PDT)
+Received: from [192.168.0.153] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id z14-20020a170906944e00b006f38c33b6e3sm4829572ejx.68.2022.04.27.05.59.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Apr 2022 05:59:40 -0700 (PDT)
+Message-ID: <6d9ded33-f5fc-6346-51ca-2de8e7a644ec@linaro.org>
+Date:   Wed, 27 Apr 2022 14:59:39 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/3] interconnect: qcom: constify qcom_icc_desc
+Content-Language: en-US
+To:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220412102623.227607-1-krzysztof.kozlowski@linaro.org>
+ <b96fd335-df13-6657-c2ff-38ff677555a4@linaro.org>
+ <12570c36-d005-f51c-654b-01d52c50205c@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <12570c36-d005-f51c-654b-01d52c50205c@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,90 +76,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Split tsens properties to the child node of the gcc. This follows the
-lead of ipq8064 (which also uses a separate node for tsens) and makes
-device tree closer to other platforms, where tsens is a completely
-separate device.
+On 27/04/2022 14:17, Georgi Djakov wrote:
+> On 22.04.22 18:25, Krzysztof Kozlowski wrote:
+>> On 12/04/2022 12:26, Krzysztof Kozlowski wrote:
+>>> struct qcom_icc_desc is not modified so it can be made const for safety.
+>>>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> ---
+>>>   drivers/interconnect/qcom/msm8916.c |  6 +++---
+>>>   drivers/interconnect/qcom/msm8939.c |  8 ++++----
+>>>   drivers/interconnect/qcom/msm8974.c | 12 ++++++------
+>>>   drivers/interconnect/qcom/qcm2290.c | 12 ++++++------
+>>>   drivers/interconnect/qcom/qcs404.c  |  6 +++---
+>>>   drivers/interconnect/qcom/sc7180.c  | 26 +++++++++++++-------------
+>>>   drivers/interconnect/qcom/sc7280.c  | 24 ++++++++++++------------
+>>>   drivers/interconnect/qcom/sdm660.c  | 12 ++++++------
+>>>   drivers/interconnect/qcom/sm8150.c  | 22 +++++++++++-----------
+>>>   drivers/interconnect/qcom/sm8250.c  | 22 +++++++++++-----------
+>>>   drivers/interconnect/qcom/sm8350.c  | 20 ++++++++++----------
+>>>   drivers/interconnect/qcom/sm8450.c  | 22 +++++++++++-----------
+>>
+>> Hi folks,
+>>
+>> Any comments here?
+> 
+> Thanks for the patches! I had actually some of these changes in my local tree
+> for a long time.
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- .../bindings/clock/qcom,gcc-apq8064.yaml      | 49 +++++++++----------
- 1 file changed, 22 insertions(+), 27 deletions(-)
+Indeed I see them now in linux-next. Sorry for pinging, I just did not
+get any notification they got applied.
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
-index bd7b04c75e50..3a8bb5a5b37f 100644
---- a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
-@@ -23,47 +23,42 @@ description: |
- 
- properties:
-   compatible:
--    enum:
--      - qcom,gcc-apq8064
--      - qcom,gcc-msm8960
--
--  nvmem-cells:
--    minItems: 1
--    maxItems: 2
--    description:
--      Qualcomm TSENS (thermal sensor device) on some devices can
--      be part of GCC and hence the TSENS properties can also be part
--      of the GCC/clock-controller node.
--      For more details on the TSENS properties please refer
--      Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
--
--  nvmem-cell-names:
--    minItems: 1
-     items:
--      - const: calib
--      - const: calib_backup
-+      - enum:
-+          - qcom,gcc-apq8064
-+          - qcom,gcc-msm8960
-+      - const: syscon
-+
-+  thermal-sensor:
-+    type: object
- 
--  '#thermal-sensor-cells':
--    const: 1
-+    allOf:
-+      - $ref: /schemas/thermal/qcom-tsens.yaml#
- 
- required:
-   - compatible
--  - nvmem-cells
--  - nvmem-cell-names
--  - '#thermal-sensor-cells'
- 
- unevaluatedProperties: false
- 
- examples:
-   - |
-     clock-controller@900000 {
--      compatible = "qcom,gcc-apq8064";
-+      compatible = "qcom,gcc-apq8064", "syscon";
-       reg = <0x00900000 0x4000>;
--      nvmem-cells = <&tsens_calib>, <&tsens_backup>;
--      nvmem-cell-names = "calib", "calib_backup";
-       #clock-cells = <1>;
-       #reset-cells = <1>;
-       #power-domain-cells = <1>;
--      #thermal-sensor-cells = <1>;
-+
-+      thermal-sensor {
-+        compatible = "qcom,msm8960-tsens";
-+
-+        nvmem-cells = <&tsens_calib>, <&tsens_backup>;
-+        nvmem-cell-names = "calib", "calib_backup";
-+        interrupts = <0 178 4>;
-+        interrupt-names = "uplow";
-+
-+        #qcom,sensors = <11>;
-+        #thermal-sensor-cells = <1>;
-+      };
-     };
- ...
--- 
-2.35.1
+> Do you want to send a follow-up patch also for sc8280xp?
 
+Yes, sir! I'll constify that one as well.
+
+
+Best regards,
+Krzysztof
