@@ -2,106 +2,208 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A398511B01
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 16:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C64511A46
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 16:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236654AbiD0Nzh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Apr 2022 09:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
+        id S236708AbiD0N5l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Apr 2022 09:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236700AbiD0Nxs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Apr 2022 09:53:48 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC5C3F8B5;
-        Wed, 27 Apr 2022 06:50:36 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:40602)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nji3u-00BTkD-8a; Wed, 27 Apr 2022 07:50:34 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:35842 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nji3t-008PdZ-0B; Wed, 27 Apr 2022 07:50:33 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
-        Oleg Nesterov <oleg@redhat.com>, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>
-References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
-        <20220426225211.308418-3-ebiederm@xmission.com>
-        <f6d31801de631dfe6e1a2da25370cddf2aca32ad.camel@sipsolutions.net>
-Date:   Wed, 27 Apr 2022 08:50:25 -0500
-In-Reply-To: <f6d31801de631dfe6e1a2da25370cddf2aca32ad.camel@sipsolutions.net>
-        (Johannes Berg's message of "Wed, 27 Apr 2022 09:10:47 +0200")
-Message-ID: <87tuaeab4u.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        with ESMTP id S236645AbiD0N5i (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Apr 2022 09:57:38 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2073.outbound.protection.outlook.com [40.107.223.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099AF27CEA;
+        Wed, 27 Apr 2022 06:54:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bQDVX6rPtyrtjBWynkiU77/38JSDSORw6ZpRDeErkXQwCVxmnMIJ3tMReImynodBcC9udSD49VKVjHykIzdq7pQKwFLgxlUZe5oBemMYL3XggV7jKJRJWP82buTzXy/YV/s0feRf183wITYSMqS9cRlJW85uM6rhqvQQM+3mK84lKPNMDMdFcPyyxrQaceEY5o0k93V0TCI4S+cTlVdsSJC0mNyZosaNMiTDUHEHJPNaBZDs3zGkG7ju5GS0a/dxXJqT4gsDTAtebyph4fl10AljMBt71dORWMuZm67tU88V9afQ+tiBsVtlM5MFuD14WJQAHltAogKFOfNzglkXgw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pAVgVGnNIzAzztIix2UcVfLquXwIGbPNolosqIoIuks=;
+ b=X06CtIJqVbnhV2WRxc4M4IwOpPwNuDA12UoYe8XR1C0K6+2psMrd+A0AhAQnw0FW/GF/Zovj0oxvPcRtPchfqTo2VEhMzng+VwjGcIPe86H36xPuD/iYN7IcV+1XrkVNkXWhvaAQtgZw5TGL71U87f/aeKNOUCJrI+bR+O+qxMiEnowsmK4jY+1XUbRc7CHYyctMrTt+fr3rANV7ITpDO9c+FExKmRcRbm1PCPBp2MNQBiozcNSbnrkTmUZ/Ahp/ByyWTHiwnMNH6sMG6wGv3pPSSrN9Oamhgko/R04y5QJs2H0ElsiVfJnLbEuDXOdAcDxSliLuOtRQs5yFrZpLmA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=temperror (sender ip
+ is 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=amd.com; dmarc=temperror action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pAVgVGnNIzAzztIix2UcVfLquXwIGbPNolosqIoIuks=;
+ b=Ldi88uXbO5tHSdU2xPxtrBauOd8M0ITQbKgiBUMpBUtKg6LmXtCYmkYCjF8Zya5Ja9MOGq6sZOIRYQfZzhVMIgastmROHZRkGYbjCjRKMnWgV4N9iEPTa8maQlsFWhSouhI1E5xlW/MnUAs2d39tD0pnuKrV5bLiB/cPj2i77U0=
+Received: from BN8PR15CA0037.namprd15.prod.outlook.com (2603:10b6:408:80::14)
+ by SJ0PR12MB5662.namprd12.prod.outlook.com (2603:10b6:a03:429::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.15; Wed, 27 Apr
+ 2022 13:54:23 +0000
+Received: from BN8NAM11FT067.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:80:cafe::d1) by BN8PR15CA0037.outlook.office365.com
+ (2603:10b6:408:80::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.21 via Frontend
+ Transport; Wed, 27 Apr 2022 13:54:23 +0000
+X-MS-Exchange-Authentication-Results: spf=temperror (sender IP is
+ 165.204.84.17) smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=temperror action=none header.from=amd.com;
+Received-SPF: TempError (protection.outlook.com: error in processing during
+ lookup of amd.com: DNS Timeout)
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT067.mail.protection.outlook.com (10.13.177.159) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5206.12 via Frontend Transport; Wed, 27 Apr 2022 13:54:21 +0000
+Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 27 Apr
+ 2022 08:54:17 -0500
+From:   Meng Li <li.meng@amd.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Huang Rui <ray.huang@amd.com>, <linux-pm@vger.kernel.org>
+CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        "Alex Deucher" <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, <linux-kernel@vger.kernel.org>,
+        Meng Li <li.meng@amd.com>
+Subject: [PATCH V4 0/3] Add unit test module for AMD P-State driver
+Date:   Wed, 27 Apr 2022 21:53:12 +0800
+Message-ID: <20220427135315.3447550-1-li.meng@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-XM-SPF: eid=1nji3t-008PdZ-0B;;;mid=<87tuaeab4u.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX18fBOV3Y1pE4P9eWAoKmnfOqa0I2VzX21o=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8d23b2b9-5a96-44bd-c2c2-08da28556e80
+X-MS-TrafficTypeDiagnostic: SJ0PR12MB5662:EE_
+X-Microsoft-Antispam-PRVS: <SJ0PR12MB56624F101EDDDD211286030BF7FA9@SJ0PR12MB5662.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: syKTcMatMKohIFN8+CLvG4GovXKnzaTiNa7rlXTxRSyud03XOi/JxXSXsYOEns5XOmMW9DRMqgxJH/Vy32IhICOt0hEHG1r6FnOaWJpDITm31xLfFQ8pBmTjD6zTkbtj3EAz8SKnVfO7zH07MhYSqROUvGZmYFPME6t0xAJJDLxv0ZbYps5OF09fZZJhZL+uKsMemRV11mBGu7MddZWiw2bpiBxBCf9NuNaOKPQ9EyC3m9OEvUxAVj6ssSXaRdY7jQZL2MOfAP5clllAcIPmKRl/M8n/1CDf2m9McDeayewT+cqj8AcGbzDJJBhV/+Eirqfp0L0Cz3hPsx5QDcucnwDvNiCrVcmlYblpcu+478Ym1lDgHkgReyKQMh5ScdV0a+dD+kH/ahNAYBsGoiTpZjjUW7v7iBT+PcrbrHAxW5O2j2tZCJjDOxMw4CcSh25hd+R7vQx8Ju/wi0aVazYNBU8yj+VSuWT6psanie/YG2cdwmUPNo+V12m9cldDR/tkpn9IcCmh4om9bRIrDHteEolq+Ydujr+fQEDk+yFhrpGoND9CmIvFlRHOqDZ4Iw8Xp3WJ7IQSgJb0y+G5bFeA5X+8u7dyilbffcoPjqh9fYxW8vzbqZjoANVvpH+SRubeBP2kSWpXg2Uu0HdZ8rLoYXVRfvYeNFQIoAz0iO8ZoZsP6dFxX5OU6NekJwklHkr3i+jiNJDJOJy/8jW34vti0yA80V2t/HYRTIACtCromvs548dbGiC3hWReJPO7RZUOMZXnmNAahUV+c2h4CH3Wizzy8bHRRcrKPkoYLAQEsQJRSv1ATtO6OF1EdgRC6t6HgrPTgzsj1/havuW/r7W/+w==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(2906002)(63370400001)(83380400001)(4326008)(8936002)(5660300002)(16526019)(356005)(63350400001)(316002)(2616005)(86362001)(966005)(82310400005)(508600001)(81166007)(7696005)(26005)(36756003)(70586007)(6666004)(1076003)(70206006)(54906003)(8676002)(110136005)(186003)(36860700001)(426003)(336012)(47076005)(40460700003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Apr 2022 13:54:21.6984
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8d23b2b9-5a96-44bd-c2c2-08da28556e80
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT067.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5662
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;Johannes Berg <johannes@sipsolutions.net>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 643 ms - load_scoreonly_sql: 0.05 (0.0%),
-        signal_user_changed: 11 (1.7%), b_tie_ro: 10 (1.5%), parse: 0.82
-        (0.1%), extract_message_metadata: 11 (1.7%), get_uri_detail_list: 0.85
-        (0.1%), tests_pri_-1000: 9 (1.3%), tests_pri_-950: 1.23 (0.2%),
-        tests_pri_-900: 1.03 (0.2%), tests_pri_-90: 286 (44.4%), check_bayes:
-        280 (43.5%), b_tokenize: 7 (1.0%), b_tok_get_all: 7 (1.1%),
-        b_comp_prob: 2.1 (0.3%), b_tok_touch_all: 261 (40.5%), b_finish: 0.86
-        (0.1%), tests_pri_0: 305 (47.4%), check_dkim_signature: 0.49 (0.1%),
-        check_dkim_adsp: 8 (1.3%), poll_dns_idle: 5 (0.8%), tests_pri_10: 2.3
-        (0.4%), tests_pri_500: 14 (2.1%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 3/9] ptrace/um: Replace PT_DTRACE with TIF_SINGLESTEP
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Johannes Berg <johannes@sipsolutions.net> writes:
+Hi all:
 
-> On Tue, 2022-04-26 at 17:52 -0500, Eric W. Biederman wrote:
->> User mode linux is the last user of the PT_DTRACE flag.  Using the flag to indicate
->> single stepping is a little confusing and worse changing tsk->ptrace without locking
->> could potentionally cause problems.
->> 
->> So use a thread info flag with a better name instead of flag in tsk->ptrace.
->> 
->> Remove the definition PT_DTRACE as uml is the last user.
->
->
-> Looks fine to me.
->
-> Acked-by: Johannes Berg <johannes@sipsolutions.net>
+AMD P-State unit test(amd-pstate-ut) is a kernel module for testing
+the functions of amd-pstate driver.
+It could import as a module to launch some test tasks.
+1) It can help all users to verify their processor support (SBIOS/
+Firmware or Hardware).
+2) Kernel can have a basic function test to avoid the kernel regression
+during the update.
+3) We can introduce more functional or performance tests to align the
+together, it will benefit power and performance scale optimization.
 
-Thanks.
+We upstream out AMD P-state driver into Linux kernel and use this unit
+test module to verify the required conditions and basic functions of
+amd-pstate before integration test.
 
-> Looking at pending patches, I don't see any conflicts from this. I'm
-> guessing anyway you'll want/need to take these through some tree all
-> together.
+We use test module in the kselftest frameworks to implement it.
+We create amd-pstate-ut module and tie it into kselftest.
 
-Taking them all through a single tree looks like it will be easiest.
-So I am planning on taking them through my signal tree.
+For example: The test case aput_acpi_cpc is used to check whether the
+_CPC object is exist in SBIOS.
+The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is not
+existed at the detected processor, so it is a necessary condition.
 
-Now that I think of it, the lack of locking also means I want to
-Cc stable.
+At present, it only implements the basic framework and some simple test
+cases.
 
-Eric
+TODO : 1) we will add more test cases to improve the depth and coverage of
+the test.
+
+Please check the documentation amd-pstate.rst for details of the test steps.
+
+See patch series in below git repo:
+V1: https://lore.kernel.org/linux-pm/20220323071502.2674156-1-li.meng@amd.com/
+V2: https://lore.kernel.org/lkml/20220413090510.4039589-1-li.meng@amd.com/
+V3: https://lore.kernel.org/lkml/20220421074152.599419-1-li.meng@amd.com/ 
+
+Changes from V1 -> V2:
+- cpufreq: amd-pstate:
+- - add a trailing of amd-pstate.h to MAINTAINER AMD PSTATE DRIVER.
+- selftests: cpufreq:
+- - add a wrapper shell script for the amd_pstate_testmod module.
+- selftests: cpufreq:
+- - remove amd_pstate_testmod kernel module to
+  .../cpufreq/amd_pstate_testmod.
+- Documentation: amd-pstate:
+- - amd_pstate_testmod rst document is not provided at present.
+
+Changes from V2 -> V3:
+- cpufreq: amd-pstate:
+- - adjust the order of add amd-pstate.h in MAINTAINERS.
+- selftests: cpufreq:
+- - remove the call of amd_pstate_testmod.sh from cpufreq Makefile to
+  main.sh.
+- selftests: cpufreq:
+- - add explain the goal or intention of the AMD P-State Unit Test
+  module.
+- - modify comments.
+- - use the checkpatch.pl to check my patches.
+- - add conditions judgment before formal test.
+- - delete some unnecessary test cases.
+- - modify test cases about perf and performance etc.
+
+Changes from V3 -> V4:
+- selftests: amd-pstate:
+- - remove script and test module to tools/testing/selftests/amd-pstate/
+- - uniformly named amd-pstate-ut.
+- - check current architectures and cpufreq driver in amd-pstate-ut.sh
+- - delete codes about conditions in amd-pstate-ut.c 
+- Documentation: amd-pstate:
+- - add introduce document about amd-pstate unit test.
+
+Thanks,
+Jasmine
+
+Meng Li (3):
+  cpufreq: amd-pstate: Expose struct amd_cpudata
+  selftests: amd-pstate: Add test module for amd-pstate driver
+  Documentation: amd-pstate: Add unit test introduction
+
+ Documentation/admin-guide/pm/amd-pstate.rst   |  87 ++++++
+ MAINTAINERS                                   |   1 +
+ drivers/cpufreq/amd-pstate.c                  |  60 +---
+ include/linux/amd-pstate.h                    |  77 +++++
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/amd-pstate/Makefile   |   9 +
+ .../selftests/amd-pstate/amd-pstate-ut.sh     |  27 ++
+ .../amd-pstate/amd-pstate-ut/Makefile         |  20 ++
+ .../amd-pstate/amd-pstate-ut/amd-pstate-ut.c  | 275 ++++++++++++++++++
+ tools/testing/selftests/amd-pstate/config     |   1 +
+ 10 files changed, 499 insertions(+), 59 deletions(-)
+ create mode 100644 include/linux/amd-pstate.h
+ create mode 100644 tools/testing/selftests/amd-pstate/Makefile
+ create mode 100755 tools/testing/selftests/amd-pstate/amd-pstate-ut.sh
+ create mode 100644 tools/testing/selftests/amd-pstate/amd-pstate-ut/Makefile
+ create mode 100644 tools/testing/selftests/amd-pstate/amd-pstate-ut/amd-pstate-ut.c
+ create mode 100644 tools/testing/selftests/amd-pstate/config
+
+-- 
+2.25.1
+
