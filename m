@@ -2,110 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA84B511B29
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 16:57:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1581651191E
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 16:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237520AbiD0OJL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Apr 2022 10:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
+        id S237416AbiD0OOF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Apr 2022 10:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237423AbiD0OJK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Apr 2022 10:09:10 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4C74E389
-        for <linux-pm@vger.kernel.org>; Wed, 27 Apr 2022 07:05:58 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 15so1548581pgf.4
-        for <linux-pm@vger.kernel.org>; Wed, 27 Apr 2022 07:05:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OT8jLHi5I0OiZTy0LV6eIgEYpe0uYFZJA9KqVmBMVzw=;
-        b=SrCfyOO36j1AT9uvoaS4hD0HxsHPiTi/Zy5MVVnulvhwb5YNHoxltXjGvslBhCNqbS
-         iTySn/IB5d+64LM1C9WgYvoHu1w1KB+pV5D212QvcON3HhOiSUTmBWNTl/Iz98Yt02t8
-         QpUsTbFJL0/uHrbDkPpawLRsJ5y7gKkxalTVnzG0seOeIIi662zyZNogfo2xOvcOEho8
-         mrLpq8HQ5j5V4lkt17/dOwTt21cI8UJCNI+xWHO6lb5mHlZmdG2WhxheejJxdhi9CX60
-         rOtpqy+b5DV79oHhBI11C0oj7NBXBVHtPD60/GoipuT6VI/3anhFYhCF4opst0xtVWlP
-         ex2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OT8jLHi5I0OiZTy0LV6eIgEYpe0uYFZJA9KqVmBMVzw=;
-        b=KviwkajkyHPc339MPvPp9PQp2PszK8+IwjUDY/coeRvZkUCFUijQ+QO6EDXAq7cwmm
-         ZHmmaBibh1F8/3Hv/D2LnKifTEFRnyDBT+4EMnrv2P5XV5wRnujxWTO0pEWnuER9W4Ou
-         T2bd8nTuTKWqhIRJ/eprzFcckzQoEJAMvzrCKe0RM6u4ZD2RTvVPqQzV1H6Pum8pwtKc
-         5iugoHmUA7wP8K2BNXxGFA/WZQJKL+G7r5fa5wKbT8AuTaCLHQEGvhLfqcN8yzOwHtAl
-         F+7hBCh2JsKEU+R/WAV6LGNEdnIipwBQCRWYs4Io/fHe5sPGKQB76cDaetbkBmU9NTDf
-         2MKw==
-X-Gm-Message-State: AOAM5333fskcNDHS5BHAiwL0z7yggAUjIv+N47i/hi+zIZkYZ0L9PcrC
-        b9ONTWOqtC1nx4J+6lVkQrDVHg==
-X-Google-Smtp-Source: ABdhPJyogLOjd4c37B198F/9gX6yPAM/D9FmoWqn+QNk98u1oleDEd359HLuknmbJwCvePhkv8ZUIA==
-X-Received: by 2002:a63:6e0b:0:b0:397:f965:64a7 with SMTP id j11-20020a636e0b000000b00397f96564a7mr23830267pgc.581.1651068358118;
-        Wed, 27 Apr 2022 07:05:58 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s ([134.195.101.46])
-        by smtp.gmail.com with ESMTPSA id p64-20020a622943000000b004fdd5c07d0bsm18622190pfp.63.2022.04.27.07.05.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Apr 2022 07:05:57 -0700 (PDT)
-Date:   Wed, 27 Apr 2022 22:05:50 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/5] dt-bindings: interconnect: Update property for
- icc-rpm path tag
-Message-ID: <20220427140550.GA560849@leoy-ThinkPad-X240s>
-References: <20220416154013.1357444-1-leo.yan@linaro.org>
- <20220416154013.1357444-2-leo.yan@linaro.org>
- <YmhBE/JDV66qQIBv@robh.at.kernel.org>
+        with ESMTP id S237600AbiD0ON7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Apr 2022 10:13:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD644506F6
+        for <linux-pm@vger.kernel.org>; Wed, 27 Apr 2022 07:10:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651068641;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NKhDa4ztHhyXVoYawVPKdjEeIt2vB/BQ7DGgaiHHY0s=;
+        b=httw3I3SiwwJLIUbsF2NxjF/SFIzX9fQG7P2E7UPi5FjusMc+hYQXoOe/V25kIc83HFrGS
+        m8C7mSGz/9Badn+ZDgCGGjgHt6Ljl4Zf3ScLUMaz12+BHYbT5E0uiIKHkckSKbQ6yLZiN+
+        vbY71Z+joWfRE85qMXhrGL3K0FYFMPI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-312-f6f79C7nO12uafBPvmz1SA-1; Wed, 27 Apr 2022 10:10:34 -0400
+X-MC-Unique: f6f79C7nO12uafBPvmz1SA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3211B1014A61;
+        Wed, 27 Apr 2022 14:10:33 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.128])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 0C5E257C911;
+        Wed, 27 Apr 2022 14:10:27 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Wed, 27 Apr 2022 16:10:31 +0200 (CEST)
+Date:   Wed, 27 Apr 2022 16:10:25 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>
+Subject: Re: [PATCH 6/9] signal: Always call do_notify_parent_cldstop with
+ siglock held
+Message-ID: <20220427141018.GA17421@redhat.com>
+References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+ <20220426225211.308418-6-ebiederm@xmission.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YmhBE/JDV66qQIBv@robh.at.kernel.org>
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_BL_SPAMCOP_NET,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220426225211.308418-6-ebiederm@xmission.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 01:59:31PM -0500, Rob Herring wrote:
-> On Sat, Apr 16, 2022 at 11:40:09PM +0800, Leo Yan wrote:
-> > To support path tag in icc-rpm driver, the "#interconnect-cells"
-> > property is updated as enumerate values: 1 or 2.  Setting to 1 means
-> > it is compatible with old DT binding that interconnect path doesn't
-> > contain tag, if set to 2 for "#interconnect-cells" property, then the
-> > second specifier in the interconnect path indicates the voting is for
-> > which buckets.
-> > 
-> > Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> > ---
-> >  Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
-> > index 89853b482513..7464a50804db 100644
-> > --- a/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
-> > +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
-> > @@ -118,7 +118,7 @@ allOf:
-> >                    - qcom,msm8939-snoc-mm
-> >  
-> >                '#interconnect-cells':
-> > -                const: 1
-> > +                enum: [ 1, 2 ]
-> 
-> Describe what each cell value is here.
+On 04/26, Eric W. Biederman wrote:
+>
+> @@ -2164,7 +2166,9 @@ static void do_notify_parent_cldstop(struct task_struct *tsk,
+>   	}
+>
+>  	sighand = parent->sighand;
+> -	spin_lock_irqsave(&sighand->siglock, flags);
+> +	lock = tsk->sighand != sighand;
+> +	if (lock)
+> +		spin_lock_nested(&sighand->siglock, SINGLE_DEPTH_NESTING);
 
-Will do.
+But why is it safe?
 
-Thanks,
-Leo
+Suppose we have two tasks, they both trace each other, both call
+ptrace_stop() at the same time. Of course this is ugly, they both
+will block.
+
+But with this patch in this case we have the trivial ABBA deadlock,
+no?
+
+Oleg.
+
