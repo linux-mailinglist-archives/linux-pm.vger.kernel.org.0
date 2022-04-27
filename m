@@ -2,159 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 591CA510D1F
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 02:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 841F3510DF9
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 03:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356374AbiD0A1Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 26 Apr 2022 20:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
+        id S1356737AbiD0Bfk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 26 Apr 2022 21:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243117AbiD0A1X (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 20:27:23 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B10E3CC4;
-        Tue, 26 Apr 2022 17:24:14 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:40810)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1njVTX-00D8XQ-QC; Tue, 26 Apr 2022 18:24:11 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:35786 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1njVTW-006ZIp-P2; Tue, 26 Apr 2022 18:24:11 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>, rjw@rjwysocki.net,
-        mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
-        linux-kernel@vger.kernel.org, tj@kernel.org,
-        linux-pm@vger.kernel.org
-References: <20220421150248.667412396@infradead.org>
-        <20220421150654.817117821@infradead.org>
-        <20220425174719.GB12412@redhat.com>
-Date:   Tue, 26 Apr 2022 19:24:03 -0500
-In-Reply-To: <20220425174719.GB12412@redhat.com> (Oleg Nesterov's message of
-        "Mon, 25 Apr 2022 19:47:20 +0200")
-Message-ID: <8735hzcr18.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        with ESMTP id S1356738AbiD0Bfj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 26 Apr 2022 21:35:39 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131C446B1D
+        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 18:32:29 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id y38so330492pfa.6
+        for <linux-pm@vger.kernel.org>; Tue, 26 Apr 2022 18:32:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=E4TARPsvw/6+T5xnBdJYIvhddKnceWXOgm76kowYwB4=;
+        b=eBoaI9KnKdjcjCGhUBWnufouBY5PH1rYH44I3Jf8h9NKLIuR81SA2zDiglWU+lzDkp
+         WCszhz5uvqLHug4eDyFdMjLzVUf2YD7v1eCtzM/8LLixnPZ99nyqqa0qpF9UavlbgVs1
+         9e2s1ql4hz+dpB+eaWXi5VT+xnRNf7m1LDtLA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=E4TARPsvw/6+T5xnBdJYIvhddKnceWXOgm76kowYwB4=;
+        b=klKJ0OTnU5BhvlB817JHK2S6Q5UhjXOIA2RfzKCYTu2K8ik77LiyRIRSVZK8dlMqbo
+         sU2ZJb1GZSyQaUnl9ri+r4kyR6BXkWhaeTnTSpJ/J5V9PHYmIKbBDHUcZkKIYr0z4q04
+         G5s64YFst3w0Z27TkGPZaDeV95X+vJJtaqzd69cUkFE+Bnn2UGcNotUjXMbu1cF3yDaU
+         eACibIzYPm+tGlM4knMnYSCIx+HLAKzyXpRX1Ya8Wn7fLsbmK0Yn6UALKts+pwyzaIz6
+         RDYUzcpQHK7v8cnJ0eHRviDp2vO5APUcwM4U35e6vG+hwR3tkIPWaA6+IZ8DW8b43D/3
+         FMEQ==
+X-Gm-Message-State: AOAM5336tJaSfKBrRO7U9GZ6YGZcW5Li5vFLFPRAmVEOtfw3XYE7+bp9
+        4eCmLthNYvOH23++ENGl0I6f0g==
+X-Google-Smtp-Source: ABdhPJxiRnUb0EOiLoh+dgt8l52uaf+WN6GBsR2KA/LrzuMlZVFfpWUZAXKIMi9G1qMoHiAv24I/Bw==
+X-Received: by 2002:aa7:82d9:0:b0:4fa:2c7f:41e with SMTP id f25-20020aa782d9000000b004fa2c7f041emr27548617pfn.1.1651023148003;
+        Tue, 26 Apr 2022 18:32:28 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:201:482e:60bc:84d1:bf5c])
+        by smtp.gmail.com with ESMTPSA id n20-20020a634d54000000b0039d18bf7864sm14019589pgl.20.2022.04.26.18.32.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Apr 2022 18:32:27 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Georgi Djakov <djakov@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Alex Elder <elder@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Mike Tipton <quic_mdtipton@quicinc.com>
+Subject: [PATCH] interconnect: Restore sync state by ignoring ipa-virt in provider count
+Date:   Tue, 26 Apr 2022 18:32:26 -0700
+Message-Id: <20220427013226.341209-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.36.0.rc2.479.g8af0fa9b8e-goog
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1njVTW-006ZIp-P2;;;mid=<8735hzcr18.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+K+Sik1kCOuihclgFx72Bbye8aJrSXdAA=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa03 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;Oleg Nesterov <oleg@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 401 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 5 (1.3%), b_tie_ro: 3.5 (0.9%), parse: 1.19
-        (0.3%), extract_message_metadata: 4.9 (1.2%), get_uri_detail_list: 2.6
-        (0.7%), tests_pri_-1000: 3.1 (0.8%), tests_pri_-950: 1.15 (0.3%),
-        tests_pri_-900: 0.92 (0.2%), tests_pri_-90: 53 (13.3%), check_bayes:
-        52 (12.9%), b_tokenize: 7 (1.6%), b_tok_get_all: 8 (2.1%),
-        b_comp_prob: 2.1 (0.5%), b_tok_touch_all: 32 (7.9%), b_finish: 0.75
-        (0.2%), tests_pri_0: 312 (78.0%), check_dkim_signature: 0.41 (0.1%),
-        check_dkim_adsp: 2.8 (0.7%), poll_dns_idle: 1.42 (0.4%), tests_pri_10:
-        2.3 (0.6%), tests_pri_500: 9 (2.3%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v2 2/5] sched,ptrace: Fix ptrace_check_attach() vs
- PREEMPT_RT
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Oleg Nesterov <oleg@redhat.com> writes:
+Ignore compatible strings for the IPA virt drivers that were removed in
+commits 2fb251c26560 ("interconnect: qcom: sdx55: Drop IP0
+interconnects") and 2f3724930eb4 ("interconnect: qcom: sc7180: Drop IP0
+interconnects") so that the sync state logic can kick in again.
+Otherwise all the interconnects in the system will stay pegged at max
+speeds because 'providers_count' is always going to be one larger than
+the number of drivers that will ever probe on sc7180 or sdx55. This
+fixes suspend on sc7180 and sdx55 devices when you don't have a
+devicetree patch to remove the ipa-virt compatible node.
 
-> On 04/21, Peter Zijlstra wrote:
->>
->> @@ -2225,7 +2238,7 @@ static int ptrace_stop(int exit_code, in
->>  	 * schedule() will not sleep if there is a pending signal that
->>  	 * can awaken the task.
->>  	 */
->> -	current->jobctl |= JOBCTL_TRACED;
->> +	current->jobctl |= JOBCTL_TRACED | JOBCTL_TRACED_QUIESCE;
->>  	set_special_state(TASK_TRACED);
->
-> OK, this looks wrong. I actually mean the previous patch which sets
-> JOBCTL_TRACED.
->
-> The problem is that the tracee can be already killed, so that
-> fatal_signal_pending(current) is true. In this case we can't rely on
-> signal_wake_up_state() which should clear JOBCTL_TRACED, or the
-> callers of ptrace_signal_wake_up/etc which clear this flag by hand.
->
-> In this case schedule() won't block and ptrace_stop() will leak
-> JOBCTL_TRACED. Unless I missed something.
->
-> We could check fatal_signal_pending() and damn! this is what I think
-> ptrace_stop() should have done from the very beginning. But for now
-> I'd suggest to simply clear this flag before return, along with
-> DELAY_WAKEKILL and LISTENING.
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Doug Anderson <dianders@chromium.org>
+Cc: Alex Elder <elder@linaro.org>
+Cc: Taniya Das <quic_tdas@quicinc.com>
+Cc: Mike Tipton <quic_mdtipton@quicinc.com>
+Fixes: 2fb251c26560 ("interconnect: qcom: sdx55: Drop IP0 interconnects")
+Fixes: 2f3724930eb4 ("interconnect: qcom: sc7180: Drop IP0 interconnects")
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+ drivers/interconnect/core.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Oh.  That is an interesting case for JOBCTL_TRACED.  The
-scheduler refuses to stop if signal_pending_state(TASK_TRACED, p)
-returns true.
+diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+index 9050ca1f4285..c52915a58b22 100644
+--- a/drivers/interconnect/core.c
++++ b/drivers/interconnect/core.c
+@@ -1087,9 +1087,15 @@ static int of_count_icc_providers(struct device_node *np)
+ {
+ 	struct device_node *child;
+ 	int count = 0;
++	const struct of_device_id ignore_list[] = {
++		{ .compatible = "qcom,sc7180-ipa-virt" },
++		{ .compatible = "qcom,sdx55-ipa-virt" },
++		{}
++	};
+ 
+ 	for_each_available_child_of_node(np, child) {
+-		if (of_property_read_bool(child, "#interconnect-cells"))
++		if (of_property_read_bool(child, "#interconnect-cells") &&
++		    likely(!of_match_node(ignore_list, child)))
+ 			count++;
+ 		count += of_count_icc_providers(child);
+ 	}
 
-The ptrace_stop code used to handle this explicitly and in commit
-7d613f9f72ec ("signal: Remove the bogus sigkill_pending in ptrace_stop")
-I actually removed the test.  As the test was somewhat wrong and
-redundant, and in slightly the wrong location.
-
-But doing:
-
-	/* Don't stop if the task is dying */
-	if (unlikely(__fatal_signal_pending(current)))
-		return exit_code;
-
-Should work.
-
->
->>  	current->jobctl &= ~JOBCTL_LISTENING;
->> +	current->jobctl &= ~JOBCTL_DELAY_WAKEKILL;
->
-> 	current->jobctl &=
-> 		~(~JOBCTL_TRACED | JOBCTL_DELAY_WAKEKILL | JOBCTL_LISTENING);
-
-
-I presume you meant:
-
-	current->jobctl &=
- 		~(JOBCTL_TRACED | JOBCTL_DELAY_WAKEKILL | JOBCTL_LISTENING);
-
-I don't think we want to do that.  For the case you are worried about it
-is a valid fix.
-
-In general this is the wrong approach as we want the waker to clear
-JOBCTL_TRACED.  If the waker does not it is possible that
-ptrace_freeze_traced might attempt to freeze a process whose state
-is not appropriate for attach, because the code is past the call
-to schedule().
-
-In fact I think clearing JOBCTL_TRACED at the end of ptrace_stop
-will allow ptrace_freeze_traced to come in while siglock is dropped,
-expect the process to stop, and have the process not stop.  Of
-course wait_task_inactive coming first that might not be a problem.
-
-
-
-This is a minor problem with the patchset I just posted.  I thought the
-only reason wait_task_inactive could fail was if ptrace_stop() hit the
-!current->ptrace case.  Thinking about any it any SIGKILL coming in
-before tracee stops in schedule will trigger this, so it is not as
-safe as I thought to not pass a state into wait_task_inactive.
-
-It is time for me to shut down today.  I will sleep on that and
-see what I can see tomorrow.
-
-Eric
+base-commit: 2fb251c265608636fc961b7d38e1a03937e57371
+-- 
+https://chromeos.dev
 
