@@ -2,90 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1D6511CE1
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 20:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B979511CF3
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 20:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239625AbiD0PXm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Apr 2022 11:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40432 "EHLO
+        id S239698AbiD0Pex (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Apr 2022 11:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239667AbiD0PXk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Apr 2022 11:23:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8FAF2E709C
-        for <linux-pm@vger.kernel.org>; Wed, 27 Apr 2022 08:20:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651072828;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OTNDlQFqEPUAvQQcM3NJWH+KFDpLAUw6Kc262wL/c/k=;
-        b=SwvMzINvkt5N6d5ojlYTQVFQOdZ+Wo4aEEm/d3LzUe6jOAiPb/bGICkazVgoMQw8qc810d
-        qpdPwDNNiuihkn4aipheHmE/1/MB0ndFVn5EOIvHMOOlPwSUaPfSrJpDtDt0WHql3OxcNE
-        bSwrpUK3rpD0Uu7yCU+TyzbLPGjSWnQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-553-f5UXHB-mN7-R7kk0TqKSrQ-1; Wed, 27 Apr 2022 11:20:25 -0400
-X-MC-Unique: f5UXHB-mN7-R7kk0TqKSrQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S239694AbiD0Peu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Apr 2022 11:34:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7B7171C36;
+        Wed, 27 Apr 2022 08:31:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E5CB48039D7;
-        Wed, 27 Apr 2022 15:20:23 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.128])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 025FD403149;
-        Wed, 27 Apr 2022 15:20:18 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Wed, 27 Apr 2022 17:20:23 +0200 (CEST)
-Date:   Wed, 27 Apr 2022 17:20:18 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH 8/9] ptrace: Use siglock instead of tasklist_lock in
- ptrace_check_attach
-Message-ID: <20220427152016.GF17421@redhat.com>
-References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
- <20220426225211.308418-8-ebiederm@xmission.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 361206165E;
+        Wed, 27 Apr 2022 15:31:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BA94C385A7;
+        Wed, 27 Apr 2022 15:31:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651073497;
+        bh=aJfZ+9yvCFPE8xiq6retolbqjQ4Eg2L17bY7gOXE74g=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=ki1ozcB0ESMwvpYya8NCHAJU3wvB53xx5SaFASY2lNNf6DM2I1xOWC+oP9aMm3c4P
+         l1M+MP6t9ws2yfdCNJt3f1rdRoiUjFuBcN5xXXwr9mcDmaXUCQGpSG1AFPbMIWbYQl
+         huGSCrxSvhqmhxJdwPFvSL+qCwPwo57BcXUpMGN0OGYQUn3e3VA5viIJ7gzmnZNyh7
+         YV9yCjenKfxx8DraC2LW3lGT9pMesU/pD92HdrbPtRLVCXpNY+o5siZA3HoFjc8akN
+         EBPeMBMtB1cSS6d6uzK/CShGCf1pDwiGfsquWaYpi7Vl5QNKPThr7wzic6cU9+XiqO
+         49K+VuREX7QxA==
+Message-ID: <99491be0-a438-cac7-1441-396aade91ea4@kernel.org>
+Date:   Wed, 27 Apr 2022 18:31:32 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220426225211.308418-8-ebiederm@xmission.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 1/3] interconnect: qcom: constify qcom_icc_desc
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220412102623.227607-1-krzysztof.kozlowski@linaro.org>
+ <b96fd335-df13-6657-c2ff-38ff677555a4@linaro.org>
+ <12570c36-d005-f51c-654b-01d52c50205c@kernel.org>
+ <6d9ded33-f5fc-6346-51ca-2de8e7a644ec@linaro.org>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <6d9ded33-f5fc-6346-51ca-2de8e7a644ec@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/26, Eric W. Biederman wrote:
->
-> +	if (lock_task_sighand(child, &flags)) {
-> +		if (child->ptrace && child->parent == current) {
-> +			WARN_ON(READ_ONCE(child->__state) == __TASK_TRACED);
-> +			/*
-> +			 * child->sighand can't be NULL, release_task()
-> +			 * does ptrace_unlink() before __exit_signal().
-> +			 */
-> +			if (ignore_state || ptrace_freeze_traced(child))
-> +				ret = 0;
 
-The comment above is no longer relevant, it should be removed.
+On 27.04.22 15:59, Krzysztof Kozlowski wrote:
+> On 27/04/2022 14:17, Georgi Djakov wrote:
+>> On 22.04.22 18:25, Krzysztof Kozlowski wrote:
+>>> On 12/04/2022 12:26, Krzysztof Kozlowski wrote:
+>>>> struct qcom_icc_desc is not modified so it can be made const for safety.
+>>>>
+>>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>> ---
+>>>>    drivers/interconnect/qcom/msm8916.c |  6 +++---
+>>>>    drivers/interconnect/qcom/msm8939.c |  8 ++++----
+>>>>    drivers/interconnect/qcom/msm8974.c | 12 ++++++------
+>>>>    drivers/interconnect/qcom/qcm2290.c | 12 ++++++------
+>>>>    drivers/interconnect/qcom/qcs404.c  |  6 +++---
+>>>>    drivers/interconnect/qcom/sc7180.c  | 26 +++++++++++++-------------
+>>>>    drivers/interconnect/qcom/sc7280.c  | 24 ++++++++++++------------
+>>>>    drivers/interconnect/qcom/sdm660.c  | 12 ++++++------
+>>>>    drivers/interconnect/qcom/sm8150.c  | 22 +++++++++++-----------
+>>>>    drivers/interconnect/qcom/sm8250.c  | 22 +++++++++++-----------
+>>>>    drivers/interconnect/qcom/sm8350.c  | 20 ++++++++++----------
+>>>>    drivers/interconnect/qcom/sm8450.c  | 22 +++++++++++-----------
+>>>
+>>> Hi folks,
+>>>
+>>> Any comments here?
+>>
+>> Thanks for the patches! I had actually some of these changes in my local tree
+>> for a long time.
+> 
+> Indeed I see them now in linux-next. Sorry for pinging, I just did not
+> get any notification they got applied.
 
-Oleg.
+I meant that i did similar changes, that i never sent upstream, so thanks
+for doing this. Pings are welcome.
 
+BR,
+Georgi
