@@ -2,109 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB500511B40
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 16:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B99F7511ACF
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 16:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238290AbiD0OjR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Apr 2022 10:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
+        id S238456AbiD0Oqh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Apr 2022 10:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238534AbiD0OjC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Apr 2022 10:39:02 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D58B2716
-        for <linux-pm@vger.kernel.org>; Wed, 27 Apr 2022 07:35:51 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id i19so3779162eja.11
-        for <linux-pm@vger.kernel.org>; Wed, 27 Apr 2022 07:35:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iBjVwlfQHfJTzGZmbfEvXhaX1IO5OkSRicNnSdosqfE=;
-        b=NSdJkx1jUjjiXuAhxMA30qKgzaND/A7AqoOWPp5E5YGLrXn7dcO3OQMupXUipJJWOA
-         JUFRfFkfl9q1bKNHk3/zQMSwlO/gsV/x5hR66QT7FXzr1siOkocOBQR/F+ktgDFUNnWb
-         X5fL4fh2Ok7wc8jM9Rp0R1OuGPLDz4fwit9ro=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iBjVwlfQHfJTzGZmbfEvXhaX1IO5OkSRicNnSdosqfE=;
-        b=toeNbkVVt8ByGos53ZJRym63vHb8WYAmhuJqm9Ma0kqB9t4NCdR5Wz/eoJwZQ76UDt
-         HuB+cFmfTNqcbck1+9NtqWcUjg/yzmF9c97jDMu/fSOKGLzTxbjtBsRkIIwzCNFOKRS+
-         JKjeIyAe/aO3IbdJc5lzoFJ2gDbWKTiJ7JNnS+vkqwjG1+V/IkgyJlOFuKuyGEYrHSp0
-         F1V5yCC2ECqMXsp5kmGmnkJ/xMZw8sFUcCQQObzFy7w9mb0Rgaf+gQcZy1u1LdlrzCaz
-         NeG9pU8xwClm+CozSS1yJZfaDnHkEIGbwhbtvX0a8d1i8XNNI/sfDUK4GlO6pOZW4eam
-         Mfjg==
-X-Gm-Message-State: AOAM533A/Eyv0F6I1cFjcl3qxZ9GamTnp3U22mZCxdblS0x94KOmIBuY
-        p0pIArKsxE8IpGwcP5tUJnymLHrIW1moo/ai3i4=
-X-Google-Smtp-Source: ABdhPJwkucBRZHXkTuPTwIij7FO8H3MMgk9oOWBv5/NuQU7gwEU2cfgaQZN73dFrXj8xXBgZ9iekhQ==
-X-Received: by 2002:a17:906:19c3:b0:6ec:c7b:ed28 with SMTP id h3-20020a17090619c300b006ec0c7bed28mr26319502ejd.612.1651070149476;
-        Wed, 27 Apr 2022 07:35:49 -0700 (PDT)
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com. [209.85.128.42])
-        by smtp.gmail.com with ESMTPSA id si8-20020a170906cec800b006f39b234b0fsm4071651ejb.103.2022.04.27.07.35.48
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 07:35:48 -0700 (PDT)
-Received: by mail-wm1-f42.google.com with SMTP id o12-20020a1c4d0c000000b00393fbe2973dso2623432wmh.2
-        for <linux-pm@vger.kernel.org>; Wed, 27 Apr 2022 07:35:48 -0700 (PDT)
-X-Received: by 2002:a05:600c:3c99:b0:392:b49c:7b79 with SMTP id
- bg25-20020a05600c3c9900b00392b49c7b79mr26204171wmb.199.1651070147811; Wed, 27
- Apr 2022 07:35:47 -0700 (PDT)
+        with ESMTP id S233966AbiD0Oq0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Apr 2022 10:46:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3959E366AA
+        for <linux-pm@vger.kernel.org>; Wed, 27 Apr 2022 07:43:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651070593;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=G9DkRJaDUMwY7Wxq8Elonr7u7Py6sFY37e6s/qu71Og=;
+        b=U6jPjTHqtOYnBdUDhggW/2RRQNwqgVs7uR/Hxao2tXmwsaEOiUPjsQSUuqyaLHIxUBrX/z
+        2qopU8u8pETruwle7t7EmgU8fVT1ZPoYpx37rC5kbFeLzD4IrPmq481bFbFdt/pvaiv81o
+        Rgq5V0qMnOu0avx5UQ4M7YWBhB5FFo4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-553-0sTi6ypeNaG65Sxn8qbA6A-1; Wed, 27 Apr 2022 10:43:07 -0400
+X-MC-Unique: 0sTi6ypeNaG65Sxn8qbA6A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7798D802803;
+        Wed, 27 Apr 2022 14:43:06 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.128])
+        by smtp.corp.redhat.com (Postfix) with SMTP id A174E40D282F;
+        Wed, 27 Apr 2022 14:43:01 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Wed, 27 Apr 2022 16:43:06 +0200 (CEST)
+Date:   Wed, 27 Apr 2022 16:43:00 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>
+Subject: Re: [PATCH 6/9] signal: Always call do_notify_parent_cldstop with
+ siglock held
+Message-ID: <20220427144259.GB17421@redhat.com>
+References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+ <20220426225211.308418-6-ebiederm@xmission.com>
+ <20220427141018.GA17421@redhat.com>
+ <874k2ea9q4.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-References: <20220427013226.341209-1-swboyd@chromium.org>
-In-Reply-To: <20220427013226.341209-1-swboyd@chromium.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 27 Apr 2022 07:35:36 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UK522o=zak8ryR4e8yGTm=wGtMjxtfYNJ4DXk5ayAGhw@mail.gmail.com>
-Message-ID: <CAD=FV=UK522o=zak8ryR4e8yGTm=wGtMjxtfYNJ4DXk5ayAGhw@mail.gmail.com>
-Subject: Re: [PATCH] interconnect: Restore sync state by ignoring ipa-virt in
- provider count
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Georgi Djakov <djakov@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alex Elder <elder@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Mike Tipton <quic_mdtipton@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <874k2ea9q4.fsf@email.froward.int.ebiederm.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-On Tue, Apr 26, 2022 at 6:32 PM Stephen Boyd <swboyd@chromium.org> wrote:
+On 04/27, Eric W. Biederman wrote:
 >
-> Ignore compatible strings for the IPA virt drivers that were removed in
-> commits 2fb251c26560 ("interconnect: qcom: sdx55: Drop IP0
-> interconnects") and 2f3724930eb4 ("interconnect: qcom: sc7180: Drop IP0
-> interconnects") so that the sync state logic can kick in again.
-> Otherwise all the interconnects in the system will stay pegged at max
-> speeds because 'providers_count' is always going to be one larger than
-> the number of drivers that will ever probe on sc7180 or sdx55. This
-> fixes suspend on sc7180 and sdx55 devices when you don't have a
-> devicetree patch to remove the ipa-virt compatible node.
+> The ptrace parental relationship definitely has the potential to be a
+> graph with cycles.  Which as you point out is not fine.
 >
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Doug Anderson <dianders@chromium.org>
-> Cc: Alex Elder <elder@linaro.org>
-> Cc: Taniya Das <quic_tdas@quicinc.com>
-> Cc: Mike Tipton <quic_mdtipton@quicinc.com>
-> Fixes: 2fb251c26560 ("interconnect: qcom: sdx55: Drop IP0 interconnects")
-> Fixes: 2f3724930eb4 ("interconnect: qcom: sc7180: Drop IP0 interconnects")
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->  drivers/interconnect/core.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+> The result is very nice and I don't want to give it up.  I suspect
+> something ptrace cycles are always a problem and can simply be
+> forbidden.
 
-Ick, but seems like an expedient fix to get us back to working while
-we try to come up with something better.
+OK, please consider another case.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+We have a parent P and its child C. C traces P.
+
+This is not that unusual, I don't think we can forbid this case.
+
+P reports an event and calls do_notify_parent_cldstop().
+
+C receives SIGSTOP and calls do_notify_parent_cldstop() too.
+
+Oleg.
+
