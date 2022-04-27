@@ -2,61 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791ED512102
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 20:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3CB511FF6
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 20:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240523AbiD0P5c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Apr 2022 11:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53322 "EHLO
+        id S242309AbiD0QRP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Apr 2022 12:17:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240431AbiD0P53 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Apr 2022 11:57:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15D3C60044
-        for <linux-pm@vger.kernel.org>; Wed, 27 Apr 2022 08:54:05 -0700 (PDT)
+        with ESMTP id S243936AbiD0QPm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Apr 2022 12:15:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E62D73BD06F
+        for <linux-pm@vger.kernel.org>; Wed, 27 Apr 2022 09:11:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651074840;
+        s=mimecast20190719; t=1651075755;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=fdXdyruG2mNABegzus1OI0l/dvVuZJQv9Fw0QN0j5EU=;
-        b=Hbk2oEHgsB/TK5kopilW1Egn140i+fCEKwgWLQi/ZvQO3De5rA8CeoUyTzmBR0k0JgIwrX
-        eoD8qpwt3PEx+5lpDTrPPdP4L80nVg4af6ylTteibODEiymYGOpq6RffeaVB3IGis9e/g7
-        2F7B6tJsflt35VDybKCnM/t8TjEx4Sg=
+        bh=q/SkBNsoTUPyKMGhRFoyh0ykNNAvugZJ3bBfN9M/MEU=;
+        b=TqUZ/pZoBHG4oJPu5xcAaa1g8yaKJDHXO1ynSa6zjW+dEovcFp8D+O34C5AdES5Ja78hgd
+        kebdeJjIaaidfAedDWNUq21pTqXbLYNP4hMvw5tRNMSUiRa/ERzhRKz++B9c/olztM59TI
+        MQnPe5j5wewbiNxcYkXjsfv3VBzA1pM=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-648-7t3OQgjoNreZbo7V5a8a2w-1; Wed, 27 Apr 2022 11:53:57 -0400
-X-MC-Unique: 7t3OQgjoNreZbo7V5a8a2w-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+ us-mta-381-fIC6HcHzNF2SRSCXM6IoTQ-1; Wed, 27 Apr 2022 12:09:10 -0400
+X-MC-Unique: fIC6HcHzNF2SRSCXM6IoTQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 274971C04B7E;
-        Wed, 27 Apr 2022 15:53:41 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 36B103820F6E;
+        Wed, 27 Apr 2022 16:09:09 +0000 (UTC)
 Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.128])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 139915E2C06;
-        Wed, 27 Apr 2022 15:53:37 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with SMTP id 45EE62024CB8;
+        Wed, 27 Apr 2022 16:09:04 +0000 (UTC)
 Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Wed, 27 Apr 2022 17:53:40 +0200 (CEST)
-Date:   Wed, 27 Apr 2022 17:53:37 +0200
+        oleg@redhat.com; Wed, 27 Apr 2022 18:09:08 +0200 (CEST)
+Date:   Wed, 27 Apr 2022 18:09:03 +0200
 From:   Oleg Nesterov <oleg@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        ebiederm@xmission.com, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] sched,ptrace: Fix ptrace_check_attach() vs
- PREEMPT_RT
-Message-ID: <20220427155335.GH17421@redhat.com>
-References: <20220421150248.667412396@infradead.org>
- <20220421150654.817117821@infradead.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>
+Subject: Re: [PATCH 9/9] ptrace: Don't change __state
+Message-ID: <20220427160901.GI17421@redhat.com>
+References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+ <20220426225211.308418-9-ebiederm@xmission.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220421150654.817117821@infradead.org>
+In-Reply-To: <20220426225211.308418-9-ebiederm@xmission.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -66,26 +72,22 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/21, Peter Zijlstra wrote:
+On 04/26, Eric W. Biederman wrote:
 >
-> @@ -1329,8 +1337,7 @@ SYSCALL_DEFINE4(ptrace, long, request, l
->  		goto out_put_task_struct;
->  
->  	ret = arch_ptrace(child, request, addr, data);
-> -	if (ret || request != PTRACE_DETACH)
-> -		ptrace_unfreeze_traced(child);
-> +	ptrace_unfreeze_traced(child);
+> @@ -253,7 +252,7 @@ static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
+>  	 */
+>  	if (lock_task_sighand(child, &flags)) {
+>  		if (child->ptrace && child->parent == current) {
+> -			WARN_ON(READ_ONCE(child->__state) == __TASK_TRACED);
+> +			WARN_ON(child->jobctl & JOBCTL_DELAY_WAKEKILL);
 
-Forgot to mention... whatever we do this doesn't look right.
+This WARN_ON() doesn't look right.
 
-ptrace_unfreeze_traced() must not be called if the tracee was untraced,
-anothet debugger can come after that. I agree, the current code looks
-a bit confusing, perhaps it makes sense to re-write it:
+It is possible that this child was traced by another task and PTRACE_DETACH'ed,
+but it didn't clear DELAY_WAKEKILL.
 
-	if (request == PTRACE_DETACH && ret == 0)
-		; /* nothing to do, no longer traced by us */
-	else
-		ptrace_unfreeze_traced(child);
+If the new debugger attaches and calls ptrace() before the child takes siglock
+ptrace_freeze_traced() will fail, but we can hit this WARN_ON().
 
 Oleg.
 
