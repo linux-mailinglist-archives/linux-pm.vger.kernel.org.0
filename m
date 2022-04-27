@@ -2,153 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CEE511B46
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 16:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1AA5511B86
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Apr 2022 16:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238684AbiD0Ovl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 27 Apr 2022 10:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
+        id S238840AbiD0O7f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 27 Apr 2022 10:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238693AbiD0Oud (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Apr 2022 10:50:33 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFA43B297;
-        Wed, 27 Apr 2022 07:47:21 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:55074)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1njiwo-00H7U3-OG; Wed, 27 Apr 2022 08:47:18 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:35882 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1njiwn-00AnmM-Hj; Wed, 27 Apr 2022 08:47:18 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>
-References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
-        <20220426225211.308418-6-ebiederm@xmission.com>
-        <20220427141018.GA17421@redhat.com>
-        <874k2ea9q4.fsf@email.froward.int.ebiederm.org>
-Date:   Wed, 27 Apr 2022 09:47:10 -0500
-In-Reply-To: <874k2ea9q4.fsf@email.froward.int.ebiederm.org> (Eric
-        W. Biederman's message of "Wed, 27 Apr 2022 09:20:51 -0500")
-Message-ID: <87zgk67fdd.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        with ESMTP id S237426AbiD0O7e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 27 Apr 2022 10:59:34 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFCC7247A
+        for <linux-pm@vger.kernel.org>; Wed, 27 Apr 2022 07:56:20 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id bv19so3938074ejb.6
+        for <linux-pm@vger.kernel.org>; Wed, 27 Apr 2022 07:56:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3kzcmQQ6qe9BuAfgJ/H9FnVAxTClpIB9Ec1O4pt+pto=;
+        b=SuM2kKvg9MIOsrbRnXK49sswjYDmhNL5auXZSawiQyqu/3r96paw8FAO/3qj4Q/cJ8
+         QYQrKWJdSqC8sHYmnj3Ta4awWKPn4feNlwgOplnY7O9t/jqCVdEUVFAP5imygZIAANnr
+         MT+u4rZ8Ba81rIDlGcH2OVlTjOJklsHfmI/CvtwDKGXyxegRBceREqeeVyyVY+NdL1yi
+         48cfxCNoL2cXq0oZV0ZSE1VeyCIF54D3kppj5UtOzfj51E71+6ttlj1FBAsklxpRdBWu
+         Id+SYXX+XrwwMOYDLDN7Sxv6Zzl7dmcpeukJ4DRd47WwLDuP8LwIWVeT1R8N0zs12UHs
+         OdFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3kzcmQQ6qe9BuAfgJ/H9FnVAxTClpIB9Ec1O4pt+pto=;
+        b=PrbKdpVoQiuAsmGY6LJscCb+vu0bcUkBGwUvv5Lxt5SWAw7Ko5Y83L589MTzhXjIX0
+         ArdjtoadH0H4NXRj+KKGQdb44Ce7Y97P9ozyXW0V8+E38LM13Jwl79GGd/6L7mMSK1eu
+         Tl5NOTu8xFs7HNy+n9DMFd5Y/4HKnFnF71jgTwitH3uCHQOkpios3K9WPII2KRmjrfnu
+         Fo15d1Ayh12UT65n6+d1q6RPwKF5fmeuajJK0XIq31pu+CBFKP0qDUyCB36bXQfflHy6
+         p8GFeZIFkjxm7/bzC8nEGKoaSYB9As9NoO1Seh4Ny3GcHT0TQvwYe02PNu7MZL9lkTdD
+         FhPg==
+X-Gm-Message-State: AOAM5322vRhGF2y8NZZpfesqujws48lyVbjv0ThgR93D1HIG4NEH45SZ
+        VIlRQEhvrKnyqfaA3lmEFMCXg1iK5lliFg==
+X-Google-Smtp-Source: ABdhPJx+Vs5y8HA3NpMU0R2RfFBUtP1VAq77R6zckJbYjK/ihkSS/J5AT+rfpaCiLUn1ZhdDvQMSIw==
+X-Received: by 2002:a17:907:3f9c:b0:6f0:28d1:3ad6 with SMTP id hr28-20020a1709073f9c00b006f028d13ad6mr27009349ejc.365.1651071379475;
+        Wed, 27 Apr 2022 07:56:19 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id u4-20020aa7db84000000b004136c2c357csm8475284edt.70.2022.04.27.07.56.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Apr 2022 07:56:18 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] interconnect: qcom: use icc_sync_state
+Date:   Wed, 27 Apr 2022 16:56:16 +0200
+Message-Id: <20220427145616.523557-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1njiwn-00AnmM-Hj;;;mid=<87zgk67fdd.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1/9mpdQTyplIkPxPVrXFUt3r9iizls3AWY=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ******;Oleg Nesterov <oleg@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 575 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 11 (1.9%), b_tie_ro: 10 (1.7%), parse: 0.96
-        (0.2%), extract_message_metadata: 12 (2.1%), get_uri_detail_list: 1.46
-        (0.3%), tests_pri_-1000: 14 (2.4%), tests_pri_-950: 1.24 (0.2%),
-        tests_pri_-900: 1.04 (0.2%), tests_pri_-90: 133 (23.2%), check_bayes:
-        132 (22.9%), b_tokenize: 8 (1.4%), b_tok_get_all: 9 (1.5%),
-        b_comp_prob: 2.6 (0.5%), b_tok_touch_all: 108 (18.8%), b_finish: 1.03
-        (0.2%), tests_pri_0: 381 (66.4%), check_dkim_signature: 0.85 (0.1%),
-        check_dkim_adsp: 3.4 (0.6%), poll_dns_idle: 0.87 (0.2%), tests_pri_10:
-        2.5 (0.4%), tests_pri_500: 15 (2.6%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 6/9] signal: Always call do_notify_parent_cldstop with
- siglock held
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-"Eric W. Biederman" <ebiederm@xmission.com> writes:
+Use icc_sync_state for interconnect providers, so that the bandwidth
+request doesn't need to stay on maximum value.
 
-> Oleg Nesterov <oleg@redhat.com> writes:
->
->> On 04/26, Eric W. Biederman wrote:
->>>
->>> @@ -2164,7 +2166,9 @@ static void do_notify_parent_cldstop(struct task_struct *tsk,
->>>   	}
->>>
->>>  	sighand = parent->sighand;
->>> -	spin_lock_irqsave(&sighand->siglock, flags);
->>> +	lock = tsk->sighand != sighand;
->>> +	if (lock)
->>> +		spin_lock_nested(&sighand->siglock, SINGLE_DEPTH_NESTING);
->>
->> But why is it safe?
->>
->> Suppose we have two tasks, they both trace each other, both call
->> ptrace_stop() at the same time. Of course this is ugly, they both
->> will block.
->>
->> But with this patch in this case we have the trivial ABBA deadlock,
->> no?
->
-> I was thinking in terms of the process tree (which is fine).
->
-> The ptrace parental relationship definitely has the potential to be a
-> graph with cycles.  Which as you point out is not fine.
->
->
-> The result is very nice and I don't want to give it up.  I suspect
-> something ptrace cycles are always a problem and can simply be
-> forbidden.  That is going to take some analsysis and some additional
-> code in ptrace_attach.
->
-> I will go look at that.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/interconnect/qcom/msm8916.c | 1 +
+ drivers/interconnect/qcom/qcm2290.c | 1 +
+ drivers/interconnect/qcom/qcs404.c  | 1 +
+ drivers/interconnect/qcom/sdm660.c  | 1 +
+ drivers/interconnect/qcom/sm8150.c  | 1 +
+ drivers/interconnect/qcom/sm8250.c  | 1 +
+ drivers/interconnect/qcom/sm8350.c  | 1 +
+ drivers/interconnect/qcom/sm8450.c  | 1 +
+ 8 files changed, 8 insertions(+)
 
-
-Hmm.  If we have the following process tree.
-
-    A
-     \
-      B
-       \
-        C
-
-Process A, B, and C are all in the same process group.
-Process A and B are setup to receive SIGCHILD when
-their process stops.
-
-Process C traces process A.
-
-When a sigstop is delivered to the group we can have:
-
-Process B takes siglock(B) siglock(A) to notify the real_parent
-Process C takes siglock(C) siglock(B) to notify the real_parent
-Process A takes siglock(A) siglock(C) to notify the tracer
-
-If they all take their local lock at the same time there is
-a deadlock.
-
-I don't think the restriction that you can never ptrace anyone
-up the process tree is going to fly.  So it looks like I am back to the
-drawing board for this one.
-
-Eric
-
-
-
-
-    
-
+diff --git a/drivers/interconnect/qcom/msm8916.c b/drivers/interconnect/qcom/msm8916.c
+index 2f397a7c3322..811370fcd211 100644
+--- a/drivers/interconnect/qcom/msm8916.c
++++ b/drivers/interconnect/qcom/msm8916.c
+@@ -1347,6 +1347,7 @@ static struct platform_driver msm8916_noc_driver = {
+ 	.driver = {
+ 		.name = "qnoc-msm8916",
+ 		.of_match_table = msm8916_noc_of_match,
++		.sync_state = icc_sync_state,
+ 	},
+ };
+ module_platform_driver(msm8916_noc_driver);
+diff --git a/drivers/interconnect/qcom/qcm2290.c b/drivers/interconnect/qcom/qcm2290.c
+index 74404e0b2080..6cf75da91428 100644
+--- a/drivers/interconnect/qcom/qcm2290.c
++++ b/drivers/interconnect/qcom/qcm2290.c
+@@ -1355,6 +1355,7 @@ static struct platform_driver qcm2290_noc_driver = {
+ 	.driver = {
+ 		.name = "qnoc-qcm2290",
+ 		.of_match_table = qcm2290_noc_of_match,
++		.sync_state = icc_sync_state,
+ 	},
+ };
+ module_platform_driver(qcm2290_noc_driver);
+diff --git a/drivers/interconnect/qcom/qcs404.c b/drivers/interconnect/qcom/qcs404.c
+index 416c8bff8efa..d82f9add4933 100644
+--- a/drivers/interconnect/qcom/qcs404.c
++++ b/drivers/interconnect/qcom/qcs404.c
+@@ -1086,6 +1086,7 @@ static struct platform_driver qcs404_noc_driver = {
+ 	.driver = {
+ 		.name = "qnoc-qcs404",
+ 		.of_match_table = qcs404_noc_of_match,
++		.sync_state = icc_sync_state,
+ 	},
+ };
+ module_platform_driver(qcs404_noc_driver);
+diff --git a/drivers/interconnect/qcom/sdm660.c b/drivers/interconnect/qcom/sdm660.c
+index 274a7139fe1a..706b49a4bb70 100644
+--- a/drivers/interconnect/qcom/sdm660.c
++++ b/drivers/interconnect/qcom/sdm660.c
+@@ -1716,6 +1716,7 @@ static struct platform_driver sdm660_noc_driver = {
+ 	.driver = {
+ 		.name = "qnoc-sdm660",
+ 		.of_match_table = sdm660_noc_of_match,
++		.sync_state = icc_sync_state,
+ 	},
+ };
+ module_platform_driver(sdm660_noc_driver);
+diff --git a/drivers/interconnect/qcom/sm8150.c b/drivers/interconnect/qcom/sm8150.c
+index 745e3c36a61a..2a85f53802b5 100644
+--- a/drivers/interconnect/qcom/sm8150.c
++++ b/drivers/interconnect/qcom/sm8150.c
+@@ -535,6 +535,7 @@ static struct platform_driver qnoc_driver = {
+ 	.driver = {
+ 		.name = "qnoc-sm8150",
+ 		.of_match_table = qnoc_of_match,
++		.sync_state = icc_sync_state,
+ 	},
+ };
+ module_platform_driver(qnoc_driver);
+diff --git a/drivers/interconnect/qcom/sm8250.c b/drivers/interconnect/qcom/sm8250.c
+index aa707582ea01..8dfb5dea562a 100644
+--- a/drivers/interconnect/qcom/sm8250.c
++++ b/drivers/interconnect/qcom/sm8250.c
+@@ -551,6 +551,7 @@ static struct platform_driver qnoc_driver = {
+ 	.driver = {
+ 		.name = "qnoc-sm8250",
+ 		.of_match_table = qnoc_of_match,
++		.sync_state = icc_sync_state,
+ 	},
+ };
+ module_platform_driver(qnoc_driver);
+diff --git a/drivers/interconnect/qcom/sm8350.c b/drivers/interconnect/qcom/sm8350.c
+index c79f93a1ac73..3e26a2175b28 100644
+--- a/drivers/interconnect/qcom/sm8350.c
++++ b/drivers/interconnect/qcom/sm8350.c
+@@ -531,6 +531,7 @@ static struct platform_driver qnoc_driver = {
+ 	.driver = {
+ 		.name = "qnoc-sm8350",
+ 		.of_match_table = qnoc_of_match,
++		.sync_state = icc_sync_state,
+ 	},
+ };
+ module_platform_driver(qnoc_driver);
+diff --git a/drivers/interconnect/qcom/sm8450.c b/drivers/interconnect/qcom/sm8450.c
+index 8d99ee6421df..d573018a6324 100644
+--- a/drivers/interconnect/qcom/sm8450.c
++++ b/drivers/interconnect/qcom/sm8450.c
+@@ -1968,6 +1968,7 @@ static struct platform_driver qnoc_driver = {
+ 	.driver = {
+ 		.name = "qnoc-sm8450",
+ 		.of_match_table = qnoc_of_match,
++		.sync_state = icc_sync_state,
+ 	},
+ };
+ 
+-- 
+2.32.0
 
