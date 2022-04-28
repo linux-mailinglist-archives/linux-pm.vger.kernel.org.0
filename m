@@ -2,377 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37574513297
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 13:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 226F05132CE
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 13:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344646AbiD1Lmk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Apr 2022 07:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
+        id S1345682AbiD1Lv5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Apr 2022 07:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235253AbiD1Lmj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 07:42:39 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D676C969;
-        Thu, 28 Apr 2022 04:39:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651145965; x=1682681965;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=EbBBYh9NEVCvlqlF3DlWr+jmXA+iZzTdz52n2zWzX24=;
-  b=bnlQ0KsgHpIYCluMGz4XZdj/4y4/OwRg5aETa6GB94ziHz8thtv7bexG
-   T2kTcY0/OXo4td4nUGxnzhZbonqfaGP7MdJ8ZVBUzPLExXznfjvuUoLhG
-   ZuR97/byk/NGhvavVfiwPMG8VUnQUdqSA8tmPAusT7GMaWkvYv/sdY6YL
-   cdd2j8V25Et8PDHpqt0mJQR5ouJYclKBrQ2vqSCYSc4ECoWQPgz62KOWc
-   QENuAZgRJG9cOtTv41BO6UPgXttRA8vA7R3RD7z2zd3891KaSi/ui/LBm
-   1XKu7vHE2Kzw75fTT5VPyT+oJnYYTgYa14eXFs/P7PoOTNzTcJk22eXU4
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="352695562"
-X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
-   d="scan'208";a="352695562"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 04:39:24 -0700
-X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
-   d="scan'208";a="731421296"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.31.248]) ([10.255.31.248])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 04:39:21 -0700
-Subject: Re: [kbuild-all] Re: [PATCH v3 2/2] PM / devfreq: mediatek: Introduce
- MediaTek CCI devfreq driver
-To:     Johnson Wang <johnson.wang@mediatek.com>,
-        kernel test robot <lkp@intel.com>, cw00.choi@samsung.com,
-        krzk+dt@kernel.org, robh+dt@kernel.org, kyungmin.park@samsung.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
+        with ESMTP id S240260AbiD1Lvy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 07:51:54 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B204468989
+        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 04:48:38 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id z5-20020a17090a468500b001d2bc2743c4so4186955pjf.0
+        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 04:48:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=lKWQTGV4dh9PrDo1ht1APvD79N4/klGUKA1N6RBf/GQ=;
+        b=G3X+tE3No3MGFynBoTKdGdMfqY90HrjssPASkzvSVM3xa3pYXi6L5rl4CkSVGOR+z+
+         ro3lt+PwqdLf+fM7ZKxmcThJNKbQML0/enxTqS50zC4K2hTQcvOt5pxHARNiLVnp9go6
+         bL9CKShiWf9WpdXYz4FEgwYeQuM3jLB5igxWwvUMTRop1jMp7JKES0USBPgplpvHCD5B
+         WKJZlv0BZVL/6km57R0RivFmVwL+azaU9mWB+VXd92FVWxDUu4qoQzjXk+Kn6xj2ujXS
+         fktKKtimTGWrvth41l0ji77mmg+KgJDLWuaxWxQGc1mNEKUqApeJtr8jCBy1bqKY6L1k
+         Injw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=lKWQTGV4dh9PrDo1ht1APvD79N4/klGUKA1N6RBf/GQ=;
+        b=AOUqclvD66VJDFNORG1AZxgkOuxdV9Y7QvRAZ1daBeG09tRqlYgH50ho8kCLD+i+ta
+         UcWQUix5wU9WjyDywLcrx1Gh2j6yjJIDNC+Uh4IcrDMtwIRw9cdiAvxxpddsyS70V/Io
+         78Q1hicPceyplrk+lU0Ukf8nEoZcB1So8/yMOYANaGLuPQKQbwyCmIHbM9hMgibKDH8I
+         /wOyACGXHiPBvcFAoqMRvLrv/VwqlgFYQDDyd6pox0jzkGDgjuAtvrm8xvg3iArm3VIX
+         pUcWvAT5uLgfo4dWXOWXw+41rJCD6kNggIlPr93AfDGT+K8BRtFTr21v9p23HAzWlSO8
+         P+2Q==
+X-Gm-Message-State: AOAM531uilOD/6EyAmYu0USbfSnDjlxJAbxM6LyjU5Y7LiMoJznlNli1
+        41Q7VRNHj+QcJREhCZqeor0froKkNgIGNw==
+X-Google-Smtp-Source: ABdhPJwfNlUrhObS4CNeZo5g5yFfXpFAPhyzjjlLtni25rafO48eOSIBrFIVd2rGxVJZL+uDhGhNbQ==
+X-Received: by 2002:a17:90b:3442:b0:1d9:8af8:2913 with SMTP id lj2-20020a17090b344200b001d98af82913mr20231216pjb.199.1651146518157;
+        Thu, 28 Apr 2022 04:48:38 -0700 (PDT)
+Received: from localhost ([122.162.207.161])
+        by smtp.gmail.com with ESMTPSA id k21-20020a63d855000000b003c14af5063fsm2654765pgj.87.2022.04.28.04.48.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 04:48:37 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 17:18:35 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     rafael@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
+        roger.lu@mediatek.com, hsinyi@google.com, khilman@baylibre.com,
+        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220425125546.4129-3-johnson.wang@mediatek.com>
- <202204271737.oAuTwqZH-lkp@intel.com>
- <a72b6333be0d8a2065477e47222c309a0d520fd4.camel@mediatek.com>
-From:   "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <abc836d8-b7da-c9da-6936-567df7206ca5@intel.com>
-Date:   Thu, 28 Apr 2022 19:39:19 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+Subject: Re: [PATCH V4 07/14] cpufreq: mediatek: Add .get function
+Message-ID: <20220428114835.3ktimyz2tzzqdcbg@vireshk-i7>
+References: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
+ <20220422075239.16437-8-rex-bc.chen@mediatek.com>
+ <20220425053548.72w2jh2g6lpzgz6g@vireshk-i7>
+ <64c690e8edf493ec0a4a14e0fdaad2d8e88e6da7.camel@mediatek.com>
+ <20220425100058.4kbvmpi63ygni6k5@vireshk-i7>
+ <078b1f9b39690da98cbd3c4528ba28374a097083.camel@mediatek.com>
+ <20220427031141.or2owu5wrh2cadfo@vireshk-i7>
+ <346736a339bed576817179ded3795d61f71fa06a.camel@mediatek.com>
 MIME-Version: 1.0
-In-Reply-To: <a72b6333be0d8a2065477e47222c309a0d520fd4.camel@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <346736a339bed576817179ded3795d61f71fa06a.camel@mediatek.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 28-04-22, 19:16, Rex-BC Chen wrote:
+> Yes, the call stack will eventually go to __cpufreq_driver_target.
+> However, we can observe the mismatch between target_freq and policy-cur 
+> with a tiny difference.
+> e.g.
+> [ 553.065356] cpufreq: target for CPU 0: 500000 kHz, relation 0,
+> requested 500000 kHz
+> [ 553.066366] cpufreq: target_freq/policy->cur: 500000/499999 kHz
 
+So you are trying to set the frequency to 500 MHz now, but policy->cur says it
+is 499 MHz.
 
-On 4/27/2022 6:11 PM, Johnson Wang wrote:
-> On Wed, 2022-04-27 at 17:25 +0800, kernel test robot wrote:
->> Hi Johnson,
->>
->> Thank you for the patch! Perhaps something to improve:
->>
->> [auto build test WARNING on robh/for-next]
->> [also build test WARNING on linus/master v5.18-rc4 next-20220427]
->> [If your patch is applied to the wrong git tree, kindly drop us a
->> note.
->> And when submitting patch, we suggest to use '--base' as documented
->> in
->>
-> https://urldefense.com/v3/__https://git-scm.com/docs/git-format-patch__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMS_s9zEZ$
->>   ]
->>
->> url:
->> https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux/commits/Johnson-Wang/Introduce-MediaTek-CCI-devfreq-driver/20220425-205820__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMc1U_tqz$
->>   
->> base:
->> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMUzTprof$
->>    for-next
->> config: hexagon-allyesconfig (
->> https://urldefense.com/v3/__https://download.01.org/0day-ci/archive/20220427/202204271737.oAuTwqZH-lkp@intel.com/config__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMaVRzbSL$
->>   )
->> compiler: clang version 15.0.0 (
->> https://urldefense.com/v3/__https://github.com/llvm/llvm-project__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMRqw5IY-$
->> $  1cddcfdc3c683b393df1a5c9063252eb60e52818)
->> reproduce (this is a W=1 build):
->>          wget
->> https://urldefense.com/v3/__https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMQLiD-i9$
->>    -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          #
->> https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux/commit/98b34c0587837b0e5b880b11a52433f8f0eee19f__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMU5yd7Y2$
->>   
->>          git remote add linux-review
->> https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMW4ldtnH$
->>   
->>          git fetch --no-tags linux-review Johnson-Wang/Introduce-
->> MediaTek-CCI-devfreq-driver/20220425-205820
->>          git checkout 98b34c0587837b0e5b880b11a52433f8f0eee19f
->>          # save the config file
->>          mkdir build_dir && cp config build_dir/.config
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross
->> W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash block/partitions/
->> drivers/devfreq/ drivers/iio/imu/ drivers/misc/lkdtm/
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All warnings (new ones prefixed by >>):
->>
->>     drivers/devfreq/mtk-cci-devfreq.c:372:16: error: no member named
->> 'parent_type' in 'struct devfreq_passive_data'
->>             passive_data->parent_type = CPUFREQ_PARENT_DEV;
->>             ~~~~~~~~~~~~  ^
->>     drivers/devfreq/mtk-cci-devfreq.c:372:30: error: use of undeclared
->> identifier 'CPUFREQ_PARENT_DEV'
->>             passive_data->parent_type = CPUFREQ_PARENT_DEV;
->>                                         ^
->>>> drivers/devfreq/mtk-cci-devfreq.c:379:4: warning: format
->>>> specifies type 'int' but the argument has type 'long' [-Wformat]
->>
->>                             PTR_ERR(drv->devfreq));
->>                             ^~~~~~~~~~~~~~~~~~~~~
->>     include/linux/dev_printk.h:144:65: note: expanded from macro
->> 'dev_err'
->>             dev_printk_index_wrap(_dev_err, KERN_ERR, dev,
->> dev_fmt(fmt), ##__VA_ARGS__)
->>                                                                    ~~~
->>       ^~~~~~~~~~~
->>     include/linux/dev_printk.h:110:23: note: expanded from macro
->> 'dev_printk_index_wrap'
->>                     _p_func(dev, fmt,
->> ##__VA_ARGS__);                       \
->>                                  ~~~    ^~~~~~~~~~~
->>     1 warning and 2 errors generated.
->>
->>
->> vim +379 drivers/devfreq/mtk-cci-devfreq.c
->>
->>     255	
->>     256	static int mtk_ccifreq_probe(struct platform_device
->> *pdev)
->>     257	{
->>     258		struct device *dev = &pdev->dev;
->>     259		struct mtk_ccifreq_drv *drv;
->>     260		struct devfreq_passive_data *passive_data;
->>     261		struct dev_pm_opp *opp;
->>     262		unsigned long rate, opp_volt;
->>     263		int ret;
->>     264	
->>     265		drv = devm_kzalloc(dev, sizeof(*drv),
->> GFP_KERNEL);
->>     266		if (!drv)
->>     267			return -ENOMEM;
->>     268	
->>     269		drv->dev = dev;
->>     270		drv->soc_data = (const struct
->> mtk_ccifreq_platform_data *)
->>     271					of_device_get_match_dat
->> a(&pdev->dev);
->>     272		mutex_init(&drv->reg_lock);
->>     273		platform_set_drvdata(pdev, drv);
->>     274	
->>     275		drv->cci_clk = devm_clk_get(dev, "cci");
->>     276		if (IS_ERR(drv->cci_clk)) {
->>     277			ret = PTR_ERR(drv->cci_clk);
->>     278			return dev_err_probe(dev, ret,
->>     279					     "failed to get cci
->> clk: %d\n", ret);
->>     280		}
->>     281	
->>     282		drv->inter_clk = devm_clk_get(dev,
->> "intermediate");
->>     283		if (IS_ERR(drv->inter_clk)) {
->>     284			ret = PTR_ERR(drv->inter_clk);
->>     285			dev_err_probe(dev, ret,
->>     286				      "failed to get
->> intermediate clk: %d\n", ret);
->>     287			goto out_free_resources;
->>     288		}
->>     289	
->>     290		drv->proc_reg =
->> devm_regulator_get_optional(dev, "proc");
->>     291		if (IS_ERR(drv->proc_reg)) {
->>     292			ret = PTR_ERR(drv->proc_reg);
->>     293			dev_err_probe(dev, ret,
->>     294				      "failed to get proc
->> regulator: %d\n", ret);
->>     295			goto out_free_resources;
->>     296		}
->>     297	
->>     298		ret = regulator_enable(drv->proc_reg);
->>     299		if (ret) {
->>     300			dev_err(dev, "failed to enable proc
->> regulator\n");
->>     301			goto out_free_resources;
->>     302		}
->>     303	
->>     304		drv->sram_reg = regulator_get_optional(dev,
->> "sram");
->>     305		if (IS_ERR(drv->sram_reg))
->>     306			drv->sram_reg = NULL;
->>     307		else {
->>     308			ret = regulator_enable(drv->sram_reg);
->>     309			if (ret) {
->>     310				dev_err(dev, "failed to enable
->> sram regulator\n");
->>     311				goto out_free_resources;
->>     312			}
->>     313		}
->>     314	
->>     315		/*
->>     316		 * We assume min voltage is 0 and tracking
->> target voltage using
->>     317		 * min_volt_shift for each iteration.
->>     318		 * The retry_max is 3 times of expeted
->> iteration count.
->>     319		 */
->>     320		drv->vtrack_max = 3 * DIV_ROUND_UP(max(drv-
->>> soc_data->sram_max_volt,
->>     321						       drv-
->>> soc_data->proc_max_volt),
->>     322						   drv-
->>> soc_data->min_volt_shift);
->>     323	
->>     324		ret = clk_prepare_enable(drv->cci_clk);
->>     325		if (ret)
->>     326			goto out_free_resources;
->>     327	
->>     328		ret = clk_prepare_enable(drv->inter_clk);
->>     329		if (ret)
->>     330			goto out_disable_cci_clk;
->>     331	
->>     332		ret = dev_pm_opp_of_add_table(dev);
->>     333		if (ret) {
->>     334			dev_err(dev, "failed to add opp table:
->> %d\n", ret);
->>     335			goto out_disable_inter_clk;
->>     336		}
->>     337	
->>     338		rate = clk_get_rate(drv->inter_clk);
->>     339		opp = dev_pm_opp_find_freq_ceil(dev, &rate);
->>     340		if (IS_ERR(opp)) {
->>     341			ret = PTR_ERR(opp);
->>     342			dev_err(dev, "failed to get
->> intermediate opp: %d\n", ret);
->>     343			goto out_remove_opp_table;
->>     344		}
->>     345		drv->inter_voltage =
->> dev_pm_opp_get_voltage(opp);
->>     346		dev_pm_opp_put(opp);
->>     347	
->>     348		rate = U32_MAX;
->>     349		opp = dev_pm_opp_find_freq_floor(drv->dev,
->> &rate);
->>     350		if (IS_ERR(opp)) {
->>     351			dev_err(dev, "failed to get opp\n");
->>     352			ret = PTR_ERR(opp);
->>     353			goto out_remove_opp_table;
->>     354		}
->>     355	
->>     356		opp_volt = dev_pm_opp_get_voltage(opp);
->>     357		dev_pm_opp_put(opp);
->>     358		ret = mtk_ccifreq_set_voltage(drv, opp_volt);
->>     359		if (ret) {
->>     360			dev_err(dev, "failed to scale to
->> highest voltage %lu in proc_reg\n",
->>     361				opp_volt);
->>     362			goto out_remove_opp_table;
->>     363		}
->>     364	
->>     365		passive_data = devm_kzalloc(dev, sizeof(struct
->> devfreq_passive_data),
->>     366					    GFP_KERNEL);
->>     367		if (!passive_data) {
->>     368			ret = -ENOMEM;
->>     369			goto out_remove_opp_table;
->>     370		}
->>     371	
->>     372		passive_data->parent_type = CPUFREQ_PARENT_DEV;
->>     373		drv->devfreq = devm_devfreq_add_device(dev,
->> &mtk_ccifreq_profile,
->>     374						       DEVFREQ_
->> GOV_PASSIVE,
->>     375						       passive_
->> data);
->>     376		if (IS_ERR(drv->devfreq)) {
->>     377			ret = -EPROBE_DEFER;
->>     378			dev_err(dev, "failed to add devfreq
->> device: %d\n",
->>   > 379				PTR_ERR(drv->devfreq));
->>     380			goto out_remove_opp_table;
->>     381		}
->>     382	
->>     383		drv->opp_nb.notifier_call =
->> mtk_ccifreq_opp_notifier;
->>     384		ret = dev_pm_opp_register_notifier(dev, &drv-
->>> opp_nb);
->>     385		if (ret) {
->>     386			dev_err(dev, "failed to register opp
->> notifier: %d\n", ret);
->>     387			goto out_remove_devfreq_device;
->>     388		}
->>     389		return 0;
->>     390	
->>     391	out_remove_devfreq_device:
->>     392		devm_devfreq_remove_device(dev, drv->devfreq);
->>     393	
->>     394	out_remove_opp_table:
->>     395		dev_pm_opp_of_remove_table(dev);
->>     396	
->>     397	out_disable_inter_clk:
->>     398		clk_disable_unprepare(drv->inter_clk);
->>     399	
->>     400	out_disable_cci_clk:
->>     401		clk_disable_unprepare(drv->cci_clk);
->>     402	
->>     403	out_free_resources:
->>     404		if (regulator_is_enabled(drv->proc_reg))
->>     405			regulator_disable(drv->proc_reg);
->>     406		if (drv->sram_reg && regulator_is_enabled(drv-
->>> sram_reg))
->>     407			regulator_disable(drv->sram_reg);
->>     408	
->>     409		if (!IS_ERR(drv->proc_reg))
->>     410			regulator_put(drv->proc_reg);
->>     411		if (!IS_ERR(drv->sram_reg))
->>     412			regulator_put(drv->sram_reg);
->>     413		if (!IS_ERR(drv->cci_clk))
->>     414			clk_put(drv->cci_clk);
->>     415		if (!IS_ERR(drv->inter_clk))
->>     416			clk_put(drv->inter_clk);
->>     417	
->>     418		return ret;
->>     419	}
->>     420	
->>
-> 
-> Hi "kernel test robot",
-> 
-> Thanks for your review.
-> 
-> This patch is based on chanwoo/devfreq-testing[1]
-> [1]
-> https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing
+> We check the assignment of policy->cur could be either from
+> cpufreq_driver->get_intermediate or from cpufreq_driver->get.
 
-Hi Johnson,
+policy->cur is set only at two places, in your case:
+- CPUFREQ_POSTCHANGE
+- cpufreq_online()
 
-Thanks for the feedback, we'll take a look too.
+From what I understand, it is possible that cpufreq_online() is setting your
+frequency to 499999 (once at boot), but as soon as a frequency change has
+happened after that, policy->cur should be set to 500 MHz and you should see
+this problem only once.
 
-Best Regards,
-Rong Chen
+From CPUFREQ_POSTCHANGE notifier, we always set policy->cur from the table
+itself, which should be 500000 MHz.
 
+I wonder how you see policy->cur to be 499999 here. Does this happen only once ?
+Or repeatedly ?
+
+> But it is strange to have the frequency value like 499999 kHz.
+> Is the result of tiny frequency difference expected from your point of
+> view?
+
+Clock driver can give this value, that is fine.
+
+> > What do you mean by "voltage pulse" here? What actually happens which
+> > you want to avoid.
+> > 
 > 
-> I will follow your suggestion to use '--base' in the next version.
-> 
-> BRs,
-> Johnson Wang
-> _______________________________________________
-> kbuild-all mailing list -- kbuild-all@lists.01.org
-> To unsubscribe send an email to kbuild-all-leave@lists.01.org
-> 
+> When cpufreq is fixed to lowest opp, "voltage pulse" is a quick voltage
+> rising and falling phenomenon which can be observed if 'cpufreq_get' is
+> invoked.
+
+Do check if the call is reaching your driver's ->target_index(), it should be
+which it should not, ideally.
+
+> Thank you for sharing the correct information.
+> Is it possible to get frequency (API) a simple way, like get current
+> opp frequency?
+
+Lets dig/debug a bit further and fix this if a real problem exists.
+
+-- 
+viresh
