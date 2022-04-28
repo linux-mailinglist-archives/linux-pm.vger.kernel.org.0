@@ -2,69 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79DB6513E77
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Apr 2022 00:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25FB6513E7E
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Apr 2022 00:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352840AbiD1WXD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Apr 2022 18:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37302 "EHLO
+        id S237174AbiD1WZK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Apr 2022 18:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237230AbiD1WXC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 18:23:02 -0400
+        with ESMTP id S237121AbiD1WZJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 18:25:09 -0400
 Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CFABF33A;
-        Thu, 28 Apr 2022 15:19:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C397E586;
+        Thu, 28 Apr 2022 15:21:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Qq72fPOyMsDMhllNPaD9/LDlbsltxPiZsmpBJxFx12M=; b=bgUEPOWf/Yyr5FFK4XBq2PNbDK
-        ZnBnUnZTZnH4A0oi3zwtEYUXvg1bFxVDJ9djmpADklpVYxA0JUDGJYQ93B9Dej5Y19KcHfdIvzxye
-        vt70+dpRdjYt0Au0M5wjcYQtU4SV8zlHEftwLoxd8buL6j/tBqzAlabZeeYpXDVkxyDme6aMo481f
-        PaCW3/T+NIK7wiJbl5wI6Hu1qrxRviFOfLwIKotaGj9nwklwVNvKIqFgE7B1uIVKvNivA9P3l9f6o
-        6nnvnAit53tlP6ZONb97iaa7gyJNlbnuQHONlrCwJ22CwYxC9TmeiufjLPDhuX0FYlos3+nl2oTJq
-        PCd5j7Jg==;
+        bh=+G7Hie6oNGeDpB2KJb8maGKxz+Iq00+I/qZ1qzvpZWM=; b=iGjf+zCilEf0KrKaMPlr6RTk4h
+        ARG+nvzH92DI5nzGFENrjO/ShsEy8TsYYhRK5m7Z0unN67DIXeQD5uJkAY1mw2dDR0QAEBkUuloiN
+        YTps4a0MMnSaaXfvokz5UUUqirdY2qg3/OKJ3LnXHxRm24q4T4BNtQxoX0dvJkOhv2Vb/tmrcUNrF
+        dR0R96+BbZ19BM6HHsAbnPGsdCwdXGFt4jQ9KxJpCbln/AULhRvlfIr7B/S5gzd4GDZrOSJf6DhbX
+        XGX6k63cc1r3DuDgOT6uqbzB+UTift48Ewd8Dc0lT3ZMEEDggB2v6dv5vjkJcJzuhpP4/jtwb46vQ
+        CIwGd3cw==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
         by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nkCTl-009RWn-3g; Thu, 28 Apr 2022 22:19:17 +0000
+        id 1nkCW7-009RZ2-L6; Thu, 28 Apr 2022 22:21:44 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E78EB30040C;
-        Fri, 29 Apr 2022 00:19:14 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 46FCF30027B;
+        Fri, 29 Apr 2022 00:21:43 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A998B202961EB; Fri, 29 Apr 2022 00:19:14 +0200 (CEST)
-Date:   Fri, 29 Apr 2022 00:19:14 +0200
+        id 318BA202961EB; Fri, 29 Apr 2022 00:21:43 +0200 (CEST)
+Date:   Fri, 29 Apr 2022 00:21:43 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Oleg Nesterov <oleg@redhat.com>, linux-kernel@vger.kernel.org,
-        rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>, rjw@rjwysocki.net,
+        mingo@kernel.org, vincent.guittot@linaro.org,
         dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
         bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
-        tj@kernel.org, linux-pm@vger.kernel.org,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH 6/9] signal: Always call do_notify_parent_cldstop with
- siglock held
-Message-ID: <YmsS4pReIh6pVeWe@hirez.programming.kicks-ass.net>
-References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
- <20220426225211.308418-6-ebiederm@xmission.com>
- <20220427141018.GA17421@redhat.com>
- <874k2ea9q4.fsf@email.froward.int.ebiederm.org>
- <87zgk67fdd.fsf@email.froward.int.ebiederm.org>
- <YmrSijTc6HIv4sAG@hirez.programming.kicks-ass.net>
- <8735hxxddw.fsf@email.froward.int.ebiederm.org>
- <87ilqtvsqg.fsf@email.froward.int.ebiederm.org>
+        linux-kernel@vger.kernel.org, tj@kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] sched,ptrace: Fix ptrace_check_attach() vs
+ PREEMPT_RT
+Message-ID: <YmsTd4FiAXjsFegE@hirez.programming.kicks-ass.net>
+References: <20220421150248.667412396@infradead.org>
+ <20220421150654.817117821@infradead.org>
+ <20220425174719.GB12412@redhat.com>
+ <8735hzcr18.fsf@email.froward.int.ebiederm.org>
+ <Ymr5Ga3gcqG4ZAMt@hirez.programming.kicks-ass.net>
+ <20220428205956.GG15485@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87ilqtvsqg.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <20220428205956.GG15485@redhat.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -74,78 +66,29 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 03:49:11PM -0500, Eric W. Biederman wrote:
+On Thu, Apr 28, 2022 at 10:59:57PM +0200, Oleg Nesterov wrote:
+> On 04/28, Peter Zijlstra wrote:
+> >
+> > Oleg pointed out that the tracee can already be killed such that
+> > fatal_signal_pending() is true. In that case signal_wake_up_state()
+> > cannot be relied upon to be responsible for the wakeup -- something
+> > we're going to want to rely on.
+> 
+> Peter, I am all confused...
+> 
+> If this patch is against the current tree, we don't need it.
+> 
+> If it is on top of JOBCTL_TRACED/DELAY_WAKEKILL changes (yours or Eric's),
+> then it can't help - SIGKILL can come right after the tracee drops siglock
+> and calls schedule().
 
-> static void lock_parents_siglocks(bool lock_tracer)
-> 	__releases(&current->sighand->siglock)
-> 	__acquires(&current->sighand->siglock)
-> 	__acquires(&current->real_parent->sighand->siglock)
-> 	__acquires(&current->parent->sighand->siglock)
-> {
-> 	struct task_struct *me = current;
-> 	struct sighand_struct *m_sighand = me->sighand;
-> 
-> 	lockdep_assert_held(&m_sighand->siglock);
-> 
-> 	rcu_read_lock();
-> 	for (;;) {
-> 		struct task_struct *parent, *tracer;
-> 		struct sighand_struct *p_sighand, *t_sighand, *s1, *s2, *s3;
-> 
-> 		parent = me->real_parent;
-> 		tracer = lock_tracer? me->parent : parent;
-> 
-> 		p_sighand = rcu_dereference(parent->sighand);
-> 		t_sighand = rcu_dereference(tracer->sighand);
-> 
-> 		/* Sort the sighands so that s1 >= s2 >= s3 */
-> 		s1 = m_sighand;
-> 		s2 = p_sighand;
-> 		s3 = t_sighand;
-> 		if (s1 > s2)
-> 			swap(s1, s2);
-> 		if (s1 > s3)
-> 			swap(s1, s3);
-> 		if (s2 > s3)
-> 			swap(s2, s3);
-> 
-> 		if (s1 != m_sighand) {
-> 			spin_unlock(&m_sighand->siglock);
-> 			spin_lock(&s1->siglock);
-> 		}
-> 
-> 		if (s1 != s2)
-> 			spin_lock_nested(&s2->siglock, SIGLOCK_LOCK_SECOND);
-> 		if (s2 != s3)
-> 			spin_lock_nested(&s3->siglock, SIGLOCK_LOCK_THIRD);
-> 
+But by that time it will already have set TRACED and signal_wake_up()
+wil clear it, no?
 
-Might as well just use 1 and 2 for subclass at this point, or use
-SIGLOCK_LOCK_FIRST below.
+> Perhaps I missed something, but let me repeat the 3rd time: I'd suggest
+> to simply clear JOBCTL_TRACED along with LISTENING/DELAY_WAKEKILL before
+> return to close this race.
 
-> 		if (likely((me->real_parent == parent) &&
-> 			   (me->parent == tracer) &&
-> 			   (parent->sighand == p_sighand) &&
-> 			   (tracer->sighand == t_sighand))) {
-> 			break;
-> 		}
-> 		spin_unlock(&p_sighand->siglock);
->                 if (t_sighand != p_sighand)
-> 			spin_unlock(&t_sighand->siglock);
-
-Indent fail above ^, also you likey need this:
-
-		/*
-		 * Since [pt]_sighand will likely change if we go
-		 * around, and m_sighand is the only one held, make sure
-		 * it is subclass-0, since the above 's1 != m_sighand'
-		 * clause very much relies on that.
-		 */
-		lock_set_subclass(&m_sighand->siglock, 0, _RET_IP_);
-
-> 		continue;
-> 	}
-> 	rcu_read_unlock();
-> }
-> 
-> Eric
+I think Eric convinced me there was a problem with that, but I'll go
+over it all again in the morning, perhaps I'll reach a different
+conclusion :-)
