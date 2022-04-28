@@ -2,73 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1A4513BF0
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 21:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE497513C1F
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 21:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351332AbiD1TGt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Apr 2022 15:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35476 "EHLO
+        id S234019AbiD1Th6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Apr 2022 15:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346460AbiD1TGr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 15:06:47 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5665DA7A;
-        Thu, 28 Apr 2022 12:03:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 86468CE2C22;
-        Thu, 28 Apr 2022 19:03:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9776CC385B0;
-        Thu, 28 Apr 2022 19:03:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651172608;
-        bh=EqzvgrXitlc/gUxcBmlr2KBOeceP/Bxg+K4LKbcKrv4=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Rpxgaq1DGU6kuE2yRUOK+xoBO8VFg3AEv9g742tsx/F79YiMUHoCa0/ARmPcsFTju
-         1SsKWbduQn3Lj/ME48EQHyOpKnW+iOjjTvSYsY7k8N5BGAYaGNR8tsyf7FQ2gYAVNk
-         I7D74+P6lILbIn/JOQyQJp1JanGTvtwYP7o7WA9A0WpNPgiQOI91WpyezS6rLZ3q1E
-         fAw4vH0k+R41KoBzKmtfpmxaT7iqc/HXMZr3DpjEJZCDYKrl+MSi8uxheCSrJlmhSn
-         lqYXDkTTdlmsBK0Eol7paFqQrH9As5bgpN3ahylPzHZShSIxsIpQAZL+VCI/aR+Owt
-         R9SgHp2D2b6bA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7E1FBE8DD67;
-        Thu, 28 Apr 2022 19:03:28 +0000 (UTC)
-Subject: Re: [GIT PULL] Power management fixes for v5.18-rc5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0jaMoSXJ-Q7w8Pduk9=3NyaWakdvQU2mBOPMM2vE9dTjQ@mail.gmail.com>
-References: <CAJZ5v0jaMoSXJ-Q7w8Pduk9=3NyaWakdvQU2mBOPMM2vE9dTjQ@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0jaMoSXJ-Q7w8Pduk9=3NyaWakdvQU2mBOPMM2vE9dTjQ@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.18-rc5
-X-PR-Tracked-Commit-Id: edbd9772cc9d8af6c136d01d8b9402f6ab767e9b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 659ed6e2850c7df4eba838863325f6d71f437844
-Message-Id: <165117260851.15527.8575331170857985877.pr-tracker-bot@kernel.org>
-Date:   Thu, 28 Apr 2022 19:03:28 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231975AbiD1Th5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 15:37:57 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0565AED6
+        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 12:34:42 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id p6so5227878plf.9
+        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 12:34:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=sblGdKLBs6vKIYGKb8j0yrpysabjJvjQtk16BpTjBeU=;
+        b=G+oaZXZ61Ff1BDikkAuNsbuqXjTPAR5lKhYazCd7CmjAs/RWHi+SRk8Sskb0RoH6Ua
+         bmANJJ7j57aWKTDHStxBmHMNOBjOSpaF77gf0pwc22Jpy4UjSAV/Q3kYDtBUhuWDaNMO
+         kPG5BLTHIn32wfPYTTUTAcUYfJ644dC9Gz6SyeEsCPR1LVDAE29JQmTr+Rf1wRGZDOg4
+         DRoCA1JyclXLZvqDgxzYDPch2/NDF3hOPZPtgjFSP3+Y3Xrc+8GnLwghgVVeFTpvta+4
+         j8bE8vNdwkLkFV9RysExF2JYRM6IlN3Qemdq/eRBwtrgpEIkz7KB15hKVcRzTofhSAnl
+         3hqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=sblGdKLBs6vKIYGKb8j0yrpysabjJvjQtk16BpTjBeU=;
+        b=yra1iZjvcfl3vQfxHDYDTn7dd4ivREj5MCWlpXUqHh6eSdLK3yvfD/wBDkLjDDLPPV
+         b7pb1lTB+G2R+4X/XR61syBo3SR3XhkyKFMhvSTz4Vs8qUljNDw4foz8fgIEbi15BLDU
+         +24ou8JFzE3Wa7BQDuYaxm7CfSuJ0tSfN7CaL9atsvsIgT0qtMszjFfJjBgmiYBOIVDS
+         2VAdxsvBsnTDa7h2el2JledIDskBtq9w9W+jeedVbsNOYv+3YKNOwvu9ZHBeRJdfq5EC
+         aobAppNWGf7p2m7p87SrIkIjUq8LZkb+1Cv2R59LfLSjMQMu7eN8IB7El1dZAnJvmWyn
+         0bkw==
+X-Gm-Message-State: AOAM532G3ERM16cLpBfdWfYj8uu7f1Pay1Qp2h3TZkR3G3RDkSukiMIb
+        HDRIFChaKt1aVIzIN+mqjBQpqjvzDzkDgbX33+w=
+X-Google-Smtp-Source: ABdhPJzNEZOV/jedAtx9ZdiMyUUGefVddafaUdW/AqXofjIReUMqC4oiG92McDHPj+0LO5olO+5EiQ==
+X-Received: by 2002:a17:90b:3843:b0:1db:c847:623 with SMTP id nl3-20020a17090b384300b001dbc8470623mr7026568pjb.52.1651174481694;
+        Thu, 28 Apr 2022 12:34:41 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id a28-20020a637f1c000000b003c14af50630sm3630019pgd.72.2022.04.28.12.34.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 12:34:41 -0700 (PDT)
+Message-ID: <626aec51.1c69fb81.85721.93aa@mx.google.com>
+Date:   Thu, 28 Apr 2022 12:34:41 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.18-rc4-115-gd3fa656ae5f38
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.18-rc4-115-gd3fa656ae5f38)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Thu, 28 Apr 2022 17:32:36 +0200:
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.18-rc4-115-gd=
+3fa656ae5f38)
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.18-rc5
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+18-rc4-115-gd3fa656ae5f38/
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/659ed6e2850c7df4eba838863325f6d71f437844
+Tree: pm
+Branch: testing
+Git Describe: v5.18-rc4-115-gd3fa656ae5f38
+Git Commit: d3fa656ae5f38da2890e3c0d538b397d9afacea2
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-Thank you!
+Warnings Detected:
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
