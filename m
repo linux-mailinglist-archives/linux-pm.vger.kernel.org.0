@@ -2,132 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 996EB513593
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 15:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2617B5135D0
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 15:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347612AbiD1NsZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Apr 2022 09:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37380 "EHLO
+        id S232046AbiD1N6I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Apr 2022 09:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347594AbiD1NsX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 09:48:23 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613661009;
-        Thu, 28 Apr 2022 06:45:07 -0700 (PDT)
-Received: from mail-yw1-f172.google.com ([209.85.128.172]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1Mbj7g-1oHTX51Pwc-00dBzt; Thu, 28 Apr 2022 15:45:05 +0200
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2f16645872fso53520157b3.4;
-        Thu, 28 Apr 2022 06:45:04 -0700 (PDT)
-X-Gm-Message-State: AOAM531rqS3TMANA9dj5PbXHgYaYSabwGuCiqYz/vsc+5F15FvO6r45T
-        WzYb45HYkZmr2LEKIEQie8lnR4wtPfawCBHHv8E=
-X-Google-Smtp-Source: ABdhPJzhKdbLezBOw+onlWys2HjSNrb5hSb6f6j0ogYNPd9ax1npbHyo1Y6CrpuYIOWED3Pgr1SGQ4YvAKDaJmP/tmM=
-X-Received: by 2002:a0d:fc83:0:b0:2e5:b0f4:c125 with SMTP id
- m125-20020a0dfc83000000b002e5b0f4c125mr33063062ywf.347.1651153503029; Thu, 28
- Apr 2022 06:45:03 -0700 (PDT)
+        with ESMTP id S1347769AbiD1N6G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 09:58:06 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE5AB42F1;
+        Thu, 28 Apr 2022 06:54:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=R62ztCNoV8ChqPdJ+dpLt5IfFlHmt2IS8Kc2/i1kepg=; b=i7t5whAkbkW/BnfOOxP/WF4QOX
+        DFg4OPTQw52j+VH9MtvwcprXopXcr35w5WIBl4xjv+WeouufjdicP+P9H6wndUfTZ+ZzOhiXOVEX1
+        nIsx+1/LnVwmH78AHc+Pgk0aBOwQsoTwK9Rv5aQmamuikPdaBWMnZkYxGvMuCOlC2GjZvPIjlE3OG
+        p49qb+LKzmH6Ww7wByliN12ueFBKxk+Ar6Da0b71bpEF8yMQtlwnDSDCQwaa9C2gTZToRUV1nMPPY
+        i4HYepPYBd2ADc7Pb5v1kxbtJBCIkxj4aDBEENAndZzBsseSgTRLa8F2tooreC8vHb33qhpISMfNM
+        u5uCIWQQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nk4bD-00BYlh-1m; Thu, 28 Apr 2022 13:54:27 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 208FC3004B5;
+        Thu, 28 Apr 2022 15:54:26 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0B4A220296EED; Thu, 28 Apr 2022 15:54:26 +0200 (CEST)
+Date:   Thu, 28 Apr 2022 15:54:25 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>
+Subject: Re: [PATCH 7/9] ptrace: Simplify the wait_task_inactive call in
+ ptrace_check_attach
+Message-ID: <YmqckaB+xB6azP1d@hirez.programming.kicks-ass.net>
+References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+ <20220426225211.308418-7-ebiederm@xmission.com>
+ <20220427151455.GE17421@redhat.com>
+ <Ympvf1Pam1ckX+EA@hirez.programming.kicks-ass.net>
+ <20220428111911.GA3804@redhat.com>
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
- <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
- <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net> <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
- <20220422234150.GA3442771@roeck-us.net> <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
- <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net> <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
- <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net> <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
-In-Reply-To: <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 28 Apr 2022 15:44:47 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
-Message-ID: <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:FlIDVPKXj9nzRwbk/wtccBdWDayg3PeTGiQuZ0/K42Bc7lGmPdy
- zssQcyDZ/DvWHSLnMLZ2c9c0/R8//Ct6Le7VOKueD5Qrh1XSkN/immCrCQM54OpPKR7UGyt
- rQR8FQFtM5HLTQupvDTlwrysBtqfjlwTZD25pEF/Z42s6fyHy6hxD7eWpHSPUujdYwhn8pQ
- hp2z24g1g13nAlk8lrHHQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:bRWqGE+N+ZY=:1iRjrIl6V157UK5O78TAoc
- 5W5zmo/RxHt6piZZQJR7bHPk8veJW7G/eD5jO6ABZaX8NSxlHXJ4TP5x5uFoaOWveTMuY2YNB
- E/S7IJzqQcjMpAVq0rBO649N779tX8wy6iezjQHdAX7O/6l7dHbxrLeGuJGtVvy5SPmFPsnuF
- 7hnbUhs94zbUsLMYQRcLlnGNptZ7bFxfi+PlNYB3jQQh0+wXdJS+P/EHPJK8UZHs5BjQBv+Qa
- EX048TdTH+63xTL5zzrwgKZLFucF2PiHs68Y/WDhFOvULFD5XwxnpC8QYME42zx9V0NjnR5nN
- Zars/a9a2hpnBBVlPLxle2k0Ttww//0frPo+wnR8G+aU3Z16D9IvAlHwSrOB4KMSHfQcLKCXw
- tPZA1Y7PpVtBkQv7lmHrlSCe1xcRYAXOza/mWm2Xjc8xgk76wXvHvzBr1oDGBEonkVw+bOSVk
- vREnB57Ovs/1UlfpUFpyy1eB8Q7JaktAGlKXASPtn19bnV5rt2G4I4ntfhaJQgAmDnlzlZpC5
- Evd5+7v4S1X/iOOX+m+Ahkho8f4fM1ugsUVvQaHKOghqQBb6nN0eAvrdXIURg56QmTfn7UwPn
- N0bxJ5G7FH8Br9CiO+tOZBKs/TdaV+aEaEj9KMO4yP5VYEF6IpBEitkf9ifUTwFwihqSEjEM8
- bFcGWSSCC9/0KLlTg8Gh5+db6LA5cg7itMKXDE5C7XsBAI9Hm3mx1p5yWo7HLHsbXHmzeASA2
- rpwe5iV2gi/30EyX8gsnnoe4xEtOTZhUuWGdwxWCA0Vb4Q0oLDG+gyWlREBg6vyV7SR9Ag7iE
- yckvS97oNG9rtf98GBy9xysVb2+4/y8JObMv6+5+lQPd284ay4=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220428111911.GA3804@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Apr 24, 2022 at 8:48 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> On Sun, Apr 24, 2022 at 5:28 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > On 4/24/22 01:52, Arnd Bergmann wrote:
-> > > On Sun, Apr 24, 2022 at 4:09 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> > > into the defconfig file, otherwise the multiplatform target defaults to
-> > > an ARMv7 instead of ARMv5 build. For an OMAP15xx as in the SX1,
-> > > you also need to enable CONFIG_ARCH_MULTI_V4T.
-> > >
-> > > This is slightly unfortunate, but I don't see any way to avoid it, and the
-> > > modified defconfig will still work fine with older kernel trees.
-> > >
-> >
-> > Yes, that works. I changed it in my configuration.
->
-> Ok, great!. I managed to boot the z2 machine with PCMCIA support
-> and it gets around the issue with my patch, correctly detecting the
-> CF card.
+On Thu, Apr 28, 2022 at 01:19:11PM +0200, Oleg Nesterov wrote:
+> > That is also the reason I couldn't do wait_task_inactive(task, 0)
+> 
+> Ah, I din't notice this patch uses wait_task_inactive(child, 0),
+> I think it should do wait_task_inactive(child, __TASK_TRACED).
 
-Hi Guenter,
-
-I have now sent out a fix that I'm happy with, and applied it to the
-pxa-multiplatform-5.18 branch of the soc tree as well as the
-combined arm/multiplatform tree.
-
-I have not merged this new version into the for-next branch
-since I would like to see if there are any other regressions first.
-
-Can you run your boot tests on the arm/multiplatform branch
-and let me know if that fixes everything you found? If that
-takes a lot of manual steps on your side, I'd just wait for the
-build bots and merge it after all there are no new compile-time
-issues.
-
-       Arnd
+Shouldn't we then switch wait_task_inactive() so have & matching instead
+of the current ==.
