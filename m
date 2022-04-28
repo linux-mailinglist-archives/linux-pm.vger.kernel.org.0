@@ -2,71 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0A4513C53
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 22:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA0B513C91
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 22:18:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351620AbiD1UIL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Apr 2022 16:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45844 "EHLO
+        id S242797AbiD1UVR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Apr 2022 16:21:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351618AbiD1UIL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 16:08:11 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D45BF94B
-        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 13:04:55 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id bu29so10615793lfb.0
-        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 13:04:54 -0700 (PDT)
+        with ESMTP id S233218AbiD1UVQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 16:21:16 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D778B1AB0
+        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 13:17:58 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id r83so4877359pgr.2
+        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 13:17:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=e5qmgQrDnLOtncZ3275YmjeZwKcNo9SSdnjrjUy1pJA=;
-        b=KvOxfE7bSF0qLmFgJXMr8pvaHcnvILpnzZmoVuGpiZZqrPs/kqyqRPpWxOQ+YqUul4
-         9IUgQhjWtFc7FP87uRkOwOLJM8Oa5iY/v9kA4uBcqtjrpCuSW6QMt7WwBGqAV3jdX3mC
-         1FQ/VCEfH6H4+EGcvAlentzQ3soQ5rMe/36gs=
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=LwywbVA49JdmEQsKXeYVbI0V1iZaTMjM4KgH+8zNNPM=;
+        b=S4f6J7ZJPUq8rKZ58lQ6Ok1JiDdGJdmLtGPVEfBAlQHshULybUxb2FhYDrtSMmBnBB
+         haTOyt9RH7MrV6Sx7A6JVG4xAXt6KmqUk5okGjEino+7iDdnUKaJ6rOoVd3AKTb3+JvM
+         lfnG8cZRuprintBqSrm5xFXiaVJZ7k0kAbGPwdByVr8C1UyEpri/9vuLfOYRoEWmsODI
+         9TVI8nMAycJ7ps1Jbwnq5I3LFO3idL4wk/81+uwEa5YRdSwRcfGYEFuAZJ+YGMCzbZxC
+         lr+OuEWYDkIPg5oVS3kOzZCc/PNddtCy7lZgY5nLgRr+v4CssaHDiw8AcC+qCh1/sQ8E
+         6Hsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=e5qmgQrDnLOtncZ3275YmjeZwKcNo9SSdnjrjUy1pJA=;
-        b=x7W+pJHiolht1OG1Mm6088lOEHgOu3coG7Wa1o4RJSyNjmzUnaNnWnJnBQaPDqZTXY
-         GGp5PUWQQfPgjCMGc8hgcazYFAV1HLxmzy8W+W+M0MaZ1EhjIbjjYRt6WzM7N2RtJiBg
-         W199h3/dcnxhN8TshSg/U0CuPYosXawc6kH9UPimJuOEA77LLuvXmVYkyyfEicAD4AV1
-         yksNwRkGUnh5QTmjD37hLhpLlY2SRA9/2ORvEa75x+ny5vzQIFueR4Y/nl+Jo18Upz+G
-         dqsygyTazN8WHmvvkqVSy5LXn6uMhTEeXb4qaDydEgFtU14Zo/uqYTTPFrlqMewevQ/q
-         ky6g==
-X-Gm-Message-State: AOAM530X75WoaFF7sqkeC9uT2vaiNK3y1N+ijlhGXqLgtwYTZyPfnwh8
-        Iy7w2XXlD+Tg6CFMonXoiTlkaQKA5yUqLtpurFk=
-X-Google-Smtp-Source: ABdhPJwY0nxDhNKqvZaihJXtvsEe+stxpvBOZCKrp4ODISoxaaR1sF4s6CzbAm6XpdP2oHWrRlQLGA==
-X-Received: by 2002:a19:dc0f:0:b0:439:702c:d83b with SMTP id t15-20020a19dc0f000000b00439702cd83bmr25290632lfg.192.1651176293069;
-        Thu, 28 Apr 2022 13:04:53 -0700 (PDT)
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
-        by smtp.gmail.com with ESMTPSA id w23-20020a197b17000000b0046d1729e7d9sm80741lfc.294.2022.04.28.13.04.52
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 13:04:52 -0700 (PDT)
-Received: by mail-lf1-f46.google.com with SMTP id t25so10536580lfg.7
-        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 13:04:52 -0700 (PDT)
-X-Received: by 2002:a05:6512:690:b0:472:4430:8f8 with SMTP id
- t16-20020a056512069000b00472443008f8mr256487lfe.531.1651176291646; Thu, 28
- Apr 2022 13:04:51 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=LwywbVA49JdmEQsKXeYVbI0V1iZaTMjM4KgH+8zNNPM=;
+        b=bN0DgRQLOhxsDWYtsO1pc9r58Cpxl0zb4uvoq27f/nnW1qrMd4wT96rVt19dIT/4cM
+         nJe2VXpEYWiADLH6o2Li9LyNVG1oQpPKufiresnVDFxxGT3GTJ5FGm7/9iifDluVeeL2
+         uTpTw0M+vUxvcDJfroao4KsShMJfOBYhrzTRhOClkt4l90cauMGW4mmELbXE8BBQnqcC
+         GrxtAPVJgrWsJIy8gKdT/lN6+bxTnstlwD5vwgZ9RfSaf5Rv60r9v63jHb81dM0S41QY
+         w+/HIZNOeGf+SlAcOHOBfyIndK6qhdbTsOgKASZZzZbkKgBtrPrBIku+N/fu3lOE2gxJ
+         d5kA==
+X-Gm-Message-State: AOAM530EXgmsStdmMQt0CnsyNxK17cSKRhzZAqpv6gaLLUreJY9cR1Ry
+        VSzCaS9igoUirmeTdUlrhLtB0++ROdYUxBzEkrU=
+X-Google-Smtp-Source: ABdhPJx2qwUbLv2y8PaDG9UqXE46RZ7piQB5KnxnWpo9uy8xzWbpKwivPWBTZR7hfux2tUBY1tTSYw==
+X-Received: by 2002:a63:80c8:0:b0:3c1:8351:303e with SMTP id j191-20020a6380c8000000b003c18351303emr3204619pgd.307.1651177077709;
+        Thu, 28 Apr 2022 13:17:57 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id g12-20020a056a001a0c00b004e1307b249csm671013pfv.69.2022.04.28.13.17.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 13:17:57 -0700 (PDT)
+Message-ID: <626af675.1c69fb81.44f18.1f26@mx.google.com>
+Date:   Thu, 28 Apr 2022 13:17:57 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <CAJZ5v0hHYRsWkRsJj+_Wa=jTS5cHasajYeh14yxEDvxu7gWWRQ@mail.gmail.com>
- <CAHk-=wit9xfwAf=z6YqkZerH28qFYeTnhr3GtBqCYBnsTsSYXw@mail.gmail.com> <CAJZ5v0jpaAwq0Ad-ZA60bA5AU8JG1Y2muYtXy-bA4LapX8_dJQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jpaAwq0Ad-ZA60bA5AU8JG1Y2muYtXy-bA4LapX8_dJQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 28 Apr 2022 13:04:35 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiABQnUatiSozcckyK+NLaUZ=PZZqgTxbN0d6wsBKzarA@mail.gmail.com>
-Message-ID: <CAHk-=wiABQnUatiSozcckyK+NLaUZ=PZZqgTxbN0d6wsBKzarA@mail.gmail.com>
-Subject: Re: [GIT PULL] ACPI fixes for v5.18-rc5
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.18-rc4-115-gd3fa656ae5f38
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing baseline: 54 runs,
+ 2 regressions (v5.18-rc4-115-gd3fa656ae5f38)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,28 +70,102 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 12:50 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> The bug was that if acpi_idle_bm_check() returned 1, it would "fall
-> back"  to the same state via safe_state_index.
+pm/testing baseline: 54 runs, 2 regressions (v5.18-rc4-115-gd3fa656ae5f38)
 
-That's actually quite hard to see in the source code.
+Regressions Summary
+-------------------
 
-Looking closer, the code calls "acpi_idle_enter_bm()" only when
-"cx->type == ACPI_STATE_C3", but that is very non-obvious in the
-context of that function (other than the comment).
+platform           | arch  | lab           | compiler | defconfig | regress=
+ions
+-------------------+-------+---------------+----------+-----------+--------=
+----
+sun50i-h6-pine-h64 | arm64 | lab-baylibre  | gcc-10   | defconfig | 1      =
+    =
 
-It might be clearer if the function was actually called "enter_c3()"
-rather than "enter_bm()". Particularly since it will continue to do
-that "c3_cpu_count" stuff even if the actual power state it goes into
-_isn't_ C3.
+sun50i-h6-pine-h64 | arm64 | lab-collabora | gcc-10   | defconfig | 1      =
+    =
 
-And the the C3 case doesn't seem to take that "demote C2 to C1" rule
-into account, so now that code will go into "safe" C2 mode even if
-ACPI_FADT_C2_MP_SUPPORTED isn't set.
 
-It's all very confusing.
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.18-rc=
+4-115-gd3fa656ae5f38/plan/baseline/
 
-But whatever. I obviously already pulled the changes.
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.18-rc4-115-gd3fa656ae5f38
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      d3fa656ae5f38da2890e3c0d538b397d9afacea2 =
 
-                Linus
+
+
+Test Regressions
+---------------- =
+
+
+
+platform           | arch  | lab           | compiler | defconfig | regress=
+ions
+-------------------+-------+---------------+----------+-----------+--------=
+----
+sun50i-h6-pine-h64 | arm64 | lab-baylibre  | gcc-10   | defconfig | 1      =
+    =
+
+
+  Details:     https://kernelci.org/test/plan/id/626aec128b3174da4bff945f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.18-rc4-115-gd3fa=
+656ae5f38/arm64/defconfig/gcc-10/lab-baylibre/baseline-sun50i-h6-pine-h64.t=
+xt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.18-rc4-115-gd3fa=
+656ae5f38/arm64/defconfig/gcc-10/lab-baylibre/baseline-sun50i-h6-pine-h64.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220422.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/626aec128b3174da4bff9=
+460
+        failing since 13 days (last pass: v5.18-rc2-13-g781d19cfe317e, firs=
+t fail: v5.18-rc2-76-g5675fd487f2b2) =
+
+ =
+
+
+
+platform           | arch  | lab           | compiler | defconfig | regress=
+ions
+-------------------+-------+---------------+----------+-----------+--------=
+----
+sun50i-h6-pine-h64 | arm64 | lab-collabora | gcc-10   | defconfig | 1      =
+    =
+
+
+  Details:     https://kernelci.org/test/plan/id/626aec0b8b3174da4bff9459
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.18-rc4-115-gd3fa=
+656ae5f38/arm64/defconfig/gcc-10/lab-collabora/baseline-sun50i-h6-pine-h64.=
+txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.18-rc4-115-gd3fa=
+656ae5f38/arm64/defconfig/gcc-10/lab-collabora/baseline-sun50i-h6-pine-h64.=
+html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20220422.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/626aec0b8b3174da4bff9=
+45a
+        failing since 13 days (last pass: v5.18-rc2-13-g781d19cfe317e, firs=
+t fail: v5.18-rc2-76-g5675fd487f2b2) =
+
+ =20
