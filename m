@@ -2,124 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FE585137DE
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 17:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9BD513864
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 17:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348757AbiD1POl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Apr 2022 11:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58256 "EHLO
+        id S1343804AbiD1PeB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 28 Apr 2022 11:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348890AbiD1POk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 11:14:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DB2E66215
-        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 08:11:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651158684;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oLKNKGr8DCgjevzFl33k7TMRU8EM/aNPYmQT5R2S5w8=;
-        b=EI0HtUaf6XEY9ZVwneUo4Akv7QwJedtZQd4rrsWc1kqr1mHgvcvL20MD3OUfqXjfZ16cMs
-        KCfQ7A7FeVqTub5BTOa1eRE08+ZCUNF+RjCH8C9Xnm2IrKvZOcxp4UJLGPRsZoH4Wb3/6R
-        8euPo/x/o1f8jmqtvLbUk0pr2pkEsw0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-529-N8lcjA7HMeetaX_6BRAbgw-1; Thu, 28 Apr 2022 11:11:18 -0400
-X-MC-Unique: N8lcjA7HMeetaX_6BRAbgw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BB1D81014A67;
-        Thu, 28 Apr 2022 15:11:17 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.151])
-        by smtp.corp.redhat.com (Postfix) with SMTP id CBFF2414A7E7;
-        Thu, 28 Apr 2022 15:11:12 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Thu, 28 Apr 2022 17:11:17 +0200 (CEST)
-Date:   Thu, 28 Apr 2022 17:11:11 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH 9/9] ptrace: Don't change __state
-Message-ID: <20220428151110.GB15485@redhat.com>
-References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
- <20220426225211.308418-9-ebiederm@xmission.com>
- <87czh2160k.fsf@email.froward.int.ebiederm.org>
+        with ESMTP id S1349217AbiD1Pdm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 11:33:42 -0400
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077F3562FD;
+        Thu, 28 Apr 2022 08:30:27 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id f38so9704059ybi.3;
+        Thu, 28 Apr 2022 08:30:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=z68eCpwlSny4KKgVzvMDlrW0IKmP+18VYo0BJNQ1LLo=;
+        b=anHMc+zORSF8M+S7y2hLVWiqKpyjBbeCk9LbRDHy7McXpU4iiGMjH2PlEzx9hOpjm4
+         tb24VZO3TjHCZ+dwyev7OtSk+Eg4A4I3SEP1xczFkxxBS2d3S2wOfW1Kn2/R/feKeL+s
+         +5F6JPiv5CbHddg/a1kUbSWDLgf+QmX1zZ8RFp7Zy7C2xKS/MmXNNbnon3+buAt40wZO
+         VlW831GKculFsNwFkc1xN+TM/ZmWdTYgJDWrRWC3Ljsdz5gJaTC1t3ZOWY8m8TO9mMrG
+         9xIQRX56At7oshPlDRY3Al6Wws4qI0X0SdHwKtB6LaBV6H0jEiXH55sKbKjTupWCn2LJ
+         fvqw==
+X-Gm-Message-State: AOAM532N0/dohbG6OiCt8lOLEgbXo+/I4hl/q/CMDD3AgCxfK6VuuMIX
+        NGgcigg5Sr3Lqql2dHQrw7Qwzg0vyV7aJUMTERnsZkhTcF8=
+X-Google-Smtp-Source: ABdhPJzPMZfx4UPXN2INNyIs2eu1P0Zn17ZqR9UnELv2FZ7paKTTdO1Ce3ipLPPTSPO5es6A/L8qJehbrQl/P/N5u04=
+X-Received: by 2002:a25:e792:0:b0:645:7ddb:b5eb with SMTP id
+ e140-20020a25e792000000b006457ddbb5ebmr31483894ybh.482.1651159826109; Thu, 28
+ Apr 2022 08:30:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87czh2160k.fsf@email.froward.int.ebiederm.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 28 Apr 2022 17:30:15 +0200
+Message-ID: <CAJZ5v0hHYRsWkRsJj+_Wa=jTS5cHasajYeh14yxEDvxu7gWWRQ@mail.gmail.com>
+Subject: [GIT PULL] ACPI fixes for v5.18-rc5
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/27, Eric W. Biederman wrote:
->
-> "Eric W. Biederman" <ebiederm@xmission.com> writes:
->
-> > diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
-> > index 3c8b34876744..1947c85aa9d9 100644
-> > --- a/include/linux/sched/signal.h
-> > +++ b/include/linux/sched/signal.h
-> > @@ -437,7 +437,8 @@ extern void signal_wake_up_state(struct task_struct *t, unsigned int state);
-> >
-> >  static inline void signal_wake_up(struct task_struct *t, bool resume)
-> >  {
-> > -	signal_wake_up_state(t, resume ? TASK_WAKEKILL : 0);
-> > +	bool wakekill = resume && !(t->jobctl & JOBCTL_DELAY_WAKEKILL);
-> > +	signal_wake_up_state(t, wakekill ? TASK_WAKEKILL : 0);
-> >  }
-> >  static inline void ptrace_signal_wake_up(struct task_struct *t, bool resume)
-> >  {
->
-> Grrr.  While looking through everything today I have realized that there
-> is a bug.
->
-> Suppose we have 3 processes: TRACER, TRACEE, KILLER.
->
-> Meanwhile TRACEE is in the middle of ptrace_stop, just after siglock has
-> been dropped.
->
-> The TRACER process has performed ptrace_attach on TRACEE and is in the
-> middle of a ptrace operation and has just set JOBCTL_DELAY_WAKEKILL.
->
-> Then comes in the KILLER process and sends the TRACEE a SIGKILL.
-> The TRACEE __state remains TASK_TRACED, as designed.
->
-> The bug appears when the TRACEE makes it to schedule().  Inside
-> schedule there is a call to signal_pending_state() which notices
-> a SIGKILL is pending and refuses to sleep.
+Hi Linus,
 
-And I think this is fine. This doesn't really differ from the case
-when the tracee was killed before it takes siglock.
+Please pull from the tag
 
-The only problem (afaics) is that, once we introduce JOBCTL_TRACED,
-ptrace_stop() can leak this flag. That is why I suggested to clear
-it along with LISTENING/DELAY_WAKEKILL before return, exactly because
-schedule() won't block if fatal_signal_pending() is true.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-5.18-rc5
 
-But may be I misunderstood you concern?
+with top-most commit 20e582e16af24b074e583f9551fad557882a3c9d
 
-Oleg.
+ Revert "ACPI: processor: idle: fix lockup regression on 32-bit ThinkPad T40"
 
+on top of commit b2d229d4ddb17db541098b83524d901257e93845
+
+ Linux 5.18-rc3
+
+to receive ACPI fixes for 5.18-rc5.
+
+These fix up the ACPI processor driver after a change made during
+the 5.16 cycle that inadvertently broke falling back to shallower
+C-states when C3 cannot be used.
+
+Specifics:
+
+ - Make the ACPI processor driver avoid falling back to C3 type of
+   C-states when C3 cannot be requested (Ville Syrjälä).
+
+ - Revert a quirk that is not necessary any more after fixing the
+   underlying issue properly (Ville Syrjälä).
+
+Thanks!
+
+
+---------------
+
+Ville Syrjälä (2):
+      ACPI: processor: idle: Avoid falling back to C3 type C-states
+      Revert "ACPI: processor: idle: fix lockup regression on 32-bit
+ThinkPad T40"
+
+---------------
+
+ drivers/acpi/processor_idle.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
