@@ -2,175 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C16513185
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 12:43:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE2C513244
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 13:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343665AbiD1KqR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Apr 2022 06:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57762 "EHLO
+        id S1345440AbiD1LUH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Apr 2022 07:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245682AbiD1KqL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 06:46:11 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207AF86E19
-        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 03:42:56 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id m20so8671380ejj.10
-        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 03:42:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=7j+DqABE5tEF/l7nDn4CCYhccura8tc3QgvKgiSg/ic=;
-        b=W+nR7RzdjRjfwSb82vOnGdvUai69HsZ4v6yC94FtZtg95MheceQN30U89f1zOeuToe
-         aPSRpZwNVeNk96CCQYrSxIJFsj1zzoFDFMHhbEYDfqZJuaV0k/TcNVT/MVuX15RkyRpt
-         oYR/5EEiFAHELJ4ChWYWv03e+0D29Hh7gxk5VHlG3LYkGroPdh0BpSTUVv4WBSgY1vEZ
-         jWdfkk9PL717gxVPrEluMcxBz61vBDsrQaRSegc7h79gWi2vrLZ3K/Cl9uchWM6ABs2f
-         fldgVnWpTozFI+sq8S7oUpCUNCDs+OgDb9dFVw3vT2LMKTn81Yh6Ja4Q+SbAGm0QLg4h
-         jfpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7j+DqABE5tEF/l7nDn4CCYhccura8tc3QgvKgiSg/ic=;
-        b=M3J/ZSIW0EPmqAx5QGZ5qAk1WjMqUTYLkCNiAORk3orMQFurs/DnsjkhYJyfBC/Lmz
-         gZi1qmXpyftqhMs9PVCQ53iPGKUG2l78O7L8KiXQ1nU1WN5ZiagT+7M1ypVh/dNI2OMo
-         5+5tKP6G/cSM3zH35+Ln7R2zNTHBfBkSh4xsrKrK92M7Rvd4YfkZa9IYNd2SMeAgCi4E
-         SE4sE4W+B7GDZkE9oxm1bSfB6ADSxNrZZLxeQGWeACf4a/3bH47RIsYz7jjkvYbybRhS
-         3b3fvgG9UWMeDO/+x52pZez2wDHUpqNWnJJ8SyYLFA+ptpv1qOGYB61cKGhjUI3M9CnW
-         glEA==
-X-Gm-Message-State: AOAM532G/meTiC4TV9NZ5K8K07gWVihqwJBfJJ/0f5pTB86GRI87a/LW
-        OONTkeN6JaZW95ovypItYVmeBA==
-X-Google-Smtp-Source: ABdhPJxhlXC/fSWqv3z31EYB8Mrtj88p1ll9+srcCmzQzRRlYBpc5l5sxvwS8r1Mhu65NCAXSYjHEA==
-X-Received: by 2002:a17:907:3da1:b0:6f3:e9d7:127 with SMTP id he33-20020a1709073da100b006f3e9d70127mr596474ejc.29.1651142574609;
-        Thu, 28 Apr 2022 03:42:54 -0700 (PDT)
-Received: from localhost.localdomain (cpc78119-cwma10-2-0-cust590.7-3.cable.virginm.net. [81.96.50.79])
-        by smtp.gmail.com with ESMTPSA id mf1-20020a1709071a4100b006f39f556011sm4982583ejc.125.2022.04.28.03.42.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 03:42:53 -0700 (PDT)
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-To:     caleb.connolly@linaro.org, Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Cc:     Amit Pundir <amit.pundir@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Subject: [PATCH v2 6/6] dt-bindings: power: supply: qcom,pmi8998-charger: add bindings for smb2 driver
-Date:   Thu, 28 Apr 2022 11:42:33 +0100
-Message-Id: <20220428104233.2980806-7-caleb.connolly@linaro.org>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220428104233.2980806-1-caleb.connolly@linaro.org>
-References: <20220428104233.2980806-1-caleb.connolly@linaro.org>
+        with ESMTP id S1345471AbiD1LUA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 07:20:00 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD9E52B12;
+        Thu, 28 Apr 2022 04:16:41 -0700 (PDT)
+X-UUID: 99dcd6c7b8c14047b1fc936b4ede6ca6-20220428
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:6ce3acf7-14bd-4058-bdb1-c51983d16a9b,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:8c8dd3c6-85ee-4ac1-ac05-bd3f1e72e732,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 99dcd6c7b8c14047b1fc936b4ede6ca6-20220428
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2020644970; Thu, 28 Apr 2022 19:16:34 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 28 Apr 2022 19:16:33 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 28 Apr 2022 19:16:32 +0800
+Message-ID: <346736a339bed576817179ded3795d61f71fa06a.camel@mediatek.com>
+Subject: Re: [PATCH V4 07/14] cpufreq: mediatek: Add .get function
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <rafael@kernel.org>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
+        <roger.lu@mediatek.com>, <hsinyi@google.com>,
+        <khilman@baylibre.com>, <angelogioacchino.delregno@collabora.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 28 Apr 2022 19:16:32 +0800
+In-Reply-To: <20220427031141.or2owu5wrh2cadfo@vireshk-i7>
+References: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
+         <20220422075239.16437-8-rex-bc.chen@mediatek.com>
+         <20220425053548.72w2jh2g6lpzgz6g@vireshk-i7>
+         <64c690e8edf493ec0a4a14e0fdaad2d8e88e6da7.camel@mediatek.com>
+         <20220425100058.4kbvmpi63ygni6k5@vireshk-i7>
+         <078b1f9b39690da98cbd3c4528ba28374a097083.camel@mediatek.com>
+         <20220427031141.or2owu5wrh2cadfo@vireshk-i7>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add devicetree bindings for the Qualcomm PMI8998/PM660 SMB2 charger
-driver.
+On Wed, 2022-04-27 at 08:41 +0530, Viresh Kumar wrote:
+> On 26-04-22, 19:13, Rex-BC Chen wrote:
+> > We have a non-upstream driver which tries to get frequency by
+> > 'cpufreq_get'.
+> 
+> This is the right thing to do there.
+> 
+> > When we use that non-upstream driver, 'cpufreq_verify_current_freq'
+> > will be further invoked by 'cpufreq_get' and it would cause voltage
+> > pulse issue as I described previously.
+> 
+> I see this will eventually resolve to __cpufreq_driver_target(),
+> which
+> should return without any frequency updates.
+> 
 
-Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
----
- .../power/supply/qcom,pmi8998-charger.yaml    | 82 +++++++++++++++++++
- 1 file changed, 82 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml
+Hello Viresh,
 
-diff --git a/Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml b/Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml
-new file mode 100644
-index 000000000000..277c47e048b6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml
-@@ -0,0 +1,82 @@
-+# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/supply/qcom,pmi8998-charger.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm PMI8998/PM660 Switch-Mode Battery Charger "2"
-+
-+maintainers:
-+  - Caleb Connolly <caleb.connolly@linaro.org>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - qcom,pmi8998-charger
-+      - qcom,pm660-charger
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 4
-+
-+  interrupt-names:
-+    items:
-+      - const: usb-plugin
-+      - const: bat-ov
-+      - const: wdog-bark
-+      - const: usbin-icl-change
-+
-+  io-channels:
-+    items:
-+      - description: USB in current in uA
-+      - description: USB in voltage in uV
-+
-+  io-channel-names:
-+    items:
-+      - const: usbin_i
-+      - const: usbin_v
-+
-+  monitored-battery:
-+    description: phandle to the simple-battery node
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-names
-+  - io-channels
-+  - io-channel-names
-+  - monitored-battery
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    pmic {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      #interrupt-cells = <4>;
-+
-+      charger@1000 {
-+        compatible = "qcom,pmi8998-charger";
-+        reg = <0x1000>;
-+
-+        interrupts = <0x2 0x12 0x2 IRQ_TYPE_EDGE_BOTH>,
-+                     <0x2 0x13 0x4 IRQ_TYPE_EDGE_BOTH>,
-+                     <0x2 0x13 0x6 IRQ_TYPE_EDGE_RISING>,
-+                     <0x2 0x16 0x1 IRQ_TYPE_EDGE_RISING>;
-+        interrupt-names = "usb-plugin", "bat-ov", "wdog-bark", "usbin-icl-change";
-+
-+        io-channels = <&pmi8998_rradc 3>,
-+                      <&pmi8998_rradc 4>;
-+        io-channel-names = "usbin_i",
-+                           "usbin_v";
-+
-+        monitored-battery = <&battery>;
-+      };
-+    };
--- 
-2.36.0
+Yes, the call stack will eventually go to __cpufreq_driver_target.
+However, we can observe the mismatch between target_freq and policy-cur 
+with a tiny difference.
+e.g.
+[ 553.065356] cpufreq: target for CPU 0: 500000 kHz, relation 0,
+requested 500000 kHz
+[ 553.066366] cpufreq: target_freq/policy->cur: 500000/499999 kHz
+
+We check the assignment of policy->cur could be either from
+cpufreq_driver->get_intermediate or from cpufreq_driver->get.
+But it is strange to have the frequency value like 499999 kHz.
+Is the result of tiny frequency difference expected from your point of
+view?
+
+> What do you mean by "voltage pulse" here? What actually happens which
+> you want to avoid.
+> 
+
+When cpufreq is fixed to lowest opp, "voltage pulse" is a quick voltage
+rising and falling phenomenon which can be observed if 'cpufreq_get' is
+invoked.
+From top of view, if 'cpufreq_get' is NOT invoked in that condition,
+the voltage pulse will no longer occur.
+That's why we add this patch for this series.
+
+> > Therefore, we apply the solution in this series.
+> 
+> I won't call it a solution but a Bug as .get() is supposed to read
+> real freq of the hardware.
+> 
+> > Recently, we found that using 'cpufreq_generic_get' directly in our
+> > non-upstream driver can do the same thing without pulse issue.
+> 
+> That would be an abuse of the cpufreq_generic_get() API. It is ONLY
+> allowed to be used while setting .get callback in the driver.
+> 
+
+Thank you for sharing the correct information.
+Is it possible to get frequency (API) a simple way, like get current
+opp frequency?
+
+BRs,
+Rex
 
