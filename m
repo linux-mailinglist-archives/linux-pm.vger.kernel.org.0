@@ -2,100 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26CA0513788
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 16:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE585137DE
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 17:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347213AbiD1PBT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Apr 2022 11:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
+        id S1348757AbiD1POl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Apr 2022 11:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243847AbiD1PBS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 11:01:18 -0400
+        with ESMTP id S1348890AbiD1POk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 11:14:40 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD0175DA29
-        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 07:58:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DB2E66215
+        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 08:11:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651157882;
+        s=mimecast20190719; t=1651158684;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=MckBjl6pEvKZdqgy2wFZthz2dfKSJ3UYla219JW17Jw=;
-        b=eEDunEcnuvBWz5w0Hj910oFaCeCUPSvCzdYMuFETO6MuPSB4hSlu+e2T3DszlCmJi7iY3x
-        PQdSiSJw+cevVQXQ6wCBJLgWH7JXK8B1afOEWnEICdEl+6jfU2l2kdVkzT7hNGfFZAlt92
-        YLuMEuk6yr3HUQaoV3eaJT9dCVujuUI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=oLKNKGr8DCgjevzFl33k7TMRU8EM/aNPYmQT5R2S5w8=;
+        b=EI0HtUaf6XEY9ZVwneUo4Akv7QwJedtZQd4rrsWc1kqr1mHgvcvL20MD3OUfqXjfZ16cMs
+        KCfQ7A7FeVqTub5BTOa1eRE08+ZCUNF+RjCH8C9Xnm2IrKvZOcxp4UJLGPRsZoH4Wb3/6R
+        8euPo/x/o1f8jmqtvLbUk0pr2pkEsw0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-157-LcUp97UwMqOoyRBIonnmcQ-1; Thu, 28 Apr 2022 10:57:58 -0400
-X-MC-Unique: LcUp97UwMqOoyRBIonnmcQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+ us-mta-529-N8lcjA7HMeetaX_6BRAbgw-1; Thu, 28 Apr 2022 11:11:18 -0400
+X-MC-Unique: N8lcjA7HMeetaX_6BRAbgw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8E7103811F24;
-        Thu, 28 Apr 2022 14:57:57 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BB1D81014A67;
+        Thu, 28 Apr 2022 15:11:17 +0000 (UTC)
 Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.151])
-        by smtp.corp.redhat.com (Postfix) with SMTP id A59CD407E1C0;
-        Thu, 28 Apr 2022 14:57:52 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with SMTP id CBFF2414A7E7;
+        Thu, 28 Apr 2022 15:11:12 +0000 (UTC)
 Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Thu, 28 Apr 2022 16:57:56 +0200 (CEST)
-Date:   Thu, 28 Apr 2022 16:57:50 +0200
+        oleg@redhat.com; Thu, 28 Apr 2022 17:11:17 +0200 (CEST)
+Date:   Thu, 28 Apr 2022 17:11:11 +0200
 From:   Oleg Nesterov <oleg@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
         vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
         rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
         Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Richard Weinberger <richard@nod.at>,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
         Anton Ivanov <anton.ivanov@cambridgegreys.com>,
         Johannes Berg <johannes@sipsolutions.net>,
         linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
         Max Filippov <jcmvbkbc@gmail.com>,
         inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
         Jann Horn <jannh@google.com>
-Subject: Re: [PATCH 7/9] ptrace: Simplify the wait_task_inactive call in
- ptrace_check_attach
-Message-ID: <20220428145750.GA15485@redhat.com>
+Subject: Re: [PATCH 9/9] ptrace: Don't change __state
+Message-ID: <20220428151110.GB15485@redhat.com>
 References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
- <20220426225211.308418-7-ebiederm@xmission.com>
- <20220427151455.GE17421@redhat.com>
- <Ympvf1Pam1ckX+EA@hirez.programming.kicks-ass.net>
- <20220428111911.GA3804@redhat.com>
- <YmqckaB+xB6azP1d@hirez.programming.kicks-ass.net>
+ <20220426225211.308418-9-ebiederm@xmission.com>
+ <87czh2160k.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YmqckaB+xB6azP1d@hirez.programming.kicks-ass.net>
+In-Reply-To: <87czh2160k.fsf@email.froward.int.ebiederm.org>
 User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/28, Peter Zijlstra wrote:
+On 04/27, Eric W. Biederman wrote:
 >
-> On Thu, Apr 28, 2022 at 01:19:11PM +0200, Oleg Nesterov wrote:
-> > > That is also the reason I couldn't do wait_task_inactive(task, 0)
+> "Eric W. Biederman" <ebiederm@xmission.com> writes:
+>
+> > diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
+> > index 3c8b34876744..1947c85aa9d9 100644
+> > --- a/include/linux/sched/signal.h
+> > +++ b/include/linux/sched/signal.h
+> > @@ -437,7 +437,8 @@ extern void signal_wake_up_state(struct task_struct *t, unsigned int state);
 > >
-> > Ah, I din't notice this patch uses wait_task_inactive(child, 0),
-> > I think it should do wait_task_inactive(child, __TASK_TRACED).
+> >  static inline void signal_wake_up(struct task_struct *t, bool resume)
+> >  {
+> > -	signal_wake_up_state(t, resume ? TASK_WAKEKILL : 0);
+> > +	bool wakekill = resume && !(t->jobctl & JOBCTL_DELAY_WAKEKILL);
+> > +	signal_wake_up_state(t, wakekill ? TASK_WAKEKILL : 0);
+> >  }
+> >  static inline void ptrace_signal_wake_up(struct task_struct *t, bool resume)
+> >  {
 >
-> Shouldn't we then switch wait_task_inactive() so have & matching instead
-> of the current ==.
+> Grrr.  While looking through everything today I have realized that there
+> is a bug.
+>
+> Suppose we have 3 processes: TRACER, TRACEE, KILLER.
+>
+> Meanwhile TRACEE is in the middle of ptrace_stop, just after siglock has
+> been dropped.
+>
+> The TRACER process has performed ptrace_attach on TRACEE and is in the
+> middle of a ptrace operation and has just set JOBCTL_DELAY_WAKEKILL.
+>
+> Then comes in the KILLER process and sends the TRACEE a SIGKILL.
+> The TRACEE __state remains TASK_TRACED, as designed.
+>
+> The bug appears when the TRACEE makes it to schedule().  Inside
+> schedule there is a call to signal_pending_state() which notices
+> a SIGKILL is pending and refuses to sleep.
 
-Sorry, I don't understand the context...
+And I think this is fine. This doesn't really differ from the case
+when the tracee was killed before it takes siglock.
 
-As long as ptrace_freeze_traced() sets __state == __TASK_TRACED (as it
-currently does) wait_task_inactive(__TASK_TRACED) is what we need ?
+The only problem (afaics) is that, once we introduce JOBCTL_TRACED,
+ptrace_stop() can leak this flag. That is why I suggested to clear
+it along with LISTENING/DELAY_WAKEKILL before return, exactly because
+schedule() won't block if fatal_signal_pending() is true.
 
-After we change it to use JOBCTL_DELAY_WAKEKILL and not abuse __state,
-ptrace_attach() should use wait_task_inactive(TASK_TRACED), but this
-depends on what exactly we are going to do...
+But may be I misunderstood you concern?
 
 Oleg.
 
