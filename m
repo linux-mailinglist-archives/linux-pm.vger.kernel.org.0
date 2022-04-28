@@ -2,182 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AA8B512DFA
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 10:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0117512EDE
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 10:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343871AbiD1IRl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Apr 2022 04:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34802 "EHLO
+        id S230157AbiD1Itc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Apr 2022 04:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232726AbiD1IRi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 04:17:38 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4BCF0771CD;
-        Thu, 28 Apr 2022 01:14:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DB9C31474;
-        Thu, 28 Apr 2022 01:14:23 -0700 (PDT)
-Received: from [10.57.12.231] (unknown [10.57.12.231])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 801DE3F774;
-        Thu, 28 Apr 2022 01:14:12 -0700 (PDT)
-Message-ID: <7956ab00-66b6-bd89-dcc0-f10cf2741e4d@arm.com>
-Date:   Thu, 28 Apr 2022 09:14:11 +0100
+        with ESMTP id S1344804AbiD1Is6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 04:48:58 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB91DEEA
+        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 01:41:49 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id p6so3705620pjm.1
+        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 01:41:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wIdqzQenp8zuRFBiUnNUkRO/mr/GSoN96MpP4RdC2Ks=;
+        b=xsSu5UkuQp97dr0n35uBtIUmJEnPrOq+7/Ht8m1e0fS41D6us0m0UdxZsuYoBM+4L/
+         qyYzrP9GeLa+6aX7dVwBoEiHpKMPqehEugWifRgV5H1Xq8/A/v21RTNfffson+PMEqdH
+         ejG15f5Yzg6nvPTTMcwiIaUHytZtm5yY+/LtxbPzw0uM76D3tVjrBOQScji6XW3+kpTL
+         vjfvAzqMjKj8Fa/q89vqNDEUWwEWUyLQUvoZATzyJi5sP5DWq6qEWzguM9rw0/74T0TB
+         iH8uoemrGokyoSu5V20+EEEyDMp9zy9aL9wwYjwcmevwmXTy6GdrMwzr6i10GIaKLoRl
+         RYgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wIdqzQenp8zuRFBiUnNUkRO/mr/GSoN96MpP4RdC2Ks=;
+        b=lOpKfOfqNdGjdFIuAN+zjn5i2jkPrRMQ/TImSXPtPV/oHRLXavsweRbkZS4mC+xDXK
+         sa9nhi9RdcDLNQFy9qZRqCoBjl1/T0T1/gD8B3HN75DbfRXgU7Xj1DvENPRgp2SHme5/
+         Bt/1GKEEHP02ta+xlWkf4EgdBnjuOiN3efJUkKBBzXrfk2kLVhQKWPUzewDu13Jo2RGn
+         Yi27GAqkG4JoGyxQPLW0vfZ0s6qWJrkQMcJMBJvAoFiaYu6dnNmFujD4XSR78+EDxqlN
+         EMyZPdHJSq5XKEkdONaoAvj9cGqbU8/xa41RSxoMFKD2Kc6ASc9c1gJxy+YBUwYjDjGs
+         AHEQ==
+X-Gm-Message-State: AOAM533gNYeTCgoFgZly4xwZ9YEvvNSeS8SZxzlWqYLqvkLQiadnles8
+        HJAJRXxAgwMvQEkuQkJ5697q6A==
+X-Google-Smtp-Source: ABdhPJxaBqG4DFsYcLCWvno3bHaamg3EwGl6hR804mfzJo/rqlAlnFOKP86OTA2RJ3iySYw9TMbjvw==
+X-Received: by 2002:a17:90b:314a:b0:1d9:5ccf:baab with SMTP id ip10-20020a17090b314a00b001d95ccfbaabmr25208550pjb.110.1651135309119;
+        Thu, 28 Apr 2022 01:41:49 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s ([134.195.101.46])
+        by smtp.gmail.com with ESMTPSA id d7-20020a62f807000000b0050d32c878f4sm15371198pfh.114.2022.04.28.01.41.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 01:41:48 -0700 (PDT)
+Date:   Thu, 28 Apr 2022 16:41:43 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Georgi Djakov <djakov@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] interconnect: qcom: msm8939: Use icc_sync_state
+Message-ID: <20220428084143.GB583115@leoy-ThinkPad-X240s>
+References: <20220416012634.479617-1-leo.yan@linaro.org>
+ <05a7c1cc-c8f4-9303-2498-ba8709c72b4b@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [PATCH 20/30] panic: Add the panic informational notifier list
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
-        kexec@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mike Leach <mike.leach@linaro.org>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-21-gpiccoli@igalia.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20220427224924.592546-21-gpiccoli@igalia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <05a7c1cc-c8f4-9303-2498-ba8709c72b4b@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27/04/2022 23:49, Guilherme G. Piccoli wrote:
-> The goal of this new panic notifier is to allow its users to
-> register callbacks to run earlier in the panic path than they
-> currently do. This aims at informational mechanisms, like dumping
-> kernel offsets and showing device error data (in case it's simple
-> registers reading, for example) as well as mechanisms to disable
-> log flooding (like hung_task detector / RCU warnings) and the
-> tracing dump_on_oops (when enabled).
+On Thu, Apr 28, 2022 at 10:19:55AM +0300, Georgi Djakov wrote:
+> On 16.04.22 4:26, Leo Yan wrote:
+> > It's fashion to use the icc_sync_state callback to notify the framework
+> > when all consumers are probed, so that the bandwidth request doesn't
+> > need to stay on maximum value.
+> > 
+> > Do the same thing for msm8939 driver.
 > 
-> Any (non-invasive) information that should be provided before
-> kmsg_dump() as well as log flooding preventing code should fit
-> here, as long it offers relatively low risk for kdump.
-> 
-> For now, the patch is almost a no-op, although it changes a bit
-> the ordering in which some panic notifiers are executed - specially
-> affected by this are the notifiers responsible for disabling the
-> hung_task detector / RCU warnings, which now run first. In a
-> subsequent patch, the panic path will be refactored, then the
-> panic informational notifiers will effectively run earlier,
-> before ksmg_dump() (and usually before kdump as well).
-> 
-> We also defer documenting it all properly in the subsequent
-> refactor patch. Finally, while at it, we removed some useless
-> header inclusions too.
-> 
-> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: Frederic Weisbecker <frederic@kernel.org>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Hari Bathini <hbathini@linux.ibm.com>
-> Cc: Joel Fernandes <joel@joelfernandes.org>
-> Cc: Jonathan Hunter <jonathanh@nvidia.com>
-> Cc: Josh Triplett <josh@joshtriplett.org>
-> Cc: Lai Jiangshan <jiangshanlai@gmail.com>
-> Cc: Leo Yan <leo.yan@linaro.org>
-> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Mike Leach <mike.leach@linaro.org>
-> Cc: Mikko Perttunen <mperttunen@nvidia.com>
-> Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-> Cc: Nicholas Piggin <npiggin@gmail.com>
-> Cc: Paul Mackerras <paulus@samba.org>
-> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-> ---
->   arch/arm64/kernel/setup.c                         | 2 +-
->   arch/mips/kernel/relocate.c                       | 2 +-
->   arch/powerpc/kernel/setup-common.c                | 2 +-
->   arch/x86/kernel/setup.c                           | 2 +-
->   drivers/bus/brcmstb_gisb.c                        | 2 +-
->   drivers/hwtracing/coresight/coresight-cpu-debug.c | 4 ++--
->   drivers/soc/tegra/ari-tegra186.c                  | 3 ++-
->   include/linux/panic_notifier.h                    | 1 +
->   kernel/hung_task.c                                | 3 ++-
->   kernel/panic.c                                    | 4 ++++
->   kernel/rcu/tree.c                                 | 1 -
->   kernel/rcu/tree_stall.h                           | 3 ++-
->   kernel/trace/trace.c                              | 2 +-
->   13 files changed, 19 insertions(+), 12 deletions(-)
-> 
+> I assume that you tested this with some out of tree DT? Is it public?
 
-...
+Yes, Bryan is upstreaming for DT binding patch, see:
+https://lore.kernel.org/all/20220419010903.3109514-3-bryan.odonoghue@linaro.org/
 
-> diff --git a/drivers/hwtracing/coresight/coresight-cpu-debug.c b/drivers/hwtracing/coresight/coresight-cpu-debug.c
-> index 1874df7c6a73..7b1012454525 100644
-> --- a/drivers/hwtracing/coresight/coresight-cpu-debug.c
-> +++ b/drivers/hwtracing/coresight/coresight-cpu-debug.c
-> @@ -535,7 +535,7 @@ static int debug_func_init(void)
->   			    &debug_func_knob_fops);
->   
->   	/* Register function to be called for panic */
-> -	ret = atomic_notifier_chain_register(&panic_notifier_list,
-> +	ret = atomic_notifier_chain_register(&panic_info_list,
->   					     &debug_notifier);
->   	if (ret) {
->   		pr_err("%s: unable to register notifier: %d\n",
-> @@ -552,7 +552,7 @@ static int debug_func_init(void)
->   
->   static void debug_func_exit(void)
->   {
-> -	atomic_notifier_chain_unregister(&panic_notifier_list,
-> +	atomic_notifier_chain_unregister(&panic_info_list,
->   					 &debug_notifier);
->   	debugfs_remove_recursive(debug_debugfs_dir);
->   }
+> If the consumers are not described as such in DT and/or the support
+> in the client drivers is missing, paths might get disabled.
 
-Acked-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+Indeed, when tested the mainline kernel on msm8939 (with several
+offline patches for enabling msm8939), I observed that GPU and display
+drivers are not enabled yet, so some interconnect paths are failed.
+In this case, the interconnect clock stays on maximum frequency.
 
+But I think this doesn't impact this patch; if without this patch,
+icc_sync_state() will never be called and the global variable
+'synced_state' is always false.
+
+In other words, based on this patch and after initiailize all client
+drivers, the clients' bandwdith request will be respected.
+
+Thanks,
+Leo
+
+> > Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> > ---
+> >   drivers/interconnect/qcom/msm8939.c | 1 +
+> >   1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/interconnect/qcom/msm8939.c b/drivers/interconnect/qcom/msm8939.c
+> > index f9c2d7d3100d..ca5f611d33b0 100644
+> > --- a/drivers/interconnect/qcom/msm8939.c
+> > +++ b/drivers/interconnect/qcom/msm8939.c
+> > @@ -1423,6 +1423,7 @@ static struct platform_driver msm8939_noc_driver = {
+> >   	.driver = {
+> >   		.name = "qnoc-msm8939",
+> >   		.of_match_table = msm8939_noc_of_match,
+> > +		.sync_state = icc_sync_state,
+> >   	},
+> >   };
+> >   module_platform_driver(msm8939_noc_driver);
+> 
