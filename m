@@ -2,124 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0117512EDE
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 10:46:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E03512F02
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 10:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbiD1Itc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Apr 2022 04:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
+        id S235742AbiD1IxF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Apr 2022 04:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344804AbiD1Is6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 04:48:58 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB91DEEA
-        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 01:41:49 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id p6so3705620pjm.1
-        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 01:41:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wIdqzQenp8zuRFBiUnNUkRO/mr/GSoN96MpP4RdC2Ks=;
-        b=xsSu5UkuQp97dr0n35uBtIUmJEnPrOq+7/Ht8m1e0fS41D6us0m0UdxZsuYoBM+4L/
-         qyYzrP9GeLa+6aX7dVwBoEiHpKMPqehEugWifRgV5H1Xq8/A/v21RTNfffson+PMEqdH
-         ejG15f5Yzg6nvPTTMcwiIaUHytZtm5yY+/LtxbPzw0uM76D3tVjrBOQScji6XW3+kpTL
-         vjfvAzqMjKj8Fa/q89vqNDEUWwEWUyLQUvoZATzyJi5sP5DWq6qEWzguM9rw0/74T0TB
-         iH8uoemrGokyoSu5V20+EEEyDMp9zy9aL9wwYjwcmevwmXTy6GdrMwzr6i10GIaKLoRl
-         RYgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wIdqzQenp8zuRFBiUnNUkRO/mr/GSoN96MpP4RdC2Ks=;
-        b=lOpKfOfqNdGjdFIuAN+zjn5i2jkPrRMQ/TImSXPtPV/oHRLXavsweRbkZS4mC+xDXK
-         sa9nhi9RdcDLNQFy9qZRqCoBjl1/T0T1/gD8B3HN75DbfRXgU7Xj1DvENPRgp2SHme5/
-         Bt/1GKEEHP02ta+xlWkf4EgdBnjuOiN3efJUkKBBzXrfk2kLVhQKWPUzewDu13Jo2RGn
-         Yi27GAqkG4JoGyxQPLW0vfZ0s6qWJrkQMcJMBJvAoFiaYu6dnNmFujD4XSR78+EDxqlN
-         EMyZPdHJSq5XKEkdONaoAvj9cGqbU8/xa41RSxoMFKD2Kc6ASc9c1gJxy+YBUwYjDjGs
-         AHEQ==
-X-Gm-Message-State: AOAM533gNYeTCgoFgZly4xwZ9YEvvNSeS8SZxzlWqYLqvkLQiadnles8
-        HJAJRXxAgwMvQEkuQkJ5697q6A==
-X-Google-Smtp-Source: ABdhPJxaBqG4DFsYcLCWvno3bHaamg3EwGl6hR804mfzJo/rqlAlnFOKP86OTA2RJ3iySYw9TMbjvw==
-X-Received: by 2002:a17:90b:314a:b0:1d9:5ccf:baab with SMTP id ip10-20020a17090b314a00b001d95ccfbaabmr25208550pjb.110.1651135309119;
-        Thu, 28 Apr 2022 01:41:49 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s ([134.195.101.46])
-        by smtp.gmail.com with ESMTPSA id d7-20020a62f807000000b0050d32c878f4sm15371198pfh.114.2022.04.28.01.41.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Apr 2022 01:41:48 -0700 (PDT)
-Date:   Thu, 28 Apr 2022 16:41:43 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Georgi Djakov <djakov@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] interconnect: qcom: msm8939: Use icc_sync_state
-Message-ID: <20220428084143.GB583115@leoy-ThinkPad-X240s>
-References: <20220416012634.479617-1-leo.yan@linaro.org>
- <05a7c1cc-c8f4-9303-2498-ba8709c72b4b@kernel.org>
+        with ESMTP id S1344298AbiD1Iw6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 04:52:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB1FDF06
+        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 01:49:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F565B82C32
+        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 08:49:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D2996C385B8
+        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 08:49:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651135780;
+        bh=v7RJc2SB4Ep7joYv3Ebg/xA1k222+xKIlbIBHmpr2fY=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=D7Ssnm+/IXdRQg1wa2xU8ztzIjA1IpW5RS3z5KkJimqPUkgsCS2U5w6J/J5TY82dI
+         6Z5zjIRLPRUuEFFk0P4vwQACB6QlS2Yxrvucnollgz08xrqbpUlzkon/U03hRNHHay
+         urN/RA3w1NzXeIgd2n8fBTSboaH+CMMJdGaY50oIt/gzMn6H8mmRVJ2cHax9/RYSQ3
+         /ouGDhfM4ZEB6WUtLTYg/J7Bvoo7V39c/nexPtn83BqECwb2qOsNAk0196HMKNdoE9
+         etrHGtaMlUFac28ICVH2dN550L/kQX6wtLTmkDsaLv7skL4hA8oldu+B8nsoq0S52K
+         RyHJrdXifWGCQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id B8CF0CAC6E2; Thu, 28 Apr 2022 08:49:40 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 215729] amd-pstate driver has a much higher idle power
+ consumption for a desktop Zen 3 CPU
+Date:   Thu, 28 Apr 2022 08:49:40 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: sujinzhou2008@126.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-215729-137361-dkqvhBHJQe@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215729-137361@https.bugzilla.kernel.org/>
+References: <bug-215729-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <05a7c1cc-c8f4-9303-2498-ba8709c72b4b@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 10:19:55AM +0300, Georgi Djakov wrote:
-> On 16.04.22 4:26, Leo Yan wrote:
-> > It's fashion to use the icc_sync_state callback to notify the framework
-> > when all consumers are probed, so that the bandwidth request doesn't
-> > need to stay on maximum value.
-> > 
-> > Do the same thing for msm8939 driver.
-> 
-> I assume that you tested this with some out of tree DT? Is it public?
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215729
 
-Yes, Bryan is upstreaming for DT binding patch, see:
-https://lore.kernel.org/all/20220419010903.3109514-3-bryan.odonoghue@linaro.org/
+Joe (sujinzhou2008@126.com) changed:
 
-> If the consumers are not described as such in DT and/or the support
-> in the client drivers is missing, paths might get disabled.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |sujinzhou2008@126.com
 
-Indeed, when tested the mainline kernel on msm8939 (with several
-offline patches for enabling msm8939), I observed that GPU and display
-drivers are not enabled yet, so some interconnect paths are failed.
-In this case, the interconnect clock stays on maximum frequency.
+--- Comment #8 from Joe (sujinzhou2008@126.com) ---
+Hello,
 
-But I think this doesn't impact this patch; if without this patch,
-icc_sync_state() will never be called and the global variable
-'synced_state' is always false.
+I reproduce this issue on my local.=20=20
 
-In other words, based on this patch and after initiailize all client
-drivers, the clients' bandwdith request will be respected.
+Your device (CPU family:  25, Model:  33) should be shared memory solution =
+with
+AMD P-state driver. Updating CPPC request with shared memory will need more
+energy  than writing MSR register directly. We are checking this issue now.
 
-Thanks,
-Leo
+For ondemand governor, could you please try to reduce the sampling_rate and
+then check to energy consumption again? Thanks a lot!
 
-> > Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> > ---
-> >   drivers/interconnect/qcom/msm8939.c | 1 +
-> >   1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/interconnect/qcom/msm8939.c b/drivers/interconnect/qcom/msm8939.c
-> > index f9c2d7d3100d..ca5f611d33b0 100644
-> > --- a/drivers/interconnect/qcom/msm8939.c
-> > +++ b/drivers/interconnect/qcom/msm8939.c
-> > @@ -1423,6 +1423,7 @@ static struct platform_driver msm8939_noc_driver = {
-> >   	.driver = {
-> >   		.name = "qnoc-msm8939",
-> >   		.of_match_table = msm8939_noc_of_match,
-> > +		.sync_state = icc_sync_state,
-> >   	},
-> >   };
-> >   module_platform_driver(msm8939_noc_driver);
-> 
+Here is the command=20
+
+cd /sys/devices/system/cpu/cpufreq/ondemand
+echo 50000 > sampling_rate
+
+Thanks
+Joe
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
