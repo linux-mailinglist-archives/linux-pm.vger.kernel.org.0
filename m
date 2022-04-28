@@ -2,88 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD58513110
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 12:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA16A513138
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 12:23:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240116AbiD1KR2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Apr 2022 06:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35476 "EHLO
+        id S233947AbiD1K0a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Apr 2022 06:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238568AbiD1KQu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 06:16:50 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067A533898;
-        Thu, 28 Apr 2022 03:08:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0hAD2TvAOIWLHlJzzIV1W5Ntb/AneBoQ7gA0EhNRMB4=; b=Yd4l882RZ59I/9Pp2tdng5bTdm
-        9V8Vgio3Lp0j1G7ughnktXJFE91D5GHMBUq6ALxMgdRL9ZJmU4Abwp3tvGFGKaXgOatfXZKb/oQdD
-        x3wiZ1rDf7PZBL6Onj7DkhqOHeCTYN1lX5P7AbwfTBySWC/8LrYFqNnvMZFncuxJ5yoBMOlgCbjAK
-        EJ4XAQ0xF/4hvOAU9OZmiEMqt1YwLvYB9s1eE3AsuCNoyVBnie16J9czUCUpgrtf/Rz049giD49BM
-        DrqbF6I+/Y9rUJpxscic27P0yHmEC+DqiQsP5qWYw2oSdEPE3HXIAgndMJf9YOeVL6tx+sk3dHTKG
-        MWc/s6qg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nk13j-00BP3P-DL; Thu, 28 Apr 2022 10:07:39 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D59BB3001AD;
-        Thu, 28 Apr 2022 12:07:36 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BB55D2029F872; Thu, 28 Apr 2022 12:07:36 +0200 (CEST)
-Date:   Thu, 28 Apr 2022 12:07:36 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, oleg@redhat.com,
-        mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
-        tj@kernel.org, linux-pm@vger.kernel.org,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH 0/9] ptrace: cleaning up ptrace_stop
-Message-ID: <YmpnaNIzudsk7JLI@hirez.programming.kicks-ass.net>
-References: <20220421150248.667412396@infradead.org>
- <20220421150654.817117821@infradead.org>
- <87czhap9dy.fsf@email.froward.int.ebiederm.org>
- <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+        with ESMTP id S233354AbiD1K02 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 06:26:28 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BDC20BDB
+        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 03:23:12 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id l18so8594980ejc.7
+        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 03:23:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=Q0r841q8Lmj207L3/SuGuqZgNI0g9j5NTczRIpmDaEw=;
+        b=R9xSeKE68VTgVWlDJZSjcG7dyqcla7RWBQrLbvg1sZfaZcgtu0Ud7RtIlTswsdpAos
+         zvu24qu3TOTRdih5EtF3rjKxIznFoFsMaYpvhAysCRx9ybBJiKT6g7sUQktOhZdsVf5L
+         uqpjtxmawQQf9f/1uzw+1JTbt5LGpiTfF/0XH+ySXUXRt+Z/H8PfwpCI9p5fEh0fUMFb
+         L+d67xGvggiCg++e0CfmLbqhSdsxm8gHh1yl7FdN5cr+zZxpEWz26CMXHXQFHAjiypOW
+         0zDScN5vMElHsiqcYn6ituCJS8Pn2S0/mV1phN4OaXLw+5P+iHpd12bOcruQz1sj2nZx
+         3/+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Q0r841q8Lmj207L3/SuGuqZgNI0g9j5NTczRIpmDaEw=;
+        b=zoB9nhOXLFGeSPSKlbHWL3SSDqG7ImtJLvpOcr90T0kdLC3jSH4ggAPhoNV6JRFjxd
+         zvpq0v/XXlVXf/Ei/ulZ2BrK/ChBJcQJscC6o68PrDeWrIzmRUYPq5LZkzDukYiRbmZP
+         FuCHeA93qfj+U7xhsD4Yen363jBB8H4Xzsq9nHjtEQ7TKH8ltsSuDo7uHc/kTEEjRkFb
+         X4znF4MgOEtEeNRm/zazoN6h/zp+Cqgtu3X/8lXMWX/5VirkgJhT+bGb2CiX+g4GL03k
+         gu5T6tCng+WdBOvtK8Z+zb8qHv1Ug9zlrNMdfM1rcQCC5qJPc1lN7gjUla8gPl89jYio
+         e2cg==
+X-Gm-Message-State: AOAM531OLnY2cuRWDylBM74OZnksYi7UgCX1T5OCa8pXBVF5kxjwsjkm
+        8mLqbvNysn6xqHq0ILBxVAwWqqeF+V1Y6g==
+X-Google-Smtp-Source: ABdhPJz/LCaM1IEwSnXb6OQ38sLpgLyZHrqkqQfaA3KS4ii7yW32/U8imRnZA6jMMsEd59dFqG45oA==
+X-Received: by 2002:a17:906:43c2:b0:6e8:47dd:47ed with SMTP id j2-20020a17090643c200b006e847dd47edmr29964740ejn.600.1651141391346;
+        Thu, 28 Apr 2022 03:23:11 -0700 (PDT)
+Received: from [192.168.0.161] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id le4-20020a170906ae0400b006f38734cadbsm6355463ejb.136.2022.04.28.03.23.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Apr 2022 03:23:10 -0700 (PDT)
+Message-ID: <e77d9ff9-67a5-e0f3-8ad8-848342ed4dfb@linaro.org>
+Date:   Thu, 28 Apr 2022 12:23:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] interconnect: qcom: use icc_sync_state
+Content-Language: en-US
+To:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220427145616.523557-1-krzysztof.kozlowski@linaro.org>
+ <4769c796-6edd-c23a-ee2a-ce54495548f7@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <4769c796-6edd-c23a-ee2a-ce54495548f7@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Apr 26, 2022 at 05:50:21PM -0500, Eric W. Biederman wrote:
-> ....  Peter Zijlstra has
-> been rewriting the classic freezer and in earlier parts of this
-> discussion so I presume it is also a problem for PREEMPT_RT.
+On 27/04/2022 17:34, Georgi Djakov wrote:
+> On 27.04.22 17:56, Krzysztof Kozlowski wrote:
+>> Use icc_sync_state for interconnect providers, so that the bandwidth
+>> request doesn't need to stay on maximum value.
+> 
+> Did you test this? In general, we should not enable this on boards that
+> do not have full interconnect scaling support in consumer drivers yet.
+> Some of the interconnects could be enabled by default by the bootloader
+> and usually later during boot the consumer drivers request the bandwidth
+> that they need. But if the requests are missing, the interconnects
+> without bandwidth users will be disabled when we reach sync state. So
+> this may (or not) cause issues...
 
-Ah, the freezer thing is in fact a sched/arm64 issue, the common issue
-between these two issues is ptrace though.
+I understand, thanks for bringing this up. It does not look like an
+issue of interconnect provider but instead consumers and DTS. It's not
+the job of provider driver to know all possible uses and DTS files. The
+driver should expose itself and if platform is not ready, should not use
+it by not enabling the interconnect. It's a job for DTS, not for the
+interconnect provider.
 
-Specifically, on recent arm64 chips only a subset of CPUs can execute
-arm32 code and 32bit processes are restricted to that subset. If by some
-mishap you try and execute a 32bit task on a non-capable CPU it gets
-terminated without prejudice.
+Imagine some out of tree DTS which cannot use interconnects because we
+assume that all users of that provider are missing bandwidth requests.
+No, instead provider should allow anyone to use it.
 
-Now, the current freezer has this problem that tasks can spuriously thaw
-too soon (where too soon is before SMP is restored) which leads to these
-32bit tasks being killed dead.
+I understand my change might cause unexpected issues, but it is still
+technically correct, just maybe should be followed with disabling in DTS
+the providers without proper consumers?
 
-That, and it was a good excuse to fix up the current freezer :-)
+Best regards,
+Krzysztof
