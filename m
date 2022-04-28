@@ -2,193 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA8A513694
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 16:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26CA0513788
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 16:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232896AbiD1OQo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Apr 2022 10:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39876 "EHLO
+        id S1347213AbiD1PBT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Apr 2022 11:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348141AbiD1OQm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 10:16:42 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85EEB53CD
-        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 07:13:24 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id r11so2061401ila.1
-        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 07:13:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=bCT2JlxzOcDaE6ycYVbjB0p6hzfQxFS5OmPVl0XHT4A=;
-        b=ByPVeKDwQRcuSB47O0Zefv/dFt5S0aRWMNs2oJF7maE4wXnsormuysnBE3KE+1D9p9
-         PB3FB3BjkOR/97x+74MBqA5RA9WqHK53ukE6KnmiwNvHyxwXKz6iLxoZSM4bciItAhHz
-         gddQYhhdQpsolBOdwDYZPGvNMFMyqb4ql/QD0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=bCT2JlxzOcDaE6ycYVbjB0p6hzfQxFS5OmPVl0XHT4A=;
-        b=yMZaRpktPI6jbUgtzwsnlUpIKMhbEmhzALDXx1R52sU7wQdlA7YrofdkoYcMa/NNEy
-         oyv5YPx7ZSMW0uRGVxqPRck5E5RvyW2IKH5c+ahdCX20ctb/j5E4/0TM296Us4Vmmi6b
-         gmeFgO/Op4IMHlMP9uLcVRlFYa7pmxHLlNs5TjoWOEWDD1Cp1HVBQms2639EIt+Zo8RP
-         Ws0IC7MkEhn4dK02PMGwhKg06Nj2c8EgTNHMFcvpK+BGvWAACOgZVsAyVFND1AtUCUUX
-         /EmsrVs9fE4Id1vCLBh3C32n2PwaZhPxOZecBcDsMTkG5sNgrQYoHods64MBvZEnRDMd
-         B/5w==
-X-Gm-Message-State: AOAM532Bphaa0yfvpjgOBb9cyL0BJMnaYlSRrCRforrh1QFKR31x3efx
-        934IiurnNeB+gRBtUM1M2FwmTw==
-X-Google-Smtp-Source: ABdhPJw448TngRonNTsTASYhGkruvfda4Cqi/x7py0vOs1UkbxiFSjNKZ9c5oG5pi/4oeINikW5dJA==
-X-Received: by 2002:a92:cac3:0:b0:2c9:a265:4cab with SMTP id m3-20020a92cac3000000b002c9a2654cabmr13504351ilq.241.1651155203895;
-        Thu, 28 Apr 2022 07:13:23 -0700 (PDT)
-Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id y21-20020a6bc415000000b00648da092c8esm4431ioa.14.2022.04.28.07.13.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Apr 2022 07:13:23 -0700 (PDT)
-Message-ID: <4cae140c-982a-6b9f-661c-4e0fdfa3297b@ieee.org>
-Date:   Thu, 28 Apr 2022 09:13:19 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 21/30] panic: Introduce the panic pre-reboot notifier list
-Content-Language: en-US
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
-        kexec@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Alex Elder <elder@kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
+        with ESMTP id S243847AbiD1PBS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 11:01:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD0175DA29
+        for <linux-pm@vger.kernel.org>; Thu, 28 Apr 2022 07:58:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651157882;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MckBjl6pEvKZdqgy2wFZthz2dfKSJ3UYla219JW17Jw=;
+        b=eEDunEcnuvBWz5w0Hj910oFaCeCUPSvCzdYMuFETO6MuPSB4hSlu+e2T3DszlCmJi7iY3x
+        PQdSiSJw+cevVQXQ6wCBJLgWH7JXK8B1afOEWnEICdEl+6jfU2l2kdVkzT7hNGfFZAlt92
+        YLuMEuk6yr3HUQaoV3eaJT9dCVujuUI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-157-LcUp97UwMqOoyRBIonnmcQ-1; Thu, 28 Apr 2022 10:57:58 -0400
+X-MC-Unique: LcUp97UwMqOoyRBIonnmcQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8E7103811F24;
+        Thu, 28 Apr 2022 14:57:57 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.151])
+        by smtp.corp.redhat.com (Postfix) with SMTP id A59CD407E1C0;
+        Thu, 28 Apr 2022 14:57:52 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu, 28 Apr 2022 16:57:56 +0200 (CEST)
+Date:   Thu, 28 Apr 2022 16:57:50 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Richard Weinberger <richard@nod.at>,
         Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Chris Zankel <chris@zankel.net>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Corey Minyard <minyard@acm.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        James Morse <james.morse@arm.com>,
         Johannes Berg <johannes@sipsolutions.net>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
         Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
-        Richard Henderson <rth@twiddle.net>,
-        Richard Weinberger <richard@nod.at>,
-        Robert Richter <rric@kernel.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, Wei Liu <wei.liu@kernel.org>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-22-gpiccoli@igalia.com>
-From:   Alex Elder <elder@ieee.org>
-In-Reply-To: <20220427224924.592546-22-gpiccoli@igalia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        inux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>
+Subject: Re: [PATCH 7/9] ptrace: Simplify the wait_task_inactive call in
+ ptrace_check_attach
+Message-ID: <20220428145750.GA15485@redhat.com>
+References: <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+ <20220426225211.308418-7-ebiederm@xmission.com>
+ <20220427151455.GE17421@redhat.com>
+ <Ympvf1Pam1ckX+EA@hirez.programming.kicks-ass.net>
+ <20220428111911.GA3804@redhat.com>
+ <YmqckaB+xB6azP1d@hirez.programming.kicks-ass.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YmqckaB+xB6azP1d@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 4/27/22 5:49 PM, Guilherme G. Piccoli wrote:
-> This patch renames the panic_notifier_list to panic_pre_reboot_list;
-> the idea is that a subsequent patch will refactor the panic path
-> in order to better split the notifiers, running some of them very
-> early, some of them not so early [but still before kmsg_dump()] and
-> finally, the rest should execute late, after kdump. The latter ones
-> are now in the panic pre-reboot list - the name comes from the idea
-> that these notifiers execute before panic() attempts rebooting the
-> machine (if that option is set).
-> 
-> We also took the opportunity to clean-up useless header inclusions,
-> improve some notifier block declarations (e.g. in ibmasm/heartbeat.c)
-> and more important, change some priorities - we hereby set 2 notifiers
-> to run late in the list [iss_panic_event() and the IPMI panic_event()]
-> due to the risks they offer (may not return, for example).
-> Proper documentation is going to be provided in a subsequent patch,
-> that effectively refactors the panic path.
-> 
-> Cc: Alex Elder <elder@kernel.org>
+On 04/28, Peter Zijlstra wrote:
+>
+> On Thu, Apr 28, 2022 at 01:19:11PM +0200, Oleg Nesterov wrote:
+> > > That is also the reason I couldn't do wait_task_inactive(task, 0)
+> >
+> > Ah, I din't notice this patch uses wait_task_inactive(child, 0),
+> > I think it should do wait_task_inactive(child, __TASK_TRACED).
+>
+> Shouldn't we then switch wait_task_inactive() so have & matching instead
+> of the current ==.
 
-For "drivers/net/ipa/ipa_smp2p.c":
+Sorry, I don't understand the context...
 
-Acked-by: Alex Elder <elder@kernel.org>
+As long as ptrace_freeze_traced() sets __state == __TASK_TRACED (as it
+currently does) wait_task_inactive(__TASK_TRACED) is what we need ?
 
-> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-> Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-> Cc: Chris Zankel <chris@zankel.net>
-> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-> Cc: Corey Minyard <minyard@acm.org>
-> Cc: Dexuan Cui <decui@microsoft.com>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: Haiyang Zhang <haiyangz@microsoft.com>
-> Cc: Heiko Carstens <hca@linux.ibm.com>
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-> Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-> Cc: James Morse <james.morse@arm.com>
-> Cc: Johannes Berg <johannes@sipsolutions.net>
-> Cc: Juergen Gross <jgross@suse.com>
-> Cc: "K. Y. Srinivasan" <kys@microsoft.com>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: Matt Turner <mattst88@gmail.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Max Filippov <jcmvbkbc@gmail.com>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Paul Mackerras <paulus@samba.org>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Richard Henderson <rth@twiddle.net>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Robert Richter <rric@kernel.org>
-> Cc: Stefano Stabellini <sstabellini@kernel.org>
-> Cc: Stephen Hemminger <sthemmin@microsoft.com>
-> Cc: Sven Schnelle <svens@linux.ibm.com>
-> Cc: Tony Luck <tony.luck@intel.com>
-> Cc: Vasily Gorbik <gor@linux.ibm.com>
-> Cc: Wei Liu <wei.liu@kernel.org>
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-> ---
-> 
+After we change it to use JOBCTL_DELAY_WAKEKILL and not abuse __state,
+ptrace_attach() should use wait_task_inactive(TASK_TRACED), but this
+depends on what exactly we are going to do...
 
-. . .
+Oleg.
+
