@@ -2,166 +2,218 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6954C5133BE
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 14:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 012EE513444
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 14:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343954AbiD1Mfm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Apr 2022 08:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
+        id S229753AbiD1M7j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Apr 2022 08:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231824AbiD1Mfl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 08:35:41 -0400
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB70AF1DA;
-        Thu, 28 Apr 2022 05:32:27 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id g28so8706235ybj.10;
-        Thu, 28 Apr 2022 05:32:27 -0700 (PDT)
+        with ESMTP id S1344020AbiD1M7i (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 08:59:38 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DED567D26;
+        Thu, 28 Apr 2022 05:56:24 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id m14-20020a17090a34ce00b001d5fe250e23so4307361pjf.3;
+        Thu, 28 Apr 2022 05:56:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XZwkjYsw9COPRHxP3kXlkswhs1cfcMm5Nckuu6rNtXY=;
+        b=GasIFlTepYdUSfijEjEHH7eWRjZviLn+iGuGNwx18RArNN0LUR8SjDj52pHlZSQn3f
+         GbhfgSCmvG2AbvVcOICcmvSdyNgU7H+FTqWnj71pNwYyHfthwKdV4hcTUHLdXCBVziD4
+         AvokHz53kBwD+4HHZLHaTR9cKgiOMri4PqGlWIQJamN9BX2Asn43Q1WHtngwbvv2CeNb
+         NMRsnNLn8eqcmRbm7QqDKQ+eCRz8dlMuUXZNZUwT1s5JpEOYFiYpqSfAfswPZSoCD4sa
+         lKSD+hs8gzJ6fF+AFzFwelm4Y+x12BWOqec++h9GyLRSVNJmIfPqWFfX2Fb8uCtPjgD+
+         B93A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=amQgG2NV0agE1gFMqpWGUu4pyR1fiuJMmDfgJJelPdE=;
-        b=bVLMzhutNwwkZ4FUraWEI0jCdXUq6nJyZmC7+gmCSp3jFeDD1mcENDl7+9Cvr3vW4e
-         eUa+mSve1dk8rLa9Pi9rQmeQ3OQK0ngurdc13Nku02dyAeBACDkTofZkTTOpq4u+dMsI
-         KIgUfx+3TQw6qujwp2phpKsWSGZx0bdTU1AZ4gA12DNFts2sfBlqzH1LGHpK9j1OSMrM
-         mVN0jfGlbVgcgP3SLNmyfpWqtNyeZhvSO1Mu5FbQnqxunnbPVIYZAlcs9IpF6Sw+kM80
-         6SfJW47I0h7Tati+GJJu5bb2zyAbrWDy2VwXKXUU2l186mDLrNwCIu09dXRAffVajA8d
-         Xogg==
-X-Gm-Message-State: AOAM533xTrbZjp6E+5BookqKSOeTDAR6ylZ+27Rc650HKX0akqDO1pGh
-        mAzmxcc49BRyMC9nA/3w1V7HW8hpf8C5WsOxrAOIodwi
-X-Google-Smtp-Source: ABdhPJwB/+EX5t6EBt1I6NzQqBAxtEOgLKJBxNB7rsFDwFQlTIAs+vmPs2QnCqLkeGnc6TfFZ56SC22ETSFI9jCLGt4=
-X-Received: by 2002:a05:6902:187:b0:63d:9c95:edca with SMTP id
- t7-20020a056902018700b0063d9c95edcamr29265812ybh.81.1651149146464; Thu, 28
- Apr 2022 05:32:26 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XZwkjYsw9COPRHxP3kXlkswhs1cfcMm5Nckuu6rNtXY=;
+        b=hcVAdWzprIiZBlDHt7F5T4AyFvvxOTnRmI4Wy7mdgZRK0dzD43Ln7v0IsbwLKy6rDc
+         eqWi3fylWC2CruwzA3D5HDVyBUrFqsh3ujZXl0I0V8eAsyOSrh1vEVfNuwW04UJ9q73g
+         GXcuTuc7UD0lCF/m21+/WPWg1QY/LKx/XmjrA7nRGCi5TDAbu0YXErBV1vl7mWWADFwe
+         ulwdPdinP9E0aqUlejQQQlrIKCsWEp03ty8L6/LMQfkjjHg49/MScrqpbyNsjEb07/VN
+         a7QJkMmyiTiJmRkgRyRHJjsfShvKhZjaS816Q21Yoou5KTwCmoksT0QdbVEXzH6qfg9G
+         SkqQ==
+X-Gm-Message-State: AOAM5315MSPPjZUieBCoHYAb3ZbOaD8nUzfQWRY049lHfd3xA12vSCS4
+        bC4G9MYzSd1MAaMECmtY44XmnLFtBzt9QQ==
+X-Google-Smtp-Source: ABdhPJyq3dZATm+OWfo0WJ/+F20liiW9Jy4UQKOGpdhYw6RaRE5xu2c6SI2RkvWpuzXtfEjeJPkGmQ==
+X-Received: by 2002:a17:90a:1116:b0:1d9:a41a:d13d with SMTP id d22-20020a17090a111600b001d9a41ad13dmr17616356pja.206.1651150583928;
+        Thu, 28 Apr 2022 05:56:23 -0700 (PDT)
+Received: from tj10039pcu.spreadtrum.com ([117.18.48.102])
+        by smtp.gmail.com with ESMTPSA id x6-20020a17090a46c600b001d960eaed66sm6514061pjg.42.2022.04.28.05.56.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Apr 2022 05:56:23 -0700 (PDT)
+From:   Cixi Geng <gengcixi@gmail.com>
+To:     sre@kernel.org, orsonzhai@gmail.com, baolin.wang7@gmail.com,
+        zhang.lyra@gmail.com, chenyongzhi811@gmail.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] power: supply: Add enable the primary charger interface
+Date:   Thu, 28 Apr 2022 20:56:10 +0800
+Message-Id: <20220428125610.66647-1-gengcixi@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220428110030.7090a45b@canb.auug.org.au> <78577b67126a3f63424059f414702a799d6baf3e.camel@intel.com>
-In-Reply-To: <78577b67126a3f63424059f414702a799d6baf3e.camel@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 28 Apr 2022 14:32:14 +0200
-Message-ID: <CAJZ5v0gAnt3=NK9BgtWYawgyc2CaQ5xbx_fMznbuUJuqX1mn9A@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the pm tree
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 10:56 AM Zhang Rui <rui.zhang@intel.com> wrote:
->
-> Resend with linux-pm mailing list CCed.
->
-> On Thu, 2022-04-28 at 11:00 +1000, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > After merging the pm tree, today's linux-next build (x86_64
-> > allmodconfig)
-> > failed like this:
-> >
-> > drivers/idle/intel_idle.c: In function 'adl_idle_state_table_update':
-> > drivers/idle/intel_idle.c:1701:17: error: 'disable_promotion_to_c1e'
-> > undeclared (first use in this function)
-> >  1701 |                 disable_promotion_to_c1e = true;
-> >       |                 ^~~~~~~~~~~~~~~~~~~~~~~~
-> > drivers/idle/intel_idle.c:1701:17: note: each undeclared identifier
-> > is reported only once for each function it appears in
-> > drivers/idle/intel_idle.c:1706:9: error: implicit declaration of
-> > function 'c1e_promotion_enable' [-Werror=implicit-function-
-> > declaration]
-> >  1706 |         c1e_promotion_enable();
-> >       |         ^~~~~~~~~~~~~~~~~~~~
-> > drivers/idle/intel_idle.c: At top level:
-> > drivers/idle/intel_idle.c:1854:13: error: conflicting types for
-> > 'c1e_promotion_enable'; have 'void(void)' [-Werror]
-> >  1854 | static void c1e_promotion_enable(void)
-> >       |             ^~~~~~~~~~~~~~~~~~~~
-> > drivers/idle/intel_idle.c:1854:13: error: static declaration of
-> > 'c1e_promotion_enable' follows non-static declaration
-> > drivers/idle/intel_idle.c:1706:9: note: previous implicit declaration
-> > of 'c1e_promotion_enable' with type 'void(void)'
-> >  1706 |         c1e_promotion_enable();
-> >       |         ^~~~~~~~~~~~~~~~~~~~
-> >
-> > Caused by commit
-> >
-> >   39c184a6a9a7 ("intel_idle: Fix the 'preferred_cstates' module
-> > parameter")
-> >
-> > interacting with commit
-> >
-> >   cc6e234b8264 ("intel_idle: Add AlderLake support")
-> >
-> > Presumably this should have been fixed up in commit
-> >
-> >   55ecda6f25ef ("Merge branch 'intel-idle' into linux-next")
-> >
-> > I have used the pm tree from next-20220427 for today.
-> >
-> TBH, I'm not quite sure about the Fixes tag below.
->
-> Although commit 39c184a6a9a7 is merged later and breaks commit
-> cc6e234b8264, but given that commit 39c184a6a9a7 is for -rc material
-> and commit cc6e234b8264 and this patch are for next merge window, so I
-> still use the orginal ADL intel_idle commit for Fixes tag.
+From: Chen Yongzhi <Yongzhi.Chen@unisoc.com>
 
-Thanks for the fix.
+In the case of charging multiple charging ICs,the primary
+charging IC often needs to be turned off in the fast
+charging stage, and only using the charger pump to charge,
+need to add a new power_supply_property attribute.
 
-I think I'll redo the ADL support commit with the below folded in.
+Signed-off-by: Chen Yongzhi <Yongzhi.Chen@unisoc.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/all/202204230206.9TgyhSb1-lkp@intel.com
+Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+---
+ drivers/power/supply/sc2731_charger.c | 52 +++++++++++++++++++++++++--
+ include/linux/power_supply.h          |  1 +
+ 2 files changed, 50 insertions(+), 3 deletions(-)
 
-> From 9b784d7f9ea5593a92eb6d616523b5f47464e981 Mon Sep 17 00:00:00 2001
-> From: Zhang Rui <rui.zhang@intel.com>
-> Date: Thu, 28 Apr 2022 09:37:10 +0800
-> Subject: [PATCH] intel_idle: fix C1E handling for AlderLake
->
-> commit cc6e234b8264 ("intel_idle: Add AlderLake support") disables the C1E
-> promotion using the 'disable_promotion_to_c1e' variable, but enables the
-> the C1E promotion by invoking c1e_promotion_enable() directly.
->
-> Then, commit 39c184a6a9a7 ("intel_idle: Fix the 'preferred_cstates' module
-> parameter") removes the 'disable_promotion_to_c1e' variable and introduces
-> a new tri-state 'c1e_promotion' variable that can be used for both
-> enabling and disabling C1E promotion, on a per CPU basis.
->
-> Switch to use the new 'c1e_promotion' variable to fix the build failure,
-> and also to do C1E promotion bit update on all CPUs.
->
-> Fixes: commit cc6e234b8264 ("intel_idle: Add AlderLake support")
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> ---
->  drivers/idle/intel_idle.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index 7c081ed26b64..2de6e0a2d9a1 100644
-> --- a/drivers/idle/intel_idle.c
-> +++ b/drivers/idle/intel_idle.c
-> @@ -1698,12 +1698,12 @@ static void __init adl_idle_state_table_update(void)
->                 cpuidle_state_table[1].flags |= CPUIDLE_FLAG_UNUSABLE;
->
->                 /* Disable C1E by clearing the "C1E promotion" bit. */
-> -               disable_promotion_to_c1e = true;
-> +               c1e_promotion = C1E_PROMOTION_DISABLE;
->                 return;
->         }
->  end:
->         /* Make sure C1E is enabled by default */
-> -       c1e_promotion_enable();
-> +       c1e_promotion = C1E_PROMOTION_ENABLE;
->  }
->
->  /**
-> --
-> 2.17.1
->
->
+diff --git a/drivers/power/supply/sc2731_charger.c b/drivers/power/supply/sc2731_charger.c
+index 9ac17cf7a126..c15f9b75e6a8 100644
+--- a/drivers/power/supply/sc2731_charger.c
++++ b/drivers/power/supply/sc2731_charger.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
+-// Copyright (C) 2018 Spreadtrum Communications Inc.
++// Copyright (C) 2022 Spreadtrum Communications Inc.
+ 
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+@@ -146,6 +146,24 @@ static int sc2731_charger_get_status(struct sc2731_charger_info *info)
+ 	return POWER_SUPPLY_STATUS_CHARGING;
+ }
+ 
++static int sc2731_charger_set_status(struct sc2731_charger_info *info, int val)
++{
++	int ret = 0;
++
++	if (!val && info->charging) {
++		sc2731_charger_stop_charge(info);
++		info->charging = false;
++	} else if (val && !info->charging) {
++		ret = sc2731_charger_start_charge(info);
++		if (ret)
++			dev_err(info->dev, "start charge failed\n");
++		else
++			info->charging = true;
++	}
++
++	return ret;
++}
++
+ static int sc2731_charger_get_current(struct sc2731_charger_info *info,
+ 				      u32 *cur)
+ {
+@@ -204,7 +222,7 @@ sc2731_charger_usb_set_property(struct power_supply *psy,
+ 				const union power_supply_propval *val)
+ {
+ 	struct sc2731_charger_info *info = power_supply_get_drvdata(psy);
+-	int ret;
++	int ret = 0;
+ 
+ 	mutex_lock(&info->lock);
+ 
+@@ -214,6 +232,12 @@ sc2731_charger_usb_set_property(struct power_supply *psy,
+ 	}
+ 
+ 	switch (psp) {
++	case POWER_SUPPLY_PROP_STATUS:
++		ret = sc2731_charger_set_status(info, val->intval);
++		if (ret < 0)
++			dev_err(info->dev, "set charge status failed\n");
++		break;
++
+ 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+ 		ret = sc2731_charger_set_current(info, val->intval / 1000);
+ 		if (ret < 0)
+@@ -227,6 +251,15 @@ sc2731_charger_usb_set_property(struct power_supply *psy,
+ 			dev_err(info->dev, "set input current limit failed\n");
+ 		break;
+ 
++	case POWER_SUPPLY_PROP_CHARGE_ENABLED:
++		if (val->intval == true) {
++			ret = sc2731_charger_start_charge(info);
++			if (ret)
++				dev_err(info->dev, "start charge failed\n");
++		} else if (val->intval == false) {
++			sc2731_charger_stop_charge(info);
++		}
++		break;
+ 	default:
+ 		ret = -EINVAL;
+ 	}
+@@ -241,7 +274,7 @@ static int sc2731_charger_usb_get_property(struct power_supply *psy,
+ {
+ 	struct sc2731_charger_info *info = power_supply_get_drvdata(psy);
+ 	int ret = 0;
+-	u32 cur;
++	u32 cur, enabled;
+ 
+ 	mutex_lock(&info->lock);
+ 
+@@ -277,6 +310,16 @@ static int sc2731_charger_usb_get_property(struct power_supply *psy,
+ 		}
+ 		break;
+ 
++	case POWER_SUPPLY_PROP_CHARGE_ENABLED:
++		ret = regmap_read(info->regmap, info->base + SC2731_CHG_CFG0, &enabled);
++		if (ret) {
++			dev_err(info->dev, "get sc2731 charge enabled failed\n");
++			goto out;
++		}
++
++		val->intval = enabled & SC2731_CHARGER_PD;
++
++		break;
+ 	default:
+ 		ret = -EINVAL;
+ 	}
+@@ -292,8 +335,10 @@ static int sc2731_charger_property_is_writeable(struct power_supply *psy,
+ 	int ret;
+ 
+ 	switch (psp) {
++	case POWER_SUPPLY_PROP_STATUS:
+ 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+ 	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
++	case POWER_SUPPLY_PROP_CHARGE_ENABLED:
+ 		ret = 1;
+ 		break;
+ 
+@@ -308,6 +353,7 @@ static enum power_supply_property sc2731_usb_props[] = {
+ 	POWER_SUPPLY_PROP_STATUS,
+ 	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
+ 	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
++	POWER_SUPPLY_PROP_CHARGE_ENABLED,
+ };
+ 
+ static const struct power_supply_desc sc2731_charger_desc = {
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index cb380c1d9459..1dfe194d8a5e 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -167,6 +167,7 @@ enum power_supply_property {
+ 	POWER_SUPPLY_PROP_PRECHARGE_CURRENT,
+ 	POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT,
+ 	POWER_SUPPLY_PROP_CALIBRATE,
++	POWER_SUPPLY_PROP_CHARGE_ENABLED,
+ 	POWER_SUPPLY_PROP_MANUFACTURE_YEAR,
+ 	POWER_SUPPLY_PROP_MANUFACTURE_MONTH,
+ 	POWER_SUPPLY_PROP_MANUFACTURE_DAY,
+-- 
+2.25.1
+
