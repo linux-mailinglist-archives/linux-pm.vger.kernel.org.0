@@ -2,134 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E15F6512BE7
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 08:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 825E8512C3B
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Apr 2022 09:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244390AbiD1Gw4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 28 Apr 2022 02:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48606 "EHLO
+        id S244795AbiD1HIk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 28 Apr 2022 03:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244160AbiD1Gw4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 02:52:56 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65CBF985BA
-        for <linux-pm@vger.kernel.org>; Wed, 27 Apr 2022 23:49:42 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id kq17so7599787ejb.4
-        for <linux-pm@vger.kernel.org>; Wed, 27 Apr 2022 23:49:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0oqHpJg2cLzeZdnyUgEioYwr2Elv4tK4koYun3ldTLg=;
-        b=eXItrn2OU2AmdngGOLZiy2Icklw+M9+AgUxk8DIq/wuut1ipjlK7FUFgXeQNzRSObw
-         hi/7hCpukEXhpfvr9AsfQGY0eqHLyZ32HUIZiNfzz2kzod9mpEnx71OB3/CuuMQdrJKA
-         dAM7+J8CPchz4RiVfhkib1BdJdeyKVwI1xcYcC4XV5O2pHg2DFLVsG3ikx0YA6aHbi3y
-         FEWjiyeONhNnaCMYu3VLTjPvBitJhGOrBXf1JrsEzLWBT5EVbLeNMn0tK6AWta3zm2xE
-         LkeojgfkER+edmIUY5M9ybfcJCNbuQpHIDXFPVzpKOXU4mSNaz0YFrjwmwEoEAMFQow0
-         /c0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0oqHpJg2cLzeZdnyUgEioYwr2Elv4tK4koYun3ldTLg=;
-        b=0tkFDD+nxEbFjDi0It+EMwB7SylaK3k772rG7j8bYiWxlOMbseeS583wUWpciCP0TH
-         /bgbngQX2po6agGVfbJDai3LrHaoMC+133FBwg0t4UuRBA5mBtGckRizorBPemdy3vg8
-         e5Oufvb3eFz3Xt71I8O5i3xhXjXwbCBc3nQKk1bCoDHx6OHzKqxvaX326jFOSJ9iOH6f
-         N0tlu1e5PE9i3qjo3nZnYHarZAatEgE6iT1RThCZJ7BK4EXBWVklxVtO+VlbddUaUTqO
-         IKEog9pm/w0Koq4ojVbtmYSMY4RLm+B8UMatzumzSuFY1epGKp1cQBxjlWqy1PVPOj0d
-         bYMw==
-X-Gm-Message-State: AOAM532h0SD1Q6ZGZzdsumzqT3Cckv/pxSKtul6Z29nxO30J5ynsLOZp
-        if/tbfyfqwlYybvg1cW8fmt4trFkuoN+eA==
-X-Google-Smtp-Source: ABdhPJzvIPdv11NF3KnCJxQlhxsCp9ZwZ2BaV4Z4RCSByZ+dEKIiXe8ylO0IZl9d5KNXpuAj+rcsPg==
-X-Received: by 2002:a17:907:3e8b:b0:6ef:a120:4ea6 with SMTP id hs11-20020a1709073e8b00b006efa1204ea6mr30533414ejc.607.1651128580958;
-        Wed, 27 Apr 2022 23:49:40 -0700 (PDT)
-Received: from [192.168.0.159] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id q8-20020aa7cc08000000b0042617ba637esm994220edt.8.2022.04.27.23.49.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Apr 2022 23:49:40 -0700 (PDT)
-Message-ID: <192d76cd-1d4c-c11a-874e-543e86cd7b64@linaro.org>
-Date:   Thu, 28 Apr 2022 08:49:39 +0200
+        with ESMTP id S244789AbiD1HIf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 28 Apr 2022 03:08:35 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50EC37C78D;
+        Thu, 28 Apr 2022 00:05:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651129514; x=1682665514;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1Tyx8UMLpzLkE5H7J9+iV5npaiElgUkBN8dO9mfu1X8=;
+  b=dPK+tIfmzJ8XazDXjxXpBKaATbh4J/z1BEVTRZmIqWrSi/1ltEhgDSIi
+   KmZmsQ6+WiguutFzjJsNMKyS06coFgwuRlG7mpwwJNag4SaOTDgOjoa8K
+   eLg1rW25K4RMm9XUby023y0jfIYb3df9Yvco2CB2MlczRAFIy9bjvnOjm
+   V0lLyZtqpVsPAJyrGqgSRRCyEVVmAuhAlbQ6ZiVOl96MCeayN9xOaI/bE
+   EuWhIyAMDmFyqc/fN3dNwN0zYctYNo+zhyCxiIkQG8zputfeDq4MLApWD
+   L4/hfHSan52AxhX+aazepcCH0+oTyjKvYwaEAU2pRy+55DMhvAmBh6mVk
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10330"; a="266344667"
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="266344667"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2022 00:05:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,295,1643702400"; 
+   d="scan'208";a="682095251"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 28 Apr 2022 00:05:12 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1njyD9-00059b-BW;
+        Thu, 28 Apr 2022 07:05:11 +0000
+Date:   Thu, 28 Apr 2022 15:04:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     kbuild-all@lists.01.org, linux-acpi@vger.kernel.org,
+        devel@acpica.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:testing 12/12] drivers/idle/intel_idle.c:1854:13:
+ warning: conflicting types for 'c1e_promotion_enable'; have 'void(void)'
+Message-ID: <202204281547.5qD9L1sw-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 6/6] dt-bindings: power: supply: qcom,pmi8998-charger: add
- bindings for smb2 driver
-Content-Language: en-US
-To:     Caleb Connolly <caleb.connolly@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Cc:     Amit Pundir <amit.pundir@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-References: <20220427184031.2569442-1-caleb.connolly@linaro.org>
- <20220427184031.2569442-7-caleb.connolly@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220427184031.2569442-7-caleb.connolly@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27/04/2022 20:40, Caleb Connolly wrote:
-> Add devicetree bindings for the Qualcomm PMI8998/PM660 SMB2 charger
-> driver.
-> 
-> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git testing
+head:   55ecda6f25ef6de769ae64f162828aee4812c313
+commit: 55ecda6f25ef6de769ae64f162828aee4812c313 [12/12] Merge branch 'intel-idle' into linux-next
+config: x86_64-randconfig-c001 (https://download.01.org/0day-ci/archive/20220428/202204281547.5qD9L1sw-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-20) 11.2.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=55ecda6f25ef6de769ae64f162828aee4812c313
+        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+        git fetch --no-tags rafael-pm testing
+        git checkout 55ecda6f25ef6de769ae64f162828aee4812c313
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/idle/
 
-This should be a v2, because you already sent a patchset. You make it
-for example with:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-`git format-patch -6 -v2`
+All warnings (new ones prefixed by >>):
 
-and add changelog to cover-letter (which actually you did...).
+   drivers/idle/intel_idle.c: In function 'adl_idle_state_table_update':
+   drivers/idle/intel_idle.c:1701:17: error: 'disable_promotion_to_c1e' undeclared (first use in this function)
+    1701 |                 disable_promotion_to_c1e = true;
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/idle/intel_idle.c:1701:17: note: each undeclared identifier is reported only once for each function it appears in
+   drivers/idle/intel_idle.c:1706:9: error: implicit declaration of function 'c1e_promotion_enable' [-Werror=implicit-function-declaration]
+    1706 |         c1e_promotion_enable();
+         |         ^~~~~~~~~~~~~~~~~~~~
+   drivers/idle/intel_idle.c: At top level:
+>> drivers/idle/intel_idle.c:1854:13: warning: conflicting types for 'c1e_promotion_enable'; have 'void(void)'
+    1854 | static void c1e_promotion_enable(void)
+         |             ^~~~~~~~~~~~~~~~~~~~
+   drivers/idle/intel_idle.c:1854:13: error: static declaration of 'c1e_promotion_enable' follows non-static declaration
+   drivers/idle/intel_idle.c:1706:9: note: previous implicit declaration of 'c1e_promotion_enable' with type 'void(void)'
+    1706 |         c1e_promotion_enable();
+         |         ^~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-> ---
->  .../power/supply/qcom,pmi8998-charger.yaml    | 83 +++++++++++++++++++
->  1 file changed, 83 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml b/Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml
-> new file mode 100644
-> index 000000000000..41b471713364
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml
-> @@ -0,0 +1,83 @@
-> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/supply/qcom,pmi8998-charger.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm PMI8998/PM660 Switch-Mode Battery Charger "2"
-> +
-> +maintainers:
-> +  - Caleb Connolly <caleb.connolly@linaro.org>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,pmi8998-charger
-> +      - qcom,pm660-charger
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    minItems: 4
-> +    maxItems: 4
 
-No need for minItems if it is equal to max. Skip the minItems, please.
+vim +1854 drivers/idle/intel_idle.c
 
-Best regards,
-Krzysztof
+1aefbd7aeb7695 Rafael J. Wysocki 2020-01-10  1853  
+da0e58c038e60e Artem Bityutskiy  2022-03-02 @1854  static void c1e_promotion_enable(void)
+da0e58c038e60e Artem Bityutskiy  2022-03-02  1855  {
+da0e58c038e60e Artem Bityutskiy  2022-03-02  1856  	unsigned long long msr_bits;
+da0e58c038e60e Artem Bityutskiy  2022-03-02  1857  
+da0e58c038e60e Artem Bityutskiy  2022-03-02  1858  	rdmsrl(MSR_IA32_POWER_CTL, msr_bits);
+da0e58c038e60e Artem Bityutskiy  2022-03-02  1859  	msr_bits |= 0x2;
+da0e58c038e60e Artem Bityutskiy  2022-03-02  1860  	wrmsrl(MSR_IA32_POWER_CTL, msr_bits);
+da0e58c038e60e Artem Bityutskiy  2022-03-02  1861  }
+da0e58c038e60e Artem Bityutskiy  2022-03-02  1862  
+
+:::::: The code at line 1854 was first introduced by commit
+:::::: da0e58c038e60e7e65d30813ebdfe91687aa8a24 intel_idle: add 'preferred_cstates' module argument
+
+:::::: TO: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
