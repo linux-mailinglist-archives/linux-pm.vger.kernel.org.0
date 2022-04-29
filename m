@@ -2,209 +2,209 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3B35157E5
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Apr 2022 00:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0AAE515809
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Apr 2022 00:09:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381257AbiD2WKp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Apr 2022 18:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46394 "EHLO
+        id S1353412AbiD2WNA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Apr 2022 18:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381167AbiD2WKo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Apr 2022 18:10:44 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144B5DBD0E;
-        Fri, 29 Apr 2022 15:07:25 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:55002)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nkYUT-00AIMf-B9; Fri, 29 Apr 2022 15:49:29 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:36464 helo=localhost.localdomain)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nkYUS-007RIp-6h; Fri, 29 Apr 2022 15:49:28 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     rjw@rjwysocki.net, Oleg Nesterov <oleg@redhat.com>,
-        mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
-        tj@kernel.org, linux-pm@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Date:   Fri, 29 Apr 2022 16:48:36 -0500
-Message-Id: <20220429214837.386518-11-ebiederm@xmission.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
-References: <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1nkYUS-007RIp-6h;;;mid=<20220429214837.386518-11-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX18Rvz6pahoBBVqRiRjYubwQ90GavkWSLh0=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+        with ESMTP id S1381336AbiD2WM6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Apr 2022 18:12:58 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35072DCA99
+        for <linux-pm@vger.kernel.org>; Fri, 29 Apr 2022 15:09:38 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 7-20020a250c07000000b0064137917a4eso8544708ybm.12
+        for <linux-pm@vger.kernel.org>; Fri, 29 Apr 2022 15:09:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=hKM9bITdw0PGb2XwX81mFD9iQzTpEY1OKJb9nL2wmVM=;
+        b=OoLk1SvFv/jTJtrMYW0SOQyQRGCBGpFgc/vEoNllR1AaKSyYPbAn38fZE7kG1JaLNw
+         sexAk7BDkPLMod8qlp9KvRVu4XZVkwoG6sot1ziSm12s8n1f0lWwP3pd4NZO9hDjSCIo
+         n4EVt4n/T4i6LWzvHIC5efT4Il77PiWFZq+vsVus4b88F/GLYaYnxrTF2BhYrTHjVvyZ
+         YJSlHx/76rMlgL8unw+vVcNr0SJeZky16wGNg4m9e30BDCrhD2L42ccHx+nJLraDz9Cv
+         QE7K62V9FK7wicbv99MdhKS9km/Q3/YCc5Tw9pA87iGWFI/wHo6va2SanzKXtugCTKxa
+         BOOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=hKM9bITdw0PGb2XwX81mFD9iQzTpEY1OKJb9nL2wmVM=;
+        b=f9B/T2BjKsWhkpNdfXa3PKw+6HPRweOxN2cYv7TxFQZYwvZ4y5uQO6sV1ODgZWG1/g
+         7X7cpH/GovXkuHaMgyIKXdNgQSHj9gDekc40o+jyTqpvMl12nvT1ZwVk7iMjOyWZYkcv
+         vbb3XP40YFrlypKpchAH5PpVtewNOED4tRrInqT0L+mURRdlj8FfXAzGHrel34eCRroy
+         z1XyGWBcSkJJUWokykqF5NrZKpa0mvNy4jqsi2PW1bNaNoFS1EJAZBbIiLwcww4zFyra
+         n3UvrfIwLKat+yFRsDGd+Lyl9SHd2zcEr9mkJ8l9J+J2iXzsC1R19uiEXXqwAgYGCPRy
+         TF1A==
+X-Gm-Message-State: AOAM530hCFDF7C+6eQaKAxanVBJWwhBQ6FCuhGOEJZuWt5BUecADhfn/
+        eZsVian1i48Ii+MZag/QFcMInsx5aSsBei0=
+X-Google-Smtp-Source: ABdhPJwkaqvpwIOQfXloIgXrKBqVrkXz9dU2lTi8+9Th0do7w1YPgiKZjeu5emN11KLpq4+CmhlxSMcUnqAj3JA=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:52dc:281f:8619:9d36])
+ (user=saravanak job=sendgmr) by 2002:a81:b88:0:b0:2f7:ccdd:642f with SMTP id
+ 130-20020a810b88000000b002f7ccdd642fmr1475417ywl.303.1651270177291; Fri, 29
+ Apr 2022 15:09:37 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 15:09:32 -0700
+Message-Id: <20220429220933.1350374-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.464.gb9c8b46e94-goog
+Subject: [PATCH v1] driver core: Extend deferred probe timeout on driver registration
+From:   Saravana Kannan <saravanak@google.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, kernel-team@android.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;linux-kernel@vger.kernel.org
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 525 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 4.8 (0.9%), b_tie_ro: 3.3 (0.6%), parse: 1.35
-        (0.3%), extract_message_metadata: 12 (2.2%), get_uri_detail_list: 3.3
-        (0.6%), tests_pri_-1000: 11 (2.1%), tests_pri_-950: 0.98 (0.2%),
-        tests_pri_-900: 0.82 (0.2%), tests_pri_-90: 112 (21.4%), check_bayes:
-        111 (21.1%), b_tokenize: 8 (1.6%), b_tok_get_all: 7 (1.3%),
-        b_comp_prob: 2.1 (0.4%), b_tok_touch_all: 90 (17.2%), b_finish: 0.81
-        (0.2%), tests_pri_0: 371 (70.7%), check_dkim_signature: 0.43 (0.1%),
-        check_dkim_adsp: 1.76 (0.3%), poll_dns_idle: 0.45 (0.1%),
-        tests_pri_10: 1.79 (0.3%), tests_pri_500: 6 (1.1%), rewrite_mail: 0.00
-        (0.0%)
-Subject: [PATCH v2 11/12] ptrace: Always call schedule in ptrace_stop
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Stop testing for !current->ptrace and setting __state to TASK_RUNNING.
-The code in __ptrace_unlink wakes up the child with
-ptrace_signal_wake_up which will set __state to TASK_RUNNING.  This
-leaves the only thing ptrace_stop needs to do is to send the signals.
+The deferred probe timer that's used for this currently starts at
+late_initcall and runs for driver_deferred_probe_timeout seconds. The
+assumption being that all available drivers would be loaded and
+registered before the timer expires. This means, the
+driver_deferred_probe_timeout has to be pretty large for it to cover the
+worst case. But if we set the default value for it to cover the worst
+case, it would significantly slow down the average case. For this
+reason, the default value is set to 0.
 
-Make the signals sending conditional upon current->ptrace so that
-the correct signals are sent to the parent.
+Also, with CONFIG_MODULES=y and the current default values of
+driver_deferred_probe_timeout=0 and fw_devlink=on, devices with missing
+drivers will cause their consumer devices to always defer their probes.
+This is because device links created by fw_devlink defer the probe even
+before the consumer driver's probe() is called.
 
-After that call schedule and let the fact that __state == TASK_RUNNING
-keep the code from sleeping in schedule.
+Instead of a fixed timeout, if we extend an unexpired deferred probe
+timer on every successful driver registration, with the expectation more
+modules would be loaded in the near future, then the default value of
+driver_deferred_probe_timeout only needs to be as long as the worst case
+time difference between two consecutive module loads.
 
-Now that it is easy to see that ptrace_stop always sleeps in
-ptrace_stop after ptrace_freeze_trace succeeds modify
-ptrace_check_attach to warn if wait_task_inactive fails.
+So let's implement that and set the default value to 10 seconds when
+CONFIG_MODULES=y.
 
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Rob Herring <robh@kernel.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Kevin Hilman <khilman@kernel.org>
+Cc: Thierry Reding <treding@nvidia.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc: linux-gpio@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: iommu@lists.linux-foundation.org
+Signed-off-by: Saravana Kannan <saravanak@google.com>
 ---
- kernel/ptrace.c | 14 +++-------
- kernel/signal.c | 68 ++++++++++++++++++-------------------------------
- 2 files changed, 28 insertions(+), 54 deletions(-)
+ .../admin-guide/kernel-parameters.txt         |  6 ++++--
+ drivers/base/base.h                           |  1 +
+ drivers/base/dd.c                             | 19 +++++++++++++++++++
+ drivers/base/driver.c                         |  1 +
+ 4 files changed, 25 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index d80222251f60..c1afebd2e8f3 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -261,17 +261,9 @@ static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
- 	}
- 	read_unlock(&tasklist_lock);
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 7123524a86b8..fcc1dfc877a9 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -939,8 +939,10 @@
+ 			[KNL] Debugging option to set a timeout in seconds for
+ 			deferred probe to give up waiting on dependencies to
+ 			probe. Only specific dependencies (subsystems or
+-			drivers) that have opted in will be ignored. A timeout of 0
+-			will timeout at the end of initcalls. This option will also
++			drivers) that have opted in will be ignored. A timeout
++			of 0 will timeout at the end of initcalls. If the time
++			out hasn't expired, it'll be restarted by each
++			successful driver registration. This option will also
+ 			dump out devices still on the deferred probe list after
+ 			retrying.
  
--	if (!ret && !ignore_state) {
--		if (!wait_task_inactive(child, __TASK_TRACED)) {
--			/*
--			 * This can only happen if may_ptrace_stop() fails and
--			 * ptrace_stop() changes ->state back to TASK_RUNNING,
--			 * so we should not worry about leaking __TASK_TRACED.
--			 */
--			WARN_ON(READ_ONCE(child->__state) == __TASK_TRACED);
--			ret = -ESRCH;
--		}
--	}
-+	if (!ret && !ignore_state &&
-+	    WARN_ON_ONCE(!wait_task_inactive(child, __TASK_TRACED)))
-+		ret = -ESRCH;
+diff --git a/drivers/base/base.h b/drivers/base/base.h
+index 2882af26392a..ab71403d102f 100644
+--- a/drivers/base/base.h
++++ b/drivers/base/base.h
+@@ -159,6 +159,7 @@ extern char *make_class_name(const char *name, struct kobject *kobj);
+ extern int devres_release_all(struct device *dev);
+ extern void device_block_probing(void);
+ extern void device_unblock_probing(void);
++extern void deferred_probe_extend_timeout(void);
+ 
+ /* /sys/devices directory */
+ extern struct kset *devices_kset;
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index f47cab21430f..603379b5f9dd 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -255,7 +255,12 @@ static int deferred_devs_show(struct seq_file *s, void *data)
+ }
+ DEFINE_SHOW_ATTRIBUTE(deferred_devs);
+ 
++#ifdef CONFIG_MODULES
++int driver_deferred_probe_timeout = 10;
++#else
+ int driver_deferred_probe_timeout;
++#endif
++
+ EXPORT_SYMBOL_GPL(driver_deferred_probe_timeout);
+ static DECLARE_WAIT_QUEUE_HEAD(probe_timeout_waitqueue);
+ 
+@@ -315,6 +320,20 @@ static void deferred_probe_timeout_work_func(struct work_struct *work)
+ }
+ static DECLARE_DELAYED_WORK(deferred_probe_timeout_work, deferred_probe_timeout_work_func);
+ 
++void deferred_probe_extend_timeout(void)
++{
++	/*
++	 * If the work hasn't been queued yet or if the work expired, don't
++	 * start a new one.
++	 */
++	if (cancel_delayed_work(&deferred_probe_timeout_work)) {
++		schedule_delayed_work(&deferred_probe_timeout_work,
++				driver_deferred_probe_timeout * HZ);
++		pr_debug("Extended deferred probe timeout by %d secs\n",
++					driver_deferred_probe_timeout);
++	}
++}
++
+ /**
+  * deferred_probe_initcall() - Enable probing of deferred devices
+  *
+diff --git a/drivers/base/driver.c b/drivers/base/driver.c
+index 8c0d33e182fd..77a77b2095cd 100644
+--- a/drivers/base/driver.c
++++ b/drivers/base/driver.c
+@@ -177,6 +177,7 @@ int driver_register(struct device_driver *drv)
+ 		return ret;
+ 	}
+ 	kobject_uevent(&drv->p->kobj, KOBJ_ADD);
++	deferred_probe_extend_timeout();
  
  	return ret;
  }
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 7cb27a27290a..4cae3f47f664 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -2255,51 +2255,33 @@ static int ptrace_stop(int exit_code, int why, int clear_code,
- 
- 	spin_unlock_irq(&current->sighand->siglock);
- 	read_lock(&tasklist_lock);
--	if (likely(current->ptrace)) {
--		/*
--		 * Notify parents of the stop.
--		 *
--		 * While ptraced, there are two parents - the ptracer and
--		 * the real_parent of the group_leader.  The ptracer should
--		 * know about every stop while the real parent is only
--		 * interested in the completion of group stop.  The states
--		 * for the two don't interact with each other.  Notify
--		 * separately unless they're gonna be duplicates.
--		 */
-+	/*
-+	 * Notify parents of the stop.
-+	 *
-+	 * While ptraced, there are two parents - the ptracer and
-+	 * the real_parent of the group_leader.  The ptracer should
-+	 * know about every stop while the real parent is only
-+	 * interested in the completion of group stop.  The states
-+	 * for the two don't interact with each other.  Notify
-+	 * separately unless they're gonna be duplicates.
-+	 */
-+	if (current->ptrace)
- 		do_notify_parent_cldstop(current, true, why);
--		if (gstop_done && ptrace_reparented(current))
--			do_notify_parent_cldstop(current, false, why);
--
--		/*
--		 * Don't want to allow preemption here, because
--		 * sys_ptrace() needs this task to be inactive.
--		 *
--		 * XXX: implement read_unlock_no_resched().
--		 */
--		preempt_disable();
--		read_unlock(&tasklist_lock);
--		cgroup_enter_frozen();
--		preempt_enable_no_resched();
--		freezable_schedule();
--		cgroup_leave_frozen(true);
--	} else {
--		/*
--		 * By the time we got the lock, our tracer went away.
--		 * Don't drop the lock yet, another tracer may come.
--		 *
--		 * If @gstop_done, the ptracer went away between group stop
--		 * completion and here.  During detach, it would have set
--		 * JOBCTL_STOP_PENDING on us and we'll re-enter
--		 * TASK_STOPPED in do_signal_stop() on return, so notifying
--		 * the real parent of the group stop completion is enough.
--		 */
--		if (gstop_done)
--			do_notify_parent_cldstop(current, false, why);
-+	if (gstop_done && (!current->ptrace || ptrace_reparented(current)))
-+		do_notify_parent_cldstop(current, false, why);
- 
--		/* tasklist protects us from ptrace_freeze_traced() */
--		__set_current_state(TASK_RUNNING);
--		read_unlock(&tasklist_lock);
--	}
-+	/*
-+	 * Don't want to allow preemption here, because
-+	 * sys_ptrace() needs this task to be inactive.
-+	 *
-+	 * XXX: implement read_unlock_no_resched().
-+	 */
-+	preempt_disable();
-+	read_unlock(&tasklist_lock);
-+	cgroup_enter_frozen();
-+	preempt_enable_no_resched();
-+	freezable_schedule();
-+	cgroup_leave_frozen(true);
- 
- 	/*
- 	 * We are back.  Now reacquire the siglock before touching
 -- 
-2.35.3
+2.36.0.464.gb9c8b46e94-goog
 
