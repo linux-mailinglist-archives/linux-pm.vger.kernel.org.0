@@ -2,178 +2,190 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4865551454D
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Apr 2022 11:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FFEA514A1F
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Apr 2022 15:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356489AbiD2J0L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Apr 2022 05:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46592 "EHLO
+        id S245479AbiD2ND3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Apr 2022 09:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356484AbiD2J0J (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Apr 2022 05:26:09 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3029C6145;
-        Fri, 29 Apr 2022 02:22:50 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id bu29so13029543lfb.0;
-        Fri, 29 Apr 2022 02:22:50 -0700 (PDT)
+        with ESMTP id S230480AbiD2ND2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Apr 2022 09:03:28 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA07F2BD7;
+        Fri, 29 Apr 2022 06:00:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=bhPxd6svpKOboxST/6guS4MOSMze/71rIJIgOQA8rZo=;
-        b=CcHlI3Au6GCo1UVzpXVov/h1wYElTNB9KLySGMMq2ve/a+TtvK5YlNIE1buiqFG4Nl
-         u/yJNPitTZt8sIeOJjB65Ui/1u355v1A2H7rivfKbBLHtHs+twE1aeJijeY6w74gk/C9
-         beognAtlmiiMUVoRPY2P2xBjOD5kn8WzXajIeBHjp2IbcVFILkaLGvvcgQymLNFVLX7W
-         O2NCAewH21dEqhwgYIy8zCJ1hXEDN8sGRLk/bc4Oj4c5AC8PD4Xjq19cf3SOi69El8Xe
-         CE7Bw/RGpPKDZ+W4HqGQMjQxaF5kblB25nziyJo7yUSAzUuWVoHRSngnqULHAZHmFVOo
-         K43A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=bhPxd6svpKOboxST/6guS4MOSMze/71rIJIgOQA8rZo=;
-        b=0SwckDKyvdXtrGfj3hhw1YjwsKW9ovm6CR+kyVHkOL5C+wTIoQqtk3PyRio/+GXfwC
-         JKX/Phvw30VecJTvcM30pNnW/1kS6wwQAhWT72EDG2Ep4pE2FfDX08Oi+P//rUsVuAYh
-         8raAG9nJUrTn637tGyLrAiFo9mh/8Ql7wEcKu+Ut5+ne5Id/xqcEHPK5FBg4wwv8Pp+g
-         xdNSeLkA44/7Pe9MgSyCDg/qnWS1cUrB0o849lSW6st+A4tuLKkrsXXMxV3et/HRxuOT
-         lvX4iu0uIluRywm3wuZDuaDiPAq1LPqY2N7H8Gxq+Fqcfci9Mf0z+xt8oL18WsYyDuG4
-         6Y1Q==
-X-Gm-Message-State: AOAM5325XnkyXPcpINg1KmTdV56P0nmyRtY8ADBE+nUNBsU5hs6E3oJL
-        8oMZbCdPh/rLoWKChR8uicc=
-X-Google-Smtp-Source: ABdhPJzFja3bmADODH1fdpoqaNJXuuCGiOo+I2PKC036x77KFxdRqfAwbMVEMu8UhB/GID87ZxayFg==
-X-Received: by 2002:a05:6512:3ba0:b0:472:49f2:a752 with SMTP id g32-20020a0565123ba000b0047249f2a752mr1049387lfv.374.1651224168844;
-        Fri, 29 Apr 2022 02:22:48 -0700 (PDT)
-Received: from [192.168.1.103] ([178.176.73.25])
-        by smtp.gmail.com with ESMTPSA id e1-20020a196741000000b0046bc4be1d60sm192072lfj.123.2022.04.29.02.22.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 02:22:48 -0700 (PDT)
-Subject: Re: [PATCH 17/30] tracing: Improve panic/die notifiers
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
-        kexec@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-18-gpiccoli@igalia.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <b8771b37-01f5-f50b-dbb3-9db4ee26e67e@gmail.com>
-Date:   Fri, 29 Apr 2022 12:22:44 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651237209; x=1682773209;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qehntlNSJq+nSLAk/tGVn281Y3k/WwjxEdBJaH7UQNQ=;
+  b=hLICcUqAu9sXLZxhGCeVcLjS3EaMVTBSa91yN0G2TGsogjo4isj/z7sx
+   XTrEfaxRO57uxHhZQqhays5QWc6EPugS3/z/KZ9vtsL38fA0QRCNrycCj
+   Z3moXFCs+MU9Dip5dJ/pJcg8exoJvII0XB5LV5GrJP4unJFuE5Vk7XhO6
+   s=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 29 Apr 2022 06:00:09 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Apr 2022 06:00:08 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 29 Apr 2022 06:00:08 -0700
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 29 Apr 2022 06:00:00 -0700
+Date:   Fri, 29 Apr 2022 18:29:56 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+CC:     Matthias Kaehlcke <mka@chromium.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        "Rob Herring" <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Len Brown <len.brown@intel.com>, "Pavel Machek" <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_kriskura@quicinc.com>,
+        <quic_vpulyala@quicinc.com>
+Subject: Re: [PATCH v14 2/7] PM / wakeup: Add device_children_wakeup_capable()
+Message-ID: <20220429125956.GD16319@hu-pkondeti-hyd.qualcomm.com>
+References: <1650395470-31333-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1650395470-31333-3-git-send-email-quic_c_sanm@quicinc.com>
+ <CAJZ5v0h2ZKPN6SERPnASPywZfeOWXWncJgNZ1WZa80+=M4DCiQ@mail.gmail.com>
+ <YmL3lMaR79wPMEfY@google.com>
+ <20220425130303.GA16319@hu-pkondeti-hyd.qualcomm.com>
 MIME-Version: 1.0
-In-Reply-To: <20220427224924.592546-18-gpiccoli@igalia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220425130303.GA16319@hu-pkondeti-hyd.qualcomm.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello!
+Hi Matthias,
 
-On 4/28/22 1:49 AM, Guilherme G. Piccoli wrote:
-
-> Currently the tracing dump_on_oops feature is implemented
-> through separate notifiers, one for die/oops and the other
-> for panic. With the addition of panic notifier "id", this
-> patch makes use of such "id" to unify both functions.
+On Mon, Apr 25, 2022 at 06:33:03PM +0530, Pavan Kondeti wrote:
+> Hi Matthias,
 > 
-> It also comments the function and changes the priority of the
-> notifier blocks, in order they run early compared to other
-> notifiers, to prevent useless trace data (like the callback
-> names for the other notifiers). Finally, we also removed an
-> unnecessary header inclusion.
+> On Fri, Apr 22, 2022 at 11:44:36AM -0700, Matthias Kaehlcke wrote:
+> > On Fri, Apr 22, 2022 at 01:57:17PM +0200, Rafael J. Wysocki wrote:
+> > > On Tue, Apr 19, 2022 at 9:11 PM Sandeep Maheswaram
+> > > <quic_c_sanm@quicinc.com> wrote:
+> > > >
+> > > > From: Matthias Kaehlcke <mka@chromium.org>
+> > > >
+> > > > Add device_children_wakeup_capable() which checks whether the device itself
+> > > > or one if its descendants is wakeup capable.
+> > > 
+> > > device_wakeup_path() exists for a very similar purpose.
+> > > 
+> > > Is it not usable for whatever you need the new function introduced here?
+> > 
+> > I wasn't aware of it's function, there are no doc comments and the
+> > name isn't really self explanatory.
+> > 
+> > In a quick test device_wakeup_path() returned inconsistent values for the
+> > root hub, sometimes true, others false when a wakeup capable USB device was
+> > connected.
 > 
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-> ---
->  kernel/trace/trace.c | 57 +++++++++++++++++++++++++-------------------
->  1 file changed, 32 insertions(+), 25 deletions(-)
+> We will also test the same to double confirm the behavior of
+> device_wakeup_path(). I am assuming that you checked device_wakeup_path()
+> only during system suspend path.
 > 
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index f4de111fa18f..c1d8a3622ccc 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-[...]
-> @@ -9767,38 +9766,46 @@ static __init int tracer_init_tracefs(void)
+> Here is what I understood by looking at __device_suspend(). Please share
+> your thoughts on this.
+> 
+> power.wakeup_path is set to true for the parent *after* a wakeup capable
+> device is suspended. This means when the root hub(s) is suspended, it is
+> propagated to xhci-plat and when xhci-plat is suspended, it is propagated
+> to dwc3. bottom up propgation during system suspend.
+> 
+> I believe we can directly check something like this in the dwc3 driver
+> instead of having another wrapper like device_children_wakeup_capable().
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 1170b80..a783257 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1878,8 +1878,14 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>  		break;
+>  	case DWC3_GCTL_PRTCAP_HOST:
+>  		if (!PMSG_IS_AUTO(msg)) {
+> +			/*
+> +			 * Don't kill the host when dwc3 is wakeup capable and
+> +			 * its children needs wakeup.
+> +			 */
+> +			if (device_may_wakeup(dwc->dev) && device_wakeup_path(dwc->dev))
+> +				handle_it();
+> +		} else {
+>  			dwc3_core_exit(dwc);
+> -			break;
+>  		}
 >  
->  fs_initcall(tracer_init_tracefs);
->  
-> -static int trace_panic_handler(struct notifier_block *this,
-> -			       unsigned long event, void *unused)
-> +/*
-> + * The idea is to execute the following die/panic callback early, in order
-> + * to avoid showing irrelevant information in the trace (like other panic
-> + * notifier functions); we are the 2nd to run, after hung_task/rcu_stall
-> + * warnings get disabled (to prevent potential log flooding).
-> + */
-> +static int trace_die_panic_handler(struct notifier_block *self,
-> +				unsigned long ev, void *unused)
->  {
-> -	if (ftrace_dump_on_oops)
-> +	int do_dump;
+>  		/* Let controller to suspend HSPHY before PHY driver suspends */
+> 
 
-   bool?
+device_wakeup_path(dwc->dev) is returning true all the time irrespective of
+the wakeup capability (and enabled status) of the connected USB devices. That
+is because xhci-plat device is configured to wakeup all the time. Since the
+child is wakeup capable, its parent i.e dwc3 has device_wakeup_path() set.
+device_children_wakeup_capable() will also suffer the problem. However,
 
-> +
-> +	if (!ftrace_dump_on_oops)
-> +		return NOTIFY_DONE;
-> +
-> +	switch (ev) {
-> +	case DIE_OOPS:
-> +		do_dump = 1;
-> +		break;
-> +	case PANIC_NOTIFIER:
-> +		do_dump = 1;
-> +		break;
+device_children_wakeup_capable(&hcd->self.root_hub->dev) is what Sandeep's
+patch is using. That is not correct. we have two root hubs (HS and SS) associated
+with a USB3 controller and calling it on one root hub is incorrect. 
+device_children_wakeup_capable() must be called on xhci-plat so that it covers
+both HS and SS root hubs
 
-   Why not:
+I am thinking of dynamically enabling/disabling xhci-plat wakeup capability so
+that the wakeup path is correctly propagated to dwc3. something like below.
+Does it make sense to you?
 
-	case DIE_OOPS:
-	case PANIC_NOTIFIER:
-		do_dump = 1;
-		break;
-
-> +	default:
-> +		do_dump = 0;
-> +		break;
-> +	}
-> +
-> +	if (do_dump)
->  		ftrace_dump(ftrace_dump_on_oops);
-> -	return NOTIFY_OK;
-> +
-> +	return NOTIFY_DONE;
->  }
-[...]
-
-MBR, Sergey
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index 649ffd8..be0c55b 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -412,6 +412,9 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
+ 	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
+ 	int ret;
+ 
++	if (!device_wakeup_path(dev))
++		device_wakeup_disable(dev);
++
+ 	if (pm_runtime_suspended(dev))
+ 		pm_runtime_resume(dev);
+ 
+@@ -443,6 +446,8 @@ static int __maybe_unused xhci_plat_resume(struct device *dev)
+ 	pm_runtime_set_active(dev);
+ 	pm_runtime_enable(dev);
+ 
++	device_wakeup_enable(dev);
++
+ 	return 0;
+ }
+ 
+Thanks,
+Pavan
