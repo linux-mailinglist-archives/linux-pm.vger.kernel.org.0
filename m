@@ -2,229 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192BE5155EE
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Apr 2022 22:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 271545156A0
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Apr 2022 23:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380938AbiD2UnJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Apr 2022 16:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53996 "EHLO
+        id S237279AbiD2VT0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Apr 2022 17:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381104AbiD2UnC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Apr 2022 16:43:02 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871DD83021;
-        Fri, 29 Apr 2022 13:39:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=9LhFYA+MjEc96AcZxxeEKFjkU9Lk82GaxnYYVWnVk68=; b=XwGE93aX+1E0t3pByj3j/O+5Ga
-        K3u/NbvWUIPTGWXFFUF5/S8bghnnop1aApPsPGKNCX+XA1bvvH3EQ0PcLpFJhLHgKjy3gTmHDpRZx
-        xpeiw9TV1dPXB2YSqRvo3agu2ikjDsTWOdpgS/WgDbAttd/ff7K6VJQNlrO38xJTdLOWq3LaiPpb7
-        BCxPsp9BBfFRjEJDD6TJuu/Y8uUcnXFJiNLt6QIOyD0DFBtRwQdBNCscMgnx+i0qVThLJVg3KcgFz
-        9afxev7tVqQLuY2Z0izXtjt9I1wawTaSR9Ugp7AvNWX4ugYt89qxijRM6XzCj5d2MXRHOn6SprLRr
-        LWTDMVqw==;
-Received: from [179.113.53.197] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nkXNs-000CEn-5h; Fri, 29 Apr 2022 22:38:36 +0200
-Message-ID: <50178dfb-8e94-f35f-09c3-22fe197550ef@igalia.com>
-Date:   Fri, 29 Apr 2022 17:38:08 -0300
+        with ESMTP id S236338AbiD2VTZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Apr 2022 17:19:25 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452797DA8F
+        for <linux-pm@vger.kernel.org>; Fri, 29 Apr 2022 14:15:57 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id g6so17694086ejw.1
+        for <linux-pm@vger.kernel.org>; Fri, 29 Apr 2022 14:15:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=oPrD1XGbang8k816Th3p/Nj4GCK9njWNLC8Vq1NS2RE=;
+        b=neKGjTr3n7UAuvdKqKsheFhLwxkLfP+/N0vjjiQyv2/cFbVSYm5LdaK5tZSnUHtE+Z
+         Ua/Q/0uGmfGWSkHKWJ5UVm3vkrMZEs9BcfZifPyIzgnRQr4nPUSz9qrOQbLhWJLk5fPc
+         rbrcWW5IOhv4fWg7XvP1mw/43vATHVzH33yr7Hve3ZwVxnJJIZ4DAQxOdwZbcFE3ChL8
+         Mc2igNBA/d0Ye3C5aP7VrSbaFyDMrKFKXTZGqfA7yPvhbtij2YH1l9vthfY/7p/UExV1
+         6bEttc8q12ICPUX+3aswm0yQcSu4oIHQIIha8E2rLbunU2CQ8i25q75pBWwIjhlmmVfW
+         5+AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oPrD1XGbang8k816Th3p/Nj4GCK9njWNLC8Vq1NS2RE=;
+        b=AYdbPqKkVaKy4zoLO1lzLUQceKlwS5AfugVAxBuDzshcYhFEG/nii3tmXNUtGx274x
+         0rnNp98stQMknmZmOXOAtlZoM2cT/HYpg0GhOTOkilw+Vef/eYwZu8z4dXtO3X1vYhL/
+         YOScWsnbwZGYLKjIdEyQxidwzBKoR21U3OSDPJMN4qF70L1ESZICB3Ak/Z3P3xOncNd+
+         HkQz0ESybfPKjBouFYdbknHA76/NvACub2nXCcB7G9lID911xt85QfGkMOS1+wloLNNJ
+         efIZyvWA9dyNbcwEEXFLPrrmy8hYHe/qrwuc15JQQNePaVs6b5Y9mE4K7K6/EQkB/nN0
+         Cd3g==
+X-Gm-Message-State: AOAM531i4VRvBzFP/OREIyew1QqDd7SpJ3eLU2aP/i7Y+gBSvtxRQmxm
+        joQpOCrDPVBm4ptpuQgsZmUKrA==
+X-Google-Smtp-Source: ABdhPJw0F/QZ+C/PT+4+BxxppDaR/sWurRfERZJALzRtLZQbYQEulUbEO8LcZnG45RXaA27Pl9DsAQ==
+X-Received: by 2002:a17:907:97cc:b0:6df:83bc:314c with SMTP id js12-20020a17090797cc00b006df83bc314cmr1109329ejc.587.1651266955853;
+        Fri, 29 Apr 2022 14:15:55 -0700 (PDT)
+Received: from [192.168.0.176] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id ze16-20020a170906ef9000b006f3ef214e37sm977203ejb.157.2022.04.29.14.15.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Apr 2022 14:15:55 -0700 (PDT)
+Message-ID: <0555284c-41db-9b52-ceb5-0625c77f99ac@linaro.org>
+Date:   Fri, 29 Apr 2022 23:15:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 24/30] panic: Refactor the panic path
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 6/6] dt-bindings: power: supply: qcom,pmi8998-charger:
+ add bindings for smb2 driver
 Content-Language: en-US
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "bhe@redhat.com" <bhe@redhat.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bcm-kernel-feedback-list@broadcom.com" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "openipmi-developer@lists.sourceforge.net" 
-        <openipmi-developer@lists.sourceforge.net>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
-        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
-        "halves@canonical.com" <halves@canonical.com>,
-        "fabiomirmar@gmail.com" <fabiomirmar@gmail.com>,
-        "alejandro.j.jimenez@oracle.com" <alejandro.j.jimenez@oracle.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "d.hatayama@jp.fujitsu.com" <d.hatayama@jp.fujitsu.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "dyoung@redhat.com" <dyoung@redhat.com>,
-        "feng.tang@intel.com" <feng.tang@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "hidehiro.kawai.ez@hitachi.com" <hidehiro.kawai.ez@hitachi.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "vgoyal@redhat.com" <vgoyal@redhat.com>,
-        vkuznets <vkuznets@redhat.com>,
-        "will@kernel.org" <will@kernel.org>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-25-gpiccoli@igalia.com>
- <PH0PR21MB30252C55EB4F97F3D78021BDD7FC9@PH0PR21MB3025.namprd21.prod.outlook.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <PH0PR21MB30252C55EB4F97F3D78021BDD7FC9@PH0PR21MB3025.namprd21.prod.outlook.com>
+To:     Caleb Connolly <caleb.connolly@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Cc:     Amit Pundir <amit.pundir@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+References: <20220428104233.2980806-1-caleb.connolly@linaro.org>
+ <20220428104233.2980806-7-caleb.connolly@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220428104233.2980806-7-caleb.connolly@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29/04/2022 14:53, Michael Kelley (LINUX) wrote:
-> From: Guilherme G. Piccoli <gpiccoli@igalia.com> Sent: Wednesday, April 27, 2022 3:49 PM
->> [...]
->> +	panic_notifiers_level=
->> +			[KNL] Set the panic notifiers execution order.
->> +			Format: <unsigned int>
->> +			We currently have 4 lists of panic notifiers; based
->> +			on the functionality and risk (for panic success) the
->> +			callbacks are added in a given list. The lists are:
->> +			- hypervisor/FW notification list (low risk);
->> +			- informational list (low/medium risk);
->> +			- pre_reboot list (higher risk);
->> +			- post_reboot list (only run late in panic and after
->> +			kdump, not configurable for now).
->> +			This parameter defines the ordering of the first 3
->> +			lists with regards to kdump; the levels determine
->> +			which set of notifiers execute before kdump. The
->> +			accepted levels are:
->> +			0: kdump is the first thing to run, NO list is
->> +			executed before kdump.
->> +			1: only the hypervisor list is executed before kdump.
->> +			2 (default level): the hypervisor list and (*if*
->> +			there's any kmsg_dumper defined) the informational
->> +			list are executed before kdump.
->> +			3: both the hypervisor and the informational lists
->> +			(always) execute before kdump.
+On 28/04/2022 12:42, Caleb Connolly wrote:
+> Add devicetree bindings for the Qualcomm PMI8998/PM660 SMB2 charger
+> driver.
 > 
-> I'm not clear on why level 2 exists.  What is the scenario where
-> execution of the info list before kdump should be conditional on the
-> existence of a kmsg_dumper?   Maybe the scenario is described
-> somewhere in the patch set and I just missed it.
-> 
+> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
 
-Hi Michael, thanks for your review/consideration. So, this idea started
-kind of some time ago. It all started with a need of exposing more
-information on kernel log *before* kdump and *before* pstore -
-specifically, we're talking about panic_print. But this cause some
-reactions, Baoquan was very concerned with that [0]. Soon after, I've
-proposed a panic notifiers filter (orthogonal) approach, to which Petr
-suggested instead doing a major refactor [1] - it finally is alive in
-the form of this series.
-
-The theory behind the level 2 is to allow a scenario of kdump with the
-minimum amount of notifiers - what is the point in printing more
-information if the user doesn't care, since it's going to kdump? Now, if
-there is a kmsg dumper, it means that there is likely some interest in
-collecting information, and that might as well be required before the
-potential kdump (which is my case, hence the proposal on [0]).
-
-Instead of forcing one of the two behaviors (level 1 or level 3), we
-have a middle-term/compromise: if there's interest in collecting such
-data (in the form of a kmsg dumper), we then execute the informational
-notifiers before kdump. If not, why to increase (even slightly) the risk
-for kdump?
-
-I'm OK in removing the level 2 if people prefer, but I don't feel it's a
-burden, quite opposite - seems a good way to accommodate the somewhat
-antagonistic ideas (jump to kdump ASAP vs collecting more info in the
-panicked kernel log).
-
-[0] https://lore.kernel.org/lkml/20220126052246.GC2086@MiWiFi-R3L-srv/
-
-[1] https://lore.kernel.org/lkml/YfPxvzSzDLjO5ldp@alley/
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
->[...]
->> +	 * Based on the level configured (smaller than 4), we clear the
->> +	 * proper bits in "panic_notifiers_bits". Notice that this bitfield
->> +	 * is initialized with all notifiers set.
->> +	 */
->> +	switch (panic_notifiers_level) {
->> +	case 3:
->> +		clear_bit(PN_PRE_REBOOT_BIT, &panic_notifiers_bits);
->> +		break;
->> +	case 2:
->> +		clear_bit(PN_PRE_REBOOT_BIT, &panic_notifiers_bits);
->> +
->> +		if (!kmsg_has_dumpers())
->> +			clear_bit(PN_INFO_BIT, &panic_notifiers_bits);
->> +		break;
->> +	case 1:
->> +		clear_bit(PN_PRE_REBOOT_BIT, &panic_notifiers_bits);
->> +		clear_bit(PN_INFO_BIT, &panic_notifiers_bits);
->> +		break;
->> +	case 0:
->> +		clear_bit(PN_PRE_REBOOT_BIT, &panic_notifiers_bits);
->> +		clear_bit(PN_INFO_BIT, &panic_notifiers_bits);
->> +		clear_bit(PN_HYPERVISOR_BIT, &panic_notifiers_bits);
->> +		break;
->> +	}
-> 
-> I think the above switch statement could be done as follows:
-> 
-> if (panic_notifiers_level <= 3)
-> 	clear_bit(PN_PRE_REBOOT_BIT, &panic_notifiers_bits);
-> if (panic_notifiers_level <= 2)
-> 	if (!kmsg_has_dumpers())
-> 		clear_bit(PN_INFO_BIT, &panic_notifiers_bits);
-> if (panic_notifiers_level <=1)
-> 	clear_bit(PN_INFO_BIT, &panic_notifiers_bits);
-> if (panic_notifiers_level == 0)
-> 	clear_bit(PN_HYPERVISOR_BIT, &panic_notifiers_bits);
-> 
-> That's about half the lines of code.  It's somewhat a matter of style,
-> so treat this as just a suggestion to consider.  I just end up looking
-> for a better solution when I see the same line of code repeated
-> 3 or 4 times!
-> 
-
-It's a good idea - I liked your code. The switch seems more
-natural/explicit for me, even duplicating some lines, but in case more
-people prefer your way, I can definitely change the code - thanks for
-the suggestion.
-Cheers,
-
-
-Guilherme
+Best regards,
+Krzysztof
