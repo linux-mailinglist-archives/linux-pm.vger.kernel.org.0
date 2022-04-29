@@ -2,77 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D66351541A
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Apr 2022 20:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE81C515458
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Apr 2022 21:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380091AbiD2S4E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 29 Apr 2022 14:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35462 "EHLO
+        id S1380265AbiD2TWp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 29 Apr 2022 15:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244557AbiD2S4D (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Apr 2022 14:56:03 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4ADCE4B1
-        for <linux-pm@vger.kernel.org>; Fri, 29 Apr 2022 11:52:44 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id q13so5985809qvk.3
-        for <linux-pm@vger.kernel.org>; Fri, 29 Apr 2022 11:52:44 -0700 (PDT)
+        with ESMTP id S231805AbiD2TWo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 29 Apr 2022 15:22:44 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC288C74BA
+        for <linux-pm@vger.kernel.org>; Fri, 29 Apr 2022 12:19:25 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id t11-20020a17090ad50b00b001d95bf21996so11345848pju.2
+        for <linux-pm@vger.kernel.org>; Fri, 29 Apr 2022 12:19:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=kMONR8uP8o1V9wDmONNEpi44JYnbSaTBErCeX+Ef8mM=;
-        b=MUwX5h8GHYTDN93S5LQ8HgipQCFvTgIJKkyQsoDuwUIJtqQlnvDOsWHlV05eaC8Ri/
-         aj2P8a4Y7arfynDH3NX+WbPF34XjQ5ExG7rNPjVnk7NT0K1wQZG/W0mGYL1zbl88pmsU
-         ojCPyRS//omI5vTAAO4qjW/XkOqvRD3PZzryTMb9Z7TL7+TxD2tFXUuhy+MlH5JeLgPp
-         NILsPP4yFMrqjNKkp6zOegLylz9rgNharn+C6dUtPOMv/q2zNzyoODPWGprdgL1EbxMi
-         zfz6WkTYuvk+Cpj1IWITDaZyqfbYl9YNoDgv6evqUEbZh2fhePEm38ELdY/mfd4WV6Uk
-         Abqw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Nbl1l94NSe3Fek2fXmDdi1dWs+tZMPUUMy0P2EiLPLg=;
+        b=e+923uX3L34JoxH8inI2ZslZuVikT2P6I5OcFSRPPg8PWVOj34lfOUIuKdw5y2eIN+
+         vGUUvNtdpS7vGCww/uqb2kGFOd9R/L99ldLU+nWZITJlCqJONw41uN3MQZD3uQ2//N+M
+         crhXv+T8QnJFSY/NAUSKR1o4ahHUVk7dBVY18=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kMONR8uP8o1V9wDmONNEpi44JYnbSaTBErCeX+Ef8mM=;
-        b=31ajWxP+pnuXy8tJrNpoltRHfB1BuHzPzbkV3JjhIq4m+GV5RahHBHmAIyYXDvUjwM
-         t5n/v/BoxZkJUNygNgWsvEVDOPZrV71UBGJMwzdyjWHQhEy2CmoWNwFHNcRZ34l65F1F
-         /I+5hDYzz2ow08bpMPSecdkJRRrhpk4P9NoZ5WYwSBYGYPET81guVroQ0zpRYyvR7l1E
-         NxviA6RSvUw3m0oMoWTqOy+y0NmyQA1U6LZ6V0hnD6fHhbdvzTBbZLnwaZTqD0Lk+QI5
-         cciZu5EcKyNUztsGo9W+UP+SNgvcsqD33DcnKKl5MwRIlGQdzQ9hYNTdZZ+ZU23xfc0k
-         TP9g==
-X-Gm-Message-State: AOAM532jpM5Bzy/w5Yr1D5Ge83vKu3r4KNneFZtLe/l+0o7CGysnrP/W
-        D0yeOQ95FcZ9DRfgfCx1nThb1A==
-X-Google-Smtp-Source: ABdhPJzb5oXknS64kuiz02rv4HWvkZbDRu3ubeC0w7hDduzsE6tvZcGKS9f3Lgfwig0zajCWBQ93Gg==
-X-Received: by 2002:a05:6214:e4a:b0:446:6567:6554 with SMTP id o10-20020a0562140e4a00b0044665676554mr305731qvc.25.1651258363472;
-        Fri, 29 Apr 2022 11:52:43 -0700 (PDT)
-Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id az14-20020a05620a170e00b0069fb6140d2fsm1374694qkb.45.2022.04.29.11.52.42
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Nbl1l94NSe3Fek2fXmDdi1dWs+tZMPUUMy0P2EiLPLg=;
+        b=BGquUAG88BxT7/PfNL2ZYjJUNh1PdyNh+lLlljR4cFYGV/4mflhFkSc0qUbxppkZZY
+         PzzADkI4safQ1AEI037ZJ/7zF4btUOQJ6k/l/WUi+cJPs/lK9mYBtwd7xKaHh/36YmeB
+         IhJfzMkK44vOtoWO0dcLCcm8MY8mFmxBdSHnLW9fNMSE3ppWlLH5/Ph3UpL4sc5WS1ay
+         mxSoUtFodHW910WFHVW00jBlpOHKvDAdcBtVh7pe2Reip+GoASoExlu4bo/xLtAMRT1G
+         jmYa1CN8nAa8zxpWvcAXBLzaKbTkVzaUP+X9P9u6Wb9dLFS6gKkhFa9H+OE58bxSjjyv
+         Rm7Q==
+X-Gm-Message-State: AOAM530IXyk7BBTFGKddsaNjTJc4J5caFn6vPpfqf8DPJrLOhJ8jt76i
+        4O6NN5qWncAO+68u2XZXNdLTpg==
+X-Google-Smtp-Source: ABdhPJx5izOWf80ef6ldgjmrgWzIUTHlyiEV4R/ZZm5TorJpza0hZq8zsUWD1pcGPG5bzvzzP3PbRg==
+X-Received: by 2002:a17:90b:4a09:b0:1d2:de49:9be8 with SMTP id kk9-20020a17090b4a0900b001d2de499be8mr5668726pjb.68.1651259965279;
+        Fri, 29 Apr 2022 12:19:25 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:7d14:5f45:9377:9b6a])
+        by smtp.gmail.com with UTF8SMTPSA id m8-20020a17090a414800b001d81a30c437sm11380455pjg.50.2022.04.29.12.19.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Apr 2022 11:52:43 -0700 (PDT)
-Message-ID: <f1a5a345-422a-e46a-3a83-2de4023762a9@linaro.org>
-Date:   Fri, 29 Apr 2022 13:52:41 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] interconnect: Restore sync state by ignoring ipa-virt in
- provider count
-Content-Language: en-US
-To:     Georgi Djakov <djakov@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Fri, 29 Apr 2022 12:19:24 -0700 (PDT)
+Date:   Fri, 29 Apr 2022 12:19:22 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
         Doug Anderson <dianders@chromium.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Mike Tipton <quic_mdtipton@quicinc.com>
-References: <20220427013226.341209-1-swboyd@chromium.org>
- <fb1f9a17-9b27-b0ac-124d-66644851e204@linaro.org>
- <38149635-26ee-ab02-7c69-c5dd5f64fab5@kernel.org>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <38149635-26ee-ab02-7c69-c5dd5f64fab5@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        quic_ppratap@quicinc.com, quic_kriskura@quicinc.com,
+        quic_vpulyala@quicinc.com
+Subject: Re: [PATCH v14 2/7] PM / wakeup: Add device_children_wakeup_capable()
+Message-ID: <Ymw6Og/qhg3D0mx+@google.com>
+References: <1650395470-31333-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1650395470-31333-3-git-send-email-quic_c_sanm@quicinc.com>
+ <CAJZ5v0h2ZKPN6SERPnASPywZfeOWXWncJgNZ1WZa80+=M4DCiQ@mail.gmail.com>
+ <YmL3lMaR79wPMEfY@google.com>
+ <20220425130303.GA16319@hu-pkondeti-hyd.qualcomm.com>
+ <20220429125956.GD16319@hu-pkondeti-hyd.qualcomm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220429125956.GD16319@hu-pkondeti-hyd.qualcomm.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,92 +89,113 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 4/27/22 3:52 PM, Georgi Djakov wrote:
-> On 27.04.22 15:00, Alex Elder wrote:
->> On 4/26/22 8:32 PM, Stephen Boyd wrote:
->>> Ignore compatible strings for the IPA virt drivers that were removed in
->>> commits 2fb251c26560 ("interconnect: qcom: sdx55: Drop IP0
->>> interconnects") and 2f3724930eb4 ("interconnect: qcom: sc7180: Drop IP0
->>> interconnects") so that the sync state logic can kick in again.
->>> Otherwise all the interconnects in the system will stay pegged at max
->>> speeds because 'providers_count' is always going to be one larger than
->>> the number of drivers that will ever probe on sc7180 or sdx55. This
->>> fixes suspend on sc7180 and sdx55 devices when you don't have a
->>> devicetree patch to remove the ipa-virt compatible node.
->>>
->>> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
->>> Cc: Doug Anderson <dianders@chromium.org>
->>> Cc: Alex Elder <elder@linaro.org>
->>> Cc: Taniya Das <quic_tdas@quicinc.com>
->>> Cc: Mike Tipton <quic_mdtipton@quicinc.com>
->>> Fixes: 2fb251c26560 ("interconnect: qcom: sdx55: Drop IP0 
->>> interconnects")
->>> Fixes: 2f3724930eb4 ("interconnect: qcom: sc7180: Drop IP0 
->>> interconnects")
->>> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
->>
->> So of_count_icc_providers() counts the number of
->> interconnect providers defined in the DTB, regardless
->> of whether anything in the code supports it.
+Hi Pavan,
+
+On Fri, Apr 29, 2022 at 06:29:56PM +0530, Pavan Kondeti wrote:
+> Hi Matthias,
 > 
-> Yes, that's the case currently. There could be multiple provider drivers
-> in different modules, and the modules may be loaded even not during boot,
-> but later. So we rely on DT.
-
-Georgi, do you have any other ideas about how to improve this?
-
-What you say makes sense--you figure out the total number of
-providers at init time based on what's defined in DT.
-
-But when all is said and done, what if even *one* of those
-has no provider driver?  Isn't that what causes the problem
-here, that icc_sync_state assumes all providers specified in
-DT will eventually have a driver that calls icc_sync_state()?
-
-(I don't claim to know the interconnect code in detail, so
-I might not be quite understanding how this works.)
-
-					-Alex
-
-> Thanks,
-> Georgi
+> On Mon, Apr 25, 2022 at 06:33:03PM +0530, Pavan Kondeti wrote:
+> > Hi Matthias,
+> > 
+> > On Fri, Apr 22, 2022 at 11:44:36AM -0700, Matthias Kaehlcke wrote:
+> > > On Fri, Apr 22, 2022 at 01:57:17PM +0200, Rafael J. Wysocki wrote:
+> > > > On Tue, Apr 19, 2022 at 9:11 PM Sandeep Maheswaram
+> > > > <quic_c_sanm@quicinc.com> wrote:
+> > > > >
+> > > > > From: Matthias Kaehlcke <mka@chromium.org>
+> > > > >
+> > > > > Add device_children_wakeup_capable() which checks whether the device itself
+> > > > > or one if its descendants is wakeup capable.
+> > > > 
+> > > > device_wakeup_path() exists for a very similar purpose.
+> > > > 
+> > > > Is it not usable for whatever you need the new function introduced here?
+> > > 
+> > > I wasn't aware of it's function, there are no doc comments and the
+> > > name isn't really self explanatory.
+> > > 
+> > > In a quick test device_wakeup_path() returned inconsistent values for the
+> > > root hub, sometimes true, others false when a wakeup capable USB device was
+> > > connected.
+> > 
+> > We will also test the same to double confirm the behavior of
+> > device_wakeup_path(). I am assuming that you checked device_wakeup_path()
+> > only during system suspend path.
+> > 
+> > Here is what I understood by looking at __device_suspend(). Please share
+> > your thoughts on this.
+> > 
+> > power.wakeup_path is set to true for the parent *after* a wakeup capable
+> > device is suspended. This means when the root hub(s) is suspended, it is
+> > propagated to xhci-plat and when xhci-plat is suspended, it is propagated
+> > to dwc3. bottom up propgation during system suspend.
+> > 
+> > I believe we can directly check something like this in the dwc3 driver
+> > instead of having another wrapper like device_children_wakeup_capable().
+> > 
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index 1170b80..a783257 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -1878,8 +1878,14 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> >  		break;
+> >  	case DWC3_GCTL_PRTCAP_HOST:
+> >  		if (!PMSG_IS_AUTO(msg)) {
+> > +			/*
+> > +			 * Don't kill the host when dwc3 is wakeup capable and
+> > +			 * its children needs wakeup.
+> > +			 */
+> > +			if (device_may_wakeup(dwc->dev) && device_wakeup_path(dwc->dev))
+> > +				handle_it();
+> > +		} else {
+> >  			dwc3_core_exit(dwc);
+> > -			break;
+> >  		}
+> >  
+> >  		/* Let controller to suspend HSPHY before PHY driver suspends */
+> > 
 > 
->> This seems to be a more general problem, but I
->> suppose in practice it's not likely to occur.
->>
->> I think your solution looks fine, but I'm interested
->> in what Georgi has to say.
->>
->> Reviewed-by: Alex Elder <elder@linaro.org>
->>
->>
->>> ---
->>>   drivers/interconnect/core.c | 8 +++++++-
->>>   1 file changed, 7 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
->>> index 9050ca1f4285..c52915a58b22 100644
->>> --- a/drivers/interconnect/core.c
->>> +++ b/drivers/interconnect/core.c
->>> @@ -1087,9 +1087,15 @@ static int of_count_icc_providers(struct 
->>> device_node *np)
->>>   {
->>>       struct device_node *child;
->>>       int count = 0;
->>> +    const struct of_device_id ignore_list[] = {
->>> +        { .compatible = "qcom,sc7180-ipa-virt" },
->>> +        { .compatible = "qcom,sdx55-ipa-virt" },
->>> +        {}
->>> +    };
->>>       for_each_available_child_of_node(np, child) {
->>> -        if (of_property_read_bool(child, "#interconnect-cells"))
->>> +        if (of_property_read_bool(child, "#interconnect-cells") &&
->>> +            likely(!of_match_node(ignore_list, child)))
->>>               count++;
->>>           count += of_count_icc_providers(child);
->>>       }
->>>
->>> base-commit: 2fb251c265608636fc961b7d38e1a03937e57371
->>
+> device_wakeup_path(dwc->dev) is returning true all the time irrespective of
+> the wakeup capability (and enabled status) of the connected USB devices. That
+> is because xhci-plat device is configured to wakeup all the time. Since the
+> child is wakeup capable, its parent i.e dwc3 has device_wakeup_path() set.
+> device_children_wakeup_capable() will also suffer the problem. However,
 > 
+> device_children_wakeup_capable(&hcd->self.root_hub->dev) is what Sandeep's
+> patch is using. That is not correct. we have two root hubs (HS and SS) associated
+> with a USB3 controller and calling it on one root hub is incorrect. 
+> device_children_wakeup_capable() must be called on xhci-plat so that it covers
+> both HS and SS root hubs
 
+Thanks for pointing that out!
+
+> I am thinking of dynamically enabling/disabling xhci-plat wakeup capability so
+> that the wakeup path is correctly propagated to dwc3. something like below.
+> Does it make sense to you?
+> 
+> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> index 649ffd8..be0c55b 100644
+> --- a/drivers/usb/host/xhci-plat.c
+> +++ b/drivers/usb/host/xhci-plat.c
+> @@ -412,6 +412,9 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
+>  	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
+>  	int ret;
+>  
+> +	if (!device_wakeup_path(dev))
+> +		device_wakeup_disable(dev);
+> +
+>  	if (pm_runtime_suspended(dev))
+>  		pm_runtime_resume(dev);
+>  
+> @@ -443,6 +446,8 @@ static int __maybe_unused xhci_plat_resume(struct device *dev)
+>  	pm_runtime_set_active(dev);
+>  	pm_runtime_enable(dev);
+>  
+> +	device_wakeup_enable(dev);
+
+I think this also needs to be done conditionally, otherwise it would
+create a new wake source on every resume when wakeup is already
+enabled.
+
+Other than that this seems to do the trick and keeps the USB layer out of
+the dwc3 code.
