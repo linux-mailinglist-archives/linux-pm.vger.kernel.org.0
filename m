@@ -2,101 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC79B515E4D
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Apr 2022 16:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8444A515E63
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Apr 2022 16:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242248AbiD3Oql (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 30 Apr 2022 10:46:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
+        id S1359868AbiD3Ow4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 30 Apr 2022 10:52:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbiD3Oqj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 Apr 2022 10:46:39 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85B161295;
-        Sat, 30 Apr 2022 07:43:16 -0700 (PDT)
-Received: from mail-ot1-f42.google.com ([209.85.210.42]) by
- mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mn2eN-1oAYcv3eXX-00kApA; Sat, 30 Apr 2022 16:43:15 +0200
-Received: by mail-ot1-f42.google.com with SMTP id w8-20020a9d5388000000b006060c4a9ee3so483894otg.10;
-        Sat, 30 Apr 2022 07:43:13 -0700 (PDT)
-X-Gm-Message-State: AOAM530lJLjGIGkDDyrzz26RBeTaJulD941ict7DOulu0ByeoygDj/K8
-        6EElQtNwsRwKvdAYHK7cp/6ch1znfnysExWofiY=
-X-Google-Smtp-Source: ABdhPJyu1oLM1IRKTqR+eQdQ1rsYTJoLMnuBV/FFpB8y5vKEh5sII8e/hMlA25PDcp1w4A+thLzVKyWiU6hDO089+bw=
-X-Received: by 2002:a0d:d804:0:b0:2f4:e47d:1c2c with SMTP id
- a4-20020a0dd804000000b002f4e47d1c2cmr4143200ywe.320.1651328616903; Sat, 30
- Apr 2022 07:23:36 -0700 (PDT)
+        with ESMTP id S1382869AbiD3Owz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 Apr 2022 10:52:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02BE628999
+        for <linux-pm@vger.kernel.org>; Sat, 30 Apr 2022 07:49:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651330165;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VOdz1ctG8DsfhQ/t3Bd0GmW9//GLUrDpBS4J4wmHKpE=;
+        b=bbzTG6W3r5qQ5Z8OYrNcOHjjEiI434/yh4C3gJlAYiEGNqm4KQPjvSGsPmG8S2L7h74Mmk
+        jVZD57+reUZY2uYXZK6ZoJlDdFmEXt9M6GjGz2alsCvIw//FNNFvhmymhlmEUsPJysz3bI
+        JDX0M0NdjJQS/m2yjd832DpAUoF5ekQ=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-602-Z6fTtB8jNx2p5FUUIbKhCQ-1; Sat, 30 Apr 2022 10:49:23 -0400
+X-MC-Unique: Z6fTtB8jNx2p5FUUIbKhCQ-1
+Received: by mail-qv1-f69.google.com with SMTP id bu6-20020ad455e6000000b004563a74e3f9so7922413qvb.9
+        for <linux-pm@vger.kernel.org>; Sat, 30 Apr 2022 07:49:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=VOdz1ctG8DsfhQ/t3Bd0GmW9//GLUrDpBS4J4wmHKpE=;
+        b=G9Sxjrma9kSdLQdOVZh2B1IXin2GY9JityZgrBshWLG7DBxa6aUhXJeASU5Ym+2FvI
+         PTPc2FQY2AbVouV0+0821II+tPGgpVJXiZCkNqZvTCJI9tal96fPpFyiVJIFXjo+uJBE
+         7/xAx8Gq889ha86Fz63aoV6abRt0sg3lrfRXXEiqLv8pqZoHjDeXfpHJqsbVP4M0n4h+
+         2jTPeK5BWXnXb1QNL1Ql7Jo+dvwLcDx2+FRq35m4r51g+2vBKYbs15af+8zbwefKpKwn
+         8KMe7rKEOGAGDEAMTyNXlcaLy5BtoCku3kdstUcM9MfmETA77kjpoe331UcruLdqcTe3
+         D4eg==
+X-Gm-Message-State: AOAM531DGI4IO4iDdPJZU8nhYuQiTL99H/sXiLctTdaP50LF5inEPeLD
+        ok9uFySdHJE98YPm0JHyCCF6UfoPPH0I61E4/cu6A7WyHCLCpkpoQvSMG38KQ8aWsBFfKGf9xUJ
+        bI0yY+91fwwFwut3WjJo=
+X-Received: by 2002:a37:f50b:0:b0:680:dee3:e59d with SMTP id l11-20020a37f50b000000b00680dee3e59dmr2911331qkk.729.1651330163211;
+        Sat, 30 Apr 2022 07:49:23 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzP2zV4X0CVFZZpyp9P4jtRx4/60L99V/JkcXscgJ7XrWASvOBkPEjf+mcNg4ZX/ZPygqtOyQ==
+X-Received: by 2002:a37:f50b:0:b0:680:dee3:e59d with SMTP id l11-20020a37f50b000000b00680dee3e59dmr2911320qkk.729.1651330163006;
+        Sat, 30 Apr 2022 07:49:23 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id bb4-20020a05622a1b0400b002e218c3d4c6sm1133195qtb.2.2022.04.30.07.49.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 30 Apr 2022 07:49:22 -0700 (PDT)
+Subject: Re: [PATCH] tools/power turbostat: close file after use
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     lenb@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220430141557.1065405-1-trix@redhat.com>
+ <20220430141947.GA5101@chenyu5-mobl1>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <d71b4f7d-70db-efb3-4eb8-93cf96ab7519@redhat.com>
+Date:   Sat, 30 Apr 2022 07:49:19 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <20220422170530.GA2338209@roeck-us.net>
- <CAK8P3a3V=qxUqYT3Yt=dpXVv58-Y+HVi952wO6D4LPN5NNphGA@mail.gmail.com>
- <8b36d3a4-ec85-2f9f-e4b7-734d8ddd3d8f@roeck-us.net> <CAK8P3a0R9cpEb1d2=e9KnGSbi_uRv48RWfCu_J4DDak_cGZSuw@mail.gmail.com>
- <20220422234150.GA3442771@roeck-us.net> <CAK8P3a3qZdEqnJ2nTOKwDMossngOgCpEvZq4cQMPQjSsUoU=6g@mail.gmail.com>
- <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net> <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
- <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net> <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
- <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
- <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net> <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
- <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com>
- <149509dd-f43d-1b27-4395-81eab4ff3455@roeck-us.net> <CAK8P3a05vFdBnXXAMPVS82xX29+uinvWPcWxAgvj0TfoOk+1kg@mail.gmail.com>
- <b13783aa-9225-d52a-3800-c97ad772688b@roeck-us.net> <CAK8P3a3S5OjkKq_u5FpnwzYv+0+typya6Z4MzTez5ZH+do00xQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a3S5OjkKq_u5FpnwzYv+0+typya6Z4MzTez5ZH+do00xQ@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 30 Apr 2022 16:23:20 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3jiqf_zpBsZyvAb5ZtkwDa7KkqExqDAdpY_pYqkr_NgQ@mail.gmail.com>
-Message-ID: <CAK8P3a3jiqf_zpBsZyvAb5ZtkwDa7KkqExqDAdpY_pYqkr_NgQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:H6IJBEz+ZpomKcFiPidyhkUxEF5w0DLXHe/vMZwISX/BHUEDMJn
- 8j/HagrzkYpHjm2t/x9VBIXKuZQV3AqFInnFiSwWiMPGzFWgqdFaN5rcXKOnBegblTTz6EE
- uMjlCJwhQjwp4SwKefBkyCGNKMB/lV4MYEcHOR/J4MeULTPINTxBzZPO8P1uDY4R9JHxRtP
- 0MMFl3XheI0bnuRT/Sk3Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:VPedLqT9np0=:7zewjiKp3tbI7dQZ8xe6nI
- U8UyWjOB5sNHgwM5+P1UxSMkme5dnGMow4JYAXQQ+TyLo6IlRzottshuhG0lTTHDzwK9hQrlY
- WYvK6HHh957URL/wUs3GqBxThWlKzULBdPhuatwg4rNa6ER5kWaDoomIGdUoaPtFyRGQlv/TI
- 1THH6UeYG//B659nk9K8vn932sLO3QESSnVOErCi1lAtUnazuP71bmCtdQ9NFdeps5CgcKWd3
- 1snKB2ECaTsCBZ4myNVW/ycvuSPkDjdAS+0HiSyY6BsCWQcWR3KQXJkVI53uYv8iZvCeYHYWk
- LAoLR8GYSoqGu0Ogm6H3riBYXyT6TWPbLw3n8s9bF0eA1UeKPSMhmcNhAeP5cHaYDPebkOuMF
- iAoQ4UQqc5wSQRxeOEbTatJd+YoZzPf1eRftohhpaGfZswgOUEkty3hzYs7Dy2YzMErRkARB0
- 2t/42VQiWjkml54rDgbucXTDT2nqxnASsJfyCVnBC4r8MYeqQACR8cJpHNXkPEa9rj8iYwsP8
- azvt6us6rZIC6gpX2nXLnNRBi4FqMELPeKL0pY7lskwIZKw6UnbHe5uOUOeKuUkwNsuxJNodk
- m+0P6Io3MXrOI3z/mHHUgs52ZL/DSK+5dnEj0ajN29iX2nYVMlV5rsNwhO+YEDK0xm0hl451K
- QG2G8hAuzwVzXeUY4LHg5uUFifmMYEhKR49z3K60I6J0brkvufGKlMgjl3pfD3/H65u1slhxb
- xkRJqjsZLimrMAQQM5VL0URHZgEoVMI6lTiza95jjdhehR2zvCmXW7h88TViDEodkWXvCu2PE
- mtOr5S65VuWBVzrJV26tfgq81fvr+wRRe+GnTvbKD3PrbnwkmQ=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+In-Reply-To: <20220430141947.GA5101@chenyu5-mobl1>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,44 +81,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Apr 30, 2022 at 3:32 PM Arnd Bergmann <arnd@arndb.de> wrote:
+
+On 4/30/22 7:19 AM, Chen Yu wrote:
+> On Sat, Apr 30, 2022 at 10:15:57AM -0400, Tom Rix wrote:
+>> The cppcheck reports this issue
+>> turbostat.c:2039]: (error) Resource leak: fp
+>>
+>> When the fscanf fails an error is returned without closing fp.
+>> Move the fclose so even if the fscanf fails, the file will be closed.
+>>
+>> Fixes: eae97e053fe3 ("tools/power turbostat: Support thermal throttle count print")
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+>> ---
+>>   tools/power/x86/turbostat/turbostat.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+>> index ede31a4287a0..2e9a751af260 100644
+>> --- a/tools/power/x86/turbostat/turbostat.c
+>> +++ b/tools/power/x86/turbostat/turbostat.c
+>> @@ -2035,9 +2035,9 @@ int get_core_throt_cnt(int cpu, unsigned long long *cnt)
+>>   	if (!fp)
+>>   		return -1;
+>>   	ret = fscanf(fp, "%lld", &tmp);
+>> +	fclose(fp);
+>>   	if (ret != 1)
+>>   		return -1;
+>> -	fclose(fp);
+>>   	*cnt = tmp;
+>>   
+>>   	return 0;
+>> --
+> Thank you Tom, and Colin has proposed a fix here:
+> https://lore.kernel.org/lkml/20220426131607.1520483-1-colin.i.king@gmail.com/
+
+Obviously I approve of Colin's fix :)
+
+If it is not too much trouble, please add
+
+Reviewed-by: Tom Rix <trix@redhat.com>
+
+If it is already on its way to linux-next, don't worry about it.
+
+Thanks,
+
+Tom
+
 >
-> On Sat, Apr 30, 2022 at 2:41 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > On 4/30/22 01:04, Arnd Bergmann wrote:
-> > > and concluded that it must have done this for a long time. In my own qemu
-> > > instance, I see a crash from iWMMXt, but that works fine on your machine.
-> > > OTOH, your failed instances all look like they either time out or
-> > > failed to find a
-> > > rootfs. I tried passing an MMC device as root, and that works here.
-> > >
-> >
-> > Booting from mmc works for me as well. Booting from pcmcia worked before,
-> > so I assume that there must be some regression.
+> thanks,
+> Chenyu
 >
-> Ok, got it, and managed to reproduce the hang now. My "ARM: pxa/sa1100: move
-> I/O space to PCI_IOBASE" patch managed to get it to the point of detecting
-> the pcmcia device instead of crashing, so I assumed it was enough when it
-> clearly was not. Before that patch, it still works, afterwards it hangs with
-> "pata_pcmcia: probe of 0.0 failed with error -12" as mentioned above. I'll
-> have another look.
 
-Got it: as the PCMCIA bus on this machine is the only thing with an I/O space,
-I assigned it port number range 0-0x1000, with an io_offset of 0, but this
-was apparently unexpected and triggered this sanity check:
-
-static int static_find_io(struct pcmcia_socket *s, unsigned int attr,
-                        unsigned int *base, unsigned int num,
-                        unsigned int align, struct resource **parent)
-{
-      if (!s->io_offset)
-              return -EINVAL;
-      ...
-      return 0;
-}
-
-I moved the devices around now, giving zeus/viper I/O space an offset of
-zero, and moving PCMCIA to offset 0x10000 and 0x11000 for the two slots,
-which now works because the io_offset is nonzero. I've regenerated the
-branches again, and confirmed the for-next branch still boots from pcmcia.
-
-        Arnd
