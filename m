@@ -2,78 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8444A515E63
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Apr 2022 16:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86AD351607A
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Apr 2022 22:51:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359868AbiD3Ow4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 30 Apr 2022 10:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
+        id S245106AbiD3Uy3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 30 Apr 2022 16:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382869AbiD3Owz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 Apr 2022 10:52:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 02BE628999
-        for <linux-pm@vger.kernel.org>; Sat, 30 Apr 2022 07:49:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651330165;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VOdz1ctG8DsfhQ/t3Bd0GmW9//GLUrDpBS4J4wmHKpE=;
-        b=bbzTG6W3r5qQ5Z8OYrNcOHjjEiI434/yh4C3gJlAYiEGNqm4KQPjvSGsPmG8S2L7h74Mmk
-        jVZD57+reUZY2uYXZK6ZoJlDdFmEXt9M6GjGz2alsCvIw//FNNFvhmymhlmEUsPJysz3bI
-        JDX0M0NdjJQS/m2yjd832DpAUoF5ekQ=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-602-Z6fTtB8jNx2p5FUUIbKhCQ-1; Sat, 30 Apr 2022 10:49:23 -0400
-X-MC-Unique: Z6fTtB8jNx2p5FUUIbKhCQ-1
-Received: by mail-qv1-f69.google.com with SMTP id bu6-20020ad455e6000000b004563a74e3f9so7922413qvb.9
-        for <linux-pm@vger.kernel.org>; Sat, 30 Apr 2022 07:49:23 -0700 (PDT)
+        with ESMTP id S245073AbiD3Uy3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 Apr 2022 16:54:29 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E4C49F1F;
+        Sat, 30 Apr 2022 13:51:06 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id d6so12659026ede.8;
+        Sat, 30 Apr 2022 13:51:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DIpg9joXVj37DEw0/X2vPHLdIx/jukzHY2nL90S93uE=;
+        b=N6/PWpxc6vUpB/yz2hISssTUs6vjQvVU+0+VYR/P0l3Y0vz0GZ+oE2j4ByKR0nzKbE
+         E/0Ct4cVlMRjJrVDXShq5oVykqKkM4zJKqYMIUVSt277X15eVVLsrJh19q4gMt0pXi0D
+         2DVXRz8nUQ/TSju93cFK3sBc8YlDpVNxCGk1rvaXQoBz8NwTLtGiTmR7f2HHU79/0xda
+         YUXoZQ5IjnOCx06YWEjNReu7/c+86vz/8YN27HnlyjlCPu595USI3kI+bOuyJsf/PpDA
+         Bia7teaPzz0DthbmjxXkgA+OVaiGwMwyPDJGQLVRswOWXg3OQvn49koQ4s2TNXDiH3aY
+         OhEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=VOdz1ctG8DsfhQ/t3Bd0GmW9//GLUrDpBS4J4wmHKpE=;
-        b=G9Sxjrma9kSdLQdOVZh2B1IXin2GY9JityZgrBshWLG7DBxa6aUhXJeASU5Ym+2FvI
-         PTPc2FQY2AbVouV0+0821II+tPGgpVJXiZCkNqZvTCJI9tal96fPpFyiVJIFXjo+uJBE
-         7/xAx8Gq889ha86Fz63aoV6abRt0sg3lrfRXXEiqLv8pqZoHjDeXfpHJqsbVP4M0n4h+
-         2jTPeK5BWXnXb1QNL1Ql7Jo+dvwLcDx2+FRq35m4r51g+2vBKYbs15af+8zbwefKpKwn
-         8KMe7rKEOGAGDEAMTyNXlcaLy5BtoCku3kdstUcM9MfmETA77kjpoe331UcruLdqcTe3
-         D4eg==
-X-Gm-Message-State: AOAM531DGI4IO4iDdPJZU8nhYuQiTL99H/sXiLctTdaP50LF5inEPeLD
-        ok9uFySdHJE98YPm0JHyCCF6UfoPPH0I61E4/cu6A7WyHCLCpkpoQvSMG38KQ8aWsBFfKGf9xUJ
-        bI0yY+91fwwFwut3WjJo=
-X-Received: by 2002:a37:f50b:0:b0:680:dee3:e59d with SMTP id l11-20020a37f50b000000b00680dee3e59dmr2911331qkk.729.1651330163211;
-        Sat, 30 Apr 2022 07:49:23 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzP2zV4X0CVFZZpyp9P4jtRx4/60L99V/JkcXscgJ7XrWASvOBkPEjf+mcNg4ZX/ZPygqtOyQ==
-X-Received: by 2002:a37:f50b:0:b0:680:dee3:e59d with SMTP id l11-20020a37f50b000000b00680dee3e59dmr2911320qkk.729.1651330163006;
-        Sat, 30 Apr 2022 07:49:23 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id bb4-20020a05622a1b0400b002e218c3d4c6sm1133195qtb.2.2022.04.30.07.49.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Apr 2022 07:49:22 -0700 (PDT)
-Subject: Re: [PATCH] tools/power turbostat: close file after use
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     lenb@kernel.org, linux-pm@vger.kernel.org,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DIpg9joXVj37DEw0/X2vPHLdIx/jukzHY2nL90S93uE=;
+        b=aaIQ599ILol0dnvwwJDDqF5/Mn5PCCXK+qxD2VLrBmPf1lq1J3X6TXrH5ynwPdWjmf
+         zQ+p1L2+TCMEIo6DQIgEHEnrREVNBmDnnwwCDevIBQ0VyLTpA6wovPxwzZbY/waizE89
+         M4HgSJcHK00X0YniC3dQcpliuR9WBwNaJrjPWtj9zzXAZRwcHmdnZvJ7lRkLuhO00s7f
+         fNkWKPFik2EpT6RMhnR5xz+OWwaGo2OukPI3dsO8kvwMSSHb0fZ2otYpgxDpPJuhAO6Z
+         KbxkZnqBN1iatN9Ehl3Wvhyexyk19fIHvFN9cLNxtcppW86ekqocyBS0XJIKdf5HIHU3
+         QD/g==
+X-Gm-Message-State: AOAM533lbL1wRqosJOQ+QdSKJMCmRMWr6jvqATyjCVJZrmjtnxtzW0Lp
+        PIHRMwOuv6bvROdNWurw6bo=
+X-Google-Smtp-Source: ABdhPJyGa8eqLLHbw4vtStE6lJud4dA5Kx/KEnnmb74LqK34mjtwtG6LYB2TeFVVmmfImp6PNbrchA==
+X-Received: by 2002:a50:ed11:0:b0:425:c3d1:4547 with SMTP id j17-20020a50ed11000000b00425c3d14547mr5959420eds.410.1651351864653;
+        Sat, 30 Apr 2022 13:51:04 -0700 (PDT)
+Received: from fedora.robimarko.hr (cpe-94-253-165-113.zg.cable.xnet.hr. [94.253.165.113])
+        by smtp.googlemail.com with ESMTPSA id p14-20020a056402154e00b0042617ba63a8sm4457852edx.50.2022.04.30.13.51.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Apr 2022 13:51:04 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, amitk@kernel.org,
+        thara.gopinath@linaro.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220430141557.1065405-1-trix@redhat.com>
- <20220430141947.GA5101@chenyu5-mobl1>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <d71b4f7d-70db-efb3-4eb8-93cf96ab7519@redhat.com>
-Date:   Sat, 30 Apr 2022 07:49:19 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH 1/5] dt-bindings: thermal: tsens: Add ipq8074 compatible
+Date:   Sat, 30 Apr 2022 22:50:57 +0200
+Message-Id: <20220430205101.459782-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-In-Reply-To: <20220430141947.GA5101@chenyu5-mobl1>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,54 +71,139 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Qualcomm IPQ8074 has tsens v2.3.0 block, though unlike existing v2 IP it
+only uses one IRQ, so tsens v2 compatible cannot be used as the fallback.
 
-On 4/30/22 7:19 AM, Chen Yu wrote:
-> On Sat, Apr 30, 2022 at 10:15:57AM -0400, Tom Rix wrote:
->> The cppcheck reports this issue
->> turbostat.c:2039]: (error) Resource leak: fp
->>
->> When the fscanf fails an error is returned without closing fp.
->> Move the fclose so even if the fscanf fails, the file will be closed.
->>
->> Fixes: eae97e053fe3 ("tools/power turbostat: Support thermal throttle count print")
->> Signed-off-by: Tom Rix <trix@redhat.com>
->> ---
->>   tools/power/x86/turbostat/turbostat.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
->> index ede31a4287a0..2e9a751af260 100644
->> --- a/tools/power/x86/turbostat/turbostat.c
->> +++ b/tools/power/x86/turbostat/turbostat.c
->> @@ -2035,9 +2035,9 @@ int get_core_throt_cnt(int cpu, unsigned long long *cnt)
->>   	if (!fp)
->>   		return -1;
->>   	ret = fscanf(fp, "%lld", &tmp);
->> +	fclose(fp);
->>   	if (ret != 1)
->>   		return -1;
->> -	fclose(fp);
->>   	*cnt = tmp;
->>   
->>   	return 0;
->> --
-> Thank you Tom, and Colin has proposed a fix here:
-> https://lore.kernel.org/lkml/20220426131607.1520483-1-colin.i.king@gmail.com/
+We also have to make sure that correct interrupts are set according to
+compatibles, so populate interrupt information per compatibles.
 
-Obviously I approve of Colin's fix :)
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+ .../bindings/thermal/qcom-tsens.yaml          | 79 ++++++++++++++++---
+ 1 file changed, 68 insertions(+), 11 deletions(-)
 
-If it is not too much trouble, please add
-
-Reviewed-by: Tom Rix <trix@redhat.com>
-
-If it is already on its way to linux-next, don't worry about it.
-
-Thanks,
-
-Tom
-
->
-> thanks,
-> Chenyu
->
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+index b6406bcc683f..44ebdfd4560a 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+@@ -56,22 +56,19 @@ properties:
+               - qcom,sm8350-tsens
+           - const: qcom,tsens-v2
+ 
++      - description: v2 of TSENS with combined interrupt
++        items:
++          - enum:
++              - qcom,ipq8074-tsens
++
+   reg:
+     items:
+       - description: TM registers
+       - description: SROT registers
+ 
+-  interrupts:
+-    minItems: 1
+-    items:
+-      - description: Combined interrupt if upper or lower threshold crossed
+-      - description: Interrupt if critical threshold crossed
++  interrupts: true
+ 
+-  interrupt-names:
+-    minItems: 1
+-    items:
+-      - const: uplow
+-      - const: critical
++  interrupt-names: true
+ 
+   nvmem-cells:
+     minItems: 1
+@@ -125,21 +122,66 @@ allOf:
+       properties:
+         interrupts:
+           maxItems: 1
++          items:
++            - description: Combined interrupt if upper or lower threshold crossed
+         interrupt-names:
+           maxItems: 1
++          items:
++            - const: uplow
+ 
+-    else:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,msm8953-tsens
++              - qcom,msm8996-tsens
++              - qcom,msm8998-tsens
++              - qcom,sc7180-tsens
++              - qcom,sc7280-tsens
++              - qcom,sc8180x-tsens
++              - qcom,sdm630-tsens
++              - qcom,sdm845-tsens
++              - qcom,sm8150-tsens
++              - qcom,sm8250-tsens
++              - qcom,sm8350-tsens
++              - qcom,tsens-v2
++    then:
+       properties:
+         interrupts:
+           minItems: 2
++          items:
++            - description: Combined interrupt if upper or lower threshold crossed
++            - description: Interrupt if critical threshold crossed
+         interrupt-names:
+           minItems: 2
++          items:
++            - const: uplow
++            - const: critical
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,ipq8074-tsens
++    then:
++      properties:
++        interrupts:
++          maxItems: 1
++          items:
++            - description: Combined interrupt if upper, lower or critical thresholds crossed
++        interrupt-names:
++          maxItems: 1
++          items:
++            - const: combined
+ 
+   - if:
+       properties:
+         compatible:
+           contains:
+             enum:
++              - qcom,ipq8074-tsens
+               - qcom,tsens-v0_1
+               - qcom,tsens-v1
+               - qcom,tsens-v2
+@@ -222,4 +264,19 @@ examples:
+            #qcom,sensors = <13>;
+            #thermal-sensor-cells = <1>;
+     };
++
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    // Example 4 (for any IPQ8074 based SoC-s):
++    tsens4: thermal-sensor@4a9000 {
++           compatible = "qcom,ipq8074-tsens";
++           reg = <0x4a9000 0x1000>,
++                 <0x4a8000 0x1000>;
++
++           interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
++           interrupt-names = "combined";
++
++           #qcom,sensors = <16>;
++           #thermal-sensor-cells = <1>;
++    };
+ ...
+-- 
+2.35.1
 
