@@ -2,202 +2,192 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 732AC516083
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Apr 2022 22:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1115160FD
+	for <lists+linux-pm@lfdr.de>; Sun,  1 May 2022 01:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245291AbiD3Uyn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 30 Apr 2022 16:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35550 "EHLO
+        id S237591AbiD3X1L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 30 Apr 2022 19:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245242AbiD3Uyg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 Apr 2022 16:54:36 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C3F5371B;
-        Sat, 30 Apr 2022 13:51:12 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id b24so12654682edu.10;
-        Sat, 30 Apr 2022 13:51:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=7ksfYzQBn7UrcwfXPR8oQDY9eW9oGago9RfblkVMga0=;
-        b=lbbeV85svKR/bRew4SlVcnU7nKENj7PIy5vr9kwC7wZyk9oAw4Cf5Qom1isdGy3HNN
-         /ExHhd318S12iwxEtUbgOARjqB0JZYGM2gx0U9ef/mkFbtAjitQk3koipNBKCh9hgTqD
-         t5WzLDarBpvId3J0h8ctSKY6jqYgXVaR8IpZEloFpNIzFRDFLlG9KtkpjwcMYkjggY2t
-         FPieRX/dsaudrRpHaTrJwBbXNLlWUsx9ljtji0/VV6vZDs15ExiamaEP7MM/UfJlLa3I
-         Y3isqioUi0RZBY9G56FRKoxJnQKH1Z9gINsKiTdueNyBvHKg+bvXaF+R1YGd7ntgwRPN
-         Gw3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7ksfYzQBn7UrcwfXPR8oQDY9eW9oGago9RfblkVMga0=;
-        b=UQ4/ZkS5NxwrUHa5Fj99zxcMJYsBQc7NaxFOQXgvXK77TsNrtmqqiY7dsUYBJiltSV
-         AFVHxs2wljtIJ4W4g0+YnLi5hN1RTMncsurKfwrzokh96jPgvIOrKSvhwTTG2HxnEWMq
-         9xGj2opY0m9VcbmMdurJxyBQMSRG3Hp16kRp/V6Gc0am+W98pUOXJw1yzcZhCS/ZYnTx
-         yhYph+tzOiOxucpMycTYMgvX1tuL5fyLUbRIEWueOI86A92hx8yAASxNAV1fOcSIE+hq
-         I/2EKnMyWDqqPrnlyk+3GDdN9berOMviXps73JljlyQXdAU413HLBJmLCXGKcfP8TG/G
-         kLyA==
-X-Gm-Message-State: AOAM5335Vv6LZC5mFqK00u24gf/5/jCn8X/UIX4HO8okKoASlyh2DzmS
-        uQyXHmGRbZZTmtKdxo483mtc40BPUEPnfw==
-X-Google-Smtp-Source: ABdhPJyK4z4U7e4b9q0BbzIwYcjagpOwUuAvrQ8PA11smPbHiuEIm63CGxBatjpbvYaT1pRfgL+0Dg==
-X-Received: by 2002:a05:6402:3488:b0:427:b4ec:991b with SMTP id v8-20020a056402348800b00427b4ec991bmr1157230edc.319.1651351871415;
-        Sat, 30 Apr 2022 13:51:11 -0700 (PDT)
-Received: from fedora.robimarko.hr (cpe-94-253-165-113.zg.cable.xnet.hr. [94.253.165.113])
-        by smtp.googlemail.com with ESMTPSA id p14-20020a056402154e00b0042617ba63a8sm4457852edx.50.2022.04.30.13.51.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 30 Apr 2022 13:51:10 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, amitk@kernel.org,
-        thara.gopinath@linaro.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [PATCH 5/5] arm64: dts: ipq8074: add thermal nodes
-Date:   Sat, 30 Apr 2022 22:51:01 +0200
-Message-Id: <20220430205101.459782-5-robimarko@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220430205101.459782-1-robimarko@gmail.com>
-References: <20220430205101.459782-1-robimarko@gmail.com>
+        with ESMTP id S237293AbiD3X1I (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 30 Apr 2022 19:27:08 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381EF5A5A7;
+        Sat, 30 Apr 2022 16:23:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1651361025; x=1682897025;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=LcKoOFAObsyAD/ndPxOCPXL8Nf7equVeddrUCIIimX4=;
+  b=B2NjbCFVD/8ZOq0lU+MvETRidwN8xS42FFCNod77NqR7ZJ9eedKi2V9X
+   h2XnrRzIioY0j15kPL/dT694lu7f7fQmj1Lvn5Tj73qbwOebhIVp0D0y0
+   N5/J/69MRVbKh1mMR2wXUcBEtJ0lUo5GL21tnoz/rdiEJeE5UmmMe+0TR
+   V/tF6tUDnQNdgNinv1kryscinpodnDEtSMiwyJsmNwiWGEkTzcHuXHQYU
+   FK2QzxX7YCL2G62vQ3p+UtYp+m4NWrESSHeyRpYQhrxKdJsVfgkjgJLMV
+   m/Gvmg2o3CUhSLkfxCAmAkPW8taDS0uZEuUOe/7P9Dm7TvMQ9EKXspQnj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10333"; a="246847630"
+X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
+   d="scan'208";a="246847630"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2022 16:23:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,189,1647327600"; 
+   d="scan'208";a="707070898"
+Received: from lkp-server01.sh.intel.com (HELO 5056e131ad90) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 30 Apr 2022 16:23:43 -0700
+Received: from kbuild by 5056e131ad90 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nkwRC-0007m0-Q6;
+        Sat, 30 Apr 2022 23:23:42 +0000
+Date:   Sun, 01 May 2022 07:22:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ f2febeef358161ef4f8055451778e19fc78d429c
+Message-ID: <626dc4c9.OQFd63oOBHa9VwE6%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-IPQ8074 has a tsens v2.3.0 peripheral which monitors
-temperatures around the various subsystems on the
-die.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: f2febeef358161ef4f8055451778e19fc78d429c  Merge branch 'acpi-osl' into bleeding-edge
 
-So lets add the tsens and thermal zone nodes, passive
-CPU cooling will come in later patches after CPU frequency
-scaling is supported.
+elapsed time: 3473m
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
- arch/arm64/boot/dts/qcom/ipq8074.dtsi | 96 +++++++++++++++++++++++++++
- 1 file changed, 96 insertions(+)
+configs tested: 109
+configs skipped: 3
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-index afbae86cf6d3..76e02490b968 100644
---- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -332,6 +332,16 @@ prng: rng@e3000 {
- 			status = "disabled";
- 		};
- 
-+		tsens: thermal-sensor@4a9000 {
-+			compatible = "qcom,ipq8074-tsens";
-+			reg = <0x4a9000 0x1000>, /* TM */
-+			      <0x4a8000 0x1000>; /* SROT */
-+			interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "combined";
-+			#qcom,sensors = <16>;
-+			#thermal-sensor-cells = <1>;
-+		};
-+
- 		cryptobam: dma-controller@704000 {
- 			compatible = "qcom,bam-v1.7.0";
- 			reg = <0x00704000 0x20000>;
-@@ -1092,4 +1102,90 @@ wifi: wifi@c0000000 {
- 			status = "disabled";
- 		};
- 	};
-+
-+	thermal-zones {
-+		nss-top-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 4>;
-+		};
-+
-+		nss0-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 5>;
-+		};
-+
-+		nss1-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 6>;
-+		};
-+
-+		wcss-phya0-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 7>;
-+		};
-+
-+		wcss-phya1-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 8>;
-+		};
-+
-+		cpu0_thermal: cpu0-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 9>;
-+		};
-+
-+		cpu1_thermal: cpu1-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 10>;
-+		};
-+
-+		cpu2_thermal: cpu2-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 11>;
-+		};
-+
-+		cpu3_thermal: cpu3-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 12>;
-+		};
-+
-+		cluster_thermal: cluster-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 13>;
-+		};
-+
-+		wcss-phyb0-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 14>;
-+		};
-+
-+		wcss-phyb1-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <1000>;
-+
-+			thermal-sensors = <&tsens 15>;
-+		};
-+	};
- };
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                              allmodconfig
+arm                              allyesconfig
+arm                                 defconfig
+arm64                               defconfig
+arm64                            allyesconfig
+i386                          randconfig-c001
+mips                           ci20_defconfig
+sh                        sh7763rdp_defconfig
+powerpc                        cell_defconfig
+parisc                generic-64bit_defconfig
+arm                         cm_x300_defconfig
+arm                         nhk8815_defconfig
+mips                         cobalt_defconfig
+ia64                             alldefconfig
+parisc                              defconfig
+sh                          lboxre2_defconfig
+arc                              alldefconfig
+sh                               j2_defconfig
+arm                        multi_v7_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220428
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+alpha                               defconfig
+csky                                defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+sh                               allmodconfig
+arc                                 defconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+parisc64                            defconfig
+s390                                defconfig
+s390                             allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+nios2                               defconfig
+arc                              allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a013
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+arc                  randconfig-r043-20220428
+riscv                             allnoconfig
+riscv                            allyesconfig
+riscv                            allmodconfig
+riscv                    nommu_k210_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_virt_defconfig
+riscv                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                                  kexec
+x86_64                          rhel-8.3-func
+x86_64                               rhel-8.3
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+
+clang tested configs:
+mips                 randconfig-c004-20220428
+x86_64                        randconfig-c007
+arm                  randconfig-c002-20220428
+i386                          randconfig-c001
+powerpc              randconfig-c003-20220428
+s390                 randconfig-c005-20220428
+riscv                randconfig-c006-20220428
+arm                       spear13xx_defconfig
+mips                        workpad_defconfig
+arm                          collie_defconfig
+mips                     loongson2k_defconfig
+powerpc                     tqm8540_defconfig
+arm                         orion5x_defconfig
+arm                         lpc32xx_defconfig
+arm                        magician_defconfig
+powerpc                 mpc8272_ads_defconfig
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a014
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r041-20220428
+hexagon              randconfig-r045-20220428
+riscv                randconfig-r042-20220428
+s390                 randconfig-r044-20220428
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
