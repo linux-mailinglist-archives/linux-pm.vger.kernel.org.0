@@ -2,98 +2,210 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B13B5162DA
-	for <lists+linux-pm@lfdr.de>; Sun,  1 May 2022 10:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2EA05166EA
+	for <lists+linux-pm@lfdr.de>; Sun,  1 May 2022 20:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237714AbiEAIlH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 1 May 2022 04:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60052 "EHLO
+        id S1350167AbiEASZe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 1 May 2022 14:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231426AbiEAIlG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 May 2022 04:41:06 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD2A40934
-        for <linux-pm@vger.kernel.org>; Sun,  1 May 2022 01:37:41 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id a21so13545264edb.1
-        for <linux-pm@vger.kernel.org>; Sun, 01 May 2022 01:37:41 -0700 (PDT)
+        with ESMTP id S239773AbiEASZc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 1 May 2022 14:25:32 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DE351E47;
+        Sun,  1 May 2022 11:22:05 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id be20so14434721edb.12;
+        Sun, 01 May 2022 11:22:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=m157W2zApEuizi33CKK6utPLhy+v4JIY3Lxqnn+AIsA=;
-        b=XKaNela1/7HSU79MHBThQ3hRkxKfHzyV1N5ENmcinScB8ju3QC1PgN2yWLKblfZkYi
-         vV2hYrpyXRlb2PfWhqvg9dHu1DJFbgGtjqN4E2IvKKiDe9ZB48ix4c1LrW6Ln83g9HWq
-         MIVPMrOl6VZsTE3bFPo8oZSVpbhx3+agpHZuZMS7XmxiNMUHSzCNatL8wVLTvmo/uxYJ
-         bNIC1TqycnpBA1nO1fIyvyw8TNvxnhRFZg2Higxq3aeSYQ9gLqlm6/vVsEsIeMSMx4/5
-         46KSy+P/MoD0HIZ/zmmuBvAzhxB44/6EWfC8VBDvcVR+Vl+L/qxReUzn9S8xYiItEc0k
-         /yhw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tHTFvMXpHoZFvzZdNmQTbEi+DbIq4dTNCJkhsSirED0=;
+        b=lA2yTdugPwgtl1Ca30TXw5qhfaC1gYzNrWc/7jT+tZ1vApMJjgusMCsPpC33BeymBe
+         r3wNs4bs00E04uJ0Hj9XDnSSkX5tb2gnuZQSZn/tXGsTFScE1kFlMwrGdElOvPa4whpJ
+         XLpdi839qF4LLMkDc8BT2FM9F+qLSKhbnZ2+6pYoACJRY48dT7qULs9YI0HNBupTJZ1a
+         GIa70TLBl8tXzqtJJgJq+y0VP1XMR0WwHL4ttuqemB0N757QgeH7FhHY5g4jVOjpsqPL
+         YjggHOjcxnBqLp5zpnapT2aB6MNEKBSJCNsBrBe+4HokcipUE14ATMn/EXUn0o4v6Ecl
+         HhUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=m157W2zApEuizi33CKK6utPLhy+v4JIY3Lxqnn+AIsA=;
-        b=bShqigioF570v0Azkxf90k1ZNpD6YtqDO6WO2jMO9A8d11D0PqUEew3Eo7p3W7z7gT
-         dvrXXJXPkdYKPGcLu3or6IiqC+c0RKjJAToTLE7rIRW1DhFcIpOqCvGaRsnmJ0+92Lml
-         0PIFHGgwz3RS7FmEMZnLFudFe9xn44afBt5yJVouJIs0HNp9q74IngN97/vCpwXmMoZG
-         j5320ion5lzkMacwrix5IVRQWP7KnfZ1j24gkJJYJtSqgkJ4h7u4pEziJ4EN+jl5zfWg
-         DP8DMYpZi744G9xaUvDcnJVm5stKOZSwzgi+jRdwfcSqQaxtTk6iqLPyqXxfk1x1TLmy
-         h1Zw==
-X-Gm-Message-State: AOAM531bTACgW3Kmu0qzyji05wtiyhwLbjfIizF1ZEZtYo4TnNQDn6Ko
-        Zsx8QblhQkGsGn31dkNnByzDrQ==
-X-Google-Smtp-Source: ABdhPJxp16wUP0I+gcjyZCBYv6Z8hFgaZkJhPmyzWzJ61JVZOEFPU9vtIUaJoGTFoFikS11YRmIk5A==
-X-Received: by 2002:a50:eb87:0:b0:425:c3e2:17a9 with SMTP id y7-20020a50eb87000000b00425c3e217a9mr7867864edr.109.1651394260574;
-        Sun, 01 May 2022 01:37:40 -0700 (PDT)
-Received: from [192.168.0.182] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id c26-20020a056402159a00b0042617ba63d1sm5058937edv.91.2022.05.01.01.37.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 01 May 2022 01:37:40 -0700 (PDT)
-Message-ID: <d4f647c4-922a-c0dd-e146-da047583c69a@linaro.org>
-Date:   Sun, 1 May 2022 10:37:39 +0200
+        bh=tHTFvMXpHoZFvzZdNmQTbEi+DbIq4dTNCJkhsSirED0=;
+        b=WBBtXQtp1GazAqvFKLxQEJx/Cd9Ckh5H98+xI/cq4n7ZYJcovdG6wHQ5Wl06k0ymoq
+         VSX+iQ69GpaA+lXKyBPdVJJXW11kjzJDbnItLB2XmXIfan8OZfS2FW3br0W83eIFqS3c
+         5wnKMSq0FU0fP43uATmgcfDWc2832iGJ2AMCgMiKKjs9n9sqIy44mEd26Dz5pPW/mTel
+         op+Ei7U+x06drKX7VP4zVSGPg1wgvURkHyVSC87F5ZHjsn/iFvw4qSeP7HyHvSOh3JYk
+         KCuVkG8x5MAwFOFF+4TFwwLBnY2iI7t7v3Dn9rfWF4k59sb12B6bq0/UrUuaUJH/mTAH
+         gNnQ==
+X-Gm-Message-State: AOAM530NNDkwGANsT2IcxEl/fJKalJJ1pdHd5UIj5oCmuLg9uNQP8rge
+        a9nsg/+5tVS+osDy4CoYpFSe4M/bcQvZUA==
+X-Google-Smtp-Source: ABdhPJxGeY3g27Ogk6Vq4xMMjYuSK3Mu+xOwkZHK1vIWZwMOqDC5IJzKUnlNWYXpbTYCAFOXVWujIw==
+X-Received: by 2002:a05:6402:1a34:b0:425:ca01:58ec with SMTP id be20-20020a0564021a3400b00425ca0158ecmr9974952edb.373.1651429323566;
+        Sun, 01 May 2022 11:22:03 -0700 (PDT)
+Received: from fedora.robimarko.hr (cpezg-94-253-144-225-cbl.xnet.hr. [94.253.144.225])
+        by smtp.googlemail.com with ESMTPSA id gv49-20020a1709072bf100b006f3ef214e35sm2769811ejc.155.2022.05.01.11.22.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 May 2022 11:22:03 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, amitk@kernel.org,
+        rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH v2 1/5] dt-bindings: thermal: tsens: Add ipq8074 compatible
+Date:   Sun,  1 May 2022 20:21:56 +0200
+Message-Id: <20220501182200.47328-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] dt-bindings: thermal: rzg2l-thermal: Document RZ/G2UL
- bindings
-Content-Language: en-US
-To:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-References: <20220501081930.23743-1-biju.das.jz@bp.renesas.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220501081930.23743-1-biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/05/2022 10:19, Biju Das wrote:
-> Document RZ/G2UL TSU bindings. The TSU block on RZ/G2UL is identical to one
-> found on RZ/G2L SoC. No driver changes are required as generic compatible
-> string "renesas,rzg2l-tsu" will be used as a fallback.
-> 
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Qualcomm IPQ8074 has tsens v2.3.0 block, though unlike existing v2 IP it
+only uses one IRQ, so tsens v2 compatible cannot be used as the fallback.
 
+We also have to make sure that correct interrupts are set according to
+compatibles, so populate interrupt information per compatibles.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+Changes in v2:
+* No need for a list in compatible check
+* Specify minItems and maxItems for interrupt and interrupt-names
+---
+ .../bindings/thermal/qcom-tsens.yaml          | 74 +++++++++++++++++--
+ 1 file changed, 67 insertions(+), 7 deletions(-)
 
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+index b6406bcc683f..e9b85c99bb60 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+@@ -56,6 +56,10 @@ properties:
+               - qcom,sm8350-tsens
+           - const: qcom,tsens-v2
+ 
++      - description: v2 of TSENS with combined interrupt
++        enum:
++          - qcom,ipq8074-tsens
++
+   reg:
+     items:
+       - description: TM registers
+@@ -63,15 +67,11 @@ properties:
+ 
+   interrupts:
+     minItems: 1
+-    items:
+-      - description: Combined interrupt if upper or lower threshold crossed
+-      - description: Interrupt if critical threshold crossed
++    maxItems: 2
+ 
+   interrupt-names:
+     minItems: 1
+-    items:
+-      - const: uplow
+-      - const: critical
++    maxItems: 2
+ 
+   nvmem-cells:
+     minItems: 1
+@@ -125,21 +125,66 @@ allOf:
+       properties:
+         interrupts:
+           maxItems: 1
++          items:
++            - description: Combined interrupt if upper or lower threshold crossed
+         interrupt-names:
+           maxItems: 1
++          items:
++            - const: uplow
+ 
+-    else:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,msm8953-tsens
++              - qcom,msm8996-tsens
++              - qcom,msm8998-tsens
++              - qcom,sc7180-tsens
++              - qcom,sc7280-tsens
++              - qcom,sc8180x-tsens
++              - qcom,sdm630-tsens
++              - qcom,sdm845-tsens
++              - qcom,sm8150-tsens
++              - qcom,sm8250-tsens
++              - qcom,sm8350-tsens
++              - qcom,tsens-v2
++    then:
+       properties:
+         interrupts:
+           minItems: 2
++          items:
++            - description: Combined interrupt if upper or lower threshold crossed
++            - description: Interrupt if critical threshold crossed
+         interrupt-names:
+           minItems: 2
++          items:
++            - const: uplow
++            - const: critical
+ 
+   - if:
+       properties:
+         compatible:
+           contains:
+             enum:
++              - qcom,ipq8074-tsens
++    then:
++      properties:
++        interrupts:
++          maxItems: 1
++          items:
++            - description: Combined interrupt if upper, lower or critical thresholds crossed
++        interrupt-names:
++          maxItems: 1
++          items:
++            - const: combined
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,ipq8074-tsens
+               - qcom,tsens-v0_1
+               - qcom,tsens-v1
+               - qcom,tsens-v2
+@@ -222,4 +267,19 @@ examples:
+            #qcom,sensors = <13>;
+            #thermal-sensor-cells = <1>;
+     };
++
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    // Example 4 (for any IPQ8074 based SoC-s):
++    tsens4: thermal-sensor@4a9000 {
++           compatible = "qcom,ipq8074-tsens";
++           reg = <0x4a9000 0x1000>,
++                 <0x4a8000 0x1000>;
++
++           interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
++           interrupt-names = "combined";
++
++           #qcom,sensors = <16>;
++           #thermal-sensor-cells = <1>;
++    };
+ ...
+-- 
+2.35.1
 
-Best regards,
-Krzysztof
