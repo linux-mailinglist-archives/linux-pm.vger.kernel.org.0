@@ -2,66 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BC85174AE
-	for <lists+linux-pm@lfdr.de>; Mon,  2 May 2022 18:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 896485175FB
+	for <lists+linux-pm@lfdr.de>; Mon,  2 May 2022 19:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386324AbiEBQqv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 May 2022 12:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55192 "EHLO
+        id S244140AbiEBRoa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 May 2022 13:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384381AbiEBQqu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 May 2022 12:46:50 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCB164E4
-        for <linux-pm@vger.kernel.org>; Mon,  2 May 2022 09:43:20 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-e656032735so14847119fac.0
-        for <linux-pm@vger.kernel.org>; Mon, 02 May 2022 09:43:20 -0700 (PDT)
+        with ESMTP id S244027AbiEBRo3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 May 2022 13:44:29 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718B12185
+        for <linux-pm@vger.kernel.org>; Mon,  2 May 2022 10:40:59 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id i19so29029576eja.11
+        for <linux-pm@vger.kernel.org>; Mon, 02 May 2022 10:40:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=SSVL4L7sJ4GCUMQJSUr4QEbXvDglQPIWtkAgagMg5GA=;
-        b=qjThrHfYibUgg3Pn32zlcaEfNZPtN59YJM/5pGTSC1oCDGS2jj1atashyUleKz6j8+
-         bU/iB6vPEEwtOzLe8Dz//5KSF5M2OZbESduYiT3x2CHj90hdZfk4UuyM+wABykiYgCYQ
-         WD2QE50nOaA3KQvWYUo4Bkk14VbrOXGk1pAxlTgr6Tbm+c9YlWGAxHVmOYx1DfBPZEQI
-         7CAcGDVapqXZEXqjU873C0wXsD1o09qkpnluDoZKKSCVOSuyHpp9DaOT1veiuvmeGCe9
-         k/EcY3aMg+gft109LFQmP0ZDpCgcaf6NTrLt8Ok6sKYpyCuy1cv3XN8ZPJsE2BZ18i7u
-         gi9Q==
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=T2pqf/ZsMQSKMuxK+/c6zd6+ftGPVEK7T/AqUXfVSTg=;
+        b=w6Xa++C37JYlMsXY8QYku3gyilnsILyuKs9Dhiv+0xVGxcRpR1l9UyjuSRbRuoB4OX
+         mWKbJ2RxY536xewVProPrUHcnc15MO66QJyK+fVdfgc5ET37LGJGdxIbIyJ+7tSDxLET
+         US5eXo9xo1b+FK4u77L4wNSq57GgzoNX3ACtcUwX+ytbowUsxN1R1s8gPd6T9/LnsjYJ
+         fOwO2nHL/geYwmSsT4qbGgY/+epHWZeOZpjIMIzrOGPOS1i6SoIc7n9GhGLHaW44qBT2
+         6RqSwh1TT9mc1RNogQFamC/AtRI+VoVa8CeTygEWw/5V1mx/BYDJF0cdBplf1deSlqd6
+         iruQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=SSVL4L7sJ4GCUMQJSUr4QEbXvDglQPIWtkAgagMg5GA=;
-        b=IXEu6FHMTv5kwuIVu0xCjcfE+/8+pLvZ+Lp5NJAqMbkP+WSMvb8dkk0WtCJYBMVlga
-         TZMAJoKRxN7iE/f7CPdiU9GE21Y4r0TgEIkVtTQIQ3ReMMs5C/NH0ugkmKzdAgVpkGu0
-         amR4PPp811BkeVNoE3ICi8wFMK46NUiZJ/yEf29kYez6wpljhlN2G5CDo++lG+H2Grlt
-         XMEwHihgxUc2JlUJ0uiWWL/mkOenMtbxbnnztIrmJhUeZSB5voUMzam37WTahz9K3T+h
-         OWGnH4tE5OytZANr4dk4/kTxOx8i0TQGMFP3j3aJyUZP/4TBklEN1azqmrC/QPP6Xsye
-         /gfg==
-X-Gm-Message-State: AOAM530tQLeJ4RaZGsS9AV+QCnLoBjW3lGLlD+xXTmdCEqvnk7OdKUSg
-        E4RqNYgNGgdvz0Hj1m7bgqYcFQ==
-X-Google-Smtp-Source: ABdhPJzu/WvwdXZNGlKws7RIfvy63zIrGOA8N/G95ei07bQN8rk/wkK4qvhpgYIAqP8ajvCCl0h1KQ==
-X-Received: by 2002:a05:6870:a107:b0:ed:9a88:88b8 with SMTP id m7-20020a056870a10700b000ed9a8888b8mr3674418oae.298.1651509800305;
-        Mon, 02 May 2022 09:43:20 -0700 (PDT)
-Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id dx4-20020a056870768400b000e686d13897sm6012889oab.49.2022.05.02.09.43.19
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=T2pqf/ZsMQSKMuxK+/c6zd6+ftGPVEK7T/AqUXfVSTg=;
+        b=S6QHc9oKHSrRUFPcnw5m0hIis+r7zjCe2EnCiDk+rzSIV/J/4ogtiVX0tNPINS+V0A
+         2G+y97uI+b84Vam5SfqZz8S/XV4ZuVqh1tvJfjDARi9SMbpsIhSnpp8GfdJjx3LPZuYf
+         cKaLHWYkHxfOoNG3z32X7nEn2RwZNuEdKlPtcTocUenEhI0vgDPYTUmYaWAzlGEAM2sn
+         IcK73zCV1h3yiu1yDP/yybayAQ7AuFCT2NiN6VLm/2lFvymKnJTjkuYIWCxeAv7eeo8m
+         3sKjIoDrDjbjoMYlM+/3AHe7uoKZgfJyBMMSLe/amuujoSSIX1EDD6XhA0gvQ2ruPUqT
+         rUaQ==
+X-Gm-Message-State: AOAM5326f1Wq9yOnSzTmbwUZvoFCNbiivvJlDumg80boeN84sFYjFCOR
+        i9hh+mZFlocX2ykvjCGWfyS23Q==
+X-Google-Smtp-Source: ABdhPJwVvu+lkFY73eVNrxet+GQc/E+bRy1O6uMwXhMPN5GQLVixiDxsLFoDD0I94kAPgjYCuasVdg==
+X-Received: by 2002:a17:907:7810:b0:6e7:ef73:8326 with SMTP id la16-20020a170907781000b006e7ef738326mr12088942ejc.429.1651513258023;
+        Mon, 02 May 2022 10:40:58 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id n9-20020aa7c689000000b0042617ba639csm6908547edq.38.2022.05.02.10.40.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 09:43:19 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mon, 02 May 2022 10:40:57 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] dt-bindings: thermal: lmh: Add Qualcomm sc8180x compatible
-Date:   Mon,  2 May 2022 09:45:04 -0700
-Message-Id: <20220502164504.3972938-2-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220502164504.3972938-1-bjorn.andersson@linaro.org>
-References: <20220502164504.3972938-1-bjorn.andersson@linaro.org>
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] soc/PM/arm64: qcom: Add initial version of bwmon
+Date:   Mon,  2 May 2022 19:40:42 +0200
+Message-Id: <20220502174046.139234-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,26 +74,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add compatible for the LMh blocks found in the Qualcomm sc8180x
-platform.
+Hi,
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- Documentation/devicetree/bindings/thermal/qcom-lmh.yaml | 1 +
- 1 file changed, 1 insertion(+)
+BWMON is a data bandwidth monitor providing throughput/bandwidth over certain
+interconnect links in a SoC.  It might be used to gather current bus usage and
+vote for interconnect bandwidth, thus adjusting the bus speed based on actual
+usage.
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml b/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-index a9b7388ca9ac..e1587ddf7de3 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-lmh.yaml
-@@ -18,6 +18,7 @@ description:
- properties:
-   compatible:
-     enum:
-+      - qcom,sc8180x-lmh
-       - qcom,sdm845-lmh
-       - qcom,sm8150-lmh
- 
+The work is built on top of Thara Gopinath's patches with several cleanups,
+changes and simplifications.
+
+This is "initial version", which means the work is not finished.  The goal is
+to add support for further devices (version 5 of bwmon) and usage of devfreq
+governors, similarly to tegra30 devfreq driver.
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (4):
+  dt-bindings: interconnect: qcom,sdm845-cpu-bwmon: add BWMON device
+  opp: Add apis to retrieve opps with interconnect bandwidth
+  soc: qcom: icc-bwmon: Add bandwidth monitoring driver
+  arm64: dts: qcom: sdm845: Add CPU BWMON
+
+ .../interconnect/qcom,sdm845-cpu-bwmon.yaml   | 105 ++++++
+ MAINTAINERS                                   |   7 +
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  60 ++++
+ drivers/opp/core.c                            | 120 +++++++
+ drivers/soc/qcom/Kconfig                      |  10 +
+ drivers/soc/qcom/Makefile                     |   1 +
+ drivers/soc/qcom/icc-bwmon.c                  | 328 ++++++++++++++++++
+ include/linux/pm_opp.h                        |  19 +
+ 8 files changed, 650 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
+ create mode 100644 drivers/soc/qcom/icc-bwmon.c
+
 -- 
-2.35.1
+2.32.0
 
