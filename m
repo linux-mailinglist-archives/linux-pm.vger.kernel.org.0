@@ -2,191 +2,270 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C17395178D1
-	for <lists+linux-pm@lfdr.de>; Mon,  2 May 2022 23:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4855179C6
+	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 00:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237701AbiEBVMW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 May 2022 17:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
+        id S231668AbiEBWLe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 May 2022 18:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232009AbiEBVMU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 May 2022 17:12:20 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFDDBC32;
-        Mon,  2 May 2022 14:08:49 -0700 (PDT)
-Received: from mail-yw1-f173.google.com ([209.85.128.173]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MUD7D-1nM1Kt3pRb-00RGrv; Mon, 02 May 2022 23:03:45 +0200
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2f7c424c66cso161902457b3.1;
-        Mon, 02 May 2022 14:03:43 -0700 (PDT)
-X-Gm-Message-State: AOAM532nk+fjKBblBr5KOBMlJG8zhtCoFIjmhOB+tG1CTVFQyTS6WonI
-        hhYJjX49doIz9jpaHy+qjov5Hoa6/Wa989TvUvI=
-X-Google-Smtp-Source: ABdhPJxEvI0WTai1d3ZR4KU3iW8w7Gb+IOi/NcLSYY9Kzki6UUTmpSHsKHSdyZ16RsjoU/k3UwknsKUnnDH1BVJBWs0=
-X-Received: by 2002:a81:ad7:0:b0:2e6:84de:3223 with SMTP id
- 206-20020a810ad7000000b002e684de3223mr13273488ywk.209.1651525422593; Mon, 02
- May 2022 14:03:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220419163810.2118169-1-arnd@kernel.org> <3b4046ed-fd75-13ea-fac3-06469172806c@roeck-us.net>
- <CAK8P3a1LzEG1vo+5nMrnL3TOMcbSKJ3u=StcfY8dajV2raUBjA@mail.gmail.com>
- <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net> <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
- <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
- <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net> <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
- <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com>
- <149509dd-f43d-1b27-4395-81eab4ff3455@roeck-us.net> <CAK8P3a05vFdBnXXAMPVS82xX29+uinvWPcWxAgvj0TfoOk+1kg@mail.gmail.com>
- <b13783aa-9225-d52a-3800-c97ad772688b@roeck-us.net> <CAK8P3a3S5OjkKq_u5FpnwzYv+0+typya6Z4MzTez5ZH+do00xQ@mail.gmail.com>
- <CAK8P3a3jiqf_zpBsZyvAb5ZtkwDa7KkqExqDAdpY_pYqkr_NgQ@mail.gmail.com>
- <4dcdbfe2-9edf-320b-d123-3b62c8b5e28e@roeck-us.net> <CAK8P3a0ogn1wgPBDHkT=Fb8ufA+y8Ax1Qov2-vRXfC08QqnrQA@mail.gmail.com>
- <c001d58e-9a78-6338-a533-d0f215b3dfd1@roeck-us.net>
-In-Reply-To: <c001d58e-9a78-6338-a533-d0f215b3dfd1@roeck-us.net>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 2 May 2022 23:03:26 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1X3YH0RqqmqgqFAaY94yreD-PfY-pvyMf+xU3nGeqvsg@mail.gmail.com>
-Message-ID: <CAK8P3a1X3YH0RqqmqgqFAaY94yreD-PfY-pvyMf+xU3nGeqvsg@mail.gmail.com>
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
+        with ESMTP id S236016AbiEBWLd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 May 2022 18:11:33 -0400
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38CA21120
+        for <linux-pm@vger.kernel.org>; Mon,  2 May 2022 15:08:00 -0700 (PDT)
+Received: by mail-pj1-f45.google.com with SMTP id w5-20020a17090aaf8500b001d74c754128so627087pjq.0
+        for <linux-pm@vger.kernel.org>; Mon, 02 May 2022 15:08:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=+WzlqIMp293K3H3f2sHDB997qf0xEgsGTkNiSko9TGw=;
+        b=u5666sVIH+hum2gWkQtep1Ck9NcCXvCVSTlj9LGUe9CU7GZMEFc0wzEDcuE2GgAYQc
+         4UomgQJfGuIdohCYzHBIUy6PH+/YO/SZL54ecrILB68v2zORUoHt02GxT9hbqovPO7SM
+         apRs1ED7wK57eISE4e3T5ZEd6rr4I99Q0WDJw5fIsi4yN4oy2i62hiZpnOLtdtMUmaU6
+         zWa71j+Tff0qUaS6mMsHUQ7d8ChheJbwN9tBxk8FVRakAGVQuhhPEzvHbGprE+XqvJtd
+         T9pABxDa5RFnRMSGSYoi3U0q8VnAGF9RAnJZHPKyvw9Yt7rjTk0bxMN1cl65ZRFhq1IA
+         WPDw==
+X-Gm-Message-State: AOAM531SYSNtdBIj2THCw4y0TF1SQZVGgGShest9REm+fW2za0AKY69l
+        TadPrMl9GnoTilLWI6C8f5up7w==
+X-Google-Smtp-Source: ABdhPJy77EMHFvDo/1IyhZFgTnu75Y3CzXZKSBDCXc2aNKF4uB76iHf85o37EM0Bt3dSQlistTdcqA==
+X-Received: by 2002:a17:903:2043:b0:15b:f6ff:79ed with SMTP id q3-20020a170903204300b0015bf6ff79edmr13581711pla.15.1651529279501;
+        Mon, 02 May 2022 15:07:59 -0700 (PDT)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id s13-20020a170902988d00b0015e8d4eb2a1sm5105174plp.235.2022.05.02.15.07.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 May 2022 15:07:58 -0700 (PDT)
+From:   Kevin Hilman <khilman@kernel.org>
+To:     Chen-Yu Tsai <wenst@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Roger Lu <roger.lu@mediatek.com>,
+        =?utf-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
+        <rex-bc.chen@mediatek.com>
+Cc:     Enric Balletbo Serra <eballetbo@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:/joxRaMGePOF01MqV1QGoIoZWu3WwV1HQObDeZSXbv+T/lBO/Rv
- EJECBT2RUm6qvSkBRo7Br4Ri8l1QKVcJ4ANXIpAVZFPPL8jrl5j2ovnfIW2GkDgf8ow29gK
- VTpIVJTZYpPdQfnctLOdBaWssicqmi5BtQB2YcyBud1PekF7Qq2tfakDXPfweccQM1ycW/R
- PdaOJE29usJKTbFThWI0A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Ap0WPyLi164=:+0AQX6UBn9LqGpi++LE7vV
- al9wtPgFUvMWY4SJdTHMceJ8vZfXTHJrTj/hswM893TIoIQOBpS13iPKKlDOtOcBVE+ZdDEWF
- SQ1KNV0WKqjR3Lf+IjxjXZxv++YhnQ5hbc2XuNOTDQTwxz3fol609HrPykfBUoTl/VZ3jRzhH
- xpPDChtue47vuHi2cNcttsZg1IifmF/neyMOj8io7ICStuvyS/LM+mKnDOV4uk+EVbbud8flr
- a5c6L7oxklcl/dq8G1DWeyuVQXqeDBg0aedL5yIiDR7kY7YEXZNaXd/G7GTBIF25UBwdKu7lN
- tk6bkD7n3OVI7FnC6eC6hHOb3EHXX3KiGMSHbEZ08C3MNsqRXhv9oTrcmMCAkwwmfLPCDORTe
- COK/hoT/orJU9QVMNH5fJpYjOM+Mol2uC8KEnsyd78hRk7WCjeQ1uli/Hi4P0Rn3C/qPJdfRi
- UfvjOz2cKojlO/+DwscaZNe63pG1ox2YVKyZ5ws+5/MmARiGFabchPX87l6Y8vsIutSd5pDLJ
- OWfrSFcP/TMr/Bgip1Jv6NWTtJwiwpXKWn9MiIIqQxrIY/pT5vcmZYRcE3q7Cgy7W3AfSpmqQ
- Na7D+rAV+Ra50lDz7H8xEz02EwVCzoCdY21BbPj1wQhRiyZNmK6PlHKsVUqJlDj8FKeKjU7jF
- vZprx8GdmTy8NF07D41xZhIW9ZZ/TQVKA0XT/i+Z0N89JSa6RjrM6uFP7gq+qalzrHvWpRqpu
- wg8VboU8hnLIY/ZYEdnLJRN/cKu8OFrHu0wJpOfU7BqW62ciZFZg8mclO1RBqCyqD7aK6hZE3
- GwIU3CvO/MmBbfMWIYknOj+dSvhYy9r7Xkdvmr9W7hdd8qA4vw=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Fan Chen <fan.chen@mediatek.com>,
+        HenryC Chen <HenryC.Chen@mediatek.com>,
+        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>
+Subject: Re: [PATCH v24 0/7] soc: mediatek: SVS: introduce MTK SVS
+In-Reply-To: <CAGXv+5HtMVCUdV=kNfOTCp3-1gEzTWtZ1xapgw=L-C2nTC0yag@mail.gmail.com>
+References: <20220420102044.10832-1-roger.lu@mediatek.com>
+ <7hczhbe3wn.fsf@baylibre.com>
+ <3d463c8b099fdb1c9a0df9e615a8ca1d8a034120.camel@mediatek.com>
+ <7hsfq6ql4v.fsf@baylibre.com>
+ <d67d5f4f2ec96ade2398e7c0897dbb16bf5fb145.camel@mediatek.com>
+ <ca127f7f-0620-1c03-4f39-206945b0e612@gmail.com>
+ <CAGXv+5HtMVCUdV=kNfOTCp3-1gEzTWtZ1xapgw=L-C2nTC0yag@mail.gmail.com>
+Date:   Mon, 02 May 2022 15:07:58 -0700
+Message-ID: <7h8rrjr3k1.fsf@baylibre.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 2, 2022 at 10:35 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> On 5/2/22 12:21, Arnd Bergmann wrote:
-> >
->
-> To boot from initrd:
->
-> qemu-system-arm -M z2 -kernel \
->       arch/arm/boot/zImage -no-reboot -initrd \
->       rootfs-armv5.cpio --append \
->       "panic=-1 slub_debug=FZPUA rdinit=/sbin/init console=ttyS0" -nographic \
->       -monitor null -serial stdio
->
-> where rootfs-armv5.cpio is from my repository at github.com.
->
-> https://github.com/groeck/linux-build-test/blob/master/rootfs/arm/rootfs-armv5.cpio.gz
->
+Chen-Yu Tsai <wenst@chromium.org> writes:
 
-Ok, that works here with any configuration, I don't see a regression.
-Could this be a problem with the size increase? The machine only has
-32MB of RAM, so it's possible that the multiplatform-enabled kernel
-with DT support etc pushes it over the edge, especially with an initramfs.
+> On Fri, Apr 22, 2022 at 11:38 PM Matthias Brugger
+> <matthias.bgg@gmail.com> wrote:
+>>
+>>
+>>
+>> On 22/04/2022 04:24, Roger Lu wrote:
+>> > Hi Kevin,
+>> >
+>> > On Thu, 2022-04-21 at 12:41 -0700, Kevin Hilman wrote:
+>> >> Hi Roger,
+>> >>
+>> >> Roger Lu <roger.lu@mediatek.com> writes:
+>> >>
+>> >>> On Wed, 2022-04-20 at 16:22 -0700, Kevin Hilman wrote:
+>> >>
+>> >> [...]
+>> >>
+>> >>>> That being said, it would be really nice to see an integration tree
+>> >>>> where this was all tested on mainline (e.g. v5.17, or v5.18-rc)
+>> >>>>
+>> >>>> For example, I can apply this to v5.18-rc2 and boot on my mt8183-pumpkin
+>> >>>> board, it fails to probe[1] because there is no CCI node in the upstream
+>> >>>> mt8183.dtsi.
+>> >>>>
+>> >>>> I'm assuming this series is also not very useful without the CPUfreq
+>> >>>> series from Rex, so being able to test this, CCI and CPUfreq together on
+>> >>>> MT8183 on a mainline kernel would be very helpful.
+>> >>>>
+>> >>>> Kevin
+>> >>>>
+>> >>>> [1]
+>> >>>> [    0.573332] mtk-svs 1100b000.svs: cannot find cci node
+>> >>>> [    0.574061] mtk-svs 1100b000.svs: error -ENODEV: svs platform probe
+>> >>>> fail
+>> >>>
+>> >>> Just share. I've tested this series on below two platforms and it works as
+>> >>> expected.
+>> >>> - mt8183-Krane (kernel-v5.10)
+>> >>> - mt8192-Hayato (kernel-v5.4)
+>> >>
+>> >> Unfortunately testing on v5.4 and v5.10 with lots of other additional
+>> >> out-of-tree patches does not give much confidence that this series works
+>> >> with upstream, especially when I've given a few reasons why it will not
+>> >> work uptream.
+>> >>
+>> >> The examples I gave above for CCI and CPUs/cluster disable are good
+>> >> examples, but another one I forgot to mention is the dependency on Mali.
+>> >> The SVS driver will never probe because it also depens on a "mali" node,
+>> >> which doesn't exist upstream either (but panfrost does, and acutually
+>> >> loads/probes fine on v5.17/v5.18) so this should be fixed to work with
+>> >> upstream panfrost.
+>> >>
+>> >> IMO, in order for this to be merged upstream, it should at least have
+>> >> some basic validation with upstream, and so far I have not even been
+>> >> able to make it successfuly probe.  To do that, you will need to either
+>> >> provide a list of the dependencies for testing this with mainline
+>> >> (e.g. CCI series, CPUfreq series, any DT changes), or even better, an
+>> >> integration tree based on recent mainline (e.g. v5.17 stable, or
+>> >> v5.18-rc) which shows all the patches (in addition to this series) used
+>> >> to validate this on mainline.
+>> >
+>> > No problem. We'll find a machine that can be run correctly with recent mainline
+>> > (e.g. v5.17 stable, or v5.18-rc) and add patches (CCI series + CPUfreq series +
+>> > any DT changes) to test this SVS series. Thanks very much.
+>> >
+>>
+>> Thanks Roger. I'll wait until this got tested with upstream Linux, before I will
+>> apply all the patches.
+>
+> Hi everyone,
+>
+> I've put together an integration test branch:
+>
+> https://github.com/wens/linux/commits/mt8183-cpufreq-cci-svs-test
+>
+> This branch is based on next-20220422 and includes the following series:
+>
+> - ANX7625 DPI support v2
+>   https://lore.kernel.org/all/20220422084720.959271-1-xji@analogixsemi.com/
+> - MTK SVS v24
+>   https://lore.kernel.org/all/20220420102044.10832-1-roger.lu@mediatek.com/
+> - MTK cpufreq v4
+>   https://lore.kernel.org/all/20220422075239.16437-1-rex-bc.chen@mediatek.com/
+> - PM / devfreq core patches from
+>   http://git.kernel.org/chanwoo/h/devfreq-testing
+>   PM / devfreq: Export devfreq_get_freq_range symbol within devfreq
+>   PM / devfreq: Add cpu based scaling support to passive governor
+>   PM / devfreq: passive: Reduce duplicate code when passive_devfreq case
+>   PM / devfreq: passive: Update frequency when start governor
+> - CCI devfreq v2
+>   https://lore.kernel.org/all/20220408052150.22536-1-johnson.wang@mediatek.com/
+>
+> And some patches of my own to fix some errors. See the last handful of
+> patches including and after the fixup! one.
 
-My configuration is clearly a bit different from yours, so I tried giving it
-a larger initramfs file, which randomly crashes elsewhere for me:
+Thanks for setting up this branch.
 
-[    0.648659] pxa2xx-uart.0: ttyS0 at MMIO 0x40100000 (irq = 38,
-base_baud = 928571) is a UART1
-[    0.697984] kworker/u2:0 invoked oom-killer:
-gfp_mask=0x100cca(GFP_HIGHUSER_MOVABLE), order=0, oom_score_adj=0
-[    0.698278] CPU: 0 PID: 7 Comm: kworker/u2:0 Not tainted
-5.18.0-rc1-00109-gee927ad51300-dirty #52
-[    0.698382] Hardware name: Zipit Z2
-[    0.698520] Workqueue: events_unbound async_run_entry_fn
-[    0.699063]  unwind_backtrace from show_stack+0x18/0x1c
-[    0.699148]  show_stack from dump_header+0x68/0x254
-[    0.699186]  dump_header from out_of_memory+0x474/0x4f0
-[    0.699208]  out_of_memory from __alloc_pages+0xa0c/0xb84
-[    0.699227]  __alloc_pages from shmem_getpage_gfp.constprop.0+0x270/0x9e0
-[    0.699247]  shmem_getpage_gfp.constprop.0 from
-generic_perform_write+0xd8/0x210
-[    0.699268]  generic_perform_write from __generic_file_write_iter+0x130/0x198
-[    0.699286]  __generic_file_write_iter from generic_file_write_iter+0x64/0xd0
-[    0.699302]  generic_file_write_iter from __kernel_write+0x114/0x2b0
-[    0.699321]  __kernel_write from kernel_write+0x68/0x194
-[    0.699337]  kernel_write from xwrite+0x3c/0x78
-[    0.699363]  xwrite from do_copy+0xc0/0x11c
-[    0.699381]  do_copy from write_buffer+0x2c/0x44
-[    0.699397]  write_buffer from flush_buffer+0x3c/0xa0
-[    0.699413]  flush_buffer from __gunzip+0x2a4/0x364
-[    0.699434]  __gunzip from gunzip+0x2c/0x34
-[    0.699449]  gunzip from unpack_to_rootfs+0x19c/0x304
-[    0.699465]  unpack_to_rootfs from do_populate_rootfs+0x6c/0x1dc
-[    0.699483]  do_populate_rootfs from async_run_entry_fn+0x44/0x1a0
-[    0.699502]  async_run_entry_fn from process_one_work+0x1e8/0x544
-[    0.699520]  process_one_work from worker_thread+0x34/0x578
-[    0.699579]  worker_thread from kthread+0xdc/0x114
-[    0.699599]  kthread from ret_from_fork+0x14/0x2c
-[    0.699651] Exception stack(0xc2821fb0 to 0xc2821ff8)
-[    0.699711] 1fa0:                                     00000000
-00000000 00000000 00000000
-[    0.699731] 1fc0: 00000000 00000000 00000000 00000000 00000000
-00000000 00000000 00000000
-[    0.699744] 1fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-[    0.699801] Mem-Info:
-[    0.699889] active_anon:90 inactive_anon:674 isolated_anon:0
-[    0.699889]  active_file:0 inactive_file:0 isolated_file:0
-[    0.699889]  unevictable:0 dirty:0 writeback:0
-[    0.699889]  slab_reclaimable:0 slab_unreclaimable:1691
-[    0.699889]  mapped:0 shmem:771 pagetables:0 bounce:0
-[    0.699889]  kernel_misc_reclaimable:0
-[    0.699889]  free:207 free_pcp:37 free_cma:0
-[    0.699986] Node 0 active_anon:360kB inactive_anon:2696kB
-active_file:0kB inactive_file:0kB unevictable:0kB isolated(anon):0kB
-isolated(file):0kB mapped:0kB dirty:0kB writeback:0kB shmem:3084kB
-writeback_tmp:0kB kernel_stack:192kB pagetables:0kB all_unreclaimable?
-yes
-[    0.700116] Normal free:828kB boost:1024kB min:1464kB low:1572kB
-high:1680kB reserved_highatomic:0KB active_anon:360kB
-inactive_anon:2696kB active_file:0kB inactive_file:0kB unevictable:0kB
-writepending:0kB present:32768kB managed:12232kB mlocked:0kB
-bounce:0kB free_pcp:148kB local_pcp:148kB free_cma:0kB
-[    0.700177] lowmem_reserve[]: 0 0
-[    0.700247] Normal: 3*4kB (UM) 2*8kB (UM) 2*16kB (M) 0*32kB 0*64kB
-0*128kB 1*256kB (M) 1*512kB (M) 0*1024kB = 828kB
+> This was tested on Juniper (Acer Chromebook Spin 311) that has MT8183.
 
-       Arnd
+Is there an upstream DT for this platform?
+
+I tried this series on mt8183-pumpkin, and since the upstream DT doesn't
+define a CCI regulator, the CCI driver fails to probe.  Without CCI, the
+SVS driver also fails to probe.  So the platform boots, but has neither
+CCI nor SVS.
+
+If I add a regulator for CCI[1], it goes farther, but then fails more
+noisly[2]
+
+
+> Looking at the mcu_*_sel clocks from /sys/kernel/debug/clk/clk_summary ,
+> it does seem like things are happening, though I'm not sure how to
+> thoroughly test this, especially SVS.
+
+I think you're probably seeing CPU DVFS (CPUfreq) working, but I suspect
+neither CCI or SVS have successfully loaded.
+
+Kevin
+
+
+
+[1]
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts b/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
+index b288b508fa4c..e064c06dc0d7 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
++++ b/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
+@@ -384,6 +384,10 @@ &mfg {
+ 	domain-supply = <&mt6358_vgpu_reg>;
+ };
+ 
++&cci {
++	proc-supply = <&mt6358_vproc12_reg>;
++};
++
+ &cpu0 {
+ 	proc-supply = <&mt6358_vproc12_reg>;
+ };
+
+
+[2]
+[    0.560083] mtk-ccifreq cci: devfreq_add_device: Unable to start governor for the device
+[    0.576083] ------------[ cut here ]------------
+[    0.576670] WARNING: CPU: 3 PID: 1 at drivers/devfreq/governor_passive.c:382 devfreq_passive_event_handler+0x80/0x3a0
+[    0.578021] Modules linked in:
+[    0.578413] CPU: 3 PID: 1 Comm: swapper/0 Not tainted 5.18.0-rc3-next-20220422-05886-g9cd0610279c1-dirty #58
+[    0.579653] Hardware name: Pumpkin MT8183 (DT)
+[    0.580217] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    0.581097] pc : devfreq_passive_event_handler+0x80/0x3a0
+[    0.581780] lr : devfreq_passive_event_handler+0x7c/0x3a0
+[    0.582463] sp : ffff80000808ba40
+[    0.582883] x29: ffff80000808ba40 x28: 0000000000000000 x27: fffffffffffffdfb
+[    0.583788] x26: ffff0000037ba810 x25: ffff80000808bb40 x24: ffff80000a406640
+[    0.584691] x23: ffff8000099153c8 x22: ffff0000037ba800 x21: 0000000000000000
+[    0.585595] x20: ffff0000035c40a0 x19: ffff0000035c4080 x18: 0000000000000000
+[    0.586267] mmc0: new ultra high speed SDR104 SDIO card at address 0001
+[    0.586498] x17: 6f6620726f6e7265 x16: 766f672074726174 x15: 000006837f6218f7
+[    0.588233] x14: 0000000000000320 x13: 0000000000000001 x12: 0000000000000000
+[    0.589137] x11: 0000000000000001 x10: 0000000000000a50 x9 : ffff80000808b7a0
+[    0.590041] x8 : ffff0000028b0ab0 x7 : ffff00007fb19d00 x6 : 00000000076832c3
+[    0.590945] x5 : 00000000410fd030 x4 : 0000000000000000 x3 : ffff80000a3f70e8
+[    0.591849] x2 : 0000000000000000 x1 : ffff0000028b0000 x0 : 00000000fffffffe
+[    0.592753] Call trace:
+[    0.593065]  devfreq_passive_event_handler+0x80/0x3a0
+[    0.593706]  devfreq_remove_device+0x38/0xd0
+[    0.594247]  devfreq_add_device+0x328/0x5f0
+[    0.594778]  devm_devfreq_add_device+0x64/0xb0
+[    0.595341]  mtk_ccifreq_probe+0x340/0x4e0
+[    0.595860]  platform_probe+0x68/0xe0
+[    0.596330]  really_probe.part.0+0x9c/0x29c
+[    0.596862]  __driver_probe_device+0x98/0x144
+[    0.597416]  driver_probe_device+0xac/0x140
+[    0.597948]  __driver_attach+0xf8/0x190
+[    0.598436]  bus_for_each_dev+0x70/0xd0
+[    0.598925]  driver_attach+0x24/0x30
+[    0.599380]  bus_add_driver+0x14c/0x1f0
+[    0.599868]  driver_register+0x78/0x130
+[    0.600356]  __platform_driver_register+0x28/0x34
+[    0.600954]  mtk_ccifreq_platdrv_init+0x1c/0x28
+[    0.601531]  do_one_initcall+0x50/0x1c0
+[    0.602021]  kernel_init_freeable+0x20c/0x290
+[    0.602576]  kernel_init+0x28/0x13c
+[    0.603024]  ret_from_fork+0x10/0x20
+[    0.603480] ---[ end trace 0000000000000000 ]---
+
