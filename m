@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 864F3516B6C
-	for <lists+linux-pm@lfdr.de>; Mon,  2 May 2022 09:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5614B516B80
+	for <lists+linux-pm@lfdr.de>; Mon,  2 May 2022 09:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235919AbiEBHyR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 May 2022 03:54:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
+        id S1383620AbiEBIBz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 May 2022 04:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231542AbiEBHyQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 May 2022 03:54:16 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229042B253;
-        Mon,  2 May 2022 00:50:48 -0700 (PDT)
-Date:   Mon, 2 May 2022 09:50:44 +0200
+        with ESMTP id S1383621AbiEBIBu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 May 2022 04:01:50 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0615E2C674;
+        Mon,  2 May 2022 00:58:23 -0700 (PDT)
+Date:   Mon, 2 May 2022 09:58:19 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1651477846;
+        s=2020; t=1651478301;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=9YTwBIK9lAkbWBv23hCp719JHcqmc8JMf0hCdSYBc0c=;
-        b=2M/sPU3//pAEsdX2cONt1/QyGpv7JUbznaFo3TL8EJYTKMi46YrGDl3WPIqBcwfCkHLBcp
-        h42onsWI74tqZHpKXhtQxejKNdHatf0qwYrxCbwJ0373XSjpxnQY3IDFBO7kcms/g+tP7p
-        pozCCrHyhYHHtBN8lYx4jD4N4vuVk60XqLqHTW2nH2BhG5SI6zTuRkaio4snddKj0FmbLY
-        YNfLb49+1LRvo3Kg0P5oc4PPCrfN5BsoE1pRqZiZRfSCt6/yA4gVvyJVOhvpdrHFYR6r18
-        cXXunTFGvBryM5xbKBRTif551R6v2RuvnKiU00cgzBgsRA97uVOyda/LJd53pg==
+        bh=40HIHqjULj7b9BBWanQBtKhj+DqOWd6zjF1ZGpV3jJs=;
+        b=3+yDNLPVuk6Nnbmj///eGm1fshWeR5tBgWbYbGGvcbj87D9zxhmQRP4Ntt6SwoAg1er8EY
+        q+P8EsMWWSgFGHW169ewpH/Txt5aCDYfgvilbcj4IQ268+4/UpzvfVnJI94rjAT0vsPPQl
+        O/vnr3Gn84ysELjY8f1YvootIjFOc8lJwLVw1X5oieoXLDdEHuvuMwY14Ic9/BBbl3i0ew
+        Rtx0BB/yeCZBRuG0/CfWa+elT+n942Jf0jQpSDorymjE0tFSWyLk/+Ay53oaAa4aMdSH+Y
+        zBWKm2hXz4VesoA3zUtXfiqs5P1UkCrLKmT++cycufWuxSmwKMTn2Ciq5UB+yA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1651477846;
+        s=2020e; t=1651478301;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=9YTwBIK9lAkbWBv23hCp719JHcqmc8JMf0hCdSYBc0c=;
-        b=iKhJ9axWwZeRIT1UBVN+1JD11D9mG69F1hukRvMjdZiumE3VqDBinhkuZlzlhWxP3X35Ig
-        O6Z7BX4CmlFo0NBQ==
+        bh=40HIHqjULj7b9BBWanQBtKhj+DqOWd6zjF1ZGpV3jJs=;
+        b=foW1BVHDKV8C6erKOmaeyl+gnXeoQ/59yY2ELW717UAKKcgPOnPAhm2/kKrTDWsDIMGMyj
+        dsPQnMxO9BjKoTCg==
 From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 To:     "Eric W. Biederman" <ebiederm@xmission.com>
 Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
@@ -49,14 +49,15 @@ Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
         Max Filippov <jcmvbkbc@gmail.com>,
         linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
         Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
-Subject: Re: [PATCH v2 01/12] signal: Rename send_signal send_signal_locked
-Message-ID: <Ym+NVG2kxgkaN3lb@linutronix.de>
+Subject: Re: [PATCH v2 02/12] signal: Replace __group_send_sig_info with
+ send_signal_locked
+Message-ID: <Ym+PG/5Ro/v3nJUR@linutronix.de>
 References: <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
- <20220429214837.386518-1-ebiederm@xmission.com>
+ <20220429214837.386518-2-ebiederm@xmission.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220429214837.386518-1-ebiederm@xmission.com>
+In-Reply-To: <20220429214837.386518-2-ebiederm@xmission.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -67,13 +68,19 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2022-04-29 16:48:26 [-0500], Eric W. Biederman wrote:
-> Rename send_signal send_signal_locked and make to make
+On 2022-04-29 16:48:27 [-0500], Eric W. Biederman wrote:
+> The function send_signal_locked does more than __group_send_sig_info so
+> replace it.
 
-s@to make@@
+This might be easier to understand:
+   __group_send_sig_info() is just a wrapper around send_signal_locked()
+   with a special pid_type. 
+   
+   Replace __group_send_sig_info() with send_signal_locked(,,,
+   PIDTYPE_TGID).
 
-> it usable outside of signal.c.
-> 
+However, keep it as is if you feel otherwise ;)
+
 > Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 
 Sebastian
