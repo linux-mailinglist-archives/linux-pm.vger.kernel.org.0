@@ -2,67 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F899518802
-	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 17:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 531BB5188A2
+	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 17:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238071AbiECPNL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 May 2022 11:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39690 "EHLO
+        id S238574AbiECPgZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 May 2022 11:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238025AbiECPNG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 11:13:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2081E3B003
-        for <linux-pm@vger.kernel.org>; Tue,  3 May 2022 08:09:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AB8CEB81ED0
-        for <linux-pm@vger.kernel.org>; Tue,  3 May 2022 15:09:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 56E7EC385A4
-        for <linux-pm@vger.kernel.org>; Tue,  3 May 2022 15:09:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651590570;
-        bh=P4m+sGkIKiZnUwUw7HipcwL0pw96ASnEf+jcB8YF0PU=;
-        h=From:To:Subject:Date:From;
-        b=EOMLCV4A/MDKRI4u1rNzgRTKEW2OTfhq7h5faHdVkteSMsNzqY/tQIz9cX4Ux7wai
-         sgIJ0PRHvnEGCIjzQljAr+POdTOP3ayXwGOvuy24tz8p9u7meoFaMtqlLlO25TcG6i
-         m4vrjpKVMMKTRweTb96RNVfkoYiPG8FaD7uo1GVXUQAuRX8o/wrEWZeju+gR6r7zWQ
-         70TplsCYi8XW3geynkpjcFrZiyn7U569h9+IyZMusHQJ/ooozwS5KohAgSykEVji+4
-         3ibD2e86h7ALSWoW4y7rtL2Kf3nF5FJ0tXkLs1BDibBFVypG7NnaC7hll0oacGPXbf
-         Ok8pwjXMFy9cQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 44426C05FCE; Tue,  3 May 2022 15:09:30 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 215938] New: amd-pstate ignoring scaling_max_freq after waking
- from suspend
-Date:   Tue, 03 May 2022 15:09:29 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: alexmaras@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
- priority component assigned_to reporter cf_regression
-Message-ID: <bug-215938-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S233589AbiECPgY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 11:36:24 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB142CE1C
+        for <linux-pm@vger.kernel.org>; Tue,  3 May 2022 08:32:51 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id r8so18546575oib.5
+        for <linux-pm@vger.kernel.org>; Tue, 03 May 2022 08:32:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=XnQmOhsCZK19KFsjaZWzKreHbtLS7E4MAuj6me5xfA4=;
+        b=e93gker8XSUGtP9FNQzNbA3o8jNHWWcEose726ZqruHmgrvDB6XNDCXe7pZbHRDROa
+         qYb/NaGqpYxL4Z8sTqsoPbLPcLSrje8PJNt043evZevPWI3kIrBFYKul4LicV+pvUZrA
+         jjRtIlggoU+i0AyhjtBiCCEXSo1/wpZADFzanrftOTBWJG6Q+DUQyuNmTve/RNnbBAIH
+         1HvGNirA6jfGl0osjYrSghaU6VKQtnqGP4RIVWaM3typQ2AbuUkNl5i4UzbJrkBz5uZ7
+         BwOKF7idQCqwcT6+PnX/vwDFwMW2xnU3c5VClxep6rw5EeZKnA1M7pWl5yI6ZsMRBwQs
+         nDoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=XnQmOhsCZK19KFsjaZWzKreHbtLS7E4MAuj6me5xfA4=;
+        b=Cy3u/GB2MLkrvJ8dnuJzVXG1xQRsE5FkMMdXrHkybN8INgIRDW6oq/hdfKphkhR5aw
+         DugaB5+OmBeyhXzJBQBiKAIYjMToLrHRy6gaxvMc6b2m1Ii2u3gAXQIqPGiN54Spiyaq
+         nZNFuU+jaY3Z3CKYP9yzIOLbhIRDJNTBlwJT4/z+6bv5j/5YSp6/bmMiAFuPFA31AEw+
+         Q3BnF9/en650quP7IU1nJgA6SZv0N2Z1fXxs32LviDYuM4EOBlgzVabVupVy65rpkwUj
+         EWHINkHuTe2wl1gcfW9bl25+K/PAaRc1iwe4SVTkd/2JNHWaF2S7goRGYLFYu2QtaBvt
+         K99Q==
+X-Gm-Message-State: AOAM532Rv5pZNZwvChFALik7cq3OM1jlOEq5psh3Q/myRHmyu0KZx2XG
+        YVwZG/rw0K9xh1K2S+PpUNCchg==
+X-Google-Smtp-Source: ABdhPJxHKuxC9rmkYi2NQblFYNBfCKjkd4iYQI+D1hZPwuCjICezisBZiLi1dY6rZjY6TScVwvLZ5Q==
+X-Received: by 2002:a05:6808:f8d:b0:325:1e81:ffe5 with SMTP id o13-20020a0568080f8d00b003251e81ffe5mr2084792oiw.253.1651591970783;
+        Tue, 03 May 2022 08:32:50 -0700 (PDT)
+Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id s4-20020a4adb84000000b00333220959b9sm4955736oou.1.2022.05.03.08.32.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 08:32:50 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2] dt-bindings: thermal: tsens: Add sc8280xp compatible
+Date:   Tue,  3 May 2022 08:34:36 -0700
+Message-Id: <20220503153436.960184-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220408225037.627432-1-bjorn.andersson@linaro.org>
+References: 
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,54 +74,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215938
+The Qualcomm SC8280XP platform has three instances of the tsens block,
+add a compatible for these instances.
 
-            Bug ID: 215938
-           Summary: amd-pstate ignoring scaling_max_freq after waking from
-                    suspend
-           Product: Power Management
-           Version: 2.5
-    Kernel Version: 5.17.5
-          Hardware: All
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: normal
-          Priority: P1
-         Component: cpufreq
-          Assignee: linux-pm@vger.kernel.org
-          Reporter: alexmaras@gmail.com
-        Regression: No
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
 
-Using the amd-pstate driver for cpu scaling, I'm only able to enforce a max=
-imum
-clock speed when my laptop has not slept. I do the following:
+I apprently missed the '2' in the compatible. Retaining Krzysztof's ack under
+the assumption that he's even more okay with the patch now that it's content is
+correct.
 
-echo 'ondemand' | sudo tee
-/sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+Changes since v1:
+- Fix compatible to say 8280, instead of 8180
 
-echo '1400000' | sudo tee
-/sys/devices/system/cpu/cpufreq/policy*/scaling_max_freq
+ Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-cat /sys/devices/system/cpu/cpufreq/policy*/scaling_cur_freq
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+index d72122bbaf3d..038d81338fcf 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+@@ -50,6 +50,7 @@ properties:
+               - qcom,sc7180-tsens
+               - qcom,sc7280-tsens
+               - qcom,sc8180x-tsens
++              - qcom,sc8280xp-tsens
+               - qcom,sdm630-tsens
+               - qcom,sdm845-tsens
+               - qcom,sm6350-tsens
+-- 
+2.35.1
 
-At this point, all reported frequencies for all cores are below 1.4ghz. If I
-then suspend the laptop, then wake it up, then checking the core frequencies
-again will show that it is behaving as if the ondemand governor was not set.
-This behavior will persist until a reboot, even if the governor is switched=
- to
-another mode and then back, or if the scaling_max_freq value is changed. All
-settings will be ignored.=20
-
-I have replicated this behavior on another identical model of laptop (Lenovo
-IdeaPad 5 14ARE05),=20
-
-cpupower frequency-info also reports that the current CPU frequency is set =
-to
-1.4GHZ and that the governor is set to ondemand.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
