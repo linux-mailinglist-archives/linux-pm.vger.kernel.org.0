@@ -2,202 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5DC518BA1
-	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 19:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46483518BB1
+	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 19:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240792AbiECSBi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 May 2022 14:01:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
+        id S240665AbiECSDW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 May 2022 14:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235852AbiECSBg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 14:01:36 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15663E0F1;
-        Tue,  3 May 2022 10:58:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=V5OlIrQZACaQuAvW/eyS6B/1Zwik+ew1I16AuySJnIg=; b=gjAznZuoR4/m9kKzzhqzuGrpkT
-        xtMc6cJN1cBQNuGvg6XyrPFTI1ixzsXC2Qdeh+HpywC/rv8GnlBjcukr7ohfRrQ9c8Vv3g1C+degf
-        BKLK1MQn4ihq1pQ2tLJ4K6bqakBNB70xc08nkdXZEPCNZh6tlfswNgMdLLmr3btmvO+ASGsTB1McO
-        bjtFx1IEqa+FJgHwAOYextuGE9H3QAozC9Ow4n5OqOMhRYX1e/PE6FhaxFfCh6NihoHwyZzrtpHli
-        GlpKhk1VLnB8Ef855kd7QLHnrR7/smJu3dr6Yo1GdqpDjEKpnWDlt7/NfiaCRZ690xo8EgxQrZVRx
-        GY9vS48w==;
-Received: from [179.113.53.197] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nlwlp-0009Ge-E7; Tue, 03 May 2022 19:57:09 +0200
-Message-ID: <dccb35f9-8fff-8b53-3b31-fbe55b2781c0@igalia.com>
-Date:   Tue, 3 May 2022 14:56:27 -0300
+        with ESMTP id S237273AbiECSDV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 14:03:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C5C3E5F0;
+        Tue,  3 May 2022 10:59:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 02187B81DC0;
+        Tue,  3 May 2022 17:59:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35C91C385B1;
+        Tue,  3 May 2022 17:59:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651600785;
+        bh=HE8JDXWHuqMA5lG6TsX84CsZNFrqdgvPHAK265pgkfM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uPtGYVBofjxM/0JIP9bZa1rb1hdLccBdHg2fFcsZnw326Am4P7hJpdU/efwbHSj2e
+         NuvsvWz6UvgEiMAnFsPgDhhTaoxgQ5Jqhu5J4pPMZEQbDq4kA+uNTV13i7W81mWkbt
+         w33wjSYpV7WAAnaGg+8HCwevvVTfQQtCaebs+QGcboBtV6+88f0kg7fGJiJwhVHP0i
+         8WPaBGhhFYt5uOzrZYJ1Y+xLxvty5AwmikmfxxdJNKzVNbcG2svyWntJS5Z3Zsq3aW
+         1mqOp647kN1a+DrCKv5IcBcA6tT/nH0YX3qx/OYh6THuvjF225fDDSVI03a03x79aC
+         yJzVSM4nPhI3A==
+Date:   Tue, 3 May 2022 10:59:43 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH v3 4/9] PCI/PM: Rework changing power states of PCI
+ devices
+Message-ID: <YnFtjzGYwe28tVAA@dev-arch.thelio-3990X>
+References: <4419002.LvFx2qVVIh@kreacher>
+ <11975904.O9o76ZdvQC@kreacher>
+ <5838942.lOV4Wx5bFT@kreacher>
+ <3687697.kQq0lBPeGt@kreacher>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
-Content-Language: en-US
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "bhe@redhat.com" <bhe@redhat.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bcm-kernel-feedback-list@broadcom.com" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "openipmi-developer@lists.sourceforge.net" 
-        <openipmi-developer@lists.sourceforge.net>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
-        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
-        "halves@canonical.com" <halves@canonical.com>,
-        "fabiomirmar@gmail.com" <fabiomirmar@gmail.com>,
-        "alejandro.j.jimenez@oracle.com" <alejandro.j.jimenez@oracle.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "d.hatayama@jp.fujitsu.com" <d.hatayama@jp.fujitsu.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "dyoung@redhat.com" <dyoung@redhat.com>,
-        "feng.tang@intel.com" <feng.tang@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "hidehiro.kawai.ez@hitachi.com" <hidehiro.kawai.ez@hitachi.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "vgoyal@redhat.com" <vgoyal@redhat.com>,
-        vkuznets <vkuznets@redhat.com>,
-        "will@kernel.org" <will@kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Brian Norris <computersforpeace@gmail.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        David Gow <davidgow@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dexuan Cui <decui@microsoft.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Evan Green <evgreen@chromium.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Julius Werner <jwerner@chromium.org>,
-        Justin Chen <justinpopo6@gmail.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mihai Carabas <mihai.carabas@oracle.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
-        Scott Branden <scott.branden@broadcom.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Shile Zhang <shile.zhang@linux.alibaba.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        zhenwei pi <pizhenwei@bytedance.com>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-20-gpiccoli@igalia.com>
- <PH0PR21MB30256260CCF4CAB713BBB11ED7FC9@PH0PR21MB3025.namprd21.prod.outlook.com>
- <0147d038-571b-0802-c210-ccd4d52cd5dd@igalia.com>
- <PH0PR21MB30257E4E6E16BB8FFDE8F312D7C09@PH0PR21MB3025.namprd21.prod.outlook.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <PH0PR21MB30257E4E6E16BB8FFDE8F312D7C09@PH0PR21MB3025.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3687697.kQq0lBPeGt@kreacher>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/05/2022 14:44, Michael Kelley (LINUX) wrote:
-> [...]
->>
->> Hi Michael, thanks for your feedback! I agree that your idea could work,
->> but...there is one downside: imagine the kmsg_dump() approach is not set
->> in some Hyper-V guest, then we would rely in the regular notification
->> mechanism [hv_die_panic_notify_crash()], right?
->> But...you want then to run this notifier in the informational list,
->> which...won't execute *by default* before kdump if no kmsg_dump() is
->> set. So, this logic is convoluted when you mix it with the default level
->> concept + kdump.
-> 
-> Yes, you are right.  But to me that speaks as much to the linkage
-> between the informational list and kmsg_dump() being the core
-> problem.  But as I described in my reply to Patch 24, I can live with
-> the linkage as-is.
+Hi Rafael,
 
-Thanks for the feedback Michael!
-
-> [...] 
->> I feel the panic notification mechanism does really fit with a
->> hypervisor list, it's a good match with the nature of the list, which
->> aims at informing the panic notification to the hypervisor/FW.
->> Of course we can modify it if you prefer...but please take into account
->> the kdump case and how it complicates the logic.
+On Thu, Apr 14, 2022 at 03:11:21PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> I agree that the runtime effect of one list vs. the other is nil.  The
-> code works and can stay as you written it.
+> There are some issues related to changing power states of PCI
+> devices, mostly related to carrying out unnecessary actions in some
+> places, and the code is generally hard to follow.
 > 
-> I was trying to align from a conceptual standpoint.  It was a bit
-> unexpected that one path would be on the hypervisor list, and the
-> other path effectively on the informational list.  When I see
-> conceptual mismatches like that, I tend to want to understand why,
-> and if there is something more fundamental that is out-of-whack.
+>  1. pci_power_up() has two callers, pci_set_power_state() and
+>     pci_pm_default_resume_early().  The latter updates the current
+>     power state of the device right after calling pci_power_up()
+>     and it restores the entire config space of the device right
+>     after that, so pci_power_up() itself need not read the
+>     PCI_PM_CTRL register or restore the BARs after programming the
+>     device into D0 in that case.
+>  
+>  2. It is generally hard to get a clear view of the pci_power_up()
+>     code flow, especially in some corner cases, due to all of the
+>     involved PCI_PM_CTRL register reads and writes occurring in
+>     pci_platform_power_transition() and in pci_raw_set_power_state(),
+>     some of which are redundant.
 > 
+>  3. The transitions from low-power states to D0 and the other way
+>     around are unnecessarily tangled in pci_raw_set_power_state()
+>     which causes it to use a redundant local variable and makes it
+>     rather hard to follow.
+> 
+> To address the above shortcomings, make the following changes:
+> 
+>  a. Remove the code handling transitions into D0
+>     from pci_raw_set_power_state() and rename it as
+>     pci_set_low_power_state().
+> 
+>  b. Add the code handling transitions into D0 directly
+>     to pci_power_up() and to a new wrapper function
+>     pci_set_full_power_state() calling it internally that is
+>     only used in pci_set_power_state().
+> 
+>  c. Make pci_power_up() avoid redundant PCI_PM_CTRL register reads
+>     and make it work in the same way for transitions from any
+>     low-power states (transitions from D1 and D2 are handled
+>     slightly differently before the change).
+> 
+>  d. Put the restoration of the BARs and the PCI_PM_CTRL
+>     register read confirming the power state change into
+>     pci_set_full_power_state() to avoid doing that in
+>     pci_pm_default_resume_early() unnecessarily.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Totally agree with you here, I am like that as well - try to really
-understand the details, this is very important specially in this patch
-set, since it's a refactor and affects every user of the notifiers
-infrastructure.
+This change as commit 5bffe4c611f5 ("PCI/PM: Rework changing power
+states of PCI devices") causes my AMD-based system to fail to fully
+boot. As far as I can tell, this might be NVMe related, which might make
+getting a full log difficult, as journalctl won't have anywhere to save
+it. I see:
 
-Again, just to double-say it: feel free to suggest any change for the
-Hyper-V portion (might as well for any patch in the series, indeed) -
-you and the other Hyper-V maintainers own this code and I'd be glad to
-align with your needs, you are honor citizens in the panic notifiers
-area, being one the most heavy users for that =)
+nvme nvme0: I/O 8 QID 0 timeout, completion polled
+
+then shortly afterwards:
+
+nvme nvme0: I/O 24 QID 0 timeout, completion polled
+nvme nvme0: missing or invalid SUBNQN field
+
+then I am dropped into an emergency shell.
+
+This is a log from the previous commit, which may give some hints about
+the configuration of this particular system.
+
+https://gist.github.com/nathanchance/8a56f0939410cb187896e904c72e41e7/raw/b47b2620bdd32d43c7a3b209fcfd9e3d4668f058/good-boot.log
+
+If there is any additional debugging information I can provide or
+patches I can try, please let me know!
 
 Cheers,
-
-
-Guilherme
+Nathan
