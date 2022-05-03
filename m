@@ -2,149 +2,202 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 289A7518B83
-	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 19:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5DC518BA1
+	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 19:58:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240716AbiECRxm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 May 2022 13:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42848 "EHLO
+        id S240792AbiECSBi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 May 2022 14:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240692AbiECRxi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 13:53:38 -0400
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18F529813;
-        Tue,  3 May 2022 10:50:05 -0700 (PDT)
-Received: by mail-ot1-f49.google.com with SMTP id 88-20020a9d0ee1000000b005d0ae4e126fso12121741otj.5;
-        Tue, 03 May 2022 10:50:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vhN5KYczMmv9TNqtRlooIo1ReYjcW4rlopTFOjfZfxg=;
-        b=Q+3X+Ho1oeRngLCagsyeDyi1D+8FD57AJRmgSonq9QkSnjHmUWIjEqSef/roiVnNAO
-         bOqrcM8BB4UYK+yPnIEcRmfSs4y3sRJwYM1iYUc6wkc7lVPvympLK+Wi1uL04nJhGGuP
-         kyX/2hhqU8iggnGnSTEIPlXfMq/4QxqJpZzAb0N3umraKaCImuo+1cfH1CutccUT/Psu
-         UqmfpBPE8BYVMNSjwHfKctwa5mTTg2EUfJfuVnxZjpryivliTqlGzifOCM69Z8PNuBXT
-         yVVkhCBbpDYQpe8qGLCkdEVrkxSBQnH/2AobuX1Cc94Ori4FajeMiedFzypiPTS8nXli
-         6MDw==
-X-Gm-Message-State: AOAM531TZJwoNQla8e1kKac9dsXdAJpoAm8YicTBG2UHJ4Yi0gaUoDt8
-        VyUzzYtnjgZy46JnvqkYaA==
-X-Google-Smtp-Source: ABdhPJwzR+vsrHG/iK5QzquHREpyKtDwFyhoKABv6B6DjZnIdhtBOWnkv7gmbbHlpz7BD8FJ9Gq8cw==
-X-Received: by 2002:a9d:19a3:0:b0:605:9af6:225c with SMTP id k32-20020a9d19a3000000b006059af6225cmr6226688otk.195.1651600205064;
-        Tue, 03 May 2022 10:50:05 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i5-20020a9d68c5000000b0060603221236sm4179544oto.6.2022.05.03.10.50.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 10:50:04 -0700 (PDT)
-Received: (nullmailer pid 3948010 invoked by uid 1000);
-        Tue, 03 May 2022 17:50:04 -0000
-Date:   Tue, 3 May 2022 12:50:04 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Li-hao Kuo <lhjeff911@gmail.com>
-Cc:     krzk@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
-        amitk@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 2/2] dt-bindings:thermal: Add Sunplus schema
-Message-ID: <YnFrTAqRJziPeo5T@robh.at.kernel.org>
-References: <cover.1651543731.git.lhjeff911@gmail.com>
- <e9f65ca9a2b3205b91210398d743415f6c799d90.1651543731.git.lhjeff911@gmail.com>
+        with ESMTP id S235852AbiECSBg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 14:01:36 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15663E0F1;
+        Tue,  3 May 2022 10:58:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=V5OlIrQZACaQuAvW/eyS6B/1Zwik+ew1I16AuySJnIg=; b=gjAznZuoR4/m9kKzzhqzuGrpkT
+        xtMc6cJN1cBQNuGvg6XyrPFTI1ixzsXC2Qdeh+HpywC/rv8GnlBjcukr7ohfRrQ9c8Vv3g1C+degf
+        BKLK1MQn4ihq1pQ2tLJ4K6bqakBNB70xc08nkdXZEPCNZh6tlfswNgMdLLmr3btmvO+ASGsTB1McO
+        bjtFx1IEqa+FJgHwAOYextuGE9H3QAozC9Ow4n5OqOMhRYX1e/PE6FhaxFfCh6NihoHwyZzrtpHli
+        GlpKhk1VLnB8Ef855kd7QLHnrR7/smJu3dr6Yo1GdqpDjEKpnWDlt7/NfiaCRZ690xo8EgxQrZVRx
+        GY9vS48w==;
+Received: from [179.113.53.197] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nlwlp-0009Ge-E7; Tue, 03 May 2022 19:57:09 +0200
+Message-ID: <dccb35f9-8fff-8b53-3b31-fbe55b2781c0@igalia.com>
+Date:   Tue, 3 May 2022 14:56:27 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e9f65ca9a2b3205b91210398d743415f6c799d90.1651543731.git.lhjeff911@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
+Content-Language: en-US
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "bhe@redhat.com" <bhe@redhat.com>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "openipmi-developer@lists.sourceforge.net" 
+        <openipmi-developer@lists.sourceforge.net>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
+        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
+        "halves@canonical.com" <halves@canonical.com>,
+        "fabiomirmar@gmail.com" <fabiomirmar@gmail.com>,
+        "alejandro.j.jimenez@oracle.com" <alejandro.j.jimenez@oracle.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "d.hatayama@jp.fujitsu.com" <d.hatayama@jp.fujitsu.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "dyoung@redhat.com" <dyoung@redhat.com>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "hidehiro.kawai.ez@hitachi.com" <hidehiro.kawai.ez@hitachi.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "vgoyal@redhat.com" <vgoyal@redhat.com>,
+        vkuznets <vkuznets@redhat.com>,
+        "will@kernel.org" <will@kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        David Gow <davidgow@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dexuan Cui <decui@microsoft.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Evan Green <evgreen@chromium.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Julius Werner <jwerner@chromium.org>,
+        Justin Chen <justinpopo6@gmail.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Scott Branden <scott.branden@broadcom.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        zhenwei pi <pizhenwei@bytedance.com>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-20-gpiccoli@igalia.com>
+ <PH0PR21MB30256260CCF4CAB713BBB11ED7FC9@PH0PR21MB3025.namprd21.prod.outlook.com>
+ <0147d038-571b-0802-c210-ccd4d52cd5dd@igalia.com>
+ <PH0PR21MB30257E4E6E16BB8FFDE8F312D7C09@PH0PR21MB3025.namprd21.prod.outlook.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <PH0PR21MB30257E4E6E16BB8FFDE8F312D7C09@PH0PR21MB3025.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, May 03, 2022 at 10:13:08AM +0800, Li-hao Kuo wrote:
-> Add bindings for Sunplus thermal driver
+On 03/05/2022 14:44, Michael Kelley (LINUX) wrote:
+> [...]
+>>
+>> Hi Michael, thanks for your feedback! I agree that your idea could work,
+>> but...there is one downside: imagine the kmsg_dump() approach is not set
+>> in some Hyper-V guest, then we would rely in the regular notification
+>> mechanism [hv_die_panic_notify_crash()], right?
+>> But...you want then to run this notifier in the informational list,
+>> which...won't execute *by default* before kdump if no kmsg_dump() is
+>> set. So, this logic is convoluted when you mix it with the default level
+>> concept + kdump.
 > 
-> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
-> ---
-> Changes in v8:
->  - Modify yaml file.
->    modify the setting compatible
->  - Change yaml file name.
->  - Modify driver.
->    mosdify and simply the nvmem setting and remove valiable
-> 
->  .../bindings/thermal/sunplus,thermal.yaml          | 43 ++++++++++++++++++++++
->  MAINTAINERS                                        |  1 +
->  2 files changed, 44 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml b/Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml
-> new file mode 100644
-> index 0000000..1ecf6f6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml
-> @@ -0,0 +1,43 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright (C) Sunplus Co., Ltd.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/sunplus,thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Sunplus Thermal controller
-> +
-> +maintainers:
-> +  - Li-hao Kuo <lhjeff911@gmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - sunplus,thermal
+> Yes, you are right.  But to me that speaks as much to the linkage
+> between the informational list and kmsg_dump() being the core
+> problem.  But as I described in my reply to Patch 24, I can live with
+> the linkage as-is.
 
-I don't think is is what was suggested. This must be SoC specific.
+Thanks for the feedback Michael!
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  nvmem-cells:
-> +    maxItems: 1
-> +
-> +  nvmem-cell-names:
-> +    const: calib
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - nvmem-cells
-> +  - nvmem-cell-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    thermal@9c000280 {
-> +        compatible = "sunplus,thermal";
-> +        reg = <0x9c000280 0xc>;
-> +        nvmem-cells = <&calib>;
-> +        nvmem-cell-names = "calib";
-> +    };
-> +...
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 82143ff..ff49023 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18900,6 +18900,7 @@ SUNPLUS THERMAL DRIVER
->  M:	Li-hao Kuo <lhjeff911@gmail.com>
->  L:	linux-pm@vger.kernel.org
->  S:	Maintained
-> +F:	Documentation/devicetree/bindings/thermal/sunplus,thermal.yaml
->  F:	drivers/thermal/sunplus_thermal.c
->  
->  SUNPLUS UART DRIVER
-> -- 
-> 2.7.4
+> [...] 
+>> I feel the panic notification mechanism does really fit with a
+>> hypervisor list, it's a good match with the nature of the list, which
+>> aims at informing the panic notification to the hypervisor/FW.
+>> Of course we can modify it if you prefer...but please take into account
+>> the kdump case and how it complicates the logic.
 > 
+> I agree that the runtime effect of one list vs. the other is nil.  The
+> code works and can stay as you written it.
 > 
+> I was trying to align from a conceptual standpoint.  It was a bit
+> unexpected that one path would be on the hypervisor list, and the
+> other path effectively on the informational list.  When I see
+> conceptual mismatches like that, I tend to want to understand why,
+> and if there is something more fundamental that is out-of-whack.
+> 
+
+Totally agree with you here, I am like that as well - try to really
+understand the details, this is very important specially in this patch
+set, since it's a refactor and affects every user of the notifiers
+infrastructure.
+
+Again, just to double-say it: feel free to suggest any change for the
+Hyper-V portion (might as well for any patch in the series, indeed) -
+you and the other Hyper-V maintainers own this code and I'd be glad to
+align with your needs, you are honor citizens in the panic notifiers
+area, being one the most heavy users for that =)
+
+Cheers,
+
+
+Guilherme
