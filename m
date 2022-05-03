@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49EE5518FEF
+	by mail.lfdr.de (Postfix) with ESMTP id 96633518FF0
 	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 23:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242737AbiECVVZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 May 2022 17:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
+        id S242764AbiECVV0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 May 2022 17:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242740AbiECVVT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 17:21:19 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F4140A1D
-        for <linux-pm@vger.kernel.org>; Tue,  3 May 2022 14:17:44 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id k25-20020a056830169900b00605f215e55dso9120180otr.13
-        for <linux-pm@vger.kernel.org>; Tue, 03 May 2022 14:17:44 -0700 (PDT)
+        with ESMTP id S242757AbiECVVY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 17:21:24 -0400
+Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1E440A1E
+        for <linux-pm@vger.kernel.org>; Tue,  3 May 2022 14:17:45 -0700 (PDT)
+Received: by mail-oo1-xc29.google.com with SMTP id y27-20020a4a9c1b000000b0032129651bb0so3303117ooj.2
+        for <linux-pm@vger.kernel.org>; Tue, 03 May 2022 14:17:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=spKs26r1F2379xZ6tS7kfXY/VPWdGsDMt+IBl0gLnAk=;
-        b=NQNVMOLommaHGfCyIQpDMdxw1821g0Ei8uXX550bRFRpSnk3YP9uvGauqW2Wzwd8Kf
-         9OeSda68kHIu03rLC40k27AW+yj0b9r2Q0rrw8c6RMs7gvuouueVDTQ1cNnHgVIMSzcH
-         94Bvo+aEBHDDLXuBH08BU2T0FDwn57Ene+eVjXqldQ3z5GRFkGi6K8SkJSacDPrH0RRl
-         R6bP/R6AxlxvSCOahohTCk0qI6z56LTaVJmdXyK3o9T9nmZzrO1B5C38DPII/AOqivBu
-         97w3gusVJyUIXgYC/7bnVKwEUA0KY1lEkDv6C2eUUENV2SLS7Q3+uSvHiwRDzP6gLiew
-         loaw==
+        bh=JBcUXt5dt4Py/iqZdre4Zy424VTqJ8vz54Hn9FgKdxs=;
+        b=G8KQVq6J/KLIzXxh/gCjlEbeH5myusk0qfSJ+kOnrXRM6suRjc/cRd11ipsFif0iW8
+         5Sa8FtrQt7pm0l0ckHDYes4z463oi5Id1/KwoUukneYOQvjP+sDXHJGMqnhE9nzj8LDQ
+         VJDg34XWtAhhbrtEtRs2IVEWoImvmCpAry2xND3O/uhLuqJD98jPC225AlIH+ACitKL5
+         ZEci23lUxJLDLh9I5BPhR+t7lasdKgR79DkpBuHpfcyVmh4FkY6F8MPrw9KhSuoBrZYA
+         Zp8YDqZ61rwpDe4AG7P8aYaH9wWdC1QSeG1cnZlUBXpKK2ZnuqoyFE45WxmzBKoLD7lM
+         e5IA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=spKs26r1F2379xZ6tS7kfXY/VPWdGsDMt+IBl0gLnAk=;
-        b=apIC5KFVhYD8Jh4ja4Z71xrm+XugaIF5+JJzrEHoRg0XVPkmhs2IqTayX1gIVvvP6+
-         03gfA+VHodbyMrEyAR3hllDu4I0F/kMJlJWj+vpq0T2YidpGxkJmlS61/Tu79pL91HlH
-         cGjs2vWnvOyS6B/D8TopVvNnqHtTptHUJZWDbBYNXlXplJkR1JVMrO6NWWsGzJ/HLD2F
-         6C7d7Vym9cBubuGY1olgx1REhx3r7+aLUdFAS4WaU2QWZmWwUc474IoSTcF3DglgAygJ
-         07t1Y0HDDTw3lCAjJuYZR0/18Ev2wMBtq7V0dQMKmzce6bX0pouqBDE1z/nLzq39vNjG
-         vY8g==
-X-Gm-Message-State: AOAM5308Xk0Vqx93D291pYZOxOrZ1FIXluDAWJnh2dvTzGNcE6uhOjJT
-        S+WDgSCqprY2kJZldSH0Dy2AZg==
-X-Google-Smtp-Source: ABdhPJyaIoThYJ7KaoNFKJNkQ5dvZPDwcVkdtfuVzaiY3Leg+sqlwsZmVIPhPJMgchjvAKq8GjjtkA==
-X-Received: by 2002:a05:6830:2ea:b0:605:e0ab:931 with SMTP id r10-20020a05683002ea00b00605e0ab0931mr6552180ote.117.1651612663995;
-        Tue, 03 May 2022 14:17:43 -0700 (PDT)
+        bh=JBcUXt5dt4Py/iqZdre4Zy424VTqJ8vz54Hn9FgKdxs=;
+        b=FQA7UjJBw9X3jFOV4ajG83R9eh78ChkYLjyGzxIkWraRGmPJMP9PJgPt5ehBrFpRH8
+         bzIZmfD/G9fnKMJmP9Iin7EnbFsibdRV9ieN0+55uQxBkxW6b1u89zMO1ZfJeefdqNyX
+         Rw4MwLq1vXBevD+ZsACOzFoffOz3MrmO5asJhqTYFx2S5IMadKDm/zxTbySEa+KWEUPY
+         KWexwrfWRiD6I3ZbM77xm5Vb6vNS1O5kbpdBwuIGMXXThbJwna5ogIya+5+wy0nN7Jgr
+         R3eCE6HPKLiiQuUxHuAqlnitzdTOvpqpqBx+NkeibQmVfUzCx8ujjDI/geP/ew4epUpV
+         pQ4g==
+X-Gm-Message-State: AOAM532MhrUuKKCk99ISvFbMAqYDapWSWK5tpZ8YmgRbgmBhCmExiyML
+        hIKEE1p4ghvP5VWFFjSr3/p+aA==
+X-Google-Smtp-Source: ABdhPJyf2RQj+l4lDSS1iSQb6aXRzO2rbt5RlRQcGdLnQvfRr5ayUX2SKaYBWt2w5H2xWB0bVkYeVA==
+X-Received: by 2002:a4a:8242:0:b0:33a:336b:8a00 with SMTP id t2-20020a4a8242000000b0033a336b8a00mr6358546oog.72.1651612665125;
+        Tue, 03 May 2022 14:17:45 -0700 (PDT)
 Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id b3-20020a056830104300b0060603221263sm4305906otp.51.2022.05.03.14.17.43
+        by smtp.gmail.com with ESMTPSA id b3-20020a056830104300b0060603221263sm4305906otp.51.2022.05.03.14.17.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 14:17:43 -0700 (PDT)
+        Tue, 03 May 2022 14:17:44 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Georgi Djakov <djakov@kernel.org>,
         Steev Klimaszewski <steev@kali.org>
@@ -54,9 +54,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] interconnect: qcom: sc8180x: Fix QUP0 nodes
-Date:   Tue,  3 May 2022 14:19:24 -0700
-Message-Id: <20220503211925.1022169-4-bjorn.andersson@linaro.org>
+Subject: [PATCH 4/4] interconnect: qcom: sc8180x: Mark some BCMs keepalive
+Date:   Tue,  3 May 2022 14:19:25 -0700
+Message-Id: <20220503211925.1022169-5-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220503211925.1022169-1-bjorn.andersson@linaro.org>
 References: <20220503211925.1022169-1-bjorn.andersson@linaro.org>
@@ -64,7 +64,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,56 +72,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The QUP0 BCM relates to some internal property of the QUPs, and should
-be configured independently of the path to the QUP. In line with other
-platforms expose QUP_CORE endpoints in order allow this configuration.
+In line with other platforms, mark BCMs controlling paths between the
+CPU, AOSS, GIC and memory as keepalive.
 
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
- drivers/interconnect/qcom/sc8180x.c           | 30 +++++++++++++++++--
- drivers/interconnect/qcom/sc8180x.h           |  7 +++++
- .../dt-bindings/interconnect/qcom,sc8180x.h   |  7 +++++
- 3 files changed, 41 insertions(+), 3 deletions(-)
+ drivers/interconnect/qcom/sc8180x.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/interconnect/qcom/sc8180x.c b/drivers/interconnect/qco=
 m/sc8180x.c
-index 467083661559..86500d05caa3 100644
+index 86500d05caa3..1a9a39ab9c05 100644
 --- a/drivers/interconnect/qcom/sc8180x.c
 +++ b/drivers/interconnect/qcom/sc8180x.c
-@@ -76,6 +76,9 @@ DEFINE_QNODE(mas_qnm_aggre2_noc, SC8180X_A2NOC_SNOC_MAS, =
-1, 16, SC8180X_SLAVE_SN
- DEFINE_QNODE(mas_qnm_gemnoc, SC8180X_MASTER_GEM_NOC_SNOC, 1, 8, SC8180X_SL=
-AVE_PIMEM, SC8180X_SLAVE_OCIMEM, SC8180X_SLAVE_APPSS, SC8180X_SNOC_CNOC_SLV=
-, SC8180X_SLAVE_TCU, SC8180X_SLAVE_QDSS_STM);
- DEFINE_QNODE(mas_qxm_pimem, SC8180X_MASTER_PIMEM, 1, 8, SC8180X_SLAVE_SNOC=
-_GEM_NOC_GC, SC8180X_SLAVE_OCIMEM);
- DEFINE_QNODE(mas_xm_gic, SC8180X_MASTER_GIC, 1, 8, SC8180X_SLAVE_SNOC_GEM_=
-NOC_GC, SC8180X_SLAVE_OCIMEM);
-+DEFINE_QNODE(mas_qup_core_0, SC8180X_MASTER_QUP_CORE_0, 1, 4, SC8180X_SLAV=
-E_QUP_CORE_0);
-+DEFINE_QNODE(mas_qup_core_1, SC8180X_MASTER_QUP_CORE_1, 1, 4, SC8180X_SLAV=
-E_QUP_CORE_1);
-+DEFINE_QNODE(mas_qup_core_2, SC8180X_MASTER_QUP_CORE_2, 1, 4, SC8180X_SLAV=
-E_QUP_CORE_2);
- DEFINE_QNODE(slv_qns_a1noc_snoc, SC8180X_A1NOC_SNOC_SLV, 1, 32, SC8180X_A1=
-NOC_SNOC_MAS);
- DEFINE_QNODE(slv_srvc_aggre1_noc, SC8180X_SLAVE_SERVICE_A1NOC, 1, 4);
- DEFINE_QNODE(slv_qns_a2noc_snoc, SC8180X_A2NOC_SNOC_SLV, 1, 16, SC8180X_A2=
-NOC_SNOC_MAS);
-@@ -165,6 +168,9 @@ DEFINE_QNODE(slv_xs_pcie_2, SC8180X_SLAVE_PCIE_2, 1, 8);
- DEFINE_QNODE(slv_xs_pcie_3, SC8180X_SLAVE_PCIE_3, 1, 8);
- DEFINE_QNODE(slv_xs_qdss_stm, SC8180X_SLAVE_QDSS_STM, 1, 4);
- DEFINE_QNODE(slv_xs_sys_tcu_cfg, SC8180X_SLAVE_TCU, 1, 8);
-+DEFINE_QNODE(slv_qup_core_0, SC8180X_SLAVE_QUP_CORE_0, 1, 4);
-+DEFINE_QNODE(slv_qup_core_1, SC8180X_SLAVE_QUP_CORE_1, 1, 4);
-+DEFINE_QNODE(slv_qup_core_2, SC8180X_SLAVE_QUP_CORE_2, 1, 4);
+@@ -173,29 +173,29 @@ DEFINE_QNODE(slv_qup_core_1, SC8180X_SLAVE_QUP_CORE_1=
+, 1, 4);
+ DEFINE_QNODE(slv_qup_core_2, SC8180X_SLAVE_QUP_CORE_2, 1, 4);
 =20
  DEFINE_QBCM(bcm_acv, "ACV", false, &slv_ebi);
- DEFINE_QBCM(bcm_mc0, "MC0", false, &slv_ebi);
-@@ -174,7 +180,7 @@ DEFINE_QBCM(bcm_co0, "CO0", false, &slv_qns_cdsp_mem_no=
-c);
+-DEFINE_QBCM(bcm_mc0, "MC0", false, &slv_ebi);
+-DEFINE_QBCM(bcm_sh0, "SH0", false, &slv_qns_llcc);
++DEFINE_QBCM(bcm_mc0, "MC0", true, &slv_ebi);
++DEFINE_QBCM(bcm_sh0, "SH0", true, &slv_qns_llcc);
+ DEFINE_QBCM(bcm_mm0, "MM0", false, &slv_qns_mem_noc_hf);
+ DEFINE_QBCM(bcm_co0, "CO0", false, &slv_qns_cdsp_mem_noc);
  DEFINE_QBCM(bcm_ce0, "CE0", false, &mas_qxm_crypto);
- DEFINE_QBCM(bcm_cn0, "CN0", false, &mas_qnm_snoc, &slv_qhs_a1_noc_cfg, &sl=
+-DEFINE_QBCM(bcm_cn0, "CN0", false, &mas_qnm_snoc, &slv_qhs_a1_noc_cfg, &sl=
 v_qhs_a2_noc_cfg, &slv_qhs_ahb2phy_refgen_center, &slv_qhs_ahb2phy_refgen_e=
 ast, &slv_qhs_ahb2phy_refgen_west, &slv_qhs_ahb2phy_south, &slv_qhs_aop, &s=
 lv_qhs_aoss, &slv_qhs_camera_cfg, &slv_qhs_clk_ctl, &slv_qhs_compute_dsp, &=
@@ -137,102 +113,51 @@ m_east, &slv_qhs_tlmm_south, &slv_qhs_tlmm_west, &slv_qhs_tsif, &slv_qhs_uf=
 s_card_cfg, &slv_qhs_ufs_mem0_cfg, &slv_qhs_ufs_mem1_cfg, &slv_qhs_usb3_0, =
 &slv_qhs_usb3_1, &slv_qhs_usb3_2, &slv_qhs_venus_cfg, &slv_qhs_vsense_ctrl_=
 cfg, &slv_srvc_cnoc);
++DEFINE_QBCM(bcm_cn0, "CN0", true, &mas_qnm_snoc, &slv_qhs_a1_noc_cfg, &slv=
+_qhs_a2_noc_cfg, &slv_qhs_ahb2phy_refgen_center, &slv_qhs_ahb2phy_refgen_ea=
+st, &slv_qhs_ahb2phy_refgen_west, &slv_qhs_ahb2phy_south, &slv_qhs_aop, &sl=
+v_qhs_aoss, &slv_qhs_camera_cfg, &slv_qhs_clk_ctl, &slv_qhs_compute_dsp, &s=
+lv_qhs_cpr_cx, &slv_qhs_cpr_mmcx, &slv_qhs_cpr_mx, &slv_qhs_crypto0_cfg, &s=
+lv_qhs_ddrss_cfg, &slv_qhs_display_cfg, &slv_qhs_emac_cfg, &slv_qhs_glm, &s=
+lv_qhs_gpuss_cfg, &slv_qhs_imem_cfg, &slv_qhs_ipa, &slv_qhs_mnoc_cfg, &slv_=
+qhs_npu_cfg, &slv_qhs_pcie0_cfg, &slv_qhs_pcie1_cfg, &slv_qhs_pcie2_cfg, &s=
+lv_qhs_pcie3_cfg, &slv_qhs_pdm, &slv_qhs_pimem_cfg, &slv_qhs_prng, &slv_qhs=
+_qdss_cfg, &slv_qhs_qspi_0, &slv_qhs_qspi_1, &slv_qhs_qupv3_east0, &slv_qhs=
+_qupv3_east1, &slv_qhs_qupv3_west, &slv_qhs_sdc2, &slv_qhs_sdc4, &slv_qhs_s=
+ecurity, &slv_qhs_snoc_cfg, &slv_qhs_spss_cfg, &slv_qhs_tcsr, &slv_qhs_tlmm=
+_east, &slv_qhs_tlmm_south, &slv_qhs_tlmm_west, &slv_qhs_tsif, &slv_qhs_ufs=
+_card_cfg, &slv_qhs_ufs_mem0_cfg, &slv_qhs_ufs_mem1_cfg, &slv_qhs_usb3_0, &=
+slv_qhs_usb3_1, &slv_qhs_usb3_2, &slv_qhs_venus_cfg, &slv_qhs_vsense_ctrl_c=
+fg, &slv_srvc_cnoc);
  DEFINE_QBCM(bcm_mm1, "MM1", false, &mas_qxm_camnoc_hf0_uncomp, &mas_qxm_ca=
 mnoc_hf1_uncomp, &mas_qxm_camnoc_sf_uncomp, &mas_qxm_camnoc_hf0, &mas_qxm_c=
 amnoc_hf1, &mas_qxm_mdp0, &mas_qxm_mdp1);
--DEFINE_QBCM(bcm_qup0, "QUP0", false, &mas_qhm_qup0, &mas_qhm_qup1, &mas_qh=
-m_qup2);
-+DEFINE_QBCM(bcm_qup0, "QUP0", false, &mas_qup_core_0, &mas_qup_core_1, &ma=
+ DEFINE_QBCM(bcm_qup0, "QUP0", false, &mas_qup_core_0, &mas_qup_core_1, &ma=
 s_qup_core_2);
  DEFINE_QBCM(bcm_sh2, "SH2", false, &slv_qns_gem_noc_snoc);
  DEFINE_QBCM(bcm_mm2, "MM2", false, &mas_qxm_camnoc_sf, &mas_qxm_rot, &mas_=
 qxm_venus0, &mas_qxm_venus1, &mas_qxm_venus_arm9, &slv_qns2_mem_noc);
- DEFINE_QBCM(bcm_sh3, "SH3", false, &mas_acm_apps);
-@@ -194,13 +200,11 @@ DEFINE_QBCM(bcm_sn15, "SN15", false, &mas_qnm_gemnoc);
+-DEFINE_QBCM(bcm_sh3, "SH3", false, &mas_acm_apps);
++DEFINE_QBCM(bcm_sh3, "SH3", true, &mas_acm_apps);
+ DEFINE_QBCM(bcm_sn0, "SN0", false, &slv_qns_gemnoc_sf);
+ DEFINE_QBCM(bcm_sn1, "SN1", false, &slv_qxs_imem);
+-DEFINE_QBCM(bcm_sn2, "SN2", false, &slv_qns_gemnoc_gc);
++DEFINE_QBCM(bcm_sn2, "SN2", true, &slv_qns_gemnoc_gc);
+ DEFINE_QBCM(bcm_co2, "CO2", false, &mas_qnm_npu);
+ DEFINE_QBCM(bcm_ip0, "IP0", false, &slv_ipa_core_slave);
+-DEFINE_QBCM(bcm_sn3, "SN3", false, &slv_srvc_aggre1_noc, &slv_qns_cnoc);
++DEFINE_QBCM(bcm_sn3, "SN3", true, &slv_srvc_aggre1_noc, &slv_qns_cnoc);
+ DEFINE_QBCM(bcm_sn4, "SN4", false, &slv_qxs_pimem);
+ DEFINE_QBCM(bcm_sn8, "SN8", false, &slv_xs_pcie_0, &slv_xs_pcie_1, &slv_xs=
+_pcie_2, &slv_xs_pcie_3);
+ DEFINE_QBCM(bcm_sn9, "SN9", false, &mas_qnm_aggre1_noc);
+ DEFINE_QBCM(bcm_sn11, "SN11", false, &mas_qnm_aggre2_noc);
+ DEFINE_QBCM(bcm_sn14, "SN14", false, &slv_qns_pcie_mem_noc);
+-DEFINE_QBCM(bcm_sn15, "SN15", false, &mas_qnm_gemnoc);
++DEFINE_QBCM(bcm_sn15, "SN15", true, &mas_qnm_gemnoc);
+=20
  static struct qcom_icc_bcm * const aggre1_noc_bcms[] =3D {
  	&bcm_sn3,
- 	&bcm_ce0,
--	&bcm_qup0,
- };
-=20
- static struct qcom_icc_bcm * const aggre2_noc_bcms[] =3D {
- 	&bcm_sn14,
- 	&bcm_ce0,
--	&bcm_qup0,
- };
-=20
- static struct qcom_icc_bcm * const camnoc_virt_bcms[] =3D {
-@@ -503,6 +507,25 @@ static const struct qcom_icc_desc sc8180x_system_noc  =
-=3D {
- 	.num_bcms =3D ARRAY_SIZE(system_noc_bcms),
- };
-=20
-+static struct qcom_icc_bcm * const qup_virt_bcms[] =3D {
-+	&bcm_qup0,
-+};
-+
-+static struct qcom_icc_node *qup_virt_nodes[] =3D {
-+	[MASTER_QUP_CORE_0] =3D &mas_qup_core_0,
-+	[MASTER_QUP_CORE_1] =3D &mas_qup_core_1,
-+	[MASTER_QUP_CORE_2] =3D &mas_qup_core_2,
-+	[SLAVE_QUP_CORE_0] =3D &slv_qup_core_0,
-+	[SLAVE_QUP_CORE_1] =3D &slv_qup_core_1,
-+	[SLAVE_QUP_CORE_2] =3D &slv_qup_core_2,
-+};
-+
-+static const struct qcom_icc_desc sc8180x_qup_virt =3D {
-+	.nodes =3D qup_virt_nodes,
-+	.num_nodes =3D ARRAY_SIZE(qup_virt_nodes),
-+	.bcms =3D qup_virt_bcms,
-+	.num_bcms =3D ARRAY_SIZE(qup_virt_bcms),
-+};
-=20
- static const struct of_device_id qnoc_of_match[] =3D {
- 	{ .compatible =3D "qcom,sc8180x-aggre1-noc", .data =3D &sc8180x_aggre1_no=
-c },
-@@ -515,6 +538,7 @@ static const struct of_device_id qnoc_of_match[] =3D {
- 	{ .compatible =3D "qcom,sc8180x-ipa-virt", .data =3D &sc8180x_ipa_virt },
- 	{ .compatible =3D "qcom,sc8180x-mc-virt", .data =3D &sc8180x_mc_virt },
- 	{ .compatible =3D "qcom,sc8180x-mmss-noc", .data =3D &sc8180x_mmss_noc },
-+	{ .compatible =3D "qcom,sc8180x-qup-virt", .data =3D &sc8180x_qup_virt },
- 	{ .compatible =3D "qcom,sc8180x-system-noc", .data =3D &sc8180x_system_no=
-c },
- 	{ }
- };
-diff --git a/drivers/interconnect/qcom/sc8180x.h b/drivers/interconnect/qco=
-m/sc8180x.h
-index e70cf7032f80..2eafd35543c7 100644
---- a/drivers/interconnect/qcom/sc8180x.h
-+++ b/drivers/interconnect/qcom/sc8180x.h
-@@ -171,4 +171,11 @@
- #define SC8180X_MASTER_OSM_L3_APPS		161
- #define SC8180X_SLAVE_OSM_L3			162
-=20
-+#define SC8180X_MASTER_QUP_CORE_0		163
-+#define SC8180X_MASTER_QUP_CORE_1		164
-+#define SC8180X_MASTER_QUP_CORE_2		165
-+#define SC8180X_SLAVE_QUP_CORE_0		166
-+#define SC8180X_SLAVE_QUP_CORE_1		167
-+#define SC8180X_SLAVE_QUP_CORE_2		168
-+
- #endif
-diff --git a/include/dt-bindings/interconnect/qcom,sc8180x.h b/include/dt-b=
-indings/interconnect/qcom,sc8180x.h
-index 235b525d2803..e84cfec5afdd 100644
---- a/include/dt-bindings/interconnect/qcom,sc8180x.h
-+++ b/include/dt-bindings/interconnect/qcom,sc8180x.h
-@@ -182,4 +182,11 @@
- #define SLAVE_MNOC_SF_MEM_NOC_DISPLAY		3
- #define SLAVE_MNOC_HF_MEM_NOC_DISPLAY		4
-=20
-+#define MASTER_QUP_CORE_0			0
-+#define MASTER_QUP_CORE_1			1
-+#define MASTER_QUP_CORE_2			2
-+#define SLAVE_QUP_CORE_0			3
-+#define SLAVE_QUP_CORE_1			4
-+#define SLAVE_QUP_CORE_2			5
-+
- #endif
 --=20
 2.35.1
 
