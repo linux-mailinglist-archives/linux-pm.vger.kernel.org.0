@@ -2,47 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B745188A9
-	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 17:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE885188B2
+	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 17:36:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbiECPjP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 May 2022 11:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
+        id S238612AbiECPjw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 May 2022 11:39:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238700AbiECPjE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 11:39:04 -0400
+        with ESMTP id S235750AbiECPjw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 11:39:52 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EB42CCBF
-        for <linux-pm@vger.kernel.org>; Tue,  3 May 2022 08:35:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBCA2F003
+        for <linux-pm@vger.kernel.org>; Tue,  3 May 2022 08:36:19 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 2EC1E1F4426F
+        with ESMTPSA id 848A71F41B99
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651592131;
-        bh=pjyzp+R74znsxiMCnsabT2Lt7s5vniGL1wQ/aYk4ItE=;
+        s=mail; t=1651592176;
+        bh=w3cS65ZizrFaW4k7vC+5vxb8mq4GjZKCd7iqLVvr9jI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PN69FYsncL8YhlC+c8JjmfFYWXIozvxeW5BF8oKicYkaCwWY9qmaChPoxluAmxb7O
-         zSQn0FUwpDGo0EdCd/HTGgEyu8Cicrpb0T/k6MzYF/taGFGPvAGAh/jwOLFziF42qZ
-         Vv0Ocr8hgrWak4NJJr+8SGrPfTgGaiYvsM8tsLeGQ+UqVj+zZAkkognmuWEQNOZA5B
-         y9HgXLNAWclhY1qLP8sU0B6im7egyk9L35MJsxm0WSM4UVs0TdvXdIbbb3gVVsed6b
-         XaFG4b50J5wtqtCtLZh1unVCaT9r8Io9Tzj8T5+WXWENBuI+IWLU70P7/lild3KLCX
-         9/WGGuFzdgWuA==
+        b=BW3LAKlzvRlhVQH47DnJE2dBl0LJwHqYJp9D+O+9Sw590GNRUIGCQryFF45Qsh1JI
+         bVfJ8udb7gMnRGHBc4rawD61GD6o9kpzomX1Njc+oQE0MwoLKFuIq6yNS8QLrreABc
+         sFGNmCgaqXh5xhOdzsxteJ9UblU9KtSEirfx0nO/h2Q+mI99pfugbz+bk2z4RH5p1W
+         RTKj08iuqhmS+32gXPFQ4CH94MogOAkcKBuffdiDDF9pql3nIF9qW2fvFty6wcsBaI
+         7HeiF4dsx7+rWeLs2OWZf7+/Hff8Qz9OSMtE/hcCkHm30/By1JwpG40DTucF3KK1i1
+         RxW/tg0uxafcw==
 Received: by mercury (Postfix, from userid 1000)
-        id 35FB21060430; Tue,  3 May 2022 17:35:29 +0200 (CEST)
-Date:   Tue, 3 May 2022 17:35:29 +0200
+        id 615621060430; Tue,  3 May 2022 17:36:14 +0200 (CEST)
+Date:   Tue, 3 May 2022 17:36:14 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/2] power: supply: axp288_fuel_gauge: Drop BIOS version
- check from "T3 MRD" DMI quirk
-Message-ID: <20220503153529.l7zgpqrdqg4yh6nv@mercury.elektranox.org>
-References: <20220502111235.331877-1-hdegoede@redhat.com>
- <20220502111235.331877-2-hdegoede@redhat.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Marcus Cooper <codekipper@gmail.com>, linux-pm@vger.kernel.org,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Subject: Re: [PATCH] power: supply: core: Initialize struct to zero
+Message-ID: <20220503153614.nkdvkaotkgliqq5a@mercury.elektranox.org>
+References: <20220424221301.1274428-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zf7gj5dwdiy3cwdu"
+        protocol="application/pgp-signature"; boundary="c43atqz36uacimn3"
 Content-Disposition: inline
-In-Reply-To: <20220502111235.331877-2-hdegoede@redhat.com>
+In-Reply-To: <20220424221301.1274428-1-linus.walleij@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
@@ -54,68 +53,72 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---zf7gj5dwdiy3cwdu
+--c43atqz36uacimn3
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Mon, May 02, 2022 at 01:12:35PM +0200, Hans de Goede wrote:
-> Some "T3 MRD" mini-PCs / HDMI-sticks without a battery use a different
-> value then "5.11" for their DMI BIOS version field.
+On Mon, Apr 25, 2022 at 12:13:01AM +0200, Linus Walleij wrote:
+> As we rely on pointers in the battery info to be zero-initialized
+> such as in the helper function power_supply_supports_vbat2ri()
+> we certainly need to allocate the struct power_supply_battery_info
+> with kzalloc() as well. Else this happens:
 >=20
-> Drop the BIOS version check so that the no-battery "T3 MRD" DMI quirk
-> applies to these too.
+> Unable to handle kernel paging request at virtual address 00280000
+> (...)
+> PC is at power_supply_vbat2ri+0x50/0x12c
+> LR is at ab8500_fg_battery_resistance+0x34/0x108
 >=20
-> Fixes: 3a06b912a5ce ("power: supply: axp288_fuel_gauge: Make "T3 MRD" no_=
-battery_list DMI entry more generic")
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> Fixes: e9e7d165b4b0 ("power: supply: Support VBAT-to-Ri lookup tables")
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 > ---
 
-Thanks, queued to my fixes branch.
+Thanks, queued to fixes branch.
 
 -- Sebastian
 
->  drivers/power/supply/axp288_fuel_gauge.c | 1 -
->  1 file changed, 1 deletion(-)
+>  drivers/power/supply/power_supply_core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >=20
-> diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/sup=
-ply/axp288_fuel_gauge.c
-> index 5b8aa4a980cd..8e6f8a655079 100644
-> --- a/drivers/power/supply/axp288_fuel_gauge.c
-> +++ b/drivers/power/supply/axp288_fuel_gauge.c
-> @@ -609,7 +609,6 @@ static const struct dmi_system_id axp288_quirks[] =3D=
- {
->  			DMI_MATCH(DMI_BOARD_NAME, "T3 MRD"),
->  			DMI_MATCH(DMI_CHASSIS_TYPE, "3"),
->  			DMI_MATCH(DMI_BIOS_VENDOR, "American Megatrends Inc."),
-> -			DMI_MATCH(DMI_BIOS_VERSION, "5.11"),
->  		},
->  		.driver_data =3D (void *)AXP288_QUIRK_NO_BATTERY,
->  	},
+> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
+ply/power_supply_core.c
+> index d925cb137e12..fad5890c899e 100644
+> --- a/drivers/power/supply/power_supply_core.c
+> +++ b/drivers/power/supply/power_supply_core.c
+> @@ -616,7 +616,7 @@ int power_supply_get_battery_info(struct power_supply=
+ *psy,
+>  		goto out_put_node;
+>  	}
+> =20
+> -	info =3D devm_kmalloc(&psy->dev, sizeof(*info), GFP_KERNEL);
+> +	info =3D devm_kzalloc(&psy->dev, sizeof(*info), GFP_KERNEL);
+>  	if (!info) {
+>  		err =3D -ENOMEM;
+>  		goto out_put_node;
 > --=20
-> 2.36.0
+> 2.35.1
 >=20
 
---zf7gj5dwdiy3cwdu
+--c43atqz36uacimn3
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmJxS8AACgkQ2O7X88g7
-+prB8w//UGCLJhQMVnxKBNLrrMzORVdg5YQLINYxP+e5gymbzk42IkYHOBjrXh0U
-16g5ktpMOQjyccqSBlmYLw10kC2+7FAChXj4YTUkSByqVSNkayjQnhAI1Vp50LrT
-xwwBVMYXsnkMsmbxgnhFQyNV2QRom6xgd/E46wWbJMK41X3RTG3csJlmVpYx/h1B
-LA6XXFxyIKM51wMdd8Xb5F1LEvTzEYxPuj9MQyydszofvWOQWKDZMYNsJ8KIP0ef
-JYCphZhcYSN92//3tPE7XBIaB2VGchGvrNp/5ZmFc/0J9w4Z5HyRyVPluEh4gOmC
-Ql0L72HBvp/1SZf4ve7xkDdAps0aQMHt+rd5HOANDTAgnEkPoyzZObuHJkU04RNZ
-NhWZrN0K6iImxEWweEVq/Lvkb7rFmVATqmbgQZV+KdavujDvQ/MTJ8crb4AGiREV
-VaDq1gUcFN5xgrcxGrUNKiD6r/CTKbVvEFik1/ER63QzEtX8MX4eFl+R62pKtOmz
-LbJxBXSm6gZN1mhjaa8Swg67YRtEPkEa4JqEIr/uLmZM3yVbQmH4JitwRZV2yJqy
-iyKbPkGMxZQncStTbRJvT/pPs2kSPv9/obGbHpYurr3s5bdp6noDG/7vTYXASFC+
-ZmALMsEnCZkoMThIjSnKWDPVPdm7IYatzunAZUsqS3/sWzCJAaM=
-=M/id
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmJxS+4ACgkQ2O7X88g7
++pqo+g//Z9LGgfDWMGWFX1KiX3MLlD3OG0bJI+ifSbJscNMue6wbvlbDnTHAoXzb
+0HG/T6LwWioScyEEYnlikhvhOG55pDPEhihaugwjwh7HQ0HRTF+9dgKylXu7izjy
+W03deTQ36fhSK02nt0bxbBvohHV8uR/nk7uxSJEnk3YQZ/ec/tmyZJmQrky4/+jR
+jSp4cyg346BYKC8hMJHDy9hZbBEKXW25/3MEI+RZuQDGhNwS2D8BT09SAklKLgg5
+j27kGxMTJODrSpH20/VvXbue5RskV3bFmGcnk7lZwKzjIRgXWHfyMvNEbcVn6g1L
+ibqyciFc7zbEmWDMyPO0v3v4SPfQO0aHDnleuSyxcxXxlOFVZrv/UxOr34Edc09b
+X6zttwMY17nVHRbc7Z7S1cfuMgQFsptU+/LrqU9O7v7Qo+pxP/MIxR4aQzS0q9Ab
+5Qe7pyMrCO7IWZeov0+vFFXr2mel5odxydgKo5YrXRmxTxVGaR37kZQc3N6e1X1t
+1iZjQPtl8mwJUZtZBdlnv6gcH/0WQ2hr/66KU7Dy8cg467qLyFvxAWNGO3eKCkDy
+YaJq9RVEaw3nyJZK1MRJpvRGG1kc5MDlFrDbXAKY7CdDZViLbV1XFnZI3O2EIjzZ
+HIK870mVbuNDlNbvlCBjcW8YdS6Hsoar4dj+FzbiwjAXyYnF8tQ=
+=bLhh
 -----END PGP SIGNATURE-----
 
---zf7gj5dwdiy3cwdu--
+--c43atqz36uacimn3--
