@@ -2,210 +2,225 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 747275188CE
-	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 17:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 163B251891C
+	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 17:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238361AbiECPmb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 May 2022 11:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55922 "EHLO
+        id S238905AbiECP4f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 May 2022 11:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238637AbiECPm3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 11:42:29 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394FC30F6B;
-        Tue,  3 May 2022 08:38:56 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 119161F44292
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651592335;
-        bh=MG/038EvUZE8OAe8PfPgJ4hV92WF62tq8yJ1yvMIAH0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V2E/EID3YLQS4QEm0CqTTREs2LcqC6vMk/tRLnBpZSilG46WeQqdcVLyQ6UCel5kB
-         DPcO7OpCdAhu//eBvIlpAn2po4JMXvqYJ6A12XNlAP4/f/AIy6SBVKq9cCzKadvjHs
-         tUt/jdbDMgbODaA1wcDVjLJISFWEayQrZc0mvkBXb6vO/HL33MuZ5KqqOrolyQldEn
-         MWY2jIMBaTvJL+9e/Uyo//D0DEBRL9uIseFnnVjsLstl/x7hWhhjznnm9P/Y3SEF+d
-         yHufZ3wOnSgr9FIVmtWAGXzoOmxQUOCK+KzO3mxWJ0bUybZgXPeiJUkW/ysl0i/qTn
-         9lZgVz44g8Xkw==
-Received: by mercury (Postfix, from userid 1000)
-        id 1717F1060430; Tue,  3 May 2022 17:38:53 +0200 (CEST)
-Date:   Tue, 3 May 2022 17:38:53 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     "Sicelo A. Mhlongo" <absicsz@gmail.com>
-Cc:     pali@kernel.org, linux-pm@vger.kernel.org,
+        with ESMTP id S234395AbiECP4e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 11:56:34 -0400
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADD63B283;
+        Tue,  3 May 2022 08:53:01 -0700 (PDT)
+Received: by mail-ot1-f41.google.com with SMTP id g11-20020a9d648b000000b00605e4278793so10945295otl.7;
+        Tue, 03 May 2022 08:53:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=O/VorzOR56WTDjehRhSMK8LAzwC+xTJ10pdPBqWQa/w=;
+        b=JZyHccr1b8zVoj8k8ZWNVOsTF+2phSSt2BweSTj0RWC7GPaVX7PtrzE7Py9xbuPJjN
+         OncER3USBLVb9KFtXFk5vDVqx8Gs5VPjdCHkyCRCSMu1/1B4iaXLDsL7NVUR/TwkyD+g
+         lDF6KMV4NDZQLQHdIg3xfCtKqsKgMadaAgVXTwY1clegkrFs5CD0gygp01NDTS1AWSYs
+         UQir/yoRYHvW7UKR9CH1tCHbEekLrPrf9pkH0CWEwCvtEUQHmDEqqbkgN9C3a9UVltnL
+         VOBUpt8BZVm9LKmm+iHdncLQ+/rejpzWj++vmmTQa9h+Bvyu0M27Uwbs4Iad14Y7hUAl
+         QXrw==
+X-Gm-Message-State: AOAM532GPNyU4qC59fMDNGZ9kahhhHd1tJ9PECKy+a+023lQM0FkOXFk
+        jdDtVO6j4lsX9X8UofaXxQ==
+X-Google-Smtp-Source: ABdhPJw1G98NTO6a1c3CpiXHWrP6FSOoG8WJv5RMlXbGCgu1vAO2Tm+NHbG7kF7E7UVgPTuww9cgbQ==
+X-Received: by 2002:a9d:7e87:0:b0:605:fa3c:95ba with SMTP id m7-20020a9d7e87000000b00605fa3c95bamr6021382otp.66.1651593180862;
+        Tue, 03 May 2022 08:53:00 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g14-20020a05683030ae00b0060603221239sm4038007ots.9.2022.05.03.08.53.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 08:53:00 -0700 (PDT)
+Received: (nullmailer pid 3768349 invoked by uid 1000);
+        Tue, 03 May 2022 15:52:59 -0000
+Date:   Tue, 3 May 2022 10:52:59 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, amitk@kernel.org,
+        rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] power: supply: bq27xxx: expose battery data when
- CI=1
-Message-ID: <20220503153853.k6aysmjep6r7yazu@mercury.elektranox.org>
-References: <20220420123059.1206443-1-absicsz@gmail.com>
- <20220420123059.1206443-2-absicsz@gmail.com>
+Subject: Re: [PATCH v2 1/5] dt-bindings: thermal: tsens: Add ipq8074
+ compatible
+Message-ID: <YnFP2x113LdM5p3Q@robh.at.kernel.org>
+References: <20220501182200.47328-1-robimarko@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ccpdmm7sz72bxqom"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220420123059.1206443-2-absicsz@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220501182200.47328-1-robimarko@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---ccpdmm7sz72bxqom
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Wed, Apr 20, 2022 at 02:30:59PM +0200, Sicelo A. Mhlongo wrote:
-> When the Capacity Inaccurate flag is set, the chip still provides data
-> about the battery, albeit inaccurate. Instead of discarding capacity
-> values for CI=3D1, expose the stale data and use the
-> POWER_SUPPLY_HEALTH_CALIBRATION_REQUIRED property to indicate that the
-> values should be used with care.
->=20
-> Reviewed-by: Pali Roh=E1r <pali@kernel.org>
-> Signed-off-by: Sicelo A. Mhlongo <absicsz@gmail.com>
+On Sun, May 01, 2022 at 08:21:56PM +0200, Robert Marko wrote:
+> Qualcomm IPQ8074 has tsens v2.3.0 block, though unlike existing v2 IP it
+> only uses one IRQ, so tsens v2 compatible cannot be used as the fallback.
+> 
+> We also have to make sure that correct interrupts are set according to
+> compatibles, so populate interrupt information per compatibles.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
 > ---
-
-Thanks, queued.
-
--- Sebastian
-
->  drivers/power/supply/bq27xxx_battery.c | 59 ++++++++++++--------------
->  1 file changed, 27 insertions(+), 32 deletions(-)
->=20
-> diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/suppl=
-y/bq27xxx_battery.c
-> index 72e727cd31e8..9adc7f43bbfd 100644
-> --- a/drivers/power/supply/bq27xxx_battery.c
-> +++ b/drivers/power/supply/bq27xxx_battery.c
-> @@ -1572,14 +1572,6 @@ static int bq27xxx_battery_read_charge(struct bq27=
-xxx_device_info *di, u8 reg)
->   */
->  static inline int bq27xxx_battery_read_nac(struct bq27xxx_device_info *d=
-i)
->  {
-> -	int flags;
-> -
-> -	if (di->opts & BQ27XXX_O_ZERO) {
-> -		flags =3D bq27xxx_read(di, BQ27XXX_REG_FLAGS, true);
-> -		if (flags >=3D 0 && (flags & BQ27000_FLAG_CI))
-> -			return -ENODATA;
-> -	}
-> -
->  	return bq27xxx_battery_read_charge(di, BQ27XXX_REG_NAC);
->  }
-> =20
-> @@ -1742,6 +1734,18 @@ static bool bq27xxx_battery_dead(struct bq27xxx_de=
-vice_info *di, u16 flags)
->  		return flags & (BQ27XXX_FLAG_SOC1 | BQ27XXX_FLAG_SOCF);
->  }
-> =20
-> +/*
-> + * Returns true if reported battery capacity is inaccurate
-> + */
-> +static bool bq27xxx_battery_capacity_inaccurate(struct bq27xxx_device_in=
-fo *di,
-> +						 u16 flags)
-> +{
-> +	if (di->opts & BQ27XXX_O_HAS_CI)
-> +		return (flags & BQ27000_FLAG_CI);
-> +	else
-> +		return false;
-> +}
+> Changes in v2:
+> * No need for a list in compatible check
+> * Specify minItems and maxItems for interrupt and interrupt-names
+> ---
+>  .../bindings/thermal/qcom-tsens.yaml          | 74 +++++++++++++++++--
+>  1 file changed, 67 insertions(+), 7 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> index b6406bcc683f..e9b85c99bb60 100644
+> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> @@ -56,6 +56,10 @@ properties:
+>                - qcom,sm8350-tsens
+>            - const: qcom,tsens-v2
+>  
+> +      - description: v2 of TSENS with combined interrupt
+> +        enum:
+> +          - qcom,ipq8074-tsens
 > +
->  static int bq27xxx_battery_read_health(struct bq27xxx_device_info *di)
->  {
->  	/* Unlikely but important to return first */
-> @@ -1751,6 +1755,8 @@ static int bq27xxx_battery_read_health(struct bq27x=
-xx_device_info *di)
->  		return POWER_SUPPLY_HEALTH_COLD;
->  	if (unlikely(bq27xxx_battery_dead(di, di->cache.flags)))
->  		return POWER_SUPPLY_HEALTH_DEAD;
-> +	if (unlikely(bq27xxx_battery_capacity_inaccurate(di, di->cache.flags)))
-> +		return POWER_SUPPLY_HEALTH_CALIBRATION_REQUIRED;
-> =20
->  	return POWER_SUPPLY_HEALTH_GOOD;
->  }
-> @@ -1766,30 +1772,19 @@ void bq27xxx_battery_update(struct bq27xxx_device=
-_info *di)
->  		cache.flags =3D -1; /* read error */
->  	if (cache.flags >=3D 0) {
->  		cache.temperature =3D bq27xxx_battery_read_temperature(di);
-> -		if (has_ci_flag && (cache.flags & BQ27000_FLAG_CI)) {
-> -			dev_info_once(di->dev, "battery is not calibrated! ignoring capacity =
-values\n");
-> -			cache.capacity =3D -ENODATA;
-> -			cache.energy =3D -ENODATA;
-> -			cache.time_to_empty =3D -ENODATA;
-> -			cache.time_to_empty_avg =3D -ENODATA;
-> -			cache.time_to_full =3D -ENODATA;
-> -			cache.charge_full =3D -ENODATA;
-> -			cache.health =3D -ENODATA;
-> -		} else {
-> -			if (di->regs[BQ27XXX_REG_TTE] !=3D INVALID_REG_ADDR)
-> -				cache.time_to_empty =3D bq27xxx_battery_read_time(di, BQ27XXX_REG_TT=
-E);
-> -			if (di->regs[BQ27XXX_REG_TTECP] !=3D INVALID_REG_ADDR)
-> -				cache.time_to_empty_avg =3D bq27xxx_battery_read_time(di, BQ27XXX_RE=
-G_TTECP);
-> -			if (di->regs[BQ27XXX_REG_TTF] !=3D INVALID_REG_ADDR)
-> -				cache.time_to_full =3D bq27xxx_battery_read_time(di, BQ27XXX_REG_TTF=
-);
-> -
-> -			cache.charge_full =3D bq27xxx_battery_read_fcc(di);
-> -			cache.capacity =3D bq27xxx_battery_read_soc(di);
-> -			if (di->regs[BQ27XXX_REG_AE] !=3D INVALID_REG_ADDR)
-> -				cache.energy =3D bq27xxx_battery_read_energy(di);
-> -			di->cache.flags =3D cache.flags;
-> -			cache.health =3D bq27xxx_battery_read_health(di);
-> -		}
-> +		if (di->regs[BQ27XXX_REG_TTE] !=3D INVALID_REG_ADDR)
-> +			cache.time_to_empty =3D bq27xxx_battery_read_time(di, BQ27XXX_REG_TTE=
-);
-> +		if (di->regs[BQ27XXX_REG_TTECP] !=3D INVALID_REG_ADDR)
-> +			cache.time_to_empty_avg =3D bq27xxx_battery_read_time(di, BQ27XXX_REG=
-_TTECP);
-> +		if (di->regs[BQ27XXX_REG_TTF] !=3D INVALID_REG_ADDR)
-> +			cache.time_to_full =3D bq27xxx_battery_read_time(di, BQ27XXX_REG_TTF);
+>    reg:
+>      items:
+>        - description: TM registers
+> @@ -63,15 +67,11 @@ properties:
+>  
+>    interrupts:
+>      minItems: 1
+> -    items:
+> -      - description: Combined interrupt if upper or lower threshold crossed
+> -      - description: Interrupt if critical threshold crossed
+> +    maxItems: 2
+>  
+>    interrupt-names:
+>      minItems: 1
+> -    items:
+> -      - const: uplow
+> -      - const: critical
+> +    maxItems: 2
+>  
+>    nvmem-cells:
+>      minItems: 1
+> @@ -125,21 +125,66 @@ allOf:
+>        properties:
+>          interrupts:
+>            maxItems: 1
+
+You can drop 'maxItems' as it is implied by 'items' length.
+
+> +          items:
+> +            - description: Combined interrupt if upper or lower threshold crossed
+>          interrupt-names:
+>            maxItems: 1
+
+ditto
+
+> +          items:
+> +            - const: uplow
+>  
+> -    else:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,msm8953-tsens
+> +              - qcom,msm8996-tsens
+> +              - qcom,msm8998-tsens
+> +              - qcom,sc7180-tsens
+> +              - qcom,sc7280-tsens
+> +              - qcom,sc8180x-tsens
+> +              - qcom,sdm630-tsens
+> +              - qcom,sdm845-tsens
+> +              - qcom,sm8150-tsens
+> +              - qcom,sm8250-tsens
+> +              - qcom,sm8350-tsens
+> +              - qcom,tsens-v2
+> +    then:
+>        properties:
+>          interrupts:
+>            minItems: 2
+
+Same for minItems.
+
+> +          items:
+> +            - description: Combined interrupt if upper or lower threshold crossed
+> +            - description: Interrupt if critical threshold crossed
+>          interrupt-names:
+>            minItems: 2
+
+ditto
+
+> +          items:
+> +            - const: uplow
+> +            - const: critical
+>  
+>    - if:
+>        properties:
+>          compatible:
+>            contains:
+>              enum:
+> +              - qcom,ipq8074-tsens
+> +    then:
+> +      properties:
+> +        interrupts:
+> +          maxItems: 1
+
+ditto
+
+> +          items:
+> +            - description: Combined interrupt if upper, lower or critical thresholds crossed
+> +        interrupt-names:
+> +          maxItems: 1
+
+ditto
+
+> +          items:
+> +            - const: combined
 > +
-> +		cache.charge_full =3D bq27xxx_battery_read_fcc(di);
-> +		cache.capacity =3D bq27xxx_battery_read_soc(di);
-> +		if (di->regs[BQ27XXX_REG_AE] !=3D INVALID_REG_ADDR)
-> +			cache.energy =3D bq27xxx_battery_read_energy(di);
-> +		di->cache.flags =3D cache.flags;
-> +		cache.health =3D bq27xxx_battery_read_health(di);
->  		if (di->regs[BQ27XXX_REG_CYCT] !=3D INVALID_REG_ADDR)
->  			cache.cycle_count =3D bq27xxx_battery_read_cyct(di);
-> =20
-> --=20
-> 2.35.2
->=20
-
---ccpdmm7sz72bxqom
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmJxTIwACgkQ2O7X88g7
-+ppi1Q//WiA3zQ3zhED88ZZqdDzq0vK2xJW9igdt/wdh/bG4Dib/pDcJnN9a4OAu
-gmVsHAmDRhwMjzleiwcRTlf8aPm/l4uLE1M7c74UEwR1KfzdZ21QOuX7KHN5OOfS
-8dreBd/HddVQEufjvG7SeVCmMtstYSzMuyAL1CB5YQWubW5gXOa2Gp1+dcXjOSBi
-ilqA5E/uon4hEDNn+TMpmQ47D3nwthS02WsazciknAIlcIw4CwF1BjhV71Nk1ODS
-TpIVbQ2NfahfU6D8WpUQ68+D8pcR05GZOWOP5t7HmoGYkGJwwwoJyy53DgpVd/6L
-/oc+kDdaDOVZj7epHUoZgRIZr4p0S/Yd+GE966I6O1vVkMzRq8aiVSOjYQ1+1bA9
-v+qSnzh0nbhpnyqKdHbaLlwUBTkK9/1xJtp5ZgHKKItjAgPkvWbNEcHO9W0ECjWI
-iMorr50bX/yqz1ttekUt6B2p5EVvsoH+AHyKbXCqYtTEMTKIYV9/0MO7Y5KqstaW
-RduqTMO/LjuAbAFnsvwSAvplE216w3vmUsTDlIBIH4N5fIZp9qngoV+Pob7wXu0u
-yR22vAjS+0X3WqvALiAZNt8iO0yqYC6x6ji86b1GulJVW8vzfNZns0jXXPT/p3ZO
-rCQ2kqpN4Vxa6D1KtJs7xS2ESi4lmRvoqbWX6ijg4us0+/uNSaE=
-=RqE+
------END PGP SIGNATURE-----
-
---ccpdmm7sz72bxqom--
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,ipq8074-tsens
+>                - qcom,tsens-v0_1
+>                - qcom,tsens-v1
+>                - qcom,tsens-v2
+> @@ -222,4 +267,19 @@ examples:
+>             #qcom,sensors = <13>;
+>             #thermal-sensor-cells = <1>;
+>      };
+> +
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    // Example 4 (for any IPQ8074 based SoC-s):
+> +    tsens4: thermal-sensor@4a9000 {
+> +           compatible = "qcom,ipq8074-tsens";
+> +           reg = <0x4a9000 0x1000>,
+> +                 <0x4a8000 0x1000>;
+> +
+> +           interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
+> +           interrupt-names = "combined";
+> +
+> +           #qcom,sensors = <16>;
+> +           #thermal-sensor-cells = <1>;
+> +    };
+>  ...
+> -- 
+> 2.35.1
+> 
+> 
