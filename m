@@ -2,69 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96633518FF0
-	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 23:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F360D5190E8
+	for <lists+linux-pm@lfdr.de>; Wed,  4 May 2022 00:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242764AbiECVV0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 May 2022 17:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33756 "EHLO
+        id S241165AbiECWBK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 May 2022 18:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242757AbiECVVY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 17:21:24 -0400
-Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1E440A1E
-        for <linux-pm@vger.kernel.org>; Tue,  3 May 2022 14:17:45 -0700 (PDT)
-Received: by mail-oo1-xc29.google.com with SMTP id y27-20020a4a9c1b000000b0032129651bb0so3303117ooj.2
-        for <linux-pm@vger.kernel.org>; Tue, 03 May 2022 14:17:45 -0700 (PDT)
+        with ESMTP id S230391AbiECWBJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 18:01:09 -0400
+Received: from mail-oo1-xc44.google.com (mail-oo1-xc44.google.com [IPv6:2607:f8b0:4864:20::c44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE1441F9F
+        for <linux-pm@vger.kernel.org>; Tue,  3 May 2022 14:57:35 -0700 (PDT)
+Received: by mail-oo1-xc44.google.com with SMTP id y22-20020a4acb96000000b0035eb01f5b65so2561265ooq.5
+        for <linux-pm@vger.kernel.org>; Tue, 03 May 2022 14:57:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JBcUXt5dt4Py/iqZdre4Zy424VTqJ8vz54Hn9FgKdxs=;
-        b=G8KQVq6J/KLIzXxh/gCjlEbeH5myusk0qfSJ+kOnrXRM6suRjc/cRd11ipsFif0iW8
-         5Sa8FtrQt7pm0l0ckHDYes4z463oi5Id1/KwoUukneYOQvjP+sDXHJGMqnhE9nzj8LDQ
-         VJDg34XWtAhhbrtEtRs2IVEWoImvmCpAry2xND3O/uhLuqJD98jPC225AlIH+ACitKL5
-         ZEci23lUxJLDLh9I5BPhR+t7lasdKgR79DkpBuHpfcyVmh4FkY6F8MPrw9KhSuoBrZYA
-         Zp8YDqZ61rwpDe4AG7P8aYaH9wWdC1QSeG1cnZlUBXpKK2ZnuqoyFE45WxmzBKoLD7lM
-         e5IA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=czLZHU7MG6H1spBLHXY5jaZbzV59tXkMuN+Ck8Z7wc4=;
+        b=hhWjsHnmVba6J3iaRJaO09nZL4LxjIq8C9W91LOfNC4XgTIwgTHymewopsSR7xhrbE
+         wJfMPDofFT9Orm5X1Xmnq6csdeG70AmAjQHsJ6oidSvnu+c5NqT0zTpfwvGt6c7imJaY
+         Yx4JIofQGY7s+yKOtcqFuF1p2zpjcELmsl0YE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JBcUXt5dt4Py/iqZdre4Zy424VTqJ8vz54Hn9FgKdxs=;
-        b=FQA7UjJBw9X3jFOV4ajG83R9eh78ChkYLjyGzxIkWraRGmPJMP9PJgPt5ehBrFpRH8
-         bzIZmfD/G9fnKMJmP9Iin7EnbFsibdRV9ieN0+55uQxBkxW6b1u89zMO1ZfJeefdqNyX
-         Rw4MwLq1vXBevD+ZsACOzFoffOz3MrmO5asJhqTYFx2S5IMadKDm/zxTbySEa+KWEUPY
-         KWexwrfWRiD6I3ZbM77xm5Vb6vNS1O5kbpdBwuIGMXXThbJwna5ogIya+5+wy0nN7Jgr
-         R3eCE6HPKLiiQuUxHuAqlnitzdTOvpqpqBx+NkeibQmVfUzCx8ujjDI/geP/ew4epUpV
-         pQ4g==
-X-Gm-Message-State: AOAM532MhrUuKKCk99ISvFbMAqYDapWSWK5tpZ8YmgRbgmBhCmExiyML
-        hIKEE1p4ghvP5VWFFjSr3/p+aA==
-X-Google-Smtp-Source: ABdhPJyf2RQj+l4lDSS1iSQb6aXRzO2rbt5RlRQcGdLnQvfRr5ayUX2SKaYBWt2w5H2xWB0bVkYeVA==
-X-Received: by 2002:a4a:8242:0:b0:33a:336b:8a00 with SMTP id t2-20020a4a8242000000b0033a336b8a00mr6358546oog.72.1651612665125;
-        Tue, 03 May 2022 14:17:45 -0700 (PDT)
-Received: from ripper.. (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id b3-20020a056830104300b0060603221263sm4305906otp.51.2022.05.03.14.17.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 May 2022 14:17:44 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Georgi Djakov <djakov@kernel.org>,
-        Steev Klimaszewski <steev@kali.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] interconnect: qcom: sc8180x: Mark some BCMs keepalive
-Date:   Tue,  3 May 2022 14:19:25 -0700
-Message-Id: <20220503211925.1022169-5-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220503211925.1022169-1-bjorn.andersson@linaro.org>
-References: <20220503211925.1022169-1-bjorn.andersson@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=czLZHU7MG6H1spBLHXY5jaZbzV59tXkMuN+Ck8Z7wc4=;
+        b=WjA1PYdR0LcTVX2CNhstoG/AEb0RLWcZsoc3usGQOD7fRJWYzlMsZkcq2VacR5HBfH
+         R6tlH6DSgskVo793HQuJoS+XijCE23u9fbvGFn4QesnchQf8h3gQQ/vOLPivw10zYY37
+         DRt0AM8U3n5/HWqotK+9DDcF9PgNYgEzCmEFBMZK+uuX87vNMhm/KWcVTERuZpyK6lX9
+         7JOehZ0ANtvjTN+I121XGrdNs00gBEiR+HpMpvt1L/9NLZFFBOqOC1+HFVXm2CYNwlum
+         Zj1JNbudukIBmABddbpx3kU40K6YvCs5qV/jF3SE4hwARiOVmml3is86tgm24O0I+chW
+         FdNg==
+X-Gm-Message-State: AOAM531TzGk3y9a4kM1Qfh+WnXPopuLhmc8/Vhy+m/HRqIV3A6FcHSbu
+        ba5iugyyLdGl70UfoIngDMPSChpWroIznQ==
+X-Google-Smtp-Source: ABdhPJzXh+1ZJGQiMhB54q6Lxu/h+7EHKJ90jfIlTfPfRF81SfJQ2SBTRUYJvBpnAajPMtWAkoNC1w==
+X-Received: by 2002:a4a:d984:0:b0:329:a95a:d492 with SMTP id k4-20020a4ad984000000b00329a95ad492mr6362012oou.61.1651615055078;
+        Tue, 03 May 2022 14:57:35 -0700 (PDT)
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com. [209.85.167.171])
+        by smtp.gmail.com with ESMTPSA id s2-20020a05683004c200b006060322126fsm4429926otd.63.2022.05.03.14.57.34
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 14:57:35 -0700 (PDT)
+Received: by mail-oi1-f171.google.com with SMTP id s131so19603561oie.1
+        for <linux-pm@vger.kernel.org>; Tue, 03 May 2022 14:57:34 -0700 (PDT)
+X-Received: by 2002:a05:6808:219a:b0:325:93fc:e0fd with SMTP id
+ be26-20020a056808219a00b0032593fce0fdmr2775646oib.241.1651615054192; Tue, 03
+ May 2022 14:57:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220427224924.592546-1-gpiccoli@igalia.com> <20220427224924.592546-5-gpiccoli@igalia.com>
+ <CAE=gft5Pq25L4KFoPWbftkPF-JN1ex2yws77mMJ4GQnn9W0L2g@mail.gmail.com> <adcf6d0e-c37c-6ede-479e-29959d03d8c0@igalia.com>
+In-Reply-To: <adcf6d0e-c37c-6ede-479e-29959d03d8c0@igalia.com>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Tue, 3 May 2022 14:56:58 -0700
+X-Gmail-Original-Message-ID: <CAE=gft623NxqetRssrZnaRmJLSP4BT5=-sVVwtYoHuspO_gULQ@mail.gmail.com>
+Message-ID: <CAE=gft623NxqetRssrZnaRmJLSP4BT5=-sVVwtYoHuspO_gULQ@mail.gmail.com>
+Subject: Re: [PATCH 04/30] firmware: google: Convert regular spinlock into
+ trylock on panic path
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
+        pmladek@suse.com, kexec@lists.infradead.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de,
+        Kees Cook <keescook@chromium.org>, luto@kernel.org,
+        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
+        peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, Alan Stern <stern@rowland.harvard.edu>,
+        Thomas Gleixner <tglx@linutronix.de>, vgoyal@redhat.com,
+        vkuznets@redhat.com, Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        David Gow <davidgow@google.com>,
+        Julius Werner <jwerner@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,92 +105,89 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In line with other platforms, mark BCMs controlling paths between the
-CPU, AOSS, GIC and memory as keepalive.
+Hi Guilherme,
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- drivers/interconnect/qcom/sc8180x.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+On Tue, May 3, 2022 at 12:12 PM Guilherme G. Piccoli
+<gpiccoli@igalia.com> wrote:
+>
+> On 03/05/2022 15:03, Evan Green wrote:
+> > [...]
+> > gsmi_shutdown_reason() is a common function called in other scenarios
+> > as well, like reboot and thermal trip, where it may still make sense
+> > to wait to acquire a spinlock. Maybe we should add a parameter to
+> > gsmi_shutdown_reason() so that you can get your change on panic, but
+> > we don't convert other callbacks into try-fail scenarios causing us to
+> > miss logs.
+> >
+>
+> Hi Evan, thanks for your feedback, much appreciated!
+> What I've done in other cases like this was to have a helper checking
+> the spinlock in the panic notifier - if we can acquire that, go ahead
+> but if not, bail out. For a proper example of an implementation, check
+> patch 13 of the series:
+> https://lore.kernel.org/lkml/20220427224924.592546-14-gpiccoli@igalia.com/ .
+>
+> Do you agree with that, or prefer really a parameter in
+> gsmi_shutdown_reason() ? I'll follow your choice =)
 
-diff --git a/drivers/interconnect/qcom/sc8180x.c b/drivers/interconnect/qco=
-m/sc8180x.c
-index 86500d05caa3..1a9a39ab9c05 100644
---- a/drivers/interconnect/qcom/sc8180x.c
-+++ b/drivers/interconnect/qcom/sc8180x.c
-@@ -173,29 +173,29 @@ DEFINE_QNODE(slv_qup_core_1, SC8180X_SLAVE_QUP_CORE_1=
-, 1, 4);
- DEFINE_QNODE(slv_qup_core_2, SC8180X_SLAVE_QUP_CORE_2, 1, 4);
-=20
- DEFINE_QBCM(bcm_acv, "ACV", false, &slv_ebi);
--DEFINE_QBCM(bcm_mc0, "MC0", false, &slv_ebi);
--DEFINE_QBCM(bcm_sh0, "SH0", false, &slv_qns_llcc);
-+DEFINE_QBCM(bcm_mc0, "MC0", true, &slv_ebi);
-+DEFINE_QBCM(bcm_sh0, "SH0", true, &slv_qns_llcc);
- DEFINE_QBCM(bcm_mm0, "MM0", false, &slv_qns_mem_noc_hf);
- DEFINE_QBCM(bcm_co0, "CO0", false, &slv_qns_cdsp_mem_noc);
- DEFINE_QBCM(bcm_ce0, "CE0", false, &mas_qxm_crypto);
--DEFINE_QBCM(bcm_cn0, "CN0", false, &mas_qnm_snoc, &slv_qhs_a1_noc_cfg, &sl=
-v_qhs_a2_noc_cfg, &slv_qhs_ahb2phy_refgen_center, &slv_qhs_ahb2phy_refgen_e=
-ast, &slv_qhs_ahb2phy_refgen_west, &slv_qhs_ahb2phy_south, &slv_qhs_aop, &s=
-lv_qhs_aoss, &slv_qhs_camera_cfg, &slv_qhs_clk_ctl, &slv_qhs_compute_dsp, &=
-slv_qhs_cpr_cx, &slv_qhs_cpr_mmcx, &slv_qhs_cpr_mx, &slv_qhs_crypto0_cfg, &=
-slv_qhs_ddrss_cfg, &slv_qhs_display_cfg, &slv_qhs_emac_cfg, &slv_qhs_glm, &=
-slv_qhs_gpuss_cfg, &slv_qhs_imem_cfg, &slv_qhs_ipa, &slv_qhs_mnoc_cfg, &slv=
-_qhs_npu_cfg, &slv_qhs_pcie0_cfg, &slv_qhs_pcie1_cfg, &slv_qhs_pcie2_cfg, &=
-slv_qhs_pcie3_cfg, &slv_qhs_pdm, &slv_qhs_pimem_cfg, &slv_qhs_prng, &slv_qh=
-s_qdss_cfg, &slv_qhs_qspi_0, &slv_qhs_qspi_1, &slv_qhs_qupv3_east0, &slv_qh=
-s_qupv3_east1, &slv_qhs_qupv3_west, &slv_qhs_sdc2, &slv_qhs_sdc4, &slv_qhs_=
-security, &slv_qhs_snoc_cfg, &slv_qhs_spss_cfg, &slv_qhs_tcsr, &slv_qhs_tlm=
-m_east, &slv_qhs_tlmm_south, &slv_qhs_tlmm_west, &slv_qhs_tsif, &slv_qhs_uf=
-s_card_cfg, &slv_qhs_ufs_mem0_cfg, &slv_qhs_ufs_mem1_cfg, &slv_qhs_usb3_0, =
-&slv_qhs_usb3_1, &slv_qhs_usb3_2, &slv_qhs_venus_cfg, &slv_qhs_vsense_ctrl_=
-cfg, &slv_srvc_cnoc);
-+DEFINE_QBCM(bcm_cn0, "CN0", true, &mas_qnm_snoc, &slv_qhs_a1_noc_cfg, &slv=
-_qhs_a2_noc_cfg, &slv_qhs_ahb2phy_refgen_center, &slv_qhs_ahb2phy_refgen_ea=
-st, &slv_qhs_ahb2phy_refgen_west, &slv_qhs_ahb2phy_south, &slv_qhs_aop, &sl=
-v_qhs_aoss, &slv_qhs_camera_cfg, &slv_qhs_clk_ctl, &slv_qhs_compute_dsp, &s=
-lv_qhs_cpr_cx, &slv_qhs_cpr_mmcx, &slv_qhs_cpr_mx, &slv_qhs_crypto0_cfg, &s=
-lv_qhs_ddrss_cfg, &slv_qhs_display_cfg, &slv_qhs_emac_cfg, &slv_qhs_glm, &s=
-lv_qhs_gpuss_cfg, &slv_qhs_imem_cfg, &slv_qhs_ipa, &slv_qhs_mnoc_cfg, &slv_=
-qhs_npu_cfg, &slv_qhs_pcie0_cfg, &slv_qhs_pcie1_cfg, &slv_qhs_pcie2_cfg, &s=
-lv_qhs_pcie3_cfg, &slv_qhs_pdm, &slv_qhs_pimem_cfg, &slv_qhs_prng, &slv_qhs=
-_qdss_cfg, &slv_qhs_qspi_0, &slv_qhs_qspi_1, &slv_qhs_qupv3_east0, &slv_qhs=
-_qupv3_east1, &slv_qhs_qupv3_west, &slv_qhs_sdc2, &slv_qhs_sdc4, &slv_qhs_s=
-ecurity, &slv_qhs_snoc_cfg, &slv_qhs_spss_cfg, &slv_qhs_tcsr, &slv_qhs_tlmm=
-_east, &slv_qhs_tlmm_south, &slv_qhs_tlmm_west, &slv_qhs_tsif, &slv_qhs_ufs=
-_card_cfg, &slv_qhs_ufs_mem0_cfg, &slv_qhs_ufs_mem1_cfg, &slv_qhs_usb3_0, &=
-slv_qhs_usb3_1, &slv_qhs_usb3_2, &slv_qhs_venus_cfg, &slv_qhs_vsense_ctrl_c=
-fg, &slv_srvc_cnoc);
- DEFINE_QBCM(bcm_mm1, "MM1", false, &mas_qxm_camnoc_hf0_uncomp, &mas_qxm_ca=
-mnoc_hf1_uncomp, &mas_qxm_camnoc_sf_uncomp, &mas_qxm_camnoc_hf0, &mas_qxm_c=
-amnoc_hf1, &mas_qxm_mdp0, &mas_qxm_mdp1);
- DEFINE_QBCM(bcm_qup0, "QUP0", false, &mas_qup_core_0, &mas_qup_core_1, &ma=
-s_qup_core_2);
- DEFINE_QBCM(bcm_sh2, "SH2", false, &slv_qns_gem_noc_snoc);
- DEFINE_QBCM(bcm_mm2, "MM2", false, &mas_qxm_camnoc_sf, &mas_qxm_rot, &mas_=
-qxm_venus0, &mas_qxm_venus1, &mas_qxm_venus_arm9, &slv_qns2_mem_noc);
--DEFINE_QBCM(bcm_sh3, "SH3", false, &mas_acm_apps);
-+DEFINE_QBCM(bcm_sh3, "SH3", true, &mas_acm_apps);
- DEFINE_QBCM(bcm_sn0, "SN0", false, &slv_qns_gemnoc_sf);
- DEFINE_QBCM(bcm_sn1, "SN1", false, &slv_qxs_imem);
--DEFINE_QBCM(bcm_sn2, "SN2", false, &slv_qns_gemnoc_gc);
-+DEFINE_QBCM(bcm_sn2, "SN2", true, &slv_qns_gemnoc_gc);
- DEFINE_QBCM(bcm_co2, "CO2", false, &mas_qnm_npu);
- DEFINE_QBCM(bcm_ip0, "IP0", false, &slv_ipa_core_slave);
--DEFINE_QBCM(bcm_sn3, "SN3", false, &slv_srvc_aggre1_noc, &slv_qns_cnoc);
-+DEFINE_QBCM(bcm_sn3, "SN3", true, &slv_srvc_aggre1_noc, &slv_qns_cnoc);
- DEFINE_QBCM(bcm_sn4, "SN4", false, &slv_qxs_pimem);
- DEFINE_QBCM(bcm_sn8, "SN8", false, &slv_xs_pcie_0, &slv_xs_pcie_1, &slv_xs=
-_pcie_2, &slv_xs_pcie_3);
- DEFINE_QBCM(bcm_sn9, "SN9", false, &mas_qnm_aggre1_noc);
- DEFINE_QBCM(bcm_sn11, "SN11", false, &mas_qnm_aggre2_noc);
- DEFINE_QBCM(bcm_sn14, "SN14", false, &slv_qns_pcie_mem_noc);
--DEFINE_QBCM(bcm_sn15, "SN15", false, &mas_qnm_gemnoc);
-+DEFINE_QBCM(bcm_sn15, "SN15", true, &mas_qnm_gemnoc);
-=20
- static struct qcom_icc_bcm * const aggre1_noc_bcms[] =3D {
- 	&bcm_sn3,
---=20
-2.35.1
+I'm fine with either, thanks for the link. Mostly I want to make sure
+other paths to gsmi_shutdown_reason() aren't also converted to a try.
 
+>
+>
+> > Though thinking more about it, is this really a Good Change (TM)? The
+> > spinlock itself already disables interrupts, meaning the only case
+> > where this change makes a difference is if the panic happens from
+> > within the function that grabbed the spinlock (in which case the
+> > callback is also likely to panic), or in an NMI that panics within
+> > that window. The downside of this change is that if one core was
+> > politely working through an event with the lock held, and another core
+> > panics, we now might lose the panic log, even though it probably would
+> > have gone through fine assuming the other core has a chance to
+> > continue.
+>
+> My feeling is that this is a good change, indeed - a lot of places are
+> getting changed like this, in this series.
+>
+> Reasoning: the problem with your example is that, by default, secondary
+> CPUs are disabled in the panic path, through an IPI mechanism. IPIs take
+> precedence and interrupt the work in these CPUs, effectively
+> interrupting the "polite work" with the lock held heh
+
+The IPI can only interrupt a CPU with irqs disabled if the IPI is an
+NMI. I haven't looked before to see if we use NMI IPIs to corral the
+other CPUs on panic. On x86, I grepped my way down to
+native_stop_other_cpus(), which looks like it does a normal IPI, waits
+1 second, then does an NMI IPI. So, if a secondary CPU has the lock
+held, on x86 it has roughly 1s to finish what it's doing and re-enable
+interrupts before smp_send_stop() brings the NMI hammer down. I think
+this should be more than enough time for the secondary CPU to get out
+and release the lock.
+
+So then it makes sense to me that you're fixing cases where we
+panicked with the lock held, or hung with the lock held. Given the 1
+second grace period x86 gives us, I'm on board, as that helps mitigate
+the risk that we bailed out early with the try and should have spun a
+bit longer instead. Thanks.
+
+-Evan
+
+>
+> Then, such CPU is put to sleep and we finally reach the panic notifier
+> hereby discussed, in the main CPU. If the other CPU was shut-off *with
+> the lock held*, it's never finishing such work, so the lock is never to
+> be released. Conclusion: the spinlock can't be acquired, hence we broke
+> the machine (which is already broken, given it's panic) in the path of
+> this notifier.
+> This should be really rare, but..possible. So I think we should protect
+> against this scenario.
+>
+> We can grab others' feedback if you prefer, and of course you have the
+> rights to refuse this change in the gsmi code, but from my
+> point-of-view, I don't see any advantage in just assume the risk,
+> specially since the change is very very simple.
+>
+> Cheers,
+>
+>
+> Guilherme
