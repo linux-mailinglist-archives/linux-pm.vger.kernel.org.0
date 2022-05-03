@@ -2,117 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 285D2517C1A
-	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 04:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30376517CC0
+	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 07:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbiECC7L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 May 2022 22:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
+        id S231319AbiECE5a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 May 2022 00:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiECC7K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 May 2022 22:59:10 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3AA2BCB;
-        Mon,  2 May 2022 19:55:39 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id e189so17022318oia.8;
-        Mon, 02 May 2022 19:55:39 -0700 (PDT)
+        with ESMTP id S231252AbiECE5a (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 00:57:30 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647F43EB82;
+        Mon,  2 May 2022 21:53:58 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id c1so12858540qkf.13;
+        Mon, 02 May 2022 21:53:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=ML+ALf4muC9UINFB1D+jUSUaT6Yc1q590//LqncXPBg=;
-        b=i7O9COFXjCPh9mubsfg4ugisxlHT5wiyH0MXCmkS/E9xJKUh9gtudd7mJOdt/lRU5s
-         XviWqp4uUxdnstDiOc3faSUjpvZagNsoavB45X1ONbSZGvYwKqCS3Q4EtrJCw38BFSTy
-         GfNBd7eRD5cCXw35f/BALZfCm/WuBWvrvy8CHiiL2yrOPGPoRYnxiuE92NR59Xn+HZB5
-         KmWN9JXFhIw1dIK45cEVSlCPHBcxANoVGaomRAUVkCZ8j7FysnRmKK/nqDi0QqiAU5qN
-         jRYD07RpfwKLRhTaIOHoyPVauNdPj2DaFQwX8xWbJUP/uVrx5krbwy8PAtKyqKnZh5Fk
-         0gYA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2AL/JKHLZMiDrdtYYPFneIU29x/Fvo6xQuo1PE3Elwk=;
+        b=mAsS7cKNG2PcNpkIxfZGdFnsrTzZ1+XVZ5/f1toViYts+E+bjdP4sEBqlsxmF1TWOk
+         O3YrZ/gM18x/N07rTZ9oT06xFXzhPpPF/o1E216+MTax+Poncw8+a2BIym8xhmdM8l/6
+         MdpeGFauQi3zUvv93bedj18NbkrGjFSCrsZ1QmCYCmpVKDebQFdUXyNnR4Q5vkJZZCe9
+         3TId3IazbL/n9U9wPkrxOJ3fVc3U8ehSzIz071HGJ+qGWAwoUqBT7V8NDRuPRYDC9HI8
+         T00uArG6Nl94iE/Vi0hKBERItx4k7G/0nST+3nEuj/MtjOLrAax2H0GPSoVmQz5k+XBN
+         SGnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=ML+ALf4muC9UINFB1D+jUSUaT6Yc1q590//LqncXPBg=;
-        b=AScAAAfQBs5jsGUnRtMO/HXUdbYQCM4L4yz1STlLCOHqWzq8GhLjJj0QEtr+mHwZzC
-         UR1hGujcZmtfqB50KWZgDd3N8rcbx+rhLdM1Nsax+a7HdWyOaVsSYEmxKSW4ZyIGJlBE
-         1XoW7E5Q+/Ft6MK2sdqL96H0vQTLq9QuhiX4g7Pgh3cx1FPTowE47zfEf8Hh7ycIxROO
-         D9eL5Cs63VjeA/iZfkGd0nMYrMkshj2LXcuI5XeGbWjxVREGgkFBNyafTbeSze4rVa0d
-         qy8Wzda0Yby76G5FfylPPaP2eq00jPzZIMzKC6/DQcZdk5a+Zd0BFk+cEUKojzPgqBLy
-         2Nww==
-X-Gm-Message-State: AOAM5317zaNYQN8hD2cFd2BVU8Nmj/xVpO+LojrlUdYdHny8dK/KzJh9
-        g/g1lqIKcw5nP91qVU3wmT8=
-X-Google-Smtp-Source: ABdhPJznbXpW7jRNt5UM7xwEtyewbcsNlzza6ofH1kXi3NQqMh/99I9VMArk+DRpxcBP+PFc4iZ78A==
-X-Received: by 2002:a05:6808:1115:b0:2ec:e78e:3fc0 with SMTP id e21-20020a056808111500b002ece78e3fc0mr978131oih.207.1651546539238;
-        Mon, 02 May 2022 19:55:39 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m17-20020a9d7e91000000b006060322126csm1564658otp.60.2022.05.02.19.55.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 May 2022 19:55:38 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <04840b4f-5b9d-b29a-62f7-e5148d415313@roeck-us.net>
-Date:   Mon, 2 May 2022 19:55:34 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2AL/JKHLZMiDrdtYYPFneIU29x/Fvo6xQuo1PE3Elwk=;
+        b=ER9t6yWD2H6h90N/CxaoduYu0p/0WBzkM1Di9IP9Gmgz60PphSBro7FQNRxtWT8iMD
+         jTTe85/u5YYDlgOvehFXGdrApbQBR7xoo+mQKDP5rCjK98Pa8ijUU93O0Ks3aAo9nGDZ
+         xheJwfzWU3BN4e76dD1k+R6fQrdP7kpk+i7mtVG8gja04FmrT6fdP1TbmvlZ/eKHawpl
+         XOCmAheVXJFlLRGlJBiqXzQaAX0iSeCW7uqmHVGArYLk8JKCtMsJUaYue23triiVQ5Kv
+         /xePc7KZSoDMLUwQYIUuUNxfpL6ASIAIqcViV+KTfpMEFRyAEwAX2eGJ8+tQkGKrX+rS
+         5hOQ==
+X-Gm-Message-State: AOAM530E/VQ+C5eTO/FH0f3QdEMnwu5Ib/inDsbCKo68nTWoG6DsYvA9
+        Wp7ERTMbHeG+b8vgy1O5g8m0Sxw6Ui9cgKYsrCitdfJeuog=
+X-Google-Smtp-Source: ABdhPJxh/EMgybZ61mkZgKwbyOrk5nhF7HHNj5cj5Uh/FQaAgfMFW9AIxqS8YCnNLqNtXnjQqCFP0CvEnSb6ZyV5YpE=
+X-Received: by 2002:a37:b886:0:b0:69f:c337:7bb with SMTP id
+ i128-20020a37b886000000b0069fc33707bbmr9823558qkf.74.1651553637547; Mon, 02
+ May 2022 21:53:57 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-References: <20220419163810.2118169-1-arnd@kernel.org>
- <3df135a2-17f5-d6c6-b4a8-e1a60e254297@roeck-us.net>
- <CAK8P3a2EHMQPN4ny9sXXuReFG0jN0hyRV7h9v_AR_0pqpOU41w@mail.gmail.com>
- <CAK8P3a09+nFS3g1rgvTW9da3tMiAhHjkjZVs1QOJOj8TJ-9MDg@mail.gmail.com>
- <6f1b27fa-96d1-4be7-ac6a-762610314f2a@roeck-us.net>
- <8d6d453a-e6fc-439b-2f34-e60c22fc9e98@roeck-us.net>
- <CAK8P3a2Ekvis1YcrJZtuga+XQdbeTC98PkOszCpS2DiZri7VMQ@mail.gmail.com>
- <149509dd-f43d-1b27-4395-81eab4ff3455@roeck-us.net>
- <CAK8P3a05vFdBnXXAMPVS82xX29+uinvWPcWxAgvj0TfoOk+1kg@mail.gmail.com>
- <b13783aa-9225-d52a-3800-c97ad772688b@roeck-us.net>
- <CAK8P3a3S5OjkKq_u5FpnwzYv+0+typya6Z4MzTez5ZH+do00xQ@mail.gmail.com>
- <CAK8P3a3jiqf_zpBsZyvAb5ZtkwDa7KkqExqDAdpY_pYqkr_NgQ@mail.gmail.com>
- <4dcdbfe2-9edf-320b-d123-3b62c8b5e28e@roeck-us.net>
- <CAK8P3a0ogn1wgPBDHkT=Fb8ufA+y8Ax1Qov2-vRXfC08QqnrQA@mail.gmail.com>
- <c001d58e-9a78-6338-a533-d0f215b3dfd1@roeck-us.net>
- <CAK8P3a1X3YH0RqqmqgqFAaY94yreD-PfY-pvyMf+xU3nGeqvsg@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v2 00/48] ARM: PXA multiplatform support
-In-Reply-To: <CAK8P3a1X3YH0RqqmqgqFAaY94yreD-PfY-pvyMf+xU3nGeqvsg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+References: <20220428125610.66647-1-gengcixi@gmail.com>
+In-Reply-To: <20220428125610.66647-1-gengcixi@gmail.com>
+From:   Baolin Wang <baolin.wang7@gmail.com>
+Date:   Tue, 3 May 2022 12:54:31 +0800
+Message-ID: <CADBw62r8eGRNcXH1cAZvYQdKCgBjxUVnxhLsa=Oyzs-uwavRTA@mail.gmail.com>
+Subject: Re: [PATCH v2] power: supply: Add enable the primary charger interface
+To:     Cixi Geng <gengcixi@gmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>, chenyongzhi811@gmail.com,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -120,37 +68,171 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/2/22 14:03, Arnd Bergmann wrote:
-> On Mon, May 2, 2022 at 10:35 PM Guenter Roeck <linux@roeck-us.net> wrote:
->> On 5/2/22 12:21, Arnd Bergmann wrote:
->>>
->>
->> To boot from initrd:
->>
->> qemu-system-arm -M z2 -kernel \
->>        arch/arm/boot/zImage -no-reboot -initrd \
->>        rootfs-armv5.cpio --append \
->>        "panic=-1 slub_debug=FZPUA rdinit=/sbin/init console=ttyS0" -nographic \
->>        -monitor null -serial stdio
->>
->> where rootfs-armv5.cpio is from my repository at github.com.
->>
->> https://github.com/groeck/linux-build-test/blob/master/rootfs/arm/rootfs-armv5.cpio.gz
->>
-> 
-> Ok, that works here with any configuration, I don't see a regression.
-> Could this be a problem with the size increase? The machine only has
-> 32MB of RAM, so it's possible that the multiplatform-enabled kernel
-> with DT support etc pushes it over the edge, especially with an initramfs.
-> 
+On Thu, Apr 28, 2022 at 8:56 PM Cixi Geng <gengcixi@gmail.com> wrote:
+>
+> From: Chen Yongzhi <Yongzhi.Chen@unisoc.com>
+>
+> In the case of charging multiple charging ICs,the primary
+> charging IC often needs to be turned off in the fast
+> charging stage, and only using the charger pump to charge,
+> need to add a new power_supply_property attribute.
 
-qemu puts initrd in the middle of available memory. With the image size
-being ~1MB larger than with v5.18-rc, this is too much, and the kernel
-overwrites part of initrd. This causes it to be corrupted.
+I'm still confused why introducing a new
+POWER_SUPPLY_PROP_CHARGE_ENABLED property to control the charging, but
+you already controlled the charging by POWER_SUPPLY_PROP_STATUS?
 
-It looks like that would have happened eventually, your patch series just
-made it happen now. The kernel is just getting too large to run on such small
-systems. I worked around the problem in my version of qemu by loading initrd
-at the end of the (small) RAM. With that, I no longer see the boot failure.
+>
+> Signed-off-by: Chen Yongzhi <Yongzhi.Chen@unisoc.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/all/202204230206.9TgyhSb1-lkp@intel.com
+> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+> ---
+>  drivers/power/supply/sc2731_charger.c | 52 +++++++++++++++++++++++++--
+>  include/linux/power_supply.h          |  1 +
+>  2 files changed, 50 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/power/supply/sc2731_charger.c b/drivers/power/supply/sc2731_charger.c
+> index 9ac17cf7a126..c15f9b75e6a8 100644
+> --- a/drivers/power/supply/sc2731_charger.c
+> +++ b/drivers/power/supply/sc2731_charger.c
+> @@ -1,5 +1,5 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> -// Copyright (C) 2018 Spreadtrum Communications Inc.
+> +// Copyright (C) 2022 Spreadtrum Communications Inc.
 
-Guenter
+Do not add unrelated changes.
+
+>
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+> @@ -146,6 +146,24 @@ static int sc2731_charger_get_status(struct sc2731_charger_info *info)
+>         return POWER_SUPPLY_STATUS_CHARGING;
+>  }
+>
+> +static int sc2731_charger_set_status(struct sc2731_charger_info *info, int val)
+> +{
+> +       int ret = 0;
+> +
+> +       if (!val && info->charging) {
+> +               sc2731_charger_stop_charge(info);
+> +               info->charging = false;
+> +       } else if (val && !info->charging) {
+> +               ret = sc2731_charger_start_charge(info);
+> +               if (ret)
+> +                       dev_err(info->dev, "start charge failed\n");
+
+Duplicate error information, since you already print errors in
+sc2731_charger_usb_set_property()
+
+> +               else
+> +                       info->charging = true;
+> +       }
+> +
+> +       return ret;
+> +}
+> +
+>  static int sc2731_charger_get_current(struct sc2731_charger_info *info,
+>                                       u32 *cur)
+>  {
+> @@ -204,7 +222,7 @@ sc2731_charger_usb_set_property(struct power_supply *psy,
+>                                 const union power_supply_propval *val)
+>  {
+>         struct sc2731_charger_info *info = power_supply_get_drvdata(psy);
+> -       int ret;
+> +       int ret = 0;
+>
+>         mutex_lock(&info->lock);
+>
+> @@ -214,6 +232,12 @@ sc2731_charger_usb_set_property(struct power_supply *psy,
+>         }
+>
+>         switch (psp) {
+> +       case POWER_SUPPLY_PROP_STATUS:
+> +               ret = sc2731_charger_set_status(info, val->intval);
+> +               if (ret < 0)
+> +                       dev_err(info->dev, "set charge status failed\n");
+> +               break;
+> +
+>         case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+>                 ret = sc2731_charger_set_current(info, val->intval / 1000);
+>                 if (ret < 0)
+> @@ -227,6 +251,15 @@ sc2731_charger_usb_set_property(struct power_supply *psy,
+>                         dev_err(info->dev, "set input current limit failed\n");
+>                 break;
+>
+> +       case POWER_SUPPLY_PROP_CHARGE_ENABLED:
+> +               if (val->intval == true) {
+> +                       ret = sc2731_charger_start_charge(info);
+> +                       if (ret)
+> +                               dev_err(info->dev, "start charge failed\n");
+> +               } else if (val->intval == false) {
+> +                       sc2731_charger_stop_charge(info);
+> +               }
+> +               break;
+>         default:
+>                 ret = -EINVAL;
+>         }
+> @@ -241,7 +274,7 @@ static int sc2731_charger_usb_get_property(struct power_supply *psy,
+>  {
+>         struct sc2731_charger_info *info = power_supply_get_drvdata(psy);
+>         int ret = 0;
+> -       u32 cur;
+> +       u32 cur, enabled;
+>
+>         mutex_lock(&info->lock);
+>
+> @@ -277,6 +310,16 @@ static int sc2731_charger_usb_get_property(struct power_supply *psy,
+>                 }
+>                 break;
+>
+> +       case POWER_SUPPLY_PROP_CHARGE_ENABLED:
+> +               ret = regmap_read(info->regmap, info->base + SC2731_CHG_CFG0, &enabled);
+> +               if (ret) {
+> +                       dev_err(info->dev, "get sc2731 charge enabled failed\n");
+> +                       goto out;
+> +               }
+> +
+> +               val->intval = enabled & SC2731_CHARGER_PD;
+> +
+> +               break;
+>         default:
+>                 ret = -EINVAL;
+>         }
+> @@ -292,8 +335,10 @@ static int sc2731_charger_property_is_writeable(struct power_supply *psy,
+>         int ret;
+>
+>         switch (psp) {
+> +       case POWER_SUPPLY_PROP_STATUS:
+>         case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+>         case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
+> +       case POWER_SUPPLY_PROP_CHARGE_ENABLED:
+>                 ret = 1;
+>                 break;
+>
+> @@ -308,6 +353,7 @@ static enum power_supply_property sc2731_usb_props[] = {
+>         POWER_SUPPLY_PROP_STATUS,
+>         POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
+>         POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
+> +       POWER_SUPPLY_PROP_CHARGE_ENABLED,
+>  };
+>
+>  static const struct power_supply_desc sc2731_charger_desc = {
+> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> index cb380c1d9459..1dfe194d8a5e 100644
+> --- a/include/linux/power_supply.h
+> +++ b/include/linux/power_supply.h
+> @@ -167,6 +167,7 @@ enum power_supply_property {
+>         POWER_SUPPLY_PROP_PRECHARGE_CURRENT,
+>         POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT,
+>         POWER_SUPPLY_PROP_CALIBRATE,
+> +       POWER_SUPPLY_PROP_CHARGE_ENABLED,
+>         POWER_SUPPLY_PROP_MANUFACTURE_YEAR,
+>         POWER_SUPPLY_PROP_MANUFACTURE_MONTH,
+>         POWER_SUPPLY_PROP_MANUFACTURE_DAY,
+> --
+> 2.25.1
+>
+
+
+-- 
+Baolin Wang
