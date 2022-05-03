@@ -2,233 +2,280 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3949518CAE
-	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 20:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A2B518CD0
+	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 21:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239348AbiECTCM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 May 2022 15:02:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56388 "EHLO
+        id S241688AbiECTGC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 May 2022 15:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234645AbiECTCL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 15:02:11 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF6B26541;
-        Tue,  3 May 2022 11:58:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Q8xZuwWHbM5RtbVLpI5p8QHhyHnoykAXVMFnszZxrdg=; b=TqkdHc+398urJjW6/hR3lSmD91
-        Fo7i3n3SNwuNElwVYi/w+KnbhS8+u2vWgV1cIJIjZ8jCkAcSLSvlso5lciPOVsZuwZ60o4GZ0Sqjx
-        22Y1fjpJoK/chqdm1vTsGuRJJqpC4q32E8Os80o8bAzvpNnZtKFYUr9IxCs7Y3+qiYY9v7R2c2HHE
-        u9NeehqoIhEiDWWb10yrMKqoHSbKirkdSM2MnGXbLFUWfXxGVmNdvtyoWTdWi0kALfB+UzyKpCQXc
-        XjY+PUaHj85B5+JbHxedajI8IojA4qagg32dYWLI8h4fZxyG6QPV3ENEKaWRgNkAk597bSNzvAt8G
-        d2ESiTmQ==;
-Received: from [179.113.53.197] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nlxio-0001n9-LT; Tue, 03 May 2022 20:58:06 +0200
-Message-ID: <92dee5a0-f04e-f352-1e22-f990818ca06a@igalia.com>
-Date:   Tue, 3 May 2022 15:57:32 -0300
+        with ESMTP id S241712AbiECTGB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 15:06:01 -0400
+Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5E53EBB2
+        for <linux-pm@vger.kernel.org>; Tue,  3 May 2022 12:02:27 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.180.246])
+        by smtp.orange.fr with ESMTPA
+        id lxmynCNbVqoKwlxmyn5d1e; Tue, 03 May 2022 21:02:25 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Tue, 03 May 2022 21:02:25 +0200
+X-ME-IP: 86.243.180.246
+Message-ID: <6e8386fe-3b22-6f54-5636-bdc946beab59@wanadoo.fr>
+Date:   Tue, 3 May 2022 21:02:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 16/30] drivers/hv/vmbus, video/hyperv_fb: Untangle and
- refactor Hyper-V panic notifiers
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v8 1/2] thermal: Add thermal driver for Sunplus
 Content-Language: en-US
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "bhe@redhat.com" <bhe@redhat.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bcm-kernel-feedback-list@broadcom.com" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "openipmi-developer@lists.sourceforge.net" 
-        <openipmi-developer@lists.sourceforge.net>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
-        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
-        "halves@canonical.com" <halves@canonical.com>,
-        "fabiomirmar@gmail.com" <fabiomirmar@gmail.com>,
-        "alejandro.j.jimenez@oracle.com" <alejandro.j.jimenez@oracle.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "d.hatayama@jp.fujitsu.com" <d.hatayama@jp.fujitsu.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "dyoung@redhat.com" <dyoung@redhat.com>,
-        "feng.tang@intel.com" <feng.tang@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "hidehiro.kawai.ez@hitachi.com" <hidehiro.kawai.ez@hitachi.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "vgoyal@redhat.com" <vgoyal@redhat.com>,
-        vkuznets <vkuznets@redhat.com>,
-        "will@kernel.org" <will@kernel.org>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-17-gpiccoli@igalia.com>
- <PH0PR21MB30250C9246FFF36AFB1DFDECD7FC9@PH0PR21MB3025.namprd21.prod.outlook.com>
- <2787b476-6366-1c83-db80-0393da417497@igalia.com>
- <PH0PR21MB3025A46643EEDA6B14AC1ECED7C09@PH0PR21MB3025.namprd21.prod.outlook.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <PH0PR21MB3025A46643EEDA6B14AC1ECED7C09@PH0PR21MB3025.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <cover.1651543731.git.lhjeff911@gmail.com>
+ <febcaf8229a33217b4bfb3654d6f0bfe7f55a84d.1651543731.git.lhjeff911@gmail.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     krzk@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
+        amitk@kernel.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Li-hao Kuo <lhjeff911@gmail.com>
+In-Reply-To: <febcaf8229a33217b4bfb3654d6f0bfe7f55a84d.1651543731.git.lhjeff911@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/05/2022 15:13, Michael Kelley (LINUX) wrote:
-> [...]
->> (a) We could forget about this change, and always do the clean-up here,
->> not relying in machine_crash_shutdown().
->> Pro: really simple, behaves the same as it is doing currently.
->> Con: less elegant/concise, doesn't allow arm64 customization.
->>
->> (b) Add a way to allow ARM64 customization of shutdown crash handler.
->> Pro: matches x86, more customizable, improves arm64 arch code.
->> Con: A tad more complex.
->>
->> Also, a question that came-up: if ARM64 has no way of calling special
->> crash shutdown handler, how can you execute hv_stimer_cleanup() and
->> hv_synic_disable_regs() there? Or are they not required in ARM64?
->>
+Hi,
+
+below, some additional nitpick.
+
+CJ
+
+Le 03/05/2022 à 04:13, Li-hao Kuo a écrit :
+> Add thermal driver for Sunplus.
 > 
-> My suggestion is to do (a) for now.  I suspect (b) could be a more
-> extended discussion and I wouldn't want your patch set to get held
-> up on that discussion.  I don't know what the sense of the ARM64
-> maintainers would be toward (b).  They have tried to avoid picking
-> up code warts like have accumulated on the x86/x64 side over the
-> years, and I agree with that effort.  But as more and varied
-> hypervisors become available for ARM64, it seems like a framework
-> for supporting a custom shutdown handler may become necessary.
-> But that could take a little time.
+> Signed-off-by: Li-hao Kuo <lhjeff911-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+> ---
+> Changes in v8:
+>   - Modify yaml file.
+>     modify the setting compatible
+>   - Change yaml file name.
+>   - Modify driver.
+>     mosdify and simply the nvmem setting and remove valiable
 > 
-> You are right about hv_stimer_cleanup() and hv_synic_disable_regs().
-> We are not running these when a panic occurs on ARM64, and we
-> should be, though the risk is small.   We will pursue (b) and add
-> these additional cleanups as part of that.  But again, I would suggest
-> doing (a) for now, and we will switch back to your solution once
-> (b) is in place.
+>   MAINTAINERS                       |   6 ++
+>   drivers/thermal/Kconfig           |  10 +++
+>   drivers/thermal/Makefile          |   1 +
+>   drivers/thermal/sunplus_thermal.c | 135 ++++++++++++++++++++++++++++++++++++++
+>   4 files changed, 152 insertions(+)
+>   create mode 100644 drivers/thermal/sunplus_thermal.c
 > 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index edc96cd..82143ff 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18896,6 +18896,12 @@ S:	Maintained
+>   F:	Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+>   F:	drivers/spi/spi-sunplus-sp7021.c
+>   
+> +SUNPLUS THERMAL DRIVER
+> +M:	Li-hao Kuo <lhjeff911-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+> +L:	linux-pm-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+> +S:	Maintained
+> +F:	drivers/thermal/sunplus_thermal.c
+> +
+>   SUNPLUS UART DRIVER
+>   M:	Hammer Hsieh <hammerh0314-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+>   S:	Maintained
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index 0e5cc94..595f507 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
+>   	  If you say yes here you get support for the FAN controlled
+>   	  by the Microcontroller found on the Khadas VIM boards.
+>   
+> +config SUNPLUS_THERMAL
+> +	tristate "Sunplus thermal drivers"
+> +	depends on SOC_SP7021 || COMPILE_TEST
+> +	help
+> +	  This the Sunplus SP7021 thermal driver, which supports the primitive
 
-Thanks again Michael, I'll stick with (a) for now. I'll check with ARM64
-community about that, and I might even try to implement something in
-parallel (if you are not already working on that - lemme know please),
-so we don't get stuck here. As you said, I feel that this is more and
-more relevant as the number of panic/crash/kexec scenarios tend to
-increase in ARM64.
+Missing word?
+This *enables* the... ?
 
+> +	  temperature sensor embedded in Sunplus SP7021 SoC.
+> +
+> +	  If you have a Sunplus SP7021 platform say Y here and enable this option
+> +	  to have support for thermal management
+> +
+>   endif
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index f0c36a1..38a76f9 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+>   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+>   obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
+>   obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
+> +obj-$(CONFIG_SUNPLUS_THERMAL)	+= sunplus_thermal.o
+> diff --git a/drivers/thermal/sunplus_thermal.c b/drivers/thermal/sunplus_thermal.c
+> new file mode 100644
+> index 0000000..d4e22fc
+> --- /dev/null
+> +++ b/drivers/thermal/sunplus_thermal.c
+> @@ -0,0 +1,135 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) Sunplus Inc.
+> + * Author: Li-hao Kuo <lhjeff911-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/nvmem-consumer.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reset.h>
+> +#include <linux/thermal.h>
+> +
+> +#define ENABLE_THERMAL		BIT(31)
+> +#define SP_THERMAL_MASK		GENMASK(10, 0)
+> +
+> +#define TEMP_RATE		608
+> +#define TEMP_BASE		3500
+> +#define TEMP_OTP_BASE		1518
+> +
+> +#define SP_THERMAL_CTL0_REG	0x0000
+> +#define SP_THERMAL_STS0_REG	0x0030
+> +
+> +/* common data structures */
+> +struct sp_thermal_data {
+> +	struct thermal_zone_device *pcb_tz;
+> +	void __iomem *regs;
+> +	int *otp_temp0;
+> +};
+> +
+> +static int sunplus_get_otp_temp_coef(struct sp_thermal_data *sp_data, struct device *dev)
+> +{
+> +	struct nvmem_cell *cell;
+> +	ssize_t otp_l;
+> +
+> +	cell = nvmem_cell_get(dev, "calib");
+> +	if (IS_ERR(cell))
+> +		return PTR_ERR(cell);
+> +
+> +	sp_data->otp_temp0 = nvmem_cell_read(cell, &otp_l);
+> +	nvmem_cell_put(cell);
+> +
+> +	if (*sp_data->otp_temp0 == 0)
+> +		*sp_data->otp_temp0 = TEMP_OTP_BASE;
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * There is a thermal sensor instance for SUNPLUS Soc
 
->> [...]
->> Some ideas of what we can do here:
->>
->> I) we could change the framebuffer notifier to rely on trylocks, instead
->> of risking a lockup scenario, and with that, we can execute it before
->> the vmbus disconnect in the hypervisor list;
-> 
-> I think we have to do this approach for now.
-> 
->>
->> II) we ignore the hypervisor notifier in case of kdump _by default_, and
->> if the users don't want that, they can always set the panic notifier
->> level to 4 and run all notifiers prior to kdump; would that be terrible
->> you think? Kdump users might don't care about the framebuffer...
->>
->> III) we go with approach (b) above and refactor arm64 code to allow the
->> custom crash handler on kdump time, then [with point (I) above] the
->> logic proposed in this series is still valid - seems more and more the
->> most correct/complete solution.
-> 
-> But even when/if we get approach (b) implemented, having the
-> framebuffer notifier on the pre_reboot list is still too late with the
-> default of panic_notifier_level = 2.  The kdump path will reset the
-> VMbus connection and then the framebuffer notifier won't work.
-> 
+I don't know what is the best, but if you want to be consistent, other 
+places are about Sunplus, not SUNPLUS.
 
-OK, perfect! I'll work something along these lines in V2, allowing the
-FB notifier to always run in the hypervisor list before the vmbus unload
-mechanism.
+> + * T_CODE is the ADC of the thermal sensor
+> + * T_CODE : 11 digits in total
+> + * When remanufacturing, the 35 degree T_CODE will be read and stored in nvcell.
+> + * otp_temp0 is the 35 degree T_CODE obtained from nvcell
+> + * The function will get 35 degree T_CODE for thermal calibration.
+> + * TEMP_RATE is the SUNPLUS thermal temperature slope.
 
+Same here.
 
->> [...]
->>>> +static int hv_panic_vmbus_unload(struct notifier_block *nb, unsigned long val,
->>>>  			      void *args)
->>>> +{
->>>> +	if (!kexec_crash_loaded())
->>>
->>> I'm not clear on the purpose of this condition.  I think it means
->>> we will skip the vmbus_initiate_unload() if a panic occurs in the
->>> kdump kernel.  Is there a reason a panic in the kdump kernel
->>> should be treated differently?  Or am I misunderstanding?
->>
->> This is really related with the point discussed in the top of this
->> response - I assumed both ARM64/x86_64 would behave the same and
->> disconnect the vmbus through the custom crash handler when kdump is set,
->> so worth skipping it here in the notifier. But that's not true for ARM64
->> as you pointed, so this guard against kexec is really part of the
->> decision/discussion on what to do with ARM64 heh
-> 
-> But note that vmbus_initiate_unload() already has a guard built-in.
-> If the intent of this test is just as a guard against running twice,
-> then it isn't needed.
+> + */
+> +
+> +static int sp_thermal_get_sensor_temp(void *data, int *temp)
+> +{
+> +	struct sp_thermal_data *sp_data = data;
+> +	int t_code;
+> +
+> +	t_code = readl(sp_data->regs + SP_THERMAL_STS0_REG);
+> +	t_code = FIELD_GET(SP_THERMAL_MASK, t_code);
+> +	*temp = ((*sp_data->otp_temp0 - t_code) * 10000 / TEMP_RATE) + TEMP_BASE;
+> +	*temp *= 10;
+> +	return 0;
+> +}
+> +
+> +static const struct thermal_zone_of_device_ops sp_of_thermal_ops = {
+> +	.get_temp = sp_thermal_get_sensor_temp,
+> +};
+> +
+> +static int sunplus_thermal_probe(struct platform_device *pdev)
+> +{
+> +	struct sp_thermal_data *sp_data;
+> +	int ret;
+> +
+> +	sp_data = devm_kzalloc(&pdev->dev, sizeof(*sp_data), GFP_KERNEL);
+> +	if (!sp_data)
+> +		return -ENOMEM;
+> +
+> +	sp_data->regs = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(sp_data->regs)) {
+> +		dev_err(&pdev->dev, "resource get fail\n");
+> +		return PTR_ERR(sp_data->regs);
+> +	}
+> +
+> +	writel(ENABLE_THERMAL, sp_data->regs + SP_THERMAL_CTL0_REG);
+> +
+> +	platform_set_drvdata(pdev, sp_data);
+> +	ret = sunplus_get_otp_temp_coef(sp_data, &pdev->dev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	sp_data->pcb_tz = devm_thermal_zone_of_sensor_register(&pdev->dev,
+> +							    0,
+> +							    sp_data, &sp_of_thermal_ops);
+> +	if (IS_ERR_OR_NULL(sp_data->pcb_tz))
 
-Since we're going to avoid relying in the custom crash_shutdown(), due
-to the lack of ARM64 support for now, this check will be removed in V2.
+I don't think that devm_thermal_zone_of_sensor_register() can return NULL.
 
-Its purpose was to skip the notifier *proactively* in case kexec is set,
-given that...once kexec happens, the custom crash_shutdown() would run
-the same function (wrong assumption for ARM64, my bad).
+> +		return PTR_ERR(sp_data->pcb_tz);
+> +
+> +	return ret;
+> +}
+> +
+> +static int sunplus_thermal_remove(struct platform_device *pdev)
+> +{
+> +	struct sp_thermal_data *sp_data = platform_get_drvdata(pdev);
+> +
+> +	thermal_zone_device_unregister(sp_data->pcb_tz);
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id of_sunplus_thermal_ids[] = {
+> +	{ .compatible = "sunplus,thermal" },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, of_sunplus_thermal_ids);
+> +
+> +static struct platform_driver sunplus_thermal_driver = {
+> +	.probe	= sunplus_thermal_probe,
+> +	.remove = sunplus_thermal_remove,
+> +	.driver	= {
+> +		.name	= "sunplus-thermal",
+> +		.of_match_table = of_sunplus_thermal_ids,
+> +		},
 
-Postponing that slightly would maybe gain us some time while the
-hypervisor finish its work, so we'd delay less in the vmbus unload path
-- that was the rationale behind this check.
+The }, should be aligned on .driver (1 less tabulation)
 
+> +};
+> +module_platform_driver(sunplus_thermal_driver);
+> +
+> +MODULE_AUTHOR("Li-hao Kuo <lhjeff911-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>");
+> +MODULE_DESCRIPTION("Thermal driver for sunplus SoC");
 
-Cheers!
+Other places are about Sunplus, not sunplus
+
+> +MODULE_LICENSE("GPL");
+
