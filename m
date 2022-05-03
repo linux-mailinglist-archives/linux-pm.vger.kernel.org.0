@@ -2,139 +2,213 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA366518D37
-	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 21:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B644E518DC8
+	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 22:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238959AbiECTlA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 May 2022 15:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36016 "EHLO
+        id S238173AbiECUJR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 May 2022 16:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiECTk7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 15:40:59 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B9924597;
-        Tue,  3 May 2022 12:37:26 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:56078)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nlyKo-00AaEh-5z; Tue, 03 May 2022 13:37:22 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:36796 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nlyKn-007Sew-2a; Tue, 03 May 2022 13:37:21 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>
-References: <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
-        <20220429214837.386518-6-ebiederm@xmission.com>
-        <20220502143750.GC17276@redhat.com>
-Date:   Tue, 03 May 2022 14:36:55 -0500
-In-Reply-To: <20220502143750.GC17276@redhat.com> (Oleg Nesterov's message of
-        "Mon, 2 May 2022 16:37:51 +0200")
-Message-ID: <87y1zio1bc.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        with ESMTP id S237803AbiECUJI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 16:09:08 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7E4B879;
+        Tue,  3 May 2022 13:05:35 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id t5so10449489edw.11;
+        Tue, 03 May 2022 13:05:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=o3MWZsx6Wz0oJnhXHc5EgYRJIPgHEoxFAS+Idrf7kxw=;
+        b=WTjNcPu/nddUOPrhaKacXQUTLslQDS13Knv/clKmNqWtsDC/596MjJ0MVZGLyAYD+y
+         jc5lhndBakfJW89eic7hJIwBWVaoQ2E9mHjoP1mA3MeH1vthl22N3nq08iTeJI6DKake
+         eHYUSPQO35eeV+xYd8Bfkark0hoELMKmtWl6p+3f53dR+LODq7HqySGfxZxR0jVVLQ1w
+         qIBc7NUEx5Sd0sdVpiiQVEFg2B/kx5jdtZMy2z4aURRFuW/QA3utTi3KSgrG1/UaUT2s
+         PFbdbYgvlwU6zzLBteknOcx/AiKzLQHwgJ3viGkbnMRQWXRWn+hhoyiM47FuFM3TdhSx
+         F88Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=o3MWZsx6Wz0oJnhXHc5EgYRJIPgHEoxFAS+Idrf7kxw=;
+        b=KTO9Eat3H6hM/bIyb7hSPWt15tZQB7uXJhWxx8jQcioEJcpTPd6bOKFkuPqRBM/NDR
+         bI3CKj/S2O4jCmwRcwUjYLchx3yqwqkj1m4XU8ZpjWRoN3kCyYGQ8AMSdJQM57+NviUq
+         7ng52yO0cf03LuPt21MWu+w8yTu89U3x0KbkzAuG7ePrElJnrmOrp8Dmmw6L6xnKjkNp
+         0KSJkGWdTb1q+x/HUuW82ZZuiYgX1gzT48N8hfcSDG2nZ009K3BomlHXuuDwiid5F+cL
+         6mSAvTBHLTfiYDwFfOmgRMKGIICHoMUEjsI82OCHSluKuDRKPYRBKWQfszU147xyaMgo
+         QLmA==
+X-Gm-Message-State: AOAM530cLa/2QqTBObz0tqMgJyE7d9iPbDrpoY+LllyiHiKuW124Dw5M
+        HAImNmBDxcmOMm4glbF/uBg=
+X-Google-Smtp-Source: ABdhPJwt27N2VjqPhn9z7ncxzJJmn9AE4qeMODZgXlBMPH4QxsSqZSTfiMCiNmG52xN5Ml7jGvTg1A==
+X-Received: by 2002:a05:6402:1450:b0:425:e43f:7ccd with SMTP id d16-20020a056402145000b00425e43f7ccdmr19898570edx.299.1651608333643;
+        Tue, 03 May 2022 13:05:33 -0700 (PDT)
+Received: from fedora.robimarko.hr (dh207-96-149.xnet.hr. [88.207.96.149])
+        by smtp.googlemail.com with ESMTPSA id ee47-20020a056402292f00b0041d893ed437sm8688450edb.2.2022.05.03.13.05.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 13:05:33 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     amitk@kernel.org, thara.gopinath@linaro.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH v3 1/5] dt-bindings: thermal: tsens: Add ipq8074 compatible
+Date:   Tue,  3 May 2022 22:05:26 +0200
+Message-Id: <20220503200530.4019673-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nlyKn-007Sew-2a;;;mid=<87y1zio1bc.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+j7nUi9NCECp7X522Zs1J0RePdyckNPD8=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Oleg Nesterov <oleg@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 521 ms - load_scoreonly_sql: 0.06 (0.0%),
-        signal_user_changed: 10 (1.9%), b_tie_ro: 8 (1.5%), parse: 1.09 (0.2%),
-         extract_message_metadata: 13 (2.4%), get_uri_detail_list: 1.50 (0.3%),
-         tests_pri_-1000: 7 (1.3%), tests_pri_-950: 1.44 (0.3%),
-        tests_pri_-900: 1.23 (0.2%), tests_pri_-90: 193 (37.1%), check_bayes:
-        183 (35.1%), b_tokenize: 8 (1.6%), b_tok_get_all: 8 (1.6%),
-        b_comp_prob: 2.7 (0.5%), b_tok_touch_all: 159 (30.5%), b_finish: 1.09
-        (0.2%), tests_pri_0: 280 (53.8%), check_dkim_signature: 1.08 (0.2%),
-        check_dkim_adsp: 3.2 (0.6%), poll_dns_idle: 0.90 (0.2%), tests_pri_10:
-        2.4 (0.5%), tests_pri_500: 9 (1.6%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v2 06/12] ptrace: Reimplement PTRACE_KILL by always
- sending SIGKILL
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Oleg Nesterov <oleg@redhat.com> writes:
+Qualcomm IPQ8074 has tsens v2.3.0 block, though unlike existing v2 IP it
+only uses one IRQ, so tsens v2 compatible cannot be used as the fallback.
 
-> On 04/29, Eric W. Biederman wrote:
->>
->> Call send_sig_info in PTRACE_KILL instead of ptrace_resume.  Calling
->> ptrace_resume is not safe to call if the task has not been stopped
->> with ptrace_freeze_traced.
->
-> Oh, I was never, never able to understand why do we have PTRACE_KILL
-> and what should it actually do.
->
-> I suggested many times to simply remove it but OK, we probably can't
-> do this.
+We also have to make sure that correct interrupts are set according to
+compatibles, so populate interrupt information per compatibles.
 
-I thought I remembered you suggesting fixing it in some other way.
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+Changes in v3:
+* Remove implied min/maxItem properties as pointed by Rob
 
-I took at quick look in codesearch.debian.net and PTRACE_KILL is
-definitely in use. I find uses in gcc-10, firefox-esr_91.8,
-llvm_toolchain, qtwebengine.  At which point I stopped looking.
+Changes in v2:
+* No need for a list in compatible check
+* Specify minItems and maxItems for interrupt and interrupt-names
+---
+ .../bindings/thermal/qcom-tsens.yaml          | 76 ++++++++++++++++---
+ 1 file changed, 65 insertions(+), 11 deletions(-)
 
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+index b6406bcc683f..23f69eead67e 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+@@ -56,6 +56,10 @@ properties:
+               - qcom,sm8350-tsens
+           - const: qcom,tsens-v2
+ 
++      - description: v2 of TSENS with combined interrupt
++        enum:
++          - qcom,ipq8074-tsens
++
+   reg:
+     items:
+       - description: TM registers
+@@ -63,15 +67,11 @@ properties:
+ 
+   interrupts:
+     minItems: 1
+-    items:
+-      - description: Combined interrupt if upper or lower threshold crossed
+-      - description: Interrupt if critical threshold crossed
++    maxItems: 2
+ 
+   interrupt-names:
+     minItems: 1
+-    items:
+-      - const: uplow
+-      - const: critical
++    maxItems: 2
+ 
+   nvmem-cells:
+     minItems: 1
+@@ -124,22 +124,61 @@ allOf:
+     then:
+       properties:
+         interrupts:
+-          maxItems: 1
++          items:
++            - description: Combined interrupt if upper or lower threshold crossed
+         interrupt-names:
+-          maxItems: 1
++          items:
++            - const: uplow
+ 
+-    else:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,msm8953-tsens
++              - qcom,msm8996-tsens
++              - qcom,msm8998-tsens
++              - qcom,sc7180-tsens
++              - qcom,sc7280-tsens
++              - qcom,sc8180x-tsens
++              - qcom,sdm630-tsens
++              - qcom,sdm845-tsens
++              - qcom,sm8150-tsens
++              - qcom,sm8250-tsens
++              - qcom,sm8350-tsens
++              - qcom,tsens-v2
++    then:
++      properties:
++        interrupts:
++          items:
++            - description: Combined interrupt if upper or lower threshold crossed
++            - description: Interrupt if critical threshold crossed
++        interrupt-names:
++          items:
++            - const: uplow
++            - const: critical
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,ipq8074-tsens
++    then:
+       properties:
+         interrupts:
+-          minItems: 2
++          items:
++            - description: Combined interrupt if upper, lower or critical thresholds crossed
+         interrupt-names:
+-          minItems: 2
++          items:
++            - const: combined
+ 
+   - if:
+       properties:
+         compatible:
+           contains:
+             enum:
++              - qcom,ipq8074-tsens
+               - qcom,tsens-v0_1
+               - qcom,tsens-v1
+               - qcom,tsens-v2
+@@ -222,4 +261,19 @@ examples:
+            #qcom,sensors = <13>;
+            #thermal-sensor-cells = <1>;
+     };
++
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    // Example 4 (for any IPQ8074 based SoC-s):
++    tsens4: thermal-sensor@4a9000 {
++           compatible = "qcom,ipq8074-tsens";
++           reg = <0x4a9000 0x1000>,
++                 <0x4a8000 0x1000>;
++
++           interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
++           interrupt-names = "combined";
++
++           #qcom,sensors = <16>;
++           #thermal-sensor-cells = <1>;
++    };
+ ...
+-- 
+2.35.1
 
->> --- a/kernel/ptrace.c
->> +++ b/kernel/ptrace.c
->> @@ -1238,7 +1238,7 @@ int ptrace_request(struct task_struct *child, long request,
->>  	case PTRACE_KILL:
->>  		if (child->exit_state)	/* already dead */
->>  			return 0;
->> -		return ptrace_resume(child, request, SIGKILL);
->> +		return send_sig_info(SIGKILL, SEND_SIG_NOINFO, child);
->
-> Note that currently ptrace(PTRACE_KILL) can never fail (yes, yes, it
-> is unsafe), but send_sig_info() can. If we do not remove PTRACE_KILL,
-> then I'd suggest
->
-> 	case PTRACE_KILL:
-> 		if (!child->exit_state)
-> 			send_sig_info(SIGKILL);
-> 		return 0;
->
-> to make this change a bit more compatible.
-
-
-Quite.  The only failure I can find from send_sig_info is if
-lock_task_sighand fails and PTRACE_KILL is deliberately ignoring errors
-when the target task has exited.
-
- 	case PTRACE_KILL:
- 		send_sig_info(SIGKILL);
- 		return 0;
-
-I think that should suffice.
-
-
-> Also, please remove the note about PTRACE_KILL in
-> set_task_blockstep().
-
-Good catch, thank you.
-
-Eric
