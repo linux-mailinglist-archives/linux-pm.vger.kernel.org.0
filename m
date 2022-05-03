@@ -2,270 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4855179C6
-	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 00:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0799F517B42
+	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 02:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbiEBWLe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 May 2022 18:11:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
+        id S229500AbiECAkq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 May 2022 20:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236016AbiEBWLd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 May 2022 18:11:33 -0400
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38CA21120
-        for <linux-pm@vger.kernel.org>; Mon,  2 May 2022 15:08:00 -0700 (PDT)
-Received: by mail-pj1-f45.google.com with SMTP id w5-20020a17090aaf8500b001d74c754128so627087pjq.0
-        for <linux-pm@vger.kernel.org>; Mon, 02 May 2022 15:08:00 -0700 (PDT)
+        with ESMTP id S229484AbiECAkp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 May 2022 20:40:45 -0400
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32BA4D26C;
+        Mon,  2 May 2022 17:37:09 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id m25so2921127oih.2;
+        Mon, 02 May 2022 17:37:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=+WzlqIMp293K3H3f2sHDB997qf0xEgsGTkNiSko9TGw=;
-        b=u5666sVIH+hum2gWkQtep1Ck9NcCXvCVSTlj9LGUe9CU7GZMEFc0wzEDcuE2GgAYQc
-         4UomgQJfGuIdohCYzHBIUy6PH+/YO/SZL54ecrILB68v2zORUoHt02GxT9hbqovPO7SM
-         apRs1ED7wK57eISE4e3T5ZEd6rr4I99Q0WDJw5fIsi4yN4oy2i62hiZpnOLtdtMUmaU6
-         zWa71j+Tff0qUaS6mMsHUQ7d8ChheJbwN9tBxk8FVRakAGVQuhhPEzvHbGprE+XqvJtd
-         T9pABxDa5RFnRMSGSYoi3U0q8VnAGF9RAnJZHPKyvw9Yt7rjTk0bxMN1cl65ZRFhq1IA
-         WPDw==
-X-Gm-Message-State: AOAM531SYSNtdBIj2THCw4y0TF1SQZVGgGShest9REm+fW2za0AKY69l
-        TadPrMl9GnoTilLWI6C8f5up7w==
-X-Google-Smtp-Source: ABdhPJy77EMHFvDo/1IyhZFgTnu75Y3CzXZKSBDCXc2aNKF4uB76iHf85o37EM0Bt3dSQlistTdcqA==
-X-Received: by 2002:a17:903:2043:b0:15b:f6ff:79ed with SMTP id q3-20020a170903204300b0015bf6ff79edmr13581711pla.15.1651529279501;
-        Mon, 02 May 2022 15:07:59 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id s13-20020a170902988d00b0015e8d4eb2a1sm5105174plp.235.2022.05.02.15.07.58
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oPoGfUm6HdS/RdvyDE4eYbdws9jspTBGYeir1rydtWI=;
+        b=A9TJ4JBeUXaqY3c1CO3CTAGFlCGj44sMrKZZbpkgnKkWWuWuLe7WzuuEjqV69qGR9r
+         BKC0sY6Xs0O6wvycVkhfajCTVq8IQudPwMCXzluHZqQKiGr5HzFcH7PaDdkiN3S1oH1v
+         zNOtx7/iLP8Wv1pz3mw69uN8l4ddGwHJR2p+e/CsYanwofqbncdWMVIMpKdg/x+2ZLBl
+         gtY+ptHYsS/txx2k7pRgvw9gh9BqJJ/ftoydNu9bTeKcO/Sd+91nqZiOcCYxEGh41005
+         aUwpalXYm0YCrapYuisbCP/QaJo5Xnqqug2zJ83SsqwLLL9AXdyhM2b7+wieQS4TxmAz
+         Ym5g==
+X-Gm-Message-State: AOAM5301DSzukuyLe79dJi+AZKgWWpwHfByjoGa69jXZqBhjDAHmi6D2
+        saPowshxHMmAUSlp4evKJw==
+X-Google-Smtp-Source: ABdhPJw3ddsqRq6pulMnNx0Fn+HlUlJlRBvLqA0Dm6SigHDMb7V21SDoPfc90N/p+iaBz3w66JpvOA==
+X-Received: by 2002:a05:6808:3083:b0:325:f167:415f with SMTP id bl3-20020a056808308300b00325f167415fmr846706oib.160.1651538096054;
+        Mon, 02 May 2022 17:34:56 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id ay7-20020a056808300700b00325cda1ff8csm2864803oib.11.2022.05.02.17.34.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 May 2022 15:07:58 -0700 (PDT)
-From:   Kevin Hilman <khilman@kernel.org>
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Roger Lu <roger.lu@mediatek.com>,
-        =?utf-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
-        <rex-bc.chen@mediatek.com>
-Cc:     Enric Balletbo Serra <eballetbo@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Fan Chen <fan.chen@mediatek.com>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jia-wei Chang <jia-wei.chang@mediatek.com>
-Subject: Re: [PATCH v24 0/7] soc: mediatek: SVS: introduce MTK SVS
-In-Reply-To: <CAGXv+5HtMVCUdV=kNfOTCp3-1gEzTWtZ1xapgw=L-C2nTC0yag@mail.gmail.com>
-References: <20220420102044.10832-1-roger.lu@mediatek.com>
- <7hczhbe3wn.fsf@baylibre.com>
- <3d463c8b099fdb1c9a0df9e615a8ca1d8a034120.camel@mediatek.com>
- <7hsfq6ql4v.fsf@baylibre.com>
- <d67d5f4f2ec96ade2398e7c0897dbb16bf5fb145.camel@mediatek.com>
- <ca127f7f-0620-1c03-4f39-206945b0e612@gmail.com>
- <CAGXv+5HtMVCUdV=kNfOTCp3-1gEzTWtZ1xapgw=L-C2nTC0yag@mail.gmail.com>
-Date:   Mon, 02 May 2022 15:07:58 -0700
-Message-ID: <7h8rrjr3k1.fsf@baylibre.com>
+        Mon, 02 May 2022 17:34:55 -0700 (PDT)
+Received: (nullmailer pid 2117695 invoked by uid 1000);
+        Tue, 03 May 2022 00:34:54 -0000
+Date:   Mon, 2 May 2022 19:34:54 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Keerthy <j-keerthy@ti.com>
+Cc:     kristo@kernel.org, amitk@kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski@linaro.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, vigneshr@ti.com,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v6 1/4] dt-bindings: thermal: k3-j72xx: Add VTM bindings
+ documentation
+Message-ID: <YnB4rtn87l5nXtRM@robh.at.kernel.org>
+References: <20220427064635.24898-1-j-keerthy@ti.com>
+ <20220427064635.24898-2-j-keerthy@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220427064635.24898-2-j-keerthy@ti.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Chen-Yu Tsai <wenst@chromium.org> writes:
+On Wed, 27 Apr 2022 12:16:32 +0530, Keerthy wrote:
+> Add VTM bindings documentation. In the Voltage Thermal
+> Management Module(VTM), K3 J72XX supplies a voltage
+> reference and a temperature sensor feature that are gathered in the band
+> gap voltage and temperature sensor (VBGAPTS) module. The band
+> gap provides current and voltage reference for its internal
+> circuits and other analog IP blocks. The analog-to-digital
+> converter (ADC) produces an output value that is proportional
+> to the silicon temperature.
+> 
+> Signed-off-by: Keerthy <j-keerthy@ti.com>
+> ---
+>  .../bindings/thermal/ti,j72xx-thermal.yaml    | 64 +++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+> 
 
-> On Fri, Apr 22, 2022 at 11:38 PM Matthias Brugger
-> <matthias.bgg@gmail.com> wrote:
->>
->>
->>
->> On 22/04/2022 04:24, Roger Lu wrote:
->> > Hi Kevin,
->> >
->> > On Thu, 2022-04-21 at 12:41 -0700, Kevin Hilman wrote:
->> >> Hi Roger,
->> >>
->> >> Roger Lu <roger.lu@mediatek.com> writes:
->> >>
->> >>> On Wed, 2022-04-20 at 16:22 -0700, Kevin Hilman wrote:
->> >>
->> >> [...]
->> >>
->> >>>> That being said, it would be really nice to see an integration tree
->> >>>> where this was all tested on mainline (e.g. v5.17, or v5.18-rc)
->> >>>>
->> >>>> For example, I can apply this to v5.18-rc2 and boot on my mt8183-pumpkin
->> >>>> board, it fails to probe[1] because there is no CCI node in the upstream
->> >>>> mt8183.dtsi.
->> >>>>
->> >>>> I'm assuming this series is also not very useful without the CPUfreq
->> >>>> series from Rex, so being able to test this, CCI and CPUfreq together on
->> >>>> MT8183 on a mainline kernel would be very helpful.
->> >>>>
->> >>>> Kevin
->> >>>>
->> >>>> [1]
->> >>>> [    0.573332] mtk-svs 1100b000.svs: cannot find cci node
->> >>>> [    0.574061] mtk-svs 1100b000.svs: error -ENODEV: svs platform probe
->> >>>> fail
->> >>>
->> >>> Just share. I've tested this series on below two platforms and it works as
->> >>> expected.
->> >>> - mt8183-Krane (kernel-v5.10)
->> >>> - mt8192-Hayato (kernel-v5.4)
->> >>
->> >> Unfortunately testing on v5.4 and v5.10 with lots of other additional
->> >> out-of-tree patches does not give much confidence that this series works
->> >> with upstream, especially when I've given a few reasons why it will not
->> >> work uptream.
->> >>
->> >> The examples I gave above for CCI and CPUs/cluster disable are good
->> >> examples, but another one I forgot to mention is the dependency on Mali.
->> >> The SVS driver will never probe because it also depens on a "mali" node,
->> >> which doesn't exist upstream either (but panfrost does, and acutually
->> >> loads/probes fine on v5.17/v5.18) so this should be fixed to work with
->> >> upstream panfrost.
->> >>
->> >> IMO, in order for this to be merged upstream, it should at least have
->> >> some basic validation with upstream, and so far I have not even been
->> >> able to make it successfuly probe.  To do that, you will need to either
->> >> provide a list of the dependencies for testing this with mainline
->> >> (e.g. CCI series, CPUfreq series, any DT changes), or even better, an
->> >> integration tree based on recent mainline (e.g. v5.17 stable, or
->> >> v5.18-rc) which shows all the patches (in addition to this series) used
->> >> to validate this on mainline.
->> >
->> > No problem. We'll find a machine that can be run correctly with recent mainline
->> > (e.g. v5.17 stable, or v5.18-rc) and add patches (CCI series + CPUfreq series +
->> > any DT changes) to test this SVS series. Thanks very much.
->> >
->>
->> Thanks Roger. I'll wait until this got tested with upstream Linux, before I will
->> apply all the patches.
->
-> Hi everyone,
->
-> I've put together an integration test branch:
->
-> https://github.com/wens/linux/commits/mt8183-cpufreq-cci-svs-test
->
-> This branch is based on next-20220422 and includes the following series:
->
-> - ANX7625 DPI support v2
->   https://lore.kernel.org/all/20220422084720.959271-1-xji@analogixsemi.com/
-> - MTK SVS v24
->   https://lore.kernel.org/all/20220420102044.10832-1-roger.lu@mediatek.com/
-> - MTK cpufreq v4
->   https://lore.kernel.org/all/20220422075239.16437-1-rex-bc.chen@mediatek.com/
-> - PM / devfreq core patches from
->   http://git.kernel.org/chanwoo/h/devfreq-testing
->   PM / devfreq: Export devfreq_get_freq_range symbol within devfreq
->   PM / devfreq: Add cpu based scaling support to passive governor
->   PM / devfreq: passive: Reduce duplicate code when passive_devfreq case
->   PM / devfreq: passive: Update frequency when start governor
-> - CCI devfreq v2
->   https://lore.kernel.org/all/20220408052150.22536-1-johnson.wang@mediatek.com/
->
-> And some patches of my own to fix some errors. See the last handful of
-> patches including and after the fixup! one.
-
-Thanks for setting up this branch.
-
-> This was tested on Juniper (Acer Chromebook Spin 311) that has MT8183.
-
-Is there an upstream DT for this platform?
-
-I tried this series on mt8183-pumpkin, and since the upstream DT doesn't
-define a CCI regulator, the CCI driver fails to probe.  Without CCI, the
-SVS driver also fails to probe.  So the platform boots, but has neither
-CCI nor SVS.
-
-If I add a regulator for CCI[1], it goes farther, but then fails more
-noisly[2]
-
-
-> Looking at the mcu_*_sel clocks from /sys/kernel/debug/clk/clk_summary ,
-> it does seem like things are happening, though I'm not sure how to
-> thoroughly test this, especially SVS.
-
-I think you're probably seeing CPU DVFS (CPUfreq) working, but I suspect
-neither CCI or SVS have successfully loaded.
-
-Kevin
-
-
-
-[1]
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts b/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
-index b288b508fa4c..e064c06dc0d7 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
-@@ -384,6 +384,10 @@ &mfg {
- 	domain-supply = <&mt6358_vgpu_reg>;
- };
- 
-+&cci {
-+	proc-supply = <&mt6358_vproc12_reg>;
-+};
-+
- &cpu0 {
- 	proc-supply = <&mt6358_vproc12_reg>;
- };
-
-
-[2]
-[    0.560083] mtk-ccifreq cci: devfreq_add_device: Unable to start governor for the device
-[    0.576083] ------------[ cut here ]------------
-[    0.576670] WARNING: CPU: 3 PID: 1 at drivers/devfreq/governor_passive.c:382 devfreq_passive_event_handler+0x80/0x3a0
-[    0.578021] Modules linked in:
-[    0.578413] CPU: 3 PID: 1 Comm: swapper/0 Not tainted 5.18.0-rc3-next-20220422-05886-g9cd0610279c1-dirty #58
-[    0.579653] Hardware name: Pumpkin MT8183 (DT)
-[    0.580217] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    0.581097] pc : devfreq_passive_event_handler+0x80/0x3a0
-[    0.581780] lr : devfreq_passive_event_handler+0x7c/0x3a0
-[    0.582463] sp : ffff80000808ba40
-[    0.582883] x29: ffff80000808ba40 x28: 0000000000000000 x27: fffffffffffffdfb
-[    0.583788] x26: ffff0000037ba810 x25: ffff80000808bb40 x24: ffff80000a406640
-[    0.584691] x23: ffff8000099153c8 x22: ffff0000037ba800 x21: 0000000000000000
-[    0.585595] x20: ffff0000035c40a0 x19: ffff0000035c4080 x18: 0000000000000000
-[    0.586267] mmc0: new ultra high speed SDR104 SDIO card at address 0001
-[    0.586498] x17: 6f6620726f6e7265 x16: 766f672074726174 x15: 000006837f6218f7
-[    0.588233] x14: 0000000000000320 x13: 0000000000000001 x12: 0000000000000000
-[    0.589137] x11: 0000000000000001 x10: 0000000000000a50 x9 : ffff80000808b7a0
-[    0.590041] x8 : ffff0000028b0ab0 x7 : ffff00007fb19d00 x6 : 00000000076832c3
-[    0.590945] x5 : 00000000410fd030 x4 : 0000000000000000 x3 : ffff80000a3f70e8
-[    0.591849] x2 : 0000000000000000 x1 : ffff0000028b0000 x0 : 00000000fffffffe
-[    0.592753] Call trace:
-[    0.593065]  devfreq_passive_event_handler+0x80/0x3a0
-[    0.593706]  devfreq_remove_device+0x38/0xd0
-[    0.594247]  devfreq_add_device+0x328/0x5f0
-[    0.594778]  devm_devfreq_add_device+0x64/0xb0
-[    0.595341]  mtk_ccifreq_probe+0x340/0x4e0
-[    0.595860]  platform_probe+0x68/0xe0
-[    0.596330]  really_probe.part.0+0x9c/0x29c
-[    0.596862]  __driver_probe_device+0x98/0x144
-[    0.597416]  driver_probe_device+0xac/0x140
-[    0.597948]  __driver_attach+0xf8/0x190
-[    0.598436]  bus_for_each_dev+0x70/0xd0
-[    0.598925]  driver_attach+0x24/0x30
-[    0.599380]  bus_add_driver+0x14c/0x1f0
-[    0.599868]  driver_register+0x78/0x130
-[    0.600356]  __platform_driver_register+0x28/0x34
-[    0.600954]  mtk_ccifreq_platdrv_init+0x1c/0x28
-[    0.601531]  do_one_initcall+0x50/0x1c0
-[    0.602021]  kernel_init_freeable+0x20c/0x290
-[    0.602576]  kernel_init+0x28/0x13c
-[    0.603024]  ret_from_fork+0x10/0x20
-[    0.603480] ---[ end trace 0000000000000000 ]---
-
+Reviewed-by: Rob Herring <robh@kernel.org>
