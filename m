@@ -2,91 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C62518A44
-	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 18:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FAA518ABC
+	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 19:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239719AbiECQqC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 May 2022 12:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37934 "EHLO
+        id S240069AbiECRPM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 May 2022 13:15:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239702AbiECQqB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 12:46:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2E12C10A;
-        Tue,  3 May 2022 09:42:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3EE0CB81EB6;
-        Tue,  3 May 2022 16:42:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDCEFC385AF;
-        Tue,  3 May 2022 16:42:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651596146;
-        bh=RdmnwE+iucpL+/8qT85xaKQLpnn8IQBlp7A0PPpBkjc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MBuAO2xSVQR0Es2Khy87In4R8Y100/OP9420inSPVtGjNodMGqIXGDeoQHgu0zdtp
-         ZSMtkeQgwnC2B29WSRQCYL/O4jCHnME+f80aw4Fo5XWoHHVCVGx/BOqioVIUben+m7
-         dAMycifIRkxwmDNlXwHi1GwZNR0O1uzfUUGAcwMMFdw8KhKSWf9AkZmD379wvLv9fh
-         Uaih7P0/38fdDXOhFQTx4yM432rKEcsSGfyxP2ivUAyVZhwEsQe0HLwzNoIPwQXGpI
-         dxuPOzqD0QB+YJpXI7AwZY3EEZfQI0H8Fxh83x1xt1dkQXlECEzWDKnz//DiA0KIY/
-         DnUedifNgT+/g==
-Date:   Tue, 3 May 2022 17:42:13 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Abel Vesa <abel.vesa@nxp.com>, Stephen Boyd <sboyd@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>, Anson Huang <Anson.Huang@nxp.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Han Xu <han.xu@nxp.com>, Dario Binacchi <dariobin@libero.it>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Drop redundant 'maxItems/minItems' in
- if/then schemas
-Message-ID: <YnFbZaARRe13BqEU@sirena.org.uk>
-References: <20220503162738.3827041-1-robh@kernel.org>
+        with ESMTP id S238946AbiECRPK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 13:15:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62E3F1CB2C
+        for <linux-pm@vger.kernel.org>; Tue,  3 May 2022 10:11:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651597896;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PmDpcAKRURnYViq/lT/qk3yWWoPeoPeLoyR0xccq8g0=;
+        b=C7eZ4CssQz4YRyBwAx5NwpTBYYlQ4c2UF+2LXO9m/I+lQoCXt+275MxP3/LEl6OmNMjIEw
+        eZapUmYRf8/d5ZexvHVwl9Aw3SFSYwDyu091UcFNCnaZNcujcxB0tjtGevudAD/Y8FoYZU
+        Ox2YgFDi3afv5Ho61Fj/jrQn+ascfUs=
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
+ [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-297-XZRRJNMOMf-UPwuv3dqYsg-1; Tue, 03 May 2022 13:11:27 -0400
+X-MC-Unique: XZRRJNMOMf-UPwuv3dqYsg-1
+Received: by mail-il1-f198.google.com with SMTP id m3-20020a056e02158300b002b6e3d1f97cso9260647ilu.19
+        for <linux-pm@vger.kernel.org>; Tue, 03 May 2022 10:11:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=PmDpcAKRURnYViq/lT/qk3yWWoPeoPeLoyR0xccq8g0=;
+        b=Q+c/nxda5ohbEKH1hr21Q3OBupGwvFOrk78uH6qy68v6Dmvi4oc9+pr1i7yFCN78f5
+         6WYakd79TUXthqM/HG8iUNtfFKl3AubxrYk9/bUE0UN/CSsooTyXcEfS9xapRmhOMLQn
+         pHv1VCQ9BqMUrHpJQhHTUn2Smbv9evYbQRgH8UVOfljh3KLfTsnvMa/C6EQT3FMqd7qc
+         1+qqfE/nFDd60/LAfZL3aiBS6cZKT4cgEOQ4f4+lBSDLkAzgArSohQy2X2Hy35l0INyP
+         RW/eelb1Z0ZNSNuV8Kovc1zw8LhIrdw9VSVb/ranyyPOtnVvtHJ2hEVycx2geUrxdlhb
+         5wXA==
+X-Gm-Message-State: AOAM531fcuVodiIovPf+EVRaoUaOX9n/EUDDTmtVezoK8wOX+TdntADI
+        lBVv3lbc8tQ66xNPul0NPwkrtBLaOEPWt4leEwz1TckyG+thujC69WAkq6XZHWWMZAthUhhF45p
+        ETiwg5roKTL35jTSFDy4=
+X-Received: by 2002:a92:3405:0:b0:2c8:70ad:fa86 with SMTP id b5-20020a923405000000b002c870adfa86mr6944740ila.268.1651597887006;
+        Tue, 03 May 2022 10:11:27 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx7d7yOwkgKoHubTk3YAA9A5VeFfPMRsv66nBH6pKBak6btih6TX9vYxf5tX3YhN+5w9tPJ4w==
+X-Received: by 2002:a92:3405:0:b0:2c8:70ad:fa86 with SMTP id b5-20020a923405000000b002c870adfa86mr6944714ila.268.1651597886678;
+        Tue, 03 May 2022 10:11:26 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id r2-20020a92c502000000b002cde6e352e2sm3578912ilg.44.2022.05.03.10.11.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 May 2022 10:11:25 -0700 (PDT)
+Date:   Tue, 3 May 2022 11:11:24 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Abhishek Sahu <abhsahu@nvidia.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH v3 4/8] vfio/pci: Add support for setting driver data
+ inside core layer
+Message-ID: <20220503111124.38b07a9e.alex.williamson@redhat.com>
+In-Reply-To: <20220425092615.10133-5-abhsahu@nvidia.com>
+References: <20220425092615.10133-1-abhsahu@nvidia.com>
+        <20220425092615.10133-5-abhsahu@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Ie5Q9u0aDDvYlHNh"
-Content-Disposition: inline
-In-Reply-To: <20220503162738.3827041-1-robh@kernel.org>
-X-Cookie: Drop that pickle!
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,31 +87,212 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, 25 Apr 2022 14:56:11 +0530
+Abhishek Sahu <abhsahu@nvidia.com> wrote:
 
---Ie5Q9u0aDDvYlHNh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> The vfio driver is divided into two layers: core layer (implemented in
+> vfio_pci_core.c) and parent driver (For example, vfio_pci, mlx5_vfio_pci,
+> hisi_acc_vfio_pci, etc.). All the parent driver calls dev_set_drvdata()
+> and assigns its own structure as driver data. Some of the callback
+> functions are implemented in the core layer and these callback functions
+> provide the reference of 'struct pci_dev' or 'struct device'. Currently,
+> we use vfio_device_get_from_dev() which provides reference to the
+> vfio_device for a device. But this function follows long path to extract
+> the same. There are few cases, where we don't need to go through this
+> long path if we get this through drvdata.
+> 
+> This patch moves the setting of drvdata inside the core layer. If we see
+> the current implementation of parent driver structure implementation,
+> then 'struct vfio_pci_core_device' is a first member so the pointer of
+> the parent structure and 'struct vfio_pci_core_device' should be the same.
+> 
+> struct hisi_acc_vf_core_device {
+>     struct vfio_pci_core_device core_device;
+>     ...
+> };
+> 
+> struct mlx5vf_pci_core_device {
+>     struct vfio_pci_core_device core_device;
+>     ...
+> };
+> 
+> The vfio_pci.c uses 'struct vfio_pci_core_device' itself.
+> 
+> To support getting the drvdata in both the layers, we can put the
+> restriction to make 'struct vfio_pci_core_device' as a first member.
+> Also, vfio_pci_core_register_device() has this validation which makes sure
+> that this prerequisite is always satisfied.
+> 
+> Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
+> ---
+>  .../vfio/pci/hisilicon/hisi_acc_vfio_pci.c    |  4 ++--
+>  drivers/vfio/pci/mlx5/main.c                  |  3 +--
+>  drivers/vfio/pci/vfio_pci.c                   |  4 ++--
+>  drivers/vfio/pci/vfio_pci_core.c              | 24 ++++++++++++++++---
+>  include/linux/vfio_pci_core.h                 |  7 +++++-
+>  5 files changed, 32 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+> index 767b5d47631a..c76c09302a8f 100644
+> --- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+> +++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
+> @@ -1274,11 +1274,11 @@ static int hisi_acc_vfio_pci_probe(struct pci_dev *pdev, const struct pci_device
+>  					  &hisi_acc_vfio_pci_ops);
+>  	}
+>  
+> -	ret = vfio_pci_core_register_device(&hisi_acc_vdev->core_device);
+> +	ret = vfio_pci_core_register_device(&hisi_acc_vdev->core_device,
+> +					    hisi_acc_vdev);
+>  	if (ret)
+>  		goto out_free;
+>  
+> -	dev_set_drvdata(&pdev->dev, hisi_acc_vdev);
+>  	return 0;
+>  
+>  out_free:
+> diff --git a/drivers/vfio/pci/mlx5/main.c b/drivers/vfio/pci/mlx5/main.c
+> index bbec5d288fee..8689248f66f3 100644
+> --- a/drivers/vfio/pci/mlx5/main.c
+> +++ b/drivers/vfio/pci/mlx5/main.c
+> @@ -614,11 +614,10 @@ static int mlx5vf_pci_probe(struct pci_dev *pdev,
+>  		}
+>  	}
+>  
+> -	ret = vfio_pci_core_register_device(&mvdev->core_device);
+> +	ret = vfio_pci_core_register_device(&mvdev->core_device, mvdev);
+>  	if (ret)
+>  		goto out_free;
+>  
+> -	dev_set_drvdata(&pdev->dev, mvdev);
+>  	return 0;
+>  
+>  out_free:
+> diff --git a/drivers/vfio/pci/vfio_pci.c b/drivers/vfio/pci/vfio_pci.c
+> index 2b047469e02f..e0f8027c5cd8 100644
+> --- a/drivers/vfio/pci/vfio_pci.c
+> +++ b/drivers/vfio/pci/vfio_pci.c
+> @@ -151,10 +151,10 @@ static int vfio_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  		return -ENOMEM;
+>  	vfio_pci_core_init_device(vdev, pdev, &vfio_pci_ops);
+>  
+> -	ret = vfio_pci_core_register_device(vdev);
+> +	ret = vfio_pci_core_register_device(vdev, vdev);
+>  	if (ret)
+>  		goto out_free;
+> -	dev_set_drvdata(&pdev->dev, vdev);
+> +
+>  	return 0;
+>  
+>  out_free:
+> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+> index 1271728a09db..953ac33b2f5f 100644
+> --- a/drivers/vfio/pci/vfio_pci_core.c
+> +++ b/drivers/vfio/pci/vfio_pci_core.c
+> @@ -1822,9 +1822,11 @@ void vfio_pci_core_uninit_device(struct vfio_pci_core_device *vdev)
+>  }
+>  EXPORT_SYMBOL_GPL(vfio_pci_core_uninit_device);
+>  
+> -int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev)
+> +int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev,
+> +				  void *driver_data)
+>  {
+>  	struct pci_dev *pdev = vdev->pdev;
+> +	struct device *dev = &pdev->dev;
+>  	int ret;
+>  
+>  	if (pdev->hdr_type != PCI_HEADER_TYPE_NORMAL)
+> @@ -1843,6 +1845,17 @@ int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev)
+>  		return -EBUSY;
+>  	}
+>  
+> +	/*
+> +	 * The 'struct vfio_pci_core_device' should be the first member of the
+> +	 * of the structure referenced by 'driver_data' so that it can be
+> +	 * retrieved with dev_get_drvdata() inside vfio-pci core layer.
+> +	 */
+> +	if ((struct vfio_pci_core_device *)driver_data != vdev) {
+> +		pci_warn(pdev, "Invalid driver data\n");
+> +		return -EINVAL;
+> +	}
 
-On Tue, May 03, 2022 at 11:27:38AM -0500, Rob Herring wrote:
-> Another round of removing redundant minItems/maxItems when 'items' list is
-> specified. This time it is in if/then schemas as the meta-schema was
-> failing to check this case.
+It seems a bit odd to me to add a driver_data arg to the function,
+which is actually required to point to the same thing as the existing
+function arg.  Is this just to codify the requirement?  Maybe others
+can suggest alternatives.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+We also need to collaborate with Jason's patch:
 
---Ie5Q9u0aDDvYlHNh
-Content-Type: application/pgp-signature; name="signature.asc"
+https://lore.kernel.org/all/0-v2-0f36bcf6ec1e+64d-vfio_get_from_dev_jgg@nvidia.com/
 
------BEGIN PGP SIGNATURE-----
+(and maybe others)
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJxW2QACgkQJNaLcl1U
-h9AhOwgAgCQAzTimr9tUAEV2YxMIwidmRC9yH7j14TLxr45y9aG5gyGDcabEWvNT
-1G+vE5DtD9PAsO0tkipn9eZam4zgKttaLGOTql3iSuyYP4IJZLz5B0UQdfH/Rblq
-lwN3vZgGQIDC0Bq4GZFntPO4DgtMJRUjLYBkqZ9VRrAc0BtdLx0s2eLXna86GqsS
-JRPrW4CqJ9evXkLhz4oWrns5IFYbbkZQBRDahnYbYEShXBVarN07FHDyJR7e563l
-wHOqrXEThke2dA9JPWeaBTp7h9SiE6UhFUpzyFAd9YF+0t0k3slgr1oj89o28M6t
-855bZNK3+42p+Ytiewlr25+J4xL31Q==
-=Z4ML
------END PGP SIGNATURE-----
+If we implement a change like proposed here that vfio-pci-core sets
+drvdata then we don't need for each variant driver to implement their
+own wrapper around err_handler or err_detected as Jason proposes in the
+linked patch.  Thanks,
 
---Ie5Q9u0aDDvYlHNh--
+Alex
+
+> +	dev_set_drvdata(dev, driver_data);
+> +
+>  	if (pci_is_root_bus(pdev->bus)) {
+>  		ret = vfio_assign_device_set(&vdev->vdev, vdev);
+>  	} else if (!pci_probe_reset_slot(pdev->slot)) {
+> @@ -1856,10 +1869,10 @@ int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev)
+>  	}
+>  
+>  	if (ret)
+> -		return ret;
+> +		goto out_drvdata;
+>  	ret = vfio_pci_vf_init(vdev);
+>  	if (ret)
+> -		return ret;
+> +		goto out_drvdata;
+>  	ret = vfio_pci_vga_init(vdev);
+>  	if (ret)
+>  		goto out_vf;
+> @@ -1890,6 +1903,8 @@ int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev)
+>  		vfio_pci_set_power_state(vdev, PCI_D0);
+>  out_vf:
+>  	vfio_pci_vf_uninit(vdev);
+> +out_drvdata:
+> +	dev_set_drvdata(dev, NULL);
+>  	return ret;
+>  }
+>  EXPORT_SYMBOL_GPL(vfio_pci_core_register_device);
+> @@ -1897,6 +1912,7 @@ EXPORT_SYMBOL_GPL(vfio_pci_core_register_device);
+>  void vfio_pci_core_unregister_device(struct vfio_pci_core_device *vdev)
+>  {
+>  	struct pci_dev *pdev = vdev->pdev;
+> +	struct device *dev = &pdev->dev;
+>  
+>  	vfio_pci_core_sriov_configure(pdev, 0);
+>  
+> @@ -1907,6 +1923,8 @@ void vfio_pci_core_unregister_device(struct vfio_pci_core_device *vdev)
+>  
+>  	if (!disable_idle_d3)
+>  		vfio_pci_set_power_state(vdev, PCI_D0);
+> +
+> +	dev_set_drvdata(dev, NULL);
+>  }
+>  EXPORT_SYMBOL_GPL(vfio_pci_core_unregister_device);
+>  
+> diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
+> index 505b2a74a479..3c7d65e68340 100644
+> --- a/include/linux/vfio_pci_core.h
+> +++ b/include/linux/vfio_pci_core.h
+> @@ -225,7 +225,12 @@ void vfio_pci_core_close_device(struct vfio_device *core_vdev);
+>  void vfio_pci_core_init_device(struct vfio_pci_core_device *vdev,
+>  			       struct pci_dev *pdev,
+>  			       const struct vfio_device_ops *vfio_pci_ops);
+> -int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev);
+> +/*
+> + * The 'struct vfio_pci_core_device' should be the first member
+> + * of the structure referenced by 'driver_data'.
+> + */
+> +int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev,
+> +				  void *driver_data);
+>  void vfio_pci_core_uninit_device(struct vfio_pci_core_device *vdev);
+>  void vfio_pci_core_unregister_device(struct vfio_pci_core_device *vdev);
+>  int vfio_pci_core_sriov_configure(struct pci_dev *pdev, int nr_virtfn);
+
