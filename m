@@ -2,65 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30376517CC0
-	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 07:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D85CE517CD7
+	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 07:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbiECE5a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 May 2022 00:57:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42648 "EHLO
+        id S231431AbiECFku (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 May 2022 01:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiECE5a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 00:57:30 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647F43EB82;
-        Mon,  2 May 2022 21:53:58 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id c1so12858540qkf.13;
-        Mon, 02 May 2022 21:53:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2AL/JKHLZMiDrdtYYPFneIU29x/Fvo6xQuo1PE3Elwk=;
-        b=mAsS7cKNG2PcNpkIxfZGdFnsrTzZ1+XVZ5/f1toViYts+E+bjdP4sEBqlsxmF1TWOk
-         O3YrZ/gM18x/N07rTZ9oT06xFXzhPpPF/o1E216+MTax+Poncw8+a2BIym8xhmdM8l/6
-         MdpeGFauQi3zUvv93bedj18NbkrGjFSCrsZ1QmCYCmpVKDebQFdUXyNnR4Q5vkJZZCe9
-         3TId3IazbL/n9U9wPkrxOJ3fVc3U8ehSzIz071HGJ+qGWAwoUqBT7V8NDRuPRYDC9HI8
-         T00uArG6Nl94iE/Vi0hKBERItx4k7G/0nST+3nEuj/MtjOLrAax2H0GPSoVmQz5k+XBN
-         SGnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2AL/JKHLZMiDrdtYYPFneIU29x/Fvo6xQuo1PE3Elwk=;
-        b=ER9t6yWD2H6h90N/CxaoduYu0p/0WBzkM1Di9IP9Gmgz60PphSBro7FQNRxtWT8iMD
-         jTTe85/u5YYDlgOvehFXGdrApbQBR7xoo+mQKDP5rCjK98Pa8ijUU93O0Ks3aAo9nGDZ
-         xheJwfzWU3BN4e76dD1k+R6fQrdP7kpk+i7mtVG8gja04FmrT6fdP1TbmvlZ/eKHawpl
-         XOCmAheVXJFlLRGlJBiqXzQaAX0iSeCW7uqmHVGArYLk8JKCtMsJUaYue23triiVQ5Kv
-         /xePc7KZSoDMLUwQYIUuUNxfpL6ASIAIqcViV+KTfpMEFRyAEwAX2eGJ8+tQkGKrX+rS
-         5hOQ==
-X-Gm-Message-State: AOAM530E/VQ+C5eTO/FH0f3QdEMnwu5Ib/inDsbCKo68nTWoG6DsYvA9
-        Wp7ERTMbHeG+b8vgy1O5g8m0Sxw6Ui9cgKYsrCitdfJeuog=
-X-Google-Smtp-Source: ABdhPJxh/EMgybZ61mkZgKwbyOrk5nhF7HHNj5cj5Uh/FQaAgfMFW9AIxqS8YCnNLqNtXnjQqCFP0CvEnSb6ZyV5YpE=
-X-Received: by 2002:a37:b886:0:b0:69f:c337:7bb with SMTP id
- i128-20020a37b886000000b0069fc33707bbmr9823558qkf.74.1651553637547; Mon, 02
- May 2022 21:53:57 -0700 (PDT)
+        with ESMTP id S231426AbiECFkt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 01:40:49 -0400
+Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D70D39B88
+        for <linux-pm@vger.kernel.org>; Mon,  2 May 2022 22:37:17 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.180.246])
+        by smtp.orange.fr with ESMTPA
+        id llDknVYrJPp5ullDknY45n; Tue, 03 May 2022 07:37:14 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Tue, 03 May 2022 07:37:14 +0200
+X-ME-IP: 86.243.180.246
+Message-ID: <c40c2f81-008a-06cf-8de3-d0bb787a9889@wanadoo.fr>
+Date:   Tue, 3 May 2022 07:37:12 +0200
 MIME-Version: 1.0
-References: <20220428125610.66647-1-gengcixi@gmail.com>
-In-Reply-To: <20220428125610.66647-1-gengcixi@gmail.com>
-From:   Baolin Wang <baolin.wang7@gmail.com>
-Date:   Tue, 3 May 2022 12:54:31 +0800
-Message-ID: <CADBw62r8eGRNcXH1cAZvYQdKCgBjxUVnxhLsa=Oyzs-uwavRTA@mail.gmail.com>
-Subject: Re: [PATCH v2] power: supply: Add enable the primary charger interface
-To:     Cixi Geng <gengcixi@gmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>, chenyongzhi811@gmail.com,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v8 1/2] thermal: Add thermal driver for Sunplus
+Content-Language: en-US
+To:     krzk@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
+        amitk@kernel.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Li-hao Kuo <lhjeff911@gmail.com>
+References: <cover.1651543731.git.lhjeff911@gmail.com>
+ <febcaf8229a33217b4bfb3654d6f0bfe7f55a84d.1651543731.git.lhjeff911@gmail.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <febcaf8229a33217b4bfb3654d6f0bfe7f55a84d.1651543731.git.lhjeff911@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,171 +47,232 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 28, 2022 at 8:56 PM Cixi Geng <gengcixi@gmail.com> wrote:
->
-> From: Chen Yongzhi <Yongzhi.Chen@unisoc.com>
->
-> In the case of charging multiple charging ICs,the primary
-> charging IC often needs to be turned off in the fast
-> charging stage, and only using the charger pump to charge,
-> need to add a new power_supply_property attribute.
+Hi,
 
-I'm still confused why introducing a new
-POWER_SUPPLY_PROP_CHARGE_ENABLED property to control the charging, but
-you already controlled the charging by POWER_SUPPLY_PROP_STATUS?
-
->
-> Signed-off-by: Chen Yongzhi <Yongzhi.Chen@unisoc.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/all/202204230206.9TgyhSb1-lkp@intel.com
-> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+Le 03/05/2022 à 04:13, Li-hao Kuo a écrit :
+> Add thermal driver for Sunplus.
+> 
+> Signed-off-by: Li-hao Kuo <lhjeff911-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
 > ---
->  drivers/power/supply/sc2731_charger.c | 52 +++++++++++++++++++++++++--
->  include/linux/power_supply.h          |  1 +
->  2 files changed, 50 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/power/supply/sc2731_charger.c b/drivers/power/supply/sc2731_charger.c
-> index 9ac17cf7a126..c15f9b75e6a8 100644
-> --- a/drivers/power/supply/sc2731_charger.c
-> +++ b/drivers/power/supply/sc2731_charger.c
-> @@ -1,5 +1,5 @@
->  // SPDX-License-Identifier: GPL-2.0
-> -// Copyright (C) 2018 Spreadtrum Communications Inc.
-> +// Copyright (C) 2022 Spreadtrum Communications Inc.
-
-Do not add unrelated changes.
-
->
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
-> @@ -146,6 +146,24 @@ static int sc2731_charger_get_status(struct sc2731_charger_info *info)
->         return POWER_SUPPLY_STATUS_CHARGING;
->  }
->
-> +static int sc2731_charger_set_status(struct sc2731_charger_info *info, int val)
+> Changes in v8:
+>   - Modify yaml file.
+>     modify the setting compatible
+>   - Change yaml file name.
+>   - Modify driver.
+>     mosdify and simply the nvmem setting and remove valiable
+> 
+>   MAINTAINERS                       |   6 ++
+>   drivers/thermal/Kconfig           |  10 +++
+>   drivers/thermal/Makefile          |   1 +
+>   drivers/thermal/sunplus_thermal.c | 135 ++++++++++++++++++++++++++++++++++++++
+>   4 files changed, 152 insertions(+)
+>   create mode 100644 drivers/thermal/sunplus_thermal.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index edc96cd..82143ff 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18896,6 +18896,12 @@ S:	Maintained
+>   F:	Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+>   F:	drivers/spi/spi-sunplus-sp7021.c
+>   
+> +SUNPLUS THERMAL DRIVER
+> +M:	Li-hao Kuo <lhjeff911-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+> +L:	linux-pm-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
+> +S:	Maintained
+> +F:	drivers/thermal/sunplus_thermal.c
+> +
+>   SUNPLUS UART DRIVER
+>   M:	Hammer Hsieh <hammerh0314-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+>   S:	Maintained
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index 0e5cc94..595f507 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
+>   	  If you say yes here you get support for the FAN controlled
+>   	  by the Microcontroller found on the Khadas VIM boards.
+>   
+> +config SUNPLUS_THERMAL
+> +	tristate "Sunplus thermal drivers"
+> +	depends on SOC_SP7021 || COMPILE_TEST
+> +	help
+> +	  This the Sunplus SP7021 thermal driver, which supports the primitive
+> +	  temperature sensor embedded in Sunplus SP7021 SoC.
+> +
+> +	  If you have a Sunplus SP7021 platform say Y here and enable this option
+> +	  to have support for thermal management
+> +
+>   endif
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index f0c36a1..38a76f9 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+>   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+>   obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
+>   obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
+> +obj-$(CONFIG_SUNPLUS_THERMAL)	+= sunplus_thermal.o
+> diff --git a/drivers/thermal/sunplus_thermal.c b/drivers/thermal/sunplus_thermal.c
+> new file mode 100644
+> index 0000000..d4e22fc
+> --- /dev/null
+> +++ b/drivers/thermal/sunplus_thermal.c
+> @@ -0,0 +1,135 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) Sunplus Inc.
+> + * Author: Li-hao Kuo <lhjeff911-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/nvmem-consumer.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reset.h>
+> +#include <linux/thermal.h>
+> +
+> +#define ENABLE_THERMAL		BIT(31)
+> +#define SP_THERMAL_MASK		GENMASK(10, 0)
+> +
+> +#define TEMP_RATE		608
+> +#define TEMP_BASE		3500
+> +#define TEMP_OTP_BASE		1518
+> +
+> +#define SP_THERMAL_CTL0_REG	0x0000
+> +#define SP_THERMAL_STS0_REG	0x0030
+> +
+> +/* common data structures */
+> +struct sp_thermal_data {
+> +	struct thermal_zone_device *pcb_tz;
+> +	void __iomem *regs;
+> +	int *otp_temp0;
+> +};
+> +
+> +static int sunplus_get_otp_temp_coef(struct sp_thermal_data *sp_data, struct device *dev)
 > +{
-> +       int ret = 0;
+> +	struct nvmem_cell *cell;
+> +	ssize_t otp_l;
 > +
-> +       if (!val && info->charging) {
-> +               sc2731_charger_stop_charge(info);
-> +               info->charging = false;
-> +       } else if (val && !info->charging) {
-> +               ret = sc2731_charger_start_charge(info);
-> +               if (ret)
-> +                       dev_err(info->dev, "start charge failed\n");
-
-Duplicate error information, since you already print errors in
-sc2731_charger_usb_set_property()
-
-> +               else
-> +                       info->charging = true;
-> +       }
+> +	cell = nvmem_cell_get(dev, "calib");
+> +	if (IS_ERR(cell))
+> +		return PTR_ERR(cell);
 > +
-> +       return ret;
+> +	sp_data->otp_temp0 = nvmem_cell_read(cell, &otp_l);
+> +	nvmem_cell_put(cell);
+> +
+> +	if (*sp_data->otp_temp0 == 0)
+> +		*sp_data->otp_temp0 = TEMP_OTP_BASE;
+> +
+> +	return 0;
 > +}
 > +
->  static int sc2731_charger_get_current(struct sc2731_charger_info *info,
->                                       u32 *cur)
->  {
-> @@ -204,7 +222,7 @@ sc2731_charger_usb_set_property(struct power_supply *psy,
->                                 const union power_supply_propval *val)
->  {
->         struct sc2731_charger_info *info = power_supply_get_drvdata(psy);
-> -       int ret;
-> +       int ret = 0;
->
->         mutex_lock(&info->lock);
->
-> @@ -214,6 +232,12 @@ sc2731_charger_usb_set_property(struct power_supply *psy,
->         }
->
->         switch (psp) {
-> +       case POWER_SUPPLY_PROP_STATUS:
-> +               ret = sc2731_charger_set_status(info, val->intval);
-> +               if (ret < 0)
-> +                       dev_err(info->dev, "set charge status failed\n");
-> +               break;
+> +/*
+> + * There is a thermal sensor instance for SUNPLUS Soc
+> + * T_CODE is the ADC of the thermal sensor
+> + * T_CODE : 11 digits in total
+> + * When remanufacturing, the 35 degree T_CODE will be read and stored in nvcell.
+> + * otp_temp0 is the 35 degree T_CODE obtained from nvcell
+> + * The function will get 35 degree T_CODE for thermal calibration.
+> + * TEMP_RATE is the SUNPLUS thermal temperature slope.
+> + */
 > +
->         case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
->                 ret = sc2731_charger_set_current(info, val->intval / 1000);
->                 if (ret < 0)
-> @@ -227,6 +251,15 @@ sc2731_charger_usb_set_property(struct power_supply *psy,
->                         dev_err(info->dev, "set input current limit failed\n");
->                 break;
->
-> +       case POWER_SUPPLY_PROP_CHARGE_ENABLED:
-> +               if (val->intval == true) {
-> +                       ret = sc2731_charger_start_charge(info);
-> +                       if (ret)
-> +                               dev_err(info->dev, "start charge failed\n");
-> +               } else if (val->intval == false) {
-> +                       sc2731_charger_stop_charge(info);
-> +               }
-> +               break;
->         default:
->                 ret = -EINVAL;
->         }
-> @@ -241,7 +274,7 @@ static int sc2731_charger_usb_get_property(struct power_supply *psy,
->  {
->         struct sc2731_charger_info *info = power_supply_get_drvdata(psy);
->         int ret = 0;
-> -       u32 cur;
-> +       u32 cur, enabled;
->
->         mutex_lock(&info->lock);
->
-> @@ -277,6 +310,16 @@ static int sc2731_charger_usb_get_property(struct power_supply *psy,
->                 }
->                 break;
->
-> +       case POWER_SUPPLY_PROP_CHARGE_ENABLED:
-> +               ret = regmap_read(info->regmap, info->base + SC2731_CHG_CFG0, &enabled);
-> +               if (ret) {
-> +                       dev_err(info->dev, "get sc2731 charge enabled failed\n");
-> +                       goto out;
-> +               }
+> +static int sp_thermal_get_sensor_temp(void *data, int *temp)
+> +{
+> +	struct sp_thermal_data *sp_data = data;
+> +	int t_code;
 > +
-> +               val->intval = enabled & SC2731_CHARGER_PD;
+> +	t_code = readl(sp_data->regs + SP_THERMAL_STS0_REG);
+> +	t_code = FIELD_GET(SP_THERMAL_MASK, t_code);
+> +	*temp = ((*sp_data->otp_temp0 - t_code) * 10000 / TEMP_RATE) + TEMP_BASE;
+> +	*temp *= 10;
+> +	return 0;
+> +}
 > +
-> +               break;
->         default:
->                 ret = -EINVAL;
->         }
-> @@ -292,8 +335,10 @@ static int sc2731_charger_property_is_writeable(struct power_supply *psy,
->         int ret;
->
->         switch (psp) {
-> +       case POWER_SUPPLY_PROP_STATUS:
->         case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
->         case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-> +       case POWER_SUPPLY_PROP_CHARGE_ENABLED:
->                 ret = 1;
->                 break;
->
-> @@ -308,6 +353,7 @@ static enum power_supply_property sc2731_usb_props[] = {
->         POWER_SUPPLY_PROP_STATUS,
->         POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
->         POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
-> +       POWER_SUPPLY_PROP_CHARGE_ENABLED,
->  };
->
->  static const struct power_supply_desc sc2731_charger_desc = {
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index cb380c1d9459..1dfe194d8a5e 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -167,6 +167,7 @@ enum power_supply_property {
->         POWER_SUPPLY_PROP_PRECHARGE_CURRENT,
->         POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT,
->         POWER_SUPPLY_PROP_CALIBRATE,
-> +       POWER_SUPPLY_PROP_CHARGE_ENABLED,
->         POWER_SUPPLY_PROP_MANUFACTURE_YEAR,
->         POWER_SUPPLY_PROP_MANUFACTURE_MONTH,
->         POWER_SUPPLY_PROP_MANUFACTURE_DAY,
-> --
-> 2.25.1
->
+> +static const struct thermal_zone_of_device_ops sp_of_thermal_ops = {
+> +	.get_temp = sp_thermal_get_sensor_temp,
+> +};
+> +
+> +static int sunplus_thermal_probe(struct platform_device *pdev)
+> +{
+> +	struct sp_thermal_data *sp_data;
+> +	int ret;
+> +
+> +	sp_data = devm_kzalloc(&pdev->dev, sizeof(*sp_data), GFP_KERNEL);
+> +	if (!sp_data)
+> +		return -ENOMEM;
+> +
+> +	sp_data->regs = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(sp_data->regs)) {
+> +		dev_err(&pdev->dev, "resource get fail\n");
+> +		return PTR_ERR(sp_data->regs);
+> +	}
+> +
+> +	writel(ENABLE_THERMAL, sp_data->regs + SP_THERMAL_CTL0_REG);
+> +
+> +	platform_set_drvdata(pdev, sp_data);
+> +	ret = sunplus_get_otp_temp_coef(sp_data, &pdev->dev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	sp_data->pcb_tz = devm_thermal_zone_of_sensor_register(&pdev->dev,
+> +							    0,
+> +							    sp_data, &sp_of_thermal_ops);
+
+sp_data->pcb_tz is the result of devm_thermal_zone_of_sensor_register() 
+and devm_ functions usually don't need any clean-up. It is done 
+automagically by the kernel itself.
 
 
--- 
-Baolin Wang
+> +	if (IS_ERR_OR_NULL(sp_data->pcb_tz))
+> +		return PTR_ERR(sp_data->pcb_tz);
+> +
+> +	return ret;
+> +}
+> +
+> +static int sunplus_thermal_remove(struct platform_device *pdev)
+> +{
+> +	struct sp_thermal_data *sp_data = platform_get_drvdata(pdev);
+> +
+> +	thermal_zone_device_unregister(sp_data->pcb_tz);
+
+But here it is unregistered.
+
+1) I would have expected that no unregister function is needed.
+2) Should one be there, based on naming, 
+thermal_zone_of_sensor_unregister() would look more consistent.
+
+I know nothing about the thermal API, so don't take this comment too 
+seriously. It just look odd to me when I gave it a look.
+
+Just my 2c,
+
+CJ
+
+
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id of_sunplus_thermal_ids[] = {
+> +	{ .compatible = "sunplus,thermal" },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, of_sunplus_thermal_ids);
+> +
+> +static struct platform_driver sunplus_thermal_driver = {
+> +	.probe	= sunplus_thermal_probe,
+> +	.remove = sunplus_thermal_remove,
+> +	.driver	= {
+> +		.name	= "sunplus-thermal",
+> +		.of_match_table = of_sunplus_thermal_ids,
+> +		},
+> +};
+> +module_platform_driver(sunplus_thermal_driver);
+> +
+> +MODULE_AUTHOR("Li-hao Kuo <lhjeff911-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>");
+> +MODULE_DESCRIPTION("Thermal driver for sunplus SoC");
+> +MODULE_LICENSE("GPL");
+
