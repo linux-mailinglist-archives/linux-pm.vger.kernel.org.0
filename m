@@ -2,57 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46483518BB1
-	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 19:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62DD4518BC7
+	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 20:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240665AbiECSDW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 May 2022 14:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53220 "EHLO
+        id S240911AbiECSHx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 May 2022 14:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237273AbiECSDV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 14:03:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C5C3E5F0;
-        Tue,  3 May 2022 10:59:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 02187B81DC0;
-        Tue,  3 May 2022 17:59:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35C91C385B1;
-        Tue,  3 May 2022 17:59:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651600785;
-        bh=HE8JDXWHuqMA5lG6TsX84CsZNFrqdgvPHAK265pgkfM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uPtGYVBofjxM/0JIP9bZa1rb1hdLccBdHg2fFcsZnw326Am4P7hJpdU/efwbHSj2e
-         NuvsvWz6UvgEiMAnFsPgDhhTaoxgQ5Jqhu5J4pPMZEQbDq4kA+uNTV13i7W81mWkbt
-         w33wjSYpV7WAAnaGg+8HCwevvVTfQQtCaebs+QGcboBtV6+88f0kg7fGJiJwhVHP0i
-         8WPaBGhhFYt5uOzrZYJ1Y+xLxvty5AwmikmfxxdJNKzVNbcG2svyWntJS5Z3Zsq3aW
-         1mqOp647kN1a+DrCKv5IcBcA6tT/nH0YX3qx/OYh6THuvjF225fDDSVI03a03x79aC
-         yJzVSM4nPhI3A==
-Date:   Tue, 3 May 2022 10:59:43 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH v3 4/9] PCI/PM: Rework changing power states of PCI
- devices
-Message-ID: <YnFtjzGYwe28tVAA@dev-arch.thelio-3990X>
-References: <4419002.LvFx2qVVIh@kreacher>
- <11975904.O9o76ZdvQC@kreacher>
- <5838942.lOV4Wx5bFT@kreacher>
- <3687697.kQq0lBPeGt@kreacher>
+        with ESMTP id S240904AbiECSHs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 14:07:48 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080773EA92
+        for <linux-pm@vger.kernel.org>; Tue,  3 May 2022 11:04:14 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id l203so19038599oif.0
+        for <linux-pm@vger.kernel.org>; Tue, 03 May 2022 11:04:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=R4/K6aedIUl9MohMPOlkW7bX2DydtcwCMb+CydErQh0=;
+        b=CJu9kW5FihxnTA4wr5HdIEfymEuuekA79aJVNMM2F6kdV2+CmmuoX8R9fhQ+4vfzGu
+         cwr0+95tIZHFde4YyKyVQIEU1uoccXZ0Wre6iNf7ZQo6N8EA9gsX+jTvyEJvXCE49T6e
+         235jqkHQ/du2SkGvAqn3TvfA6e2cYQxB3dcEA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=R4/K6aedIUl9MohMPOlkW7bX2DydtcwCMb+CydErQh0=;
+        b=hfGyBBKdMbuS9Rzy8/O3fg7S/5Fdx19IWj4PnP6/f0M5IPy2Ag8RR/ruYDBokeyjqq
+         Ei/YcGb8KIvIcLh1LRF+9wUCipsw9Klp0bRZdI/aVBcPDHzjmiPb9K54EcZcA8XfoYzb
+         m99pPo4H2lKYeOJXkiRxqGzhKCVukoJk554hr84mCsE/7zLyzEtHE+WZ59Nzl6asmfjk
+         VhItVLy3oamoVtCXyJv7CrXNTqSl3BM0MM/fckks0ezONWum9WnutqnCQ5BDxS8Th6zx
+         6TeCyq0KSyFsf4yPkR5SU5n7o9A8G+iOstxfFpMIMv+1hnHz7wfmADbJikU8zJkYiQ1d
+         bnbw==
+X-Gm-Message-State: AOAM531srZcV+EZjxIDo6H76LtOYFVRkPryGihXeX29BP58fvlQKUYUi
+        eW9cW7zjOde1ItETAM0/ZH/SuGRpe83gHA==
+X-Google-Smtp-Source: ABdhPJzae3ebf7M03P8iLfKSaz5rm/z3NEI5s9r2nKlQspbJqxAOckRQ3YwsKxv4vocmPA5JYTs5Sg==
+X-Received: by 2002:a05:6808:2125:b0:325:b284:d438 with SMTP id r37-20020a056808212500b00325b284d438mr2365186oiw.232.1651601054223;
+        Tue, 03 May 2022 11:04:14 -0700 (PDT)
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com. [209.85.167.181])
+        by smtp.gmail.com with ESMTPSA id n29-20020a9d711d000000b0060603221250sm4246125otj.32.2022.05.03.11.04.13
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 May 2022 11:04:13 -0700 (PDT)
+Received: by mail-oi1-f181.google.com with SMTP id y63so18986096oia.7
+        for <linux-pm@vger.kernel.org>; Tue, 03 May 2022 11:04:13 -0700 (PDT)
+X-Received: by 2002:a05:6808:d50:b0:322:fb1d:319d with SMTP id
+ w16-20020a0568080d5000b00322fb1d319dmr2350498oik.174.1651601052906; Tue, 03
+ May 2022 11:04:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3687697.kQq0lBPeGt@kreacher>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220427224924.592546-1-gpiccoli@igalia.com> <20220427224924.592546-5-gpiccoli@igalia.com>
+In-Reply-To: <20220427224924.592546-5-gpiccoli@igalia.com>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Tue, 3 May 2022 11:03:37 -0700
+X-Gmail-Original-Message-ID: <CAE=gft5Pq25L4KFoPWbftkPF-JN1ex2yws77mMJ4GQnn9W0L2g@mail.gmail.com>
+Message-ID: <CAE=gft5Pq25L4KFoPWbftkPF-JN1ex2yws77mMJ4GQnn9W0L2g@mail.gmail.com>
+Subject: Re: [PATCH 04/30] firmware: google: Convert regular spinlock into
+ trylock on panic path
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
+        pmladek@suse.com, kexec@lists.infradead.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de,
+        Kees Cook <keescook@chromium.org>, luto@kernel.org,
+        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
+        peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, Alan Stern <stern@rowland.harvard.edu>,
+        Thomas Gleixner <tglx@linutronix.de>, vgoyal@redhat.com,
+        vkuznets@redhat.com, Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        David Gow <davidgow@google.com>,
+        Julius Werner <jwerner@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,80 +105,60 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+On Wed, Apr 27, 2022 at 3:51 PM Guilherme G. Piccoli
+<gpiccoli@igalia.com> wrote:
+>
+> Currently the gsmi driver registers a panic notifier as well as
+> reboot and die notifiers. The callbacks registered are called in
+> atomic and very limited context - for instance, panic disables
+> preemption, local IRQs and all other CPUs that aren't running the
+> current panic function.
+>
+> With that said, taking a spinlock in this scenario is a
+> dangerous invitation for a deadlock scenario. So, we fix
+> that in this commit by changing the regular spinlock with
+> a trylock, which is a safer approach.
+>
+> Fixes: 74c5b31c6618 ("driver: Google EFI SMI")
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: David Gow <davidgow@google.com>
+> Cc: Evan Green <evgreen@chromium.org>
+> Cc: Julius Werner <jwerner@chromium.org>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> ---
+>  drivers/firmware/google/gsmi.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/firmware/google/gsmi.c b/drivers/firmware/google/gsmi.c
+> index adaa492c3d2d..b01ed02e4a87 100644
+> --- a/drivers/firmware/google/gsmi.c
+> +++ b/drivers/firmware/google/gsmi.c
+> @@ -629,7 +629,10 @@ static int gsmi_shutdown_reason(int reason)
+>         if (saved_reason & (1 << reason))
+>                 return 0;
+>
+> -       spin_lock_irqsave(&gsmi_dev.lock, flags);
+> +       if (!spin_trylock_irqsave(&gsmi_dev.lock, flags)) {
+> +               rc = -EBUSY;
+> +               goto out;
+> +       }
 
-On Thu, Apr 14, 2022 at 03:11:21PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> There are some issues related to changing power states of PCI
-> devices, mostly related to carrying out unnecessary actions in some
-> places, and the code is generally hard to follow.
-> 
->  1. pci_power_up() has two callers, pci_set_power_state() and
->     pci_pm_default_resume_early().  The latter updates the current
->     power state of the device right after calling pci_power_up()
->     and it restores the entire config space of the device right
->     after that, so pci_power_up() itself need not read the
->     PCI_PM_CTRL register or restore the BARs after programming the
->     device into D0 in that case.
->  
->  2. It is generally hard to get a clear view of the pci_power_up()
->     code flow, especially in some corner cases, due to all of the
->     involved PCI_PM_CTRL register reads and writes occurring in
->     pci_platform_power_transition() and in pci_raw_set_power_state(),
->     some of which are redundant.
-> 
->  3. The transitions from low-power states to D0 and the other way
->     around are unnecessarily tangled in pci_raw_set_power_state()
->     which causes it to use a redundant local variable and makes it
->     rather hard to follow.
-> 
-> To address the above shortcomings, make the following changes:
-> 
->  a. Remove the code handling transitions into D0
->     from pci_raw_set_power_state() and rename it as
->     pci_set_low_power_state().
-> 
->  b. Add the code handling transitions into D0 directly
->     to pci_power_up() and to a new wrapper function
->     pci_set_full_power_state() calling it internally that is
->     only used in pci_set_power_state().
-> 
->  c. Make pci_power_up() avoid redundant PCI_PM_CTRL register reads
->     and make it work in the same way for transitions from any
->     low-power states (transitions from D1 and D2 are handled
->     slightly differently before the change).
-> 
->  d. Put the restoration of the BARs and the PCI_PM_CTRL
->     register read confirming the power state change into
->     pci_set_full_power_state() to avoid doing that in
->     pci_pm_default_resume_early() unnecessarily.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+gsmi_shutdown_reason() is a common function called in other scenarios
+as well, like reboot and thermal trip, where it may still make sense
+to wait to acquire a spinlock. Maybe we should add a parameter to
+gsmi_shutdown_reason() so that you can get your change on panic, but
+we don't convert other callbacks into try-fail scenarios causing us to
+miss logs.
 
-This change as commit 5bffe4c611f5 ("PCI/PM: Rework changing power
-states of PCI devices") causes my AMD-based system to fail to fully
-boot. As far as I can tell, this might be NVMe related, which might make
-getting a full log difficult, as journalctl won't have anywhere to save
-it. I see:
+Though thinking more about it, is this really a Good Change (TM)? The
+spinlock itself already disables interrupts, meaning the only case
+where this change makes a difference is if the panic happens from
+within the function that grabbed the spinlock (in which case the
+callback is also likely to panic), or in an NMI that panics within
+that window. The downside of this change is that if one core was
+politely working through an event with the lock held, and another core
+panics, we now might lose the panic log, even though it probably would
+have gone through fine assuming the other core has a chance to
+continue.
 
-nvme nvme0: I/O 8 QID 0 timeout, completion polled
-
-then shortly afterwards:
-
-nvme nvme0: I/O 24 QID 0 timeout, completion polled
-nvme nvme0: missing or invalid SUBNQN field
-
-then I am dropped into an emergency shell.
-
-This is a log from the previous commit, which may give some hints about
-the configuration of this particular system.
-
-https://gist.github.com/nathanchance/8a56f0939410cb187896e904c72e41e7/raw/b47b2620bdd32d43c7a3b209fcfd9e3d4668f058/good-boot.log
-
-If there is any additional debugging information I can provide or
-patches I can try, please let me know!
-
-Cheers,
-Nathan
+-Evan
