@@ -2,141 +2,233 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BECB3518C19
-	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 20:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3949518CAE
+	for <lists+linux-pm@lfdr.de>; Tue,  3 May 2022 20:58:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241186AbiECSWR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 May 2022 14:22:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
+        id S239348AbiECTCM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 May 2022 15:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241184AbiECSWQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 14:22:16 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9E53EBB2
-        for <linux-pm@vger.kernel.org>; Tue,  3 May 2022 11:18:43 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1nlx5e-0000ix-89; Tue, 03 May 2022 20:17:38 +0200
-Received: from pengutronix.de (unknown [86.103.140.108])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 0B74E75107;
-        Tue,  3 May 2022 18:17:23 +0000 (UTC)
-Date:   Tue, 3 May 2022 20:17:23 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Abel Vesa <abel.vesa@nxp.com>, Stephen Boyd <sboyd@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Han Xu <han.xu@nxp.com>, Dario Binacchi <dariobin@libero.it>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Drop redundant 'maxItems/minItems' in
- if/then schemas
-Message-ID: <20220503181723.wczerdgfrfoxj5xf@pengutronix.de>
-References: <20220503162738.3827041-1-robh@kernel.org>
+        with ESMTP id S234645AbiECTCL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 May 2022 15:02:11 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF6B26541;
+        Tue,  3 May 2022 11:58:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Q8xZuwWHbM5RtbVLpI5p8QHhyHnoykAXVMFnszZxrdg=; b=TqkdHc+398urJjW6/hR3lSmD91
+        Fo7i3n3SNwuNElwVYi/w+KnbhS8+u2vWgV1cIJIjZ8jCkAcSLSvlso5lciPOVsZuwZ60o4GZ0Sqjx
+        22Y1fjpJoK/chqdm1vTsGuRJJqpC4q32E8Os80o8bAzvpNnZtKFYUr9IxCs7Y3+qiYY9v7R2c2HHE
+        u9NeehqoIhEiDWWb10yrMKqoHSbKirkdSM2MnGXbLFUWfXxGVmNdvtyoWTdWi0kALfB+UzyKpCQXc
+        XjY+PUaHj85B5+JbHxedajI8IojA4qagg32dYWLI8h4fZxyG6QPV3ENEKaWRgNkAk597bSNzvAt8G
+        d2ESiTmQ==;
+Received: from [179.113.53.197] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nlxio-0001n9-LT; Tue, 03 May 2022 20:58:06 +0200
+Message-ID: <92dee5a0-f04e-f352-1e22-f990818ca06a@igalia.com>
+Date:   Tue, 3 May 2022 15:57:32 -0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vn735wunl5rhhwdp"
-Content-Disposition: inline
-In-Reply-To: <20220503162738.3827041-1-robh@kernel.org>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 16/30] drivers/hv/vmbus, video/hyperv_fb: Untangle and
+ refactor Hyper-V panic notifiers
+Content-Language: en-US
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "bhe@redhat.com" <bhe@redhat.com>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "openipmi-developer@lists.sourceforge.net" 
+        <openipmi-developer@lists.sourceforge.net>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
+        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
+        "halves@canonical.com" <halves@canonical.com>,
+        "fabiomirmar@gmail.com" <fabiomirmar@gmail.com>,
+        "alejandro.j.jimenez@oracle.com" <alejandro.j.jimenez@oracle.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "d.hatayama@jp.fujitsu.com" <d.hatayama@jp.fujitsu.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "dyoung@redhat.com" <dyoung@redhat.com>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "hidehiro.kawai.ez@hitachi.com" <hidehiro.kawai.ez@hitachi.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "vgoyal@redhat.com" <vgoyal@redhat.com>,
+        vkuznets <vkuznets@redhat.com>,
+        "will@kernel.org" <will@kernel.org>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-17-gpiccoli@igalia.com>
+ <PH0PR21MB30250C9246FFF36AFB1DFDECD7FC9@PH0PR21MB3025.namprd21.prod.outlook.com>
+ <2787b476-6366-1c83-db80-0393da417497@igalia.com>
+ <PH0PR21MB3025A46643EEDA6B14AC1ECED7C09@PH0PR21MB3025.namprd21.prod.outlook.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <PH0PR21MB3025A46643EEDA6B14AC1ECED7C09@PH0PR21MB3025.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 03/05/2022 15:13, Michael Kelley (LINUX) wrote:
+> [...]
+>> (a) We could forget about this change, and always do the clean-up here,
+>> not relying in machine_crash_shutdown().
+>> Pro: really simple, behaves the same as it is doing currently.
+>> Con: less elegant/concise, doesn't allow arm64 customization.
+>>
+>> (b) Add a way to allow ARM64 customization of shutdown crash handler.
+>> Pro: matches x86, more customizable, improves arm64 arch code.
+>> Con: A tad more complex.
+>>
+>> Also, a question that came-up: if ARM64 has no way of calling special
+>> crash shutdown handler, how can you execute hv_stimer_cleanup() and
+>> hv_synic_disable_regs() there? Or are they not required in ARM64?
+>>
+> 
+> My suggestion is to do (a) for now.  I suspect (b) could be a more
+> extended discussion and I wouldn't want your patch set to get held
+> up on that discussion.  I don't know what the sense of the ARM64
+> maintainers would be toward (b).  They have tried to avoid picking
+> up code warts like have accumulated on the x86/x64 side over the
+> years, and I agree with that effort.  But as more and varied
+> hypervisors become available for ARM64, it seems like a framework
+> for supporting a custom shutdown handler may become necessary.
+> But that could take a little time.
+> 
+> You are right about hv_stimer_cleanup() and hv_synic_disable_regs().
+> We are not running these when a panic occurs on ARM64, and we
+> should be, though the risk is small.   We will pursue (b) and add
+> these additional cleanups as part of that.  But again, I would suggest
+> doing (a) for now, and we will switch back to your solution once
+> (b) is in place.
+> 
 
---vn735wunl5rhhwdp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks again Michael, I'll stick with (a) for now. I'll check with ARM64
+community about that, and I might even try to implement something in
+parallel (if you are not already working on that - lemme know please),
+so we don't get stuck here. As you said, I feel that this is more and
+more relevant as the number of panic/crash/kexec scenarios tend to
+increase in ARM64.
 
-On 03.05.2022 11:27:38, Rob Herring wrote:
-> Another round of removing redundant minItems/maxItems when 'items' list is
-> specified. This time it is in if/then schemas as the meta-schema was
-> failing to check this case.
->=20
-> If a property has an 'items' list, then a 'minItems' or 'maxItems' with t=
-he
-> same size as the list is redundant and can be dropped. Note that is DT
-> schema specific behavior and not standard json-schema behavior. The tooli=
-ng
-> will fixup the final schema adding any unspecified minItems/maxItems.
 
->  .../bindings/net/can/bosch,c_can.yaml         |  3 ---
+>> [...]
+>> Some ideas of what we can do here:
+>>
+>> I) we could change the framebuffer notifier to rely on trylocks, instead
+>> of risking a lockup scenario, and with that, we can execute it before
+>> the vmbus disconnect in the hypervisor list;
+> 
+> I think we have to do this approach for now.
+> 
+>>
+>> II) we ignore the hypervisor notifier in case of kdump _by default_, and
+>> if the users don't want that, they can always set the panic notifier
+>> level to 4 and run all notifiers prior to kdump; would that be terrible
+>> you think? Kdump users might don't care about the framebuffer...
+>>
+>> III) we go with approach (b) above and refactor arm64 code to allow the
+>> custom crash handler on kdump time, then [with point (I) above] the
+>> logic proposed in this series is still valid - seems more and more the
+>> most correct/complete solution.
+> 
+> But even when/if we get approach (b) implemented, having the
+> framebuffer notifier on the pre_reboot list is still too late with the
+> default of panic_notifier_level = 2.  The kdump path will reset the
+> VMbus connection and then the framebuffer notifier won't work.
+> 
 
-For net/can:
+OK, perfect! I'll work something along these lines in V2, allowing the
+FB notifier to always run in the hypervisor list before the vmbus unload
+mechanism.
 
-Acked-by: Marc Kleine-Budde <mkl@pengutronix.de>
 
-regards,
-Marc
+>> [...]
+>>>> +static int hv_panic_vmbus_unload(struct notifier_block *nb, unsigned long val,
+>>>>  			      void *args)
+>>>> +{
+>>>> +	if (!kexec_crash_loaded())
+>>>
+>>> I'm not clear on the purpose of this condition.  I think it means
+>>> we will skip the vmbus_initiate_unload() if a panic occurs in the
+>>> kdump kernel.  Is there a reason a panic in the kdump kernel
+>>> should be treated differently?  Or am I misunderstanding?
+>>
+>> This is really related with the point discussed in the top of this
+>> response - I assumed both ARM64/x86_64 would behave the same and
+>> disconnect the vmbus through the custom crash handler when kdump is set,
+>> so worth skipping it here in the notifier. But that's not true for ARM64
+>> as you pointed, so this guard against kexec is really part of the
+>> decision/discussion on what to do with ARM64 heh
+> 
+> But note that vmbus_initiate_unload() already has a guard built-in.
+> If the intent of this test is just as a guard against running twice,
+> then it isn't needed.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Since we're going to avoid relying in the custom crash_shutdown(), due
+to the lack of ARM64 support for now, this check will be removed in V2.
 
---vn735wunl5rhhwdp
-Content-Type: application/pgp-signature; name="signature.asc"
+Its purpose was to skip the notifier *proactively* in case kexec is set,
+given that...once kexec happens, the custom crash_shutdown() would run
+the same function (wrong assumption for ARM64, my bad).
 
------BEGIN PGP SIGNATURE-----
+Postponing that slightly would maybe gain us some time while the
+hypervisor finish its work, so we'd delay less in the vmbus unload path
+- that was the rationale behind this check.
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJxcbAACgkQrX5LkNig
-010+7wf+Mqx1TWITM4zoyD5krckfHGf4qplQOx8GgcvjVUhJVQ0mDXx9PgM7D2fF
-HjL7mYlg2zj+lrwhgLeH/YNvoCAKzXmbKRVFjs2HfzIEe3xaC1xFXt+vXRU4v1mE
-DXW0vVKC/oYmGqIWCSda8MeqjOhR+hFoQLC1RefyFIHijbaa/4+8W9Qe+oayuzIo
-aDASB5q9KGJUVxeh15402et6p4EqI6rJ8LiKW79xwtgfqRlqBGDQ1LBuBYf0LKFE
-Whl4mJRw2P0razAapZrvNWK6osSzN2ERLC7qQ9dnUOJvHYffN5IFcO8X3GbdpEkX
-SPDiKbA08vY8R9xmqlH4PzUcrR46zg==
-=MWdl
------END PGP SIGNATURE-----
 
---vn735wunl5rhhwdp--
+Cheers!
