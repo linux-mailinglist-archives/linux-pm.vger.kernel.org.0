@@ -2,92 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3EF151AEC4
-	for <lists+linux-pm@lfdr.de>; Wed,  4 May 2022 22:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C67651AF2A
+	for <lists+linux-pm@lfdr.de>; Wed,  4 May 2022 22:33:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377895AbiEDUOe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 May 2022 16:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47446 "EHLO
+        id S1354381AbiEDUgc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 May 2022 16:36:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352117AbiEDUOe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 May 2022 16:14:34 -0400
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF31B4B43E;
-        Wed,  4 May 2022 13:10:56 -0700 (PDT)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-e656032735so2352728fac.0;
-        Wed, 04 May 2022 13:10:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AQcC/PTw0CZ4nW87/fDZEd1OCFRfJKtF1G1vA6JNl30=;
-        b=RQr0fRDs8oSnLTEIaCWk2+95WrviwBo+P9Df4GgeqUTK8UacayQ87PqZpMwwzDjytp
-         XG7pMKb9uJyJwKe4gF/OeMztw90nJ9Sg9wSimSRLENKRBfDBI/7aje/SMUYL0BHav/yU
-         +riYSxE3HGTqRbxloUIkbOw3Dv0NHOyrlanVqkM56gU9N+ZG0GsSoIviWoIW58HEQ5zD
-         41YBg2lJcABsvJEpK3VIaymMUsPtLDYvc1z9cgsjIzTValc9YlPPBsymnr0xRvznbKHY
-         W16IGlSDgvZML99V/N3T+F6PhK0AGZAEs9ceHRI1xfT66v9/8uwHD+QGUdbIxgcQP9eC
-         U7Cw==
-X-Gm-Message-State: AOAM5301P/nQSsP00Sq/K+Ts7eTcXHyoXX4+3Mn8mYzD8YZCo0OFeHgl
-        Q9iUz/+bZxXqC0rYbmXkn+/GWaJyxw==
-X-Google-Smtp-Source: ABdhPJxm9dCY1QAzxTuM18EpGcmPS9stG0iSdDg3APF55LC0FY7ml3TuO/YsSKuI0ItXvUhRfVyG8Q==
-X-Received: by 2002:a05:6870:2419:b0:ed:efba:5e11 with SMTP id n25-20020a056870241900b000edefba5e11mr641328oap.136.1651695045621;
-        Wed, 04 May 2022 13:10:45 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z24-20020a9d7a58000000b006062d346083sm2907056otm.22.2022.05.04.13.10.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 13:10:45 -0700 (PDT)
-Received: (nullmailer pid 2143715 invoked by uid 1000);
-        Wed, 04 May 2022 20:10:44 -0000
-Date:   Wed, 4 May 2022 15:10:44 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Robert Marko <robimarko@gmail.com>
-Cc:     amitk@kernel.org, thara.gopinath@linaro.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        krzysztof.kozlowski+dt@linaro.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v4 1/5] dt-bindings: thermal: tsens: Add ipq8074
- compatible
-Message-ID: <YnLdxF+P7hWwjgZS@robh.at.kernel.org>
-References: <20220503200813.4020698-1-robimarko@gmail.com>
+        with ESMTP id S1353874AbiEDUgb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 May 2022 16:36:31 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 367574F448;
+        Wed,  4 May 2022 13:32:53 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1nmLg4-0003MI-02; Wed, 04 May 2022 22:32:52 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id B9C09C01D0; Wed,  4 May 2022 22:32:24 +0200 (CEST)
+Date:   Wed, 4 May 2022 22:32:24 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org
+Subject: Re: [PATCH 07/30] mips: ip22: Reword PANICED to PANICKED and remove
+ useless header
+Message-ID: <20220504203224.GA23475@alpha.franken.de>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-8-gpiccoli@igalia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220503200813.4020698-1-robimarko@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220427224924.592546-8-gpiccoli@igalia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, May 03, 2022 at 10:08:09PM +0200, Robert Marko wrote:
-> Qualcomm IPQ8074 has tsens v2.3.0 block, though unlike existing v2 IP it
-> only uses one IRQ, so tsens v2 compatible cannot be used as the fallback.
+On Wed, Apr 27, 2022 at 07:49:01PM -0300, Guilherme G. Piccoli wrote:
+> Many other place in the kernel prefer the latter, so let's keep
+> it consistent in MIPS code as well. Also, removes a useless header.
 > 
-> We also have to make sure that correct interrupts are set according to
-> compatibles, so populate interrupt information per compatibles.
-> 
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
 > ---
-> Changes in v4:
-> * Add the forgotten Reviewed-by tag from Krzysztof
-> 
-> Changes in v3:
-> * Remove implied min/maxItem properties as pointed by Rob
-> 
-> Changes in v2:
-> * No need for a list in compatible check
-> * Specify minItems and maxItems for interrupt and interrupt-names
-> ---
->  .../bindings/thermal/qcom-tsens.yaml          | 76 ++++++++++++++++---
->  1 file changed, 65 insertions(+), 11 deletions(-)
+>  arch/mips/sgi-ip22/ip22-reset.c | 11 +++++------
+>  1 file changed, 5 insertions(+), 6 deletions(-)
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+applied to mips-next.
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
