@@ -2,108 +2,188 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9F451ACB2
-	for <lists+linux-pm@lfdr.de>; Wed,  4 May 2022 20:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1079851ACC1
+	for <lists+linux-pm@lfdr.de>; Wed,  4 May 2022 20:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376519AbiEDS2V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 May 2022 14:28:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50734 "EHLO
+        id S1376743AbiEDS3e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 May 2022 14:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376846AbiEDS2P (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 May 2022 14:28:15 -0400
-X-Greylist: delayed 406 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 May 2022 10:55:25 PDT
-Received: from mxout1.routing.net (mxout1.routing.net [IPv6:2a03:2900:1:a::a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457F47665;
-        Wed,  4 May 2022 10:55:23 -0700 (PDT)
-Received: from mxbox3.masterlogin.de (unknown [192.168.10.78])
-        by mxout1.routing.net (Postfix) with ESMTP id 577BB40821;
-        Wed,  4 May 2022 17:48:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1651686516;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PkayX3cpIbN2bP4bEPk/mnWfaMveU0+7qkBXCgv/T9o=;
-        b=X8Ma05sMwPyKXtQFp92ps0fLub1eRcX0Y+uUSE8mexg54j4iPrYokP+AtQbbzJWhrWfYTH
-        2yMyGqqEbQGE6hGzq46fPL/EK9AHRUnX5CXVt2elxDimdn4ZP4OjsPiOM0FACB19oO8Wm2
-        UAQGwaYG+sMSV2H7KMrztQ6W7TBSDDc=
-Received: from localhost.localdomain (fttx-pool-80.245.79.168.bambit.de [80.245.79.168])
-        by mxbox3.masterlogin.de (Postfix) with ESMTPSA id 85F0B3606E1;
-        Wed,  4 May 2022 17:48:35 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     linux-pm@vger.kernel.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [RFC v1] opp: add config option for debug
-Date:   Wed,  4 May 2022 19:48:23 +0200
-Message-Id: <20220504174823.156709-1-linux@fw-web.de>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S1376761AbiEDS3N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 May 2022 14:29:13 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76BE4757F;
+        Wed,  4 May 2022 11:00:37 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 51a7cf1e4c0649f0; Wed, 4 May 2022 20:00:35 +0200
+Received: from kreacher.localnet (unknown [213.134.161.219])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id A61BA66C2D7;
+        Wed,  4 May 2022 20:00:34 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH v3 4/9] PCI/PM: Rework changing power states of PCI devices
+Date:   Wed, 04 May 2022 20:00:33 +0200
+Message-ID: <2650302.mvXUDI8C0e@kreacher>
+In-Reply-To: <YnKrcFSjLr+W+myL@dev-arch.thelio-3990X>
+References: <4419002.LvFx2qVVIh@kreacher> <CAJZ5v0i1Ynt54yb7aMJorkYUvqkxhxOqvQJb8AdA7Ps1aBO5tg@mail.gmail.com> <YnKrcFSjLr+W+myL@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mail-ID: 65529973-93c8-4f73-bd71-4fb0c003dd48
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.161.219
+X-CLIENT-HOSTNAME: 213.134.161.219
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdelgdduudelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepledtieekkeekveeikeetgffgteeuteefjeevjeegudelvdduheeiuedvieehieevnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepvddufedrudefgedrudeiuddrvdduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduiedurddvudelpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtohepnhgrthhhrghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdp
+ rhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+On Wednesday, May 4, 2022 6:36:00 PM CEST Nathan Chancellor wrote:
+> On Wed, May 04, 2022 at 02:59:17PM +0200, Rafael J. Wysocki wrote:
+> > On Tue, May 3, 2022 at 7:59 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > Hi Rafael,
+> > >
+> > > On Thu, Apr 14, 2022 at 03:11:21PM +0200, Rafael J. Wysocki wrote:
+> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > >
+> > > > There are some issues related to changing power states of PCI
+> > > > devices, mostly related to carrying out unnecessary actions in some
+> > > > places, and the code is generally hard to follow.
+> > > >
+> > > >  1. pci_power_up() has two callers, pci_set_power_state() and
+> > > >     pci_pm_default_resume_early().  The latter updates the current
+> > > >     power state of the device right after calling pci_power_up()
+> > > >     and it restores the entire config space of the device right
+> > > >     after that, so pci_power_up() itself need not read the
+> > > >     PCI_PM_CTRL register or restore the BARs after programming the
+> > > >     device into D0 in that case.
+> > > >
+> > > >  2. It is generally hard to get a clear view of the pci_power_up()
+> > > >     code flow, especially in some corner cases, due to all of the
+> > > >     involved PCI_PM_CTRL register reads and writes occurring in
+> > > >     pci_platform_power_transition() and in pci_raw_set_power_state(),
+> > > >     some of which are redundant.
+> > > >
+> > > >  3. The transitions from low-power states to D0 and the other way
+> > > >     around are unnecessarily tangled in pci_raw_set_power_state()
+> > > >     which causes it to use a redundant local variable and makes it
+> > > >     rather hard to follow.
+> > > >
+> > > > To address the above shortcomings, make the following changes:
+> > > >
+> > > >  a. Remove the code handling transitions into D0
+> > > >     from pci_raw_set_power_state() and rename it as
+> > > >     pci_set_low_power_state().
+> > > >
+> > > >  b. Add the code handling transitions into D0 directly
+> > > >     to pci_power_up() and to a new wrapper function
+> > > >     pci_set_full_power_state() calling it internally that is
+> > > >     only used in pci_set_power_state().
+> > > >
+> > > >  c. Make pci_power_up() avoid redundant PCI_PM_CTRL register reads
+> > > >     and make it work in the same way for transitions from any
+> > > >     low-power states (transitions from D1 and D2 are handled
+> > > >     slightly differently before the change).
+> > > >
+> > > >  d. Put the restoration of the BARs and the PCI_PM_CTRL
+> > > >     register read confirming the power state change into
+> > > >     pci_set_full_power_state() to avoid doing that in
+> > > >     pci_pm_default_resume_early() unnecessarily.
+> > > >
+> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > >
+> > > This change as commit 5bffe4c611f5 ("PCI/PM: Rework changing power
+> > > states of PCI devices") causes my AMD-based system to fail to fully
+> > > boot. As far as I can tell, this might be NVMe related, which might make
+> > > getting a full log difficult, as journalctl won't have anywhere to save
+> > > it. I see:
+> > >
+> > > nvme nvme0: I/O 8 QID 0 timeout, completion polled
+> > >
+> > > then shortly afterwards:
+> > >
+> > > nvme nvme0: I/O 24 QID 0 timeout, completion polled
+> > > nvme nvme0: missing or invalid SUBNQN field
+> > >
+> > > then I am dropped into an emergency shell.
+> > 
+> > Thanks for the report!
+> > 
+> > > This is a log from the previous commit, which may give some hints about
+> > > the configuration of this particular system.
+> > >
+> > > https://gist.github.com/nathanchance/8a56f0939410cb187896e904c72e41e7/raw/b47b2620bdd32d43c7a3b209fcfd9e3d4668f058/good-boot.log
+> > >
+> > > If there is any additional debugging information I can provide or
+> > > patches I can try, please let me know!
+> > 
+> > Please see what happens if the "if (dev->current_state == PCI_D0)"
+> > check and the following "return 0" statement in pci_power_up() are
+> > commented out.
+> 
+> If I understand you correctly, this? Unfortunately, that does not help.
 
-Currently OPP debug is enabled by DEBUG_DRIVER option. This is generic
-driver debug and opp floods serial console. This is annoying if opp is
-not needed so give it an additional config-key.
+Thanks for testing.
 
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+Please check if the patch below makes any difference.
+
 ---
- drivers/base/Kconfig | 1 +
- drivers/opp/Kconfig  | 7 +++++++
- drivers/opp/Makefile | 2 +-
- 3 files changed, 9 insertions(+), 1 deletion(-)
+ drivers/pci/pci.c |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
-index 6f04b831a5c0..8ae826c95d5f 100644
---- a/drivers/base/Kconfig
-+++ b/drivers/base/Kconfig
-@@ -130,6 +130,7 @@ config DEV_COREDUMP
- config DEBUG_DRIVER
- 	bool "Driver Core verbose debug messages"
- 	depends on DEBUG_KERNEL
-+	imply DEBUG_OPP
- 	help
- 	  Say Y here if you want the Driver core to produce a bunch of
- 	  debug messages to the system log. Select this if you are having a
-diff --git a/drivers/opp/Kconfig b/drivers/opp/Kconfig
-index e8ce47b32735..6a2d2c6c1143 100644
---- a/drivers/opp/Kconfig
-+++ b/drivers/opp/Kconfig
-@@ -12,3 +12,10 @@ config PM_OPP
- 	  representing individual voltage domains and provides SOC
- 	  implementations a ready to use framework to manage OPPs.
- 	  For more information, read <file:Documentation/power/opp.rst>
+Index: linux-pm/drivers/pci/pci.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci.c
++++ linux-pm/drivers/pci/pci.c
+@@ -1245,7 +1245,7 @@ int pci_power_up(struct pci_dev *dev)
+ 
+ 	/* There's nothing more to do if current_state is D0 at this point. */
+ 	if (dev->current_state == PCI_D0)
+-		return 0;
++		goto done;
+ 
+ 	/*
+ 	 * Program the device into PCI_D0 by forcing the entire word to 0 (this
+@@ -1260,6 +1260,11 @@ int pci_power_up(struct pci_dev *dev)
+ 		udelay(PCI_PM_D2_DELAY);
+ 
+ 	dev->current_state = PCI_D0;
 +
-+menu "Operating Performance Points (OPP)"
-+config DEBUG_OPP
-+	bool "Debug Operating Performance Points"
-+	help
-+	  enable opp debugging
-+endmenu
-diff --git a/drivers/opp/Makefile b/drivers/opp/Makefile
-index f65ed5985bb4..2589915eef95 100644
---- a/drivers/opp/Makefile
-+++ b/drivers/opp/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0-only
--ccflags-$(CONFIG_DEBUG_DRIVER)	:= -DDEBUG
-+ccflags-$(CONFIG_DEBUG_OPP)	:= -DDEBUG
- obj-y				+= core.o cpu.o
- obj-$(CONFIG_OF)		+= of.o
- obj-$(CONFIG_DEBUG_FS)		+= debugfs.o
--- 
-2.25.1
++done:
++	if (dev->bus->self)
++		pcie_aspm_pm_state_change(dev->bus->self);
++
+ 	return 1;
+ 
+ fail:
+@@ -1339,9 +1344,6 @@ static int pci_set_full_power_state(stru
+ 		pci_restore_bars(dev);
+ 	}
+ 
+-	if (dev->bus->self)
+-		pcie_aspm_pm_state_change(dev->bus->self);
+-
+ 	return 0;
+ }
+ 
+
+
 
