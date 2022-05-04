@@ -2,297 +2,196 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0690D51B22A
-	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 00:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F3D51B449
+	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 02:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378482AbiEDWqJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 May 2022 18:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32906 "EHLO
+        id S1383729AbiEEAAZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 May 2022 20:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379069AbiEDWqB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 May 2022 18:46:01 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1340053731;
-        Wed,  4 May 2022 15:41:58 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:52142)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nmNgz-002E7F-6C; Wed, 04 May 2022 16:41:57 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37004 helo=localhost.localdomain)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nmNgw-00GI0k-Sk; Wed, 04 May 2022 16:41:56 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
+        with ESMTP id S1382255AbiEDXYy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 May 2022 19:24:54 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034034D9FD
+        for <linux-pm@vger.kernel.org>; Wed,  4 May 2022 16:21:15 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id cx11-20020a17090afd8b00b001d9fe5965b3so6470898pjb.3
+        for <linux-pm@vger.kernel.org>; Wed, 04 May 2022 16:21:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f0BxOsiS7N+HTfWR68wbuI5GyHjxWUqAQAvHwIwW+yE=;
+        b=R5D0DOFVkQco+OK496uEyWM8qRT/qEDa61ADRf8s0rAJeF034c8CBOcJkI9DhSK99P
+         T9KGcuzycnvXcJPNISrJKPRM0NBDojZJdo/30qDInqLY8l2tGI62dZHO/kSe2d29NFi9
+         K7Vu8cNCpHGLqj5AbbquXriJVZ5gqG2e3HHcg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f0BxOsiS7N+HTfWR68wbuI5GyHjxWUqAQAvHwIwW+yE=;
+        b=Ck9aOzZYej/ex5QsHUqfjWNi/EYzKWSqsmFqRnyS7bcAhhOKfw3w4luVoc6LTtNLvY
+         4X1C9vjEbVHqIFSh8ni9xB/twcmKaaXeNz2IEottOY+w4mSwqoqfXsGSh4gyPF699SiZ
+         uHVzRWEYEkSGnp+yAcSw47B9DaRLd4cn8u/o4xtq+TVw/ZbJ/7y+taf9szLZ60ge8OOt
+         As3eM6Q3u+vcK4o4N2BB7vxCk4whvZVf6x2YSuVSfRJflwV7+s9pGB9gvB/3UXF8EdS5
+         vD3YjEreWYRtH7stxJTepAqO6KFo9mE8/hbkyvqHr8z09OGzu6yioH/NyEjFljec2nz/
+         lyBA==
+X-Gm-Message-State: AOAM533JStIsQAzAwIF1FQUVlq//JdmQbOqyloE0HjJ9alOydB+aMBvS
+        YpcH3XbInV/Wh9dXA6w3Ll2eKA==
+X-Google-Smtp-Source: ABdhPJz4iqQo29US5gcPdIjO5OrbAwRmVDtwaNJJOfTh1rXJxFOpVW3YvogErA3bWiWXuRJJXotSlg==
+X-Received: by 2002:a17:90b:4b83:b0:1dc:5073:b704 with SMTP id lr3-20020a17090b4b8300b001dc5073b704mr2397627pjb.94.1651706474455;
+        Wed, 04 May 2022 16:21:14 -0700 (PDT)
+Received: from evgreen-glaptop.lan ([98.47.98.87])
+        by smtp.gmail.com with ESMTPSA id q12-20020a170902f78c00b0015e8d4eb2d6sm1901pln.288.2022.05.04.16.21.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 16:21:14 -0700 (PDT)
+From:   Evan Green <evgreen@chromium.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     rjw@rjwysocki.net, Oleg Nesterov <oleg@redhat.com>,
-        mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
-        tj@kernel.org, linux-pm@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
-        "Eric W . Biederman" <ebiederm@xmission.com>
-Date:   Wed,  4 May 2022 17:40:58 -0500
-Message-Id: <20220504224058.476193-11-ebiederm@xmission.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
-References: <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
+Cc:     Matthew Garrett <mgarrett@aurora.tech>, dlunev@google.com,
+        zohar@linux.ibm.com, jejb@linux.ibm.com,
+        linux-integrity@vger.kernel.org, corbet@lwn.net, rjw@rjwysocki.net,
+        gwendal@chromium.org, jarkko@kernel.org, linux-pm@vger.kernel.org,
+        Evan Green <evgreen@chromium.org>,
+        David Howells <dhowells@redhat.com>,
+        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Len Brown <len.brown@intel.com>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Pavel Machek <pavel@ucw.cz>, Peter Huewe <peterhuewe@gmx.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
+        keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH 00/10] Encrypted Hibernation
+Date:   Wed,  4 May 2022 16:20:52 -0700
+Message-Id: <20220504232102.469959-1-evgreen@chromium.org>
+X-Mailer: git-send-email 2.31.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1nmNgw-00GI0k-Sk;;;mid=<20220504224058.476193-11-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1/4O1Me+wjAHiAxCjW+9VhfNjaKni2YTZs=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa08 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;linux-kernel@vger.kernel.org
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1627 ms - load_scoreonly_sql: 0.05 (0.0%),
-        signal_user_changed: 16 (1.0%), b_tie_ro: 13 (0.8%), parse: 1.63
-        (0.1%), extract_message_metadata: 19 (1.2%), get_uri_detail_list: 4.3
-        (0.3%), tests_pri_-1000: 21 (1.3%), tests_pri_-950: 1.53 (0.1%),
-        tests_pri_-900: 1.22 (0.1%), tests_pri_-90: 111 (6.8%), check_bayes:
-        108 (6.6%), b_tokenize: 16 (1.0%), b_tok_get_all: 16 (1.0%),
-        b_comp_prob: 5 (0.3%), b_tok_touch_all: 65 (4.0%), b_finish: 1.33
-        (0.1%), tests_pri_0: 1438 (88.4%), check_dkim_signature: 0.63 (0.0%),
-        check_dkim_adsp: 4.9 (0.3%), poll_dns_idle: 0.21 (0.0%), tests_pri_10:
-        4.2 (0.3%), tests_pri_500: 10 (0.6%), rewrite_mail: 0.00 (0.0%)
-Subject: [PATCH v3 11/11] sched,signal,ptrace: Rework TASK_TRACED, TASK_STOPPED state
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+We are exploring enabling hibernation in some new scenarios. However,
+our security team has a few requirements, listed below:
+1. The hibernate image must be encrypted with protection derived from
+   both the platform (eg TPM) and user authentication data (eg
+   password).
+2. Hibernation must not be a vector by which a malicious userspace can
+   escalate to the kernel.
 
-Currently ptrace_stop() / do_signal_stop() rely on the special states
-TASK_TRACED and TASK_STOPPED resp. to keep unique state. That is, this
-state exists only in task->__state and nowhere else.
+Requirement #1 can be achieved solely with uswsusp, however requirement
+2 necessitates mechanisms in the kernel to guarantee integrity of the
+hibernate image. The kernel needs a way to authenticate that it generated
+the hibernate image being loaded, and that the image has not been tampered
+with. Adding support for in-kernel AEAD encryption with a TPM-sealed key
+allows us to achieve both requirements with a single computation pass.
 
-There's two spots of bother with this:
+Matthew Garrett published a series [1] that aligns closely with this
+goal. His series utilized the fact that PCR23 is a resettable PCR that
+can be blocked from access by usermode. The TPM can create a sealed key
+tied to PCR23 in two ways. First, the TPM can attest to the value of
+PCR23 when the key was created, which the kernel can use on resume to
+verify that the kernel must have created the key (since it is the only
+one capable of modifying PCR23). It can also create a policy that enforces
+PCR23 be set to a specific value as a condition of unsealing the key,
+preventing usermode from unsealing the key by talking directly to the
+TPM.
 
- - PREEMPT_RT has task->saved_state which complicates matters,
-   meaning task_is_{traced,stopped}() needs to check an additional
-   variable.
+This series adopts that primitive as a foundation, tweaking and building
+on it a bit. Where Matthew's series used the TPM-backed key to encrypt a
+hash of the image, this series uses the key directly as a gcm(aes)
+encryption key, which the kernel uses to encrypt and decrypt the
+hibernate image in chunks of 16 pages. This provides both encryption and
+integrity, which turns out to be a noticeable performance improvement over
+separate passes for encryption and hashing.
 
- - An alternative freezer implementation that itself relies on a
-   special TASK state would loose TASK_TRACED/TASK_STOPPED and will
-   result in misbehaviour.
+The series also introduces the concept of mixing user key material into
+the encryption key. This allows usermode to introduce key material
+based on unspecified external authentication data (in our case derived
+from something like the user password or PIN), without requiring
+usermode to do a separate encryption pass.
 
-As such, add additional state to task->jobctl to track this state
-outside of task->__state.
+Matthew also documented issues his series had [2] related to generating
+fake images by booting alternate kernels without the PCR23 limiting.
+With access to PCR23 on the same machine, usermode can create fake
+hibernate images that are indistinguishable to the new kernel from
+genuine ones. His post outlines a solution that involves adding more
+PCRs into the creation data and policy, with some gyrations to make this
+work well on a standard PC.
 
-NOTE: this doesn't actually fix anything yet, just adds extra state.
+Our approach would be similar: on our machines PCR 0 indicates whether
+the system is booted in secure/verified mode or developer mode. By
+adding PCR0 to the policy, we can reject hibernate images made in
+developer mode while in verified mode (or vice versa).
 
---EWB
-  * didn't add a unnecessary newline in signal.h
-  * Update t->jobctl in signal_wake_up and ptrace_signal_wake_up
-    instead of in signal_wake_up_state.  This prevents the clearing
-    of TASK_STOPPED and TASK_TRACED from getting lost.
-  * Added warnings if JOBCTL_STOPPED or JOBCTL_TRACED are not cleared
+Additionally, mixing in the user authentication data limits both
+data exfiltration attacks (eg a stolen laptop) and forged hibernation
+image attacks to attackers that already know the authentication data (eg
+user's password). This, combined with our relatively sealed userspace
+(dm-verity on the rootfs), and some judicious clearing of the hibernate
+image (such as across an OS update) further reduce the risk of an online
+attack. The remaining attack space of a forgery from someone with
+physical access to the device and knowledge of the authentication data
+is out of scope for us, given that flipping to developer mode or
+reflashing RO firmware trivially achieves the same thing.
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220421150654.757693825@infradead.org
-Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
----
- include/linux/sched.h        |  8 +++-----
- include/linux/sched/jobctl.h |  6 ++++++
- include/linux/sched/signal.h | 19 +++++++++++++++----
- kernel/ptrace.c              | 16 +++++++++++++---
- kernel/signal.c              | 10 ++++++++--
- 5 files changed, 45 insertions(+), 14 deletions(-)
+A couple of patches still need to be written on top of this series. The
+generalized functionality to OR in additional PCRs via Kconfig (like PCR
+0 or 5) still needs to be added. We'll also need a patch that disallows
+unencrypted forms of resume from hibernation, to fully close the door
+to malicious userspace. However, I wanted to get this series out first
+and get reactions from upstream before continuing to add to it.
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 610f2fdb1e2c..cbe5c899599c 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -118,11 +118,9 @@ struct task_group;
- 
- #define task_is_running(task)		(READ_ONCE((task)->__state) == TASK_RUNNING)
- 
--#define task_is_traced(task)		((READ_ONCE(task->__state) & __TASK_TRACED) != 0)
--
--#define task_is_stopped(task)		((READ_ONCE(task->__state) & __TASK_STOPPED) != 0)
--
--#define task_is_stopped_or_traced(task)	((READ_ONCE(task->__state) & (__TASK_STOPPED | __TASK_TRACED)) != 0)
-+#define task_is_traced(task)		((READ_ONCE(task->jobctl) & JOBCTL_TRACED) != 0)
-+#define task_is_stopped(task)		((READ_ONCE(task->jobctl) & JOBCTL_STOPPED) != 0)
-+#define task_is_stopped_or_traced(task)	((READ_ONCE(task->jobctl) & (JOBCTL_STOPPED | JOBCTL_TRACED)) != 0)
- 
- /*
-  * Special states are those that do not use the normal wait-loop pattern. See
-diff --git a/include/linux/sched/jobctl.h b/include/linux/sched/jobctl.h
-index d556c3425963..68876d0a7ef9 100644
---- a/include/linux/sched/jobctl.h
-+++ b/include/linux/sched/jobctl.h
-@@ -21,6 +21,9 @@ struct task_struct;
- #define JOBCTL_TRAP_FREEZE_BIT	23	/* trap for cgroup freezer */
- #define JOBCTL_PTRACE_FROZEN_BIT	24	/* frozen for ptrace */
- 
-+#define JOBCTL_STOPPED_BIT	26	/* do_signal_stop() */
-+#define JOBCTL_TRACED_BIT	27	/* ptrace_stop() */
-+
- #define JOBCTL_STOP_DEQUEUED	(1UL << JOBCTL_STOP_DEQUEUED_BIT)
- #define JOBCTL_STOP_PENDING	(1UL << JOBCTL_STOP_PENDING_BIT)
- #define JOBCTL_STOP_CONSUME	(1UL << JOBCTL_STOP_CONSUME_BIT)
-@@ -31,6 +34,9 @@ struct task_struct;
- #define JOBCTL_TRAP_FREEZE	(1UL << JOBCTL_TRAP_FREEZE_BIT)
- #define JOBCTL_PTRACE_FROZEN	(1UL << JOBCTL_PTRACE_FROZEN_BIT)
- 
-+#define JOBCTL_STOPPED		(1UL << JOBCTL_STOPPED_BIT)
-+#define JOBCTL_TRACED		(1UL << JOBCTL_TRACED_BIT)
-+
- #define JOBCTL_TRAP_MASK	(JOBCTL_TRAP_STOP | JOBCTL_TRAP_NOTIFY)
- #define JOBCTL_PENDING_MASK	(JOBCTL_STOP_PENDING | JOBCTL_TRAP_MASK)
- 
-diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
-index e66948abbee4..07ba3404fcde 100644
---- a/include/linux/sched/signal.h
-+++ b/include/linux/sched/signal.h
-@@ -294,8 +294,10 @@ static inline int kernel_dequeue_signal(void)
- static inline void kernel_signal_stop(void)
- {
- 	spin_lock_irq(&current->sighand->siglock);
--	if (current->jobctl & JOBCTL_STOP_DEQUEUED)
-+	if (current->jobctl & JOBCTL_STOP_DEQUEUED) {
-+		current->jobctl |= JOBCTL_STOPPED;
- 		set_special_state(TASK_STOPPED);
-+	}
- 	spin_unlock_irq(&current->sighand->siglock);
- 
- 	schedule();
-@@ -437,12 +439,21 @@ extern void signal_wake_up_state(struct task_struct *t, unsigned int state);
- 
- static inline void signal_wake_up(struct task_struct *t, bool fatal)
- {
--	fatal = fatal && !(t->jobctl & JOBCTL_PTRACE_FROZEN);
--	signal_wake_up_state(t, fatal ? TASK_WAKEKILL | __TASK_TRACED : 0);
-+	unsigned int state = 0;
-+	if (fatal && !(t->jobctl & JOBCTL_PTRACE_FROZEN)) {
-+		t->jobctl &= ~(JOBCTL_STOPPED | JOBCTL_TRACED);
-+		state = TASK_WAKEKILL | __TASK_TRACED;
-+	}
-+	signal_wake_up_state(t, state);
- }
- static inline void ptrace_signal_wake_up(struct task_struct *t, bool resume)
- {
--	signal_wake_up_state(t, resume ? __TASK_TRACED : 0);
-+	unsigned int state = 0;
-+	if (resume) {
-+		t->jobctl &= ~JOBCTL_TRACED;
-+		state = __TASK_TRACED;
-+	}
-+	signal_wake_up_state(t, state);
- }
- 
- void task_join_group_stop(struct task_struct *task);
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index 36a5b7a00d2f..328a34a99124 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -185,7 +185,12 @@ static bool looks_like_a_spurious_pid(struct task_struct *task)
- 	return true;
- }
- 
--/* Ensure that nothing can wake it up, even SIGKILL */
-+/*
-+ * Ensure that nothing can wake it up, even SIGKILL
-+ *
-+ * A task is switched to this state while a ptrace operation is in progress;
-+ * such that the ptrace operation is uninterruptible.
-+ */
- static bool ptrace_freeze_traced(struct task_struct *task)
- {
- 	bool ret = false;
-@@ -216,8 +221,10 @@ static void ptrace_unfreeze_traced(struct task_struct *task)
- 	 */
- 	if (lock_task_sighand(task, &flags)) {
- 		task->jobctl &= ~JOBCTL_PTRACE_FROZEN;
--		if (__fatal_signal_pending(task))
-+		if (__fatal_signal_pending(task)) {
-+			task->jobctl &= ~TASK_TRACED;
- 			wake_up_state(task, __TASK_TRACED);
-+		}
- 		unlock_task_sighand(task, &flags);
- 	}
- }
-@@ -462,8 +469,10 @@ static int ptrace_attach(struct task_struct *task, long request,
- 	 * in and out of STOPPED are protected by siglock.
- 	 */
- 	if (task_is_stopped(task) &&
--	    task_set_jobctl_pending(task, JOBCTL_TRAP_STOP | JOBCTL_TRAPPING))
-+	    task_set_jobctl_pending(task, JOBCTL_TRAP_STOP | JOBCTL_TRAPPING)) {
-+		task->jobctl &= ~JOBCTL_STOPPED;
- 		signal_wake_up_state(task, __TASK_STOPPED);
-+	}
- 
- 	spin_unlock(&task->sighand->siglock);
- 
-@@ -875,6 +884,7 @@ static int ptrace_resume(struct task_struct *child, long request,
- 	 */
- 	spin_lock_irq(&child->sighand->siglock);
- 	child->exit_code = data;
-+	child->jobctl &= ~JOBCTL_TRACED;
- 	wake_up_state(child, __TASK_TRACED);
- 	spin_unlock_irq(&child->sighand->siglock);
- 
-diff --git a/kernel/signal.c b/kernel/signal.c
-index e0b416b21ad3..80108017783d 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -762,7 +762,10 @@ static int dequeue_synchronous_signal(kernel_siginfo_t *info)
-  */
- void signal_wake_up_state(struct task_struct *t, unsigned int state)
- {
-+	lockdep_assert_held(&t->sighand->siglock);
-+
- 	set_tsk_thread_flag(t, TIF_SIGPENDING);
-+
- 	/*
- 	 * TASK_WAKEKILL also means wake it up in the stopped/traced/killable
- 	 * case. We don't check t->state here because there is a race with it
-@@ -930,9 +933,10 @@ static bool prepare_signal(int sig, struct task_struct *p, bool force)
- 		for_each_thread(p, t) {
- 			flush_sigqueue_mask(&flush, &t->pending);
- 			task_clear_jobctl_pending(t, JOBCTL_STOP_PENDING);
--			if (likely(!(t->ptrace & PT_SEIZED)))
-+			if (likely(!(t->ptrace & PT_SEIZED))) {
-+				t->jobctl &= ~JOBCTL_STOPPED;
- 				wake_up_state(t, __TASK_STOPPED);
--			else
-+			} else
- 				ptrace_trap_notify(t);
- 		}
- 
-@@ -2218,6 +2222,7 @@ static int ptrace_stop(int exit_code, int why, unsigned long message,
- 		return exit_code;
- 
- 	set_special_state(TASK_TRACED);
-+	current->jobctl |= JOBCTL_TRACED;
- 
- 	/*
- 	 * We're committing to trapping.  TRACED should be visible before
-@@ -2437,6 +2442,7 @@ static bool do_signal_stop(int signr)
- 		if (task_participate_group_stop(current))
- 			notify = CLD_STOPPED;
- 
-+		current->jobctl |= JOBCTL_STOPPED;
- 		set_special_state(TASK_STOPPED);
- 		spin_unlock_irq(&current->sighand->siglock);
- 
+[1] https://patchwork.kernel.org/project/linux-pm/cover/20210220013255.1083202-1-matthewgarrett@google.com/
+[2] https://mjg59.dreamwidth.org/58077.html
+
+
+Evan Green (6):
+  security: keys: trusted: Verify creation data
+  PM: hibernate: Add kernel-based encryption
+  PM: hibernate: Use TPM-backed keys to encrypt image
+  PM: hibernate: Mix user key in encrypted hibernate
+  PM: hibernate: Verify the digest encryption key
+  PM: hibernate: seal the encryption key with a PCR policy
+
+Matthew Garrett (4):
+  tpm: Add support for in-kernel resetting of PCRs
+  tpm: Allow PCR 23 to be restricted to kernel-only use
+  security: keys: trusted: Parse out individual components of the key
+    blob
+  security: keys: trusted: Allow storage of PCR values in creation data
+
+ Documentation/power/userland-swsusp.rst       |    8 +
+ .../security/keys/trusted-encrypted.rst       |    4 +
+ drivers/char/tpm/Kconfig                      |   10 +
+ drivers/char/tpm/tpm-dev-common.c             |    8 +
+ drivers/char/tpm/tpm-interface.c              |   28 +
+ drivers/char/tpm/tpm.h                        |   23 +
+ drivers/char/tpm/tpm1-cmd.c                   |   69 ++
+ drivers/char/tpm/tpm2-cmd.c                   |   58 +
+ drivers/char/tpm/tpm2-space.c                 |    2 +-
+ include/keys/trusted-type.h                   |    9 +
+ include/linux/tpm.h                           |   12 +
+ include/uapi/linux/suspend_ioctls.h           |   28 +-
+ kernel/power/Kconfig                          |   15 +
+ kernel/power/Makefile                         |    1 +
+ kernel/power/power.h                          |    1 +
+ kernel/power/snapenc.c                        | 1076 +++++++++++++++++
+ kernel/power/snapshot.c                       |    5 +
+ kernel/power/user.c                           |   44 +-
+ kernel/power/user.h                           |  114 ++
+ security/keys/trusted-keys/trusted_tpm1.c     |    9 +
+ security/keys/trusted-keys/trusted_tpm2.c     |  164 ++-
+ 21 files changed, 1670 insertions(+), 18 deletions(-)
+ create mode 100644 kernel/power/snapenc.c
+ create mode 100644 kernel/power/user.h
+
 -- 
-2.35.3
+2.31.0
 
