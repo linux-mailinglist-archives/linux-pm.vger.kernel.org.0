@@ -2,82 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 903685199A8
-	for <lists+linux-pm@lfdr.de>; Wed,  4 May 2022 10:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D613519A52
+	for <lists+linux-pm@lfdr.de>; Wed,  4 May 2022 10:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346189AbiEDI03 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 May 2022 04:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55090 "EHLO
+        id S235435AbiEDIvc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 May 2022 04:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343704AbiEDI02 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 May 2022 04:26:28 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FEE8237F2
-        for <linux-pm@vger.kernel.org>; Wed,  4 May 2022 01:22:52 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 7so588796pga.12
-        for <linux-pm@vger.kernel.org>; Wed, 04 May 2022 01:22:52 -0700 (PDT)
+        with ESMTP id S1346592AbiEDIv2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 May 2022 04:51:28 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2EA24BD1
+        for <linux-pm@vger.kernel.org>; Wed,  4 May 2022 01:47:52 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id j6so1510929ejc.13
+        for <linux-pm@vger.kernel.org>; Wed, 04 May 2022 01:47:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=SdK0VTClXf0YNc37VM3s8fuaeXHi8SET3pp3ZISSadQ=;
-        b=kI3XGnNupu3SzP3j+gsgoUyARk2Wrt2S+bwMeFoftnnsUUT/IKfAPwJBbymvvv7sKI
-         MtZiTor/k7fZWZr/pOd91PQ32xe8gk7O8UluhjaoD80iCQq5KR0ElvLOv/+jc5Sk3mTp
-         f97GhVWt/tC5JoVDdHJkcpwOFJU+HmA1gUkCOkTFU/nEj4A1jik9+4unIxwkoLU3AM4U
-         sB9N2gr+d+eo/1Yc/QkRtRvFlPcxYxsL1WUXNERbUCluf9OeiK43keT2zDGB8ybGKtnJ
-         dxk67XdrwEwuYFABcrd90pMCJDxKfIwcmp0BVvmdZgG32cqOH4V+rcUsOte9Mo8V12Mb
-         xaZw==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=6f1dDCVmeyq91xhXZCZayQyn+IZwU2L4aZ+Foq78eA4=;
+        b=tmFZC8fD0Q56/y2iWBYOsKJY0o2MUehHpKVtve/rmhYh5x/7PbwoBdgaC8XLZgD+hE
+         fMIBNqBYry6FkCKA2vZ6qAWwRS+vbfplUyvchQSYAsde/5N11REnwbkj65150Xb0BXtv
+         TnGOSSDu23VUScaUMx1vIkmabyrZ2WkecZCbrnD/vZzxTGLZQsMvU9AvSMYl38kJGrah
+         1a/DEMKlgKYFNaj+cCJXxz5lQ6cBLS0KPH8HTbIWcgpUHm4VeHd2m5wbku6XTNtNL2II
+         myyFcR6JGjr14fVtveiWgC3sjCnDHRwtPI/Byf7m58lM8jJHJP70qrYXIo5gis2hWngm
+         w+Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=SdK0VTClXf0YNc37VM3s8fuaeXHi8SET3pp3ZISSadQ=;
-        b=3UsPXoavWbxRSGYiwCKN/3f8/W5vK/ndTl16RksRRmVrHALMfjhBPs/IslJuSA/Ph/
-         s6xJJA9Q3bCesMbFOmGMad7/K+telcaLxOi2vMBc/xGeoRi/WzEZWkmcqZIvwH+qGEmQ
-         9KsUmSAwfdQ8NGgcpWaedCxGhgYiOxp+FLLbDEjl2MYiuzXt0BTa9NIQD8Lf7vmUbQ3+
-         CF/9ugcKWzIIMrXBgurNXcFbjDAMKgAk52DIMnAOD0WTUyCfyHF5/643Tf9OzOQPYmY7
-         lpwO1S5YMCyJPMp/BZLYzPHysNPJVGLvJlhb+5I6YITTKD1jzE8VjeqVH2pBQsNY15Gh
-         bdLw==
-X-Gm-Message-State: AOAM531kpbWLEnhH5ZUs0gd2YCufTefkbTytVglJf3NHi5qVLgsbFe6s
-        VXmFHO2Sf7sndjvsQOXcxPwUfg==
-X-Google-Smtp-Source: ABdhPJwfha0ZWyhE1MyC7JONGEsucCB5kCwPDXSeGpREJK9mLcP9oTgoHlBBtf6lTMLv8gsdZ0zvRQ==
-X-Received: by 2002:aa7:82d9:0:b0:4fa:2c7f:41e with SMTP id f25-20020aa782d9000000b004fa2c7f041emr20107812pfn.1.1651652571708;
-        Wed, 04 May 2022 01:22:51 -0700 (PDT)
-Received: from localhost ([122.162.207.161])
-        by smtp.gmail.com with ESMTPSA id az12-20020a170902a58c00b0015e8d4eb27esm7653617plb.200.2022.05.04.01.22.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 01:22:51 -0700 (PDT)
-Date:   Wed, 4 May 2022 13:52:49 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     rafael@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
-        roger.lu@mediatek.com, hsinyi@google.com, khilman@baylibre.com,
-        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH V4 07/14] cpufreq: mediatek: Add .get function
-Message-ID: <20220504082249.anrvkf2ssbxyzz5m@vireshk-i7>
-References: <20220422075239.16437-1-rex-bc.chen@mediatek.com>
- <20220422075239.16437-8-rex-bc.chen@mediatek.com>
- <20220425053548.72w2jh2g6lpzgz6g@vireshk-i7>
- <64c690e8edf493ec0a4a14e0fdaad2d8e88e6da7.camel@mediatek.com>
- <20220425100058.4kbvmpi63ygni6k5@vireshk-i7>
- <078b1f9b39690da98cbd3c4528ba28374a097083.camel@mediatek.com>
- <20220427031141.or2owu5wrh2cadfo@vireshk-i7>
- <346736a339bed576817179ded3795d61f71fa06a.camel@mediatek.com>
- <20220428114835.3ktimyz2tzzqdcbg@vireshk-i7>
- <27a5dddd91b3dcbd69f08c10108cdec808237ace.camel@mediatek.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6f1dDCVmeyq91xhXZCZayQyn+IZwU2L4aZ+Foq78eA4=;
+        b=RPGcppuqhFbc7bsVEpLHuccKNKgu+A83taJ2Aye5KSmaK4YHc+mDrT5NZSbtKpWABF
+         K7Veu+bS1JyOHLyJgBgJuQyERgLnB5D3znr0uz3zaEDQrqcQOQk/oHP9+eKLXY4IkHuX
+         LTIz4CT5DSRR69rCW+/tvFLlj+mbo2Ha7nMlE8vJhiHwrmLrn1Q4YuRdyvoOilCs8DeG
+         jWh4P+Ju4BPVJg7D47gHy33mfeF4h6rZ+tReosLeRxNDCm7TAJulB3yTQl2d34HHbPCs
+         2ZNDS+uZk46R5F4aF38LDThTJGoLo7T1fWm6fmRr9riI3Y0ReGcPj6mTsPb67OXWHW7l
+         dd+w==
+X-Gm-Message-State: AOAM532yIoeBvI5Vrsrlu58VsS+5+WJtDNz8NNFxq1ks/WKRhrTA8KGA
+        +PuBCTADEBE1nJ10qzmTmpAXBA==
+X-Google-Smtp-Source: ABdhPJzTuUXZBXabjBTqCkCCerSU7CeFyLjRBzDtRGc7Ho1xl58OdSJcNj30Fj6JPJEt2c2wsY2Wvw==
+X-Received: by 2002:a17:906:c110:b0:6e0:dc2a:3393 with SMTP id do16-20020a170906c11000b006e0dc2a3393mr19274768ejc.512.1651654071403;
+        Wed, 04 May 2022 01:47:51 -0700 (PDT)
+Received: from [192.168.0.210] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id gv3-20020a1709072bc300b006f3ef214db7sm5542893ejc.29.2022.05.04.01.47.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 01:47:50 -0700 (PDT)
+Message-ID: <0793b555-b734-7a45-ba1e-c525c9a95d41@linaro.org>
+Date:   Wed, 4 May 2022 10:47:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <27a5dddd91b3dcbd69f08c10108cdec808237ace.camel@mediatek.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] PM: Domains: Extend dev_pm_domain_detach() doc
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220401084950.118998-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220401084950.118998-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,25 +74,13 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03-05-22, 19:33, Rex-BC Chen wrote:
-> Our observation tells us cpufreq_online is setting only once at boot
-> for one cpu cluster.
-> But we can see the problem repeatly occurs once cpufreq_get is invoked.
+On 01/04/2022 10:49, Krzysztof Kozlowski wrote:
+> Mention all domain attach menthods which dev_pm_domain_detach()
+> reverses.
 > 
-> e.g.
-> [ 71.154560] cpufreq: Warning: CPU frequency out of sync: cpufreq and
-> timing core thinks of 500000, is 499999 kHz
-> [ 71.155880] cpufreq: notification 0 of frequency transition to 499999
-> kHz
-> [ 71.156777] cpufreq: notification 1 of frequency transition to 499999
-> kHz
-> [ 71.187241] cpufreq: target for CPU 0: 500000 kHz, relation 0,
-> requested 500000 kHz
-> [ 71.188246] cpufreq: target_freq/policy->cur: 500000/499999 kHz
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Lemme know if this helps:
+Any comments on this patch?
 
-https://lore.kernel.org/lkml/39e39a7d30c8ee6af81fb64670a330abeb87402e.1651652493.git.viresh.kumar@linaro.org/
-
--- 
-viresh
+Best regards,
+Krzysztof
