@@ -2,182 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF34751B050
-	for <lists+linux-pm@lfdr.de>; Wed,  4 May 2022 23:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA0B451B085
+	for <lists+linux-pm@lfdr.de>; Wed,  4 May 2022 23:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378577AbiEDVWf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 May 2022 17:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36194 "EHLO
+        id S1357747AbiEDVbF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 May 2022 17:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378561AbiEDVWd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 May 2022 17:22:33 -0400
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6EB51580;
-        Wed,  4 May 2022 14:18:55 -0700 (PDT)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-e93bbb54f9so2472278fac.12;
-        Wed, 04 May 2022 14:18:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=S5KOsETtEM/tlLh5aE4TllMhkuOxHv7tKaCHP6S4dRs=;
-        b=meSoVHFyMu9XzuL5NYYuF/42g3MrcFOvn/6Blo8+9ojSM8x1iGh/FtVc4t3KJt7Crc
-         Y5OAEByzofLzVTFIGNEdJGRHGugIa/CiNpoDezNpXgGItMKMn8sh95q+YiGEZtqYcbNf
-         d2yLJe/fDXZG0o1Ri9X5xiaBW5N2H8jlt/rYvu6+l2g2HkDqKnUZmbezNQo2Eju8TT4p
-         Y0/Irem2qPk+TkOEq9EAzWeG4wrVVVlC27DcEwprzenxJgdlxD5W2ubW+l16kssI00/1
-         ZliX2s0ScWKyZgmvgL13y8QDZCfC5X8JkmhsKMllMQZQop/OeIrgZ7/xUoTQc6pRcGzy
-         YCog==
-X-Gm-Message-State: AOAM531oiZOyMyoNLGQ6c1u+vWrNsSPrkTLKe9eXuXWLSHAXNW+yfJ6z
-        wnwuwrb7dEG3ohpmw2d2Tg==
-X-Google-Smtp-Source: ABdhPJx70C27VXLkiWuEEIrWSrTpQJyJY8Bcpnd3QFecXI5OFZqDfycowXXO+amY4bM1axvVUtwzWg==
-X-Received: by 2002:a05:6870:7a8:b0:e5:d471:1e82 with SMTP id en40-20020a05687007a800b000e5d4711e82mr785288oab.138.1651699135188;
-        Wed, 04 May 2022 14:18:55 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m1-20020a056808024100b00325cda1ff88sm15372oie.7.2022.05.04.14.18.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 May 2022 14:18:54 -0700 (PDT)
-Received: (nullmailer pid 2242697 invoked by uid 1000);
-        Wed, 04 May 2022 21:18:52 -0000
-Date:   Wed, 4 May 2022 16:18:52 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-clk@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-        netdev@vger.kernel.org, Dario Binacchi <dariobin@libero.it>,
-        Han Xu <han.xu@nxp.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Richard Weinberger <richard@nod.at>,
-        Chen-Yu Tsai <wens@csie.org>, linux-mtd@lists.infradead.org,
-        linux-can@vger.kernel.org, linux-iio@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Mark Brown <broonie@kernel.org>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        alsa-devel@alsa-project.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-serial@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-phy@lists.infradead.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-rtc@vger.kernel.org, Jonathan Hunter <jonathanh@nvidia.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        dri-devel@lists.freedesktop.org, linux-mmc@vger.kernel.org,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Drop redundant 'maxItems/minItems' in
- if/then schemas
-Message-ID: <YnLtvA9hWMSIfSP7@robh.at.kernel.org>
-References: <20220503162738.3827041-1-robh@kernel.org>
+        with ESMTP id S235839AbiEDVbC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 May 2022 17:31:02 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620E446665;
+        Wed,  4 May 2022 14:27:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=dpN78FnXP8xKsKthCe3ePYGrznnidWC78ijJKGIis+s=; b=VzNshjcWDWgTdIjmwACWbnjJ/H
+        mQcB13lNG3fglzHQC/FUqdo2dvwKWsRAKNIc/TJuBa97Z8kYuf2lpVRvpBu62ga3ovDrsi08aDNiE
+        OlqogXHjD4qsmKbgS2LbXN2AOGnhdCvdtCVo6IDt0imworVavUuV/zNlIT6mNaTQhnLm07TNtoK4m
+        Ihl3ULKYuFP6cuYPQF485CZFlEA6oPcsLGDcH0IfHz/dstflDSmqrZB+ksN5MQ7uiQlVVpBT+K7Ib
+        0RM9kXieFgdNepPjq9LySneGSuViPcHimXjyBUf5+knfLf159kvuFYr1c8xkwmLdvzZ/p8/HjZAHo
+        dOADxIVQ==;
+Received: from [179.113.53.197] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nmMWW-0004FF-4B; Wed, 04 May 2022 23:27:04 +0200
+Message-ID: <976c2d62-09e7-9f8d-d978-12749a2f70e6@igalia.com>
+Date:   Wed, 4 May 2022 18:26:28 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220503162738.3827041-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 07/30] mips: ip22: Reword PANICED to PANICKED and remove
+ useless header
+Content-Language: en-US
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com, pmladek@suse.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-8-gpiccoli@igalia.com>
+ <20220504203224.GA23475@alpha.franken.de>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20220504203224.GA23475@alpha.franken.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 03 May 2022 11:27:38 -0500, Rob Herring wrote:
-> Another round of removing redundant minItems/maxItems when 'items' list is
-> specified. This time it is in if/then schemas as the meta-schema was
-> failing to check this case.
+On 04/05/2022 17:32, Thomas Bogendoerfer wrote:
+> [...]
 > 
-> If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
-> same size as the list is redundant and can be dropped. Note that is DT
-> schema specific behavior and not standard json-schema behavior. The tooling
-> will fixup the final schema adding any unspecified minItems/maxItems.
+> applied to mips-next.
 > 
-> Cc: Abel Vesa <abel.vesa@nxp.com>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> Cc: Jonathan Cameron <jic23@kernel.org>
-> Cc: Lars-Peter Clausen <lars@metafoo.de>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Jonathan Hunter <jonathanh@nvidia.com>
-> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> Cc: Wolfgang Grandegger <wg@grandegger.com>
-> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Alessandro Zummo <a.zummo@towertech.it>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: "Niklas Söderlund" <niklas.soderlund@ragnatech.se>
-> Cc: Anson Huang <Anson.Huang@nxp.com>
-> Cc: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-> Cc: Han Xu <han.xu@nxp.com>
-> Cc: Dario Binacchi <dariobin@libero.it>
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Peter Ujfalusi <peter.ujfalusi@ti.com>
-> Cc: linux-clk@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-iio@vger.kernel.org
-> Cc: linux-mmc@vger.kernel.org
-> Cc: linux-mtd@lists.infradead.org
-> Cc: linux-can@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-phy@lists.infradead.org
-> Cc: linux-rtc@vger.kernel.org
-> Cc: linux-serial@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-pm@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/clock/imx8m-clock.yaml           |  4 ----
->  .../bindings/display/bridge/renesas,lvds.yaml |  4 ----
->  .../bindings/display/renesas,du.yaml          | 23 -------------------
->  .../bindings/iio/adc/st,stm32-adc.yaml        |  2 --
->  .../bindings/mmc/nvidia,tegra20-sdhci.yaml    |  7 +-----
->  .../devicetree/bindings/mtd/gpmi-nand.yaml    |  2 --
->  .../bindings/net/can/bosch,c_can.yaml         |  3 ---
->  .../bindings/phy/brcm,sata-phy.yaml           | 10 ++++----
->  .../bindings/rtc/allwinner,sun6i-a31-rtc.yaml | 10 --------
->  .../bindings/serial/samsung_uart.yaml         |  4 ----
->  .../sound/allwinner,sun4i-a10-i2s.yaml        |  1 -
->  .../bindings/sound/ti,j721e-cpb-audio.yaml    |  2 --
->  .../bindings/thermal/rcar-gen3-thermal.yaml   |  1 -
->  13 files changed, 5 insertions(+), 68 deletions(-)
+> Thomas.
 > 
 
-Applied, thanks!
+Thanks a bunch Thomas =)
