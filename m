@@ -2,42 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4361519C01
-	for <lists+linux-pm@lfdr.de>; Wed,  4 May 2022 11:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BC9519C9D
+	for <lists+linux-pm@lfdr.de>; Wed,  4 May 2022 12:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347560AbiEDJke (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 May 2022 05:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48732 "EHLO
+        id S1347931AbiEDKPF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 May 2022 06:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347574AbiEDJkb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 May 2022 05:40:31 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B8BF827147;
-        Wed,  4 May 2022 02:36:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8695A1570;
-        Wed,  4 May 2022 02:36:53 -0700 (PDT)
-Received: from e120937-lin.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B4F9D3FA50;
-        Wed,  4 May 2022 02:36:51 -0700 (PDT)
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
-        vincent.guittot@linaro.org, daniel.lezcano@linaro.org,
-        tarek.el-sherbiny@arm.com, adrian.slatineanu@arm.com,
-        souvik.chakravarty@arm.com,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH 7/7] powercap: arm_scmi: Add SCMI Powercap based driver
-Date:   Wed,  4 May 2022 10:36:09 +0100
-Message-Id: <20220504093609.3077646-8-cristian.marussi@arm.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220504093609.3077646-1-cristian.marussi@arm.com>
-References: <20220504093609.3077646-1-cristian.marussi@arm.com>
+        with ESMTP id S1347888AbiEDKPD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 May 2022 06:15:03 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0938A13F6F
+        for <linux-pm@vger.kernel.org>; Wed,  4 May 2022 03:11:28 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id k1so1006203pll.4
+        for <linux-pm@vger.kernel.org>; Wed, 04 May 2022 03:11:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4PBl8xW2PSVI88j/b+bhi+tuhcm4YohlmH+sr2K1/cw=;
+        b=jjpgmjCDYPoVR7p5fJq+gv0fE5KfgYNqRIkHrfJI5dpd5/gReG1zqXsB86ajj3smDI
+         Jgw4zMqtRukgZHGtsntByJIi65cd+b6TdKuIAWBci7tPqgnC7EnBdGQCGncbCNlehV5R
+         6fRWAqij4LQYlOZX/cTyQwRZnye7FTyvwqHXq13DiGa/Rx49batyBAOtWufZVrpTouav
+         qCUIFo+RGfiQI6ZEoUFfNrcYC9p7/pnsJdKe1nW0b89h+SqorqCiQIydrRQmN41IG3ZM
+         PVfhtNMex8iKDO5IGl37wlUbMogoapWtzN4V9swZcF21zcNiOUNfcy3gaN2i3RHvZ5Mb
+         rO/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4PBl8xW2PSVI88j/b+bhi+tuhcm4YohlmH+sr2K1/cw=;
+        b=cppJHDaketuUmUBviJRETwzZX5rSqCWvu8kGhL5gM5Ibo/bDibWxtcH2cN6f3+7QjM
+         dyqTKAaBSXOQOMhOXhFLUjc9z5cx3n0QraXlBPSw7RR/Kx+nOAdGAxZUAkrvGHOu3LNE
+         kPqlSwe7d2vSxkgTRwkZWXyDltNASiZVajHFb5MsNOTEttGDGcIVYys9mwbHpdsY4qlI
+         vqhFM3mD7TXZcbm88nDaMSNdBBn3EA96qXIi9g4gxELrju0Bb0/nhACqlJlgfLufPBjT
+         88EprV4gXMYCkYnQYyIdUpr/EIsW1XIhcI5FYfSR1vdYfytg3xipcC7mj1ag6010zFF/
+         9qcA==
+X-Gm-Message-State: AOAM530ShGpUN0Ztv40cGNX0tfBrb1+6uExoT7cejoumxjYqqBAXuRBw
+        SFbiLItRDjWWyYE2A1t7zh+dXA==
+X-Google-Smtp-Source: ABdhPJwoydtOgEFBuhFb/unLnpikeNggmtykmu7XmJdAH08BreVz+Css31CxDKVEQqk6f3yyI/wdjQ==
+X-Received: by 2002:a17:90b:4a05:b0:1dc:1a2c:8c69 with SMTP id kk5-20020a17090b4a0500b001dc1a2c8c69mr9313162pjb.9.1651659087375;
+        Wed, 04 May 2022 03:11:27 -0700 (PDT)
+Received: from localhost ([122.162.207.161])
+        by smtp.gmail.com with ESMTPSA id gn4-20020a17090ac78400b001d25dfb9d39sm2882077pjb.14.2022.05.04.03.11.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 May 2022 03:11:26 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] opp: Reorder definition of ceil/floor helpers
+Date:   Wed,  4 May 2022 15:41:22 +0530
+Message-Id: <22079af7df5a5dfef1c4d160abfd43035211759e.1651659079.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,599 +71,281 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a powercap driver that, using the ARM SCMI Protocol to query the SCMI
-platform firmware for the list of existing Powercap domains, registers all
-of such discovered domains under the new 'arm-scmi' powercap control type.
+Reorder the helpers to keep all freq specific ones, followed by level
+and bw.
 
-A new simple powercap zone and constraint is registered for all the SCMI
-powercap zones that are found.
+No functional change.
 
-Cc: Rafael J. Wysocki <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/powercap/Kconfig             |  13 +
- drivers/powercap/Makefile            |   1 +
- drivers/powercap/arm_scmi_powercap.c | 537 +++++++++++++++++++++++++++
- 3 files changed, 551 insertions(+)
- create mode 100644 drivers/powercap/arm_scmi_powercap.c
+ drivers/opp/core.c     | 194 ++++++++++++++++++++---------------------
+ include/linux/pm_opp.h |  22 ++---
+ 2 files changed, 108 insertions(+), 108 deletions(-)
 
-diff --git a/drivers/powercap/Kconfig b/drivers/powercap/Kconfig
-index 515e3ceb3393..90d33cd1b670 100644
---- a/drivers/powercap/Kconfig
-+++ b/drivers/powercap/Kconfig
-@@ -44,6 +44,19 @@ config IDLE_INJECT
- 	  synchronously on a set of specified CPUs or alternatively
- 	  on a per CPU basis.
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 48606f52759d..84063eaebb91 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -456,103 +456,6 @@ struct dev_pm_opp *dev_pm_opp_find_freq_exact(struct device *dev,
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_opp_find_freq_exact);
  
-+config ARM_SCMI_POWERCAP
-+	tristate "ARM SCMI Powercap driver"
-+	depends on ARM_SCMI_PROTOCOL
-+	help
-+	  This enables support for the ARM Powercap based on ARM SCMI
-+	  Powercap protocol.
-+
-+	  ARM SCMI Powercap protocol allows power limits to be enforced
-+	  and monitored against the SCMI Powercap domains advertised as
-+	  available by the SCMI platform firmware.
-+
-+	  When compiled as module it will be called arm_scmi_powercap.ko.
-+
- config DTPM
- 	bool "Power capping for Dynamic Thermal Power Management (EXPERIMENTAL)"
- 	depends on OF
-diff --git a/drivers/powercap/Makefile b/drivers/powercap/Makefile
-index 494617cdad88..4474201b4aa7 100644
---- a/drivers/powercap/Makefile
-+++ b/drivers/powercap/Makefile
-@@ -6,3 +6,4 @@ obj-$(CONFIG_POWERCAP)	+= powercap_sys.o
- obj-$(CONFIG_INTEL_RAPL_CORE) += intel_rapl_common.o
- obj-$(CONFIG_INTEL_RAPL) += intel_rapl_msr.o
- obj-$(CONFIG_IDLE_INJECT) += idle_inject.o
-+obj-$(CONFIG_ARM_SCMI_POWERCAP) += arm_scmi_powercap.o
-diff --git a/drivers/powercap/arm_scmi_powercap.c b/drivers/powercap/arm_scmi_powercap.c
-new file mode 100644
-index 000000000000..abaa21563bc5
---- /dev/null
-+++ b/drivers/powercap/arm_scmi_powercap.c
-@@ -0,0 +1,537 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * SCMI Powercap support.
+-/**
+- * dev_pm_opp_find_level_exact() - search for an exact level
+- * @dev:		device for which we do this operation
+- * @level:		level to search for
+- *
+- * Return: Searches for exact match in the opp table and returns pointer to the
+- * matching opp if found, else returns ERR_PTR in case of error and should
+- * be handled using IS_ERR. Error return values can be:
+- * EINVAL:	for bad pointer
+- * ERANGE:	no match found for search
+- * ENODEV:	if device not found in list of registered devices
+- *
+- * The callers are required to call dev_pm_opp_put() for the returned OPP after
+- * use.
+- */
+-struct dev_pm_opp *dev_pm_opp_find_level_exact(struct device *dev,
+-					       unsigned int level)
+-{
+-	struct opp_table *opp_table;
+-	struct dev_pm_opp *temp_opp, *opp = ERR_PTR(-ERANGE);
+-
+-	opp_table = _find_opp_table(dev);
+-	if (IS_ERR(opp_table)) {
+-		int r = PTR_ERR(opp_table);
+-
+-		dev_err(dev, "%s: OPP table not found (%d)\n", __func__, r);
+-		return ERR_PTR(r);
+-	}
+-
+-	mutex_lock(&opp_table->lock);
+-
+-	list_for_each_entry(temp_opp, &opp_table->opp_list, node) {
+-		if (temp_opp->level == level) {
+-			opp = temp_opp;
+-
+-			/* Increment the reference count of OPP */
+-			dev_pm_opp_get(opp);
+-			break;
+-		}
+-	}
+-
+-	mutex_unlock(&opp_table->lock);
+-	dev_pm_opp_put_opp_table(opp_table);
+-
+-	return opp;
+-}
+-EXPORT_SYMBOL_GPL(dev_pm_opp_find_level_exact);
+-
+-/**
+- * dev_pm_opp_find_level_ceil() - search for an rounded up level
+- * @dev:		device for which we do this operation
+- * @level:		level to search for
+- *
+- * Return: Searches for rounded up match in the opp table and returns pointer
+- * to the  matching opp if found, else returns ERR_PTR in case of error and
+- * should be handled using IS_ERR. Error return values can be:
+- * EINVAL:	for bad pointer
+- * ERANGE:	no match found for search
+- * ENODEV:	if device not found in list of registered devices
+- *
+- * The callers are required to call dev_pm_opp_put() for the returned OPP after
+- * use.
+- */
+-struct dev_pm_opp *dev_pm_opp_find_level_ceil(struct device *dev,
+-					      unsigned int *level)
+-{
+-	struct opp_table *opp_table;
+-	struct dev_pm_opp *temp_opp, *opp = ERR_PTR(-ERANGE);
+-
+-	opp_table = _find_opp_table(dev);
+-	if (IS_ERR(opp_table)) {
+-		int r = PTR_ERR(opp_table);
+-
+-		dev_err(dev, "%s: OPP table not found (%d)\n", __func__, r);
+-		return ERR_PTR(r);
+-	}
+-
+-	mutex_lock(&opp_table->lock);
+-
+-	list_for_each_entry(temp_opp, &opp_table->opp_list, node) {
+-		if (temp_opp->available && temp_opp->level >= *level) {
+-			opp = temp_opp;
+-			*level = opp->level;
+-
+-			/* Increment the reference count of OPP */
+-			dev_pm_opp_get(opp);
+-			break;
+-		}
+-	}
+-
+-	mutex_unlock(&opp_table->lock);
+-	dev_pm_opp_put_opp_table(opp_table);
+-
+-	return opp;
+-}
+-EXPORT_SYMBOL_GPL(dev_pm_opp_find_level_ceil);
+-
+ static noinline struct dev_pm_opp *_find_freq_ceil(struct opp_table *opp_table,
+ 						   unsigned long *freq)
+ {
+@@ -729,6 +632,103 @@ struct dev_pm_opp *dev_pm_opp_find_freq_ceil_by_volt(struct device *dev,
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_opp_find_freq_ceil_by_volt);
+ 
++/**
++ * dev_pm_opp_find_level_exact() - search for an exact level
++ * @dev:		device for which we do this operation
++ * @level:		level to search for
 + *
-+ * Copyright (C) 2022 ARM Ltd.
++ * Return: Searches for exact match in the opp table and returns pointer to the
++ * matching opp if found, else returns ERR_PTR in case of error and should
++ * be handled using IS_ERR. Error return values can be:
++ * EINVAL:	for bad pointer
++ * ERANGE:	no match found for search
++ * ENODEV:	if device not found in list of registered devices
++ *
++ * The callers are required to call dev_pm_opp_put() for the returned OPP after
++ * use.
 + */
-+
-+#include <linux/device.h>
-+#include <linux/math.h>
-+#include <linux/limits.h>
-+#include <linux/list.h>
-+#include <linux/module.h>
-+#include <linux/powercap.h>
-+#include <linux/scmi_protocol.h>
-+
-+#define to_scmi_powercap_zone(z)		\
-+	container_of(z, struct scmi_powercap_zone, zone)
-+
-+static const struct scmi_powercap_proto_ops *powercap_ops;
-+
-+struct scmi_powercap_zone {
-+	unsigned int height;
-+	struct device *dev;
-+	struct scmi_protocol_handle *ph;
-+	const struct scmi_powercap_info *info;
-+	struct scmi_powercap_zone *spzones;
-+	struct powercap_zone zone;
-+	struct list_head node;
-+};
-+
-+struct scmi_powercap_root {
-+	unsigned int num_zones;
-+	struct scmi_powercap_zone *spzones;
-+	struct list_head *registered_zones;
-+};
-+
-+struct powercap_control_type *scmi_top_pcntrl;
-+
-+static int scmi_powercap_zone_release(struct powercap_zone *pz)
++struct dev_pm_opp *dev_pm_opp_find_level_exact(struct device *dev,
++					       unsigned int level)
 +{
-+	return 0;
-+}
++	struct opp_table *opp_table;
++	struct dev_pm_opp *temp_opp, *opp = ERR_PTR(-ERANGE);
 +
-+static int scmi_powercap_get_max_power_range_uw(struct powercap_zone *pz,
-+						u64 *max_power_range_uw)
-+{
-+	*max_power_range_uw = (u64)U32_MAX;
-+	return 0;
-+}
++	opp_table = _find_opp_table(dev);
++	if (IS_ERR(opp_table)) {
++		int r = PTR_ERR(opp_table);
 +
-+static int scmi_powercap_get_power_uw(struct powercap_zone *pz,
-+				      u64 *power_uw)
-+{
-+	int ret;
-+	u32 avg_power, pai;
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
++		dev_err(dev, "%s: OPP table not found (%d)\n", __func__, r);
++		return ERR_PTR(r);
++	}
 +
-+	if (!spz->info)
-+		return -ENODEV;
++	mutex_lock(&opp_table->lock);
 +
-+	if (!spz->info->powercap_monitoring)
-+		return -EINVAL;
++	list_for_each_entry(temp_opp, &opp_table->opp_list, node) {
++		if (temp_opp->level == level) {
++			opp = temp_opp;
 +
-+	ret = powercap_ops->measurements_get(spz->ph, spz->info->id, &avg_power,
-+					     &pai);
-+	if (ret)
-+		return ret;
-+
-+	if (spz->info->powercap_scale_mw)
-+		*power_uw = (u64)(avg_power * 1000);
-+	else
-+		*power_uw = (u64)avg_power;
-+
-+	return 0;
-+}
-+
-+static const struct powercap_zone_ops zone_ops = {
-+	.get_max_power_range_uw = scmi_powercap_get_max_power_range_uw,
-+	.get_power_uw = scmi_powercap_get_power_uw,
-+	.release = scmi_powercap_zone_release,
-+};
-+
-+static inline int
-+scmi_powercap_normalize_cap(const struct scmi_powercap_info *info,
-+			    u64 power_limit_uw, u32 *normalized)
-+{
-+	u64 req_power;
-+
-+	if (info->powercap_scale_mw)
-+		req_power = DIV_ROUND_UP_ULL(power_limit_uw, 1000);
-+	else
-+		req_power = power_limit_uw;
-+
-+	if (req_power > info->max_power_cap)
-+		*normalized = info->max_power_cap;
-+	else if (req_power < info->min_power_cap)
-+		*normalized = info->min_power_cap;
-+	else
-+		*normalized = (u32)req_power;
-+
-+	*normalized = rounddown(*normalized, info->power_cap_step);
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_set_power_limit_uw(struct powercap_zone *pz, int cid,
-+					    u64 power_uw)
-+{
-+	int ret;
-+	u32 power;
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	if (!spz->info->powercap_cap_config)
-+		return -EINVAL;
-+
-+	ret = scmi_powercap_normalize_cap(spz->info, power_uw, &power);
-+	if (ret)
-+		return ret;
-+
-+	return powercap_ops->cap_set(spz->ph, spz->info->id, power, false);
-+}
-+
-+static int scmi_powercap_get_power_limit_uw(struct powercap_zone *pz, int cid,
-+					    u64 *power_limit_uw)
-+{
-+	int ret;
-+	u32 power;
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	ret = powercap_ops->cap_get(spz->ph, spz->info->id, &power);
-+	if (ret)
-+		return ret;
-+
-+	if (spz->info->powercap_scale_mw)
-+		*power_limit_uw = power * 1000;
-+	else
-+		*power_limit_uw = power;
-+
-+	return 0;
-+}
-+
-+static inline int
-+scmi_powercap_normalize_time(const struct scmi_powercap_info *info,
-+			     u64 time_us, u32 *normalized)
-+{
-+	if (time_us > info->max_pai)
-+		*normalized = info->max_pai;
-+	else if (time_us < info->min_pai)
-+		*normalized = info->min_pai;
-+	else
-+		*normalized = (u32)time_us;
-+
-+	*normalized = rounddown(*normalized, info->pai_step);
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_set_time_window_us(struct powercap_zone *pz, int cid,
-+					    u64 time_window_us)
-+{
-+	int ret;
-+	u32 pai;
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	if (!spz->info->powercap_pai_config)
-+		return -EINVAL;
-+
-+	ret = scmi_powercap_normalize_time(spz->info, time_window_us, &pai);
-+	if (ret)
-+		return ret;
-+
-+	return powercap_ops->pai_set(spz->ph, spz->info->id, pai);
-+}
-+
-+static int scmi_powercap_get_time_window_us(struct powercap_zone *pz, int cid,
-+					    u64 *time_window_us)
-+{
-+	int ret;
-+	u32 pai;
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	ret = powercap_ops->pai_get(spz->ph, spz->info->id, &pai);
-+	if (ret)
-+		return ret;
-+
-+	*time_window_us = (u64)pai;
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_max_power_uw(struct powercap_zone *pz, int cid,
-+					  u64 *max_power_uw)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	if (spz->info->powercap_scale_uw)
-+		*max_power_uw = (u64)spz->info->max_power_cap;
-+	else
-+		*max_power_uw = (u64)(spz->info->max_power_cap * 1000);
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_min_power_uw(struct powercap_zone *pz, int cid,
-+					  u64 *min_power_uw)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	if (spz->info->powercap_scale_uw)
-+		*min_power_uw = (u64)spz->info->min_power_cap;
-+	else
-+		*min_power_uw = (u64)(spz->info->min_power_cap * 1000);
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_max_time_window_us(struct powercap_zone *pz,
-+						int cid, u64 *time_window_us)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	*time_window_us = (u64)spz->info->max_pai;
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_min_time_window_us(struct powercap_zone *pz,
-+						int cid, u64 *time_window_us)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	*time_window_us = (u64)spz->info->min_pai;
-+
-+	return 0;
-+}
-+
-+static const char *scmi_powercap_get_name(struct powercap_zone *pz, int cid)
-+{
-+	return "SCMI power-cap";
-+}
-+
-+static const struct powercap_zone_constraint_ops constraint_ops  = {
-+	.set_power_limit_uw = scmi_powercap_set_power_limit_uw,
-+	.get_power_limit_uw = scmi_powercap_get_power_limit_uw,
-+	.set_time_window_us = scmi_powercap_set_time_window_us,
-+	.get_time_window_us = scmi_powercap_get_time_window_us,
-+	.get_max_power_uw = scmi_powercap_get_max_power_uw,
-+	.get_min_power_uw = scmi_powercap_get_min_power_uw,
-+	.get_max_time_window_us = scmi_powercap_get_max_time_window_us,
-+	.get_min_time_window_us = scmi_powercap_get_min_time_window_us,
-+	.get_name = scmi_powercap_get_name,
-+};
-+
-+static void scmi_powercap_unregister_all_zones(struct scmi_powercap_root *pr)
-+{
-+	int i;
-+
-+	/* Un-register children zones first starting from the leaves */
-+	for (i = pr->num_zones - 1; i >= 0; i--) {
-+		if (!list_empty(&pr->registered_zones[i])) {
-+			struct scmi_powercap_zone *spz;
-+
-+			list_for_each_entry(spz, &pr->registered_zones[i], node)
-+				powercap_unregister_zone(scmi_top_pcntrl,
-+							 &spz->zone);
++			/* Increment the reference count of OPP */
++			dev_pm_opp_get(opp);
++			break;
 +		}
 +	}
++
++	mutex_unlock(&opp_table->lock);
++	dev_pm_opp_put_opp_table(opp_table);
++
++	return opp;
 +}
-+
-+static inline bool
-+scmi_powercap_is_zone_registered(struct scmi_powercap_zone *spz)
-+{
-+	return !list_empty(&spz->node);
-+}
-+
-+static inline unsigned int
-+scmi_powercap_get_zone_height(struct scmi_powercap_zone *spz)
-+{
-+	if (spz->info->parent_id == SCMI_POWERCAP_ROOT_ZONE_ID)
-+		return 0;
-+
-+	return spz->spzones[spz->info->parent_id].height + 1;
-+}
-+
-+static inline struct scmi_powercap_zone *
-+scmi_powercap_get_parent_zone(struct scmi_powercap_zone *spz)
-+{
-+	if (spz->info->parent_id == SCMI_POWERCAP_ROOT_ZONE_ID)
-+		return NULL;
-+
-+	return &spz->spzones[spz->info->parent_id];
-+}
++EXPORT_SYMBOL_GPL(dev_pm_opp_find_level_exact);
 +
 +/**
-+ * scmi_powercap_register_zone  - Register an SCMI powercap zone recursively
++ * dev_pm_opp_find_level_ceil() - search for an rounded up level
++ * @dev:		device for which we do this operation
++ * @level:		level to search for
 + *
-+ * @pr: A reference to the root powercap zones descriptors
-+ * @spz: A reference to the SCMI powercap zone to register
++ * Return: Searches for rounded up match in the opp table and returns pointer
++ * to the  matching opp if found, else returns ERR_PTR in case of error and
++ * should be handled using IS_ERR. Error return values can be:
++ * EINVAL:	for bad pointer
++ * ERANGE:	no match found for search
++ * ENODEV:	if device not found in list of registered devices
 + *
-+ * When registering SCMI powercap zones with the powercap framework we should
-+ * take care to always register zones starting from the root ones and to
-+ * deregister starting from the leaves.
-+ *
-+ * Unfortunately we cannot assume that the array of available SCMI powercap
-+ * zones provided by the SCMI platform firmware is built to comply with such
-+ * requirement.
-+ *
-+ * This function, given an SCMI powercap zone to register, takes care to walk
-+ * the SCMI powercap zones tree up to the root looking recursively for
-+ * unregistered parent zones before regsitering the provided zone; at the same
-+ * time each registered zone height in such a tree is accounted for and each
-+ * zone, once registered, is stored in the @registered_zones array that is
-+ * indexed by zone height: this way will be trivial, at unregister time, to walk
-+ * the @registered_zones array backward and unregister all the zones starting
-+ * from the leaves, removing children zones before parents.
-+ *
-+ * While doing this, we prune away any zone marked as invalid (like the ones
-+ * sporting an SCMI abstract power scale) as long as they are positioned as
-+ * leaves in the SCMI powercap zones hierarchy: any non-leaf invalid zone causes
-+ * the entire process to fail since we cannot assume the correctness of an SCMI
-+ * powercap zones hierarchy if some of the internal nodes are missing.
-+ *
-+ * Note that the array of SCMI powercap zones as returned by the SCMI platform
-+ * is known to be sane, i.e. zones relationships have been validated at the
-+ * protocol layer.
-+ *
-+ * Return: 0 on Success
++ * The callers are required to call dev_pm_opp_put() for the returned OPP after
++ * use.
 + */
-+static int scmi_powercap_register_zone(struct scmi_powercap_root *pr,
-+				       struct scmi_powercap_zone *spz)
++struct dev_pm_opp *dev_pm_opp_find_level_ceil(struct device *dev,
++					      unsigned int *level)
 +{
-+	int ret = 0;
-+	struct scmi_powercap_zone *parent;
++	struct opp_table *opp_table;
++	struct dev_pm_opp *temp_opp, *opp = ERR_PTR(-ERANGE);
 +
-+	if (!spz->info)
-+		return ret;
++	opp_table = _find_opp_table(dev);
++	if (IS_ERR(opp_table)) {
++		int r = PTR_ERR(opp_table);
 +
-+	parent = scmi_powercap_get_parent_zone(spz);
-+	if (parent && !scmi_powercap_is_zone_registered(parent)) {
-+		/*
-+		 * Bail out if a parent domain was marked as unsupported:
-+		 * only domains participating as leaves can be skipped.
-+		 */
-+		if (!parent->info)
-+			return -ENODEV;
-+
-+		ret = scmi_powercap_register_zone(pr, parent);
-+		if (ret)
-+			return ret;
++		dev_err(dev, "%s: OPP table not found (%d)\n", __func__, r);
++		return ERR_PTR(r);
 +	}
 +
-+	if (!scmi_powercap_is_zone_registered(spz)) {
-+		struct powercap_zone *z;
++	mutex_lock(&opp_table->lock);
 +
-+		z = powercap_register_zone(&spz->zone,
-+					   scmi_top_pcntrl,
-+					   spz->info->name,
-+					   parent ? &parent->zone : NULL,
-+					   &zone_ops, 1, &constraint_ops);
-+		if (!IS_ERR(z)) {
-+			spz->height = scmi_powercap_get_zone_height(spz);
-+			list_add(&spz->node,
-+				 &pr->registered_zones[spz->height]);
-+			dev_dbg(spz->dev,
-+				"Registered node %s - parent %s - height:%d\n",
-+				spz->info->name,
-+				parent ? parent->info->name : "ROOT",
-+				spz->height);
-+			ret = 0;
-+		} else {
-+			ret = PTR_ERR(z);
-+			dev_err(spz->dev,
-+				"Error registering node:%s - parent:%s - h:%d - ret:%d\n",
-+				 spz->info->name,
-+				 parent ? parent->info->name : "ROOT",
-+				 spz->height, ret);
++	list_for_each_entry(temp_opp, &opp_table->opp_list, node) {
++		if (temp_opp->available && temp_opp->level >= *level) {
++			opp = temp_opp;
++			*level = opp->level;
++
++			/* Increment the reference count of OPP */
++			dev_pm_opp_get(opp);
++			break;
 +		}
 +	}
 +
-+	return ret;
-+}
++	mutex_unlock(&opp_table->lock);
++	dev_pm_opp_put_opp_table(opp_table);
 +
-+static int scmi_powercap_probe(struct scmi_device *sdev)
++	return opp;
++}
++EXPORT_SYMBOL_GPL(dev_pm_opp_find_level_ceil);
++
+ /**
+  * dev_pm_opp_find_bw_ceil() - Search for a rounded ceil bandwidth
+  * @dev:	device for which we do this operation
+diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+index dcea178868c9..6708b4ec244d 100644
+--- a/include/linux/pm_opp.h
++++ b/include/linux/pm_opp.h
+@@ -117,16 +117,16 @@ unsigned long dev_pm_opp_get_suspend_opp_freq(struct device *dev);
+ struct dev_pm_opp *dev_pm_opp_find_freq_exact(struct device *dev,
+ 					      unsigned long freq,
+ 					      bool available);
+-struct dev_pm_opp *dev_pm_opp_find_level_exact(struct device *dev,
+-					       unsigned int level);
+-struct dev_pm_opp *dev_pm_opp_find_level_ceil(struct device *dev,
+-					      unsigned int *level);
+-
+ struct dev_pm_opp *dev_pm_opp_find_freq_floor(struct device *dev,
+ 					      unsigned long *freq);
+ struct dev_pm_opp *dev_pm_opp_find_freq_ceil_by_volt(struct device *dev,
+ 						     unsigned long u_volt);
+ 
++struct dev_pm_opp *dev_pm_opp_find_level_exact(struct device *dev,
++					       unsigned int level);
++struct dev_pm_opp *dev_pm_opp_find_level_ceil(struct device *dev,
++					      unsigned int *level);
++
+ struct dev_pm_opp *dev_pm_opp_find_freq_ceil(struct device *dev,
+ 					     unsigned long *freq);
+ 
+@@ -250,12 +250,6 @@ static inline unsigned long dev_pm_opp_get_suspend_opp_freq(struct device *dev)
+ 	return 0;
+ }
+ 
+-static inline struct dev_pm_opp *dev_pm_opp_find_freq_exact(struct device *dev,
+-					unsigned long freq, bool available)
+-{
+-	return ERR_PTR(-EOPNOTSUPP);
+-}
+-
+ static inline struct dev_pm_opp *dev_pm_opp_find_level_exact(struct device *dev,
+ 					unsigned int level)
+ {
+@@ -268,6 +262,12 @@ static inline struct dev_pm_opp *dev_pm_opp_find_level_ceil(struct device *dev,
+ 	return ERR_PTR(-EOPNOTSUPP);
+ }
+ 
++static inline struct dev_pm_opp *dev_pm_opp_find_freq_exact(struct device *dev,
++					unsigned long freq, bool available)
 +{
-+	int ret, i;
-+	struct scmi_powercap_root *pr;
-+	struct scmi_powercap_zone *spz;
-+	struct scmi_protocol_handle *ph;
-+	struct device *dev = &sdev->dev;
-+	const struct scmi_handle *handle = sdev->handle;
-+
-+	if (!handle)
-+		return -ENODEV;
-+
-+	powercap_ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_POWERCAP,
-+						 &ph);
-+	if (IS_ERR(powercap_ops))
-+		return PTR_ERR(powercap_ops);
-+
-+	pr = devm_kzalloc(dev, sizeof(*pr), GFP_KERNEL);
-+	if (!pr)
-+		return -ENOMEM;
-+
-+	pr->num_zones = powercap_ops->num_domains_get(ph);
-+	if (pr->num_zones < 0) {
-+		dev_err(dev, "number of powercap domains not found\n");
-+		return pr->num_zones;
-+	}
-+
-+	pr->spzones = devm_kcalloc(dev, pr->num_zones,
-+				   sizeof(*pr->spzones), GFP_KERNEL);
-+	if (!pr->spzones)
-+		return -ENOMEM;
-+
-+	/* Allocate for worst possible scenario of maximum tree height. */
-+	pr->registered_zones = devm_kcalloc(dev, pr->num_zones,
-+					    sizeof(*pr->registered_zones),
-+					    GFP_KERNEL);
-+	if (!pr->registered_zones)
-+		return -ENOMEM;
-+
-+	for (i = 0, spz = pr->spzones; i < pr->num_zones; i++, spz++) {
-+		/*
-+		 * Powercap domains are validate by the protocol layer, i.e.
-+		 * when only non-NULL domains are returned here, whose
-+		 * parent_id is assured to point to another valid domain.
-+		 */
-+		spz->info = powercap_ops->info_get(ph, i);
-+
-+		spz->dev = dev;
-+		spz->ph = ph;
-+		spz->spzones = pr->spzones;
-+		INIT_LIST_HEAD(&spz->node);
-+		INIT_LIST_HEAD(&pr->registered_zones[i]);
-+
-+		/*
-+		 * Forcibly skip powercap domains using an abstract scale.
-+		 * Note that only leaves domains can be skipped, so this could
-+		 * lead later to a global failure.
-+		 */
-+		if (!spz->info->powercap_scale_uw &&
-+		    !spz->info->powercap_scale_mw) {
-+			dev_warn(dev,
-+				 "Abstract power scale not supported. Skip %s.\n",
-+				 spz->info->name);
-+			spz->info = NULL;
-+			continue;
-+		}
-+	}
-+
-+	/*
-+	 * Scan array of retrieved SCMI powercap domains and register them
-+	 * recursively starting from the root domains.
-+	 */
-+	for (i = 0, spz = pr->spzones; i < pr->num_zones; i++, spz++) {
-+		ret = scmi_powercap_register_zone(pr, spz);
-+		if (ret) {
-+			dev_err(dev,
-+				"Failed to register powercap zone %s - ret:%d\n",
-+				spz->info->name, ret);
-+			scmi_powercap_unregister_all_zones(pr);
-+			return ret;
-+		}
-+	}
-+
-+	dev_set_drvdata(dev, pr);
-+
-+	dev_info(dev, "Registered %d SCMI Powercap domains !\n", pr->num_zones);
-+
-+	return ret;
++	return ERR_PTR(-EOPNOTSUPP);
 +}
 +
-+static void scmi_powercap_remove(struct scmi_device *sdev)
-+{
-+	struct device *dev = &sdev->dev;
-+	struct scmi_powercap_root *pr = dev_get_drvdata(dev);
-+
-+	scmi_powercap_unregister_all_zones(pr);
-+}
-+
-+static const struct scmi_device_id scmi_id_table[] = {
-+	{ SCMI_PROTOCOL_POWERCAP, "powercap" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(scmi, scmi_id_table);
-+
-+static int scmi_powercap_setup(void)
-+{
-+	scmi_top_pcntrl = powercap_register_control_type(NULL, "arm-scmi", NULL);
-+	if (!scmi_top_pcntrl)
-+		return -ENODEV;
-+
-+	return 0;
-+}
-+
-+static void scmi_powercap_teardown(void)
-+{
-+	powercap_unregister_control_type(scmi_top_pcntrl);
-+}
-+
-+static struct scmi_driver scmi_powercap_driver = {
-+	.name = "scmi-powercap",
-+	.setup = scmi_powercap_setup,
-+	.teardown = scmi_powercap_teardown,
-+	.probe = scmi_powercap_probe,
-+	.remove = scmi_powercap_remove,
-+	.id_table = scmi_id_table,
-+};
-+module_scmi_driver(scmi_powercap_driver);
-+
-+MODULE_AUTHOR("Cristian Marussi <cristian.marussi@arm.com>");
-+MODULE_DESCRIPTION("ARM SCMI Powercap driver");
-+MODULE_LICENSE("GPL");
+ static inline struct dev_pm_opp *dev_pm_opp_find_freq_floor(struct device *dev,
+ 					unsigned long *freq)
+ {
 -- 
-2.32.0
+2.31.1.272.g89b43f80a514
 
