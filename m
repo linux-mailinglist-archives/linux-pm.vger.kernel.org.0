@@ -2,267 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB2551AC85
-	for <lists+linux-pm@lfdr.de>; Wed,  4 May 2022 20:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3B251AC98
+	for <lists+linux-pm@lfdr.de>; Wed,  4 May 2022 20:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376573AbiEDSRU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 May 2022 14:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35562 "EHLO
+        id S1376902AbiEDSWv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 May 2022 14:22:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376703AbiEDSRO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 May 2022 14:17:14 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4AF86E39;
-        Wed,  4 May 2022 10:37:43 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:39280)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nmIwW-001XCw-8N; Wed, 04 May 2022 11:37:40 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:36936 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nmIwT-00EmeC-TQ; Wed, 04 May 2022 11:37:39 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
-References: <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
-        <20220429214837.386518-7-ebiederm@xmission.com>
-        <20220502153934.GD17276@redhat.com>
-        <87levjrixl.fsf@email.froward.int.ebiederm.org>
-        <20220503134149.GA22999@redhat.com>
-        <877d72l50n.fsf@email.froward.int.ebiederm.org>
-        <20220504140210.GA24581@redhat.com>
-Date:   Wed, 04 May 2022 12:37:07 -0500
-In-Reply-To: <20220504140210.GA24581@redhat.com> (Oleg Nesterov's message of
-        "Wed, 4 May 2022 16:02:38 +0200")
-Message-ID: <87h765ci7w.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        with ESMTP id S1376749AbiEDSWq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 May 2022 14:22:46 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A414BB9E
+        for <linux-pm@vger.kernel.org>; Wed,  4 May 2022 10:46:33 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id c9so1371435plh.2
+        for <linux-pm@vger.kernel.org>; Wed, 04 May 2022 10:46:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LtWHuThIe0dcxXuedbVwJNy12A4ZYyFgKdzHIm7dues=;
+        b=Vfd0Sq+Wzp1oZDscK9nncqtb62H1YcTv5jc/nrwigR2VKbA6OkaPGroKpsj3kv+sQX
+         CljNkT1bNmxMDGjq+o9fjKGuaLTIC4SyMK+odZjHhr3K0OYaEBpx/i/hY8xb5QBJQABp
+         PGTH7AkFPEj6DI0rmw/JchSqtuazrYVhS9GOo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LtWHuThIe0dcxXuedbVwJNy12A4ZYyFgKdzHIm7dues=;
+        b=d19i7+pCOuCPpCVySnHkPQtzl1KeUQvRW2mSC4TcMQzNWuxb8/bD2LHQFE12mmMoAU
+         JBXicF/fxCuYj4W2ZWqaUzwisfFkiz9QNmq47FVdcCDEK6Ibu1LQp05ie7PJF1C+A+gP
+         Y0GV66RXQOvG2iVcWmC/cIV9y4dDGbNloSEq/o19p88rcUnTS9wIj7llyQiiYm3V/SlM
+         FfE7KGEOazfNL4v9wouOxcVDubuLbW/LW4YLkt19vR5mHozxM+QXlBykCMzEAoeS6Szl
+         5RtvxSAoywcFp10FJZRBwc8nkKkJQb7pojvqOetoa/CUmt2+MScjdSCv+rPvA2yQNMd/
+         7nKw==
+X-Gm-Message-State: AOAM533j54zTheuULbVSf9eyWZk07zON3b9oYCMYFEvquTVTIPc3ZUMH
+        HDGITte9YgZpKE99FzNfcoZo2Q==
+X-Google-Smtp-Source: ABdhPJzGjN/OiaZWZXI+A5qznvKAV8N/38y/N4mbFxjfX9tWUyAGv9EtHXHEYW/GLFF2lvfgq/eYSg==
+X-Received: by 2002:a17:90b:2249:b0:1dc:7905:c4bf with SMTP id hk9-20020a17090b224900b001dc7905c4bfmr730381pjb.62.1651686392625;
+        Wed, 04 May 2022 10:46:32 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:35b6:c77b:be04:3bd5])
+        by smtp.gmail.com with UTF8SMTPSA id q26-20020a63505a000000b003aa8b87feb5sm15538347pgl.0.2022.05.04.10.46.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 May 2022 10:46:32 -0700 (PDT)
+Date:   Wed, 4 May 2022 10:46:30 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_kriskura@quicinc.com,
+        quic_vpulyala@quicinc.com
+Subject: Re: [PATCH v14 3/7] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <YnK79i3NiTdMmC98@google.com>
+References: <1650395470-31333-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1650395470-31333-4-git-send-email-quic_c_sanm@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nmIwT-00EmeC-TQ;;;mid=<87h765ci7w.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1/okH30qBwmDRs8Am6a013Vr3keSCsXcuk=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1650395470-31333-4-git-send-email-quic_c_sanm@quicinc.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;Oleg Nesterov <oleg@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1676 ms - load_scoreonly_sql: 0.23 (0.0%),
-        signal_user_changed: 12 (0.7%), b_tie_ro: 10 (0.6%), parse: 2.4 (0.1%),
-         extract_message_metadata: 9 (0.6%), get_uri_detail_list: 5 (0.3%),
-        tests_pri_-1000: 5 (0.3%), tests_pri_-950: 2.0 (0.1%), tests_pri_-900:
-        1.36 (0.1%), tests_pri_-90: 75 (4.5%), check_bayes: 74 (4.4%),
-        b_tokenize: 16 (0.9%), b_tok_get_all: 12 (0.7%), b_comp_prob: 5 (0.3%),
-         b_tok_touch_all: 37 (2.2%), b_finish: 0.93 (0.1%), tests_pri_0: 1540
-        (91.9%), check_dkim_signature: 0.87 (0.1%), check_dkim_adsp: 2.9
-        (0.2%), poll_dns_idle: 0.98 (0.1%), tests_pri_10: 2.3 (0.1%),
-        tests_pri_500: 13 (0.8%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v2 07/12] ptrace: Don't change __state
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Oleg Nesterov <oleg@redhat.com> writes:
+On Wed, Apr 20, 2022 at 12:41:06AM +0530, Sandeep Maheswaram wrote:
+> During suspend read the status of all port and set hs phy mode
+> based on current speed. Use this hs phy mode to configure wakeup
+> interrupts in qcom glue driver.
+> 
+> Check wakeup-source property for dwc3 core node to set the
+> wakeup capability. Drop the device_init_wakeup call from
+> runtime suspend and resume.
+> 
+> Also check during suspend if any wakeup capable devices are
+> connected to the controller (directly or through hubs), if there
+> are none set a flag to indicate that the PHY is powered
+> down during suspend.
+> 
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> ---
+> v14:
+> Used device_children_wakeup_capable instead of usb_wakeup_enabled_descendants.
+> 
+> v13:
+> Changed dwc3_set_phy_speed_mode to dwc3_check_phy_speed_mode.
+> Removed device_init_wakeup calls from dwc3_runtime_suspend and dwc3_runtime_resume
+> as we have a new dt property wakeup-source.
+> 
+> 
+>  drivers/usb/dwc3/core.c | 33 ++++++++++++++++++++-------------
+>  drivers/usb/dwc3/core.h |  4 ++++
+>  drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
+>  3 files changed, 48 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 1170b80..898aa66 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -32,6 +32,7 @@
+>  #include <linux/usb/gadget.h>
+>  #include <linux/usb/of.h>
+>  #include <linux/usb/otg.h>
+> +#include <linux/usb/hcd.h>
+>  
+>  #include "core.h"
+>  #include "gadget.h"
+> @@ -1723,6 +1724,7 @@ static int dwc3_probe(struct platform_device *pdev)
+>  
+>  	platform_set_drvdata(pdev, dwc);
+>  	dwc3_cache_hwparams(dwc);
+> +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
+>  
+>  	spin_lock_init(&dwc->lock);
+>  	mutex_init(&dwc->mutex);
+> @@ -1865,6 +1867,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>  {
+>  	unsigned long	flags;
+>  	u32 reg;
+> +	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
+>  
+>  	switch (dwc->current_dr_role) {
+>  	case DWC3_GCTL_PRTCAP_DEVICE:
+> @@ -1877,10 +1880,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>  		dwc3_core_exit(dwc);
+>  		break;
+>  	case DWC3_GCTL_PRTCAP_HOST:
+> -		if (!PMSG_IS_AUTO(msg)) {
+> -			dwc3_core_exit(dwc);
+> -			break;
+> -		}
+> +		dwc3_check_phy_speed_mode(dwc);
+>  
+>  		/* Let controller to suspend HSPHY before PHY driver suspends */
+>  		if (dwc->dis_u2_susphy_quirk ||
+> @@ -1896,6 +1896,16 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>  
+>  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
+>  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
+> +
+> +		if (!PMSG_IS_AUTO(msg)) {
+> +			if (device_may_wakeup(dwc->dev) &&
+> +			    device_children_wakeup_capable(&hcd->self.root_hub->dev)) {
+> +				dwc->phy_power_off = false;
+> +			} else {
+> +				dwc->phy_power_off = true;
+> +				dwc3_core_exit(dwc);
 
-> On 05/03, Eric W. Biederman wrote:
->>
->> Oleg Nesterov <oleg@redhat.com> writes:
->>
->> > But why is it bad if the tracee doesn't sleep in schedule ? If it races
->> > with SIGKILL. I still can't understand this.
->> >
->> > Yes, wait_task_inactive() can fail, so you need to remove WARN_ON_ONCE()
->> > in 11/12.
->>
->> >
->> > Why is removing TASK_WAKEKILL from TASK_TRACED and complicating
->> > *signal_wake_up() better?
->>
->> Not changing __state is better because it removes special cases
->> from the scheduler that only apply to ptrace.
->
-> Hmm. But I didn't argue with that? I like the idea of JOBCTL_TASK_FROZEN.
->
-> I meant, I do not think that removing KILLABLE from TASK_TRACED (not
-> from __state) and complicating *signal_wake_up() (I mean, compared
-> to your previous version) is a good idea.
->
-> And. At least in context of this series it is fine if the JOBCTL_TASK_FROZEN
-> tracee do not block in schedule(), just you need to remove WARN_ON_ONCE()
-> around wait_task_inactive().
->
->> > And even if we need to ensure the tracee will always block after
->> > ptrace_freeze_traced(), we can change signal_pending_state() to
->> > return false if JOBCTL_PTRACE_FROZEN. Much simpler, imo. But still
->> > looks unnecessary to me.
->>
->> We still need to change signal_wake_up in that case.  Possibly
->> signal_wake_up_state.
->
-> Of course. See above.
->
->> >> if we depend on wait_task_inactive failing if the process is in the
->> >> wrong state.
->> >
->> > OK, I guess this is what I do not understand. Could you spell please?
->> >
->> > And speaking of RT, wait_task_inactive() still can fail because
->> > cgroup_enter_frozen() takes css_set_lock? And it is called under
->> > preempt_disable() ? I don't understand the plan :/
->>
->> Let me describe his freezer change as that is much easier to get to the
->> final result.  RT has more problems as it turns all spin locks into
->> sleeping locks.  When a task is frozen
->
-> [...snip...]
->
-> Oh, thanks Eric, but I understand this part. But I still can't understand
-> why is it that critical to block in schedule... OK, I need to think about
-> it. Lets assume this is really necessary.
->
-> Anyway. I'd suggest to not change TASK_TRACED in this series and not
-> complicate signal_wake_up() more than you did in your previous version:
->
-> 	static inline void signal_wake_up(struct task_struct *t, bool resume)
-> 	{
-> 		bool wakekill = resume && !(t->jobctl & JOBCTL_DELAY_WAKEKILL);
-> 		signal_wake_up_state(t, wakekill ? TASK_WAKEKILL : 0);
-> 	}
+I found that shutting the PHYs down during suspend leads to high power
+consumption of a downstream hub (about 80mW vs 15mW when the PHYs are
+not shut down).
 
-If your concern is signal_wake_up there is no reason it can't be:
+It would be interesting to know if this also impacts other non-hub
+peripherals. Unfortunately I can't test that, the hub on my system is
+soldered to the board.
 
-	static inline void signal_wake_up(struct task_struct *t, bool fatal)
-        {
-        	fatal = fatal && !(t->jobctl & JOBCTL_PTRACE_FROZEN);
-                signal_wake_up_state(t, fatal ? TASK_WAKEKILL | TASK_TRACED : 0);
-        }
+I understand that shutting the PHYs down might be beneficial in terms
+of power on some systems, however on those I'm looking at we'd strongly
+prefer to save the 65mW of power consumed by the hub, rather than
+whatever smaller amount of power that is saved by powering down the
+PHYs.
 
-I guess I was more targeted in this version, which lead to more if
-statements but as there is only one place in the code that can be
-JOBCTL_PTRACE_FROZEN and TASK_TRACED there is no point in setting
-TASK_WAKEKILL without also setting TASK_TRACED in the wake-up.
-
-So yes. I can make the code as simple as my earlier version of
-signal_wake_up.
-
-> JOBCTL_PTRACE_FROZEN is fine.
->
-> ptrace_check_attach() can do
->
-> 	if (!ret && !ignore_state &&
-> 	    /*
-> 	     * This can only fail if the frozen tracee races with
-> 	     * SIGKILL and enters schedule() with fatal_signal_pending
-> 	     */
-> 	    !wait_task_inactive(child, __TASK_TRACED))
-> 		ret = -ESRCH;
->
-> 	return ret;
->
->
-> Now. If/when we really need to ensure that the frozen tracee always
-> blocks and wait_task_inactive() never fails, we can just do
->
-> 	- add the fatal_signal_pending() check into ptrace_stop()
-> 	  (like this patch does)
->
-> 	- say, change signal_pending_state:
->
-> 	static inline int signal_pending_state(unsigned int state, struct task_struct *p)
-> 	{
-> 		if (!(state & (TASK_INTERRUPTIBLE | TASK_WAKEKILL)))
-> 			return 0;
-> 		if (!signal_pending(p))
-> 			return 0;
-> 		if (p->jobctl & JOBCTL_TASK_FROZEN)
-> 			return 0;
-> 		return (state & TASK_INTERRUPTIBLE) || __fatal_signal_pending(p);
-> 	}
->
-> in a separate patch which should carefully document the need for this
-> change.
->
->> > I didn't look at JOBCTL_PTRACE_SIGNR yet. But this looks minor to me,
->> > I mean, I am not sure it worth the trouble.
->>
->> The immediate problem the JOBCTL_PTRACE_SIGNR patch solves is:
->> - stopping in ptrace_report_syscall.
->> - Not having PT_TRACESYSGOOD set.
->> - The tracee being killed with a fatal signal
->         ^^^^^^
->         tracer ?
-
-Both actually.
-
->> - The tracee sending SIGTRAP to itself.
->
-> Oh, but this is clear. But do we really care? If the tracer exits
-> unexpectedly, the tracee can have a lot more problems, I don't think
-> that this particular one is that important.
-
-I don't know of complaints, and if you haven't heard them either
-that that is a good indication that in practice we don't care.
-
-At a practical level I just don't want that silly case that sets
-TASK_TRACED to TASK_RUNNING without stopping at all in ptrace_stop to
-remain.  It just seems to make everything more complicated for no real
-reason anymore.  The deadlocks may_ptrace_stop was guarding against are
-gone.
-
-Plus the test is so racy we case can happen after we drop siglock
-before we schedule, or shortly after we have stopped so we really
-don't reliably catch the condition the code is trying to catch.
-
-I think the case I care most about is ptrace_signal, which pretty much
-requires the tracer to wait and clear exit_code before being terminated
-to cause problems.  We don't handle that at all today.
-
-So yeah.  I think the code handles so little at this point we can just
-remove the code and simplify things, if we actually care we can come
-back and implement JOBCTL_PTRACE_SIGNR or the like.
-
-I will chew on that a bit and see if I can find any reasons for keeping
-the code in ptrace_stop at all.
-
-
-
-As an added data point we can probably remove handling of the signal
-from ptrace_report_syscall entirely (not in this patchset!).
-
-I took a quick skim and it appears that sending a signal in
-ptrace_report_syscall appears to be a feature introduced with ptrace
-support in Linux v1.0 and the comment in ptrace_report_syscall appears
-to document the fact that the code has always been dead.
-
-
-I made it through 13 of 133 pages of debian code search results for
-PTRACE_SYSCALL, and the only use I could find of setting the continue
-signal was when the signal reported from wait was not SIGTRAP.  Exactly
-the same as in the comment in ptrace_report_syscall.
-
-If that pattern holds for all of the uses of ptrace then the code
-in ptrace_report_syscall is dead.
-
-
-
-Eric
-
+Could we introduce a sysfs attribute (or some other sort of knob) to
+allow the admin to configure whether the PHYs should remain on or off
+during suspend? That is assuming that it is actually desirable to power
+them off on some systems.
