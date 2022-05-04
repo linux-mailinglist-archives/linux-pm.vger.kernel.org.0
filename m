@@ -2,109 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB92519781
-	for <lists+linux-pm@lfdr.de>; Wed,  4 May 2022 08:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C602D5198E6
+	for <lists+linux-pm@lfdr.de>; Wed,  4 May 2022 09:52:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345019AbiEDGog (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 May 2022 02:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
+        id S1345913AbiEDH4I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 May 2022 03:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240187AbiEDGof (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 May 2022 02:44:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9409818B13;
-        Tue,  3 May 2022 23:41:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S243507AbiEDHzr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 May 2022 03:55:47 -0400
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6AD1C10C
+        for <linux-pm@vger.kernel.org>; Wed,  4 May 2022 00:52:11 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38CF46153E;
-        Wed,  4 May 2022 06:41:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 929DBC385A4;
-        Wed,  4 May 2022 06:40:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651646459;
-        bh=ZGMwwfSt9WgGcP9EzHW/QosFc70Yb/XaCBfaIMon8lM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hCMa156AuRtjnImdRRFb6sjNT7gi2K+aKH0x8uKbL7AEODCLcmpA+AldqhNahLoMc
-         Jjbn4PU2sZC0QO3tUog7PiYYrqIfJDpXhjQPR0ah9UBAo6hM2LqRyEviiRxk8BR/Z/
-         PswEhJLlhaaJETbJ+cDB+HgHVFfdIRtcQWjx3W6kmEYtvsvtdX1D61teQWllRNYd4Y
-         4rq0yVjTAy3gemypN42SU8Wvxydjxbsf9n9Yu7PohyC0omGj3kKtLN8XGs6TxWmKd5
-         RbuiHnFactE1ob6Dd26hg53PXFe++MOjqEkVBKu+OdQv2rpx3HjFyo1wUYQL3DAF3f
-         4Lj9rl6MCVe6w==
-Date:   Wed, 4 May 2022 12:10:55 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Abel Vesa <abel.vesa@nxp.com>, Stephen Boyd <sboyd@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
+        (Authenticated sender: hector@marcansoft.com)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id E009741E64;
+        Wed,  4 May 2022 07:52:00 +0000 (UTC)
+From:   Hector Martin <marcan@marcan.st>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>, Anson Huang <Anson.Huang@nxp.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Han Xu <han.xu@nxp.com>, Dario Binacchi <dariobin@libero.it>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Drop redundant 'maxItems/minItems' in
- if/then schemas
-Message-ID: <YnIf95FnuC01qxIp@matsya>
-References: <20220503162738.3827041-1-robh@kernel.org>
+        Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/4] Apple SoC cpufreq driver
+Date:   Wed,  4 May 2022 16:51:49 +0900
+Message-Id: <20220504075153.185208-1-marcan@marcan.st>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220503162738.3827041-1-robh@kernel.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03-05-22, 11:27, Rob Herring wrote:
-> Another round of removing redundant minItems/maxItems when 'items' list is
-> specified. This time it is in if/then schemas as the meta-schema was
-> failing to check this case.
-> 
-> If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
-> same size as the list is redundant and can be dropped. Note that is DT
-> schema specific behavior and not standard json-schema behavior. The tooling
-> will fixup the final schema adding any unspecified minItems/maxItems.
+Hi folks,
 
-For phy:
+Here's a second take on the cpufreq driver for Apple SoCs. This is a
+complete rewrite using a stand-alone cpufreq driver instead of using the
+cpufreq-dt infrastructure.
 
-Acked-By: Vinod Koul <vkoul@kernel.org>
+Since v1 we ran some experiments on the memory controller performance
+switching and it turns out it doesn't make a huge difference, so it
+makes sense to punt that feature to the future (perhaps once a proper
+memory controller driver exists for other reasons, e.g. for error
+handling).
+
+One advantage of having a standalone cpufreq driver is that we can
+support fast switching. This also means any future interaction with
+the memory controller will probably use some bespoke mechanism instead
+of the genpd infrastructure, so we can keep the fast path without
+allowing sleeps/etc.
+
+The driver is based on scpi-cpufreq.c, with some bits (e.g. the
+apple,freq-domain stuff) inspired by how cpufreq-qcom-hw does it.
+I'm not sure if that particular property should be described
+in a binding, since it goes in the cpu nodes (qcom doesn't have it
+anywhere...).
+
+Changes since v1:
+- Complete rewrite
+- Reports current frequency to userspace properly (incl. if different
+  from requested due to hardware constraints)
+- Supports fast switching
+- MCC latency control stuff no longer included, punted for later
+- Supports exposing higher states as turbo states
+
+Hector Martin (4):
+  MAINTAINERS: Add entries for Apple SoC cpufreq driver
+  dt-bindings: cpufreq: apple,soc-cpufreq: Add binding for Apple SoC
+    cpufreq
+  cpufreq: apple-soc: Add new driver to control Apple SoC CPU P-states
+  arm64: dts: apple: Add CPU topology & cpufreq nodes for t8103
+
+ .../bindings/cpufreq/apple,soc-cpufreq.yaml   | 121 +++++++
+ MAINTAINERS                                   |   2 +
+ arch/arm64/boot/dts/apple/t8103.dtsi          | 203 ++++++++++-
+ drivers/cpufreq/Kconfig.arm                   |   9 +
+ drivers/cpufreq/Makefile                      |   1 +
+ drivers/cpufreq/apple-soc-cpufreq.c           | 330 ++++++++++++++++++
+ drivers/cpufreq/cpufreq-dt-platdev.c          |   2 +
+ 7 files changed, 658 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml
+ create mode 100644 drivers/cpufreq/apple-soc-cpufreq.c
 
 -- 
-~Vinod
+2.35.1
+
