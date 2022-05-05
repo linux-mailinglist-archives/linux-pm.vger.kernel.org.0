@@ -2,143 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E3951BDB7
-	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 13:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D8251BE7D
+	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 13:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353861AbiEELKV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 May 2022 07:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44752 "EHLO
+        id S1358740AbiEEL4c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 May 2022 07:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344317AbiEELKU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 07:10:20 -0400
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86D313F06;
-        Thu,  5 May 2022 04:06:40 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 7FB7E41F28;
-        Thu,  5 May 2022 11:06:34 +0000 (UTC)
-Message-ID: <39ad7d44-7320-bc7c-8645-6643a1e69c06@marcan.st>
-Date:   Thu, 5 May 2022 20:06:31 +0900
+        with ESMTP id S1358642AbiEEL43 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 07:56:29 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75A6546A5;
+        Thu,  5 May 2022 04:52:48 -0700 (PDT)
+X-UUID: 8b5692ab6061431987afe33afce68adf-20220505
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:4d41151f-4347-4aed-920d-db156ef68961,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:e293b1b2-56b5-4c9e-8d83-0070b288eb6a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 8b5692ab6061431987afe33afce68adf-20220505
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 179822082; Thu, 05 May 2022 19:52:32 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 5 May 2022 19:52:28 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 5 May 2022 19:52:27 +0800
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <matthias.bgg@gmail.com>
+CC:     <jia-wei.chang@mediatek.com>, <roger.lu@mediatek.com>,
+        <hsinyi@google.com>, <khilman@baylibre.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH v6 00/10] cpufreq: mediatek: Cleanup and support MT8183 and MT8186
+Date:   Thu, 5 May 2022 19:52:16 +0800
+Message-ID: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: es-ES
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220504075153.185208-1-marcan@marcan.st>
- <20220504075153.185208-3-marcan@marcan.st>
- <a7e87c9a-7b3e-ea46-6171-4a87d1052a98@linaro.org>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH v2 2/4] dt-bindings: cpufreq: apple,soc-cpufreq: Add
- binding for Apple SoC cpufreq
-In-Reply-To: <a7e87c9a-7b3e-ea46-6171-4a87d1052a98@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/05/2022 17.43, Krzysztof Kozlowski wrote:
-> On 04/05/2022 09:51, Hector Martin wrote:
->> This binding represents the cpufreq/DVFS hardware present in Apple SoCs.
->> The hardware has an independent controller per CPU cluster, but we
->> represent them as a single cpufreq node since there can only be one
->> systemwide cpufreq device (and since in the future, interactions with
->> memory controller performance states will also involve cooperation
->> between multiple frequency domains).
->>
->> Signed-off-by: Hector Martin <marcan@marcan.st>
->> ---
->>  .../bindings/cpufreq/apple,soc-cpufreq.yaml   | 121 ++++++++++++++++++
->>  1 file changed, 121 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml b/Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml
->> new file mode 100644
->> index 000000000000..f398c1bd5de5
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml
->> @@ -0,0 +1,121 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/cpufreq/apple,soc-cpufreq.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Apple SoC cpufreq device
->> +
->> +maintainers:
->> +  - Hector Martin <marcan@marcan.st>
->> +
->> +description: |
->> +  Apple SoCs (e.g. M1) have a per-cpu-cluster DVFS controller that is part of
->> +  the cluster management register block. This binding uses the standard
->> +  operating-points-v2 table to define the CPU performance states, with the
->> +  opp-level property specifying the hardware p-state index for that level.
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - enum:
->> +          - apple,t8103-soc-cpufreq
->> +          - apple,t6000-soc-cpufreq
->> +      - const: apple,soc-cpufreq
->> +
->> +  reg:
->> +    minItems: 1
->> +    maxItems: 6
-> 
-> Is the number of clusters fixed for t8103 and t6000? Are these
-> compatibles strictly related to some specific M1 SoC? If yes, then you
-> should have constraints in allOf:if:then.
+Cpufreq is a DVFS driver used for power saving to scale the clock frequency
+and supply the voltage for CPUs. This series do some cleanup for MediaTek
+cpufreq drivers and add support for MediaTek SVS[2] and MediaTek CCI
+devfreq[3] which are supported in MT8183 and MT8186.
 
-No, t6000 includes t6002 which is a 2-die version and has 6 clusters,
-t6001 and t6000 have 3. t8103 always has 2, but it's conceivable that
-compatible could be used for other chips within the same generation with
-a different number.
+Changes for v6:
+1. Reorder patches in this series.
+2. Add a new patch to do unregister platform device.
+3. Modify drivers from maintainer's advice.
 
-The general idea for these compats is as a fallback in case we need to
-quirk something for individual SoCs or start using registers which
-changed for some reason, but right now they are not used. But I think
-given how closely related t6000/t6001/t6002 are (t6002 is literally two
-t6001 dies, and t6000 is almost identical to t6001 with a chunk
-missing), I think spelling those out as 3 separate compatibles is
-overkill. In general we treat those 3 SoCs as identical in terms of
-compatibles, but the one-cpufreq-node limitation means t6002 does have
-twice the clusters.
+Changes for v5:
+1. Modify the description for the reason we need to use mediatek,cci.
+2. Drop [07/14] cpufreq: mediatek: Add .get function.
 
-It's also conceivable that Apple could start releasing CPUs with entire
-clusters fused off, so then our bootloader would have to start mutating
-the reg entry to represent that.
+Changes for V4:
+1. Revise drivers from reviewers' suggestion.
+2. Fix name of opp table issue.
 
-I can add constraints to express some of this if you really want me to,
-but I'm not sure it's that useful. The way I see it, the compatibles
-really *mean* "this soc has t8103 clusters" or "this soc has t6000
-clusters" and the number of clusters is arbitrary and the driver will
-never care about that. Honestly I'd rather have separate cpufreq nodes
-for each cluster, but nobody else does it like that and there's only one
-driver instance, so that gets complicated...
+Changes for V3:
+1. Rebased to linux-next-20220414.
+2. Drop accepted patches.
+3. Drop "cpufreq: mediatek: Use maximum voltage in init stage" because we
+   make sure the voltage we set is safe for both mediatek cci and cpufreq.
+4. Rename cci property to mediatek,cci.
+5. Adjust order of cleanup patches.
+6. Add new patches for cleanup, handle infinite loop and MT8183 dts.
+7. Revise drivers from reviewers' suggestion.
+8. Revise commit message of some patches to avoid confusion and misunderstand.
+9. Revise "cpufreq: mediatek: Link CCI device to CPU".
+   We do not return successful to pretend we set the target frequency done
+   when cci is not ready. Instead, we find and set a safe voltage so that we
+   can set the target cpufrequency.
+
+Changes for V2:
+1. Drop the modification of transforming cpufreq-mediatek into yaml and
+   only add the MediaTek CCI property for MediaTek cpufreq.
+2. Split the original patches into several patches.
+
+Reference series:
+[1]: V1 of this series is present by Jia-Wei Chang.
+     https://lore.kernel.org/all/20220307122151.11666-1-jia-wei.chang@mediatek.com/
+
+[2]: The MediaTek CCI devfreq driver is introduced in another series.
+     https://lore.kernel.org/all/20220425125546.4129-1-johnson.wang@mediatek.com/
+
+[3]: The MediaTek SVS driver is introduced in another series.
+     https://lore.kernel.org/all/20220420102044.10832-1-roger.lu@mediatek.com/
+
+Jia-Wei Chang (2):
+  cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()
+  cpufreq: mediatek: Add support for MT8186
+
+Rex-BC Chen (8):
+  dt-bindings: cpufreq: mediatek: Add MediaTek CCI property
+  cpufreq: mediatek: Add platform_device_unregister when driver exit
+  cpufreq: mediatek: Move voltage limits to platform data
+  cpufreq: mediatek: Add opp notification support
+  cpufreq: mediatek: Link CCI device to CPU
+  arm64: dts: mediatek: Add opp table and clock property for MT8183
+    cpufreq
+  arm64: dts: mediatek: Add MediaTek CCI node for MT8183
+  arm64: dts: mediatek: Add mediatek,cci property for MT8183 cpufreq
+
+ .../bindings/cpufreq/cpufreq-mediatek.txt     |   7 +
+ arch/arm64/boot/dts/mediatek/mt8183-evb.dts   |  36 ++
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   4 +
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      | 285 +++++++++++++
+ drivers/cpufreq/mediatek-cpufreq.c            | 400 ++++++++++++------
+ 5 files changed, 609 insertions(+), 123 deletions(-)
 
 -- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+2.18.0
+
