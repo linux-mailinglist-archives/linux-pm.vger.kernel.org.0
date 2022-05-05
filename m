@@ -2,53 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE2251BEB6
-	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 13:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 280F851BEC1
+	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 14:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359223AbiEEMCL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 May 2022 08:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39866 "EHLO
+        id S1359389AbiEEMGF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 May 2022 08:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232409AbiEEMCI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 08:02:08 -0400
+        with ESMTP id S1356598AbiEEMGF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 08:06:05 -0400
 Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC94854F9A;
-        Thu,  5 May 2022 04:58:28 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id e12so7171256ybc.11;
-        Thu, 05 May 2022 04:58:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEA44551C;
+        Thu,  5 May 2022 05:02:26 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id f38so7249523ybi.3;
+        Thu, 05 May 2022 05:02:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ZdpkfPpjlgj+BjtkQkQRFzNPoUnYFAkYolYnzJCRfGg=;
-        b=WS9wYLWRQjRbPba/RC0Ugqw9UAU4RcCkCsdBpbHzI5dX3dg40gJ4v7IKbK9u3HC34N
-         QBZ8bRrdeRdYP1z/7fUmVVfxYxF7towx5IhPt7GDDH0EanOyQj4j6D3pmrKIFMZViPLi
-         TX91+FXmXrRf0jpqR0bOqmLOsbjQO8QODS5Nt7xy0YFTmoKyfjUsAV9b8gBQ5tcCieWg
-         eDCk0IWXvPLqcykTYVgsSv1uorCBiAYk9vtWcmrBwzIO7I41uMb7UwqmGpUz7e/RI2eA
-         4g4niS6TJ+DraarLfyCLRki+aPIEhlBx2xVtxuGtYmPkJpL2HlgjotseWUFl8JPzpU9V
-         qvnQ==
-X-Gm-Message-State: AOAM530chs80aB1rHKqCRH0tGXyrzBh6wpXv5jOWCokGNHOa4VEdtuST
-        Plcg3HrjSedUuickx6qqf0jwAWFV7GSwjAQ627wCL4WW
-X-Google-Smtp-Source: ABdhPJzik3aLC1FIebu4+vOjKc8Q7bVB0QF3GEbyurQXIQeWK+r2oHOfyjQdhBmQeBK/u3Vjnem9d+vlMvL9iufFdZU=
+        bh=7v2CD/TPwrcoEWudBwZsC3kPJhWxSkWgF2bGSBvAsoc=;
+        b=voMCLYKcOy7jEVWOHmkPjpOMDJxfxAe6GIvnjnMTW/qMGq4iIkHibwTsj8fRDdAsHA
+         bDaB9j2uutSY0hIQJ4Bf5RtXrTQ8gJp9koKLGPXR+qhwyoAcKRUcoN8u1Q15+2p4J5fq
+         BMF53JbGa4Dvh40vLPChimmy6+NX2/mgJq3jJQ4Vbfqda0QjZsHAR5AP9udP1SDSQFHN
+         hnnusqocumRrnvgA21NpHpokAeYk3MOeXQ9YotXyrUc2hnsIxYanfbwXj0q3T/pi79FI
+         Txecs+EyZYO38Wr8C5Lzo5TIv+LatIMhF5Mfel1y7FcC8zu5z+pX0SanZWdo8ipesMuV
+         DSpA==
+X-Gm-Message-State: AOAM530epU9i9aIczjmY4Q91Agap/35lnnohE+MkiMM23fpwem3EEssJ
+        TwakJdozX8ggv/S4xv6EwparrpyMtDjkj2lugX4=
+X-Google-Smtp-Source: ABdhPJyKpd7G7qLA+GPK2PlKD+1TSCHY7kpSqAdE7H1yIDAZVQ+IQ+Nlt3Lzo4yG35XXp+zVRbglifazAfGWMMGzHUg=
 X-Received: by 2002:a25:3795:0:b0:648:fa25:5268 with SMTP id
- e143-20020a253795000000b00648fa255268mr22539195yba.153.1651751908074; Thu, 05
- May 2022 04:58:28 -0700 (PDT)
+ e143-20020a253795000000b00648fa255268mr22558130yba.153.1651752145467; Thu, 05
+ May 2022 05:02:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <4419002.LvFx2qVVIh@kreacher> <CAJZ5v0i1Ynt54yb7aMJorkYUvqkxhxOqvQJb8AdA7Ps1aBO5tg@mail.gmail.com>
- <YnKrcFSjLr+W+myL@dev-arch.thelio-3990X> <2650302.mvXUDI8C0e@kreacher> <YnLVgOqGOPaSrC7G@dev-arch.thelio-3990X>
-In-Reply-To: <YnLVgOqGOPaSrC7G@dev-arch.thelio-3990X>
+References: <20220505015814.3727692-1-rui.zhang@intel.com> <40b8ad06-6ef2-113c-fffb-2fa001603b3f@suse.com>
+In-Reply-To: <40b8ad06-6ef2-113c-fffb-2fa001603b3f@suse.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 5 May 2022 13:58:17 +0200
-Message-ID: <CAJZ5v0i85XEjMKOPrHGCqgW526eqVDH_26mMsmZBJOj0dtStoA@mail.gmail.com>
-Subject: Re: [PATCH v3 4/9] PCI/PM: Rework changing power states of PCI devices
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
+Date:   Thu, 5 May 2022 14:02:14 +0200
+Message-ID: <CAJZ5v0hceDVkv05=SFbO53wsmHWkrs1SSoxZ=FuErYsnNutGWg@mail.gmail.com>
+Subject: Re: [PATCH 0/7] PM: Solution for S0ix failure caused by PCH overheating
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, kvalo@kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-rtc@vger.kernel.org,
+        "open list:NETWORKING DRIVERS (WIRELESS)" 
+        <linux-wireless@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        merez@codeaurora.org, mat.jonczyk@o2.pl,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        Len Brown <len.brown@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -60,115 +64,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 4, 2022 at 9:35 PM Nathan Chancellor <nathan@kernel.org> wrote:
+On Thu, May 5, 2022 at 10:23 AM Oliver Neukum <oneukum@suse.com> wrote:
 >
-> On Wed, May 04, 2022 at 08:00:33PM +0200, Rafael J. Wysocki wrote:
-> > On Wednesday, May 4, 2022 6:36:00 PM CEST Nathan Chancellor wrote:
-> > > On Wed, May 04, 2022 at 02:59:17PM +0200, Rafael J. Wysocki wrote:
-> > > > On Tue, May 3, 2022 at 7:59 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> > > > >
-> > > > > Hi Rafael,
-> > > > >
-> > > > > On Thu, Apr 14, 2022 at 03:11:21PM +0200, Rafael J. Wysocki wrote:
-> > > > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > >
-> > > > > > There are some issues related to changing power states of PCI
-> > > > > > devices, mostly related to carrying out unnecessary actions in some
-> > > > > > places, and the code is generally hard to follow.
-> > > > > >
-> > > > > >  1. pci_power_up() has two callers, pci_set_power_state() and
-> > > > > >     pci_pm_default_resume_early().  The latter updates the current
-> > > > > >     power state of the device right after calling pci_power_up()
-> > > > > >     and it restores the entire config space of the device right
-> > > > > >     after that, so pci_power_up() itself need not read the
-> > > > > >     PCI_PM_CTRL register or restore the BARs after programming the
-> > > > > >     device into D0 in that case.
-> > > > > >
-> > > > > >  2. It is generally hard to get a clear view of the pci_power_up()
-> > > > > >     code flow, especially in some corner cases, due to all of the
-> > > > > >     involved PCI_PM_CTRL register reads and writes occurring in
-> > > > > >     pci_platform_power_transition() and in pci_raw_set_power_state(),
-> > > > > >     some of which are redundant.
-> > > > > >
-> > > > > >  3. The transitions from low-power states to D0 and the other way
-> > > > > >     around are unnecessarily tangled in pci_raw_set_power_state()
-> > > > > >     which causes it to use a redundant local variable and makes it
-> > > > > >     rather hard to follow.
-> > > > > >
-> > > > > > To address the above shortcomings, make the following changes:
-> > > > > >
-> > > > > >  a. Remove the code handling transitions into D0
-> > > > > >     from pci_raw_set_power_state() and rename it as
-> > > > > >     pci_set_low_power_state().
-> > > > > >
-> > > > > >  b. Add the code handling transitions into D0 directly
-> > > > > >     to pci_power_up() and to a new wrapper function
-> > > > > >     pci_set_full_power_state() calling it internally that is
-> > > > > >     only used in pci_set_power_state().
-> > > > > >
-> > > > > >  c. Make pci_power_up() avoid redundant PCI_PM_CTRL register reads
-> > > > > >     and make it work in the same way for transitions from any
-> > > > > >     low-power states (transitions from D1 and D2 are handled
-> > > > > >     slightly differently before the change).
-> > > > > >
-> > > > > >  d. Put the restoration of the BARs and the PCI_PM_CTRL
-> > > > > >     register read confirming the power state change into
-> > > > > >     pci_set_full_power_state() to avoid doing that in
-> > > > > >     pci_pm_default_resume_early() unnecessarily.
-> > > > > >
-> > > > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > > > >
-> > > > > This change as commit 5bffe4c611f5 ("PCI/PM: Rework changing power
-> > > > > states of PCI devices") causes my AMD-based system to fail to fully
-> > > > > boot. As far as I can tell, this might be NVMe related, which might make
-> > > > > getting a full log difficult, as journalctl won't have anywhere to save
-> > > > > it. I see:
-> > > > >
-> > > > > nvme nvme0: I/O 8 QID 0 timeout, completion polled
-> > > > >
-> > > > > then shortly afterwards:
-> > > > >
-> > > > > nvme nvme0: I/O 24 QID 0 timeout, completion polled
-> > > > > nvme nvme0: missing or invalid SUBNQN field
-> > > > >
-> > > > > then I am dropped into an emergency shell.
-> > > >
-> > > > Thanks for the report!
-> > > >
-> > > > > This is a log from the previous commit, which may give some hints about
-> > > > > the configuration of this particular system.
-> > > > >
-> > > > > https://gist.github.com/nathanchance/8a56f0939410cb187896e904c72e41e7/raw/b47b2620bdd32d43c7a3b209fcfd9e3d4668f058/good-boot.log
-> > > > >
-> > > > > If there is any additional debugging information I can provide or
-> > > > > patches I can try, please let me know!
-> > > >
-> > > > Please see what happens if the "if (dev->current_state == PCI_D0)"
-> > > > check and the following "return 0" statement in pci_power_up() are
-> > > > commented out.
-> > >
-> > > If I understand you correctly, this? Unfortunately, that does not help.
-> >
-> > Thanks for testing.
-> >
-> > Please check if the patch below makes any difference.
 >
-> Unfortunately, there is still no difference. Even worse, I thought I
-> might be able to get some information from the emergency shell but I
-> don't think the HID driver is loaded yet so my keyboard does not work. I
-> am not sure of how to get any further information from the problematic
-> kernel; if anyone has any ideas, I am happy to test them! I am more than
-> happy to continue to test patches or provide information, I just don't
-> want to be a waste of time :)
+>
+> On 05.05.22 03:58, Zhang Rui wrote:
+> > On some Intel client platforms like SKL/KBL/CNL/CML, there is a
+> > PCH thermal sensor that monitors the PCH temperature and blocks the system
+> > from entering S0ix in case it overheats.
+> >
+> > Commit ef63b043ac86 ("thermal: intel: pch: fix S0ix failure due to PCH
+> > temperature above threshold") introduces a delay loop to cool the
+> > temperature down for this purpose.
+> >
+> > However, in practice, we found that the time it takes to cool the PCH down
+> > below threshold highly depends on the initial PCH temperature when the
+> > delay starts, as well as the ambient temperature.
+>
+> >
+> > This patch series has been tested on the same Dell XPS 9360 laptop and
+> > S0ix is 100% achieved across 1000+ s2idle iterations.
+> >
+> Hi,
+>
+> what is the user experience if this ever triggers? At that stage the
+> system will appear to be suspended to an external observer, won't it?
+> So in effect you'd have a system that spontaneously wakes up, won't you?
 
-It's not a waste of time if you run tests I ask for.
+No, you won't.
 
-Anyway, I'm going to change the approach, because we're looking for a
-subtle change in behavior that breaks your system and there are quite
-a few of these in the problematic patch.
-
-I'll post a new series of patches to replace the commits dropped by
-Bjorn later today.
-
-Thanks!
+It will just go ahead and reach S0ix when it can.  It will only wake
+up if there's a legitimate wakeup even in the meantime.
