@@ -2,200 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B6551C54B
-	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 18:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58BED51C55B
+	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 18:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381571AbiEEQtc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 May 2022 12:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40462 "EHLO
+        id S1382050AbiEEQwo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 May 2022 12:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbiEEQtc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 12:49:32 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE39140E4
-        for <linux-pm@vger.kernel.org>; Thu,  5 May 2022 09:45:52 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id w5-20020a17090aaf8500b001d74c754128so8537732pjq.0
-        for <linux-pm@vger.kernel.org>; Thu, 05 May 2022 09:45:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+TBIdvlOJIeAZLlUH3ltx+xD24LgL4B/TL6SthL09iE=;
-        b=jPFTxZhNy8P8I57ysGL8O7NhJLEO+m/BV9OiLJqP95qcGWqqcuLbmQ+SiwYeagFWeI
-         oZeK0KqiF9tzEmGRX6oTvPzB3JwnjGQLnOQUmDnr2Y92sQQa0ms4lCk1j9Ku60Sap21O
-         Rke/rPnerLL2j7fILyK5KqBnefIVvPCjvMSC0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+TBIdvlOJIeAZLlUH3ltx+xD24LgL4B/TL6SthL09iE=;
-        b=2aMvxzZa35z2rrzwk2aZegZ1s130Mm2fBebhWWhOcl/fRG6FKQW/AeMETI68znlavl
-         zqIRay8ha1bgr6ZYTNDUN9dzgR/5s5Yg5Ssfmes4MC0nsou19+OCrVWBHe7ZEnkRdEhF
-         P9C/Zb+ipalucHKWemwIqS0XZG8bYrfMNuZsJogsGyxnZZUYKg5mWPcIOaxNZm/Ugmw2
-         vEXjKvN7P5gilwUCDWoyRcOA4dU6482Odms3RZHz3wvlZqPh1/YHSl3oOTNAF2QJWVQ8
-         7ipNXvE2bOldq9IQNu4OLJam/TSpVg++6rMKb8zXAHGONHxYufdOpX+PqMyDhzYHogtv
-         qxJA==
-X-Gm-Message-State: AOAM530iFGGYyWA29nrZEzcxOHJMUaOmAPxDHIAM9sg1bunBiLKq8BSt
-        JHMrZT1Bx3fm0GtcZYLxhUMZ4L937v7DiQ==
-X-Google-Smtp-Source: ABdhPJxXxB4lWpwbKRTOIHg2/PYNrZeJ89rDwPZDBEkxyplEIxF2hwF7jddtU/57yDbA/hTxLLC9tQ==
-X-Received: by 2002:a17:90a:a82:b0:1da:3763:5cf5 with SMTP id 2-20020a17090a0a8200b001da37635cf5mr7218492pjw.55.1651769151549;
-        Thu, 05 May 2022 09:45:51 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:827b:7f14:bb7e:2898])
-        by smtp.gmail.com with UTF8SMTPSA id x20-20020aa78f14000000b0050dc76281e7sm1588230pfr.193.2022.05.05.09.45.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 09:45:51 -0700 (PDT)
-Date:   Thu, 5 May 2022 09:45:49 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
-        quic_kriskura@quicinc.com, quic_vpulyala@quicinc.com
-Subject: Re: [PATCH v14 3/7] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <YnP/PZViq1u0f2yl@google.com>
-References: <1650395470-31333-1-git-send-email-quic_c_sanm@quicinc.com>
- <1650395470-31333-4-git-send-email-quic_c_sanm@quicinc.com>
- <YnK79i3NiTdMmC98@google.com>
- <20220505032618.GC4640@hu-pkondeti-hyd.qualcomm.com>
+        with ESMTP id S244049AbiEEQwn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 12:52:43 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D939157B14;
+        Thu,  5 May 2022 09:49:03 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:41442)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nmeey-006uoh-6M; Thu, 05 May 2022 10:49:00 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37064 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nmeex-0031MX-9y; Thu, 05 May 2022 10:48:59 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
+        Oleg Nesterov <oleg@redhat.com>, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
+References: <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
+        <20220504224058.476193-9-ebiederm@xmission.com>
+        <YnPIF9DvM9L0k+0U@linutronix.de>
+Date:   Thu, 05 May 2022 11:48:34 -0500
+In-Reply-To: <YnPIF9DvM9L0k+0U@linutronix.de> (Sebastian Andrzej Siewior's
+        message of "Thu, 5 May 2022 14:50:31 +0200")
+Message-ID: <87ee189b8d.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220505032618.GC4640@hu-pkondeti-hyd.qualcomm.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nmeex-0031MX-9y;;;mid=<87ee189b8d.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1++Z+axhusfo6JndgThNVMSOQtg9/DxfAc=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Virus: No
+X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 235 ms - load_scoreonly_sql: 0.02 (0.0%),
+        signal_user_changed: 4.5 (1.9%), b_tie_ro: 3.0 (1.3%), parse: 1.02
+        (0.4%), extract_message_metadata: 10 (4.4%), get_uri_detail_list: 0.67
+        (0.3%), tests_pri_-1000: 9 (3.7%), tests_pri_-950: 0.98 (0.4%),
+        tests_pri_-900: 0.86 (0.4%), tests_pri_-90: 56 (23.8%), check_bayes:
+        55 (23.3%), b_tokenize: 4.4 (1.9%), b_tok_get_all: 6 (2.5%),
+        b_comp_prob: 1.31 (0.6%), b_tok_touch_all: 41 (17.2%), b_finish: 0.71
+        (0.3%), tests_pri_0: 140 (59.4%), check_dkim_signature: 0.58 (0.2%),
+        check_dkim_adsp: 2.5 (1.1%), poll_dns_idle: 0.81 (0.3%), tests_pri_10:
+        2.1 (0.9%), tests_pri_500: 8 (3.5%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v3 09/11] ptrace: Don't change __state
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 05, 2022 at 08:56:18AM +0530, Pavan Kondeti wrote:
-> On Wed, May 04, 2022 at 10:46:30AM -0700, Matthias Kaehlcke wrote:
-> > On Wed, Apr 20, 2022 at 12:41:06AM +0530, Sandeep Maheswaram wrote:
-> > > During suspend read the status of all port and set hs phy mode
-> > > based on current speed. Use this hs phy mode to configure wakeup
-> > > interrupts in qcom glue driver.
-> > > 
-> > > Check wakeup-source property for dwc3 core node to set the
-> > > wakeup capability. Drop the device_init_wakeup call from
-> > > runtime suspend and resume.
-> > > 
-> > > Also check during suspend if any wakeup capable devices are
-> > > connected to the controller (directly or through hubs), if there
-> > > are none set a flag to indicate that the PHY is powered
-> > > down during suspend.
-> > > 
-> > > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > > ---
-> > > v14:
-> > > Used device_children_wakeup_capable instead of usb_wakeup_enabled_descendants.
-> > > 
-> > > v13:
-> > > Changed dwc3_set_phy_speed_mode to dwc3_check_phy_speed_mode.
-> > > Removed device_init_wakeup calls from dwc3_runtime_suspend and dwc3_runtime_resume
-> > > as we have a new dt property wakeup-source.
-> > > 
-> > > 
-> > >  drivers/usb/dwc3/core.c | 33 ++++++++++++++++++++-------------
-> > >  drivers/usb/dwc3/core.h |  4 ++++
-> > >  drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
-> > >  3 files changed, 48 insertions(+), 13 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > > index 1170b80..898aa66 100644
-> > > --- a/drivers/usb/dwc3/core.c
-> > > +++ b/drivers/usb/dwc3/core.c
-> > > @@ -32,6 +32,7 @@
-> > >  #include <linux/usb/gadget.h>
-> > >  #include <linux/usb/of.h>
-> > >  #include <linux/usb/otg.h>
-> > > +#include <linux/usb/hcd.h>
-> > >  
-> > >  #include "core.h"
-> > >  #include "gadget.h"
-> > > @@ -1723,6 +1724,7 @@ static int dwc3_probe(struct platform_device *pdev)
-> > >  
-> > >  	platform_set_drvdata(pdev, dwc);
-> > >  	dwc3_cache_hwparams(dwc);
-> > > +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
-> > >  
-> > >  	spin_lock_init(&dwc->lock);
-> > >  	mutex_init(&dwc->mutex);
-> > > @@ -1865,6 +1867,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > >  {
-> > >  	unsigned long	flags;
-> > >  	u32 reg;
-> > > +	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
-> > >  
-> > >  	switch (dwc->current_dr_role) {
-> > >  	case DWC3_GCTL_PRTCAP_DEVICE:
-> > > @@ -1877,10 +1880,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > >  		dwc3_core_exit(dwc);
-> > >  		break;
-> > >  	case DWC3_GCTL_PRTCAP_HOST:
-> > > -		if (!PMSG_IS_AUTO(msg)) {
-> > > -			dwc3_core_exit(dwc);
-> > > -			break;
-> > > -		}
-> > > +		dwc3_check_phy_speed_mode(dwc);
-> > >  
-> > >  		/* Let controller to suspend HSPHY before PHY driver suspends */
-> > >  		if (dwc->dis_u2_susphy_quirk ||
-> > > @@ -1896,6 +1896,16 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > >  
-> > >  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
-> > >  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
-> > > +
-> > > +		if (!PMSG_IS_AUTO(msg)) {
-> > > +			if (device_may_wakeup(dwc->dev) &&
-> > > +			    device_children_wakeup_capable(&hcd->self.root_hub->dev)) {
-> > > +				dwc->phy_power_off = false;
-> > > +			} else {
-> > > +				dwc->phy_power_off = true;
-> > > +				dwc3_core_exit(dwc);
-> > 
-> > I found that shutting the PHYs down during suspend leads to high power
-> > consumption of a downstream hub (about 80mW vs 15mW when the PHYs are
-> > not shut down).
-> > 
-> > It would be interesting to know if this also impacts other non-hub
-> > peripherals. Unfortunately I can't test that, the hub on my system is
-> > soldered to the board.
-> > 
-> > I understand that shutting the PHYs down might be beneficial in terms
-> > of power on some systems, however on those I'm looking at we'd strongly
-> > prefer to save the 65mW of power consumed by the hub, rather than
-> > whatever smaller amount of power that is saved by powering down the
-> > PHYs.
-> > 
-> > Could we introduce a sysfs attribute (or some other sort of knob) to
-> > allow the admin to configure whether the PHYs should remain on or off
-> > during suspend? That is assuming that it is actually desirable to power
-> > them off on some systems.
-> 
-> The result may vary across SoCs also. The current proposal is to keep PHY
-> powered during system suspend if any of the downstream USB devices are enabled
-> for wakeup. This also includes USB2/USB3 root hub. If one wants to keep PHY
-> always powered on even when no device is attached, they can do so by enabling
-> wakeup (echo enabled > /sys/bus/usb/devices/usbX/power/wakeup). This is anyway
-> needed if you want to detect a peripheral attach during system suspend.
+Sebastian Andrzej Siewior <bigeasy@linutronix.de> writes:
 
-My concern is that it is not evident for an admin what causes the high power
-consumption of the USB client (if they detect/localize it in the first place),
-and even less that wakeup needs to be enabled to mitigate it.
+> On 2022-05-04 17:40:56 [-0500], Eric W. Biederman wrote:
+>> Stop playing with tsk->__state to remove TASK_WAKEKILL while a ptrace
+>> command is executing.
+>> 
+>> Instead remove TASK_WAKEKILL from the definition of TASK_TRACED, and
+>> implemention a new jobctl flag TASK_PTRACE_FROZEN.  This new flag is
+> implement ?
 
-Why can't we just put the PHYs in suspend, rather than taking the controller
-down completely during suspend?
+Yes.  Thank you.
+
+Eric
