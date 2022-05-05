@@ -2,75 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6574A51BA60
-	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 10:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B06951BACA
+	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 10:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348260AbiEEIbp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 May 2022 04:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
+        id S237995AbiEEIpb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 May 2022 04:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348522AbiEEIbn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 04:31:43 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFBF82DD57
-        for <linux-pm@vger.kernel.org>; Thu,  5 May 2022 01:28:04 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 15so3119229pgf.4
-        for <linux-pm@vger.kernel.org>; Thu, 05 May 2022 01:28:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=HOKWQO3AA3Q0kMwEYSF8sNwEKbhYO51b9Gcb/RnOKGg=;
-        b=wci8YOoxZ3illRFKHKrWaX7T897Mmf1T5O3iEUl+cL+QRBXehtQcWlzLaWIPPakKqr
-         ZW21u9nGyxk794Gfd2xWUN15d8CvQaYrXiETA8AIQUeETlm6NxnWyj3QuixYzEimAQqR
-         WYyvmk61zfkke2dhM85U7aYfHweXphpxcwJEB3taPGqLejWPxB7tSWyYqmtxF2cHzQBd
-         tTEAHp20VGgM9M2gs9WlZWFdXHhLA+Rc1yxd6Q4wR5ZNqQmBPIEm06qD8rquGqxXMU2k
-         dqHArOIllIBoQAhxe6QBPhXz8EusZoVpiKvcqdgeWQqVeztKoWsb1Hyjf4bJGCftI2a5
-         JFOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=HOKWQO3AA3Q0kMwEYSF8sNwEKbhYO51b9Gcb/RnOKGg=;
-        b=lxxMLz/TUyC82Xu5Qr9wEf9eiNQ0vb+aaz6LAhhx1bTxpdqefVI4+BR4adgjKMvO9r
-         a52S37eDz2uwSVHshdmVwotVKFuUgV2c2q71if0SaMY2JTqJzRS3f+WZ0KC1MDuA37Lj
-         DFv4GWfJ9OAqleqDZ9F28lPcrEHntAq4lZTfhQmxPQ0LyBo6IXQul5Jm7ghGLJOHNgy6
-         kvEVS43jvr20w3cyFvNTQjn3b7nARVuw1LgaCbAWzhoiRpCr1y3xq1aPOZGwQGoeAaUy
-         3mopkw3PZdfaXDO01HciaCl7TlMBt0y5LmAU1RPsyL8zsIISjLRV5pmhUI7f7JdpaI0W
-         uPhw==
-X-Gm-Message-State: AOAM532aVSeO5RhFD60cPBDE4XCH0+0lgH2vkvbT2hnNwZyrIZxf9xGK
-        Z1D+vSE4R3Bc/OSkX7FyZvuncQ==
-X-Google-Smtp-Source: ABdhPJz9Kgs7jvcZ0UyuZFb+nux2ZvzGdTDCoVC8GdWBchRjFOawaRJ3x6Cb7nYnHszwKHVJJIuurw==
-X-Received: by 2002:a63:da04:0:b0:3c1:457c:3df3 with SMTP id c4-20020a63da04000000b003c1457c3df3mr21712805pgh.292.1651739284363;
-        Thu, 05 May 2022 01:28:04 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id r11-20020a170902ea4b00b0015e8d4eb2dfsm859092plg.297.2022.05.05.01.28.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 01:28:03 -0700 (PDT)
-Date:   Thu, 5 May 2022 13:58:01 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pm@vger.kernel.org, Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] cpufreq: Avoid unnecessary frequency updates due to
- mismatch
-Message-ID: <20220505082801.oks7ko2sbqazyenn@vireshk-i7>
-References: <39e39a7d30c8ee6af81fb64670a330abeb87402e.1651652493.git.viresh.kumar@linaro.org>
- <CAKfTPtDbsd+RLwY+0ZfnNWkQD+jOHmoX2K+ZfsOMnEH81ouVjw@mail.gmail.com>
- <20220505074408.ayzmd5kdbw2fagbq@vireshk-i7>
- <CAKfTPtCuJGsrsBJ2jACr_YeKN3RXNVMkgRgo+cw9t7CAyGwHWQ@mail.gmail.com>
+        with ESMTP id S232818AbiEEIpb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 04:45:31 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF17E49F8C;
+        Thu,  5 May 2022 01:41:52 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id EA1B11F41053
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651740111;
+        bh=/QeZ5vMr5HKTzS4nnc319BmT5r9JF4pfYQjq6kNPoOE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=H7GjKQm0tpa2/3pSsk5EGKWYdgv+In5yZAveILwiE6K5rA4yrAqG9Rj4hIFKuAo6V
+         eezcCF+lfVm/9WJak5nUmDJM7ZSbQm9RYLS6CQ/ws1nLk0BJmMinmKpKdkfPMuU2da
+         OrTUYRAmF39kan7DMHJbGd9J4yvHaWKfmBKZ0Qo5upAeLI1unSBRY6xS7W74/H+yyV
+         uA6npuFaiLvjC9ujvkEWi/FyqcEnN6eNbri3Qgc2UvHSi0r1qVwNngb2yckVCiDBb/
+         puY8qRD9oqY3uANsEHzkWuBrZtswj0zjjQDtE9lVWSYyYTwG7dPqyytCIliydTBqOH
+         xeNN0y34Gbl2g==
+Message-ID: <5d532a9c-8227-610c-d0ae-9352b91b42e5@collabora.com>
+Date:   Thu, 5 May 2022 10:41:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtCuJGsrsBJ2jACr_YeKN3RXNVMkgRgo+cw9t7CAyGwHWQ@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v5 1/9] dt-bindings: cpufreq: mediatek: Add MediaTek CCI
+ property
+Content-Language: en-US
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
+        viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        matthias.bgg@gmail.com
+Cc:     jia-wei.chang@mediatek.com, roger.lu@mediatek.com,
+        hsinyi@google.com, khilman@baylibre.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220504130540.5902-1-rex-bc.chen@mediatek.com>
+ <20220504130540.5902-2-rex-bc.chen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220504130540.5902-2-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,23 +61,18 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05-05-22, 10:21, Vincent Guittot wrote:
-> Part of your problem is that cpufreq use khz whereas clock uses hz
-
-Not in this case at least as the value mentioned in OPP table DT is in
-Hz.
-
-> Would it be better to do something like below in cpufreq_generic_get
+Il 04/05/22 15:05, Rex-BC Chen ha scritto:
+> MediaTek Cache Coherent Interconnect (CCI) uses software devfreq module
+> for scaling clock frequency and adjust voltage.
+> The phandle could be linked between CPU and MediaTek CCI for some
+> MediaTek SoCs, like MT8183 and MT8186.
 > 
-> (clk_get_rate(policy->clk) + 500) / 1000
+> The reason we need the link status between cpufreq and MediaTek cci is
+> cpufreq and mediatek cci could share the same regulator in some MediaTek
+> SoCs. Therefore, to prevent the issue of high frequency and low voltage,
+> we need to use this to make sure mediatek cci is ready.
 > 
-> so you round to closest instead of always floor rounding
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
 
-That would be a fine thing to do anyway, though I am not sure if it
-will fix the problem at hand.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-If the hardware returns 499,999,499 Hz, we will still have the
-problem.
-
--- 
-viresh
