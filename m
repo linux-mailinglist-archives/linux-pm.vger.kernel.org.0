@@ -2,207 +2,219 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E6751B587
-	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 03:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C02751B5F1
+	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 04:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236972AbiEECCU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 May 2022 22:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
+        id S239272AbiEECda (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 May 2022 22:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236879AbiEECCS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 May 2022 22:02:18 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C14251E4F;
-        Wed,  4 May 2022 18:58:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651715917; x=1683251917;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5JGo0CUXEeDd0hKD63fYj2DEOqA2I95e7owhFGJ3cD0=;
-  b=T2vi7lviGPNuzJvBAs+HON3xp/9sCWSnLTDimeia0D56KrotSEV/osNb
-   cSmPXn9jx54NpSw9Z/xa0wZlefRSSsxmLNzQc0cuJSHUPIf84XCQk2wlW
-   Y1W+ITpjRceo7oJbyYnxUWma9Ux7IsMXEg+kCqK3xVOngKBlexFeHSnPd
-   WYLEo3dv4ud/1r5DW6is32jnywbQKSZCsU+pnxbwO/yF+6euoSCfdissl
-   aLRU9OLGvSG0cD44ahEv0bqg5VVUYI7uDI5EQXqwNfERfHGCzABWIaN4c
-   AAavDzmW/fEr0Vznirer6G/oq7LbWPn3WRYZuAHazalNtvkaBMfBgAQ7l
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10337"; a="293153507"
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="293153507"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2022 18:58:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,199,1647327600"; 
-   d="scan'208";a="537106061"
-Received: from rzhang1-dev.sh.intel.com ([10.239.48.43])
-  by orsmga006.jf.intel.com with ESMTP; 04 May 2022 18:58:33 -0700
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     rjw@rjwysocki.net, kvalo@kernel.org, alexandre.belloni@bootlin.com
-Cc:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-wireless@vger.kernel.org,
-        daniel.lezcano@linaro.org, merez@codeaurora.org, mat.jonczyk@o2.pl,
-        sumeet.r.pawnikar@intel.com, len.brown@intel.com
-Subject: [PATCH 7/7] rtc: cmos: Add suspend/resume endurance testing hook
-Date:   Thu,  5 May 2022 09:58:14 +0800
-Message-Id: <20220505015814.3727692-8-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220505015814.3727692-1-rui.zhang@intel.com>
-References: <20220505015814.3727692-1-rui.zhang@intel.com>
+        with ESMTP id S232555AbiEECd3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 May 2022 22:33:29 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2081.outbound.protection.outlook.com [40.107.243.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B49C4240A4;
+        Wed,  4 May 2022 19:29:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=clZZOtohWjGh0lNxwh8d20pwUVt7vQSAZGiF61zW1BJh31hcfV9Im/IRPwlKAcRglboUG++jf1ZYpHsfAG/7k3qIUecEGI/SYQv9nbcTdUTLzDuGQDPngerpBTHKUpCPUP0puU+qZMVir+Y07GScdU7XZXo5W5efpMVhMfeJWJyZjRvxZuz7MudFviPMd8lqkJo2jj8grfLnfBGVIba1AGueNhdvo2a8KRNsmacc0K+nodJ4YQ8VtIE16McNVyMxd/qhgKwtQCzQiW2uBeMobtZhMN3ZwFbCMQue5wGUygfx8bDIvINI3FaEKmAkP9O57WHGBCCUwrIFidcdfawC2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Tbicu/xoVJXVaItkk9R4MQpMdrwdIW2ciSZeVWDMCgM=;
+ b=UCYQLLu6MzaJH1WmelE51tdHQFT4yx2P/lakE44pyvtxa7pagEoN4Iup0bpyKgMwM8yTEBX8JXcm4FOdVui/Qdicd3M+Kjeynsdi2CU/brmRsEX13tX8mdykyZw4Zoc1o+neKsCYCB0BCZjzZ2ivLAvwu0pGdfImuBFTUO365fcGQa1ZAZZNe2Ox3LeGWwSPEVNrkG+lphU/n4nKnnefPqDurUUx43pYrCsdaU0s8EKDX9829v0CgDzcZSGwKeVbio9NUESV3Fp1NbWh83PLMbZkWZjiZ30ZD6AvzcUxJZn8Tas6vQxPtPCZV2BPkpJhP3Xyv+BHBtnlx4RptsFc9Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Tbicu/xoVJXVaItkk9R4MQpMdrwdIW2ciSZeVWDMCgM=;
+ b=ZLtDpfAv0gNya/WL14dp6zehh8YSj6q01TP61rtOdA8M29QVAjGAshB9iNbWBvR4xT2DiC6+QgdYxuU6QDTp1MifKIxtltBonfuqnwgoJ3sWfwpn+NcwVUnYoR2twQ/uBft3h0Eciv8pM5HmjCzls3DuZX4DZ5Ezu+7WN/geSxo=
+Received: from BN7PR06CA0051.namprd06.prod.outlook.com (2603:10b6:408:34::28)
+ by BN6PR12MB1332.namprd12.prod.outlook.com (2603:10b6:404:15::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.18; Thu, 5 May
+ 2022 02:29:45 +0000
+Received: from BN8NAM11FT032.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:34:cafe::55) by BN7PR06CA0051.outlook.office365.com
+ (2603:10b6:408:34::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5206.24 via Frontend
+ Transport; Thu, 5 May 2022 02:29:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT032.mail.protection.outlook.com (10.13.177.88) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5227.15 via Frontend Transport; Thu, 5 May 2022 02:29:45 +0000
+Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 4 May
+ 2022 21:29:40 -0500
+From:   Meng Li <li.meng@amd.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Huang Rui <ray.huang@amd.com>, <linux-pm@vger.kernel.org>
+CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        "Alex Deucher" <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, <linux-kernel@vger.kernel.org>,
+        Meng Li <li.meng@amd.com>
+Subject: [PATCH V5 0/3] Add unit test module for AMD P-State driver
+Date:   Thu, 5 May 2022 10:29:10 +0800
+Message-ID: <20220505022913.329259-1-li.meng@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1a788d07-5fd8-4276-99f9-08da2e3f1e35
+X-MS-TrafficTypeDiagnostic: BN6PR12MB1332:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR12MB13321DBABB66E80AA9E909CEF7C29@BN6PR12MB1332.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XdjqybvdYVrBv9gq2FnNWJrt7SxRFb3IJPxPsO+xSZjX4O7iNpmD8EARcX6ixcajZs5Ha6cNuRz+UzgNMlUweEA1qHMZCUA5POMtL/hgj8o5oGrFP1WYTl6VejKF7rLz1jq8tUZecZpYsZ0P6aT+jXifVlpMT/Dhx/lRUzFqDHfQV1H7gn+6w5hPAJepb8kgvqZMVQOGDm03799ZsZRVSUMnI5ATuVhtzh9EysOSbRWrPvPyPc3N9Vulfcs75kBfABeAxU9hds0AHVjWejoZD0jALYMV4GmvJJOZDcpJCBGF2gc5b6jm3qO2NqUBjcmFaLx+iFLMEHg1du1Wro4Ww/E9MUdvBTjMakMGxv5KwV/tAAKhJtoCBuCiwRZ6AqrztsTvuwj8421BYRWI3KHY0QfyxRoqTdD1cCWnlc9iitNXPxFEPcN2f4XIahsEzb8YP4Il64NqznsI7i7ZILu3ZZluSHNHirO/1aWw5rWciaHSAHehM9cqXabsuH0aqp8dCXNWLHHSjenvfWi1VRDaKh3axIpYZVWxXnHm1VAOc0BO84Id4uP1GAG1wGYaAuEK6E8XQi++oNeow8xE3mpoMRWPQLrrQCY/cxFtpjBQDswn66Le0mPz4NhN/quSQVNREneajYPAsSKVOs/KSTrBy6eXGDPa2tkGo6nAy04eTXjNdEGN2/7YBW9uk6Gc7PaGMkX42/5aOxlSgR8JrwnBrOaOhX9oTBoT7ExwspejwJaiwg6QuCgfNxymeui9cIgRLSMWuwE58l3KAUbemY+adFhewkE4Qc7zaYjvZKC85XqitRIqtTQdes7aWco8ylcojo5I0n7lwq7ncpwgc6v/Lw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(16526019)(186003)(81166007)(36756003)(966005)(5660300002)(508600001)(2616005)(1076003)(4326008)(6666004)(70206006)(8676002)(70586007)(40460700003)(8936002)(86362001)(316002)(110136005)(54906003)(82310400005)(26005)(2906002)(7696005)(36860700001)(83380400001)(47076005)(356005)(426003)(336012)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2022 02:29:45.0368
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a788d07-5fd8-4276-99f9-08da2e3f1e35
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT032.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1332
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Automated suspend/resume testing uses the RTC for wakeup.
-A short rtcwake period is desirable, so that more suspend/resume
-cycles can be completed, while the machine is available for testing.
+Hi all:
 
-But if too short a wake interval is specified, the event can occur,
-while still suspending, and then no event wakes the suspended system
-until the user notices that testing has stalled, and manually intervenes.
+AMD P-State unit test(amd-pstate-ut) is a kernel module for testing
+the functions of amd-pstate driver.
+It could import as a module to launch some test tasks.
+1) It can help all users to verify their processor support (SBIOS/
+Firmware or Hardware).
+2) Kernel can have a basic function test to avoid the kernel regression
+during the update.
+3) We can introduce more functional or performance tests to align the
+together, it will benefit power and performance scale optimization.
 
-Here we add a hook to the rtc-cmos driver to
-a) remove the alarm timer in the beginning of suspend, if there is any
-b) arm the wakeup in PM notifier callback, which is in the very late stage
-   before the system really suspends
-The remaining part of suspend is usually measured under 10 ms,
-and so arming the timer at this point could be as fast as the minimum
-time of 1-second.
+We upstream out AMD P-state driver into Linux kernel and use this unit
+test module to verify the required conditions and basic functions of
+amd-pstate before integration test.
 
-But there is a 2nd race.  The RTC has 1-second granularity, and unless
-you are timing the timer with a higher resolution timer,
-there is no telling if the current time + 1 will occur immediately,
-or a full second in the future.  And so 2-seconds is the safest minimum:
+We use test module in the kselftest frameworks to implement it.
+We create amd-pstate-ut module and tie it into kselftest.
 
-Run 1,000 s2idle cycles with (max of) 2 second wakeup period:
+For example: The test case aput_acpi_cpc is used to check whether the
+_CPC object is exist in SBIOS.
+The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is not
+existed at the detected processor, so it is a necessary condition.
 
- # echo 2 > /sys/module/rtc_cmos/parameters/rtc_wake_override_sec
- # sleepgraph.py -m freeze -multi 1000 0 -skiphtml -gzip
+At present, it only implements the basic framework and some simple test
+cases.
 
-Clear the timer override, to not interfere with subsequent
-real use of the machine's suspend/resume feature:
+TODO : 1) we will add more test cases to improve the depth and coverage of
+the test.
 
- # echo 0 > /sys/module/rtc_cmos/parameters/rtc_wake_override_sec
+Please check the documentation amd-pstate.rst for details of the test steps.
 
-Originally-by: Len Brown <len.brown@intel.com>
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-Tested-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
----
- drivers/rtc/interface.c |  1 +
- drivers/rtc/rtc-cmos.c  | 45 +++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 46 insertions(+)
+See patch series in below git repo:
+V1: https://lore.kernel.org/linux-pm/20220323071502.2674156-1-li.meng@amd.com/
+V2: https://lore.kernel.org/lkml/20220413090510.4039589-1-li.meng@amd.com/
+V3: https://lore.kernel.org/lkml/20220421074152.599419-1-li.meng@amd.com/ 
+V4: https://lore.kernel.org/lkml/20220427135315.3447550-1-li.meng@amd.com/
 
-diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
-index 9edd662c69ac..fb93aa2dc99c 100644
---- a/drivers/rtc/interface.c
-+++ b/drivers/rtc/interface.c
-@@ -1020,6 +1020,7 @@ void rtc_timer_cancel(struct rtc_device *rtc, struct rtc_timer *timer)
- 		rtc_timer_remove(rtc, timer);
- 	mutex_unlock(&rtc->ops_lock);
- }
-+EXPORT_SYMBOL_GPL(rtc_timer_cancel);
- 
- /**
-  * rtc_read_offset - Read the amount of rtc offset in parts per billion
-diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
-index 7c006c2b125f..9590c40fa9d8 100644
---- a/drivers/rtc/rtc-cmos.c
-+++ b/drivers/rtc/rtc-cmos.c
-@@ -32,6 +32,7 @@
- #include <linux/init.h>
- #include <linux/interrupt.h>
- #include <linux/spinlock.h>
-+#include <linux/suspend.h>
- #include <linux/platform_device.h>
- #include <linux/log2.h>
- #include <linux/pm.h>
-@@ -70,6 +71,9 @@ static inline int cmos_use_acpi_alarm(void)
- }
- #endif
- 
-+static int rtc_wake_override_sec;
-+module_param(rtc_wake_override_sec, int, 0644);
-+
- struct cmos_rtc {
- 	struct rtc_device	*rtc;
- 	struct device		*dev;
-@@ -89,6 +93,7 @@ struct cmos_rtc {
- 	u8			century;
- 
- 	struct rtc_wkalrm	saved_wkalrm;
-+	struct notifier_block	pm_nb;
- };
- 
- /* both platform and pnp busses use negative numbers for invalid irqs */
-@@ -744,6 +749,42 @@ static irqreturn_t cmos_interrupt(int irq, void *p)
- 		return IRQ_NONE;
- }
- 
-+static int cmos_pm_notify(struct notifier_block *nb, unsigned long mode, void *_unused)
-+{
-+	struct cmos_rtc *cmos = container_of(nb, struct cmos_rtc, pm_nb);
-+	struct rtc_device       *rtc = cmos->rtc;
-+	unsigned long           now;
-+	struct rtc_wkalrm       alm;
-+
-+	if (rtc_wake_override_sec == 0)
-+		return NOTIFY_OK;
-+
-+	switch (mode) {
-+	case PM_SUSPEND_PREPARE:
-+		/*
-+		 * Cancel the timer to make sure it won't fire
-+		 * before rtc is rearmed later.
-+		 */
-+		rtc_timer_cancel(rtc, &rtc->aie_timer);
-+		break;
-+	case PM_SUSPEND_LATE:
-+		if (rtc_read_time(rtc, &alm.time))
-+			return NOTIFY_BAD;
-+
-+		now = rtc_tm_to_time64(&alm.time);
-+		memset(&alm, 0, sizeof(alm));
-+		rtc_time64_to_tm(now + rtc_wake_override_sec, &alm.time);
-+		alm.enabled = true;
-+		if (rtc_set_alarm(rtc, &alm))
-+			return NOTIFY_BAD;
-+		if (cmos->wake_on)
-+			cmos->wake_on(cmos->dev);
-+		break;
-+	}
-+
-+	return NOTIFY_OK;
-+}
-+
- #ifdef	CONFIG_PNP
- #define	INITSECTION
- 
-@@ -937,6 +978,9 @@ cmos_do_probe(struct device *dev, struct resource *ports, int rtc_irq)
- 		 nvmem_cfg.size,
- 		 use_hpet_alarm() ? ", hpet irqs" : "");
- 
-+	cmos_rtc.pm_nb.notifier_call = cmos_pm_notify;
-+	register_pm_notifier(&cmos_rtc.pm_nb);
-+
- 	return 0;
- 
- cleanup2:
-@@ -965,6 +1009,7 @@ static void cmos_do_remove(struct device *dev)
- 	struct cmos_rtc	*cmos = dev_get_drvdata(dev);
- 	struct resource *ports;
- 
-+	unregister_pm_notifier(&cmos_rtc.pm_nb);
- 	cmos_do_shutdown(cmos->irq);
- 
- 	if (is_valid_irq(cmos->irq)) {
+Changes from V1 -> V2:
+- cpufreq: amd-pstate:
+- - add a trailing of amd-pstate.h to MAINTAINER AMD PSTATE DRIVER.
+- selftests: cpufreq:
+- - add a wrapper shell script for the amd_pstate_testmod module.
+- selftests: cpufreq:
+- - remove amd_pstate_testmod kernel module to
+  .../cpufreq/amd_pstate_testmod.
+- Documentation: amd-pstate:
+- - amd_pstate_testmod rst document is not provided at present.
+
+Changes from V2 -> V3:
+- cpufreq: amd-pstate:
+- - adjust the order of add amd-pstate.h in MAINTAINERS.
+- selftests: cpufreq:
+- - remove the call of amd_pstate_testmod.sh from cpufreq Makefile to
+  main.sh.
+- selftests: cpufreq:
+- - add explain the goal or intention of the AMD P-State Unit Test
+  module.
+- - modify comments.
+- - use the checkpatch.pl to check my patches.
+- - add conditions judgment before formal test.
+- - delete some unnecessary test cases.
+- - modify test cases about perf and performance etc.
+
+Changes from V3 -> V4:
+- selftests: amd-pstate:
+- - remove script and test module to tools/testing/selftests/amd-pstate/
+- - uniformly named amd-pstate-ut.
+- - check current architectures and cpufreq driver in amd-pstate-ut.sh
+- - delete codes about conditions in amd-pstate-ut.c 
+- Documentation: amd-pstate:
+- - add introduce document about amd-pstate unit test.
+
+Changes from V4 -> V5:
+- selftests: amd-pstate:
+- - add print the current scaling_driver.
+- - add amd-pstate-ut.ko into TEST_GEN_FILES.
+- - move "insmod/rmmod amd-pstate-ut.ko" stuff into script amd_pstate_ut.sh
+- - add a check of read back from X86_FEATURE_CPPC in get_shared_mem().
+- Documentation: amd-pstate:
+- - delete the test step about insmod/rmmod amd-pstate-ut.ko
+
+Thanks,
+Jasmine
+
+Meng Li (3):
+  cpufreq: amd-pstate: Expose struct amd_cpudata
+  selftests: amd-pstate: Add test module for amd-pstate driver
+  Documentation: amd-pstate: Add unit test introduction
+
+ Documentation/admin-guide/pm/amd-pstate.rst   |  85 ++++++
+ MAINTAINERS                                   |   1 +
+ drivers/cpufreq/amd-pstate.c                  |  60 +---
+ include/linux/amd-pstate.h                    |  77 +++++
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/amd-pstate/Makefile   |  15 +
+ .../selftests/amd-pstate/amd-pstate-ut.sh     |  45 +++
+ .../amd-pstate/amd-pstate-ut/Makefile         |  20 ++
+ .../amd-pstate/amd-pstate-ut/amd-pstate-ut.c  | 278 ++++++++++++++++++
+ tools/testing/selftests/amd-pstate/config     |   1 +
+ 10 files changed, 524 insertions(+), 59 deletions(-)
+ create mode 100644 include/linux/amd-pstate.h
+ create mode 100644 tools/testing/selftests/amd-pstate/Makefile
+ create mode 100755 tools/testing/selftests/amd-pstate/amd-pstate-ut.sh
+ create mode 100644 tools/testing/selftests/amd-pstate/amd-pstate-ut/Makefile
+ create mode 100644 tools/testing/selftests/amd-pstate/amd-pstate-ut/amd-pstate-ut.c
+ create mode 100644 tools/testing/selftests/amd-pstate/config
+
 -- 
-2.17.1
+2.25.1
 
