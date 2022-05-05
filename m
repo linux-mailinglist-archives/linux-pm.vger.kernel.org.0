@@ -2,77 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D6951BC64
-	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 11:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F0051BC6C
+	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 11:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245181AbiEEJt3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 May 2022 05:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
+        id S1354160AbiEEJvE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 May 2022 05:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354077AbiEEJt3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 05:49:29 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94171ADB7
-        for <linux-pm@vger.kernel.org>; Thu,  5 May 2022 02:45:50 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id iq10so3734763pjb.0
-        for <linux-pm@vger.kernel.org>; Thu, 05 May 2022 02:45:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Xd+tFU4G6DiHT7gIjy4KKIDQKgemXk6bnmPVHdW1sAc=;
-        b=qnlHZ+v6nzaiWZnsSkygEbiKNIGLS53iBtlot9+8u+KvtVnyMzeKoOksnY+xVHxKrT
-         Lz9CpGjYrEpC/QZm9KT19CItp17cgx9gnp66neRlQzxRR72//DpI7C2PjnWDdxmn6+xL
-         VB/f84cTCRcZtYxzRUtQRuth4nPhqyvZpgTlxP3bTcSy6JwuA1TDmdWaBdqfc3WcpXgn
-         njlIJ3XWnXC8lRMus63hIKZygsLUiOFbtjF2OFwogfhZtcexsS7PSwgZKTCYHXraU4pA
-         JJ5+KORlvZ6bAevhfRsviXyvZxUmJtCleiEb8C0sDrgfGL08z2Zv4uTbc1sNH4wiCMM0
-         /ndw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Xd+tFU4G6DiHT7gIjy4KKIDQKgemXk6bnmPVHdW1sAc=;
-        b=depASvOpkmJF7ec8BlSmRY7sAhczif7dXb4HPMOwjTr8rIGFQpKQXWnwpNoW/1DFnM
-         ne2Bs37+B9jof2GydJuRfKCHxX/BjFLjEXzvXItq1kAKdiRPLlWiblwcWE+Kn5/ucHk8
-         N2Vvt1RNOgWsbD9P31tjZGu9xPBlVS9F2k7mLU586/o36wE8cyEutXL6+fy8iGrayn9Z
-         yK99EcPkbJvNQCDj0HF86j0bhzHBI9upMjCeXmGMBco1tuzq/LQwkONBBbRGSBL+N/bs
-         vzoiv6ARgMcwdqYTKzPGey29h7FImneZY9euKwPw3upO41PkmD1KfBBC44ul/i2Zp5af
-         CP+w==
-X-Gm-Message-State: AOAM531kv8CXRbdrS9+i1V/cF3zXD/x/Fnj0M/Y8mh+wUYYfHX3m5T+D
-        Y+/faPeUMylIBIcuacgZ/g0+3A==
-X-Google-Smtp-Source: ABdhPJxhUO8FQ8vO2QKxlT51BGpwvAlvoIbwqpuo53kcnys/cWG/navnqZwc2uKd+K7E2NDJU85rDQ==
-X-Received: by 2002:a17:902:a987:b0:158:b020:e5b8 with SMTP id bh7-20020a170902a98700b00158b020e5b8mr26451166plb.103.1651743950207;
-        Thu, 05 May 2022 02:45:50 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id f18-20020a63f112000000b003c14af50603sm859049pgi.27.2022.05.05.02.45.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 02:45:49 -0700 (PDT)
-Date:   Thu, 5 May 2022 15:15:47 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pm@vger.kernel.org, Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] cpufreq: Avoid unnecessary frequency updates due to
- mismatch
-Message-ID: <20220505094547.skkwuthq454ajo7l@vireshk-i7>
-References: <39e39a7d30c8ee6af81fb64670a330abeb87402e.1651652493.git.viresh.kumar@linaro.org>
- <CAKfTPtDbsd+RLwY+0ZfnNWkQD+jOHmoX2K+ZfsOMnEH81ouVjw@mail.gmail.com>
- <20220505074408.ayzmd5kdbw2fagbq@vireshk-i7>
- <CAKfTPtCuJGsrsBJ2jACr_YeKN3RXNVMkgRgo+cw9t7CAyGwHWQ@mail.gmail.com>
- <20220505082801.oks7ko2sbqazyenn@vireshk-i7>
- <CAKfTPtCfKBiQkghY6gw+sSYYOXFRWMZNXsr64Vn5G-Oo1HF8ew@mail.gmail.com>
+        with ESMTP id S1354302AbiEEJvA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 05:51:00 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D2E4F9DB;
+        Thu,  5 May 2022 02:47:20 -0700 (PDT)
+X-UUID: 793874e842b54637a2b77ddf5a0cec4d-20220505
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:73cb7cf4-0bff-4b06-b0bf-bd17bb849a93,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:43e04e16-2e53-443e-b81a-655c13977218,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 793874e842b54637a2b77ddf5a0cec4d-20220505
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 742936293; Thu, 05 May 2022 17:47:14 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 5 May 2022 17:47:13 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Thu, 5 May 2022 17:47:13 +0800
+Message-ID: <9bddb8595ab7a8a9ca598aa7a90eb52c75916499.camel@mediatek.com>
+Subject: Re: [PATCH v5 0/9] cpufreq: mediatek: Cleanup and support MT8183
+ and MT8186
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <rafael@kernel.org>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
+        <roger.lu@mediatek.com>, <hsinyi@google.com>,
+        <khilman@baylibre.com>, <angelogioacchino.delregno@collabora.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Thu, 5 May 2022 17:47:13 +0800
+In-Reply-To: <20220505085358.nmohfx3akk7to46r@vireshk-i7>
+References: <20220504130540.5902-1-rex-bc.chen@mediatek.com>
+         <20220505085358.nmohfx3akk7to46r@vireshk-i7>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtCfKBiQkghY6gw+sSYYOXFRWMZNXsr64Vn5G-Oo1HF8ew@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,40 +65,26 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05-05-22, 11:40, Vincent Guittot wrote:
-> On Thu, 5 May 2022 at 10:28, Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> >
-> > On 05-05-22, 10:21, Vincent Guittot wrote:
-> > > Part of your problem is that cpufreq use khz whereas clock uses hz
-> >
-> > Not in this case at least as the value mentioned in OPP table DT is in
-> > Hz.
+On Thu, 2022-05-05 at 14:23 +0530, Viresh Kumar wrote:
+> On 04-05-22, 21:05, Rex-BC Chen wrote:
+> >   arm64: dts: mediatek: Add opp table and clock property for MT8183
+> >     cpufreq
+> >   arm64: dts: mediatek: Add MediaTek CCI node for MT8183
+> >   arm64: dts: mediatek: Add mediatek,cci property for MT8183
+> > cpufreq
 > 
-> But dev_pm_opp_init_cpufreq_table make it kHz anyway
-
-Yes.
-
-> > > Would it be better to do something like below in cpufreq_generic_get
-> > >
-> > > (clk_get_rate(policy->clk) + 500) / 1000
-> > >
-> > > so you round to closest instead of always floor rounding
-> >
-> > That would be a fine thing to do anyway, though I am not sure if it
-> > will fix the problem at hand.
-> >
-> > If the hardware returns 499,999,499 Hz, we will still have the
-> > problem.
+> I guess these would also go through my tree? Please get them acked by
+> SoC maintainers.
 > 
-> But in this case, cpufreq table should use 499,999Khz IMO.
+> I would also need an Ack from Rob for the binding patch.
+> 
 
-I did think about it earlier, but then left it.
+Hello Viresh,
 
-> We already
-> have OPP/cpufreq table being updated at boot with actual value.
+I also mail to Matthias who is mediatek soc maintainer.
+As for binding, I think we need to wait for the review from Rob or
+Krzysztof.
 
-I don't think we update the frequency values there yet, but yes one
-way to fix it is via DT.
+BRs,
+Rex
 
--- 
-viresh
