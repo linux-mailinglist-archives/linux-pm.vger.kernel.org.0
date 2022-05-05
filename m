@@ -2,144 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BDEE51C2BF
-	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 16:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B971D51C315
+	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 16:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380677AbiEEOnS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 May 2022 10:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35790 "EHLO
+        id S1380876AbiEEO7I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 May 2022 10:59:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232677AbiEEOnR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 10:43:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AEB53A43;
-        Thu,  5 May 2022 07:39:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81728B82DAC;
-        Thu,  5 May 2022 14:39:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CCC8C385A4;
-        Thu,  5 May 2022 14:39:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651761575;
-        bh=g1QQljRmgGmXNfn7Y2eEY8r+LEwnNx4UeO2ISPOT2Do=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L0vPd9KPowSZpVQBjF8sXiij5yDMPUr5RFtZooPJOYwEr7f6V9sJ5RjdYt4+teXw4
-         HX+3Lsvh/tUnu66swbaUJEf3iEzikdlXlrH/m21+aBGkI74L4jL0vHXMlDW2xju7TQ
-         qSgqS/SB6NAeJ6q+4V1081PhxiZSp+u2jJAGBT16clcxiZwyFhsilN3AcPaFw3uQOl
-         /U3Lqtt3KoGY9ElusVTjM9Ji1vjNy9BzO+uo7E5TbFnGSS0gc/3PaPsgM4L70/AnXp
-         acSYOAdCd/x5HGwT2qAZRb1IU7d68EXwD6NGQwfP8HuCcvQadOu/ksUTWE8VfWWXKG
-         AY97ayhF9stoQ==
-Date:   Thu, 5 May 2022 15:39:25 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>
-Subject: Re: [PATCH 18/48] ARM: pxa: hx4700: use gpio descriptors for audio
-Message-ID: <YnPhna5h1+kQGFLa@sirena.org.uk>
-References: <20220419163810.2118169-1-arnd@kernel.org>
- <20220419163810.2118169-19-arnd@kernel.org>
- <CACRpkdac8dGKSEmc-HpgooJefrDtiKK+_A1Mv7AJM8yQV9UY-w@mail.gmail.com>
- <CAK8P3a0w3gFzZoBzyRsi1Ta4prESf8Fp0=quAPSKMnaXvbXNTQ@mail.gmail.com>
- <CACRpkdZNryYkidvdKuT57RM3fz6_X+3oOzF5xaOZd+TyScfUsw@mail.gmail.com>
- <CAK8P3a0y0tVZODpp+GSf0EkMPWbbvMqA-4kNf0NJMc0M2=2WHw@mail.gmail.com>
- <CACRpkdaNRX0RDYJd_uaGo5jtiXu_qGHmEDGniaCmR=TZvcHH8A@mail.gmail.com>
+        with ESMTP id S1380893AbiEEO7G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 10:59:06 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF8319036;
+        Thu,  5 May 2022 07:55:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1651762525; x=1683298525;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8u8iQQdbFCIjYVkUVW1oE+jbyTZg2TDE6RFS2HVSKm4=;
+  b=MPlTVriwYQhco9Q/A99oo5TqOFP6/L4C2j4p4vbNivGuwG/0ntUqdADY
+   N7POBn+8gliTnwkOi6h3eizcK1cU1J/LnUNq4djilGZq0y+rQaKrk9lJC
+   KQFR/GAC5rNRoxmLi8hyEzJYycHBJ964/11tuaBzRXjHKrWiQcDzvWoNN
+   0E2xFFhzPZmbJpktSVIeNBhTdNPGO427PFtUQDM8+T0h99KAd6vpRhqxx
+   rQi6ltieZ9N4IhR8qUKr1iR/8mbNuqAP5ZMg24210DhVk96JRdSufL1WW
+   tByxFfHQrxfeMdJZo7C8Jqev/Ib65h+xn5eRuTFM0qEUdZiJTO1ne73AC
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
+   d="scan'208";a="154938494"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 May 2022 07:55:24 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 5 May 2022 07:55:24 -0700
+Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Thu, 5 May 2022 07:55:21 -0700
+Message-ID: <3dba24d7-8555-aa33-3bc7-2f0e19af2f48@microchip.com>
+Date:   Thu, 5 May 2022 16:55:14 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cOFcvF3tCFvqoEy/"
-Content-Disposition: inline
-In-Reply-To: <CACRpkdaNRX0RDYJd_uaGo5jtiXu_qGHmEDGniaCmR=TZvcHH8A@mail.gmail.com>
-X-Cookie: Real programs don't eat cache.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3 10/10] ARM: configs: sama7: enable
+ CONFIG_RESET_CONTROLLER
+Content-Language: en-US
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        <robh+dt@kernel.org>, <alexandre.belloni@bootlin.com>,
+        <p.zabel@pengutronix.de>, <linux@armlinux.org.uk>,
+        <sre@kernel.org>, <linux-arm-kernel@lists.infradead.org>
+CC:     <cristian.birsan@microchip.com>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220408080031.2527232-1-claudiu.beznea@microchip.com>
+ <20220408080031.2527232-11-claudiu.beznea@microchip.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20220408080031.2527232-11-claudiu.beznea@microchip.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 08/04/2022 at 10:00, Claudiu Beznea wrote:
+> Enable CONFIG_RESET_CONTROLLER. It is necessary for resetting individual
+> in SoC devices.
+> 
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 
---cOFcvF3tCFvqoEy/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+and queued in at91-defconfig for 5.19.
 
-On Thu, May 05, 2022 at 04:33:06PM +0200, Linus Walleij wrote:
-> On Thu, May 5, 2022 at 8:04 AM Arnd Bergmann <arnd@kernel.org> wrote:
+Best regards,
+   Nicolas
 
-> > /* Headphones jack detection DAPM pin */
-> > static struct snd_soc_jack_pin hs_jack_pin[] = {
-> >         {
-> >                 .pin    = "Headphone Jack",
-> >                 .mask   = SND_JACK_HEADPHONE,
-> >         },
-> >         {
-> >                 .pin    = "Speaker",
-> >                 /* disable speaker when hp jack is inserted */
-> >                 .mask   = SND_JACK_HEADPHONE,
-> >                 .invert = 1,
-> >         },
+> ---
+>   arch/arm/configs/sama7_defconfig | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm/configs/sama7_defconfig b/arch/arm/configs/sama7_defconfig
+> index 0368068e04d9..ce20bef1246e 100644
+> --- a/arch/arm/configs/sama7_defconfig
+> +++ b/arch/arm/configs/sama7_defconfig
+> @@ -180,6 +180,7 @@ CONFIG_IIO_SW_TRIGGER=y
+>   CONFIG_AT91_SAMA5D2_ADC=y
+>   CONFIG_PWM=y
+>   CONFIG_PWM_ATMEL=y
+> +CONFIG_RESET_CONTROLLER=y
+>   CONFIG_EXT2_FS=y
+>   CONFIG_EXT3_FS=y
+>   CONFIG_FANOTIFY=y
 
-> Hm some ASoC thingie. No idea what that is, but I suppose another
-> place where a subsystem for legacy reasons try to do the gpiolib
-> inversion on it's own accord. That one isn't flagged as active low in the
-> descriptor so it's fine I guess.
 
-It's saying that when the headphone is inserted the headphone output
-should be enabled and the speaker output should be disabled, and vice
-versa.
-
-> Possible this should be fixed in ASoC to rely on gpiolib but we can't
-> fix the entire world.
-
-I don't think so.
-
---cOFcvF3tCFvqoEy/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJz4ZwACgkQJNaLcl1U
-h9DWzgf+L3LZ6AC+cLFicMlKK60/cMgGMGUBo/mfgAk+G01MppBCzVUBD0sq8yoB
-9txZAIQeRSHcBJAs2/cp0Tpn6boCF1wwEkW/cP1ENkWFbTpUHpJPKzOmHOfhghTa
-W6pokDB6BExE10l8bgrjirSCGKpy9eLTzWkqpq1cb3h9AnaGWqnCakvf0Y33LB8E
-xodrQYiRtjGx7sN+iSb0DKzd1aX8MYFAdWN6MIJ/aengJTm1bHbRANMavfvPerE/
-REKky9u/NLWP2TXqYfbQaQNkefLK91ezapwt6UYh1K9FxtBd8UNRkkYnbauU+0qP
-XzqnZicyIPtB3pQ7IofAi3yQRgjPew==
-=dH+z
------END PGP SIGNATURE-----
-
---cOFcvF3tCFvqoEy/--
+-- 
+Nicolas Ferre
