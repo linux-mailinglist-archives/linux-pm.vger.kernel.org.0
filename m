@@ -2,82 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68BCC51BB14
-	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 10:54:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6389151BB03
+	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 10:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234790AbiEEI6X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 May 2022 04:58:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38938 "EHLO
+        id S1344682AbiEEIzo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 May 2022 04:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239748AbiEEI6W (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 04:58:22 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A99B4B1EF
-        for <linux-pm@vger.kernel.org>; Thu,  5 May 2022 01:54:44 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id p8so3138433pfh.8
-        for <linux-pm@vger.kernel.org>; Thu, 05 May 2022 01:54:44 -0700 (PDT)
+        with ESMTP id S232713AbiEEIzm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 04:55:42 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD7E4831A
+        for <linux-pm@vger.kernel.org>; Thu,  5 May 2022 01:52:03 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id c14so3146596pfn.2
+        for <linux-pm@vger.kernel.org>; Thu, 05 May 2022 01:52:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=XRbImXS7yZjOSKJpbk8D2qEogzCI5zzUCNGCXkZ4ORI=;
-        b=itRUh1dwQfTmRruVf3tQRZTPHU7Q3LOQmD46K2PgD63vClU5QD1rKPPIjkhgtLXcuB
-         b/DTrLyF+Zv4hWALhGeK13DLEj9w2CPGWsdw+DPkgS5YcTKdH4ODYx6Dib5R1UkVZg2O
-         phpswVF3Zi0Eaqu52fpaMAOJXJQinwJvhUB2Ly7tNCVqb2YBT+tu57hcTnWvYaf49OGa
-         zQFFXlZ7SawuqXjPhrVYSu1S+HF+r3uiA94IZ4dl4sVsVHlrGd7YpZW8pRxmEKc4nwJr
-         owZsh7QYjRj9Bwc259EmGttM/+0UWE9ABmd+dMEQt2Hf05KbbZwwyk20anpZobX0p8bC
-         JzeA==
+        bh=VwylQrsAGt1pODen6Yx6oRq8wvZvaler6x63zFeemjM=;
+        b=FLu+4l5iq0cTeLr34zKB+dJcpMejhiqqpJlsKL9ttR0QigpelBGLyPCSnIiiYBYtJp
+         FiSsehmGfYEfP26CgXR5ITrso79t6PMhZZdZxDgOzriJkuqaIcihgMEK1V0LsM5JQWnj
+         NHnlhIVY7wuiefZxsOq09VdkARxruo5m2Btb5kNqAsGvwkvOA2c8A+dz267Ynxib8cU8
+         wU9drjRMI3Gs6R15w7QzDYZgXjkampL0mUOPGHHItEHsCmbUeGcwEAhaqiNTViWg64ot
+         5nO4va1yn8R+3MdvLQYLJn+QcbBnPttDYE2ckse3S93AJijv4o0T3wXJGieEdtntUnHZ
+         k04Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XRbImXS7yZjOSKJpbk8D2qEogzCI5zzUCNGCXkZ4ORI=;
-        b=EaiEwCUD/fAbnCAxgBizjw8vFK0ERmvPMlkr957w4+l/JkJSDE0AIpruz+wGrFyEHk
-         rbcV7OK2791oL86n5glpjqtJjQioMvm6eVdyGzxxKoEoKmjzP0Tfj2QoOpYynFtHz6Jm
-         fav0vLMuXYTiDFptGssmRyB9WMkifHlD7RteEFF0835y3fOd8B0dTj4T82X+syEBWeZF
-         Vs9pDscoARBsK5p0l7gWca05lg0YR9n8OzknAOJGGKjEEh1xKKri8ATbwrO33zFPCeE0
-         1zFEPw1s99f73yX8Rj63i8jAcGnrilTGPrk5vGyjcRprL4K8a2QnSYYzcj/rGWimerx9
-         fSww==
-X-Gm-Message-State: AOAM530P66YmajrLeIyiM5T3lei/44t0VTX4SKAEENXsuGqOSM8GV9FV
-        bnQgX6C8E27t1gXecI+WaTTTRuZah/l3cQ==
-X-Google-Smtp-Source: ABdhPJxk2kal36tmSOj1u1bseqzNs8vNHgDOt6a/BDP1nICDYU6wjZQCZwyllBJW4uJTWz/H755R5w==
-X-Received: by 2002:a65:490d:0:b0:39e:58cb:b1eb with SMTP id p13-20020a65490d000000b0039e58cbb1ebmr21792988pgs.390.1651740298043;
-        Thu, 05 May 2022 01:44:58 -0700 (PDT)
+        bh=VwylQrsAGt1pODen6Yx6oRq8wvZvaler6x63zFeemjM=;
+        b=0Gh5tFJ9wtg0aoimEl0E/JKVt33uUkI6pTRcuaTCWcWeP6PfeHGUIMHB4DszreXgKz
+         haUGUcrxpl0njXGBuMYPsn0ULDvxsiQ0j0gr37h/bk416QjiV2NvaYZW5LR8bGC2MxuK
+         xEs9g9QX9ibKs/ZmQxZ0ciUFDBgMgfP3PTOI/lRGhXIV9cGd6ss+8bk0oqjLYdVeSTHC
+         6/CxfNeKHbtmRhv773Kx5MnMGv3PFf+j/4VJJRjlWu793DHbygu8WhDkajF9VobSU2Hv
+         BPcYclWWVXtXuzLQUNucxVV86kNblSlBpC9A6NbVrcSsi7YjwJgUlBx8GWDfMgFz2BXg
+         4Bmg==
+X-Gm-Message-State: AOAM5326e+20ctQKv8rPk+yy7BnIexLFuK9ssgYh80Zm72sEBVbZgAhK
+        Kksqzn8AoCGqiBhOhF8Cn3pM5w==
+X-Google-Smtp-Source: ABdhPJxSKwaqeGfh4/f+8ZXuLhUKlJ82K+YgosKX484l1tnWZUJol0h9AeYMEr7O9PHzGEm836Zk4w==
+X-Received: by 2002:a65:614e:0:b0:380:bfd9:d4ea with SMTP id o14-20020a65614e000000b00380bfd9d4eamr21079682pgv.92.1651740723313;
+        Thu, 05 May 2022 01:52:03 -0700 (PDT)
 Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id t3-20020a170902e84300b0015e8d4eb267sm935629plg.177.2022.05.05.01.44.57
+        by smtp.gmail.com with ESMTPSA id h16-20020a170902f55000b0015e8d4eb2cbsm938677plf.277.2022.05.05.01.52.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 01:44:57 -0700 (PDT)
-Date:   Thu, 5 May 2022 14:14:55 +0530
+        Thu, 05 May 2022 01:52:02 -0700 (PDT)
+Date:   Thu, 5 May 2022 14:22:00 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Hector Martin <marcan@marcan.st>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] MAINTAINERS: Add entries for Apple SoC cpufreq
- driver
-Message-ID: <20220505084455.x575yl2evgty5x3j@vireshk-i7>
-References: <20220504075153.185208-1-marcan@marcan.st>
- <20220504075153.185208-2-marcan@marcan.st>
- <20220504101750.wmuicq3dytnxrw5o@vireshk-i7>
- <e0445aa6-0c96-b80d-154e-274be0c1a025@marcan.st>
- <c374bea4-554d-2e50-4ac6-fb4a2e4fec67@linaro.org>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     rafael@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
+        roger.lu@mediatek.com, hsinyi@google.com, khilman@baylibre.com,
+        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v5 3/9] cpufreq: mediatek: Move voltage limits to
+ platform data
+Message-ID: <20220505085200.rzwzblirsprkvcz7@vireshk-i7>
+References: <20220504130540.5902-1-rex-bc.chen@mediatek.com>
+ <20220504130540.5902-4-rex-bc.chen@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c374bea4-554d-2e50-4ac6-fb4a2e4fec67@linaro.org>
+In-Reply-To: <20220504130540.5902-4-rex-bc.chen@mediatek.com>
 User-Agent: NeoMutt/20180716-391-311a52
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,38 +78,252 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05-05-22, 10:42, Krzysztof Kozlowski wrote:
-> On 04/05/2022 16:52, Hector Martin wrote:
-> > On 04/05/2022 19.17, Viresh Kumar wrote:
-> >> This should be the last patch instead, or should at least be added
-> >> after the files are merged first. If someone checks out at this
-> >> commit, the files won't be available but still linked here.
-> > 
-> > Isn't that backwards? 
+On 04-05-22, 21:05, Rex-BC Chen wrote:
+> From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
 > 
-> No, because we have tools for checking valid paths (in some places), so
-> when using that tool, the history is not bisectable.
+> Voltages and shifts are defined as macros originally.
+> There are different requirements of these values for each MediaTek SoCs.
+> Therefore, we add the platform data and move these values into it.
 > 
-> > If someone touches the files, we want them to be
-> > able to get_maintainer.pl, so the MAINTAINERS entries should come first.
-> > It doesn't really cause any issues if there are entries that point at
-> > files that don't exist yet, right?
+> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/cpufreq/mediatek-cpufreq.c | 90 ++++++++++++++++++++----------
+>  1 file changed, 61 insertions(+), 29 deletions(-)
 > 
-> It hurts any current or future tools checking for valid paths.
-> 
-> > 
-> > Though this is mostly a moot point because the purpose of splitting this
-> > out is so we can merge this one patch through the SoC tree, at which
-> > point the ordering isn't guaranteed (unless the whole series goes
-> > through SoC). 
-> 
-> Just add each path change to respective commit adding that file. It
-> should not be a separate commit, at first place.
-> 
-> Separate commits are for adding entire Maintainers entry.
+> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+> index 363ebecb2c80..80a3d4cd49ed 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> @@ -10,15 +10,21 @@
+>  #include <linux/cpumask.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> +#include <linux/of_platform.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_opp.h>
+>  #include <linux/regulator/consumer.h>
+>  
+> -#define MIN_VOLT_SHIFT		(100000)
+> -#define MAX_VOLT_SHIFT		(200000)
+> -#define MAX_VOLT_LIMIT		(1150000)
+>  #define VOLT_TOL		(10000)
+>  
+> +struct mtk_cpufreq_platform_data {
+> +	int min_volt_shift;
+> +	int max_volt_shift;
+> +	int proc_max_volt;
+> +	int sram_min_volt;
+> +	int sram_max_volt;
+> +};
+> +
+>  /*
+>   * The struct mtk_cpu_dvfs_info holds necessary information for doing CPU DVFS
+>   * on each CPU power/clock domain of Mediatek SoCs. Each CPU cluster in
+> @@ -46,8 +52,11 @@ struct mtk_cpu_dvfs_info {
+>  	struct notifier_block opp_nb;
+>  	unsigned int opp_cpu;
+>  	unsigned long opp_freq;
+> +	const struct mtk_cpufreq_platform_data *soc_data;
+>  };
+>  
+> +static struct platform_device *cpufreq_pdev;
+> +
+>  static LIST_HEAD(dvfs_info_list);
+>  
+>  static struct mtk_cpu_dvfs_info *mtk_cpu_dvfs_info_lookup(int cpu)
+> @@ -65,6 +74,7 @@ static struct mtk_cpu_dvfs_info *mtk_cpu_dvfs_info_lookup(int cpu)
+>  static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+>  					int new_vproc)
+>  {
+> +	const struct mtk_cpufreq_platform_data *soc_data = info->soc_data;
+>  	struct regulator *proc_reg = info->proc_reg;
+>  	struct regulator *sram_reg = info->sram_reg;
+>  	int pre_vproc, pre_vsram, new_vsram, vsram, vproc, ret;
+> @@ -76,7 +86,8 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+>  		return pre_vproc;
+>  	}
+>  	/* Vsram should not exceed the maximum allowed voltage of SoC. */
+> -	new_vsram = min(new_vproc + MIN_VOLT_SHIFT, MAX_VOLT_LIMIT);
+> +	new_vsram = min(new_vproc + soc_data->min_volt_shift,
+> +			soc_data->sram_max_volt);
+>  
+>  	if (pre_vproc < new_vproc) {
+>  		/*
+> @@ -99,10 +110,11 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+>  				return pre_vproc;
+>  			}
+>  
+> -			vsram = min(new_vsram, pre_vproc + MAX_VOLT_SHIFT);
+> +			vsram = min(new_vsram,
+> +				    pre_vproc + soc_data->min_volt_shift);
+>  
+> -			if (vsram + VOLT_TOL >= MAX_VOLT_LIMIT) {
+> -				vsram = MAX_VOLT_LIMIT;
+> +			if (vsram + VOLT_TOL >= soc_data->sram_max_volt) {
+> +				vsram = soc_data->sram_max_volt;
+>  
+>  				/*
+>  				 * If the target Vsram hits the maximum voltage,
+> @@ -120,7 +132,7 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+>  				ret = regulator_set_voltage(sram_reg, vsram,
+>  							    vsram + VOLT_TOL);
+>  
+> -				vproc = vsram - MIN_VOLT_SHIFT;
+> +				vproc = vsram - soc_data->min_volt_shift;
+>  			}
+>  			if (ret)
+>  				return ret;
+> @@ -154,7 +166,8 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+>  				return pre_vsram;
+>  			}
+>  
+> -			vproc = max(new_vproc, pre_vsram - MAX_VOLT_SHIFT);
+> +			vproc = max(new_vproc,
+> +				    pre_vsram - soc_data->max_volt_shift);
+>  			ret = regulator_set_voltage(proc_reg, vproc,
+>  						    vproc + VOLT_TOL);
+>  			if (ret)
+> @@ -163,10 +176,11 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+>  			if (vproc == new_vproc)
+>  				vsram = new_vsram;
+>  			else
+> -				vsram = max(new_vsram, vproc + MIN_VOLT_SHIFT);
+> +				vsram = max(new_vsram,
+> +					    vproc + soc_data->min_volt_shift);
+>  
+> -			if (vsram + VOLT_TOL >= MAX_VOLT_LIMIT) {
+> -				vsram = MAX_VOLT_LIMIT;
+> +			if (vsram + VOLT_TOL >= soc_data->sram_max_volt) {
+> +				vsram = soc_data->sram_max_volt;
+>  
+>  				/*
+>  				 * If the target Vsram hits the maximum voltage,
+> @@ -197,13 +211,14 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+>  
+>  static int mtk_cpufreq_set_voltage(struct mtk_cpu_dvfs_info *info, int vproc)
+>  {
+> +	const struct mtk_cpufreq_platform_data *soc_data = info->soc_data;
+>  	int ret;
+>  
+>  	if (info->need_voltage_tracking)
+>  		ret = mtk_cpufreq_voltage_tracking(info, vproc);
+>  	else
+>  		ret = regulator_set_voltage(info->proc_reg, vproc,
+> -					    MAX_VOLT_LIMIT);
+> +					    soc_data->proc_max_volt);
+>  	if (!ret)
+>  		info->pre_vproc = vproc;
+>  
+> @@ -583,9 +598,17 @@ static struct cpufreq_driver mtk_cpufreq_driver = {
+>  
+>  static int mtk_cpufreq_probe(struct platform_device *pdev)
+>  {
+> +	const struct of_device_id *match;
+>  	struct mtk_cpu_dvfs_info *info, *tmp;
+>  	int cpu, ret;
+>  
+> +	match = dev_get_platdata(&pdev->dev);
+> +	if (!match || !match->data) {
+> +		dev_err(&pdev->dev,
+> +			"failed to get mtk cpufreq platform data\n");
+> +		return -ENODEV;
+> +	}
+> +
+>  	for_each_possible_cpu(cpu) {
+>  		info = mtk_cpu_dvfs_info_lookup(cpu);
+>  		if (info)
+> @@ -597,6 +620,7 @@ static int mtk_cpufreq_probe(struct platform_device *pdev)
+>  			goto release_dvfs_info_list;
+>  		}
+>  
+> +		info->soc_data = match->data;
+>  		ret = mtk_cpu_dvfs_info_init(info, cpu);
+>  		if (ret) {
+>  			dev_err(&pdev->dev,
+> @@ -632,20 +656,27 @@ static struct platform_driver mtk_cpufreq_platdrv = {
+>  	.probe		= mtk_cpufreq_probe,
+>  };
+>  
+> +static const struct mtk_cpufreq_platform_data mt2701_platform_data = {
+> +	.min_volt_shift = 100000,
+> +	.max_volt_shift = 200000,
+> +	.proc_max_volt = 1150000,
+> +	.sram_min_volt = 0,
+> +	.sram_max_volt = 1150000,
+> +};
+> +
+>  /* List of machines supported by this driver */
+>  static const struct of_device_id mtk_cpufreq_machines[] __initconst = {
+> -	{ .compatible = "mediatek,mt2701", },
+> -	{ .compatible = "mediatek,mt2712", },
+> -	{ .compatible = "mediatek,mt7622", },
+> -	{ .compatible = "mediatek,mt7623", },
+> -	{ .compatible = "mediatek,mt8167", },
+> -	{ .compatible = "mediatek,mt817x", },
+> -	{ .compatible = "mediatek,mt8173", },
+> -	{ .compatible = "mediatek,mt8176", },
+> -	{ .compatible = "mediatek,mt8183", },
+> -	{ .compatible = "mediatek,mt8365", },
+> -	{ .compatible = "mediatek,mt8516", },
+> -
+> +	{ .compatible = "mediatek,mt2701", .data = &mt2701_platform_data },
+> +	{ .compatible = "mediatek,mt2712", .data = &mt2701_platform_data },
+> +	{ .compatible = "mediatek,mt7622", .data = &mt2701_platform_data },
+> +	{ .compatible = "mediatek,mt7623", .data = &mt2701_platform_data },
+> +	{ .compatible = "mediatek,mt8167", .data = &mt2701_platform_data },
+> +	{ .compatible = "mediatek,mt817x", .data = &mt2701_platform_data },
+> +	{ .compatible = "mediatek,mt8173", .data = &mt2701_platform_data },
+> +	{ .compatible = "mediatek,mt8176", .data = &mt2701_platform_data },
+> +	{ .compatible = "mediatek,mt8183", .data = &mt2701_platform_data },
+> +	{ .compatible = "mediatek,mt8365", .data = &mt2701_platform_data },
+> +	{ .compatible = "mediatek,mt8516", .data = &mt2701_platform_data },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(of, mtk_cpufreq_machines);
+> @@ -654,7 +685,6 @@ static int __init mtk_cpufreq_driver_init(void)
+>  {
+>  	struct device_node *np;
+>  	const struct of_device_id *match;
+> -	struct platform_device *pdev;
+>  	int err;
+>  
+>  	np = of_find_node_by_path("/");
+> @@ -678,11 +708,12 @@ static int __init mtk_cpufreq_driver_init(void)
+>  	 * and the device registration codes are put here to handle defer
+>  	 * probing.
+>  	 */
+> -	pdev = platform_device_register_simple("mtk-cpufreq", -1, NULL, 0);
+> -	if (IS_ERR(pdev)) {
+> +	cpufreq_pdev = platform_device_register_data(NULL, "mtk-cpufreq", -1,
+> +						     match, sizeof(*match));
 
-And there is no need for this patch to go via SoC tree, we can handle
-minor conflicts later on if required.
+Why pass match here instead of just the data ?
+
+> +	if (IS_ERR(cpufreq_pdev)) {
+>  		pr_err("failed to register mtk-cpufreq platform device\n");
+>  		platform_driver_unregister(&mtk_cpufreq_platdrv);
+> -		return PTR_ERR(pdev);
+> +		return PTR_ERR(cpufreq_pdev);
+>  	}
+>  
+>  	return 0;
+> @@ -691,6 +722,7 @@ module_init(mtk_cpufreq_driver_init)
+>  
+>  static void __exit mtk_cpufreq_driver_exit(void)
+>  {
+> +	platform_device_unregister(cpufreq_pdev);
+
+You fixed a bug silently :)
+
+That's not right.
+
+>  	platform_driver_unregister(&mtk_cpufreq_platdrv);
+>  }
+>  module_exit(mtk_cpufreq_driver_exit)
+> -- 
+> 2.18.0
 
 -- 
 viresh
