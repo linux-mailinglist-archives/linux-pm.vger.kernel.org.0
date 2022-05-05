@@ -2,137 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 327D451C6A1
-	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 19:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 308F451C807
+	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 20:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382942AbiEESBY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 May 2022 14:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51414 "EHLO
+        id S1383774AbiEEScg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 May 2022 14:32:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382941AbiEESBW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 14:01:22 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E7611C36;
-        Thu,  5 May 2022 10:57:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S1385271AbiEESaT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 14:30:19 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A505F25D;
+        Thu,  5 May 2022 11:20:54 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id e3b6dcd732a5fece; Thu, 5 May 2022 20:19:45 +0200
+Received: from kreacher.localnet (unknown [213.134.161.219])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 416F7CE2F54;
-        Thu,  5 May 2022 17:57:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39AD6C385A8;
-        Thu,  5 May 2022 17:57:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1651773458;
-        bh=CXgvnZVu0rwEM0ACvUhkHVFy8LvlpA+vkKO1Hu87/OY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kqo51bgwhbaxDJ2jGEqRneRMCLEY6acJI2GErjjdVUF9aBaJxGCug2WFcGraBKuei
-         Hsdr2h9XW580LBQ80eUepJUXEexRuaPRWiRbOqyHd9iZavkcQgnqfjSz52uIVmg11t
-         rLJ7JVRCuXahgxMzyFsq8Pz9b/LZAoEvZGuZyVRs=
-Date:   Thu, 5 May 2022 19:57:37 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Frank Wunderlich <linux@fw-web.de>, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC v1] opp: add config option for debug
-Message-ID: <YnQQEZ7eoa/ZbmEj@kroah.com>
-References: <20220504174823.156709-1-linux@fw-web.de>
- <YnLEwEIOqnLGxFjJ@kroah.com>
- <E08A9747-2F96-42A7-A427-0E00D4075CF0@public-files.de>
+        by v370.home.net.pl (Postfix) with ESMTPSA id 17CE866C2F2;
+        Thu,  5 May 2022 20:19:45 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PCI <linux-pci@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH v1 00/11] PCI/PM: Rework powering up PCI devices
+Date:   Thu, 05 May 2022 19:57:15 +0200
+Message-ID: <4738492.GXAFRqVoOG@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <E08A9747-2F96-42A7-A427-0E00D4075CF0@public-files.de>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.161.219
+X-CLIENT-HOSTNAME: 213.134.161.219
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfedugdduvdduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddufedrudefgedrudeiuddrvdduleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduiedurddvudelpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhkrgdrfigvshht
+ vghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohephhgvlhhgrggrsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhgrthhhrghnsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhguvghrshdrrhhogigvlhhlsehlihhnrghrohdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 05, 2022 at 07:50:56PM +0200, Frank Wunderlich wrote:
-> Hi,
-> 
-> Am 4. Mai 2022 20:24:00 MESZ schrieb Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
-> >On Wed, May 04, 2022 at 07:48:23PM +0200, Frank Wunderlich wrote:
-> >> From: Frank Wunderlich <frank-w@public-files.de>
-> >> 
-> >> Currently OPP debug is enabled by DEBUG_DRIVER option. This is
-> >generic
-> >> driver debug and opp floods serial console. This is annoying if opp
-> >is
-> >> not needed so give it an additional config-key.
-> >> 
-> >> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> >> ---
-> >>  drivers/base/Kconfig | 1 +
-> >>  drivers/opp/Kconfig  | 7 +++++++
-> >>  drivers/opp/Makefile | 2 +-
-> >>  3 files changed, 9 insertions(+), 1 deletion(-)
-> >> 
-> >> diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
-> >> index 6f04b831a5c0..8ae826c95d5f 100644
-> >> --- a/drivers/base/Kconfig
-> >> +++ b/drivers/base/Kconfig
-> >> @@ -130,6 +130,7 @@ config DEV_COREDUMP
-> >>  config DEBUG_DRIVER
-> >>  	bool "Driver Core verbose debug messages"
-> >>  	depends on DEBUG_KERNEL
-> >> +	imply DEBUG_OPP
-> >
-> >This should not be needed, otherwise we would have to do that for all
-> >random driver subsystem in the kernel.
-> 
-> Have added this to have same behaviour if anyone sets DEBUG_DRIVER via defconfig. Else this is disabled by default.
-> 
-> >>  	help
-> >>  	  Say Y here if you want the Driver core to produce a bunch of
-> >>  	  debug messages to the system log. Select this if you are having a
-> >> diff --git a/drivers/opp/Kconfig b/drivers/opp/Kconfig
-> >> index e8ce47b32735..6a2d2c6c1143 100644
-> >> --- a/drivers/opp/Kconfig
-> >> +++ b/drivers/opp/Kconfig
-> >> @@ -12,3 +12,10 @@ config PM_OPP
-> >>  	  representing individual voltage domains and provides SOC
-> >>  	  implementations a ready to use framework to manage OPPs.
-> >>  	  For more information, read <file:Documentation/power/opp.rst>
-> >> +
-> >> +menu "Operating Performance Points (OPP)"
-> >> +config DEBUG_OPP
-> >> +	bool "Debug Operating Performance Points"
-> >> +	help
-> >> +	  enable opp debugging
-> >> +endmenu
-> >> diff --git a/drivers/opp/Makefile b/drivers/opp/Makefile
-> >> index f65ed5985bb4..2589915eef95 100644
-> >> --- a/drivers/opp/Makefile
-> >> +++ b/drivers/opp/Makefile
-> >> @@ -1,5 +1,5 @@
-> >>  # SPDX-License-Identifier: GPL-2.0-only
-> >> -ccflags-$(CONFIG_DEBUG_DRIVER)	:= -DDEBUG
-> >> +ccflags-$(CONFIG_DEBUG_OPP)	:= -DDEBUG
-> >
-> >This feels wrong, you shouldn't need a -DDEBUG for anything if all is
-> >going correctly.  Why is opp so odd this way?  Just use the normal
-> >dev_dbg() macros and all will be fine, nothing special should be needed
-> >at all.
-> 
-> I have looked more into it,just wanted to get driver debug (probing/binding) and dev_dbg messages without the opp spam (floods serial console).
-> 
-> >And don't use a config option for it either, no one will turn it on, it
-> >needs to "just work" for all systems.
-> 
-> Config option is to enable if needed and not via driver-debug.
+Hi All,
 
-Please do not do that, you should never need subsystem/driver Kconfig
-options like this.  Distros will never enable them and you can't ask a
-user to rebuild their kernel easily.  Just rely on the same
-infrastructure like all other subsystems do please.
+This patch set replaces patches [4-9/9] from the series at
 
-thanks,
+https://lore.kernel.org/linux-pm/4419002.LvFx2qVVIh@kreacher/T/#mf7ed30e7cf114b131e6067e4e10c28e59d661cb4
 
-greg k-h
+which had to be dropped, because they were problematic:
+
+https://lore.kernel.org/linux-pm/4419002.LvFx2qVVIh@kreacher/T/#ma71172f00a95708f0cd4d21741bcc248d394caf1
+
+This time there are more patches making smaller changes each and I've done my
+best to avoid making any changes without a good enough motivation.
+
+Please refer to the patch changelogs for details.
+
+Thanks!
+
+
+
