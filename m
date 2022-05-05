@@ -2,73 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A936751C60F
-	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 19:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F9051C65D
+	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 19:42:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382671AbiEERbi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 May 2022 13:31:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50804 "EHLO
+        id S1382792AbiEERpn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 May 2022 13:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382668AbiEERbi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 13:31:38 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.133.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8705B59940
-        for <linux-pm@vger.kernel.org>; Thu,  5 May 2022 10:27:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651771677;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WF7KSuI261u8vVkwn0kUu26vaIBYgg0I47oTcQGVWZc=;
-        b=chFrUPDbGL0rn7TOe3btAqe8NL5BgCBcIYxjinOY3RGZ5rDTOUCY8g/o7ypBq5MbvwkTjB
-        SraUXnpreAQzZX7wikARwBLRyhLocEHRhA1Kt4Jkkh/jeTJpD8NYAURlWrkatI5OyjvvpF
-        6V/Ej7sFJv9Aq79E2OYmHLYENgV2QvE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-90-OMBnKkxEPYO6IDkxWB4cIw-1; Thu, 05 May 2022 13:27:52 -0400
-X-MC-Unique: OMBnKkxEPYO6IDkxWB4cIw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S1382810AbiEERny (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 13:43:54 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C885D643;
+        Thu,  5 May 2022 10:40:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 52721398CA60;
-        Thu,  5 May 2022 17:27:51 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.3])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 46F1B40CF905;
-        Thu,  5 May 2022 17:27:45 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Thu,  5 May 2022 19:27:51 +0200 (CEST)
-Date:   Thu, 5 May 2022 19:27:45 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
-Subject: Re: [PATCH v3 08/11] ptrace: Admit ptrace_stop can generate spuriuos
- SIGTRAPs
-Message-ID: <20220505172744.GA13664@redhat.com>
-References: <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
- <20220504224058.476193-8-ebiederm@xmission.com>
- <20220505150158.GB13929@redhat.com>
- <87a6bv7v49.fsf@email.froward.int.ebiederm.org>
+        by sin.source.kernel.org (Postfix) with ESMTPS id E52BACE2F17;
+        Thu,  5 May 2022 17:40:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19B9FC385AE;
+        Thu,  5 May 2022 17:40:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1651772402;
+        bh=LadALzBO76IZIhY8zk7doDAmtjAq+INNAF1NnnHxrUs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sLInGr2tnnXgxO0ZV1wLnKBiMXljVidKippK7tkX/zrESqFVJoJrClIjABzah4W4x
+         6gk6Vwq/4H24PlAitI9jgsfJP0Xmz9QVv5maunm9tFX4ysmjxLZSnqWBTnbcbH7WI3
+         VOLyqDWhObxI9s5nHH0Bhx6JEHzL0hT2yg4pubIw=
+Date:   Thu, 5 May 2022 19:38:24 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Frank Wunderlich <linux@fw-web.de>, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: Aw: Re: [RFC v1] opp: add config option for debug
+Message-ID: <YnQLkBwMyIDdjbL0@kroah.com>
+References: <20220504174823.156709-1-linux@fw-web.de>
+ <20220505055857.bqjm72qkzwcbuvuh@vireshk-i7>
+ <trinity-6a6249b9-69eb-459c-96f1-dbf8f031a86f-1651766058085@3c-app-gmx-bs47>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87a6bv7v49.fsf@email.froward.int.ebiederm.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <trinity-6a6249b9-69eb-459c-96f1-dbf8f031a86f-1651766058085@3c-app-gmx-bs47>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,15 +55,56 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/05, Eric W. Biederman wrote:
->
-> And yes that WARN_ON_ONCE can trigger on PREEMPT_RT but that is just
-> because PREMPT_RT is currently broken with respect to ptrace.  Which
-> makes a WARN_ON_ONCE appropriate.
+On Thu, May 05, 2022 at 05:54:18PM +0200, Frank Wunderlich wrote:
+> Hi,
+> 
+> > Gesendet: Donnerstag, 05. Mai 2022 um 07:58 Uhr
+> > Von: "Viresh Kumar" <viresh.kumar@linaro.org>
+> > An: "Frank Wunderlich" <linux@fw-web.de>
+> > Cc: linux-pm@vger.kernel.org, "Frank Wunderlich" <frank-w@public-files.de>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, "Viresh Kumar" <vireshk@kernel.org>, "Nishanth Menon" <nm@ti.com>, "Stephen Boyd" <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+> > Betreff: Re: [RFC v1] opp: add config option for debug
+> >
+> > On 04-05-22, 19:48, Frank Wunderlich wrote:
+> > > From: Frank Wunderlich <frank-w@public-files.de>
+> > >
+> > > Currently OPP debug is enabled by DEBUG_DRIVER option. This is generic
+> > > driver debug and opp floods serial console. This is annoying if opp is
+> > > not needed so give it an additional config-key.
+> > >
+> > > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> > > ---
+> > >  drivers/base/Kconfig | 1 +
+> > >  drivers/opp/Kconfig  | 7 +++++++
+> > >  drivers/opp/Makefile | 2 +-
+> > >  3 files changed, 9 insertions(+), 1 deletion(-)
+> >
+> > Isn't something like Dynamic Debug helpful here ?
+> 
+> you mean something like this:
+> 
+> https://www.kernel.org/doc/html/v5.17/admin-guide/dynamic-debug-howto.html#debug-messages-during-boot-process
+> 
+> so enabling debug only with cmdline-param...
+> 
+> have you a simple example how to implement it? have not done anything with dynamic-debug yet...seems mighty but not trivial to implement.
+> 
+> currently dev_dbg() is used for the messages that i try to disable...but show others from driver_debug at debug level.
+> 
+> What needs to be changed to filter it via DYNAMIC_DEBUG?
+> 
+> found this, but i'm not sure if i interpret it the right way...
+> 
+> https://elixir.bootlin.com/linux/v5.18-rc5/source/drivers/acpi/utils.c#L495
+> defines __acpi_handle_debug
+> called via acpi_handle_debug macro
+> https://elixir.bootlin.com/linux/v5.18-rc5/source/include/linux/acpi.h#L1136
+> 
+> so basicly convert dev_dbg to __dynamic_pr_debug
 
-Yes agreed. In this case WARN_ON_ONCE() can help a user to understand
-that a failure was caused by the kernel problem which we need to fix
-anyway.
+Ick, no, just stick with all dev_dbg() calls and do not add any Makefile
+changes and all should be fine.  And drop the Kconfig option, should not
+be needed for a subsystem/driver at all.
 
-Oleg.
+thanks,
 
+greg k-h
