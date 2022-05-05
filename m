@@ -2,71 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D249351C31C
-	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 16:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F19651C32B
+	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 17:00:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380322AbiEEPBR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 May 2022 11:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
+        id S1380944AbiEEPDg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 May 2022 11:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380899AbiEEPBR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 11:01:17 -0400
-Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 114BF5676C
-        for <linux-pm@vger.kernel.org>; Thu,  5 May 2022 07:57:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1651762656;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=edMoOIi5W5h5BTuQ+OG7p8B5wBOMsVB1tjxMAlGSHpw=;
-        b=GgF2wvqJZ3WuUdokNPJMZsCfHlNeGEg75Ac/Fsy7KGUES4kQhqylfCMlZAzB47uj5KgqqX
-        ImOcjeVT2UrIKhCTwZIDn7Xpn76xCY5sKknzrcaEBD64S3SO5IIFcKnQr+N9VWqD9USKoi
-        gRYJ5iWsu+1IKqDAg16W1l5440LH05g=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-187-7XIzuTHxPNix0eEXnTrTjw-1; Thu, 05 May 2022 10:57:31 -0400
-X-MC-Unique: 7XIzuTHxPNix0eEXnTrTjw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S233400AbiEEPDe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 11:03:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1C25A15F;
+        Thu,  5 May 2022 07:59:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A339C1E7DCD6;
-        Thu,  5 May 2022 14:57:30 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.3])
-        by smtp.corp.redhat.com (Postfix) with SMTP id E03E840CF8F5;
-        Thu,  5 May 2022 14:57:24 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Thu,  5 May 2022 16:57:28 +0200 (CEST)
-Date:   Thu, 5 May 2022 16:57:22 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
-Subject: Re: [PATCH v3 08/11] ptrace: Admit ptrace_stop can generate spuriuos
- SIGTRAPs
-Message-ID: <20220505145721.GA13929@redhat.com>
-References: <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
- <20220504224058.476193-8-ebiederm@xmission.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B827661CC5;
+        Thu,  5 May 2022 14:59:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2171EC385BA;
+        Thu,  5 May 2022 14:59:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651762794;
+        bh=IhPlTG/RSP+SotNFea7Fr39MZz0OjsoIPseiihaGxkc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=skKE7CkSWJipKAwKJCBrR71hl9l5yOYjQoARS41ioF8PPh7bxColWxsD4vdtmnrMC
+         mQBIqAunoSnIAL+eTFw6a87TENu1OZL3J0unpwvAapDjehQbL4dIYPVxYDr5E0f8H2
+         2Ut88XHuXmqK6oXMnJsfP9eSc86Q5HJlHS7nBYfK8IZe39hShNsGm5F+uG6l3Ohx8q
+         Y2qhl3pfwWmUs7JTRVGH5vJD27kQLOf6she+YLgBmzISzF3PWnvMRiH84FZiN5pT9f
+         vZW1FeaKkpy+VomhCOcOZ66ZN31g3fbgxTh0Rr9f2+J3tXb9yK6yeSyrs1M6tkoYJl
+         i07arWsPlHMPw==
+Received: by mail-wr1-f47.google.com with SMTP id e2so6474486wrh.7;
+        Thu, 05 May 2022 07:59:54 -0700 (PDT)
+X-Gm-Message-State: AOAM530MYMU8o7FNtrhlIEiSgBAJYTWan5euWHydKoFdBgiQSVdyQ1Ay
+        JyrECOUz9sQ7Dzw/+vBjIHbF09LRhwsqD32VXeM=
+X-Google-Smtp-Source: ABdhPJyKl/lyubFIqlgFQkig5zNAs/zvVqV8InTOhcfpAoriY4j8URNODYiLewygje3f2WDNulvuU9Rfg/N1L0FjaiU=
+X-Received: by 2002:a05:6000:707:b0:20c:4fd8:1d61 with SMTP id
+ bs7-20020a056000070700b0020c4fd81d61mr21866057wrb.407.1651762791921; Thu, 05
+ May 2022 07:59:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504224058.476193-8-ebiederm@xmission.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220419163810.2118169-1-arnd@kernel.org> <20220419163810.2118169-19-arnd@kernel.org>
+ <CACRpkdac8dGKSEmc-HpgooJefrDtiKK+_A1Mv7AJM8yQV9UY-w@mail.gmail.com>
+ <CAK8P3a0w3gFzZoBzyRsi1Ta4prESf8Fp0=quAPSKMnaXvbXNTQ@mail.gmail.com>
+ <CACRpkdZNryYkidvdKuT57RM3fz6_X+3oOzF5xaOZd+TyScfUsw@mail.gmail.com>
+ <CAK8P3a0y0tVZODpp+GSf0EkMPWbbvMqA-4kNf0NJMc0M2=2WHw@mail.gmail.com>
+ <CACRpkdaNRX0RDYJd_uaGo5jtiXu_qGHmEDGniaCmR=TZvcHH8A@mail.gmail.com> <YnPhna5h1+kQGFLa@sirena.org.uk>
+In-Reply-To: <YnPhna5h1+kQGFLa@sirena.org.uk>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Thu, 5 May 2022 16:59:35 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2cYUYMKSMo3VOLVTO0=LWc0sHf72Eph8t_es9axo_eeA@mail.gmail.com>
+Message-ID: <CAK8P3a2cYUYMKSMo3VOLVTO0=LWc0sHf72Eph8t_es9axo_eeA@mail.gmail.com>
+Subject: Re: [PATCH 18/48] ARM: pxa: hx4700: use gpio descriptors for audio
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Tomas Cech <sleep_walker@suse.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,103 +97,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/04, Eric W. Biederman wrote:
+On Thu, May 5, 2022 at 4:39 PM Mark Brown <broonie@kernel.org> wrote:
+> On Thu, May 05, 2022 at 04:33:06PM +0200, Linus Walleij wrote:
+> > On Thu, May 5, 2022 at 8:04 AM Arnd Bergmann <arnd@kernel.org> wrote:
 >
-> -static int ptrace_stop(int exit_code, int why, int clear_code,
-> -			unsigned long message, kernel_siginfo_t *info)
-> +static int ptrace_stop(int exit_code, int why, unsigned long message,
-> +		       kernel_siginfo_t *info)
->  	__releases(&current->sighand->siglock)
->  	__acquires(&current->sighand->siglock)
->  {
-> @@ -2259,54 +2259,33 @@ static int ptrace_stop(int exit_code, int why, int clear_code,
->  
->  	spin_unlock_irq(&current->sighand->siglock);
->  	read_lock(&tasklist_lock);
-> -	if (likely(current->ptrace)) {
-> -		/*
-> -		 * Notify parents of the stop.
-> -		 *
-> -		 * While ptraced, there are two parents - the ptracer and
-> -		 * the real_parent of the group_leader.  The ptracer should
-> -		 * know about every stop while the real parent is only
-> -		 * interested in the completion of group stop.  The states
-> -		 * for the two don't interact with each other.  Notify
-> -		 * separately unless they're gonna be duplicates.
-> -		 */
-> +	/*
-> +	 * Notify parents of the stop.
-> +	 *
-> +	 * While ptraced, there are two parents - the ptracer and
-> +	 * the real_parent of the group_leader.  The ptracer should
-> +	 * know about every stop while the real parent is only
-> +	 * interested in the completion of group stop.  The states
-> +	 * for the two don't interact with each other.  Notify
-> +	 * separately unless they're gonna be duplicates.
-> +	 */
-> +	if (current->ptrace)
->  		do_notify_parent_cldstop(current, true, why);
-> -		if (gstop_done && ptrace_reparented(current))
-> -			do_notify_parent_cldstop(current, false, why);
-> +	if (gstop_done && (!current->ptrace || ptrace_reparented(current)))
-> +		do_notify_parent_cldstop(current, false, why);
->  
-> -		/*
-> -		 * Don't want to allow preemption here, because
-> -		 * sys_ptrace() needs this task to be inactive.
-> -		 *
-> -		 * XXX: implement read_unlock_no_resched().
-> -		 */
-> -		preempt_disable();
-> -		read_unlock(&tasklist_lock);
-> -		cgroup_enter_frozen();
-> -		preempt_enable_no_resched();
-> -		freezable_schedule();
-> -		cgroup_leave_frozen(true);
-> -	} else {
-> -		/*
-> -		 * By the time we got the lock, our tracer went away.
-> -		 * Don't drop the lock yet, another tracer may come.
-> -		 *
-> -		 * If @gstop_done, the ptracer went away between group stop
-> -		 * completion and here.  During detach, it would have set
-> -		 * JOBCTL_STOP_PENDING on us and we'll re-enter
-> -		 * TASK_STOPPED in do_signal_stop() on return, so notifying
-> -		 * the real parent of the group stop completion is enough.
-> -		 */
-> -		if (gstop_done)
-> -			do_notify_parent_cldstop(current, false, why);
-> -
-> -		/* tasklist protects us from ptrace_freeze_traced() */
-> -		__set_current_state(TASK_RUNNING);
-> -		read_code = false;
-> -		if (clear_code)
-> -			exit_code = 0;
-> -		read_unlock(&tasklist_lock);
-> -	}
-> +	/*
-> +	 * Don't want to allow preemption here, because
-> +	 * sys_ptrace() needs this task to be inactive.
-> +	 *
-> +	 * XXX: implement read_unlock_no_resched().
-> +	 */
-> +	preempt_disable();
-> +	read_unlock(&tasklist_lock);
-> +	cgroup_enter_frozen();
-> +	preempt_enable_no_resched();
-> +	freezable_schedule();
+> > > /* Headphones jack detection DAPM pin */
+> > > static struct snd_soc_jack_pin hs_jack_pin[] = {
+> > >         {
+> > >                 .pin    = "Headphone Jack",
+> > >                 .mask   = SND_JACK_HEADPHONE,
+> > >         },
+> > >         {
+> > >                 .pin    = "Speaker",
+> > >                 /* disable speaker when hp jack is inserted */
+> > >                 .mask   = SND_JACK_HEADPHONE,
+> > >                 .invert = 1,
+> > >         },
+>
+> > Hm some ASoC thingie. No idea what that is, but I suppose another
+> > place where a subsystem for legacy reasons try to do the gpiolib
+> > inversion on it's own accord. That one isn't flagged as active low in the
+> > descriptor so it's fine I guess.
+>
+> It's saying that when the headphone is inserted the headphone output
+> should be enabled and the speaker output should be disabled, and vice
+> versa.
 
-I must have missed something.
+Ok, that sounds like I should remove the flag here if I declare the
+GPIO line as GPIO_ACTIVE_LOW instead of GPIO_ACTIVE_HIGH, right?
 
-So the tracee calls ptrace_notify() but debugger goes away before the
-ptrace_notify() takes siglock. After that the no longer traced task
-will sleep in TASK_TRACED ?
-
-Looks like ptrace_stop() needs to check current->ptrace before it does
-set_special_state(TASK_TRACED) with siglock held? Then we can rely on
-ptrace_unlink() which will wake the tracee up even if debugger exits.
-
-No?
-
-Oleg.
-
+         Arnd
