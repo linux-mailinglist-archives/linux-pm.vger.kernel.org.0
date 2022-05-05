@@ -2,70 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3015851C23D
-	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 16:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B45E351C2A6
+	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 16:33:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379710AbiEEOW6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 May 2022 10:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47338 "EHLO
+        id S1380687AbiEEOhB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 May 2022 10:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240498AbiEEOWz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 10:22:55 -0400
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A34A5A2F6;
-        Thu,  5 May 2022 07:19:16 -0700 (PDT)
-Received: by mail-oi1-f169.google.com with SMTP id w194so3247916oie.9;
-        Thu, 05 May 2022 07:19:16 -0700 (PDT)
+        with ESMTP id S1380688AbiEEOhA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 10:37:00 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF5B5AA70
+        for <linux-pm@vger.kernel.org>; Thu,  5 May 2022 07:33:18 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id f38so7981905ybi.3
+        for <linux-pm@vger.kernel.org>; Thu, 05 May 2022 07:33:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mjPMNwsrp6J5GYko2SAtRJngBnVXhB8jFuWLYKEwiPY=;
+        b=fewd6t0m8AlbJsOL8rMMtmdSbrblLC+tou4WQa5Ukx0fDLML8yOTTiI03IEYZHxp2c
+         5W5CFU2Qo00NadwNz4fu2sdMo4N/fhzCDiGLHlJnCCs1Ua3dcldY61sEg61hMdSawUir
+         7eSZQI2CebwLUn4u4p9Bz1nt0xWXEswSQ1mxvA/ee4Uu5XXGOucd4+6oSzUonl+Kg0LI
+         8uOzDzX7qYjSqNbAmA90tOmmW4qdH/x0e5n5IbhGhckydFuX0s17/FQo0madWUU2q0+q
+         rIcDxGLzvzfaBFeSvXHNgwp/tqsLvfCOnU4JqRfERHcRhzltPIYSlpBkJGsKowlUJZN7
+         2CtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7YpYUilK7VdhZah+ZTNWbp1uIYfeJVKBdco83rssHIo=;
-        b=hgscqlqz8SNyWXxbl3wsYeQmshKMkrV5vbIKG5RBqjeTpMaaOmQNkixXveIOBjTOJj
-         m4dgBuuE+4DfSUNNPJpqT6IwFpZR0IGtAEJ38ZzsIwlh5mxKNow2lCv5TYOFDNLMgSae
-         UbRNlNUBSFVIbFC4pjXbsjB0M+mlTwSIEp+vVmeOpqIFUzJbN4d1VQfuKXRB9NPWeVsd
-         A3EksZq05Pu3yEQ8h/xBqLJf3egrSQnFsmHnhzNxpLF+Rsiw2bH2jGvxWfuGxedH2F8n
-         3GH3gsxJvOMXsozWQdepCjch3R6po6H2uAV6JnK8EWURNUIVxbmQutuB0ytdx4vS7eNG
-         lIiQ==
-X-Gm-Message-State: AOAM530uNCZSYlChx1isAV9MGPsja07WQ9Z0JRxN/ebsAxYtcnGxPrKC
-        l5V5bk6FQwPJw5YNI86SIA==
-X-Google-Smtp-Source: ABdhPJz9g6PNoKy1GNiXgsPTNjyrkNfljTmstUY2TRuHCbsbvyAS8494S0N5o5R4ICttDtR8kNQqjQ==
-X-Received: by 2002:a05:6808:19a5:b0:326:26b7:984a with SMTP id bj37-20020a05680819a500b0032626b7984amr2582239oib.12.1651760355291;
-        Thu, 05 May 2022 07:19:15 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t25-20020a056870601900b000e686d1386fsm540802oaa.9.2022.05.05.07.19.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 07:19:14 -0700 (PDT)
-Received: (nullmailer pid 3819550 invoked by uid 1000);
-        Thu, 05 May 2022 14:19:13 -0000
-Date:   Thu, 5 May 2022 09:19:13 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Will Deacon <will@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>
-Subject: Re: [PATCH v2 1/5] dt-bindings: interconnect: qcom,sdm845-cpu-bwmon:
- add BWMON device
-Message-ID: <YnPc4eLI2nW5J2e3@robh.at.kernel.org>
-References: <20220504081735.26906-1-krzysztof.kozlowski@linaro.org>
- <20220504081735.26906-2-krzysztof.kozlowski@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mjPMNwsrp6J5GYko2SAtRJngBnVXhB8jFuWLYKEwiPY=;
+        b=HnoSQZgH8zZJKKFrPJ78VDwIGEAVXqTyEu4ElElvnAfVpwEkxC1SHu37A6l6i+T3Mg
+         yIYGkMNY3AJ7D84TFEULP/Ac90Asn8VElMkwsIAV/tRFvGUkY1vRBjByr0/H8QjlwaNt
+         xurMVfSdAle3T7qcqY1lazJ/RElEAhDzkp2zNWDuaid4eCMFYAzJnnMMclm1tnw5eY68
+         SAOBdN3obq+IIZq6Rym4JWLQVgzLqiXBmahAmArsbC6Oc1mLIWnDi792eUVk45mjnWq/
+         m0jxXJhnOf29kMYWU1mXtD9EXymSYrurlW3gy+50LOJ2VUAvT5R04hjCVUbpOgfE+vC+
+         ts2g==
+X-Gm-Message-State: AOAM533ynB7YQOm13ilXihjuWQZHgYdyjpbB08NMZpNblZpHITwJjK1/
+        RHukGaDr4wSHUc3PeSzDItvgV/FF6WF3Y9dc63XsWw==
+X-Google-Smtp-Source: ABdhPJwo8Hf6LSoTaiB2cHkTaFM0+gz3ZfG++D4wXVwew3EevAVlxRmwDqgoKNolEWO5oTKK+x6Cg+35P6TVPloh+u0=
+X-Received: by 2002:a25:bcc7:0:b0:648:d728:d39 with SMTP id
+ l7-20020a25bcc7000000b00648d7280d39mr22199185ybm.514.1651761198027; Thu, 05
+ May 2022 07:33:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220504081735.26906-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20220419163810.2118169-1-arnd@kernel.org> <20220419163810.2118169-19-arnd@kernel.org>
+ <CACRpkdac8dGKSEmc-HpgooJefrDtiKK+_A1Mv7AJM8yQV9UY-w@mail.gmail.com>
+ <CAK8P3a0w3gFzZoBzyRsi1Ta4prESf8Fp0=quAPSKMnaXvbXNTQ@mail.gmail.com>
+ <CACRpkdZNryYkidvdKuT57RM3fz6_X+3oOzF5xaOZd+TyScfUsw@mail.gmail.com> <CAK8P3a0y0tVZODpp+GSf0EkMPWbbvMqA-4kNf0NJMc0M2=2WHw@mail.gmail.com>
+In-Reply-To: <CAK8P3a0y0tVZODpp+GSf0EkMPWbbvMqA-4kNf0NJMc0M2=2WHw@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 5 May 2022 16:33:06 +0200
+Message-ID: <CACRpkdaNRX0RDYJd_uaGo5jtiXu_qGHmEDGniaCmR=TZvcHH8A@mail.gmail.com>
+Subject: Re: [PATCH 18/48] ARM: pxa: hx4700: use gpio descriptors for audio
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Philipp Zabel <philipp.zabel@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Paul Parsons <lost.distance@yahoo.com>,
+        Tomas Cech <sleep_walker@suse.com>,
+        Sergey Lapin <slapin@ossfans.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,17 +98,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 04 May 2022 10:17:31 +0200, Krzysztof Kozlowski wrote:
-> Add bindings for the Qualcomm Bandwidth Monitor device providing
-> performance data on interconnects.  The bindings describe only BWMON
-> version 4, e.g. the instance on SDM845 between CPU and Last Level Cache
-> Controller.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../interconnect/qcom,sdm845-cpu-bwmon.yaml   | 105 ++++++++++++++++++
->  1 file changed, 105 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
-> 
+On Thu, May 5, 2022 at 8:04 AM Arnd Bergmann <arnd@kernel.org> wrote:
+> On Wed, May 4, 2022 at 11:59 PM Linus Walleij <linus.walleij@linaro.org> wrote:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+> > Thus drop one ! in front of the expression, just !SND_SOC_DAPM_EVENT_ON(event)
+>
+> Ok, done. But I still leave the extra 'invert=1' in hs_jack_pin[], right?
+>
+> /* Headphones jack detection DAPM pin */
+> static struct snd_soc_jack_pin hs_jack_pin[] = {
+>         {
+>                 .pin    = "Headphone Jack",
+>                 .mask   = SND_JACK_HEADPHONE,
+>         },
+>         {
+>                 .pin    = "Speaker",
+>                 /* disable speaker when hp jack is inserted */
+>                 .mask   = SND_JACK_HEADPHONE,
+>                 .invert = 1,
+>         },
+
+Hm some ASoC thingie. No idea what that is, but I suppose another
+place where a subsystem for legacy reasons try to do the gpiolib
+inversion on it's own accord. That one isn't flagged as active low in the
+descriptor so it's fine I guess.
+
+Possible this should be fixed in ASoC to rely on gpiolib but we can't
+fix the entire world.
+
+Yours,
+Linus Walleij
