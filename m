@@ -2,55 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 933AD51B858
-	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 09:00:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8C251B8FB
+	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 09:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239611AbiEEHEW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 May 2022 03:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
+        id S1344309AbiEEHcm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 May 2022 03:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235166AbiEEHEV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 03:04:21 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566A426548
-        for <linux-pm@vger.kernel.org>; Thu,  5 May 2022 00:00:42 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id q8so3461396oif.13
-        for <linux-pm@vger.kernel.org>; Thu, 05 May 2022 00:00:42 -0700 (PDT)
+        with ESMTP id S1344940AbiEEHcV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 03:32:21 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3F1488BA
+        for <linux-pm@vger.kernel.org>; Thu,  5 May 2022 00:28:25 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2f7ca2ce255so39257807b3.7
+        for <linux-pm@vger.kernel.org>; Thu, 05 May 2022 00:28:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=endlessos.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=GYb2qyeDXFpfHBcs3u1MbmVCzXSjcUG0qu6nWI0aQBY=;
-        b=ltzuFON4sacssZlcAtwXMz5GbnKSvVZaUwUQKVyMl+XFQ9LA6DmMRAMBetiiLTdxz1
-         8mHAXwJg/IdvB+T5t4DPfLLq89MFeMOCiy2yYPxfGy+IoLE2hFmvEofMokeOjIseKA3V
-         aLxHUzAKFr3t23SVRCMonUC9Jj3F+eXaKSmvTQVgx1d4MIOq27kFQahb8KMVyCHFKcH0
-         iSypWWzIy1qRNf2kxYFPoR80Bjzwmy6X9pAuIuT6SRJKSBMZSXB61Zb1oohk8u8OZiXB
-         nUVRX3M7Bqyq9+KQgxAOQJVumzaPpMeoNWopa6p8UhSoNIA0AckGfkc8+zyVSeN3J6mN
-         VXcw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=48+VPlemZJQL+qvD7CaffUbdWdX7cgwHukCbmFSwzDA=;
+        b=DlDNwa0ZgSuGFaPb9/5V4xdJuzdc1qvt84MDes0CBs0+t3E5jO2bQtLFtvOgOGVpY/
+         K3EDNQt/lzJdGsDI2h1TldQhtUIJQXkflCiTjhHmgu7gIFp7yHW3fsp2Hy8uIf+2HBRV
+         hoWXI70o7DYT+XVPsNsYYbmiaqG27BxNGD54j5VBu8oR9Bf5oY8ITksM2oLOiBgsP7JK
+         4PnpFjptob373B7FmzkOO64UL0fF4fWokILUdrWeQb/9YKAQGLi36glJ1Tcqkox4VwDO
+         kH48CKYKvfxteTh4CzEZxOUG6UN3tO4j0xfpWcogcQz0PXcxEY2jA5/ZuqOrYtquWhF0
+         bobA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=GYb2qyeDXFpfHBcs3u1MbmVCzXSjcUG0qu6nWI0aQBY=;
-        b=l0IPg+okWxjINRhiJwvkcOEN22N8eG0eStwWmeLq2cp9z4oK58tFPNfpir1Ivyaiuf
-         rXWYV5v4O1xBHKFbdrurhgIB1wZjqc6Ob7uzVhrgz6P76LMlNI7D+anSXKokfiILQ/Kg
-         OzrRunvidhpV7obptzrBqz9cvfArrENlSh94CsBmkVBzXyIAHlrRnz/XzxAkxl6DO/WL
-         xSwgrUj8zFZHRfXTkIhOCG7jrMHcXSPxMWs93X7Ipe28Ut1GLIxlsyNeQrGipx182CDM
-         TxecVew/xVXkbXkom6ccsP1uLc7ReXAcIMUyW8LxDABwD/qFOx2ECOYd+I/4QxRkHXzU
-         I3xQ==
-X-Gm-Message-State: AOAM533AVrQAYsQDtlPZXMV0SyrQrAEHthBHb23CyVgf84VIWiFjxB8o
-        MGFmqEQKV3ypxz/51e84njF41W2W9//Zj5LvBCHtAQ==
-X-Google-Smtp-Source: ABdhPJzIbrVzcDCPJMBPLSECStk77anISWTIvF2PH1N8TpB4sURyaOKd5cyPadiOr9DrZ+b3WQewur735l/o2y4cm30=
-X-Received: by 2002:a05:6808:180a:b0:322:bcd3:ddaf with SMTP id
- bh10-20020a056808180a00b00322bcd3ddafmr1623748oib.35.1651734041647; Thu, 05
- May 2022 00:00:41 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=48+VPlemZJQL+qvD7CaffUbdWdX7cgwHukCbmFSwzDA=;
+        b=sn9RocO1B3dJcTkYuAeXKgprkCM2Byj58dgC1CvvrxdHkHGdgOodPklG7v9uRZPoca
+         oDL4BxszfLf2wHa+UyC3AML7uuZPg4hvvgoeczWvDe9GbM4fm5cR1Wfnd0e+V0b2zv9r
+         Dfy5zMPApmNeJPg/7ZZ/QPlWQ5p5j+tpiV1dmLfINxm8LM5bBh7WDDh/oBi09pcIkMoc
+         oWhKOIrsMjmzUWyZtdk1r8yTsHkMdzVXipKdZMUYodoY9yXp2SicuZo908bpD5B69evy
+         QJq8acEVMUo4QoMp7mMMpnFpQeBYW5QIWk0tW7SURjF/DIIL07HOjhzswwUG4FhI/DEx
+         DbGg==
+X-Gm-Message-State: AOAM533k5iV+z34tGqoNXJeyIo5yKvnR2mtD/tjDFlbEBVYlj3ltXZCz
+        xNv3punV8xX/tdfF/cn4W51g66x4iLeaaDhmRj7fQw==
+X-Google-Smtp-Source: ABdhPJySMA4IYtf0tSy4AlHAEslsKT1Sgz5FwyhMbz396ZGiZIF5CHRLdSW+QVBf1xsup+mUhFKCXMJ8YCqPwplVMDA=
+X-Received: by 2002:a81:6189:0:b0:2eb:deb5:9f63 with SMTP id
+ v131-20020a816189000000b002ebdeb59f63mr21387188ywb.319.1651735705105; Thu, 05
+ May 2022 00:28:25 -0700 (PDT)
 MIME-Version: 1.0
-From:   Jian-Hong Pan <jhp@endlessos.org>
-Date:   Thu, 5 May 2022 14:59:35 +0800
-Message-ID: <CAPpJ_edpzKpLzrwT-+gB2c-6qhVPs_iNHL6=uDOyc9Xr2wGCiQ@mail.gmail.com>
-Subject: [BUG] The UI hangs when system changes CPU frequency on Raspberry Pi 4B
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Cc:     linux-pm@vger.kernel.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        linux@endlessos.org
+References: <39e39a7d30c8ee6af81fb64670a330abeb87402e.1651652493.git.viresh.kumar@linaro.org>
+In-Reply-To: <39e39a7d30c8ee6af81fb64670a330abeb87402e.1651652493.git.viresh.kumar@linaro.org>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 5 May 2022 09:28:13 +0200
+Message-ID: <CAKfTPtDbsd+RLwY+0ZfnNWkQD+jOHmoX2K+ZfsOMnEH81ouVjw@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Avoid unnecessary frequency updates due to mismatch
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pm@vger.kernel.org, Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -62,85 +69,62 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Wed, 4 May 2022 at 10:21, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> For some platforms, the frequency returned by hardware may be slightly
+> different from what is provided in the frequency table. For example,
 
-We found the UI hangs totally when system changes CPU frequency on
-Raspberry Pi 4B.  The test kernel is mainline kernel 5.18-rc3.
+Do you have more details ?
 
-According to the oops messages and the stack:
+Do you mean that between 2 consecutives reads you can get either
+500Mhz or 499Mhz ?
 
-[ 1330.166158] INFO: task kworker/0:0:6 blocked for more than 120 seconds.
-[ 1330.172963]       Tainted: G        W   E     5.18.0-rc3 #61
-[ 1330.178767] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
-disables this message.
-[ 1330.186742] task:kworker/0:0     state:D stack:    0 pid:    6
-ppid:     2 flags:0x00000008
-[ 1330.186762] Workqueue: events dbs_work_handler
-[ 1330.186779] Call trace:
-[ 1330.186782]  __switch_to+0xf8/0x150
-[ 1330.186793]  __schedule+0x37c/0x141c
-[ 1330.186800]  schedule+0x54/0xc4
-[ 1330.186807]  schedule_timeout+0xa4/0x190
-[ 1330.186813]  __wait_for_common+0xc4/0x224
-[ 1330.186818]  wait_for_completion_timeout+0x2c/0x40
-[ 1330.186822]  mbox_send_message+0xf0/0x1f4
-[ 1330.186828]  rpi_firmware_property_list+0xf8/0x280
-[ 1330.186834]  rpi_firmware_property+0x7c/0xc0
-[ 1330.186839]  raspberrypi_fw_set_rate+0x64/0xe4 [clk_raspberrypi]
-[ 1330.186851]  clk_change_rate+0xe4/0x470
-[ 1330.186859]  clk_core_set_rate_nolock+0x1d0/0x2ec
-[ 1330.186864]  clk_set_rate+0x44/0x190
-[ 1330.186870]  _set_opp+0x3b4/0x70c
-[ 1330.186876]  dev_pm_opp_set_rate+0x11c/0x2d0
-[ 1330.186881]  set_target+0x3c/0x4c
-[ 1330.186887]  __cpufreq_driver_target+0x400/0x7ac
-[ 1330.186893]  od_dbs_update+0xc8/0x1c0
-[ 1330.186898]  dbs_work_handler+0x4c/0x8c
-[ 1330.186903]  process_one_work+0x210/0x480
-[ 1330.186910]  worker_thread+0x180/0x520
-[ 1330.186915]  kthread+0xe4/0xf0
-[ 1330.186920]  ret_from_fork+0x10/0x20
-[ 1330.186928] INFO: task kworker/u8:0:8 blocked for more than 120 seconds.
-[ 1330.193744]       Tainted: G        W   E     5.18.0-rc3 #61
-[ 1330.199509] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
-disables this message.
-[ 1330.207467] task:kworker/u8:0    state:D stack:    0 pid:    8
-ppid:     2 flags:0x00000008
-[ 1330.207485] Workqueue: events_unbound commit_work [drm_kms_helper]
-[ 1330.207555] Call trace:
-[ 1330.207558]  __switch_to+0xf8/0x150
-[ 1330.207572]  __schedule+0x37c/0x141c
-[ 1330.207579]  schedule+0x54/0xc4
-[ 1330.207586]  schedule_preempt_disabled+0x1c/0x2c
-[ 1330.207593]  __mutex_lock.constprop.0+0x160/0x59c
-[ 1330.207598]  __mutex_lock_slowpath+0x40/0x8c
-[ 1330.207602]  mutex_lock+0x68/0x80
-[ 1330.207607]  clk_prepare_lock+0x4c/0xac
-[ 1330.207616]  clk_set_rate_range.part.0+0x3c/0x250
-[ 1330.207622]  clk_set_min_rate+0x3c/0xdc
-[ 1330.207627]  vc4_atomic_commit_tail+0x68c/0x77c [vc4]
-[ 1330.207664]  commit_tail+0xd8/0x210 [drm_kms_helper]
-[ 1330.207707]  commit_work+0x20/0x30 [drm_kms_helper]
-[ 1330.207748]  process_one_work+0x210/0x480
-[ 1330.207755]  worker_thread+0x180/0x520
-[ 1330.207760]  kthread+0xe4/0xf0
-[ 1330.207765]  ret_from_fork+0x10/0x20
+Or is it a fixed mismatch between the table and the freq returned by HW ?
 
-Looks like clk_raspberrypi tries to set/change rate by invoking
-raspberrypi_fw_set_rate(), but the transaction with firmware is
-timeout. There might be a lock shared with others, but held by it. For
-example, the second oops message from drm_kms_helper -> vc4 shows
-clk_prepare_lock() is waiting to be scheduled.
-
-The UI hangs until raspberrypi-firmware gets the failed returned error
-from mbox_send_message().
-
-[ 4887.601985] raspberrypi-firmware soc:firmware: mbox_send_message returned -62
-[ 4887.609269] raspberrypi-clk soc:firmware:clocks: Failed to change
-fw-clk-arm frequency: -62
-
-The serial console is alive when the UI hangs.
-
-I put all of the findings on https://bugzilla.kernel.org/show_bug.cgi?id=215875
-
-Jian-Hong Pan
+> hardware may return 499 MHz instead of 500 MHz. In such cases it is
+> better to avoid getting into unnecessary frequency updates, as we may
+> end up switching policy->cur between the two and sending unnecessary
+> pre/post update notifications, etc.
+>
+> This patch has chosen allows the hardware frequency and table frequency
+> to deviate by 1 MHz for now, we may want to increase it a bit later on
+> if someone still complains.
+>
+> Reported-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/cpufreq/cpufreq.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 0d58b0f8f3af..233e8af48848 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -28,6 +28,7 @@
+>  #include <linux/suspend.h>
+>  #include <linux/syscore_ops.h>
+>  #include <linux/tick.h>
+> +#include <linux/units.h>
+>  #include <trace/events/power.h>
+>
+>  static LIST_HEAD(cpufreq_policy_list);
+> @@ -1708,6 +1709,16 @@ static unsigned int cpufreq_verify_current_freq(struct cpufreq_policy *policy, b
+>                 return new_freq;
+>
+>         if (policy->cur != new_freq) {
+> +               /*
+> +                * For some platforms, the frequency returned by hardware may be
+> +                * slightly different from what is provided in the frequency
+> +                * table, for example hardware may return 499 MHz instead of 500
+> +                * MHz. In such cases it is better to avoid getting into
+> +                * unnecessary frequency updates.
+> +                */
+> +               if (abs(policy->cur - new_freq) < HZ_PER_MHZ)
+> +                       return policy->cur;
+> +
+>                 cpufreq_out_of_sync(policy, new_freq);
+>                 if (update)
+>                         schedule_work(&policy->update);
+> --
+> 2.31.1.272.g89b43f80a514
+>
