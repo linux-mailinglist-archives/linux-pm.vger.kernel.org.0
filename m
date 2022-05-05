@@ -2,102 +2,175 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B971D51C315
-	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 16:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D249351C31C
+	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 16:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380876AbiEEO7I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 May 2022 10:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48754 "EHLO
+        id S1380322AbiEEPBR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 May 2022 11:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380893AbiEEO7G (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 10:59:06 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF8319036;
-        Thu,  5 May 2022 07:55:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1651762525; x=1683298525;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=8u8iQQdbFCIjYVkUVW1oE+jbyTZg2TDE6RFS2HVSKm4=;
-  b=MPlTVriwYQhco9Q/A99oo5TqOFP6/L4C2j4p4vbNivGuwG/0ntUqdADY
-   N7POBn+8gliTnwkOi6h3eizcK1cU1J/LnUNq4djilGZq0y+rQaKrk9lJC
-   KQFR/GAC5rNRoxmLi8hyEzJYycHBJ964/11tuaBzRXjHKrWiQcDzvWoNN
-   0E2xFFhzPZmbJpktSVIeNBhTdNPGO427PFtUQDM8+T0h99KAd6vpRhqxx
-   rQi6ltieZ9N4IhR8qUKr1iR/8mbNuqAP5ZMg24210DhVk96JRdSufL1WW
-   tByxFfHQrxfeMdJZo7C8Jqev/Ib65h+xn5eRuTFM0qEUdZiJTO1ne73AC
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.91,201,1647327600"; 
-   d="scan'208";a="154938494"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 May 2022 07:55:24 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Thu, 5 May 2022 07:55:24 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Thu, 5 May 2022 07:55:21 -0700
-Message-ID: <3dba24d7-8555-aa33-3bc7-2f0e19af2f48@microchip.com>
-Date:   Thu, 5 May 2022 16:55:14 +0200
+        with ESMTP id S1380899AbiEEPBR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 11:01:17 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 114BF5676C
+        for <linux-pm@vger.kernel.org>; Thu,  5 May 2022 07:57:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651762656;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=edMoOIi5W5h5BTuQ+OG7p8B5wBOMsVB1tjxMAlGSHpw=;
+        b=GgF2wvqJZ3WuUdokNPJMZsCfHlNeGEg75Ac/Fsy7KGUES4kQhqylfCMlZAzB47uj5KgqqX
+        ImOcjeVT2UrIKhCTwZIDn7Xpn76xCY5sKknzrcaEBD64S3SO5IIFcKnQr+N9VWqD9USKoi
+        gRYJ5iWsu+1IKqDAg16W1l5440LH05g=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-187-7XIzuTHxPNix0eEXnTrTjw-1; Thu, 05 May 2022 10:57:31 -0400
+X-MC-Unique: 7XIzuTHxPNix0eEXnTrTjw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A339C1E7DCD6;
+        Thu,  5 May 2022 14:57:30 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.3])
+        by smtp.corp.redhat.com (Postfix) with SMTP id E03E840CF8F5;
+        Thu,  5 May 2022 14:57:24 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu,  5 May 2022 16:57:28 +0200 (CEST)
+Date:   Thu, 5 May 2022 16:57:22 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
+Subject: Re: [PATCH v3 08/11] ptrace: Admit ptrace_stop can generate spuriuos
+ SIGTRAPs
+Message-ID: <20220505145721.GA13929@redhat.com>
+References: <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
+ <20220504224058.476193-8-ebiederm@xmission.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v3 10/10] ARM: configs: sama7: enable
- CONFIG_RESET_CONTROLLER
-Content-Language: en-US
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
-        <robh+dt@kernel.org>, <alexandre.belloni@bootlin.com>,
-        <p.zabel@pengutronix.de>, <linux@armlinux.org.uk>,
-        <sre@kernel.org>, <linux-arm-kernel@lists.infradead.org>
-CC:     <cristian.birsan@microchip.com>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220408080031.2527232-1-claudiu.beznea@microchip.com>
- <20220408080031.2527232-11-claudiu.beznea@microchip.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20220408080031.2527232-11-claudiu.beznea@microchip.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220504224058.476193-8-ebiederm@xmission.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/04/2022 at 10:00, Claudiu Beznea wrote:
-> Enable CONFIG_RESET_CONTROLLER. It is necessary for resetting individual
-> in SoC devices.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+On 05/04, Eric W. Biederman wrote:
+>
+> -static int ptrace_stop(int exit_code, int why, int clear_code,
+> -			unsigned long message, kernel_siginfo_t *info)
+> +static int ptrace_stop(int exit_code, int why, unsigned long message,
+> +		       kernel_siginfo_t *info)
+>  	__releases(&current->sighand->siglock)
+>  	__acquires(&current->sighand->siglock)
+>  {
+> @@ -2259,54 +2259,33 @@ static int ptrace_stop(int exit_code, int why, int clear_code,
+>  
+>  	spin_unlock_irq(&current->sighand->siglock);
+>  	read_lock(&tasklist_lock);
+> -	if (likely(current->ptrace)) {
+> -		/*
+> -		 * Notify parents of the stop.
+> -		 *
+> -		 * While ptraced, there are two parents - the ptracer and
+> -		 * the real_parent of the group_leader.  The ptracer should
+> -		 * know about every stop while the real parent is only
+> -		 * interested in the completion of group stop.  The states
+> -		 * for the two don't interact with each other.  Notify
+> -		 * separately unless they're gonna be duplicates.
+> -		 */
+> +	/*
+> +	 * Notify parents of the stop.
+> +	 *
+> +	 * While ptraced, there are two parents - the ptracer and
+> +	 * the real_parent of the group_leader.  The ptracer should
+> +	 * know about every stop while the real parent is only
+> +	 * interested in the completion of group stop.  The states
+> +	 * for the two don't interact with each other.  Notify
+> +	 * separately unless they're gonna be duplicates.
+> +	 */
+> +	if (current->ptrace)
+>  		do_notify_parent_cldstop(current, true, why);
+> -		if (gstop_done && ptrace_reparented(current))
+> -			do_notify_parent_cldstop(current, false, why);
+> +	if (gstop_done && (!current->ptrace || ptrace_reparented(current)))
+> +		do_notify_parent_cldstop(current, false, why);
+>  
+> -		/*
+> -		 * Don't want to allow preemption here, because
+> -		 * sys_ptrace() needs this task to be inactive.
+> -		 *
+> -		 * XXX: implement read_unlock_no_resched().
+> -		 */
+> -		preempt_disable();
+> -		read_unlock(&tasklist_lock);
+> -		cgroup_enter_frozen();
+> -		preempt_enable_no_resched();
+> -		freezable_schedule();
+> -		cgroup_leave_frozen(true);
+> -	} else {
+> -		/*
+> -		 * By the time we got the lock, our tracer went away.
+> -		 * Don't drop the lock yet, another tracer may come.
+> -		 *
+> -		 * If @gstop_done, the ptracer went away between group stop
+> -		 * completion and here.  During detach, it would have set
+> -		 * JOBCTL_STOP_PENDING on us and we'll re-enter
+> -		 * TASK_STOPPED in do_signal_stop() on return, so notifying
+> -		 * the real parent of the group stop completion is enough.
+> -		 */
+> -		if (gstop_done)
+> -			do_notify_parent_cldstop(current, false, why);
+> -
+> -		/* tasklist protects us from ptrace_freeze_traced() */
+> -		__set_current_state(TASK_RUNNING);
+> -		read_code = false;
+> -		if (clear_code)
+> -			exit_code = 0;
+> -		read_unlock(&tasklist_lock);
+> -	}
+> +	/*
+> +	 * Don't want to allow preemption here, because
+> +	 * sys_ptrace() needs this task to be inactive.
+> +	 *
+> +	 * XXX: implement read_unlock_no_resched().
+> +	 */
+> +	preempt_disable();
+> +	read_unlock(&tasklist_lock);
+> +	cgroup_enter_frozen();
+> +	preempt_enable_no_resched();
+> +	freezable_schedule();
 
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-and queued in at91-defconfig for 5.19.
+I must have missed something.
 
-Best regards,
-   Nicolas
+So the tracee calls ptrace_notify() but debugger goes away before the
+ptrace_notify() takes siglock. After that the no longer traced task
+will sleep in TASK_TRACED ?
 
-> ---
->   arch/arm/configs/sama7_defconfig | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm/configs/sama7_defconfig b/arch/arm/configs/sama7_defconfig
-> index 0368068e04d9..ce20bef1246e 100644
-> --- a/arch/arm/configs/sama7_defconfig
-> +++ b/arch/arm/configs/sama7_defconfig
-> @@ -180,6 +180,7 @@ CONFIG_IIO_SW_TRIGGER=y
->   CONFIG_AT91_SAMA5D2_ADC=y
->   CONFIG_PWM=y
->   CONFIG_PWM_ATMEL=y
-> +CONFIG_RESET_CONTROLLER=y
->   CONFIG_EXT2_FS=y
->   CONFIG_EXT3_FS=y
->   CONFIG_FANOTIFY=y
+Looks like ptrace_stop() needs to check current->ptrace before it does
+set_special_state(TASK_TRACED) with siglock held? Then we can rely on
+ptrace_unlink() which will wake the tracee up even if debugger exits.
 
+No?
 
--- 
-Nicolas Ferre
+Oleg.
+
