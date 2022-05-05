@@ -2,132 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B530651C0E7
-	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 15:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3015851C23D
+	for <lists+linux-pm@lfdr.de>; Thu,  5 May 2022 16:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379813AbiEENgc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 May 2022 09:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
+        id S1379710AbiEEOW6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 May 2022 10:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379840AbiEENgT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 09:36:19 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7C157981;
-        Thu,  5 May 2022 06:31:58 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id k2so6128736wrd.5;
-        Thu, 05 May 2022 06:31:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=5pSUK+NARKQGP0RSfhMDxUAusxVl8fziSm0RmmnAc6E=;
-        b=bretBRaPEZmVMji52YIT2cPIghpPUcOUPpBAKJc5YUPDThrBkg42K5pCLeNarY+bxW
-         17Kof9p/ykq91o+GLZ6upG204f288SaZmouWEERoOkA3JVyL/+I8lYCAsxCsvXAzSiK6
-         YQUZs7GQZed3srmxxNEKyXoD3mjbkSwvELw5yX4A/0hQ1wTlNAaF7hRs6nIkEPjBaRli
-         UydZcr4EHMgsFPIt0gvmmkM8PK1ZWa5Dzkl4UUTAFCoW6d9puNs82UtG8dHweLdcGeU8
-         pcIoKLh9o2TiGNDb9LdiQtI9TP7L6G6A3wIjD4EFRVJ7c0VR1oKEKYzvhUH28cxyeHfd
-         FmVw==
+        with ESMTP id S240498AbiEEOWz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 10:22:55 -0400
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A34A5A2F6;
+        Thu,  5 May 2022 07:19:16 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id w194so3247916oie.9;
+        Thu, 05 May 2022 07:19:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5pSUK+NARKQGP0RSfhMDxUAusxVl8fziSm0RmmnAc6E=;
-        b=F+8jZig9fx2F0bAMy8Lmeo6Ou0NlfuNurGAehq/jnnuizgze7I6cM1kfP1omDyvOmd
-         KV0bs2p9HDz3NIzf1MLS8CXhE1pkg9wViHwwAjLnFlWwFHzTCRNkNCzWji5kfAqMBVs6
-         vZoAKhe4HffjoELHrQ3iKrHnjEr4UAxSFheFNYcBrRrqV2EPDkkhF8PZTpJWkVuIfoy1
-         b7Y/0GHk6KF0hP5TcBwLcbzxarD+Osh8oYmh7EFUgBUMIjWSJJlwWGxmBiz2pHM7fFqL
-         86zyFSiHzeZ26gX281pazgUnSnTgDHKLZkAVV6d/DdFyPgWJbshbaTqcRLXRug8WBcE3
-         /uYQ==
-X-Gm-Message-State: AOAM5310I5Srs8RPPnVv2zt2WmaaT4Q1sofj+8gREoSKiUkcI44Fq+9k
-        M/CZLzO6ScXvVJyNb/13SAE=
-X-Google-Smtp-Source: ABdhPJy6T3JY2QzQ/ndLAhrjpHqo9Ok+/mi3IOHf5OfKw5JxhwBq4ViMM7UYjpOnxVCjgszbhN88aw==
-X-Received: by 2002:a05:6000:100c:b0:20a:c68a:e9a with SMTP id a12-20020a056000100c00b0020ac68a0e9amr21047454wrx.314.1651757516554;
-        Thu, 05 May 2022 06:31:56 -0700 (PDT)
-Received: from [192.168.1.145] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id b15-20020a7bc24f000000b003942a244ecfsm1422829wmj.20.2022.05.05.06.31.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 06:31:56 -0700 (PDT)
-Message-ID: <0b9e332d-f479-ed3d-78ce-6386383d827b@gmail.com>
-Date:   Thu, 5 May 2022 15:31:54 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7YpYUilK7VdhZah+ZTNWbp1uIYfeJVKBdco83rssHIo=;
+        b=hgscqlqz8SNyWXxbl3wsYeQmshKMkrV5vbIKG5RBqjeTpMaaOmQNkixXveIOBjTOJj
+         m4dgBuuE+4DfSUNNPJpqT6IwFpZR0IGtAEJ38ZzsIwlh5mxKNow2lCv5TYOFDNLMgSae
+         UbRNlNUBSFVIbFC4pjXbsjB0M+mlTwSIEp+vVmeOpqIFUzJbN4d1VQfuKXRB9NPWeVsd
+         A3EksZq05Pu3yEQ8h/xBqLJf3egrSQnFsmHnhzNxpLF+Rsiw2bH2jGvxWfuGxedH2F8n
+         3GH3gsxJvOMXsozWQdepCjch3R6po6H2uAV6JnK8EWURNUIVxbmQutuB0ytdx4vS7eNG
+         lIiQ==
+X-Gm-Message-State: AOAM530uNCZSYlChx1isAV9MGPsja07WQ9Z0JRxN/ebsAxYtcnGxPrKC
+        l5V5bk6FQwPJw5YNI86SIA==
+X-Google-Smtp-Source: ABdhPJz9g6PNoKy1GNiXgsPTNjyrkNfljTmstUY2TRuHCbsbvyAS8494S0N5o5R4ICttDtR8kNQqjQ==
+X-Received: by 2002:a05:6808:19a5:b0:326:26b7:984a with SMTP id bj37-20020a05680819a500b0032626b7984amr2582239oib.12.1651760355291;
+        Thu, 05 May 2022 07:19:15 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t25-20020a056870601900b000e686d1386fsm540802oaa.9.2022.05.05.07.19.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 May 2022 07:19:14 -0700 (PDT)
+Received: (nullmailer pid 3819550 invoked by uid 1000);
+        Thu, 05 May 2022 14:19:13 -0000
+Date:   Thu, 5 May 2022 09:19:13 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Will Deacon <will@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>
+Subject: Re: [PATCH v2 1/5] dt-bindings: interconnect: qcom,sdm845-cpu-bwmon:
+ add BWMON device
+Message-ID: <YnPc4eLI2nW5J2e3@robh.at.kernel.org>
+References: <20220504081735.26906-1-krzysztof.kozlowski@linaro.org>
+ <20220504081735.26906-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] cpufreq: Avoid unnecessary frequency updates due to
- mismatch
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <39e39a7d30c8ee6af81fb64670a330abeb87402e.1651652493.git.viresh.kumar@linaro.org>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <39e39a7d30c8ee6af81fb64670a330abeb87402e.1651652493.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220504081735.26906-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 04/05/2022 10:21, Viresh Kumar wrote:
-> For some platforms, the frequency returned by hardware may be slightly
-> different from what is provided in the frequency table. For example,
-> hardware may return 499 MHz instead of 500 MHz. In such cases it is
-> better to avoid getting into unnecessary frequency updates, as we may
-> end up switching policy->cur between the two and sending unnecessary
-> pre/post update notifications, etc.
+On Wed, 04 May 2022 10:17:31 +0200, Krzysztof Kozlowski wrote:
+> Add bindings for the Qualcomm Bandwidth Monitor device providing
+> performance data on interconnects.  The bindings describe only BWMON
+> version 4, e.g. the instance on SDM845 between CPU and Last Level Cache
+> Controller.
 > 
-> This patch has chosen allows the hardware frequency and table frequency
-> to deviate by 1 MHz for now, we may want to increase it a bit later on
-> if someone still complains.
-> 
-> Reported-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->   drivers/cpufreq/cpufreq.c | 11 +++++++++++
->   1 file changed, 11 insertions(+)
+>  .../interconnect/qcom,sdm845-cpu-bwmon.yaml   | 105 ++++++++++++++++++
+>  1 file changed, 105 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
 > 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 0d58b0f8f3af..233e8af48848 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -28,6 +28,7 @@
->   #include <linux/suspend.h>
->   #include <linux/syscore_ops.h>
->   #include <linux/tick.h>
-> +#include <linux/units.h>
->   #include <trace/events/power.h>
->   
->   static LIST_HEAD(cpufreq_policy_list);
-> @@ -1708,6 +1709,16 @@ static unsigned int cpufreq_verify_current_freq(struct cpufreq_policy *policy, b
->   		return new_freq;
->   
->   	if (policy->cur != new_freq) {
-> +		/*
-> +		 * For some platforms, the frequency returned by hardware may be
-> +		 * slightly different from what is provided in the frequency
-> +		 * table, for example hardware may return 499 MHz instead of 500
-> +		 * MHz. In such cases it is better to avoid getting into
-> +		 * unnecessary frequency updates.
-> +		 */
-> +		if (abs(policy->cur - new_freq) < HZ_PER_MHZ)
-> +			return policy->cur;
-> +
->   		cpufreq_out_of_sync(policy, new_freq);
->   		if (update)
->   			schedule_work(&policy->update);
+
+Reviewed-by: Rob Herring <robh@kernel.org>
