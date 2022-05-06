@@ -2,74 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB33C51D00A
-	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 06:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F69951D07D
+	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 07:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231607AbiEFEX7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 May 2022 00:23:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47680 "EHLO
+        id S1389065AbiEFFOz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 May 2022 01:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388927AbiEFEXw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 May 2022 00:23:52 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9BF13EBD
-        for <linux-pm@vger.kernel.org>; Thu,  5 May 2022 21:20:06 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id n18so6289355plg.5
-        for <linux-pm@vger.kernel.org>; Thu, 05 May 2022 21:20:06 -0700 (PDT)
+        with ESMTP id S233865AbiEFFOx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 May 2022 01:14:53 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1885DA17;
+        Thu,  5 May 2022 22:11:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=nYgHnNqlChNguPe7Q9G6D1OpvFbxYV1H4WdQcw7evEQ=;
-        b=jLR8HEc8Nd75VZ5BMZ3GFNPR4EBWnhsK1Gi4HmhTScy0L2VXovvTvzt48ouC2ztuEV
-         7UYwmbT6BD4//p9E+ex5zIrc17dCWgz3tLKNizpJe19Nz6F5XFBwK0tvGE26hUn8R0lK
-         uX9vGEPo+nxqhfdwjJ+oa+wbNS2nQSwZfv1l6YfEnWpT+UosFMNdKC1IGwDveVzC2LDL
-         rCt2EwbKegxPsGYnr0NycqAp2AQfRjSzGLLCun1sLFgq575fPTYXe1nchL45VMOOrirL
-         QStI9DRPJ5ceSGkX+OI571GoMhgA1rcltzY2JMyysNZPiYWzUqD/7/OKTAp17VsyxVk4
-         8G2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=nYgHnNqlChNguPe7Q9G6D1OpvFbxYV1H4WdQcw7evEQ=;
-        b=yB6eQLA9BMBNDbvRHTPvU6m2jy9ZndIspySNu4HGNrbRdm0Tx2n6N+tB7OA0KL8Mc6
-         cX83cuoGcJinGK8IAkAKT+35Hb3Y1fDOX/LzopzQMBcTG5aFE4W2DRQaHMbbQVI5Xcdj
-         gOiZ98/7zB0qWpzPMffxZr8E3dugxrV4tH1jQD6lc7Jc634eg2C/TGvjyKN8yGRk6Es/
-         DV8NYWirqFj1ejMfNUgDwGEDBcSw0N9XFZvX4uOTv4NxgCQREmKjvbU74i5TCWo+LZKI
-         Eu2bhOXK3dqA9TLxjywhlNvYjd77p/v8FGBuEaWP85NX+Gw/K8N3gZIbkE8P6PWiGFH6
-         KBQg==
-X-Gm-Message-State: AOAM532MZw/esfqYvd1IqebKIant4dJXAcnlbJccDpUOp5qehKQKkNJe
-        Byzk5eBTgzummqO6Lzwr4dqneA==
-X-Google-Smtp-Source: ABdhPJwPdeAVQ0kgtN+QPRoWNHRxFzCt8kSKOwhyA+hqhpV5DQjikmiK5c4CLYCslM6zf1SeGOCrug==
-X-Received: by 2002:a17:90a:9483:b0:1dc:5fb2:9b89 with SMTP id s3-20020a17090a948300b001dc5fb29b89mr9937153pjo.235.1651810806236;
-        Thu, 05 May 2022 21:20:06 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id z189-20020a6365c6000000b003c14af50620sm2156741pgb.56.2022.05.05.21.20.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 21:20:05 -0700 (PDT)
-Date:   Fri, 6 May 2022 09:50:04 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     rafael@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
-        roger.lu@mediatek.com, hsinyi@google.com, khilman@baylibre.com,
-        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v6 00/10] cpufreq: mediatek: Cleanup and support MT8183
- and MT8186
-Message-ID: <20220506042004.hqzpb66shak4y7rz@vireshk-i7>
-References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1651813871; x=1683349871;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=LWa/GCb2e9nLWQ6HBGCRCWwheNv3vZF6ySDulKPKY7E=;
+  b=Tr0y5sQhMBXnZrgpOaLQLrZQl0/f2SY8cHGIQw7DYdk1PObn5/fX8//h
+   RHksbNsn19kqQbfGsVoqrLfXmEro8YQAnjFl5zbsq6+I4MNh8dIn2kHoB
+   VpG/X8PL1gRlB1aEgz/M5/eGgTFXnuAQA+fWtjiufz6R81fZcbWYOiznn
+   E=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 05 May 2022 22:11:11 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 22:11:10 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 5 May 2022 22:11:10 -0700
+Received: from [10.206.28.16] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 5 May 2022
+ 22:11:04 -0700
+Message-ID: <a83dea08-0920-17e6-ec1c-f9d8a490a08d@quicinc.com>
+Date:   Fri, 6 May 2022 10:41:01 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [v15 3/6] usb: dwc3: core: Host wake up support from system
+ suspend
+Content-Language: en-US
+To:     Matthias Kaehlcke <mka@chromium.org>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+References: <1651740973-7944-1-git-send-email-quic_kriskura@quicinc.com>
+ <1651740973-7944-4-git-send-email-quic_kriskura@quicinc.com>
+ <YnRUPxBZB55TPmf2@google.com>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <YnRUPxBZB55TPmf2@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,14 +80,91 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05-05-22, 19:52, Rex-BC Chen wrote:
-> Cpufreq is a DVFS driver used for power saving to scale the clock frequency
-> and supply the voltage for CPUs. This series do some cleanup for MediaTek
-> cpufreq drivers and add support for MediaTek SVS[2] and MediaTek CCI
-> devfreq[3] which are supported in MT8183 and MT8186.
 
-Applied 2-5, rest of them depend on the binding and dts patches to be
-Acked.
-
--- 
-viresh
+On 5/6/2022 4:18 AM, Matthias Kaehlcke wrote:
+> On Thu, May 05, 2022 at 02:26:10PM +0530, Krishna Kurapati wrote:
+>> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>>
+>> During suspend read the status of all port and set hs phy mode
+>> based on current speed. Use this hs phy mode to configure wakeup
+>> interrupts in qcom glue driver.
+>>
+>> Check wakeup-source property for dwc3 core node to set the
+>> wakeup capability. Drop the device_init_wakeup call from
+>> runtime suspend and resume.
+>>
+>> Also check during suspend if any wakeup capable devices are
+>> connected to the controller (directly or through hubs), if there
+>> are none set a flag to indicate that the PHY is powered
+>> down during suspend.
+>>
+>> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/core.c | 33 ++++++++++++++++++++-------------
+>>   drivers/usb/dwc3/core.h |  4 ++++
+>>   drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
+>>   3 files changed, 48 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index 950e238..cf377f5 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -33,6 +33,7 @@
+>>   #include <linux/usb/gadget.h>
+>>   #include <linux/usb/of.h>
+>>   #include <linux/usb/otg.h>
+>> +#include <linux/usb/hcd.h>
+> This is not needed anymore
+>
+>>   
+>>   #include "core.h"
+>>   #include "gadget.h"
+>> @@ -1787,6 +1788,7 @@ static int dwc3_probe(struct platform_device *pdev)
+>>   
+>>   	platform_set_drvdata(pdev, dwc);
+>>   	dwc3_cache_hwparams(dwc);
+>> +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
+>>   
+>>   	spin_lock_init(&dwc->lock);
+>>   	mutex_init(&dwc->mutex);
+>> @@ -1936,6 +1938,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>>   {
+>>   	unsigned long	flags;
+>>   	u32 reg;
+>> +	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
+> This isn't used anymore, delete it
+My bad, Will fix this in next version.
+>>   
+>>   	switch (dwc->current_dr_role) {
+>>   	case DWC3_GCTL_PRTCAP_DEVICE:
+>> @@ -1948,10 +1951,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>>   		dwc3_core_exit(dwc);
+>>   		break;
+>>   	case DWC3_GCTL_PRTCAP_HOST:
+>> -		if (!PMSG_IS_AUTO(msg)) {
+>> -			dwc3_core_exit(dwc);
+>> -			break;
+>> -		}
+>> +		dwc3_check_phy_speed_mode(dwc);
+>>   
+>>   		/* Let controller to suspend HSPHY before PHY driver suspends */
+>>   		if (dwc->dis_u2_susphy_quirk ||
+>> @@ -1967,6 +1967,16 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>>   
+>>   		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
+>>   		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
+>> +
+>> +		if (!PMSG_IS_AUTO(msg)) {
+>> +			if (device_may_wakeup(dwc->dev) &&
+>> +					device_wakeup_path(dwc->dev)) {
+> nit: the indentation is odd, align it with device_may_wakeup()?
+Sure, Will take care of it.
+>> +				dwc->phy_power_off = false;
+>> +			} else {
+>> +				dwc->phy_power_off = true;
+>> +				dwc3_core_exit(dwc);
+> As commented earlier, taking the controller and PHYs completely down causes a
+> significant power draw in some USB clients. Let's clarify what the specific
+> benefits are of doing dwc3_core_exit() vs. entering a low power mode.
+Sure, once we come to a conclusion on this, I will refresh the patches.
