@@ -2,169 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B190851D77D
-	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 14:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E23E651D9A0
+	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 15:52:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391802AbiEFMZA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 May 2022 08:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51768 "EHLO
+        id S1441909AbiEFN4Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 May 2022 09:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391785AbiEFMYu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 May 2022 08:24:50 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E4869288;
-        Fri,  6 May 2022 05:21:02 -0700 (PDT)
+        with ESMTP id S1441901AbiEFN4Q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 May 2022 09:56:16 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6883F5640C;
+        Fri,  6 May 2022 06:52:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651839662; x=1683375662;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=bNlWVZBGsCe3HZ1F4wDWDUdYtwtvMD+wGTDxUy08Iwk=;
-  b=Iu3RYfugvajJf+KuJcM0m+VGqgxKmUMbT7UonF7LYMNcXSesODqUZVSM
-   oE2ZXGXFR/GiHEM67NTXpgTrPtrZ3N0O+a8DLTBVKGZKnvX+81vNY354X
-   eonwKIgLydwnzXfybKZcs6pm42Xx9hp5vPI85k5h2I/1iQIzRBcurvRTR
-   efXgkIXASvBhjKwALMH2+oSR7241vHNMAbApg1GQwgW8VGDnv5a53GDf5
-   OfrPM7NNq3aT59TqvkG5qA0DyGGCt8sug6QQTIedXMn2d7qvLA+B+bgkz
-   YuKsypd9QncplQkQeLUmYz5GOwBRJOIYWRI+2DsmHzrR/lbekpM7UPiFG
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10338"; a="267290929"
+  t=1651845153; x=1683381153;
+  h=from:to:cc:subject:date:message-id;
+  bh=9wDnsvS/6Z2OFFZgBJm5Wi0bWXc2LWpf6mCk4M3Kstg=;
+  b=mnbe3M6PfByB77QEOzHeuw5JYZjSHpNqj/5i5g/e96TTdMZdNgKMGDBQ
+   IFcKS4DXWM2OxS7yVrbtnyl1laHhASXNnxRu/6Ta4VwxA3jQNAwwLZ+xX
+   PwjXGjnaGx1mmV/HYtqRumXx45YHvu+rzZE/9avRbaHekdWoBQI3GMRxc
+   UKcJpc7zsecnF8Qnd58qqALe+3FuSuQ1jP1RT9eSp50/uoY+w1X8Ze7df
+   wJGu609FfDFkZkTp+G3zFc+ID+gCvELuaht4iMzPMWGk30FUf9tXIzlud
+   ZA/BhwCpQKqldq2XCytcJRyOwF3ZzzD2wg4vhlltGOcb6swVv+9oj+pIR
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="266062738"
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="267290929"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 05:21:02 -0700
+   d="scan'208";a="266062738"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 06:52:33 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="891816225"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga005.fm.intel.com with ESMTP; 06 May 2022 05:21:01 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] thermal: int340x: Mode setting with new OS handshake
-Date:   Fri,  6 May 2022 05:20:52 -0700
-Message-Id: <20220506122052.659129-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+   d="scan'208";a="735709939"
+Received: from srpawnik.iind.intel.com ([10.99.123.68])
+  by orsmga005.jf.intel.com with ESMTP; 06 May 2022 06:52:30 -0700
+From:   Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+To:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
+        rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     sumeet.r.pawnikar@intel.com
+Subject: [PATCH] drivers/thermal/intel: Add TCC cooling support for RaptorLake platform
+Date:   Fri,  6 May 2022 19:20:09 +0530
+Message-Id: <20220506135009.22246-1-sumeet.r.pawnikar@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-With the new OS handshake introduced with the commit: "c7ff29763989
-("thermal: int340x: Update OS policy capability handshake")",
-thermal zone mode "enabled" doesn't work in the same way as the legacy
-handshake. The mode "enabled" fails with -EINVAL using new handshake.
+Add TCC cooling support for the RaptorLake platform
 
-To address this issue, when the new OS UUID mask is set:
-- When mode is "enabled", return 0 as the firmware already has the
-latest policy mask.
-- When mode is "disabled", update the firmware with UUID mask of zero.
-In this way firmware can take control of the thermal control. Also
-reset the OS UUID mask. This allows user space to update with new
-set of policies.
-
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: stable@vger.kernel.org
+Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
 ---
- .../intel/int340x_thermal/int3400_thermal.c   | 48 ++++++++++++-------
- 1 file changed, 32 insertions(+), 16 deletions(-)
+ drivers/thermal/intel/intel_tcc_cooling.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index d97f496bab9b..1061728ad5a9 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -194,12 +194,31 @@ static int int3400_thermal_run_osc(acpi_handle handle, char *uuid_str, int *enab
- 	return result;
- }
+diff --git a/drivers/thermal/intel/intel_tcc_cooling.c b/drivers/thermal/intel/intel_tcc_cooling.c
+index cd80c7db4073..a9596e7562ea 100644
+--- a/drivers/thermal/intel/intel_tcc_cooling.c
++++ b/drivers/thermal/intel/intel_tcc_cooling.c
+@@ -81,6 +81,7 @@ static const struct x86_cpu_id tcc_ids[] __initconst = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(COMETLAKE, NULL),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE, NULL),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE, NULL),
+ 	{}
+ };
  
-+static int set_os_uuid_mask(struct int3400_thermal_priv *priv, u32 mask)
-+{
-+	int cap = 0;
-+
-+	/*
-+	 * Capability bits:
-+	 * Bit 0: set to 1 to indicate DPTF is active
-+	 * Bi1 1: set to 1 to active cooling is supported by user space daemon
-+	 * Bit 2: set to 1 to passive cooling is supported by user space daemon
-+	 * Bit 3: set to 1 to critical trip is handled by user space daemon
-+	 */
-+	if (mask)
-+		cap = ((priv->os_uuid_mask << 1) | 0x01);
-+
-+	return int3400_thermal_run_osc(priv->adev->handle,
-+				       "b23ba85d-c8b7-3542-88de-8de2ffcfd698",
-+				       &cap);
-+}
-+
- static ssize_t current_uuid_store(struct device *dev,
- 				  struct device_attribute *attr,
- 				  const char *buf, size_t count)
- {
- 	struct int3400_thermal_priv *priv = dev_get_drvdata(dev);
--	int i;
-+	int ret, i;
- 
- 	for (i = 0; i < INT3400_THERMAL_MAXIMUM_UUID; ++i) {
- 		if (!strncmp(buf, int3400_thermal_uuids[i],
-@@ -231,19 +250,7 @@ static ssize_t current_uuid_store(struct device *dev,
- 	}
- 
- 	if (priv->os_uuid_mask) {
--		int cap, ret;
--
--		/*
--		 * Capability bits:
--		 * Bit 0: set to 1 to indicate DPTF is active
--		 * Bi1 1: set to 1 to active cooling is supported by user space daemon
--		 * Bit 2: set to 1 to passive cooling is supported by user space daemon
--		 * Bit 3: set to 1 to critical trip is handled by user space daemon
--		 */
--		cap = ((priv->os_uuid_mask << 1) | 0x01);
--		ret = int3400_thermal_run_osc(priv->adev->handle,
--					      "b23ba85d-c8b7-3542-88de-8de2ffcfd698",
--					      &cap);
-+		ret = set_os_uuid_mask(priv, priv->os_uuid_mask);
- 		if (ret)
- 			return ret;
- 	}
-@@ -469,17 +476,26 @@ static int int3400_thermal_change_mode(struct thermal_zone_device *thermal,
- 	if (mode != thermal->mode) {
- 		int enabled;
- 
-+		enabled = (mode == THERMAL_DEVICE_ENABLED);
-+
-+		if (priv->os_uuid_mask) {
-+			if (!enabled) {
-+				priv->os_uuid_mask = 0;
-+				result = set_os_uuid_mask(priv, priv->os_uuid_mask);
-+			}
-+			goto eval_odvp;
-+		}
-+
- 		if (priv->current_uuid_index < 0 ||
- 		    priv->current_uuid_index >= INT3400_THERMAL_MAXIMUM_UUID)
- 			return -EINVAL;
- 
--		enabled = (mode == THERMAL_DEVICE_ENABLED);
- 		result = int3400_thermal_run_osc(priv->adev->handle,
- 						 int3400_thermal_uuids[priv->current_uuid_index],
- 						 &enabled);
- 	}
- 
--
-+eval_odvp:
- 	evaluate_odvp(priv);
- 
- 	return result;
 -- 
-2.31.1
+2.17.1
 
