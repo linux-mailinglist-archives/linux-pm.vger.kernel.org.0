@@ -2,106 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4208751DA29
-	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 16:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0E151DA43
+	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 16:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442082AbiEFOO3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 May 2022 10:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38426 "EHLO
+        id S1442098AbiEFOSb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 May 2022 10:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442080AbiEFOO0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 May 2022 10:14:26 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3877529C96;
-        Fri,  6 May 2022 07:10:39 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id C4EBD1F46719
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1651846231;
-        bh=aPzN11eOYyBmn6uYxSJ4z+OxGW0B11goKlzatjEFOG4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=A5kW1JJmvHfMp+G3BYZfs1DtIoJxwTSAkQcm9HkU230sGHCbaarPy3d3ylVb7ghQK
-         QFidNeP16CsPIu7NGef5buR6vQrZaa2Bu2Ol7ocivR52MK99+p14lZHhPhckFBadHq
-         LWO8HGz0L5XHJgOXIl4zHum9KGrTPQ8XNRCAiPLiBFHqfgiXkDJFYnZvSeZjgWY6Sf
-         b+r6JcWvC90AjEGx12tTLe293/2dwUtSGPf4vDeIZmmldanQoeJoRJ1W5+Zs/dm4mK
-         YMULBdy55mQ6HS0+7WhL/7UJ3ikAvXuW+YZrNYtURWDPqYm9/aozEGozBwUb1cqkv6
-         H0OATVRjsYPpg==
-Message-ID: <ca422804-0fa0-5fef-07e2-a9ff005a495c@collabora.com>
-Date:   Fri, 6 May 2022 17:10:24 +0300
+        with ESMTP id S1442124AbiEFOS3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 May 2022 10:18:29 -0400
+Received: from us-smtp-delivery-74.mimecast.com (us-smtp-delivery-74.mimecast.com [170.10.129.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B9866832F
+        for <linux-pm@vger.kernel.org>; Fri,  6 May 2022 07:14:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1651846484;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4WPQviVmMjemjYUh4b8U2LA9qSLoIcn96jpyEFtsl+k=;
+        b=R4rj4LFFCAhLtEUzxNBLFEAqXZJZWctilf+wp+fdEg88CkzM5DIZwS13vf1bjkz12A7Mkv
+        YR8drfVECsK2rBh839n3z0uzh8qTpyISTsxC8vH+URn8DCr99jGtnQ8tLqJ/8pMEBg68u0
+        4l9KXPtI9a7Eg4Vr2X9r0yDq+4OewVM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-629-dni0LC3cNe2LSghfsbJBpw-1; Fri, 06 May 2022 10:14:37 -0400
+X-MC-Unique: dni0LC3cNe2LSghfsbJBpw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EEAEE1C06903;
+        Fri,  6 May 2022 14:14:35 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.95])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 85DF840CF8E8;
+        Fri,  6 May 2022 14:14:31 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Fri,  6 May 2022 16:14:35 +0200 (CEST)
+Date:   Fri, 6 May 2022 16:14:30 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>, linux-ia64@vger.kernel.org
+Subject: Re: [PATCH v4 0/12] ptrace: cleaning up ptrace_stop
+Message-ID: <20220506141403.GA16084@redhat.com>
+References: <20220421150248.667412396@infradead.org>
+ <20220421150654.817117821@infradead.org>
+ <87czhap9dy.fsf@email.froward.int.ebiederm.org>
+ <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+ <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
+ <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
+ <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v7 04/20] kernel: Add combined power-off+restart handler
- call chain API
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-References: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
- <20220411233832.391817-5-dmitry.osipenko@collabora.com>
- <CAJZ5v0gnTSoeNP+QXwrZ45FQY4howVkJMuCjM=j+_-2BngJdQg@mail.gmail.com>
- <990621e7-9f8a-8b4a-02ec-fd6c1e1f48ff@collabora.com>
- <CAJZ5v0jxXtwot0qpib4UG8Tz8Hd1dEbgo58tEdPFboU8xwKHNw@mail.gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <CAJZ5v0jxXtwot0qpib4UG8Tz8Hd1dEbgo58tEdPFboU8xwKHNw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,59 +78,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 4/20/22 21:47, Rafael J. Wysocki wrote:
->>>> +       POWEROFF_PREPARE,
->>>> +};
->>>> +
->>>> +/**
->>>> + * struct power_off_data - Power-off callback argument
->>>> + *
->>>> + * @cb_data: Callback data.
->>>> + */
->>>> +struct power_off_data {
->>>> +       void *cb_data;
->>>> +};
->>>> +
->>>> +/**
->>>> + * struct power_off_prep_data - Power-off preparation callback argument
->>>> + *
->>>> + * @cb_data: Callback data.
->>>> + */
->>>> +struct power_off_prep_data {
->>>> +       void *cb_data;
->>>> +};
->>> Why does this need to be a separate data type?
->> To allow us extend the "struct power_off_prep_data" with more parameters
->> later on without a need to update each driver with the new arguments.
+On 05/05, Eric W. Biederman wrote:
+>
+> Eric W. Biederman (11):
+>       signal: Rename send_signal send_signal_locked
+>       signal: Replace __group_send_sig_info with send_signal_locked
+>       ptrace/um: Replace PT_DTRACE with TIF_SINGLESTEP
+>       ptrace/xtensa: Replace PT_SINGLESTEP with TIF_SINGLESTEP
+>       ptrace: Remove arch_ptrace_attach
+>       signal: Use lockdep_assert_held instead of assert_spin_locked
+>       ptrace: Reimplement PTRACE_KILL by always sending SIGKILL
+>       ptrace: Document that wait_task_inactive can't fail
+>       ptrace: Admit ptrace_stop can generate spuriuos SIGTRAPs
+>       ptrace: Don't change __state
+>       ptrace: Always take siglock in ptrace_resume
+>
+> Peter Zijlstra (1):
+>       sched,signal,ptrace: Rework TASK_TRACED, TASK_STOPPED state
 
-> I'm not really sure what you mean here.  Can you give an example?
-> 
+I can't comment 5/12. to be honest I didn't even try to look into
+arch/ia64/.
 
-The restart callbacks use more than the cb_data and we have:
+But other than that I see no problems in this version. However, I'd
+like to actually apply the whole series and read the changed code
+carefully, but sorry, I don't think I can do this before Monday.
 
-struct restart_data {
-	void *cb_data;
-	const char *cmd;
-	bool stop_chain;
-	enum reboot_mode mode;
-};
+Oleg.
 
-If we'll ever need to extended struct power_off_data similarly to the
-restart_data, then we will need to update all the power-off callbacks
-instead of adding a new field to the power_off_data.
-
-Hence, for example, if you'll want to extend power_off_data with "enum
-poweroff_mode mode", then for each driver you'll need to do this change:
-
--power_off(void *cb_data)
-+power_off(void *cb_data, enum poweroff_mode mode)
-
-and you won't need to do that using struct power_off_data.
-
-Why do we need this? Because I saw in the past people changing kernel
-APIs that way when they wanted to add new arguments and then needed to
-update every call site around the kernel.
-
--- 
-Best regards,
-Dmitry
