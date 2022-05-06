@@ -2,71 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B4751CE5C
-	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 04:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD2851CEA8
+	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 04:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388124AbiEFBwu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 May 2022 21:52:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
+        id S1388154AbiEFBya (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 May 2022 21:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349717AbiEFBwt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 21:52:49 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDB662A1A;
-        Thu,  5 May 2022 18:49:07 -0700 (PDT)
-X-UUID: e22ab0cec2694569aba31fdfa791b297-20220506
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:f32d2ef3-d71b-41f4-a4e3-01aebce32f80,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.4,REQID:f32d2ef3-d71b-41f4-a4e3-01aebce32f80,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:faefae9,CLOUDID:c3f46016-2e53-443e-b81a-655c13977218,C
-        OID:IGNORED,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,File:nil,QS:0
-        ,BEC:nil
-X-UUID: e22ab0cec2694569aba31fdfa791b297-20220506
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1728532245; Fri, 06 May 2022 09:49:02 +0800
-Received: from MTKMBS07N2.mediatek.inc (172.21.101.141) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 6 May 2022 09:49:01 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 6 May 2022 09:49:01 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Fri, 6 May 2022 09:49:01 +0800
-Message-ID: <774c87ffdcac2ca97efef9fc6140f85ddc30e513.camel@mediatek.com>
-Subject: Re: [PATCH v6 02/10] cpufreq: mediatek: Add
- platform_device_unregister when driver exit
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
-        <krzk+dt@kernel.org>, <matthias.bgg@gmail.com>
-CC:     <jia-wei.chang@mediatek.com>, <roger.lu@mediatek.com>,
-        <hsinyi@google.com>, <khilman@baylibre.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 6 May 2022 09:49:01 +0800
-In-Reply-To: <af9724fe-181d-3ba4-79b9-bf3fab1ca80d@collabora.com>
-References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
-         <20220505115226.20130-3-rex-bc.chen@mediatek.com>
-         <af9724fe-181d-3ba4-79b9-bf3fab1ca80d@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S1388195AbiEFByT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 21:54:19 -0400
+Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C25205CD;
+        Thu,  5 May 2022 18:50:35 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
+ (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Fri, 6 May
+ 2022 09:50:34 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Fri, 6 May
+ 2022 09:50:33 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+CC:     Haowen Bai <baihaowen@meizu.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] tools/thermal: Remove unneeded semicolon
+Date:   Fri, 6 May 2022 09:50:31 +0800
+Message-ID: <1651801831-24944-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,32 +46,28 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 2022-05-05 at 17:04 +0200, AngeloGioacchino Del Regno wrote:
-> Il 05/05/22 13:52, Rex-BC Chen ha scritto:
-> > We register the platform device when driver inits. However, we do
-> > not
-> > unregister it when driver exits.
-> > To resolve this, we declare the platform data to be a global static
-> > variable and rename it to be "cpufreq_pdev".
-> > With this global variable, we can do platform_device_unregister()
-> > when
-> > driver exits.
-> > 
-> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> 
-> Hello Rex,
-> this commit needs a Fixes: tag.
-> 
-> Cheers,
-> Angelo
-> 
+Fixes coccicheck warning:
 
-Hello Angelo,
+tools/thermal/thermometer/thermometer.c:147:3-4: Unneeded semicolon
 
-Thanks for the reminder.
-I will add "Fixes: 501c574f4e3a ("cpufreq: mediatek: Add support of
-cpufreq to MT2701/MT7623 SoC")"
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+ tools/thermal/thermometer/thermometer.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-BRs,
-Rex
+diff --git a/tools/thermal/thermometer/thermometer.c b/tools/thermal/thermometer/thermometer.c
+index 914986f20a37..1a87a0a77f9f 100644
+--- a/tools/thermal/thermometer/thermometer.c
++++ b/tools/thermal/thermometer/thermometer.c
+@@ -144,7 +144,7 @@ static int configuration_init(const char *path, struct configuration *config)
+ 		if (!node) {
+ 			ERROR("Missing node name '%d'\n", i);
+ 			return -1;
+-		};
++		}
+ 
+ 		if (!config_setting_lookup_string(node, "name", &name)) {
+ 			ERROR("Thermal zone name not found\n");
+-- 
+2.7.4
 
