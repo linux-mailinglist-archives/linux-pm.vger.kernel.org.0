@@ -2,154 +2,212 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2F0851E10A
-	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 23:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74AF851E158
+	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 23:46:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444423AbiEFVaY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 May 2022 17:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
+        id S1376497AbiEFVue (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 May 2022 17:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444426AbiEFVaW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 May 2022 17:30:22 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753D86F48A
-        for <linux-pm@vger.kernel.org>; Fri,  6 May 2022 14:26:38 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so11868673pjb.5
-        for <linux-pm@vger.kernel.org>; Fri, 06 May 2022 14:26:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=o6Oz7HOQ3x6czvwnoivav5HCYoCnmrdh+Dm8MPs0jWw=;
-        b=SwSsYkfN9KDMSB9pu+/5JgU2+rc3oBkAjfkvyVVfj4lcVjlMSeXz7cn1HFWsS0mdbe
-         ZRjWpTVwLSz/9p3vpGcOcbvBkpxNLjdAtOqAHGzkEKp1Kd3d8Q383mYCiHBojVpARBTn
-         eEeMZFbq42IX6E84oH9rQEVpC2kuaoCp2yZ9g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=o6Oz7HOQ3x6czvwnoivav5HCYoCnmrdh+Dm8MPs0jWw=;
-        b=JR9CMcr3Gzua2Jk43VTsFWvvyLwhApz+Tp0ArdDUotmiOizyCUv9PvYzBWuHWUlD4Z
-         tPYzlOF/wQkJwJumlw1SqRcRnt0nI0sbPtQzNKgGU6gJ2pmb0YIxf8seDQrD0ikeLQj3
-         PN1B0KHevbdLfDwYS5n/G9F3gH+IcJlhKLx5VWq36ia9dSIuEa6Urh+kmSR3XWgWpdfd
-         vaEpfeTwdG7bN7kXPmr6RhVpQREWFcS3Nm+Ztvo1tnkO98Kv2binHfee5ppJYalBykJX
-         53x4WQ/UY/lIA+oL+v7eJv+QJGw+5c2GFkYLCAg2bfc3D2Km3SReU+T0DBiDgmCfDV3v
-         2R+A==
-X-Gm-Message-State: AOAM531B/hVevewwuJzm831PFdQ7JZOS3aawnhZ6BC7k+LT8leI745TV
-        l9Y9n/ReHRDNjQSmC8ImYKBF5g==
-X-Google-Smtp-Source: ABdhPJxqHSDMOut62U5hSxiCpUfOF+RHgmwoJ/cR7WT5zkFNH1CBodbZioDdYdrafVGnTPdDOvN6/g==
-X-Received: by 2002:a17:902:f612:b0:14c:e978:f99e with SMTP id n18-20020a170902f61200b0014ce978f99emr5727111plg.23.1651872397724;
-        Fri, 06 May 2022 14:26:37 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c17-20020a63ef51000000b003c2f9540127sm3713041pgk.93.2022.05.06.14.26.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 May 2022 14:26:37 -0700 (PDT)
-Date:   Fri, 6 May 2022 14:26:36 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, oleg@redhat.com,
-        mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
-        tj@kernel.org, linux-pm@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Jann Horn <jannh@google.com>,
-        linux-ia64@vger.kernel.org, Robert O'Callahan <roc@pernos.co>,
-        Kyle Huey <khuey@pernos.co>
-Subject: Re: [PATCH v4 0/12] ptrace: cleaning up ptrace_stop
-Message-ID: <202205061348.927E94729E@keescook>
-References: <20220421150248.667412396@infradead.org>
- <20220421150654.817117821@infradead.org>
- <87czhap9dy.fsf@email.froward.int.ebiederm.org>
- <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
- <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
- <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
- <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
+        with ESMTP id S1348985AbiEFVud (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 May 2022 17:50:33 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54E2637D;
+        Fri,  6 May 2022 14:46:48 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 52EABFF802;
+        Fri,  6 May 2022 21:46:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1651873602;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jgdW+utjX69lw9hZBaJPICrrQFeG4ACbfoIiurJVsC0=;
+        b=cWZn2bIvqcSVFGu3IsFqsqClQjrfuRcnBfGvVG1LC+EZb+VCl3Yve3JqmG+2HHscqfqp4i
+        vX97M++arG5GXblHmiyRHG9ZIgYSYZVpCZKXHS8td9kNTSj4IS28/SMJNhO9jrkVvk0ATN
+        24bIxEbxb/BKyXuR5gp81RK8bjzdn5jkjH//ttYhUvkv0x4kUkoWf4YX59s1KBc9aZOfNG
+        0gJTBGziACERliLJVvJ3QeGv//sGN7+r852isaiAwAtl7iQ64GSyw4gmGupgAcheSJ1W+9
+        g30110feSLlykUWTJKC7WTbThbnp43eb6vzRn+UpM8oxgk68GpzG5k+tY7GEVA==
+Date:   Fri, 6 May 2022 23:46:40 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     rjw@rjwysocki.net, kvalo@kernel.org, linux-pm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-wireless@vger.kernel.org, daniel.lezcano@linaro.org,
+        merez@codeaurora.org, mat.jonczyk@o2.pl,
+        sumeet.r.pawnikar@intel.com, len.brown@intel.com
+Subject: Re: [PATCH 7/7] rtc: cmos: Add suspend/resume endurance testing hook
+Message-ID: <YnWXQE9QASycOzZo@mail.local>
+References: <20220505015814.3727692-1-rui.zhang@intel.com>
+ <20220505015814.3727692-8-rui.zhang@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220505015814.3727692-8-rui.zhang@intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 05, 2022 at 01:25:57PM -0500, Eric W. Biederman wrote:
-> The states TASK_STOPPED and TASK_TRACE are special in they can not
-> handle spurious wake-ups.  This plus actively depending upon and
-> changing the value of tsk->__state causes problems for PREEMPT_RT and
-> Peter's freezer rewrite.
+Hello,
+
+I assume I can ignore this patch as this seems to be only for testing
+I'm not even sure why this is needed as this completely breaks setting
+the alarm time.
+
+On 05/05/2022 09:58:14+0800, Zhang Rui wrote:
+> Automated suspend/resume testing uses the RTC for wakeup.
+> A short rtcwake period is desirable, so that more suspend/resume
+> cycles can be completed, while the machine is available for testing.
 > 
-> There are a lot of details we have to get right to sort out the
-> technical challenges and this is my parred back version of the changes
-> that contains just those problems I see good solutions to that I believe
-> are ready.
+> But if too short a wake interval is specified, the event can occur,
+> while still suspending, and then no event wakes the suspended system
+> until the user notices that testing has stalled, and manually intervenes.
 > 
-> A couple of issues have been pointed but I think this parred back set of
-> changes is still on the right track.  The biggest change in v4 is the
-> split of "ptrace: Admit ptrace_stop can generate spuriuos SIGTRAPs" into
-> two patches because the dependency I thought exited between two
-> different changes did not exist.  The rest of the changes are minor
-> tweaks to "ptrace: Admit ptrace_stop can generate spuriuos SIGTRAPs";
-> removing an always true branch, and adding an early  test to see if the
-> ptracer had gone, before TASK_TRAPPING was set.
+> Here we add a hook to the rtc-cmos driver to
+> a) remove the alarm timer in the beginning of suspend, if there is any
+> b) arm the wakeup in PM notifier callback, which is in the very late stage
+>    before the system really suspends
+> The remaining part of suspend is usually measured under 10 ms,
+> and so arming the timer at this point could be as fast as the minimum
+> time of 1-second.
 > 
-> This set of changes should support Peter's freezer rewrite, and with the
-> addition of changing wait_task_inactive(TASK_TRACED) to be
-> wait_task_inactive(0) in ptrace_check_attach I don't think there are any
-> races or issues to be concerned about from the ptrace side.
+> But there is a 2nd race.  The RTC has 1-second granularity, and unless
+> you are timing the timer with a higher resolution timer,
+> there is no telling if the current time + 1 will occur immediately,
+> or a full second in the future.  And so 2-seconds is the safest minimum:
 > 
-> More work is needed to support PREEMPT_RT, but these changes get things
-> closer.
+> Run 1,000 s2idle cycles with (max of) 2 second wakeup period:
 > 
-> This set of changes continues to look like it will provide a firm
-> foundation for solving the PREEMPT_RT and freezer challenges.
-
-One of the more sensitive projects to changes around ptrace is rr
-(Robert and Kyle added to CC). I ran rr's selftests before/after this
-series and saw no changes. My failures remained the same; I assume
-they're due to missing CPU features (pkeys) or build configs (bpf), etc:
-
-99% tests passed, 19 tests failed out of 2777
-
-Total Test time (real) = 773.40 sec
-
-The following tests FAILED:
-         42 - bpf_map (Failed)
-         43 - bpf_map-no-syscallbuf (Failed)
-        414 - netfilter (Failed)
-        415 - netfilter-no-syscallbuf (Failed)
-        454 - x86/pkeys (Failed)
-        455 - x86/pkeys-no-syscallbuf (Failed)
-        1152 - ttyname (Failed)
-        1153 - ttyname-no-syscallbuf (Failed)
-        1430 - bpf_map-32 (Failed)
-        1431 - bpf_map-32-no-syscallbuf (Failed)
-        1502 - detach_sigkill-32 (Failed)
-        1802 - netfilter-32 (Failed)
-        1803 - netfilter-32-no-syscallbuf (Failed)
-        1842 - x86/pkeys-32 (Failed)
-        1843 - x86/pkeys-32-no-syscallbuf (Failed)
-        2316 - crash_in_function-32 (Failed)
-        2317 - crash_in_function-32-no-syscallbuf (Failed)
-        2540 - ttyname-32 (Failed)
-        2541 - ttyname-32-no-syscallbuf (Failed)
-
-So, I guess:
-
-Tested-by: Kees Cook <keescook@chromium.org>
-
-:)
+>  # echo 2 > /sys/module/rtc_cmos/parameters/rtc_wake_override_sec
+>  # sleepgraph.py -m freeze -multi 1000 0 -skiphtml -gzip
+> 
+> Clear the timer override, to not interfere with subsequent
+> real use of the machine's suspend/resume feature:
+> 
+>  # echo 0 > /sys/module/rtc_cmos/parameters/rtc_wake_override_sec
+> 
+> Originally-by: Len Brown <len.brown@intel.com>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> Tested-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+> ---
+>  drivers/rtc/interface.c |  1 +
+>  drivers/rtc/rtc-cmos.c  | 45 +++++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 46 insertions(+)
+> 
+> diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
+> index 9edd662c69ac..fb93aa2dc99c 100644
+> --- a/drivers/rtc/interface.c
+> +++ b/drivers/rtc/interface.c
+> @@ -1020,6 +1020,7 @@ void rtc_timer_cancel(struct rtc_device *rtc, struct rtc_timer *timer)
+>  		rtc_timer_remove(rtc, timer);
+>  	mutex_unlock(&rtc->ops_lock);
+>  }
+> +EXPORT_SYMBOL_GPL(rtc_timer_cancel);
+>  
+>  /**
+>   * rtc_read_offset - Read the amount of rtc offset in parts per billion
+> diff --git a/drivers/rtc/rtc-cmos.c b/drivers/rtc/rtc-cmos.c
+> index 7c006c2b125f..9590c40fa9d8 100644
+> --- a/drivers/rtc/rtc-cmos.c
+> +++ b/drivers/rtc/rtc-cmos.c
+> @@ -32,6 +32,7 @@
+>  #include <linux/init.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/spinlock.h>
+> +#include <linux/suspend.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/log2.h>
+>  #include <linux/pm.h>
+> @@ -70,6 +71,9 @@ static inline int cmos_use_acpi_alarm(void)
+>  }
+>  #endif
+>  
+> +static int rtc_wake_override_sec;
+> +module_param(rtc_wake_override_sec, int, 0644);
+> +
+>  struct cmos_rtc {
+>  	struct rtc_device	*rtc;
+>  	struct device		*dev;
+> @@ -89,6 +93,7 @@ struct cmos_rtc {
+>  	u8			century;
+>  
+>  	struct rtc_wkalrm	saved_wkalrm;
+> +	struct notifier_block	pm_nb;
+>  };
+>  
+>  /* both platform and pnp busses use negative numbers for invalid irqs */
+> @@ -744,6 +749,42 @@ static irqreturn_t cmos_interrupt(int irq, void *p)
+>  		return IRQ_NONE;
+>  }
+>  
+> +static int cmos_pm_notify(struct notifier_block *nb, unsigned long mode, void *_unused)
+> +{
+> +	struct cmos_rtc *cmos = container_of(nb, struct cmos_rtc, pm_nb);
+> +	struct rtc_device       *rtc = cmos->rtc;
+> +	unsigned long           now;
+> +	struct rtc_wkalrm       alm;
+> +
+> +	if (rtc_wake_override_sec == 0)
+> +		return NOTIFY_OK;
+> +
+> +	switch (mode) {
+> +	case PM_SUSPEND_PREPARE:
+> +		/*
+> +		 * Cancel the timer to make sure it won't fire
+> +		 * before rtc is rearmed later.
+> +		 */
+> +		rtc_timer_cancel(rtc, &rtc->aie_timer);
+> +		break;
+> +	case PM_SUSPEND_LATE:
+> +		if (rtc_read_time(rtc, &alm.time))
+> +			return NOTIFY_BAD;
+> +
+> +		now = rtc_tm_to_time64(&alm.time);
+> +		memset(&alm, 0, sizeof(alm));
+> +		rtc_time64_to_tm(now + rtc_wake_override_sec, &alm.time);
+> +		alm.enabled = true;
+> +		if (rtc_set_alarm(rtc, &alm))
+> +			return NOTIFY_BAD;
+> +		if (cmos->wake_on)
+> +			cmos->wake_on(cmos->dev);
+> +		break;
+> +	}
+> +
+> +	return NOTIFY_OK;
+> +}
+> +
+>  #ifdef	CONFIG_PNP
+>  #define	INITSECTION
+>  
+> @@ -937,6 +978,9 @@ cmos_do_probe(struct device *dev, struct resource *ports, int rtc_irq)
+>  		 nvmem_cfg.size,
+>  		 use_hpet_alarm() ? ", hpet irqs" : "");
+>  
+> +	cmos_rtc.pm_nb.notifier_call = cmos_pm_notify;
+> +	register_pm_notifier(&cmos_rtc.pm_nb);
+> +
+>  	return 0;
+>  
+>  cleanup2:
+> @@ -965,6 +1009,7 @@ static void cmos_do_remove(struct device *dev)
+>  	struct cmos_rtc	*cmos = dev_get_drvdata(dev);
+>  	struct resource *ports;
+>  
+> +	unregister_pm_notifier(&cmos_rtc.pm_nb);
+>  	cmos_do_shutdown(cmos->irq);
+>  
+>  	if (is_valid_irq(cmos->irq)) {
+> -- 
+> 2.17.1
+> 
 
 -- 
-Kees Cook
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
