@@ -2,215 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9728C51DDED
-	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 18:51:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7212351DE04
+	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 19:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443966AbiEFQzf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 May 2022 12:55:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57352 "EHLO
+        id S1443994AbiEFREd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 May 2022 13:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443932AbiEFQze (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 May 2022 12:55:34 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1934633B6
-        for <linux-pm@vger.kernel.org>; Fri,  6 May 2022 09:51:49 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id a191so6568223pge.2
-        for <linux-pm@vger.kernel.org>; Fri, 06 May 2022 09:51:49 -0700 (PDT)
+        with ESMTP id S1382740AbiEFREd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 May 2022 13:04:33 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C477423BF2;
+        Fri,  6 May 2022 10:00:49 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id z12so5163450ilp.8;
+        Fri, 06 May 2022 10:00:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=8CjPh+bfg9FeD4L33j+vl0as/9NZnd8bSEbyXP8g7WM=;
-        b=Hmb66AOkOay154HlbmrZiCSrPZhss1uyez/WWDvOU1oYt4IH/+ZcEiBDia0jEf1SpT
-         ENKTAoBFILmVfQgb7K/+vOcsUbe5WUIlXIr8x6J8wOcDvo2wfiIyG2hP2ko5zymHscYB
-         YT6hd2RpFiQVZQoZaFfWe06fyCbLvU4RmbfSw=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=3hv4at3JYf4y09rWLgIApsDSX2KKaSl4kYTsB/P5mJ0=;
+        b=gua7RI8qZk25ZAewCZAiAJMawwqFhhz80joRswrrSwHhsVDCOOYu8i13fjCzBt77/h
+         NbNLUJDn8YVcp1T+41qtfChmCn5sms9aEYSKHPEUFPjKcWBvSgi2cSMdHJb/lJ8Rkvz+
+         X2anB5H7ASVH7YcisrXDldbK8a3ib96x3P5dL08H/Rcybuo+zLoc9AA6dRB1m/ubO4dF
+         Fha/oqnTvNexNyXgQgkDoLs44Yt0NUj037nxdZaV2JfHyv3ZxHmgu7FeN5koqiKFiSwp
+         IX7eH+Yic3HhFj4z4mEikD/Zhgyb0iSyeRznbJVTZhpmXlFiF8PCQ0akxhk6PRcU/cge
+         PEmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8CjPh+bfg9FeD4L33j+vl0as/9NZnd8bSEbyXP8g7WM=;
-        b=xMiz4smWCu4VfleBhOBR7YGrWruC9Z4P0Qq2l6zAbdZiXbCHzAwk52woRknpLB9qX7
-         /fohufgEAtt/Qnvv7eadJTrPlZxldAlhp8ccwmI/WSyQzdXNmxhm428mBd4suP3j+njJ
-         M36uiKtlS+sv+drsDFP4AbphNfG/gnohN/XBHywV6dK+F/1A2mQAsGnwEsaFKkwLCkPP
-         t5RrDvH/FZ085LCqmv3A4VTMATH15brt7tAtMwJJMlIQ1IeNDwOhtc2gThHxRYj/v8x9
-         2jkOK43elCqTM6VUSbOsjIN4JgGtpuYYlXdEqsSRDSyvENekcLtOoi6fXIPK+ZgK24b9
-         pkZA==
-X-Gm-Message-State: AOAM5302F8x/lXh0MDrT2fSOiMsj/ZHDK5nvzzhqcFBZ1K4oZ+tn+1Ye
-        0ph4ifcwm/pNMnSdAPJPWDOpDg==
-X-Google-Smtp-Source: ABdhPJxgMQ1i3BHka8S2fWHqHyjIQLDycbKmqf5OsGqno4rWYcWYXY5wJezWWIGw+N85L117g6Iauw==
-X-Received: by 2002:a63:2c8a:0:b0:3c5:f760:2e36 with SMTP id s132-20020a632c8a000000b003c5f7602e36mr3494211pgs.372.1651855909179;
-        Fri, 06 May 2022 09:51:49 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:5605:d5cd:699b:1b26])
-        by smtp.gmail.com with UTF8SMTPSA id u10-20020a170902e80a00b0015e8d4eb24asm2111268plg.148.2022.05.06.09.51.47
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3hv4at3JYf4y09rWLgIApsDSX2KKaSl4kYTsB/P5mJ0=;
+        b=bk0GOKLQu4+KMDvfYPa3X/7/QFTMe/TdtM2kuM3ZskuL2W/UZP/rW7/gijgdySK+iH
+         DwgTGyZ3r4WJ+LDPE5dSvQ8BkCC1vc/h0HHRyvEcrZ6Nkt9d4pkuOEom4fj4R7iiday6
+         qZw7lkd7iGfGW3XvtlYpubxbB4VkfiszkbfgnSSz30A8jBEDhcfQrz4EW5deiy+Xls5p
+         HNfQtxoBX5rgei47Y8gnqZURXg0Q5iA+/gu/KTU6PA9onE9NDaSMrz6IIsjA/WMQVgus
+         uBDSTMuw7mDDAMvMSZ1QQ3L22cltQ1jn/jtE/8zBhfHMCT6K4Q3onjzg2hcObwr0fMaU
+         eGTA==
+X-Gm-Message-State: AOAM530JUse//jvhNiUFPz+pMFUbpTLt3YbJbpAZwb+QkzXYf5lPCJ1l
+        nq9oixlea94EOvyi0WQ245ODiGbGG3TguXxK
+X-Google-Smtp-Source: ABdhPJwjp2QyOO3aX6GanfAOk4ePC/7fufotuPndabaMczq0WyiENpJP23ShZvUPg96s0ojmnnoBWA==
+X-Received: by 2002:a05:6e02:198e:b0:2cf:4a7a:faf8 with SMTP id g14-20020a056e02198e00b002cf4a7afaf8mr1589453ilf.206.1651856449165;
+        Fri, 06 May 2022 10:00:49 -0700 (PDT)
+Received: from localhost (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
+        by smtp.gmail.com with UTF8SMTPSA id f21-20020a05660215d500b0065a47e16f63sm1411863iow.53.2022.05.06.10.00.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 09:51:48 -0700 (PDT)
-Date:   Fri, 6 May 2022 09:51:46 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
-        quic_vpulyala@quicinc.com
-Subject: Re: [v15 3/6] usb: dwc3: core: Host wake up support from system
- suspend
-Message-ID: <YnVSIvwXsKySg33M@google.com>
-References: <1651740973-7944-1-git-send-email-quic_kriskura@quicinc.com>
- <1651740973-7944-4-git-send-email-quic_kriskura@quicinc.com>
- <YnRUPxBZB55TPmf2@google.com>
- <a83dea08-0920-17e6-ec1c-f9d8a490a08d@quicinc.com>
- <20220506051448.GE4640@hu-pkondeti-hyd.qualcomm.com>
- <YnVD+ltiQhKE+jPf@google.com>
+        Fri, 06 May 2022 10:00:48 -0700 (PDT)
+From:   Schspa Shi <schspa@gmail.com>
+To:     rafael@kernel.org, viresh.kumar@linaro.org,
+        dan.carpenter@oracle.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        schspa@gmail.com
+Subject: [PATCH] cpufreq: fix double unlock when cpufreq online
+Date:   Sat,  7 May 2022 01:00:35 +0800
+Message-Id: <20220506170035.32115-1-schspa@gmail.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+In-Reply-To: <20220506072146.GD4031@kadam>
+References: <20220506072146.GD4031@kadam>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YnVD+ltiQhKE+jPf@google.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 06, 2022 at 08:51:22AM -0700, Matthias Kaehlcke wrote:
-> On Fri, May 06, 2022 at 10:44:48AM +0530, Pavan Kondeti wrote:
-> > On Fri, May 06, 2022 at 10:41:01AM +0530, Krishna Kurapati PSSNV wrote:
-> > > 
-> > > On 5/6/2022 4:18 AM, Matthias Kaehlcke wrote:
-> > > >On Thu, May 05, 2022 at 02:26:10PM +0530, Krishna Kurapati wrote:
-> > > >>From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > > >>
-> > > >>During suspend read the status of all port and set hs phy mode
-> > > >>based on current speed. Use this hs phy mode to configure wakeup
-> > > >>interrupts in qcom glue driver.
-> > > >>
-> > > >>Check wakeup-source property for dwc3 core node to set the
-> > > >>wakeup capability. Drop the device_init_wakeup call from
-> > > >>runtime suspend and resume.
-> > > >>
-> > > >>Also check during suspend if any wakeup capable devices are
-> > > >>connected to the controller (directly or through hubs), if there
-> > > >>are none set a flag to indicate that the PHY is powered
-> > > >>down during suspend.
-> > > >>
-> > > >>Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > > >>Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> > > >>---
-> > > >>  drivers/usb/dwc3/core.c | 33 ++++++++++++++++++++-------------
-> > > >>  drivers/usb/dwc3/core.h |  4 ++++
-> > > >>  drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
-> > > >>  3 files changed, 48 insertions(+), 13 deletions(-)
-> > > >>
-> > > >>diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > > >>index 950e238..cf377f5 100644
-> > > >>--- a/drivers/usb/dwc3/core.c
-> > > >>+++ b/drivers/usb/dwc3/core.c
-> > > >>@@ -33,6 +33,7 @@
-> > > >>  #include <linux/usb/gadget.h>
-> > > >>  #include <linux/usb/of.h>
-> > > >>  #include <linux/usb/otg.h>
-> > > >>+#include <linux/usb/hcd.h>
-> > > >This is not needed anymore
-> > > >
-> > > >>  #include "core.h"
-> > > >>  #include "gadget.h"
-> > > >>@@ -1787,6 +1788,7 @@ static int dwc3_probe(struct platform_device *pdev)
-> > > >>  	platform_set_drvdata(pdev, dwc);
-> > > >>  	dwc3_cache_hwparams(dwc);
-> > > >>+	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
-> > > >>  	spin_lock_init(&dwc->lock);
-> > > >>  	mutex_init(&dwc->mutex);
-> > > >>@@ -1936,6 +1938,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > > >>  {
-> > > >>  	unsigned long	flags;
-> > > >>  	u32 reg;
-> > > >>+	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
-> > > >This isn't used anymore, delete it
-> > > My bad, Will fix this in next version.
-> > > >>  	switch (dwc->current_dr_role) {
-> > > >>  	case DWC3_GCTL_PRTCAP_DEVICE:
-> > > >>@@ -1948,10 +1951,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > > >>  		dwc3_core_exit(dwc);
-> > > >>  		break;
-> > > >>  	case DWC3_GCTL_PRTCAP_HOST:
-> > > >>-		if (!PMSG_IS_AUTO(msg)) {
-> > > >>-			dwc3_core_exit(dwc);
-> > > >>-			break;
-> > > >>-		}
-> > > >>+		dwc3_check_phy_speed_mode(dwc);
-> > > >>  		/* Let controller to suspend HSPHY before PHY driver suspends */
-> > > >>  		if (dwc->dis_u2_susphy_quirk ||
-> > > >>@@ -1967,6 +1967,16 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > > >>  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
-> > > >>  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
-> > > >>+
-> > > >>+		if (!PMSG_IS_AUTO(msg)) {
-> > > >>+			if (device_may_wakeup(dwc->dev) &&
-> > > >>+					device_wakeup_path(dwc->dev)) {
-> > > >nit: the indentation is odd, align it with device_may_wakeup()?
-> > > Sure, Will take care of it.
-> > > >>+				dwc->phy_power_off = false;
-> > > >>+			} else {
-> > > >>+				dwc->phy_power_off = true;
-> > > >>+				dwc3_core_exit(dwc);
-> > > >As commented earlier, taking the controller and PHYs completely down causes a
-> > > >significant power draw in some USB clients. Let's clarify what the specific
-> > > >benefits are of doing dwc3_core_exit() vs. entering a low power mode.
-> > > Sure, once we come to a conclusion on this, I will refresh the patches.
-> > 
-> > I think, Matthias is asking you to clarify in the commit description. we can
-> > even quote Matthias observations.
-> 
-> Actually I would like to have a discussion about the benefits of powering down
-> the controller and PHYs vs. entering a low power state. Maybe there are good
-> reasons for powering everything down (e.g. significant power savings), but
-> as we have seen there are also significant downsides, so let's make sure
-> we understand both.
+The patch f346e96267cd: ("cpufreq: Fix possible race in cpufreq online
+error path") expand the critical region. But policy->rwsem is not held when
+calling cpufreq_driver->online and cpufreq_driver->init calls, which lead to bad
+unlock.
 
-I found this, as I commented on the other thread:
+And it's well to hold this lock when calling cpufreq_driver->online, which
+provide more protects without bad influence.
 
-  commit c4a5153e87fdf6805f63ff57556260e2554155a5
-  Author: Manu Gautam <mgautam@codeaurora.org>
-  Date:   Thu Jan 18 16:54:30 2018 +0530
+Fixes: f346e96267cd: ("cpufreq: Fix possible race in cpufreq online error path")
+Link: https://lore.kernel.org/all/YnKZCGaig+EXSowf@kili/
 
-  usb: dwc3: core: Power-off core/PHYs on system_suspend in host mode
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Schspa Shi <schspa@gmail.com>
+---
+ drivers/cpufreq/cpufreq.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-  Commit 689bf72c6e0d ("usb: dwc3: Don't reinitialize core during
-  host bus-suspend/resume") updated suspend/resume routines to not
-  power_off and reinit PHYs/core for host mode.
-  It broke platforms that rely on DWC3 core to power_off PHYs to
-  enter low power state on system suspend.
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 0d58b0f8f3af..43dfaa8124e2 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1337,12 +1337,12 @@ static int cpufreq_online(unsigned int cpu)
+ 		down_write(&policy->rwsem);
+ 		policy->cpu = cpu;
+ 		policy->governor = NULL;
+-		up_write(&policy->rwsem);
+ 	} else {
+ 		new_policy = true;
+ 		policy = cpufreq_policy_alloc(cpu);
+ 		if (!policy)
+ 			return -ENOMEM;
++		down_write(&policy->rwsem);
+ 	}
+ 
+ 	if (!new_policy && cpufreq_driver->online) {
+@@ -1382,7 +1382,6 @@ static int cpufreq_online(unsigned int cpu)
+ 		cpumask_copy(policy->related_cpus, policy->cpus);
+ 	}
+ 
+-	down_write(&policy->rwsem);
+ 	/*
+ 	 * affected cpus must always be the one, which are online. We aren't
+ 	 * managing offline cpus here.
+@@ -1542,9 +1541,9 @@ static int cpufreq_online(unsigned int cpu)
+ 		cpufreq_driver->exit(policy);
+ 
+ 	cpumask_clear(policy->cpus);
+-	up_write(&policy->rwsem);
+ 
+ out_free_policy:
++	up_write(&policy->rwsem);
+ 	cpufreq_policy_free(policy);
+ 	return ret;
+ }
+-- 
+2.24.3 (Apple Git-128)
 
-  Perform dwc3_core_exit/init only during host mode system_suspend/
-  resume to addresses power regression from above mentioned patch
-  and also allow USB session to stay connected across
-  runtime_suspend/resume in host mode. While at it also replace
-  existing checks for HOST only dr_mode with current_dr_role to
-  have similar core driver behavior for both Host-only and DRD+Host
-  configurations.
-
-  Fixes: 689bf72c6e0d ("usb: dwc3: Don't reinitialize core during host bus-suspend/resume")
-  Reviewed-by: Roger Quadros <rogerq@ti.com>
-  Signed-off-by: Manu Gautam <mgautam@codeaurora.org>
-  Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
-
-
-So apparently powering off the core and PHYs is needed on some
-platforms.
-
-Let's move forward with the core/PHYs off for now and try to
-come up with a solution (e.g. a DT property that indicates
-that the core/PHYs can remain powererd) in a separate
-patch/series.
