@@ -2,75 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E23E651D9A0
-	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 15:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A147151D9AB
+	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 15:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1441909AbiEFN4Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 May 2022 09:56:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51918 "EHLO
+        id S236583AbiEFOAA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 May 2022 10:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1441901AbiEFN4Q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 May 2022 09:56:16 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6883F5640C;
-        Fri,  6 May 2022 06:52:33 -0700 (PDT)
+        with ESMTP id S239169AbiEFN77 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 May 2022 09:59:59 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F635DBE5;
+        Fri,  6 May 2022 06:56:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651845153; x=1683381153;
+  t=1651845376; x=1683381376;
   h=from:to:cc:subject:date:message-id;
-  bh=9wDnsvS/6Z2OFFZgBJm5Wi0bWXc2LWpf6mCk4M3Kstg=;
-  b=mnbe3M6PfByB77QEOzHeuw5JYZjSHpNqj/5i5g/e96TTdMZdNgKMGDBQ
-   IFcKS4DXWM2OxS7yVrbtnyl1laHhASXNnxRu/6Ta4VwxA3jQNAwwLZ+xX
-   PwjXGjnaGx1mmV/HYtqRumXx45YHvu+rzZE/9avRbaHekdWoBQI3GMRxc
-   UKcJpc7zsecnF8Qnd58qqALe+3FuSuQ1jP1RT9eSp50/uoY+w1X8Ze7df
-   wJGu609FfDFkZkTp+G3zFc+ID+gCvELuaht4iMzPMWGk30FUf9tXIzlud
-   ZA/BhwCpQKqldq2XCytcJRyOwF3ZzzD2wg4vhlltGOcb6swVv+9oj+pIR
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="266062738"
+  bh=98S21VI5IJ85HPl4gKniQ9tbcJ0oPC6mo8HQoRhUgyY=;
+  b=PY5cRSf5xVxj1AR2vbXRWnjI83ysoK6XD6CxbkYmfYzQh30uSXYa0tSc
+   o5CN52ODapMi79YZT4kchKuc4XB0VszfJ7UtZjf2MQHRfDh7W8frZhcC7
+   qDNGwa1GnnXVPRL7Fro9VgkS+Bf/lbTd8DXGNR5PelNj7PlR2igVcFZiz
+   OGkQSq+ndktHeCsT4IwAzTZ+2pOyiznSIrr4aNxeIqICfFdh2l/Lv5keU
+   8rmW+tsZgF91O73fAB0GooTgs2LB/rCbP8HwpX3CzVPkllK9CQXh+SIkO
+   sI8JC1vnY+1wkaElHgcJwWdH8yxx2mSvLKiLiVKLKrNheBE4trRl8+qbM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="250472354"
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="266062738"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 06:52:33 -0700
+   d="scan'208";a="250472354"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 06:56:16 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="735709939"
+   d="scan'208";a="537899302"
 Received: from srpawnik.iind.intel.com ([10.99.123.68])
-  by orsmga005.jf.intel.com with ESMTP; 06 May 2022 06:52:30 -0700
+  by orsmga006.jf.intel.com with ESMTP; 06 May 2022 06:56:14 -0700
 From:   Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
 To:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
-        rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+        rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Cc:     sumeet.r.pawnikar@intel.com
-Subject: [PATCH] drivers/thermal/intel: Add TCC cooling support for RaptorLake platform
-Date:   Fri,  6 May 2022 19:20:09 +0530
-Message-Id: <20220506135009.22246-1-sumeet.r.pawnikar@intel.com>
+Subject: [PATCH] powercap: Add Power Limit4 support for RaptorLake SoC
+Date:   Fri,  6 May 2022 19:23:52 +0530
+Message-Id: <20220506135352.22427-1-sumeet.r.pawnikar@intel.com>
 X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add TCC cooling support for the RaptorLake platform
+Add Power Limit4 support for RaptorLake SoC.
 
 Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
 ---
- drivers/thermal/intel/intel_tcc_cooling.c | 1 +
+ drivers/powercap/intel_rapl_msr.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/thermal/intel/intel_tcc_cooling.c b/drivers/thermal/intel/intel_tcc_cooling.c
-index cd80c7db4073..a9596e7562ea 100644
---- a/drivers/thermal/intel/intel_tcc_cooling.c
-+++ b/drivers/thermal/intel/intel_tcc_cooling.c
-@@ -81,6 +81,7 @@ static const struct x86_cpu_id tcc_ids[] __initconst = {
- 	X86_MATCH_INTEL_FAM6_MODEL(COMETLAKE, NULL),
- 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE, NULL),
- 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, NULL),
-+	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE, NULL),
+diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
+index 1be45f36ab6c..9d23984d8931 100644
+--- a/drivers/powercap/intel_rapl_msr.c
++++ b/drivers/powercap/intel_rapl_msr.c
+@@ -140,6 +140,7 @@ static const struct x86_cpu_id pl4_support_ids[] = {
+ 	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_TIGERLAKE_L, X86_FEATURE_ANY },
+ 	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_ALDERLAKE, X86_FEATURE_ANY },
+ 	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_ALDERLAKE_L, X86_FEATURE_ANY },
++	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_RAPTORLAKE, X86_FEATURE_ANY },
  	{}
  };
  
