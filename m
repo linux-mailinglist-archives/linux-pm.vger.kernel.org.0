@@ -2,78 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A147151D9AB
-	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 15:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E6E51D9C9
+	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 16:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236583AbiEFOAA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 May 2022 10:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
+        id S1380131AbiEFOIp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 May 2022 10:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239169AbiEFN77 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 May 2022 09:59:59 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F635DBE5;
-        Fri,  6 May 2022 06:56:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1651845376; x=1683381376;
-  h=from:to:cc:subject:date:message-id;
-  bh=98S21VI5IJ85HPl4gKniQ9tbcJ0oPC6mo8HQoRhUgyY=;
-  b=PY5cRSf5xVxj1AR2vbXRWnjI83ysoK6XD6CxbkYmfYzQh30uSXYa0tSc
-   o5CN52ODapMi79YZT4kchKuc4XB0VszfJ7UtZjf2MQHRfDh7W8frZhcC7
-   qDNGwa1GnnXVPRL7Fro9VgkS+Bf/lbTd8DXGNR5PelNj7PlR2igVcFZiz
-   OGkQSq+ndktHeCsT4IwAzTZ+2pOyiznSIrr4aNxeIqICfFdh2l/Lv5keU
-   8rmW+tsZgF91O73fAB0GooTgs2LB/rCbP8HwpX3CzVPkllK9CQXh+SIkO
-   sI8JC1vnY+1wkaElHgcJwWdH8yxx2mSvLKiLiVKLKrNheBE4trRl8+qbM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10339"; a="250472354"
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="250472354"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2022 06:56:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,203,1647327600"; 
-   d="scan'208";a="537899302"
-Received: from srpawnik.iind.intel.com ([10.99.123.68])
-  by orsmga006.jf.intel.com with ESMTP; 06 May 2022 06:56:14 -0700
-From:   Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-To:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
-        rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     sumeet.r.pawnikar@intel.com
-Subject: [PATCH] powercap: Add Power Limit4 support for RaptorLake SoC
-Date:   Fri,  6 May 2022 19:23:52 +0530
-Message-Id: <20220506135352.22427-1-sumeet.r.pawnikar@intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S236164AbiEFOIo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 May 2022 10:08:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AFA56762;
+        Fri,  6 May 2022 07:05:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1D211B835D5;
+        Fri,  6 May 2022 14:04:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 699DBC385A9;
+        Fri,  6 May 2022 14:04:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651845897;
+        bh=/HOBhUjG+Mc3GBeGJW8BQ0KRE8eqV2P4POi86WN+/I0=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=ZThZcANqyoaGOsM/UoBGqzFzzd9Ty9Q7im5c343O8MpatQ7Yh3Mz0dOJvdkk75dRA
+         wXNtJ+JxaeN86OCjcx/eHR06p5xFSXDYI7vv5SGUzyxVIqOq1BZ5hRiWTsR20m2jPo
+         eWjkcyH8W3fiIoTsr+D2NRuAI/mLEYwz62zgciw40yl96Ni6mg1NoiLdsbiaFdsoGz
+         001dlzjbqQI3O9LQ9shzfcn9MvyOSP1Oj/X5iVSK5YE5QYbZBUxlbblmLjZ5wSFozK
+         LWmOVFdFmYYYeGyp/EhQUW2kcHpWTEw3ojF2r1s2ZVotAnNaWPYP52J1a7xhwyl1z3
+         EWcCJ2/bVQ22A==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     rjw@rjwysocki.net, alexandre.belloni@bootlin.com,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-wireless@vger.kernel.org,
+        daniel.lezcano@linaro.org, mat.jonczyk@o2.pl,
+        sumeet.r.pawnikar@intel.com, len.brown@intel.com
+Subject: Re: [PATCH 5/7] wil6210: remove debug message for unsupported PM event
+References: <20220505015814.3727692-1-rui.zhang@intel.com>
+        <20220505015814.3727692-6-rui.zhang@intel.com>
+        <875ymkzj9e.fsf@kernel.org>
+        <2358992684eb37823378cb48de2775620ee42031.camel@intel.com>
+Date:   Fri, 06 May 2022 17:04:50 +0300
+In-Reply-To: <2358992684eb37823378cb48de2775620ee42031.camel@intel.com> (Zhang
+        Rui's message of "Thu, 05 May 2022 13:24:04 +0800")
+Message-ID: <87tua292pp.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add Power Limit4 support for RaptorLake SoC.
+Zhang Rui <rui.zhang@intel.com> writes:
 
-Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
----
- drivers/powercap/intel_rapl_msr.c | 1 +
- 1 file changed, 1 insertion(+)
+> Hi, Kalle,
+>
+> thanks for the quick response.
+>
+> On Thu, 2022-05-05 at 07:38 +0300, Kalle Valo wrote:
+>> Zhang Rui <rui.zhang@intel.com> writes:
+>> 
+>> > Remove the useless debug message for unsupported PM event because
+>> > it is
+>> > noop in current code, and it gives a warning when a new event is
+>> > introduced, which it doesn't care.
+>> 
+>> It's a debug message, not a warning, and only visible when debug
+>> messages are enabled. Why do you want to remove it?
+>
+> I'm concerning that people will report problems when they see new
+> messages which never shows up previously.
+>
+> Deleting or keeping this message are both okay to me. But patch 6/7
+> indeed introduces a change to this piece of code and it's better for
+> you to be aware of it before people starts to complain.
+>
+>> 
+>> > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+>> > Tested-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+>> 
+>> Is this really tested on a wil6210 device? Not that it matters, just
+>> surprised to see a Tested-by for a wil6210 patch. It's not really
+>> common
+>> hardware.
+>
+> No, we just tested the whole patch series on a Dell 9360 laptop, and a
+> series of internal test machines. I didn't check if any of them has
+> this device or not. Maybe I should remove the tested by in this case?
 
-diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
-index 1be45f36ab6c..9d23984d8931 100644
---- a/drivers/powercap/intel_rapl_msr.c
-+++ b/drivers/powercap/intel_rapl_msr.c
-@@ -140,6 +140,7 @@ static const struct x86_cpu_id pl4_support_ids[] = {
- 	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_TIGERLAKE_L, X86_FEATURE_ANY },
- 	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_ALDERLAKE, X86_FEATURE_ANY },
- 	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_ALDERLAKE_L, X86_FEATURE_ANY },
-+	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_RAPTORLAKE, X86_FEATURE_ANY },
- 	{}
- };
- 
+I think it's best to drop this wil6210 patch. The driver is orphaned
+anyway and if anyone complains, they will do that to me :)
+
 -- 
-2.17.1
+https://patchwork.kernel.org/project/linux-wireless/list/
 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
