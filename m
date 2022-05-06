@@ -2,213 +2,311 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6462D51CF35
-	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 05:02:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D03751CF5E
+	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 05:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388435AbiEFDFO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 May 2022 23:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
+        id S1388504AbiEFD0l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 May 2022 23:26:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1388410AbiEFDFM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 23:05:12 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83BE63BD4;
-        Thu,  5 May 2022 20:01:19 -0700 (PDT)
+        with ESMTP id S1376581AbiEFD0k (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 23:26:40 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72C55EDD5
+        for <linux-pm@vger.kernel.org>; Thu,  5 May 2022 20:22:57 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id e12so10791155ybc.11
+        for <linux-pm@vger.kernel.org>; Thu, 05 May 2022 20:22:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1651806079; x=1683342079;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6NJBNSe+ke9BOc+D9CNrVP8Oq2ZaFRRV3VehaVMuYpM=;
-  b=mCjl9eOF85DmkmxLaKeA3L8fWWexbtBAGdQkXKE9Sq+zt2pLmxqL3B2w
-   rgxPHjJGIdxwkLG0OdnfNWevizRO2tg1XV2mO7pFkdj6vCTQ56HVAfnik
-   8bBsfuUSJ087mW99V5H0/+k6xWSzymbh3sPUjSkWsfeE1gJ4q6C+dOOo5
-   w=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 05 May 2022 20:01:19 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2022 20:01:18 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 5 May 2022 20:01:18 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 5 May 2022 20:01:11 -0700
-Date:   Fri, 6 May 2022 08:31:07 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_kriskura@quicinc.com>, <quic_vpulyala@quicinc.com>
-Subject: Re: [PATCH v14 3/7] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <20220506030107.GD4640@hu-pkondeti-hyd.qualcomm.com>
-References: <1650395470-31333-1-git-send-email-quic_c_sanm@quicinc.com>
- <1650395470-31333-4-git-send-email-quic_c_sanm@quicinc.com>
- <YnK79i3NiTdMmC98@google.com>
- <20220505032618.GC4640@hu-pkondeti-hyd.qualcomm.com>
- <YnP/PZViq1u0f2yl@google.com>
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sYeOKYw6kwfaILJY6bEHCOKM5bFjhmE1ze1/LSaaovw=;
+        b=BLsVEaTG9U91396ZOP2b2MwVake7ojEipUon5OHt1Gy89SB9TslU1tsdVRhaxC4q/1
+         jR53S2m613SbxCgxn+k3UaVkQWznyQ9jxkBYcSvw3h+ZKQN0sfVfZucfjoplsMN+OlSp
+         oj3a/RwNhQcS0xIC9KsOHEHLYceThRr9bvcs0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sYeOKYw6kwfaILJY6bEHCOKM5bFjhmE1ze1/LSaaovw=;
+        b=HjRepNY96uJnpNl8iIpKPnQyrm6yqLe+75BEsHTHtG6+hhPKND9UwQbDJKFT6jV2JS
+         mlRs7V+TXeP/Pi0kcLKCGPT6EVCvauhbjASIUZnoC8h6Nt7b3FYf8n/DpUXK1OtPvEGk
+         E8umuyfimQt/tOYyjKcyAFmkM/UgTEjeFuWfAjcDJTXgoqT+wAecBnUwupyb48AJSNDv
+         2X+DxoBphW1w8Sq7J/XngUtfLs2iIhuXbFxCnWXRn7gEiyhY7aTseHIe5Q1eNMbCUUGs
+         OGJWcOVoglM/tU1YvKklTe4aePQYQwlK7YDDJPnqt3c6mfFO9tDVp7jQu+coX2JZBTTV
+         vbiA==
+X-Gm-Message-State: AOAM532GP2MQLcfbbTiCNe6MQXrGH89VBqDo8SBwVixoUaCiRNjb9vN+
+        itejY0IsYAzH0o3X0fSfZv0zpIF0jD8Fn87RQm0N5g==
+X-Google-Smtp-Source: ABdhPJzFrU6lJVs+NCit9LuyTEGNDWdMffiHdTCFRjgdhz+G0uAPff2R6owz9lUHYA3QGONqEJvI6agU3HSeStN62Qk=
+X-Received: by 2002:a25:4c2:0:b0:648:6a77:5da0 with SMTP id
+ 185-20020a2504c2000000b006486a775da0mr867811ybe.203.1651807376928; Thu, 05
+ May 2022 20:22:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YnP/PZViq1u0f2yl@google.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
+ <20220505115226.20130-6-rex-bc.chen@mediatek.com> <89dc58a34ea080ca50a94187e24cabc22aba3304.camel@mediatek.com>
+In-Reply-To: <89dc58a34ea080ca50a94187e24cabc22aba3304.camel@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 6 May 2022 11:22:45 +0800
+Message-ID: <CAGXv+5EOdXFjwbtZWY4_KBdp6BaQdp389JqUS18ifAgdcQiAtQ@mail.gmail.com>
+Subject: Re: [PATCH v6 05/10] cpufreq: mediatek: Add opp notification support
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     rafael@kernel.org, viresh.kumar@linaro.org, robh+dt@kernel.org,
+        krzk+dt@kernel.org, matthias.bgg@gmail.com,
+        jia-wei.chang@mediatek.com, roger.lu@mediatek.com,
+        hsinyi@google.com, khilman@baylibre.com,
+        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        "Andrew-sh . Cheng" <andrew-sh.cheng@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 05, 2022 at 09:45:49AM -0700, Matthias Kaehlcke wrote:
-> On Thu, May 05, 2022 at 08:56:18AM +0530, Pavan Kondeti wrote:
-> > On Wed, May 04, 2022 at 10:46:30AM -0700, Matthias Kaehlcke wrote:
-> > > On Wed, Apr 20, 2022 at 12:41:06AM +0530, Sandeep Maheswaram wrote:
-> > > > During suspend read the status of all port and set hs phy mode
-> > > > based on current speed. Use this hs phy mode to configure wakeup
-> > > > interrupts in qcom glue driver.
-> > > > 
-> > > > Check wakeup-source property for dwc3 core node to set the
-> > > > wakeup capability. Drop the device_init_wakeup call from
-> > > > runtime suspend and resume.
-> > > > 
-> > > > Also check during suspend if any wakeup capable devices are
-> > > > connected to the controller (directly or through hubs), if there
-> > > > are none set a flag to indicate that the PHY is powered
-> > > > down during suspend.
-> > > > 
-> > > > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > > > ---
-> > > > v14:
-> > > > Used device_children_wakeup_capable instead of usb_wakeup_enabled_descendants.
-> > > > 
-> > > > v13:
-> > > > Changed dwc3_set_phy_speed_mode to dwc3_check_phy_speed_mode.
-> > > > Removed device_init_wakeup calls from dwc3_runtime_suspend and dwc3_runtime_resume
-> > > > as we have a new dt property wakeup-source.
-> > > > 
-> > > > 
-> > > >  drivers/usb/dwc3/core.c | 33 ++++++++++++++++++++-------------
-> > > >  drivers/usb/dwc3/core.h |  4 ++++
-> > > >  drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
-> > > >  3 files changed, 48 insertions(+), 13 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > > > index 1170b80..898aa66 100644
-> > > > --- a/drivers/usb/dwc3/core.c
-> > > > +++ b/drivers/usb/dwc3/core.c
-> > > > @@ -32,6 +32,7 @@
-> > > >  #include <linux/usb/gadget.h>
-> > > >  #include <linux/usb/of.h>
-> > > >  #include <linux/usb/otg.h>
-> > > > +#include <linux/usb/hcd.h>
-> > > >  
-> > > >  #include "core.h"
-> > > >  #include "gadget.h"
-> > > > @@ -1723,6 +1724,7 @@ static int dwc3_probe(struct platform_device *pdev)
-> > > >  
-> > > >  	platform_set_drvdata(pdev, dwc);
-> > > >  	dwc3_cache_hwparams(dwc);
-> > > > +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
-> > > >  
-> > > >  	spin_lock_init(&dwc->lock);
-> > > >  	mutex_init(&dwc->mutex);
-> > > > @@ -1865,6 +1867,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > > >  {
-> > > >  	unsigned long	flags;
-> > > >  	u32 reg;
-> > > > +	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
-> > > >  
-> > > >  	switch (dwc->current_dr_role) {
-> > > >  	case DWC3_GCTL_PRTCAP_DEVICE:
-> > > > @@ -1877,10 +1880,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > > >  		dwc3_core_exit(dwc);
-> > > >  		break;
-> > > >  	case DWC3_GCTL_PRTCAP_HOST:
-> > > > -		if (!PMSG_IS_AUTO(msg)) {
-> > > > -			dwc3_core_exit(dwc);
-> > > > -			break;
-> > > > -		}
-> > > > +		dwc3_check_phy_speed_mode(dwc);
-> > > >  
-> > > >  		/* Let controller to suspend HSPHY before PHY driver suspends */
-> > > >  		if (dwc->dis_u2_susphy_quirk ||
-> > > > @@ -1896,6 +1896,16 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > > >  
-> > > >  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
-> > > >  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
-> > > > +
-> > > > +		if (!PMSG_IS_AUTO(msg)) {
-> > > > +			if (device_may_wakeup(dwc->dev) &&
-> > > > +			    device_children_wakeup_capable(&hcd->self.root_hub->dev)) {
-> > > > +				dwc->phy_power_off = false;
-> > > > +			} else {
-> > > > +				dwc->phy_power_off = true;
-> > > > +				dwc3_core_exit(dwc);
-> > > 
-> > > I found that shutting the PHYs down during suspend leads to high power
-> > > consumption of a downstream hub (about 80mW vs 15mW when the PHYs are
-> > > not shut down).
-> > > 
-> > > It would be interesting to know if this also impacts other non-hub
-> > > peripherals. Unfortunately I can't test that, the hub on my system is
-> > > soldered to the board.
-> > > 
-> > > I understand that shutting the PHYs down might be beneficial in terms
-> > > of power on some systems, however on those I'm looking at we'd strongly
-> > > prefer to save the 65mW of power consumed by the hub, rather than
-> > > whatever smaller amount of power that is saved by powering down the
-> > > PHYs.
-> > > 
-> > > Could we introduce a sysfs attribute (or some other sort of knob) to
-> > > allow the admin to configure whether the PHYs should remain on or off
-> > > during suspend? That is assuming that it is actually desirable to power
-> > > them off on some systems.
-> > 
-> > The result may vary across SoCs also. The current proposal is to keep PHY
-> > powered during system suspend if any of the downstream USB devices are enabled
-> > for wakeup. This also includes USB2/USB3 root hub. If one wants to keep PHY
-> > always powered on even when no device is attached, they can do so by enabling
-> > wakeup (echo enabled > /sys/bus/usb/devices/usbX/power/wakeup). This is anyway
-> > needed if you want to detect a peripheral attach during system suspend.
-> 
-> My concern is that it is not evident for an admin what causes the high power
-> consumption of the USB client (if they detect/localize it in the first place),
-> and even less that wakeup needs to be enabled to mitigate it.
-> 
-> Why can't we just put the PHYs in suspend, rather than taking the controller
-> down completely during suspend?
+On Fri, May 6, 2022 at 9:56 AM Rex-BC Chen <rex-bc.chen@mediatek.com> wrote:
+>
+> On Thu, 2022-05-05 at 19:52 +0800, Rex-BC Chen wrote:
+> > From this opp notifier, cpufreq should listen to opp notification and
+> > do
+>
+> Hello Viresh,
+>
+> There is still ">" in this patch...
+> I think the root cause could be the "From" word in the beginning of
+> this message.
+> I will not use "From" in next version..
 
-Agreed and I also have the same question.
+Could this be a bug in lore?
 
-I don't know the background on why DWC3 chooses to power down the PHY(s)
-during system suspend. Probably it is beneficial in some board designs.
-Atleast this patch series provides a way to wakeup the USB from system
-suspend, which also can be used not to power down the PHY(s). If all the users
-of DWC3 agree that powering down the PHY is bad, then we can do something
-about it.
+I'm not seeing this extra ">" in either the email in my inbox, viewed
+raw, nor the patch downloaded from patchwork [1].
 
-Thanks,
-Pavan
+
+ChenYu
+
+[1] https://patchwork.kernel.org/project/linux-mediatek/patch/20220505115226.20130-6-rex-bc.chen@mediatek.com/mbox/
+
+
+>
+> BRs,
+> Rex
+>
+> > proper actions when receiving events of disable and voltage
+> > adjustment.
+> >
+> > One of the user for this opp notifier is MediaTek SVS.
+> > The MediaTek Smart Voltage Scaling (SVS) is a hardware which
+> > calculates
+> > suitable SVS bank voltages to OPP voltage table.
+> >
+> > Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
+> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > ---
+> >  drivers/cpufreq/mediatek-cpufreq.c | 91 +++++++++++++++++++++++++++-
+> > --
+> >  1 file changed, 83 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/mediatek-cpufreq.c
+> > b/drivers/cpufreq/mediatek-cpufreq.c
+> > index fe205eca657d..06d80ee06bbf 100644
+> > --- a/drivers/cpufreq/mediatek-cpufreq.c
+> > +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> > @@ -46,6 +46,11 @@ struct mtk_cpu_dvfs_info {
+> >       int intermediate_voltage;
+> >       bool need_voltage_tracking;
+> >       int pre_vproc;
+> > +     /* Avoid race condition for regulators between notify and
+> > policy */
+> > +     struct mutex reg_lock;
+> > +     struct notifier_block opp_nb;
+> > +     unsigned int opp_cpu;
+> > +     unsigned long opp_freq;
+> >       const struct mtk_cpufreq_platform_data *soc_data;
+> >       int vtrack_max;
+> >  };
+> > @@ -182,6 +187,8 @@ static int mtk_cpufreq_set_target(struct
+> > cpufreq_policy *policy,
+> >
+> >       pre_freq_hz = clk_get_rate(cpu_clk);
+> >
+> > +     mutex_lock(&info->reg_lock);
+> > +
+> >       if (unlikely(info->pre_vproc <= 0))
+> >               pre_vproc = regulator_get_voltage(info->proc_reg);
+> >       else
+> > @@ -214,7 +221,7 @@ static int mtk_cpufreq_set_target(struct
+> > cpufreq_policy *policy,
+> >                       dev_err(cpu_dev,
+> >                               "cpu%d: failed to scale up voltage!\n",
+> > policy->cpu);
+> >                       mtk_cpufreq_set_voltage(info, pre_vproc);
+> > -                     return ret;
+> > +                     goto out;
+> >               }
+> >       }
+> >
+> > @@ -224,8 +231,7 @@ static int mtk_cpufreq_set_target(struct
+> > cpufreq_policy *policy,
+> >               dev_err(cpu_dev,
+> >                       "cpu%d: failed to re-parent cpu clock!\n",
+> > policy->cpu);
+> >               mtk_cpufreq_set_voltage(info, pre_vproc);
+> > -             WARN_ON(1);
+> > -             return ret;
+> > +             goto out;
+> >       }
+> >
+> >       /* Set the original PLL to target rate. */
+> > @@ -235,7 +241,7 @@ static int mtk_cpufreq_set_target(struct
+> > cpufreq_policy *policy,
+> >                       "cpu%d: failed to scale cpu clock rate!\n",
+> > policy->cpu);
+> >               clk_set_parent(cpu_clk, armpll);
+> >               mtk_cpufreq_set_voltage(info, pre_vproc);
+> > -             return ret;
+> > +             goto out;
+> >       }
+> >
+> >       /* Set parent of CPU clock back to the original PLL. */
+> > @@ -244,8 +250,7 @@ static int mtk_cpufreq_set_target(struct
+> > cpufreq_policy *policy,
+> >               dev_err(cpu_dev,
+> >                       "cpu%d: failed to re-parent cpu clock!\n",
+> > policy->cpu);
+> >               mtk_cpufreq_set_voltage(info, inter_vproc);
+> > -             WARN_ON(1);
+> > -             return ret;
+> > +             goto out;
+> >       }
+> >
+> >       /*
+> > @@ -260,15 +265,72 @@ static int mtk_cpufreq_set_target(struct
+> > cpufreq_policy *policy,
+> >                       clk_set_parent(cpu_clk, info->inter_clk);
+> >                       clk_set_rate(armpll, pre_freq_hz);
+> >                       clk_set_parent(cpu_clk, armpll);
+> > -                     return ret;
+> > +                     goto out;
+> >               }
+> >       }
+> >
+> > -     return 0;
+> > +     info->opp_freq = freq_hz;
+> > +
+> > +out:
+> > +     mutex_unlock(&info->reg_lock);
+> > +
+> > +     return ret;
+> >  }
+> >
+> >  #define DYNAMIC_POWER "dynamic-power-coefficient"
+> >
+> > +static int mtk_cpufreq_opp_notifier(struct notifier_block *nb,
+> > +                                 unsigned long event, void *data)
+> > +{
+> > +     struct dev_pm_opp *opp = data;
+> > +     struct dev_pm_opp *new_opp;
+> > +     struct mtk_cpu_dvfs_info *info;
+> > +     unsigned long freq, volt;
+> > +     struct cpufreq_policy *policy;
+> > +     int ret = 0;
+> > +
+> > +     info = container_of(nb, struct mtk_cpu_dvfs_info, opp_nb);
+> > +
+> > +     if (event == OPP_EVENT_ADJUST_VOLTAGE) {
+> > +             freq = dev_pm_opp_get_freq(opp);
+> > +
+> > +             mutex_lock(&info->reg_lock);
+> > +             if (info->opp_freq == freq) {
+> > +                     volt = dev_pm_opp_get_voltage(opp);
+> > +                     ret = mtk_cpufreq_set_voltage(info, volt);
+> > +                     if (ret)
+> > +                             dev_err(info->cpu_dev,
+> > +                                     "failed to scale voltage:
+> > %d\n", ret);
+> > +             }
+> > +             mutex_unlock(&info->reg_lock);
+> > +     } else if (event == OPP_EVENT_DISABLE) {
+> > +             freq = dev_pm_opp_get_freq(opp);
+> > +
+> > +             /* case of current opp item is disabled */
+> > +             if (info->opp_freq == freq) {
+> > +                     freq = 1;
+> > +                     new_opp = dev_pm_opp_find_freq_ceil(info-
+> > >cpu_dev,
+> > +                                                         &freq);
+> > +                     if (IS_ERR(new_opp)) {
+> > +                             dev_err(info->cpu_dev,
+> > +                                     "all opp items are
+> > disabled\n");
+> > +                             ret = PTR_ERR(new_opp);
+> > +                             return notifier_from_errno(ret);
+> > +                     }
+> > +
+> > +                     dev_pm_opp_put(new_opp);
+> > +                     policy = cpufreq_cpu_get(info->opp_cpu);
+> > +                     if (policy) {
+> > +                             cpufreq_driver_target(policy, freq /
+> > 1000,
+> > +                                                   CPUFREQ_RELATION_
+> > L);
+> > +                             cpufreq_cpu_put(policy);
+> > +                     }
+> > +             }
+> > +     }
+> > +
+> > +     return notifier_from_errno(ret);
+> > +}
+> > +
+> >  static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info,
+> > int cpu)
+> >  {
+> >       struct device *cpu_dev;
+> > @@ -357,6 +419,18 @@ static int mtk_cpu_dvfs_info_init(struct
+> > mtk_cpu_dvfs_info *info, int cpu)
+> >       info->intermediate_voltage = dev_pm_opp_get_voltage(opp);
+> >       dev_pm_opp_put(opp);
+> >
+> > +     mutex_init(&info->reg_lock);
+> > +
+> > +     info->opp_cpu = cpu;
+> > +     info->opp_nb.notifier_call = mtk_cpufreq_opp_notifier;
+> > +     ret = dev_pm_opp_register_notifier(cpu_dev, &info->opp_nb);
+> > +     if (ret) {
+> > +             dev_err(cpu_dev, "cpu%d: failed to register opp
+> > notifier\n", cpu);
+> > +             goto out_disable_inter_clock;
+> > +     }
+> > +
+> > +     info->opp_freq = clk_get_rate(info->cpu_clk);
+> > +
+> >       /*
+> >        * If SRAM regulator is present, software "voltage tracking" is
+> > needed
+> >        * for this CPU power domain.
+> > @@ -421,6 +495,7 @@ static void mtk_cpu_dvfs_info_release(struct
+> > mtk_cpu_dvfs_info *info)
+> >       }
+> >
+> >       dev_pm_opp_of_cpumask_remove_table(&info->cpus);
+> > +     dev_pm_opp_unregister_notifier(info->cpu_dev, &info->opp_nb);
+> >  }
+> >
+> >  static int mtk_cpufreq_init(struct cpufreq_policy *policy)
+>
+>
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek
