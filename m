@@ -2,171 +2,287 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FFB751CC52
-	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 00:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7900851CE1A
+	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 04:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382065AbiEEWwQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 May 2022 18:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35000 "EHLO
+        id S1343715AbiEFBt4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 May 2022 21:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386483AbiEEWwP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 18:52:15 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845DA5DA3C
-        for <linux-pm@vger.kernel.org>; Thu,  5 May 2022 15:48:33 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id gj17-20020a17090b109100b001d8b390f77bso9269501pjb.1
-        for <linux-pm@vger.kernel.org>; Thu, 05 May 2022 15:48:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dOvtahK956Ivo+8wYfwH4F2X00Zrm/MhoFWEgCAUD/s=;
-        b=B7YNLeILdO7JIZFMjaI+Xd8odazymDoK4JVXXm9WjQBUXwPcVdvv181pdkz8Rfur+F
-         FUzUwcFS19U1qZci1rlkeuziHXEPZn8EAndNdzobYO4AIDtnHzXFv13BJUBdHRo3Xh7Z
-         NmBdNrIz0woYjhvJcS49lKoQ6idyX5XwFdNjk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dOvtahK956Ivo+8wYfwH4F2X00Zrm/MhoFWEgCAUD/s=;
-        b=AdXneqP70KEzm4yiKo577hT5JtGyHGlc23nV2ucGVpQwKuG8f1w2gUxnRjs1/pxPwv
-         9m9UkXM/nxhEHBOgoWQrp4U3Do8+dUrbJVcsLxRraQGaZdC7PKZVo36dZaI9F5zq5HuZ
-         1FTZJRWUCwr/ZysD3jxhUJWBV6FFdHP1/7Y3sBG6ON2sF/wDMsZHTmWrlJgkMw0kABBj
-         61J+Y2UQTzV6Du7b7DXjqSGLEduNBCyRIZo6QPj7zy+7SxDKVPzvNVJgf3Wm8AEm6uRM
-         +b47Zx5oH20Zkg+6rlcj6aywtAZWOnMNsOFMP8IF6AeP0QkfzrGA6o+bBROAsrHgVWbc
-         vnfw==
-X-Gm-Message-State: AOAM530CT1PkGoWXfoWP7V9iQ1ZX9j5zt4dsK6r5Kve4SG9qlaWhjwLl
-        q16fAMEr0TULI4jF8h9Gvb6dXw==
-X-Google-Smtp-Source: ABdhPJwji52geo2qkgFpp9fgSwaUVZ9VbcOfLrtQ81fQp2II80rTvMrsuXG7lN58lVPelZ2IgJ9q+g==
-X-Received: by 2002:a17:902:f64e:b0:14d:20db:8478 with SMTP id m14-20020a170902f64e00b0014d20db8478mr485373plg.158.1651790913052;
-        Thu, 05 May 2022 15:48:33 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:5605:d5cd:699b:1b26])
-        by smtp.gmail.com with UTF8SMTPSA id 2-20020a621702000000b0050dc76281f6sm1876448pfx.208.2022.05.05.15.48.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 May 2022 15:48:32 -0700 (PDT)
-Date:   Thu, 5 May 2022 15:48:31 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: Re: [v15 3/6] usb: dwc3: core: Host wake up support from system
- suspend
-Message-ID: <YnRUPxBZB55TPmf2@google.com>
-References: <1651740973-7944-1-git-send-email-quic_kriskura@quicinc.com>
- <1651740973-7944-4-git-send-email-quic_kriskura@quicinc.com>
+        with ESMTP id S234118AbiEFBtz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 May 2022 21:49:55 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281F55D5FD;
+        Thu,  5 May 2022 18:46:08 -0700 (PDT)
+X-UUID: 3bee3a0e7a324307afa33f92ea2e1e9f-20220506
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:78df6090-3536-419a-89d0-3c0db43164e5,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:db7cc0b2-56b5-4c9e-8d83-0070b288eb6a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: 3bee3a0e7a324307afa33f92ea2e1e9f-20220506
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 653952957; Fri, 06 May 2022 09:46:04 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Fri, 6 May 2022 09:46:03 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Fri, 6 May 2022 09:46:03 +0800
+Message-ID: <89dc58a34ea080ca50a94187e24cabc22aba3304.camel@mediatek.com>
+Subject: Re: [PATCH v6 05/10] cpufreq: mediatek: Add opp notification support
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <matthias.bgg@gmail.com>
+CC:     <jia-wei.chang@mediatek.com>, <roger.lu@mediatek.com>,
+        <hsinyi@google.com>, <khilman@baylibre.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "Andrew-sh . Cheng" <andrew-sh.cheng@mediatek.com>
+Date:   Fri, 6 May 2022 09:46:03 +0800
+In-Reply-To: <20220505115226.20130-6-rex-bc.chen@mediatek.com>
+References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
+         <20220505115226.20130-6-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1651740973-7944-4-git-send-email-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 05, 2022 at 02:26:10PM +0530, Krishna Kurapati wrote:
-> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+On Thu, 2022-05-05 at 19:52 +0800, Rex-BC Chen wrote:
+> From this opp notifier, cpufreq should listen to opp notification and
+> do
+
+Hello Viresh,
+
+There is still ">" in this patch...
+I think the root cause could be the "From" word in the beginning of
+this message.
+I will not use "From" in next version..
+
+BRs,
+Rex
+
+> proper actions when receiving events of disable and voltage
+> adjustment.
 > 
-> During suspend read the status of all port and set hs phy mode
-> based on current speed. Use this hs phy mode to configure wakeup
-> interrupts in qcom glue driver.
+> One of the user for this opp notifier is MediaTek SVS.
+> The MediaTek Smart Voltage Scaling (SVS) is a hardware which
+> calculates
+> suitable SVS bank voltages to OPP voltage table.
 > 
-> Check wakeup-source property for dwc3 core node to set the
-> wakeup capability. Drop the device_init_wakeup call from
-> runtime suspend and resume.
-> 
-> Also check during suspend if any wakeup capable devices are
-> connected to the controller (directly or through hubs), if there
-> are none set a flag to indicate that the PHY is powered
-> down during suspend.
-> 
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
+> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
 > ---
->  drivers/usb/dwc3/core.c | 33 ++++++++++++++++++++-------------
->  drivers/usb/dwc3/core.h |  4 ++++
->  drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
->  3 files changed, 48 insertions(+), 13 deletions(-)
+>  drivers/cpufreq/mediatek-cpufreq.c | 91 +++++++++++++++++++++++++++-
+> --
+>  1 file changed, 83 insertions(+), 8 deletions(-)
 > 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 950e238..cf377f5 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -33,6 +33,7 @@
->  #include <linux/usb/gadget.h>
->  #include <linux/usb/of.h>
->  #include <linux/usb/otg.h>
-> +#include <linux/usb/hcd.h>
-
-This is not needed anymore
-
+> diff --git a/drivers/cpufreq/mediatek-cpufreq.c
+> b/drivers/cpufreq/mediatek-cpufreq.c
+> index fe205eca657d..06d80ee06bbf 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> @@ -46,6 +46,11 @@ struct mtk_cpu_dvfs_info {
+>  	int intermediate_voltage;
+>  	bool need_voltage_tracking;
+>  	int pre_vproc;
+> +	/* Avoid race condition for regulators between notify and
+> policy */
+> +	struct mutex reg_lock;
+> +	struct notifier_block opp_nb;
+> +	unsigned int opp_cpu;
+> +	unsigned long opp_freq;
+>  	const struct mtk_cpufreq_platform_data *soc_data;
+>  	int vtrack_max;
+>  };
+> @@ -182,6 +187,8 @@ static int mtk_cpufreq_set_target(struct
+> cpufreq_policy *policy,
 >  
->  #include "core.h"
->  #include "gadget.h"
-> @@ -1787,6 +1788,7 @@ static int dwc3_probe(struct platform_device *pdev)
+>  	pre_freq_hz = clk_get_rate(cpu_clk);
 >  
->  	platform_set_drvdata(pdev, dwc);
->  	dwc3_cache_hwparams(dwc);
-> +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
->  
->  	spin_lock_init(&dwc->lock);
->  	mutex_init(&dwc->mutex);
-> @@ -1936,6 +1938,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->  {
->  	unsigned long	flags;
->  	u32 reg;
-> +	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
-
-This isn't used anymore, delete it
-
->  
->  	switch (dwc->current_dr_role) {
->  	case DWC3_GCTL_PRTCAP_DEVICE:
-> @@ -1948,10 +1951,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->  		dwc3_core_exit(dwc);
->  		break;
->  	case DWC3_GCTL_PRTCAP_HOST:
-> -		if (!PMSG_IS_AUTO(msg)) {
-> -			dwc3_core_exit(dwc);
-> -			break;
-> -		}
-> +		dwc3_check_phy_speed_mode(dwc);
->  
->  		/* Let controller to suspend HSPHY before PHY driver suspends */
->  		if (dwc->dis_u2_susphy_quirk ||
-> @@ -1967,6 +1967,16 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->  
->  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
->  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
+> +	mutex_lock(&info->reg_lock);
 > +
-> +		if (!PMSG_IS_AUTO(msg)) {
-> +			if (device_may_wakeup(dwc->dev) &&
-> +					device_wakeup_path(dwc->dev)) {
-
-nit: the indentation is odd, align it with device_may_wakeup()?
-
-> +				dwc->phy_power_off = false;
-> +			} else {
-> +				dwc->phy_power_off = true;
-> +				dwc3_core_exit(dwc);
-
-As commented earlier, taking the controller and PHYs completely down causes a
-significant power draw in some USB clients. Let's clarify what the specific
-benefits are of doing dwc3_core_exit() vs. entering a low power mode.
+>  	if (unlikely(info->pre_vproc <= 0))
+>  		pre_vproc = regulator_get_voltage(info->proc_reg);
+>  	else
+> @@ -214,7 +221,7 @@ static int mtk_cpufreq_set_target(struct
+> cpufreq_policy *policy,
+>  			dev_err(cpu_dev,
+>  				"cpu%d: failed to scale up voltage!\n",
+> policy->cpu);
+>  			mtk_cpufreq_set_voltage(info, pre_vproc);
+> -			return ret;
+> +			goto out;
+>  		}
+>  	}
+>  
+> @@ -224,8 +231,7 @@ static int mtk_cpufreq_set_target(struct
+> cpufreq_policy *policy,
+>  		dev_err(cpu_dev,
+>  			"cpu%d: failed to re-parent cpu clock!\n",
+> policy->cpu);
+>  		mtk_cpufreq_set_voltage(info, pre_vproc);
+> -		WARN_ON(1);
+> -		return ret;
+> +		goto out;
+>  	}
+>  
+>  	/* Set the original PLL to target rate. */
+> @@ -235,7 +241,7 @@ static int mtk_cpufreq_set_target(struct
+> cpufreq_policy *policy,
+>  			"cpu%d: failed to scale cpu clock rate!\n",
+> policy->cpu);
+>  		clk_set_parent(cpu_clk, armpll);
+>  		mtk_cpufreq_set_voltage(info, pre_vproc);
+> -		return ret;
+> +		goto out;
+>  	}
+>  
+>  	/* Set parent of CPU clock back to the original PLL. */
+> @@ -244,8 +250,7 @@ static int mtk_cpufreq_set_target(struct
+> cpufreq_policy *policy,
+>  		dev_err(cpu_dev,
+>  			"cpu%d: failed to re-parent cpu clock!\n",
+> policy->cpu);
+>  		mtk_cpufreq_set_voltage(info, inter_vproc);
+> -		WARN_ON(1);
+> -		return ret;
+> +		goto out;
+>  	}
+>  
+>  	/*
+> @@ -260,15 +265,72 @@ static int mtk_cpufreq_set_target(struct
+> cpufreq_policy *policy,
+>  			clk_set_parent(cpu_clk, info->inter_clk);
+>  			clk_set_rate(armpll, pre_freq_hz);
+>  			clk_set_parent(cpu_clk, armpll);
+> -			return ret;
+> +			goto out;
+>  		}
+>  	}
+>  
+> -	return 0;
+> +	info->opp_freq = freq_hz;
+> +
+> +out:
+> +	mutex_unlock(&info->reg_lock);
+> +
+> +	return ret;
+>  }
+>  
+>  #define DYNAMIC_POWER "dynamic-power-coefficient"
+>  
+> +static int mtk_cpufreq_opp_notifier(struct notifier_block *nb,
+> +				    unsigned long event, void *data)
+> +{
+> +	struct dev_pm_opp *opp = data;
+> +	struct dev_pm_opp *new_opp;
+> +	struct mtk_cpu_dvfs_info *info;
+> +	unsigned long freq, volt;
+> +	struct cpufreq_policy *policy;
+> +	int ret = 0;
+> +
+> +	info = container_of(nb, struct mtk_cpu_dvfs_info, opp_nb);
+> +
+> +	if (event == OPP_EVENT_ADJUST_VOLTAGE) {
+> +		freq = dev_pm_opp_get_freq(opp);
+> +
+> +		mutex_lock(&info->reg_lock);
+> +		if (info->opp_freq == freq) {
+> +			volt = dev_pm_opp_get_voltage(opp);
+> +			ret = mtk_cpufreq_set_voltage(info, volt);
+> +			if (ret)
+> +				dev_err(info->cpu_dev,
+> +					"failed to scale voltage:
+> %d\n", ret);
+> +		}
+> +		mutex_unlock(&info->reg_lock);
+> +	} else if (event == OPP_EVENT_DISABLE) {
+> +		freq = dev_pm_opp_get_freq(opp);
+> +
+> +		/* case of current opp item is disabled */
+> +		if (info->opp_freq == freq) {
+> +			freq = 1;
+> +			new_opp = dev_pm_opp_find_freq_ceil(info-
+> >cpu_dev,
+> +							    &freq);
+> +			if (IS_ERR(new_opp)) {
+> +				dev_err(info->cpu_dev,
+> +					"all opp items are
+> disabled\n");
+> +				ret = PTR_ERR(new_opp);
+> +				return notifier_from_errno(ret);
+> +			}
+> +
+> +			dev_pm_opp_put(new_opp);
+> +			policy = cpufreq_cpu_get(info->opp_cpu);
+> +			if (policy) {
+> +				cpufreq_driver_target(policy, freq /
+> 1000,
+> +						      CPUFREQ_RELATION_
+> L);
+> +				cpufreq_cpu_put(policy);
+> +			}
+> +		}
+> +	}
+> +
+> +	return notifier_from_errno(ret);
+> +}
+> +
+>  static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info,
+> int cpu)
+>  {
+>  	struct device *cpu_dev;
+> @@ -357,6 +419,18 @@ static int mtk_cpu_dvfs_info_init(struct
+> mtk_cpu_dvfs_info *info, int cpu)
+>  	info->intermediate_voltage = dev_pm_opp_get_voltage(opp);
+>  	dev_pm_opp_put(opp);
+>  
+> +	mutex_init(&info->reg_lock);
+> +
+> +	info->opp_cpu = cpu;
+> +	info->opp_nb.notifier_call = mtk_cpufreq_opp_notifier;
+> +	ret = dev_pm_opp_register_notifier(cpu_dev, &info->opp_nb);
+> +	if (ret) {
+> +		dev_err(cpu_dev, "cpu%d: failed to register opp
+> notifier\n", cpu);
+> +		goto out_disable_inter_clock;
+> +	}
+> +
+> +	info->opp_freq = clk_get_rate(info->cpu_clk);
+> +
+>  	/*
+>  	 * If SRAM regulator is present, software "voltage tracking" is
+> needed
+>  	 * for this CPU power domain.
+> @@ -421,6 +495,7 @@ static void mtk_cpu_dvfs_info_release(struct
+> mtk_cpu_dvfs_info *info)
+>  	}
+>  
+>  	dev_pm_opp_of_cpumask_remove_table(&info->cpus);
+> +	dev_pm_opp_unregister_notifier(info->cpu_dev, &info->opp_nb);
+>  }
+>  
+>  static int mtk_cpufreq_init(struct cpufreq_policy *policy)
 
