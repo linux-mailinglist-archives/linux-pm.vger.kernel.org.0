@@ -2,72 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7671251CFF7
-	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 06:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD06D51CFFC
+	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 06:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388852AbiEFEJu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 May 2022 00:09:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
+        id S1388904AbiEFENI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 May 2022 00:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232934AbiEFEJu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 May 2022 00:09:50 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0666B4B84F
-        for <linux-pm@vger.kernel.org>; Thu,  5 May 2022 21:06:07 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id p6so5729247plr.12
-        for <linux-pm@vger.kernel.org>; Thu, 05 May 2022 21:06:07 -0700 (PDT)
+        with ESMTP id S1388898AbiEFENH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 May 2022 00:13:07 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD0B65799D
+        for <linux-pm@vger.kernel.org>; Thu,  5 May 2022 21:09:25 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id t13so5162633pgn.8
+        for <linux-pm@vger.kernel.org>; Thu, 05 May 2022 21:09:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=9xUjY/Sk1s4u2esh57fjrL6TCcB4aUwi+kflp6Fv2t8=;
-        b=vZPpQvL1o6mLIpHBQJcuUdaxxwP8V87v52/wrzRkz1TkrAtEJeHmq35SHTv+gTpD4L
-         5jEqB6oj8/EjqpJbaGYPu4NNdJ+74CEZF3uY3B/eoItBXf3iVh0vMFSJt0jwtSLKXdgl
-         4UX9q4yNJOBJeWC3troOuSVLKDokz5dqpZcltI2rqWktv6pPDY06w8+MfNAxsvwahhtt
-         eywjmHiTp8wPX3UELcHUxjhIJ/gvQaMMl9M7gGdScWSCXbuwP+YWAavvZwMJdrxQA9EU
-         SeVyi89aAr68/9g9uFXtPXO8xoiiQd6cl9ZVAhf/H+T7xegllLovV6AmICCfqR8szrf9
-         +FgQ==
+        bh=XsoBtkAebOgjtMxymQU1wBQgO9U1OW2Xx5QkHSE5DvU=;
+        b=rGUsO7GehX3b88mwxY/zTcVQU8oj8k7UYuN4o173aiyqlC/wvG1bQc2Fi1rXhtE3Bx
+         36+GftgNTCKYaGOqx/CeIa0XZaYCfOYsiabPJlmqnYBxpSbmchkntincElTwg/HoLuJi
+         e+lCHyvNqeQZqp1F5XV1AE1AAlRnEUm5g5DGIn5EdsZvvTunX5GoU0ZwZkI7YE8lQKEs
+         vEb4rR/TkUiuN4JMzIa1nU3YFANscD/rgHmiXMbPtgYTU4nxHRNQelZogez37nGnPYaW
+         6D83cfDUjFuvHsBfG0DgWLAG9QDRFYy3eKhq0ZffkCkdgvNJ29OtPapnnyqNAzzVmxZX
+         Z47w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=9xUjY/Sk1s4u2esh57fjrL6TCcB4aUwi+kflp6Fv2t8=;
-        b=1M9JH3hcI/NNSSlRfswK8xVWXYGQ5iNHNlaEMpTsdT/SbxI/gjBvQ2OmjkzwHJhBHA
-         r3ZS8YkQyu9ZCz67/a5Kzwu705htZ339XXwx1QXAPuMOzmgmBMdWXV9g9HV4t+FC00bT
-         Rn8RDUuVEQyVwkhBM/hDtq97TUOvcb/lp9oDuqHy28PaWdrXIVBPr6z4IOH1xh3ocBFM
-         UNoKuPeuEU/1Q5M9wCzfS6sr/nJiKy69y9eJOD7OIqbYfCxK3c420nngKqelhou5R/hM
-         bBnxCCukaSb2hIkgvChGwMVZtlXFnegbOAQO0EtrU5sqM9vOfPFi6kfuhhGam70TbZfQ
-         5sow==
-X-Gm-Message-State: AOAM532GTpjE5qjydoKa/D9U9PDRlOxd8yjzW7szKRVwFmhQATMfUf/K
-        P+8fUWUlhOh0MRP9q/+HefUw0g==
-X-Google-Smtp-Source: ABdhPJzZ8j4w4qg6Gct1rEZ8SPcaL3UOakO/Qy/CAepj696EjjU/cEWU79AeqN+ilk56PGwCDQAu6g==
-X-Received: by 2002:a17:90a:4417:b0:1ca:a861:3fbf with SMTP id s23-20020a17090a441700b001caa8613fbfmr10164152pjg.80.1651809966534;
-        Thu, 05 May 2022 21:06:06 -0700 (PDT)
+        bh=XsoBtkAebOgjtMxymQU1wBQgO9U1OW2Xx5QkHSE5DvU=;
+        b=5eZCHI+dpq/OLxP/p1cFxX/CzAAgJMDfzSsw9tJBoVEzsStfV/YGdwSAtc4C9kGhsM
+         z24WNSVsnY0hU5oLb+C3mcI8o4GzMfJU8MkVNJJYJZXmXAkFtEny4xkwiHUMpGsNOjNn
+         jb50zNsGe7kHiqXdnrPCRUFDXFHGtL6d46PdXh87W+xrnxbCtxD3SZfeSvvw8Ss+Ase+
+         c3ZxzMEVOXziuX7BXDZw0gmCsAD/0BOu03sk0cKc+bxbYNTCkn90lcMYR4Ygo94YKIS5
+         yJDLDFw+R5R+A2tHgQIo1rFbyw8CUyDMTK0T2pMxHKu2k0tdKCEqUpomXnP5yFO4lz17
+         Yb3w==
+X-Gm-Message-State: AOAM531KWJNqVBU+akp+5YAHugGtg9NnHxeKq73M03IZ4PyKIMA0cxBQ
+        VSKUknNpUGy0I5ZjFIegzeyr7A==
+X-Google-Smtp-Source: ABdhPJwx7b+xmNh51JOkVexQJYw4Ub0h4b4eREe4WGecOLA4rSVA2b7lG2+t2YveniTshYGKqRBPJw==
+X-Received: by 2002:a65:5245:0:b0:39c:ce49:e97d with SMTP id q5-20020a655245000000b0039cce49e97dmr1193052pgp.301.1651810165472;
+        Thu, 05 May 2022 21:09:25 -0700 (PDT)
 Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id b10-20020a17090a550a00b001d954837197sm6072611pji.22.2022.05.05.21.06.05
+        by smtp.gmail.com with ESMTPSA id e30-20020a631e1e000000b003c14af5060asm2125467pge.34.2022.05.05.21.09.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 May 2022 21:06:05 -0700 (PDT)
-Date:   Fri, 6 May 2022 09:36:03 +0530
+        Thu, 05 May 2022 21:09:24 -0700 (PDT)
+Date:   Fri, 6 May 2022 09:39:22 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Frank Wunderlich <linux@fw-web.de>, linux-pm@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [RFC v1] opp: add config option for debug
-Message-ID: <20220506040603.xumqemlcrlrolqmw@vireshk-i7>
-References: <20220504174823.156709-1-linux@fw-web.de>
- <20220505055857.bqjm72qkzwcbuvuh@vireshk-i7>
- <trinity-6a6249b9-69eb-459c-96f1-dbf8f031a86f-1651766058085@3c-app-gmx-bs47>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     rafael@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
+        roger.lu@mediatek.com, hsinyi@google.com, khilman@baylibre.com,
+        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v6 02/10] cpufreq: mediatek: Add
+ platform_device_unregister when driver exit
+Message-ID: <20220506040922.n7l3kswvsh4re5xr@vireshk-i7>
+References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
+ <20220505115226.20130-3-rex-bc.chen@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <trinity-6a6249b9-69eb-459c-96f1-dbf8f031a86f-1651766058085@3c-app-gmx-bs47>
+In-Reply-To: <20220505115226.20130-3-rex-bc.chen@mediatek.com>
 User-Agent: NeoMutt/20180716-391-311a52
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,38 +78,20 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05-05-22, 17:54, Frank Wunderlich wrote:
-> you mean something like this:
+On 05-05-22, 19:52, Rex-BC Chen wrote:
+> We register the platform device when driver inits. However, we do not
+> unregister it when driver exits.
+> To resolve this, we declare the platform data to be a global static
+> variable and rename it to be "cpufreq_pdev".
+> With this global variable, we can do platform_device_unregister() when
+> driver exits.
 > 
-> https://www.kernel.org/doc/html/v5.17/admin-guide/dynamic-debug-howto.html#debug-messages-during-boot-process
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> ---
+>  drivers/cpufreq/mediatek-cpufreq.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
 
-Yes, though I haven't used it in a long time myself :)
-
-> so enabling debug only with cmdline-param...
-
-Yes and via debugfs file. You can basically control debug messages
-based on subsystems, files, functions, etc.
-
-> have you a simple example how to implement it? have not done anything with dynamic-debug yet...seems mighty but not trivial to implement.
-> 
-> currently dev_dbg() is used for the messages that i try to disable...but show others from driver_debug at debug level.
-> 
-> What needs to be changed to filter it via DYNAMIC_DEBUG?
-
-Nothing, just enable the config for dynamic debug.
-
-> found this, but i'm not sure if i interpret it the right way...
-> 
-> https://elixir.bootlin.com/linux/v5.18-rc5/source/drivers/acpi/utils.c#L495
-> defines __acpi_handle_debug
-> called via acpi_handle_debug macro
-> https://elixir.bootlin.com/linux/v5.18-rc5/source/include/linux/acpi.h#L1136
-> 
-> so basicly convert dev_dbg to __dynamic_pr_debug
-> 
-> at least much more changed code because all dev_*/pr_* needs to be changed to own handler which does the switch based on CONFIG_DYNAMIC_DEBUG set or not.
-
-You aren't required to change anything there.
+Applied. Thanks.
 
 -- 
 viresh
