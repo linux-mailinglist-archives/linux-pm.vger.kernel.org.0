@@ -2,57 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E6E51D9C9
-	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 16:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4208751DA29
+	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 16:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380131AbiEFOIp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 May 2022 10:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
+        id S1442082AbiEFOO3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 May 2022 10:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236164AbiEFOIo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 May 2022 10:08:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AFA56762;
-        Fri,  6 May 2022 07:05:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D211B835D5;
-        Fri,  6 May 2022 14:04:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 699DBC385A9;
-        Fri,  6 May 2022 14:04:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1651845897;
-        bh=/HOBhUjG+Mc3GBeGJW8BQ0KRE8eqV2P4POi86WN+/I0=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=ZThZcANqyoaGOsM/UoBGqzFzzd9Ty9Q7im5c343O8MpatQ7Yh3Mz0dOJvdkk75dRA
-         wXNtJ+JxaeN86OCjcx/eHR06p5xFSXDYI7vv5SGUzyxVIqOq1BZ5hRiWTsR20m2jPo
-         eWjkcyH8W3fiIoTsr+D2NRuAI/mLEYwz62zgciw40yl96Ni6mg1NoiLdsbiaFdsoGz
-         001dlzjbqQI3O9LQ9shzfcn9MvyOSP1Oj/X5iVSK5YE5QYbZBUxlbblmLjZ5wSFozK
-         LWmOVFdFmYYYeGyp/EhQUW2kcHpWTEw3ojF2r1s2ZVotAnNaWPYP52J1a7xhwyl1z3
-         EWcCJ2/bVQ22A==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     rjw@rjwysocki.net, alexandre.belloni@bootlin.com,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-wireless@vger.kernel.org,
-        daniel.lezcano@linaro.org, mat.jonczyk@o2.pl,
-        sumeet.r.pawnikar@intel.com, len.brown@intel.com
-Subject: Re: [PATCH 5/7] wil6210: remove debug message for unsupported PM event
-References: <20220505015814.3727692-1-rui.zhang@intel.com>
-        <20220505015814.3727692-6-rui.zhang@intel.com>
-        <875ymkzj9e.fsf@kernel.org>
-        <2358992684eb37823378cb48de2775620ee42031.camel@intel.com>
-Date:   Fri, 06 May 2022 17:04:50 +0300
-In-Reply-To: <2358992684eb37823378cb48de2775620ee42031.camel@intel.com> (Zhang
-        Rui's message of "Thu, 05 May 2022 13:24:04 +0800")
-Message-ID: <87tua292pp.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        with ESMTP id S1442080AbiEFOO0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 May 2022 10:14:26 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3877529C96;
+        Fri,  6 May 2022 07:10:39 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id C4EBD1F46719
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651846231;
+        bh=aPzN11eOYyBmn6uYxSJ4z+OxGW0B11goKlzatjEFOG4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=A5kW1JJmvHfMp+G3BYZfs1DtIoJxwTSAkQcm9HkU230sGHCbaarPy3d3ylVb7ghQK
+         QFidNeP16CsPIu7NGef5buR6vQrZaa2Bu2Ol7ocivR52MK99+p14lZHhPhckFBadHq
+         LWO8HGz0L5XHJgOXIl4zHum9KGrTPQ8XNRCAiPLiBFHqfgiXkDJFYnZvSeZjgWY6Sf
+         b+r6JcWvC90AjEGx12tTLe293/2dwUtSGPf4vDeIZmmldanQoeJoRJ1W5+Zs/dm4mK
+         YMULBdy55mQ6HS0+7WhL/7UJ3ikAvXuW+YZrNYtURWDPqYm9/aozEGozBwUb1cqkv6
+         H0OATVRjsYPpg==
+Message-ID: <ca422804-0fa0-5fef-07e2-a9ff005a495c@collabora.com>
+Date:   Fri, 6 May 2022 17:10:24 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v7 04/20] kernel: Add combined power-off+restart handler
+ call chain API
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+References: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
+ <20220411233832.391817-5-dmitry.osipenko@collabora.com>
+ <CAJZ5v0gnTSoeNP+QXwrZ45FQY4howVkJMuCjM=j+_-2BngJdQg@mail.gmail.com>
+ <990621e7-9f8a-8b4a-02ec-fd6c1e1f48ff@collabora.com>
+ <CAJZ5v0jxXtwot0qpib4UG8Tz8Hd1dEbgo58tEdPFboU8xwKHNw@mail.gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <CAJZ5v0jxXtwot0qpib4UG8Tz8Hd1dEbgo58tEdPFboU8xwKHNw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,47 +109,59 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Zhang Rui <rui.zhang@intel.com> writes:
+On 4/20/22 21:47, Rafael J. Wysocki wrote:
+>>>> +       POWEROFF_PREPARE,
+>>>> +};
+>>>> +
+>>>> +/**
+>>>> + * struct power_off_data - Power-off callback argument
+>>>> + *
+>>>> + * @cb_data: Callback data.
+>>>> + */
+>>>> +struct power_off_data {
+>>>> +       void *cb_data;
+>>>> +};
+>>>> +
+>>>> +/**
+>>>> + * struct power_off_prep_data - Power-off preparation callback argument
+>>>> + *
+>>>> + * @cb_data: Callback data.
+>>>> + */
+>>>> +struct power_off_prep_data {
+>>>> +       void *cb_data;
+>>>> +};
+>>> Why does this need to be a separate data type?
+>> To allow us extend the "struct power_off_prep_data" with more parameters
+>> later on without a need to update each driver with the new arguments.
 
-> Hi, Kalle,
->
-> thanks for the quick response.
->
-> On Thu, 2022-05-05 at 07:38 +0300, Kalle Valo wrote:
->> Zhang Rui <rui.zhang@intel.com> writes:
->> 
->> > Remove the useless debug message for unsupported PM event because
->> > it is
->> > noop in current code, and it gives a warning when a new event is
->> > introduced, which it doesn't care.
->> 
->> It's a debug message, not a warning, and only visible when debug
->> messages are enabled. Why do you want to remove it?
->
-> I'm concerning that people will report problems when they see new
-> messages which never shows up previously.
->
-> Deleting or keeping this message are both okay to me. But patch 6/7
-> indeed introduces a change to this piece of code and it's better for
-> you to be aware of it before people starts to complain.
->
->> 
->> > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
->> > Tested-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
->> 
->> Is this really tested on a wil6210 device? Not that it matters, just
->> surprised to see a Tested-by for a wil6210 patch. It's not really
->> common
->> hardware.
->
-> No, we just tested the whole patch series on a Dell 9360 laptop, and a
-> series of internal test machines. I didn't check if any of them has
-> this device or not. Maybe I should remove the tested by in this case?
+> I'm not really sure what you mean here.  Can you give an example?
+> 
 
-I think it's best to drop this wil6210 patch. The driver is orphaned
-anyway and if anyone complains, they will do that to me :)
+The restart callbacks use more than the cb_data and we have:
+
+struct restart_data {
+	void *cb_data;
+	const char *cmd;
+	bool stop_chain;
+	enum reboot_mode mode;
+};
+
+If we'll ever need to extended struct power_off_data similarly to the
+restart_data, then we will need to update all the power-off callbacks
+instead of adding a new field to the power_off_data.
+
+Hence, for example, if you'll want to extend power_off_data with "enum
+poweroff_mode mode", then for each driver you'll need to do this change:
+
+-power_off(void *cb_data)
++power_off(void *cb_data, enum poweroff_mode mode)
+
+and you won't need to do that using struct power_off_data.
+
+Why do we need this? Because I saw in the past people changing kernel
+APIs that way when they wanted to add new arguments and then needed to
+update every call site around the kernel.
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Best regards,
+Dmitry
