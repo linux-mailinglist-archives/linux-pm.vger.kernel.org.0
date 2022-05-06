@@ -2,102 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFE351DFB6
-	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 21:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 490C051E0CD
+	for <lists+linux-pm@lfdr.de>; Fri,  6 May 2022 23:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391094AbiEFTqq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 May 2022 15:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49142 "EHLO
+        id S1444347AbiEFVNc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 May 2022 17:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234627AbiEFTqp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 May 2022 15:46:45 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C2368FB3;
-        Fri,  6 May 2022 12:43:00 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:48382)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nn3qr-00AmLz-LF; Fri, 06 May 2022 13:42:57 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37254 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nn3qp-00AEeV-Kg; Fri, 06 May 2022 13:42:57 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
-References: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
-        <20220505182645.497868-10-ebiederm@xmission.com>
-        <20220506150903.GB16084@redhat.com>
-Date:   Fri, 06 May 2022 14:42:16 -0500
-In-Reply-To: <20220506150903.GB16084@redhat.com> (Oleg Nesterov's message of
-        "Fri, 6 May 2022 17:09:04 +0200")
-Message-ID: <874k2230tj.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        with ESMTP id S1444344AbiEFVNb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 May 2022 17:13:31 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C306F4A4
+        for <linux-pm@vger.kernel.org>; Fri,  6 May 2022 14:09:47 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id i17so8581204pla.10
+        for <linux-pm@vger.kernel.org>; Fri, 06 May 2022 14:09:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
+         :subject:to;
+        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
+        b=eiAQXuEKXp5T9ck7zmwrtRg7mfdJz+b5e/qLZGNQ+P0jlbkGGyLUR+k8OQGunYV4w4
+         eySbEB2zi6V5vmP5aMQ2aTjvhsXqeGeNCaXKDTmu3I7z4XL+pW4OvX3Z2jx3GwqegtS8
+         B/6pQqBJhtaS+I9tjFoKAuGDb0fWMi+x5hlAUgBfIf2lwRC3GbJ/LCvb0cslojJTiXv6
+         2QS4mYskP3yxkq5AQmzh0pubamLpiFgh3sSG6JGF7eC1+wjOyCOm6BXcKhHZRJyklGjh
+         VQ+VoFh6DWjvUS0ZfFB0B0XD1LN754vsNH9vipO0KfrDO8JBq+TS26TOQQ3tNQJ6214C
+         5a8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
+         :from:date:message-id:subject:to;
+        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
+        b=feKNTf/fqGH+NfVTZV9W3mug4uzZSuwuhFoQIvySjxiPvNLnYFiB0pEdu1lGSNXUrq
+         bDc3WICjtfCeqUHAukc4Z22WkoXKf39txBqH672okpC5FVqj3DpH2/258Y9cgWNvu821
+         wAiR+sLwuFYGHGzB6Ar6YOursc8X+gtG0aiROGDo1c/feF4n4WLsOlEDkcQ7akgHjpx8
+         mQJlS0UjYeRhvGJX6ysKU8WRkBpSR3NM29vv/IRxQzRgvL52t7W8mazEDiMY9QJj4Afa
+         GeyXllSQM02XjAPuQCuGnePTP0PJ86kynfj3pqB8hZGa5wE6x+mhydZJxxKMi2JqNKS9
+         7hBA==
+X-Gm-Message-State: AOAM530hb96Rf4CFi11PVcYMYMxnsGJYmS2QNgXsS41D22ha0uQ9b5nj
+        j1efibBmWThpq2qNF0uMbppoHMjVX3ztPKj4Bg==
+X-Google-Smtp-Source: ABdhPJzg0WuA2nWsf5GfojxJwV1671Vg7LfyIkyz0YR1vlLhPfyCappL8fPY+P0VDolj1UnA1lJoJRDRGks4K5ixmyY=
+X-Received: by 2002:a17:90a:1944:b0:1d9:7cf8:5457 with SMTP id
+ 4-20020a17090a194400b001d97cf85457mr14365809pjh.112.1651871386691; Fri, 06
+ May 2022 14:09:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nn3qp-00AEeV-Kg;;;mid=<874k2230tj.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX193hxkPxGdrMoGxQM4MFn+uyJKR1dj9OVA=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Received: by 2002:ac4:9906:0:b0:4ba:807b:b8f3 with HTTP; Fri, 6 May 2022
+ 14:09:44 -0700 (PDT)
+Reply-To: warren001buffett@gmail.com
+In-Reply-To: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
+References: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
+From:   Warren Buffett <guidayema@gmail.com>
+Date:   Fri, 6 May 2022 21:09:44 +0000
+Message-ID: <CAD_xG_odZ2a17vwQOtf_G_N8RGEpabLVcAoVxBDgubah5+QYJA@mail.gmail.com>
+Subject: Fwd: My name is Warren Buffett, an American businessman.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:644 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4845]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [guidayema[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Oleg Nesterov <oleg@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 1285 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 3.7 (0.3%), b_tie_ro: 2.5 (0.2%), parse: 0.96
-        (0.1%), extract_message_metadata: 3.0 (0.2%), get_uri_detail_list:
-        0.85 (0.1%), tests_pri_-1000: 4.7 (0.4%), tests_pri_-950: 1.39 (0.1%),
-        tests_pri_-900: 1.16 (0.1%), tests_pri_-90: 72 (5.6%), check_bayes: 71
-        (5.5%), b_tokenize: 8 (0.6%), b_tok_get_all: 6 (0.5%), b_comp_prob:
-        2.4 (0.2%), b_tok_touch_all: 51 (4.0%), b_finish: 0.64 (0.0%),
-        tests_pri_0: 1179 (91.7%), check_dkim_signature: 0.37 (0.0%),
-        check_dkim_adsp: 1.72 (0.1%), poll_dns_idle: 0.34 (0.0%),
-        tests_pri_10: 2.8 (0.2%), tests_pri_500: 8 (0.6%), rewrite_mail: 0.00
-        (0.0%)
-Subject: Re: [PATCH v4 10/12] ptrace: Don't change __state
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Oleg Nesterov <oleg@redhat.com> writes:
+My name is Warren Buffett, an American businessman and investor I have
+something important to discuss with you.
 
-> On 05/05, Eric W. Biederman wrote:
->>
->> --- a/include/linux/sched.h
->> +++ b/include/linux/sched.h
->> @@ -103,7 +103,7 @@ struct task_group;
->>  /* Convenience macros for the sake of set_current_state: */
->>  #define TASK_KILLABLE			(TASK_WAKEKILL | TASK_UNINTERRUPTIBLE)
->>  #define TASK_STOPPED			(TASK_WAKEKILL | __TASK_STOPPED)
->> -#define TASK_TRACED			(TASK_WAKEKILL | __TASK_TRACED)
->> +#define TASK_TRACED			__TASK_TRACED
->
-> however I personally still dislike this change. But let me read the
-> code with this series applied, perhaps I will change my mind. If not,
-> I will argue ;)
-
-That is fair.  I kind of grew on my after I implemented it and wrapped
-my head around what was going on, as it is simple and there are no
-implicit cases.
-
-Eric
+Mr. Warren Buffett
+warren001buffett@gmail.com
+Chief Executive Officer: Berkshire Hathaway
+aphy/Warren-Edward-Buffett
