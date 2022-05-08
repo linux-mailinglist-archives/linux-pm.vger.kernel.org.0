@@ -2,130 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A98E951ECE1
-	for <lists+linux-pm@lfdr.de>; Sun,  8 May 2022 12:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E796351EE6F
+	for <lists+linux-pm@lfdr.de>; Sun,  8 May 2022 17:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbiEHKa3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 8 May 2022 06:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51798 "EHLO
+        id S234280AbiEHPJj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 8 May 2022 11:09:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbiEHKa2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 8 May 2022 06:30:28 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01903DFBD;
-        Sun,  8 May 2022 03:26:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652005598; x=1683541598;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bSU9fO4lrWoDsIEUgjYMWmwmoe4o/mjHCu3zxv5muLo=;
-  b=bgLWj9Ugko7x3VrxEUt+bA8JPpASnmfAw1o6MUinh/egqAJlZVsOZsUF
-   OpPwjg74P73SVlHzQASclgOQg4JTNnba5JSvrildL03zgVBAY0p45BZdu
-   jD4Jcdduwompy3biUGjGM25k5I9iPlGJWiAkUezPkjTMKenvlgS6bISEd
-   hAX3rGbYH1z7abWiBc7ax3lWfnPHJqPaJr8+0Amxngs1cE7qFPjh9/Vu6
-   09+GnLlT86T3odBOHPQ5nDErTa+0E3TSkhS0WV1+BJR3INzkkyofOs9D7
-   rrRFI+9LzW399sOhtfVynAJgv9XUlzCK3e0SLSS3ZQuGgtQfMre4VGm3b
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10340"; a="329386548"
-X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
-   d="scan'208";a="329386548"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 03:26:37 -0700
-X-IronPort-AV: E=Sophos;i="5.91,208,1647327600"; 
-   d="scan'208";a="564569270"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 03:26:26 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nne7J-00DSlW-Qt;
-        Sun, 08 May 2022 13:26:21 +0300
-Date:   Sun, 8 May 2022 13:26:21 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>
-Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, khilman@baylibre.com,
-        abailon@baylibre.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>, Len Brown <lenb@kernel.org>,
-        Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Kalle Valo <kvalo@kernel.org>, Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>,
-        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Chuansheng Liu <chuansheng.liu@intel.com>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Antoine Tenart <atenart@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>,
-        "open list:CXGB4 ETHERNET DRIVER (CXGB4)" <netdev@vger.kernel.org>,
-        "open list:INTEL WIRELESS WIFI LINK (iwlwifi)" 
-        <linux-wireless@vger.kernel.org>,
-        "open list:ACER ASPIRE ONE TEMPERATURE AND FAN DRIVER" 
-        <platform-driver-x86@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH v2 01/14] thermal/core: Change thermal_zone_ops to
- thermal_sensor_ops
-Message-ID: <YneazaFEg3nONazs@smile.fi.intel.com>
-References: <20220507125443.2766939-1-daniel.lezcano@linexp.org>
- <20220507125443.2766939-2-daniel.lezcano@linexp.org>
+        with ESMTP id S234437AbiEHPJj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 8 May 2022 11:09:39 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1DEBDF63;
+        Sun,  8 May 2022 08:05:46 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1nniTd-0000uy-O3; Sun, 08 May 2022 17:05:41 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Brian Norris <briannorris@chromium.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        linux-pm@vger.kernel.org, Doug Anderson <dianders@chromium.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        Brian Norris <briannorris@chromium.org>
+Subject: Re: [RFC PATCH 1/2] soc: rockchip: power-domain: Manage resource conflicts with firmware
+Date:   Sun, 08 May 2022 17:05:40 +0200
+Message-ID: <1860576.taCxCBeP46@phil>
+In-Reply-To: <20220405184816.RFC.1.Ib865f199d15221eab4ff77f70bd7e9e2eb04d32f@changeid>
+References: <20220406014842.2771799-1-briannorris@chromium.org> <20220405184816.RFC.1.Ib865f199d15221eab4ff77f70bd7e9e2eb04d32f@changeid>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220507125443.2766939-2-daniel.lezcano@linexp.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, May 07, 2022 at 02:54:29PM +0200, Daniel Lezcano wrote:
-> A thermal zone is software abstraction of a sensor associated with
-> properties and cooling devices if any.
+Am Mittwoch, 6. April 2022, 03:48:41 CEST schrieb Brian Norris:
+> On RK3399 platforms, power domains are managed mostly by the kernel
+> (drivers/soc/rockchip/pm_domains.c), but there are a few exceptions
+> where ARM Trusted Firmware has to be involved:
 > 
-> The fact that we have thermal_zone and thermal_zone_ops mixed is
-> confusing and does not clearly identify the different components
-> entering in the thermal management process. A thermal zone appears to
-> be a sensor while it is not.
+> (1) system suspend/resume
+> (2) DRAM DVFS (a.k.a., "ddrfreq")
 > 
-> In order to set the scene for multiple thermal sensors aggregated into
-> a single thermal zone. Rename the thermal_zone_ops to
-> thermal_sensor_ops, that will appear clearyl the thermal zone is not a
-> sensor but an abstraction of one [or multiple] sensor(s).
+> Exception (1) does not cause much conflict, since the kernel has
+> quiesced itself by the time we make the relevant PSCI call.
+> 
+> Exception (2) can cause conflict, because of two actions:
+> 
+> (a) ARM Trusted Firmware needs to read/modify/write the PMU_BUS_IDLE_REQ
+>     register to idle the memory controller domain; the kernel driver
+>     also has to touch this register for other domains.
+> (b) ARM Trusted Firmware needs to manage the clocks associated with
+>     these domains.
+> 
+> To elaborate on (b): idling a power domain has always required ungating
+> an array of clocks; see this old explanation from Rockchip:
+> https://lore.kernel.org/linux-arm-kernel/54503C19.9060607@rock-chips.com/
+> 
+> Historically, ARM Trusted Firmware has avoided this issue by using a
+> special PMU_CRU_GATEDIS_CON0 register -- this register ungates all the
+> necessary clocks -- when idling the memory controller. Unfortunately,
+> we've found that this register is not 100% sufficient; it does not turn
+> the relevant PLLs on [0].
+> 
+> So it's possible to trigger issues with something like the following:
+> 
+> 1. enable a power domain (e.g., RK3399_PD_VDU) -- kernel will
+>    temporarily enable relevant clocks/PLLs, then turn them back off
+>    2. a PLL (e.g., PLL_NPLL) is part of the clock tree for
+>       RK3399_PD_VDU's clocks but otherwise unused; NPLL is disabled
+> 3. perform a ddrfreq transition (rk3399_dmcfreq_target() -> ...
+>    drivers/clk/rockchip/clk-ddr.c / ROCKCHIP_SIP_DRAM_FREQ)
+>    4. ARM Trusted Firmware unagates VDU clocks (via PMU_CRU_GATEDIS_CON0)
+>    5. ARM Trusted firmware idles the memory controller domain
+>    6. Step 5 waits on the VDU domain/clocks, but NPLL is still off
+> 
+> i.e., we hang the system.
+> 
+> So for (b), we need to at a minimum manage the relevant PLLs on behalf
+> of firmware. It's easier to simply manage the whole clock tree, in a
+> similar way we do in rockchip_pd_power().
+> 
+> For (a), we need to provide mutual exclusion betwen rockchip_pd_power()
+> and firmware. To resolve that, we simply grab the PMU mutex and release
+> it when ddrfreq is done.
+> 
+> The Chromium OS kernel has been carrying versions of part of this hack
+> for a while, based on some new custom notifiers [1]. I've rewritten as a
+> simple function call between the drivers, which is OK because:
+> 
+>  * the PMU driver isn't enabled, and we don't have this problem at all
+>    (the firmware should have left us in an OK state, and there are no
+>    runtime conflicts); or
+>  * the PMU driver is present, and is a single instance.
+> 
+> And the power-domain driver cannot be removed, so there's no lifetime
+> management to worry about.
+> 
+> For completeness, there's a 'dmc_pmu_mutex' to guard (likely
+> theoretical?) probe()-time races. It's OK for the memory controller
+> driver to start running before the PMU, because the PMU will avoid any
+> critical actions during the block() sequence.
+> 
+> [0] The RK3399 TRM for PMU_CRU_GATEDIS_CON0 only talks about ungating
+>     clocks. Based on experimentation, we've found that it does not power
+>     up the necessary PLLs.
+> 
+> [1] CHROMIUM: soc: rockchip: power-domain: Add notifier to dmc driver
+>     https://chromium-review.googlesource.com/q/I242dbd706d352f74ff706f5cbf42ebb92f9bcc60
+>     Notably, the Chromium solution only handled conflict (a), not (b).
+>     In practice, item (b) wasn't a problem in many cases because we
+>     never managed to fully power off PLLs. Now that the (upstream) video
+>     decoder driver performs runtime clock management, we often power off
+>     NPLL.
+> 
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
 
-Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-for whatever drivers in this series I have somehow been involved into.
-
--- 
-With Best Regards,
-Andy Shevchenko
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 
 
