@@ -2,118 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60D7A51E7EE
-	for <lists+linux-pm@lfdr.de>; Sat,  7 May 2022 17:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7483851EC0A
+	for <lists+linux-pm@lfdr.de>; Sun,  8 May 2022 09:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389653AbiEGPGF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 7 May 2022 11:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
+        id S229772AbiEHHUy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 8 May 2022 03:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446582AbiEGPGC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 7 May 2022 11:06:02 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E31345ADA;
-        Sat,  7 May 2022 08:02:11 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id p12so8648583pfn.0;
-        Sat, 07 May 2022 08:02:11 -0700 (PDT)
+        with ESMTP id S229617AbiEHHUx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 8 May 2022 03:20:53 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7457EBF64
+        for <linux-pm@vger.kernel.org>; Sun,  8 May 2022 00:17:03 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id bo5so9736038pfb.4
+        for <linux-pm@vger.kernel.org>; Sun, 08 May 2022 00:17:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8S2Ee/r4gdu8szylQWKNq1eYo0gsqwwKtcV/b5eUXQk=;
-        b=WO2s8NhiV9YPSglSonwtbrQzbnmw2d1x+XbJXFiPdeEBcNXIdqqc/5eybtaqtUxVLb
-         jjfenTFQuY0rRqyta56BStnCdEjYzasC3/C2LWYMNSo07kPjYlcUXHJJ6obqK0WvtSmL
-         Jz/IqDoK8dZL07vEWaSHK6yFadd1vuT0dI1vYunMg5wEPItzyMEzuorlRF3KJdtwy7RM
-         QUWmtRDQQZdX8+o/0Qc/dHOAqtVl5ub8PJ0NvRpSxk+HhJrEpltQIeRHKWR8Z60jFwLu
-         I4Pq3yEshPLQ0IrWP/gwJ0gZOokfdhMU3nso4rkfQlELvVCAwq0mKgluwU47w1Izy89S
-         fzJw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Pmia3f83d9c4z0pslQdQjq3eRCIFxyb8z/IWO9Z38ao=;
+        b=t6kDm7iTCtb4FmyDMxma8umwQwzKL2JupjfLGk02JjYTGCWzc8I9DDOPnVU/JulmG3
+         KszspKzJB8w+ttIZYkI7L9z8UUJJLtx7CRWRGfS4VPRBlXRFRwct2yAOUziTqaForIGg
+         cQ2nzM8vWDrOU+oGjD+0OaCFvvIOTShiAvA3dEbYlt4A1OjormyjvG4wAs5wuCYWCo+v
+         GtVuJvYGKEok/g5gq8PoHIBzscVGuzN6nrWgmAw/Oy8ah9YMJAt0zOlTYX64UPACkMcq
+         6ej+hbT8CBfWY63RjIuDHc97Tm1zW/HQl8Zg9TEzo4m3QuLQ+oD/beHpyUnUbWMgCFBH
+         JeKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8S2Ee/r4gdu8szylQWKNq1eYo0gsqwwKtcV/b5eUXQk=;
-        b=KEw8hjML/2y9PZx+IFb8pJ934pydRDMljTH2l6w8refU28dlGFMY0fgvmXakIufl/q
-         RBial7Jog9kUIc2CQ4ut1mLa/nYF3CXGQUMDmtFZn7E0OrqLNQqI9zkKr8Q4rB4tWTlQ
-         oooDVTlF/zMtRBARZ6UiYY3leajih3l/VAMimrsQJ2YswWqGOBVyM+0DtU3QYYzx/vpF
-         Jn9ghNaFXAwUpnMva1y1NJ1ARYQqWn8AI9RFovc0tKtIHdv6qakUSmVfdeg912gO3ghw
-         wmMT9IpxPsDDmCwGYGQp9Drfmn+O8MSUEYy5qFFpTB0uwMHsjduqyD1mTdIrKwQ9XCWz
-         qcmQ==
-X-Gm-Message-State: AOAM532NoYEQ7iJm+O7BcHIcKOEYAA6ptxBC8OaMkzAlYShT8vHEPnGD
-        ThQuNAQ7TxjzgO4lm7xgIGm9bCTXp3+nAw==
-X-Google-Smtp-Source: ABdhPJzcrR6UqrpIoIICLxvdLEh6oKCdG7X7TQJujmjnLjlvWv3z90HwvvVSumbJwjkyaR/8DYengA==
-X-Received: by 2002:a05:6a00:b8b:b0:50d:6080:6be7 with SMTP id g11-20020a056a000b8b00b0050d60806be7mr8408789pfj.56.1651935730651;
-        Sat, 07 May 2022 08:02:10 -0700 (PDT)
-Received: from localhost.localdomain ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id v21-20020a170902ca9500b0015e8d4eb2a8sm3711007pld.242.2022.05.07.08.02.07
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Pmia3f83d9c4z0pslQdQjq3eRCIFxyb8z/IWO9Z38ao=;
+        b=p1jzQN0ZTCjsNt2XT54kDgX+douvdqgKTXCrUHCVITwdkTDk2mEd+LvE0Tcb4WVuLV
+         MF3eGBQWOOX/MGZLLqabUtixgbLiwAj3Y39pDt/IRm9z+GM0Y6DQ4Z/yAB8FXJ8+RWll
+         SYU3E9VmtHP3sObg9WY0gwxp+wYkaScBH948tbU0eMsTcFhXI7gUoYn6ujHP14z16MPl
+         pc+uANXbNsGHCZ8J0RWOVjnJ6PVfXw/dJIAlsLhW5aGJxg2I/p00edL/fTt5tXjzNnai
+         nX+NVr9E0aVELbwZsdIOvB68WBp6jI0TWAnWZlclnfROsNKvAO0YgkbwIskWWK8oIoA8
+         gsRg==
+X-Gm-Message-State: AOAM5308Le0snPoVExMKo94i8mGFGWTVKSHZn+KvIqrbumh78T1jb+TV
+        Kiko+QU+ShOEmep1qkctHmw7
+X-Google-Smtp-Source: ABdhPJxu5CrFctjLtjT1lTJIK1jFwL+XEsVaS5Sz7j5qObZKbONmEaEZJKQEO5T8vskmUppYOSmqGw==
+X-Received: by 2002:a05:6a00:26cf:b0:4f6:fc52:7b6a with SMTP id p15-20020a056a0026cf00b004f6fc527b6amr10673139pfw.39.1651994222762;
+        Sun, 08 May 2022 00:17:02 -0700 (PDT)
+Received: from thinkpad ([27.111.75.235])
+        by smtp.gmail.com with ESMTPSA id iy11-20020a17090b16cb00b001dc37aef4ffsm6363055pjb.48.2022.05.08.00.16.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 May 2022 08:02:10 -0700 (PDT)
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-X-Google-Original-From: Chanwoo Choi <cw00.choi@samsung.com>
-To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     cw00.choi@samsung.com, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com, johnson.wang@mediatek.com,
-        mka@chromium.org, jia-wei.chang@mediatek.com,
-        andrew-sh.cheng@mediatek.com, hsinyi@chromium.org,
-        sibis@codeaurora.org, saravanak@google.com
-Subject: [PATCH v2 5/5] PM / devfreq: passive: Update frequency when start governor
-Date:   Sun,  8 May 2022 00:01:45 +0900
-Message-Id: <20220507150145.531864-6-cw00.choi@samsung.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220507150145.531864-1-cw00.choi@samsung.com>
-References: <20220507150145.531864-1-cw00.choi@samsung.com>
+        Sun, 08 May 2022 00:17:02 -0700 (PDT)
+Date:   Sun, 8 May 2022 12:46:56 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Hector Martin <marcan@marcan.st>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] Apple SoC cpufreq driver
+Message-ID: <20220508071656.GA42059@thinkpad>
+References: <20220504075153.185208-1-marcan@marcan.st>
+ <20220504102745.fv5bl2cphq7ft4lm@vireshk-i7>
+ <20220504160019.GB3507@thinkpad>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220504160019.GB3507@thinkpad>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-If the parent device changes the their frequency before registering
-the passive device, the passive device cannot receive the notification
-from parent device and then the passive device cannot be able to
-set the proper frequency according to the frequency of parent device.
+On Wed, May 04, 2022 at 09:30:26PM +0530, Manivannan Sadhasivam wrote:
+> Hi Viresh,
+> 
+> On Wed, May 04, 2022 at 03:57:45PM +0530, Viresh Kumar wrote:
+> > On 04-05-22, 16:51, Hector Martin wrote:
+> > > Hi folks,
+> > > 
+> > > Here's a second take on the cpufreq driver for Apple SoCs. This is a
+> > > complete rewrite using a stand-alone cpufreq driver instead of using the
+> > > cpufreq-dt infrastructure.
+> > > 
+> > > Since v1 we ran some experiments on the memory controller performance
+> > > switching and it turns out it doesn't make a huge difference, so it
+> > > makes sense to punt that feature to the future (perhaps once a proper
+> > > memory controller driver exists for other reasons, e.g. for error
+> > > handling).
+> > > 
+> > > One advantage of having a standalone cpufreq driver is that we can
+> > > support fast switching. This also means any future interaction with
+> > > the memory controller will probably use some bespoke mechanism instead
+> > > of the genpd infrastructure, so we can keep the fast path without
+> > > allowing sleeps/etc.
+> > > 
+> > > The driver is based on scpi-cpufreq.c, with some bits (e.g. the
+> > > apple,freq-domain stuff) inspired by how cpufreq-qcom-hw does it.
+> > > I'm not sure if that particular property should be described
+> > > in a binding, since it goes in the cpu nodes (qcom doesn't have it
+> > > anywhere...).
+> > 
+> > Hi Mani,
+> > 
+> > I can see that Rob asked you to add this somewhere, maybe in arm/cpu
+> > stuff, but I don't think you ever sent a patch with that. What
+> > happened ?
+> > 
+> > https://lore.kernel.org/lkml/20201013171800.GA3716411@bogus/
+> > 
+> 
+> Oops. Looks like that one slipped through the cracks. I did add it to my todo
+> list for qcom-cpufreq but missed it completely.
+> 
+> I will look into it.
+> 
 
-So, when start the passive governor, update the frequency
-according to the frequency of parent device.
+So I did send a patch for adding the qcom specific property [1], but Rob asked
+for a common one and that's where it got lost.
 
-Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
----
- drivers/devfreq/governor_passive.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+But in the last revision [2], you've asked for converting the qcom cpufreq
+driver to support the generic performance domains instead. For maintaining
+compatibility with the old dts files, we need to support the qcom specific
+property as well.
 
-diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
-index b34dbe750c0a..74d26c193fdb 100644
---- a/drivers/devfreq/governor_passive.c
-+++ b/drivers/devfreq/governor_passive.c
-@@ -412,6 +412,23 @@ static int devfreq_passive_event_handler(struct devfreq *devfreq,
- 		if (!p_data->this)
- 			p_data->this = devfreq;
- 
-+		/*
-+		 * If the parent device changes the their frequency before
-+		 * registering the passive device, the passive device cannot
-+		 * receive the notification from parent device and then the
-+		 * passive device cannot be able to set the proper frequency
-+		 * according to the frequency of parent device.
-+		 *
-+		 * When start the passive governor, update the frequency
-+		 * according to the frequency of parent device.
-+		 */
-+		mutex_lock(&devfreq->lock);
-+		ret = devfreq_update_target(devfreq, parent->previous_freq);
-+		if (ret < 0)
-+			dev_warn(&devfreq->dev,
-+			"failed to update devfreq using passive governor\n");
-+		mutex_unlock(&devfreq->lock);
-+
- 		if (p_data->parent_type == DEVFREQ_PARENT_DEV)
- 			ret = devfreq_passive_register_notifier(devfreq);
- 		else if (p_data->parent_type == CPUFREQ_PARENT_DEV)
+I will send a series for that.
+
+Thanks,
+Mani
+
+[1] https://patchwork.kernel.org/project/linux-pm/patch/20201020153944.18047-1-manivannan.sadhasivam@linaro.org/#23718065
+[2] https://patchwork.kernel.org/project/linux-pm/patch/20210701105730.322718-4-angelogioacchino.delregno@somainline.org/ 
+> Thanks,
+> Mani
+> 
+> > -- 
+> > viresh
+
 -- 
-2.25.1
-
+மணிவண்ணன் சதாசிவம்
