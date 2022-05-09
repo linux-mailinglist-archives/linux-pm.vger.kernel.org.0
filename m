@@ -2,119 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2D05202D6
-	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 18:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1ADC52033F
+	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 19:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239277AbiEIQtV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 May 2022 12:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59198 "EHLO
+        id S239351AbiEIRMw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 May 2022 13:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239283AbiEIQtU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 May 2022 12:49:20 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB49017064A
-        for <linux-pm@vger.kernel.org>; Mon,  9 May 2022 09:45:24 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-ee1e7362caso11251778fac.10
-        for <linux-pm@vger.kernel.org>; Mon, 09 May 2022 09:45:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IJm8tqFp/0kJcX4DPEzMhsJv1lU8izIHHH4OFpntEsU=;
-        b=Qy25jWI1jrH/ESF5nL9X9mAJidez6FmBE0GoGBzEKA0FshCLGq187sNpwBSs3C39OT
-         WGAT2i6c9cl2Fem0JBznTEawVUaebk6zRSpVCExOJ4/JL6qtqBH3n5Byz1OrchvpYq2B
-         pj1ziH0YWE07Okka7jo/n8GWZOLw2UyCeX9c0=
+        with ESMTP id S232065AbiEIRMv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 May 2022 13:12:51 -0400
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356391DF67E;
+        Mon,  9 May 2022 10:08:57 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id y2so26111306ybi.7;
+        Mon, 09 May 2022 10:08:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=IJm8tqFp/0kJcX4DPEzMhsJv1lU8izIHHH4OFpntEsU=;
-        b=tRM/HkiCHPc+9bS18uKUmGNyFDme+x3aBtSnCIU91XXOy0EiV9pUYvocPJAfzOnasU
-         KDCxR9xJoYtL9Q3LaO4EvrJgqEO/xysRM1hkDtYB09IWq6lQ7d79kNIxfvtR/1L/44YO
-         CkKMoDuC66FBm4nlDekW8LPUWWRIKHJRhTXPtkYRIKCwHujxSSZ5MORZG7qLGLPnTeuA
-         1I8A3Vgw4SHn/IPRvjArOZ3itdAuuIVKmU5eJHIBbu17o212xDLNCQ44kwgSiwqLHq0z
-         HtFFIqieHAelMRlBQy2yzBM+ormQ91RP8U31SiVZpvzvij0uxlKKd8RRFgZLxduogiA9
-         y/bA==
-X-Gm-Message-State: AOAM530i8cdJ6uDRFTQK9/uXsk6ohaTd6Fo/zJmscKi1oAiwdh79QAaS
-        nOmT1lr8QiY8phOxSOpZYQDTEyssWevjnw==
-X-Google-Smtp-Source: ABdhPJyFt+649UaAp+HJIzmsgHNjYYy34lh08N3OF6PyNZdWUlXRnIFt+pfXCBhujxdWOP4VYHQObA==
-X-Received: by 2002:a05:6870:7d08:b0:ee:7028:8829 with SMTP id os8-20020a0568707d0800b000ee70288829mr2703020oab.106.1652114723122;
-        Mon, 09 May 2022 09:45:23 -0700 (PDT)
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com. [209.85.167.176])
-        by smtp.gmail.com with ESMTPSA id m22-20020a9d6ad6000000b0060603221276sm4803227otq.70.2022.05.09.09.45.21
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 09:45:22 -0700 (PDT)
-Received: by mail-oi1-f176.google.com with SMTP id q10so658892oia.9
-        for <linux-pm@vger.kernel.org>; Mon, 09 May 2022 09:45:21 -0700 (PDT)
-X-Received: by 2002:a05:6808:d50:b0:322:fb1d:319d with SMTP id
- w16-20020a0568080d5000b00322fb1d319dmr8015340oik.174.1652114721469; Mon, 09
- May 2022 09:45:21 -0700 (PDT)
+        bh=MlJ2kEMj8cXOg3SwHVjy6hDQMego6crqK0D4CKhudAE=;
+        b=5o3JitCR6epNC9Guo6XV90Mhe4S2a5BCWK2B4iH/ovIh6Zb375JE6S9m4U51luNA29
+         OnJLM1vTFaOIBMhFlMegBdO9NlF+lL8h7rCGgEbnhIHtKzTtjySQQulV5+Px9gRQjFEf
+         Y2qdXvP/5xe1Um+4fkDZ+/jEvbCFqCFa2FWD1fkkdUYDnU/sRuFCQSmpn8SunXeqDmGQ
+         y4oY4eVxlIc5DR0YCw8NVSS1r0D6RC7qOegVMXxKTRVe9JTKPdHOYXetFM1yAsgalC9n
+         fx3+O40lF8TCU3ty0jt1p/z7zxFjMB5VWFojLuFPEKoYgWayxx5YIjoRo3e6oDzWQWGJ
+         KXXQ==
+X-Gm-Message-State: AOAM5327auYxNjD9Qn18lU1QwZcGJ4xA7gbYPYFpNfQplQHZBD8dh00w
+        5DwXizOQ66KEmPL8/3PXPwinRuFcjN3mQKZRKeM=
+X-Google-Smtp-Source: ABdhPJzNH7k0ngDG/21vShiiC41r6x0C2z0f1L0hOHknfZ/PUHBP5Votk2wmnb5CUh5LUjI5E+R/EwVD3cJ39tTZKB8=
+X-Received: by 2002:a25:da84:0:b0:648:423e:57b0 with SMTP id
+ n126-20020a25da84000000b00648423e57b0mr13738485ybf.137.1652116135342; Mon, 09
+ May 2022 10:08:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220504232102.469959-1-evgreen@chromium.org> <20220504161439.8.I87952411cf83f2199ff7a4cc8c828d357b8c8ce3@changeid>
- <20220506160820.GB1060@bug>
-In-Reply-To: <20220506160820.GB1060@bug>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Mon, 9 May 2022 09:44:45 -0700
-X-Gmail-Original-Message-ID: <CAE=gft4nE6nYx9gRZuSL1v=8CjGsdtmx+GxPjmdD_hwJs5j-tw@mail.gmail.com>
-Message-ID: <CAE=gft4nE6nYx9gRZuSL1v=8CjGsdtmx+GxPjmdD_hwJs5j-tw@mail.gmail.com>
-Subject: Re: [PATCH 08/10] PM: hibernate: Mix user key in encrypted hibernate
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Daniil Lunev <dlunev@google.com>, zohar@linux.ibm.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        rjw@rjwysocki.net, Gwendal Grignou <gwendal@chromium.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
+References: <7f505491f4e8207bb5d79b1b7b34a28b6d1f03b6.1652068655.git.viresh.kumar@linaro.org>
+In-Reply-To: <7f505491f4e8207bb5d79b1b7b34a28b6d1f03b6.1652068655.git.viresh.kumar@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 9 May 2022 19:08:44 +0200
+Message-ID: <CAJZ5v0jVTQSe47hNeON-FmxTXXXTSkTpoJv==CT4c_zYkbV0OA@mail.gmail.com>
+Subject: Re: [PATCH] Revert "cpufreq: Fix possible race in cpufreq online
+ error path"
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Schspa Shi <schspa@gmail.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 6, 2022 at 9:08 AM Pavel Machek <pavel@ucw.cz> wrote:
+On Mon, May 9, 2022 at 5:57 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> Hi!
-Hi Pavel!
-
+> This reverts commit f346e96267cd76175d6c201b40f770c0116a8a04.
 >
-> > One annoyance of the "preloading" scheme is that hibernate image memory
-> > is effectively double-allocated: first by the usermode process pulling
-> > encrypted contents off of disk and holding it, and second by the kernel
-> > in its giant allocation in prepare_image(). An interesting future
-> > optimization would be to allow the kernel to accept and store encrypted
-> > page data before the user key is available. This would remove the
-> > double allocation problem, as usermode could push the encrypted pages
-> > loaded from disk immediately without storing them. The kernel could defer
-> > decryption of the data until the user key is available, while still
-> > knowing the correct page locations to store the encrypted data in.
+> The commit tried to fix a possible real bug but it made it even worse.
+> The fix was simply buggy as now an error out to out_offline_policy or
+> out_exit_policy will try to release a semaphore which was never taken in
+> the first place. This works fine only if we failed late, i.e. via
+> out_destroy_policy.
 >
-> Um. Dunno. Won't you run out of memory? Hibernation images can be quite big...
+> Fixes: f346e96267cd ("cpufreq: Fix possible race in cpufreq online error path")
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+
+Applied, thanks!
+
+I should have caught the breakage in this patch, sorry about missing it.
+
+> ---
+>  drivers/cpufreq/cpufreq.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 >
-
-As you know, with the way the snapshot mechanism works, a hibernation
-image can be at most 50% of RAM. If the system was using more than
-that at hibernation time, it has to free up the excess via swap before
-hibernating. So during this resume period, there's at least 50% of RAM
-to play around in and still be able to preload the hibernation image.
-
-What I've been doing in practice is to load as much of the hibernate
-image as possible into memory at the login screen while at the same
-time ensuring the system maintains a comfortable margin of free
-memory. I have to coerce the kernel into doing its giant allocation in
-prepare_image() first since it uses GFP_ATOMIC. This might mean I can
-only preload some of the image from disk. With the disk I/O being by
-far the longest pole in the tent, hiding even some of that latency
-behind the password prompt is still great for perceived resume time.
-
-
--Evan
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 233e8af48848..fbaa8e6c7d23 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1534,6 +1534,8 @@ static int cpufreq_online(unsigned int cpu)
+>         for_each_cpu(j, policy->real_cpus)
+>                 remove_cpu_dev_symlink(policy, get_cpu_device(j));
+>
+> +       up_write(&policy->rwsem);
+> +
+>  out_offline_policy:
+>         if (cpufreq_driver->offline)
+>                 cpufreq_driver->offline(policy);
+> @@ -1542,9 +1544,6 @@ static int cpufreq_online(unsigned int cpu)
+>         if (cpufreq_driver->exit)
+>                 cpufreq_driver->exit(policy);
+>
+> -       cpumask_clear(policy->cpus);
+> -       up_write(&policy->rwsem);
+> -
+>  out_free_policy:
+>         cpufreq_policy_free(policy);
+>         return ret;
+> --
+> 2.31.1.272.g89b43f80a514
+>
