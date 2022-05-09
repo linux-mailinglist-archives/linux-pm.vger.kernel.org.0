@@ -2,68 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B5C51F79E
-	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 11:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7935451F908
+	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 12:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233724AbiEIJNN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 May 2022 05:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
+        id S234319AbiEIJsd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 May 2022 05:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236094AbiEIImP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 May 2022 04:42:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7611312A9
-        for <linux-pm@vger.kernel.org>; Mon,  9 May 2022 01:38:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3D47FB8108E
-        for <linux-pm@vger.kernel.org>; Mon,  9 May 2022 08:38:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 043C7C385B0
-        for <linux-pm@vger.kernel.org>; Mon,  9 May 2022 08:38:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652085482;
-        bh=Kz6CDz5kIbeJlC1q5ITghEDiaJwsNSBobnynDHjS1x4=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=jstWMA9PWVc1TCfJDIImiMQelNyMv9cGS5yAIHOUdXflOJGLk59PmGLEazJBWGJnp
-         zH5+wciMuFJos4DA1fGc9/WOOLqhdsIl6unVkExOkLULiMQ1f+VP56NcaN4KDnPhhl
-         acEXGXo5G0bTENtx1l5zMRHIPbJN4F27fuvZctVC85V8CbRzj/xEYgvh+YxlVx2Sjj
-         Mhv5n+u2c4nY1CblFvbxmNqSyxm7ryQxtjhqYvfilnufsVo84iGqUSCKmdFo61L2jR
-         a7KL4u0s9wfmV8VyHVJRWQyMEzAY1NPl1bwJhtuqM9ecVdlZH/f+VG/Isj4ZhoUSbm
-         UR4n13OTF1LWg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id E0569C05FD0; Mon,  9 May 2022 08:38:01 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 215729] amd-pstate driver has a much higher idle power
- consumption for a desktop Zen 3 CPU
-Date:   Mon, 09 May 2022 08:38:00 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: aros@gmx.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215729-137361-NVvfoHP98z@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215729-137361@https.bugzilla.kernel.org/>
-References: <bug-215729-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S234300AbiEIJPW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 May 2022 05:15:22 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F90B1ED5AE
+        for <linux-pm@vger.kernel.org>; Mon,  9 May 2022 02:11:28 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id x52so11718644pfu.11
+        for <linux-pm@vger.kernel.org>; Mon, 09 May 2022 02:11:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=7QpxuoVC9zQ059fU/VCO45VAfx6s8GhPEiX2c3POePM=;
+        b=NcDYpNTw04yugULw2lGRPP8uvp5iDaWIg0Cp83izxqM6A+vpvp3r73InUADA5S/+yl
+         /bUQgAbVun7lO/SrKqe3BscfTx87KV0KGXXOUtm05SEuQT2T/EzBfyBziD+Ru1pSxYxB
+         uRheeODB9N5K98Z+wxZkt75t7PyiIEBycBKZiwdobxmqb20wJMq6/69yPJXXtLYiBUta
+         p7NLsTeoh0mDe6rxbNgt23gvteCIu4YTAqeHIQTdeOWvQcu5t3cD5n6Q5aaK/JxJcWrw
+         qwQLl3kimsJcId7BZDfqPXNvL/Aw5boIH8aoSWxaIuiyYhEyH5CRxIzACxYLjwd96QS9
+         TttA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=7QpxuoVC9zQ059fU/VCO45VAfx6s8GhPEiX2c3POePM=;
+        b=2aJfWG/U0eYIiEHlD2LKw0XgYnivVoj6ZoKeyr1AkvIaFD9SliTcAQRn35eO7pEcbR
+         oNsOXH5TIr+Cblqgu1o629JnDpGwPHZB/VssB7+baXJNA0dOyIaN3fcUpV4WMM9DO1/c
+         5F+hrgu1xMz1cv+GMq/pvrGcRRXq8b0RAi982xI3lt0UVUS5M5s22M7Hki5LUOBzdiZx
+         QDFWmqOhVdCnCKtq0TQuYtvTyqU4rYXPZBdSB06Cd69eNyEqO7dMUy27UXBxKtzDrk5A
+         LKc0pOjlsLKNNvcmiheiLsUFFG01QEaSxj3/Lp24v00TeWS17fB6PPi+0ogBD7rMiovy
+         oXag==
+X-Gm-Message-State: AOAM531R3qrs3udsWn48DbFkD5Weyz10fhaegMIkFkfLj3tqvGB036b0
+        kGG0wPePAKwOR1dNnT9jNCZuUQ==
+X-Google-Smtp-Source: ABdhPJxOwO6usL9axVziBSOIzqmZTG8IQH2ceVvogPLS2D4/RbZmODDEy76gkcTU+6D0WXe67qjY/A==
+X-Received: by 2002:a63:d43:0:b0:3c1:475e:8341 with SMTP id 3-20020a630d43000000b003c1475e8341mr12236858pgn.533.1652087488293;
+        Mon, 09 May 2022 02:11:28 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id h27-20020a056a00001b00b0050dc76281d7sm8361307pfk.177.2022.05.09.02.11.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 02:11:27 -0700 (PDT)
+Date:   Mon, 9 May 2022 14:41:25 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     qianfanguijin@163.com
+Cc:     linux-sunxi@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v1] drivers: cpufreq: sun8i-r40: Add cpufreq support
+Message-ID: <20220509091125.tps3zwaq276jlgh3@vireshk-i7>
+References: <20220509084853.17068-1-qianfanguijin@163.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220509084853.17068-1-qianfanguijin@163.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,46 +75,18 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215729
+On 09-05-22, 16:48, qianfanguijin@163.com wrote:
+> From: qianfan Zhao <qianfanguijin@163.com>
+> 
+> OPP table value is get from allwinner lichee 3.10 kernel.
+> 
+> Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
+> ---
+>  arch/arm/boot/dts/sun8i-r40.dtsi     | 47 ++++++++++++++++++++++++++++
+>  drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
+>  2 files changed, 48 insertions(+)
 
---- Comment #9 from Artem S. Tashkinov (aros@gmx.com) ---
-(In reply to Joe from comment #8)
-> Hello,
->=20
-> I reproduce this issue on my local.=20=20
->=20
-> Your device (CPU family:  25, Model:  33) should be shared memory solution
-> with AMD P-state driver. Updating CPPC request with shared memory will ne=
-ed
-> more energy  than writing MSR register directly. We are checking this iss=
-ue
-> now.
->=20
-> For ondemand governor, could you please try to reduce the sampling_rate a=
-nd
-> then check to energy consumption again? Thanks a lot!
->=20
-> Here is the command=20
->=20
-> cd /sys/devices/system/cpu/cpufreq/ondemand
-> echo 50000 > sampling_rate
->=20
-> Thanks
-> Joe
+Applied. Thanks.
 
-Changing sampling_rate from default 2000 to 50000 has improved the situation
-considerably but still acpi-cpufreq has a tiny better idle power consumptio=
-n.
-
-acpi-cpufreq: ~20W
-amd-pstate with default ondemand settings: ~23W
-amd-pstate with ondemand/sampling_rate=3D50k: ~21W
-
-Looks like the ondemand scheduler is not super efficient with the amd-pstate
-driver.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
+-- 
+viresh
