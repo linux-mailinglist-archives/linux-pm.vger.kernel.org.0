@@ -2,85 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A3C5207A4
-	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 00:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 958D252086F
+	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 01:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbiEIWeG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 May 2022 18:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47934 "EHLO
+        id S232511AbiEIXhB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 May 2022 19:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231685AbiEIWeC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 May 2022 18:34:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51DC126FA57
-        for <linux-pm@vger.kernel.org>; Mon,  9 May 2022 15:30:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652135406;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HZA6VNXAM5i4PcwO3aAoa6h2tMmE/5TqVCC2BscCJgw=;
-        b=igAGOjWq7e/eZKmQi1k9/H/cZu96i52zK2bAdWDbWwO8K3k8/qua7B3vQxoiovYTWm+LfF
-        bCyaOowzZ+6NZVCwl7YvDGwcRQkiXD3oj+Sh8TYeM+yILl7wb9xaQd12SYKdH1xanPk90v
-        mVmdFxKWau8tRoioPwScpvg1kcyPb4Y=
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
- [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-347-gzgRazzlOmmbPLtrBaFdNA-1; Mon, 09 May 2022 18:30:05 -0400
-X-MC-Unique: gzgRazzlOmmbPLtrBaFdNA-1
-Received: by mail-il1-f197.google.com with SMTP id r5-20020a924405000000b002cf9a5b9080so3083899ila.16
-        for <linux-pm@vger.kernel.org>; Mon, 09 May 2022 15:30:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HZA6VNXAM5i4PcwO3aAoa6h2tMmE/5TqVCC2BscCJgw=;
-        b=mgFfuDz6p7EvA4Yw6DQEqi+rapvcs7r2MrF1fqNsrDVUl3UlJAd8Pa21r9F2LXoIwv
-         VwGeMXJgqemE2vvvkKcb1kjbks43AZ5oY4QyFo5+d9l+LcLpWm6N1xdhsvv3F1MhPWCX
-         eL+p8nz0l5GDbm1KREHKhjYiTqkVvSsd/hwcgh44COzVBZRPi3XLgLcUB1jEnqUyw7iG
-         AYWPQNkzd7sNcfuJxXuDzpz0f7WNCaHvO4lQ6sb8kgSQhPfLm9qI6/JZwmFCZ9b3cGjt
-         laH0MD6GbUSGMqlyBwSqpdQ10tfWG0uaqBoCnzeC04V2iU1MHfCKy9qtz9gOkwciryIG
-         4jiQ==
-X-Gm-Message-State: AOAM532XEH34dmnHbee95OpLth8NR6MmN27dFCzfFFAX/ROB7T53QU+0
-        k4/r0JQ5p0/xugdcNBPEH+OuI/EEr8h5nNpW+BJXGjCjoNP4CNzhX2vUYDmBp22xBJp2h99mY98
-        2uK0yZKedPGnPKUstkLo=
-X-Received: by 2002:a05:6e02:1585:b0:2c2:5b2c:e3e5 with SMTP id m5-20020a056e02158500b002c25b2ce3e5mr8000885ilu.76.1652135404645;
-        Mon, 09 May 2022 15:30:04 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw/xDm0oeizzFs9OsjgHv5iN7DYQPBrPufu9Ukf8kxzdUFWsryqO/OP8BvcOcM21ir0kbx5eg==
-X-Received: by 2002:a05:6e02:1585:b0:2c2:5b2c:e3e5 with SMTP id m5-20020a056e02158500b002c25b2ce3e5mr8000867ilu.76.1652135404331;
-        Mon, 09 May 2022 15:30:04 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id q6-20020a056e02096600b002cde6e352ccsm3489431ilt.22.2022.05.09.15.30.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 15:30:04 -0700 (PDT)
-Date:   Mon, 9 May 2022 16:30:02 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Abhishek Sahu <abhsahu@nvidia.com>
-Cc:     Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v3 6/8] vfio: Invoke runtime PM API for IOCTL request
-Message-ID: <20220509163002.57fe44fa.alex.williamson@redhat.com>
-In-Reply-To: <0ba3d469-58af-64d3-514c-6d33c483f8fb@nvidia.com>
-References: <20220425092615.10133-1-abhsahu@nvidia.com>
-        <20220425092615.10133-7-abhsahu@nvidia.com>
-        <20220504134257.1ecb245b.alex.williamson@redhat.com>
-        <0ba3d469-58af-64d3-514c-6d33c483f8fb@nvidia.com>
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        with ESMTP id S232477AbiEIXhA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 May 2022 19:37:00 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009F5216045;
+        Mon,  9 May 2022 16:33:04 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id 607931F416C1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652139183;
+        bh=lLgNEvskjYPed89A1nrHxa9JSdRs0IUn4pOHSUK7jTc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WUHzEmLOMl++gIYprzLY4Y5ZgwkylBFM3NXfpKcZkd+7BNaZaUmiGqg0VUYWRABmv
+         hJH1Ou7MvzVQEeCAUDDHWRMZxDQoppEXGKbM2j06jRJrIABXsEZZwm7i9NM879gB6O
+         2Y1Se37TomGB4d2h1mXO6OlgzOTBjNFsW3GHIFZ7/mIkei0JXAEQaCq8Rz0ut+bUea
+         RPU0PjopsaMLBS9qFclxouby5tVIWXA/d0NuIMg3imq9abL7b/0/41RgiE9Je581Oh
+         wDZpoyFknmJS5vpV9L2nPVYSN0vUloiI1KAFaWeUbC9qrgYElXNzM0KEblyCj/O68o
+         va3jAifDGqHhA==
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH v8 00/27] Introduce power-off+restart call chain API
+Date:   Tue, 10 May 2022 02:32:08 +0300
+Message-Id: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,152 +95,229 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 5 May 2022 15:10:43 +0530
-Abhishek Sahu <abhsahu@nvidia.com> wrote:
+Problem
+-------
 
-> On 5/5/2022 1:12 AM, Alex Williamson wrote:
-> > On Mon, 25 Apr 2022 14:56:13 +0530
-> > Abhishek Sahu <abhsahu@nvidia.com> wrote:
-> >   
-> >> The vfio/pci driver will have runtime power management support where the
-> >> user can put the device low power state and then PCI devices can go into
-> >> the D3cold state. If the device is in low power state and user issues any
-> >> IOCTL, then the device should be moved out of low power state first. Once
-> >> the IOCTL is serviced, then it can go into low power state again. The
-> >> runtime PM framework manages this with help of usage count. One option
-> >> was to add the runtime PM related API's inside vfio/pci driver but some
-> >> IOCTL (like VFIO_DEVICE_FEATURE) can follow a different path and more
-> >> IOCTL can be added in the future. Also, the runtime PM will be
-> >> added for vfio/pci based drivers variant currently but the other vfio
-> >> based drivers can use the same in the future. So, this patch adds the
-> >> runtime calls runtime related API in the top level IOCTL function itself.
-> >>
-> >> For the vfio drivers which do not have runtime power management support
-> >> currently, the runtime PM API's won't be invoked. Only for vfio/pci
-> >> based drivers currently, the runtime PM API's will be invoked to increment
-> >> and decrement the usage count. Taking this usage count incremented while
-> >> servicing IOCTL will make sure that user won't put the device into low
-> >> power state when any other IOCTL is being serviced in parallel.
-> >>
-> >> Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
-> >> ---
-> >>  drivers/vfio/vfio.c | 44 +++++++++++++++++++++++++++++++++++++++++---
-> >>  1 file changed, 41 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/drivers/vfio/vfio.c b/drivers/vfio/vfio.c
-> >> index a4555014bd1e..4e65a127744e 100644
-> >> --- a/drivers/vfio/vfio.c
-> >> +++ b/drivers/vfio/vfio.c
-> >> @@ -32,6 +32,7 @@
-> >>  #include <linux/vfio.h>
-> >>  #include <linux/wait.h>
-> >>  #include <linux/sched/signal.h>
-> >> +#include <linux/pm_runtime.h>
-> >>  #include "vfio.h"
-> >>  
-> >>  #define DRIVER_VERSION	"0.3"
-> >> @@ -1536,6 +1537,30 @@ static const struct file_operations vfio_group_fops = {
-> >>  	.release	= vfio_group_fops_release,
-> >>  };
-> >>  
-> >> +/*
-> >> + * Wrapper around pm_runtime_resume_and_get().
-> >> + * Return 0, if driver power management callbacks are not present i.e. the driver is not  
-> > 
-> > Mind the gratuitous long comment line here.
-> >   
->  
->  Thanks Alex.
->  
->  That was a miss. I will fix this.
->  
-> >> + * using runtime power management.
-> >> + * Return 1 upon success, otherwise -errno  
-> > 
-> > Changing semantics vs the thing we're wrapping, why not provide a
-> > wrapper for the `put` as well to avoid?  The only cases where we return
-> > zero are just as easy to detect on the other side.
-> >   
-> 
->  Yes. Using wrapper function for put is better option.
->  I will make the changes.
-> 
-> >> + */
-> >> +static inline int vfio_device_pm_runtime_get(struct device *dev)  
-> > 
-> > Given some of Jason's recent series, this should probably just accept a
-> > vfio_device.
-> >   
-> 
->  Sorry. I didn't get this part.
-> 
->  Do I need to change it to
-> 
->  static inline int vfio_device_pm_runtime_get(struct vfio_device *device)
->  {
->     struct device *dev = device->dev;
->     ...
->  }
+SoC devices require power-off call chaining functionality from kernel.
+We have a widely used restart chaining provided by restart notifier API,
+but nothing for power-off.
 
-Yes.
+Solution
+--------
 
-> >> +{
-> >> +#ifdef CONFIG_PM
-> >> +	int ret;
-> >> +
-> >> +	if (!dev->driver || !dev->driver->pm)
-> >> +		return 0;
+Introduce new API that provides call chains support for all restart and
+power-off modes. The new API is designed with simplicity and extensibility
+in mind.
 
-I'm also wondering how we could ever get here with dev->driver == NULL.
-If that were actually possible, the above would at best be racy.  It
-also really seems like there ought to be a better test than the
-driver->pm pointer to check if runtime pm is enabled, but I haven't
-spotted it yet.
+This is a third attempt to introduce the new API. First was made by
+Guenter Roeck back in 2014, second was made by Thierry Reding in 2017.
+In fact the work didn't stop and recently arm_pm_restart() was removed
+from v5.14 kernel, which was a part of preparatory work started by
+Guenter Roeck.
 
-> >> +
-> >> +	ret = pm_runtime_resume_and_get(dev);
-> >> +	if (ret < 0)
-> >> +		return ret;
-> >> +
-> >> +	return 1;
-> >> +#else
-> >> +	return 0;
-> >> +#endif
-> >> +}
-> >> +
-> >>  /*
-> >>   * VFIO Device fd
-> >>   */
-> >> @@ -1845,15 +1870,28 @@ static long vfio_device_fops_unl_ioctl(struct file *filep,
-> >>  				       unsigned int cmd, unsigned long arg)
-> >>  {
-> >>  	struct vfio_device *device = filep->private_data;
-> >> +	int pm_ret, ret = 0;
-> >> +
-> >> +	pm_ret = vfio_device_pm_runtime_get(device->dev);
-> >> +	if (pm_ret < 0)
-> >> +		return pm_ret;  
-> > 
-> > I wonder if we might simply want to mask pm errors behind -EIO, maybe
-> > with a rate limited dev_info().  My concern would be that we might mask
-> > errnos that userspace has come to expect for certain ioctls.  Thanks,
-> > 
-> > Alex
-> >   
-> 
->   I need to do something like following. Correct ?
-> 
->   ret = vfio_device_pm_runtime_get(device);
->   if (ret < 0) {
->      dev_info_ratelimited(device->dev, "vfio: runtime resume failed %d\n", ret);
->      return -EIO;
->   }
+Adoption plan
+-------------
 
-Yeah, though I'd welcome other thoughts here.  I don't necessarily like
-the idea of squashing the errno, but at the same time, if
-pm_runtime_resume_and_get() returns -EINVAL on user ioctl, that's not
-really describing an invalid parameter relative to the ioctl itself.
-Thanks,
+This patchset introduces the new API. It also converts multiple drivers
+and arch code to the new API to demonstrate how it all looks in practice,
+removing the pm_power_off_prepare global variable.
 
-Alex
+The plan is:
+
+1. Merge the new API and convert arch code to use do_kernel_power_off().
+   For now the new API will co-exist with the older API.
+
+2. Convert all drivers and platform code to the new API.
+
+3. Remove obsoleted pm_power_off and pm_power_off_prepare variables.
+
+Results
+-------
+
+1. Devices can be powered off properly.
+
+2. Global variables are removed from drivers.
+
+3. Global pm_power_off and pm_power_off_prepare callback variables are
+removed once all users are converted to the new API. The latter callback
+is removed by patch #24 of this series.
+
+4. Ambiguous call chain ordering is prohibited for non-default priorities.
+
+Changelog:
+
+v8: - Reworked sys-off handler like was suggested by Rafael Wysocki in
+      the comments to v7.
+
+    - The struct sys-off handler now is private to kernel/reboot.c and
+      new API is simplified.
+
+    - There is a single sys-off API function for all handler types.
+      Users shall pass the required sys-off mode type (restart, power-off
+      and etc).
+
+    - There is single struct sys_off_data callback argument for all
+      handler modes.
+
+    - User's callback now must return NOTIFY_DONE or NOTIFY_STOP.
+
+    - The default priority level is zero now.
+
+    - Multiple handlers now allowed to be registered at the default
+      priority level.
+
+    - Power-off call chain is atomic now, like the restart chain.
+
+    - kernel/reboot.c changes are split up into several logical patches.
+
+    - Added r-b from Michał Mirosław to unmodified patches from v7.
+
+    - Added acks that were missing in v7 by accident.
+
+v7: - Rebased on a recent linux-next. Dropped the recently removed
+      NDS32 architecture. Only SH and x86 arches left un-acked.
+
+    - Added acks from Thomas Bogendoerfer and Krzysztof Kozlowski
+      to the MIPS and memory/emif patches respectively.
+
+    - Made couple minor cosmetic improvements to the new API.
+
+    - A month ago I joined Collabora and continuing to work on this series
+      on the company's time, so changed my email address to collabora.com
+
+v6: - Rebased on a recent linux-next.
+
+    - Made minor couple cosmetic changes.
+
+v5: - Dropped patches which cleaned up notifier/reboot headers, as was
+      requested by Rafael Wysocki.
+
+    - Dropped WARN_ON() from the code, as was requested by Rafael Wysocki.
+      Replaced it with pr_err() appropriately.
+
+    - Dropped *_notifier_has_unique_priority() functions and added
+      *_notifier_chain_register_unique_prio() instead, as was suggested
+      by Michał Mirosław and Rafael Wysocki.
+
+    - Dropped export of blocking_notifier_call_chain_is_empty() symbol,
+      as was suggested by Rafael Wysocki.
+
+    - Michał Mirosław suggested that will be better to split up patch
+      that adds the new API to ease reviewing, but Rafael Wysocki asked
+      not add more patches, so I kept it as a single patch.
+
+    - Added temporary "weak" stub for pm_power_off() which fixes linkage
+      failure once symbol is removed from arch/* code. Previously I missed
+      this problem because was only compile-testing object files.
+
+v4: - Made a very minor improvement to doc comments, clarifying couple
+      default values.
+
+    - Corrected list of emails recipient by adding Linus, Sebastian,
+      Philipp and more NDS people. Removed bouncing emails.
+
+    - Added acks that were given to v3.
+
+v3: - Renamed power_handler to sys_off_handler as was suggested by
+      Rafael Wysocki.
+
+    - Improved doc-comments as was suggested by Rafael Wysocki. Added more
+      doc-comments.
+
+    - Implemented full set of 180 patches which convert whole kernel in
+      accordance to the plan, see link [1] above. Slightly adjusted API to
+      better suit for the remaining converted drivers.
+
+      * Added unregister_sys_off_handler() that is handy for a couple old
+        platform drivers.
+
+      * Dropped devm_register_trivial_restart_handler(), 'simple' variant
+        is enough to have.
+
+    - Improved "Add atomic/blocking_notifier_has_unique_priority()" patch,
+      as was suggested by Andy Shevchenko. Also replaced down_write() with
+      down_read() and factored out common notifier_has_unique_priority().
+
+    - Added stop_chain field to struct restart_data and reboot_prep_data
+      after discovering couple drivers wanting that feature.
+
+    - Added acks that were given to v2.
+
+v2: - Replaced standalone power-off call chain demo-API with the combined
+      power-off+restart API because this is what drivers want. It's a more
+      comprehensive solution.
+
+    - Converted multiple drivers and arch code to the new API. Suggested by
+      Andy Shevchenko. I skimmed through the rest of drivers, verifying that
+      new API suits them. The rest of the drivers will be converted once we
+      will settle on the new API, otherwise will be too many patches here.
+
+    - v2 API doesn't expose notifier to users and require handlers to
+      have unique priority. Suggested by Guenter Roeck.
+
+    - v2 API has power-off chaining disabled by default and require
+      drivers to explicitly opt-in to the chaining. This preserves old
+      behaviour for existing drivers once they are converted to the new
+      API.
+
+Dmitry Osipenko (27):
+  notifier: Add atomic_notifier_call_chain_is_empty()
+  notifier: Add blocking/atomic_notifier_chain_register_unique_prio()
+  kernel/reboot: Introduce sys-off handler API
+  kernel/reboot: Wrap legacy power-off callbacks into sys-off handlers
+  kernel/reboot: Add do_kernel_power_off()
+  kernel/reboot: Add stub for pm_power_off
+  kernel/reboot: Add kernel_can_power_off()
+  kernel/reboot: Add register_platform_power_off()
+  ARM: Use do_kernel_power_off()
+  csky: Use do_kernel_power_off()
+  riscv: Use do_kernel_power_off()
+  arm64: Use do_kernel_power_off()
+  parisc: Use do_kernel_power_off()
+  xen/x86: Use do_kernel_power_off()
+  powerpc: Use do_kernel_power_off()
+  m68k: Switch to new sys-off handler API
+  sh: Use do_kernel_power_off()
+  x86: Use do_kernel_power_off()
+  ia64: Use do_kernel_power_off()
+  mips: Use do_kernel_power_off()
+  memory: emif: Use kernel_can_power_off()
+  ACPI: power: Switch to sys-off handler API
+  regulator: pfuze100: Use devm_register_sys_off_handler()
+  reboot: Remove pm_power_off_prepare()
+  soc/tegra: pmc: Use sys-off handler API to power off Nexus 7 properly
+  kernel/reboot: Add devm_register_power_off_handler()
+  kernel/reboot: Add devm_register_restart_handler()
+
+ arch/arm/kernel/reboot.c               |   4 +-
+ arch/arm64/kernel/process.c            |   3 +-
+ arch/csky/kernel/power.c               |   6 +-
+ arch/ia64/kernel/process.c             |   4 +-
+ arch/m68k/emu/natfeat.c                |   3 +-
+ arch/m68k/include/asm/machdep.h        |   1 -
+ arch/m68k/kernel/process.c             |   5 +-
+ arch/m68k/kernel/setup_mm.c            |   1 -
+ arch/m68k/kernel/setup_no.c            |   1 -
+ arch/m68k/mac/config.c                 |   4 +-
+ arch/mips/kernel/reset.c               |   3 +-
+ arch/parisc/kernel/process.c           |   4 +-
+ arch/powerpc/kernel/setup-common.c     |   4 +-
+ arch/powerpc/xmon/xmon.c               |   3 +-
+ arch/riscv/kernel/reset.c              |  12 +-
+ arch/sh/kernel/reboot.c                |   3 +-
+ arch/x86/kernel/reboot.c               |   4 +-
+ arch/x86/xen/enlighten_pv.c            |   4 +-
+ drivers/acpi/sleep.c                   |  16 +-
+ drivers/memory/emif.c                  |   2 +-
+ drivers/regulator/pfuze100-regulator.c |  42 ++-
+ drivers/soc/tegra/pmc.c                |  87 +++++--
+ include/linux/notifier.h               |   7 +
+ include/linux/pm.h                     |   1 -
+ include/linux/reboot.h                 |  91 +++++++
+ kernel/notifier.c                      | 101 +++++--
+ kernel/reboot.c                        | 347 ++++++++++++++++++++++++-
+ 27 files changed, 639 insertions(+), 124 deletions(-)
+
+-- 
+2.35.1
 
