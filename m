@@ -2,69 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F12451FC39
-	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 14:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B79D151FC38
+	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 14:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233659AbiEIMIA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 May 2022 08:08:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39440 "EHLO
+        id S233892AbiEIMNN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 May 2022 08:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233744AbiEIMH6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 May 2022 08:07:58 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59ED61F8C76;
-        Mon,  9 May 2022 05:04:00 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id w17-20020a17090a529100b001db302efed6so12595805pjh.4;
-        Mon, 09 May 2022 05:04:00 -0700 (PDT)
+        with ESMTP id S233895AbiEIMNM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 May 2022 08:13:12 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB83E32;
+        Mon,  9 May 2022 05:09:19 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id g184so9370567pgc.1;
+        Mon, 09 May 2022 05:09:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=U/+cjTq96Md245G/ctLSnsIz59bTLEMZ0UwmrABqvAA=;
-        b=iTw5/jM8rSn2lj23WcpYEr0ucEgsXh5lB+hBC5+kl4Uhy+jLkYBQM3PTWnGBKh+inw
-         K+7ETnys8V+VZxYk7eR9VMgfqBbJOFH3M1P0tghTkCc+JzchQfAW1cSf3S1fCQm6Vi66
-         Xp7ReX5YKjKHZzqIju9BZNfyaQvgE7ZTFuaMjZAtZAGHJ0JGMy1CsW6CCXR3+YEFlHwJ
-         yyKTO1elC40YPzcvHGBUYhc9kb/gdsYrvcn9rJFs80AZVyXgCrOTOcpN8/ciix6nRQM3
-         DlBxkNj/kuhTxc6wr2gY0Fqetuzj2dtDiSNnyf3UnHCZUpWgNYdZfdt2vD4E+lcujNT1
-         9u2A==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ZCKR2KVToumZXg10SfRvbk1URc/xJPQvsDbss1BO/1o=;
+        b=ePKFMJwL5M1xzt0w76+6VlSDEby4h4o0iY4YRShL+32c2fNBngdZDBkJ8+lYgsifg1
+         JZ2yaxHPvbFrydTuxN9q91HvF5fv9hZvt35W+3wSMEZNIPaN3Tw5lO0uaNCR2JR2tlt8
+         o/FNAtivqYH3yIf+HOVGe8VtMMZHmkyLbhMRSqrkrXRqjedOxVFYV72tpvxfz9iqDLdS
+         xjO9YXahuk/4G5wCYGnJFObReCScziM3Rl7J9SUv0aDDIx2DGvpYbaLQpPSYgJIDrxLl
+         qjqFUgWKmPx9OGYuJisuhkoMB+226LCqRj+PH30FmG8NSFPalGLRRj2ry/mBRk3Yo+Jx
+         YMtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=U/+cjTq96Md245G/ctLSnsIz59bTLEMZ0UwmrABqvAA=;
-        b=ul+X5tLZAV1u5+/f1XEfhAQBerCQNhfPC1QRoGTZjySIfGdcgyAOxvt18yT2Q4x3Eq
-         2LyZ1J4Bv66r3lm7M6kZuC8uJ4KSxXQG44BcqJvsMZ6ZjejkjZGrtUuzhIU4OxOsqCjc
-         2jQOh2GxZkqjaAbiwXBXtf/Xw7dWizZBLmwRgAMRXRlm2o82A+x7hMRfo0bWcB9Qz0yU
-         +3Wnu4sWCocuYkBksptz6amCk4sOS2n2OFuwPOgSvlgpcwqXizdaoLRDu8W4hm3eqrkN
-         QzSMDLxBcTuvJE0khK0QmP3gI4mS6fzxnaP++VtHuNrYcThUxJNhCoTFJA6HkgGoqHWA
-         kFYw==
-X-Gm-Message-State: AOAM532GoSjeUCmdPlSckmrBj9N2cJttMNqLIykGUYjkq07rIFp+UCaS
-        3FLeu8dn7tYEiLNdFeW1NvOE7gncTMehjg==
-X-Google-Smtp-Source: ABdhPJzt/2j2kHqCRSjdHZdbEtIvKFiMu7s1C2cK7xeXRk+QGlEZyuW6vIstRRrnex2s7medG3rG3A==
-X-Received: by 2002:a17:90a:d584:b0:1b8:7864:1735 with SMTP id v4-20020a17090ad58400b001b878641735mr17932118pju.126.1652097839175;
-        Mon, 09 May 2022 05:03:59 -0700 (PDT)
-Received: from localhost.localdomain ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id c4-20020a170903234400b0015e8d4eb245sm7020283plh.143.2022.05.09.05.03.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 05:03:58 -0700 (PDT)
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-X-Google-Original-From: Chanwoo Choi <cw00.choi@samsung.com>
-To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     johnson.wang@mediatek.com, mka@chromium.org, wenst@chromium.org,
-        jia-wei.chang@mediatek.com, andrew-sh.cheng@mediatek.com,
-        hsinyi@chromium.org, saravanak@google.com, cw00.choi@samsung.com,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com
-Subject: [PATCH v3 4/4] PM / devfreq: passive: Keep cpufreq_policy for possible cpus
-Date:   Mon,  9 May 2022 21:03:37 +0900
-Message-Id: <20220509120337.92472-5-cw00.choi@samsung.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220509120337.92472-1-cw00.choi@samsung.com>
-References: <20220509120337.92472-1-cw00.choi@samsung.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZCKR2KVToumZXg10SfRvbk1URc/xJPQvsDbss1BO/1o=;
+        b=dYNtyqgnmeSbq7k7y/FPy4GVsYnHBys5lYD9eomYnoDwaF947jSr0NZ0mU3SNTtwik
+         Lisglgl4UnsiASg89SodLbv5lPQXsOyGu+sEdbsYHkL5wGMUwxEsHpHQCoBQ8h7attFo
+         2zPtbKrGAQSW4Id8LjXBvI1ysqQrfNoJi/xaR++auNnMWv7PrzOOayx0dvBFaytAUDNr
+         uQA+/UmnO9GoPWQ4y36FWV7KVH1QsNr+kjnPdU+Kh49DNnCdB/c7oa5Cijxk9zB98aVZ
+         W5RNyTXyG/AEze7+qwUswsvx6NnRJbcej5M2SRB92O5l/pfaBDTOfNGQ6szz9HJSYi9h
+         85sQ==
+X-Gm-Message-State: AOAM531vG7eGFVvKOFkdwYTvtMCzXqlSomb8L8ueYPb1BY77Yi+qMag+
+        qHdIh1d2Ac5ENiemQ9LS4b8=
+X-Google-Smtp-Source: ABdhPJwCNlzwTWdyYUV9nLIUQ8FyUrTnDjVEBuHktiZQfP4Wryqs2YCdeWG4ZYYFdtjeADhw7PCaWg==
+X-Received: by 2002:a05:6a00:1307:b0:4b0:b1c:6fd9 with SMTP id j7-20020a056a00130700b004b00b1c6fd9mr15621633pfu.27.1652098158457;
+        Mon, 09 May 2022 05:09:18 -0700 (PDT)
+Received: from [172.30.1.40] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id y10-20020a170902d64a00b0015e8d4eb2d8sm6916016plh.290.2022.05.09.05.09.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 05:09:18 -0700 (PDT)
+Message-ID: <94efefab-918d-2367-4b74-076dd6f23936@gmail.com>
+Date:   Mon, 9 May 2022 21:09:11 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3 1/2] dt-bindings: interconnect: Add MediaTek CCI
+ dt-bindings
+Content-Language: en-US
+To:     Johnson Wang <johnson.wang@mediatek.com>, cw00.choi@samsung.com,
+        krzk+dt@kernel.org, robh+dt@kernel.org, kyungmin.park@samsung.com
+Cc:     khilman@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220425125546.4129-1-johnson.wang@mediatek.com>
+ <20220425125546.4129-2-johnson.wang@mediatek.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20220425125546.4129-2-johnson.wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,230 +79,189 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The passive governor requires the cpu data to get the next target frequency
-of devfreq device if depending on cpu. In order to reduce the unnecessary
-memory data, keep cpufreq_policy data for possible cpus instead of NR_CPU.
+Hi,
 
-Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
----
- drivers/devfreq/governor.h         |  3 ++
- drivers/devfreq/governor_passive.c | 73 ++++++++++++++++++++++++------
- include/linux/devfreq.h            |  4 +-
- 3 files changed, 63 insertions(+), 17 deletions(-)
+On 22. 4. 25. 21:55, Johnson Wang wrote:
+> Add devicetree binding of MediaTek CCI on MT8183 and MT8186.
+> 
+> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> ---
+>   .../bindings/interconnect/mediatek,cci.yaml   | 139 ++++++++++++++++++
+>   1 file changed, 139 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+> new file mode 100644
+> index 000000000000..e5221e17d11b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+> @@ -0,0 +1,139 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interconnect/mediatek,cci.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek Cache Coherent Interconnect (CCI) frequency and voltage scaling
+> +
+> +maintainers:
+> +  - Jia-Wei Chang <jia-wei.chang@mediatek.com>
 
-diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
-index 335c4a491254..0adfebc0467a 100644
---- a/drivers/devfreq/governor.h
-+++ b/drivers/devfreq/governor.h
-@@ -49,6 +49,7 @@
- 
- /**
-  * struct devfreq_cpu_data - Hold the per-cpu data
-+ * @node:	list node
-  * @dev:	reference to cpu device.
-  * @first_cpu:	the cpumask of the first cpu of a policy.
-  * @opp_table:	reference to cpu opp table.
-@@ -60,6 +61,8 @@
-  * This is auto-populated by the governor.
-  */
- struct devfreq_cpu_data {
-+	struct list_head node;
-+
- 	struct device *dev;
- 	unsigned int first_cpu;
- 
-diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
-index db02f5219684..331e93b9eb8d 100644
---- a/drivers/devfreq/governor_passive.c
-+++ b/drivers/devfreq/governor_passive.c
-@@ -18,6 +18,22 @@
- 
- #define HZ_PER_KHZ	1000
- 
-+static struct devfreq_cpu_data *
-+get_parent_cpu_data(struct devfreq_passive_data *p_data,
-+		    struct cpufreq_policy *policy)
-+{
-+	struct devfreq_cpu_data *parent_cpu_data;
-+
-+	if (!p_data || !policy)
-+		return NULL;
-+
-+	list_for_each_entry(parent_cpu_data, &p_data->cpu_data_list, node)
-+		if (parent_cpu_data->first_cpu == cpumask_first(policy->related_cpus))
-+			return parent_cpu_data;
-+
-+	return NULL;
-+}
-+
- static unsigned long get_target_freq_by_required_opp(struct device *p_dev,
- 						struct opp_table *p_opp_table,
- 						struct opp_table *opp_table,
-@@ -50,14 +66,24 @@ static int get_target_freq_with_cpufreq(struct devfreq *devfreq,
- 	struct devfreq_passive_data *p_data =
- 				(struct devfreq_passive_data *)devfreq->data;
- 	struct devfreq_cpu_data *parent_cpu_data;
-+	struct cpufreq_policy *policy;
- 	unsigned long cpu, cpu_cur, cpu_min, cpu_max, cpu_percent;
- 	unsigned long dev_min, dev_max;
- 	unsigned long freq = 0;
-+	int ret = 0;
- 
- 	for_each_online_cpu(cpu) {
--		parent_cpu_data = p_data->parent_cpu_data[cpu];
--		if (!parent_cpu_data || parent_cpu_data->first_cpu != cpu)
-+		policy = cpufreq_cpu_get(cpu);
-+		if (!policy) {
-+			ret = -EINVAL;
-+			continue;
-+		}
-+
-+		parent_cpu_data = get_parent_cpu_data(p_data, policy);
-+		if (!parent_cpu_data) {
-+			cpufreq_cpu_put(policy);
- 			continue;
-+		}
- 
- 		/* Get target freq via required opps */
- 		cpu_cur = parent_cpu_data->cur_freq * HZ_PER_KHZ;
-@@ -66,6 +92,7 @@ static int get_target_freq_with_cpufreq(struct devfreq *devfreq,
- 					devfreq->opp_table, cpu_cur);
- 		if (freq) {
- 			*target_freq = max(freq, *target_freq);
-+			cpufreq_cpu_put(policy);
- 			continue;
- 		}
- 
-@@ -80,9 +107,10 @@ static int get_target_freq_with_cpufreq(struct devfreq *devfreq,
- 		freq = dev_min + mult_frac(dev_max - dev_min, cpu_percent, 100);
- 
- 		*target_freq = max(freq, *target_freq);
-+		cpufreq_cpu_put(policy);
- 	}
- 
--	return 0;
-+	return ret;
- }
- 
- static int get_target_freq_with_devfreq(struct devfreq *devfreq,
-@@ -167,12 +195,11 @@ static int cpufreq_passive_notifier_call(struct notifier_block *nb,
- 	unsigned int cur_freq;
- 	int ret;
- 
--	if (event != CPUFREQ_POSTCHANGE || !freqs ||
--		!p_data->parent_cpu_data[freqs->policy->cpu])
-+	if (event != CPUFREQ_POSTCHANGE || !freqs)
- 		return 0;
- 
--	parent_cpu_data = p_data->parent_cpu_data[freqs->policy->cpu];
--	if (parent_cpu_data->cur_freq == freqs->new)
-+	parent_cpu_data = get_parent_cpu_data(p_data, freqs->policy);
-+	if (!parent_cpu_data || parent_cpu_data->cur_freq == freqs->new)
- 		return 0;
- 
- 	cur_freq = parent_cpu_data->cur_freq;
-@@ -195,7 +222,7 @@ static int cpufreq_passive_unregister_notifier(struct devfreq *devfreq)
- 	struct devfreq_passive_data *p_data
- 			= (struct devfreq_passive_data *)devfreq->data;
- 	struct devfreq_cpu_data *parent_cpu_data;
--	int cpu, ret;
-+	int cpu, ret = 0;
- 
- 	if (p_data->nb.notifier_call) {
- 		ret = cpufreq_unregister_notifier(&p_data->nb,
-@@ -205,16 +232,26 @@ static int cpufreq_passive_unregister_notifier(struct devfreq *devfreq)
- 	}
- 
- 	for_each_possible_cpu(cpu) {
--		parent_cpu_data = p_data->parent_cpu_data[cpu];
--		if (!parent_cpu_data)
-+		struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
-+		if (!policy) {
-+			ret = -EINVAL;
- 			continue;
-+		}
- 
-+		parent_cpu_data = get_parent_cpu_data(p_data, policy);
-+		if (!parent_cpu_data) {
-+			cpufreq_cpu_put(policy);
-+			continue;
-+		}
-+
-+		list_del(&parent_cpu_data->node);
- 		if (parent_cpu_data->opp_table)
- 			dev_pm_opp_put_opp_table(parent_cpu_data->opp_table);
- 		kfree(parent_cpu_data);
-+		cpufreq_cpu_put(policy);
- 	}
- 
--	return 0;
-+	return ret;
- }
- 
- static int cpufreq_passive_register_notifier(struct devfreq *devfreq)
-@@ -232,6 +269,9 @@ static int cpufreq_passive_register_notifier(struct devfreq *devfreq)
- 	if (!p_data->this)
- 		p_data->this = devfreq;
- 
-+	p_data->cpu_data_list
-+		= (struct list_head)LIST_HEAD_INIT(p_data->cpu_data_list);
-+
- 	p_data->nb.notifier_call = cpufreq_passive_notifier_call;
- 	ret = cpufreq_register_notifier(&p_data->nb, CPUFREQ_TRANSITION_NOTIFIER);
- 	if (ret) {
-@@ -241,15 +281,18 @@ static int cpufreq_passive_register_notifier(struct devfreq *devfreq)
- 	}
- 
- 	for_each_possible_cpu(cpu) {
--		if (p_data->parent_cpu_data[cpu])
--			continue;
--
- 		policy = cpufreq_cpu_get(cpu);
- 		if (!policy) {
- 			ret = -EPROBE_DEFER;
- 			goto err;
- 		}
- 
-+		parent_cpu_data = get_parent_cpu_data(p_data, policy);
-+		if (parent_cpu_data) {
-+			cpufreq_cpu_put(policy);
-+			continue;
-+		}
-+
- 		parent_cpu_data = kzalloc(sizeof(*parent_cpu_data),
- 						GFP_KERNEL);
- 		if (!parent_cpu_data) {
-@@ -278,7 +321,7 @@ static int cpufreq_passive_register_notifier(struct devfreq *devfreq)
- 		parent_cpu_data->min_freq = policy->cpuinfo.min_freq;
- 		parent_cpu_data->max_freq = policy->cpuinfo.max_freq;
- 
--		p_data->parent_cpu_data[cpu] = parent_cpu_data;
-+		list_add_tail(&parent_cpu_data->node, &p_data->cpu_data_list);
- 		cpufreq_cpu_put(policy);
- 	}
- 
-diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-index ccebb5c84d62..2fca831db564 100644
---- a/include/linux/devfreq.h
-+++ b/include/linux/devfreq.h
-@@ -309,7 +309,7 @@ enum devfreq_parent_dev_type {
-  + * @this:		the devfreq instance of own device.
-  + * @nb:		the notifier block for DEVFREQ_TRANSITION_NOTIFIER or
-  *			CPUFREQ_TRANSITION_NOTIFIER list.
-- + * @cpu_data:		the state min/max/current frequency of all online cpu's
-+ + * @cpu_data_list:	the cpufreq_policy list of all possible cpus.
-  *
-  * The devfreq_passive_data have to set the devfreq instance of parent
-  * device with governors except for the passive governor. But, don't need to
-@@ -329,7 +329,7 @@ struct devfreq_passive_data {
- 	/* For passive governor's internal use. Don't need to set them */
- 	struct devfreq *this;
- 	struct notifier_block nb;
--	struct devfreq_cpu_data *parent_cpu_data[NR_CPUS];
-+	struct list_head cpu_data_list;
- };
- #endif
- 
+Why did you add your author information?
+Please add your author information.
+
+And add this dt-binding information to MAINTAINERS
+as following: because I cannot catch the later patch
+of modification.
+
+cwchoi00@chanwoo:~/kernel/linux.chanwoo$ d
+diff --git a/MAINTAINERS b/MAINTAINERS
+index edc96cdb85e8..a11e9c1947b7 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5698,6 +5698,7 @@ L:        linux-pm@vger.kernel.org
+  S:     Maintained
+  T:     git git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git
+  F:     Documentation/devicetree/bindings/devfreq/
++F:     Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+  F:     drivers/devfreq/
+  F:     include/linux/devfreq.h
+  F:     include/trace/events/devfreq.h
+
+
+> +
+> +description: |
+> +  MediaTek Cache Coherent Interconnect (CCI) is a hardware engine used by
+> +  MT8183 and MT8186 SoCs to scale the frequency and adjust the voltage in
+> +  hardware. It can also optimize the voltage to reduce the power consumption.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt8183-cci
+> +      - mediatek,mt8186-cci
+> +
+> +  clocks:
+> +    items:
+> +      - description:
+> +          The multiplexer for clock input of CPU cluster.
+> +      - description:
+> +          A parent of "cpu" clock which is used as an intermediate clock source
+> +          when the original CPU is under transition and not stable yet.
+> +
+> +  clock-names:
+> +    items:
+> +      - const: cci
+> +      - const: intermediate
+> +
+> +  operating-points-v2: true
+> +  opp-table: true
+> +
+> +  proc-supply:
+> +    description:
+> +      Phandle of the regulator for CCI that provides the supply voltage.
+> +
+> +  sram-supply:
+> +    description:
+> +      Phandle of the regulator for sram of CCI that provides the supply
+> +      voltage. When it presents, the cci devfreq driver needs to do
+> +      "voltage tracking" to step by step scale up/down Vproc and Vsram to fit
+> +      SoC specific needs. When absent, the voltage scaling flow is handled by
+> +      hardware, hence no software "voltage tracking" is needed.
+> +
+> +required:
+> +  - compatible
+> +  - clocks
+> +  - clock-names
+> +  - operating-points-v2
+> +  - proc-supply
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/mt8183-clk.h>
+> +    cci: cci {
+> +        compatible = "mediatek,mt8183-cci";
+> +        clocks = <&mcucfg CLK_MCU_BUS_SEL>,
+> +                 <&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
+> +        clock-names = "cci", "intermediate";
+> +        operating-points-v2 = <&cci_opp>;
+> +        proc-supply = <&mt6358_vproc12_reg>;
+> +    };
+> +
+> +    cci_opp: opp-table-cci {
+> +        compatible = "operating-points-v2";
+> +        opp-shared;
+> +        opp2_00: opp-273000000 {
+> +            opp-hz = /bits/ 64 <273000000>;
+> +            opp-microvolt = <650000>;
+> +        };
+> +        opp2_01: opp-338000000 {
+> +            opp-hz = /bits/ 64 <338000000>;
+> +            opp-microvolt = <687500>;
+> +        };
+> +        opp2_02: opp-403000000 {
+> +            opp-hz = /bits/ 64 <403000000>;
+> +            opp-microvolt = <718750>;
+> +        };
+> +        opp2_03: opp-463000000 {
+> +            opp-hz = /bits/ 64 <463000000>;
+> +            opp-microvolt = <756250>;
+> +        };
+> +        opp2_04: opp-546000000 {
+> +            opp-hz = /bits/ 64 <546000000>;
+> +            opp-microvolt = <800000>;
+> +        };
+> +        opp2_05: opp-624000000 {
+> +            opp-hz = /bits/ 64 <624000000>;
+> +            opp-microvolt = <818750>;
+> +        };
+> +        opp2_06: opp-689000000 {
+> +            opp-hz = /bits/ 64 <689000000>;
+> +            opp-microvolt = <850000>;
+> +        };
+> +        opp2_07: opp-767000000 {
+> +            opp-hz = /bits/ 64 <767000000>;
+> +            opp-microvolt = <868750>;
+> +        };
+> +        opp2_08: opp-845000000 {
+> +            opp-hz = /bits/ 64 <845000000>;
+> +            opp-microvolt = <893750>;
+> +        };
+> +        opp2_09: opp-871000000 {
+> +            opp-hz = /bits/ 64 <871000000>;
+> +            opp-microvolt = <906250>;
+> +        };
+> +        opp2_10: opp-923000000 {
+> +            opp-hz = /bits/ 64 <923000000>;
+> +            opp-microvolt = <931250>;
+> +        };
+> +        opp2_11: opp-962000000 {
+> +            opp-hz = /bits/ 64 <962000000>;
+> +            opp-microvolt = <943750>;
+> +        };
+> +        opp2_12: opp-1027000000 {
+> +            opp-hz = /bits/ 64 <1027000000>;
+> +            opp-microvolt = <975000>;
+> +        };
+> +        opp2_13: opp-1092000000 {
+> +            opp-hz = /bits/ 64 <1092000000>;
+> +            opp-microvolt = <1000000>;
+> +        };
+> +        opp2_14: opp-1144000000 {
+> +            opp-hz = /bits/ 64 <1144000000>;
+> +            opp-microvolt = <1025000>;
+> +        };
+> +        opp2_15: opp-1196000000 {
+> +            opp-hz = /bits/ 64 <1196000000>;
+> +            opp-microvolt = <1050000>;
+> +        };
+> +    };
+
+
 -- 
-2.25.1
-
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
