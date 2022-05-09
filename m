@@ -2,150 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5BCE51F918
-	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 12:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17ED451F8FD
+	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 12:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235691AbiEIJse (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 May 2022 05:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53908 "EHLO
+        id S232341AbiEIJs3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 May 2022 05:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235704AbiEIJY5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 May 2022 05:24:57 -0400
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2EB131F22;
-        Mon,  9 May 2022 02:21:01 -0700 (PDT)
-Received: by mail-qk1-f173.google.com with SMTP id z126so10302506qkb.2;
-        Mon, 09 May 2022 02:21:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gMtmW3ArowZdX4IsaNSLBpR+NhLcfUq95yoUD9gi7Sw=;
-        b=RPbtzqE7rsbQATU6SraHZ5WF8sqL/dJMsdRf3VxMG2l0nyGHyJnVeR1CbqgVgiZwk7
-         K1cckVRnICC1Ttt/J+vIz1+8hg5h+QsziFaqrJmHfKRWUYjfvSxW0IPzoW30Ycvtfqbr
-         LoWndeocqBDIPgtNck0MoZHx4HjJ0lqEFa0hLFNYy4smuKdUmcfolZ1j+xDxBptDU/Xg
-         32atW/LVRs28O66Vheo+fJqFaeGiyCyp/erqy7i0uKWGKDfXR0fipzGqm+mFGBNfGzJD
-         hMAubUMZzWeB9o0I2WBUBPUPnayKzdFJJ8kjdqSbhguMF4rsQXGHwusQpvWIqaCFzdkt
-         vCZg==
-X-Gm-Message-State: AOAM532LFEsIpxM5WTRCEERrNv9b5cC8eNYIx8Qt41ds9PoaToFJYDW8
-        +Oj2xyFjFF6gi2GNnMbfvOT+878GxtTFoA==
-X-Google-Smtp-Source: ABdhPJxnCxGOKIp1bvvTmGtnVq0s0cmUaxXisxLRgd67SYcfs1XylGWC/N82+lVAr1wxirT3+vyUEA==
-X-Received: by 2002:a05:620a:4488:b0:6a0:2aab:a736 with SMTP id x8-20020a05620a448800b006a02aaba736mr11287091qkp.717.1652088060478;
-        Mon, 09 May 2022 02:21:00 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id w24-20020ac87198000000b002f39b99f697sm7235538qto.49.2022.05.09.02.20.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 02:20:59 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id g28so23731968ybj.10;
-        Mon, 09 May 2022 02:20:59 -0700 (PDT)
-X-Received: by 2002:a25:4506:0:b0:648:cfc2:301d with SMTP id
- s6-20020a254506000000b00648cfc2301dmr12295875yba.380.1652088059134; Mon, 09
- May 2022 02:20:59 -0700 (PDT)
+        with ESMTP id S235313AbiEIJ1I (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 May 2022 05:27:08 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A491EEE02;
+        Mon,  9 May 2022 02:23:14 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id E5E6F3200915;
+        Mon,  9 May 2022 05:23:09 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 09 May 2022 05:23:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1652088189; x=
+        1652174589; bh=Ry+sG7AeUuuSUyeaD2CqDfW56d5oAW3SwnbrciZOPu8=; b=b
+        dkILA9FZ2V2Of/AuvGmRShHZ8HV0pudACEbHev17TrYQVZIL2zudheJnxnVvuXY1
+        GDtkOfAYt3C+X5PCgZs5qCrejhkhf+d3Ovmfi067Tos61i8k6blm4XLsj43abDOS
+        ChWFqcoJNjBzXD03QIYPmPemAOmjICwSg7WenPGkcWZ91egni2UC0g4hRCI+yfkk
+        mt1aVRQisb5sV7j1HYAlVfkzjjeYcsz/mh+d2QIE8YxdDnIwmPOcDocJrv0i/gng
+        w7lnWzCD59uotp8ewhX5ZIfJB19NE6MPnakXoyqt6dZwXn+aVhSwDQVPmSgFT0wx
+        BmJJ7r421yIZB3SZSSM4g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1652088189; x=1652174589; bh=Ry+sG7AeUuuSU
+        yeaD2CqDfW56d5oAW3SwnbrciZOPu8=; b=T2Ij/FDU1n1eCko98Av+rvmtnY2kG
+        N3Pbb/B0+04qsCq0L1whc7KLszmTQDeLv9yeNo5Q4E2qIry1QhiU/lbHns1zAt7L
+        IwRy5oxXDeCpYWg6cWnZpbPl1zG7PbwJeqfS8kRuCqjusGeci7PLZ/9w1cS5c8Ql
+        5lOP5aWb5Dhjd8WgnexuaCjXQ3ZQuJm/GeDP5J0n3u7I4QE9CS3gFwyueY1JTv5V
+        GkitRW7rmYZrUVoCAeiJnHAHdwTw/urAj32z2VEjC+n113ldhbqKZtwsDrt529aW
+        NSmwbY9o0rain9KTuRcn136U8SqsEKEoxRTT2/b+ArHn0LkTD9ag78L9w==
+X-ME-Sender: <xms:fd14YuKh5KxGK6GvdRXY_15ewX9BbTykIyUFFhXDGjViEB8ARyjwQA>
+    <xme:fd14YmIVGIfd3Rh6uzGtmsjxTICWV66k-skXiLYgj5B-BbTGz057XEA7XNOqBzd0B
+    NoBcnIOCeQfws8R1vU>
+X-ME-Received: <xmr:fd14Yut-L9KwQkkgp_UzG2siIEz9w0SNxzicKwGkZWHppbHZFiQCiW30X0KY5EMRYXcVPrYgdCR-E6Ujri7t4HeChHnWv08OUi7ensg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelgddugecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtugfgjgesthhqredttddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeetgfelgefggeekkefggfeludeiudffjeffgeevveekjedukedtudeuteef
+    teefgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:fd14YjaYxzmOmOV5koXZ5qJFoj64d7iI-AaPJmeKAyZ0cF3Sk_F5Qg>
+    <xmx:fd14YlYXyE6KaXrkoCJVcIDeNzdVToBvqKHz47YRk65sMQ76zeaCgQ>
+    <xmx:fd14YvDPV-jU1B9NaFDHL0ZTp0pp7a31ghhh0XjXjKhNGP9n-9ZasQ>
+    <xmx:fd14Ynkya5CXWwUIPy7ND0GIy_vPeS241DQ5hdRAjlP7fEGp3np8CQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 9 May 2022 05:23:08 -0400 (EDT)
+Date:   Mon, 9 May 2022 11:23:06 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     qianfanguijin@163.com, linux-sunxi@lists.linux.dev,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v1] drivers: cpufreq: sun8i-r40: Add cpufreq support
+Message-ID: <20220509092306.22ttfunrislztbvh@houat>
+References: <20220509084853.17068-1-qianfanguijin@163.com>
+ <20220509091125.tps3zwaq276jlgh3@vireshk-i7>
 MIME-Version: 1.0
-References: <20220507125443.2766939-1-daniel.lezcano@linexp.org> <20220507125443.2766939-2-daniel.lezcano@linexp.org>
-In-Reply-To: <20220507125443.2766939-2-daniel.lezcano@linexp.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 9 May 2022 11:20:47 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXXMzR+ukK9Bm+eWhLuWOozU6n96hTcGV5xf9omQvoHCA@mail.gmail.com>
-Message-ID: <CAMuHMdXXMzR+ukK9Bm+eWhLuWOozU6n96hTcGV5xf9omQvoHCA@mail.gmail.com>
-Subject: Re: [PATCH v2 01/14] thermal/core: Change thermal_zone_ops to thermal_sensor_ops
-To:     daniel.lezcano@linexp.org
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>, Len Brown <lenb@kernel.org>,
-        Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Kalle Valo <kvalo@kernel.org>, Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Chuansheng Liu <chuansheng.liu@intel.com>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Antoine Tenart <atenart@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>,
-        "open list:CXGB4 ETHERNET DRIVER (CXGB4)" <netdev@vger.kernel.org>,
-        "open list:INTEL WIRELESS WIFI LINK (iwlwifi)" 
-        <linux-wireless@vger.kernel.org>,
-        "open list:ACER ASPIRE ONE TEMPERATURE AND FAN DRIVER" 
-        <platform-driver-x86@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220509091125.tps3zwaq276jlgh3@vireshk-i7>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+Hi,
 
-Thanks for your patch!
+On Mon, May 09, 2022 at 02:41:25PM +0530, Viresh Kumar wrote:
+> On 09-05-22, 16:48, qianfanguijin@163.com wrote:
+> > From: qianfan Zhao <qianfanguijin@163.com>
+> >=20
+> > OPP table value is get from allwinner lichee 3.10 kernel.
+> >=20
+> > Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
+> > ---
+> >  arch/arm/boot/dts/sun8i-r40.dtsi     | 47 ++++++++++++++++++++++++++++
+> >  drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
+> >  2 files changed, 48 insertions(+)
+>=20
+> Applied. Thanks.
 
-On Sat, May 7, 2022 at 3:03 PM Daniel Lezcano <daniel.lezcano@linexp.org> wrote:
-> A thermal zone is software abstraction of a sensor associated with
-> properties and cooling devices if any.
->
-> The fact that we have thermal_zone and thermal_zone_ops mixed is
-> confusing and does not clearly identify the different components
-> entering in the thermal management process. A thermal zone appears to
-> be a sensor while it is not.
->
-> In order to set the scene for multiple thermal sensors aggregated into
-> a single thermal zone. Rename the thermal_zone_ops to
-> thermal_sensor_ops, that will appear clearyl the thermal zone is not a
+Shouldn't you wait for the maintainers feedback for the DT bits at least?
 
-to make it clear
-
-> sensor but an abstraction of one [or multiple] sensor(s).
->
-> Cc: Alexandre Bailon <abailon@baylibre.com>
-> Cc: Kevin Hilman <khilman@baylibre.com>
-> Cc; Eduardo Valentin <eduval@amazon.com>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
-
->  drivers/thermal/rcar_thermal.c                            | 4 ++--
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Maxime
