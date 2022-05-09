@@ -2,165 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C4C51F2EC
-	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 05:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 635CE51F309
+	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 05:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiEID20 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 8 May 2022 23:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
+        id S231684AbiEIDtz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 8 May 2022 23:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231673AbiEIDWS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 8 May 2022 23:22:18 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4B5941A0;
-        Sun,  8 May 2022 20:18:24 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2493IHdW085931;
-        Sun, 8 May 2022 22:18:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1652066297;
-        bh=lrwTkKgCgSSEev9c5TfJpMVwLN2aiNmjYPqohHDbx14=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=qeur2vGO4zz758AaWb38eD9xkz+UEdXU5vMbuukvTRCQlLYBI9cogkNpk7P6+H/ml
-         xujzbcpRd1YbBFUdVfS0oiURlLpjmTxmAgD1Ha4gvDIDdem04UhIMu7xUk9fUPuPZs
-         KmxOWpDbZL5AhmiXdiPaQRk5UWgZBqaTbhkZQSOg=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2493IHGC063722
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 8 May 2022 22:18:17 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Sun, 8
- May 2022 22:18:16 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Sun, 8 May 2022 22:18:16 -0500
-Received: from [10.250.234.106] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2493ICQA006580;
-        Sun, 8 May 2022 22:18:13 -0500
-Message-ID: <5859fed0-82b7-95eb-5719-9b0016916c50@ti.com>
-Date:   Mon, 9 May 2022 08:48:12 +0530
+        with ESMTP id S233231AbiEIDkv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 8 May 2022 23:40:51 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD53ABF73
+        for <linux-pm@vger.kernel.org>; Sun,  8 May 2022 20:36:59 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so1172587pjq.2
+        for <linux-pm@vger.kernel.org>; Sun, 08 May 2022 20:36:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=JQ5hWsounMpf58DHcH0GLKrQSLqO2OdQzcem2B4+ChU=;
+        b=QkF9M8J123UteR1cPxuEawzImVx/iLdvIryVF9OwDpcPLWaPm82wa1yD3XJwXIQ8bc
+         JgAUvGxNueEjxQfFn8SAxLGZ+evF351ZGLIRh/hxEMh1SFIht86dRGKTn1Ps5UvHDtUO
+         oy+vqQjHwapTDEzUg+VRkeDQYNRAdp1/2X9udHLwt0Rxla4648nfPRi5AVaM/V5pO/Z/
+         An094rUi2hY0/JxXSUdNKQnsJ7da2J5ljxaYVJljw6xtkApiPAw+dOR78oKmdF1QqiIA
+         LTyVkYUmAVOVx1XaJHWU7fSIlwSKueBNcS88V3FNIfQEhkamsHjpQZekP6XFbNdl5Zr9
+         rMTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=JQ5hWsounMpf58DHcH0GLKrQSLqO2OdQzcem2B4+ChU=;
+        b=kqn8Jh46imBWXUDbCLHNRXApAUu6MSiE6sxWpHQVS+jCv24ogzq6Y9USOWi/rwyrCe
+         KYHLGkKMMpQvF3MRUkw91Fh6F9pRCl59vie4GKFGFwunIEuW5AKVLZ7D2E21uHIKB/3q
+         VgbKtGQj0pmmE/1qJ7iwa/H7xDC1UNZjql3wcIDIqYQmZCqDP/ph/l+F8q7Dmjz+lRVY
+         VuDzGEgGpf/RwzUMKdpEJqQYxYDDDUR9e5z4GmRpsGe75c9X1pIepDgJG7YR/XO+Thip
+         koX6yYUFClofiVV0kofJ9AtFINILGOtb0eikNQjvGXjIyqiw8vKDn9EZUzhOAuT1gPLf
+         2HfA==
+X-Gm-Message-State: AOAM53151eQXETcaQ1qL3yAOxG+Ij7F9yBW4KaNqT8R0Ml3y1XrFh/fV
+        4pH39bkCu9RFeqFdxhLkp0+Tvw==
+X-Google-Smtp-Source: ABdhPJyYXA+HSxshWIHyeWTIGwpaZOw21UOu7nN+qsNb530j9mXYoo+2hFP4+z4p+EG/f+8DEUXFPA==
+X-Received: by 2002:a17:90b:606:b0:1d9:5dd5:1489 with SMTP id gb6-20020a17090b060600b001d95dd51489mr24257701pjb.171.1652067418724;
+        Sun, 08 May 2022 20:36:58 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id b2-20020a056a0002c200b0050dc7628143sm7265847pft.29.2022.05.08.20.36.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 May 2022 20:36:57 -0700 (PDT)
+Date:   Mon, 9 May 2022 09:06:55 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: fix typo when cpufreq device remove
+Message-ID: <20220509033655.f2fsbis72hrjft6q@vireshk-i7>
+References: <20220506170832.33386-1-schspa@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v6 1/4] dt-bindings: thermal: k3-j72xx: Add VTM bindings
- documentation
-Content-Language: en-US
-To:     <robh+dt@kernel.org>, <daniel.lezcano@linaro.org>,
-        <rui.zhang@intel.com>, <amitk@kernel.org>, <kristo@kernel.org>,
-        <vigneshr@ti.com>, <krzysztof.kozlowski@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220427064635.24898-1-j-keerthy@ti.com>
- <20220427064635.24898-2-j-keerthy@ti.com>
-From:   "J, KEERTHY" <j-keerthy@ti.com>
-In-Reply-To: <20220427064635.24898-2-j-keerthy@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220506170832.33386-1-schspa@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 4/27/2022 12:16 PM, Keerthy wrote:
-> Add VTM bindings documentation. In the Voltage Thermal
-> Management Module(VTM), K3 J72XX supplies a voltage
-> reference and a temperature sensor feature that are gathered in the band
-> gap voltage and temperature sensor (VBGAPTS) module. The band
-> gap provides current and voltage reference for its internal
-> circuits and other analog IP blocks. The analog-to-digital
-> converter (ADC) produces an output value that is proportional
-> to the silicon temperature.
-
-Hi krzysztof,
-
-Any comments on this version?
-
-- Keerthy
-
+On 07-05-22, 01:08, Schspa Shi wrote:
+> This should check cpufreq_driver->exit pointer before call this function
 > 
-> Signed-off-by: Keerthy <j-keerthy@ti.com>
+> Fixes: 91a12e91dc39 ("cpufreq: Allow light-weight tear down and bring up of
+> CPUs")
+> 
+> Signed-off-by: Schspa Shi <schspa@gmail.com>
 > ---
->   .../bindings/thermal/ti,j72xx-thermal.yaml    | 64 +++++++++++++++++++
->   1 file changed, 64 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+>  drivers/cpufreq/cpufreq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-> new file mode 100644
-> index 000000000000..84b70fb108da
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-> @@ -0,0 +1,64 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/ti,j72xx-thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Texas Instruments J72XX VTM (DTS) binding
-> +
-> +maintainers:
-> +  - Keerthy <j-keerthy@ti.com>
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - ti,j721e-vtm
-> +          - ti,j7200-vtm
-> +
-> +  reg:
-> +    maxItems: 3
-> +    description:
-> +      Must be 3, in order to specify three register spaces for VTM cfg1, cfg2
-> +      and efuse register space.
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  "#thermal-sensor-cells":
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - power-domains
-> +  - "#thermal-sensor-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/soc/ti,sci_pm_domain.h>
-> +    wkup_vtm0: thermal-sensor@42040000 {
-> +        compatible = "ti,j721e-vtm";
-> +        reg = <0x42040000 0x350>,
-> +            <0x42050000 0x350>,
-> +            <0x43000300 0x10>;
-> +        power-domains = <&k3_pds 154 TI_SCI_PD_EXCLUSIVE>;
-> +        #thermal-sensor-cells = <1>;
-> +    };
-> +
-> +    mpu_thermal: mpu-thermal {
-> +        polling-delay-passive = <250>; /* milliseconds */
-> +        polling-delay = <500>; /* milliseconds */
-> +        thermal-sensors = <&wkup_vtm0 0>;
-> +
-> +        trips {
-> +                mpu_crit: mpu-crit {
-> +                        temperature = <125000>; /* milliCelsius */
-> +                        hysteresis = <2000>; /* milliCelsius */
-> +                        type = "critical";
-> +                };
-> +        };
-> +    };
-> +...
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 43dfaa8124e2..0f59c8ec2b39 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1661,7 +1661,7 @@ static void cpufreq_remove_dev(struct device *dev, struct subsys_interface *sif)
+>  
+>  	if (cpumask_empty(policy->real_cpus)) {
+>  		/* We did light-weight exit earlier, do full tear down now */
+> -		if (cpufreq_driver->offline)
+> +		if (cpufreq_driver->exit)
+>  			cpufreq_driver->exit(policy);
+>  
+>  		cpufreq_policy_free(policy);
+
+NAK.
+
+The code is doing fine and there is a comment above it on why it is
+doing it this way.
+
+-- 
+viresh
