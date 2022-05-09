@@ -2,62 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD7F5202CB
-	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 18:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2D05202D6
+	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 18:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239267AbiEIQr4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 May 2022 12:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
+        id S239277AbiEIQtV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 May 2022 12:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239243AbiEIQrz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 May 2022 12:47:55 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD471F68F9
-        for <linux-pm@vger.kernel.org>; Mon,  9 May 2022 09:43:59 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id v66so15805893oib.3
-        for <linux-pm@vger.kernel.org>; Mon, 09 May 2022 09:43:59 -0700 (PDT)
+        with ESMTP id S239283AbiEIQtU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 May 2022 12:49:20 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB49017064A
+        for <linux-pm@vger.kernel.org>; Mon,  9 May 2022 09:45:24 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-ee1e7362caso11251778fac.10
+        for <linux-pm@vger.kernel.org>; Mon, 09 May 2022 09:45:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=XqWCEiFRZR6d7K91PH8ezSoYLh3BKRbhvIoPlxx9A7I=;
-        b=HUq4PANpxSIB27eIQbGcBLcJ1kMRfgia2LIbn1U/sr3tsZ29aWkap3rwOThAhgUyct
-         MW4AAxZzt0kalHcKw0VYco7ySwx5B0Q6L9DvBsfj/UbG57AwzHEN8a6JkyYUfNQ29VTC
-         pohnxIWc1viOIWSeXqW8vA+HehX4XegFte3mA=
+        bh=IJm8tqFp/0kJcX4DPEzMhsJv1lU8izIHHH4OFpntEsU=;
+        b=Qy25jWI1jrH/ESF5nL9X9mAJidez6FmBE0GoGBzEKA0FshCLGq187sNpwBSs3C39OT
+         WGAT2i6c9cl2Fem0JBznTEawVUaebk6zRSpVCExOJ4/JL6qtqBH3n5Byz1OrchvpYq2B
+         pj1ziH0YWE07Okka7jo/n8GWZOLw2UyCeX9c0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=XqWCEiFRZR6d7K91PH8ezSoYLh3BKRbhvIoPlxx9A7I=;
-        b=2VS6yo6kmYupXfJeqI3yax+XRzRBtmqvmaBxzkYSSlt+/yZEXZnQ2bwRhK3Z0n93Kc
-         C7IwjsNfjlnoCr6W5uU83BW+l4O+pecAo4+jTkqPPtHpZHjjNDSW1jawZMPvuW8oBFSx
-         umFZsxts1n8S6z2ZvK7AIMnhJbevZ03P55BgLUKQ5jskZt+7QWb3nExG1bBnFebOiIkT
-         d1P8DR8CHgJ45+T88HZdC0lxB1Bof4Xcg3MJ3dlhxbCmyItF4Pfg0efq288OAL0CCObp
-         L/V0Iwzb2JqpuixhuE39MAoEJJyT/S74om40yqKY60fLbTSyr0w3M1mjFcxDpJcRSeGO
-         0rYA==
-X-Gm-Message-State: AOAM530G6fWKzdiMYiLZ5Q7BVFf+Tz3YLXtOCxncurXYHjeqMubl5miH
-        izkxCFUNLHnaxfz8gL46tdS1X1wLtC1A5P4T
-X-Google-Smtp-Source: ABdhPJzkk+ancvhyClQRXz0/L5XZBys8aw2vKZeCXCB8YYKbNlclO5T6xHaG0sMY46LtMzjMI6naug==
-X-Received: by 2002:a05:6808:64c:b0:326:cbd3:3bc4 with SMTP id z12-20020a056808064c00b00326cbd33bc4mr2638892oih.167.1652114639268;
-        Mon, 09 May 2022 09:43:59 -0700 (PDT)
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com. [209.85.210.52])
-        by smtp.gmail.com with ESMTPSA id a9-20020a9d6e89000000b0060603221280sm4839493otr.80.2022.05.09.09.43.56
+        bh=IJm8tqFp/0kJcX4DPEzMhsJv1lU8izIHHH4OFpntEsU=;
+        b=tRM/HkiCHPc+9bS18uKUmGNyFDme+x3aBtSnCIU91XXOy0EiV9pUYvocPJAfzOnasU
+         KDCxR9xJoYtL9Q3LaO4EvrJgqEO/xysRM1hkDtYB09IWq6lQ7d79kNIxfvtR/1L/44YO
+         CkKMoDuC66FBm4nlDekW8LPUWWRIKHJRhTXPtkYRIKCwHujxSSZ5MORZG7qLGLPnTeuA
+         1I8A3Vgw4SHn/IPRvjArOZ3itdAuuIVKmU5eJHIBbu17o212xDLNCQ44kwgSiwqLHq0z
+         HtFFIqieHAelMRlBQy2yzBM+ormQ91RP8U31SiVZpvzvij0uxlKKd8RRFgZLxduogiA9
+         y/bA==
+X-Gm-Message-State: AOAM530i8cdJ6uDRFTQK9/uXsk6ohaTd6Fo/zJmscKi1oAiwdh79QAaS
+        nOmT1lr8QiY8phOxSOpZYQDTEyssWevjnw==
+X-Google-Smtp-Source: ABdhPJyFt+649UaAp+HJIzmsgHNjYYy34lh08N3OF6PyNZdWUlXRnIFt+pfXCBhujxdWOP4VYHQObA==
+X-Received: by 2002:a05:6870:7d08:b0:ee:7028:8829 with SMTP id os8-20020a0568707d0800b000ee70288829mr2703020oab.106.1652114723122;
+        Mon, 09 May 2022 09:45:23 -0700 (PDT)
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com. [209.85.167.176])
+        by smtp.gmail.com with ESMTPSA id m22-20020a9d6ad6000000b0060603221276sm4803227otq.70.2022.05.09.09.45.21
         for <linux-pm@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 09:43:57 -0700 (PDT)
-Received: by mail-ot1-f52.google.com with SMTP id s12-20020a0568301e0c00b00605f30530c2so10493014otr.9
-        for <linux-pm@vger.kernel.org>; Mon, 09 May 2022 09:43:56 -0700 (PDT)
-X-Received: by 2002:a9d:6953:0:b0:606:3534:168e with SMTP id
- p19-20020a9d6953000000b006063534168emr6192989oto.237.1652114636260; Mon, 09
- May 2022 09:43:56 -0700 (PDT)
+        Mon, 09 May 2022 09:45:22 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id q10so658892oia.9
+        for <linux-pm@vger.kernel.org>; Mon, 09 May 2022 09:45:21 -0700 (PDT)
+X-Received: by 2002:a05:6808:d50:b0:322:fb1d:319d with SMTP id
+ w16-20020a0568080d5000b00322fb1d319dmr8015340oik.174.1652114721469; Mon, 09
+ May 2022 09:45:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220504232102.469959-1-evgreen@chromium.org> <20220506160807.GA1060@bug>
-In-Reply-To: <20220506160807.GA1060@bug>
+References: <20220504232102.469959-1-evgreen@chromium.org> <20220504161439.8.I87952411cf83f2199ff7a4cc8c828d357b8c8ce3@changeid>
+ <20220506160820.GB1060@bug>
+In-Reply-To: <20220506160820.GB1060@bug>
 From:   Evan Green <evgreen@chromium.org>
-Date:   Mon, 9 May 2022 09:43:19 -0700
-X-Gmail-Original-Message-ID: <CAE=gft6m75T0UC2DBhfFhuSMW6TK7aatD_04sQ18WosgGVsATw@mail.gmail.com>
-Message-ID: <CAE=gft6m75T0UC2DBhfFhuSMW6TK7aatD_04sQ18WosgGVsATw@mail.gmail.com>
-Subject: Re: [PATCH 00/10] Encrypted Hibernation
+Date:   Mon, 9 May 2022 09:44:45 -0700
+X-Gmail-Original-Message-ID: <CAE=gft4nE6nYx9gRZuSL1v=8CjGsdtmx+GxPjmdD_hwJs5j-tw@mail.gmail.com>
+Message-ID: <CAE=gft4nE6nYx9gRZuSL1v=8CjGsdtmx+GxPjmdD_hwJs5j-tw@mail.gmail.com>
+Subject: Re: [PATCH 08/10] PM: hibernate: Mix user key in encrypted hibernate
 To:     Pavel Machek <pavel@ucw.cz>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Matthew Garrett <mgarrett@aurora.tech>,
@@ -67,16 +68,8 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         rjw@rjwysocki.net, Gwendal Grignou <gwendal@chromium.org>,
         Jarkko Sakkinen <jarkko@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
         Len Brown <len.brown@intel.com>,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
-        keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-security-module@vger.kernel.org
+        "Rafael J. Wysocki" <rafael@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -91,43 +84,37 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On Fri, May 6, 2022 at 9:08 AM Pavel Machek <pavel@ucw.cz> wrote:
 >
 > Hi!
+Hi Pavel!
+
 >
-> > We are exploring enabling hibernation in some new scenarios. However,
-> > our security team has a few requirements, listed below:
-> > 1. The hibernate image must be encrypted with protection derived from
-> >    both the platform (eg TPM) and user authentication data (eg
-> >    password).
-> > 2. Hibernation must not be a vector by which a malicious userspace can
-> >    escalate to the kernel.
+> > One annoyance of the "preloading" scheme is that hibernate image memory
+> > is effectively double-allocated: first by the usermode process pulling
+> > encrypted contents off of disk and holding it, and second by the kernel
+> > in its giant allocation in prepare_image(). An interesting future
+> > optimization would be to allow the kernel to accept and store encrypted
+> > page data before the user key is available. This would remove the
+> > double allocation problem, as usermode could push the encrypted pages
+> > loaded from disk immediately without storing them. The kernel could defer
+> > decryption of the data until the user key is available, while still
+> > knowing the correct page locations to store the encrypted data in.
 >
-> Can you (or your security team) explain why requirement 2. is needed?
->
-> On normal systems, trusted userspace handles kernel upgrades (for example),
-> so it can escalate to kernel priviledges.
+> Um. Dunno. Won't you run out of memory? Hibernation images can be quite big...
 >
 
-Our systems are a little more sealed up than a normal distro, we use
-Verified Boot [1]. To summarize, RO firmware with an embedded public
-key verifies that the kernel+commandline was signed by Google. The
-commandline includes the root hash of the rootfs as well (where the
-modules live). So when an update is applied (A/B style, including the
-whole rootfs), assuming the RO firmware stayed RO (which requires
-physical measures to defeat), we can guarantee that the kernel,
-commandline, and rootfs have not been tampered with.
+As you know, with the way the snapshot mechanism works, a hibernation
+image can be at most 50% of RAM. If the system was using more than
+that at hibernation time, it has to free up the excess via swap before
+hibernating. So during this resume period, there's at least 50% of RAM
+to play around in and still be able to preload the hibernation image.
 
-Verified boot gives us confidence that on each boot, we're at least
-starting from known code. This makes it more challenging for an
-attacker to persist an exploit across reboot. With the kernel and
-modules verified, we try to make it non-trivial for someone who does
-manage to gain root execution once from escalating to kernel
-execution. Hibernation would be one obvious escalation route, so we're
-hoping to find a way to enable it without handing out that easy
-primitive.
+What I've been doing in practice is to load as much of the hibernate
+image as possible into memory at the login screen while at the same
+time ensuring the system maintains a comfortable margin of free
+memory. I have to coerce the kernel into doing its giant allocation in
+prepare_image() first since it uses GFP_ATOMIC. This might mean I can
+only preload some of the image from disk. With the disk I/O being by
+far the longest pole in the tent, hiding even some of that latency
+behind the password prompt is still great for perceived resume time.
 
-[1] https://www.chromium.org/chromium-os/chromiumos-design-docs/verified-boot/
 
-> Best regards,
->                                                                         Pavel
-> --
-> (english) http://www.livejournal.com/~pavelmachek
-> (cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
+-Evan
