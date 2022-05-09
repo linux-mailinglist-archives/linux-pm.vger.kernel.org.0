@@ -2,108 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1ADC52033F
-	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 19:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 402A2520419
+	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 20:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239351AbiEIRMw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 May 2022 13:12:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
+        id S239996AbiEISHd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 May 2022 14:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232065AbiEIRMv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 May 2022 13:12:51 -0400
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356391DF67E;
-        Mon,  9 May 2022 10:08:57 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id y2so26111306ybi.7;
-        Mon, 09 May 2022 10:08:57 -0700 (PDT)
+        with ESMTP id S240033AbiEISFt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 May 2022 14:05:49 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F102313CA33;
+        Mon,  9 May 2022 11:01:52 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id l20-20020a17090a409400b001dd2a9d555bso81034pjg.0;
+        Mon, 09 May 2022 11:01:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=Zr4sf3jMmMYEtunS1AGBN0+UBbxqzKWjBhRS7eCzWvU=;
+        b=kpaE3+pcIgmBhM8YMFL+srUugcyrQZd15pyIU9uVjAb3Lhku1yhOBaH3E3dcG1ajGt
+         d92ozd2RFpublhOQGdgvwPKF338HhuoG5sQzeRZcoLG/QGpgDovlxI4cGG8HlNrMM6tp
+         xIf3B70b3eQHR5L/bFGOjd6CM8NirgYmuQzvW9TunWBpoiwfyNGePZIt0vKheZ6+M3Yy
+         cm2PzIZjf6BqCRlTyFUTBJ7QpvlDtD4Vo9vyffzeU/a+iHZa/ndF9a5Ono57bqKgQOE7
+         AQ1DSY7Tnr0CZELPJNXjpl6SKR43CJvVmSFTvPX0gWcwnamc3qyvaOX0dl1bJlnmOtXY
+         Hq7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MlJ2kEMj8cXOg3SwHVjy6hDQMego6crqK0D4CKhudAE=;
-        b=5o3JitCR6epNC9Guo6XV90Mhe4S2a5BCWK2B4iH/ovIh6Zb375JE6S9m4U51luNA29
-         OnJLM1vTFaOIBMhFlMegBdO9NlF+lL8h7rCGgEbnhIHtKzTtjySQQulV5+Px9gRQjFEf
-         Y2qdXvP/5xe1Um+4fkDZ+/jEvbCFqCFa2FWD1fkkdUYDnU/sRuFCQSmpn8SunXeqDmGQ
-         y4oY4eVxlIc5DR0YCw8NVSS1r0D6RC7qOegVMXxKTRVe9JTKPdHOYXetFM1yAsgalC9n
-         fx3+O40lF8TCU3ty0jt1p/z7zxFjMB5VWFojLuFPEKoYgWayxx5YIjoRo3e6oDzWQWGJ
-         KXXQ==
-X-Gm-Message-State: AOAM5327auYxNjD9Qn18lU1QwZcGJ4xA7gbYPYFpNfQplQHZBD8dh00w
-        5DwXizOQ66KEmPL8/3PXPwinRuFcjN3mQKZRKeM=
-X-Google-Smtp-Source: ABdhPJzNH7k0ngDG/21vShiiC41r6x0C2z0f1L0hOHknfZ/PUHBP5Votk2wmnb5CUh5LUjI5E+R/EwVD3cJ39tTZKB8=
-X-Received: by 2002:a25:da84:0:b0:648:423e:57b0 with SMTP id
- n126-20020a25da84000000b00648423e57b0mr13738485ybf.137.1652116135342; Mon, 09
- May 2022 10:08:55 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=Zr4sf3jMmMYEtunS1AGBN0+UBbxqzKWjBhRS7eCzWvU=;
+        b=CeWSUAhn1DFg6aZNCPTOk5N7raB9mTXuYc71jsu7fR4UC9JA8C0DO3Zq1HQKugvjn4
+         f/USE2klhFwojFsAFynH1kFtvNffOEGmez4vJeUSHx+BoqZ7ihu2wlG56cbkXllH5cD4
+         oy1nTjuHru0EZE/DIPKs7BkEcQ+Fziru9/GqagTOd/+TyScTvTASH/B2LvMrX+KXPA5C
+         SdJ7T2FuRWulmK2MrwVxFbD1SGJmx49PXCOYeH0yRrmcgOJbD6SxQT0oPkL2HfyYtdkZ
+         P20MRECBPY+HAkFVmptap88XviNydzwJ8VopTl/aQd/ucoQY9ZcCRUjs8YLUqIr/VN7u
+         Qnkw==
+X-Gm-Message-State: AOAM530I6Nugo3MphZVzrYs/vPK9Y3ZQI27kZCer8Jak0am6f9Eho5kw
+        vS5meBko+y/NThI54Dlwtn4Ipp8wOCfcqg==
+X-Google-Smtp-Source: ABdhPJyFbQaoXUAhKpnfNQIcQWJd7U/PXfNQ+yWN8cCtKartLmD7dTH2hzlMAQqaxWfS3ClH0R4g+Q==
+X-Received: by 2002:a17:90b:4c03:b0:1dc:50f5:e291 with SMTP id na3-20020a17090b4c0300b001dc50f5e291mr19305931pjb.214.1652119312201;
+        Mon, 09 May 2022 11:01:52 -0700 (PDT)
+Received: from [172.30.1.40] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id 10-20020a170902c10a00b0015e8d4eb27esm141329pli.200.2022.05.09.11.01.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 May 2022 11:01:51 -0700 (PDT)
+Message-ID: <faad0f87-1367-3a6a-9b99-805feb422c91@gmail.com>
+Date:   Tue, 10 May 2022 03:01:45 +0900
 MIME-Version: 1.0
-References: <7f505491f4e8207bb5d79b1b7b34a28b6d1f03b6.1652068655.git.viresh.kumar@linaro.org>
-In-Reply-To: <7f505491f4e8207bb5d79b1b7b34a28b6d1f03b6.1652068655.git.viresh.kumar@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 9 May 2022 19:08:44 +0200
-Message-ID: <CAJZ5v0jVTQSe47hNeON-FmxTXXXTSkTpoJv==CT4c_zYkbV0OA@mail.gmail.com>
-Subject: Re: [PATCH] Revert "cpufreq: Fix possible race in cpufreq online
- error path"
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Schspa Shi <schspa@gmail.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3 2/4] PM / devfreq: Add cpu based scaling support to
+ passive governor
+Content-Language: en-US
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     johnson.wang@mediatek.com, mka@chromium.org, wenst@chromium.org,
+        jia-wei.chang@mediatek.com, andrew-sh.cheng@mediatek.com,
+        hsinyi@chromium.org, saravanak@google.com, cw00.choi@samsung.com,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        Saravana Kannan <skannan@codeaurora.org>,
+        Sibi Sankar <sibis@codeaurora.org>
+References: <20220509120337.92472-1-cw00.choi@samsung.com>
+ <20220509120337.92472-3-cw00.choi@samsung.com>
+In-Reply-To: <20220509120337.92472-3-cw00.choi@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 9, 2022 at 5:57 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> This reverts commit f346e96267cd76175d6c201b40f770c0116a8a04.
->
-> The commit tried to fix a possible real bug but it made it even worse.
-> The fix was simply buggy as now an error out to out_offline_policy or
-> out_exit_policy will try to release a semaphore which was never taken in
-> the first place. This works fine only if we failed late, i.e. via
-> out_destroy_policy.
->
-> Fixes: f346e96267cd ("cpufreq: Fix possible race in cpufreq online error path")
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+On 22. 5. 9. 21:03, Chanwoo Choi wrote:
+> - * @this:	the devfreq instance of own device.
+> - * @nb:		the notifier block for DEVFREQ_TRANSITION_NOTIFIER list
+> + + * @parent_type	parent type of the device.
+> + + * @this:		the devfreq instance of own device.
+> + + * @nb:		the notifier block for DEVFREQ_TRANSITION_NOTIFIER or
+> + *			CPUFREQ_TRANSITION_NOTIFIER list.
+> + + * @cpu_data:		the state min/max/current frequency of all online cpu's
 
-Applied, thanks!
+There are some mistake with unneeded '+'. It will be fixed on next
+version but anyway it doesn't affect the passive governor operation.
 
-I should have caught the breakage in this patch, sorry about missing it.
-
-> ---
->  drivers/cpufreq/cpufreq.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 233e8af48848..fbaa8e6c7d23 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1534,6 +1534,8 @@ static int cpufreq_online(unsigned int cpu)
->         for_each_cpu(j, policy->real_cpus)
->                 remove_cpu_dev_symlink(policy, get_cpu_device(j));
->
-> +       up_write(&policy->rwsem);
-> +
->  out_offline_policy:
->         if (cpufreq_driver->offline)
->                 cpufreq_driver->offline(policy);
-> @@ -1542,9 +1544,6 @@ static int cpufreq_online(unsigned int cpu)
->         if (cpufreq_driver->exit)
->                 cpufreq_driver->exit(policy);
->
-> -       cpumask_clear(policy->cpus);
-> -       up_write(&policy->rwsem);
-> -
->  out_free_policy:
->         cpufreq_policy_free(policy);
->         return ret;
-> --
-> 2.31.1.272.g89b43f80a514
->
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
