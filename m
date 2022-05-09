@@ -2,142 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C2F251F8A8
-	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 11:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 029E251F8B2
+	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 11:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbiEIJs7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 May 2022 05:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56380 "EHLO
+        id S236058AbiEIJsf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 May 2022 05:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238352AbiEIJpo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 May 2022 05:45:44 -0400
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0442300CE;
-        Mon,  9 May 2022 02:41:41 -0700 (PDT)
-Received: by mail-oo1-xc2d.google.com with SMTP id bm18-20020a056820189200b0035f7e56a3dfso423215oob.8;
-        Mon, 09 May 2022 02:41:41 -0700 (PDT)
+        with ESMTP id S238282AbiEIJfn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 May 2022 05:35:43 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2163D1A0AC5
+        for <linux-pm@vger.kernel.org>; Mon,  9 May 2022 02:31:49 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id s16so1453422pgs.3
+        for <linux-pm@vger.kernel.org>; Mon, 09 May 2022 02:31:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=JpCRaDNZYevpLkY4KOz+K7YSl/uzka5d9oakp3W77tc=;
+        b=HCmVcQ84A1B0mzXMIys8FhK9PENXHAKemAfPPPxoXKFdSh1QQXAzaPKVIqUEZLBs3/
+         H3pOb5uEAcuA5+F3hsUEogfhE/lRjNABeErSGu86+1ArNxEujpz8rVgWRX6v8tqEHwvx
+         0Xqpg/6Ry0GYJyosH55MLUfXrVeFOeBbGMK0uDInQXOaKGgdh2bcfZdABop9RngLLwa+
+         byDloH8cGSO4Dgs0GAKgT2GGWD3uNvjIr77nTWojR1RPoerG/QTxBZopGJZ/enkgNXjI
+         JKPl1sWprQahCNAmvlKDtaIJKpENBTMrQIA16/z2HPN40vin7eLoO7VkkbrQPSCVNvLk
+         7pew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/2S52I/7rnpAZPZBnPAQrsYd+UWQvbEGjZCjMYNcziY=;
-        b=SaJcfRTmzrIU3dMkD+We4rkg1XIReS5NS79HAoK0MegmHM847XqmBul86CxGWtKcw/
-         3dQjG6Kp2K+wRg/d0soSR9LRkUU92Nk2go4EzSzDXyNlzmh93N9VEshjUhV0cSYCx3o3
-         +R2UXL7llLjz9s7jIpA+70uqNh4Z3WiLeMP9KBE06UHAbtRfv82efm7FkuEvZlt59aYn
-         1JVZYAdVYcnj/2gs7zjOMpUEyPQ/gttVpQ7wFVUCbPqz8/0B6Vz5trpnQCDbuNBX/kdF
-         /Jz1JnltJNTY5Dvr9u1Oj35tbZEJdiAQm8JEeGFiXbdcqKxrAXZG9R8lqbr7QGCCH3yR
-         WtkQ==
-X-Gm-Message-State: AOAM5313TKZow2GK4gpyqo2YszOhPSVhbKtlzdSwPZ2esBbYjqs1GVKY
-        uLZz/mb+vuG3HThcamHQ9bGwsleKIaja3Q==
-X-Google-Smtp-Source: ABdhPJxLFleYDC+MrO2l8La8D4Yi8Vw0mJAWR1LKq8xR8Eajy8FC/ZdWGe+byu4mPvRWtslo/pg5dw==
-X-Received: by 2002:a05:6820:1007:b0:35e:a77a:e712 with SMTP id v7-20020a056820100700b0035ea77ae712mr5488413oor.64.1652088906127;
-        Mon, 09 May 2022 02:35:06 -0700 (PDT)
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com. [209.85.210.54])
-        by smtp.gmail.com with ESMTPSA id 26-20020aca0d1a000000b00325d7b6cab8sm4158479oin.16.2022.05.09.02.35.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 02:35:06 -0700 (PDT)
-Received: by mail-ot1-f54.google.com with SMTP id z5-20020a9d62c5000000b00606041d11f1so9708000otk.2;
-        Mon, 09 May 2022 02:35:05 -0700 (PDT)
-X-Received: by 2002:a25:448:0:b0:64a:94d6:e420 with SMTP id
- 69-20020a250448000000b0064a94d6e420mr8778268ybe.89.1652088533360; Mon, 09 May
- 2022 02:28:53 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=JpCRaDNZYevpLkY4KOz+K7YSl/uzka5d9oakp3W77tc=;
+        b=Dc4FvLP7URHfm+OTcyEOh4ZFYecIHGYoBykIjYSShJzkZTPwOhGw926hk/jNKb/+Dp
+         kI5EgV4uuHXrYzJntD3459Xj1PFb+Rel5D8bfdfjd+NgfEarBo7w+OiyJQE3FCgcXgcN
+         pob70v7I96dV7ACsJmzPaP1q5mtK6zy3lqA3ASEKWxZiJ6WlTOEN0fJr20imhFhyICCr
+         tvQn2UJoMz2pW/tdPkode7gaFU40pkRoXOf2w1rO6S4p8QoF1mjfvhVpZLHq+7OKts3Q
+         EpMxcxqxdTM3fQyCtnEDRRhKd9ggQmiNd5KV4wrmmMNV/fhrDEkIyWQo/HQ3L2DqQn2Z
+         wuYA==
+X-Gm-Message-State: AOAM530eb2eUnhe4oSFwUBOExJ9dt4UOCtLnnS8Jh5wzl6oMyZuITw7s
+        hTvCxsKcY4cmoBjUMNN6xREspg==
+X-Google-Smtp-Source: ABdhPJxdD04mCtOjOZoG59KlHgaCvKklPPxlk10wG2ZHb2KCQ4qNWZv9oKioDl7bTyyCDTPNP632lQ==
+X-Received: by 2002:a63:ad0c:0:b0:374:50b4:c955 with SMTP id g12-20020a63ad0c000000b0037450b4c955mr12237883pgf.530.1652088692871;
+        Mon, 09 May 2022 02:31:32 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id n28-20020a056a000d5c00b0050dc7628148sm8110335pfv.34.2022.05.09.02.31.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 02:31:32 -0700 (PDT)
+Date:   Mon, 9 May 2022 15:01:30 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     qianfanguijin@163.com, linux-sunxi@lists.linux.dev,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v1] drivers: cpufreq: sun8i-r40: Add cpufreq support
+Message-ID: <20220509093130.jegqpe6m7xtbouqa@vireshk-i7>
+References: <20220509084853.17068-1-qianfanguijin@163.com>
+ <20220509091125.tps3zwaq276jlgh3@vireshk-i7>
+ <20220509092306.22ttfunrislztbvh@houat>
 MIME-Version: 1.0
-References: <20220507125443.2766939-1-daniel.lezcano@linexp.org> <20220507125443.2766939-3-daniel.lezcano@linexp.org>
-In-Reply-To: <20220507125443.2766939-3-daniel.lezcano@linexp.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 9 May 2022 11:28:41 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdW9A5NC64yzErhUZd5y88cHN0xgzOAiwzVcdYse9sdUsQ@mail.gmail.com>
-Message-ID: <CAMuHMdW9A5NC64yzErhUZd5y88cHN0xgzOAiwzVcdYse9sdUsQ@mail.gmail.com>
-Subject: Re: [PATCH v2 02/14] thermal/core: Add a thermal sensor structure in
- the thermal zone
-To:     daniel.lezcano@linexp.org
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "open list:SAMSUNG THERMAL DRIVER" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220509092306.22ttfunrislztbvh@houat>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+On 09-05-22, 11:23, Maxime Ripard wrote:
+> Hi,
+> 
+> On Mon, May 09, 2022 at 02:41:25PM +0530, Viresh Kumar wrote:
+> > On 09-05-22, 16:48, qianfanguijin@163.com wrote:
+> > > From: qianfan Zhao <qianfanguijin@163.com>
+> > > 
+> > > OPP table value is get from allwinner lichee 3.10 kernel.
+> > > 
+> > > Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
+> > > ---
+> > >  arch/arm/boot/dts/sun8i-r40.dtsi     | 47 ++++++++++++++++++++++++++++
+> > >  drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
+> > >  2 files changed, 48 insertions(+)
+> > 
+> > Applied. Thanks.
+> 
+> Shouldn't you wait for the maintainers feedback for the DT bits at least?
 
-On Sat, May 7, 2022 at 3:02 PM Daniel Lezcano <daniel.lezcano@linexp.org> wrote:
-> The thermal sensor ops is directly defined in the thermal zone but
-> still its data structuration makes the sensor ops and the thermal zone
-> too much interconnected for multiple sensors per thermal zone.
->
-> Create a dedicated structure for the thermal sensor to be included in
-> the thermal zone structure so these components are clearly separated.
->
-> Cc: Alexandre Bailon <abailon@baylibre.com>
-> Cc: Kevin Hilman <khilman@baylibre.com>
-> Cc; Eduardo Valentin <eduval@amazon.com>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+I should have, will drop it.
 
-Thanks for your patch!
-
->  drivers/thermal/rcar_gen3_thermal.c        |  6 +--
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -80,6 +80,11 @@ struct thermal_sensor_ops {
->         void (*critical)(struct thermal_zone_device *);
->  };
->
-> +struct thermal_sensor {
-> +       struct thermal_sensor_ops *ops;
-> +       struct device *dev;
-
-Unless I missed something, the "dev" field is unused in this series?
-
-> +};
-> +
->  struct thermal_cooling_device_ops {
->         int (*get_max_state) (struct thermal_cooling_device *, unsigned long *);
->         int (*get_cur_state) (struct thermal_cooling_device *, unsigned long *);
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+viresh
