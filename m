@@ -2,103 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 635CE51F309
-	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 05:53:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EFE951F319
+	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 05:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbiEIDtz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 8 May 2022 23:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
+        id S233231AbiEIDvp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 8 May 2022 23:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233231AbiEIDkv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 8 May 2022 23:40:51 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD53ABF73
-        for <linux-pm@vger.kernel.org>; Sun,  8 May 2022 20:36:59 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id l7-20020a17090aaa8700b001dd1a5b9965so1172587pjq.2
-        for <linux-pm@vger.kernel.org>; Sun, 08 May 2022 20:36:59 -0700 (PDT)
+        with ESMTP id S229689AbiEIDm6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 8 May 2022 23:42:58 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8608AD11F;
+        Sun,  8 May 2022 20:39:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=JQ5hWsounMpf58DHcH0GLKrQSLqO2OdQzcem2B4+ChU=;
-        b=QkF9M8J123UteR1cPxuEawzImVx/iLdvIryVF9OwDpcPLWaPm82wa1yD3XJwXIQ8bc
-         JgAUvGxNueEjxQfFn8SAxLGZ+evF351ZGLIRh/hxEMh1SFIht86dRGKTn1Ps5UvHDtUO
-         oy+vqQjHwapTDEzUg+VRkeDQYNRAdp1/2X9udHLwt0Rxla4648nfPRi5AVaM/V5pO/Z/
-         An094rUi2hY0/JxXSUdNKQnsJ7da2J5ljxaYVJljw6xtkApiPAw+dOR78oKmdF1QqiIA
-         LTyVkYUmAVOVx1XaJHWU7fSIlwSKueBNcS88V3FNIfQEhkamsHjpQZekP6XFbNdl5Zr9
-         rMTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JQ5hWsounMpf58DHcH0GLKrQSLqO2OdQzcem2B4+ChU=;
-        b=kqn8Jh46imBWXUDbCLHNRXApAUu6MSiE6sxWpHQVS+jCv24ogzq6Y9USOWi/rwyrCe
-         KYHLGkKMMpQvF3MRUkw91Fh6F9pRCl59vie4GKFGFwunIEuW5AKVLZ7D2E21uHIKB/3q
-         VgbKtGQj0pmmE/1qJ7iwa/H7xDC1UNZjql3wcIDIqYQmZCqDP/ph/l+F8q7Dmjz+lRVY
-         VuDzGEgGpf/RwzUMKdpEJqQYxYDDDUR9e5z4GmRpsGe75c9X1pIepDgJG7YR/XO+Thip
-         koX6yYUFClofiVV0kofJ9AtFINILGOtb0eikNQjvGXjIyqiw8vKDn9EZUzhOAuT1gPLf
-         2HfA==
-X-Gm-Message-State: AOAM53151eQXETcaQ1qL3yAOxG+Ij7F9yBW4KaNqT8R0Ml3y1XrFh/fV
-        4pH39bkCu9RFeqFdxhLkp0+Tvw==
-X-Google-Smtp-Source: ABdhPJyYXA+HSxshWIHyeWTIGwpaZOw21UOu7nN+qsNb530j9mXYoo+2hFP4+z4p+EG/f+8DEUXFPA==
-X-Received: by 2002:a17:90b:606:b0:1d9:5dd5:1489 with SMTP id gb6-20020a17090b060600b001d95dd51489mr24257701pjb.171.1652067418724;
-        Sun, 08 May 2022 20:36:58 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id b2-20020a056a0002c200b0050dc7628143sm7265847pft.29.2022.05.08.20.36.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 May 2022 20:36:57 -0700 (PDT)
-Date:   Mon, 9 May 2022 09:06:55 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Schspa Shi <schspa@gmail.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: fix typo when cpufreq device remove
-Message-ID: <20220509033655.f2fsbis72hrjft6q@vireshk-i7>
-References: <20220506170832.33386-1-schspa@gmail.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652067541; x=1683603541;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Eec18//IsPwyC++u7RUnbqlmOOXMwJSxguy1wuaYhpw=;
+  b=we78HVW9HlOQ/CHVIvPONMrWOEGsHpG9ajgN3+52cChGpxoq7sE2QWfd
+   2tZuSSPTFCrPxCTZD5mGFfA47RMAmrtnxhSLio9EKj+2wmPbvv2F4RBht
+   /xuSguEi6tos0JA23AJfVDJHOnADtepgXVed+iRan6Y3Bd+7lv/EaipsR
+   U=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 08 May 2022 20:38:53 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2022 20:38:53 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sun, 8 May 2022 20:38:53 -0700
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sun, 8 May 2022 20:38:47 -0700
+Date:   Mon, 9 May 2022 09:08:43 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Matthias Kaehlcke <mka@chromium.org>
+CC:     Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>
+Subject: Re: [v15 2/6] usb: host: xhci-plat: Enable wakeup based on children
+ wakeup status
+Message-ID: <20220509033843.GB9170@hu-pkondeti-hyd.qualcomm.com>
+References: <1651740973-7944-1-git-send-email-quic_kriskura@quicinc.com>
+ <1651740973-7944-3-git-send-email-quic_kriskura@quicinc.com>
+ <YnVAZSZYQvIJxOHv@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220506170832.33386-1-schspa@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YnVAZSZYQvIJxOHv@google.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07-05-22, 01:08, Schspa Shi wrote:
-> This should check cpufreq_driver->exit pointer before call this function
+On Fri, May 06, 2022 at 08:36:31AM -0700, Matthias Kaehlcke wrote:
+> On Thu, May 05, 2022 at 02:26:09PM +0530, Krishna Kurapati wrote:
+> > device_wakeup_path() tells if any of the children devices needs
+> > wakeup. Use this hint to enable/disable wakeup of our device. This
+> > helps the parent device of xhci-plat (like sysdev) to retrieve
+> > the wakeup setting via device_wakeup_path().
+> > 
+> > Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> > ---
+> >  drivers/usb/host/xhci-plat.c | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> > 
+> > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> > index 649ffd8..ad585fa 100644
+> > --- a/drivers/usb/host/xhci-plat.c
+> > +++ b/drivers/usb/host/xhci-plat.c
+> > @@ -415,6 +415,14 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
+> >  	if (pm_runtime_suspended(dev))
+> >  		pm_runtime_resume(dev);
+> >  
+> > +	if (device_wakeup_path(dev)) {
+> > +		if (!device_may_wakeup(dev))
+> > +			device_wakeup_enable(dev);
+> > +	} else {
+> > +		if (device_may_wakeup(dev))
+> > +			device_wakeup_disable(dev);
+> > +	}
 > 
-> Fixes: 91a12e91dc39 ("cpufreq: Allow light-weight tear down and bring up of
-> CPUs")
+> This code is not self-explantatory and deserves a comment.
 > 
-> Signed-off-by: Schspa Shi <schspa@gmail.com>
-> ---
->  drivers/cpufreq/cpufreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Enabling/disabling wakeup for the purpose if signalling is a bit of a
+> hack. It might be an acceptable hack as long as it has no side effects.
+> However with the current implementation the wakeup state of the xHCI can
+> be different after resuming than it was before going to suspend:
 > 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 43dfaa8124e2..0f59c8ec2b39 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1661,7 +1661,7 @@ static void cpufreq_remove_dev(struct device *dev, struct subsys_interface *sif)
->  
->  	if (cpumask_empty(policy->real_cpus)) {
->  		/* We did light-weight exit earlier, do full tear down now */
-> -		if (cpufreq_driver->offline)
-> +		if (cpufreq_driver->exit)
->  			cpufreq_driver->exit(policy);
->  
->  		cpufreq_policy_free(policy);
+> after boot
+>   grep -h xhci /sys/class/wakeup/*/name
+>     => xhci-hcd.14.auto
+> 
+> after suspend w/o wakeup capable device
+>   grep -h xhci /sys/class/wakeup/*/name
+>     => no results
+> 
+> after suspend with wakeup capable device
+>   grep -h xhci /sys/class/wakeup/*/name
+>     => xhci-hcd.14.auto
+> 
+> The hack shouldn't alter the wakeup state 'persistently', i.e. you'll have
+> to restore it on resume, as in Pavan does in his reply to '[PATCH v14 2/7]
+> PM / wakeup: Add device_children_wakeup_capable()' (it needs to be done
+> conditionally though).
 
-NAK.
+I am worried that we are not doing the right thing here. why should the
+xhci-plat goes against the wishes of the user space policy here? Can we NOT
+just do anything here? If some one wants xhci-plat to wakeup all the time,
+dwc3 will be configured to wakeup the system provided that the support is
+available. This way we don't break any existing users of xhci-plat i.e not
+enabling wakeup from the kernel.
 
-The code is doing fine and there is a comment above it on why it is
-doing it this way.
-
--- 
-viresh
+Thanks,
+Pavan
