@@ -2,82 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17ED451F8FD
-	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 12:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14AE051F91E
+	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 12:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232341AbiEIJs3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 May 2022 05:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
+        id S230209AbiEIJod (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 May 2022 05:44:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235313AbiEIJ1I (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 May 2022 05:27:08 -0400
+        with ESMTP id S235372AbiEIJbl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 May 2022 05:31:41 -0400
 Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A491EEE02;
-        Mon,  9 May 2022 02:23:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A2B210B83;
+        Mon,  9 May 2022 02:27:45 -0700 (PDT)
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id E5E6F3200915;
-        Mon,  9 May 2022 05:23:09 -0400 (EDT)
+        by mailout.west.internal (Postfix) with ESMTP id 85ACD3200914;
+        Mon,  9 May 2022 05:27:43 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 09 May 2022 05:23:10 -0400
+  by compute5.internal (MEProxy); Mon, 09 May 2022 05:27:44 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1652088189; x=
-        1652174589; bh=Ry+sG7AeUuuSUyeaD2CqDfW56d5oAW3SwnbrciZOPu8=; b=b
-        dkILA9FZ2V2Of/AuvGmRShHZ8HV0pudACEbHev17TrYQVZIL2zudheJnxnVvuXY1
-        GDtkOfAYt3C+X5PCgZs5qCrejhkhf+d3Ovmfi067Tos61i8k6blm4XLsj43abDOS
-        ChWFqcoJNjBzXD03QIYPmPemAOmjICwSg7WenPGkcWZ91egni2UC0g4hRCI+yfkk
-        mt1aVRQisb5sV7j1HYAlVfkzjjeYcsz/mh+d2QIE8YxdDnIwmPOcDocJrv0i/gng
-        w7lnWzCD59uotp8ewhX5ZIfJB19NE6MPnakXoyqt6dZwXn+aVhSwDQVPmSgFT0wx
-        BmJJ7r421yIZB3SZSSM4g==
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1652088463; x=
+        1652174863; bh=z5peICARyV6gw69WenVqUK4dOs/cJCiJ9yWzJBPFzDE=; b=o
+        kTtnZCT4WeqieMEGPaqyNLWwcEKjRrxPrpCLDclxp7cS6vEKFMSl/pZPO/J5s3EU
+        HBfq1j8IPn+Wj43Gf9lb8Ea05aFlUqt2Uv4PxzRMTjY0H0gfhMs0MSGI6iwNHD6V
+        RKNEnxG6v+6sMcqLEoj4KmE3Xj/JBngzyztnnJHH/1RzhjiCZLzM2d2ePf6NBSu4
+        GaSK97vIjSwgTCSXZPaVaqhmvlAlM/J/dUuXrQpg5LNC0Ih9QT+/ay/gQ0ERk+Bn
+        ABwkcW9a/E0KorbSyPvPh1DOtz0AkAOBW9iABcUtXO6UrBdpWFwnKtj97XAMdhaA
+        nPQGYggFQEyUceszxNxoQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1652088189; x=1652174589; bh=Ry+sG7AeUuuSU
-        yeaD2CqDfW56d5oAW3SwnbrciZOPu8=; b=T2Ij/FDU1n1eCko98Av+rvmtnY2kG
-        N3Pbb/B0+04qsCq0L1whc7KLszmTQDeLv9yeNo5Q4E2qIry1QhiU/lbHns1zAt7L
-        IwRy5oxXDeCpYWg6cWnZpbPl1zG7PbwJeqfS8kRuCqjusGeci7PLZ/9w1cS5c8Ql
-        5lOP5aWb5Dhjd8WgnexuaCjXQ3ZQuJm/GeDP5J0n3u7I4QE9CS3gFwyueY1JTv5V
-        GkitRW7rmYZrUVoCAeiJnHAHdwTw/urAj32z2VEjC+n113ldhbqKZtwsDrt529aW
-        NSmwbY9o0rain9KTuRcn136U8SqsEKEoxRTT2/b+ArHn0LkTD9ag78L9w==
-X-ME-Sender: <xms:fd14YuKh5KxGK6GvdRXY_15ewX9BbTykIyUFFhXDGjViEB8ARyjwQA>
-    <xme:fd14YmIVGIfd3Rh6uzGtmsjxTICWV66k-skXiLYgj5B-BbTGz057XEA7XNOqBzd0B
-    NoBcnIOCeQfws8R1vU>
-X-ME-Received: <xmr:fd14Yut-L9KwQkkgp_UzG2siIEz9w0SNxzicKwGkZWHppbHZFiQCiW30X0KY5EMRYXcVPrYgdCR-E6Ujri7t4HeChHnWv08OUi7ensg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelgddugecutefuodetggdotefrodftvf
+        :x-sasl-enc; s=fm1; t=1652088463; x=1652174863; bh=z5peICARyV6gw
+        69WenVqUK4dOs/cJCiJ9yWzJBPFzDE=; b=KUa9Jq29tvqGiT7uEf+FwpGtC4y11
+        rJ+rPV8FWiaAwDEwWFGzDqWdTP4TtQfMlWTQ7eZnfs/SfkvVHOatLWdqjUapBN2p
+        nNHhd2nlA9lIgV9x2OCMz9qgxi6Ek7RhCMzGexerhOuDeL3jd8JWVntUMTLVeYrk
+        TxXvhA4GcKAVKPF2gv/fKICn+m8hhs8SNPpieaP3MVkllFsOCUnM8K3eDfwscdtT
+        uyT8ASLxb0UMgqJbIyd3907EfjAUpk9t24Ha0Gg+C5bRLNsybR3fc3RlI/tUF+hN
+        ScMsIUn15VzxpaxOFWYVkGFmlYMFQdEGPvYYiBTxBE1Pf3jS8axf25Wtw==
+X-ME-Sender: <xms:jt54YvkOIbFttto_DW8q0SLk69Eb8rBjNkZQ93IkJHQEYsaxdmjptQ>
+    <xme:jt54Yi0yCSL0a6gFQHB7pkDSdJ_KrjMFCHmTJ0yRg6Vxs5-zLVFRfXVJ_n624r4Wj
+    aAmIhGBVgcJe64j5Ko>
+X-ME-Received: <xmr:jt54Yloj2__KFd5aKy6belo4TMFx-SHLvpdQrHtO3D8evABhtLs2pjwqZrqX9b9AeTHGz3mP6EVF5gInpHXJNtlJTUjtmaqLHZ5CXa0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelgdduhecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
     fjughrpeffhffvvefukfhfgggtugfgjgesthhqredttddtvdenucfhrhhomhepofgrgihi
     mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetgfelgefggeekkefggfeludeiudffjeffgeevveekjedukedtudeuteef
-    teefgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:fd14YjaYxzmOmOV5koXZ5qJFoj64d7iI-AaPJmeKAyZ0cF3Sk_F5Qg>
-    <xmx:fd14YlYXyE6KaXrkoCJVcIDeNzdVToBvqKHz47YRk65sMQ76zeaCgQ>
-    <xmx:fd14YvDPV-jU1B9NaFDHL0ZTp0pp7a31ghhh0XjXjKhNGP9n-9ZasQ>
-    <xmx:fd14Ynkya5CXWwUIPy7ND0GIy_vPeS241DQ5hdRAjlP7fEGp3np8CQ>
+    htthgvrhhnpedutdejgffftdehheetteduhfekgeevgeffteetfeejudfhuddukeefvdeg
+    geeuleenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
+    hh
+X-ME-Proxy: <xmx:jt54YnlV7LkQsB0RtQEXuyrZQdOlGUOYUXMe1anqypbDjIgWILGSxQ>
+    <xmx:jt54Yt3eOnTEawnqCtpFEAvX2U6ZUCJr8tsKzOJu8KzZMHLEQJbDvA>
+    <xmx:jt54YmsO7vszbzzMMfN7TNXE47chBmrGlqmN9rX6CU9Ra1aPwVEsCA>
+    <xmx:j954YnzGlUW4O3tjftTK39IT_HjBY6AWxQdbNZH7VN8-zvIi3pOOKg>
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 9 May 2022 05:23:08 -0400 (EDT)
-Date:   Mon, 9 May 2022 11:23:06 +0200
+ 9 May 2022 05:27:42 -0400 (EDT)
+Date:   Mon, 9 May 2022 11:27:40 +0200
 From:   Maxime Ripard <maxime@cerno.tech>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     qianfanguijin@163.com, linux-sunxi@lists.linux.dev,
-        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+To:     qianfanguijin@163.com
+Cc:     linux-sunxi@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Subject: Re: [PATCH v1] drivers: cpufreq: sun8i-r40: Add cpufreq support
-Message-ID: <20220509092306.22ttfunrislztbvh@houat>
+Message-ID: <20220509092740.qmpizwxappy77ggc@houat>
 References: <20220509084853.17068-1-qianfanguijin@163.com>
- <20220509091125.tps3zwaq276jlgh3@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220509091125.tps3zwaq276jlgh3@vireshk-i7>
+In-Reply-To: <20220509084853.17068-1-qianfanguijin@163.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -88,22 +89,69 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-On Mon, May 09, 2022 at 02:41:25PM +0530, Viresh Kumar wrote:
-> On 09-05-22, 16:48, qianfanguijin@163.com wrote:
-> > From: qianfan Zhao <qianfanguijin@163.com>
-> >=20
-> > OPP table value is get from allwinner lichee 3.10 kernel.
-> >=20
-> > Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
-> > ---
-> >  arch/arm/boot/dts/sun8i-r40.dtsi     | 47 ++++++++++++++++++++++++++++
-> >  drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
-> >  2 files changed, 48 insertions(+)
+On Mon, May 09, 2022 at 04:48:53PM +0800, qianfanguijin@163.com wrote:
+> From: qianfan Zhao <qianfanguijin@163.com>
 >=20
-> Applied. Thanks.
+> OPP table value is get from allwinner lichee 3.10 kernel.
+>=20
+> Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
+> ---
+>  arch/arm/boot/dts/sun8i-r40.dtsi     | 47 ++++++++++++++++++++++++++++
+>  drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
+>  2 files changed, 48 insertions(+)
+>=20
+> diff --git a/arch/arm/boot/dts/sun8i-r40.dtsi b/arch/arm/boot/dts/sun8i-r=
+40.dtsi
+> index 291f4784e86c..90de119095fa 100644
+> --- a/arch/arm/boot/dts/sun8i-r40.dtsi
+> +++ b/arch/arm/boot/dts/sun8i-r40.dtsi
+> @@ -54,6 +54,41 @@ / {
+>  	#size-cells =3D <1>;
+>  	interrupt-parent =3D <&gic>;
+> =20
+> +	cpu0_opp_table: opp_table0 {
+> +		compatible =3D "operating-points-v2";
+> +		opp-shared;
+> +
+> +		opp-720000000 {
+> +			opp-hz =3D /bits/ 64 <720000000>;
+> +			opp-microvolt =3D <1000000 1000000 1300000>;
+> +			clock-latency-ns =3D <2000000>;
+> +		};
+> +
+> +		opp-912000000 {
+> +			opp-hz =3D /bits/ 64 <912000000>;
+> +			opp-microvolt =3D <1100000 1100000 1300000>;
+> +			clock-latency-ns =3D <2000000>;
+> +		};
+> +
+> +		opp-1008000000 {
+> +			opp-hz =3D /bits/ 64 <1008000000>;
+> +			opp-microvolt =3D <1160000 1160000 1300000>;
+> +			clock-latency-ns =3D <2000000>;
+> +		};
+> +
+> +		opp-1104000000 {
+> +			opp-hz =3D /bits/ 64 <1104000000>;
+> +			opp-microvolt =3D <1240000 1240000 1300000>;
+> +			clock-latency-ns =3D <2000000>;
+> +		};
+> +
+> +		opp-1200000000 {
+> +			opp-hz =3D /bits/ 64 <1200000000>;
+> +			opp-microvolt =3D <1300000 1300000 1300000>;
+> +			clock-latency-ns =3D <2000000>;
+> +		};
+> +	};
+> +
 
-Shouldn't you wait for the maintainers feedback for the DT bits at least?
+How were these OPPs tested? If you didn't, please test with
+https://github.com/ssvb/cpuburn-arm/blob/master/cpufreq-ljt-stress-test
+
+And report the results
+
+Also, U-Boot sets the 1008MHz OPP by default, and the voltage to match.
+How is this going to play out on device tree where the CPU regulators
+aren't set?
 
 Maxime
