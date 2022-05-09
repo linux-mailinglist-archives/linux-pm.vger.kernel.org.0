@@ -2,393 +2,706 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3051F51F2BA
-	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 04:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6C751F2DB
+	for <lists+linux-pm@lfdr.de>; Mon,  9 May 2022 05:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232138AbiEIDAr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 8 May 2022 23:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
+        id S229925AbiEIDRq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 8 May 2022 23:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbiEIC5q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 8 May 2022 22:57:46 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F167719DF;
-        Sun,  8 May 2022 19:53:54 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id j6so9904564qkp.9;
-        Sun, 08 May 2022 19:53:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=LoAV4vKHtDWHYcjx/HccDNScwoaBWI78ZMg1Lhzn0Kc=;
-        b=AV0eCAcM4dwQEL2GYa+8ylnliPw/IllGlpfo370R8veFGqCZINAxqbvS7tANJ2s101
-         hqpowH7o2P1pFracXHKx/CFSSdKuDTQXovwowr4M2wabCy9szm+KmIlFL3q2XVP9aSFD
-         euwnuzZhA0WJTHPb7z/Uyl6lOIjxAQRO6XfiogAA1qmX/hRLF+RfjujPcVeU9N47JyqJ
-         OyE28U2bGJlE8aYPrC0FVFBZYKdD3vZwr6JNPThX8buSxKqGRR3MZbWEWSvMminsWp6l
-         xjgximImsPkhRHnAnBBDRdfAWOBekT+9n9Dd5qkxMLoEch5PPmEkKAUNCoElVpTo+Kkh
-         SPPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=LoAV4vKHtDWHYcjx/HccDNScwoaBWI78ZMg1Lhzn0Kc=;
-        b=FwCRDuNUoEwuNH7NZSQYW0sHGuw8WIWtlMynqG2PZfBVUVnUGWn3uffO7mCRqBSJXz
-         XKNoTXAbyrBXkhQNgpXBAd3IhC5n43qod/hooE8zL3eIwnGqvoEVnsdYEbIJblff5lwz
-         57Gq0VxORH8qO89YKC8kMkXqe/YzlogREcrMSitcjGkNfsl11/fJy96LsXeO7WyN2x1v
-         ebrXBGJjEK6T4E2jFdFtCkfGBxaHrmY2FvXeWu1JEiAJjlVmIbbVnwKzgkPbL3M1gaGM
-         Fr9CUQP11Sm3GuntB9PTepd1qGpdeDfSQ8Yj/FVVOOk3CW+ILrlsT/i33QETPDMgCce5
-         FMPQ==
-X-Gm-Message-State: AOAM533s2teMsVsoPXxU3a8QS5uT+zWp+X7PtTsvPi5xpaoA4zDLsYQ3
-        YWmOvNW4rE4Vinlg0rgfTjjnA6ENsGUrJBD/btU=
-X-Google-Smtp-Source: ABdhPJxcLQ/dM1ItCcc01DCsbquqlE4w8IbwGnFnYAlwRZQbOLCKc6tQdBjxm5j6pTgbELgQk1Va1n/i48Ro1zrORrM=
-X-Received: by 2002:a37:ad16:0:b0:6a0:1468:4513 with SMTP id
- f22-20020a37ad16000000b006a014684513mr10207672qkm.96.1652064833037; Sun, 08
- May 2022 19:53:53 -0700 (PDT)
+        with ESMTP id S232257AbiEIDOP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 8 May 2022 23:14:15 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94DB38E18B;
+        Sun,  8 May 2022 20:10:19 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2493A75b083668;
+        Sun, 8 May 2022 22:10:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1652065807;
+        bh=lbMzZ6Jl2+yMFL2ybAkxfceLgPzC/M89KeNBnVFzkG0=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=uhQ4hHorKf2NAVJPhvpXFohRdQno2xMQVAEuAt3aa7Rzxntt4FULzWpl6s+voLhky
+         fOQsPgaoQQ+w3z4kHkhjrMllxc2ZR1PS++UGBMvbW5VpXjhEkAkCwvbBXYS/YdXYGq
+         OfdTFALQfM7+D8jm2wz1QHdTgDU2MZ4AT8NWMP+k=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2493A78B059239
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sun, 8 May 2022 22:10:07 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Sun, 8
+ May 2022 22:10:07 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Sun, 8 May 2022 22:10:07 -0500
+Received: from [10.250.234.106] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2493A2Dg096241;
+        Sun, 8 May 2022 22:10:03 -0500
+Message-ID: <78a3cc4d-8ce4-0dae-2f4e-7522a0a3aa0b@ti.com>
+Date:   Mon, 9 May 2022 08:40:02 +0530
 MIME-Version: 1.0
-References: <20220425125546.4129-3-johnson.wang@mediatek.com>
- <202204271737.oAuTwqZH-lkp@intel.com> <a72b6333be0d8a2065477e47222c309a0d520fd4.camel@mediatek.com>
- <abc836d8-b7da-c9da-6936-567df7206ca5@intel.com> <CAGXv+5Hpcm12h0LNPaQ+svdtCa5AaMkC=qS8WaShWQc2oxQfJg@mail.gmail.com>
-In-Reply-To: <CAGXv+5Hpcm12h0LNPaQ+svdtCa5AaMkC=qS8WaShWQc2oxQfJg@mail.gmail.com>
-Reply-To: cwchoi00@gmail.com
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-Date:   Mon, 9 May 2022 11:53:16 +0900
-Message-ID: <CAGTfZH2Oc6ADQtFiNqa+R=rDPPrKAyEUw_9DY54trr7kU34_Rw@mail.gmail.com>
-Subject: Re: [kbuild-all] Re: [PATCH v3 2/2] PM / devfreq: mediatek: Introduce
- MediaTek CCI devfreq driver
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     "Chen, Rong A" <rong.a.chen@intel.com>,
-        Johnson Wang <johnson.wang@mediatek.com>,
-        kernel test robot <lkp@intel.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>, krzk+dt@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v6 4/4] thermal: k3_j72xx_bandgap: Add the bandgap driver
+ support
+Content-Language: en-US
+To:     <robh+dt@kernel.org>, <daniel.lezcano@linaro.org>,
+        <rui.zhang@intel.com>, <amitk@kernel.org>, <kristo@kernel.org>,
+        <vigneshr@ti.com>, <krzysztof.kozlowski@linaro.org>
+CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220427064635.24898-1-j-keerthy@ti.com>
+ <20220427064635.24898-5-j-keerthy@ti.com>
+From:   "J, KEERTHY" <j-keerthy@ti.com>
+In-Reply-To: <20220427064635.24898-5-j-keerthy@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Chen-Yu,
-
-On Mon, May 9, 2022 at 10:53 AM Chen-Yu Tsai <wenst@chromium.org> wrote:
->
-> On Thu, Apr 28, 2022 at 7:39 PM Chen, Rong A <rong.a.chen@intel.com> wrote:
-> > On 4/27/2022 6:11 PM, Johnson Wang wrote:
-> > > On Wed, 2022-04-27 at 17:25 +0800, kernel test robot wrote:
-> > >> Hi Johnson,
-> > >>
-> > >> Thank you for the patch! Perhaps something to improve:
-> > >>
-> > >> [auto build test WARNING on robh/for-next]
-> > >> [also build test WARNING on linus/master v5.18-rc4 next-20220427]
-> > >> [If your patch is applied to the wrong git tree, kindly drop us a
-> > >> note.
-> > >> And when submitting patch, we suggest to use '--base' as documented
-> > >> in
-> > >>
-> > > https://urldefense.com/v3/__https://git-scm.com/docs/git-format-patch__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMS_s9zEZ$
-> > >>   ]
-> > >>
-> > >> url:
-> > >> https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux/commits/Johnson-Wang/Introduce-MediaTek-CCI-devfreq-driver/20220425-205820__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMc1U_tqz$
-> > >>
-> > >> base:
-> > >> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMUzTprof$
-> > >>    for-next
-> > >> config: hexagon-allyesconfig (
-> > >> https://urldefense.com/v3/__https://download.01.org/0day-ci/archive/20220427/202204271737.oAuTwqZH-lkp@intel.com/config__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMaVRzbSL$
-> > >>   )
-> > >> compiler: clang version 15.0.0 (
-> > >> https://urldefense.com/v3/__https://github.com/llvm/llvm-project__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMRqw5IY-$
-> > >> $  1cddcfdc3c683b393df1a5c9063252eb60e52818)
-> > >> reproduce (this is a W=1 build):
-> > >>          wget
-> > >> https://urldefense.com/v3/__https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMQLiD-i9$
-> > >>    -O ~/bin/make.cross
-> > >>          chmod +x ~/bin/make.cross
-> > >>          #
-> > >> https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux/commit/98b34c0587837b0e5b880b11a52433f8f0eee19f__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMU5yd7Y2$
-> > >>
-> > >>          git remote add linux-review
-> > >> https://urldefense.com/v3/__https://github.com/intel-lab-lkp/linux__;!!CTRNKA9wMg0ARbw!wdyoWXNLBcYM97vMuNFQXZ9BaajEp-Kmh5-xrvU2Rlmb0o-b9tRvCD0cPzbLMW4ldtnH$
-> > >>
-> > >>          git fetch --no-tags linux-review Johnson-Wang/Introduce-
-> > >> MediaTek-CCI-devfreq-driver/20220425-205820
-> > >>          git checkout 98b34c0587837b0e5b880b11a52433f8f0eee19f
-> > >>          # save the config file
-> > >>          mkdir build_dir && cp config build_dir/.config
-> > >>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross
-> > >> W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash block/partitions/
-> > >> drivers/devfreq/ drivers/iio/imu/ drivers/misc/lkdtm/
-> > >>
-> > >> If you fix the issue, kindly add following tag as appropriate
-> > >> Reported-by: kernel test robot <lkp@intel.com>
-> > >>
-> > >> All warnings (new ones prefixed by >>):
-> > >>
-> > >>     drivers/devfreq/mtk-cci-devfreq.c:372:16: error: no member named
-> > >> 'parent_type' in 'struct devfreq_passive_data'
-> > >>             passive_data->parent_type = CPUFREQ_PARENT_DEV;
-> > >>             ~~~~~~~~~~~~  ^
-> > >>     drivers/devfreq/mtk-cci-devfreq.c:372:30: error: use of undeclared
-> > >> identifier 'CPUFREQ_PARENT_DEV'
-> > >>             passive_data->parent_type = CPUFREQ_PARENT_DEV;
-> > >>                                         ^
-> > >>>> drivers/devfreq/mtk-cci-devfreq.c:379:4: warning: format
-> > >>>> specifies type 'int' but the argument has type 'long' [-Wformat]
-> > >>
-> > >>                             PTR_ERR(drv->devfreq));
-> > >>                             ^~~~~~~~~~~~~~~~~~~~~
-> > >>     include/linux/dev_printk.h:144:65: note: expanded from macro
-> > >> 'dev_err'
-> > >>             dev_printk_index_wrap(_dev_err, KERN_ERR, dev,
-> > >> dev_fmt(fmt), ##__VA_ARGS__)
-> > >>                                                                    ~~~
-> > >>       ^~~~~~~~~~~
-> > >>     include/linux/dev_printk.h:110:23: note: expanded from macro
-> > >> 'dev_printk_index_wrap'
-> > >>                     _p_func(dev, fmt,
-> > >> ##__VA_ARGS__);                       \
-> > >>                                  ~~~    ^~~~~~~~~~~
-> > >>     1 warning and 2 errors generated.
-> > >>
-> > >>
-> > >> vim +379 drivers/devfreq/mtk-cci-devfreq.c
-> > >>
-> > >>     255
-> > >>     256      static int mtk_ccifreq_probe(struct platform_device
-> > >> *pdev)
-> > >>     257      {
-> > >>     258              struct device *dev = &pdev->dev;
-> > >>     259              struct mtk_ccifreq_drv *drv;
-> > >>     260              struct devfreq_passive_data *passive_data;
-> > >>     261              struct dev_pm_opp *opp;
-> > >>     262              unsigned long rate, opp_volt;
-> > >>     263              int ret;
-> > >>     264
-> > >>     265              drv = devm_kzalloc(dev, sizeof(*drv),
-> > >> GFP_KERNEL);
-> > >>     266              if (!drv)
-> > >>     267                      return -ENOMEM;
-> > >>     268
-> > >>     269              drv->dev = dev;
-> > >>     270              drv->soc_data = (const struct
-> > >> mtk_ccifreq_platform_data *)
-> > >>     271                                      of_device_get_match_dat
-> > >> a(&pdev->dev);
-> > >>     272              mutex_init(&drv->reg_lock);
-> > >>     273              platform_set_drvdata(pdev, drv);
-> > >>     274
-> > >>     275              drv->cci_clk = devm_clk_get(dev, "cci");
-> > >>     276              if (IS_ERR(drv->cci_clk)) {
-> > >>     277                      ret = PTR_ERR(drv->cci_clk);
-> > >>     278                      return dev_err_probe(dev, ret,
-> > >>     279                                           "failed to get cci
-> > >> clk: %d\n", ret);
-> > >>     280              }
-> > >>     281
-> > >>     282              drv->inter_clk = devm_clk_get(dev,
-> > >> "intermediate");
-> > >>     283              if (IS_ERR(drv->inter_clk)) {
-> > >>     284                      ret = PTR_ERR(drv->inter_clk);
-> > >>     285                      dev_err_probe(dev, ret,
-> > >>     286                                    "failed to get
-> > >> intermediate clk: %d\n", ret);
-> > >>     287                      goto out_free_resources;
-> > >>     288              }
-> > >>     289
-> > >>     290              drv->proc_reg =
-> > >> devm_regulator_get_optional(dev, "proc");
-> > >>     291              if (IS_ERR(drv->proc_reg)) {
-> > >>     292                      ret = PTR_ERR(drv->proc_reg);
-> > >>     293                      dev_err_probe(dev, ret,
-> > >>     294                                    "failed to get proc
-> > >> regulator: %d\n", ret);
-> > >>     295                      goto out_free_resources;
-> > >>     296              }
-> > >>     297
-> > >>     298              ret = regulator_enable(drv->proc_reg);
-> > >>     299              if (ret) {
-> > >>     300                      dev_err(dev, "failed to enable proc
-> > >> regulator\n");
-> > >>     301                      goto out_free_resources;
-> > >>     302              }
-> > >>     303
-> > >>     304              drv->sram_reg = regulator_get_optional(dev,
-> > >> "sram");
-> > >>     305              if (IS_ERR(drv->sram_reg))
-> > >>     306                      drv->sram_reg = NULL;
-> > >>     307              else {
-> > >>     308                      ret = regulator_enable(drv->sram_reg);
-> > >>     309                      if (ret) {
-> > >>     310                              dev_err(dev, "failed to enable
-> > >> sram regulator\n");
-> > >>     311                              goto out_free_resources;
-> > >>     312                      }
-> > >>     313              }
-> > >>     314
-> > >>     315              /*
-> > >>     316               * We assume min voltage is 0 and tracking
-> > >> target voltage using
-> > >>     317               * min_volt_shift for each iteration.
-> > >>     318               * The retry_max is 3 times of expeted
-> > >> iteration count.
-> > >>     319               */
-> > >>     320              drv->vtrack_max = 3 * DIV_ROUND_UP(max(drv-
-> > >>> soc_data->sram_max_volt,
-> > >>     321                                                     drv-
-> > >>> soc_data->proc_max_volt),
-> > >>     322                                                 drv-
-> > >>> soc_data->min_volt_shift);
-> > >>     323
-> > >>     324              ret = clk_prepare_enable(drv->cci_clk);
-> > >>     325              if (ret)
-> > >>     326                      goto out_free_resources;
-> > >>     327
-> > >>     328              ret = clk_prepare_enable(drv->inter_clk);
-> > >>     329              if (ret)
-> > >>     330                      goto out_disable_cci_clk;
-> > >>     331
-> > >>     332              ret = dev_pm_opp_of_add_table(dev);
-> > >>     333              if (ret) {
-> > >>     334                      dev_err(dev, "failed to add opp table:
-> > >> %d\n", ret);
-> > >>     335                      goto out_disable_inter_clk;
-> > >>     336              }
-> > >>     337
-> > >>     338              rate = clk_get_rate(drv->inter_clk);
-> > >>     339              opp = dev_pm_opp_find_freq_ceil(dev, &rate);
-> > >>     340              if (IS_ERR(opp)) {
-> > >>     341                      ret = PTR_ERR(opp);
-> > >>     342                      dev_err(dev, "failed to get
-> > >> intermediate opp: %d\n", ret);
-> > >>     343                      goto out_remove_opp_table;
-> > >>     344              }
-> > >>     345              drv->inter_voltage =
-> > >> dev_pm_opp_get_voltage(opp);
-> > >>     346              dev_pm_opp_put(opp);
-> > >>     347
-> > >>     348              rate = U32_MAX;
-> > >>     349              opp = dev_pm_opp_find_freq_floor(drv->dev,
-> > >> &rate);
-> > >>     350              if (IS_ERR(opp)) {
-> > >>     351                      dev_err(dev, "failed to get opp\n");
-> > >>     352                      ret = PTR_ERR(opp);
-> > >>     353                      goto out_remove_opp_table;
-> > >>     354              }
-> > >>     355
-> > >>     356              opp_volt = dev_pm_opp_get_voltage(opp);
-> > >>     357              dev_pm_opp_put(opp);
-> > >>     358              ret = mtk_ccifreq_set_voltage(drv, opp_volt);
-> > >>     359              if (ret) {
-> > >>     360                      dev_err(dev, "failed to scale to
-> > >> highest voltage %lu in proc_reg\n",
-> > >>     361                              opp_volt);
-> > >>     362                      goto out_remove_opp_table;
-> > >>     363              }
-> > >>     364
-> > >>     365              passive_data = devm_kzalloc(dev, sizeof(struct
-> > >> devfreq_passive_data),
-> > >>     366                                          GFP_KERNEL);
-> > >>     367              if (!passive_data) {
-> > >>     368                      ret = -ENOMEM;
-> > >>     369                      goto out_remove_opp_table;
-> > >>     370              }
-> > >>     371
-> > >>     372              passive_data->parent_type = CPUFREQ_PARENT_DEV;
-> > >>     373              drv->devfreq = devm_devfreq_add_device(dev,
-> > >> &mtk_ccifreq_profile,
-> > >>     374                                                     DEVFREQ_
-> > >> GOV_PASSIVE,
-> > >>     375                                                     passive_
-> > >> data);
-> > >>     376              if (IS_ERR(drv->devfreq)) {
-> > >>     377                      ret = -EPROBE_DEFER;
-> > >>     378                      dev_err(dev, "failed to add devfreq
-> > >> device: %d\n",
-> > >>   > 379                              PTR_ERR(drv->devfreq));
-> > >>     380                      goto out_remove_opp_table;
-> > >>     381              }
-> > >>     382
-> > >>     383              drv->opp_nb.notifier_call =
-> > >> mtk_ccifreq_opp_notifier;
-> > >>     384              ret = dev_pm_opp_register_notifier(dev, &drv-
-> > >>> opp_nb);
-> > >>     385              if (ret) {
-> > >>     386                      dev_err(dev, "failed to register opp
-> > >> notifier: %d\n", ret);
-> > >>     387                      goto out_remove_devfreq_device;
-> > >>     388              }
-> > >>     389              return 0;
-> > >>     390
-> > >>     391      out_remove_devfreq_device:
-> > >>     392              devm_devfreq_remove_device(dev, drv->devfreq);
-> > >>     393
-> > >>     394      out_remove_opp_table:
-> > >>     395              dev_pm_opp_of_remove_table(dev);
-> > >>     396
-> > >>     397      out_disable_inter_clk:
-> > >>     398              clk_disable_unprepare(drv->inter_clk);
-> > >>     399
-> > >>     400      out_disable_cci_clk:
-> > >>     401              clk_disable_unprepare(drv->cci_clk);
-> > >>     402
-> > >>     403      out_free_resources:
-> > >>     404              if (regulator_is_enabled(drv->proc_reg))
-> > >>     405                      regulator_disable(drv->proc_reg);
-> > >>     406              if (drv->sram_reg && regulator_is_enabled(drv-
-> > >>> sram_reg))
-> > >>     407                      regulator_disable(drv->sram_reg);
-> > >>     408
-> > >>     409              if (!IS_ERR(drv->proc_reg))
-> > >>     410                      regulator_put(drv->proc_reg);
-> > >>     411              if (!IS_ERR(drv->sram_reg))
-> > >>     412                      regulator_put(drv->sram_reg);
-> > >>     413              if (!IS_ERR(drv->cci_clk))
-> > >>     414                      clk_put(drv->cci_clk);
-> > >>     415              if (!IS_ERR(drv->inter_clk))
-> > >>     416                      clk_put(drv->inter_clk);
-> > >>     417
-> > >>     418              return ret;
-> > >>     419      }
-> > >>     420
-> > >>
-> > >
-> > > Hi "kernel test robot",
-> > >
-> > > Thanks for your review.
-> > >
-> > > This patch is based on chanwoo/devfreq-testing[1]
-> > > [1]
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing
-> >
-> > Hi Johnson,
-> >
-> > Thanks for the feedback, we'll take a look too.
->
-> I think the last patch on that branch might be broken.
-
-You mean the patch[1]. Without this patch[1], there are no problems?
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/commit/?h=devfreq-testing&id=ea1011fba665b95fc28f682c9b131799a88b11ae
-
-When you tested these patches with patchset[2] without last patch[1]
-if there are no problems, please reply to patchset[2] with your Tested-by tag.
-[2] https://patchwork.kernel.org/project/linux-pm/cover/20220507150145.531864-1-cw00.choi@samsung.com/
 
 
---
-Best Regards,
-Chanwoo Choi
+On 4/27/2022 12:16 PM, Keerthy wrote:
+> Add VTM thermal support. In the Voltage Thermal Management
+> Module(VTM), K3 J72XX supplies a voltage reference and a temperature
+> sensor feature that are gathered in the band gap voltage and
+> temperature sensor (VBGAPTS) module. The band gap provides current and
+> voltage reference for its internal circuits and other analog IP
+> blocks. The analog-to-digital converter (ADC) produces an output value
+> that is proportional to the silicon temperature.
+> 
+> Currently reading temperatures only is supported.  There are no
+> active/passive cooling agent supported.
+> 
+> J721e SoCs have errata i2128: https://www.ti.com/lit/pdf/sprz455
+> 
+> The VTM Temperature Monitors (TEMPSENSORs) are trimmed during production,
+> with the resulting values stored in software-readable registers. Software
+> should use these  register values when translating the Temperature
+> Monitor output codes to temperature values.
+> 
+> It has an involved workaround. Software needs to read the error codes for
+> -40C, 30C, 125C from the efuse for each device & derive a new look up table
+> for adc to temperature conversion. Involved calculating slopes & constants
+> using 3 different straight line equations with adc refernce codes as the
+> y-axis & error codes in the x-axis.
+> 
+> -40C to 30C
+> 30C to 125C
+> 125C to 150C
+> 
+> With the above 2 line equations we derive the full look-up table to
+> workaround the errata i2128 for j721e SoC.
+
+Hi Daniel,
+
+Any feedback on this series? Let me know.
+
+- Keerthy
+> 
+> Tested temperature reading on J721e SoC & J7200 SoC.
+> 
+> [daniel.lezcano@linaro.org: Generate look-up tables run-time]
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Signed-off-by: Keerthy <j-keerthy@ti.com>
+> ---
+>   drivers/thermal/Makefile           |   2 +-
+>   drivers/thermal/k3_j72xx_bandgap.c | 566 +++++++++++++++++++++++++++++
+>   2 files changed, 567 insertions(+), 1 deletion(-)
+>   create mode 100644 drivers/thermal/k3_j72xx_bandgap.c
+> 
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index f0c36a1530d5..def8e1a0399c 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -28,7 +28,7 @@ thermal_sys-$(CONFIG_CPU_IDLE_THERMAL)	+= cpuidle_cooling.o
+>   # devfreq cooling
+>   thermal_sys-$(CONFIG_DEVFREQ_THERMAL) += devfreq_cooling.o
+>   
+> -obj-$(CONFIG_K3_THERMAL)	+= k3_bandgap.o
+> +obj-$(CONFIG_K3_THERMAL)	+= k3_bandgap.o k3_j72xx_bandgap.o
+>   # platform thermal drivers
+>   obj-y				+= broadcom/
+>   obj-$(CONFIG_THERMAL_MMIO)		+= thermal_mmio.o
+> diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
+> new file mode 100644
+> index 000000000000..64e323158952
+> --- /dev/null
+> +++ b/drivers/thermal/k3_j72xx_bandgap.c
+> @@ -0,0 +1,566 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * TI Bandgap temperature sensor driver for J72XX SoC Family
+> + *
+> + * Copyright (C) 2021 Texas Instruments Incorporated - http://www.ti.com/
+> + */
+> +
+> +#include <linux/math.h>
+> +#include <linux/math64.h>
+> +#include <linux/module.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/err.h>
+> +#include <linux/types.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/io.h>
+> +#include <linux/thermal.h>
+> +#include <linux/of.h>
+> +#include <linux/delay.h>
+> +#include <linux/slab.h>
+> +
+> +#define K3_VTM_DEVINFO_PWR0_OFFSET		0x4
+> +#define K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK	0xf0
+> +#define K3_VTM_TMPSENS0_CTRL_OFFSET		0x300
+> +#define K3_VTM_MISC_CTRL_OFFSET			0xc
+> +#define K3_VTM_TMPSENS_STAT_OFFSET		0x8
+> +#define K3_VTM_ANYMAXT_OUTRG_ALERT_EN		0x1
+> +#define K3_VTM_MISC_CTRL2_OFFSET		0x10
+> +#define K3_VTM_TS_STAT_DTEMP_MASK		0x3ff
+> +#define K3_VTM_MAX_NUM_TS			8
+> +#define K3_VTM_TMPSENS_CTRL_SOC			BIT(5)
+> +#define K3_VTM_TMPSENS_CTRL_CLRZ		BIT(6)
+> +#define K3_VTM_TMPSENS_CTRL_CLKON_REQ		BIT(7)
+> +#define K3_VTM_TMPSENS_CTRL_MAXT_OUTRG_EN	BIT(11)
+> +
+> +#define K3_VTM_CORRECTION_TEMP_CNT		3
+> +
+> +#define MINUS40CREF				5
+> +#define PLUS30CREF				253
+> +#define PLUS125CREF				730
+> +#define PLUS150CREF				940
+> +
+> +#define TABLE_SIZE				1024
+> +#define MAX_TEMP				123000
+> +#define COOL_DOWN_TEMP				105000
+> +
+> +#define FACTORS_REDUCTION			13
+> +static int *derived_table;
+> +
+> +static int compute_value(int index, const s64 *factors, int nr_factors,
+> +			 int reduction)
+> +{
+> +	s64 value = 0;
+> +	int i;
+> +
+> +	for (i = 0; i < nr_factors; i++)
+> +		value += factors[i] * int_pow(index, i);
+> +
+> +	return (int)div64_s64(value, int_pow(10, reduction));
+> +}
+> +
+> +static void init_table(int factors_size, int *table, const s64 *factors)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < TABLE_SIZE; i++)
+> +		table[i] = compute_value(i, factors, factors_size,
+> +					 FACTORS_REDUCTION);
+> +}
+> +
+> +/**
+> + * struct err_values - structure containing error/reference values
+> + * @refs: reference error values for -40C, 30C, 125C & 150C
+> + * @errs: Actual error values for -40C, 30C, 125C & 150C read from the efuse
+> + */
+> +struct err_values {
+> +	int refs[4];
+> +	int errs[4];
+> +};
+> +
+> +static void create_table_segments(struct err_values *err_vals, int seg,
+> +				  int *ref_table)
+> +{
+> +	int m = 0, c, num, den, i, err, idx1, idx2, err1, err2, ref1, ref2;
+> +
+> +	if (seg == 0)
+> +		idx1 = 0;
+> +	else
+> +		idx1 = err_vals->refs[seg];
+> +
+> +	idx2 = err_vals->refs[seg + 1];
+> +	err1 = err_vals->errs[seg];
+> +	err2 = err_vals->errs[seg + 1];
+> +	ref1 = err_vals->refs[seg];
+> +	ref2 = err_vals->refs[seg + 1];
+> +
+> +	/*
+> +	 * Calculate the slope with adc values read from the register
+> +	 * as the y-axis param and err in adc value as x-axis param
+> +	 */
+> +	num = ref2 - ref1;
+> +	den = err2 - err1;
+> +	if (den)
+> +		m = num / den;
+> +	c = ref2 - m * err2;
+> +
+> +	/*
+> +	 * Take care of divide by zero error if error values are same
+> +	 * Or when the slope is 0
+> +	 */
+> +	if (den != 0 && m != 0) {
+> +		for (i = idx1; i <= idx2; i++) {
+> +			err = (i - c) / m;
+> +			if (((i + err) < 0) || ((i + err) >= TABLE_SIZE))
+> +				continue;
+> +			derived_table[i] = ref_table[i + err];
+> +		}
+> +	} else { /* Constant error take care of divide by zero */
+> +		for (i = idx1; i <= idx2; i++) {
+> +			if (((i + err1) < 0) || ((i + err1) >= TABLE_SIZE))
+> +				continue;
+> +			derived_table[i] = ref_table[i + err1];
+> +		}
+> +	}
+> +}
+> +
+> +static int prep_lookup_table(struct err_values *err_vals, int *ref_table)
+> +{
+> +	int inc, i, seg;
+> +
+> +	/*
+> +	 * Fill up the lookup table under 3 segments
+> +	 * region -40C to +30C
+> +	 * region +30C to +125C
+> +	 * region +125C to +150C
+> +	 */
+> +	for (seg = 0; seg < 3; seg++)
+> +		create_table_segments(err_vals, seg, ref_table);
+> +
+> +	/* Get to the first valid temperature */
+> +	i = 0;
+> +	while (!derived_table[i])
+> +		i++;
+> +
+> +	/*
+> +	 * Get to the last zero index and back fill the temperature for
+> +	 * sake of continuity
+> +	 */
+> +	if (i) {
+> +		/* 300 milli celsius steps */
+> +		while (i--)
+> +			derived_table[i] = derived_table[i + 1] - 300;
+> +		/* case 0 */
+> +		derived_table[i] = derived_table[i + 1] - 300;
+> +	}
+> +
+> +	/*
+> +	 * Fill the last trailing 0s which are unfilled with increments of
+> +	 * 100 milli celsius till 1023 code
+> +	 */
+> +	i = TABLE_SIZE - 1;
+> +	while (!derived_table[i])
+> +		i--;
+> +
+> +	i++;
+> +	inc = 1;
+> +	while (i < TABLE_SIZE) {
+> +		derived_table[i] = derived_table[i - 1] + inc * 100;
+> +		i++;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +struct k3_thermal_data;
+> +
+> +struct k3_j72xx_bandgap {
+> +	struct device *dev;
+> +	void __iomem *base;
+> +	void __iomem *cfg2_base;
+> +	void __iomem *fuse_base;
+> +	struct k3_thermal_data *ts_data[K3_VTM_MAX_NUM_TS];
+> +};
+> +
+> +/* common data structures */
+> +struct k3_thermal_data {
+> +	struct k3_j72xx_bandgap *bgp;
+> +	u32 ctrl_offset;
+> +	u32 stat_offset;
+> +};
+> +
+> +static int two_cmp(int tmp, int mask)
+> +{
+> +	tmp = ~(tmp);
+> +	tmp &= mask;
+> +	tmp += 1;
+> +
+> +	/* Return negative value */
+> +	return (0 - tmp);
+> +}
+> +
+> +static unsigned int vtm_get_best_value(unsigned int s0, unsigned int s1,
+> +				       unsigned int s2)
+> +{
+> +	int d01 = abs(s0 - s1);
+> +	int d02 = abs(s0 - s2);
+> +	int d12 = abs(s1 - s2);
+> +
+> +	if (d01 <= d02 && d01 <= d12)
+> +		return (s0 + s1) / 2;
+> +
+> +	if (d02 <= d01 && d02 <= d12)
+> +		return (s0 + s2) / 2;
+> +
+> +	return (s1 + s2) / 2;
+> +}
+> +
+> +static inline int k3_bgp_read_temp(struct k3_thermal_data *devdata,
+> +				   int *temp)
+> +{
+> +	struct k3_j72xx_bandgap *bgp;
+> +	unsigned int dtemp, s0, s1, s2;
+> +
+> +	bgp = devdata->bgp;
+> +	/*
+> +	 * Errata is applicable for am654 pg 1.0 silicon/J7ES. There
+> +	 * is a variation of the order for certain degree centigrade on AM654.
+> +	 * Work around that by getting the average of two closest
+> +	 * readings out of three readings everytime we want to
+> +	 * report temperatures.
+> +	 *
+> +	 * Errata workaround.
+> +	 */
+> +	s0 = readl(bgp->base + devdata->stat_offset) &
+> +		K3_VTM_TS_STAT_DTEMP_MASK;
+> +	s1 = readl(bgp->base + devdata->stat_offset) &
+> +		K3_VTM_TS_STAT_DTEMP_MASK;
+> +	s2 = readl(bgp->base + devdata->stat_offset) &
+> +		K3_VTM_TS_STAT_DTEMP_MASK;
+> +	dtemp = vtm_get_best_value(s0, s1, s2);
+> +
+> +	if (dtemp < 0 || dtemp >= TABLE_SIZE)
+> +		return -EINVAL;
+> +
+> +	*temp = derived_table[dtemp];
+> +
+> +	return 0;
+> +}
+> +
+> +/* Get temperature callback function for thermal zone */
+> +static int k3_thermal_get_temp(void *devdata, int *temp)
+> +{
+> +	struct k3_thermal_data *data = devdata;
+> +	int ret = 0;
+> +
+> +	ret = k3_bgp_read_temp(data, temp);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct thermal_zone_of_device_ops k3_of_thermal_ops = {
+> +	.get_temp = k3_thermal_get_temp,
+> +};
+> +
+> +static int k3_j72xx_bandgap_temp_to_adc_code(int temp)
+> +{
+> +	int low = 0, high = TABLE_SIZE - 1, mid;
+> +
+> +	if (temp > 160000 || temp < -50000)
+> +		return -EINVAL;
+> +
+> +	/* Binary search to find the adc code */
+> +	while (low < (high - 1)) {
+> +		mid = (low + high) / 2;
+> +		if (temp <= derived_table[mid])
+> +			high = mid;
+> +		else
+> +			low = mid;
+> +	}
+> +
+> +	return mid;
+> +}
+> +
+> +static void get_efuse_values(int id, struct k3_thermal_data *data, int *err,
+> +			     struct k3_j72xx_bandgap *bgp)
+> +{
+> +	int i, tmp, pow;
+> +	int ct_offsets[5][K3_VTM_CORRECTION_TEMP_CNT] = {
+> +		{ 0x0, 0x8, 0x4 },
+> +		{ 0x0, 0x8, 0x4 },
+> +		{ 0x0, -1,  0x4 },
+> +		{ 0x0, 0xC, -1 },
+> +		{ 0x0, 0xc, 0x8 }
+> +	};
+> +	int ct_bm[5][K3_VTM_CORRECTION_TEMP_CNT] = {
+> +		{ 0x3f, 0x1fe000, 0x1ff },
+> +		{ 0xfc0, 0x1fe000, 0x3fe00 },
+> +		{ 0x3f000, 0x7f800000, 0x7fc0000 },
+> +		{ 0xfc0000, 0x1fe0, 0x1f800000 },
+> +		{ 0x3f000000, 0x1fe000, 0x1ff0 }
+> +	};
+> +
+> +	for (i = 0; i < 3; i++) {
+> +		/* Extract the offset value using bit-mask */
+> +		if (ct_offsets[id][i] == -1 && i == 1) {
+> +			/* 25C offset Case of Sensor 2 split between 2 regs */
+> +			tmp = (readl(bgp->fuse_base + 0x8) & 0xE0000000) >> (29);
+> +			tmp |= ((readl(bgp->fuse_base + 0xC) & 0x1F) << 3);
+> +			pow = tmp & 0x80;
+> +		} else if (ct_offsets[id][i] == -1 && i == 2) {
+> +			/* 125C Case of Sensor 3 split between 2 regs */
+> +			tmp = (readl(bgp->fuse_base + 0x4) & 0xF8000000) >> (27);
+> +			tmp |= ((readl(bgp->fuse_base + 0x8) & 0xF) << 5);
+> +			pow = tmp & 0x100;
+> +		} else {
+> +			tmp = readl(bgp->fuse_base + ct_offsets[id][i]);
+> +			tmp &= ct_bm[id][i];
+> +			tmp = tmp >> __ffs(ct_bm[id][i]);
+> +
+> +			/* Obtain the sign bit pow*/
+> +			pow = ct_bm[id][i] >> __ffs(ct_bm[id][i]);
+> +			pow += 1;
+> +			pow /= 2;
+> +		}
+> +
+> +		/* Check for negative value */
+> +		if (tmp & pow) {
+> +			/* 2's complement value */
+> +			tmp = two_cmp(tmp, ct_bm[id][i] >> __ffs(ct_bm[id][i]));
+> +		}
+> +		err[i] = tmp;
+> +	}
+> +
+> +	/* Err value for 150C is set to 0 */
+> +	err[i] = 0;
+> +}
+> +
+> +static void print_look_up_table(struct device *dev, int *ref_table)
+> +{
+> +	int i;
+> +
+> +	dev_dbg(dev, "The contents of derived array\n");
+> +	dev_dbg(dev, "Code   Temperature\n");
+> +	for (i = 0; i < TABLE_SIZE; i++)
+> +		dev_dbg(dev, "%d       %d %d\n", i, derived_table[i], ref_table[i]);
+> +}
+> +
+> +struct k3_j72xx_bandgap_data {
+> +	unsigned int has_errata_i2128;
+> +};
+> +
+> +static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
+> +{
+> +	int ret = 0, cnt, val, id;
+> +	int high_max, low_temp;
+> +	struct resource *res;
+> +	struct device *dev = &pdev->dev;
+> +	struct k3_j72xx_bandgap *bgp;
+> +	struct k3_thermal_data *data;
+> +	int workaround_needed = 0;
+> +	const struct k3_j72xx_bandgap_data *driver_data;
+> +	struct thermal_zone_device *ti_thermal;
+> +	int *ref_table;
+> +	struct err_values err_vals;
+> +
+> +	const s64 golden_factors[] = {
+> +		-490019999999999936,
+> +		3251200000000000,
+> +		-1705800000000,
+> +		603730000,
+> +		-92627,
+> +	};
+> +
+> +	const s64 pvt_wa_factors[] = {
+> +		-415230000000000000,
+> +		3126600000000000,
+> +		-1157800000000,
+> +	};
+> +
+> +	bgp = devm_kzalloc(&pdev->dev, sizeof(*bgp), GFP_KERNEL);
+> +	if (!bgp)
+> +		return -ENOMEM;
+> +
+> +	bgp->dev = dev;
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	bgp->base = devm_ioremap_resource(dev, res);
+> +	if (IS_ERR(bgp->base))
+> +		return PTR_ERR(bgp->base);
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+> +	bgp->cfg2_base = devm_ioremap_resource(dev, res);
+> +	if (IS_ERR(bgp->cfg2_base))
+> +		return PTR_ERR(bgp->cfg2_base);
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 2);
+> +	bgp->fuse_base = devm_ioremap_resource(dev, res);
+> +	if (IS_ERR(bgp->fuse_base))
+> +		return PTR_ERR(bgp->fuse_base);
+> +
+> +	driver_data = of_device_get_match_data(dev);
+> +	if (driver_data)
+> +		workaround_needed = driver_data->has_errata_i2128;
+> +
+> +	pm_runtime_enable(dev);
+> +	ret = pm_runtime_get_sync(dev);
+> +	if (ret < 0) {
+> +		pm_runtime_put_noidle(dev);
+> +		pm_runtime_disable(dev);
+> +		return ret;
+> +	}
+> +
+> +	/* Get the sensor count in the VTM */
+> +	val = readl(bgp->base + K3_VTM_DEVINFO_PWR0_OFFSET);
+> +	cnt = val & K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK;
+> +	cnt >>= __ffs(K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK);
+> +
+> +	data = devm_kcalloc(bgp->dev, cnt, sizeof(*data), GFP_KERNEL);
+> +	if (!data) {
+> +		ret = -ENOMEM;
+> +		goto err_alloc;
+> +	}
+> +
+> +	ref_table = kzalloc(sizeof(*ref_table) * TABLE_SIZE, GFP_KERNEL);
+> +	if (!ref_table) {
+> +		ret = -ENOMEM;
+> +		goto err_alloc;
+> +	}
+> +
+> +	derived_table = devm_kzalloc(bgp->dev, sizeof(*derived_table) * TABLE_SIZE,
+> +				     GFP_KERNEL);
+> +	if (!derived_table) {
+> +		ret = -ENOMEM;
+> +		goto err_alloc;
+> +	}
+> +
+> +	/* Workaround not needed if bit30/bit31 is set even for J721e */
+> +	if (workaround_needed && (readl(bgp->fuse_base + 0x0) & 0xc0000000) == 0xc0000000)
+> +		workaround_needed = false;
+> +
+> +	dev_dbg(bgp->dev, "Work around %sneeded\n",
+> +		workaround_needed ? "not " : "");
+> +
+> +	if (!workaround_needed)
+> +		init_table(5, ref_table, golden_factors);
+> +	else
+> +		init_table(3, ref_table, pvt_wa_factors);
+> +
+> +	/* Register the thermal sensors */
+> +	for (id = 0; id < cnt; id++) {
+> +		data[id].bgp = bgp;
+> +		data[id].ctrl_offset = K3_VTM_TMPSENS0_CTRL_OFFSET + id * 0x20;
+> +		data[id].stat_offset = data[id].ctrl_offset +
+> +					K3_VTM_TMPSENS_STAT_OFFSET;
+> +
+> +		if (workaround_needed) {
+> +			/* ref adc values for -40C, 30C & 125C respectively */
+> +			err_vals.refs[0] = MINUS40CREF;
+> +			err_vals.refs[1] = PLUS30CREF;
+> +			err_vals.refs[2] = PLUS125CREF;
+> +			err_vals.refs[3] = PLUS150CREF;
+> +			get_efuse_values(id, &data[id], err_vals.errs, bgp);
+> +		}
+> +
+> +		if (id == 0 && workaround_needed)
+> +			prep_lookup_table(&err_vals, ref_table);
+> +		else if (id == 0 && !workaround_needed)
+> +			memcpy(derived_table, ref_table, TABLE_SIZE * 4);
+> +
+> +		val = readl(data[id].bgp->cfg2_base + data[id].ctrl_offset);
+> +		val |= (K3_VTM_TMPSENS_CTRL_MAXT_OUTRG_EN |
+> +			K3_VTM_TMPSENS_CTRL_SOC |
+> +			K3_VTM_TMPSENS_CTRL_CLRZ | BIT(4));
+> +		writel(val, data[id].bgp->cfg2_base + data[id].ctrl_offset);
+> +
+> +		bgp->ts_data[id] = &data[id];
+> +		ti_thermal =
+> +		devm_thermal_zone_of_sensor_register(bgp->dev, id,
+> +						     &data[id],
+> +						     &k3_of_thermal_ops);
+> +		if (IS_ERR(ti_thermal)) {
+> +			dev_err(bgp->dev, "thermal zone device is NULL\n");
+> +			ret = PTR_ERR(ti_thermal);
+> +			goto err_alloc;
+> +		}
+> +	}
+> +
+> +	/*
+> +	 * Program TSHUT thresholds
+> +	 * Step 1: set the thresholds to ~123C and 105C WKUP_VTM_MISC_CTRL2
+> +	 * Step 2: WKUP_VTM_TMPSENS_CTRL_j set the MAXT_OUTRG_EN  bit
+> +	 *         This is already taken care as per of init
+> +	 * Step 3: WKUP_VTM_MISC_CTRL set the ANYMAXT_OUTRG_ALERT_EN  bit
+> +	 */
+> +	high_max = k3_j72xx_bandgap_temp_to_adc_code(MAX_TEMP);
+> +	low_temp = k3_j72xx_bandgap_temp_to_adc_code(COOL_DOWN_TEMP);
+> +
+> +	writel((low_temp << 16) | high_max, data[0].bgp->cfg2_base +
+> +	       K3_VTM_MISC_CTRL2_OFFSET);
+> +	mdelay(100);
+> +	writel(K3_VTM_ANYMAXT_OUTRG_ALERT_EN, data[0].bgp->cfg2_base +
+> +	       K3_VTM_MISC_CTRL_OFFSET);
+> +
+> +	platform_set_drvdata(pdev, bgp);
+> +
+> +	print_look_up_table(dev, ref_table);
+> +	/*
+> +	 * Now that the derived_table has the appropriate look up values
+> +	 * Free up the ref_table
+> +	 */
+> +	kfree(ref_table);
+> +
+> +	return 0;
+> +
+> +err_alloc:
+> +	pm_runtime_put_sync(&pdev->dev);
+> +	pm_runtime_disable(&pdev->dev);
+> +
+> +	return ret;
+> +}
+> +
+> +static int k3_j72xx_bandgap_remove(struct platform_device *pdev)
+> +{
+> +	pm_runtime_put_sync(&pdev->dev);
+> +	pm_runtime_disable(&pdev->dev);
+> +
+> +	return 0;
+> +}
+> +
+> +const struct k3_j72xx_bandgap_data k3_j72xx_bandgap_j721e_data = {
+> +	.has_errata_i2128 = 1,
+> +};
+> +
+> +const struct k3_j72xx_bandgap_data k3_j72xx_bandgap_j7200_data = {
+> +	.has_errata_i2128 = 0,
+> +};
+> +
+> +static const struct of_device_id of_k3_j72xx_bandgap_match[] = {
+> +	{
+> +		.compatible = "ti,j721e-vtm",
+> +		.data = &k3_j72xx_bandgap_j721e_data,
+> +	},
+> +	{
+> +		.compatible = "ti,j7200-vtm",
+> +		.data = &k3_j72xx_bandgap_j7200_data,
+> +	},
+> +	{ /* sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, of_k3_j72xx_bandgap_match);
+> +
+> +static struct platform_driver k3_j72xx_bandgap_sensor_driver = {
+> +	.probe = k3_j72xx_bandgap_probe,
+> +	.remove = k3_j72xx_bandgap_remove,
+> +	.driver = {
+> +		.name = "k3-j72xx-soc-thermal",
+> +		.of_match_table	= of_k3_j72xx_bandgap_match,
+> +	},
+> +};
+> +
+> +module_platform_driver(k3_j72xx_bandgap_sensor_driver);
+> +
+> +MODULE_DESCRIPTION("K3 bandgap temperature sensor driver");
+> +MODULE_LICENSE("GPL");
+> +MODULE_AUTHOR("J Keerthy <j-keerthy@ti.com>");
