@@ -2,175 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38EDE522171
-	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 18:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DB3A522226
+	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 19:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245440AbiEJQor (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 May 2022 12:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41066 "EHLO
+        id S244233AbiEJRWM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 May 2022 13:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345425AbiEJQoq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 May 2022 12:44:46 -0400
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9A81D1;
-        Tue, 10 May 2022 09:40:46 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id w187so31737721ybe.2;
-        Tue, 10 May 2022 09:40:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HGoPv6W6CM1DO2fVfWosWDd56IU/7LHJWw4c0lAvJA4=;
-        b=yvBxknRisfq9swtcJocG9WwgmwooxJe6idDXOi2tI8fOyvot1EKmcFjT0dNEhVZp5n
-         E3LjGBZMcNHU3/WJowDxKT+B2en26WHwCa2F0FiTMWRbl1X55Z2lFXrZ/eThuNIopJwj
-         OfEC9vSZKYXVmTFe0ecTzlGIoZHW0Eb/rdWuTYvsXBFxqoaLwqrrOxVgCny4JJBt3dU6
-         f23mg5ew95hLH7ADPwqwkFbAP1+fIuevRj7BIeT9UrYtNmKroaVMrr5GkTYpXBEtYWRt
-         VqFNTe0J7wzR25YK217KAHOb1zDsLMrJbEsuy/pm8hEtXAoZEun2CYIpWEGllovRZM4l
-         saug==
-X-Gm-Message-State: AOAM532n3Erpei054ayZqrj/QtkyEcjCtwYAU0EeUwhz+pkuJpV3c/aI
-        9zK6GwmFGRdJmVj6UjlCCvl5lZqFN11N5Q2HGHY=
-X-Google-Smtp-Source: ABdhPJzt3lisSBKrlknwiaLfEFImDorjTjrExik21oVqLt+AIUyKLfyONbcQGpvGYBEJhAuq1ttlOmXUi1pCjBPmYjQ=
-X-Received: by 2002:a25:da84:0:b0:648:423e:57b0 with SMTP id
- n126-20020a25da84000000b00648423e57b0mr18644611ybf.137.1652200845998; Tue, 10
- May 2022 09:40:45 -0700 (PDT)
+        with ESMTP id S243692AbiEJRWL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 May 2022 13:22:11 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7643222C35;
+        Tue, 10 May 2022 10:18:11 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24AHI6oZ079593;
+        Tue, 10 May 2022 12:18:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1652203086;
+        bh=vG8qH7Id0KatZxxnzh45gjQie9mxliK6XF0aBz5/SDc=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=i+M2nbjyMujhQv1B9XR/zfYyfNw05HiP4ulC4MND6fiRM3MkqvI49HugvmEh+afG8
+         T9Z/viFLg9IGt6OwlPNnqq1AH+cJ/ld8Yl4EoeSCdEI+x0oXefOfXWk/e2v3O0I24+
+         MiOfkT3mJUNx7FzVw6TjNatoo/oGUZiHzsNSw5/s=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24AHI66F024926
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 10 May 2022 12:18:06 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 10
+ May 2022 12:18:04 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 10 May 2022 12:18:04 -0500
+Received: from [10.250.234.179] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24AHI0TQ063624;
+        Tue, 10 May 2022 12:18:01 -0500
+Message-ID: <ffafc50e-9adb-9d66-3d1f-4ebc9f91f47d@ti.com>
+Date:   Tue, 10 May 2022 22:47:59 +0530
 MIME-Version: 1.0
-References: <20220506122052.659129-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20220506122052.659129-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 10 May 2022 18:40:34 +0200
-Message-ID: <CAJZ5v0h5ZvB2yQz3m5Z149jCMvNhzwt_a76tm5bVK8VzC5YY9A@mail.gmail.com>
-Subject: Re: [PATCH] thermal: int340x: Mode setting with new OS handshake
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v6 4/4] thermal: k3_j72xx_bandgap: Add the bandgap driver
+ support
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, <robh+dt@kernel.org>,
+        <rui.zhang@intel.com>, <amitk@kernel.org>, <kristo@kernel.org>,
+        <vigneshr@ti.com>, <krzysztof.kozlowski@linaro.org>
+CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220427064635.24898-1-j-keerthy@ti.com>
+ <20220427064635.24898-5-j-keerthy@ti.com>
+ <78a3cc4d-8ce4-0dae-2f4e-7522a0a3aa0b@ti.com>
+ <d94ea6b0-e138-951d-5405-375255104adb@linaro.org>
+From:   "J, KEERTHY" <j-keerthy@ti.com>
+In-Reply-To: <d94ea6b0-e138-951d-5405-375255104adb@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 6, 2022 at 2:21 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> With the new OS handshake introduced with the commit: "c7ff29763989
-> ("thermal: int340x: Update OS policy capability handshake")",
-> thermal zone mode "enabled" doesn't work in the same way as the legacy
-> handshake. The mode "enabled" fails with -EINVAL using new handshake.
->
-> To address this issue, when the new OS UUID mask is set:
-> - When mode is "enabled", return 0 as the firmware already has the
-> latest policy mask.
-> - When mode is "disabled", update the firmware with UUID mask of zero.
-> In this way firmware can take control of the thermal control. Also
-> reset the OS UUID mask. This allows user space to update with new
-> set of policies.
->
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: stable@vger.kernel.org
 
-It would be good to have a Fixes tag for this one.
 
-> ---
->  .../intel/int340x_thermal/int3400_thermal.c   | 48 ++++++++++++-------
->  1 file changed, 32 insertions(+), 16 deletions(-)
->
-> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> index d97f496bab9b..1061728ad5a9 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> @@ -194,12 +194,31 @@ static int int3400_thermal_run_osc(acpi_handle handle, char *uuid_str, int *enab
->         return result;
->  }
->
-> +static int set_os_uuid_mask(struct int3400_thermal_priv *priv, u32 mask)
-> +{
-> +       int cap = 0;
-> +
-> +       /*
-> +        * Capability bits:
-> +        * Bit 0: set to 1 to indicate DPTF is active
-> +        * Bi1 1: set to 1 to active cooling is supported by user space daemon
-> +        * Bit 2: set to 1 to passive cooling is supported by user space daemon
-> +        * Bit 3: set to 1 to critical trip is handled by user space daemon
-> +        */
-> +       if (mask)
-> +               cap = ((priv->os_uuid_mask << 1) | 0x01);
-> +
-> +       return int3400_thermal_run_osc(priv->adev->handle,
-> +                                      "b23ba85d-c8b7-3542-88de-8de2ffcfd698",
-> +                                      &cap);
-> +}
-> +
->  static ssize_t current_uuid_store(struct device *dev,
->                                   struct device_attribute *attr,
->                                   const char *buf, size_t count)
->  {
->         struct int3400_thermal_priv *priv = dev_get_drvdata(dev);
-> -       int i;
-> +       int ret, i;
->
->         for (i = 0; i < INT3400_THERMAL_MAXIMUM_UUID; ++i) {
->                 if (!strncmp(buf, int3400_thermal_uuids[i],
-> @@ -231,19 +250,7 @@ static ssize_t current_uuid_store(struct device *dev,
->         }
->
->         if (priv->os_uuid_mask) {
-> -               int cap, ret;
-> -
-> -               /*
-> -                * Capability bits:
-> -                * Bit 0: set to 1 to indicate DPTF is active
-> -                * Bi1 1: set to 1 to active cooling is supported by user space daemon
-> -                * Bit 2: set to 1 to passive cooling is supported by user space daemon
-> -                * Bit 3: set to 1 to critical trip is handled by user space daemon
-> -                */
-> -               cap = ((priv->os_uuid_mask << 1) | 0x01);
-> -               ret = int3400_thermal_run_osc(priv->adev->handle,
-> -                                             "b23ba85d-c8b7-3542-88de-8de2ffcfd698",
-> -                                             &cap);
-> +               ret = set_os_uuid_mask(priv, priv->os_uuid_mask);
->                 if (ret)
->                         return ret;
->         }
-> @@ -469,17 +476,26 @@ static int int3400_thermal_change_mode(struct thermal_zone_device *thermal,
->         if (mode != thermal->mode) {
->                 int enabled;
->
-> +               enabled = (mode == THERMAL_DEVICE_ENABLED);
-> +
-> +               if (priv->os_uuid_mask) {
-> +                       if (!enabled) {
-> +                               priv->os_uuid_mask = 0;
-> +                               result = set_os_uuid_mask(priv, priv->os_uuid_mask);
-> +                       }
-> +                       goto eval_odvp;
-> +               }
-> +
->                 if (priv->current_uuid_index < 0 ||
->                     priv->current_uuid_index >= INT3400_THERMAL_MAXIMUM_UUID)
->                         return -EINVAL;
->
-> -               enabled = (mode == THERMAL_DEVICE_ENABLED);
->                 result = int3400_thermal_run_osc(priv->adev->handle,
->                                                  int3400_thermal_uuids[priv->current_uuid_index],
->                                                  &enabled);
->         }
->
-> -
-> +eval_odvp:
->         evaluate_odvp(priv);
->
->         return result;
-> --
-> 2.31.1
->
+On 5/10/2022 8:55 PM, Daniel Lezcano wrote:
+> On 09/05/2022 05:10, J, KEERTHY wrote:
+>>
+>>
+>> On 4/27/2022 12:16 PM, Keerthy wrote:
+>>> Add VTM thermal support. In the Voltage Thermal Management
+>>> Module(VTM), K3 J72XX supplies a voltage reference and a temperature
+>>> sensor feature that are gathered in the band gap voltage and
+>>> temperature sensor (VBGAPTS) module. The band gap provides current and
+>>> voltage reference for its internal circuits and other analog IP
+>>> blocks. The analog-to-digital converter (ADC) produces an output value
+>>> that is proportional to the silicon temperature.
+>>>
+>>> Currently reading temperatures only is supported.  There are no
+>>> active/passive cooling agent supported.
+>>>
+>>> J721e SoCs have errata i2128: https://www.ti.com/lit/pdf/sprz455
+>>>
+>>> The VTM Temperature Monitors (TEMPSENSORs) are trimmed during 
+>>> production,
+>>> with the resulting values stored in software-readable registers. 
+>>> Software
+>>> should use these  register values when translating the Temperature
+>>> Monitor output codes to temperature values.
+>>>
+>>> It has an involved workaround. Software needs to read the error codes 
+>>> for
+>>> -40C, 30C, 125C from the efuse for each device & derive a new look up 
+>>> table
+>>> for adc to temperature conversion. Involved calculating slopes & 
+>>> constants
+>>> using 3 different straight line equations with adc refernce codes as the
+>>> y-axis & error codes in the x-axis.
+>>>
+>>> -40C to 30C
+>>> 30C to 125C
+>>> 125C to 150C
+>>>
+>>> With the above 2 line equations we derive the full look-up table to
+>>> workaround the errata i2128 for j721e SoC.
+>>
+>> Hi Daniel,
+>>
+>> Any feedback on this series? Let me know.
+> 
+> There are a few but that would be nit picking and I don't want to 
+> postpone this driver any longer.
+> 
+> How do you want to proceed? Shall I take it through my tree?
+
+Hi Daniel,
+
+Patch 1 & 4 i.e Documentation patch and driver patch can be picked by 
+you. I believe Vignesh will take the dts patches.
+
+Vignesh,
+
+Can you confirm?
+
+- Keerthy
+
+> 
+> 
