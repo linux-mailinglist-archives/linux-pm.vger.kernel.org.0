@@ -2,158 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66CFD5212A5
-	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 12:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0877C5213FC
+	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 13:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240146AbiEJKwv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 May 2022 06:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
+        id S241120AbiEJLml (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 May 2022 07:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240080AbiEJKwh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 May 2022 06:52:37 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBD22ABBCC
-        for <linux-pm@vger.kernel.org>; Tue, 10 May 2022 03:48:33 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id c1-20020a17090a558100b001dca2694f23so1803643pji.3
-        for <linux-pm@vger.kernel.org>; Tue, 10 May 2022 03:48:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=RmY4Du8Nvs6alfFWh2qW6nu7nxQ97kHdJXS5k70cTzM=;
-        b=mQUU2+FT2dewytO9DkfnAAUXtO2FlX1UQdIbMzpbwFTCky3d0NkWMyGmEIQr1M9DcM
-         Yr5Lsrem0pJMIncRUwS+UcbsOGDJKD5IDOT4c1phP7yhqtDbf0i25AJYtrhS+2cild6G
-         y2iRpEpuIu4lNuK7IvFAARXHwtCS7aUTFJQe/B7SojXRX8KaIVuXV8ZSfY+QELJ6WuIt
-         rwj90Y8zXuZmwQMleLH129JidMEJJZ/GlIzfgYjT8JbVuon8DJ+GWUl0bEqFu9+7s4bQ
-         dtNON1w4zT75pJxY/N62jvtcPcI5VW95Imd22nRVJtT9JWZd8O10Oo6qCck19vVhoY/X
-         FWxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=RmY4Du8Nvs6alfFWh2qW6nu7nxQ97kHdJXS5k70cTzM=;
-        b=dje7qus2Zwk9AoU4IMmpoRoGt5lbJuYvtGtWibCPs/QlGenvsPOxb+4XwlcY+2NNfw
-         9YwArvJpfWhaPM11ntGLPuPUZrgpCvBgtY0H075PuH5kbJSQ6suwqdEIqizFFi5uvI1G
-         1/pguffjGcM2qvFbZ+fXHti3Dvy3tdDwgrVfyDs0HhIMwX7Q+DG55gS+D02TBh14avkZ
-         wpCUYKPiU0z/8sjYJoOwqJ365VS/upKV4qwaaCv9T2SBEGzLpEnjTajxxwhl0DCzpZQ3
-         73Pr8UiLl9X8m09G9PMS940pev3fousL5743eY3fY4Hts1xmKd9PNZZ+V2d4RryvBg6u
-         l7yA==
-X-Gm-Message-State: AOAM5313sAlBZwuBv9aZT8Kgc5kUYEedm4nbNC+QPFd7FX3AAl3G5+hb
-        aW451wTXIaWJO81Nj7fBwC1kIA==
-X-Google-Smtp-Source: ABdhPJyEtOk7xXU1y6Nwx5GmD7oXKSBW2mXf4MS1xj4V4mEtVu7N+Bmg6G/uyXGRzvvV90CdInXG0A==
-X-Received: by 2002:a17:902:ea53:b0:15b:1bb8:ac9e with SMTP id r19-20020a170902ea5300b0015b1bb8ac9emr19596767plg.45.1652179712814;
-        Tue, 10 May 2022 03:48:32 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id x7-20020a170902b40700b0015e8d4eb258sm1643400plr.162.2022.05.10.03.48.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 03:48:32 -0700 (PDT)
-Message-ID: <627a4300.1c69fb81.264dd.3fc6@mx.google.com>
-Date:   Tue, 10 May 2022 03:48:32 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S241118AbiEJLmk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 May 2022 07:42:40 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FBBC24DC00;
+        Tue, 10 May 2022 04:38:43 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id E7BCB21C07;
+        Tue, 10 May 2022 11:38:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652182721; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QjxQbnD6WUcAB5XSGPbhgiXq5Z1nB8h07eo4ZkZ4QC8=;
+        b=ux1OKlKPpQAZrqb3VSx/+cdnKv+z0GMrb7Vrl4wT7av9mwtdsYHmGTFl15YLILBNoNipDu
+        zhzvyNUQ0tVf4I8bosAIddNvm3hk9CLYxTFt2W7RQIuTrmM1G9742/mw3JpxDF9W//N0xh
+        4YsR4kO61TX2TGUrgE/V7TAnZzSnJsg=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id F0AB42C141;
+        Tue, 10 May 2022 11:38:39 +0000 (UTC)
+Date:   Tue, 10 May 2022 13:38:39 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Evan Green <evgreen@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
+        kexec@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de,
+        Kees Cook <keescook@chromium.org>, luto@kernel.org,
+        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
+        peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, Alan Stern <stern@rowland.harvard.edu>,
+        Thomas Gleixner <tglx@linutronix.de>, vgoyal@redhat.com,
+        vkuznets@redhat.com, Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        David Gow <davidgow@google.com>,
+        Julius Werner <jwerner@chromium.org>
+Subject: Re: [PATCH 04/30] firmware: google: Convert regular spinlock into
+ trylock on panic path
+Message-ID: <YnpOv4hAPV4b+6v4@alley>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-5-gpiccoli@igalia.com>
+ <CAE=gft5Pq25L4KFoPWbftkPF-JN1ex2yws77mMJ4GQnn9W0L2g@mail.gmail.com>
+ <adcf6d0e-c37c-6ede-479e-29959d03d8c0@igalia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v5.18-rc6-113-g96a231dae3ae
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (v5.18-rc6-113-g96a231dae3ae)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <adcf6d0e-c37c-6ede-479e-29959d03d8c0@igalia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.18-rc6-113-g9=
-6a231dae3ae)
+On Tue 2022-05-03 16:12:09, Guilherme G. Piccoli wrote:
+> On 03/05/2022 15:03, Evan Green wrote:
+> > [...]
+> > gsmi_shutdown_reason() is a common function called in other scenarios
+> > as well, like reboot and thermal trip, where it may still make sense
+> > to wait to acquire a spinlock. Maybe we should add a parameter to
+> > gsmi_shutdown_reason() so that you can get your change on panic, but
+> > we don't convert other callbacks into try-fail scenarios causing us to
+> > miss logs.
+> > 
+> 
+> Hi Evan, thanks for your feedback, much appreciated!
+> What I've done in other cases like this was to have a helper checking
+> the spinlock in the panic notifier - if we can acquire that, go ahead
+> but if not, bail out. For a proper example of an implementation, check
+> patch 13 of the series:
+> https://lore.kernel.org/lkml/20220427224924.592546-14-gpiccoli@igalia.com/ .
+> 
+> Do you agree with that, or prefer really a parameter in
+> gsmi_shutdown_reason() ? I'll follow your choice =)
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-18-rc6-113-g96a231dae3ae/
+I see two more alternative solutions:
 
-Tree: pm
-Branch: testing
-Git Describe: v5.18-rc6-113-g96a231dae3ae
-Git Commit: 96a231dae3ae94ca45a8788eebc11cd68a5b906b
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+1st variant is a trick already used in console write() callbacks.
+They do trylock() when oops_in_progress is set. They remember
+the result to prevent double unlock when printing Oops messages and
+the system will try to continue working. For example:
 
-Warnings Detected:
+pl011_console_write(struct console *co, const char *s, unsigned int count)
+{
+[...]
+	int locked = 1;
+[...]
+	if (uap->port.sysrq)
+		locked = 0;
+	else if (oops_in_progress)
+		locked = spin_trylock(&uap->port.lock);
+	else
+		spin_lock(&uap->port.lock);
 
-arc:
+[...]
 
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
+	if (locked)
+		spin_unlock(&uap->port.lock);
+}
 
 
-Warnings summary:
+2nd variant is to check panic_cpu variable. It is used in printk.c.
+We might move the function to panic.h:
 
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
+static bool panic_in_progress(void)
+{
+	return unlikely(atomic_read(&panic_cpu) != PANIC_CPU_INVALID);
+}
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+and then do:
 
-Detailed per-defconfig build reports:
+	if (panic_in_progress()) {
+		...
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
 
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
+> > Though thinking more about it, is this really a Good Change (TM)? The
+> > spinlock itself already disables interrupts, meaning the only case
+> > where this change makes a difference is if the panic happens from
+> > within the function that grabbed the spinlock (in which case the
+> > callback is also likely to panic), or in an NMI that panics within
+> > that window.
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+As already mentioned in the other reply, panic() sometimes stops
+the other CPUs using NMI, for example, see kdump_nmi_shootdown_cpus().
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+Another situation is when the CPU using the lock ends in some
+infinite loop because something went wrong. The system is in
+an unpredictable state during panic().
 
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
+I am not sure if this is possible with the code under gsmi_dev.lock
+but such things really happen during panic() in other subsystems.
+Using trylock in the panic() code path is a good practice.
 
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+Best Regards,
+Petr
