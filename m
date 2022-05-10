@@ -2,164 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6625223BE
-	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 20:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E005223D3
+	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 20:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348811AbiEJSUN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 10 May 2022 14:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
+        id S1345534AbiEJS07 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 May 2022 14:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348854AbiEJST0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 May 2022 14:19:26 -0400
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190252A975A;
-        Tue, 10 May 2022 11:14:24 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id m128so32191961ybm.5;
-        Tue, 10 May 2022 11:14:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=qpqXrLDWUEHd+BUtmgMjhwAa3QcGPruT6uNMBEv9rjU=;
-        b=sE0t+MrA2XaCL45MizPmFfYKh+U7rCzOjLv98vxpalwZsq4dz5KZYWa5EvT7z4Dj/J
-         72cDF6NlgQd5iWSoHTtTXxceYUf04R6uRHcOV8jsHXPlhwwbDMcx1IMyPtxOrsKhDggi
-         wuvB1W8gNO5ex306dapgVyE0ASFzoomTxg7L9zcB+drqohTFQe1hR9PsfiRaJ27pJr9l
-         H9JvOI63+Ooq4kqdLZBUXUvsOeixRzwIj1hEV+GcQckk7SAXqz9jSivd5ellFLiPqFs8
-         5bJ2n96C8IUu5Z4Fpv4clNCpiCIoJ0o2C6AAumEzIviiNN9HcMufo4dJXUAXqyc/StxF
-         2E1g==
-X-Gm-Message-State: AOAM531+oHyPotUKmUfvdnQsDixTSyf4gFm2u1Db2FoFEqVUEzAdkJOx
-        yFppIfJjpin5xoQr9N1U5JMJQ0EWlcJyxNaNJzA=
-X-Google-Smtp-Source: ABdhPJy/3C7Xf5XL6o3yFhMZ917Dv3JWEaRfPbmjw9NKhK3//cChodJMWe9FmxWaGm5UEgRYGP1Nqk2NauJUMOpu3kk=
-X-Received: by 2002:a25:e792:0:b0:645:7ddb:b5eb with SMTP id
- e140-20020a25e792000000b006457ddbb5ebmr19781278ybh.482.1652206451725; Tue, 10
- May 2022 11:14:11 -0700 (PDT)
+        with ESMTP id S1348902AbiEJS0X (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 May 2022 14:26:23 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A635950B08;
+        Tue, 10 May 2022 11:22:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652206944; x=1683742944;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sSmQP3uhDLR96PsowzYCDVSU0HDCkoGesSibvvpbnN8=;
+  b=hz0+L91/mag6bEQ396ibYjw9w3L+XLhS5Ne60aDeMfb+gdqGDlDUCdWQ
+   0HWhUkTz2Is6DPzbp0C3AP0oOpQruqbZsAIIgYhXIKPj6gG/NUYTNCZI1
+   1xSR3uvLaVfnpighI5jru4L85pLjSvDs/NEl35zaW6Xfca686dhE7YDCK
+   0VvIQDBGNxOZuHfaG0RA+A93KkNcTFhzfOh4zWh+s8HV3E7+B++xNmXiD
+   icm0BCzOohcW/DFKgMJfHN/ltEG/ikpLu2P/wSoQFz3QFhmawWci04cQI
+   5a4cqgczArUHsNTSZDlO7pZZu1K9w/gmc1RfNUwuiwxCtlQveD4nV9RhG
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10343"; a="355891446"
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="355891446"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 11:22:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,214,1647327600"; 
+   d="scan'208";a="636072237"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga004.fm.intel.com with ESMTP; 10 May 2022 11:22:24 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        stable@vger.kernel.org
+Subject: [UPDATE][PATCH] thermal: int340x: Mode setting with new OS handshake
+Date:   Tue, 10 May 2022 11:22:21 -0700
+Message-Id: <20220510182221.3990256-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20220509233235.995021-1-dmitry.osipenko@collabora.com> <20220509233235.995021-2-dmitry.osipenko@collabora.com>
-In-Reply-To: <20220509233235.995021-2-dmitry.osipenko@collabora.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 10 May 2022 20:14:00 +0200
-Message-ID: <CAJZ5v0gApRhc9+jZLxgNXC2B2tmz450=8+mFZUjTFF1iU7C-gw@mail.gmail.com>
-Subject: Re: [PATCH v8 01/27] notifier: Add atomic_notifier_call_chain_is_empty()
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, May 10, 2022 at 1:33 AM Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
->
-> Add atomic_notifier_call_chain_is_empty() that returns true if given
-> atomic call chain is empty.
+With the new OS handshake introduced with the commit: "c7ff29763989
+("thermal: int340x: Update OS policy capability handshake")",
+thermal zone mode "enabled" doesn't work in the same way as the legacy
+handshake. The mode "enabled" fails with -EINVAL using new handshake.
 
-It would be good to mention a use case for it.
+To address this issue, when the new OS UUID mask is set:
+- When mode is "enabled", return 0 as the firmware already has the
+latest policy mask.
+- When mode is "disabled", update the firmware with UUID mask of zero.
+In this way firmware can take control of the thermal control. Also
+reset the OS UUID mask. This allows user space to update with new
+set of policies.
 
-> Reviewed-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> ---
->  include/linux/notifier.h |  2 ++
->  kernel/notifier.c        | 13 +++++++++++++
->  2 files changed, 15 insertions(+)
->
-> diff --git a/include/linux/notifier.h b/include/linux/notifier.h
-> index 87069b8459af..95e2440037de 100644
-> --- a/include/linux/notifier.h
-> +++ b/include/linux/notifier.h
-> @@ -173,6 +173,8 @@ extern int blocking_notifier_call_chain_robust(struct blocking_notifier_head *nh
->  extern int raw_notifier_call_chain_robust(struct raw_notifier_head *nh,
->                 unsigned long val_up, unsigned long val_down, void *v);
->
-> +extern bool atomic_notifier_call_chain_is_empty(struct atomic_notifier_head *nh);
-> +
->  #define NOTIFY_DONE            0x0000          /* Don't care */
->  #define NOTIFY_OK              0x0001          /* Suits me */
->  #define NOTIFY_STOP_MASK       0x8000          /* Don't call further */
-> diff --git a/kernel/notifier.c b/kernel/notifier.c
-> index ba005ebf4730..aaf5b56452a6 100644
-> --- a/kernel/notifier.c
-> +++ b/kernel/notifier.c
-> @@ -204,6 +204,19 @@ int atomic_notifier_call_chain(struct atomic_notifier_head *nh,
->  EXPORT_SYMBOL_GPL(atomic_notifier_call_chain);
->  NOKPROBE_SYMBOL(atomic_notifier_call_chain);
->
-> +/**
-> + *     atomicnotifier_call_chain_is_empty - Check whether notifier chain is empty
-> + *     @nh: Pointer to head of the blocking notifier chain
-> + *
-> + *     Checks whether notifier chain is empty.
-> + *
-> + *     Returns true is notifier chain is empty, false otherwise.
-> + */
-> +bool atomic_notifier_call_chain_is_empty(struct atomic_notifier_head *nh)
-> +{
-> +       return !rcu_access_pointer(nh->head);
-> +}
-> +
->  /*
->   *     Blocking notifier chain routines.  All access to the chain is
->   *     synchronized by an rwsem.
-> --
-> 2.35.1
->
+Fixes: c7ff29763989 ("thermal: int340x: Update OS policy capability handshake")
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: stable@vger.kernel.org
+---
+update:
+Added Fixes tag
+
+ .../intel/int340x_thermal/int3400_thermal.c   | 48 ++++++++++++-------
+ 1 file changed, 32 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+index d97f496bab9b..1061728ad5a9 100644
+--- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
++++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+@@ -194,12 +194,31 @@ static int int3400_thermal_run_osc(acpi_handle handle, char *uuid_str, int *enab
+ 	return result;
+ }
+ 
++static int set_os_uuid_mask(struct int3400_thermal_priv *priv, u32 mask)
++{
++	int cap = 0;
++
++	/*
++	 * Capability bits:
++	 * Bit 0: set to 1 to indicate DPTF is active
++	 * Bi1 1: set to 1 to active cooling is supported by user space daemon
++	 * Bit 2: set to 1 to passive cooling is supported by user space daemon
++	 * Bit 3: set to 1 to critical trip is handled by user space daemon
++	 */
++	if (mask)
++		cap = ((priv->os_uuid_mask << 1) | 0x01);
++
++	return int3400_thermal_run_osc(priv->adev->handle,
++				       "b23ba85d-c8b7-3542-88de-8de2ffcfd698",
++				       &cap);
++}
++
+ static ssize_t current_uuid_store(struct device *dev,
+ 				  struct device_attribute *attr,
+ 				  const char *buf, size_t count)
+ {
+ 	struct int3400_thermal_priv *priv = dev_get_drvdata(dev);
+-	int i;
++	int ret, i;
+ 
+ 	for (i = 0; i < INT3400_THERMAL_MAXIMUM_UUID; ++i) {
+ 		if (!strncmp(buf, int3400_thermal_uuids[i],
+@@ -231,19 +250,7 @@ static ssize_t current_uuid_store(struct device *dev,
+ 	}
+ 
+ 	if (priv->os_uuid_mask) {
+-		int cap, ret;
+-
+-		/*
+-		 * Capability bits:
+-		 * Bit 0: set to 1 to indicate DPTF is active
+-		 * Bi1 1: set to 1 to active cooling is supported by user space daemon
+-		 * Bit 2: set to 1 to passive cooling is supported by user space daemon
+-		 * Bit 3: set to 1 to critical trip is handled by user space daemon
+-		 */
+-		cap = ((priv->os_uuid_mask << 1) | 0x01);
+-		ret = int3400_thermal_run_osc(priv->adev->handle,
+-					      "b23ba85d-c8b7-3542-88de-8de2ffcfd698",
+-					      &cap);
++		ret = set_os_uuid_mask(priv, priv->os_uuid_mask);
+ 		if (ret)
+ 			return ret;
+ 	}
+@@ -469,17 +476,26 @@ static int int3400_thermal_change_mode(struct thermal_zone_device *thermal,
+ 	if (mode != thermal->mode) {
+ 		int enabled;
+ 
++		enabled = (mode == THERMAL_DEVICE_ENABLED);
++
++		if (priv->os_uuid_mask) {
++			if (!enabled) {
++				priv->os_uuid_mask = 0;
++				result = set_os_uuid_mask(priv, priv->os_uuid_mask);
++			}
++			goto eval_odvp;
++		}
++
+ 		if (priv->current_uuid_index < 0 ||
+ 		    priv->current_uuid_index >= INT3400_THERMAL_MAXIMUM_UUID)
+ 			return -EINVAL;
+ 
+-		enabled = (mode == THERMAL_DEVICE_ENABLED);
+ 		result = int3400_thermal_run_osc(priv->adev->handle,
+ 						 int3400_thermal_uuids[priv->current_uuid_index],
+ 						 &enabled);
+ 	}
+ 
+-
++eval_odvp:
+ 	evaluate_odvp(priv);
+ 
+ 	return result;
+-- 
+2.31.1
+
