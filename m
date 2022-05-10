@@ -2,174 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B47E0521115
-	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 11:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66CFD5212A5
+	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 12:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238829AbiEJJlV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 May 2022 05:41:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
+        id S240146AbiEJKwv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 May 2022 06:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238584AbiEJJky (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 May 2022 05:40:54 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2134.outbound.protection.outlook.com [40.107.117.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E39DF31;
-        Tue, 10 May 2022 02:36:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H+Voc02mQZY4JLsyksvpqbWXFF5Xww0qqJr1jVQHki7ZJPJPMedu8eUjLsDpF1064OjSGf97RVUGHe5NYPpe+w+DXTZIYj8+bAlWxAjD9m3RjPtTTwe1385QXp6cY8YTFQ8y4eLntjJI8r+FY51FhSLzDu9+E3yf4xQqtf0XcT7G5dKplUfKiJKbrxnXF0YIjbICZvEobSsWH8VUA1YHhEYoaHwD1PAXeZuV6eIgmVxMFzviibG9DRYCtSvri+J0rdJmQkcFmmA4FLHsi4gD2Tkveiat9qfPFAI28bCbYhu/Q+IyMBdTr+zEJzsYyRLFJuyiCyXFy6TCWi7tntlVwg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tsQJFUt1ZRT/7b3Eq06pFw0VvdpJI4yO/sBtEvUUsSI=;
- b=cJQC+FTAQPoR45YROb9lvISAXk6+en4nLQxZZ0B3fFQruIX35UE/s2iwCjMlgaTppHr6RLXiOcD9XmgJHmnba4FpEXmXV5rTMwFAdMeKrKCh0mpyL6+AbS5VCvQi9u+UGpI3KSAgnFGX2k29pL+Zv0g+lZUMSMSJaUIpgDKNYAbT5WlUiBxqoZr7dc8iFTkhh4l2cTL74I85sxUMDS32xcK6MFdkwpsMJFBbZXkkOkwevnXFtegfufVknLzf2zSMFD91/RNu7QYErRPugGf82QusU3sV+7IoF0m40XvUig4VGiM8meIyBCTQg6jmZhcXJylJkVwyRY+rlCzOJEuhIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tsQJFUt1ZRT/7b3Eq06pFw0VvdpJI4yO/sBtEvUUsSI=;
- b=V3IS95n7nv29ENvG7XvvSkAAiZbXzMDG+1c7r1dt+tzMOzDCIb2tn/V4xMxiwXgqmuVkBPp/gjEZ5Jal6sR/sic3uWB0IM8Z8fQOKSIxsJW59GIrRxUwTGqAChoD3wO70rDdEnt2vTRhU1eI3xCDJqhCqaY+8U6ZkznMJPyyC/c=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
- PS1PR06MB2837.apcprd06.prod.outlook.com (2603:1096:803:42::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5227.23; Tue, 10 May 2022 09:36:51 +0000
-Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::4591:4f3e:f951:6c8c]) by SG2PR06MB3367.apcprd06.prod.outlook.com
- ([fe80::4591:4f3e:f951:6c8c%7]) with mapi id 15.20.5227.022; Tue, 10 May 2022
- 09:36:51 +0000
-Message-ID: <e58f36d3-c01d-b133-6615-be5d34fa62a1@vivo.com>
-Date:   Tue, 10 May 2022 17:36:45 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] cpufreq: mediatek: Fix potential deadlock problem in
- mtk_cpufreq_set_target
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jia-Wei Chang <jia-wei.chang@mediatek.com>,
-        "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220510090531.12438-1-wanjiabing@vivo.com>
- <20220510091212.olrvvjlx4jtm7zw2@vireshk-i7>
- <49566544-e8f2-ef38-288e-fcd276d87d3b@vivo.com>
- <20220510092822.j3z6bydurg7x5bu4@vireshk-i7>
-From:   Jiabing Wan <wanjiabing@vivo.com>
-Organization: vivo
-In-Reply-To: <20220510092822.j3z6bydurg7x5bu4@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: TYAPR01CA0021.jpnprd01.prod.outlook.com (2603:1096:404::33)
- To SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19)
+        with ESMTP id S240080AbiEJKwh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 May 2022 06:52:37 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBD22ABBCC
+        for <linux-pm@vger.kernel.org>; Tue, 10 May 2022 03:48:33 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id c1-20020a17090a558100b001dca2694f23so1803643pji.3
+        for <linux-pm@vger.kernel.org>; Tue, 10 May 2022 03:48:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=RmY4Du8Nvs6alfFWh2qW6nu7nxQ97kHdJXS5k70cTzM=;
+        b=mQUU2+FT2dewytO9DkfnAAUXtO2FlX1UQdIbMzpbwFTCky3d0NkWMyGmEIQr1M9DcM
+         Yr5Lsrem0pJMIncRUwS+UcbsOGDJKD5IDOT4c1phP7yhqtDbf0i25AJYtrhS+2cild6G
+         y2iRpEpuIu4lNuK7IvFAARXHwtCS7aUTFJQe/B7SojXRX8KaIVuXV8ZSfY+QELJ6WuIt
+         rwj90Y8zXuZmwQMleLH129JidMEJJZ/GlIzfgYjT8JbVuon8DJ+GWUl0bEqFu9+7s4bQ
+         dtNON1w4zT75pJxY/N62jvtcPcI5VW95Imd22nRVJtT9JWZd8O10Oo6qCck19vVhoY/X
+         FWxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=RmY4Du8Nvs6alfFWh2qW6nu7nxQ97kHdJXS5k70cTzM=;
+        b=dje7qus2Zwk9AoU4IMmpoRoGt5lbJuYvtGtWibCPs/QlGenvsPOxb+4XwlcY+2NNfw
+         9YwArvJpfWhaPM11ntGLPuPUZrgpCvBgtY0H075PuH5kbJSQ6suwqdEIqizFFi5uvI1G
+         1/pguffjGcM2qvFbZ+fXHti3Dvy3tdDwgrVfyDs0HhIMwX7Q+DG55gS+D02TBh14avkZ
+         wpCUYKPiU0z/8sjYJoOwqJ365VS/upKV4qwaaCv9T2SBEGzLpEnjTajxxwhl0DCzpZQ3
+         73Pr8UiLl9X8m09G9PMS940pev3fousL5743eY3fY4Hts1xmKd9PNZZ+V2d4RryvBg6u
+         l7yA==
+X-Gm-Message-State: AOAM5313sAlBZwuBv9aZT8Kgc5kUYEedm4nbNC+QPFd7FX3AAl3G5+hb
+        aW451wTXIaWJO81Nj7fBwC1kIA==
+X-Google-Smtp-Source: ABdhPJyEtOk7xXU1y6Nwx5GmD7oXKSBW2mXf4MS1xj4V4mEtVu7N+Bmg6G/uyXGRzvvV90CdInXG0A==
+X-Received: by 2002:a17:902:ea53:b0:15b:1bb8:ac9e with SMTP id r19-20020a170902ea5300b0015b1bb8ac9emr19596767plg.45.1652179712814;
+        Tue, 10 May 2022 03:48:32 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id x7-20020a170902b40700b0015e8d4eb258sm1643400plr.162.2022.05.10.03.48.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 03:48:32 -0700 (PDT)
+Message-ID: <627a4300.1c69fb81.264dd.3fc6@mx.google.com>
+Date:   Tue, 10 May 2022 03:48:32 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 093272c3-a58f-485b-26fb-08da32689c2f
-X-MS-TrafficTypeDiagnostic: PS1PR06MB2837:EE_
-X-Microsoft-Antispam-PRVS: <PS1PR06MB28376D08C62ABB2E7D64B8DEABC99@PS1PR06MB2837.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RizwF8joGOAWRCDZS6WWCoq0ca3blYmgapK0JUpsWgRIWaJegdbsY4rLYpXpAvnK9h5u6nQGHmQtgD+gFAi57vVxmJ5jHjQyG37zJHBFpauvRYz5c9sicsGIouIP/ajvU1XXVffCrzuGGBQis+BMJ2pf47CiokCHVYFNE2Nx2SlK8N5Ko1kGUvk50fw6FIvBLhvDXgySZI8XgUnrIUDqXjATOvbumwcp8LNODUD0sbMWWQLU/xph2KwDJhLybCqS5CLVkBMGPb8ktMG+XuoIBFMQQ+tkSxr/2LDxPbemeOyMg9Y58DyIUVIhB1wvm2a7qOWdFbM9La7Z1rOATmcn59E9eMnf1jACmtnb6P6IzanDuxHaapWsMBF9bvuvD+xuF5yBZG45UEjxxxapteA4gvD+12JWu6WHbGOQoVnIu+aIyeoFJo+N20JViwpPHYSnfUKhVuj0IRPcRBo3pR20AUcPWjYNB9uNV2hN32ewrXOLP0iAQaxh8SILL4bCbVoTenvp0l9kupOLeLUrMEI0xlFf4E3OKpzLaVqDS3w5C+HdNJN0UxjgCljS6K1aHO+iDjsxZvWOtMhvcasOrziSLQS0ngQ7TfVveo9ZP4EplcYj87yXyLWXBLd3JzIBjfdkOArGauKytnHkw0TFOCiZlXss2BzA+5HJ02GpQy2N8hgmYd0lQnAmTstvieFEcyj7htna2mqbHxJwHfjhTi4eSXbAYqXMxiKjHCYMCpYchceEiCv8/in92yzLTdQLdLr2WUinffoz//F1WHoL3Hs+ooDkk0H0hXfKPzogghEPGRudQde1TsG0KuZBOWvG7Z2nG9RjFGqRjyUWdLToF0JRD7teRt+FyRdxyd3dNLqrch5qEEFC5Q8fkmUQjsn1CHDb
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(52116002)(6512007)(6916009)(26005)(36916002)(508600001)(53546011)(6506007)(6666004)(86362001)(38100700002)(966005)(6486002)(38350700002)(54906003)(31696002)(186003)(83380400001)(2616005)(5660300002)(7416002)(36756003)(8936002)(66946007)(66556008)(31686004)(316002)(8676002)(4326008)(49246003)(2906002)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cVJ5RjlHdVZZeXNRWVZwdjRRY2hGNmczSFREbzZENTdZZGRFWUVTcGRWRXJW?=
- =?utf-8?B?THBnTmVnVmVZSHU0YXRYci9BMm1FVk1CWU52UnpOVW93UnpPdW5CV1FzaHFn?=
- =?utf-8?B?N01KL1VQTWptZnZ3Zk95NWNtRWJvcU9MU1B2emtYcFQ3ckRiK01sSXU0K2Mx?=
- =?utf-8?B?djJHZS84dHFmMjNDcVJqdFpvdHlMSzdDTDVIenErUU9pcm1EQWd1ZDdsc25h?=
- =?utf-8?B?Y1pVTnZWdlBhd3B0OHU4ai9aRktoUmxKTTFiZDJFWFQvMFpVV2g0cDdKTC9I?=
- =?utf-8?B?c0FQU1R2ejByTDZKc1d4UjRMY0txQ2xvMVJZMUlrMHlUMzdlc2w0aG5mOWUx?=
- =?utf-8?B?M1FIK21HTHBaeUUxTXNOSFh5MUlLczFZWVZJQ3NjZ0RPSmVySy9HTDZDOHpt?=
- =?utf-8?B?eUZETWxnamdETXpGUHcybkszZFcydnhVd3VqQWJWcVdsYzdSN3JtWlpZdW9x?=
- =?utf-8?B?SzdIQzUvSVJYWGExSnlucjAwUnRRdVB2NXF2S0MrMEFrbXVkTVBlT2NYYU83?=
- =?utf-8?B?MXFtdzBBbkpYSHo1Mm0vUTRmSGVnVGdQWDIwaHBMK3FwclpReTk3WVR0cmpK?=
- =?utf-8?B?aDdvZlAveEtkb051b3lvWWhFT0lzZlIrSHM4bTBrTFZCWkRlQlQweTZ3SC9s?=
- =?utf-8?B?OUw2TERXc3dGREUxNzZoY3JvMklsU0xkUW5QUlFCZ0ZCR3JqWXZ2Y2pndDM0?=
- =?utf-8?B?ZUNKeVUzZ2plNHNrU3ZQRE0wVzNhcEYwNkh6TkJueXE0NHZMcWYrUzI0dVVz?=
- =?utf-8?B?RnhZUm5mSFdnL3V0MmlWdzlEUE52Y0VaZ3NDMkFDdVNrMkVmeUlpNUVXa2lF?=
- =?utf-8?B?OGNUOUZqWkpmZWlkNFBPMmkrek5UaThMNGl4VGlIaUNST0ZuVzFGMEJ0QVhl?=
- =?utf-8?B?a25JN3JiZG1iZ0dpdkxmMTVkVE42d0hML1BDNW9WWWxPMjJkMWh0QStUekJT?=
- =?utf-8?B?RUlIeFNuWTRlZXd4U2pEdk9CLzhuakp0N1B5YTlqakI0VnVVcnM0bnJTdDRt?=
- =?utf-8?B?L0M1OXAyK29HV1RsS3pmYS9HbFM2d0FlWVVFdm9tNzNTS1h1YU4xMGNoakFi?=
- =?utf-8?B?WTdoOFl5blZJamhNSlBkNDZRQ2hWWENWZFk4bkQ5dTNxMGtWeHp0RHVEZUhm?=
- =?utf-8?B?SnNkNnByd0VrODNESU9DQWNCT05ESUJvRkRzNDdyK0ptT0FvUkFOdEl1YWdJ?=
- =?utf-8?B?MTlKb0ZsdFVtZ0ZuMXpSS0tHU1J6dGhudEcvbERFRU9BWEhTc3NMZGg2bHdH?=
- =?utf-8?B?RlBNOXZWVjdkUlZENlAvVzZrdGEzeE85bnRxSG1JOFhMZ01CbWpMZGZxYmNN?=
- =?utf-8?B?VVFtajJRRjJpcnQxWlBnREJCaDFhZEtLNkpnWkVUVzUzQ0JodWlWc2FTUVhi?=
- =?utf-8?B?S3NSeXA0UHZmZVRmc3FvWUNVWFcrSy9RQS84ekVsdDZYSGduT0F1MGY2WWNS?=
- =?utf-8?B?a3JxQXNOOVp4L0FKZWhhUmN2VktwSjJ2K1llODVubVUxNm9qa3ppL0IvVWsy?=
- =?utf-8?B?ajcyUFpxaHFYTnZLcTk0T0ZzZWRaY3ZUN3NIcVBmbEErblpnQkVxdlMrNURv?=
- =?utf-8?B?UGZVZ25ZOE9sQ0JCR0V6ZGU1QTBGa2l5RThOMXNUdExBYmtlbGlxVTVOZ2t5?=
- =?utf-8?B?dlV0QTRMc0ZZNFlLeUZReXhvc1krSk5SNTJlUDhTNS9ROFkwZm1obXVMbHRp?=
- =?utf-8?B?N3ZsMlBBSVJRcXYrN3B2SVBPeWJmRHFQaG9jemlRTWc2UkJzUVVpREtKWjNq?=
- =?utf-8?B?aXp5b0FZZS9xbFZWQ2NYMXNaU3RIWVBBcWdaOTRWcXRHRkFEd3lyMmdVS0pn?=
- =?utf-8?B?MTNmMi9XZFlVelVkalEwSVp3amU3WGErMjRGV0V1a1pYc0Vqc2hFMHFvS00y?=
- =?utf-8?B?V0VBVWVvYmlEa2lWbEhFNndGTE1tYTN1KzZWU216TFlZT1B4c2NRanFhcDZS?=
- =?utf-8?B?azJPb0F0ai9OY0ZVY0hNYWM1Z2JxSWFUNzJ5aVFIcVdqVHRYRFJxQ1o1Wm5K?=
- =?utf-8?B?YUhaT3BndWtIMEtWNGZZWk5ZQ2hkc0pQNDIvcEF3V3Q0Y1lGK2thUC93OTBp?=
- =?utf-8?B?bDhmOU8vTEozWEtEQ244UHBYZWE0MEIzZERZWVZMZVNaVm9hN0k2RkZ2NFls?=
- =?utf-8?B?eUx3cStvYWpwbGxJK05LU1o4Wi9sK2RyVjNTVjE5dzZ3NjRiSU5tWFBqQ09i?=
- =?utf-8?B?UDdxU2NQVEdXczV4dTNraU5FNVV3MlFZWGFTUlhoeG9kR3dVbVFGQm54VFUw?=
- =?utf-8?B?T2NmcSs3VGtycVo1RTc3K2Qwdm44d29vc0JSSXhuSk10cGNwSVBrdGlFSlY3?=
- =?utf-8?B?UXVNRWMrZU8zMVoyL0ZzakFoR093cUtxKzJ5ZnNpdHM5TFlXVWlTUT09?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 093272c3-a58f-485b-26fb-08da32689c2f
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2022 09:36:50.7013
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KFtsYQUubNgMHh7mDI8vflSD0HY1UIoXNBjqatnNzGinu6dA1Hr/aiTjBYVDJjsNkdeX8lj+S6z0aRz7U6xeNA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PS1PR06MB2837
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v5.18-rc6-113-g96a231dae3ae
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.18-rc6-113-g96a231dae3ae)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.18-rc6-113-g9=
+6a231dae3ae)
+
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+18-rc6-113-g96a231dae3ae/
+
+Tree: pm
+Branch: testing
+Git Describe: v5.18-rc6-113-g96a231dae3ae
+Git Commit: 96a231dae3ae94ca45a8788eebc11cd68a5b906b
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
 
 
-On 2022/5/10 17:28, Viresh Kumar wrote:
-> On 10-05-22, 17:23, Jiabing Wan wrote:
->>
->> On 2022/5/10 17:12, Viresh Kumar wrote:
->>> On 10-05-22, 17:05, Wan Jiabing wrote:
->>>> Fix following coccichek error:
->>>> ./drivers/cpufreq/mediatek-cpufreq.c:199:2-8: preceding lock on line
->>>> ./drivers/cpufreq/mediatek-cpufreq.c:208:2-8: preceding lock on line
->>>>
->>>> mutex_lock is acquired but not released before return.
->>>> Use 'goto out' to help releasing the mutex_lock.
->>>>
->>>> Fixes: c210063b40ac ("cpufreq: mediatek: Add opp notification support")
->>>> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
->>> You should have added the review tag you received.
->>>
->>> Applied. Thanks.
->> Oh, yes.  I would add the "Reviewed-by:" tag only if someone sends
->> this tag to me.
-> Didn't you get this ?
->
-> https://lore.kernel.org/linux-mediatek/304e7eefbb57e9c938737b64fbb515201c7944b8.camel@mediatek.com/
+Warnings summary:
 
-Oh, sorry! there might be some problem in my email-server.
-I didn't get this email and I also didn't see this email on LKML lore.
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
 
-So I missed this email.
-Sorry for my mistake.
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-Wan Jiabing
+Detailed per-defconfig build reports:
 
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
 
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
