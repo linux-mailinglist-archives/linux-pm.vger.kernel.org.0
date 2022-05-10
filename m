@@ -2,75 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF66521CD5
-	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 16:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB9B521D0B
+	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 16:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344883AbiEJOwI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 May 2022 10:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45476 "EHLO
+        id S1345147AbiEJOzw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 May 2022 10:55:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345284AbiEJOvM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 May 2022 10:51:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 87A18266041
-        for <linux-pm@vger.kernel.org>; Tue, 10 May 2022 07:11:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1652191897;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        with ESMTP id S1344797AbiEJOzl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 May 2022 10:55:41 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9C71A06C;
+        Tue, 10 May 2022 07:16:12 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 932E91F8C6;
+        Tue, 10 May 2022 14:16:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652192171; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=rtq28CnPqdWCcQU57wEB4HrePwIAG8WJOylvl7UVi70=;
-        b=jSsZU7nCkRa7tJEuhoHC1XCFn1H0w9aTIqVdbE9aMMs9Oi3HTZlyYHP5+xOOpMKC9/DXt+
-        90dRgCDDYaCWIZph+WSSZ5vdZtlRiwGehy/lMmmL9PPTsjthsEqz5Vc1Yk6Z42W2pDvnNK
-        A+JC4zQdjpW8uGpyeKnKFfhMNj0I4H0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-371-raQYS_JPNre-oUAAvyhb7w-1; Tue, 10 May 2022 10:11:30 -0400
-X-MC-Unique: raQYS_JPNre-oUAAvyhb7w-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        bh=A8/NZJeBAhTKLHLb3PoAvlXD/AvbEgaBaR5HXaRNdkM=;
+        b=BeTzacf3mS4VoGHK6i1jVn2p93FIleajbiX/lqLZYQzEPT5BuEThdtby46ST2AJUboj/I/
+        VqEG9r83Q4xijGW9lCE2hweKm6E7raa+vKstZ+w2OtTvG5P31Un3HT5rf7nvpJdK7CHBFy
+        VZPQPYk1mnBdJ3vUcDiFbXkwBcjlkRU=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6DE863833286;
-        Tue, 10 May 2022 14:11:29 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.98])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 8C11BC28106;
-        Tue, 10 May 2022 14:11:24 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Tue, 10 May 2022 16:11:26 +0200 (CEST)
-Date:   Tue, 10 May 2022 16:11:21 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>, linux-ia64@vger.kernel.org
-Subject: Re: [PATCH v4 0/12] ptrace: cleaning up ptrace_stop
-Message-ID: <20220510141119.GA23277@redhat.com>
-References: <20220421150248.667412396@infradead.org>
- <20220421150654.817117821@infradead.org>
- <87czhap9dy.fsf@email.froward.int.ebiederm.org>
- <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
- <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
- <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
- <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
+        by relay2.suse.de (Postfix) with ESMTPS id 01C5F2C141;
+        Tue, 10 May 2022 14:16:09 +0000 (UTC)
+Date:   Tue, 10 May 2022 16:16:06 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, rth@gcc.gnu.org,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        bhe@redhat.com, kexec@lists.infradead.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org
+Subject: Re: [PATCH 10/30] alpha: Clean-up the panic notifier code
+Message-ID: <YnpzpkfuwzJYbPYj@alley>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-11-gpiccoli@igalia.com>
+ <f6def662-5742-b3a8-544f-bf15c636d83d@igalia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <f6def662-5742-b3a8-544f-bf15c636d83d@igalia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,31 +79,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/05, Eric W. Biederman wrote:
->
-> Eric W. Biederman (11):
->       signal: Rename send_signal send_signal_locked
->       signal: Replace __group_send_sig_info with send_signal_locked
->       ptrace/um: Replace PT_DTRACE with TIF_SINGLESTEP
->       ptrace/xtensa: Replace PT_SINGLESTEP with TIF_SINGLESTEP
->       ptrace: Remove arch_ptrace_attach
->       signal: Use lockdep_assert_held instead of assert_spin_locked
->       ptrace: Reimplement PTRACE_KILL by always sending SIGKILL
->       ptrace: Document that wait_task_inactive can't fail
->       ptrace: Admit ptrace_stop can generate spuriuos SIGTRAPs
->       ptrace: Don't change __state
->       ptrace: Always take siglock in ptrace_resume
->
-> Peter Zijlstra (1):
->       sched,signal,ptrace: Rework TASK_TRACED, TASK_STOPPED state
+On Mon 2022-05-09 11:13:17, Guilherme G. Piccoli wrote:
+> On 27/04/2022 19:49, Guilherme G. Piccoli wrote:
+> > The alpha panic notifier has some code issues, not following
+> > the conventions of other notifiers. Also, it might halt the
+> > machine but still it is set to run as early as possible, which
+> > doesn't seem to be a good idea.
 
-OK, lgtm.
+Yeah, it is pretty strange behavior.
 
-Reviewed-by: Oleg Nesterov <oleg@redhat.com>
+I looked into the history. This notifier was added into the alpha code
+in 2.4.0-test2pre2. In this historic code, the default panic() code
+either rebooted after a timeout or ended in a infinite loop. There
+was not crasdump at that times.
 
+The notifier allowed to change the behavior. There were 3 notifiers:
 
-I still dislike you removed TASK_WAKEKILL from TASK_TRACED, but I can't
-find a good argument against it ;) and yes, this is subjective.
+   + mips and mips64 ended with blinking in panic()
+   + alpha did __halt() in this srm case
 
-Oleg.
+They both still do this. I guess that it is some historic behavior
+that people using these architectures are used to.
 
+Anyway, it makes sense to do this as the last notifier after
+dumping other information.
+
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+
+Best Regards,
+Petr
