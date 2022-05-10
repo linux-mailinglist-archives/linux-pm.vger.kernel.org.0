@@ -2,316 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22D7C520CE1
-	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 06:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53651520D08
+	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 06:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236580AbiEJEdC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 May 2022 00:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51036 "EHLO
+        id S236444AbiEJEo4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 May 2022 00:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236718AbiEJEbs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 May 2022 00:31:48 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2722555A6;
-        Mon,  9 May 2022 21:27:37 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id f3so7573704qvi.2;
-        Mon, 09 May 2022 21:27:37 -0700 (PDT)
+        with ESMTP id S236428AbiEJEoz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 May 2022 00:44:55 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47D11BEB7
+        for <linux-pm@vger.kernel.org>; Mon,  9 May 2022 21:40:56 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id j6so13946483pfe.13
+        for <linux-pm@vger.kernel.org>; Mon, 09 May 2022 21:40:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=vMpaHuuuOG4MGEWXiRfaUjNNiANU4+C8012F//qkXo8=;
-        b=VC4yVVFd/at+KN9tejUb+tTTTy3SktsyRsPMmN1Xbj4dRCy1d0ArQwTL4vrl6r4qwt
-         CVogS8g3yw3RYsC2GXSpWF4m27QOcRMgcTv73Y0G2UpLUCvdo7i6Dg3KiZsWD1TcSGR3
-         BicwMdlaVxi2OMw+EzdJg/5A+gYjQEWwut5p+K0SpMG3UOADxORAJBJXTLxgI+iO5Sgi
-         eZjTgLxzmEKb5yOH3G5IYGMGcw+mSdtlzslM2jxAYrvyH0WTMgy3KmDGqGnf2/MmV29U
-         7QnqYWAl9Crd7HZSw6ukvHvCjoYfLzqJXFAHGZqIlp1fE8KuroZyYlPQ1JwKaua3+oD7
-         yHYA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=lbY1apz0pshrpCAaJ1RrYyZnbJ+UjeS0fVoXXo8j4x4=;
+        b=g1O4yIW8IBZL4UjQArViSLk8BGWFwVVdDj4k3lboHQlTkJQ+rm3mIbeCIIKgBldnDL
+         vemV1tqpX0uc13aujVWctoK7Xgz/Zw9Wdv34dhYv0rS2b96Ryzawc8Q7WTi9VBXsyM8/
+         I5Pi+SicIj63pu9fYM3QYaBG5+AIDSGzQCMOf3QCc6fdmLUVblR7n6tedFbDYuwdUZhu
+         zIuKHv2b8wLek6nQwSIbFcYwuO2pnT7dYWxxulUgiS5fNtP+EASQcqA5eMTg8QKMPEiX
+         u1yAPilOKbWZR5pPKRYIkh4RjlpecE57z8J7ag6lrDvUnChqYht9pXoHxKkm7w1GC0Ey
+         LmBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=vMpaHuuuOG4MGEWXiRfaUjNNiANU4+C8012F//qkXo8=;
-        b=Qh4Nb6plr2Wcq3ICcKJ5YJ5iCj3NmlIK/kyGWi9zDAamrgGQrEQuntwxfKZF7ZkBSK
-         7U2RAtzHQzA/4t9OYNm2fBM8wXocFyokum6G6LZBmjw2LUgTzuOxZjYa/9Bc/SSGVJ9E
-         xbrCdkoBFiwUG6rhZ3lnKgyfxz6q9CzH3vePnnKTS0VU0EXJK+vQUmBx0DzxSQuZxgP/
-         csH51+pJ2sfVVUU0HrX6P02KgXVES16VWuQh/a8JbWfYwwo6U+Bl0KMrJ4UD0pYKAXE1
-         ZshylpVGIX+XWJr/9f++ako4KBIpjyUCUbZMlixFFxT1P9boCcy8pPlNJVm7LppPh3eP
-         rjsg==
-X-Gm-Message-State: AOAM530DoV0HR6N7OxYxEQjvBGqShijiieIMmCMaIdcm5AROn79w+75i
-        hRNFcqTOQZ2fqmo3rgdRkTb+XVu1lM/ehgRcmTM=
-X-Google-Smtp-Source: ABdhPJwO7MdX2N+BxIvvqfhmxboqfMxlBiZaJL3wP1cEl/CpufKLHoQMnnY4JeZx47aYXO2bdL5yKMHOwUpp65u4jnw=
-X-Received: by 2002:a05:6214:3017:b0:45a:6c33:2ae9 with SMTP id
- ke23-20020a056214301700b0045a6c332ae9mr16619988qvb.108.1652156856955; Mon, 09
- May 2022 21:27:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220425125546.4129-1-johnson.wang@mediatek.com>
- <20220425125546.4129-2-johnson.wang@mediatek.com> <94efefab-918d-2367-4b74-076dd6f23936@gmail.com>
- <e8124721a4ecd591ffea2c4d70853c1f89c83975.camel@mediatek.com>
-In-Reply-To: <e8124721a4ecd591ffea2c4d70853c1f89c83975.camel@mediatek.com>
-Reply-To: cwchoi00@gmail.com
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-Date:   Tue, 10 May 2022 13:27:00 +0900
-Message-ID: <CAGTfZH1dipThTeaZiD1JucYYQB+M19wVrhRy0aCC+7TydNFXjQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: interconnect: Add MediaTek CCI dt-bindings
-To:     Johnson Wang <johnson.wang@mediatek.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>, krzk+dt@kernel.org,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=lbY1apz0pshrpCAaJ1RrYyZnbJ+UjeS0fVoXXo8j4x4=;
+        b=Z+SB+umFalu3qhXNXQeMu3IAGM3XE4KrH3AAFKkVvA2BMJ/SjJb/9toOjY8KOht1io
+         KGfDsS146Xxt6OQCR2bquR+HFVh+utWL090xkOKhT3YmEOkGggovZbVGsekgQ4Od91Ds
+         Qxzaeum+S6mckZmB0Uavi4XlGSamElmPVYTVJEPRP9b1N5U4ZWjYzeg1BN7reH0bR25x
+         PlSjUkiGhhuzqI+nq+izcq/I6I+rUi/z7aicnEpxh0D8jgmh+taIXCrm9a5cI77BhXvX
+         zlVZG5qUONzVppfiSwuvB+NSIedX454F3zMnXwsxWyKuuHTdRu5vJtHQeMvb3IXHrEat
+         j3lQ==
+X-Gm-Message-State: AOAM532beI+ocS/uzHaaWyO27lJPVzHgYl4tGcwcEGLdvZaIw1DUOvtW
+        lhRVrl1yltRMRGFeX+WozZ9/zg==
+X-Google-Smtp-Source: ABdhPJymevaw8JA+ZHsBCjPJ4j0suFS7f77voPGuje3SGgohExKLxChq+oCh5WRtZK41XqI6SBv0+w==
+X-Received: by 2002:aa7:9110:0:b0:4fa:e388:af57 with SMTP id 16-20020aa79110000000b004fae388af57mr18793150pfh.1.1652157656115;
+        Mon, 09 May 2022 21:40:56 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id a2-20020a170902900200b0015e8d4eb289sm780370plp.211.2022.05.09.21.40.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 21:40:55 -0700 (PDT)
+Date:   Tue, 10 May 2022 10:10:53 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
+Message-ID: <20220510044053.ykn6ygnbeokhzrsa@vireshk-i7>
+References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
+ <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
+ <20220425072710.v6gwo4gu3aouezg4@vireshk-i7>
+ <dea39b1f-0091-2690-7f07-108d07ef9f3c@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dea39b1f-0091-2690-7f07-108d07ef9f3c@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, May 10, 2022 at 11:59 AM Johnson Wang <johnson.wang@mediatek.com> wrote:
->
-> Hi Chanwoo,
->
-> On Mon, 2022-05-09 at 21:09 +0900, Chanwoo Choi wrote:
-> > Hi,
-> >
-> > On 22. 4. 25. 21:55, Johnson Wang wrote:
-> > > Add devicetree binding of MediaTek CCI on MT8183 and MT8186.
-> > >
-> > > Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
-> > > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > > ---
-> > >   .../bindings/interconnect/mediatek,cci.yaml   | 139
-> > > ++++++++++++++++++
-> > >   1 file changed, 139 insertions(+)
-> > >   create mode 100644
-> > > Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-> > >
-> > > diff --git
-> > > a/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-> > > b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-> > > new file mode 100644
-> > > index 000000000000..e5221e17d11b
-> > > --- /dev/null
-> > > +++
-> > > b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-> > > @@ -0,0 +1,139 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id:
-> > > https://urldefense.com/v3/__http://devicetree.org/schemas/interconnect/mediatek,cci.yaml*__;Iw!!CTRNKA9wMg0ARbw!z6ogArqzuIzPR3TYO1aW-Z-scpuZJxIriWMofdfnvrKTXAYBBLZeitAPIKyZayMYZGsR$
-> > >
-> > > +$schema:
-> > > https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!z6ogArqzuIzPR3TYO1aW-Z-scpuZJxIriWMofdfnvrKTXAYBBLZeitAPIKyZa9f2pALd$
-> > >
-> > > +
-> > > +title: MediaTek Cache Coherent Interconnect (CCI) frequency and
-> > > voltage scaling
-> > > +
-> > > +maintainers:
-> > > +  - Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> >
-> > Why did you add your author information?
-> > Please add your author information.
->
-> Sorry, I don't really understand what you mean.
-> Could you please explain your advice again?
->
-> The author of this driver is 'Jia-Wei Chang'.
-> We have added author information to the driver code and this binding
-> document as above.
+On 09-05-22, 12:38, Krzysztof Kozlowski wrote:
+> On 25/04/2022 09:27, Viresh Kumar wrote:
+> > This is tricky as the OPP core can't really assume the order in which the clocks
+> > needs to be programmed. We had the same problem with multiple regulators and the
+> > same is left for drivers to do via the custom-api.
+> > 
+> > Either we can take the same route here, and let platforms add their own OPP
+> > drivers which can handle this, Or hide this all behind a basic device clock's
+> > driver, which you get with clk_get(dev, NULL).
+> 
+> For my use case, the order of scaling will be the same as in previous
+> implementation, because UFS drivers just got bunch of clocks with
+> freq-table-hz property and were scaling in DT order.
+> 
+> If drivers need something better, they can always provide custom-opp
+> thus replacing my method. My implementation here does not restrict them.
+> 
+> For the drivers where the order does not matter, why forcing each driver
+> to provide its own implementation of clock scaling? Isn't shared generic
+> PM OPP code a way to remove code duplication?
 
-Firstly, sorry for the confusion.
+Code duplication is a good argument and I am in favor of avoiding it,
+but nevertheless this shouldn't be something which platforms can pick
+by mistake, just because they didn't go through core code. In other
+words, this shouldn't be the default behavior of the core.
 
-I have discussed this patch with you. I think that you (Johnson Wang)
-should be added to 'maintainers' of this binding document as following:
+If we want, core can provide a helper to get rid of the duplication
+though, but the user explicitly needs to use it.
 
-+maintainers:
-+  - Jia-Wei Chang <jia-wei.chang@mediatek.com>
-+  - Johnson Wang <johnson.wang@mediatek.com>
+> >> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> > 
+> >> +static int _generic_set_opp_clks_only(struct device *dev,
+> >> +				      struct opp_table *opp_table,
+> >> +				      struct dev_pm_opp *opp)
+> >> +{
+> >> +	int i, ret;
+> >> +
+> >> +	if (!opp_table->clks)
+> >> +		return 0;
+> >> +
+> >> +	for (i = 0; i < opp_table->clk_count; i++) {
+> >> +		if (opp->rates[i]) {
+> > 
+> > This should mean that we can disable that clock and it isn't required.
+> 
+> No, it does not mean that. The DT might provide several clocks which
+> only some are important for frequency scaling. All others just need to
+> be enabled.
+> 
+> Maybe you prefer to skip getting such clocks in PM OPP?
 
->
-> >
-> > And add this dt-binding information to MAINTAINERS
-> > as following: because I cannot catch the later patch
-> > of modification.
-> >
-> > cwchoi00@chanwoo:~/kernel/linux.chanwoo$ d
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index edc96cdb85e8..a11e9c1947b7 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -5698,6 +5698,7 @@ L:        linux-pm@vger.kernel.org
-> >   S:     Maintained
-> >   T:     git
-> > git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git
-> >   F:     Documentation/devicetree/bindings/devfreq/
-> > +F:     Documentation/devicetree/bindings/interconnect/mediatek,cci.y
-> > aml
-> >   F:     drivers/devfreq/
-> >   F:     include/linux/devfreq.h
-> >   F:     include/trace/events/devfreq.h
-> >
->
-> I will add it in the next version.
->
-> BRs,
-> Johnson Wang
-> >
-> > > +
-> > > +description: |
-> > > +  MediaTek Cache Coherent Interconnect (CCI) is a hardware engine
-> > > used by
-> > > +  MT8183 and MT8186 SoCs to scale the frequency and adjust the
-> > > voltage in
-> > > +  hardware. It can also optimize the voltage to reduce the power
-> > > consumption.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    enum:
-> > > +      - mediatek,mt8183-cci
-> > > +      - mediatek,mt8186-cci
-> > > +
-> > > +  clocks:
-> > > +    items:
-> > > +      - description:
-> > > +          The multiplexer for clock input of CPU cluster.
-> > > +      - description:
-> > > +          A parent of "cpu" clock which is used as an intermediate
-> > > clock source
-> > > +          when the original CPU is under transition and not stable
-> > > yet.
-> > > +
-> > > +  clock-names:
-> > > +    items:
-> > > +      - const: cci
-> > > +      - const: intermediate
-> > > +
-> > > +  operating-points-v2: true
-> > > +  opp-table: true
-> > > +
-> > > +  proc-supply:
-> > > +    description:
-> > > +      Phandle of the regulator for CCI that provides the supply
-> > > voltage.
-> > > +
-> > > +  sram-supply:
-> > > +    description:
-> > > +      Phandle of the regulator for sram of CCI that provides the
-> > > supply
-> > > +      voltage. When it presents, the cci devfreq driver needs to
-> > > do
-> > > +      "voltage tracking" to step by step scale up/down Vproc and
-> > > Vsram to fit
-> > > +      SoC specific needs. When absent, the voltage scaling flow is
-> > > handled by
-> > > +      hardware, hence no software "voltage tracking" is needed.
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - clocks
-> > > +  - clock-names
-> > > +  - operating-points-v2
-> > > +  - proc-supply
-> > > +
-> > > +additionalProperties: false
-> > > +
-> > > +examples:
-> > > +  - |
-> > > +    #include <dt-bindings/clock/mt8183-clk.h>
-> > > +    cci: cci {
-> > > +        compatible = "mediatek,mt8183-cci";
-> > > +        clocks = <&mcucfg CLK_MCU_BUS_SEL>,
-> > > +                 <&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
-> > > +        clock-names = "cci", "intermediate";
-> > > +        operating-points-v2 = <&cci_opp>;
-> > > +        proc-supply = <&mt6358_vproc12_reg>;
-> > > +    };
-> > > +
-> > > +    cci_opp: opp-table-cci {
-> > > +        compatible = "operating-points-v2";
-> > > +        opp-shared;
-> > > +        opp2_00: opp-273000000 {
-> > > +            opp-hz = /bits/ 64 <273000000>;
-> > > +            opp-microvolt = <650000>;
-> > > +        };
-> > > +        opp2_01: opp-338000000 {
-> > > +            opp-hz = /bits/ 64 <338000000>;
-> > > +            opp-microvolt = <687500>;
-> > > +        };
-> > > +        opp2_02: opp-403000000 {
-> > > +            opp-hz = /bits/ 64 <403000000>;
-> > > +            opp-microvolt = <718750>;
-> > > +        };
-> > > +        opp2_03: opp-463000000 {
-> > > +            opp-hz = /bits/ 64 <463000000>;
-> > > +            opp-microvolt = <756250>;
-> > > +        };
-> > > +        opp2_04: opp-546000000 {
-> > > +            opp-hz = /bits/ 64 <546000000>;
-> > > +            opp-microvolt = <800000>;
-> > > +        };
-> > > +        opp2_05: opp-624000000 {
-> > > +            opp-hz = /bits/ 64 <624000000>;
-> > > +            opp-microvolt = <818750>;
-> > > +        };
-> > > +        opp2_06: opp-689000000 {
-> > > +            opp-hz = /bits/ 64 <689000000>;
-> > > +            opp-microvolt = <850000>;
-> > > +        };
-> > > +        opp2_07: opp-767000000 {
-> > > +            opp-hz = /bits/ 64 <767000000>;
-> > > +            opp-microvolt = <868750>;
-> > > +        };
-> > > +        opp2_08: opp-845000000 {
-> > > +            opp-hz = /bits/ 64 <845000000>;
-> > > +            opp-microvolt = <893750>;
-> > > +        };
-> > > +        opp2_09: opp-871000000 {
-> > > +            opp-hz = /bits/ 64 <871000000>;
-> > > +            opp-microvolt = <906250>;
-> > > +        };
-> > > +        opp2_10: opp-923000000 {
-> > > +            opp-hz = /bits/ 64 <923000000>;
-> > > +            opp-microvolt = <931250>;
-> > > +        };
-> > > +        opp2_11: opp-962000000 {
-> > > +            opp-hz = /bits/ 64 <962000000>;
-> > > +            opp-microvolt = <943750>;
-> > > +        };
-> > > +        opp2_12: opp-1027000000 {
-> > > +            opp-hz = /bits/ 64 <1027000000>;
-> > > +            opp-microvolt = <975000>;
-> > > +        };
-> > > +        opp2_13: opp-1092000000 {
-> > > +            opp-hz = /bits/ 64 <1092000000>;
-> > > +            opp-microvolt = <1000000>;
-> > > +        };
-> > > +        opp2_14: opp-1144000000 {
-> > > +            opp-hz = /bits/ 64 <1144000000>;
-> > > +            opp-microvolt = <1025000>;
-> > > +        };
-> > > +        opp2_15: opp-1196000000 {
-> > > +            opp-hz = /bits/ 64 <1196000000>;
-> > > +            opp-microvolt = <1050000>;
-> > > +        };
-> > > +    };
-> >
-> >
->
+They shouldn't reach the OPP core then. What will the OPP core do if a
+clock has a value for one OPP and not the other ?
 
+> >> @@ -969,8 +1008,8 @@ static void _find_current_opp(struct device *dev, struct opp_table *opp_table)
+> > 
+> > I think this routine breaks as soon as we add support for multiple clocks.
+> > clks[0]'s frequency can be same for multiple OPPs and this won't get you the
+> > right OPP then.
+> 
+> I don't think so and this was raised also by Stephen - only the first
+> clock is considered the one used for all PM OPP frequency operations,
+> like get ceil/floor.
+
+IMHO, this is broken by design. I can easily see that someone wants to
+have few variants of all other frequencies for the same frequency of
+the so called "main" clock, i.e. multiple OPPs with same "main" freq
+value.  I don't think we can mark the clocks "main" or otherwise as
+easily for every platform.
+
+Stephen, any inputs on this ?
+
+> The assumption (which might need better documentation) is that first
+> clock frequency is the main one:
+> 1. It is still in opp->rate field, so it is used everywhere when OPPs
+> are compared/checked for rates.
+> 1. Usually is used also in opp-table nodes names.
+> 
+> The logical explanation is that devices has some main operating
+> frequency, e.g. the core clock, and this determines the performance. In
+> the same time such device might not be able to scale this one core clock
+> independently from others, therefore this set of patches.
+
+I understand what you are saying, but I can feel that it will break or
+will force bad bug-fixes into the core at a later point of time.
+
+I think it would be better to take it slowly and see how it goes. Lets
+first add support for the OPP core to parse and store this data and
+then we can add support to use it, or at least do all this in separate
+patches so they are easier to review/apply.
 
 -- 
-Best Regards,
-Chanwoo Choi
+viresh
