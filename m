@@ -2,134 +2,175 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 976D45220F0
-	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 18:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38EDE522171
+	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 18:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347240AbiEJQV5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 May 2022 12:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36120 "EHLO
+        id S245440AbiEJQor (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 May 2022 12:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347193AbiEJQVr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 May 2022 12:21:47 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21D428ED28;
-        Tue, 10 May 2022 09:17:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=DG+kC/U+ySej5D6tfV4OCa8YH0d8ESpuNC4bFJt4RU8=; b=C2KkFYKUIxmXZpa9w2+Tc0j2Ea
-        RFFr76ch465vsOUiMZW1uqZNDnhRYy0QqpFeaougTFG9GOX2EvcKO8NnFtvJdvaTDSvmTGm5I6bLE
-        gx/SYLZAEuVfjx7NJeu1tB8cieKdzixVjql/phg2ZRqRsu9xZgqdP1nbzw6Nv7UUXN3Dua0weQYl6
-        +N3ACyNpHY020LPMtgokauBK3/rzBv0qIzP0VJEueNDPsJdk0Noe60ugWXyfyRTapgsSXBPVXAg4/
-        oobDhrEfQYteiYAwrodL1TGkVGLJREzPqDYfYYN3sh0JBT6vnlq6trf1vxZCJI19NPJiA+YiSFKJe
-        qkMs6K7A==;
-Received: from [177.183.162.244] (helo=[192.168.0.5])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1noSY8-0008UD-Jz; Tue, 10 May 2022 18:17:24 +0200
-Message-ID: <244a412c-4589-28d1-bb77-d3648d4f0b12@igalia.com>
-Date:   Tue, 10 May 2022 13:16:54 -0300
+        with ESMTP id S1345425AbiEJQoq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 May 2022 12:44:46 -0400
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9A81D1;
+        Tue, 10 May 2022 09:40:46 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id w187so31737721ybe.2;
+        Tue, 10 May 2022 09:40:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HGoPv6W6CM1DO2fVfWosWDd56IU/7LHJWw4c0lAvJA4=;
+        b=yvBxknRisfq9swtcJocG9WwgmwooxJe6idDXOi2tI8fOyvot1EKmcFjT0dNEhVZp5n
+         E3LjGBZMcNHU3/WJowDxKT+B2en26WHwCa2F0FiTMWRbl1X55Z2lFXrZ/eThuNIopJwj
+         OfEC9vSZKYXVmTFe0ecTzlGIoZHW0Eb/rdWuTYvsXBFxqoaLwqrrOxVgCny4JJBt3dU6
+         f23mg5ew95hLH7ADPwqwkFbAP1+fIuevRj7BIeT9UrYtNmKroaVMrr5GkTYpXBEtYWRt
+         VqFNTe0J7wzR25YK217KAHOb1zDsLMrJbEsuy/pm8hEtXAoZEun2CYIpWEGllovRZM4l
+         saug==
+X-Gm-Message-State: AOAM532n3Erpei054ayZqrj/QtkyEcjCtwYAU0EeUwhz+pkuJpV3c/aI
+        9zK6GwmFGRdJmVj6UjlCCvl5lZqFN11N5Q2HGHY=
+X-Google-Smtp-Source: ABdhPJzt3lisSBKrlknwiaLfEFImDorjTjrExik21oVqLt+AIUyKLfyONbcQGpvGYBEJhAuq1ttlOmXUi1pCjBPmYjQ=
+X-Received: by 2002:a25:da84:0:b0:648:423e:57b0 with SMTP id
+ n126-20020a25da84000000b00648423e57b0mr18644611ybf.137.1652200845998; Tue, 10
+ May 2022 09:40:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 14/30] panic: Properly identify the panic event to the
- notifiers' callbacks
-Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-15-gpiccoli@igalia.com> <YnqBsXBImU64PAOL@alley>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <YnqBsXBImU64PAOL@alley>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220506122052.659129-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20220506122052.659129-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 10 May 2022 18:40:34 +0200
+Message-ID: <CAJZ5v0h5ZvB2yQz3m5Z149jCMvNhzwt_a76tm5bVK8VzC5YY9A@mail.gmail.com>
+Subject: Re: [PATCH] thermal: int340x: Mode setting with new OS handshake
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/05/2022 12:16, Petr Mladek wrote:
-> [...]
-> Hmm, this looks like a hack. PANIC_UNUSED will never be used.
-> All notifiers will be always called with PANIC_NOTIFIER.
-> 
-> The @val parameter is normally used when the same notifier_list
-> is used in different situations.
-> 
-> But you are going to use it when the same notifier is used
-> in more lists. This is normally distinguished by the @nh
-> (atomic_notifier_head) parameter.
-> 
-> IMHO, it is a bad idea. First, it would confuse people because
-> it does not follow the original design of the parameters.
-> Second, the related code must be touched anyway when
-> the notifier is moved into another list so it does not
-> help much.
-> 
-> Or do I miss anything, please?
-> 
-> Best Regards,
-> Petr
+On Fri, May 6, 2022 at 2:21 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> With the new OS handshake introduced with the commit: "c7ff29763989
+> ("thermal: int340x: Update OS policy capability handshake")",
+> thermal zone mode "enabled" doesn't work in the same way as the legacy
+> handshake. The mode "enabled" fails with -EINVAL using new handshake.
+>
+> To address this issue, when the new OS UUID mask is set:
+> - When mode is "enabled", return 0 as the firmware already has the
+> latest policy mask.
+> - When mode is "disabled", update the firmware with UUID mask of zero.
+> In this way firmware can take control of the thermal control. Also
+> reset the OS UUID mask. This allows user space to update with new
+> set of policies.
+>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: stable@vger.kernel.org
 
-Hi Petr, thanks for the review.
+It would be good to have a Fixes tag for this one.
 
-I'm not strong attached to this patch, so we could drop it and refactor
-the code of next patches to use the @nh as identification - but
-personally, I feel this parameter could be used to identify the list
-that called such function, in other words, what is the event that
-triggered the callback. Some notifiers are even declared with this
-parameter called "ev", like the event that triggers the notifier.
-
-
-You mentioned 2 cases:
-
-(a) Same notifier_list used in different situations;
-
-(b) Same *notifier callback* used in different lists;
-
-Mine is case (b), right? Can you show me an example of case (a)? You can
-see in the following patches (or grep the kernel) that people are using
-this identification parameter to determine which kind of OOPS trigger
-the callback to condition the execution of the function to specific
-cases. IIUIC, this is more or less what I'm doing, but extending the
-idea for panic notifiers.
-
-Again, as a personal preference, it makes sense to me using id's VS
-comparing pointers to differentiate events/callers.
-
-Cheers,
-
-
-Guilherme
+> ---
+>  .../intel/int340x_thermal/int3400_thermal.c   | 48 ++++++++++++-------
+>  1 file changed, 32 insertions(+), 16 deletions(-)
+>
+> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> index d97f496bab9b..1061728ad5a9 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> @@ -194,12 +194,31 @@ static int int3400_thermal_run_osc(acpi_handle handle, char *uuid_str, int *enab
+>         return result;
+>  }
+>
+> +static int set_os_uuid_mask(struct int3400_thermal_priv *priv, u32 mask)
+> +{
+> +       int cap = 0;
+> +
+> +       /*
+> +        * Capability bits:
+> +        * Bit 0: set to 1 to indicate DPTF is active
+> +        * Bi1 1: set to 1 to active cooling is supported by user space daemon
+> +        * Bit 2: set to 1 to passive cooling is supported by user space daemon
+> +        * Bit 3: set to 1 to critical trip is handled by user space daemon
+> +        */
+> +       if (mask)
+> +               cap = ((priv->os_uuid_mask << 1) | 0x01);
+> +
+> +       return int3400_thermal_run_osc(priv->adev->handle,
+> +                                      "b23ba85d-c8b7-3542-88de-8de2ffcfd698",
+> +                                      &cap);
+> +}
+> +
+>  static ssize_t current_uuid_store(struct device *dev,
+>                                   struct device_attribute *attr,
+>                                   const char *buf, size_t count)
+>  {
+>         struct int3400_thermal_priv *priv = dev_get_drvdata(dev);
+> -       int i;
+> +       int ret, i;
+>
+>         for (i = 0; i < INT3400_THERMAL_MAXIMUM_UUID; ++i) {
+>                 if (!strncmp(buf, int3400_thermal_uuids[i],
+> @@ -231,19 +250,7 @@ static ssize_t current_uuid_store(struct device *dev,
+>         }
+>
+>         if (priv->os_uuid_mask) {
+> -               int cap, ret;
+> -
+> -               /*
+> -                * Capability bits:
+> -                * Bit 0: set to 1 to indicate DPTF is active
+> -                * Bi1 1: set to 1 to active cooling is supported by user space daemon
+> -                * Bit 2: set to 1 to passive cooling is supported by user space daemon
+> -                * Bit 3: set to 1 to critical trip is handled by user space daemon
+> -                */
+> -               cap = ((priv->os_uuid_mask << 1) | 0x01);
+> -               ret = int3400_thermal_run_osc(priv->adev->handle,
+> -                                             "b23ba85d-c8b7-3542-88de-8de2ffcfd698",
+> -                                             &cap);
+> +               ret = set_os_uuid_mask(priv, priv->os_uuid_mask);
+>                 if (ret)
+>                         return ret;
+>         }
+> @@ -469,17 +476,26 @@ static int int3400_thermal_change_mode(struct thermal_zone_device *thermal,
+>         if (mode != thermal->mode) {
+>                 int enabled;
+>
+> +               enabled = (mode == THERMAL_DEVICE_ENABLED);
+> +
+> +               if (priv->os_uuid_mask) {
+> +                       if (!enabled) {
+> +                               priv->os_uuid_mask = 0;
+> +                               result = set_os_uuid_mask(priv, priv->os_uuid_mask);
+> +                       }
+> +                       goto eval_odvp;
+> +               }
+> +
+>                 if (priv->current_uuid_index < 0 ||
+>                     priv->current_uuid_index >= INT3400_THERMAL_MAXIMUM_UUID)
+>                         return -EINVAL;
+>
+> -               enabled = (mode == THERMAL_DEVICE_ENABLED);
+>                 result = int3400_thermal_run_osc(priv->adev->handle,
+>                                                  int3400_thermal_uuids[priv->current_uuid_index],
+>                                                  &enabled);
+>         }
+>
+> -
+> +eval_odvp:
+>         evaluate_odvp(priv);
+>
+>         return result;
+> --
+> 2.31.1
+>
