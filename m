@@ -2,127 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C859D521E48
-	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 17:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2157521E44
+	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 17:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345612AbiEJP1y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 May 2022 11:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
+        id S1345811AbiEJP1q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 May 2022 11:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345835AbiEJP1P (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 May 2022 11:27:15 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6F05A5AA;
-        Tue, 10 May 2022 08:16:08 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 88F0D21BB9;
-        Tue, 10 May 2022 15:16:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652195767; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OZqtmv8UjkqRBSiOYZ6ar9KDyJT6hDNxXl9SSULCXTQ=;
-        b=fGhdvJlPt//dq0KQAtVijfj/ESEJ/OC2EKpevE2XN9mzQ9A1L9iCAxeXNQ+pUyb1Mv1UlE
-        HCruB1nKt1ZaJRQk1txzbCvkQt9XnVOQap2jC6oxObMWliWuUvAfiBCulbtCmC4sio8+xa
-        +ZqWsGMsijF1KXpHWJf4ANyjUo2sNOU=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 2901B2C141;
-        Tue, 10 May 2022 15:16:06 +0000 (UTC)
-Date:   Tue, 10 May 2022 17:16:01 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-Subject: Re: [PATCH 14/30] panic: Properly identify the panic event to the
- notifiers' callbacks
-Message-ID: <YnqBsXBImU64PAOL@alley>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-15-gpiccoli@igalia.com>
+        with ESMTP id S1345741AbiEJP11 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 May 2022 11:27:27 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656876252;
+        Tue, 10 May 2022 08:17:43 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:60048)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1noRcL-00D06M-QG; Tue, 10 May 2022 09:17:41 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:37644 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1noRcK-00D119-OQ; Tue, 10 May 2022 09:17:41 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org
+References: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
+        <20220505182645.497868-10-ebiederm@xmission.com>
+        <20220510142202.GB23277@redhat.com>
+Date:   Tue, 10 May 2022 10:17:32 -0500
+In-Reply-To: <20220510142202.GB23277@redhat.com> (Oleg Nesterov's message of
+        "Tue, 10 May 2022 16:23:18 +0200")
+Message-ID: <87ee11wh6b.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427224924.592546-15-gpiccoli@igalia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1noRcK-00D119-OQ;;;mid=<87ee11wh6b.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1/Y8vXvnEYjPf/cn2xYcSjvlg/Nnds05MI=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Oleg Nesterov <oleg@redhat.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 394 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 11 (2.9%), b_tie_ro: 10 (2.5%), parse: 0.92
+        (0.2%), extract_message_metadata: 3.1 (0.8%), get_uri_detail_list:
+        1.13 (0.3%), tests_pri_-1000: 4.3 (1.1%), tests_pri_-950: 1.30 (0.3%),
+        tests_pri_-900: 1.05 (0.3%), tests_pri_-90: 141 (35.7%), check_bayes:
+        139 (35.3%), b_tokenize: 7 (1.8%), b_tok_get_all: 9 (2.2%),
+        b_comp_prob: 2.4 (0.6%), b_tok_touch_all: 117 (29.8%), b_finish: 1.04
+        (0.3%), tests_pri_0: 209 (53.1%), check_dkim_signature: 0.51 (0.1%),
+        check_dkim_adsp: 2.7 (0.7%), poll_dns_idle: 0.93 (0.2%), tests_pri_10:
+        3.0 (0.7%), tests_pri_500: 10 (2.6%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v4 10/12] ptrace: Don't change __state
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed 2022-04-27 19:49:08, Guilherme G. Piccoli wrote:
-> The notifiers infrastructure provides a way to pass an "id" to the
-> callbacks to determine what kind of event happened, i.e., what is
-> the reason behind they getting called.
-> 
-> The panic notifier currently pass 0, but this is soon to be
-> used in a multi-targeted notifier, so let's pass a meaningful
-> "id" over there.
+Oleg Nesterov <oleg@redhat.com> writes:
+
+> On 05/05, Eric W. Biederman wrote:
+>>
+>>  static void ptrace_unfreeze_traced(struct task_struct *task)
+>>  {
+>> -	if (READ_ONCE(task->__state) != __TASK_TRACED)
+>> -		return;
+>> -
+>> -	WARN_ON(!task->ptrace || task->parent != current);
+>> +	unsigned long flags;
+>>  
+>>  	/*
+>> -	 * PTRACE_LISTEN can allow ptrace_trap_notify to wake us up remotely.
+>> -	 * Recheck state under the lock to close this race.
+>> +	 * The child may be awake and may have cleared
+>> +	 * JOBCTL_PTRACE_FROZEN (see ptrace_resume).  The child will
+>> +	 * not set JOBCTL_PTRACE_FROZEN or enter __TASK_TRACED anew.
+>>  	 */
+>> -	spin_lock_irq(&task->sighand->siglock);
+>> -	if (READ_ONCE(task->__state) == __TASK_TRACED) {
+>> +	if (lock_task_sighand(task, &flags)) {
 >
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-> ---
->  include/linux/panic_notifier.h | 5 +++++
->  kernel/panic.c                 | 2 +-
->  2 files changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/panic_notifier.h b/include/linux/panic_notifier.h
-> index 41e32483d7a7..07dced83a783 100644
-> --- a/include/linux/panic_notifier.h
-> +++ b/include/linux/panic_notifier.h
-> @@ -9,4 +9,9 @@ extern struct atomic_notifier_head panic_notifier_list;
->  
->  extern bool crash_kexec_post_notifiers;
->  
-> +enum panic_notifier_val {
-> +	PANIC_UNUSED,
-> +	PANIC_NOTIFIER = 0xDEAD,
-> +};
+> But I still think that a lockless
+>
+> 	if (!(task->jobctl & JOBCTL_PTRACE_FROZEN))
+> 		return;
+>
+> check at the start of ptrace_unfreeze_traced() makes sense to avoid
+> lock_task_sighand() if possible.
+>
+> And ptrace_resume() can probably clear JOBCTL_PTRACE_FROZEN along with
+> JOBCTL_TRACED to make this optimization work better. The same for
+> ptrace_signal_wake_up().
 
-Hmm, this looks like a hack. PANIC_UNUSED will never be used.
-All notifiers will be always called with PANIC_NOTIFIER.
+What do you have that suggests that taking siglock there is a problem?
 
-The @val parameter is normally used when the same notifier_list
-is used in different situations.
+What you propose will definitely work as an incremental change, and
+in an incremental change we can explain why doing the stupid simple
+thing is not good enough.
 
-But you are going to use it when the same notifier is used
-in more lists. This is normally distinguished by the @nh
-(atomic_notifier_head) parameter.
+I am not really opposed on any grounds except that simplicity is good,
+and hard to get wrong.
 
-IMHO, it is a bad idea. First, it would confuse people because
-it does not follow the original design of the parameters.
-Second, the related code must be touched anyway when
-the notifier is moved into another list so it does not
-help much.
+Eric
 
-Or do I miss anything, please?
-
-Best Regards,
-Petr
