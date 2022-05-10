@@ -2,160 +2,232 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7AE52096A
-	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 01:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1414B520A9E
+	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 03:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233454AbiEIXnW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 May 2022 19:43:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
+        id S233955AbiEJB1H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 May 2022 21:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233558AbiEIXlU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 May 2022 19:41:20 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E6A262658;
-        Mon,  9 May 2022 16:34:53 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 3F0BE1F44239
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1652139289;
-        bh=pGHmFEEjaXj2663JV2ZbLu8gGj/vTytf7TAeEENRqwc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j6TdMpmPOCtsPovulFCfAQHz4uF7UDkPzJj/3CmgFYBImRy8M4O8YGcz4W706uWok
-         oiILXGafhBbX7n+gHJn6RXTuMBUQC8tJ+EhQAGsuO/iXIERVRLzkR/44dQES7yRA6/
-         FtuuqnjfOGSov1+k3mURGR/0OqutTfvEFLoWalI2/ND2VETgVusAQFBX2DfNOA/g7I
-         j0l9XZgvP22CfJfFfA6ZxZIqFh1T34qNRlUcm5bkUIByJGzf9sEM5G0d3YHcPWZak3
-         l8eX2DCnZSObZ31khwPUziOiMTJxqBOzynYhlqeRkrRRR5tLIOpk/iZhwBgqc0RGs9
-         Toz7YL4ixFXdA==
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v8 27/27] kernel/reboot: Add devm_register_restart_handler()
-Date:   Tue, 10 May 2022 02:32:35 +0300
-Message-Id: <20220509233235.995021-28-dmitry.osipenko@collabora.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
-References: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
+        with ESMTP id S229696AbiEJB1E (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 May 2022 21:27:04 -0400
+X-Greylist: delayed 1808 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 09 May 2022 18:23:07 PDT
+Received: from m12-15.163.com (m12-15.163.com [220.181.12.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2431614096
+        for <linux-pm@vger.kernel.org>; Mon,  9 May 2022 18:23:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=WqmJd
+        515m1PJTK0nq4GDI1QjAybjj0z9nr72C7+YdFk=; b=qEMnIt5En+Lp2rUDeRV1N
+        uD+cCktAsYhJe+phFhsY3IRQCT/nKbr8daGR05VDy4Cl8CLAWNZF8DXZ4M9cGLIT
+        q76QsILybAawv1BQ/CquxKzzbjeB8ZopTtrRWC+jBNj/9pnbusas0sG7WCXKZ8IX
+        dcATHn+rPjzauh/lqdoU9Q=
+Received: from DESKTOP-B1R4FVG.localdomain (unknown [218.201.129.19])
+        by smtp11 (Coremail) with SMTP id D8CowABntf58s3liulW+Bg--.40118S2;
+        Tue, 10 May 2022 08:36:13 +0800 (CST)
+From:   qianfanguijin@163.com
+To:     linux-sunxi@lists.linux.dev
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        qianfan Zhao <qianfanguijin@163.com>
+Subject: [PATCH v2] drivers: cpufreq: sun8i-r40: Add cpufreq support
+Date:   Tue, 10 May 2022 08:36:11 +0800
+Message-Id: <20220510003611.1812-1-qianfanguijin@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: D8CowABntf58s3liulW+Bg--.40118S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxWrWxWF47WF4UWrWfuF43GFg_yoWrtry5pr
+        17CFWkGrs3Wr1Yqw12qrW8tF18Caykuay5tF1UC34fJr1kXFyDXryftr9akrZ8Xr13X3yS
+        vrnYqr92vw4DXaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zN9aPUUUUUU=
+X-Originating-IP: [218.201.129.19]
+X-CM-SenderInfo: htld0w5dqj3xxmlqqiywtou0bp/1tbiXB387VXl2wCLHQAAst
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add devm_register_restart_handler() helper that registers sys-off
-handler using restart mode and with a default priority. Most drivers
-will want to register restart handler with a default priority, so this
-helper will reduce the boilerplate code and make code easier to read and
-follow.
+From: qianfan Zhao <qianfanguijin@163.com>
 
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+OPP table value is get from allwinner lichee 3.10 kernel.
+And completed 'cpu-supply' on sun8i based board.
+
+Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
 ---
- include/linux/reboot.h |  4 ++++
- kernel/reboot.c        | 22 ++++++++++++++++++++++
- 2 files changed, 26 insertions(+)
+ .../boot/dts/sun8i-r40-bananapi-m2-ultra.dts  |  4 ++
+ arch/arm/boot/dts/sun8i-r40-feta40i.dtsi      |  4 ++
+ arch/arm/boot/dts/sun8i-r40.dtsi              | 47 +++++++++++++++++++
+ arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts      |  4 ++
+ .../boot/dts/sun8i-v40-bananapi-m2-berry.dts  |  4 ++
+ drivers/cpufreq/cpufreq-dt-platdev.c          |  1 +
+ 6 files changed, 64 insertions(+)
 
-diff --git a/include/linux/reboot.h b/include/linux/reboot.h
-index 7c6e1f308f7c..e5d9ef886179 100644
---- a/include/linux/reboot.h
-+++ b/include/linux/reboot.h
-@@ -145,6 +145,10 @@ int devm_register_power_off_handler(struct device *dev,
- 				    int (*callback)(struct sys_off_data *data),
- 				    void *cb_data);
+diff --git a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts b/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
+index a6a1087a0c9b..4f30018ec4a2 100644
+--- a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
++++ b/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
+@@ -113,6 +113,10 @@ &ahci {
+ 	status = "okay";
+ };
  
-+int devm_register_restart_handler(struct device *dev,
-+				  int (*callback)(struct sys_off_data *data),
-+				  void *cb_data);
++&cpu0 {
++	cpu-supply = <&reg_dcdc2>;
++};
 +
- int register_platform_power_off(void (*power_off)(void));
- void unregister_platform_power_off(void (*power_off)(void));
+ &de {
+ 	status = "okay";
+ };
+diff --git a/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi b/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi
+index 265e0fa57a32..b872b51a346d 100644
+--- a/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi
++++ b/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi
+@@ -6,6 +6,10 @@
  
-diff --git a/kernel/reboot.c b/kernel/reboot.c
-index b790025154ac..2e78bd754a75 100644
---- a/kernel/reboot.c
-+++ b/kernel/reboot.c
-@@ -484,6 +484,28 @@ int devm_register_power_off_handler(struct device *dev,
- }
- EXPORT_SYMBOL_GPL(devm_register_power_off_handler);
+ #include "sun8i-r40.dtsi"
  
-+/**
-+ *	devm_register_restart_handler - Register restart handler
-+ *	@dev: Device that registers callback
-+ *	@callback: Callback function
-+ *	@cb_data: Callback's argument
-+ *
-+ *	Registers resource-managed sys-off handler with a default priority
-+ *	and using restart mode.
-+ *
-+ *	Returns zero on success, or error code on failure.
-+ */
-+int devm_register_restart_handler(struct device *dev,
-+				  int (*callback)(struct sys_off_data *data),
-+				  void *cb_data)
-+{
-+	return devm_register_sys_off_handler(dev,
-+					     SYS_OFF_MODE_RESTART,
-+					     SYS_OFF_PRIO_DEFAULT,
-+					     callback, cb_data);
-+}
-+EXPORT_SYMBOL_GPL(devm_register_restart_handler);
++&cpu0 {
++	cpu-supply = <&reg_dcdc2>;
++};
 +
- static struct sys_off_handler *platform_power_off_handler;
+ &i2c0 {
+ 	status = "okay";
  
- static int platform_power_off_notify(struct sys_off_data *data)
+diff --git a/arch/arm/boot/dts/sun8i-r40.dtsi b/arch/arm/boot/dts/sun8i-r40.dtsi
+index 291f4784e86c..90de119095fa 100644
+--- a/arch/arm/boot/dts/sun8i-r40.dtsi
++++ b/arch/arm/boot/dts/sun8i-r40.dtsi
+@@ -54,6 +54,41 @@ / {
+ 	#size-cells = <1>;
+ 	interrupt-parent = <&gic>;
+ 
++	cpu0_opp_table: opp_table0 {
++		compatible = "operating-points-v2";
++		opp-shared;
++
++		opp-720000000 {
++			opp-hz = /bits/ 64 <720000000>;
++			opp-microvolt = <1000000 1000000 1300000>;
++			clock-latency-ns = <2000000>;
++		};
++
++		opp-912000000 {
++			opp-hz = /bits/ 64 <912000000>;
++			opp-microvolt = <1100000 1100000 1300000>;
++			clock-latency-ns = <2000000>;
++		};
++
++		opp-1008000000 {
++			opp-hz = /bits/ 64 <1008000000>;
++			opp-microvolt = <1160000 1160000 1300000>;
++			clock-latency-ns = <2000000>;
++		};
++
++		opp-1104000000 {
++			opp-hz = /bits/ 64 <1104000000>;
++			opp-microvolt = <1240000 1240000 1300000>;
++			clock-latency-ns = <2000000>;
++		};
++
++		opp-1200000000 {
++			opp-hz = /bits/ 64 <1200000000>;
++			opp-microvolt = <1300000 1300000 1300000>;
++			clock-latency-ns = <2000000>;
++		};
++	};
++
+ 	clocks {
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+@@ -84,24 +119,36 @@ cpu0: cpu@0 {
+ 			compatible = "arm,cortex-a7";
+ 			device_type = "cpu";
+ 			reg = <0>;
++			clocks = <&ccu CLK_CPU>;
++			clock-names = "cpu";
++			operating-points-v2 = <&cpu0_opp_table>;
+ 		};
+ 
+ 		cpu1: cpu@1 {
+ 			compatible = "arm,cortex-a7";
+ 			device_type = "cpu";
+ 			reg = <1>;
++			clocks = <&ccu CLK_CPU>;
++			clock-names = "cpu";
++			operating-points-v2 = <&cpu0_opp_table>;
+ 		};
+ 
+ 		cpu2: cpu@2 {
+ 			compatible = "arm,cortex-a7";
+ 			device_type = "cpu";
+ 			reg = <2>;
++			clocks = <&ccu CLK_CPU>;
++			clock-names = "cpu";
++			operating-points-v2 = <&cpu0_opp_table>;
+ 		};
+ 
+ 		cpu3: cpu@3 {
+ 			compatible = "arm,cortex-a7";
+ 			device_type = "cpu";
+ 			reg = <3>;
++			clocks = <&ccu CLK_CPU>;
++			clock-names = "cpu";
++			operating-points-v2 = <&cpu0_opp_table>;
+ 		};
+ 	};
+ 
+diff --git a/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts b/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts
+index 6931aaab2382..0eb1990742ff 100644
+--- a/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts
++++ b/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts
+@@ -88,6 +88,10 @@ &ahci {
+ 	status = "okay";
+ };
+ 
++&cpu0 {
++	cpu-supply = <&reg_dcdc2>;
++};
++
+ &de {
+ 	status = "okay";
+ };
+diff --git a/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts b/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts
+index 47954551f573..fdf8bd12faaa 100644
+--- a/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts
++++ b/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts
+@@ -107,6 +107,10 @@ &ahci {
+ 	status = "okay";
+ };
+ 
++&cpu0 {
++	cpu-supply = <&reg_dcdc2>;
++};
++
+ &de {
+ 	status = "okay";
+ };
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index ca1d103ec449..971a99219d4d 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -26,6 +26,7 @@ static const struct of_device_id allowlist[] __initconst = {
+ 	{ .compatible = "allwinner,sun8i-a23", },
+ 	{ .compatible = "allwinner,sun8i-a83t", },
+ 	{ .compatible = "allwinner,sun8i-h3", },
++	{ .compatible = "allwinner,sun8i-r40", },
+ 
+ 	{ .compatible = "apm,xgene-shadowcat", },
+ 
 -- 
-2.35.1
+2.25.1
 
