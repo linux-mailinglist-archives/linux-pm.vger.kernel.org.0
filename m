@@ -2,74 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D15C521D5A
-	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 16:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B28521DA4
+	for <lists+linux-pm@lfdr.de>; Tue, 10 May 2022 17:08:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241611AbiEJPDp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 May 2022 11:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
+        id S1345195AbiEJPMd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 May 2022 11:12:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345496AbiEJPDe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 May 2022 11:03:34 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C51731361;
-        Tue, 10 May 2022 07:28:24 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 3A6AE1F896;
-        Tue, 10 May 2022 14:28:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652192903; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        with ESMTP id S1346125AbiEJPLw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 May 2022 11:11:52 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678342AC0F1;
+        Tue, 10 May 2022 07:45:19 -0700 (PDT)
+Date:   Tue, 10 May 2022 16:45:16 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1652193917;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=5Vk/8pdLWJKvC1pkcnRQ/HwoU2ABECojPYTjSUx9JWI=;
-        b=qCuBe8399OKc/XhS2YM19THr9x0w+LK3v0+yrYrVMx1O5y8bO2nhr7ld/xwzdNWpoeMnQv
-        KDbf9vzeiGs4Zk4jc5/KyT1Cq3WiPlflRqYiR6m11RKyyC/hq4LcZ09p+y2XB4Mv583rFK
-        /mj4yXQtU5XfZ45MAwfj3oDOrq6/m9Q=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 344FF2C141;
-        Tue, 10 May 2022 14:28:22 +0000 (UTC)
-Date:   Tue, 10 May 2022 16:28:21 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        bh=5blkjIedYuMCiqErNt15Eq65xE+zoCnwsx/3F3fRUQ8=;
+        b=jXszJivvNglB8FP/v3gF3KwlzVs0dDzDmH1/cWD/Zy3cdPLh9I8DjDJZwprPIV+P5jvzEy
+        xm+NGj8oUdQNAZGcrqWTv4+neGmzcCMwyZpJhgDdsnp3X47Bxugq4OqnvDph5Ou9eoljOV
+        F5QRTSDBnFjkgu+fzG9vgfqcLk12/M5XMTw4w1QxaO+zx7VQrXVM60oYxGyY6ITBPiT7ac
+        X24VJanYpx8dmh0ZkIwdpqKtmklxkZcMhQI5I/wl1fPsXGuJ53yqFGI+NNUIdzm3labKWi
+        i3ZmLr8IwHR0bm+cqlY+0APMFY4+8Y7wrVxqNJZzyIWu0C03zqnS4fGAvBt77Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1652193917;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5blkjIedYuMCiqErNt15Eq65xE+zoCnwsx/3F3fRUQ8=;
+        b=WEzshOP+DtQxpnpyZIVwNRSJAbEcKHWL7ofcB9TlTU5e8NmlPVtxeVq23+5gqbxWlEHFC3
+        1TYWJVUuC1RJKMCw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Oleg Nesterov <oleg@redhat.com>, linux-kernel@vger.kernel.org,
+        rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
         Johannes Berg <johannes@sipsolutions.net>,
-        Richard Weinberger <richard@nod.at>
-Subject: Re: [PATCH 11/30] um: Improve panic notifiers consistency and
- ordering
-Message-ID: <Ynp2hRodh04K3pzK@alley>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-12-gpiccoli@igalia.com>
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>, linux-ia64@vger.kernel.org
+Subject: Re: [PATCH v4 0/12] ptrace: cleaning up ptrace_stop
+Message-ID: <Ynp6fP8QkIGvUT1T@linutronix.de>
+References: <20220421150248.667412396@infradead.org>
+ <20220421150654.817117821@infradead.org>
+ <87czhap9dy.fsf@email.froward.int.ebiederm.org>
+ <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+ <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
+ <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
+ <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
+ <20220510141119.GA23277@redhat.com>
+ <87lev9xy3n.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220427224924.592546-12-gpiccoli@igalia.com>
+In-Reply-To: <87lev9xy3n.fsf@email.froward.int.ebiederm.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -80,31 +73,17 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed 2022-04-27 19:49:05, Guilherme G. Piccoli wrote:
-> Currently the panic notifiers from user mode linux don't follow
-> the convention for most of the other notifiers present in the
-> kernel (indentation, priority setting, numeric return).
-> More important, the priorities could be improved, since it's a
-> special case (userspace), hence we could run the notifiers earlier;
-> user mode linux shouldn't care much with other panic notifiers but
-> the ordering among the mconsole and arch notifier is important,
-> given that the arch one effectively triggers a core dump.
+On 2022-05-10 09:26:36 [-0500], Eric W. Biederman wrote:
+> Does anyone else have any comments on this patchset?
+> 
+> If not I am going to apply this to a branch and get it into linux-next.
 
-It is not clear to me why user mode linux should not care about
-the other notifiers. It might be because I do not know much
-about the user mode linux.
+Looks good I guess.
+Be aware that there will be clash due to
+   https://lore.kernel.org/all/1649240981-11024-3-git-send-email-yangtiezhu@loongson.cn/
 
-Is the because they always create core dump or are never running
-in a hypervisor or ...?
+which sits currently in -akpm.
 
-AFAIK, the notifiers do many different things. For example, there
-is a notifier that disables RCU watchdog, print some extra
-information. Why none of them make sense here?
+> Eric
 
-> This patch fixes that by running the mconsole notifier as the first
-> panic notifier, followed by the architecture one (that coredumps).
-> Also, we remove a useless header inclusion.
-
-
-Best Regards,
-Petr
+Sebastian
