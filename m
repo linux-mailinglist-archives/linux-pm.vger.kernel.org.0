@@ -2,79 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 394B9523ED5
-	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 22:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF9452413D
+	for <lists+linux-pm@lfdr.de>; Thu, 12 May 2022 01:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347755AbiEKUYW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 May 2022 16:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
+        id S1349476AbiEKXzF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 May 2022 19:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238984AbiEKUYR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 16:24:17 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0345A72E01;
-        Wed, 11 May 2022 13:24:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=LCKlEcL/+gLbho7zoJo89g9MDYx2GFkg8N7n1nlW+0g=; b=MQpyMZ3nMM+SlSF0Ic+7AggIHS
-        wWCWxLFJNdpcNC/qKw1wNJR3uSo8xMkfiJlq7d2aikSbZG9yuq1pfGOyawWDcFgWnRsla4fbF455Y
-        3RXCIUoMIO9o6uix81B+J++RZraHoxYIg5AFTEzg2KmNpXSrs7BEjvRicrp5TYhs6s3mYN27kkyAz
-        njPDxaRSeQ75fkZPzqisnL9xIuav4szhmycF8VItK7avDyCoEE8U/Zs7xTZO8x+jizmxi0qGskMhG
-        GsWdK7oyZ7kJDFhpPsgWAmAhF7aiE+T5aNpN2RQ5WYTzC7ql7jtRy3esjCfYNiJNCeB+2D6JHceeB
-        Ayva3vzg==;
-Received: from [177.183.162.244] (helo=[192.168.0.5])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1noss0-000Aod-US; Wed, 11 May 2022 22:23:41 +0200
-Message-ID: <4b003501-f5c3-cd66-d222-88d98c93e141@igalia.com>
-Date:   Wed, 11 May 2022 17:22:22 -0300
+        with ESMTP id S237870AbiEKXzE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 19:55:04 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745406FD3A;
+        Wed, 11 May 2022 16:54:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652313299; x=1683849299;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=djoNJ50KR+AFBmKpoCbyO4jjNOYnBtA+kMqhid4fp1A=;
+  b=ofVj1TUvUACSYehN7FLHJfCWGZGRezsPN9fMjqaAjmpPF1E4U6RL/dC2
+   vTNqYRkVEUIxUFXNO7ENNB5RQ7dAWDzo/W6g7riy6zDTI7qdYSzb+eEnT
+   fnZyiaV63OBdscqlRy0GPJrJvkdx/vUBvJnLKDf5anKVOSGVSoYJtzBHk
+   o=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 11 May 2022 16:54:58 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 16:54:58 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 11 May 2022 16:54:58 -0700
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 11 May 2022 16:54:52 -0700
+Date:   Thu, 12 May 2022 05:24:48 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Matthias Kaehlcke <mka@chromium.org>
+CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_vpulyala@quicinc.com>
+Subject: Re: [v15 2/6] usb: host: xhci-plat: Enable wakeup based on children
+ wakeup status
+Message-ID: <20220511235448.GA11722@hu-pkondeti-hyd.qualcomm.com>
+References: <1651740973-7944-1-git-send-email-quic_kriskura@quicinc.com>
+ <1651740973-7944-3-git-send-email-quic_kriskura@quicinc.com>
+ <YnVAZSZYQvIJxOHv@google.com>
+ <20220509033843.GB9170@hu-pkondeti-hyd.qualcomm.com>
+ <20220511015101.GB23843@hu-pkondeti-hyd.qualcomm.com>
+ <YnvcMe+irsndtcV0@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 11/30] um: Improve panic notifiers consistency and
- ordering
-Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Richard Weinberger <richard@nod.at>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-12-gpiccoli@igalia.com> <Ynp2hRodh04K3pzK@alley>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <Ynp2hRodh04K3pzK@alley>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YnvcMe+irsndtcV0@google.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,37 +82,107 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/05/2022 11:28, Petr Mladek wrote:
-> [...]
-> It is not clear to me why user mode linux should not care about
-> the other notifiers. It might be because I do not know much
-> about the user mode linux.
+On Wed, May 11, 2022 at 08:54:25AM -0700, Matthias Kaehlcke wrote:
+> On Wed, May 11, 2022 at 07:21:01AM +0530, Pavan Kondeti wrote:
+> > On Mon, May 09, 2022 at 09:08:43AM +0530, Pavan Kondeti wrote:
+> > > On Fri, May 06, 2022 at 08:36:31AM -0700, Matthias Kaehlcke wrote:
+> > > > On Thu, May 05, 2022 at 02:26:09PM +0530, Krishna Kurapati wrote:
+> > > > > device_wakeup_path() tells if any of the children devices needs
+> > > > > wakeup. Use this hint to enable/disable wakeup of our device. This
+> > > > > helps the parent device of xhci-plat (like sysdev) to retrieve
+> > > > > the wakeup setting via device_wakeup_path().
+> > > > > 
+> > > > > Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> > > > > ---
+> > > > >  drivers/usb/host/xhci-plat.c | 8 ++++++++
+> > > > >  1 file changed, 8 insertions(+)
+> > > > > 
+> > > > > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> > > > > index 649ffd8..ad585fa 100644
+> > > > > --- a/drivers/usb/host/xhci-plat.c
+> > > > > +++ b/drivers/usb/host/xhci-plat.c
+> > > > > @@ -415,6 +415,14 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
+> > > > >  	if (pm_runtime_suspended(dev))
+> > > > >  		pm_runtime_resume(dev);
+> > > > >  
+> > > > > +	if (device_wakeup_path(dev)) {
+> > > > > +		if (!device_may_wakeup(dev))
+> > > > > +			device_wakeup_enable(dev);
+> > > > > +	} else {
+> > > > > +		if (device_may_wakeup(dev))
+> > > > > +			device_wakeup_disable(dev);
+> > > > > +	}
+> > > > 
+> > > > This code is not self-explantatory and deserves a comment.
+> > > > 
+> > > > Enabling/disabling wakeup for the purpose if signalling is a bit of a
+> > > > hack. It might be an acceptable hack as long as it has no side effects.
+> > > > However with the current implementation the wakeup state of the xHCI can
+> > > > be different after resuming than it was before going to suspend:
+> > > > 
+> > > > after boot
+> > > >   grep -h xhci /sys/class/wakeup/*/name
+> > > >     => xhci-hcd.14.auto
+> > > > 
+> > > > after suspend w/o wakeup capable device
+> > > >   grep -h xhci /sys/class/wakeup/*/name
+> > > >     => no results
+> > > > 
+> > > > after suspend with wakeup capable device
+> > > >   grep -h xhci /sys/class/wakeup/*/name
+> > > >     => xhci-hcd.14.auto
+> > > > 
+> > > > The hack shouldn't alter the wakeup state 'persistently', i.e. you'll have
+> > > > to restore it on resume, as in Pavan does in his reply to '[PATCH v14 2/7]
+> > > > PM / wakeup: Add device_children_wakeup_capable()' (it needs to be done
+> > > > conditionally though).
+> > > 
+> > > I am worried that we are not doing the right thing here. why should the
+> > > xhci-plat goes against the wishes of the user space policy here? Can we NOT
+> > > just do anything here? If some one wants xhci-plat to wakeup all the time,
+> > > dwc3 will be configured to wakeup the system provided that the support is
+> > > available. This way we don't break any existing users of xhci-plat i.e not
+> > > enabling wakeup from the kernel.
+> > > 
+> > Krishna,
+> > 
+> > can we please drop this patch and use device_wakeup_path() and verify the
+> > following cases.
+> > 
+> > 1. one of the downstream USB device supports wakeup and xhci-plat wakeup is enabled
+> > 2. one of the downstream USB device supports wakeup and xhci-plat wakeup is
+> > disabled
+> > 3. none of the downstream USB device supports wakeup (or disable) and
+> > xhci-plat wakeup is enabled.
+> > 4. none of the downstream USB device supports wakeup (or disable) and
+> > xhci-plat wakeup is disabled.
 > 
-> Is the because they always create core dump or are never running
-> in a hypervisor or ...?
+> I wonder if we couldn't keep this simpler: if the dwc3 is wakeup capable keep
+> the PHYs/core powered, otherwise power them down. Similar to what commit
+> 689bf72c6e0d ("usb: dwc3: Don't reinitialize core during host
+> bus-suspend/resume") intended, but with the additonal check for wakeup
+> capability. We now know that the PHYs need to be powered down on some SoCs
+> to allow the SoC to reach its low power mode during suspend:
 > 
-> AFAIK, the notifiers do many different things. For example, there
-> is a notifier that disables RCU watchdog, print some extra
-> information. Why none of them make sense here?
->
+> 
+>   commit c4a5153e87fdf6805f63ff57556260e2554155a5
+>   Author: Manu Gautam <mgautam@codeaurora.org>
+>   Date:   Thu Jan 18 16:54:30 2018 +0530
+> 
+>   usb: dwc3: core: Power-off core/PHYs on system_suspend in host mode
+> 
+>   Commit 689bf72c6e0d ("usb: dwc3: Don't reinitialize core during
+>   host bus-suspend/resume") updated suspend/resume routines to not
+>   power_off and reinit PHYs/core for host mode.
+>   It broke platforms that rely on DWC3 core to power_off PHYs to
+>   enter low power state on system suspend.
+> 
+> 
+> With wakeup capable controllers this is apparently not an issue, otherwise
+> the SoC wouldn't be able to enter its low power state when wakeup is
+> enabled.
 
-Hi Petr, my understanding is that UML is a form of running Linux as a
-regular userspace process for testing purposes. With that said, as soon
-as we exit in the error path, less "pollution" would happen, so users
-can use GDB to debug the core dump for example.
+Agree to your suggestion. Thanks for your inputs.
 
-In later patches of this series (when we split the panic notifiers in 3
-lists) these UML notifiers run in the pre-reboot list, so they run after
-the informational notifiers for example (in the default level).
-But without the list split we cannot order properly, so my gut feeling
-is that makes sense to run them rather earlier than later in the panic
-process...
-
-Maybe Anton / Johannes / Richard could give their opinions - appreciate
-that, I'm not attached to the priority here, it's more about users'
-common usage of UML I can think of...
-
-Cheers,
-
-
-Guilherme
+Thanks,
+Pavan
