@@ -2,123 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82485522EEE
-	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 11:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19876522F86
+	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 11:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbiEKJGk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 May 2022 05:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36064 "EHLO
+        id S236923AbiEKJg1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 May 2022 05:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244051AbiEKJGd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 05:06:33 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151D81D0CA
-        for <linux-pm@vger.kernel.org>; Wed, 11 May 2022 02:06:31 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id a15-20020a17090ad80f00b001dc2e23ad84so4333572pjv.4
-        for <linux-pm@vger.kernel.org>; Wed, 11 May 2022 02:06:31 -0700 (PDT)
+        with ESMTP id S241889AbiEKJgI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 05:36:08 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC391193F9;
+        Wed, 11 May 2022 02:36:05 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id c14so1509056pfn.2;
+        Wed, 11 May 2022 02:36:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=nsHL/Fgf/VRDzuQNj7TOsqpyMCDcKbQUomZXfLWBfKI=;
-        b=e+IuamdFJTZpf5n5zxxUPfE3eAwTLOKFTxWIbi0xVTgF8k5lupUYviT1ldVmDLwI5b
-         UcizCvRPkzjQ7X21TsMxwUhVLknK9YzpAqT8wDqB+HGxU2CSZXU0bfE6SL3FiHbaTEyN
-         8Ccl1gnC952TZNg/1j/mmr4UdySSOlYhCj3liTNwPOKtjQHgRLYxrhNpTrKpvY80K1x0
-         JdqDYcxeVvny6JJzbsmP7HVaKiPIGedXHaCOza361rAjSOs2q7CZTzqtV4jeGuPx3Wk8
-         Yjo+gzUN4rEhUrYJ1jl53HzENhO6c2DHRy5KjVTOg6MmNeHPOZ82y/pUisIqC4RDWo0O
-         MQIA==
+        bh=O88Szo+Omq4F6dF+s0q/ZFttzodkP+77b2tvfNUQP3c=;
+        b=ghRHSjolHLt2VDl+GTER1jRRuG0yAr0hwwgCy3W89FomDCyWDWa31WsotgFihImdXk
+         WUpIuoxhM1xvlXdz2opqG4GOMJD5Sn5OLV7KzJl76rdiYxeNoSKc3SQ8ogFmz0htPVzr
+         MK8Acc3idh2/M5VqLgrAdUgFTae6VV4tKT8D6wOT9F8CDKIqZhunbwRbYBx92MK1vuvi
+         gMqSyjuIqZdtZfJOC6DOo2rtxJFgsQtIxQfQQ2s1aiXw528Gw71fvVsHT/rvzdtmH1P+
+         q7ZKHVXuFOaOR6/EmrmtvslcdOxY7ovrRhVasFPvMqdzMlM2XDz4taJXpFj55g0K5SbN
+         3dCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=nsHL/Fgf/VRDzuQNj7TOsqpyMCDcKbQUomZXfLWBfKI=;
-        b=JJWqoP5z6Tmi3NVlnR5RKvzM2nNAxfpQz9YS0ibN9bTd3Z0QSPz3CPmqQ5faPgoEnn
-         XVxuNfC6gYvcGPJ8De1Sf6/caxtNA22UkEV75fvXO2YnY8SCHOauojD4c+jRTvYauBWy
-         OghHoHARG8svyNDtquzWu797ub5YSd++B0erAmi92WhRYNVjc+vwsOWSADYsPLThdNca
-         U+h0mn3zkndfm2y3Yor158VtqERJctxET7kmeGLqtPXwSZg4ItAMkcBj4FCHQAIZbnkF
-         8aAFrbUBe94WtVncWm+yXckudY+ayWDLn0YB7IZoCvtvb0+s2KqJQKPTs4f1Jb82obGO
-         i/4A==
-X-Gm-Message-State: AOAM532SfSzd5Pgk7guxYbllw8wNgeeTOgxxdJfEd34+TGgkkXxKodW8
-        TOivOznZGleaCrERB15Yx09YE2QaxhwKBw==
-X-Google-Smtp-Source: ABdhPJwBVKz8nB+2n8dSZV3VanQ8pn3CfXK/2OC9FcSog0V/gl5h4NUyfyOrtBFiBZcleQJCGXfFxg==
-X-Received: by 2002:a17:902:b412:b0:15e:dc07:4c14 with SMTP id x18-20020a170902b41200b0015edc074c14mr24522004plr.99.1652259991350;
-        Wed, 11 May 2022 02:06:31 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id w63-20020a628242000000b0050dc7628151sm1098779pfd.43.2022.05.11.02.06.30
+        bh=O88Szo+Omq4F6dF+s0q/ZFttzodkP+77b2tvfNUQP3c=;
+        b=Y0aOwRjT2uEAqh0JCpa98uzf1/urTqWjOZpO5jIIQxYgnaW62WkI/AsTyUYKf69HT1
+         BRdRUUn1XE2+B3dpTozARJYK5pXVaciuTzycjiv0ltbj4G0wc/v5hOI7fYxVJHQ2tWqI
+         YMo0d6agS1iybQLdsWiNqw5q17G+Z+mo5JeYW5ebpjMcZb3/qMN+s7/z9Jdg4WZVjEH/
+         RgEuM1rm4I0Rb5opXsKnBg+M1uiT1PLv8iRK86+/nWjyIx3jMO0wxU3dvgOAQxTgFMOA
+         UkA8MOMKrUIzYBQQrhKfCNqHP9C8x91eBlnzW+jqYIFd7yfSBncDyL5jnkkQ62LzGAaq
+         FhVQ==
+X-Gm-Message-State: AOAM533Y+ZJPWqOSoNzNXu+x7QB3AP7Z/B05WQ0S//5sM/LJG7oCKG6Q
+        fTVlJ+CagnLqncM1qzzekYj8/BxFzJw3Cg==
+X-Google-Smtp-Source: ABdhPJxmOhooQCAQx+k65II1F+oq1C/AsvE6sY9DXx8MY4psgP3uIMv6+nQOeogMk8mGb9emyq+Jyg==
+X-Received: by 2002:a63:fe16:0:b0:3c6:48dd:f7e4 with SMTP id p22-20020a63fe16000000b003c648ddf7e4mr19483963pgh.458.1652261760238;
+        Wed, 11 May 2022 02:36:00 -0700 (PDT)
+Received: from localhost.localdomain ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id p14-20020a17090a428e00b001dcf8960a13sm3492640pjg.40.2022.05.11.02.35.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 02:06:30 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rafael Wysocki <rjw@rjwysocki.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: Clear real_cpus mask from remove_cpu_dev_symlink()
-Date:   Wed, 11 May 2022 14:36:24 +0530
-Message-Id: <b44e39176bbba43c256ae75df26c1fd051353ff9.1652259889.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+        Wed, 11 May 2022 02:35:59 -0700 (PDT)
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+X-Google-Original-From: Chanwoo Choi <cw00.choi@samsung.com>
+To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     johnson.wang@mediatek.com, mka@chromium.org, wenst@chromium.org,
+        jia-wei.chang@mediatek.com, andrew-sh.cheng@mediatek.com,
+        hsinyi@chromium.org, saravanak@google.com, cw00.choi@samsung.com,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com
+Subject: [PATCH v4 0/4] PM / devfreq: Add cpu based scaling support to passive governor
+Date:   Wed, 11 May 2022 18:35:50 +0900
+Message-Id: <20220511093554.17535-1-cw00.choi@samsung.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-add_cpu_dev_symlink() is responsible for setting the CPUs in the
-real_cpus mask, the reverse of which should be done from
-remove_cpu_dev_symlink() to make it look clean and avoid any breakage
-later on.
+The devfreq passive governor has already supported the devfreq parent device
+for coupling the frequency change if some hardware have the constraints
+such as power sharing and so on.
 
-Move the call to clear the mask to remove_cpu_dev_symlink().
+Add cpu based scaling support to passive governor with required-opp property.
+It uses the cpufreq notifier to catch the frequency change timing of cpufreq
+and get the next frequency according to new cpu frequency by using required-opp
+property. It is based on patch[1] and then just code clean-up by myself.
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/cpufreq/cpufreq.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Make the common code for both passive_devfreq and passive_cpufreq
+parent type to remove the duplicate code.
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index fbaa8e6c7d23..c8bf6c68597c 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1020,11 +1020,12 @@ static void add_cpu_dev_symlink(struct cpufreq_policy *policy, unsigned int cpu,
- 		dev_err(dev, "cpufreq symlink creation failed\n");
- }
- 
--static void remove_cpu_dev_symlink(struct cpufreq_policy *policy,
-+static void remove_cpu_dev_symlink(struct cpufreq_policy *policy, int cpu,
- 				   struct device *dev)
- {
- 	dev_dbg(dev, "%s: Removing symlink\n", __func__);
- 	sysfs_remove_link(&dev->kobj, "cpufreq");
-+	cpumask_clear_cpu(cpu, policy->real_cpus);
- }
- 
- static int cpufreq_add_dev_interface(struct cpufreq_policy *policy)
-@@ -1532,7 +1533,7 @@ static int cpufreq_online(unsigned int cpu)
- 
- out_destroy_policy:
- 	for_each_cpu(j, policy->real_cpus)
--		remove_cpu_dev_symlink(policy, get_cpu_device(j));
-+		remove_cpu_dev_symlink(policy, j, get_cpu_device(j));
- 
- 	up_write(&policy->rwsem);
- 
-@@ -1657,8 +1658,7 @@ static void cpufreq_remove_dev(struct device *dev, struct subsys_interface *sif)
- 	if (cpu_online(cpu))
- 		cpufreq_offline(cpu);
- 
--	cpumask_clear_cpu(cpu, policy->real_cpus);
--	remove_cpu_dev_symlink(policy, dev);
-+	remove_cpu_dev_symlink(policy, cpu, dev);
- 
- 	if (cpumask_empty(policy->real_cpus)) {
- 		/* We did light-weight exit earlier, do full tear down now */
+[1] [RFC,v2] PM / devfreq: Add cpu based scaling support to passive_governor
+- https://lore.kernel.org/patchwork/patch/1101049/
+
+Changes from v3:
+: ttps://patchwork.kernel.org/project/linux-pm/cover/20220509120337.92472-1-cw00.choi@samsung.com/
+- Add tested-by tag of both Chen-Yu Tsai and Johnson Wang
+- Fix some typo
+
+Changes from v2:
+: https://patchwork.kernel.org/project/linux-pm/cover/20220507150145.531864-1-cw00.choi@samsung.com/
+- Drop the following patch ("PM / devfreq: passive: Update frequency when start governor")
+- Move p_data->this initialization into cpufreq_passive_regiser_notifier()
+
+Changes from v1:
+: https://patchwork.kernel.org/project/linux-pm/cover/20210617060546.26933-1-cw00.choi@samsung.com/
+- Rename cpu_data variable to parent_cpu_data to avoid build fail
+- Use for_each_possible_cpu macro when register cpufreq transition notifier
+- Add missing exception handling when cpufreq_passive_register_notifier is failed
+- Keep cpufreq_policy for posible cpus instead of NR_CPU in order to avoid
+  the memory waste when NR_CPU is too high.
+- Add reviewed-by tag of Matthias Kaehlcke for patch1
+
+
+
+Chanwoo Choi (3):
+  PM / devfreq: Export devfreq_get_freq_range symbol within devfreq
+  PM / devfreq: passive: Reduce duplicate code when passive_devfreq case
+  PM / devfreq: passive: Keep cpufreq_policy for possible cpus
+
+Saravana Kannan (1):
+  PM / devfreq: Add cpu based scaling support to passive governor
+
+ drivers/devfreq/devfreq.c          |  20 +-
+ drivers/devfreq/governor.h         |  27 ++
+ drivers/devfreq/governor_passive.c | 400 ++++++++++++++++++++++++-----
+ include/linux/devfreq.h            |  17 +-
+ 4 files changed, 387 insertions(+), 77 deletions(-)
+
 -- 
-2.31.1.272.g89b43f80a514
+2.25.1
 
