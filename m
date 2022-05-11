@@ -2,182 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A065D5237D6
-	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 17:54:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8D38523AA2
+	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 18:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344091AbiEKPyb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 May 2022 11:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39262 "EHLO
+        id S1344990AbiEKQsE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 May 2022 12:48:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344090AbiEKPya (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 11:54:30 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4787814084C
-        for <linux-pm@vger.kernel.org>; Wed, 11 May 2022 08:54:28 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 202so2144029pgc.9
-        for <linux-pm@vger.kernel.org>; Wed, 11 May 2022 08:54:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yq+8NVE8TzoPtPDw2d7uVYhIh7kwcTL+WnUZqQp8/Zg=;
-        b=A544jE1jdTMe9rrfN8ZdDhzFJSzsaDUGkABDM9EFerAvihrvGhotTw0oFkJ/MgR4Pk
-         MVqu24ruuNA2Jz7aM8P43TlZt35mSbEaKcGO+kDEBI0pQmBg2yj9JzwE6Yaee9r0d4BK
-         FXMdVl3CU0KS/d16Wjxe5x9DbaNtTPQ4HaDmU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yq+8NVE8TzoPtPDw2d7uVYhIh7kwcTL+WnUZqQp8/Zg=;
-        b=Kp/xWLpM1aBmHW/riEerdNAGzaucaDHQJh5uo/EnVYdz7HG+Cqm2Ylqm8ZdnjrTlD8
-         FmjxGtvXAbUYZjb7BbjU9I5vyGWW1bvWpHCSJrNuGNiBJQ0U/e8towqqKgoa6A5b69SR
-         HoieDLBEJhY7p5U/Q9WdYZ79jxLutg3WdENF+FqCStRmmZgaqI9HbrFP+RX75fdINk/P
-         9U63GSg38pyAjutvKW+NwBCZi0d7D9hqIGZUCRAffpM4kEfvkZpWJjrTK2a/ZMFrRmhS
-         jdIVNjmLnDPdirjVhMbA/LPLD8ewLXQybbRV6I1/3bbwuUtN/BF08bWP2SRa5fFWKv0h
-         F22g==
-X-Gm-Message-State: AOAM532Q2TTA1ljdanMTHHZJ3BNiAZIFFlCFGgJqGSluBV0ONN+3Drze
-        9GtXr5SV0l1ZsZmrzs7Ix6G9Zw==
-X-Google-Smtp-Source: ABdhPJx+7JYliMThOtCxTm/yr7mP3xyk5xGko+RGNTMntUQK+05+H3747B8X3nCsLHyiObebw5cQQw==
-X-Received: by 2002:a65:6217:0:b0:3c6:1571:b971 with SMTP id d23-20020a656217000000b003c61571b971mr21594732pgv.124.1652284467734;
-        Wed, 11 May 2022 08:54:27 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:c586:bf93:e960:73b4])
-        by smtp.gmail.com with UTF8SMTPSA id k15-20020a170902760f00b0015ed19cbfd8sm2043579pll.150.2022.05.11.08.54.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 08:54:27 -0700 (PDT)
-Date:   Wed, 11 May 2022 08:54:25 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
-        quic_vpulyala@quicinc.com
-Subject: Re: [v15 2/6] usb: host: xhci-plat: Enable wakeup based on children
- wakeup status
-Message-ID: <YnvcMe+irsndtcV0@google.com>
-References: <1651740973-7944-1-git-send-email-quic_kriskura@quicinc.com>
- <1651740973-7944-3-git-send-email-quic_kriskura@quicinc.com>
- <YnVAZSZYQvIJxOHv@google.com>
- <20220509033843.GB9170@hu-pkondeti-hyd.qualcomm.com>
- <20220511015101.GB23843@hu-pkondeti-hyd.qualcomm.com>
+        with ESMTP id S233496AbiEKQsA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 12:48:00 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCDE6B7DB;
+        Wed, 11 May 2022 09:47:58 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24BESoKr028080;
+        Wed, 11 May 2022 16:46:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=tjIW4ViQYza/lnoDnWyOhboEO5kjiPdt7taCyynzKFw=;
+ b=lxUbqAEO3GqUpU+Tuw2IWXF1fzXIGSDn1j9FVHjMmFIPrrH/+bQrVN9PaaYcbEJhBJIr
+ 7d0t++ZFM6UKMdcnwcUF0YasHW2SP51KwmfPJnRgOou9+kRarIXLa3hIMjmu5cX5t3FO
+ 6rItwaIor28IfP+e6c0HY1HIerMLLjGg06tg70umpoMhCUKjDu0piWYCrZz/VisJ+s0b
+ 0DuyX+X+ttOZsVNhvwPdzqfPCbp/RA3MDqZWBEVZBj0PN/wvhGTqQYzQ4imgN+k8TjhU
+ NC3v9IrNMZOoN56TSdKZo20ktYuMVwJV19grssXUZ/JxpGndCu9D0HmYa5fO310s9Ten QA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g0etx3406-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 May 2022 16:46:00 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 24BGebih023228;
+        Wed, 11 May 2022 16:45:59 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3g0etx33y1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 May 2022 16:45:59 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 24BGgY6p030999;
+        Wed, 11 May 2022 16:45:56 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 3fwgd8wsc9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 11 May 2022 16:45:55 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 24BGjqsM27197764
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 11 May 2022 16:45:52 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BA0B35204E;
+        Wed, 11 May 2022 16:45:52 +0000 (GMT)
+Received: from osiris (unknown [9.145.80.86])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id B9FCE52050;
+        Wed, 11 May 2022 16:45:50 +0000 (GMT)
+Date:   Wed, 11 May 2022 18:45:49 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, pmladek@suse.com, bhe@redhat.com,
+        akpm@linux-foundation.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        kexec@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org
+Subject: Re: [PATCH 22/30] panic: Introduce the panic post-reboot notifier
+ list
+Message-ID: <YnvoPe2cTS31qbjb@osiris>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-23-gpiccoli@igalia.com>
+ <7017c234-7c73-524a-11b6-fefdd5646f59@igalia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220511015101.GB23843@hu-pkondeti-hyd.qualcomm.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <7017c234-7c73-524a-11b6-fefdd5646f59@igalia.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: P8jYmW-Xe3lS0Lxn9LfjJuLQx8-pWyu5
+X-Proofpoint-ORIG-GUID: 3EoVOe4XNkWaSjwGnBLNECSOqY142ccD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-11_07,2022-05-11_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1015 malwarescore=0 phishscore=0 mlxscore=0 adultscore=0
+ suspectscore=0 mlxlogscore=429 bulkscore=0 impostorscore=0
+ priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2205110076
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 11, 2022 at 07:21:01AM +0530, Pavan Kondeti wrote:
-> On Mon, May 09, 2022 at 09:08:43AM +0530, Pavan Kondeti wrote:
-> > On Fri, May 06, 2022 at 08:36:31AM -0700, Matthias Kaehlcke wrote:
-> > > On Thu, May 05, 2022 at 02:26:09PM +0530, Krishna Kurapati wrote:
-> > > > device_wakeup_path() tells if any of the children devices needs
-> > > > wakeup. Use this hint to enable/disable wakeup of our device. This
-> > > > helps the parent device of xhci-plat (like sysdev) to retrieve
-> > > > the wakeup setting via device_wakeup_path().
-> > > > 
-> > > > Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> > > > ---
-> > > >  drivers/usb/host/xhci-plat.c | 8 ++++++++
-> > > >  1 file changed, 8 insertions(+)
-> > > > 
-> > > > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-> > > > index 649ffd8..ad585fa 100644
-> > > > --- a/drivers/usb/host/xhci-plat.c
-> > > > +++ b/drivers/usb/host/xhci-plat.c
-> > > > @@ -415,6 +415,14 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
-> > > >  	if (pm_runtime_suspended(dev))
-> > > >  		pm_runtime_resume(dev);
-> > > >  
-> > > > +	if (device_wakeup_path(dev)) {
-> > > > +		if (!device_may_wakeup(dev))
-> > > > +			device_wakeup_enable(dev);
-> > > > +	} else {
-> > > > +		if (device_may_wakeup(dev))
-> > > > +			device_wakeup_disable(dev);
-> > > > +	}
-> > > 
-> > > This code is not self-explantatory and deserves a comment.
-> > > 
-> > > Enabling/disabling wakeup for the purpose if signalling is a bit of a
-> > > hack. It might be an acceptable hack as long as it has no side effects.
-> > > However with the current implementation the wakeup state of the xHCI can
-> > > be different after resuming than it was before going to suspend:
-> > > 
-> > > after boot
-> > >   grep -h xhci /sys/class/wakeup/*/name
-> > >     => xhci-hcd.14.auto
-> > > 
-> > > after suspend w/o wakeup capable device
-> > >   grep -h xhci /sys/class/wakeup/*/name
-> > >     => no results
-> > > 
-> > > after suspend with wakeup capable device
-> > >   grep -h xhci /sys/class/wakeup/*/name
-> > >     => xhci-hcd.14.auto
-> > > 
-> > > The hack shouldn't alter the wakeup state 'persistently', i.e. you'll have
-> > > to restore it on resume, as in Pavan does in his reply to '[PATCH v14 2/7]
-> > > PM / wakeup: Add device_children_wakeup_capable()' (it needs to be done
-> > > conditionally though).
+On Mon, May 09, 2022 at 11:16:10AM -0300, Guilherme G. Piccoli wrote:
+> On 27/04/2022 19:49, Guilherme G. Piccoli wrote:
+> > Currently we have 3 notifier lists in the panic path, which will
+> > be wired in a way to allow the notifier callbacks to run in
+> > different moments at panic time, in a subsequent patch.
 > > 
-> > I am worried that we are not doing the right thing here. why should the
-> > xhci-plat goes against the wishes of the user space policy here? Can we NOT
-> > just do anything here? If some one wants xhci-plat to wakeup all the time,
-> > dwc3 will be configured to wakeup the system provided that the support is
-> > available. This way we don't break any existing users of xhci-plat i.e not
-> > enabling wakeup from the kernel.
+> > But there is also an odd set of architecture calls hardcoded in
+> > the end of panic path, after the restart machinery. They're
+> > responsible for late time tunings / events, like enabling a stop
+> > button (Sparc) or effectively stopping the machine (s390).
 > > 
-> Krishna,
+> > This patch introduces yet another notifier list to offer the
+> > architectures a way to add callbacks in such late moment on
+> > panic path without the need of ifdefs / hardcoded approaches.
+> > 
+> > Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+> > Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Heiko Carstens <hca@linux.ibm.com>
+> > Cc: Sven Schnelle <svens@linux.ibm.com>
+> > Cc: Vasily Gorbik <gor@linux.ibm.com>
+> > Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
 > 
-> can we please drop this patch and use device_wakeup_path() and verify the
-> following cases.
+> Hey S390/SPARC folks, sorry for the ping!
 > 
-> 1. one of the downstream USB device supports wakeup and xhci-plat wakeup is enabled
-> 2. one of the downstream USB device supports wakeup and xhci-plat wakeup is
-> disabled
-> 3. none of the downstream USB device supports wakeup (or disable) and
-> xhci-plat wakeup is enabled.
-> 4. none of the downstream USB device supports wakeup (or disable) and
-> xhci-plat wakeup is disabled.
+> Any reviews on this V1 would be greatly appreciated, I'm working on V2
+> and seeking feedback in the non-reviewed patches.
 
-I wonder if we couldn't keep this simpler: if the dwc3 is wakeup capable keep
-the PHYs/core powered, otherwise power them down. Similar to what commit
-689bf72c6e0d ("usb: dwc3: Don't reinitialize core during host
-bus-suspend/resume") intended, but with the additonal check for wakeup
-capability. We now know that the PHYs need to be powered down on some SoCs
-to allow the SoC to reach its low power mode during suspend:
+Sorry, missed that this is quite s390 specific. So, yes, this looks
+good to me and nice to see that one of the remaining CONFIG_S390 in
+common code will be removed!
 
-
-  commit c4a5153e87fdf6805f63ff57556260e2554155a5
-  Author: Manu Gautam <mgautam@codeaurora.org>
-  Date:   Thu Jan 18 16:54:30 2018 +0530
-
-  usb: dwc3: core: Power-off core/PHYs on system_suspend in host mode
-
-  Commit 689bf72c6e0d ("usb: dwc3: Don't reinitialize core during
-  host bus-suspend/resume") updated suspend/resume routines to not
-  power_off and reinit PHYs/core for host mode.
-  It broke platforms that rely on DWC3 core to power_off PHYs to
-  enter low power state on system suspend.
-
-
-With wakeup capable controllers this is apparently not an issue, otherwise
-the SoC wouldn't be able to enter its low power state when wakeup is
-enabled.
+For the s390 bits:
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
