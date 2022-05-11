@@ -2,240 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B3035233DF
-	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 15:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AFCB523417
+	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 15:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243538AbiEKNSE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 May 2022 09:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34746 "EHLO
+        id S230178AbiEKNVJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 May 2022 09:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243402AbiEKNSA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 09:18:00 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DF88FD67;
-        Wed, 11 May 2022 06:17:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652275061; x=1683811061;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=7veflo9UbLlxTRHyg/FB//3GlHN50TVblda+zNS/H24=;
-  b=j8mWWNNhcY3bcklZ6HZFFkEHqRh2xh9OCqpVRnS5pGi1YlL1Q8x0X5Ax
-   4H5AKQ6VK8BHc71ANijk06m+DWmmkqSkKj9eEfVoDcFoSNXXOwegWvZYH
-   0yc8w9RCSohzDyYQ+B6vTL1ofoHYjXPALHqHpdGSAJh0vuPq2mIoYbL8j
-   o=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 11 May 2022 06:17:41 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2022 06:17:40 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 11 May 2022 06:17:40 -0700
-Received: from mkshah-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 11 May 2022 06:17:36 -0700
-From:   Maulik Shah <quic_mkshah@quicinc.com>
-To:     <bjorn.andersson@linaro.org>, <ulf.hansson@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>, <quic_lsrao@quicinc.com>,
-        <quic_rjendra@quicinc.com>, Maulik Shah <quic_mkshah@quicinc.com>
-Subject: [PATCH v2 6/6] soc: qcom: rpmh-rsc: Write CONTROL_TCS with next timer wakeup
-Date:   Wed, 11 May 2022 18:46:56 +0530
-Message-ID: <1652275016-13423-7-git-send-email-quic_mkshah@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1652275016-13423-1-git-send-email-quic_mkshah@quicinc.com>
-References: <1652275016-13423-1-git-send-email-quic_mkshah@quicinc.com>
+        with ESMTP id S243738AbiEKNU7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 09:20:59 -0400
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CB923979F;
+        Wed, 11 May 2022 06:20:08 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id v59so3906547ybi.12;
+        Wed, 11 May 2022 06:20:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lPcFmOfBb0IAWaOSqE2Bx+EAh22wxVBQU4MZcbQtQDs=;
+        b=7X/WLawAJv4UYTgNYNbmSNyR+hmRHfJeOqXgodQmf+Lq/7MF9dVQFKtaQ99xQCEJOC
+         SXhRPK/FY6Lj6akRh/xiPjhIHxeKvoKFNsgTtfd6UHe9wymDyM2tlC0fBw0l7R3wPhmo
+         q0KHDTXCImhpBNk85cesArV72mCKbvwEbyTINOmeSF5gk5vbmc9jMez/YRqQaHk6Yojx
+         Ozk0EdnTYEY3is5VOVokIwV4rKDtsNCEGDPyFTbbZvx/YOQe2AHw53loTvsJ130eCFkL
+         dkMU+nEK2gOZn0sOnWcBlxRXA8AS8MM88tlk6VRQjqj0+0gafS9x1HJSdZeGYe4KMTdI
+         WVgg==
+X-Gm-Message-State: AOAM532TjmAuFt9S6teMHYbJz6QeXFmH1W61J7+0ktYGEdp6ldUFKtzl
+        /Eu2+FqzwZo7tSF2LTHLHB71FvYcQ9Glh/hRD1Y=
+X-Google-Smtp-Source: ABdhPJzuSeISNyAQbkHgmRVOZUc8DuN07Iysy3COQorKIdjj24Gic9TrcIsZxaQN4MUKF0X25jCZV/FEuEUdxZXPwog=
+X-Received: by 2002:a25:3795:0:b0:648:fa25:5268 with SMTP id
+ e143-20020a253795000000b00648fa255268mr25012294yba.153.1652275207937; Wed, 11
+ May 2022 06:20:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220510035259.5ep52sgahd2a6rie@vireshk-i7> <20220510154236.88753-1-schspa@gmail.com>
+ <20220511043515.fn2gz6q3kcpdai5p@vireshk-i7> <CAMA88TpefB=rnqea2u1zEvNUJNE_kdj4mYito7SGCuMj-o071Q@mail.gmail.com>
+ <20220511122114.wccgyur6g3qs6fps@vireshk-i7> <CAJZ5v0gN_yDFpvCXRXv8rN-i3TugCi-HKpBKK2z4eWU0Zm1GUg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gN_yDFpvCXRXv8rN-i3TugCi-HKpBKK2z4eWU0Zm1GUg@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 11 May 2022 15:19:56 +0200
+Message-ID: <CAJZ5v0id+7vkqMQEyVRe29oF_dRtzZ0EhoYUn8=yzeENDeABJw@mail.gmail.com>
+Subject: Re: [PATCH v3] cpufreq: fix race on cpufreq online
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Schspa Shi <schspa@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The next wakeup timer value needs to be set in always on domain timer
-as the arch timer interrupt can not wakeup the SoC if after the deepest
-CPUidle states the SoC also enters deepest low power state.
+On Wed, May 11, 2022 at 2:59 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Wed, May 11, 2022 at 2:21 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > On 11-05-22, 16:10, Schspa Shi wrote:
+> > > Viresh Kumar <viresh.kumar@linaro.org> writes:
+> > > > I am not sure, but maybe there were issues in calling init() with rwsem held, as
+> > > > it may want to call some API from there.
+> > > >
+> > >
+> > > I have checked all the init() implement of the fellowing files, It should be OK.
+> > > Function find command:
+> > >   ag "init[\s]+=" drivers/cpufreq
+> > >
+> > > All the init() implement only initialize policy object without holding this lock
+> > > and won't call cpufreq APIs need to hold this lock.
+> >
+> > Okay, we can see if someone complains later then :)
+> >
+> > > > I don't think you can do that safely. offline() or exit() may depend on
+> > > > policy->cpus being set to all CPUs.
+> > > OK, I will move this after exit(). and there will be no effect with those
+> > > two APIs. But policy->cpus must be clear before release policy->rwsem.
+> >
+> > Hmm, I don't think depending on the values of policy->cpus is a good idea to be
+> > honest. This design is inviting bugs to come in at another place. We need a
+> > clear flag for this, a new flag or something like policy_list.
 
-To wakeup the SoC in such scenarios the earliest wakeup time is set in
-CONTROL_TCS and the firmware takes care of setting up its own timer in
-always on domain with next wakeup time. The timer wakes up the RSC and
-sets resources back to wake state.
+Why?
 
-Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
----
- drivers/soc/qcom/rpmh-internal.h |  3 ++
- drivers/soc/qcom/rpmh-rsc.c      | 61 ++++++++++++++++++++++++++++++++++++++++
- drivers/soc/qcom/rpmh.c          |  4 ++-
- 3 files changed, 67 insertions(+), 1 deletion(-)
+> > Also I see the same bug happening while the policy is removed. The kobject is
+> > put after the rwsem is dropped.
 
-diff --git a/drivers/soc/qcom/rpmh-internal.h b/drivers/soc/qcom/rpmh-internal.h
-index 7866bb1..39f5358 100644
---- a/drivers/soc/qcom/rpmh-internal.h
-+++ b/drivers/soc/qcom/rpmh-internal.h
-@@ -112,6 +112,7 @@ struct rpmh_ctrlr {
-  * @tcs_wait:           Wait queue used to wait for @tcs_in_use to free up a
-  *                      slot
-  * @client:             Handle to the DRV's client.
-+ * @dev:                RSC device.
-  */
- struct rsc_drv {
- 	const char *name;
-@@ -127,12 +128,14 @@ struct rsc_drv {
- 	spinlock_t lock;
- 	wait_queue_head_t tcs_wait;
- 	struct rpmh_ctrlr client;
-+	struct device *dev;
- };
- 
- int rpmh_rsc_send_data(struct rsc_drv *drv, const struct tcs_request *msg);
- int rpmh_rsc_write_ctrl_data(struct rsc_drv *drv,
- 			     const struct tcs_request *msg);
- void rpmh_rsc_invalidate(struct rsc_drv *drv);
-+void rpmh_rsc_write_next_wakeup(struct rsc_drv *drv);
- 
- void rpmh_tx_done(const struct tcs_request *msg, int r);
- int rpmh_flush(struct rpmh_ctrlr *ctrlr);
-diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
-index 8e01697..25b838b 100644
---- a/drivers/soc/qcom/rpmh-rsc.c
-+++ b/drivers/soc/qcom/rpmh-rsc.c
-@@ -12,6 +12,7 @@
- #include <linux/io.h>
- #include <linux/iopoll.h>
- #include <linux/kernel.h>
-+#include <linux/ktime.h>
- #include <linux/list.h>
- #include <linux/module.h>
- #include <linux/notifier.h>
-@@ -25,6 +26,7 @@
- #include <linux/spinlock.h>
- #include <linux/wait.h>
- 
-+#include <clocksource/arm_arch_timer.h>
- #include <soc/qcom/cmd-db.h>
- #include <soc/qcom/tcs.h>
- #include <dt-bindings/soc/qcom,rpmh-rsc.h>
-@@ -49,6 +51,14 @@
- #define DRV_NCPT_MASK			0x1F
- #define DRV_NCPT_SHIFT			27
- 
-+/* Offsets for CONTROL TCS Registers */
-+#define RSC_DRV_CTL_TCS_DATA_HI		0x38
-+#define RSC_DRV_CTL_TCS_DATA_HI_MASK	0xFFFFFF
-+#define RSC_DRV_CTL_TCS_DATA_HI_VALID	BIT(31)
-+#define RSC_DRV_CTL_TCS_DATA_LO		0x40
-+#define RSC_DRV_CTL_TCS_DATA_LO_MASK	0xFFFFFFFF
-+#define RSC_DRV_CTL_TCS_DATA_SIZE	32
-+
- /* Offsets for common TCS Registers, one bit per TCS */
- #define RSC_DRV_IRQ_ENABLE		0x00
- #define RSC_DRV_IRQ_STATUS		0x04
-@@ -142,6 +152,14 @@
-  *  +---------------------------------------------------+
-  */
- 
-+#define USECS_TO_CYCLES(time_usecs)			\
-+	xloops_to_cycles((time_usecs) * 0x10C7UL)
-+
-+static inline unsigned long xloops_to_cycles(unsigned long xloops)
-+{
-+	return (xloops * loops_per_jiffy * HZ) >> 32;
-+}
-+
- static inline void __iomem *
- tcs_reg_addr(const struct rsc_drv *drv, int reg, int tcs_id)
- {
-@@ -757,6 +775,48 @@ static bool rpmh_rsc_ctrlr_is_busy(struct rsc_drv *drv)
- }
- 
- /**
-+ * rpmh_rsc_write_next_wakeup() - Write next wakeup in CONTROL_TCS.
-+ * @drv: The controller
-+ *
-+ * Writes maximum wakeup cycles when called from suspend.
-+ * Writes earliest hrtimer wakeup when called from idle.
-+ */
-+void rpmh_rsc_write_next_wakeup(struct rsc_drv *drv)
-+{
-+	ktime_t now, wakeup;
-+	u64 wakeup_us, wakeup_cycles = ~0;
-+	u32 lo, hi;
-+
-+	if (!drv->tcs[CONTROL_TCS].num_tcs || !drv->genpd_nb.notifier_call)
-+		return;
-+
-+	/* Set highest time when system (timekeeping) is suspended */
-+	if (system_state == SYSTEM_SUSPEND)
-+		goto exit;
-+
-+	/* Find the earliest hrtimer wakeup from online cpus */
-+	wakeup = dev_pm_genpd_get_next_hrtimer(drv->dev);
-+
-+	/* Find the relative wakeup in kernel time scale */
-+	now = ktime_get();
-+	wakeup = ktime_sub(wakeup, now);
-+	wakeup_us = ktime_to_us(wakeup);
-+
-+	/* Convert the wakeup to arch timer scale */
-+	wakeup_cycles = USECS_TO_CYCLES(wakeup_us);
-+	wakeup_cycles += arch_timer_read_counter();
-+
-+exit:
-+	lo = wakeup_cycles & RSC_DRV_CTL_TCS_DATA_LO_MASK;
-+	hi = wakeup_cycles >> RSC_DRV_CTL_TCS_DATA_SIZE;
-+	hi &= RSC_DRV_CTL_TCS_DATA_HI_MASK;
-+	hi |= RSC_DRV_CTL_TCS_DATA_HI_VALID;
-+
-+	writel_relaxed(lo, drv->base + RSC_DRV_CTL_TCS_DATA_LO);
-+	writel_relaxed(hi, drv->base + RSC_DRV_CTL_TCS_DATA_HI);
-+}
-+
-+/**
-  * rpmh_rsc_cpu_pm_callback() - Check if any of the AMCs are busy.
-  * @nfb:    Pointer to the notifier block in struct rsc_drv.
-  * @action: CPU_PM_ENTER, CPU_PM_ENTER_FAILED, or CPU_PM_EXIT.
-@@ -1035,6 +1095,7 @@ static int rpmh_rsc_probe(struct platform_device *pdev)
- 	INIT_LIST_HEAD(&drv->client.batch_cache);
- 
- 	dev_set_drvdata(&pdev->dev, drv);
-+	drv->dev = &pdev->dev;
- 
- 	ret = devm_of_platform_populate(&pdev->dev);
- 	if (ret && pdev->dev.pm_domain) {
-diff --git a/drivers/soc/qcom/rpmh.c b/drivers/soc/qcom/rpmh.c
-index 01765ee..3a53ed9 100644
---- a/drivers/soc/qcom/rpmh.c
-+++ b/drivers/soc/qcom/rpmh.c
-@@ -450,7 +450,7 @@ int rpmh_flush(struct rpmh_ctrlr *ctrlr)
- 
- 	if (!ctrlr->dirty) {
- 		pr_debug("Skipping flush, TCS has latest data.\n");
--		goto exit;
-+		goto write_next_wakeup;
- 	}
- 
- 	/* Invalidate the TCSes first to avoid stale data */
-@@ -479,6 +479,8 @@ int rpmh_flush(struct rpmh_ctrlr *ctrlr)
- 
- 	ctrlr->dirty = false;
- 
-+write_next_wakeup:
-+	rpmh_rsc_write_next_wakeup(ctrlr_to_drv(ctrlr));
- exit:
- 	spin_unlock(&ctrlr->cache_lock);
- 	return ret;
--- 
-2.7.4
+This shouldn't be a problem because of the wait_for_completion() in
+cpufreq_policy_put_kobj().  It is known that cpufreq_sysfs_release()
+has run when cpufreq_policy_put_kobj() returns, so it is safe to free
+the policy then.
 
+> > > >  static inline bool policy_is_inactive(struct cpufreq_policy *policy)
+> > > >  {
+> > > > -     return cpumask_empty(policy->cpus);
+> > > > +     return unlikely(cpumask_empty(policy->cpus) ||
+> > > > +                     list_empty(&policy->policy_list));
+> > > >  }
+> > > >
+> > >
+> > > I don't think this fully solves my problem.
+> > > 1. There is some case which cpufreq_online failed after the policy is added to
+> > >    cpufreq_policy_list.
+> >
+> > And I missed that :(
+> >
+> > > 2. policy->policy_list is not protected by &policy->rwsem, and we
+> > > can't relay on this to
+> > >    indict the policy is fine.
+> >
+> > Ahh..
+> >
+> > > >From this point of view, we can fix this problem through the state of
+> > > this linked list.
+> > > But the above two problems need to be solved first.
+> >
+> > I feel overriding policy_list for this is going to make it complex/messy.
+> >
+> > Maybe something like this then:
+>
+> There are two things.
+>
+> One is the possible race with respect to the sysfs access occurring
+> during failing initialization and the other is that ->offline() or
+> ->exit() can be called with or without holding the policy rwsem
+> depending on the code path.
+>
+> Namely, cpufreq_offline() calls them under the policy rwsem, but
+> cpufreq_remove_dev() calls ->exit() outside the rwsem.  Also they are
+> called outside the rwsem in cpufreq_online().
+>
+> Moreover, ->offline() and ->exit() cannot expect policy->cpus to be
+> populated, because they are called when it is empty from
+> cpufreq_offline().
+>
+> So the $subject patch is correct AFAICS even though it doesn't address
+> all of the above.
+
+TBH, I'm not sure why show() doesn't check policy_is_inactive() under the rwsem.
+
+Moreover, I'm not sure why the locking dance in store() is necessary.
