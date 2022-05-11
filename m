@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EA0F523B57
-	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 19:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F281523B6F
+	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 19:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244095AbiEKRTA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 May 2022 13:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56728 "EHLO
+        id S1345486AbiEKRYX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 May 2022 13:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345413AbiEKRS6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 13:18:58 -0400
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069C319CB74;
-        Wed, 11 May 2022 10:18:57 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2f7ca2ce255so29020937b3.7;
-        Wed, 11 May 2022 10:18:56 -0700 (PDT)
+        with ESMTP id S1345444AbiEKRYX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 13:24:23 -0400
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B0D2230A2;
+        Wed, 11 May 2022 10:24:22 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id j2so5415536ybu.0;
+        Wed, 11 May 2022 10:24:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=8IznQYPJ44n5aKvSC9fpTkKkn7z/3b/M/dwJg0jZxqw=;
-        b=UZoSH7U1ZU4IJswwvMlV2yHvBOtMb9kMDhSMB+fHcNQn+CI+MhkoNRnA1mVdfv9ABk
-         DWJKfRHT66asvGVFP1NkJ8+FqF3ng0tOVeH+h8M8oNkSnYlcsaeHDII+F4OL9RAKVDJo
-         qlakjP76g26sMmQlh7wi8Qv6yCbpbDbdFZBJN7SAPvotYUmjG4+gEYEpnqelX5e0wXJN
-         17pa9Hs5Yz5lMcMDUAF2DBne1MNFijZejntR+sIs7lHzA9paciFlU5qyk+tpvUa27c3+
-         qeFW/Dmq8iHMvwokuQ1Tix+Dbr8GFBYk0bRNLLNttZ+EjtUYUbGD6vQ5VNYzIbqPqW4Y
-         dpxw==
-X-Gm-Message-State: AOAM530LoYBoWSrjpIb5PNCs8dJUWoe94U8qjVscj5VFBI416bAUCcsy
-        og9IyPTwJcArPXbtVzjldqrb5oHATdMUaYyx+Sc=
-X-Google-Smtp-Source: ABdhPJzUy92OlQ44g7Aet0Kzhsu/S503joAemeA2YFFg0+m09LtO13jWRSTPjhINJs/E1oMPFNJvuhTiv0OPDL2K1Rg=
-X-Received: by 2002:a81:2f4e:0:b0:2fb:2c97:d66f with SMTP id
- v75-20020a812f4e000000b002fb2c97d66fmr26882271ywv.196.1652289536285; Wed, 11
- May 2022 10:18:56 -0700 (PDT)
+        bh=TJO/Zn3MPmYiAzjRbG4V7TOcCMadCMhhJkknqYNpUp8=;
+        b=h8U/ecdgqTmpTxl386pJEszwzHXiv+/P+gceaRub7Kgn9vErpyBd4fkNVG+ZvjS/rY
+         5ddstadq7GZ5KwrQTbkuhmYcTwLkW/AeXty3hY+2mWhoQU6JA+5ZNj1D3t0kHNsR2DF9
+         ktC7cChCt04/jNnCUDKfMslznNnSi65peS+li2toRGOOdDSqU/ASKPk1CzJM94TAWJAq
+         ryM+NiRm1vdcnc+ckt7bxBl4HNRgP1hsJtA7StMVm+quFJvRqjSTYJNxt9H8kFPnv43u
+         YxkSeMIaT8IhINcvFfDHvUbo6ytGzOsjYu7kb0gPgBqO1P/L/c23Rd9B8dleojiB6IZr
+         2nVg==
+X-Gm-Message-State: AOAM530t3vXrE9fZQ6S6gZDHewXDo4+EeRCYKLs2HRpFAiwm9NwmkEoM
+        ypKls3J954FlzIvX17OrcWzGAkNU4j0FsQWRfPo=
+X-Google-Smtp-Source: ABdhPJztC2WEyge9/kG78iWVoyrinUqiVqsdUMzH2GFAy+MUlCwRiman49itjCFJb7D1oSP2eMeDWsZqoiZpGmVkdFA=
+X-Received: by 2002:a25:da84:0:b0:648:423e:57b0 with SMTP id
+ n126-20020a25da84000000b00648423e57b0mr23829636ybf.137.1652289861658; Wed, 11
+ May 2022 10:24:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220502205052.1257462-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20220502205052.1257462-1-srinivas.pandruvada@linux.intel.com>
+References: <b44e39176bbba43c256ae75df26c1fd051353ff9.1652259889.git.viresh.kumar@linaro.org>
+In-Reply-To: <b44e39176bbba43c256ae75df26c1fd051353ff9.1652259889.git.viresh.kumar@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 11 May 2022 19:18:45 +0200
-Message-ID: <CAJZ5v0htY-7yc6dbtabnRLWkegiJy3OGg9jfXCk=LVbsD+LKgw@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Support Sapphire Rapids OOB mode
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Len Brown <lenb@kernel.org>,
+Date:   Wed, 11 May 2022 19:24:10 +0200
+Message-ID: <CAJZ5v0hD8k6W32MkU1Kp6aN0_xmPgXApswK1Wuxuf3RZYzSKbQ@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Clear real_cpus mask from remove_cpu_dev_symlink()
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -57,31 +57,57 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 2, 2022 at 10:50 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
+On Wed, May 11, 2022 at 11:06 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> Prevent intel_pstate to load when OOB (Out Of Band) P-states mode is
-> enabled in Sapphire Rapids. The OOB identifying bits are same as the
-> prior generation CPUs like Ice Lake servers. So, also add Sapphire
-> Rapids to intel_pstate_cpu_oob_ids list.
+> add_cpu_dev_symlink() is responsible for setting the CPUs in the
+> real_cpus mask, the reverse of which should be done from
+> remove_cpu_dev_symlink() to make it look clean and avoid any breakage
+> later on.
 >
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Move the call to clear the mask to remove_cpu_dev_symlink().
+>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 > ---
->  drivers/cpufreq/intel_pstate.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/cpufreq/cpufreq.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 >
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index 846bb3a78788..76d59b3f35e4 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -2424,6 +2424,7 @@ static const struct x86_cpu_id intel_pstate_cpu_oob_ids[] __initconst = {
->         X86_MATCH(BROADWELL_X,          core_funcs),
->         X86_MATCH(SKYLAKE_X,            core_funcs),
->         X86_MATCH(ICELAKE_X,            core_funcs),
-> +       X86_MATCH(SAPPHIRERAPIDS_X,     core_funcs),
->         {}
->  };
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index fbaa8e6c7d23..c8bf6c68597c 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1020,11 +1020,12 @@ static void add_cpu_dev_symlink(struct cpufreq_policy *policy, unsigned int cpu,
+>                 dev_err(dev, "cpufreq symlink creation failed\n");
+>  }
 >
+> -static void remove_cpu_dev_symlink(struct cpufreq_policy *policy,
+> +static void remove_cpu_dev_symlink(struct cpufreq_policy *policy, int cpu,
+>                                    struct device *dev)
+>  {
+>         dev_dbg(dev, "%s: Removing symlink\n", __func__);
+>         sysfs_remove_link(&dev->kobj, "cpufreq");
+> +       cpumask_clear_cpu(cpu, policy->real_cpus);
+>  }
+>
+>  static int cpufreq_add_dev_interface(struct cpufreq_policy *policy)
+> @@ -1532,7 +1533,7 @@ static int cpufreq_online(unsigned int cpu)
+>
+>  out_destroy_policy:
+>         for_each_cpu(j, policy->real_cpus)
+> -               remove_cpu_dev_symlink(policy, get_cpu_device(j));
+> +               remove_cpu_dev_symlink(policy, j, get_cpu_device(j));
+>
+>         up_write(&policy->rwsem);
+>
+> @@ -1657,8 +1658,7 @@ static void cpufreq_remove_dev(struct device *dev, struct subsys_interface *sif)
+>         if (cpu_online(cpu))
+>                 cpufreq_offline(cpu);
+>
+> -       cpumask_clear_cpu(cpu, policy->real_cpus);
+> -       remove_cpu_dev_symlink(policy, dev);
+> +       remove_cpu_dev_symlink(policy, cpu, dev);
+>
+>         if (cpumask_empty(policy->real_cpus)) {
+>                 /* We did light-weight exit earlier, do full tear down now */
 > --
 
 Applied as 5.19 material, thanks!
