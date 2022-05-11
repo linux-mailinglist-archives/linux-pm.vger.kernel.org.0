@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE07B52365D
+	by mail.lfdr.de (Postfix) with ESMTP id F300452365E
 	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 16:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245288AbiEKO5n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S231776AbiEKO5n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Wed, 11 May 2022 10:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245291AbiEKO5j (ORCPT
+        with ESMTP id S245333AbiEKO5j (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 10:57:39 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599D21F3EBC
-        for <linux-pm@vger.kernel.org>; Wed, 11 May 2022 07:57:31 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id y32so4042435lfa.6
-        for <linux-pm@vger.kernel.org>; Wed, 11 May 2022 07:57:31 -0700 (PDT)
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59EEC1FD855
+        for <linux-pm@vger.kernel.org>; Wed, 11 May 2022 07:57:33 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id q130so2955253ljb.5
+        for <linux-pm@vger.kernel.org>; Wed, 11 May 2022 07:57:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2gFFvwdN/Sbzb6gl/THgYR/bjpxtOmE1Z07RfTChlck=;
-        b=AKMBOxosg+GEA7ZZLPUVvSF9Nz2ZhFwCheRbwlKRxf5eHcI/lcg2XZ/v0Q1fKU3Y8r
-         PyEMzM0zsZpNRhjZ/q3kO6e+AS1vgy1HuYHmkxc3od8ILggFTkUv33Q7QR9m+ikgKhwt
-         bK6jV3XkOGqKRwsa5Vr8Took8lIY9B7N75kQyHZBrbsJEXIsVreCgmzUbXHffQGKsaTE
-         4PFbREOn5I8aK2EUBC/48mzJHHMVl4buN8+wyF2G7ysE30SgmFl44/boOgrPx9ZhOnJI
-         LkHXt1ItXHq8C6FaK0r/YlZjmFLmH8bfe58M/tZcC+H9vIiPtym5x8NqCC2FLyfh1h/B
-         4PpQ==
+        bh=1l+XmFy90zJUqh6uSXg8CIYQDjU5HDLCDj0R7eANRVs=;
+        b=KSlADItncdzu7g/umHmQz3OtajEsfndFD+dkoDvvfzlZo2fREDqcLmV+CqiHDXFjMm
+         oeO36+yXMVzEjqnEB2JFbNi5ovuCxSyQstqQU2zqnhch+RNOaLIGnOxPIXKl89dM76S+
+         y68pdPWTEqXeoAaGuijCxJDG5i+aAjNLrS7+pq0N/tFdq1UxdeIv5q7AHzIGl/o9yOKv
+         z1bVdY1tDEp6mE2bbZK+lYRn8/t3SWLflT9lMDsxzLePFj+MH2abaHEn5gRurfe52+OU
+         78XUs9Pymg+1GL7aUV2ZHJ34OWGWNNZhOQCpodipAI1erTZBuSIzA4LoRF8t222NbymO
+         kQ2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2gFFvwdN/Sbzb6gl/THgYR/bjpxtOmE1Z07RfTChlck=;
-        b=1weC6oL7OG5hUhzuIVhu511ivrKHgKIPwyU53w8flvVT60MrpdLC38KdXxpH+maq45
-         /Rqe2jbxmel2so3kzvil6fFORZojGaEXVoU0YYYx4nti8fzMGPPbC9NTeCLu0Iy3IQJo
-         Fffvxv3vDafJgR7ziO6n/AAJaKuxTnw7w22pFmcDkJujpInRPfRwxshiPYnPn8BPmVXh
-         RFZGRqA3uS6NmxtmCON2FTH3bLPeENAWzOaS+lSymk19MmsarusNB6AIGDVNvx2/Cpv2
-         GCD9FyMuG1g2BZj+TTfvPssR2NJqkXTbJt+lvb9fJ1RoRyEQzJipNqNYRT3+QWk4W4fP
-         rDpw==
-X-Gm-Message-State: AOAM531CJF263/SvCm+H+CT0QzNnt2XXYEObJ7h1PMVXgJnFLiJArO9V
-        1WpvZhlWJ12kWwmCqIs3Nj3Vmw==
-X-Google-Smtp-Source: ABdhPJyKM/oX7q2GnhgQf0vJUOqTliTzVsmMWV8dFynsx6Tt6u0Zi82/g1j3o0k081btT4lf1QlnJQ==
-X-Received: by 2002:ac2:5456:0:b0:471:f9e6:7388 with SMTP id d22-20020ac25456000000b00471f9e67388mr19548791lfn.504.1652281051171;
-        Wed, 11 May 2022 07:57:31 -0700 (PDT)
+        bh=1l+XmFy90zJUqh6uSXg8CIYQDjU5HDLCDj0R7eANRVs=;
+        b=Rp4B3YAx1rvdsF7EvyTUWy+csCFa7NftQc6anN9XeKU9XLpoxMaiV/azRT1yV3szqz
+         iFuGdmB1cDWt5hbE/BOEsCnukarJIkIOOgWJS1y3gOr3nhcJJjrjV2nWsGfRp5UjafSW
+         QYY2zVhqGRTtnH0edgoWt3yfq1b8exvOWQKifzOnedvk1JJOgAeeXpqWq4kk9cdS0/II
+         LAO+LXNSeWkQmLbr+gDrWc4zEteBCBOOwwDazX2ojegJTYEg6VW8lW8PV0eq3YbEitgD
+         ytU7RcH4RH4T+A72LJ2RSl5SaDb+i45tsamcmPNJzrYvSjgEfKQhBJVtfAlQOab0gRgR
+         /L1Q==
+X-Gm-Message-State: AOAM533Eam3M7ieIls96d58TvMr/yowQKvckkGrcHQJEtH2CfQkteVo/
+        bFx3DWxQDVQCTPsHSndrWsIBcQ==
+X-Google-Smtp-Source: ABdhPJxXvTOm0cxB4sH4Yz2HTmmgnHipU4lVOgRNiD0Lw1H2QftanODBihzRGG0PhZdXh4L4C788JQ==
+X-Received: by 2002:a2e:3304:0:b0:250:9109:2e80 with SMTP id d4-20020a2e3304000000b0025091092e80mr17593469ljc.508.1652281052855;
+        Wed, 11 May 2022 07:57:32 -0700 (PDT)
 Received: from localhost.localdomain (h-98-128-181-154.NA.cust.bahnhof.se. [98.128.181.154])
-        by smtp.gmail.com with ESMTPSA id z26-20020a19f71a000000b0047255d210f3sm320793lfe.34.2022.05.11.07.57.29
+        by smtp.gmail.com with ESMTPSA id z26-20020a19f71a000000b0047255d210f3sm320793lfe.34.2022.05.11.07.57.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 07:57:30 -0700 (PDT)
+        Wed, 11 May 2022 07:57:31 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
 Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
@@ -58,9 +58,9 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Kevin Hilman <khilman@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 07/14] PM: domains: Move the next_wakeup variable into the struct gpd_timing_data
-Date:   Wed, 11 May 2022 16:56:57 +0200
-Message-Id: <20220511145704.698189-8-ulf.hansson@linaro.org>
+Subject: [PATCH 08/14] PM: domains: Measure suspend/resume latencies in genpd based on governor
+Date:   Wed, 11 May 2022 16:56:58 +0200
+Message-Id: <20220511145704.698189-9-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220511145704.698189-1-ulf.hansson@linaro.org>
 References: <20220511145704.698189-1-ulf.hansson@linaro.org>
@@ -76,93 +76,89 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-If the corresponding genpd for the device doesn't use a governor, the
-variable next_wakeup within the struct generic_pm_domain_data becomes
-superfluous.
+The QoS latency measurements for devices in genpd_runtime_suspend|resume()
+are superfluous, unless the corresponding genpd has a governor assigned to
+it, which would make use of the data.
 
-To avoid wasting memory, let's move it into the struct gpd_timing_data,
-which is already being allocated based upon if there is governor assigned.
+Therefore, let's improve the behaviour in genpd by making the measurements
+conditional, based upon if there's a governor assigned.
 
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/base/power/domain.c          | 9 +++++----
- drivers/base/power/domain_governor.c | 2 +-
- include/linux/pm_domain.h            | 2 +-
- 3 files changed, 7 insertions(+), 6 deletions(-)
+ drivers/base/power/domain.c | 21 +++++++++------------
+ 1 file changed, 9 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index ca86fb3db901..4c059a858957 100644
+index 4c059a858957..2cdfbe48dde0 100644
 --- a/drivers/base/power/domain.c
 +++ b/drivers/base/power/domain.c
-@@ -478,15 +478,16 @@ EXPORT_SYMBOL_GPL(dev_pm_genpd_set_performance_state);
-  */
- void dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next)
- {
--	struct generic_pm_domain_data *gpd_data;
- 	struct generic_pm_domain *genpd;
-+	struct gpd_timing_data *td;
+@@ -881,7 +881,7 @@ static int genpd_runtime_suspend(struct device *dev)
+ 	struct generic_pm_domain_data *gpd_data = dev_gpd_data(dev);
+ 	struct gpd_timing_data *td = gpd_data->td;
+ 	bool runtime_pm = pm_runtime_enabled(dev);
+-	ktime_t time_start;
++	ktime_t time_start = 0;
+ 	s64 elapsed_ns;
+ 	int ret;
  
- 	genpd = dev_to_genpd_safe(dev);
- 	if (!genpd)
- 		return;
+@@ -902,8 +902,7 @@ static int genpd_runtime_suspend(struct device *dev)
+ 		return -EBUSY;
  
--	gpd_data = to_gpd_data(dev->power.subsys_data->domain_data);
--	gpd_data->next_wakeup = next;
-+	td = to_gpd_data(dev->power.subsys_data->domain_data)->td;
-+	if (td)
-+		td->next_wakeup = next;
- }
- EXPORT_SYMBOL_GPL(dev_pm_genpd_set_next_wakeup);
+ 	/* Measure suspend latency. */
+-	time_start = 0;
+-	if (runtime_pm)
++	if (td && runtime_pm)
+ 		time_start = ktime_get();
  
-@@ -1518,7 +1519,6 @@ static struct generic_pm_domain_data *genpd_alloc_dev_data(struct device *dev,
- 
- 	gpd_data->base.dev = dev;
- 	gpd_data->nb.notifier_call = genpd_dev_pm_qos_notifier;
--	gpd_data->next_wakeup = KTIME_MAX;
- 
- 	/* Allocate data used by a governor. */
- 	if (has_governor) {
-@@ -1530,6 +1530,7 @@ static struct generic_pm_domain_data *genpd_alloc_dev_data(struct device *dev,
- 
- 		td->constraint_changed = true;
- 		td->effective_constraint_ns = PM_QOS_RESUME_LATENCY_NO_CONSTRAINT_NS;
-+		td->next_wakeup = KTIME_MAX;
- 		gpd_data->td = td;
+ 	ret = __genpd_runtime_suspend(dev);
+@@ -917,9 +916,9 @@ static int genpd_runtime_suspend(struct device *dev)
  	}
  
-diff --git a/drivers/base/power/domain_governor.c b/drivers/base/power/domain_governor.c
-index 62be9b3f8c90..599b3909821c 100644
---- a/drivers/base/power/domain_governor.c
-+++ b/drivers/base/power/domain_governor.c
-@@ -139,7 +139,7 @@ static void update_domain_next_wakeup(struct generic_pm_domain *genpd, ktime_t n
- 	 * is able to enter its optimal idle state.
- 	 */
- 	list_for_each_entry(pdd, &genpd->dev_list, list_node) {
--		next_wakeup = to_gpd_data(pdd)->next_wakeup;
-+		next_wakeup = to_gpd_data(pdd)->td->next_wakeup;
- 		if (next_wakeup != KTIME_MAX && !ktime_before(next_wakeup, now))
- 			if (ktime_before(next_wakeup, domain_wakeup))
- 				domain_wakeup = next_wakeup;
-diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index 126a4b9ab215..1f370f074f30 100644
---- a/include/linux/pm_domain.h
-+++ b/include/linux/pm_domain.h
-@@ -182,6 +182,7 @@ struct gpd_timing_data {
- 	s64 suspend_latency_ns;
- 	s64 resume_latency_ns;
- 	s64 effective_constraint_ns;
-+	ktime_t	next_wakeup;
- 	bool constraint_changed;
- 	bool cached_suspend_ok;
- };
-@@ -200,7 +201,6 @@ struct generic_pm_domain_data {
- 	unsigned int performance_state;
- 	unsigned int default_pstate;
- 	unsigned int rpm_pstate;
--	ktime_t	next_wakeup;
- 	void *data;
- };
+ 	/* Update suspend latency value if the measured time exceeds it. */
+-	if (runtime_pm) {
++	if (td && runtime_pm) {
+ 		elapsed_ns = ktime_to_ns(ktime_sub(ktime_get(), time_start));
+-		if (td && (elapsed_ns > td->suspend_latency_ns)) {
++		if (elapsed_ns > td->suspend_latency_ns) {
+ 			td->suspend_latency_ns = elapsed_ns;
+ 			dev_dbg(dev, "suspend latency exceeded, %lld ns\n",
+ 				elapsed_ns);
+@@ -956,11 +955,10 @@ static int genpd_runtime_resume(struct device *dev)
+ 	struct generic_pm_domain *genpd;
+ 	struct generic_pm_domain_data *gpd_data = dev_gpd_data(dev);
+ 	struct gpd_timing_data *td = gpd_data->td;
+-	bool runtime_pm = pm_runtime_enabled(dev);
+-	ktime_t time_start;
++	bool timed = td && pm_runtime_enabled(dev);
++	ktime_t time_start = 0;
+ 	s64 elapsed_ns;
+ 	int ret;
+-	bool timed = true;
  
+ 	dev_dbg(dev, "%s()\n", __func__);
+ 
+@@ -988,8 +986,7 @@ static int genpd_runtime_resume(struct device *dev)
+ 
+  out:
+ 	/* Measure resume latency. */
+-	time_start = 0;
+-	if (timed && runtime_pm)
++	if (timed)
+ 		time_start = ktime_get();
+ 
+ 	ret = genpd_start_dev(genpd, dev);
+@@ -1001,9 +998,9 @@ static int genpd_runtime_resume(struct device *dev)
+ 		goto err_stop;
+ 
+ 	/* Update resume latency value if the measured time exceeds it. */
+-	if (timed && runtime_pm) {
++	if (timed) {
+ 		elapsed_ns = ktime_to_ns(ktime_sub(ktime_get(), time_start));
+-		if (td && (elapsed_ns > td->resume_latency_ns)) {
++		if (elapsed_ns > td->resume_latency_ns) {
+ 			td->resume_latency_ns = elapsed_ns;
+ 			dev_dbg(dev, "resume latency exceeded, %lld ns\n",
+ 				elapsed_ns);
 -- 
 2.25.1
 
