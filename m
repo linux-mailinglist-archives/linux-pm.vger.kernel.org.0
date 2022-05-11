@@ -2,274 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B51D3523E92
-	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 22:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 394B9523ED5
+	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 22:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242644AbiEKUNn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 May 2022 16:13:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48092 "EHLO
+        id S1347755AbiEKUYW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 May 2022 16:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347595AbiEKUNe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 16:13:34 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E605AA59;
-        Wed, 11 May 2022 13:13:27 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id p18so3843720edr.7;
-        Wed, 11 May 2022 13:13:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Nm89gfLqtSP3TfQoaVyZOT3oxzHwcL28ZW4W5CS/9qo=;
-        b=DCSfEwi/ZFlNlmvv+UkFcfWq90jcjs1SXyu3yKp6oYQ5GnnJms08VToWJ9z6a1DlJT
-         eY5mhTZTW5Ix4ptglCA9GFwi7iHce6jKIdyKVI4roVhkxrotKQFZo58LE6A9NNre/mwy
-         CE3qnm2pGTwy8TUiNBHNYJrNh+Ax2DfRr0Biy1pOdWKENSxJSPWDM/zgNPj+o0hqX+G9
-         WB1mDJOfNkTKAnLhFnRhVOmxowH+gmZ7jKLQWLs/8VRStrhUS9C8ssJVTJd+Do5jPxQ9
-         n13K2eTY75Q/7E5q7eLZVTqWqum9VTXoPs07dSH2mxTuiAfWILjN+/zhZZhzemrrUSMy
-         oAjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Nm89gfLqtSP3TfQoaVyZOT3oxzHwcL28ZW4W5CS/9qo=;
-        b=mGSXiiRp/TYZq+9jL1S58MfdYv4DUGUlzWUIcsaCc3zFdzjAugQETazkw6PxGPH/eH
-         lS+W7fLALmPcEfM6cMQffYudljt7qfWh9X+iPRKKFYY3RJaVARpn7h13n7kYtR+41oRJ
-         1i3bFtquswNCP0wqpu+3MpSTjjY73qRnFf4tJ3ANAjjQ0nO8frpoDJIOZKBUoo2WR8+m
-         1p4VCkWds9yA7i5jw4D3rxtw45LPE6/BA7yBriHjVeTbMryacUwKz5HMEf71nToZkb/1
-         t5SgrUIJG7W962ZXkVWVICr2YUiXegB1C8WW6NCTy0+D6SQJa+3/GnE+ELX46pH4nUta
-         D9RQ==
-X-Gm-Message-State: AOAM5301kI+LjbEmoy+JbbruqnCDSVtLge3+PobpJ1eGq7NxDwIMWbg2
-        FEiPsJ7tV9v/NVssKDZ0qIk=
-X-Google-Smtp-Source: ABdhPJxwFRdLfiMvDB5YKZpJTQp0z3Ohhe7yXCCx50Ljz5hzv9ZJovC6a5xfyy8LPah7sHr4dZbKAw==
-X-Received: by 2002:a05:6402:17c1:b0:428:8016:d98d with SMTP id s1-20020a05640217c100b004288016d98dmr24417591edy.5.1652300006185;
-        Wed, 11 May 2022 13:13:26 -0700 (PDT)
-Received: from kista.localnet (cpe1-3-76.cable.triera.net. [213.161.3.76])
-        by smtp.gmail.com with ESMTPSA id oz35-20020a1709077da300b006f3ef214e1csm1359454ejc.130.2022.05.11.13.13.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 May 2022 13:13:25 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     linux-sunxi@lists.linux.dev, qianfanguijin@163.com
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        qianfan Zhao <qianfanguijin@163.com>
-Subject: Re: [PATCH v2] drivers: cpufreq: sun8i-r40: Add cpufreq support
-Date:   Wed, 11 May 2022 22:13:24 +0200
-Message-ID: <1902551.yKVeVyVuyW@kista>
-In-Reply-To: <20220510003611.1812-1-qianfanguijin@163.com>
-References: <20220510003611.1812-1-qianfanguijin@163.com>
+        with ESMTP id S238984AbiEKUYR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 16:24:17 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0345A72E01;
+        Wed, 11 May 2022 13:24:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=LCKlEcL/+gLbho7zoJo89g9MDYx2GFkg8N7n1nlW+0g=; b=MQpyMZ3nMM+SlSF0Ic+7AggIHS
+        wWCWxLFJNdpcNC/qKw1wNJR3uSo8xMkfiJlq7d2aikSbZG9yuq1pfGOyawWDcFgWnRsla4fbF455Y
+        3RXCIUoMIO9o6uix81B+J++RZraHoxYIg5AFTEzg2KmNpXSrs7BEjvRicrp5TYhs6s3mYN27kkyAz
+        njPDxaRSeQ75fkZPzqisnL9xIuav4szhmycF8VItK7avDyCoEE8U/Zs7xTZO8x+jizmxi0qGskMhG
+        GsWdK7oyZ7kJDFhpPsgWAmAhF7aiE+T5aNpN2RQ5WYTzC7ql7jtRy3esjCfYNiJNCeB+2D6JHceeB
+        Ayva3vzg==;
+Received: from [177.183.162.244] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1noss0-000Aod-US; Wed, 11 May 2022 22:23:41 +0200
+Message-ID: <4b003501-f5c3-cd66-d222-88d98c93e141@igalia.com>
+Date:   Wed, 11 May 2022 17:22:22 -0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 11/30] um: Improve panic notifiers consistency and
+ ordering
+Content-Language: en-US
+To:     Petr Mladek <pmladek@suse.com>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Richard Weinberger <richard@nod.at>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-12-gpiccoli@igalia.com> <Ynp2hRodh04K3pzK@alley>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <Ynp2hRodh04K3pzK@alley>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dne torek, 10. maj 2022 ob 02:36:11 CEST je qianfanguijin@163.com napisal(a):
-> From: qianfan Zhao <qianfanguijin@163.com>
+On 10/05/2022 11:28, Petr Mladek wrote:
+> [...]
+> It is not clear to me why user mode linux should not care about
+> the other notifiers. It might be because I do not know much
+> about the user mode linux.
 > 
-> OPP table value is get from allwinner lichee 3.10 kernel.
-> And completed 'cpu-supply' on sun8i based board.
+> Is the because they always create core dump or are never running
+> in a hypervisor or ...?
 > 
-> Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
-> ---
->  .../boot/dts/sun8i-r40-bananapi-m2-ultra.dts  |  4 ++
->  arch/arm/boot/dts/sun8i-r40-feta40i.dtsi      |  4 ++
->  arch/arm/boot/dts/sun8i-r40.dtsi              | 47 +++++++++++++++++++
->  arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts      |  4 ++
->  .../boot/dts/sun8i-v40-bananapi-m2-berry.dts  |  4 ++
->  drivers/cpufreq/cpufreq-dt-platdev.c          |  1 +
+> AFAIK, the notifiers do many different things. For example, there
+> is a notifier that disables RCU watchdog, print some extra
+> information. Why none of them make sense here?
+>
 
-This patch needs to be split in two:
-1. driver change
-2. DT changes
+Hi Petr, my understanding is that UML is a form of running Linux as a
+regular userspace process for testing purposes. With that said, as soon
+as we exit in the error path, less "pollution" would happen, so users
+can use GDB to debug the core dump for example.
 
-And please add change log here for next submission.
+In later patches of this series (when we split the panic notifiers in 3
+lists) these UML notifiers run in the pre-reboot list, so they run after
+the informational notifiers for example (in the default level).
+But without the list split we cannot order properly, so my gut feeling
+is that makes sense to run them rather earlier than later in the panic
+process...
 
->  6 files changed, 64 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts b/arch/arm/
-boot/dts/sun8i-r40-bananapi-m2-ultra.dts
-> index a6a1087a0c9b..4f30018ec4a2 100644
-> --- a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
-> +++ b/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
-> @@ -113,6 +113,10 @@ &ahci {
->  	status = "okay";
->  };
->  
-> +&cpu0 {
-> +	cpu-supply = <&reg_dcdc2>;
-> +};
-> +
->  &de {
->  	status = "okay";
->  };
-> diff --git a/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi b/arch/arm/boot/dts/
-sun8i-r40-feta40i.dtsi
-> index 265e0fa57a32..b872b51a346d 100644
-> --- a/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi
-> +++ b/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi
-> @@ -6,6 +6,10 @@
->  
->  #include "sun8i-r40.dtsi"
->  
-> +&cpu0 {
-> +	cpu-supply = <&reg_dcdc2>;
-> +};
-> +
->  &i2c0 {
->  	status = "okay";
->  
-> diff --git a/arch/arm/boot/dts/sun8i-r40.dtsi b/arch/arm/boot/dts/sun8i-
-r40.dtsi
-> index 291f4784e86c..90de119095fa 100644
-> --- a/arch/arm/boot/dts/sun8i-r40.dtsi
-> +++ b/arch/arm/boot/dts/sun8i-r40.dtsi
-> @@ -54,6 +54,41 @@ / {
->  	#size-cells = <1>;
->  	interrupt-parent = <&gic>;
->  
-> +	cpu0_opp_table: opp_table0 {
-> +		compatible = "operating-points-v2";
-> +		opp-shared;
-> +
-> +		opp-720000000 {
-> +			opp-hz = /bits/ 64 <720000000>;
-> +			opp-microvolt = <1000000 1000000 1300000>;
-> +			clock-latency-ns = <2000000>;
-> +		};
-> +
-> +		opp-912000000 {
-> +			opp-hz = /bits/ 64 <912000000>;
-> +			opp-microvolt = <1100000 1100000 1300000>;
-> +			clock-latency-ns = <2000000>;
-> +		};
-> +
-> +		opp-1008000000 {
-> +			opp-hz = /bits/ 64 <1008000000>;
-> +			opp-microvolt = <1160000 1160000 1300000>;
-> +			clock-latency-ns = <2000000>;
-> +		};
-> +
-> +		opp-1104000000 {
-> +			opp-hz = /bits/ 64 <1104000000>;
-> +			opp-microvolt = <1240000 1240000 1300000>;
-> +			clock-latency-ns = <2000000>;
-> +		};
-> +
-> +		opp-1200000000 {
-> +			opp-hz = /bits/ 64 <1200000000>;
-> +			opp-microvolt = <1300000 1300000 1300000>;
-> +			clock-latency-ns = <2000000>;
-> +		};
-> +	};
-> +
->  	clocks {
->  		#address-cells = <1>;
->  		#size-cells = <1>;
-> @@ -84,24 +119,36 @@ cpu0: cpu@0 {
->  			compatible = "arm,cortex-a7";
->  			device_type = "cpu";
->  			reg = <0>;
-> +			clocks = <&ccu CLK_CPU>;
-> +			clock-names = "cpu";
-> +			operating-points-v2 = <&cpu0_opp_table>;
->  		};
->  
->  		cpu1: cpu@1 {
->  			compatible = "arm,cortex-a7";
->  			device_type = "cpu";
->  			reg = <1>;
-> +			clocks = <&ccu CLK_CPU>;
-> +			clock-names = "cpu";
-> +			operating-points-v2 = <&cpu0_opp_table>;
->  		};
->  
->  		cpu2: cpu@2 {
->  			compatible = "arm,cortex-a7";
->  			device_type = "cpu";
->  			reg = <2>;
-> +			clocks = <&ccu CLK_CPU>;
-> +			clock-names = "cpu";
-> +			operating-points-v2 = <&cpu0_opp_table>;
->  		};
->  
->  		cpu3: cpu@3 {
->  			compatible = "arm,cortex-a7";
->  			device_type = "cpu";
->  			reg = <3>;
-> +			clocks = <&ccu CLK_CPU>;
-> +			clock-names = "cpu";
-> +			operating-points-v2 = <&cpu0_opp_table>;
->  		};
->  	};
->  
-> diff --git a/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts b/arch/arm/boot/dts/
-sun8i-t3-cqa3t-bv3.dts
-> index 6931aaab2382..0eb1990742ff 100644
-> --- a/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts
-> +++ b/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts
-> @@ -88,6 +88,10 @@ &ahci {
->  	status = "okay";
->  };
->  
-> +&cpu0 {
-> +	cpu-supply = <&reg_dcdc2>;
-> +};
-> +
->  &de {
->  	status = "okay";
->  };
-> diff --git a/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts b/arch/arm/
-boot/dts/sun8i-v40-bananapi-m2-berry.dts
-> index 47954551f573..fdf8bd12faaa 100644
-> --- a/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts
-> +++ b/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts
-> @@ -107,6 +107,10 @@ &ahci {
->  	status = "okay";
->  };
->  
-> +&cpu0 {
-> +	cpu-supply = <&reg_dcdc2>;
-> +};
-> +
->  &de {
->  	status = "okay";
->  };
-> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-
-dt-platdev.c
-> index ca1d103ec449..971a99219d4d 100644
-> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
-> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-> @@ -26,6 +26,7 @@ static const struct of_device_id allowlist[] __initconst = 
-{
->  	{ .compatible = "allwinner,sun8i-a23", },
->  	{ .compatible = "allwinner,sun8i-a83t", },
->  	{ .compatible = "allwinner,sun8i-h3", },
-> +	{ .compatible = "allwinner,sun8i-r40", },
+Maybe Anton / Johannes / Richard could give their opinions - appreciate
+that, I'm not attached to the priority here, it's more about users'
+common usage of UML I can think of...
 
-Why on allow list? Comment says operatings-point-v2 should be on block list, 
-just like H6.
-
-Best regards,
-Jernej
-
->  
->  	{ .compatible = "apm,xgene-shadowcat", },
->  
-> -- 
-> 2.25.1
-> 
-> 
+Cheers,
 
 
+Guilherme
