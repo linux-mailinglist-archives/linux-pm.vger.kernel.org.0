@@ -2,141 +2,265 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D3EA523205
-	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 13:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A989523302
+	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 14:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235555AbiEKLpr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 May 2022 07:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49366 "EHLO
+        id S235117AbiEKMVV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 May 2022 08:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiEKLpq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 07:45:46 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC661D33A;
-        Wed, 11 May 2022 04:45:44 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 3223521B63;
-        Wed, 11 May 2022 11:45:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652269543; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0Q+AKogAFqrapMhSKhemsZfgkWqWDsARusHusUCyiK4=;
-        b=iY95HDQGs4qC23cq77bOCFTEdU/S8O5CyJ+RlnRZnMkkUzmn+I2Mm5/bPWA2BvWJDPDEv9
-        JwfZEqzAICGf45PeIFuZlFjlIC7fxZJfv9Ryxp3gi9axon0On+MdUW3HdUoK9u0ccTLMhL
-        Yjmk7zW6CuGXpaXXuOUQvYlsrSO1r9M=
-Received: from suse.cz (pathway.suse.cz [10.100.12.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 043992C141;
-        Wed, 11 May 2022 11:45:41 +0000 (UTC)
-Date:   Wed, 11 May 2022 13:45:41 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-Subject: Re: [PATCH 17/30] tracing: Improve panic/die notifiers
-Message-ID: <20220511114541.GC26047@pathway.suse.cz>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-18-gpiccoli@igalia.com>
+        with ESMTP id S234639AbiEKMVV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 08:21:21 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F27F136B
+        for <linux-pm@vger.kernel.org>; Wed, 11 May 2022 05:21:19 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id x12so1640905pgj.7
+        for <linux-pm@vger.kernel.org>; Wed, 11 May 2022 05:21:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Zu0vDG30iDCeqnvFJYec9mPAq1krcLLpZzNBmfizPr4=;
+        b=WTYai0R1CMae7C1ojqbvv26/WoYECprNeG9MvrAYCP6U1EyTXTWDpoKDSoA6u/McUx
+         8x3eGcSqBPgwhsQPNijFjuoHLclOUA2Uh6Lfs08wDjOKTEGk+hyNbaiLmwi1xgfH41pl
+         CoWVqqXQaLX5Jw7quRJeOSFKvLqlifBhCKrr4zF6LGU0Ad1TcxXX3JWlxEx2Hthxor7I
+         gw2WBLlKnidi0cc6HdVITzw0BOgtg8HUyDpM1n6l9b8zFYDfwvKtxWNWxGfNfn/zctFA
+         zw273z6pJ1ri+H6YSPZYT9a8cP65J0uhpyervzCLg1w7GqZO4UFlIjtmXqcp7FgMA3vu
+         h8Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Zu0vDG30iDCeqnvFJYec9mPAq1krcLLpZzNBmfizPr4=;
+        b=GORXa2gxo7faJPXkojAXJjmIDs1HjGsidtPjXxNoJFt3ZC2u1ZPaIL7+c4KUs/HW9z
+         ItLWnE9jUeaEiNRIORyqMzlErSmCyOA0Dz5c29i6fSxjmcAFBGQwP3uHJkObWxf7YY4A
+         3RE7gPkqeE8DSqTtiVH7b05HxhfIQa9BN2Se4m/njnT3i7qiV1ntDLD9UC4SFs6Xo3UV
+         m6SfvS7siOYuLZ2r4tnW8UVXMNX6kwHI2P00qn7bTG5gnD2+w72Xs5B1A0Y9do34GnbB
+         Rsl5l8UldKIxHNhdThNdml4QnukXjvc7GR749lIRsbnFTAUiMDZXODkCGvnAqZzWKtZk
+         0LUA==
+X-Gm-Message-State: AOAM533mu6TKHJvpQ12qQuFUkSXTOuFA12lcHNK2rlycOxpFl3hZDjHA
+        PQMhmgDOhVBIZYJyDHf1dqQ0HA==
+X-Google-Smtp-Source: ABdhPJya6SegzD3EabAH8KzEFVPIw8qnKM7iVqDqXyicbd53l/POubpHSHyTI3C1nH5iFiRrtFMzkg==
+X-Received: by 2002:a05:6a00:1352:b0:510:4c0e:d230 with SMTP id k18-20020a056a00135200b005104c0ed230mr25470973pfu.79.1652271679049;
+        Wed, 11 May 2022 05:21:19 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id r3-20020a632b03000000b003c14af505edsm1677853pgr.5.2022.05.11.05.21.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 May 2022 05:21:17 -0700 (PDT)
+Date:   Wed, 11 May 2022 17:51:14 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rafael@kernel.org
+Subject: Re: [PATCH v3] cpufreq: fix race on cpufreq online
+Message-ID: <20220511122114.wccgyur6g3qs6fps@vireshk-i7>
+References: <20220510035259.5ep52sgahd2a6rie@vireshk-i7>
+ <20220510154236.88753-1-schspa@gmail.com>
+ <20220511043515.fn2gz6q3kcpdai5p@vireshk-i7>
+ <CAMA88TpefB=rnqea2u1zEvNUJNE_kdj4mYito7SGCuMj-o071Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220427224924.592546-18-gpiccoli@igalia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMA88TpefB=rnqea2u1zEvNUJNE_kdj4mYito7SGCuMj-o071Q@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed 2022-04-27 19:49:11, Guilherme G. Piccoli wrote:
-> Currently the tracing dump_on_oops feature is implemented
-> through separate notifiers, one for die/oops and the other
-> for panic. With the addition of panic notifier "id", this
-> patch makes use of such "id" to unify both functions.
+On 11-05-22, 16:10, Schspa Shi wrote:
+> Viresh Kumar <viresh.kumar@linaro.org> writes:
+> > I am not sure, but maybe there were issues in calling init() with rwsem held, as
+> > it may want to call some API from there.
+> >
 > 
-> It also comments the function and changes the priority of the
-> notifier blocks, in order they run early compared to other
-> notifiers, to prevent useless trace data (like the callback
-> names for the other notifiers). Finally, we also removed an
-> unnecessary header inclusion.
+> I have checked all the init() implement of the fellowing files, It should be OK.
+> Function find command:
+>   ag "init[\s]+=" drivers/cpufreq
 > 
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -9767,38 +9766,46 @@ static __init int tracer_init_tracefs(void)
->  
->  fs_initcall(tracer_init_tracefs);
->  
-> -static int trace_panic_handler(struct notifier_block *this,
-> -			       unsigned long event, void *unused)
-> +/*
-> + * The idea is to execute the following die/panic callback early, in order
-> + * to avoid showing irrelevant information in the trace (like other panic
-> + * notifier functions); we are the 2nd to run, after hung_task/rcu_stall
-> + * warnings get disabled (to prevent potential log flooding).
-> + */
-> +static int trace_die_panic_handler(struct notifier_block *self,
-> +				unsigned long ev, void *unused)
->  {
-> -	if (ftrace_dump_on_oops)
-> +	int do_dump;
-> +
-> +	if (!ftrace_dump_on_oops)
-> +		return NOTIFY_DONE;
-> +
-> +	switch (ev) {
-> +	case DIE_OOPS:
-> +		do_dump = 1;
-> +		break;
-> +	case PANIC_NOTIFIER:
-> +		do_dump = 1;
-> +		break;
+> All the init() implement only initialize policy object without holding this lock
+> and won't call cpufreq APIs need to hold this lock.
 
-DIE_OOPS and PANIC_NOTIFIER are from different enum.
-It feels like comparing apples with oranges here.
+Okay, we can see if someone complains later then :)
 
-IMHO, the proper way to unify the two notifiers is
-a check of the @self parameter. Something like:
+> > I don't think you can do that safely. offline() or exit() may depend on
+> > policy->cpus being set to all CPUs.
+> OK, I will move this after exit(). and there will be no effect with those
+> two APIs. But policy->cpus must be clear before release policy->rwsem.
 
-static int trace_die_panic_handler(struct notifier_block *self,
-				unsigned long ev, void *unused)
-{
-	if (self == trace_die_notifier && val != DIE_OOPS)
-		goto out;
+Hmm, I don't think depending on the values of policy->cpus is a good idea to be
+honest. This design is inviting bugs to come in at another place. We need a
+clear flag for this, a new flag or something like policy_list.
 
-	ftrace_dump(ftrace_dump_on_oops);
-out:
-	return NOTIFY_DONE;
-}
+Also I see the same bug happening while the policy is removed. The kobject is
+put after the rwsem is dropped.
 
-Best Regards,
-Petr
+> >  static inline bool policy_is_inactive(struct cpufreq_policy *policy)
+> >  {
+> > -     return cpumask_empty(policy->cpus);
+> > +     return unlikely(cpumask_empty(policy->cpus) ||
+> > +                     list_empty(&policy->policy_list));
+> >  }
+> >
+> 
+> I don't think this fully solves my problem.
+> 1. There is some case which cpufreq_online failed after the policy is added to
+>    cpufreq_policy_list.
+
+And I missed that :(
+
+> 2. policy->policy_list is not protected by &policy->rwsem, and we
+> can't relay on this to
+>    indict the policy is fine.
+
+Ahh..
+
+> >From this point of view, we can fix this problem through the state of
+> this linked list.
+> But the above two problems need to be solved first.
+
+I feel overriding policy_list for this is going to make it complex/messy.
+
+Maybe something like this then:
+
+-------------------------8<-------------------------
+
+From dacc8d09d4d7b3d9a8bca8d78fc72199c16dc4a5 Mon Sep 17 00:00:00 2001
+Message-Id: <dacc8d09d4d7b3d9a8bca8d78fc72199c16dc4a5.1652271581.git.viresh.kumar@linaro.org>
+From: Viresh Kumar <viresh.kumar@linaro.org>
+Date: Wed, 11 May 2022 09:13:26 +0530
+Subject: [PATCH] cpufreq: Allow sysfs access only for active policies
+
+It is currently possible, in a corner case, to access the sysfs files
+and reach show_cpuinfo_cur_freq(), etc, for a partly initialized policy.
+
+This can happen for example if cpufreq_online() fails after adding the
+sysfs files, which are immediately accessed by another process. There
+can easily be other such cases, which aren't identified yet, like while
+the policy is getting freed.
+
+Process A:					Process B
+
+cpufreq_online()
+  down_write(&policy->rwsem);
+  if (new_policy) {
+    ret = cpufreq_add_dev_interface(policy);
+    /* This fails after adding few files */
+    if (ret)
+      goto out_destroy_policy;
+
+    ...
+  }
+
+  ...
+
+out_destroy_policy:
+  ...
+  up_write(&policy->rwsem);
+						/*
+						 * This will end up accessing the policy
+						 * which isn't fully initialized.
+						 */
+						show_cpuinfo_cur_freq()
+
+if (cpufreq_driver->offline)
+    cpufreq_driver->offline(policy);
+
+  if (cpufreq_driver->exit)
+    cpufreq_driver->exit(policy);
+
+  cpufreq_policy_free(policy);
+
+Fix these by checking in show/store if the policy is sysfs ready or not.
+
+Reported-by: Schspa Shi <schspa@gmail.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ drivers/cpufreq/cpufreq.c | 18 ++++++++++++++----
+ include/linux/cpufreq.h   |  3 +++
+ 2 files changed, 17 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index c8bf6c68597c..65c2bbcf555d 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -948,13 +948,14 @@ static ssize_t show(struct kobject *kobj, struct attribute *attr, char *buf)
+ {
+ 	struct cpufreq_policy *policy = to_policy(kobj);
+ 	struct freq_attr *fattr = to_attr(attr);
+-	ssize_t ret;
++	ssize_t ret = -EBUSY;
+ 
+ 	if (!fattr->show)
+ 		return -EIO;
+ 
+ 	down_read(&policy->rwsem);
+-	ret = fattr->show(policy, buf);
++	if (policy->sysfs_ready)
++		ret = fattr->show(policy, buf);
+ 	up_read(&policy->rwsem);
+ 
+ 	return ret;
+@@ -965,7 +966,7 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
+ {
+ 	struct cpufreq_policy *policy = to_policy(kobj);
+ 	struct freq_attr *fattr = to_attr(attr);
+-	ssize_t ret = -EINVAL;
++	ssize_t ret = -EBUSY;
+ 
+ 	if (!fattr->store)
+ 		return -EIO;
+@@ -979,7 +980,8 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
+ 
+ 	if (cpu_online(policy->cpu)) {
+ 		down_write(&policy->rwsem);
+-		ret = fattr->store(policy, buf, count);
++		if (policy->sysfs_ready)
++			ret = fattr->store(policy, buf, count);
+ 		up_write(&policy->rwsem);
+ 	}
+ 
+@@ -1280,6 +1282,11 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+ 	unsigned long flags;
+ 	int cpu;
+ 
++	/* Disallow sysfs interactions now */
++	down_write(&policy->rwsem);
++	policy->sysfs_ready = false;
++	up_write(&policy->rwsem);
++
+ 	/* Remove policy from list */
+ 	write_lock_irqsave(&cpufreq_driver_lock, flags);
+ 	list_del(&policy->policy_list);
+@@ -1516,6 +1523,9 @@ static int cpufreq_online(unsigned int cpu)
+ 		goto out_destroy_policy;
+ 	}
+ 
++	/* We can allow sysfs interactions now */
++	policy->sysfs_ready = true;
++
+ 	up_write(&policy->rwsem);
+ 
+ 	kobject_uevent(&policy->kobj, KOBJ_ADD);
+diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+index 35c7d6db4139..7e4384e535fd 100644
+--- a/include/linux/cpufreq.h
++++ b/include/linux/cpufreq.h
+@@ -101,6 +101,9 @@ struct cpufreq_policy {
+ 	 */
+ 	struct rw_semaphore	rwsem;
+ 
++	/* Policy is ready for sysfs interactions */
++	bool			sysfs_ready;
++
+ 	/*
+ 	 * Fast switch flags:
+ 	 * - fast_switch_possible should be set by the driver if it can
+-- 
+2.31.1.272.g89b43f80a514
+
