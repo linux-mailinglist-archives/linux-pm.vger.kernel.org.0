@@ -2,77 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A779D522930
-	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 03:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD92A52293A
+	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 03:54:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240799AbiEKBvT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 May 2022 21:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
+        id S240765AbiEKByk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 May 2022 21:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240796AbiEKBvR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 May 2022 21:51:17 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6230606E0;
-        Tue, 10 May 2022 18:51:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652233872; x=1683769872;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bGoWUSVkBi0VXKTbuYsdajcXGv1TjqD5Cu56Xf2zl10=;
-  b=CU744RWHpoPzi4UIdfb/vRjLY//Fmll07FWhSeIsVF2pB+ZAzQeK1Jj2
-   VzyO36VkciC4QKRaazlG6IiAfZ1IDXLN/rTaaPcOeaqyIov6Kc3Swru6M
-   D28ioiNm4BPmqI7fHUnmlyP8S3vPm3hTC668yc0V7Sn/1T2cyLw7STWFg
-   k=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 10 May 2022 18:51:11 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 18:51:11 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 10 May 2022 18:51:11 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 10 May 2022 18:51:04 -0700
-Date:   Wed, 11 May 2022 07:21:01 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-CC:     Matthias Kaehlcke <mka@chromium.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Andy Gross" <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_vpulyala@quicinc.com>
-Subject: Re: [v15 2/6] usb: host: xhci-plat: Enable wakeup based on children
- wakeup status
-Message-ID: <20220511015101.GB23843@hu-pkondeti-hyd.qualcomm.com>
-References: <1651740973-7944-1-git-send-email-quic_kriskura@quicinc.com>
- <1651740973-7944-3-git-send-email-quic_kriskura@quicinc.com>
- <YnVAZSZYQvIJxOHv@google.com>
- <20220509033843.GB9170@hu-pkondeti-hyd.qualcomm.com>
+        with ESMTP id S232452AbiEKByk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 May 2022 21:54:40 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28A5189E5F;
+        Tue, 10 May 2022 18:54:38 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KydBj5YxwzCscm;
+        Wed, 11 May 2022 09:49:49 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 11 May 2022 09:54:36 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 11 May
+ 2022 09:54:36 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+CC:     <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
+        <amitk@kernel.org>, <rui.zhang@intel.com>
+Subject: [PATCH] thermal: core: fix memory leak in __thermal_cooling_device_register()
+Date:   Wed, 11 May 2022 10:06:05 +0800
+Message-ID: <20220511020605.3096734-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220509033843.GB9170@hu-pkondeti-hyd.qualcomm.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,82 +49,44 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 09, 2022 at 09:08:43AM +0530, Pavan Kondeti wrote:
-> On Fri, May 06, 2022 at 08:36:31AM -0700, Matthias Kaehlcke wrote:
-> > On Thu, May 05, 2022 at 02:26:09PM +0530, Krishna Kurapati wrote:
-> > > device_wakeup_path() tells if any of the children devices needs
-> > > wakeup. Use this hint to enable/disable wakeup of our device. This
-> > > helps the parent device of xhci-plat (like sysdev) to retrieve
-> > > the wakeup setting via device_wakeup_path().
-> > > 
-> > > Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> > > ---
-> > >  drivers/usb/host/xhci-plat.c | 8 ++++++++
-> > >  1 file changed, 8 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-> > > index 649ffd8..ad585fa 100644
-> > > --- a/drivers/usb/host/xhci-plat.c
-> > > +++ b/drivers/usb/host/xhci-plat.c
-> > > @@ -415,6 +415,14 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
-> > >  	if (pm_runtime_suspended(dev))
-> > >  		pm_runtime_resume(dev);
-> > >  
-> > > +	if (device_wakeup_path(dev)) {
-> > > +		if (!device_may_wakeup(dev))
-> > > +			device_wakeup_enable(dev);
-> > > +	} else {
-> > > +		if (device_may_wakeup(dev))
-> > > +			device_wakeup_disable(dev);
-> > > +	}
-> > 
-> > This code is not self-explantatory and deserves a comment.
-> > 
-> > Enabling/disabling wakeup for the purpose if signalling is a bit of a
-> > hack. It might be an acceptable hack as long as it has no side effects.
-> > However with the current implementation the wakeup state of the xHCI can
-> > be different after resuming than it was before going to suspend:
-> > 
-> > after boot
-> >   grep -h xhci /sys/class/wakeup/*/name
-> >     => xhci-hcd.14.auto
-> > 
-> > after suspend w/o wakeup capable device
-> >   grep -h xhci /sys/class/wakeup/*/name
-> >     => no results
-> > 
-> > after suspend with wakeup capable device
-> >   grep -h xhci /sys/class/wakeup/*/name
-> >     => xhci-hcd.14.auto
-> > 
-> > The hack shouldn't alter the wakeup state 'persistently', i.e. you'll have
-> > to restore it on resume, as in Pavan does in his reply to '[PATCH v14 2/7]
-> > PM / wakeup: Add device_children_wakeup_capable()' (it needs to be done
-> > conditionally though).
-> 
-> I am worried that we are not doing the right thing here. why should the
-> xhci-plat goes against the wishes of the user space policy here? Can we NOT
-> just do anything here? If some one wants xhci-plat to wakeup all the time,
-> dwc3 will be configured to wakeup the system provided that the support is
-> available. This way we don't break any existing users of xhci-plat i.e not
-> enabling wakeup from the kernel.
-> 
-Krishna,
+I got memory leak as follows when doing fault injection test:
 
-can we please drop this patch and use device_wakeup_path() and verify the
-following cases.
+unreferenced object 0xffff888010080000 (size 264312):
+  comm "182", pid 102533, jiffies 4296434960 (age 10.100s)
+  hex dump (first 32 bytes):
+    00 00 00 00 ad 4e ad de ff ff ff ff 00 00 00 00  .....N..........
+    ff ff ff ff ff ff ff ff 40 7f 1f b9 ff ff ff ff  ........@.......
+  backtrace:
+    [<0000000038b2f4fc>] kmalloc_order_trace+0x1d/0x110 mm/slab_common.c:969
+    [<00000000ebcb8da5>] __kmalloc+0x373/0x420 include/linux/slab.h:510
+    [<0000000084137f13>] thermal_cooling_device_setup_sysfs+0x15d/0x2d0 include/linux/slab.h:586
+    [<00000000352b8755>] __thermal_cooling_device_register+0x332/0xa60 drivers/thermal/thermal_core.c:927
+    [<00000000fb9f331b>] devm_thermal_of_cooling_device_register+0x6b/0xf0 drivers/thermal/thermal_core.c:1041
+    [<000000009b8012d2>] max6650_probe.cold+0x557/0x6aa drivers/hwmon/max6650.c:211
+    [<00000000da0b7e04>] i2c_device_probe+0x472/0xac0 drivers/i2c/i2c-core-base.c:561
 
-1. one of the downstream USB device supports wakeup and xhci-plat wakeup is enabled
-2. one of the downstream USB device supports wakeup and xhci-plat wakeup is
-disabled
-3. none of the downstream USB device supports wakeup (or disable) and
-xhci-plat wakeup is enabled.
-4. none of the downstream USB device supports wakeup (or disable) and
-xhci-plat wakeup is disabled.
+If device_register() fails, thermal_cooling_device_destroy_sysfs() need be called
+to free the memory allocated in thermal_cooling_device_setup_sysfs().
 
-We don't want to enable xhci-plat wakeup capability like we do in this patch
-and potentially break any other platform. Lets leave the policy to the user
-space and rely on wakeup path to see if we can achieve the desired result.
+Fixes: 8ea229511e06 ("thermal: Add cooling device's statistics in sysfs")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/thermal/thermal_core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
-Pavan
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 82654dc8382b..cdc0552e8c42 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -947,6 +947,7 @@ __thermal_cooling_device_register(struct device_node *np,
+ 	return cdev;
+ 
+ out_kfree_type:
++	thermal_cooling_device_destroy_sysfs(cdev);
+ 	kfree(cdev->type);
+ 	put_device(&cdev->device);
+ 	cdev = NULL;
+-- 
+2.25.1
+
