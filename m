@@ -2,147 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8587A522B6C
-	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 06:57:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBEB8522B79
+	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 07:06:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbiEKE5V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 May 2022 00:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42016 "EHLO
+        id S236221AbiEKFGx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 May 2022 01:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiEKE5U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 00:57:20 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA3EBA981;
-        Tue, 10 May 2022 21:57:17 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24B4v8MD009060;
-        Tue, 10 May 2022 23:57:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1652245028;
-        bh=nTz7YT0yRqP5kLgxJz0n83SBM4tCZh4oJr4tKzF560c=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=Prioy0KvgkySR8MuJXpUWhWdXwff8EzSci6WKuhIVkun72tmhLVL5ZgvO59qepVVV
-         PMgv6zLrdirZvFcetVI372ORxY9p4vhwzyrcxpqZ9znLKd4hS6b+pDZesMS+1k8HNZ
-         Y/SepBW3GWN/pswogDyK+UyJ7ehR8t6GCTIjYzvE=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24B4v8rJ108735
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 10 May 2022 23:57:08 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 10
- May 2022 23:57:08 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 10 May 2022 23:57:08 -0500
-Received: from [172.24.145.176] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24B4v4bK026680;
-        Tue, 10 May 2022 23:57:05 -0500
-Message-ID: <6054e7e6-928e-1378-fed5-587fd7fe3442@ti.com>
-Date:   Wed, 11 May 2022 10:27:04 +0530
+        with ESMTP id S234463AbiEKFGu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 01:06:50 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5D94EDFC
+        for <linux-pm@vger.kernel.org>; Tue, 10 May 2022 22:06:46 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id p8so991432pfh.8
+        for <linux-pm@vger.kernel.org>; Tue, 10 May 2022 22:06:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=AUEIkeNWULTqIuIT1TZeXx+IdneqcLu7BzWDktuhfnk=;
+        b=F8jn7i4bbQ95N7G7p4DIUqUUwb8R45Ly5JB7TyyhJiHYhrGNc7SkaFJWOMLSwQiz6B
+         mLVffC7ztUhB4aMrEx9YveKtguy8R5xI87IrhfPmry6wYuvrkwwXZhpMXR2S/FF3paXF
+         4vR4IChTGPB+fepRra4S8AToZBNXV2Un6pyThhngFfNZ12B4XRupcgr9ykO+zGnLooZe
+         WEypzao1fonjiP3LL3Df9bvaMieh8T3HC9Lp2fDodmttzz5+CZTXnRYZn2ANc1NCvkus
+         AfLV9HnZVpARsF8gv35ufAIkT1BXKQoDK835N2MrukdhICpE6kgp8lRM8SUu7m7KiNPy
+         GOaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=AUEIkeNWULTqIuIT1TZeXx+IdneqcLu7BzWDktuhfnk=;
+        b=smMgaUeO+VnRAVJykRAOa182qEGc80GILBLFmHkOJH7QCKZdeEjIGU6sY8raCmBuuy
+         /s0BeuNPbsJJ7ff2KBvRu8t+u4y+lyD+U1V8PhmrTv8/HYxSJZkmbgO93NBYCspsHZzn
+         QUfbZaFtxra50dSgkW+qbu9lTWvWvetlSE031L/Uq6+2Ybcm/Vvbf0WxXa0nIPT1ghah
+         w0l4jaRXVsl9vO6wH3q+yCGi3b8nBuuvBlcak6+Yaa9CyCs7GmUXigUx7PIMexYZqAPe
+         P+81X45TwpKIryCJnBjha0V9MKysE6lrz++M8vKetO/Nk9nOGn1qEyLVF/Y57dGzGCVn
+         gRRw==
+X-Gm-Message-State: AOAM533jS0kQ9uiHecISKzY98N2w83xEBsuJYq/XJ1Po/aA5zSx+gQut
+        zRWt041F7IavE8wljggF+3vU7A==
+X-Google-Smtp-Source: ABdhPJw19bwjjubf5ZE0oIAmRAefBe7FNecIitByBceQ0V+zCTh9c6/8TSu7+c0yFISh4fD8ZvKs3w==
+X-Received: by 2002:a05:6a00:18a9:b0:50d:d41b:7240 with SMTP id x41-20020a056a0018a900b0050dd41b7240mr23119315pfh.66.1652245606028;
+        Tue, 10 May 2022 22:06:46 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id 13-20020a62190d000000b0050dc7628161sm496573pfz.59.2022.05.10.22.06.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 22:06:45 -0700 (PDT)
+Date:   Wed, 11 May 2022 10:36:43 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
+Message-ID: <20220511050643.hd5tcrojb3wkbg7t@vireshk-i7>
+References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
+ <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
+ <20220425072710.v6gwo4gu3aouezg4@vireshk-i7>
+ <dea39b1f-0091-2690-7f07-108d07ef9f3c@linaro.org>
+ <20220510044053.ykn6ygnbeokhzrsa@vireshk-i7>
+ <1e533194-7047-8342-b426-f607fddbfaa3@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v6 4/4] thermal: k3_j72xx_bandgap: Add the bandgap driver
- support
-Content-Language: en-US
-To:     "J, KEERTHY" <j-keerthy@ti.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        <robh+dt@kernel.org>, <rui.zhang@intel.com>, <amitk@kernel.org>,
-        <kristo@kernel.org>, <krzysztof.kozlowski@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220427064635.24898-1-j-keerthy@ti.com>
- <20220427064635.24898-5-j-keerthy@ti.com>
- <78a3cc4d-8ce4-0dae-2f4e-7522a0a3aa0b@ti.com>
- <d94ea6b0-e138-951d-5405-375255104adb@linaro.org>
- <ffafc50e-9adb-9d66-3d1f-4ebc9f91f47d@ti.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <ffafc50e-9adb-9d66-3d1f-4ebc9f91f47d@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1e533194-7047-8342-b426-f607fddbfaa3@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 10-05-22, 15:09, Krzysztof Kozlowski wrote:
+> On 10/05/2022 06:40, Viresh Kumar wrote:
+> > They shouldn't reach the OPP core then. What will the OPP core do if a
+> > clock has a value for one OPP and not the other ?
+> 
+> That would be the same mistake as providing one voltage as 0 or with
+> something outside of a spec (but still within regulators min/max).
+> Mistakes in DTS create undesirable behavior and this part is no different.
 
+Right, I agree and so it shouldn't be allowed in principle.
 
-On 10/05/22 22:47, J, KEERTHY wrote:
-> 
-> 
-> On 5/10/2022 8:55 PM, Daniel Lezcano wrote:
->> On 09/05/2022 05:10, J, KEERTHY wrote:
->>>
->>>
->>> On 4/27/2022 12:16 PM, Keerthy wrote:
->>>> Add VTM thermal support. In the Voltage Thermal Management
->>>> Module(VTM), K3 J72XX supplies a voltage reference and a temperature
->>>> sensor feature that are gathered in the band gap voltage and
->>>> temperature sensor (VBGAPTS) module. The band gap provides current and
->>>> voltage reference for its internal circuits and other analog IP
->>>> blocks. The analog-to-digital converter (ADC) produces an output value
->>>> that is proportional to the silicon temperature.
->>>>
->>>> Currently reading temperatures only is supported.  There are no
->>>> active/passive cooling agent supported.
->>>>
->>>> J721e SoCs have errata i2128: https://www.ti.com/lit/pdf/sprz455
->>>>
->>>> The VTM Temperature Monitors (TEMPSENSORs) are trimmed during
->>>> production,
->>>> with the resulting values stored in software-readable registers.
->>>> Software
->>>> should use these  register values when translating the Temperature
->>>> Monitor output codes to temperature values.
->>>>
->>>> It has an involved workaround. Software needs to read the error
->>>> codes for
->>>> -40C, 30C, 125C from the efuse for each device & derive a new look
->>>> up table
->>>> for adc to temperature conversion. Involved calculating slopes &
->>>> constants
->>>> using 3 different straight line equations with adc refernce codes as
->>>> the
->>>> y-axis & error codes in the x-axis.
->>>>
->>>> -40C to 30C
->>>> 30C to 125C
->>>> 125C to 150C
->>>>
->>>> With the above 2 line equations we derive the full look-up table to
->>>> workaround the errata i2128 for j721e SoC.
->>>
->>> Hi Daniel,
->>>
->>> Any feedback on this series? Let me know.
->>
->> There are a few but that would be nit picking and I don't want to
->> postpone this driver any longer.
->>
->> How do you want to proceed? Shall I take it through my tree?
-> 
-> Hi Daniel,
-> 
-> Patch 1 & 4 i.e Documentation patch and driver patch can be picked by
-> you. I believe Vignesh will take the dts patches.
-> 
-> Vignesh,
-> 
-> Can you confirm?
-> 
+> However I understand your point - since the driver provides the list of
+> clocks to OPP, it should not provide ones which are irrelevant.
 
-Yes, please decouple DT patches from driver+binding patches as they are
-to be applied to different trees.
+Right.
 
+> > IMHO, this is broken by design. I can easily see that someone wants to
+> > have few variants of all other frequencies for the same frequency of
+> > the so called "main" clock, i.e. multiple OPPs with same "main" freq
+> > value.  I don't think we can mark the clocks "main" or otherwise as
+> > easily for every platform.
+> > 
+> > Stephen, any inputs on this ?
+> 
+> In such case, matching opps by frequency would be a quite different API.
+> The drivers can use now:
+> https://github.com/krzk/linux/commit/ebc31798494fcc66389ae409dce6d9489c16156a#diff-b6370444c32afa2e55d9b6150f355ba6f4d20c5ed5da5399ea8295d323de8267R1200
+> 
+> If you assume that this frequency can be used for multiple OPPs, then
+> the API should be different. Something like:
+> int dev_pm_opp_set_rate(struct device *dev, unsigned long *target_freqs,
+>                         size_t num_freqs);
+
+At this point I am not looking for a new API, but just continuing the discussion
+to understand what different hardwares want or look like.
+
+> Finding right opp for given frequencies would be also quite much more
+> complicated task. Not a simple ceil/floor search by one frequency.
+
+Right.
+
+> I don't need that use-case and my implementation does not prevent anyone
+> from implementing it in the future. IOW, why developing now complex
+> solution which no one currently needs? If anyone needs such scaling by
+> multiple-frequencies, the PM OPP can be reworked/extended/improved again.
+
+It isn't about being complex or simple for me, but the design needs to be
+robust. Either we can have a guaranteed "main" frequency or not and that would
+decide how we need to proceed here.
 
 -- 
-Regards
-Vignesh
+viresh
