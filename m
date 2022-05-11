@@ -2,52 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B865234AF
-	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 15:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 465DA523528
+	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 16:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244176AbiEKNub (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 May 2022 09:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46360 "EHLO
+        id S244470AbiEKOPS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 May 2022 10:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244192AbiEKNu2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 09:50:28 -0400
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9FA248248;
-        Wed, 11 May 2022 06:50:23 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id v59so4076068ybi.12;
-        Wed, 11 May 2022 06:50:23 -0700 (PDT)
+        with ESMTP id S244471AbiEKOPP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 10:15:15 -0400
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F1A6B679;
+        Wed, 11 May 2022 07:15:13 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id r1so4256137ybo.7;
+        Wed, 11 May 2022 07:15:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=6T461oZUF/Gcihy0sNyV0keeWDDkJXZ5dXIGK7Rlpm4=;
-        b=FhD/mJI6beFgnO2dlADIJAJfIwvW4jGtAWwL2F6iLqVRVLiIYcmrQ5fANhRa0jUSR3
-         zhMAso//l5f6lyO9LocDtRgfLwV0noYvlt3Cx0PLFs52u8VYB/6941Z+OCSXnZyj3xqP
-         Iv0FaQkeSQ0H+fM+GQPEhRdnANRLhZ6JS+oz+QroNCibcI7jxCEMZ80snwm3bLDQA3vr
-         9/fmafGknoUQmjXyHjwiMaOgPrAuYvlaM4EDcpHm1g50m2O+luvYHTZY1FhExDhMKLmH
-         ysDFaRVTzG54mTBsm2CleiAJmucQZvhjduGg/nVwQeysGeljsU30u1yqTemhW52SLeNY
-         ZFog==
-X-Gm-Message-State: AOAM531zux7S254RJAk/GdC6oyG3hdu/7QKEpQ35H76W6snLmKOXX1Dg
-        8KP1dKMyT6B10Uwm0N4DLhfIF362FKAYC363A54=
-X-Google-Smtp-Source: ABdhPJyF9CtAHyGPDj3C5LuFBkn+YAFfhdpjED3P5cec42HkSqLIoJKj+aqMJwdIsmbDiS36VgdmqCY+eO5f0pSGxwc=
-X-Received: by 2002:a25:e792:0:b0:645:7ddb:b5eb with SMTP id
- e140-20020a25e792000000b006457ddbb5ebmr23615068ybh.482.1652277022345; Wed, 11
- May 2022 06:50:22 -0700 (PDT)
+        bh=6UrXsXYy6M//zNzEGaa3ePaijRBCwEV3iZbCY12Czp0=;
+        b=ayt90iGjxzzujL7sjILXhC8ZxtKQvUl2rLhBjlitF6igPuaE8djjhMYU9/mI9WtQeJ
+         K1Xj6+LqiDVjvOs6yyratmcM0G+b3wDGQlVe8rbzoqCXxkhovKzWI4fcls240qiaKRAz
+         lMAH9PGqmLAGPHQdEAqfBrrzgeC3ZkxGMImpPs37hMYPmsmL+bO33w4DeHkhD6AjVVle
+         67zK/TNFMroYvWVLd2ADMDf29WQT4XBtGd0pmaxA+ygHCfqTDkC//OnZER/Z1jZRWLc5
+         qmL2FgvNuu+8XHZ0qJeKnEsmgGrC6Mz7TzB1voMAw2Tjm9oyyAmP/B4m2BJjVVcqfsB7
+         hA3g==
+X-Gm-Message-State: AOAM5324iQdIj3l8XcooHeO3OLSpOwmI0dm4SsOcEgpRdKqMZUTfejSC
+        M4zkXacq/oSqWg2lieJXyoDiPocU0LNmucp4k4M=
+X-Google-Smtp-Source: ABdhPJwtPC7qiUkK5mKXa6SK0vRcLSJ3+elfOqI7rHeE7T2vpFDnDLnrs+VtPqa7RzXl66HncJLx/JK+aN2V44jYahU=
+X-Received: by 2002:a25:3795:0:b0:648:fa25:5268 with SMTP id
+ e143-20020a253795000000b00648fa255268mr25291511yba.153.1652278512727; Wed, 11
+ May 2022 07:15:12 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220510035259.5ep52sgahd2a6rie@vireshk-i7> <20220510154236.88753-1-schspa@gmail.com>
- <20220511043515.fn2gz6q3kcpdai5p@vireshk-i7> <CAMA88TpefB=rnqea2u1zEvNUJNE_kdj4mYito7SGCuMj-o071Q@mail.gmail.com>
- <20220511122114.wccgyur6g3qs6fps@vireshk-i7> <CAJZ5v0gN_yDFpvCXRXv8rN-i3TugCi-HKpBKK2z4eWU0Zm1GUg@mail.gmail.com>
- <CAJZ5v0id+7vkqMQEyVRe29oF_dRtzZ0EhoYUn8=yzeENDeABJw@mail.gmail.com> <CAMA88TpJuJY7oxPFW8xKzch60+n_2qRp7KO2r-YwZxiM7GXF3w@mail.gmail.com>
-In-Reply-To: <CAMA88TpJuJY7oxPFW8xKzch60+n_2qRp7KO2r-YwZxiM7GXF3w@mail.gmail.com>
+In-Reply-To: <20220510154236.88753-1-schspa@gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 11 May 2022 15:50:11 +0200
-Message-ID: <CAJZ5v0hkdr2N65p84X0HdVCkqr621=rE4cFmqFMMXTvn6=BCAw@mail.gmail.com>
+Date:   Wed, 11 May 2022 16:15:00 +0200
+Message-ID: <CAJZ5v0gcOmd8fXG9_BYxr6rN7ncUWnfki7K9S5wK2Vvh9SxUCA@mail.gmail.com>
 Subject: Re: [PATCH v3] cpufreq: fix race on cpufreq online
 To:     Schspa Shi <schspa@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -59,112 +56,167 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 11, 2022 at 3:42 PM Schspa Shi <schspa@gmail.com> wrote:
+On Tue, May 10, 2022 at 5:42 PM Schspa Shi <schspa@gmail.com> wrote:
 >
-> "Rafael J. Wysocki" <rafael@kernel.org> writes:
+> When cpufreq online failed, policy->cpus are not empty while
+> cpufreq sysfs file available, we may access some data freed.
 >
-> > On Wed, May 11, 2022 at 2:59 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >>
-> >> On Wed, May 11, 2022 at 2:21 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> >> >
-> >> > On 11-05-22, 16:10, Schspa Shi wrote:
-> >> > > Viresh Kumar <viresh.kumar@linaro.org> writes:
-> >> > > > I am not sure, but maybe there were issues in calling init() with rwsem held, as
-> >> > > > it may want to call some API from there.
-> >> > > >
-> >> > >
-> >> > > I have checked all the init() implement of the fellowing files, It should be OK.
-> >> > > Function find command:
-> >> > >   ag "init[\s]+=" drivers/cpufreq
-> >> > >
-> >> > > All the init() implement only initialize policy object without holding this lock
-> >> > > and won't call cpufreq APIs need to hold this lock.
-> >> >
-> >> > Okay, we can see if someone complains later then :)
-> >> >
-> >> > > > I don't think you can do that safely. offline() or exit() may depend on
-> >> > > > policy->cpus being set to all CPUs.
-> >> > > OK, I will move this after exit(). and there will be no effect with those
-> >> > > two APIs. But policy->cpus must be clear before release policy->rwsem.
-> >> >
-> >> > Hmm, I don't think depending on the values of policy->cpus is a good idea to be
-> >> > honest. This design is inviting bugs to come in at another place. We need a
-> >> > clear flag for this, a new flag or something like policy_list.
-> >
-> > Why?
-> >
-> >> > Also I see the same bug happening while the policy is removed. The kobject is
-> >> > put after the rwsem is dropped.
-> >
-> > This shouldn't be a problem because of the wait_for_completion() in
-> > cpufreq_policy_put_kobj().  It is known that cpufreq_sysfs_release()
-> > has run when cpufreq_policy_put_kobj() returns, so it is safe to free
-> > the policy then.
-> >
-> >> > > >  static inline bool policy_is_inactive(struct cpufreq_policy *policy)
-> >> > > >  {
-> >> > > > -     return cpumask_empty(policy->cpus);
-> >> > > > +     return unlikely(cpumask_empty(policy->cpus) ||
-> >> > > > +                     list_empty(&policy->policy_list));
-> >> > > >  }
-> >> > > >
-> >> > >
-> >> > > I don't think this fully solves my problem.
-> >> > > 1. There is some case which cpufreq_online failed after the policy is added to
-> >> > >    cpufreq_policy_list.
-> >> >
-> >> > And I missed that :(
-> >> >
-> >> > > 2. policy->policy_list is not protected by &policy->rwsem, and we
-> >> > > can't relay on this to
-> >> > >    indict the policy is fine.
-> >> >
-> >> > Ahh..
-> >> >
-> >> > > >From this point of view, we can fix this problem through the state of
-> >> > > this linked list.
-> >> > > But the above two problems need to be solved first.
-> >> >
-> >> > I feel overriding policy_list for this is going to make it complex/messy.
-> >> >
-> >> > Maybe something like this then:
-> >>
-> >> There are two things.
-> >>
-> >> One is the possible race with respect to the sysfs access occurring
-> >> during failing initialization and the other is that ->offline() or
-> >> ->exit() can be called with or without holding the policy rwsem
-> >> depending on the code path.
-> >>
-> >> Namely, cpufreq_offline() calls them under the policy rwsem, but
-> >> cpufreq_remove_dev() calls ->exit() outside the rwsem.  Also they are
-> >> called outside the rwsem in cpufreq_online().
-> >>
-> >> Moreover, ->offline() and ->exit() cannot expect policy->cpus to be
-> >> populated, because they are called when it is empty from
-> >> cpufreq_offline().
-> >>
-> >> So the $subject patch is correct AFAICS even though it doesn't address
-> >> all of the above.
-> >
-> > TBH, I'm not sure why show() doesn't check policy_is_inactive() under the rwsem.
-> >
+> Take policy->clk as an example:
 >
-> There is a exist bugs, and somebody try to fixed, please see commit
-> Fixes: 2f66196208c9 ("cpufreq: check if policy is inactive early in
-> __cpufreq_get()")
-
-Well, exactly.
-
-This only addressed one bug out of a category.
-
-> > Moreover, I'm not sure why the locking dance in store() is necessary.
+> static int cpufreq_online(unsigned int cpu)
+> {
+>   ...
+>   // policy->cpus != 0 at this time
+>   down_write(&policy->rwsem);
+>   ret = cpufreq_add_dev_interface(policy);
+>   up_write(&policy->rwsem);
 >
-> The store interface hold cpu_hotplug_lock via
->     cpus_read_trylock();
-> , cannot run in parallel with cpufreq_online() & cpufreq_offline().
+>   down_write(&policy->rwsem);
+>   ...
+>   /* cpufreq nitialization fails in some cases */
+>   if (cpufreq_driver->get && has_target()) {
+>     policy->cur = cpufreq_driver->get(policy->cpu);
+>     if (!policy->cur) {
+>       ret = -EIO;
+>       pr_err("%s: ->get() failed\n", __func__);
+>       goto out_destroy_policy;
+>     }
+>   }
+>   ...
+>   up_write(&policy->rwsem);
+>   ...
+>
+>   return 0;
+>
+> out_destroy_policy:
+>         for_each_cpu(j, policy->real_cpus)
+>                 remove_cpu_dev_symlink(policy, get_cpu_device(j));
+>     up_write(&policy->rwsem);
+> ...
+> out_exit_policy:
+>   if (cpufreq_driver->exit)
+>     cpufreq_driver->exit(policy);
+>       clk_put(policy->clk);
+>       // policy->clk is a wild pointer
+> ...
+>                                     ^
+>                                     |
+>                             Another process access
+>                             __cpufreq_get
+>                               cpufreq_verify_current_freq
+>                                 cpufreq_generic_get
+>                                   // acces wild pointer of policy->clk;
+>                                     |
+>                                     |
+> out_offline_policy:                 |
+>   cpufreq_policy_free(policy);      |
+>     // deleted here, and will wait for no body reference
+>     cpufreq_policy_put_kobj(policy);
+> }
+>
+> We can fix it by clear the policy->cpus mask.
+> Both show_scaling_cur_freq and show_cpuinfo_cur_freq will return an
+> error by checking this mask, thus avoiding UAF.
 
-So the reason why is to prevent store() from running in parallel with
-the two functions above.  Which generally  is because the policy
-configuration is in-flight then.  However, I'm wondering about what
-exactly would break then.
+So the UAF only happens if something is freed by ->offline() or
+->exit() and I'm not sure where the mask is checked in the
+scaling_cur_freq() path.
+
+Overall, the patch is really two changes in one IMO.
+
+> Signed-off-by: Schspa Shi <schspa@gmail.com>
+>
+> ---
+>
+> Changelog:
+> v1 -> v2:
+>         - Fix bad critical region enlarge which causes uninitialized
+>           unlock.
+> v2 -> v3:
+>         - Remove the missed down_write() before
+>           cpumask_and(policy->cpus, policy->cpus, cpu_online_mask);
+>
+> Signed-off-by: Schspa Shi <schspa@gmail.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 80f535cc8a75..d93958dbdab8 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1337,12 +1337,12 @@ static int cpufreq_online(unsigned int cpu)
+>                 down_write(&policy->rwsem);
+>                 policy->cpu = cpu;
+>                 policy->governor = NULL;
+> -               up_write(&policy->rwsem);
+>         } else {
+>                 new_policy = true;
+>                 policy = cpufreq_policy_alloc(cpu);
+>                 if (!policy)
+>                         return -ENOMEM;
+> +               down_write(&policy->rwsem);
+>         }
+>
+>         if (!new_policy && cpufreq_driver->online) {
+> @@ -1382,7 +1382,6 @@ static int cpufreq_online(unsigned int cpu)
+>                 cpumask_copy(policy->related_cpus, policy->cpus);
+>         }
+>
+> -       down_write(&policy->rwsem);
+>         /*
+>          * affected cpus must always be the one, which are online. We aren't
+>          * managing offline cpus here.
+
+The first change, which could and probably should be a separate patch,
+ends here.
+
+You prevent the rwsem from being dropped in the existing policy case
+and acquire it right after creating a new policy.
+
+This way ->online() always runs under the rwsem, which definitely
+sounds like a good idea, and policy->cpus is manipulated under the
+rwsem which IMV is required.
+
+As a side-effect, ->init() is also run under the rwsem, but that
+shouldn't be a problem as per your discussion with Viresh.
+
+So the above would be patch 1 in a series.
+
+The change below is a separate one and it addresses the particular
+race you've discovered, as long as patch 1 above is present.  It would
+be patch 2 in the series.
+
+> @@ -1533,7 +1532,7 @@ static int cpufreq_online(unsigned int cpu)
+>         for_each_cpu(j, policy->real_cpus)
+>                 remove_cpu_dev_symlink(policy, get_cpu_device(j));
+>
+> -       up_write(&policy->rwsem);
+> +       cpumask_clear(policy->cpus);
+
+It is OK to clear policy->cpus here, because ->offline() and ->exit()
+are called with policy->cpus clear from cpufreq_offline() and
+cpufreq_remove_dev(), so they cannot assume policy->cpus to be
+populated when they are invoked.  However, this needs to be stated in
+the changelog of patch 2.
+
+>  out_offline_policy:
+>         if (cpufreq_driver->offline)
+> @@ -1542,6 +1541,7 @@ static int cpufreq_online(unsigned int cpu)
+>  out_exit_policy:
+>         if (cpufreq_driver->exit)
+>                 cpufreq_driver->exit(policy);
+> +       up_write(&policy->rwsem);
+
+It is consistent to run ->offline() and ->exit() under the rwsem, so
+this change is OK too.
+
+>  out_free_policy:
+>         cpufreq_policy_free(policy);
+> --
+
+That said, there still are races that are not addressed by the above,
+so I would add patch 3 changing show() to check policy_is_inactive()
+under the rwsem.
+
+Thanks!
