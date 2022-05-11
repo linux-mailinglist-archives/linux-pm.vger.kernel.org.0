@@ -2,121 +2,253 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA8C522A43
-	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 05:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC28522B0F
+	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 06:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240625AbiEKDQw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 May 2022 23:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44646 "EHLO
+        id S229766AbiEKEfV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 May 2022 00:35:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241589AbiEKDQu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 May 2022 23:16:50 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2EF3BF8A
-        for <linux-pm@vger.kernel.org>; Tue, 10 May 2022 20:16:45 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 202so629542pgc.9
-        for <linux-pm@vger.kernel.org>; Tue, 10 May 2022 20:16:45 -0700 (PDT)
+        with ESMTP id S234542AbiEKEfT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 00:35:19 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B509C9B1BB
+        for <linux-pm@vger.kernel.org>; Tue, 10 May 2022 21:35:18 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so3793566pjb.5
+        for <linux-pm@vger.kernel.org>; Tue, 10 May 2022 21:35:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=351fsulzgIB9s45r5aDOm6WnMH7u9ny+vycNfOOPWQs=;
-        b=KiltleuwVgGeRkRv9NEZxDAhsZnrsI0rvrspNE5rpKFJHuJJCryNVRWRascDsZP5+c
-         VgFWYsZXNZ1KTwYc4JqZL/sr4jK9ZcbGO4knq5y+y4yaqst6dPDXf3BWKwC4Q4Le0L5h
-         sFVKbTCnZZDE25GFlNbrOktAR5o9nZY6Lrvby1msNEMQ9P7CpnnnDLuML9KHXDSNWdTJ
-         LWmPxBu7Cu0zXHQDQMWmd6fka+7E4MPgEqTY6MXCVJE9yOgzfUK4vQV2rpAoL/jtz+mz
-         GDdygl97K77j7WecH0qaNLnLGsheZN98PYga879q41+ohCQkzAsmUzWot4ir+6p2qw3c
-         dlyw==
+        bh=dV4WsBT9ftPx6yaQb9rdbf6XsiVSnfObebmDzI5cz4I=;
+        b=OyLfG1JFN9LPV9gAe3HeVkM+fm3O5Rm5aQ4dv8I2HYmkSt6AcGB2erlPyAUXo9fz2X
+         wN4YIWy/gK9zIXGfQbS9cWsoIZ/FO2srrXwT7xWcTAFQwF1t3/VnGeHjxo3NbtywfddD
+         GgGQ6GbBBwOUAmJse1+ivEEM1CE022upJSE/MQV3E9vWLBv0pduxs1sqcds0pi60MkYy
+         38q1RTZn7cSYaNjf67H+XX4PANLTeiJqVIm11mWeUG0ABLouWRw/d78E/ghW/xU13dz/
+         m+xgypK1c2BY/+GD/GJAMzn8dZjFiM4qJ3hjhjXBzQpO/5IDC6xLDXV6fqgmZLItG9OW
+         NaZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=351fsulzgIB9s45r5aDOm6WnMH7u9ny+vycNfOOPWQs=;
-        b=wVXKVM7zCzcP5D9wUwZ2NgVB8dcBuI2Gp+aDVrCNh/Crt8ICcgQUhglZipSdPpfV6J
-         LSb82OBRB2z+b6ZwE0rSYA4G2B69uehiJQkThDruwdQCuf8fBRoQRA4R8DXXmgYFbRG6
-         V5zMWp3lhnABB4AEEZ1W3I3b9JVz/HpxaUVuKLM4CoqReyaHzP/h+ePxXcciWATwkvz+
-         knwvNjioGn4f8OEJZW2UsYxk0kn9vaGMCoJkDGvkwRuh4UwqlquZ/RjZShJ3nb7TKvqc
-         kADZ+HEWwPuYrm26CYhldOU58JuZb+t3/uhA0WuSeiK36ScdnFGOFUwGBRpwmBcclRm8
-         O49g==
-X-Gm-Message-State: AOAM530FWZFQV67X7/S6dhnFDCSLLEx8rmR52biFnQ8t/fNyJK50M6++
-        BS7woQhUh1xZOhJ23d2dLtzT0w==
-X-Google-Smtp-Source: ABdhPJwH9MkjfMSImU0n8xgNYqs/wPiW1E3mNUN0UGgqP2wMeA/84jCkmHUFOVpu/jendWWQERL3Rg==
-X-Received: by 2002:a63:6381:0:b0:3c6:4449:fc60 with SMTP id x123-20020a636381000000b003c64449fc60mr18596862pgb.457.1652239005368;
-        Tue, 10 May 2022 20:16:45 -0700 (PDT)
+        bh=dV4WsBT9ftPx6yaQb9rdbf6XsiVSnfObebmDzI5cz4I=;
+        b=Xhs7Mrc8d5VLUKfyXme/rc9Zh32wpO6ehGXWUciS8UUM4Kbz1kX2HTwkAco9fn5vQc
+         LPKwSrMzFHuvPok+UnovxW6CHEbnx6tL+/jeTTlkoUtNCrFXFygGslla5TZiqN6AmHVu
+         Se758kiAJpA9xKoDgWj84vs1bQCqB7kX5O1/Yk8LAne9NpKhmLI8SHMo0FEW5VdZooAF
+         rPyN/ztMxY4ETjeRsRpqMlhKcOMmOgjZiOcgO9oRAM6s2TRQn+e13zv3ntfffOS1ORPh
+         lJDyAN/nDJ4GFPjjF97NZQ2bPReOKS6syJVuipvcuPexiquY/Qr2Yc9EeTLRwF9Y4cK7
+         FEug==
+X-Gm-Message-State: AOAM530fIUBs08sm9gitDnzMqwY8B/l8yN8zLQdpHCUUJ1czxf7WzmNy
+        DQRarZgfo+eQekva86wn6MyByg==
+X-Google-Smtp-Source: ABdhPJxGhj4QhJC/wnNwmC1f907XtQnF5Lx8eQ5FWQi5l5r8ulD7vJxK5irUq1FnZURG61cJNVBLuA==
+X-Received: by 2002:a17:902:d48d:b0:15e:c236:4fd3 with SMTP id c13-20020a170902d48d00b0015ec2364fd3mr23683614plg.113.1652243718250;
+        Tue, 10 May 2022 21:35:18 -0700 (PDT)
 Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id y5-20020aa78045000000b0050dd876f5f8sm313012pfm.49.2022.05.10.20.16.44
+        by smtp.gmail.com with ESMTPSA id w10-20020a170902e88a00b0015e8d4eb1c2sm535966plg.12.2022.05.10.21.35.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 20:16:44 -0700 (PDT)
-Date:   Wed, 11 May 2022 08:46:42 +0530
+        Tue, 10 May 2022 21:35:17 -0700 (PDT)
+Date:   Wed, 11 May 2022 10:05:15 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joe Perches <joe@perches.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Nicolas Palix <nicolas.palix@imag.fr>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        linux-kernel@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 21/22] cpufreq: use cpumask_weight_gt() in
- policy_is_shared()
-Message-ID: <20220511031642.6isyzny6ldhsj43q@vireshk-i7>
-References: <20220510154750.212913-1-yury.norov@gmail.com>
- <20220510154750.212913-22-yury.norov@gmail.com>
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rafael@kernel.org
+Subject: Re: [PATCH v3] cpufreq: fix race on cpufreq online
+Message-ID: <20220511043515.fn2gz6q3kcpdai5p@vireshk-i7>
+References: <20220510035259.5ep52sgahd2a6rie@vireshk-i7>
+ <20220510154236.88753-1-schspa@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220510154750.212913-22-yury.norov@gmail.com>
+In-Reply-To: <20220510154236.88753-1-schspa@gmail.com>
 User-Agent: NeoMutt/20180716-391-311a52
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10-05-22, 08:47, Yury Norov wrote:
-> cpumask_weight_gt() is better than cpumask_weight() because it may
-> return earlier depending on condition.
-> 
-> CC: Rafael J. Wysocki <rafael@kernel.org>
-> CC: Viresh Kumar <viresh.kumar@linaro.org>
-> CC: linux-pm@vger.kernel.org
-> CC: linux-kernel@vger.kernel.org
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
->  include/linux/cpufreq.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index d5595d57f4e5..865cc9e23518 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -214,7 +214,7 @@ static inline bool policy_is_inactive(struct cpufreq_policy *policy)
+Don't use in-reply-to for single patches. It is mostly used when you are
+updating a single patch in a patchset and it makes sense to continue the
+discussion in the same thread. In this case, we have a fresh patchset and it
+makes the same thread messy.
+
+On 10-05-22, 23:42, Schspa Shi wrote:
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 80f535cc8a75..d93958dbdab8 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1337,12 +1337,12 @@ static int cpufreq_online(unsigned int cpu)
+>  		down_write(&policy->rwsem);
+>  		policy->cpu = cpu;
+>  		policy->governor = NULL;
+> -		up_write(&policy->rwsem);
+>  	} else {
+>  		new_policy = true;
+>  		policy = cpufreq_policy_alloc(cpu);
+>  		if (!policy)
+>  			return -ENOMEM;
+> +		down_write(&policy->rwsem);
+>  	}
+
+I am not sure, but maybe there were issues in calling init() with rwsem held, as
+it may want to call some API from there.
+
+>  	if (!new_policy && cpufreq_driver->online) {
+> @@ -1382,7 +1382,6 @@ static int cpufreq_online(unsigned int cpu)
+>  		cpumask_copy(policy->related_cpus, policy->cpus);
+>  	}
 >  
->  static inline bool policy_is_shared(struct cpufreq_policy *policy)
->  {
-> -	return cpumask_weight(policy->cpus) > 1;
-> +	return cpumask_weight_gt(policy->cpus, 1);
->  }
+> -	down_write(&policy->rwsem);
+>  	/*
+>  	 * affected cpus must always be the one, which are online. We aren't
+>  	 * managing offline cpus here.
+> @@ -1533,7 +1532,7 @@ static int cpufreq_online(unsigned int cpu)
+>  	for_each_cpu(j, policy->real_cpus)
+>  		remove_cpu_dev_symlink(policy, get_cpu_device(j));
 >  
->  #ifdef CONFIG_CPU_FREQ
+> -	up_write(&policy->rwsem);
+> +	cpumask_clear(policy->cpus);
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+I don't think you can do that safely. offline() or exit() may depend on
+policy->cpus being set to all CPUs.
 
-Though the patch to add cpumask_weight_gt() is still in linux-next and so this
-patch should get merged after rc1 is out.
+>  
+>  out_offline_policy:
+>  	if (cpufreq_driver->offline)
+> @@ -1542,6 +1541,7 @@ static int cpufreq_online(unsigned int cpu)
+>  out_exit_policy:
+>  	if (cpufreq_driver->exit)
+>  		cpufreq_driver->exit(policy);
+> +	up_write(&policy->rwsem);
+>  
+>  out_free_policy:
+>  	cpufreq_policy_free(policy);
 
-And it would have been nice to know of this dependency in the original mail
-itself instead of me searching for it :)
+Apart from the issues highlighted about, I think we are trying to fix an issue
+locally which can happen at other places as well. Does something like this fix
+your problem at hand ?
+
+Untested.
 
 -- 
 viresh
+
+-------------------------8<-------------------------
+
+From e379921d3efa58a40d9565a4506a2580318a437d Mon Sep 17 00:00:00 2001
+Message-Id: <e379921d3efa58a40d9565a4506a2580318a437d.1652243573.git.viresh.kumar@linaro.org>
+From: Viresh Kumar <viresh.kumar@linaro.org>
+Date: Wed, 11 May 2022 09:13:26 +0530
+Subject: [PATCH] cpufreq: Allow sysfs access only for active policies
+
+It is currently possible, in a corner case, to access the sysfs files
+and reach show_cpuinfo_cur_freq(), etc, for a partly initialized policy.
+
+This can happen for example if cpufreq_online() fails after adding the
+sysfs files, which are immediately accessed by another process. There
+can easily be other such cases, which aren't identified yet.
+
+Process A:					Process B
+
+cpufreq_online()
+  down_write(&policy->rwsem);
+  if (new_policy) {
+    ret = cpufreq_add_dev_interface(policy);
+    /* This fails after adding few files */
+    if (ret)
+      goto out_destroy_policy;
+
+    ...
+  }
+
+  ...
+
+out_destroy_policy:
+  ...
+  up_write(&policy->rwsem);
+						/*
+						 * This will end up accessing the policy
+						 * which isn't fully initialized.
+						 */
+						show_cpuinfo_cur_freq()
+
+if (cpufreq_driver->offline)
+    cpufreq_driver->offline(policy);
+
+  if (cpufreq_driver->exit)
+    cpufreq_driver->exit(policy);
+
+  cpufreq_policy_free(policy);
+
+Fix these by checking in show/store if the policy is active or not and
+update policy_is_inactive() to also check if the policy is added to the
+global list or not.
+
+Reported-by: Schspa Shi <schspa@gmail.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ drivers/cpufreq/cpufreq.c | 10 ++++++----
+ include/linux/cpufreq.h   |  3 ++-
+ 2 files changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index fbaa8e6c7d23..036314d05ded 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -948,13 +948,14 @@ static ssize_t show(struct kobject *kobj, struct attribute *attr, char *buf)
+ {
+ 	struct cpufreq_policy *policy = to_policy(kobj);
+ 	struct freq_attr *fattr = to_attr(attr);
+-	ssize_t ret;
++	ssize_t ret = -EBUSY;
+ 
+ 	if (!fattr->show)
+ 		return -EIO;
+ 
+ 	down_read(&policy->rwsem);
+-	ret = fattr->show(policy, buf);
++	if (!policy_is_inactive(policy))
++		ret = fattr->show(policy, buf);
+ 	up_read(&policy->rwsem);
+ 
+ 	return ret;
+@@ -965,7 +966,7 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
+ {
+ 	struct cpufreq_policy *policy = to_policy(kobj);
+ 	struct freq_attr *fattr = to_attr(attr);
+-	ssize_t ret = -EINVAL;
++	ssize_t ret = -EBUSY;
+ 
+ 	if (!fattr->store)
+ 		return -EIO;
+@@ -979,7 +980,8 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
+ 
+ 	if (cpu_online(policy->cpu)) {
+ 		down_write(&policy->rwsem);
+-		ret = fattr->store(policy, buf, count);
++		if (!policy_is_inactive(policy))
++			ret = fattr->store(policy, buf, count);
+ 		up_write(&policy->rwsem);
+ 	}
+ 
+diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+index 35c7d6db4139..03e5e114c996 100644
+--- a/include/linux/cpufreq.h
++++ b/include/linux/cpufreq.h
+@@ -209,7 +209,8 @@ static inline void cpufreq_cpu_put(struct cpufreq_policy *policy) { }
+ 
+ static inline bool policy_is_inactive(struct cpufreq_policy *policy)
+ {
+-	return cpumask_empty(policy->cpus);
++	return unlikely(cpumask_empty(policy->cpus) ||
++			list_empty(&policy->policy_list));
+ }
+ 
+ static inline bool policy_is_shared(struct cpufreq_policy *policy)
+-- 
+2.31.1.272.g89b43f80a514
+
