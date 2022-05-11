@@ -2,52 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA37523B8C
-	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 19:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AF75523BC6
+	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 19:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345575AbiEKRaU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 May 2022 13:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40388 "EHLO
+        id S1345738AbiEKRm2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 May 2022 13:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239654AbiEKRaU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 13:30:20 -0400
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD242317E0;
-        Wed, 11 May 2022 10:30:18 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id r11so5333662ybg.6;
-        Wed, 11 May 2022 10:30:18 -0700 (PDT)
+        with ESMTP id S231907AbiEKRm1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 13:42:27 -0400
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BE521A957;
+        Wed, 11 May 2022 10:42:26 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2f7c57ee6feso30056367b3.2;
+        Wed, 11 May 2022 10:42:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=kA5LUrg9FEK6lcfS6hSBAItDCTrYCnHyDwxKH4zNPeE=;
-        b=km5I3gSzIbTEWdHVVIN/zKLWy7PIJJa/NA7/y5zfX2YPaCmEgmyO5F9Hwrw5ybagmO
-         PhBW/ZhVHk7m0xNMPd9FSDZqRMoa49N8oqiLdq6eYVx2Zj99qhUqPhzyqza+ujOPWIXH
-         VBF8DxZAOrLfWUYfVeEqwIY2tOhS68mUiTmJ4cpWVjCqlupo+xaOwQGhIFYVEDTYWH1d
-         G6uMiVZymvDlMoeURi2KHrBUaQJgC4kEAq/5LbaepN6NM2b6hJhmVQKx7TSgm3rO4LRV
-         7Fi+FWm4gG8j3x3zycrjPJ+DSu24DcPNJrEsyRrgPo7PiymLLJfrBZ7apTsT/E8SPrJb
-         2qjQ==
-X-Gm-Message-State: AOAM531zzEIWUC23Cm4UovjyBr56UnnWJNiA3vUSJfOC+yh2Xwd1ylwD
-        u/BQTPcQ4pmn6EAlWfadInp4oHoXLscWHsuZ7TQ=
-X-Google-Smtp-Source: ABdhPJzx10oGXmjUdrgRFpSf2JnlUCQLWprnfw47qR/sZ08uGzJzbPZal4vP3IN9LVYQ/6ChRXKsf3TVio6AaBZyTuw=
-X-Received: by 2002:a25:e792:0:b0:645:7ddb:b5eb with SMTP id
- e140-20020a25e792000000b006457ddbb5ebmr24694201ybh.482.1652290218179; Wed, 11
- May 2022 10:30:18 -0700 (PDT)
+        bh=NqQEfmUOxEoKhZuqO9SUs7ykPGMa11we1uD8EpZuUrM=;
+        b=oRJbhv44scWvji3LPDirPqzaKf3er+x/UgzeEbjFNHeELDLy9o8Jh+Wv504YiLliRN
+         oBQ7061lxR3tiMN0Y2zAJ/byB85xq0X90/Ok7G+LoXRIwQL4HuIhe+2FvgMn8JJVzNRo
+         6nccu85cPM0nlI0v0tDawFVARc3C0B3MgzuDeM8Q7yJHMjB//5KGZSSQK5ANgPV4H4Or
+         BfjJQHv9mUXcZMuZoKNBU9HjGOI02V3cI0hHAfRaHqSfay2a8sWN13C5X0guFS0W/xLM
+         K+gRzYM5o6H4ZY85ORaiKgW7KTJN2tBYIxAQ8IURR20PHqj7FFYpRe2qRZHV4hCygQR6
+         R6Fw==
+X-Gm-Message-State: AOAM533gNNmu8Qr4JZHFcJzNp3+4WXSX6SFoAAT+ABfb2+LLIY5JpIpc
+        dgmktp4Ci8v1zsapuLM2n8DEtQkPFbaWu4DiASkkPT4A
+X-Google-Smtp-Source: ABdhPJxNK5W1RzVC6npP/iYVW+ODznFZpQ04sFEN216pHzVWk+PZuzwiPqhNzZ9GhECrAl/pfnmc/p4R/72BCOhC+cQ=
+X-Received: by 2002:a0d:edc7:0:b0:2f8:f300:df2b with SMTP id
+ w190-20020a0dedc7000000b002f8f300df2bmr26313215ywe.515.1652290946149; Wed, 11
+ May 2022 10:42:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220511051605.103574-1-kunyu@nfschina.com>
-In-Reply-To: <20220511051605.103574-1-kunyu@nfschina.com>
+References: <20220506135009.22246-1-sumeet.r.pawnikar@intel.com>
+In-Reply-To: <20220506135009.22246-1-sumeet.r.pawnikar@intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 11 May 2022 19:30:07 +0200
-Message-ID: <CAJZ5v0hmHjjUx1+aWxph2aqh4jv=FQBTtc1ccH-thtD4G-iG9A@mail.gmail.com>
-Subject: Re: [PATCH] x86: The return type of the function could be void
-To:     Li kunyu <kunyu@nfschina.com>
+Date:   Wed, 11 May 2022 19:42:15 +0200
+Message-ID: <CAJZ5v0hmQAobWte1-zeVS8_e8Dw2uL9eHat875d9UzuHYdmAgQ@mail.gmail.com>
+Subject: Re: [PATCH] drivers/thermal/intel: Add TCC cooling support for
+ RaptorLake platform
+To:     Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
@@ -61,49 +59,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 11, 2022 at 7:16 AM Li kunyu <kunyu@nfschina.com> wrote:
+On Fri, May 6, 2022 at 3:52 PM Sumeet Pawnikar
+<sumeet.r.pawnikar@intel.com> wrote:
 >
-> perhaps the return value of the function is not used.
-> it may be possible to optimize the execution instructions.
+> Add TCC cooling support for the RaptorLake platform
 >
-> Signed-off-by: Li kunyu <kunyu@nfschina.com>
+> Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
 > ---
->  arch/x86/kernel/acpi/boot.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
+>  drivers/thermal/intel/intel_tcc_cooling.c | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
-> index 0d01e7f5078c..7e32e33d52fa 100644
-> --- a/arch/x86/kernel/acpi/boot.c
-> +++ b/arch/x86/kernel/acpi/boot.c
-> @@ -375,7 +375,7 @@ static void __init mp_override_legacy_irq(u8 bus_irq, u8 polarity, u8 trigger,
->         isa_irq_to_gsi[bus_irq] = gsi;
->  }
+> diff --git a/drivers/thermal/intel/intel_tcc_cooling.c b/drivers/thermal/intel/intel_tcc_cooling.c
+> index cd80c7db4073..a9596e7562ea 100644
+> --- a/drivers/thermal/intel/intel_tcc_cooling.c
+> +++ b/drivers/thermal/intel/intel_tcc_cooling.c
+> @@ -81,6 +81,7 @@ static const struct x86_cpu_id tcc_ids[] __initconst = {
+>         X86_MATCH_INTEL_FAM6_MODEL(COMETLAKE, NULL),
+>         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE, NULL),
+>         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, NULL),
+> +       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE, NULL),
+>         {}
+>  };
 >
-> -static int mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
-> +static void mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
->                         int polarity)
->  {
->  #ifdef CONFIG_X86_MPPARSE
-> @@ -387,9 +387,9 @@ static int mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
->         u8 pin;
->
->         if (!acpi_ioapic)
-> -               return 0;
-> +               return;
->         if (!dev || !dev_is_pci(dev))
-> -               return 0;
-> +               return;
->
->         pdev = to_pci_dev(dev);
->         number = pdev->bus->number;
-> @@ -408,7 +408,6 @@ static int mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
->
->         mp_save_irq(&mp_irq);
->  #endif
-> -       return 0;
->  }
->
->  static int __init mp_register_ioapic_irq(u8 bus_irq, u8 polarity,
 > --
 
-Applied as 5.19 material with rewritten subject and changelog, thanks!
+Applied as 5.19 material with some edits in the subject and a new changelog.
+
+Thanks!
