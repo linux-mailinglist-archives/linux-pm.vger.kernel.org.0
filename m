@@ -2,192 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0DBA5230F6
-	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 12:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3959B52310C
+	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 12:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234751AbiEKKsV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 May 2022 06:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41254 "EHLO
+        id S232439AbiEKK5l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 May 2022 06:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232679AbiEKKsU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 06:48:20 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06B14CD57
-        for <linux-pm@vger.kernel.org>; Wed, 11 May 2022 03:48:17 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2fb9a85a124so12681017b3.13
-        for <linux-pm@vger.kernel.org>; Wed, 11 May 2022 03:48:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=drfygkTowvuBLUYKKqSn7wnL9G7tj7fcltIt86mentk=;
-        b=U0Z5PRzaDD8HlY7u+vcRl3tjjLWmlEi4zx9guX+v+HnsRNi1BsPtGOFeWg7v/H8I/n
-         v8vG/2LxavvFpGWW5BtLREFEtxUtULs9eeO/YBB3EKYbe7VGIk6aT6klVarI5nC8mODC
-         7nHyamuW4M6cY0v2L3Jr6ofjaRUER+LJwoBuk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=drfygkTowvuBLUYKKqSn7wnL9G7tj7fcltIt86mentk=;
-        b=eoED+QIiiyqPEAtiyrxZfDrseQ28CGjo1Cgkt2OxaZKUoNCeQ6cgLq3KYURZyymMjB
-         WYqrArFHfM26i7QFKcfVPZGFFIk87EexJkOXm3gYStiRSNQNxg4jp/p8E2vAKd016HQz
-         q3jKtYlsrD5K23lG0L97pK9L5zjttMDrY9MMppk7wxmEdvuPHXRu+kYUaMTiBeuC2FEw
-         W/fp4sI0qo1G2Qw/qDEjqddcVxKRUt3Q4DlH7uNKhWK3TOOMtSGqTiVzOQ+eIvzaRuV0
-         9uXMVk5zukmloRPgL92SkebTj3iezbKyhbVEc+PaYxIjrkydiAGSRNRqH7P7MKRJAnLq
-         dQwg==
-X-Gm-Message-State: AOAM530Xyb8Iyo7iaFPkAMWyWXWdQKVqHjV/nO2cBA1LKIKVigUggtXA
-        gC9RgsqyXfjMJCpvGoxh6ERkkoJxfvDMSxWKwNwUkXZWFhQiUQ==
-X-Google-Smtp-Source: ABdhPJxGVBQnozICEIYWYYUmj2XDVy7Iv/cHfh2VaMsWkzahJc7RVRiArSA2H274bdeXvoIWUvYywB06XduA/JHWTxw=
-X-Received: by 2002:a81:23cc:0:b0:2f8:1a60:a215 with SMTP id
- j195-20020a8123cc000000b002f81a60a215mr24030993ywj.295.1652266097218; Wed, 11
- May 2022 03:48:17 -0700 (PDT)
+        with ESMTP id S231894AbiEKK5j (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 06:57:39 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2636341313;
+        Wed, 11 May 2022 03:57:36 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24BAvUxt020473;
+        Wed, 11 May 2022 05:57:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1652266650;
+        bh=YuNjT9OAQcHM2+4MYxNaA6BMEN97M20h+8FMQV1qmKI=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=ka0sP70Dtsz/NzkDxg6zLlSttOPOAugYjOA1VOvuzp0zSsq927Dv7innsjVSl7OBD
+         vax1bKhQTZOm6KfHJDjCmIDE5prCD9mUYlENdU/n/0s1wvvhHIgb5IepgUtT/KuqV/
+         Tf0t6CAaY06MAyHRrKUnBZJ6uNfCqhTUKcccAHR0=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24BAvU7V118634
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 11 May 2022 05:57:30 -0500
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 11
+ May 2022 05:57:29 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 11 May 2022 05:57:29 -0500
+Received: from [172.24.223.48] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24BAvQUq023006;
+        Wed, 11 May 2022 05:57:27 -0500
+Message-ID: <7219b406-7677-748b-984c-66009d9f6327@ti.com>
+Date:   Wed, 11 May 2022 16:27:25 +0530
 MIME-Version: 1.0
-References: <20220425125546.4129-1-johnson.wang@mediatek.com>
- <20220425125546.4129-2-johnson.wang@mediatek.com> <CAGXv+5HgyN+kp86M2GgFtbruXSAMSLxsh9vf8zVE5TxRMyTyaA@mail.gmail.com>
- <a8e5fd9de1feece9051e1624c5cf3b672131a122.camel@mediatek.com>
-In-Reply-To: <a8e5fd9de1feece9051e1624c5cf3b672131a122.camel@mediatek.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Wed, 11 May 2022 18:48:06 +0800
-Message-ID: <CAGXv+5G6Qv1JcsZNrw5=USJSzPkczW42FgXRYqAK=xS-moO6nw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: interconnect: Add MediaTek CCI dt-bindings
-To:     Johnson Wang <johnson.wang@mediatek.com>
-Cc:     krzk+dt@kernel.org, cw00.choi@samsung.com, robh+dt@kernel.org,
-        kyungmin.park@samsung.com, khilman@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v6 1/4] dt-bindings: thermal: k3-j72xx: Add VTM bindings
+ documentation
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <robh+dt@kernel.org>, <daniel.lezcano@linaro.org>,
+        <rui.zhang@intel.com>, <amitk@kernel.org>, <kristo@kernel.org>,
+        <vigneshr@ti.com>
+CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220427064635.24898-1-j-keerthy@ti.com>
+ <20220427064635.24898-2-j-keerthy@ti.com>
+ <5859fed0-82b7-95eb-5719-9b0016916c50@ti.com>
+ <eb0745a6-ecf2-4b70-368b-9ad8a322f208@linaro.org>
+ <117f175f-62d1-17b5-742b-bcb250b7866f@ti.com>
+ <091e6619-3341-4a98-90f6-48a6281f6275@linaro.org>
+From:   "J, KEERTHY" <j-keerthy@ti.com>
+In-Reply-To: <091e6619-3341-4a98-90f6-48a6281f6275@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 9, 2022 at 8:14 PM Johnson Wang <johnson.wang@mediatek.com> wrote:
->
-> Hi Chen-Yu,
->
-> On Tue, 2022-04-26 at 11:18 +0800, Chen-Yu Tsai wrote:
-> > On Mon, Apr 25, 2022 at 8:56 PM Johnson Wang <
-> > johnson.wang@mediatek.com> wrote:
-> > >
-> > > Add devicetree binding of MediaTek CCI on MT8183 and MT8186.
-> > >
-> > > Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
-> > > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > > ---
-> > >  .../bindings/interconnect/mediatek,cci.yaml   | 139
-> > > ++++++++++++++++++
-> > >  1 file changed, 139 insertions(+)
-> > >  create mode 100644
-> > > Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-> > >
-> > > diff --git
-> > > a/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-> > > b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-> > > new file mode 100644
-> > > index 000000000000..e5221e17d11b
-> > > --- /dev/null
-> > > +++
-> > > b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
-> > > @@ -0,0 +1,139 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id:
-> > > https://urldefense.com/v3/__http://devicetree.org/schemas/interconnect/mediatek,cci.yaml*__;Iw!!CTRNKA9wMg0ARbw!zuufEcqpKbditY3eqLTHpL8P8humMCyh4D4QWsximmw124tJUPE3ZBUyBqBtDlQ9pSDO$
-> > >
-> > > +$schema:
-> > > https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!zuufEcqpKbditY3eqLTHpL8P8humMCyh4D4QWsximmw124tJUPE3ZBUyBqBtDoE9YHyu$
-> > >
-> > > +
-> > > +title: MediaTek Cache Coherent Interconnect (CCI) frequency and
-> > > voltage scaling
-> > > +
-> > > +maintainers:
-> > > +  - Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > > +
-> > > +description: |
-> > > +  MediaTek Cache Coherent Interconnect (CCI) is a hardware engine
-> > > used by
-> > > +  MT8183 and MT8186 SoCs to scale the frequency and adjust the
-> > > voltage in
-> > > +  hardware. It can also optimize the voltage to reduce the power
-> > > consumption.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    enum:
-> > > +      - mediatek,mt8183-cci
-> > > +      - mediatek,mt8186-cci
-> > > +
-> > > +  clocks:
-> > > +    items:
-> > > +      - description:
-> > > +          The multiplexer for clock input of CPU cluster.
-> >
-> > of the bus, not CPU cluster.
->
-> Thanks for your suggestion.
-> I will correct it in the next version.
->
-> >
-> > > +      - description:
-> > > +          A parent of "cpu" clock which is used as an intermediate
-> > > clock source
-> > > +          when the original CPU is under transition and not stable
-> > > yet.
-> >
-> > This really should be handled in the clk controller, and not by every
-> > device
-> > that happens to take a clock from a mux with upstream PLLs that can
-> > change
-> > in clock rate. The end device hardware only takes one clock input.
-> > That's it.
-> >
->
-> To make this intermediate clock works properly, this driver is also
-> responsible for handling the Vproc voltage and ensures the voltage is
-> high enough to support intermediate clock rate.
->
-> If we move intermediate clock rate control to clock driver, then
-> intermediate voltage control may be handled by the clock driver itself
-> as well.
->
-> We believe that is not reasonable because clock driver shouldn't handle
-> voltage control. On the other hand, DVFS driver is more suitable for
-> doing this job.
-
-Either way the DVFS driver handles the voltage change.
-
-Right now the driver is doing:
-
-1. Raise voltage if scaling up
-2. Mux CCI clock over to stable clock
-3. Set rate for CCI PLL
-4. Mux CCI clock back to CCI PLL
-5. Drop voltage if scaling down
-
-I'm saying that the clock driver should handle 2+4 transparently when any
-driver requests a rate change on the CCI clock. So instead the driver would
-do:
-
-1. Raise voltage if scaling up
-2. Set rate for CCI _clock_
-   Here the clock driver would do:
-   a. Mux CCI clock over to stable clock
-   b. Change clock rate for original parent, i.e. the CCI PLL
-   c. Mux CCI clock back to original parent, i.e. the CCI PLL
-   and back to the devfreq driver ...
-3. Drop voltage if scaling down
-
-Does that make sense?
 
 
-Regards
-ChenYu
+On 5/11/2022 1:45 PM, Krzysztof Kozlowski wrote:
+> On 11/05/2022 09:53, J, KEERTHY wrote:
+>>>>
+>>>> Any comments on this version?
+>>>
+>>> You got Rob's review, so you don't need also mine.
+>>>
+>>> If you want, then in general look okay, except the description for "reg"
+>>> you could split per items:
+>>>
+>>> reg:
+>>>     items:
+>>>       - description: VTM cfg1 register space
+>>>       - description: VTM cfg2 register space
+>>>       - description: efuse register space
+>>>
+>>> It's more obvious what items you expect.
+>>
+>> Hi Krzysztof,
+>>
+>> DTEX
+>> Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.example.dts
+>> Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml: found
+>> duplicate key "description" with value "VTM cfg2 register space"
+>> (original value: "VTM cfg1 register space")
+>> Documentation/devicetree/bindings/Makefile:26: recipe for target
+>> 'Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.example.dts'
+>> failed
+>> make[1]: ***
+>> [Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.example.dts] Er
+>>
+>> I believe multiple instances of description is failing. So can i keep
+>> the description as is?
+> 
+> It looks weird. Can you share your code (pastebin/github/paste here)?
+
+My bad. I had missed the '-' before description & hence it was erring 
+out. I fixed. I will post v7 of this patch alone.
+
+Thanks,
+Keerthy
+
+> 
+> 
+> Best regards,
+> Krzysztof
