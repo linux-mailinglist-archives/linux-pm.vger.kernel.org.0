@@ -2,173 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C71D5523487
-	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 15:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3FB52348D
+	for <lists+linux-pm@lfdr.de>; Wed, 11 May 2022 15:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231907AbiEKNm4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 May 2022 09:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48718 "EHLO
+        id S243807AbiEKNq1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 May 2022 09:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243999AbiEKNmy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 09:42:54 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEB613483C;
-        Wed, 11 May 2022 06:42:52 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-ed9ac77cbbso2869592fac.1;
-        Wed, 11 May 2022 06:42:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LmKpLR3KpqpjhFrNdA9cs+ta9/b/YlHR5WXRY1TMskg=;
-        b=ANJ9TCDF1OKYyfNeOvsA8MBtwBpDguU0QQxIWOGUvudSGL5OmTzf3AVmw4kvGJmDea
-         ve2oPAAYI0Ss6dh3PSe0LFhX3509IZikdKJMzhWsCwlCqkhtiCRvKi23KgfNs2nLugII
-         eQqd7Z1F5Ajc1aAZfv8MKrudg8AhoFrjjq/kLnXTG6s9DQHdUibUQPKvS57wzt+pD8rQ
-         KL1QrX2Tix9PrcbC/n00g1ZZnakZZgX6oIg+fw7ZU3O7CjTXnzETh2gvWDH1Grdrn6iL
-         UiAJLysUmVb3s7FqaLY0DIAu65gRryHR3WegDXnBvYh4LQU8fTVBnwC4QfyFbRasiF83
-         D5WQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LmKpLR3KpqpjhFrNdA9cs+ta9/b/YlHR5WXRY1TMskg=;
-        b=vzPh6gznmeJAU+tT3vBROxrImi6APUlOLV6mdQ3Hy+9oBCP6Q8BH1i0z1IGohVzWVQ
-         oKyLOtA9SOpDKsZT4zYWRHWQ/WQTR4A+BlWMtPalCyB32MnuBcQUl1G35xrI8pU/L0qe
-         2hFMc7t3PNWryWrJiHL9fMd6PVXdl3RnS05/MNjzCZH88KbkQtbaoxgjyR4IJQBKVRqE
-         MhvPSIawWhYMJ75L2SbTnYXYw7AadCqz7Hj0sMuqvozNXIOFhBP5S60UPLSp61tg9RWQ
-         fc1PVPftakt18S5bSzWnxMhiUnmkQO/cWxfWvND8FlXiQL/CKuTTVfjVKTCpcrY9VFjH
-         lBdw==
-X-Gm-Message-State: AOAM532/Yj6WFu51zjDaAv5ysDX/KhwVnFiAAouwul3YvPBapwMTKWWL
-        9AmqiRLKhTsyW6K1TdEBKczFDuouLgi95jHIhuKlZk8yUZa6kQ==
-X-Google-Smtp-Source: ABdhPJw4C+c+9O2BdWMxl8BajjTI3V9PJaSjwsg6afy8m049UaRA2GEhGHc6WquyAKcySdkZyqhiCfYPTc9MDD0/x/4=
-X-Received: by 2002:a05:6870:5b89:b0:e9:bb4c:a6f1 with SMTP id
- em9-20020a0568705b8900b000e9bb4ca6f1mr2767148oab.52.1652276571601; Wed, 11
- May 2022 06:42:51 -0700 (PDT)
+        with ESMTP id S244065AbiEKNq0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 09:46:26 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 686045FF36;
+        Wed, 11 May 2022 06:46:23 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 314D8ED1;
+        Wed, 11 May 2022 06:46:23 -0700 (PDT)
+Received: from pierre123.arm.com (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A065C3F66F;
+        Wed, 11 May 2022 06:46:20 -0700 (PDT)
+From:   Pierre Gondois <pierre.gondois@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ionela.Voinescu@arm.com, Dietmar.Eggemann@arm.com,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robert Moore <robert.moore@intel.com>,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        devel@acpica.org
+Subject: [PATCH v1 1/5] ACPI: CPPC: Check _OSC for flexible address space
+Date:   Wed, 11 May 2022 15:45:55 +0200
+Message-Id: <20220511134559.1466925-1-pierre.gondois@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220510035259.5ep52sgahd2a6rie@vireshk-i7> <20220510154236.88753-1-schspa@gmail.com>
- <20220511043515.fn2gz6q3kcpdai5p@vireshk-i7> <CAMA88TpefB=rnqea2u1zEvNUJNE_kdj4mYito7SGCuMj-o071Q@mail.gmail.com>
- <20220511122114.wccgyur6g3qs6fps@vireshk-i7> <CAJZ5v0gN_yDFpvCXRXv8rN-i3TugCi-HKpBKK2z4eWU0Zm1GUg@mail.gmail.com>
- <CAJZ5v0id+7vkqMQEyVRe29oF_dRtzZ0EhoYUn8=yzeENDeABJw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0id+7vkqMQEyVRe29oF_dRtzZ0EhoYUn8=yzeENDeABJw@mail.gmail.com>
-From:   Schspa Shi <schspa@gmail.com>
-Date:   Wed, 11 May 2022 21:42:40 +0800
-Message-ID: <CAMA88TpJuJY7oxPFW8xKzch60+n_2qRp7KO2r-YwZxiM7GXF3w@mail.gmail.com>
-Subject: Re: [PATCH v3] cpufreq: fix race on cpufreq online
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-"Rafael J. Wysocki" <rafael@kernel.org> writes:
+ACPI 6.2 Section 6.2.11.2 'Platform-Wide OSPM Capabilities':
+  Starting with ACPI Specification 6.2, all _CPC registers can be in
+  PCC, System Memory, System IO, or Functional Fixed Hardware address
+  spaces. OSPM support for this more flexible register space scheme is
+  indicated by the “Flexible Address Space for CPPC Registers” _OSC bit
 
-> On Wed, May 11, 2022 at 2:59 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->>
->> On Wed, May 11, 2022 at 2:21 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->> >
->> > On 11-05-22, 16:10, Schspa Shi wrote:
->> > > Viresh Kumar <viresh.kumar@linaro.org> writes:
->> > > > I am not sure, but maybe there were issues in calling init() with rwsem held, as
->> > > > it may want to call some API from there.
->> > > >
->> > >
->> > > I have checked all the init() implement of the fellowing files, It should be OK.
->> > > Function find command:
->> > >   ag "init[\s]+=" drivers/cpufreq
->> > >
->> > > All the init() implement only initialize policy object without holding this lock
->> > > and won't call cpufreq APIs need to hold this lock.
->> >
->> > Okay, we can see if someone complains later then :)
->> >
->> > > > I don't think you can do that safely. offline() or exit() may depend on
->> > > > policy->cpus being set to all CPUs.
->> > > OK, I will move this after exit(). and there will be no effect with those
->> > > two APIs. But policy->cpus must be clear before release policy->rwsem.
->> >
->> > Hmm, I don't think depending on the values of policy->cpus is a good idea to be
->> > honest. This design is inviting bugs to come in at another place. We need a
->> > clear flag for this, a new flag or something like policy_list.
->
-> Why?
->
->> > Also I see the same bug happening while the policy is removed. The kobject is
->> > put after the rwsem is dropped.
->
-> This shouldn't be a problem because of the wait_for_completion() in
-> cpufreq_policy_put_kobj().  It is known that cpufreq_sysfs_release()
-> has run when cpufreq_policy_put_kobj() returns, so it is safe to free
-> the policy then.
->
->> > > >  static inline bool policy_is_inactive(struct cpufreq_policy *policy)
->> > > >  {
->> > > > -     return cpumask_empty(policy->cpus);
->> > > > +     return unlikely(cpumask_empty(policy->cpus) ||
->> > > > +                     list_empty(&policy->policy_list));
->> > > >  }
->> > > >
->> > >
->> > > I don't think this fully solves my problem.
->> > > 1. There is some case which cpufreq_online failed after the policy is added to
->> > >    cpufreq_policy_list.
->> >
->> > And I missed that :(
->> >
->> > > 2. policy->policy_list is not protected by &policy->rwsem, and we
->> > > can't relay on this to
->> > >    indict the policy is fine.
->> >
->> > Ahh..
->> >
->> > > >From this point of view, we can fix this problem through the state of
->> > > this linked list.
->> > > But the above two problems need to be solved first.
->> >
->> > I feel overriding policy_list for this is going to make it complex/messy.
->> >
->> > Maybe something like this then:
->>
->> There are two things.
->>
->> One is the possible race with respect to the sysfs access occurring
->> during failing initialization and the other is that ->offline() or
->> ->exit() can be called with or without holding the policy rwsem
->> depending on the code path.
->>
->> Namely, cpufreq_offline() calls them under the policy rwsem, but
->> cpufreq_remove_dev() calls ->exit() outside the rwsem.  Also they are
->> called outside the rwsem in cpufreq_online().
->>
->> Moreover, ->offline() and ->exit() cannot expect policy->cpus to be
->> populated, because they are called when it is empty from
->> cpufreq_offline().
->>
->> So the $subject patch is correct AFAICS even though it doesn't address
->> all of the above.
->
-> TBH, I'm not sure why show() doesn't check policy_is_inactive() under the rwsem.
->
+Otherwise (cf ACPI 6.1, s8.4.7.1.1.X), _CPC registers must be in:
+- PCC or Functional Fixed Hardware address space if defined
+- SystemMemory address space (NULL register) if not defined
 
-There is a exist bugs, and somebody try to fixed, please see commit
-Fixes: 2f66196208c9 ("cpufreq: check if policy is inactive early in
-__cpufreq_get()")
+Add the corresponding _OSC bit and check it when parsing _CPC objects.
 
-> Moreover, I'm not sure why the locking dance in store() is necessary.
-
-The store interface hold cpu_hotplug_lock via
-    cpus_read_trylock();
-, cannot run in parallel with cpufreq_online() & cpufreq_offline().
-
+Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 ---
-BRs
+ drivers/acpi/bus.c       | 18 ++++++++++++++++++
+ drivers/acpi/cppc_acpi.c |  9 +++++++++
+ include/linux/acpi.h     |  2 ++
+ 3 files changed, 29 insertions(+)
 
-Schspa Shi
+diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+index 3e58b613a2c4..a5d08de5d1e9 100644
+--- a/drivers/acpi/bus.c
++++ b/drivers/acpi/bus.c
+@@ -278,6 +278,20 @@ bool osc_sb_apei_support_acked;
+ bool osc_pc_lpi_support_confirmed;
+ EXPORT_SYMBOL_GPL(osc_pc_lpi_support_confirmed);
+ 
++/*
++ * ACPI 6.2 Section 6.2.11.2 'Platform-Wide OSPM Capabilities':
++ *   Starting with ACPI Specification 6.2, all _CPC registers can be in
++ *   PCC, System Memory, System IO, or Functional Fixed Hardware address
++ *   spaces. OSPM support for this more flexible register space scheme is
++ *   indicated by the “Flexible Address Space for CPPC Registers” _OSC bit.
++ *
++ * Otherwise (cf ACPI 6.1, s8.4.7.1.1.X), _CPC registers must be in:
++ * - PCC or Functional Fixed Hardware address space if defined
++ * - SystemMemory address space (NULL register) if not defined
++ */
++bool osc_cpc_flexible_adr_space_confirmed;
++EXPORT_SYMBOL_GPL(osc_cpc_flexible_adr_space_confirmed);
++
+ /*
+  * ACPI 6.4 Operating System Capabilities for USB.
+  */
+@@ -321,6 +335,8 @@ static void acpi_bus_osc_negotiate_platform_control(void)
+ 	}
+ #endif
+ 
++	capbuf[OSC_SUPPORT_DWORD] |= OSC_SB_CPC_FLEXIBLE_ADR_SP;
++
+ 	if (IS_ENABLED(CONFIG_SCHED_MC_PRIO))
+ 		capbuf[OSC_SUPPORT_DWORD] |= OSC_SB_CPC_DIVERSE_HIGH_SUPPORT;
+ 
+@@ -366,6 +382,8 @@ static void acpi_bus_osc_negotiate_platform_control(void)
+ 			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_PCLPI_SUPPORT;
+ 		osc_sb_native_usb4_support_confirmed =
+ 			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_NATIVE_USB4_SUPPORT;
++		osc_cpc_flexible_adr_space_confirmed =
++			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_CPC_FLEXIBLE_ADR_SP;
+ 	}
+ 
+ 	kfree(context.ret.pointer);
+diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+index bc1454789a06..6f09fe011544 100644
+--- a/drivers/acpi/cppc_acpi.c
++++ b/drivers/acpi/cppc_acpi.c
+@@ -736,6 +736,11 @@ int acpi_cppc_processor_probe(struct acpi_processor *pr)
+ 				if (gas_t->address) {
+ 					void __iomem *addr;
+ 
++					if (!osc_cpc_flexible_adr_space_confirmed) {
++						pr_debug("Flexible address space capability not supported\n");
++						goto out_free;
++					}
++
+ 					addr = ioremap(gas_t->address, gas_t->bit_width/8);
+ 					if (!addr)
+ 						goto out_free;
+@@ -758,6 +763,10 @@ int acpi_cppc_processor_probe(struct acpi_processor *pr)
+ 						 gas_t->address);
+ 					goto out_free;
+ 				}
++				if (!osc_cpc_flexible_adr_space_confirmed) {
++					pr_debug("Flexible address space capability not supported\n");
++					goto out_free;
++				}
+ 			} else {
+ 				if (gas_t->space_id != ACPI_ADR_SPACE_FIXED_HARDWARE || !cpc_ffh_supported()) {
+ 					/* Support only PCC, SystemMemory, SystemIO, and FFH type regs. */
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index d7136d13aa44..977d74d0465b 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -574,6 +574,7 @@ acpi_status acpi_run_osc(acpi_handle handle, struct acpi_osc_context *context);
+ #define OSC_SB_OSLPI_SUPPORT			0x00000100
+ #define OSC_SB_CPC_DIVERSE_HIGH_SUPPORT		0x00001000
+ #define OSC_SB_GENERIC_INITIATOR_SUPPORT	0x00002000
++#define OSC_SB_CPC_FLEXIBLE_ADR_SP		0x00004000
+ #define OSC_SB_NATIVE_USB4_SUPPORT		0x00040000
+ #define OSC_SB_PRM_SUPPORT			0x00200000
+ 
+@@ -581,6 +582,7 @@ extern bool osc_sb_apei_support_acked;
+ extern bool osc_pc_lpi_support_confirmed;
+ extern bool osc_sb_native_usb4_support_confirmed;
+ extern bool osc_sb_cppc_not_supported;
++extern bool osc_cpc_flexible_adr_space_confirmed;
+ 
+ /* USB4 Capabilities */
+ #define OSC_USB_USB3_TUNNELING			0x00000001
+-- 
+2.25.1
+
