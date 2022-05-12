@@ -2,156 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3A7525276
-	for <lists+linux-pm@lfdr.de>; Thu, 12 May 2022 18:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF8C5253EE
+	for <lists+linux-pm@lfdr.de>; Thu, 12 May 2022 19:42:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356435AbiELQYG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 May 2022 12:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35230 "EHLO
+        id S1357180AbiELRmq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 May 2022 13:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344263AbiELQYF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 12:24:05 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C461C1E5EF6;
-        Thu, 12 May 2022 09:24:04 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2f863469afbso63293587b3.0;
-        Thu, 12 May 2022 09:24:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=thtHMzRehtI+V+OgK8quGY/Of/jRrIGIaRefx1ZVDTI=;
-        b=PTQE8JAxKqopuPrNPNM6tNRWwFy3tBU04wqFII4+R+eYp8mGI49u4ZeyFGSOfV1CFE
-         Ppw8ISAsAD2k5mgpM3UuML2AjYZQM/+b2FAWWZXj+JjngsB2IPa8v+Fk0ELRPgWZi5fK
-         qN6QhC9Sj3v/wP1ABV3L6nu8HBSfWyKLNBVgakCB3bqBCc+KWUovpI/wp5wRnZ7pL5ur
-         5T46RvJg/Ul0djnhjrPrBJyhZc79ifSoy0eFT+GJXr/S6hRuH8uk7sWbLdqMQEKQ5Oi9
-         D0nTxbKNUxgmvbvaY8e2Br4asRTd6StQa0CxAC+94jI0D08cpmsy9Fag06Mi1+kAHAq7
-         rcWQ==
-X-Gm-Message-State: AOAM5326p4YHm9c1Ny14KX/k0AY8pLYMAgo9hwZ1trlc/x8Feqznax6V
-        tQ8BnQhYsjfVOO1z8D+HySxJ9sIiXQQXmrOAqDIOG7zy
-X-Google-Smtp-Source: ABdhPJz5dHgHC4COVczQNzeU9FkZjxePoGFWPsWRtlbTZa0wsX+dudZRgsfCf1jg1+hP3iVguixQSQXTVQz0uyo21DY=
-X-Received: by 2002:a81:4b8e:0:b0:2ef:5240:69fc with SMTP id
- y136-20020a814b8e000000b002ef524069fcmr932781ywa.19.1652372643823; Thu, 12
- May 2022 09:24:03 -0700 (PDT)
+        with ESMTP id S1353035AbiELRmo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 13:42:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17465E743;
+        Thu, 12 May 2022 10:42:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CD6A620C3;
+        Thu, 12 May 2022 17:42:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87477C385B8;
+        Thu, 12 May 2022 17:42:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652377361;
+        bh=xqAM2tBdd1Wwr4gn7QuECIUH2WF1B4DBfO+9+uwWOHg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=SVzzxKHIsuL34zozU+8DhYbhZ3LXXYPiE3Zsc+HXJU1jfuV4JCoFBtqQ5ditBeGQd
+         QpC9UuVvAzwtWxBU+kBdBppCkolASzQ51OAVEsny3Lqk94Yusf2mMiWAzotA0PdPiA
+         XacNYIbUgC6EXvR8Xxmc2WoZ+PUVEW7t4EwPaPzEtK4xEzMTETbyyyxUBKqH53gx9k
+         Ueu8XN1G7pZwzMh/u2lmffCUmeCmB+eXaq4efTAwKtqTNqW+4k/OImiKr5DHdXIoMX
+         FAicIJPA7HrgaA+bh58lX00OYFTAE0GTChNZtPZTv8ObaZ53KdyE3KXtRHGkqrRM7t
+         GFoh44sm04XSA==
+Date:   Thu, 12 May 2022 12:42:39 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Rajvi Jingar <rajvi.jingar@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        bhelgaas@google.com, david.e.box@linux.intel.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
+Message-ID: <20220512174239.GA851224@bhelgaas>
 MIME-Version: 1.0
-References: <20220512135231.10076-1-schspa@gmail.com> <20220512135231.10076-2-schspa@gmail.com>
- <CAJZ5v0htGfZ3G+BWgZSxvcEAhNd_LONm8rNMetdPts3uZ=Tcxw@mail.gmail.com> <CAMA88TodZJYmd2GnWty=qCw7T=LG9jihEAmT+RPK8tSBqdiubA@mail.gmail.com>
-In-Reply-To: <CAMA88TodZJYmd2GnWty=qCw7T=LG9jihEAmT+RPK8tSBqdiubA@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 12 May 2022 18:23:52 +0200
-Message-ID: <CAJZ5v0h5QbKRg+1428EdEziV-ovuav396c6fwAaOnrDe=NU46A@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] cpufreq: make interface functions and lock holding
- state clear
-To:     Schspa Shi <schspa@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <70d0c0d4-093f-ae8a-9654-5a433285ab12@intel.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 12, 2022 at 6:01 PM Schspa Shi <schspa@gmail.com> wrote:
->
-> "Rafael J. Wysocki" <rafael@kernel.org> writes:
->
-> > On Thu, May 12, 2022 at 3:52 PM Schspa Shi <schspa@gmail.com> wrote:
-> >>
-> >> cpufreq_offline() calls offline() and exit() under the policy rwsem
-> >> But they are called outside the rwsem in cpufreq_online().
-> >>
-> >> This patch move the offline(), exit(), online(), init() to be inside
-> >> of policy rwsem to achieve a clear lock relationship.
-> >>
-> >> All the init() online() implement only initialize policy object without
-> >> holding this lock and won't call cpufreq APIs need to hold this lock.
-> >>
-> >> Signed-off-by: Schspa Shi <schspa@gmail.com>
-> >
-> > IMV this still addresses 2 different issues and so it should be split
-> > into 2 different patches.
-> >
-> >> ---
-> >>  drivers/cpufreq/cpufreq.c | 5 ++---
-> >>  1 file changed, 2 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> >> index 35dffd738580..f242d5488364 100644
-> >> --- a/drivers/cpufreq/cpufreq.c
-> >> +++ b/drivers/cpufreq/cpufreq.c
-> >
-> > Patch 1:
-> >
-> >> @@ -1343,12 +1343,12 @@ static int cpufreq_online(unsigned int cpu)
-> >>                 down_write(&policy->rwsem);
-> >>                 policy->cpu = cpu;
-> >>                 policy->governor = NULL;
-> >> -               up_write(&policy->rwsem);
-> >>         } else {
-> >>                 new_policy = true;
-> >>                 policy = cpufreq_policy_alloc(cpu);
-> >>                 if (!policy)
-> >>                         return -ENOMEM;
-> >> +               down_write(&policy->rwsem);
-> >>         }
-> >>
-> >>         if (!new_policy && cpufreq_driver->online) {
-> >> @@ -1388,7 +1388,6 @@ static int cpufreq_online(unsigned int cpu)
-> >>                 cpumask_copy(policy->related_cpus, policy->cpus);
-> >>         }
-> >>
-> >> -       down_write(&policy->rwsem);
-> >>         /*
-> >>          * affected cpus must always be the one, which are online. We aren't
-> >>          * managing offline cpus here.
-> >
-> > which addresses the problem that cpufreq_online() updates the
-> > policy->cpus and related_cpus masks without holding the policy rwsem
-> > (since the policy kobject has been registered already at this point,
-> > this is generally unsafe).
-> >
-> > A side-effect of it is that ->online() and ->init() will be called
-> > under the policy rwsem now, but that should be fine and is more
-> > consistent than the current code too.
-> >
-> > Patch 2:
-> >
-> >> @@ -1540,7 +1539,6 @@ static int cpufreq_online(unsigned int cpu)
-> >>                 remove_cpu_dev_symlink(policy, get_cpu_device(j));
-> >>
-> >>         cpumask_clear(policy->cpus);
-> >> -       up_write(&policy->rwsem);
-> >>
-> >>  out_offline_policy:
-> >>         if (cpufreq_driver->offline)
-> >> @@ -1549,6 +1547,7 @@ static int cpufreq_online(unsigned int cpu)
-> >>  out_exit_policy:
-> >>         if (cpufreq_driver->exit)
-> >>                 cpufreq_driver->exit(policy);
-> >> +       up_write(&policy->rwsem);
-> >>
-> >>  out_free_policy:
-> >>         cpufreq_policy_free(policy);
-> >> --
-> >
-> > which addressed the issue of calling ->offline() and ->exit() without
-> > holding the policy rwsem that is at best inconsistent with
-> > cpufreq_offline().
->
-> No, we can't split this into two different patches. which will cause a
-> uninitialized unlock for policy rwsem.
-> This will make the git bitsec unusable.
->
-> Which Dan Carpenter reported, and cause the patch of the v1 version to
-> be reverted.
->
-> Link: https://lore.kernel.org/all/YnKZCGaig+EXSowf@kili/
+Hi Rajvi,
 
-Ah, OK.  Never mind.
+I received your v1, v2, v3, v4, v5 postings because they were sent
+directly to bhelgaas@google.com, but for some reason vger doesn't like
+them so they don't show up on the mailing list:
+
+  https://lore.kernel.org/all/?q=a%3Arajvi.jingar
+
+I looked at the ones I received directly and don't see an obvious
+problem.  Maybe there's a hint here?
+
+  http://vger.kernel.org/majordomo-info.html
+
+All patches should appear on the linux-pci mailing list before
+applying them, so we need to figure this out somehow.  In fact, I read
+and review patches from linux-pci, so I often don't even see things
+that are just sent directly to bhelgaas@google.com. 
+
+On Thu, May 12, 2022 at 03:49:18PM +0200, Rafael J. Wysocki wrote:
+> On 4/29/2022 11:05 PM, Rajvi Jingar wrote:
+> > For the PCIe devices (like nvme) that do not go into D3 state still need to
+> > disable PTM to allow the port to enter a lower-power PM state and the SoC
+> > to reach a lower-power idle state as a whole. Move the pci_disable_ptm()
+> > out of pci_prepare_to_sleep() as this code path is not followed for devices
+> > that do not go into D3. This fixes the issue seen on Dell XPS 9300 with
+> > Ice Lake CPU and Dell Precision 5530 with Coffee Lake CPU platforms to get
+> > improved residency in low power idle states.
+
+I think the paragraph above is a distraction, and the real reason is
+the paragraph below.
+
+> > Also, on receiving a PTM Request from a downstream device, if PTM is
+> > disabled on the root port, as per PCIe r6.0, sec 6.21.3, such a request
+> > would cause an Unsupported Request error. So it must first disable PTM in
+> > any downstream devices.
+> > 
+> > Fixes: a697f072f5da ("PCI: Disable PTM during suspend to save power")
+> > Signed-off-by: Rajvi Jingar <rajvi.jingar@intel.com>
+> > Suggested-by: David E. Box <david.e.box@linux.intel.com>
+> > ---
+> >   v1 -> v2: add Fixes tag in commit message
+> >   v2 -> v3: move changelog after "---" marker
+> >   v3 -> v4: add "---" marker after changelog
+> >   v4 -> v5: move pci_disable_ptm() out of the pci_dev->state_saved check.
+> > 	   disable PTM for all devices, not just root ports.
+> > ---
+> >   drivers/pci/pci-driver.c | 28 +++++++++++++++++++---------
+> >   drivers/pci/pci.c        | 10 ----------
+> >   2 files changed, 19 insertions(+), 19 deletions(-)
+> > 
+> > diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> > index 8b55a90126a2..400dd18a9cf5 100644
+> > --- a/drivers/pci/pci-driver.c
+> > +++ b/drivers/pci/pci-driver.c
+> > @@ -813,6 +813,7 @@ static int pci_pm_suspend_late(struct device *dev)
+> >   static int pci_pm_suspend_noirq(struct device *dev)
+> >   {
+> > +	unsigned int dev_state_saved;
+> >   	struct pci_dev *pci_dev = to_pci_dev(dev);
+> >   	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> > @@ -845,16 +846,25 @@ static int pci_pm_suspend_noirq(struct device *dev)
+> >   		}
+> >   	}
+> > -	if (!pci_dev->state_saved) {
+> > +	dev_state_saved = pci_dev->state_saved;
+> 
+> If pci_dev->state_saved is set here, the device may be in D3cold already and
+> disabling PTM for it will not work.  Of course, it is not necessary to
+> disable PTM for it then, but this case need to be taken care of.
+> 
+> > +	if (!dev_state_saved)
+> >   		pci_save_state(pci_dev);
+> > -		/*
+> > -		 * If the device is a bridge with a child in D0 below it, it needs to
+> > -		 * stay in D0, so check skip_bus_pm to avoid putting it into a
+> > -		 * low-power state in that case.
+> > -		 */
+> > -		if (!pci_dev->skip_bus_pm && pci_power_manageable(pci_dev))
+> > -			pci_prepare_to_sleep(pci_dev);
+> > -	}
+> > +
+> > +	/*
+> > +	 * There are systems (for example, Intel mobile chips since Coffee
+> > +	 * Lake) where the power drawn while suspended can be significantly
+> > +	 * reduced by disabling PTM as this allows the SoC to reach a
+> > +	 * lower-power idle state as a whole.
+
+I think the argument for disabling PTM is that:
+
+  - If a PTM Requester is put in a low-power state, a PTM Responder
+    upstream from it may also be put in a low-power state.
+
+  - Putting a Port in D1, D2, or D3hot does not prohibit it from
+    sending or responding to PTM Requests (I'd be glad to be corrected
+    about this).
+
+  - We want to disable PTM on Responders when they are in a low-power
+    state.
+
+  - Per 6.21.3, a PTM Requester must not be enabled when the upstream
+    PTM Responder is disabled.
+
+  - Therefore, we must disable all PTM on all downstream PTM
+    Requesters before disabling it on the PTM Responder, e.g., a Root
+    Port.
+
+This has nothing specifically to do with Coffee Lake or other Intel
+chips, so I think the comment should be merely something to the
+effect that "disabling PTM reduces power consumption."
+
+> Something like this should suffice IMV:
+> 
+> if (!dev_state_saved || pci_dev->current_state != PCI_D3cold)
+> 
+>         pci_disable_ptm(pci_dev);
+
+It makes sense to me that we needn't disable PTM if the device is in
+D3cold.  But the "!dev_state_saved" condition depends on what the
+driver did.  Why is that important?  Why should we not do the
+following?
+
+  if (pci_dev->current_state != PCI_D3cold)
+    pci_disable_ptm(pci_dev);
+
+Bjorn
