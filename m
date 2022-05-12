@@ -2,163 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B9CE5250D5
-	for <lists+linux-pm@lfdr.de>; Thu, 12 May 2022 17:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 827975251BE
+	for <lists+linux-pm@lfdr.de>; Thu, 12 May 2022 18:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353656AbiELPFJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 May 2022 11:05:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45458 "EHLO
+        id S1355645AbiELQBb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 May 2022 12:01:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355688AbiELPFF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 11:05:05 -0400
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B551625509F;
-        Thu, 12 May 2022 08:05:02 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id r1so10277730ybo.7;
-        Thu, 12 May 2022 08:05:02 -0700 (PDT)
+        with ESMTP id S1343533AbiELQBa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 12:01:30 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EC147558;
+        Thu, 12 May 2022 09:01:28 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-ed9a75c453so7131423fac.11;
+        Thu, 12 May 2022 09:01:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BoY7g8nUQQ3BvW0xBl0eILMoOU8tGg7MZ9xjNiqrFPA=;
+        b=TH7l9iasZncqnM5kUsqw7GwUDOgqZpjRQ9+dl4GQpL+/5cH5UVP+bjbrT+vsprLv4z
+         pwVBaeaGBSBWxAGZoCgSSUQLvIlt1CRZ7/6Q7z1gts6rlcG7rHbH/oqfW51h86zVhfF2
+         3s+pzxr/jBtnRXomw2dHHx7nV5kHJLKKJILZVH0eZNm5/YVPapJK4G7R0wFVVGFqs977
+         UhSoI4uadPx+aSBHE9WgbJXilQ6BZl+oBec+wjMFL36cpvI/7PV/raWjk4iCKrmslGdn
+         E768o01/UPTWFZ1EORuaBNU/7FugBRPrAzcdSKzQ5ETnXycI8Xtqgs0fYKzIkPJtdO+h
+         ZWLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3m1cLce0U7sWwoPRoIzSnGNl6tg1bkDp1pFDNxtbcTk=;
-        b=Snwyg6vameeadNIw6m8ow8BvTqvyLwSzJ4Mn6PXHeIQjvszUQKGNXFGowc7D4lBeTg
-         rPdvZN5ZCZNtj/Jsiv3kCNarNFebfoxrKFgmP6pk24jGc/74+D4zNO1w/Jh/YL+GovgH
-         ByXTgB+DRZq5ehwtIDhIYEyJHYJyy+EjgsgfduS/m2RBcgAP3Fp4A9eI0ul3TeLKFMqD
-         phKbXy5V1vj+CzL7Uv2GsEL6grSwd8EUV4ipcwkbtAmMJz4h9fHogtw3s9XhtSTn+KFV
-         /flP74kyCUUkVfR44X+VD5F5UsKc3K+Sh1SdQNuOjEiNQrjJ4R1l01/1RfLxkEfAQ/Sv
-         9W+g==
-X-Gm-Message-State: AOAM530tUmSgd5EY+DfEBYeJrwT/qm/N4G9rSZmEeS1Rf0n1bsioFBTj
-        XUws+h/w30xFmi0GJzyFwDjGTgVeua70rLlDKgehABOZ
-X-Google-Smtp-Source: ABdhPJyVyp4by0cL7EufgP8w7GRukzsRyDSHhJZOpF+poV1MdPj+Aq7HO3eT2LyRF32MRAnkZMgy6LoFj0Yeo/byNy0=
-X-Received: by 2002:a25:d288:0:b0:64b:4bb5:32be with SMTP id
- j130-20020a25d288000000b0064b4bb532bemr173435ybg.633.1652367901673; Thu, 12
- May 2022 08:05:01 -0700 (PDT)
+        bh=BoY7g8nUQQ3BvW0xBl0eILMoOU8tGg7MZ9xjNiqrFPA=;
+        b=3i9ndeOwYD+GYqFKeiGPOD/Pn6lT5pofZwquTJJQIduWL9nlROtdcvmmQD3pMCoSVQ
+         3C7GfSyNemPJpGRDQFWW8fm0hIUiXUEtBXzKpwp6AXnU4O/kFAMYRLTqzMVHz+WO+AqE
+         /+oDHonsUOa/g7jyLZYqa5Qz9p7Vrtmg2CFAcOOu9VudcH136hr4UEAfA3sHzc8EZmAp
+         LNiYfgT0A6iKsExfbEwz4rTMb1yMyFgBVKdlUEdQt4m+bqwEzKJAGPRhmbnpCkCXGbzr
+         6Q1N7Po8Rs3MwcUe/soqnIlGW4BfDunAhG6nY6fNvetgiJinl17WnqWIfSYFHCtK3CDC
+         jBZw==
+X-Gm-Message-State: AOAM533IGYxVm1FkobfYcGQC8n1F+F4Di9Q9OZV+qYQaC0S4fb4WrQ3S
+        S2tDkin8GfSTvwO09L6KhKJVRb89xHeuv92CMZmaoAH7IpYADKLD
+X-Google-Smtp-Source: ABdhPJx/2GOpXH2bLjEym/lKA2keUtwkdjxN/7bIy/NLe+vgD2VyAqthraR6XG9/mFx406495jSSJO8wXSUA4TmYxKo=
+X-Received: by 2002:a05:6870:5b89:b0:e9:bb4c:a6f1 with SMTP id
+ em9-20020a0568705b8900b000e9bb4ca6f1mr299361oab.52.1652371287934; Thu, 12 May
+ 2022 09:01:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220511134559.1466925-1-pierre.gondois@arm.com>
- <20220511134559.1466925-3-pierre.gondois@arm.com> <20220511143001.ewba7sovabinnajz@bogus>
-In-Reply-To: <20220511143001.ewba7sovabinnajz@bogus>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 12 May 2022 17:04:50 +0200
-Message-ID: <CAJZ5v0i5h+JYd=jXsgfcuA8_XnUV0RenqFZ0ALhCVt1eZtKnrQ@mail.gmail.com>
-Subject: Re: [PATCH v1 3/5] ACPI: CPPC: Assume no transition latency if no PCCT
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Pierre Gondois <pierre.gondois@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ionela Voinescu <Ionela.Voinescu@arm.com>,
-        Dietmar Eggemann <Dietmar.Eggemann@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Robert Moore <robert.moore@intel.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+References: <20220512135231.10076-1-schspa@gmail.com> <20220512135231.10076-2-schspa@gmail.com>
+ <CAJZ5v0htGfZ3G+BWgZSxvcEAhNd_LONm8rNMetdPts3uZ=Tcxw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0htGfZ3G+BWgZSxvcEAhNd_LONm8rNMetdPts3uZ=Tcxw@mail.gmail.com>
+From:   Schspa Shi <schspa@gmail.com>
+Date:   Fri, 13 May 2022 00:01:16 +0800
+Message-ID: <CAMA88TodZJYmd2GnWty=qCw7T=LG9jihEAmT+RPK8tSBqdiubA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] cpufreq: make interface functions and lock holding
+ state clear
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 11, 2022 at 4:30 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Wed, May 11, 2022 at 03:45:57PM +0200, Pierre Gondois wrote:
-> > From: Pierre Gondois <Pierre.Gondois@arm.com>
-> >
-> > The transition_delay_us (struct cpufreq_policy) is currently defined
-> > as:
-> >   Preferred average time interval between consecutive invocations of
-> >   the driver to set the frequency for this policy.  To be set by the
-> >   scaling driver (0, which is the default, means no preference).
-> > The transition_latency represents the amount of time necessary for a
-> > CPU to change its frequency.
-> >
-> > A PCCT table advertises mutliple values:
-> > - pcc_nominal: Expected latency to process a command, in microseconds
-> > - pcc_mpar: The maximum number of periodic requests that the subspace
-> >   channel can support, reported in commands per minute. 0 indicates no
-> >   limitation.
-> > - pcc_mrtt: The minimum amount of time that OSPM must wait after the
-> >   completion of a command before issuing the next command,
-> >   in microseconds.
-> > cppc_get_transition_latency() allows to get the max of them.
-> >
-> > commit d4f3388afd48 ("cpufreq / CPPC: Set platform specific
-> > transition_delay_us") allows to select transition_delay_us based on
-> > the platform, and fallbacks to cppc_get_transition_latency()
-> > otherwise.
-> >
-> > If _CPC objects are not using PCC channels (no PPCT table), the
-> > transition_delay_us is set to CPUFREQ_ETERNAL, leading to really long
-> > periods between frequency updates (~4s).
-> >
-> > If the desired_reg, where performance requests are written, is in
-> > SystemMemory or SystemIo ACPI address space, there is no delay
-> > in requests. So return 0 instead of CPUFREQ_ETERNAL, leading to
-> > transition_delay_us being set to LATENCY_MULTIPLIER us (1000 us).
-> >
-> > This patch also adds two macros to check the address spaces.
-> >
-> > Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
-> > ---
-> >  drivers/acpi/cppc_acpi.c | 17 ++++++++++++++++-
-> >  1 file changed, 16 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> > index 6f09fe011544..cc932ec1b613 100644
-> > --- a/drivers/acpi/cppc_acpi.c
-> > +++ b/drivers/acpi/cppc_acpi.c
-> > @@ -100,6 +100,16 @@ static DEFINE_PER_CPU(struct cpc_desc *, cpc_desc_ptr);
-> >                               (cpc)->cpc_entry.reg.space_id ==        \
-> >                               ACPI_ADR_SPACE_PLATFORM_COMM)
-> >
-> > +/* Check if a CPC register is in SystemMemory */
-> > +#define CPC_IN_SM(cpc) ((cpc)->type == ACPI_TYPE_BUFFER &&           \
-> > +                             (cpc)->cpc_entry.reg.space_id ==        \
-> > +                             ACPI_ADR_SPACE_SYSTEM_MEMORY)
-> > +
->
-> Again my taste or preference: s/SM/SYS_MEM or SYSTEM_MEM
+"Rafael J. Wysocki" <rafael@kernel.org> writes:
 
-SYSTEM_MEMORY even.
-
+> On Thu, May 12, 2022 at 3:52 PM Schspa Shi <schspa@gmail.com> wrote:
+>>
+>> cpufreq_offline() calls offline() and exit() under the policy rwsem
+>> But they are called outside the rwsem in cpufreq_online().
+>>
+>> This patch move the offline(), exit(), online(), init() to be inside
+>> of policy rwsem to achieve a clear lock relationship.
+>>
+>> All the init() online() implement only initialize policy object without
+>> holding this lock and won't call cpufreq APIs need to hold this lock.
+>>
+>> Signed-off-by: Schspa Shi <schspa@gmail.com>
 >
-> > +/* Check if a CPC register is in SystemIo */
-> > +#define CPC_IN_SIO(cpc) ((cpc)->type == ACPI_TYPE_BUFFER &&          \
-> > +                             (cpc)->cpc_entry.reg.space_id ==        \
-> > +                             ACPI_ADR_SPACE_SYSTEM_IO)
-> > +
+> IMV this still addresses 2 different issues and so it should be split
+> into 2 different patches.
 >
-> Ditto, s/SM/SYS_IO or SYSTEM_IO
+>> ---
+>>  drivers/cpufreq/cpufreq.c | 5 ++---
+>>  1 file changed, 2 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+>> index 35dffd738580..f242d5488364 100644
+>> --- a/drivers/cpufreq/cpufreq.c
+>> +++ b/drivers/cpufreq/cpufreq.c
 >
-> I need not refer back to the macro when reading the code. SM/SIO is too
-> short and makes it hard to infer from the name in general.
+> Patch 1:
+>
+>> @@ -1343,12 +1343,12 @@ static int cpufreq_online(unsigned int cpu)
+>>                 down_write(&policy->rwsem);
+>>                 policy->cpu = cpu;
+>>                 policy->governor = NULL;
+>> -               up_write(&policy->rwsem);
+>>         } else {
+>>                 new_policy = true;
+>>                 policy = cpufreq_policy_alloc(cpu);
+>>                 if (!policy)
+>>                         return -ENOMEM;
+>> +               down_write(&policy->rwsem);
+>>         }
+>>
+>>         if (!new_policy && cpufreq_driver->online) {
+>> @@ -1388,7 +1388,6 @@ static int cpufreq_online(unsigned int cpu)
+>>                 cpumask_copy(policy->related_cpus, policy->cpus);
+>>         }
+>>
+>> -       down_write(&policy->rwsem);
+>>         /*
+>>          * affected cpus must always be the one, which are online. We aren't
+>>          * managing offline cpus here.
+>
+> which addresses the problem that cpufreq_online() updates the
+> policy->cpus and related_cpus masks without holding the policy rwsem
+> (since the policy kobject has been registered already at this point,
+> this is generally unsafe).
+>
+> A side-effect of it is that ->online() and ->init() will be called
+> under the policy rwsem now, but that should be fine and is more
+> consistent than the current code too.
+>
+> Patch 2:
+>
+>> @@ -1540,7 +1539,6 @@ static int cpufreq_online(unsigned int cpu)
+>>                 remove_cpu_dev_symlink(policy, get_cpu_device(j));
+>>
+>>         cpumask_clear(policy->cpus);
+>> -       up_write(&policy->rwsem);
+>>
+>>  out_offline_policy:
+>>         if (cpufreq_driver->offline)
+>> @@ -1549,6 +1547,7 @@ static int cpufreq_online(unsigned int cpu)
+>>  out_exit_policy:
+>>         if (cpufreq_driver->exit)
+>>                 cpufreq_driver->exit(policy);
+>> +       up_write(&policy->rwsem);
+>>
+>>  out_free_policy:
+>>         cpufreq_policy_free(policy);
+>> --
+>
+> which addressed the issue of calling ->offline() and ->exit() without
+> holding the policy rwsem that is at best inconsistent with
+> cpufreq_offline().
 
-Right.
+No, we can't split this into two different patches. which will cause a
+uninitialized unlock for policy rwsem.
+This will make the git bitsec unusable.
 
-> >  /* Evaluates to True if reg is a NULL register descriptor */
-> >  #define IS_NULL_REG(reg) ((reg)->space_id ==  ACPI_ADR_SPACE_SYSTEM_MEMORY && \
-> >                               (reg)->address == 0 &&                  \
-> > @@ -1456,6 +1466,9 @@ EXPORT_SYMBOL_GPL(cppc_set_perf);
-> >   * transition latency for performance change requests. The closest we have
-> >   * is the timing information from the PCCT tables which provides the info
-> >   * on the number and frequency of PCC commands the platform can handle.
-> > + *
-> > + * If desired_reg is in the SystemMemory or SystemIo ACPI address space,
-> > + * then assume there is no latency.
-> >   */
-> >  unsigned int cppc_get_transition_latency(int cpu_num)
-> >  {
-> > @@ -1481,7 +1494,9 @@ unsigned int cppc_get_transition_latency(int cpu_num)
-> >               return CPUFREQ_ETERNAL;
-> >
-> >       desired_reg = &cpc_desc->cpc_regs[DESIRED_PERF];
-> > -     if (!CPC_IN_PCC(desired_reg))
-> > +     if (CPC_IN_SM(desired_reg) || CPC_IN_SIO(desired_reg))
-> > +             return 0;
-> > +     else if (!CPC_IN_PCC(desired_reg))
-> >               return CPUFREQ_ETERNAL;
+Which Dan Carpenter reported, and cause the patch of the v1 version to
+be reverted.
+
+Link: https://lore.kernel.org/all/YnKZCGaig+EXSowf@kili/
+
+---
+BRs
+
+
+Schspa Shi
