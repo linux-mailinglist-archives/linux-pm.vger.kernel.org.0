@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C13345257E8
-	for <lists+linux-pm@lfdr.de>; Fri, 13 May 2022 00:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1A85257F6
+	for <lists+linux-pm@lfdr.de>; Fri, 13 May 2022 00:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359250AbiELWkr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 May 2022 18:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60638 "EHLO
+        id S1359275AbiELWqk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 May 2022 18:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359244AbiELWkp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 18:40:45 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE477DFD
-        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 15:40:40 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id o69so6479938pjo.3
-        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 15:40:40 -0700 (PDT)
+        with ESMTP id S1354944AbiELWqj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 18:46:39 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82FE64B85C
+        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 15:46:38 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id i17so6248671pla.10
+        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 15:46:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=Var06zhUfSCRGoXl/2YsHbPLCV39KwA7ovVK4YO/gYI=;
-        b=lRh8vfKWUKUZwwsK2meeCN8N1RalNIVkqUl9qT9Miv8PTf5mw6HFPPiCt96zBtd98U
-         YNkSyfcIAvU5f7F+qhAIzbiUBhVPvLiDVJ/+KurWq6X1DYubUfQ7Q54ZAbE+tK52azF5
-         xR1ztL15JY3nvuj2ZkBRnM2YM/xp2wKuf5OpE=
+        bh=w7xRYGEEgLlcfSNhLyiae2Suom2+oKJoUELtHjnH1l4=;
+        b=JcxyzS2/X+CTAkdqnryxhc1CdjvPBZ6DX7dJAB08YX/K61V5t4vhFW0BZn/hQ+cbUE
+         4Dju2qWnEnZm4o7CahLxVzBOo6nqKavIFCjlMbGVer+y5zrTtDFDHDrWav+llnze2g0x
+         5x7Jv1JJulg7CUH5L4GwG+2yXJOQ0+bFjF5gs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Var06zhUfSCRGoXl/2YsHbPLCV39KwA7ovVK4YO/gYI=;
-        b=GGt7EYe0QtyeBDUWvadJUzB/fgPzkORNVeW5v9X84eSi2aiSrgsi9TxeoBxtWtd/fP
-         A6im5cFo9E46ybD0g8vQQL1kdNtD8TE3hJnNd8qzKODOoK4zK0el17KZ0j/oDAiSEeZ5
-         WNGuEJBJQIPbHngalJcW9TXuS350F+ubmdy2voc8aVV/x01Qj7Oj19I9DcV7CkUNspoe
-         oyrkvVSQYWYk47PpzIPSrsjcgt51+7kXl+Kq9nWJQpUceRcmp7icNhHdMEphxJIDsHV5
-         UJu1q3kfHr/w+Uh+yQTxH3/cqk0rS3vZvrkCXj2nFT76401ZhBiFVhyyrA1PJg7R+4jL
-         imFA==
-X-Gm-Message-State: AOAM530ff7lyXciplUKx84SFnQj6obLZTjBbfSTHuV/m5RN0iFFPsasT
-        oWRB4cZKZxqPMf4uZne26nkuCA==
-X-Google-Smtp-Source: ABdhPJz/0NAzpj2X0qc6+LmD057ToQ+VV6hPC/AZ4GoKWxAxkwvmbJ/ELD8Ga+7cT1wWr4yCeaBWgw==
-X-Received: by 2002:a17:902:d2c9:b0:15e:a266:6472 with SMTP id n9-20020a170902d2c900b0015ea2666472mr1736829plc.45.1652395240339;
-        Thu, 12 May 2022 15:40:40 -0700 (PDT)
+        bh=w7xRYGEEgLlcfSNhLyiae2Suom2+oKJoUELtHjnH1l4=;
+        b=NZkt6o3fDS7/weobI2icfrXlccdkJXUUgcjfTPboxy2YD4M74urjAID6FONz8/qvzM
+         7/VJ3iV5qrMRaeRcg1/XKvrsuMqyNx0r7vk6lVP2EYPKHRFuOzvFIbBJK/yrEMT7yITQ
+         PQ2H6xIrA5XzIqvKR0u/sE+670b83p/0FO8+F0iLyav3JKUZArN008lDIKQHIKTlluTf
+         GOxVCi5qL+Dy03MY+anU5wKne/cVnUPEYzOjrqK3QJ/Ffo5dONXCgk8B6O3h0uoCQ/cj
+         XYb+sl4tkF/26DoQ6LrgD5f7wM8sRUm3HsDJuLc+7woUkD7tSAUbz8s95Vo+r42N5r2M
+         VUQg==
+X-Gm-Message-State: AOAM5339DOtr7dsgQYvWtiRkcQcrN/Ycrzwitfo3T/LFcQTKNNGwskJq
+        ZbI4M4nlnqQqfNfCSP2e69YD6A==
+X-Google-Smtp-Source: ABdhPJxLdQopQQB82M4oh6IUbuLnZifJOaY3RgFRN8NvEkSNVuq88W7hpERHgcLZHkvW2a9p6vFsBw==
+X-Received: by 2002:a17:902:7891:b0:15e:f845:b816 with SMTP id q17-20020a170902789100b0015ef845b816mr1640183pll.60.1652395598075;
+        Thu, 12 May 2022 15:46:38 -0700 (PDT)
 Received: from localhost ([2620:15c:11a:202:bc87:9632:bcce:8e17])
-        by smtp.gmail.com with UTF8SMTPSA id v21-20020a17090a521500b001d2edf4b513sm275481pjh.56.2022.05.12.15.40.39
+        by smtp.gmail.com with UTF8SMTPSA id 2-20020a17090a19c200b001d5c571f487sm306302pjj.25.2022.05.12.15.46.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 15:40:40 -0700 (PDT)
-Date:   Thu, 12 May 2022 15:40:38 -0700
+        Thu, 12 May 2022 15:46:37 -0700 (PDT)
+Date:   Thu, 12 May 2022 15:46:36 -0700
 From:   Matthias Kaehlcke <mka@chromium.org>
 To:     Krishna Kurapati <quic_kriskura@quicinc.com>
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -61,18 +61,18 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-pm@vger.kernel.org, quic_pkondeti@quicinc.com,
         quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
         Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: Re: [v16 2/5] usb: dwc3: core: Host wake up support from system
- suspend
-Message-ID: <Yn2M5hrah78jro1C@google.com>
+Subject: Re: [v16 5/5] usb: dwc3: qcom: Keep power domain on to retain
+ controller status
+Message-ID: <Yn2OTOF07A5jhYSF@google.com>
 References: <1652379802-8318-1-git-send-email-quic_kriskura@quicinc.com>
- <1652379802-8318-3-git-send-email-quic_kriskura@quicinc.com>
+ <1652379802-8318-6-git-send-email-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1652379802-8318-3-git-send-email-quic_kriskura@quicinc.com>
+In-Reply-To: <1652379802-8318-6-git-send-email-quic_kriskura@quicinc.com>
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,177 +80,81 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 12, 2022 at 11:53:19PM +0530, Krishna Kurapati wrote:
+On Thu, May 12, 2022 at 11:53:22PM +0530, Krishna Kurapati wrote:
 > From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 > 
-> During suspend read the status of all port and set hs phy mode
-> based on current speed. Use this hs phy mode to configure wakeup
-> interrupts in qcom glue driver.
-> 
-> Check wakeup-source property for dwc3 core node to set the
-> wakeup capability. Drop the device_init_wakeup call from
-> runtime suspend and resume.
-> 
-> Also check during suspend if any wakeup capable devices are
-> connected to the controller (directly or through hubs), if there
-> are none set a flag to indicate that the PHY is powered
-> down during suspend.
+> Keep the power domain always on during runtime suspend or if the
+> controller supports wakeup in order to retain controller status
+> and to support wakeup from devices.
 > 
 > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 > Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 > ---
->  drivers/usb/dwc3/core.c | 30 +++++++++++++++++-------------
->  drivers/usb/dwc3/core.h |  4 ++++
->  drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
->  3 files changed, 45 insertions(+), 13 deletions(-)
+>  drivers/usb/dwc3/dwc3-qcom.c | 23 ++++++++++++++++-------
+>  1 file changed, 16 insertions(+), 7 deletions(-)
 > 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 01115df..8bcabc5 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1785,6 +1785,7 @@ static int dwc3_probe(struct platform_device *pdev)
->  
->  	platform_set_drvdata(pdev, dwc);
->  	dwc3_cache_hwparams(dwc);
-> +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
->  
->  	spin_lock_init(&dwc->lock);
->  	mutex_init(&dwc->mutex);
-> @@ -1946,10 +1947,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->  		dwc3_core_exit(dwc);
->  		break;
->  	case DWC3_GCTL_PRTCAP_HOST:
-> -		if (!PMSG_IS_AUTO(msg)) {
-> -			dwc3_core_exit(dwc);
-> -			break;
-> -		}
-> +		dwc3_check_phy_speed_mode(dwc);
->  
->  		/* Let controller to suspend HSPHY before PHY driver suspends */
->  		if (dwc->dis_u2_susphy_quirk ||
-> @@ -1965,6 +1963,15 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->  
->  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
->  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
-> +
-> +		if (!PMSG_IS_AUTO(msg)) {
-> +			if (device_may_wakeup(dwc->dev))
-
-I think this should be device_can_wakeup(), i.e. hardware capability instead of
-device policy. A drawback of powering the PHYs off is that it causes a high
-power consumption of certain peripherals if VBUS is still supplied, so this
-should be limited to platforms where the PHYs must be powered off (using wakeup
-capability as a proxy for now).
-
-
-> +				dwc->phy_power_off = false;
-> +			else {
-> +				dwc->phy_power_off = true;
-> +				dwc3_core_exit(dwc);
-> +			}
-> +		}
->  		break;
->  	case DWC3_GCTL_PRTCAP_OTG:
->  		/* do nothing during runtime_suspend */
-> @@ -2008,11 +2015,12 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
->  		break;
->  	case DWC3_GCTL_PRTCAP_HOST:
->  		if (!PMSG_IS_AUTO(msg)) {
-> -			ret = dwc3_core_init_for_resume(dwc);
-> -			if (ret)
-> -				return ret;
-> -			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
-> -			break;
-> +			if (dwc->phy_power_off) {
-> +				ret = dwc3_core_init_for_resume(dwc);
-> +				if (ret)
-> +					return ret;
-> +				dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
-> +			}
->  		}
->  		/* Restore GUSB2PHYCFG bits that were modified in suspend */
->  		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
-> @@ -2084,8 +2092,6 @@ static int dwc3_runtime_suspend(struct device *dev)
->  	if (ret)
->  		return ret;
->  
-> -	device_init_wakeup(dev, true);
-> -
->  	return 0;
->  }
->  
-> @@ -2094,8 +2100,6 @@ static int dwc3_runtime_resume(struct device *dev)
->  	struct dwc3     *dwc = dev_get_drvdata(dev);
->  	int		ret;
->  
-> -	device_init_wakeup(dev, false);
-> -
->  	ret = dwc3_resume_common(dwc, PMSG_AUTO_RESUME);
->  	if (ret)
->  		return ret;
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index 81c486b..37397a8 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -1155,6 +1155,9 @@ struct dwc3 {
->  
->  	bool			phys_ready;
->  
-> +	unsigned int            hs_phy_mode;
-> +	bool			phy_power_off;
-> +
->  	struct ulpi		*ulpi;
->  	bool			ulpi_ready;
->  
-> @@ -1539,6 +1542,7 @@ int dwc3_core_soft_reset(struct dwc3 *dwc);
->  #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
->  int dwc3_host_init(struct dwc3 *dwc);
->  void dwc3_host_exit(struct dwc3 *dwc);
-> +void dwc3_check_phy_speed_mode(struct dwc3 *dwc);
->  #else
->  static inline int dwc3_host_init(struct dwc3 *dwc)
->  { return 0; }
-> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> index f56c30c..e19b40a 100644
-> --- a/drivers/usb/dwc3/host.c
-> +++ b/drivers/usb/dwc3/host.c
-> @@ -12,6 +12,7 @@
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 9804a19..1f9589a 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/of_platform.h>
 >  #include <linux/platform_device.h>
+>  #include <linux/phy/phy.h>
+> +#include <linux/pm_domain.h>
+>  #include <linux/usb/of.h>
+>  #include <linux/reset.h>
+>  #include <linux/iopoll.h>
+> @@ -718,12 +719,13 @@ dwc3_qcom_create_urs_usb_platdev(struct device *dev)
 >  
->  #include "core.h"
-> +#include "../host/xhci.h"
->  
->  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
->  					int irq, char *name)
-> @@ -136,3 +137,26 @@ void dwc3_host_exit(struct dwc3 *dwc)
+>  static int dwc3_qcom_probe(struct platform_device *pdev)
 >  {
->  	platform_device_unregister(dwc->xhci);
->  }
+> -	struct device_node	*np = pdev->dev.of_node;
+> -	struct device		*dev = &pdev->dev;
+> -	struct dwc3_qcom	*qcom;
+> -	struct resource		*res, *parent_res = NULL;
+> -	int			ret, i;
+> -	bool			ignore_pipe_clk;
+> +	struct device_node *np = pdev->dev.of_node;
+> +	struct device *dev = &pdev->dev;
+> +	struct dwc3_qcom *qcom;
+> +	struct resource	*res, *parent_res = NULL;
+> +	int ret, i;
+> +	bool ignore_pipe_clk;
+> +	struct generic_pm_domain *genpd;
+>  
+>  	qcom = devm_kzalloc(&pdev->dev, sizeof(*qcom), GFP_KERNEL);
+>  	if (!qcom)
+> @@ -732,6 +734,8 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>  	platform_set_drvdata(pdev, qcom);
+>  	qcom->dev = &pdev->dev;
+>  
+> +	genpd = pd_to_genpd(qcom->dev->pm_domain);
 > +
-> +void dwc3_check_phy_speed_mode(struct dwc3 *dwc)
-> +{
-> +	int i, num_ports;
-> +	u32 reg;
-> +	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
-> +	struct xhci_hcd	*xhci_hcd = hcd_to_xhci(hcd);
+>  	if (has_acpi_companion(dev)) {
+>  		qcom->acpi_pdata = acpi_device_get_match_data(dev);
+>  		if (!qcom->acpi_pdata) {
+> @@ -839,7 +843,12 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		goto interconnect_exit;
+>  
+> -	device_init_wakeup(&pdev->dev, 1);
+> +	genpd->flags |= GENPD_FLAG_RPM_ALWAYS_ON;
 > +
-> +	dwc->hs_phy_mode = 0;
-> +
-> +	reg = readl(&xhci_hcd->cap_regs->hcs_params1);
-> +
-> +	num_ports = HCS_MAX_PORTS(reg);
-> +	for (i = 0; i < num_ports; i++) {
-> +		reg = readl(&xhci_hcd->op_regs->port_status_base + i * NUM_PORT_REGS);
-> +		if (reg & PORT_PE) {
-> +			if (DEV_HIGHSPEED(reg) || DEV_FULLSPEED(reg))
-> +				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_HS;
-> +			else if (DEV_LOWSPEED(reg))
-> +				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_LS;
-> +		}
-> +	}
-> +}
+> +	if (device_may_wakeup(&qcom->dwc3->dev)) {
 
-I anticipate that it might raise concerns from maintainers that
-dwc3_check_phy_speed_mode() accesses xHCI data structures and
-registers directly. Could there be a generic HCD API that provides
-this functionality (if implemented by the specific HCD)?
+This should probably be device_can_wakeup(), otherwise you'll have to set/clear
+the flag before suspending (the wakeup policy might change after the device is
+probed). Also I'm not sure if switching the domain off can impact the power
+consumption of some connected peripherals, as is observed when the PHYs are
+powered off (I could confirm this if needed).
+
+> +		genpd->flags |= GENPD_FLAG_ALWAYS_ON;
+> +		device_init_wakeup(&pdev->dev, true);
+> +	}
+>  	qcom->is_suspended = false;
+>  	pm_runtime_set_active(dev);
+>  	pm_runtime_enable(dev);
+> -- 
+> 2.7.4
+> 
