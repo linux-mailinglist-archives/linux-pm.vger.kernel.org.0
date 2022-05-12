@@ -2,459 +2,210 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E02524F50
-	for <lists+linux-pm@lfdr.de>; Thu, 12 May 2022 16:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 191C2524FEC
+	for <lists+linux-pm@lfdr.de>; Thu, 12 May 2022 16:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354951AbiELODY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 May 2022 10:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
+        id S1355245AbiELO0N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 May 2022 10:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354935AbiELODW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 10:03:22 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E219F55206;
-        Thu, 12 May 2022 07:03:17 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 5FD141F908;
-        Thu, 12 May 2022 14:03:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652364196; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LqB96ySSQJ4ly+3J+rYGGuH/Fd7fkvILEbloF31pDTM=;
-        b=q3SRuDuz1bsrtNT6AQbijhKvd/E1pyV5ISS04f4B5Eo/MpxJkThlvlpzsrdXZrusqFVq1r
-        7s+CTa1eDnSZSlcSzDLMEjhXIjmmjm5vpsFw4wJd/0EtFszB2sl8NlJGjykorM6dG2+lpF
-        5FiP1kelHffEWxoWnmRZqh37k1tv6Lg=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 5C2702C141;
-        Thu, 12 May 2022 14:03:13 +0000 (UTC)
-Date:   Thu, 12 May 2022 16:03:10 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-Subject: Re: [PATCH 24/30] panic: Refactor the panic path
-Message-ID: <Yn0TnsWVxCcdB2yO@alley>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-25-gpiccoli@igalia.com>
+        with ESMTP id S1355261AbiELOZ5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 10:25:57 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3B713E38
+        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 07:25:55 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id bv19so10597089ejb.6
+        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 07:25:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=e7wJLjfJ1iVilvpq3jQ/LuI1I5wd6zNBUq4hxK7yISQ=;
+        b=r5ualuxQ0leFqfg+jbNOvJJk8d5rLmW6rQULOQ0IRnTzgGR9H/PIWd9zWwzi3fs9WC
+         S1+FtRFMKsim/XCxLByVyAPekRdEM+FkcCbXi0+pkaqQrGQuMKAqH4LWlJgqhnW90b53
+         hUcHLI6ng/MAOx3Ixjn4Bte8v2Le82Buhh1GjWKoq0c0Q8nk9dyi3F42U34U10f6fyyO
+         +hMWt5oUXdRHyqZvXq4fpzcyQ+u/x9RJ318MWMw/PSTuk7Wo0+iY86IzDn6FKEzxbT8x
+         EG0pnu9SrvZgNIOARlKvfuwqyU1AOdJqhDncYUpZLB5LqJs2JwSHle88uuT735DJAPAC
+         y0cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=e7wJLjfJ1iVilvpq3jQ/LuI1I5wd6zNBUq4hxK7yISQ=;
+        b=FWMI0qjbviqB/K+jtjIu5pPmbzMeO3xtMqZ2Z7Wf32fBZWWWGRFU2XWy1JNx5VQgK7
+         qdpejafZWFsbCwZDmJIbWOMqpjGD/7F7Tjq7n0UDTebpzkbeIFFtdgUKX+IoLBHvY8YN
+         UcX+cwUWnbBS/Aqt8LoU+zOSqCooWkbjmFKGZFJb6oiRdEEqoe/pdSmWkqjTKX5nQSf9
+         aLNIU7gBOKwlx4gkdizel8OzwRatbFgzWjIpmWOJb3dWWzRJi+nmxdB4yQqG5WzIfTjR
+         yRubBWw4OG+mfX4o1JgXFRpL6tug3m8ViJ1EvvXtiO54KXZ9r8QglF9UguDOavW163FG
+         i14w==
+X-Gm-Message-State: AOAM532bTT76u+iia74oG0/JIvV++iwx2vP1bCZB21MzmQGivQaaP8aJ
+        5Fj69+ooJ8hgHZehlWi0BDxn1A==
+X-Google-Smtp-Source: ABdhPJxfn8AF52a6nAcaWJI5jbWZNRWTIkVKS2zEyi9i2MQCsxmdkfWrb5DIJvkdV6aURcKf/+NZ2w==
+X-Received: by 2002:a17:907:6e88:b0:6fa:888d:74a7 with SMTP id sh8-20020a1709076e8800b006fa888d74a7mr141867ejc.335.1652365553928;
+        Thu, 12 May 2022 07:25:53 -0700 (PDT)
+Received: from [192.168.0.161] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id n14-20020a170906700e00b006f3ef214e34sm2134511ejj.154.2022.05.12.07.25.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 07:25:53 -0700 (PDT)
+Message-ID: <546ddbd4-927d-2e28-6e82-a67b4584a17f@linaro.org>
+Date:   Thu, 12 May 2022 16:25:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427224924.592546-25-gpiccoli@igalia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v6 2/7] dt-bindings: thermal: Add binding document for
+ mt6873 thermal controller
+Content-Language: en-US
+To:     Alexandre Bailon <abailon@baylibre.com>, robh+dt@kernel.org,
+        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, michael.kao@mediatek.com,
+        ben.tseng@mediatek.com, ethan.chang@mediatek.com,
+        frank-w@public-files.de, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, khilman@baylibre.com
+References: <20220512122433.1399802-1-abailon@baylibre.com>
+ <20220512122433.1399802-3-abailon@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220512122433.1399802-3-abailon@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
-
-first, I am sorry for stepping into the discussion so late.
-I was busy with some other stuff and this patchset is far
-from trivial.
-
-Second, thanks a lot for putting so much effort into it.
-Most of the changes look pretty good, especially all
-the fixes of particular notifiers and split into
-four lists.
-
-Though this patch will need some more love. See below
-for more details.
-
-
-On Wed 2022-04-27 19:49:18, Guilherme G. Piccoli wrote:
-> The panic() function is somewhat convoluted - a lot of changes were
-> made over the years, adding comments that might be misleading/outdated
-> now, it has a code structure that is a bit complex to follow, with
-> lots of conditionals, for example. The panic notifier list is something
-> else - a single list, with multiple callbacks of different purposes,
-> that run in a non-deterministic order and may affect hardly kdump
-> reliability - see the "crash_kexec_post_notifiers" workaround-ish flag.
+On 12/05/2022 14:24, Alexandre Bailon wrote:
+> From: Michael Kao <michael.kao@mediatek.com>
 > 
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -3784,6 +3791,33 @@
->  			timeout < 0: reboot immediately
->  			Format: <timeout>
->  
-> +	panic_notifiers_level=
-> +			[KNL] Set the panic notifiers execution order.
-> +			Format: <unsigned int>
-> +			We currently have 4 lists of panic notifiers; based
-> +			on the functionality and risk (for panic success) the
-> +			callbacks are added in a given list. The lists are:
-> +			- hypervisor/FW notification list (low risk);
-> +			- informational list (low/medium risk);
-> +			- pre_reboot list (higher risk);
-> +			- post_reboot list (only run late in panic and after
-> +			kdump, not configurable for now).
-> +			This parameter defines the ordering of the first 3
-> +			lists with regards to kdump; the levels determine
-> +			which set of notifiers execute before kdump. The
-> +			accepted levels are:
+> This patch adds binding document for mt6873 thermal controller.
 
-This talks only about kdump. The reality is much more complicated.
-The level affect the order of:
+Thank you for your patch. There is something to discuss/improve.
 
-    + notifiers vs. kdump
-    + notifiers vs. crash_dump
-    + crash_dump vs. kdump
+> 
+> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+> Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
+> ---
+>  .../thermal/mediatek-thermal-lvts.yaml        | 81 +++++++++++++++++++
+>  1 file changed, 81 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml b/Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
+> new file mode 100644
+> index 000000000000..69ffe7b14c21
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/mediatek-thermal-lvts.yaml
 
-There might theoretically many variants of the ordering of kdump,
-crash_dump, and the 4 notifier list. Some variants do not make
-much sense. You choose 5 variants and tried to select them by
-a level number.
+filename: vendor,device
+so something like mediatek,mt6873-lvts.yaml or
+mediatek,mt6873-lvts-thermal.yaml
 
-The question is if we really could easily describe the meaning this
-way. It is not only about a "level" of notifiers before kdump. It is
-also about the ordering of crash_dump vs. kdump. IMHO, "level"
-semantic does not fit there.
-
-Maybe more parameters might be easier to understand the effect.
-Anyway, we first need to agree on the chosen variants.
-I am going to discuss it more in the code, see below.
-
-
-
-> +			0: kdump is the first thing to run, NO list is
-> +			executed before kdump.
-> +			1: only the hypervisor list is executed before kdump.
-> +			2 (default level): the hypervisor list and (*if*
-> +			there's any kmsg_dumper defined) the informational
-> +			list are executed before kdump.
-> +			3: both the hypervisor and the informational lists
-> +			(always) execute before kdump.
-> +			4: the 3 lists (hypervisor, info and pre_reboot)
-> +			execute before kdump - this behavior is analog to the
-> +			deprecated parameter "crash_kexec_post_notifiers".
+> @@ -0,0 +1,81 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/mediatek-thermal-lvts.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  	panic_print=	Bitmask for printing system info when panic happens.
->  			User can chose combination of the following bits:
->  			bit 0: print all tasks info
-> --- a/kernel/panic.c
-> +++ b/kernel/panic.c
-> @@ -183,6 +195,112 @@ static void panic_print_sys_info(bool console_flush)
->  		ftrace_dump(DUMP_ALL);
->  }
->  
-> +/*
-> + * Helper that accumulates all console flushing routines executed on panic.
-> + */
-> +static void console_flushing(void)
-> +{
-> +#ifdef CONFIG_VT
-> +	unblank_screen();
-> +#endif
-> +	console_unblank();
+> +title: Mediatek SoC LVTS thermal controller (DTS) binding
+
+s/(DTS) binding//
+(unless DTS means something related to hardware)
+
 > +
-> +	/*
-> +	 * In this point, we may have disabled other CPUs, hence stopping the
-> +	 * CPU holding the lock while still having some valuable data in the
-> +	 * console buffer.
-> +	 *
-> +	 * Try to acquire the lock then release it regardless of the result.
-> +	 * The release will also print the buffers out. Locks debug should
-> +	 * be disabled to avoid reporting bad unlock balance when panic()
-> +	 * is not being called from OOPS.
-> +	 */
-> +	debug_locks_off();
-> +	console_flush_on_panic(CONSOLE_FLUSH_PENDING);
+> +maintainers:
+> +  - Yu-Chia Chang <ethan.chang@mediatek.com>
+> +  - Ben Tseng <ben.tseng@mediatek.com>
 > +
-> +	panic_print_sys_info(true);
-> +}
+> +properties:
+> +  compatible:
+> +    const: mediatek,mt6873-lvts
 > +
-> +#define PN_HYPERVISOR_BIT	0
-> +#define PN_INFO_BIT		1
-> +#define PN_PRE_REBOOT_BIT	2
-> +#define PN_POST_REBOOT_BIT	3
+> +  reg:
+> +    maxItems: 1
 > +
-> +/*
-> + * Determine the order of panic notifiers with regards to kdump.
-> + *
-> + * This function relies in the "panic_notifiers_level" kernel parameter
-> + * to determine how to order the notifiers with regards to kdump. We
-> + * have currently 5 levels. For details, please check the kernel docs for
-> + * "panic_notifiers_level" at Documentation/admin-guide/kernel-parameters.txt.
-> + *
-> + * Default level is 2, which means the panic hypervisor and informational
-> + * (unless we don't have any kmsg_dumper) lists will execute before kdump.
-> + */
-> +static void order_panic_notifiers_and_kdump(void)
-> +{
-> +	/*
-> +	 * The parameter "crash_kexec_post_notifiers" is deprecated, but
-> +	 * valid. Users that set it want really all panic notifiers to
-> +	 * execute before kdump, so it's effectively the same as setting
-> +	 * the panic notifiers level to 4.
-> +	 */
-> +	if (panic_notifiers_level >= 4 || crash_kexec_post_notifiers)
-> +		return;
+> +  interrupts:
+> +    maxItems: 1
 > +
-> +	/*
-> +	 * Based on the level configured (smaller than 4), we clear the
-> +	 * proper bits in "panic_notifiers_bits". Notice that this bitfield
-> +	 * is initialized with all notifiers set.
-> +	 */
-> +	switch (panic_notifiers_level) {
-> +	case 3:
-> +		clear_bit(PN_PRE_REBOOT_BIT, &panic_notifiers_bits);
-> +		break;
-> +	case 2:
-> +		clear_bit(PN_PRE_REBOOT_BIT, &panic_notifiers_bits);
+> +  clocks:
+> +    maxItems: 1
 > +
-> +		if (!kmsg_has_dumpers())
-> +			clear_bit(PN_INFO_BIT, &panic_notifiers_bits);
-> +		break;
-> +	case 1:
-> +		clear_bit(PN_PRE_REBOOT_BIT, &panic_notifiers_bits);
-> +		clear_bit(PN_INFO_BIT, &panic_notifiers_bits);
-> +		break;
-> +	case 0:
-> +		clear_bit(PN_PRE_REBOOT_BIT, &panic_notifiers_bits);
-> +		clear_bit(PN_INFO_BIT, &panic_notifiers_bits);
-> +		clear_bit(PN_HYPERVISOR_BIT, &panic_notifiers_bits);
-> +		break;
-> +	}
-> +}
->
-> +/*
-> + * Set of helpers to execute the panic notifiers only once.
-> + * Just the informational notifier cares about the return.
-> + */
-> +static inline bool notifier_run_once(struct atomic_notifier_head head,
-> +				     char *buf, long bit)
-> +{
-> +	if (test_and_change_bit(bit, &panic_notifiers_bits)) {
-> +		atomic_notifier_call_chain(&head, PANIC_NOTIFIER, buf);
-> +		return true;
-> +	}
-> +	return false;
-> +}
+> +  clock-names:
+> +    items:
+> +      - const: lvts_clk
 
-Here is the code using the above functions. It helps to discuss
-the design and logic.
+Skip "_clk" suffix, so just lvts.
 
-<kernel/panic.c>
-	order_panic_notifiers_and_kdump();
+> +
+> +  "#thermal-sensor-cells":
+> +    const: 0
+> +
+> +required:
+> +  - "#thermal-sensor-cells"
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
 
-	/* If no level, we should kdump ASAP. */
-	if (!panic_notifiers_level)
-		__crash_kexec(NULL);
+You should reference in allOf therma-sensor.yaml unless this is not a
+thermal sensor?
 
-	crash_smp_send_stop();
-	panic_notifier_hypervisor_once(buf);
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/thermal/thermal.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/mt8192-clk.h>
+> +    dts: lvts@1100b000 {
 
-	if (panic_notifier_info_once(buf))
-		kmsg_dump(KMSG_DUMP_PANIC);
+Generic node name, so thermal-sensor
 
-	panic_notifier_pre_reboot_once(buf);
+> +        compatible = "mediatek,mt6873-lvts";
+> +        reg = <0x1100b000 0x1000>;
+> +        clocks = <&infracfg CLK_INFRA_THERM>;
+> +        clock-names = "lvts_clk";
+> +        #thermal-sensor-cells = <0>;
+> +        interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_HIGH>;
+> +    };
+> +
+> +    thermal-zones {
+> +        cpu_thermal: cpu-thermal {
+> +            polling-delay-passive = <0>;
+> +            polling-delay = <0>;
+> +
+> +            thermal-sensors = <&dts>;
+> +            trips {
+> +                cpu_alert1: cpu-alert1 {
+> +                    temperature = <85000>;
+> +                    hysteresis = <0>;
+> +                    type = "passive";
+> +                };
+> +
+> +                cpu_crit: cpu-crit {
+> +                    temperature = <120000>;
+> +                    hysteresis = <0>;
+> +                    type = "critical";
+> +                };
+> +            };
+> +
+> +            cooling-maps {
+> +            };
 
-	__crash_kexec(NULL);
+Empty node? Is it used anyhow here?
 
-	panic_notifier_hypervisor_once(buf);
-
-	if (panic_notifier_info_once(buf))
-		kmsg_dump(KMSG_DUMP_PANIC);
-
-	panic_notifier_pre_reboot_once(buf);
-</kernel/panic.c>
-
-I have to say that the logic is very unclear. Almost all
-functions are called twice:
-
-   + __crash_kexec()
-   + kmsg_dump()
-   + panic_notifier_hypervisor_once()
-   + panic_notifier_pre_reboot_once()
-   + panic_notifier_info_once()
-
-It is pretty hard to find what functions are always called in the same
-order and where the order can be inverted.
-
-The really used code path is defined by order_panic_notifiers_and_kdump()
-that encodes "level" into "bits". The bits are then flipped in
-panic_notifier_*_once() calls that either do something or not.
-kmsg_dump() is called according to the bit flip.
-
-It is an interesting approach. I guess that you wanted to avoid too
-many if/then/else levels in panic(). But honestly, it looks like
-a black magic to me.
-
-IMHO, it is always easier to follow if/then/else logic than using
-a translation table that requires additional bit flips when
-a value is used more times.
-
-Also I guess that it is good proof that "level" abstraction does
-not fit here. Normal levels would not need this kind of magic.
+> +        };
+> +    };
+> +...
 
 
-OK, the question is how to make it better. Let's start with
-a clear picture of the problem:
-
-1. panic() has basically two funtions:
-
-      + show/store debug information (optional ways and amount)
-      + do something with the system (reboot, stay hanged)
-
-
-2. There are 4 ways how to show/store the information:
-
-      + tell hypervisor to store what it is interested about
-      + crash_dump
-      + kmsg_dump()
-      + consoles
-
-  , where crash_dump and consoles are special:
-
-     + crash_dump does not return. Instead it ends up with reboot.
-
-     + Consoles work transparently. They just need an extra flush
-       before reboot or staying hanged.
-
-
-3. The various notifiers do things like:
-
-     + tell hypervisor about the crash
-     + print more information (also stop watchdogs)
-     + prepare system for reboot (touch some interfaces)
-     + prepare system for staying hanged (blinking)
-
-   Note that it pretty nicely matches the 4 notifier lists.
-
-
-Now, we need to decide about the ordering. The main area is how
-to store the debug information. Consoles are transparent so
-the quesition is about:
-
-     + hypervisor
-     + crash_dump
-     + kmsg_dump
-
-Some people need none and some people want all. There is a
-risk that system might hung at any stage. This why people want to
-make the order configurable.
-
-But crash_dump() does not return when it succeeds. And kmsg_dump()
-users havn't complained about hypervisor problems yet. So, that
-two variants might be enough:
-
-    + crash_dump (hypervisor, kmsg_dump as fallback)
-    + hypervisor, kmsg_dump, crash_dump
-
-One option "panic_prefer_crash_dump" should be enough.
-And the code might look like:
-
-void panic()
-{
-[...]
-	dump_stack();
-	kgdb_panic(buf);
-
-	< ---  here starts the reworked code --- >
-
-	/* crash dump is enough when enabled and preferred. */
-	if (panic_prefer_crash_dump)
-		__crash_kexec(NULL);
-
-	/* Stop other CPUs and focus on handling the panic state. */
-	if (has_kexec_crash_image)
-		crash_smp_send_stop();
-	else
-		smp_send_stop()
-
-	/* Notify hypervisor about the system panic. */
-	atomic_notifier_call_chain(&panic_hypervisor_list, 0, NULL);
-
-	/*
-	 * No need to risk extra info when there is no kmsg dumper
-	 * registered.
-	 */
-	if (!has_kmsg_dumper())
-		__crash_kexec(NULL);
-
-	/* Add extra info from different subsystems. */
-	atomic_notifier_call_chain(&panic_info_list, 0, NULL);
-
-	kmsg_dump(KMSG_DUMP_PANIC);
-	__crash_kexec(NULL);
-
-	/* Flush console */
-	unblank_screen();
-	console_unblank();
-	debug_locks_off();
-	console_flush_on_panic(CONSOLE_FLUSH_PENDING);
-
-	if (panic_timeout > 0) {
-		delay()
-	}
-
-	/*
-	 * Prepare system for eventual reboot and allow custom
-	 * reboot handling.
-	 */
-	atomic_notifier_call_chain(&panic_reboot_list, 0, NULL);
-
-	if (panic_timeout != 0) {
-		reboot();
-	}
-
-	/*
-	 * Prepare system for the infinite waiting, for example,
-	 * setup blinking.
-	 */
-	atomic_notifier_call_chain(&panic_loop_list, 0, NULL);
-
-	infinite_loop();
-}
-
-
-__crash_kexec() is there 3 times but otherwise the code looks
-quite straight forward.
-
-Note 1: I renamed the two last notifier list. The name 'post-reboot'
-	did sound strange from the logical POV ;-)
-
-Note 2: We have to avoid the possibility to call "reboot" list
-	before kmsg_dump(). All callbacks providing info
-	have to be in the info list. It a callback combines
-	info and reboot functionality then it should be split.
-
-	There must be another way to calm down problematic
-	info callbacks. And it has to be solved when such
-	a problem is reported. Is there any known issue, please?
-
-It is possible that I have missed something important.
-But I would really like to make the logic as simple as possible.
-
-Best Regards,
-Petr
+Best regards,
+Krzysztof
