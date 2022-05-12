@@ -2,106 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7FA524AC4
-	for <lists+linux-pm@lfdr.de>; Thu, 12 May 2022 12:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B696B524ACF
+	for <lists+linux-pm@lfdr.de>; Thu, 12 May 2022 12:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352215AbiELKtW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 May 2022 06:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55470 "EHLO
+        id S1352766AbiELKwv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 May 2022 06:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352827AbiELKtU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 06:49:20 -0400
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB67D22D620;
-        Thu, 12 May 2022 03:49:18 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id i38so8911056ybj.13;
-        Thu, 12 May 2022 03:49:18 -0700 (PDT)
+        with ESMTP id S1348325AbiELKwu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 06:52:50 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AEDB43ED6
+        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 03:52:49 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id bg25so2784318wmb.4
+        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 03:52:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=bhLFZhLOR9onxP484HtUMsK0gwVtyvrIXG0q9mh+mB8=;
+        b=oQh7bAgWJKuPkOFCZlwH/GCKyuTYyJBoNv0Z/xBneQ/z5viblDRKuSwn1nCSZnqf1v
+         i7ZMJ0bTEu3+l4mcrcU88szFyOS7bLCn4ZVnbSq/g2csHU0nVdNAj85USOj6sw8kqy/r
+         wxUPxfYPOpAqoQ4n/Itk5kQArJXSzTaJoWaIVmkb92XdnKkk7J9ah+bUx84EgYkEoLGr
+         y0cbwdDaUtHASxOvTSMnGYgGv895MHq6LtWGpRUizqyS06Jl9CXOGMLvEcSAF75mCEvv
+         xCwahgWPnBoguv21RqwsRI4IS4sXq8RpIgWZFDqZPLNfTbwRFeRzArKhQv3vGvk+whYr
+         YSjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=73Q4ig9VmqJ22FBOR2b+2j1Ani6FbrMKsnpdJgype9o=;
-        b=uUsdP36xRujd6SCekJNuBc+IPRtUT2W8mt0jReGHX4AIM6ELLr8SK80OJIYzn13oKu
-         b9Nh+yP75fpPJEbruMrm+VCcm5x0sVWLjVNk8aKc5Z5zZwEhFb3hm+fxjkkW7YuvFJpo
-         +Df/lYFyaHhdl+NI0ZIHTIpmZ4shBzMF97QvkaZ8SGYLZrS3I7rn6OuMXbMRHfHut5Q0
-         9mMs4chISGF8tsSR86AhYuIu4uO6isp3qhs7dgU2IrlCw+4/NlXzmEzrKsEqJxLv0UcL
-         ct4a9kCXpHgSUF3VYGm9TvcDOT/YWI0/PySzrGxHCoXLX5dKiKDAjEGxIE/42IU3/lRA
-         4hog==
-X-Gm-Message-State: AOAM531KEfZMyvjoNnMI8uS+wccv1qLncG+OmDnjHpCcB1QRLZ3heaDU
-        LTUSoYs4FCZ6c98z7IMaEsXLxIjKLZs45JiWy6gjHv/HMwU=
-X-Google-Smtp-Source: ABdhPJzVx8fUu5InL7ElfenAl55jA+0J6UObydM85W1BeoHrjGnB/WooVOODRolD9IALH1Sd8ri/WmGbiYXXY4t1Zxg=
-X-Received: by 2002:a25:e792:0:b0:645:7ddb:b5eb with SMTP id
- e140-20020a25e792000000b006457ddbb5ebmr27902834ybh.482.1652352557949; Thu, 12
- May 2022 03:49:17 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=bhLFZhLOR9onxP484HtUMsK0gwVtyvrIXG0q9mh+mB8=;
+        b=2k4MBrixeAf5WGZRytx7MzAr6iOQ4EP4WSC1zmr4bloXhtiUtbQ9/3MWEc6h0r4tsl
+         fRRNNdTnIFEiwNQtxfpPVMg4ikWUlJzCOm9+0tbKCGb8kpvO85hhttkutn1UmRf+vN+/
+         ie87RUWlm9MaaZYPyFht/yEVdInKUCMNW1imaxHvie/faZbsgvitRB++t9QeuQkt6Njw
+         IY0aRxMMcmISegC+opFMTyOVQ6LgOuz50EZvySHxd6i8oDQYtF0eYJjqnaVFRVpK4GFz
+         sHphYATWux12tumIy0cILfQTSXrxO0bmgdezg2LWGxYhCdfZplR0aTVCLz6O+qXI26X/
+         VX5A==
+X-Gm-Message-State: AOAM532kVwuQc+EJ0vbrHxqyz8jOMO+v1VySrIQ4HRJlels+5Vz6GJlb
+        QlQfP/1QPu7kWddRa5LpeVWVbssDVSSKYQ==
+X-Google-Smtp-Source: ABdhPJwUwARiT0JiS8onhePQzPpGHIHKLwPey9ZANnfcwYX9ORx5RbY3ysiI34m2IZBuDq+PBdKV9A==
+X-Received: by 2002:a1c:2784:0:b0:392:b4f9:c6ef with SMTP id n126-20020a1c2784000000b00392b4f9c6efmr9220341wmn.201.1652352767915;
+        Thu, 12 May 2022 03:52:47 -0700 (PDT)
+Received: from [192.168.1.41] (static-176-182-171-101.ncc.abo.bbox.fr. [176.182.171.101])
+        by smtp.googlemail.com with ESMTPSA id c6-20020a056000104600b0020c6fa5a797sm3800787wrx.91.2022.05.12.03.52.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 03:52:47 -0700 (PDT)
+Message-ID: <7f5a919c-2fa1-a463-1f6b-6b531d5ee27d@linaro.org>
+Date:   Thu, 12 May 2022 12:52:46 +0200
 MIME-Version: 1.0
-References: <20220510035259.5ep52sgahd2a6rie@vireshk-i7> <20220510154236.88753-1-schspa@gmail.com>
- <20220511043515.fn2gz6q3kcpdai5p@vireshk-i7> <CAMA88TpefB=rnqea2u1zEvNUJNE_kdj4mYito7SGCuMj-o071Q@mail.gmail.com>
- <20220511122114.wccgyur6g3qs6fps@vireshk-i7> <CAJZ5v0gN_yDFpvCXRXv8rN-i3TugCi-HKpBKK2z4eWU0Zm1GUg@mail.gmail.com>
- <CAJZ5v0id+7vkqMQEyVRe29oF_dRtzZ0EhoYUn8=yzeENDeABJw@mail.gmail.com> <20220512065623.q4aa6y52pst3zpxu@vireshk-i7>
-In-Reply-To: <20220512065623.q4aa6y52pst3zpxu@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 12 May 2022 12:49:07 +0200
-Message-ID: <CAJZ5v0jeYiZ6esdxnJbOyDztNqOAbjcjxmpca3JTFWRh+cwdBw@mail.gmail.com>
-Subject: Re: [PATCH v3] cpufreq: fix race on cpufreq online
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Schspa Shi <schspa@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v1] thermal: imx: Update critical temp threshold
+Content-Language: en-US
+To:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Lucas Stach <l.stach@pengutronix.de>
+Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, linux-pm@vger.kernel.org,
+        Tim Harvey <tharvey@gateworks.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Jon Nettleton <jon@solid-run.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <20220420091300.179753-1-francesco.dolcini@toradex.com>
+ <486c5c72-812a-d4ea-0c5a-49783bdc4a1f@linaro.org>
+ <20220512073600.GA36153@francesco-nb.int.toradex.com>
+ <6918b1a7ba401cd4db2db0601137766acd93bc63.camel@pengutronix.de>
+ <20220512102454.GA39979@francesco-nb.int.toradex.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220512102454.GA39979@francesco-nb.int.toradex.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 12, 2022 at 8:56 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 11-05-22, 15:19, Rafael J. Wysocki wrote:
-> > On Wed, May 11, 2022 at 2:59 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > > Hmm, I don't think depending on the values of policy->cpus is a good idea to be
-> > > > honest. This design is inviting bugs to come in at another place. We need a
-> > > > clear flag for this, a new flag or something like policy_list.
-> >
-> > Why?
->
-> Because it doesn't mean anything unless we have code elsewhere which checks this
-> specifically. It should be fine though after using policy_is_inactive() in
-> show/store as you suggested, which I too tried to do in a patch :)
->
-> > > > Also I see the same bug happening while the policy is removed. The kobject is
-> > > > put after the rwsem is dropped.
-> >
-> > This shouldn't be a problem because of the wait_for_completion() in
-> > cpufreq_policy_put_kobj().  It is known that cpufreq_sysfs_release()
-> > has run when cpufreq_policy_put_kobj() returns, so it is safe to free
-> > the policy then.
->
-> I agree to that, but the destruction of stuff happens right in
-> cpufreq_policy_free() where it starts removing the policy from the list and
-> clears cpufreq_cpu_data. I don't know if it will break anything or not, but we
-> should disallow any further sysfs operations once we have reached
-> cpufreq_policy_free().
+On 12/05/2022 12:24, Francesco Dolcini wrote:
+> Hello Lucas,
+> 
+> On Thu, May 12, 2022 at 12:08:08PM +0200, Lucas Stach wrote:
+>> Am Donnerstag, dem 12.05.2022 um 09:36 +0200 schrieb Francesco Dolcini:
 
-Well, would there be a problem with moving the
-cpufreq_policy_put_kobj() call to the front of cpufreq_policy_free()?
-If we did that, we'd know that everything could be torn down safely,
-because nobody would be holding references to the policy any more.
+[ ... ]
 
-> > TBH, I'm not sure why show() doesn't check policy_is_inactive() under the rwsem.
->
-> I agree, both show/store should have it.
->
-> > Moreover, I'm not sure why the locking dance in store() is necessary.
->
-> commit fdd320da84c6 ("cpufreq: Lock CPU online/offline in cpufreq_register_driver()")
+> Anyway, would it be fine to have a patch that make the critical
+> threshold write-able (in my initial message I mentioned this as my
+> preferred solution also)? If anybody has a pointer on how
+> to do it, it would be great, I'm not familiar with that code.
 
-I get that, but I'm wondering if locking CPU hotplug from store() is
-needed at all.  I mean, if we are in store(), we are holding an active
-reference to the policy kobject, so the policy cannot go away until we
-are done anyway.  Thus it should be sufficient to use the policy rwsem
-for synchronization.
+What about a module param ?
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
