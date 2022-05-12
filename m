@@ -2,207 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47CC5524957
-	for <lists+linux-pm@lfdr.de>; Thu, 12 May 2022 11:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E68855249A6
+	for <lists+linux-pm@lfdr.de>; Thu, 12 May 2022 11:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352229AbiELJoe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 May 2022 05:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60270 "EHLO
+        id S1352361AbiELJ6o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 May 2022 05:58:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352206AbiELJob (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 05:44:31 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03A9EAD2B;
-        Thu, 12 May 2022 02:44:28 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 202so4103714pgc.9;
-        Thu, 12 May 2022 02:44:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ihqvNRJwImzsOLrl3fxE6zMebem5b+EV0AECQRLqNQk=;
-        b=COTfQBLUEjx07aJkBhxtHqjkf9N6ZR9iAwxuruHzNA3z1Qe1bTVmIVg+61R3eygp7A
-         XKDsm3qSfKayt8PHc04UMg9gmYGMkhjI1069FUL27w9zO/615T/NWkFdQ0xfk+L1TXDS
-         HRE07M6dV+ixjeOmhNna62fsLR25u5I/i2O1LFJGf3BOWLpDIMbSbwHJubQ6DL2ZiVmA
-         3CKcmSsvlIW0LtHJHSyN2YIWS0eNLVFVR1BvU6GMXamUXUJBk5kbRF/nyzGfSetEO6+Y
-         wivIcptXIECPEUFrC0LVhAY1Tccuu3n5Aiv27mp3tU1d0FiLlAmP5qdslrCVm82x2Lis
-         Hz5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ihqvNRJwImzsOLrl3fxE6zMebem5b+EV0AECQRLqNQk=;
-        b=stxjL40WMUXnssqXUJwwJV74SCuU0zq/++ieAwScKVAxYcehLoV70l/8qakDeYWdOm
-         PQa11csnGdyo4gt/ENi5r8Ea+hpP1M2SJ2lCypLiiSUf6qjiZjc3OlQksEsJjvxtBTAr
-         Kdd03pto92rYqdWvtiDhkKjQrCkcpz2RRuCwE7WYC+UCNWe7lfhyzRDcUaV6LsCYbbWa
-         MR77m3h5xvhk/Am7LEDDGjG1Zf0shSGM/QkqxraVl1BScgc8EFDJTvPfzJTRajuPt6MP
-         ZeXzpNTbpL7oGoKuY/pEFsnxqXt/5koBqBkdR3qL0l0vm/iA1ntAy1QOZbKBN7LDgZcJ
-         pL4w==
-X-Gm-Message-State: AOAM531UL5z3AAmbp/XU+PhsuNfq/foqHuUzu2b2mdDBai2jKd7Ty3MD
-        uweRiE/pNo9+ybx5zy3SkFU=
-X-Google-Smtp-Source: ABdhPJz4HMYDsfitlJnQpZNXkkiQyofzdNHIYRvUPRioT1c/GBy8uzQ8DBgFmjrQxCaeIc4d6t4rrA==
-X-Received: by 2002:a63:8749:0:b0:3c6:aa1d:bd3c with SMTP id i70-20020a638749000000b003c6aa1dbd3cmr17318160pge.403.1652348668074;
-        Thu, 12 May 2022 02:44:28 -0700 (PDT)
-Received: from tj10039pcu.spreadtrum.com ([117.18.48.102])
-        by smtp.gmail.com with ESMTPSA id b5-20020a170902e94500b0015e8d4eb222sm3412681pll.108.2022.05.12.02.44.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 02:44:27 -0700 (PDT)
-From:   Cixi Geng <gengcixi@gmail.com>
-To:     sre@kernel.org, orsonzhai@gmail.com, baolin.wang7@gmail.com,
-        zhang.lyra@gmail.com, chenyongzhi811@gmail.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V3] power: supply: Add enable the primary charger interface
-Date:   Thu, 12 May 2022 17:44:17 +0800
-Message-Id: <20220512094417.3716654-1-gengcixi@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S1352337AbiELJ6i (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 05:58:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C820E22EA63;
+        Thu, 12 May 2022 02:58:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1BBB0B82728;
+        Thu, 12 May 2022 09:58:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 178B5C385B8;
+        Thu, 12 May 2022 09:58:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652349513;
+        bh=kq14DywiWLmIjJ7CeeAFiu7DThWHwli6FpsxFOYnjgk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aCX1hDkfNTSfVLdYCM6R7yyJEj7szJz/ia3Yl3l8oFqnlmY1z9pocN2VIpi/ok91Z
+         hpIH8CXFBQBH/J/D6qUAOUjJyXl1ZfbR+jOBzDdBDtA6EofD9MHPgT4vCARWFp4epr
+         SLeCLFY1GTx1cbw8nIerNkt2/bDxkr5b1Wbgqm09yrfpGi6ucObTmPJBvSwN7Aq5nJ
+         5Q6UKlxovGvq0qcuQYDrEJVIYspp83PwCvGdvnUnXD5iI0ot9PbKr1qdvWyR9TD3av
+         xQ/GNMTqGXaNuEM91wS33lsDpDIsLKTXIHsr+1rze+jmgTX2oxv5t1vlpxycyKc9Jy
+         a1RIwvxo5c1dQ==
+Message-ID: <445dd693-f797-c4f9-3bf9-04185a54286d@kernel.org>
+Date:   Thu, 12 May 2022 12:58:29 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [GIT PULL] interconnect fix for 5.18-rc
+Content-Language: en-US
+To:     gregkh@linuxfoundation.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220506085923.23816-1-djakov@kernel.org>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <20220506085923.23816-1-djakov@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Chen Yongzhi <Yongzhi.Chen@unisoc.com>
+On 6.05.22 11:59, Georgi Djakov wrote:
+> Hello Greg,
+> 
+> This pull request contains one more fix for the current cycle. The
+> details are in the signed tag. It has been in linux-next during the
+> last few days. Please pull into char-misc-linus when possible.
+> 
 
-In the case of charging multiple charging ICs,the primary
-charging IC often needs to be turned off in the fast
-charging stage, and only using the charger pump to charge,
-need to add a new power_supply_property attribute.
+Hello Greg,
 
-Signed-off-by: Chen Yongzhi <Yongzhi.Chen@unisoc.com>
-Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
----
- drivers/power/supply/sc2731_charger.c | 48 +++++++++++++++++++++++++--
- include/linux/power_supply.h          |  1 +
- 2 files changed, 47 insertions(+), 2 deletions(-)
+I was wondering if this got missed or is it in your mail queue? Please
+let me know in case anything is required from my side.
 
-diff --git a/drivers/power/supply/sc2731_charger.c b/drivers/power/supply/sc2731_charger.c
-index 9ac17cf7a126..170b7a30e9b9 100644
---- a/drivers/power/supply/sc2731_charger.c
-+++ b/drivers/power/supply/sc2731_charger.c
-@@ -146,6 +146,22 @@ static int sc2731_charger_get_status(struct sc2731_charger_info *info)
- 	return POWER_SUPPLY_STATUS_CHARGING;
- }
- 
-+static int sc2731_charger_set_status(struct sc2731_charger_info *info, int val)
-+{
-+	int ret = 0;
-+
-+	if (!val && info->charging) {
-+		sc2731_charger_stop_charge(info);
-+		info->charging = false;
-+	} else if (val && !info->charging) {
-+		ret = sc2731_charger_start_charge(info);
-+		if (!ret)
-+			info->charging = true;
-+	}
-+
-+	return ret;
-+}
-+
- static int sc2731_charger_get_current(struct sc2731_charger_info *info,
- 				      u32 *cur)
- {
-@@ -204,7 +220,7 @@ sc2731_charger_usb_set_property(struct power_supply *psy,
- 				const union power_supply_propval *val)
- {
- 	struct sc2731_charger_info *info = power_supply_get_drvdata(psy);
--	int ret;
-+	int ret = 0;
- 
- 	mutex_lock(&info->lock);
- 
-@@ -214,6 +230,12 @@ sc2731_charger_usb_set_property(struct power_supply *psy,
- 	}
- 
- 	switch (psp) {
-+	case POWER_SUPPLY_PROP_STATUS:
-+		ret = sc2731_charger_set_status(info, val->intval);
-+		if (ret < 0)
-+			dev_err(info->dev, "set charge status failed\n");
-+		break;
-+
- 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
- 		ret = sc2731_charger_set_current(info, val->intval / 1000);
- 		if (ret < 0)
-@@ -227,6 +249,15 @@ sc2731_charger_usb_set_property(struct power_supply *psy,
- 			dev_err(info->dev, "set input current limit failed\n");
- 		break;
- 
-+	case POWER_SUPPLY_PROP_CHARGE_ENABLED:
-+		if (val->intval == true) {
-+			ret = sc2731_charger_start_charge(info);
-+			if (ret)
-+				dev_err(info->dev, "start charge failed\n");
-+		} else if (val->intval == false) {
-+			sc2731_charger_stop_charge(info);
-+		}
-+		break;
- 	default:
- 		ret = -EINVAL;
- 	}
-@@ -241,7 +272,7 @@ static int sc2731_charger_usb_get_property(struct power_supply *psy,
- {
- 	struct sc2731_charger_info *info = power_supply_get_drvdata(psy);
- 	int ret = 0;
--	u32 cur;
-+	u32 cur, enabled;
- 
- 	mutex_lock(&info->lock);
- 
-@@ -277,6 +308,16 @@ static int sc2731_charger_usb_get_property(struct power_supply *psy,
- 		}
- 		break;
- 
-+	case POWER_SUPPLY_PROP_CHARGE_ENABLED:
-+		ret = regmap_read(info->regmap, info->base + SC2731_CHG_CFG0, &enabled);
-+		if (ret) {
-+			dev_err(info->dev, "get sc2731 charge enabled failed\n");
-+			goto out;
-+		}
-+
-+		val->intval = enabled & SC2731_CHARGER_PD;
-+
-+		break;
- 	default:
- 		ret = -EINVAL;
- 	}
-@@ -292,8 +333,10 @@ static int sc2731_charger_property_is_writeable(struct power_supply *psy,
- 	int ret;
- 
- 	switch (psp) {
-+	case POWER_SUPPLY_PROP_STATUS:
- 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
- 	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-+	case POWER_SUPPLY_PROP_CHARGE_ENABLED:
- 		ret = 1;
- 		break;
- 
-@@ -308,6 +351,7 @@ static enum power_supply_property sc2731_usb_props[] = {
- 	POWER_SUPPLY_PROP_STATUS,
- 	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
- 	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
-+	POWER_SUPPLY_PROP_CHARGE_ENABLED,
- };
- 
- static const struct power_supply_desc sc2731_charger_desc = {
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index cb380c1d9459..1dfe194d8a5e 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -167,6 +167,7 @@ enum power_supply_property {
- 	POWER_SUPPLY_PROP_PRECHARGE_CURRENT,
- 	POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT,
- 	POWER_SUPPLY_PROP_CALIBRATE,
-+	POWER_SUPPLY_PROP_CHARGE_ENABLED,
- 	POWER_SUPPLY_PROP_MANUFACTURE_YEAR,
- 	POWER_SUPPLY_PROP_MANUFACTURE_MONTH,
- 	POWER_SUPPLY_PROP_MANUFACTURE_DAY,
--- 
-2.25.1
+Thanks,
+Georgi
+
+> 
+> The following changes since commit 2fb251c265608636fc961b7d38e1a03937e57371:
+> 
+>    interconnect: qcom: sdx55: Drop IP0 interconnects (2022-04-14 09:47:16 +0300)
+> 
+> are available in the Git repository at:
+> 
+>    git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-5.18-rc6
+> 
+> for you to fetch changes up to 20ce30fb4750f2ffc130cdcb26232b1dd87cd0a5:
+> 
+>    interconnect: Restore sync state by ignoring ipa-virt in provider count (2022-05-03 22:24:21 +0300)
+> 
+> ----------------------------------------------------------------
+> interconnect fixes for v5.18-rc
+> 
+> This contains an additional fix for sc7180 and sdx55 platforms that helps
+> them to enter suspend even on devices that don't have the most recent DT
+> changes.
+> 
+> - interconnect: Restore sync state by ignoring ipa-virt in provider count
+> 
+> Signed-off-by: Georgi Djakov <djakov@kernel.org>
+> 
+> ----------------------------------------------------------------
+> Stephen Boyd (1):
+>        interconnect: Restore sync state by ignoring ipa-virt in provider count
+> 
+>   drivers/interconnect/core.c | 8 +++++++-
+>   1 file changed, 7 insertions(+), 1 deletion(-)
 
