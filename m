@@ -2,68 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5BAA52472E
-	for <lists+linux-pm@lfdr.de>; Thu, 12 May 2022 09:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C56524740
+	for <lists+linux-pm@lfdr.de>; Thu, 12 May 2022 09:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351111AbiELHmn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 May 2022 03:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34458 "EHLO
+        id S239853AbiELHqg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 May 2022 03:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351108AbiELHmk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 03:42:40 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882181A15D4
-        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 00:42:39 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id q76so3853059pgq.10
-        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 00:42:39 -0700 (PDT)
+        with ESMTP id S1350644AbiELHqe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 03:46:34 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A15532EC0
+        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 00:46:32 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id cx11-20020a17090afd8b00b001d9fe5965b3so7083439pjb.3
+        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 00:46:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=WgTgy6Q+d8TrDK1hHPXj5oNnS+nB3lnyhddRNxBZhpk=;
-        b=OhYgBUt2hUmUJ+ybZL/wdXJLTU0v+/9O+N5ePdErfkb4ZTtdJ5P0t67WYjcdjFXEne
-         2vPwS8X0CJy1h25YJo8wqCso1FL5di2KkfkbiMtLzZl8FVax2zIVTSD1r5cB1voGiKF4
-         +XDyVWJvry04by0kx6zsSlLL1DW8PSOiTvF794KJCtUKVwVQ76fOdt3hWhfa9nRuw5fS
-         mxrV809q5uSxkGUqEd/LYNrNru8VAtzAnM5erRvTwbYsMDExyUyXh7VQBMUk2ATHyh3L
-         RkZoEpu2+XFPdhKXFJH+7Na36uTHaXDQmE13zYefldQeQ0E3s6T4QSYIy3RRjgCrN2bV
-         3V0Q==
+        bh=JqKmOBdyvSAB2RQPk7pfmb7qvk5aEFRk658+MP9/8GA=;
+        b=X4zHvSs2OtqDypNXNfmaomwFgwxRLmD9XFu2ESdk4XQ3Uo78qZHFVISztp97Ta0n5C
+         zUvEnltHgHmaGdFZuMmZC4i1jGM+WMi80vrB6Vm7t3uylzs0fyVNgSsiyfuhb8ZSW4X6
+         c0sO9TyaPmS/P1YxVxgltuTIUOiideMbzhVdsJLHSkqYLoryuttMYunBYcna1c0UJwtH
+         cCsR/TuKr+aVNYoZCAszIiEnjCR58xTRjK7W0p/kFsxnxIfktE4pJmvNaRGj8wSfKYv9
+         mWMRe6RySEHVF+qBMm7MZvYjpgOtR164GYbLAE4He+rsh0CQ1XzMfh9Bou6AgBrOh+Fk
+         zQvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=WgTgy6Q+d8TrDK1hHPXj5oNnS+nB3lnyhddRNxBZhpk=;
-        b=ZGxKDkHIs7wzRV4arufm3XamsPeuTzi5OwMDNxGDNIOEhMnQJMuymPt6BDBtzlnPDB
-         eQ/l4+T8Du/CmamF9jF7gK53KT7gueifWrrhjJcEP9DXfamp6ZriowU5NwlawrHQsTBN
-         ugfWVSEe+VkDcJx29OywLBv5hSV6KMx/iu795wq31iwEGQBCnAMw/3+ePIxAdjfn5ayY
-         7+PIZAD0KZkJ5xKNkctSLEOZnCDcC5s4mqaJsWeJMQFKbdAqmAefeDwHH+Qab8foRIY5
-         ETErrxcmN4t6+66acC9JWsO0keKjrjldUCQ53ew3n09abmM4KyCnrrZRNRDngSXILbJ/
-         fl3g==
-X-Gm-Message-State: AOAM530L2s3OKjlnCU9K4s1IbVf6rEG8LArQ+yyBYvw8vToMEHxLJovM
-        tnAVLI7BA1imSf9fEcSr/wrD+g==
-X-Google-Smtp-Source: ABdhPJwia2Fq44GWsT7Jk6YqY2Am5aAvcWQiS8d5n/BYk4E3i6aXcP2rSAmGyo9C/F4nOfaSjhHBRQ==
-X-Received: by 2002:a63:1d26:0:b0:3c1:eb3f:9daf with SMTP id d38-20020a631d26000000b003c1eb3f9dafmr23797634pgd.284.1652341358988;
-        Thu, 12 May 2022 00:42:38 -0700 (PDT)
+        bh=JqKmOBdyvSAB2RQPk7pfmb7qvk5aEFRk658+MP9/8GA=;
+        b=Lwg+gKT9aMFVgI01Gkl7WrPGUvbAvxLN7LGjyqRw9+UaLTJScsy0peehitiYyEegkj
+         oYgHNWalFuUzoSty5i+gHcLCJJjkd5q55B5Nz8QlfM6zFPVcgt1gMVtZzc9oHF8M5UK8
+         QUfwsoo/siGJ8bqP8HFE/oK0TGVwEcTPiwsm9yX6poHP6IxtiS6/5xpJdiVE0Q9C3zkK
+         t+A1+26rpBnJGffZ0/6i0hg3WrRDoMorJon625p/3GeleuCtustsTuHMGzfelHJ39aaT
+         5CjBLQfEw8pCUdgT5+AzaJrNxTCbWnalNzSlytfK/e3PM6I6R+gURm0shv9KH+0AagUK
+         sFnA==
+X-Gm-Message-State: AOAM530/BnZEdl0Ijkxp9FziHfbDkEjgjAjCUG3DWE9ThWStGtJTttr8
+        OyKL4uKwSEUqWRt/R4wl5BmU2w==
+X-Google-Smtp-Source: ABdhPJwUqx1pbyIyvspuWNontshAmCuEcq5ZJyBlMDjfIBLljoOQH3ZGhCvC+DWmIKArMfbLLu2iAw==
+X-Received: by 2002:a17:90a:4d04:b0:1d9:3f18:f4dd with SMTP id c4-20020a17090a4d0400b001d93f18f4ddmr9482641pjg.111.1652341592056;
+        Thu, 12 May 2022 00:46:32 -0700 (PDT)
 Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id m3-20020a17090aef8300b001cd4989ff42sm1204989pjy.9.2022.05.12.00.42.38
+        by smtp.gmail.com with ESMTPSA id w8-20020aa78588000000b0050dc76281a8sm3009761pfn.130.2022.05.12.00.46.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 00:42:38 -0700 (PDT)
-Date:   Thu, 12 May 2022 13:12:36 +0530
+        Thu, 12 May 2022 00:46:31 -0700 (PDT)
+Date:   Thu, 12 May 2022 13:16:29 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 3/3] cpufreq: Rearrange locking in cpufreq_remove_dev()
-Message-ID: <20220512074236.bkamv2o5hgson243@vireshk-i7>
-References: <5585781.DvuYhMxLoT@kreacher>
- <1836239.tdWV9SEqCh@kreacher>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
+        Dietmar.Eggemann@arm.com, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        devel@acpica.org
+Subject: Re: [PATCH v1 4/5] cpufreq: CPPC: Enable fast_switch
+Message-ID: <20220512074629.3cewdk4pu3oydlfg@vireshk-i7>
+References: <20220511134559.1466925-1-pierre.gondois@arm.com>
+ <20220511134559.1466925-4-pierre.gondois@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1836239.tdWV9SEqCh@kreacher>
+In-Reply-To: <20220511134559.1466925-4-pierre.gondois@arm.com>
 User-Agent: NeoMutt/20180716-391-311a52
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,25 +75,29 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11-05-22, 17:51, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 11-05-22, 15:45, Pierre Gondois wrote:
+> From: Pierre Gondois <Pierre.Gondois@arm.com>
 > 
-> Currently, cpufreq_remove_dev() invokes the ->exit() driver callback
-> without holding the policy rwsem which is inconsistent with what
-> happens if ->exit() is invoked directly from cpufreq_offline().
+> The communication mean of the _CPC desired performance can be
+> PCC, System Memory, System IO, or Functional Fixed Hardware.
 > 
-> It also manipulates the real_cpus mask and removes the CPU device
-> symlink without holding the policy rwsem, but cpufreq_offline() holds
-> the rwsem around the modifications thereof.
+> commit b7898fda5bc7 ("cpufreq: Support for fast frequency switching")
+> fast_switching is 'for switching CPU frequencies from interrupt
+> context'.
+> Writes to SystemMemory and SystemIo are fast and suitable this.
+> This is not the case for PCC and might not be the case for FFH.
 > 
-> For consistency, modify cpufreq_remove_dev() to hold the policy rwsem
-> until the ->exit() callback has been called (or it has been determined
-> that it is not necessary to call it).
+> Enable fast_switching for the cppc_cpufreq driver in above cases.
 > 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Add cppc_allow_fast_switch() to check the desired performance
+> register address space and set fast_switching accordingly.
+> 
+> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 > ---
->  drivers/cpufreq/cpufreq.c |   21 ++++++++++++++-------
->  1 file changed, 14 insertions(+), 7 deletions(-)
+>  drivers/acpi/cppc_acpi.c       | 17 +++++++++++++++++
+>  drivers/cpufreq/cppc_cpufreq.c | 24 ++++++++++++++++++++++++
+>  include/acpi/cppc_acpi.h       |  5 +++++
+>  3 files changed, 46 insertions(+)
 
 Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
