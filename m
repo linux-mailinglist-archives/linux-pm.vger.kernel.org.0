@@ -2,272 +2,265 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F4052435A
-	for <lists+linux-pm@lfdr.de>; Thu, 12 May 2022 05:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F363252444C
+	for <lists+linux-pm@lfdr.de>; Thu, 12 May 2022 06:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234528AbiELDXD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 May 2022 23:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45708 "EHLO
+        id S1347248AbiELEgO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 May 2022 00:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238977AbiELDXC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 May 2022 23:23:02 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7424157140;
-        Wed, 11 May 2022 20:22:57 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id bq30so6795718lfb.3;
-        Wed, 11 May 2022 20:22:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=vDxPRNJ47MRH72+7zGqfBM9QHNeqbDBoxMkpFljWCrs=;
-        b=T8BHKRSYIB6UI/eYY/8Qxf12CdDAjFFoO8zYHLFKzc+mSy4NMfGJC2b6J/LIC8W2XE
-         Kq69Fs+Cbc6nyCDuK2215tVt5ob16Y/qVaSrJsdxFLOl/XtZ+6XIuaxBSc28MI3nHfeU
-         GdEwjfhfho8k5KT6vPbP5HsMrobEIhdRQdl75m1Nqxix5LiZb1OXkMxENaQQu5RG5KUo
-         w/8p42yvZ9WUOnz1OQi7VzVVVqkMz1lk5IKQ2f7m1bYcNUA4ahu00u7xGFeiT7aXdaXP
-         kzWEJ9eWr9On/8CdafqLWKZaqF88acFUsUMMKQWsrm6Mb+/JnlhDaIrvSlST98qp1TMM
-         K5cQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=vDxPRNJ47MRH72+7zGqfBM9QHNeqbDBoxMkpFljWCrs=;
-        b=BM3Zl0WMwQxBIkzxlWW2DyXFaiGj1ga7k9GhQ6GgUTUHtl8AryB7hQZw+lSvnyjWhZ
-         EN5OIN8OAicr6TTA32LcR+pIuCEdNYj3F2C3QYkT8x2l8PAGLwyreBlrrA2ZNb5I7tum
-         xNmeCQF3vEP/xINIz6Q5tED/LoVpsI2Df/B5RIGblpFcw8eZULRqILmxaUKoRJd/oL9g
-         8wwdauNEXrtX01ZiAVFdjrwRjl7fPEbOvtgqy5sFDcvposWf5QFcasmEyvHpLdSUZFfW
-         ReM13kpwm1vFZPM4bbYYydC8RA8vMrWssvStVCVK8eTb6j/0Uxy6KmDG1E7ODeh6qWpL
-         fiIg==
-X-Gm-Message-State: AOAM533mjszhKA5Gr7SK9eU+6NdOxHoxyoS/2jWQMDIfAR8ZhZBbIVyc
-        XrSipIl5rMJN+5jxAFtOig8kwice0beXyIPWsRY=
-X-Google-Smtp-Source: ABdhPJz5hhErvKjwfwdhA9nvvhAPbAbGLTwzikSLQ8u7BMgmCnvyTgA+xfu2/v0a9U5V1f6g9n/5j+ZnFUXk44/i4ns=
-X-Received: by 2002:a05:6512:16a2:b0:448:1fbb:8ca1 with SMTP id
- bu34-20020a05651216a200b004481fbb8ca1mr22116326lfb.125.1652325775668; Wed, 11
- May 2022 20:22:55 -0700 (PDT)
+        with ESMTP id S1347286AbiELEgK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 00:36:10 -0400
+Received: from m12-13.163.com (m12-13.163.com [220.181.12.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07C2115A25;
+        Wed, 11 May 2022 21:36:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Message-ID:Date:MIME-Version:Subject:From; bh=1d1tM
+        H+vnpjo4OFLZKcFG1r3ENVDriGXTVUEOuHNaZI=; b=d9n4eEEfilh7piLG7UENr
+        1Boj9hwQtUtl1CeaNiYFDlYuMRUTBDhRUZJGikc9OnvLgYlFR0xkvUp1YI9vtuJY
+        pgSoSaCc/Fi1/78Q5RTpzeje4bYF9ONLeZuBR5sU/jKzE4obNA4yLCs3sMrbB/bn
+        TY12O6FCtnLzkTlCi8bxIM=
+Received: from [192.168.3.102] (unknown [218.201.129.19])
+        by smtp9 (Coremail) with SMTP id DcCowABHmR9ejnxi3XKFCQ--.35242S2;
+        Thu, 12 May 2022 12:34:39 +0800 (CST)
+Message-ID: <01c2c11f-71fd-b735-b935-109865d62de5@163.com>
+Date:   Thu, 12 May 2022 12:34:38 +0800
 MIME-Version: 1.0
-References: <20220428125610.66647-1-gengcixi@gmail.com> <CADBw62r8eGRNcXH1cAZvYQdKCgBjxUVnxhLsa=Oyzs-uwavRTA@mail.gmail.com>
-In-Reply-To: <CADBw62r8eGRNcXH1cAZvYQdKCgBjxUVnxhLsa=Oyzs-uwavRTA@mail.gmail.com>
-From:   =?UTF-8?B?6ZmI5rC45b+X?= <chenyongzhi811@gmail.com>
-Date:   Thu, 12 May 2022 11:22:44 +0800
-Message-ID: <CAJejCsY+DX0JywDS_dk=1P-fvyjUc4i1e67uM_WW64E3YVvzQg@mail.gmail.com>
-Subject: Re: [PATCH v2] power: supply: Add enable the primary charger interface
-To:     Baolin Wang <baolin.wang7@gmail.com>
-Cc:     Cixi Geng <gengcixi@gmail.com>, Sebastian Reichel <sre@kernel.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2] drivers: cpufreq: sun8i-r40: Add cpufreq support
+Content-Language: en-US
+To:     =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
+        linux-sunxi@lists.linux.dev
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20220510003611.1812-1-qianfanguijin@163.com>
+ <1902551.yKVeVyVuyW@kista>
+From:   qianfan <qianfanguijin@163.com>
+In-Reply-To: <1902551.yKVeVyVuyW@kista>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DcCowABHmR9ejnxi3XKFCQ--.35242S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxKF17GFy3tFW5JFWxKr17Jrb_yoW7Zw15pr
+        1UCFZ5GF4fWr15t34aqw1DGrn7CFyv9FWY9ryUGa48tr1kZrykXr13tr93KrZ5Xr13J3yI
+        vrn5XryI9ws8JaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UXiSLUUUUU=
+X-Originating-IP: [218.201.129.19]
+X-CM-SenderInfo: htld0w5dqj3xxmlqqiywtou0bp/1tbiGhn+7VaEBiT6wwABsY
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Baolin Wang <baolin.wang7@gmail.com> =E4=BA=8E2022=E5=B9=B45=E6=9C=883=E6=
-=97=A5=E5=91=A8=E4=BA=8C 12:53=E5=86=99=E9=81=93=EF=BC=9A
+
+
+在 2022/5/12 4:13, Jernej Škrabec 写道:
+> Dne torek, 10. maj 2022 ob 02:36:11 CEST je qianfanguijin@163.com napisal(a):
+>> From: qianfan Zhao <qianfanguijin@163.com>
+>>
+>> OPP table value is get from allwinner lichee 3.10 kernel.
+>> And completed 'cpu-supply' on sun8i based board.
+>>
+>> Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
+>> ---
+>>   .../boot/dts/sun8i-r40-bananapi-m2-ultra.dts  |  4 ++
+>>   arch/arm/boot/dts/sun8i-r40-feta40i.dtsi      |  4 ++
+>>   arch/arm/boot/dts/sun8i-r40.dtsi              | 47 +++++++++++++++++++
+>>   arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts      |  4 ++
+>>   .../boot/dts/sun8i-v40-bananapi-m2-berry.dts  |  4 ++
+>>   drivers/cpufreq/cpufreq-dt-platdev.c          |  1 +
+> This patch needs to be split in two:
+> 1. driver change
+> 2. DT changes
 >
-> On Thu, Apr 28, 2022 at 8:56 PM Cixi Geng <gengcixi@gmail.com> wrote:
-> >
-> > From: Chen Yongzhi <Yongzhi.Chen@unisoc.com>
-> >
-> > In the case of charging multiple charging ICs,the primary
-> > charging IC often needs to be turned off in the fast
-> > charging stage, and only using the charger pump to charge,
-> > need to add a new power_supply_property attribute.
+> And please add change log here for next submission.
+Maybe there patch is better? one of driver, one of sun8i-r40.dtsi
+and the others is the board's changes.
 >
-> I'm still confused why introducing a new
-> POWER_SUPPLY_PROP_CHARGE_ENABLED property to control the charging, but
-> you already controlled the charging by POWER_SUPPLY_PROP_STATUS?
+>>   6 files changed, 64 insertions(+)
+>>
+>> diff --git a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts b/arch/arm/
+> boot/dts/sun8i-r40-bananapi-m2-ultra.dts
+>> index a6a1087a0c9b..4f30018ec4a2 100644
+>> --- a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
+>> +++ b/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
+>> @@ -113,6 +113,10 @@ &ahci {
+>>   	status = "okay";
+>>   };
+>>   
+>> +&cpu0 {
+>> +	cpu-supply = <&reg_dcdc2>;
+>> +};
+>> +
+>>   &de {
+>>   	status = "okay";
+>>   };
+>> diff --git a/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi b/arch/arm/boot/dts/
+> sun8i-r40-feta40i.dtsi
+>> index 265e0fa57a32..b872b51a346d 100644
+>> --- a/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi
+>> +++ b/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi
+>> @@ -6,6 +6,10 @@
+>>   
+>>   #include "sun8i-r40.dtsi"
+>>   
+>> +&cpu0 {
+>> +	cpu-supply = <&reg_dcdc2>;
+>> +};
+>> +
+>>   &i2c0 {
+>>   	status = "okay";
+>>   
+>> diff --git a/arch/arm/boot/dts/sun8i-r40.dtsi b/arch/arm/boot/dts/sun8i-
+> r40.dtsi
+>> index 291f4784e86c..90de119095fa 100644
+>> --- a/arch/arm/boot/dts/sun8i-r40.dtsi
+>> +++ b/arch/arm/boot/dts/sun8i-r40.dtsi
+>> @@ -54,6 +54,41 @@ / {
+>>   	#size-cells = <1>;
+>>   	interrupt-parent = <&gic>;
+>>   
+>> +	cpu0_opp_table: opp_table0 {
+>> +		compatible = "operating-points-v2";
+>> +		opp-shared;
+>> +
+>> +		opp-720000000 {
+>> +			opp-hz = /bits/ 64 <720000000>;
+>> +			opp-microvolt = <1000000 1000000 1300000>;
+>> +			clock-latency-ns = <2000000>;
+>> +		};
+>> +
+>> +		opp-912000000 {
+>> +			opp-hz = /bits/ 64 <912000000>;
+>> +			opp-microvolt = <1100000 1100000 1300000>;
+>> +			clock-latency-ns = <2000000>;
+>> +		};
+>> +
+>> +		opp-1008000000 {
+>> +			opp-hz = /bits/ 64 <1008000000>;
+>> +			opp-microvolt = <1160000 1160000 1300000>;
+>> +			clock-latency-ns = <2000000>;
+>> +		};
+>> +
+>> +		opp-1104000000 {
+>> +			opp-hz = /bits/ 64 <1104000000>;
+>> +			opp-microvolt = <1240000 1240000 1300000>;
+>> +			clock-latency-ns = <2000000>;
+>> +		};
+>> +
+>> +		opp-1200000000 {
+>> +			opp-hz = /bits/ 64 <1200000000>;
+>> +			opp-microvolt = <1300000 1300000 1300000>;
+>> +			clock-latency-ns = <2000000>;
+>> +		};
+>> +	};
+>> +
+>>   	clocks {
+>>   		#address-cells = <1>;
+>>   		#size-cells = <1>;
+>> @@ -84,24 +119,36 @@ cpu0: cpu@0 {
+>>   			compatible = "arm,cortex-a7";
+>>   			device_type = "cpu";
+>>   			reg = <0>;
+>> +			clocks = <&ccu CLK_CPU>;
+>> +			clock-names = "cpu";
+>> +			operating-points-v2 = <&cpu0_opp_table>;
+>>   		};
+>>   
+>>   		cpu1: cpu@1 {
+>>   			compatible = "arm,cortex-a7";
+>>   			device_type = "cpu";
+>>   			reg = <1>;
+>> +			clocks = <&ccu CLK_CPU>;
+>> +			clock-names = "cpu";
+>> +			operating-points-v2 = <&cpu0_opp_table>;
+>>   		};
+>>   
+>>   		cpu2: cpu@2 {
+>>   			compatible = "arm,cortex-a7";
+>>   			device_type = "cpu";
+>>   			reg = <2>;
+>> +			clocks = <&ccu CLK_CPU>;
+>> +			clock-names = "cpu";
+>> +			operating-points-v2 = <&cpu0_opp_table>;
+>>   		};
+>>   
+>>   		cpu3: cpu@3 {
+>>   			compatible = "arm,cortex-a7";
+>>   			device_type = "cpu";
+>>   			reg = <3>;
+>> +			clocks = <&ccu CLK_CPU>;
+>> +			clock-names = "cpu";
+>> +			operating-points-v2 = <&cpu0_opp_table>;
+>>   		};
+>>   	};
+>>   
+>> diff --git a/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts b/arch/arm/boot/dts/
+> sun8i-t3-cqa3t-bv3.dts
+>> index 6931aaab2382..0eb1990742ff 100644
+>> --- a/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts
+>> +++ b/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts
+>> @@ -88,6 +88,10 @@ &ahci {
+>>   	status = "okay";
+>>   };
+>>   
+>> +&cpu0 {
+>> +	cpu-supply = <&reg_dcdc2>;
+>> +};
+>> +
+>>   &de {
+>>   	status = "okay";
+>>   };
+>> diff --git a/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts b/arch/arm/
+> boot/dts/sun8i-v40-bananapi-m2-berry.dts
+>> index 47954551f573..fdf8bd12faaa 100644
+>> --- a/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts
+>> +++ b/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts
+>> @@ -107,6 +107,10 @@ &ahci {
+>>   	status = "okay";
+>>   };
+>>   
+>> +&cpu0 {
+>> +	cpu-supply = <&reg_dcdc2>;
+>> +};
+>> +
+>>   &de {
+>>   	status = "okay";
+>>   };
+>> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-
+> dt-platdev.c
+>> index ca1d103ec449..971a99219d4d 100644
+>> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+>> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+>> @@ -26,6 +26,7 @@ static const struct of_device_id allowlist[] __initconst =
+> {
+>>   	{ .compatible = "allwinner,sun8i-a23", },
+>>   	{ .compatible = "allwinner,sun8i-a83t", },
+>>   	{ .compatible = "allwinner,sun8i-h3", },
+>> +	{ .compatible = "allwinner,sun8i-r40", },
+> Why on allow list? Comment says operatings-point-v2 should be on block list,
+> just like H6.
+Actually I'm not make sure the difference, seems both of them can work.
+Most of allwinner device_id is added in allowlist, so I did this.
 >
-Our purpose is to achieve two different stop charging states:
-POWER_SUPPLY_PROP_STATUS: The software status stops charging, and the
-hardware also stops charging=EF=BC=9B
-POWER_SUPPLY_PROP_CHARGE_ENABLED: The hardware is stopped charging,
-the software is still charging=EF=BC=9B
-  Our  don't want to change the charge_status switch due to the
-switching of charging and discharging of the charging IC in the
-charging scenario of multiple charging ICs, and let the upper layer
-perceive this switching
-> >
-> > Signed-off-by: Chen Yongzhi <Yongzhi.Chen@unisoc.com>
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Link: https://lore.kernel.org/all/202204230206.9TgyhSb1-lkp@intel.com
-> > Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
-> > ---
-> >  drivers/power/supply/sc2731_charger.c | 52 +++++++++++++++++++++++++--
-> >  include/linux/power_supply.h          |  1 +
-> >  2 files changed, 50 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/power/supply/sc2731_charger.c b/drivers/power/supp=
-ly/sc2731_charger.c
-> > index 9ac17cf7a126..c15f9b75e6a8 100644
-> > --- a/drivers/power/supply/sc2731_charger.c
-> > +++ b/drivers/power/supply/sc2731_charger.c
-> > @@ -1,5 +1,5 @@
-> >  // SPDX-License-Identifier: GPL-2.0
-> > -// Copyright (C) 2018 Spreadtrum Communications Inc.
-> > +// Copyright (C) 2022 Spreadtrum Communications Inc.
+> Best regards,
+> Jernej
 >
-> Do not add unrelated changes.
->
-  ok, do not change
-> >
-> >  #include <linux/module.h>
-> >  #include <linux/platform_device.h>
-> > @@ -146,6 +146,24 @@ static int sc2731_charger_get_status(struct sc2731=
-_charger_info *info)
-> >         return POWER_SUPPLY_STATUS_CHARGING;
-> >  }
-> >
-> > +static int sc2731_charger_set_status(struct sc2731_charger_info *info,=
- int val)
-> > +{
-> > +       int ret =3D 0;
-> > +
-> > +       if (!val && info->charging) {
-> > +               sc2731_charger_stop_charge(info);
-> > +               info->charging =3D false;
-> > +       } else if (val && !info->charging) {
-> > +               ret =3D sc2731_charger_start_charge(info);
-> > +               if (ret)
-> > +                       dev_err(info->dev, "start charge failed\n");
->
-> Duplicate error information, since you already print errors in
-   fix it
-> sc2731_charger_usb_set_property()
->
-> > +               else
-> > +                       info->charging =3D true;
-> > +       }
-> > +
-> > +       return ret;
-> > +}
-> > +
-> >  static int sc2731_charger_get_current(struct sc2731_charger_info *info=
-,
-> >                                       u32 *cur)
-> >  {
-> > @@ -204,7 +222,7 @@ sc2731_charger_usb_set_property(struct power_supply=
- *psy,
-> >                                 const union power_supply_propval *val)
-> >  {
-> >         struct sc2731_charger_info *info =3D power_supply_get_drvdata(p=
-sy);
-> > -       int ret;
-> > +       int ret =3D 0;
-> >
-> >         mutex_lock(&info->lock);
-> >
-> > @@ -214,6 +232,12 @@ sc2731_charger_usb_set_property(struct power_suppl=
-y *psy,
-> >         }
-> >
-> >         switch (psp) {
-> > +       case POWER_SUPPLY_PROP_STATUS:
-> > +               ret =3D sc2731_charger_set_status(info, val->intval);
-> > +               if (ret < 0)
-> > +                       dev_err(info->dev, "set charge status failed\n"=
-);
-> > +               break;
-> > +
-> >         case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
-> >                 ret =3D sc2731_charger_set_current(info, val->intval / =
-1000);
-> >                 if (ret < 0)
-> > @@ -227,6 +251,15 @@ sc2731_charger_usb_set_property(struct power_suppl=
-y *psy,
-> >                         dev_err(info->dev, "set input current limit fai=
-led\n");
-> >                 break;
-> >
-> > +       case POWER_SUPPLY_PROP_CHARGE_ENABLED:
-> > +               if (val->intval =3D=3D true) {
-> > +                       ret =3D sc2731_charger_start_charge(info);
-> > +                       if (ret)
-> > +                               dev_err(info->dev, "start charge failed=
-\n");
-> > +               } else if (val->intval =3D=3D false) {
-> > +                       sc2731_charger_stop_charge(info);
-> > +               }
-> > +               break;
-> >         default:
-> >                 ret =3D -EINVAL;
-> >         }
-> > @@ -241,7 +274,7 @@ static int sc2731_charger_usb_get_property(struct p=
-ower_supply *psy,
-> >  {
-> >         struct sc2731_charger_info *info =3D power_supply_get_drvdata(p=
-sy);
-> >         int ret =3D 0;
-> > -       u32 cur;
-> > +       u32 cur, enabled;
-> >
-> >         mutex_lock(&info->lock);
-> >
-> > @@ -277,6 +310,16 @@ static int sc2731_charger_usb_get_property(struct =
-power_supply *psy,
-> >                 }
-> >                 break;
-> >
-> > +       case POWER_SUPPLY_PROP_CHARGE_ENABLED:
-> > +               ret =3D regmap_read(info->regmap, info->base + SC2731_C=
-HG_CFG0, &enabled);
-> > +               if (ret) {
-> > +                       dev_err(info->dev, "get sc2731 charge enabled f=
-ailed\n");
-> > +                       goto out;
-> > +               }
-> > +
-> > +               val->intval =3D enabled & SC2731_CHARGER_PD;
-> > +
-> > +               break;
-> >         default:
-> >                 ret =3D -EINVAL;
-> >         }
-> > @@ -292,8 +335,10 @@ static int sc2731_charger_property_is_writeable(st=
-ruct power_supply *psy,
-> >         int ret;
-> >
-> >         switch (psp) {
-> > +       case POWER_SUPPLY_PROP_STATUS:
-> >         case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
-> >         case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-> > +       case POWER_SUPPLY_PROP_CHARGE_ENABLED:
-> >                 ret =3D 1;
-> >                 break;
-> >
-> > @@ -308,6 +353,7 @@ static enum power_supply_property sc2731_usb_props[=
-] =3D {
-> >         POWER_SUPPLY_PROP_STATUS,
-> >         POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
-> >         POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
-> > +       POWER_SUPPLY_PROP_CHARGE_ENABLED,
-> >  };
-> >
-> >  static const struct power_supply_desc sc2731_charger_desc =3D {
-> > diff --git a/include/linux/power_supply.h b/include/linux/power_supply.=
-h
-> > index cb380c1d9459..1dfe194d8a5e 100644
-> > --- a/include/linux/power_supply.h
-> > +++ b/include/linux/power_supply.h
-> > @@ -167,6 +167,7 @@ enum power_supply_property {
-> >         POWER_SUPPLY_PROP_PRECHARGE_CURRENT,
-> >         POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT,
-> >         POWER_SUPPLY_PROP_CALIBRATE,
-> > +       POWER_SUPPLY_PROP_CHARGE_ENABLED,
-> >         POWER_SUPPLY_PROP_MANUFACTURE_YEAR,
-> >         POWER_SUPPLY_PROP_MANUFACTURE_MONTH,
-> >         POWER_SUPPLY_PROP_MANUFACTURE_DAY,
-> > --
-> > 2.25.1
-> >
->
->
-> --
-> Baolin Wang
+>>   
+>>   	{ .compatible = "apm,xgene-shadowcat", },
+>>   
+>> -- 
+>> 2.25.1
+>>
+>>
+
