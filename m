@@ -2,264 +2,255 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8415257DB
-	for <lists+linux-pm@lfdr.de>; Fri, 13 May 2022 00:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C13345257E8
+	for <lists+linux-pm@lfdr.de>; Fri, 13 May 2022 00:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359209AbiELWe7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 May 2022 18:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40604 "EHLO
+        id S1359250AbiELWkr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 May 2022 18:40:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352714AbiELWe5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 18:34:57 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 191831F9A15
-        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 15:34:55 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220512223452euoutp029799bf29ee1289341240b089565b6d5e~ufGZ7uspd1014210142euoutp02U
-        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 22:34:52 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220512223452euoutp029799bf29ee1289341240b089565b6d5e~ufGZ7uspd1014210142euoutp02U
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1652394892;
-        bh=sLkxMDQPs6EXbWVxl48t3PGxlsdq8uNENFIAMvFlFds=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=HEa4zHS/yubaJCnXBb3SjdatRadSjyjOXM1CNNAHT2cCOTsEWlX+HLZN97UvpffRV
-         bAh/c6NadLR3i7YuBlkDNEAjZswA5eTHX30q12UtdCjMLlKcVzucsPDqvEIO0CV4+q
-         jsf2Roic/ifbryTqcVfF8eY0XAplvj45hIG2JeyY=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20220512223451eucas1p1e9e507edeec33876661bbaa5ad121a3d~ufGY-g8ZT0250502505eucas1p1n;
-        Thu, 12 May 2022 22:34:51 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id A2.8F.10260.B8B8D726; Thu, 12
-        May 2022 23:34:51 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220512223450eucas1p203b702e114dd2cd1bafcfd7d4c80b638~ufGXzyyeW0867708677eucas1p2c;
-        Thu, 12 May 2022 22:34:50 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220512223450eusmtrp137486ba4a93c43cefe60168460639899~ufGXy8tQ52256022560eusmtrp1-;
-        Thu, 12 May 2022 22:34:50 +0000 (GMT)
-X-AuditID: cbfec7f5-bf3ff70000002814-fa-627d8b8b7b23
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id D6.2D.09522.A8B8D726; Thu, 12
-        May 2022 23:34:50 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220512223449eusmtip1c11fb40e8cbadaaf7d77b931027024c9~ufGW70fET2891028910eusmtip1V;
-        Thu, 12 May 2022 22:34:49 +0000 (GMT)
-Message-ID: <7ecd0d6a-cbf2-448c-92ef-2adb5184342c@samsung.com>
-Date:   Fri, 13 May 2022 00:34:50 +0200
+        with ESMTP id S1359244AbiELWkp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 18:40:45 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE477DFD
+        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 15:40:40 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id o69so6479938pjo.3
+        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 15:40:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Var06zhUfSCRGoXl/2YsHbPLCV39KwA7ovVK4YO/gYI=;
+        b=lRh8vfKWUKUZwwsK2meeCN8N1RalNIVkqUl9qT9Miv8PTf5mw6HFPPiCt96zBtd98U
+         YNkSyfcIAvU5f7F+qhAIzbiUBhVPvLiDVJ/+KurWq6X1DYubUfQ7Q54ZAbE+tK52azF5
+         xR1ztL15JY3nvuj2ZkBRnM2YM/xp2wKuf5OpE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Var06zhUfSCRGoXl/2YsHbPLCV39KwA7ovVK4YO/gYI=;
+        b=GGt7EYe0QtyeBDUWvadJUzB/fgPzkORNVeW5v9X84eSi2aiSrgsi9TxeoBxtWtd/fP
+         A6im5cFo9E46ybD0g8vQQL1kdNtD8TE3hJnNd8qzKODOoK4zK0el17KZ0j/oDAiSEeZ5
+         WNGuEJBJQIPbHngalJcW9TXuS350F+ubmdy2voc8aVV/x01Qj7Oj19I9DcV7CkUNspoe
+         oyrkvVSQYWYk47PpzIPSrsjcgt51+7kXl+Kq9nWJQpUceRcmp7icNhHdMEphxJIDsHV5
+         UJu1q3kfHr/w+Uh+yQTxH3/cqk0rS3vZvrkCXj2nFT76401ZhBiFVhyyrA1PJg7R+4jL
+         imFA==
+X-Gm-Message-State: AOAM530ff7lyXciplUKx84SFnQj6obLZTjBbfSTHuV/m5RN0iFFPsasT
+        oWRB4cZKZxqPMf4uZne26nkuCA==
+X-Google-Smtp-Source: ABdhPJz/0NAzpj2X0qc6+LmD057ToQ+VV6hPC/AZ4GoKWxAxkwvmbJ/ELD8Ga+7cT1wWr4yCeaBWgw==
+X-Received: by 2002:a17:902:d2c9:b0:15e:a266:6472 with SMTP id n9-20020a170902d2c900b0015ea2666472mr1736829plc.45.1652395240339;
+        Thu, 12 May 2022 15:40:40 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:bc87:9632:bcce:8e17])
+        by smtp.gmail.com with UTF8SMTPSA id v21-20020a17090a521500b001d2edf4b513sm275481pjh.56.2022.05.12.15.40.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 May 2022 15:40:40 -0700 (PDT)
+Date:   Thu, 12 May 2022 15:40:38 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Subject: Re: [v16 2/5] usb: dwc3: core: Host wake up support from system
+ suspend
+Message-ID: <Yn2M5hrah78jro1C@google.com>
+References: <1652379802-8318-1-git-send-email-quic_kriskura@quicinc.com>
+ <1652379802-8318-3-git-send-email-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-        Gecko/20100101 Thunderbird/91.9.0
-Subject: Re: [PATCH v4 2/4] PM / devfreq: Add cpu based scaling support to
- passive governor
-Content-Language: en-US
-To:     Chanwoo Choi <cwchoi00@gmail.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     johnson.wang@mediatek.com, mka@chromium.org, wenst@chromium.org,
-        jia-wei.chang@mediatek.com, andrew-sh.cheng@mediatek.com,
-        hsinyi@chromium.org, saravanak@google.com, cw00.choi@samsung.com,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        Saravana Kannan <skannan@codeaurora.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20220511093554.17535-3-cw00.choi@samsung.com>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrGKsWRmVeSWpSXmKPExsWy7djP87rd3bVJBscbDS22r3/BanH9y3NW
-        i2dHtS0mtG5ntji+fwm7xbFfwRbnz29gtzjb9Ibd4vKuOWwWn3uPMFrMOL+PyeLzhseMFrcb
-        V7BZdB36y2ZxbeF7VosDFyeyWcxou8zqIOgxu+Eii8flvl4mj52z7rJ7LNhU6rFpVSebR8vJ
-        /SwefVtWMXp83iQXwBHFZZOSmpNZllqkb5fAlTHxVmrBT72KnoaMBsZJ6l2MnBwSAiYSlyY3
-        sncxcnEICaxglJh79TIzhPOFUaKr/T4jSJWQwGdGiea3aV2MHGAdVybrQISXM0pcaOWBqP/I
-        KHH18DWwel4BO4n+Db/BbBYBVYnd1xYzQ8QFJU7OfMICYosKJEm8eXMVLC4sECvxpuE/K4jN
-        LCAucevJfCYQW0QgXuLr6dmsIAuYBdYxS/Teeg3WwCZgKNH1tosNxOYUsJboOLyQCaJZXqJ5
-        62ywDyQEdnNK3JmymAniTxeJX10LWSFsYYlXx7ewQ9gyEqcn97BAfJYv8XeGMUS4QuLa6zXM
-        ELa1xJ1zv9hASpgFNCXW79KHCDtKNDZ8Y4Xo5JO48VYQ4gI+iUnbpjNDhHklOtqEIKrVJGYd
-        Xwe38+CFS8wTGJVmIQXKLCTPz0LyyyyEvQsYWVYxiqeWFuempxYb56WW6xUn5haX5qXrJefn
-        bmIEJr3T/45/3cG44tVHvUOMTByMhxglOJiVRHhrmmuShHhTEiurUovy44tKc1KLDzFKc7Ao
-        ifMmZ25IFBJITyxJzU5NLUgtgskycXBKNTAld29a73wkpaXS0pSpfVKEoOyNLVZ+QlysJqaf
-        pnz5udVShGPK4R9yZ5jSv6p/v3hgSazny69rvmyKD7yged/laJS87aJ7c8MP9OetvnKbZ2K+
-        gtbu/YslHkzRZnUNKjosL73987XE/tcn57yxO+DtaKThdiApvvO/X2thdHJH1HamcAn16D0J
-        O34cznt3LdpGwoytXPfx/2/vzcTW1HE2+j/o/MFQI5LPwDjNYmr5kqj7jN0NZxi8Ln6t+/rO
-        6dPc5XHc6bYmTcu3LE+5+6NWzKKCzXb7jCjuGcINCZPvv0jInyouwP6z9l1k14wFsvfLYvcc
-        Nlu5+FL3yt+9zslMSa8PffGakPi7yfOEeqQSS3FGoqEWc1FxIgBOEJlG6QMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrNIsWRmVeSWpSXmKPExsVy+t/xu7pd3bVJBhvaZS22r3/BanH9y3NW
-        i2dHtS0mtG5ntji+fwm7xbFfwRbnz29gtzjb9Ibd4vKuOWwWn3uPMFrMOL+PyeLzhseMFrcb
-        V7BZdB36y2ZxbeF7VosDFyeyWcxou8zqIOgxu+Eii8flvl4mj52z7rJ7LNhU6rFpVSebR8vJ
-        /SwefVtWMXp83iQXwBGlZ1OUX1qSqpCRX1xiqxRtaGGkZ2hpoWdkYqlnaGwea2VkqqRvZ5OS
-        mpNZllqkb5eglzHxVmrBT72KnoaMBsZJ6l2MHBwSAiYSVybrdDFycQgJLGWU2LLzFVsXIydQ
-        XEbi5LQGVghbWOLPtS42iKL3jBLLJ8xgAUnwCthJ9G/4zQhiswioSuy+tpgZIi4ocXLmExaQ
-        BaICSRJHDvODhIUFYiXeNPwHm8ksIC5x68l8JhBbRCBe4ueUPmaQ+cwC65glli46zw6SEBLI
-        ltgzvRGsiE3AUKLrbRfYcZwC1hIdhxcyQQwyk+ja2sUIYctLNG+dzTyBUWgWkjNmIdk3C0nL
-        LCQtCxhZVjGKpJYW56bnFhvqFSfmFpfmpesl5+duYgTG+rZjPzfvYJz36qPeIUYmDsZDjBIc
-        zEoivDXNNUlCvCmJlVWpRfnxRaU5qcWHGE2BYTGRWUo0OR+YbPJK4g3NDEwNTcwsDUwtzYyV
-        xHk9CzoShQTSE0tSs1NTC1KLYPqYODilGpg8dNcLli6XWO2jcPlKu6eviMqexOZ9z9c4cd1/
-        clixNMhB8NRZnYVB3sc3ViyL237SNFoz+V74d9WlW+8+UA+acyJt/dJTElk8TyMnKqotUXHd
-        U75l3zr9BWlvlnCZHVtXnc+jdVPD7a92Zq+U3K1E4WlbzjIcebOxdM2TJTIC7hum1TRonN3t
-        Hcg98aFKoMEPw2Blnuxqe0arlltveDx1El0Wvpp29WHBxoANuoGFj2Ma02K+7g3Ti9td4PW4
-        PW3dxLevn8U1qQaHP5INPSPxpWb50S+MLxfqqv9ZfN/qpkh16hc3wcVtnYZactmf1m2LKZ4Z
-        M+2x3rWoprtRxW08HSL+q+ZqOEzkmib087YSS3FGoqEWc1FxIgD+wgK1fgMAAA==
-X-CMS-MailID: 20220512223450eucas1p203b702e114dd2cd1bafcfd7d4c80b638
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220512223450eucas1p203b702e114dd2cd1bafcfd7d4c80b638
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220512223450eucas1p203b702e114dd2cd1bafcfd7d4c80b638
-References: <20220511093554.17535-1-cw00.choi@samsung.com>
-        <20220511093554.17535-3-cw00.choi@samsung.com>
-        <CGME20220512223450eucas1p203b702e114dd2cd1bafcfd7d4c80b638@eucas1p2.samsung.com>
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1652379802-8318-3-git-send-email-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Chanwoo,
-
-On 11.05.2022 11:35, Chanwoo Choi wrote:
-> From: Saravana Kannan <skannan@codeaurora.org>
->
-> Many CPU architectures have caches that can scale independent of the
-> CPUs. Frequency scaling of the caches is necessary to make sure that the
-> cache is not a performance bottleneck that leads to poor performance and
-> power. The same idea applies for RAM/DDR.
->
-> To achieve this, this patch adds support for cpu based scaling to the
-> passive governor. This is accomplished by taking the current frequency
-> of each CPU frequency domain and then adjust the frequency of the cache
-> (or any devfreq device) based on the frequency of the CPUs. It listens
-> to CPU frequency transition notifiers to keep itself up to date on the
-> current CPU frequency.
->
-> To decide the frequency of the device, the governor does one of the
-> following:
-> * Derives the optimal devfreq device opp from required-opps property of
->    the parent cpu opp_table.
->
-> * Scales the device frequency in proportion to the CPU frequency. So, if
->    the CPUs are running at their max frequency, the device runs at its
->    max frequency. If the CPUs are running at their min frequency, the
->    device runs at its min frequency. It is interpolated for frequencies
->    in between.
->
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-> Tested-by: Johnson Wang <johnson.wang@mediatek.com>
-> Signed-off-by: Saravana Kannan <skannan@codeaurora.org>
-> [Sibi: Integrated cpu-freqmap governor into passive_governor]
-> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
-> [Chanwoo: Fix conflict with latest code and cleanup code]
-> Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
-
-This patch landed in today's linux next-20220512 as commit 2ab415d4e4e6 
-("PM / devfreq: Add cpu based scaling support to passive governor").
-
-It triggers the following NULL pointer dereference on Exynos based boards:
-
-exynos-bus: new bus device registered: soc:bus-leftbus (100000 KHz ~ 
-200000 KHz)
-exynos-bus: new bus device registered: soc:bus-rightbus (100000 KHz ~ 
-200000 KHz)
-exynos-bus: new bus device registered: soc:bus-display (160000 KHz ~ 
-200000 KHz)
-exynos-bus: new bus device registered: soc:bus-fsys (100000 KHz ~ 134000 
-KHz)
-exynos-bus: new bus device registered: soc:bus-peri ( 50000 KHz ~ 100000 
-KHz)
-exynos-bus: new bus device registered: soc:bus-mfc (100000 KHz ~ 200000 KHz)
-8<--- cut here ---
-Unable to handle kernel NULL pointer dereference at virtual address 0000003c
-[0000003c] *pgd=00000000
-Internal error: Oops: 5 [#1] PREEMPT SMP ARM
-Modules linked in:
-CPU: 3 PID: 8 Comm: kworker/u8:0 Not tainted 5.18.0-rc6-next-20220512 #5014
-Hardware name: Samsung Exynos (Flattened Device Tree)
-Workqueue: devfreq_wq devfreq_monitor
-PC is at __mutex_lock+0x48/0x948
-LR is at lock_is_held_type+0x104/0x1a4
-pc : [<c0b93098>]    lr : [<c0b8f2ec>]    psr: 60000053
-sp : f0889dc0  ip : 600000d3  fp : c1dca624
-r10: c1dca44c  r9 : 00000000  r8 : c1984104
-r7 : c1d7f000  r6 : 00000000  r5 : 00000001  r4 : 00000008
-r3 : 00000000  r2 : 00000000  r1 : 2de44000  r0 : 00000000
-Flags: nZCv  IRQs on  FIQs off  Mode SVC_32  ISA ARM  Segment none
-Control: 10c5387d  Table: 4000404a  DAC: 00000051
-Register r0 information: NULL pointer
-Register r1 information: non-paged memory
-Register r2 information: NULL pointer
-Register r3 information: NULL pointer
-Register r4 information: non-paged memory
-Register r5 information: non-paged memory
-Register r6 information: NULL pointer
-Register r7 information: slab task_struct start c1d7f000 pointer offset 0
-Register r8 information: non-slab/vmalloc memory
-Register r9 information: NULL pointer
-Register r10 information: slab kmalloc-2k start c1dca000 pointer offset 
-1100 size 2048
-Register r11 information: slab kmalloc-2k start c1dca000 pointer offset 
-1572 size 2048
-Register r12 information: non-paged memory
-Process kworker/u8:0 (pid: 8, stack limit = 0x(ptrval))
-Stack: (0xf0889dc0 to 0xf088a000)
-...
-  __mutex_lock from mutex_lock_nested+0x1c/0x24
-  mutex_lock_nested from devfreq_passive_notifier_call+0x24/0x90
-  devfreq_passive_notifier_call from srcu_notifier_call_chain+0x98/0x114
-  srcu_notifier_call_chain from devfreq_set_target+0x6c/0x304
-  devfreq_set_target from devfreq_update_target+0x98/0xe8
-  devfreq_update_target from devfreq_monitor+0x28/0x1c0
-  devfreq_monitor from process_one_work+0x288/0x774
-  process_one_work from worker_thread+0x44/0x504
-  worker_thread from kthread+0xf4/0x128
-  kthread from ret_from_fork+0x14/0x2c
-Exception stack(0xf0889fb0 to 0xf0889ff8)
-...
----[ end trace 0000000000000000 ]---
-
-The issue is caused by the lack of setting devfreq_passive_data->this 
-pointer in devfreq_passive_register_notifier. However, after adding:
-
-@@ -395,6 +395,9 @@ static int devfreq_passive_register_notifier(struct 
-devfreq *devfreq)
-         if (!parent)
-                 return -EPROBE_DEFER;
-
-+       if (!p_data->this)
-+               p_data->this = devfreq;
-+
-         nb->notifier_call = devfreq_passive_notifier_call;
-         return devfreq_register_notifier(parent, nb, 
-DEVFREQ_TRANSITION_NOTIFIER);
-  }
-
-the NULL pointer dereference is gone, but I see the following warnings 
-on Odroid U3 board, which were not present before this patch:
-
-devfreq soc:bus-acp: failed to update devfreq using passive governor
-devfreq soc:bus-c2c: failed to update devfreq using passive governor
-devfreq soc:bus-acp: failed to update devfreq using passive governor
-devfreq soc:bus-c2c: failed to update devfreq using passive governor
-
-
+On Thu, May 12, 2022 at 11:53:19PM +0530, Krishna Kurapati wrote:
+> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> 
+> During suspend read the status of all port and set hs phy mode
+> based on current speed. Use this hs phy mode to configure wakeup
+> interrupts in qcom glue driver.
+> 
+> Check wakeup-source property for dwc3 core node to set the
+> wakeup capability. Drop the device_init_wakeup call from
+> runtime suspend and resume.
+> 
+> Also check during suspend if any wakeup capable devices are
+> connected to the controller (directly or through hubs), if there
+> are none set a flag to indicate that the PHY is powered
+> down during suspend.
+> 
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 > ---
->   drivers/devfreq/governor.h         |  22 +++
->   drivers/devfreq/governor_passive.c | 297 +++++++++++++++++++++++++++--
->   include/linux/devfreq.h            |  17 +-
->   3 files changed, 322 insertions(+), 14 deletions(-)
+>  drivers/usb/dwc3/core.c | 30 +++++++++++++++++-------------
+>  drivers/usb/dwc3/core.h |  4 ++++
+>  drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
+>  3 files changed, 45 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 01115df..8bcabc5 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1785,6 +1785,7 @@ static int dwc3_probe(struct platform_device *pdev)
+>  
+>  	platform_set_drvdata(pdev, dwc);
+>  	dwc3_cache_hwparams(dwc);
+> +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
+>  
+>  	spin_lock_init(&dwc->lock);
+>  	mutex_init(&dwc->mutex);
+> @@ -1946,10 +1947,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>  		dwc3_core_exit(dwc);
+>  		break;
+>  	case DWC3_GCTL_PRTCAP_HOST:
+> -		if (!PMSG_IS_AUTO(msg)) {
+> -			dwc3_core_exit(dwc);
+> -			break;
+> -		}
+> +		dwc3_check_phy_speed_mode(dwc);
+>  
+>  		/* Let controller to suspend HSPHY before PHY driver suspends */
+>  		if (dwc->dis_u2_susphy_quirk ||
+> @@ -1965,6 +1963,15 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>  
+>  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
+>  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
+> +
+> +		if (!PMSG_IS_AUTO(msg)) {
+> +			if (device_may_wakeup(dwc->dev))
 
- > ...
+I think this should be device_can_wakeup(), i.e. hardware capability instead of
+device policy. A drawback of powering the PHYs off is that it causes a high
+power consumption of certain peripherals if VBUS is still supplied, so this
+should be limited to platforms where the PHYs must be powered off (using wakeup
+capability as a proxy for now).
 
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+> +				dwc->phy_power_off = false;
+> +			else {
+> +				dwc->phy_power_off = true;
+> +				dwc3_core_exit(dwc);
+> +			}
+> +		}
+>  		break;
+>  	case DWC3_GCTL_PRTCAP_OTG:
+>  		/* do nothing during runtime_suspend */
+> @@ -2008,11 +2015,12 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+>  		break;
+>  	case DWC3_GCTL_PRTCAP_HOST:
+>  		if (!PMSG_IS_AUTO(msg)) {
+> -			ret = dwc3_core_init_for_resume(dwc);
+> -			if (ret)
+> -				return ret;
+> -			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
+> -			break;
+> +			if (dwc->phy_power_off) {
+> +				ret = dwc3_core_init_for_resume(dwc);
+> +				if (ret)
+> +					return ret;
+> +				dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
+> +			}
+>  		}
+>  		/* Restore GUSB2PHYCFG bits that were modified in suspend */
+>  		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
+> @@ -2084,8 +2092,6 @@ static int dwc3_runtime_suspend(struct device *dev)
+>  	if (ret)
+>  		return ret;
+>  
+> -	device_init_wakeup(dev, true);
+> -
+>  	return 0;
+>  }
+>  
+> @@ -2094,8 +2100,6 @@ static int dwc3_runtime_resume(struct device *dev)
+>  	struct dwc3     *dwc = dev_get_drvdata(dev);
+>  	int		ret;
+>  
+> -	device_init_wakeup(dev, false);
+> -
+>  	ret = dwc3_resume_common(dwc, PMSG_AUTO_RESUME);
+>  	if (ret)
+>  		return ret;
+> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> index 81c486b..37397a8 100644
+> --- a/drivers/usb/dwc3/core.h
+> +++ b/drivers/usb/dwc3/core.h
+> @@ -1155,6 +1155,9 @@ struct dwc3 {
+>  
+>  	bool			phys_ready;
+>  
+> +	unsigned int            hs_phy_mode;
+> +	bool			phy_power_off;
+> +
+>  	struct ulpi		*ulpi;
+>  	bool			ulpi_ready;
+>  
+> @@ -1539,6 +1542,7 @@ int dwc3_core_soft_reset(struct dwc3 *dwc);
+>  #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
+>  int dwc3_host_init(struct dwc3 *dwc);
+>  void dwc3_host_exit(struct dwc3 *dwc);
+> +void dwc3_check_phy_speed_mode(struct dwc3 *dwc);
+>  #else
+>  static inline int dwc3_host_init(struct dwc3 *dwc)
+>  { return 0; }
+> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> index f56c30c..e19b40a 100644
+> --- a/drivers/usb/dwc3/host.c
+> +++ b/drivers/usb/dwc3/host.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/platform_device.h>
+>  
+>  #include "core.h"
+> +#include "../host/xhci.h"
+>  
+>  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
+>  					int irq, char *name)
+> @@ -136,3 +137,26 @@ void dwc3_host_exit(struct dwc3 *dwc)
+>  {
+>  	platform_device_unregister(dwc->xhci);
+>  }
+> +
+> +void dwc3_check_phy_speed_mode(struct dwc3 *dwc)
+> +{
+> +	int i, num_ports;
+> +	u32 reg;
+> +	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
+> +	struct xhci_hcd	*xhci_hcd = hcd_to_xhci(hcd);
+> +
+> +	dwc->hs_phy_mode = 0;
+> +
+> +	reg = readl(&xhci_hcd->cap_regs->hcs_params1);
+> +
+> +	num_ports = HCS_MAX_PORTS(reg);
+> +	for (i = 0; i < num_ports; i++) {
+> +		reg = readl(&xhci_hcd->op_regs->port_status_base + i * NUM_PORT_REGS);
+> +		if (reg & PORT_PE) {
+> +			if (DEV_HIGHSPEED(reg) || DEV_FULLSPEED(reg))
+> +				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_HS;
+> +			else if (DEV_LOWSPEED(reg))
+> +				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_LS;
+> +		}
+> +	}
+> +}
 
+I anticipate that it might raise concerns from maintainers that
+dwc3_check_phy_speed_mode() accesses xHCI data structures and
+registers directly. Could there be a generic HCD API that provides
+this functionality (if implemented by the specific HCD)?
