@@ -2,137 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76ACE52500A
-	for <lists+linux-pm@lfdr.de>; Thu, 12 May 2022 16:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 761B4525078
+	for <lists+linux-pm@lfdr.de>; Thu, 12 May 2022 16:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355295AbiELOcr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 May 2022 10:32:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
+        id S1347679AbiELOop (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 May 2022 10:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355300AbiELOcq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 10:32:46 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FFE62120
-        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 07:32:45 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id q20so3156434wmq.1
-        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 07:32:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gfV6hdj+G/eKhil+K8KKf6Xy30nkm2zLFDY36R9t3Bg=;
-        b=N2yYG9TriNOJkpOXXy+kvvvM/AVOyWksfsEqkamccWwpC1p89jHbnFVmMIbjpVpHqn
-         ijVwQn5PbA+yltYmAjcbEzdfyMcGeik0hu/dBbEjKrW96bUcGb/31M2/C2xVd75uvGxQ
-         7Lu+Ojd2bUFvks7wdtkzdhLxEf1xlOe2mO+vit3gJb4HFJ3V/J/gDz6mwInwXvjDlMS7
-         Bu8hBAteXfuNqmRV0VLeKs0YUIIa6pUjdm+qvUS2f/h2cl2LauaSzKOh6WE8miCAm/VN
-         CaNlV4gGIPF67/MjFTemRYxuNztld9/UNCXJm51mBxAgRN3DowKDKH3mOu5UnjLxaV6n
-         cbhw==
+        with ESMTP id S232208AbiELOon (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 10:44:43 -0400
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2670233A57;
+        Thu, 12 May 2022 07:44:42 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2fb965b34easo59488137b3.1;
+        Thu, 12 May 2022 07:44:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gfV6hdj+G/eKhil+K8KKf6Xy30nkm2zLFDY36R9t3Bg=;
-        b=4KpffngHZXh0iq1+Q4TfoBfvtx+2ZJHSp3hQHwN55HPhsfL528o8H49WSw0BixJqWA
-         fMGpHUtBH/JQYus35CIDqIb7At1YQS35XGuU0/LPJPcwI1DWfRRhxVA5on8ThtfkbDeK
-         31EFsf1AuCO504Kjq4X5+NGg5mjCe0eHPezlzXPyqbrB03p9Mcmq1BZ4PryXVyP0mlU2
-         vcoWpgIcskCVxmzebOlWU4aN13B6KcC92LF0B8+1P9PY19pMWx5HukyK5Ko2CW3bGpUP
-         ap1+KizkrxXe57v2bpHrD/78/EDe/94dwz50DgzHYXpXKq6seVcYSj0k/aunyb7/r5eR
-         oYdw==
-X-Gm-Message-State: AOAM533aGX8p8DpKOumq0AsXHQIUY+lu2eCB8QIO5exfaQ1L8n9hf0yT
-        8OvGy6a2GQ4BahMZtVxJ9P+iKg==
-X-Google-Smtp-Source: ABdhPJzn0NdYnZ6arUr+7JV+G5AsR7rJ0k6j66fzM/lksa0zMGVqxos0KZ1oxRF7R+mdChnOviCSnQ==
-X-Received: by 2002:a05:600c:b47:b0:394:1200:957b with SMTP id k7-20020a05600c0b4700b003941200957bmr10506789wmr.2.1652365963660;
-        Thu, 12 May 2022 07:32:43 -0700 (PDT)
-Received: from [192.168.0.161] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id o15-20020a5d684f000000b0020c5253d8fesm4459561wrw.74.2022.05.12.07.32.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 May 2022 07:32:42 -0700 (PDT)
-Message-ID: <a219c974-a291-7fb5-bdd0-1979d9083eb1@linaro.org>
-Date:   Thu, 12 May 2022 16:32:41 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/0uB1vg+wKEz0tKGd5rEWM9IxDTniQFNILDoFpPZL8Q=;
+        b=o98JMmTneZERTGZVN1FInQDBea0XwolZqxt+g+mdMEClnVfaZlyJUflGOSNelPsXfc
+         e1TXwJe3jXp6fiwP5uauEMpxgxnJ3udvTwTsbyBNYvCyRHwzR7Db+Zh1o0HaIZ/qLtkW
+         h4RM3Aov7KOWLZycC765TNZnJQTkRoAJetgquMp9N7ZxFueUlhYwiYdfIFGTtazypY9V
+         3yBaC2Hb4yIZDt3eTS2f8D84NMefdUmyeojFx/j8ay+9TjNv3D8LKc2j06UsdnRI7tW2
+         mJg3sNHbZ8T5MNA2uI9gKP6ooTxv4Yj3csB+ATeTa3UzvEhUr2CiasI+g8YUZxLmHlv+
+         k3iQ==
+X-Gm-Message-State: AOAM533GPSzBITIfVTFFgS+swFuST21OVcR3a3/gAJLinpA4sttEXfpb
+        Swz4Z/fmqI+V+uAfQXYlnIuyNoxL0wHbKM/OLAEoF8dv
+X-Google-Smtp-Source: ABdhPJzqiPuNmgjY9WaEmbcKDsq8CTY+scvKZ2iZBd9fzQ7+9AutJTo0eVEnNCkBhXi+biMnrnrNH8aaI+zGW+6ZNKE=
+X-Received: by 2002:a81:2f4e:0:b0:2fb:2c97:d66f with SMTP id
+ v75-20020a812f4e000000b002fb2c97d66fmr433624ywv.196.1652366681348; Thu, 12
+ May 2022 07:44:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v6 7/7] arm64: dts: mt8195: Add thermal zone
-Content-Language: en-US
-To:     Alexandre Bailon <abailon@baylibre.com>, robh+dt@kernel.org,
-        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, michael.kao@mediatek.com,
-        ben.tseng@mediatek.com, ethan.chang@mediatek.com,
-        frank-w@public-files.de, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, khilman@baylibre.com,
-        Tinghan Shen <tinghan.shen@mediatek.com>
-References: <20220512122433.1399802-1-abailon@baylibre.com>
- <20220512122433.1399802-8-abailon@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220512122433.1399802-8-abailon@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220512135231.10076-1-schspa@gmail.com> <20220512135231.10076-2-schspa@gmail.com>
+In-Reply-To: <20220512135231.10076-2-schspa@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 12 May 2022 16:44:30 +0200
+Message-ID: <CAJZ5v0htGfZ3G+BWgZSxvcEAhNd_LONm8rNMetdPts3uZ=Tcxw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] cpufreq: make interface functions and lock holding
+ state clear
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/05/2022 14:24, Alexandre Bailon wrote:
-> From: Tinghan Shen <tinghan.shen@mediatek.com>
-> 
-> This adds the thermal zone for the mt8195.
-> 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
-> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
+On Thu, May 12, 2022 at 3:52 PM Schspa Shi <schspa@gmail.com> wrote:
+>
+> cpufreq_offline() calls offline() and exit() under the policy rwsem
+> But they are called outside the rwsem in cpufreq_online().
+>
+> This patch move the offline(), exit(), online(), init() to be inside
+> of policy rwsem to achieve a clear lock relationship.
+>
+> All the init() online() implement only initialize policy object without
+> holding this lock and won't call cpufreq APIs need to hold this lock.
+>
+> Signed-off-by: Schspa Shi <schspa@gmail.com>
+
+IMV this still addresses 2 different issues and so it should be split
+into 2 different patches.
+
 > ---
->  arch/arm64/boot/dts/mediatek/mt8195.dtsi | 103 +++++++++++++++++++++++
->  1 file changed, 103 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> index 12887fb4d0d1..d6e5b595a89f 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> @@ -823,6 +823,21 @@ spi0: spi@1100a000 {
->  			status = "disabled";
->  		};
->  
-> +		lvts: lvts@1100b000 {
+>  drivers/cpufreq/cpufreq.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 35dffd738580..f242d5488364 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
 
-Generic node names.
+Patch 1:
 
-> +			compatible = "mediatek,mt8195-lvts";
-> +			#thermal-sensor-cells = <1>;
-> +			reg = <0 0x1100b000 0 0x1000>,
-> +				<0 0x11278000 0 0x1000>;
-> +			interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH 0>,
-> +					<GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH 0>;
-> +			clocks = <&infracfg_ao CLK_INFRA_AO_THERM>;
-> +			clock-names = "lvts_clk";
-> +			resets = <&infracfg_rst 1>,
-> +					<&infracfg_rst 2>;
-> +			nvmem-cells = <&lvts_e_data1 &lvts_e_data2>;
-> +			nvmem-cell-names = "e_data1","e_data2";
-> +		};
-> +
->  		spi1: spi@11010000 {
->  			compatible = "mediatek,mt8195-spi",
->  				     "mediatek,mt6765-spi";
-> @@ -1627,4 +1642,92 @@ vencsys_core1: clock-controller@1b000000 {
->  			#clock-cells = <1>;
->  		};
->  	};
-> +
-> +	thermal_zones: thermal-zones {
-> +		cpu_big1 {
+> @@ -1343,12 +1343,12 @@ static int cpufreq_online(unsigned int cpu)
+>                 down_write(&policy->rwsem);
+>                 policy->cpu = cpu;
+>                 policy->governor = NULL;
+> -               up_write(&policy->rwsem);
+>         } else {
+>                 new_policy = true;
+>                 policy = cpufreq_policy_alloc(cpu);
+>                 if (!policy)
+>                         return -ENOMEM;
+> +               down_write(&policy->rwsem);
+>         }
+>
+>         if (!new_policy && cpufreq_driver->online) {
+> @@ -1388,7 +1388,6 @@ static int cpufreq_online(unsigned int cpu)
+>                 cpumask_copy(policy->related_cpus, policy->cpus);
+>         }
+>
+> -       down_write(&policy->rwsem);
+>         /*
+>          * affected cpus must always be the one, which are online. We aren't
+>          * managing offline cpus here.
 
-No underscores in node names. Generic node names - please open existing
-thermal zones schema and look how it is done. This probably fails
-validation, so be sure your DTS passes make dtbs_check.
+which addresses the problem that cpufreq_online() updates the
+policy->cpus and related_cpus masks without holding the policy rwsem
+(since the policy kobject has been registered already at this point,
+this is generally unsafe).
 
-Best regards,
-Krzysztof
+A side-effect of it is that ->online() and ->init() will be called
+under the policy rwsem now, but that should be fine and is more
+consistent than the current code too.
+
+Patch 2:
+
+> @@ -1540,7 +1539,6 @@ static int cpufreq_online(unsigned int cpu)
+>                 remove_cpu_dev_symlink(policy, get_cpu_device(j));
+>
+>         cpumask_clear(policy->cpus);
+> -       up_write(&policy->rwsem);
+>
+>  out_offline_policy:
+>         if (cpufreq_driver->offline)
+> @@ -1549,6 +1547,7 @@ static int cpufreq_online(unsigned int cpu)
+>  out_exit_policy:
+>         if (cpufreq_driver->exit)
+>                 cpufreq_driver->exit(policy);
+> +       up_write(&policy->rwsem);
+>
+>  out_free_policy:
+>         cpufreq_policy_free(policy);
+> --
+
+which addressed the issue of calling ->offline() and ->exit() without
+holding the policy rwsem that is at best inconsistent with
+cpufreq_offline().
