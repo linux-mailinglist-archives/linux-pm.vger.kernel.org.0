@@ -2,121 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A3E2524EF3
-	for <lists+linux-pm@lfdr.de>; Thu, 12 May 2022 15:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E02524F50
+	for <lists+linux-pm@lfdr.de>; Thu, 12 May 2022 16:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354791AbiELN5G convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 12 May 2022 09:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52914 "EHLO
+        id S1354951AbiELODY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 May 2022 10:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354777AbiELN5B (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 09:57:01 -0400
-X-Greylist: delayed 22853 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 May 2022 06:57:00 PDT
-Received: from de-smtp-delivery-63.mimecast.com (de-smtp-delivery-63.mimecast.com [194.104.111.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 374A51C1966
-        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 06:56:58 -0700 (PDT)
-Received: from CHE01-GV0-obe.outbound.protection.outlook.com
- (mail-gv0che01lp2045.outbound.protection.outlook.com [104.47.22.45]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-34-ok-G87yyMQqne9i7uMs8vA-2; Thu, 12 May 2022 15:56:56 +0200
-X-MC-Unique: ok-G87yyMQqne9i7uMs8vA-2
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
- GV0P278MB0499.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:34::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5250.13; Thu, 12 May 2022 13:56:54 +0000
-Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::f465:3051:c795:3c2]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- ([fe80::f465:3051:c795:3c2%9]) with mapi id 15.20.5250.014; Thu, 12 May 2022
- 13:56:54 +0000
-Date:   Thu, 12 May 2022 15:56:53 +0200
-From:   Francesco Dolcini <francesco.dolcini@toradex.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, linux-pm@vger.kernel.org,
-        Tim Harvey <tharvey@gateworks.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Jon Nettleton <jon@solid-run.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1] thermal: imx: Update critical temp threshold
-Message-ID: <20220512135653.GB39979@francesco-nb.int.toradex.com>
-References: <20220420091300.179753-1-francesco.dolcini@toradex.com>
- <486c5c72-812a-d4ea-0c5a-49783bdc4a1f@linaro.org>
- <20220512073600.GA36153@francesco-nb.int.toradex.com>
- <6918b1a7ba401cd4db2db0601137766acd93bc63.camel@pengutronix.de>
- <20220512102454.GA39979@francesco-nb.int.toradex.com>
- <7f5a919c-2fa1-a463-1f6b-6b531d5ee27d@linaro.org>
-In-Reply-To: <7f5a919c-2fa1-a463-1f6b-6b531d5ee27d@linaro.org>
-X-ClientProxiedBy: MR2P264CA0117.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:500:33::33) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:2e::8)
+        with ESMTP id S1354935AbiELODW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 10:03:22 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E219F55206;
+        Thu, 12 May 2022 07:03:17 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 5FD141F908;
+        Thu, 12 May 2022 14:03:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652364196; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LqB96ySSQJ4ly+3J+rYGGuH/Fd7fkvILEbloF31pDTM=;
+        b=q3SRuDuz1bsrtNT6AQbijhKvd/E1pyV5ISS04f4B5Eo/MpxJkThlvlpzsrdXZrusqFVq1r
+        7s+CTa1eDnSZSlcSzDLMEjhXIjmmjm5vpsFw4wJd/0EtFszB2sl8NlJGjykorM6dG2+lpF
+        5FiP1kelHffEWxoWnmRZqh37k1tv6Lg=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 5C2702C141;
+        Thu, 12 May 2022 14:03:13 +0000 (UTC)
+Date:   Thu, 12 May 2022 16:03:10 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org
+Subject: Re: [PATCH 24/30] panic: Refactor the panic path
+Message-ID: <Yn0TnsWVxCcdB2yO@alley>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-25-gpiccoli@igalia.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: dc921e48-1ff2-44a4-7159-08da341f45ab
-X-MS-TrafficTypeDiagnostic: GV0P278MB0499:EE_
-X-Microsoft-Antispam-PRVS: <GV0P278MB04999A05EB89A7530516CFEDE2CB9@GV0P278MB0499.CHEP278.PROD.OUTLOOK.COM>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0
-X-Microsoft-Antispam-Message-Info: L+0zMhhh+P32vKQRGyRK1a6BOQbNB2gUGRl20hXCtdG9wGua4Fcq5KTs8Uj0yWCcaLcFT/Qem6uQklKJ7dxzcSM6ExMFaIXlU7Nw91x6QcayruRXILVeKeIYYLO/cf7/6bYmbUZOsDAY39D10QLHGTBMYB0JoP/FaEGQ4rBeGj3j+Fz8ZVZ92YQS8lpernogIG8XjqMVkrkZatxNAD7tpGpORtpM/LyYJ3inL0DHldcNtGOUs67k0NnoCwEXgPhqQO+tr8nxaI6C7dyIDNPV8PfdrzsAOnmFC1U11fFrU6x3adKVvLCwEk3rHl2Ay0dQ9NTwzeDJCDyxBZgSOx3xGmgZzl3jm58zF706XYJfCknh3+ay/3GamslzQcMq7dH0DKyotH4TctnsRAQX9e9HQnnMxKneB/qxwcD+zCHLdeq97M+5lnBqvw3TXBfc9NYZ3NZRY/Xxv/73yVWIcfI7smM0q8oIRNRGWg7RYbkl6lptIF1Xy9JszUEPZ4YMwaVQqlMboCpnf0jzH52wH4yLTHFu7L7O9bX9kiHIERaEwAgOiTojU0KFIuLeXVPmAz7Z6IG/xIGt5+pEeYoZ7XHy3ym8QxIgmUj01AQ3lqisi32MCGvnMRcK9oZlno1kBXjqrPA5FgGa0oubhtg8f2vY5mCZiItFp7Ax4RYTJOUORCRtMNpT/U1PgDhaGiHMhiA5SVGfgLAk+L8HiS8q9j2XZg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(376002)(366004)(39850400004)(346002)(136003)(396003)(2906002)(6486002)(6512007)(186003)(6506007)(53546011)(1076003)(52116002)(44832011)(316002)(66556008)(66476007)(5660300002)(8676002)(66946007)(86362001)(6916009)(54906003)(15650500001)(4326008)(26005)(38100700002)(33656002)(38350700002)(7416002)(8936002)(83380400001)(508600001);DIR:OUT;SFP:1102
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vT4BkdANt3EG/8/Li5jT5e1ZB77UuyHoVjjWbpW7wv4wde9QNf9cPxhVrZkY?=
- =?us-ascii?Q?0hz1MelOvOv5BAZv1Tpc14jp6Qwd9QeeXO4etBV08IUVyzWviB2V8U8a2I2Z?=
- =?us-ascii?Q?9YlliqjHWS3EIMkHRJZpk3XmgHaJzytOGKbbXHPaTXuuLrCNOsTobgnV0Urg?=
- =?us-ascii?Q?x74Tr5DGknOxsX7GtiDbJ6M9F2g7D8XO8pf/B/CE4+hADOyDsN8DcAxWIkNP?=
- =?us-ascii?Q?GVbI3TszUsYw+g7ol4XnKqCj/3qXVCPQo+bXamzAD4d0T0XIQ1nrYMVZlWXL?=
- =?us-ascii?Q?wrZMpr5vt8HOFFtWSGm1S1nI5zy3JsvNnoYeYiGmryM2QqpOpV8GqYg/3+ki?=
- =?us-ascii?Q?Shvl9trUxjTegnQTeiR2yWN4WC1xAPy/gMgNURZ9U8D/pPBiOCUwAyQIgO1O?=
- =?us-ascii?Q?oQpkOo7zB1x2vXyFwVogeweFDhEqU+kR7QgnV2eRvihc02c3kgZGwygPnQ1l?=
- =?us-ascii?Q?t1D7LNEdGVxSIUc4WasiHZr6hW7zUZfg7puVAxb2cUYg01NADIqeJYO6bcgf?=
- =?us-ascii?Q?321m3wxNy5vPW45UWihUvrHbQw+vbx+b17wnd4amefX5X3kBWp5V8/ecUOCO?=
- =?us-ascii?Q?TQF1pOszcUv8Gekv7C/KM+jUTuie2KiHug/6wHtCKXcjfHTQNfGdxwkF9BF7?=
- =?us-ascii?Q?OPt/YaWMC+hR3Zp7L/SKWYtGn62PETSgwjWqHOGrr2QkEZc51w7kv8iakEs8?=
- =?us-ascii?Q?ducPkIYNcpD/UGXeDalVfw3IeYnZUm1hECRhD++FkB8jcoPso71gD25Xdu8b?=
- =?us-ascii?Q?1GiyYmbfvhlCZBJC7XXywwxmM/q8Htjz3j6cZoEA9nAfn+QDZbqzB+USOlqW?=
- =?us-ascii?Q?QAA+rKTzbv9N7NjCRuTidpSh45qLP2CI5ltsU6xejH+zu2lWVGhVvbbo2qHO?=
- =?us-ascii?Q?oYCQhyO+JQmdK3/spzju8dzQ+NT6Mcyc71O8qmx47QHGnMwKk0gWLO6iD7V+?=
- =?us-ascii?Q?Ug+GH8rg/RfdidsQj/BFMsfKVcM5dHFEbOs+NY6xZchYMHa3t89zlI+eCrc7?=
- =?us-ascii?Q?LaHS4Nd/l4pVi0/RUowUoOpskSXPSeOnjvCFxP6R/ShxI+orJmTbxm0hUd0Y?=
- =?us-ascii?Q?nuXFyu8qxMWTvx+ZBWhUwnDzd7vv7S+Ui8zEMoF0ZmRINPpVLbe7MDip54Mv?=
- =?us-ascii?Q?NEOGfMgWpBPgY/RVkRL3xUVDn8b9+DLT8QXzbWd1zKv5O69d0wvgcgbBgLjr?=
- =?us-ascii?Q?RiH0iluYP6D+Ad/TAG/EosIA/Zj/fvsZcWa79RshL+MWh8xxR3Gx55wmYeOX?=
- =?us-ascii?Q?PzUE065vf7LREYorLquarVyq3OWeQC9CPfs0gErh/9AMP6zUJ+bAM9JMCBKV?=
- =?us-ascii?Q?Tb1LC1CxOcxXhlN3xaew/hsis3UfHpcWRze2vgvYDVNUz0tYcz6vzfMJzit9?=
- =?us-ascii?Q?jZHW3yQiLoB8DuSzqIEm1gaFS9Jq1C2k2jPKGgL/cI/N664Wt/yMbop6gMd9?=
- =?us-ascii?Q?NbufGaqaoWKnLiQnNkdFqiFEcX5nenz6ldxtdq80GarJLEyynPZ2qHL+Pkn3?=
- =?us-ascii?Q?j6jzhWmEgiAIAd9VohddQ78EwnmXQje0XzWH4rMqzukGDv6dC6axJ6shpjmo?=
- =?us-ascii?Q?lDX4fW60P7bfduWsYdxaoCKBr9veJhAbo8RnTaH4dR7sHK/icQiBGnYUJhWN?=
- =?us-ascii?Q?9c2D2Au7T12NHX+SWS4OqsQneizl0HdSAz6vfpg3ZrDss96Q9I7xa8DXFBN6?=
- =?us-ascii?Q?dB75L0s8S9f5raXyEo4QWhstdn0syPKB9uNojueANy1B/rKhOhQsS3MDYEYy?=
- =?us-ascii?Q?EX5SapDrsg+UVyVJgubvMEvPw2Ph+rY=3D?=
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dc921e48-1ff2-44a4-7159-08da341f45ab
-X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2022 13:56:54.4633
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: C9Ww5Wn6iWrW5ufzOLD6zE8hVbT+33ERmonw0hMempZUeioNbxgHvG8yp1L9PzhBxtHx7D4e8tyFAS4pErGQ4Y8EGqLbVMgTa7d2tdKr/+Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV0P278MB0499
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CDE13A77 smtp.mailfrom=francesco.dolcini@toradex.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: toradex.com
-Content-Type: text/plain; charset=WINDOWS-1252
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220427224924.592546-25-gpiccoli@igalia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -124,31 +77,384 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 12, 2022 at 12:52:46PM +0200, Daniel Lezcano wrote:
-> On 12/05/2022 12:24, Francesco Dolcini wrote:
-> > Hello Lucas,
-> > 
-> > On Thu, May 12, 2022 at 12:08:08PM +0200, Lucas Stach wrote:
-> > > Am Donnerstag, dem 12.05.2022 um 09:36 +0200 schrieb Francesco Dolcini:
+Hello,
+
+first, I am sorry for stepping into the discussion so late.
+I was busy with some other stuff and this patchset is far
+from trivial.
+
+Second, thanks a lot for putting so much effort into it.
+Most of the changes look pretty good, especially all
+the fixes of particular notifiers and split into
+four lists.
+
+Though this patch will need some more love. See below
+for more details.
+
+
+On Wed 2022-04-27 19:49:18, Guilherme G. Piccoli wrote:
+> The panic() function is somewhat convoluted - a lot of changes were
+> made over the years, adding comments that might be misleading/outdated
+> now, it has a code structure that is a bit complex to follow, with
+> lots of conditionals, for example. The panic notifier list is something
+> else - a single list, with multiple callbacks of different purposes,
+> that run in a non-deterministic order and may affect hardly kdump
+> reliability - see the "crash_kexec_post_notifiers" workaround-ish flag.
 > 
-> [ ... ]
-> 
-> > Anyway, would it be fine to have a patch that make the critical
-> > threshold write-able (in my initial message I mentioned this as my
-> > preferred solution also)? If anybody has a pointer on how
-> > to do it, it would be great, I'm not familiar with that code.
-> 
-> What about a module param ?
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -3784,6 +3791,33 @@
+>  			timeout < 0: reboot immediately
+>  			Format: <timeout>
+>  
+> +	panic_notifiers_level=
+> +			[KNL] Set the panic notifiers execution order.
+> +			Format: <unsigned int>
+> +			We currently have 4 lists of panic notifiers; based
+> +			on the functionality and risk (for panic success) the
+> +			callbacks are added in a given list. The lists are:
+> +			- hypervisor/FW notification list (low risk);
+> +			- informational list (low/medium risk);
+> +			- pre_reboot list (higher risk);
+> +			- post_reboot list (only run late in panic and after
+> +			kdump, not configurable for now).
+> +			This parameter defines the ordering of the first 3
+> +			lists with regards to kdump; the levels determine
+> +			which set of notifiers execute before kdump. The
+> +			accepted levels are:
 
-I would be happy to just be able to write to the `critical`
-trip_point_temp file in sysfs, however the thermal
-framework seems to enforce the critical threshold being read only (only
-`get_trip_temp` callback available). Is there any way to change this? 
+This talks only about kdump. The reality is much more complicated.
+The level affect the order of:
 
-# cat /sys/class/thermal/thermal_zone0/trip_point_1_type
-critical
-# ls -l /sys/class/thermal/thermal_zone0/trip_point_1_temp
--r--r--r-- 1 root root 4096 May  6 14:33 /sys/class/thermal/thermal_zone0/trip_point_1_temp
+    + notifiers vs. kdump
+    + notifiers vs. crash_dump
+    + crash_dump vs. kdump
 
-Francesco
+There might theoretically many variants of the ordering of kdump,
+crash_dump, and the 4 notifier list. Some variants do not make
+much sense. You choose 5 variants and tried to select them by
+a level number.
 
+The question is if we really could easily describe the meaning this
+way. It is not only about a "level" of notifiers before kdump. It is
+also about the ordering of crash_dump vs. kdump. IMHO, "level"
+semantic does not fit there.
+
+Maybe more parameters might be easier to understand the effect.
+Anyway, we first need to agree on the chosen variants.
+I am going to discuss it more in the code, see below.
+
+
+
+> +			0: kdump is the first thing to run, NO list is
+> +			executed before kdump.
+> +			1: only the hypervisor list is executed before kdump.
+> +			2 (default level): the hypervisor list and (*if*
+> +			there's any kmsg_dumper defined) the informational
+> +			list are executed before kdump.
+> +			3: both the hypervisor and the informational lists
+> +			(always) execute before kdump.
+> +			4: the 3 lists (hypervisor, info and pre_reboot)
+> +			execute before kdump - this behavior is analog to the
+> +			deprecated parameter "crash_kexec_post_notifiers".
+> +
+>  	panic_print=	Bitmask for printing system info when panic happens.
+>  			User can chose combination of the following bits:
+>  			bit 0: print all tasks info
+> --- a/kernel/panic.c
+> +++ b/kernel/panic.c
+> @@ -183,6 +195,112 @@ static void panic_print_sys_info(bool console_flush)
+>  		ftrace_dump(DUMP_ALL);
+>  }
+>  
+> +/*
+> + * Helper that accumulates all console flushing routines executed on panic.
+> + */
+> +static void console_flushing(void)
+> +{
+> +#ifdef CONFIG_VT
+> +	unblank_screen();
+> +#endif
+> +	console_unblank();
+> +
+> +	/*
+> +	 * In this point, we may have disabled other CPUs, hence stopping the
+> +	 * CPU holding the lock while still having some valuable data in the
+> +	 * console buffer.
+> +	 *
+> +	 * Try to acquire the lock then release it regardless of the result.
+> +	 * The release will also print the buffers out. Locks debug should
+> +	 * be disabled to avoid reporting bad unlock balance when panic()
+> +	 * is not being called from OOPS.
+> +	 */
+> +	debug_locks_off();
+> +	console_flush_on_panic(CONSOLE_FLUSH_PENDING);
+> +
+> +	panic_print_sys_info(true);
+> +}
+> +
+> +#define PN_HYPERVISOR_BIT	0
+> +#define PN_INFO_BIT		1
+> +#define PN_PRE_REBOOT_BIT	2
+> +#define PN_POST_REBOOT_BIT	3
+> +
+> +/*
+> + * Determine the order of panic notifiers with regards to kdump.
+> + *
+> + * This function relies in the "panic_notifiers_level" kernel parameter
+> + * to determine how to order the notifiers with regards to kdump. We
+> + * have currently 5 levels. For details, please check the kernel docs for
+> + * "panic_notifiers_level" at Documentation/admin-guide/kernel-parameters.txt.
+> + *
+> + * Default level is 2, which means the panic hypervisor and informational
+> + * (unless we don't have any kmsg_dumper) lists will execute before kdump.
+> + */
+> +static void order_panic_notifiers_and_kdump(void)
+> +{
+> +	/*
+> +	 * The parameter "crash_kexec_post_notifiers" is deprecated, but
+> +	 * valid. Users that set it want really all panic notifiers to
+> +	 * execute before kdump, so it's effectively the same as setting
+> +	 * the panic notifiers level to 4.
+> +	 */
+> +	if (panic_notifiers_level >= 4 || crash_kexec_post_notifiers)
+> +		return;
+> +
+> +	/*
+> +	 * Based on the level configured (smaller than 4), we clear the
+> +	 * proper bits in "panic_notifiers_bits". Notice that this bitfield
+> +	 * is initialized with all notifiers set.
+> +	 */
+> +	switch (panic_notifiers_level) {
+> +	case 3:
+> +		clear_bit(PN_PRE_REBOOT_BIT, &panic_notifiers_bits);
+> +		break;
+> +	case 2:
+> +		clear_bit(PN_PRE_REBOOT_BIT, &panic_notifiers_bits);
+> +
+> +		if (!kmsg_has_dumpers())
+> +			clear_bit(PN_INFO_BIT, &panic_notifiers_bits);
+> +		break;
+> +	case 1:
+> +		clear_bit(PN_PRE_REBOOT_BIT, &panic_notifiers_bits);
+> +		clear_bit(PN_INFO_BIT, &panic_notifiers_bits);
+> +		break;
+> +	case 0:
+> +		clear_bit(PN_PRE_REBOOT_BIT, &panic_notifiers_bits);
+> +		clear_bit(PN_INFO_BIT, &panic_notifiers_bits);
+> +		clear_bit(PN_HYPERVISOR_BIT, &panic_notifiers_bits);
+> +		break;
+> +	}
+> +}
+>
+> +/*
+> + * Set of helpers to execute the panic notifiers only once.
+> + * Just the informational notifier cares about the return.
+> + */
+> +static inline bool notifier_run_once(struct atomic_notifier_head head,
+> +				     char *buf, long bit)
+> +{
+> +	if (test_and_change_bit(bit, &panic_notifiers_bits)) {
+> +		atomic_notifier_call_chain(&head, PANIC_NOTIFIER, buf);
+> +		return true;
+> +	}
+> +	return false;
+> +}
+
+Here is the code using the above functions. It helps to discuss
+the design and logic.
+
+<kernel/panic.c>
+	order_panic_notifiers_and_kdump();
+
+	/* If no level, we should kdump ASAP. */
+	if (!panic_notifiers_level)
+		__crash_kexec(NULL);
+
+	crash_smp_send_stop();
+	panic_notifier_hypervisor_once(buf);
+
+	if (panic_notifier_info_once(buf))
+		kmsg_dump(KMSG_DUMP_PANIC);
+
+	panic_notifier_pre_reboot_once(buf);
+
+	__crash_kexec(NULL);
+
+	panic_notifier_hypervisor_once(buf);
+
+	if (panic_notifier_info_once(buf))
+		kmsg_dump(KMSG_DUMP_PANIC);
+
+	panic_notifier_pre_reboot_once(buf);
+</kernel/panic.c>
+
+I have to say that the logic is very unclear. Almost all
+functions are called twice:
+
+   + __crash_kexec()
+   + kmsg_dump()
+   + panic_notifier_hypervisor_once()
+   + panic_notifier_pre_reboot_once()
+   + panic_notifier_info_once()
+
+It is pretty hard to find what functions are always called in the same
+order and where the order can be inverted.
+
+The really used code path is defined by order_panic_notifiers_and_kdump()
+that encodes "level" into "bits". The bits are then flipped in
+panic_notifier_*_once() calls that either do something or not.
+kmsg_dump() is called according to the bit flip.
+
+It is an interesting approach. I guess that you wanted to avoid too
+many if/then/else levels in panic(). But honestly, it looks like
+a black magic to me.
+
+IMHO, it is always easier to follow if/then/else logic than using
+a translation table that requires additional bit flips when
+a value is used more times.
+
+Also I guess that it is good proof that "level" abstraction does
+not fit here. Normal levels would not need this kind of magic.
+
+
+OK, the question is how to make it better. Let's start with
+a clear picture of the problem:
+
+1. panic() has basically two funtions:
+
+      + show/store debug information (optional ways and amount)
+      + do something with the system (reboot, stay hanged)
+
+
+2. There are 4 ways how to show/store the information:
+
+      + tell hypervisor to store what it is interested about
+      + crash_dump
+      + kmsg_dump()
+      + consoles
+
+  , where crash_dump and consoles are special:
+
+     + crash_dump does not return. Instead it ends up with reboot.
+
+     + Consoles work transparently. They just need an extra flush
+       before reboot or staying hanged.
+
+
+3. The various notifiers do things like:
+
+     + tell hypervisor about the crash
+     + print more information (also stop watchdogs)
+     + prepare system for reboot (touch some interfaces)
+     + prepare system for staying hanged (blinking)
+
+   Note that it pretty nicely matches the 4 notifier lists.
+
+
+Now, we need to decide about the ordering. The main area is how
+to store the debug information. Consoles are transparent so
+the quesition is about:
+
+     + hypervisor
+     + crash_dump
+     + kmsg_dump
+
+Some people need none and some people want all. There is a
+risk that system might hung at any stage. This why people want to
+make the order configurable.
+
+But crash_dump() does not return when it succeeds. And kmsg_dump()
+users havn't complained about hypervisor problems yet. So, that
+two variants might be enough:
+
+    + crash_dump (hypervisor, kmsg_dump as fallback)
+    + hypervisor, kmsg_dump, crash_dump
+
+One option "panic_prefer_crash_dump" should be enough.
+And the code might look like:
+
+void panic()
+{
+[...]
+	dump_stack();
+	kgdb_panic(buf);
+
+	< ---  here starts the reworked code --- >
+
+	/* crash dump is enough when enabled and preferred. */
+	if (panic_prefer_crash_dump)
+		__crash_kexec(NULL);
+
+	/* Stop other CPUs and focus on handling the panic state. */
+	if (has_kexec_crash_image)
+		crash_smp_send_stop();
+	else
+		smp_send_stop()
+
+	/* Notify hypervisor about the system panic. */
+	atomic_notifier_call_chain(&panic_hypervisor_list, 0, NULL);
+
+	/*
+	 * No need to risk extra info when there is no kmsg dumper
+	 * registered.
+	 */
+	if (!has_kmsg_dumper())
+		__crash_kexec(NULL);
+
+	/* Add extra info from different subsystems. */
+	atomic_notifier_call_chain(&panic_info_list, 0, NULL);
+
+	kmsg_dump(KMSG_DUMP_PANIC);
+	__crash_kexec(NULL);
+
+	/* Flush console */
+	unblank_screen();
+	console_unblank();
+	debug_locks_off();
+	console_flush_on_panic(CONSOLE_FLUSH_PENDING);
+
+	if (panic_timeout > 0) {
+		delay()
+	}
+
+	/*
+	 * Prepare system for eventual reboot and allow custom
+	 * reboot handling.
+	 */
+	atomic_notifier_call_chain(&panic_reboot_list, 0, NULL);
+
+	if (panic_timeout != 0) {
+		reboot();
+	}
+
+	/*
+	 * Prepare system for the infinite waiting, for example,
+	 * setup blinking.
+	 */
+	atomic_notifier_call_chain(&panic_loop_list, 0, NULL);
+
+	infinite_loop();
+}
+
+
+__crash_kexec() is there 3 times but otherwise the code looks
+quite straight forward.
+
+Note 1: I renamed the two last notifier list. The name 'post-reboot'
+	did sound strange from the logical POV ;-)
+
+Note 2: We have to avoid the possibility to call "reboot" list
+	before kmsg_dump(). All callbacks providing info
+	have to be in the info list. It a callback combines
+	info and reboot functionality then it should be split.
+
+	There must be another way to calm down problematic
+	info callbacks. And it has to be solved when such
+	a problem is reported. Is there any known issue, please?
+
+It is possible that I have missed something important.
+But I would really like to make the logic as simple as possible.
+
+Best Regards,
+Petr
