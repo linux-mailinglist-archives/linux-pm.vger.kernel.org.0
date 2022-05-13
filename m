@@ -2,84 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50511526837
-	for <lists+linux-pm@lfdr.de>; Fri, 13 May 2022 19:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8E252683F
+	for <lists+linux-pm@lfdr.de>; Fri, 13 May 2022 19:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382942AbiEMRXD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 May 2022 13:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33438 "EHLO
+        id S1382949AbiEMRXv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 May 2022 13:23:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382922AbiEMRXC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 May 2022 13:23:02 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 863FF53A60
-        for <linux-pm@vger.kernel.org>; Fri, 13 May 2022 10:23:00 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id n18so8576816plg.5
-        for <linux-pm@vger.kernel.org>; Fri, 13 May 2022 10:23:00 -0700 (PDT)
+        with ESMTP id S1382929AbiEMRXu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 May 2022 13:23:50 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C0366ADC
+        for <linux-pm@vger.kernel.org>; Fri, 13 May 2022 10:23:48 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id a5so8494349wrp.7
+        for <linux-pm@vger.kernel.org>; Fri, 13 May 2022 10:23:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=LmlkxE85vc6UhxNoZfZV20UnauAx9uE6Cz/0zHf9/y0=;
-        b=tHn0ufT6L+atomup5vtndYLuPbMdYYrBkYgqv6ommywwIMqpqT+wemVju040dVYiUM
-         kH2sDLqTKFFja93w7x9kbQpl9GqnJp1u3YyOKs2jmxb5gAIf/KEoY7mvWNSKidlC9PoQ
-         /l7ch9/cWgGlO7IMtxkC9iysiHdTobTx7CwOg8CS02y2iEfr5/Ql5D/VFE7owQevuT3f
-         Xrv954YQ0D49HAaesYjBUxxiIZ6jShsY1k9DXGXiVGECWWZYEGGNvYVr0LE/pCyRxvHo
-         /IQ2La+xI0613nRYpdMCTlA97L8SOInyE0o7FpeSvEWszNbxcperG4TGzjloH1rByJ5w
-         XgKQ==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9JeC/UwGxq2Eyj4KJe9rSsGrpMRSgX/mq86/Sh1LXC8=;
+        b=sP/9mb3p4SMkERCWlqWhOasd7ln5EzMoc/ho71rWbV5OjvjdEdtjagShwyCmIhtObB
+         p2ms3JFqfTxHCGkYf2FGWAjUUpzKXF7kS/2amNwK0CK2spbdSJHiehDh4zm6hzHl14mY
+         CkpcFiPXrn5D19GbG5vjqnJ3jEBj3cShkYtDuhC4pPm9rakJFjMsRhoNIXJYQ6Rk4yOH
+         toH5DVFPv9Ig+iGvARQDVgiCuJ5k2TiFOduvhrnAithd4sw1Lu4NMQmOqRN0D4ddClv5
+         7KnyzWZONMb56pP0j+aGNrCuwV/2F+UtUyuoUAgV1XPzMQI4D4rfuDsJh69BUtWJouto
+         /RFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=LmlkxE85vc6UhxNoZfZV20UnauAx9uE6Cz/0zHf9/y0=;
-        b=dGvCknuuGeOgBOPwgEUr1qrrnNeRf4NNHWYzac8v82myFcXaPx+REbjBtfpre0ZFt/
-         JTrWMT4sMD4ZdWRr2IRbqh9XyZ+dDyjiER02C+nfCC5LMmRzj9ilkhQ+Z2zy2NYUO41w
-         fV1guR1TptMh0zOpTO2HfNdNTk5qzp5jilUed+5wlhJ7rZoe2Y+cMV9Chb4fq/dJK+Ly
-         nMhpX6/7t4lzTFcZML+j9wpb4bs0bg/61KUAPxCNi1rW/ZXvwxtdoMu3scnrOvQTi1ox
-         dC57rxzfwoQrOuBZkIlWAeBXcLBkkHQT2PdovkaKUzWLc0oz7SJegajHYAu23mjvtu2u
-         /ptg==
-X-Gm-Message-State: AOAM530u3QlJxbDpipQd557MPEi1Z/5DimF0c5MfXqfHQzPHSbPBXVb/
-        j2y8jmcNsuy3e7FBtzYJu6W5
-X-Google-Smtp-Source: ABdhPJyZY6dt5VXk1vcXI7ZjHApuVJAr163atWieL5kinllyl84dovJtGvw031JvaqN7voVZHkCwew==
-X-Received: by 2002:a17:90b:4c0a:b0:1dc:e81a:f0c with SMTP id na10-20020a17090b4c0a00b001dce81a0f0cmr6068132pjb.2.1652462580028;
-        Fri, 13 May 2022 10:23:00 -0700 (PDT)
-Received: from thinkpad ([117.202.184.246])
-        by smtp.gmail.com with ESMTPSA id f10-20020a6547ca000000b003c5e836eddasm1886683pgs.94.2022.05.13.10.22.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 10:22:59 -0700 (PDT)
-Date:   Fri, 13 May 2022 22:52:49 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v3 2/7] dt-bindings: opp: accept array of frequencies
-Message-ID: <20220513172249.GB1922@thinkpad>
-References: <20220513061347.46480-1-krzysztof.kozlowski@linaro.org>
- <20220513061347.46480-3-krzysztof.kozlowski@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9JeC/UwGxq2Eyj4KJe9rSsGrpMRSgX/mq86/Sh1LXC8=;
+        b=sWjQWqnoEWwFVJfXF1gOUSqjykMiz7x0v8h+U8e8JB6WEPcNXE6+uKgVc4Gj6UvMrM
+         Nhi3MlHyXxyTs8Ytl3jG8x7/b+lUiGC1vb4mFS0wMebqHUjq86Kav8JiMhINAfD0K2Q0
+         efaI6KkZ2BaQkgu8vDrfRuk3Rt+aESPZWNcvLe1QYKpo2seK0ojQAk3A6wLODJgmzLFo
+         oO41PyuBUolHOP0zB2iaj9VefYcENVEXi1zcfuaULr/qGgk5Yt/3EHzGAnoRl1BlNynD
+         Rq3mZ9TxDtfY9zxgipuFMg8V/FMVUcIot0bi+36u2TPKg2GMGZnIokFWXvDKlMd+m3yE
+         z16A==
+X-Gm-Message-State: AOAM531fCXf3Ep3PzdceMXhUOzDYPRz5/iXQa2/Y4SipcZhLsYfdSBGE
+        sKSaRK7Ny3hjNIozDF09aw7k7w==
+X-Google-Smtp-Source: ABdhPJyAnD6twOkIHdeDiY+tGgaCRVKJA40sfewef7gLVL5NkSQK45NAtkIehF6CxV8wsR4e0UpFZw==
+X-Received: by 2002:a5d:4b89:0:b0:20c:52e3:3073 with SMTP id b9-20020a5d4b89000000b0020c52e33073mr4997148wrt.140.1652462627136;
+        Fri, 13 May 2022 10:23:47 -0700 (PDT)
+Received: from [192.168.1.41] (static-176-182-171-101.ncc.abo.bbox.fr. [176.182.171.101])
+        by smtp.googlemail.com with ESMTPSA id p15-20020a7bcdef000000b00394517e7d98sm2997981wmj.25.2022.05.13.10.23.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 May 2022 10:23:46 -0700 (PDT)
+Message-ID: <63f1c4a0-d2c6-8157-5da0-198c2d8d1013@linaro.org>
+Date:   Fri, 13 May 2022 19:23:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 00/14] thermal OF rework
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>, rafael@kernel.org
+Cc:     khilman@baylibre.com, abailon@baylibre.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220507125443.2766939-1-daniel.lezcano@linexp.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220507125443.2766939-1-daniel.lezcano@linexp.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220513061347.46480-3-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,52 +73,116 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 13, 2022 at 08:13:42AM +0200, Krzysztof Kozlowski wrote:
-> Devices might need to control several clocks when scaling the frequency
-> and voltage.  Allow passing array of clock frequencies, similarly to the
-> voltages.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Hi Rafael,
 
-Thanks,
-Mani
+if you are ok with this series, I'll pick it up.
 
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Acked-by: Rob Herring <robh@kernel.org>
+Is that ok ?
+
+
+
+
+On 07/05/2022 14:54, Daniel Lezcano wrote:
+> The thermal framework initialization with the device tree appears to
+> be complicated and hard to make it to evolve.
 > 
-> ---
+> It contains duplication of almost the same thermal generic structures
+> and has an assymetric initialization making hard any kind of serious
+> changes for more complex features. One of them is the multiple sensors
+> support per thermal zone.
 > 
-> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+> In order to set the scene for the aforementioned feature with generic
+> code, we need to cleanup and rework the device tree initialization.
 > 
-> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> index 76c8acd981b3..66d0ec763f0b 100644
-> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> @@ -50,6 +50,16 @@ patternProperties:
->            property to uniquely identify the OPP nodes exists. Devices like power
->            domains must have another (implementation dependent) property.
->  
-> +          Entries for multiple clocks shall be provided in the same field, as
-> +          array of frequencies.  The OPP binding doesn't provide any provisions
-> +          to relate the values to their clocks or the order in which the clocks
-> +          need to be configured and that is left for the implementation
-> +          specific binding.
-> +        minItems: 1
-> +        maxItems: 16
-> +        items:
-> +          maxItems: 1
-> +
->        opp-microvolt:
->          description: |
->            Voltage for the OPP
-> -- 
-> 2.32.0
+> However this rework is not obvious because of the multiple components
+> entering in the composition of a thermal zone and being initialized at
+> different moments. For instance, a cooling device can be initialized
+> before a sensor, so the thermal zones must exist before the cooling
+> device as well as the sensor. This asynchonous initialization forces
+> the thermal zone to be created with fake ops because they are
+> mandotory and build a list of cooling devices which is used to lookup
+> afterwards when the cooling device driver is registering itself.
 > 
+> As there could be a large number of changes, this first series provide
+> some steps forward for a simpler device tree initialization.
+> 
+> Changelog:
+>   - V2:
+>     - Drop patch 1/15 which contains too many changes for a simple
+>       structure renaming. This could be addressed in a separate series as
+>       it is not necessary for the OF rework
+>       
+>     - Fixed of_node_put with gchild not initialized as reported by
+>       kbuild and Dan Carpenter
+> 
+>   - V1:
+>     - Initial post
+> 
+> Daniel Lezcano (14):
+>    thermal/core: Change thermal_zone_ops to thermal_sensor_ops
+>    thermal/core: Add a thermal sensor structure in the thermal zone
+>    thermal/core: Remove duplicate information when an error occurs
+>    thermal/of: Replace device node match with device node search
+>    thermal/of: Remove the device node pointer for thermal_trip
+>    thermal/of: Move thermal_trip structure to thermal.h
+>    thermal/core: Remove unneeded EXPORT_SYMBOLS
+>    thermal/core: Move thermal_set_delay_jiffies to static
+>    thermal/core: Rename trips to ntrips
+>    thermal/core: Add thermal_trip in thermal_zone
+>    thermal/core: Register with the trip points
+>    thermal/of: Store the trips in the thermal zone
+>    thermal/of: Use thermal trips stored in the thermal zone
+>    thermal/of: Initialize trip points separately
+> 
+>   .../driver-api/thermal/sysfs-api.rst          |   2 +-
+>   drivers/acpi/thermal.c                        |   6 +-
+>   .../ethernet/chelsio/cxgb4/cxgb4_thermal.c    |   2 +-
+>   .../ethernet/mellanox/mlxsw/core_thermal.c    |   6 +-
+>   drivers/net/wireless/intel/iwlwifi/mvm/tt.c   |   2 +-
+>   drivers/platform/x86/acerhdf.c                |   2 +-
+>   drivers/power/supply/power_supply_core.c      |   2 +-
+>   drivers/thermal/armada_thermal.c              |   2 +-
+>   drivers/thermal/broadcom/bcm2835_thermal.c    |   2 +-
+>   drivers/thermal/da9062-thermal.c              |   2 +-
+>   drivers/thermal/dove_thermal.c                |   2 +-
+>   drivers/thermal/gov_bang_bang.c               |   6 +-
+>   drivers/thermal/gov_fair_share.c              |  10 +-
+>   drivers/thermal/gov_power_allocator.c         |  22 +-
+>   drivers/thermal/gov_step_wise.c               |   4 +-
+>   drivers/thermal/imx_thermal.c                 |   2 +-
+>   .../intel/int340x_thermal/int3400_thermal.c   |   2 +-
+>   .../int340x_thermal/int340x_thermal_zone.c    |   6 +-
+>   .../int340x_thermal/int340x_thermal_zone.h    |   4 +-
+>   .../processor_thermal_device.c                |   4 +-
+>   .../processor_thermal_device_pci.c            |   2 +-
+>   drivers/thermal/intel/intel_pch_thermal.c     |   2 +-
+>   .../thermal/intel/intel_quark_dts_thermal.c   |   2 +-
+>   drivers/thermal/intel/intel_soc_dts_iosf.c    |   2 +-
+>   drivers/thermal/intel/x86_pkg_temp_thermal.c  |   2 +-
+>   drivers/thermal/kirkwood_thermal.c            |   2 +-
+>   drivers/thermal/rcar_gen3_thermal.c           |   6 +-
+>   drivers/thermal/rcar_thermal.c                |   4 +-
+>   drivers/thermal/samsung/exynos_tmu.c          |   6 +-
+>   drivers/thermal/spear_thermal.c               |   2 +-
+>   drivers/thermal/st/st_thermal.c               |   2 +-
+>   drivers/thermal/tegra/soctherm.c              |  10 +-
+>   drivers/thermal/tegra/tegra30-tsensor.c       |   6 +-
+>   drivers/thermal/thermal_core.c                | 102 ++++----
+>   drivers/thermal/thermal_core.h                |  25 +-
+>   drivers/thermal/thermal_helpers.c             |  35 ++-
+>   drivers/thermal/thermal_hwmon.c               |   4 +-
+>   drivers/thermal/thermal_netlink.c             |  10 +-
+>   drivers/thermal/thermal_of.c                  | 221 ++++++++++--------
+>   drivers/thermal/thermal_sysfs.c               |  62 ++---
+>   include/linux/thermal.h                       |  34 ++-
+>   41 files changed, 341 insertions(+), 290 deletions(-)
+> 
+
 
 -- 
-மணிவண்ணன் சதாசிவம்
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
