@@ -2,112 +2,356 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE9B5260D1
-	for <lists+linux-pm@lfdr.de>; Fri, 13 May 2022 13:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 932B25261FD
+	for <lists+linux-pm@lfdr.de>; Fri, 13 May 2022 14:34:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243836AbiEMLQ1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 May 2022 07:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
+        id S1380301AbiEMMdl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 May 2022 08:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379849AbiEMLQO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 May 2022 07:16:14 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40932497D;
-        Fri, 13 May 2022 04:16:12 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id y63so9721975oia.7;
-        Fri, 13 May 2022 04:16:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vBhBc4igSr5lkTEDPBacehSjxXJjowFEHzx5Vf8m4fc=;
-        b=Y3HANqTF+N/856tejKBCenQuJ0ulUY/RfjPBUwD3eBBkEHkFnYR8KRQrl1vqY7AJRN
-         dciWsFYxtSoy5Rszs1C9tUXo7kcJUzwMsLHVtoe1bbB2hUlZue4gsvGLSiM7hEVfed/W
-         ZVtEHMXHxmcgk/4el0nRixdpwveu4ab8p5bS+XvfPA5IfNgu8sr+1apNsaHscqwSeGcL
-         /8cnEtTva+LSO7DiSRIriIG8Df5OMbL5lCxA5v3RBat2pEBU4HgCpH6mCFthLyEA8cfg
-         OZamTyZhG/33/L5fBA6Dot3n/t3aa8zSHPsmTrplg8eOrV2ulCcvPR05KO5UT0Kncv1u
-         hlFw==
+        with ESMTP id S1380298AbiEMMdj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 May 2022 08:33:39 -0400
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E2D674E5;
+        Fri, 13 May 2022 05:33:33 -0700 (PDT)
+Received: by mail-oi1-f177.google.com with SMTP id w123so9951190oiw.5;
+        Fri, 13 May 2022 05:33:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vBhBc4igSr5lkTEDPBacehSjxXJjowFEHzx5Vf8m4fc=;
-        b=0e0MaZM3najvv560bDKQH3Q+E4wNzD2HBj3vq8P/lY3y9z+5PgJlbFESGGIxKz/dOR
-         vmOo8+4PV0iK1OpiXCmHlVYCEymLs7cuxGLe5EAp2GuMTS/GVpg5POBtm/Y+O0KDoMQ2
-         LDk4oxnwoOUP3jsJhqnlQMYnzo7xDHUfhkGdBUrmAT0yYLK4rshVA0acjgMtPymeiVF0
-         tUkjwgYZzVQmLdVqeMI80Ceh+IHurFlPUWAhoazhhEQOyrWFEkF698ZO40dLCqDs3YC0
-         +Vrx0qsLwuQWAweCwnKbB5Wi+NfkSiJR3EwOIv1Uvv4L1H+cJFZy24kYhQYRqiGnlug0
-         h4Vw==
-X-Gm-Message-State: AOAM533hT5xvr+dbwlrsBb9t8Re54l0EELF24Zqj2nHA1d8eXvPAsw7s
-        eEUMKlp1WSAxmKaJFTIAYjfa2/s6dbblzQRp7oY=
-X-Google-Smtp-Source: ABdhPJz2QtgAfkKunulDO5CncAdA8wyHmU0kqVg93DGCgowosP9LEUAB5IFLOc33MgO2fcqNxfvldw5KwhAe7ViZf2E=
-X-Received: by 2002:a05:6808:690:b0:325:9655:d782 with SMTP id
- k16-20020a056808069000b003259655d782mr2197475oig.276.1652440572190; Fri, 13
- May 2022 04:16:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220512135231.10076-1-schspa@gmail.com> <20220513041833.mcubozfhl2qd2rps@vireshk-i7>
- <CAMA88Tpjms4HEos0GJHmQR5YZd4hhdqpgMO7JmxTxVpF0oMUCg@mail.gmail.com> <20220513061343.wndyhjeehoqmfofp@vireshk-i7>
-In-Reply-To: <20220513061343.wndyhjeehoqmfofp@vireshk-i7>
-From:   Schspa Shi <schspa@gmail.com>
-Date:   Fri, 13 May 2022 19:16:01 +0800
-Message-ID: <CAMA88Trc143Zaeua_AEt0ynukACYdPqXMG6R50Zoz-sXmMbX4A@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] cpufreq: fix race on cpufreq online
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=WpkJGC/aYt+zei5DfkFr+BBMssSXYh9sm76rTb3A0ss=;
+        b=aKaG41Ju89RWMlC+9IFxu3HrnXi6LL1y8txvikjjSsCiZHduYWSwqyjZMv9/ctr3fF
+         sxWyYryZ6xNk7pWfWMiFeeSfILVAbniF9ZUR5JG2yxmPeqVLOWP0NPCOyDvM+BSZSMpq
+         WkFXvnKhxnwNtYW7oOu+GJItvaEIVkuMQOmWY8DOsyy2NeoMxel/aHqxdUoWwLKqFE93
+         PATMvOj4Jq5UVjld00IpbIOvrHM15cMeV/KBEqMsRYpZzXCEMQXRHfBFEAX+R3a8fi7M
+         7yjqBAle/u19zF15pgROtb/we9F/Ev5A+DWp1vuhUCrFK+V7oRzeOhYHlfzw2Oew697r
+         A9zg==
+X-Gm-Message-State: AOAM532KS97UPnBiLxKJzadma4oCpCHtBwtj/h6bF7yYNEnjv6RNG1dp
+        Jvp8S0JKrWkX73NNnTpuv/p/Bm9vnQ==
+X-Google-Smtp-Source: ABdhPJzn9fuPQjmsnKno893E5/unpG+vKQtmhPIw2Y2xzK157Mm4P3gNUtEWwNRPQjhqkTeNOat/XQ==
+X-Received: by 2002:a05:6808:2199:b0:326:90e2:754b with SMTP id be25-20020a056808219900b0032690e2754bmr7528877oib.227.1652445210867;
+        Fri, 13 May 2022 05:33:30 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g15-20020a9d6a0f000000b006060322124csm900213otn.28.2022.05.13.05.33.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 05:33:30 -0700 (PDT)
+Received: (nullmailer pid 85855 invoked by uid 1000);
+        Fri, 13 May 2022 12:33:21 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
+        Andy Gross <agross@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        quic_pkondeti@quicinc.com, Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        quic_vpulyala@quicinc.com, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        linux-pm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
+        linux-arm-msm@vger.kernel.org
+In-Reply-To: <1652379802-8318-2-git-send-email-quic_kriskura@quicinc.com>
+References: <1652379802-8318-1-git-send-email-quic_kriskura@quicinc.com> <1652379802-8318-2-git-send-email-quic_kriskura@quicinc.com>
+Subject: Re: [v16 1/5] dt-bindings: usb: dwc3: Add wakeup-source property support
+Date:   Fri, 13 May 2022 07:33:21 -0500
+Message-Id: <1652445201.122658.85854.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Viresh Kumar <viresh.kumar@linaro.org> writes:
+On Thu, 12 May 2022 23:53:18 +0530, Krishna Kurapati wrote:
+> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> 
+> Added support for wakeup-source property. This property can be
+> used to check and power down the phy during system suspend if
+> wake up is not supported.
+> 
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
 
-> On 13-05-22, 14:06, Schspa Shi wrote:
->> Viresh Kumar <viresh.kumar@linaro.org> writes:
->> > On 12-05-22, 21:52, Schspa Shi wrote:
->> >> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
->> >> index 80f535cc8a75..35dffd738580 100644
->> >> --- a/drivers/cpufreq/cpufreq.c
->> >> +++ b/drivers/cpufreq/cpufreq.c
->> >> @@ -953,7 +953,10 @@ static ssize_t show(struct kobject *kobj, struct attribute *attr, char *buf)
->> >>              return -EIO;
->> >>
->> >>      down_read(&policy->rwsem);
->> >> -    ret = fattr->show(policy, buf);
->> >> +    if (unlikely(policy_is_inactive(policy)))
->> >> +            ret = -EBUSY;
->> >> +    else
->> >> +            ret = fattr->show(policy, buf);
->> >
->> > I like it the way I have done earlier, initialize ret to -EBUSY and
->> > get rid of the else part and call show/store in if itself. Same for
->> > below.
->> >
->>
->> I add a unlikely here, to avoid branch prediction failed.
->
-> I am not asking you to drop it, I also added the unlikely within the
-> implementation of policy_is_inactive() then. It can be written as:
->
-> if (likely(!policy_is_inactive(policy)))
->         ret = fattr->show(policy, buf);
->
->> And move the
->> to the fail path to avoid a register assignment to -EBUSY.
->
-> We don't care about such assignments for performance to be honest.
-> This makes the code smaller by few lines, that's enough.
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-OK, I have uploaded a v5 patch for this. Please review it.
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
+
+Full log is available here: https://patchwork.ozlabs.org/patch/
 
 
---
-Schspa Shi
-BRs
+dwc3@10000000: $nodename:0: 'dwc3@10000000' does not match '^usb(@.*)?'
+	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
+	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
+
+dwc3@11000000: $nodename:0: 'dwc3@11000000' does not match '^usb(@.*)?'
+	arch/arm/boot/dts/qcom-ipq8064-ap148.dtb
+	arch/arm/boot/dts/qcom-ipq8064-rb3011.dtb
+
+dwc3@6000000: $nodename:0: 'dwc3@6000000' does not match '^usb(@.*)?'
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dtb
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtb
+	arch/arm/boot/dts/qcom-ipq4018-jalapeno.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c3.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c2.dtb
+
+dwc3@6a00000: $nodename:0: 'dwc3@6a00000' does not match '^usb(@.*)?'
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+dwc3@7580000: $nodename:0: 'dwc3@7580000' does not match '^usb(@.*)?'
+	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dtb
+
+dwc3@7600000: $nodename:0: 'dwc3@7600000' does not match '^usb(@.*)?'
+	arch/arm64/boot/dts/qcom/apq8096-db820c.dtb
+	arch/arm64/boot/dts/qcom/apq8096-ifc6640.dtb
+	arch/arm64/boot/dts/qcom/msm8996-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-pmi8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-dora.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-kagura.dtb
+	arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone-keyaki.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dtb
+	arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dtb
+
+dwc3@78c0000: $nodename:0: 'dwc3@78c0000' does not match '^usb(@.*)?'
+	arch/arm64/boot/dts/qcom/qcs404-evb-1000.dtb
+	arch/arm64/boot/dts/qcom/qcs404-evb-4000.dtb
+
+dwc3@8a00000: $nodename:0: 'dwc3@8a00000' does not match '^usb(@.*)?'
+	arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c1.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c2.dtb
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac-bit.dtb
+	arch/arm/boot/dts/qcom-ipq4018-ap120c-ac.dtb
+	arch/arm/boot/dts/qcom-ipq4018-jalapeno.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk04.1-c3.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c1.dtb
+	arch/arm/boot/dts/qcom-ipq4019-ap.dk07.1-c2.dtb
+
+dwc3@8c00000: $nodename:0: 'dwc3@8c00000' does not match '^usb(@.*)?'
+	arch/arm64/boot/dts/qcom/ipq8074-hk01.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c1.dtb
+	arch/arm64/boot/dts/qcom/ipq8074-hk10-c2.dtb
+
+dwc3@9900000: $nodename:0: 'dwc3@9900000' does not match '^usb(@.*)?'
+	arch/arm/boot/dts/stih407-b2120.dtb
+	arch/arm/boot/dts/stih410-b2120.dtb
+	arch/arm/boot/dts/stih410-b2260.dtb
+	arch/arm/boot/dts/stih418-b2199.dtb
+	arch/arm/boot/dts/stih418-b2264.dtb
+
+dwc3@a600000: $nodename:0: 'dwc3@a600000' does not match '^usb(@.*)?'
+	arch/arm64/boot/dts/qcom/sa8155p-adp.dtb
+	arch/arm64/boot/dts/qcom/sc7180-idp.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1-lte.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r3.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r3-lte.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r2.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r3.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar-r4.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r4.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r5.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r9.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-r4.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-r9.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1-kb.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1-lte.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-kb.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r3-lte.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-kb.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r9-lte.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1-lte.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r2.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r2-lte.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r3.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r3-lte.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dtb
+	arch/arm64/boot/dts/qcom/sc7180-trogdor-r1-lte.dtb
+	arch/arm64/boot/dts/qcom/sdm845-cheza-r1.dtb
+	arch/arm64/boot/dts/qcom/sdm845-cheza-r2.dtb
+	arch/arm64/boot/dts/qcom/sdm845-cheza-r3.dtb
+	arch/arm64/boot/dts/qcom/sdm845-db845c.dtb
+	arch/arm64/boot/dts/qcom/sdm845-mtp.dtb
+	arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dtb
+	arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dtb
+	arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dtb
+	arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-akari.dtb
+	arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-akatsuki.dtb
+	arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-apollo.dtb
+	arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dtb
+	arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dtb
+	arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dtb
+	arch/arm64/boot/dts/qcom/sm8150-hdk.dtb
+	arch/arm64/boot/dts/qcom/sm8150-microsoft-surface-duo.dtb
+	arch/arm64/boot/dts/qcom/sm8150-mtp.dtb
+	arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano-bahamut.dtb
+	arch/arm64/boot/dts/qcom/sm8150-sony-xperia-kumano-griffin.dtb
+	arch/arm/boot/dts/qcom-sdx55-mtp.dtb
+	arch/arm/boot/dts/qcom-sdx55-t55.dtb
+	arch/arm/boot/dts/qcom-sdx55-telit-fn980-tlb.dtb
+
+dwc3@a800000: $nodename:0: 'dwc3@a800000' does not match '^usb(@.*)?'
+	arch/arm64/boot/dts/qcom/msm8998-asus-novago-tp370ql.dtb
+	arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dtb
+	arch/arm64/boot/dts/qcom/msm8998-hp-envy-x2.dtb
+	arch/arm64/boot/dts/qcom/msm8998-lenovo-miix-630.dtb
+	arch/arm64/boot/dts/qcom/msm8998-mtp.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-cheeseburger.dtb
+	arch/arm64/boot/dts/qcom/msm8998-oneplus-dumpling.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-lilac.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dtb
+	arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-poplar.dtb
+	arch/arm64/boot/dts/qcom/sdm845-cheza-r1.dtb
+	arch/arm64/boot/dts/qcom/sdm845-cheza-r2.dtb
+	arch/arm64/boot/dts/qcom/sdm845-cheza-r3.dtb
+	arch/arm64/boot/dts/qcom/sdm845-db845c.dtb
+	arch/arm64/boot/dts/qcom/sdm845-mtp.dtb
+	arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dtb
+	arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dtb
+	arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dtb
+	arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-akari.dtb
+	arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-akatsuki.dtb
+	arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama-apollo.dtb
+	arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium.dtb
+	arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dtb
+	arch/arm64/boot/dts/qcom/sdm850-samsung-w737.dtb
+
+dwusb@19000000: $nodename:0: 'dwusb@19000000' does not match '^usb(@.*)?'
+	arch/arm64/boot/dts/apm/apm-merlin.dtb
+	arch/arm64/boot/dts/apm/apm-mustang.dtb
+
+dwusb@19800000: $nodename:0: 'dwusb@19800000' does not match '^usb(@.*)?'
+	arch/arm64/boot/dts/apm/apm-mustang.dtb
+
+usb@38100000: port@0: 'compatible' is a required property
+	arch/arm64/boot/dts/freescale/imx8mq-librem5-devkit.dtb
+	arch/arm64/boot/dts/freescale/imx8mq-librem5-r2.dtb
+	arch/arm64/boot/dts/freescale/imx8mq-librem5-r3.dtb
+	arch/arm64/boot/dts/freescale/imx8mq-librem5-r4.dtb
+
+usb@38100000: port@1: 'compatible' is a required property
+	arch/arm64/boot/dts/freescale/imx8mq-librem5-devkit.dtb
+	arch/arm64/boot/dts/freescale/imx8mq-librem5-r2.dtb
+	arch/arm64/boot/dts/freescale/imx8mq-librem5-r3.dtb
+	arch/arm64/boot/dts/freescale/imx8mq-librem5-r4.dtb
+
+usb@65a00000: phys: [[41], [42], [43], [44]] is too long
+	arch/arm64/boot/dts/socionext/uniphier-pxs3-ref.dtb
+
+usb@65a00000: phys: [[47], [48], [49], [50]] is too long
+	arch/arm/boot/dts/uniphier-ld6b-ref.dtb
+
+usb@65a00000: phys: [[48], [49], [50], [51]] is too long
+	arch/arm/boot/dts/uniphier-pxs2-gentil.dtb
+	arch/arm/boot/dts/uniphier-pxs2-vodka.dtb
+
+usb@65a00000: phys: [[50], [51], [52], [53], [54], [55]] is too long
+	arch/arm64/boot/dts/socionext/uniphier-ld20-ref.dtb
+
+usb@65a00000: phys: [[52], [53], [54], [55], [56], [57]] is too long
+	arch/arm64/boot/dts/socionext/uniphier-ld20-akebi96.dtb
+
+usb@65a00000: phys: [[55], [56], [57], [58], [59], [60]] is too long
+	arch/arm64/boot/dts/socionext/uniphier-ld20-global.dtb
+
+usb@65c00000: phys: [[55], [56], [57]] is too long
+	arch/arm64/boot/dts/socionext/uniphier-pxs3-ref.dtb
+
+usb@65c00000: phys: [[56], [57], [58]] is too long
+	arch/arm/boot/dts/uniphier-ld6b-ref.dtb
+
+usb@65c00000: phys: [[57], [58], [59]] is too long
+	arch/arm/boot/dts/uniphier-pxs2-gentil.dtb
+	arch/arm/boot/dts/uniphier-pxs2-vodka.dtb
+
+usb@fe200000: interrupt-names: 'oneOf' conditional failed, one must be fixed:
+	arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-smk-k26-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1232-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1275-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.0.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dtb
+
+usb@fe300000: interrupt-names: 'oneOf' conditional failed, one must be fixed:
+	arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-smk-k26-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1232-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1275-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.0.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dtb
+
+usb@ff100000: resets: [[31, 144, 8], [31, 144, 7], [31, 144, 6], [31, 144, 5]] is too long
+	arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dtb
+
+usb@ff100000: snps,tx_de_emphasis:0: [0, 0, 0, 1] is too long
+	arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dtb
+	arch/arm64/boot/dts/hisilicon/hi3660-hikey960.dtb
+
