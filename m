@@ -2,122 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF5E52685E
-	for <lists+linux-pm@lfdr.de>; Fri, 13 May 2022 19:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 844CA52689A
+	for <lists+linux-pm@lfdr.de>; Fri, 13 May 2022 19:40:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383032AbiEMR0m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 May 2022 13:26:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
+        id S1383119AbiEMRkY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 May 2022 13:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382997AbiEMR0b (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 May 2022 13:26:31 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE09703EC
-        for <linux-pm@vger.kernel.org>; Fri, 13 May 2022 10:26:29 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2ec42eae76bso97092737b3.10
-        for <linux-pm@vger.kernel.org>; Fri, 13 May 2022 10:26:29 -0700 (PDT)
+        with ESMTP id S1383113AbiEMRkW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 May 2022 13:40:22 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B73377CB
+        for <linux-pm@vger.kernel.org>; Fri, 13 May 2022 10:40:20 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id l11so8113448pgt.13
+        for <linux-pm@vger.kernel.org>; Fri, 13 May 2022 10:40:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yncJ85+SIlrUyfibchlOo3nGcBtZSYvrpkr6At33oFM=;
-        b=tELgWSqPJ2XeK5KWJc0j3Izxo5P0JYNJpS1LDlgAuPlebbh9e6WMDgeVVLegGeIaAG
-         VVkPFzkgs9492PO60P9XWePlc06wmWZFRlwvZJOZcx5xgrMhBpFW0sOXiKbdsVgYAIRK
-         zjP+gEQNqrUKj69da/qFLQkvCuZ4GjCjn29S2q5SXBtTpeqs0++CM4HRgIxA5FD6F1rD
-         PV/soEr2Mv4iexAm30OrWfc/UQepJQ0ZaQQ+CqJ76d1FTyEX4rQxfaOahQA70NByLksO
-         DRAsanWwPBz8CdNJ7IaHIeXq66XPKKcVg1BFmGAU10mdurV7Lixpw2rYJxRhb1PbLjk0
-         QcmA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Ww/qFjWwrZ3PoYuCt3E6efWcKpC5tEXZBrJvZ8cR1LI=;
+        b=O93qK4w/S03z5gd4Z+CP5yG9MFg/tvmoc9kyyCQqcV/Mz2YexNCrZo01E2mtLKBtxR
+         TRkAlkWmi6D9g3qdIzer7hfnNqJj2J3f4FljvBmblziDyWfSxhbe/vKfL1AGgTuUTsKr
+         DoWTcCkB9v6g+skYiRdCfCo3rbG2J6gdkmU3bmnAh3vq1mscALwOR24Gisf+2WZJxLKE
+         8uNwQeg9/6kOmzB5byZmOYqLib0M+Y0lvl1FKEpi7xjYOm4zxe+J52sJOtAJy30DiobH
+         8xcYSXp/WP6NWt85a5xY4DktYxvQ7eMPBZPMGHG3qn+uit9yW3UN2bZmVArwGTQ88de9
+         dxlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yncJ85+SIlrUyfibchlOo3nGcBtZSYvrpkr6At33oFM=;
-        b=Ki/6KkF1CQjQKdL7iVBYCAYlqi9wGehOEzZCkf34/ICz62m7LawH1/IPW6Ux2mAAcg
-         glNCNJkMqPG4dy8jtpq1lZpKYBSNsO7jF1eVgL0BqvFH4Yc2sXBb93VdbnVVYLdVTnCF
-         kbDE17+Aj9p9V48VoZrDNiB+dkauq/ZcQLPlQae+r909pV6FV37omeKhwhmRRaTEvcXg
-         Nf4VrqH6qprNR/oAaeEHj8RM5nRU6Oy0rlJr2M8bX575fz9ABshi6WfTJ94WLusCvA7W
-         sfUhZzBJyKX9yDmBHBTwsvX5myWBburLkfKUN9UnPaYJ66ZPngiV9u3+9mHFzGnuTTQn
-         vi/w==
-X-Gm-Message-State: AOAM532sY5ARx9CZr7vzvM3+RiNll06kOafrKzSo1vGP0q0mWw4YHWqz
-        RPnAoHCzB0oPBI7RDPUe/e45Ky5vx8NJxKIISzPsDQ==
-X-Google-Smtp-Source: ABdhPJwDc39YV2aEhsT7aNk3yasAQxRbPZaXjabeYzrpzhFybpEVGwlpZU8+hsRWlLkM/kxsOCa4BRf6isC84kd7cTg=
-X-Received: by 2002:a81:1e09:0:b0:2fe:c53c:a0aa with SMTP id
- e9-20020a811e09000000b002fec53ca0aamr2051320ywe.455.1652462788378; Fri, 13
- May 2022 10:26:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220429220933.1350374-1-saravanak@google.com> <CAL_Jsq+2A7mRVV24XW0YcP8GkFCK_Ri4KDcqvW4e0p3TkQMWVg@mail.gmail.com>
-In-Reply-To: <CAL_Jsq+2A7mRVV24XW0YcP8GkFCK_Ri4KDcqvW4e0p3TkQMWVg@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 13 May 2022 10:25:52 -0700
-Message-ID: <CAGETcx8=ZX+Pb4ioMVb7LfuF9c3HNP8g1+WMqZR=Pq7-9=DUCA@mail.gmail.com>
-Subject: Re: [PATCH v1] driver core: Extend deferred probe timeout on driver registration
-To:     Rob Herring <robh@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Ww/qFjWwrZ3PoYuCt3E6efWcKpC5tEXZBrJvZ8cR1LI=;
+        b=CoqfaTHKPfSMGTKzvZdAH/wUjJUMHlnu7ukb+HXlp/Hu4PyBJrEXwD0EqvjcwOo5im
+         6qCTP5kCfPUkcYesqG9vRnFqjYNAn5npIPiX8G2Z+Dxui7PF992kgC/ksI734tbBgXU8
+         14iXqir9busJG1e2jwJW3sWOEKD+MFNt4z7PVqqbSQeZPwGrhvwR+ZRzS5ATVSWT0bzU
+         2kTMwqqN8sWfqoslRszNaeRYJNiqcAjF2hre/0xg7JkjHC7ZiJBxjOO4G9vGx+5I+Gv4
+         qa6VgwnRy6IcPT8haJgk+TcoVvxhOMLAhEOf2cQB7Zyqk/0vR+X4O8G/KOVJPXsg2zNR
+         nfYw==
+X-Gm-Message-State: AOAM532GQtk91Dh0PpE0rTH/WBretjVzVAPXzmLJ0/b6UcTjl2NLYr1D
+        IAoJgjPWbGBkCzuZWvhox+o2
+X-Google-Smtp-Source: ABdhPJzraGPi1ax/y/zer2RyzKcWfeu62crVSXxE94AtGdfKOMGGkKDp4NJOyHwJem3eCBrEO733Rw==
+X-Received: by 2002:a05:6a00:a85:b0:506:b9e:7f43 with SMTP id b5-20020a056a000a8500b005060b9e7f43mr5524669pfl.5.1652463620335;
+        Fri, 13 May 2022 10:40:20 -0700 (PDT)
+Received: from thinkpad ([117.202.184.246])
+        by smtp.gmail.com with ESMTPSA id j18-20020a170902da9200b0015e8d4eb272sm2160673plx.188.2022.05.13.10.40.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 May 2022 10:40:19 -0700 (PDT)
+Date:   Fri, 13 May 2022 23:10:10 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v3 3/7] dt-bindings: ufs: common: add OPP table
+Message-ID: <20220513174010.GC1922@thinkpad>
+References: <20220513061347.46480-1-krzysztof.kozlowski@linaro.org>
+ <20220513061347.46480-4-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220513061347.46480-4-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 13, 2022 at 6:58 AM Rob Herring <robh@kernel.org> wrote:
->
-> On Fri, Apr 29, 2022 at 5:09 PM Saravana Kannan <saravanak@google.com> wrote:
-> >
-> > The deferred probe timer that's used for this currently starts at
-> > late_initcall and runs for driver_deferred_probe_timeout seconds. The
-> > assumption being that all available drivers would be loaded and
-> > registered before the timer expires. This means, the
-> > driver_deferred_probe_timeout has to be pretty large for it to cover the
-> > worst case. But if we set the default value for it to cover the worst
-> > case, it would significantly slow down the average case. For this
-> > reason, the default value is set to 0.
-> >
-> > Also, with CONFIG_MODULES=y and the current default values of
-> > driver_deferred_probe_timeout=0 and fw_devlink=on, devices with missing
-> > drivers will cause their consumer devices to always defer their probes.
-> > This is because device links created by fw_devlink defer the probe even
-> > before the consumer driver's probe() is called.
-> >
-> > Instead of a fixed timeout, if we extend an unexpired deferred probe
-> > timer on every successful driver registration, with the expectation more
-> > modules would be loaded in the near future, then the default value of
-> > driver_deferred_probe_timeout only needs to be as long as the worst case
-> > time difference between two consecutive module loads.
-> >
-> > So let's implement that and set the default value to 10 seconds when
-> > CONFIG_MODULES=y.
->
-> We had to revert a non-zero timeout before (issue with NFS root IIRC).
-> Does fw_devlink=on somehow fix that?
+On Fri, May 13, 2022 at 08:13:43AM +0200, Krzysztof Kozlowski wrote:
+> Except scaling UFS and bus clocks, it's necessary to scale also the
+> voltages of regulators or power domain performance state levels.  Adding
+> Operating Performance Points table allows to adjust power domain
+> performance state, depending on the UFS clock speed.
+> 
+> OPPv2 deprecates previous property limited to clock scaling:
+> freq-table-hz.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> 
+> ---
+> 
+> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  .../devicetree/bindings/ufs/ufs-common.yaml   | 34 +++++++++++++++++--
+>  1 file changed, 31 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/ufs/ufs-common.yaml b/Documentation/devicetree/bindings/ufs/ufs-common.yaml
+> index 47a4e9e1a775..d7d2c8a136bb 100644
+> --- a/Documentation/devicetree/bindings/ufs/ufs-common.yaml
+> +++ b/Documentation/devicetree/bindings/ufs/ufs-common.yaml
+> @@ -20,11 +20,24 @@ properties:
+>        items:
+>          - description: Minimum frequency for given clock in Hz
+>          - description: Maximum frequency for given clock in Hz
+> +    deprecated: true
+>      description: |
+> +      Preferred is operating-points-v2.
+> +
+>        Array of <min max> operating frequencies in Hz stored in the same order
+> -      as the clocks property. If this property is not defined or a value in the
+> -      array is "0" then it is assumed that the frequency is set by the parent
+> -      clock or a fixed rate clock source.
+> +      as the clocks property. If either this property or operating-points-v2 is
+> +      not defined or a value in the array is "0" then it is assumed that the
+> +      frequency is set by the parent clock or a fixed rate clock source.
+> +
+> +  operating-points-v2:
+> +    description:
+> +      Preferred over freq-table-hz.
+> +      If present, each OPP must contain array of frequencies stored in the same
+> +      order for each clock.  If clock frequency in the array is "0" then it is
+> +      assumed that the frequency is set by the parent clock or a fixed rate
+> +      clock source.
 
-If it's the one where ip autoconfig was timing out, then John Stultz
-fixed it by fixing wait_for_device_probe().
-https://lore.kernel.org/all/20200422203245.83244-4-john.stultz@linaro.org/
+This description mentions only the clocks and not voltages. But in theory, the
+OPP table can contain other parameters like current, bandwidth, etc,... So to
+avoid confusion, I'd suggest to get rid of the description.
 
-If you are referring to some other issue, then I'd need more details.
+> +
+> +  opp-table: true
+>  
+>    interrupts:
+>      maxItems: 1
+> @@ -75,8 +88,23 @@ properties:
+>  
+>  dependencies:
+>    freq-table-hz: [ 'clocks' ]
+> +  operating-points-v2: [ 'clocks', 'clock-names' ]
 
--Saravana
+What about voltage regulators if relevant opp property is present?
+
+Thanks,
+Mani
+
+>  
+>  required:
+>    - interrupts
+>  
+> +allOf:
+> +  - if:
+> +      required:
+> +        - freq-table-hz
+> +    then:
+> +      properties:
+> +        operating-points-v2: false
+> +  - if:
+> +      required:
+> +        - operating-points-v2
+> +    then:
+> +      properties:
+> +        freq-table-hz: false
+> +
+>  additionalProperties: true
+> -- 
+> 2.32.0
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
