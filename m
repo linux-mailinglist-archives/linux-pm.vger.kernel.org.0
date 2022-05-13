@@ -2,130 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3ED1525D51
-	for <lists+linux-pm@lfdr.de>; Fri, 13 May 2022 10:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3935260B6
+	for <lists+linux-pm@lfdr.de>; Fri, 13 May 2022 13:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378198AbiEMIYd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 May 2022 04:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39394 "EHLO
+        id S245323AbiEMLJD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 May 2022 07:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351221AbiEMIY3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 May 2022 04:24:29 -0400
-Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 936A62A76A2;
-        Fri, 13 May 2022 01:24:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Message-ID:Date:MIME-Version:Subject:From; bh=1wq4x
-        +GCdYKq7VSZUcMOO2GqRgSu1qPIqNZNKgKe78o=; b=aGsvRiKodBfXXrQubvrmS
-        eNaI5SHRoxDxCWaYRIFOL0XFsdCTJuktUokDSniA34TYvI8srQh30tyJ9TWbM8jI
-        lxOuOLA8XtgwGgdS0M1LYm33GJSaddvaBUQLXrNYbyp9MyMZGTjSwqlVHSNuJWFu
-        A5KmFokyy5XONgBDiMi4is=
-Received: from [192.168.3.102] (unknown [218.201.129.19])
-        by smtp7 (Coremail) with SMTP id C8CowAA3GrB4FX5i05E+CQ--.22485S2;
-        Fri, 13 May 2022 16:23:21 +0800 (CST)
-Message-ID: <666ead08-af1e-81f5-6fe1-e5e3370e6d6f@163.com>
-Date:   Fri, 13 May 2022 16:23:20 +0800
+        with ESMTP id S1379766AbiEMLJC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 May 2022 07:09:02 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BA71356A7;
+        Fri, 13 May 2022 04:09:01 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id p4so6494936qtq.12;
+        Fri, 13 May 2022 04:09:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WmgMp6GvUkzNH+zUibeCMplxNIPkAGROCIcy5eW+4vc=;
+        b=N2AbmWKlTMtelPKNo0GzQElQkZxny2h3l07Q4c8QSoeEwWdaGMyY7WZZMdWLyz4WVT
+         NCj6+gULWAVEkyUOrerghm9J4y/JDVNh6isrScn4ctu4NaimjJFToPZgdVyEo9G2sBeY
+         FpZvnTabZCoy9eZ7rDSd2q63+C/JPgqoffdK+lRxHGOKJUSxxLG80EsTUjkR43zbnjYf
+         Jl+Fml9F6FSA9v3y6AgPQ9zLBqfBCUtZElkaXNydIOWkKpA0n7PI0qs5xxFCugxymM7W
+         WVQ8WaDnqxmDDAE+K0wEclNqGBDxgvloaJ/dXb1iLk8s+HWBMmfmiboz/dhjizMT+aQb
+         byXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WmgMp6GvUkzNH+zUibeCMplxNIPkAGROCIcy5eW+4vc=;
+        b=5L3YSt0STtXel7ulqDWEcfVk/FYXR7faCOj42LI/w4ZvVmGdz5flgy3Oz6T53QA6Hp
+         imQJWXdEjdz81cpdOGlIaeVOsC0ShU17LX7n0sACvIz7PQ3mrfpHvHLOy2IvZL6iwG/L
+         NCTE8Be5uGzP8pXC02WB0sxXUOaHPeGePujd/9JHhWP8Mw1lvizTEWwmrzu7nHfiqBO6
+         88gr6uHdESG7vmy1tYBhkKqefPfYlwY+d8x42m4nTNUN2V7uR4QX0n+8BltWTdkfK0Ek
+         OWiucT+Ew2dAthYSF3uMwOs4+Lfzm4aMdasYI/v3Zqs+DrSA/L8C7r+xXod5g1jxJTSc
+         SSXg==
+X-Gm-Message-State: AOAM533xY37AMXLMHG1nvLjCXH/xERYOXBaWzVRnVuciC/0/VVLKi3Pw
+        TmYJ4dMUP5f5hidoVtXdEXt5HRHi7RQHRgUy
+X-Google-Smtp-Source: ABdhPJwNGzvFRR5or8n6Km5CQIiApH6yHBiP1d5j6g24mm+kstLp8O5NCyccJ9jSReCuCLlxPzCDcg==
+X-Received: by 2002:a05:622a:1e12:b0:2f3:d254:45b7 with SMTP id br18-20020a05622a1e1200b002f3d25445b7mr3995083qtb.88.1652440140560;
+        Fri, 13 May 2022 04:09:00 -0700 (PDT)
+Received: from MBP.hobot.cc (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
+        by smtp.gmail.com with ESMTPSA id b16-20020a05620a04f000b0069fd57d435fsm1127548qkh.101.2022.05.13.04.08.57
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 13 May 2022 04:08:59 -0700 (PDT)
+From:   Schspa Shi <schspa@gmail.com>
+To:     rafael@kernel.org, viresh.kumar@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        schspa@gmail.com
+Subject: [PATCH v5 1/2] cpufreq: Abort show/store for half initialized policy
+Date:   Fri, 13 May 2022 19:08:47 +0800
+Message-Id: <20220513110848.20204-1-schspa@gmail.com>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v3 2/2] ARM: dts: sun8i-r40: Add "cpu-supply" node for
- sun8i-r40 based board
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     linux-sunxi@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20220512071858.10805-1-qianfanguijin@163.com>
- <20220512071858.10805-2-qianfanguijin@163.com>
- <20220513073849.cu4jzykefat2sepg@houat>
- <1352b9d7-5219-af09-948b-6462def39ea5@163.com>
- <20220513081556.knd3tf6pangfblh3@houat>
-From:   qianfan <qianfanguijin@163.com>
-In-Reply-To: <20220513081556.knd3tf6pangfblh3@houat>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: C8CowAA3GrB4FX5i05E+CQ--.22485S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWF1ktF47Kw4DXw1DCw4kJFb_yoW5GFyDp3
-        y7uF4DCF4kGFyrtry2gFWUJrySy34rWr4UXFn8Kw1rJrn8XF9rtrs5K3WFkFZ8Wr4fGw40
-        vrWUWrn7Wws8Za7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UpWlPUUUUU=
-X-Originating-IP: [218.201.129.19]
-X-CM-SenderInfo: htld0w5dqj3xxmlqqiywtou0bp/1tbiGh0A7VaEBkJFWgABsi
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+If policy initialization fails after the sysfs files are created,
+there is a possibility that we may end up running show()/store()
+callbacks for half initialized policies, which may have unpredictable
+outcomes.
 
+Abort show/store in such a case by making sure the policy is active.
+Also inactivate the policy on such failures.
 
-在 2022/5/13 16:15, Maxime Ripard 写道:
-> On Fri, May 13, 2022 at 03:48:50PM +0800, qianfan wrote:
->>
->> 在 2022/5/13 15:38, Maxime Ripard 写道:
->>> Hi,
->>>
->>> On Thu, May 12, 2022 at 03:18:58PM +0800, qianfanguijin@163.com wrote:
->>>> From: qianfan Zhao <qianfanguijin@163.com>
->>>>
->>>> sun8i-r40 actived cpufreq feature now, let's add "cpu-supply" node on
->>>> board.
->>>>
->>>> Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
->>>> ---
->>>>    arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts | 4 ++++
->>>>    arch/arm/boot/dts/sun8i-r40-feta40i.dtsi          | 4 ++++
->>>>    arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts          | 4 ++++
->>>>    arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts | 4 ++++
->>>>    4 files changed, 16 insertions(+)
->>>>
->>>> diff --git a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts b/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
->>>> index a6a1087a0c9b..4f30018ec4a2 100644
->>>> --- a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
->>>> +++ b/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
->>>> @@ -113,6 +113,10 @@ &ahci {
->>>>    	status = "okay";
->>>>    };
->>>> +&cpu0 {
->>>> +	cpu-supply = <&reg_dcdc2>;
->>>> +};
->>>> +
->>> This will break bisection on those boards. Indeed, you added the OPPs on
->>> the first patch, and if you only apply that patch, the boards in the
->>> second patch will be missing their CPU regulator. The kernel will then
->>> ramp up the frequency to the highest OPP, but will not change the
->>> voltage, resulting in a crash.
->> This is a good point and I will merge those two patch.
-> That's not what I meant to say. Those two patches are great separated.
-> You can invert them though.
-haha, invert them, so interesting. good idea.
->
->>> There's a similar issue for all the boards that don't have a regulator
->>> in the first place.
->>>
->>> The way we worked around this for the other SoCs is to have a DTSI with
->>> the OPPs with a frequency higher than what U-Boot boots with (1008MHz?),
->>> and only include that DTSI on boards that have a CPU regulator hooked in.
->> Is this really necessary? It seems like every board based on sun8i-r40
->> have a cpu regulator.
-> This probably won't be the case whenever someone starts a new design,
-> and then they'll face random crashes for no apparent reason, and waste a
-> lot of time in the process.
->
-> Whereas the alternative is that you would be missing some OPPs,
-> something that is fairly easy to figure out.
-How about remove the OPPs which greate that 1.08G in sun8i-r40.dtsi,
-If some boards want to run at a higher frequency, can add them byself
-in the board's file.
->
-> Maxime
+Signed-off-by: Schspa Shi <schspa@gmail.com>
+
+---
+
+Changelog:
+v1 -> v2:
+        - Fix bad critical region enlarge which causes uninitialized
+          unlock.
+        - Move cpumask_clear(policy->cpus); before out_offline_policy
+v2 -> v3:
+        - Remove the missed down_write() before
+          cpumask_and(policy->cpus, policy->cpus, cpu_online_mask);
+v3 -> v4:
+        - Seprate to two patchs.
+        - Add policy_is_inactive check before sysfs access
+v4 -> v5:
+        - Change the commit message as Viresh advised.
+        - Initialize ret to -EBUSY to get rid of the else part.
+---
+ drivers/cpufreq/cpufreq.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 80f535cc8a75..ba73be6f0490 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -947,13 +947,14 @@ static ssize_t show(struct kobject *kobj, struct attribute *attr, char *buf)
+ {
+ 	struct cpufreq_policy *policy = to_policy(kobj);
+ 	struct freq_attr *fattr = to_attr(attr);
+-	ssize_t ret;
++	ssize_t ret = -EBUSY;
+ 
+ 	if (!fattr->show)
+ 		return -EIO;
+ 
+ 	down_read(&policy->rwsem);
+-	ret = fattr->show(policy, buf);
++	if (likely(!policy_is_inactive(policy)))
++		ret = fattr->show(policy, buf);
+ 	up_read(&policy->rwsem);
+ 
+ 	return ret;
+@@ -964,7 +965,7 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
+ {
+ 	struct cpufreq_policy *policy = to_policy(kobj);
+ 	struct freq_attr *fattr = to_attr(attr);
+-	ssize_t ret = -EINVAL;
++	ssize_t ret = -EBUSY;
+ 
+ 	if (!fattr->store)
+ 		return -EIO;
+@@ -978,7 +979,8 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
+ 
+ 	if (cpu_online(policy->cpu)) {
+ 		down_write(&policy->rwsem);
+-		ret = fattr->store(policy, buf, count);
++		if (likely(!policy_is_inactive(policy)))
++			ret = fattr->store(policy, buf, count);
+ 		up_write(&policy->rwsem);
+ 	}
+ 
+@@ -1533,6 +1535,7 @@ static int cpufreq_online(unsigned int cpu)
+ 	for_each_cpu(j, policy->real_cpus)
+ 		remove_cpu_dev_symlink(policy, get_cpu_device(j));
+ 
++	cpumask_clear(policy->cpus);
+ 	up_write(&policy->rwsem);
+ 
+ out_offline_policy:
+-- 
+2.29.0
 
