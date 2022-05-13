@@ -2,187 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8E252683F
-	for <lists+linux-pm@lfdr.de>; Fri, 13 May 2022 19:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF5E52685E
+	for <lists+linux-pm@lfdr.de>; Fri, 13 May 2022 19:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382949AbiEMRXv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 May 2022 13:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35100 "EHLO
+        id S1383032AbiEMR0m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 May 2022 13:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382929AbiEMRXu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 May 2022 13:23:50 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C0366ADC
-        for <linux-pm@vger.kernel.org>; Fri, 13 May 2022 10:23:48 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id a5so8494349wrp.7
-        for <linux-pm@vger.kernel.org>; Fri, 13 May 2022 10:23:48 -0700 (PDT)
+        with ESMTP id S1382997AbiEMR0b (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 May 2022 13:26:31 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE09703EC
+        for <linux-pm@vger.kernel.org>; Fri, 13 May 2022 10:26:29 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-2ec42eae76bso97092737b3.10
+        for <linux-pm@vger.kernel.org>; Fri, 13 May 2022 10:26:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=9JeC/UwGxq2Eyj4KJe9rSsGrpMRSgX/mq86/Sh1LXC8=;
-        b=sP/9mb3p4SMkERCWlqWhOasd7ln5EzMoc/ho71rWbV5OjvjdEdtjagShwyCmIhtObB
-         p2ms3JFqfTxHCGkYf2FGWAjUUpzKXF7kS/2amNwK0CK2spbdSJHiehDh4zm6hzHl14mY
-         CkpcFiPXrn5D19GbG5vjqnJ3jEBj3cShkYtDuhC4pPm9rakJFjMsRhoNIXJYQ6Rk4yOH
-         toH5DVFPv9Ig+iGvARQDVgiCuJ5k2TiFOduvhrnAithd4sw1Lu4NMQmOqRN0D4ddClv5
-         7KnyzWZONMb56pP0j+aGNrCuwV/2F+UtUyuoUAgV1XPzMQI4D4rfuDsJh69BUtWJouto
-         /RFA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yncJ85+SIlrUyfibchlOo3nGcBtZSYvrpkr6At33oFM=;
+        b=tELgWSqPJ2XeK5KWJc0j3Izxo5P0JYNJpS1LDlgAuPlebbh9e6WMDgeVVLegGeIaAG
+         VVkPFzkgs9492PO60P9XWePlc06wmWZFRlwvZJOZcx5xgrMhBpFW0sOXiKbdsVgYAIRK
+         zjP+gEQNqrUKj69da/qFLQkvCuZ4GjCjn29S2q5SXBtTpeqs0++CM4HRgIxA5FD6F1rD
+         PV/soEr2Mv4iexAm30OrWfc/UQepJQ0ZaQQ+CqJ76d1FTyEX4rQxfaOahQA70NByLksO
+         DRAsanWwPBz8CdNJ7IaHIeXq66XPKKcVg1BFmGAU10mdurV7Lixpw2rYJxRhb1PbLjk0
+         QcmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9JeC/UwGxq2Eyj4KJe9rSsGrpMRSgX/mq86/Sh1LXC8=;
-        b=sWjQWqnoEWwFVJfXF1gOUSqjykMiz7x0v8h+U8e8JB6WEPcNXE6+uKgVc4Gj6UvMrM
-         Nhi3MlHyXxyTs8Ytl3jG8x7/b+lUiGC1vb4mFS0wMebqHUjq86Kav8JiMhINAfD0K2Q0
-         efaI6KkZ2BaQkgu8vDrfRuk3Rt+aESPZWNcvLe1QYKpo2seK0ojQAk3A6wLODJgmzLFo
-         oO41PyuBUolHOP0zB2iaj9VefYcENVEXi1zcfuaULr/qGgk5Yt/3EHzGAnoRl1BlNynD
-         Rq3mZ9TxDtfY9zxgipuFMg8V/FMVUcIot0bi+36u2TPKg2GMGZnIokFWXvDKlMd+m3yE
-         z16A==
-X-Gm-Message-State: AOAM531fCXf3Ep3PzdceMXhUOzDYPRz5/iXQa2/Y4SipcZhLsYfdSBGE
-        sKSaRK7Ny3hjNIozDF09aw7k7w==
-X-Google-Smtp-Source: ABdhPJyAnD6twOkIHdeDiY+tGgaCRVKJA40sfewef7gLVL5NkSQK45NAtkIehF6CxV8wsR4e0UpFZw==
-X-Received: by 2002:a5d:4b89:0:b0:20c:52e3:3073 with SMTP id b9-20020a5d4b89000000b0020c52e33073mr4997148wrt.140.1652462627136;
-        Fri, 13 May 2022 10:23:47 -0700 (PDT)
-Received: from [192.168.1.41] (static-176-182-171-101.ncc.abo.bbox.fr. [176.182.171.101])
-        by smtp.googlemail.com with ESMTPSA id p15-20020a7bcdef000000b00394517e7d98sm2997981wmj.25.2022.05.13.10.23.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 May 2022 10:23:46 -0700 (PDT)
-Message-ID: <63f1c4a0-d2c6-8157-5da0-198c2d8d1013@linaro.org>
-Date:   Fri, 13 May 2022 19:23:45 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yncJ85+SIlrUyfibchlOo3nGcBtZSYvrpkr6At33oFM=;
+        b=Ki/6KkF1CQjQKdL7iVBYCAYlqi9wGehOEzZCkf34/ICz62m7LawH1/IPW6Ux2mAAcg
+         glNCNJkMqPG4dy8jtpq1lZpKYBSNsO7jF1eVgL0BqvFH4Yc2sXBb93VdbnVVYLdVTnCF
+         kbDE17+Aj9p9V48VoZrDNiB+dkauq/ZcQLPlQae+r909pV6FV37omeKhwhmRRaTEvcXg
+         Nf4VrqH6qprNR/oAaeEHj8RM5nRU6Oy0rlJr2M8bX575fz9ABshi6WfTJ94WLusCvA7W
+         sfUhZzBJyKX9yDmBHBTwsvX5myWBburLkfKUN9UnPaYJ66ZPngiV9u3+9mHFzGnuTTQn
+         vi/w==
+X-Gm-Message-State: AOAM532sY5ARx9CZr7vzvM3+RiNll06kOafrKzSo1vGP0q0mWw4YHWqz
+        RPnAoHCzB0oPBI7RDPUe/e45Ky5vx8NJxKIISzPsDQ==
+X-Google-Smtp-Source: ABdhPJwDc39YV2aEhsT7aNk3yasAQxRbPZaXjabeYzrpzhFybpEVGwlpZU8+hsRWlLkM/kxsOCa4BRf6isC84kd7cTg=
+X-Received: by 2002:a81:1e09:0:b0:2fe:c53c:a0aa with SMTP id
+ e9-20020a811e09000000b002fec53ca0aamr2051320ywe.455.1652462788378; Fri, 13
+ May 2022 10:26:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 00/14] thermal OF rework
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>, rafael@kernel.org
-Cc:     khilman@baylibre.com, abailon@baylibre.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220507125443.2766939-1-daniel.lezcano@linexp.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220507125443.2766939-1-daniel.lezcano@linexp.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220429220933.1350374-1-saravanak@google.com> <CAL_Jsq+2A7mRVV24XW0YcP8GkFCK_Ri4KDcqvW4e0p3TkQMWVg@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+2A7mRVV24XW0YcP8GkFCK_Ri4KDcqvW4e0p3TkQMWVg@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Fri, 13 May 2022 10:25:52 -0700
+Message-ID: <CAGETcx8=ZX+Pb4ioMVb7LfuF9c3HNP8g1+WMqZR=Pq7-9=DUCA@mail.gmail.com>
+Subject: Re: [PATCH v1] driver core: Extend deferred probe timeout on driver registration
+To:     Rob Herring <robh@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, May 13, 2022 at 6:58 AM Rob Herring <robh@kernel.org> wrote:
+>
+> On Fri, Apr 29, 2022 at 5:09 PM Saravana Kannan <saravanak@google.com> wrote:
+> >
+> > The deferred probe timer that's used for this currently starts at
+> > late_initcall and runs for driver_deferred_probe_timeout seconds. The
+> > assumption being that all available drivers would be loaded and
+> > registered before the timer expires. This means, the
+> > driver_deferred_probe_timeout has to be pretty large for it to cover the
+> > worst case. But if we set the default value for it to cover the worst
+> > case, it would significantly slow down the average case. For this
+> > reason, the default value is set to 0.
+> >
+> > Also, with CONFIG_MODULES=y and the current default values of
+> > driver_deferred_probe_timeout=0 and fw_devlink=on, devices with missing
+> > drivers will cause their consumer devices to always defer their probes.
+> > This is because device links created by fw_devlink defer the probe even
+> > before the consumer driver's probe() is called.
+> >
+> > Instead of a fixed timeout, if we extend an unexpired deferred probe
+> > timer on every successful driver registration, with the expectation more
+> > modules would be loaded in the near future, then the default value of
+> > driver_deferred_probe_timeout only needs to be as long as the worst case
+> > time difference between two consecutive module loads.
+> >
+> > So let's implement that and set the default value to 10 seconds when
+> > CONFIG_MODULES=y.
+>
+> We had to revert a non-zero timeout before (issue with NFS root IIRC).
+> Does fw_devlink=on somehow fix that?
 
-Hi Rafael,
+If it's the one where ip autoconfig was timing out, then John Stultz
+fixed it by fixing wait_for_device_probe().
+https://lore.kernel.org/all/20200422203245.83244-4-john.stultz@linaro.org/
 
-if you are ok with this series, I'll pick it up.
+If you are referring to some other issue, then I'd need more details.
 
-Is that ok ?
-
-
-
-
-On 07/05/2022 14:54, Daniel Lezcano wrote:
-> The thermal framework initialization with the device tree appears to
-> be complicated and hard to make it to evolve.
-> 
-> It contains duplication of almost the same thermal generic structures
-> and has an assymetric initialization making hard any kind of serious
-> changes for more complex features. One of them is the multiple sensors
-> support per thermal zone.
-> 
-> In order to set the scene for the aforementioned feature with generic
-> code, we need to cleanup and rework the device tree initialization.
-> 
-> However this rework is not obvious because of the multiple components
-> entering in the composition of a thermal zone and being initialized at
-> different moments. For instance, a cooling device can be initialized
-> before a sensor, so the thermal zones must exist before the cooling
-> device as well as the sensor. This asynchonous initialization forces
-> the thermal zone to be created with fake ops because they are
-> mandotory and build a list of cooling devices which is used to lookup
-> afterwards when the cooling device driver is registering itself.
-> 
-> As there could be a large number of changes, this first series provide
-> some steps forward for a simpler device tree initialization.
-> 
-> Changelog:
->   - V2:
->     - Drop patch 1/15 which contains too many changes for a simple
->       structure renaming. This could be addressed in a separate series as
->       it is not necessary for the OF rework
->       
->     - Fixed of_node_put with gchild not initialized as reported by
->       kbuild and Dan Carpenter
-> 
->   - V1:
->     - Initial post
-> 
-> Daniel Lezcano (14):
->    thermal/core: Change thermal_zone_ops to thermal_sensor_ops
->    thermal/core: Add a thermal sensor structure in the thermal zone
->    thermal/core: Remove duplicate information when an error occurs
->    thermal/of: Replace device node match with device node search
->    thermal/of: Remove the device node pointer for thermal_trip
->    thermal/of: Move thermal_trip structure to thermal.h
->    thermal/core: Remove unneeded EXPORT_SYMBOLS
->    thermal/core: Move thermal_set_delay_jiffies to static
->    thermal/core: Rename trips to ntrips
->    thermal/core: Add thermal_trip in thermal_zone
->    thermal/core: Register with the trip points
->    thermal/of: Store the trips in the thermal zone
->    thermal/of: Use thermal trips stored in the thermal zone
->    thermal/of: Initialize trip points separately
-> 
->   .../driver-api/thermal/sysfs-api.rst          |   2 +-
->   drivers/acpi/thermal.c                        |   6 +-
->   .../ethernet/chelsio/cxgb4/cxgb4_thermal.c    |   2 +-
->   .../ethernet/mellanox/mlxsw/core_thermal.c    |   6 +-
->   drivers/net/wireless/intel/iwlwifi/mvm/tt.c   |   2 +-
->   drivers/platform/x86/acerhdf.c                |   2 +-
->   drivers/power/supply/power_supply_core.c      |   2 +-
->   drivers/thermal/armada_thermal.c              |   2 +-
->   drivers/thermal/broadcom/bcm2835_thermal.c    |   2 +-
->   drivers/thermal/da9062-thermal.c              |   2 +-
->   drivers/thermal/dove_thermal.c                |   2 +-
->   drivers/thermal/gov_bang_bang.c               |   6 +-
->   drivers/thermal/gov_fair_share.c              |  10 +-
->   drivers/thermal/gov_power_allocator.c         |  22 +-
->   drivers/thermal/gov_step_wise.c               |   4 +-
->   drivers/thermal/imx_thermal.c                 |   2 +-
->   .../intel/int340x_thermal/int3400_thermal.c   |   2 +-
->   .../int340x_thermal/int340x_thermal_zone.c    |   6 +-
->   .../int340x_thermal/int340x_thermal_zone.h    |   4 +-
->   .../processor_thermal_device.c                |   4 +-
->   .../processor_thermal_device_pci.c            |   2 +-
->   drivers/thermal/intel/intel_pch_thermal.c     |   2 +-
->   .../thermal/intel/intel_quark_dts_thermal.c   |   2 +-
->   drivers/thermal/intel/intel_soc_dts_iosf.c    |   2 +-
->   drivers/thermal/intel/x86_pkg_temp_thermal.c  |   2 +-
->   drivers/thermal/kirkwood_thermal.c            |   2 +-
->   drivers/thermal/rcar_gen3_thermal.c           |   6 +-
->   drivers/thermal/rcar_thermal.c                |   4 +-
->   drivers/thermal/samsung/exynos_tmu.c          |   6 +-
->   drivers/thermal/spear_thermal.c               |   2 +-
->   drivers/thermal/st/st_thermal.c               |   2 +-
->   drivers/thermal/tegra/soctherm.c              |  10 +-
->   drivers/thermal/tegra/tegra30-tsensor.c       |   6 +-
->   drivers/thermal/thermal_core.c                | 102 ++++----
->   drivers/thermal/thermal_core.h                |  25 +-
->   drivers/thermal/thermal_helpers.c             |  35 ++-
->   drivers/thermal/thermal_hwmon.c               |   4 +-
->   drivers/thermal/thermal_netlink.c             |  10 +-
->   drivers/thermal/thermal_of.c                  | 221 ++++++++++--------
->   drivers/thermal/thermal_sysfs.c               |  62 ++---
->   include/linux/thermal.h                       |  34 ++-
->   41 files changed, 341 insertions(+), 290 deletions(-)
-> 
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+-Saravana
