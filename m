@@ -2,58 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE608525A1F
-	for <lists+linux-pm@lfdr.de>; Fri, 13 May 2022 05:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B9A525A29
+	for <lists+linux-pm@lfdr.de>; Fri, 13 May 2022 05:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353334AbiEMDbk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 May 2022 23:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
+        id S1376792AbiEMDfg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 May 2022 23:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349960AbiEMDbj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 23:31:39 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A9C5DA4D
-        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 20:31:38 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id t5so8393068edw.11
-        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 20:31:37 -0700 (PDT)
+        with ESMTP id S1376786AbiEMDff (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 May 2022 23:35:35 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87AF2983A9
+        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 20:35:32 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id c12so8429111edv.10
+        for <linux-pm@vger.kernel.org>; Thu, 12 May 2022 20:35:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=5yCw6+SLWwc4hLigZs4FMJCongrsGQWmk50eU/pub3E=;
-        b=aioEmXhPB8b+rsy5UpVm5j8mhPIA2BMxULITDwvPqJ14UdKSU49ZpLdNVruYg67ti/
-         sVZAUYXqQUjgB1O5jwF7yUharg744ZVAebijeS1fJLBlr5E4MgoMqkRhopAkDrD4yLEX
-         5t6CSiyUxUv6EeN0RjQ7nJLeOvS9hJa/gkCNA=
+        bh=hp5XW+EPUgNO9juHKBfPepcJCtSp8113Ul6jaPu0DAQ=;
+        b=GDSDCn+HYVu7o6UcrQY7lfpYOfUai0qVrApLd9h412Qrq2pirSRC/X/vIGsbko6Xzr
+         u3u5darEcYyz1M2dEJRf6XEL1U+gNibYj54aLOA6Sy+/Fx6sALMc8GvkVgl/2TEaeP51
+         6K5WH0O4bOLy61rVkroPJh9crDW+fddMKEZzU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=5yCw6+SLWwc4hLigZs4FMJCongrsGQWmk50eU/pub3E=;
-        b=ZMnBCzyNQDrn5vjzZFTwZyv0nmV58Hdhne5KJ16ny5fwYnQ0F7AiJx3srkaxfKU3UA
-         N9LoYL99gfI4n9M2xsD9cHkPaqzjlPw9v5b5Hi1UdcKW/92InJ8HgbBZgSpmjhP/Ontc
-         gSyHhQER2QGcKonxKBAgFFGIQ0BnhwziSJeXdt5U+S+xp75RZBiZXLsuU+HChbctviom
-         uCPHAPHFtSht21lalPoFgQ1TO7rjShVzGTfu6Pj7EfGs9jDi+Uh3YsBAy3BSLEPf3JEb
-         P+b8TWPVF+obO4mtDCzXjG9tNh8BvpnowGTC3oXilhIUGxRgK+44dBRZmkt7QZFOulJb
-         c+jw==
-X-Gm-Message-State: AOAM530fZ5si8TGlID4rBy4ItuzgC9mev0vfQnFOIYWzgc7als84T9ym
-        MJn1AhvbjrK4XZLZqNL3L6qjuKacC/9WKI/HKbnsJg==
-X-Google-Smtp-Source: ABdhPJwpZayrClC+spTzuFpZXtMET8ynvlYqTUFmPJed8aEt6GjVxYTTm2RZ+SRrZTAY9eMOjyCMTDxDFFphMihU77Y=
-X-Received: by 2002:a05:6402:42d4:b0:412:c26b:789 with SMTP id
- i20-20020a05640242d400b00412c26b0789mr38593610edc.232.1652412696597; Thu, 12
- May 2022 20:31:36 -0700 (PDT)
+        bh=hp5XW+EPUgNO9juHKBfPepcJCtSp8113Ul6jaPu0DAQ=;
+        b=RvPgj+8jXbfEev+FpxkSboXs3QQL0DgMlJ6YfJM/JDnmcVUjqY7OBIgZIkXzTLr2hd
+         YlH+lSDj9Rv/AlKvehkqcFnQv+LkwmlEzVctIULfOqUG60q2ay72wxNlvVq9RdyISe1O
+         hwLo4S0OqFbFuiBUMw1dzgKsFcG8buVDGz9iKuaUsXVBAGEW9rawKJgJj1yPx5fLt+Am
+         urIOW/35+VzugkGZlLG9q7+WQaiXk3G43KtatxPE0RCPgGElDiPMSd1JIM1GNjSSzyEB
+         mEmnbWkn1in5572rV42wY2o2DZKDIf6//nFHy2MzLGMuKVjedxRzb3EKGeLY+Hre0SgM
+         95JQ==
+X-Gm-Message-State: AOAM532/Hc9hRCTzA0GzJYTOmcioVxk4V3SwfFa4QK9gqsHlonHKRQFZ
+        6Q6lpRpGpC/o192/DdRipUj97fpYfXrKl3ri8EK3LS/bXiqbYw==
+X-Google-Smtp-Source: ABdhPJwCxuakH0MPfmD4BsVGbk8H/0s+6mFVVZ6p1DZEFE3K2V6LRK/oXrI3wQNquf51Rr/hHpcAOHj5MVbVUnJKE6w=
+X-Received: by 2002:a50:9ecc:0:b0:428:73bd:4667 with SMTP id
+ a70-20020a509ecc000000b0042873bd4667mr34262382edf.165.1652412931525; Thu, 12
+ May 2022 20:35:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220425125546.4129-1-johnson.wang@mediatek.com>
- <20220425125546.4129-2-johnson.wang@mediatek.com> <CAGXv+5HgyN+kp86M2GgFtbruXSAMSLxsh9vf8zVE5TxRMyTyaA@mail.gmail.com>
- <a8e5fd9de1feece9051e1624c5cf3b672131a122.camel@mediatek.com>
- <CAGXv+5G6Qv1JcsZNrw5=USJSzPkczW42FgXRYqAK=xS-moO6nw@mail.gmail.com> <14cdb1e17015e299231e72356e661203d4beda17.camel@mediatek.com>
-In-Reply-To: <14cdb1e17015e299231e72356e661203d4beda17.camel@mediatek.com>
+References: <20220513032832.17645-1-johnson.wang@mediatek.com> <20220513032832.17645-2-johnson.wang@mediatek.com>
+In-Reply-To: <20220513032832.17645-2-johnson.wang@mediatek.com>
 From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Fri, 13 May 2022 11:31:25 +0800
-Message-ID: <CAGXv+5EfoOx8LHwHeL+wva_M0KX4S3qLNsBgk_003hvXxYPRVQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: interconnect: Add MediaTek CCI dt-bindings
+Date:   Fri, 13 May 2022 11:35:20 +0800
+Message-ID: <CAGXv+5FqjDX7y_bR0Y=2xCnCqwtAB2S+3Fn==adxJJqanv8=YQ@mail.gmail.com>
+Subject: Re: [RESEND v4 1/2] dt-bindings: interconnect: Add MediaTek CCI dt-bindings
 To:     Johnson Wang <johnson.wang@mediatek.com>
-Cc:     krzk+dt@kernel.org, cw00.choi@samsung.com, robh+dt@kernel.org,
-        kyungmin.park@samsung.com, khilman@kernel.org,
+Cc:     cw00.choi@samsung.com, krzk+dt@kernel.org, robh+dt@kernel.org,
+        kyungmin.park@samsung.com, djakov@kernel.org, khilman@kernel.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
@@ -69,187 +66,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 12, 2022 at 9:05 PM Johnson Wang <johnson.wang@mediatek.com> wrote:
+On Fri, May 13, 2022 at 11:31 AM Johnson Wang <johnson.wang@mediatek.com> wrote:
 >
-> On Wed, 2022-05-11 at 18:48 +0800, Chen-Yu Tsai wrote:
-> > On Mon, May 9, 2022 at 8:14 PM Johnson Wang <
-> > johnson.wang@mediatek.com> wrote:
-> > >
-> > > Hi Chen-Yu,
-> > >
-> > > On Tue, 2022-04-26 at 11:18 +0800, Chen-Yu Tsai wrote:
-> > > > On Mon, Apr 25, 2022 at 8:56 PM Johnson Wang <
-> > > > johnson.wang@mediatek.com> wrote:
-> > > > >
-> > > > > Add devicetree binding of MediaTek CCI on MT8183 and MT8186.
-> > > > >
-> > > > > Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
-> > > > > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > > > > ---
-> > > > >  .../bindings/interconnect/mediatek,cci.yaml   | 139
-> > > > > ++++++++++++++++++
-> > > > >  1 file changed, 139 insertions(+)
-> > > > >  create mode 100644
-> > > > > Documentation/devicetree/bindings/interconnect/mediatek,cci.yam
-> > > > > l
-> > > > >
-> > > > > diff --git
-> > > > > a/Documentation/devicetree/bindings/interconnect/mediatek,cci.y
-> > > > > aml
-> > > > > b/Documentation/devicetree/bindings/interconnect/mediatek,cci.y
-> > > > > aml
-> > > > > new file mode 100644
-> > > > > index 000000000000..e5221e17d11b
-> > > > > --- /dev/null
-> > > > > +++
-> > > > > b/Documentation/devicetree/bindings/interconnect/mediatek,cci.y
-> > > > > aml
-> > > > > @@ -0,0 +1,139 @@
-> > > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > > +%YAML 1.2
-> > > > > +---
-> > > > > +$id:
-> > > > >
-> https://urldefense.com/v3/__http://devicetree.org/schemas/interconnect/mediatek,cci.yaml*__;Iw!!CTRNKA9wMg0ARbw!zuufEcqpKbditY3eqLTHpL8P8humMCyh4D4QWsximmw124tJUPE3ZBUyBqBtDlQ9pSDO$
-> > > > >
-> > > > > +$schema:
-> > > > >
-> https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!zuufEcqpKbditY3eqLTHpL8P8humMCyh4D4QWsximmw124tJUPE3ZBUyBqBtDoE9YHyu$
-> > > > >
-> > > > > +
-> > > > > +title: MediaTek Cache Coherent Interconnect (CCI) frequency
-> > > > > and
-> > > > > voltage scaling
-> > > > > +
-> > > > > +maintainers:
-> > > > > +  - Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > > > > +
-> > > > > +description: |
-> > > > > +  MediaTek Cache Coherent Interconnect (CCI) is a hardware
-> > > > > engine
-> > > > > used by
-> > > > > +  MT8183 and MT8186 SoCs to scale the frequency and adjust the
-> > > > > voltage in
-> > > > > +  hardware. It can also optimize the voltage to reduce the
-> > > > > power
-> > > > > consumption.
-> > > > > +
-> > > > > +properties:
-> > > > > +  compatible:
-> > > > > +    enum:
-> > > > > +      - mediatek,mt8183-cci
-> > > > > +      - mediatek,mt8186-cci
-> > > > > +
-> > > > > +  clocks:
-> > > > > +    items:
-> > > > > +      - description:
-> > > > > +          The multiplexer for clock input of CPU cluster.
-> > > >
-> > > > of the bus, not CPU cluster.
-> > >
-> > > Thanks for your suggestion.
-> > > I will correct it in the next version.
-> > >
-> > > >
-> > > > > +      - description:
-> > > > > +          A parent of "cpu" clock which is used as an
-> > > > > intermediate
-> > > > > clock source
-> > > > > +          when the original CPU is under transition and not
-> > > > > stable
-> > > > > yet.
-> > > >
-> > > > This really should be handled in the clk controller, and not by
-> > > > every
-> > > > device
-> > > > that happens to take a clock from a mux with upstream PLLs that
-> > > > can
-> > > > change
-> > > > in clock rate. The end device hardware only takes one clock
-> > > > input.
-> > > > That's it.
-> > > >
-> > >
-> > > To make this intermediate clock works properly, this driver is also
-> > > responsible for handling the Vproc voltage and ensures the voltage
-> > > is
-> > > high enough to support intermediate clock rate.
-> > >
-> > > If we move intermediate clock rate control to clock driver, then
-> > > intermediate voltage control may be handled by the clock driver
-> > > itself
-> > > as well.
-> > >
-> > > We believe that is not reasonable because clock driver shouldn't
-> > > handle
-> > > voltage control. On the other hand, DVFS driver is more suitable
-> > > for
-> > > doing this job.
-> >
-> > Either way the DVFS driver handles the voltage change.
-> >
-> > Right now the driver is doing:
-> >
-> > 1. Raise voltage if scaling up
-> > 2. Mux CCI clock over to stable clock
-> > 3. Set rate for CCI PLL
-> > 4. Mux CCI clock back to CCI PLL
-> > 5. Drop voltage if scaling down
-> >
-> > I'm saying that the clock driver should handle 2+4 transparently when
-> > any
-> > driver requests a rate change on the CCI clock. So instead the driver
-> > would
-> > do:
-> >
-> > 1. Raise voltage if scaling up
-> > 2. Set rate for CCI _clock_
-> >    Here the clock driver would do:
-> >    a. Mux CCI clock over to stable clock
-> >    b. Change clock rate for original parent, i.e. the CCI PLL
-> >    c. Mux CCI clock back to original parent, i.e. the CCI PLL
-> >    and back to the devfreq driver ...
-> > 3. Drop voltage if scaling down
-> >
-> > Does that make sense?
-> >
-> >
-> > Regards
-> > ChenYu
+> Add devicetree binding of MediaTek CCI on MT8183 and MT8186.
 >
-> Hi Chen-Yu,
+> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+> ---
+>  .../bindings/interconnect/mediatek,cci.yaml   | 140 ++++++++++++++++++
+>  MAINTAINERS                                   |   1 +
+>  2 files changed, 141 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
 >
-> Before we mux the CCI clock to an intermediate clock(MAINPLL), we must
-> ensure that regulator voltage is high enough (we call it intermediate
-> voltage) to support the intermediate clock rate.
->
-> Based on this concept, if we move mux control to clock driver, there
-> will be a dilemma about which driver to adjust the voltage.
->
-> 1)When DVFS calls clk_set_rate(), clock driver scales up the regulator
-> voltage to higher than intermediate voltage and then mux the CCI clock.
->
-> This option is not reasonable because clock driver shouldn't handle the
-> regulators.
->
->
-> 2)DVFS scales up the regulator voltage, then calls clk_set_rate().
-> Clock driver mux the CCI clock to the intermediate clock.
->
-> This option isn't straightforward and makes one confused easily. For a
-> person who reads this driver, he may not understand why we adjust the
-> voltage before clk_set_rate().
->
-> That's why we put intermediate voltage/freq together in the DVFS.
+> diff --git a/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+> new file mode 100644
+> index 000000000000..034c3b38ca3d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+> @@ -0,0 +1,140 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interconnect/mediatek,cci.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek Cache Coherent Interconnect (CCI) frequency and voltage scaling
+> +
+> +maintainers:
+> +  - Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> +  - Johnson Wang <johnson.wang@mediatek.com>
+> +
+> +description: |
+> +  MediaTek Cache Coherent Interconnect (CCI) is a hardware engine used by
+> +  MT8183 and MT8186 SoCs to scale the frequency and adjust the voltage in
+> +  hardware. It can also optimize the voltage to reduce the power consumption.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt8183-cci
+> +      - mediatek,mt8186-cci
+> +
+> +  clocks:
+> +    items:
+> +      - description:
+> +          The multiplexer for clock input of the bus.
+> +      - description:
+> +          A parent of "cpu" clock which is used as an intermediate clock source
 
-Thanks for the explanation. The intermediate clock's rate being higher
-than the lowest OPP is the key I missed.
+Replace "cpu" with "bus"?
 
-I can't think of a better way to describe this in DT. The intermediate
-clock's rate is stable, but it is set either through hardware reset defaults
-or firmware, so we can't just assume a given clock rate and hard code that.
-Having a direct reference to the clock seems simpler.
+> +          when the original CPU is under transition and not stable yet.
 
 
-Regards
-ChenYu
+And also, "when the original clock source (PLL) is under transition ..."
+
+Otherwise,
+
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
