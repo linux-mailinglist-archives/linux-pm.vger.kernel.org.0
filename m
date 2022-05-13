@@ -2,72 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4F4525CE4
-	for <lists+linux-pm@lfdr.de>; Fri, 13 May 2022 10:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F9CA525D32
+	for <lists+linux-pm@lfdr.de>; Fri, 13 May 2022 10:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347131AbiEMIGi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 May 2022 04:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38816 "EHLO
+        id S1378104AbiEMIQ2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 May 2022 04:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378043AbiEMIGh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 May 2022 04:06:37 -0400
-Received: from mail.coredeal.pl (mail.coredeal.pl [51.75.73.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456AB4EDCC
-        for <linux-pm@vger.kernel.org>; Fri, 13 May 2022 01:06:29 -0700 (PDT)
-Received: by mail.coredeal.pl (Postfix, from userid 1002)
-        id CB6C1A5267; Fri, 13 May 2022 08:06:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=coredeal.pl; s=mail;
-        t=1652429187; bh=9KGuIG62LgzC9aYmjKxzocuYLRCVghXg6v9Q1q2LHec=;
-        h=Date:From:To:Subject:From;
-        b=OfQFhahnJG1srNKB3A8KGOjfK6LeK8YrJE73ILcKBLY+V0xOdBytr0pc6AeEtDJM1
-         kYkL78jgjCCVUv+v5DFWXk1BA9zlPqTPYQlDYewt3gvFh0aSsPMxjqMbhtzSuzCdcn
-         pLvfNq0uawQ8Y6dtAl86K0cq0k+UryjotvUC3bRk+kvE3RSgNoXIGHRjQ/DPJ1EMHC
-         SFiLi/YdUBfLGcwY1mR/NLvTzU+JG9aA2KyDSMfqv9lYX6D1xYdBqvsYupc+qemelC
-         iYODPd3LoEue9qdPiG1yq0bAgPSyL56Xq1wGTpP9QALDqA9Fe7ktGj46Tw1I9O6P7f
-         bHPlZ5QXQqrrg==
-Received: by mail.coredeal.pl for <linux-pm@vger.kernel.org>; Fri, 13 May 2022 08:05:55 GMT
-Message-ID: <20220513064500-0.1.33.o0a2.0.wb2skikngm@coredeal.pl>
-Date:   Fri, 13 May 2022 08:05:55 GMT
-From:   "Krzysztof Maj" <krzysztof.maj@coredeal.pl>
-To:     <linux-pm@vger.kernel.org>
-Subject: Biznesowy angielski
-X-Mailer: mail.coredeal.pl
+        with ESMTP id S1378139AbiEMIQH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 May 2022 04:16:07 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9203E08D;
+        Fri, 13 May 2022 01:16:01 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id E421B5C00E4;
+        Fri, 13 May 2022 04:15:58 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Fri, 13 May 2022 04:15:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1652429758; x=1652516158; bh=iY9shFm2Us
+        jfmpTTWu209xlXSoo1/kSVXTPhcXMt7H8=; b=uin/nZOFrMN1r3HNuWHmdoGaY3
+        c7FRaFuahQzKICW7+sXgp7uFRCf6nfBbRUC6qoTalXEwERQDkdkm7pagYWNswuw7
+        LNxbo+qZaPwNQWQBe4UD/pa0/5IoQLjJGGqHzdPFS//WrmNObBk5kg4UD8dlWr/s
+        CUslx4dgQvclORi4IeQlr3Tm4oc0WaWGVdI2slV/+YF8x6V1eENUEKYA3bRz57tj
+        TfcECEiFUusehtJwjbUxQEZ4QysRJ8QwJKFP7rykSE9QTWUHG3BQnSQp0xzthQHa
+        HIPmKNxHqkJW23T41yni9Mj06EuRNv+7Z9Kp/JMulYcVeI3Hl95cp7JyPpGQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1652429758; x=
+        1652516158; bh=iY9shFm2UsjfmpTTWu209xlXSoo1/kSVXTPhcXMt7H8=; b=O
+        txrF9ODGUXG/fJtjc68Vnrim6/M1IT/RwWsCEySKTH8NljzFVFci1v7iph3xmYtx
+        c7sKXNXwSd++avrklkfvgHcZNGjdwzsi6UcGVq/5CEfgB/2mY4mX9q/2FUv1HWU8
+        Pb+GixFh6C3nstMt8eaYFh3ffM3V2T4jLxtW35M8XlDPYU7qPsgYWl9RDaLIJROa
+        CbYlWFlaw8/ZrrQla1EfOUZExY2A4KQrAqq3W4JsJWCDvYA84nBncpI4P8SG6J4D
+        lHFE5GszS0h4kpy+BqfeY3yggQ3BSfZ+fVOTe+Z+WUjIckkNr+CRhkAj990Z6rVW
+        VmsskET9xHuMYMrQYk3IQ==
+X-ME-Sender: <xms:vhN-YnzcTbiG27OA1P756RmfHM36QMyh2GbPglNVLKRCLCEHu2uq0A>
+    <xme:vhN-YvRkhH9BwLlPOx8QRN7jf92VpTobhpxfQWGAqOcBSJtwVHK1MT-rDutm82D40
+    iZNGMiTEMA8MgLv7vU>
+X-ME-Received: <xmr:vhN-YhWMYt7HzFou5fAtMcaZpPf5vdSCxQSEMqfVhuNH40O3fQ5LAhsP1aa20IbPC-ykUDQY-3BD8K9qeErac540TeJirNVivc5-jpc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgeelgddtudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepjeegieevvedvgffffedtveeuhfehudevjeeifeegjeevuefhteeklefgveet
+    feffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:vhN-YhjvD9iHhT3MCWCWXIOgSYkkmG4VszRZ6srvl6FsfPPn-lFEeQ>
+    <xmx:vhN-YpAh_MXz6ykwmHJo5lKK4dmGhEE0K2HORfkronBnAyiL3aAI0w>
+    <xmx:vhN-YqJGKCQSQn1CNJ2aj9yeVbcZ2iGt7sNu-lIazufNsEwnqS85Iw>
+    <xmx:vhN-YtsF32_EoAfbvgYEHEPNRszMbjIu0XZBBYwB-cSTa1mWk1UzRA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 13 May 2022 04:15:58 -0400 (EDT)
+Date:   Fri, 13 May 2022 10:15:56 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     qianfan <qianfanguijin@163.com>
+Cc:     linux-sunxi@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] ARM: dts: sun8i-r40: Add "cpu-supply" node for
+ sun8i-r40 based board
+Message-ID: <20220513081556.knd3tf6pangfblh3@houat>
+References: <20220512071858.10805-1-qianfanguijin@163.com>
+ <20220512071858.10805-2-qianfanguijin@163.com>
+ <20220513073849.cu4jzykefat2sepg@houat>
+ <1352b9d7-5219-af09-948b-6462def39ea5@163.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ocbjtkvxhxhj7iii"
+Content-Disposition: inline
+In-Reply-To: <1352b9d7-5219-af09-948b-6462def39ea5@163.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dzie=C5=84 dobry,=20
 
-czy rozwa=C5=BCali Pa=C5=84stwo rozw=C3=B3j kwalifikacji j=C4=99zykowych =
-swoich pracownik=C3=B3w?
+--ocbjtkvxhxhj7iii
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Opracowali=C5=9Bmy kursy j=C4=99zykowe dla r=C3=B3=C5=BCnych bran=C5=BC, =
-w kt=C3=B3rych koncentrujemy si=C4=99 na podniesieniu poziomu s=C5=82owni=
-ctwa i jako=C5=9Bci komunikacji wykorzystuj=C4=85c autorsk=C4=85 metod=C4=
-=99, stworzon=C4=85 specjalnie dla wymagaj=C4=85cego biznesu.=20
+On Fri, May 13, 2022 at 03:48:50PM +0800, qianfan wrote:
+>=20
+>=20
+> =E5=9C=A8 2022/5/13 15:38, Maxime Ripard =E5=86=99=E9=81=93:
+> > Hi,
+> >=20
+> > On Thu, May 12, 2022 at 03:18:58PM +0800, qianfanguijin@163.com wrote:
+> > > From: qianfan Zhao <qianfanguijin@163.com>
+> > >=20
+> > > sun8i-r40 actived cpufreq feature now, let's add "cpu-supply" node on
+> > > board.
+> > >=20
+> > > Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
+> > > ---
+> > >   arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts | 4 ++++
+> > >   arch/arm/boot/dts/sun8i-r40-feta40i.dtsi          | 4 ++++
+> > >   arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts          | 4 ++++
+> > >   arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts | 4 ++++
+> > >   4 files changed, 16 insertions(+)
+> > >=20
+> > > diff --git a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts b/arch=
+/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
+> > > index a6a1087a0c9b..4f30018ec4a2 100644
+> > > --- a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
+> > > +++ b/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
+> > > @@ -113,6 +113,10 @@ &ahci {
+> > >   	status =3D "okay";
+> > >   };
+> > > +&cpu0 {
+> > > +	cpu-supply =3D <&reg_dcdc2>;
+> > > +};
+> > > +
+> > This will break bisection on those boards. Indeed, you added the OPPs on
+> > the first patch, and if you only apply that patch, the boards in the
+> > second patch will be missing their CPU regulator. The kernel will then
+> > ramp up the frequency to the highest OPP, but will not change the
+> > voltage, resulting in a crash.
+>
+> This is a good point and I will merge those two patch.
 
-Niestandardowy kurs on-line, dopasowany do profilu firmy i obszar=C3=B3w =
-=C5=9Bwiadczonych us=C5=82ug, w szybkim czasie przyniesie efekty, kt=C3=B3=
-re zwi=C4=99ksz=C4=85 komfort i jako=C5=9B=C4=87 pracy, rozwijaj=C4=85c m=
-o=C5=BCliwo=C5=9Bci biznesowe.=20
+That's not what I meant to say. Those two patches are great separated.
+You can invert them though.
 
-Zdalne szkolenie j=C4=99zykowe to m.in. zaj=C4=99cia z native speakerami,=
- kt=C3=B3re w szybkim czasie naucz=C4=85 pracownik=C3=B3w rozmawia=C4=87 =
-za pomoc=C4=85 jasnego i zwi=C4=99z=C5=82ego j=C4=99zyka Business English=
-=2E
+> > There's a similar issue for all the boards that don't have a regulator
+> > in the first place.
+> >=20
+> > The way we worked around this for the other SoCs is to have a DTSI with
+> > the OPPs with a frequency higher than what U-Boot boots with (1008MHz?),
+> > and only include that DTSI on boards that have a CPU regulator hooked i=
+n.
+>
+> Is this really necessary? It seems like every board based on sun8i-r40
+> have a cpu regulator.
 
-Czy m=C3=B3g=C5=82bym przedstawi=C4=87 wi=C4=99cej szczeg=C3=B3=C5=82=C3=B3=
-w i opowiedzie=C4=87 jak dzia=C5=82amy?=20
+This probably won't be the case whenever someone starts a new design,
+and then they'll face random crashes for no apparent reason, and waste a
+lot of time in the process.
 
+Whereas the alternative is that you would be missing some OPPs,
+something that is fairly easy to figure out.
 
-Pozdrawiam
-Krzysztof Maj
+Maxime
+
+--ocbjtkvxhxhj7iii
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYn4TvAAKCRDj7w1vZxhR
+xXVzAQCYS/y6GVik1wq99/10xFtsQVwNbQDTafNgKQRW8bpSxwD+Ohmf/aYmi5JZ
+QfgJA4DF5q5bvX0nina8Y7KiVSMVSQ0=
+=x+9H
+-----END PGP SIGNATURE-----
+
+--ocbjtkvxhxhj7iii--
