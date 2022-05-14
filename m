@@ -2,123 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A0C527323
-	for <lists+linux-pm@lfdr.de>; Sat, 14 May 2022 18:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B026527341
+	for <lists+linux-pm@lfdr.de>; Sat, 14 May 2022 19:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbiENQs5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 14 May 2022 12:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
+        id S233450AbiENRM6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 14 May 2022 13:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234374AbiENQsy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 May 2022 12:48:54 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341833668F
-        for <linux-pm@vger.kernel.org>; Sat, 14 May 2022 09:48:49 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id e29so5463159wrc.11
-        for <linux-pm@vger.kernel.org>; Sat, 14 May 2022 09:48:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h9Ne+v1fWGSBcxhiyeEoVMQ4rFmfRWh1mmd5YIH/r7U=;
-        b=meRQd62ep69g3tBqBYUeXf3me9m4oJ40AN+j1I4vlanRExPpzRRvwJGiZsLYWDyhUd
-         INUHrkzVoQbMxwzgnNexlklgKVtXN71UobSDGxwNOupmGxiJLLVDLriwyM4gsuQYSAem
-         FnSvIK6r1IjytddhDA39hO7kvmvRaLmR4FkQFhFkSBb/6XBSG0Hja8KDeT6hmGFjhdrO
-         w3gKjf6NfulL/sCas5YgKZC5aHSNIbfBU1JjOHyAYFP140etjYNiMZ5zIUUw30xts2jh
-         6mSYZXNzv11NKlDDULNg+MaipgsRINAnRucaHw+mp6UGZHPd8l9v8uGP9Vj7uuw6b6nS
-         Whag==
+        with ESMTP id S229901AbiENRM4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 May 2022 13:12:56 -0400
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC63B205CE;
+        Sat, 14 May 2022 10:12:55 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2f7c57ee6feso117799137b3.2;
+        Sat, 14 May 2022 10:12:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=h9Ne+v1fWGSBcxhiyeEoVMQ4rFmfRWh1mmd5YIH/r7U=;
-        b=dBUOafQTlMwFW8DwZ6lOSV8BQUsZvSyiRlVgvwuyM0t9sn8jS9RWrO5fuvUN7IVdfW
-         YGV6SPE6XbBjajW55D9qLTpsxd3GWbSmukLmTb8swlnFMlfRtuh3VgcHtzWifHbvcjee
-         4iAAfC/yj/GC08lf92Rx721rMnuSwzSetL5ew7bx03FZV+R+Fub0A7tRt2WBG0D/7xvt
-         nw8NwDkVXkxNQO/B5L3xr+asUmrIBd6RaMF9n5jyG9IpyxvHowdJg5bfmjtQsEkHnJVO
-         ZsYCer00YaolzBAN2TeUBVc6vmO7U5XyygVlkpQGwSdhc7oshVIf5Wsr65a2VE+2YvA5
-         8osQ==
-X-Gm-Message-State: AOAM531Z+C3aDgmHnoTgg+rcZplrNPkqCLJCmhGIRAJx9cLFLDPPkbtW
-        sWpEaC20lXanb+XPlEUdlkjGaDXIkId+H8PyIw/5+A==
-X-Google-Smtp-Source: ABdhPJzDGeojNw7I+D9/Q7eW0grf3LDdqkTv+/FnRYaAGPuKeMRYFm+g8lQXX1H8/begn/XMC+R1eTY1NiPkP69InEU=
-X-Received: by 2002:adf:f001:0:b0:20d:22b:183c with SMTP id
- j1-20020adff001000000b0020d022b183cmr1403508wro.313.1652546927571; Sat, 14
- May 2022 09:48:47 -0700 (PDT)
+        bh=ARYo/f15fkpOFA40ZR3JDA70StrlLOsPpijtOSDAnu4=;
+        b=JgGFlhCBhWy1uxHZr5QyECyS6ISGBWIu4qDAtz8iyllWA1QaiVxCK3MltYbj50h2du
+         PoyUpztoF8Oia89Co0EIfbN+wGWqkQYyUjTg4Dtg8OPFTLKfybJV+6M0JLLUypiwY+jB
+         31w54WH8Vspss0nR172hgP/2Q+/57VC22SMcsR9HryHjsI6OcQH6N4CH38OBE8zVqEkY
+         cX82TuC3H0H247Jx4BbcnuyvHx35SqQHcnNFY9WdAiajFr7L6W1OqxrO0/QYGyqK1A1u
+         tYW59ReUxmjQKKHghBWA9qiY02UpZVrkr5numv58Pi1h/83LiredqdCciaBxgVOuefOx
+         xkQQ==
+X-Gm-Message-State: AOAM530H89O4YSStgEZbEks4c5GSK8VjH5+1HQgVJkT2be6EBYZEkTbI
+        ZZblFvNmCcER9J2xzv/9usyhlJGXpYknFyL4AfE=
+X-Google-Smtp-Source: ABdhPJxgI42R2wt7RchmcTdowww+/QM/FvFuk1vjbPOi5zZORwRnAbtLw578zenvitEYjUex3PE+sDT5f7rJhZ/YhUQ=
+X-Received: by 2002:a0d:ddce:0:b0:2f8:c9f7:8f7c with SMTP id
+ g197-20020a0dddce000000b002f8c9f78f7cmr11916578ywe.301.1652548374869; Sat, 14
+ May 2022 10:12:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220514152032.758738-1-ulf.hansson@linaro.org>
-In-Reply-To: <20220514152032.758738-1-ulf.hansson@linaro.org>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Sat, 14 May 2022 22:18:35 +0530
-Message-ID: <CAAhSdy3m3FzbkL-On5kPtrZgyO4x=6onr6mXi_=te5B=m_n8GQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] cpuidle: psci: Fix regression leading to no genpd governor
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Maulik Shah <quic_mkshah@quicinc.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@rivosinc.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+References: <CAJZ5v0g_p+Yb-VLo8b6-SYU17=GQOqZh2E5-52dkq-3rzU=57A@mail.gmail.com>
+ <20220512183540.GA859016@bhelgaas> <SJ0PR11MB5070B095B8A28634B43A231F9ECA9@SJ0PR11MB5070.namprd11.prod.outlook.com>
+In-Reply-To: <SJ0PR11MB5070B095B8A28634B43A231F9ECA9@SJ0PR11MB5070.namprd11.prod.outlook.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sat, 14 May 2022 19:12:43 +0200
+Message-ID: <CAJZ5v0gPKHDpCuM98UgRFXhxaZxvx1NkzrLArvxhuZ3a-iso=Q@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
+To:     "Jingar, Rajvi" <rajvi.jingar@intel.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        David Box <david.e.box@linux.intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, May 14, 2022 at 8:50 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+On Sat, May 14, 2022 at 12:01 AM Jingar, Rajvi <rajvi.jingar@intel.com> wrote:
 >
-> While factoring out the PM domain related code from PSCI domain driver into
-> a set of library functions, a regression when initializing the genpds got
-> introduced. More precisely, we fail to assign a genpd governor, so let's
-> fix this.
 >
-> Fixes: 9d976d6721df ("cpuidle: Factor-out power domain related code from PSCI domain driver")
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > -----Original Message-----
+> > From: Bjorn Helgaas <helgaas@kernel.org>
+> > Sent: Thursday, May 12, 2022 11:36 AM
+> > To: Rafael J. Wysocki <rafael@kernel.org>
+> > Cc: Jingar, Rajvi <rajvi.jingar@intel.com>; Wysocki, Rafael J
+> > <rafael.j.wysocki@intel.com>; Bjorn Helgaas <bhelgaas@google.com>; David Box
+> > <david.e.box@linux.intel.com>; Linux PCI <linux-pci@vger.kernel.org>; Linux
+> > Kernel Mailing List <linux-kernel@vger.kernel.org>; Linux PM <linux-
+> > pm@vger.kernel.org>
+> > Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
+> >
+> > On Thu, May 12, 2022 at 07:52:36PM +0200, Rafael J. Wysocki wrote:
+> > > On Thu, May 12, 2022 at 7:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > On Thu, May 12, 2022 at 03:49:18PM +0200, Rafael J. Wysocki wrote:
+> >
+> > > > > Something like this should suffice IMV:
+> > > > >
+> > > > > if (!dev_state_saved || pci_dev->current_state != PCI_D3cold)
+> > > > >
+> > > > >         pci_disable_ptm(pci_dev);
+> > > >
+> > > > It makes sense to me that we needn't disable PTM if the device is in
+> > > > D3cold.  But the "!dev_state_saved" condition depends on what the
+> > > > driver did.  Why is that important?  Why should we not do the
+> > > > following?
+> > > >
+> > > >   if (pci_dev->current_state != PCI_D3cold)
+> > > >     pci_disable_ptm(pci_dev);
+> > >
+> > > We can do this too.  I thought we could skip the power state check if
+> > > dev_state_saved was unset, because then we would know that the power
+> > > state was not D3cold.  It probably isn't worth the hassle though.
+> >
+>
+> We see issue with certain platforms where only checking if device power
+> state in D3Cold is not enough and the !dev_state_saved check is needed
+> when disabling PTM. Device like nvme is relying on ASPM, it stays in D0 but
+> state is saved. Touching the config space wakes up the device which
+> prevents the system from entering into low power state.
+>
+> Following would fix the issue:
+>
+>  if (!pci_dev->state_save) {
+>                 pci_save_state(pci_dev);
+>
+>                pci_disable_ptm(pci_dev);
+>
+>                 if (!pci_dev->skip_bus_pm && pci_power_manageable(pci_dev))
+>                         pci_prepare_to_sleep(pci_dev);
+> }
 
-Looks good to me.
+Well, the point is to also disable PTM for devices that were put into
+D3 by their drivers.
 
-Reviewed-by: Anup Patel <anup@brainfault.org>
+In addition to D3cold, the check could cover D0 too, that is
 
-Regards,
-Anup
+if (pci_dev->current_state > D0 && pci_dev->current_state < PCI_D3cold)
+         pci_disable_ptm(pci_dev);
 
-> ---
->  drivers/cpuidle/cpuidle-psci-domain.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-> index 755bbdfc5b82..3db4fca1172b 100644
-> --- a/drivers/cpuidle/cpuidle-psci-domain.c
-> +++ b/drivers/cpuidle/cpuidle-psci-domain.c
-> @@ -52,7 +52,7 @@ static int psci_pd_init(struct device_node *np, bool use_osi)
->         struct generic_pm_domain *pd;
->         struct psci_pd_provider *pd_provider;
->         struct dev_power_governor *pd_gov;
-> -       int ret = -ENOMEM, state_count = 0;
-> +       int ret = -ENOMEM;
->
->         pd = dt_idle_pd_alloc(np, psci_dt_parse_state_node);
->         if (!pd)
-> @@ -71,7 +71,7 @@ static int psci_pd_init(struct device_node *np, bool use_osi)
->                 pd->flags |= GENPD_FLAG_ALWAYS_ON;
->
->         /* Use governor for CPU PM domains if it has some states to manage. */
-> -       pd_gov = state_count > 0 ? &pm_domain_cpu_gov : NULL;
-> +       pd_gov = pd->states ? &pm_domain_cpu_gov : NULL;
->
->         ret = pm_genpd_init(pd, pd_gov, false);
->         if (ret)
-> --
-> 2.25.1
->
+> > Ah, thanks.  IMHO it's easier to analyze for correctness if we only
+> > check the power state.
+> >
+> > Bjorn
