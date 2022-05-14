@@ -2,56 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F53527317
-	for <lists+linux-pm@lfdr.de>; Sat, 14 May 2022 18:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A0C527323
+	for <lists+linux-pm@lfdr.de>; Sat, 14 May 2022 18:49:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234360AbiENQrk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 14 May 2022 12:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
+        id S231819AbiENQs5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 14 May 2022 12:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234352AbiENQrg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 May 2022 12:47:36 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748BC31939
-        for <linux-pm@vger.kernel.org>; Sat, 14 May 2022 09:47:34 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id j25so14078267wrc.9
-        for <linux-pm@vger.kernel.org>; Sat, 14 May 2022 09:47:34 -0700 (PDT)
+        with ESMTP id S234374AbiENQsy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 May 2022 12:48:54 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341833668F
+        for <linux-pm@vger.kernel.org>; Sat, 14 May 2022 09:48:49 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id e29so5463159wrc.11
+        for <linux-pm@vger.kernel.org>; Sat, 14 May 2022 09:48:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=brainfault-org.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=n/mgIjRvvJPY19sTVzBgUbBKV/toAZXWOr19sK94Ueg=;
-        b=FnLI62tda7G4LUCDCeToyihFzqCLwmokw+LF+XC/D2mcefciSGP2A24Igxnhkkhahc
-         vRvtv5rMVO2/vot6MWLs7i+BA9EuNCGusNNxfsWkF5D2sDrvpcnkRgDaLq+nVeIIhGNN
-         LscT7xk/lrUsi0/oGm6JQpcsNHpPzodIUkHRGPUVcsidAuObpjxwwF0yzekrXG7igOgg
-         BDmhv4snk6f0ykJPqElje/EJsyubnaGWxri4UaWNnz3oMQnmM1qWE1WRsoi3cR7XRCSy
-         Pg2ICmtFYTpGLHnE9/elllsWYTHKc+63SC41gUBrvWrNGsVnE87liAaIl/3wKnsgQkzE
-         jLYA==
+        bh=h9Ne+v1fWGSBcxhiyeEoVMQ4rFmfRWh1mmd5YIH/r7U=;
+        b=meRQd62ep69g3tBqBYUeXf3me9m4oJ40AN+j1I4vlanRExPpzRRvwJGiZsLYWDyhUd
+         INUHrkzVoQbMxwzgnNexlklgKVtXN71UobSDGxwNOupmGxiJLLVDLriwyM4gsuQYSAem
+         FnSvIK6r1IjytddhDA39hO7kvmvRaLmR4FkQFhFkSBb/6XBSG0Hja8KDeT6hmGFjhdrO
+         w3gKjf6NfulL/sCas5YgKZC5aHSNIbfBU1JjOHyAYFP140etjYNiMZ5zIUUw30xts2jh
+         6mSYZXNzv11NKlDDULNg+MaipgsRINAnRucaHw+mp6UGZHPd8l9v8uGP9Vj7uuw6b6nS
+         Whag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=n/mgIjRvvJPY19sTVzBgUbBKV/toAZXWOr19sK94Ueg=;
-        b=T/9hj9xY5x2Yn4Xl9sfEzkwVqv2gH02TRPJXEomGoR661vWWPYJMGAX30FFbgCvSlP
-         sdAaQVTMRU662i/gLjsxWnWykNXDglK9rAF8iw66H6Cs3915yKxnDZunYJBlP0MJ3sOW
-         HQcEGb1Tv/jGFQ+Irj+GfYg1OsXG/veq1C1PKGGGR/C5yjvrm1qtoTJhVA0Qaj1ROD8E
-         pTVl2BFdwkKU/XqmCLCDcSHPp+Cj+kZRwNRaIdkSRo8q9FYYT6syAfRpkWVjTPjjtzMc
-         4iuNKdg00+PAZpeoXdCQms1jcPQutr4FVmEsNa4D4+L9L2zPYvhPm7bqgRD/s6o0RH20
-         F/Rw==
-X-Gm-Message-State: AOAM532xAliCpkJHer5CORa8Gw4mitROuKxq241tONYnwNRLlB/jMCEg
-        sj5xQZnUVMnV6BlhZDnO4gIuvznxsrRNcvbm+NA9hQ==
-X-Google-Smtp-Source: ABdhPJxUfYpE2VhGuI45d7fw+1N7B/jx3qn+wllVENZjJFA+V3lCXac+BxeHu6VSjPf+yHW2DPEhjWtwJvgc5wit8dM=
-X-Received: by 2002:a5d:6483:0:b0:20c:5c21:5c8c with SMTP id
- o3-20020a5d6483000000b0020c5c215c8cmr8122994wri.86.1652546852805; Sat, 14 May
- 2022 09:47:32 -0700 (PDT)
+        bh=h9Ne+v1fWGSBcxhiyeEoVMQ4rFmfRWh1mmd5YIH/r7U=;
+        b=dBUOafQTlMwFW8DwZ6lOSV8BQUsZvSyiRlVgvwuyM0t9sn8jS9RWrO5fuvUN7IVdfW
+         YGV6SPE6XbBjajW55D9qLTpsxd3GWbSmukLmTb8swlnFMlfRtuh3VgcHtzWifHbvcjee
+         4iAAfC/yj/GC08lf92Rx721rMnuSwzSetL5ew7bx03FZV+R+Fub0A7tRt2WBG0D/7xvt
+         nw8NwDkVXkxNQO/B5L3xr+asUmrIBd6RaMF9n5jyG9IpyxvHowdJg5bfmjtQsEkHnJVO
+         ZsYCer00YaolzBAN2TeUBVc6vmO7U5XyygVlkpQGwSdhc7oshVIf5Wsr65a2VE+2YvA5
+         8osQ==
+X-Gm-Message-State: AOAM531Z+C3aDgmHnoTgg+rcZplrNPkqCLJCmhGIRAJx9cLFLDPPkbtW
+        sWpEaC20lXanb+XPlEUdlkjGaDXIkId+H8PyIw/5+A==
+X-Google-Smtp-Source: ABdhPJzDGeojNw7I+D9/Q7eW0grf3LDdqkTv+/FnRYaAGPuKeMRYFm+g8lQXX1H8/begn/XMC+R1eTY1NiPkP69InEU=
+X-Received: by 2002:adf:f001:0:b0:20d:22b:183c with SMTP id
+ j1-20020adff001000000b0020d022b183cmr1403508wro.313.1652546927571; Sat, 14
+ May 2022 09:48:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220514152044.758802-1-ulf.hansson@linaro.org>
-In-Reply-To: <20220514152044.758802-1-ulf.hansson@linaro.org>
+References: <20220514152032.758738-1-ulf.hansson@linaro.org>
+In-Reply-To: <20220514152032.758738-1-ulf.hansson@linaro.org>
 From:   Anup Patel <anup@brainfault.org>
-Date:   Sat, 14 May 2022 22:17:20 +0530
-Message-ID: <CAAhSdy0=jvJ-Gqx7CEeRS+ZSBS8mEaZiZ1vT5p=47n=p3wBaBw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] cpuidle: riscv-sbi: Fix code to allow a genpd
- governor to be used
+Date:   Sat, 14 May 2022 22:18:35 +0530
+Message-ID: <CAAhSdy3m3FzbkL-On5kPtrZgyO4x=6onr6mXi_=te5B=m_n8GQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] cpuidle: psci: Fix regression leading to no genpd governor
 To:     Ulf Hansson <ulf.hansson@linaro.org>
 Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         "open list:THERMAL" <linux-pm@vger.kernel.org>,
@@ -69,7 +68,8 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,39 +78,39 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Sat, May 14, 2022 at 8:50 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-> The intent is to use a genpd governor when there are some states that needs
-> to be managed. Although, the current code ends up to never assign a
-> governor, let's fix this.
+> While factoring out the PM domain related code from PSCI domain driver into
+> a set of library functions, a regression when initializing the genpds got
+> introduced. More precisely, we fail to assign a genpd governor, so let's
+> fix this.
 >
-> Fixes: 6abf32f1d9c50 ("cpuidle: Add RISC-V SBI CPU idle driver")
+> Fixes: 9d976d6721df ("cpuidle: Factor-out power domain related code from PSCI domain driver")
 > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Looks good to me. I have tested this on QEMU RISC-V as well.
+Looks good to me.
 
 Reviewed-by: Anup Patel <anup@brainfault.org>
-Tested-by: Anup Patel <anup@brainfault.org>
 
-Thanks,
+Regards,
 Anup
 
 > ---
->  drivers/cpuidle/cpuidle-riscv-sbi.c | 4 ++--
+>  drivers/cpuidle/cpuidle-psci-domain.c | 4 ++--
 >  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
-> index b459eda2cd37..478970fa3b0c 100644
-> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
-> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
-> @@ -413,7 +413,7 @@ static int sbi_pd_init(struct device_node *np)
+> diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+> index 755bbdfc5b82..3db4fca1172b 100644
+> --- a/drivers/cpuidle/cpuidle-psci-domain.c
+> +++ b/drivers/cpuidle/cpuidle-psci-domain.c
+> @@ -52,7 +52,7 @@ static int psci_pd_init(struct device_node *np, bool use_osi)
 >         struct generic_pm_domain *pd;
->         struct sbi_pd_provider *pd_provider;
+>         struct psci_pd_provider *pd_provider;
 >         struct dev_power_governor *pd_gov;
 > -       int ret = -ENOMEM, state_count = 0;
 > +       int ret = -ENOMEM;
 >
->         pd = dt_idle_pd_alloc(np, sbi_dt_parse_state_node);
+>         pd = dt_idle_pd_alloc(np, psci_dt_parse_state_node);
 >         if (!pd)
-> @@ -432,7 +432,7 @@ static int sbi_pd_init(struct device_node *np)
+> @@ -71,7 +71,7 @@ static int psci_pd_init(struct device_node *np, bool use_osi)
 >                 pd->flags |= GENPD_FLAG_ALWAYS_ON;
 >
 >         /* Use governor for CPU PM domains if it has some states to manage. */
