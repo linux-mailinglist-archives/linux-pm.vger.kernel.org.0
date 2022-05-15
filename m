@@ -2,89 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB9F527477
-	for <lists+linux-pm@lfdr.de>; Sun, 15 May 2022 00:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6178527618
+	for <lists+linux-pm@lfdr.de>; Sun, 15 May 2022 08:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230396AbiENWKK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 14 May 2022 18:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
+        id S232837AbiEOGlh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 15 May 2022 02:41:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbiENWKJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 May 2022 18:10:09 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CC4120A9
-        for <linux-pm@vger.kernel.org>; Sat, 14 May 2022 15:10:08 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2ec42eae76bso120456967b3.10
-        for <linux-pm@vger.kernel.org>; Sat, 14 May 2022 15:10:08 -0700 (PDT)
+        with ESMTP id S232692AbiEOGlg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 May 2022 02:41:36 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32C2205FC;
+        Sat, 14 May 2022 23:41:34 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d17so11681187plg.0;
+        Sat, 14 May 2022 23:41:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=L4ClGq7yvUj7htHY+ElrZBm3AzCgZu29/ABPxk/n3Jc=;
-        b=cNe6ev+ofG0b/Pazsb266II3fHCjtNi9RFC/kDTysYaSFxMz9gS2pF5tuskIXu9o+R
-         kXVMnZ9F1ACQqIO/N3LUrqtcG2Iy6ddFnqEVKMcruflni/8trEsmwDwm+267T3Q+r1mC
-         GHAdhU4Za7HTMm8l1QoG3gA0/GCL1hsRkfD0CJKlRn40jgLz94bvm2pdzmsiYBPxUQdw
-         +kxQJ4fyX+4FG5FWOaCPbgaJ+ojXX9A9sLo64pCqPF4VsNN2FhEOQN8aavT0B/4aY0A6
-         KOL+3nEzKZN78qI25uTXY91Z7kktiwYj9iR9fQo2LkeIwmxUa1aJj3AuzA6oZW4G0rkj
-         3W7Q==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=za5/t/5KkYioKJmzQzgENeUXLSS16uofilAGGJlszx0=;
+        b=JIiqOt/a5TLUxVNH3f+ZwfWJO8Czg82ArCJvX9a1BU9r/jw8PHKg18U3FcmQ61vvIy
+         atBIHlFwZhJ5A+mz7JxPRD+zHsuVtT20GmhFUyETDgSl7ldVMBYe0Ov5gnMpmJ4d84Y4
+         gIT7ON6YRGgd8rAMhUWCYhYJFVb01/FZPb2DivWo/oh0yKxDUd6ZuEuqNCdkmLuLk3Tg
+         pTDqwxGg6qclpKFtJ5qE4SpEymtuVl5K+fmMHHlSNkQxO8h65OCLJqkUxcBJVOeCFtAs
+         HjnFte50TqNU8zmsI2NNaxNrIe5jdApvdl2A+gwq0BnK4LhW8vax/JmUnoKCalRGUesh
+         Mk0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=L4ClGq7yvUj7htHY+ElrZBm3AzCgZu29/ABPxk/n3Jc=;
-        b=zwcAC9yFW4IEPoKVbw4gFNksisFcqvk8JgKFyJwCeXRVtA11XD8cz81nN1LLWNx2l7
-         Uj2AcrzV5rMW+/7Q8PmQIYKzCkYWIHy6kRISm15MSZ/90iQ6lJ0uLRGdLC2qE5BPaT33
-         GkTmgtREl8hKrM4yJDWi1deD6Pm0BXYZRrwjdVmUcHeyX0gW1Y8nhoVEkzlSioIbWql7
-         Fkmc1HCsgJ3gDzS6qsMuAAqQ7J1Tojcxr+LWmDgOIAD+qDKwyuWD6AtSfxTwIS4t9G0w
-         FkYlTvhSqWFardp4/CZWU6WIDlAREO3kQGOoRoz+plS/o13sGRat8MRcAelk2k7pP2y9
-         M1Wg==
-X-Gm-Message-State: AOAM533FdTdgdC292DcWj6TFBbZ+CZFJxDTVl50AcTBKhGk+395fPoqZ
-        6nwNJKSxALdxtBXZ9IZtcpxCxw9oiLJDkVM/voExIA==
-X-Google-Smtp-Source: ABdhPJxnR9LAgw+ZgzpNiAHNL7jSU1q/3ldJxHFFztb0pAh3Yz9r/XR3vEXevF3JB25rKEp72rvIQ1LZIbNaiU7H0dw=
-X-Received: by 2002:a81:1d48:0:b0:2f1:8ebf:25f3 with SMTP id
- d69-20020a811d48000000b002f18ebf25f3mr12243831ywd.118.1652566207412; Sat, 14
- May 2022 15:10:07 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=za5/t/5KkYioKJmzQzgENeUXLSS16uofilAGGJlszx0=;
+        b=oaLQeqG7nrIcVhZ/66qYoNeNs064TdlHxWRjQ5+INN4rrg4/up4k/ufTpc2WlLUhvf
+         rhRZdiwTTsZ1UXUfoifIYgjzZ7Cy1BUyfKANAdFQr2zQdSPWmmIQEVFctot+H0Y9w8fC
+         7YNT7WT//ctbreDpP1BLuNNksqa+/L4CvtXTkH7mJNpUPYkfPToInqF++k3PvR2zaaGZ
+         u6hB6B5FpYx53iM20h7KQ95IrUT2yuO6dWhhCJXkQC3BK5oh6hzYKa8j0xgzogw3VYMH
+         w6OgBcZHgIuwm6Blgp6CLeJx0QdO16JqMnD7svbDXOsdoLRaVv9l9Jo+1qWDdXTgsjYH
+         PrxQ==
+X-Gm-Message-State: AOAM531wP16ZP6uVnmKh0rx50evWScl+EKJhL0mlV9ut8WWziy3VQbze
+        60kkYJ/U9GDj8+OdZMsTw9Q=
+X-Google-Smtp-Source: ABdhPJzsicDTzI+l/ZT8QLsaVDoMbxnsSTLq4wrbKMKpwEb8IsE84lbV283DB9Ckmk7g8xHwj1suDA==
+X-Received: by 2002:a17:902:c404:b0:15e:9aa2:3abc with SMTP id k4-20020a170902c40400b0015e9aa23abcmr12164063plk.172.1652596894372;
+        Sat, 14 May 2022 23:41:34 -0700 (PDT)
+Received: from alarm.. ([103.51.72.28])
+        by smtp.gmail.com with ESMTPSA id g24-20020a170902d5d800b0015e8d4eb2e3sm4568687plh.301.2022.05.14.23.41.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 May 2022 23:41:34 -0700 (PDT)
+From:   Anand Moon <linux.amoon@gmail.com>
+To:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Anand Moon <linux.amoon@gmail.com>
+Subject: [PATCHv2 0/6] Exynos Thermal code inprovement
+Date:   Sun, 15 May 2022 06:41:17 +0000
+Message-Id: <20220515064126.1424-1-linux.amoon@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <4ca23609-11f4-881b-6676-83ac80dff254@dorianrudolph.com>
-In-Reply-To: <4ca23609-11f4-881b-6676-83ac80dff254@dorianrudolph.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 15 May 2022 00:09:56 +0200
-Message-ID: <CACRpkdZJV4FjgVMmRU+vr1wkcoRuMG+FS69QMC1iPTjz0qwwvQ@mail.gmail.com>
-Subject: Re: [PATCH] power: supply: core: Fix boundary conditions in interpolation
-To:     Dorian Rudolph <mail@dorianrudolph.com>
-Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, May 14, 2022 at 5:23 PM Dorian Rudolph <mail@dorianrudolph.com> wrote:
+Hi All 
 
-> The functions power_supply_temp2resist_simple and power_supply_ocv2cap_simple
-> handle boundary conditions incorrectly.
-> The change was introduced in a4585ba2050f460f749bbaf2b67bd56c41e30283
-> ("power: supply: core: Use library interpolation").
-> There are two issues: First, the lines "high = i - 1" and "high = i" in ocv2cap
-> have the wrong order compared to temp2resist. As a consequence, ocv2cap
-> sets high=-1 if ocv>table[0].ocv, which causes an out-of-bounds read.
-> Second, the logic of temp2resist is also not correct.
-> Consider the case table[] = {{20, 100}, {10, 80}, {0, 60}}.
-> For temp=5, we expect a resistance of 70% by interpolation.
-> However, temp2resist sets high=low=2 and returns 60.
->
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Dorian Rudolph <mail@dorianrudolph.com>
+This patch series is bit of rework on my previous
+patch series [0], where I failed to justify the code changes.
 
-My arithmetics were not with me that day. I also copypasted the error :(
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Fixes: a4585ba2050f ("power: supply: core: Use library interpolation")
-Cc: stable@vger.kernel.org
+With this new series I have tried to improve the commit subject
+and commit message.
 
-Yours,
-Linus Walleij
+Added new patchs are added to improve the PM suspend/resume and 
+added runtime power management support to exynos tmu driver.
+  
+[0] https://lore.kernel.org/lkml/CANAwSgS=08fVsqn95WHzSF71WTTyD2-=K2C6-BEz0tY0t6A1-g@mail.gmail.com/T/#m77e57120d230d57f34c29e1422d7fc5f5587ac30
+
+Best Regards
+-Anand
+
+Anand Moon (6):
+  thermal: exynos: Enable core tmu hardware clk flag on exynos platform
+  thermal: exynos: Reorder the gpu clock initialization for exynos5420
+    SoC
+  thermal: exynos: Check before clk_disable_unprepare() not needed
+  thermal: exynos: fixed the efuse min/max value for exynos5422
+  thermal: exynos: Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
+  thermal: exynos: Add runtime power management for tmu
+
+ drivers/thermal/samsung/exynos_tmu.c | 107 ++++++++++++++++-----------
+ 1 file changed, 62 insertions(+), 45 deletions(-)
+
+
+base-commit: ec7f49619d8ee13e108740c82f942cd401b989e9
+-- 
+2.36.1
+
