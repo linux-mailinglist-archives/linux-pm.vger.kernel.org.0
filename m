@@ -2,61 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BDC2527708
-	for <lists+linux-pm@lfdr.de>; Sun, 15 May 2022 12:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0754C527A90
+	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 00:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231526AbiEOKfM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 15 May 2022 06:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47382 "EHLO
+        id S238735AbiEOWPA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 15 May 2022 18:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236513AbiEOKe7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 May 2022 06:34:59 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB9A286DC;
-        Sun, 15 May 2022 03:34:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652610856; x=1684146856;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=D2zM/NOEft1xXBFaRL/87t/mkHUG/94CxpYCSdy6ZDc=;
-  b=ZVAVM1Pb73P86KKZmlz858ljRwHlJmYfZ6SWcbCq2iNC/EdHXYAKRYFk
-   Wi7SLDCDX3/Ag0by93J74gr2pehfiC4AfxtH9nxZUzf+Prc27SCCKb0Ke
-   yvbayHkVfNKBAkZKQzqV66gAklJJj7SzzZZhYebjMdEBoqURb6Jdaj94Y
-   tL3qWhHYzAvwkqN29SMlIewEQcIWXvkoFcywfhLBa8UHIUA+R5FpaBejs
-   5e0mVcXmFy94n6wMVVy0dDUxW+Hr/7Ed+8grSUGBWRZX5Lj2ghh0CBXo+
-   v9hTl6aihNPLptT0kgtCFTMy5XGb56ccaRjUUM/AiuB/OjPP9/o0dgCgd
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10347"; a="258184980"
-X-IronPort-AV: E=Sophos;i="5.91,228,1647327600"; 
-   d="scan'208";a="258184980"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2022 03:34:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,228,1647327600"; 
-   d="scan'208";a="740814903"
-Received: from lkp-server01.sh.intel.com (HELO d1462bc4b09b) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 15 May 2022 03:34:11 -0700
-Received: from kbuild by d1462bc4b09b with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nqBZi-0001X7-Nn;
-        Sun, 15 May 2022 10:34:10 +0000
-Date:   Sun, 15 May 2022 18:34:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 60c4d1a7db661a73f444de5563a84e57ce78dc76
-Message-ID: <6280d718.XFcnVdyqKBjMBerm%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S234701AbiEOWO5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 May 2022 18:14:57 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0F12AE33;
+        Sun, 15 May 2022 15:14:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=YHVcpMpwO8nyb8k3/FdyFSCMjS4nrs3MtFW4fah9gBU=; b=or/Fp90JrKe5WlMtL6cMgrtDTd
+        KlQ8Vj1tprmMn4SD+c397HC1ukULCsTvCB4iLkFWE/e5eO3HFfAEwKhrKkKAtUd9klk2EZdbn6mIN
+        Qd+4SALGR19YAeq7zzTYslQNi14hCF7XYTbP7jST+WF88j+/yFKclHfwZStwWLlezXivWrxaH8IdO
+        FFInQai4LoqHg4Is254olZSUcp3WbX0NojyrclkAFtXk81MOkLDyQLJPvTXx/jJ5o9GkRAlJzHqhs
+        Xl4VBJVpr4ONcW/qU5LapKJAeqGhxtirFucuu9tYQZm2MIj3QsWcao7mjJyCDthsv8RdX0nMP6hLP
+        SN2gr77A==;
+Received: from [177.183.162.244] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nqMUS-005ij1-QV; Mon, 16 May 2022 00:13:29 +0200
+Message-ID: <178a456d-3961-9bc2-83d2-2b9457d45fbd@igalia.com>
+Date:   Sun, 15 May 2022 19:12:55 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 11/30] um: Improve panic notifiers consistency and
+ ordering
+Content-Language: en-US
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        Petr Mladek <pmladek@suse.com>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Richard Weinberger <richard@nod.at>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-12-gpiccoli@igalia.com> <Ynp2hRodh04K3pzK@alley>
+ <4b003501-f5c3-cd66-d222-88d98c93e141@igalia.com>
+ <1760d499824f9ef053af7a8dac04b48ab7d7fd3d.camel@sipsolutions.net>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <1760d499824f9ef053af7a8dac04b48ab7d7fd3d.camel@sipsolutions.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,135 +85,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 60c4d1a7db661a73f444de5563a84e57ce78dc76  Merge branch 'pm-cpufreq' into bleeding-edge
+On 13/05/2022 11:44, Johannes Berg wrote:
+> [...]
+>> Maybe Anton / Johannes / Richard could give their opinions - appreciate
+>> that, I'm not attached to the priority here, it's more about users'
+>> common usage of UML I can think of...
+> 
+> It's hard to say ... In a sense I'm not sure it matters?
+> 
+> OTOH something like the ftrace dump notifier (kernel/trace/trace.c)
+> might still be useful to run before the mconsole and coredump ones, even
+> if you could probably use gdb to figure out the information.
+> 
+> Personally, I don't have a scenario where I'd care about the trace
+> buffers though, and most of the others I found would seem irrelevant
+> (drivers that aren't even compiled, hung tasks won't really happen since
+> we exit immediately, and similar.)
+> 
+> johannes
 
-elapsed time: 4002m
+Thanks Johannes, I agree with you.
 
-configs tested: 110
-configs skipped: 3
+We don't have great ordering now, one thing we need to enforce is the
+order between the 2 UML notifiers, and this patch is doing that..trying
+to order against other callbacks like the ftrace dumper is messy in the
+current code.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+OTOH if this patch set is accepted at some point, we'll likely have 3
+lists, and with that we can improve ordering a lot - this notifier for
+instance would run in the pre-reboot list, *after* the ftrace dumper (if
+a kmsg dumper is set).
 
-gcc tested configs:
-arm                              allmodconfig
-arm                              allyesconfig
-arm                                 defconfig
-arm64                               defconfig
-arm64                            allyesconfig
-i386                          randconfig-c001
-mips                         bigsur_defconfig
-powerpc                 mpc837x_mds_defconfig
-arm                        trizeps4_defconfig
-mips                         tb0226_defconfig
-arm                         lpc18xx_defconfig
-m68k                          atari_defconfig
-ia64                         bigsur_defconfig
-arc                     haps_hs_smp_defconfig
-arc                        nsim_700_defconfig
-sh                           se7343_defconfig
-parisc                generic-32bit_defconfig
-sh                            hp6xx_defconfig
-sh                           se7751_defconfig
-sh                          rsk7264_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220512
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-alpha                               defconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-parisc64                            defconfig
-s390                             allyesconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-i386                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-sparc                            allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-mips                             allmodconfig
-mips                             allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arc                  randconfig-r043-20220512
-s390                 randconfig-r044-20220512
-riscv                randconfig-r042-20220512
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                    nommu_k210_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-riscv                            allyesconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                                  kexec
-x86_64                           rhel-8.3-syz
-x86_64                          rhel-8.3-func
-x86_64                               rhel-8.3
-x86_64                         rhel-8.3-kunit
+So, my intention is to keep this patch as is for V2 (with some changes
+Johannes suggested before), unless Petr or the other maintainers want
+something different.
+Cheers,
 
-clang tested configs:
-x86_64                        randconfig-c007
-powerpc              randconfig-c003-20220512
-arm                  randconfig-c002-20220512
-s390                 randconfig-c005-20220512
-i386                          randconfig-c001
-riscv                randconfig-c006-20220512
-mips                 randconfig-c004-20220512
-arm                         orion5x_defconfig
-powerpc                      ppc64e_defconfig
-powerpc                     tqm5200_defconfig
-x86_64                           allyesconfig
-powerpc                          allmodconfig
-mips                      pic32mzda_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220512
-hexagon              randconfig-r041-20220512
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Guilherme
