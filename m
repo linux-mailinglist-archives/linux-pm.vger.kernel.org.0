@@ -2,69 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA385293CC
-	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 00:49:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 956805294C6
+	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 01:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349788AbiEPWtk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 May 2022 18:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58134 "EHLO
+        id S1350232AbiEPXNt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 May 2022 19:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349833AbiEPWtg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 18:49:36 -0400
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C4C41988;
-        Mon, 16 May 2022 15:49:34 -0700 (PDT)
-Received: by mail-oi1-f174.google.com with SMTP id l16so20440376oil.6;
-        Mon, 16 May 2022 15:49:34 -0700 (PDT)
+        with ESMTP id S1348940AbiEPXNt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 19:13:49 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF9546641
+        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 16:13:47 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id bo5so15377341pfb.4
+        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 16:13:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5H3z629Hzfk43FPeQ6l/HvvBwzEkP6gG3fYwPQ2Js60=;
+        b=jhIu5fQgzwPiId/ZxVydKq1h+XIxL2F7FxjE6RLbLjB/hi59yOcqn8ZQzey53AkfLE
+         7+wBDQR3CM6K7jvai1Sv0qU0Tt2NUOhf9Cm37Kv2CCO/OsXB6c2BByySQQTZsFDgXPCV
+         Z1zcA7QhHnof/elpjpaLLtOrIfLm8UczZCpMg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=mdM5qvrQm7rJky1mnAZGhGxpOiNhvwd5dv3eu9sS6CM=;
-        b=lWDjoaQUg03fGSGIVGclk9jrP8TsDroFYllOtC+LSaciHtcqDj4cxlufkYYY7/PzB0
-         rPyr9pAkKunFkefFAwJnW4vjIreGD39J3VZPk/vnUD1LluW4vydbbQ6xaG5BLJIxO6BA
-         aOGoH74cnbhwS8PgBm1ST69nerxe5zmnikRJ8dBECiFR7AuVCZ9N5tTJy9h5yrQLi10z
-         xI5zYlW2ceIpO48NiHQ6ae+UW6Yt7zPgnvYQiwRCS+X+uXlXB68hduBCnHIrWnCjSsCG
-         MorZ9iB3SEhjkPyHzXK0Xb2HWDLPT+NktFj910/1Fyc4wLH79+dfxKWp7Wq7fMNi1lkh
-         s8KA==
-X-Gm-Message-State: AOAM5322z3fuLb8iHqe+VWXhlRDolHxQoFmDREj6tZgFvKm7R715Sm58
-        n2Gr2WdeZlnqUW5S8s9hEg==
-X-Google-Smtp-Source: ABdhPJyCOm7HmYlOFO+xSDlzkoN0MiRoCx+anoUxdsRLlaxja49bMCTzfTXikwJn30vz5uh4WMnJzw==
-X-Received: by 2002:a05:6808:d49:b0:328:ed5c:f8da with SMTP id w9-20020a0568080d4900b00328ed5cf8damr5207399oik.64.1652741373805;
-        Mon, 16 May 2022 15:49:33 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j9-20020aca3c09000000b00326bab99fe5sm4305839oia.40.2022.05.16.15.49.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 15:49:33 -0700 (PDT)
-Received: (nullmailer pid 3462273 invoked by uid 1000);
-        Mon, 16 May 2022 22:49:32 -0000
-Date:   Mon, 16 May 2022 17:49:32 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        bh=5H3z629Hzfk43FPeQ6l/HvvBwzEkP6gG3fYwPQ2Js60=;
+        b=SfeJJB+z/9vppBYbepcjbVa0DA4aZZQLtwiV1H7RN/zHI+6kwa2gnMlc+de0ashnON
+         t1ADZjxMQoMXmYt8gePexyos4iNheIOX1+bI/adBu78wNzwxeeAPGsbxYXd/13BGS+cS
+         VWKS9YzC1tLE8XHUHqXRwkkts73SQHGVOvwmKojO3RC7uTzsYf3AssF8U/YBSIafTvEh
+         yJxyEMuKT2Q8SJaMc1KUegn+o6Apsa5FhnFf5qvqoZQpbETv57pNJeVJuc2MifDx10rd
+         zXyaaP4yH/oZEhyE9US5eAyx0pf5j505OcWg1W1P9BgPgTtgedMSPOD21ZQiDn55VZQe
+         fUpQ==
+X-Gm-Message-State: AOAM533ggSKONWYwTSDie75Kg9dVste4PAfGQ4fnKyhhj4VVs1vZgmOE
+        kgzfPOLPJWxepKAGwud7IEsedA==
+X-Google-Smtp-Source: ABdhPJwwnz9S624j2DyMnf5Z0FuaroubFYKYyHv08Qz90vcyybDrg5YFj61CBAtNHDlIP5z3XyNLVQ==
+X-Received: by 2002:a63:8ac7:0:b0:3aa:fa62:5a28 with SMTP id y190-20020a638ac7000000b003aafa625a28mr17119678pgd.400.1652742826365;
+        Mon, 16 May 2022 16:13:46 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:641e:de1c:873b:321e])
+        by smtp.gmail.com with UTF8SMTPSA id q16-20020a170902dad000b0015e8d4eb26fsm7992100plx.185.2022.05.16.16.13.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 16:13:45 -0700 (PDT)
+Date:   Mon, 16 May 2022 16:13:44 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] dt-bindings: cpufreq: apple,soc-cpufreq: Add
- binding for Apple SoC cpufreq
-Message-ID: <20220516224932.GA3452552-robh@kernel.org>
-References: <20220504075153.185208-1-marcan@marcan.st>
- <20220504075153.185208-3-marcan@marcan.st>
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
+        quic_vpulyala@quicinc.com,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Subject: Re: [v16 2/5] usb: dwc3: core: Host wake up support from system
+ suspend
+Message-ID: <YoLaqDCNK0St8qsB@google.com>
+References: <1652379802-8318-1-git-send-email-quic_kriskura@quicinc.com>
+ <1652379802-8318-3-git-send-email-quic_kriskura@quicinc.com>
+ <Yn2M5hrah78jro1C@google.com>
+ <4124392b-a40f-c204-f9b0-68c3b22dd652@quicinc.com>
+ <20220516044327.GA19209@hu-pkondeti-hyd.qualcomm.com>
+ <20220516150445.GB19209@hu-pkondeti-hyd.qualcomm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220504075153.185208-3-marcan@marcan.st>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220516150445.GB19209@hu-pkondeti-hyd.qualcomm.com>
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,152 +85,226 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 04, 2022 at 04:51:51PM +0900, Hector Martin wrote:
-> This binding represents the cpufreq/DVFS hardware present in Apple SoCs.
-> The hardware has an independent controller per CPU cluster, but we
-> represent them as a single cpufreq node since there can only be one
-> systemwide cpufreq device (and since in the future, interactions with
-> memory controller performance states will also involve cooperation
-> between multiple frequency domains).
-> 
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> ---
->  .../bindings/cpufreq/apple,soc-cpufreq.yaml   | 121 ++++++++++++++++++
->  1 file changed, 121 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml b/Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml
-> new file mode 100644
-> index 000000000000..f398c1bd5de5
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml
-> @@ -0,0 +1,121 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/cpufreq/apple,soc-cpufreq.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Apple SoC cpufreq device
-> +
-> +maintainers:
-> +  - Hector Martin <marcan@marcan.st>
-> +
-> +description: |
-> +  Apple SoCs (e.g. M1) have a per-cpu-cluster DVFS controller that is part of
-> +  the cluster management register block. This binding uses the standard
-> +  operating-points-v2 table to define the CPU performance states, with the
-> +  opp-level property specifying the hardware p-state index for that level.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - apple,t8103-soc-cpufreq
-> +          - apple,t6000-soc-cpufreq
-> +      - const: apple,soc-cpufreq
-> +
-> +  reg:
-> +    minItems: 1
-> +    maxItems: 6
-> +    description: One register region per CPU cluster DVFS controller
-> +
-> +  reg-names:
-> +    minItems: 1
-> +    items:
-> +      - const: cluster0
-> +      - const: cluster1
-> +      - const: cluster2
-> +      - const: cluster3
-> +      - const: cluster4
-> +      - const: cluster5
-> +
-> +  '#freq-domain-cells':
-> +    const: 1
+On Mon, May 16, 2022 at 08:34:45PM +0530, Pavan Kondeti wrote:
+> On Mon, May 16, 2022 at 10:13:27AM +0530, Pavan Kondeti wrote:
+> > On Fri, May 13, 2022 at 09:28:16AM +0530, Krishna Kurapati PSSNV wrote:
+> > > 
+> > > On 5/13/2022 4:10 AM, Matthias Kaehlcke wrote:
+> > > >On Thu, May 12, 2022 at 11:53:19PM +0530, Krishna Kurapati wrote:
+> > > >>From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> > > >>
+> > > >>During suspend read the status of all port and set hs phy mode
+> > > >>based on current speed. Use this hs phy mode to configure wakeup
+> > > >>interrupts in qcom glue driver.
+> > > >>
+> > > >>Check wakeup-source property for dwc3 core node to set the
+> > > >>wakeup capability. Drop the device_init_wakeup call from
+> > > >>runtime suspend and resume.
+> > > >>
+> > > >>Also check during suspend if any wakeup capable devices are
+> > > >>connected to the controller (directly or through hubs), if there
+> > > >>are none set a flag to indicate that the PHY is powered
+> > > >>down during suspend.
+> > > >>
+> > > >>Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> > > >>Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> > > >>---
+> > > >>  drivers/usb/dwc3/core.c | 30 +++++++++++++++++-------------
+> > > >>  drivers/usb/dwc3/core.h |  4 ++++
+> > > >>  drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
+> > > >>  3 files changed, 45 insertions(+), 13 deletions(-)
+> > > >>
+> > > >>diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > > >>index 01115df..8bcabc5 100644
+> > > >>--- a/drivers/usb/dwc3/core.c
+> > > >>+++ b/drivers/usb/dwc3/core.c
+> > > >>@@ -1785,6 +1785,7 @@ static int dwc3_probe(struct platform_device *pdev)
+> > > >>  	platform_set_drvdata(pdev, dwc);
+> > > >>  	dwc3_cache_hwparams(dwc);
+> > > >>+	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
+> > > >>  	spin_lock_init(&dwc->lock);
+> > > >>  	mutex_init(&dwc->mutex);
+> > > >>@@ -1946,10 +1947,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > > >>  		dwc3_core_exit(dwc);
+> > > >>  		break;
+> > > >>  	case DWC3_GCTL_PRTCAP_HOST:
+> > > >>-		if (!PMSG_IS_AUTO(msg)) {
+> > > >>-			dwc3_core_exit(dwc);
+> > > >>-			break;
+> > > >>-		}
+> > > >>+		dwc3_check_phy_speed_mode(dwc);
+> > > >>  		/* Let controller to suspend HSPHY before PHY driver suspends */
+> > > >>  		if (dwc->dis_u2_susphy_quirk ||
+> > > >>@@ -1965,6 +1963,15 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> > > >>  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
+> > > >>  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
+> > > >>+
+> > > >>+		if (!PMSG_IS_AUTO(msg)) {
+> > > >>+			if (device_may_wakeup(dwc->dev))
+> > > >I think this should be device_can_wakeup(), i.e. hardware capability instead of
+> > > >device policy. A drawback of powering the PHYs off is that it causes a high
+> > > >power consumption of certain peripherals if VBUS is still supplied, so this
+> > > >should be limited to platforms where the PHYs must be powered off (using wakeup
+> > > >capability as a proxy for now).
+> > > Thnaks Mathias for the review. Will make this change in the next patchset.
+> > > >>+				dwc->phy_power_off = false;
+> > > >>+			else {
+> > > >>+				dwc->phy_power_off = true;
+> > > >>+				dwc3_core_exit(dwc);
+> > > >>+			}
+> > > >>+		}
+> > > >>  		break;
+> > > >>  	case DWC3_GCTL_PRTCAP_OTG:
+> > > >>  		/* do nothing during runtime_suspend */
+> > > >>@@ -2008,11 +2015,12 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+> > > >>  		break;
+> > > >>  	case DWC3_GCTL_PRTCAP_HOST:
+> > > >>  		if (!PMSG_IS_AUTO(msg)) {
+> > > >>-			ret = dwc3_core_init_for_resume(dwc);
+> > > >>-			if (ret)
+> > > >>-				return ret;
+> > > >>-			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
+> > > >>-			break;
+> > > >>+			if (dwc->phy_power_off) {
+> > > >>+				ret = dwc3_core_init_for_resume(dwc);
+> > > >>+				if (ret)
+> > > >>+					return ret;
+> > > >>+				dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
+> > > >>+			}
+> > > >>  		}
+> > > >>  		/* Restore GUSB2PHYCFG bits that were modified in suspend */
+> > > >>  		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
+> > > >>@@ -2084,8 +2092,6 @@ static int dwc3_runtime_suspend(struct device *dev)
+> > > >>  	if (ret)
+> > > >>  		return ret;
+> > > >>-	device_init_wakeup(dev, true);
+> > > >>-
+> > > >>  	return 0;
+> > > >>  }
+> > > >>@@ -2094,8 +2100,6 @@ static int dwc3_runtime_resume(struct device *dev)
+> > > >>  	struct dwc3     *dwc = dev_get_drvdata(dev);
+> > > >>  	int		ret;
+> > > >>-	device_init_wakeup(dev, false);
+> > > >>-
+> > > >>  	ret = dwc3_resume_common(dwc, PMSG_AUTO_RESUME);
+> > > >>  	if (ret)
+> > > >>  		return ret;
+> > > >>diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> > > >>index 81c486b..37397a8 100644
+> > > >>--- a/drivers/usb/dwc3/core.h
+> > > >>+++ b/drivers/usb/dwc3/core.h
+> > > >>@@ -1155,6 +1155,9 @@ struct dwc3 {
+> > > >>  	bool			phys_ready;
+> > > >>+	unsigned int            hs_phy_mode;
+> > > >>+	bool			phy_power_off;
+> > > >>+
+> > > >>  	struct ulpi		*ulpi;
+> > > >>  	bool			ulpi_ready;
+> > > >>@@ -1539,6 +1542,7 @@ int dwc3_core_soft_reset(struct dwc3 *dwc);
+> > > >>  #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
+> > > >>  int dwc3_host_init(struct dwc3 *dwc);
+> > > >>  void dwc3_host_exit(struct dwc3 *dwc);
+> > > >>+void dwc3_check_phy_speed_mode(struct dwc3 *dwc);
+> > > >>  #else
+> > > >>  static inline int dwc3_host_init(struct dwc3 *dwc)
+> > > >>  { return 0; }
+> > > >>diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> > > >>index f56c30c..e19b40a 100644
+> > > >>--- a/drivers/usb/dwc3/host.c
+> > > >>+++ b/drivers/usb/dwc3/host.c
+> > > >>@@ -12,6 +12,7 @@
+> > > >>  #include <linux/platform_device.h>
+> > > >>  #include "core.h"
+> > > >>+#include "../host/xhci.h"
+> > > >>  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
+> > > >>  					int irq, char *name)
+> > > >>@@ -136,3 +137,26 @@ void dwc3_host_exit(struct dwc3 *dwc)
+> > > >>  {
+> > > >>  	platform_device_unregister(dwc->xhci);
+> > > >>  }
+> > > >>+
+> > > >>+void dwc3_check_phy_speed_mode(struct dwc3 *dwc)
+> > > >>+{
+> > > >>+	int i, num_ports;
+> > > >>+	u32 reg;
+> > > >>+	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
+> > > >>+	struct xhci_hcd	*xhci_hcd = hcd_to_xhci(hcd);
+> > > >>+
+> > > >>+	dwc->hs_phy_mode = 0;
+> > > >>+
+> > > >>+	reg = readl(&xhci_hcd->cap_regs->hcs_params1);
+> > > >>+
+> > > >>+	num_ports = HCS_MAX_PORTS(reg);
+> > > >>+	for (i = 0; i < num_ports; i++) {
+> > > >>+		reg = readl(&xhci_hcd->op_regs->port_status_base + i * NUM_PORT_REGS);
+> > > >>+		if (reg & PORT_PE) {
+> > > >>+			if (DEV_HIGHSPEED(reg) || DEV_FULLSPEED(reg))
+> > > >>+				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_HS;
+> > > >>+			else if (DEV_LOWSPEED(reg))
+> > > >>+				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_LS;
+> > > >>+		}
+> > > >>+	}
+> > > >>+}
+> > > >I anticipate that it might raise concerns from maintainers that
+> > > >dwc3_check_phy_speed_mode() accesses xHCI data structures and
+> > > >registers directly. Could there be a generic HCD API that provides
+> > > >this functionality (if implemented by the specific HCD)?
+> > > 
+> > > Hi Mathias, we are not sure if there is any such API present currently.
+> > > 
+> > > Hi Alan, can you help suggest any API (if present) that we can reuse here to
+> > > avoid
+> > > 
+> > > xhci registers and structs here in dwc3.
+> > > 
+> > 
+> > We can probably do something like below to query the speed. This avoids adding
+> > another API and does not touch the underlying registers.
+> > 
+> > Pls define enum usb_device_speed usb2_speed in dwc3 structure.
+> > 
+> > diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> > index f29a264..fed1c58 100644
+> > --- a/drivers/usb/dwc3/host.c
+> > +++ b/drivers/usb/dwc3/host.c
+> > @@ -9,9 +9,29 @@
+> >  
+> >  #include <linux/acpi.h>
+> >  #include <linux/platform_device.h>
+> > +#include <linux/usb.h>
+> >  
+> >  #include "core.h"
+> >  
+> > +void dwc3_update_hs_phy_speed(struct dwc3 *dwc)
+> > +{
+> > +	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
+> > +	struct usb_device *udev;
+> > +
+> > +	/*
+> > +	 * It is possible to query the speed of all children of
+> > +	 * USB2.0 root hub via usb_hub_for_each_child(). DWC3 code
+> > +	 * currently supports only 1 port per controller. So
+> > +	 * this is sufficient.
+> > +	 */
+> > +	udev = usb_hub_find_child(hcd->self.root_hub, 1);
+> > +
+> > +	if (udev)
+> > +		dwc->usb2_speed = udev->speed;
+> > +	else
+> > +		dwc->usb2_speed = USB_SPEED_UNKNOWN;
+> > +}
+> > +
+> >  static int dwc3_host_get_irq(struct dwc3 *dwc)
+> >  {
+> >  	struct platform_device	*dwc3_pdev = to_platform_device(dwc->dev);
+> > 
+> > 
+> I am also thinking why dwc core needs to cache usb2_speed since dwc3-qcom glue
+> driver is the only sole user. We also require it only during suspend and does
+> not bother about dwc::usb2_speed correctness outside suspend. Lets move this
+> to dwc3-qcom suspend routines where we have to rely on USB2 speed for
+> configuring the D+/D- interrupt.
 
-Copied QCom it seems. Use 'performance-domains' which is the common 
-binding.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - '#freq-domain-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    // This example shows a single CPU per domain and 2 domains,
-> +    // with two p-states per domain.
-> +    // Shipping hardware has 2-4 CPUs per domain and 2-6 domains.
-> +    cpus {
-> +      #address-cells = <2>;
-> +      #size-cells = <0>;
-> +
-> +      cpu@0 {
-> +        compatible = "apple,icestorm";
-> +        device_type = "cpu";
-> +        reg = <0x0 0x0>;
-> +        operating-points-v2 = <&ecluster_opp>;
-> +        apple,freq-domain = <&cpufreq_hw 0>;
-> +      };
-> +
-> +      cpu@10100 {
-> +        compatible = "apple,firestorm";
-> +        device_type = "cpu";
-> +        reg = <0x0 0x10100>;
-> +        operating-points-v2 = <&pcluster_opp>;
-> +        apple,freq-domain = <&cpufreq_hw 1>;
-> +      };
-> +    };
-> +
-> +    ecluster_opp: opp-table-0 {
-> +      compatible = "operating-points-v2";
-> +      opp-shared;
-> +
-> +      opp01 {
-> +        opp-hz = /bits/ 64 <600000000>;
-> +        opp-level = <1>;
-> +        clock-latency-ns = <7500>;
-> +      };
-> +      opp02 {
-> +        opp-hz = /bits/ 64 <972000000>;
-> +        opp-level = <2>;
-> +        clock-latency-ns = <22000>;
-> +      };
-> +    };
-> +
-> +    pcluster_opp: opp-table-1 {
-> +      compatible = "operating-points-v2";
-> +      opp-shared;
-> +
-> +      opp01 {
-> +        opp-hz = /bits/ 64 <600000000>;
-> +        opp-level = <1>;
-> +        clock-latency-ns = <8000>;
-> +      };
-> +      opp02 {
-> +        opp-hz = /bits/ 64 <828000000>;
-> +        opp-level = <2>;
-> +        clock-latency-ns = <19000>;
-> +      };
-> +    };
-> +
-> +    soc {
-> +      #address-cells = <2>;
-> +      #size-cells = <2>;
-> +
-> +      cpufreq_hw: cpufreq@210e20000 {
-> +        compatible = "apple,t8103-soc-cpufreq", "apple,soc-cpufreq";
-> +        reg = <0x2 0x10e20000 0 0x1000>,
-> +              <0x2 0x11e20000 0 0x1000>;
-> +        reg-names = "cluster0", "cluster1";
-> +        #freq-domain-cells = <1>;
-> +      };
-> +    };
-> -- 
-> 2.35.1
-> 
-> 
+I like both of your suggestions. If something like dwc3_update_hs_phy_speed()
+works properly here we should have finally sorted out all the layering issues
+Felipe was unhappy about.
