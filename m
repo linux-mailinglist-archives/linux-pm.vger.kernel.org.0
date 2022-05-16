@@ -2,138 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AAC4529175
-	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 22:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AFF35292BC
+	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 23:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241391AbiEPUcy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 May 2022 16:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42436 "EHLO
+        id S1349258AbiEPVMx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 May 2022 17:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349114AbiEPUcM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 16:32:12 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A431FA78;
-        Mon, 16 May 2022 13:15:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0F573CE1799;
-        Mon, 16 May 2022 20:15:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14BE4C385AA;
-        Mon, 16 May 2022 20:15:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652732147;
-        bh=zUURAcddULKH97MeOKJwmTGU6utdU5/s7G9WrHiCTFk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=r9VTZLEOTfzAv7DGyZZZMdbM3HengP/kdytlM1Z3v4rr2rs5wT/+XXfWaONGuKAdk
-         0Hkh+N+O3k81ITyO7C4CymO3qPbpFEH17ORbu9j/y1igx2xC7NhnLk7bot43sK5Py4
-         aWfuWEW+uYhS6dYE01EC4d4QjlvHJB0T0HjA84jOTeu68oFevqwJ0K9EhzmMQGKYhk
-         aYTqdMsAkD3i+VMZKcftkuPVmWFYAm6HzY6TqiTq7G9/REy9Z4bRzJEPi3YQadnBBf
-         vmZ/5W3hJzj5otJ63XqXYWXL9JgYQ2xIScbJpKez9ly9Yo713dmniTjdYrv+wG8Qz9
-         7bkb2WzqE49yw==
-Date:   Mon, 16 May 2022 15:15:45 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     bhelgaas@google.com, lorenzo.pieralisi@arm.com, kbusch@kernel.org,
-        hch@lst.de, linux-nvme@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, svarbanov@mm-sol.com,
-        bjorn.andersson@linaro.org, axboe@fb.com,
-        quic_vbadigan@quicinc.com, quic_krichai@quicinc.com,
-        quic_nitirawa@quicinc.com, vidyas@nvidia.com, sagi@grimberg.me,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 0/3] PCI: Notify PCI drivers about powerdown during
- suspend
-Message-ID: <20220516201545.GA1046888@bhelgaas>
+        with ESMTP id S1349863AbiEPVLv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 17:11:51 -0400
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D411FA61;
+        Mon, 16 May 2022 13:59:44 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2fee9fe48c2so45665917b3.3;
+        Mon, 16 May 2022 13:59:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=v8CuZFsnTOi32M4APK7fICwRmlRzyWraAOnG9eilkyo=;
+        b=jLQWTnfFKtrSqFaqll7upzyWIWIuSopUONa3xYqrH4bXL/fI3yAyFlcjmfGnpyqAOj
+         womYBTP+CExHEogIe1+59c7j7c9XQN3FX0IIE81Wops1vj7WRWm8ARvKxIu6XTJerbEQ
+         TYlv6nnDCGjYRC1oQINXtgY4zxzQhYqMUJzhqb2LdK5Kv45+S7eMMY2tdGxgMP9oUDpG
+         KiNaw3lHjYqo8aI/I4sKUe8924awtqOtM3T4dvTY7aL4V6OBUe8vPvCgyi97lptmfmtX
+         5wxlp78E/IssiqeV0YOzV59gkvXL5YveVcPEEK8vcjSgIt6msj7/1MpjBgfVzjrNF/1I
+         DyOA==
+X-Gm-Message-State: AOAM530m5bRgTRET/gEB6DADpuSk+BzQkQWUaxEPZo/+y6mZ4I2TNmyE
+        s432g4+FGPV6Ch8oJL1HklUrXYxfoXoyKyLydGgCngxF0/s=
+X-Google-Smtp-Source: ABdhPJxKhTbm4KUGm4E639zehLL3oGJVzd+DOuaL3l/fDv4EecMJc90THrk+O6ZSiJ+y9oKlD0rCncRNi3iCskiwqB8=
+X-Received: by 2002:a81:260a:0:b0:2f4:ca82:a42f with SMTP id
+ m10-20020a81260a000000b002f4ca82a42fmr22397134ywm.149.1652734783486; Mon, 16
+ May 2022 13:59:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220513110027.31015-1-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <SJ0PR11MB5070B095B8A28634B43A231F9ECA9@SJ0PR11MB5070.namprd11.prod.outlook.com>
+ <20220516200927.GA1046452@bhelgaas>
+In-Reply-To: <20220516200927.GA1046452@bhelgaas>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 16 May 2022 22:59:32 +0200
+Message-ID: <CAJZ5v0g6GdKfN4b5uwHEhh4hBuG=haVHaXc-XuMQLe8Wd41Y3g@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Jingar, Rajvi" <rajvi.jingar@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        David Box <david.e.box@linux.intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[+cc Rafael, linux-pm, since this is power management stuff
-https://lore.kernel.org/all/20220513110027.31015-1-manivannan.sadhasivam@linaro.org/]
+On Mon, May 16, 2022 at 10:09 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Fri, May 13, 2022 at 10:00:48PM +0000, Jingar, Rajvi wrote:
+> >
+> > > -----Original Message-----
+> > > From: Bjorn Helgaas <helgaas@kernel.org>
+> > > Sent: Thursday, May 12, 2022 11:36 AM
+> > > To: Rafael J. Wysocki <rafael@kernel.org>
+> > > Cc: Jingar, Rajvi <rajvi.jingar@intel.com>; Wysocki, Rafael J
+> > > <rafael.j.wysocki@intel.com>; Bjorn Helgaas <bhelgaas@google.com>; David Box
+> > > <david.e.box@linux.intel.com>; Linux PCI <linux-pci@vger.kernel.org>; Linux
+> > > Kernel Mailing List <linux-kernel@vger.kernel.org>; Linux PM <linux-
+> > > pm@vger.kernel.org>
+> > > Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
+> > >
+> > > On Thu, May 12, 2022 at 07:52:36PM +0200, Rafael J. Wysocki wrote:
+> > > > On Thu, May 12, 2022 at 7:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > On Thu, May 12, 2022 at 03:49:18PM +0200, Rafael J. Wysocki wrote:
+> > >
+> > > > > > Something like this should suffice IMV:
+> > > > > >
+> > > > > > if (!dev_state_saved || pci_dev->current_state != PCI_D3cold)
+> > > > > >
+> > > > > >         pci_disable_ptm(pci_dev);
+> > > > >
+> > > > > It makes sense to me that we needn't disable PTM if the device is in
+> > > > > D3cold.  But the "!dev_state_saved" condition depends on what the
+> > > > > driver did.  Why is that important?  Why should we not do the
+> > > > > following?
+> > > > >
+> > > > >   if (pci_dev->current_state != PCI_D3cold)
+> > > > >     pci_disable_ptm(pci_dev);
+> > > >
+> > > > We can do this too.  I thought we could skip the power state
+> > > > check if dev_state_saved was unset, because then we would know
+> > > > that the power state was not D3cold.  It probably isn't worth
+> > > > the hassle though.
+> >
+> > We see issue with certain platforms where only checking if device
+> > power state in D3Cold is not enough and the !dev_state_saved check
+> > is needed when disabling PTM. Device like nvme is relying on ASPM,
+> > it stays in D0 but state is saved. Touching the config space wakes
+> > up the device which prevents the system from entering into low power
+> > state.
+>
+> Correct me if I'm wrong: for NVMe devices, nvme_suspend() has already
+> saved state and put the device in some low-power state.  Disabling PTM
+> here is functionally OK but prevents a system low power state, so you
+> want to leave PTM enabled.
+>
+> But I must be missing something because pci_prepare_to_sleep()
+> currently disables PTM for Root Ports.  If we leave PTM enabled on
+> NVMe but disable it on the Root Port above it, any PTM Request from
+> NVMe will cause an Unsupported Request error.
+>
+> Disabling PTM must be coordinated across PTM Requesters and PTM
+> Responders.  That means the decision to disable cannot depend on
+> driver-specific things like whether the driver has saved state.
 
-On Fri, May 13, 2022 at 04:30:24PM +0530, Manivannan Sadhasivam wrote:
-> Hi,
-> 
-> This series adds support for notifying the PCI drivers like NVMe about the
-> transition of PCI devices into powerdown mode during system suspend.
-> 
-> Background
-> ----------
-> 
-> On Qcom SC7280 based Chrome platforms, the OS will turn off the power to all
-> PCIe devices during system suspend for aggressive powersaving. Currently, there
-> is no way for the PCI device drivers to learn about this situation. Some of the
-> drivers assume that the power will be retained and some others assume that the
-> power may be taken down.
-> 
-> We faced the issue with NVMe PCI driver, where the driver expects the NVMe
-> device to be in APST (Autonomous Power State Transition) state for power saving
-> during system suspend. So when the power goes down, the NVMe driver fails to
-> bringup the device during resume.
-> 
-> Previous work
-> -------------
-> 
-> We tried to fix this issue in a couple of ways:
-> 
-> 1. The NVMe PCI driver checks for the existence of "StorageD3Enable" ACPI
-> property in the suspend path. If the property is found, the driver assumes that
-> the device may go to poweroff state and shutdowns the device accordingly.
-> 
-> As like the ACPI based systems, we also tried to get the support in place for
-> DT based systems. But that didn't get accepted:
-> https://lore.kernel.org/all/Yl+6V3pWuyRYuVV8@infradead.org/T/
-> 
-> 2. Keith Busch proposed a module params based approach. The parameter when set,
-> will allow the driver to support APST during suspend. Absence of that parameter
-> will let the driver shutdown the device.
-> 
-> This also did not get accepted:
-> https://lore.kernel.org/linux-nvme/20220201165006.3074615-1-kbusch@kernel.org/
-> 
-> Proposal
-> --------
-> 
-> Christoph suggested to add a notification in the PCI/PM core to let the NVMe
-> driver know that the device will go into powerdown state during suspend.
-> https://lore.kernel.org/all/Yg0wklcJ3ed76Jbk@infradead.org/ 
-> 
-> Hence in this series, a "suspend_poweroff" flag is introduced in the host bridge
-> struct. When this flag is set by the PCI RC drivers, the PCI device driver like
-> NVMe can shutdown the device during suspend.
-> 
-> In the coming days, the usage of this flag could be extended to other PCI
-> drivers as well.
-> 
-> Testing
-> -------
-> 
-> This series has been tested on SC7280 IDP board connected to a NVMe PCI device.
-> 
-> Thanks,
-> Mani
-> 
-> Manivannan Sadhasivam (3):
->   PCI: Add a flag to notify PCI drivers about powerdown during suspend
->   PCI: dwc: qcom: Set suspend_poweroff flag for SC7280
->   nvme-pci: Make use of "suspend_poweroff" flag during system suspend
-> 
->  drivers/nvme/host/pci.c                | 3 ++-
->  drivers/pci/controller/dwc/pcie-qcom.c | 6 ++++++
->  include/linux/pci.h                    | 1 +
->  3 files changed, 9 insertions(+), 1 deletion(-)
-> 
-> -- 
-> 2.25.1
-> 
+Setting state_saved generally informs pci_pm_suspend_noirq() that the
+device has already been handled and it doesn't need to do anything to
+it.
+
+But you are right that PTM should be disabled on downstream devices as
+well as on the ports that those devices are connected to and it can be
+done even if the given device has already been handled, so the
+state_saved value is technically irrelevant.
+
+That's why I suggested to check if the power state is between D0 and
+D3cold (exclusive) and only disable PTM if that is the case.  It is
+pointless to disable PTM for devices in D3cold and it may be harmful
+for devices that are left in D0.
