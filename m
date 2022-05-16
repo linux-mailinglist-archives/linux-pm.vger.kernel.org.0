@@ -2,67 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78EC7528019
-	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 10:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1775A52806D
+	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 11:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbiEPIxU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 May 2022 04:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
+        id S242140AbiEPJJO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 May 2022 05:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiEPIxT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 04:53:19 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01C613EA5;
-        Mon, 16 May 2022 01:53:16 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 6E08B3200930;
-        Mon, 16 May 2022 04:53:14 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 16 May 2022 04:53:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1652691193; x=
-        1652777593; bh=+Xd3PLAvDk9oWGFHPx+CW0Qh/oAyEPqTd5DjSbxGME0=; b=D
-        tKU0DACi1vO/P+Q3BY7U+Dngk5OeXRwGSjw6sAgClTTvNQ/kEic0vMclukz7iYVg
-        TsUF6UvLTvk+p7vxqXzFt2oz9JLN58srGNTsq4sz8coViK0KjD1XnqY+nuOwqNNH
-        FoF8QatRwcgWl+sXckWBSIEeWsJQTI6bYc+XYW8qZ8TvGW8IkKKiDOKdwuriwz7U
-        9v5HVyulxIVnWQInrnDFhRdqyr7alERUa5wcSJ6/kgAfSZT/+DGEuanDSSXF+UO2
-        sNbM5vBd9R/t+McGJzB//bPet2brlxme92GLm/nXHZGXcPaVgZqD3hkugbVgHz53
-        lWNmp6hVvA18bLXSmo2IQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1652691193; x=1652777593; bh=+Xd3PLAvDk9oW
-        GFHPx+CW0Qh/oAyEPqTd5DjSbxGME0=; b=Tp8ZS+t1MQwMeT2DiiCVpW3RY9rAs
-        u18kmVGDJDrEV8jVrUOPlrSj03zkhZIaP8+IqAcpcUfniJThz3qLDX4LlHN5u4fe
-        okqkBWYHVJK+HboR8CPFZ7DzBzREZnH3RRAtaN1SmeiYeYUI/zKg+eBVYzbC9fxs
-        SsblbKJUG0bwGbqwBew9/GtK3bma9AINh2VYjD1+h8PW08AJthc9YRtzcMxRFxgK
-        sTL0U0IHhZiBL893rEY0o6tI1S5KLKErRcCaeQ3NvZ3BQFRyoc24efKjNsAxptU5
-        JENIMXhSKIauCzefEQ+Rc7Tp/8vhGnshhmralujBjDIGYcWlmnNQ6ifLA==
-X-ME-Sender: <xms:-RCCYvtlF57rD14MAdZsMzqWPoG2-CEFUbQ1xeZ-yu2pFS3slFkMLQ>
-    <xme:-RCCYgcK8ErZMrzy9Z1mhd3tDa7s7aIy4wt7OkkY1tJAbd2JkauGaXvpBxF2AtOUW
-    57OS5wuLWcMKTXHHxQ>
-X-ME-Received: <xmr:-RCCYiznCtmKfiL3P4kdsB-h9O8PnanGXMpDHa1y4cS_3ZGt7B0evIjgqvg42LE_6Orb9S_Ayyr1VnYIFze8roDreS7HvtEQELkCswc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrheehgddtkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtugfgjgesthhqredttddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeetgfelgefggeekkefggfeludeiudffjeffgeevveekjedukedtudeuteef
-    teefgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:-RCCYuNhyb6KgmKHuD2-6jjJ8J74sbQTtyYXJnZZ1K6OssQ575Spgg>
-    <xmx:-RCCYv9jOH14-609woY2dmX34nupuYQpc4I0AI1oEuI3pcJs9C2Vaw>
-    <xmx:-RCCYuVJ1MxAmk6lJlI_aDcjDSvabA1NBdrHrOPeodq5gnDVZVNhtw>
-    <xmx:-RCCYmbB1puiO02N3N3yjP1qSteUQK-i-X-dgeXJ1XDX-dEdSkaHSw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 16 May 2022 04:53:12 -0400 (EDT)
-Date:   Mon, 16 May 2022 10:53:09 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     qianfanguijin@163.com
+        with ESMTP id S233408AbiEPJJD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 05:09:03 -0400
+Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48A2C22B27;
+        Mon, 16 May 2022 02:08:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Message-ID:Date:MIME-Version:Subject:From; bh=SJzeR
+        opa97b+y4ikvwq8pQd3JkFOAJvJtPN1447zVMU=; b=OYFMch/JvS5zRHMSkFQy2
+        6+npR9/hT5fhljyMlbai5peBOLYvad8xghCvHdv6UTqdplMHc6ZNiZm7w79DG5yq
+        5Ela9Pwau9h4KnGD2tgptGrmXJq0K15Un486eThtgQ+3fZw1LxwcLth6EK4dxIM1
+        9eRidqHRafP+X9Spj9aF8I=
+Received: from [192.168.3.102] (unknown [218.201.129.19])
+        by smtp7 (Coremail) with SMTP id C8CowAB3CplRFIJiwNRICw--.41526S2;
+        Mon, 16 May 2022 17:07:30 +0800 (CST)
+Message-ID: <145f9b94-1eb1-8a66-9f9b-36a8395bde70@163.com>
+Date:   Mon, 16 May 2022 17:07:29 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v4 2/2] ARM: dts: sun8i-r40: add opp table for cpu
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>
 Cc:     linux-sunxi@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
         Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -70,17 +38,23 @@ Cc:     linux-sunxi@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] ARM: dts: sun8i-r40: add opp table for cpu
-Message-ID: <20220516085309.jp5yautmb3veocvl@houat>
 References: <20220516021516.23216-1-qianfanguijin@163.com>
  <20220516021516.23216-3-qianfanguijin@163.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220516021516.23216-3-qianfanguijin@163.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+ <20220516085309.jp5yautmb3veocvl@houat>
+From:   qianfan <qianfanguijin@163.com>
+In-Reply-To: <20220516085309.jp5yautmb3veocvl@houat>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: C8CowAB3CplRFIJiwNRICw--.41526S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7WFWDuFWxKr4rKw1ftry5Jwb_yoW8tr1Upr
+        ZrCr4Ykr4kWr17JrySgw1UJFn3uFWkuFyUGry7GFy8Jwn8Zr1DGFn7trnxKrW8Xr4fZ3y2
+        9rnaqr9Fkw1DC3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jjtC7UUUUU=
+X-Originating-IP: [218.201.129.19]
+X-CM-SenderInfo: htld0w5dqj3xxmlqqiywtou0bp/1tbiXBID7VXl25gMPQAAsi
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,56 +63,67 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 16, 2022 at 10:15:16AM +0800, qianfanguijin@163.com wrote:
-> From: qianfan Zhao <qianfanguijin@163.com>
->=20
-> OPP table value is get from allwinner lichee linux-3.10 kernel driver
->=20
-> Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
-> ---
->  arch/arm/boot/dts/sun8i-r40.dtsi | 42 ++++++++++++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
->=20
-> diff --git a/arch/arm/boot/dts/sun8i-r40.dtsi b/arch/arm/boot/dts/sun8i-r=
-40.dtsi
-> index 291f4784e86c..8949153eb0eb 100644
-> --- a/arch/arm/boot/dts/sun8i-r40.dtsi
-> +++ b/arch/arm/boot/dts/sun8i-r40.dtsi
-> @@ -54,6 +54,36 @@ / {
->  	#size-cells =3D <1>;
->  	interrupt-parent =3D <&gic>;
-> =20
-> +	cpu0_opp_table: opp_table0 {
-> +		compatible =3D "operating-points-v2";
-> +		opp-shared;
-> +
-> +		opp-720000000 {
-> +			opp-hz =3D /bits/ 64 <720000000>;
-> +			opp-microvolt =3D <1000000 1000000 1300000>;
-> +			clock-latency-ns =3D <2000000>;
-> +		};
-> +
-> +		opp-912000000 {
-> +			opp-hz =3D /bits/ 64 <912000000>;
-> +			opp-microvolt =3D <1100000 1100000 1300000>;
-> +			clock-latency-ns =3D <2000000>;
-> +		};
-> +
-> +		opp-1008000000 {
-> +			opp-hz =3D /bits/ 64 <1008000000>;
-> +			opp-microvolt =3D <1160000 1160000 1300000>;
-> +			clock-latency-ns =3D <2000000>;
-> +		};
-> +
-> +		/* The opp table of the cpu frequency that exceeds 1G
-> +		 * is not defined here. They require higher operating
-> +		 * current, which may exceed the 500mA limited if the
-> +		 * system is powered by USB. You can add them to the
-> +		 * board's DTS is you make sure.
-> +		 */
 
-That's not the issue though. The issue is that the board is setup with a
-CPU voltage at 1160mV, and if we raise the frequency to a higher OPP
-without raising the voltage as well, the CPU will crash.
 
-Maxime
+在 2022/5/16 16:53, Maxime Ripard 写道:
+> On Mon, May 16, 2022 at 10:15:16AM +0800, qianfanguijin@163.com wrote:
+>> From: qianfan Zhao <qianfanguijin@163.com>
+>>
+>> OPP table value is get from allwinner lichee linux-3.10 kernel driver
+>>
+>> Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
+>> ---
+>>   arch/arm/boot/dts/sun8i-r40.dtsi | 42 ++++++++++++++++++++++++++++++++
+>>   1 file changed, 42 insertions(+)
+>>
+>> diff --git a/arch/arm/boot/dts/sun8i-r40.dtsi b/arch/arm/boot/dts/sun8i-r40.dtsi
+>> index 291f4784e86c..8949153eb0eb 100644
+>> --- a/arch/arm/boot/dts/sun8i-r40.dtsi
+>> +++ b/arch/arm/boot/dts/sun8i-r40.dtsi
+>> @@ -54,6 +54,36 @@ / {
+>>   	#size-cells = <1>;
+>>   	interrupt-parent = <&gic>;
+>>   
+>> +	cpu0_opp_table: opp_table0 {
+>> +		compatible = "operating-points-v2";
+>> +		opp-shared;
+>> +
+>> +		opp-720000000 {
+>> +			opp-hz = /bits/ 64 <720000000>;
+>> +			opp-microvolt = <1000000 1000000 1300000>;
+>> +			clock-latency-ns = <2000000>;
+>> +		};
+>> +
+>> +		opp-912000000 {
+>> +			opp-hz = /bits/ 64 <912000000>;
+>> +			opp-microvolt = <1100000 1100000 1300000>;
+>> +			clock-latency-ns = <2000000>;
+>> +		};
+>> +
+>> +		opp-1008000000 {
+>> +			opp-hz = /bits/ 64 <1008000000>;
+>> +			opp-microvolt = <1160000 1160000 1300000>;
+>> +			clock-latency-ns = <2000000>;
+>> +		};
+>> +
+>> +		/* The opp table of the cpu frequency that exceeds 1G
+>> +		 * is not defined here. They require higher operating
+>> +		 * current, which may exceed the 500mA limited if the
+>> +		 * system is powered by USB. You can add them to the
+>> +		 * board's DTS is you make sure.
+>> +		 */
+> That's not the issue though. The issue is that the board is setup with a
+> CPU voltage at 1160mV, and if we raise the frequency to a higher OPP
+> without raising the voltage as well, the CPU will crash.
+Yes, this is a issue and if the dts doesn't has "cpu-supply" node.
+The comment above is found while testing. 100% cpu load @ 4x1.2G
+will consume about 800mA@5V current, the board will reboot if it
+is powered by USB. So I leave those comments.
+
+I am thinking your suggestion to write the opp part to a dtsi like
+A64. Should I adding all supported freq?
+
+I am preparing a new version which including cpu cooling.
+>
+> Maxime
+
