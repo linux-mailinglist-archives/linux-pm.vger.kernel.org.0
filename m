@@ -2,63 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B005281FC
-	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 12:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30B2D52821F
+	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 12:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242620AbiEPKZk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 May 2022 06:25:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42142 "EHLO
+        id S233881AbiEPKcU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 May 2022 06:32:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242592AbiEPKZi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 06:25:38 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25E211A19
-        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 03:25:27 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id h85so15350956iof.12
-        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 03:25:27 -0700 (PDT)
+        with ESMTP id S232972AbiEPKcT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 06:32:19 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBD019C2C
+        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 03:32:17 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id d21so3959095wra.10
+        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 03:32:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Wi7FZ4sQpiYFKSAT45PbkZoAgmyf6uUSxphI+SAE7xg=;
-        b=gExCtsIsHo4jDqSh1oIaaQMB/SVgN1TgdoLWTbuBqlwADdC4X8/BXUu0W5pAsIbnuB
-         Gd/lIj0KUexSKmCA6VgMA5qw0Kp80B8oD++5zkRiD1X5kn70tlwr8pOM8HKCaPgJpZod
-         hVCcl6MZZajGoz5v/sH7W7trFYcCi0WK4tPqbHNTRsxxQyivr4dYEzu+tgvXPYXOzrk8
-         hZcIPvbUEEEl7+dIEQMujSm2xzHvye0fTzRpcGSJBYt4JbZVMeEOT5yMn6Rm3sr9rwVD
-         GSPgTZ9358/8ti/Vq3+MyAbtWI6VESWFHyxGEE3yK5dHhlPRlQ9D6yGDrvYSAVI7XABI
-         R7KA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=RttnXZvU3aVxvRaSNtU7c8RHwC9HgssmoEkHoxVMQBM=;
+        b=BTvtyT5KS3O7KQDTCvAOXzDvo7vlxqZY6GXK14238lvkCAYg+K092d1YrSZndxNxun
+         7GVUQdCb7S9MD+c0jaYNkXszQAg67aKEiiMw0vqQ3l9Cea1BXn+jeUFPQmBgaprF9l72
+         Ac8YwwSgdY42PBTqBAFlm7oAUy4ucN99TjkQjgdp/hkF81+hMyvyn70y7lGd0Ag25IBF
+         23KTyYX1Tp3CjLvEPVUuZ5frwWTMMAUBdlRsIht/DWAebAvfS0hjjG/zq8XKSH2kNqHg
+         khgrMjofQ5p7hM+YdJx9Eex9mnsBjqXHAJE2tLdRA5Z2RbsMOzz0ybDIx/Yq/Qp1TBM4
+         /7oQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Wi7FZ4sQpiYFKSAT45PbkZoAgmyf6uUSxphI+SAE7xg=;
-        b=nd3HdKi2/d5X1CvusLsWJB9S6jlGkTMZa65pOk2NzPsZLuJWkIYO96hsTPmz8vrvXE
-         IuGPB2C4ZeMX5DQBfIx6520hPoANoB69m8fyj7V6MjotzdGGdtoOPXmklemXZ8KNsemq
-         CXEP+sEdf4OUDOYnsITTT/JjoPTYVH7KkAodlDTx13M5GaGN6FqgQyGpM5N5M9Eshiz3
-         x5vbblMakGT5GV5SPe0uxXb5VO61IfJjOTXCKJVR05JXyypdVEyum2j7zQMxsb5QDPKI
-         EY5Sql2J3Wzumh+tqsYZp6Ibz1YvQjobVktgAxgUK48yRcBjFanxB6RkN6m30sNUjfkf
-         W9Ew==
-X-Gm-Message-State: AOAM53367WFnLavKiK2Jughjpz0fsM6BVj6NA3gs6NLeuIuL3mWgzNBU
-        htqf4O6jvKWFOxKrlJh99IkajAGNpgQZ/4dO8+dpWQ==
-X-Google-Smtp-Source: ABdhPJxw5zlT4NJpzsyi5yIx3XxcoNdxQbi+F3voNa3E3vqfR8SegU6lhQZA3QYcoF2h5lNr7l0dDXMuGhUcC7d/92g=
-X-Received: by 2002:a05:6638:450a:b0:32e:1bd1:735f with SMTP id
- bs10-20020a056638450a00b0032e1bd1735fmr4119326jab.145.1652696726666; Mon, 16
- May 2022 03:25:26 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RttnXZvU3aVxvRaSNtU7c8RHwC9HgssmoEkHoxVMQBM=;
+        b=utaRk+svWA9BK6Bt6Df14nJsjSorySMUe6GxI5YsyiKUu4KDJCq8EFiEnjkRCMJl6D
+         aawxL9G7nU9BVmRfr5yFzwmsmagm+77Wo8uPLaAnEi5tQlUid1EAFinTkigj1qwFaayH
+         PW3AB0IywDD+FUmKDk7OtYpp/Ss2y2ftY2zZ4zui8x55ISql1J5wrwFZPw0hbEiuVakM
+         aoq1RsEMi7PfZiMEknUubiF+5/Bvc6iL9qQotQuMFGz2OlOC6JFecwZTuczt08Tuh84T
+         B1p4g6nhtrQ/JIZ7gubwnuSjo1UO0PHclH3VO7IPoj+bs29l8cMCTEwgEYNNkL+ygGGQ
+         7LPA==
+X-Gm-Message-State: AOAM530CxMyHTLhnFuhXBK45rv+/Ic046CGaKMnF3mknr0XVQeva3As1
+        EVfpwN4EVkgdN63vpQFBVMp8ZQ==
+X-Google-Smtp-Source: ABdhPJwdCf+BkcMYSxApqADPjW+dHt5DnvG160gLFyEFNPZNqcDHC2iHM205gH0uqDN53qEOS7fY3w==
+X-Received: by 2002:adf:d1ec:0:b0:20c:61ef:93b6 with SMTP id g12-20020adfd1ec000000b0020c61ef93b6mr13754972wrd.694.1652697136459;
+        Mon, 16 May 2022 03:32:16 -0700 (PDT)
+Received: from ?IPV6:2a01:e34:ed2f:f020:b464:e524:6a1d:33d0? ([2a01:e34:ed2f:f020:b464:e524:6a1d:33d0])
+        by smtp.googlemail.com with ESMTPSA id v2-20020a05600c15c200b00395f15d993fsm4454619wmf.5.2022.05.16.03.32.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 03:32:15 -0700 (PDT)
+Message-ID: <4568653d-706e-8621-3fee-d4a853517256@linaro.org>
+Date:   Mon, 16 May 2022 12:32:14 +0200
 MIME-Version: 1.0
-References: <20220516030251.42323-1-schspa@gmail.com> <20220516030251.42323-2-schspa@gmail.com>
-In-Reply-To: <20220516030251.42323-2-schspa@gmail.com>
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-Date:   Mon, 16 May 2022 11:25:15 +0100
-Message-ID: <CAKohpokHFd=EAOXvpecde=QRGEq8Ek+P6UsLjfVDrW0nOspuFg@mail.gmail.com>
-Subject: Re: [PATCH v6 2/2] cpufreq: make interface functions and lock holding
- state clear
-To:     Schspa Shi <schspa@gmail.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v7 1/2] dt-bindings: thermal: k3-j72xx: Add VTM bindings
+ documentation
+Content-Language: en-US
+To:     Keerthy <j-keerthy@ti.com>, robh+dt@kernel.org,
+        rui.zhang@intel.com, amitk@kernel.org, kristo@kernel.org
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, krzysztof.kozlowski@linaro.org
+References: <20220511110657.16305-1-j-keerthy@ti.com>
+ <20220511110657.16305-2-j-keerthy@ti.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220511110657.16305-2-j-keerthy@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,20 +76,100 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 16 May 2022 at 04:12, Schspa Shi <schspa@gmail.com> wrote:
->
-> cpufreq_offline() calls offline() and exit() under the policy rwsem
-> But they are called outside the rwsem in cpufreq_online().
->
-> This patch move the offline(), exit(), online(), init() to be inside
-> of policy rwsem to achieve a clear lock relationship.
->
-> All the init() online() implement only initialize policy object without
-> holding this lock and won't call cpufreq APIs need to hold this lock.
->
-> Signed-off-by: Schspa Shi <schspa@gmail.com>
-> ---
->  drivers/cpufreq/cpufreq.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Cc'ing krzysztof.kozlowski@linaro.org
+
+On 11/05/2022 13:06, Keerthy wrote:
+> Add VTM bindings documentation. In the Voltage Thermal
+> Management Module(VTM), K3 J72XX supplies a voltage
+> reference and a temperature sensor feature that are gathered in the band
+> gap voltage and temperature sensor (VBGAPTS) module. The band
+> gap provides current and voltage reference for its internal
+> circuits and other analog IP blocks. The analog-to-digital
+> converter (ADC) produces an output value that is proportional
+> to the silicon temperature.
+> 
+> Signed-off-by: Keerthy <j-keerthy@ti.com>
+> ---
+>   .../bindings/thermal/ti,j72xx-thermal.yaml    | 64 +++++++++++++++++++
+>   1 file changed, 64 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+> new file mode 100644
+> index 000000000000..83f8f444a133
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+> @@ -0,0 +1,64 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/thermal/ti,j72xx-thermal.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Texas Instruments J72XX VTM (DTS) binding
+> +
+> +maintainers:
+> +  - Keerthy <j-keerthy@ti.com>
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - ti,j721e-vtm
+> +          - ti,j7200-vtm
+> +
+> +  reg:
+> +    items:
+> +      - description: VTM cfg1 register space
+> +      - description: VTM cfg2 register space
+> +      - description: VTM efuse register space
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  "#thermal-sensor-cells":
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - power-domains
+> +  - "#thermal-sensor-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/soc/ti,sci_pm_domain.h>
+> +    wkup_vtm0: thermal-sensor@42040000 {
+> +        compatible = "ti,j721e-vtm";
+> +        reg = <0x42040000 0x350>,
+> +            <0x42050000 0x350>,
+> +            <0x43000300 0x10>;
+> +        power-domains = <&k3_pds 154 TI_SCI_PD_EXCLUSIVE>;
+> +        #thermal-sensor-cells = <1>;
+> +    };
+> +
+> +    mpu_thermal: mpu-thermal {
+> +        polling-delay-passive = <250>; /* milliseconds */
+> +        polling-delay = <500>; /* milliseconds */
+> +        thermal-sensors = <&wkup_vtm0 0>;
+> +
+> +        trips {
+> +                mpu_crit: mpu-crit {
+> +                        temperature = <125000>; /* milliCelsius */
+> +                        hysteresis = <2000>; /* milliCelsius */
+> +                        type = "critical";
+> +                };
+> +        };
+> +    };
+> +...
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
