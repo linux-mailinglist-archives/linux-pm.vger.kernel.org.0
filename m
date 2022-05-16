@@ -2,78 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE6852937B
-	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 00:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA385293CC
+	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 00:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345596AbiEPWQO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 May 2022 18:16:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45794 "EHLO
+        id S1349788AbiEPWtk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 May 2022 18:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbiEPWQN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 18:16:13 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904502C10B
-        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 15:16:11 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id n8so13327629qke.11
-        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 15:16:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=EDpKgH3/WPZM/363RddYVU5cX26QwXiUYlUKXjvLI+w=;
-        b=rr0Lzlh4RQe5+hFaBPjqPfkCkryQUmL7dQa++VAGdy52rMii+uf5cEQYN0/J/o1IBf
-         uR4WcAfuUSb+weiCYWwpFa9EXBjFsvyC81WKH1B6mUA5Qzt666Yf7WWD+0r2SOXltpcV
-         vUL6IUV/O21kvSj5iTVHZ6ivPLn6NrIyG3S4zB2HCc3fbp/3NKE85/Zir1Qn8NjQSBs5
-         Gk4FCwBor0V8fIPZ0q9GztHXRakIuhk8qYv0TXQjtVS7TBVlG4obJhZjI5EiRWhUZ2U8
-         jYX21mOkrSrXPHuDr1mRj4m9lLMhCMAiYONHrx93BZriczvyMaHaSnLEuPRceClGuftI
-         SFnw==
+        with ESMTP id S1349833AbiEPWtg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 18:49:36 -0400
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C4C41988;
+        Mon, 16 May 2022 15:49:34 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id l16so20440376oil.6;
+        Mon, 16 May 2022 15:49:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=EDpKgH3/WPZM/363RddYVU5cX26QwXiUYlUKXjvLI+w=;
-        b=stl5h2ShMk35ncRAInRl9qQ2rDzZAjhbCnTI/CV6VT7xwOnjGY6/vdbdzLGpiELsvX
-         qkuZ3cWGAMn0Eb5WlaTyR2OAQomg7Ej6UeohozEYi9IIbDMomf7lOyU7SmnMVnTYZoKq
-         hZLUbZ/xFdvny9qA1xODgEbKzcJJgp11YVZEMMwi2/Gj73KUwLdahVebtposoyRRdbYs
-         xmxajVCy8P9S8/jQoTlRv5sMnoicvtu2uO72ZWtTVoOb1CYZV86zA9lxMZWUP8IAqvNA
-         e3IacLN/tJjTBAVvfJ+F+fJIBHnObdnT7VBFmD6BjaGp/iPQ3wiudxWFQO9JbroaVjx1
-         YmCg==
-X-Gm-Message-State: AOAM532+bvoj+TyED0ZHoTIAUdbPsoYGyBGYVMhFNXppz8hLwIlMi+5b
-        ygmGEY0pODx4jmokaYkxzQgUag==
-X-Google-Smtp-Source: ABdhPJxG7XD4iDKgNS58sELNuzjPJk3namOwny1F4tvwGJp483qDx5nUXnvRn7ROwnWdZjAvvLQlyQ==
-X-Received: by 2002:a37:b986:0:b0:69f:ed3a:55cc with SMTP id j128-20020a37b986000000b0069fed3a55ccmr13892091qkf.558.1652739370681;
-        Mon, 16 May 2022 15:16:10 -0700 (PDT)
-Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id 2-20020ac85902000000b002f39b99f6b3sm7091530qty.77.2022.05.16.15.16.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 15:16:10 -0700 (PDT)
-Message-ID: <a17603a8-f273-0dde-8e84-3c0616ff04aa@linaro.org>
-Date:   Mon, 16 May 2022 17:16:08 -0500
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mdM5qvrQm7rJky1mnAZGhGxpOiNhvwd5dv3eu9sS6CM=;
+        b=lWDjoaQUg03fGSGIVGclk9jrP8TsDroFYllOtC+LSaciHtcqDj4cxlufkYYY7/PzB0
+         rPyr9pAkKunFkefFAwJnW4vjIreGD39J3VZPk/vnUD1LluW4vydbbQ6xaG5BLJIxO6BA
+         aOGoH74cnbhwS8PgBm1ST69nerxe5zmnikRJ8dBECiFR7AuVCZ9N5tTJy9h5yrQLi10z
+         xI5zYlW2ceIpO48NiHQ6ae+UW6Yt7zPgnvYQiwRCS+X+uXlXB68hduBCnHIrWnCjSsCG
+         MorZ9iB3SEhjkPyHzXK0Xb2HWDLPT+NktFj910/1Fyc4wLH79+dfxKWp7Wq7fMNi1lkh
+         s8KA==
+X-Gm-Message-State: AOAM5322z3fuLb8iHqe+VWXhlRDolHxQoFmDREj6tZgFvKm7R715Sm58
+        n2Gr2WdeZlnqUW5S8s9hEg==
+X-Google-Smtp-Source: ABdhPJyCOm7HmYlOFO+xSDlzkoN0MiRoCx+anoUxdsRLlaxja49bMCTzfTXikwJn30vz5uh4WMnJzw==
+X-Received: by 2002:a05:6808:d49:b0:328:ed5c:f8da with SMTP id w9-20020a0568080d4900b00328ed5cf8damr5207399oik.64.1652741373805;
+        Mon, 16 May 2022 15:49:33 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j9-20020aca3c09000000b00326bab99fe5sm4305839oia.40.2022.05.16.15.49.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 15:49:33 -0700 (PDT)
+Received: (nullmailer pid 3462273 invoked by uid 1000);
+        Mon, 16 May 2022 22:49:32 -0000
+Date:   Mon, 16 May 2022 17:49:32 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] dt-bindings: cpufreq: apple,soc-cpufreq: Add
+ binding for Apple SoC cpufreq
+Message-ID: <20220516224932.GA3452552-robh@kernel.org>
+References: <20220504075153.185208-1-marcan@marcan.st>
+ <20220504075153.185208-3-marcan@marcan.st>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 5/2] dt-bindings: interconnect: Remove sc7180/sdx55 ipa
- compatibles
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        Doug Anderson <dianders@chromium.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Mike Tipton <quic_mdtipton@quicinc.com>
-References: <20220412220033.1273607-1-swboyd@chromium.org>
- <20220415005828.1980055-1-swboyd@chromium.org>
- <20220415005828.1980055-3-swboyd@chromium.org>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <20220415005828.1980055-3-swboyd@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220504075153.185208-3-marcan@marcan.st>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,46 +72,152 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 4/14/22 7:58 PM, Stephen Boyd wrote:
-> These interconnects are modeled as clks, not interconnects, therefore
-> remove the compatibles from the binding as they're unused.
+On Wed, May 04, 2022 at 04:51:51PM +0900, Hector Martin wrote:
+> This binding represents the cpufreq/DVFS hardware present in Apple SoCs.
+> The hardware has an independent controller per CPU cluster, but we
+> represent them as a single cpufreq node since there can only be one
+> systemwide cpufreq device (and since in the future, interactions with
+> memory controller performance states will also involve cooperation
+> between multiple frequency domains).
 > 
-> Cc: Alex Elder <elder@linaro.org>
-> Cc: Taniya Das <quic_tdas@quicinc.com>
-> Cc: Mike Tipton <quic_mdtipton@quicinc.com>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 > ---
+>  .../bindings/cpufreq/apple,soc-cpufreq.yaml   | 121 ++++++++++++++++++
+>  1 file changed, 121 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml
 > 
-> I don't know who should apply this. Probably whoever takes the dtsi
-> patches, Bjorn?, because otherwise dt_bindings_check will fail.
+> diff --git a/Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml b/Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml
+> new file mode 100644
+> index 000000000000..f398c1bd5de5
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/cpufreq/apple,soc-cpufreq.yaml
+> @@ -0,0 +1,121 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/cpufreq/apple,soc-cpufreq.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Apple SoC cpufreq device
+> +
+> +maintainers:
+> +  - Hector Martin <marcan@marcan.st>
+> +
+> +description: |
+> +  Apple SoCs (e.g. M1) have a per-cpu-cluster DVFS controller that is part of
+> +  the cluster management register block. This binding uses the standard
+> +  operating-points-v2 table to define the CPU performance states, with the
+> +  opp-level property specifying the hardware p-state index for that level.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - apple,t8103-soc-cpufreq
+> +          - apple,t6000-soc-cpufreq
+> +      - const: apple,soc-cpufreq
+> +
+> +  reg:
+> +    minItems: 1
+> +    maxItems: 6
+> +    description: One register region per CPU cluster DVFS controller
+> +
+> +  reg-names:
+> +    minItems: 1
+> +    items:
+> +      - const: cluster0
+> +      - const: cluster1
+> +      - const: cluster2
+> +      - const: cluster3
+> +      - const: cluster4
+> +      - const: cluster5
+> +
+> +  '#freq-domain-cells':
+> +    const: 1
 
-I don't see this commit applied anywhere, though I
-might have missed it.  Is this for Bjorn, or Georgi,
-or someone else?
+Copied QCom it seems. Use 'performance-domains' which is the common 
+binding.
 
-					-Alex
-
->   Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml | 2 --
->   1 file changed, 2 deletions(-)
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - '#freq-domain-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    // This example shows a single CPU per domain and 2 domains,
+> +    // with two p-states per domain.
+> +    // Shipping hardware has 2-4 CPUs per domain and 2-6 domains.
+> +    cpus {
+> +      #address-cells = <2>;
+> +      #size-cells = <0>;
+> +
+> +      cpu@0 {
+> +        compatible = "apple,icestorm";
+> +        device_type = "cpu";
+> +        reg = <0x0 0x0>;
+> +        operating-points-v2 = <&ecluster_opp>;
+> +        apple,freq-domain = <&cpufreq_hw 0>;
+> +      };
+> +
+> +      cpu@10100 {
+> +        compatible = "apple,firestorm";
+> +        device_type = "cpu";
+> +        reg = <0x0 0x10100>;
+> +        operating-points-v2 = <&pcluster_opp>;
+> +        apple,freq-domain = <&cpufreq_hw 1>;
+> +      };
+> +    };
+> +
+> +    ecluster_opp: opp-table-0 {
+> +      compatible = "operating-points-v2";
+> +      opp-shared;
+> +
+> +      opp01 {
+> +        opp-hz = /bits/ 64 <600000000>;
+> +        opp-level = <1>;
+> +        clock-latency-ns = <7500>;
+> +      };
+> +      opp02 {
+> +        opp-hz = /bits/ 64 <972000000>;
+> +        opp-level = <2>;
+> +        clock-latency-ns = <22000>;
+> +      };
+> +    };
+> +
+> +    pcluster_opp: opp-table-1 {
+> +      compatible = "operating-points-v2";
+> +      opp-shared;
+> +
+> +      opp01 {
+> +        opp-hz = /bits/ 64 <600000000>;
+> +        opp-level = <1>;
+> +        clock-latency-ns = <8000>;
+> +      };
+> +      opp02 {
+> +        opp-hz = /bits/ 64 <828000000>;
+> +        opp-level = <2>;
+> +        clock-latency-ns = <19000>;
+> +      };
+> +    };
+> +
+> +    soc {
+> +      #address-cells = <2>;
+> +      #size-cells = <2>;
+> +
+> +      cpufreq_hw: cpufreq@210e20000 {
+> +        compatible = "apple,t8103-soc-cpufreq", "apple,soc-cpufreq";
+> +        reg = <0x2 0x10e20000 0 0x1000>,
+> +              <0x2 0x11e20000 0 0x1000>;
+> +        reg-names = "cluster0", "cluster1";
+> +        #freq-domain-cells = <1>;
+> +      };
+> +    };
+> -- 
+> 2.35.1
 > 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> index 5a911be0c2ea..ab859150c7f7 100644
-> --- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> @@ -31,7 +31,6 @@ properties:
->         - qcom,sc7180-config-noc
->         - qcom,sc7180-dc-noc
->         - qcom,sc7180-gem-noc
-> -      - qcom,sc7180-ipa-virt
->         - qcom,sc7180-mc-virt
->         - qcom,sc7180-mmss-noc
->         - qcom,sc7180-npu-noc
-> @@ -68,7 +67,6 @@ properties:
->         - qcom,sdm845-mem-noc
->         - qcom,sdm845-mmss-noc
->         - qcom,sdm845-system-noc
-> -      - qcom,sdx55-ipa-virt
->         - qcom,sdx55-mc-virt
->         - qcom,sdx55-mem-noc
->         - qcom,sdx55-system-noc
-
+> 
