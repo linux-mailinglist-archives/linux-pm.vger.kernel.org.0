@@ -2,148 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F50D52825D
-	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 12:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9662528258
+	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 12:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232266AbiEPKmT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S237155AbiEPKmT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Mon, 16 May 2022 06:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242839AbiEPKk6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 06:40:58 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750CE26FE
-        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 03:40:48 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id g16so17586037lja.3
-        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 03:40:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=PIStbMHPtan1KLlc0XW15FaN5Q5q5/G9moSTVEJOKR8=;
-        b=Okry26+6WYZDBL/wyrImejHnErmgQv2VjJ3jxlPsOdX4tWoDQ0KeVWRt3ereejd+P+
-         l+zojoW4rovfwGTHTaxCqbsItDrqLt4TsrXgsqA4EvvM5/JkYxncPvSfhKyEhjmbASZQ
-         TibF4DIkzbDmuy0xtgyjkkgUOdyUb27/kr9dXc3rzbncMVJyYudJD0o5udiVuAEQxY/I
-         5rzowjS35jGcEV/2e/UK+/sj7+IRhOMQANzlqR59j9MGraRJ6MnQvrJJBTDfrf82S9Pp
-         UH/Rnn2AJGZRxLprskHloIEFc1kh4AIDEMX+wordKF8SmSST+s4U96TB9CeldPcYSWND
-         Q8ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PIStbMHPtan1KLlc0XW15FaN5Q5q5/G9moSTVEJOKR8=;
-        b=cDeE36F+L7QZKyo91B3UFHXuUQTSmTS5A97Ke45H9T+Y59XkOgn6nE1Ma7Z6deKjXM
-         wjKlR/2nqrPNFyEMZEEIYKpPsEyRi522fRPSSHyyGe7GH1lJYkfceZEDDG9wCEu7YYLP
-         GGziTQgKipMCiMEuWLhGdbO9csSrgqaY6oLvGmNhraWP+sxyrFA8i9IroyW86WrUU//i
-         27BkdnN5mK/AkJrv8fdM1EWp3kAKcFjN4yuidrhY7ZD3wYHbTRtsNXNGW6+pEBn7XZCZ
-         kS41EilaNqbkrzhVcwHhlFfTYPmESEUs8i3SgBQB80bOpDnZOMH91flfl3xWhkCdSFOb
-         eFPw==
-X-Gm-Message-State: AOAM5334MVoNSJV8YcxTxRhBSZrgkRyoqKpadt+w+Ybx/tkYhFpP95d4
-        8esemSWqpBMKk4/L2GBWq2O4aQ==
-X-Google-Smtp-Source: ABdhPJy1QZ8BxVhQaPE0U/RAWQGsWQF8ytlTewjrJGbgoAmLSxr4qWAyDEMSN3A6btYEAhDImT/3Rw==
-X-Received: by 2002:a05:651c:105a:b0:250:c5ec:bc2d with SMTP id x26-20020a05651c105a00b00250c5ecbc2dmr10737190ljm.321.1652697646673;
-        Mon, 16 May 2022 03:40:46 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id t28-20020ac243bc000000b0047255d21195sm1265267lfl.196.2022.05.16.03.40.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 03:40:46 -0700 (PDT)
-Message-ID: <9a94cf23-430e-56e2-1260-92a162d608e7@linaro.org>
-Date:   Mon, 16 May 2022 12:40:45 +0200
+        with ESMTP id S242947AbiEPKlk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 06:41:40 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEEF9261C;
+        Mon, 16 May 2022 03:41:37 -0700 (PDT)
+X-UUID: 6456a25257d540899786888d20ed49f0-20220516
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:14da1c38-918c-4adf-b92e-1cf13a3a5ae1,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:89bb2e94-563e-4fc2-8a0d-fda4821947ab,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 6456a25257d540899786888d20ed49f0-20220516
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1875934610; Mon, 16 May 2022 18:41:33 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 16 May 2022 18:41:31 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 16 May 2022 18:41:31 +0800
+Message-ID: <e1dffbf98c034b99b1d7fd10aa009a645812abdc.camel@mediatek.com>
+Subject: Re: [PATCH v6 09/10] arm64: dts: mediatek: Add MediaTek CCI node
+ for MT8183
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>
+CC:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
+        <roger.lu@mediatek.com>, <hsinyi@google.com>,
+        <khilman@baylibre.com>, <angelogioacchino.delregno@collabora.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "Andrew-sh . Cheng" <andrew-sh.cheng@mediatek.com>
+Date:   Mon, 16 May 2022 18:41:31 +0800
+In-Reply-To: <CAGXv+5FW59B1Dq8eH=5KjEdTxgT64GuvYZHZ9LnnTuaVrK3XpQ@mail.gmail.com>
+References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
+         <20220505115226.20130-10-rex-bc.chen@mediatek.com>
+         <CAGXv+5FW59B1Dq8eH=5KjEdTxgT64GuvYZHZ9LnnTuaVrK3XpQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v7 1/2] dt-bindings: thermal: k3-j72xx: Add VTM bindings
- documentation
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Keerthy <j-keerthy@ti.com>, robh+dt@kernel.org,
-        rui.zhang@intel.com, amitk@kernel.org, kristo@kernel.org
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220511110657.16305-1-j-keerthy@ti.com>
- <20220511110657.16305-2-j-keerthy@ti.com>
- <4568653d-706e-8621-3fee-d4a853517256@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <4568653d-706e-8621-3fee-d4a853517256@linaro.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/05/2022 12:32, Daniel Lezcano wrote:
+On Mon, 2022-05-16 at 13:35 +0800, Chen-Yu Tsai wrote:
+> On Thu, May 5, 2022 at 8:04 PM Rex-BC Chen <rex-bc.chen@mediatek.com>
+> wrote:
+> > 
+> > Add MediaTek CCI devfreq node for MT8183.
+> > 
+> > Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
+> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <
+> > angelogioacchino.delregno@collabora.com>
+> > ---
+> >  arch/arm64/boot/dts/mediatek/mt8183-evb.dts    | 4 ++++
+> >  arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 4 ++++
+> >  arch/arm64/boot/dts/mediatek/mt8183.dtsi       | 7 +++++++
+> >  3 files changed, 15 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
+> > b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
+> > index 8953dbf84f3e..7ac9864db9de 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
+> > @@ -412,6 +412,10 @@
+> > 
+> >  };
+> > 
+> > +&cci {
+> > +       proc-supply = <&mt6358_vproc12_reg>;
+> > +};
+> > +
+> >  &cpu0 {
+> >         proc-supply = <&mt6358_vproc12_reg>;
+> >  };
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+> > b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+> > index 8d5bf73a9099..b035e06840e6 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
+> > @@ -230,6 +230,10 @@
+> >         status = "okay";
+> >  };
+> > 
+> > +&cci {
+> > +       proc-supply = <&mt6358_vproc12_reg>;
+> > +};
+> > +
+> >  &cpu0 {
+> >         proc-supply = <&mt6358_vproc12_reg>;
+> >  };
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > index cecf96b628b7..11caf3dd85cd 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> > @@ -280,6 +280,13 @@
+> >                 };
+> >         };
+> > 
+> > +       cci: cci {
+> > +               compatible = "mediatek,mt8183-cci";
+> > +               clocks = <&apmixedsys CLK_APMIXED_CCIPLL>;
+> > +               clock-names = "cci_clock";
 > 
-> Cc'ing krzysztof.kozlowski@linaro.org
-
-Eh, I wished people used automatically scripts/get_maintainers.pl, so
-there will be no need to Cc someone. It's actually a bit weird because I
-was reviewing v6...
-
+> Binding says there should be two clocks: the actual clock that drives
+> CCI, and a stable "intermediate" clock to switch to during clock rate
+> changes. So I think this should look like:
 > 
-> On 11/05/2022 13:06, Keerthy wrote:
->> Add VTM bindings documentation. In the Voltage Thermal
->> Management Module(VTM), K3 J72XX supplies a voltage
->> reference and a temperature sensor feature that are gathered in the band
->> gap voltage and temperature sensor (VBGAPTS) module. The band
->> gap provides current and voltage reference for its internal
->> circuits and other analog IP blocks. The analog-to-digital
->> converter (ADC) produces an output value that is proportional
->> to the silicon temperature.
->>
->> Signed-off-by: Keerthy <j-keerthy@ti.com>
+>     clocks = <&mcucfg CLK_MCU_BUS_SEL>,
+>              <&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
+>     clock-names = "cci", "intermediate";
+> 
+> 
+> ChenYu
+> 
 
+Hello Chen-Yu,
 
-In any case this misses all the review-tags, so I don't know what we are
-supposed to do here.
+Thanks for your reminder.
+I will update this and sned next version.
 
+BRs,
+Rex
 
-Keerthy,
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
+> > +               operating-points-v2 = <&cci_opp>;
+> > +       };
+> > +
+> >         cpus {
+> >                 #address-cells = <1>;
+> >                 #size-cells = <0>;
+> > --
+> > 2.18.0
+> > 
+> > 
+> > _______________________________________________
+> > Linux-mediatek mailing list
+> > Linux-mediatek@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-mediatek
 
-https://elixir.bootlin.com/linux/v5.13/source/Documentation/process/submitting-patches.rst#L543
-
-If a tag was not added on purpose, please state why and what changed.
-
->> ---
->>   .../bindings/thermal/ti,j72xx-thermal.yaml    | 64 +++++++++++++++++++
->>   1 file changed, 64 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
->> new file mode 100644
->> index 000000000000..83f8f444a133
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
->> @@ -0,0 +1,64 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/thermal/ti,j72xx-thermal.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Texas Instruments J72XX VTM (DTS) binding
->> +
->> +maintainers:
->> +  - Keerthy <j-keerthy@ti.com>
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - enum:
->> +          - ti,j721e-vtm
->> +          - ti,j7200-vtm
-
-No items, you have only one item.
-
-
-Best regards,
-Krzysztof
