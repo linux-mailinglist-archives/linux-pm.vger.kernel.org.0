@@ -2,134 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AFF35292BC
-	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 23:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE6852937B
+	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 00:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349258AbiEPVMx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 May 2022 17:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39518 "EHLO
+        id S1345596AbiEPWQO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 May 2022 18:16:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349863AbiEPVLv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 17:11:51 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D411FA61;
-        Mon, 16 May 2022 13:59:44 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2fee9fe48c2so45665917b3.3;
-        Mon, 16 May 2022 13:59:44 -0700 (PDT)
+        with ESMTP id S230056AbiEPWQN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 18:16:13 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904502C10B
+        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 15:16:11 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id n8so13327629qke.11
+        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 15:16:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=EDpKgH3/WPZM/363RddYVU5cX26QwXiUYlUKXjvLI+w=;
+        b=rr0Lzlh4RQe5+hFaBPjqPfkCkryQUmL7dQa++VAGdy52rMii+uf5cEQYN0/J/o1IBf
+         uR4WcAfuUSb+weiCYWwpFa9EXBjFsvyC81WKH1B6mUA5Qzt666Yf7WWD+0r2SOXltpcV
+         vUL6IUV/O21kvSj5iTVHZ6ivPLn6NrIyG3S4zB2HCc3fbp/3NKE85/Zir1Qn8NjQSBs5
+         Gk4FCwBor0V8fIPZ0q9GztHXRakIuhk8qYv0TXQjtVS7TBVlG4obJhZjI5EiRWhUZ2U8
+         jYX21mOkrSrXPHuDr1mRj4m9lLMhCMAiYONHrx93BZriczvyMaHaSnLEuPRceClGuftI
+         SFnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v8CuZFsnTOi32M4APK7fICwRmlRzyWraAOnG9eilkyo=;
-        b=jLQWTnfFKtrSqFaqll7upzyWIWIuSopUONa3xYqrH4bXL/fI3yAyFlcjmfGnpyqAOj
-         womYBTP+CExHEogIe1+59c7j7c9XQN3FX0IIE81Wops1vj7WRWm8ARvKxIu6XTJerbEQ
-         TYlv6nnDCGjYRC1oQINXtgY4zxzQhYqMUJzhqb2LdK5Kv45+S7eMMY2tdGxgMP9oUDpG
-         KiNaw3lHjYqo8aI/I4sKUe8924awtqOtM3T4dvTY7aL4V6OBUe8vPvCgyi97lptmfmtX
-         5wxlp78E/IssiqeV0YOzV59gkvXL5YveVcPEEK8vcjSgIt6msj7/1MpjBgfVzjrNF/1I
-         DyOA==
-X-Gm-Message-State: AOAM530m5bRgTRET/gEB6DADpuSk+BzQkQWUaxEPZo/+y6mZ4I2TNmyE
-        s432g4+FGPV6Ch8oJL1HklUrXYxfoXoyKyLydGgCngxF0/s=
-X-Google-Smtp-Source: ABdhPJxKhTbm4KUGm4E639zehLL3oGJVzd+DOuaL3l/fDv4EecMJc90THrk+O6ZSiJ+y9oKlD0rCncRNi3iCskiwqB8=
-X-Received: by 2002:a81:260a:0:b0:2f4:ca82:a42f with SMTP id
- m10-20020a81260a000000b002f4ca82a42fmr22397134ywm.149.1652734783486; Mon, 16
- May 2022 13:59:43 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=EDpKgH3/WPZM/363RddYVU5cX26QwXiUYlUKXjvLI+w=;
+        b=stl5h2ShMk35ncRAInRl9qQ2rDzZAjhbCnTI/CV6VT7xwOnjGY6/vdbdzLGpiELsvX
+         qkuZ3cWGAMn0Eb5WlaTyR2OAQomg7Ej6UeohozEYi9IIbDMomf7lOyU7SmnMVnTYZoKq
+         hZLUbZ/xFdvny9qA1xODgEbKzcJJgp11YVZEMMwi2/Gj73KUwLdahVebtposoyRRdbYs
+         xmxajVCy8P9S8/jQoTlRv5sMnoicvtu2uO72ZWtTVoOb1CYZV86zA9lxMZWUP8IAqvNA
+         e3IacLN/tJjTBAVvfJ+F+fJIBHnObdnT7VBFmD6BjaGp/iPQ3wiudxWFQO9JbroaVjx1
+         YmCg==
+X-Gm-Message-State: AOAM532+bvoj+TyED0ZHoTIAUdbPsoYGyBGYVMhFNXppz8hLwIlMi+5b
+        ygmGEY0pODx4jmokaYkxzQgUag==
+X-Google-Smtp-Source: ABdhPJxG7XD4iDKgNS58sELNuzjPJk3namOwny1F4tvwGJp483qDx5nUXnvRn7ROwnWdZjAvvLQlyQ==
+X-Received: by 2002:a37:b986:0:b0:69f:ed3a:55cc with SMTP id j128-20020a37b986000000b0069fed3a55ccmr13892091qkf.558.1652739370681;
+        Mon, 16 May 2022 15:16:10 -0700 (PDT)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id 2-20020ac85902000000b002f39b99f6b3sm7091530qty.77.2022.05.16.15.16.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 15:16:10 -0700 (PDT)
+Message-ID: <a17603a8-f273-0dde-8e84-3c0616ff04aa@linaro.org>
+Date:   Mon, 16 May 2022 17:16:08 -0500
 MIME-Version: 1.0
-References: <SJ0PR11MB5070B095B8A28634B43A231F9ECA9@SJ0PR11MB5070.namprd11.prod.outlook.com>
- <20220516200927.GA1046452@bhelgaas>
-In-Reply-To: <20220516200927.GA1046452@bhelgaas>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 16 May 2022 22:59:32 +0200
-Message-ID: <CAJZ5v0g6GdKfN4b5uwHEhh4hBuG=haVHaXc-XuMQLe8Wd41Y3g@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Jingar, Rajvi" <rajvi.jingar@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        David Box <david.e.box@linux.intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 5/2] dt-bindings: interconnect: Remove sc7180/sdx55 ipa
+ compatibles
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        Doug Anderson <dianders@chromium.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Mike Tipton <quic_mdtipton@quicinc.com>
+References: <20220412220033.1273607-1-swboyd@chromium.org>
+ <20220415005828.1980055-1-swboyd@chromium.org>
+ <20220415005828.1980055-3-swboyd@chromium.org>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <20220415005828.1980055-3-swboyd@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 16, 2022 at 10:09 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Fri, May 13, 2022 at 10:00:48PM +0000, Jingar, Rajvi wrote:
-> >
-> > > -----Original Message-----
-> > > From: Bjorn Helgaas <helgaas@kernel.org>
-> > > Sent: Thursday, May 12, 2022 11:36 AM
-> > > To: Rafael J. Wysocki <rafael@kernel.org>
-> > > Cc: Jingar, Rajvi <rajvi.jingar@intel.com>; Wysocki, Rafael J
-> > > <rafael.j.wysocki@intel.com>; Bjorn Helgaas <bhelgaas@google.com>; David Box
-> > > <david.e.box@linux.intel.com>; Linux PCI <linux-pci@vger.kernel.org>; Linux
-> > > Kernel Mailing List <linux-kernel@vger.kernel.org>; Linux PM <linux-
-> > > pm@vger.kernel.org>
-> > > Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
-> > >
-> > > On Thu, May 12, 2022 at 07:52:36PM +0200, Rafael J. Wysocki wrote:
-> > > > On Thu, May 12, 2022 at 7:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > On Thu, May 12, 2022 at 03:49:18PM +0200, Rafael J. Wysocki wrote:
-> > >
-> > > > > > Something like this should suffice IMV:
-> > > > > >
-> > > > > > if (!dev_state_saved || pci_dev->current_state != PCI_D3cold)
-> > > > > >
-> > > > > >         pci_disable_ptm(pci_dev);
-> > > > >
-> > > > > It makes sense to me that we needn't disable PTM if the device is in
-> > > > > D3cold.  But the "!dev_state_saved" condition depends on what the
-> > > > > driver did.  Why is that important?  Why should we not do the
-> > > > > following?
-> > > > >
-> > > > >   if (pci_dev->current_state != PCI_D3cold)
-> > > > >     pci_disable_ptm(pci_dev);
-> > > >
-> > > > We can do this too.  I thought we could skip the power state
-> > > > check if dev_state_saved was unset, because then we would know
-> > > > that the power state was not D3cold.  It probably isn't worth
-> > > > the hassle though.
-> >
-> > We see issue with certain platforms where only checking if device
-> > power state in D3Cold is not enough and the !dev_state_saved check
-> > is needed when disabling PTM. Device like nvme is relying on ASPM,
-> > it stays in D0 but state is saved. Touching the config space wakes
-> > up the device which prevents the system from entering into low power
-> > state.
->
-> Correct me if I'm wrong: for NVMe devices, nvme_suspend() has already
-> saved state and put the device in some low-power state.  Disabling PTM
-> here is functionally OK but prevents a system low power state, so you
-> want to leave PTM enabled.
->
-> But I must be missing something because pci_prepare_to_sleep()
-> currently disables PTM for Root Ports.  If we leave PTM enabled on
-> NVMe but disable it on the Root Port above it, any PTM Request from
-> NVMe will cause an Unsupported Request error.
->
-> Disabling PTM must be coordinated across PTM Requesters and PTM
-> Responders.  That means the decision to disable cannot depend on
-> driver-specific things like whether the driver has saved state.
+On 4/14/22 7:58 PM, Stephen Boyd wrote:
+> These interconnects are modeled as clks, not interconnects, therefore
+> remove the compatibles from the binding as they're unused.
+> 
+> Cc: Alex Elder <elder@linaro.org>
+> Cc: Taniya Das <quic_tdas@quicinc.com>
+> Cc: Mike Tipton <quic_mdtipton@quicinc.com>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+> 
+> I don't know who should apply this. Probably whoever takes the dtsi
+> patches, Bjorn?, because otherwise dt_bindings_check will fail.
 
-Setting state_saved generally informs pci_pm_suspend_noirq() that the
-device has already been handled and it doesn't need to do anything to
-it.
+I don't see this commit applied anywhere, though I
+might have missed it.  Is this for Bjorn, or Georgi,
+or someone else?
 
-But you are right that PTM should be disabled on downstream devices as
-well as on the ports that those devices are connected to and it can be
-done even if the given device has already been handled, so the
-state_saved value is technically irrelevant.
+					-Alex
 
-That's why I suggested to check if the power state is between D0 and
-D3cold (exclusive) and only disable PTM if that is the case.  It is
-pointless to disable PTM for devices in D3cold and it may be harmful
-for devices that are left in D0.
+>   Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml | 2 --
+>   1 file changed, 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> index 5a911be0c2ea..ab859150c7f7 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> @@ -31,7 +31,6 @@ properties:
+>         - qcom,sc7180-config-noc
+>         - qcom,sc7180-dc-noc
+>         - qcom,sc7180-gem-noc
+> -      - qcom,sc7180-ipa-virt
+>         - qcom,sc7180-mc-virt
+>         - qcom,sc7180-mmss-noc
+>         - qcom,sc7180-npu-noc
+> @@ -68,7 +67,6 @@ properties:
+>         - qcom,sdm845-mem-noc
+>         - qcom,sdm845-mmss-noc
+>         - qcom,sdm845-system-noc
+> -      - qcom,sdx55-ipa-virt
+>         - qcom,sdx55-mc-virt
+>         - qcom,sdx55-mem-noc
+>         - qcom,sdx55-system-noc
+
