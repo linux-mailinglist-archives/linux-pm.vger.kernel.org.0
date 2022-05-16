@@ -2,78 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6CA65287EC
-	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 17:05:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52ED1528809
+	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 17:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244916AbiEPPFE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 May 2022 11:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52734 "EHLO
+        id S244954AbiEPPHb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 May 2022 11:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244731AbiEPPE6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 11:04:58 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B9E3B541;
-        Mon, 16 May 2022 08:04:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652713497; x=1684249497;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0WN1O4NIiy98MJcCKj7FtiCxT2nloIYmKZcXnr3Bmio=;
-  b=XgeQB+/74tR3tWyBBFNAuWyJyA9A7GW+gxzPSlO6C7i6d4jAT/bOt6Jb
-   Dn+Av1ntlMpodANdEeKRTx3wXDt0Cc/vu8rkf55aGDmN78KtY77hazw5N
-   pzGUvKS8WrpjcwxFAhTJ5bZxzB30eMi+r6jdeUKdHyOT7WgK/1kqDHZIT
-   Y=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 16 May 2022 08:04:57 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 08:04:56 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 16 May 2022 08:04:56 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 16 May 2022 08:04:49 -0700
-Date:   Mon, 16 May 2022 20:34:45 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-CC:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_vpulyala@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: Re: [v16 2/5] usb: dwc3: core: Host wake up support from system
- suspend
-Message-ID: <20220516150445.GB19209@hu-pkondeti-hyd.qualcomm.com>
-References: <1652379802-8318-1-git-send-email-quic_kriskura@quicinc.com>
- <1652379802-8318-3-git-send-email-quic_kriskura@quicinc.com>
- <Yn2M5hrah78jro1C@google.com>
- <4124392b-a40f-c204-f9b0-68c3b22dd652@quicinc.com>
- <20220516044327.GA19209@hu-pkondeti-hyd.qualcomm.com>
+        with ESMTP id S238196AbiEPPHa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 11:07:30 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1863B3DA;
+        Mon, 16 May 2022 08:07:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=x8rylV2fo2RhFyw7lXZ7iRi1TUSl/qSAgQ1QFQa6Swk=; b=feXctn9xVfAtMOxpqtYyQ3CA85
+        BjdcLwwe8TiMsRw2fUykvtPuvzY6hmKnTuAYE+A0XsmmVYSLQ/kcthiUMBKg0mNjJ1yc4l+lLSsmf
+        USmCbBkmQnOZm2iGOSrx6Rl0cCpZ73ILK767ZxXmwm6a3QHv/+OS7mfra0PYCo9fNU1O9VQyfm4pw
+        6HrCZSPKvKswSfp/Eu6sagLk3Urn9HpvONKk/wFmV32LKFF9WaILoOgpFS5qfU8S7XCa8c/aUXIoQ
+        86eaCmPOCcjnQf8OfgMGzWfOoSFt/jwGca1nP55u94yjF/tPVCKn3Ik3vagLqYanseWDcV4ZXGkRO
+        T9pShFkw==;
+Received: from [177.183.162.244] (helo=[192.168.0.5])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nqcJI-006nIW-Cg; Mon, 16 May 2022 17:07:00 +0200
+Message-ID: <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com>
+Date:   Mon, 16 May 2022 12:06:17 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220516044327.GA19209@hu-pkondeti-hyd.qualcomm.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
+Content-Language: en-US
+To:     Petr Mladek <pmladek@suse.com>, David Gow <davidgow@google.com>,
+        Evan Green <evgreen@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dexuan Cui <decui@microsoft.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        zhenwei pi <pizhenwei@bytedance.com>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-20-gpiccoli@igalia.com> <YoJZVZl/MH0KiE/J@alley>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <YoJZVZl/MH0KiE/J@alley>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,224 +113,179 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 16, 2022 at 10:13:27AM +0530, Pavan Kondeti wrote:
-> On Fri, May 13, 2022 at 09:28:16AM +0530, Krishna Kurapati PSSNV wrote:
-> > 
-> > On 5/13/2022 4:10 AM, Matthias Kaehlcke wrote:
-> > >On Thu, May 12, 2022 at 11:53:19PM +0530, Krishna Kurapati wrote:
-> > >>From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > >>
-> > >>During suspend read the status of all port and set hs phy mode
-> > >>based on current speed. Use this hs phy mode to configure wakeup
-> > >>interrupts in qcom glue driver.
-> > >>
-> > >>Check wakeup-source property for dwc3 core node to set the
-> > >>wakeup capability. Drop the device_init_wakeup call from
-> > >>runtime suspend and resume.
-> > >>
-> > >>Also check during suspend if any wakeup capable devices are
-> > >>connected to the controller (directly or through hubs), if there
-> > >>are none set a flag to indicate that the PHY is powered
-> > >>down during suspend.
-> > >>
-> > >>Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > >>Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> > >>---
-> > >>  drivers/usb/dwc3/core.c | 30 +++++++++++++++++-------------
-> > >>  drivers/usb/dwc3/core.h |  4 ++++
-> > >>  drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
-> > >>  3 files changed, 45 insertions(+), 13 deletions(-)
-> > >>
-> > >>diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > >>index 01115df..8bcabc5 100644
-> > >>--- a/drivers/usb/dwc3/core.c
-> > >>+++ b/drivers/usb/dwc3/core.c
-> > >>@@ -1785,6 +1785,7 @@ static int dwc3_probe(struct platform_device *pdev)
-> > >>  	platform_set_drvdata(pdev, dwc);
-> > >>  	dwc3_cache_hwparams(dwc);
-> > >>+	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
-> > >>  	spin_lock_init(&dwc->lock);
-> > >>  	mutex_init(&dwc->mutex);
-> > >>@@ -1946,10 +1947,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > >>  		dwc3_core_exit(dwc);
-> > >>  		break;
-> > >>  	case DWC3_GCTL_PRTCAP_HOST:
-> > >>-		if (!PMSG_IS_AUTO(msg)) {
-> > >>-			dwc3_core_exit(dwc);
-> > >>-			break;
-> > >>-		}
-> > >>+		dwc3_check_phy_speed_mode(dwc);
-> > >>  		/* Let controller to suspend HSPHY before PHY driver suspends */
-> > >>  		if (dwc->dis_u2_susphy_quirk ||
-> > >>@@ -1965,6 +1963,15 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > >>  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
-> > >>  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
-> > >>+
-> > >>+		if (!PMSG_IS_AUTO(msg)) {
-> > >>+			if (device_may_wakeup(dwc->dev))
-> > >I think this should be device_can_wakeup(), i.e. hardware capability instead of
-> > >device policy. A drawback of powering the PHYs off is that it causes a high
-> > >power consumption of certain peripherals if VBUS is still supplied, so this
-> > >should be limited to platforms where the PHYs must be powered off (using wakeup
-> > >capability as a proxy for now).
-> > Thnaks Mathias for the review. Will make this change in the next patchset.
-> > >>+				dwc->phy_power_off = false;
-> > >>+			else {
-> > >>+				dwc->phy_power_off = true;
-> > >>+				dwc3_core_exit(dwc);
-> > >>+			}
-> > >>+		}
-> > >>  		break;
-> > >>  	case DWC3_GCTL_PRTCAP_OTG:
-> > >>  		/* do nothing during runtime_suspend */
-> > >>@@ -2008,11 +2015,12 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
-> > >>  		break;
-> > >>  	case DWC3_GCTL_PRTCAP_HOST:
-> > >>  		if (!PMSG_IS_AUTO(msg)) {
-> > >>-			ret = dwc3_core_init_for_resume(dwc);
-> > >>-			if (ret)
-> > >>-				return ret;
-> > >>-			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
-> > >>-			break;
-> > >>+			if (dwc->phy_power_off) {
-> > >>+				ret = dwc3_core_init_for_resume(dwc);
-> > >>+				if (ret)
-> > >>+					return ret;
-> > >>+				dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
-> > >>+			}
-> > >>  		}
-> > >>  		/* Restore GUSB2PHYCFG bits that were modified in suspend */
-> > >>  		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
-> > >>@@ -2084,8 +2092,6 @@ static int dwc3_runtime_suspend(struct device *dev)
-> > >>  	if (ret)
-> > >>  		return ret;
-> > >>-	device_init_wakeup(dev, true);
-> > >>-
-> > >>  	return 0;
-> > >>  }
-> > >>@@ -2094,8 +2100,6 @@ static int dwc3_runtime_resume(struct device *dev)
-> > >>  	struct dwc3     *dwc = dev_get_drvdata(dev);
-> > >>  	int		ret;
-> > >>-	device_init_wakeup(dev, false);
-> > >>-
-> > >>  	ret = dwc3_resume_common(dwc, PMSG_AUTO_RESUME);
-> > >>  	if (ret)
-> > >>  		return ret;
-> > >>diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> > >>index 81c486b..37397a8 100644
-> > >>--- a/drivers/usb/dwc3/core.h
-> > >>+++ b/drivers/usb/dwc3/core.h
-> > >>@@ -1155,6 +1155,9 @@ struct dwc3 {
-> > >>  	bool			phys_ready;
-> > >>+	unsigned int            hs_phy_mode;
-> > >>+	bool			phy_power_off;
-> > >>+
-> > >>  	struct ulpi		*ulpi;
-> > >>  	bool			ulpi_ready;
-> > >>@@ -1539,6 +1542,7 @@ int dwc3_core_soft_reset(struct dwc3 *dwc);
-> > >>  #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
-> > >>  int dwc3_host_init(struct dwc3 *dwc);
-> > >>  void dwc3_host_exit(struct dwc3 *dwc);
-> > >>+void dwc3_check_phy_speed_mode(struct dwc3 *dwc);
-> > >>  #else
-> > >>  static inline int dwc3_host_init(struct dwc3 *dwc)
-> > >>  { return 0; }
-> > >>diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> > >>index f56c30c..e19b40a 100644
-> > >>--- a/drivers/usb/dwc3/host.c
-> > >>+++ b/drivers/usb/dwc3/host.c
-> > >>@@ -12,6 +12,7 @@
-> > >>  #include <linux/platform_device.h>
-> > >>  #include "core.h"
-> > >>+#include "../host/xhci.h"
-> > >>  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
-> > >>  					int irq, char *name)
-> > >>@@ -136,3 +137,26 @@ void dwc3_host_exit(struct dwc3 *dwc)
-> > >>  {
-> > >>  	platform_device_unregister(dwc->xhci);
-> > >>  }
-> > >>+
-> > >>+void dwc3_check_phy_speed_mode(struct dwc3 *dwc)
-> > >>+{
-> > >>+	int i, num_ports;
-> > >>+	u32 reg;
-> > >>+	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
-> > >>+	struct xhci_hcd	*xhci_hcd = hcd_to_xhci(hcd);
-> > >>+
-> > >>+	dwc->hs_phy_mode = 0;
-> > >>+
-> > >>+	reg = readl(&xhci_hcd->cap_regs->hcs_params1);
-> > >>+
-> > >>+	num_ports = HCS_MAX_PORTS(reg);
-> > >>+	for (i = 0; i < num_ports; i++) {
-> > >>+		reg = readl(&xhci_hcd->op_regs->port_status_base + i * NUM_PORT_REGS);
-> > >>+		if (reg & PORT_PE) {
-> > >>+			if (DEV_HIGHSPEED(reg) || DEV_FULLSPEED(reg))
-> > >>+				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_HS;
-> > >>+			else if (DEV_LOWSPEED(reg))
-> > >>+				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_LS;
-> > >>+		}
-> > >>+	}
-> > >>+}
-> > >I anticipate that it might raise concerns from maintainers that
-> > >dwc3_check_phy_speed_mode() accesses xHCI data structures and
-> > >registers directly. Could there be a generic HCD API that provides
-> > >this functionality (if implemented by the specific HCD)?
-> > 
-> > Hi Mathias, we are not sure if there is any such API present currently.
-> > 
-> > Hi Alan, can you help suggest any API (if present) that we can reuse here to
-> > avoid
-> > 
-> > xhci registers and structs here in dwc3.
-> > 
-> 
-> We can probably do something like below to query the speed. This avoids adding
-> another API and does not touch the underlying registers.
-> 
-> Pls define enum usb_device_speed usb2_speed in dwc3 structure.
-> 
-> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> index f29a264..fed1c58 100644
-> --- a/drivers/usb/dwc3/host.c
-> +++ b/drivers/usb/dwc3/host.c
-> @@ -9,9 +9,29 @@
->  
->  #include <linux/acpi.h>
->  #include <linux/platform_device.h>
-> +#include <linux/usb.h>
->  
->  #include "core.h"
->  
-> +void dwc3_update_hs_phy_speed(struct dwc3 *dwc)
-> +{
-> +	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
-> +	struct usb_device *udev;
-> +
-> +	/*
-> +	 * It is possible to query the speed of all children of
-> +	 * USB2.0 root hub via usb_hub_for_each_child(). DWC3 code
-> +	 * currently supports only 1 port per controller. So
-> +	 * this is sufficient.
-> +	 */
-> +	udev = usb_hub_find_child(hcd->self.root_hub, 1);
-> +
-> +	if (udev)
-> +		dwc->usb2_speed = udev->speed;
-> +	else
-> +		dwc->usb2_speed = USB_SPEED_UNKNOWN;
-> +}
-> +
->  static int dwc3_host_get_irq(struct dwc3 *dwc)
->  {
->  	struct platform_device	*dwc3_pdev = to_platform_device(dwc->dev);
-> 
-> 
-I am also thinking why dwc core needs to cache usb2_speed since dwc3-qcom glue
-driver is the only sole user. We also require it only during suspend and does
-not bother about dwc::usb2_speed correctness outside suspend. Lets move this
-to dwc3-qcom suspend routines where we have to rely on USB2 speed for
-configuring the D+/D- interrupt.
+Thanks for the review!
 
-Thanks,
-Pavan
+I agree with the blinking stuff, I can rework and add all LED/blinking
+stuff into the loop list, it does make sense. I'll comment a bit in the
+others below...
+
+On 16/05/2022 11:01, Petr Mladek wrote:
+> [...]
+>> --- a/arch/mips/sgi-ip22/ip22-reset.c
+>> +++ b/arch/mips/sgi-ip22/ip22-reset.c
+>> @@ -195,7 +195,7 @@ static int __init reboot_setup(void)
+>>  	}
+>>  
+>>  	timer_setup(&blink_timer, blink_timeout, 0);
+>> -	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
+>> +	atomic_notifier_chain_register(&panic_hypervisor_list, &panic_block);
+> 
+> This notifier enables blinking. It is not much safe. It calls
+> mod_timer() that takes a lock internally.
+> 
+> This kind of functionality should go into the last list called
+> before panic() enters the infinite loop. IMHO, all the blinking
+> stuff should go there.
+> [...] 
+>> --- a/arch/mips/sgi-ip32/ip32-reset.c
+>> +++ b/arch/mips/sgi-ip32/ip32-reset.c
+>> @@ -145,7 +144,7 @@ static __init int ip32_reboot_setup(void)
+>>  	pm_power_off = ip32_machine_halt;
+>>  
+>>  	timer_setup(&blink_timer, blink_timeout, 0);
+>> -	atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
+>> +	atomic_notifier_chain_register(&panic_hypervisor_list, &panic_block);
+> 
+> Same here. Should be done only before the "loop".
+> [...] 
+
+Ack.
+
+
+>> --- a/drivers/firmware/google/gsmi.c
+>> +++ b/drivers/firmware/google/gsmi.c
+>> @@ -1034,7 +1034,7 @@ static __init int gsmi_init(void)
+>>  
+>>  	register_reboot_notifier(&gsmi_reboot_notifier);
+>>  	register_die_notifier(&gsmi_die_notifier);
+>> -	atomic_notifier_chain_register(&panic_notifier_list,
+>> +	atomic_notifier_chain_register(&panic_hypervisor_list,
+>>  				       &gsmi_panic_notifier);
+> 
+> I am not sure about this one. It looks like some logging or
+> pre_reboot stuff.
+> 
+
+Disagree here. I'm looping Google maintainers, so they can comment.
+(CCed Evan, David, Julius)
+
+This notifier is clearly a hypervisor notification mechanism. I've fixed
+a locking stuff there (in previous patch), I feel it's low-risk but even
+if it's mid-risk, the class of such callback remains a perfect fit with
+the hypervisor list IMHO.
+
+
+> [...] 
+>> --- a/drivers/leds/trigger/ledtrig-activity.c
+>> +++ b/drivers/leds/trigger/ledtrig-activity.c
+>> @@ -247,7 +247,7 @@ static int __init activity_init(void)
+>>  	int rc = led_trigger_register(&activity_led_trigger);
+>>  
+>>  	if (!rc) {
+>> -		atomic_notifier_chain_register(&panic_notifier_list,
+>> +		atomic_notifier_chain_register(&panic_hypervisor_list,
+>>  					       &activity_panic_nb);
+> 
+> The notifier is trivial. It just sets a variable.
+> 
+> But still, it is about blinking and should be done
+> in the last "loop" list.
+> 
+> 
+>>  		register_reboot_notifier(&activity_reboot_nb);
+>>  	}
+>> --- a/drivers/leds/trigger/ledtrig-heartbeat.c
+>> +++ b/drivers/leds/trigger/ledtrig-heartbeat.c
+>> @@ -190,7 +190,7 @@ static int __init heartbeat_trig_init(void)
+>>  	int rc = led_trigger_register(&heartbeat_led_trigger);
+>>  
+>>  	if (!rc) {
+>> -		atomic_notifier_chain_register(&panic_notifier_list,
+>> +		atomic_notifier_chain_register(&panic_hypervisor_list,
+>>  					       &heartbeat_panic_nb);
+> 
+> Same here. Blinking => loop list.
+
+Ack.
+
+
+>> [...]
+>> diff --git a/drivers/misc/bcm-vk/bcm_vk_dev.c b/drivers/misc/bcm-vk/bcm_vk_dev.c
+>> index a16b99bdaa13..d9d5199cdb2b 100644
+>> --- a/drivers/misc/bcm-vk/bcm_vk_dev.c
+>> +++ b/drivers/misc/bcm-vk/bcm_vk_dev.c
+>> @@ -1446,7 +1446,7 @@ static int bcm_vk_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+>>  
+>>  	/* register for panic notifier */
+>>  	vk->panic_nb.notifier_call = bcm_vk_on_panic;
+>> -	err = atomic_notifier_chain_register(&panic_notifier_list,
+>> +	err = atomic_notifier_chain_register(&panic_hypervisor_list,
+>>  					     &vk->panic_nb);
+> 
+> It seems to reset some hardware or so. IMHO, it should go into the
+> pre-reboot list.
+
+Mixed feelings here, I'm looping Broadcom maintainers to comment.
+(CC Scott and Broadcom list)
+
+I'm afraid it breaks kdump if this device is not reset beforehand - it's
+a doorbell write, so not high risk I think...
+
+But in case the not-reset device can be probed normally in kdump kernel,
+then I'm fine in moving this to the reboot list! I don't have the HW to
+test myself.
+
+
+> [...]
+>> --- a/drivers/power/reset/ltc2952-poweroff.c
+>> +++ b/drivers/power/reset/ltc2952-poweroff.c
+>> @@ -279,7 +279,7 @@ static int ltc2952_poweroff_probe(struct platform_device *pdev)
+>>  	pm_power_off = ltc2952_poweroff_kill;
+>>  
+>>  	data->panic_notifier.notifier_call = ltc2952_poweroff_notify_panic;
+>> -	atomic_notifier_chain_register(&panic_notifier_list,
+>> +	atomic_notifier_chain_register(&panic_hypervisor_list,
+>>  				       &data->panic_notifier);
+> 
+> I looks like this somehow triggers the reboot. IMHO, it should go
+> into the pre_reboot list.
+
+Mixed feeling again here - CCing the maintainers for comments (Sebastian
+/ PM folks).
+
+This is setting a variable only, and once it's set (data->kernel_panic
+is the bool's name), it just bails out the IRQ handler and a timer
+setting - this timer seems kinda tricky, so bailing out ASAP makes sense
+IMHO.
+
+But my mixed feeling comes from the fact this notifier really is not a
+fit to any list - it's just a "watchdog"/device quiesce in some form.
+Since it's very low-risk (IIUC), I've put it here.
+
+
+> [...]
+>> --- a/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+>> +++ b/drivers/soc/bcm/brcmstb/pm/pm-arm.c
+>> @@ -814,7 +814,7 @@ static int brcmstb_pm_probe(struct platform_device *pdev)
+>>  		goto out;
+>>  	}
+>>  
+>> -	atomic_notifier_chain_register(&panic_notifier_list,
+>> +	atomic_notifier_chain_register(&panic_hypervisor_list,
+>>  				       &brcmstb_pm_panic_nb);
+> 
+> I am not sure about this one. It instruct some HW to preserve DRAM.
+> IMHO, it better fits into pre_reboot category but I do not have
+> strong opinion.
+
+Disagree here, I'm CCing Florian for information.
+
+This notifier preserves RAM so it's *very interesting* if we have
+kmsg_dump() for example, but maybe might be also relevant in case kdump
+kernel is configured to store something in a persistent RAM (then,
+without this notifier, after kdump reboots the system data would be lost).
+
+Cheers,
+
+
+Guilherme
