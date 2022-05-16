@@ -2,128 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1775A52806D
-	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 11:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE90528120
+	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 11:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242140AbiEPJJO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 May 2022 05:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
+        id S232412AbiEPJ66 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 May 2022 05:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233408AbiEPJJD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 05:09:03 -0400
-Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48A2C22B27;
-        Mon, 16 May 2022 02:08:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Message-ID:Date:MIME-Version:Subject:From; bh=SJzeR
-        opa97b+y4ikvwq8pQd3JkFOAJvJtPN1447zVMU=; b=OYFMch/JvS5zRHMSkFQy2
-        6+npR9/hT5fhljyMlbai5peBOLYvad8xghCvHdv6UTqdplMHc6ZNiZm7w79DG5yq
-        5Ela9Pwau9h4KnGD2tgptGrmXJq0K15Un486eThtgQ+3fZw1LxwcLth6EK4dxIM1
-        9eRidqHRafP+X9Spj9aF8I=
-Received: from [192.168.3.102] (unknown [218.201.129.19])
-        by smtp7 (Coremail) with SMTP id C8CowAB3CplRFIJiwNRICw--.41526S2;
-        Mon, 16 May 2022 17:07:30 +0800 (CST)
-Message-ID: <145f9b94-1eb1-8a66-9f9b-36a8395bde70@163.com>
-Date:   Mon, 16 May 2022 17:07:29 +0800
+        with ESMTP id S232190AbiEPJ65 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 05:58:57 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548C126C5
+        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 02:58:53 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id t6so19773785wra.4
+        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 02:58:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=awMikNuwzVLC+pmZZU3cfGp/NS4iflwUhbb4vdr1BwU=;
+        b=TGkJGxkuZAfVOWbjyHTHXuRlzDFJ/R/VFXCAEzftXtlyUp9DvQKtq6YhoD14PyEI5f
+         YQxuyM/gkfWDE18Jwy5tcdp+9E6kGKsAQS4D5yUI3k1eSSdwPxs0fOUtpmCNqUiRyHNd
+         xPm5qxLUKT7QFJ+UmxHZ44NYuFIrLD4jgj9TtbZBuanEzqkfRA5So8Ri/69zGst1OjAN
+         Bnx1VTUKSiZVNcL0bEjj1/vAgrLQVdr++gN2Uz3hI1MBUv6QesxshBj020Lg4TA0XDMm
+         PB2VtQgKAcDKmP7AZLIsjnDpVM1fjopxboadRalpbuQXarNcdhast8vJT4uS6YOeFbQN
+         Vogw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=awMikNuwzVLC+pmZZU3cfGp/NS4iflwUhbb4vdr1BwU=;
+        b=szmbrq7JOKaxYE2LTKFYTYabgxEad6WsaW+S6flPM8RBV1jZqkTJtQc8xXXpeL2yGv
+         1B/DpjvoLTa2zC5R+jlwyC4CybhkRb+DIxgff1GcaNgL28w7mGq4hp17pXK5ziBhgYRs
+         lC59kC5Pa0z3drBBsWWbqghTRITjtXW3zMGkqeLuiRlY6vJFgoelr70G242dUII0jlaS
+         uEDaDsDNpvYZZN9jBSncHOPV2jT8nfZjcqfCrCW8+4gPzsyulc53V9k8B0ttS1e5FhzJ
+         uZ5SRBLejDV5KmxXQAWZryxe++dDhboj8cijGO5vBrQTsiknaxta/h1fMtgtZOEd6uGU
+         lSYQ==
+X-Gm-Message-State: AOAM530S4p8n86Nz/YtuxOBqE/0SRSAjVTeqcYlIuWeGV6VpwdZwfTG4
+        loSyRr0SF0H65Lajnp8AOnDmlQ==
+X-Google-Smtp-Source: ABdhPJxKlfFTUQWpLCHDwKBtfdXNaL6242t1PprpAeei/WKMmBWjox0VQEBz/nuIn6pjuYl3HMJ2sg==
+X-Received: by 2002:a05:6000:1acd:b0:20c:7201:9267 with SMTP id i13-20020a0560001acd00b0020c72019267mr13455532wry.41.1652695131910;
+        Mon, 16 May 2022 02:58:51 -0700 (PDT)
+Received: from ?IPV6:2a01:e34:ed2f:f020:b464:e524:6a1d:33d0? ([2a01:e34:ed2f:f020:b464:e524:6a1d:33d0])
+        by smtp.googlemail.com with ESMTPSA id g9-20020adfbc89000000b0020c5253d909sm9676582wrh.85.2022.05.16.02.58.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 02:58:51 -0700 (PDT)
+Message-ID: <af322b93-fd61-fed6-7880-75b5ad0cb65b@linaro.org>
+Date:   Mon, 16 May 2022 11:58:49 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v4 2/2] ARM: dts: sun8i-r40: add opp table for cpu
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] thermal: imx_sc_thermal: Fix refcount leak in
+ imx_sc_thermal_probe
 Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     linux-sunxi@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20220516021516.23216-1-qianfanguijin@163.com>
- <20220516021516.23216-3-qianfanguijin@163.com>
- <20220516085309.jp5yautmb3veocvl@houat>
-From:   qianfan <qianfanguijin@163.com>
-In-Reply-To: <20220516085309.jp5yautmb3veocvl@houat>
+To:     Miaoqian Lin <linmq006@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220516073151.25918-1-linmq006@gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220516073151.25918-1-linmq006@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: C8CowAB3CplRFIJiwNRICw--.41526S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7WFWDuFWxKr4rKw1ftry5Jwb_yoW8tr1Upr
-        ZrCr4Ykr4kWr17JrySgw1UJFn3uFWkuFyUGry7GFy8Jwn8Zr1DGFn7trnxKrW8Xr4fZ3y2
-        9rnaqr9Fkw1DC3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jjtC7UUUUU=
-X-Originating-IP: [218.201.129.19]
-X-CM-SenderInfo: htld0w5dqj3xxmlqqiywtou0bp/1tbiXBID7VXl25gMPQAAsi
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 16/05/2022 09:31, Miaoqian Lin wrote:
+> of_find_node_by_name() returns a node pointer with refcount
+> incremented, we should use of_node_put() on it when done.
+> Add missing of_node_put() to avoid refcount leak.
+> 
+> Fixes: e20db70dba1c ("thermal: imx_sc: add i.MX system controller thermal support")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>   drivers/thermal/imx_sc_thermal.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/thermal/imx_sc_thermal.c b/drivers/thermal/imx_sc_thermal.c
+> index 8d76dbfde6a9..1ab854c228e5 100644
+> --- a/drivers/thermal/imx_sc_thermal.c
+> +++ b/drivers/thermal/imx_sc_thermal.c
+> @@ -95,6 +95,7 @@ static int imx_sc_thermal_probe(struct platform_device *pdev)
+>   		if (!sensor) {
+>   			of_node_put(child);
+>   			of_node_put(sensor_np);
+> +			of_node_put(np);
+>   			return -ENOMEM;
+>   		}
 
 
-在 2022/5/16 16:53, Maxime Ripard 写道:
-> On Mon, May 16, 2022 at 10:15:16AM +0800, qianfanguijin@163.com wrote:
->> From: qianfan Zhao <qianfanguijin@163.com>
->>
->> OPP table value is get from allwinner lichee linux-3.10 kernel driver
->>
->> Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
->> ---
->>   arch/arm/boot/dts/sun8i-r40.dtsi | 42 ++++++++++++++++++++++++++++++++
->>   1 file changed, 42 insertions(+)
->>
->> diff --git a/arch/arm/boot/dts/sun8i-r40.dtsi b/arch/arm/boot/dts/sun8i-r40.dtsi
->> index 291f4784e86c..8949153eb0eb 100644
->> --- a/arch/arm/boot/dts/sun8i-r40.dtsi
->> +++ b/arch/arm/boot/dts/sun8i-r40.dtsi
->> @@ -54,6 +54,36 @@ / {
->>   	#size-cells = <1>;
->>   	interrupt-parent = <&gic>;
->>   
->> +	cpu0_opp_table: opp_table0 {
->> +		compatible = "operating-points-v2";
->> +		opp-shared;
->> +
->> +		opp-720000000 {
->> +			opp-hz = /bits/ 64 <720000000>;
->> +			opp-microvolt = <1000000 1000000 1300000>;
->> +			clock-latency-ns = <2000000>;
->> +		};
->> +
->> +		opp-912000000 {
->> +			opp-hz = /bits/ 64 <912000000>;
->> +			opp-microvolt = <1100000 1100000 1300000>;
->> +			clock-latency-ns = <2000000>;
->> +		};
->> +
->> +		opp-1008000000 {
->> +			opp-hz = /bits/ 64 <1008000000>;
->> +			opp-microvolt = <1160000 1160000 1300000>;
->> +			clock-latency-ns = <2000000>;
->> +		};
->> +
->> +		/* The opp table of the cpu frequency that exceeds 1G
->> +		 * is not defined here. They require higher operating
->> +		 * current, which may exceed the 500mA limited if the
->> +		 * system is powered by USB. You can add them to the
->> +		 * board's DTS is you make sure.
->> +		 */
-> That's not the issue though. The issue is that the board is setup with a
-> CPU voltage at 1160mV, and if we raise the frequency to a higher OPP
-> without raising the voltage as well, the CPU will crash.
-Yes, this is a issue and if the dts doesn't has "cpu-supply" node.
-The comment above is found while testing. 100% cpu load @ 4x1.2G
-will consume about 800mA@5V current, the board will reboot if it
-is powered by USB. So I leave those comments.
+Please use goto statement
 
-I am thinking your suggestion to write the opp part to a dtsi like
-A64. Should I adding all supported freq?
+> @@ -125,6 +126,7 @@ static int imx_sc_thermal_probe(struct platform_device *pdev)
+>   	}
+>   
+>   	of_node_put(sensor_np);
+> +	of_node_put(np);
+>   
+>   	return ret;
+>   }
 
-I am preparing a new version which including cpu cooling.
->
-> Maxime
 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
