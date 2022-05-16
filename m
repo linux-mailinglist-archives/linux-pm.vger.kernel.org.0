@@ -2,140 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A9E528A9A
-	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 18:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A44C528D97
+	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 21:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245136AbiEPQex (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 May 2022 12:34:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
+        id S1345162AbiEPTAK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 16 May 2022 15:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231615AbiEPQev (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 12:34:51 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C763B3CD;
-        Mon, 16 May 2022 09:34:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=XzoH5iutkh5O9t0pH+ypA1lIfMmiHtlRHdYp+UCsrGU=; b=WepOMKgEKhpR+t0vOgpE/YwZDW
-        g57IfgGh3nzpJ2ZtHEZUcsTnwsDP6I2/FDZ4vnLGZ0Qw7F/Mn84yHkJf4BXJ/OpxzJ1p70t/N3EaQ
-        3PmdLprDUfYS48zPyb3blZ6UPVVkXH0bl8D3dn+A0vPKMKqgzgV2PkJylwkbN3xzE2jIxJLk5t9Xh
-        Ean6ag10EMxBmLMIVJGXD8wgUW7usVSQYiFjIPvG61RcLN+veFIRifMeScPdiuTNjKo2kRxG2B83U
-        8p8XJXLR0CD8m0oqdI8PKIctIPo5el7u/X3BJM63/kcmCM4vsP6tEoNCn+7qkwfuh6KJplRNa4LRS
-        5jGHUhPQ==;
-Received: from [177.183.162.244] (helo=[192.168.0.5])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nqdg0-006uIN-Pp; Mon, 16 May 2022 18:34:32 +0200
-Message-ID: <e895ce94-e6b9-caf6-e5d3-06bf0149445c@igalia.com>
-Date:   Mon, 16 May 2022 13:33:51 -0300
+        with ESMTP id S242157AbiEPTAK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 15:00:10 -0400
+Received: from de-smtp-delivery-63.mimecast.com (de-smtp-delivery-63.mimecast.com [194.104.111.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C3553EB9D
+        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 12:00:08 -0700 (PDT)
+Received: from CHE01-ZR0-obe.outbound.protection.outlook.com
+ (mail-zr0che01lp2108.outbound.protection.outlook.com [104.47.22.108]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-18-H2utoj4aMT6YV9Y7gFwn4w-2; Mon, 16 May 2022 21:00:05 +0200
+X-MC-Unique: H2utoj4aMT6YV9Y7gFwn4w-2
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
+ ZRAP278MB0548.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:27::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5250.13; Mon, 16 May 2022 19:00:03 +0000
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::f465:3051:c795:3c2]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::f465:3051:c795:3c2%9]) with mapi id 15.20.5250.018; Mon, 16 May 2022
+ 19:00:03 +0000
+From:   Francesco Dolcini <francesco.dolcini@toradex.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, l.stach@pengutronix.de,
+        linux-pm@vger.kernel.org
+CC:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Tim Harvey <tharvey@gateworks.com>,
+        Jon Nettleton <jon@solid-run.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Subject: [PATCH v1] thermal: imx: Make trip point offset configurable
+Date:   Mon, 16 May 2022 21:00:01 +0200
+Message-ID: <20220516190001.147919-1-francesco.dolcini@toradex.com>
+X-Mailer: git-send-email 2.25.1
+X-ClientProxiedBy: MR1P264CA0149.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:501:54::15) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:2e::8)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 21/30] panic: Introduce the panic pre-reboot notifier list
-Content-Language: en-US
-To:     "Luck, Tony" <tony.luck@intel.com>, Petr Mladek <pmladek@suse.com>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "bhe@redhat.com" <bhe@redhat.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bcm-kernel-feedback-list@broadcom.com" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "openipmi-developer@lists.sourceforge.net" 
-        <openipmi-developer@lists.sourceforge.net>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
-        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
-        "halves@canonical.com" <halves@canonical.com>,
-        "fabiomirmar@gmail.com" <fabiomirmar@gmail.com>,
-        "alejandro.j.jimenez@oracle.com" <alejandro.j.jimenez@oracle.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "d.hatayama@jp.fujitsu.com" <d.hatayama@jp.fujitsu.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "dyoung@redhat.com" <dyoung@redhat.com>,
-        "Tang, Feng" <feng.tang@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "mikelley@microsoft.com" <mikelley@microsoft.com>,
-        "hidehiro.kawai.ez@hitachi.com" <hidehiro.kawai.ez@hitachi.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "vgoyal@redhat.com" <vgoyal@redhat.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "will@kernel.org" <will@kernel.org>, Alex Elder <elder@kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Chris Zankel <chris@zankel.net>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Corey Minyard <minyard@acm.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        James Morse <james.morse@arm.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
-        Richard Weinberger <richard@nod.at>,
-        Robert Richter <rric@kernel.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, Wei Liu <wei.liu@kernel.org>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-22-gpiccoli@igalia.com> <YoJgcC8c6LaKADZV@alley>
- <63a74b56-89ef-8d1f-d487-cdb986aab798@igalia.com>
- <bed66b9467254a5a8bafc1983dad643a@intel.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <bed66b9467254a5a8bafc1983dad643a@intel.com>
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: fdb830fc-4951-4295-be2c-08da376e48ed
+X-MS-TrafficTypeDiagnostic: ZRAP278MB0548:EE_
+X-Microsoft-Antispam-PRVS: <ZRAP278MB0548C8886D1BFA066A59B3DAE2CF9@ZRAP278MB0548.CHEP278.PROD.OUTLOOK.COM>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0
+X-Microsoft-Antispam-Message-Info: 3L8a7sxO+GJQnQLmvZBoEpa4RsUT1eBsxHpVPscs2IxANzgl8CumQLjYc9ObOOtcfbXQhc4GKd6031H51vORxJE7tFSLSAkluPxGUCj6iH+BVOxTVnFezklxzO1TGfUPtl2obcYW1Wyc7MKz5JeU5HKe3iNeaiP+C1jGxKG4gX1nf4uj3yZeOkb5Hah/n6y1B1kgD4+vEABzRXfnfBkckVViep7ApQjmfk4VbT9EwjXbgTpjSZNeZyfPYQUVuOZH0oAGzcj7JkDPFVkz6QuqDuDbwp4UGTx/zIz50yXuBm6vQ34Z0u7Oz3kX6jEuovS2paxsNwFpIxueKCngA040tabq4cUnz+8TvRaDS7gcWuZtiQW+5vV2bQLHCaY5Hjfk48ssOazP22BBhGs7V+wmjZSdUVaDCo2xINhhy6IghMbHNLNd7yiSuYgzQiai7i+far873BbXYPZvitNMYpJMOMNlvSz1JELFWQunBooOW8bB4iWOISZZ1drHRt5QNqUsJtFmANd/33z274lGNabgbMjcvsGbwR5xi6jqkcvtA0spkDR9PONoNA48mFTiM7NWuy5gLRI1KN/RK/N+GdWqXpt6TP7sIMSS7+DDlRAbJtt73kSENZVrZhuD/HVfxfzXkHB9GdIiOb2ulqup3BUuHphtdjUOE61e8EA4uUKWDhC6ce2ilT4LeBE5WIJKF+ZOYtWjIEuBBp7aTsb2YmD9yNcabYXWuYr7w25L6Ap1FoNRn4EW4JCbCOnMyc8+cNq2BOcUaNi3Od96a5UYvB5FHemA0vY1UYxRlAeBS9QqBhI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(39850400004)(366004)(376002)(346002)(136003)(396003)(4326008)(44832011)(86362001)(83380400001)(66476007)(38100700002)(508600001)(66556008)(966005)(66946007)(52116002)(5660300002)(2906002)(36756003)(1076003)(8676002)(41300700001)(38350700002)(8936002)(54906003)(186003)(2616005)(316002)(6506007)(6486002)(7416002)(6512007)(26005);DIR:OUT;SFP:1102
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?s22sw+ImBaROWhuFS/gPuCjfEG1GkO3YK3rpiSz0QVqMErQQHvEo8BRpiqJt?=
+ =?us-ascii?Q?0ThgA7Qhem+n4eSgwabs9oJmGDDelr4RpEVHvgdeRW6e3PnNTTE2/gzg4KvE?=
+ =?us-ascii?Q?25NzGQCNIDjZuxWFlVznF0UeXTwUZaj1LyI9Hj5w2DrUw0N2pSczYksFvI/q?=
+ =?us-ascii?Q?KVuMCvk/tb8LjJBVDzVXgoHLo9sE0LOI7bNsm2jCfOoNygnTql5wggQ2RYn6?=
+ =?us-ascii?Q?4tdjq/ASYtalVMbDG4QLj8Hi+ki+/TbK6Gmsacv+rJE8/JjBznS9lekV/3gy?=
+ =?us-ascii?Q?98lSri7ukg9UrlWTpQ6trqhLw2QOUXGrvxMsVZaACdKS0qq9K81qgxO4pw95?=
+ =?us-ascii?Q?jLy8/TtywyCiYzyqFCnZXtVCUcxo5CKppLQ+zmvZLrtHgDbOS/LGHlkS+RuC?=
+ =?us-ascii?Q?9/vlXmxMyioXRKJmR/oh0OczdPMrDfra3XZGgbOsbtWNNJknzA+VKS9yHMH6?=
+ =?us-ascii?Q?quzrhTsbm2sVSouAWg4vByGbmkZzb3iFB90IvSroR9SBlCgkNPbX3V1K6Nd4?=
+ =?us-ascii?Q?VGJpnq6X/cgp8KhzPHmfiawZAtxH6hUBZfgwmZZ1L8xf4ySoS99HyH6C6N8L?=
+ =?us-ascii?Q?snQkcRJFg9eLhzgHxHKpZv4imVAHD/Y7ojbUXaxnama/oQ1mU3PTxTKAQG6H?=
+ =?us-ascii?Q?OBTX+RcD2eIlRKFBPynrB8fknSgDTVqagS9gCkJdFFQVya/FK+fCqMEcAtoB?=
+ =?us-ascii?Q?yFLYPwFtbBdA/tGxUF4Uqu6qTWN8Rk4kIxcLjvYjL7hZ8wzMVeDB/M5IiCjO?=
+ =?us-ascii?Q?Q4Lh2jcptPc984/R3NTCXdl/9zC9qXGIED67f86r1so+qTM9IgqXARKLs3zj?=
+ =?us-ascii?Q?OoP1IOVBmZiHZSktMw3hqeVWhb6MSIfClKpJCOOcpmb66dep4wvDXDDgFWTr?=
+ =?us-ascii?Q?aahZo0NK5Mm9znwQ+4zcETAbExTr0WuS3DCId+l9FsNbCx8pMMNWQXyiVECO?=
+ =?us-ascii?Q?Hqo8d0PHJd47Vwaw83ucrA4lHKqFkK9tM/OKv7Q5FGmwd4W14wYkjFABO9rJ?=
+ =?us-ascii?Q?ncYJRhD0VQc8GUkgG9YY74yYUEGe3T1YK/q9yM9Ct/4MBflWoZcxssuyliau?=
+ =?us-ascii?Q?adIZ0qzrL5ZaWW+A2WhjaEhRkO/Mx5RE4EimWCPw4MXjLPlGruEf8/jZLwaa?=
+ =?us-ascii?Q?G4WNRLEPv5N3N2GvELLx+cZdgb5Ntq8gEjPBaOtAMRN6wcCf6BifCev4/W3a?=
+ =?us-ascii?Q?Y8R9CrMUw86r0unUOLtANv2QkQOgzfIJ4yNPthFTjaEhmC7EVXgXjRJEfRgz?=
+ =?us-ascii?Q?nPJvfxiHg+MFus5+wIAkvsW8TlqHUiMWN6OV2gF7msPk+EBA21oUjqb3LhfD?=
+ =?us-ascii?Q?Rk6jm4lKHUpY6d29tpyjkmO3/3mgpsPE9e96H4w9M77akRDuak4qjp8zj3Q1?=
+ =?us-ascii?Q?UUqLv91mxWhhqIa6+KgVBGQuACxPCKRDnljtOHqCgQaIhJ+N7lL6WzfxjBb4?=
+ =?us-ascii?Q?jBab2CO5nCMEZGD10Ggr7Z1LGJx5AWjZJRAqP/FYMo9WlnbCisU09jb3G6k5?=
+ =?us-ascii?Q?NQHR1CV52NCqE0gbUZ5zcRFbPRbs+k2vC4DlxLzitquefxmw3pVnBdn/egmx?=
+ =?us-ascii?Q?9S+N7C8eLoipYSbXzpjsIjYkCracr0mbh0Dzzt0HrXvt0BecsLZUGuyX3MsR?=
+ =?us-ascii?Q?mmeYaWqlTmjX67J0O2eLeWxOBu7qieJDwW5iW4GFufg61I/MvDMouPnZNLDX?=
+ =?us-ascii?Q?celyiKdnExblbDNwzhtoRQ6PoKOum+R/+LHB5oyaxmqRiQKOmQ0v7woLZ7jk?=
+ =?us-ascii?Q?21qxwCP9q5gXiQjL0sALChkK0JtTRDc=3D?=
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fdb830fc-4951-4295-be2c-08da376e48ed
+X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 May 2022 19:00:03.6753
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ve9BB0eBvapQl3b3xsNAOnjS5Hbs93EJA4dwg4GxrcP+DiEtUM5whD2JjNzu9l7GQ+6jqw49X/GISszc5MmO/MBRrmRp6D41tpQ2a+6tML0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZRAP278MB0548
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CDE13A77 smtp.mailfrom=francesco.dolcini@toradex.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: toradex.com
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -144,20 +116,56 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/05/2022 13:18, Luck, Tony wrote:
->> [...]
-> Would it be possible to have some global "kdump is configured + enabled" flag?
-> 
-> Then notifiers could make an informed choice on whether to deep dive to
-> get all the possible details (when there is no kdump) or just skim the high
-> level stuff (to maximize chance of getting a successful kdump).
-> 
-> -Tony
+Currently the imx thermal driver has a hardcoded critical temperature
+value offset of 5 Celsius degrees from the actual SoC maximum
+temperature.
 
-Good idea Tony! What if I wire a kexec_crash_loaded() in the notifier?
+This affects applications and systems designed to be working on this close
+to the limit, but yet valid, temperature range.
 
-With that, are you/Petr/Dinh OK in moving it for the info list?
-Cheers,
+Given that there is no single value that will fit all the use cases make
+the critical trip point offset from the max temperature configurable
+using a newly added trip_offset module parameter, passive trip point is
+set to 5 Celsius degrees less than the critical. By default the
+system behaves exactly as before.
 
+Link: https://lore.kernel.org/all/20220420091300.179753-1-francesco.dolcini@toradex.com/
+Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+---
+ drivers/thermal/imx_thermal.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-Guilherme
+diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+index 16663373b682..42d1f8a3eccb 100644
+--- a/drivers/thermal/imx_thermal.c
++++ b/drivers/thermal/imx_thermal.c
+@@ -86,6 +86,10 @@ enum imx_thermal_trip {
+ #define TEMPMON_IMX6SX			2
+ #define TEMPMON_IMX7D			3
+ 
++static int trip_offset = 5;
++module_param(trip_offset, int, 0444);
++MODULE_PARM_DESC(trip_offset, "Critical trip point offset from CPU max temp in Celsius degrees (default 5)");
++
+ struct thermal_soc_data {
+ 	u32 version;
+ 
+@@ -504,11 +508,11 @@ static void imx_init_temp_grade(struct platform_device *pdev, u32 ocotp_mem0)
+ 	}
+ 
+ 	/*
+-	 * Set the critical trip point at 5 °C under max
+-	 * Set the passive trip point at 10 °C under max (changeable via sysfs)
++	 * Set the critical trip point at 5 °C under max (changeable via module param)
++	 * Set the passive trip point at 5 °C under critical (changeable via sysfs)
+ 	 */
+-	data->temp_critical = data->temp_max - (1000 * 5);
+-	data->temp_passive = data->temp_max - (1000 * 10);
++	data->temp_critical = data->temp_max - (1000 * trip_offset);
++	data->temp_passive = data->temp_critical - (1000 * 5);
+ }
+ 
+ static int imx_init_from_tempmon_data(struct platform_device *pdev)
+-- 
+2.25.1
+
