@@ -2,73 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A65528911
-	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 17:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDDED52896C
+	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 18:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245442AbiEPPjl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 May 2022 11:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44534 "EHLO
+        id S245553AbiEPQCx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 May 2022 12:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245441AbiEPPjk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 11:39:40 -0400
-Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com [209.85.222.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4053C733;
-        Mon, 16 May 2022 08:39:39 -0700 (PDT)
-Received: by mail-ua1-f51.google.com with SMTP id p1so5963128uak.1;
-        Mon, 16 May 2022 08:39:39 -0700 (PDT)
+        with ESMTP id S245544AbiEPQCw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 12:02:52 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDE02FE70
+        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 09:02:51 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id w130so19206438oig.0
+        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 09:02:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ScgtWm2uFkOxfulqs7520gHM/my4MYIe3yq/VcV3Ozw=;
+        b=Ui6BaQ6lQ9IwPfOUL4TJm7cJvfYf8UFV8wI0yIE/ecSwLqobvQf4rTIikXPC8Ksnp/
+         JRSTr3Fgwya3hm14X44WgUx1HJGuc9H1MoeHAN4VBzxuhJEnypxN8+xF6HAWoKiAVAs3
+         mxYrKvjtDKZ5Z0eJvjVSmqSHIwF8R/De7GbNU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=v4AO4TvHBXHTDE7cylsD4nuz6SSH2GMvFgLvHL67nzg=;
-        b=oQvj+YtW4IrWIS+cbVofERrPNxoiZ8a1TfUizMKdXiF+oifQ8rMR6dMTD7xhC/yBT8
-         nIlW/vYFRGCmTNzy+RLefilKS93CS3r2u+KmhGJONUoBisSKGNjCJ4GGuhBvM6yJ3Wyo
-         cGZfRkJlXPUUXwbK4ElaFRRcOVBN+4fijkzafe5BaXNh3Lo8MvTTcF6ssID+xi6bBX8I
-         tKuPZu8AwwauFWuytr7C7kIpD1qnMZle7E14LHJGNXpSyHHc8HjsNR/3Co9ctkUpt6T0
-         9WNggDn7scmECNqDFk2r7BaKOivdy3hF0E0Ko1wINSACP7MFzmdbj+xDmWWb6Jq9LP91
-         WSzA==
-X-Gm-Message-State: AOAM533GXRf6SaXto10Vj8JWJoJrpyNdUUXQ091u6ARi2imeY/phE6Hl
-        yABpqvEU/LrqMcd/xidbhVuq5wR+KomV8A==
-X-Google-Smtp-Source: ABdhPJwr2O3FGik3cSKjaPSHku0LPtjeQtskgMWSj2/APW6/bM2WjQEqOOhYbESvhMt7lbawcfZW4A==
-X-Received: by 2002:ab0:349a:0:b0:35c:b898:a733 with SMTP id c26-20020ab0349a000000b0035cb898a733mr6082808uar.85.1652715578381;
-        Mon, 16 May 2022 08:39:38 -0700 (PDT)
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
-        by smtp.gmail.com with ESMTPSA id y17-20020ac5c811000000b0034e98f6f2d8sm1281781vkl.55.2022.05.16.08.39.37
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ScgtWm2uFkOxfulqs7520gHM/my4MYIe3yq/VcV3Ozw=;
+        b=12f2R3C2lmCKm9LOQtSmGak2lCFfUhqjPMfBALpNhxCroVGOZWrh756FI2z6COddCV
+         +mlRanUBkGoWRIKoMlIbkOlsubulVDV8gKrVmdF61ZmqbiJfkLMvWhHzYnZr/JSZubmp
+         JpDvu8MbYN4AgTt8Bi5soO7kL6MCLa42dcGKfKSoTw4Ph6XzucY/8ouF/w1x/scrQUf1
+         aemfOMpbY4Dln8HO/DnyQag0RWf/uyN4uhZYs06CfKyx3iD2H6COUCqQOwfzS23cXltL
+         lVocPg+oIuSlERxJ2nlCT1N1WJqZ8OHJZLeRfXvBrLAAjUcadM2KcKs2MuatAGtDp4Po
+         Iybg==
+X-Gm-Message-State: AOAM531GRE0Eevqb6xS+gjFSwgD5giYsYXIdzaD+dgxvsy1gfn0Rb90f
+        tLrXiZ7JtWNkGLYYWx9Au3R+9n8H8F4LiPLN
+X-Google-Smtp-Source: ABdhPJzDCDcf+HDbRJdNk+fyhDtmMzmm4HJRwoYcwWusNw1/axz8Djw+O0Xf8gVbUNLajlQEIN/7fA==
+X-Received: by 2002:a05:6808:1204:b0:325:7ce2:77f6 with SMTP id a4-20020a056808120400b003257ce277f6mr13532346oil.165.1652716970179;
+        Mon, 16 May 2022 09:02:50 -0700 (PDT)
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com. [209.85.160.50])
+        by smtp.gmail.com with ESMTPSA id p129-20020acaf187000000b00328c9e63389sm3913298oih.11.2022.05.16.09.02.47
+        for <linux-pm@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 08:39:38 -0700 (PDT)
-Received: by mail-vs1-f41.google.com with SMTP id c62so15915004vsc.10;
-        Mon, 16 May 2022 08:39:37 -0700 (PDT)
-X-Received: by 2002:a67:b304:0:b0:32c:fb41:9f43 with SMTP id
- a4-20020a67b304000000b0032cfb419f43mr6526925vsm.83.1652715577451; Mon, 16 May
- 2022 08:39:37 -0700 (PDT)
+        Mon, 16 May 2022 09:02:48 -0700 (PDT)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-f16a3e0529so10368289fac.2
+        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 09:02:47 -0700 (PDT)
+X-Received: by 2002:a05:6870:63a0:b0:f1:8bca:8459 with SMTP id
+ t32-20020a05687063a000b000f18bca8459mr4861359oap.174.1652716966894; Mon, 16
+ May 2022 09:02:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220512071858.10805-1-qianfanguijin@163.com> <20220512071858.10805-2-qianfanguijin@163.com>
- <20220513073849.cu4jzykefat2sepg@houat> <1352b9d7-5219-af09-948b-6462def39ea5@163.com>
- <20220513081556.knd3tf6pangfblh3@houat> <666ead08-af1e-81f5-6fe1-e5e3370e6d6f@163.com>
- <20220516075326.hccburhu743t7p6r@houat>
-In-Reply-To: <20220516075326.hccburhu743t7p6r@houat>
-Reply-To: wens@csie.org
-From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Mon, 16 May 2022 23:39:26 +0800
-X-Gmail-Original-Message-ID: <CAGb2v65xifgy4dXciron4yxiUQtHb-2ZRGTqOiSjLrdbFtqQEA@mail.gmail.com>
-Message-ID: <CAGb2v65xifgy4dXciron4yxiUQtHb-2ZRGTqOiSjLrdbFtqQEA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] ARM: dts: sun8i-r40: Add "cpu-supply" node for
- sun8i-r40 based board
-To:     qianfan <qianfanguijin@163.com>
-Cc:     linux-sunxi@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>
+References: <20220427224924.592546-1-gpiccoli@igalia.com> <20220427224924.592546-20-gpiccoli@igalia.com>
+ <YoJZVZl/MH0KiE/J@alley> <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com>
+In-Reply-To: <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Mon, 16 May 2022 09:02:10 -0700
+X-Gmail-Original-Message-ID: <CAE=gft7ds+dHfEkRz8rnSH1EbTpGTpKbi5Wxj9DW0Jr5mX_j4w@mail.gmail.com>
+Message-ID: <CAE=gft7ds+dHfEkRz8rnSH1EbTpGTpKbi5Wxj9DW0Jr5mX_j4w@mail.gmail.com>
+Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Petr Mladek <pmladek@suse.com>, David Gow <davidgow@google.com>,
+        Julius Werner <jwerner@chromium.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Sebastian Reichel <sre@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
+        kexec@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de,
+        Kees Cook <keescook@chromium.org>, luto@kernel.org,
+        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
+        peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, Alan Stern <stern@rowland.harvard.edu>,
+        Thomas Gleixner <tglx@linutronix.de>, vgoyal@redhat.com,
+        vkuznets@redhat.com, Will Deacon <will@kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dexuan Cui <decui@microsoft.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        zhenwei pi <pizhenwei@bytedance.com>,
+        Stephen Boyd <swboyd@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,42 +137,74 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 16, 2022 at 3:53 PM Maxime Ripard <maxime@cerno.tech> wrote:
+On Mon, May 16, 2022 at 8:07 AM Guilherme G. Piccoli
+<gpiccoli@igalia.com> wrote:
 >
-> On Fri, May 13, 2022 at 04:23:20PM +0800, qianfan wrote:
-> > > > > There's a similar issue for all the boards that don't have a regulator
-> > > > > in the first place.
-> > > > >
-> > > > > The way we worked around this for the other SoCs is to have a DTSI with
-> > > > > the OPPs with a frequency higher than what U-Boot boots with (1008MHz?),
-> > > > > and only include that DTSI on boards that have a CPU regulator hooked in.
-> > > > Is this really necessary? It seems like every board based on sun8i-r40
-> > > > have a cpu regulator.
-> > > This probably won't be the case whenever someone starts a new design,
-> > > and then they'll face random crashes for no apparent reason, and waste a
-> > > lot of time in the process.
-> > >
-> > > Whereas the alternative is that you would be missing some OPPs,
-> > > something that is fairly easy to figure out.
+> Thanks for the review!
+>
+> I agree with the blinking stuff, I can rework and add all LED/blinking
+> stuff into the loop list, it does make sense. I'll comment a bit in the
+> others below...
+>
+> On 16/05/2022 11:01, Petr Mladek wrote:
+> > [...]
+> >> --- a/arch/mips/sgi-ip22/ip22-reset.c
+> >> +++ b/arch/mips/sgi-ip22/ip22-reset.c
+> >> @@ -195,7 +195,7 @@ static int __init reboot_setup(void)
+> >>      }
+> >>
+> >>      timer_setup(&blink_timer, blink_timeout, 0);
+> >> -    atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
+> >> +    atomic_notifier_chain_register(&panic_hypervisor_list, &panic_block);
 > >
-> > How about remove the OPPs which greate that 1.08G in sun8i-r40.dtsi,
-> > If some boards want to run at a higher frequency, can add them byself
-> > in the board's file.
+> > This notifier enables blinking. It is not much safe. It calls
+> > mod_timer() that takes a lock internally.
+> >
+> > This kind of functionality should go into the last list called
+> > before panic() enters the infinite loop. IMHO, all the blinking
+> > stuff should go there.
+> > [...]
+> >> --- a/arch/mips/sgi-ip32/ip32-reset.c
+> >> +++ b/arch/mips/sgi-ip32/ip32-reset.c
+> >> @@ -145,7 +144,7 @@ static __init int ip32_reboot_setup(void)
+> >>      pm_power_off = ip32_machine_halt;
+> >>
+> >>      timer_setup(&blink_timer, blink_timeout, 0);
+> >> -    atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
+> >> +    atomic_notifier_chain_register(&panic_hypervisor_list, &panic_block);
+> >
+> > Same here. Should be done only before the "loop".
+> > [...]
 >
-> You did all the work to support and test them already. It's a bit of a
-> waste to do that and not include it.
+> Ack.
 >
-> Just do a DTSI like we did for the A64 for example.
+>
+> >> --- a/drivers/firmware/google/gsmi.c
+> >> +++ b/drivers/firmware/google/gsmi.c
+> >> @@ -1034,7 +1034,7 @@ static __init int gsmi_init(void)
+> >>
+> >>      register_reboot_notifier(&gsmi_reboot_notifier);
+> >>      register_die_notifier(&gsmi_die_notifier);
+> >> -    atomic_notifier_chain_register(&panic_notifier_list,
+> >> +    atomic_notifier_chain_register(&panic_hypervisor_list,
+> >>                                     &gsmi_panic_notifier);
+> >
+> > I am not sure about this one. It looks like some logging or
+> > pre_reboot stuff.
+> >
+>
+> Disagree here. I'm looping Google maintainers, so they can comment.
+> (CCed Evan, David, Julius)
+>
+> This notifier is clearly a hypervisor notification mechanism. I've fixed
+> a locking stuff there (in previous patch), I feel it's low-risk but even
+> if it's mid-risk, the class of such callback remains a perfect fit with
+> the hypervisor list IMHO.
 
-There's also no guarantee that the board boots up at 1.08G. The board
-may be set to boot up at a slightly lower frequency / voltage combination.
-Or maybe the board's supply voltage simply isn't stable enough for sustained
-high CPU usage at 1.08G.
+This logs a panic to our "eventlog", a tiny logging area in SPI flash
+for critical and power-related events. In some cases this ends up
+being the only clue we get in a Chromebook feedback report that a
+panic occurred, so from my perspective moving it to the front of the
+line seems like a good idea.
 
-Letting the kernel assume that it is OK to run at some OPP is not a good
-idea. The boards should explicitly include the default OPP table, or define
-their own, while adding a proper CPU supply at the same time.
-
-
-Regards
-ChenYu
+-Evan
