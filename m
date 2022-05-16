@@ -2,381 +2,203 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C26A4527AC2
-	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 00:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5E8527B07
+	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 02:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236663AbiEOWsk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 15 May 2022 18:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45100 "EHLO
+        id S237165AbiEPAn0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 15 May 2022 20:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234031AbiEOWsh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 May 2022 18:48:37 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF83E0EA;
-        Sun, 15 May 2022 15:48:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=93lwEQzS5IXDyIA/NgwVVg/rNYgBX/Ekc2xpjleQYUs=; b=kTFBpmweCVBGzCiXcny/Ei9sEB
-        uLvI0D7aJyCY9gW4MGXg7URDXPxUenVwWXA89vT+j9BRtrs1EQfNeJ4qB6gH1x3WL3JnCBSUAhoXN
-        1INIRQN5V3AcrCr4dPVHFH/5EtxkbxYQW14SNMurRWenslQKNiT8uXf6mSEvQOr2XsmvD7L3cVekK
-        G4ucrnvqt1/qzfQAz5Rre/uP6rIw96QRGg/Ntwc578rmZP+ob6saFKUKA0qaw+P9NiH2QNSqjbmfS
-        xeJNCdUwDvi5QchOtqGvFJPXe/AnKHhlIFK8hoqIAjFEroOQ6KccSYTKVhehD92Fv+lP928LorOpQ
-        iXFJTFmg==;
-Received: from [177.183.162.244] (helo=[192.168.0.5])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nqN22-005kj2-70; Mon, 16 May 2022 00:48:10 +0200
-Message-ID: <d313eec2-96b6-04e3-35cd-981f103d010e@igalia.com>
-Date:   Sun, 15 May 2022 19:47:39 -0300
+        with ESMTP id S229508AbiEPAnZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 May 2022 20:43:25 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61C11A39E;
+        Sun, 15 May 2022 17:43:19 -0700 (PDT)
+X-UUID: e79b8d9f129648c3885f99a4fee235b7-20220516
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:d960f2b5-c9b2-4583-95a0-5097beaeb387,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:b67b4ff2-ab23-4aed-a67b-f96514452486,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: e79b8d9f129648c3885f99a4fee235b7-20220516
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 479741431; Mon, 16 May 2022 08:43:13 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 16 May 2022 08:43:12 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 16 May 2022 08:43:12 +0800
+Received: from mtksdaap41.mediatek.inc (172.21.77.4) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 16 May 2022 08:43:11 +0800
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Fan Chen <fan.chen@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>
+Subject: [PATCH v25 0/7] soc: mediatek: SVS: introduce MTK SVS
+Date:   Mon, 16 May 2022 08:43:04 +0800
+Message-ID: <20220516004311.18358-1-roger.lu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 24/30] panic: Refactor the panic path
-Content-Language: en-US
-To:     Petr Mladek <pmladek@suse.com>,
-        "michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
-        d.hatayama@jp.fujitsu.com
-Cc:     akpm@linux-foundation.org, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, dave.hansen@linux.intel.com, feng.tang@intel.com,
-        gregkh@linuxfoundation.org, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-25-gpiccoli@igalia.com> <Yn0TnsWVxCcdB2yO@alley>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <Yn0TnsWVxCcdB2yO@alley>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/05/2022 11:03, Petr Mladek wrote:
-> Hello,
-> 
-> first, I am sorry for stepping into the discussion so late.
-> I was busy with some other stuff and this patchset is far
-> from trivial.
-> 
-> Second, thanks a lot for putting so much effort into it.
-> Most of the changes look pretty good, especially all
-> the fixes of particular notifiers and split into
-> four lists.
-> 
-> Though this patch will need some more love. See below
-> for more details.
+The Smart Voltage Scaling(SVS) engine is a piece of hardware
+which calculates suitable SVS bank voltages to OPP voltage table.
+Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
+when receiving OPP_EVENT_ADJUST_VOLTAGE.
 
-Thanks a lot for your review Petr, it is much appreciated! No need for
-apologies, there is no urgency here =)
+1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
+2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
+After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
 
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=25cb20a212a1f989385dfe23230817e69c62bee5
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=b325ce39785b1408040d90365a6ab1aa36e94f87
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.16-next/dts64&id=a8168cebf1bca1b5269e8a7eb2626fb76814d6e2
 
-> [...] 
-> This talks only about kdump. The reality is much more complicated.
-> The level affect the order of:
-> 
->     + notifiers vs. kdump
->     + notifiers vs. crash_dump
->     + crash_dump vs. kdump
+Change since v24:
+- Rebase to Linux 5.18-rc6
+- Show specific fail log in svs_platform_probe() to help catch which step fails quickly
+- Remove struct svs_bank member "pd_dev" because all subsys device's power domain has been merged into one node like above [3]
 
-First of all, I'd like to ask you please to clarify to me *exactly* what
-are the differences between "crash_dump" and "kdump". I'm sorry if
-that's a silly question, I need to be 100% sure I understand the
-concepts the same way you do.
+Test in below environment:
+SW: Integration Tree [4] + Thermal patch [5] + SVS v25 (this patchset)
+HW: mt8183-Krane
 
+[4] https://github.com/wens/linux/commits/mt8183-cpufreq-cci-svs-test
+[5] https://patchwork.kernel.org/project/linux-pm/patch/20210820095206.30981-1-ben.tseng@mediatek.com
 
-> There might theoretically many variants of the ordering of kdump,
-> crash_dump, and the 4 notifier list. Some variants do not make
-> much sense. You choose 5 variants and tried to select them by
-> a level number.
-> 
-> The question is if we really could easily describe the meaning this
-> way. It is not only about a "level" of notifiers before kdump. It is
-> also about the ordering of crash_dump vs. kdump. IMHO, "level"
-> semantic does not fit there.
-> 
-> Maybe more parameters might be easier to understand the effect.
-> Anyway, we first need to agree on the chosen variants.
-> I am going to discuss it more in the code, see below.
-> 
-> 
-> [...] 
-> Here is the code using the above functions. It helps to discuss
-> the design and logic.
-> 
-> <kernel/panic.c>
-> 	order_panic_notifiers_and_kdump();
-> 
-> 	/* If no level, we should kdump ASAP. */
-> 	if (!panic_notifiers_level)
-> 		__crash_kexec(NULL);
-> 
-> 	crash_smp_send_stop();
-> 	panic_notifier_hypervisor_once(buf);
-> 
-> 	if (panic_notifier_info_once(buf))
-> 		kmsg_dump(KMSG_DUMP_PANIC);
-> 
-> 	panic_notifier_pre_reboot_once(buf);
-> 
-> 	__crash_kexec(NULL);
-> 
-> 	panic_notifier_hypervisor_once(buf);
-> 
-> 	if (panic_notifier_info_once(buf))
-> 		kmsg_dump(KMSG_DUMP_PANIC);
-> 
-> 	panic_notifier_pre_reboot_once(buf);
-> </kernel/panic.c>
-> 
-> I have to say that the logic is very unclear. Almost all
-> functions are called twice:
-> 
->    + __crash_kexec()
->    + kmsg_dump()
->    + panic_notifier_hypervisor_once()
->    + panic_notifier_pre_reboot_once()
->    + panic_notifier_info_once()
-> 
-> It is pretty hard to find what functions are always called in the same
-> order and where the order can be inverted.
-> 
-> The really used code path is defined by order_panic_notifiers_and_kdump()
-> that encodes "level" into "bits". The bits are then flipped in
-> panic_notifier_*_once() calls that either do something or not.
-> kmsg_dump() is called according to the bit flip.
-> 
-> It is an interesting approach. I guess that you wanted to avoid too
-> many if/then/else levels in panic(). But honestly, it looks like
-> a black magic to me.
-> 
-> IMHO, it is always easier to follow if/then/else logic than using
-> a translation table that requires additional bit flips when
-> a value is used more times.
-> 
-> Also I guess that it is good proof that "level" abstraction does
-> not fit here. Normal levels would not need this kind of magic.
+Boots up log:
+[    4.447369]  SVSB_CPU_LITTLE: svs_init01_isr_handler: VDN74~30:0x141e262e~0x33373c42, DC:0x02f3010b
+[    4.447623]  SVSB_CPU_BIG: svs_init01_isr_handler: VDN74~30:0x151f2830~0x363a4046, DC:0x02f90141
+[    4.447872]  SVSB_CCI: svs_init01_isr_handler: VDN74~30:0x141a232b~0x30363d42, DC:0x02ed00d5
+[    4.448119]  SVSB_GPU: svs_init01_isr_handler: VDN74~30:0x1416171a~0x1d202327, DC:0x02f7012f
+[    4.448239]  SVSB_CPU_LITTLE: svs_init02_isr_handler: VOP74~30:0x1b252d35~0x3a3e4349, DC:0x02f30000
+[    4.448343]  SVSB_CPU_BIG: svs_init02_isr_handler: VOP74~30:0x1c262f37~0x3d41474d, DC:0x02f90000
+[    4.448400]  SVSB_CCI: svs_init02_isr_handler: VOP74~30:0x1b212a32~0x373d4449, DC:0x02ed0000
+[    4.448499]  SVSB_GPU: svs_init02_isr_handler: VOP74~30:0x1618191c~0x1f222529, DC:0x02f70000
 
-Heheh OK, I appreciate your opinion, but I guess we'll need to agree in
-disagree here - I'm much more fond to this kind of code than a bunch of
-if/else blocks that almost give headaches. Encoding such "level" logic
-in the if/else scheme is very convoluted, generates a very big code. And
-the functions aren't so black magic - they map a level in bits, and the
-functions _once() are called...once! Although we switch the position in
-the code, so there are 2 calls, one of them is called and the other not.
+SVS commands log:
+localhost ~ # cat /sys/kernel/debug/svs/*/*
+init2
+SVSB_CCI: temperature ignore, turn_pt = 0
+opp_freq[00]: 1196000000, opp_volt[00]: 968750, svsb_volt[00]: 0x4b, freq_pct[00]: 100
+opp_freq[01]: 1144000000, opp_volt[01]: 956250, svsb_volt[01]: 0x49, freq_pct[01]: 96
+opp_freq[02]: 1092000000, opp_volt[02]: 937500, svsb_volt[02]: 0x46, freq_pct[02]: 92
+opp_freq[03]: 1027000000, opp_volt[03]: 918750, svsb_volt[03]: 0x43, freq_pct[03]: 86
+opp_freq[04]: 962000000, opp_volt[04]: 893750, svsb_volt[04]: 0x3f, freq_pct[04]: 81
+opp_freq[05]: 923000000, opp_volt[05]: 881250, svsb_volt[05]: 0x3d, freq_pct[05]: 78
+opp_freq[06]: 871000000, opp_volt[06]: 856250, svsb_volt[06]: 0x39, freq_pct[06]: 73
+opp_freq[07]: 845000000, opp_volt[07]: 850000, svsb_volt[07]: 0x38, freq_pct[07]: 71
+opp_freq[08]: 767000000, opp_volt[08]: 825000, svsb_volt[08]: 0x34, freq_pct[08]: 65
+opp_freq[09]: 689000000, opp_volt[09]: 800000, svsb_volt[09]: 0x30, freq_pct[09]: 58
+opp_freq[10]: 624000000, opp_volt[10]: 775000, svsb_volt[10]: 0x2c, freq_pct[10]: 53
+opp_freq[11]: 546000000, opp_volt[11]: 750000, svsb_volt[11]: 0x28, freq_pct[11]: 46
+opp_freq[12]: 463000000, opp_volt[12]: 718750, svsb_volt[12]: 0x23, freq_pct[12]: 39
+opp_freq[13]: 403000000, opp_volt[13]: 700000, svsb_volt[13]: 0x20, freq_pct[13]: 34
+opp_freq[14]: 338000000, opp_volt[14]: 681250, svsb_volt[14]: 0x1d, freq_pct[14]: 29
+opp_freq[15]: 273000000, opp_volt[15]: 650000, svsb_volt[15]: 0x1a, freq_pct[15]: 23
+init2
+SVSB_CPU_BIG: temperature ignore, turn_pt = 0
+opp_freq[00]: 1989000000, opp_volt[00]: 1050000, svsb_volt[00]: 0x59, freq_pct[00]: 100
+opp_freq[01]: 1924000000, opp_volt[01]: 1025000, svsb_volt[01]: 0x57, freq_pct[01]: 97
+opp_freq[02]: 1846000000, opp_volt[02]: 1000000, svsb_volt[02]: 0x53, freq_pct[02]: 93
+opp_freq[03]: 1781000000, opp_volt[03]: 975000, svsb_volt[03]: 0x50, freq_pct[03]: 90
+opp_freq[04]: 1716000000, opp_volt[04]: 950000, svsb_volt[04]: 0x4d, freq_pct[04]: 87
+opp_freq[05]: 1677000000, opp_volt[05]: 931250, svsb_volt[05]: 0x4c, freq_pct[05]: 85
+opp_freq[06]: 1625000000, opp_volt[06]: 912500, svsb_volt[06]: 0x49, freq_pct[06]: 82
+opp_freq[07]: 1586000000, opp_volt[07]: 900000, svsb_volt[07]: 0x47, freq_pct[07]: 80
+opp_freq[08]: 1508000000, opp_volt[08]: 875000, svsb_volt[08]: 0x43, freq_pct[08]: 76
+opp_freq[09]: 1417000000, opp_volt[09]: 850000, svsb_volt[09]: 0x40, freq_pct[09]: 72
+opp_freq[10]: 1326000000, opp_volt[10]: 825000, svsb_volt[10]: 0x3b, freq_pct[10]: 67
+opp_freq[11]: 1248000000, opp_volt[11]: 800000, svsb_volt[11]: 0x38, freq_pct[11]: 63
+opp_freq[12]: 1131000000, opp_volt[12]: 775000, svsb_volt[12]: 0x32, freq_pct[12]: 57
+opp_freq[13]: 1014000000, opp_volt[13]: 750000, svsb_volt[13]: 0x2d, freq_pct[13]: 51
+opp_freq[14]: 910000000, opp_volt[14]: 725000, svsb_volt[14]: 0x28, freq_pct[14]: 46
+opp_freq[15]: 793000000, opp_volt[15]: 700000, svsb_volt[15]: 0x23, freq_pct[15]: 40
+init2
+SVSB_CPU_LITTLE: temperature ignore, turn_pt = 0
+opp_freq[00]: 1989000000, opp_volt[00]: 968750, svsb_volt[00]: 0x4b, freq_pct[00]: 100
+opp_freq[01]: 1924000000, opp_volt[01]: 956250, svsb_volt[01]: 0x49, freq_pct[01]: 97
+opp_freq[02]: 1846000000, opp_volt[02]: 931250, svsb_volt[02]: 0x45, freq_pct[02]: 93
+opp_freq[03]: 1781000000, opp_volt[03]: 918750, svsb_volt[03]: 0x43, freq_pct[03]: 90
+opp_freq[04]: 1716000000, opp_volt[04]: 900000, svsb_volt[04]: 0x40, freq_pct[04]: 87
+opp_freq[05]: 1677000000, opp_volt[05]: 893750, svsb_volt[05]: 0x3f, freq_pct[05]: 85
+opp_freq[06]: 1625000000, opp_volt[06]: 875000, svsb_volt[06]: 0x3c, freq_pct[06]: 82
+opp_freq[07]: 1586000000, opp_volt[07]: 868750, svsb_volt[07]: 0x3b, freq_pct[07]: 80
+opp_freq[08]: 1508000000, opp_volt[08]: 843750, svsb_volt[08]: 0x37, freq_pct[08]: 76
+opp_freq[09]: 1417000000, opp_volt[09]: 825000, svsb_volt[09]: 0x34, freq_pct[09]: 72
+opp_freq[10]: 1326000000, opp_volt[10]: 793750, svsb_volt[10]: 0x2f, freq_pct[10]: 67
+opp_freq[11]: 1248000000, opp_volt[11]: 775000, svsb_volt[11]: 0x2c, freq_pct[11]: 63
+opp_freq[12]: 1131000000, opp_volt[12]: 743750, svsb_volt[12]: 0x27, freq_pct[12]: 57
+opp_freq[13]: 1014000000, opp_volt[13]: 712500, svsb_volt[13]: 0x22, freq_pct[13]: 51
+opp_freq[14]: 910000000, opp_volt[14]: 681250, svsb_volt[14]: 0x1d, freq_pct[14]: 46
+opp_freq[15]: 793000000, opp_volt[15]: 650000, svsb_volt[15]: 0x18, freq_pct[15]: 40
+mon mode
+SVSB_GPU: temperature = 33492, turn_pt = 0
+opp_freq[00]: 800000000, opp_volt[00]: 743750, svsb_volt[00]: 0x27, freq_pct[00]: 100
+opp_freq[01]: 743000000, opp_volt[01]: 731250, svsb_volt[01]: 0x25, freq_pct[01]: 93
+opp_freq[02]: 698000000, opp_volt[02]: 718750, svsb_volt[02]: 0x23, freq_pct[02]: 88
+opp_freq[03]: 653000000, opp_volt[03]: 712500, svsb_volt[03]: 0x22, freq_pct[03]: 82
+opp_freq[04]: 620000000, opp_volt[04]: 700000, svsb_volt[04]: 0x20, freq_pct[04]: 78
+opp_freq[05]: 580000000, opp_volt[05]: 693750, svsb_volt[05]: 0x1f, freq_pct[05]: 73
+opp_freq[06]: 540000000, opp_volt[06]: 681250, svsb_volt[06]: 0x1d, freq_pct[06]: 68
+opp_freq[07]: 500000000, opp_volt[07]: 675000, svsb_volt[07]: 0x1c, freq_pct[07]: 63
+opp_freq[08]: 460000000, opp_volt[08]: 662500, svsb_volt[08]: 0x1a, freq_pct[08]: 58
+opp_freq[09]: 420000000, opp_volt[09]: 656250, svsb_volt[09]: 0x19, freq_pct[09]: 53
+opp_freq[10]: 400000000, opp_volt[10]: 643750, svsb_volt[10]: 0x17, freq_pct[10]: 50
+opp_freq[11]: 380000000, opp_volt[11]: 643750, svsb_volt[11]: 0x17, freq_pct[11]: 48
+opp_freq[12]: 360000000, opp_volt[12]: 637500, svsb_volt[12]: 0x16, freq_pct[12]: 45
+opp_freq[13]: 340000000, opp_volt[13]: 637500, svsb_volt[13]: 0x16, freq_pct[13]: 43
+opp_freq[14]: 320000000, opp_volt[14]: 625000, svsb_volt[14]: 0x14, freq_pct[14]: 40
+opp_freq[15]: 300000000, opp_volt[15]: 625000, svsb_volt[15]: 0x14, freq_pct[15]: 38
 
-But that's totally fine to change - especially if we're moving away from
-the "level" logic. I see below you propose a much simpler approach - if
-we follow that, definitely we won't need the "black magic" approach heheh
+Roger Lu (7):
+  [v25,1/7] dt-bindings: soc: mediatek: add mtk svs dt-bindings
+  [v25,2/7] arm64: dts: mt8183: add svs device information
+  [v25,3/7] soc: mediatek: SVS: introduce MTK SVS engine
+  [v25,4/7] soc: mediatek: SVS: add monitor mode
+  [v25,5/7] soc: mediatek: SVS: add debug commands
+  [v25,6/7] dt-bindings: soc: mediatek: add mt8192 svs dt-bindings
+  [v25,7/7] soc: mediatek: SVS: add mt8192 SVS GPU driver
 
-
-> 
-> OK, the question is how to make it better. Let's start with
-> a clear picture of the problem:
-> 
-> 1. panic() has basically two funtions:
-> 
->       + show/store debug information (optional ways and amount)
->       + do something with the system (reboot, stay hanged)
-> 
-> 
-> 2. There are 4 ways how to show/store the information:
-> 
->       + tell hypervisor to store what it is interested about
->       + crash_dump
->       + kmsg_dump()
->       + consoles
-> 
->   , where crash_dump and consoles are special:
-> 
->      + crash_dump does not return. Instead it ends up with reboot.
-> 
->      + Consoles work transparently. They just need an extra flush
->        before reboot or staying hanged.
-> 
-> 
-> 3. The various notifiers do things like:
-> 
->      + tell hypervisor about the crash
->      + print more information (also stop watchdogs)
->      + prepare system for reboot (touch some interfaces)
->      + prepare system for staying hanged (blinking)
-> 
->    Note that it pretty nicely matches the 4 notifier lists.
-> 
-
-I really appreciate the summary skill you have, to convert complex
-problems in very clear and concise ideas. Thanks for that, very useful!
-I agree with what was summarized above.
+ .../bindings/soc/mediatek/mtk-svs.yaml        |   91 +
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   16 +
+ drivers/soc/mediatek/Kconfig                  |   10 +
+ drivers/soc/mediatek/Makefile                 |    1 +
+ drivers/soc/mediatek/mtk-svs.c                | 2399 +++++++++++++++++
+ 5 files changed, 2517 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
+ create mode 100644 drivers/soc/mediatek/mtk-svs.c
 
 
-> Now, we need to decide about the ordering. The main area is how
-> to store the debug information. Consoles are transparent so
-> the quesition is about:
-> 
->      + hypervisor
->      + crash_dump
->      + kmsg_dump
-> 
-> Some people need none and some people want all. There is a
-> risk that system might hung at any stage. This why people want to
-> make the order configurable.
-> 
-> But crash_dump() does not return when it succeeds. And kmsg_dump()
-> users havn't complained about hypervisor problems yet. So, that
-> two variants might be enough:
-> 
->     + crash_dump (hypervisor, kmsg_dump as fallback)
->     + hypervisor, kmsg_dump, crash_dump
-> 
-> One option "panic_prefer_crash_dump" should be enough.
-> And the code might look like:
-> 
-> void panic()
-> {
-> [...]
-> 	dump_stack();
-> 	kgdb_panic(buf);
-> 
-> 	< ---  here starts the reworked code --- >
-> 
-> 	/* crash dump is enough when enabled and preferred. */
-> 	if (panic_prefer_crash_dump)
-> 		__crash_kexec(NULL);
-> 
-> 	/* Stop other CPUs and focus on handling the panic state. */
-> 	if (has_kexec_crash_image)
-> 		crash_smp_send_stop();
-> 	else
-> 		smp_send_stop()
-> 
-
-Here we have a very important point. Why do we need 2 variants of SMP
-CPU stopping functions? I disagree with that - my understanding of this
-after some study in architectures is that the crash_() variant is
-"stronger", should work in all cases and if not, we should fix that -
-that'd be a bug.
-
-Such variant either maps to smp_send_stop() (in various architectures,
-including XEN/x86) or overrides the basic function with more proper
-handling for panic() case...I don't see why we still need such
-distinction, if you / others have some insight about that, I'd like to
-hear =)
-
-
-> 	/* Notify hypervisor about the system panic. */
-> 	atomic_notifier_call_chain(&panic_hypervisor_list, 0, NULL);
-> 
-> 	/*
-> 	 * No need to risk extra info when there is no kmsg dumper
-> 	 * registered.
-> 	 */
-> 	if (!has_kmsg_dumper())
-> 		__crash_kexec(NULL);
-> 
-> 	/* Add extra info from different subsystems. */
-> 	atomic_notifier_call_chain(&panic_info_list, 0, NULL);
-> 
-> 	kmsg_dump(KMSG_DUMP_PANIC);
-> 	__crash_kexec(NULL);
-> 
-> 	/* Flush console */
-> 	unblank_screen();
-> 	console_unblank();
-> 	debug_locks_off();
-> 	console_flush_on_panic(CONSOLE_FLUSH_PENDING);
-> 
-> 	if (panic_timeout > 0) {
-> 		delay()
-> 	}
-> 
-> 	/*
-> 	 * Prepare system for eventual reboot and allow custom
-> 	 * reboot handling.
-> 	 */
-> 	atomic_notifier_call_chain(&panic_reboot_list, 0, NULL);
-
-You had the order of panic_reboot_list VS. consoles flushing inverted.
-It might make sense, although I didn't do that in V1...
-Are you OK in having a helper for console flushing, as I did in V1? It
-makes code of panic() a bit less polluted / more focused I feel.
-
-
-> 
-> 	if (panic_timeout != 0) {
-> 		reboot();
-> 	}
-> 
-> 	/*
-> 	 * Prepare system for the infinite waiting, for example,
-> 	 * setup blinking.
-> 	 */
-> 	atomic_notifier_call_chain(&panic_loop_list, 0, NULL);
-> 
-> 	infinite_loop();
-> }
-> 
-> 
-> __crash_kexec() is there 3 times but otherwise the code looks
-> quite straight forward.
-> 
-> Note 1: I renamed the two last notifier list. The name 'post-reboot'
-> 	did sound strange from the logical POV ;-)
-> 
-> Note 2: We have to avoid the possibility to call "reboot" list
-> 	before kmsg_dump(). All callbacks providing info
-> 	have to be in the info list. It a callback combines
-> 	info and reboot functionality then it should be split.
-> 
-> 	There must be another way to calm down problematic
-> 	info callbacks. And it has to be solved when such
-> 	a problem is reported. Is there any known issue, please?
-> 
-> It is possible that I have missed something important.
-> But I would really like to make the logic as simple as possible.
-
-OK, I agree with you! It's indeed simpler and if others agree, I can
-happily change the logic to what you proposed. Although...currently the
-"crash_kexec_post_notifiers" allows to call _all_ panic_reboot_list
-callbacks _before kdump_.
-
-We need to mention this change in the commit messages, but I really
-would like to hear the opinions of heavy users of notifiers (as
-Michael/Hyper-V) and the kdump interested parties (like Baoquan / Dave
-Young / Hayatama). If we all agree on such approach, will change that
-for V2 =)
-
-Thanks again Petr, for the time spent in such detailed review!
-Cheers,
-
-
-Guilherme
