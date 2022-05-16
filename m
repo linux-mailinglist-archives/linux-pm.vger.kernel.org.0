@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 131DF527C1E
-	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 04:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4846B527C2C
+	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 05:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239463AbiEPCpF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 15 May 2022 22:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33234 "EHLO
+        id S239527AbiEPDDH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 15 May 2022 23:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239465AbiEPCo7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 May 2022 22:44:59 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F012E686;
-        Sun, 15 May 2022 19:44:58 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id u3so985258qta.8;
-        Sun, 15 May 2022 19:44:58 -0700 (PDT)
+        with ESMTP id S239532AbiEPDDF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 15 May 2022 23:03:05 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809F65F56;
+        Sun, 15 May 2022 20:03:03 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id a22so11412295qkl.5;
+        Sun, 15 May 2022 20:03:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=WmgMp6GvUkzNH+zUibeCMplxNIPkAGROCIcy5eW+4vc=;
-        b=hGGv72BYX6iJjv/7a5ftHCcnCgpBrvSIuCg1ghANY9ZWQRApMJWMXwf1MFM5eR/UCH
-         FLzRpErl4ms+SwwBZdpGOeJ9I84Vy+bQMQJBoNQEietdXQfNm7LcUAGkh3aDnjtO+l/o
-         W9gjhGf34Dwt8EmOEYf8TT+GKkiuVeKEXUahhfUXLMG6686AWBeWwa/oGAG4CJClTsn1
-         WN41Mlu0WBjQU2DC/Kx6kjI5T39ITvPu6g2DSm23XNw2xdMf0f7QmvO/0E6sZ4+bIXt6
-         oBrLpHYuk/cBzsK6IDWnOO3qiU/febP3TA7aDYS1hLniz0Ex1wfyXd66E+IBprJZDZdV
-         +glw==
+        bh=3tBgExR0vnd7YeIN6exy+FZqzAtBcN823ZwmLJgoZM4=;
+        b=Dt0n/o78G8O5CmeL15OxCRf1vH0qc/qDLtvTljzjUaXl4UHcuvQcOoBciZJWAoj8w0
+         IUU5EkKv8fRae6PUk/8chmxu+4q5P+mSeV3n1MsAVFR7KYjUTgwIfV91vgj5SxyJoSa1
+         lgfs0pZ6OdRLlU7Bh3liLsxkfl9PMwYSUm+LeIV8ojKcxTDPVcfD/m4rJz9hHEU+HvO+
+         fubbLv+DS0n2mI8woNBYWIyEjKxtLzjzpKvsQm8xRVort9ZBoacpPxokRF+qXwVSCjy8
+         e93zU7mIC1+Ah9buZT1uonJUdGV5q4SSlw99MKh08hkQpgn4HhNTP3vNLyKC8bAKC8+y
+         AtmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=WmgMp6GvUkzNH+zUibeCMplxNIPkAGROCIcy5eW+4vc=;
-        b=mt+N9PB6ALbQyLYs5pl/f/l97gOOiBzhWfloXPo4KPceJYnAcMprl+4r7bm6hgdMrJ
-         6HCAe6sp+qBWwZtfoBaSSt2CvfSkFPk4n//8Oqyv0NOrH4mUZzHd4tGgOCbtYVEYAMm+
-         lTd3Ras3szx5OBJxZRnDEOFKxtee+3ozseVRh6HjPmXxdM4KmdiZlr/Cy0QCqhL4rL4+
-         cafpThuhnFG+GBKD81OYK4pwVhGBHSeqtkB3jD+jUv049+8kaujfO49+8GUt7RL5HJq+
-         /piWyrgbclH5EBYolaaOx8snDhqdFLBlHzcDYYRF670jAaN6Iv8mt0e6J6vclQOeh4K4
-         EJHw==
-X-Gm-Message-State: AOAM533wPW1H4+WNjPCcDd49SqN+5aNKKmhxylKUX79k0RH6uAQYLaWG
-        PisYUIEQcMn9HN8DPkD6EgBceb2MfX7tE5ut
-X-Google-Smtp-Source: ABdhPJxzHcCMYPPl1FS9EKMnN1FcApa3TyJ8RuuK6k64POxXqz4mMyAxDRscJXRnwZoahaDdVQrU4w==
-X-Received: by 2002:a05:622a:15c5:b0:2f3:c195:8d5 with SMTP id d5-20020a05622a15c500b002f3c19508d5mr13863473qty.369.1652669097798;
-        Sun, 15 May 2022 19:44:57 -0700 (PDT)
+        bh=3tBgExR0vnd7YeIN6exy+FZqzAtBcN823ZwmLJgoZM4=;
+        b=abdvdGIm0nwljTRnZNJFwLl02oSKKiBthAeEYGp6F8yafra9WYoGzwEtBj/z/Z0qFQ
+         Kf44uPWk/RTTcRoK3HCTEX1ZVXbjB18vT8Adp8WWGlehU0HjWLaqUpSa7MCHfjq9fTSk
+         rqaLFbPMiAMW+jHfHTxfROinn0dfyL3L3Q/7+sQYKBMU0ePbnESoaI58NeZTq6hQVD74
+         zLcHILZmSOVP4NCtFT1ZrOqh1kll6VjHi2brGu/QT0Lfjcj8G+YhBc2dZHIQUd6kWvUn
+         6R391pYRUhsckWfS/lFXFj6QyFf0nmrMDPOK+pWq7EBHjXoFgGiDUVSVzUzFdzYr3yTJ
+         5v/w==
+X-Gm-Message-State: AOAM531Hf+SUFS2D3CFN+lFTTXx+a+U4T8ZDfqbn3O7f1592lykaPRuC
+        qRcRWbmHXRjbGyaHNl2BY6U=
+X-Google-Smtp-Source: ABdhPJygMrdqZ83DlnmDrSrFKeY7Pnw2vBpB8+lhU8+IzsjP/UxNQpyB6rqifHN24jn+Guf9CtE//g==
+X-Received: by 2002:a05:620a:993:b0:69f:d0fb:48a5 with SMTP id x19-20020a05620a099300b0069fd0fb48a5mr11019650qkx.562.1652670182328;
+        Sun, 15 May 2022 20:03:02 -0700 (PDT)
 Received: from MBP.hobot.cc (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
-        by smtp.gmail.com with ESMTPSA id 186-20020a370bc3000000b0069fcabfdaebsm4973821qkl.70.2022.05.15.19.44.54
+        by smtp.gmail.com with ESMTPSA id 186-20020a370bc3000000b0069fcabfdaebsm4993072qkl.70.2022.05.15.20.02.59
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 15 May 2022 19:44:57 -0700 (PDT)
+        Sun, 15 May 2022 20:03:01 -0700 (PDT)
 From:   Schspa Shi <schspa@gmail.com>
 To:     rafael@kernel.org, viresh.kumar@linaro.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         schspa@gmail.com
 Subject: [PATCH v6 1/2] cpufreq: Abort show/store for half initialized policy
-Date:   Mon, 16 May 2022 10:44:47 +0800
-Message-Id: <20220516024448.14637-1-schspa@gmail.com>
+Date:   Mon, 16 May 2022 11:02:50 +0800
+Message-Id: <20220516030251.42323-1-schspa@gmail.com>
 X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -93,6 +93,11 @@ v3 -> v4:
 v4 -> v5:
         - Change the commit message as Viresh advised.
         - Initialize ret to -EBUSY to get rid of the else part.
+v5 -> v6:
+        - Change up_write(&policy->rwsem); to after out_free_policy;
+        - Fixes: https://lore.kernel.org/all/20220515095313.GE10578@xsang-OptiPlex-9020/
+
+Signed-off-by: Schspa Shi <schspa@gmail.com>
 ---
  drivers/cpufreq/cpufreq.c | 11 +++++++----
  1 file changed, 7 insertions(+), 4 deletions(-)
