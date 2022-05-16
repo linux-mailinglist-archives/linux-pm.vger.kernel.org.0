@@ -2,106 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C196352827B
-	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 12:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9505282DE
+	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 13:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237910AbiEPKpL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 May 2022 06:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52662 "EHLO
+        id S242938AbiEPLLt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 May 2022 07:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242891AbiEPKpB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 06:45:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3327725280;
-        Mon, 16 May 2022 03:44:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB8D960F27;
-        Mon, 16 May 2022 10:44:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBA7DC34119;
-        Mon, 16 May 2022 10:44:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652697898;
-        bh=8e86Bl8VYKJuozeVnXgHNviEIwU1zooEoIg8B9aysS8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=XNsx9Lp0Uyr3ubMiRW1dnbg/fR0pDdvuXh+0oYQBEMrDDUk7iAiW7GbC58D/yK3RE
-         8umVVFbUErwYkcH5VZhcqI6Ao/CAv4o3Tw1+81cBW+guGBXn/TjW6grLmokZ5X4cs0
-         EBfhCSbEvwKRrtNDDv41BtzLuySfmEZ+CXplj4sSzALvc9548rBa0Yqo/IodbscYA0
-         WzFDgN7rAgWx/IsNO6OYBSy1wbc/oCJYoYlECO2QN1MM55/s6IsdY8vW1QBkM2QXmC
-         enrtrJs8SXiTewhml8IOKlqFjFT11gu7bYe5S9TVetdtpO0oq/vxS/pWK4gZCJe8jc
-         UKY0TS8MNdvtw==
-Message-ID: <874f08d9-e67e-f7f3-4d98-89bdb8333ce5@kernel.org>
-Date:   Mon, 16 May 2022 12:44:52 +0200
+        with ESMTP id S242931AbiEPLLo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 07:11:44 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680B22AD2;
+        Mon, 16 May 2022 04:11:39 -0700 (PDT)
+X-UUID: 64852cda1f6b4ca098a3fad396ba65dc-20220516
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:edd5ab4b-a499-4c7b-942c-64f168d38ea6,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:1714c0b9-9f46-4d76-a271-164488ed79f1,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 64852cda1f6b4ca098a3fad396ba65dc-20220516
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2116379412; Mon, 16 May 2022 19:11:33 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 16 May 2022 19:11:32 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 16 May 2022 19:11:31 +0800
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <matthias.bgg@gmail.com>
+CC:     <jia-wei.chang@mediatek.com>, <roger.lu@mediatek.com>,
+        <hsinyi@google.com>, <khilman@baylibre.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH v7 0/3] cpufreq: mediatek: Cleanup and support MT8183 and MT8186
+Date:   Mon, 16 May 2022 19:11:27 +0800
+Message-ID: <20220516111130.13325-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCHv2 4/6] thermal: exynos: fixed the efuse min/max value for
- exynos5422
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        Anand Moon <linux.amoon@gmail.com>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org
-References: <20220515064126.1424-5-linux.amoon@gmail.com>
- <202205161820.8rHIcsvI-lkp@intel.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <202205161820.8rHIcsvI-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/05/2022 12:42, kernel test robot wrote:
-> Hi Anand,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on ec7f49619d8ee13e108740c82f942cd401b989e9]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Anand-Moon/Exynos-Thermal-code-inprovement/20220515-144336
-> base:   ec7f49619d8ee13e108740c82f942cd401b989e9
-> config: hexagon-randconfig-r033-20220516 (https://download.01.org/0day-ci/archive/20220516/202205161820.8rHIcsvI-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 853fa8ee225edf2d0de94b0dcbd31bea916e825e)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/eb50b0c2100fabd6d09b87abd11f52c5295512e8
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Anand-Moon/Exynos-Thermal-code-inprovement/20220515-144336
->         git checkout eb50b0c2100fabd6d09b87abd11f52c5295512e8
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/thermal/samsung/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> drivers/thermal/samsung/exynos_tmu.c:929:40: warning: overlapping comparisons always evaluate to false [-Wtautological-overlap-compare]
->                    if (data->soc == SOC_ARCH_EXYNOS5420 &&
->                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
->    1 warning generated.
+Cpufreq is a DVFS driver used for power saving to scale the clock frequency
+and supply the voltage for CPUs. This series do some cleanup for MediaTek
+cpufreq drivers and add support for MediaTek SVS[2] and MediaTek CCI
+devfreq[3] which are supported in MT8183 and MT8186.
 
-Ah, I did not notice it and it seems code was not compile-tested with W=1.
+Changes for v7:
+1. Drop all drviers patches because they are all accepted.
+2. Correct clock/clock-name for cci in dts.
 
-Anand, please be sure you compile your code with W=1...
+Changes for v6:
+1. Reorder patches in this series.
+2. Add a new patch to do unregister platform device.
+3. Modify drivers from maintainer's advice.
 
+Reference series:
+[1]: V1 of this series is present by Jia-Wei Chang.
+     https://lore.kernel.org/all/20220307122151.11666-1-jia-wei.chang@mediatek.com/
 
-Best regards,
-Krzysztof
+[2]: The MediaTek CCI devfreq driver is introduced in another series.
+     https://lore.kernel.org/all/20220425125546.4129-1-johnson.wang@mediatek.com/
+
+[3]: The MediaTek SVS driver is introduced in another series.
+     https://lore.kernel.org/all/20220420102044.10832-1-roger.lu@mediatek.com/
+
+Rex-BC Chen (3):
+  arm64: dts: mediatek: Add opp table and clock property for MT8183
+    cpufreq
+  arm64: dts: mediatek: Add MediaTek CCI node for MT8183
+  arm64: dts: mediatek: Add mediatek,cci property for MT8183 cpufreq
+
+ arch/arm64/boot/dts/mediatek/mt8183-evb.dts   |  36 +++
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   4 +
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      | 286 ++++++++++++++++++
+ 3 files changed, 326 insertions(+)
+
+-- 
+2.18.0
+
