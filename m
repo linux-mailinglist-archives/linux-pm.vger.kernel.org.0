@@ -2,67 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A89E527D10
-	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 07:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 412ED527D69
+	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 08:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239355AbiEPFff (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 May 2022 01:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47140 "EHLO
+        id S240221AbiEPGKh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 May 2022 02:10:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239061AbiEPFfc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 01:35:32 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8A2DF34
-        for <linux-pm@vger.kernel.org>; Sun, 15 May 2022 22:35:30 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id j28so2764746eda.13
-        for <linux-pm@vger.kernel.org>; Sun, 15 May 2022 22:35:30 -0700 (PDT)
+        with ESMTP id S240218AbiEPGKf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 02:10:35 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1934821240
+        for <linux-pm@vger.kernel.org>; Sun, 15 May 2022 23:10:31 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id y19so16845331ljd.4
+        for <linux-pm@vger.kernel.org>; Sun, 15 May 2022 23:10:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=c/IovKeDQ5OmYImuaDKw85Gvkz+g6dB9ube8wouUX0E=;
-        b=GGajIGxKz4a1kdgVCnNp3TVY4oWNsaMBX25vD2wNxJjdlfjW0K2HSomOmhtNf8KlII
-         I/KzDUxpS795xfRF8NdRofQwNVP/BcZW3gRgq5wCMrBCZXhJNS+FRleC+mG3irXz/3aO
-         +mT31wgaBGkXLx4Qfi9CCUwCaASTGFEm4O6+Q=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zib3uaRuFHQp5m+3/8oVVWs2fT/RhjrDBvhpgKAcf3A=;
+        b=T8a68Wcn4gY9NFXddamoH+rRrUy8g81C6ugx+hQrWs90thVEoFpfoW5rfePda8J8Ti
+         KhYLE5GeSNkseGhg6lt7Uw3CFsrabahfUTN6w49xWFaBgVGI0x9XP77w7igMPyaJ68Cq
+         qg8vUoA0kBuM1wr5DCpHhE3FpkgNX+KKJZK6qCoalPD/rQiLoRs9/bYs/l0ErwlkoH0P
+         1viy/5jm8JiHRHEICvrFZ3mP4KXxz85YQeOIAL0QqJ1J/jLc0LdzwVX5OH8SXaqpQEH3
+         cNP78pu268Ud97vfkkEiS4RW+MJ/RzJICDEG0kc8MdHqBzJU5DPGyHb+S8K2sDRzFhMV
+         K1KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c/IovKeDQ5OmYImuaDKw85Gvkz+g6dB9ube8wouUX0E=;
-        b=k0Fi8L0cIGe+WDnQeUbD3r8zx6+fkwHiEChdz/xfYvZ5c7QZPn5hCeJ1kU3uR2mAHa
-         pnNHj4sNCSV6IIlyFU+kbxaxIMuI/fxs19c4+fGq+5XqTgbGRD42wKmCT/BbncW/VqEM
-         smDK+9NpzkJzMu4Xeij5XXl3koNoLxs7HVhH5eHIrn4/vXBr6wwnrxqtUid/4Uxfc51L
-         HrlEzG32nzCEch3k0fB+r1Af0GNny67A7nV2iuVdS+YCg61HEKkEOxgLBJt/VmYSClKW
-         muLY55TWkC247rX2xUfmunV6XSzM9PlvWeEd1LEVl1bdtLCMhFWNlinEK+QaQxMHp59f
-         Ud2w==
-X-Gm-Message-State: AOAM531vGJEyMjw5o3M3wAIvBqqAsoB7GuWPj8c/4tSYxo55bOmVWXnr
-        Q3MxUuI9amzFeMFsonbAx9aexmUKupyscZdmZeaAdQ==
-X-Google-Smtp-Source: ABdhPJxkaaQU1pxAn/HNEptaZ1FK3UV5eSAHcvlMeQ1pJimMFp8UJ4ll80vonmeQUOiLh7XTmmmV9IDAbxXEwPO61wM=
-X-Received: by 2002:a05:6402:11cd:b0:427:bda5:542f with SMTP id
- j13-20020a05640211cd00b00427bda5542fmr11486167edw.290.1652679329459; Sun, 15
- May 2022 22:35:29 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zib3uaRuFHQp5m+3/8oVVWs2fT/RhjrDBvhpgKAcf3A=;
+        b=FO1F7+xCp1b/4T0gUStEAqO8Y7m8yKN2XGLZyozGAX3sRgxBPouQeXJ9TBV4ACkydL
+         TY2xjuUohjP9+6TQDI8fnl8hW08AvHD4+vCnU0+Q7D8jG1AvPTZPlSrQbk9WyGXTgUcD
+         ksMIGBMCq6krmWUgetV530xS9bsQl6+aAJMBDQZJI5nz23puLOwiPGhQRpMSRIUjtGWK
+         LtIsLzNrglW49rKURBegT98wuhBIVBhZm1drugYRYH1q6VwZyeGn2QDpIdvxt2fzFfIg
+         wy0tu14XbEHOxP8Dw0uWfS3BUE1IigPfgeky2lYAkcK5ThSQYxOaopK9XyRgVlrKZmyg
+         XEkQ==
+X-Gm-Message-State: AOAM533SK+CKqzti6x0OUMYRBbQOhhxM4XdI8UAPYqDyEfRnDbsZvfTh
+        Hntrklyo5DyHkv9J/xpKFobXoA==
+X-Google-Smtp-Source: ABdhPJyrZUQf7WD5zZ0nqfhRfXzM6EGNE+a7PhnPAP8HR3cuJ7y91FoKEpx/vEUszqhSySkNWYqKKw==
+X-Received: by 2002:a05:651c:399:b0:24f:18d:5bbd with SMTP id e25-20020a05651c039900b0024f018d5bbdmr10166934ljp.481.1652681429224;
+        Sun, 15 May 2022 23:10:29 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id j9-20020a19f509000000b0047255d210f2sm1208147lfb.33.2022.05.15.23.10.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 May 2022 23:10:28 -0700 (PDT)
+Message-ID: <eecf3117-772a-f50a-5d09-4d729dea7561@linaro.org>
+Date:   Mon, 16 May 2022 08:10:27 +0200
 MIME-Version: 1.0
-References: <20220505115226.20130-1-rex-bc.chen@mediatek.com> <20220505115226.20130-10-rex-bc.chen@mediatek.com>
-In-Reply-To: <20220505115226.20130-10-rex-bc.chen@mediatek.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Mon, 16 May 2022 13:35:18 +0800
-Message-ID: <CAGXv+5FW59B1Dq8eH=5KjEdTxgT64GuvYZHZ9LnnTuaVrK3XpQ@mail.gmail.com>
-Subject: Re: [PATCH v6 09/10] arm64: dts: mediatek: Add MediaTek CCI node for MT8183
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     rafael@kernel.org, viresh.kumar@linaro.org, robh+dt@kernel.org,
-        krzk+dt@kernel.org, matthias.bgg@gmail.com,
-        jia-wei.chang@mediatek.com, roger.lu@mediatek.com,
-        hsinyi@google.com, khilman@baylibre.com,
-        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v3 7/7] ufs: use PM OPP when scaling gears
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        "Andrew-sh . Cheng" <andrew-sh.cheng@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
+References: <20220513061347.46480-1-krzysztof.kozlowski@linaro.org>
+ <20220513061347.46480-8-krzysztof.kozlowski@linaro.org>
+ <20220513182546.GD1922@thinkpad>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220513182546.GD1922@thinkpad>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,84 +89,152 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 5, 2022 at 8:04 PM Rex-BC Chen <rex-bc.chen@mediatek.com> wrote:
->
-> Add MediaTek CCI devfreq node for MT8183.
->
-> Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  arch/arm64/boot/dts/mediatek/mt8183-evb.dts    | 4 ++++
->  arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 4 ++++
->  arch/arm64/boot/dts/mediatek/mt8183.dtsi       | 7 +++++++
->  3 files changed, 15 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-> index 8953dbf84f3e..7ac9864db9de 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-> @@ -412,6 +412,10 @@
->
->  };
->
-> +&cci {
-> +       proc-supply = <&mt6358_vproc12_reg>;
-> +};
-> +
->  &cpu0 {
->         proc-supply = <&mt6358_vproc12_reg>;
->  };
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> index 8d5bf73a9099..b035e06840e6 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> @@ -230,6 +230,10 @@
->         status = "okay";
->  };
->
-> +&cci {
-> +       proc-supply = <&mt6358_vproc12_reg>;
-> +};
-> +
->  &cpu0 {
->         proc-supply = <&mt6358_vproc12_reg>;
->  };
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> index cecf96b628b7..11caf3dd85cd 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> @@ -280,6 +280,13 @@
->                 };
->         };
->
-> +       cci: cci {
-> +               compatible = "mediatek,mt8183-cci";
-> +               clocks = <&apmixedsys CLK_APMIXED_CCIPLL>;
-> +               clock-names = "cci_clock";
+On 13/05/2022 20:25, Manivannan Sadhasivam wrote:
+> On Fri, May 13, 2022 at 08:13:47AM +0200, Krzysztof Kozlowski wrote:
+>> Scaling gears requires not only scaling clocks, but also voltage levels,
+>> e.g. via performance states.
+>>
+>> Use the provided OPP table, to set proper OPP frequency which through
+>> required-opps will trigger performance state change.  This deprecates
+>> the old freq-table-hz Devicetree property and old clock scaling method
+>> in favor of PM core code.
+>>
+> 
+> To be clear, you are not changing the voltages (UFS supplies) through OPP. But
+> rather handle only clks and leave the power domain handling to parent OPP
+> device.
 
-Binding says there should be two clocks: the actual clock that drives
-CCI, and a stable "intermediate" clock to switch to during clock rate
-changes. So I think this should look like:
+Correct, the patchset itself does not introduce itself regulator
+control. For Qualcomm (and maybe others) these will be scaled via OPP
+performance states.
 
-    clocks = <&mcucfg CLK_MCU_BUS_SEL>,
-             <&topckgen CLK_TOP_ARMPLL_DIV_PLL1>;
-    clock-names = "cci", "intermediate";
+> 
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>>
+>> ---
+>>
+>> Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+>> ---
+>>  drivers/scsi/ufs/ufshcd-pltfrm.c |  73 +++++++++++++++
+>>  drivers/scsi/ufs/ufshcd.c        | 150 ++++++++++++++++++++++++-------
+>>  drivers/scsi/ufs/ufshcd.h        |   6 ++
+>>  3 files changed, 195 insertions(+), 34 deletions(-)
+>>
+>> diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
+>> index 3ab555f6e66e..a603ca8e383b 100644
+>> --- a/drivers/scsi/ufs/ufshcd-pltfrm.c
+>> +++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
+>> @@ -10,6 +10,7 @@
+>>  
+>>  #include <linux/module.h>
+>>  #include <linux/platform_device.h>
+>> +#include <linux/pm_opp.h>
+>>  #include <linux/pm_runtime.h>
+>>  #include <linux/of.h>
+>>  
+>> @@ -108,6 +109,72 @@ static int ufshcd_parse_clock_info(struct ufs_hba *hba)
+>>  	return ret;
+>>  }
+>>  
+>> +static int ufshcd_parse_operating_points(struct ufs_hba *hba)
+>> +{
+>> +	struct device *dev = hba->dev;
+>> +	struct device_node *np = dev->of_node;
+>> +	struct ufs_clk_info *clki;
+>> +	const char *names[16];
+>> +	int cnt, i, ret;
+>> +
+>> +	if (!of_find_property(dev->of_node, "operating-points-v2", NULL))
+>> +		return 0;
+>> +
+>> +	cnt = of_property_count_strings(np, "clock-names");
+>> +	if (cnt <= 0) {
+>> +		dev_warn(dev, "%s: Missing clock-names\n",
+>> +			 __func__);
+> 
+> This is a hard error, right? So why not dev_err()?
 
+Good point, but actually this (and following cases) should be return 0,
+because clocks/freq-table/opp-points are not required properties. The
+original code (parsing it for freq-table-hz) also does not treat it as
+error.
 
-ChenYu
+> 
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	if (cnt > ARRAY_SIZE(names)) {
+>> +		dev_info(dev, "%s: Too many clock-names\n",  __func__);
+> 
+> dev_err()?
+> 
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	if (of_find_property(np, "freq-table-hz", NULL)) {
+>> +		dev_info(dev, "%s: operating-points and freq-table-hz are incompatible\n",
+>> +			 __func__);
+> 
+> dev_err()?
+> 
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	for (i = 0; i < cnt; i++) {
+>> +		ret = of_property_read_string_index(np, "clock-names", i,
+>> +						    &names[i]);
+>> +		if (ret)
+>> +			return ret;
+>> +
+>> +		clki = devm_kzalloc(dev, sizeof(*clki), GFP_KERNEL);
+>> +		if (!clki)
+>> +			return -ENOMEM;
+>> +
+>> +		clki->name = devm_kstrdup(dev, names[i], GFP_KERNEL);
+>> +		if (!clki->name)
+>> +			return -ENOMEM;
+>> +
+>> +		if (!strcmp(names[i], "ref_clk"))
+>> +			clki->keep_link_active = true;
+>> +
+>> +		list_add_tail(&clki->list, &hba->clk_list_head);
+>> +	}
+>> +
+>> +	ret = devm_pm_opp_set_clknames(dev, names, i);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = devm_pm_opp_register_set_opp_helper(dev, ufshcd_set_opp);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	ret = devm_pm_opp_of_add_table(dev);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	hba->use_pm_opp = true;
+>> +
+> 
+> Since you are only handling the clks in UFS driver's OPP implementation, it
+> warrants atleast a comment. Otherwise, someone will add voltage to the OPP
+> table and complain that it is not getting changed. Eventhough the UFS driver
+> won't allow doing it, it is safer to mention it explicitly.
 
-> +               operating-points-v2 = <&cci_opp>;
-> +       };
-> +
->         cpus {
->                 #address-cells = <1>;
->                 #size-cells = <0>;
-> --
-> 2.18.0
->
->
-> _______________________________________________
-> Linux-mediatek mailing list
-> Linux-mediatek@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-mediatek
+Sure.
+
+> 
+> Also I'm worried about the implementation specific to Qcom platforms. Like we
+> rely on RPMHPD to handle the power domains, but that may not be true for other
+> platforms. I know that we cannot support all possible implementations but
+> atleast we should document this limitation.
+> 
+> Rest looks fine to me. I'll take one more look after testing this series on
+> SM8450.
+
+Using OPPs is quite generic, so other platform could implement also
+regulator scaling. The changes are indeed targetting Qcom platforms, but
+they are not restricting any other usage.
+
+Best regards,
+Krzysztof
