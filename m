@@ -2,148 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0040B5282DD
-	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 13:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B06AF528470
+	for <lists+linux-pm@lfdr.de>; Mon, 16 May 2022 14:48:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242932AbiEPLLs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 May 2022 07:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
+        id S232718AbiEPMsb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 May 2022 08:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242922AbiEPLLo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 07:11:44 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9281B2AD3;
-        Mon, 16 May 2022 04:11:39 -0700 (PDT)
-X-UUID: 934a62a40a6d4404862cd3ab34257fb6-20220516
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:149a575f-bb4a-44f7-a1af-1bb4f419b3f7,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:1914c0b9-9f46-4d76-a271-164488ed79f1,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 934a62a40a6d4404862cd3ab34257fb6-20220516
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 423380597; Mon, 16 May 2022 19:11:32 +0800
-Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 16 May 2022 19:11:32 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 16 May 2022 19:11:32 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 16 May 2022 19:11:32 +0800
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-        <matthias.bgg@gmail.com>
-CC:     <jia-wei.chang@mediatek.com>, <roger.lu@mediatek.com>,
-        <hsinyi@google.com>, <khilman@baylibre.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Subject: [PATCH v7 3/3] arm64: dts: mediatek: Add mediatek,cci property for MT8183 cpufreq
-Date:   Mon, 16 May 2022 19:11:30 +0800
-Message-ID: <20220516111130.13325-4-rex-bc.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220516111130.13325-1-rex-bc.chen@mediatek.com>
-References: <20220516111130.13325-1-rex-bc.chen@mediatek.com>
+        with ESMTP id S238703AbiEPMsW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 08:48:22 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498EA38BE3
+        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 05:48:20 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id j24so5114646wrb.1
+        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 05:48:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=2emP0o2Jt7FbRySNCidIZURKJdhheIYK6xxEQgSB/+c=;
+        b=FF8MBGabC1OTjVtSlzqUERFu9GkOOE8GzlCF6uY+tbZo5HZvGMZ7usLj40S5ouMMtl
+         3qmHrikNsc8FaFr/q5ybLQgUXT0d4CLi576CtTz+neYkWmOFC5hEbdyaWa/LgDcSHQtW
+         ghHCNWougnmWNi/JVNWGNainF0D4jt09jDnEPy6+SOfpFgtksYepAhrr1L5JdJuVXmpn
+         lIs5K87TFVSvisb4KjB299zrYV84tkoJJYmGSe3i3XyI9B5yWHGwPLnl1ZaduJtSLPSS
+         tCKjDUk2BBmYnSkjNg9Z//nAaQ1yN3NdHiZFWz0xBKpUc3l5yS6EtMGqw4XFC9FIBpix
+         0gNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2emP0o2Jt7FbRySNCidIZURKJdhheIYK6xxEQgSB/+c=;
+        b=gNnlD4pKBA2txvRl5kvVj0C2lnx9H4OY6aTB7wkbg37zyIKwAW4ZNLU/qx9ji8Pfsb
+         Mi/ojPtZRwzGL5pVwkMbzWK5yJz3i5+fTy/BjnbO6Rz7DU6l+174imLsiz/vqWdnlhei
+         m8ZEySjnleqopaKTlDw0NXfD9VyIn9fRvyCxvWt6mRQZcMJNt38Xdeimt6eCcIdBvAPr
+         IxTxpPQo2SeX/PAKsBNZsZ6i5AaUg9MuMVtvqmFiVCCn8b+LGE2+Cb6FxZQmExujazQx
+         eU6W3n9DcB7TImlZ6J/RWTsCvQIbqpf67GKck7Y/KmGyf3Y3YEso3KgxTb7edT2ng63X
+         pcgA==
+X-Gm-Message-State: AOAM531Dxa54f8JoWKCgf5Uek4ZiW7/My5Sno3qH155xp+Dzwhf/yPN+
+        iSxt0jiYGj5RalhgrenDxwm8EA==
+X-Google-Smtp-Source: ABdhPJzGnZylZxNFjLHsyNSQjMM0vFq/pqOBHD613P+R/DQTEbtQIQ4qXWDIluB0FBk/5i0UlafO7w==
+X-Received: by 2002:a05:6000:2c2:b0:20c:c6e1:e881 with SMTP id o2-20020a05600002c200b0020cc6e1e881mr13981371wry.333.1652705298776;
+        Mon, 16 May 2022 05:48:18 -0700 (PDT)
+Received: from ?IPV6:2a01:e34:ed2f:f020:b464:e524:6a1d:33d0? ([2a01:e34:ed2f:f020:b464:e524:6a1d:33d0])
+        by smtp.googlemail.com with ESMTPSA id z10-20020a7bc7ca000000b003942a244ee7sm9913913wmk.44.2022.05.16.05.48.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 05:48:18 -0700 (PDT)
+Message-ID: <c80f78d9-f846-82af-2151-14423c9bac22@linaro.org>
+Date:   Mon, 16 May 2022 14:48:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] thermal: core: fix memory leak in
+ __thermal_cooling_device_register()
+Content-Language: en-US
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com
+References: <20220511020605.3096734-1-yangyingliang@huawei.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220511020605.3096734-1-yangyingliang@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add mediatek,cci property to support MediaTek CCI feature.
+On 11/05/2022 04:06, Yang Yingliang wrote:
+> I got memory leak as follows when doing fault injection test:
+> 
+> unreferenced object 0xffff888010080000 (size 264312):
+>    comm "182", pid 102533, jiffies 4296434960 (age 10.100s)
+>    hex dump (first 32 bytes):
+>      00 00 00 00 ad 4e ad de ff ff ff ff 00 00 00 00  .....N..........
+>      ff ff ff ff ff ff ff ff 40 7f 1f b9 ff ff ff ff  ........@.......
+>    backtrace:
+>      [<0000000038b2f4fc>] kmalloc_order_trace+0x1d/0x110 mm/slab_common.c:969
+>      [<00000000ebcb8da5>] __kmalloc+0x373/0x420 include/linux/slab.h:510
+>      [<0000000084137f13>] thermal_cooling_device_setup_sysfs+0x15d/0x2d0 include/linux/slab.h:586
+>      [<00000000352b8755>] __thermal_cooling_device_register+0x332/0xa60 drivers/thermal/thermal_core.c:927
+>      [<00000000fb9f331b>] devm_thermal_of_cooling_device_register+0x6b/0xf0 drivers/thermal/thermal_core.c:1041
+>      [<000000009b8012d2>] max6650_probe.cold+0x557/0x6aa drivers/hwmon/max6650.c:211
+>      [<00000000da0b7e04>] i2c_device_probe+0x472/0xac0 drivers/i2c/i2c-core-base.c:561
+> 
+> If device_register() fails, thermal_cooling_device_destroy_sysfs() need be called
+> to free the memory allocated in thermal_cooling_device_setup_sysfs().
+> 
+> Fixes: 8ea229511e06 ("thermal: Add cooling device's statistics in sysfs")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+>   drivers/thermal/thermal_core.c | 1 +
+>   1 file changed, 1 insertion(+)
 
-Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- arch/arm64/boot/dts/mediatek/mt8183.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Applied, thanks
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 21ec9f1ef406..7c0ed2642b69 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -337,6 +337,7 @@
- 			operating-points-v2 = <&cluster0_opp>;
- 			dynamic-power-coefficient = <84>;
- 			#cooling-cells = <2>;
-+			mediatek,cci = <&cci>;
- 		};
- 
- 		cpu1: cpu@1 {
-@@ -352,6 +353,7 @@
- 			operating-points-v2 = <&cluster0_opp>;
- 			dynamic-power-coefficient = <84>;
- 			#cooling-cells = <2>;
-+			mediatek,cci = <&cci>;
- 		};
- 
- 		cpu2: cpu@2 {
-@@ -367,6 +369,7 @@
- 			operating-points-v2 = <&cluster0_opp>;
- 			dynamic-power-coefficient = <84>;
- 			#cooling-cells = <2>;
-+			mediatek,cci = <&cci>;
- 		};
- 
- 		cpu3: cpu@3 {
-@@ -382,6 +385,7 @@
- 			operating-points-v2 = <&cluster0_opp>;
- 			dynamic-power-coefficient = <84>;
- 			#cooling-cells = <2>;
-+			mediatek,cci = <&cci>;
- 		};
- 
- 		cpu4: cpu@100 {
-@@ -397,6 +401,7 @@
- 			operating-points-v2 = <&cluster1_opp>;
- 			dynamic-power-coefficient = <211>;
- 			#cooling-cells = <2>;
-+			mediatek,cci = <&cci>;
- 		};
- 
- 		cpu5: cpu@101 {
-@@ -412,6 +417,7 @@
- 			operating-points-v2 = <&cluster1_opp>;
- 			dynamic-power-coefficient = <211>;
- 			#cooling-cells = <2>;
-+			mediatek,cci = <&cci>;
- 		};
- 
- 		cpu6: cpu@102 {
-@@ -427,6 +433,7 @@
- 			operating-points-v2 = <&cluster1_opp>;
- 			dynamic-power-coefficient = <211>;
- 			#cooling-cells = <2>;
-+			mediatek,cci = <&cci>;
- 		};
- 
- 		cpu7: cpu@103 {
-@@ -442,6 +449,7 @@
- 			operating-points-v2 = <&cluster1_opp>;
- 			dynamic-power-coefficient = <211>;
- 			#cooling-cells = <2>;
-+			mediatek,cci = <&cci>;
- 		};
- 
- 		idle-states {
+
 -- 
-2.18.0
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
