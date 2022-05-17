@@ -2,179 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 393C652AA5A
-	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 20:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC7252AAB0
+	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 20:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352126AbiEQSOf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 May 2022 14:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36234 "EHLO
+        id S1348374AbiEQS1S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 May 2022 14:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351992AbiEQSN4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 14:13:56 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D2E50E0D;
-        Tue, 17 May 2022 11:13:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=6MSK1Z4Nv/e1GFKFinCP8P3dIYao0CoLyUe3quXpDhY=; b=cRMrVSVTR+3cn6FVG65SC4Au0y
-        UkLE3SVfqGk36g/jG1E9IomGRvED5Awi+eOSCTntuGE0jPXl5+kfHlbKsvhvVjaCNf8y4mBWXGPlT
-        8r/o/CMKhbUaIdrKhLkt446cgXa07HTSiorku/w0xJvIn3aE4uqi2qj8QGi7eb4Kmsg0/Wh5BR8Vi
-        YCGb8f9djqv6fWXVwjRpFQtg+9b6W6H4TQisr9ZwQKSIB4SsmfEWL196/jrcNQFL2lm66S4LfYE8s
-        uZ+fz2jSIIuBy2Np//l8BP/gbXHu+JyZVeJsb8IAXoZSlvi3RYMR9sSIMXj8sSzR7kYxeP4KKKokk
-        nGGtp5Zg==;
-Received: from 200-161-159-120.dsl.telesp.net.br ([200.161.159.120] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1nr1gv-008nSU-6m; Tue, 17 May 2022 20:13:05 +0200
-Message-ID: <62a63fc2-346f-f375-043a-fa21385279df@igalia.com>
-Date:   Tue, 17 May 2022 15:12:25 -0300
+        with ESMTP id S231199AbiEQS1S (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 14:27:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC2A63878F
+        for <linux-pm@vger.kernel.org>; Tue, 17 May 2022 11:27:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1652812035;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=808kPoCVZ9QBXQQ50NY9PebUEFZ1B+K2Bsp/en8vgGY=;
+        b=hIpYi/sGN2DecSuoV+aN+/5uy97WasBMnQL/n4kbh3XyBo3J2E4ufENMgixlxA7jfbwPyq
+        NSG5GKRT4CCuW2QxV837+nuhLlAjJdFkVPD56gWrlx0tybTB4tsQsuIPvEc3mpfEifh+1m
+        79SrGJrgyTzkl3S1Q8OSGSJEmuOjDy0=
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
+ [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-445-Dg_ySqA8OQmIcXuk0pISGQ-1; Tue, 17 May 2022 14:27:14 -0400
+X-MC-Unique: Dg_ySqA8OQmIcXuk0pISGQ-1
+Received: by mail-il1-f197.google.com with SMTP id s6-20020a056e021a0600b002d0fe2b6d2fso5466723ild.12
+        for <linux-pm@vger.kernel.org>; Tue, 17 May 2022 11:27:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=808kPoCVZ9QBXQQ50NY9PebUEFZ1B+K2Bsp/en8vgGY=;
+        b=2sDZ/XKCWvEQBmfE3wkB9bPTCK6O6eEIoeVRAH7a2FNKdY3MAYgb4oV1E+doiH/IPx
+         AHeIs/utkMEIRBML2AFe0RH2R8mz+TXvqNyWpSaadIDRXdRH7drxK+lUauy6CIVdSqhD
+         JbXH23ZQwqwDI6yvSCbFcXBe9dx42TxmkGkTX54gg2DWWIEVCJzeFd0qqSKXh8Q69ib5
+         eipHd4Vv5qWgzS3Ua4aJvDwUpNG3Uf4JGc6pf6x7kJ2xP2x8uPjIFUMIvLg3lnwIGmes
+         8VTzdoqrHUDgUd79QZtmvLMFTNj/6XvvZb199IXsPqpvU4RoaLFJaHkZmTUJC25iayLQ
+         +hog==
+X-Gm-Message-State: AOAM532Wz644eVAfGp/h7WFAKxx0z04LlKwtQgBbT7wXfxDXpDtzD++/
+        FELNOaC1QhQr8Ffe0g3M1duSjKQudNF2iBMV3wKceNQDkUxwCBImJ6+4YKnBmIGOgXR6GDlgO7f
+        +MeUoEUPQsArHgwiA16k=
+X-Received: by 2002:a05:6638:140d:b0:32b:c643:e334 with SMTP id k13-20020a056638140d00b0032bc643e334mr13045255jad.125.1652812033712;
+        Tue, 17 May 2022 11:27:13 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwXPnig6pt33JX7CJmiZk9MZj+x43/FCA6lZpbkCX+oaIPq/UYqAVOL24lvn/cJscVyWc3kyA==
+X-Received: by 2002:a05:6638:140d:b0:32b:c643:e334 with SMTP id k13-20020a056638140d00b0032bc643e334mr13045242jad.125.1652812033478;
+        Tue, 17 May 2022 11:27:13 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id r4-20020a02c844000000b0032e2dce10aesm1885083jao.160.2022.05.17.11.27.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 May 2022 11:27:12 -0700 (PDT)
+Date:   Tue, 17 May 2022 12:27:10 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Abhishek Sahu <abhsahu@nvidia.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-pci@vger.kernel.org>
+Subject: Re: [PATCH v4 2/4] vfio/pci: Change the PF power state to D0 before
+ enabling VFs
+Message-ID: <20220517122710.093c9c19.alex.williamson@redhat.com>
+In-Reply-To: <20220517100219.15146-3-abhsahu@nvidia.com>
+References: <20220517100219.15146-1-abhsahu@nvidia.com>
+        <20220517100219.15146-3-abhsahu@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 21/30] panic: Introduce the panic pre-reboot notifier list
-Content-Language: en-US
-To:     "Luck, Tony" <tony.luck@intel.com>, Petr Mladek <pmladek@suse.com>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "bhe@redhat.com" <bhe@redhat.com>,
-        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "bcm-kernel-feedback-list@broadcom.com" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "openipmi-developer@lists.sourceforge.net" 
-        <openipmi-developer@lists.sourceforge.net>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
-        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
-        "halves@canonical.com" <halves@canonical.com>,
-        "fabiomirmar@gmail.com" <fabiomirmar@gmail.com>,
-        "alejandro.j.jimenez@oracle.com" <alejandro.j.jimenez@oracle.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "d.hatayama@jp.fujitsu.com" <d.hatayama@jp.fujitsu.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "dyoung@redhat.com" <dyoung@redhat.com>,
-        "Tang, Feng" <feng.tang@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "mikelley@microsoft.com" <mikelley@microsoft.com>,
-        "hidehiro.kawai.ez@hitachi.com" <hidehiro.kawai.ez@hitachi.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "vgoyal@redhat.com" <vgoyal@redhat.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "will@kernel.org" <will@kernel.org>, Alex Elder <elder@kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Chris Zankel <chris@zankel.net>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Corey Minyard <minyard@acm.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        James Morse <james.morse@arm.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
-        Richard Weinberger <richard@nod.at>,
-        Robert Richter <rric@kernel.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>, Wei Liu <wei.liu@kernel.org>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-22-gpiccoli@igalia.com> <YoJgcC8c6LaKADZV@alley>
- <63a74b56-89ef-8d1f-d487-cdb986aab798@igalia.com>
- <bed66b9467254a5a8bafc1983dad643a@intel.com>
- <e895ce94-e6b9-caf6-e5d3-06bf0149445c@igalia.com> <YoOs9GJ5Ovq63u5Q@alley>
- <599b72f6-76a4-8e6d-5432-56fb1ffd7e0b@igalia.com>
- <06d85642fef24bc482642d669242654b@intel.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <06d85642fef24bc482642d669242654b@intel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17/05/2022 14:02, Luck, Tony wrote:
->> Tony / Dinh - can I just *skip* this notifier *if kdump* is set or else
->> we run the code as-is? Does that make sense to you?
+On Tue, 17 May 2022 15:32:17 +0530
+Abhishek Sahu <abhsahu@nvidia.com> wrote:
+
+> According to [PCIe v5 9.6.2] for PF Device Power Management States
 > 
-> The "skip" option sounds like it needs some special flag associated with
-> an entry on the notifier chain. But there are other notifier chains ... so that
-> sounds messy to me.
+>  "The PF's power management state (D-state) has global impact on its
+>   associated VFs. If a VF does not implement the Power Management
+>   Capability, then it behaves as if it is in an equivalent
+>   power state of its associated PF.
 > 
-> Just all the notifiers in priority order. If any want to take different actions
-> based on kdump status, change the code. That seems more flexible than
-> an "all or nothing" approach by skipping.
+>   If a VF implements the Power Management Capability, the Device behavior
+>   is undefined if the PF is placed in a lower power state than the VF.
+>   Software should avoid this situation by placing all VFs in lower power
+>   state before lowering their associated PF's power state."
 > 
-> -Tony
+> From the vfio driver side, user can enable SR-IOV when the PF is in D3hot
+> state. If VF does not implement the Power Management Capability, then
+> the VF will be actually in D3hot state and then the VF BAR access will
+> fail. If VF implements the Power Management Capability, then VF will
+> assume that its current power state is D0 when the PF is D3hot and
+> in this case, the behavior is undefined.
+> 
+> To support PF power management, we need to create power management
+> dependency between PF and its VF's. The runtime power management support
+> may help with this where power management dependencies are supported
+> through device links. But till we have such support in place, we can
+> disallow the PF to go into low power state, if PF has VF enabled.
+> There can be a case, where user first enables the VF's and then
+> disables the VF's. If there is no user of PF, then the PF can put into
+> D3hot state again. But with this patch, the PF will still be in D0
+> state after disabling VF's since detecting this case inside
+> vfio_pci_core_sriov_configure() requires access to
+> struct vfio_device::open_count along with its locks. But the subsequent
+> patches related to runtime PM will handle this case since runtime PM
+> maintains its own usage count.
+> 
+> Also, vfio_pci_core_sriov_configure() can be called at any time
+> (with and without vfio pci device user), so the power state change
+> needs to be protected with the required locks.
+> 
+> Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
+> ---
+>  drivers/vfio/pci/vfio_pci_core.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+> index b9f222ca48cf..4fe9a4efc751 100644
+> --- a/drivers/vfio/pci/vfio_pci_core.c
+> +++ b/drivers/vfio/pci/vfio_pci_core.c
+> @@ -217,6 +217,10 @@ int vfio_pci_set_power_state(struct vfio_pci_core_device *vdev, pci_power_t stat
+>  	bool needs_restore = false, needs_save = false;
+>  	int ret;
+>  
+> +	/* Prevent changing power state for PFs with VFs enabled */
+> +	if (pci_num_vf(pdev) && state > PCI_D0)
+> +		return -EBUSY;
+> +
+>  	if (vdev->needs_pm_restore) {
+>  		if (pdev->current_state < PCI_D3hot && state >= PCI_D3hot) {
+>  			pci_save_state(pdev);
+> @@ -1960,6 +1964,13 @@ int vfio_pci_core_sriov_configure(struct vfio_pci_core_device *vdev,
+>  		}
+>  		list_add_tail(&vdev->sriov_pfs_item, &vfio_pci_sriov_pfs);
+>  		mutex_unlock(&vfio_pci_sriov_pfs_mutex);
+> +
+> +		/*
+> +		 * The PF power state should always be higher than the VF power
+> +		 * state. If PF is in the low power state, then change the
+> +		 * power state to D0 first before enabling SR-IOV.
+> +		 */
+> +		vfio_pci_lock_and_set_power_state(vdev, PCI_D0);
 
-I guess I've expressed myself in a poor way - sorry!
+But we need to hold memory_lock across the next function or else
+userspace could race a write to the PM register to set D3 before
+pci_num_vf() can protect us.  Thanks,
 
-What I'm planning to do in the altera_edac notifier is:
+Alex
 
-if (kdump_is_set)
- return;
+>  		ret = pci_enable_sriov(pdev, nr_virtfn);
+>  		if (ret)
+>  			goto out_del;
 
-/* regular code */
-
-In other words: if the kdump is set, this notifier will be effectively a
-nop (although it's gonna be called).
-
-Lemme know your thoughts Tony, if that makes sense.
-Thanks,
-
-
-Guilherme
