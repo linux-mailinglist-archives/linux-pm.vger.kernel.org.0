@@ -2,124 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0747529EE4
-	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 12:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE118529FD7
+	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 12:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343519AbiEQKLt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 May 2022 06:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44744 "EHLO
+        id S1344781AbiEQK6X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 May 2022 06:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343782AbiEQKKs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 06:10:48 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30804BBA8;
-        Tue, 17 May 2022 03:09:28 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id t6so24033416wra.4;
-        Tue, 17 May 2022 03:09:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=t4zPUKpv7XaTfwCy6u8+Y9X67AplsbkFXvPulu0ea1U=;
-        b=aEs+kBHg2LKI6or1oWTOXdLQLX5BKJra6ZJ/JQVkHM6rAssedHYEsM5LLwYPaUnEW1
-         Er8hzUj6HM+y4+yiwXyGVakR9K1eW0wFG7ntWYX5PrRIhZBrwU73bj12BVqv7NW1xe73
-         rziM/EwhIps3HhQpVH3xaVdy9KwZFJThIxS8WO2QzKsRYwexHJQ5FVMx/yzgcCpRvCX3
-         /cEjZ9eofAuUBTLY2ZjgATPazGtrs7j+Kro5NGKhNPAU9Qsj1jj4Xk0gUlM5P2xco1/S
-         iWjuFJt8aUKqornzfztDZjF2cIMAHiiJJ4upNIaJSphy/O4g63nrhNzt3IXXaiTJKFZi
-         6qgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=t4zPUKpv7XaTfwCy6u8+Y9X67AplsbkFXvPulu0ea1U=;
-        b=shN6m1f3JJttSDu5wdr946HWluh2OFbBAFh9tBuq4FG3LbQzU5KSdwT58xFjR4+Wv9
-         zUD7UaewMcUtFMzs4nI2y8P3m2HpBn04FWBeuHyoaHsZU6nYRRzBUUT0KpB0CAID39Yv
-         kLVZXSwi/SMkYaNl5j3CMYMc1aJlY5Q4nUKORHiRW8O8O2uqzJ5s2fj3CnK0jcLZS7dB
-         EzLKFQ/+vYSwZIRZabIVu2J4vRg4qU+esPhAh+bGYAIk0QGVew549YLABwGv8Cv3hpx+
-         oVdH63EU3kwu/TyO/pdxgP+KiHUczJDWi5pncUKQI2zF/0X0vZv0eOljPi3pwH7PKsO8
-         3fFg==
-X-Gm-Message-State: AOAM532gMOeY859zNspEHeWvJXSon/DOjtgzNSwjdVjnwtXljpFv5+0w
-        ZLbGNQW4Qd4I8dEbJ5HrHKM=
-X-Google-Smtp-Source: ABdhPJzK4FAOgEnNQs53gtSOtT0Y8b5G++nzf2lJHnk/cY7kMsd4pENS/ntIKs/HT0Xr5wKaUtO4JA==
-X-Received: by 2002:a5d:6989:0:b0:20d:b25:f5 with SMTP id g9-20020a5d6989000000b0020d0b2500f5mr6372658wru.616.1652782167330;
-        Tue, 17 May 2022 03:09:27 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id s7-20020a05600c29c700b003942a244ec2sm1443015wmd.7.2022.05.17.03.09.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 03:09:26 -0700 (PDT)
-Message-ID: <3e9f0936-efee-cedf-6e2b-4dd9de79fc4e@gmail.com>
-Date:   Tue, 17 May 2022 12:09:25 +0200
+        with ESMTP id S1344691AbiEQK6U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 06:58:20 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13820483AA;
+        Tue, 17 May 2022 03:58:18 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 97F9F21CB7;
+        Tue, 17 May 2022 10:58:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652785097; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UpU3PwW0+vEopHT6mwlEtKZnt5vjcj6K5z6p2RvwFDI=;
+        b=A62HHwy96rt3Peh/2oQoJb/W5OQ8Z85j1RGtcSopCMAn7XlytDk/24zuEW9Tpga7/Yq/ue
+        yQKQnkJYG61eGpGqLTfCCGX/srVGllxHF23XScgduJU8Byym34HyS4Bk1MWh3Z8Rwo0Y9Q
+        s5hDkQjh35sYKTX8Zcjp7xwrzg3RpvU=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 5CD572C141;
+        Tue, 17 May 2022 10:58:15 +0000 (UTC)
+Date:   Tue, 17 May 2022 12:58:15 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        zhenwei pi <pizhenwei@bytedance.com>
+Subject: Re: [PATCH 05/30] misc/pvpanic: Convert regular spinlock into
+ trylock on panic path
+Message-ID: <YoN/x2fpdDU4+nSB@alley>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-6-gpiccoli@igalia.com>
+ <YnpXGOXicwdy1E6n@alley>
+ <0a20dd06-f459-638e-cb4d-8255ab1a1f23@igalia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v7 0/3] cpufreq: mediatek: Cleanup and support MT8183 and
- MT8186
-Content-Language: en-US
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org
-Cc:     jia-wei.chang@mediatek.com, roger.lu@mediatek.com,
-        hsinyi@google.com, khilman@baylibre.com,
-        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220516111130.13325-1-rex-bc.chen@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20220516111130.13325-1-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0a20dd06-f459-638e-cb4d-8255ab1a1f23@igalia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue 2022-05-10 10:00:58, Guilherme G. Piccoli wrote:
+> On 10/05/2022 09:14, Petr Mladek wrote:
+> > [...]
+> >> With that said, it's dangerous to use regular spinlocks in such path,
+> >> as introduced by commit b3c0f8774668 ("misc/pvpanic: probe multiple instances").
+> >> This patch fixes that by replacing regular spinlocks with the trylock
+> >> safer approach.
+> > 
+> > It seems that the lock is used just to manipulating a list. A super
+> > safe solution would be to use the rcu API: rcu_add_rcu() and
+> > list_del_rcu() under rcu_read_lock(). The spin lock will not be
+> > needed and the list will always be valid.
+> > 
+> > The advantage would be that it will always call members that
+> > were successfully added earlier. That said, I am not familiar
+> > with pvpanic and am not sure if it is worth it.
+> > 
+> >> It also fixes an old comment (about a long gone framebuffer code) and
+> >> the notifier priority - we should execute hypervisor notifiers early,
+> >> deferring this way the panic action to the hypervisor, as expected by
+> >> the users that are setting up pvpanic.
+> > 
+> > This should be done in a separate patch. It changes the behavior.
+> > Also there might be a discussion whether it really should be
+> > the maximal priority.
+> > 
+> > Best Regards,
+> > Petr
+> 
+> Thanks for the review Petr. Patch was already merged - my goal was to be
+> concise, i.e., a patch per driver / module, so the patch kinda fixes
+> whatever I think is wrong with the driver with regards panic handling.
+> 
+> Do you think it worth to remove this patch from Greg's branch just to
+> split it in 2? Personally I think it's not worth, but opinions are welcome.
+
+No problem. It is not worth the effort.
 
 
-On 16/05/2022 13:11, Rex-BC Chen wrote:
-> Cpufreq is a DVFS driver used for power saving to scale the clock frequency
-> and supply the voltage for CPUs. This series do some cleanup for MediaTek
-> cpufreq drivers and add support for MediaTek SVS[2] and MediaTek CCI
-> devfreq[3] which are supported in MT8183 and MT8186.
-> 
+> About the RCU part, this one really could be a new patch, a good
+> improvement patch - it makes sense to me, we can think about that after
+> the fixes I guess.
 
-Series applied to v5.19-next/dts64
+Yup.
 
-Thanks!
-
-> Changes for v7:
-> 1. Drop all drviers patches because they are all accepted.
-> 2. Correct clock/clock-name for cci in dts.
-> 
-> Changes for v6:
-> 1. Reorder patches in this series.
-> 2. Add a new patch to do unregister platform device.
-> 3. Modify drivers from maintainer's advice.
-> 
-> Reference series:
-> [1]: V1 of this series is present by Jia-Wei Chang.
->       https://lore.kernel.org/all/20220307122151.11666-1-jia-wei.chang@mediatek.com/
-> 
-> [2]: The MediaTek CCI devfreq driver is introduced in another series.
->       https://lore.kernel.org/all/20220425125546.4129-1-johnson.wang@mediatek.com/
-> 
-> [3]: The MediaTek SVS driver is introduced in another series.
->       https://lore.kernel.org/all/20220420102044.10832-1-roger.lu@mediatek.com/
-> 
-> Rex-BC Chen (3):
->    arm64: dts: mediatek: Add opp table and clock property for MT8183
->      cpufreq
->    arm64: dts: mediatek: Add MediaTek CCI node for MT8183
->    arm64: dts: mediatek: Add mediatek,cci property for MT8183 cpufreq
-> 
->   arch/arm64/boot/dts/mediatek/mt8183-evb.dts   |  36 +++
->   .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   4 +
->   arch/arm64/boot/dts/mediatek/mt8183.dtsi      | 286 ++++++++++++++++++
->   3 files changed, 326 insertions(+)
-> 
+Best Regards,
+Petr
