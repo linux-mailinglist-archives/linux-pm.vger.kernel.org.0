@@ -2,57 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3413C52AB13
-	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 20:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3949352AB19
+	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 20:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239589AbiEQSn5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 May 2022 14:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
+        id S1352320AbiEQSoe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 May 2022 14:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349466AbiEQSn4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 14:43:56 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E30D38BED;
-        Tue, 17 May 2022 11:43:55 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id q203so4438259iod.0;
-        Tue, 17 May 2022 11:43:55 -0700 (PDT)
+        with ESMTP id S1347049AbiEQSod (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 14:44:33 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FF139164;
+        Tue, 17 May 2022 11:44:32 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id d3so13218103ilr.10;
+        Tue, 17 May 2022 11:44:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=24z2rIPOjspqLIvJA+pLlxRucFiWn677Oid4iweb0Dg=;
-        b=RflgnTC/fSgfiQ7JPC4Vo6LtMqSVZUonqUxgiU+LpZ60b++1MC0YPHjrPGZE8Bc/0n
-         kIZbEilYsDEsF2YjerI/J98vVcayeNomP5KpHNM8/y4ug8RJ+8i5iNQRqXxiZS1TlsRU
-         Dvw7RoiBNXb8VC2A+MT2cOk4GVZZDi4DGrfxPRo3yy4lhzDvyI5WmLRLnGdQzRqZheX/
-         cR+YGA40M59Q4mXzbzgJYMnmAw2NGOPMXDigu+yDXThTqKL98vcucZMW6V3YD64BmU96
-         CmG6IB1VYw+hX5GVx5GEa+CjojTa+IyOVFKbflXrIL0DmvdTnxMbEcTKYJ934PqnI5Pn
-         0/aQ==
+        bh=j51jKuN9LxvI+OJRdkmu6rD6Kj69fRthuGQLklYAkDA=;
+        b=as17G5fbhkMRlyXiHsU2KOLKCrfeZcdSYQlK1LW7Q8XiRvt3/rvMdCt9YdS6IVQIyR
+         G5jGuOFEU38O7dokmbx2OkssSbKCCe4PNCnvyE4PWTfpNTlkqaWFsvCt+rkxOZffu1zn
+         eVkVlRV5tqGqvDBXVggSl4zD/n4rLWObhE3iac3Uua5g5n47TChEhLJcTZtshzjVGzv/
+         3H1q1UDPdjttHDKpQM0vIBxiavoZgLzuPVPzzO59GDqil4mokNUn7ON0krii5w1TqmIn
+         KDSSXSC5lcuZhi76ddqFyYUApnEz62L0ffUtc5+71dbXayAAlXPhVVXShSP2c1/9JP/b
+         v0Nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=24z2rIPOjspqLIvJA+pLlxRucFiWn677Oid4iweb0Dg=;
-        b=YKGZaE2oWAeS20+vLMZ/BsNzKEN7VlIYfCHmCPjaT8ZR2Oreb22HAFlaTP5lO3Z4ND
-         tLERzhAZvt0QOIbiwUtLB1EDFDEyfulvdhzU2MxO/mDBEjWij5JDTnq3Vj2G1mBM89BL
-         KLIGHlZj+t2mqng2Vr1HZU39qbaiA9+Ngwj8Mz62RbtIKd9t5aS+v/KD74Gh9rW8agRV
-         37Gv7a7Z3oZAKoqE/Gds1eXTMZNigs+11opu46UNwlN8g2nwSXbng6hBgcb645NOWhk4
-         RXVQ0Q7WbnDyhhX12S5UbrtvWV/fpnzsRgVznwunlYGfABbYqr5UAMvecKyT7rkbTtXv
-         uh+g==
-X-Gm-Message-State: AOAM531vXkPXxwuWmsq+ctJNR1344J2dXbj3+e+BFTxaM4FzjoAjN+dI
-        sH8SYHxsuEJgeH68JC3tI7SytUQjyI1gEL0U5FM=
-X-Google-Smtp-Source: ABdhPJy43gOA2vSTuvgpKh9zqiGfS8aX38Qop9gTMFY6BV4lVnFHg58wwQVqy0+5WdFrUYIB98sLszgM0jueiGM9FR8=
-X-Received: by 2002:a05:6638:3b2:b0:32e:5fe5:d37e with SMTP id
- z18-20020a05663803b200b0032e5fe5d37emr1039074jap.252.1652813035053; Tue, 17
- May 2022 11:43:55 -0700 (PDT)
+        bh=j51jKuN9LxvI+OJRdkmu6rD6Kj69fRthuGQLklYAkDA=;
+        b=yJcLuMxwNhw+qN8V91WP+RzXXta284U+Z8KMPsdl2my/Hn/bnuy+aGh4ncB5wxAWmc
+         spmSI6tl/SCTquwM5RIhOOAC294Q2as5bUbipqC4QS+7a2ylUdAxU36HhvWVi5hIHwG0
+         swF75AFSC3e7uioS+NIKP9FtkyrIR5NyN1etcWH781/LyCSEehD/jvuCgwcSTph3S69D
+         7lnjGCbbsVGzUgh+Nguq96buJ63HR+NqUAjmIhebBPCDKkgU7Zl/hz4tnyTNEL2IJ9VY
+         HeqHkYFhUvNxpqqVxfi88N6pG2P5fSia1Es002abSv1bM4hoJvg6aLBB/s9KyeRGMiD0
+         MIaA==
+X-Gm-Message-State: AOAM5320YFcY7NxgO85v5BFObyjC5VXhDVk7cAr6Br1AKOqD5BU0lKFQ
+        /L4OtY9VQ4Qqtcl8bYXWZWwzYyGCxNFBAmEafbw=
+X-Google-Smtp-Source: ABdhPJxJ6tU3iv6ZTZdFdsDIf4WvuvuPVt1sg1fug6jUfJkmip9XyKYbki5Vhi6bMNmdl6Ae9J2s/GR+4NVJhh7Ohx4=
+X-Received: by 2002:a05:6e02:20c3:b0:2cf:976d:f43c with SMTP id
+ 3-20020a056e0220c300b002cf976df43cmr12036180ilq.264.1652813071800; Tue, 17
+ May 2022 11:44:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220515064126.1424-1-linux.amoon@gmail.com> <20220515064126.1424-3-linux.amoon@gmail.com>
- <fab8d2b5-7c1f-4047-8b51-f78358a77d01@linaro.org>
-In-Reply-To: <fab8d2b5-7c1f-4047-8b51-f78358a77d01@linaro.org>
+References: <20220515064126.1424-1-linux.amoon@gmail.com> <20220515064126.1424-4-linux.amoon@gmail.com>
+ <7c479bdb-4bf7-68a5-c6e7-20dc19b91dc8@linaro.org>
+In-Reply-To: <7c479bdb-4bf7-68a5-c6e7-20dc19b91dc8@linaro.org>
 From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Wed, 18 May 2022 00:13:40 +0530
-Message-ID: <CANAwSgSmDZa7gnhr+RAFOn03C4WzYTav-ANGEi+mkNRcSuDeWA@mail.gmail.com>
-Subject: Re: [PATCHv2 2/6] thermal: exynos: Reorder the gpu clock
- initialization for exynos5420 SoC
+Date:   Wed, 18 May 2022 00:14:16 +0530
+Message-ID: <CANAwSgS4uEJd98hs-CGU+LqzMfAqJzvbEgQp5MRC4ad5XT3XfA@mail.gmail.com>
+Subject: Re: [PATCHv2 3/6] thermal: exynos: Check before clk_disable_unprepare()
+ not needed
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -77,33 +77,49 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Krzysztof,
 
-On Sun, 15 May 2022 at 15:20, Krzysztof Kozlowski
+On Sun, 15 May 2022 at 15:13, Krzysztof Kozlowski
 <krzysztof.kozlowski@linaro.org> wrote:
 >
 > On 15/05/2022 08:41, Anand Moon wrote:
-> > Reorder the tmu_gpu clock initialization for exynos5422 SoC.
+> > All code in clk_disable_unprepare() already checks the clk ptr using
+> > IS_ERR_OR_NULL so there is no need to check it again before calling it.
+> > A lot of other drivers already rely on this behaviour, so it's safe
+> > to do so here.
+> >
+> > Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
+> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> > ---
+> > v1: improve the commit message
+> > ---
+> >  drivers/thermal/samsung/exynos_tmu.c | 12 ++++--------
+> >  1 file changed, 4 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
+> > index 1ef90dc52c08..58ff1b577c47 100644
+> > --- a/drivers/thermal/samsung/exynos_tmu.c
+> > +++ b/drivers/thermal/samsung/exynos_tmu.c
+> > @@ -289,8 +289,7 @@ static int exynos_tmu_initialize(struct platform_device *pdev)
+> >
+> >       mutex_lock(&data->lock);
+> >       clk_enable(data->clk);
+> > -     if (!IS_ERR(data->clk_sec))
+> > -             clk_enable(data->clk_sec);
+> > +     clk_enable(data->clk_sec);
 >
-> Some more thoughts: where is the GPU here? This is a TMU driver... In
-> subject you also describe GPU.
+> You say that clk_enable() checks for IS_ERR_OR_NULL. Where? I see only
+> check for non-null case and then immediately taking clk prepare lock.
 >
+> This looks buggy... did you test it?
 
-As per the Exynos 5422 clock driver,
-CLK_TMU_GPU_APBIF  represents the clock for TMU_GPU
-CLK_TMU_APBIF            represents the clock for TMU
-hence the subject is GPU-related.
+Thanks for your review comments
+Yes have tested the changes, this was last-minute changes
+will drop this in the next version.
 
-> My comments about unusual code order from [1] were not answered.
 >
-> https://lore.kernel.org/lkml/CANAwSgS=08fVsqn95WHzSF71WTTyD2-=K2C6-BEz0tY0t6A1-g@mail.gmail.com/T/#m3edd1fa357eb3e921e51eb09e2e32d68496332eb
->
-> Please respond/address to all comments before resending.
->
-OK, thanks, I have not touched that part of the code in this series
-but now I have a better understanding of the TMU drivers.
-
 > Best regards,
 > Krzysztof
 
 Thanks & Regards
+
 
 -Anand
