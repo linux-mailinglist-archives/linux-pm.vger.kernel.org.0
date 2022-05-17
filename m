@@ -2,130 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B760A52A510
-	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 16:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFB7B52A524
+	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 16:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345762AbiEQOiw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 May 2022 10:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
+        id S1346302AbiEQOpj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 May 2022 10:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232190AbiEQOiw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 10:38:52 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0032E9
-        for <linux-pm@vger.kernel.org>; Tue, 17 May 2022 07:38:51 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id g16so22031011lja.3
-        for <linux-pm@vger.kernel.org>; Tue, 17 May 2022 07:38:50 -0700 (PDT)
+        with ESMTP id S235629AbiEQOpi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 10:45:38 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A732369FA
+        for <linux-pm@vger.kernel.org>; Tue, 17 May 2022 07:45:37 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-f16a3e0529so14121148fac.2
+        for <linux-pm@vger.kernel.org>; Tue, 17 May 2022 07:45:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=adr1JHVYZ1Sl6/EAXezCq4S8vGxWaNlDrui9XdLoHMw=;
-        b=Q+YjFqOPjrvGujz8ipPpbE5e54u9p4f8wgh0+tu2M+62yxjtWF5TghHM/ES091X7f1
-         O9tcf1c4gKh8eiMZ2uAJLQFSk3shO45j+fcz1psirzoVXZL1cC8ahLCMt9WigtaZMs9V
-         eGFaPnafmVY5uKjVFEODiC8JiHLf4me5Q3fk3aywfAI1fFB/yfbCe8LGwzZsjdKawqNX
-         6LDYvLn8Mz3sYGvMPsiUhtN2deUXk6Hwlc47vwdgH7vhe7fT77XhbMYsXQ5l42UbSQID
-         yQJ5/XQyA8dMcCzh+gZriXJ2kX4K463YmeJrUaNhn9xkY81qEuZg5p9T52vGw6/3V8mp
-         7VUA==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=hU7G7S+95X8uKEDpImFotwWuDqrirnkCAEdpX3raMwY=;
+        b=M3/HCAetf4hTHAQ0wa/H05Ak/DdE/puyPcqdqWE4o2+0jyzI9As8QI17obBpUUiKw8
+         P1ysIHMSzmMkGk0V4+mWsAPTShdXJ5Q+Meg4ch8NVid4yXSq43Xvyyy4pFRwgJKhD6Yc
+         yH17WpVOJvjT1xcn3x/4OfEGN98EbBwaheNlk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=adr1JHVYZ1Sl6/EAXezCq4S8vGxWaNlDrui9XdLoHMw=;
-        b=OZjfcgxBjMhLt4LTDNvezIAaSg8D9ZJ7V32qzhvXN91syVUe5fkG6MIk9Kc0R36J93
-         BO9EvBD4n15mv2/P/gz9swGDkK2ymx330C4wYHNgggC8PPprMsTnKJfaHh0HdDbS5/gR
-         qt75Tf4DWNXInmsHNRnmr9kmKCPNsXV486gDG9Ch69ORgiBhCw/YE09bWqxW2LpBjWTv
-         bN7Hz34cscWU5JvGL60KISV8OLUnN611JgOjuRpuuWCxhiZCRCmvQ/kAALzIqBvxsrew
-         whGSum266qIaGW3nwB5B2wxdF2Qr9j4AsSJfAO8FGB/o8IO2D6FkppyT2DGdtsPUBt9D
-         huRA==
-X-Gm-Message-State: AOAM530NqkNz5uRDWvWs3gn2ewWDAXpTUXFMe9dm0Jq/gGcnUynulS03
-        ivQ+3s+QV2DVgELhMb9dznhHcQ==
-X-Google-Smtp-Source: ABdhPJxLZV9G+/vbOKBuCv8p/snaDneIY3rE5qJYKhOrA7N4rHO5NtVGN7RuqQOYFUK6y8s53JV6Ng==
-X-Received: by 2002:a2e:9019:0:b0:250:8205:dfb4 with SMTP id h25-20020a2e9019000000b002508205dfb4mr14152916ljg.396.1652798329316;
-        Tue, 17 May 2022 07:38:49 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id i2-20020a2e5402000000b0024f3d1dae91sm1887687ljb.25.2022.05.17.07.38.48
+        bh=hU7G7S+95X8uKEDpImFotwWuDqrirnkCAEdpX3raMwY=;
+        b=iRyilSRfhKcfGger7zJYbKjO22eL2lqBy2Zcvj07U+psf0kNvfqqT7eQ+ONRGCKPL5
+         UsWtKuB3Q9G6jCHZQFEuDRDqfMfU6gAW4+6T+1+9RzcMc+av5pHZi5YYWqtYlwMPkKPQ
+         ZPd9hAUr5DyTLJUv8i6oOPl5acdNZZa/IxfZBhbFiloKHOko+cB8kv25GpUbBY8k2BU9
+         jOfZ2kT9hWRpb+205HczSPNNJz9UhJQ9KqMSKoPHXfib7MKca7IFgXn32fC4MGAlL6Uo
+         sd1hFaNhba2XTJD4yuEpoo3owvhQbTq6577uV+d2P27RtI7Zjo2wJ34MSs+DrqtwAMF5
+         rf8g==
+X-Gm-Message-State: AOAM532NZOpUQ08kp9h7PJdraDw3L6WD3y7/Kfm/QsXyo8Qu1dthDuUL
+        5kEUMoGqdhTkT2CJUU6cX5l23g==
+X-Google-Smtp-Source: ABdhPJzQGi1jRVS3Ds4jOGiXPt0AlKWitHFERYSHqcj1j4MYS9RQunGY1pYsbpCLywXI/xskPyH7Iw==
+X-Received: by 2002:a05:6870:9724:b0:f1:b413:8aa8 with SMTP id n36-20020a056870972400b000f1b4138aa8mr3935343oaq.39.1652798736791;
+        Tue, 17 May 2022 07:45:36 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id i20-20020a4a8d94000000b0035eb4e5a6c5sm5279711ook.27.2022.05.17.07.45.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 07:38:48 -0700 (PDT)
-Message-ID: <03c0e4fa-ccfb-fd86-0899-92a1086cac09@linaro.org>
-Date:   Tue, 17 May 2022 16:38:47 +0200
+        Tue, 17 May 2022 07:45:36 -0700 (PDT)
+Subject: Re: [PATCH V5 0/3] Add unit test module for AMD P-State driver
+To:     Huang Rui <ray.huang@amd.com>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220505022913.329259-1-li.meng@amd.com>
+ <YnNxlzRW2NGCx5dO@amd.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <615adab4-515c-7d61-5662-bd342b759d6d@linuxfoundation.org>
+Date:   Tue, 17 May 2022 08:45:35 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v8 1/2] dt-bindings: thermal: k3-j72xx: Add VTM bindings
- documentation
+In-Reply-To: <YnNxlzRW2NGCx5dO@amd.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Keerthy <j-keerthy@ti.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, daniel.lezcano@linaro.org,
-        rui.zhang@intel.com, amitk@kernel.org, kristo@kernel.org
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org, vigneshr@ti.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220517121423.8017-1-j-keerthy@ti.com>
- <20220517121423.8017-2-j-keerthy@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220517121423.8017-2-j-keerthy@ti.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17/05/2022 14:14, Keerthy wrote:
-> Add VTM bindings documentation. In the Voltage Thermal
-> Management Module(VTM), K3 J72XX supplies a voltage
-> reference and a temperature sensor feature that are gathered in the band
-> gap voltage and temperature sensor (VBGAPTS) module. The band
-> gap provides current and voltage reference for its internal
-> circuits and other analog IP blocks. The analog-to-digital
-> converter (ADC) produces an output value that is proportional
-> to the silicon temperature.
-> 
-> Signed-off-by: Keerthy <j-keerthy@ti.com>
+On 5/5/22 12:41 AM, Huang Rui wrote:
+> On Thu, May 05, 2022 at 10:29:10AM +0800, Meng, Li (Jassmine) wrote:
+>> Hi all:
+>>
+>> AMD P-State unit test(amd-pstate-ut) is a kernel module for testing
+>> the functions of amd-pstate driver.
+>> It could import as a module to launch some test tasks.
+>> 1) It can help all users to verify their processor support (SBIOS/
+>> Firmware or Hardware).
+>> 2) Kernel can have a basic function test to avoid the kernel regression
+>> during the update.
+>> 3) We can introduce more functional or performance tests to align the
+>> together, it will benefit power and performance scale optimization.
+>>
+>> We upstream out AMD P-state driver into Linux kernel and use this unit
+>> test module to verify the required conditions and basic functions of
+>> amd-pstate before integration test.
+>>
+>> We use test module in the kselftest frameworks to implement it.
+>> We create amd-pstate-ut module and tie it into kselftest.
+>>
+>> For example: The test case aput_acpi_cpc is used to check whether the
+>> _CPC object is exist in SBIOS.
+>> The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is not
+>> existed at the detected processor, so it is a necessary condition.
+>>
+>> At present, it only implements the basic framework and some simple test
+>> cases.
+>>
+>> TODO : 1) we will add more test cases to improve the depth and coverage of
+>> the test.
+>>
+>> Please check the documentation amd-pstate.rst for details of the test steps.
+>>
+>> See patch series in below git repo:
+>> V1: https://lore.kernel.org/linux-pm/20220323071502.2674156-1-li.meng@amd.com/
+>> V2: https://lore.kernel.org/lkml/20220413090510.4039589-1-li.meng@amd.com/
+>> V3: https://lore.kernel.org/lkml/20220421074152.599419-1-li.meng@amd.com/
+>> V4: https://lore.kernel.org/lkml/20220427135315.3447550-1-li.meng@amd.com/
+>>
 
-It seems I am repeating myself... Tags are still missing...
+>> Changes from V4 -> V5:
+>> - selftests: amd-pstate:
+>> - - add print the current scaling_driver.
+>> - - add amd-pstate-ut.ko into TEST_GEN_FILES.
+>> - - move "insmod/rmmod amd-pstate-ut.ko" stuff into script amd_pstate_ut.sh
+>> - - add a check of read back from X86_FEATURE_CPPC in get_shared_mem().
+>> - Documentation: amd-pstate:
+>> - - delete the test step about insmod/rmmod amd-pstate-ut.ko
+>>
+>> Thanks,
+>> Jasmine
+>>
 
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/soc/ti,sci_pm_domain.h>
-> +    wkup_vtm0: thermal-sensor@42040000 {
-> +        compatible = "ti,j721e-vtm";
-> +        reg = <0x42040000 0x350>,
-> +            <0x42050000 0x350>,
-> +            <0x43000300 0x10>;
+Sorry for the delay on this. I will review the series in the next couple
+of days.
 
-Please align the continued entries with opening <.
+Did you consider using KUnit for this? I think asked that question when
+reviewing the previous version.
 
-> +        power-domains = <&k3_pds 154 TI_SCI_PD_EXCLUSIVE>;
-> +        #thermal-sensor-cells = <1>;
-> +    };
-> +
-> +    mpu_thermal: mpu-thermal {
-> +        polling-delay-passive = <250>; /* milliseconds */
-> +        polling-delay = <500>; /* milliseconds */
-> +        thermal-sensors = <&wkup_vtm0 0>;
-> +
-> +        trips {
-> +                mpu_crit: mpu-crit {
-
-You still have here incorrect/inconsistent indentation. Entire DTS
-example goes usually with 4 spaces.
-
-> +                        temperature = <125000>; /* milliCelsius */
-> +                        hysteresis = <2000>; /* milliCelsius */
-> +                        type = "critical";
-> +                };
-> +        };
-> +    };
-> +...
-
-
-Best regards,
-Krzysztof
+thanks,
+-- Shuah
