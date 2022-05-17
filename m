@@ -2,146 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB7B52A524
-	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 16:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A56F52A530
+	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 16:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346302AbiEQOpj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 May 2022 10:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
+        id S1349237AbiEQOsw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 May 2022 10:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235629AbiEQOpi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 10:45:38 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A732369FA
-        for <linux-pm@vger.kernel.org>; Tue, 17 May 2022 07:45:37 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-f16a3e0529so14121148fac.2
-        for <linux-pm@vger.kernel.org>; Tue, 17 May 2022 07:45:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=hU7G7S+95X8uKEDpImFotwWuDqrirnkCAEdpX3raMwY=;
-        b=M3/HCAetf4hTHAQ0wa/H05Ak/DdE/puyPcqdqWE4o2+0jyzI9As8QI17obBpUUiKw8
-         P1ysIHMSzmMkGk0V4+mWsAPTShdXJ5Q+Meg4ch8NVid4yXSq43Xvyyy4pFRwgJKhD6Yc
-         yH17WpVOJvjT1xcn3x/4OfEGN98EbBwaheNlk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hU7G7S+95X8uKEDpImFotwWuDqrirnkCAEdpX3raMwY=;
-        b=iRyilSRfhKcfGger7zJYbKjO22eL2lqBy2Zcvj07U+psf0kNvfqqT7eQ+ONRGCKPL5
-         UsWtKuB3Q9G6jCHZQFEuDRDqfMfU6gAW4+6T+1+9RzcMc+av5pHZi5YYWqtYlwMPkKPQ
-         ZPd9hAUr5DyTLJUv8i6oOPl5acdNZZa/IxfZBhbFiloKHOko+cB8kv25GpUbBY8k2BU9
-         jOfZ2kT9hWRpb+205HczSPNNJz9UhJQ9KqMSKoPHXfib7MKca7IFgXn32fC4MGAlL6Uo
-         sd1hFaNhba2XTJD4yuEpoo3owvhQbTq6577uV+d2P27RtI7Zjo2wJ34MSs+DrqtwAMF5
-         rf8g==
-X-Gm-Message-State: AOAM532NZOpUQ08kp9h7PJdraDw3L6WD3y7/Kfm/QsXyo8Qu1dthDuUL
-        5kEUMoGqdhTkT2CJUU6cX5l23g==
-X-Google-Smtp-Source: ABdhPJzQGi1jRVS3Ds4jOGiXPt0AlKWitHFERYSHqcj1j4MYS9RQunGY1pYsbpCLywXI/xskPyH7Iw==
-X-Received: by 2002:a05:6870:9724:b0:f1:b413:8aa8 with SMTP id n36-20020a056870972400b000f1b4138aa8mr3935343oaq.39.1652798736791;
-        Tue, 17 May 2022 07:45:36 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id i20-20020a4a8d94000000b0035eb4e5a6c5sm5279711ook.27.2022.05.17.07.45.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 07:45:36 -0700 (PDT)
-Subject: Re: [PATCH V5 0/3] Add unit test module for AMD P-State driver
-To:     Huang Rui <ray.huang@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220505022913.329259-1-li.meng@amd.com>
- <YnNxlzRW2NGCx5dO@amd.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <615adab4-515c-7d61-5662-bd342b759d6d@linuxfoundation.org>
-Date:   Tue, 17 May 2022 08:45:35 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        with ESMTP id S1348400AbiEQOsu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 10:48:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610724CD5C;
+        Tue, 17 May 2022 07:48:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF81861665;
+        Tue, 17 May 2022 14:48:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A079C34113;
+        Tue, 17 May 2022 14:48:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652798928;
+        bh=WH1XjOHZMUkBmVozWE2TGSdngqxpzYYtwhgMhjYHD08=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=sBlX4WLiZkn8cbvAIXQxMV8M+hCKD+y4Sidi3Smw476AHGWW0eKMxhHwJclFRXYVR
+         qAfMWePypc2OXfkXONjn0EQvSl8mp2wdPvqkqyTALRXgcyvR3YWZmE/j2sSEEX47cp
+         4O1n0Acl53n0c3FBia0WLP2q005RI4s4Wibyyq5c3DWZM2U0fONBbC4mzv40fDEM/1
+         a68UHUcWv708WOw9ZpKJPvApfixFjFvmalX8ewv0/vPIchdZA5Yv4A+myzsa0y3iTe
+         9Mhstqptv8d0RQenbofqWpm3e8w9snKA1p0PlApfT3NYS9XzprGhWb6E84PqICS/kN
+         I6myESnqnwOPg==
+Date:   Tue, 17 May 2022 09:48:46 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Jingar, Rajvi" <rajvi.jingar@intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        David Box <david.e.box@linux.intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
+Message-ID: <20220517144846.GA1068039@bhelgaas>
 MIME-Version: 1.0
-In-Reply-To: <YnNxlzRW2NGCx5dO@amd.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0g6GdKfN4b5uwHEhh4hBuG=haVHaXc-XuMQLe8Wd41Y3g@mail.gmail.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/5/22 12:41 AM, Huang Rui wrote:
-> On Thu, May 05, 2022 at 10:29:10AM +0800, Meng, Li (Jassmine) wrote:
->> Hi all:
->>
->> AMD P-State unit test(amd-pstate-ut) is a kernel module for testing
->> the functions of amd-pstate driver.
->> It could import as a module to launch some test tasks.
->> 1) It can help all users to verify their processor support (SBIOS/
->> Firmware or Hardware).
->> 2) Kernel can have a basic function test to avoid the kernel regression
->> during the update.
->> 3) We can introduce more functional or performance tests to align the
->> together, it will benefit power and performance scale optimization.
->>
->> We upstream out AMD P-state driver into Linux kernel and use this unit
->> test module to verify the required conditions and basic functions of
->> amd-pstate before integration test.
->>
->> We use test module in the kselftest frameworks to implement it.
->> We create amd-pstate-ut module and tie it into kselftest.
->>
->> For example: The test case aput_acpi_cpc is used to check whether the
->> _CPC object is exist in SBIOS.
->> The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is not
->> existed at the detected processor, so it is a necessary condition.
->>
->> At present, it only implements the basic framework and some simple test
->> cases.
->>
->> TODO : 1) we will add more test cases to improve the depth and coverage of
->> the test.
->>
->> Please check the documentation amd-pstate.rst for details of the test steps.
->>
->> See patch series in below git repo:
->> V1: https://lore.kernel.org/linux-pm/20220323071502.2674156-1-li.meng@amd.com/
->> V2: https://lore.kernel.org/lkml/20220413090510.4039589-1-li.meng@amd.com/
->> V3: https://lore.kernel.org/lkml/20220421074152.599419-1-li.meng@amd.com/
->> V4: https://lore.kernel.org/lkml/20220427135315.3447550-1-li.meng@amd.com/
->>
+On Mon, May 16, 2022 at 10:59:32PM +0200, Rafael J. Wysocki wrote:
+> On Mon, May 16, 2022 at 10:09 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Fri, May 13, 2022 at 10:00:48PM +0000, Jingar, Rajvi wrote:
+> > > > -----Original Message-----
+> > > > From: Bjorn Helgaas <helgaas@kernel.org>
+> > > > Sent: Thursday, May 12, 2022 11:36 AM
+> > > > To: Rafael J. Wysocki <rafael@kernel.org>
+> > > > Cc: Jingar, Rajvi <rajvi.jingar@intel.com>; Wysocki, Rafael J
+> > > > <rafael.j.wysocki@intel.com>; Bjorn Helgaas <bhelgaas@google.com>; David Box
+> > > > <david.e.box@linux.intel.com>; Linux PCI <linux-pci@vger.kernel.org>; Linux
+> > > > Kernel Mailing List <linux-kernel@vger.kernel.org>; Linux PM <linux-
+> > > > pm@vger.kernel.org>
+> > > > Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
+> > > >
+> > > > On Thu, May 12, 2022 at 07:52:36PM +0200, Rafael J. Wysocki wrote:
+> > > > > On Thu, May 12, 2022 at 7:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > > On Thu, May 12, 2022 at 03:49:18PM +0200, Rafael J. Wysocki wrote:
+> > > >
+> > > > > > > Something like this should suffice IMV:
+> > > > > > >
+> > > > > > > if (!dev_state_saved || pci_dev->current_state != PCI_D3cold)
+> > > > > > >
+> > > > > > >         pci_disable_ptm(pci_dev);
+> > > > > >
+> > > > > > It makes sense to me that we needn't disable PTM if the device is in
+> > > > > > D3cold.  But the "!dev_state_saved" condition depends on what the
+> > > > > > driver did.  Why is that important?  Why should we not do the
+> > > > > > following?
+> > > > > >
+> > > > > >   if (pci_dev->current_state != PCI_D3cold)
+> > > > > >     pci_disable_ptm(pci_dev);
+> > > > >
+> > > > > We can do this too.  I thought we could skip the power state
+> > > > > check if dev_state_saved was unset, because then we would know
+> > > > > that the power state was not D3cold.  It probably isn't worth
+> > > > > the hassle though.
+> > >
+> > > We see issue with certain platforms where only checking if device
+> > > power state in D3Cold is not enough and the !dev_state_saved check
+> > > is needed when disabling PTM. Device like nvme is relying on ASPM,
+> > > it stays in D0 but state is saved. Touching the config space wakes
+> > > up the device which prevents the system from entering into low power
+> > > state.
+> >
+> > Correct me if I'm wrong: for NVMe devices, nvme_suspend() has already
+> > saved state and put the device in some low-power state.  Disabling PTM
+> > here is functionally OK but prevents a system low power state, so you
+> > want to leave PTM enabled.
+> >
+> > But I must be missing something because pci_prepare_to_sleep()
+> > currently disables PTM for Root Ports.  If we leave PTM enabled on
+> > NVMe but disable it on the Root Port above it, any PTM Request from
+> > NVMe will cause an Unsupported Request error.
+> >
+> > Disabling PTM must be coordinated across PTM Requesters and PTM
+> > Responders.  That means the decision to disable cannot depend on
+> > driver-specific things like whether the driver has saved state.
+> 
+> Setting state_saved generally informs pci_pm_suspend_noirq() that the
+> device has already been handled and it doesn't need to do anything to
+> it.
+> 
+> But you are right that PTM should be disabled on downstream devices as
+> well as on the ports that those devices are connected to and it can be
+> done even if the given device has already been handled, so the
+> state_saved value is technically irrelevant.
+> 
+> That's why I suggested to check if the power state is between D0 and
+> D3cold (exclusive) and only disable PTM if that is the case.  It is
+> pointless to disable PTM for devices in D3cold and it may be harmful
+> for devices that are left in D0.
 
->> Changes from V4 -> V5:
->> - selftests: amd-pstate:
->> - - add print the current scaling_driver.
->> - - add amd-pstate-ut.ko into TEST_GEN_FILES.
->> - - move "insmod/rmmod amd-pstate-ut.ko" stuff into script amd_pstate_ut.sh
->> - - add a check of read back from X86_FEATURE_CPPC in get_shared_mem().
->> - Documentation: amd-pstate:
->> - - delete the test step about insmod/rmmod amd-pstate-ut.ko
->>
->> Thanks,
->> Jasmine
->>
+"... it may be harmful for devices that are left in D0" -- I want to
+understand this better.  It sounds like nvme_suspend() leaves the
+device in some device-specific low-power flavor of D0, and subsequent
+config accesses take it out of that low-power situation?  
 
-Sorry for the delay on this. I will review the series in the next couple
-of days.
+If that's the case, it sounds a little brittle.  I don't think it's
+obvious that "pci_dev->state_saved was set by the driver" means "no
+config accesses allowed in pci_pm_suspend_noirq()."  And
+pci_pm_suspend_noirq() calls quirks via pci_fixup_device(), which are
+very likely to do config accesses.
 
-Did you consider using KUnit for this? I think asked that question when
-reviewing the previous version.
-
-thanks,
--- Shuah
+Maybe PTM needs to be disabled earlier, e.g., in pci_pm_suspend()?  I
+don't think PTM uses any interrupts, so there's probably no reason
+interrupts need to be disabled before disabling PTM.
