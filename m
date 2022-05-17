@@ -2,122 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E335298D6
-	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 06:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36327529924
+	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 07:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiEQEgo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 May 2022 00:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38564 "EHLO
+        id S231278AbiEQFvg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 May 2022 01:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiEQEgm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 00:36:42 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A794727FEC
-        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 21:36:38 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nqowm-0006GK-1p; Tue, 17 May 2022 06:36:36 +0200
-Message-ID: <a32a70be-699e-88ff-83ba-cdf96f9221a1@pengutronix.de>
-Date:   Tue, 17 May 2022 06:36:31 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v1] thermal: imx: Make trip point offset configurable
-Content-Language: en-US
-To:     Francesco Dolcini <francesco.dolcini@toradex.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, l.stach@pengutronix.de,
-        linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rafael@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
+        with ESMTP id S230378AbiEQFve (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 01:51:34 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FAE73DDD7;
+        Mon, 16 May 2022 22:51:32 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id q7so5025957plx.3;
+        Mon, 16 May 2022 22:51:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PwvzoeY6N9lJ4fKAAqEsuvjxiVm8EwN2t9yaRifsIoc=;
+        b=IuBnJZko7z+mYQOiTfa5mrvWE04qWHy4+1eddt0J8qUj59+sfA03udQJQaX96+iHcv
+         P1b5J/dplK6ghbqW3+VYgAsom2M9WheUcYvCSBzKpma5XPVT7lQ7nN3VuepLGQjF0B5y
+         QDMGNvGh9NL1zl2VLOh0sTuwdtZaWxFOJguydVyW16KT3u64ydyNqSDC1bThTMCmdJ0D
+         Z7dKNY5vIX8r74SWTZFAbOYFpGe/az/8Hvux2nMiguucbyfEo5PXp6LUp3nWGTy4ZDjC
+         egLg7TIXkbtTl2/ll5yQBWDt85HWHB/cZIZ5RPYn6De6UZXFmUR6p0kegLlsDLYNBFvO
+         /k2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PwvzoeY6N9lJ4fKAAqEsuvjxiVm8EwN2t9yaRifsIoc=;
+        b=OJKTbS1ulOoe56j0x09UpPuBxkxaDGNESeC3I2iIjec5IALqExNCPKpD3kahBQyIM6
+         xS4XrlrU5X391FPpiVxLUM6OZqVh0dWXfA8PuxID4711txteP95kOFlMO7QkHRsOEykG
+         O0xVb4CcyFcnEXT+G6XKn/iyJG1tRtw7CtIxiIEaS8b/KyzoLNr2i9l65cbq1MbS/qst
+         W/7jZJbCkm506tQGocjNZXc23DpCupZeUGtuyhPc/ouiMeaBHh3Cd9rQ5qpqtcksizsA
+         XbqpJOoA5UwPF1cjZgFKRMc+4m/AAVgAl1eVi35j3m8/OI41j1JcaQ09ofHGI2voYvm/
+         kAzg==
+X-Gm-Message-State: AOAM531ORLhZFLvOCOdQnY+7/dWQijc1P6g+C1OcTUG9fOav42QsToXZ
+        w0213oh1tWotm92TiYflWsg=
+X-Google-Smtp-Source: ABdhPJxUvQzeLnS5fgfw4sRQZ85fmjGNSpwRzd4pl8qtvQDNTT/6Z3W8r7fBlzshAsesUF1CgWechA==
+X-Received: by 2002:a17:902:eccd:b0:161:9e20:1a14 with SMTP id a13-20020a170902eccd00b001619e201a14mr3566936plh.43.1652766691934;
+        Mon, 16 May 2022 22:51:31 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id c7-20020a62f847000000b0050dc76281f7sm7825217pfm.209.2022.05.16.22.51.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 May 2022 22:51:31 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
-        Jon Nettleton <jon@solid-run.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Zhang Rui <rui.zhang@intel.com>,
         Shawn Guo <shawnguo@kernel.org>,
-        Tim Harvey <tharvey@gateworks.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20220516190001.147919-1-francesco.dolcini@toradex.com>
- <92ae0fd5-f827-ae3c-bbef-d551c9fa5b76@pengutronix.de>
- <20220516191657.GA148058@francesco-nb.int.toradex.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <20220516191657.GA148058@francesco-nb.int.toradex.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH v2] thermal: imx_sc_thermal: Fix refcount leak in imx_sc_thermal_probe
+Date:   Tue, 17 May 2022 09:51:21 +0400
+Message-Id: <20220517055121.18092-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Francesco,
+of_find_node_by_name() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
+Add missing of_node_put() to avoid refcount leak.
 
-On 16.05.22 21:16, Francesco Dolcini wrote:
-> On Mon, May 16, 2022 at 09:06:10PM +0200, Ahmad Fatoum wrote:
->> On 16.05.22 21:00, Francesco Dolcini wrote:
->>> Currently the imx thermal driver has a hardcoded critical temperature
->>> value offset of 5 Celsius degrees from the actual SoC maximum
->>> temperature.
->>>
->>> This affects applications and systems designed to be working on this close
->>> to the limit, but yet valid, temperature range.
->>>
->>> Given that there is no single value that will fit all the use cases make
->>> the critical trip point offset from the max temperature configurable
->>> using a newly added trip_offset module parameter, passive trip point is
->>> set to 5 Celsius degrees less than the critical. By default the
->>> system behaves exactly as before.
->>>
->>> Link: https://lore.kernel.org/all/20220420091300.179753-1-francesco.dolcini@toradex.com/
->>> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
->>> ---
->>>  drivers/thermal/imx_thermal.c | 12 ++++++++----
->>>  1 file changed, 8 insertions(+), 4 deletions(-)
->>>
->>> diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
->>> index 16663373b682..42d1f8a3eccb 100644
->>> --- a/drivers/thermal/imx_thermal.c
->>> +++ b/drivers/thermal/imx_thermal.c
->>> @@ -86,6 +86,10 @@ enum imx_thermal_trip {
->>>  #define TEMPMON_IMX6SX			2
->>>  #define TEMPMON_IMX7D			3
->>>  
->>> +static int trip_offset = 5;
->>> +module_param(trip_offset, int, 0444);
->>
->> Is this being r--r--r-- intended?
-> 
-> Yes, would you expect something more or less strict?
-> 
-> Daniel was pretty assertive that this is supposed to be a system
-> property and not something that should be possible to mess around with
-> [0]. Given this and that trip points are a+r in sysfs this was the most
-> reasonable solution to me. Said that I do not mind changing
-> this to 640 or 0440 or ...
+Fixes: e20db70dba1c ("thermal: imx_sc: add i.MX system controller thermal support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+changes in v2:
+- use goto statement, also move of_node_put(sensor_np) to goto label
+v1 Link: https://lore.kernel.org/all/20220516073151.25918-1-linmq006@gmail.com/
+---
+ drivers/thermal/imx_sc_thermal.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-I just found it odd, but with your explanation, it makes sense to have
-this a read-only-after-init setting.
-
-Thanks for the clarification,
-Ahmad
-
-> 
-> [0] https://lore.kernel.org/all/4de41b5e-1fa6-ece4-9d9a-2656d399b452@linaro.org/
-> 
-> Francesco
-> 
-> 
-
-
+diff --git a/drivers/thermal/imx_sc_thermal.c b/drivers/thermal/imx_sc_thermal.c
+index 8d76dbfde6a9..331a241eb0ef 100644
+--- a/drivers/thermal/imx_sc_thermal.c
++++ b/drivers/thermal/imx_sc_thermal.c
+@@ -94,8 +94,8 @@ static int imx_sc_thermal_probe(struct platform_device *pdev)
+ 		sensor = devm_kzalloc(&pdev->dev, sizeof(*sensor), GFP_KERNEL);
+ 		if (!sensor) {
+ 			of_node_put(child);
+-			of_node_put(sensor_np);
+-			return -ENOMEM;
++			ret = -ENOMEM;
++			goto put_node;
+ 		}
+ 
+ 		ret = thermal_zone_of_get_sensor_id(child,
+@@ -124,7 +124,9 @@ static int imx_sc_thermal_probe(struct platform_device *pdev)
+ 			dev_warn(&pdev->dev, "failed to add hwmon sysfs attributes\n");
+ 	}
+ 
++put_node:
+ 	of_node_put(sensor_np);
++	of_node_put(np);
+ 
+ 	return ret;
+ }
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.25.1
+
