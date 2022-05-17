@@ -2,133 +2,210 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE118529FD7
-	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 12:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5466052A0CC
+	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 13:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344781AbiEQK6X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 May 2022 06:58:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56724 "EHLO
+        id S1345564AbiEQLyx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 May 2022 07:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344691AbiEQK6U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 06:58:20 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13820483AA;
-        Tue, 17 May 2022 03:58:18 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 97F9F21CB7;
-        Tue, 17 May 2022 10:58:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652785097; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UpU3PwW0+vEopHT6mwlEtKZnt5vjcj6K5z6p2RvwFDI=;
-        b=A62HHwy96rt3Peh/2oQoJb/W5OQ8Z85j1RGtcSopCMAn7XlytDk/24zuEW9Tpga7/Yq/ue
-        yQKQnkJYG61eGpGqLTfCCGX/srVGllxHF23XScgduJU8Byym34HyS4Bk1MWh3Z8Rwo0Y9Q
-        s5hDkQjh35sYKTX8Zcjp7xwrzg3RpvU=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 5CD572C141;
-        Tue, 17 May 2022 10:58:15 +0000 (UTC)
-Date:   Tue, 17 May 2022 12:58:15 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Mihai Carabas <mihai.carabas@oracle.com>,
-        Shile Zhang <shile.zhang@linux.alibaba.com>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        zhenwei pi <pizhenwei@bytedance.com>
-Subject: Re: [PATCH 05/30] misc/pvpanic: Convert regular spinlock into
- trylock on panic path
-Message-ID: <YoN/x2fpdDU4+nSB@alley>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-6-gpiccoli@igalia.com>
- <YnpXGOXicwdy1E6n@alley>
- <0a20dd06-f459-638e-cb4d-8255ab1a1f23@igalia.com>
+        with ESMTP id S1345567AbiEQLys (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 07:54:48 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665A6419BB;
+        Tue, 17 May 2022 04:54:40 -0700 (PDT)
+X-UUID: 10a6435c58b44ea6be7a5091242888d2-20220517
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:0d8f568d-f922-46b5-b62f-9ea606901178,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:2a19b09,CLOUDID:6b3d7fe2-edbf-4bd4-8a34-dfc5f7bb086d,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 10a6435c58b44ea6be7a5091242888d2-20220517
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 613556711; Tue, 17 May 2022 19:54:35 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 17 May 2022 19:54:32 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 17 May 2022 19:54:32 +0800
+Message-ID: <b2a0449d7d1a1ae09ff9cdeff6a1a59b9aeac6bf.camel@mediatek.com>
+Subject: Re: [PATCH v6 1/7] thermal: mediatek: Relocate driver to mediatek
+ folder
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Alexandre Bailon <abailon@baylibre.com>, <robh+dt@kernel.org>,
+        <krzk+dt@kernel.org>, <matthias.bgg@gmail.com>,
+        <p.zabel@pengutronix.de>
+CC:     <devicetree@vger.kernel.org>, <daniel.lezcano@linaro.org>,
+        <rafael@kernel.org>, <khilman@baylibre.com>,
+        <linux-pm@vger.kernel.org>, <amitk@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <michael.kao@mediatek.com>,
+        <ethan.chang@mediatek.com>, <linux-mediatek@lists.infradead.org>,
+        Michael Kao <michael.kao@mediatek.comi>, <rui.zhang@intel.com>,
+        <ben.tseng@mediatek.com>, <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <james.lo@mediatek.com>, <fan.chen@mediatek.com>,
+        <louis.yu@mediatek.com>
+Date:   Tue, 17 May 2022 19:54:32 +0800
+In-Reply-To: <20220512122433.1399802-2-abailon@baylibre.com>
+References: <20220512122433.1399802-1-abailon@baylibre.com>
+         <20220512122433.1399802-2-abailon@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0a20dd06-f459-638e-cb4d-8255ab1a1f23@igalia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue 2022-05-10 10:00:58, Guilherme G. Piccoli wrote:
-> On 10/05/2022 09:14, Petr Mladek wrote:
-> > [...]
-> >> With that said, it's dangerous to use regular spinlocks in such path,
-> >> as introduced by commit b3c0f8774668 ("misc/pvpanic: probe multiple instances").
-> >> This patch fixes that by replacing regular spinlocks with the trylock
-> >> safer approach.
-> > 
-> > It seems that the lock is used just to manipulating a list. A super
-> > safe solution would be to use the rcu API: rcu_add_rcu() and
-> > list_del_rcu() under rcu_read_lock(). The spin lock will not be
-> > needed and the list will always be valid.
-> > 
-> > The advantage would be that it will always call members that
-> > were successfully added earlier. That said, I am not familiar
-> > with pvpanic and am not sure if it is worth it.
-> > 
-> >> It also fixes an old comment (about a long gone framebuffer code) and
-> >> the notifier priority - we should execute hypervisor notifiers early,
-> >> deferring this way the panic action to the hypervisor, as expected by
-> >> the users that are setting up pvpanic.
-> > 
-> > This should be done in a separate patch. It changes the behavior.
-> > Also there might be a discussion whether it really should be
-> > the maximal priority.
-> > 
-> > Best Regards,
-> > Petr
+On Thu, 2022-05-12 at 14:24 +0200, Alexandre Bailon wrote:
+> From: Michael Kao <michael.kao@mediatek.com>
 > 
-> Thanks for the review Petr. Patch was already merged - my goal was to be
-> concise, i.e., a patch per driver / module, so the patch kinda fixes
-> whatever I think is wrong with the driver with regards panic handling.
+> Add Mediatek proprietary folder to upstream more thermal zone and
+> cooler
+> drivers. Relocate the original thermal controller driver to it and
+> rename
+> as soc_temp.c to show its purpose more clearly.
 > 
-> Do you think it worth to remove this patch from Greg's branch just to
-> split it in 2? Personally I think it's not worth, but opinions are welcome.
+> Signed-off-by: Michael Kao <michael.kao@mediatek.comi>
+> Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> ---
+>  drivers/thermal/Kconfig                       | 14 ++++-------
+>  drivers/thermal/Makefile                      |  2 +-
+>  drivers/thermal/mediatek/Kconfig              | 23
+> +++++++++++++++++++
+>  drivers/thermal/mediatek/Makefile             |  1 +
+>  .../{mtk_thermal.c => mediatek/soc_temp.c}    |  0
+>  5 files changed, 29 insertions(+), 11 deletions(-)
+>  create mode 100644 drivers/thermal/mediatek/Kconfig
+>  create mode 100644 drivers/thermal/mediatek/Makefile
+>  rename drivers/thermal/{mtk_thermal.c => mediatek/soc_temp.c} (100%)
+> 
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index e37691e0bf20..8669d7278055 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -410,16 +410,10 @@ config DA9062_THERMAL
+>  	  zone.
+>  	  Compatible with the DA9062 and DA9061 PMICs.
+>  
+> -config MTK_THERMAL
+> -	tristate "Temperature sensor driver for mediatek SoCs"
+> -	depends on ARCH_MEDIATEK || COMPILE_TEST
+> -	depends on HAS_IOMEM
+> -	depends on NVMEM || NVMEM=n
+> -	depends on RESET_CONTROLLER
+> -	default y
+> -	help
+> -	  Enable this option if you want to have support for thermal
+> management
+> -	  controller present in Mediatek SoCs
+> +menu "Mediatek thermal drivers"
 
-No problem. It is not worth the effort.
+Hello Alexandre,
+
+could you help to do this?
+s/Mediatek/MediaTek/
+
+and please also apply this to this series.
+
+Thanks.
+
+> +depends on ARCH_MEDIATEK || COMPILE_TEST
+> +source "drivers/thermal/mediatek/Kconfig"
+> +endmenu
+>  
+>  config AMLOGIC_THERMAL
+>  	tristate "Amlogic Thermal Support"
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index f0c36a1530d5..9ade39bdb525 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -55,7 +55,7 @@ obj-y				+= st/
+>  obj-$(CONFIG_QCOM_TSENS)	+= qcom/
+>  obj-y				+= tegra/
+>  obj-$(CONFIG_HISI_THERMAL)     += hisi_thermal.o
+> -obj-$(CONFIG_MTK_THERMAL)	+= mtk_thermal.o
+> +obj-$(CONFIG_MTK_THERMAL)	+= mediatek/
+>  obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
+>  obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+>  obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+> diff --git a/drivers/thermal/mediatek/Kconfig
+> b/drivers/thermal/mediatek/Kconfig
+> new file mode 100644
+> index 000000000000..0351e73170b7
+> --- /dev/null
+> +++ b/drivers/thermal/mediatek/Kconfig
+> @@ -0,0 +1,23 @@
+> +config MTK_THERMAL
+> +	tristate "Mediatek thermal drivers"
+> +	depends on THERMAL_OF
+> +	help
+> +	  This is the option for Mediatek thermal software
+> +	  solutions. Please enable corresponding options to
+> +	  get temperature information from thermal sensors or
+> +	  turn on throttle mechaisms for thermal mitigation.
+> +
+> +if MTK_THERMAL
+> +
+> +config MTK_SOC_THERMAL
+> +	tristate "Temperature sensor driver for mediatek SoCs"
+> +	depends on HAS_IOMEM
+> +	depends on NVMEM
+> +	depends on RESET_CONTROLLER
+> +	help
+> +	  Enable this option if you want to get SoC temperature
+> +	  information for Mediatek platforms. This driver
+> +	  configures thermal controllers to collect temperature
+> +	  via AUXADC interface.
+> +
+> +endif
+> diff --git a/drivers/thermal/mediatek/Makefile
+> b/drivers/thermal/mediatek/Makefile
+> new file mode 100644
+> index 000000000000..f75313ddce5e
+> --- /dev/null
+> +++ b/drivers/thermal/mediatek/Makefile
+> @@ -0,0 +1 @@
+> +obj-$(CONFIG_MTK_SOC_THERMAL)	+= soc_temp.o
+> diff --git a/drivers/thermal/mtk_thermal.c
+> b/drivers/thermal/mediatek/soc_temp.c
+> similarity index 100%
+> rename from drivers/thermal/mtk_thermal.c
+> rename to drivers/thermal/mediatek/soc_temp.c
+
+We should remain the original file "mtk_thermal.c" ?
+I think it's a old hardware structure for mtk socs, like mt8183.
+
+For mt8183, we still need to use this file.
+
+Therefore, I think we should use a config to handle this?
+And also, I think we can rename the mtk_thermal.c to mtk_thermal_adc.c.
+soc_temp.c to mtk_thermal_lvts.c.
+
+maybe we can discuss the file name offline.
+
+The new owner of mtk thermal is James Lo.
+Ben Tseng is no longer in mtk. Please remove this email.
+Please also cc these mail in next version.
+james.lo@mediatek.com
+fan.chen@mediatek.com
+louis.yu@mediatek.com
+rex-bc.chen@mediatek.com
+
+BRs,
+Rex
 
 
-> About the RCU part, this one really could be a new patch, a good
-> improvement patch - it makes sense to me, we can think about that after
-> the fixes I guess.
-
-Yup.
-
-Best Regards,
-Petr
