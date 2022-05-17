@@ -2,309 +2,410 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 956805294C6
-	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 01:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F3752965E
+	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 02:58:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350232AbiEPXNt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 May 2022 19:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
+        id S240721AbiEQA6T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 May 2022 20:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348940AbiEPXNt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 19:13:49 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF9546641
-        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 16:13:47 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id bo5so15377341pfb.4
-        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 16:13:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5H3z629Hzfk43FPeQ6l/HvvBwzEkP6gG3fYwPQ2Js60=;
-        b=jhIu5fQgzwPiId/ZxVydKq1h+XIxL2F7FxjE6RLbLjB/hi59yOcqn8ZQzey53AkfLE
-         7+wBDQR3CM6K7jvai1Sv0qU0Tt2NUOhf9Cm37Kv2CCO/OsXB6c2BByySQQTZsFDgXPCV
-         Z1zcA7QhHnof/elpjpaLLtOrIfLm8UczZCpMg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5H3z629Hzfk43FPeQ6l/HvvBwzEkP6gG3fYwPQ2Js60=;
-        b=SfeJJB+z/9vppBYbepcjbVa0DA4aZZQLtwiV1H7RN/zHI+6kwa2gnMlc+de0ashnON
-         t1ADZjxMQoMXmYt8gePexyos4iNheIOX1+bI/adBu78wNzwxeeAPGsbxYXd/13BGS+cS
-         VWKS9YzC1tLE8XHUHqXRwkkts73SQHGVOvwmKojO3RC7uTzsYf3AssF8U/YBSIafTvEh
-         yJxyEMuKT2Q8SJaMc1KUegn+o6Apsa5FhnFf5qvqoZQpbETv57pNJeVJuc2MifDx10rd
-         zXyaaP4yH/oZEhyE9US5eAyx0pf5j505OcWg1W1P9BgPgTtgedMSPOD21ZQiDn55VZQe
-         fUpQ==
-X-Gm-Message-State: AOAM533ggSKONWYwTSDie75Kg9dVste4PAfGQ4fnKyhhj4VVs1vZgmOE
-        kgzfPOLPJWxepKAGwud7IEsedA==
-X-Google-Smtp-Source: ABdhPJwwnz9S624j2DyMnf5Z0FuaroubFYKYyHv08Qz90vcyybDrg5YFj61CBAtNHDlIP5z3XyNLVQ==
-X-Received: by 2002:a63:8ac7:0:b0:3aa:fa62:5a28 with SMTP id y190-20020a638ac7000000b003aafa625a28mr17119678pgd.400.1652742826365;
-        Mon, 16 May 2022 16:13:46 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:641e:de1c:873b:321e])
-        by smtp.gmail.com with UTF8SMTPSA id q16-20020a170902dad000b0015e8d4eb26fsm7992100plx.185.2022.05.16.16.13.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 May 2022 16:13:45 -0700 (PDT)
-Date:   Mon, 16 May 2022 16:13:44 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, quic_ppratap@quicinc.com,
-        quic_vpulyala@quicinc.com,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: Re: [v16 2/5] usb: dwc3: core: Host wake up support from system
- suspend
-Message-ID: <YoLaqDCNK0St8qsB@google.com>
-References: <1652379802-8318-1-git-send-email-quic_kriskura@quicinc.com>
- <1652379802-8318-3-git-send-email-quic_kriskura@quicinc.com>
- <Yn2M5hrah78jro1C@google.com>
- <4124392b-a40f-c204-f9b0-68c3b22dd652@quicinc.com>
- <20220516044327.GA19209@hu-pkondeti-hyd.qualcomm.com>
- <20220516150445.GB19209@hu-pkondeti-hyd.qualcomm.com>
+        with ESMTP id S239137AbiEQA6E (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 20:58:04 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806DD41984;
+        Mon, 16 May 2022 17:58:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652749082; x=1684285082;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=000D+w6c9+o/iIArI5e5AkAY8TBtbH1cExDaLUDxzdY=;
+  b=nakFw8+UXkLhaj/dubSnweSlF06GMXxARe1Lyro74MTdnBrh3A/NticF
+   OM9/kL8QD/mlH3pZePQbNlAGTwB9Hrh2RX9NUXNL3CN4JiHih+8P0gOd0
+   x8N2naT7KVZdqJxgUiKPkdIZaDPmZpBz/HO3qO6wMsMWobw/Hr4arGdwQ
+   kSjDV1BOjmzhbevjVv3KGuVnGwWiXzi24lT+7XFOjkUAeno6+b6Ird2M3
+   v/uQHQnnRa3pUmi/5wjx65pRKoCYwAPmns1uvcEPg2zDHYbRnaGJJp8uM
+   Kmwjp4szMbWUSLGlCldWP+T1HyY0EcHOejv0UgmWBRIDzuhl8dZVFE3do
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10349"; a="270701446"
+X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
+   d="scan'208";a="270701446"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2022 17:58:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,231,1647327600"; 
+   d="scan'208";a="555525387"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 16 May 2022 17:57:58 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nqlXB-0000SL-T8;
+        Tue, 17 May 2022 00:57:57 +0000
+Date:   Tue, 17 May 2022 08:56:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     netdev@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-mm@kvack.org,
+        linux-fbdev@vger.kernel.org, kvm@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        bpf@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD REGRESSION
+ 3f7bdc402fb06f897ff1f492a2d42e1f7c2efedb
+Message-ID: <6282f2d9.GP5VHNfZqwSMzmr+%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220516150445.GB19209@hu-pkondeti-hyd.qualcomm.com>
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 16, 2022 at 08:34:45PM +0530, Pavan Kondeti wrote:
-> On Mon, May 16, 2022 at 10:13:27AM +0530, Pavan Kondeti wrote:
-> > On Fri, May 13, 2022 at 09:28:16AM +0530, Krishna Kurapati PSSNV wrote:
-> > > 
-> > > On 5/13/2022 4:10 AM, Matthias Kaehlcke wrote:
-> > > >On Thu, May 12, 2022 at 11:53:19PM +0530, Krishna Kurapati wrote:
-> > > >>From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > > >>
-> > > >>During suspend read the status of all port and set hs phy mode
-> > > >>based on current speed. Use this hs phy mode to configure wakeup
-> > > >>interrupts in qcom glue driver.
-> > > >>
-> > > >>Check wakeup-source property for dwc3 core node to set the
-> > > >>wakeup capability. Drop the device_init_wakeup call from
-> > > >>runtime suspend and resume.
-> > > >>
-> > > >>Also check during suspend if any wakeup capable devices are
-> > > >>connected to the controller (directly or through hubs), if there
-> > > >>are none set a flag to indicate that the PHY is powered
-> > > >>down during suspend.
-> > > >>
-> > > >>Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > > >>Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> > > >>---
-> > > >>  drivers/usb/dwc3/core.c | 30 +++++++++++++++++-------------
-> > > >>  drivers/usb/dwc3/core.h |  4 ++++
-> > > >>  drivers/usb/dwc3/host.c | 24 ++++++++++++++++++++++++
-> > > >>  3 files changed, 45 insertions(+), 13 deletions(-)
-> > > >>
-> > > >>diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > > >>index 01115df..8bcabc5 100644
-> > > >>--- a/drivers/usb/dwc3/core.c
-> > > >>+++ b/drivers/usb/dwc3/core.c
-> > > >>@@ -1785,6 +1785,7 @@ static int dwc3_probe(struct platform_device *pdev)
-> > > >>  	platform_set_drvdata(pdev, dwc);
-> > > >>  	dwc3_cache_hwparams(dwc);
-> > > >>+	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
-> > > >>  	spin_lock_init(&dwc->lock);
-> > > >>  	mutex_init(&dwc->mutex);
-> > > >>@@ -1946,10 +1947,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > > >>  		dwc3_core_exit(dwc);
-> > > >>  		break;
-> > > >>  	case DWC3_GCTL_PRTCAP_HOST:
-> > > >>-		if (!PMSG_IS_AUTO(msg)) {
-> > > >>-			dwc3_core_exit(dwc);
-> > > >>-			break;
-> > > >>-		}
-> > > >>+		dwc3_check_phy_speed_mode(dwc);
-> > > >>  		/* Let controller to suspend HSPHY before PHY driver suspends */
-> > > >>  		if (dwc->dis_u2_susphy_quirk ||
-> > > >>@@ -1965,6 +1963,15 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > > >>  		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
-> > > >>  		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
-> > > >>+
-> > > >>+		if (!PMSG_IS_AUTO(msg)) {
-> > > >>+			if (device_may_wakeup(dwc->dev))
-> > > >I think this should be device_can_wakeup(), i.e. hardware capability instead of
-> > > >device policy. A drawback of powering the PHYs off is that it causes a high
-> > > >power consumption of certain peripherals if VBUS is still supplied, so this
-> > > >should be limited to platforms where the PHYs must be powered off (using wakeup
-> > > >capability as a proxy for now).
-> > > Thnaks Mathias for the review. Will make this change in the next patchset.
-> > > >>+				dwc->phy_power_off = false;
-> > > >>+			else {
-> > > >>+				dwc->phy_power_off = true;
-> > > >>+				dwc3_core_exit(dwc);
-> > > >>+			}
-> > > >>+		}
-> > > >>  		break;
-> > > >>  	case DWC3_GCTL_PRTCAP_OTG:
-> > > >>  		/* do nothing during runtime_suspend */
-> > > >>@@ -2008,11 +2015,12 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
-> > > >>  		break;
-> > > >>  	case DWC3_GCTL_PRTCAP_HOST:
-> > > >>  		if (!PMSG_IS_AUTO(msg)) {
-> > > >>-			ret = dwc3_core_init_for_resume(dwc);
-> > > >>-			if (ret)
-> > > >>-				return ret;
-> > > >>-			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
-> > > >>-			break;
-> > > >>+			if (dwc->phy_power_off) {
-> > > >>+				ret = dwc3_core_init_for_resume(dwc);
-> > > >>+				if (ret)
-> > > >>+					return ret;
-> > > >>+				dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
-> > > >>+			}
-> > > >>  		}
-> > > >>  		/* Restore GUSB2PHYCFG bits that were modified in suspend */
-> > > >>  		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
-> > > >>@@ -2084,8 +2092,6 @@ static int dwc3_runtime_suspend(struct device *dev)
-> > > >>  	if (ret)
-> > > >>  		return ret;
-> > > >>-	device_init_wakeup(dev, true);
-> > > >>-
-> > > >>  	return 0;
-> > > >>  }
-> > > >>@@ -2094,8 +2100,6 @@ static int dwc3_runtime_resume(struct device *dev)
-> > > >>  	struct dwc3     *dwc = dev_get_drvdata(dev);
-> > > >>  	int		ret;
-> > > >>-	device_init_wakeup(dev, false);
-> > > >>-
-> > > >>  	ret = dwc3_resume_common(dwc, PMSG_AUTO_RESUME);
-> > > >>  	if (ret)
-> > > >>  		return ret;
-> > > >>diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> > > >>index 81c486b..37397a8 100644
-> > > >>--- a/drivers/usb/dwc3/core.h
-> > > >>+++ b/drivers/usb/dwc3/core.h
-> > > >>@@ -1155,6 +1155,9 @@ struct dwc3 {
-> > > >>  	bool			phys_ready;
-> > > >>+	unsigned int            hs_phy_mode;
-> > > >>+	bool			phy_power_off;
-> > > >>+
-> > > >>  	struct ulpi		*ulpi;
-> > > >>  	bool			ulpi_ready;
-> > > >>@@ -1539,6 +1542,7 @@ int dwc3_core_soft_reset(struct dwc3 *dwc);
-> > > >>  #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
-> > > >>  int dwc3_host_init(struct dwc3 *dwc);
-> > > >>  void dwc3_host_exit(struct dwc3 *dwc);
-> > > >>+void dwc3_check_phy_speed_mode(struct dwc3 *dwc);
-> > > >>  #else
-> > > >>  static inline int dwc3_host_init(struct dwc3 *dwc)
-> > > >>  { return 0; }
-> > > >>diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> > > >>index f56c30c..e19b40a 100644
-> > > >>--- a/drivers/usb/dwc3/host.c
-> > > >>+++ b/drivers/usb/dwc3/host.c
-> > > >>@@ -12,6 +12,7 @@
-> > > >>  #include <linux/platform_device.h>
-> > > >>  #include "core.h"
-> > > >>+#include "../host/xhci.h"
-> > > >>  static void dwc3_host_fill_xhci_irq_res(struct dwc3 *dwc,
-> > > >>  					int irq, char *name)
-> > > >>@@ -136,3 +137,26 @@ void dwc3_host_exit(struct dwc3 *dwc)
-> > > >>  {
-> > > >>  	platform_device_unregister(dwc->xhci);
-> > > >>  }
-> > > >>+
-> > > >>+void dwc3_check_phy_speed_mode(struct dwc3 *dwc)
-> > > >>+{
-> > > >>+	int i, num_ports;
-> > > >>+	u32 reg;
-> > > >>+	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
-> > > >>+	struct xhci_hcd	*xhci_hcd = hcd_to_xhci(hcd);
-> > > >>+
-> > > >>+	dwc->hs_phy_mode = 0;
-> > > >>+
-> > > >>+	reg = readl(&xhci_hcd->cap_regs->hcs_params1);
-> > > >>+
-> > > >>+	num_ports = HCS_MAX_PORTS(reg);
-> > > >>+	for (i = 0; i < num_ports; i++) {
-> > > >>+		reg = readl(&xhci_hcd->op_regs->port_status_base + i * NUM_PORT_REGS);
-> > > >>+		if (reg & PORT_PE) {
-> > > >>+			if (DEV_HIGHSPEED(reg) || DEV_FULLSPEED(reg))
-> > > >>+				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_HS;
-> > > >>+			else if (DEV_LOWSPEED(reg))
-> > > >>+				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_LS;
-> > > >>+		}
-> > > >>+	}
-> > > >>+}
-> > > >I anticipate that it might raise concerns from maintainers that
-> > > >dwc3_check_phy_speed_mode() accesses xHCI data structures and
-> > > >registers directly. Could there be a generic HCD API that provides
-> > > >this functionality (if implemented by the specific HCD)?
-> > > 
-> > > Hi Mathias, we are not sure if there is any such API present currently.
-> > > 
-> > > Hi Alan, can you help suggest any API (if present) that we can reuse here to
-> > > avoid
-> > > 
-> > > xhci registers and structs here in dwc3.
-> > > 
-> > 
-> > We can probably do something like below to query the speed. This avoids adding
-> > another API and does not touch the underlying registers.
-> > 
-> > Pls define enum usb_device_speed usb2_speed in dwc3 structure.
-> > 
-> > diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> > index f29a264..fed1c58 100644
-> > --- a/drivers/usb/dwc3/host.c
-> > +++ b/drivers/usb/dwc3/host.c
-> > @@ -9,9 +9,29 @@
-> >  
-> >  #include <linux/acpi.h>
-> >  #include <linux/platform_device.h>
-> > +#include <linux/usb.h>
-> >  
-> >  #include "core.h"
-> >  
-> > +void dwc3_update_hs_phy_speed(struct dwc3 *dwc)
-> > +{
-> > +	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
-> > +	struct usb_device *udev;
-> > +
-> > +	/*
-> > +	 * It is possible to query the speed of all children of
-> > +	 * USB2.0 root hub via usb_hub_for_each_child(). DWC3 code
-> > +	 * currently supports only 1 port per controller. So
-> > +	 * this is sufficient.
-> > +	 */
-> > +	udev = usb_hub_find_child(hcd->self.root_hub, 1);
-> > +
-> > +	if (udev)
-> > +		dwc->usb2_speed = udev->speed;
-> > +	else
-> > +		dwc->usb2_speed = USB_SPEED_UNKNOWN;
-> > +}
-> > +
-> >  static int dwc3_host_get_irq(struct dwc3 *dwc)
-> >  {
-> >  	struct platform_device	*dwc3_pdev = to_platform_device(dwc->dev);
-> > 
-> > 
-> I am also thinking why dwc core needs to cache usb2_speed since dwc3-qcom glue
-> driver is the only sole user. We also require it only during suspend and does
-> not bother about dwc::usb2_speed correctness outside suspend. Lets move this
-> to dwc3-qcom suspend routines where we have to rely on USB2 speed for
-> configuring the D+/D- interrupt.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: 3f7bdc402fb06f897ff1f492a2d42e1f7c2efedb  Add linux-next specific files for 20220516
 
-I like both of your suggestions. If something like dwc3_update_hs_phy_speed()
-works properly here we should have finally sorted out all the layering issues
-Felipe was unhappy about.
+Error/Warning reports:
+
+https://lore.kernel.org/linux-mm/202204291924.vTGZmerI-lkp@intel.com
+https://lore.kernel.org/linux-mm/202205041248.WgCwPcEV-lkp@intel.com
+https://lore.kernel.org/linux-mm/202205122113.uLKzd3SZ-lkp@intel.com
+https://lore.kernel.org/linux-mm/202205150051.3RzuooAG-lkp@intel.com
+https://lore.kernel.org/linux-mm/202205150117.sd6HzBVm-lkp@intel.com
+https://lore.kernel.org/llvm/202205170327.TVBbIsh2-lkp@intel.com
+https://lore.kernel.org/llvm/202205170352.5YjuBP5H-lkp@intel.com
+
+Error/Warning: (recently discovered and may have been fixed)
+
+<command-line>: fatal error: ./include/generated/utsrelease.h: No such file or directory
+ERROR: modpost: "__udivdi3" [drivers/mtd/parsers/scpart.ko] undefined!
+arch/riscv/include/asm/tlbflush.h:23:2: error: expected assembly-time absolute expression
+arch/x86/kvm/pmu.h:20:32: warning: 'vmx_icl_pebs_cpu' defined but not used [-Wunused-const-variable=]
+drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c:1364:5: warning: no previous prototype for 'amdgpu_discovery_get_mall_info' [-Wmissing-prototypes]
+drivers/gpu/drm/amd/amdgpu/soc21.c:171:6: warning: no previous prototype for 'soc21_grbm_select' [-Wmissing-prototypes]
+drivers/gpu/drm/solomon/ssd130x-spi.c:154:35: warning: 'ssd130x_spi_table' defined but not used [-Wunused-const-variable=]
+drivers/video/fbdev/omap/hwa742.c:492:5: warning: no previous prototype for 'hwa742_update_window_async' [-Wmissing-prototypes]
+fs/buffer.c:2254:5: warning: stack frame size (2152) exceeds limit (1024) in 'block_read_full_folio' [-Wframe-larger-than]
+fs/ntfs/aops.c:378:12: warning: stack frame size (2216) exceeds limit (1024) in 'ntfs_read_folio' [-Wframe-larger-than]
+kernel/trace/fgraph.c:37:12: warning: no previous prototype for 'ftrace_enable_ftrace_graph_caller' [-Wmissing-prototypes]
+kernel/trace/fgraph.c:46:12: warning: no previous prototype for 'ftrace_disable_ftrace_graph_caller' [-Wmissing-prototypes]
+
+Unverified Error/Warning (likely false positive, please contact us if interested):
+
+Error: Section .bss not empty in prom_init.c
+Makefile:686: arch/h8300/Makefile: No such file or directory
+arch/Kconfig:10: can't open file "arch/h8300/Kconfig"
+arch/arm64/kvm/pmu.c:9:46: warning: tentative definition of variable with internal linkage has incomplete non-array type 'typeof(struct kvm_pmu_events)' (aka 'struct kvm_pmu_events') [-Wtentative-definition-incomplete-type]
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:5102:14: warning: variable 'allow_lttpr_non_transparent_mode' set but not used [-Wunused-but-set-variable]
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:5147:6: warning: no previous prototype for 'dp_parse_lttpr_mode' [-Wmissing-prototypes]
+drivers/gpu/drm/bridge/adv7511/adv7511.h:229:17: warning: 'ADV7511_REG_CEC_RX_FRAME_HDR' defined but not used [-Wunused-const-variable=]
+drivers/gpu/drm/bridge/adv7511/adv7511.h:235:17: warning: 'ADV7511_REG_CEC_RX_FRAME_LEN' defined but not used [-Wunused-const-variable=]
+drivers/gpu/drm/i915/gt/intel_gt_sysfs_pm.c:46 sysfs_gt_attribute_w_func() error: uninitialized symbol 'ret'.
+drivers/opp/core.c:1499:13: warning: Uninitialized variable: iter->rate [uninitvar]
+drivers/opp/core.c:1533:14: warning: Uninitialized variable: temp->removed [uninitvar]
+drivers/opp/core.c:2682:16: warning: Uninitialized variable: tmp_opp->rate [uninitvar]
+drivers/opp/core.c:365:12: warning: Uninitialized variable: opp->available [uninitvar]
+drivers/opp/core.c:442:17: warning: Uninitialized variable: temp_opp->available [uninitvar]
+drivers/opp/core.c:491:17: warning: Uninitialized variable: temp_opp->level [uninitvar]
+drivers/opp/core.c:60:26: warning: Uninitialized variables: opp_table.node, opp_table.lazy, opp_table.head, opp_table.dev_list, opp_table.opp_list, opp_table.kref, opp_table.lock, opp_table.np, opp_table.clock_latency_ns_max, opp_table.voltage_tolerance_v1, opp_table.parsed_static_opps, opp_table.shared_opp, opp_table.current_rate, opp_table.current_opp, opp_table.suspend_opp, opp_table.genpd_virt_dev_lock, opp_table.genpd_virt_devs, opp_table.required_opp_tables, opp_table.required_opp_count, opp_table.supported_hw, opp_table.supported_hw_count, opp_table.prop_name, opp_table.clk, opp_table.regulators, opp_table.regulator_count, opp_table.paths, opp_table.path_count, opp_table.enabled, opp_table.genpd_performance_state, opp_table.is_genpd, opp_table.set_opp, opp_table.sod_supplies, opp_table.set_opp_data [uninitvar]
+kernel/bpf/verifier.c:5354 process_kptr_func() warn: passing zero to 'PTR_ERR'
+make[1]: *** No rule to make target 'arch/h8300/Makefile'.
+mm/shmem.c:1910 shmem_getpage_gfp() warn: should '(((1) << 12) / 512) << folio_order(folio)' be a 64 bit type?
+{standard input}:1991: Error: unknown pseudo-op: `.lc'
+
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:no-previous-prototype-for-dp_parse_lttpr_mode
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:variable-allow_lttpr_non_transparent_mode-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_discovery.c:warning:no-previous-prototype-for-amdgpu_discovery_get_mall_info
+|   `-- drivers-gpu-drm-amd-amdgpu-soc21.c:warning:no-previous-prototype-for-soc21_grbm_select
+|-- arc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:no-previous-prototype-for-dp_parse_lttpr_mode
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:variable-allow_lttpr_non_transparent_mode-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_discovery.c:warning:no-previous-prototype-for-amdgpu_discovery_get_mall_info
+|   `-- drivers-gpu-drm-amd-amdgpu-soc21.c:warning:no-previous-prototype-for-soc21_grbm_select
+|-- arm-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:no-previous-prototype-for-dp_parse_lttpr_mode
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:variable-allow_lttpr_non_transparent_mode-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_discovery.c:warning:no-previous-prototype-for-amdgpu_discovery_get_mall_info
+|   |-- drivers-gpu-drm-amd-amdgpu-soc21.c:warning:no-previous-prototype-for-soc21_grbm_select
+|   `-- drivers-video-fbdev-omap-hwa742.c:warning:no-previous-prototype-for-hwa742_update_window_async
+|-- arm-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:no-previous-prototype-for-dp_parse_lttpr_mode
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:variable-allow_lttpr_non_transparent_mode-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_discovery.c:warning:no-previous-prototype-for-amdgpu_discovery_get_mall_info
+|   |-- drivers-gpu-drm-amd-amdgpu-soc21.c:warning:no-previous-prototype-for-soc21_grbm_select
+|   `-- drivers-video-fbdev-omap-hwa742.c:warning:no-previous-prototype-for-hwa742_update_window_async
+|-- arm64-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:no-previous-prototype-for-dp_parse_lttpr_mode
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:variable-allow_lttpr_non_transparent_mode-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_discovery.c:warning:no-previous-prototype-for-amdgpu_discovery_get_mall_info
+|   `-- drivers-gpu-drm-amd-amdgpu-soc21.c:warning:no-previous-prototype-for-soc21_grbm_select
+|-- h8300-allyesconfig
+|   |-- Makefile:arch-h8300-Makefile:No-such-file-or-directory
+|   |-- arch-Kconfig:can-t-open-file-arch-h8300-Kconfig
+|   `-- make:No-rule-to-make-target-arch-h8300-Makefile-.
+|-- h8300-randconfig-r001-20220516
+|   |-- Makefile:arch-h8300-Makefile:No-such-file-or-directory
+|   |-- arch-Kconfig:can-t-open-file-arch-h8300-Kconfig
+|   `-- make:No-rule-to-make-target-arch-h8300-Makefile-.
+|-- i386-allyesconfig
+|   |-- arch-x86-kvm-pmu.h:warning:vmx_icl_pebs_cpu-defined-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:no-previous-prototype-for-dp_parse_lttpr_mode
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:variable-allow_lttpr_non_transparent_mode-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_discovery.c:warning:no-previous-prototype-for-amdgpu_discovery_get_mall_info
+|   |-- drivers-gpu-drm-amd-amdgpu-soc21.c:warning:no-previous-prototype-for-soc21_grbm_select
+|   |-- drivers-gpu-drm-bridge-adv7511-adv7511.h:warning:ADV7511_REG_CEC_RX_FRAME_HDR-defined-but-not-used
+|   |-- drivers-gpu-drm-bridge-adv7511-adv7511.h:warning:ADV7511_REG_CEC_RX_FRAME_LEN-defined-but-not-used
+|   `-- drivers-gpu-drm-solomon-ssd13-spi.c:warning:ssd13_spi_table-defined-but-not-used
+|-- i386-debian-10.3
+|   `-- arch-x86-kvm-pmu.h:warning:vmx_icl_pebs_cpu-defined-but-not-used
+|-- i386-debian-10.3-kselftests
+|   `-- arch-x86-kvm-pmu.h:warning:vmx_icl_pebs_cpu-defined-but-not-used
+|-- i386-randconfig-a011-20220516
+|   |-- drivers-gpu-drm-bridge-adv7511-adv7511.h:warning:ADV7511_REG_CEC_RX_FRAME_HDR-defined-but-not-used
+|   `-- drivers-gpu-drm-bridge-adv7511-adv7511.h:warning:ADV7511_REG_CEC_RX_FRAME_LEN-defined-but-not-used
+|-- i386-randconfig-m021-20220516
+|   |-- kernel-bpf-verifier.c-process_kptr_func()-warn:passing-zero-to-PTR_ERR
+|   `-- mm-shmem.c-shmem_getpage_gfp()-warn:should-((()-)-)-folio_order(folio)-be-a-bit-type
+|-- ia64-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:no-previous-prototype-for-dp_parse_lttpr_mode
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:variable-allow_lttpr_non_transparent_mode-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_discovery.c:warning:no-previous-prototype-for-amdgpu_discovery_get_mall_info
+|   `-- drivers-gpu-drm-amd-amdgpu-soc21.c:warning:no-previous-prototype-for-soc21_grbm_select
+|-- ia64-randconfig-r005-20220516
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_discovery.c:warning:no-previous-prototype-for-amdgpu_discovery_get_mall_info
+|   `-- drivers-gpu-drm-amd-amdgpu-soc21.c:warning:no-previous-prototype-for-soc21_grbm_select
+|-- microblaze-randconfig-s031-20220516
+|   |-- kernel-trace-fgraph.c:warning:no-previous-prototype-for-ftrace_disable_ftrace_graph_caller
+|   `-- kernel-trace-fgraph.c:warning:no-previous-prototype-for-ftrace_enable_ftrace_graph_caller
+|-- mips-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:no-previous-prototype-for-dp_parse_lttpr_mode
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:variable-allow_lttpr_non_transparent_mode-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_discovery.c:warning:no-previous-prototype-for-amdgpu_discovery_get_mall_info
+|   `-- drivers-gpu-drm-amd-amdgpu-soc21.c:warning:no-previous-prototype-for-soc21_grbm_select
+|-- mips-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:no-previous-prototype-for-dp_parse_lttpr_mode
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:variable-allow_lttpr_non_transparent_mode-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_discovery.c:warning:no-previous-prototype-for-amdgpu_discovery_get_mall_info
+|   `-- drivers-gpu-drm-amd-amdgpu-soc21.c:warning:no-previous-prototype-for-soc21_grbm_select
+|-- parisc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:no-previous-prototype-for-dp_parse_lttpr_mode
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:variable-allow_lttpr_non_transparent_mode-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_discovery.c:warning:no-previous-prototype-for-amdgpu_discovery_get_mall_info
+|   `-- drivers-gpu-drm-amd-amdgpu-soc21.c:warning:no-previous-prototype-for-soc21_grbm_select
+|-- powerpc-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:no-previous-prototype-for-dp_parse_lttpr_mode
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:variable-allow_lttpr_non_transparent_mode-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_discovery.c:warning:no-previous-prototype-for-amdgpu_discovery_get_mall_info
+|   `-- drivers-gpu-drm-amd-amdgpu-soc21.c:warning:no-previous-prototype-for-soc21_grbm_select
+|-- powerpc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:no-previous-prototype-for-dp_parse_lttpr_mode
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:variable-allow_lttpr_non_transparent_mode-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_discovery.c:warning:no-previous-prototype-for-amdgpu_discovery_get_mall_info
+|   `-- drivers-gpu-drm-amd-amdgpu-soc21.c:warning:no-previous-prototype-for-soc21_grbm_select
+|-- powerpc-randconfig-c004-20220516
+|   `-- command-line:fatal-error:.-include-generated-utsrelease.h:No-such-file-or-directory
+|-- powerpc64-randconfig-r011-20220516
+|   `-- Error:Section-.bss-not-empty-in-prom_init.c
+|-- riscv-allmodconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:no-previous-prototype-for-dp_parse_lttpr_mode
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:variable-allow_lttpr_non_transparent_mode-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_discovery.c:warning:no-previous-prototype-for-amdgpu_discovery_get_mall_info
+|   `-- drivers-gpu-drm-amd-amdgpu-soc21.c:warning:no-previous-prototype-for-soc21_grbm_select
+|-- riscv-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:no-previous-prototype-for-dp_parse_lttpr_mode
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:variable-allow_lttpr_non_transparent_mode-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_discovery.c:warning:no-previous-prototype-for-amdgpu_discovery_get_mall_info
+|   `-- drivers-gpu-drm-amd-amdgpu-soc21.c:warning:no-previous-prototype-for-soc21_grbm_select
+|-- s390-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:no-previous-prototype-for-dp_parse_lttpr_mode
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:variable-allow_lttpr_non_transparent_mode-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_discovery.c:warning:no-previous-prototype-for-amdgpu_discovery_get_mall_info
+|   `-- drivers-gpu-drm-amd-amdgpu-soc21.c:warning:no-previous-prototype-for-soc21_grbm_select
+|-- sh-allmodconfig
+|   `-- standard-input:Error:unknown-pseudo-op:lc
+|-- sparc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:no-previous-prototype-for-dp_parse_lttpr_mode
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:variable-allow_lttpr_non_transparent_mode-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_discovery.c:warning:no-previous-prototype-for-amdgpu_discovery_get_mall_info
+|   `-- drivers-gpu-drm-amd-amdgpu-soc21.c:warning:no-previous-prototype-for-soc21_grbm_select
+|-- x86_64-allyesconfig
+|   |-- arch-x86-kvm-pmu.h:warning:vmx_icl_pebs_cpu-defined-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:no-previous-prototype-for-dp_parse_lttpr_mode
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:variable-allow_lttpr_non_transparent_mode-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_discovery.c:warning:no-previous-prototype-for-amdgpu_discovery_get_mall_info
+|   |-- drivers-gpu-drm-amd-amdgpu-soc21.c:warning:no-previous-prototype-for-soc21_grbm_select
+|   |-- drivers-gpu-drm-bridge-adv7511-adv7511.h:warning:ADV7511_REG_CEC_RX_FRAME_HDR-defined-but-not-used
+|   |-- drivers-gpu-drm-bridge-adv7511-adv7511.h:warning:ADV7511_REG_CEC_RX_FRAME_LEN-defined-but-not-used
+|   `-- drivers-gpu-drm-solomon-ssd13-spi.c:warning:ssd13_spi_table-defined-but-not-used
+|-- x86_64-kexec
+|   `-- arch-x86-kvm-pmu.h:warning:vmx_icl_pebs_cpu-defined-but-not-used
+|-- x86_64-randconfig-a012-20220516
+|   |-- drivers-gpu-drm-bridge-adv7511-adv7511.h:warning:ADV7511_REG_CEC_RX_FRAME_HDR-defined-but-not-used
+|   `-- drivers-gpu-drm-bridge-adv7511-adv7511.h:warning:ADV7511_REG_CEC_RX_FRAME_LEN-defined-but-not-used
+|-- x86_64-randconfig-a014-20220516
+|   `-- arch-x86-kvm-pmu.h:warning:vmx_icl_pebs_cpu-defined-but-not-used
+|-- x86_64-randconfig-c002-20220516
+|   `-- command-line:fatal-error:.-include-generated-utsrelease.h:No-such-file-or-directory
+|-- x86_64-randconfig-m001-20220516
+|   |-- drivers-gpu-drm-i915-gt-intel_gt_sysfs_pm.c-sysfs_gt_attribute_w_func()-error:uninitialized-symbol-ret-.
+|   `-- kernel-bpf-verifier.c-process_kptr_func()-warn:passing-zero-to-PTR_ERR
+|-- x86_64-rhel-8.3
+|   `-- arch-x86-kvm-pmu.h:warning:vmx_icl_pebs_cpu-defined-but-not-used
+|-- x86_64-rhel-8.3-func
+|   `-- arch-x86-kvm-pmu.h:warning:vmx_icl_pebs_cpu-defined-but-not-used
+|-- x86_64-rhel-8.3-kselftests
+|   `-- arch-x86-kvm-pmu.h:warning:vmx_icl_pebs_cpu-defined-but-not-used
+|-- x86_64-rhel-8.3-kunit
+|   `-- arch-x86-kvm-pmu.h:warning:vmx_icl_pebs_cpu-defined-but-not-used
+|-- x86_64-rhel-8.3-syz
+|   `-- arch-x86-kvm-pmu.h:warning:vmx_icl_pebs_cpu-defined-but-not-used
+|-- xtensa-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:no-previous-prototype-for-dp_parse_lttpr_mode
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:variable-allow_lttpr_non_transparent_mode-set-but-not-used
+|   |-- drivers-gpu-drm-amd-amdgpu-amdgpu_discovery.c:warning:no-previous-prototype-for-amdgpu_discovery_get_mall_info
+|   `-- drivers-gpu-drm-amd-amdgpu-soc21.c:warning:no-previous-prototype-for-soc21_grbm_select
+`-- xtensa-randconfig-p002-20220516
+    |-- drivers-opp-core.c:warning:Uninitialized-variable:iter-rate-uninitvar
+    |-- drivers-opp-core.c:warning:Uninitialized-variable:opp-available-uninitvar
+    |-- drivers-opp-core.c:warning:Uninitialized-variable:temp-removed-uninitvar
+    |-- drivers-opp-core.c:warning:Uninitialized-variable:temp_opp-available-uninitvar
+    |-- drivers-opp-core.c:warning:Uninitialized-variable:temp_opp-level-uninitvar
+    |-- drivers-opp-core.c:warning:Uninitialized-variable:tmp_opp-rate-uninitvar
+    `-- drivers-opp-core.c:warning:Uninitialized-variables:opp_table.node-opp_table.lazy-opp_table.head-opp_table.dev_list-opp_table.opp_list-opp_table.kref-opp_table.lock-opp_table.np-opp_table.clock_latency
+
+clang_recent_errors
+|-- arm64-randconfig-r001-20220516
+|   `-- arch-arm64-kvm-pmu.c:warning:tentative-definition-of-variable-with-internal-linkage-has-incomplete-non-array-type-typeof(struct-kvm_pmu_events)-(aka-struct-kvm_pmu_events-)
+|-- hexagon-randconfig-r045-20220516
+|   |-- fs-buffer.c:warning:stack-frame-size-()-exceeds-limit-()-in-block_read_full_folio
+|   `-- fs-ntfs-aops.c:warning:stack-frame-size-()-exceeds-limit-()-in-ntfs_read_folio
+|-- i386-randconfig-r004-20220516
+|   `-- ERROR:__udivdi3-drivers-mtd-parsers-scpart.ko-undefined
+`-- riscv-randconfig-r036-20220516
+    `-- arch-riscv-include-asm-tlbflush.h:error:expected-assembly-time-absolute-expression
+
+elapsed time: 728m
+
+configs tested: 104
+configs skipped: 3
+
+gcc tested configs:
+arm                              allmodconfig
+arm                              allyesconfig
+arm                                 defconfig
+arm64                               defconfig
+arm64                            allyesconfig
+i386                 randconfig-c001-20220516
+ia64                          tiger_defconfig
+mips                            gpr_defconfig
+mips                       bmips_be_defconfig
+arm                        spear6xx_defconfig
+powerpc                       maple_defconfig
+sh                 kfr2r09-romimage_defconfig
+mips                         db1xxx_defconfig
+powerpc                      cm5200_defconfig
+sh                           se7619_defconfig
+xtensa                  audio_kc705_defconfig
+sh                           se7780_defconfig
+sh                           se7705_defconfig
+powerpc                     sequoia_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+alpha                               defconfig
+csky                                defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+s390                             allyesconfig
+parisc64                            defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+nios2                               defconfig
+arc                              allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+x86_64               randconfig-a012-20220516
+x86_64               randconfig-a011-20220516
+x86_64               randconfig-a013-20220516
+x86_64               randconfig-a014-20220516
+x86_64               randconfig-a016-20220516
+x86_64               randconfig-a015-20220516
+i386                 randconfig-a011-20220516
+i386                 randconfig-a013-20220516
+i386                 randconfig-a015-20220516
+i386                 randconfig-a012-20220516
+i386                 randconfig-a016-20220516
+i386                 randconfig-a014-20220516
+arc                  randconfig-r043-20220516
+riscv                randconfig-r042-20220516
+s390                 randconfig-r044-20220516
+riscv                             allnoconfig
+riscv                            allyesconfig
+riscv                            allmodconfig
+riscv                    nommu_k210_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_virt_defconfig
+riscv                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                                  kexec
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+x86_64                               rhel-8.3
+x86_64                         rhel-8.3-kunit
+
+clang tested configs:
+arm                         orion5x_defconfig
+arm                       aspeed_g4_defconfig
+powerpc                      katmai_defconfig
+powerpc                   microwatt_defconfig
+powerpc                     akebono_defconfig
+powerpc                    mvme5100_defconfig
+i386                 randconfig-a003-20220516
+i386                 randconfig-a001-20220516
+i386                 randconfig-a004-20220516
+i386                 randconfig-a006-20220516
+i386                 randconfig-a002-20220516
+i386                 randconfig-a005-20220516
+x86_64               randconfig-a002-20220516
+x86_64               randconfig-a001-20220516
+x86_64               randconfig-a003-20220516
+x86_64               randconfig-a005-20220516
+x86_64               randconfig-a004-20220516
+x86_64               randconfig-a006-20220516
+hexagon              randconfig-r045-20220516
+hexagon              randconfig-r041-20220516
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
