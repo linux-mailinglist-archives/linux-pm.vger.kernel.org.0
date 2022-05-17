@@ -2,62 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 897B852A944
-	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 19:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA7F52A97C
+	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 19:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351436AbiEQR3n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 May 2022 13:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39362 "EHLO
+        id S1347612AbiEQRmS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 May 2022 13:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351428AbiEQR3n (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 13:29:43 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B0B36B71;
-        Tue, 17 May 2022 10:29:41 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24HHTaQK003334;
-        Tue, 17 May 2022 12:29:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1652808576;
-        bh=deD3EIje9Vyk7QFSHVfQAyeVCw4AXB48R+C+3n6GWRY=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=q0DMtRozylqsCsX1qt3C73A+iz8Jq80paOwGlzbF0YOHctcqMsVo2a6syy7F1eeEn
-         OmIx5mUbL4LTLxkCZS6BZIh33m9cOfo8mcroi+6X8jrKhbnRlZsV9YEEVP0jnlnjTT
-         43IqCI0wb27HeUL9SgiJut4vDasCgoBLT14jFPic=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24HHTa5m108805
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 17 May 2022 12:29:36 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 17
- May 2022 12:29:35 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 17 May 2022 12:29:35 -0500
-Received: from localhost.localdomain (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24HHTRYE079003;
-        Tue, 17 May 2022 12:29:32 -0500
-From:   Keerthy <j-keerthy@ti.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <amitk@kernel.org>, <kristo@kernel.org>
-CC:     <j-keerthy@ti.com>, <rafael@kernel.org>,
-        <linux-pm@vger.kernel.org>, <vigneshr@ti.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v9 1/2] dt-bindings: thermal: k3-j72xx: Add VTM bindings documentation
-Date:   Tue, 17 May 2022 22:59:19 +0530
-Message-ID: <20220517172920.10857-2-j-keerthy@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220517172920.10857-1-j-keerthy@ti.com>
-References: <20220517172920.10857-1-j-keerthy@ti.com>
+        with ESMTP id S242639AbiEQRmS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 13:42:18 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35CDD109
+        for <linux-pm@vger.kernel.org>; Tue, 17 May 2022 10:42:16 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-f17f1acffeso12538643fac.4
+        for <linux-pm@vger.kernel.org>; Tue, 17 May 2022 10:42:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eg7EH5Vrvb2fKjVFmkcCg9Zq9x2kct9i+zNiZ3Rb9nE=;
+        b=e1JvkQ93rAtCK7sn488U3SuJf4AoUESglxHXrKJTTMMkNeQNcU7i/nTgft7PxtzV81
+         JTZb2e0ArclXtYmdxk/G5BmXdnm+y8WTIxYFtmcmGcWKgMQy1d7RhscLPElAzT1nXsHj
+         Xd2uFtRkYUUKQb5Cxhh1Wdfsp9NSTDDMoVQRs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eg7EH5Vrvb2fKjVFmkcCg9Zq9x2kct9i+zNiZ3Rb9nE=;
+        b=oWlbv7lkXsNZxR+wymvxniv7T+tSuXJJTq0WJhBlGvae6l3NskCGpxrwpavPVzJfKg
+         BYhx/2CwwV9sjuDjvExEwQnfiu1qfUzpauwO4I2DVFa4GmAthaHj6uk5HPWMXEDg95Z1
+         T+xv9Bs508/FVRGiJcGlhDPewRJHCio+LIRYEZkGdFU0GeFz3y9nS4/khcdSXe2oryS0
+         UL05XmPxGz3zSCneE/kcXGLpLqfA1q70ayi1STFxrm3Vx02rJweEiSdpQmv++HLZBl6m
+         yIbKkJyPfQyInLdpbbHUwm8mnD2Db143jKOxfUecU5iIVPfffRNeQiYNrmdSTYWyln2o
+         iHJw==
+X-Gm-Message-State: AOAM530k9VipudFKuZVIeEIFONzYVkyO8fkt0u5MMirtxToyJk8+G7Vs
+        NW2/aIuFLE/uhZvfwwwW92XotU7UL9tILA==
+X-Google-Smtp-Source: ABdhPJx5hDtElGp3FhUQJC494zZcfHa8LIlA0xziB4QjxBMjDsj8ohcO+TGjQmkudIH6DW5q12gbCA==
+X-Received: by 2002:a05:6870:630d:b0:e2:6498:6734 with SMTP id s13-20020a056870630d00b000e264986734mr13071396oao.3.1652809335971;
+        Tue, 17 May 2022 10:42:15 -0700 (PDT)
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com. [209.85.167.172])
+        by smtp.gmail.com with ESMTPSA id o185-20020acabec2000000b00325cda1ff95sm68893oif.20.2022.05.17.10.42.15
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 May 2022 10:42:15 -0700 (PDT)
+Received: by mail-oi1-f172.google.com with SMTP id q10so23156919oia.9
+        for <linux-pm@vger.kernel.org>; Tue, 17 May 2022 10:42:15 -0700 (PDT)
+X-Received: by 2002:a05:6808:d52:b0:328:acfc:d274 with SMTP id
+ w18-20020a0568080d5200b00328acfcd274mr11183218oik.174.1652808882898; Tue, 17
+ May 2022 10:34:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220504232102.469959-1-evgreen@chromium.org> <20220506160807.GA1060@bug>
+ <CAE=gft6m75T0UC2DBhfFhuSMW6TK7aatD_04sQ18WosgGVsATw@mail.gmail.com> <CAJZ5v0gxq=EA_WWUiCR_w8o87iTHDR7OC5wi=GRBaAQS2ofd5w@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gxq=EA_WWUiCR_w8o87iTHDR7OC5wi=GRBaAQS2ofd5w@mail.gmail.com>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Tue, 17 May 2022 10:34:05 -0700
+X-Gmail-Original-Message-ID: <CAE=gft6V6RLc-d4AOuRUVU2u1jMGghDRSrFqiCqMCLxemui8Pw@mail.gmail.com>
+Message-ID: <CAE=gft6V6RLc-d4AOuRUVU2u1jMGghDRSrFqiCqMCLxemui8Pw@mail.gmail.com>
+Subject: Re: [PATCH 00/10] Encrypted Hibernation
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, LKML <linux-kernel@vger.kernel.org>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        Daniil Lunev <dlunev@google.com>, zohar@linux.ibm.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Len Brown <len.brown@intel.com>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
+        keyrings@vger.kernel.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,91 +90,68 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add VTM bindings documentation. In the Voltage Thermal
-Management Module(VTM), K3 J72XX supplies a voltage
-reference and a temperature sensor feature that are gathered in the band
-gap voltage and temperature sensor (VBGAPTS) module. The band
-gap provides current and voltage reference for its internal
-circuits and other analog IP blocks. The analog-to-digital
-converter (ADC) produces an output value that is proportional
-to the silicon temperature.
+Hi Rafael,
 
-Signed-off-by: Keerthy <j-keerthy@ti.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- .../bindings/thermal/ti,j72xx-thermal.yaml    | 63 +++++++++++++++++++
- 1 file changed, 63 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+On Tue, May 17, 2022 at 9:06 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Mon, May 9, 2022 at 6:44 PM Evan Green <evgreen@chromium.org> wrote:
+> >
+> > On Fri, May 6, 2022 at 9:08 AM Pavel Machek <pavel@ucw.cz> wrote:
+> > >
+> > > Hi!
+> > >
+> > > > We are exploring enabling hibernation in some new scenarios. However,
+> > > > our security team has a few requirements, listed below:
+> > > > 1. The hibernate image must be encrypted with protection derived from
+> > > >    both the platform (eg TPM) and user authentication data (eg
+> > > >    password).
+> > > > 2. Hibernation must not be a vector by which a malicious userspace can
+> > > >    escalate to the kernel.
+> > >
+> > > Can you (or your security team) explain why requirement 2. is needed?
+> > >
+> > > On normal systems, trusted userspace handles kernel upgrades (for example),
+> > > so it can escalate to kernel priviledges.
+> > >
+> >
+> > Our systems are a little more sealed up than a normal distro, we use
+> > Verified Boot [1]. To summarize, RO firmware with an embedded public
+> > key verifies that the kernel+commandline was signed by Google. The
+> > commandline includes the root hash of the rootfs as well (where the
+> > modules live). So when an update is applied (A/B style, including the
+> > whole rootfs), assuming the RO firmware stayed RO (which requires
+> > physical measures to defeat), we can guarantee that the kernel,
+> > commandline, and rootfs have not been tampered with.
+> >
+> > Verified boot gives us confidence that on each boot, we're at least
+> > starting from known code. This makes it more challenging for an
+> > attacker to persist an exploit across reboot. With the kernel and
+> > modules verified, we try to make it non-trivial for someone who does
+> > manage to gain root execution once from escalating to kernel
+> > execution. Hibernation would be one obvious escalation route, so we're
+> > hoping to find a way to enable it without handing out that easy
+> > primitive.
+> >
+> > [1] https://www.chromium.org/chromium-os/chromiumos-design-docs/verified-boot/
+>
+> So I guess this really is an RFC.
 
-diff --git a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-new file mode 100644
-index 000000000000..c74f124ebfc0
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/ti,j72xx-thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Texas Instruments J72XX VTM (DTS) binding
-+
-+maintainers:
-+  - Keerthy <j-keerthy@ti.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - ti,j721e-vtm
-+      - ti,j7200-vtm
-+
-+  reg:
-+    items:
-+      - description: VTM cfg1 register space
-+      - description: VTM cfg2 register space
-+      - description: VTM efuse register space
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  "#thermal-sensor-cells":
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - power-domains
-+  - "#thermal-sensor-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/soc/ti,sci_pm_domain.h>
-+    wkup_vtm0: thermal-sensor@42040000 {
-+        compatible = "ti,j721e-vtm";
-+        reg = <0x42040000 0x350>,
-+              <0x42050000 0x350>,
-+              <0x43000300 0x10>;
-+        power-domains = <&k3_pds 154 TI_SCI_PD_EXCLUSIVE>;
-+        #thermal-sensor-cells = <1>;
-+    };
-+
-+    mpu_thermal: mpu-thermal {
-+        polling-delay-passive = <250>; /* milliseconds */
-+        polling-delay = <500>; /* milliseconds */
-+        thermal-sensors = <&wkup_vtm0 0>;
-+
-+        trips {
-+            mpu_crit: mpu-crit {
-+                temperature = <125000>; /* milliCelsius */
-+                hysteresis = <2000>; /* milliCelsius */
-+                type = "critical";
-+            };
-+        };
-+    };
-+...
--- 
-2.17.1
+Yes, I suppose it is.
 
+>
+> Honestly, I need more time to go through this and there are pieces of
+> it that need to be looked at other people (like the TPM-related
+> changes).
+
+No problem, thanks for the reply to let me know. I expect some back
+and forth in terms of what should be hidden behind abstractions and
+where exactly things should live. But I wanted to get this out to
+upstream as early as I could, just to get initial reactions on the
+overall concept and design. Looking forward to hearing your thoughts
+when you get a chance, and let me know if there are others I should be
+adding that I've missed.
+
+-Evan
+
+>
+> Thanks!
