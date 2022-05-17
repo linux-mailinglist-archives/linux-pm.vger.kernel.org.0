@@ -2,56 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3ACA529756
-	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 04:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E335298D6
+	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 06:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233914AbiEQCYJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 May 2022 22:24:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36640 "EHLO
+        id S229895AbiEQEgo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 May 2022 00:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiEQCYE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 May 2022 22:24:04 -0400
-Received: from m12-13.163.com (m12-13.163.com [220.181.12.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B9E53D1FC;
-        Mon, 16 May 2022 19:24:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=lTBhx
-        p2EfVojczwDke4E/Onuf36SXf/m+vxj1MMdS2Y=; b=K6NlZ9QpriWOehObiwcCW
-        pE3iFoBEuRVoIUNkpmAnABQTWS8xwo6jXXfDwuQ5jbHAhPGifkxC5uTlGvPQuGiy
-        kUsAAnQ9eT0171ARPVgOufstlCt9tFJLy0bZgjlR45aNrDd9IDvSeFkNoFonE878
-        KrJ3CCaBcKTwmrhIejxA8A=
-Received: from DESKTOP-B1R4FVG.localdomain (unknown [218.201.129.20])
-        by smtp9 (Coremail) with SMTP id DcCowAB3USwR_IJiF3ohDQ--.61255S4;
-        Tue, 17 May 2022 09:36:19 +0800 (CST)
-From:   qianfanguijin@163.com
-To:     linux-sunxi@lists.linux.dev
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        qianfan Zhao <qianfanguijin@163.com>
-Subject: [PATCH v5 2/3] ARM: dts: sun8i-r40: add opp table for cpu
-Date:   Tue, 17 May 2022 09:36:06 +0800
-Message-Id: <20220517013607.2252-3-qianfanguijin@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220517013607.2252-1-qianfanguijin@163.com>
-References: <20220517013607.2252-1-qianfanguijin@163.com>
+        with ESMTP id S229769AbiEQEgm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 00:36:42 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A794727FEC
+        for <linux-pm@vger.kernel.org>; Mon, 16 May 2022 21:36:38 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1nqowm-0006GK-1p; Tue, 17 May 2022 06:36:36 +0200
+Message-ID: <a32a70be-699e-88ff-83ba-cdf96f9221a1@pengutronix.de>
+Date:   Tue, 17 May 2022 06:36:31 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DcCowAB3USwR_IJiF3ohDQ--.61255S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxGrWxXF1UKw4xur17Xry5urg_yoWrZFy8pw
-        17Zr4kGrs7Wr1Yq342gry8KF18uFWv9F4Yyry5C348Jrn7X34DJr97tr9akrWDXr43X3yI
-        9Fs5Xr9rtw1DZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Ubo7tUUUUU=
-X-Originating-IP: [218.201.129.20]
-X-CM-SenderInfo: htld0w5dqj3xxmlqqiywtou0bp/1tbiQhQE7VaECXNrTAAAsw
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v1] thermal: imx: Make trip point offset configurable
+Content-Language: en-US
+To:     Francesco Dolcini <francesco.dolcini@toradex.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, l.stach@pengutronix.de,
+        linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rafael@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Amit Kucheria <amitk@kernel.org>,
+        Jon Nettleton <jon@solid-run.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tim Harvey <tharvey@gateworks.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <20220516190001.147919-1-francesco.dolcini@toradex.com>
+ <92ae0fd5-f827-ae3c-bbef-d551c9fa5b76@pengutronix.de>
+ <20220516191657.GA148058@francesco-nb.int.toradex.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <20220516191657.GA148058@francesco-nb.int.toradex.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,164 +57,67 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: qianfan Zhao <qianfanguijin@163.com>
+Hello Francesco,
 
-OPP table value is get from allwinner lichee linux-3.10 kernel driver
+On 16.05.22 21:16, Francesco Dolcini wrote:
+> On Mon, May 16, 2022 at 09:06:10PM +0200, Ahmad Fatoum wrote:
+>> On 16.05.22 21:00, Francesco Dolcini wrote:
+>>> Currently the imx thermal driver has a hardcoded critical temperature
+>>> value offset of 5 Celsius degrees from the actual SoC maximum
+>>> temperature.
+>>>
+>>> This affects applications and systems designed to be working on this close
+>>> to the limit, but yet valid, temperature range.
+>>>
+>>> Given that there is no single value that will fit all the use cases make
+>>> the critical trip point offset from the max temperature configurable
+>>> using a newly added trip_offset module parameter, passive trip point is
+>>> set to 5 Celsius degrees less than the critical. By default the
+>>> system behaves exactly as before.
+>>>
+>>> Link: https://lore.kernel.org/all/20220420091300.179753-1-francesco.dolcini@toradex.com/
+>>> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+>>> ---
+>>>  drivers/thermal/imx_thermal.c | 12 ++++++++----
+>>>  1 file changed, 8 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+>>> index 16663373b682..42d1f8a3eccb 100644
+>>> --- a/drivers/thermal/imx_thermal.c
+>>> +++ b/drivers/thermal/imx_thermal.c
+>>> @@ -86,6 +86,10 @@ enum imx_thermal_trip {
+>>>  #define TEMPMON_IMX6SX			2
+>>>  #define TEMPMON_IMX7D			3
+>>>  
+>>> +static int trip_offset = 5;
+>>> +module_param(trip_offset, int, 0444);
+>>
+>> Is this being r--r--r-- intended?
+> 
+> Yes, would you expect something more or less strict?
+> 
+> Daniel was pretty assertive that this is supposed to be a system
+> property and not something that should be possible to mess around with
+> [0]. Given this and that trip points are a+r in sysfs this was the most
+> reasonable solution to me. Said that I do not mind changing
+> this to 640 or 0440 or ...
 
-Signed-off-by: qianfan Zhao <qianfanguijin@163.com>
----
- .../boot/dts/sun8i-r40-bananapi-m2-ultra.dts  |  1 +
- arch/arm/boot/dts/sun8i-r40-cpu-opp.dtsi      | 52 +++++++++++++++++++
- arch/arm/boot/dts/sun8i-r40-feta40i.dtsi      |  1 +
- arch/arm/boot/dts/sun8i-r40.dtsi              |  8 +++
- arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts      |  1 +
- .../boot/dts/sun8i-v40-bananapi-m2-berry.dts  |  1 +
- 6 files changed, 64 insertions(+)
- create mode 100644 arch/arm/boot/dts/sun8i-r40-cpu-opp.dtsi
+I just found it odd, but with your explanation, it makes sense to have
+this a read-only-after-init setting.
 
-diff --git a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts b/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
-index 4f30018ec4a2..28197bbcb1d5 100644
---- a/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
-+++ b/arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dts
-@@ -43,6 +43,7 @@
- 
- /dts-v1/;
- #include "sun8i-r40.dtsi"
-+#include "sun8i-r40-cpu-opp.dtsi"
- 
- #include <dt-bindings/gpio/gpio.h>
- 
-diff --git a/arch/arm/boot/dts/sun8i-r40-cpu-opp.dtsi b/arch/arm/boot/dts/sun8i-r40-cpu-opp.dtsi
-new file mode 100644
-index 000000000000..4faa22d3bac8
---- /dev/null
-+++ b/arch/arm/boot/dts/sun8i-r40-cpu-opp.dtsi
-@@ -0,0 +1,52 @@
-+/{
-+	cpu0_opp_table: opp_table0 {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		opp-720000000 {
-+			opp-hz = /bits/ 64 <720000000>;
-+			opp-microvolt = <1000000 1000000 1300000>;
-+			clock-latency-ns = <2000000>;
-+		};
-+
-+		opp-912000000 {
-+			opp-hz = /bits/ 64 <912000000>;
-+			opp-microvolt = <1100000 1100000 1300000>;
-+			clock-latency-ns = <2000000>;
-+		};
-+
-+		opp-1008000000 {
-+			opp-hz = /bits/ 64 <1008000000>;
-+			opp-microvolt = <1160000 1160000 1300000>;
-+			clock-latency-ns = <2000000>;
-+		};
-+
-+		opp-1104000000 {
-+			opp-hz = /bits/ 64 <1104000000>;
-+			opp-microvolt = <1240000 1240000 1300000>;
-+			clock-latency-ns = <2000000>;
-+		};
-+
-+		opp-1200000000 {
-+			opp-hz = /bits/ 64 <1200000000>;
-+			opp-microvolt = <1300000 1300000 1300000>;
-+			clock-latency-ns = <2000000>;
-+		};
-+	};
-+};
-+
-+&cpu0 {
-+	operating-points-v2 = <&cpu0_opp_table>;
-+};
-+
-+&cpu1 {
-+	operating-points-v2 = <&cpu0_opp_table>;
-+};
-+
-+&cpu2 {
-+	operating-points-v2 = <&cpu0_opp_table>;
-+};
-+
-+&cpu3 {
-+	operating-points-v2 = <&cpu0_opp_table>;
-+};
-diff --git a/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi b/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi
-index b872b51a346d..9f39b5a2bb35 100644
---- a/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi
-+++ b/arch/arm/boot/dts/sun8i-r40-feta40i.dtsi
-@@ -5,6 +5,7 @@
- //  Copyright (C) 2017 Icenowy Zheng <icenowy@aosc.io>
- 
- #include "sun8i-r40.dtsi"
-+#include "sun8i-r40-cpu-opp.dtsi"
- 
- &cpu0 {
- 	cpu-supply = <&reg_dcdc2>;
-diff --git a/arch/arm/boot/dts/sun8i-r40.dtsi b/arch/arm/boot/dts/sun8i-r40.dtsi
-index 291f4784e86c..ae2a5ebd9924 100644
---- a/arch/arm/boot/dts/sun8i-r40.dtsi
-+++ b/arch/arm/boot/dts/sun8i-r40.dtsi
-@@ -84,24 +84,32 @@ cpu0: cpu@0 {
- 			compatible = "arm,cortex-a7";
- 			device_type = "cpu";
- 			reg = <0>;
-+			clocks = <&ccu CLK_CPU>;
-+			clock-names = "cpu";
- 		};
- 
- 		cpu1: cpu@1 {
- 			compatible = "arm,cortex-a7";
- 			device_type = "cpu";
- 			reg = <1>;
-+			clocks = <&ccu CLK_CPU>;
-+			clock-names = "cpu";
- 		};
- 
- 		cpu2: cpu@2 {
- 			compatible = "arm,cortex-a7";
- 			device_type = "cpu";
- 			reg = <2>;
-+			clocks = <&ccu CLK_CPU>;
-+			clock-names = "cpu";
- 		};
- 
- 		cpu3: cpu@3 {
- 			compatible = "arm,cortex-a7";
- 			device_type = "cpu";
- 			reg = <3>;
-+			clocks = <&ccu CLK_CPU>;
-+			clock-names = "cpu";
- 		};
- 	};
- 
-diff --git a/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts b/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts
-index 0eb1990742ff..9f472521f4a4 100644
---- a/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts
-+++ b/arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dts
-@@ -45,6 +45,7 @@
- 
- /dts-v1/;
- #include "sun8i-r40.dtsi"
-+#include "sun8i-r40-cpu-opp.dtsi"
- 
- #include <dt-bindings/gpio/gpio.h>
- 
-diff --git a/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts b/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts
-index fdf8bd12faaa..434871040aca 100644
---- a/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts
-+++ b/arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dts
-@@ -42,6 +42,7 @@
- 
- /dts-v1/;
- #include "sun8i-r40.dtsi"
-+#include "sun8i-r40-cpu-opp.dtsi"
- 
- #include <dt-bindings/gpio/gpio.h>
- 
+Thanks for the clarification,
+Ahmad
+
+> 
+> [0] https://lore.kernel.org/all/4de41b5e-1fa6-ece4-9d9a-2656d399b452@linaro.org/
+> 
+> Francesco
+> 
+> 
+
+
 -- 
-2.25.1
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
