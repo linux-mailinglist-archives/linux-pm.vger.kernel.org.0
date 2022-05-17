@@ -2,135 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA1C52A901
-	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 19:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F09C52A940
+	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 19:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbiEQRJs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 May 2022 13:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57604 "EHLO
+        id S1346397AbiEQR3l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 May 2022 13:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351412AbiEQRJG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 13:09:06 -0400
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54671506D4;
-        Tue, 17 May 2022 10:09:04 -0700 (PDT)
-Received: from relay4-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::224])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id E253BC65DF;
-        Tue, 17 May 2022 17:07:49 +0000 (UTC)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B3415E0006;
-        Tue, 17 May 2022 17:07:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1652807258;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lMslnncr3ii3Tkm1tB44alj8rpL8Y4RP39Ic20UO+ks=;
-        b=NV4NKeda8S4TQDTGbPu7/JpPe2xaqRFF+0D2NppThjNGRRqzjeY9dWkIxtMyzboiHAaH6v
-        UcNhUv1rdN6gzz3kDihWRkKcGDn9P3dro+noKnqjp2bhtOhqUqUzOfWH2roWBLLCPjNtWE
-        glY67Ghd34mxekvUcKtwM3v3ufm0tpUbknXzbWjHzEP1JaR9JKNgVCfoGf55dkfdXivuAr
-        RF72k6OwT7VrM5DYoDLPB4mThf3tagC/Ic0eMorY0/P+RzrTNaatCdo1J0tM46DwYyeH5g
-        UtFhUh2v9AA+IikUNbYFa37FRbMoK1fqib3HWrOD4G87QrcYV/j/R6os3MP/8A==
-Date:   Tue, 17 May 2022 19:07:37 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, kvalo@kernel.org,
-        Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-rtc@vger.kernel.org,
-        "open list:NETWORKING DRIVERS (WIRELESS)" 
-        <linux-wireless@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        merez@codeaurora.org, mat.jonczyk@o2.pl,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        Len Brown <len.brown@intel.com>
-Subject: Re: [PATCH 0/7] PM: Solution for S0ix failure caused by PCH
- overheating
-Message-ID: <YoPWWYOMqshE06vr@mail.local>
-References: <20220505015814.3727692-1-rui.zhang@intel.com>
- <CAJZ5v0gj=zOF-9sMaWtWbPm7051W31qbJsK25bceeAe693Wj3g@mail.gmail.com>
+        with ESMTP id S235561AbiEQR3k (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 13:29:40 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FE136B71;
+        Tue, 17 May 2022 10:29:37 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 24HHTW31027902;
+        Tue, 17 May 2022 12:29:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1652808572;
+        bh=GGaWzv0XZo+/v48et4y0JyL0RDgIw6ucMpSmKq2lOMI=;
+        h=From:To:CC:Subject:Date;
+        b=Xu1jnlu6NXxI/jDXlFOUFMgEDcW5m8BxuLPWYcp+bzuO8ielQQGjaW+EtONdWgCaQ
+         yn6j65a+GSI05oo7YgsCtXo6v0svBYJN7UY1P8Ah8EszT/Z2mAvCuplsRLhCJBXhrJ
+         t9cQnVqwBTn2auTYLRKCzfEhaJ9QRwSg7OLLbRrU=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 24HHTW99104909
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 17 May 2022 12:29:32 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 17
+ May 2022 12:29:32 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 17 May 2022 12:29:32 -0500
+Received: from localhost.localdomain (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 24HHTRYD079003;
+        Tue, 17 May 2022 12:29:28 -0500
+From:   Keerthy <j-keerthy@ti.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <amitk@kernel.org>, <kristo@kernel.org>
+CC:     <j-keerthy@ti.com>, <rafael@kernel.org>,
+        <linux-pm@vger.kernel.org>, <vigneshr@ti.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v9 0/2] thermal: k3_j72xx_bandgap: Add the bandgap driver support
+Date:   Tue, 17 May 2022 22:59:18 +0530
+Message-ID: <20220517172920.10857-1-j-keerthy@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gj=zOF-9sMaWtWbPm7051W31qbJsK25bceeAe693Wj3g@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17/05/2022 17:11:05+0200, Rafael J. Wysocki wrote:
-> On Thu, May 5, 2022 at 3:58 AM Zhang Rui <rui.zhang@intel.com> wrote:
-> >
-> > On some Intel client platforms like SKL/KBL/CNL/CML, there is a
-> > PCH thermal sensor that monitors the PCH temperature and blocks the system
-> > from entering S0ix in case it overheats.
-> >
-> > Commit ef63b043ac86 ("thermal: intel: pch: fix S0ix failure due to PCH
-> > temperature above threshold") introduces a delay loop to cool the
-> > temperature down for this purpose.
-> >
-> > However, in practice, we found that the time it takes to cool the PCH down
-> > below threshold highly depends on the initial PCH temperature when the
-> > delay starts, as well as the ambient temperature.
-> >
-> > For example, on a Dell XPS 9360 laptop, the problem can be triggered
-> > 1. when it is suspended with heavy workload running.
-> > or
-> > 2. when it is moved from New Hampshire to Florida.
-> >
-> > In these cases, the 1 second delay is not sufficient. As a result, the
-> > system stays in a shallower power state like PCx instead of S0ix, and
-> > drains the battery power, without user' notice.
-> >
-> > In this patch series, we first fix the problem in patch 1/7 ~ 3/7, by
-> > 1. expand the default overall cooling delay timeout to 60 seconds.
-> > 2. make sure the temperature is below threshold rather than equal to it.
-> > 3. move the delay to .suspend_noirq phase instead, in order to
-> >    a) do the cooling when the system is in a more quiescent state
-> >    b) be aware of wakeup events during the long delay, because some wakeup
-> >       events (ACPI Power button Press, USB mouse, etc) become valid only
-> >       in .suspend_noirq phase and later.
-> >
-> > However, this potential long delay introduces a problem to our suspend
-> > stress automation test, because the delay makes it hard to predict how
-> > much time it takes to suspend the system.
-> > As we want to do as much suspend iterations as possible in limited time,
-> > setting a 60+ seconds rtc alarm for suspend which usually takes shorter
-> > than 1 second is far beyond overkill.
-> >
-> > Thus, in patch 4/7 ~ 7/7, a rtc driver hook is introduced, which cancels
-> > the armed rtc alarm in the beginning of suspend and then rearm the rtc
-> > alarm with a short interval (say, 2 second) right before system suspended.
-> >
-> > By running
-> >  # echo 2 > /sys/module/rtc_cmos/parameters/rtc_wake_override_sec
-> > before suspend, the system can be resumed by RTC alarm right after it is
-> > suspended, no matter how much time the suspend really takes.
-> >
-> > This patch series has been tested on the same Dell XPS 9360 laptop and
-> > S0ix is 100% achieved across 1000+ s2idle iterations.
-> 
-> Overall, the first three patches in the series can go in without the
-> rest, so let's put them into a separate series.
-> 
-> Patch [4/7] doesn't depend on the first three ones, so it can go in by itself.
-> 
-> Patch [5/7] is to be dropped anyway as per the earlier discussion.
-> 
-> Patch [6/7] is only needed to apply patch [7/7] which is controversial.
-> 
-> I think that we can drop or defer patches [6-7/7] for now.
+Add VTM thermal support. In the Voltage Thermal Management
+Module(VTM), K3 J72XX supplies a voltage reference and a temperature
+sensor feature that are gathered in the band gap voltage and
+temperature sensor (VBGAPTS) module. The band gap provides current and
+voltage reference for its internal circuits and other analog IP
+blocks. The analog-to-digital converter (ADC) produces an output value
+that is proportional to the silicon temperature.
 
-I don't think 7/7 is really useful in the upstream kernel, I don't plan
-to apply it
+Currently reading temperatures only is supported.  There are no
+active/passive cooling agent supported.
+
+J721e SoCs have errata i2128: https://www.ti.com/lit/pdf/sprz455
+
+The series also incorporates workaround for Errata i2128.
+
+Changes in v9:
+
+  * Fixed indentation in DT binding documentation
+  * Added Rob's Reviewed-by
+
+Changes in v8:
+
+  * Removed redundant items from compatible in the Documentation patch
+
+Changes in v7:
+
+  * Separated the DT patches from this series.
+  * Fixed description of reg property in the DT documentation patch.
+
+Changes in v6:
+
+  * Fixed the DT comments that were missed in v5.
+  * Changed the offsets, bit masks to 2-D array.
+  * Clean up
+
+Changes in v5:
+
+  * Simplified the computation of the table.
+  * Removed unnecessary members in the structures.
+
+Changes in v4:
+
+  * Fixed compilation warning with W=1.
+
+Changes in v3:
+
+  * Removed static look up tables & added functions to dynamically generate them.
+
+Changes in v2:
+
+  * Fixed DT binding errors. 
+
+Keerthy (2):
+  dt-bindings: thermal: k3-j72xx: Add VTM bindings documentation
+  thermal: k3_j72xx_bandgap: Add the bandgap driver support
+
+ .../bindings/thermal/ti,j72xx-thermal.yaml    |  63 ++
+ drivers/thermal/Makefile                      |   2 +-
+ drivers/thermal/k3_j72xx_bandgap.c            | 566 ++++++++++++++++++
+ 3 files changed, 630 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+ create mode 100644 drivers/thermal/k3_j72xx_bandgap.c
 
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
+
