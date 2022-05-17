@@ -2,57 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 689CD52AB20
-	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 20:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D5D152AB25
+	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 20:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350747AbiEQSpD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 May 2022 14:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47504 "EHLO
+        id S233988AbiEQSpV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 May 2022 14:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352344AbiEQSpB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 14:45:01 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331FB39B88;
-        Tue, 17 May 2022 11:45:00 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id o190so20224379iof.10;
-        Tue, 17 May 2022 11:45:00 -0700 (PDT)
+        with ESMTP id S243849AbiEQSpU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 14:45:20 -0400
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE38410FE8;
+        Tue, 17 May 2022 11:45:19 -0700 (PDT)
+Received: by mail-il1-x134.google.com with SMTP id i15so3340573ilk.5;
+        Tue, 17 May 2022 11:45:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=lUy238nMpvEvl2v9xc46uFLuB5rlBp2vt6Z0ncfv3Tw=;
-        b=aVneSFLGS7/Q8IaZfkmVSttswtaMa2DLaZkPa4XoOJuViF8qAfnBMkjYzWsFeGmfz9
-         lulSPpYiL26gk/PFUmjw0zG4RISx3yr1pDsPG6uiCtvHRn3/n2P2rPJ3JT/dYUyz42/B
-         sgd6yPsrYf70CRN/yoir0ULfwxD6IWlqFK/5BzaeBucPH6XAOIZQ+DtKF8DrpJA63uce
-         iGHaGUZHvgxeB8W3L4PNYTKVFpdE/HePmgWqOb0IvgDKkPwK8/+0+F6ZMt02u/hYzzjz
-         ti9Rqu7rcSSc8ipZXJwzOhaBjbK10bIGzJQO8NcgXqO9f4Be+KIV5lUlm9eaOCm0wA9G
-         L3Ow==
+        bh=0Y+qkluu9VKepyBlMDfrx+r7tkG/mdYwtfblWpe2z9Y=;
+        b=l01OyNeB/A6Q+vxByyTAVu9qpdFA+aYn0Vst3ljF3PdrG+pxPeaVtNZoGSu7FLkowE
+         Yv0cCkilWvXuTPTKNaduH7p2F3IXPEF+IpKomUf2I3XNmR82SeOU9cIUja0gC2qsWXLR
+         siDaHE4Ysl4MQ5igmKCslQMAPvYKAl/Mw0TslVwfWwH5KOSQU5iDbM6agJBoVx/sBd2g
+         Byhqm2GjIY2MTlWkZlPk7kfyjL7mUFtvUzpNAyiNayWscrlKwGOOZ/IrH4IxOWY/6HHk
+         5rwiOFR9ninFTSDwXx5K33CyeZwCX3VBFVaHGdAcTNi7+iUZr2dt/OjisLAQqT+r6apD
+         JrLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lUy238nMpvEvl2v9xc46uFLuB5rlBp2vt6Z0ncfv3Tw=;
-        b=b5ZCtMIQZXtbk1136Xc19eA6tpQtk63+nyRtf9gQRFxfSeAWDTrlfOcGGDR6IcFwAB
-         vtRm4/FQtEnO/CmvYYiCsdWuBqb4s0AfQ49Dug8utz+5hs74dthEpHOYgbutyjVH574q
-         F/BcYTp24J/bBlKIYanYdcuSXCbsmVpV2u4v6V1B5hf5OZi3vZ/8JL1vcb/HiFenevfq
-         A2Ws4VA6t0ahJIOTb+tKJIe3CoNWKKgh/IgjVCzPaiyMMCh8vdnOiJLzugH9yz5vyLrv
-         P7r82F6TJg1EeS7onOpgNcb2IzjpMhPzvNFP271LDYTXJ/IR7MmxA3wNlPnJu2B3c9rx
-         Aqww==
-X-Gm-Message-State: AOAM530I0spvx0H5Hm3jGFzadi18YcdohMyt1RAFAKOrI1DrkQ1u2jGS
-        TAo4/1S8X9/+mgPPXACGSayUEb6Fg91e60U93rkPMMJoILZyog==
-X-Google-Smtp-Source: ABdhPJxcEi8IfxZ+n4SRU+Iwu6eEWoqsslvZEj71yr2eye9dJlr/0+Re5dKgpg702TTUVuMBPEI3rCC/jpJ1JRzFqcU=
-X-Received: by 2002:a05:6638:3589:b0:32b:858c:6cc3 with SMTP id
- v9-20020a056638358900b0032b858c6cc3mr12843978jal.229.1652813099592; Tue, 17
- May 2022 11:44:59 -0700 (PDT)
+        bh=0Y+qkluu9VKepyBlMDfrx+r7tkG/mdYwtfblWpe2z9Y=;
+        b=ivUejRwnZ1QJkYOsK0tbKYn1MVzfopBwkc/MLvX/11bStQvNJyysA3UGB//gcu3VPL
+         7d4Sq2TFPwOFlSHEItuWa38ziV7kv358JPym1GAIEC7U/6fIJNPU7z4YmuQtvoACm35x
+         hTvP64LEpUxREiOZm1QHky1aVhSB7VOb7RdkisMDbW1tQewJM0fTH3I9Xa0LBDQMZC8G
+         UJsutIJu2+CfBQgOCHdhAv6uP0Z1YSykcBq4fNo2c/mZ+y2gAf6lvfoBHCb3L0Ep0ybr
+         8rmXLuz9rZB5D9QoCry946alVPLzFnn/QpLA7Ga48ZQvUt2rfX8MmELm0JJf2xhVzR2v
+         Je6Q==
+X-Gm-Message-State: AOAM532asPJ7tglwgCG2+LGG4oHM2RK+96yAcwcuXF2xaOH8N2A8sp0m
+        KXd19fdH0mXz/akX7kBKJnxL/9NTuRyJvDdwvy4=
+X-Google-Smtp-Source: ABdhPJzwZftXXY/3Ig3lS+yWjDaVrpZMGecxql4yV/QR4m8oYDw3NDhTzg479ocUa4qwGUyh5cDXiEz4Kdn33DnzV6Q=
+X-Received: by 2002:a05:6e02:188a:b0:2cf:7adc:7a86 with SMTP id
+ o10-20020a056e02188a00b002cf7adc7a86mr12780302ilu.276.1652813119437; Tue, 17
+ May 2022 11:45:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220515064126.1424-1-linux.amoon@gmail.com> <20220515064126.1424-6-linux.amoon@gmail.com>
- <2a8e9301-5da6-46b0-850f-f3f12447d400@linaro.org>
-In-Reply-To: <2a8e9301-5da6-46b0-850f-f3f12447d400@linaro.org>
+References: <20220515064126.1424-1-linux.amoon@gmail.com> <20220515064126.1424-7-linux.amoon@gmail.com>
+ <79b727f8-0631-5a96-fbc6-6e5d637bab7d@linaro.org>
+In-Reply-To: <79b727f8-0631-5a96-fbc6-6e5d637bab7d@linaro.org>
 From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Wed, 18 May 2022 00:14:45 +0530
-Message-ID: <CANAwSgS7-907hR+2zB1Y+koZQunZ=9va3T5rmXSQswngVVpMhA@mail.gmail.com>
-Subject: Re: [PATCHv2 5/6] thermal: exynos: Switch from CONFIG_PM_SLEEP guards
- to pm_sleep_ptr()
+Date:   Wed, 18 May 2022 00:15:04 +0530
+Message-ID: <CANAwSgSY=4zOLjw22GN+a7cc5j=myWWkD7gEQ4_3sgEaTS74Rw@mail.gmail.com>
+Subject: Re: [PATCHv2 6/6] thermal: exynos: Add runtime power management for tmu
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -77,21 +76,25 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Krzysztof,
 
-On Sun, 15 May 2022 at 15:17, Krzysztof Kozlowski
+On Sun, 15 May 2022 at 15:18, Krzysztof Kozlowski
 <krzysztof.kozlowski@linaro.org> wrote:
 >
 > On 15/05/2022 08:41, Anand Moon wrote:
-> > Use the newlly introduced pm_sleep_ptr() macro, and mark the
+> > Add runtime power management for exynos thermal driver.
 >
-> s/newlly/newly/
+> First of all - why? Second, I do not see it being added. Where are the
+> runtime callbacks?
 >
-Ok, I will fix this next version.
 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To control runtime control PMU, did I miss something?
+I looked into imx thermal driver # drivers/thermal/imx_thermal.c
+to enable run-time power management for exynos driver.
+
 >
 > Best regards,
 > Krzysztof
 
 Thanks & Regards
+
 
 -Anand
