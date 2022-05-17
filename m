@@ -2,54 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 655A252A56C
-	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 16:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 686A952A58B
+	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 17:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238657AbiEQOyi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 May 2022 10:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48064 "EHLO
+        id S1349511AbiEQPC3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 May 2022 11:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349450AbiEQOyf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 10:54:35 -0400
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7BB50447;
-        Tue, 17 May 2022 07:54:32 -0700 (PDT)
-Received: by mail-io1-f43.google.com with SMTP id e194so19447192iof.11;
-        Tue, 17 May 2022 07:54:32 -0700 (PDT)
+        with ESMTP id S243507AbiEQPC1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 11:02:27 -0400
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB886410;
+        Tue, 17 May 2022 08:02:25 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id q203so3706208iod.0;
+        Tue, 17 May 2022 08:02:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=H8nn88xQh9eGLKIffo1TE6yNWGKhqJHXOhxiPgSDN0E=;
-        b=TJbJUVog3vcrz0zoSnCUaSiO+S4a0kT/cl95I3D1/KcKPTcGZ3sgpl1gJkFdViso1j
-         KGL+KrmPp4XdbEytUsywYZcFcDA6haUbmlR3BNqTNbGGiJDZyZNYmE218noTLNAW7vud
-         TcuHf7DSPemojfGMnvs/JvqQBIlj8e8hNK23QJTfD5TYSl8oaE87GaYHMfyz8X0wpvHj
-         rwJMIbOiik7lTuJFFw86xk2578inwTNtRWDid27kI/FF0h6DjLql+YUjSGRsrdAHCYst
-         OpLv8asCPeE1jj3ZDuE9rQ6a+qML28qOmZnbbPdDytvmE3MncsMsfLIOkr3FPPIaWMUA
-         8c8g==
-X-Gm-Message-State: AOAM533WfNqFLrWqRlWpNtK7T91G7SArSdJLeyxxanwTvuc/saidNy2I
-        rtVjL2Hmcc5a9WaGTdaQ8pMKUC6+HngB4cICo2o=
-X-Google-Smtp-Source: ABdhPJyUbjhY69ilI/s9mBNDVH5iERYUtRrDzsbW/o8lztqPEGggfJCDCG4DcINQoLOPIxgyFBXYTR3Y9cWQF9ak7V0=
-X-Received: by 2002:a05:6602:2082:b0:657:ad1c:795e with SMTP id
- a2-20020a056602208200b00657ad1c795emr10733535ioa.187.1652799272034; Tue, 17
- May 2022 07:54:32 -0700 (PDT)
+        bh=Hy9Fd7X4zWlZDVMRHmrsAnJCqrq0FuPgwnYlhjRMc+M=;
+        b=h9kzDs1ENar/YlTwbHiTk4WwcfDyyY240uuoEgCYeCr8eoS6T7zDui13pa85nrKXa9
+         +B0AkXQD7WRf3mZCQnHb39HAVf1/4puk6itnRgX3gGn/GTOrMMK4c4ezlda22eciz4R4
+         GcaI5FqFGg+uf8DA2t83RXaLpJcmsGXiwPGUZFchEmRscr494VTj+yUtSXOJlBD9+eZO
+         B720SCmoxIV7ETyqwzOfGsjssUeHn3iZ86uReJxo1qekMToIetVn8hnBe/mPUHzLjmNq
+         bMwG7r5ohbouu1qSnVuqxLDaebioVB/Y6wZLQo5yDRbcXM9LEDb37v3+HJ6R9L0pghvI
+         yd5A==
+X-Gm-Message-State: AOAM530/9NOuEfyM4A8pG/2FQXjM98E1yUp4TvCPjT005EgIHL0El7vE
+        PT0eoPAYIYIgd++0h2lLaP7XfVawG4bDGWE2cXjzNhg+
+X-Google-Smtp-Source: ABdhPJwXLH/EDjQbAWO8AgtCBj7RSBPSJyTjT/MEJTmnCK/Yct/LD0ToRzPkNBc5al34nAyrikJRVGhUz/UB83jrUVk=
+X-Received: by 2002:a05:6602:2dc4:b0:648:adac:bae8 with SMTP id
+ l4-20020a0566022dc400b00648adacbae8mr10802774iow.9.1652799745301; Tue, 17 May
+ 2022 08:02:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAJZ5v0g6GdKfN4b5uwHEhh4hBuG=haVHaXc-XuMQLe8Wd41Y3g@mail.gmail.com>
- <20220517144846.GA1068039@bhelgaas>
-In-Reply-To: <20220517144846.GA1068039@bhelgaas>
+References: <20220505015814.3727692-1-rui.zhang@intel.com> <20220505015814.3727692-3-rui.zhang@intel.com>
+In-Reply-To: <20220505015814.3727692-3-rui.zhang@intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 17 May 2022 16:54:20 +0200
-Message-ID: <CAJZ5v0iNaAd=yP3DgDVVpffKU6kt+nSpPeqxWJyRddaX5K4FRA@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Jingar, Rajvi" <rajvi.jingar@intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        David Box <david.e.box@linux.intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+Date:   Tue, 17 May 2022 17:02:14 +0200
+Message-ID: <CAJZ5v0ikGkBqT1FNxGv3Y2guMRhb0su+qioGee=eo22NS+xErQ@mail.gmail.com>
+Subject: Re: [PATCH 2/7] thermal: intel: pch: enhance overheat handling
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, kvalo@kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-rtc@vger.kernel.org,
+        "open list:NETWORKING DRIVERS (WIRELESS)" 
+        <linux-wireless@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        merez@codeaurora.org, mat.jonczyk@o2.pl,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        Len Brown <len.brown@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -61,101 +63,108 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, May 17, 2022 at 4:48 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+On Thu, May 5, 2022 at 3:58 AM Zhang Rui <rui.zhang@intel.com> wrote:
 >
-> On Mon, May 16, 2022 at 10:59:32PM +0200, Rafael J. Wysocki wrote:
-> > On Mon, May 16, 2022 at 10:09 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > On Fri, May 13, 2022 at 10:00:48PM +0000, Jingar, Rajvi wrote:
-> > > > > -----Original Message-----
-> > > > > From: Bjorn Helgaas <helgaas@kernel.org>
-> > > > > Sent: Thursday, May 12, 2022 11:36 AM
-> > > > > To: Rafael J. Wysocki <rafael@kernel.org>
-> > > > > Cc: Jingar, Rajvi <rajvi.jingar@intel.com>; Wysocki, Rafael J
-> > > > > <rafael.j.wysocki@intel.com>; Bjorn Helgaas <bhelgaas@google.com>; David Box
-> > > > > <david.e.box@linux.intel.com>; Linux PCI <linux-pci@vger.kernel.org>; Linux
-> > > > > Kernel Mailing List <linux-kernel@vger.kernel.org>; Linux PM <linux-
-> > > > > pm@vger.kernel.org>
-> > > > > Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
-> > > > >
-> > > > > On Thu, May 12, 2022 at 07:52:36PM +0200, Rafael J. Wysocki wrote:
-> > > > > > On Thu, May 12, 2022 at 7:42 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > > > On Thu, May 12, 2022 at 03:49:18PM +0200, Rafael J. Wysocki wrote:
-> > > > >
-> > > > > > > > Something like this should suffice IMV:
-> > > > > > > >
-> > > > > > > > if (!dev_state_saved || pci_dev->current_state != PCI_D3cold)
-> > > > > > > >
-> > > > > > > >         pci_disable_ptm(pci_dev);
-> > > > > > >
-> > > > > > > It makes sense to me that we needn't disable PTM if the device is in
-> > > > > > > D3cold.  But the "!dev_state_saved" condition depends on what the
-> > > > > > > driver did.  Why is that important?  Why should we not do the
-> > > > > > > following?
-> > > > > > >
-> > > > > > >   if (pci_dev->current_state != PCI_D3cold)
-> > > > > > >     pci_disable_ptm(pci_dev);
-> > > > > >
-> > > > > > We can do this too.  I thought we could skip the power state
-> > > > > > check if dev_state_saved was unset, because then we would know
-> > > > > > that the power state was not D3cold.  It probably isn't worth
-> > > > > > the hassle though.
-> > > >
-> > > > We see issue with certain platforms where only checking if device
-> > > > power state in D3Cold is not enough and the !dev_state_saved check
-> > > > is needed when disabling PTM. Device like nvme is relying on ASPM,
-> > > > it stays in D0 but state is saved. Touching the config space wakes
-> > > > up the device which prevents the system from entering into low power
-> > > > state.
-> > >
-> > > Correct me if I'm wrong: for NVMe devices, nvme_suspend() has already
-> > > saved state and put the device in some low-power state.  Disabling PTM
-> > > here is functionally OK but prevents a system low power state, so you
-> > > want to leave PTM enabled.
-> > >
-> > > But I must be missing something because pci_prepare_to_sleep()
-> > > currently disables PTM for Root Ports.  If we leave PTM enabled on
-> > > NVMe but disable it on the Root Port above it, any PTM Request from
-> > > NVMe will cause an Unsupported Request error.
-> > >
-> > > Disabling PTM must be coordinated across PTM Requesters and PTM
-> > > Responders.  That means the decision to disable cannot depend on
-> > > driver-specific things like whether the driver has saved state.
-> >
-> > Setting state_saved generally informs pci_pm_suspend_noirq() that the
-> > device has already been handled and it doesn't need to do anything to
-> > it.
-> >
-> > But you are right that PTM should be disabled on downstream devices as
-> > well as on the ports that those devices are connected to and it can be
-> > done even if the given device has already been handled, so the
-> > state_saved value is technically irrelevant.
-> >
-> > That's why I suggested to check if the power state is between D0 and
-> > D3cold (exclusive) and only disable PTM if that is the case.  It is
-> > pointless to disable PTM for devices in D3cold and it may be harmful
-> > for devices that are left in D0.
+> Commit ef63b043ac86 ("thermal: intel: pch: fix S0ix failure due to PCH
+> temperature above threshold") introduces delay loop mechanism that allows
+> PCH temperature to go down below threshold during suspend so it won't
+> block S0ix. And the default overall delay timeout is 1 second.
 >
-> "... it may be harmful for devices that are left in D0" -- I want to
-> understand this better.  It sounds like nvme_suspend() leaves the
-> device in some device-specific low-power flavor of D0, and subsequent
-> config accesses take it out of that low-power situation?
-
-That's my understanding of it.
-
-> If that's the case, it sounds a little brittle.  I don't think it's
-> obvious that "pci_dev->state_saved was set by the driver" means "no
-> config accesses allowed in pci_pm_suspend_noirq()."
-
-Well, yes and no.  The device may be in D3cold then, so
-pci_pm_suspend_noirq() should at least check that before accessing its
-config space.
-
-> And pci_pm_suspend_noirq() calls quirks via pci_fixup_device(), which are
-> very likely to do config accesses.
+> However, in practice, we found that the time it takes to cool the PCH down
+> below threshold highly depends on the initial PCH temperature when the
+> delay starts, as well as the ambient temperature.
+> And in some cases, the 1 second delay is not sufficient. As a result, the
+> system stays in a shallower power state like PCx instead of S0ix, and
+> drains the battery power, without user' notice.
 >
-> Maybe PTM needs to be disabled earlier, e.g., in pci_pm_suspend()?  I
-> don't think PTM uses any interrupts, so there's probably no reason
-> interrupts need to be disabled before disabling PTM.
+> To make sure S0ix is not blocked by the PCH overheating, we
+> 1. expand the default overall timeout to 60 seconds.
+> 2. make sure the temperature is below threshold rather than equal to it.
+> 3. move the delay to .suspend_noirq phase instead, in order to
+>    a) do cooling delay with a more quiescent system
+>    b) be aware of wakeup events during the long delay, because some wakeup
+>       events (ACPI Power button Press, USB mouse, etc) become valid only
+>       in .suspend_noirq phase and later.
+>
+> This may introduce longer suspend time, but only in the cases when the
+> system overheats and Linux used to enter a shallower S2idle state, say,
+> PCx instead of S0ix.
+>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> Tested-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+> ---
+>  drivers/thermal/intel/intel_pch_thermal.c | 18 +++++++++++-------
+>  1 file changed, 11 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/thermal/intel/intel_pch_thermal.c b/drivers/thermal/intel/intel_pch_thermal.c
+> index 527c91f5960b..b7b32e2f5ae2 100644
+> --- a/drivers/thermal/intel/intel_pch_thermal.c
+> +++ b/drivers/thermal/intel/intel_pch_thermal.c
+> @@ -70,8 +70,8 @@ static unsigned int delay_timeout = 100;
+>  module_param(delay_timeout, int, 0644);
+>  MODULE_PARM_DESC(delay_timeout, "amount of time delay for each iteration.");
+>
+> -/* Number of iterations for cooling delay, 10 counts by default for now */
+> -static unsigned int delay_cnt = 10;
+> +/* Number of iterations for cooling delay, 600 counts by default for now */
+> +static unsigned int delay_cnt = 600;
+>  module_param(delay_cnt, int, 0644);
+>  MODULE_PARM_DESC(delay_cnt, "total number of iterations for time delay.");
+>
+> @@ -193,10 +193,11 @@ static int pch_wpt_get_temp(struct pch_thermal_device *ptd, int *temp)
+>         return 0;
+>  }
+>
+> +/* Cool the PCH when it's overheat in .suspend_noirq phase */
+>  static int pch_wpt_suspend(struct pch_thermal_device *ptd)
+>  {
+>         u8 tsel;
+> -       u8 pch_delay_cnt = 1;
+> +       int pch_delay_cnt = 1;
+>         u16 pch_thr_temp, pch_cur_temp;
+>
+>         /* Shutdown the thermal sensor if it is not enabled by BIOS */
+> @@ -233,7 +234,10 @@ static int pch_wpt_suspend(struct pch_thermal_device *ptd)
+>          * which helps to indentify the reason why S0ix entry was rejected.
+>          */
+>         while (pch_delay_cnt <= delay_cnt) {
+> -               if (pch_cur_temp <= pch_thr_temp)
+> +               if (pch_cur_temp < pch_thr_temp)
+> +                       break;
+> +
+> +               if (pm_wakeup_pending())
+>                         break;
+>
+>                 dev_warn(&ptd->pdev->dev,
+> @@ -245,7 +249,7 @@ static int pch_wpt_suspend(struct pch_thermal_device *ptd)
+>                 pch_delay_cnt++;
+>         }
+>
+> -       if (pch_cur_temp > pch_thr_temp)
+> +       if (pch_cur_temp >= pch_thr_temp)
+>                 dev_warn(&ptd->pdev->dev,
+>                         "CPU-PCH is hot [%dC] even after delay, continue to suspend. S0ix might fail\n",
+>                         pch_cur_temp);
+> @@ -455,7 +459,7 @@ static void intel_pch_thermal_remove(struct pci_dev *pdev)
+>         pci_disable_device(pdev);
+>  }
+>
+> -static int intel_pch_thermal_suspend(struct device *device)
+> +static int intel_pch_thermal_suspend_noirq(struct device *device)
+>  {
+>         struct pch_thermal_device *ptd = dev_get_drvdata(device);
+>
+> @@ -495,7 +499,7 @@ static const struct pci_device_id intel_pch_thermal_id[] = {
+>  MODULE_DEVICE_TABLE(pci, intel_pch_thermal_id);
+>
+>  static const struct dev_pm_ops intel_pch_pm_ops = {
+> -       .suspend = intel_pch_thermal_suspend,
+> +       .suspend_noirq = intel_pch_thermal_suspend_noirq,
 
-That certainly is worth investigation.  For one, I don't see any
-obvious downsides of doing so.
+IMO it would be better to put this change into a separate patch and
+reorder the other changes after this one.  It is valid by itself.
+
+>         .resume = intel_pch_thermal_resume,
+>  };
+>
+> --
