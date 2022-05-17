@@ -2,194 +2,179 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDCB152A9F1
-	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 20:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 393C652AA5A
+	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 20:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351781AbiEQSGe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 May 2022 14:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39820 "EHLO
+        id S1352126AbiEQSOf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 May 2022 14:14:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352084AbiEQSGH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 14:06:07 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9046250B1F;
-        Tue, 17 May 2022 11:05:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652810749; x=1684346749;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=G5Wv9shpOpxZTi2I/lWPe2CBntwVSC8iH9Z7DnGd2zo=;
-  b=Ce8caY3KTpwcG1kJRg521Hgq68jJuqxCs+ak/crw7MMv/G+pXOD9349g
-   7x8ZQDpnxI8lQTxx40/scBbtVHLBReCxLBBk1ptqPLKjeWouOHmiYcHbw
-   KJe2GPe2OxWuPFIpuLOyNXT+8RToL4CUvVDNeT26JVhRzaSgZgdpaNDMk
-   On3xZbla9cRsVxmGnj+FFYSwn/1lrhNq8C1g2cSNm0eAbEIRqt0JaXWV9
-   BC3/u5UiINpsLlEX0HSC2aTa1IROGTeYc6AX6bcriIUQsaXgcKm74u7sa
-   jsICuqR2HAPlI7PHmho3AjLJ7WlnqHtEYrnPxWg0//7pItpEfshqXnP7O
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="296556739"
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="296556739"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 11:05:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="545024206"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga006.jf.intel.com with ESMTP; 17 May 2022 11:05:48 -0700
-Received: from debox1-desk1.jf.intel.com (debox1-desk1.jf.intel.com [10.54.75.53])
-        by linux.intel.com (Postfix) with ESMTP id DE05A5807E8;
-        Tue, 17 May 2022 11:05:48 -0700 (PDT)
-Message-ID: <92f32b4703091acb0aaf3f784be448d469e9e2fa.camel@linux.intel.com>
-Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
-From:   "David E. Box" <david.e.box@linux.intel.com>
-Reply-To: david.e.box@linux.intel.com
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Jingar, Rajvi" <rajvi.jingar@intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Date:   Tue, 17 May 2022 11:05:48 -0700
-In-Reply-To: <CAJZ5v0iNaAd=yP3DgDVVpffKU6kt+nSpPeqxWJyRddaX5K4FRA@mail.gmail.com>
-References: <CAJZ5v0g6GdKfN4b5uwHEhh4hBuG=haVHaXc-XuMQLe8Wd41Y3g@mail.gmail.com>
-         <20220517144846.GA1068039@bhelgaas>
-         <CAJZ5v0iNaAd=yP3DgDVVpffKU6kt+nSpPeqxWJyRddaX5K4FRA@mail.gmail.com>
-Organization: David E. Box
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+        with ESMTP id S1351992AbiEQSN4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 14:13:56 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D2E50E0D;
+        Tue, 17 May 2022 11:13:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=6MSK1Z4Nv/e1GFKFinCP8P3dIYao0CoLyUe3quXpDhY=; b=cRMrVSVTR+3cn6FVG65SC4Au0y
+        UkLE3SVfqGk36g/jG1E9IomGRvED5Awi+eOSCTntuGE0jPXl5+kfHlbKsvhvVjaCNf8y4mBWXGPlT
+        8r/o/CMKhbUaIdrKhLkt446cgXa07HTSiorku/w0xJvIn3aE4uqi2qj8QGi7eb4Kmsg0/Wh5BR8Vi
+        YCGb8f9djqv6fWXVwjRpFQtg+9b6W6H4TQisr9ZwQKSIB4SsmfEWL196/jrcNQFL2lm66S4LfYE8s
+        uZ+fz2jSIIuBy2Np//l8BP/gbXHu+JyZVeJsb8IAXoZSlvi3RYMR9sSIMXj8sSzR7kYxeP4KKKokk
+        nGGtp5Zg==;
+Received: from 200-161-159-120.dsl.telesp.net.br ([200.161.159.120] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nr1gv-008nSU-6m; Tue, 17 May 2022 20:13:05 +0200
+Message-ID: <62a63fc2-346f-f375-043a-fa21385279df@igalia.com>
+Date:   Tue, 17 May 2022 15:12:25 -0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 21/30] panic: Introduce the panic pre-reboot notifier list
+Content-Language: en-US
+To:     "Luck, Tony" <tony.luck@intel.com>, Petr Mladek <pmladek@suse.com>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "bhe@redhat.com" <bhe@redhat.com>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "openipmi-developer@lists.sourceforge.net" 
+        <openipmi-developer@lists.sourceforge.net>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
+        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
+        "halves@canonical.com" <halves@canonical.com>,
+        "fabiomirmar@gmail.com" <fabiomirmar@gmail.com>,
+        "alejandro.j.jimenez@oracle.com" <alejandro.j.jimenez@oracle.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "d.hatayama@jp.fujitsu.com" <d.hatayama@jp.fujitsu.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "dyoung@redhat.com" <dyoung@redhat.com>,
+        "Tang, Feng" <feng.tang@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "mikelley@microsoft.com" <mikelley@microsoft.com>,
+        "hidehiro.kawai.ez@hitachi.com" <hidehiro.kawai.ez@hitachi.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "vgoyal@redhat.com" <vgoyal@redhat.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "will@kernel.org" <will@kernel.org>, Alex Elder <elder@kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Chris Zankel <chris@zankel.net>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Corey Minyard <minyard@acm.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Helge Deller <deller@gmx.de>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        James Morse <james.morse@arm.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matt Turner <mattst88@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Richard Weinberger <richard@nod.at>,
+        Robert Richter <rric@kernel.org>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, Wei Liu <wei.liu@kernel.org>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-22-gpiccoli@igalia.com> <YoJgcC8c6LaKADZV@alley>
+ <63a74b56-89ef-8d1f-d487-cdb986aab798@igalia.com>
+ <bed66b9467254a5a8bafc1983dad643a@intel.com>
+ <e895ce94-e6b9-caf6-e5d3-06bf0149445c@igalia.com> <YoOs9GJ5Ovq63u5Q@alley>
+ <599b72f6-76a4-8e6d-5432-56fb1ffd7e0b@igalia.com>
+ <06d85642fef24bc482642d669242654b@intel.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <06d85642fef24bc482642d669242654b@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2022-05-17 at 16:54 +0200, Rafael J. Wysocki wrote:
-> On Tue, May 17, 2022 at 4:48 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > 
-> > On Mon, May 16, 2022 at 10:59:32PM +0200, Rafael J. Wysocki wrote:
-> > > On Mon, May 16, 2022 at 10:09 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > On Fri, May 13, 2022 at 10:00:48PM +0000, Jingar, Rajvi wrote:
-> > > > > > -----Original Message-----
-> > > > > > From: Bjorn Helgaas <helgaas@kernel.org>
-> > > > > > Sent: Thursday, May 12, 2022 11:36 AM
-> > > > > > To: Rafael J. Wysocki <rafael@kernel.org>
-> > > > > > Cc: Jingar, Rajvi <rajvi.jingar@intel.com>; Wysocki, Rafael J
-> > > > > > <rafael.j.wysocki@intel.com>; Bjorn Helgaas <bhelgaas@google.com>;
-> > > > > > David Box
-> > > > > > <david.e.box@linux.intel.com>; Linux PCI <linux-pci@vger.kernel.org>;
-> > > > > > Linux
-> > > > > > Kernel Mailing List <linux-kernel@vger.kernel.org>; Linux PM <linux-
-> > > > > > pm@vger.kernel.org>
-> > > > > > Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to
-> > > > > > disable PTM
-> > > > > > 
-> > > > > > On Thu, May 12, 2022 at 07:52:36PM +0200, Rafael J. Wysocki wrote:
-> > > > > > > On Thu, May 12, 2022 at 7:42 PM Bjorn Helgaas <helgaas@kernel.org>
-> > > > > > > wrote:
-> > > > > > > > On Thu, May 12, 2022 at 03:49:18PM +0200, Rafael J. Wysocki wrote:
-> > > > > > 
-> > > > > > > > > Something like this should suffice IMV:
-> > > > > > > > > 
-> > > > > > > > > if (!dev_state_saved || pci_dev->current_state != PCI_D3cold)
-> > > > > > > > > 
-> > > > > > > > >         pci_disable_ptm(pci_dev);
-> > > > > > > > 
-> > > > > > > > It makes sense to me that we needn't disable PTM if the device is
-> > > > > > > > in
-> > > > > > > > D3cold.  But the "!dev_state_saved" condition depends on what the
-> > > > > > > > driver did.  Why is that important?  Why should we not do the
-> > > > > > > > following?
-> > > > > > > > 
-> > > > > > > >   if (pci_dev->current_state != PCI_D3cold)
-> > > > > > > >     pci_disable_ptm(pci_dev);
-> > > > > > > 
-> > > > > > > We can do this too.  I thought we could skip the power state
-> > > > > > > check if dev_state_saved was unset, because then we would know
-> > > > > > > that the power state was not D3cold.  It probably isn't worth
-> > > > > > > the hassle though.
-> > > > > 
-> > > > > We see issue with certain platforms where only checking if device
-> > > > > power state in D3Cold is not enough and the !dev_state_saved check
-> > > > > is needed when disabling PTM. Device like nvme is relying on ASPM,
-> > > > > it stays in D0 but state is saved. Touching the config space wakes
-> > > > > up the device which prevents the system from entering into low power
-> > > > > state.
-> > > > 
-> > > > Correct me if I'm wrong: for NVMe devices, nvme_suspend() has already
-> > > > saved state and put the device in some low-power state.  Disabling PTM
-> > > > here is functionally OK but prevents a system low power state, so you
-> > > > want to leave PTM enabled.
-> > > > 
-> > > > But I must be missing something because pci_prepare_to_sleep()
-> > > > currently disables PTM for Root Ports.  If we leave PTM enabled on
-> > > > NVMe but disable it on the Root Port above it, any PTM Request from
-> > > > NVMe will cause an Unsupported Request error.
-> > > > 
-> > > > Disabling PTM must be coordinated across PTM Requesters and PTM
-> > > > Responders.  That means the decision to disable cannot depend on
-> > > > driver-specific things like whether the driver has saved state.
-> > > 
-> > > Setting state_saved generally informs pci_pm_suspend_noirq() that the
-> > > device has already been handled and it doesn't need to do anything to
-> > > it.
-> > > 
-> > > But you are right that PTM should be disabled on downstream devices as
-> > > well as on the ports that those devices are connected to and it can be
-> > > done even if the given device has already been handled, so the
-> > > state_saved value is technically irrelevant.
-> > > 
-> > > That's why I suggested to check if the power state is between D0 and
-> > > D3cold (exclusive) and only disable PTM if that is the case.  It is
-> > > pointless to disable PTM for devices in D3cold and it may be harmful
-> > > for devices that are left in D0.
-> > 
-> > "... it may be harmful for devices that are left in D0" -- I want to
-> > understand this better.  It sounds like nvme_suspend() leaves the
-> > device in some device-specific low-power flavor of D0, and subsequent
-> > config accesses take it out of that low-power situation?
+On 17/05/2022 14:02, Luck, Tony wrote:
+>> Tony / Dinh - can I just *skip* this notifier *if kdump* is set or else
+>> we run the code as-is? Does that make sense to you?
 > 
-
-This is exactly what we see. It's not all machines, but in our lab we've seen in
-it on 3 production systems out of about 20. And they were all different
-generations, a 7th, 8th, and 10th gen.
-
-nvme_suspend is relying on NVMe APST / PCIe ASPM to put the device in a low
-power state. The link state will be L1 or deeper while the device remains in D0.
-
-https://nvmexpress.org/resources/nvm-express-technology-features/nvme-technology-power-features/
-
-
-> That's my understanding of it.
+> The "skip" option sounds like it needs some special flag associated with
+> an entry on the notifier chain. But there are other notifier chains ... so that
+> sounds messy to me.
 > 
-> > If that's the case, it sounds a little brittle.  I don't think it's
-> > obvious that "pci_dev->state_saved was set by the driver" means "no
-> > config accesses allowed in pci_pm_suspend_noirq()."
+> Just all the notifiers in priority order. If any want to take different actions
+> based on kdump status, change the code. That seems more flexible than
+> an "all or nothing" approach by skipping.
 > 
-> Well, yes and no.  The device may be in D3cold then, so
-> pci_pm_suspend_noirq() should at least check that before accessing its
-> config space.
-> 
-> > And pci_pm_suspend_noirq() calls quirks via pci_fixup_device(), which are
-> > very likely to do config accesses.
-> > 
-> > Maybe PTM needs to be disabled earlier, e.g., in pci_pm_suspend()?  I
-> > don't think PTM uses any interrupts, so there's probably no reason
-> > interrupts need to be disabled before disabling PTM.
-> 
-> That certainly is worth investigation.  For one, I don't see any
-> obvious downsides of doing so.
+> -Tony
 
-We will look at this.
+I guess I've expressed myself in a poor way - sorry!
 
-David
+What I'm planning to do in the altera_edac notifier is:
+
+if (kdump_is_set)
+ return;
+
+/* regular code */
+
+In other words: if the kdump is set, this notifier will be effectively a
+nop (although it's gonna be called).
+
+Lemme know your thoughts Tony, if that makes sense.
+Thanks,
 
 
+Guilherme
