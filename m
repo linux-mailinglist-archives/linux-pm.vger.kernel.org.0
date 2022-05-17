@@ -2,109 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5C8529E92
-	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 11:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1ED8529EA8
+	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 12:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245396AbiEQJ54 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 May 2022 05:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48332 "EHLO
+        id S238377AbiEQKCV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 May 2022 06:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245347AbiEQJ5m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 05:57:42 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA6D38181;
-        Tue, 17 May 2022 02:57:41 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id r6-20020a1c2b06000000b00396fee5ebc9so977324wmr.1;
-        Tue, 17 May 2022 02:57:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=vkbPSe6+lbN9CgRiuIs5X2zmL0tJEg4PuoARLaGrjvs=;
-        b=OosLfLz7al3FcOZC7A+KBKjtG62QHZMTp+4/P4+CXZ6od3wajq6h0IvIK++O4SRbnc
-         fK0X36zpiYXLjUGV5JSdKvbFIeSGqyWxjC6Eu6LhzNq0/vBW22bNpbyoTzYkiTnIbZmx
-         7m+X1EVuosimr7zWLMXeOQxDDzfTpUFxqTQNlpouG/kOhBT/rcFTBcE33zZRgpJ0KOo5
-         MrPKmLtsyjUkbTyQWr4+DBCwMD9jDv0g2DT7nWMOuTgwrqH1stHzbxS31l4cEXrzwbgk
-         nnfnZjrlHwx5rFT+F1Px1Zb9D+irjdobOmsFHehYqON55+owGp+IDa6Z+gtWv3DTsfi2
-         MWCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vkbPSe6+lbN9CgRiuIs5X2zmL0tJEg4PuoARLaGrjvs=;
-        b=ypt8siMpI9uB2K3cjfNdG1/JQOPWUS3iwI8l0Xj+QyUgbLXgkIA3LFA9U1HSzY3I+Z
-         QPfjAjAv/8osP8ZQAdrnmsnVsDd/lwGQKmRp2DONpAaqepZ97PBDDVa2Xu5wLUWmDwPY
-         6dpHTKC3CPvRUyITP1XJiD3XWDuMdghlpG0xt0HetrFaFN6Hm8kniIRU2jAGdv29SlgW
-         VST8tc6+IlrCQ+NOh+QVE89nzvQkE2PJIGOw5MXzu94VwNnG661574jiCLb16oU9PPfM
-         QfYScPCRXm4/bs8ORYuEsstI1FwzZYia65eAT7MxchR6kscax8Tq4j/GYtowX55zUZls
-         52yA==
-X-Gm-Message-State: AOAM532cHejepq7QJHaK6EjYhSvZDgAzsixvCRwSwYP8CtgBxU8u5lHI
-        aBZVTSP0My3vm2pdHxGJ/AY=
-X-Google-Smtp-Source: ABdhPJx2Y7sHu8IoFE8w1v+BrUgCcLNWC3tjiunbkuXLBwpxYw6yZeq3jVkMV9Vc9/hzmXYODRpJ6Q==
-X-Received: by 2002:a05:600c:240a:b0:394:18b:d722 with SMTP id 10-20020a05600c240a00b00394018bd722mr31834039wmp.177.1652781459678;
-        Tue, 17 May 2022 02:57:39 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id c13-20020adfa70d000000b0020c5253d8bfsm12028639wrd.11.2022.05.17.02.57.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 02:57:39 -0700 (PDT)
-Message-ID: <dde746ce-5663-e12f-4537-4206945b6b59@gmail.com>
-Date:   Tue, 17 May 2022 11:57:37 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
+        with ESMTP id S231372AbiEQKCQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 06:02:16 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E35F2D;
+        Tue, 17 May 2022 03:02:14 -0700 (PDT)
+X-UUID: b63e995b8210496ba0dba6811dc8b7f3-20220517
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:401017f9-3c99-46d5-b8bf-e3595f1903e4,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.5,REQID:401017f9-3c99-46d5-b8bf-e3595f1903e4,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:2a19b09,CLOUDID:31577ce2-edbf-4bd4-8a34-dfc5f7bb086d,C
+        OID:b694db9682df,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:0,BEC:nil
+X-UUID: b63e995b8210496ba0dba6811dc8b7f3-20220517
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 195184224; Tue, 17 May 2022 18:02:08 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 17 May 2022 18:02:07 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 17 May 2022 18:02:07 +0800
+Message-ID: <eab324a190c47cd139c243d1034fa44aa51f9377.camel@mediatek.com>
 Subject: Re: [PATCH v6 00/10] cpufreq: mediatek: Cleanup and support MT8183
  and MT8186
-Content-Language: en-US
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
         Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     rafael@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        jia-wei.chang@mediatek.com, roger.lu@mediatek.com,
-        hsinyi@google.com, khilman@baylibre.com,
-        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
+CC:     <rafael@kernel.org>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <jia-wei.chang@mediatek.com>, <roger.lu@mediatek.com>,
+        <hsinyi@google.com>, <khilman@baylibre.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 17 May 2022 18:02:07 +0800
+In-Reply-To: <dde746ce-5663-e12f-4537-4206945b6b59@gmail.com>
 References: <20220505115226.20130-1-rex-bc.chen@mediatek.com>
- <20220506042004.hqzpb66shak4y7rz@vireshk-i7>
- <86851bd03128cc61082d516ebff929d3637063cb.camel@mediatek.com>
- <20220512052732.iqphgpveoyrqjlqg@vireshk-i7>
- <af82434adea0b648d74ed5ffd123e0faaaac6508.camel@mediatek.com>
- <20220512054825.aqe4g4lupuqj3rcq@vireshk-i7>
- <ca85977bcff2e3de925d7ab834b8654ec5ddf8c1.camel@mediatek.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <ca85977bcff2e3de925d7ab834b8654ec5ddf8c1.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+         <20220506042004.hqzpb66shak4y7rz@vireshk-i7>
+         <86851bd03128cc61082d516ebff929d3637063cb.camel@mediatek.com>
+         <20220512052732.iqphgpveoyrqjlqg@vireshk-i7>
+         <af82434adea0b648d74ed5ffd123e0faaaac6508.camel@mediatek.com>
+         <20220512054825.aqe4g4lupuqj3rcq@vireshk-i7>
+         <ca85977bcff2e3de925d7ab834b8654ec5ddf8c1.camel@mediatek.com>
+         <dde746ce-5663-e12f-4537-4206945b6b59@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 12/05/2022 08:05, Rex-BC Chen wrote:
-> On Thu, 2022-05-12 at 11:18 +0530, Viresh Kumar wrote:
->> On 12-05-22, 13:33, Rex-BC Chen wrote:
->>> Matthias is not the member of mediatek, so I think we still need
->>> his
->>> feedback for these three patches.
->>
->> Please ping him and ask for his feedback then.
->>
+On Tue, 2022-05-17 at 11:57 +0200, Matthias Brugger wrote:
 > 
-> ok, I will do this.
-> Thanks!
+> On 12/05/2022 08:05, Rex-BC Chen wrote:
+> > On Thu, 2022-05-12 at 11:18 +0530, Viresh Kumar wrote:
+> > > On 12-05-22, 13:33, Rex-BC Chen wrote:
+> > > > Matthias is not the member of mediatek, so I think we still
+> > > > need
+> > > > his
+> > > > feedback for these three patches.
+> > > 
+> > > Please ping him and ask for his feedback then.
+> > > 
+> > 
+> > ok, I will do this.
+> > Thanks!
+> > 
 > 
+> Sorry for the late reply. I'll take the DTS patches through my tree.
+> As I'm late 
+> to the game this will be for v5.20.
+> 
+> Regards,
+> Matthias
 
-Sorry for the late reply. I'll take the DTS patches through my tree. As I'm late 
-to the game this will be for v5.20.
+Hello Matthias,
 
-Regards,
-Matthias
+Thanks for you reply,
+I send another version for this series.
+Please refer to this:
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=641933
+
+BRs,
+Rex
+
