@@ -2,66 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F0E52A7A0
-	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 18:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A9852A81E
+	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 18:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350763AbiEQQG6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 May 2022 12:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
+        id S242634AbiEQQgn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 May 2022 12:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350676AbiEQQG5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 12:06:57 -0400
+        with ESMTP id S238721AbiEQQgn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 12:36:43 -0400
 Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A63369E5;
-        Tue, 17 May 2022 09:06:56 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id i11so33157487ybq.9;
-        Tue, 17 May 2022 09:06:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0C120BD4;
+        Tue, 17 May 2022 09:36:41 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id p139so12431861ybc.11;
+        Tue, 17 May 2022 09:36:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T+Y0T0by6V75JyhkkKhy6aaHysUDsmwlgU76NEv5hWY=;
-        b=JTxWjsc1g9aYb/foqfiAq6EqRuWOzjuVWT97j4hei0KotI2fGZLoyk5H9k2vpFVABK
-         2gMsAP0otZsp+mk4lMAGh5XYJwdaXjJoz80VaExDriCUo+A3xY8XODKIDdwx5p18pPUQ
-         a79VdvzuaLIqj7ePYQqWL3ltFlobmmcsUXkTK16aBZNP/jNyitdFGU1TkiZDemdu5EsA
-         8Fi83f/O6anK8/sqbNSQwnkPiUtuJCD7cQPLa7QkjqinCLfNzWPo9z3j5A7g3ADyELE4
-         9S2kwN74Xkh074fXE7Mzs60WyKzUKTnfuGprrBd12erZl9WIBPz4akLvqw3XGoYMz2LX
-         5cXA==
-X-Gm-Message-State: AOAM5304AGrVtug+HToZCE+wR33fjbyUtDZYx3YvC6ghQNl6CkbNe1AC
-        KpDRUclLkwOy0fMtVPDqu2oZVjTI/cKT/WlHqws/ufhe
-X-Google-Smtp-Source: ABdhPJy1LGg4mJVH0m9Pwfdn7gwx0zv22rx74oJyN/QFQI66KeJQrMvIuDw13YQMm1Z5ZZyzAnUAXdJqmdCaaW/IMyc=
-X-Received: by 2002:a25:1145:0:b0:64d:d6be:c741 with SMTP id
- 66-20020a251145000000b0064dd6bec741mr8135761ybr.137.1652803615502; Tue, 17
- May 2022 09:06:55 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=XzZsCz+FEDhr5zfSeWU+bowEEKWP57VJ8xk562lPInY=;
+        b=jqNRJecgJWG0orNedLcyhTebhAn71pml9sD8cIVjuQ8SU0FHi8ccPrbqjIeU+OW73/
+         2bUrYGHMs8dOz1SFbl9nZhiGasxkH9pkdm2AmuiHRAIKWt7gwtMxbVIQ6nPbGQovnig7
+         iE3KbEipVsTN5rpVbF40QLqTf52iHhZXi5TlAmR13bPXnLJr6Ah/M3QwVBzB+AGBiWZ6
+         A6wbVcZFjKBSVxIPT5YT/U/JYQdoGn1JWXS6IxEFm0VviPALGxr7wFj9VPx21iWUAlgc
+         3mA/6heoo2URQh6gztBgPjsnaQ0dKM5bJ6+k7j9oS2RibvWigb1VLRpso7zZumCwuiqB
+         c+eQ==
+X-Gm-Message-State: AOAM532kbN1Xz5K7dcCqSWZQ8gaEMags9pMBXQUM6XSNssKTOj3B4IdW
+        GnXukWGoeRZOttVXFooPN2VHGAlUOlIAfuideAmQgGJjM7Y=
+X-Google-Smtp-Source: ABdhPJx2hgUuHv/xBi+xAczLQQBmVAOVbS0p3qrHUhTBhMGTALjD7CIZDEbnEjM2Yt3ZNyEVKnHWuOzfmJE4CMXdgM4=
+X-Received: by 2002:a25:ed06:0:b0:64d:e12f:5229 with SMTP id
+ k6-20020a25ed06000000b0064de12f5229mr7140356ybh.622.1652805401179; Tue, 17
+ May 2022 09:36:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220504232102.469959-1-evgreen@chromium.org> <20220506160807.GA1060@bug>
- <CAE=gft6m75T0UC2DBhfFhuSMW6TK7aatD_04sQ18WosgGVsATw@mail.gmail.com>
-In-Reply-To: <CAE=gft6m75T0UC2DBhfFhuSMW6TK7aatD_04sQ18WosgGVsATw@mail.gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 17 May 2022 18:06:44 +0200
-Message-ID: <CAJZ5v0gxq=EA_WWUiCR_w8o87iTHDR7OC5wi=GRBaAQS2ofd5w@mail.gmail.com>
-Subject: Re: [PATCH 00/10] Encrypted Hibernation
-To:     Evan Green <evgreen@chromium.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, LKML <linux-kernel@vger.kernel.org>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Daniil Lunev <dlunev@google.com>, zohar@linux.ibm.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Hao Wu <hao.wu@rubrik.com>, James Morris <jmorris@namei.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Len Brown <len.brown@intel.com>,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
-        keyrings@vger.kernel.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-security-module@vger.kernel.org
+Date:   Tue, 17 May 2022 18:36:30 +0200
+Message-ID: <CAJZ5v0ghkfwSznen8DTiS_O_obYWmOw8R_RyqK4ZYur+Kkus8w@mail.gmail.com>
+Subject: [GIT PULL] Thermal control fix for v5.18-rc8
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -73,50 +52,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 9, 2022 at 6:44 PM Evan Green <evgreen@chromium.org> wrote:
->
-> On Fri, May 6, 2022 at 9:08 AM Pavel Machek <pavel@ucw.cz> wrote:
-> >
-> > Hi!
-> >
-> > > We are exploring enabling hibernation in some new scenarios. However,
-> > > our security team has a few requirements, listed below:
-> > > 1. The hibernate image must be encrypted with protection derived from
-> > >    both the platform (eg TPM) and user authentication data (eg
-> > >    password).
-> > > 2. Hibernation must not be a vector by which a malicious userspace can
-> > >    escalate to the kernel.
-> >
-> > Can you (or your security team) explain why requirement 2. is needed?
-> >
-> > On normal systems, trusted userspace handles kernel upgrades (for example),
-> > so it can escalate to kernel priviledges.
-> >
->
-> Our systems are a little more sealed up than a normal distro, we use
-> Verified Boot [1]. To summarize, RO firmware with an embedded public
-> key verifies that the kernel+commandline was signed by Google. The
-> commandline includes the root hash of the rootfs as well (where the
-> modules live). So when an update is applied (A/B style, including the
-> whole rootfs), assuming the RO firmware stayed RO (which requires
-> physical measures to defeat), we can guarantee that the kernel,
-> commandline, and rootfs have not been tampered with.
->
-> Verified boot gives us confidence that on each boot, we're at least
-> starting from known code. This makes it more challenging for an
-> attacker to persist an exploit across reboot. With the kernel and
-> modules verified, we try to make it non-trivial for someone who does
-> manage to gain root execution once from escalating to kernel
-> execution. Hibernation would be one obvious escalation route, so we're
-> hoping to find a way to enable it without handing out that easy
-> primitive.
->
-> [1] https://www.chromium.org/chromium-os/chromiumos-design-docs/verified-boot/
+Hi Linus,
 
-So I guess this really is an RFC.
+Please pull from the tag
 
-Honestly, I need more time to go through this and there are pieces of
-it that need to be looked at other people (like the TPM-related
-changes).
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ thermal-5.18-rc8
+
+with top-most commit 7b145802ba545ecf9446ce6d67d6011b73dac0e0
+
+ thermal: int340x: Mode setting with new OS handshake
+
+on top of commit c5eb0a61238dd6faf37f58c9ce61c9980aaffd7a
+
+ Linux 5.18-rc6
+
+to receive a thermal control fix for 5.18-rc8.
+
+This fixes up a recent change in the int340x thermal driver that
+inadvertently broke thermal zone handling on some systems (Srinivas
+Pandruvada).
 
 Thanks!
+
+
+---------------
+
+Srinivas Pandruvada (1):
+      thermal: int340x: Mode setting with new OS handshake
+
+---------------
+
+ .../intel/int340x_thermal/int3400_thermal.c        | 48 ++++++++++++++--------
+ 1 file changed, 32 insertions(+), 16 deletions(-)
