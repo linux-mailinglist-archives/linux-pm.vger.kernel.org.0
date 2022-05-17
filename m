@@ -2,163 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D12652A898
-	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 18:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9729A52A8D4
+	for <lists+linux-pm@lfdr.de>; Tue, 17 May 2022 19:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351176AbiEQQvR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 May 2022 12:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
+        id S1351301AbiEQRDD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 May 2022 13:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351207AbiEQQu7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 12:50:59 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5AE2BE7;
-        Tue, 17 May 2022 09:50:57 -0700 (PDT)
+        with ESMTP id S1351286AbiEQRDB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 13:03:01 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B914339D;
+        Tue, 17 May 2022 10:03:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652806257; x=1684342257;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9E/vttDFy0EFq5zSJDnsg0HX9OScE43/QxlsTcLOYjs=;
-  b=UJP/OC/2KaLR5AWSQouaN1Gn86vjq8OiJlF4rj4czHPCzl1W20K28/yj
-   E48d3/mnsQq9MGhMPHzQhwRhrS6Y9ylFqNVpHBMnlQzakcyonIljuzsw2
-   /Wlm3MGAXM1oMtPb2hLe8UQuNX3atEIBNZ9vkcedVhvpUGBy4ergUvyFX
-   USfbcdLREcD1wZsXsiZkkCqkqs3CEOdeqtxwb/KkLBc1nYuLP1tD28tAR
-   WclN2XblDZRwtPIi/cwTw74EfMRQWhqcVg5SJNkZoebwdvVUp/h9Mi/k8
-   UV1rn/PnmsWXLJovpJLIVBzc1DbLDpUNsAlV4eHBj+wSiX16F1JMgMiJl
+  t=1652806980; x=1684342980;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=wPndYlW5xEVdpcc0zA72NXu9ypQzfs4FPZzk6VJMkkY=;
+  b=E6G3ldzPD5ig+NOHm3uUhmmKyCOpiFukwEEZN44mGoqTeXEdbdfw+54i
+   MfU5oqDXSCbrrrvCbE1PbO6tCvc0/ujp0eInlhXAJzbqUmnYl8c8cl0xx
+   nvBxMtW7ZG+ZbqValn2tSdtB8S6ufEPhiga+FXYRM9g2uZux15Xku7Fjv
+   n4U+zmQ9y2VuCsaNZGr7bmg1A0a9kBKt0V3Jq9+oyJ5EqNm4VMbeWzTau
+   pEARQDCByUAmm5UjlOTVRBz39ZEj3GqFKiWAqG5uoXzQkn6sCqNUtExse
+   WAc8YZw5fu16sBtoiouqaY+RbPDv1S8BPINTNA1dHWZ6WQ1a9fkNK+Zta
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="271371030"
+X-IronPort-AV: E=McAfee;i="6400,9594,10350"; a="258814403"
 X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="271371030"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 09:50:57 -0700
+   d="scan'208";a="258814403"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 10:02:35 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,233,1647327600"; 
-   d="scan'208";a="672939443"
-Received: from abhuwalk-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.246.60])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2022 09:50:55 -0700
-Message-ID: <7b1a9f3b5b5087f47bf4839858c7bfebdb60aa2f.camel@linux.intel.com>
-Subject: Re: [PATCH v2 01/14] thermal/core: Change thermal_zone_ops to
- thermal_sensor_ops
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linexp.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>, Len Brown <lenb@kernel.org>,
-        Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Petr Machata <petrm@nvidia.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Kalle Valo <kvalo@kernel.org>, Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>,
-        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Chuansheng Liu <chuansheng.liu@intel.com>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Antoine Tenart <atenart@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "open list:ACPI THERMAL DRIVER" <linux-acpi@vger.kernel.org>,
-        "open list:CXGB4 ETHERNET DRIVER (CXGB4)" <netdev@vger.kernel.org>,
-        "open list:INTEL WIRELESS WIFI LINK (iwlwifi)" 
-        <linux-wireless@vger.kernel.org>,
-        "open list:ACER ASPIRE ONE TEMPERATURE AND FAN DRIVER" 
-        <platform-driver-x86@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:RENESAS R-CAR THERMAL DRIVERS" 
-        <linux-renesas-soc@vger.kernel.org>
-Date:   Tue, 17 May 2022 09:50:54 -0700
-In-Reply-To: <CAJZ5v0ik_JQ4Awtw7iR68W4-9ZL8FRDsDd-kWmL-n09fgg3reg@mail.gmail.com>
-References: <20220507125443.2766939-1-daniel.lezcano@linexp.org>
-         <20220507125443.2766939-2-daniel.lezcano@linexp.org>
-         <CAJZ5v0ik_JQ4Awtw7iR68W4-9ZL8FRDsDd-kWmL-n09fgg3reg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+   d="scan'208";a="700144313"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga004.jf.intel.com with ESMTP; 17 May 2022 10:02:32 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Tue, 17 May 2022 10:02:32 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Tue, 17 May 2022 10:02:31 -0700
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.027;
+ Tue, 17 May 2022 10:02:31 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Dinh Nguyen <dinguyen@kernel.org>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "bhe@redhat.com" <bhe@redhat.com>,
+        "kexec@lists.infradead.org" <kexec@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bcm-kernel-feedback-list@broadcom.com" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "openipmi-developer@lists.sourceforge.net" 
+        <openipmi-developer@lists.sourceforge.net>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
+        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
+        "halves@canonical.com" <halves@canonical.com>,
+        "fabiomirmar@gmail.com" <fabiomirmar@gmail.com>,
+        "alejandro.j.jimenez@oracle.com" <alejandro.j.jimenez@oracle.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "d.hatayama@jp.fujitsu.com" <d.hatayama@jp.fujitsu.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "dyoung@redhat.com" <dyoung@redhat.com>,
+        "Tang, Feng" <feng.tang@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "mikelley@microsoft.com" <mikelley@microsoft.com>,
+        "hidehiro.kawai.ez@hitachi.com" <hidehiro.kawai.ez@hitachi.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "vgoyal@redhat.com" <vgoyal@redhat.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "will@kernel.org" <will@kernel.org>, Alex Elder <elder@kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Chris Zankel <chris@zankel.net>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        "Corey Minyard" <minyard@acm.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "Heiko Carstens" <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        James Morse <james.morse@arm.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "Matt Turner" <mattst88@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        "Richard Weinberger" <richard@nod.at>,
+        Robert Richter <rric@kernel.org>,
+        "Stefano Stabellini" <sstabellini@kernel.org>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "Vasily Gorbik" <gor@linux.ibm.com>, Wei Liu <wei.liu@kernel.org>
+Subject: RE: [PATCH 21/30] panic: Introduce the panic pre-reboot notifier list
+Thread-Topic: [PATCH 21/30] panic: Introduce the panic pre-reboot notifier
+ list
+Thread-Index: AQHYWooLnXaT7guJw0OCpuGv/IkEoK0iJCSAgAAZuAD//40QkIAAesuAgAFqbACAACtDgP//jcxA
+Date:   Tue, 17 May 2022 17:02:31 +0000
+Message-ID: <06d85642fef24bc482642d669242654b@intel.com>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-22-gpiccoli@igalia.com> <YoJgcC8c6LaKADZV@alley>
+ <63a74b56-89ef-8d1f-d487-cdb986aab798@igalia.com>
+ <bed66b9467254a5a8bafc1983dad643a@intel.com>
+ <e895ce94-e6b9-caf6-e5d3-06bf0149445c@igalia.com> <YoOs9GJ5Ovq63u5Q@alley>
+ <599b72f6-76a4-8e6d-5432-56fb1ffd7e0b@igalia.com>
+In-Reply-To: <599b72f6-76a4-8e6d-5432-56fb1ffd7e0b@igalia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.401.20
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2022-05-17 at 17:42 +0200, Rafael J. Wysocki wrote:
-> On Sat, May 7, 2022 at 2:55 PM Daniel Lezcano
-> <daniel.lezcano@linexp.org> wrote:
-> > 
-> > A thermal zone is software abstraction of a sensor associated with
-> > properties and cooling devices if any.
-> > 
-> > The fact that we have thermal_zone and thermal_zone_ops mixed is
-> > confusing and does not clearly identify the different components
-> > entering in the thermal management process. A thermal zone appears
-> > to
-> > be a sensor while it is not.
-> 
-> Well, the majority of the operations in thermal_zone_ops don't apply
-> to thermal sensors.  For example, ->set_trips(), ->get_trip_type(),
-> ->get_trip_temp().
-> 
-In past we discussed adding thermal sensor sysfs with threshold to
-notify temperature.
-
-So sensor can have set/get_threshold() functions instead of the
-set/get_trip for zones.
-
-Like we have /sys/class/thermal_zone* we can have
-/sys/class/thermal_sensor*.
-
-Thermal sensor(s) are bound to  thermal zones. This can also include
-multiple sensors in a zone and can create a virtual sensor also.
-
-Thanks,
-Srinivas
-
-> > In order to set the scene for multiple thermal sensors aggregated
-> > into
-> > a single thermal zone. Rename the thermal_zone_ops to
-> > thermal_sensor_ops, that will appear clearyl the thermal zone is
-> > not a
-> > sensor but an abstraction of one [or multiple] sensor(s).
-> 
-> So I'm not convinced that the renaming mentioned above is
-> particularly
-> clean either.
-> 
-> IMV the way to go would be to split the thermal sensor operations,
-> like ->get_temp(), out of thermal_zone_ops.
-> 
-> But then it is not clear what a thermal zone with multiple sensors in
-> it really means.  I guess it would require an aggregation function to
-> combine the thermal sensors in it that would produce an effective
-> temperature to check against the trip points.
-> 
-> Honestly, I don't think that setting a separate set of trips for each
-> sensor in a thermal zone would make a lot of sense.
-
+PiBUb255IC8gRGluaCAtIGNhbiBJIGp1c3QgKnNraXAqIHRoaXMgbm90aWZpZXIgKmlmIGtkdW1w
+KiBpcyBzZXQgb3IgZWxzZQ0KPiB3ZSBydW4gdGhlIGNvZGUgYXMtaXM/IERvZXMgdGhhdCBtYWtl
+IHNlbnNlIHRvIHlvdT8NCg0KVGhlICJza2lwIiBvcHRpb24gc291bmRzIGxpa2UgaXQgbmVlZHMg
+c29tZSBzcGVjaWFsIGZsYWcgYXNzb2NpYXRlZCB3aXRoDQphbiBlbnRyeSBvbiB0aGUgbm90aWZp
+ZXIgY2hhaW4uIEJ1dCB0aGVyZSBhcmUgb3RoZXIgbm90aWZpZXIgY2hhaW5zIC4uLiBzbyB0aGF0
+DQpzb3VuZHMgbWVzc3kgdG8gbWUuDQoNCkp1c3QgYWxsIHRoZSBub3RpZmllcnMgaW4gcHJpb3Jp
+dHkgb3JkZXIuIElmIGFueSB3YW50IHRvIHRha2UgZGlmZmVyZW50IGFjdGlvbnMNCmJhc2VkIG9u
+IGtkdW1wIHN0YXR1cywgY2hhbmdlIHRoZSBjb2RlLiBUaGF0IHNlZW1zIG1vcmUgZmxleGlibGUg
+dGhhbg0KYW4gImFsbCBvciBub3RoaW5nIiBhcHByb2FjaCBieSBza2lwcGluZy4NCg0KLVRvbnkN
+Cg==
