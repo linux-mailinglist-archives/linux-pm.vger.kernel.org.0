@@ -2,69 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B97F52BB0E
-	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 14:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF17552BA59
+	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 14:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236579AbiERM1c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 May 2022 08:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47636 "EHLO
+        id S236867AbiERMae (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 May 2022 08:30:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236482AbiERM1Q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 08:27:16 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AE1AFAC7;
-        Wed, 18 May 2022 05:27:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=QJsVQym+xL0e9ZE8cs4o3sRq3C2RnAjl/FhXvupRFQ0=; b=D/Bh+Gmzw2BN6pBNp567gS2D0/
-        VKxeDUt7MYxt68TtoX3genmgLQ2oeiNNKiP0kGjaIGmiJfJjrDvbEDObjF99Cs6dMhZ6RnHqXVH7+
-        ssMEbATCPWp8/NOivDUP4Rv4NAL42rgZGvDejwV1CjptmTPve2x2GjNuMuzzwvPD0tOg=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nrIld-003K4e-Dv; Wed, 18 May 2022 14:27:05 +0200
-Date:   Wed, 18 May 2022 14:27:05 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Vivek Kumar <quic_vivekuma@quicinc.com>
-Cc:     corbet@lwn.net, catalin.marinas@arm.com, will@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, axboe@kernel.dk,
-        rafael@kernel.org, akpm@linux-foundation.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-mm@kvack.org, len.brown@intel.com,
-        pavel@ucw.cz, paulmck@kernel.org, bp@suse.de,
-        keescook@chromium.org, songmuchun@bytedance.com,
-        rdunlap@infradead.org, damien.lemoal@opensource.wdc.com,
-        pasha.tatashin@soleen.com, tabba@google.com, ardb@kernel.org,
-        tsoni@quicinc.com, quic_psodagud@quicinc.com,
-        quic_svaddagi@quicinc.com,
-        Prasanna Kumar <quic_kprasan@quicinc.com>
-Subject: Re: [RFC 4/6] mm: swap: Add randomization check for swapon/off calls
-Message-ID: <YoTmGREvHTpTeeUH@lunn.ch>
-References: <1652860121-24092-1-git-send-email-quic_vivekuma@quicinc.com>
- <1652860121-24092-5-git-send-email-quic_vivekuma@quicinc.com>
+        with ESMTP id S236945AbiERM3w (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 08:29:52 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530AB196686
+        for <linux-pm@vger.kernel.org>; Wed, 18 May 2022 05:28:25 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id v191-20020a1cacc8000000b00397001398c0so3087581wme.5
+        for <linux-pm@vger.kernel.org>; Wed, 18 May 2022 05:28:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=vbZ35HTc/Z+9/YtPffCcXnSQ34v/inirF9FoyPpxltg=;
+        b=XMZgvjHgjIEqx7BPEB+Mdfhrp5/F6NWKbVG3Q6DHC2nGEPXEQc90ld+Gz69p1flrqV
+         psPqnkkcTUVGnyHvizy90TW1A/mBQtY+zxcholbkSylys2Fnwya1odyM8BuREjk7joN/
+         4HBkKzziHy05hSlCMOE1nk1BJZ4Ialira3K2Jmw4xD9CwPdOdwzoxH8cc+4H4wnDhpnT
+         VEQXw3FLimcMlPr9IArItdoBeDkD5Zfhi5sEiJL8EtWCtkYANpQPmY5aoTECOXjmSQ9v
+         tnAsF5JNzAXVE8bou5eMoBJ+QYSCFHLIYVjE+OjhEnTW32uZN7AvpjybB1IRbckAh68v
+         6qqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=vbZ35HTc/Z+9/YtPffCcXnSQ34v/inirF9FoyPpxltg=;
+        b=jKfVZwnNNZTOY9goP1K+egUmVyTkSagPcpKk/q14eJxqvmlUzzOLL9Lsxeb4hqeWJb
+         V18omjzUE/by4TGdVkqOq8Fg1oHjeLtAaYcb5xt7t+pb8H97nBe36gn2kIP+Udf1juvC
+         uZEKm5F7PDPvwo3mVs3JWmus4XwAFmTc/xQGY0hWZUVTbDkDI9ykVJJu17j8T00YfCyM
+         IK6Zw5ILgutx883MIE0hHiFXVSje0iHxKoym9jKFX9hY4U0v5xlK1z4edKLfjEat9j3w
+         XAl4nTiFNEQ5+EFPeWWVkxTl1qQmBILZknLP85io+9AxfBcU1UkJsyiUAVJh3HxFoiJw
+         3xug==
+X-Gm-Message-State: AOAM532JDXQQov30OuaD99mCzFtggH/Bea0KCkCAqy3LmVOc80ql6DMx
+        YDHQrg5TrY4xf+O+5xPfgj9oeg==
+X-Google-Smtp-Source: ABdhPJxaPpelIGlhHrpTWKJVajqQdAKSpL79pB1ObInSUNS/WOVFT1qfZsR7QWypis9eBbi7xMO4jA==
+X-Received: by 2002:a05:600c:1c17:b0:394:7ecb:5b3a with SMTP id j23-20020a05600c1c1700b003947ecb5b3amr36479002wms.185.1652876896879;
+        Wed, 18 May 2022 05:28:16 -0700 (PDT)
+Received: from localhost ([212.187.182.163])
+        by smtp.gmail.com with ESMTPSA id e4-20020adf9bc4000000b0020d0c48d135sm1969667wrc.15.2022.05.18.05.28.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 05:28:16 -0700 (PDT)
+Date:   Wed, 18 May 2022 13:28:15 +0100
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
+        dietmar.eggemann@arm.com, sudeep.holla@arm.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        devel@acpica.org
+Subject: Re: [PATCH v2 1/5] ACPI: CPPC: Check _OSC for flexible address space
+Message-ID: <20220518122815.7wzbzi2u55eq7tpv@viresh-thinkpad>
+References: <20220518090901.2724518-1-pierre.gondois@arm.com>
+ <20220518094243.6oxbdmf226jvqoef@viresh-thinkpad>
+ <16566ef8-15d3-bf1b-37f2-c0b94b0493bc@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1652860121-24092-5-git-send-email-quic_vivekuma@quicinc.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <16566ef8-15d3-bf1b-37f2-c0b94b0493bc@arm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 18, 2022 at 01:18:39PM +0530, Vivek Kumar wrote:
-> Add addtional check on swapon/swapoff sycalls to disable
-> randomization of swap offsets if GENHD_FL_NO_RANDOMIZE
-> flag is passed.
+On 18-05-22, 12:34, Pierre Gondois wrote:
+> 
+> 
+> On 5/18/22 11:42, Viresh Kumar wrote:
+> > On 18-05-22, 11:08, Pierre Gondois wrote:
+> > > ACPI 6.2 Section 6.2.11.2 'Platform-Wide OSPM Capabilities':
+> > >    Starting with ACPI Specification 6.2, all _CPC registers can be in
+> > >    PCC, System Memory, System IO, or Functional Fixed Hardware address
+> > >    spaces. OSPM support for this more flexible register space scheme is
+> > >    indicated by the “Flexible Address Space for CPPC Registers” _OSC bit
+> > > 
+> > > Otherwise (cf ACPI 6.1, s8.4.7.1.1.X), _CPC registers must be in:
+> > > - PCC or Functional Fixed Hardware address space if defined
+> > > - SystemMemory address space (NULL register) if not defined
+> > > 
+> > > Add the corresponding _OSC bit and check it when parsing _CPC objects.
+> > > 
+> > > Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+> > > Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> > > ---
+> > >   drivers/acpi/bus.c       | 18 ++++++++++++++++++
+> > >   drivers/acpi/cppc_acpi.c |  9 +++++++++
+> > >   include/linux/acpi.h     |  2 ++
+> > >   3 files changed, 29 insertions(+)
+> > 
+> > It would be much useful to get a cover letter for this series with
+> > what you have changed since the previous version. It is almost
+> > impossible to find that out otherwise.
+> > 
+> 
+> Yes indeed, sorry for that, the changelog is:
+> v2:
+> [1/5] ACPI: CPPC: Check _OSC for flexible address space
+> - Renamed OSC_SB_CPC_FLEXIBLE_ADR_SP to OSC_SB_CPC_FLEXIBLE_ADR_SPACE
+> [3/5] ACPI: CPPC: Assume no transition latency if no PCCT
+> and
+> [4/5] cpufreq: CPPC: Enable fast_switch
+> - Renamed CPC_IN_SIO to CPC_IN_SYSTEM_IO
+> - Renamed CPC_IN_SM to CPC_IN_SYSTEM_MEMORY
+> 
+> or do you prefer to have the serie re-submitted ?
 
-Is there already a flag in the image header which tells you if the
-image is randomozied or not? I assume the bootloader needs to know,
-doing a linear read of a randomized image is not going to end well.
+No it is fine for now :)
 
-      Andrew
+-- 
+viresh
