@@ -2,97 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A52252B54F
-	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 11:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A9152B54B
+	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 11:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233439AbiERIpm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 May 2022 04:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37936 "EHLO
+        id S233644AbiERIzr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 May 2022 04:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbiERIpk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 04:45:40 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C277E133277;
-        Wed, 18 May 2022 01:45:39 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id k30so1650804wrd.5;
-        Wed, 18 May 2022 01:45:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cajtq/WCCYY+Uzv177x/wTfPz35hSuCd8u3Ec2e4AOQ=;
-        b=aHTdStFe5NRbSQREHiQSU+A6Q7nqKkqfDryBo32bfI2egWwMPE0X3YHRWU9Kjrmxk+
-         7MFCPuN24HBjFAKgkvcySKE7dAPrUYtYeqAj7NyFaSzjNqmnygt8YuqP+BeNryvLs1M0
-         Oh2RU3o1tXXrye7A22ihl1SNcHD74N6fXtHIlEAKjLusGQx1V/MJOQA1QVXD4i+/n7rv
-         2WoKzuKW72yUpasATnk9zqBPDl6pXC6ozrSAblkZMISNuCfxY1tWzdD4WzMogLGkxS3J
-         0GVwlwnZNKoZ0vTwtgd0QyJYyiWulCqqhQKNM1pU+xFClwPETPxBfJVvYnR6KjlTjqaK
-         wQUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cajtq/WCCYY+Uzv177x/wTfPz35hSuCd8u3Ec2e4AOQ=;
-        b=Twl97t+FLmyOq2zWzFtY2sRwqHmKXxHQz+dJv7cBi0cGP4/5caFMuUjff/ZguUVEGZ
-         1xkHUmgOyitUblDtw/9VO4gTtGgyCPw0WuFEsU8dUN9RtQ5y0OTx2gEm6dBENnCCEBzZ
-         HKIUGHUFiYl5P1labVqxB+lNb0N+BzWPNRRxyrrsh0nPX87isk0+C2iqzmhXto6ZysRI
-         I8LphDrYUK4GS7MydkiggDz2v2VFj4CzCG4gItLUHAmUQNvuDnm9CrhDtVEoMyydPoG4
-         hBeHh2dPZJ+O8zIpcRjEePbumCaR3GP05wik76mYC1a3HyOt+UQAmCXKK/k8dbiisdf7
-         dsAA==
-X-Gm-Message-State: AOAM531Y88KsUooUSSUtEbbr8bDFSks3q1jL9nxNOoPh503lasoaiWNp
-        wAT4oQ2XO9VN6hf9uOBJZGE=
-X-Google-Smtp-Source: ABdhPJy+jzxaUQm1PdxdFGCsAK/RXRQls9XoisZOu97pRzrOPADdNoGvXXMtH5aa16qydr9vPPjWPQ==
-X-Received: by 2002:a05:6000:2a2:b0:20c:734f:d38a with SMTP id l2-20020a05600002a200b0020c734fd38amr22705633wry.417.1652863538304;
-        Wed, 18 May 2022 01:45:38 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id d28-20020adfa41c000000b0020e5b4ebaecsm1431579wra.4.2022.05.18.01.45.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 May 2022 01:45:37 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] powercap: intel_rapl: remove redundant store to value after multiply
-Date:   Wed, 18 May 2022 09:45:36 +0100
-Message-Id: <20220518084536.508514-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        with ESMTP id S233666AbiERIzb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 04:55:31 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C19134E15
+        for <linux-pm@vger.kernel.org>; Wed, 18 May 2022 01:55:26 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1nrFSm-0000Au-5b; Wed, 18 May 2022 10:55:24 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1nrFSk-0003OT-3Y; Wed, 18 May 2022 10:55:22 +0200
+Date:   Wed, 18 May 2022 10:55:22 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Francesco Dolcini <francesco.dolcini@toradex.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, l.stach@pengutronix.de,
+        linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rafael@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Amit Kucheria <amitk@kernel.org>,
+        Jon Nettleton <jon@solid-run.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tim Harvey <tharvey@gateworks.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v1] thermal: imx: Make trip point offset configurable
+Message-ID: <20220518085522.3fpzy37kkbkn4hpl@pengutronix.de>
+References: <20220516190001.147919-1-francesco.dolcini@toradex.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220516190001.147919-1-francesco.dolcini@toradex.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is no need to store the result of the multiply back to variable value
-after the multiplication. The store is redundant, replace *= with just *.
+Hi Francesco,
 
-Cleans up clang scan build warning:
-warning: Although the value stored to 'value' is used in the enclosing
-expression, the value is never actually read from 'value'
-[deadcode.DeadStores]
+On 22-05-16, Francesco Dolcini wrote:
+> Currently the imx thermal driver has a hardcoded critical temperature
+> value offset of 5 Celsius degrees from the actual SoC maximum
+> temperature.
+> 
+> This affects applications and systems designed to be working on this close
+> to the limit, but yet valid, temperature range.
+> 
+> Given that there is no single value that will fit all the use cases make
+> the critical trip point offset from the max temperature configurable
+> using a newly added trip_offset module parameter, passive trip point is
+> set to 5 Celsius degrees less than the critical. By default the
+> system behaves exactly as before.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/powercap/intel_rapl_common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I thought the conclusion of the discussion was to use a dt-property?
+Since it is device and/or environment specific.
 
-diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-index 83da499dd6ec..70e38278986d 100644
---- a/drivers/powercap/intel_rapl_common.c
-+++ b/drivers/powercap/intel_rapl_common.c
-@@ -1010,7 +1010,7 @@ static u64 rapl_compute_time_window_atom(struct rapl_package *rp, u64 value,
- 	 * where time_unit is default to 1 sec. Never 0.
- 	 */
- 	if (!to_raw)
--		return (value) ? value *= rp->time_unit : rp->time_unit;
-+		return (value) ? value * rp->time_unit : rp->time_unit;
- 
- 	value = div64_u64(value, rp->time_unit);
- 
--- 
-2.36.1
+Regards,
+  Marco
 
+> 
+> Link: https://lore.kernel.org/all/20220420091300.179753-1-francesco.dolcini@toradex.com/
+> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+> ---
+>  drivers/thermal/imx_thermal.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+> index 16663373b682..42d1f8a3eccb 100644
+> --- a/drivers/thermal/imx_thermal.c
+> +++ b/drivers/thermal/imx_thermal.c
+> @@ -86,6 +86,10 @@ enum imx_thermal_trip {
+>  #define TEMPMON_IMX6SX			2
+>  #define TEMPMON_IMX7D			3
+>  
+> +static int trip_offset = 5;
+> +module_param(trip_offset, int, 0444);
+> +MODULE_PARM_DESC(trip_offset, "Critical trip point offset from CPU max temp in Celsius degrees (default 5)");
+> +
+>  struct thermal_soc_data {
+>  	u32 version;
+>  
+> @@ -504,11 +508,11 @@ static void imx_init_temp_grade(struct platform_device *pdev, u32 ocotp_mem0)
+>  	}
+>  
+>  	/*
+> -	 * Set the critical trip point at 5 °C under max
+> -	 * Set the passive trip point at 10 °C under max (changeable via sysfs)
+> +	 * Set the critical trip point at 5 °C under max (changeable via module param)
+> +	 * Set the passive trip point at 5 °C under critical (changeable via sysfs)
+>  	 */
+> -	data->temp_critical = data->temp_max - (1000 * 5);
+> -	data->temp_passive = data->temp_max - (1000 * 10);
+> +	data->temp_critical = data->temp_max - (1000 * trip_offset);
+> +	data->temp_passive = data->temp_critical - (1000 * 5);
+>  }
+>  
+>  static int imx_init_from_tempmon_data(struct platform_device *pdev)
+> -- 
+> 2.25.1
+> 
+> 
+> 
