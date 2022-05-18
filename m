@@ -2,167 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F86D52C303
-	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 21:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 304F952C401
+	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 22:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241709AbiERTEd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 May 2022 15:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40074 "EHLO
+        id S242161AbiERUCn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 May 2022 16:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241721AbiERTEc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 15:04:32 -0400
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7575B20EE27;
-        Wed, 18 May 2022 12:04:29 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2fefb051547so34864037b3.5;
-        Wed, 18 May 2022 12:04:29 -0700 (PDT)
+        with ESMTP id S242109AbiERUCm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 16:02:42 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1321E3EC7
+        for <linux-pm@vger.kernel.org>; Wed, 18 May 2022 13:02:40 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id s14so2255045ild.6
+        for <linux-pm@vger.kernel.org>; Wed, 18 May 2022 13:02:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=mj28eAA7jFmQsuBi8F2d/CpOSog8MsvJJWpWNUXOAqY=;
+        b=c0xg0dXTIMvvVLpM9pxFLIASs/USM8les0/qR9K+D5itQ2NBoW4ldkbunCJnr9ftRh
+         YMT2nk4JcRIYdccAZ/hFCsq8zvh+VCtCwc/saB48SkxtDSQ0+Yo6zFqzAuxHa3IqZY5K
+         Km4+KzVtjrJb6hTD7I3HrzpSO2+CbIczQlJNM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QRP/znsW6twON92OkuCxDQka0yD+6IG0hBq5yN5qSP0=;
-        b=EbQp6tEvYlRFvrx2KtPg/OgRf2EePPZtbNWZLJDvPnTI9zZeS3sJnavNWnAtOTSEF/
-         Ja+YIIj0RjXBU3Gjw0LHAMqDpip+xv0sBRV+d3VbHS0vVAyDY7KnOis+0cUMmIgQkANq
-         atRg8WW/bMx7Pa8C+1PYogqCvQQ3ITSM2ECuv5gdKAHGtdNwHhyCLh8sDmMB1K7annyB
-         D5/3O6F/0Bi/nc06C0lNSR/+CIqfbOj8nW63zeXoCh4Wg4KM5T9PZBVjGVtwdXTVizZo
-         xg9gaeVTlP8vlUvMNyPexS7lF38V5hk18aiDMi+msvJGoykgW0Q+aXZDE9itmUO+gbjX
-         qVNQ==
-X-Gm-Message-State: AOAM531oNkRuOSbw/fFd9ABoH8LeLAKe0k82KgTFyxqUZ/ifKlmPTNpz
-        w8E2sbSWrI+DWSBjcup0SaM+jjvuMTwIG0r9mlY=
-X-Google-Smtp-Source: ABdhPJwpIe9ajHD4rKJrEU1dtxwdKJqPzwBoJd5QiCJoxXrFiFd5xtP2h1riCXK+UeIGlaRu2ObHjC/WEXT47/9ySGo=
-X-Received: by 2002:a0d:c8c3:0:b0:2fe:e9eb:664 with SMTP id
- k186-20020a0dc8c3000000b002fee9eb0664mr910598ywd.301.1652900668697; Wed, 18
- May 2022 12:04:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <CGME20220518021539epcas1p3449c756c4aca3c12000e2350b288a197@epcas1p3.samsung.com>
- <3acd6c32-6e78-dfc2-3e45-84f69a7d5f36@samsung.com>
-In-Reply-To: <3acd6c32-6e78-dfc2-3e45-84f69a7d5f36@samsung.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 18 May 2022 21:04:17 +0200
-Message-ID: <CAJZ5v0hRiWXrG1pMzLAqoRE9MidDPm21Mjpk7sjPsE=LA2oVuA@mail.gmail.com>
-Subject: Re: [GIT PULL] devfreq next for 5.19
-To:     Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     "Rafael J. Wysocki <rjw@rjwysocki.net>" <rjw@rjwysocki.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=mj28eAA7jFmQsuBi8F2d/CpOSog8MsvJJWpWNUXOAqY=;
+        b=xWH356blKki75aWLlviDZrrfsAIDqFuVmQdp5hVLhpT6huZKEiJtp1c5/YKV7W3eX4
+         Gvwi+GSVIyHYOWlL5wyDxesVCEfhnHIXVIPL+fvjPrBIu4Tv6AjWL2UVKtrmNwhNjWfI
+         AmtTtHPx6xxPjF8UPFgVR6Y/drJBg6Z/d3R31q4WQl2HAPiCtMoiFel+nwLs+u9cFTUm
+         URpIpV8aDtaKpHYuf8YOteYFihTDuTPxslNU7aR/8+4Jv9fppd+ZUXOKJCpTqTLT49Va
+         e07Ah8jUO758qXp5UldRlcSizkO9K0bawFSI02UOiGedLNHYECOVsyIKdP+4z8W5I3xY
+         XAMg==
+X-Gm-Message-State: AOAM5305T2NmwMdgc2AopFJoIvscpbA7p1a/m7+43QMvNiHY41eZnMar
+        j7mAooZI82c9bFHn+rsvZ+LpMA==
+X-Google-Smtp-Source: ABdhPJyodFs+oGS3ms9XYWcg56utelXkCdpo91qxHRbf//xPU48zYUhJXJt0/3+l9ZeJnz271kd/jA==
+X-Received: by 2002:a92:d20b:0:b0:2d1:1588:385e with SMTP id y11-20020a92d20b000000b002d11588385emr756936ily.23.1652904160177;
+        Wed, 18 May 2022 13:02:40 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id e17-20020a022111000000b0032e2c859d8esm110971jaa.138.2022.05.18.13.02.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 May 2022 13:02:39 -0700 (PDT)
+Subject: Re: [PATCH V5 0/3] Add unit test module for AMD P-State driver
+To:     Huang Rui <ray.huang@amd.com>
+Cc:     "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Chanwoo Choi (chanwoo@kernel.org)" <chanwoo@kernel.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        =?UTF-8?B?7ZWo66qF7KO8?= <myungjoo.ham@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220505022913.329259-1-li.meng@amd.com>
+ <YnNxlzRW2NGCx5dO@amd.com>
+ <615adab4-515c-7d61-5662-bd342b759d6d@linuxfoundation.org>
+ <27434868-1d0f-4493-3265-bea4e1dc8494@linuxfoundation.org>
+ <YoSB6JRplJR79Beu@amd.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <bafe3aab-166d-7d9f-8909-8ffa41579a47@linuxfoundation.org>
+Date:   Wed, 18 May 2022 14:02:38 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <YoSB6JRplJR79Beu@amd.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 18, 2022 at 4:16 AM Chanwoo Choi <cw00.choi@samsung.com> wrote:
->
-> Dear Rafael,
->
-> This is devfreq-next pull request for v5.19-rc1. I add detailed description of
-> this pull request on the following tag. Please pull devfreq with
-> following updates.
-> - tag name : devfreq-next-for-5.19
->
-> Best Regards,
-> Chanwoo Choi
->
->
-> The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
->
->   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-5.19
->
-> for you to fetch changes up to 26984d9d581e5049bd75091d2e789b9cc3ea12e0:
->
->   PM / devfreq: passive: Keep cpufreq_policy for possible cpus (2022-05-17 18:24:39 +0900)
->
-> ----------------------------------------------------------------
-> Update devfreq next for v5.19
->
-> Detailed description for this pull request:
-> 1. Update devfreq core
-> - Add cpu based scaling support to passive governor. Some device like
-> cache might require the dynamic frequency scaling. But, it has very
-> tightly to cpu frequency. So that use passive governor to scale
-> the frequency according to current cpu frequency.
->
-> To decide the frequency of the device, the governor does one of the following:
-> : Derives the optimal devfreq device opp from required-opps property of
->   the parent cpu opp_table.
->
-> : Scales the device frequency in proportion to the CPU frequency. So, if
->   the CPUs are running at their max frequency, the device runs at its
->   max frequency. If the CPUs are running at their min frequency, the
->   device runs at its min frequency. It is interpolated for frequencies
->   in between.
->
-> 2. Update devfreq driver
-> - Update rk3399_dmc.c as following:
-> : Convert dt-binding document to YAML and deprecate unused properties.
->
-> : Use Hz units for the device-tree properties of rk3399_dmc.
->
-> : rk3399_dmc is able to set the idle time before changing the dmc clock.
->   Specify idle time parameters by using nano-second unit on dt bidning.
->
-> : Add new disable-freq properties to optimize the power-saving feature
->   of rk3399_dmc.
->
-> : Disable devfreq-event device on remove() to fix unbalanced
->   enable-disable count.
->
-> : Use devm_pm_opp_of_add_table()
->
-> : Block PMU (Power-Management Unit) transitions when scaling frequency
->   by ARM Trust Firmware in order to fix the conflict between PMU and DMC
->   (Dynamic Memory Controller).
-> ----------------------------------------------------------------
->
-> Brian Norris (15):
->       dt-bindings: devfreq: rk3399_dmc: Convert to YAML
->       dt-bindings: devfreq: rk3399_dmc: Deprecate unused/redundant properties
->       dt-bindings: devfreq: rk3399_dmc: Fix Hz units
->       dt-bindings: devfreq: rk3399_dmc: Specify idle params in nanoseconds
->       dt-bindings: devfreq: rk3399_dmc: Add more disable-freq properties
->       PM / devfreq: rk3399_dmc: Drop undocumented ondemand DT props
->       PM / devfreq: rk3399_dmc: Drop excess timing properties
->       PM / devfreq: rk3399_dmc: Use bitfield macro definitions for ODT_PD
->       PM / devfreq: rk3399_dmc: Support new disable-freq properties
->       PM / devfreq: rk3399_dmc: Support new *-ns properties
->       PM / devfreq: rk3399_dmc: Disable edev on remove()
->       PM / devfreq: rk3399_dmc: Use devm_pm_opp_of_add_table()
->       PM / devfreq: rk3399_dmc: Avoid static (reused) profile
->       soc: rockchip: power-domain: Manage resource conflicts with firmware
->       PM / devfreq: rk3399_dmc: Block PMU during transitions
->
-> Chanwoo Choi (3):
->       PM / devfreq: Export devfreq_get_freq_range symbol within devfreq
->       PM / devfreq: passive: Reduce duplicate code when passive_devfreq case
->       PM / devfreq: passive: Keep cpufreq_policy for possible cpus
->
-> Saravana Kannan (1):
->       PM / devfreq: Add cpu based scaling support to passive governor
->
->  .../devicetree/bindings/devfreq/rk3399_dmc.txt     | 212 -----------
->  .../memory-controllers/rockchip,rk3399-dmc.yaml    | 384 ++++++++++++++++++++
->  drivers/devfreq/devfreq.c                          |  20 +-
->  drivers/devfreq/governor.h                         |  27 ++
->  drivers/devfreq/governor_passive.c                 | 403 +++++++++++++++++----
->  drivers/devfreq/rk3399_dmc.c                       | 312 ++++++++--------
->  drivers/soc/rockchip/pm_domains.c                  | 118 ++++++
->  include/linux/devfreq.h                            |  17 +-
->  include/soc/rockchip/pm_domains.h                  |  25 ++
->  9 files changed, 1063 insertions(+), 455 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
->  create mode 100644 Documentation/devicetree/bindings/memory-controllers/rockchip,rk3399-dmc.yaml
->  create mode 100644 include/soc/rockchip/pm_domains.h
+On 5/17/22 11:19 PM, Huang Rui wrote:
+> On Wed, May 18, 2022 at 04:03:05AM +0800, Shuah Khan wrote:
 
-Pulled, thanks!
+>> I reviewed the patches and the test driver amd-pstate-ut doesn't belong under
+>> selftests. I would recommend the following approach:
+>>
+>> - add this test driver under drivers/cpufreq
+>>
+>> - KUnit is a better fit for this unit test driver unless you want
+>>     to be able to run this without KUnit configured
+>>
+>> - add the test script under selftests - the script then can load the
+>>     test driver and run tests and unload the driver.
+>>
+> 
+> Thanks Shuah. We would like to introduce more CPU benchmark testing based
+> the amd-pstate-ut next step, it may not be all the stuff in the kernel
+> module. E.X.  use the script to trigger the tbench, gitsource, kernbench,
+> netperf, speedometer, and etc. testing and monitor the cpu frequency and
+> performance goals change, power consumption at runtime. Can the KUnit +
+> Kselftests work more straight forward in user scenario?
+> 
+
+I am not sure if I understand your question. Also I am not sure if understand
+the scope of the testing you are intending to do using amd-pstate-ut.
+
+tbench, gitsource etc. are external tests (meaning not in kernel repo). Do these
+tests depend on amd-pstate-ut?
+
+It would be helpful to understand the scope first. What exactly will amd-pstate-ut
+used for? Based on the patch series it looked like:
+
+-- amd-pstate-ut has unit test code which will be triggered from kselftest
+
+This is perfectly fine. The driver can reside under drivers/cpufreq and a test.sh
+can reside under selftests. It can just use kselftest framework.
+
+Based on what you are saying. kselftest might be a good choice.
+
+thanks,
+-- Shuah
+
