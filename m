@@ -2,114 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C9652BE85
-	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 17:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CC0052BF1F
+	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 18:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238977AbiERPCu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 May 2022 11:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50470 "EHLO
+        id S239489AbiERPlZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 May 2022 11:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238931AbiERPCt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 11:02:49 -0400
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09FC21D2FDF;
-        Wed, 18 May 2022 08:02:49 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2f16645872fso27702697b3.4;
-        Wed, 18 May 2022 08:02:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ayfHAoqEtV8GWKK73lN72HvcNOrapmeyJaXzktDoFp4=;
-        b=0i5R4c053As+/XsqizslXydUIJ3zc2GmYzYmsbGzyDsvfQEmDz9nt9BL9ZWLrk1iQm
-         wK7buiSbeuJ0X7+02xpGS9WeyJidOBfWANio9IXfWqno+JILwfOZUIidLDmde9JXVoSH
-         gc0d9hZAt3IeL5Ip7sr9anauGOAwDeAQyDukL0nyncEfQdjdQvKFCVR7Q9h7i/SDCIw1
-         NBL+gtRjMXVoGIkc3cmumb4bDHQDRtqI4mcUbExt1LQU5L1MMWGnu5UjxsuKqO/WOvig
-         3R5kX5gBS2eeWmD/ngH3zjA8AfbpMCSQVcbZQyleLYSMDSywIHSfA6ipfWUVxt56ggOW
-         HCPA==
-X-Gm-Message-State: AOAM531dd/v7QHFtaJM8WIG9A0fl/0+SEV8/RdQHopAcHneknrjNb0DX
-        aFvKVJOJspX5GLxmKp0cHqk6gz+Uu2cYL95AQRw=
-X-Google-Smtp-Source: ABdhPJxTDH362ZG7eZ1d0YXaROwhqfIiGt6sEyNfxW0dpdRgj7GdGxC2HW6tdf9RvBVyBjQZxaFchoSUUWT+jEJGtQE=
-X-Received: by 2002:a81:91d4:0:b0:2fe:e300:3581 with SMTP id
- i203-20020a8191d4000000b002fee3003581mr19834231ywg.7.1652886168249; Wed, 18
- May 2022 08:02:48 -0700 (PDT)
+        with ESMTP id S239485AbiERPlX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 11:41:23 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E073057177;
+        Wed, 18 May 2022 08:41:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1652888481; x=1684424481;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=02mEOdEenFaDxhJfvBWh5KieQnIcJ6sG7CwO5VjZO1M=;
+  b=DUAawwWOZmml2kWLLyfhwj6E2dQf1akugoRX9deJideVkA1qPVl1DfUo
+   9M2EemQf1QVv1kdeB1LWzU4NpzrW2cdSl0ZiRixCIjDPl2i0NZYEboFPX
+   RVwyxxEdgvwcL028PrmQ6LhRcR4UjPXX6wEW06UcUrgEzRqE+S6FznGNJ
+   TLbs0puwUBik8ckffj0iq957AuZijIYeZ0cF3rSK1X4AsUhjYGSHPvyp5
+   LDbXjarnsgLqU37DoPYypl34vbVbkvfb0Fgz/oum4n/OifRSLrJfdhRYp
+   eYRSD2tzzTVJeP8vJyOz+2AKPOsqedudusq5+BODt/nDFL+6V8RkDd9HE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10351"; a="297028437"
+X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
+   d="scan'208";a="297028437"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 08:41:16 -0700
+X-IronPort-AV: E=Sophos;i="5.91,235,1647327600"; 
+   d="scan'208";a="817496990"
+Received: from kackerma-mobl2.amr.corp.intel.com (HELO [10.209.69.102]) ([10.209.69.102])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 08:41:12 -0700
+Message-ID: <25a2a82f-b5e5-0fce-86c8-03d7da5fcdd1@intel.com>
+Date:   Wed, 18 May 2022 08:41:12 -0700
 MIME-Version: 1.0
-References: <20220505015814.3727692-1-rui.zhang@intel.com> <20220505015814.3727692-8-rui.zhang@intel.com>
- <CAJZ5v0jt1OND_d08mC0TC1LZ-JGANDY5fiDmH5RUfdtRk1vZFw@mail.gmail.com> <2dc4aa933d07add206a2aeefa15a4837aca6ff62.camel@intel.com>
-In-Reply-To: <2dc4aa933d07add206a2aeefa15a4837aca6ff62.camel@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 18 May 2022 17:02:37 +0200
-Message-ID: <CAJZ5v0h=pYZkbhN2EiYzUGn36Q4-2tMyzfUP0uyFO=Sybse4DA@mail.gmail.com>
-Subject: Re: [PATCH 7/7] rtc: cmos: Add suspend/resume endurance testing hook
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kalle Valo <kvalo@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-rtc@vger.kernel.org,
-        "open list:NETWORKING DRIVERS (WIRELESS)" 
-        <linux-wireless@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        merez@codeaurora.org, mat.jonczyk@o2.pl,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        Len Brown <len.brown@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v4 1/2] x86/fpu: Add a helper to prepare AMX state for
+ low-power CPU idle
+Content-Language: en-US
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     tglx@linutronix.de, dave.hansen@linux.intel.com,
+        peterz@infradead.org, bp@alien8.de, rafael@kernel.org,
+        ravi.v.shankar@intel.com
+References: <20220517222430.24524-1-chang.seok.bae@intel.com>
+ <20220517222430.24524-2-chang.seok.bae@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220517222430.24524-2-chang.seok.bae@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 18, 2022 at 4:45 PM Zhang Rui <rui.zhang@intel.com> wrote:
->
-> On Tue, 2022-05-17 at 17:14 +0200, Rafael J. Wysocki wrote:
-> > On Thu, May 5, 2022 at 3:58 AM Zhang Rui <rui.zhang@intel.com> wrote:
-> > >
-> > > Automated suspend/resume testing uses the RTC for wakeup.
-> > > A short rtcwake period is desirable, so that more suspend/resume
-> > > cycles can be completed, while the machine is available for
-> > > testing.
-> > >
-> > > But if too short a wake interval is specified, the event can occur,
-> > > while still suspending, and then no event wakes the suspended
-> > > system
-> > > until the user notices that testing has stalled, and manually
-> > > intervenes.
-> >
-> > If the wakeup event occurs while still suspending, it should abort
-> > the
-> > suspend in progress, shouldn't it?  But the above implies that it
-> > doesn't do that.
-> >
-> > If this is fixed, wouldn't it address the issue at hand?
->
-> I think the rootcause of the original problem is that
-> 1. on some systems, the ACPI RTC Fixed event is used during suspend
-> only, and the ACPI Fixed event is enabled in the rtc-cmos driver
-> .suspend() callback
-> and
-> 2. if the RTC Alarm already expires before .suspend() invoked, we will
-> lose the ACPI RTC Fixed Event as well as the wakeup event, say 20
-> seconds delay in freeze processes.
+On 5/17/22 15:24, Chang S. Bae wrote:
+> +/*
+> + * Initialize register state that may prevent from entering low-power idle.
+> + * This function will be invoked from the cpuidle driver only when needed.
+> + */
+> +void fpu_idle_fpregs(void)
+> +{
+> +	if (cpu_feature_enabled(X86_FEATURE_XGETBV1) &&
+> +	    (xfeatures_in_use() & XFEATURE_MASK_XTILE)) {
+> +		tile_release();
+> +		fpregs_deactivate(&current->thread.fpu);
+> +	}
+> +}
 
-Well, the RTC Fixed event can be armed in a PM/HIBERNATE notifier and
-if it fires before .suspend() runs, system wakeup can be triggered
-from there.
+This is a pretty minor nit, but:
 
-> But, even if that problem is fixed, the suspend aborts and "fails" as
-> expected, this is still a problem for the suspend-automation scenario,
-> because the system actually can suspend successfully if we don't set
-> the RTC alarm too aggressively. And in PCH overheating case, surely we
-> will get false alarms, because we will never use a 60s+ rtc alarm for
-> suspend-automation.
+X86_FEATURE_XFD depends on X86_FEATURE_XGETBV1
 
-I'm not sure why this is a problem.
+and
 
-It only means that occasionally the system will not reach the final
-"suspended" state, but that can happen regardless.
+X86_FEATURE_AMX_TILE depends on X86_FEATURE_XFD
+
+via cpu_deps[].  So there is an implicit dependency all the way from AMX
+to XGETBV1.  It's also not patently obvious what X86_FEATURE_XGETBV1 has
+to do with the rest of the if().
+
+Would this make more logical sense to folks?
+
+	/* Note: AMX_TILE being enabled implies XGETBV1 support */
+	if (cpu_feature_enabled(X86_FEATURE_AMX_TILE) &&
+	    (xfeatures_in_use() & XFEATURE_MASK_XTILE)) {
+		tile_release();
+		fpregs_deactivate(&current->thread.fpu);
+	}
+
+That also has a nice side effect that non-AMX systems will get to use a
+static branch and can also skip over the XGETBV1 entirely.
+
+The downside is that there's no explicit XGETBV1 check before calling
+xfeatures_in_use().  But, I don't really expect the AMX->XGETBV1
+dependency to go away either.
