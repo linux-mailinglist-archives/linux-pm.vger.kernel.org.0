@@ -2,178 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE08952B501
-	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 10:38:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A52252B54F
+	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 11:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233101AbiERI1m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 May 2022 04:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
+        id S233439AbiERIpm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 May 2022 04:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233188AbiERI1f (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 04:27:35 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4778435A99
-        for <linux-pm@vger.kernel.org>; Wed, 18 May 2022 01:27:22 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id k30so1576877wrd.5
-        for <linux-pm@vger.kernel.org>; Wed, 18 May 2022 01:27:21 -0700 (PDT)
+        with ESMTP id S230513AbiERIpk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 04:45:40 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C277E133277;
+        Wed, 18 May 2022 01:45:39 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id k30so1650804wrd.5;
+        Wed, 18 May 2022 01:45:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=EjqmNzNHU62tbGWEmGCSZ/quQcHD8ef7lqrbwmVPudg=;
-        b=l0KEje+nRrOVaYyABLHpk/z7KT6s2EzSKaWTOvSZjAdbPwkFb6/+OsoW2dHRIrb4Rs
-         MHfuy2yQx/EsZT0D/AqfHL2hZEw7DKuvSr40QZYcYiNnQ/z9ENrQ7HqkYHZ/DK1O8k8R
-         QQ6WMyrc3XW//fZyijLHTBHrn5zPGiDk0OAJxIfDzLJJmJa50V25x3qpbxzJh00t8cNV
-         TQhVJX2HZ7uYczoOeYS6THjh/QK0IcLJQ+P4KuaZzkC/RZk0bcwVpxx4q3REARP5SLPB
-         Md28A1GdYJxHXtWSDtGTSSCTh/H5MVqAVpkGR50V/JfX6fosGF2ESLexvdLXNd9uxkDY
-         hMMQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cajtq/WCCYY+Uzv177x/wTfPz35hSuCd8u3Ec2e4AOQ=;
+        b=aHTdStFe5NRbSQREHiQSU+A6Q7nqKkqfDryBo32bfI2egWwMPE0X3YHRWU9Kjrmxk+
+         7MFCPuN24HBjFAKgkvcySKE7dAPrUYtYeqAj7NyFaSzjNqmnygt8YuqP+BeNryvLs1M0
+         Oh2RU3o1tXXrye7A22ihl1SNcHD74N6fXtHIlEAKjLusGQx1V/MJOQA1QVXD4i+/n7rv
+         2WoKzuKW72yUpasATnk9zqBPDl6pXC6ozrSAblkZMISNuCfxY1tWzdD4WzMogLGkxS3J
+         0GVwlwnZNKoZ0vTwtgd0QyJYyiWulCqqhQKNM1pU+xFClwPETPxBfJVvYnR6KjlTjqaK
+         wQUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=EjqmNzNHU62tbGWEmGCSZ/quQcHD8ef7lqrbwmVPudg=;
-        b=uSA4vlNN+G+a+UPFqbyFqB8iYna5SSP56MkDQP6krGkRtvL/n9xRkBBn1vTtitgkqb
-         RFeLu+qRqDUGDJTqy0DVtfYZOTfK02FM/pZhsyEwvQcbtL23+D+B919WeVH5I54aoZUw
-         x0bRCnWZ4LNli8q7yo5BLxv4+siEgg5AD9kyGcnfIqscNhP953L2GEklfA9c9cqmo3CW
-         Mh9MPtZEl/i/XtAXy7D0v/BNUcUT4wLw0MzErjFb+9iiUxiPDBgVKkGX80AiITb12GCr
-         KTONuzINTCLkk5I5M747gyqopQvzc835QD0kUDG9gg7L1mFnbyjrxFV+1HGxHDEujlKq
-         E9Hg==
-X-Gm-Message-State: AOAM532QRM7SGg0w2OARB6biU34XZtfQdJQxYWszkFvZeSCBhaIvn5rj
-        27xauzwGqgzLwGrLUHZCPgfLIQ==
-X-Google-Smtp-Source: ABdhPJzsQmvAd0aRM2QlN6e8UT8l1YW2ynIkGdTxBw24pZOfbRtG8tLNrRz+RztnCqXbypwm6Sypcw==
-X-Received: by 2002:a05:6000:2a2:b0:20c:734f:d38a with SMTP id l2-20020a05600002a200b0020c734fd38amr22637848wry.417.1652862439796;
-        Wed, 18 May 2022 01:27:19 -0700 (PDT)
-Received: from ?IPV6:2a01:e34:ed2f:f020:8ba:b9c:a451:5abb? ([2a01:e34:ed2f:f020:8ba:b9c:a451:5abb])
-        by smtp.googlemail.com with ESMTPSA id v13-20020a05600c214d00b003942a244ed1sm1087483wml.22.2022.05.18.01.27.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 01:27:19 -0700 (PDT)
-Message-ID: <783127cf-79cf-90f2-4200-30db56a1fd7c@linaro.org>
-Date:   Wed, 18 May 2022 10:27:16 +0200
+        bh=cajtq/WCCYY+Uzv177x/wTfPz35hSuCd8u3Ec2e4AOQ=;
+        b=Twl97t+FLmyOq2zWzFtY2sRwqHmKXxHQz+dJv7cBi0cGP4/5caFMuUjff/ZguUVEGZ
+         1xkHUmgOyitUblDtw/9VO4gTtGgyCPw0WuFEsU8dUN9RtQ5y0OTx2gEm6dBENnCCEBzZ
+         HKIUGHUFiYl5P1labVqxB+lNb0N+BzWPNRRxyrrsh0nPX87isk0+C2iqzmhXto6ZysRI
+         I8LphDrYUK4GS7MydkiggDz2v2VFj4CzCG4gItLUHAmUQNvuDnm9CrhDtVEoMyydPoG4
+         hBeHh2dPZJ+O8zIpcRjEePbumCaR3GP05wik76mYC1a3HyOt+UQAmCXKK/k8dbiisdf7
+         dsAA==
+X-Gm-Message-State: AOAM531Y88KsUooUSSUtEbbr8bDFSks3q1jL9nxNOoPh503lasoaiWNp
+        wAT4oQ2XO9VN6hf9uOBJZGE=
+X-Google-Smtp-Source: ABdhPJy+jzxaUQm1PdxdFGCsAK/RXRQls9XoisZOu97pRzrOPADdNoGvXXMtH5aa16qydr9vPPjWPQ==
+X-Received: by 2002:a05:6000:2a2:b0:20c:734f:d38a with SMTP id l2-20020a05600002a200b0020c734fd38amr22705633wry.417.1652863538304;
+        Wed, 18 May 2022 01:45:38 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id d28-20020adfa41c000000b0020e5b4ebaecsm1431579wra.4.2022.05.18.01.45.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 May 2022 01:45:37 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] powercap: intel_rapl: remove redundant store to value after multiply
+Date:   Wed, 18 May 2022 09:45:36 +0100
+Message-Id: <20220518084536.508514-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v9 1/2] dt-bindings: thermal: k3-j72xx: Add VTM bindings
- documentation
-Content-Language: en-US
-To:     Keerthy <j-keerthy@ti.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rui.zhang@intel.com,
-        amitk@kernel.org, kristo@kernel.org
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org, vigneshr@ti.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220517172920.10857-1-j-keerthy@ti.com>
- <20220517172920.10857-2-j-keerthy@ti.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220517172920.10857-2-j-keerthy@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+There is no need to store the result of the multiply back to variable value
+after the multiplication. The store is redundant, replace *= with just *.
 
-Hi Krzysztof,
+Cleans up clang scan build warning:
+warning: Although the value stored to 'value' is used in the enclosing
+expression, the value is never actually read from 'value'
+[deadcode.DeadStores]
 
-I would like to pick this series, does the DT bindings have your blessing ?
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/powercap/intel_rapl_common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-On 17/05/2022 19:29, Keerthy wrote:
-> Add VTM bindings documentation. In the Voltage Thermal
-> Management Module(VTM), K3 J72XX supplies a voltage
-> reference and a temperature sensor feature that are gathered in the band
-> gap voltage and temperature sensor (VBGAPTS) module. The band
-> gap provides current and voltage reference for its internal
-> circuits and other analog IP blocks. The analog-to-digital
-> converter (ADC) produces an output value that is proportional
-> to the silicon temperature.
-> 
-> Signed-off-by: Keerthy <j-keerthy@ti.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->   .../bindings/thermal/ti,j72xx-thermal.yaml    | 63 +++++++++++++++++++
->   1 file changed, 63 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-> new file mode 100644
-> index 000000000000..c74f124ebfc0
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-> @@ -0,0 +1,63 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/ti,j72xx-thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Texas Instruments J72XX VTM (DTS) binding
-> +
-> +maintainers:
-> +  - Keerthy <j-keerthy@ti.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,j721e-vtm
-> +      - ti,j7200-vtm
-> +
-> +  reg:
-> +    items:
-> +      - description: VTM cfg1 register space
-> +      - description: VTM cfg2 register space
-> +      - description: VTM efuse register space
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  "#thermal-sensor-cells":
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - power-domains
-> +  - "#thermal-sensor-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/soc/ti,sci_pm_domain.h>
-> +    wkup_vtm0: thermal-sensor@42040000 {
-> +        compatible = "ti,j721e-vtm";
-> +        reg = <0x42040000 0x350>,
-> +              <0x42050000 0x350>,
-> +              <0x43000300 0x10>;
-> +        power-domains = <&k3_pds 154 TI_SCI_PD_EXCLUSIVE>;
-> +        #thermal-sensor-cells = <1>;
-> +    };
-> +
-> +    mpu_thermal: mpu-thermal {
-> +        polling-delay-passive = <250>; /* milliseconds */
-> +        polling-delay = <500>; /* milliseconds */
-> +        thermal-sensors = <&wkup_vtm0 0>;
-> +
-> +        trips {
-> +            mpu_crit: mpu-crit {
-> +                temperature = <125000>; /* milliCelsius */
-> +                hysteresis = <2000>; /* milliCelsius */
-> +                type = "critical";
-> +            };
-> +        };
-> +    };
-> +...
-
-
+diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+index 83da499dd6ec..70e38278986d 100644
+--- a/drivers/powercap/intel_rapl_common.c
++++ b/drivers/powercap/intel_rapl_common.c
+@@ -1010,7 +1010,7 @@ static u64 rapl_compute_time_window_atom(struct rapl_package *rp, u64 value,
+ 	 * where time_unit is default to 1 sec. Never 0.
+ 	 */
+ 	if (!to_raw)
+-		return (value) ? value *= rp->time_unit : rp->time_unit;
++		return (value) ? value * rp->time_unit : rp->time_unit;
+ 
+ 	value = div64_u64(value, rp->time_unit);
+ 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.36.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
