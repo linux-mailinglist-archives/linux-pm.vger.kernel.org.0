@@ -2,207 +2,213 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D3B52B168
-	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 06:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44E7D52B1D1
+	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 07:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiERESM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 May 2022 00:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
+        id S230153AbiERFUG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 May 2022 01:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiERESK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 00:18:10 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B08A2714A
-        for <linux-pm@vger.kernel.org>; Tue, 17 May 2022 21:18:07 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id g6so1440825ejw.1
-        for <linux-pm@vger.kernel.org>; Tue, 17 May 2022 21:18:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LepV/V/rw3KHQSLPiaLiP/J9OYk0ZMB5clNI2uCKxco=;
-        b=mRXr4u8V1f/S5RyW1JNxJSUxM+z8+ui74rqnugYbsf5s6dbwGsmqlLlN6ZYgsgxcCG
-         bKqcvOMQ23KO1SE+HPFpaE4W1qrmrT2D8ZaS/yHhKJAVJUeQfwrZc2JzpntyqucghdZ6
-         lX6dQbdT98u6OdtodRJPm107TfKlDpvepIP+w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LepV/V/rw3KHQSLPiaLiP/J9OYk0ZMB5clNI2uCKxco=;
-        b=ezJuRTPHOyDwczRpy7IUkSV8rzQILd0e2OIJqLzP/2GO1sxcP43xmfA6f2VHtrlL4N
-         v1ki9hqzSZ40l1671o416CAU9CE3apMXPFyHfXnR3KrTLFTLLSh635KclIcf8NtVj6Hs
-         mvfwKaG8frVv2M1xkH3hQc+zI1FeFvT/33/XlsOTPgwDoUD4S/2ENhXhwq+g9GAkmw1S
-         /4mLeteydeWiordSPaTHHnoGB5EPib1M2kS22lf7DceUrBkgIdzYsYQrPa9QGNRq7wLv
-         DASvZlNawto93TZT/6FuXOmHc8qXFP5+iO5VAmIWpik5AMsIoZOdhvLT32v5sxm2iXzx
-         h5Zw==
-X-Gm-Message-State: AOAM533ONaisVFCPgv9fSUB6OnIim8hksLTXQrFf9OW/AUkQd9glzjyM
-        RyH4hhck7PvzgfsK72JgM03PudpxO31dakYZQF1YIw==
-X-Google-Smtp-Source: ABdhPJx2Eb3PB99mTXrpervjGP3hlbnI5chnI8LPmgJy/jBWlyWBov63NZ3kC2St8DMKHxEfsAkr7rAxBXKeSKpzdBI=
-X-Received: by 2002:a17:906:c142:b0:6da:9781:ae5d with SMTP id
- dp2-20020a170906c14200b006da9781ae5dmr21221643ejc.73.1652847485641; Tue, 17
- May 2022 21:18:05 -0700 (PDT)
+        with ESMTP id S230064AbiERFUG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 01:20:06 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2048.outbound.protection.outlook.com [40.107.94.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF096542;
+        Tue, 17 May 2022 22:20:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nUPatN5BGq2Dvjn6f4E5dLeMHl7wlLm1Ino0od+9gj3o7SG8p/Del1gFrW8CIOJ0sPOROueQRJSOd57zwOWaKkkjpZMcAjHejXj74nYPh6T2OL7/gUSwGMdiRxppDAS6GBjoGUNeKj55SeDrAd0iJnMOHdb+21zVGPxm5SZHcNco44rBafpLl4v/Xn64jqMjkl7TzphlodoneL7yEHqZ5U6M2zfKE+7ZBAhmu2dSbB7c/uPZAyX2IGldhk/gyxcuVJqOl1MFJXjc05tJU+FMa+xryghJWt8aTmYfnNus6x7Q/syxdV0tIqt/d5kbKAoArWiQG9D6hV1wQz3sCGa4WQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kmqoVya8SBKjVRa2r3TTehkp4gb64wXw/fjS7taodKM=;
+ b=QVoTt1Flp5BCJKNxjZLke3MY3kDKP6hUnoLIhYLlhstXKCylsukDzN2/0QO3rpHwhHqFVSAaGbLQmQG4/Y7sznjO909rpSi8Y6ctAMfTUXNurtSJbUBgctDXJ5kLF76hbozOlruW5KWcrOMr9CwgABee7H2iCz9ZM5SjzGeygxY1r6y5cTx4bs5lhXMAGhbt83ZRUetdZ4AMs+S1SZAkjI5H8BJRCsWtbZjFGyfleLlkOcDNTtuAuqB9qXmRF7/Sl3sCOOwJAIWXXlCAzhu6l1SoDezL/N0334sGqxzihmLmcyUFW4JQCxWyWqi7bSxpZLkQW6JRQQnDHaYtG0sDPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kmqoVya8SBKjVRa2r3TTehkp4gb64wXw/fjS7taodKM=;
+ b=shDElxCyaLh5q8lO+3b0dqH0iUlwm82vHbHtkP9wYopMMz7b/r4dxZ5q63G7A021/fBdU2cXFCtO0ntX5s1HgcQi0KeAaDXeLUR61JnQxn8WMi3FRJnRmgvGprwmCnjpKSlDTRpWupba45y0Zs0rRw1XZ3o+NpyQkk+8Q7zFrLM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
+ LV2PR12MB5750.namprd12.prod.outlook.com (2603:10b6:408:17e::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5250.18; Wed, 18 May 2022 05:19:59 +0000
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::b846:d865:5901:f76d]) by DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::b846:d865:5901:f76d%7]) with mapi id 15.20.5273.014; Wed, 18 May 2022
+ 05:19:59 +0000
+Date:   Wed, 18 May 2022 13:19:36 +0800
+From:   Huang Rui <ray.huang@amd.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V5 0/3] Add unit test module for AMD P-State driver
+Message-ID: <YoSB6JRplJR79Beu@amd.com>
+References: <20220505022913.329259-1-li.meng@amd.com>
+ <YnNxlzRW2NGCx5dO@amd.com>
+ <615adab4-515c-7d61-5662-bd342b759d6d@linuxfoundation.org>
+ <27434868-1d0f-4493-3265-bea4e1dc8494@linuxfoundation.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <27434868-1d0f-4493-3265-bea4e1dc8494@linuxfoundation.org>
+X-ClientProxiedBy: HK0PR01CA0070.apcprd01.prod.exchangelabs.com
+ (2603:1096:203:a6::34) To DM5PR12MB2504.namprd12.prod.outlook.com
+ (2603:10b6:4:b5::19)
 MIME-Version: 1.0
-References: <20220516004311.18358-1-roger.lu@mediatek.com> <CAGXv+5GSdWPZe3fNpBJ_WW0zCL8Skg6fHx9ATxaKU1hyMEt2Ww@mail.gmail.com>
- <7h4k1ndaui.fsf@baylibre.com> <7hy1yzbtb7.fsf@baylibre.com>
-In-Reply-To: <7hy1yzbtb7.fsf@baylibre.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Wed, 18 May 2022 12:17:54 +0800
-Message-ID: <CAGXv+5GT=3m=pVPwUOWR42BR=emCpBXvvoAiRV7YKt2kEKWdAQ@mail.gmail.com>
-Subject: Re: [PATCH v25 0/7] soc: mediatek: SVS: introduce MTK SVS
-To:     Kevin Hilman <khilman@kernel.org>, cw00.choi@samsung.com
-Cc:     Roger Lu <roger.lu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Fan Chen <fan.chen@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jia-wei Chang <jia-wei.chang@mediatek.com>,
-        =?UTF-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
-        <rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0cd44961-e882-4276-54bb-08da388e0d6b
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5750:EE_
+X-Microsoft-Antispam-PRVS: <LV2PR12MB5750090C6522A7DF4E49F11EECD19@LV2PR12MB5750.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: j5HhrKP12U25gty7qKVvF8XaDLR2FjS/tt93JL8IsM91XaNesZswvEzLmIoH1NhGCAdHWEQjiMLVD1mwF0LlEERtYKbgEkjiyC7R/vVKXJy5KA6zcHyFVBYhdq3LWymlPdIZTSR+iIzutc6bwAeD1wk6sofaOS/w5dS8/GCB3dLeubtjGawfYWgT+ER8NPreWtnKl1/2jlGZGrC48EzGjOt/77hryp7s41y8fpBACZLM8sNhFYqFXIymcLNGcgZKpbzfCKh56PFN8vN7VP4kYJtg0XjDkGuLBQoqp50r4+6TDehUrFlsZaqq7wZavXHYsbWaMebmYSVAXov9j04bwiJr0cL/kNiBA+JdAw5Z8BWbXAoGEIvOzijM5FOs94CMqq5eDei2uP4ZlDkEk35LNLK4HLtS5TveiNRCxPM9goMXzd0VHKUl/U2VNK1xkMYVidE6viKFM6SR6YDdXxuC/Lr7ZtHMMkKNB9FjtshqbavUXvZQ2sq+sO1n2yT/nK1IYRanC/QLkinflvKMZEWSu2BFw44vL8C/l5Pj98hxFxiwqnty2+rn6It6Qisdt6xDchMI9YpQy3d+tz0JlGe/4vv/cH8JAjtDbzWc86tAY3tmfD+O7nsu+mzlmmSCV28GoJ/bnr2Z+YYbqEvYaMoUaV/urcgH2C1VIX27CbXyvJ6PLYfXU5unR1ERG5nSK7JXZY5Smfx2t5zIDw56qOi53/g38xlWw6b8+5TR5qk203NcjwvgLMvZ3CGTCJLrylSGhJ9azcSG/QMmDsYG3fqMNQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(2906002)(6506007)(2616005)(6666004)(36756003)(83380400001)(66946007)(186003)(53546011)(66476007)(6512007)(6486002)(966005)(38100700002)(508600001)(8936002)(45080400002)(26005)(8676002)(54906003)(66556008)(6916009)(4326008)(316002)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Lnq8091462OF2uMq0ZsUgOGqocCxa2eJ85AJ1yZY3k7H11ORsFcQRzJSs+qC?=
+ =?us-ascii?Q?/7hxkwQEMZ8Qwppr7Ms5ApyKQtSBwl6HlyTJCh3+MAk5zTLztEAfoO+kUaWz?=
+ =?us-ascii?Q?Rq5MhZsiBJxaCR+QqQuajYG6wYN2MIki1yEpGJuf5kyYof640h5LcRZOWkhW?=
+ =?us-ascii?Q?OjX2T4FqFaCYwQL3pkXh5+HzklZfUctpdaCMtTlQdAKDJwoOfuJLqBSp4e92?=
+ =?us-ascii?Q?tuXoXPDjt+XxU3bS9P02e8Slnw+3HUhyWHHuAhhRMOXS82z9QqebVe0TexPR?=
+ =?us-ascii?Q?iLJerYEq9RfLjgiHlIn6sY/AE7XWQbdmOzCS+bDdkh/ltQMsnOQS7TjC6vW/?=
+ =?us-ascii?Q?mvUbph8tcdM6L2iylSNT+xivLF9A/mYjEPbcKnJvBaY69Y+VJAKmm/D5Lw9o?=
+ =?us-ascii?Q?xcmwmVekyXVF/D8G0VMPQtcgJS1/15X9gUpr3nc7y44ML/lLSg7LGTTMIUkt?=
+ =?us-ascii?Q?+otm78cDjQP3kz4v10DqYZosNgvOa2yNwgxBAi3lc0mevEXOmh8+E/0iedWd?=
+ =?us-ascii?Q?PqKNJHeTwNaNPqSX3dC9LSgvH391XLuEP7QawYm1b/Pifx9CM0kmTZQCxHwI?=
+ =?us-ascii?Q?tKGTWr+nJr5m/rlJS1+3FZd/aDa6GxrY3n1EPejo9IK5Dv28HdhaI7iPZ1Ri?=
+ =?us-ascii?Q?Vqxs41Q60U5JU5R/1W1G8cjWXJpvo5ND61dy1f0UsKaqAUdOnOSBMb38XMU0?=
+ =?us-ascii?Q?E3Votq5kDTiBxy72cPnOZ72qSNaUK25QFrEj6LCJgnx+LMvN1GP1wRg5m/WR?=
+ =?us-ascii?Q?4+Sm4VcIKRC3uGdBh8OpTZCXlP3fnfvG1NnvLoFlozsEapxa6iRdMaI5QKge?=
+ =?us-ascii?Q?xLewZxVt+7In9vYXSZ/KwjecFfO0eaRxX9IkJ5u2LhJlxvjPY8R6XBzNmKeX?=
+ =?us-ascii?Q?9eoG0tQYVPW8OlFpvMFbezM0z8fZ0GHQPHxAc6ZFEtpPcWNfV7PaauTpuAjn?=
+ =?us-ascii?Q?3Lsxnod3aJKScbKxCa1AdQahqtrLMFkH3k89Qe6WF8FqhFjAul0bKf6rcMHW?=
+ =?us-ascii?Q?dHNnp52Q2KEOKzVIt0jpc1pRZ7VTT0g24zVzMn6K5VrsHe9m+zherLUzviWB?=
+ =?us-ascii?Q?dPnaoie51Peg+iPwJVwFkqf3gTNJi8gqGgAOMinvQLsmM0uXgUIQbMiDfze9?=
+ =?us-ascii?Q?U2xTIX7Em2ybL1tPCBDiPzIk21ASpucKMKXAcUOr45X64eFwqY0nS3uyvahj?=
+ =?us-ascii?Q?dnZHR/pQ/iXqZ3e4HzbSSLFsIw1UQjZ92yrV0xppizkiZewyDqj6j0HCr/Nw?=
+ =?us-ascii?Q?XDR6/ahNQGPqJebit4Mz0/UaUp7W0QZFfbWRf8Kwl8jN1Gx6zKTSnWJ/52Hw?=
+ =?us-ascii?Q?byY5KJQ3lF6EMXQZWiUvfdG6Pd8IgYwxCP36ESelCcKJK9VK5nlvT2MmeuGE?=
+ =?us-ascii?Q?Pr5q324p5ItzrQIfHZUEWuZ3PYamjy69jo7UquQD9tIjqVABG7/ekZPTP/UQ?=
+ =?us-ascii?Q?dL9sNxz42+vJi6bJ8zOms/WjqKm3+dIzy06LnQJpuXi9PIzfr/5osy3ARR1l?=
+ =?us-ascii?Q?gZGqNbTQZHH2IrNd5uXcn0cHv5mIBe7mcjNvzjAGWgxpI94Y+BWlMNdo2QHr?=
+ =?us-ascii?Q?adjqUxjp7xfR8D3lniy38lswlE1rlHL3S+06d4b2Dpmm7fQBgO2wGvFAQq0d?=
+ =?us-ascii?Q?yOvltct+WaO/n5m4BW0bf98SnTy3kMNs1SQGeHUtpiZ01Z0yRR9V+Gg/BqE1?=
+ =?us-ascii?Q?5srmvwg02GAChcKaA+5xk14GDxd0eXPJe1qN+0H09wzMnkzRd0vvy+gS9KWb?=
+ =?us-ascii?Q?kRToQ2IqJA=3D=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0cd44961-e882-4276-54bb-08da388e0d6b
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2022 05:19:59.0026
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nYuVlCMMjTNkh7+9v3d8qVDjtQR0PH+i68UE6i0BYfi6WcuRBg4gXCQGnr4D1SmEOmRZWNaHGzE/Udx/w7BD3Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5750
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-n Wed, May 18, 2022 at 8:03 AM Kevin Hilman <khilman@kernel.org> wrote:
->
-> Kevin Hilman <khilman@kernel.org> writes:
->
-> > Chen-Yu Tsai <wenst@chromium.org> writes:
-> >
-> >> On Mon, May 16, 2022 at 8:43 AM Roger Lu <roger.lu@mediatek.com> wrote:
+On Wed, May 18, 2022 at 04:03:05AM +0800, Shuah Khan wrote:
+> On 5/17/22 8:45 AM, Shuah Khan wrote:
+> > On 5/5/22 12:41 AM, Huang Rui wrote:
+> >> On Thu, May 05, 2022 at 10:29:10AM +0800, Meng, Li (Jassmine) wrote:
+> >>> Hi all:
 > >>>
-> >>> The Smart Voltage Scaling(SVS) engine is a piece of hardware
-> >>> which calculates suitable SVS bank voltages to OPP voltage table.
-> >>> Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
-> >>> when receiving OPP_EVENT_ADJUST_VOLTAGE.
+> >>> AMD P-State unit test(amd-pstate-ut) is a kernel module for testing
+> >>> the functions of amd-pstate driver.
+> >>> It could import as a module to launch some test tasks.
+> >>> 1) It can help all users to verify their processor support (SBIOS/
+> >>> Firmware or Hardware).
+> >>> 2) Kernel can have a basic function test to avoid the kernel regression
+> >>> during the update.
+> >>> 3) We can introduce more functional or performance tests to align the
+> >>> together, it will benefit power and performance scale optimization.
 > >>>
-> >>> 1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
-> >>> 2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
-> >>> After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
+> >>> We upstream out AMD P-state driver into Linux kernel and use this unit
+> >>> test module to verify the required conditions and basic functions of
+> >>> amd-pstate before integration test.
 > >>>
-> >>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=25cb20a212a1f989385dfe23230817e69c62bee5
-> >>> [2] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=b325ce39785b1408040d90365a6ab1aa36e94f87
-> >>> [3] https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.16-next/dts64&id=a8168cebf1bca1b5269e8a7eb2626fb76814d6e2
+> >>> We use test module in the kselftest frameworks to implement it.
+> >>> We create amd-pstate-ut module and tie it into kselftest.
 > >>>
-> >>> Change since v24:
-> >>> - Rebase to Linux 5.18-rc6
-> >>> - Show specific fail log in svs_platform_probe() to help catch which step fails quickly
-> >>> - Remove struct svs_bank member "pd_dev" because all subsys device's power domain has been merged into one node like above [3]
+> >>> For example: The test case aput_acpi_cpc is used to check whether the
+> >>> _CPC object is exist in SBIOS.
+> >>> The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is not
+> >>> existed at the detected processor, so it is a necessary condition.
 > >>>
-> >>> Test in below environment:
-> >>> SW: Integration Tree [4] + Thermal patch [5] + SVS v25 (this patchset)
-> >>> HW: mt8183-Krane
+> >>> At present, it only implements the basic framework and some simple test
+> >>> cases.
 > >>>
-> >>> [4] https://github.com/wens/linux/commits/mt8183-cpufreq-cci-svs-test
-> >>
-> >> I've updated my branch to include all the latest versions of the relevant
-> >> patch series:
-> >>
-> >> - anx7625 DPI bus type series v2 (so the display works)
-> >> - MT8183 thermal series v9 (this seems to have been overlooked by the
-> >> maintainer)
-> >> - MTK SVS driver series v25
-> >> - devfreq: cpu based scaling support to passive governor series v5
-> >> - MTK CCI devfreq series v4
-> >> - MT8183 cpufreq series v7
-> >> - Additional WIP patches for panfrost MTK devfreq
-> >
-> > Thanks for preparing an integration branch Chen-Yu.
-> >
-> > I'm testing this on mt8183-pumpkin with one patch to add the CCI
-> > regulator[1], and the defconfig you posted in a previous rev of this
-> > series, but the CCI driver still causes a fault on boot[2] on my
-> > platform.
-> >
-> > I mentioned in earlier reviews that I think there's potentially a race
-> > between CCI and SVS loading since they are co-dependent.  My hunch is
-> > that this is still not being handled properly.
->
-> Ah, actually it's crashing when I try to boot the platform with
-> `maxcpus=4` on the cmdline (which I have to do because mt8183-pumpkin is
-> unstable upstream with the 2nd cluster enabled.)
->
-> The CCI driver should be a bit more robust about detecting
-> available/online CPUs
+> >>> TODO : 1) we will add more test cases to improve the depth and coverage of
+> >>> the test.
+> >>>
+> >>> Please check the documentation amd-pstate.rst for details of the test steps.
+> >>>
+> >>> See patch series in below git repo:
+> >>> V1: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flinux-pm%2F20220323071502.2674156-1-li.meng%40amd.com%2F&amp;data=05%7C01%7Cray.huang%40amd.com%7C267a994f51e34371021c08da384042f1%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637884145911708064%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=m9BlIFlf8IEeSGjycWdppnIMoZTbfmi3tIsuRJZL6cw%3D&amp;reserved=0
+> >>> V2: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flkml%2F20220413090510.4039589-1-li.meng%40amd.com%2F&amp;data=05%7C01%7Cray.huang%40amd.com%7C267a994f51e34371021c08da384042f1%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637884145911708064%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=h1o69SJ5iaVChb1h8a3FZURAeKAj6vlB%2FmR%2BtfmpoE4%3D&amp;reserved=0
+> >>> V3: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flkml%2F20220421074152.599419-1-li.meng%40amd.com%2F&amp;data=05%7C01%7Cray.huang%40amd.com%7C267a994f51e34371021c08da384042f1%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637884145911708064%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=WcXo7q2snNWM8nUSF08HjPDB7UuwFMDTTwe6zLcXHyY%3D&amp;reserved=0
+> >>> V4: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flkml%2F20220427135315.3447550-1-li.meng%40amd.com%2F&amp;data=05%7C01%7Cray.huang%40amd.com%7C267a994f51e34371021c08da384042f1%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637884145911708064%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=Rnn9bLhc1sDkNyBlmwmb8Zy4IJUKwtIq0M0qhcUbdM8%3D&amp;reserved=0
+> >>>
+> > 
+> >>> Changes from V4 -> V5:
+> >>> - selftests: amd-pstate:
+> >>> - - add print the current scaling_driver.
+> >>> - - add amd-pstate-ut.ko into TEST_GEN_FILES.
+> >>> - - move "insmod/rmmod amd-pstate-ut.ko" stuff into script amd_pstate_ut.sh
+> >>> - - add a check of read back from X86_FEATURE_CPPC in get_shared_mem().
+> >>> - Documentation: amd-pstate:
+> >>> - - delete the test step about insmod/rmmod amd-pstate-ut.ko
+> >>>
+> >>> Thanks,
+> >>> Jasmine
+> >>>
+> > 
+> > Sorry for the delay on this. I will review the series in the next couple
+> > of days.
+> > 
+> > Did you consider using KUnit for this? I think asked that question when
+> > reviewing the previous version.
+> > 
+> 
+> I reviewed the patches and the test driver amd-pstate-ut doesn't belong under
+> selftests. I would recommend the following approach:
+> 
+> - add this test driver under drivers/cpufreq
+> 
+> - KUnit is a better fit for this unit test driver unless you want
+>    to be able to run this without KUnit configured
+> 
+> - add the test script under selftests - the script then can load the
+>    test driver and run tests and unload the driver.
+> 
 
-This all seems to be handled in the devfreq passive governor.
+Thanks Shuah. We would like to introduce more CPU benchmark testing based
+the amd-pstate-ut next step, it may not be all the stuff in the kernel
+module. E.X.  use the script to trigger the tbench, gitsource, kernbench,
+netperf, speedometer, and etc. testing and monitor the cpu frequency and
+performance goals change, power consumption at runtime. Can the KUnit +
+Kselftests work more straight forward in user scenario?
 
-And presumably we'd like to have CCI devfreq running even if just one
-core was booted.
-
-Added Chanwoo for more ideas.
-
-ChenYu
-
-
-> If I boot with both clusters, I see SVS probing[1], and I see CCI
-> doing transitions[2]
->
-> Kevin
->
->
-> [1]
-> # dmesg |grep -i svs
-> [    0.739298] mtk-svs 1100b000.svs: M_HW_RES0: 0x00120090
-> [    0.739315] mtk-svs 1100b000.svs: M_HW_RES1: 0xa6fdfb5b
-> [    0.739318] mtk-svs 1100b000.svs: M_HW_RES2: 0x47cb47cb
-> [    0.739321] mtk-svs 1100b000.svs: M_HW_RES3: 0xa6fdfb5b
-> [    0.739324] mtk-svs 1100b000.svs: M_HW_RES4: 0xa6fde4ad
-> [    0.739326] mtk-svs 1100b000.svs: M_HW_RES5: 0x47f84b80
-> [    0.739328] mtk-svs 1100b000.svs: M_HW_RES6: 0xa6fd87a6
-> [    0.739331] mtk-svs 1100b000.svs: M_HW_RES7: 0xa6fddf4a
-> [    0.739333] mtk-svs 1100b000.svs: M_HW_RES8: 0x4bf84be5
-> [    0.739335] mtk-svs 1100b000.svs: M_HW_RES9: 0xa6fd3267
-> [    0.739338] mtk-svs 1100b000.svs: M_HW_RES14: 0x9696d5ab
-> [    0.739340] mtk-svs 1100b000.svs: M_HW_RES15: 0x015a0015
-> [    0.739343] mtk-svs 1100b000.svs: M_HW_RES16: 0xa6fdf05d
-> [    0.739345] mtk-svs 1100b000.svs: M_HW_RES17: 0x47f847e5
-> [    0.739347] mtk-svs 1100b000.svs: M_HW_RES18: 0xa6fdc240
-> [    0.741890]  SVSB_CPU_LITTLE: svs_init01_isr_handler: VDN74~30:0x141c242a~0x2f32373c, DC:0x0316ff30
-> [    0.742165]  SVSB_CPU_BIG: svs_init01_isr_handler: VDN74~30:0x141e262e~0x33373c42, DC:0x031aff50
-> [    0.742431]  SVSB_CCI: svs_init01_isr_handler: VDN74~30:0x13192128~0x2d31383c, DC:0x0314ff20
-> [    0.742696]  SVSB_GPU: svs_init01_isr_handler: VDN74~30:0x1416181a~0x1d202428, DC:0x030efef0
-> [    0.742875]  SVSB_CPU_LITTLE: svs_init02_isr_handler: VOP74~30:0x1d252c33~0x373b3f45, DC:0x031600d0
-> [    0.742989]  SVSB_CPU_BIG: svs_init02_isr_handler: VOP74~30:0x1d262e36~0x3b3f444a, DC:0x031a00b0
-> [    0.743060]  SVSB_CCI: svs_init02_isr_handler: VOP74~30:0x1c222a31~0x353a4045, DC:0x031400e0
-> [    0.743176]  SVSB_GPU: svs_init02_isr_handler: VOP74~30:0x181a1c1e~0x2125282c, DC:0x030e0110
->
-> [2]
-> # cat /sys/class/devfreq/cci/trans_stat
->      From  :   To
->            : 273000000 338000000 403000000 463000000 546000000 624000000 689000000 767000000 845000000 871000000 923000000 9620000001027000000109200000011440000001196000000   time(ms)
->   273000000:         0        77        11        10        34         8         6         8         3         3         0         0         4         1         2        12    135675
->   338000000:        90         0        32         4         7         2         1         0         0         0         0         0         0         0         0         2       664
->   403000000:        20        45         0        35         7         2         0         0         0         0         0         0         0         0         0         0       509
->   463000000:        13         7        53         0        46         4         1         1         1         2         0         1         2         0         0         1       568
->   546000000:        12         5        10        63         0        55         3         3         3         1         3         2         8         3         1        35       858
-> * 624000000:         4         0         2        10        50         0        49         1         1         0         0         1         3         2         0         7       407
->   689000000:         6         1         0         2        18        36         0        47         5         3         1         0         1         0         0        10       388
->   767000000:         2         1         0         3         5        11        42         0        35         4         1         1         2         0         1        23       486
->   845000000:         3         0         0         0         1         0         9        27         0        37         8         1         0         0         2        23       290
->   871000000:         2         0         0         1         0         0         3         9        19         0        29         5         1         1         1        12       179
->   923000000:         0         0         0         0         0         2         2         7        10        13         0        31         1         1         0         4       154
->   962000000:         0         0         0         0         0         1         0         4         3         4        14         0        27         1         0         2       123
->  1027000000:         2         0         0         1         2         2         3         2         1         1         7        11         0        24         2         1       182
->  1092000000:         1         0         0         0         3         2         0         1         2         0         0         1         5         0        25         5       123
->  1144000000:         2         0         0         0         0         0         0         0         2         0         1         1         2         7         0        38       193
->  1196000000:        22         2         1         3        34         6        11        21        26        15         7         1         3         5        19         0      1621
-> Total transition : 1810
+Thanks,
+Ray
