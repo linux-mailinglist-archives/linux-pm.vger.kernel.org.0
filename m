@@ -2,109 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716F052B3A8
-	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 09:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F1B52B3E4
+	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 09:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232311AbiERHi6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 May 2022 03:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42156 "EHLO
+        id S232494AbiERHtE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 May 2022 03:49:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232286AbiERHiz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 03:38:55 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CE31059E0;
-        Wed, 18 May 2022 00:38:54 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id F09A21F9A4;
-        Wed, 18 May 2022 07:38:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652859533; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+lyyDjAjgyfEhWEBfN0EDdR6Jmx4pHSl+tBKIhX1g7c=;
-        b=j0w4/FD8BT6n50PoBFWZ2B9hxn1McNizrLx3lcvWYTHgmFBxhdJUV3RAv4Ssdii4QSileV
-        Dl88LCOs7NY6Zlry9hleanS5GY4TpOEfeqkhXf/HNSrx5fV+jFGy5YS3+L30Mt6n4dNsLm
-        vyO1S4F65bAw7AbpuXo9HU2OHf85ddo=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 5D79B2C142;
-        Wed, 18 May 2022 07:38:52 +0000 (UTC)
-Date:   Wed, 18 May 2022 09:38:52 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     Scott Branden <scott.branden@broadcom.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        David Gow <davidgow@google.com>,
-        Evan Green <evgreen@chromium.org>,
-        Julius Werner <jwerner@chromium.org>,
-        bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
-        akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Brian Norris <computersforpeace@gmail.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dexuan Cui <decui@microsoft.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mihai Carabas <mihai.carabas@oracle.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
-        Shile Zhang <shile.zhang@linux.alibaba.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        zhenwei pi <pizhenwei@bytedance.com>
-Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
-Message-ID: <YoSijKwuwbY9uHxG@alley>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-20-gpiccoli@igalia.com>
- <YoJZVZl/MH0KiE/J@alley>
- <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com>
- <YoOpyW1+q+Z5as78@alley>
- <d72b9aab-675c-ac89-b73a-b1de4a0b722d@igalia.com>
+        with ESMTP id S232493AbiERHtD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 03:49:03 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA26C16594;
+        Wed, 18 May 2022 00:49:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652860143; x=1684396143;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=FFmn27BmEvRPFt+EeFCTjSFHWGKsjOHO+ZSlgAAGdKc=;
+  b=sZn14dB8UT/oGLlyxLJGmK08ERAcPVTV5z4exdmaGvvz8NXHHPPMFrwy
+   9CEHmkmo8g25qi3FqPVE1e57SkNLByBmDqWXX6qtGAUn84jL205ei318h
+   ep9WBr4CRyvyO3IPpD4bfzyd9PK8dGBnC5y7yf6hDbQoK3/y3zP0gkjcq
+   o=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 18 May 2022 00:49:02 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2022 00:49:01 -0700
+Received: from blr-ubuntu-185.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 18 May 2022 00:48:52 -0700
+From:   Vivek Kumar <quic_vivekuma@quicinc.com>
+To:     <corbet@lwn.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
+        <tglx@linutronix.de>, <maz@kernel.org>, <axboe@kernel.dk>,
+        <rafael@kernel.org>, <akpm@linux-foundation.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-block@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-mm@kvack.org>
+CC:     <len.brown@intel.com>, <pavel@ucw.cz>, <paulmck@kernel.org>,
+        <bp@suse.de>, <keescook@chromium.org>, <songmuchun@bytedance.com>,
+        <rdunlap@infradead.org>, <damien.lemoal@opensource.wdc.com>,
+        <pasha.tatashin@soleen.com>, <tabba@google.com>, <ardb@kernel.org>,
+        <tsoni@quicinc.com>, <quic_psodagud@quicinc.com>,
+        <quic_svaddagi@quicinc.com>,
+        Vivek Kumar <quic_vivekuma@quicinc.com>
+Subject: [RFC 0/6] Bootloader based hibernation
+Date:   Wed, 18 May 2022 13:18:35 +0530
+Message-ID: <1652860121-24092-1-git-send-email-quic_vivekuma@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d72b9aab-675c-ac89-b73a-b1de4a0b722d@igalia.com>
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -115,47 +66,76 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue 2022-05-17 13:42:06, Guilherme G. Piccoli wrote:
-> On 17/05/2022 10:57, Petr Mladek wrote:
-> >> Disagree here, I'm CCing Florian for information.
-> >>
-> >> This notifier preserves RAM so it's *very interesting* if we have
-> >> kmsg_dump() for example, but maybe might be also relevant in case kdump
-> >> kernel is configured to store something in a persistent RAM (then,
-> >> without this notifier, after kdump reboots the system data would be lost).
-> > 
-> > I see. It is actually similar problem as with
-> > drivers/firmware/google/gsmi.c.
-> > 
-> > I does similar things like kmsg_dump() so it should be called in
-> > the same location (after info notifier list and before kdump).
-> > 
-> > A solution might be to put it at these notifiers at the very
-> > end of the "info" list or make extra "dump" notifier list.
-> 
-> Here I still disagree. I've commented in the other response thread
-> (about Google gsmi) about the semantics of the hypervisor list, but
-> again: this list should contain callbacks that
-> 
-> (a) Should run early, _by default_ before a kdump;
-> (b) Communicate with the firmware/hypervisor in a "low-risk" way;
-> 
-> Imagine a scenario where users configure kdump kernel to save something
-> in a persistent form in DRAM - it'd be like a late pstore, in the next
-> kernel. This callback enables that, it's meant to inform FW "hey, panic
-> happened, please from now on don't clear the RAM in the next FW-reboot".
-> I don't see a reason to postpone that - let's see if the maintainers
-> have an opinion.
+Kernel Hibernation
 
-I have answered this in more detail in the other reply, see
-https://lore.kernel.org/r/YoShZVYNAdvvjb7z@alley
+Linux Kernel has been already supporting hibernation, a process which
+involves freezing of all userspace tasks, followed by quiescing of all
+kernel device drivers and then a DDR snapshot is taken which is saved
+to disc-swap partition, after the save, the system can either shutdown
+or continue further. Generally during the next power cycle when kernel
+boots and after probing almost all of the drivers, in the late_init()
+part, it checks if a hibernation image is present in the specified swap
+slot, if a valid hibernation image is found, it superimposes the currently
+executing Kernel with an older kernel from the snapshot, moving further,
+it calls the restore of the drivers and unfreezes the userspace tasks.
+CONFIG_HIBERNATION and a designated swap partition needs to be present
+for to enable Hibernation.
 
-I agree that both notifiers in
+Bootloader Based Hibernation:
 
-    drivers/soc/bcm/brcmstb/pm/pm-arm.c
-    drivers/firmware/google/gsmi.c
+Automotive usecases require better boot KPIs, Hence we are proposing a
+bootloader based hibernation restore. Purpose of bootloader based
+hibernation is to improve the overall boot time till the first display
+frame is seen on the screen or a camera application can be launched from
+userspace after the power on reset key is pressed. This RFC patchset
+implements a slightly tweaked version of hibernation in which the
+restoration of an older snapshot into DDR is being carried out from the
+bootloader (ABL) itself, by doing this we are saving some time
+(1 second measured on msm-4.14 Kernel) by not running a
+temporary kernel and figuring out the hibernation image at late_init().
+In order to achieve the same bootloader checks for the hibernation
+image at a very early stage from swap partition, it parses the image and
+loads it in the DDR instead of loading boot image form boot partition.
+Since we are not running the temporary kernel,which would have done some
+basic ARM related setup like, MMU enablement, EL2 setup, CPU setup etc,
+entry point into hibernation snapshot image directly from bootloader is
+different, on similar lines, all device drivers are now re-programming
+the IO-mapped registers as part of the restore callback (which is
+triggered from the hibernation framework) to bring back the HW/SW sync.
 
-better fit into the hypervisor list after all.
+Other factors like, read-speed of the secondary storage device and
+organization of the hibernation image in the swap partition effects the
+total image restore time and the overall boot time. In our current
+implementation we have serialized the allocation of swap-partition's slots
+in kernel, so when hibernation image is being saved to disc, each page is
+not scattered across various swap-slot offsets, rather it in a serial
+manner. For example, if a DDR page at Page frame number 0x8005 is
+located at a swap-slot offset 50, the next valid DDR page at PFN 0x8005
+will be preset at the swap-slot offset 51. With this optimization in
+place, bootloader can utilize the max capacity of issuing a disc-read
+for reading a bigger chunk (~50 MBs at once) from the swap slot,
+and also parsing of the image becomes simpler as it is available
+contiguously.
 
-Best Regards,
-Petr
+
+
+Vivek Kumar (6):
+  arm64: hibernate: Introduce new entry point to kernel
+  PM: Hibernate: Add option to disable disk offset randomization
+  block: gendisk: Add a new genhd capability flag
+  mm: swap: Add randomization check for swapon/off calls
+  Hibernate: Add check for pte_valid in saveable page
+  irqchip/gic-v3: Re-init GIC hardware upon hibernation restore
+
+ Documentation/admin-guide/kernel-parameters.txt |  11 ++
+ arch/arm64/kernel/hibernate.c                   |   9 ++
+ drivers/irqchip/irq-gic-v3.c                    | 138 ++++++++++++++++-
+ include/linux/blkdev.h                          |   1 +
+ kernel/power/snapshot.c                         |  43 ++++++++
+ kernel/power/swap.c                             |  12 +++
+ mm/swapfile.c                                   |   6 +-
+ 7 files changed, 216 insertions(+), 4 deletions(-)
+
+-- 
+2.7.4
+
