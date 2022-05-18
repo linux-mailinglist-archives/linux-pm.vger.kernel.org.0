@@ -2,322 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C70B752C61A
-	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 00:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D172E52C69F
+	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 00:50:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiERWRZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 May 2022 18:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49128 "EHLO
+        id S229528AbiERWuO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 May 2022 18:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiERWRW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 18:17:22 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04FE209B7E
-        for <linux-pm@vger.kernel.org>; Wed, 18 May 2022 15:17:19 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id w17-20020a17090a529100b001db302efed6so3413048pjh.4
-        for <linux-pm@vger.kernel.org>; Wed, 18 May 2022 15:17:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to;
-        bh=atRwm+OVb9dTc/GL02ZZs9TeAmhcLIQXexHGCnLgQsU=;
-        b=AedmINpihUCBCHALv2IR5WA6NVSb4xueQhxyLjwABK+0bFjQIH3fBd8SQB97+/vadP
-         sPJvCw9gl+JHo93aMATBbdBZLg74oPk922DBaokyFSLLBDzYzp1rAWuXy0hE4zi8Mk4n
-         JbkKhMeRI/29d3EFG63pJxYsSFqNbsmX4Zog4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to;
-        bh=atRwm+OVb9dTc/GL02ZZs9TeAmhcLIQXexHGCnLgQsU=;
-        b=180sxwnLzu5poFWIt/kNQRCsn6wboQXVU2Kv8VVdnAt3rD6+1HgCVxV3QhetMXAj3O
-         dwbVPN3WuqjNzhHpG+EkjiDIhS9CzlWHlpeYlCe5Mw7M5SAh5udArFWteeHSOR4mxxj1
-         uypbsmvWdaQBJN/SOmGJDPLr7Aqy8mMYr3CBJnPN3GDhPcnPkS4lZvI/nNsawLAmTWyv
-         lzG3Q6MD4tR8d5nE/9SWJ6CBL5L9M6rLgwj3hd6n4xdw+R6WqcWNOgiu9JChIfDJOFrm
-         76YcbqP16sxXk1CjldUIW+RVsWBgI51hYhvBCcrMKM0abHdQ6GoRldo/3cj2goh5imTy
-         jHeg==
-X-Gm-Message-State: AOAM530NHPuoUMIiusHlovypXj6DhyH0Ceq/qWj37zbQnyRgHsy8W3FD
-        Xlz62hTcfASxPrkpXncZ/2fIHxqtfRoKwQ+JD/W/wg==
-X-Google-Smtp-Source: ABdhPJxkLsE36Kq2JcCUoiWV2ClSYG7H68DZOk0Dnd5ufVpjZfzcSk9Zz5AbXiW59SdIpTBHz/LAmw==
-X-Received: by 2002:a17:902:ec92:b0:161:7e29:6f9d with SMTP id x18-20020a170902ec9200b001617e296f9dmr1458536plg.157.1652912238747;
-        Wed, 18 May 2022 15:17:18 -0700 (PDT)
-Received: from [10.136.13.180] ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id ji15-20020a170903324f00b001616e13fccdsm2195161plb.221.2022.05.18.15.17.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 15:17:17 -0700 (PDT)
-Message-ID: <81878a67-21f1-fee8-1add-f381bc8b05df@broadcom.com>
-Date:   Wed, 18 May 2022 15:17:07 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Desmond yan <desmond.yan@broadcom.com>
-Cc:     David Gow <davidgow@google.com>, Evan Green <evgreen@chromium.org>,
-        Julius Werner <jwerner@chromium.org>,
-        bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
-        akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
-        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Brian Norris <computersforpeace@gmail.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dexuan Cui <decui@microsoft.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Justin Chen <justinpopo6@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Markus Mayer <mmayer@broadcom.com>,
+        with ESMTP id S229520AbiERWuO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 18:50:14 -0400
+Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F40149147;
+        Wed, 18 May 2022 15:50:12 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:57012)
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nrSUR-00CkAs-9I; Wed, 18 May 2022 16:49:59 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:38714 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nrSUQ-002Y4a-2G; Wed, 18 May 2022 16:49:58 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>, linux-ia64@vger.kernel.org,
+        Robert O'Callahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Douglas Miller <dougmill@linux.vnet.ibm.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
-        Mihai Carabas <mihai.carabas@oracle.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
-        Shile Zhang <shile.zhang@linux.alibaba.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        zhenwei pi <pizhenwei@bytedance.com>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-20-gpiccoli@igalia.com> <YoJZVZl/MH0KiE/J@alley>
- <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com> <YoOpyW1+q+Z5as78@alley>
- <d72b9aab-675c-ac89-b73a-b1de4a0b722d@igalia.com>
-From:   Scott Branden <scott.branden@broadcom.com>
-In-Reply-To: <d72b9aab-675c-ac89-b73a-b1de4a0b722d@igalia.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000df8f2105df509ec9"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+References: <20220421150248.667412396@infradead.org>
+        <20220421150654.817117821@infradead.org>
+        <87czhap9dy.fsf@email.froward.int.ebiederm.org>
+        <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+        <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
+        <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
+        <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
+Date:   Wed, 18 May 2022 17:49:50 -0500
+In-Reply-To: <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org> (Eric
+        W. Biederman's message of "Thu, 05 May 2022 13:25:57 -0500")
+Message-ID: <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-XM-SPF: eid=1nrSUQ-002Y4a-2G;;;mid=<871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX18+P8DhIXiW3QQ2kaItdAgP/dwjAcwP+HQ=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *****;linux-kernel@vger.kernel.org
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 589 ms - load_scoreonly_sql: 0.13 (0.0%),
+        signal_user_changed: 12 (2.0%), b_tie_ro: 10 (1.7%), parse: 1.11
+        (0.2%), extract_message_metadata: 3.8 (0.7%), get_uri_detail_list:
+        1.71 (0.3%), tests_pri_-1000: 5 (0.9%), tests_pri_-950: 1.28 (0.2%),
+        tests_pri_-900: 1.12 (0.2%), tests_pri_-90: 91 (15.4%), check_bayes:
+        89 (15.1%), b_tokenize: 11 (1.9%), b_tok_get_all: 10 (1.8%),
+        b_comp_prob: 3.1 (0.5%), b_tok_touch_all: 61 (10.3%), b_finish: 1.04
+        (0.2%), tests_pri_0: 456 (77.4%), check_dkim_signature: 0.53 (0.1%),
+        check_dkim_adsp: 2.9 (0.5%), poll_dns_idle: 0.64 (0.1%), tests_pri_10:
+        2.1 (0.3%), tests_pri_500: 7 (1.2%), rewrite_mail: 0.00 (0.0%)
+Subject: [PATCH 00/16] ptrace: cleanups and calling do_cldstop with only
+ siglock
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---000000000000df8f2105df509ec9
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-Hi Guilherme,
+For ptrace_stop to work on PREEMT_RT no spinlocks can be taken once
+ptrace_freeze_traced has completed successfully.  Which fundamentally
+means the lock dance of dropping siglock and grabbing tasklist_lock does
+not work on PREEMPT_RT.  So I have worked through what is necessary so
+that tasklist_lock does not need to be grabbed in ptrace_stop after
+siglock is dropped.
 
-+Desmond
+I have explored several alternate ways of getting there and along the
+way I found a lot of small bug fixes/cleanups that don't necessarily
+contribute to the final result but that or worthwhile on their own.  So
+I have included those changes in this set of changes just so they don't
+get lost.
 
-On 2022-05-17 09:42, Guilherme G. Piccoli wrote:
-> On 17/05/2022 10:57, Petr Mladek wrote:
->> [...]
->>>>> --- a/drivers/misc/bcm-vk/bcm_vk_dev.c
->>>>> +++ b/drivers/misc/bcm-vk/bcm_vk_dev.c
->>>>> @@ -1446,7 +1446,7 @@ static int bcm_vk_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
->>>> [... snip ...]
->>>> It seems to reset some hardware or so. IMHO, it should go into the
->>>> pre-reboot list.
->>>
->>> Mixed feelings here, I'm looping Broadcom maintainers to comment.
->>> (CC Scott and Broadcom list)
->>>
->>> I'm afraid it breaks kdump if this device is not reset beforehand - it's
->>> a doorbell write, so not high risk I think...
->>>
->>> But in case the not-reset device can be probed normally in kdump kernel,
->>> then I'm fine in moving this to the reboot list! I don't have the HW to
->>> test myself.
->>
->> Good question. Well, it if has to be called before kdump then
->> even "hypervisor" list is a wrong place because is not always
->> called before kdump.
-> 
-> Agreed! I'll defer that to Scott and Broadcom folks to comment.
-> If it's not strictly necessary, I'll happily move it to the reboot list.
-> 
-> If necessary, we could use the machine_crash_kexec() approach, but we'll
-> fall into the case arm64 doesn't support it and I'm not sure if this
-> device is available for arm - again a question for the maintainers.
-We register to the panic notifier so that we can kill the VK card ASAP
-to stop DMAing things over to the host side.  If it is not notified then
-memory may not be frozen when kdump is occurring.
-Notifying the card on panic is also needed to allow for any type of 
-reset to occur.
+In addition I had a conversation with Thomas Gleixner recently that
+emphasized for me the need to reduce the hold times of tasklist_lock,
+and that made me realize that in principle it is possible.
+https://lkml.kernel.org/r/87mtfmhap2.fsf@email.froward.int.ebiederm.org
 
-So, the only thing preventing moving the notifier later is the chance
-that memory is modified while kdump is occurring.  Or, if DMA is 
-disabled before kdump already then this wouldn't be an issue and the 
-notification to the card (to allow for clean resets) can be done later.
-> 
-> 
->>   [...]
->>>>> --- a/drivers/power/reset/ltc2952-poweroff.c
->>>>> +++ b/drivers/power/reset/ltc2952-poweroff.c
->>> [...]
->>> This is setting a variable only, and once it's set (data->kernel_panic
->>> is the bool's name), it just bails out the IRQ handler and a timer
->>> setting - this timer seems kinda tricky, so bailing out ASAP makes sense
->>> IMHO.
->>
->> IMHO, the timer informs the hardware that the system is still alive
->> in the middle of panic(). If the timer is not working then the
->> hardware (chip) will think that the system frozen in panic()
->> and will power off the system. See the comments in
->> drivers/power/reset/ltc2952-poweroff.c:
->> [.... snip ...]
->> IMHO, we really have to keep it alive until we reach the reboot stage.
->>
->> Another question is how it actually works when the interrupts are
->> disabled during panic() and the timer callbacks are not handled.
-> 
-> Agreed here! Guess I can move this one the reboot list, fine by me.
-> Unless PM folks think otherwise.
-> 
-> 
->> [...]
->>> Disagree here, I'm CCing Florian for information.
->>>
->>> This notifier preserves RAM so it's *very interesting* if we have
->>> kmsg_dump() for example, but maybe might be also relevant in case kdump
->>> kernel is configured to store something in a persistent RAM (then,
->>> without this notifier, after kdump reboots the system data would be lost).
->>
->> I see. It is actually similar problem as with
->> drivers/firmware/google/gsmi.c.
->>
->> I does similar things like kmsg_dump() so it should be called in
->> the same location (after info notifier list and before kdump).
->>
->> A solution might be to put it at these notifiers at the very
->> end of the "info" list or make extra "dump" notifier list.
-> 
-> Here I still disagree. I've commented in the other response thread
-> (about Google gsmi) about the semantics of the hypervisor list, but
-> again: this list should contain callbacks that
-> 
-> (a) Should run early, _by default_ before a kdump;
-> (b) Communicate with the firmware/hypervisor in a "low-risk" way;
-> 
-> Imagine a scenario where users configure kdump kernel to save something
-> in a persistent form in DRAM - it'd be like a late pstore, in the next
-> kernel. This callback enables that, it's meant to inform FW "hey, panic
-> happened, please from now on don't clear the RAM in the next FW-reboot".
-> I don't see a reason to postpone that - let's see if the maintainers
-> have an opinion.
-> 
-> Cheers,
-> 
-> 
-> Guilherme
+Which is a long way of saying that not taking tasklist_lock in
+ptrace_stop is good not just for PREMPT_RT but also for improving the
+scalability of the kernel in general.
 
---000000000000df8f2105df509ec9
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+After this set of changes only cgroup_enter_frozen should remain a
+stumbling block for PREEMPT_RT in the ptrace_stop path.
 
-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
-cRe0CRXA7ypOJSgxO/nOOyQoaJxT7CGg1npOeSpPjEuc3fE4xum3l0nvU85hj6MlKZu43hokdBh0
-D0nLyyhEwlR3AC/msdff/UGbM/JR9vk812RP4m/aNWZFJwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRpzY290dC5icmFuZGVuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUOhjEpl04Sz9dh5MI82E1
-V39lM/owDQYJKoZIhvcNAQELBQADggEBAA7Rlypx/esz/iq1yA4+KW7uwV/aBY344BWcXt6I+SNK
-VwFBgFWfLj5vaEud9TVv2fPSiaHJo0umemOJk+43QD+bsoqmgcFXd21PrOt7Jjs+jjVED9VC5kJq
-S4NNKUkS+BqijJwSegtVygrc/atrIlJbjI21q4qpemUo5fgwqCNm++BmBGTI8yA09vtGSNDRN42k
-lLX9hl3iEj5SBgkQqCbbnoE+ZjjKfqt7ED166WhgyQWNrl39yLcvLj+JRUB3RuvXKZjH0NQEEBII
-wZBDSkyneykLt3CBNIhSCTxKM6OWxVp936ALSa5K9FNy00TeWSpokR6NmzaW8VD/EjTgvqAxggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgx9oXSJpKniO4dS
-Gk8wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIILFBbO32At0jlQYmvDlBzxxKfke
-QfIJzMrdu2nIpFihMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
-MDUxODIyMTcxOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQBIc7nOZb/W3CkCvD0kf3LJMsgwBiUyTBcOQHeudvIMXgiB
-QQ8+U0c03geY7pr3oC9UDTjRSIF1RwJcP3BwheBLJu7kfHK3jy1JiouqgOLb3cV+n/v8R/+Xc+Q9
-MlWFHGJrAD9gPOMrvJ1KMqx0CFXaz0l8rlyXDGV6s+r8X1jt1rnbjZIGoBbGOP0+bObjxE+1Gdyd
-bQJRFfYVGChsqzAPm+mOmOBOafJhgclqEhJSTDfXRiL12HGLyzWipIAmcAo0FrSMyjIkYTvnPG2n
-n3uZVbKScFO51F6GoCOYWwE5SK0CHfHOWXk8TRl9CTBHlWCZR0XRAfCmijeVCq6/xT0J
---000000000000df8f2105df509ec9--
+Eric W. Biederman (16):
+      signal/alpha: Remove unused definition of TASK_REAL_PARENT
+      signal/ia64: Remove unused definition of IA64_TASK_REAL_PARENT_OFFSET
+      kdb: Use real_parent when displaying a list of processes
+      powerpc/xmon:  Use real_parent when displaying a list of processes
+      ptrace: Remove dead code from __ptrace_detach
+      ptrace: Remove unnecessary locking in ptrace_(get|set)siginfo
+      signal: Wake up the designated parent
+      ptrace: Only populate last_siginfo from ptrace
+      ptrace: In ptrace_setsiginfo deal with invalid si_signo
+      ptrace: In ptrace_signal look at what the debugger did with siginfo
+      ptrace: Use si_sino as the signal number to resume with
+      ptrace: Stop protecting ptrace_set_signr with tasklist_lock
+      ptrace: Document why ptrace_setoptions does not need a lock
+      signal: Protect parent child relationships by childs siglock
+      ptrace: Use siglock instead of tasklist_lock in ptrace_check_attach
+      signal: Always call do_notify_parent_cldstop with siglock held
+
+ arch/alpha/kernel/asm-offsets.c |   1 -
+ arch/ia64/kernel/asm-offsets.c  |   1 -
+ arch/powerpc/xmon/xmon.c        |   2 +-
+ kernel/debug/kdb/kdb_main.c     |   2 +-
+ kernel/exit.c                   |  23 +++-
+ kernel/fork.c                   |  12 +-
+ kernel/ptrace.c                 | 132 ++++++++----------
+ kernel/signal.c                 | 296 ++++++++++++++++++++++++++--------------
+ 8 files changed, 279 insertions(+), 190 deletions(-)
+
+Eric
