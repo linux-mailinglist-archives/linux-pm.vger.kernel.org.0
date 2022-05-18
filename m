@@ -2,54 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A9152B54B
-	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 11:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C04252B5E9
+	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 11:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233644AbiERIzr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 May 2022 04:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45492 "EHLO
+        id S233795AbiERJJW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 May 2022 05:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233666AbiERIzb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 04:55:31 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C19134E15
-        for <linux-pm@vger.kernel.org>; Wed, 18 May 2022 01:55:26 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1nrFSm-0000Au-5b; Wed, 18 May 2022 10:55:24 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1nrFSk-0003OT-3Y; Wed, 18 May 2022 10:55:22 +0200
-Date:   Wed, 18 May 2022 10:55:22 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Francesco Dolcini <francesco.dolcini@toradex.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, l.stach@pengutronix.de,
-        linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rafael@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Amit Kucheria <amitk@kernel.org>,
-        Jon Nettleton <jon@solid-run.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tim Harvey <tharvey@gateworks.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1] thermal: imx: Make trip point offset configurable
-Message-ID: <20220518085522.3fpzy37kkbkn4hpl@pengutronix.de>
-References: <20220516190001.147919-1-francesco.dolcini@toradex.com>
+        with ESMTP id S233341AbiERJJV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 05:09:21 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8D5E413F911;
+        Wed, 18 May 2022 02:09:19 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 48D1A1042;
+        Wed, 18 May 2022 02:09:19 -0700 (PDT)
+Received: from pierre123.arm.com (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7B26A3F66F;
+        Wed, 18 May 2022 02:09:16 -0700 (PDT)
+From:   Pierre Gondois <pierre.gondois@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ionela.Voinescu@arm.com, dietmar.eggemann@arm.com,
+        sudeep.holla@arm.com, Pierre Gondois <pierre.gondois@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robert Moore <robert.moore@intel.com>,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        devel@acpica.org
+Subject: [PATCH v2 1/5] ACPI: CPPC: Check _OSC for flexible address space
+Date:   Wed, 18 May 2022 11:08:57 +0200
+Message-Id: <20220518090901.2724518-1-pierre.gondois@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220516190001.147919-1-francesco.dolcini@toradex.com>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,68 +46,116 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Francesco,
+ACPI 6.2 Section 6.2.11.2 'Platform-Wide OSPM Capabilities':
+  Starting with ACPI Specification 6.2, all _CPC registers can be in
+  PCC, System Memory, System IO, or Functional Fixed Hardware address
+  spaces. OSPM support for this more flexible register space scheme is
+  indicated by the â€œFlexible Address Space for CPPC Registersâ€ _OSC bit
 
-On 22-05-16, Francesco Dolcini wrote:
-> Currently the imx thermal driver has a hardcoded critical temperature
-> value offset of 5 Celsius degrees from the actual SoC maximum
-> temperature.
-> 
-> This affects applications and systems designed to be working on this close
-> to the limit, but yet valid, temperature range.
-> 
-> Given that there is no single value that will fit all the use cases make
-> the critical trip point offset from the max temperature configurable
-> using a newly added trip_offset module parameter, passive trip point is
-> set to 5 Celsius degrees less than the critical. By default the
-> system behaves exactly as before.
+Otherwise (cf ACPI 6.1, s8.4.7.1.1.X), _CPC registers must be in:
+- PCC or Functional Fixed Hardware address space if defined
+- SystemMemory address space (NULL register) if not defined
 
-I thought the conclusion of the discussion was to use a dt-property?
-Since it is device and/or environment specific.
+Add the corresponding _OSC bit and check it when parsing _CPC objects.
 
-Regards,
-  Marco
+Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+---
+ drivers/acpi/bus.c       | 18 ++++++++++++++++++
+ drivers/acpi/cppc_acpi.c |  9 +++++++++
+ include/linux/acpi.h     |  2 ++
+ 3 files changed, 29 insertions(+)
 
-> 
-> Link: https://lore.kernel.org/all/20220420091300.179753-1-francesco.dolcini@toradex.com/
-> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
-> ---
->  drivers/thermal/imx_thermal.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-> index 16663373b682..42d1f8a3eccb 100644
-> --- a/drivers/thermal/imx_thermal.c
-> +++ b/drivers/thermal/imx_thermal.c
-> @@ -86,6 +86,10 @@ enum imx_thermal_trip {
->  #define TEMPMON_IMX6SX			2
->  #define TEMPMON_IMX7D			3
->  
-> +static int trip_offset = 5;
-> +module_param(trip_offset, int, 0444);
-> +MODULE_PARM_DESC(trip_offset, "Critical trip point offset from CPU max temp in Celsius degrees (default 5)");
-> +
->  struct thermal_soc_data {
->  	u32 version;
->  
-> @@ -504,11 +508,11 @@ static void imx_init_temp_grade(struct platform_device *pdev, u32 ocotp_mem0)
->  	}
->  
->  	/*
-> -	 * Set the critical trip point at 5 °C under max
-> -	 * Set the passive trip point at 10 °C under max (changeable via sysfs)
-> +	 * Set the critical trip point at 5 °C under max (changeable via module param)
-> +	 * Set the passive trip point at 5 °C under critical (changeable via sysfs)
->  	 */
-> -	data->temp_critical = data->temp_max - (1000 * 5);
-> -	data->temp_passive = data->temp_max - (1000 * 10);
-> +	data->temp_critical = data->temp_max - (1000 * trip_offset);
-> +	data->temp_passive = data->temp_critical - (1000 * 5);
->  }
->  
->  static int imx_init_from_tempmon_data(struct platform_device *pdev)
-> -- 
-> 2.25.1
-> 
-> 
-> 
+diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c
+index 3e58b613a2c4..9eca43d1d941 100644
+--- a/drivers/acpi/bus.c
++++ b/drivers/acpi/bus.c
+@@ -278,6 +278,20 @@ bool osc_sb_apei_support_acked;
+ bool osc_pc_lpi_support_confirmed;
+ EXPORT_SYMBOL_GPL(osc_pc_lpi_support_confirmed);
+ 
++/*
++ * ACPI 6.2 Section 6.2.11.2 'Platform-Wide OSPM Capabilities':
++ *   Starting with ACPI Specification 6.2, all _CPC registers can be in
++ *   PCC, System Memory, System IO, or Functional Fixed Hardware address
++ *   spaces. OSPM support for this more flexible register space scheme is
++ *   indicated by the â€œFlexible Address Space for CPPC Registersâ€ _OSC bit.
++ *
++ * Otherwise (cf ACPI 6.1, s8.4.7.1.1.X), _CPC registers must be in:
++ * - PCC or Functional Fixed Hardware address space if defined
++ * - SystemMemory address space (NULL register) if not defined
++ */
++bool osc_cpc_flexible_adr_space_confirmed;
++EXPORT_SYMBOL_GPL(osc_cpc_flexible_adr_space_confirmed);
++
+ /*
+  * ACPI 6.4 Operating System Capabilities for USB.
+  */
+@@ -321,6 +335,8 @@ static void acpi_bus_osc_negotiate_platform_control(void)
+ 	}
+ #endif
+ 
++	capbuf[OSC_SUPPORT_DWORD] |= OSC_SB_CPC_FLEXIBLE_ADR_SPACE;
++
+ 	if (IS_ENABLED(CONFIG_SCHED_MC_PRIO))
+ 		capbuf[OSC_SUPPORT_DWORD] |= OSC_SB_CPC_DIVERSE_HIGH_SUPPORT;
+ 
+@@ -366,6 +382,8 @@ static void acpi_bus_osc_negotiate_platform_control(void)
+ 			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_PCLPI_SUPPORT;
+ 		osc_sb_native_usb4_support_confirmed =
+ 			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_NATIVE_USB4_SUPPORT;
++		osc_cpc_flexible_adr_space_confirmed =
++			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_CPC_FLEXIBLE_ADR_SPACE;
+ 	}
+ 
+ 	kfree(context.ret.pointer);
+diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+index bc1454789a06..6f09fe011544 100644
+--- a/drivers/acpi/cppc_acpi.c
++++ b/drivers/acpi/cppc_acpi.c
+@@ -736,6 +736,11 @@ int acpi_cppc_processor_probe(struct acpi_processor *pr)
+ 				if (gas_t->address) {
+ 					void __iomem *addr;
+ 
++					if (!osc_cpc_flexible_adr_space_confirmed) {
++						pr_debug("Flexible address space capability not supported\n");
++						goto out_free;
++					}
++
+ 					addr = ioremap(gas_t->address, gas_t->bit_width/8);
+ 					if (!addr)
+ 						goto out_free;
+@@ -758,6 +763,10 @@ int acpi_cppc_processor_probe(struct acpi_processor *pr)
+ 						 gas_t->address);
+ 					goto out_free;
+ 				}
++				if (!osc_cpc_flexible_adr_space_confirmed) {
++					pr_debug("Flexible address space capability not supported\n");
++					goto out_free;
++				}
+ 			} else {
+ 				if (gas_t->space_id != ACPI_ADR_SPACE_FIXED_HARDWARE || !cpc_ffh_supported()) {
+ 					/* Support only PCC, SystemMemory, SystemIO, and FFH type regs. */
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index d7136d13aa44..03465db16b68 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -574,6 +574,7 @@ acpi_status acpi_run_osc(acpi_handle handle, struct acpi_osc_context *context);
+ #define OSC_SB_OSLPI_SUPPORT			0x00000100
+ #define OSC_SB_CPC_DIVERSE_HIGH_SUPPORT		0x00001000
+ #define OSC_SB_GENERIC_INITIATOR_SUPPORT	0x00002000
++#define OSC_SB_CPC_FLEXIBLE_ADR_SPACE		0x00004000
+ #define OSC_SB_NATIVE_USB4_SUPPORT		0x00040000
+ #define OSC_SB_PRM_SUPPORT			0x00200000
+ 
+@@ -581,6 +582,7 @@ extern bool osc_sb_apei_support_acked;
+ extern bool osc_pc_lpi_support_confirmed;
+ extern bool osc_sb_native_usb4_support_confirmed;
+ extern bool osc_sb_cppc_not_supported;
++extern bool osc_cpc_flexible_adr_space_confirmed;
+ 
+ /* USB4 Capabilities */
+ #define OSC_USB_USB3_TUNNELING			0x00000001
+-- 
+2.25.1
+
