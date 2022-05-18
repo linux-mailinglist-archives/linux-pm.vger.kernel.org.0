@@ -2,301 +2,207 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24D9052B096
-	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 04:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47D3B52B168
+	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 06:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbiERC5P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 May 2022 22:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60666 "EHLO
+        id S229652AbiERESM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 May 2022 00:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiERC5M (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 May 2022 22:57:12 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A10230F4F;
-        Tue, 17 May 2022 19:57:07 -0700 (PDT)
-X-UUID: f7642e5736b04ed0a20b1b19e8252628-20220518
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:ccdd8882-f281-40d0-8bd0-485e80349883,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:2a19b09,CLOUDID:236991e2-edbf-4bd4-8a34-dfc5f7bb086d,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: f7642e5736b04ed0a20b1b19e8252628-20220518
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2125808040; Wed, 18 May 2022 10:57:02 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 18 May 2022 10:57:00 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 18 May 2022 10:57:00 +0800
-Message-ID: <c1cba326f204fce3204d252c1a837ff2b030bb53.camel@mediatek.com>
+        with ESMTP id S229483AbiERESK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 00:18:10 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B08A2714A
+        for <linux-pm@vger.kernel.org>; Tue, 17 May 2022 21:18:07 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id g6so1440825ejw.1
+        for <linux-pm@vger.kernel.org>; Tue, 17 May 2022 21:18:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LepV/V/rw3KHQSLPiaLiP/J9OYk0ZMB5clNI2uCKxco=;
+        b=mRXr4u8V1f/S5RyW1JNxJSUxM+z8+ui74rqnugYbsf5s6dbwGsmqlLlN6ZYgsgxcCG
+         bKqcvOMQ23KO1SE+HPFpaE4W1qrmrT2D8ZaS/yHhKJAVJUeQfwrZc2JzpntyqucghdZ6
+         lX6dQbdT98u6OdtodRJPm107TfKlDpvepIP+w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LepV/V/rw3KHQSLPiaLiP/J9OYk0ZMB5clNI2uCKxco=;
+        b=ezJuRTPHOyDwczRpy7IUkSV8rzQILd0e2OIJqLzP/2GO1sxcP43xmfA6f2VHtrlL4N
+         v1ki9hqzSZ40l1671o416CAU9CE3apMXPFyHfXnR3KrTLFTLLSh635KclIcf8NtVj6Hs
+         mvfwKaG8frVv2M1xkH3hQc+zI1FeFvT/33/XlsOTPgwDoUD4S/2ENhXhwq+g9GAkmw1S
+         /4mLeteydeWiordSPaTHHnoGB5EPib1M2kS22lf7DceUrBkgIdzYsYQrPa9QGNRq7wLv
+         DASvZlNawto93TZT/6FuXOmHc8qXFP5+iO5VAmIWpik5AMsIoZOdhvLT32v5sxm2iXzx
+         h5Zw==
+X-Gm-Message-State: AOAM533ONaisVFCPgv9fSUB6OnIim8hksLTXQrFf9OW/AUkQd9glzjyM
+        RyH4hhck7PvzgfsK72JgM03PudpxO31dakYZQF1YIw==
+X-Google-Smtp-Source: ABdhPJx2Eb3PB99mTXrpervjGP3hlbnI5chnI8LPmgJy/jBWlyWBov63NZ3kC2St8DMKHxEfsAkr7rAxBXKeSKpzdBI=
+X-Received: by 2002:a17:906:c142:b0:6da:9781:ae5d with SMTP id
+ dp2-20020a170906c14200b006da9781ae5dmr21221643ejc.73.1652847485641; Tue, 17
+ May 2022 21:18:05 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220516004311.18358-1-roger.lu@mediatek.com> <CAGXv+5GSdWPZe3fNpBJ_WW0zCL8Skg6fHx9ATxaKU1hyMEt2Ww@mail.gmail.com>
+ <7h4k1ndaui.fsf@baylibre.com> <7hy1yzbtb7.fsf@baylibre.com>
+In-Reply-To: <7hy1yzbtb7.fsf@baylibre.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Wed, 18 May 2022 12:17:54 +0800
+Message-ID: <CAGXv+5GT=3m=pVPwUOWR42BR=emCpBXvvoAiRV7YKt2kEKWdAQ@mail.gmail.com>
 Subject: Re: [PATCH v25 0/7] soc: mediatek: SVS: introduce MTK SVS
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Roger Lu <roger.lu@mediatek.com>,
+To:     Kevin Hilman <khilman@kernel.org>, cw00.choi@samsung.com
+Cc:     Roger Lu <roger.lu@mediatek.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Nicolas Boichat <drinkcat@google.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Fan Chen <fan.chen@mediatek.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Fan Chen <fan.chen@mediatek.com>,
         Charles Yang <Charles.Yang@mediatek.com>,
         Angus Lin <Angus.Lin@mediatek.com>,
-        "Mark Rutland" <mark.rutland@arm.com>, Nishanth Menon <nm@ti.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
         Guenter Roeck <linux@roeck-us.net>,
-        Jia-wei Chang <jia-wei.chang@mediatek.com>
-Date:   Wed, 18 May 2022 10:57:00 +0800
-In-Reply-To: <20220516004311.18358-1-roger.lu@mediatek.com>
-References: <20220516004311.18358-1-roger.lu@mediatek.com>
+        Jia-wei Chang <jia-wei.chang@mediatek.com>,
+        =?UTF-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
+        <rex-bc.chen@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2022-05-16 at 08:43 +0800, Roger Lu wrote:
-> The Smart Voltage Scaling(SVS) engine is a piece of hardware
-> which calculates suitable SVS bank voltages to OPP voltage table.
-> Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
-> when receiving OPP_EVENT_ADJUST_VOLTAGE.
-> 
-> 1. SVS driver uses OPP adjust event in [1] to update OPP table
-> voltage part.
-> 2. SVS driver gets thermal/GPU device by node [2][3] and CPU device
-> by get_cpu_device().
-> After retrieving subsys device, SVS driver calls device_link_add() to
-> make sure probe/suspend callback priority.
-> 
-> [1] 
-> https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=25cb20a212a1f989385dfe23230817e69c62bee5
-> [2] 
-> https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=b325ce39785b1408040d90365a6ab1aa36e94f87
-> [3] 
-> https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.16-next/dts64&id=a8168cebf1bca1b5269e8a7eb2626fb76814d6e2
-> 
-> Change since v24:
-> - Rebase to Linux 5.18-rc6
-> - Show specific fail log in svs_platform_probe() to help catch which
-> step fails quickly
-> - Remove struct svs_bank member "pd_dev" because all subsys device's
-> power domain has been merged into one node like above [3]
-> 
-> Test in below environment:
-> SW: Integration Tree [4] + Thermal patch [5] + SVS v25 (this
-> patchset)
-> HW: mt8183-Krane
-> 
-> [4] https://github.com/wens/linux/commits/mt8183-cpufreq-cci-svs-test
-> [5] 
-> https://patchwork.kernel.org/project/linux-pm/patch/20210820095206.30981-1-ben.tseng@mediatek.com
-> 
-> Boots up log:
-> [    4.447369]  SVSB_CPU_LITTLE: svs_init01_isr_handler:
-> VDN74~30:0x141e262e~0x33373c42, DC:0x02f3010b
-> [    4.447623]  SVSB_CPU_BIG: svs_init01_isr_handler:
-> VDN74~30:0x151f2830~0x363a4046, DC:0x02f90141
-> [    4.447872]  SVSB_CCI: svs_init01_isr_handler:
-> VDN74~30:0x141a232b~0x30363d42, DC:0x02ed00d5
-> [    4.448119]  SVSB_GPU: svs_init01_isr_handler:
-> VDN74~30:0x1416171a~0x1d202327, DC:0x02f7012f
-> [    4.448239]  SVSB_CPU_LITTLE: svs_init02_isr_handler:
-> VOP74~30:0x1b252d35~0x3a3e4349, DC:0x02f30000
-> [    4.448343]  SVSB_CPU_BIG: svs_init02_isr_handler:
-> VOP74~30:0x1c262f37~0x3d41474d, DC:0x02f90000
-> [    4.448400]  SVSB_CCI: svs_init02_isr_handler:
-> VOP74~30:0x1b212a32~0x373d4449, DC:0x02ed0000
-> [    4.448499]  SVSB_GPU: svs_init02_isr_handler:
-> VOP74~30:0x1618191c~0x1f222529, DC:0x02f70000
-> 
-> SVS commands log:
-> localhost ~ # cat /sys/kernel/debug/svs/*/*
-> init2
-> SVSB_CCI: temperature ignore, turn_pt = 0
-> opp_freq[00]: 1196000000, opp_volt[00]: 968750, svsb_volt[00]: 0x4b,
-> freq_pct[00]: 100
-> opp_freq[01]: 1144000000, opp_volt[01]: 956250, svsb_volt[01]: 0x49,
-> freq_pct[01]: 96
-> opp_freq[02]: 1092000000, opp_volt[02]: 937500, svsb_volt[02]: 0x46,
-> freq_pct[02]: 92
-> opp_freq[03]: 1027000000, opp_volt[03]: 918750, svsb_volt[03]: 0x43,
-> freq_pct[03]: 86
-> opp_freq[04]: 962000000, opp_volt[04]: 893750, svsb_volt[04]: 0x3f,
-> freq_pct[04]: 81
-> opp_freq[05]: 923000000, opp_volt[05]: 881250, svsb_volt[05]: 0x3d,
-> freq_pct[05]: 78
-> opp_freq[06]: 871000000, opp_volt[06]: 856250, svsb_volt[06]: 0x39,
-> freq_pct[06]: 73
-> opp_freq[07]: 845000000, opp_volt[07]: 850000, svsb_volt[07]: 0x38,
-> freq_pct[07]: 71
-> opp_freq[08]: 767000000, opp_volt[08]: 825000, svsb_volt[08]: 0x34,
-> freq_pct[08]: 65
-> opp_freq[09]: 689000000, opp_volt[09]: 800000, svsb_volt[09]: 0x30,
-> freq_pct[09]: 58
-> opp_freq[10]: 624000000, opp_volt[10]: 775000, svsb_volt[10]: 0x2c,
-> freq_pct[10]: 53
-> opp_freq[11]: 546000000, opp_volt[11]: 750000, svsb_volt[11]: 0x28,
-> freq_pct[11]: 46
-> opp_freq[12]: 463000000, opp_volt[12]: 718750, svsb_volt[12]: 0x23,
-> freq_pct[12]: 39
-> opp_freq[13]: 403000000, opp_volt[13]: 700000, svsb_volt[13]: 0x20,
-> freq_pct[13]: 34
-> opp_freq[14]: 338000000, opp_volt[14]: 681250, svsb_volt[14]: 0x1d,
-> freq_pct[14]: 29
-> opp_freq[15]: 273000000, opp_volt[15]: 650000, svsb_volt[15]: 0x1a,
-> freq_pct[15]: 23
-> init2
-> SVSB_CPU_BIG: temperature ignore, turn_pt = 0
-> opp_freq[00]: 1989000000, opp_volt[00]: 1050000, svsb_volt[00]: 0x59,
-> freq_pct[00]: 100
-> opp_freq[01]: 1924000000, opp_volt[01]: 1025000, svsb_volt[01]: 0x57,
-> freq_pct[01]: 97
-> opp_freq[02]: 1846000000, opp_volt[02]: 1000000, svsb_volt[02]: 0x53,
-> freq_pct[02]: 93
-> opp_freq[03]: 1781000000, opp_volt[03]: 975000, svsb_volt[03]: 0x50,
-> freq_pct[03]: 90
-> opp_freq[04]: 1716000000, opp_volt[04]: 950000, svsb_volt[04]: 0x4d,
-> freq_pct[04]: 87
-> opp_freq[05]: 1677000000, opp_volt[05]: 931250, svsb_volt[05]: 0x4c,
-> freq_pct[05]: 85
-> opp_freq[06]: 1625000000, opp_volt[06]: 912500, svsb_volt[06]: 0x49,
-> freq_pct[06]: 82
-> opp_freq[07]: 1586000000, opp_volt[07]: 900000, svsb_volt[07]: 0x47,
-> freq_pct[07]: 80
-> opp_freq[08]: 1508000000, opp_volt[08]: 875000, svsb_volt[08]: 0x43,
-> freq_pct[08]: 76
-> opp_freq[09]: 1417000000, opp_volt[09]: 850000, svsb_volt[09]: 0x40,
-> freq_pct[09]: 72
-> opp_freq[10]: 1326000000, opp_volt[10]: 825000, svsb_volt[10]: 0x3b,
-> freq_pct[10]: 67
-> opp_freq[11]: 1248000000, opp_volt[11]: 800000, svsb_volt[11]: 0x38,
-> freq_pct[11]: 63
-> opp_freq[12]: 1131000000, opp_volt[12]: 775000, svsb_volt[12]: 0x32,
-> freq_pct[12]: 57
-> opp_freq[13]: 1014000000, opp_volt[13]: 750000, svsb_volt[13]: 0x2d,
-> freq_pct[13]: 51
-> opp_freq[14]: 910000000, opp_volt[14]: 725000, svsb_volt[14]: 0x28,
-> freq_pct[14]: 46
-> opp_freq[15]: 793000000, opp_volt[15]: 700000, svsb_volt[15]: 0x23,
-> freq_pct[15]: 40
-> init2
-> SVSB_CPU_LITTLE: temperature ignore, turn_pt = 0
-> opp_freq[00]: 1989000000, opp_volt[00]: 968750, svsb_volt[00]: 0x4b,
-> freq_pct[00]: 100
-> opp_freq[01]: 1924000000, opp_volt[01]: 956250, svsb_volt[01]: 0x49,
-> freq_pct[01]: 97
-> opp_freq[02]: 1846000000, opp_volt[02]: 931250, svsb_volt[02]: 0x45,
-> freq_pct[02]: 93
-> opp_freq[03]: 1781000000, opp_volt[03]: 918750, svsb_volt[03]: 0x43,
-> freq_pct[03]: 90
-> opp_freq[04]: 1716000000, opp_volt[04]: 900000, svsb_volt[04]: 0x40,
-> freq_pct[04]: 87
-> opp_freq[05]: 1677000000, opp_volt[05]: 893750, svsb_volt[05]: 0x3f,
-> freq_pct[05]: 85
-> opp_freq[06]: 1625000000, opp_volt[06]: 875000, svsb_volt[06]: 0x3c,
-> freq_pct[06]: 82
-> opp_freq[07]: 1586000000, opp_volt[07]: 868750, svsb_volt[07]: 0x3b,
-> freq_pct[07]: 80
-> opp_freq[08]: 1508000000, opp_volt[08]: 843750, svsb_volt[08]: 0x37,
-> freq_pct[08]: 76
-> opp_freq[09]: 1417000000, opp_volt[09]: 825000, svsb_volt[09]: 0x34,
-> freq_pct[09]: 72
-> opp_freq[10]: 1326000000, opp_volt[10]: 793750, svsb_volt[10]: 0x2f,
-> freq_pct[10]: 67
-> opp_freq[11]: 1248000000, opp_volt[11]: 775000, svsb_volt[11]: 0x2c,
-> freq_pct[11]: 63
-> opp_freq[12]: 1131000000, opp_volt[12]: 743750, svsb_volt[12]: 0x27,
-> freq_pct[12]: 57
-> opp_freq[13]: 1014000000, opp_volt[13]: 712500, svsb_volt[13]: 0x22,
-> freq_pct[13]: 51
-> opp_freq[14]: 910000000, opp_volt[14]: 681250, svsb_volt[14]: 0x1d,
-> freq_pct[14]: 46
-> opp_freq[15]: 793000000, opp_volt[15]: 650000, svsb_volt[15]: 0x18,
-> freq_pct[15]: 40
-> mon mode
-> SVSB_GPU: temperature = 33492, turn_pt = 0
-> opp_freq[00]: 800000000, opp_volt[00]: 743750, svsb_volt[00]: 0x27,
-> freq_pct[00]: 100
-> opp_freq[01]: 743000000, opp_volt[01]: 731250, svsb_volt[01]: 0x25,
-> freq_pct[01]: 93
-> opp_freq[02]: 698000000, opp_volt[02]: 718750, svsb_volt[02]: 0x23,
-> freq_pct[02]: 88
-> opp_freq[03]: 653000000, opp_volt[03]: 712500, svsb_volt[03]: 0x22,
-> freq_pct[03]: 82
-> opp_freq[04]: 620000000, opp_volt[04]: 700000, svsb_volt[04]: 0x20,
-> freq_pct[04]: 78
-> opp_freq[05]: 580000000, opp_volt[05]: 693750, svsb_volt[05]: 0x1f,
-> freq_pct[05]: 73
-> opp_freq[06]: 540000000, opp_volt[06]: 681250, svsb_volt[06]: 0x1d,
-> freq_pct[06]: 68
-> opp_freq[07]: 500000000, opp_volt[07]: 675000, svsb_volt[07]: 0x1c,
-> freq_pct[07]: 63
-> opp_freq[08]: 460000000, opp_volt[08]: 662500, svsb_volt[08]: 0x1a,
-> freq_pct[08]: 58
-> opp_freq[09]: 420000000, opp_volt[09]: 656250, svsb_volt[09]: 0x19,
-> freq_pct[09]: 53
-> opp_freq[10]: 400000000, opp_volt[10]: 643750, svsb_volt[10]: 0x17,
-> freq_pct[10]: 50
-> opp_freq[11]: 380000000, opp_volt[11]: 643750, svsb_volt[11]: 0x17,
-> freq_pct[11]: 48
-> opp_freq[12]: 360000000, opp_volt[12]: 637500, svsb_volt[12]: 0x16,
-> freq_pct[12]: 45
-> opp_freq[13]: 340000000, opp_volt[13]: 637500, svsb_volt[13]: 0x16,
-> freq_pct[13]: 43
-> opp_freq[14]: 320000000, opp_volt[14]: 625000, svsb_volt[14]: 0x14,
-> freq_pct[14]: 40
-> opp_freq[15]: 300000000, opp_volt[15]: 625000, svsb_volt[15]: 0x14,
-> freq_pct[15]: 38
-> 
-> Roger Lu (7):
->   [v25,1/7] dt-bindings: soc: mediatek: add mtk svs dt-bindings
->   [v25,2/7] arm64: dts: mt8183: add svs device information
->   [v25,3/7] soc: mediatek: SVS: introduce MTK SVS engine
->   [v25,4/7] soc: mediatek: SVS: add monitor mode
->   [v25,5/7] soc: mediatek: SVS: add debug commands
->   [v25,6/7] dt-bindings: soc: mediatek: add mt8192 svs dt-bindings
->   [v25,7/7] soc: mediatek: SVS: add mt8192 SVS GPU driver
-> 
->  .../bindings/soc/mediatek/mtk-svs.yaml        |   91 +
->  arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   16 +
->  drivers/soc/mediatek/Kconfig                  |   10 +
->  drivers/soc/mediatek/Makefile                 |    1 +
->  drivers/soc/mediatek/mtk-svs.c                | 2399
-> +++++++++++++++++
->  5 files changed, 2517 insertions(+)
->  create mode 100644
-> Documentation/devicetree/bindings/soc/mediatek/mtk-svs.yaml
->  create mode 100644 drivers/soc/mediatek/mtk-svs.c
-> 
-> 
+n Wed, May 18, 2022 at 8:03 AM Kevin Hilman <khilman@kernel.org> wrote:
+>
+> Kevin Hilman <khilman@kernel.org> writes:
+>
+> > Chen-Yu Tsai <wenst@chromium.org> writes:
+> >
+> >> On Mon, May 16, 2022 at 8:43 AM Roger Lu <roger.lu@mediatek.com> wrote:
+> >>>
+> >>> The Smart Voltage Scaling(SVS) engine is a piece of hardware
+> >>> which calculates suitable SVS bank voltages to OPP voltage table.
+> >>> Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
+> >>> when receiving OPP_EVENT_ADJUST_VOLTAGE.
+> >>>
+> >>> 1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
+> >>> 2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
+> >>> After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
+> >>>
+> >>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=25cb20a212a1f989385dfe23230817e69c62bee5
+> >>> [2] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=b325ce39785b1408040d90365a6ab1aa36e94f87
+> >>> [3] https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.16-next/dts64&id=a8168cebf1bca1b5269e8a7eb2626fb76814d6e2
+> >>>
+> >>> Change since v24:
+> >>> - Rebase to Linux 5.18-rc6
+> >>> - Show specific fail log in svs_platform_probe() to help catch which step fails quickly
+> >>> - Remove struct svs_bank member "pd_dev" because all subsys device's power domain has been merged into one node like above [3]
+> >>>
+> >>> Test in below environment:
+> >>> SW: Integration Tree [4] + Thermal patch [5] + SVS v25 (this patchset)
+> >>> HW: mt8183-Krane
+> >>>
+> >>> [4] https://github.com/wens/linux/commits/mt8183-cpufreq-cci-svs-test
+> >>
+> >> I've updated my branch to include all the latest versions of the relevant
+> >> patch series:
+> >>
+> >> - anx7625 DPI bus type series v2 (so the display works)
+> >> - MT8183 thermal series v9 (this seems to have been overlooked by the
+> >> maintainer)
+> >> - MTK SVS driver series v25
+> >> - devfreq: cpu based scaling support to passive governor series v5
+> >> - MTK CCI devfreq series v4
+> >> - MT8183 cpufreq series v7
+> >> - Additional WIP patches for panfrost MTK devfreq
+> >
+> > Thanks for preparing an integration branch Chen-Yu.
+> >
+> > I'm testing this on mt8183-pumpkin with one patch to add the CCI
+> > regulator[1], and the defconfig you posted in a previous rev of this
+> > series, but the CCI driver still causes a fault on boot[2] on my
+> > platform.
+> >
+> > I mentioned in earlier reviews that I think there's potentially a race
+> > between CCI and SVS loading since they are co-dependent.  My hunch is
+> > that this is still not being handled properly.
+>
+> Ah, actually it's crashing when I try to boot the platform with
+> `maxcpus=4` on the cmdline (which I have to do because mt8183-pumpkin is
+> unstable upstream with the 2nd cluster enabled.)
+>
+> The CCI driver should be a bit more robust about detecting
+> available/online CPUs
 
-Hello Matthias,
+This all seems to be handled in the devfreq passive governor.
 
-Gentle remind for svs series.
-Roger tests 8183 svs done using Chen-Yu's branch and it's based on 5.18
-next.
-Tested on 8183 Chromepad - Krane.
+And presumably we'd like to have CCI devfreq running even if just one
+core was booted.
 
-Thanks for your big support!
+Added Chanwoo for more ideas.
 
-BRs,
-Rex
+ChenYu
 
+
+> If I boot with both clusters, I see SVS probing[1], and I see CCI
+> doing transitions[2]
+>
+> Kevin
+>
+>
+> [1]
+> # dmesg |grep -i svs
+> [    0.739298] mtk-svs 1100b000.svs: M_HW_RES0: 0x00120090
+> [    0.739315] mtk-svs 1100b000.svs: M_HW_RES1: 0xa6fdfb5b
+> [    0.739318] mtk-svs 1100b000.svs: M_HW_RES2: 0x47cb47cb
+> [    0.739321] mtk-svs 1100b000.svs: M_HW_RES3: 0xa6fdfb5b
+> [    0.739324] mtk-svs 1100b000.svs: M_HW_RES4: 0xa6fde4ad
+> [    0.739326] mtk-svs 1100b000.svs: M_HW_RES5: 0x47f84b80
+> [    0.739328] mtk-svs 1100b000.svs: M_HW_RES6: 0xa6fd87a6
+> [    0.739331] mtk-svs 1100b000.svs: M_HW_RES7: 0xa6fddf4a
+> [    0.739333] mtk-svs 1100b000.svs: M_HW_RES8: 0x4bf84be5
+> [    0.739335] mtk-svs 1100b000.svs: M_HW_RES9: 0xa6fd3267
+> [    0.739338] mtk-svs 1100b000.svs: M_HW_RES14: 0x9696d5ab
+> [    0.739340] mtk-svs 1100b000.svs: M_HW_RES15: 0x015a0015
+> [    0.739343] mtk-svs 1100b000.svs: M_HW_RES16: 0xa6fdf05d
+> [    0.739345] mtk-svs 1100b000.svs: M_HW_RES17: 0x47f847e5
+> [    0.739347] mtk-svs 1100b000.svs: M_HW_RES18: 0xa6fdc240
+> [    0.741890]  SVSB_CPU_LITTLE: svs_init01_isr_handler: VDN74~30:0x141c242a~0x2f32373c, DC:0x0316ff30
+> [    0.742165]  SVSB_CPU_BIG: svs_init01_isr_handler: VDN74~30:0x141e262e~0x33373c42, DC:0x031aff50
+> [    0.742431]  SVSB_CCI: svs_init01_isr_handler: VDN74~30:0x13192128~0x2d31383c, DC:0x0314ff20
+> [    0.742696]  SVSB_GPU: svs_init01_isr_handler: VDN74~30:0x1416181a~0x1d202428, DC:0x030efef0
+> [    0.742875]  SVSB_CPU_LITTLE: svs_init02_isr_handler: VOP74~30:0x1d252c33~0x373b3f45, DC:0x031600d0
+> [    0.742989]  SVSB_CPU_BIG: svs_init02_isr_handler: VOP74~30:0x1d262e36~0x3b3f444a, DC:0x031a00b0
+> [    0.743060]  SVSB_CCI: svs_init02_isr_handler: VOP74~30:0x1c222a31~0x353a4045, DC:0x031400e0
+> [    0.743176]  SVSB_GPU: svs_init02_isr_handler: VOP74~30:0x181a1c1e~0x2125282c, DC:0x030e0110
+>
+> [2]
+> # cat /sys/class/devfreq/cci/trans_stat
+>      From  :   To
+>            : 273000000 338000000 403000000 463000000 546000000 624000000 689000000 767000000 845000000 871000000 923000000 9620000001027000000109200000011440000001196000000   time(ms)
+>   273000000:         0        77        11        10        34         8         6         8         3         3         0         0         4         1         2        12    135675
+>   338000000:        90         0        32         4         7         2         1         0         0         0         0         0         0         0         0         2       664
+>   403000000:        20        45         0        35         7         2         0         0         0         0         0         0         0         0         0         0       509
+>   463000000:        13         7        53         0        46         4         1         1         1         2         0         1         2         0         0         1       568
+>   546000000:        12         5        10        63         0        55         3         3         3         1         3         2         8         3         1        35       858
+> * 624000000:         4         0         2        10        50         0        49         1         1         0         0         1         3         2         0         7       407
+>   689000000:         6         1         0         2        18        36         0        47         5         3         1         0         1         0         0        10       388
+>   767000000:         2         1         0         3         5        11        42         0        35         4         1         1         2         0         1        23       486
+>   845000000:         3         0         0         0         1         0         9        27         0        37         8         1         0         0         2        23       290
+>   871000000:         2         0         0         1         0         0         3         9        19         0        29         5         1         1         1        12       179
+>   923000000:         0         0         0         0         0         2         2         7        10        13         0        31         1         1         0         4       154
+>   962000000:         0         0         0         0         0         1         0         4         3         4        14         0        27         1         0         2       123
+>  1027000000:         2         0         0         1         2         2         3         2         1         1         7        11         0        24         2         1       182
+>  1092000000:         1         0         0         0         3         2         0         1         2         0         0         1         5         0        25         5       123
+>  1144000000:         2         0         0         0         0         0         0         0         2         0         1         1         2         7         0        38       193
+>  1196000000:        22         2         1         3        34         6        11        21        26        15         7         1         3         5        19         0      1621
+> Total transition : 1810
