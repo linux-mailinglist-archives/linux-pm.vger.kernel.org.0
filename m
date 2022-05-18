@@ -2,59 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 032CB52BC0B
-	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 16:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 899A152BD70
+	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 16:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237447AbiERNAm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 May 2022 09:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57942 "EHLO
+        id S237616AbiERNKm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 May 2022 09:10:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237425AbiERNAl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 09:00:41 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512A01A6AE4;
-        Wed, 18 May 2022 06:00:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=6rvVpjtewErevwtzxVWgKanKatH+lil9XQiGaNTaboY=; b=ThnAz/oFIZap4IArJner1pmcW3
-        6MJb8LhZ5nlzG/AhKU5YUmwufgHp2bWyyb94yxcxXrUBTN7Cl0dmA2z8CKpyzIK8v7TkyezC8WKNP
-        p4BAlJjvwr25/AOq/K3pzMeuO66nCKb7HsqmmbeQtweeDVpo+my1JeYHtcVeuNXIzNV1wVA5LVb5o
-        6IoZcDm+xiE6JtFyotUMSu++E2VWulFO3SodIndd8ca0TPhnop8eZO2XeBJR+m96h41AWDR0iv+y0
-        ELyJaeXYcmM7NBeIeWyQVoyNbNex/DPS2tNs3gXLZ9tQfqQMbbiHixzQycBM9ELWJsqZeII6s0y3p
-        CacIyhmg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nrJHs-002CUG-Vm; Wed, 18 May 2022 13:00:25 +0000
-Date:   Wed, 18 May 2022 06:00:24 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Vivek Kumar <quic_vivekuma@quicinc.com>
-Cc:     corbet@lwn.net, catalin.marinas@arm.com, will@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, axboe@kernel.dk,
-        rafael@kernel.org, akpm@linux-foundation.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-mm@kvack.org, len.brown@intel.com,
-        pavel@ucw.cz, paulmck@kernel.org, bp@suse.de,
-        keescook@chromium.org, songmuchun@bytedance.com,
-        rdunlap@infradead.org, damien.lemoal@opensource.wdc.com,
-        pasha.tatashin@soleen.com, tabba@google.com, ardb@kernel.org,
-        tsoni@quicinc.com, quic_psodagud@quicinc.com,
-        quic_svaddagi@quicinc.com,
-        Prasanna Kumar <quic_kprasan@quicinc.com>
-Subject: Re: [RFC 2/6] PM: Hibernate: Add option to disable disk offset
- randomization
-Message-ID: <YoTt6C5ymvmMcmWw@infradead.org>
-References: <1652860121-24092-1-git-send-email-quic_vivekuma@quicinc.com>
- <1652860121-24092-3-git-send-email-quic_vivekuma@quicinc.com>
+        with ESMTP id S237535AbiERNKb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 09:10:31 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4A219FB2A;
+        Wed, 18 May 2022 06:10:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Du0yR9uhHpKwWrKsjoqMfifs7bCXApVmJcTLKS159Q8=; b=KR8Ca3qzn6Prru2b2ovD3a5c88
+        3Yl32PXNgwJAzJv1K+GwtALbIi3R7PHWPogPI//mjA46BacEdcFlczlu7VgbqBbi0iRFln4dhAmL3
+        5vAwoEH2Y5npRXnrsBS0Pt1IPEFHpxBOrNJbK+CGAUFY1mpA/Xk/bDS+XL+ITQtGq3i57YSw2ze27
+        6u/aeZyJiDji8Ld6K9lb+iY/t9E1NA5TGk8rCRjPY8WXYQAQH85dDOYmikTTt80JzPDf76BhHmUH/
+        IE+yGx2cI+Y6f449JTeHotkEOnM9AIr+trG8kHtj2MTTykTHXqJtKMQ7SzJhAjeP0O52jetyt0xPW
+        XVvP+JXg==;
+Received: from 200-161-159-120.dsl.telesp.net.br ([200.161.159.120] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1nrJR1-009xZP-0G; Wed, 18 May 2022 15:09:51 +0200
+Message-ID: <8a1159c6-b4c1-87b9-8a09-6d5696f8f3f4@igalia.com>
+Date:   Wed, 18 May 2022 10:09:06 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1652860121-24092-3-git-send-email-quic_vivekuma@quicinc.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
+Content-Language: en-US
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Scott Branden <scott.branden@broadcom.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        David Gow <davidgow@google.com>,
+        Evan Green <evgreen@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+        akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dexuan Cui <decui@microsoft.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        zhenwei pi <pizhenwei@bytedance.com>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-20-gpiccoli@igalia.com> <YoJZVZl/MH0KiE/J@alley>
+ <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com> <YoOpyW1+q+Z5as78@alley>
+ <d72b9aab-675c-ac89-b73a-b1de4a0b722d@igalia.com> <YoSijKwuwbY9uHxG@alley>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <YoSijKwuwbY9uHxG@alley>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,19 +116,19 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 18, 2022 at 01:18:37PM +0530, Vivek Kumar wrote:
-> Add a kernel parameter to disable the disk offset randomization
-> for SSD devices in which such feature is available at the
-> firmware level. This is helpful in improving hibernation
-> resume time.
+On 18/05/2022 04:38, Petr Mladek wrote:
+> [...]
+> I have answered this in more detail in the other reply, see
+> https://lore.kernel.org/r/YoShZVYNAdvvjb7z@alley
+> 
+> I agree that both notifiers in
+> 
+>     drivers/soc/bcm/brcmstb/pm/pm-arm.c
+>     drivers/firmware/google/gsmi.c
+> 
+> better fit into the hypervisor list after all.
+> 
+> Best Regards,
+> Petr
 
-This patch just adds a global variable which is then entirely
-igored.
-
-But the idea of "randomizing" offsets on SSDs sounds like complete BS to
-start with.  The whole job of the SSD is to remap from a random writable
-block device to difference physical blocks to deal with erases and wear
-leveling.  In other words it really doesn't matter what offset your
-write to.  That being said I could not actually find any code that does
-this randomization to start with, but that might just be my lack of grep
-skills.
+Perfect, thanks - will keep both in such list for V2.
