@@ -2,153 +2,219 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7486552B366
-	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 09:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC47552B39E
+	for <lists+linux-pm@lfdr.de>; Wed, 18 May 2022 09:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232129AbiERH2X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 May 2022 03:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
+        id S232216AbiERHeL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 May 2022 03:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbiERH2W (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 03:28:22 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B7F6A02A
-        for <linux-pm@vger.kernel.org>; Wed, 18 May 2022 00:28:20 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id e4so921458ljb.13
-        for <linux-pm@vger.kernel.org>; Wed, 18 May 2022 00:28:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=G8aT1X87JNBdCI8skihL4Aci/WonpChvYF5exTqGUGQ=;
-        b=jkmeGMT7U6r3ipXxlaZNQziLbo1jfUcG+l8wzWGpMtwVkbEsSh+Nv0S8o3o3Xx6uex
-         1u+X36202XBACe4QDg4YsC2xPZB/cSlRPOwnTfKonKkfZuHuRrHIGWA+CE0qvVp9n+BG
-         xNwOlrA3kMuPW/BCw62OZeoye0svLMaWUsOZFJIK2HTRxf1sJ4qjH+Yfz7WjkzxbroI+
-         YJ4z+XelEGgBlQ8o1F3RGuxFsjfXgiAndFVM383dBD0EsheUvSAku6sbueRRrDeyZMTb
-         STdFI3EHz0Wnd8K+jVqUChm0AGaS5X5YPxJi+QFnjBQJ8+wBQaWgSAmJDdOcHUqP+Xla
-         h78Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=G8aT1X87JNBdCI8skihL4Aci/WonpChvYF5exTqGUGQ=;
-        b=slAVsGk6pLwUyrA7p0nfTYfwS2zzH6fQHT3Hhp0VfJuMRu5/EvtJrnNKepCd3ICGoF
-         T4ShzJzoQge7tD+eJO6zzevflKxNx+qwz7+/iaa/BCtuu+BW5EDFfWsCtCjbXPFOhFLd
-         obojPFLUmOvhvf7ELz2lDnR2iOmJnPL+dd/7dMUKQTQglpYRu7YlziwQIGq0jJfPmFQ7
-         J2J0EN2+pXq+sjuCkwmvYJpWQJFzifekLpdgKX9iwpJkX07Swr6KTQyDnf/wJUNGtwxn
-         uexjUSdCEaX1JKMy8HLQe6V+/rcVPcN1Wkhbk9NlpscCDnnXyYCq7T1hrVqz4K3gUvDg
-         ih9g==
-X-Gm-Message-State: AOAM531rPP8xawFMu3a5WM1FMDUwEdGmsGy4z8SjZgzFWY0xcsTUXVM9
-        8w5enQl5uw2n187m1nwdYqFtDA==
-X-Google-Smtp-Source: ABdhPJzQpIHYBfZIO+VNiBxbykGultqVVrcygi6gkVr7zCu6FvKyQHoW1r4bEz9pT8ZZfsJ63NoVow==
-X-Received: by 2002:a2e:b8cc:0:b0:24f:501b:af80 with SMTP id s12-20020a2eb8cc000000b0024f501baf80mr16351009ljp.328.1652858898881;
-        Wed, 18 May 2022 00:28:18 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id z15-20020ac2418f000000b0047255d211c0sm119884lfh.239.2022.05.18.00.28.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 May 2022 00:28:18 -0700 (PDT)
-Message-ID: <a197ed7f-6115-4407-6931-f37b719587be@linaro.org>
-Date:   Wed, 18 May 2022 09:28:17 +0200
+        with ESMTP id S232127AbiERHeH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 03:34:07 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D294CC5E55;
+        Wed, 18 May 2022 00:34:04 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 8990E1F9A4;
+        Wed, 18 May 2022 07:34:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1652859243; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YR5rOhmSURb4d/IKXy5VZg8z1ImD01Us4xBpVFtyoqU=;
+        b=apiSUoAwUbqeAccPNQ19K+RPeAfjpiC+Kw09kP9gYD08Bjqn9sy6l8W4iwyq6IQeI6Aplp
+        +YIfJeRJqbcdQptzveOcUb8Q0R7nuJcbMiyUrGxQWxZdDf/W1Ubmr612J8Zmj7lPwrkx5l
+        wG1cTFsW35nAwzkY9hs+1GgrMVmINpw=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id AA6042C142;
+        Wed, 18 May 2022 07:33:59 +0000 (UTC)
+Date:   Wed, 18 May 2022 09:33:57 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Evan Green <evgreen@chromium.org>, David Gow <davidgow@google.com>,
+        Julius Werner <jwerner@chromium.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Sebastian Reichel <sre@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
+        kexec@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de,
+        Kees Cook <keescook@chromium.org>, luto@kernel.org,
+        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
+        peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, Alan Stern <stern@rowland.harvard.edu>,
+        Thomas Gleixner <tglx@linutronix.de>, vgoyal@redhat.com,
+        vkuznets@redhat.com, Will Deacon <will@kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dexuan Cui <decui@microsoft.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        zhenwei pi <pizhenwei@bytedance.com>,
+        Stephen Boyd <swboyd@chromium.org>
+Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
+Message-ID: <YoShZVYNAdvvjb7z@alley>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-20-gpiccoli@igalia.com>
+ <YoJZVZl/MH0KiE/J@alley>
+ <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com>
+ <CAE=gft7ds+dHfEkRz8rnSH1EbTpGTpKbi5Wxj9DW0Jr5mX_j4w@mail.gmail.com>
+ <YoOi9PFK/JnNwH+D@alley>
+ <b9ec2fc8-216f-f261-8417-77b6dd95e25c@igalia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCHv2 2/6] thermal: exynos: Reorder the gpu clock
- initialization for exynos5420 SoC
-Content-Language: en-US
-To:     Anand Moon <linux.amoon@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-References: <20220515064126.1424-1-linux.amoon@gmail.com>
- <20220515064126.1424-3-linux.amoon@gmail.com>
- <68969550-e18b-3c27-d449-1478b314e129@linaro.org>
- <CANAwSgRBpm9gybfUWZbu3-eXLTYkpTZ=s3fmhpNyQcuj7+xdOA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CANAwSgRBpm9gybfUWZbu3-eXLTYkpTZ=s3fmhpNyQcuj7+xdOA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b9ec2fc8-216f-f261-8417-77b6dd95e25c@igalia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17/05/2022 20:43, Anand Moon wrote:
-> Hi Krzysztof,
+On Tue 2022-05-17 13:37:58, Guilherme G. Piccoli wrote:
+> On 17/05/2022 10:28, Petr Mladek wrote:
+> > [...]
+> >>> Disagree here. I'm looping Google maintainers, so they can comment.
+> >>> (CCed Evan, David, Julius)
+> >>>
+> >>> This notifier is clearly a hypervisor notification mechanism. I've fixed
+> >>> a locking stuff there (in previous patch), I feel it's low-risk but even
+> >>> if it's mid-risk, the class of such callback remains a perfect fit with
+> >>> the hypervisor list IMHO.
+> >>
+> >> This logs a panic to our "eventlog", a tiny logging area in SPI flash
+> >> for critical and power-related events. In some cases this ends up
+ > >> being the only clue we get in a Chromebook feedback report that a
+> >> panic occurred, so from my perspective moving it to the front of the
+> >> line seems like a good idea.
+> > 
+> > IMHO, this would really better fit into the pre-reboot notifier list:
+> > 
+> >    + the callback stores the log so it is similar to kmsg_dump()
+> >      or console_flush_on_panic()
+> > 
+> >    + the callback should be proceed after "info" notifiers
+> >      that might add some other useful information.
+> > 
+> > Honestly, I am not sure what exactly hypervisor callbacks do. But I
+> > think that they do not try to extract the kernel log because they
+> > would need to handle the internal format.
+> > 
 > 
-> On Sun, 15 May 2022 at 15:11, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 15/05/2022 08:41, Anand Moon wrote:
->>> Reorder the tmu_gpu clock initialization for exynos5422 SoC.
->>
->> Why?
-> It just code reorder
-
-I know what it is. I asked why. The answer in English to question "Why"
-is starting with "Because".
-
-You repeated again the argument what are you doing to my question "Why
-are you doing it".
-
-It was the same before, many, many times. It's a waste of reviewers
-time, because you receive a review and you do not implement the feedback.
-
->>
->>>
->>> Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
->>> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
->>> ---
->>> v1: split the changes and improve the commit messages
->>> ---
->>>  drivers/thermal/samsung/exynos_tmu.c | 43 ++++++++++++++--------------
->>>  1 file changed, 21 insertions(+), 22 deletions(-)
->>>
->>> diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
->>> index 75b3afadb5be..1ef90dc52c08 100644
->>> --- a/drivers/thermal/samsung/exynos_tmu.c
->>> +++ b/drivers/thermal/samsung/exynos_tmu.c
->>> @@ -1044,42 +1044,41 @@ static int exynos_tmu_probe(struct platform_device *pdev)
->>>               dev_err(&pdev->dev, "Failed to get clock\n");
->>>               ret = PTR_ERR(data->clk);
->>>               goto err_sensor;
->>> -     }
->>> -
->>> -     data->clk_sec = devm_clk_get(&pdev->dev, "tmu_triminfo_apbif");
->>> -     if (IS_ERR(data->clk_sec)) {
->>> -             if (data->soc == SOC_ARCH_EXYNOS5420_TRIMINFO) {
->>> -                     dev_err(&pdev->dev, "Failed to get triminfo clock\n");
->>> -                     ret = PTR_ERR(data->clk_sec);
->>> -                     goto err_sensor;
->>> -             }
->>>       } else {
->>> -             ret = clk_prepare_enable(data->clk_sec);
->>> +             ret = clk_prepare_enable(data->clk);
->>
->> This looks a bit odd. The clock was before taken unconditionally, not
->> within "else" branch...
+> I guess the main point in your response is : "I am not sure what exactly
+> hypervisor callbacks do". We need to be sure about the semantics of such
+> list, and agree on that.
 > 
-> The whole *clk_sec*  ie tmu_triminfo_apbif clock enable is being moved
-> down to the switch case.
-> tmu_triminfo_apbif  clock is not used by Exynos4412 and Exynos5433 and
-> Exynos7 SoC.
+> So, my opinion about this first list, that we call "hypervisor list",
+> is: it contains callbacks that
+> 
+> (1) should run early, preferably before kdump (or even if kdump isn't
+> set, should run ASAP);
+> 
+> (2) these callbacks perform some communication with an abstraction that
+> runs "below" the kernel, like a firmware or hypervisor. Classic example:
+> pvpanic, that communicates with VMM (usually qemu) and allow such VMM to
+> snapshot the full guest memory, for example.
+> 
+> (3) Should be low-risk. What defines risk is the level of reliability of
+> subsequent operations - if the callback have 50% of chance of "bricking"
+> the system totally and prevent kdump / kmsg_dump() / reboot , this is
+> high risk one for example.
+> 
+> Some good fits IMO: pvpanic, sstate_panic_event() [sparc], fadump in
+> powerpc, etc.
+> 
+> So, this is a good case for the Google notifier as well - it's not
+> collecting data like the dmesg (hence your second bullet seems to not
+> apply here, info notifiers won't add info to be collected by gsmi). It
+> is a firmware/hypervisor/whatever-gsmi-is notification mechanism, that
+> tells such "lower" abstraction a panic occurred. It seems low risk and
+> we want it to run ASAP, if possible.
 
-This is not the answer. Why are you preparing data->clk within else{}
-branch?
+" 
+> >> This logs a panic to our "eventlog", a tiny logging area in SPI flash
+> >> for critical and power-related events. In some cases this ends up
+
+I see. I somehow assumed that it was about the kernel log because
+Evans wrote:
+
+  "This logs a panic to our "eventlog", a tiny logging area in SPI flash
+   for critical and power-related events. In some cases this ends up"
 
 
-Best regards,
-Krzysztof
+Anyway, I would distinguish it the following way.
+
+  + If the notifier is preserving kernel log then it should be ideally
+    treated as kmsg_dump().
+
+  + It the notifier is saving another debugging data then it better
+    fits into the "hypervisor" notifier list.
+
+
+Regarding the reliability. From my POV, any panic notifier enabled
+in a generic kernel should be reliable with more than 99,9%.
+Otherwise, they should not be in the notifier list at all.
+
+An exception would be a platform-specific notifier that is
+called only on some specific platform and developers maintaining
+this platform agree on this.
+
+The value "99,9%" is arbitrary. I am not sure if it is realistic
+even in the other code, for example, console_flush_on_panic()
+or emergency_restart(). I just want to point out that the border
+should be rather high. Otherwise we would back in the situation
+where people would want to disable particular notifiers.
+
+Best Regards,
+Petr
