@@ -2,291 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5573752E0BD
-	for <lists+linux-pm@lfdr.de>; Fri, 20 May 2022 01:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD1752E0CF
+	for <lists+linux-pm@lfdr.de>; Fri, 20 May 2022 01:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343713AbiESXpR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 May 2022 19:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48822 "EHLO
+        id S1343767AbiESXt2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 May 2022 19:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343701AbiESXpP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 19:45:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88CC8119041
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 16:45:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653003913;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xcqeqNHBqLaEPFvaMSIdVsHM/2ssgjepqSc89Z+McDY=;
-        b=A1NmWK4G/Tnr0+ZlvjpzQNqsGDIO7dshbDJJZGU9Ozj9ysKdnjToR8iYdxDb4XepI7+eEu
-        ++yRczmz9zH5sWH8dFkaOI4ulJi/SonkfTgO3YUIPDJGJfSX+1m5zB3Ti40m+jCy0Hc46d
-        cqhJ1ggmZQrOzIHoYrjADt2ocDfcP3E=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-671-51qE-HMZMJ-_l5k-QlXFHg-1; Thu, 19 May 2022 19:45:10 -0400
-X-MC-Unique: 51qE-HMZMJ-_l5k-QlXFHg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A41B685A5AA;
-        Thu, 19 May 2022 23:45:07 +0000 (UTC)
-Received: from localhost (ovpn-12-42.pek2.redhat.com [10.72.12.42])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4ABA5492C14;
-        Thu, 19 May 2022 23:45:06 +0000 (UTC)
-Date:   Fri, 20 May 2022 07:45:02 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     "michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Young <dyoung@redhat.com>, d.hatayama@jp.fujitsu.com,
-        akpm@linux-foundation.org, kexec@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, dave.hansen@linux.intel.com, feng.tang@intel.com,
-        gregkh@linuxfoundation.org, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org
-Subject: Re: [PATCH 24/30] panic: Refactor the panic path
-Message-ID: <20220519234502.GA194232@MiWiFi-R3L-srv>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-25-gpiccoli@igalia.com>
- <Yn0TnsWVxCcdB2yO@alley>
- <d313eec2-96b6-04e3-35cd-981f103d010e@igalia.com>
+        with ESMTP id S1343776AbiESXtY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 19:49:24 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7525A1271A7;
+        Thu, 19 May 2022 16:49:19 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:56376)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nrptC-005nI6-L7; Thu, 19 May 2022 17:49:06 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:38840 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nrptB-007p0E-Jc; Thu, 19 May 2022 17:49:06 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Will Deacon <will@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
+        Robert OCallahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Miller <dougmill@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+References: <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
+        <20220518225355.784371-3-ebiederm@xmission.com>
+        <CAD=FV=UFK7h0oHGJ23y37ShO+z4vt9ubGE9E4m=jMECgNAAHgA@mail.gmail.com>
+Date:   Thu, 19 May 2022 18:48:40 -0500
+In-Reply-To: <CAD=FV=UFK7h0oHGJ23y37ShO+z4vt9ubGE9E4m=jMECgNAAHgA@mail.gmail.com>
+        (Doug Anderson's message of "Thu, 19 May 2022 13:52:22 -0700")
+Message-ID: <8735h52ief.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d313eec2-96b6-04e3-35cd-981f103d010e@igalia.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nrptB-007p0E-Jc;;;mid=<8735h52ief.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1/r+I4NpBL/cjZDGRTZsuxWM8gB/3i+bCM=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Virus: No
+X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;Doug Anderson <dianders@chromium.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 379 ms - load_scoreonly_sql: 0.03 (0.0%),
+        signal_user_changed: 4.0 (1.0%), b_tie_ro: 2.6 (0.7%), parse: 0.71
+        (0.2%), extract_message_metadata: 12 (3.1%), get_uri_detail_list: 1.06
+        (0.3%), tests_pri_-1000: 23 (6.1%), tests_pri_-950: 1.10 (0.3%),
+        tests_pri_-900: 0.86 (0.2%), tests_pri_-90: 71 (18.7%), check_bayes:
+        70 (18.4%), b_tokenize: 8 (2.2%), b_tok_get_all: 10 (2.6%),
+        b_comp_prob: 2.0 (0.5%), b_tok_touch_all: 47 (12.3%), b_finish: 0.66
+        (0.2%), tests_pri_0: 256 (67.7%), check_dkim_signature: 0.60 (0.2%),
+        check_dkim_adsp: 2.2 (0.6%), poll_dns_idle: 0.76 (0.2%), tests_pri_10:
+        1.72 (0.5%), tests_pri_500: 6 (1.7%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 03/16] kdb: Use real_parent when displaying a list of
+ processes
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/15/22 at 07:47pm, Guilherme G. Piccoli wrote:
-> On 12/05/2022 11:03, Petr Mladek wrote:
-...... 
-> > OK, the question is how to make it better. Let's start with
-> > a clear picture of the problem:
-> > 
-> > 1. panic() has basically two funtions:
-> > 
-> >       + show/store debug information (optional ways and amount)
-> >       + do something with the system (reboot, stay hanged)
-> > 
-> > 
-> > 2. There are 4 ways how to show/store the information:
-> > 
-> >       + tell hypervisor to store what it is interested about
-> >       + crash_dump
-> >       + kmsg_dump()
-> >       + consoles
-> > 
-> >   , where crash_dump and consoles are special:
-> > 
-> >      + crash_dump does not return. Instead it ends up with reboot.
-> > 
-> >      + Consoles work transparently. They just need an extra flush
-> >        before reboot or staying hanged.
-> > 
-> > 
-> > 3. The various notifiers do things like:
-> > 
-> >      + tell hypervisor about the crash
-> >      + print more information (also stop watchdogs)
-> >      + prepare system for reboot (touch some interfaces)
-> >      + prepare system for staying hanged (blinking)
-> > 
-> >    Note that it pretty nicely matches the 4 notifier lists.
-> > 
-> 
-> I really appreciate the summary skill you have, to convert complex
-> problems in very clear and concise ideas. Thanks for that, very useful!
-> I agree with what was summarized above.
+Doug Anderson <dianders@chromium.org> writes:
 
-I want to say the similar words to Petr's reviewing comment when I went
-through the patches and traced each reviewing sub-thread to try to
-catch up. Petr has reivewed this series so carefully and given many
-comments I want to ack immediately.
+> Hi,
+>
+> On Wed, May 18, 2022 at 3:54 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+>>
+>> kdb has a bug that when using the ps command to display a list of
+>> processes, if a process is being debugged the debugger as the parent
+>> process.
+>>
+>> This is silly, and I expect it never comes up in ptractice.  As there
+>> is very little point in using gdb and kdb simultaneously.  Update the
+>> code to use real_parent so that it is clear kdb does not want to
+>> display a debugger as the parent of a process.
+>
+> So I would tend to defer to Daniel, but I'm not convinced that the
+> behavior you describe for kdb today _is_ actually silly.
+>
+> If I was in kdb and I was listing processes, I might actually want to
+> see that a process's parent was set to gdb. Presumably that would tell
+> me extra information that might be relevant to my debug session.
+>
+> Personally, I'd rather add an extra piece of information into the list
+> showing the real parent if it's not the same as the parent. Then
+> you're not throwing away information.
 
-I agree with most of the suggestions from Petr to this patch, except of
-one tiny concern, please see below inline comment.
+The name of the field is confusing for anyone who isn't intimate with
+the implementation details.  The function getppid returns
+tsk->real_parent->tgid.
 
-> 
-> 
-> > Now, we need to decide about the ordering. The main area is how
-> > to store the debug information. Consoles are transparent so
-> > the quesition is about:
-> > 
-> >      + hypervisor
-> >      + crash_dump
-> >      + kmsg_dump
-> > 
-> > Some people need none and some people want all. There is a
-> > risk that system might hung at any stage. This why people want to
-> > make the order configurable.
-> > 
-> > But crash_dump() does not return when it succeeds. And kmsg_dump()
-> > users havn't complained about hypervisor problems yet. So, that
-> > two variants might be enough:
-> > 
-> >     + crash_dump (hypervisor, kmsg_dump as fallback)
-> >     + hypervisor, kmsg_dump, crash_dump
-> > 
-> > One option "panic_prefer_crash_dump" should be enough.
-> > And the code might look like:
-> > 
-> > void panic()
-> > {
-> > [...]
-> > 	dump_stack();
-> > 	kgdb_panic(buf);
-> > 
-> > 	< ---  here starts the reworked code --- >
-> > 
-> > 	/* crash dump is enough when enabled and preferred. */
-> > 	if (panic_prefer_crash_dump)
-> > 		__crash_kexec(NULL);
+If kdb wants information of what the tracer is that is fine, but I
+recommend putting that information in another field.
 
-I like the proposed skeleton of panic() and code style suggested by
-Petr very much. About panic_prefer_crash_dump which might need be added,
-I hope it has a default value true. This makes crash_dump execute at
-first by default just as before, unless people specify
-panic_prefer_crash_dump=0|n|off to disable it. Otherwise we need add
-panic_prefer_crash_dump=1 in kernel and in our distros to enable kdump,
-this is inconsistent with the old behaviour.
+Given that the original description says give the information that ps
+gives my sense is that kdb is currently wrong.  Especially as it does
+not give you the actual parentage anywhere.
 
-> > 
-> > 	/* Stop other CPUs and focus on handling the panic state. */
-> > 	if (has_kexec_crash_image)
-> > 		crash_smp_send_stop();
-> > 	else
-> > 		smp_send_stop()
-> > 
-> 
-> Here we have a very important point. Why do we need 2 variants of SMP
-> CPU stopping functions? I disagree with that - my understanding of this
-> after some study in architectures is that the crash_() variant is
-> "stronger", should work in all cases and if not, we should fix that -
-> that'd be a bug.
-> 
-> Such variant either maps to smp_send_stop() (in various architectures,
-> including XEN/x86) or overrides the basic function with more proper
-> handling for panic() case...I don't see why we still need such
-> distinction, if you / others have some insight about that, I'd like to
-> hear =)
-> 
-> 
-> > 	/* Notify hypervisor about the system panic. */
-> > 	atomic_notifier_call_chain(&panic_hypervisor_list, 0, NULL);
-> > 
-> > 	/*
-> > 	 * No need to risk extra info when there is no kmsg dumper
-> > 	 * registered.
-> > 	 */
-> > 	if (!has_kmsg_dumper())
-> > 		__crash_kexec(NULL);
-> > 
-> > 	/* Add extra info from different subsystems. */
-> > 	atomic_notifier_call_chain(&panic_info_list, 0, NULL);
-> > 
-> > 	kmsg_dump(KMSG_DUMP_PANIC);
-> > 	__crash_kexec(NULL);
-> > 
-> > 	/* Flush console */
-> > 	unblank_screen();
-> > 	console_unblank();
-> > 	debug_locks_off();
-> > 	console_flush_on_panic(CONSOLE_FLUSH_PENDING);
-> > 
-> > 	if (panic_timeout > 0) {
-> > 		delay()
-> > 	}
-> > 
-> > 	/*
-> > 	 * Prepare system for eventual reboot and allow custom
-> > 	 * reboot handling.
-> > 	 */
-> > 	atomic_notifier_call_chain(&panic_reboot_list, 0, NULL);
-> 
-> You had the order of panic_reboot_list VS. consoles flushing inverted.
-> It might make sense, although I didn't do that in V1...
-> Are you OK in having a helper for console flushing, as I did in V1? It
-> makes code of panic() a bit less polluted / more focused I feel.
-> 
-> 
-> > 
-> > 	if (panic_timeout != 0) {
-> > 		reboot();
-> > 	}
-> > 
-> > 	/*
-> > 	 * Prepare system for the infinite waiting, for example,
-> > 	 * setup blinking.
-> > 	 */
-> > 	atomic_notifier_call_chain(&panic_loop_list, 0, NULL);
-> > 
-> > 	infinite_loop();
-> > }
-> > 
-> > 
-> > __crash_kexec() is there 3 times but otherwise the code looks
-> > quite straight forward.
-> > 
-> > Note 1: I renamed the two last notifier list. The name 'post-reboot'
-> > 	did sound strange from the logical POV ;-)
-> > 
-> > Note 2: We have to avoid the possibility to call "reboot" list
-> > 	before kmsg_dump(). All callbacks providing info
-> > 	have to be in the info list. It a callback combines
-> > 	info and reboot functionality then it should be split.
-> > 
-> > 	There must be another way to calm down problematic
-> > 	info callbacks. And it has to be solved when such
-> > 	a problem is reported. Is there any known issue, please?
-> > 
-> > It is possible that I have missed something important.
-> > But I would really like to make the logic as simple as possible.
-> 
-> OK, I agree with you! It's indeed simpler and if others agree, I can
-> happily change the logic to what you proposed. Although...currently the
-> "crash_kexec_post_notifiers" allows to call _all_ panic_reboot_list
-> callbacks _before kdump_.
-> 
-> We need to mention this change in the commit messages, but I really
-> would like to hear the opinions of heavy users of notifiers (as
-> Michael/Hyper-V) and the kdump interested parties (like Baoquan / Dave
-> Young / Hayatama). If we all agree on such approach, will change that
-> for V2 =)
-> 
-> Thanks again Petr, for the time spent in such detailed review!
-> Cheers,
-> 
-> 
-> Guilherme
-> 
+I can certainly be convinced, but I do want some clarity.  It looks very
+attractive to rename task->parent to task->ptracer and leave the field
+NULL when there is no tracer.
 
+Eric
