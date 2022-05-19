@@ -2,134 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C82A52DA94
-	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 18:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6CA52DABD
+	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 18:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242204AbiESQry (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 May 2022 12:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
+        id S241541AbiESQ6q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 May 2022 12:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242206AbiESQqC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 12:46:02 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EAD24BF8
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 09:45:54 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id m25so7159744oih.2
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 09:45:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=vAncHnLBpOlRUc0OOfu8cfX5QtgUJCxxL9tQZFajpgg=;
-        b=hJy6IxH21tG0Q2UVRI6I0zpPJBekBS3BT51UmhrFdjVWmuOIh75PYs12fFPvf5Hhmk
-         OHERQ4aC7BLYotIVpL1fykIFL7ZSwuRMuxXJ2hCCbT7igx+rb2hdWtayaJ1RFfqL7Kif
-         AU6C0gQagpcxlkaUvO9yZvBRam5QI+98UHdIIfgLmC7jqslf2Wsxc9wqMPMEELoGcJAs
-         Qr38w+dazgnW0y/pYniDTTKMDktRVOMGy7Ufv//p3gRBz0BhUPQ3mB939KaCS3xcElZs
-         P231f4tlbL60zVDOuMDS0PuK1xDKGNP+8T3ldEsmu9HEvUqDsiVV5g7G0V0j1VMiSKmr
-         jtTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vAncHnLBpOlRUc0OOfu8cfX5QtgUJCxxL9tQZFajpgg=;
-        b=abUO09UtwELbAj0DoJ9xj5x/G6tDH0NARmZdfa87OZwczJZ8M2yy8iRj1aCSuGGfZO
-         g66BYoi6iqghEhnebeffL4LomUROoXqr1rrt9cFqSWo/IsfiPFR/3Qby/rbPsA7/mJEd
-         HGJzQqw1Z2SJTM+G64UPUdKOJCzswDBr8eF8a5PXp2neGEHTY3YXADI6RQkT26n1uQUx
-         94iiGbS4iFfsRC4Trr+lioXhtSwmpI5nq+8bbOCZYQDmxsKdsXKb6jtuv7DOsBgtbQhh
-         y498KKJN9r03x9CrWVn+mYu49dtxhHGA8YvkoGPE2fQFur+nv9f3bOq92I/U2tAT+C7T
-         tjJA==
-X-Gm-Message-State: AOAM532gBliVvbfY4QbYrzkVKw1jJOhV10+yoA9ipRg1xjfhWeyOhyOd
-        uXkrd3RYoIVbajymj9+OPyV+lg1+dwFzOg==
-X-Google-Smtp-Source: ABdhPJz551tN9FM+mkMdW4A/XUbEeb/DtY+Y/vclXl9Gt1dtCrgtIQkaivvVQHph2qP/N47jz4ikPg==
-X-Received: by 2002:aca:5889:0:b0:32a:f591:8731 with SMTP id m131-20020aca5889000000b0032af5918731mr828910oib.270.1652978753548;
-        Thu, 19 May 2022 09:45:53 -0700 (PDT)
-Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
-        by smtp.gmail.com with ESMTPSA id i20-20020a9d6114000000b0060ae5f10973sm575601otj.15.2022.05.19.09.45.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 09:45:53 -0700 (PDT)
-From:   Chris Morgan <macroalpha82@gmail.com>
-To:     linux-pm@vger.kernel.org
-Cc:     linux-rockchip@lists.infradead.org, lee.jones@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        heiko@sntech.de, sre@kernel.org, jon.lin@rock-chips.com,
-        zyw@rock-chips.com, zhangqing@rock-chips.com,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>
-Subject: [PATCH 4/4 v7] arm64: dts: rockchip: add rk817 chg to Odroid Go Advance
-Date:   Thu, 19 May 2022 11:45:33 -0500
-Message-Id: <20220519164533.1961-5-macroalpha82@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220519164533.1961-1-macroalpha82@gmail.com>
-References: <20220519164533.1961-1-macroalpha82@gmail.com>
+        with ESMTP id S234219AbiESQ6q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 12:58:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86762939E1;
+        Thu, 19 May 2022 09:58:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B207B824F2;
+        Thu, 19 May 2022 16:58:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFB66C385AA;
+        Thu, 19 May 2022 16:58:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652979521;
+        bh=8msCZGZp9vw10oH1HRJNB+EC/PkjHEg1vwfz5vYcw/Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Pjk092wVmetA22+lvBjRPJ57dzZ/2n4MhvMOLGxNHxYLqO0stnezgbcib1o5BGeeU
+         793eGieTLIOalZtyt1/RGF+9tRqHBHiwIGzkkfhzKxiGrR02eyauCsAk9DhSSWJ9Cf
+         BRRaG0lzu0gU0/j4j7fy7+seBCCkR0QJbGLfbmHQUOH6iudYGLSpbm/9m/SOHnNlGd
+         TsnMt8EnioNYIBWSoUXpBJHTlDpiuyIXluhhb36t9VWW8qNMJXg2ecSVTj1ZO5w0kL
+         /Fm02OqtrrPXkUg1FzwaGLGuwHbW3C8jOwy0/ZLFEJIv/d96MHju+K8iSKub3OIvD5
+         sxYBCu92QgWjQ==
+From:   Georgi Djakov <djakov@kernel.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        djakov@kernel.org
+Subject: [GIT PULL] interconnect changes for 5.19
+Date:   Thu, 19 May 2022 19:58:39 +0300
+Message-Id: <20220519165839.28592-1-djakov@kernel.org>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Chris Morgan <macromorgan@hotmail.com>
+Hello Greg,
 
-Add the new rk817 charger driver to the Odroid Go Advance. Create a
-monitored battery node as well for the charger to use. All values
-from monitored battery are gathered from the BSP kernel for the
-Odroid Go Advance provided by HardKernel.
+This is the pull request with interconnect changes for the 5.19-rc1 merge
+window. It contains driver updates. The details are in the signed tag.
 
-Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
----
- .../boot/dts/rockchip/rk3326-odroid-go2.dts   | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
+All patches have been in linux-next during the last few days. No issues have
+been reported so far. Please pull into char-misc-next.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
-index ea0695b51ecd..ba72e6716e8c 100644
---- a/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3326-odroid-go2.dts
-@@ -52,6 +52,25 @@ backlight: backlight {
- 		pwms = <&pwm1 0 25000 0>;
- 	};
- 
-+	battery: battery {
-+		compatible = "simple-battery";
-+		charge-full-design-microamp-hours = <3000000>;
-+		charge-term-current-microamp = <300000>;
-+		constant-charge-current-max-microamp = <2000000>;
-+		constant-charge-voltage-max-microvolt = <4200000>;
-+		factory-internal-resistance-micro-ohms = <180000>;
-+		voltage-max-design-microvolt = <4100000>;
-+		voltage-min-design-microvolt = <3500000>;
-+
-+		ocv-capacity-celsius = <20>;
-+		ocv-capacity-table-0 =	<4046950 100>, <4001920 95>, <3967900 90>, <3919950 85>,
-+					<3888450 80>, <3861850 75>, <3831540 70>, <3799130 65>,
-+					<3768190 60>, <3745650 55>, <3726610 50>, <3711630 45>,
-+					<3696720 40>, <3685660 35>, <3674950 30>, <3663050 25>,
-+					<3649470 20>, <3635260 15>, <3616920 10>, <3592440 5>,
-+					<3574170 0>;
-+	};
-+
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 		pinctrl-names = "default";
-@@ -472,6 +491,13 @@ usb_midu: BOOST {
- 			};
- 		};
- 
-+		rk817_charger: charger {
-+			monitored-battery = <&battery>;
-+			rockchip,resistor-sense-micro-ohms = <10000>;
-+			rockchip,sleep-enter-current-microamp = <300000>;
-+			rockchip,sleep-filter-current-microamp = <100000>;
-+		};
-+
- 		rk817_codec: codec {
- 			rockchip,mic-in-differential;
- 		};
--- 
-2.25.1
+Thanks,
+Georgi
 
+The following changes since commit 672c0c5173427e6b3e2a9bbb7be51ceeec78093a:
+
+  Linux 5.18-rc5 (2022-05-01 13:57:58 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-5.19-rc1
+
+for you to fetch changes up to 3be0ec65fd17b9677d0a4c8913ee359bd941da5d:
+
+  dt-bindings: interconnect: Remove sc7180/sdx55 ipa compatibles (2022-05-18 03:03:55 +0300)
+
+----------------------------------------------------------------
+interconnect changes for 5.19
+
+These are the interconnect changes for the 5.19-rc1 merge window
+consisting of driver updates.
+
+ Driver changes:
+ - New driver for SC8280XP
+ - New driver for SDX65
+ - SC8180X driver fixes
+ - Constify various data structures in that are never modified
+ - Fix clock rate caching in RPM drivers.
+ - Misc fixes and clean-ups
+
+Signed-off-by: Georgi Djakov <djakov@kernel.org>
+
+----------------------------------------------------------------
+Bjorn Andersson (7):
+      dt-bindings: interconnect: qcom: Add sc8280xp binding
+      interconnect: qcom: Add SC8280XP interconnect provider
+      dt-bindings: interconnect: Add SC8180X QUP0 virt provider
+      interconnect: qcom: sc8180x: Modernize sc8180x probe
+      interconnect: qcom: sc8180x: Fix QUP0 nodes
+      interconnect: qcom: sc8180x: Mark some BCMs keepalive
+      interconnect: qcom: sc8180x: Reformat node and bcm definitions
+
+Georgi Djakov (5):
+      Merge branch 'icc-sc8280xp' into icc-next
+      Merge branch 'icc-sdx65' into icc-next
+      Merge branch 'icc-const' into icc-next
+      Merge branch 'icc-sc8180x' into icc-next
+      Merge branch 'icc-rpm' into icc-next
+
+Krzysztof Kozlowski (6):
+      interconnect: qcom: constify qcom_icc_desc
+      interconnect: qcom: constify icc_node pointers
+      interconnect: qcom: constify qcom_icc_bcm pointers
+      interconnect: qcom: sc8280xp: constify qcom_icc_desc
+      interconnect: qcom: sc8280xp: constify icc_node pointers
+      interconnect: qcom: sc8280xp: constify qcom_icc_bcm pointers
+
+Leo Yan (2):
+      interconnect: qcom: icc-rpm: Fix for cached clock rate
+      interconnect: qcom: icc-rpm: Cache every clock rate
+
+Rohit Agarwal (2):
+      dt-bindings: interconnect: Add Qualcomm SDX65 DT bindings
+      interconnect: qcom: Add SDX65 interconnect provider driver
+
+Stephen Boyd (1):
+      dt-bindings: interconnect: Remove sc7180/sdx55 ipa compatibles
+
+ Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml |   18 +-
+ drivers/interconnect/qcom/Kconfig                             |   18 +
+ drivers/interconnect/qcom/Makefile                            |    4 +
+ drivers/interconnect/qcom/icc-rpm.c                           |   16 +-
+ drivers/interconnect/qcom/icc-rpm.h                           |    6 +-
+ drivers/interconnect/qcom/icc-rpmh.c                          |    2 +-
+ drivers/interconnect/qcom/icc-rpmh.h                          |    6 +-
+ drivers/interconnect/qcom/msm8916.c                           |   12 +-
+ drivers/interconnect/qcom/msm8939.c                           |   16 +-
+ drivers/interconnect/qcom/msm8974.c                           |   28 +-
+ drivers/interconnect/qcom/msm8996.c                           |   16 +-
+ drivers/interconnect/qcom/osm-l3.c                            |   16 +-
+ drivers/interconnect/qcom/qcm2290.c                           |   24 +-
+ drivers/interconnect/qcom/qcs404.c                            |   12 +-
+ drivers/interconnect/qcom/sc7180.c                            |   66 +-
+ drivers/interconnect/qcom/sc7280.c                            |   72 +-
+ drivers/interconnect/qcom/sc8180x.c                           | 1895 +++++-
+ drivers/interconnect/qcom/sc8180x.h                           |    7 +
+ drivers/interconnect/qcom/sc8280xp.c                          | 2438 ++++++++
+ drivers/interconnect/qcom/sc8280xp.h                          |  209 +
+ drivers/interconnect/qcom/sdm660.c                            |   24 +-
+ drivers/interconnect/qcom/sdm845.c                            |   32 +-
+ drivers/interconnect/qcom/sdx55.c                             |   12 +-
+ drivers/interconnect/qcom/sdx65.c                             |  231 +
+ drivers/interconnect/qcom/sdx65.h                             |   65 +
+ drivers/interconnect/qcom/sm8150.c                            |   66 +-
+ drivers/interconnect/qcom/sm8250.c                            |   66 +-
+ drivers/interconnect/qcom/sm8350.c                            |   60 +-
+ drivers/interconnect/qcom/sm8450.c                            |   68 +-
+ include/dt-bindings/interconnect/qcom,sc8180x.h               |    7 +
+ include/dt-bindings/interconnect/qcom,sc8280xp.h              |  232 +
+ include/dt-bindings/interconnect/qcom,sdx65.h                 |   67 +
+ 32 files changed, 5209 insertions(+), 602 deletions(-)
+ create mode 100644 drivers/interconnect/qcom/sc8280xp.c
+ create mode 100644 drivers/interconnect/qcom/sc8280xp.h
+ create mode 100644 drivers/interconnect/qcom/sdx65.c
+ create mode 100644 drivers/interconnect/qcom/sdx65.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sc8280xp.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sdx65.h
