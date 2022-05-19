@@ -2,157 +2,190 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 686F352DD3B
-	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 20:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 625A952DD61
+	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 21:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239031AbiESSzf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 May 2022 14:55:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
+        id S244365AbiESTBz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 May 2022 15:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236387AbiESSzf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 14:55:35 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1EA5EDCF
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 11:55:33 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 31so5830617pgp.8
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 11:55:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Vcq7tyUgjjfj36Z7GAL4pyiZhPzRJuU5K1Deejv3s+c=;
-        b=RpcDGn0zUuRRSzMHg/2vbH38olCzCTLs9CXXAABQO5PRI95DcHTmOPL2A7KA/EdyWP
-         k3fVNWxzTgQOCvVf9rLlirWpxvWje5isWigtqnZ8jdkSvm7MimOPxJQKKfoi6BU1/TXL
-         4fcwKQAMqnWPBoOFF8JdCgkoDleuQUayDCwPWLpdwXMoxIKf+ebgqkYm95AC4P373jSP
-         KMsM5PXtyzxxOU/cu3/ccCQQwuAIN61kgLP3KNBX4Eg6igzvtKEKB5JdLLmmgNEho04l
-         R97nDSUDSdI9kSS1UtWddFBuYa2b3Iut2MygZoy6eJ46fDFA6SqscYIarRLTwosxBYdB
-         SGMg==
+        with ESMTP id S244390AbiESTBu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 15:01:50 -0400
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3CE5E758;
+        Thu, 19 May 2022 12:01:39 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id x2so10280059ybi.8;
+        Thu, 19 May 2022 12:01:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Vcq7tyUgjjfj36Z7GAL4pyiZhPzRJuU5K1Deejv3s+c=;
-        b=Pfo0KXKBnur2CRj7jzvyXCICJVRlOcIOTBXgHaesO2aCNw0qhwivCCefKActGT8mx7
-         FD5fkC8Y9zl81TRGkYdmNLRBxgUUhCk6DIMKpOkh/Y+Et8qS3xAcH1hqmTVpdigLO+RY
-         VOujiVpn4ryT0FkLtxs32AyAFutCTf7qON3MQy+12idpNDa9Ee3ji+mXlZc3P6PzrZdr
-         KSXM3RWEoYu52hR7nR1hlnJPMhTkvCiUExmNGE2bGXVtJqu1t8daOG5qVy+jd4KHbL6t
-         LyKQ5QAKXwInxDS6TWtluWlwuFu/oo0cZynotXiMCGhvsVo8vqUHdI90rXcTQ/7CqJch
-         idCw==
-X-Gm-Message-State: AOAM531RGos4JrGukcjrPIMYubbf0s76iDBCUeoijmSJyZoppXrBDIec
-        PmgxnrD6Q93FH+Rb8xUE0/vzSVJX9tQAQHJbE0s=
-X-Google-Smtp-Source: ABdhPJyCAxXsEe3KapjAs/t2PrP/+Xk/1JiDGoheTaAC9W0DnaWcfAPLP8UIViEHXVW0d58/dNtK+w==
-X-Received: by 2002:a05:6a00:ad2:b0:4f1:2734:a3d9 with SMTP id c18-20020a056a000ad200b004f12734a3d9mr6029772pfl.61.1652986533384;
-        Thu, 19 May 2022 11:55:33 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id q22-20020a17090aa01600b001cd4989ff5esm139132pjp.37.2022.05.19.11.55.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 11:55:32 -0700 (PDT)
-Message-ID: <628692a4.1c69fb81.1c36f.085b@mx.google.com>
-Date:   Thu, 19 May 2022 11:55:32 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CgmliyXEshKe8ze3MsG0OI5BIXp5ouCTuj68lO/qhlY=;
+        b=RL7Zpx9Q66dOKXdYty+Eeu+imhiKw0oUaZjuJ+/+yrOw/2Q1I1FCW6mR5V4pNpVKG3
+         RogSRuFKsAJ6KsZ/vKBX3SOsuQgD70Iyfunxiu9PSk6kFNSsVn24QaN9m9TmhTq6ax5S
+         p7VVEzeY+SMAuBaU7xkmlFlV04mn7nTpXun1UxMUin4KHqW26wYiZaqg2MiklPdfLDHH
+         MeldO865uS94v3VSf9AAPgX40zd50oJgjauapBFfyXsSWD3OT7vodelSpu3uTN0YDY5B
+         1gZHo+VCCEcd+n3593Txs3AkRyYIx+sN62H9Pr3x2iM6V9Dgtw3lvwziY5aRwUWklMNO
+         TUWw==
+X-Gm-Message-State: AOAM533REvuXxU5Ni5t6SwD/56ECQG0sCTdlMr/3oyM+campsbicN8Vk
+        c7vgdUTxsU95jgSknxA07zcEnIhudDsRw3YV2lA=
+X-Google-Smtp-Source: ABdhPJz/aC95/DqdsvnoW1dLX/SnlankeUa5x1s79FSxX7u2dMMW2V98Sq7Vh7q90OH3aOE7skOQkfRia0rPk2ZEeIE=
+X-Received: by 2002:a25:d687:0:b0:64e:3a41:8d5 with SMTP id
+ n129-20020a25d687000000b0064e3a4108d5mr5838382ybg.622.1652986898304; Thu, 19
+ May 2022 12:01:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v5.18-rc7-185-g0f360c018be3
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (v5.18-rc7-185-g0f360c018be3)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <CAJZ5v0g6GdKfN4b5uwHEhh4hBuG=haVHaXc-XuMQLe8Wd41Y3g@mail.gmail.com>
+ <20220517144846.GA1068039@bhelgaas> <CAJZ5v0iNaAd=yP3DgDVVpffKU6kt+nSpPeqxWJyRddaX5K4FRA@mail.gmail.com>
+ <92f32b4703091acb0aaf3f784be448d469e9e2fa.camel@linux.intel.com>
+In-Reply-To: <92f32b4703091acb0aaf3f784be448d469e9e2fa.camel@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 19 May 2022 21:01:27 +0200
+Message-ID: <CAJZ5v0iHgtTpW+ox=wK68cnuG6D+KvFiOCh2UF96dxq08Z3BSA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
+To:     David Box <david.e.box@linux.intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Jingar, Rajvi" <rajvi.jingar@intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.18-rc7-185-g0=
-f360c018be3)
+On Tue, May 17, 2022 at 8:05 PM David E. Box
+<david.e.box@linux.intel.com> wrote:
+>
+> On Tue, 2022-05-17 at 16:54 +0200, Rafael J. Wysocki wrote:
+> > On Tue, May 17, 2022 at 4:48 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > >
+> > > On Mon, May 16, 2022 at 10:59:32PM +0200, Rafael J. Wysocki wrote:
+> > > > On Mon, May 16, 2022 at 10:09 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > On Fri, May 13, 2022 at 10:00:48PM +0000, Jingar, Rajvi wrote:
+> > > > > > > -----Original Message-----
+> > > > > > > From: Bjorn Helgaas <helgaas@kernel.org>
+> > > > > > > Sent: Thursday, May 12, 2022 11:36 AM
+> > > > > > > To: Rafael J. Wysocki <rafael@kernel.org>
+> > > > > > > Cc: Jingar, Rajvi <rajvi.jingar@intel.com>; Wysocki, Rafael J
+> > > > > > > <rafael.j.wysocki@intel.com>; Bjorn Helgaas <bhelgaas@google.com>;
+> > > > > > > David Box
+> > > > > > > <david.e.box@linux.intel.com>; Linux PCI <linux-pci@vger.kernel.org>;
+> > > > > > > Linux
+> > > > > > > Kernel Mailing List <linux-kernel@vger.kernel.org>; Linux PM <linux-
+> > > > > > > pm@vger.kernel.org>
+> > > > > > > Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to
+> > > > > > > disable PTM
+> > > > > > >
+> > > > > > > On Thu, May 12, 2022 at 07:52:36PM +0200, Rafael J. Wysocki wrote:
+> > > > > > > > On Thu, May 12, 2022 at 7:42 PM Bjorn Helgaas <helgaas@kernel.org>
+> > > > > > > > wrote:
+> > > > > > > > > On Thu, May 12, 2022 at 03:49:18PM +0200, Rafael J. Wysocki wrote:
+> > > > > > >
+> > > > > > > > > > Something like this should suffice IMV:
+> > > > > > > > > >
+> > > > > > > > > > if (!dev_state_saved || pci_dev->current_state != PCI_D3cold)
+> > > > > > > > > >
+> > > > > > > > > >         pci_disable_ptm(pci_dev);
+> > > > > > > > >
+> > > > > > > > > It makes sense to me that we needn't disable PTM if the device is
+> > > > > > > > > in
+> > > > > > > > > D3cold.  But the "!dev_state_saved" condition depends on what the
+> > > > > > > > > driver did.  Why is that important?  Why should we not do the
+> > > > > > > > > following?
+> > > > > > > > >
+> > > > > > > > >   if (pci_dev->current_state != PCI_D3cold)
+> > > > > > > > >     pci_disable_ptm(pci_dev);
+> > > > > > > >
+> > > > > > > > We can do this too.  I thought we could skip the power state
+> > > > > > > > check if dev_state_saved was unset, because then we would know
+> > > > > > > > that the power state was not D3cold.  It probably isn't worth
+> > > > > > > > the hassle though.
+> > > > > >
+> > > > > > We see issue with certain platforms where only checking if device
+> > > > > > power state in D3Cold is not enough and the !dev_state_saved check
+> > > > > > is needed when disabling PTM. Device like nvme is relying on ASPM,
+> > > > > > it stays in D0 but state is saved. Touching the config space wakes
+> > > > > > up the device which prevents the system from entering into low power
+> > > > > > state.
+> > > > >
+> > > > > Correct me if I'm wrong: for NVMe devices, nvme_suspend() has already
+> > > > > saved state and put the device in some low-power state.  Disabling PTM
+> > > > > here is functionally OK but prevents a system low power state, so you
+> > > > > want to leave PTM enabled.
+> > > > >
+> > > > > But I must be missing something because pci_prepare_to_sleep()
+> > > > > currently disables PTM for Root Ports.  If we leave PTM enabled on
+> > > > > NVMe but disable it on the Root Port above it, any PTM Request from
+> > > > > NVMe will cause an Unsupported Request error.
+> > > > >
+> > > > > Disabling PTM must be coordinated across PTM Requesters and PTM
+> > > > > Responders.  That means the decision to disable cannot depend on
+> > > > > driver-specific things like whether the driver has saved state.
+> > > >
+> > > > Setting state_saved generally informs pci_pm_suspend_noirq() that the
+> > > > device has already been handled and it doesn't need to do anything to
+> > > > it.
+> > > >
+> > > > But you are right that PTM should be disabled on downstream devices as
+> > > > well as on the ports that those devices are connected to and it can be
+> > > > done even if the given device has already been handled, so the
+> > > > state_saved value is technically irrelevant.
+> > > >
+> > > > That's why I suggested to check if the power state is between D0 and
+> > > > D3cold (exclusive) and only disable PTM if that is the case.  It is
+> > > > pointless to disable PTM for devices in D3cold and it may be harmful
+> > > > for devices that are left in D0.
+> > >
+> > > "... it may be harmful for devices that are left in D0" -- I want to
+> > > understand this better.  It sounds like nvme_suspend() leaves the
+> > > device in some device-specific low-power flavor of D0, and subsequent
+> > > config accesses take it out of that low-power situation?
+> >
+>
+> This is exactly what we see. It's not all machines, but in our lab we've seen in
+> it on 3 production systems out of about 20. And they were all different
+> generations, a 7th, 8th, and 10th gen.
+>
+> nvme_suspend is relying on NVMe APST / PCIe ASPM to put the device in a low
+> power state. The link state will be L1 or deeper while the device remains in D0.
+>
+> https://nvmexpress.org/resources/nvm-express-technology-features/nvme-technology-power-features/
+>
+>
+> > That's my understanding of it.
+> >
+> > > If that's the case, it sounds a little brittle.  I don't think it's
+> > > obvious that "pci_dev->state_saved was set by the driver" means "no
+> > > config accesses allowed in pci_pm_suspend_noirq()."
+> >
+> > Well, yes and no.  The device may be in D3cold then, so
+> > pci_pm_suspend_noirq() should at least check that before accessing its
+> > config space.
+> >
+> > > And pci_pm_suspend_noirq() calls quirks via pci_fixup_device(), which are
+> > > very likely to do config accesses.
+> > >
+> > > Maybe PTM needs to be disabled earlier, e.g., in pci_pm_suspend()?  I
+> > > don't think PTM uses any interrupts, so there's probably no reason
+> > > interrupts need to be disabled before disabling PTM.
+> >
+> > That certainly is worth investigation.  For one, I don't see any
+> > obvious downsides of doing so.
+>
+> We will look at this.
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-18-rc7-185-g0f360c018be3/
+Appreciated.
 
-Tree: pm
-Branch: testing
-Git Describe: v5.18-rc7-185-g0f360c018be3
-Git Commit: 0f360c018be30741d75f746467daf173c05ef1f7
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+In the meantime, I think that it would make sense to pick up the first
+patch in this series which is a good cleanup regardless.
 
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+Bjorn, could you do that, please?
