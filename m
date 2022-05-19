@@ -2,42 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D5252C9D8
-	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 04:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D77D52C9DE
+	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 04:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229437AbiESCe4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 May 2022 22:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
+        id S229815AbiESCls (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 May 2022 22:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232932AbiESCez (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 22:34:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CACD682D
-        for <linux-pm@vger.kernel.org>; Wed, 18 May 2022 19:34:54 -0700 (PDT)
+        with ESMTP id S229790AbiESCls (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 22:41:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2601AFB33
+        for <linux-pm@vger.kernel.org>; Wed, 18 May 2022 19:41:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81953618A6
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 02:34:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E4592C34113
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 02:34:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6D7ABB82284
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 02:41:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 33FFBC34113
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 02:41:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652927692;
-        bh=LIVL+qUgk3ilP+w8eihz0D04l+8Pg6TJrPyZMJFCEYA=;
+        s=k20201202; t=1652928103;
+        bh=+uDCYLjZ3RI33AGKdts1VUoX86YdW4WKDNAld9oVOyc=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=RqLqWVNFG5IaHoDqyo+L70DO3raEKgC2mh0tqulsMqRKQtCw23jf2yW+qyNfIYaek
-         7wtAcnw+lp181qTVU1iDR/LarSoNnLn2EsH21CQthxJgmBGCbqzARGj7Y6VP0fDzjr
-         dp0qpWyItSclR2n8SFnscI+6MYgHCk9avgIb/QpyBHHxwCZ20/BNCtNUd86y543omv
-         jqMTcaHmnp2gKTWJvyYRKBv9rOA0Y75D/mnYfvCwb2SZahLAtoB+XGXrg2uaGh6Dyr
-         DJvH3vYwv+SOIW3OcpDEFv0VWGZwdzHsGqu6lg3mTRJTEujwTAb8RfS345TwSuYMWP
-         HE58JTKKf76jA==
+        b=pZzSLCZToTKlH/+dQ8cQyWS3YcfI7RGuug6XJXgffYQ8s/OUw6TTkb5x+jhFPjJZ1
+         IuK0ozTGvZOvTGYSihMn5IwSvDkm4857gbuOKUu86qotzfoSpuSU7XoZ1yTvha0nNN
+         m1uooFAClwBhdO5CGonMjn/bJJrFOXN7LXIOHnqsB08+TMh21XmbukRpxNTPDJdBMB
+         oO8PmNmfRtik43ljbEwwyQlJxk+jH9YmfDegoryXdDS6viMSS67KvJMZgfpbmXnbm0
+         0ECQzInucdGpBNn5rw32WA2Q6+yP4qfDc9wFQVKcAJN3jiRIDffkDH5IqxOHxJw8HK
+         Uvl9eHxFoX36Q==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id C9F19CC13B5; Thu, 19 May 2022 02:34:52 +0000 (UTC)
+        id 201F1CC13B5; Thu, 19 May 2022 02:41:43 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-pm@vger.kernel.org
 Subject: [Bug 215800] amd-pstate does not allow to set arbitrary maximum CPU
  frequency above 2200MHz for a desktop Zen 3 CPU
-Date:   Thu, 19 May 2022 02:34:52 +0000
+Date:   Thu, 19 May 2022 02:41:42 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -53,7 +53,7 @@ X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215800-137361-xL2EnTfVJU@https.bugzilla.kernel.org/>
+Message-ID: <bug-215800-137361-UZxZojbnEd@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-215800-137361@https.bugzilla.kernel.org/>
 References: <bug-215800-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -73,28 +73,36 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D215800
 
---- Comment #17 from perry_yuan@outlook.com ---
-(In reply to Artem S. Tashkinov from comment #16)
-> (In reply to perry_yuan from comment #15)
-> >=20
-> > Could you help to try the below kernel ?
-> > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/log/
-> > drivers/cpufreq/amd-pstate.c?h=3Dnext-20220516
-> >=20
-> > I tried this kernel, but 5950x cannot reproduce the issue as yours.
+--- Comment #18 from perry_yuan@outlook.com ---
+(In reply to Artem S. Tashkinov from comment #0)
+> For my Ryzen 7 5800X I've tried (under root) numbers from 600 000 to 2 200
+> 000 and they all work:
 >=20
-> Does this patch require enabling debugging in the kernel? I'm not sure ho=
-w I
-> am supposed to share (debug) data once I've applied it.
+> echo $number | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_max_freq
+>=20
+> However anything above 2 200 000 instead makes the CPU stay at 2.2GHz.
+>=20
+> This is after booting with acpi-cpufreq and loading amd-pstate with
+> replace=3D1.
+>=20
+> Even switching to the performance governor keeps all the cores at 2.2GHz.
+>=20
+> I've also tried the userspace governor and again only frequencies up to
+> 2.2GHz work. Anything above will be ignored.
+>=20
+> I've tried to fix the issue by `cat cpuinfo_max_freq > scaling_max_freq` =
+but
+> that didn't work.
+>=20
+> That looks like a bug.
 
-Hi Artem.
-I mean you could build the kernel and install it on your system.
-and switch the governor , capture the min/max log ,etc.
+I would like to confirm which kernel version or patch cause the regression,
+so need you help to verify the regression root cause, then I will reproduce=
+ the
+issue to fix it on my side.
 
-I do not find the reproducing way, but I still want to try to reproduce the
-issue if you can confirm the kernel link has same problem.
 
-Perry.
+Perry
 
 --=20
 You may reply to this email to add a comment.
