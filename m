@@ -2,62 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B845F52D369
-	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 15:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1532F52D3A4
+	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 15:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237665AbiESNCJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 May 2022 09:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51684 "EHLO
+        id S233781AbiESNMc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 May 2022 09:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237422AbiESNCI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 09:02:08 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDAAE62A3B
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 06:02:05 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id bu29so9065401lfb.0
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 06:02:05 -0700 (PDT)
+        with ESMTP id S237529AbiESNMb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 09:12:31 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E8AB41FA
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 06:12:28 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id o22so6170680ljp.8
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 06:12:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ZSu0XTILVshJ9x+raeV7MMtJ9MSB+JWGEzTTcAYgGH8=;
-        b=xqED8FRRBUVTJs7yZwduUBlQVzuTT6nBQqS8MK6cY4tL4aSDZSi5uEDOJeQkjNDaPN
-         G8YSKiHjSHkGbcos8Waq3CA5OaE7m3AQ8fcvT8MARoiuiJUfjTxrGZpJmIX5Js3HHQdo
-         xaT6kf/P4GruZnyXpl+5b/UVlDa14h+BGYixzLR9AmpwXeEY82HH1tn4ZzjhwOSsHOE/
-         kujzLJWw5HlwRzqYnhohpDYWZMe9H2ovChf7ZJrWULZD2bzNg0zCMKwbXzY1xJGW+r5G
-         E4B6PuJ45TgHO0NE5Tp/TKHh6LCqbIqQDV3P/+kRu2Gjg03dItAs60osg+4Grcx6zX1f
-         2w/Q==
+        bh=Tbdzb2bRxg6928mKfr1eQOs/EHKsEy71qlxik1ZfHuc=;
+        b=tPZRoKf1FlzJiaJ/LSleGDTLKgl7yH7IGkYrmC9jz8fvV59szPSLEx9tzbAJuOYU8k
+         hllYDvJHQtHZNRxc1bZ0kYGluAm3oi81WSbXFp7wA8pUYdqZZYxUDbQkVIvSGveNfZQ5
+         ordtsUr+t5+4hUODc0Ikjsi9nK1nRTPDpO8ewpxWr9wC7+U+6cP/97mUOeC2H5hsoTWY
+         s/2pWEkuiucEchrCOqINbhN+8T85nI3kof5SooGUz6erEZYnsbQQn29SsqevWcRxij4e
+         kr1RoaRklvO6n+JCOxp/U+f2f+3BWg2GCVk2xGxCv7oFjTGbiUgt9vN7Y49/IjMSOc/i
+         Vzxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ZSu0XTILVshJ9x+raeV7MMtJ9MSB+JWGEzTTcAYgGH8=;
-        b=xtEMc+U5+y+B2xuwYT5TpMdpM3D9b6UGifBViFs0m2HaVpYpXS/WxHpCN1ctivTj40
-         dwJXNSoKA1FkmIbAjCsd3AC/4CljzrbyNZGSvGrtI1YLcA6UNq4pnFJWZaywQ4UsjOEo
-         oJALd1CmHcjJn6woTSVtGe7Q/sm/bvnFUtWeD+ZUuIXAssxUDQCoil0Y0dKUBUhOJkyk
-         0a8FpxWhjtQveCv2idabFRKTalemX5vZKpFhgG7Oi7wtI2Srz9KxnC5OjnVDoUompYwY
-         I6oHEmc+nSjQk9i2eh+BXU3x+m2kLeqjba6z/69fgOXMhG3dyCT9xbjcDY4EiZgCclGh
-         aIpA==
-X-Gm-Message-State: AOAM532pFas3SwKqaEuC7cMm/q71udPEEzK8t8mxAqEhJQBIj/P8UGO3
-        KXjJqGbLxEZhVrBDNtfmClxQ7khlGfCFNKsxzp42qw==
-X-Google-Smtp-Source: ABdhPJylwHp+PNUHX0L3veOS1GtM4Mw0E0JPCmgEyCyRHaCw2NGWeTZfPTo+jpC/foRCai/LLqJubn4J1RgwqQDBofA=
-X-Received: by 2002:a05:6512:70b:b0:477:a832:7d07 with SMTP id
- b11-20020a056512070b00b00477a8327d07mr3144930lfs.71.1652965323773; Thu, 19
- May 2022 06:02:03 -0700 (PDT)
+        bh=Tbdzb2bRxg6928mKfr1eQOs/EHKsEy71qlxik1ZfHuc=;
+        b=R5WENf22ihT1MkcH2ANDcX6uUBqTlaWYDjv/fG5SaNa2xIua5Wjq7PSbDaKeIXnU9f
+         BfP7rWPTw2cZmPOz4RONug30ycfoM74S2Bm1dZz3Yf24XK6h5/57tlJvb6kgUvJ3Rf/V
+         0muNwlGcwgh58OPLoZ+1+C38v3yLRzUqsiccOHVdxkvLusbYQIB+A4z581fHn/aBTmrG
+         Kj61hIEY9OIy4F6p+RmjmW+TLrdTCHqJXCqkZjNZIZzkVI7Ub5rsZUBJxlBF5Ml4ANNv
+         eqKlaSGTML2Dp3C1mgtIcTep8mNAKfeqy2OwjO1bBLIPQugrKTfbljVG3GgIh0hG7jIh
+         GoWg==
+X-Gm-Message-State: AOAM530XHWNBTxePhLUn3LA1QY8y5Ahpe/iCUo1V6PzB2PPagk71sBxN
+        jj7lvDq4vZRSiPk0qrGtvnxmEv4LO5Tx932MzWp9pQ==
+X-Google-Smtp-Source: ABdhPJwnhgPHFqa5mGfL1upSwxPA4GdglCVq6IdM8730POYTcoZpgJGdmGeVx20WdRrQeXywDLaSPOPlVzmQrnlRv1k=
+X-Received: by 2002:a2e:954c:0:b0:253:d9bf:9f55 with SMTP id
+ t12-20020a2e954c000000b00253d9bf9f55mr469067ljh.300.1652965947206; Thu, 19
+ May 2022 06:12:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <1652275016-13423-1-git-send-email-quic_mkshah@quicinc.com> <1652275016-13423-2-git-send-email-quic_mkshah@quicinc.com>
-In-Reply-To: <1652275016-13423-2-git-send-email-quic_mkshah@quicinc.com>
+References: <1652275016-13423-1-git-send-email-quic_mkshah@quicinc.com> <1652275016-13423-3-git-send-email-quic_mkshah@quicinc.com>
+In-Reply-To: <1652275016-13423-3-git-send-email-quic_mkshah@quicinc.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 19 May 2022 15:01:27 +0200
-Message-ID: <CAPDyKFoDmTMfGNsvv-DJqrV-xX=nLKfR-fjSOB_1JBbHm+nzqA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] dt-bindings: soc: qcom: Update devicetree binding
- document for rpmh-rsc
+Date:   Thu, 19 May 2022 15:11:51 +0200
+Message-ID: <CAPDyKFqVU_8d_eMWHPByc5JiCdQGnYfWFc9HRv83X55N8UYCfg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] soc: qcom: rpmh-rsc: Attach RSC to cluster PM domain
 To:     Maulik Shah <quic_mkshah@quicinc.com>
 Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         rafael@kernel.org, daniel.lezcano@linaro.org,
-        quic_lsrao@quicinc.com, quic_rjendra@quicinc.com,
-        devicetree@vger.kernel.org
+        quic_lsrao@quicinc.com, quic_rjendra@quicinc.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -71,10 +69,21 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Wed, 11 May 2022 at 15:17, Maulik Shah <quic_mkshah@quicinc.com> wrote:
 >
-> The change documents power-domains property for RSC device.
-> This optional property points to corresponding PM domain node.
+> From: Lina Iyer <ilina@codeaurora.org>
 >
-> Cc: devicetree@vger.kernel.org
+> RSC is part the CPU subsystem and powers off the CPU domains when all
+> the CPUs and no RPMH transactions are pending from any of the drivers.
+> The RSC needs to flush the 'sleep' and 'wake' votes that are critical
+> for saving power when all the CPUs are in idle.
+>
+> Let's make RSC part of the CPU PM domains, by attaching it to the
+> cluster power domain. Registering for PM domain notifications, RSC
+> driver can be notified that the last CPU is powering down. When the last
+> CPU is powering down the domain, let's flush the 'sleep' and 'wake'
+> votes that are stored in the data buffers into the hardware and also
+> write next wakeup in CONTROL_TCS.
+>
+> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
 > Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
 
 Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
@@ -82,41 +91,143 @@ Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 Kind regards
 Uffe
 
-
 > ---
->  Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
+>  drivers/soc/qcom/rpmh-internal.h |  4 ++-
+>  drivers/soc/qcom/rpmh-rsc.c      | 67 +++++++++++++++++++++++++++++++++++++---
+>  2 files changed, 66 insertions(+), 5 deletions(-)
 >
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
-> index f5ecf4a..7683cc9 100644
-> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
-> @@ -110,6 +110,9 @@ properties:
->        - const: drv-2
->        - const: drv-3
+> diff --git a/drivers/soc/qcom/rpmh-internal.h b/drivers/soc/qcom/rpmh-internal.h
+> index 344ba68..cd3d6ce 100644
+> --- a/drivers/soc/qcom/rpmh-internal.h
+> +++ b/drivers/soc/qcom/rpmh-internal.h
+> @@ -97,7 +97,8 @@ struct rpmh_ctrlr {
+>   * @rsc_pm:             CPU PM notifier for controller.
+>   *                      Used when solver mode is not present.
+>   * @cpus_in_pm:         Number of CPUs not in idle power collapse.
+> - *                      Used when solver mode is not present.
+> + *                      Used when solver mode and "power-domains" is not present.
+> + * @genpd_nb:           PM Domain notifier for cluster genpd notifications.
+>   * @tcs:                TCS groups.
+>   * @tcs_in_use:         S/W state of the TCS; only set for ACTIVE_ONLY
+>   *                      transfers, but might show a sleep/wake TCS in use if
+> @@ -117,6 +118,7 @@ struct rsc_drv {
+>         int id;
+>         int num_tcs;
+>         struct notifier_block rsc_pm;
+> +       struct notifier_block genpd_nb;
+>         atomic_t cpus_in_pm;
+>         struct tcs_group tcs[TCS_TYPE_NR];
+>         DECLARE_BITMAP(tcs_in_use, MAX_TCS_NR);
+> diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
+> index 01c2f50c..050b5f5c 100644
+> --- a/drivers/soc/qcom/rpmh-rsc.c
+> +++ b/drivers/soc/qcom/rpmh-rsc.c
+> @@ -14,10 +14,13 @@
+>  #include <linux/kernel.h>
+>  #include <linux/list.h>
+>  #include <linux/module.h>
+> +#include <linux/notifier.h>
+>  #include <linux/of.h>
+>  #include <linux/of_irq.h>
+>  #include <linux/of_platform.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/pm_domain.h>
+> +#include <linux/pm_runtime.h>
+>  #include <linux/slab.h>
+>  #include <linux/spinlock.h>
+>  #include <linux/wait.h>
+> @@ -834,6 +837,50 @@ static int rpmh_rsc_cpu_pm_callback(struct notifier_block *nfb,
+>         return ret;
+>  }
 >
-> +  power-domains:
-> +    maxItems: 1
+> +/**
+> + * rpmh_rsc_pd_callback() - Check if any of the AMCs are busy.
+> + * @nfb:    Pointer to the genpd notifier block in struct rsc_drv.
+> + * @action: GENPD_NOTIFY_PRE_OFF, GENPD_NOTIFY_OFF, GENPD_NOTIFY_PRE_ON or GENPD_NOTIFY_ON.
+> + * @v:      Unused
+> + *
+> + * This function is given to dev_pm_genpd_add_notifier() so we can be informed
+> + * about when cluster-pd is going down. When cluster go down we know no more active
+> + * transfers will be started so we write sleep/wake sets. This function gets
+> + * called from cpuidle code paths and also at system suspend time.
+> + *
+> + * If AMCs are not busy then writes cached sleep and wake messages to TCSes.
+> + * The firmware then takes care of triggering them when entering deepest low power modes.
+> + *
+> + * Return:
+> + * * NOTIFY_OK          - success
+> + * * NOTIFY_BAD         - failure
+> + */
+> +static int rpmh_rsc_pd_callback(struct notifier_block *nfb,
+> +                               unsigned long action, void *v)
+> +{
+> +       struct rsc_drv *drv = container_of(nfb, struct rsc_drv, genpd_nb);
 > +
->    bcm-voter:
->      $ref: /schemas/interconnect/qcom,bcm-voter.yaml#
+> +       /* We don't need to lock as genpd on/off are serialized */
+> +       if ((action == GENPD_NOTIFY_PRE_OFF) &&
+> +           (rpmh_rsc_ctrlr_is_busy(drv) || rpmh_flush(&drv->client)))
+> +               return NOTIFY_BAD;
+> +
+> +       return NOTIFY_OK;
+> +}
+> +
+> +static int rpmh_rsc_pd_attach(struct rsc_drv *drv, struct device *dev)
+> +{
+> +       int ret;
+> +
+> +       pm_runtime_enable(dev);
+> +       drv->genpd_nb.notifier_call = rpmh_rsc_pd_callback;
+> +       ret = dev_pm_genpd_add_notifier(dev, &drv->genpd_nb);
+> +       if (ret)
+> +               pm_runtime_disable(dev);
+> +
+> +       return ret;
+> +}
+> +
+>  static int rpmh_probe_tcs_config(struct platform_device *pdev,
+>                                  struct rsc_drv *drv, void __iomem *base)
+>  {
+> @@ -963,7 +1010,7 @@ static int rpmh_rsc_probe(struct platform_device *pdev)
+>                 return ret;
 >
-> @@ -162,6 +165,7 @@ examples:
->                            <SLEEP_TCS   3>,
->                            <WAKE_TCS    3>,
->                            <CONTROL_TCS 1>;
-> +        power-domains = <&CLUSTER_PD>;
->        };
+>         /*
+> -        * CPU PM notification are not required for controllers that support
+> +        * CPU PM/genpd notification are not required for controllers that support
+>          * 'HW solver' mode where they can be in autonomous mode executing low
+>          * power mode to power down.
+>          */
+> @@ -971,8 +1018,14 @@ static int rpmh_rsc_probe(struct platform_device *pdev)
+>         solver_config &= DRV_HW_SOLVER_MASK << DRV_HW_SOLVER_SHIFT;
+>         solver_config = solver_config >> DRV_HW_SOLVER_SHIFT;
+>         if (!solver_config) {
+> -               drv->rsc_pm.notifier_call = rpmh_rsc_cpu_pm_callback;
+> -               cpu_pm_register_notifier(&drv->rsc_pm);
+> +               if (pdev->dev.pm_domain) {
+> +                       ret = rpmh_rsc_pd_attach(drv, &pdev->dev);
+> +                       if (ret)
+> +                               return ret;
+> +               } else {
+> +                       drv->rsc_pm.notifier_call = rpmh_rsc_cpu_pm_callback;
+> +                       cpu_pm_register_notifier(&drv->rsc_pm);
+> +               }
+>         }
 >
->    - |
-> @@ -208,6 +212,7 @@ examples:
->                            <SLEEP_TCS   3>,
->                            <WAKE_TCS    3>,
->                            <CONTROL_TCS 0>;
-> +        power-domains = <&CLUSTER_PD>;
+>         /* Enable the active TCS to send requests immediately */
+> @@ -985,7 +1038,13 @@ static int rpmh_rsc_probe(struct platform_device *pdev)
 >
->          clock-controller {
->              compatible = "qcom,sm8350-rpmh-clk";
+>         dev_set_drvdata(&pdev->dev, drv);
+>
+> -       return devm_of_platform_populate(&pdev->dev);
+> +       ret = devm_of_platform_populate(&pdev->dev);
+> +       if (ret && pdev->dev.pm_domain) {
+> +               dev_pm_genpd_remove_notifier(&pdev->dev);
+> +               pm_runtime_disable(&pdev->dev);
+> +       }
+> +
+> +       return ret;
+>  }
+>
+>  static const struct of_device_id rpmh_drv_match[] = {
 > --
 > 2.7.4
 >
