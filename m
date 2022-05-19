@@ -2,74 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A9A52DF1A
-	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 23:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D5252DF84
+	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 23:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245108AbiESVUK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 May 2022 17:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49606 "EHLO
+        id S229682AbiESVnv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 May 2022 17:43:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231966AbiESVUI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 17:20:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF53ED726;
-        Thu, 19 May 2022 14:20:07 -0700 (PDT)
+        with ESMTP id S235456AbiESVnv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 17:43:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4411759BBF
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 14:43:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52B84B8250B;
-        Thu, 19 May 2022 21:20:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79C6FC385AA;
-        Thu, 19 May 2022 21:19:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9FF8B828A7
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 21:43:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA3B5C34113
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 21:43:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652995205;
-        bh=SvQDWvHaw/Ro4+sDEA3LzYO4ioj59uSH1d5BBRvD684=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lZPvgxQ/0GEOJbdI/RsIgFr7yLZfcUJvpqzkwIfYr6DnYL+2Rhom2zrrp9ZJYTqpF
-         2BbR9KFYoHbcXxtwZrm5jEIxoonOr6uHesOrfW2SzdnjGAFe7wRyLtBeOLomEHF142
-         GyhjeqDrl/+/XblALv6RzMdFZz//uCum30g8tGHTm+Jh2eHBkWU+fpxNxNOYIVKpdO
-         Yz+zapxuT0saXPNbmmikHL5VGRFl3k5i/okcNGRFGOcWY43CajAV5gIwlk5K91/tPl
-         FY3nh2Cq1LMWd9FJmk7x7tKje3C8gCWlhNIHrrazJdMY61SXsJMc302TGt3KV0Bc7z
-         VYeES8NTlFwKw==
-Date:   Thu, 19 May 2022 22:19:54 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        dri-devel@lists.freedesktop.org, linux-gpio@vger.kernel.org,
-        linux-input@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-media@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Fix properties without any type
-Message-ID: <Yoa0egr9vhTHcxjp@sirena.org.uk>
-References: <20220519211411.2200720-1-robh@kernel.org>
+        s=k20201202; t=1652996627;
+        bh=5aMdAvTCHVLlyDNppzS55+XVjRG2HfXHSwjwsdpbSDI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=BMt93s2vM6p1ZI2XQ3Q86EEKTlBzjLxQUlSqkcYfmBCuijxIW8eKhLsfShbku5Bni
+         zw3xcNBXu42bakrmqkgx7Sx+HK5LomkerwtRcOxJeW1buvwdgeRM3TLSNrtSA4hH4B
+         V4Jy0L99TanxomZmIYpNPRTY6mLx9bYu+528EZYuUCawqZyRFdPuXmWVos1Cky8MWH
+         TCDCb1g3fGDCRq1Xl91+jgBd6hgumhWAS43BzNHksnwPasQJ3Q4toKemfk9DIMKf69
+         soVGYAnTKx2/uY/p7F/d3wPqEPE9QHq8nQ5SR6QoHZeEatCuVanGM+i+jdrfX1eM/o
+         1FaPIttreRubQ==
+Received: by mail-ej1-f52.google.com with SMTP id tk15so12312508ejc.6
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 14:43:47 -0700 (PDT)
+X-Gm-Message-State: AOAM531a1edxuiOXTofyHSC2JqDQLn5sNFQSQZ+njYZdBSqvOD9ZwT68
+        4n/nz9V/4ZePjTvXobQ1+rtBEtC6CjtJJFaadQ==
+X-Google-Smtp-Source: ABdhPJy/FmQBVx6CrhZAtN/k6CFbQ9CkVxk9EXYwaAWWsAYZzAOadTHWIasmQ9mr78AgZlMNI2cC8j+VFKqwl5z/bJ8=
+X-Received: by 2002:a17:907:9602:b0:6df:e82c:f84 with SMTP id
+ gb2-20020a170907960200b006dfe82c0f84mr6180859ejc.590.1652996625948; Thu, 19
+ May 2022 14:43:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eXFy+XxgE7404o6q"
-Content-Disposition: inline
-In-Reply-To: <20220519211411.2200720-1-robh@kernel.org>
-X-Cookie: Some restrictions may apply.
+References: <20220519164533.1961-1-macroalpha82@gmail.com> <20220519164533.1961-2-macroalpha82@gmail.com>
+In-Reply-To: <20220519164533.1961-2-macroalpha82@gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 19 May 2022 16:43:33 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLOknvm2E8hU9Hd_5S0ZCnPxzbgq4BQL4m6UqC9+tC1tw@mail.gmail.com>
+Message-ID: <CAL_JsqLOknvm2E8hU9Hd_5S0ZCnPxzbgq4BQL4m6UqC9+tC1tw@mail.gmail.com>
+Subject: Re: [PATCH 1/4 v7] dt-bindings: Add Rockchip rk817 battery charger support
+To:     Chris Morgan <macroalpha82@gmail.com>
+Cc:     "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "heiko@sntech.de" <heiko@sntech.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Jon Lin <jon.lin@rock-chips.com>,
+        Chris Zhong <zyw@rock-chips.com>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -80,36 +71,31 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, May 19, 2022 at 11:45 AM Chris Morgan <macroalpha82@gmail.com> wrote:
+>
+> From: Chris Morgan <macromorgan@hotmail.com>
+>
+> Create dt-binding documentation to document rk817 battery and charger
+> usage. New device-tree properties have been added.
+>
+> - rockchip,resistor-sense-micro-ohms: The value in microohms of the
+>                                       sample resistor.
+> - rockchip,sleep-enter-current-microamp: The value in microamps of the
+>                                          sleep enter current.
+> - rockchip,sleep-filter-current: The value in microamps of the sleep
+>                                  filter current.
+>
+> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+> Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>
+> Note that this patch requires the following commit (still pending):
+> https://lore.kernel.org/linux-rockchip/20220519161731.1168-1-macroalpha82@gmail.com/
+>
+>  .../bindings/mfd/rockchip,rk817.yaml          | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
 
---eXFy+XxgE7404o6q
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Please resend to the DT list so that automated checks run.
 
-On Thu, May 19, 2022 at 04:14:11PM -0500, Rob Herring wrote:
-> Now that the schema tools can extract type information for all
-> properties (in order to decode dtb files), finding properties missing
-> any type definition is fairly trivial though not yet automated.
->=20
-> Fix the various property schemas which are missing a type. Most of these
-> tend to be device specific properties which don't have a vendor prefix.
-> A vendor prefix is how we normally ensure a type is defined.
-
-Acked-by: Mark Brown <broonie@kernel.org>
-
---eXFy+XxgE7404o6q
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKGtHkACgkQJNaLcl1U
-h9CTcgf/YrxaonL9unlOXD9rVNzVh2gBFZV2wTefQuNDSwkIM40MNQLcoafgcXo5
-gFwpnXnCULN4HW9E4gsxeDnj3lcvR/bPgnNtrHetwyPKH/I99KJSgtm6605GyKWF
-4d5cVzASF5iCk9z6tn51f2x6jCCLVkVoAOOohCc3nYr1YbXRtQSnKKS8vYaNyqVq
-/sELkTEEdwMdl9AML+9S0amyFoPS92ZdcFlFWZIjjzPmidXQxZuL7tGvs9O56vj+
-QUESokWc4u2ziIcTQT9X0XXb9dDJjhXWaFiHNc38F7o+ad3kBXAhgzzBzMC/6fLI
-/352XipOMFDBOV9MMA03nK4kEtXQBA==
-=MbOe
------END PGP SIGNATURE-----
-
---eXFy+XxgE7404o6q--
+Rob
