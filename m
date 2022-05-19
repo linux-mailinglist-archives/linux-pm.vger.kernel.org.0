@@ -2,66 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A95D052C9D4
-	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 04:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52D5252C9D8
+	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 04:34:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232882AbiESCd4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 May 2022 22:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39766 "EHLO
+        id S229437AbiESCe4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 May 2022 22:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiESCdz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 22:33:55 -0400
-Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12548C6E74;
-        Wed, 18 May 2022 19:33:55 -0700 (PDT)
-Received: by mail-vk1-f177.google.com with SMTP id d132so2118250vke.0;
-        Wed, 18 May 2022 19:33:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=e6jbyutOwumj+LrvLcjzetQUKqPKzUNIp/FTCu48hvw=;
-        b=jOoVC97FIxfNPed3L7v50RfQbh4AxRDz6r5YpX9jAZhcRTU0o+NQKZykKjHAh2F/ys
-         xrm0S25mrpm5bSv+yLmkFFLSy7E/yEB1FdoBWm40eZqCcIqzOHOyz3T0aJ7jJk8q+bSK
-         MHNlEdAHDIapuoQug+gYN8/qLy2ZuuEKXToj7ELyy0Q8jDxQj2QJiYHv67p9Dar+Tfpi
-         KzUczpBWalmeW13dOSI428BpE2wF8Ao+1QAp6M2v/wyw/3d8X3SH7oWwOodIuuyOzUzj
-         4gZxvH3+fnz2X5zF+db+v5uAiHLXzSe7bJPGIm/0vbEdygxuJxOW9AWTAtvEd0AyCTht
-         RC3A==
-X-Gm-Message-State: AOAM530F454QTKv0KMPfxJUShz+1r9KRmFXRwOYuVoL1bEyqPCu0gPFc
-        zDzLC9EjLHuS6wFEP4vKSwRrb6JDUpVPhHhkrK8=
-X-Google-Smtp-Source: ABdhPJwON+5z8eNTjw6bpXmLZQJvvRhiCNs5QCAZObqr3pRwKRoTxGdMQmC3/+8n/nYodjdo61T9rduIi1V9+RNE1ck=
-X-Received: by 2002:a1f:5907:0:b0:352:6327:926f with SMTP id
- n7-20020a1f5907000000b003526327926fmr986181vkb.1.1652927634185; Wed, 18 May
- 2022 19:33:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220505015814.3727692-1-rui.zhang@intel.com> <20220505015814.3727692-8-rui.zhang@intel.com>
- <CAJZ5v0jt1OND_d08mC0TC1LZ-JGANDY5fiDmH5RUfdtRk1vZFw@mail.gmail.com>
- <2dc4aa933d07add206a2aeefa15a4837aca6ff62.camel@intel.com>
- <CAJZ5v0h=pYZkbhN2EiYzUGn36Q4-2tMyzfUP0uyFO=Sybse4DA@mail.gmail.com> <20ad397b7975775d69d6c0ea902ca362fa3cf395.camel@intel.com>
-In-Reply-To: <20ad397b7975775d69d6c0ea902ca362fa3cf395.camel@intel.com>
-From:   Len Brown <lenb@kernel.org>
-Date:   Wed, 18 May 2022 16:33:43 -1000
-Message-ID: <CAJvTdKnRmsR+1b2urHr7=u7AcvCfr7m+GqLfLLgOgoB9KaB-zQ@mail.gmail.com>
-Subject: Re: [PATCH 7/7] rtc: cmos: Add suspend/resume endurance testing hook
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kalle Valo <kvalo@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-rtc@vger.kernel.org,
-        "open list:NETWORKING DRIVERS (WIRELESS)" 
-        <linux-wireless@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        merez@codeaurora.org, mat.jonczyk@o2.pl,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        Len Brown <len.brown@intel.com>
+        with ESMTP id S232932AbiESCez (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 22:34:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CACD682D
+        for <linux-pm@vger.kernel.org>; Wed, 18 May 2022 19:34:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81953618A6
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 02:34:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E4592C34113
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 02:34:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1652927692;
+        bh=LIVL+qUgk3ilP+w8eihz0D04l+8Pg6TJrPyZMJFCEYA=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=RqLqWVNFG5IaHoDqyo+L70DO3raEKgC2mh0tqulsMqRKQtCw23jf2yW+qyNfIYaek
+         7wtAcnw+lp181qTVU1iDR/LarSoNnLn2EsH21CQthxJgmBGCbqzARGj7Y6VP0fDzjr
+         dp0qpWyItSclR2n8SFnscI+6MYgHCk9avgIb/QpyBHHxwCZ20/BNCtNUd86y543omv
+         jqMTcaHmnp2gKTWJvyYRKBv9rOA0Y75D/mnYfvCwb2SZahLAtoB+XGXrg2uaGh6Dyr
+         DJvH3vYwv+SOIW3OcpDEFv0VWGZwdzHsGqu6lg3mTRJTEujwTAb8RfS345TwSuYMWP
+         HE58JTKKf76jA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id C9F19CC13B5; Thu, 19 May 2022 02:34:52 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 215800] amd-pstate does not allow to set arbitrary maximum CPU
+ frequency above 2200MHz for a desktop Zen 3 CPU
+Date:   Thu, 19 May 2022 02:34:52 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: perry_yuan@outlook.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215800-137361-xL2EnTfVJU@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215800-137361@https.bugzilla.kernel.org/>
+References: <bug-215800-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,52 +71,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-First let's agree on why this should not be ignored.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215800
 
-Our development team at Intel has lab with laptops, we run sleepgraph
-on every RC, and we publish the tool in public:
-https://www.intel.com/content/www/us/en/developer/topic-technology/open/pm-graph/overview.html
+--- Comment #17 from perry_yuan@outlook.com ---
+(In reply to Artem S. Tashkinov from comment #16)
+> (In reply to perry_yuan from comment #15)
+> >=20
+> > Could you help to try the below kernel ?
+> > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/log/
+> > drivers/cpufreq/amd-pstate.c?h=3Dnext-20220516
+> >=20
+> > I tried this kernel, but 5950x cannot reproduce the issue as yours.
+>=20
+> Does this patch require enabling debugging in the kernel? I'm not sure ho=
+w I
+> am supposed to share (debug) data once I've applied it.
 
-But even if we were funded to do it (which we are not), we can't
-possibly test every kind of device.
-We need the community to help testing Linux (suspend/resume,
-specifically) on a broad range of devices, so together we can make it
-better for all.
+Hi Artem.
+I mean you could build the kernel and install it on your system.
+and switch the governor , capture the min/max log ,etc.
 
-The community is made up mostly of users, rather than kernel hackers,
-and so this effectively means that distro binary kernels need to be
-able to support testing.
+I do not find the reproducing way, but I still want to try to reproduce the
+issue if you can confirm the kernel link has same problem.
 
-Enabling that broad community of users/contributors is the goal.
+Perry.
 
-As Rui explained, this patch does nothing and breaks nothing if the
-new hook remains unused.
-If it is used, then overrides the wakeup duration for all subsequent
-system suspends, until it is cleared.
-If it does more than that, or does that in a clumsy way, then let's fix that.
+--=20
+You may reply to this email to add a comment.
 
-Today it gives us two new capabilities:
-
-1. Prevents a lost wake event.  Commonly we see this with kcompatd
-taking 20 seconds when we had previously armed the RTC for 15 seconds.
-The system will sleep forever, until the user intervenes -- which may
-be a very long time later.
-
-Rafael, If you have a better way to fix that, I'm all ears.  Aborted
-suspend flows are ugly -- particularly when the user didn't want them,
-but they are much less ugly then losing a wake event, which can result
-in losing, say 10-hours of test time.
-
-2. Allows more suspends/resume cycles per time.  Say the early wake is
-fixed.  Then we have to decide how long to sleep before being
-suspended.  If we set it for 1 second, and suspend takes longer than 1
-second, then all of our tests will fail with early wakeups and we have
-tested nothing.  If we set it to 60 seconds, and suspend takes 1
-second, then 59/60 seconds are spent sleeping, when they could be
-spent testing Linux.  With this patch, we can set it to the minimum of
-2 seconds right before we sleep, guaranteeing that we spend at least 1
-second, and under 2 seconds sleeping, and the rest of the time testing
--- which allows us to meet the goal.
-
-thanks,
-Len Brown, Intel
+You are receiving this mail because:
+You are the assignee for the bug.=
