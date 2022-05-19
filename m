@@ -2,151 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20CEE52C8C9
-	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 02:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A95D052C9D4
+	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 04:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232290AbiESAmC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 May 2022 20:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
+        id S232882AbiESCd4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 May 2022 22:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232183AbiESAl7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 20:41:59 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897AD2B1A3
-        for <linux-pm@vger.kernel.org>; Wed, 18 May 2022 17:41:46 -0700 (PDT)
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220519004141epoutp0385785f7acb8a3f27e7da77f1316797a3~wWs1KKGCg2996929969epoutp03c
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 00:41:41 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220519004141epoutp0385785f7acb8a3f27e7da77f1316797a3~wWs1KKGCg2996929969epoutp03c
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1652920901;
-        bh=1/6+G1PwL9P9KchBj2p5sbz8lwiQyq4Yp2+xeM30yOs=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=mFmEbI47tdVy/0JRSprUy0T3P9gotTXJlUcZ/5SVzsuxP7wNMO6NTwSRIhlc4dh7P
-         9ki8AjxNSaxX4X1vQ2XHAMhWPRQME3tMm211yeyr+DrBuI4Ww3HrzL2czrJmS/Lhie
-         0hqR5Po+AjqKq+syX3H3QZh+upqrydcTNcEYuQDQ=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220519004140epcas1p2fbd9fd8953e1f1b9c204e6f2cd8df1ec~wWs0U8JdL2792127921epcas1p2O;
-        Thu, 19 May 2022 00:41:40 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.36.133]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4L3WJM1FdJz4x9QD; Thu, 19 May
-        2022 00:41:39 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        85.DB.10354.34295826; Thu, 19 May 2022 09:41:39 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220519004138epcas1p1cb026c559dacbf3f8525910293b2de89~wWszBcPf32697226972epcas1p1t;
-        Thu, 19 May 2022 00:41:38 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220519004138epsmtrp2b8212b74ac9262af585ebd354b2ff553~wWszAsLHN1245412454epsmtrp2D;
-        Thu, 19 May 2022 00:41:38 +0000 (GMT)
-X-AuditID: b6c32a38-4b5ff70000002872-22-62859243f91c
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        81.F3.08924.24295826; Thu, 19 May 2022 09:41:38 +0900 (KST)
-Received: from localhost.localdomain (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220519004138epsmtip2b5f07f510de34158f06eb580f1b77c23~wWsy10rEz1367213672epsmtip2I;
-        Thu, 19 May 2022 00:41:38 +0000 (GMT)
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-To:     rjw@rjwysocki.net
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        m.szyprowski@samsung.com, cw00.choi@samsung.com,
-        chanwoo@kernel.org, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com
-Subject: [PATCH] PM / devfreq: passive: Return non-error when not-supported
- event is required
-Date:   Thu, 19 May 2022 10:07:53 +0900
-Message-Id: <20220519010753.32228-1-cw00.choi@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrIKsWRmVeSWpSXmKPExsWy7bCmga7zpNYkg5M9bBYTb1xhsbj+5Tmr
-        xdmmN+wWl3fNYbP43HuE0WLtkbvsFrcbV7BZnDl9idWBw2PTqk42jy1X21k8+rasYvT4vEku
-        gCUq2yYjNTEltUghNS85PyUzL91WyTs43jne1MzAUNfQ0sJcSSEvMTfVVsnFJ0DXLTMH6Awl
-        hbLEnFKgUEBicbGSvp1NUX5pSapCRn5xia1SakFKToFpgV5xYm5xaV66Xl5qiZWhgYGRKVBh
-        QnbG264nbAWfuCp+bH7K1sA4l7OLkZNDQsBEov3aU5YuRi4OIYEdjBL9t2+yQTifGCW+XbgC
-        lfnMKPF95yImmJb/G++yQiR2MUr8u7aVHcL5wihx9dUkVpAqNgEtif0vbrCB2CICohKXd09g
-        AbGZQZZceGgDYgsLxEvMPbGdEcRmEVCVWLl0MtAgDg5eASuJy2uh7pOXWL3hADPIfAmBTewS
-        fZunQl3hInHvyw82CFtY4tXxLewQtpTE53d72SAamhklGl7cZoRwehgljj7rY4GoMpbYv3Qy
-        E8g2ZgFNifW79CHCihI7f89lhDiUT+Ld1x5WkBIJAV6JjjYhiBJlicsP7kLdICmxuL0T6gYP
-        iVeHnoG1CgnESjxvfMsygVF2FsKCBYyMqxjFUguKc9NTiw0LTODRlJyfu4kRnLa0LHYwzn37
-        Qe8QIxMH4yFGCQ5mJRFextyWJCHelMTKqtSi/Pii0pzU4kOMpsAAm8gsJZqcD0yceSXxhiaW
-        BiZmRsYmFoZmhkrivL1TTycKCaQnlqRmp6YWpBbB9DFxcEo1MAmf6UrVdK4Waj8TptKwU1W7
-        0qvHR/yazKptgd8dt4WLLgmVWs2/YX3TmUyhM5sZ0149sLtXdXkxd6Rdtp/w5o33pjBF+FWd
-        vXWU7/zVOQurumK4qyvcy58+ynC9EOb1JcryqsjU2phPieU5fNZ7DRlWLI2RX8q84CSHw9w4
-        7ttSJ1YFf6n4XHDGsJ0jP+aniItn8ZnFk9LOlN6t6wj38A70tty+b6leUsYHo07FnuJLu9xD
-        TyxwDV5itNfntNGNy/kf9Hsd81pmP+y5Oadw04/lPhWL819z/zKsXXczp2DGsbfeV87Z8x3W
-        YVrtWJ1tp+slwfKXNTBWf0Po/gi3a796VKrqkn4+59YLXXFGiaU4I9FQi7moOBEAYDOCGOQD
-        AAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrHJMWRmVeSWpSXmKPExsWy7bCSvK7TpNYkg8656hYTb1xhsbj+5Tmr
-        xdmmN+wWl3fNYbP43HuE0WLtkbvsFrcbV7BZnDl9idWBw2PTqk42jy1X21k8+rasYvT4vEku
-        gCWKyyYlNSezLLVI3y6BK+Nt1xO2gk9cFT82P2VrYJzL2cXIySEhYCLxf+Nd1i5GLg4hgR2M
-        Emd2HWWFSEhKTLt4lLmLkQPIFpY4fLgYouYTo8S954fBatgEtCT2v7jBBmKLCIhKXN49gQWk
-        iFngAKPE6o+bGUESwgKxEq8mnWcCsVkEVCVWLp3MDjKUV8BK4vJaqCPkJVZvOMA8gZFnASPD
-        KkbJ1ILi3PTcYsMCo7zUcr3ixNzi0rx0veT83E2M4CDS0trBuGfVB71DjEwcjIcYJTiYlUR4
-        GXNbkoR4UxIrq1KL8uOLSnNSiw8xSnOwKInzXug6GS8kkJ5YkpqdmlqQWgSTZeLglGpgqkmr
-        691y9mXloYJ3B2czNuh5fJ6b/Sy11i9o4nuJ97mJuv1lawTl3AI9/tVYW36epfE0xj3x6a0N
-        OSazKv1XXd76wuVby/HC4Hrzq6aNQhqRIfwdnxcs+8yZff3iDp138XIGEaFv57Jlrruxx3jx
-        O85360/pyxr5ckpZ/TS8p/B86fzz9+0dPu558y9u21pptkNftk/KiGg67Oz5QvSmMI+sC3t3
-        x22TswXum/+faq3fVVR6TnPbYUaFN+/2/2qfEsPPPdVA7d5Xs5gpcyeXZ0wvL6m/ZVf5u35C
-        7g6uUy/VryrOXcsiL9Z40i21rHuK7Fa/I7MqV0+3+3snw2rPNZuVanG/NpyYr7HAOVj3jRJL
-        cUaioRZzUXEiADvNkLGRAgAA
-X-CMS-MailID: 20220519004138epcas1p1cb026c559dacbf3f8525910293b2de89
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220519004138epcas1p1cb026c559dacbf3f8525910293b2de89
-References: <CGME20220519004138epcas1p1cb026c559dacbf3f8525910293b2de89@epcas1p1.samsung.com>
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229437AbiESCdz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 May 2022 22:33:55 -0400
+Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12548C6E74;
+        Wed, 18 May 2022 19:33:55 -0700 (PDT)
+Received: by mail-vk1-f177.google.com with SMTP id d132so2118250vke.0;
+        Wed, 18 May 2022 19:33:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=e6jbyutOwumj+LrvLcjzetQUKqPKzUNIp/FTCu48hvw=;
+        b=jOoVC97FIxfNPed3L7v50RfQbh4AxRDz6r5YpX9jAZhcRTU0o+NQKZykKjHAh2F/ys
+         xrm0S25mrpm5bSv+yLmkFFLSy7E/yEB1FdoBWm40eZqCcIqzOHOyz3T0aJ7jJk8q+bSK
+         MHNlEdAHDIapuoQug+gYN8/qLy2ZuuEKXToj7ELyy0Q8jDxQj2QJiYHv67p9Dar+Tfpi
+         KzUczpBWalmeW13dOSI428BpE2wF8Ao+1QAp6M2v/wyw/3d8X3SH7oWwOodIuuyOzUzj
+         4gZxvH3+fnz2X5zF+db+v5uAiHLXzSe7bJPGIm/0vbEdygxuJxOW9AWTAtvEd0AyCTht
+         RC3A==
+X-Gm-Message-State: AOAM530F454QTKv0KMPfxJUShz+1r9KRmFXRwOYuVoL1bEyqPCu0gPFc
+        zDzLC9EjLHuS6wFEP4vKSwRrb6JDUpVPhHhkrK8=
+X-Google-Smtp-Source: ABdhPJwON+5z8eNTjw6bpXmLZQJvvRhiCNs5QCAZObqr3pRwKRoTxGdMQmC3/+8n/nYodjdo61T9rduIi1V9+RNE1ck=
+X-Received: by 2002:a1f:5907:0:b0:352:6327:926f with SMTP id
+ n7-20020a1f5907000000b003526327926fmr986181vkb.1.1652927634185; Wed, 18 May
+ 2022 19:33:54 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220505015814.3727692-1-rui.zhang@intel.com> <20220505015814.3727692-8-rui.zhang@intel.com>
+ <CAJZ5v0jt1OND_d08mC0TC1LZ-JGANDY5fiDmH5RUfdtRk1vZFw@mail.gmail.com>
+ <2dc4aa933d07add206a2aeefa15a4837aca6ff62.camel@intel.com>
+ <CAJZ5v0h=pYZkbhN2EiYzUGn36Q4-2tMyzfUP0uyFO=Sybse4DA@mail.gmail.com> <20ad397b7975775d69d6c0ea902ca362fa3cf395.camel@intel.com>
+In-Reply-To: <20ad397b7975775d69d6c0ea902ca362fa3cf395.camel@intel.com>
+From:   Len Brown <lenb@kernel.org>
+Date:   Wed, 18 May 2022 16:33:43 -1000
+Message-ID: <CAJvTdKnRmsR+1b2urHr7=u7AcvCfr7m+GqLfLLgOgoB9KaB-zQ@mail.gmail.com>
+Subject: Re: [PATCH 7/7] rtc: cmos: Add suspend/resume endurance testing hook
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kalle Valo <kvalo@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-rtc@vger.kernel.org,
+        "open list:NETWORKING DRIVERS (WIRELESS)" 
+        <linux-wireless@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        merez@codeaurora.org, mat.jonczyk@o2.pl,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        Len Brown <len.brown@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Each devfreq governor specifies the supported governor event
-such as GOV_START and GOV_STOP. When not-supported event is required,
-just return non-error. But, commit ce9a0d88d97a ("PM / devfreq: Add
-cpu based scaling support to passive governor") returned the error
-value. So that return non-error value when not-supported event is required.
+First let's agree on why this should not be ignored.
 
-Fixes: ce9a0d88d97a ("PM / devfreq: Add cpu based scaling support to passive governor")
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
----
-Dear Rafael,
+Our development team at Intel has lab with laptops, we run sleepgraph
+on every RC, and we publish the tool in public:
+https://www.intel.com/content/www/us/en/developer/topic-technology/open/pm-graph/overview.html
 
-This patch fixes the issue of the pull request[1].
-I'd like you to apply it to linux-pm.git direclty.
-[1] https://patchwork.kernel.org/project/linux-pm/patch/3acd6c32-6e78-dfc2-3e45-84f69a7d5f36@samsung.com/
+But even if we were funded to do it (which we are not), we can't
+possibly test every kind of device.
+We need the community to help testing Linux (suspend/resume,
+specifically) on a broad range of devices, so together we can make it
+better for all.
 
-Best Regards,
-Chanwoo Choi
+The community is made up mostly of users, rather than kernel hackers,
+and so this effectively means that distro binary kernels need to be
+able to support testing.
 
- drivers/devfreq/governor_passive.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Enabling that broad community of users/contributors is the goal.
 
-diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
-index 7306e943a234..72c67979ebe1 100644
---- a/drivers/devfreq/governor_passive.c
-+++ b/drivers/devfreq/governor_passive.c
-@@ -402,7 +402,7 @@ static int devfreq_passive_event_handler(struct devfreq *devfreq,
- {
- 	struct devfreq_passive_data *p_data
- 			= (struct devfreq_passive_data *)devfreq->data;
--	int ret = -EINVAL;
-+	int ret = 0;
- 
- 	if (!p_data)
- 		return -EINVAL;
--- 
-2.17.1
+As Rui explained, this patch does nothing and breaks nothing if the
+new hook remains unused.
+If it is used, then overrides the wakeup duration for all subsequent
+system suspends, until it is cleared.
+If it does more than that, or does that in a clumsy way, then let's fix that.
 
+Today it gives us two new capabilities:
+
+1. Prevents a lost wake event.  Commonly we see this with kcompatd
+taking 20 seconds when we had previously armed the RTC for 15 seconds.
+The system will sleep forever, until the user intervenes -- which may
+be a very long time later.
+
+Rafael, If you have a better way to fix that, I'm all ears.  Aborted
+suspend flows are ugly -- particularly when the user didn't want them,
+but they are much less ugly then losing a wake event, which can result
+in losing, say 10-hours of test time.
+
+2. Allows more suspends/resume cycles per time.  Say the early wake is
+fixed.  Then we have to decide how long to sleep before being
+suspended.  If we set it for 1 second, and suspend takes longer than 1
+second, then all of our tests will fail with early wakeups and we have
+tested nothing.  If we set it to 60 seconds, and suspend takes 1
+second, then 59/60 seconds are spent sleeping, when they could be
+spent testing Linux.  With this patch, we can set it to the minimum of
+2 seconds right before we sleep, guaranteeing that we spend at least 1
+second, and under 2 seconds sleeping, and the rest of the time testing
+-- which allows us to meet the goal.
+
+thanks,
+Len Brown, Intel
