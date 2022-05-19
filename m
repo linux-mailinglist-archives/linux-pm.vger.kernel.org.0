@@ -2,55 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA35852D2D0
-	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 14:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B025352D2D2
+	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 14:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238012AbiESMo0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 May 2022 08:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
+        id S238019AbiESMo1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 May 2022 08:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238011AbiESMoY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 08:44:24 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E152FBA9A9
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 05:44:22 -0700 (PDT)
-Date:   Thu, 19 May 2022 12:44:20 -0000
+        with ESMTP id S238013AbiESMoZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 08:44:25 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58838BA98C
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 05:44:24 -0700 (PDT)
+Date:   Thu, 19 May 2022 12:44:21 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652964261;
+        s=2020; t=1652964262;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dRFRnFzNFJmfYYGM31LVX4TsK0erew7eGFocaxGB/7w=;
-        b=KBjLUVbu7nphwghJp0RrPIsC9P5VOCTNrxjq8U4nMj+qQRZJTbeKddXC1hxuA0GcG9C7lR
-        Pya3howEK7mS/COaND+g60Me+epwL/PW3YlUmchY+Ek/vDP0tJLjG4NGag0MeMGT9+Jfk5
-        t4YrG1zxsFGlFgqNBzvEiSiSFrcVqQ/mjQrtFJAiHtwTDgUzAk6zJklb00MAM1tNb8eAZS
-        vD07dra6OQ2kj4dncOJaJwQ7SYrS01tm9RFVfM0jgRHms2VFkf6Ffd49q2umuqNpfwgFh3
-        9ZjIJ+hqXOMIPXl8+Z/E6f25+Xf5OQYNCoSp/3BOZYVoVOlN9OEV5MOl2mErJw==
+        bh=3xn818POQ3JBi8GGgkqN6EY9klfTUz1haeuQPD1Uems=;
+        b=lga6CkD2Pz65JtfcnOGRJTtNMEQwqiDVxSJ7O2hZCzkhvEqdZIBBEyk5Ga2g2mIZbCJ5uw
+        3zdKYb5Tk1mRju+KorYxB8NBqQJFLKLQDrbi7MeYBKojIooovGlOaJ/kCkEPS0aJYi24Fh
+        9FBE+RpkZ00kNPwIy2GLd0235Xp+ks0w13V0a+wtpv6lxZMPxx+9f12tadJAbIlsHoXIMQ
+        JdpCq4Py5wblxwCIHO/95QIuitrjq83YYY7e6jCXs09B43QWSD1CXjocintLoJNgGx/Ri/
+        IpGpQS2yUf2Rk2kGUlnS+aKDov93i4c3jMPPJ0WB1vLhIBDAJlTM3ZiIoF3UQw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652964261;
+        s=2020e; t=1652964262;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dRFRnFzNFJmfYYGM31LVX4TsK0erew7eGFocaxGB/7w=;
-        b=NJoilCMxGzsZNsI6TE5/zmvSgJRprshCoxhxqyWXhKcF5a8ulSungNCateKMZL9DxxUI2N
-        NV+FbK6QkmNnmSBQ==
-From:   "thermal-bot for Dmitry Baryshkov" <tip-bot2@linutronix.de>
+        bh=3xn818POQ3JBi8GGgkqN6EY9klfTUz1haeuQPD1Uems=;
+        b=49SKxLc1i1mCST/VUSj7iafo370KEqpA/iA6WvnMQia2icNclv2hJExwrZoKIKY0/1fMNY
+        PokHnrK+lGahMjCA==
+From:   "thermal-bot for Massimiliano Minella" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/tsens: Add compat string for
- the qcom,msm8960
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+Subject: [thermal: thermal/next] thermal/drivers/k3: Add hwmon support
+Cc:     Massimiliano Minella <massimiliano.minella@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20220406002648.393486-3-dmitry.baryshkov@linaro.org>
-References: <20220406002648.393486-3-dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220401151656.913166-1-massimiliano.minella@se.com>
+References: <20220401151656.913166-1-massimiliano.minella@se.com>
 MIME-Version: 1.0
-Message-ID: <165296426003.4207.14373737174482487624.tip-bot2@tip-bot2>
+Message-ID: <165296426176.4207.15051030762623208961.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,37 +66,45 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     2caf73969de6675318a711d0622406c8c66afc03
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//2caf73969de6675318a711d0622406c8c66afc03
-Author:        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-AuthorDate:    Wed, 06 Apr 2022 03:26:46 +03:00
+Commit-ID:     9e5f5f15fef5efd6847b8802e509b67fce72e2fb
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//9e5f5f15fef5efd6847b8802e509b67fce72e2fb
+Author:        Massimiliano Minella <massimiliano.minella@gmail.com>
+AuthorDate:    Fri, 01 Apr 2022 17:13:51 +02:00
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Thu, 19 May 2022 12:11:51 +02:00
 
-thermal/drivers/tsens: Add compat string for the qcom,msm8960
+thermal/drivers/k3: Add hwmon support
 
-On apq8064 (msm8960) platforms the tsens device is created manually by
-the gcc driver. Prepare the tsens driver for the qcom,msm8960-tsens
-device instantiated from the device tree.
+Expose the thermal sensors on K3 AM654 as hwmon devices, so that
+temperatures could be read using lm-sensors.
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Link: https://lore.kernel.org/r/20220406002648.393486-3-dmitry.baryshkov@linaro.org
+Signed-off-by: Massimiliano Minella <massimiliano.minella@gmail.com>
+Link: https://lore.kernel.org/r/20220401151656.913166-1-massimiliano.minella@se.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/qcom/tsens.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/thermal/k3_bandgap.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index 154d3cb..7963ee3 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -980,6 +980,9 @@ static const struct of_device_id tsens_table[] = {
- 		.compatible = "qcom,msm8939-tsens",
- 		.data = &data_8939,
- 	}, {
-+		.compatible = "qcom,msm8960-tsens",
-+		.data = &data_8960,
-+	}, {
- 		.compatible = "qcom,msm8974-tsens",
- 		.data = &data_8974,
- 	}, {
+diff --git a/drivers/thermal/k3_bandgap.c b/drivers/thermal/k3_bandgap.c
+index 35f41e8..5d0b3ff 100644
+--- a/drivers/thermal/k3_bandgap.c
++++ b/drivers/thermal/k3_bandgap.c
+@@ -16,6 +16,8 @@
+ #include <linux/thermal.h>
+ #include <linux/types.h>
+ 
++#include "thermal_hwmon.h"
++
+ #define K3_VTM_DEVINFO_PWR0_OFFSET		0x4
+ #define K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK	0xf0
+ #define K3_VTM_TMPSENS0_CTRL_OFFSET	0x80
+@@ -219,6 +221,9 @@ static int k3_bandgap_probe(struct platform_device *pdev)
+ 			ret = PTR_ERR(data[id].tzd);
+ 			goto err_alloc;
+ 		}
++
++		if (devm_thermal_add_hwmon_sysfs(data[id].tzd))
++			dev_warn(dev, "Failed to add hwmon sysfs attributes\n");
+ 	}
+ 
+ 	platform_set_drvdata(pdev, bgp);
