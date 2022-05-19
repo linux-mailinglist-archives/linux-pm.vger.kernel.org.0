@@ -2,190 +2,283 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 625A952DD61
-	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 21:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E168452DDB4
+	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 21:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244365AbiESTBz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 May 2022 15:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59970 "EHLO
+        id S244406AbiESTWC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 May 2022 15:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244390AbiESTBu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 15:01:50 -0400
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3CE5E758;
-        Thu, 19 May 2022 12:01:39 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id x2so10280059ybi.8;
-        Thu, 19 May 2022 12:01:39 -0700 (PDT)
+        with ESMTP id S244473AbiESTVr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 15:21:47 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55474583AE
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 12:21:38 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id i1so5611104plg.7
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 12:21:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to;
+        bh=5XgvICP2fGU0UUpymIxXjtH8G7hGw9kGma7VMwfTsic=;
+        b=Ehcj7NeLBUl9L1Yu1/xc/J6pfjw9H7/L+WfC00gX2CiRHM+viLL1tJ9Phw/RndhG9G
+         11enMs0wMQeK2Lc/dIrRLYEKW8RtfXfiIke067uK5WJM5x0ft4/DBFqI4wdXcKW73hp7
+         gtTAo/supBvCoLaVjryUQIIDQsL3vItrNhGJQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CgmliyXEshKe8ze3MsG0OI5BIXp5ouCTuj68lO/qhlY=;
-        b=RL7Zpx9Q66dOKXdYty+Eeu+imhiKw0oUaZjuJ+/+yrOw/2Q1I1FCW6mR5V4pNpVKG3
-         RogSRuFKsAJ6KsZ/vKBX3SOsuQgD70Iyfunxiu9PSk6kFNSsVn24QaN9m9TmhTq6ax5S
-         p7VVEzeY+SMAuBaU7xkmlFlV04mn7nTpXun1UxMUin4KHqW26wYiZaqg2MiklPdfLDHH
-         MeldO865uS94v3VSf9AAPgX40zd50oJgjauapBFfyXsSWD3OT7vodelSpu3uTN0YDY5B
-         1gZHo+VCCEcd+n3593Txs3AkRyYIx+sN62H9Pr3x2iM6V9Dgtw3lvwziY5aRwUWklMNO
-         TUWw==
-X-Gm-Message-State: AOAM533REvuXxU5Ni5t6SwD/56ECQG0sCTdlMr/3oyM+campsbicN8Vk
-        c7vgdUTxsU95jgSknxA07zcEnIhudDsRw3YV2lA=
-X-Google-Smtp-Source: ABdhPJz/aC95/DqdsvnoW1dLX/SnlankeUa5x1s79FSxX7u2dMMW2V98Sq7Vh7q90OH3aOE7skOQkfRia0rPk2ZEeIE=
-X-Received: by 2002:a25:d687:0:b0:64e:3a41:8d5 with SMTP id
- n129-20020a25d687000000b0064e3a4108d5mr5838382ybg.622.1652986898304; Thu, 19
- May 2022 12:01:38 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to;
+        bh=5XgvICP2fGU0UUpymIxXjtH8G7hGw9kGma7VMwfTsic=;
+        b=oUCHBwEWwIUEVGkBisI3mY6H8EHfwWEz4IItOnFZBjvKP/WQF/JJdxySCdvVl4JLE7
+         6gvMPyAwGBIMXnnm4wnnOJ3WtYn+ENMfktlC6M+S2VZlj43y5iVyZhqHAd7H0FHY0HqD
+         hp6REJXDNbp25R5v5y+RbKQH+uOgIZAL2DrHEvIEGyP+N20szCkcMbSnfRYDlKecmUJY
+         Y47gxqkBO9yBeyotpYHnLIMOcVBmPFTFM4Ih4s5754i/S2bjEcBvEY3BjrOLUdkUY7I3
+         80WD9GTHXnd2IP3MsSzzna2TO39M+IDEeTFsZpBa+1cqu/BQm8LDg+/Y5Rsf8gxiK34C
+         0dyA==
+X-Gm-Message-State: AOAM533eTc61Ac+D0ugd6H/NZQcG2mjt0bZAK73uo0+bKQ+Zw+xpp7GU
+        cKupLrbp2/w7V8bwX1pG0Y+EIw==
+X-Google-Smtp-Source: ABdhPJy10NyoQgp6RBZKGliXG8eNodnAGbYEZ6SUYrfrdh7Px/LOSRK6yXAE0oXiUJBwAYB6KTRkcw==
+X-Received: by 2002:a17:902:8644:b0:153:9f01:2090 with SMTP id y4-20020a170902864400b001539f012090mr5952326plt.101.1652988097307;
+        Thu, 19 May 2022 12:21:37 -0700 (PDT)
+Received: from [10.136.13.180] ([192.19.161.250])
+        by smtp.gmail.com with ESMTPSA id s13-20020a17090302cd00b0015e8d4eb244sm4097873plk.142.2022.05.19.12.20.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 May 2022 12:21:36 -0700 (PDT)
+Message-ID: <d1cc0bee-2a98-0c2e-8796-6fb7fae6b803@broadcom.com>
+Date:   Thu, 19 May 2022 12:20:54 -0700
 MIME-Version: 1.0
-References: <CAJZ5v0g6GdKfN4b5uwHEhh4hBuG=haVHaXc-XuMQLe8Wd41Y3g@mail.gmail.com>
- <20220517144846.GA1068039@bhelgaas> <CAJZ5v0iNaAd=yP3DgDVVpffKU6kt+nSpPeqxWJyRddaX5K4FRA@mail.gmail.com>
- <92f32b4703091acb0aaf3f784be448d469e9e2fa.camel@linux.intel.com>
-In-Reply-To: <92f32b4703091acb0aaf3f784be448d469e9e2fa.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 19 May 2022 21:01:27 +0200
-Message-ID: <CAJZ5v0iHgtTpW+ox=wK68cnuG6D+KvFiOCh2UF96dxq08Z3BSA@mail.gmail.com>
-Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
-To:     David Box <david.e.box@linux.intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Jingar, Rajvi" <rajvi.jingar@intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Desmond yan <desmond.yan@broadcom.com>
+Cc:     David Gow <davidgow@google.com>, Evan Green <evgreen@chromium.org>,
+        Julius Werner <jwerner@chromium.org>,
+        bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+        akpm@linux-foundation.org, bhe@redhat.com,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org, netdev@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net, rcu@vger.kernel.org,
+        sparclinux@vger.kernel.org, xen-devel@lists.xenproject.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dexuan Cui <decui@microsoft.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        zhenwei pi <pizhenwei@bytedance.com>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-20-gpiccoli@igalia.com> <YoJZVZl/MH0KiE/J@alley>
+ <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com> <YoOpyW1+q+Z5as78@alley>
+ <d72b9aab-675c-ac89-b73a-b1de4a0b722d@igalia.com>
+ <81878a67-21f1-fee8-1add-f381bc8b05df@broadcom.com>
+ <edbaa4fa-561c-6f5e-f2ab-43ae68acaede@igalia.com>
+From:   Scott Branden <scott.branden@broadcom.com>
+In-Reply-To: <edbaa4fa-561c-6f5e-f2ab-43ae68acaede@igalia.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000061ed3c05df62484f"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, May 17, 2022 at 8:05 PM David E. Box
-<david.e.box@linux.intel.com> wrote:
->
-> On Tue, 2022-05-17 at 16:54 +0200, Rafael J. Wysocki wrote:
-> > On Tue, May 17, 2022 at 4:48 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > >
-> > > On Mon, May 16, 2022 at 10:59:32PM +0200, Rafael J. Wysocki wrote:
-> > > > On Mon, May 16, 2022 at 10:09 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > > On Fri, May 13, 2022 at 10:00:48PM +0000, Jingar, Rajvi wrote:
-> > > > > > > -----Original Message-----
-> > > > > > > From: Bjorn Helgaas <helgaas@kernel.org>
-> > > > > > > Sent: Thursday, May 12, 2022 11:36 AM
-> > > > > > > To: Rafael J. Wysocki <rafael@kernel.org>
-> > > > > > > Cc: Jingar, Rajvi <rajvi.jingar@intel.com>; Wysocki, Rafael J
-> > > > > > > <rafael.j.wysocki@intel.com>; Bjorn Helgaas <bhelgaas@google.com>;
-> > > > > > > David Box
-> > > > > > > <david.e.box@linux.intel.com>; Linux PCI <linux-pci@vger.kernel.org>;
-> > > > > > > Linux
-> > > > > > > Kernel Mailing List <linux-kernel@vger.kernel.org>; Linux PM <linux-
-> > > > > > > pm@vger.kernel.org>
-> > > > > > > Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to
-> > > > > > > disable PTM
-> > > > > > >
-> > > > > > > On Thu, May 12, 2022 at 07:52:36PM +0200, Rafael J. Wysocki wrote:
-> > > > > > > > On Thu, May 12, 2022 at 7:42 PM Bjorn Helgaas <helgaas@kernel.org>
-> > > > > > > > wrote:
-> > > > > > > > > On Thu, May 12, 2022 at 03:49:18PM +0200, Rafael J. Wysocki wrote:
-> > > > > > >
-> > > > > > > > > > Something like this should suffice IMV:
-> > > > > > > > > >
-> > > > > > > > > > if (!dev_state_saved || pci_dev->current_state != PCI_D3cold)
-> > > > > > > > > >
-> > > > > > > > > >         pci_disable_ptm(pci_dev);
-> > > > > > > > >
-> > > > > > > > > It makes sense to me that we needn't disable PTM if the device is
-> > > > > > > > > in
-> > > > > > > > > D3cold.  But the "!dev_state_saved" condition depends on what the
-> > > > > > > > > driver did.  Why is that important?  Why should we not do the
-> > > > > > > > > following?
-> > > > > > > > >
-> > > > > > > > >   if (pci_dev->current_state != PCI_D3cold)
-> > > > > > > > >     pci_disable_ptm(pci_dev);
-> > > > > > > >
-> > > > > > > > We can do this too.  I thought we could skip the power state
-> > > > > > > > check if dev_state_saved was unset, because then we would know
-> > > > > > > > that the power state was not D3cold.  It probably isn't worth
-> > > > > > > > the hassle though.
-> > > > > >
-> > > > > > We see issue with certain platforms where only checking if device
-> > > > > > power state in D3Cold is not enough and the !dev_state_saved check
-> > > > > > is needed when disabling PTM. Device like nvme is relying on ASPM,
-> > > > > > it stays in D0 but state is saved. Touching the config space wakes
-> > > > > > up the device which prevents the system from entering into low power
-> > > > > > state.
-> > > > >
-> > > > > Correct me if I'm wrong: for NVMe devices, nvme_suspend() has already
-> > > > > saved state and put the device in some low-power state.  Disabling PTM
-> > > > > here is functionally OK but prevents a system low power state, so you
-> > > > > want to leave PTM enabled.
-> > > > >
-> > > > > But I must be missing something because pci_prepare_to_sleep()
-> > > > > currently disables PTM for Root Ports.  If we leave PTM enabled on
-> > > > > NVMe but disable it on the Root Port above it, any PTM Request from
-> > > > > NVMe will cause an Unsupported Request error.
-> > > > >
-> > > > > Disabling PTM must be coordinated across PTM Requesters and PTM
-> > > > > Responders.  That means the decision to disable cannot depend on
-> > > > > driver-specific things like whether the driver has saved state.
-> > > >
-> > > > Setting state_saved generally informs pci_pm_suspend_noirq() that the
-> > > > device has already been handled and it doesn't need to do anything to
-> > > > it.
-> > > >
-> > > > But you are right that PTM should be disabled on downstream devices as
-> > > > well as on the ports that those devices are connected to and it can be
-> > > > done even if the given device has already been handled, so the
-> > > > state_saved value is technically irrelevant.
-> > > >
-> > > > That's why I suggested to check if the power state is between D0 and
-> > > > D3cold (exclusive) and only disable PTM if that is the case.  It is
-> > > > pointless to disable PTM for devices in D3cold and it may be harmful
-> > > > for devices that are left in D0.
-> > >
-> > > "... it may be harmful for devices that are left in D0" -- I want to
-> > > understand this better.  It sounds like nvme_suspend() leaves the
-> > > device in some device-specific low-power flavor of D0, and subsequent
-> > > config accesses take it out of that low-power situation?
-> >
->
-> This is exactly what we see. It's not all machines, but in our lab we've seen in
-> it on 3 production systems out of about 20. And they were all different
-> generations, a 7th, 8th, and 10th gen.
->
-> nvme_suspend is relying on NVMe APST / PCIe ASPM to put the device in a low
-> power state. The link state will be L1 or deeper while the device remains in D0.
->
-> https://nvmexpress.org/resources/nvm-express-technology-features/nvme-technology-power-features/
->
->
-> > That's my understanding of it.
-> >
-> > > If that's the case, it sounds a little brittle.  I don't think it's
-> > > obvious that "pci_dev->state_saved was set by the driver" means "no
-> > > config accesses allowed in pci_pm_suspend_noirq()."
-> >
-> > Well, yes and no.  The device may be in D3cold then, so
-> > pci_pm_suspend_noirq() should at least check that before accessing its
-> > config space.
-> >
-> > > And pci_pm_suspend_noirq() calls quirks via pci_fixup_device(), which are
-> > > very likely to do config accesses.
-> > >
-> > > Maybe PTM needs to be disabled earlier, e.g., in pci_pm_suspend()?  I
-> > > don't think PTM uses any interrupts, so there's probably no reason
-> > > interrupts need to be disabled before disabling PTM.
-> >
-> > That certainly is worth investigation.  For one, I don't see any
-> > obvious downsides of doing so.
->
-> We will look at this.
+--00000000000061ed3c05df62484f
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Appreciated.
 
-In the meantime, I think that it would make sense to pick up the first
-patch in this series which is a good cleanup regardless.
 
-Bjorn, could you do that, please?
+On 2022-05-19 05:19, Guilherme G. Piccoli wrote:
+> On 18/05/2022 19:17, Scott Branden wrote:
+>> Hi Guilherme,
+>>
+>> +Desmond
+>> [...]
+>>>>> I'm afraid it breaks kdump if this device is not reset beforehand - it's
+>>>>> a doorbell write, so not high risk I think...
+>>>>>
+>>>>> But in case the not-reset device can be probed normally in kdump kernel,
+>>>>> then I'm fine in moving this to the reboot list! I don't have the HW to
+>>>>> test myself.
+>>>>
+>>>> Good question. Well, it if has to be called before kdump then
+>>>> even "hypervisor" list is a wrong place because is not always
+>>>> called before kdump.
+>>> [...]
+>> We register to the panic notifier so that we can kill the VK card ASAP
+>> to stop DMAing things over to the host side.  If it is not notified then
+>> memory may not be frozen when kdump is occurring.
+>> Notifying the card on panic is also needed to allow for any type of
+>> reset to occur.
+>>
+>> So, the only thing preventing moving the notifier later is the chance
+>> that memory is modified while kdump is occurring.  Or, if DMA is
+>> disabled before kdump already then this wouldn't be an issue and the
+>> notification to the card (to allow for clean resets) can be done later.
+> 
+> Hi Scott / Desmond, thanks for the detailed answer! Is this adapter
+> designed to run in x86 only or you have other architectures' use cases?
+The adapter may be used in any PCIe design that supports DMA.
+So it may be possible to run in arm64 servers.
+> 
+> I'm not expert on that, but I guess whether DMA is "kept" or not depends
+> a bit if IOMMU is used. IIRC, there was a copy of the DMAR table in
+> kdump (at least for Intel IOMMU). Also, devices are not properly
+> quiesced on kdump IIUC, we don't call shutdown/reset handlers, they're
+> skip due to the crash nature - so there is a risk of devices doing bad
+> things in the new kernel.
+> 
+> With that said, and given this is a lightweight notifier that ideally
+> should run ASAP, I'd keep this one in the hypervisor list. We can
+> "adjust" the semantic of this list to include lightweight notifiers that
+> reset adapters.
+Sounds the best to keep system operating as tested today.
+> 
+> With that said, Petr has a point - not always such list is going to be
+> called before kdump. So, that makes me think in another idea: what if we
+> have another list, but not on panic path, but instead in the custom
+> crash_shutdown()? Drivers could add callbacks there that must execute
+> before kexec/kdump, no matter what.
+It may be beneficial for some other drivers but for our use we would 
+then need to register for the panic path and the crash_shutdown path. 
+We notify the VK card for 2 purposes: one to stop DMA so memory stop 
+changing during a kdump.  And also to get the card into a good state so 
+resets happen cleanly.
+> 
+> Let me know your thoughts Scott / Desmond / Petr and all interested parties.
+> Cheers,
+> 
+> 
+> Guilherme
+
+--00000000000061ed3c05df62484f
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+cRe0CRXA7ypOJSgxO/nOOyQoaJxT7CGg1npOeSpPjEuc3fE4xum3l0nvU85hj6MlKZu43hokdBh0
+D0nLyyhEwlR3AC/msdff/UGbM/JR9vk812RP4m/aNWZFJwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
+BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
+YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
+BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
+YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
+Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
+HREEHjAcgRpzY290dC5icmFuZGVuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
+BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUOhjEpl04Sz9dh5MI82E1
+V39lM/owDQYJKoZIhvcNAQELBQADggEBAA7Rlypx/esz/iq1yA4+KW7uwV/aBY344BWcXt6I+SNK
+VwFBgFWfLj5vaEud9TVv2fPSiaHJo0umemOJk+43QD+bsoqmgcFXd21PrOt7Jjs+jjVED9VC5kJq
+S4NNKUkS+BqijJwSegtVygrc/atrIlJbjI21q4qpemUo5fgwqCNm++BmBGTI8yA09vtGSNDRN42k
+lLX9hl3iEj5SBgkQqCbbnoE+ZjjKfqt7ED166WhgyQWNrl39yLcvLj+JRUB3RuvXKZjH0NQEEBII
+wZBDSkyneykLt3CBNIhSCTxKM6OWxVp936ALSa5K9FNy00TeWSpokR6NmzaW8VD/EjTgvqAxggJt
+MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
+VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgx9oXSJpKniO4dS
+Gk8wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILXYB80rvGoONbSrKccJNuW/yt4P
+RwosxTdX9/zqPyCuMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIy
+MDUxOTE5MjEzN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
+AwQCATANBgkqhkiG9w0BAQEFAASCAQBsqFeeADkOUmIUQkOFTz4+tbTbcu1kJOu0o2LxolE41ACQ
+Jjl4mG3AxFObAA/vLQRFL2LzmM7+OQ1nUaL/1rIXCVF7a9/kONy4oIc1uslvIVE6XRS3TrWAZyJ1
+KXT1lLM7MUhCe5EkzcZxuapBiKdpmxfhxDzt27vOsC3LpZXW8YbnYGANBVAG0RYROLCIzpGsRUeh
+vHZtk9Zj5ppQPXoMCjx9Nah3XO3Uhnp0i0UbRd2dsZj60JkDxx2H+iX54btyjpq60IUp5n2ulZMN
+latE6tPUnpMceZbDhq45QMDYde9jGlCoU4/7lo4RwQhU+Kl7xsUECNDbTk4UszM1uyGJ
+--00000000000061ed3c05df62484f--
