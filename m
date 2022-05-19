@@ -2,55 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D39952D2C6
-	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 14:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4917B52D2C7
+	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 14:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238000AbiESMoS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 May 2022 08:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42112 "EHLO
+        id S238003AbiESMoT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 May 2022 08:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238003AbiESMoP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 08:44:15 -0400
+        with ESMTP id S238002AbiESMoR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 08:44:17 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F162BA57A
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 05:44:15 -0700 (PDT)
-Date:   Thu, 19 May 2022 12:44:12 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E93BA98C
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 05:44:16 -0700 (PDT)
+Date:   Thu, 19 May 2022 12:44:13 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652964253;
+        s=2020; t=1652964254;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UT4db1IZhDvOQ210swy4MlPuECKJesUI7pS7NbtS0u8=;
-        b=d0hWy85l3e5rd2eRdFg3vYgQf+A8rWkMNZzWUdA2cAtgL8rY2FznoxcrXLKL5OHj9u0nRP
-        KAIAx/OC4wcq8Ki3h+t7eMX24F8PF395rC/bWsF1GuOuCycMgAaE0VoUjfzFMjSMLi5v2y
-        MkNqHcet3/oE6v9FzpkbYz8aou4jh2NBwCL/ywc4JD75VyvR8gDSfrdfJQQ0a1bhcWQEtk
-        zw3L19v4SYD7JtyhDxBH9ExeJzxmkgN7mDwQ/0akXWnaBZXRPZxNHY53SjlYA+p7xxDNVC
-        aeqe4G8YN8rb4j09M2fHYk/rmJUv6dFpO7R68UjWNK921ImNCWlEZSbdyBlDSw==
+        bh=pVJqs8upnbXXkCV59v8imVkt+tD39Y0RsI4kQWHhkb4=;
+        b=mxdvAEP7lYYryBzvztmaFD+8zCdlu3zwjWIriV45wR37fcW9PxL9dOmR/JzlfmGG0L2tGL
+        Kof4OVhxg66u10G4Sww6s/01HPHMI7+sSthBmXnsjOM+Fh5SquEXeTyYX4e4EAej9RpSSy
+        m/p2YrOGbZTQoyuVLTfa26/dNTbouyEgGFpiO9ZKGR969c6HmcF9X6DN+wzf+RC4qlrM9e
+        CipWd5dRzxFxvO3X2OVM/amWVnyqvUAJqYjtUTxgxFlI+Ms++okRG2CS2L34eUONt9v3ed
+        XDzC/Ya0Ri2d/vwtxmkNlyOKP9rzaICC2AwPR0WMG+qx+R30M5cz3ERHTuedNg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652964253;
+        s=2020e; t=1652964254;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UT4db1IZhDvOQ210swy4MlPuECKJesUI7pS7NbtS0u8=;
-        b=PuCdldnQX6K+V7OHgzpeukEdO1l/zKR/tUKugla7Sf87LrMAhw/xTYOmlmQKV4CCh7Bmph
-        6byPsmeRezDLVQBA==
-From:   "thermal-bot for Jiapeng Chong" <tip-bot2@linutronix.de>
+        bh=pVJqs8upnbXXkCV59v8imVkt+tD39Y0RsI4kQWHhkb4=;
+        b=xdKJ+HXEuMMtWYg9rfZZ5JiOxrJYi3Du989wJa4Z5htQ2wbD4E6XRUX6hNb/adBF7kgZX7
+        Lp1Cy29VRcOSb3DQ==
+From:   "thermal-bot for Zheng Yongjun" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] tools/lib/thermal: remove unneeded semicolon
-Cc:     Abaci Robot <abaci@linux.alibaba.com>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+Subject: [thermal: thermal/next] thermal/drivers/broadcom: Fix potential NULL
+ dereference in sr_thermal_probe
+Cc:     Zheng Yongjun <zhengyongjun3@huawei.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20220427030619.81556-1-jiapeng.chong@linux.alibaba.com>
-References: <20220427030619.81556-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20220425092929.90412-1-zhengyongjun3@huawei.com>
+References: <20220425092929.90412-1-zhengyongjun3@huawei.com>
 MIME-Version: 1.0
-Message-ID: <165296425281.4207.1135914442258082055.tip-bot2@tip-bot2>
+Message-ID: <165296425371.4207.10296133140962930839.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,37 +67,37 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     f21b57eb12bfe0d38794145f976ca8127d8846db
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//f21b57eb12bfe0d38794145f976ca8127d8846db
-Author:        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-AuthorDate:    Wed, 27 Apr 2022 11:06:18 +08:00
+Commit-ID:     e20d136ec7d6f309989c447638365840d3424c8e
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//e20d136ec7d6f309989c447638365840d3424c8e
+Author:        Zheng Yongjun <zhengyongjun3@huawei.com>
+AuthorDate:    Mon, 25 Apr 2022 09:29:29 
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Thu, 19 May 2022 12:11:52 +02:00
 
-tools/lib/thermal: remove unneeded semicolon
+thermal/drivers/broadcom: Fix potential NULL dereference in sr_thermal_probe
 
-Fix the following coccicheck warnings:
+platform_get_resource() may return NULL, add proper check to
+avoid potential NULL dereferencing.
 
-./tools/lib/thermal/commands.c:215:2-3: Unneeded semicolon.
-
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Link: https://lore.kernel.org/r/20220427030619.81556-1-jiapeng.chong@linux.alibaba.com
+Fixes: 250e211057c72 ("thermal: broadcom: Add Stingray thermal driver")
+Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+Link: https://lore.kernel.org/r/20220425092929.90412-1-zhengyongjun3@huawei.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- tools/lib/thermal/commands.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thermal/broadcom/sr-thermal.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/lib/thermal/commands.c b/tools/lib/thermal/commands.c
-index 4e289ca..73d4d4e 100644
---- a/tools/lib/thermal/commands.c
-+++ b/tools/lib/thermal/commands.c
-@@ -212,7 +212,7 @@ static int handle_netlink(struct nl_cache_ops *unused,
+diff --git a/drivers/thermal/broadcom/sr-thermal.c b/drivers/thermal/broadcom/sr-thermal.c
+index 475ce29..85ab9ed 100644
+--- a/drivers/thermal/broadcom/sr-thermal.c
++++ b/drivers/thermal/broadcom/sr-thermal.c
+@@ -60,6 +60,9 @@ static int sr_thermal_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
  
- 	default:
- 		return THERMAL_ERROR;
--	};
-+	}
- 
- 	return ret;
- }
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!res)
++		return -ENOENT;
++
+ 	sr_thermal->regs = (void __iomem *)devm_memremap(&pdev->dev, res->start,
+ 							 resource_size(res),
+ 							 MEMREMAP_WB);
