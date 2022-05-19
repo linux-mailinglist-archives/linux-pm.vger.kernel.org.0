@@ -2,62 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B3352DA82
-	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 18:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7405552DA85
+	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 18:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238394AbiESQpp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 May 2022 12:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34076 "EHLO
+        id S241816AbiESQqO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 May 2022 12:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238189AbiESQpn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 12:45:43 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC59DD0
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 09:45:42 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id v9so2481109oie.5
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 09:45:42 -0700 (PDT)
+        with ESMTP id S242149AbiESQps (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 12:45:48 -0400
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1171007
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 09:45:46 -0700 (PDT)
+Received: by mail-oo1-xc34.google.com with SMTP id s11-20020a4ab54b000000b0035f0178dfcfso1089965ooo.7
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 09:45:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=E3vPikjMrJ/sOxGD67uc6AI/57xp+LEL2ERbhK7XXUA=;
-        b=qGdA6buGE7he5OAvsFwc9+qzJWFYexwGF5N1CS+dhRpoci7jYQsQ5GVUDiyq3B4iUE
-         ig+LkclsIaSCkgNUaGAF2v16PEkkGdX0eZbIkerk0w62jk+E4qc5OgTUYRwOCiMYciUh
-         WF8VhG0X2J2kOCKQEXCGPgG8LUfYf+LbfF1bbMlcDgjqhWX8x9Z2AgtMVqkQjUdDyzVN
-         oSt0RisIkZ8gObHNB0e1iC9c6ef1G8t4S4BHvefTwM4VrqhzgEb6qWUaucZX7n/hrFz5
-         BrWh7ipqLBLCJINsrNEy0dRWAlA8iVWBojZ0TaCiUGIS9ltDfp01+VThDxyczs1HiPAr
-         Shfw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=za+JFS8UrUe1EXtSy/HN8YRbGNE25Vj78rAPO0Rkf/g=;
+        b=cg6+vIhCSI7HHV/IeYX98FFMnomiDXGC8qXPpKRbECi9S5ZPJM/TJ6XLIZGo1Rmtzn
+         WubFecTLsBClsoR+g6p1nKIOFb78/bSf4q/MGpl6ATisNNCM4al5jpUhisyKdbJPYQm4
+         DniJUGei56MYcf7txmuimwp1geQYYf0ROpbQqrNIZM8WwczMVlgclvFw5oHrzcEArE4X
+         821NNnf+nfcY6a0cgayYSzy/ht6XZ0saVVLfwAqsXE6dQZgJjHsTz8e8EOkGQxXbG+GG
+         ZIgnTwMYWun0XI3m5LNFIHDjTDH0VX2QwGMtzB1c8oncBk82kZ6v0/7H8eBPDYuRrxcz
+         t5YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=E3vPikjMrJ/sOxGD67uc6AI/57xp+LEL2ERbhK7XXUA=;
-        b=wy9FufWvUAztBPR0fjZYgvvZ0DVtlp+Ycg+Rh6r3QlGS5whXZdUiD6tWyVjhVKqWiM
-         U/KUHkxMAVu9acnQHmJcdQJHCsKcDcaMxeOFaHNQnYgOcEldmY3m+wFWFODklZQdtx9/
-         p8uqQstzHCEqfTrSReDQf2c5o0oHdfPeOXjH6BhYipPa0+8uT+Rs5LyzAwDJTzJo6Biy
-         YKQSz8x6t4z6XMuoeyxD9aFXvPmoVHvJPXUXX2Jx6RQxkElqU3U1ZB9IzDvVj5issqoQ
-         8O6C7rQZYuuLUySl0oJIHAt9cGEHr5G5z6rGTgySjCp2rJO6d17QMMK2QkTeUwCr0Ck7
-         hPFw==
-X-Gm-Message-State: AOAM531/KwJ2p0FIMmK0U+ucj4XroNifNlNx6VTWx6tdblAuV8pKAeYF
-        Vo0rkPR9T0CJCVRhclqjYzI/kVJX/XnoGQ==
-X-Google-Smtp-Source: ABdhPJy1+PyYfk/d1jWWt3rldvPYaJPRzGumQAEyDKvEBFiAqv2WwRd7oKZEpHxWHaa2ZJCvYkIrBA==
-X-Received: by 2002:a05:6808:1250:b0:2da:39df:1f92 with SMTP id o16-20020a056808125000b002da39df1f92mr3265027oiv.27.1652978741858;
-        Thu, 19 May 2022 09:45:41 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=za+JFS8UrUe1EXtSy/HN8YRbGNE25Vj78rAPO0Rkf/g=;
+        b=0bRSv3Kg8JAyaVsj5B5UtpVmRS7ubyx9s0ngVjeYFX+pEapz9OZgVU6zK67RtI8I9W
+         2Ecr4is9cF9fT3IFgh92GpWbru3GIm5YjXrkxk7YdVFHVa5MNZPkI2c+5oLNkxgwqN41
+         8AVs4LiUxxEYer8hVJLOIY6usPLN04oiwoYYW+mvKqEEY6vfjt9KZs1t+TvfNgz0FThR
+         ngVCS9Uo+7l4y4XsQGQzwEW6iE39L8O9MIyAtmB9AbRxJcmhirxY3rbnpA3/FR8jrki5
+         kEhtaurquerUfhEDsSDAyBOKe1wVy8WlZSIs7u0jG3pNWUOaf+gTN1cbdJtXfJI+atpJ
+         wqgA==
+X-Gm-Message-State: AOAM530RmOyka8OBitIs9uQm1tonucHYuCo36/O8vkg9pucAR+vgltsL
+        s39Ozk81XzMhhkLo9iAfZSyer40DJRsq5A==
+X-Google-Smtp-Source: ABdhPJxI5A12WfjhIpKU1q8aHjBpHtVeCEkedOkazEWaDVAuM5xlWJaLTR9YwGgAHnZmikOHhX1Y/g==
+X-Received: by 2002:a4a:abcd:0:b0:35d:9b36:62f3 with SMTP id o13-20020a4aabcd000000b0035d9b3662f3mr2450026oon.14.1652978745137;
+        Thu, 19 May 2022 09:45:45 -0700 (PDT)
 Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
-        by smtp.gmail.com with ESMTPSA id i20-20020a9d6114000000b0060ae5f10973sm575601otj.15.2022.05.19.09.45.40
+        by smtp.gmail.com with ESMTPSA id i20-20020a9d6114000000b0060ae5f10973sm575601otj.15.2022.05.19.09.45.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 09:45:41 -0700 (PDT)
+        Thu, 19 May 2022 09:45:44 -0700 (PDT)
 From:   Chris Morgan <macroalpha82@gmail.com>
 To:     linux-pm@vger.kernel.org
 Cc:     linux-rockchip@lists.infradead.org, lee.jones@linaro.org,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         heiko@sntech.de, sre@kernel.org, jon.lin@rock-chips.com,
         zyw@rock-chips.com, zhangqing@rock-chips.com,
-        Chris Morgan <macromorgan@hotmail.com>
-Subject: [PATCH 0/4 v7] power: supply: Add Support for RK817 Charger
-Date:   Thu, 19 May 2022 11:45:29 -0500
-Message-Id: <20220519164533.1961-1-macroalpha82@gmail.com>
+        Chris Morgan <macromorgan@hotmail.com>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/4 v7] dt-bindings: Add Rockchip rk817 battery charger support
+Date:   Thu, 19 May 2022 11:45:30 -0500
+Message-Id: <20220519164533.1961-2-macroalpha82@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220519164533.1961-1-macroalpha82@gmail.com>
+References: <20220519164533.1961-1-macroalpha82@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,91 +76,93 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Chris Morgan <macromorgan@hotmail.com>
 
-This series is to add support for the Rockchip rk817 battery charger
-which is present in all Rockchip RK817 PMICs. The driver was written
-as a joint effort by Maya Matuszczyk <maccraft123mc@gmail.com> and
-myself Chris Morgan <macromorgan@hotmail.com>.
+Create dt-binding documentation to document rk817 battery and charger
+usage. New device-tree properties have been added.
 
-The driver requires some basic parameters be described about the
-battery in the devicetree such as the maximum capacity, the minimum
-and maximum voltage for the battery, the maximum charge current, the
-maximum charge voltage, and the value of sample resistors and sleep
-currents.
+- rockchip,resistor-sense-micro-ohms: The value in microohms of the
+                                      sample resistor.
+- rockchip,sleep-enter-current-microamp: The value in microamps of the
+                                         sleep enter current.
+- rockchip,sleep-filter-current: The value in microamps of the sleep
+                                 filter current.
 
-The hardware itself contains an ADC capable of measuring the voltage,
-current, and temperature of the battery (though my implementation of an
-Odroid Go Advance lacks a thermistor for temperature). It also contains
-a columb counter, registers for tracking the measured voltage and
-current at boot, and a few bytes of nvram for storing data.
+Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+Signed-off-by: Maya Matuszczyk <maccraft123mc@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
 
-Changes from V6:
- - Updated devicetree binding patch to reference the required
-   prerequisite patch in the correct manner (relocated it below the ---
-   and pointed it to lore.kernel.org).
+Note that this patch requires the following commit (still pending):
+https://lore.kernel.org/linux-rockchip/20220519161731.1168-1-macroalpha82@gmail.com/
 
-Changes from V5:
- - Renamed mfd-cell from "battery" to "charger".
- - Added note for devicetree binding documentation that it requires
-   application of an additional pending patch (to convert documentation
-   to yaml).
+ .../bindings/mfd/rockchip,rk817.yaml          | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-Changes from V4:
- - Massively redesigned the battery driver to improve measurement
-   accuracy and reliability. Driver now checks values every 8
-   seconds (mimicking BSP driver behavior), or whenever a plug event
-   is detected.
- - Removed OCV, boot voltage, and boot current as values were found
-   to be unreliable.
- - Updated first-boot behavior to perform a "best guess" at capacity.
- - Added ability to calibrate columb counter to full state of charge
-   when charger reports full, and added ability calibrate full charge
-   capacity when battery discharges from full charge to minimum
-   voltage.
- - Expose state of charge as capacity (in percents).
- - Updated storing of values to nvram to preserve compatibility with
-   BSP kernel.
-
-Changes from V3:
-
- - Corrected issues in device tree documentation.
- - Added additional logic to battery to correct for columb counter
-   drift when the device stays plugged in at a full charge state.
-
-Changes from V2:
-
- - Updated devicetree bindings to use common property units.
- - Removed unneeded includes.
- - Updated rk817_chg_cur_to_reg to make more legible.
- - Simplified formula for displaying calibrated voltage.
- - Updated power supply type to POWER_SUPPLY_TYPE_USB.
- - Implemented get/put_unaligned macros for bulk reads and writes.
- - Changed numerous dev_err() to dev_err_probe().
- - Call power_supply_put_battery_info() at end of probe function.
- - Removed unneeded whitespace.
-
-Changes from V1:
-
- - Fixed a CLANG warning regarding an uninitalized variable.
- - Fixed a CLANG warning regarding a pointer as a bool value always
-   returning as true.
- - Added Maya Matuszczyk to the Signed-off-by.
-
-Chris Morgan (4):
-  dt-bindings: Add Rockchip rk817 battery charger support
-  mfd: Add Rockchip rk817 battery charger support
-  power: supply: Add charger driver for Rockchip RK817
-  arm64: dts: rockchip: add rk817 chg to Odroid Go Advance
-
- .../bindings/mfd/rockchip,rk817.yaml          |   48 +
- .../boot/dts/rockchip/rk3326-odroid-go2.dts   |   26 +
- drivers/mfd/rk808.c                           |   16 +-
- drivers/power/supply/Kconfig                  |    6 +
- drivers/power/supply/Makefile                 |    1 +
- drivers/power/supply/rk817_charger.c          | 1157 +++++++++++++++++
- include/linux/mfd/rk808.h                     |   91 ++
- 7 files changed, 1344 insertions(+), 1 deletion(-)
- create mode 100644 drivers/power/supply/rk817_charger.c
-
+diff --git a/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml b/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml
+index bfc1720adc43..d0dccb1aaf4c 100644
+--- a/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml
++++ b/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml
+@@ -117,6 +117,47 @@ properties:
+         description:
+           Describes if the microphone uses differential mode.
+ 
++  charger:
++    description: |
++      The child node for the charger to hold additional properties. If a
++      battery is not in use, this node can be omitted.
++    type: object
++    properties:
++      monitored-battery:
++        description: |
++          A phandle to a monitored battery node that contains a valid
++          value for:
++          charge-full-design-microamp-hours,
++          charge-term-current-microamp,
++          constant-charge-current-max-microamp,
++          constant-charge-voltage-max-microvolt,
++          voltage-max-design-microvolt,
++          voltage-min-design-microvolt,
++          and a valid ocv-capacity table.
++
++      rockchip,resistor-sense-micro-ohms:
++        description: |
++          Value in microohms of the battery sense resistor. This value is
++          used by the driver to set the correct divisor value to translate
++          ADC readings into the proper units of measure.
++        enum: [10000, 20000]
++
++      rockchip,sleep-enter-current-microamp:
++        description: |
++          Value in microamps of the sleep enter current for the charger.
++          Value is used by the driver to calibrate the relax threshold.
++
++      rockchip,sleep-filter-current-microamp:
++        description:
++          Value in microamps of the sleep filter current for the charger.
++          Value is used by the driver to derive the sleep sample current.
++
++    required:
++      - monitored-battery
++      - rockchip,resistor-sense-micro-ohms
++      - rockchip,sleep-enter-current-microamp
++      - rockchip,sleep-filter-current-microamp
++
+ allOf:
+   - if:
+       properties:
+@@ -323,6 +364,13 @@ examples:
+                 };
+             };
+ 
++            rk817_charger: charger {
++                monitored-battery = <&battery>;
++                rockchip,resistor-sense-micro-ohms = <10000>;
++                rockchip,sleep-enter-current-microamp = <300000>;
++                rockchip,sleep-filter-current-microamp = <100000>;
++            };
++
+             rk817_codec: codec {
+                 rockchip,mic-in-differential;
+             };
 -- 
 2.25.1
 
