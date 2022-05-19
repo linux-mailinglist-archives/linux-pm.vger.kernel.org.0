@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9561552D62F
-	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 16:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A607252D630
+	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 16:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239328AbiESOe6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 May 2022 10:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45738 "EHLO
+        id S239714AbiESOfA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 May 2022 10:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231470AbiESOe5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 10:34:57 -0400
+        with ESMTP id S231470AbiESOe7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 10:34:59 -0400
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB9E79398
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 07:34:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F262F79398
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 07:34:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1652970897; x=1684506897;
+  t=1652970898; x=1684506898;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=D3ZZxLXW0g++7yQ4TCcNc5rHJLllJ4ihW+EZESk4M/k=;
-  b=Q/UuZByf0LwEMwRru8aYs0Dkmyec3SrmGHooL7p9WXGNQqD4BSLFG59D
-   XtzPh4ZRrJ7QLA7i9OBC3pI1hElH3xDPCFuV5xT5oAFPhZOuTcWuAxZ7k
-   s9EjT5O+kvcuPTRZGCi+qKl1Zl0zBESjZiGr02kaQ2OSxN2+hb6Gkn98b
-   Du+qaPM2Mtfngjk6LmpTh1BtE0l9MuBS7buj9uAPePQmmwPuk0JRG/vCJ
-   G5TvoDfjVYmPjHCDoSyEW9eGSnNhTTV4mIs8S3oyyBxWB0HTfRJ31JIAp
-   +t16J5N3xwZQK/hdAlnoJqUbhk1j5HOhn5mem1E+1w+7Tj9uJUGVNqGMC
+  bh=tmNxs/F3ojtRb9sOqI1KH8epaDv6aemsd0izOCkyu8E=;
+  b=czi8Wk0ykNnDTMDbilKXdKOzk+ftp+inW4QjZeGDD744yrntuGAOGxcp
+   m0K7wKMyp/6oPNvJHQoK+dJJhQ9w7Lh5xzT8TmsBOaRQYB7PSBuZSIv7w
+   hAnRRywiWkl6F3bCVVyXMdjAw4hVbwxWpA0gnkr8pD/rg/p37/YyUZxqn
+   8oJqzcghUGF9eqaZPeMbbhNQQmpwJIc94ZmKAU0jnMHF8gLT0KY7zCMjl
+   M18MziyMgw8dDXS4uQbCazc/w64wD0y127Rd0mBFl8deFOW5nm8eIS9Ge
+   f5rK6T35G0vYVuy0r9BkzKSBgueXBWZV1l/DAjOuBJu1N3fz9L12pyPPq
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="259804219"
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="259804223"
 X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
-   d="scan'208";a="259804219"
+   d="scan'208";a="259804223"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 07:34:57 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 07:34:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,237,1647327600"; 
-   d="scan'208";a="570244525"
+   d="scan'208";a="570244538"
 Received: from rzhang1-dev.sh.intel.com ([10.239.48.43])
-  by orsmga007.jf.intel.com with ESMTP; 19 May 2022 07:34:55 -0700
+  by orsmga007.jf.intel.com with ESMTP; 19 May 2022 07:34:57 -0700
 From:   Zhang Rui <rui.zhang@intel.com>
 To:     rjw@rjwysocki.net
 Cc:     linux-pm@vger.kernel.org, daniel.lezcano@linaro.org,
         sumeet.r.pawnikar@intel.com, len.brown@intel.com
-Subject: [PATCH V2 1/4] PM: wakeup: expose pm_wakeup_pending to modules
-Date:   Thu, 19 May 2022 22:35:05 +0800
-Message-Id: <20220519143508.3803894-2-rui.zhang@intel.com>
+Subject: [PATCH V2 2/4] thermal: intel: pch: move cooling delay to suspend_noirq phase
+Date:   Thu, 19 May 2022 22:35:06 +0800
+Message-Id: <20220519143508.3803894-3-rui.zhang@intel.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220519143508.3803894-1-rui.zhang@intel.com>
 References: <20220519143508.3803894-1-rui.zhang@intel.com>
@@ -59,32 +59,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-intel_pch_thermal driver needs a long delay to cool itself (60 seconds
-in maximum) during suspend. When a wakeup event occures during the
-delay, it is better for the intel_pch_thermal driver to detect this and
-quit cooling because the suspend is likely to abort anyway.
-
-Thus expose pm_wakeup_pending to modules so that intel_pch_thermal
-driver can be aware of the wakeup events.
+Move the PCH Thermal driver suspend callback to suspend_noirq to do
+cooling while the system is more quiescent.
 
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 Tested-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
 ---
- drivers/base/power/wakeup.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/thermal/intel/intel_pch_thermal.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-index a57d469676ca..11a4ffe91367 100644
---- a/drivers/base/power/wakeup.c
-+++ b/drivers/base/power/wakeup.c
-@@ -930,6 +930,7 @@ bool pm_wakeup_pending(void)
- 
- 	return ret || atomic_read(&pm_abort_suspend) > 0;
+diff --git a/drivers/thermal/intel/intel_pch_thermal.c b/drivers/thermal/intel/intel_pch_thermal.c
+index 527c91f5960b..c0f651b5905d 100644
+--- a/drivers/thermal/intel/intel_pch_thermal.c
++++ b/drivers/thermal/intel/intel_pch_thermal.c
+@@ -193,6 +193,7 @@ static int pch_wpt_get_temp(struct pch_thermal_device *ptd, int *temp)
+ 	return 0;
  }
-+EXPORT_SYMBOL_GPL(pm_wakeup_pending);
  
- void pm_system_wakeup(void)
++/* Cool the PCH when it's overheat in .suspend_noirq phase */
+ static int pch_wpt_suspend(struct pch_thermal_device *ptd)
  {
+ 	u8 tsel;
+@@ -455,7 +456,7 @@ static void intel_pch_thermal_remove(struct pci_dev *pdev)
+ 	pci_disable_device(pdev);
+ }
+ 
+-static int intel_pch_thermal_suspend(struct device *device)
++static int intel_pch_thermal_suspend_noirq(struct device *device)
+ {
+ 	struct pch_thermal_device *ptd = dev_get_drvdata(device);
+ 
+@@ -495,7 +496,7 @@ static const struct pci_device_id intel_pch_thermal_id[] = {
+ MODULE_DEVICE_TABLE(pci, intel_pch_thermal_id);
+ 
+ static const struct dev_pm_ops intel_pch_pm_ops = {
+-	.suspend = intel_pch_thermal_suspend,
++	.suspend_noirq = intel_pch_thermal_suspend_noirq,
+ 	.resume = intel_pch_thermal_resume,
+ };
+ 
 -- 
 2.17.1
 
