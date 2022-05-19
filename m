@@ -2,132 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA69652D780
-	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 17:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B3352DA82
+	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 18:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240958AbiESP1h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 May 2022 11:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47320 "EHLO
+        id S238394AbiESQpp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 May 2022 12:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240957AbiESP1d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 11:27:33 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F86EC3D4;
-        Thu, 19 May 2022 08:27:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 817F5CE2508;
-        Thu, 19 May 2022 15:27:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5DC7C385AA;
-        Thu, 19 May 2022 15:27:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1652974048;
-        bh=fWzT1RDzL+g/G2pbgJJD/u9obC3MZhKB4yK9conyL8g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KhPlyqr5DQ+2cxzW0xu4vYkoXbmxOHVwbib+1FOdSi4DyM1fdNRJKpkCXmhKC8/sw
-         jNg5Ewr2ACxNFq6z9vUY4tGKAxaJ6wujFNx5o7sLHygM2LxCMvsb+AXZ+kJbtwHbrm
-         TcVxENBVaAuttLzbvtbAahxCC7LXKKuezdvoJFBMa9CL6AZPR13x9yJAJs3w9JdE2M
-         gILeHgLB+1/mYxOpjc9gAt4SIVhmBzql+/b7dKEEToGvpMwDfrRpEtcjpy6FnzQ5iP
-         1yGgwc3aZNTv1BV6VUHo14UYj1DGJ41lfxRRnI3gGhcTloxiboRbNY0M0VvQwEOy+f
-         tiNlDxh+Nzn/g==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nri3i-00CSzu-B2; Thu, 19 May 2022 16:27:26 +0100
+        with ESMTP id S238189AbiESQpn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 12:45:43 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC59DD0
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 09:45:42 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id v9so2481109oie.5
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 09:45:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=E3vPikjMrJ/sOxGD67uc6AI/57xp+LEL2ERbhK7XXUA=;
+        b=qGdA6buGE7he5OAvsFwc9+qzJWFYexwGF5N1CS+dhRpoci7jYQsQ5GVUDiyq3B4iUE
+         ig+LkclsIaSCkgNUaGAF2v16PEkkGdX0eZbIkerk0w62jk+E4qc5OgTUYRwOCiMYciUh
+         WF8VhG0X2J2kOCKQEXCGPgG8LUfYf+LbfF1bbMlcDgjqhWX8x9Z2AgtMVqkQjUdDyzVN
+         oSt0RisIkZ8gObHNB0e1iC9c6ef1G8t4S4BHvefTwM4VrqhzgEb6qWUaucZX7n/hrFz5
+         BrWh7ipqLBLCJINsrNEy0dRWAlA8iVWBojZ0TaCiUGIS9ltDfp01+VThDxyczs1HiPAr
+         Shfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=E3vPikjMrJ/sOxGD67uc6AI/57xp+LEL2ERbhK7XXUA=;
+        b=wy9FufWvUAztBPR0fjZYgvvZ0DVtlp+Ycg+Rh6r3QlGS5whXZdUiD6tWyVjhVKqWiM
+         U/KUHkxMAVu9acnQHmJcdQJHCsKcDcaMxeOFaHNQnYgOcEldmY3m+wFWFODklZQdtx9/
+         p8uqQstzHCEqfTrSReDQf2c5o0oHdfPeOXjH6BhYipPa0+8uT+Rs5LyzAwDJTzJo6Biy
+         YKQSz8x6t4z6XMuoeyxD9aFXvPmoVHvJPXUXX2Jx6RQxkElqU3U1ZB9IzDvVj5issqoQ
+         8O6C7rQZYuuLUySl0oJIHAt9cGEHr5G5z6rGTgySjCp2rJO6d17QMMK2QkTeUwCr0Ck7
+         hPFw==
+X-Gm-Message-State: AOAM531/KwJ2p0FIMmK0U+ucj4XroNifNlNx6VTWx6tdblAuV8pKAeYF
+        Vo0rkPR9T0CJCVRhclqjYzI/kVJX/XnoGQ==
+X-Google-Smtp-Source: ABdhPJy1+PyYfk/d1jWWt3rldvPYaJPRzGumQAEyDKvEBFiAqv2WwRd7oKZEpHxWHaa2ZJCvYkIrBA==
+X-Received: by 2002:a05:6808:1250:b0:2da:39df:1f92 with SMTP id o16-20020a056808125000b002da39df1f92mr3265027oiv.27.1652978741858;
+        Thu, 19 May 2022 09:45:41 -0700 (PDT)
+Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
+        by smtp.gmail.com with ESMTPSA id i20-20020a9d6114000000b0060ae5f10973sm575601otj.15.2022.05.19.09.45.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 May 2022 09:45:41 -0700 (PDT)
+From:   Chris Morgan <macroalpha82@gmail.com>
+To:     linux-pm@vger.kernel.org
+Cc:     linux-rockchip@lists.infradead.org, lee.jones@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        heiko@sntech.de, sre@kernel.org, jon.lin@rock-chips.com,
+        zyw@rock-chips.com, zhangqing@rock-chips.com,
+        Chris Morgan <macromorgan@hotmail.com>
+Subject: [PATCH 0/4 v7] power: supply: Add Support for RK817 Charger
+Date:   Thu, 19 May 2022 11:45:29 -0500
+Message-Id: <20220519164533.1961-1-macroalpha82@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Date:   Thu, 19 May 2022 16:27:26 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Vivek Kumar <quic_vivekuma@quicinc.com>
-Cc:     corbet@lwn.net, catalin.marinas@arm.com, will@kernel.org,
-        tglx@linutronix.de, axboe@kernel.dk, rafael@kernel.org,
-        akpm@linux-foundation.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-mm@kvack.org, len.brown@intel.com, pavel@ucw.cz,
-        paulmck@kernel.org, bp@suse.de, keescook@chromium.org,
-        songmuchun@bytedance.com, rdunlap@infradead.org,
-        damien.lemoal@opensource.wdc.com, pasha.tatashin@soleen.com,
-        tabba@google.com, ardb@kernel.org, tsoni@quicinc.com,
-        quic_psodagud@quicinc.com, quic_svaddagi@quicinc.com,
-        Prasanna Kumar <quic_kprasan@quicinc.com>
-Subject: Re: [RFC 1/6] arm64: hibernate: Introduce new entry point to kernel
-In-Reply-To: <1652860121-24092-2-git-send-email-quic_vivekuma@quicinc.com>
-References: <1652860121-24092-1-git-send-email-quic_vivekuma@quicinc.com>
- <1652860121-24092-2-git-send-email-quic_vivekuma@quicinc.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <1d517a7598f7833196ec0c8258816aba@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: quic_vivekuma@quicinc.com, corbet@lwn.net, catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de, axboe@kernel.dk, rafael@kernel.org, akpm@linux-foundation.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org, linux-pm@vger.kernel.org, linux-mm@kvack.org, len.brown@intel.com, pavel@ucw.cz, paulmck@kernel.org, bp@suse.de, keescook@chromium.org, songmuchun@bytedance.com, rdunlap@infradead.org, damien.lemoal@opensource.wdc.com, pasha.tatashin@soleen.com, tabba@google.com, ardb@kernel.org, tsoni@quicinc.com, quic_psodagud@quicinc.com, quic_svaddagi@quicinc.com, quic_kprasan@quicinc.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2022-05-18 08:48, Vivek Kumar wrote:
-> Introduce a new entry point to hibernated kernel image.
-> This is generally needed when bootloader restores the
-> hibernated image from disc to ddr and passes control
-> to it by turning off the mmu, also initialize this new
-> entry point with cpu_resume which turns on the mmu and
-> then proceeds with restore routines.
-> 
-> Signed-off-by: Vivek Kumar <quic_vivekuma@quicinc.com>
-> Signed-off-by: Prasanna Kumar <quic_kprasan@quicinc.com>
-> ---
->  arch/arm64/kernel/hibernate.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/arch/arm64/kernel/hibernate.c 
-> b/arch/arm64/kernel/hibernate.c
-> index 6328308..4e294b3 100644
-> --- a/arch/arm64/kernel/hibernate.c
-> +++ b/arch/arm64/kernel/hibernate.c
-> @@ -74,6 +74,14 @@ static struct arch_hibernate_hdr {
->  	void		(*reenter_kernel)(void);
-> 
->  	/*
-> +	 * Another entry point if jump to kernel happens with mmu disabled,
-> +	 * generally done when restoring hibernation image from bootloader
-> +	 * context
-> +	 */
-> +
-> +	phys_addr_t	phys_reenter_kernel;
-> +
-> +	/*
->  	 * We need to know where the __hyp_stub_vectors are after restore to
->  	 * re-configure el2.
->  	 */
-> @@ -116,6 +124,7 @@ int arch_hibernation_header_save(void *addr,
-> unsigned int max_size)
->  	arch_hdr_invariants(&hdr->invariants);
->  	hdr->ttbr1_el1		= __pa_symbol(swapper_pg_dir);
->  	hdr->reenter_kernel	= _cpu_resume;
-> +	hdr->phys_reenter_kernel  = __pa(cpu_resume);
-> 
->  	/* We can't use __hyp_get_vectors() because kvm may still be loaded 
-> */
->  	if (el2_reset_needed())
+From: Chris Morgan <macromorgan@hotmail.com>
 
-So here, you are creating a new ABI with the bootloader, based on
-a data structure that isn't mean't to be ABI. It means that we
-wouldn't be allowed to ever change this data structure, as this
-would mean having to update the bootloader in sync.
+This series is to add support for the Rockchip rk817 battery charger
+which is present in all Rockchip RK817 PMICs. The driver was written
+as a joint effort by Maya Matuszczyk <maccraft123mc@gmail.com> and
+myself Chris Morgan <macromorgan@hotmail.com>.
 
-Clearly, this isn't acceptable.
+The driver requires some basic parameters be described about the
+battery in the devicetree such as the maximum capacity, the minimum
+and maximum voltage for the battery, the maximum charge current, the
+maximum charge voltage, and the value of sample resistors and sleep
+currents.
 
-         M.
+The hardware itself contains an ADC capable of measuring the voltage,
+current, and temperature of the battery (though my implementation of an
+Odroid Go Advance lacks a thermistor for temperature). It also contains
+a columb counter, registers for tracking the measured voltage and
+current at boot, and a few bytes of nvram for storing data.
+
+Changes from V6:
+ - Updated devicetree binding patch to reference the required
+   prerequisite patch in the correct manner (relocated it below the ---
+   and pointed it to lore.kernel.org).
+
+Changes from V5:
+ - Renamed mfd-cell from "battery" to "charger".
+ - Added note for devicetree binding documentation that it requires
+   application of an additional pending patch (to convert documentation
+   to yaml).
+
+Changes from V4:
+ - Massively redesigned the battery driver to improve measurement
+   accuracy and reliability. Driver now checks values every 8
+   seconds (mimicking BSP driver behavior), or whenever a plug event
+   is detected.
+ - Removed OCV, boot voltage, and boot current as values were found
+   to be unreliable.
+ - Updated first-boot behavior to perform a "best guess" at capacity.
+ - Added ability to calibrate columb counter to full state of charge
+   when charger reports full, and added ability calibrate full charge
+   capacity when battery discharges from full charge to minimum
+   voltage.
+ - Expose state of charge as capacity (in percents).
+ - Updated storing of values to nvram to preserve compatibility with
+   BSP kernel.
+
+Changes from V3:
+
+ - Corrected issues in device tree documentation.
+ - Added additional logic to battery to correct for columb counter
+   drift when the device stays plugged in at a full charge state.
+
+Changes from V2:
+
+ - Updated devicetree bindings to use common property units.
+ - Removed unneeded includes.
+ - Updated rk817_chg_cur_to_reg to make more legible.
+ - Simplified formula for displaying calibrated voltage.
+ - Updated power supply type to POWER_SUPPLY_TYPE_USB.
+ - Implemented get/put_unaligned macros for bulk reads and writes.
+ - Changed numerous dev_err() to dev_err_probe().
+ - Call power_supply_put_battery_info() at end of probe function.
+ - Removed unneeded whitespace.
+
+Changes from V1:
+
+ - Fixed a CLANG warning regarding an uninitalized variable.
+ - Fixed a CLANG warning regarding a pointer as a bool value always
+   returning as true.
+ - Added Maya Matuszczyk to the Signed-off-by.
+
+Chris Morgan (4):
+  dt-bindings: Add Rockchip rk817 battery charger support
+  mfd: Add Rockchip rk817 battery charger support
+  power: supply: Add charger driver for Rockchip RK817
+  arm64: dts: rockchip: add rk817 chg to Odroid Go Advance
+
+ .../bindings/mfd/rockchip,rk817.yaml          |   48 +
+ .../boot/dts/rockchip/rk3326-odroid-go2.dts   |   26 +
+ drivers/mfd/rk808.c                           |   16 +-
+ drivers/power/supply/Kconfig                  |    6 +
+ drivers/power/supply/Makefile                 |    1 +
+ drivers/power/supply/rk817_charger.c          | 1157 +++++++++++++++++
+ include/linux/mfd/rk808.h                     |   91 ++
+ 7 files changed, 1344 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/power/supply/rk817_charger.c
+
 -- 
-Jazz is not dead. It just smells funny...
+2.25.1
+
