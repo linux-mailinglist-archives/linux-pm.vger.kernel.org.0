@@ -2,69 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 472B152DFFA
-	for <lists+linux-pm@lfdr.de>; Fri, 20 May 2022 00:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5573752E0BD
+	for <lists+linux-pm@lfdr.de>; Fri, 20 May 2022 01:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243737AbiESWbQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 May 2022 18:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34650 "EHLO
+        id S1343713AbiESXpR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 May 2022 19:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233817AbiESWbO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 18:31:14 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A954A9FD2;
-        Thu, 19 May 2022 15:31:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1652999472; x=1684535472;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=bDLidO+uz/WxZLgd7T0KPUs7o3mI46xraJxkCn7ZFMc=;
-  b=L3bmzxmvKv0afo4OS0Cl3vprFCz4ygPt8+5thrqcpI0TsSTFMv/tB3GB
-   Ra84KiwHRxeIvkx8knnfaOROkXK/WC3FfEgcB9A+jbGxHB6Ac96R/UtPC
-   qRp3vOnmALkUpMyLH/tnDSBNduAwtNtIAHkcEZkybHN/ECzglUQo4Wj6L
-   k=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 19 May 2022 15:31:10 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 15:31:09 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 19 May 2022 15:30:38 -0700
-Received: from [10.110.88.175] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 19 May
- 2022 15:30:37 -0700
-Message-ID: <27515993-18f3-8891-4835-9b6a8d7f86b0@quicinc.com>
-Date:   Thu, 19 May 2022 15:30:37 -0700
+        with ESMTP id S1343701AbiESXpP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 19:45:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88CC8119041
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 16:45:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653003913;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xcqeqNHBqLaEPFvaMSIdVsHM/2ssgjepqSc89Z+McDY=;
+        b=A1NmWK4G/Tnr0+ZlvjpzQNqsGDIO7dshbDJJZGU9Ozj9ysKdnjToR8iYdxDb4XepI7+eEu
+        ++yRczmz9zH5sWH8dFkaOI4ulJi/SonkfTgO3YUIPDJGJfSX+1m5zB3Ti40m+jCy0Hc46d
+        cqhJ1ggmZQrOzIHoYrjADt2ocDfcP3E=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-671-51qE-HMZMJ-_l5k-QlXFHg-1; Thu, 19 May 2022 19:45:10 -0400
+X-MC-Unique: 51qE-HMZMJ-_l5k-QlXFHg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A41B685A5AA;
+        Thu, 19 May 2022 23:45:07 +0000 (UTC)
+Received: from localhost (ovpn-12-42.pek2.redhat.com [10.72.12.42])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4ABA5492C14;
+        Thu, 19 May 2022 23:45:06 +0000 (UTC)
+Date:   Fri, 20 May 2022 07:45:02 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Petr Mladek <pmladek@suse.com>
+Cc:     "michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Dave Young <dyoung@redhat.com>, d.hatayama@jp.fujitsu.com,
+        akpm@linux-foundation.org, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
+        corbet@lwn.net, dave.hansen@linux.intel.com, feng.tang@intel.com,
+        gregkh@linuxfoundation.org, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org
+Subject: Re: [PATCH 24/30] panic: Refactor the panic path
+Message-ID: <20220519234502.GA194232@MiWiFi-R3L-srv>
+References: <20220427224924.592546-1-gpiccoli@igalia.com>
+ <20220427224924.592546-25-gpiccoli@igalia.com>
+ <Yn0TnsWVxCcdB2yO@alley>
+ <d313eec2-96b6-04e3-35cd-981f103d010e@igalia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v6] dt-bindings: power: reset: qcom-pon: update "reg"
- property details
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     <dmitry.torokhov@gmail.com>, <corbet@lwn.net>, <sre@kernel.org>,
-        <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <bjorn.andersson@linaro.org>,
-        <swboyd@chromium.org>, <linux-doc@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        David Collins <quic_collinsd@quicinc.com>
-References: <20220422191239.6271-1-quic_amelende@quicinc.com>
- <20220422191239.6271-2-quic_amelende@quicinc.com>
- <YmcWZLp2X8UYOVas@robh.at.kernel.org>
-From:   Anjelique Melendez <quic_amelende@quicinc.com>
-In-Reply-To: <YmcWZLp2X8UYOVas@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d313eec2-96b6-04e3-35cd-981f103d010e@igalia.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,72 +87,206 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 05/15/22 at 07:47pm, Guilherme G. Piccoli wrote:
+> On 12/05/2022 11:03, Petr Mladek wrote:
+...... 
+> > OK, the question is how to make it better. Let's start with
+> > a clear picture of the problem:
+> > 
+> > 1. panic() has basically two funtions:
+> > 
+> >       + show/store debug information (optional ways and amount)
+> >       + do something with the system (reboot, stay hanged)
+> > 
+> > 
+> > 2. There are 4 ways how to show/store the information:
+> > 
+> >       + tell hypervisor to store what it is interested about
+> >       + crash_dump
+> >       + kmsg_dump()
+> >       + consoles
+> > 
+> >   , where crash_dump and consoles are special:
+> > 
+> >      + crash_dump does not return. Instead it ends up with reboot.
+> > 
+> >      + Consoles work transparently. They just need an extra flush
+> >        before reboot or staying hanged.
+> > 
+> > 
+> > 3. The various notifiers do things like:
+> > 
+> >      + tell hypervisor about the crash
+> >      + print more information (also stop watchdogs)
+> >      + prepare system for reboot (touch some interfaces)
+> >      + prepare system for staying hanged (blinking)
+> > 
+> >    Note that it pretty nicely matches the 4 notifier lists.
+> > 
+> 
+> I really appreciate the summary skill you have, to convert complex
+> problems in very clear and concise ideas. Thanks for that, very useful!
+> I agree with what was summarized above.
 
+I want to say the similar words to Petr's reviewing comment when I went
+through the patches and traced each reviewing sub-thread to try to
+catch up. Petr has reivewed this series so carefully and given many
+comments I want to ack immediately.
 
-On 4/25/2022 2:45 PM, Rob Herring wrote:
-> On Fri, Apr 22, 2022 at 12:12:38PM -0700, Anjelique Melendez wrote:
->> From: David Collins <collinsd@quicinc.com>
->>
->> Update the description of "reg" property to add the PON_PBS base
->> address along with PON_HLOS base address.  Also add "reg-names"
->> property description.
->>
->> Signed-off-by: David Collins <quic_collinsd@quicinc.com>
->> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
->> ---
->>  .../bindings/power/reset/qcom,pon.yaml | 19 ++++++++++++++++++-
->>  1 file changed, 18 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
->> index 353f155d..65ec8197 100644
->> --- a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
->> +++ b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
->> @@ -26,7 +26,24 @@ properties:
->>        - qcom,pm8998-pon
->>  
->>    reg:
->> -    maxItems: 1
->> +    description: |
->> +      Specifies the SPMI base address for the PON (power-on) peripheral.  For
->> +      PMICs that have the PON peripheral (GEN3) split into PON_HLOS and PON_PBS
->> +      (e.g. PMK8350), this can hold addresses of both PON_HLOS and PON_PBS
->> +      peripherals.  In that case, the PON_PBS address needs to be specified to
->> +      facilitate software debouncing on some PMICs.
->> +    minItems: 1
->> +    maxItems: 2
->> +
->> +  reg-names:
->> +    description: |
->> +      For PON GEN1 and GEN2, it should be "pon".  For PON GEN3 it should include
->> +      "pon_hlos" and optionally "pon_pbs".
->> +    minItems: 1
->> +    items:
->> +      - const: pon_hlos
->> +      - const: pon_pbs
->> +      - const: pon
-> 
-> Did you test that 'reg-names = "pon";' works? It doesn't. The schema 
-> says 'pon' is the 3rd entry in reg-names.
-> 
-> As 'reg-names' is new I thin this should be:
-> 
-> items:
->   - const: hlos
->   - const: pbs
-> 
-> And if there's 1 entry, then 'reg-names' should not be there.
-> 
-> Rob
+I agree with most of the suggestions from Petr to this patch, except of
+one tiny concern, please see below inline comment.
 
-currently reg-names is not consumed by the pm8941 driver but rather for users to understand
-what each reg address is associated with. 
-With this being the case would the following be acceptable?
-	minItems: 1
-	maxItems: 2
-	items:
-    	    anyOf:
-     	      - const: pon_hlos
-     	      - const: pon_pbs
-     	      - const: pon
+> 
+> 
+> > Now, we need to decide about the ordering. The main area is how
+> > to store the debug information. Consoles are transparent so
+> > the quesition is about:
+> > 
+> >      + hypervisor
+> >      + crash_dump
+> >      + kmsg_dump
+> > 
+> > Some people need none and some people want all. There is a
+> > risk that system might hung at any stage. This why people want to
+> > make the order configurable.
+> > 
+> > But crash_dump() does not return when it succeeds. And kmsg_dump()
+> > users havn't complained about hypervisor problems yet. So, that
+> > two variants might be enough:
+> > 
+> >     + crash_dump (hypervisor, kmsg_dump as fallback)
+> >     + hypervisor, kmsg_dump, crash_dump
+> > 
+> > One option "panic_prefer_crash_dump" should be enough.
+> > And the code might look like:
+> > 
+> > void panic()
+> > {
+> > [...]
+> > 	dump_stack();
+> > 	kgdb_panic(buf);
+> > 
+> > 	< ---  here starts the reworked code --- >
+> > 
+> > 	/* crash dump is enough when enabled and preferred. */
+> > 	if (panic_prefer_crash_dump)
+> > 		__crash_kexec(NULL);
 
-If not we would be ok with getting rid of the reg-name property.
+I like the proposed skeleton of panic() and code style suggested by
+Petr very much. About panic_prefer_crash_dump which might need be added,
+I hope it has a default value true. This makes crash_dump execute at
+first by default just as before, unless people specify
+panic_prefer_crash_dump=0|n|off to disable it. Otherwise we need add
+panic_prefer_crash_dump=1 in kernel and in our distros to enable kdump,
+this is inconsistent with the old behaviour.
+
+> > 
+> > 	/* Stop other CPUs and focus on handling the panic state. */
+> > 	if (has_kexec_crash_image)
+> > 		crash_smp_send_stop();
+> > 	else
+> > 		smp_send_stop()
+> > 
+> 
+> Here we have a very important point. Why do we need 2 variants of SMP
+> CPU stopping functions? I disagree with that - my understanding of this
+> after some study in architectures is that the crash_() variant is
+> "stronger", should work in all cases and if not, we should fix that -
+> that'd be a bug.
+> 
+> Such variant either maps to smp_send_stop() (in various architectures,
+> including XEN/x86) or overrides the basic function with more proper
+> handling for panic() case...I don't see why we still need such
+> distinction, if you / others have some insight about that, I'd like to
+> hear =)
+> 
+> 
+> > 	/* Notify hypervisor about the system panic. */
+> > 	atomic_notifier_call_chain(&panic_hypervisor_list, 0, NULL);
+> > 
+> > 	/*
+> > 	 * No need to risk extra info when there is no kmsg dumper
+> > 	 * registered.
+> > 	 */
+> > 	if (!has_kmsg_dumper())
+> > 		__crash_kexec(NULL);
+> > 
+> > 	/* Add extra info from different subsystems. */
+> > 	atomic_notifier_call_chain(&panic_info_list, 0, NULL);
+> > 
+> > 	kmsg_dump(KMSG_DUMP_PANIC);
+> > 	__crash_kexec(NULL);
+> > 
+> > 	/* Flush console */
+> > 	unblank_screen();
+> > 	console_unblank();
+> > 	debug_locks_off();
+> > 	console_flush_on_panic(CONSOLE_FLUSH_PENDING);
+> > 
+> > 	if (panic_timeout > 0) {
+> > 		delay()
+> > 	}
+> > 
+> > 	/*
+> > 	 * Prepare system for eventual reboot and allow custom
+> > 	 * reboot handling.
+> > 	 */
+> > 	atomic_notifier_call_chain(&panic_reboot_list, 0, NULL);
+> 
+> You had the order of panic_reboot_list VS. consoles flushing inverted.
+> It might make sense, although I didn't do that in V1...
+> Are you OK in having a helper for console flushing, as I did in V1? It
+> makes code of panic() a bit less polluted / more focused I feel.
+> 
+> 
+> > 
+> > 	if (panic_timeout != 0) {
+> > 		reboot();
+> > 	}
+> > 
+> > 	/*
+> > 	 * Prepare system for the infinite waiting, for example,
+> > 	 * setup blinking.
+> > 	 */
+> > 	atomic_notifier_call_chain(&panic_loop_list, 0, NULL);
+> > 
+> > 	infinite_loop();
+> > }
+> > 
+> > 
+> > __crash_kexec() is there 3 times but otherwise the code looks
+> > quite straight forward.
+> > 
+> > Note 1: I renamed the two last notifier list. The name 'post-reboot'
+> > 	did sound strange from the logical POV ;-)
+> > 
+> > Note 2: We have to avoid the possibility to call "reboot" list
+> > 	before kmsg_dump(). All callbacks providing info
+> > 	have to be in the info list. It a callback combines
+> > 	info and reboot functionality then it should be split.
+> > 
+> > 	There must be another way to calm down problematic
+> > 	info callbacks. And it has to be solved when such
+> > 	a problem is reported. Is there any known issue, please?
+> > 
+> > It is possible that I have missed something important.
+> > But I would really like to make the logic as simple as possible.
+> 
+> OK, I agree with you! It's indeed simpler and if others agree, I can
+> happily change the logic to what you proposed. Although...currently the
+> "crash_kexec_post_notifiers" allows to call _all_ panic_reboot_list
+> callbacks _before kdump_.
+> 
+> We need to mention this change in the commit messages, but I really
+> would like to hear the opinions of heavy users of notifiers (as
+> Michael/Hyper-V) and the kdump interested parties (like Baoquan / Dave
+> Young / Hayatama). If we all agree on such approach, will change that
+> for V2 =)
+> 
+> Thanks again Petr, for the time spent in such detailed review!
+> Cheers,
+> 
+> 
+> Guilherme
+> 
+
