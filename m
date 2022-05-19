@@ -2,57 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 382EB52D2C3
+	by mail.lfdr.de (Postfix) with ESMTP id 84A1952D2C4
 	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 14:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237999AbiESMoQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 May 2022 08:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42080 "EHLO
+        id S237976AbiESMoR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 May 2022 08:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237976AbiESMoO (ORCPT
+        with ESMTP id S237994AbiESMoO (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 08:44:14 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E0BBA98C
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 05:44:12 -0700 (PDT)
-Date:   Thu, 19 May 2022 12:44:10 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F37BA99D
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 05:44:13 -0700 (PDT)
+Date:   Thu, 19 May 2022 12:44:11 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652964251;
+        s=2020; t=1652964252;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AQ8wIZW/gX5qVCHR5mwg2xY8CjzCcj8k0dg7S6A/nAc=;
-        b=AI9rL/IwCrqdpoqtZF1CfE02uwr9MojWQA9waCT4gkOe7s/htfyoTZ8Bq8kCNlEEyvppQD
-        5OnvbY3O2IvEiZRFTuQArZc1BhdZGzmEfh6wAXtc4nNIzhduJdIqQ6/BjtoPNmctHNyN2U
-        ZegnILR36fDmSItrk5m/8dO1Qrywkqo99p3YNnPYTHg562grSp+qu4KCoot5pxx0Efuxvj
-        2UcNXmlpm1pK5FbEEKClQg/4S4EthLeDJIn1t0WMuqJ+oUbDEbFWsWNVHGh6SUy+KAwcEX
-        QbYcFck2e6Sot+8GLhYbqxX5RGP+YxtZNpDrVY1RIDxxp7JHK0qQC/5M9GWDlQ==
+        bh=Vosng7/NSlMGpz0vi9weuk9xk/nt2/vRFG4VyAn211k=;
+        b=EUdxXsNi78QbjCEuB+hIVK9auFDQdAhvF6Dk2YtqhGbM4tJ4XMqZ6u4IKp+J1ffX5jQyhq
+        zFw8B09zh0oKEHRLEdhkIhGzvsMuxAwRoKNi7/JnJPxkEkLtHJmSfxbTA802HHQtluy5YY
+        KQH+Db1c/25IXOATDBXcLy4reg4rH4ICT1eHX9PeFK7sDz6w0On+f8qDdLRbRceqO3MFTI
+        rtfYzAzVevCp6PmmvI9a4kywgrN+ysrGXdjSOYTFof/QLEqbGPD4YU5xNiQ3viSfSNlS0K
+        6/x8yaslxfl55RihcWvR/ucJpHhvxdlAslCIv1DCJmdFnFLNlwyg7ZJOSoF1lw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652964251;
+        s=2020e; t=1652964252;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AQ8wIZW/gX5qVCHR5mwg2xY8CjzCcj8k0dg7S6A/nAc=;
-        b=13I92Q1UuzdK7oOpoiucDffM7U4mgG4y+P4Szp4mHnctDQ1USlE20cGo2WH2C9WeFPVnE7
-        i4TFDqetPBYnnnDQ==
-From:   "thermal-bot for Biju Das" <tip-bot2@linutronix.de>
+        bh=Vosng7/NSlMGpz0vi9weuk9xk/nt2/vRFG4VyAn211k=;
+        b=B9zZKrhTktfvwSFtI9pWax7xTS2FERF9ULYJXpSi+NTu37OLy4ZEu9Jd1QtYY3TvZeY8dq
+        P6i3fSxjBidiGvCw==
+From:   "thermal-bot for Corentin Labbe" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] dt-bindings: thermal: rzg2l-thermal: Document
- RZ/G2UL bindings
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+Subject: [thermal: thermal/next] thermal: thermal_of: fix typo on
+ __thermal_bind_params
+Cc:     Corentin Labbe <clabbe@baylibre.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20220501081930.23743-1-biju.das.jz@bp.renesas.com>
-References: <20220501081930.23743-1-biju.das.jz@bp.renesas.com>
+In-Reply-To: <20220426064113.3787826-1-clabbe@baylibre.com>
+References: <20220426064113.3787826-1-clabbe@baylibre.com>
 MIME-Version: 1.0
-Message-ID: <165296425018.4207.12815208444452730180.tip-bot2@tip-bot2>
+Message-ID: <165296425108.4207.3172189754708769819.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,37 +67,36 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     e126ce0bcc082382497219c323e1b941583c9036
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//e126ce0bcc082382497219c323e1b941583c9036
-Author:        Biju Das <biju.das.jz@bp.renesas.com>
-AuthorDate:    Sun, 01 May 2022 09:19:30 +01:00
+Commit-ID:     44b965d8c44e8e86a43e11fc46adfc60da540c77
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//44b965d8c44e8e86a43e11fc46adfc60da540c77
+Author:        Corentin Labbe <clabbe@baylibre.com>
+AuthorDate:    Tue, 26 Apr 2022 06:41:13 
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Thu, 19 May 2022 12:11:52 +02:00
 
-dt-bindings: thermal: rzg2l-thermal: Document RZ/G2UL bindings
+thermal: thermal_of: fix typo on __thermal_bind_params
 
-Document RZ/G2UL TSU bindings. The TSU block on RZ/G2UL is identical to one
-found on RZ/G2L SoC. No driver changes are required as generic compatible
-string "renesas,rzg2l-tsu" will be used as a fallback.
+Add a missing s to __thermal_bind_param kernel doc comment.
+This fixes the following sparse warnings:
+drivers/thermal/thermal_of.c:50: warning: expecting prototype for struct __thermal_bind_param. Prototype was for struct __thermal_bind_params instead
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220501081930.23743-1-biju.das.jz@bp.renesas.com
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Link: https://lore.kernel.org/r/20220426064113.3787826-1-clabbe@baylibre.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/thermal/thermal_of.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml b/Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml
-index dfb6dce..1d83733 100644
---- a/Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml
-+++ b/Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml
-@@ -17,6 +17,7 @@ properties:
-   compatible:
-     items:
-       - enum:
-+          - renesas,r9a07g043-tsu # RZ/G2UL
-           - renesas,r9a07g044-tsu # RZ/G2{L,LC}
-           - renesas,r9a07g054-tsu # RZ/V2L
-       - const: renesas,rzg2l-tsu
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index da48480..b65d435 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -35,7 +35,7 @@ struct __thermal_cooling_bind_param {
+ };
+ 
+ /**
+- * struct __thermal_bind_param - a match between trip and cooling device
++ * struct __thermal_bind_params - a match between trip and cooling device
+  * @tcbp: a pointer to an array of cooling devices
+  * @count: number of elements in array
+  * @trip_id: the trip point index
