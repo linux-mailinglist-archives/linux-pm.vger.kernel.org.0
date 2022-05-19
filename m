@@ -2,131 +2,370 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08DEC52CDD5
-	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 10:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0401652D02D
+	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 12:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235135AbiESIDV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 May 2022 04:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47098 "EHLO
+        id S234032AbiESKLS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 May 2022 06:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232049AbiESIDU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 04:03:20 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F46757997
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 01:03:18 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id p22so7690691lfo.10
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 01:03:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=h+5XYMbcVG/ukMH+8rM5pkWmGEN5A1VDZBupz3IskQ4=;
-        b=ookNFxXo3dqEYboeqhuxEAIDVKM2ggkLyyJZrAXTVDXa5x4KcT3z346tW+efpnrjmX
-         S+56zMWLsReakocli3x4AXTS6EqN32Nr2yCmZy03cUO4PcNLp1h6yCHSiA4+YFQ7WMRU
-         LICyzxNlOt5FHOVfS3CFn1v/esPjRtQ1eNyKuNk+bg3N84W2THm/XuJ1JDJhpRv/Xh98
-         ZFQT/WlNnMoVu4UXqHIARzIW/yx0OUE6MMvP7MhZup2YEdqEjZbW1gHifpJa9qdhmkEs
-         HgHgYcV2D6Ona9aCCBBoA/5TAJ5K/8qobzisYfzFzNB5MOKFhRJqh1B5wd9qQcunFkyM
-         gY/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=h+5XYMbcVG/ukMH+8rM5pkWmGEN5A1VDZBupz3IskQ4=;
-        b=kfm/83HjWISx/UZr9KI0OSDoHTPK8ABhYAaVn7HWaf+r8w3ls492VSuwIzwy198O6s
-         fXpA6yID1CLyetstDccAnALvEVopkRFQ7dsNARzYLVn738ApMim9LjFAMgtGU/co294k
-         8dmF7XCxu2rTHxgvmkBbAsM4+ST/T5YaOmSAYMXVdpF4EX8RENpIhF+v5jCrNnIQNAwY
-         Y5FSGdtV4mDbf+RQ1yJfhg7sUWkrbgZiJceTC/BjWLAyNic6hHpk7x+D6T7LYOLK8MCy
-         bStehVYNPk6+3QFcD5g/DUHaEVXV0DKzwQZZEOZQY0JDKVHxfDNJQpqHL6zwW4RHIv47
-         Uj6w==
-X-Gm-Message-State: AOAM5323NlyY/7M6epykMpF1aXlsy7xVaUzJr4MbhBrh3QEZsLFGTged
-        r8ro8vQ9NjJH55txU1Ju2l+0TA==
-X-Google-Smtp-Source: ABdhPJzcdAmmROIvWFwwSM91fShqeasCgr925FoWEh4W9HiVHNX3YCiZf/CDs2u8H05VevxjMEcRTA==
-X-Received: by 2002:a05:6512:449:b0:477:cb59:9fe5 with SMTP id y9-20020a056512044900b00477cb599fe5mr558965lfk.40.1652947396699;
-        Thu, 19 May 2022 01:03:16 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id n14-20020ac242ce000000b0047255d211b8sm195035lfl.231.2022.05.19.01.03.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 01:03:16 -0700 (PDT)
-Message-ID: <65a4c28d-6702-3a9f-f837-1ea69a428777@linaro.org>
-Date:   Thu, 19 May 2022 10:03:14 +0200
+        with ESMTP id S236574AbiESKLO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 06:11:14 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559AE1583B;
+        Thu, 19 May 2022 03:11:07 -0700 (PDT)
+X-UUID: 82c5b6c23ff94c03bb4608183d116306-20220519
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:b5ddf7d2-e15d-442e-b4ec-5fb1b3a51000,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:2a19b09,CLOUDID:e7a9db79-5ef6-470b-96c9-bdb8ced32786,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 82c5b6c23ff94c03bb4608183d116306-20220519
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <james.lo@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1266524108; Thu, 19 May 2022 18:10:46 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 19 May 2022 18:10:46 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 19 May 2022 18:10:46 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 19 May 2022 18:10:46 +0800
+From:   James Lo <james.lo@mediatek.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-pm@vger.kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Fan Chen <fan.chen@mediatek.com>,
+        Louis Yu <louis.yu@mediatek.com>,
+        Michael Kao <michael.kao@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Ben Tseng <ben.tseng@mediatek.com>,
+        James Lo <james.lo@mediatek.com>
+Subject: [v10 1/1] thermal: mediatek: add another get_temp ops for thermal sensors
+Date:   Thu, 19 May 2022 18:10:44 +0800
+Message-ID: <20220519101044.16765-1-james.lo@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
-References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
- <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
- <20220425072710.v6gwo4gu3aouezg4@vireshk-i7>
- <dea39b1f-0091-2690-7f07-108d07ef9f3c@linaro.org>
- <20220510044053.ykn6ygnbeokhzrsa@vireshk-i7>
- <1e533194-7047-8342-b426-f607fddbfaa3@linaro.org>
- <20220511050643.hd5tcrojb3wkbg7t@vireshk-i7>
- <20220518235708.1A04CC385A9@smtp.kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220518235708.1A04CC385A9@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19/05/2022 01:57, Stephen Boyd wrote:
-> Quoting Viresh Kumar (2022-05-10 22:06:43)
->> On 10-05-22, 15:09, Krzysztof Kozlowski wrote:
->>> On 10/05/2022 06:40, Viresh Kumar wrote:
->>>> IMHO, this is broken by design. I can easily see that someone wants to
->>>> have few variants of all other frequencies for the same frequency of
->>>> the so called "main" clock, i.e. multiple OPPs with same "main" freq
->>>> value.  I don't think we can mark the clocks "main" or otherwise as
->>>> easily for every platform.
->>>>
->>>> Stephen, any inputs on this ?
->>>
->>> In such case, matching opps by frequency would be a quite different API.
->>> The drivers can use now:
->>> https://github.com/krzk/linux/commit/ebc31798494fcc66389ae409dce6d9489c16156a#diff-b6370444c32afa2e55d9b6150f355ba6f4d20c5ed5da5399ea8295d323de8267R1200
->>>
->>> If you assume that this frequency can be used for multiple OPPs, then
->>> the API should be different. Something like:
->>> int dev_pm_opp_set_rate(struct device *dev, unsigned long *target_freqs,
->>>                         size_t num_freqs);
->>
->> At this point I am not looking for a new API, but just continuing the discussion
->> to understand what different hardwares want or look like.
-> 
-> I think for UFS they don't want a rate API at all. They want to set a
-> "clock gear" and that translates into whatever that means for OPP; be it
-> a clk frequency (or two), an interconnect bandwidth (or multiple?), and some
-> performance state (or many) for any power domains. I think the gear
-> design is built into the UFS spec. If it isn't then I'm misremembering
-> things.
+Provide thermal zone to read thermal sensor
+in the SoC. We can read all the thermal sensors
+value in the SoC by the node /sys/class/thermal/
 
-Yes, true. The clock frequencies are still changed with each gear, but
-in general the UFS indeed operates on gear concept.
+In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
+on the first read of sensor that often are bogus values.
+This can avoid following warning on boot:
 
-Best regards,
-Krzysztof
+  thermal thermal_zone6: failed to read out thermal zone (-13)
+
+Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+Signed-off-by: Ben Tseng <ben.tseng@mediatek.com>
+Signed-off-by: James Lo <james.lo@mediatek.com>
+
+---
+Changes in V10:
+    - Rebase to kernel-v5.18-rc7
+    - Resend
+
+Changes in V9:
+    - Rebase to kernel-v5.14-rc1
+    - Bind raw_to_mcelsius_v1 or raw_to_mcelsius_v2 to compatible
+      data of struct mtk_thermal_data
+    - Remove duplicate struct 'mtk_thermal_bank'
+    - Remove unnecessary if condition check
+    - Return error if any thermal zone fail to register
+
+Changes in V8:
+    - Rebase to kernel-v5.13-rc1
+    - Resend
+
+Changes in v7:
+    - Fix build error in v6.
+
+Changes in v6:
+    - Rebase to kernel-5.11-rc1.
+    - [1/3]
+        - add interrupts property.
+    - [2/3]
+        - add the Tested-by in the commit message.
+    - [3/3]
+        - use the mt->conf->msr[id] instead of conf->msr[id] in the
+          _get_sensor_temp and mtk_thermal_bank_temperature.
+        - remove the redundant space in _get_sensor_temp and
+          mtk_read_sensor_temp.
+        - change kmalloc to dev_kmalloc in mtk_thermal_probe.
+
+Changes in v5:
+    - Rebase to kernel-5.9-rc1.
+    - Revise the title of cover letter.
+    - Drop "[v4,7/7] thermal: mediatek: use spinlock to protect PTPCORESEL"
+    - [2/2]
+        -  Add the judgement to the version of raw_to_mcelsius.
+
+Changes in v4:
+    - Rebase to kernel-5.6-rc1.
+    - [1/7]
+        - Squash thermal zone settings in the dtsi from [v3,5/8]
+          arm64: dts: mt8183: Increase polling frequency for CPU thermal zone.
+        - Remove the property of interrupts and mediatek,hw-reset-temp.
+    - [2/7]
+        - Correct commit message.
+    - [4/7]
+        - Change the target temperature to the 80C and change the commit message.
+    - [6/7]
+        - Adjust newline alignment.
+        - Fix the judgement on the return value of registering thermal zone.
+
+Changes in v3:
+    - Rebase to kernel-5.5-rc1.
+    - [1/8]
+        - Update sustainable power of cpu, tzts1~5 and tztsABB.
+    - [7/8]
+        - Bypass the failure that non cpu_thermal sensor is not find in thermal-zones
+          in dts, which is normal for mt8173, so prompt a warning here instead of
+          failing.
+
+    Return -EAGAIN instead of -EACCESS on the first read of sensor that
+        often are bogus values. This can avoid following warning on boot:
+
+          thermal thermal_zone6: failed to read out thermal zone (-13)
+
+Changes in v2:
+    - [1/8]
+        - Add the sustainable-power,trips,cooling-maps to the tzts1~tztsABB.
+    - [4/8]
+        - Add the min opp of cpu throttle.
+
+Matthias Kaehlcke (1):
+  arm64: dts: mt8183: Configure CPU cooling
+
+Michael Kao (2):
+  thermal: mediatek: add another get_temp ops for thermal sensors
+  arm64: dts: mt8183: add thermal zone node
+---
+
+---
+ drivers/thermal/mtk_thermal.c | 95 ++++++++++++++++++++++++++---------
+ 1 file changed, 70 insertions(+), 25 deletions(-)
+
+diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
+index ede94eadddda..8bb0bb26113f 100644
+--- a/drivers/thermal/mtk_thermal.c
++++ b/drivers/thermal/mtk_thermal.c
+@@ -271,6 +271,7 @@ struct mtk_thermal_data {
+ 	bool need_switch_bank;
+ 	struct thermal_bank_cfg bank_data[MAX_NUM_ZONES];
+ 	enum mtk_thermal_version version;
++	int (*raw_to_mcelsius)(struct mtk_thermal *mt, int sensno, s32 raw);
+ };
+ 
+ struct mtk_thermal {
+@@ -294,6 +295,9 @@ struct mtk_thermal {
+ 	struct mtk_thermal_bank banks[MAX_NUM_ZONES];
+ };
+ 
++static int raw_to_mcelsius_v1(struct mtk_thermal *mt, int sensno, s32 raw);
++static int raw_to_mcelsius_v2(struct mtk_thermal *mt, int sensno, s32 raw);
++
+ /* MT8183 thermal sensor data */
+ static const int mt8183_bank_data[MT8183_NUM_SENSORS] = {
+ 	MT8183_TS1, MT8183_TS2, MT8183_TS3, MT8183_TS4, MT8183_TS5, MT8183_TSABB
+@@ -427,6 +431,7 @@ static const struct mtk_thermal_data mt8173_thermal_data = {
+ 	.adcpnp = mt8173_adcpnp,
+ 	.sensor_mux_values = mt8173_mux_values,
+ 	.version = MTK_THERMAL_V1,
++	.raw_to_mcelsius = raw_to_mcelsius_v1,
+ };
+ 
+ /*
+@@ -458,6 +463,7 @@ static const struct mtk_thermal_data mt2701_thermal_data = {
+ 	.adcpnp = mt2701_adcpnp,
+ 	.sensor_mux_values = mt2701_mux_values,
+ 	.version = MTK_THERMAL_V1,
++	.raw_to_mcelsius = raw_to_mcelsius_v1,
+ };
+ 
+ /*
+@@ -489,6 +495,7 @@ static const struct mtk_thermal_data mt2712_thermal_data = {
+ 	.adcpnp = mt2712_adcpnp,
+ 	.sensor_mux_values = mt2712_mux_values,
+ 	.version = MTK_THERMAL_V1,
++	.raw_to_mcelsius = raw_to_mcelsius_v1,
+ };
+ 
+ /*
+@@ -514,6 +521,7 @@ static const struct mtk_thermal_data mt7622_thermal_data = {
+ 	.adcpnp = mt7622_adcpnp,
+ 	.sensor_mux_values = mt7622_mux_values,
+ 	.version = MTK_THERMAL_V2,
++	.raw_to_mcelsius = raw_to_mcelsius_v2,
+ };
+ 
+ /*
+@@ -547,6 +555,7 @@ static const struct mtk_thermal_data mt8183_thermal_data = {
+ 	.adcpnp = mt8183_adcpnp,
+ 	.sensor_mux_values = mt8183_mux_values,
+ 	.version = MTK_THERMAL_V1,
++	.raw_to_mcelsius = raw_to_mcelsius_v1,
+ };
+ 
+ /**
+@@ -639,6 +648,27 @@ static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
+ 		mutex_unlock(&mt->lock);
+ }
+ 
++static u32 _get_sensor_temp(struct mtk_thermal *mt, int id)
++{
++	u32 raw;
++	int temp;
++
++	raw = readl(mt->thermal_base + mt->conf->msr[id]);
++
++	temp = mt->conf->raw_to_mcelsius(mt, id, raw);
++
++	/*
++	 * The first read of a sensor often contains very high bogus
++	 * temperature value. Filter these out so that the system does
++	 * not immediately shut down.
++	 */
++
++	if (temp > 200000)
++		return -EAGAIN;
++	else
++		return temp;
++}
++
+ /**
+  * mtk_thermal_bank_temperature - get the temperature of a bank
+  * @bank:	The bank
+@@ -649,28 +679,11 @@ static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
+ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+ {
+ 	struct mtk_thermal *mt = bank->mt;
+-	const struct mtk_thermal_data *conf = mt->conf;
+ 	int i, temp = INT_MIN, max = INT_MIN;
+-	u32 raw;
+-
+-	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
+-		raw = readl(mt->thermal_base + conf->msr[i]);
+ 
+-		if (mt->conf->version == MTK_THERMAL_V1) {
+-			temp = raw_to_mcelsius_v1(
+-				mt, conf->bank_data[bank->id].sensors[i], raw);
+-		} else {
+-			temp = raw_to_mcelsius_v2(
+-				mt, conf->bank_data[bank->id].sensors[i], raw);
+-		}
++	for (i = 0; i < mt->conf->bank_data[bank->id].num_sensors; i++) {
+ 
+-		/*
+-		 * The first read of a sensor often contains very high bogus
+-		 * temperature value. Filter these out so that the system does
+-		 * not immediately shut down.
+-		 */
+-		if (temp > 200000)
+-			temp = 0;
++		temp = _get_sensor_temp(mt, i);
+ 
+ 		if (temp > max)
+ 			max = temp;
+@@ -681,7 +694,8 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+ 
+ static int mtk_read_temp(void *data, int *temperature)
+ {
+-	struct mtk_thermal *mt = data;
++	struct mtk_thermal_bank *tz = data;
++	struct mtk_thermal *mt = tz->mt;
+ 	int i;
+ 	int tempmax = INT_MIN;
+ 
+@@ -700,10 +714,25 @@ static int mtk_read_temp(void *data, int *temperature)
+ 	return 0;
+ }
+ 
++static int mtk_read_sensor_temp(void *data, int *temperature)
++{
++	struct mtk_thermal_bank *tz = data;
++	struct mtk_thermal *mt = tz->mt;
++	int id = tz->id - 1;
++
++	*temperature = _get_sensor_temp(mt, id);
++
++	return 0;
++}
++
+ static const struct thermal_zone_of_device_ops mtk_thermal_ops = {
+ 	.get_temp = mtk_read_temp,
+ };
+ 
++static const struct thermal_zone_of_device_ops mtk_thermal_sensor_ops = {
++	.get_temp = mtk_read_sensor_temp,
++};
++
+ static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
+ 				  u32 apmixed_phys_base, u32 auxadc_phys_base,
+ 				  int ctrl_id)
+@@ -994,6 +1023,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+ 	u64 auxadc_phys_base, apmixed_phys_base;
+ 	struct thermal_zone_device *tzdev;
+ 	void __iomem *apmixed_base, *auxadc_base;
++	struct mtk_thermal_bank *tz;
+ 
+ 	mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
+ 	if (!mt)
+@@ -1082,11 +1112,26 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, mt);
+ 
+-	tzdev = devm_thermal_zone_of_sensor_register(&pdev->dev, 0, mt,
+-						     &mtk_thermal_ops);
+-	if (IS_ERR(tzdev)) {
+-		ret = PTR_ERR(tzdev);
+-		goto err_disable_clk_peri_therm;
++	for (i = 0; i < mt->conf->num_sensors + 1; i++) {
++		tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
++		if (!tz)
++			return -ENOMEM;
++
++		tz->mt = mt;
++		tz->id = i;
++
++		tzdev = devm_thermal_zone_of_sensor_register(
++						&pdev->dev, i, tz, (i == 0) ?
++						&mtk_thermal_ops :
++						&mtk_thermal_sensor_ops);
++
++		if (IS_ERR(tzdev)) {
++			ret = PTR_ERR(tzdev);
++			dev_err(&pdev->dev,
++				"Error: Failed to register thermal zone %d, ret = %d\n",
++				i, ret);
++			goto err_disable_clk_peri_therm;
++		}
+ 	}
+ 
+ 	ret = devm_thermal_add_hwmon_sysfs(tzdev);
+-- 
+2.18.0
+
