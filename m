@@ -2,194 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 747A852DDF7
-	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 21:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB4F52DEC5
+	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 22:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235289AbiESTum (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 May 2022 15:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60404 "EHLO
+        id S235255AbiESUwj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 May 2022 16:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231970AbiESTul (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 15:50:41 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6D7F1352
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 12:50:40 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id d198so1799726iof.12
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 12:50:40 -0700 (PDT)
+        with ESMTP id S234953AbiESUwi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 16:52:38 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B594C2BE3
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 13:52:37 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id n23so8499763edy.0
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 13:52:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=80hccpo9jht5r4qiVCPTMS3bJPZP6KLkPvpQ3s/DEvM=;
-        b=T5+2BwEMNrFuDfdKOsd5NyrIqe2ZJDSEfiHtwpdH3YrcMB95Z+DzZRv5ifb8tyJ+og
-         0mQta3DUpQflbSbdWmXtrKMgVNLezTY8p4tZgJi1hGOdqj6D2A1shRPLcFATPEe3oFWq
-         arBs8uEHwpev8FlDANCnQ9vYEUYrGCFHG2Qck=
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=w7n9soc+YeiEuDs+/wVe5880ZbNB6SfvRzmD9yZCDg0=;
+        b=DBEkcJxwMHgrSW6HcJcRibGMLRAHktxTfe210zz70+cSSKn6ZpUgiva+kk1wpf11Zn
+         AEG+Mgw1hd0KW2hE0Q1vG6WOtJs0wkwyzpBg39QhS4doVKGMJsExBp8t3Mh2Q11oNnXz
+         Uj83mLI19GvO9WWx9wIiJ6kgKwKQLuX9IR+/Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=80hccpo9jht5r4qiVCPTMS3bJPZP6KLkPvpQ3s/DEvM=;
-        b=kbQtXN5BTVcO6hzV6HJV4jx787S/8evu2yGL+v+5k7a2FydH+/5aCai70h6mXSYGFB
-         xbZ02oH/JjGHiivOld/DGIgx1gUhY4Yhk6UzD+LpSDIpv12rzf2qBQrAjW7OlOD/lVe3
-         512e5uhIAqRUsyvMic4DVOPfFl5Rc5wmfTCy+wPHBlnSf9GbnX1vEeZttuARh187exfH
-         4Sko7D0GJSakQZwEqOKIXU50icFU0sorePVBlMe7s/W0qEFErsgAGml0PBk7yg2d6H79
-         6h/q3KlvAj+v8FAoueiCYIhLN36a9y1ps0G7Ccolcpmt8GK7CS7/YVt4t6CqLLRrCSvx
-         vYMg==
-X-Gm-Message-State: AOAM530n8G/uc3HFNkzK4lPhc2Qj14PLwqewtBhUhDIEirtO2CpkZlV2
-        cJH6Xi2abjnq1DLBzYQkr6mBdw==
-X-Google-Smtp-Source: ABdhPJxUt2twkEXW0cKwjBs3QoU9j98+GPX5jtQEhA08kyb8XoQSwoAvVYnYGNRsLYJCM6kglSFOWQ==
-X-Received: by 2002:a05:6602:2d8d:b0:649:f82b:c877 with SMTP id k13-20020a0566022d8d00b00649f82bc877mr3307330iow.66.1652989839674;
-        Thu, 19 May 2022 12:50:39 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id m7-20020a056638408700b0032b3a78176esm140575jam.50.2022.05.19.12.50.38
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w7n9soc+YeiEuDs+/wVe5880ZbNB6SfvRzmD9yZCDg0=;
+        b=5WkZKRUc65i8idT/kvPR8B6k2MtAZnPQyxcleRhsx/0M2dg3RqH4QgQyJ2mOrIbnnd
+         C6CzlMZPPlbYywQT/aHeLaPMx0EXHpfGdYbSF51oJ3bo5X9ugsJwRFH1itqxagcxcOV2
+         3/JqOfy4Dycm6OAt36pAsWyUsqCI8GSUJ4e9fMxXYJMJ2IoX+6DukkLsn7N4RTN3oqGJ
+         IycmuoFUWf640GIE4KKsQIoPEXZlxjXLL7WZ2W8oUS+1z3DxB0BJA+90gsUbvHOEoTGZ
+         bXTnuWGF/rS8cbDuP+yTvtFtWKWhc0qf6y6B4k/EdB03WyaT7MGO10YKLTKX0C6MYdN8
+         Y6HQ==
+X-Gm-Message-State: AOAM532dot882sb3t2hB6pBf3h65kRUg+k7CUv2DerJ8ecIn3Juk2qMu
+        V2bbXyaY/8wOWF5bXwLRvw88eRBjxcGP3g==
+X-Google-Smtp-Source: ABdhPJxNXtzzC1o8jHyTxqmHBpu/l+Pyco4C5nc9/95wsyhJIJD24jXFQtl055axoIGakL4+8Ufk+Q==
+X-Received: by 2002:a05:6402:2750:b0:42b:2616:7cdb with SMTP id z16-20020a056402275000b0042b26167cdbmr689839edd.306.1652993556092;
+        Thu, 19 May 2022 13:52:36 -0700 (PDT)
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com. [209.85.221.46])
+        by smtp.gmail.com with ESMTPSA id d24-20020a1709067a1800b006f3ef214e25sm2417419ejo.139.2022.05.19.13.52.34
+        for <linux-pm@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 May 2022 12:50:39 -0700 (PDT)
-Subject: Re: [PATCH V6 3/4] selftests: amd-pstate: Add test trigger for
- amd-pstate driver
-To:     Meng Li <li.meng@amd.com>, Huang Rui <ray.huang@amd.com>,
-        linux-pm@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220519134737.359290-1-li.meng@amd.com>
- <20220519134737.359290-4-li.meng@amd.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <aff0bd75-6c50-09bb-9c8f-20f2ef19ab98@linuxfoundation.org>
-Date:   Thu, 19 May 2022 13:50:38 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Thu, 19 May 2022 13:52:35 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id s28so8643183wrb.7
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 13:52:34 -0700 (PDT)
+X-Received: by 2002:a05:6000:2c1:b0:20c:5e37:3ed1 with SMTP id
+ o1-20020a05600002c100b0020c5e373ed1mr5575002wry.342.1652993554192; Thu, 19
+ May 2022 13:52:34 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220519134737.359290-4-li.meng@amd.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org> <20220518225355.784371-3-ebiederm@xmission.com>
+In-Reply-To: <20220518225355.784371-3-ebiederm@xmission.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 19 May 2022 13:52:22 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UFK7h0oHGJ23y37ShO+z4vt9ubGE9E4m=jMECgNAAHgA@mail.gmail.com>
+Message-ID: <CAD=FV=UFK7h0oHGJ23y37ShO+z4vt9ubGE9E4m=jMECgNAAHgA@mail.gmail.com>
+Subject: Re: [PATCH 03/16] kdb: Use real_parent when displaying a list of processes
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Will Deacon <will@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
+        Robert OCallahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Miller <dougmill@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/19/22 7:47 AM, Meng Li wrote:
-> Add amd-pstate test trigger in kselftest, it will load/unload
-> amd-pstate-ut module to test some cases etc.
-> 
-> Signed-off-by: Meng Li <li.meng@amd.com>
-> Acked-by: Huang Rui <ray.huang@amd.com>
-> ---
->   tools/testing/selftests/Makefile              |  1 +
->   tools/testing/selftests/amd-pstate/Makefile   |  8 +++++
->   .../selftests/amd-pstate/amd-pstate-ut.sh     | 34 +++++++++++++++++++
->   tools/testing/selftests/amd-pstate/config     |  1 +
->   4 files changed, 44 insertions(+)
->   create mode 100644 tools/testing/selftests/amd-pstate/Makefile
->   create mode 100755 tools/testing/selftests/amd-pstate/amd-pstate-ut.sh
->   create mode 100644 tools/testing/selftests/amd-pstate/config
-> 
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index 2319ec87f53d..975c13368286 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -1,5 +1,6 @@
->   # SPDX-License-Identifier: GPL-2.0
->   TARGETS += alsa
-> +TARGETS += amd-pstate
->   TARGETS += arm64
->   TARGETS += bpf
->   TARGETS += breakpoints
-> diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
-> new file mode 100644
-> index 000000000000..e1432112fb70
-> --- /dev/null
-> +++ b/tools/testing/selftests/amd-pstate/Makefile
-> @@ -0,0 +1,8 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +# Makefile for amd-pstate/ function selftests
-> +
-> +TEST_PROGS := amd-pstate-ut.sh
-> +
-> +include ../lib.mk
-> +
-> +$(TEST_GEN_FILES): $(HEADERS)
+Hi,
 
-Do you still need this?
+On Wed, May 18, 2022 at 3:54 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+>
+> kdb has a bug that when using the ps command to display a list of
+> processes, if a process is being debugged the debugger as the parent
+> process.
+>
+> This is silly, and I expect it never comes up in ptractice.  As there
+> is very little point in using gdb and kdb simultaneously.  Update the
+> code to use real_parent so that it is clear kdb does not want to
+> display a debugger as the parent of a process.
 
-> diff --git a/tools/testing/selftests/amd-pstate/amd-pstate-ut.sh b/tools/testing/selftests/amd-pstate/amd-pstate-ut.sh
-> new file mode 100755
-> index 000000000000..970f7a76c7d5
-> --- /dev/null
-> +++ b/tools/testing/selftests/amd-pstate/amd-pstate-ut.sh
-> @@ -0,0 +1,34 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +# amd-pstate-ut is a test module for testing the amd-pstate driver.
-> +# (1) It can help all users to verify their processor support
-> +# (SBIOS/Firmware or Hardware).
-> +# (2) Kernel can have a basic function test to avoid the kernel
-> +# regression during the update.
-> +# (3) We can introduce more functional or performance tests to align
-> +# the result together, it will benefit power and performance scale optimization.
-> +
-> +# Kselftest framework requirement - SKIP code is 4.
-> +ksft_skip=4
-> +
-> +if ! uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ | grep -q x86; then
+So I would tend to defer to Daniel, but I'm not convinced that the
+behavior you describe for kdb today _is_ actually silly.
 
-This can be simpler - see prctl/Makefile or other tests that do arch
-checks. Also does this test run on non-amd x86_64 systems?
+If I was in kdb and I was listing processes, I might actually want to
+see that a process's parent was set to gdb. Presumably that would tell
+me extra information that might be relevant to my debug session.
 
-> +	echo "$0 # Skipped: Test can only run on x86 architectures."
+Personally, I'd rather add an extra piece of information into the list
+showing the real parent if it's not the same as the parent. Then
+you're not throwing away information.
 
-All x86 or x86_64 AMD systems? Does this run on Intel systems?
-
-> +	exit $ksft_skip
-> +fi
-> +
-> +msg="Skip all tests:"
-> +if [ ! -w /dev ]; then
-> +    echo $msg please run this as root >&2
-> +    exit $ksft_skip
-> +fi
-> +
-> +scaling_driver=$(cat /sys/devices/system/cpu/cpufreq/policy0/scaling_driver)
-> +
-> +if [ "$scaling_driver" != "amd-pstate" ]; then
-> +	echo "$0 # Skipped: Test can only run on amd-pstate driver."
-> +	echo "$0 # Current cpufreq scaling drvier is $scaling_driver."
-> +	exit $ksft_skip
-> +fi
-> +
-> +$(dirname $0)/../kselftest/module.sh "amd-pstate-ut" amd-pstate-ut
-
-What does this do?
-
-Has this script been updated after moving the module to drivers/cpufreq?
-Also doesn't this script need to to load the amd_pstate_ut module?
-
-Please take a look at user/test_user_copy.sh for example on modprobe
-checks and appropriate test exit codes
-
-> diff --git a/tools/testing/selftests/amd-pstate/config b/tools/testing/selftests/amd-pstate/config
-> new file mode 100644
-> index 000000000000..f43103c9adc4
-> --- /dev/null
-> +++ b/tools/testing/selftests/amd-pstate/config
-> @@ -0,0 +1 @@
-> +CONFIG_X86_AMD_PSTATE_UT=m
-> 
-
-thanks,
--- Shuah
+-Doug
