@@ -2,160 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F13FC52DCB2
-	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 20:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A8F52DCED
+	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 20:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243863AbiESSZN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 May 2022 14:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44798 "EHLO
+        id S243301AbiESShf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 May 2022 14:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243214AbiESSZL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 14:25:11 -0400
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5011EBABE
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 11:25:08 -0700 (PDT)
-Received: by mail-pl1-f169.google.com with SMTP id m12so5508122plb.4
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 11:25:08 -0700 (PDT)
+        with ESMTP id S232411AbiESShe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 14:37:34 -0400
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E825FF137A;
+        Thu, 19 May 2022 11:37:32 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2ff155c239bso66078717b3.2;
+        Thu, 19 May 2022 11:37:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=yYJ5d8JV3t4O7WcoAyfX+3lgnKWLdKUEPNKkivp4FxE=;
-        b=v13mG5z/xmRLieZftCgcRQ73C3ogqJcF8OkA0BaN/k5YBCSNWH+VBD5Q0rkkpEl0vO
-         NoaniQLJ+cJVlZLO5Ig4Mhjy3t6eW6YcpGWQqU6vfs4QaT1Bdg/dGOPmqxI3YWloK2IA
-         7Sb2O+LbVdryPGMhDvcidf1KqOvZp3nqyKv+fhK4XTg+KX9ZyGM5BZQJvKfKIvaSA9Zk
-         aDV0p7YPcbfPodbsUS4gcPoDI9EMx1UMx7EejZ5g9zB+kIhJXewWU6uHB1klKYfJiEae
-         x67r2L8RwOeVfzr9q/6xhkYf3S4Jx9caJ/qsxHB8eU+9J2W18j4jixW+4tHncll9MELB
-         BAcw==
-X-Gm-Message-State: AOAM5313CjarhrRRZvleoqAMGnR3TgSFedXPDYsnWYFhzjzwvgOGD1Bi
-        xZbC88wbBKZL/UJbbVCDUZTBWQ==
-X-Google-Smtp-Source: ABdhPJxJuiO93xsMywzWjqiZThDp7pcpVoqDBgq85ICeMcDEB034hBaCoXLEhaErUk+3R3vaFW18kQ==
-X-Received: by 2002:a17:902:e415:b0:161:d804:dc6c with SMTP id m21-20020a170902e41500b00161d804dc6cmr5341884ple.50.1652984708201;
-        Thu, 19 May 2022 11:25:08 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id 76-20020a63044f000000b003db141a5f26sm3868353pge.1.2022.05.19.11.25.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 May 2022 11:25:07 -0700 (PDT)
-From:   Kevin Hilman <khilman@kernel.org>
-To:     Chen-Yu Tsai <wenst@chromium.org>, cw00.choi@samsung.com
-Cc:     Roger Lu <roger.lu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Fan Chen <fan.chen@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jia-wei Chang <jia-wei.chang@mediatek.com>,
-        =?utf-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
-        <rex-bc.chen@mediatek.com>
-Subject: Re: [PATCH v25 0/7] soc: mediatek: SVS: introduce MTK SVS
-In-Reply-To: <CAGXv+5GT=3m=pVPwUOWR42BR=emCpBXvvoAiRV7YKt2kEKWdAQ@mail.gmail.com>
-References: <20220516004311.18358-1-roger.lu@mediatek.com>
- <CAGXv+5GSdWPZe3fNpBJ_WW0zCL8Skg6fHx9ATxaKU1hyMEt2Ww@mail.gmail.com>
- <7h4k1ndaui.fsf@baylibre.com> <7hy1yzbtb7.fsf@baylibre.com>
- <CAGXv+5GT=3m=pVPwUOWR42BR=emCpBXvvoAiRV7YKt2kEKWdAQ@mail.gmail.com>
-Date:   Thu, 19 May 2022 11:25:07 -0700
-Message-ID: <7hmtfdbcsc.fsf@baylibre.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yS1kEN+GXXpbhqkK6UqZTr2vL0SVZ2tag5VCxMz5nz0=;
+        b=jmrIfPusZI5fyymMsLl4c3Iq9DmivzrHUNu/I44fgo+jvKx/OWw3eeWc0T1+qJsud1
+         ShqudmELo0J8Efaj06AEY2YokyN8vyIu1lLFknZH6czkZ9h2lDe5iqVC3x1qGkLZEjWl
+         8LaLrAJPYybJDRuxMDUPB4Wi+UMXh69osi4KnRTVvm+2u5qNxWpi6rr0/L54URYq1ulE
+         3I0HptHzxn5KPXnl9QNM11SEPZUu/ttooBkDP5YbeQZU7Ff06xbvlZvRHJSJwVE6jPvu
+         eiQ1vorRNWbUK7BDgVSEl4TeFQVWORBh0OEwJU2I55cBia+kzK1Zo5UStCMGqPIPwbOV
+         XGQQ==
+X-Gm-Message-State: AOAM531JVbuxTJOpuV0lOPcC/tOXQRl1PoGfFlk4AkhcgCWUMj40ka9k
+        Y0HKv1xqEe71id7IrgTOy6LyvoOfAjOs3o1cvAs=
+X-Google-Smtp-Source: ABdhPJxWx4suARB6p5108TodMZoK6QfRDz1CDtEyftKwKTyQe+rLtQu08lC+lkjXIM1zM+NGYEffev9rMGnJpUozft8=
+X-Received: by 2002:a81:91d4:0:b0:2fe:e300:3581 with SMTP id
+ i203-20020a8191d4000000b002fee3003581mr6273739ywg.7.1652985452189; Thu, 19
+ May 2022 11:37:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220511145704.698189-1-ulf.hansson@linaro.org>
+In-Reply-To: <20220511145704.698189-1-ulf.hansson@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 19 May 2022 20:37:21 +0200
+Message-ID: <CAJZ5v0gaaCYzCYdWhXjn7-S7MyAcDuM4epNp2eOr2_7h-cu4tw@mail.gmail.com>
+Subject: Re: [PATCH 00/14] PM: domains: Various improvements for genpd
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Chen-Yu Tsai <wenst@chromium.org> writes:
-
-> n Wed, May 18, 2022 at 8:03 AM Kevin Hilman <khilman@kernel.org> wrote:
->>
->> Kevin Hilman <khilman@kernel.org> writes:
->>
->> > Chen-Yu Tsai <wenst@chromium.org> writes:
->> >
->> >> On Mon, May 16, 2022 at 8:43 AM Roger Lu <roger.lu@mediatek.com> wrote:
->> >>>
->> >>> The Smart Voltage Scaling(SVS) engine is a piece of hardware
->> >>> which calculates suitable SVS bank voltages to OPP voltage table.
->> >>> Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
->> >>> when receiving OPP_EVENT_ADJUST_VOLTAGE.
->> >>>
->> >>> 1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
->> >>> 2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
->> >>> After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
->> >>>
->> >>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=25cb20a212a1f989385dfe23230817e69c62bee5
->> >>> [2] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=b325ce39785b1408040d90365a6ab1aa36e94f87
->> >>> [3] https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.16-next/dts64&id=a8168cebf1bca1b5269e8a7eb2626fb76814d6e2
->> >>>
->> >>> Change since v24:
->> >>> - Rebase to Linux 5.18-rc6
->> >>> - Show specific fail log in svs_platform_probe() to help catch which step fails quickly
->> >>> - Remove struct svs_bank member "pd_dev" because all subsys device's power domain has been merged into one node like above [3]
->> >>>
->> >>> Test in below environment:
->> >>> SW: Integration Tree [4] + Thermal patch [5] + SVS v25 (this patchset)
->> >>> HW: mt8183-Krane
->> >>>
->> >>> [4] https://github.com/wens/linux/commits/mt8183-cpufreq-cci-svs-test
->> >>
->> >> I've updated my branch to include all the latest versions of the relevant
->> >> patch series:
->> >>
->> >> - anx7625 DPI bus type series v2 (so the display works)
->> >> - MT8183 thermal series v9 (this seems to have been overlooked by the
->> >> maintainer)
->> >> - MTK SVS driver series v25
->> >> - devfreq: cpu based scaling support to passive governor series v5
->> >> - MTK CCI devfreq series v4
->> >> - MT8183 cpufreq series v7
->> >> - Additional WIP patches for panfrost MTK devfreq
->> >
->> > Thanks for preparing an integration branch Chen-Yu.
->> >
->> > I'm testing this on mt8183-pumpkin with one patch to add the CCI
->> > regulator[1], and the defconfig you posted in a previous rev of this
->> > series, but the CCI driver still causes a fault on boot[2] on my
->> > platform.
->> >
->> > I mentioned in earlier reviews that I think there's potentially a race
->> > between CCI and SVS loading since they are co-dependent.  My hunch is
->> > that this is still not being handled properly.
->>
->> Ah, actually it's crashing when I try to boot the platform with
->> `maxcpus=4` on the cmdline (which I have to do because mt8183-pumpkin is
->> unstable upstream with the 2nd cluster enabled.)
->>
->> The CCI driver should be a bit more robust about detecting
->> available/online CPUs
+On Wed, May 11, 2022 at 4:57 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-> This all seems to be handled in the devfreq passive governor.
+> The main goal with this series is to improve the way genpd deals with its
+> governor(s). Especially it turns allocation of governor related data to be
+> dynamically allocated. It also improves the execution path for runtime-
+> suspend/resume of devices (attached to a genpd of course) and the similar is
+> also done for genpd's power-on/off path.
+>
+> Note that, patch 1->3 have already been sent before in a separate series [1],
+> but for simplicity I have included them here again.
+>
+> Tests/reviews are as usual highly appreciated!
+>
+> Kind regards
+> Ulf Hansson
+>
+> [1]
+> https://www.spinics.net/lists/kernel/msg4335838.html
+>
+> Ulf Hansson (14):
+>   PM: domains: Add GENPD_FLAG_RPM_ALWAYS_ON for the always-on governor
+>   PM: domains: Drop redundant code for genpd always-on governor
+>   PM: domains: Don't check PM_QOS_FLAG_NO_POWER_OFF in genpd
+>   PM: domains: Rename irq_safe_dev_in_no_sleep_domain() in genpd
+>   PM: domains: Skip another warning in irq_safe_dev_in_sleep_domain()
+>   PM: domains: Allocate gpd_timing_data dynamically based on governor
+>   PM: domains: Move the next_wakeup variable into the struct
+>     gpd_timing_data
+>   PM: domains: Measure suspend/resume latencies in genpd based on
+>     governor
+>   PM: domains: Fixup QoS latency measurements for IRQ safe devices in
+>     genpd
+>   PM: domains: Fix initialization of genpd's next_wakeup
+>   PM: domains: Clean up some code in pm_genpd_init() and genpd_remove()
+>   PM: domains: Allocate governor data dynamically based on a genpd
+>     governor
+>   PM: domains: Measure power-on/off latencies in genpd based on a
+>     governor
+>   PM: domains: Trust domain-idle-states from DT to be correct by genpd
+>
+>  drivers/base/power/domain.c          | 201 +++++++++++++++++----------
+>  drivers/base/power/domain_governor.c |  65 +++++----
+>  include/linux/pm_domain.h            |  18 ++-
+>  3 files changed, 173 insertions(+), 111 deletions(-)
+>
+> --
 
-Well, that's the initial crash.  But the SVS driver will also go through
-its svs_mt8183_banks[] array (including both big & little clusters) and
-try to init SVS, so presumably that will have some problems also if only
-one cluster is enabled.
+All of the changes made by this series make sense to me, so I've
+queued it for 5.19.
 
-> And presumably we'd like to have CCI devfreq running even if just one
-> core was booted.
-
-Yes, I assume so also.
-
-> Added Chanwoo for more ideas.
-
-OK, thanks.
-
-Kevin
+Thanks!
