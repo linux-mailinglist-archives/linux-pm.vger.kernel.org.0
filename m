@@ -2,54 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B025352D2D2
-	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 14:44:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 077F452D2D3
+	for <lists+linux-pm@lfdr.de>; Thu, 19 May 2022 14:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238019AbiESMo1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S238023AbiESMo1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Thu, 19 May 2022 08:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42236 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238013AbiESMoZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 08:44:25 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58838BA98C
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 05:44:24 -0700 (PDT)
-Date:   Thu, 19 May 2022 12:44:21 -0000
+        with ESMTP id S238022AbiESMo0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 08:44:26 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156A4BA57A
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 05:44:25 -0700 (PDT)
+Date:   Thu, 19 May 2022 12:44:22 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1652964262;
+        s=2020; t=1652964263;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3xn818POQ3JBi8GGgkqN6EY9klfTUz1haeuQPD1Uems=;
-        b=lga6CkD2Pz65JtfcnOGRJTtNMEQwqiDVxSJ7O2hZCzkhvEqdZIBBEyk5Ga2g2mIZbCJ5uw
-        3zdKYb5Tk1mRju+KorYxB8NBqQJFLKLQDrbi7MeYBKojIooovGlOaJ/kCkEPS0aJYi24Fh
-        9FBE+RpkZ00kNPwIy2GLd0235Xp+ks0w13V0a+wtpv6lxZMPxx+9f12tadJAbIlsHoXIMQ
-        JdpCq4Py5wblxwCIHO/95QIuitrjq83YYY7e6jCXs09B43QWSD1CXjocintLoJNgGx/Ri/
-        IpGpQS2yUf2Rk2kGUlnS+aKDov93i4c3jMPPJ0WB1vLhIBDAJlTM3ZiIoF3UQw==
+        bh=2GELOcDZwa1OQDYcqgpmDGGEct69xCHqXGUaqHqGEQo=;
+        b=OfoCqMvegjun8M37rlfb9dJTnhZN66Kexn6a4IMbliNbBKz1Q+8YoV+LYdBXgKZa5vJiis
+        5djw4vJcVZvQvYfwGKZqeiCntWGHgbj9qy9o5J/NLeULTbrM4zv/S51NpAUcwRzDyqSR1e
+        EJUzKdfkBUtfrnSY63MJ8oghdJWRfWnnIB6IS8Fd11ry2buQPzKUSzHzHj1lDG6mFTv4JP
+        Uv70H3ni5FJCJZHmb17ZZA+bg10mFYx62S+Nh6KRbhpKhv7RpdT27OdGaENxwTLQ2zwFtl
+        4zN0cZBhAsiTNjnqvFK89CdMgL8ZdDf5os1eYK7v1HvMSPjMERKDstY0Qzdndg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1652964262;
+        s=2020e; t=1652964263;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3xn818POQ3JBi8GGgkqN6EY9klfTUz1haeuQPD1Uems=;
-        b=49SKxLc1i1mCST/VUSj7iafo370KEqpA/iA6WvnMQia2icNclv2hJExwrZoKIKY0/1fMNY
-        PokHnrK+lGahMjCA==
-From:   "thermal-bot for Massimiliano Minella" <tip-bot2@linutronix.de>
+        bh=2GELOcDZwa1OQDYcqgpmDGGEct69xCHqXGUaqHqGEQo=;
+        b=hDCNkf+MopigI5FM/40Gy5RPMcOzJP8vCOYOGGQwMRrQKCIwVQ30GDIr044WvPez3CYZzx
+        A9eQhOiUITkSGyCg==
+From:   "thermal-bot for Jishnu Prakash" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/k3: Add hwmon support
-Cc:     Massimiliano Minella <massimiliano.minella@gmail.com>,
+Subject: [thermal: thermal/next] thermal/drivers/qcom: Add support for PMIC5
+ Gen2 ADCTM
+Cc:     Jishnu Prakash <quic_jprakash@quicinc.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20220401151656.913166-1-massimiliano.minella@se.com>
-References: <20220401151656.913166-1-massimiliano.minella@se.com>
+In-Reply-To: <1648991869-20899-5-git-send-email-quic_jprakash@quicinc.com>
+References: <1648991869-20899-5-git-send-email-quic_jprakash@quicinc.com>
 MIME-Version: 1.0
-Message-ID: <165296426176.4207.15051030762623208961.tip-bot2@tip-bot2>
+Message-ID: <165296426262.4207.18318074818957333033.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,45 +68,576 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     9e5f5f15fef5efd6847b8802e509b67fce72e2fb
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//9e5f5f15fef5efd6847b8802e509b67fce72e2fb
-Author:        Massimiliano Minella <massimiliano.minella@gmail.com>
-AuthorDate:    Fri, 01 Apr 2022 17:13:51 +02:00
+Commit-ID:     96f6f333bcf082756a01a7dc5cc7d4898e11b31b
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//96f6f333bcf082756a01a7dc5cc7d4898e11b31b
+Author:        Jishnu Prakash <quic_jprakash@quicinc.com>
+AuthorDate:    Sun, 03 Apr 2022 18:47:49 +05:30
 Committer:     Daniel Lezcano <daniel.lezcano@linaro.org>
 CommitterDate: Thu, 19 May 2022 12:11:51 +02:00
 
-thermal/drivers/k3: Add hwmon support
+thermal/drivers/qcom: Add support for PMIC5 Gen2 ADCTM
 
-Expose the thermal sensors on K3 AM654 as hwmon devices, so that
-temperatures could be read using lm-sensors.
+Add support for PMIC5 Gen2 ADC_TM, used on PMIC7 chips. It is a
+close counterpart of PMIC7 ADC and has the same functionality as
+PMIC5 ADC_TM, for threshold monitoring and interrupt generation.
+It is present on PMK8350 alone, like PMIC7 ADC and can be used
+to monitor up to 8 ADC channels, from any of the PMIC7 PMICs
+having ADC on a target, through PBS(Programmable Boot Sequence).
 
-Signed-off-by: Massimiliano Minella <massimiliano.minella@gmail.com>
-Link: https://lore.kernel.org/r/20220401151656.913166-1-massimiliano.minella@se.com
+Signed-off-by: Jishnu Prakash <quic_jprakash@quicinc.com>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Link: https://lore.kernel.org/r/1648991869-20899-5-git-send-email-quic_jprakash@quicinc.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/k3_bandgap.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 404 +++++++++++++++++++++-
+ 1 file changed, 397 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/thermal/k3_bandgap.c b/drivers/thermal/k3_bandgap.c
-index 35f41e8..5d0b3ff 100644
---- a/drivers/thermal/k3_bandgap.c
-+++ b/drivers/thermal/k3_bandgap.c
-@@ -16,6 +16,8 @@
+diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+index 6d8fcf2..d9c9c97 100644
+--- a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
++++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+@@ -4,7 +4,10 @@
+  *
+  * Based on original driver:
+  * Copyright (c) 2012-2020, The Linux Foundation. All rights reserved.
++ *
++ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+  */
++
+ #include <linux/bitfield.h>
+ #include <linux/iio/adc/qcom-vadc-common.h>
+ #include <linux/iio/consumer.h>
+@@ -15,6 +18,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
  #include <linux/thermal.h>
- #include <linux/types.h>
++#include <asm-generic/unaligned.h>
  
-+#include "thermal_hwmon.h"
+ /*
+  * Thermal monitoring block consists of 8 (ADC_TM5_NUM_CHANNELS) channels. Each
+@@ -71,6 +75,60 @@
+ #define ADC_TM5_M_HIGH_THR_INT_EN			BIT(1)
+ #define ADC_TM5_M_LOW_THR_INT_EN			BIT(0)
+ 
++#define ADC_TM_GEN2_STATUS1			0x08
++#define ADC_TM_GEN2_STATUS_LOW_SET		0x09
++#define ADC_TM_GEN2_STATUS_LOW_CLR		0x0a
++#define ADC_TM_GEN2_STATUS_HIGH_SET		0x0b
++#define ADC_TM_GEN2_STATUS_HIGH_CLR		0x0c
 +
- #define K3_VTM_DEVINFO_PWR0_OFFSET		0x4
- #define K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK	0xf0
- #define K3_VTM_TMPSENS0_CTRL_OFFSET	0x80
-@@ -219,6 +221,9 @@ static int k3_bandgap_probe(struct platform_device *pdev)
- 			ret = PTR_ERR(data[id].tzd);
- 			goto err_alloc;
- 		}
++#define ADC_TM_GEN2_CFG_HS_SET			0x0d
++#define ADC_TM_GEN2_CFG_HS_FLAG			BIT(0)
++#define ADC_TM_GEN2_CFG_HS_CLR			0x0e
 +
-+		if (devm_thermal_add_hwmon_sysfs(data[id].tzd))
-+			dev_warn(dev, "Failed to add hwmon sysfs attributes\n");
++#define ADC_TM_GEN2_SID				0x40
++
++#define ADC_TM_GEN2_CH_CTL			0x41
++#define ADC_TM_GEN2_TM_CH_SEL			GENMASK(7, 5)
++#define ADC_TM_GEN2_MEAS_INT_SEL		GENMASK(3, 2)
++
++#define ADC_TM_GEN2_ADC_DIG_PARAM		0x42
++#define ADC_TM_GEN2_CTL_CAL_SEL			GENMASK(5, 4)
++#define ADC_TM_GEN2_CTL_DEC_RATIO_MASK		GENMASK(3, 2)
++
++#define ADC_TM_GEN2_FAST_AVG_CTL		0x43
++#define ADC_TM_GEN2_FAST_AVG_EN			BIT(7)
++
++#define ADC_TM_GEN2_ADC_CH_SEL_CTL		0x44
++
++#define ADC_TM_GEN2_DELAY_CTL			0x45
++#define ADC_TM_GEN2_HW_SETTLE_DELAY		GENMASK(3, 0)
++
++#define ADC_TM_GEN2_EN_CTL1			0x46
++#define ADC_TM_GEN2_EN				BIT(7)
++
++#define ADC_TM_GEN2_CONV_REQ			0x47
++#define ADC_TM_GEN2_CONV_REQ_EN			BIT(7)
++
++#define ADC_TM_GEN2_LOW_THR0			0x49
++#define ADC_TM_GEN2_LOW_THR1			0x4a
++#define ADC_TM_GEN2_HIGH_THR0			0x4b
++#define ADC_TM_GEN2_HIGH_THR1			0x4c
++#define ADC_TM_GEN2_LOWER_MASK(n)		((n) & GENMASK(7, 0))
++#define ADC_TM_GEN2_UPPER_MASK(n)		(((n) & GENMASK(15, 8)) >> 8)
++
++#define ADC_TM_GEN2_MEAS_IRQ_EN			0x4d
++#define ADC_TM_GEN2_MEAS_EN			BIT(7)
++#define ADC_TM5_GEN2_HIGH_THR_INT_EN		BIT(1)
++#define ADC_TM5_GEN2_LOW_THR_INT_EN		BIT(0)
++
++#define ADC_TM_GEN2_MEAS_INT_LSB		0x50
++#define ADC_TM_GEN2_MEAS_INT_MSB		0x51
++#define ADC_TM_GEN2_MEAS_INT_MODE		0x52
++
++#define ADC_TM_GEN2_Mn_DATA0(n)			((n * 2) + 0xa0)
++#define ADC_TM_GEN2_Mn_DATA1(n)			((n * 2) + 0xa1)
++#define ADC_TM_GEN2_DATA_SHIFT			8
++
+ enum adc5_timer_select {
+ 	ADC5_TIMER_SEL_1 = 0,
+ 	ADC5_TIMER_SEL_2,
+@@ -81,6 +139,7 @@ enum adc5_timer_select {
+ enum adc5_gen {
+ 	ADC_TM5,
+ 	ADC_TM_HC,
++	ADC_TM5_GEN2,
+ 	ADC_TM5_MAX
+ };
+ 
+@@ -90,6 +149,14 @@ enum adc_tm5_cal_method {
+ 	ADC_TM5_ABSOLUTE_CAL
+ };
+ 
++enum adc_tm_gen2_time_select {
++	MEAS_INT_50MS = 0,
++	MEAS_INT_100MS,
++	MEAS_INT_1S,
++	MEAS_INT_SET,
++	MEAS_INT_NONE,
++};
++
+ struct adc_tm5_chip;
+ struct adc_tm5_channel;
+ 
+@@ -113,6 +180,12 @@ struct adc_tm5_data {
+  * @prescale: channel scaling performed on the input signal.
+  * @hw_settle_time: the time between AMUX being configured and the
+  *	start of conversion.
++ * @decimation: sampling rate supported for the channel.
++ * @avg_samples: ability to provide single result from the ADC
++ *	that is an average of multiple measurements.
++ * @high_thr_en: channel upper voltage threshold enable state.
++ * @low_thr_en: channel lower voltage threshold enable state.
++ * @meas_en: recurring measurement enable state
+  * @iio: IIO channel instance used by this channel.
+  * @chip: ADC TM chip instance.
+  * @tzd: thermal zone device used by this channel.
+@@ -123,6 +196,11 @@ struct adc_tm5_channel {
+ 	enum adc_tm5_cal_method	cal_method;
+ 	unsigned int		prescale;
+ 	unsigned int		hw_settle_time;
++	unsigned int		decimation;	/* For Gen2 ADC_TM */
++	unsigned int		avg_samples;	/* For Gen2 ADC_TM */
++	bool			high_thr_en;	/* For Gen2 ADC_TM */
++	bool			low_thr_en;	/* For Gen2 ADC_TM */
++	bool			meas_en;	/* For Gen2 ADC_TM */
+ 	struct iio_channel	*iio;
+ 	struct adc_tm5_chip	*chip;
+ 	struct thermal_zone_device *tzd;
+@@ -136,9 +214,15 @@ struct adc_tm5_channel {
+  * @channels: array of ADC TM channel data.
+  * @nchannels: amount of channels defined/allocated
+  * @decimation: sampling rate supported for the channel.
++ *      Applies to all channels, used only on Gen1 ADC_TM.
+  * @avg_samples: ability to provide single result from the ADC
+- *	that is an average of multiple measurements.
++ *      that is an average of multiple measurements. Applies to all
++ *      channels, used only on Gen1 ADC_TM.
+  * @base: base address of TM registers.
++ * @adc_mutex_lock: ADC_TM mutex lock, used only on Gen2 ADC_TM.
++ *      It is used to ensure only one ADC channel configuration
++ *      is done at a time using the shared set of configuration
++ *      registers.
+  */
+ struct adc_tm5_chip {
+ 	struct regmap		*regmap;
+@@ -149,6 +233,7 @@ struct adc_tm5_chip {
+ 	unsigned int		decimation;
+ 	unsigned int		avg_samples;
+ 	u16			base;
++	struct mutex		adc_mutex_lock;
+ };
+ 
+ static int adc_tm5_read(struct adc_tm5_chip *adc_tm, u16 offset, u8 *data, int len)
+@@ -215,6 +300,61 @@ static irqreturn_t adc_tm5_isr(int irq, void *data)
+ 	return IRQ_HANDLED;
+ }
+ 
++static irqreturn_t adc_tm5_gen2_isr(int irq, void *data)
++{
++	struct adc_tm5_chip *chip = data;
++	u8 status_low, status_high;
++	int ret, i;
++
++	ret = adc_tm5_read(chip, ADC_TM_GEN2_STATUS_LOW_CLR, &status_low, sizeof(status_low));
++	if (ret) {
++		dev_err(chip->dev, "read status_low failed: %d\n", ret);
++		return IRQ_HANDLED;
++	}
++
++	ret = adc_tm5_read(chip, ADC_TM_GEN2_STATUS_HIGH_CLR, &status_high, sizeof(status_high));
++	if (ret) {
++		dev_err(chip->dev, "read status_high failed: %d\n", ret);
++		return IRQ_HANDLED;
++	}
++
++	ret = adc_tm5_write(chip, ADC_TM_GEN2_STATUS_LOW_CLR, &status_low, sizeof(status_low));
++	if (ret < 0) {
++		dev_err(chip->dev, "clear status low failed with %d\n", ret);
++		return IRQ_HANDLED;
++	}
++
++	ret = adc_tm5_write(chip, ADC_TM_GEN2_STATUS_HIGH_CLR, &status_high, sizeof(status_high));
++	if (ret < 0) {
++		dev_err(chip->dev, "clear status high failed with %d\n", ret);
++		return IRQ_HANDLED;
++	}
++
++	for (i = 0; i < chip->nchannels; i++) {
++		bool upper_set = false, lower_set = false;
++		unsigned int ch = chip->channels[i].channel;
++
++		/* No TZD, we warned at the boot time */
++		if (!chip->channels[i].tzd)
++			continue;
++
++		if (!chip->channels[i].meas_en)
++			continue;
++
++		lower_set = (status_low & BIT(ch)) &&
++			(chip->channels[i].low_thr_en);
++
++		upper_set = (status_high & BIT(ch)) &&
++			(chip->channels[i].high_thr_en);
++
++		if (upper_set || lower_set)
++			thermal_zone_device_update(chip->channels[i].tzd,
++						   THERMAL_EVENT_UNSPECIFIED);
++	}
++
++	return IRQ_HANDLED;
++}
++
+ static int adc_tm5_get_temp(void *data, int *temp)
+ {
+ 	struct adc_tm5_channel *channel = data;
+@@ -245,6 +385,104 @@ static int adc_tm5_disable_channel(struct adc_tm5_channel *channel)
+ 				  0);
+ }
+ 
++#define ADC_TM_GEN2_POLL_DELAY_MIN_US		100
++#define ADC_TM_GEN2_POLL_DELAY_MAX_US		110
++#define ADC_TM_GEN2_POLL_RETRY_COUNT		3
++
++static int32_t adc_tm5_gen2_conv_req(struct adc_tm5_chip *chip)
++{
++	int ret;
++	u8 data;
++	unsigned int count;
++
++	data = ADC_TM_GEN2_EN;
++	ret = adc_tm5_write(chip, ADC_TM_GEN2_EN_CTL1, &data, 1);
++	if (ret < 0) {
++		dev_err(chip->dev, "adc-tm enable failed with %d\n", ret);
++		return ret;
++	}
++
++	data = ADC_TM_GEN2_CFG_HS_FLAG;
++	ret = adc_tm5_write(chip, ADC_TM_GEN2_CFG_HS_SET, &data, 1);
++	if (ret < 0) {
++		dev_err(chip->dev, "adc-tm handshake failed with %d\n", ret);
++		return ret;
++	}
++
++	data = ADC_TM_GEN2_CONV_REQ_EN;
++	ret = adc_tm5_write(chip, ADC_TM_GEN2_CONV_REQ, &data, 1);
++	if (ret < 0) {
++		dev_err(chip->dev, "adc-tm request conversion failed with %d\n", ret);
++		return ret;
++	}
++
++	/*
++	 * SW sets a handshake bit and waits for PBS to clear it
++	 * before the next conversion request can be queued.
++	 */
++
++	for (count = 0; count < ADC_TM_GEN2_POLL_RETRY_COUNT; count++) {
++		ret = adc_tm5_read(chip, ADC_TM_GEN2_CFG_HS_SET, &data, sizeof(data));
++		if (ret < 0) {
++			dev_err(chip->dev, "adc-tm read failed with %d\n", ret);
++			return ret;
++		}
++
++		if (!(data & ADC_TM_GEN2_CFG_HS_FLAG))
++			return ret;
++		usleep_range(ADC_TM_GEN2_POLL_DELAY_MIN_US,
++			ADC_TM_GEN2_POLL_DELAY_MAX_US);
++	}
++
++	dev_err(chip->dev, "adc-tm conversion request handshake timed out\n");
++
++	return -ETIMEDOUT;
++}
++
++static int adc_tm5_gen2_disable_channel(struct adc_tm5_channel *channel)
++{
++	struct adc_tm5_chip *chip = channel->chip;
++	int ret;
++	u8 val;
++
++	mutex_lock(&chip->adc_mutex_lock);
++
++	channel->meas_en = false;
++	channel->high_thr_en = false;
++	channel->low_thr_en = false;
++
++	ret = adc_tm5_read(chip, ADC_TM_GEN2_CH_CTL, &val, sizeof(val));
++	if (ret < 0) {
++		dev_err(chip->dev, "adc-tm block read failed with %d\n", ret);
++		goto disable_fail;
++	}
++
++	val &= ~ADC_TM_GEN2_TM_CH_SEL;
++	val |= FIELD_PREP(ADC_TM_GEN2_TM_CH_SEL, channel->channel);
++
++	ret = adc_tm5_write(chip, ADC_TM_GEN2_CH_CTL, &val, 1);
++	if (ret < 0) {
++		dev_err(chip->dev, "adc-tm channel disable failed with %d\n", ret);
++		goto disable_fail;
++	}
++
++	val = 0;
++	ret = adc_tm5_write(chip, ADC_TM_GEN2_MEAS_IRQ_EN, &val, 1);
++	if (ret < 0) {
++		dev_err(chip->dev, "adc-tm interrupt disable failed with %d\n", ret);
++		goto disable_fail;
++	}
++
++
++	ret = adc_tm5_gen2_conv_req(channel->chip);
++	if (ret < 0)
++		dev_err(chip->dev, "adc-tm channel configure failed with %d\n", ret);
++
++disable_fail:
++	mutex_unlock(&chip->adc_mutex_lock);
++	return ret;
++}
++
+ static int adc_tm5_enable(struct adc_tm5_chip *chip)
+ {
+ 	int ret;
+@@ -287,8 +525,7 @@ static int adc_tm5_configure(struct adc_tm5_channel *channel, int low, int high)
+ 		u16 adc_code = qcom_adc_tm5_temp_volt_scale(channel->prescale,
+ 				chip->data->full_scale_code_volt, high);
+ 
+-		buf[1] = adc_code & 0xff;
+-		buf[2] = adc_code >> 8;
++		put_unaligned_le16(adc_code, &buf[1]);
+ 		buf[7] |= ADC_TM5_M_LOW_THR_INT_EN;
+ 	} else {
+ 		buf[7] &= ~ADC_TM5_M_LOW_THR_INT_EN;
+@@ -299,8 +536,7 @@ static int adc_tm5_configure(struct adc_tm5_channel *channel, int low, int high)
+ 		u16 adc_code = qcom_adc_tm5_temp_volt_scale(channel->prescale,
+ 				chip->data->full_scale_code_volt, low);
+ 
+-		buf[3] = adc_code & 0xff;
+-		buf[4] = adc_code >> 8;
++		put_unaligned_le16(adc_code, &buf[3]);
+ 		buf[7] |= ADC_TM5_M_HIGH_THR_INT_EN;
+ 	} else {
+ 		buf[7] &= ~ADC_TM5_M_HIGH_THR_INT_EN;
+@@ -325,6 +561,82 @@ static int adc_tm5_configure(struct adc_tm5_channel *channel, int low, int high)
+ 	return adc_tm5_enable(chip);
+ }
+ 
++static int adc_tm5_gen2_configure(struct adc_tm5_channel *channel, int low, int high)
++{
++	struct adc_tm5_chip *chip = channel->chip;
++	int ret;
++	u8 buf[14];
++	u16 adc_code;
++
++	mutex_lock(&chip->adc_mutex_lock);
++
++	channel->meas_en = true;
++
++	ret = adc_tm5_read(chip, ADC_TM_GEN2_SID, buf, sizeof(buf));
++	if (ret < 0) {
++		dev_err(chip->dev, "adc-tm block read failed with %d\n", ret);
++		goto config_fail;
++	}
++
++	/* Set SID from virtual channel number */
++	buf[0] = channel->adc_channel >> 8;
++
++	/* Set TM channel number used and measurement interval */
++	buf[1] &= ~ADC_TM_GEN2_TM_CH_SEL;
++	buf[1] |= FIELD_PREP(ADC_TM_GEN2_TM_CH_SEL, channel->channel);
++	buf[1] &= ~ADC_TM_GEN2_MEAS_INT_SEL;
++	buf[1] |= FIELD_PREP(ADC_TM_GEN2_MEAS_INT_SEL, MEAS_INT_1S);
++
++	buf[2] &= ~ADC_TM_GEN2_CTL_DEC_RATIO_MASK;
++	buf[2] |= FIELD_PREP(ADC_TM_GEN2_CTL_DEC_RATIO_MASK, channel->decimation);
++	buf[2] &= ~ADC_TM_GEN2_CTL_CAL_SEL;
++	buf[2] |= FIELD_PREP(ADC_TM_GEN2_CTL_CAL_SEL, channel->cal_method);
++
++	buf[3] = channel->avg_samples | ADC_TM_GEN2_FAST_AVG_EN;
++
++	buf[4] = channel->adc_channel & 0xff;
++
++	buf[5] = channel->hw_settle_time & ADC_TM_GEN2_HW_SETTLE_DELAY;
++
++	/* High temperature corresponds to low voltage threshold */
++	if (high != INT_MAX) {
++		channel->low_thr_en = true;
++		adc_code = qcom_adc_tm5_gen2_temp_res_scale(high);
++		put_unaligned_le16(adc_code, &buf[9]);
++	} else {
++		channel->low_thr_en = false;
++	}
++
++	/* Low temperature corresponds to high voltage threshold */
++	if (low != -INT_MAX) {
++		channel->high_thr_en = true;
++		adc_code = qcom_adc_tm5_gen2_temp_res_scale(low);
++		put_unaligned_le16(adc_code, &buf[11]);
++	} else {
++		channel->high_thr_en = false;
++	}
++
++	buf[13] = ADC_TM_GEN2_MEAS_EN;
++	if (channel->high_thr_en)
++		buf[13] |= ADC_TM5_GEN2_HIGH_THR_INT_EN;
++	if (channel->low_thr_en)
++		buf[13] |= ADC_TM5_GEN2_LOW_THR_INT_EN;
++
++	ret = adc_tm5_write(chip, ADC_TM_GEN2_SID, buf, sizeof(buf));
++	if (ret) {
++		dev_err(chip->dev, "channel %d params write failed: %d\n", channel->channel, ret);
++		goto config_fail;
++	}
++
++	ret = adc_tm5_gen2_conv_req(channel->chip);
++	if (ret < 0)
++		dev_err(chip->dev, "adc-tm channel configure failed with %d\n", ret);
++
++config_fail:
++	mutex_unlock(&chip->adc_mutex_lock);
++	return ret;
++}
++
+ static int adc_tm5_set_trips(void *data, int low, int high)
+ {
+ 	struct adc_tm5_channel *channel = data;
+@@ -438,12 +750,37 @@ static int adc_tm5_init(struct adc_tm5_chip *chip)
+ 	return ret;
+ }
+ 
++static int adc_tm5_gen2_init(struct adc_tm5_chip *chip)
++{
++	u8 channels_available;
++	int ret;
++	unsigned int i;
++
++	ret = adc_tm5_read(chip, ADC_TM5_NUM_BTM,
++			   &channels_available, sizeof(channels_available));
++	if (ret) {
++		dev_err(chip->dev, "read failed for BTM channels\n");
++		return ret;
++	}
++
++	for (i = 0; i < chip->nchannels; i++) {
++		if (chip->channels[i].channel >= channels_available) {
++			dev_err(chip->dev, "Invalid channel %d\n", chip->channels[i].channel);
++			return -EINVAL;
++		}
++	}
++
++	mutex_init(&chip->adc_mutex_lock);
++
++	return ret;
++}
++
+ static int adc_tm5_get_dt_channel_data(struct adc_tm5_chip *adc_tm,
+ 				       struct adc_tm5_channel *channel,
+ 				       struct device_node *node)
+ {
+ 	const char *name = node->name;
+-	u32 chan, value, varr[2];
++	u32 chan, value, adc_channel, varr[2];
+ 	int ret;
+ 	struct device *dev = adc_tm->dev;
+ 	struct of_phandle_args args;
+@@ -473,7 +810,16 @@ static int adc_tm5_get_dt_channel_data(struct adc_tm5_chip *adc_tm,
  	}
+ 	of_node_put(args.np);
  
- 	platform_set_drvdata(pdev, bgp);
+-	if (args.args_count != 1 || args.args[0] >= ADC5_MAX_CHANNEL) {
++	if (args.args_count != 1) {
++		dev_err(dev, "%s: invalid args count for ADC channel %d\n", name, chan);
++		return -EINVAL;
++	}
++
++	adc_channel = args.args[0];
++	if (adc_tm->data->gen == ADC_TM5_GEN2)
++		adc_channel &= 0xff;
++
++	if (adc_channel >= ADC5_MAX_CHANNEL) {
+ 		dev_err(dev, "%s: invalid ADC channel number %d\n", name, chan);
+ 		return -EINVAL;
+ 	}
+@@ -519,6 +865,32 @@ static int adc_tm5_get_dt_channel_data(struct adc_tm5_chip *adc_tm,
+ 	else
+ 		channel->cal_method = ADC_TM5_ABSOLUTE_CAL;
+ 
++	if (adc_tm->data->gen == ADC_TM5_GEN2) {
++		ret = of_property_read_u32(node, "qcom,decimation", &value);
++		if (!ret) {
++			ret = qcom_adc5_decimation_from_dt(value, adc_tm->data->decimation);
++			if (ret < 0) {
++				dev_err(dev, "invalid decimation %d\n", value);
++				return ret;
++			}
++			channel->decimation = ret;
++		} else {
++			channel->decimation = ADC5_DECIMATION_DEFAULT;
++		}
++
++		ret = of_property_read_u32(node, "qcom,avg-samples", &value);
++		if (!ret) {
++			ret = qcom_adc5_avg_samples_from_dt(value);
++			if (ret < 0) {
++				dev_err(dev, "invalid avg-samples %d\n", value);
++				return ret;
++			}
++			channel->avg_samples = ret;
++		} else {
++			channel->avg_samples = VADC_DEF_AVG_SAMPLES;
++		}
++	}
++
+ 	return 0;
+ }
+ 
+@@ -549,6 +921,20 @@ static const struct adc_tm5_data adc_tm_hc_data_pmic = {
+ 	.gen = ADC_TM_HC,
+ };
+ 
++static const struct adc_tm5_data adc_tm5_gen2_data_pmic = {
++	.full_scale_code_volt = 0x70e4,
++	.decimation = (unsigned int []) { 85, 340, 1360 },
++	.hw_settle = (unsigned int []) { 15, 100, 200, 300, 400, 500, 600, 700,
++					 1000, 2000, 4000, 8000, 16000, 32000,
++					 64000, 128000 },
++	.disable_channel = adc_tm5_gen2_disable_channel,
++	.configure = adc_tm5_gen2_configure,
++	.isr = adc_tm5_gen2_isr,
++	.init = adc_tm5_gen2_init,
++	.irq_name = "pm-adc-tm5-gen2",
++	.gen = ADC_TM5_GEN2,
++};
++
+ static int adc_tm5_get_dt_data(struct adc_tm5_chip *adc_tm, struct device_node *node)
+ {
+ 	struct adc_tm5_channel *channels;
+@@ -671,6 +1057,10 @@ static const struct of_device_id adc_tm5_match_table[] = {
+ 		.compatible = "qcom,spmi-adc-tm-hc",
+ 		.data = &adc_tm_hc_data_pmic,
+ 	},
++	{
++		.compatible = "qcom,spmi-adc-tm5-gen2",
++		.data = &adc_tm5_gen2_data_pmic,
++	},
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, adc_tm5_match_table);
