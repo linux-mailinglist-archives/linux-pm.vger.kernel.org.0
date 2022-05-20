@@ -2,106 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1339752F2F3
-	for <lists+linux-pm@lfdr.de>; Fri, 20 May 2022 20:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE7752F3D4
+	for <lists+linux-pm@lfdr.de>; Fri, 20 May 2022 21:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352769AbiETSex (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 May 2022 14:34:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49618 "EHLO
+        id S238304AbiETTcs convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 20 May 2022 15:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352717AbiETSer (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 May 2022 14:34:47 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697AC195783;
-        Fri, 20 May 2022 11:34:46 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id m20so1473798wrb.13;
-        Fri, 20 May 2022 11:34:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LSTVujSZxd7jybS/Xm7tv3qPDlYb2MEOHKZDRGbEpQ4=;
-        b=dJg9CQe3nx273fBEBZF9WXB3LktQmm+FfckxuUxi32ZHs5Hnk9iwWc49xyjTpTK85r
-         UbolqjCZgEvqbWO3Z9hFSBMhiQutha2QIf9FIt7VjTUHjsjRZt/KgX7Cmq8TgL1Vpl2L
-         my39hrNeKD2g/2GCAsx6qptExQRN5QNKiqvbQkDwhZMVXXeHr2+MXnZQsAe1w6anupgn
-         Gpzht8aV3N/xQi7xPJ068ufGTB1ivTUdw2elNrZw/uaSuRY0p7I9JzUCPSbk/U9okiWQ
-         EDGYP7EbCKTH3x6UO9XdH9Sz4/2Y9rL1Wa2ftb8zVFpKW79T85nRGoORlKuDrVrMIrmq
-         UMpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LSTVujSZxd7jybS/Xm7tv3qPDlYb2MEOHKZDRGbEpQ4=;
-        b=A+HvFrwk46GApWQkPf8Oa4mLITCYaSMzRDD/WJnEZz8ZTlnoKCfqaJluSrjXNoCfyF
-         +I4MfFHoN0CY2qxh0y/qcRgjy/rczlJruH5CPPwvHBuC+OIQDUYBpsLi65NQv/IDAO/S
-         YmdIYfGdMleyz8oad2dI9YShf9JyfUZawvLP9941I7NfypgeNs4cbcZAMMdlPdrfPcGq
-         995H7cVjr88jiKlW31pZkakO3p1dtDZ93sz+WF9pyo/MPi01HBj1wqQBQzdZL8Qsll9c
-         Hhq/u47uFH5ms6L1zH5wz/Gz32murncnoXd52jVHwc4/IVrSE1hsMX2eVEKjbpc+BKGD
-         unLQ==
-X-Gm-Message-State: AOAM5320J3/HAQS1sFaQhrsOVqnZ0XvhUx9jQoti5ciX5tiLd5gUu1Dx
-        2OEoR3UQsuMLMmRj7Gb/+MeAZEPLlHU=
-X-Google-Smtp-Source: ABdhPJxGAMbJ8hZRi7BTY3l1yRertQpGm8j1ElOR4tU22rk62QJymMuemNP8L8Yer/YbcP1WXy2Gqw==
-X-Received: by 2002:adf:f24c:0:b0:20c:fe15:504c with SMTP id b12-20020adff24c000000b0020cfe15504cmr9404828wrp.123.1653071686072;
-        Fri, 20 May 2022 11:34:46 -0700 (PDT)
-Received: from xws.localdomain (pd9e5a9fe.dip0.t-ipconnect.de. [217.229.169.254])
-        by smtp.gmail.com with ESMTPSA id r9-20020adfa149000000b0020e62feca05sm3252081wrr.32.2022.05.20.11.34.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 May 2022 11:34:45 -0700 (PDT)
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 05/10] power/supply: surface_battery: Use client device wrappers for notifier registration
-Date:   Fri, 20 May 2022 20:34:17 +0200
-Message-Id: <20220520183422.7185-6-luzmaximilian@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220520183422.7185-1-luzmaximilian@gmail.com>
-References: <20220520183422.7185-1-luzmaximilian@gmail.com>
+        with ESMTP id S1353236AbiETTcr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 May 2022 15:32:47 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BBE719579A;
+        Fri, 20 May 2022 12:32:46 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:37830)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1ns8MT-007S8z-KA; Fri, 20 May 2022 13:32:33 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:38910 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1ns8MS-00BQ97-Jb; Fri, 20 May 2022 13:32:33 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, oleg@redhat.com,
+        mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>, linux-ia64@vger.kernel.org,
+        Robert O'Callahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Douglas Miller <dougmill@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+References: <20220421150248.667412396@infradead.org>
+        <20220421150654.817117821@infradead.org>
+        <87czhap9dy.fsf@email.froward.int.ebiederm.org>
+        <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+        <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
+        <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
+        <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
+        <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
+        <YodEWlfo4kFd8+mt@linutronix.de>
+Date:   Fri, 20 May 2022 14:32:24 -0500
+In-Reply-To: <YodEWlfo4kFd8+mt@linutronix.de> (Sebastian Andrzej Siewior's
+        message of "Fri, 20 May 2022 09:33:46 +0200")
+Message-ID: <87wnegyp87.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-XM-SPF: eid=1ns8MS-00BQ97-Jb;;;mid=<87wnegyp87.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX18cQrXh+UQWoHE6LCH3Iga9qNv05JRvfdM=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ******;Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 420 ms - load_scoreonly_sql: 0.06 (0.0%),
+        signal_user_changed: 12 (2.9%), b_tie_ro: 10 (2.4%), parse: 1.71
+        (0.4%), extract_message_metadata: 17 (4.1%), get_uri_detail_list: 2.1
+        (0.5%), tests_pri_-1000: 17 (4.1%), tests_pri_-950: 1.73 (0.4%),
+        tests_pri_-900: 1.39 (0.3%), tests_pri_-90: 79 (18.7%), check_bayes:
+        77 (18.3%), b_tokenize: 12 (2.9%), b_tok_get_all: 10 (2.5%),
+        b_comp_prob: 3.5 (0.8%), b_tok_touch_all: 47 (11.2%), b_finish: 0.95
+        (0.2%), tests_pri_0: 269 (64.1%), check_dkim_signature: 0.74 (0.2%),
+        check_dkim_adsp: 2.5 (0.6%), poll_dns_idle: 0.73 (0.2%), tests_pri_10:
+        4.0 (0.9%), tests_pri_500: 12 (2.9%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 00/16] ptrace: cleanups and calling do_cldstop with only
+ siglock
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use newly introduced client device wrapper functions for notifier
-registration and unregistration.
+Sebastian Andrzej Siewior <bigeasy@linutronix.de> writes:
 
-Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
----
- drivers/power/supply/surface_battery.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> On 2022-05-18 17:49:50 [-0500], Eric W. Biederman wrote:
+>> 
+>> For ptrace_stop to work on PREEMT_RT no spinlocks can be taken once
+>> ptrace_freeze_traced has completed successfully.  Which fundamentally
+>> means the lock dance of dropping siglock and grabbing tasklist_lock does
+>> not work on PREEMPT_RT.  So I have worked through what is necessary so
+>> that tasklist_lock does not need to be grabbed in ptrace_stop after
+>> siglock is dropped.
+> …
+> It took me a while to realise that this is a follow-up I somehow assumed
+> that you added a few patches on top. Might have been the yesterday's
+> heat. b4 also refused to download this series because the v4 in this
+> thread looked newer… Anyway. Both series applied:
+>
+> | =============================
+> | WARNING: suspicious RCU usage
+> | 5.18.0-rc7+ #16 Not tainted
+> | -----------------------------
+> | include/linux/ptrace.h:120 suspicious rcu_dereference_check() usage!
+> |
+> | other info that might help us debug this:
+> |
+> | rcu_scheduler_active = 2, debug_locks = 1
+> | 2 locks held by ssdd/1734:
+> |  #0: ffff88800eaa6918 (&sighand->siglock){....}-{2:2}, at: lock_parents_siglocks+0xf0/0x3b0
+> |  #1: ffff88800eaa71d8 (&sighand->siglock/2){....}-{2:2}, at: lock_parents_siglocks+0x115/0x3b0
+> |
+> | stack backtrace:
+> | CPU: 2 PID: 1734 Comm: ssdd Not tainted 5.18.0-rc7+ #16
+> | Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
+> | Call Trace:
+> |  <TASK>
+> |  dump_stack_lvl+0x45/0x5a
+> |  unlock_parents_siglocks+0xb6/0xc0
+> |  ptrace_stop+0xb9/0x390
+> |  get_signal+0x51c/0x8d0
+> |  arch_do_signal_or_restart+0x31/0x750
+> |  exit_to_user_mode_prepare+0x157/0x220
+> |  irqentry_exit_to_user_mode+0x5/0x50
+> |  asm_sysvec_apic_timer_interrupt+0x12/0x20
+>
+> That is ptrace_parent() in unlock_parents_siglocks().
 
-diff --git a/drivers/power/supply/surface_battery.c b/drivers/power/supply/surface_battery.c
-index 5ec2e6bb2465..540707882bb0 100644
---- a/drivers/power/supply/surface_battery.c
-+++ b/drivers/power/supply/surface_battery.c
-@@ -802,7 +802,7 @@ static int spwr_battery_register(struct spwr_battery_device *bat)
- 	if (IS_ERR(bat->psy))
- 		return PTR_ERR(bat->psy);
- 
--	return ssam_notifier_register(bat->sdev->ctrl, &bat->notif);
-+	return ssam_device_notifier_register(bat->sdev, &bat->notif);
- }
- 
- 
-@@ -837,7 +837,7 @@ static void surface_battery_remove(struct ssam_device *sdev)
- {
- 	struct spwr_battery_device *bat = ssam_device_get_drvdata(sdev);
- 
--	ssam_notifier_unregister(sdev->ctrl, &bat->notif);
-+	ssam_device_notifier_unregister(sdev, &bat->notif);
- 	cancel_delayed_work_sync(&bat->update_work);
- }
- 
--- 
-2.36.1
+How odd.  I thought I had the appropriate lockdep config options enabled
+in my test build to catch things like this.  I guess not.
 
+Now I am trying to think how to tell it that holding the appropriate
+iglock makes this ok.
+
+Eric
