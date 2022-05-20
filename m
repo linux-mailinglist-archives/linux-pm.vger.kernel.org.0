@@ -2,139 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3843C52EAD1
-	for <lists+linux-pm@lfdr.de>; Fri, 20 May 2022 13:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9908E52EB0A
+	for <lists+linux-pm@lfdr.de>; Fri, 20 May 2022 13:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348551AbiETLb4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 May 2022 07:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46460 "EHLO
+        id S240812AbiETLmO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 May 2022 07:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243408AbiETLby (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 May 2022 07:31:54 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36061C11C
-        for <linux-pm@vger.kernel.org>; Fri, 20 May 2022 04:31:50 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id gh17so2026804ejc.6
-        for <linux-pm@vger.kernel.org>; Fri, 20 May 2022 04:31:50 -0700 (PDT)
+        with ESMTP id S236468AbiETLmN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 May 2022 07:42:13 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD6EC0381
+        for <linux-pm@vger.kernel.org>; Fri, 20 May 2022 04:42:10 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id gh17so2072339ejc.6
+        for <linux-pm@vger.kernel.org>; Fri, 20 May 2022 04:42:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0NvptFqrj7j0InVdvvMmgqzBzN84J9LRB794rQxkFdY=;
-        b=re4Sm8tWAvFHp6bKgAYMf09Z79Kgi3OEdhOIiBZ7/Rn2QXbgu5Ly14y4/nQN7Y/aTo
-         VlgbB9yG7Rlr2cuoabCyBxc2bGDLVKK0lXBLnASl6zsHCcOeA+1KzIBeqFsR+y75i5XZ
-         XvFFiPa9GJ2QyyaAdSmJuFi5RyYukwsFD78F77Gu/KxBhoXO8QeL/xhxXqgh8n2pVQ16
-         5uSsdoWXuRrwj+2ip8smJzRExeR9DRqgQ7nZOdTto/19ei6AXbORk/Mx4Jr1TH0FheIZ
-         Rjk53cTk2OReyJUGfCv97XHsZ5d+q5q5c0jA2xxlOnKUomCD8mRuslxc9zsWStq2ZrCv
-         ptCw==
+        d=fairphone.com; s=fair;
+        h=mime-version:content-transfer-encoding:date:message-id:cc:subject
+         :from:to:references:in-reply-to;
+        bh=wS/ZZ/XGdYJivGUIc7glIv8A/QnED+cfdPx1Mf0OR3o=;
+        b=GB72r8xYURZ6bzQkm22Tu7tonI4ZKXJGQRhTtyxiRTudpMondZELrlYY1Xhwk/RTh7
+         5Zeda7d68kYmu4UCNIN7fS1lTpbwBNmqbf4icxZKokgVZAw3IURsvL0hYvjRsQQt94SW
+         8g3F5Vr/0cKVHhCmBXZcWzC0wiq7c3V0JSaC3VnVhKiPnqLTbIVVrxOldU6Csho//iAb
+         i+1fml2hr9pQ0FUoqm5dGGC4coiMNgTvLt6e50kn9jusRG5SCBeCbTcL00riYCnnhFaf
+         YFkN3NQQ4g90z5x59jFrDWx4eRldBx1pjejiDJWfm3XVu8iRY29x1FFUUaukXe6wZQ0h
+         /hHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0NvptFqrj7j0InVdvvMmgqzBzN84J9LRB794rQxkFdY=;
-        b=wCIeQUvyy+p5rceErKTOsb3HAJc0Z5jdf42R+K50v27eXC0Cja9VE1VIWn4YBPgJiF
-         gyi213F0Q9KWx3bHxbNdMbkDvo6DgRKTudobHh9ruJiF+SD6xLiPeTDOYqse2n19up/k
-         aB0g8oKOzELybQz0gma5e/KqrFcmwCwKQEz67vo6qe6JHuNVxHaLD6HjRPd070ihjHBn
-         ofIDIgMU17mx/buWDtQT7hEvIwggLnZXaYb46pGzAtanF4xO6bwz8u4zPUTq89v+9B2F
-         ZPED5QK+51E141f/iXDG03iROfOjFDSIWtwn51FYdLXnVgbHkQHDiTJzpq00HjKxJakm
-         UImw==
-X-Gm-Message-State: AOAM531TUbV7I9Izq2UvWJd/ycp+L136vKjKoDD6afEj4mvaRQNjpzn9
-        Vw7Df8NrRXjSXHszfsdeXBdzhkwabsu3gHDQV4qqpw==
-X-Google-Smtp-Source: ABdhPJyAADo7d4aXCmDNCVnTVXprJXf99iw8JPsCwtJN6tP2yH5Av5Yx22hVAD/QFIma8grUrwXZC/mCf6Av3T8PJbw=
-X-Received: by 2002:a17:907:6eab:b0:6fe:b5e2:7b0e with SMTP id
- sh43-20020a1709076eab00b006feb5e27b0emr1053811ejc.736.1653046309443; Fri, 20
- May 2022 04:31:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220519211411.2200720-1-robh@kernel.org>
-In-Reply-To: <20220519211411.2200720-1-robh@kernel.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 20 May 2022 13:31:38 +0200
-Message-ID: <CAMRc=McjvTE27BMbN-_W+Fdd7CJcswZQYsB-4N8cj=WfAQ9QOQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Fix properties without any type
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree <devicetree@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Input <linux-input@vger.kernel.org>,
-        chrome-platform@lists.linux.dev,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, linux-pci@vger.kernel.org,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-serial@vger.kernel.org,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:content-transfer-encoding:date
+         :message-id:cc:subject:from:to:references:in-reply-to;
+        bh=wS/ZZ/XGdYJivGUIc7glIv8A/QnED+cfdPx1Mf0OR3o=;
+        b=DLpz9iP7qSFjmXLxmLr49dlMpxYGlUElFsmwX5e9jIdFSomSP01H1HJ98vKW+mg2F7
+         khscU7W6Wl+P57lXzaH3+xY9pAIwf6tPxhWbQ6H6BmhTGMIKU/+xkFGcu0/xx6NXwXT1
+         FkBwKTjB4rPxpMkCQj82cQx9K5eiyybCrd5EC2FKqzn9bfbZ7J/fY92Iu4vgOvsTI8b7
+         Pm8rzKgTzftdVlL1PGseBraXk8w4Hz4RlRKVDBHZFjuKXoTmnUTNixE88ASP9TRTj/lp
+         ahR90hQr2tNQPwq7O5TzC7iR6VCc2M902aMzPVr/wVS37tSrRsSzC4ghBIfeZvCSnQdL
+         r5ew==
+X-Gm-Message-State: AOAM532tkK0rDcDDeEgKA/J5vfx22ZXSt8Wbd375AyRL9vUHALOXWr5W
+        OOb9lLlHqzxkqAcpyh4CQRHzjQ==
+X-Google-Smtp-Source: ABdhPJy7fnm73XK7inxXakUomDMt4LomtggIToBNbNojpFIo5Eg5Y2uqDhzYDPx7fPeRzTTy50Yt/g==
+X-Received: by 2002:a17:906:7b82:b0:6f3:ee8d:b959 with SMTP id s2-20020a1709067b8200b006f3ee8db959mr8591524ejo.458.1653046929316;
+        Fri, 20 May 2022 04:42:09 -0700 (PDT)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id w6-20020a170907270600b006f3ef214dedsm3036390ejk.83.2022.05.20.04.42.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 May 2022 04:42:08 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 20 May 2022 13:42:08 +0200
+Message-Id: <CK4K8B8KQICX.LX0G6HW66RNU@otso>
+Cc:     <~postmarketos/upstreaming@lists.sr.ht>,
+        <phone-devel@vger.kernel.org>, "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        "Georgi Djakov" <djakov@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Odelu Kukatla" <okukatla@codeaurora.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/5] dt-bindings: interconnect: qcom: Reuse new
+ rpmh-common bindings
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>
+X-Mailer: aerc 0.9.0
+References: <20220520070318.48521-1-luca.weiss@fairphone.com>
+ <20220520070318.48521-4-luca.weiss@fairphone.com>
+ <d1072c55-9e1c-83df-0184-7405448bbade@linaro.org>
+In-Reply-To: <d1072c55-9e1c-83df-0184-7405448bbade@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 19, 2022 at 11:14 PM Rob Herring <robh@kernel.org> wrote:
->
-> Now that the schema tools can extract type information for all
-> properties (in order to decode dtb files), finding properties missing
-> any type definition is fairly trivial though not yet automated.
->
-> Fix the various property schemas which are missing a type. Most of these
-> tend to be device specific properties which don't have a vendor prefix.
-> A vendor prefix is how we normally ensure a type is defined.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../arm/hisilicon/controller/hip04-bootwrapper.yaml       | 5 +++--
->  .../bindings/display/bridge/toshiba,tc358768.yaml         | 1 +
->  .../devicetree/bindings/display/panel/panel-timing.yaml   | 5 +++++
->  .../bindings/display/panel/raydium,rm67191.yaml           | 1 +
->  .../bindings/display/panel/samsung,s6e8aa0.yaml           | 1 +
->  .../devicetree/bindings/gpio/fairchild,74hc595.yaml       | 1 +
->  .../devicetree/bindings/input/google,cros-ec-keyb.yaml    | 1 +
->  .../devicetree/bindings/input/matrix-keymap.yaml          | 4 ++++
->  Documentation/devicetree/bindings/media/i2c/adv7604.yaml  | 3 ++-
->  Documentation/devicetree/bindings/mux/reg-mux.yaml        | 8 ++++++--
->  Documentation/devicetree/bindings/net/cdns,macb.yaml      | 1 +
->  Documentation/devicetree/bindings/net/ingenic,mac.yaml    | 1 +
->  .../devicetree/bindings/net/ti,davinci-mdio.yaml          | 1 +
->  .../devicetree/bindings/net/wireless/ti,wlcore.yaml       | 2 ++
->  .../devicetree/bindings/pci/snps,dw-pcie-ep.yaml          | 6 ++++--
->  Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml   | 2 ++
->  .../devicetree/bindings/pinctrl/canaan,k210-fpioa.yaml    | 2 ++
->  Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml | 1 +
->  .../devicetree/bindings/power/supply/battery.yaml         | 7 ++++++-
->  .../devicetree/bindings/power/supply/charger-manager.yaml | 1 +
->  Documentation/devicetree/bindings/rng/st,stm32-rng.yaml   | 1 +
->  Documentation/devicetree/bindings/serial/8250.yaml        | 1 +
->  .../devicetree/bindings/sound/audio-graph-card2.yaml      | 3 +++
->  .../devicetree/bindings/sound/imx-audio-hdmi.yaml         | 3 +++
->  Documentation/devicetree/bindings/usb/smsc,usb3503.yaml   | 1 +
->  25 files changed, 55 insertions(+), 8 deletions(-)
->
+Hi Krzysztof,
 
-For GPIO:
+On Fri May 20, 2022 at 12:33 PM CEST, Krzysztof Kozlowski wrote:
+> On 20/05/2022 09:03, Luca Weiss wrote:
+> > Stop defining the properties twice and use the ones provided in the new
+> > qcom,rpmh-common.yaml.
+> >=20
+> > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> > ---
+> > Changes since v1:
+> > * New patch
+> >=20
+> >  .../bindings/interconnect/qcom,rpmh.yaml      | 22 +++++--------------
+> >  1 file changed, 5 insertions(+), 17 deletions(-)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.y=
+aml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> > index fae3363fed02..e822dc099339 100644
+> > --- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> > +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> > @@ -18,6 +18,9 @@ description: |
+> >     least one RPMh device child node pertaining to their RSC and each p=
+rovider
+> >     can map to multiple RPMh resources.
+> > =20
+> > +allOf:
+> > +  - $ref: qcom,rpmh-common.yaml#
+> > +
+> >  properties:
+> >    reg:
+> >      maxItems: 1
+> > @@ -131,28 +134,13 @@ properties:
+> >        - qcom,sm8450-pcie-anoc
+> >        - qcom,sm8450-system-noc
+> > =20
+> > -  '#interconnect-cells':
+> > -    enum: [ 1, 2 ]
+> > -
+> > -  qcom,bcm-voters:
+> > -    $ref: /schemas/types.yaml#/definitions/phandle-array
+> > -    items:
+> > -      maxItems: 1
+> > -    description: |
+> > -      List of phandles to qcom,bcm-voter nodes that are required by
+> > -      this interconnect to send RPMh commands.
+> > -
+> > -  qcom,bcm-voter-names:
+> > -    description: |
+> > -      Names for each of the qcom,bcm-voters specified.
+> > +  '#interconnect-cells': true
+> > =20
+>
+> So this explains why your previous patch had such values... The order is
+> messed up - first you move common parts to common file, then you add
+> SM6350 support.
 
-Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Right, that makes much more sense. Will split out qcom,rpmh-common first
+and use in rpmh.yaml and then afterwards introduce sm6350.
+
+Regards
+Luca
+
+>
+>
+> Best regards,
+> Krzysztof
+
