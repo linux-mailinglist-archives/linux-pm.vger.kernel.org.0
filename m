@@ -2,136 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF4B952E650
-	for <lists+linux-pm@lfdr.de>; Fri, 20 May 2022 09:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8CEB52E7B9
+	for <lists+linux-pm@lfdr.de>; Fri, 20 May 2022 10:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345912AbiETHdx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 May 2022 03:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44074 "EHLO
+        id S1347019AbiETIhZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 May 2022 04:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235940AbiETHdw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 May 2022 03:33:52 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE4914AC97;
-        Fri, 20 May 2022 00:33:50 -0700 (PDT)
-Date:   Fri, 20 May 2022 09:33:46 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1653032028;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WO3Qag7yVyo0GFmwDFCkyWbSVTR+kGU+HMvb/D9bjOo=;
-        b=h4dL5j62evAr9rItV/vck1C6kA0EcttM1m0b1Da0ljJr4V7XdOnxfSv+mWxSutuS2anLKN
-        neSSgNQkpP53eeKBE5CT48hYBJKpeL2q5GmrRpUfJSrhbbAgR96xaZFLm2m9HyNl2hpRjT
-        p4R0TUJObBZ8LuvElhNTARZVzJSH+sfB8hS+wPzXOg5CKr62geGJqavEKMI2R0SUtV5/8r
-        jm0hy5BI7tr3GfOMHLvYq1VeO3ehLaTFzPsyd262aPCmYuf6k1919aqHhR+iCvZFAB5r9g
-        WDP5zU50AT8WP6hpkDrViT7FZkOgF4nok3fWjosNMDT8fokR0m0ESQUltn3zng==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1653032028;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WO3Qag7yVyo0GFmwDFCkyWbSVTR+kGU+HMvb/D9bjOo=;
-        b=4tb6POwNJbbl9CtNBPZJfUGQvl1P67iM9z/Z0O1ewVgldWrTMWuavKsCaXBCXYv5PsOEiU
-        eksDJVhVX6WxZDDw==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, oleg@redhat.com,
-        mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>, linux-ia64@vger.kernel.org,
-        Robert O'Callahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Douglas Miller <dougmill@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-Subject: Re: [PATCH 00/16] ptrace: cleanups and calling do_cldstop with only
- siglock
-Message-ID: <YodEWlfo4kFd8+mt@linutronix.de>
-References: <20220421150248.667412396@infradead.org>
- <20220421150654.817117821@infradead.org>
- <87czhap9dy.fsf@email.froward.int.ebiederm.org>
- <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
- <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org>
- <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
- <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org>
- <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        with ESMTP id S1344658AbiETIhY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 May 2022 04:37:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925E09CF59
+        for <linux-pm@vger.kernel.org>; Fri, 20 May 2022 01:37:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4CA5DB82A57
+        for <linux-pm@vger.kernel.org>; Fri, 20 May 2022 08:37:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 00546C34100
+        for <linux-pm@vger.kernel.org>; Fri, 20 May 2022 08:37:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653035841;
+        bh=2SKY3jpynNKLufcZca/1Z+lFwjXHI96uphaPTcdCdgs=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=tA//iF2imD847LShObPo7unn/aIhyNRs1t/iB5QUe7RqyLnkfWJvSc1Amk9NHa1Jm
+         r9IVfBKfRbfNJcIG44ajNtE2kPVPPuOr2kBws4b288r2q6lYLxFBbek9zpBVG3SUeS
+         1UEt7Xj6XdMqc9OYoTa/Fgh2T0JWwywtJb4gKvJ7uXBNTsfeySf3LB+p5rfjL7D8MS
+         APRpiZ2E8F29NFvuv+fM6BdMYF9H+KotatQsGOkGBXajY3QXYYUTV28PtjfvbgFJPP
+         YusSN7c06hM+3/mFIk7MV6joPZ7+JczHCJj0RvI8Kfs3RAIN1o1yx8164wMLBg3C0i
+         bBAeXaVR/kOmw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id C11B4C05FD6; Fri, 20 May 2022 08:37:20 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 215938] amd-pstate ignoring scaling_max_freq after waking from
+ suspend
+Date:   Fri, 20 May 2022 08:37:19 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: perry_yuan@outlook.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215938-137361-AuEuNaF996@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215938-137361@https.bugzilla.kernel.org/>
+References: <bug-215938-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2022-05-18 17:49:50 [-0500], Eric W. Biederman wrote:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215938
+
+--- Comment #3 from perry_yuan@outlook.com ---
+(In reply to Alex Maras from comment #2)
+> (In reply to Artem S. Tashkinov from comment #1)
+> > Could you please check if bug 215800 affects you?
 >=20
-> For ptrace_stop to work on PREEMT_RT no spinlocks can be taken once
-> ptrace_freeze_traced has completed successfully.  Which fundamentally
-> means the lock dance of dropping siglock and grabbing tasklist_lock does
-> not work on PREEMPT_RT.  So I have worked through what is necessary so
-> that tasklist_lock does not need to be grabbed in ptrace_stop after
-> siglock is dropped.
-=E2=80=A6
-It took me a while to realise that this is a follow-up I somehow assumed
-that you added a few patches on top. Might have been the yesterday's
-heat. b4 also refused to download this series because the v4 in this
-thread looked newer=E2=80=A6 Anyway. Both series applied:
+> No, I can set my frequency to 3GHZ and run stress and my scaling_cur_freq
+> value reports ~3GHZ. I'm also on a AMD Ryzen 7 4800U, which is a Zen2 mod=
+el.
 
-| =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-| WARNING: suspicious RCU usage
-| 5.18.0-rc7+ #16 Not tainted
-| -----------------------------
-| include/linux/ptrace.h:120 suspicious rcu_dereference_check() usage!
-|
-| other info that might help us debug this:
-|
-| rcu_scheduler_active =3D 2, debug_locks =3D 1
-| 2 locks held by ssdd/1734:
-|  #0: ffff88800eaa6918 (&sighand->siglock){....}-{2:2}, at: lock_parents_s=
-iglocks+0xf0/0x3b0
-|  #1: ffff88800eaa71d8 (&sighand->siglock/2){....}-{2:2}, at: lock_parents=
-_siglocks+0x115/0x3b0
-|
-| stack backtrace:
-| CPU: 2 PID: 1734 Comm: ssdd Not tainted 5.18.0-rc7+ #16
-| Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.=
-16.0-4 04/01/2014
-| Call Trace:
-|  <TASK>
-|  dump_stack_lvl+0x45/0x5a
-|  unlock_parents_siglocks+0xb6/0xc0
-|  ptrace_stop+0xb9/0x390
-|  get_signal+0x51c/0x8d0
-|  arch_do_signal_or_restart+0x31/0x750
-|  exit_to_user_mode_prepare+0x157/0x220
-|  irqentry_exit_to_user_mode+0x5/0x50
-|  asm_sysvec_apic_timer_interrupt+0x12/0x20
+Hi Alex.
+Could you help to attach the dmesg log and all CPU model info ?
+Meanwhile I will check if I can reproduce the issue on my side if I have the
+any similar CPU model.
 
-That is ptrace_parent() in unlock_parents_siglocks().
+Perry.
 
-Sebastian
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
