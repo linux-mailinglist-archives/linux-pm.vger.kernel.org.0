@@ -2,145 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3DFB52F0E9
-	for <lists+linux-pm@lfdr.de>; Fri, 20 May 2022 18:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 769C052F2A5
+	for <lists+linux-pm@lfdr.de>; Fri, 20 May 2022 20:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351760AbiETQni (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 May 2022 12:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48590 "EHLO
+        id S243600AbiETSay (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 May 2022 14:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiETQng (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 May 2022 12:43:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 57B7117855A;
-        Fri, 20 May 2022 09:43:35 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 077B91477;
-        Fri, 20 May 2022 09:43:35 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.7.188])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CF25E3F73D;
-        Fri, 20 May 2022 09:43:30 -0700 (PDT)
-Date:   Fri, 20 May 2022 17:43:26 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Vivek Kumar <quic_vivekuma@quicinc.com>
-Cc:     corbet@lwn.net, catalin.marinas@arm.com, will@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, axboe@kernel.dk,
-        rafael@kernel.org, akpm@linux-foundation.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-mm@kvack.org, len.brown@intel.com,
-        pavel@ucw.cz, paulmck@kernel.org, bp@suse.de,
-        keescook@chromium.org, songmuchun@bytedance.com,
-        rdunlap@infradead.org, damien.lemoal@opensource.wdc.com,
-        pasha.tatashin@soleen.com, tabba@google.com, ardb@kernel.org,
-        tsoni@quicinc.com, quic_psodagud@quicinc.com,
-        quic_svaddagi@quicinc.com
-Subject: Re: [RFC 0/6] Bootloader based hibernation
-Message-ID: <YofFLih8LML9U5rc@FVFF77S0Q05N>
-References: <1652860121-24092-1-git-send-email-quic_vivekuma@quicinc.com>
+        with ESMTP id S1352658AbiETSaw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 May 2022 14:30:52 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E730271D;
+        Fri, 20 May 2022 11:30:52 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id s18-20020a056830149200b006063fef3e17so6043440otq.12;
+        Fri, 20 May 2022 11:30:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=U5IbhIIo2Ex15+PJPCMxKef+LbGdFyZTyufuHty8qHo=;
+        b=iq9/6y8GI/TnANp1RCAraEui+WiIgDl/46PyKF2k4/voiiysrmTm5qwem2BanLUGsZ
+         v+kY1rEeCX8u92xfYlq7q1DYOqwJSOTsgKnY2N4MjHmnbBwhP7jtNWtFHxMCt2jG6wue
+         Z6pNHGIZVLFG2BpQQdvoLKHuoLl7ziApc7pjmMNTh5GKkhk2KU7H237F7hnbyPYogH7v
+         Ru7lde4tDF6iMYl9ZzQFfktw6Hj9fA5VlJnzhySo7/cq9wYSiTlVoUOfotB7YJVYu49d
+         K1dgapC+aXcQkUaFmKB2nhLSG+s7OOj7UCVeQ8xRGuhVnf/v9iLV69I9A8IUz6S5KDtm
+         SEng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=U5IbhIIo2Ex15+PJPCMxKef+LbGdFyZTyufuHty8qHo=;
+        b=PEiM2GuVFRzv1UjEHrWLnKd1FQtox3patVyY4p+zB10D4gnDSlCfoH7fVYUpSv6EDh
+         tegtYVnkEID5hJLDTTjWSZoMwtldGIIJegjRBFdB1kdJtQtXzGw8Q7ev534IPxsn32D+
+         mpiMyi/tZQ3/m3B0Y7kHihDimB/8vYUcdxgv9BAi9f0PNkJW5wuhYjZgo5t3SloJPS7U
+         dodIAjpikwmyoDM3nPLUPJzmrf5nZWUF8mW3PqcAC5gHDSxcDD7iw6AboOqPVqi06t5b
+         5eWlqTqzrzg7WUqS6yW0JK+l154SN5M6GH/BFFK1LM92gNieFKzSytFhqW1fGVxEhFLP
+         xlIg==
+X-Gm-Message-State: AOAM5313GvtEQGDRZCGHki5+OvKv3lVYBZ7y96iFYOqXd/W/1rCcdy7I
+        B7oh4KdKhUxY++fMmwvTLhorHYhJ2JIHsg==
+X-Google-Smtp-Source: ABdhPJwzaUYgQUwCeSVbbocaJLwqMJOJvR+2bwzwy/QIN/IXIC0gDQB0P3pkZezbWrVsPgHmh03J3g==
+X-Received: by 2002:a05:6830:9c2:b0:606:1e0a:cc8d with SMTP id y2-20020a05683009c200b006061e0acc8dmr4475147ott.265.1653071451235;
+        Fri, 20 May 2022 11:30:51 -0700 (PDT)
+Received: from wintermute.localdomain (cpe-76-183-134-35.tx.res.rr.com. [76.183.134.35])
+        by smtp.gmail.com with ESMTPSA id w12-20020a4ab6cc000000b0035eb4e5a6d0sm1339467ooo.38.2022.05.20.11.30.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 May 2022 11:30:50 -0700 (PDT)
+From:   Chris Morgan <macroalpha82@gmail.com>
+To:     linux-pm@vger.kernel.org
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lee.jones@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        heiko@sntech.de, sre@kernel.org, jon.lin@rock-chips.com,
+        zyw@rock-chips.com, zhangqing@rock-chips.com,
+        Chris Morgan <macromorgan@hotmail.com>
+Subject: [RESEND 0/4 v7] power: supply: Add Support for RK817 Charger
+Date:   Fri, 20 May 2022 13:30:33 -0500
+Message-Id: <20220520183037.2566-1-macroalpha82@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1652860121-24092-1-git-send-email-quic_vivekuma@quicinc.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+From: Chris Morgan <macromorgan@hotmail.com>
 
-On Wed, May 18, 2022 at 01:18:35PM +0530, Vivek Kumar wrote:
-> Kernel Hibernation
-> 
-> Linux Kernel has been already supporting hibernation, a process which
-> involves freezing of all userspace tasks, followed by quiescing of all
-> kernel device drivers and then a DDR snapshot is taken which is saved
-> to disc-swap partition, after the save, the system can either shutdown
-> or continue further. Generally during the next power cycle when kernel
-> boots and after probing almost all of the drivers, in the late_init()
-> part, it checks if a hibernation image is present in the specified swap
-> slot, if a valid hibernation image is found, it superimposes the currently
-> executing Kernel with an older kernel from the snapshot, moving further,
-> it calls the restore of the drivers and unfreezes the userspace tasks.
-> CONFIG_HIBERNATION and a designated swap partition needs to be present
-> for to enable Hibernation.
-> 
-> Bootloader Based Hibernation:
-> 
-> Automotive usecases require better boot KPIs, Hence we are proposing a
-> bootloader based hibernation restore.
+Resending due to missing cc of DT mailing list.
 
-At a high-level, I'm not a fan of adding new ways to enter the kernel, and for
-the same reasons that the existing hibernate handover is deliberately *not* a
-stable ABI, I don't think we should add an ABI for this. This is not going to
-remain maintainable or compatible over time as the kernel evolves.
+This series is to add support for the Rockchip rk817 battery charger
+which is present in all Rockchip RK817 PMICs. The driver was written
+as a joint effort by Maya Matuszczyk <maccraft123mc@gmail.com> and
+myself Chris Morgan <macromorgan@hotmail.com>.
 
-> Purpose of bootloader based hibernation is to improve the overall boot time
-> till the first display frame is seen on the screen or a camera application
-> can be launched from userspace after the power on reset key is pressed.
+The driver requires some basic parameters be described about the
+battery in the devicetree such as the maximum capacity, the minimum
+and maximum voltage for the battery, the maximum charge current, the
+maximum charge voltage, and the value of sample resistors and sleep
+currents.
 
-Can you break down the time taken for that today?
+The hardware itself contains an ADC capable of measuring the voltage,
+current, and temperature of the battery (though my implementation of an
+Odroid Go Advance lacks a thermistor for temperature). It also contains
+a columb counter, registers for tracking the measured voltage and
+current at boot, and a few bytes of nvram for storing data.
 
-What does a cold boot look like?
+Changes from V6:
+ - Updated devicetree binding patch to reference the required
+   prerequisite patch in the correct manner (relocated it below the ---
+   and pointed it to lore.kernel.org).
 
-What *exactly* are you trying to skip by using hibernation?
+Changes from V5:
+ - Renamed mfd-cell from "battery" to "charger".
+ - Added note for devicetree binding documentation that it requires
+   application of an additional pending patch (to convert documentation
+   to yaml).
 
-Thanks,
-Mark.
+Changes from V4:
+ - Massively redesigned the battery driver to improve measurement
+   accuracy and reliability. Driver now checks values every 8
+   seconds (mimicking BSP driver behavior), or whenever a plug event
+   is detected.
+ - Removed OCV, boot voltage, and boot current as values were found
+   to be unreliable.
+ - Updated first-boot behavior to perform a "best guess" at capacity.
+ - Added ability to calibrate columb counter to full state of charge
+   when charger reports full, and added ability calibrate full charge
+   capacity when battery discharges from full charge to minimum
+   voltage.
+ - Expose state of charge as capacity (in percents).
+ - Updated storing of values to nvram to preserve compatibility with
+   BSP kernel.
 
-> This RFC patchset
-> implements a slightly tweaked version of hibernation in which the
-> restoration of an older snapshot into DDR is being carried out from the
-> bootloader (ABL) itself, by doing this we are saving some time
-> (1 second measured on msm-4.14 Kernel) by not running a
-> temporary kernel and figuring out the hibernation image at late_init().
-> In order to achieve the same bootloader checks for the hibernation
-> image at a very early stage from swap partition, it parses the image and
-> loads it in the DDR instead of loading boot image form boot partition.
-> Since we are not running the temporary kernel,which would have done some
-> basic ARM related setup like, MMU enablement, EL2 setup, CPU setup etc,
-> entry point into hibernation snapshot image directly from bootloader is
-> different, on similar lines, all device drivers are now re-programming
-> the IO-mapped registers as part of the restore callback (which is
-> triggered from the hibernation framework) to bring back the HW/SW sync.
-> 
-> Other factors like, read-speed of the secondary storage device and
-> organization of the hibernation image in the swap partition effects the
-> total image restore time and the overall boot time. In our current
-> implementation we have serialized the allocation of swap-partition's slots
-> in kernel, so when hibernation image is being saved to disc, each page is
-> not scattered across various swap-slot offsets, rather it in a serial
-> manner. For example, if a DDR page at Page frame number 0x8005 is
-> located at a swap-slot offset 50, the next valid DDR page at PFN 0x8005
-> will be preset at the swap-slot offset 51. With this optimization in
-> place, bootloader can utilize the max capacity of issuing a disc-read
-> for reading a bigger chunk (~50 MBs at once) from the swap slot,
-> and also parsing of the image becomes simpler as it is available
-> contiguously.
-> 
-> 
-> 
-> Vivek Kumar (6):
->   arm64: hibernate: Introduce new entry point to kernel
->   PM: Hibernate: Add option to disable disk offset randomization
->   block: gendisk: Add a new genhd capability flag
->   mm: swap: Add randomization check for swapon/off calls
->   Hibernate: Add check for pte_valid in saveable page
->   irqchip/gic-v3: Re-init GIC hardware upon hibernation restore
-> 
->  Documentation/admin-guide/kernel-parameters.txt |  11 ++
->  arch/arm64/kernel/hibernate.c                   |   9 ++
->  drivers/irqchip/irq-gic-v3.c                    | 138 ++++++++++++++++-
->  include/linux/blkdev.h                          |   1 +
->  kernel/power/snapshot.c                         |  43 ++++++++
->  kernel/power/swap.c                             |  12 +++
->  mm/swapfile.c                                   |   6 +-
->  7 files changed, 216 insertions(+), 4 deletions(-)
-> 
-> -- 
-> 2.7.4
-> 
+Changes from V3:
+
+ - Corrected issues in device tree documentation.
+ - Added additional logic to battery to correct for columb counter
+   drift when the device stays plugged in at a full charge state.
+
+Changes from V2:
+
+ - Updated devicetree bindings to use common property units.
+ - Removed unneeded includes.
+ - Updated rk817_chg_cur_to_reg to make more legible.
+ - Simplified formula for displaying calibrated voltage.
+ - Updated power supply type to POWER_SUPPLY_TYPE_USB.
+ - Implemented get/put_unaligned macros for bulk reads and writes.
+ - Changed numerous dev_err() to dev_err_probe().
+ - Call power_supply_put_battery_info() at end of probe function.
+ - Removed unneeded whitespace.
+
+Changes from V1:
+
+ - Fixed a CLANG warning regarding an uninitalized variable.
+ - Fixed a CLANG warning regarding a pointer as a bool value always
+   returning as true.
+ - Added Maya Matuszczyk to the Signed-off-by.
+
+Chris Morgan (4):
+  dt-bindings: Add Rockchip rk817 battery charger support
+  mfd: Add Rockchip rk817 battery charger support
+  power: supply: Add charger driver for Rockchip RK817
+  arm64: dts: rockchip: add rk817 chg to Odroid Go Advance
+
+ .../bindings/mfd/rockchip,rk817.yaml          |   48 +
+ .../boot/dts/rockchip/rk3326-odroid-go2.dts   |   26 +
+ drivers/mfd/rk808.c                           |   16 +-
+ drivers/power/supply/Kconfig                  |    6 +
+ drivers/power/supply/Makefile                 |    1 +
+ drivers/power/supply/rk817_charger.c          | 1157 +++++++++++++++++
+ include/linux/mfd/rk808.h                     |   91 ++
+ 7 files changed, 1344 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/power/supply/rk817_charger.c
+
+-- 
+2.25.1
+
