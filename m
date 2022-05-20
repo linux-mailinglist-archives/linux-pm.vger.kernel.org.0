@@ -2,139 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD1752E0CF
-	for <lists+linux-pm@lfdr.de>; Fri, 20 May 2022 01:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5588752E11B
+	for <lists+linux-pm@lfdr.de>; Fri, 20 May 2022 02:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343767AbiESXt2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 May 2022 19:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55336 "EHLO
+        id S1343944AbiETAVC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 May 2022 20:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343776AbiESXtY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 19:49:24 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7525A1271A7;
-        Thu, 19 May 2022 16:49:19 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:56376)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nrptC-005nI6-L7; Thu, 19 May 2022 17:49:06 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:38840 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nrptB-007p0E-Jc; Thu, 19 May 2022 17:49:06 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Will Deacon <will@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
-        Robert OCallahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Miller <dougmill@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-References: <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
-        <20220518225355.784371-3-ebiederm@xmission.com>
-        <CAD=FV=UFK7h0oHGJ23y37ShO+z4vt9ubGE9E4m=jMECgNAAHgA@mail.gmail.com>
-Date:   Thu, 19 May 2022 18:48:40 -0500
-In-Reply-To: <CAD=FV=UFK7h0oHGJ23y37ShO+z4vt9ubGE9E4m=jMECgNAAHgA@mail.gmail.com>
-        (Doug Anderson's message of "Thu, 19 May 2022 13:52:22 -0700")
-Message-ID: <8735h52ief.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        with ESMTP id S1343956AbiETAUz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 20:20:55 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C274224BE0;
+        Thu, 19 May 2022 17:20:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653006054; x=1684542054;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AX9u0AjfkhQIv902pkLIaB2pcFVPrNmehZjTGBz16NU=;
+  b=mtdNsYRF+q2AdF6JvRpi9EUz8Qwia2g7y2xkHHWUnQGdev+VW+5yPics
+   qubndh+n8FMLi9x+3hNsrUwl4LvDkA5nbVC/VsZYS2FCzIddNqF0jDAtS
+   ebN+wsypSB6luy265BQy1d1Q5F6jati6qsXeYqY/XfEvMzdzpb0hPWChY
+   ghH+vYtWAXId7tBjSdcb+oiNbdtQ8NusS+PAgAlLVPc6AjwRGRfPnc8jf
+   HxMDcRhkdvfCVliekjAwSTxhse0S0ARg5QpvVsh69wpOh3zDbNgDz2tQe
+   6l+yN1RyuExN57sa5jNkXgWJ24AnEY1oF4WcKwqZoDo/ndCEayA3n5Fwc
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10352"; a="272394418"
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="272394418"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2022 17:20:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,238,1647327600"; 
+   d="scan'208";a="546392359"
+Received: from lkp-server02.sh.intel.com (HELO 242b25809ac7) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 19 May 2022 17:20:48 -0700
+Received: from kbuild by 242b25809ac7 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nrqNs-000459-6h;
+        Fri, 20 May 2022 00:20:48 +0000
+Date:   Fri, 20 May 2022 08:20:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Meng Li <li.meng@amd.com>, Shuah Khan <skhan@linuxfoundation.org>,
+        Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org
+Cc:     kbuild-all@lists.01.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
+        Meng Li <li.meng@amd.com>
+Subject: Re: [PATCH V6 2/4] cpufreq: amd-pstate: Add test module for
+ amd-pstate driver
+Message-ID: <202205200812.g9S1SWP3-lkp@intel.com>
+References: <20220519134737.359290-3-li.meng@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nrptB-007p0E-Jc;;;mid=<8735h52ief.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1/r+I4NpBL/cjZDGRTZsuxWM8gB/3i+bCM=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220519134737.359290-3-li.meng@amd.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Virus: No
-X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;Doug Anderson <dianders@chromium.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 379 ms - load_scoreonly_sql: 0.03 (0.0%),
-        signal_user_changed: 4.0 (1.0%), b_tie_ro: 2.6 (0.7%), parse: 0.71
-        (0.2%), extract_message_metadata: 12 (3.1%), get_uri_detail_list: 1.06
-        (0.3%), tests_pri_-1000: 23 (6.1%), tests_pri_-950: 1.10 (0.3%),
-        tests_pri_-900: 0.86 (0.2%), tests_pri_-90: 71 (18.7%), check_bayes:
-        70 (18.4%), b_tokenize: 8 (2.2%), b_tok_get_all: 10 (2.6%),
-        b_comp_prob: 2.0 (0.5%), b_tok_touch_all: 47 (12.3%), b_finish: 0.66
-        (0.2%), tests_pri_0: 256 (67.7%), check_dkim_signature: 0.60 (0.2%),
-        check_dkim_adsp: 2.2 (0.6%), poll_dns_idle: 0.76 (0.2%), tests_pri_10:
-        1.72 (0.5%), tests_pri_500: 6 (1.7%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 03/16] kdb: Use real_parent when displaying a list of
- processes
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Doug Anderson <dianders@chromium.org> writes:
+Hi Meng,
 
-> Hi,
->
-> On Wed, May 18, 2022 at 3:54 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
->>
->> kdb has a bug that when using the ps command to display a list of
->> processes, if a process is being debugged the debugger as the parent
->> process.
->>
->> This is silly, and I expect it never comes up in ptractice.  As there
->> is very little point in using gdb and kdb simultaneously.  Update the
->> code to use real_parent so that it is clear kdb does not want to
->> display a debugger as the parent of a process.
->
-> So I would tend to defer to Daniel, but I'm not convinced that the
-> behavior you describe for kdb today _is_ actually silly.
->
-> If I was in kdb and I was listing processes, I might actually want to
-> see that a process's parent was set to gdb. Presumably that would tell
-> me extra information that might be relevant to my debug session.
->
-> Personally, I'd rather add an extra piece of information into the list
-> showing the real parent if it's not the same as the parent. Then
-> you're not throwing away information.
+Thank you for the patch! Perhaps something to improve:
 
-The name of the field is confusing for anyone who isn't intimate with
-the implementation details.  The function getppid returns
-tsk->real_parent->tgid.
+[auto build test WARNING on shuah-kselftest/next]
+[also build test WARNING on rafael-pm/linux-next linux/master linus/master v5.18-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-If kdb wants information of what the tracer is that is fine, but I
-recommend putting that information in another field.
+url:    https://github.com/intel-lab-lkp/linux/commits/Meng-Li/Add-unit-test-module-for-AMD-P-State-driver/20220519-215444
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220520/202205200812.g9S1SWP3-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/5a00a68d142a32f76cf2e770d75463802273e7ed
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Meng-Li/Add-unit-test-module-for-AMD-P-State-driver/20220519-215444
+        git checkout 5a00a68d142a32f76cf2e770d75463802273e7ed
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cpufreq/
 
-Given that the original description says give the information that ps
-gives my sense is that kdb is currently wrong.  Especially as it does
-not give you the actual parentage anywhere.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I can certainly be convinced, but I do want some clarity.  It looks very
-attractive to rename task->parent to task->ptracer and leave the field
-NULL when there is no tracer.
+All warnings (new ones prefixed by >>):
 
-Eric
+   In file included from include/linux/kernel.h:29,
+                    from arch/x86/include/asm/percpu.h:27,
+                    from arch/x86/include/asm/current.h:6,
+                    from arch/x86/include/asm/processor.h:17,
+                    from arch/x86/include/asm/timex.h:5,
+                    from include/linux/timex.h:65,
+                    from include/linux/time32.h:13,
+                    from include/linux/time.h:60,
+                    from include/linux/stat.h:19,
+                    from include/linux/module.h:13,
+                    from include/../tools/testing/selftests/kselftest_module.h:5,
+                    from drivers/cpufreq/amd-pstate-ut.c:23:
+   drivers/cpufreq/amd-pstate-ut.c: In function 'get_shared_mem':
+>> include/linux/kern_levels.h:5:25: warning: format '%ld' expects argument of type 'long int', but argument 3 has type 'ssize_t' {aka 'int'} [-Wformat=]
+       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
+         |                         ^~~~~~
+   include/linux/printk.h:418:25: note: in definition of macro 'printk_index_wrap'
+     418 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ^~~~
+   include/linux/printk.h:489:9: note: in expansion of macro 'printk'
+     489 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~
+   include/linux/kern_levels.h:11:25: note: in expansion of macro 'KERN_SOH'
+      11 | #define KERN_ERR        KERN_SOH "3"    /* error conditions */
+         |                         ^~~~~~~~
+   include/linux/printk.h:489:16: note: in expansion of macro 'KERN_ERR'
+     489 |         printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+         |                ^~~~~~~~
+   drivers/cpufreq/amd-pstate-ut.c:83:33: note: in expansion of macro 'pr_err'
+      83 |                                 pr_err("%s ret=%ld unable to read from param file!\n",
+         |                                 ^~~~~~
+
+
+vim +5 include/linux/kern_levels.h
+
+314ba3520e513a Joe Perches 2012-07-30  4  
+04d2c8c83d0e3a Joe Perches 2012-07-30 @5  #define KERN_SOH	"\001"		/* ASCII Start Of Header */
+04d2c8c83d0e3a Joe Perches 2012-07-30  6  #define KERN_SOH_ASCII	'\001'
+04d2c8c83d0e3a Joe Perches 2012-07-30  7  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
