@@ -2,244 +2,175 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DFB152EE10
-	for <lists+linux-pm@lfdr.de>; Fri, 20 May 2022 16:24:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 346D652EEA0
+	for <lists+linux-pm@lfdr.de>; Fri, 20 May 2022 17:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350248AbiETOYk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 May 2022 10:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
+        id S1350263AbiETPDL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 May 2022 11:03:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350238AbiETOYj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 May 2022 10:24:39 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693A9169E0C
-        for <linux-pm@vger.kernel.org>; Fri, 20 May 2022 07:24:35 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id c19so1509730lfv.5
-        for <linux-pm@vger.kernel.org>; Fri, 20 May 2022 07:24:35 -0700 (PDT)
+        with ESMTP id S231347AbiETPDK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 May 2022 11:03:10 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF1A16D4B3;
+        Fri, 20 May 2022 08:03:09 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24KDTOuv014287;
+        Fri, 20 May 2022 15:02:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
+ bh=Ha++xD5LmKR+qFQ3st7nRfjH6f6dDAaXFeYULXN2u2U=;
+ b=W42mu7r6KXv4CIWLu38e8dr6ay/W7CnFL5SG9MDEoAATzr6PNP8Ivui6fqd2cj2gLw27
+ Y6gKSF5Q31ZliZXf9oRLoVTyzFtG7lY05xib/P24gPjdeTLTcq3hGBeyaZ6RLRZOHNSs
+ ky+EEY0TnbDOJYMxn8oAJ+nxmGRYaornEnKLVjTt9ztjKZgcN1kg0fBDxuRqJaVutYPU
+ 1ws7lAzAhE5H+HRq12MevZ3B2FVheoNhDRucFLB6mcDZLYPXNMf6nbsOZ7wqRfebyWPE
+ f8epbUkTMv7sNAusHcXufijcz4cSdJBLw4TPr8mu9ktnfNf30x5otMgIPYS4b9GFiSne rg== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3g24ytyax2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 20 May 2022 15:02:58 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 24KF048Y001081;
+        Fri, 20 May 2022 15:02:57 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2045.outbound.protection.outlook.com [104.47.66.45])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3g37csj9be-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 20 May 2022 15:02:57 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J9KuVY69uVmkN+AW/aNHv2k2f9qCaG56Hi+tBSwMsX1IUAaeEheuSo7Ix/VDaJIAIEzgzb5Kztj7gHPIEB7wYwvb951erB7WiJwEiU2DCdklXyqNip/1WIJ35+04DiAU9vN+RD+VQpB/oyS3wVcQ+U/5fgeuEpyyX9k8uR4vh53qM1/di1AtzZzqDP6vk/AUiCOFdkPYEaLkj/oB0sZ7fbe4TzG08iMindxn0etl81K4UqgM7mAx8neWOeeL8OD17q61ZeJnKEedW3VlG59U8DQpHdbwtf7UH/q+m7F3FI3XfajyRa/EJcJVFyhXwf2xkXR0IhTA1ATwpkVUzNet3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ha++xD5LmKR+qFQ3st7nRfjH6f6dDAaXFeYULXN2u2U=;
+ b=ZW/bcFGk4bQEH98apDTMPzugDOSEk/mtCVHLfFiyViJz633R4VQ/B6p332Ht5+I/tn1+4rZYA/HlMVS4xcTEL5+I5MV3l7/vZFlXDkQ2hHs0DTqTEjuXRZyzBo8Upme2F2kq++meS+1gA952CJzw7P08WDdfFJGt/AjXvsTo1BbaH9IQDirD74JBHCKXP9suMXVQ5LqPEaDO5imvWmyYjW4GN6SXYOKacGyHDntI7LZyfxcIaTjo9Tza1er7Hfq0JtLS0VRkc4P/wlNv5BGk2ScXe4Spd0fn1kLglYCutC1n0OX+Gi8uZJhBv5AVNxQKm/2MFVmJVvY6Gy6fvzUwiw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=8qK1C/fXcj1Bx31GwrbgIHQcHFBncp+gQ5Gc0QhkCVs=;
-        b=XX0K4MWrxSFsvmT0HwgfuHMG+PL/FDHT2earFmJZKpu92EmvkETnV90r/whOD+/lL/
-         nGVWqi/eYsZYX2P8CBT16ewGnaf+AMkQk/1oQm2tdWIH3Fe4KXAWxkkSUCiTSqomOoCK
-         WmDEeN67QmThoa9r3L66RSklPVtI/Ja/zILbnI/URnPDcTYIEPEVpyxBW48RUS+xTHnr
-         C1ZCvj2Mr3gvzekOMt6lDvaxKe3SgWMSMxhcqKjm3V7jipK6Ktbo5JKqe60kmm3Vhs6E
-         SMCGwv7oQ92A5Q2QjLfxfBwIeIvz6D0LWbSY26f2rZmldPZ31ChLWmA+T2EJGcDpyekH
-         z5Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8qK1C/fXcj1Bx31GwrbgIHQcHFBncp+gQ5Gc0QhkCVs=;
-        b=B/MNdFdNzpy7rEPdsboX3n3gfYk58/aXpB1maFGnrWZSHDNXyYtC7oWcXsOxdMzwsJ
-         e/ZSIUwBG81ymbIRtTgik1pBm8Sx++BqeSWMvka7W/UhM8T+/0eHk4aHB5t6FLgXLV50
-         Gk6+201TdlknMrbshWPw+SLbZzHisTvOKSVZKNTMN7EM6gFXowimU95zMkBVlnTHa8kg
-         QZp2YqtukqtKc4SIb0q4P7a5yAe2XFrvmLxtUnCHkXi2GVqKctH/9qgjRugDBdnXn7aZ
-         teQa2J1DjRxGdekj+YZUncBnC9hSwHNjvai+bMK5bNERp+Wl06BOT4p+yA3nuSpItG0Z
-         VDEQ==
-X-Gm-Message-State: AOAM531liobFXisDJydcf8LGl81YSN7MxTtJ9OiUABWNZtDmkvvlZrCp
-        RL0sL4tPdJnva0v02/uMKK2I5g==
-X-Google-Smtp-Source: ABdhPJwwrJPm4H3reVCsciJsAq6hR9ACJ31onH+YD27Kg88MIvoXnWyGyYu+ftDUc43IRAua/VsZiA==
-X-Received: by 2002:a05:6512:110d:b0:473:d519:5764 with SMTP id l13-20020a056512110d00b00473d5195764mr7385296lfg.128.1653056673730;
-        Fri, 20 May 2022 07:24:33 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id o25-20020a056512051900b0047255d2117asm678537lfb.169.2022.05.20.07.24.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 07:24:33 -0700 (PDT)
-Message-ID: <b9487ffe-7ed5-077c-3c2c-886746457365@linaro.org>
-Date:   Fri, 20 May 2022 16:24:31 +0200
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ha++xD5LmKR+qFQ3st7nRfjH6f6dDAaXFeYULXN2u2U=;
+ b=DnNEYCR7PbRDXtHPiKDxsMnX4nWcNYzjQRxTE948MkjegL/BAJm1vmIi69iP2dAeaP6arXaqsVSl8FzxTooaGOcUaBxFGIx5WOVA4oNczV+N6/8ipjGAX8OyTY8Las9k57IHZC3Mno6r+DB/52lwo/olEOjlA8uVU03dMOsaFaE=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by DM6PR10MB3722.namprd10.prod.outlook.com
+ (2603:10b6:5:152::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.14; Fri, 20 May
+ 2022 15:02:55 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::86f:81ba:9951:5a7e]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::86f:81ba:9951:5a7e%2]) with mapi id 15.20.5273.014; Fri, 20 May 2022
+ 15:02:55 +0000
+Date:   Fri, 20 May 2022 18:02:39 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>, Keerthy <j-keerthy@ti.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] thermal: k3_j72xx_bandgap: Fix array underflow in
+ prep_lookup_table()
+Message-ID: <YoetjwcOEzYEFp9b@kili>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+X-ClientProxiedBy: ZR0P278CA0042.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:1d::11) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v2 2/5] dt-bindings: interconnect: Add Qualcomm SM6350 NoC
- support
-Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Odelu Kukatla <okukatla@codeaurora.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220520070318.48521-1-luca.weiss@fairphone.com>
- <20220520070318.48521-3-luca.weiss@fairphone.com>
- <7b451dfb-8353-4a4e-1834-a01feaa267d2@linaro.org>
- <CK4KPEWM9165.2LR9ZUG2GGK6Q@otso>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CK4KPEWM9165.2LR9ZUG2GGK6Q@otso>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 808c4cd4-a992-44df-e48d-08da3a71d1ac
+X-MS-TrafficTypeDiagnostic: DM6PR10MB3722:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR10MB3722F6425ABC351C1A9D70BE8ED39@DM6PR10MB3722.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FRY2P4R5NLwbWdV+Zt7EjT8LY5ECjVGVFE7Cga7BH9pxS0388aIVvknCJLKPjAXWFkBz4cECXaEqYK8wT7ha5yew/Nup22IOwF5hjkZUF3s4Y3tQOPN5F9i87BTgTeYU5YRA9cifApUjvxUyqaOv/RB5b4Ti1kqb4i0xTokNNDZGoRlVmAKChdzWda79sLjOa9LWlWmGhmQrvZK4khBSFX8M8FXzPMOZLcktraGVVTRvGWJKrhenVzsRua7okNWmxu8aRkAJRpJs3DPHSRiiB5eTwWar3Ed6+gSvSsHrKoGDmm3JaZscx4UlUY4mxcA3Ek8aQxI5eQbNZDr0UYaPO061PobjLaUKo6x2RMfYfEQt4cLFVmqjbfpWOxjLzsiP89pTJUnDyp/BhiVGBnfT5YpzWq41JAANO1ieLnG1m+1iZnfYhH9pgM1r9Ppy/bpJ0vD159Ap5MM3gWMyCK1WQlai9hSKpFiteXp6wKz3qDIQIHDm0waQRub+QymzPC0Clb7tM962B9W1nxMHqXlxXIzK8PZlWG3Coz+w+KD1R+xuTr+rjoX5NXamQ1Awgh7p8F0+PJsa+6Yh7TY1jgR3YVLGbzDdCWB8zc5567LQSCLyvL4ReaNT8RbwKkOmgWLlscMkotqJURvW22cdWi8SSQn2MhgVu3TjzBIZkyJWd94MPPJIw1vUbdNSH6EzpUY/UqOZ+d98TIhJAW+yNUf/og==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(33716001)(83380400001)(66556008)(4326008)(44832011)(38350700002)(38100700002)(26005)(66946007)(8676002)(66476007)(5660300002)(86362001)(6486002)(2906002)(6666004)(6512007)(4744005)(9686003)(8936002)(508600001)(110136005)(52116002)(54906003)(186003)(6506007)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Y7+79d6l5tE09lmkgyEg/v6gLDBuA2Pa+lknM92NsCjv6OwOlLHXlIlR0P03?=
+ =?us-ascii?Q?CAsv7INBfWeAO5A6MNkSdeMMq6sapavPr66d8Jh11wDNR+R5eIG6P3lNJ+ey?=
+ =?us-ascii?Q?AtUmw4Ifoq/feJLPWK8YI0zkm6TZaq7HECfPWz+t3Lf6QWdJFbuxXssGPW/C?=
+ =?us-ascii?Q?PX1pYAbGUQe0lmPdekVn1e55/s5V75IgbnBjLiGJDr9D8IHc9Rcrvr8lub2E?=
+ =?us-ascii?Q?cqqMNrmQ6iS8QDKGFApC2L0zryOhY0NUf1LTSyhVjzg4Z1sPywLpgvKV0zO+?=
+ =?us-ascii?Q?2NI0ROmJhoDqfmB40Cfq8uLQEzst9S3lIOVA5eoaeZFffE/s9tep1mYKaqeq?=
+ =?us-ascii?Q?yvZPfOX8+qOW5K8MM7nH8GDlG/zNxUPWWkV0XVR3lfSyiemyeEpYcnUEyoa3?=
+ =?us-ascii?Q?RG5J7KaHKLDvvnGZrOf5mT+HX+h9dI+uN4rTL7Dr5DHtjFCBSBtGifBJbAIm?=
+ =?us-ascii?Q?hKUWsUFD3lWVqZ11Hlv8AZF5nPReh9RV+Z0IuyKpv1GjAvfLxtUgoKjA3AGR?=
+ =?us-ascii?Q?teRsLbl8S2SLNfU8o7z+Fmw5ZV26GnGwniqgM6Qxi7q0hOy/Ikkl8NJVD4v3?=
+ =?us-ascii?Q?InNBpGyrVQyCPul9B3IDZ+TGrDBItljzEZS6JRjQsfD3KUI6e0GPz+3Rq1D5?=
+ =?us-ascii?Q?Hc+x98ek7Xk0VnTPV2qwul/y83Qp6B1RXkA35qO0JyobZFCNrse3sBmkB3hI?=
+ =?us-ascii?Q?fm0J/cODyJ/Edi4fiwCI+HfsX1Zcr6uZHcrDizhZjExZiuGsjkfkdb81VZsj?=
+ =?us-ascii?Q?3OfFpUiBwtZVVcxwkm1RgVoaRcaxs025B54+v7gw+ElAwOWWqCwR/DZeHL7z?=
+ =?us-ascii?Q?HIR8QSSRRqWRt51xWtJEthfKQ4yMvQ6LAOC4IrNFaU6iQk4/bc1hI+5lvvhD?=
+ =?us-ascii?Q?5py/2r+JhsrlNw99WQRX5mKw0gB68tnh5ZL3cEq/vWKtUC8bkoOHi6rKwH+q?=
+ =?us-ascii?Q?truU9/paY9ZhIoF5c9u9oKOMNOH8mly4vibuGROnWftuanjmQ7jIP370phDv?=
+ =?us-ascii?Q?Qi3Icn3kY3fSGSGbmaDQ5bAeRiErS4KN3QmHyOJQVZRjC9t3to3j/iDO8nZ9?=
+ =?us-ascii?Q?MPcTVtNxoPz3GEV5Iple5GgQzXD1JcdNqYaZox39fZE89Jnrquzyvw3aLQkD?=
+ =?us-ascii?Q?JKti0F8PfbjLtnMbdOXuLvALdO4GAZAZnmV10PcsVNPOD+9KSB7wkas/iv0n?=
+ =?us-ascii?Q?N9xBRl4PGUQCA2GjusvLJpjkYm1VkuCp4XJ5PXJIhMY7adFEHFvBkw4dl5Q5?=
+ =?us-ascii?Q?NBmOpAbP0oefzFe5vf9X7aS/PicVvnRIYNPudHbRi+I8nimC/o9Ou05kSBun?=
+ =?us-ascii?Q?rqva2BNjweVJaHXN+AesJ0ecwgBDKUjkXWfFTikBsZ2JXhhswN5oGqMdtzWb?=
+ =?us-ascii?Q?J2mfwqlXGYjLRZf6Ar5ix0bi4eJXCA1prAfxbfhmv1VLScgCsG25KGoLsrv1?=
+ =?us-ascii?Q?8IT0Di9e9+5y69EhEnAdtk94aMvxgKyziNAl9IoRdsVj6LTPjgaBsiiKK4tf?=
+ =?us-ascii?Q?EuBvNGA71sgoRTW32AEkuhNRh9XtYjoLBT3BNkdPSXVKRdclU+GnJHX8FVYH?=
+ =?us-ascii?Q?MMvjhXl7eHDXmoumg2jzBLHxDQ0RRErg35ksBuWpLhkuA8EeECWNiqNlLF+J?=
+ =?us-ascii?Q?MOVq7U5fkxOKoax/OixVcXPrTDa4tZD//FVzQiEnCPIK/I7HYCL2bi95RTyZ?=
+ =?us-ascii?Q?lrR6uUh6r8P+Boht8io1Dpi9JJYDznEkZtkQkstXRH5G/XiX481uYIKq4wov?=
+ =?us-ascii?Q?7UcWBzHo92MFdl3uVkIm9U5XyzZqVj0=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 808c4cd4-a992-44df-e48d-08da3a71d1ac
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2022 15:02:55.4205
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Z6EBzsJSK9ME8q77NCou1pcal7fAuOZrMOoIBOK/gAccAjRpZYtm8cU9NJghE6Y30edsmNaXUOv1OGpLE8DtCSoj28Kn4Q4SKqbaR9M/ypw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB3722
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.874
+ definitions=2022-05-20_04:2022-05-20,2022-05-20 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 mlxscore=0
+ phishscore=0 bulkscore=0 mlxlogscore=999 adultscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2205200104
+X-Proofpoint-GUID: OligXqyY2O5aRmQ4Q14YkpGZcM8pNrTt
+X-Proofpoint-ORIG-GUID: OligXqyY2O5aRmQ4Q14YkpGZcM8pNrTt
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20/05/2022 14:04, Luca Weiss wrote:
-> Hi Krzysztof,
-> 
-> Thanks for the review!
-> 
-> On Fri May 20, 2022 at 12:31 PM CEST, Krzysztof Kozlowski wrote:
->> On 20/05/2022 09:03, Luca Weiss wrote:
->>> Add bindings for Qualcomm SM6350 Network-On-Chip interconnect devices.
->>>
->>> As SM6350 has two pairs of NoCs sharing the same reg, allow this in the
->>> binding documentation, as was done for qcm2290.
->>>
->>> Because the main qcom,rpmh.yaml file is getting too complicated for our
->>> use cases, create a new qcom,rpmh-common.yaml and a separate
->>> qcom,sm6350-rpmh.yaml that defines our new bindings.
->>>
->>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
->>> ---
->>> Changes since v1:
->>> * Split sm6350 into separate yaml with new rpmh-common.yaml
->>>
->>>  .../interconnect/qcom,rpmh-common.yaml        |  41 +++++
->>>  .../interconnect/qcom,sm6350-rpmh.yaml        |  82 ++++++++++
->>>  .../dt-bindings/interconnect/qcom,sm6350.h    | 148 ++++++++++++++++++
->>>  3 files changed, 271 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,rpmh-common.yaml
->>>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm6350-rpmh.yaml
->>>  create mode 100644 include/dt-bindings/interconnect/qcom,sm6350.h
->>>
->>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh-common.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh-common.yaml
->>> new file mode 100644
->>> index 000000000000..6121eea3e87d
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh-common.yaml
->>> @@ -0,0 +1,41 @@
->>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/interconnect/qcom,rpmh-common.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Qualcomm RPMh Network-On-Chip Interconnect
->>> +
->>> +maintainers:
->>> +  - Georgi Djakov <georgi.djakov@linaro.org>
->>> +  - Odelu Kukatla <okukatla@codeaurora.org>
->>
->> Is this valid email address?
-> 
-> Will put Georgi and Bjorn as maintainers, as per your other email.
-> 
->>
->>> +
->>> +description: |
->>> +   RPMh interconnect providers support system bandwidth requirements through
->>> +   RPMh hardware accelerators known as Bus Clock Manager (BCM). The provider is
->>> +   able to communicate with the BCM through the Resource State Coordinator (RSC)
->>> +   associated with each execution environment. Provider nodes must point to at
->>> +   least one RPMh device child node pertaining to their RSC and each provider
->>> +   can map to multiple RPMh resources.
->>> +
->>> +properties:
->>> +  '#interconnect-cells':
->>> +    enum: [ 1, 2 ]
->>
->> Why this is an enum?
-> 
-> As a start, just adding that the definitions are copied from
-> qcom,rpmh.yaml so it's not my invention :) Of course that doesn't mean
-> that it should be improved where possible!
-> 
-> Either value is supported by the driver (and used upstream). But perhaps
-> it can use a description to define what the 'parameters' mean.
-> 
-> The second (optional) parameters "is to support different bandwidth
-> configurations that are toggled by RPMh, depending on the power state of
-> the CPU."[0]
-> 
-> A commit message for sc7180 calls it the "tag information" and "The
-> consumers can specify the path tag as an additional argument to the
-> endpoints."[1]
-> 
-> Not sure how to properly describe the first property, I guess the
-> interconnect endpoint? Maybe Georgi can help here.
-> 
-> 
-> [0] https://lore.kernel.org/linux-arm-msm/b079a211-d387-7958-bbe2-c41cac00d269@kernel.org/
-> [1] https://git.kernel.org/torvalds/c/e23b122
+This while loop exits with "i" set to -1 and so then it sets:
 
-Hm, indeed driver supports variable values. It's fine then.
+	derived_table[-1] = derived_table[0] - 300;
 
-> 
->>
->>> +
->>> +  qcom,bcm-voters:
->>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->>> +    items:
->>
->> Please implement my previous comments.
-> 
-> Sorry, I looked over the comment in v1.
-> 
-> As far as I can tell in current code only 1 item is used.
-> 
-> If the second parameter of_bcm_voter_get would be used as non-NULL then
-> qcom,bcm-voter-names gets looked up and the N-th value in qcom,bcm-voters
-> used. But currently qcom,bcm-voter-names is not actively used so only
-> one gets used.
-> 
-> Do you have a recommendation what to put here? A synthetic limit like
-> 32 just to have a number there?
+There is no need for this assignment at all.  Just delete it.
 
-Let's go with maxItems:1, for both fields.
+Fixes: 72b3fc61c752 ("thermal: k3_j72xx_bandgap: Add the bandgap driver support")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/thermal/k3_j72xx_bandgap.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-> 
->>
->>> +      maxItems: 1
->>> +    description: |
->>
->> No need for |
-> 
-> ack
-> 
->>
->>> +      List of phandles to qcom,bcm-voter nodes that are required by
->>> +      this interconnect to send RPMh commands.
->>> +
->>> +  qcom,bcm-voter-names:
->>
->> What names do you expect here?
-> 
-> Currently unused in mainline but newer downstream kernels[2] use "hlos"
-> as first parameter, and e.g. "disp" as second one that goes to a
-> qcom,bcm-voter that's a child of disp_rsc. Not sure exactly what that
-> does.
-> 
-> [2] https://github.com/atomsand/android_kernel_qcom_devicetree/blob/a6d50810116e8314d64eb63b8862c207b974e0c7/qcom/waipio.dtsi#L1701-L1793
+diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
+index 64e323158952..a9789b17513b 100644
+--- a/drivers/thermal/k3_j72xx_bandgap.c
++++ b/drivers/thermal/k3_j72xx_bandgap.c
+@@ -151,8 +151,6 @@ static int prep_lookup_table(struct err_values *err_vals, int *ref_table)
+ 		/* 300 milli celsius steps */
+ 		while (i--)
+ 			derived_table[i] = derived_table[i + 1] - 300;
+-		/* case 0 */
+-		derived_table[i] = derived_table[i + 1] - 300;
+ 	}
+ 
+ 	/*
+-- 
+2.35.1
 
-The bindings example uses apps and disp, so here would be only "apps".
-
->>> +
->>> +  '#interconnect-cells': true
->>
->> Since you defined it as enum in rpmh-common, you really expect here
->> different values?
-> 
-> Doesn't ": true" here just mean we want the value from the allOf: -
-> $ref?
-> But we could in theory make interconnect-cells only accept <2> for
-> sm6350.
-
-Yes, and the $ref defines it as [1, 2], so initially I thought this
-should be narrowed. However it seems 1 or 2 are still valid for all of
-Qcom interconnects, so your "true" is correct.
-
-
-Best regards,
-Krzysztof
