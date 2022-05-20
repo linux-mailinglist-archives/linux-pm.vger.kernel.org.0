@@ -2,288 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A58B52E29C
-	for <lists+linux-pm@lfdr.de>; Fri, 20 May 2022 04:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F5252E454
+	for <lists+linux-pm@lfdr.de>; Fri, 20 May 2022 07:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344754AbiETCqO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 May 2022 22:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54142 "EHLO
+        id S1345581AbiETFYO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 May 2022 01:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344795AbiETCqN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 May 2022 22:46:13 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F7450039
-        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 19:46:08 -0700 (PDT)
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220520024603epoutp03e1817479b123b126828839c403fd543b~wsCtBk4cg3085130851epoutp03U
-        for <linux-pm@vger.kernel.org>; Fri, 20 May 2022 02:46:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220520024603epoutp03e1817479b123b126828839c403fd543b~wsCtBk4cg3085130851epoutp03U
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1653014763;
-        bh=pNwd+tG5/5Th2TaXiJdgPU0+4OREyHFZPZACOtCzGwo=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=mL95xUAwWAKdOD8Rxo1Sgi9jsDBgq8jf9eDdje4Om9iBkn6F4A9n4nePxUOdINJZn
-         Qmxi8NP7EMryGlzP20kAFcb8/hrqHaWWaRIa3//5x6qpJA5jq/U2/S8l4c21QcVDsg
-         uL8bllJdxea6o0IjBR1pJJ8iztcc+oKiroyEc8Ao=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20220520024602epcas1p101fd352055afd50ab10860434a668044~wsCsRq4ps1499814998epcas1p1g;
-        Fri, 20 May 2022 02:46:02 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.36.134]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4L4B1N5w7zz4x9Pp; Fri, 20 May
-        2022 02:46:00 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        BE.1E.10038.8E007826; Fri, 20 May 2022 11:46:00 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220520024600epcas1p340ac0aa2dcf54e4b69180e8d4483bd18~wsCqkBSnO0345903459epcas1p3W;
-        Fri, 20 May 2022 02:46:00 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220520024600epsmtrp2d94a309fb79df1a06022261361dd966e~wsCqiuVGy2863728637epsmtrp2-;
-        Fri, 20 May 2022 02:46:00 +0000 (GMT)
-X-AuditID: b6c32a37-127ff70000002736-50-628700e88ece
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        04.76.08924.8E007826; Fri, 20 May 2022 11:46:00 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220520024559epsmtip1aa1b59a3005b8fe5f752d9712e6eb50c~wsCqG38ll1417514175epsmtip1W;
-        Fri, 20 May 2022 02:45:59 +0000 (GMT)
-Subject: Re: [PATCH v25 0/7] soc: mediatek: SVS: introduce MTK SVS
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Kevin Hilman <khilman@kernel.org>,
-        Roger Lu <roger.lu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Fan Chen <fan.chen@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jia-wei Chang <jia-wei.chang@mediatek.com>,
-        =?UTF-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
-        <rex-bc.chen@mediatek.com>
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <7beea208-7d40-1c7d-9c70-6437440d22da@samsung.com>
-Date:   Fri, 20 May 2022 12:12:18 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        with ESMTP id S1345572AbiETFYN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 May 2022 01:24:13 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9538C14AF73
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 22:24:12 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id n10so7081476pjh.5
+        for <linux-pm@vger.kernel.org>; Thu, 19 May 2022 22:24:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pernos.co; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ugR0diJyK9tyJS/g6851PslJmHEat2mXN1zC2extgo4=;
+        b=LGNkWIjJcigvMa3VriU6XF8R3RykYP3qK/iTGBwESiA802CoenEuBBG+Y/h+WaLtvX
+         dKWVHhaYx4cGD+RP6oobuCLYaQMsogtMd1fOrpL1irJtp4nq+EugoK8ac2cI88jAZw5O
+         BSiCI1FZBkRQevVJ5J1NhMccZfC0EheXeKUY8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ugR0diJyK9tyJS/g6851PslJmHEat2mXN1zC2extgo4=;
+        b=3Jg/9qavWmXqG0giqwzsVCfqO2qdChaRA0/SJpRGAmoyv8rpbr+aCkIJ6J2uz4KF8q
+         E5Cz0cl0Z0YxlnG+uQtjJOdes9S05bUIrqoodvkE35Me/qVQ/Ol57dljy2ECThc2N5eP
+         TNYbsuU2HqB1KpbXtBplk7tRPZi4rXN8/1yZxRNkhXEe8PZNOlHug3/ZLCN1RyetHK9q
+         3EifmhNmL1MJFPIsQMU49gErEjnaje/vu+kIISMP+5kDk3ZuRNV7UdYnxyNvlXfozYC1
+         kQDtl7nJ0Zb5inL6eTM+gTwpDckN6pNaLUlfnpCvjekeQWUtFf35E3TNNad2xCsNNN2h
+         1hAQ==
+X-Gm-Message-State: AOAM532JNnAxkTE5/aPyEGD/5cpAsX2KAdm8RSJXxRmLwRkVQ1qQiIc4
+        ffm5UJbQzpNZdOvdJ9MaWCQw28DIJAW77Zx9QRS8Iw==
+X-Google-Smtp-Source: ABdhPJweQLRt0zQYOkMLmENDxsjQRrDWuz6sx2VP4M/s/7GGjhpww45oRGtvs6MOfvUJ9JibGnhOfUlcwT5Ret4dCKw=
+X-Received: by 2002:a17:90b:384d:b0:1df:f014:54e1 with SMTP id
+ nl13-20020a17090b384d00b001dff01454e1mr3543295pjb.107.1653024252060; Thu, 19
+ May 2022 22:24:12 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAGXv+5EsgiXCpe-8H0cQ=qm_Nq+yfM_a4b1L=hOFP6mcwfZymw@mail.gmail.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Tf1RTZRjHfe8ud8NaXRHYG5wMr9YRarABm9ccHk8g53b0BJ2OFpw64wL3
-        AALb2t3K7A+n/JwhipxAFwYKFE5O4TBwOyEKJL/EohUgRD8YIhoosAhOO0gbF4v/vs/zfr7v
-        837f97wCnk8OP0CQodIxWhWdRWDr0ab2YLF4cl1BsuTTATG5cLSaT86fMaBkZcdtL9I+PM8j
-        f3BdxMi/f3EhZGdrDZ+82+hASItjwL1qq8BIe04/IJ0nOgA5fv4WQtYO9iPksdwIcmqxDyFH
-        f+1CybmvClHyWm85j8xr6eCTdsdljHw8cBklz+TbvXaLqPrP6wH1maEfpaymUT5VZdFTFrMR
-        oxprjlC53a0odXJJQlkXDHyqc6gZoZyWTfFPJWYq0hk6ldEGMaoUdWqGKi2K2PuWMlopk0uk
-        YukOcjsRpKKzmSgiZl+8ODYjyx2YCPqAztK7W/E0yxJhuxRatV7HBKWrWV0UwWhSszQyTShL
-        Z7N6VVqoitG9KpVIwmVuMCkzfdY8w9MUSw5NVpXyDaB823HgLYB4JLxYdxocB+sFPvhVAK+V
-        XcK4Yg7AkesLCFc4ASw+3+H1xNLcf3eVsgH4R0EPyhWPAPypdATzUBvx1+BI6z23Fgh88Reh
-        7dtAD8PDHRgcnW9CPQyGh8DWyaEV/ll8M/x50QE8WojvguaeKsTjRd3eBrPM0/bDD8DuptxV
-        ZAPsPju+so03/ib87c49vkfzcBEcHq9EOP0CbJ6u4HnmQrzRGy73VSNcghj4xXLeapqN8EHn
-        FT6nA6DzYQvGGXIANEyOAK4oAvC7iWKUoyJga23pyul4eDD82hbGtTdDq+sc4CY/Ax/OF3l5
-        EIgLYWG+D4dsgfbfR1fP8BysLjBipwBhWpPHtCaDaU0G0//DqgBqBv6Mhs1OY1ipJuK/505R
-        Z1vAym8I2X4VlE3PhLYBRADaABTwCF8hyM5N9hGm0h8dZrRqpVafxbBtQOa+4BJegF+K2v2d
-        VDqlNHKHJFIeHhFJSuVSQiQ0l/XSPngarWMyGUbDaJ/4EIF3gAE5ESoyvkv7TW+6IJ8VxaXM
-        Hba73tAWn1UcBG/71rQ3vt77o/8+bbW+9qQxvoGoq1B2P7p/ejDQ4WdahDXXxyaU/KEyy7pj
-        STH79++RLe/dWtTyYIPr+5rAPsVMXcLMuYNxRnrx/aUrRy7djNPfCovOyZtKxpYSopIEW9vT
-        Ev1dATcc792OVcu9dpbvPjR4YeyovDAxXmH6UB2d65wd679vtimsSMKdp0c+uRFiH63XKybK
-        gu02dvivl8ZU+YioYYrqvWks2TYxbm3z6/lm+s+6qY+/dO7ssmlaQPiDxQOTryT75iUTz4eX
-        iF9+p8O0pT7P2lHJxo4ljsucfGHX43/2oATKptPSEJ6Wpf8FAoiXi5YEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SaUwTURSFfTPjdChpHAqEZ9WqVcRUrYBgntEQIxrHBI3EuOCGo4y40Iod
-        cE2gAlZsgpgYt4qlIkatuFDEAlaRTUTRUOuK4jZFMIJBtEIUF0pjwr8v95zv/LoULu0gZNRm
-        TQqn1bBJClJM3KhRyKe0DzmwPtSZG4h69p0VIfcJHYHyax8NRc5mN46afl0k0Y/XvzBUX1ko
-        Qq0lAoaswrP+tCKPRM5MB0DfcmoBcp1pxNC55w4MZWRNQx29DzHU8uYegbqvZBPo9oPjONp/
-        q1aEnEIxif48KybQCb1z6OwgpshUBJhTOgfBlBtbRIzZmspYLQdJpqQwnclqqCSY3N+hTHmP
-        TsTUv7BhzDerfLHvSvGsBC5p8w5OOzVqnXjTV0sXnnwodFe7+YhIB45PNAAfCtIR0OZoJQ1A
-        TEnpMgArhCeYNxgOjznqcAOg+tkf1tTw3k4ngMU/9SJPx5+eA19VtpGeTgAdDCvsIzwdnG4l
-        4dPuO4RX+IHD264LAwJJK2Fl+wvSw8PosfBprwA8LKGjoOW+GfMMEf1D1yyRnnMgvQyWFwqY
-        t+IHG066CA/70LHw7cu2gUmcDoF9pse4l4Ngsysf8/JoaOvMww8Df+Mg3ThIMQ5SjIMUMyAs
-        YDiXzKsT1XxYcriG26niWTWfqklUbdimtoKBh1Aqy4Dd0qWqBhgFqgGkcEWABKiz1kslCezu
-        PZx2W7w2NYnjq8EIilAESZoMDfFSOpFN4bZyXDKn/Z9ilI9Mh8UAP/ndyOjGdnytJrb2/crl
-        SlWWTtv2HYTHpObO/ZIm7LDPl+VOvCwb93OF/vX5z9bl4vOUQqqJ2Vu1MKp+yUx7xrvre90R
-        O/uitcVv4B0Vz1NzDOOzLzpLJ42OKHA7PrHbhUNKkX5Yk//IlISiq9Hh7rp96pyt+owtMr9M
-        x9GlrYtY6x+TfN5sU+xGfHIVOX0GON2hf1twy+4KUcROW5oz4Wz5GXSvNCA9e5Rk/6WCtGZj
-        Xs8jPC2uwRy8pa93QkvnFHP6qpZGP4uLPRoXFumbWdddiAd+SPhbkb+6pm+BfLcQ9vLBGFP8
-        muCbVTZ9wPiukT20bwlSfTyWYvt+X0Hwm9gwJa7l2X+Ix37+fwMAAA==
-X-CMS-MailID: 20220520024600epcas1p340ac0aa2dcf54e4b69180e8d4483bd18
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220519182512epcas1p3020bd4713580c9244f759971b8bd2c3a
-References: <20220516004311.18358-1-roger.lu@mediatek.com>
-        <CAGXv+5GSdWPZe3fNpBJ_WW0zCL8Skg6fHx9ATxaKU1hyMEt2Ww@mail.gmail.com>
-        <7h4k1ndaui.fsf@baylibre.com> <7hy1yzbtb7.fsf@baylibre.com>
-        <CAGXv+5GT=3m=pVPwUOWR42BR=emCpBXvvoAiRV7YKt2kEKWdAQ@mail.gmail.com>
-        <CGME20220519182512epcas1p3020bd4713580c9244f759971b8bd2c3a@epcas1p3.samsung.com>
-        <7hmtfdbcsc.fsf@baylibre.com>
-        <5a1767dc-ba2d-4de5-d8fe-2f308d3318a9@samsung.com>
-        <CAGXv+5EsgiXCpe-8H0cQ=qm_Nq+yfM_a4b1L=hOFP6mcwfZymw@mail.gmail.com>
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220421150248.667412396@infradead.org> <20220421150654.817117821@infradead.org>
+ <87czhap9dy.fsf@email.froward.int.ebiederm.org> <878rrrh32q.fsf_-_@email.froward.int.ebiederm.org>
+ <87k0b7v9yk.fsf_-_@email.froward.int.ebiederm.org> <87k0b0apne.fsf_-_@email.froward.int.ebiederm.org>
+ <87a6bv6dl6.fsf_-_@email.froward.int.ebiederm.org> <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
+ <CALWUPBdFDLuT7JaNGSJ_UXbHf8y9uKdC-SkAqzd=FQC0MX4nNQ@mail.gmail.com>
+ <YoXhfGGPKnT/YFC1@linutronix.de> <8735h54cur.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <8735h54cur.fsf@email.froward.int.ebiederm.org>
+From:   Kyle Huey <khuey@pernos.co>
+Date:   Thu, 19 May 2022 22:24:00 -0700
+Message-ID: <CALWUPBdPO0ccBpFjQ-Lb5GsD=DcBw8ZyVwYVhLdpSeCcu2BSEg@mail.gmail.com>
+Subject: Re: [PATCH 00/16] ptrace: cleanups and calling do_cldstop with only siglock
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>, rjw@rjwysocki.net,
+        oleg@redhat.com, mingo@kernel.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Jann Horn <jannh@google.com>,
+        Kees Cook <keescook@chromium.org>, linux-ia64@vger.kernel.org,
+        "Robert O'Callahan" <roc@pernos.co>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Douglas Miller <dougmill@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/20/22 11:42 AM, Chen-Yu Tsai wrote:
-> On Fri, May 20, 2022 at 9:28 AM Chanwoo Choi <cw00.choi@samsung.com> wrote:
->>
->> Hi Kevin, Chen-Yu,
->>
->> On 5/20/22 3:25 AM, Kevin Hilman wrote:
->>> Chen-Yu Tsai <wenst@chromium.org> writes:
->>>
->>>> n Wed, May 18, 2022 at 8:03 AM Kevin Hilman <khilman@kernel.org> wrote:
->>>>>
->>>>> Kevin Hilman <khilman@kernel.org> writes:
->>>>>
->>>>>> Chen-Yu Tsai <wenst@chromium.org> writes:
->>>>>>
->>>>>>> On Mon, May 16, 2022 at 8:43 AM Roger Lu <roger.lu@mediatek.com> wrote:
->>>>>>>>
->>>>>>>> The Smart Voltage Scaling(SVS) engine is a piece of hardware
->>>>>>>> which calculates suitable SVS bank voltages to OPP voltage table.
->>>>>>>> Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
->>>>>>>> when receiving OPP_EVENT_ADJUST_VOLTAGE.
->>>>>>>>
->>>>>>>> 1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
->>>>>>>> 2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
->>>>>>>> After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
->>>>>>>>
->>>>>>>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=25cb20a212a1f989385dfe23230817e69c62bee5
->>>>>>>> [2] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=b325ce39785b1408040d90365a6ab1aa36e94f87
->>>>>>>> [3] https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.16-next/dts64&id=a8168cebf1bca1b5269e8a7eb2626fb76814d6e2
->>>>>>>>
->>>>>>>> Change since v24:
->>>>>>>> - Rebase to Linux 5.18-rc6
->>>>>>>> - Show specific fail log in svs_platform_probe() to help catch which step fails quickly
->>>>>>>> - Remove struct svs_bank member "pd_dev" because all subsys device's power domain has been merged into one node like above [3]
->>>>>>>>
->>>>>>>> Test in below environment:
->>>>>>>> SW: Integration Tree [4] + Thermal patch [5] + SVS v25 (this patchset)
->>>>>>>> HW: mt8183-Krane
->>>>>>>>
->>>>>>>> [4] https://protect2.fireeye.com/v1/url?k=847bae75-e5f0bb43-847a253a-000babff9b5d-0b6f42041b9dea1d&q=1&e=37a26c43-8564-4808-9701-dc76d1ebbb27&u=https%3A%2F%2Fgithub.com%2Fwens%2Flinux%2Fcommits%2Fmt8183-cpufreq-cci-svs-test
->>>>>>>
->>>>>>> I've updated my branch to include all the latest versions of the relevant
->>>>>>> patch series:
->>>>>>>
->>>>>>> - anx7625 DPI bus type series v2 (so the display works)
->>>>>>> - MT8183 thermal series v9 (this seems to have been overlooked by the
->>>>>>> maintainer)
->>>>>>> - MTK SVS driver series v25
->>>>>>> - devfreq: cpu based scaling support to passive governor series v5
->>>>>>> - MTK CCI devfreq series v4
->>>>>>> - MT8183 cpufreq series v7
->>>>>>> - Additional WIP patches for panfrost MTK devfreq
->>>>>>
->>>>>> Thanks for preparing an integration branch Chen-Yu.
->>>>>>
->>>>>> I'm testing this on mt8183-pumpkin with one patch to add the CCI
->>>>>> regulator[1], and the defconfig you posted in a previous rev of this
->>>>>> series, but the CCI driver still causes a fault on boot[2] on my
->>>>>> platform.
->>>>>>
->>>>>> I mentioned in earlier reviews that I think there's potentially a race
->>>>>> between CCI and SVS loading since they are co-dependent.  My hunch is
->>>>>> that this is still not being handled properly.
->>>>>
->>>>> Ah, actually it's crashing when I try to boot the platform with
->>>>> `maxcpus=4` on the cmdline (which I have to do because mt8183-pumpkin is
->>>>> unstable upstream with the 2nd cluster enabled.)
->>
->> This warning message is printed by 'WARN_ON(cpufreq_passive_unregister_notifier(devfreq))'
->> on devfreq passive governor.
->>
->> If the cpufreq drivers are not probed before of probing cci devfreq driver
->> with passive governor, passive governor shows this warning message.
->> Because passive governor with CPUFREQ_PARENT_DEV depends on the cpufreq driver
->> in order to get 'struct cpufreq_policy'[2].
->>
->> [1] https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/tree/drivers/devfreq/governor_passive.c?h=devfreq-testing#n339
->> [2] https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/tree/drivers/devfreq/governor_passive.c?h=devfreq-testing#n282
->>
->> But, as I knew, this message might not stop the kernel. Just show the warning
->> message and then return -EPROBE_DEFER error. It means that maybe try to
->> probe the cci devfreq driver on late time of kernel booting
->> and then will be working. But, I need the full kernel booting log
->> and the booting sequence of between cpufreq and cci devfreq driver.
-> 
-> Maybe just use a standard dev_warn() instead? WARN_ON causes all sorts
-> of panicking in developers' minds. :p
+On Thu, May 19, 2022 at 11:05 AM Eric W. Biederman
+<ebiederm@xmission.com> wrote:
+>
+> Sebastian Andrzej Siewior <bigeasy@linutronix.de> writes:
+>
+> > On 2022-05-18 20:26:05 [-0700], Kyle Huey wrote:
+> >> Is there a git branch somewhere I can pull to test this? It doesn't apply
+> >> cleanly to Linus's tip.
+> >
+> > https://kernel.googlesource.com/pub/scm/linux/kernel/git/ebiederm/user-namespace.git ptrace_stop-cleanup-for-v5.19
+>
+> Yes that is the branch this all applies to.
+>
+> This is my second round of cleanups this cycle for this code.
+> I just keep finding little things that deserve to be changed,
+> when I am working on the more substantial issues.
+>
+> Eric
 
-OK. I'll use dev_warn() instead of WARN_ON.
+When running the rr test suite, I see hangs like this
 
-> 
->> In order to fix your issue, could you share the full booting log?
->> And if possible, please explain the more detailed something about this.
-> 
-> The shortened version is that on an 8 core system, with maxcpus=4,
-> only the first four cores are booted and have cpufreq associated.
-> I've not actually used this mechanism, so I don't really know what
-> happens if the other cores are brought up later with hotplug. Is
-> cpufreq expected to attach to them?
-> 
-> Maybe Kevin can add some more details.
-> 
-> 
-> ChenYu
-> 
-> 
->>>>>
->>>>> The CCI driver should be a bit more robust about detecting
->>>>> available/online CPUs
->>>>
->>>> This all seems to be handled in the devfreq passive governor.
->>>
->>> Well, that's the initial crash.  But the SVS driver will also go through
->>> its svs_mt8183_banks[] array (including both big & little clusters) and
->>> try to init SVS, so presumably that will have some problems also if only
->>> one cluster is enabled.
->>>
->>>> And presumably we'd like to have CCI devfreq running even if just one
->>>> core was booted.
->>>
->>> Yes, I assume so also.
->>>
->>>> Added Chanwoo for more ideas.
->>>
->>> OK, thanks.
->>>
->>> Kevin
->>
->>
->> --
->> Best Regards,
->> Chanwoo Choi
->> Samsung Electronics
-> 
-> 
+[  812.151505] watchdog: BUG: soft lockup - CPU#3 stuck for 548s!
+[condvar_stress-:12152]
+[  812.151529] Modules linked in: snd_hda_codec_realtek
+snd_hda_codec_generic ledtrig_audio rfcomm cmac algif_hash
+algif_skcipher af_alg bnep dm_crypt intel_rapl_msr mei_hdcp
+snd_hda_codec_
+hdmi intel_rapl_common snd_hda_intel x86_pkg_temp_thermal
+snd_intel_dspcfg snd_intel_sdw_acpi nls_iso8859_1 intel_powerclamp
+snd_hda_codec coretemp snd_hda_core snd_hwdep snd_pcm rtl8723be
+btcoexist snd_seq_midi snd_seq_midi_event rtl8723_common kvm_intel
+rtl_pci snd_rawmidi rtlwifi btusb btrtl btbcm snd_seq kvm mac80211
+btintel btmtk snd_seq_device rapl bluetooth snd_timer i
+ntel_cstate hp_wmi cfg80211 serio_raw snd platform_profile
+ecdh_generic mei_me sparse_keymap efi_pstore wmi_bmof ee1004 joydev
+input_leds ecc libarc4 soundcore mei acpi_pad mac_hid sch_fq_c
+odel ipmi_devintf ipmi_msghandler msr vhost_vsock
+vmw_vsock_virtio_transport_common vsock vhost_net vhost vhost_iotlb
+tap vhci_hcd usbip_core parport_pc ppdev lp parport ip_tables x_tables
+autofs4 btrfs blake2b_generic xor raid6_pq zstd_compress
+[  812.151570]  libcrc32c hid_generic usbhid hid i915 drm_buddy
+i2c_algo_bit ttm drm_dp_helper cec rc_core crct10dif_pclmul
+drm_kms_helper crc32_pclmul syscopyarea ghash_clmulni_intel sysfi
+llrect sysimgblt fb_sys_fops aesni_intel crypto_simd cryptd r8169
+psmouse drm i2c_i801 realtek ahci i2c_smbus xhci_pci libahci
+xhci_pci_renesas wmi video
+[  812.151584] CPU: 3 PID: 12152 Comm: condvar_stress- Tainted: G
+    I  L    5.18.0-rc1+ #2
+[  812.151586] Hardware name: HP 750-280st/2B4B, BIOS A0.11 02/24/2016
+[  812.151587] RIP: 0010:_raw_spin_unlock_irq+0x15/0x40
+[  812.151591] Code: df e8 3f 1f 4a ff 90 5b 5d c3 66 66 2e 0f 1f 84
+00 00 00 00 00 0f 1f 44 00 00 55 48 89 e5 c6 07 00 0f 1f 00 fb 0f 1f
+44 00 00 <bf> 01 00 00 00 e8 41 95 46 ff 65 8b 05 9
+a c1 9a 5f 85 c0 74 02 5d
+[  812.151593] RSP: 0018:ffffa863c246bd70 EFLAGS: 00000246
+[  812.151594] RAX: ffff8bc0913f6400 RBX: ffff8bc0913f6400 RCX: 0000000000000000
+[  812.151595] RDX: 0000000000000002 RSI: 00000000000a0013 RDI: ffff8bc089b63180
+[  812.151596] RBP: ffffa863c246bd70 R08: ffff8bc0811d6b40 R09: ffff8bc089b63180
+[  812.151597] R10: 0000000000000000 R11: 0000000000000004 R12: ffff8bc0913f6400
+[  812.151597] R13: ffff8bc089b63180 R14: ffff8bc0913f6400 R15: ffffa863c246be68
+[  812.151598] FS:  00007f612dda5700(0000) GS:ffff8bc7e24c0000(0000)
+knlGS:0000000000000000
+[  812.151599] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  812.151600] CR2: 000055e70715692e CR3: 000000010b4e8005 CR4: 00000000003706e4
+[  812.151601] Call Trace:
+[  812.151602]  <TASK>
+[  812.151604]  do_signal_stop+0x228/0x260
+[  812.151606]  get_signal+0x43a/0x8e0
+[  812.151608]  arch_do_signal_or_restart+0x37/0x7d0
+[  812.151610]  ? __this_cpu_preempt_check+0x13/0x20
+[  812.151612]  ? __perf_event_task_sched_in+0x81/0x230
+[  812.151616]  ? __this_cpu_preempt_check+0x13/0x20
+[  812.151617]  exit_to_user_mode_prepare+0x130/0x1a0
+[  812.151620]  syscall_exit_to_user_mode+0x26/0x40
+[  812.151621]  ret_from_fork+0x15/0x30
+[  812.151623] RIP: 0033:0x7f612dfcd125
+[  812.151625] Code: 48 85 ff 74 3d 48 85 f6 74 38 48 83 ee 10 48 89
+4e 08 48 89 3e 48 89 d7 4c 89 c2 4d 89 c8 4c 8b 54 24 08 b8 38 00 00
+00 0f 05 <48> 85 c0 7c 13 74 01 c3 31 ed 58 5f ff d
+0 48 89 c7 b8 3c 00 00 00
+[  812.151626] RSP: 002b:00007f612dda4fb0 EFLAGS: 00000246 ORIG_RAX:
+0000000000000038
+[  812.151628] RAX: 0000000000000000 RBX: 00007f612dda5700 RCX: ffffffffffffffff
+[  812.151628] RDX: 00007f612dda59d0 RSI: 00007f612dda4fb0 RDI: 00000000003d0f00
+[  812.151629] RBP: 00007ffd59ad20b0 R08: 00007f612dda5700 R09: 00007f612dda5700
+[  812.151630] R10: 00007f612dda59d0 R11: 0000000000000246 R12: 00007ffd59ad20ae
+[  812.151631] R13: 00007ffd59ad20af R14: 00007ffd59ad20b0 R15: 00007f612dda4fc0
+[  812.151632]  </TASK>
 
-
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+- Kyle
