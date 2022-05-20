@@ -2,72 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D27F252EF26
-	for <lists+linux-pm@lfdr.de>; Fri, 20 May 2022 17:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1730252EF41
+	for <lists+linux-pm@lfdr.de>; Fri, 20 May 2022 17:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237193AbiETP0b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 May 2022 11:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35398 "EHLO
+        id S237360AbiETPbf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 May 2022 11:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350852AbiETP0L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 May 2022 11:26:11 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6536611C22
-        for <linux-pm@vger.kernel.org>; Fri, 20 May 2022 08:26:08 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id ay35so3102168wmb.5
-        for <linux-pm@vger.kernel.org>; Fri, 20 May 2022 08:26:07 -0700 (PDT)
+        with ESMTP id S1350708AbiETPb2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 May 2022 11:31:28 -0400
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 20 May 2022 08:31:25 PDT
+Received: from mailrelay2-1.pub.mailoutpod1-cph3.one.com (mailrelay2-1.pub.mailoutpod1-cph3.one.com [46.30.210.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829425798E
+        for <linux-pm@vger.kernel.org>; Fri, 20 May 2022 08:31:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=IIqtgCzNSeqKw8j48M0jMnpUd6n4sTNC1dQh3wc63iM=;
-        b=AfEwR7pD0jiCCW/0Ra5X7F+iAknaRwE2El2kpNq0r1TQLVYXYO1U5mqTfazW1BxM85
-         +VVyEPU/5CDpIACcvIUJ7foobxlepMPbMy5zoAO7IhKgAHz6o7wGtckAIJyGXE7ODVaZ
-         2mPd1SNBm7wVuDg1LNjXPZgluibOzeMvY7Ioxs/7S7UGdSI37HkySCA31QeSa+Q7/UYG
-         hkig0XWzejvYcRbFPP1dz9rDdlyTThVpjgC1LzJFccUPXjjHZ7fIcDL5ETQR6E3dnOkj
-         FdXSKlHPspNxCLQxRPcH/MisMNidn2QWmLJuFyCkWMnQdEGzJ050rxvfLu0pLoWHYCYK
-         AMKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IIqtgCzNSeqKw8j48M0jMnpUd6n4sTNC1dQh3wc63iM=;
-        b=M+amUEMrkgDqhGNid1uhVgIRW6XgJytAgSAsG/ZU20zobmQuPbbV+u26g37BDRaODf
-         0lrVzyLiZA2VjWncJR+aLas1MNbqgmE0rYJgfLSU5ReXh478bL2i5o72iMe9AuOVk0yB
-         4vuZ6otEgKY3t1Mv4rdIe7axRqmK/7ZRUdQVNZD/KgHGr1cN47kmFtRD+7Jg+QKp4P3k
-         m+lGz4SiY41tlq4vpeC/wWkn1LvbnTNxP5PnU/4AAcy4YpsACSF6fNNhdECJ0bBqoBZf
-         k+dFgWTSEOgBUUD+zTtLFc/ezNRmD1r1/z+RL8DjTZ6dejWhH0v+FCx82wDoqo8oe77a
-         1O5w==
-X-Gm-Message-State: AOAM5311zjf4WvCScXdpK54hsZ9HQBniqI3VGNXcPC2izOnKcYACBzZq
-        yg/FAT7nnX9IiMxYS9t7UN496TI2wWQJ8S/voDY=
-X-Google-Smtp-Source: ABdhPJzTQTpTppVCBw61PgXQnzBb6wQCNtBUQhcsbLYozX3ugc7CSUicW5bRgHzt3QN12dgJ3bmTcg==
-X-Received: by 2002:a05:600c:1d23:b0:394:685b:c18b with SMTP id l35-20020a05600c1d2300b00394685bc18bmr9129228wms.121.1653060366523;
-        Fri, 20 May 2022 08:26:06 -0700 (PDT)
-Received: from ?IPV6:2a01:e34:ed2f:f020:b8:a290:ff05:e4c4? ([2a01:e34:ed2f:f020:b8:a290:ff05:e4c4])
-        by smtp.googlemail.com with ESMTPSA id o4-20020a05600c338400b00394708a3d7dsm2242616wmp.15.2022.05.20.08.26.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 May 2022 08:26:05 -0700 (PDT)
-Message-ID: <3061a9fd-5301-4d91-2d60-b85a5d4910e9@linaro.org>
-Date:   Fri, 20 May 2022 17:25:56 +0200
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=kwToCduxEHKRlf6xTfLStwKuhJjU+lyECx++Tp7rwBg=;
+        b=dKidBF+iQ7d11gWNT/UoyXW+3Hs3JRy8MCTHjV+5ua+Tg8M5cogj66cbemiXXWJkpK0zsojA7lQyE
+         +WqVoFZWQ6MJXXhEGgSw5lyAml+bPL2Bob4FIJw5qswzhyuzPAS6nncjClEcmRp8/q5uuFnaXkNE2d
+         CPuaLrtvtWobbmHB9tsxsDLdpABvzpEFwrP2Hjj7G7q9P4zXpqd59UkkCfAXbqYiZX0JhO/0Al924K
+         wFSjZf6TdiexU83WgAFrBKHbEHcVNpQIMy29BaLvT2CXdB5WMu+1QWT1QpW5jqN1dCLHfvlGz7DBJM
+         XMgEyhF4mJWi5tS9mXMNT9APf2Wijnw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=kwToCduxEHKRlf6xTfLStwKuhJjU+lyECx++Tp7rwBg=;
+        b=n6agCsCBqaR8eTktbf5YnuH91+U1tOyO7hFP5kGyWriJEdb5PGp+30pFXfAEW1f4wny+jHMBg9N+G
+         uHm+DFOBg==
+X-HalOne-Cookie: 6d6a2faa20e68cf1e8fd7d3b59daf8d1323c09c1
+X-HalOne-ID: c1025af6-d851-11ec-a909-d0431ea8a290
+Received: from mailproxy2.cst.dirpod4-cph3.one.com (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
+        by mailrelay2.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id c1025af6-d851-11ec-a909-d0431ea8a290;
+        Fri, 20 May 2022 15:30:19 +0000 (UTC)
+Date:   Fri, 20 May 2022 17:30:17 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Matt Mackall <mpm@selenic.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        chrome-platform@lists.linux.dev, alsa-devel@alsa-project.org,
+        linux-pm@vger.kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-pci@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-gpio@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Fix properties without any type
+Message-ID: <Yoe0CRhygXOIrYJc@ravnborg.org>
+References: <20220519211411.2200720-1-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] thermal: k3_j72xx_bandgap: Fix array underflow in
- prep_lookup_table()
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, Keerthy <j-keerthy@ti.com>
-Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org
-References: <YoetjwcOEzYEFp9b@kili>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <YoetjwcOEzYEFp9b@kili>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220519211411.2200720-1-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,40 +85,14 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20/05/2022 17:02, Dan Carpenter wrote:
-> This while loop exits with "i" set to -1 and so then it sets:
-
-Won't it exit with 'i' set to '0' ?
-
-
-> 	derived_table[-1] = derived_table[0] - 300;
+On Thu, May 19, 2022 at 04:14:11PM -0500, Rob Herring wrote:
+> Now that the schema tools can extract type information for all
+> properties (in order to decode dtb files), finding properties missing
+> any type definition is fairly trivial though not yet automated.
 > 
-> There is no need for this assignment at all.  Just delete it.
+> Fix the various property schemas which are missing a type. Most of these
+> tend to be device specific properties which don't have a vendor prefix.
+> A vendor prefix is how we normally ensure a type is defined.
 > 
-> Fixes: 72b3fc61c752 ("thermal: k3_j72xx_bandgap: Add the bandgap driver support")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> ---
->   drivers/thermal/k3_j72xx_bandgap.c | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
-> index 64e323158952..a9789b17513b 100644
-> --- a/drivers/thermal/k3_j72xx_bandgap.c
-> +++ b/drivers/thermal/k3_j72xx_bandgap.c
-> @@ -151,8 +151,6 @@ static int prep_lookup_table(struct err_values *err_vals, int *ref_table)
->   		/* 300 milli celsius steps */
->   		while (i--)
->   			derived_table[i] = derived_table[i + 1] - 300;
-> -		/* case 0 */
-> -		derived_table[i] = derived_table[i + 1] - 300;
->   	}
->   
->   	/*
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> Signed-off-by: Rob Herring <robh@kernel.org>
+Acked-by: Sam Ravnborg <sam@ravnborg.org> # for everything in .../bindings/display/
