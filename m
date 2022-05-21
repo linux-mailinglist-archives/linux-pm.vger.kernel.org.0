@@ -2,80 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB57452FB27
-	for <lists+linux-pm@lfdr.de>; Sat, 21 May 2022 13:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD27352FD27
+	for <lists+linux-pm@lfdr.de>; Sat, 21 May 2022 16:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352887AbiEULNk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 21 May 2022 07:13:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
+        id S1344643AbiEUOLq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 21 May 2022 10:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350732AbiEULMQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 21 May 2022 07:12:16 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC6D2B244;
-        Sat, 21 May 2022 04:12:07 -0700 (PDT)
+        with ESMTP id S1344195AbiEUOLn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 21 May 2022 10:11:43 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158CD5B8AA
+        for <linux-pm@vger.kernel.org>; Sat, 21 May 2022 07:11:41 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id a23so12372637ljd.9
+        for <linux-pm@vger.kernel.org>; Sat, 21 May 2022 07:11:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=54IWCUGGCd44a/vf5yEHvwTkwcuHywIaV6YBxOe4Ots=;
-  b=UBOer3vGyYfWv3LkLnVG7eUHW6KdF4NAfl//Y6Z9Kg6hNjpHTFvQk7lX
-   MkofMvNN9EELZuJhQNDTk/ueTt7o5Mbn757S5rrXdjnLB2AXs1FsQ//Bv
-   Vx4Krz8QdHzMbRSpvxbkjFfXx/YViuZlr2cJAiMg+4kdfbFIBT+dsVqYv
-   8=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.91,242,1647298800"; 
-   d="scan'208";a="14727932"
-Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.90.48])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 13:11:58 +0200
-From:   Julia Lawall <Julia.Lawall@inria.fr>
-To:     Vasily Khoruzhick <anarsoul@gmail.com>
-Cc:     kernel-janitors@vger.kernel.org,
-        Yangtao Li <tiny.windzz@gmail.com>,
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=RYQl+aSSz5PsYbdsuyy+v7rTecA/vZhumWdjuVfDKJU=;
+        b=F3KMUI0Hix+/TfIYMbxg1Ypge2zPmys0v3YycP7qikAxm1HoOVXiozuLobosqJ+uvL
+         flKkM208eQQrUACVO5UKBlg+R73EVUsLqepPpb5oMayWIvfEbw9isE7r+k222jAxiixf
+         XPipudb1nlRrxxtMGMg0nurlX/mmgE0w7BKfPbvRPnOZ2XFJqrXJ2Ab8DdEhKS5EfuzT
+         8qBnjdhHnRUNAaj0Dnbk/5NcdkJIImeHEMuPRdziQf1kikN0Y6w5tdN1jjYmlHl8UP87
+         vv9Smewt3cX9xWNTheSPcjqhHdB9F1OzniM7BBMs0HsB1MxghuAu6ua7iYY9NUM1E7Eh
+         yiYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RYQl+aSSz5PsYbdsuyy+v7rTecA/vZhumWdjuVfDKJU=;
+        b=fa0qCzj+8RRDLHN+A11nv81qWh4UZLPwm06qfWU4OTR/bxg1qDRMGkDFnTmBFm6tMC
+         FlZiFIaZB5BtdUEbnvv8gy+pj/ry8M7uEvPp8ZNVwr+Bs5TO+iTLo6fDZFT7ulxqeo9d
+         j6GsYSCgg+O0dz0o/hCalXJFVRKhm0h8rQ5bC7tpQL3ITScYofqOUdGEtnf6T/LJ6Mwt
+         B3LNvO1W3S1fu8d4Wb6wiOXxDVp2ZbSK29KJvYJwYc+8R/qs8BT73kB2zGgcrU7a3uoE
+         nMS7jgSi1RLI12OWmaPRxfTNtFQKcmCKD4HuYOMD4w1v31kCqwNbjqZMcn7VJ+LpEvSZ
+         DZwA==
+X-Gm-Message-State: AOAM5309FmPAkV8AdYgUK8u9C9rYLG8dCGKOAuKaq5wD4vMyv2jhYeXt
+        CCp85dpOpSjUjVmp/3gWkHtRZA==
+X-Google-Smtp-Source: ABdhPJzPIY5bRKl/lSFeIJShNcSK8ZwQEDiGbi1evoB0c4BWO3BIv09buuA6GVolzs36yKpWhvoiJQ==
+X-Received: by 2002:a2e:84c8:0:b0:24b:50bb:de7d with SMTP id q8-20020a2e84c8000000b0024b50bbde7dmr7876086ljh.40.1653142299331;
+        Sat, 21 May 2022 07:11:39 -0700 (PDT)
+Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id e7-20020a2e9847000000b0024f3d1daeacsm722958ljj.52.2022.05.21.07.11.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 21 May 2022 07:11:38 -0700 (PDT)
+Message-ID: <54c7cc5e-8bf5-b0b6-017b-32063c3a9652@linaro.org>
+Date:   Sat, 21 May 2022 16:11:37 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCHv2 6/6] thermal: exynos: Add runtime power management for
+ tmu
+Content-Language: en-US
+To:     Anand Moon <linux.amoon@gmail.com>
+Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] thermal: sun8i: fix typo in comment
-Date:   Sat, 21 May 2022 13:10:46 +0200
-Message-Id: <20220521111145.81697-36-Julia.Lawall@inria.fr>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Zhang Rui <rui.zhang@intel.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>
+References: <20220515064126.1424-1-linux.amoon@gmail.com>
+ <20220515064126.1424-7-linux.amoon@gmail.com>
+ <79b727f8-0631-5a96-fbc6-6e5d637bab7d@linaro.org>
+ <CANAwSgSY=4zOLjw22GN+a7cc5j=myWWkD7gEQ4_3sgEaTS74Rw@mail.gmail.com>
+ <018b97c2-efab-699d-653d-c220a98f5ec3@linaro.org>
+ <CANAwSgQe9uveBMgrt3VNUTmFodW3P0Pxhc28KfB8MyEogOtOjQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CANAwSgQe9uveBMgrt3VNUTmFodW3P0Pxhc28KfB8MyEogOtOjQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Spelling mistake (triple letters) in comment.
-Detected with the help of Coccinelle.
+On 21/05/2022 11:52, Anand Moon wrote:
+> Hi Krzysztof,
+> 
+> On Wed, 18 May 2022 at 12:49, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 17/05/2022 20:45, Anand Moon wrote:
+>>> Hi Krzysztof,
+>>>
+>>> On Sun, 15 May 2022 at 15:18, Krzysztof Kozlowski
+>>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>>
+>>>> On 15/05/2022 08:41, Anand Moon wrote:
+>>>>> Add runtime power management for exynos thermal driver.
+>>>>
+>>>> First of all - why? Second, I do not see it being added. Where are the
+>>>> runtime callbacks?
+>>>>
+>>>
+>>> To control runtime control PMU, did I miss something?
+>>
+>> Controlling runtime PM by itself is not a goal. What does it change if
+>> it is enabled?
+>>
+> It means we could have efficient power management for this driver.
+> as per my understanding, it controls runtime sleep and improves power efficiency
 
-Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
+How? I asked - what is being changed after enabling PM - and you
+answered without any specifics. Where exactly is the power saving?
+Please be specific, very specific.
 
----
- drivers/thermal/sun8i_thermal.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+>>> I looked into imx thermal driver # drivers/thermal/imx_thermal.c
+>>> to enable run-time power management for exynos driver.
+>>
+>> So you have runtime PM enabled and then what happens? Where is the power
+>> saving? Since you did not implement the callbacks, all this should be
+>> explained in commit msg.
+>>
+> Ok, As per the original code, it just registers the SIMPLE_DEV_PM_OPS
+> with .pm = &exynos_tmu_pm
 
-diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-index d9cd23cbb671..212c87e63a66 100644
---- a/drivers/thermal/sun8i_thermal.c
-+++ b/drivers/thermal/sun8i_thermal.c
-@@ -237,7 +237,7 @@ static int sun50i_h6_ths_calibrate(struct ths_device *tmdev,
- 	 * The calibration data on the H6 is the ambient temperature and
- 	 * sensor values that are filled during the factory test stage.
- 	 *
--	 * The unit of stored FT temperature is 0.1 degreee celusis.
-+	 * The unit of stored FT temperature is 0.1 degree celsius.
- 	 *
- 	 * We need to calculate a delta between measured and caluclated
- 	 * register values and this will become a calibration offset.
+And does nothing else, right? No benefits?
 
+> So I have made sure that suspend resume feature works correctly
+>  with these changes on SBC Odroid U3 and XU4.
+
+How is suspend/resume related to runtime PM? Are you talking about
+system suspend? What do you mean now?
+
+> 
+> I will try to look into setting RUNTIME_PM_OPS
+> or use UNIVERSAL_DEV_PM_OPS instead of SIMPLE_DEV_PM_OPS
+> any thought on this?
+
+Why looking at them? You avoid giving any specific answer, so we are
+repeating the same and the same. Just to be sure - maybe I don't see the
+obvious stuff, so please explain also this obvious things.
+
+Please come with specifics, because otherwise I see it as a waste of our
+time.
+
+Best regards,
+Krzysztof
