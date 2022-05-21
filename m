@@ -2,40 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C1352F7E2
-	for <lists+linux-pm@lfdr.de>; Sat, 21 May 2022 05:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBED352F949
+	for <lists+linux-pm@lfdr.de>; Sat, 21 May 2022 08:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239561AbiEUDLN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 May 2022 23:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54006 "EHLO
+        id S229808AbiEUGhT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 21 May 2022 02:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239550AbiEUDLB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 May 2022 23:11:01 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5EB1583B;
-        Fri, 20 May 2022 20:10:59 -0700 (PDT)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L4pVz44DVzhYx0;
-        Sat, 21 May 2022 11:10:19 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by kwepemi500015.china.huawei.com
- (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 21 May
- 2022 11:10:57 +0800
-From:   Zheng Bin <zhengbin13@huawei.com>
-To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <Pierre.Gondois@arm.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <zhengbin13@huawei.com>, <gaochao49@huawei.com>
-Subject: [PATCH -next] cpufreq: CPPC: Fix build error without CONFIG_ACPI_CPPC_CPUFREQ_FIE
-Date:   Sat, 21 May 2022 11:24:38 +0800
-Message-ID: <20220521032438.2504155-1-zhengbin13@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        with ESMTP id S1349685AbiEUGhS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 21 May 2022 02:37:18 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77021DA5E;
+        Fri, 20 May 2022 23:37:17 -0700 (PDT)
+Received: from kwepemi100004.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L4v4j1VY5zjWx6;
+        Sat, 21 May 2022 14:36:21 +0800 (CST)
+Received: from kwepemm600014.china.huawei.com (7.193.23.54) by
+ kwepemi100004.china.huawei.com (7.221.188.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 21 May 2022 14:37:14 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.28) by
+ kwepemm600014.china.huawei.com (7.193.23.54) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 21 May 2022 14:37:14 +0800
+From:   Yi Yang <yiyang13@huawei.com>
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yiyang13@huawei.com>
+Subject: [PATCH -next] cpufreq: Fix reserved space in cpufreq_show_cpus()
+Date:   Sat, 21 May 2022 14:35:34 +0800
+Message-ID: <20220521063534.138930-1-yiyang13@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.175.127.227]
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.28]
 X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500015.china.huawei.com (7.221.188.92)
+ kwepemm600014.china.huawei.com (7.193.23.54)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -46,44 +48,43 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-If CONFIG_ACPI_CPPC_CPUFREQ_FIE is not set, building fails:
+Function scnprintf() would reserve space for the trailing '\0' and return 
+value is the number of characters written into buf not including the 
+trailing '\0'. internally meaning the next scnprintf() would write begin 
+the trailing '\0'. The code specifying "PAGE_SIZE - i - 2" here is trying 
+to reserve space for "\n\0" which would cause scnprintf() to reserve an 
+additional byte making the tail of the buf looks like this: "\n\0\0". 
+Thus. we should reserve only the space for one '\0'. passing in 
+"PAGE_SIZE - i - 1".
 
-drivers/cpufreq/cppc_cpufreq.c: In function ‘populate_efficiency_class’:
-drivers/cpufreq/cppc_cpufreq.c:584:2: error: ‘cppc_cpufreq_driver’ undeclared (first use in this function); did you mean ‘cpufreq_driver’?
-  cppc_cpufreq_driver.register_em = cppc_cpufreq_register_em;
-  ^~~~~~~~~~~~~~~~~~~
-  cpufreq_driver
+Additionally, each iteration would replace the trailing '\0' from the last 
+iteration with a space, and append 4 additional bytes to the string making 
+it a total of 5 additional bytes. That means we should stop printing into 
+the buffer if the remaining size is less than 7 bytes(1 for the ' ', 4 for 
+the %u and 2 for the tailing "\n\0")
 
-Make declare of cppc_cpufreq_driver out of CONFIG_ACPI_CPPC_CPUFREQ_FIE
-to fix this.
-
-Fixes: 740fcdc2c20e ("cpufreq: CPPC: Register EM based on efficiency class information")
-Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
+Signed-off-by: Yi Yang <yiyang13@huawei.com>
 ---
- drivers/cpufreq/cppc_cpufreq.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/cpufreq/cpufreq.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index 3eaa23d1aaf5..1837f2ce8243 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -61,6 +61,8 @@ static struct cppc_workaround_oem_info wa_info[] = {
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 1f6667ce43bd..60c005c9961e 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -844,9 +844,9 @@ ssize_t cpufreq_show_cpus(const struct cpumask *mask, char *buf)
+ 
+ 	for_each_cpu(cpu, mask) {
+ 		if (i)
+-			i += scnprintf(&buf[i], (PAGE_SIZE - i - 2), " ");
+-		i += scnprintf(&buf[i], (PAGE_SIZE - i - 2), "%u", cpu);
+-		if (i >= (PAGE_SIZE - 5))
++			i += scnprintf(&buf[i], (PAGE_SIZE - i - 1), " ");
++		i += scnprintf(&buf[i], (PAGE_SIZE - i - 1), "%u", cpu);
++		if (i >= (PAGE_SIZE - 6))
+ 			break;
  	}
- };
-
-+static struct cpufreq_driver cppc_cpufreq_driver;
-+
- #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
-
- /* Frequency invariance support */
-@@ -75,7 +77,6 @@ struct cppc_freq_invariance {
- static DEFINE_PER_CPU(struct cppc_freq_invariance, cppc_freq_inv);
- static struct kthread_worker *kworker_fie;
-
--static struct cpufreq_driver cppc_cpufreq_driver;
- static unsigned int hisi_cppc_cpufreq_get_rate(unsigned int cpu);
- static int cppc_perf_from_fbctrs(struct cppc_cpudata *cpu_data,
- 				 struct cppc_perf_fb_ctrs *fb_ctrs_t0,
---
-2.31.1
+ 	i += sprintf(&buf[i], "\n");
+-- 
+2.17.1
 
