@@ -2,190 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A987530158
-	for <lists+linux-pm@lfdr.de>; Sun, 22 May 2022 08:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CFBE530198
+	for <lists+linux-pm@lfdr.de>; Sun, 22 May 2022 09:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241025AbiEVGnQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 22 May 2022 02:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36408 "EHLO
+        id S240984AbiEVHdO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 22 May 2022 03:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239924AbiEVGnP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 22 May 2022 02:43:15 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5E520F47;
-        Sat, 21 May 2022 23:43:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653201794; x=1684737794;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=4w46qxfNSVssfa7fbKnGNmQEU8ePKVCiB2XwRuFc7as=;
-  b=RIs1SArIO/z0HIl9heEOjWiOFcLPcBGXXKUq/52Yw8jL1FnCliEjMbeG
-   FB2BRzffeEcVIrLrwpCqOstIk0pSe2f/Ra6SG5L+w6H00ICORn7B+Q95D
-   Vy5E6aQ+4KFQ2k7LnmC/tKTIb/7niY1w4RgZDLenMu4FMO/G9S/5QQAEy
-   gTtjD3BuudkUlGw+wSVeOB9LYZq5+pcYFvwQBgWAecYUhLca/i9z+W10P
-   oht1xEpSuV/u4HisHbzvi4qb5VFGen50DtPBtYoyOIbwTc/w0otsLPwxg
-   +Dm/9iZ9kLexLb2uklaYR7HMaPpeJsoV06Z6DVHB9Z6MzAnrWQqZNrXwV
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10354"; a="298273655"
-X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
-   d="scan'208";a="298273655"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2022 23:43:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,243,1647327600"; 
-   d="scan'208";a="547342991"
-Received: from lkp-server01.sh.intel.com (HELO db63a1be7222) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 21 May 2022 23:43:12 -0700
-Received: from kbuild by db63a1be7222 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nsfJ1-00006p-H8;
-        Sun, 22 May 2022 06:43:11 +0000
-Date:   Sun, 22 May 2022 14:42:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 3d22e39d225d7adb6c670065f4ae016e759171ed
-Message-ID: <6289db57.CKTfld2m2iPjA4xf%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S1344951AbiEVHdN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 22 May 2022 03:33:13 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352713CA70;
+        Sun, 22 May 2022 00:33:07 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id gh17so9789515ejc.6;
+        Sun, 22 May 2022 00:33:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Q56IvgxavWJhsEkcadDqcZc6FJeimEL1lZJWPor8auE=;
+        b=oIiyK58kipbrNJ6GQaCjqXXreZvXCvVHjcytBE/FyzVM+VNOTvCLY9FgQAbTRnNQaw
+         3ucvfITxTcnGiCU+HpEs9caByTp2IZrMetTUCkQ32agmMhas4iT8pkIgIqXpgXauf+Su
+         QY0G/53zn+mjJUpwQt1y5LJ5fS4hfXc4jsC+2Pf/PzUWRKKyinlGb2b25puWwo/X7bDE
+         FT++CTBo+jSorDuKzLAkowO8jVDCa50w6IAfA8MWGwIz6v8uq8caLkIscISKHMAqHv9+
+         CYpaAlYlc4RBOqL204PQb/8Tmf9+Pn9SF3B6ozmHMdzXhoCMUwwcisKgI1SntF4zjFO9
+         YV1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Q56IvgxavWJhsEkcadDqcZc6FJeimEL1lZJWPor8auE=;
+        b=H43+eCS4Q3ClnNc1RzYZ6jJhDKESxRdkVZYpdfqAjlcC1ka/YX94hOS8JAaC15uDih
+         W9QoxG5Kaoplc239nubyBS8KVPqJnutYkPJa81fyNE76/7x0ZowI8NXxrDdEEjfF6iZr
+         VxAyyVG0/rIsx6ETV/dhLx2OoRH9/ren2lck0i7LAi+r9rx44E8vrWl2LPv+TISQ0TpC
+         z1g51ccvMUEG7nY9Kg3TEQFvrjQ5lDGynhnWLynehxUkkeevFXVfYy1leDxrTqcBTapm
+         V9WTgDOB1jbMT9fAh/8gyuyfcpSERQznsLm25AxTKvKxuJwHQX/WxeM2IaQQ3e3+ivZx
+         LIJQ==
+X-Gm-Message-State: AOAM533wYKT7ocjHOD3HfhR8epnNdRT6sn3woz4iYuEtQkOTIM5AJjp6
+        +cShUfVhQeFV+sXATeT9/NI=
+X-Google-Smtp-Source: ABdhPJxlBx3vwsBGbu+xb+kNECnqZsU7ogBTgwifDfJ1SRjFeixrkga7Y7gf13mVgboWIf8yJHFEKQ==
+X-Received: by 2002:a17:906:d193:b0:6fe:9a92:6c4d with SMTP id c19-20020a170906d19300b006fe9a926c4dmr13355170ejz.49.1653204785589;
+        Sun, 22 May 2022 00:33:05 -0700 (PDT)
+Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
+        by smtp.gmail.com with ESMTPSA id ej23-20020a056402369700b0042a2d9af0f8sm6696800edb.79.2022.05.22.00.33.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 May 2022 00:33:05 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Vasily Khoruzhick <anarsoul@gmail.com>,
+        Julia Lawall <Julia.Lawall@inria.fr>
+Cc:     kernel-janitors@vger.kernel.org,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thermal: sun8i: fix typo in comment
+Date:   Sun, 22 May 2022 09:33:03 +0200
+Message-ID: <2629117.mvXUDI8C0e@jernej-laptop>
+In-Reply-To: <20220521111145.81697-36-Julia.Lawall@inria.fr>
+References: <20220521111145.81697-36-Julia.Lawall@inria.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 3d22e39d225d7adb6c670065f4ae016e759171ed  Merge branch 'acpica' into linux-next
+Dne sobota, 21. maj 2022 ob 13:10:46 CEST je Julia Lawall napisal(a):
+> Spelling mistake (triple letters) in comment.
+> Detected with the help of Coccinelle.
+> 
+> Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
-elapsed time: 829m
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-configs tested: 108
-configs skipped: 3
+Best regards,
+Jernej
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> 
+> ---
+>  drivers/thermal/sun8i_thermal.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/sun8i_thermal.c
+> b/drivers/thermal/sun8i_thermal.c index d9cd23cbb671..212c87e63a66 100644
+> --- a/drivers/thermal/sun8i_thermal.c
+> +++ b/drivers/thermal/sun8i_thermal.c
+> @@ -237,7 +237,7 @@ static int sun50i_h6_ths_calibrate(struct ths_device
+> *tmdev, * The calibration data on the H6 is the ambient temperature and *
+> sensor values that are filled during the factory test stage.
+>  	 *
+> -	 * The unit of stored FT temperature is 0.1 degreee celusis.
+> +	 * The unit of stored FT temperature is 0.1 degree celsius.
+>  	 *
+>  	 * We need to calculate a delta between measured and caluclated
+>  	 * register values and this will become a calibration offset.
 
-gcc tested configs:
-arm                              allmodconfig
-arm                                 defconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-mips                             allyesconfig
-riscv                            allyesconfig
-um                           x86_64_defconfig
-riscv                            allmodconfig
-um                             i386_defconfig
-mips                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-arm                           imxrt_defconfig
-arm                       imx_v6_v7_defconfig
-mips                     loongson1b_defconfig
-parisc                           alldefconfig
-arm                         assabet_defconfig
-xtensa                generic_kc705_defconfig
-s390                       zfcpdump_defconfig
-arm                       omap2plus_defconfig
-powerpc64                           defconfig
-mips                 decstation_r4k_defconfig
-arm                            qcom_defconfig
-arm                        realview_defconfig
-powerpc                     sequoia_defconfig
-arm                           sama5_defconfig
-arc                           tb10x_defconfig
-h8300                     edosk2674_defconfig
-nios2                            alldefconfig
-arm                           h5000_defconfig
-m68k                          multi_defconfig
-arc                          axs101_defconfig
-alpha                               defconfig
-ia64                                defconfig
-sh                         microdev_defconfig
-m68k                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-csky                                defconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-i386                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-nios2                               defconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arc                  randconfig-r043-20220522
-s390                 randconfig-r044-20220522
-riscv                randconfig-r042-20220522
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
 
-clang tested configs:
-arm                          ep93xx_defconfig
-powerpc                 mpc832x_rdb_defconfig
-powerpc                   lite5200b_defconfig
-powerpc                 mpc8560_ads_defconfig
-arm                           omap1_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-hexagon              randconfig-r041-20220522
-hexagon              randconfig-r045-20220522
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
