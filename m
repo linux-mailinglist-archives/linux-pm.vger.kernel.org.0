@@ -2,272 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F24B253192A
-	for <lists+linux-pm@lfdr.de>; Mon, 23 May 2022 22:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B02531CFB
+	for <lists+linux-pm@lfdr.de>; Mon, 23 May 2022 22:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239271AbiEWQ4W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 May 2022 12:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46794 "EHLO
+        id S240000AbiEWRce (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 May 2022 13:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239229AbiEWQ4O (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 May 2022 12:56:14 -0400
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40F4E40;
-        Mon, 23 May 2022 09:56:12 -0700 (PDT)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-edeb6c3642so19212178fac.3;
-        Mon, 23 May 2022 09:56:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FfAOhZNasQcy6TRDHmB8U+mc653MKDmGV3a61UnarkE=;
-        b=4KkfVM5goTSkVfLLz4yJUTYK9jwLwzP8f/PpRo8aB8IkJKQi4ENdB4cz/bZLj0eHjb
-         YEXOmwJPZz219J0oESUvV2cbqkJIpqB2mqP/ypOKRIxZB5Q9ecba77zNia8ciYFPTPbk
-         vrPNx2dzj7Nu7sb5kIUa1SknUEJwHpW4RVMX3HI+Rcflbis/zJ+RO3KVWPHkHoMAjboW
-         RPDv58ohM5ox6JZFx3SnjCEC6tUT4eWwAHijPFqTXLOB6kbQmb/HSuAr60U1UXZA/cFV
-         IF9PfZ6TLKCtKhg8wZAkXPMRJlyHYLB34KalgVgU4A29QzcRkpiOUSSNuUBlkObVOCfG
-         wCkw==
-X-Gm-Message-State: AOAM533vkLoWrjdNEctnWHVHHnoq5MUMqieCqa4zrXOERLLWtvOXgsOu
-        fOCXzySz8awOAEzcFjzLRA==
-X-Google-Smtp-Source: ABdhPJzG3ZFQrmj1v1yitS4jTC5DzQZmWnfRLp9MNvhBwUQ6yufF6JdEMRoPfxaQK0q/QMOIiKOBDg==
-X-Received: by 2002:a05:6870:5823:b0:f2:2dfd:8df0 with SMTP id r35-20020a056870582300b000f22dfd8df0mr6004573oap.157.1653324972043;
-        Mon, 23 May 2022 09:56:12 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id eb38-20020a056870a8a600b000edf5a12baasm3976216oab.46.2022.05.23.09.56.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 May 2022 09:56:11 -0700 (PDT)
-Received: (nullmailer pid 1750116 invoked by uid 1000);
-        Mon, 23 May 2022 16:56:09 -0000
-Date:   Mon, 23 May 2022 11:56:09 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        dri-devel@lists.freedesktop.org, linux-gpio@vger.kernel.org,
-        linux-input@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-media@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Fix properties without any type
-Message-ID: <20220523165609.GA1743214-robh@kernel.org>
-References: <20220519211411.2200720-1-robh@kernel.org>
- <6ae55a29-0b29-f53c-c9bd-fae929f3caf7@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6ae55a29-0b29-f53c-c9bd-fae929f3caf7@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S241877AbiEWRb1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 May 2022 13:31:27 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B873E644DB;
+        Mon, 23 May 2022 10:26:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1653326817; x=1684862817;
+  h=from:to:cc:subject:date:message-id;
+  bh=M6F2O+s0jMQ7ZCsSYUNBJ1oe1calqhqjLZFVNEsEBjE=;
+  b=L2jReUn3AWIj8nPk5387gTLOJECnKyNxqQ3sAof4d8V8WnbJMbcyDn1F
+   0hkuI4yZpw5lPyRVmUJzkCmWzp4IXRKNlbc5t+XX99gCObGApE1pUB8vJ
+   Jj+ikO+U5MT11ErBkYNNAoSe+gdEmBz4BTM/rPgJJwD8v3CLEQmhzy9CU
+   IqIaKDitk2jgo4RYibF7lnOHSM2FkRIahaXqwdQWFp2G3L17eVTddbu7d
+   OTS5bA7eToKlGpqdapF+mXixh97biTRRnsjz+sPv8th65sPBxF/RjUudC
+   NOBnSXSb0UObZEFm5QnYq/K+M8IB8M2AgdZAle0bQYdlfM+qowLq/C2d+
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273289487"
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="273289487"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 10:25:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
+   d="scan'208";a="703115895"
+Received: from srpawnik.iind.intel.com ([10.99.123.68])
+  by orsmga004.jf.intel.com with ESMTP; 23 May 2022 10:25:31 -0700
+From:   Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+To:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        atenart@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     sumeet.r.pawnikar@intel.com
+Subject: [PATCH] thermal: int340x: Add Meteor Lake PCI device id
+Date:   Mon, 23 May 2022 22:52:42 +0530
+Message-Id: <20220523172242.30378-1-sumeet.r.pawnikar@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, May 21, 2022 at 05:03:41PM +0200, Krzysztof Kozlowski wrote:
-> On 19/05/2022 23:14, Rob Herring wrote:
-> > Now that the schema tools can extract type information for all
-> > properties (in order to decode dtb files), finding properties missing
-> > any type definition is fairly trivial though not yet automated.
-> > 
-> > Fix the various property schemas which are missing a type. Most of these
-> > tend to be device specific properties which don't have a vendor prefix.
-> > A vendor prefix is how we normally ensure a type is defined.
-> > 
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  .../arm/hisilicon/controller/hip04-bootwrapper.yaml       | 5 +++--
-> >  .../bindings/display/bridge/toshiba,tc358768.yaml         | 1 +
-> >  .../devicetree/bindings/display/panel/panel-timing.yaml   | 5 +++++
-> >  .../bindings/display/panel/raydium,rm67191.yaml           | 1 +
-> >  .../bindings/display/panel/samsung,s6e8aa0.yaml           | 1 +
-> >  .../devicetree/bindings/gpio/fairchild,74hc595.yaml       | 1 +
-> >  .../devicetree/bindings/input/google,cros-ec-keyb.yaml    | 1 +
-> >  .../devicetree/bindings/input/matrix-keymap.yaml          | 4 ++++
-> >  Documentation/devicetree/bindings/media/i2c/adv7604.yaml  | 3 ++-
-> >  Documentation/devicetree/bindings/mux/reg-mux.yaml        | 8 ++++++--
-> >  Documentation/devicetree/bindings/net/cdns,macb.yaml      | 1 +
-> >  Documentation/devicetree/bindings/net/ingenic,mac.yaml    | 1 +
-> >  .../devicetree/bindings/net/ti,davinci-mdio.yaml          | 1 +
-> >  .../devicetree/bindings/net/wireless/ti,wlcore.yaml       | 2 ++
-> >  .../devicetree/bindings/pci/snps,dw-pcie-ep.yaml          | 6 ++++--
-> >  Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml   | 2 ++
-> >  .../devicetree/bindings/pinctrl/canaan,k210-fpioa.yaml    | 2 ++
-> >  Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml | 1 +
-> >  .../devicetree/bindings/power/supply/battery.yaml         | 7 ++++++-
-> >  .../devicetree/bindings/power/supply/charger-manager.yaml | 1 +
-> >  Documentation/devicetree/bindings/rng/st,stm32-rng.yaml   | 1 +
-> >  Documentation/devicetree/bindings/serial/8250.yaml        | 1 +
-> >  .../devicetree/bindings/sound/audio-graph-card2.yaml      | 3 +++
-> >  .../devicetree/bindings/sound/imx-audio-hdmi.yaml         | 3 +++
-> >  Documentation/devicetree/bindings/usb/smsc,usb3503.yaml   | 1 +
-> >  25 files changed, 55 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/arm/hisilicon/controller/hip04-bootwrapper.yaml b/Documentation/devicetree/bindings/arm/hisilicon/controller/hip04-bootwrapper.yaml
-> > index 7378159e61df..483caf0ce25b 100644
-> > --- a/Documentation/devicetree/bindings/arm/hisilicon/controller/hip04-bootwrapper.yaml
-> > +++ b/Documentation/devicetree/bindings/arm/hisilicon/controller/hip04-bootwrapper.yaml
-> > @@ -17,14 +17,15 @@ properties:
-> >        - const: hisilicon,hip04-bootwrapper
-> >  
-> >    boot-method:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> >      description: |
-> >        Address and size of boot method.
-> >        [0]: bootwrapper physical address
-> >        [1]: bootwrapper size
-> >        [2]: relocation physical address
-> >        [3]: relocation size
-> > -    minItems: 1
-> > -    maxItems: 2
-> > +    minItems: 2
-> > +    maxItems: 4
-> >  
-> >  required:
-> >    - compatible
-> > diff --git a/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml b/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml
-> > index 3bd670b8e5cd..0b6f5bef120f 100644
-> > --- a/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml
-> > +++ b/Documentation/devicetree/bindings/display/bridge/toshiba,tc358768.yaml
-> > @@ -58,6 +58,7 @@ properties:
-> >  
-> >              properties:
-> >                data-lines:
-> > +                $ref: /schemas/types.yaml#/definitions/uint32
-> >                  enum: [ 16, 18, 24 ]
-> >  
-> >        port@1:
-> > diff --git a/Documentation/devicetree/bindings/display/panel/panel-timing.yaml b/Documentation/devicetree/bindings/display/panel/panel-timing.yaml
-> > index 7749de95ee40..229e3b36ee29 100644
-> > --- a/Documentation/devicetree/bindings/display/panel/panel-timing.yaml
-> > +++ b/Documentation/devicetree/bindings/display/panel/panel-timing.yaml
-> > @@ -146,6 +146,7 @@ properties:
-> >        Horizontal sync pulse.
-> >        0 selects active low, 1 selects active high.
-> >        If omitted then it is not used by the hardware
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> >      enum: [0, 1]
-> >  
-> >    vsync-active:
-> > @@ -153,6 +154,7 @@ properties:
-> >        Vertical sync pulse.
-> >        0 selects active low, 1 selects active high.
-> >        If omitted then it is not used by the hardware
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> >      enum: [0, 1]
-> >  
-> >    de-active:
-> > @@ -160,6 +162,7 @@ properties:
-> >        Data enable.
-> >        0 selects active low, 1 selects active high.
-> >        If omitted then it is not used by the hardware
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> >      enum: [0, 1]
-> >  
-> >    pixelclk-active:
-> > @@ -169,6 +172,7 @@ properties:
-> >        sample data on rising edge.
-> >        Use 1 to drive pixel data on rising edge and
-> >        sample data on falling edge
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> >      enum: [0, 1]
-> >  
-> >    syncclk-active:
-> > @@ -179,6 +183,7 @@ properties:
-> >        sample sync on rising edge of pixel clock.
-> >        Use 1 to drive sync on rising edge and
-> >        sample sync on falling edge of pixel clock
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> >      enum: [0, 1]
-> >  
-> >    interlaced:
-> > diff --git a/Documentation/devicetree/bindings/display/panel/raydium,rm67191.yaml b/Documentation/devicetree/bindings/display/panel/raydium,rm67191.yaml
-> > index 745dd247c409..617aa8c8c03a 100644
-> > --- a/Documentation/devicetree/bindings/display/panel/raydium,rm67191.yaml
-> > +++ b/Documentation/devicetree/bindings/display/panel/raydium,rm67191.yaml
-> > @@ -24,6 +24,7 @@ properties:
-> >  
-> >    dsi-lanes:
-> >      description: Number of DSI lanes to be used must be <3> or <4>
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> >      enum: [3, 4]
-> >  
-> >    v3p3-supply:
-> > diff --git a/Documentation/devicetree/bindings/display/panel/samsung,s6e8aa0.yaml b/Documentation/devicetree/bindings/display/panel/samsung,s6e8aa0.yaml
-> > index ca959451557e..1cdc91b3439f 100644
-> > --- a/Documentation/devicetree/bindings/display/panel/samsung,s6e8aa0.yaml
-> > +++ b/Documentation/devicetree/bindings/display/panel/samsung,s6e8aa0.yaml
-> > @@ -36,6 +36,7 @@ properties:
-> >  
-> >    init-delay:
-> >      description: delay after initialization sequence [ms]
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> >  
-> >    panel-width-mm:
-> >      description: physical panel width [mm]
-> > diff --git a/Documentation/devicetree/bindings/gpio/fairchild,74hc595.yaml b/Documentation/devicetree/bindings/gpio/fairchild,74hc595.yaml
-> > index 5fe19fa5f67c..a99e7842ca17 100644
-> > --- a/Documentation/devicetree/bindings/gpio/fairchild,74hc595.yaml
-> > +++ b/Documentation/devicetree/bindings/gpio/fairchild,74hc595.yaml
-> > @@ -26,6 +26,7 @@ properties:
-> >      const: 2
-> >  
-> >    registers-number:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> >      description: Number of daisy-chained shift registers
-> >  
-> >    enable-gpios:
-> > diff --git a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
-> > index e8f137abb03c..aa61fe64be63 100644
-> > --- a/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
-> > +++ b/Documentation/devicetree/bindings/input/google,cros-ec-keyb.yaml
-> > @@ -31,6 +31,7 @@ properties:
-> >      type: boolean
-> >  
-> >    function-row-physmap:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> >      minItems: 1
-> >      maxItems: 15
-> >      description: |
-> > diff --git a/Documentation/devicetree/bindings/input/matrix-keymap.yaml b/Documentation/devicetree/bindings/input/matrix-keymap.yaml
-> > index 6699d5e32dca..9f703bb51e12 100644
-> > --- a/Documentation/devicetree/bindings/input/matrix-keymap.yaml
-> > +++ b/Documentation/devicetree/bindings/input/matrix-keymap.yaml
-> > @@ -27,6 +27,10 @@ properties:
-> >        column and linux key-code. The 32-bit big endian cell is packed as:
-> >            row << 24 | column << 16 | key-code
-> >  
-> > +  linux,no-autorepeat:
-> > +    type: boolean
-> > +    description: Disable keyrepeat
-> 
-> This should be rather a separate patch - it's documenting a missing
-> property, not only a type.
+Add Meteor Lake PCI ID for processor thermal device.
 
-Yes, I've dropped this hunk while applying.
+Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ drivers/thermal/intel/int340x_thermal/processor_thermal_device.h | 1 +
+ .../thermal/intel/int340x_thermal/processor_thermal_device_pci.c | 1 +
+ 2 files changed, 2 insertions(+)
 
-Rob
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+index 49932a68abac..7d52fcff4937 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+@@ -24,6 +24,7 @@
+ #define PCI_DEVICE_ID_INTEL_HSB_THERMAL	0x0A03
+ #define PCI_DEVICE_ID_INTEL_ICL_THERMAL	0x8a03
+ #define PCI_DEVICE_ID_INTEL_JSL_THERMAL	0x4E03
++#define PCI_DEVICE_ID_INTEL_MTLP_THERMAL	0x7D03
+ #define PCI_DEVICE_ID_INTEL_RPL_THERMAL	0xA71D
+ #define PCI_DEVICE_ID_INTEL_SKL_THERMAL	0x1903
+ #define PCI_DEVICE_ID_INTEL_TGL_THERMAL	0x9A03
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+index ca40b0967cdd..c2dc4c158b9d 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+@@ -358,6 +358,7 @@ static SIMPLE_DEV_PM_OPS(proc_thermal_pci_pm, proc_thermal_pci_suspend,
+ 
+ static const struct pci_device_id proc_thermal_pci_ids[] = {
+ 	{ PCI_DEVICE_DATA(INTEL, ADL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
++	{ PCI_DEVICE_DATA(INTEL, MTLP_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
+ 	{ PCI_DEVICE_DATA(INTEL, RPL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
+ 	{ },
+ };
+-- 
+2.17.1
+
