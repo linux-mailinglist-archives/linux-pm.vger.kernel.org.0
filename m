@@ -2,158 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3B2531B6B
-	for <lists+linux-pm@lfdr.de>; Mon, 23 May 2022 22:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC31531C84
+	for <lists+linux-pm@lfdr.de>; Mon, 23 May 2022 22:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241152AbiEWRjW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 May 2022 13:39:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35654 "EHLO
+        id S241129AbiEWRoM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 May 2022 13:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242871AbiEWRht (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 May 2022 13:37:49 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7615DD32;
-        Mon, 23 May 2022 10:31:50 -0700 (PDT)
+        with ESMTP id S242218AbiEWRhZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 May 2022 13:37:25 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD4823150;
+        Mon, 23 May 2022 10:31:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653327112; x=1684863112;
-  h=from:to:cc:subject:date:message-id;
-  bh=1a6xvUVraNwPsJU4Rdg2VoIzY6z3cXUo5L9xyuMQW10=;
-  b=jZZ4Ss2cC9FdaYUiYD7eMciUNKwWofAf83XDg39+G+pLQdKr7UfIDN9M
-   NOZ5dO/pIEExNs0Q5Qe/7WhDsG0mkigC7xumOAZsnp8XX6ry1/hqqaJXY
-   krrRtjY+/tL5mVpzLFBQkARspOEYeiwZxHh+8ECCDD6T831NcpTeNqQ8g
-   325H4AE1/A1Sl1kQbC5maHrz9z1odexDxkaxdq3iPZREZH6ijuEqyL7t9
-   NLHukXG80s9R0v4i3Wz/5VWTg20ml8X9VBT8fp+D3Ab9vteLajrdB0T3p
-   V9A1U5OuTQLoC8ezi8Mqe+l+LNQRV9D964k8TLedNEY2nfeDybM/wOyMY
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="272115807"
+  t=1653327070; x=1684863070;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=yEKxJVGCY27SHm5dP9lIMOmKkOGFlFMyVfaXYrGEgOA=;
+  b=RKG5vLCn4NHSN0ULoje8CgbeSIYdoL1KJoT0CBSMYytoRuxF0YmwR+H6
+   D1bVmLCifpdthshBIGNMT2ohbycx+63KftIKeBdDeJ8pWcsb2kli88Ogc
+   JV90jFUf2cYNhTxBq1LBq/BQOYj3e9K3mhExiGNtzphmkRdmubewzLtQ/
+   5UdiilF60BqYdryKmob08gamuGFkxsx8/Km1NtJ1ibSa6gLWuoacUUwWf
+   BWcPeZ2Z95xG6edF4JgctdxfGM1ZpyjbKASUjmOpZGTpyWarbYVFe52lt
+   yfYpjrr/BYfY1OH13Llew0OMr5z2FiR3HAVocaEjX24ltLnE4mXr59rxG
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="273290493"
 X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="272115807"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 10:30:17 -0700
+   d="scan'208";a="273290493"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 10:28:24 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="744846445"
-Received: from srpawnik.iind.intel.com ([10.99.123.68])
-  by orsmga005.jf.intel.com with ESMTP; 23 May 2022 10:30:14 -0700
-From:   Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-To:     rafael@kernel.org, lenb@kernel.org,
-        srinivas.pandruvada@linux.intel.com, daniel.lezcano@linaro.org,
-        rui.zhang@intel.com, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     sumeet.r.pawnikar@intel.com
-Subject: [PATCH] ACPI: DPTF: Support Meteor Lake
-Date:   Mon, 23 May 2022 22:57:24 +0530
-Message-Id: <20220523172724.30556-1-sumeet.r.pawnikar@intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+   d="scan'208";a="577510072"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga007.fm.intel.com with ESMTP; 23 May 2022 10:28:23 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, corbet@lwn.net, hdegoede@redhat.com,
+        markgross@kernel.org
+Cc:     lenb@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-doc@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, prarit@redhat.com,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] Documentation: admin-guide: pm: Add Out of Band mode
+Date:   Mon, 23 May 2022 10:27:57 -0700
+Message-Id: <20220523172757.2351052-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add Meteor Lake ACPI IDs for DPTF devices.
+Update documentation for using the tool to support performance level
+change via OOB (Out of Band) interface.
 
-Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
 Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 ---
- drivers/acpi/dptf/dptf_pch_fivr.c                       | 1 +
- drivers/acpi/dptf/dptf_power.c                          | 2 ++
- drivers/acpi/dptf/int340x_thermal.c                     | 6 ++++++
- drivers/acpi/fan.h                                      | 1 +
- drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 1 +
- drivers/thermal/intel/int340x_thermal/int3403_thermal.c | 1 +
- 6 files changed, 12 insertions(+)
+ .../admin-guide/pm/intel-speed-select.rst     | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/drivers/acpi/dptf/dptf_pch_fivr.c b/drivers/acpi/dptf/dptf_pch_fivr.c
-index c0da24c9f8c3..4919e7abe93f 100644
---- a/drivers/acpi/dptf/dptf_pch_fivr.c
-+++ b/drivers/acpi/dptf/dptf_pch_fivr.c
-@@ -151,6 +151,7 @@ static int pch_fivr_remove(struct platform_device *pdev)
- static const struct acpi_device_id pch_fivr_device_ids[] = {
- 	{"INTC1045", 0},
- 	{"INTC1049", 0},
-+	{"INTC1064", 0},
- 	{"INTC10A3", 0},
- 	{"", 0},
- };
-diff --git a/drivers/acpi/dptf/dptf_power.c b/drivers/acpi/dptf/dptf_power.c
-index dc1f52a5b3f4..a5f29d061b37 100644
---- a/drivers/acpi/dptf/dptf_power.c
-+++ b/drivers/acpi/dptf/dptf_power.c
-@@ -231,6 +231,8 @@ static const struct acpi_device_id int3407_device_ids[] = {
- 	{"INTC1050", 0},
- 	{"INTC1060", 0},
- 	{"INTC1061", 0},
-+	{"INTC1065", 0},
-+	{"INTC1066", 0},
- 	{"INTC10A4", 0},
- 	{"INTC10A5", 0},
- 	{"", 0},
-diff --git a/drivers/acpi/dptf/int340x_thermal.c b/drivers/acpi/dptf/int340x_thermal.c
-index 42a556346548..b7113fa92fa6 100644
---- a/drivers/acpi/dptf/int340x_thermal.c
-+++ b/drivers/acpi/dptf/int340x_thermal.c
-@@ -27,6 +27,7 @@ static const struct acpi_device_id int340x_thermal_device_ids[] = {
- 	{"INT3532"},
- 	{"INTC1040"},
- 	{"INTC1041"},
-+	{"INTC1042"},
- 	{"INTC1043"},
- 	{"INTC1044"},
- 	{"INTC1045"},
-@@ -37,6 +38,11 @@ static const struct acpi_device_id int340x_thermal_device_ids[] = {
- 	{"INTC1050"},
- 	{"INTC1060"},
- 	{"INTC1061"},
-+	{"INTC1062"},
-+	{"INTC1063"},
-+	{"INTC1064"},
-+	{"INTC1065"},
-+	{"INTC1066"},
- 	{"INTC10A0"},
- 	{"INTC10A1"},
- 	{"INTC10A2"},
-diff --git a/drivers/acpi/fan.h b/drivers/acpi/fan.h
-index 44728529a5b6..e7b4b4e4a55e 100644
---- a/drivers/acpi/fan.h
-+++ b/drivers/acpi/fan.h
-@@ -14,6 +14,7 @@
- 	{"INT3404", }, /* Fan */ \
- 	{"INTC1044", }, /* Fan for Tiger Lake generation */ \
- 	{"INTC1048", }, /* Fan for Alder Lake generation */ \
-+	{"INTC1063", }, /* Fan for Meteor Lake generation */ \
- 	{"INTC10A2", }, /* Fan for Raptor Lake generation */ \
- 	{"PNP0C0B", } /* Generic ACPI fan */
+diff --git a/Documentation/admin-guide/pm/intel-speed-select.rst b/Documentation/admin-guide/pm/intel-speed-select.rst
+index 0a1fbdb54bfe..4146a2da35ea 100644
+--- a/Documentation/admin-guide/pm/intel-speed-select.rst
++++ b/Documentation/admin-guide/pm/intel-speed-select.rst
+@@ -262,6 +262,25 @@ Which shows that the base frequency now increased from 2600 MHz at performance
+ level 0 to 2800 MHz at performance level 4. As a result, any workload, which can
+ use fewer CPUs, can see a boost of 200 MHz compared to performance level 0.
  
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index 79931ddc582a..1ea861473cba 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -669,6 +669,7 @@ static const struct acpi_device_id int3400_thermal_match[] = {
- 	{"INT3400", 0},
- 	{"INTC1040", 0},
- 	{"INTC1041", 0},
-+	{"INTC1042", 0},
- 	{"INTC10A0", 0},
- 	{}
- };
-diff --git a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-index 07e25321dfe3..71d084c4c456 100644
---- a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-@@ -285,6 +285,7 @@ static const struct acpi_device_id int3403_device_ids[] = {
- 	{"INT3403", 0},
- 	{"INTC1043", 0},
- 	{"INTC1046", 0},
-+	{"INTC1062", 0},
- 	{"INTC10A1", 0},
- 	{"", 0},
- };
++Changing performance level via BMC Interface
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++It is possible to change SST-PP level using out of band (OOB) agent (Via some
++remote management console, through BMC "Baseboard Management Controller"
++interface). This mode is supported from the Sapphire Rapids processor
++generation. The kernel and tool change to support this mode is added to Linux
++kernel version 5.18. To enable this feature, kernel config
++"CONFIG_INTEL_HFI_THERMAL" is required. The minimum version of the tool
++is "v1.12" to support this feature, which is part of Linux kernel version 5.18.
++
++To support such configuration, this tool can be used as a daemon. Add
++a command line option --oob::
++
++# intel-speed-select --oob
++
++In this mode the tool will online/offline CPUs based on the new performance
++level.
++
+ Check presence of other Intel(R) SST features
+ ---------------------------------------------
+ 
 -- 
-2.17.1
+2.35.1
 
