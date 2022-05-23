@@ -2,110 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02A87531A3F
-	for <lists+linux-pm@lfdr.de>; Mon, 23 May 2022 22:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E722A5317A7
+	for <lists+linux-pm@lfdr.de>; Mon, 23 May 2022 22:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231891AbiEWSud (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 May 2022 14:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35618 "EHLO
+        id S232444AbiEWStc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 May 2022 14:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239398AbiEWSiC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 May 2022 14:38:02 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC28C168D32;
-        Mon, 23 May 2022 11:17:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1653329840; x=1684865840;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=j6PmUFEBfihBJn4L9py22kWT+PelQuFH5/63xz2cOMU=;
-  b=h3CitwUcFNkH3uCVncnSOU9C2DHG1+0R/2w0QsDqmeH4TmPz1+3pQ1T7
-   gR1e9Y5O1O3AxDBVeZ9bjw070riHFxkIwto5l+Szy4Tv+kfC1kMVlNaKP
-   2SrBda00m72a6eJUKNMWhjjJGUOSPVrnd5gCsVw0PBa4SbZ8KM4oiJK/v
-   zFAAGHOR8fLqFlbGTp4V1vBxbhjdwl5sZ+VZhQMZEVc+ci4RMypg0o4Dj
-   dnr2vNYGVFWNvyICEY6hUV/olfdRMPm2C9/t3PIYpAjqUhFBaMIozUlL3
-   roNThknhxetw9IlqfqmhP1MAbZXCnwF/+Gi2wPLuYB0YRNiFgR6wF3QBf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10356"; a="260920336"
-X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="260920336"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2022 11:16:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,246,1647327600"; 
-   d="scan'208";a="744865243"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by orsmga005.jf.intel.com with ESMTP; 23 May 2022 11:16:58 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org, corbet@lwn.net, hdegoede@redhat.com,
-        markgross@kernel.org
-Cc:     lenb@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-doc@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, prarit@redhat.com,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH v2] Documentation: admin-guide: pm: Add Out of Band mode
-Date:   Mon, 23 May 2022 11:16:55 -0700
-Message-Id: <20220523181655.2352470-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.31.1
+        with ESMTP id S243596AbiEWSsD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 May 2022 14:48:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8306AAB0C1;
+        Mon, 23 May 2022 11:33:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D91C60EBC;
+        Mon, 23 May 2022 18:32:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49A7FC385A9;
+        Mon, 23 May 2022 18:32:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653330760;
+        bh=6x15FAaWRfuRB2uOgjXHOEP2szbRD1ja9LAbFtWkp6k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=G8O0GvzI1AoHu3KGYVes5OExmxN1O9NVzfr8AYwOBZ+FWufKii5XfDGBLvkcZadVP
+         n6WVbYoQKXHb9Goq89weUIc40nIfmaBTGeUiTKH6Zwg55S/wbeu1PCzK69wUPYE3SC
+         Vk5fOgB9by2BPWavu0Y08TO1+v7Kf9uoC5Tmjl+DiiEg/YghYu2CGYjtQbsNEcNmwf
+         kZ1Q019hARbXEHmT2m1OZCSWEhKIBRGTEz3uuRVYLyXexzhEFGwoEqs8ewZFFEtBwj
+         17qIF2dJChZ/ss4Yv4kXocsJ9BzIVhIewZkchCQObubE58V+PCDI1fFRHE6epyhAZ8
+         x7pJf5jgtO1KA==
+Date:   Mon, 23 May 2022 13:32:38 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     David Box <david.e.box@linux.intel.com>,
+        "Jingar, Rajvi" <rajvi.jingar@intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v5 2/2] PCI/PM: Fix pci_pm_suspend_noirq() to disable PTM
+Message-ID: <20220523183238.GA174199@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0iHgtTpW+ox=wK68cnuG6D+KvFiOCh2UF96dxq08Z3BSA@mail.gmail.com>
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Update documentation for using the tool to support performance level
-change via OOB (Out of Band) interface.
+On Thu, May 19, 2022 at 09:01:27PM +0200, Rafael J. Wysocki wrote:
+> ...
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
-v2:
-As suggested by Jonathan
-- Indent literal block
-- Show output of command
+> In the meantime, I think that it would make sense to pick up the first
+> patch in this series which is a good cleanup regardless.
+> 
+> Bjorn, could you do that, please?
 
- .../admin-guide/pm/intel-speed-select.rst     | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
+As far as I know, this series has never actually made it to
+linux-pci@vger.kernel.org, so I haven't seen the 1/2 patch.  This
+query:
 
-diff --git a/Documentation/admin-guide/pm/intel-speed-select.rst b/Documentation/admin-guide/pm/intel-speed-select.rst
-index 0a1fbdb54bfe..a2bfb971654f 100644
---- a/Documentation/admin-guide/pm/intel-speed-select.rst
-+++ b/Documentation/admin-guide/pm/intel-speed-select.rst
-@@ -262,6 +262,28 @@ Which shows that the base frequency now increased from 2600 MHz at performance
- level 0 to 2800 MHz at performance level 4. As a result, any workload, which can
- use fewer CPUs, can see a boost of 200 MHz compared to performance level 0.
- 
-+Changing performance level via BMC Interface
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+It is possible to change SST-PP level using out of band (OOB) agent (Via some
-+remote management console, through BMC "Baseboard Management Controller"
-+interface). This mode is supported from the Sapphire Rapids processor
-+generation. The kernel and tool change to support this mode is added to Linux
-+kernel version 5.18. To enable this feature, kernel config
-+"CONFIG_INTEL_HFI_THERMAL" is required. The minimum version of the tool
-+is "v1.12" to support this feature, which is part of Linux kernel version 5.18.
-+
-+To support such configuration, this tool can be used as a daemon. Add
-+a command line option --oob::
-+
-+ # intel-speed-select --oob
-+ Intel(R) Speed Select Technology
-+ Executing on CPU model:143[0x8f]
-+ OOB mode is enabled and will run as daemon
-+
-+In this mode the tool will online/offline CPUs based on the new performance
-+level.
-+
- Check presence of other Intel(R) SST features
- ---------------------------------------------
- 
--- 
-2.35.1
+  https://lore.kernel.org/linux-pci/?q=f%3Arajvi.jingar
 
+finds only a couple responses.  I did mention this to Rajvi, but
+haven't heard anything yet.
+
+Bjorn
