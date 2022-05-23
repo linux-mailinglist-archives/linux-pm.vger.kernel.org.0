@@ -2,283 +2,224 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA67531934
-	for <lists+linux-pm@lfdr.de>; Mon, 23 May 2022 22:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13706531AF6
+	for <lists+linux-pm@lfdr.de>; Mon, 23 May 2022 22:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbiEWTpV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 May 2022 15:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48014 "EHLO
+        id S232060AbiEWUEo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 May 2022 16:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231816AbiEWTpL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 May 2022 15:45:11 -0400
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FC4E77;
-        Mon, 23 May 2022 12:44:43 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id t26so27267492ybt.3;
-        Mon, 23 May 2022 12:44:43 -0700 (PDT)
+        with ESMTP id S232077AbiEWUEn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 May 2022 16:04:43 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F43D59B96
+        for <linux-pm@vger.kernel.org>; Mon, 23 May 2022 13:04:40 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id i187so25135583ybg.6
+        for <linux-pm@vger.kernel.org>; Mon, 23 May 2022 13:04:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=u1AipD1OfrmQcB3YUOaC7P4EIOVqCxquxh0+AE+xuhM=;
+        b=bQzOkbeNz00bM35Ce99+u6O7FvwcbMq3CbiwHzibWAm6u6rINPbk7M+Gwf+K9Rpfqf
+         Bf403twpWA0WD0G/TeiGjK7xOqCHIbbjcEyaY7BokFUQ+zKuBOPZ4uuNji6TV8e8F0C1
+         OiSHL6d1UFbmnZn05rjy7t5aWkkhI9KCK9PlriUExXYqGdsnCTQfyAuJZt5YfiCD5x4p
+         PKKVhF6lcNgu2psiwb4uusrHWD7/H5PDQpYT3YIO6SB5vgxXpWhixe5z1M+Sg7r5WGTG
+         kStV8jBQu/gFdCpVP2vrKt9lgnlvuXrGHW8QBgL9FPZgCDY30zwKLwvPAhDhx3FPGx8x
+         PsTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=1UFvX39NtfpENeFeSqm15Ok9Y3UgF929dIZB7DaqiWs=;
-        b=ZGM9hTCbNCNbSBX6DCgPqHl4On70SBxzJk2AtGUY7mxYnc4guZPOqQx1e2SyAB2sVt
-         m7zJpPNpwrUYr/TJjB4+ow3CfvekHTJKXxI8uTHno/w4qGKlIQjTeimpXmSKQxFh7otY
-         W2siGCVL2whjjjnbgxMpuyccA9lTSs3JiJ49H7F1vT5+U7gRlGrj6vBJXjSRAFVnVf0i
-         2vREcoutWQtAJD9YmZ0P5ScHIrD7TYIGrjZIp3p8vU7l/S2fPpecip53UsjofysTIPCx
-         +vQV2QQ7PIMOht/Y4UgZF4M6Ib1eIm3asjledULIy+JIjzt+JVB2p+xTAle0n1TM9HTX
-         JfDQ==
-X-Gm-Message-State: AOAM533+q2dOqnypAiAOYCjnWRbWwxf34YMUg5bNKfe026i3agzxWk4n
-        q5depf9ZVYB5rHy9Yu4G9UeTf8+MpdXx7ghW9lkF3yqYcs0=
-X-Google-Smtp-Source: ABdhPJw+r2WDnLRkeP7kU+jwLwLscbC6WPEeP6qV6zkunGQrssqr2ZBku4w+RoY2dwg/gysjjFPg9G+uixehaLCdgsM=
-X-Received: by 2002:a25:6b50:0:b0:64f:4b33:664 with SMTP id
- o16-20020a256b50000000b0064f4b330664mr20740180ybm.153.1653335082793; Mon, 23
- May 2022 12:44:42 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u1AipD1OfrmQcB3YUOaC7P4EIOVqCxquxh0+AE+xuhM=;
+        b=ph+AluYTvkPgc5J4RNMlaPBs+PveCfrcWmMz1YY3ZUThDn3l+9nAheA7RfD9LJDhJI
+         07o7M0QohbVnrvtcBxjsjw9uhtXYrYF2Pqeb8Q3hwypPGYm51rz6GQ50u3LfPDD/pORm
+         VGHYvspWJFhqO4d/Orx1g93PZSwv+jpju1ApU+lBKs6H9Gx9KPqp9RwAOF8HMAolGw1r
+         KyDRUJ/oaJ6oOZg0MPTkwPwjOqQCf/VWO0YEaF58HBt41LMroXWfCyfOI+Gs+ONRWW2S
+         8ZZslgmLTVW31LnQwZNcdErcL1AXCf9Zc9FeJa6/c4EaoKey+puGVD1o+wNiZXCc2BK8
+         SDGw==
+X-Gm-Message-State: AOAM532fVuJcv+za9j1bTmEaYTZrjm6P7QnYuLRInQ0fnZ02myqZrGar
+        IEpSZE1f1scse6IG77KZYv+3fM0dBlbzITYwBHvJAA==
+X-Google-Smtp-Source: ABdhPJzqi3uJx736pHwpoReDWxmaiJiRfwvNOrYnqDbU07+DT5iV9p+v8KIvHm54c3ZBoXT3vDZcWATWAm//Q1iK/LY=
+X-Received: by 2002:a05:6902:70e:b0:64f:2e28:d64a with SMTP id
+ k14-20020a056902070e00b0064f2e28d64amr23757981ybt.80.1653336279141; Mon, 23
+ May 2022 13:04:39 -0700 (PDT)
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 23 May 2022 21:44:31 +0200
-Message-ID: <CAJZ5v0h803aUmDW-oHh6+DkBkSXftmrVTwD463YkHW-h+8c=kQ@mail.gmail.com>
-Subject: [GIT PULL] Thermal control updates for v5.19-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+References: <20220429220933.1350374-1-saravanak@google.com>
+ <YogkhvFGVcjNQ21Z@dev-arch.thelio-3990X> <CAGETcx9nvBs1b4M=2hBhrLX_2-rzLtAmV9WfTXu0MC7JnsBvwA@mail.gmail.com>
+ <YogsiMCDupNUhMgL@dev-fedora.thelio-3990X> <CAGETcx-JyWwoGA3o8eep7E29Cm4DcVT6D1JFJh72jLcqm_mjCQ@mail.gmail.com>
+ <Youleo3Ganxbc1sq@dev-arch.thelio-3990X>
+In-Reply-To: <Youleo3Ganxbc1sq@dev-arch.thelio-3990X>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 23 May 2022 13:04:03 -0700
+Message-ID: <CAGETcx-sL08h2toEyxY6ztc6xNuJiPok6iDEeuJ1mOA3nvE+vA@mail.gmail.com>
+Subject: Re: [PATCH v1] driver core: Extend deferred probe timeout on driver registration
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, kernel-team@android.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+On Mon, May 23, 2022 at 8:17 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Fri, May 20, 2022 at 05:15:55PM -0700, Saravana Kannan wrote:
+> > On Fri, May 20, 2022 at 5:04 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > On Fri, May 20, 2022 at 04:49:48PM -0700, Saravana Kannan wrote:
+> > > > On Fri, May 20, 2022 at 4:30 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > > >
+> > > > > Hi Saravana,
+> > > > >
+> > > > > On Fri, Apr 29, 2022 at 03:09:32PM -0700, Saravana Kannan wrote:
+> > > > > > The deferred probe timer that's used for this currently starts at
+> > > > > > late_initcall and runs for driver_deferred_probe_timeout seconds. The
+> > > > > > assumption being that all available drivers would be loaded and
+> > > > > > registered before the timer expires. This means, the
+> > > > > > driver_deferred_probe_timeout has to be pretty large for it to cover the
+> > > > > > worst case. But if we set the default value for it to cover the worst
+> > > > > > case, it would significantly slow down the average case. For this
+> > > > > > reason, the default value is set to 0.
+> > > > > >
+> > > > > > Also, with CONFIG_MODULES=y and the current default values of
+> > > > > > driver_deferred_probe_timeout=0 and fw_devlink=on, devices with missing
+> > > > > > drivers will cause their consumer devices to always defer their probes.
+> > > > > > This is because device links created by fw_devlink defer the probe even
+> > > > > > before the consumer driver's probe() is called.
+> > > > > >
+> > > > > > Instead of a fixed timeout, if we extend an unexpired deferred probe
+> > > > > > timer on every successful driver registration, with the expectation more
+> > > > > > modules would be loaded in the near future, then the default value of
+> > > > > > driver_deferred_probe_timeout only needs to be as long as the worst case
+> > > > > > time difference between two consecutive module loads.
+> > > > > >
+> > > > > > So let's implement that and set the default value to 10 seconds when
+> > > > > > CONFIG_MODULES=y.
+> > > > > >
+> > > > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > > > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> > > > > > Cc: Rob Herring <robh@kernel.org>
+> > > > > > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > > > > > Cc: Will Deacon <will@kernel.org>
+> > > > > > Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> > > > > > Cc: Kevin Hilman <khilman@kernel.org>
+> > > > > > Cc: Thierry Reding <treding@nvidia.com>
+> > > > > > Cc: Mark Brown <broonie@kernel.org>
+> > > > > > Cc: Pavel Machek <pavel@ucw.cz>
+> > > > > > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> > > > > > Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> > > > > > Cc: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > > > > Cc: linux-gpio@vger.kernel.org
+> > > > > > Cc: linux-pm@vger.kernel.org
+> > > > > > Cc: iommu@lists.linux-foundation.org
+> > > > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > > >
+> > > > > I bisected a boot hang with ARCH=s390 defconfig in QEMU down to this
+> > > > > change as commit 2b28a1a84a0e ("driver core: Extend deferred probe
+> > > > > timeout on driver registration") in next-20220520 (bisect log below).
+> > > > >
+> > > > > $ make -skj"$(nproc)" ARCH=s390 CROSS_COMPILE=s390x-linux-gnu- defconfig bzImage
+> > > > >
+> > > > > $ timeout --foreground 15m stdbuf -oL -eL \
+> > > > > qemu-system-s390x \
+> > > > > -initrd ... \
+> > > > > -M s390-ccw-virtio \
+> > > > > -display none \
+> > > > > -kernel arch/s390/boot/bzImage \
+> > > > > -m 512m \
+> > > > > -nodefaults \
+> > > > > -serial mon:stdio
+> > > > > ...
+> > > > > [    2.077303] In-situ OAM (IOAM) with IPv6
+> > > > > [    2.077639] NET: Registered PF_PACKET protocol family
+> > > > > [    2.078063] bridge: filtering via arp/ip/ip6tables is no longer available by default. Update your scripts to load br_netfilter if you need this.
+> > > > > [    2.078795] Key type dns_resolver registered
+> > > > > [    2.079317] cio: Channel measurement facility initialized using format extended (mode autodetected)
+> > > > > [    2.081494] Discipline DIAG cannot be used without z/VM
+> > > > > [  260.626363] random: crng init done
+> > > > > qemu-system-s390x: terminating on signal 15 from pid 3815762 (timeout)
+> > > > >
+> > > > > We have a simple rootfs available if necessary:
+> > > > >
+> > > > > https://github.com/ClangBuiltLinux/boot-utils/raw/bc0d17785eb67f1edd0ee0a134970a807895f741/images/s390/rootfs.cpio.zst
+> > > > >
+> > > > > If there is any other information I can provide, please let me know!
+> > > >
+> > > > Hmm... strange. Can you please try the following command line options
+> > > > and tell me which of these has the issue and which don't?
+> > >
+> > > Sure thing!
+> > >
+> > > > 1) deferred_probe_timeout=0
+> > >
+> > > No issue.
+> > >
+> > > > 2) deferred_probe_timeout=1
+> > > > 3) deferred_probe_timeout=300
+> > >
+> > > Both of these appear to hang in the same way, I let each sit for five
+> > > minutes.
+> >
+> > Strange that a sufficiently large timeout isn't helping. Is it trying
+> > to boot off a network mount? I'll continue looking into this next
+> > week.
+>
+> I don't think so, it seems like doing that requires some extra flags
+> that we do not have:
+>
+> https://wiki.qemu.org/Features/S390xNetworkBoot
+>
+> If you need any additional information or want something tested, please
+> let me know!
 
-Please pull from the tag
+I'll try to get qemu going on my end, but I'm not too confident I'll
+be able to get to it in a timely fashion. So if you can help figure
+out where this boot process is hanging, that'd be very much
+appreciated.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- thermal-5.19-rc1
+Couple of suggestions for debugging:
 
-with top-most commit bbb544f3349197d1e7f4f9b921b75e919cd45f39
+Can you add a log to "wait_for_device_probe()" and see if that's
+getting called right before the boot process hangs? If it does, can
+you get a stacktrace (I just add a WARN_ON(1) when I need a stack
+trace)? It's unlikely this is the case because
+deferred_probe_timeout=1 still causes an issue for you, but I'd be
+good to rule out.
 
- Merge branches 'thermal-int340x', 'thermal-pch' and 'thermal-misc'
+Let's try to rule out if deferred_probe_extend_timeout() is causing
+some issues. So, without my patch, what happens if you set:
+deferred_probe_timeout=1
+deferred_probe_timeout=300
 
-on top of commit 42226c989789d8da4af1de0c31070c96726d990c
+If deferred_probe_timeout=1 causes an issue even without my patch,
+then in addition, can you try commenting out the call to
+fw_devlink_drivers_done() inside deferred_probe_timeout_work_func()
+and try again?
 
- Linux 5.18-rc7
+Thanks a lot for reporting and helping debug this issue.
 
-to receive thermal control updates for 5.19-rc1.
-
-These add a thermal library and thermal tools to wrap the netlink
-interface into event-based callbacks, improve overheat condition
-handling during suspend-to-idle on Intel SoCs, add some new hardware
-support, fix bugs and clean up code.
-
-Specifics:
-
- - Add thermal library and thermal tools to encapsulate the netlink
-   into event based callbacks (Daniel Lezcano, Jiapeng Chong).
-
- - Improve overheat condition handling during suspend-to-idle in the
-   Intel PCH thermal driver (Zhang Rui).
-
- - Use local ops instead of global ops in devfreq_cooling (Kant Fan).
-
- - Clean up _OSC handling in int340x (Davidlohr Bueso).
-
- - Switch hisi_termal from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
-   (Hesham Almatary).
-
- - Add new k3 j72xx bangdap driver and the corresponding bindings
-   (Keerthy).
-
- - Fix missing of_node_put() in the SC iMX driver at probe time
-   (Miaoqian Lin).
-
- - Fix memory leak in __thermal_cooling_device_register() when
-   device_register() fails by calling thermal_cooling_device_destroy_sysfs()
-   (Yang Yingliang).
-
- - Add sc8180x and sc8280xp compatible string in the DT bindings and
-   lMH support for QCom tsens driver (Bjorn Andersson).
-
- - Fix OTP Calibration Register values conforming to the documentation
-   on RZ/G2L and bindings documentation for RZ/G2UL (Biju Das).
-
- - Fix type in kerneldoc description for __thermal_bind_params (Corentin
-   Labbe).
-
- - Fix potential NULL dereference in sr_thermal_probe() on Broadcom
-   platform (Zheng Yongjun).
-
- - Add change mode ops to the thermal-of sensor (Manaf Meethalavalappu
-   Pallikunhi).
-
- - Fix non-negative value support by preventing the value to be clamp
-   to zero (Stefan Wahren).
-
- - Add compatible string and DT bindings for MSM8960 tsens driver
-   (Dmitry Baryshkov).
-
- - Add hwmon support for K3 driver (Massimiliano Minella).
-
- - Refactor and add multiple generations support for QCom ADC driver
-   (Jishnu Prakash).
-
- - Use platform_get_irq_optional() to get the interrupt on RCar driver and
-   document Document RZ/V2L bindings (Lad Prabhakar).
-
- - Remove NULL check after container_of() call from the Intel HFI
-   thermal driver (Haowen Bai).
-
-Thanks!
-
-
----------------
-
-Biju Das (2):
-      dt-bindings: thermal: rzg2l-thermal: Document RZ/G2UL bindings
-      thermal/drivers/rz2gl: Fix OTP Calibration Register values
-
-Bjorn Andersson (3):
-      thermal/drivers/qcom/lmh: Add sc8180x compatible
-      dt-bindings: thermal: lmh: Add Qualcomm sc8180x compatible
-      dt-bindings: thermal: tsens: Add sc8280xp compatible
-
-Corentin Labbe (1):
-      thermal: thermal_of: fix typo on __thermal_bind_params
-
-Daniel Lezcano (4):
-      tools/lib/thermal: Add a thermal library
-      tools/thermal: Add util library
-      tools/thermal: Add a temperature capture tool
-      tools/thermal: Add thermal daemon skeleton
-
-Davidlohr Bueso (3):
-      thermal: int340x: Clean up unnecessary acpi_buffer pointer freeing
-      thermal: int340x: Consolidate freeing of acpi_buffer pointer
-      thermal: int340x: Clean up _OSC context init
-
-Dmitry Baryshkov (2):
-      dt-bindings: thermal: qcom-tsens.yaml: add msm8960 compat string
-      thermal/drivers/tsens: Add compat string for the qcom,msm8960
-
-Haowen Bai (1):
-      thermal: intel: hfi: remove NULL check after container_of() call
-
-Hesham Almatary (1):
-      thermal: hisi_termal: Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
-
-Jiapeng Chong (2):
-      tools/lib/thermal: remove unneeded semicolon
-      tools/thermal: remove unneeded semicolon
-
-Jishnu Prakash (4):
-      dt-bindings: thermal: qcom: add PMIC5 Gen2 ADC_TM bindings
-      iio: adc: qcom-vadc-common: add reverse scaling for PMIC5 Gen2 ADC_TM
-      thermal/drivers/qcom: Add support for multiple generations of devices
-      thermal/drivers/qcom: Add support for PMIC5 Gen2 ADCTM
-
-Kant Fan (1):
-      thermal: devfreq_cooling: use local ops instead of global ops
-
-Keerthy (2):
-      dt-bindings: thermal: k3-j72xx: Add VTM bindings documentation
-      thermal: k3_j72xx_bandgap: Add the bandgap driver support
-
-Lad Prabhakar (2):
-      dt-bindings: thermal: rzg2l-thermal: Document RZ/V2L bindings
-      thermal/drivers/rcar_thermal: Use platform_get_irq_optional() to
-get the interrupt
-
-Manaf Meethalavalappu Pallikunhi (1):
-      thermal/drivers/thermal_of: Add change_mode ops support for
-thermal_of sensor
-
-Massimiliano Minella (1):
-      thermal/drivers/k3: Add hwmon support
-
-Miaoqian Lin (1):
-      thermal/drivers/imx_sc_thermal: Fix refcount leak in imx_sc_thermal_probe
-
-Srinivas Pandruvada (1):
-      thermal: int340x: Mode setting with new OS handshake
-
-Stefan Wahren (1):
-      thermal/drivers/bcm2711: Don't clamp temperature at zero
-
-Yang Yingliang (1):
-      thermal/core: Fix memory leak in __thermal_cooling_device_register()
-
-Zhang Rui (4):
-      PM: wakeup: expose pm_wakeup_pending to modules
-      thermal: intel: pch: move cooling delay to suspend_noirq phase
-      thermal: intel: pch: enhance overheat handling
-      thermal: intel: pch: improve the cooling delay log
-
-Zheng Yongjun (1):
-      thermal/drivers/broadcom: Fix potential NULL dereference in
-sr_thermal_probe
-
----------------
-
- .../devicetree/bindings/thermal/qcom-lmh.yaml      |   1 +
- .../bindings/thermal/qcom-spmi-adc-tm5.yaml        | 110 +++-
- .../devicetree/bindings/thermal/qcom-tsens.yaml    |   5 +-
- .../devicetree/bindings/thermal/rzg2l-thermal.yaml |   2 +
- .../bindings/thermal/ti,j72xx-thermal.yaml         |  63 +++
- MAINTAINERS                                        |   1 +
- drivers/base/power/wakeup.c                        |   1 +
- drivers/iio/adc/qcom-vadc-common.c                 |  11 +
- drivers/thermal/Makefile                           |   2 +-
- drivers/thermal/broadcom/bcm2711_thermal.c         |   5 +-
- drivers/thermal/broadcom/sr-thermal.c              |   3 +
- drivers/thermal/devfreq_cooling.c                  |  25 +-
- drivers/thermal/hisi_thermal.c                     |   6 +-
- drivers/thermal/imx_sc_thermal.c                   |   6 +-
- .../intel/int340x_thermal/int3400_thermal.c        |  72 +--
- drivers/thermal/intel/intel_hfi.c                  |   2 -
- drivers/thermal/intel/intel_pch_thermal.c          |  43 +-
- drivers/thermal/k3_bandgap.c                       |   5 +
- drivers/thermal/k3_j72xx_bandgap.c                 | 566 ++++++++++++++++++++
- drivers/thermal/qcom/lmh.c                         |   1 +
- drivers/thermal/qcom/qcom-spmi-adc-tm5.c           | 486 +++++++++++++++--
- drivers/thermal/qcom/tsens.c                       |   3 +
- drivers/thermal/rcar_thermal.c                     |  17 +-
- drivers/thermal/rzg2l_thermal.c                    |  10 +-
- drivers/thermal/thermal_core.c                     |   1 +
- drivers/thermal/thermal_of.c                       |  14 +-
- include/linux/iio/adc/qcom-vadc-common.h           |   2 +
- include/linux/thermal.h                            |   3 +
- tools/Makefile                                     |  36 +-
- tools/lib/thermal/.gitignore                       |   2 +
- tools/lib/thermal/Build                            |   5 +
- tools/lib/thermal/Makefile                         | 165 ++++++
- tools/lib/thermal/commands.c                       | 349 +++++++++++++
- tools/lib/thermal/events.c                         | 164 ++++++
- tools/lib/thermal/include/thermal.h                | 142 +++++
- tools/lib/thermal/libthermal.map                   |  25 +
- tools/lib/thermal/libthermal.pc.template           |  12 +
- tools/lib/thermal/sampling.c                       |  75 +++
- tools/lib/thermal/thermal.c                        | 135 +++++
- tools/lib/thermal/thermal_nl.c                     | 215 ++++++++
- tools/lib/thermal/thermal_nl.h                     |  46 ++
- tools/thermal/lib/Build                            |   3 +
- tools/thermal/lib/Makefile                         | 158 ++++++
- tools/thermal/lib/libthermal_tools.pc.template     |  12 +
- tools/thermal/lib/log.c                            |  77 +++
- tools/thermal/lib/log.h                            |  31 ++
- tools/thermal/lib/mainloop.c                       | 120 +++++
- tools/thermal/lib/mainloop.h                       |  15 +
- tools/thermal/lib/thermal-tools.h                  |  10 +
- tools/thermal/lib/uptimeofday.c                    |  40 ++
- tools/thermal/lib/uptimeofday.h                    |  12 +
- tools/thermal/thermal-engine/Build                 |   1 +
- tools/thermal/thermal-engine/Makefile              |  28 +
- tools/thermal/thermal-engine/thermal-engine.c      | 341 ++++++++++++
- tools/thermal/thermometer/Build                    |   1 +
- tools/thermal/thermometer/Makefile                 |  26 +
- tools/thermal/thermometer/thermometer.8            |  92 ++++
- tools/thermal/thermometer/thermometer.c            | 572 +++++++++++++++++++++
- tools/thermal/thermometer/thermometer.conf         |   5 +
- 59 files changed, 4263 insertions(+), 118 deletions(-)
+-Saravana
