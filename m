@@ -2,62 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F79531E5E
-	for <lists+linux-pm@lfdr.de>; Tue, 24 May 2022 00:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D6E531E6B
+	for <lists+linux-pm@lfdr.de>; Tue, 24 May 2022 00:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiEWWKn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 May 2022 18:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
+        id S229781AbiEWWOW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 May 2022 18:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiEWWKn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 May 2022 18:10:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BD6BA553;
-        Mon, 23 May 2022 15:10:41 -0700 (PDT)
+        with ESMTP id S229697AbiEWWOW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 May 2022 18:14:22 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9C56D945;
+        Mon, 23 May 2022 15:14:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3D388B8162C;
-        Mon, 23 May 2022 22:10:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C5AAC385AA;
-        Mon, 23 May 2022 22:10:38 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E4A3CCE1941;
+        Mon, 23 May 2022 22:14:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17BD8C385A9;
+        Mon, 23 May 2022 22:14:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653343838;
-        bh=yQVurtYEo5Ovn07aQzlO31017UwCZBxe6EyP0GZUBI0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=pj5rw/4/Oehudh25vKqU7IKu15HY3CB/4gvutCSqOFZuHAZ34pq/7z/d4kwmWXUjC
-         kYjseRqkOfrCcXgvgU54/8v5SilNE4o88EDFNfQ2QrSGnh5yYtAf6igJ+7iBi7+Fw7
-         KJjU4/TS+z1cKpIEFzXBThVmJNJKAJJhYzCH8wWPuplyLR9RsnfzuGQCzEsLqaU63n
-         ebBPOMljRrR47dIYs7F71FgXSFwPAWnpvXaM+9MRqDAySTy1Dlm/By7UnW0r7+XhUQ
-         3024KG3TlRxKzzp8zYTe8Ous53CVXDFTtqYEJD6OobHEcPacqXfUa2AIi4M0BV0YPC
-         joBoDBsc5S2WQ==
-Date:   Mon, 23 May 2022 17:10:36 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jim Quinlan <jim2101024@gmail.com>
-Cc:     linux-pci <linux-pci@vger.kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        James Dutton <james.dutton@gmail.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Jim Quinlan <james.quinlan@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        s=k20201202; t=1653344057;
+        bh=BtnYCdlUBKX6YqS/BraKh22u8nz1TCw7j+9R1vskYOQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k9BhonP0X+z778fxt/u02FGrHj5D510oCITyE4f6lDSzAPgfHnXUes/jfy4VfLrE/
+         3QbasTeMap/V1oSB5s7BQ267SqGCKHWEc5s/yce5mwtQJluyG76bOMklKJ5vQedHxf
+         UZfm7iH5QC6Nximri882B/sWSXl0jnfN6ea1UZh3zNCHSML5+0rVqGGnf7w04x01at
+         F/dxZl77ZfP6VKQ0UNzEXcCS1hRU9XQfHPPtt1KIs1KwWohxf0SXgU2U2ODK2gtO9n
+         0Kramiu5uPQ5tbNXMh/2cRhdp0/W3KdxANznXrGIncJHq16yDli+3UX74fpP9Rzqpu
+         15hZuZYOOheFQ==
+Date:   Mon, 23 May 2022 15:14:14 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v1] PCI: brcmstb: Fix regression regarding missing PCIe
- linkup
-Message-ID: <20220523221036.GA130515@bhelgaas>
+        Linus Walleij <linus.walleij@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, kernel-team@android.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH v1] driver core: Extend deferred probe timeout on driver
+ registration
+Message-ID: <YowHNo4sBjr9ijZr@dev-arch.thelio-3990X>
+References: <20220429220933.1350374-1-saravanak@google.com>
+ <YogkhvFGVcjNQ21Z@dev-arch.thelio-3990X>
+ <CAGETcx9nvBs1b4M=2hBhrLX_2-rzLtAmV9WfTXu0MC7JnsBvwA@mail.gmail.com>
+ <YogsiMCDupNUhMgL@dev-fedora.thelio-3990X>
+ <CAGETcx-JyWwoGA3o8eep7E29Cm4DcVT6D1JFJh72jLcqm_mjCQ@mail.gmail.com>
+ <Youleo3Ganxbc1sq@dev-arch.thelio-3990X>
+ <CAGETcx-sL08h2toEyxY6ztc6xNuJiPok6iDEeuJ1mOA3nvE+vA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANCKTBvqp7_MSG3aMpp6pmNoPUnYpH0c+8-r7Pzgebuzb4sZPA@mail.gmail.com>
+In-Reply-To: <CAGETcx-sL08h2toEyxY6ztc6xNuJiPok6iDEeuJ1mOA3nvE+vA@mail.gmail.com>
 X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,207 +76,189 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, May 21, 2022 at 02:51:42PM -0400, Jim Quinlan wrote:
-> On Sat, May 21,
-> 2CONFIG_INITRAMFS_SOURCE="/work3/jq921458/cpio/54-arm64-rootfs.cpio022
-> at 12:43 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Wed, May 18, 2022 at 03:42:11PM -0400, Jim Quinlan wrote:
-> > > commit 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice
-> > > voltage regulators")
-> > >
-> > > introduced a regression on the PCIe RPi4 Compute Module.  If the
-> > > PCIe endpoint node described in [2] was missing, no linkup would
-> > > be attempted, and subsequent accesses would cause a panic
-> > > because this particular PCIe HW causes a CPU abort on illegal
-> > > accesses (instead of returning 0xffffffff).
-> > >
-> > > We fix this by allowing the DT endpoint subnode to be missing.
-> > > This is important for platforms like the CM4 which have a
-> > > standard PCIe socket and the endpoint device is unknown.
+On Mon, May 23, 2022 at 01:04:03PM -0700, Saravana Kannan wrote:
+> On Mon, May 23, 2022 at 8:17 AM Nathan Chancellor <nathan@kernel.org> wrote:
 > >
-> > I think the problem here is that on the CM, we try to enumerate
-> > devices that are not powered up, isn't it?  The commit log should
-> > say something about that power situation and how the driver learns
-> > about the power regulators instead of just pointing at an DT
-> > endpoint node.
+> > On Fri, May 20, 2022 at 05:15:55PM -0700, Saravana Kannan wrote:
+> > > On Fri, May 20, 2022 at 5:04 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > >
+> > > > On Fri, May 20, 2022 at 04:49:48PM -0700, Saravana Kannan wrote:
+> > > > > On Fri, May 20, 2022 at 4:30 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > > > >
+> > > > > > Hi Saravana,
+> > > > > >
+> > > > > > On Fri, Apr 29, 2022 at 03:09:32PM -0700, Saravana Kannan wrote:
+> > > > > > > The deferred probe timer that's used for this currently starts at
+> > > > > > > late_initcall and runs for driver_deferred_probe_timeout seconds. The
+> > > > > > > assumption being that all available drivers would be loaded and
+> > > > > > > registered before the timer expires. This means, the
+> > > > > > > driver_deferred_probe_timeout has to be pretty large for it to cover the
+> > > > > > > worst case. But if we set the default value for it to cover the worst
+> > > > > > > case, it would significantly slow down the average case. For this
+> > > > > > > reason, the default value is set to 0.
+> > > > > > >
+> > > > > > > Also, with CONFIG_MODULES=y and the current default values of
+> > > > > > > driver_deferred_probe_timeout=0 and fw_devlink=on, devices with missing
+> > > > > > > drivers will cause their consumer devices to always defer their probes.
+> > > > > > > This is because device links created by fw_devlink defer the probe even
+> > > > > > > before the consumer driver's probe() is called.
+> > > > > > >
+> > > > > > > Instead of a fixed timeout, if we extend an unexpired deferred probe
+> > > > > > > timer on every successful driver registration, with the expectation more
+> > > > > > > modules would be loaded in the near future, then the default value of
+> > > > > > > driver_deferred_probe_timeout only needs to be as long as the worst case
+> > > > > > > time difference between two consecutive module loads.
+> > > > > > >
+> > > > > > > So let's implement that and set the default value to 10 seconds when
+> > > > > > > CONFIG_MODULES=y.
+> > > > > > >
+> > > > > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > > > > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> > > > > > > Cc: Rob Herring <robh@kernel.org>
+> > > > > > > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > > > > > > Cc: Will Deacon <will@kernel.org>
+> > > > > > > Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> > > > > > > Cc: Kevin Hilman <khilman@kernel.org>
+> > > > > > > Cc: Thierry Reding <treding@nvidia.com>
+> > > > > > > Cc: Mark Brown <broonie@kernel.org>
+> > > > > > > Cc: Pavel Machek <pavel@ucw.cz>
+> > > > > > > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> > > > > > > Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> > > > > > > Cc: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > > > > > Cc: linux-gpio@vger.kernel.org
+> > > > > > > Cc: linux-pm@vger.kernel.org
+> > > > > > > Cc: iommu@lists.linux-foundation.org
+> > > > > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > > > >
+> > > > > > I bisected a boot hang with ARCH=s390 defconfig in QEMU down to this
+> > > > > > change as commit 2b28a1a84a0e ("driver core: Extend deferred probe
+> > > > > > timeout on driver registration") in next-20220520 (bisect log below).
+> > > > > >
+> > > > > > $ make -skj"$(nproc)" ARCH=s390 CROSS_COMPILE=s390x-linux-gnu- defconfig bzImage
+> > > > > >
+> > > > > > $ timeout --foreground 15m stdbuf -oL -eL \
+> > > > > > qemu-system-s390x \
+> > > > > > -initrd ... \
+> > > > > > -M s390-ccw-virtio \
+> > > > > > -display none \
+> > > > > > -kernel arch/s390/boot/bzImage \
+> > > > > > -m 512m \
+> > > > > > -nodefaults \
+> > > > > > -serial mon:stdio
+> > > > > > ...
+> > > > > > [    2.077303] In-situ OAM (IOAM) with IPv6
+> > > > > > [    2.077639] NET: Registered PF_PACKET protocol family
+> > > > > > [    2.078063] bridge: filtering via arp/ip/ip6tables is no longer available by default. Update your scripts to load br_netfilter if you need this.
+> > > > > > [    2.078795] Key type dns_resolver registered
+> > > > > > [    2.079317] cio: Channel measurement facility initialized using format extended (mode autodetected)
+> > > > > > [    2.081494] Discipline DIAG cannot be used without z/VM
+> > > > > > [  260.626363] random: crng init done
+> > > > > > qemu-system-s390x: terminating on signal 15 from pid 3815762 (timeout)
+> > > > > >
+> > > > > > We have a simple rootfs available if necessary:
+> > > > > >
+> > > > > > https://github.com/ClangBuiltLinux/boot-utils/raw/bc0d17785eb67f1edd0ee0a134970a807895f741/images/s390/rootfs.cpio.zst
+> > > > > >
+> > > > > > If there is any other information I can provide, please let me know!
+> > > > >
+> > > > > Hmm... strange. Can you please try the following command line options
+> > > > > and tell me which of these has the issue and which don't?
+> > > >
+> > > > Sure thing!
+> > > >
+> > > > > 1) deferred_probe_timeout=0
+> > > >
+> > > > No issue.
+> > > >
+> > > > > 2) deferred_probe_timeout=1
+> > > > > 3) deferred_probe_timeout=300
+> > > >
+> > > > Both of these appear to hang in the same way, I let each sit for five
+> > > > minutes.
+> > >
+> > > Strange that a sufficiently large timeout isn't helping. Is it trying
+> > > to boot off a network mount? I'll continue looking into this next
+> > > week.
+> >
+> > I don't think so, it seems like doing that requires some extra flags
+> > that we do not have:
+> >
+> > https://wiki.qemu.org/Features/S390xNetworkBoot
+> >
+> > If you need any additional information or want something tested, please
+> > let me know!
 > 
-> This is incorrect.  The regression occurred because the code
-> mistakenly skips PCIe-linkup if the PCI portdrv DT node does not
-> exist. With our RC HW, doing a config space access to bus 1 w/o
-> first linking up results in a CPU abort.  This regression has
-> nothing to do with EP power at all.
+> I'll try to get qemu going on my end, but I'm not too confident I'll
+> be able to get to it in a timely fashion. So if you can help figure
+> out where this boot process is hanging, that'd be very much
+> appreciated.
 
-OK, I think I'm starting to see, but I'm still missing some things.
+Sure thing! Information included below, I am more than happy to continue
+to test and debug as you need.
 
-67211aadcb4b ("PCI: brcmstb: Add mechanism to turn on subdev
-regulators") added pci_subdev_regulators_add_bus() as an .add_bus()
-method.  This is called by pci_alloc_child_bus(), and if the DT
-describes any regulators for the bridge leading to the new child bus,
-we turn them on.
-
-Then 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage
-regulators") added brcm_pcie_add_bus() and made *it* the .add_bus()
-method.  It turns on the regulators and brings the link up, but it
-skips both if there's no DT node for the bridge to the new bus.
-
-I guess RPi4 CM has no DT node to describe regulators, so we skip both
-turning them on *and* bringing the link up?
-
-But above you say it's the *endpoint* node that doesn't exist.  The
-existing code looks like it's checking for the *bridge* node
-(bus->dev->of_node).  We haven't even enumerated the devices on the
-child bus, so we don't know about them at this point.
-
-What happens if there is a DT node for the bridge, but it doesn't
-describe any regulators?  I assume regulator_bulk_get() will fail, and
-it looks like that might still keep us from bringing the link up?
-
-I would think that lack of regulator description in the DT would mean
-that any regulators are always on and the OS doesn't need to do
-anything.
-
-> >  What happens if we turn on the power but don't find any
-> >  downstream devices?
->
-> They are turned off to conserve power.
+> Couple of suggestions for debugging:
 > 
-> > From looking at the code, I assume we just leave the power on.
-> > Maybe that's what you want, I dunno.
+> Can you add a log to "wait_for_device_probe()" and see if that's
+> getting called right before the boot process hangs? If it does, can
+> you get a stacktrace (I just add a WARN_ON(1) when I need a stack
+> trace)? It's unlikely this is the case because
+> deferred_probe_timeout=1 still causes an issue for you, but I'd be
+> good to rule out.
 
-> For STB and Cable Modem products we do not leave the power on.  In
-> fact, our Cable Modem group was the first to request this feature.
-> It appears that the RPi CM4 always keeps endpoint power on but I do
-> not know for sure.
+If I add a pr_info() call at the top of wait_for_device_probe(), I see
+it right before the process hangs. Adding WARN_ON(1) right below that
+reveals dasd_eckd_init() in drivers/s390/block/dasd_eckd.c calls
+wait_for_device_probe():
 
-I'm confused.  Why can't we tell by looking at pcie-brcmstb.c?  All I
-know is what's in pcie-brcmstb.c; I have no idea which things apply to
-which products.
+[    4.610397] ------------[ cut here ]------------
+[    4.610520] WARNING: CPU: 0 PID: 1 at drivers/base/dd.c:742 wait_for_device_probe+0x28/0x110
+[    4.611134] Modules linked in:
+[    4.611593] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.18.0-next-20220523-dirty #1
+[    4.611830] Hardware name: QEMU 8561 QEMU (KVM/Linux)
+[    4.612017] Krnl PSW : 0704c00180000000 0000000000ce4b3c (wait_for_device_probe+0x2c/0x110)
+[    4.612258]            R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:0 PM:0 RI:0 EA:3
+[    4.612387] Krnl GPRS: 80000000fffff071 0000000000000027 000000000000000c 00000000017f91d8
+[    4.612457]            00000000fffff071 00000000017f9218 0000000001a655a0 0000000000000006
+[    4.612521]            0000000000000002 0000000001965810 00000000019d51a0 0000000000000000
+[    4.612585]            0000000002218000 000000000125bcc8 0000000000ce4b38 000003800000bc80
+[    4.614814] Krnl Code: 0000000000ce4b2c: e3e0f0980024        stg     %r14,152(%r15)
+[    4.614814]            0000000000ce4b32: c0e5ffff94cb        brasl   %r14,0000000000cd74c8
+[    4.614814]           #0000000000ce4b38: af000000            mc      0,0
+[    4.614814]           >0000000000ce4b3c: c0100054d1fa        larl    %r1,000000000177ef30
+[    4.614814]            0000000000ce4b42: e31010000012        lt      %r1,0(%r1)
+[    4.614814]            0000000000ce4b48: a784002d            brc     8,0000000000ce4ba2
+[    4.614814]            0000000000ce4b4c: d727f0a0f0a0        xc      160(40,%r15),160(%r15)
+[    4.614814]            0000000000ce4b52: 41b0f0a0            la      %r11,160(%r15)
+[    4.615698] Call Trace:
+[    4.616559]  [<0000000000ce4b3c>] wait_for_device_probe+0x2c/0x110
+[    4.616744] ([<0000000000ce4b38>] wait_for_device_probe+0x28/0x110)
+[    4.616841]  [<000000000196593e>] dasd_eckd_init+0x12e/0x178
+[    4.616913]  [<0000000000100936>] do_one_initcall+0x46/0x1e8
+[    4.616983]  [<0000000001920706>] do_initcalls+0x126/0x150
+[    4.617046]  [<000000000192095e>] kernel_init_freeable+0x1ae/0x1f0
+[    4.617110]  [<0000000000ce85a6>] kernel_init+0x2e/0x168
+[    4.617171]  [<0000000000103320>] __ret_from_fork+0x40/0x58
+[    4.617233]  [<0000000000cf5eaa>] ret_from_fork+0xa/0x40
+[    4.617352] Last Breaking-Event-Address:
+[    4.617393]  [<0000000000e0e098>] __s390_indirect_jump_r14+0x0/0xc
+[    4.617481] ---[ end trace 0000000000000000 ]---
 
-The only calls to regulator_bulk_disable() are in
-pci_subdev_regulators_remove_bus(), brcm_pcie_suspend(), and
-brcm_pcie_resume().  I don't think the fact that enumeration didn't
-find any devices necessarily leads to any of those.  What am I
-missing?  (This is really a tangent that isn't critical for fixing the
-regression.)
+> Let's try to rule out if deferred_probe_extend_timeout() is causing
+> some issues. So, without my patch, what happens if you set:
+> deferred_probe_timeout=1
+> deferred_probe_timeout=300
 
-> > I added Rafael because this seems vaguely similar to runtime power
-> > management, and if we can integrate with that somehow, I'd sure like
-> > to avoid building a parallel infrastructure for it.
-> >
-> > The current path we're on is to move some of this code that's
-> > currently in pcie-brcmstb.c to the PCIe portdrv [0].  I'm a little
-> > hesitant about that because ACPI does just fine without it.  If we're
-> > adding new DT functionality that could not be implemented via ACPI,
-> > that's one thing.  But I'm not convinced this is that new.
->
-> AFAICT, Broadcom STB and Cable Modem products do not have/use/want
-> ACPI.  We are fine with keeping this "PCIe regulator" feature
-> private to our driver and giving you speedy and full support in
-> maintaining it.
+At commit 6ee60e9c9f2f ("MAINTAINERS: add Russ Weight as a firmware
+loader maintainer"), both deferred_probe_timeout=1 and
+deferred_probe_timeout=300 hang the boot.
 
-I don't mean that you should use ACPI, only that ACPI platforms can do
-this sort of power control using the existing PCI core infrastructure,
-and maybe there's a way for OF/DT platforms to hook into that same
-infrastructure to minimize the driver-specific work.  E.g., maybe
-there's a way to extend platform_pci_set_power_state() and similar to
-manage these regulators.
+> If deferred_probe_timeout=1 causes an issue even without my patch,
+> then in addition, can you try commenting out the call to
+> fw_devlink_drivers_done() inside deferred_probe_timeout_work_func()
+> and try again?
 
-> > [0] https://lore.kernel.org/r/20211110221456.11977-6-jim2101024@gmail.com
-> >
-> > > [1] https://bugzilla.kernel.org/show_bug.cgi?id=215925
-> > > [2] Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml
-> > >
-> > > Fixes: 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage regulators")
-> > > Fixes: 830aa6f29f07 ("PCI: brcmstb: Split brcm_pcie_setup() into two funcs")
-> > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=215925
-> > > Signed-off-by: Jim Quinlan <jim2101024@gmail.com>
-> > > ---
-> > >  drivers/pci/controller/pcie-brcmstb.c | 8 +++++---
-> > >  1 file changed, 5 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
-> > > index ba5c120816b2..adca74e235cb 100644
-> > > --- a/drivers/pci/controller/pcie-brcmstb.c
-> > > +++ b/drivers/pci/controller/pcie-brcmstb.c
-> > > @@ -540,16 +540,18 @@ static int pci_subdev_regulators_add_bus(struct pci_bus *bus)
-> > >
-> > >  static int brcm_pcie_add_bus(struct pci_bus *bus)
-> > >  {
-> > > -     struct device *dev = &bus->dev;
-> > >       struct brcm_pcie *pcie = (struct brcm_pcie *) bus->sysdata;
-> > >       int ret;
-> > >
-> > > -     if (!dev->of_node || !bus->parent || !pci_is_root_bus(bus->parent))
-> > > +     /* Only busno==1 requires us to linkup */
-> > > +     if ((int)bus->number != 1)
-> > >               return 0;
-> > >
-> > >       ret = pci_subdev_regulators_add_bus(bus);
-> > > -     if (ret)
-> > > +     if (ret) {
-> > > +             pcie->refusal_mode = true;
-> > >               return ret;
-> > > +     }
-> > >
-> > >       /* Grab the regulators for suspend/resume */
-> > >       pcie->sr = bus->dev.driver_data;
-> >
-> > IIUC, this path:
-> >
-> >   pci_alloc_child_bus
-> >     brcm_pcie_add_bus                   # .add_bus method
-> >       pci_subdev_regulators_add_bus     # in pcie-brcmstb.c for now
-> >         alloc_subdev_regulators         # in pcie-brcmstb.c for now
-> >         regulator_bulk_get
-> >         regulator_bulk_enable
-> >       brcm_pcie_linkup                  # bring link up
-> >
-> > is basically so we can leave power to downstream devices off, then
-> > turn it on when we're ready to enumerate those downstream devices.
->
-> Yes  -- it is the "chicken-and-egg" problem.  Ideally, we would like
-> for the endpoint driver to turn on its own regulators, but even to
-> know which endpoint driver to probe we must turn on the regulator to
-> establish linkup.
+Sure, that does not appear to make a difference with
+deferred_probe_timeout=1.
 
-I don't think having an endpoint driver turn on power to its device is
-the right goal.  As you said, if the power is off, we don't know
-whether there's an endpoint or what it is, so the driver isn't in the
-picture (I know sometimes endpoints are described in DT, and that
-might be needed for non-discoverable properties, but I don't think
-it's a good way to *enumerate* the device).
-
-I don't know much about ACPI power management, but I kind of think it
-turns on power to *everything* initially so we can enumerate all the
-devices (Rafael or others, please correct me!)  After enumeration, we
-can turn off devices we don't need, and the power management framework 
-already supports turning devices on again when we use them.
-
-> > I think the brcmstb root bus is always bus 0, it only has a single
-> > Root Port on the root bus, and it always leads to bus 1, so it sort of
-> > makes sense that we only need to turn on power when we're about to
-> > scan "bus->number == 1".
->
-> Correct.
-> 
-> > But this power management seems like a pattern that other
-> > controllers will use.  Other controllers will have several Root
-> > Ports, so checking the bus number won't work for them.  Instead of
-> > checking the bus number, I think brcmstb should check more
-> > directly for a power regulator.
->
-> I agree.  That is why I said that we should consider removing the
-> "busno==1" conditional if we want this feature for general use.  If
-> you want, I can submit a V2 that removes this conditional.
-
-If it's as easy as dropping a needlessly platform-dependent check, we
-should absolutely do it.  Are you saying the patch would just become
-this?
-
-> I have a series of patches coming up that address some of these concerns.
-> Can we please take this up then but allow us to escape "revert jail" first?
-
-Of course.  That's why I labeled these "tangents"; they're just things
-for future work that I noticed and didn't want to forget.
-
-Bjorn
+Cheers,
+Nathan
