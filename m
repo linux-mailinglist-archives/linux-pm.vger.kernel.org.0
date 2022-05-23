@@ -2,111 +2,236 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D84895305CD
-	for <lists+linux-pm@lfdr.de>; Sun, 22 May 2022 22:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD3B5530A89
+	for <lists+linux-pm@lfdr.de>; Mon, 23 May 2022 10:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234319AbiEVUSe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 22 May 2022 16:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49086 "EHLO
+        id S229746AbiEWH1Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 May 2022 03:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233422AbiEVUSd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 22 May 2022 16:18:33 -0400
-X-Greylist: delayed 1757 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 22 May 2022 13:18:32 PDT
-Received: from out1.nocdirect.com (out1.nocdirect.com [69.73.171.0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD07C36695
-        for <linux-pm@vger.kernel.org>; Sun, 22 May 2022 13:18:32 -0700 (PDT)
-Received: from binky.nswebhost.com ([69.73.168.248])
-        by spamexperts03.nocdirect.com with esmtpsa (TLSv1.2:AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <support@iesottawa.ca>)
-        id 1nsrZV-0000Ye-Tr
-        for linux-pm@vger.kernel.org; Sun, 22 May 2022 15:49:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iesottawa.ca; s=default; h=Sender:Content-Type:MIME-Version:Message-ID:
-        Reply-To:From:Date:Subject:To:Cc:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=tsytaq9P6jbx84sZaeZ2ujyYY054YqWU2QI73VCcE8s=; b=I+EfnWt5bqJC4xa+PwRgY6FKGp
-        zPGSPqkAN0AS0UJ4AcCvSfT9kuLs4IXMQGAgKCBkl1NA/clu6NHT4KAFk5Z4tk4qx5DabV/K62egO
-        S6CSXuqcdUNUKTdtLVivefvA9TcqnxPGbV0DJF7etDxa2Ij0JI3vaRRNTUHl9CzpIJgfYV2R+l3HE
-        XEtWMZpE8bjnTj2VWh7hV+48goTlJNVbx6sAZR7e2Q1kxF5AeEt59UgMmbu7A+EMkm0iXx0VPn5EW
-        TC0RJfcPCdnKy4m6nUyGzt5Xi7f9AwDHY55I4jaaLX8tgpTgUzfImqzCqNq8wc9hqoIJ4wTWXSEWC
-        4BNHWc8A==;
-Received: from ottawa by binky.nswebhost.com with local (Exim 4.93)
-        (envelope-from <support@iesottawa.ca>)
-        id 1nsrYV-0007Cx-EW
-        for linux-pm@vger.kernel.org; Sun, 22 May 2022 15:47:59 -0400
-To:     linux-pm@vger.kernel.org
-Subject: Re: Looking forward to hearing from you
-X-PHP-Script: iesottawa.ca/modules/mod_simplefileuploadv1.3/elements/bcqkhulk.php for 36.37.185.70
-Date:   Sun, 22 May 2022 19:47:59 +0000
-From:   "Mrs. Mamand Mashamsul" <support@iesottawa.ca>
-Reply-To: mrsmamands@gmail.com
-Message-ID: <2de91cbf2578d631cdd4e0bdd8d4d626@iesottawa.ca>
+        with ESMTP id S230345AbiEWH0x (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 May 2022 03:26:53 -0400
+Received: from mx0b-002c1b01.pphosted.com (mx0b-002c1b01.pphosted.com [148.163.155.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B019247AD1;
+        Mon, 23 May 2022 00:23:03 -0700 (PDT)
+Received: from pps.filterd (m0127842.ppops.net [127.0.0.1])
+        by mx0b-002c1b01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24MHmCuX022425;
+        Sun, 22 May 2022 23:37:33 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com; h=from : to : cc :
+ subject : date : message-id : content-type : mime-version;
+ s=proofpoint20171006; bh=RBnszdSDMgdIlZM1Mzjru/X5vF4drmy9svjiXjbsUQY=;
+ b=uavZXA+uYjGTDzfaPk5z+X1E4e6t0f+C23prjixwb/dTKTxfGgKW4zapOzsLcAs/CTl/
+ 8BhcJxTCvkwW1e+KrZ1CjNSvjn1hatYjaBzgI2Ok75zLKif14rMm0XuVp9827tdK73db
+ QmEHQk360u1GwsC2oqVL5BRij2AbP5JOxzihnLUvidKvRkl3dcAy/Mnhj5mqonHXxKon
+ xVEIGXdxH2WE/2GKkfE02M9jSThac4UbKQDh0nstocX7LxZgNleh4aihznfkyLi52war
+ 64vKPpjdqkuizW5TOV55HHZQbaLh1RaveufwCShjXNK3Cqr3/h3PbP+ZOHEza8ivVCQG qQ== 
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2171.outbound.protection.outlook.com [104.47.59.171])
+        by mx0b-002c1b01.pphosted.com (PPS) with ESMTPS id 3g6ydejgwb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 22 May 2022 23:37:33 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iOi+rCxchXsnwoyi3op7HjhN9KAvfcDsUfpoTw7SYGxboNT2HbqNQIjOBF9et3+kLWkUzBfMoSdj049FBoVyJlyUu5GiiOTOy1nM3pSnptrefwyS1sThlzWPD6+Kjqr0iaC76w2ZEeah9/rP8NIrzlYWP+7KqbwEmaA/qI6sekapmQOJcg1B2FsheGZ/U63Tt9FkdcciE73x3XehC2UYkgYD1rdpvQEj1OoSIAhWP2ezvKeRpNFiWS6L/YhaijCV/A90+Mui8zWskG7FgetAqaT4LObSjWw3nY3GDfqTikvl3InKGCu3y76kp9Ckjx+JsvXiPdxtj0qjHGZ18H4k5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RBnszdSDMgdIlZM1Mzjru/X5vF4drmy9svjiXjbsUQY=;
+ b=aZNw2G9U4g0H7MIyt4EVoF5wjdBTAW7gSgIi3LT5Uq9W43QJB/hYQ+BvCy6kD7+CN6BuCvpSqaRRVGjN036JdUU+9sD11X4wA3g+NnOe/BW1IRnv8qogK0Lhv0Coffie8ZxwkK0qniw3x/qrei12HKptAbGj1oWTwJEMLYtU7T+GCK6RrEatgE3qPOjwrSBANJURdC4fjyeMJH+ARoyVWpYhY3avezlm0Qr/79o7xqbwFaeEaLQyOeZninPCAU7fDFs4Fl6QHKnTtAuPEcaNwx1HGHw0T2eIrLU9EfJzj4YlwroX/oXDm4ME4B4bGc1bBqUbaRvN7C7ah5nBE0rJkw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nutanix.com; dmarc=pass action=none header.from=nutanix.com;
+ dkim=pass header.d=nutanix.com; arc=none
+Received: from CH0PR02MB8041.namprd02.prod.outlook.com (2603:10b6:610:106::10)
+ by DM6PR02MB5945.namprd02.prod.outlook.com (2603:10b6:5:17e::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.15; Mon, 23 May
+ 2022 06:37:31 +0000
+Received: from CH0PR02MB8041.namprd02.prod.outlook.com
+ ([fe80::34c3:f129:a785:52b3]) by CH0PR02MB8041.namprd02.prod.outlook.com
+ ([fe80::34c3:f129:a785:52b3%5]) with mapi id 15.20.5273.022; Mon, 23 May 2022
+ 06:37:31 +0000
+From:   Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org, rostedt@goodmis.org,
+        mingo@redhat.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joao.m.martins@oracle.com,
+        mtosatti@redhat.com
+Cc:     Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+Subject: [PATCH] cpuidle: haltpoll: Add trace points for guest_halt_poll_ns grow/shrink
+Date:   Mon, 23 May 2022 06:35:43 +0000
+Message-Id: <20220523063543.99335-1-eiichi.tsukata@nutanix.com>
+X-Mailer: git-send-email 2.9.3
+Content-Type: text/plain
+X-ClientProxiedBy: PH0PR07CA0063.namprd07.prod.outlook.com
+ (2603:10b6:510:f::8) To CH0PR02MB8041.namprd02.prod.outlook.com
+ (2603:10b6:610:106::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Sender:  <ottawa@binky.nswebhost.com>
-X-Originating-IP: 69.73.168.248
-X-SpamExperts-Domain: nocdirect.com
-X-SpamExperts-Username: binky
-Authentication-Results: nocdirect.com; auth=pass (login) smtp.auth=binky@nocdirect.com
-X-SpamExperts-Outgoing-Class: unsure
-X-SpamExperts-Outgoing-Evidence: Combined (0.83)
-X-Recommended-Action: accept
-X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT9NxnHXhFI9aLFhf4G9YVDvPUtbdvnXkggZ
- 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5w9+NB0706U/e5JSnH+B9KnW4h0KqOTIGbSh7sPxo0b07gN
- zB/4Jkrw1eDLcif59fsIsT83vl+1bmtnUwX2zThxgYVALhXkueKT79r7FRLqfcoJDehyBsdBu50D
- mtW4oaJLav+rNhkBvA/yx3UOkyxilU4PumfG+1zay7DesNa5m5kncdbkChqOd1xRCjRXrOUo6w9/
- xJPGBYLRFSVc+fdHZK0EMmf3P50Ajf/tIX00Fi2UzZMb4kuX6D5eETmGUuUcqbdy+7WYS7ujrPXH
- qhox0HpT3S2SFmqVvJUoDpLg17fDQD9rTYKpWUjzugBu3bR7NBygveb6c8kYDlcMKNLdfoLeZ09b
- xZt+2giPJq6hQNKJ9zpkh4CBVZNevlN99LDk6xV06FcgZkQoEFV+s1chVLvKs3jED+rkxy9HfVI3
- 2AJ/g31PqNR+MEBwOQya+LjmlTqiXb5DktChYWJ+7Vxty4Cn30yIJe57hjvyCVNd+NjlDHh8k6TT
- dHl8m1/8O/+GvmcnNbFGJXJDA267gIcXe8nVzIfQ9pH2EV9pPX+JYOKK2nN+Ec8agd1+3wZtTuax
- 8jRGiTUr3xlJM6AS3uCbJ+tdNWrmGmSjHHXIaEZaAhi6R+2ZJAIWHs0KPnepAlMlC1QqG5wZG0oX
- 2QUKBbmIiwQzKw+6v3CaIMG6s7LqJIQj1LuoK31lBRJSSr7O4nJm4eDGPWQjiHziZaTK5a5hn1s1
- h9hckh1ZbTQPe2LI2pRncTcSaSwH1WBJUBsJy7hDPDo3pDJlUlQ25PasjIMI/mKKM1+EgghWm5D0
- 3bCLK+uO5TcDeKjrEmYPn2IVWRvTk6nHRRspqNsaP48+Pyzv2RAMUzcxPFk6QeElJUkx8BJ8JwTn
- a1RcqY1+KjpDJopf41QeuQVkfXoTGRWEU/OLQ+Z6IxeQ3uxPHIN2qm5xKroy2+XMVhIoa/OtSSGm
- Yp9mtlRTKBfv33uOwsmJdRic
-X-Report-Abuse-To: spam@spamexperts01.nocdirect.com
-X-Spam-Status: Yes, score=6.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        HK_NAME_MR_MRS,PHP_SCRIPT,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.7 RCVD_IN_DNSWL_LOW RBL: Sender listed at https://www.dnswl.org/,
-        *       low trust
-        *      [69.73.171.0 listed in list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.5 PHP_SCRIPT Sent by PHP script
-        *  1.0 HK_NAME_MR_MRS No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: ******
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6ec84cbc-829d-404b-d564-08da3c86b677
+X-MS-TrafficTypeDiagnostic: DM6PR02MB5945:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR02MB59458E5E6D0B433ADB57F64C80D49@DM6PR02MB5945.namprd02.prod.outlook.com>
+x-proofpoint-crosstenant: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +NcqijOFYzDIXTiD3t/bwbVK8xfQ40JYiEcmet7OKKT2dO63UukunTEBoS7CycAMirfee7cb/2pKicKnm39t9KCTHBUul4+6l2AryTiAwHxMXdOuIl+SC9eWVpGYAJ8IqgGrIO6RZPgCp739ThiqJHCTswIYM+r+t2nWBrYTZTEjvrGmDWWxitpLdb8taIxFh3jYNOT5p2bT9UxuB6rtKF4qwKnWJL0mzEGvf2CQy4k4OvmRdC2hoAVbWwn9MgBuFsIRAGkkoqv8O5yMOcgrAbZJtoh5U2bEJcbHAxFvFJh+g3ZSz5o05sedd7G2WjT4V90PEgKd2TAPNBgdmQ9J5P1F7mt3E0baZZdoYwWg+V1fQ5Z6/JVnZIEuLHrTsPYcDkFENZFaXbof33lPLSsgnESfTicUo0lmjyTfTIDARsl5gJ9TZNWLJXjMc08nqISp6Qm4dCEXiLgA+yaPTBXfPs87L/Moqo+EgILYFr9WABOkG+5KYN5a8rWR8Ld5sOPpyMiPdrPjKoBWLzc4uXCVHoOWDJTMPvltZRTkxizy6wU38n75IBA+kSluoXzKp6jCmJS3a+r2cGyF4pp8Z9uS5DP11gCOWLFyubmQnSCm5X2z9J7v9VSs4Yyv3pCGnQWyLl0mKXoCJaQhKennj++WFatsU8V5XsWsikV2tEb0+X5dBRwBcQiS+xh6bv47FpeGx1MwPin/uD7cwjdSSb1r4Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR02MB8041.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(5660300002)(36756003)(316002)(44832011)(38350700002)(6666004)(6486002)(508600001)(8676002)(4326008)(83380400001)(8936002)(86362001)(66556008)(186003)(52116002)(38100700002)(26005)(2616005)(66946007)(6506007)(66476007)(1076003)(6512007)(2906002)(107886003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?j+kClSS9u5g8AiZVflNZG4kDeXx1ntiCuLvqQ64TEVnHcTsIIWGXlN6feQGN?=
+ =?us-ascii?Q?dBlSg+kSizUUjp+uDk2ze8rBiDKVY0dwnfyCNc7f3hssCxsQJUzdQuR90SeX?=
+ =?us-ascii?Q?b1X9vEwsOQ2JOXEcWc8Xizp0zQai/5EGbhOe4+YDncqCn+WXY1vOy0+vMZDE?=
+ =?us-ascii?Q?QC3Vs/el6LiLDu5cox2JldtxepjXNCsKy2uoaeuOtuCvrstLFgSV1dC0+sNf?=
+ =?us-ascii?Q?XRGgc/xn56gFoQ++5ApqiTwtn9rZWtSj0r0vUE1UrNcFddiw8//7N1CkwTlx?=
+ =?us-ascii?Q?vwfu0dZqSXwlsTQzFdmZiWV87sLv96d6QB23L9CaLSnwgf2MFkX5czo9tJWT?=
+ =?us-ascii?Q?POcCl/GTYvgxN8dwJr/D980mOsCjOTUzs1oJUlTqC/8mGq7w3jVqSdJk882q?=
+ =?us-ascii?Q?LHUfPAIRsfrKiDjgowH5Vlgv1BlWZeMwj95y5fX7HOpHW594umZlL8O0uuju?=
+ =?us-ascii?Q?Xi57eNMgK3sBmsj87wzX2wpIR2lkD/W4iMzAcocxPeMdy3AgwtvZNFHK87OA?=
+ =?us-ascii?Q?r99YPmzt52Iy5Ek8Eb8Ayl72rCcYwuKT85HbejoTdnoAU7YrH36cbx/7amYJ?=
+ =?us-ascii?Q?s0r5RZa+v0OLPrhi8xMCyxJ2FAagg9/stw/et+5lc7eJbWlFBCnDrX0aRAZg?=
+ =?us-ascii?Q?E4+7rUkTlTU6PblAeQDya+axQ67YSQwa5qvymuScUIZSKgRigBsQQymCq4LQ?=
+ =?us-ascii?Q?4DYoeWQcBX00nimUm8PDNhHvEyrvAwi82b54L+zxovYryKunOukKiTmXiEdy?=
+ =?us-ascii?Q?Ff5rzvvBPaiDfjIbRVR3AIPzM1KcmEfBttZ81NPflLU9z86tKOFQWO7XOYIM?=
+ =?us-ascii?Q?laXe4fYFrZVRsrUTpBI00J8HJoUeeYgZR0se1uyDd+OpzKhv0LPVLTxGY2tJ?=
+ =?us-ascii?Q?jk5QFlE1hKq7/CoMb8jbuDcHAQxxSmkib9khcEKngQyAMLcq7+83Dx0c2nbC?=
+ =?us-ascii?Q?aujvkYf9DYWS/6H0uiJOID/ClTEsORXQdzQijEUdCCM/H+hkg1Ls4+R94LOz?=
+ =?us-ascii?Q?qt6fgejCrU68wdit8FPbCM/tF0eT+VOygE71RNhVoxNXU24UB3WXxGmNQcOC?=
+ =?us-ascii?Q?XKhwcS+I0takoZhFtWynXtjrjCTKvtCbX5NiRB/14qFg4O6h7L606t2OkeA8?=
+ =?us-ascii?Q?gWoUsG2NK8UuRleWjcyo+SM1YjwjN/oL7tWiKgHgfQtNnRI+D5Dqlm7banTZ?=
+ =?us-ascii?Q?IM+dBIQyyx9uhDETEouSClBU8F3KFro+bQnfwKSl7j+4aQMXNBffVr+Ln4/u?=
+ =?us-ascii?Q?VV8pW5XmcizwUBuw2cTXPsnjI5NZRS1EdMPMRUQ5mXR6xGkkIzqGjygB8f75?=
+ =?us-ascii?Q?EL2aKpSGY5gWW0v5a2JfHaJ9NVEHlX/4qiRV1RUOh15I1wyE5uBy+YdaYYXe?=
+ =?us-ascii?Q?mwQzbgt67uSTZPjm15WaJgreh/F71Pz0VChbOuNFw0on4+ykMdNx+h6P8JUX?=
+ =?us-ascii?Q?J1M2Z89o++mALmkdLpzfQ+/1i6woh4qiz4vvaQbMEvwPnIJbgZCgRynpcEU/?=
+ =?us-ascii?Q?l4OeB+hSb7nBfs+6M/O1hiWl42VSownpuB0iW5t3SNNLIVKXQPQVsmIuLxBN?=
+ =?us-ascii?Q?ygBsy4yQf+3zoLUMAtSJLuOc1xtPlg56A6xNRouQBB9VefFMyVmCOgzBaiFS?=
+ =?us-ascii?Q?HrxjlRQJQfvOvfyIVkQ5i5plG6L3I+cWp9oQ0rZdLyDwNzppWaq3q8DCFIGf?=
+ =?us-ascii?Q?CTT7TCiKl+p1hV1KQFDGjZMw8u8HIQG5QJ/YxVDvM5twEM0RucI26ZTFtWBG?=
+ =?us-ascii?Q?7WxoSZARTgiVbi361bPynDfpveK/TH4=3D?=
+X-OriginatorOrg: nutanix.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ec84cbc-829d-404b-d564-08da3c86b677
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR02MB8041.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2022 06:37:31.2030
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bb047546-786f-4de1-bd75-24e5b6f79043
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YhrsOmqm57XSDH81Dl0r5IrnB0MEPh29TGseTQ5z0u6jegfOuwFf63hvIhK55/quehN+VJk87oKRPbg6mM+G001XNN9GrOFyAnP6bxTaOZg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB5945
+X-Proofpoint-ORIG-GUID: 5_2iAuj3b-Q567gwABcfvlw8IgeFYOMB
+X-Proofpoint-GUID: 5_2iAuj3b-Q567gwABcfvlw8IgeFYOMB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-23_01,2022-05-20_02,2022-02-23_01
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Greatings Dear
+Add trace points as are implemented in KVM host halt polling.
+This helps tune guest halt polling params.
 
-I am Mrs. Mamand Mashamsul, from Kabul, Capital of Afghanistan. With due respect, I want to know if foreigners can buy and own properties in your beautiful country, I desire to relocate my investment capital abroad where it will generate more returns. 
- 
-I will appreciate your response. Please let me know your ideas and knowledge regarding my research. In Any viable investment idea you suggest to me will be also be considered. 
- 
-Looking forward to hearing from you.
+Signed-off-by: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+---
+ drivers/cpuidle/governors/haltpoll.c |  7 +++++-
+ include/trace/events/power.h         | 33 ++++++++++++++++++++++++++++
+ 2 files changed, 39 insertions(+), 1 deletion(-)
 
-Best regards,
-Mrs. Mamand Mashamsul
+diff --git a/drivers/cpuidle/governors/haltpoll.c b/drivers/cpuidle/governors/haltpoll.c
+index cb2a96eafc02..9a6eca41a484 100644
+--- a/drivers/cpuidle/governors/haltpoll.c
++++ b/drivers/cpuidle/governors/haltpoll.c
+@@ -19,6 +19,7 @@
+ #include <linux/sched.h>
+ #include <linux/module.h>
+ #include <linux/kvm_para.h>
++#include <trace/events/power.h>
+ 
+ static unsigned int guest_halt_poll_ns __read_mostly = 200000;
+ module_param(guest_halt_poll_ns, uint, 0644);
+@@ -77,13 +78,14 @@ static int haltpoll_select(struct cpuidle_driver *drv,
+ 
+ static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
+ {
+-	unsigned int val;
++	unsigned int val, old;
+ 
+ 	/* Grow cpu_halt_poll_us if
+ 	 * cpu_halt_poll_us < block_ns < guest_halt_poll_us
+ 	 */
+ 	if (block_ns > dev->poll_limit_ns && block_ns <= guest_halt_poll_ns) {
+ 		val = dev->poll_limit_ns * guest_halt_poll_grow;
++		old = val;
+ 
+ 		if (val < guest_halt_poll_grow_start)
+ 			val = guest_halt_poll_grow_start;
+@@ -91,16 +93,19 @@ static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
+ 			val = guest_halt_poll_ns;
+ 
+ 		dev->poll_limit_ns = val;
++		trace_guest_halt_poll_ns_grow(smp_processor_id(), val, old);
+ 	} else if (block_ns > guest_halt_poll_ns &&
+ 		   guest_halt_poll_allow_shrink) {
+ 		unsigned int shrink = guest_halt_poll_shrink;
+ 
+ 		val = dev->poll_limit_ns;
++		old = val;
+ 		if (shrink == 0)
+ 			val = 0;
+ 		else
+ 			val /= shrink;
+ 		dev->poll_limit_ns = val;
++		trace_guest_halt_poll_ns_shrink(smp_processor_id(), val, old);
+ 	}
+ }
+ 
+diff --git a/include/trace/events/power.h b/include/trace/events/power.h
+index af5018aa9517..db065af9c3c0 100644
+--- a/include/trace/events/power.h
++++ b/include/trace/events/power.h
+@@ -500,6 +500,39 @@ DEFINE_EVENT(dev_pm_qos_request, dev_pm_qos_remove_request,
+ 
+ 	TP_ARGS(name, type, new_value)
+ );
++
++TRACE_EVENT(guest_halt_poll_ns,
++
++	TP_PROTO(bool grow, unsigned int cpu_id,
++		 unsigned int new, unsigned int old),
++
++	TP_ARGS(grow, cpu_id, new, old),
++
++	TP_STRUCT__entry(
++		__field(bool, grow)
++		__field(unsigned int, cpu_id)
++		__field(unsigned int, new)
++		__field(unsigned int, old)
++	),
++
++	TP_fast_assign(
++		__entry->grow   = grow;
++		__entry->cpu_id = cpu_id;
++		__entry->new    = new;
++		__entry->old    = old;
++	),
++
++	TP_printk("cpu %u: halt_poll_ns %u (%s %u)",
++		__entry->cpu_id,
++		__entry->new,
++		__entry->grow ? "grow" : "shrink",
++		__entry->old)
++);
++
++#define trace_guest_halt_poll_ns_grow(cpu_id, new, old) \
++	trace_guest_halt_poll_ns(true, cpu_id, new, old)
++#define trace_guest_halt_poll_ns_shrink(cpu_id, new, old) \
++	trace_guest_halt_poll_ns(false, cpu_id, new, old)
+ #endif /* _TRACE_POWER_H */
+ 
+ /* This part must be outside protection */
+-- 
+2.36.1
 
