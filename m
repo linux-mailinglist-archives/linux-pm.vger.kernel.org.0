@@ -2,119 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F050532CD4
-	for <lists+linux-pm@lfdr.de>; Tue, 24 May 2022 17:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89707532D6B
+	for <lists+linux-pm@lfdr.de>; Tue, 24 May 2022 17:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238612AbiEXPDy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 24 May 2022 11:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33804 "EHLO
+        id S238868AbiEXP1x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 May 2022 11:27:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236693AbiEXPDs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 May 2022 11:03:48 -0400
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355BD8AE4C;
-        Tue, 24 May 2022 08:03:47 -0700 (PDT)
-Received: by mail-qt1-f182.google.com with SMTP id hh4so14886798qtb.10;
-        Tue, 24 May 2022 08:03:47 -0700 (PDT)
+        with ESMTP id S238862AbiEXP1v (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 May 2022 11:27:51 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36935FF08
+        for <linux-pm@vger.kernel.org>; Tue, 24 May 2022 08:27:49 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 67-20020a1c1946000000b00397382b44f4so1620729wmz.2
+        for <linux-pm@vger.kernel.org>; Tue, 24 May 2022 08:27:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R2w5tfWVkkqH5erhNFYiJNGO89mooqJ/f3WebpkD9pw=;
+        b=5py3jx843dbBAQDoG6BUKJpJcOTFw+CyMGMpuJgnlNrBcWlZpHxJmmJUtvHPr945ky
+         hsj8JuSMUygANtZlpSXU764z9bPAqKG0Qc1CL4jTKg8by7rHxuyS67Iqa0+wLLGIQf72
+         UqghYJAbnGs/86iKbUQmqk5ICY7XsrMsSh/kRZZCCbCyMJezX0iVzuMr80ARgNWnF4OU
+         nW4bUb8s9cLnE8R43AD6oCbXTuxpnL29o3aOEsVZ8VgAulULWmYIOcXBjLDPIixTIu6r
+         IRtZU3fjqT9P8yv3Hj88apg5bPUTs+Z1corNyK40MhCbqe3UxoIhMaEcWjN5k0Ufo7Nd
+         owzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=xvY3YRGz6Q5JdIA0GD3/2z1w0vgXjW2K3nWPGIL58cE=;
-        b=xmw6PBJiSKQWxyIlk16DzUlnKILhKmHhqG8uMXbF+yPCpsjbkkIGNrPKL+ptX2oSWM
-         10hxtw6XYabM9Y6OFj5CbNeOA11OELyYv1s2LMJi0B+U7SaIcApYvttqfLYa3DLLFIe6
-         S1XMdU4rNuEnzPKmVtdKefOHqVUQBOc1Pg+PLs8+H6hmY3FdIRDD2MEQ+B/QlLapC+Jh
-         V54GLpUZUm8uVkePXQ2BZmAFyFCrb/ErCxRFnlyNGmCTIV6PeP7HbUeKM+eqQkev274K
-         5QGR/DRp6vwg+1wk+89Ky86U/IXZiASfyi9yRqe2FcFNhh84gv4iAPVQvPxpgKfOfeuV
-         7zIw==
-X-Gm-Message-State: AOAM533jFVWX6MTIzltEAkzjXD+sgLwm/jLPRMy1Ure0h6xAde70GoHj
-        b543jcrjuUQklrGLL37dklIHDP06AnN3uGYc
-X-Google-Smtp-Source: ABdhPJwuk9H/mEk8wIoK8/x19GtEPey883vcqDGFb9QDo6KvHAzFTF8B3gztyBKrkKlDvmsI+8rjtg==
-X-Received: by 2002:a05:622a:1aa9:b0:2f9:8593:76c0 with SMTP id s41-20020a05622a1aa900b002f9859376c0mr1039264qtc.278.1653404626186;
-        Tue, 24 May 2022 08:03:46 -0700 (PDT)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id 7-20020a370707000000b0069fc13ce244sm6230671qkh.117.2022.05.24.08.03.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 08:03:43 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id g72so3324900ybf.0;
-        Tue, 24 May 2022 08:03:42 -0700 (PDT)
-X-Received: by 2002:a81:2143:0:b0:2fb:1274:247e with SMTP id
- h64-20020a812143000000b002fb1274247emr28501106ywh.384.1653404610585; Tue, 24
- May 2022 08:03:30 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R2w5tfWVkkqH5erhNFYiJNGO89mooqJ/f3WebpkD9pw=;
+        b=41XgwFLHN06ZxY9evHU4ymekWdDWDcjFRh3VsszyJ83ClRoPbZvdTFSUinnOukwFTg
+         k4mBm71ztJixDb3P3sQk0CS55ITRHoGIYBvxvj7erNmzo7iUI9cLIvZAjHhJzUKdLtft
+         H8K9eCsZGk2bSjj71cUbUyQ2Wryq81olMqSIFPD35mmCprEHTx4TsKTHn3dbzjv+uIzQ
+         7NdYqWamgjnyraOnLmFXRMQaoXLDrbWsxhCRTrgpyJudhSoxG38W9nV0uH5RKxCtbhCV
+         HBxWnhlbUHMsyo/8Dtff8kJvVNJsGPkve2GShYgS+tn5Kx9zLx2JJEFxggTSD+Mnm2qn
+         anng==
+X-Gm-Message-State: AOAM531SUvn++q5HJyoTIOES8m/2MWmw4KjeJaPQmaGmV9tdRnOyfaLZ
+        d/rREUbG9ZbBUFVTLC2cTrHxsQ==
+X-Google-Smtp-Source: ABdhPJzJi0LPjrECz8V5+Pr2ftapF3zqFkYd3LMw0KNtjeDJ6jhgUU1AjknD4REIAnLLUcgUcLIG0w==
+X-Received: by 2002:a05:600c:4e94:b0:397:62ab:f88f with SMTP id f20-20020a05600c4e9400b0039762abf88fmr2049905wmq.63.1653406068135;
+        Tue, 24 May 2022 08:27:48 -0700 (PDT)
+Received: from xps-9300.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id k24-20020a05600c1c9800b003974027722csm2703693wms.47.2022.05.24.08.27.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 08:27:47 -0700 (PDT)
+From:   Alexandre Bailon <abailon@baylibre.com>
+To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, mka@chromium.org, robh+dt@kernel.org,
+        krzk+dt@kernel.org, matthias.bgg@gmail.com, p.zabel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        fan.chen@mediatek.com, louis.yu@mediatek.com,
+        rex-bc.chen@mediatek.com, Alexandre Bailon <abailon@baylibre.com>
+Subject: [PATCH v7 0/6] Add LVTS architecture thermal
+Date:   Tue, 24 May 2022 17:25:46 +0200
+Message-Id: <20220524152552.246193-1-abailon@baylibre.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
- <20220509233235.995021-8-dmitry.osipenko@collabora.com> <CAMuHMdVGjeFe=Z_1Kr9ZaNZ7HUVH1usvubEB31WUQf0fg8E1kA@mail.gmail.com>
- <c4914e14-1882-55a1-bcbd-a905852b45a3@collabora.com>
-In-Reply-To: <c4914e14-1882-55a1-bcbd-a905852b45a3@collabora.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 24 May 2022 17:03:19 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWBWWVeegvLQQzT8CRL5z38AhXigaNjzw8p0NwQ1B4DPQ@mail.gmail.com>
-Message-ID: <CAMuHMdWBWWVeegvLQQzT8CRL5z38AhXigaNjzw8p0NwQ1B4DPQ@mail.gmail.com>
-Subject: Re: [PATCH v8 07/27] kernel/reboot: Add kernel_can_power_off()
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -122,77 +73,87 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dmitry,
+This patch move thermal files related to Mediatek to the mediatek folder.
+And introduce the new architecture LVTS (low pressure thermal sensor) driver to report
+the highest temperature in the SoC and record the highest temperature sensor,
+each sensor as a hot zone.
+The LVTS body is divided into two parts, the LVTS controller and the LVTS device.
+The LVTS controller can connect up to 4 LVTS devices, and each LVTS device
+can connect up to 7 TSMCUs.
 
-On Tue, May 24, 2022 at 3:41 PM Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
-> On 5/24/22 16:14, Geert Uytterhoeven wrote:
-> > On Tue, May 10, 2022 at 1:33 AM Dmitry Osipenko
-> > <dmitry.osipenko@collabora.com> wrote:
-> >> Add kernel_can_power_off() helper that replaces open-coded checks of
-> >> the global pm_power_off variable. This is a necessary step towards
-> >> supporting chained power-off handlers.
-> >>
-> >> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> >
-> > Thanks for your patch, which is now commit 0e2110d2e910e44c
-> > ("kernel/reboot: Add kernel_can_power_off()") in pm/linux-next.
-> >
-> > This causes the "poweroff" command (Debian nfsroot) to no longer
-> > cleanly halt the system on arm32 systems, but fail with a panic
-> > instead:
-> >
-> > -reboot: System halted
-> > +reboot: Power down
-> > +Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000000
-> > +CPU: 0 PID: 1 Comm: systemd-shutdow Not tainted
-> > 5.18.0-rc7-shmobile-00007-g0e2110d2e910 #1274
-> > +Hardware name: Generic R-Car Gen2 (Flattened Device Tree)
-> > + unwind_backtrace from show_stack+0x10/0x14
-> > + show_stack from dump_stack_lvl+0x40/0x4c
-> > + dump_stack_lvl from panic+0xf4/0x330
-> > + panic from do_exit+0x1c8/0x8e4
-> > + do_exit from __do_sys_reboot+0x174/0x1fc
-> > + __do_sys_reboot from ret_fast_syscall+0x0/0x54
-> > +Exception stack(0xf0815fa8 to 0xf0815ff0)
-> > +5fa0:                   004e6954 00000000 fee1dead 28121969 4321fedc f0d94600
-> > +5fc0: 004e6954 00000000 00000000 00000058 befa0c78 00000000 befa0c10 004e56f8
-> > +5fe0: 00000058 befa0b6c b6ec8d45 b6e4a746
-> > +---[ end Kernel panic - not syncing: Attempted to kill init!
-> > exitcode=0x00000000 ]---
-> >
-> > On arm64, "poweroff" causes a clean "reboot: Power down" before/after.
-> >
-> > On both arm32 and arm64, the same handlers are registered:
-> >   - SYS_OFF_MODE_POWER_OFF_PREPARE: legacy_pm_power_off_prepare
-> >   - SYS_OFF_MODE_POWER_OFF: legacy_pm_power_off
-> >
-> > On both arm32 and arm64, legacy_pm_power_off_prepare() is called.
-> > On both arm32 and arm64, legacy_pm_power_off() does not seem to
-> > be called.
-> >
-> > On arm32, both pm_power_off_prepare and pm_power_off are NULL.
-> > On arm64, pm_power_off_prepare is NULL, and
-> > pm_power_off is psci_sys_poweroff.
-> >
-> > Do you have a clue?
-> > Thanks!
->
-> Thank you, Geert! I see the problem, the kernel_can_power_off() checks whether power-off handler is registered, but it's always registered because legacy_pm_power_off is registered unconditionally. So it causes trouble for platforms that don't have power-off handler installed at all. All platforms that I tested have a power-off handler, so now wonder that I didn't notice this before.
->
-> This change should fix the problem, please give it a try:
+The architecture will be the first to be used on mt6873 and mt8192.
 
-Thank you, that fixes the problem for me!
+Change in v7:
+        - Fix coding style issues
+        - Rewrite dt bindings
+          - was not accurate
+          - Use mt8195 for example (instead of mt8192)
+          - Rename mt6873 to mt8192
+          - Remove clock name
+        - Rebased on top of to series:
+          - https://patchwork.kernel.org/project/linux-mediatek/list/?series=637849
+          - https://patchwork.kernel.org/project/linux-pm/list/?series=639386
+Change in v6:
+        - Remove temperature aggregation (it will be added in another series)
+        - Update the way to read the temperature (read one sensor instead of all)
+        - Add support of mt8195
+Change in v5:
+        - Use 'git mv' for the relocated file.
 
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Change in v4:
+        - Rebase to kernel-v5.13-rc1
+        - Resend
 
-Gr{oetje,eeting}s,
+Change in v3:
+        - [2/3]
+          - change the expression in the lvts_temp_to_raw to dev_s64.
 
-                        Geert
+Change in v2:
+        - Rebase to kernel-5.11-rc1.
+        - [2/3]
+          - sort headers
+          - remove initial value 0 of msr_raw in the lvts_temp_to_raw.
+          - disconstruct the api of lvts_read_tc_msr_raw.
+          - add the initial value max_temp = 0 and compare e.q.
+            in the lvts_read_all_tc_temperature.
+          - add the return with invalid number in the lvts_init.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+This patch depends on [1], [2] and [3].
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+[1]https://patchwork.kernel.org/project/linux-mediatek/patch/20210524122053.17155-7-chun-jie.chen@mediatek.com/
+[2]https://patchwork.kernel.org/project/linux-mediatek/list/?series=637849
+[3]https://patchwork.kernel.org/project/linux-pm/list/?series=639386
+
+Alexandre Bailon (2):
+  dt-bindings: thermal: Add binding document for LVTS thermal
+    controllers
+  arm64: dts: mt8195: Add efuse node to mt8195
+
+Michael Kao (3):
+  thermal: mediatek: Relocate driver to mediatek folder
+  thermal: mediatek: Add LVTS drivers for SoC theraml zones
+  thermal: mediatek: Add thermal zone settings for mt8195
+
+Tinghan Shen (1):
+  arm64: dts: mt8195: Add thermal zone
+
+ .../thermal/mediatek,mt8192-lvts.yaml         |   81 +
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  121 ++
+ drivers/thermal/Kconfig                       |   14 +-
+ drivers/thermal/Makefile                      |    2 +-
+ drivers/thermal/mediatek/Kconfig              |   33 +
+ drivers/thermal/mediatek/Makefile             |    2 +
+ .../{mtk_thermal.c => mediatek/soc_temp.c}    |    2 +-
+ drivers/thermal/mediatek/soc_temp_lvts.c      | 1434 +++++++++++++++++
+ drivers/thermal/mediatek/soc_temp_lvts.h      |  304 ++++
+ 9 files changed, 1981 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,mt8192-lvts.yaml
+ create mode 100644 drivers/thermal/mediatek/Kconfig
+ create mode 100644 drivers/thermal/mediatek/Makefile
+ rename drivers/thermal/{mtk_thermal.c => mediatek/soc_temp.c} (99%)
+ create mode 100644 drivers/thermal/mediatek/soc_temp_lvts.c
+ create mode 100644 drivers/thermal/mediatek/soc_temp_lvts.h
+
+-- 
+2.35.1
+
