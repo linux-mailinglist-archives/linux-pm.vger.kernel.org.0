@@ -2,108 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52087532EED
-	for <lists+linux-pm@lfdr.de>; Tue, 24 May 2022 18:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B21532F22
+	for <lists+linux-pm@lfdr.de>; Tue, 24 May 2022 18:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239356AbiEXQ2z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 May 2022 12:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52122 "EHLO
+        id S239647AbiEXQl4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 May 2022 12:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239680AbiEXQ2y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 May 2022 12:28:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C775B2558C
-        for <linux-pm@vger.kernel.org>; Tue, 24 May 2022 09:28:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653409717;
+        with ESMTP id S239552AbiEXQlx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 May 2022 12:41:53 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56629369E3;
+        Tue, 24 May 2022 09:41:51 -0700 (PDT)
+Date:   Tue, 24 May 2022 18:41:45 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1653410507;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tgYm45Tc+Uo0q6+4gAt4ZLxsiwtWeg9L52KfwWzhmrE=;
-        b=M/Iz09lwc/egElvMOOCoOJYOWOWJAZb7iXtwYH9aRy50yqA+0xL+DqTIzmSdVHpMLXV/TX
-        /3764f8SBA1am+nzFzX1LShez4Zw6jyX0du8ooRQviVFjqcKiE1K7UOe/oj/3p13X9gVig
-        78TAXuh04AkBxq6NK6sJpTp+DviUgso=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-327-kuqjvOxXMMqGfl-AezKgcQ-1; Tue, 24 May 2022 12:28:33 -0400
-X-MC-Unique: kuqjvOxXMMqGfl-AezKgcQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D4DE3180074C;
-        Tue, 24 May 2022 16:28:30 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.195.109])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 5ABA6404E4A2;
-        Tue, 24 May 2022 16:28:11 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Tue, 24 May 2022 18:28:30 +0200 (CEST)
-Date:   Tue, 24 May 2022 18:28:09 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
-        Robert OCallahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Douglas Miller <dougmill@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-Subject: Re: [PATCH 07/16] signal: Wake up the designated parent
-Message-ID: <20220524162808.GF14347@redhat.com>
-References: <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
- <20220518225355.784371-7-ebiederm@xmission.com>
- <20220524132553.GD14347@redhat.com>
+        bh=YK2eEOx7qW4qJHtFCm6AqFTk2cYYBK5VN6M5h7/LPJY=;
+        b=RpxUjmeXaoO/cBMYYtR+W0dgahHZXn+pWhavM1CLX7ZfQbTpfWIlyVxXP2YkVVmh2rwFni
+        oLUkOWEklbTTdrrQ7EBqMg9VljxqAkk2RMpDM3IceQGLMwRX/iWplU9ypzMYYcF6rIsNq5
+        gEQ4o1/jjw0KCo+cUaPASqE1n/pDEduI0UjFZDyXV0oSZG/MAsghi4jn0Q2Rgd5KSWzxGx
+        bQvfZfriHlwfgaQV7kIhJvTA4aJo6Sat/396ZLjHmqW288KyLlFNIavuowjRfXYfA7qDR7
+        byhLkWlIiN/whQv1P/8pn5vO4+sDy2ImQNzEoKhEtwkvfwviQyVSr29nT72Agg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1653410507;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YK2eEOx7qW4qJHtFCm6AqFTk2cYYBK5VN6M5h7/LPJY=;
+        b=/mpKm9K+KmM77y1Sv2U9sqow5FiO6MRm6Pw38G0V5vb80cMf3MtUbFzjWo6JzMqnXUz52M
+        Ak5KSCUA8QKj4tCw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, kernel-team@android.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, John Stultz <jstultz@google.com>
+Subject: Re: [PATCH v1] driver core: Extend deferred probe timeout on driver
+ registration
+Message-ID: <Yo0KyWx+3oX3cMCS@linutronix.de>
+References: <20220429220933.1350374-1-saravanak@google.com>
+ <YogkhvFGVcjNQ21Z@dev-arch.thelio-3990X>
+ <CAGETcx9nvBs1b4M=2hBhrLX_2-rzLtAmV9WfTXu0MC7JnsBvwA@mail.gmail.com>
+ <YogsiMCDupNUhMgL@dev-fedora.thelio-3990X>
+ <CAGETcx-JyWwoGA3o8eep7E29Cm4DcVT6D1JFJh72jLcqm_mjCQ@mail.gmail.com>
+ <Youleo3Ganxbc1sq@dev-arch.thelio-3990X>
+ <CAGETcx-sL08h2toEyxY6ztc6xNuJiPok6iDEeuJ1mOA3nvE+vA@mail.gmail.com>
+ <YowHNo4sBjr9ijZr@dev-arch.thelio-3990X>
+ <CAGETcx91_WgpmwEA7mBSvUdyJV0a8ymfaNKTmXq=mAJYAjzq1A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220524132553.GD14347@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAGETcx91_WgpmwEA7mBSvUdyJV0a8ymfaNKTmXq=mAJYAjzq1A@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/24, Oleg Nesterov wrote:
->
-> I fail to understand this patch...
->
-> On 05/18, Eric W. Biederman wrote:
-> >
-> > Today if a process is ptraced only the ptracer will ever be woken up in
-> > wait
->
-> and why is this wrong?
->
-> > Fixes: 75b95953a569 ("job control: Add @for_ptrace to do_notify_parent_cldstop()")
->
-> how does this change fix 75b95953a569?
+On 2022-05-23 20:43:06 [-0700], Saravana Kannan wrote:
+=E2=80=A6
+> Thanks for all the help. I think I know what's going on.
 
-OK, I guess you mean the 2nd do_notify_parent_cldstop() in ptrace_stop(),
-the problematic case is current->ptrace == T. Right?
+I, too got here because my boot recently was extended by 10 seconds and
+bisected to that commit in question.
 
-I dislike this patch anyway, but let me think more about it.
+> If you revert the following commit, then you'll see that your device
+> no longer hangs with my changes.
+> 35a672363ab3 driver core: Ensure wait_for_device_probe() waits until
+> the deferred_probe_timeout fires
 
-Oleg.
+Removing probe_timeout_waitqueue (as suggested) or setting the timeout
+to 0 avoids the delay.
 
+> -Saravana
+
+Sebastian
