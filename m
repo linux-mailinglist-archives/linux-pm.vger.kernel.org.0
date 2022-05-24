@@ -2,250 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D39532FA5
-	for <lists+linux-pm@lfdr.de>; Tue, 24 May 2022 19:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72023532FD4
+	for <lists+linux-pm@lfdr.de>; Tue, 24 May 2022 19:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239964AbiEXRbC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 May 2022 13:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42274 "EHLO
+        id S240062AbiEXRrb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 May 2022 13:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239960AbiEXRa4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 May 2022 13:30:56 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A448CCE7
-        for <linux-pm@vger.kernel.org>; Tue, 24 May 2022 10:30:54 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id d22so293280edj.4
-        for <linux-pm@vger.kernel.org>; Tue, 24 May 2022 10:30:54 -0700 (PDT)
+        with ESMTP id S240055AbiEXRr1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 May 2022 13:47:27 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A550B5D5EC
+        for <linux-pm@vger.kernel.org>; Tue, 24 May 2022 10:47:26 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2ff53d86abbso170829517b3.8
+        for <linux-pm@vger.kernel.org>; Tue, 24 May 2022 10:47:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=JdewMav35aHVc1L9YMxiXtQ+2iHYmgrdFRlYVwhspmQ=;
-        b=DZYZYWW9v10znjdgPPOnrdrolsTZI7ASyy2HuqGbinN63RMtDZ0l1TkQBEMiiYt45V
-         b7cZcFd6yFmKzT+1PuYCALVxXJsMwZOaFUpAZMVApIIb7NGPDEqclHi+zdf7S6+sDImv
-         qXATqbtN2IeZsV9LkRSV2mFX3+VjOeRE5BekC2BVBpR5sSHKOBelMTfgBLqwXzG3vOIq
-         K1yI27ULkithIOT/WPiZ0ImM9uVRgD9NBG4oqZAazJysSAKouYmGO6+jZVVxjjIFcand
-         RiGiU25Do/zJYQCyuUA+0FDn6HRkC4jLwE0LL0Gi763t+e5Zc4rHYT8CYvPXPNwMi6pj
-         yf/Q==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=e6VPETmeyZX5JOF6lrU6bxZMJd0n0GPwABfSqTucdjs=;
+        b=bZjveAEaUMpvjHfz1Cch8bK+pwqo5wReSl7Ni1ySDkX7vgB+ELyVHAsXpIXDy/NzwQ
+         F/baQeyilKuLVyVSZ3e3AFkWzCGjLP/qgdKtUY8I6Yt9r3cYFnDW2ohFYoNsEKr6MYS5
+         lTj9Ai76LjkVrc+uNTqmiubbz+0pmokn7RIRVfhrsz/Hy9byfa+AQQHsnVEgdDlwIs+L
+         /MVtlD/qzhhotKGBMHeGk5luHST+bgqa6sQdqklFRiQXgo7W6TChKNkAQk57YkYZePEG
+         mNoW/y/qBqR0twFm26Kyrx/dG4oRQ86aObRbtuGaU8bvLjKWJQHgSKYtBQFQLNzrfScW
+         bbcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=JdewMav35aHVc1L9YMxiXtQ+2iHYmgrdFRlYVwhspmQ=;
-        b=J2hoP6FG66HFMZKxyjsc0eFbszyHwTcpc9sKBAd0RYBYFePO4DtAa2NzpIKOdgYFAJ
-         X0SScBW5ztfeaBqC16QqUKNkrId5CG8FmV1X4zST6igsERkoETifOuZNMnopVAE9ohS8
-         63s33OJW589HElW67vN/ye1081b+kCDIZFoii0hsp+8ujUAXKAkzc/IMmk6vqeObUlEI
-         TAPIjEooMEopYJkICu69q8TPDJmFf7Zhftr/+oozZNqHOvzwgws3u4VW0Ijsp7IpV89A
-         1CEZwtSh2f6o38wn20RZMbprWe40bnKtvu8qhMUGAi4apvUBU3mxpmdC76piJ/ycYAS9
-         7TuQ==
-X-Gm-Message-State: AOAM532v1gbMgNcgICmuLL7RCgdaSb1CmuUQgEKMVij1T14Gfxbf9Nmn
-        iybJQhb5QBd4QEVfe3+CFhQXMQ==
-X-Google-Smtp-Source: ABdhPJzLwvfqIhM0418Nd6FwrngpMY/o0fyd+b+of5/IIfKtQs964W+WpfZ7dMJsxtkLlKz0CFp6ug==
-X-Received: by 2002:a50:ee18:0:b0:42a:b57c:2532 with SMTP id g24-20020a50ee18000000b0042ab57c2532mr29925115eds.169.1653413452951;
-        Tue, 24 May 2022 10:30:52 -0700 (PDT)
-Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id j4-20020a170906104400b006f3ef214db4sm7456300ejj.26.2022.05.24.10.30.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 10:30:51 -0700 (PDT)
-Message-ID: <03beddbd-24ff-16bd-b254-ab4764cb7ca0@linaro.org>
-Date:   Tue, 24 May 2022 19:30:50 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=e6VPETmeyZX5JOF6lrU6bxZMJd0n0GPwABfSqTucdjs=;
+        b=vEyTOnScUh4hQfm+ZlHlQ8VV/EcfqjS6vZYXMwA+wMuPrdyH/oMGyLcNNBWK3c1PMM
+         eOubQchhyoyQV8xqYFZnyYGRRQQJwg539769zT9pd2lZKKWi2eABUS2CGPooNUcidJUQ
+         hA3Rse09ZZVJttA0CF7/orpkAPwzYYQrZ07VEvHgxFc3iVLFegO5kaAlTQn7gotR/deK
+         VDpyxRYNHAgXpGYB7VGsKEabfrWZu8yFb22tsDi4Vjx6C2YHbpnoNB22t4YT91QuyUn6
+         Y24W2Mep0VEtV+b35sq1f8Fm31zvsfSRW1YCrkJcEC33Qtdpbdnehs8WUs6Q07RgpnBG
+         iWbw==
+X-Gm-Message-State: AOAM532et/WMP1y2dUR81/KgppeO0YlyYjGa86QuWM5bdaQvetjKgxMA
+        KKlJtefxZ8lpVnGwaxJhGTZtEsaSbqjGmji6VLW4NA==
+X-Google-Smtp-Source: ABdhPJywyPDKCAP33MtzxfXuYMCC6HltN18smuTT+NiEjrolMWs5gH6m5KLHG22tADmM3eKx+ae1gKCOsi42FnXISCA=
+X-Received: by 2002:a0d:e903:0:b0:2ff:43a3:90c8 with SMTP id
+ s3-20020a0de903000000b002ff43a390c8mr29118839ywe.455.1653414445758; Tue, 24
+ May 2022 10:47:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 2/5] dt-bindings: interconnect: Add Qualcomm SM6350 NoC
- support
-Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Odelu Kukatla <okukatla@codeaurora.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220520070318.48521-1-luca.weiss@fairphone.com>
- <20220520070318.48521-3-luca.weiss@fairphone.com>
- <7b451dfb-8353-4a4e-1834-a01feaa267d2@linaro.org>
- <CK4KPEWM9165.2LR9ZUG2GGK6Q@otso>
- <b9487ffe-7ed5-077c-3c2c-886746457365@linaro.org>
- <CK77QG2WNJ7B.EIXG4S6SVQ2D@otso>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CK77QG2WNJ7B.EIXG4S6SVQ2D@otso>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220429220933.1350374-1-saravanak@google.com>
+ <YogkhvFGVcjNQ21Z@dev-arch.thelio-3990X> <CAGETcx9nvBs1b4M=2hBhrLX_2-rzLtAmV9WfTXu0MC7JnsBvwA@mail.gmail.com>
+ <YogsiMCDupNUhMgL@dev-fedora.thelio-3990X> <CAGETcx-JyWwoGA3o8eep7E29Cm4DcVT6D1JFJh72jLcqm_mjCQ@mail.gmail.com>
+ <Youleo3Ganxbc1sq@dev-arch.thelio-3990X> <CAGETcx-sL08h2toEyxY6ztc6xNuJiPok6iDEeuJ1mOA3nvE+vA@mail.gmail.com>
+ <YowHNo4sBjr9ijZr@dev-arch.thelio-3990X> <CAGETcx91_WgpmwEA7mBSvUdyJV0a8ymfaNKTmXq=mAJYAjzq1A@mail.gmail.com>
+ <Yo0KyWx+3oX3cMCS@linutronix.de>
+In-Reply-To: <Yo0KyWx+3oX3cMCS@linutronix.de>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Tue, 24 May 2022 10:46:49 -0700
+Message-ID: <CAGETcx_qTLwbjzMruLThLYV+MZD5W2Ox-QwLFQeW=eQgxzq-Hw@mail.gmail.com>
+Subject: Re: [PATCH v1] driver core: Extend deferred probe timeout on driver registration
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, kernel-team@android.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, John Stultz <jstultz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23/05/2022 16:32, Luca Weiss wrote:
-> Hi Krzysztof,
-> 
-> On Fri May 20, 2022 at 4:24 PM CEST, Krzysztof Kozlowski wrote:
->> On 20/05/2022 14:04, Luca Weiss wrote:
->>> Hi Krzysztof,
->>>
->>> Thanks for the review!
->>>
->>> On Fri May 20, 2022 at 12:31 PM CEST, Krzysztof Kozlowski wrote:
->>>> On 20/05/2022 09:03, Luca Weiss wrote:
->>>>> Add bindings for Qualcomm SM6350 Network-On-Chip interconnect devices.
->>>>>
->>>>> As SM6350 has two pairs of NoCs sharing the same reg, allow this in the
->>>>> binding documentation, as was done for qcm2290.
->>>>>
->>>>> Because the main qcom,rpmh.yaml file is getting too complicated for our
->>>>> use cases, create a new qcom,rpmh-common.yaml and a separate
->>>>> qcom,sm6350-rpmh.yaml that defines our new bindings.
->>>>>
->>>>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
->>>>> ---
->>>>> Changes since v1:
->>>>> * Split sm6350 into separate yaml with new rpmh-common.yaml
->>>>>
->>>>>  .../interconnect/qcom,rpmh-common.yaml        |  41 +++++
->>>>>  .../interconnect/qcom,sm6350-rpmh.yaml        |  82 ++++++++++
->>>>>  .../dt-bindings/interconnect/qcom,sm6350.h    | 148 ++++++++++++++++++
->>>>>  3 files changed, 271 insertions(+)
->>>>>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,rpmh-common.yaml
->>>>>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm6350-rpmh.yaml
->>>>>  create mode 100644 include/dt-bindings/interconnect/qcom,sm6350.h
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh-common.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh-common.yaml
->>>>> new file mode 100644
->>>>> index 000000000000..6121eea3e87d
->>>>> --- /dev/null
->>>>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh-common.yaml
->>>>> @@ -0,0 +1,41 @@
->>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>>>> +%YAML 1.2
->>>>> +---
->>>>> +$id: http://devicetree.org/schemas/interconnect/qcom,rpmh-common.yaml#
->>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>> +
->>>>> +title: Qualcomm RPMh Network-On-Chip Interconnect
->>>>> +
->>>>> +maintainers:
->>>>> +  - Georgi Djakov <georgi.djakov@linaro.org>
->>>>> +  - Odelu Kukatla <okukatla@codeaurora.org>
->>>>
->>>> Is this valid email address?
->>>
->>> Will put Georgi and Bjorn as maintainers, as per your other email.
->>>
->>>>
->>>>> +
->>>>> +description: |
->>>>> +   RPMh interconnect providers support system bandwidth requirements through
->>>>> +   RPMh hardware accelerators known as Bus Clock Manager (BCM). The provider is
->>>>> +   able to communicate with the BCM through the Resource State Coordinator (RSC)
->>>>> +   associated with each execution environment. Provider nodes must point to at
->>>>> +   least one RPMh device child node pertaining to their RSC and each provider
->>>>> +   can map to multiple RPMh resources.
->>>>> +
->>>>> +properties:
->>>>> +  '#interconnect-cells':
->>>>> +    enum: [ 1, 2 ]
->>>>
->>>> Why this is an enum?
->>>
->>> As a start, just adding that the definitions are copied from
->>> qcom,rpmh.yaml so it's not my invention :) Of course that doesn't mean
->>> that it should be improved where possible!
->>>
->>> Either value is supported by the driver (and used upstream). But perhaps
->>> it can use a description to define what the 'parameters' mean.
->>>
->>> The second (optional) parameters "is to support different bandwidth
->>> configurations that are toggled by RPMh, depending on the power state of
->>> the CPU."[0]
->>>
->>> A commit message for sc7180 calls it the "tag information" and "The
->>> consumers can specify the path tag as an additional argument to the
->>> endpoints."[1]
->>>
->>> Not sure how to properly describe the first property, I guess the
->>> interconnect endpoint? Maybe Georgi can help here.
->>>
->>>
->>> [0] https://lore.kernel.org/linux-arm-msm/b079a211-d387-7958-bbe2-c41cac00d269@kernel.org/
->>> [1] https://git.kernel.org/torvalds/c/e23b122
->>
->> Hm, indeed driver supports variable values. It's fine then.
->>
->>>
->>>>
->>>>> +
->>>>> +  qcom,bcm-voters:
->>>>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->>>>> +    items:
->>>>
->>>> Please implement my previous comments.
->>>
->>> Sorry, I looked over the comment in v1.
->>>
->>> As far as I can tell in current code only 1 item is used.
->>>
->>> If the second parameter of_bcm_voter_get would be used as non-NULL then
->>> qcom,bcm-voter-names gets looked up and the N-th value in qcom,bcm-voters
->>> used. But currently qcom,bcm-voter-names is not actively used so only
->>> one gets used.
->>>
->>> Do you have a recommendation what to put here? A synthetic limit like
->>> 32 just to have a number there?
->>
->> Let's go with maxItems:1, for both fields.
-> 
-> Do you mean adjusting the example using:
-> 
->   qcom,bcm-voter-names = "apps", "disp";
->   qcom,bcm-voters = <&apps_bcm_voter>, <&disp_bcm_voter>;
-> 
-> in qcom,rpmh.yaml then? Otherwise validation fails with maxItems: 1
-> 
->>
->>>
->>>>
->>>>> +      maxItems: 1
->>>>> +    description: |
->>>>
->>>> No need for |
->>>
->>> ack
->>>
->>>>
->>>>> +      List of phandles to qcom,bcm-voter nodes that are required by
->>>>> +      this interconnect to send RPMh commands.
->>>>> +
->>>>> +  qcom,bcm-voter-names:
->>>>
->>>> What names do you expect here?
->>>
->>> Currently unused in mainline but newer downstream kernels[2] use "hlos"
->>> as first parameter, and e.g. "disp" as second one that goes to a
->>> qcom,bcm-voter that's a child of disp_rsc. Not sure exactly what that
->>> does.
->>>
->>> [2] https://github.com/atomsand/android_kernel_qcom_devicetree/blob/a6d50810116e8314d64eb63b8862c207b974e0c7/qcom/waipio.dtsi#L1701-L1793
->>
->> The bindings example uses apps and disp, so here would be only "apps".
-> 
-> Here also the above, allow only "apps" for now in the binding and remove
-> "disp" from example?
+On Tue, May 24, 2022 at 9:41 AM Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> wrote:
+>
+> On 2022-05-23 20:43:06 [-0700], Saravana Kannan wrote:
+> =E2=80=A6
+> > Thanks for all the help. I think I know what's going on.
+>
+> I, too got here because my boot recently was extended by 10 seconds and
+> bisected to that commit in question.
+>
+> > If you revert the following commit, then you'll see that your device
+> > no longer hangs with my changes.
+> > 35a672363ab3 driver core: Ensure wait_for_device_probe() waits until
+> > the deferred_probe_timeout fires
+>
+> Removing probe_timeout_waitqueue (as suggested) or setting the timeout
+> to 0 avoids the delay.
 
-I actually don't know what is the proper value, so choose a reasonable
-constraint matching existing sources. Since example uses two of them,
-then maybe "maxItems:2"?
+In your case, I think it might be working as intended? Curious, what
+was the call stack in your case where it was blocked?
 
-
-Best regards,
-Krzysztof
+-Saravana
