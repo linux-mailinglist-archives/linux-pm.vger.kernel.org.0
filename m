@@ -2,182 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 782E7532B03
-	for <lists+linux-pm@lfdr.de>; Tue, 24 May 2022 15:16:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ADCD532B0A
+	for <lists+linux-pm@lfdr.de>; Tue, 24 May 2022 15:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237665AbiEXNPW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 May 2022 09:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
+        id S231564AbiEXNRb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 May 2022 09:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234130AbiEXNPT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 May 2022 09:15:19 -0400
-Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A758092D3C;
-        Tue, 24 May 2022 06:15:16 -0700 (PDT)
-Received: by mail-vk1-f172.google.com with SMTP id i25so3509450vkr.8;
-        Tue, 24 May 2022 06:15:16 -0700 (PDT)
+        with ESMTP id S230052AbiEXNR3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 May 2022 09:17:29 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945D19344B
+        for <linux-pm@vger.kernel.org>; Tue, 24 May 2022 06:17:28 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id e28so25065209wra.10
+        for <linux-pm@vger.kernel.org>; Tue, 24 May 2022 06:17:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=a2ygfMAPWttk3NX9KoZrm2L1NTEtjK96CkgBXeZd5E0=;
+        b=bhdtqRY2lf+APtqsxe6UQbGJHZjCj98ZCSISX2086noM9cjwcY4tqoTbTSPdwhX3wD
+         V5ebN5jx1YMwW+KfMWCZuKxf0ab5bP8m65/ZhAQYAOhaq0XIFwkGtIpcBv3+hHbPIQ03
+         kNV/4LKT4w0xwbaLmpofSX6YBEcNCI3VetJxm5Kz3/L9BXuVDpvF8JKgzom+04dNx4ng
+         vz7cYbV0lwDGYl2QZpfe9rG5qOwLCsgW4W1oqCIQZPJ58Db0Y8B3EUdi86Sf2Iwzqs06
+         HcEyvHv1sb4bjw2YsIGNngcwiyyrGBl4O64MJOg98+eE2hHelObn4UZ1yqqt/Idfge74
+         97mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S/pNo5ypsj8sjqbjG1l1gWrym6AVA3NFtAtotZSuvpI=;
-        b=Nlnp3Tt7ggn57HIpiVd8CvV+0ugogeUYN+jELykDDIxebKZC9XGaCn5KFR486E2X0k
-         qTx3JF5rJfvLifnrCOLM80QF0/ZUXpj5nColqtphIzI++D/sVniQAqq5vQ+lPX47gGkA
-         KBx1AgXROK6AfhviJCRB3xoaB4DF7ozHk+wv4BVfGJqH8XobD3FiaCb4UKX9nrOUzTXu
-         i11tyLLgMm2rzWkr87NZCzemjsM24C4BE5tcLfHA0VpF2C3RHWIXr3h5xxSvYHSrcYbO
-         02uaWF3TKJSebcR1dNamHmOMRypwr41nJ2MOU+VFXixo2Hs3A9/C/H/yO/zDAFISzX/K
-         8GVw==
-X-Gm-Message-State: AOAM531yx760ja3yIFmW5n/5PG/ykmXFSNo0ablQ3Idb7/7i8Ujvq8Jr
-        qylPGpq5obQlUylrePr1dcu1etL99R+xwmBf4bQ=
-X-Google-Smtp-Source: ABdhPJyQMjkU2pFncm97tvshlgqAgIyKOlZpUu863vwvqA6s/pj0DzpChnIjsM4xuD6o3+RIk2euBw==
-X-Received: by 2002:a1f:2f8b:0:b0:357:8887:811 with SMTP id v133-20020a1f2f8b000000b0035788870811mr4393420vkv.0.1653398115473;
-        Tue, 24 May 2022 06:15:15 -0700 (PDT)
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
-        by smtp.gmail.com with ESMTPSA id x184-20020a1fe0c1000000b00352a7e95666sm1479777vkg.29.2022.05.24.06.15.14
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=a2ygfMAPWttk3NX9KoZrm2L1NTEtjK96CkgBXeZd5E0=;
+        b=yiQzouGG5iLuLo2k5+UsQUNU6TlBsDCLxzOmKcYxmbw5beBym6tpuhSfp+bpmDcubF
+         E7j5Z5i2eQGq4tnLKf1qO/cijs5RR3NHVfT6Q+eaasJHAtKoWg8PN3ElHcw7RWJ9cW90
+         nRgvwUbYmg3Wfv5NhmDN3uQmjm1ekBwCHleJTbs+Yndt6mNPl5qf9dXwDcs1UZc+GFSo
+         nCbeqhThBqyWseapOB2147LpKgiT3b/wcu1Hdhhsp6cKwbVq9JX/e1Dqysf0nypvPcbY
+         A3yK9M6MOtgJYxHjKgMMGcxLZPnvWQ8qURLQo/XF5dIewmwIlM780OMspaOFMWuDQED+
+         5xWw==
+X-Gm-Message-State: AOAM5323HqTQpLVccJVSsctBvN+SmIdx1nbgV1+ZatlIfDti0rRH5zjc
+        FpM5EnpwRnbaIGPfNgH4qVMlJQ==
+X-Google-Smtp-Source: ABdhPJyc/jNlYEcQrDyYQ8TOt0Jj8KmdmxFOUtIADKFtf55OdflalFTUCblfMIURzz2uyGT7tNTSYA==
+X-Received: by 2002:a05:6000:1e1a:b0:20f:c403:9180 with SMTP id bj26-20020a0560001e1a00b0020fc4039180mr14933177wrb.147.1653398247008;
+        Tue, 24 May 2022 06:17:27 -0700 (PDT)
+Received: from [192.168.1.41] (static-176-182-171-101.ncc.abo.bbox.fr. [176.182.171.101])
+        by smtp.googlemail.com with ESMTPSA id p13-20020adfba8d000000b0020cdcb0efa2sm13123226wrg.34.2022.05.24.06.17.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 06:15:15 -0700 (PDT)
-Received: by mail-ua1-f52.google.com with SMTP id n24so6240512uap.13;
-        Tue, 24 May 2022 06:15:14 -0700 (PDT)
-X-Received: by 2002:a25:e7ce:0:b0:64d:6028:96b9 with SMTP id
- e197-20020a25e7ce000000b0064d602896b9mr25151338ybh.365.1653398104009; Tue, 24
- May 2022 06:15:04 -0700 (PDT)
+        Tue, 24 May 2022 06:17:26 -0700 (PDT)
+Message-ID: <4ba1d7d2-3e8c-ba60-37fd-9598f415c076@linaro.org>
+Date:   Tue, 24 May 2022 15:17:24 +0200
 MIME-Version: 1.0
-References: <20220509233235.995021-1-dmitry.osipenko@collabora.com> <20220509233235.995021-8-dmitry.osipenko@collabora.com>
-In-Reply-To: <20220509233235.995021-8-dmitry.osipenko@collabora.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 24 May 2022 15:14:52 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVGjeFe=Z_1Kr9ZaNZ7HUVH1usvubEB31WUQf0fg8E1kA@mail.gmail.com>
-Message-ID: <CAMuHMdVGjeFe=Z_1Kr9ZaNZ7HUVH1usvubEB31WUQf0fg8E1kA@mail.gmail.com>
-Subject: Re: [PATCH v8 07/27] kernel/reboot: Add kernel_can_power_off()
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v1] thermal: imx: Make trip point offset configurable
+Content-Language: en-US
+To:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Marco Felsch <m.felsch@pengutronix.de>
+Cc:     l.stach@pengutronix.de, linux-pm@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Amit Kucheria <amitk@kernel.org>,
+        Jon Nettleton <jon@solid-run.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tim Harvey <tharvey@gateworks.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <20220516190001.147919-1-francesco.dolcini@toradex.com>
+ <20220518085522.3fpzy37kkbkn4hpl@pengutronix.de>
+ <20220518094916.GA27037@francesco-nb.int.toradex.com>
+ <0006b8cb-b4fc-5015-5c86-be2a6a39be93@linaro.org>
+ <20220523143545.GA30537@francesco-nb.int.toradex.com>
+ <20220524083514.btjjv6ai6ve74bdc@pengutronix.de>
+ <20220524100728.GA99192@francesco-nb.int.toradex.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20220524100728.GA99192@francesco-nb.int.toradex.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dmitry,
 
-On Tue, May 10, 2022 at 1:33 AM Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
-> Add kernel_can_power_off() helper that replaces open-coded checks of
-> the global pm_power_off variable. This is a necessary step towards
-> supporting chained power-off handlers.
->
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Hi Francesco,
 
-Thanks for your patch, which is now commit 0e2110d2e910e44c
-("kernel/reboot: Add kernel_can_power_off()") in pm/linux-next.
 
-This causes the "poweroff" command (Debian nfsroot) to no longer
-cleanly halt the system on arm32 systems, but fail with a panic
-instead:
+On 24/05/2022 12:07, Francesco Dolcini wrote:
+> On Tue, May 24, 2022 at 10:35:14AM +0200, Marco Felsch wrote:
+>> On 22-05-23, Francesco Dolcini wrote:
+>>> On Wed, May 18, 2022 at 12:10:34PM +0200, Daniel Lezcano wrote:
+>>>> It would have been easier if the imx6/7 platforms were defining the thermal
+>>>> zones in their DT ...
+>>
+>> After checking the driver I completely agree with you... But this would
+>> need much more rework.
+>>
+>>> Marco, Lucas,
+>>> What about a &tempon { fsl,tempmon-critical-offset=<0>; } dt property?
+>>
+>> I would not introduce a special binding for it. Instead I would add the
+>> support to parse the already exisiting bindings so the new-tempmon node
+>> would look like:
+>>
+>> tempmon: tempmon {
+>>          compatible = "fsl,imx6q-tempmon";
+>>          interrupt-parent = <&gpc>;
+>>          interrupts = <0 49 IRQ_TYPE_LEVEL_HIGH>;
+>>          fsl,tempmon = <&anatop>;
+>>          nvmem-cells = <&tempmon_calib>, <&tempmon_temp_grade>;
+>>          nvmem-cell-names = "calib", "temp_grade";
+>>          clocks = <&clks IMX6QDL_CLK_PLL3_USB_OTG>;
+>>          #thermal-sensor-cells = <0>;
+>>
+>> 	commercial-thermal {
+>> 		trips {
+>> 			commercial_trip_passive: trip-point0 {
+>> 				temperature = <85000>;
+>> 				type = "passive";
+>> 			};
+>> 			commercial_trip_crit: trip-point1 {
+>> 				temperature = <90000>;
+>> 				type = "critical";
+>> 			};
+>> 		};
+>> 	};
+>>
+>> 	extended-commercial-thermal {
+>> 		trips {
+>> 			ecommercial_trip_passive: trip-point0 {
+>> 				temperature = <95000>;
+>> 				type = "passive";
+>> 			};
+>> 			ecommercial_trip_crit: trip-point1 {
+>> 				temperature = <100000>;
+>> 				type = "critical";
+>> 			};
+>> 		};
+>> 	};
+>>
+>> 	industrial-thermal { };
+>> 	automotive-thermal { };
+>> };
+>>
+>> That way we can reuse the existing dt definitions and if no *-thermal
+>> child device nodes exist we can keep the original logic.
+> 
+> Good for me, it's more work, of course, but if this is the way to do it
+> let it be.
+> Daniel: I'd like to have an ack from you before implementing this.
 
--reboot: System halted
-+reboot: Power down
-+Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000000
-+CPU: 0 PID: 1 Comm: systemd-shutdow Not tainted
-5.18.0-rc7-shmobile-00007-g0e2110d2e910 #1274
-+Hardware name: Generic R-Car Gen2 (Flattened Device Tree)
-+ unwind_backtrace from show_stack+0x10/0x14
-+ show_stack from dump_stack_lvl+0x40/0x4c
-+ dump_stack_lvl from panic+0xf4/0x330
-+ panic from do_exit+0x1c8/0x8e4
-+ do_exit from __do_sys_reboot+0x174/0x1fc
-+ __do_sys_reboot from ret_fast_syscall+0x0/0x54
-+Exception stack(0xf0815fa8 to 0xf0815ff0)
-+5fa0:                   004e6954 00000000 fee1dead 28121969 4321fedc f0d94600
-+5fc0: 004e6954 00000000 00000000 00000058 befa0c78 00000000 befa0c10 004e56f8
-+5fe0: 00000058 befa0b6c b6ec8d45 b6e4a746
-+---[ end Kernel panic - not syncing: Attempted to kill init!
-exitcode=0x00000000 ]---
+It sounds like a correct approach, especially that is back compatible 
+with old DTs.
 
-On arm64, "poweroff" causes a clean "reboot: Power down" before/after.
 
-On both arm32 and arm64, the same handlers are registered:
-  - SYS_OFF_MODE_POWER_OFF_PREPARE: legacy_pm_power_off_prepare
-  - SYS_OFF_MODE_POWER_OFF: legacy_pm_power_off
 
-On both arm32 and arm64, legacy_pm_power_off_prepare() is called.
-On both arm32 and arm64, legacy_pm_power_off() does not seem to
-be called.
 
-On arm32, both pm_power_off_prepare and pm_power_off are NULL.
-On arm64, pm_power_off_prepare is NULL, and
-pm_power_off is psci_sys_poweroff.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Do you have a clue?
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
