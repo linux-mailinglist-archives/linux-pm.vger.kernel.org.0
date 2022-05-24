@@ -2,240 +2,315 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC99531F6D
-	for <lists+linux-pm@lfdr.de>; Tue, 24 May 2022 01:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 485675321AD
+	for <lists+linux-pm@lfdr.de>; Tue, 24 May 2022 05:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231314AbiEWXxz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 May 2022 19:53:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
+        id S233849AbiEXDnr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 May 2022 23:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbiEWXxy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 May 2022 19:53:54 -0400
-Received: from mx0b-002c1b01.pphosted.com (mx0b-002c1b01.pphosted.com [148.163.155.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF61B45067;
-        Mon, 23 May 2022 16:53:53 -0700 (PDT)
-Received: from pps.filterd (m0127841.ppops.net [127.0.0.1])
-        by mx0b-002c1b01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24NMBfTg017246;
-        Mon, 23 May 2022 16:53:45 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com; h=from : to : cc :
- subject : date : message-id : content-type : mime-version;
- s=proofpoint20171006; bh=c6RSa6RU4tc7g6H4/qRzt3WFMLwVimVTKgJFckLNlyY=;
- b=BDKklnCDNGQ5G+0/jKC+zGrgkIJY0WP1RYnu/U+rsERDFq4j0x8pjzDDjlcq5wPb5zLJ
- qHQQJi2+Eh6hiwUkY9ocg/RJuWDbV/vi/Nt3D1ZODDs0lV9AQX+zXq2Cea6xbKSqDsLS
- 1Tz4/RMPcTesc9DuXyjlRSTyTLWiwcVDfG2B8h5bG/ToDd32O0bgGCz92b/3LCiZGaDd
- ezbhcmIqShcbc7fvnTxFJESdLAfFDMummWARyiaPO6B059T83Khj8+sjDryjgK90dE3S
- MBWZeGirELXkp56m3Obj7SI7jaj+JI5WtH7UifD3n6Awe4dz3DwV1LOff/1CFKKF9g8E dA== 
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2173.outbound.protection.outlook.com [104.47.59.173])
-        by mx0b-002c1b01.pphosted.com (PPS) with ESMTPS id 3g6wm8vj18-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 23 May 2022 16:53:44 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=neKzLr2Z3XP1HDVvqgAdH6ABLwUEGDinkichIRxo3wLcKTALD449/oebuPUjmI/qzGfEUavVmU/IP37HwCB1OV2PNbuJmqbLBQ8ECkUa/eXh5QFk5JeXjO+YsxzwQS8hpG6lpNF+JDdkFuGpyJtPVY37k1UEUhXujRPc3l2n4SSvKrGyFc4cMvVA6kTDZorslVnhV8ZzAv3dXqj9G70c/SwPAspYAapibFUYXEf+GyBljjQCwRWk0abhmz5fc3+ggKTwsiO0g7fLhVRZS5UMV+icDd7j+XmiJa7xGlitbYrnj93efpNOFkLDPi+rI3SsHlNQYkpGC3rEjnEpepxb5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=c6RSa6RU4tc7g6H4/qRzt3WFMLwVimVTKgJFckLNlyY=;
- b=juFMcI1+xLF+KchlGOdJGdKsWzsRAWYecpw2u81Y3LqGkqV9k+WH5fsQlJ2CUxJjmLejTdnFRUfKlI/dt3kxEacLVznHMNoTxkpSYJ7biEEuWiSYQ3MnJnNHDfAu8eoLLfulQT8Zwoi2ZClLJQ+Z8uEjWejept2RRiOg4ASBJqrpsOXiDQeD4jzn2EQh92Hp7weq6GHOz6qDaLb6bt6Q+8kTp1YGnesuQCL+lcJqOXtgHi8cfOfF0whVBs8Bh+JU/Awg+gtJYnUVp9IvtkuJ5PydIT8jiHFhTKuPfJ/5cJWz/GdRJtCQKT4w/Q3OgDW1whfHO3ZC1RJGTcyqnWZpfA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nutanix.com; dmarc=pass action=none header.from=nutanix.com;
- dkim=pass header.d=nutanix.com; arc=none
-Received: from CH0PR02MB8041.namprd02.prod.outlook.com (2603:10b6:610:106::10)
- by BN8PR02MB5891.namprd02.prod.outlook.com (2603:10b6:408:b8::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.14; Mon, 23 May
- 2022 23:53:43 +0000
-Received: from CH0PR02MB8041.namprd02.prod.outlook.com
- ([fe80::34c3:f129:a785:52b3]) by CH0PR02MB8041.namprd02.prod.outlook.com
- ([fe80::34c3:f129:a785:52b3%5]) with mapi id 15.20.5273.023; Mon, 23 May 2022
- 23:53:42 +0000
-From:   Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org, rostedt@goodmis.org,
-        mingo@redhat.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, joao.m.martins@oracle.com,
-        mtosatti@redhat.com
-Cc:     Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-Subject: [PATCH v2] cpuidle: haltpoll: Add trace points for guest_halt_poll_ns grow/shrink
-Date:   Mon, 23 May 2022 23:53:32 +0000
-Message-Id: <20220523235332.162966-1-eiichi.tsukata@nutanix.com>
-X-Mailer: git-send-email 2.9.3
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0377.namprd03.prod.outlook.com
- (2603:10b6:a03:3a1::22) To CH0PR02MB8041.namprd02.prod.outlook.com
- (2603:10b6:610:106::10)
+        with ESMTP id S233807AbiEXDnq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 May 2022 23:43:46 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6533B63BD6
+        for <linux-pm@vger.kernel.org>; Mon, 23 May 2022 20:43:43 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2fee010f509so168610977b3.11
+        for <linux-pm@vger.kernel.org>; Mon, 23 May 2022 20:43:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kFcU8MB8D+ohTeCCBEOJ8SRbXprR3YxyruL+Vn+38fo=;
+        b=m3kfG3aPU2TePLRky/sZTAPS/O8UFZ1VH2Y7ghtxl8F1dCiFtEvBxxlGLFcI91noK3
+         PmdoI1PlTIgN3DS5MdQIdf0zpikiGhPuQplZyw6PtJENoVqaQH7D10bacWQPCDfNIbBv
+         iUSldiezerkONOrJN5tFqbJTLgOyCvUP3hEgZJaqr2RGVpPUHHGyQiuIopmsEoaVUJpn
+         CYm66AIhx5qlpDlhpV6qEI+ysK4msP/h451PP/d7JzDICJuKEioBY0ZsScCLCzAacdJy
+         UQf/QVe6paRIxczQp0VNNq8z3K8j02hTkC49RF/1HhmgRlXEglK9yae/vUDQBZI2sG6+
+         cOXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kFcU8MB8D+ohTeCCBEOJ8SRbXprR3YxyruL+Vn+38fo=;
+        b=EiKxVmTydY57b8EYBEy1q0oO4LIoKzBYt4CrqzyEDQqW0MkKrc7/Se5hdhMrrmEf4L
+         wAc07/N9xTW67idjmdRWl1r63UHL7WRFJ+Y635tpgiqkw6dl29flqTTHWkb5rW1E4fLt
+         mPM6qShw8p7tq9xMqLY3IolDOdWmbydBhRlb5uQSpi9XPa+S/kgJDnP8GNQAD0uu+1N6
+         Hq9kEurydu6nWDloNREceAQD1dnvEoUtJ79BuAPiLw3s6ugXhUWThHBHS7yKeHXlCfRS
+         ZXEUuXCHkePNEHmL58fYoGbenGFZIBiKLeD1d6pPRcOnpZSFzZjd333QdLHQ682ru4lN
+         PHTg==
+X-Gm-Message-State: AOAM533IVP6rJWwcRvtOLDAu1ctcRZl3zHikv5f6wMxYWONFcEgUN5CX
+        0S11cye92qLxsQg9MU5DDGnWkKpl58LDXNA3PHGSeQ==
+X-Google-Smtp-Source: ABdhPJxxclBWP5tFkbFjNa7SsUrOWwTViOz3TwNZEdS4IBh9mbWmiM1ACFR0gCy5bMxNXKWUSpBB+nSOyrtYgANPI38=
+X-Received: by 2002:a0d:e903:0:b0:2ff:43a3:90c8 with SMTP id
+ s3-20020a0de903000000b002ff43a390c8mr26160017ywe.455.1653363822372; Mon, 23
+ May 2022 20:43:42 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5c63f468-62f9-4568-5174-08da3d17778d
-X-MS-TrafficTypeDiagnostic: BN8PR02MB5891:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR02MB5891B7574E84C2736C9002E480D49@BN8PR02MB5891.namprd02.prod.outlook.com>
-x-proofpoint-crosstenant: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1+b3SQu126NvYJoe9WOGAl/JUquDCRWHg5DKHutJlw4rcMlU2RaOci4EhTzStxJkPOnY2QlVrhePr3VDF6yQdRDGn41gwZS4rAuAqws0PHJVvu+1Db/uDJKVQyuqn6z/nZQGKF0LQVKcqM4o9Xd07bcpU/kEN0dOWwjJX3V7aLuDpQ+dSur5TgfG5hWug0QM9o3bi8LXKdt4vwt8fhE1aSFGcoQve43z4l2+rYHkRFPVtjMxcQwslsy3WbSztXgIrtCLSSFChfWzQvo8g+/sxRFBwKw0g3E36iF3Pyn45P6FBieOOBcL2dRDRXHiBgyf7oypSL5AYbGt+6EME6JR87fJp4o6Y+FVIwyPMKx74IHzlMWruvEAnR+b2gjklFgsHdhLKJtT0VoMbyT5G9dceBxf+r1gT88oC68vEdU1UHRpqY+USef9kwpP+7UWmrIyCWXir3AY8ES3gX6SANeIzNC6EKlCYY96US2ret6BHveIigiZKoqoxtAIMyy8GDGv7oEkyUhpKVLybL6KNeB/wPO1WndqMzulkkI1HWUfcklMdnU4m6xAF4Zy1X5Ct0KH7muDnLGKV0HBsynaLryfXsLeD7/VfrjkaDTLyjBeM/UT3j+2FcyX2xmB9wkyfvj3543KPmyYRRuOVPhnHF9Ketd9VB+X/CBB20fAXrFIBMd2HR2ZJMGOZo7FhCiKC6bH0WHHYcV12JqvzAHWqIFR4Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR02MB8041.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8676002)(1076003)(66946007)(66556008)(66476007)(8936002)(316002)(26005)(4326008)(107886003)(83380400001)(5660300002)(6486002)(44832011)(186003)(86362001)(508600001)(2616005)(36756003)(2906002)(6512007)(38100700002)(38350700002)(52116002)(6666004)(6506007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DXCKOPA/T/ziaZY7plCnSuSYSZaI+RWmb3rWuvV7uMfCnb/DzAb2D3CLStAg?=
- =?us-ascii?Q?SgCOBveFBOnB4FHI4hW8tKQL4nh2vi4Coin7A7pt0iXlxYYOsZyjVtdQ3IeY?=
- =?us-ascii?Q?KCDjKbO+C/IFDRpmSCTQYjPWmXcid16RQvfQm9dyBlQWJo8P153YGdI9pFGv?=
- =?us-ascii?Q?K7sb5DTN14JjzwzoK62OJdUQzqsNrY0Z2Ex51VCPhJNZEuLyTBMN9zHCKUty?=
- =?us-ascii?Q?VPUpPMSHfngKL7RUzCfZzD8co1XbPZD/Y83bPZRMDsgfIDGytSotmy3UBP3a?=
- =?us-ascii?Q?t1D8AVFZDXY49RPRDwc9ZO5iGdYzxMS98JwOKduOMXf2K0f8aOccaNIIbJI3?=
- =?us-ascii?Q?oo+zvUasspqhQN7ZK/eoQAczPDuzDZ0wZqDT3W3G05Tq3qTNM27pb95ywW8N?=
- =?us-ascii?Q?iTMz8ndhAnxDjuh7SDd4eKbsew9cC5MlnbfqPPO99CEZfHyNsi0HO1jd3q0C?=
- =?us-ascii?Q?havL7Zh6/y8+UB7Folk3cmvmMOT6EK+t4hHKaxZUDBk7Jybc3lKzyVv0tG6C?=
- =?us-ascii?Q?z1etLiWz10PaaiWIkq2d3/p+21G7iAhDKmbkbeH0A/JJbBoPkul+w2Dqzcf/?=
- =?us-ascii?Q?5x6Gf+OHqbVQc6067K+8kVHD1S3O055nrfKKeI9qD/pvrIRM9TraU94+PoY5?=
- =?us-ascii?Q?i0nDUkKcTSghANJp6EwYKCXMb82Lygu41D9ViVpxx+oN4BqdNyW8QxXBYPRN?=
- =?us-ascii?Q?pQDrZzxmgrTT/n5HJiACbxaOFpejGf+rvuO+KyWTGR6LBA6LrubfVfZ1XhRk?=
- =?us-ascii?Q?bn13yPWhYECBzIWMA/hAEmS6L7T62qcFdEn9Rd4TmD6b5FVIqdb8OY0hfT6P?=
- =?us-ascii?Q?j/wuNDl4jU2lYsbWgV+ijWunRPpNpe7yPwjkQKMA1g6KXnVRmATEeUR7xQQq?=
- =?us-ascii?Q?yjojTGRvukPuYHno1N6JwQSbghPxAgL5uEaIaeBRv/hl95VwXPCEVUEY0xLi?=
- =?us-ascii?Q?3iluNpmUSoE+rJH59iMfK+94ZfVo1sE7XgvYpP/40f0bVe0lk+fN/IqViEqB?=
- =?us-ascii?Q?a0qcEyv9QjU9PPznHpYkhtGnU5RD7uHmEWRiPEm2UhCti7I8TDCyMQ3i9FSr?=
- =?us-ascii?Q?Hmy+nQDgY8cTgcg8vR3+nP2S+oOxQdiEqYjpDMF2JRYBeNpCmkkFQ/dAA5JY?=
- =?us-ascii?Q?qNt8EjfbuOkAvQDLFoii09jF1jHoC9r5Z4hA4HcLeux8AunY8GGCIC50Z+9D?=
- =?us-ascii?Q?M5B46Rhp/TqDavPaYcpaCIloAPU4X1uLDxT1LaqpcUtl8Oz2E/3XJ/EK68oo?=
- =?us-ascii?Q?X9bUZC9/5MUsX0U/1txidYPXoFfR7PXbPYMbCDK2i4skp8UHZE5oTlmwxbnt?=
- =?us-ascii?Q?RjFmeVnem7XcDTNRWfngRumw0qH/BLWOYuX4D48AF/x49sI4qjWoMChWjVm0?=
- =?us-ascii?Q?hwxW7c76qXNhLi4GUPzU8RKOGUxfriatp92NOkmrsJNG9wVW8+MFzNxZFEJo?=
- =?us-ascii?Q?JARYXq+f+Kob238HArID5JeR6T76pD2lshFRbTIjdUI0i0UNihVVoC032J4S?=
- =?us-ascii?Q?jCcCvwVQGPpBaYQX2binzdvL1HTVvot7kdnMOO8ILkFnO+vTlC+wtKlVhsfZ?=
- =?us-ascii?Q?qo+ZsLwGBEHkRjBOL5VQQmytuQ/DpGHLwX6gtA3nsv/mufzAS7/rKgCUmI/0?=
- =?us-ascii?Q?6cJiIEYRBm4KEuEXF8MHBeU1JJQnY+GMfuXXxEUwSF+/U713aisSaunbdqJg?=
- =?us-ascii?Q?ScpoI/DtWrbGJSS9TqkOXi1+BX+EQBc0gCrRbwisbxDT4fcJcYRMAjoUIGZ1?=
- =?us-ascii?Q?7iCa2iLtwA0C3lDhxymq2k9fYFsvRBk=3D?=
-X-OriginatorOrg: nutanix.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c63f468-62f9-4568-5174-08da3d17778d
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR02MB8041.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2022 23:53:42.7357
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bb047546-786f-4de1-bd75-24e5b6f79043
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JQwMkVVuc8s63+Xa1ESTTBAnLTdQsQ3tcha2LLYKaiMrmQTgm4MO7PGj6uL7/5LeiMdTKE6JD/ZCChcHAoqE9lUJo3quwVUx31OymmJX7f4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR02MB5891
-X-Proofpoint-ORIG-GUID: kUxYqlZdpUbll1kyc3Ms-WwKqBsgzode
-X-Proofpoint-GUID: kUxYqlZdpUbll1kyc3Ms-WwKqBsgzode
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-23_10,2022-05-23_01,2022-02-23_01
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220429220933.1350374-1-saravanak@google.com>
+ <YogkhvFGVcjNQ21Z@dev-arch.thelio-3990X> <CAGETcx9nvBs1b4M=2hBhrLX_2-rzLtAmV9WfTXu0MC7JnsBvwA@mail.gmail.com>
+ <YogsiMCDupNUhMgL@dev-fedora.thelio-3990X> <CAGETcx-JyWwoGA3o8eep7E29Cm4DcVT6D1JFJh72jLcqm_mjCQ@mail.gmail.com>
+ <Youleo3Ganxbc1sq@dev-arch.thelio-3990X> <CAGETcx-sL08h2toEyxY6ztc6xNuJiPok6iDEeuJ1mOA3nvE+vA@mail.gmail.com>
+ <YowHNo4sBjr9ijZr@dev-arch.thelio-3990X>
+In-Reply-To: <YowHNo4sBjr9ijZr@dev-arch.thelio-3990X>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 23 May 2022 20:43:06 -0700
+Message-ID: <CAGETcx91_WgpmwEA7mBSvUdyJV0a8ymfaNKTmXq=mAJYAjzq1A@mail.gmail.com>
+Subject: Re: [PATCH v1] driver core: Extend deferred probe timeout on driver registration
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, kernel-team@android.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, John Stultz <jstultz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add trace points as are implemented in KVM host halt polling.
-This helps tune guest halt polling params.
+On Mon, May 23, 2022 at 3:14 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> On Mon, May 23, 2022 at 01:04:03PM -0700, Saravana Kannan wrote:
+> > On Mon, May 23, 2022 at 8:17 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > On Fri, May 20, 2022 at 05:15:55PM -0700, Saravana Kannan wrote:
+> > > > On Fri, May 20, 2022 at 5:04 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > > >
+> > > > > On Fri, May 20, 2022 at 04:49:48PM -0700, Saravana Kannan wrote:
+> > > > > > On Fri, May 20, 2022 at 4:30 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > > > > >
+> > > > > > > Hi Saravana,
+> > > > > > >
+> > > > > > > On Fri, Apr 29, 2022 at 03:09:32PM -0700, Saravana Kannan wrote:
+> > > > > > > > The deferred probe timer that's used for this currently starts at
+> > > > > > > > late_initcall and runs for driver_deferred_probe_timeout seconds. The
+> > > > > > > > assumption being that all available drivers would be loaded and
+> > > > > > > > registered before the timer expires. This means, the
+> > > > > > > > driver_deferred_probe_timeout has to be pretty large for it to cover the
+> > > > > > > > worst case. But if we set the default value for it to cover the worst
+> > > > > > > > case, it would significantly slow down the average case. For this
+> > > > > > > > reason, the default value is set to 0.
+> > > > > > > >
+> > > > > > > > Also, with CONFIG_MODULES=y and the current default values of
+> > > > > > > > driver_deferred_probe_timeout=0 and fw_devlink=on, devices with missing
+> > > > > > > > drivers will cause their consumer devices to always defer their probes.
+> > > > > > > > This is because device links created by fw_devlink defer the probe even
+> > > > > > > > before the consumer driver's probe() is called.
+> > > > > > > >
+> > > > > > > > Instead of a fixed timeout, if we extend an unexpired deferred probe
+> > > > > > > > timer on every successful driver registration, with the expectation more
+> > > > > > > > modules would be loaded in the near future, then the default value of
+> > > > > > > > driver_deferred_probe_timeout only needs to be as long as the worst case
+> > > > > > > > time difference between two consecutive module loads.
+> > > > > > > >
+> > > > > > > > So let's implement that and set the default value to 10 seconds when
+> > > > > > > > CONFIG_MODULES=y.
+> > > > > > > >
+> > > > > > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > > > > > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> > > > > > > > Cc: Rob Herring <robh@kernel.org>
+> > > > > > > > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > > > > > > > Cc: Will Deacon <will@kernel.org>
+> > > > > > > > Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> > > > > > > > Cc: Kevin Hilman <khilman@kernel.org>
+> > > > > > > > Cc: Thierry Reding <treding@nvidia.com>
+> > > > > > > > Cc: Mark Brown <broonie@kernel.org>
+> > > > > > > > Cc: Pavel Machek <pavel@ucw.cz>
+> > > > > > > > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> > > > > > > > Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> > > > > > > > Cc: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > > > > > > Cc: linux-gpio@vger.kernel.org
+> > > > > > > > Cc: linux-pm@vger.kernel.org
+> > > > > > > > Cc: iommu@lists.linux-foundation.org
+> > > > > > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > > > > >
+> > > > > > > I bisected a boot hang with ARCH=s390 defconfig in QEMU down to this
+> > > > > > > change as commit 2b28a1a84a0e ("driver core: Extend deferred probe
+> > > > > > > timeout on driver registration") in next-20220520 (bisect log below).
+> > > > > > >
+> > > > > > > $ make -skj"$(nproc)" ARCH=s390 CROSS_COMPILE=s390x-linux-gnu- defconfig bzImage
+> > > > > > >
+> > > > > > > $ timeout --foreground 15m stdbuf -oL -eL \
+> > > > > > > qemu-system-s390x \
+> > > > > > > -initrd ... \
+> > > > > > > -M s390-ccw-virtio \
+> > > > > > > -display none \
+> > > > > > > -kernel arch/s390/boot/bzImage \
+> > > > > > > -m 512m \
+> > > > > > > -nodefaults \
+> > > > > > > -serial mon:stdio
+> > > > > > > ...
+> > > > > > > [    2.077303] In-situ OAM (IOAM) with IPv6
+> > > > > > > [    2.077639] NET: Registered PF_PACKET protocol family
+> > > > > > > [    2.078063] bridge: filtering via arp/ip/ip6tables is no longer available by default. Update your scripts to load br_netfilter if you need this.
+> > > > > > > [    2.078795] Key type dns_resolver registered
+> > > > > > > [    2.079317] cio: Channel measurement facility initialized using format extended (mode autodetected)
+> > > > > > > [    2.081494] Discipline DIAG cannot be used without z/VM
+> > > > > > > [  260.626363] random: crng init done
+> > > > > > > qemu-system-s390x: terminating on signal 15 from pid 3815762 (timeout)
+> > > > > > >
+> > > > > > > We have a simple rootfs available if necessary:
+> > > > > > >
+> > > > > > > https://github.com/ClangBuiltLinux/boot-utils/raw/bc0d17785eb67f1edd0ee0a134970a807895f741/images/s390/rootfs.cpio.zst
+> > > > > > >
+> > > > > > > If there is any other information I can provide, please let me know!
+> > > > > >
+> > > > > > Hmm... strange. Can you please try the following command line options
+> > > > > > and tell me which of these has the issue and which don't?
+> > > > >
+> > > > > Sure thing!
+> > > > >
+> > > > > > 1) deferred_probe_timeout=0
+> > > > >
+> > > > > No issue.
+> > > > >
+> > > > > > 2) deferred_probe_timeout=1
+> > > > > > 3) deferred_probe_timeout=300
+> > > > >
+> > > > > Both of these appear to hang in the same way, I let each sit for five
+> > > > > minutes.
+> > > >
+> > > > Strange that a sufficiently large timeout isn't helping. Is it trying
+> > > > to boot off a network mount? I'll continue looking into this next
+> > > > week.
+> > >
+> > > I don't think so, it seems like doing that requires some extra flags
+> > > that we do not have:
+> > >
+> > > https://wiki.qemu.org/Features/S390xNetworkBoot
+> > >
+> > > If you need any additional information or want something tested, please
+> > > let me know!
+> >
+> > I'll try to get qemu going on my end, but I'm not too confident I'll
+> > be able to get to it in a timely fashion. So if you can help figure
+> > out where this boot process is hanging, that'd be very much
+> > appreciated.
+>
+> Sure thing! Information included below, I am more than happy to continue
+> to test and debug as you need.
+>
+> > Couple of suggestions for debugging:
+> >
+> > Can you add a log to "wait_for_device_probe()" and see if that's
+> > getting called right before the boot process hangs? If it does, can
+> > you get a stacktrace (I just add a WARN_ON(1) when I need a stack
+> > trace)? It's unlikely this is the case because
+> > deferred_probe_timeout=1 still causes an issue for you, but I'd be
+> > good to rule out.
+>
+> If I add a pr_info() call at the top of wait_for_device_probe(), I see
+> it right before the process hangs. Adding WARN_ON(1) right below that
+> reveals dasd_eckd_init() in drivers/s390/block/dasd_eckd.c calls
+> wait_for_device_probe():
+>
+> [    4.610397] ------------[ cut here ]------------
+> [    4.610520] WARNING: CPU: 0 PID: 1 at drivers/base/dd.c:742 wait_for_device_probe+0x28/0x110
+> [    4.611134] Modules linked in:
+> [    4.611593] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.18.0-next-20220523-dirty #1
+> [    4.611830] Hardware name: QEMU 8561 QEMU (KVM/Linux)
+> [    4.612017] Krnl PSW : 0704c00180000000 0000000000ce4b3c (wait_for_device_probe+0x2c/0x110)
+> [    4.612258]            R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:0 PM:0 RI:0 EA:3
+> [    4.612387] Krnl GPRS: 80000000fffff071 0000000000000027 000000000000000c 00000000017f91d8
+> [    4.612457]            00000000fffff071 00000000017f9218 0000000001a655a0 0000000000000006
+> [    4.612521]            0000000000000002 0000000001965810 00000000019d51a0 0000000000000000
+> [    4.612585]            0000000002218000 000000000125bcc8 0000000000ce4b38 000003800000bc80
+> [    4.614814] Krnl Code: 0000000000ce4b2c: e3e0f0980024        stg     %r14,152(%r15)
+> [    4.614814]            0000000000ce4b32: c0e5ffff94cb        brasl   %r14,0000000000cd74c8
+> [    4.614814]           #0000000000ce4b38: af000000            mc      0,0
+> [    4.614814]           >0000000000ce4b3c: c0100054d1fa        larl    %r1,000000000177ef30
+> [    4.614814]            0000000000ce4b42: e31010000012        lt      %r1,0(%r1)
+> [    4.614814]            0000000000ce4b48: a784002d            brc     8,0000000000ce4ba2
+> [    4.614814]            0000000000ce4b4c: d727f0a0f0a0        xc      160(40,%r15),160(%r15)
+> [    4.614814]            0000000000ce4b52: 41b0f0a0            la      %r11,160(%r15)
+> [    4.615698] Call Trace:
+> [    4.616559]  [<0000000000ce4b3c>] wait_for_device_probe+0x2c/0x110
+> [    4.616744] ([<0000000000ce4b38>] wait_for_device_probe+0x28/0x110)
+> [    4.616841]  [<000000000196593e>] dasd_eckd_init+0x12e/0x178
+> [    4.616913]  [<0000000000100936>] do_one_initcall+0x46/0x1e8
+> [    4.616983]  [<0000000001920706>] do_initcalls+0x126/0x150
+> [    4.617046]  [<000000000192095e>] kernel_init_freeable+0x1ae/0x1f0
+> [    4.617110]  [<0000000000ce85a6>] kernel_init+0x2e/0x168
+> [    4.617171]  [<0000000000103320>] __ret_from_fork+0x40/0x58
+> [    4.617233]  [<0000000000cf5eaa>] ret_from_fork+0xa/0x40
+> [    4.617352] Last Breaking-Event-Address:
+> [    4.617393]  [<0000000000e0e098>] __s390_indirect_jump_r14+0x0/0xc
+> [    4.617481] ---[ end trace 0000000000000000 ]---
+>
+> > Let's try to rule out if deferred_probe_extend_timeout() is causing
+> > some issues. So, without my patch, what happens if you set:
+> > deferred_probe_timeout=1
+> > deferred_probe_timeout=300
+>
+> At commit 6ee60e9c9f2f ("MAINTAINERS: add Russ Weight as a firmware
+> loader maintainer"), both deferred_probe_timeout=1 and
+> deferred_probe_timeout=300 hang the boot.
 
-Signed-off-by: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
----
- drivers/cpuidle/governors/haltpoll.c | 15 ++++++++-----
- include/trace/events/power.h         | 33 ++++++++++++++++++++++++++++
- 2 files changed, 43 insertions(+), 5 deletions(-)
+Thanks for all the help. I think I know what's going on.
 
-diff --git a/drivers/cpuidle/governors/haltpoll.c b/drivers/cpuidle/governors/haltpoll.c
-index cb2a96eafc02..a5b6ad32956c 100644
---- a/drivers/cpuidle/governors/haltpoll.c
-+++ b/drivers/cpuidle/governors/haltpoll.c
-@@ -19,6 +19,7 @@
- #include <linux/sched.h>
- #include <linux/module.h>
- #include <linux/kvm_para.h>
-+#include <trace/events/power.h>
- 
- static unsigned int guest_halt_poll_ns __read_mostly = 200000;
- module_param(guest_halt_poll_ns, uint, 0644);
-@@ -77,13 +78,16 @@ static int haltpoll_select(struct cpuidle_driver *drv,
- 
- static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
- {
--	unsigned int val;
-+	unsigned int val, old;
- 
--	/* Grow cpu_halt_poll_us if
--	 * cpu_halt_poll_us < block_ns < guest_halt_poll_us
-+	val = dev->poll_limit_ns;
-+	old = val;
-+
-+	/* Grow poll_limit_ns if
-+	 * poll_limit_ns < block_ns < guest_halt_poll_ns
- 	 */
- 	if (block_ns > dev->poll_limit_ns && block_ns <= guest_halt_poll_ns) {
--		val = dev->poll_limit_ns * guest_halt_poll_grow;
-+		val *= guest_halt_poll_grow;
- 
- 		if (val < guest_halt_poll_grow_start)
- 			val = guest_halt_poll_grow_start;
-@@ -91,16 +95,17 @@ static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
- 			val = guest_halt_poll_ns;
- 
- 		dev->poll_limit_ns = val;
-+		trace_guest_halt_poll_ns_grow(smp_processor_id(), val, old);
- 	} else if (block_ns > guest_halt_poll_ns &&
- 		   guest_halt_poll_allow_shrink) {
- 		unsigned int shrink = guest_halt_poll_shrink;
- 
--		val = dev->poll_limit_ns;
- 		if (shrink == 0)
- 			val = 0;
- 		else
- 			val /= shrink;
- 		dev->poll_limit_ns = val;
-+		trace_guest_halt_poll_ns_shrink(smp_processor_id(), val, old);
- 	}
- }
- 
-diff --git a/include/trace/events/power.h b/include/trace/events/power.h
-index af5018aa9517..db065af9c3c0 100644
---- a/include/trace/events/power.h
-+++ b/include/trace/events/power.h
-@@ -500,6 +500,39 @@ DEFINE_EVENT(dev_pm_qos_request, dev_pm_qos_remove_request,
- 
- 	TP_ARGS(name, type, new_value)
- );
-+
-+TRACE_EVENT(guest_halt_poll_ns,
-+
-+	TP_PROTO(bool grow, unsigned int cpu_id,
-+		 unsigned int new, unsigned int old),
-+
-+	TP_ARGS(grow, cpu_id, new, old),
-+
-+	TP_STRUCT__entry(
-+		__field(bool, grow)
-+		__field(unsigned int, cpu_id)
-+		__field(unsigned int, new)
-+		__field(unsigned int, old)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->grow   = grow;
-+		__entry->cpu_id = cpu_id;
-+		__entry->new    = new;
-+		__entry->old    = old;
-+	),
-+
-+	TP_printk("cpu %u: halt_poll_ns %u (%s %u)",
-+		__entry->cpu_id,
-+		__entry->new,
-+		__entry->grow ? "grow" : "shrink",
-+		__entry->old)
-+);
-+
-+#define trace_guest_halt_poll_ns_grow(cpu_id, new, old) \
-+	trace_guest_halt_poll_ns(true, cpu_id, new, old)
-+#define trace_guest_halt_poll_ns_shrink(cpu_id, new, old) \
-+	trace_guest_halt_poll_ns(false, cpu_id, new, old)
- #endif /* _TRACE_POWER_H */
- 
- /* This part must be outside protection */
--- 
-2.36.1
+If you revert the following commit, then you'll see that your device
+no longer hangs with my changes.
+35a672363ab3 driver core: Ensure wait_for_device_probe() waits until
+the deferred_probe_timeout fires
 
+That commit was made to make sure NFS mounts continue to work even
+when deferred_probe_timeout is set to a value greater than the IP auto
+config timeout (I think that's 12 seconds). While that definitely
+helps the NFS mount case, unfortunately wait_for_device_probe() is
+used in some initcalls that happen before late_initcall(). This causes
+a deadlock -- earlier initcalls wait for
+late_initcall(deferred_probe_initcall) to run but we can't get to
+late_initcall() if earlier initcalls don't finish.
+
+Even if wait_for_device_probe() is used only in late_initcalls(), it
+can still hang the kernel boot based on the link order of the .c
+files as that determined the call order between late_initcalls().
+
+It looks like all the existing users of wait_for_device_probe() seem
+to try and "wait for currently probing devices to finish probing", but
+the commit mentioned above changes the semantics to "wait until every
+device that'll eventually probe finishes probing". I think the
+solution is to revert the commit and then do this additional waiting
+just in ip_auto_config(). I'll need to think about this a bit before
+I'm sure the solution makes sense.
+
+Thanks for all the help so far.
+
+-Saravana
+
+
+
+
+-Saravana
+
+
+
+>
+> > If deferred_probe_timeout=1 causes an issue even without my patch,
+> > then in addition, can you try commenting out the call to
+> > fw_devlink_drivers_done() inside deferred_probe_timeout_work_func()
+> > and try again?
+>
+> Sure, that does not appear to make a difference with
+> deferred_probe_timeout=1.
+>
+> Cheers,
+> Nathan
