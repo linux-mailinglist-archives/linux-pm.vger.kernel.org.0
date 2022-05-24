@@ -2,106 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 440AF532D68
-	for <lists+linux-pm@lfdr.de>; Tue, 24 May 2022 17:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F76532DEE
+	for <lists+linux-pm@lfdr.de>; Tue, 24 May 2022 17:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238881AbiEXP15 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 May 2022 11:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
+        id S233885AbiEXP5o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 May 2022 11:57:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238878AbiEXP1z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 May 2022 11:27:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A69F95FF0D
-        for <linux-pm@vger.kernel.org>; Tue, 24 May 2022 08:27:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653406073;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0dpLkRs1d/f4IvFC0kcR0J1iYghGd/WbywlFV5pQCIw=;
-        b=ilxgQ6U8GlBMouQlFtovYTXM67zgxZVH/c42YJBzDXFoxkUcyUDu4BNQS2loManxhvBDMK
-        zM9Vrlv8rqmbSqCnv7o7DzCBL6t1uclplZaT7ZgKI2M2nhtMLlAM6f278mbNfnIZ4WJhIU
-        hC12Qro0TEMUulO2E4ATCRY04s3wsJE=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-586-StCUA6iqOkemmeQYbKoalw-1; Tue, 24 May 2022 11:27:48 -0400
-X-MC-Unique: StCUA6iqOkemmeQYbKoalw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D2ABC3810D25;
-        Tue, 24 May 2022 15:27:46 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.195.109])
-        by smtp.corp.redhat.com (Postfix) with SMTP id EB1312166B29;
-        Tue, 24 May 2022 15:27:26 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Tue, 24 May 2022 17:27:46 +0200 (CEST)
-Date:   Tue, 24 May 2022 17:27:25 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
-        Robert OCallahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Douglas Miller <dougmill@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-Subject: Re: [PATCH 08/16] ptrace: Only populate last_siginfo from ptrace
-Message-ID: <20220524152725.GE14347@redhat.com>
-References: <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
- <20220518225355.784371-8-ebiederm@xmission.com>
+        with ESMTP id S232287AbiEXP5n (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 May 2022 11:57:43 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D5D986D7;
+        Tue, 24 May 2022 08:57:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=B8XT5WxddcuyBOpLYerWnhTOFuVD+zv031mAdqT881Y=; b=qnN3we4WI+oi/EwyaNHt8O2sCV
+        kHYyoy78xzATv6nYHAqOJz/lRBrRGh+1vbn83L7gWzIjQSWbwCV/v2v/H3O7IGkCOld/JYiecMtZa
+        LbK9ZWRWW3LcV+1WCu41UfNAS1tHHLEnaaFHDFiqGjgxI2J4dRe5+TsF+J8FFiiGFYoweeRdT5mVp
+        IYg8KuwK63VGm1bc2oSCsRRVpqmbKyTCtJYr5QtQ8UiR1U3j+A+pvK14wXcaVJpac/59NLvrmHDvk
+        6E+iZTW54PPVI4M4+6TvGDKQpGFR8U4wRZUVbBR4thmFIdqZahF66ENjamuDwN2UtLWdP2cJWGqQq
+        Z19JrGAA==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=casper.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ntWug-00HEa4-Ux; Tue, 24 May 2022 15:57:39 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <treding@nvidia.com>
+Subject: [PATCH] cpuidle: tegra: honor ARCH_SUSPEND_POSSIBLE
+Date:   Tue, 24 May 2022 08:57:33 -0700
+Message-Id: <20220524155733.28262-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220518225355.784371-8-ebiederm@xmission.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/18, Eric W. Biederman wrote:
->
-> The code in ptrace_signal to populate siginfo if the signal number
-> changed is buggy.  If the tracer contined the tracee using
-> ptrace_detach it is guaranteed to use the real_parent (or possibly a
-> new tracer) but definitely not the origional tracer to populate si_pid
-> and si_uid.
+When ARCH_SUSPEND_POSSIBLE is not enabled, selecting ARM_CPU_SUSPEND
+causes a Kconfig warning, so make ARM_TEGRA_CPUIDLE depend on
+ARCH_SUSPEND_POSSIBLE to prevent that warning.
 
-I guess nobody cares. As the comment says
+WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
+  Depends on [n]: ARCH_SUSPEND_POSSIBLE [=n]
+  Selected by [y]:
+  - ARM_TEGRA_CPUIDLE [=y] && CPU_IDLE [=y] && (ARM [=y] || ARM64) && (ARCH_TEGRA [=n] || COMPILE_TEST [=y]) && !ARM64 && MMU [=y]
 
-	 If the debugger wanted something
-	 specific in the siginfo structure then it should
-	 have updated *info via PTRACE_SETSIGINFO.
+Fixes: 860fbde438dc ("cpuidle: Refactor and move out NVIDIA Tegra20 driver into drivers/cpuidle")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: linux-pm@vger.kernel.org
+Cc: Dmitry Osipenko <digetx@gmail.com>
+Cc: Thierry Reding <treding@nvidia.com>
+---
+ drivers/cpuidle/Kconfig.arm |    1 +
+ 1 file changed, 1 insertion(+)
 
-otherwise I don't think si_pid/si_uid have any value.
-
-However the patch looks fine to me, just the word "buggy" looks a bit
-too strong imo.
-
-Oleg.
-
+--- a/drivers/cpuidle/Kconfig.arm
++++ b/drivers/cpuidle/Kconfig.arm
+@@ -100,6 +100,7 @@ config ARM_MVEBU_V7_CPUIDLE
+ 
+ config ARM_TEGRA_CPUIDLE
+ 	bool "CPU Idle Driver for NVIDIA Tegra SoCs"
++	depends on ARCH_SUSPEND_POSSIBLE
+ 	depends on (ARCH_TEGRA || COMPILE_TEST) && !ARM64 && MMU
+ 	select ARCH_NEEDS_CPU_IDLE_COUPLED if SMP
+ 	select ARM_CPU_SUSPEND
