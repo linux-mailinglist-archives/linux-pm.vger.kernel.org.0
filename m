@@ -2,123 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 581AF5329BF
-	for <lists+linux-pm@lfdr.de>; Tue, 24 May 2022 13:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 505645329CA
+	for <lists+linux-pm@lfdr.de>; Tue, 24 May 2022 13:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236633AbiEXLxt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 May 2022 07:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42158 "EHLO
+        id S236569AbiEXL4S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 May 2022 07:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236667AbiEXLxs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 May 2022 07:53:48 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3166E5C87A;
-        Tue, 24 May 2022 04:53:43 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2f83983782fso178788997b3.6;
-        Tue, 24 May 2022 04:53:43 -0700 (PDT)
+        with ESMTP id S237100AbiEXL4H (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 May 2022 07:56:07 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24EF110FE;
+        Tue, 24 May 2022 04:56:04 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id q2so3249683ils.0;
+        Tue, 24 May 2022 04:56:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=s623joAvO3I1Y9L2nlzNVOrnSxU41vctt1MgQl9k/Tw=;
+        b=THJ5JC0ab5X8dbma1QqJxqhYdU+gLa+DUUYC3aN6h2RNF3eibTE3jZOCOAhVvgD4pg
+         a5fJfSbmLKuf1qspU2vTsvzhhRj0rljqn0ZztTjDZLov508goL5YyJpOz5CVvrwTJ3e7
+         R4OzWwshJ90xqGuSFGjqCnEtDsKnWwk0G9kkTeeCZih2B0nxSOaQR1Sd8iYR4k5Zfofb
+         C70XP+ASrsbHWR/7YzCmxl57ftYzJ+GktCRG8aQPWWT514qIUitfqIc+f+4WCUspX6nH
+         XRQAFSnzQYAqhfXWzdAxGuv4oQbNTswvBSBGyBTgm6wsQaBeS2fYCdvrZdqjxWuFEmGv
+         q4Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BoiYeaDjs15JekgURHYc+TLJ+J0nfYc/PIk2wBIW2ng=;
-        b=yo7r8dw5K62i/0OSSBOhlFLgnIt4R/YU7E6r4PiTIdSUSDtsW6IoIRavipKYZOI4YD
-         1exbTS2QYTVjvEoDgIPIuBd4kc8t52wg/vrBVF2vYophX7/FIHG7U6FTciD9W16ilf4R
-         McOAWt21xzKPgqSy8BrlyJUOT+NyQSR6t2EEifDP9Gm+OxUKbbzxTY1qLoxwtk/cL8su
-         TcjUHNQVX204ZQMcxBzMuHHivpIS/qoqiYN82dtkNQ+HjaD0qJkzCOT+GWmHBgQZ96X8
-         jiaCYlzRXCi/DvpT1th17g9swTqrHgm6X0SsdDB0MfZqhz3ssoI4Qgfu6kHyWiemzCd2
-         ev1g==
-X-Gm-Message-State: AOAM530LT0/T+h+XUT3Jd67srpNfPcfcswuA4IMKmy1I6Ma4vw9hW7Dz
-        4wWHcls4SfbJX4nvteK15wQeU+rX3sRYpsmiyMs=
-X-Google-Smtp-Source: ABdhPJxxhebXn0C3eLDhe4i9ZzjnVgQWEnsfCVOME28CuSjNmUyzCvyA2ceDnIGiynqz4RzvVCViHBJYZztQAezuUJ0=
-X-Received: by 2002:a0d:c442:0:b0:2fe:beab:1fef with SMTP id
- g63-20020a0dc442000000b002febeab1fefmr28721987ywd.196.1653393222323; Tue, 24
- May 2022 04:53:42 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=s623joAvO3I1Y9L2nlzNVOrnSxU41vctt1MgQl9k/Tw=;
+        b=FBXtAcfJNh8K3neooChQUXQDqsbASXqraMvQyRVN6LX61F9jz3EX/8g5EjoKmQLH3j
+         f9WnFrZ75v0CdvB1d4LhLC5/JxnOUp2mH6AkK/l4FOo3YYnXSMpOE9n/hFlM/gYfeHYt
+         s+RAUS1nq6JUpvS+pkWqhN63Tk/2S5FdeOuKpm55NUC5IG1wOBL98vFUfoRtg56EfloT
+         qdttuZwgbhNBCWKg5izIHlQkV86GwMHN1BPCqdc/whio8voB866+yu2OFP2xMAeTi2O4
+         3SB0IEw6s9fLmrTFUIUxkzUEYlbij3y8b1L1yOeGC9JoplKdlgVxJIpA8tfhheuROuwH
+         S1LQ==
+X-Gm-Message-State: AOAM532KiOCeOqTTUoAyzbMI6gmgj/5qXcg2dv+k934vzrY+bpfheWR2
+        dUdqPHWs6UcFl+T2oVQLwONNK2rautixg1M2LDE=
+X-Google-Smtp-Source: ABdhPJxY0fnNn+R942HDyIrQWoTArBHncI0MuDToWWNAMuWa9r9pFisa9HveCYRrvRbh8M/lqcPFzyjXjmtTMbYjmEI=
+X-Received: by 2002:a05:6e02:188f:b0:2d1:58f:41a6 with SMTP id
+ o15-20020a056e02188f00b002d1058f41a6mr13594132ilu.86.1653393363575; Tue, 24
+ May 2022 04:56:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220511043515.fn2gz6q3kcpdai5p@vireshk-i7> <CAMA88TpefB=rnqea2u1zEvNUJNE_kdj4mYito7SGCuMj-o071Q@mail.gmail.com>
- <20220511122114.wccgyur6g3qs6fps@vireshk-i7> <CAJZ5v0gN_yDFpvCXRXv8rN-i3TugCi-HKpBKK2z4eWU0Zm1GUg@mail.gmail.com>
- <CAJZ5v0id+7vkqMQEyVRe29oF_dRtzZ0EhoYUn8=yzeENDeABJw@mail.gmail.com>
- <20220512065623.q4aa6y52pst3zpxu@vireshk-i7> <CAJZ5v0jeYiZ6esdxnJbOyDztNqOAbjcjxmpca3JTFWRh+cwdBw@mail.gmail.com>
- <20220513042705.nbnd6vccuiu6lb7a@vireshk-i7> <20220524111456.hw4qugsvt4bm7reh@vireshk-i7>
- <CAJZ5v0i_qpcaUwdZY=KR_e=HC6MZUw2aDGL=hxgo866dF1zwOA@mail.gmail.com>
- <20220524112917.apcvvvblksg7jdu4@vireshk-i7> <CAJZ5v0jRtYcscWjUras9RC9LOTHf=qu1SPBhnC=52Gb3KKAQNw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jRtYcscWjUras9RC9LOTHf=qu1SPBhnC=52Gb3KKAQNw@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 24 May 2022 13:53:31 +0200
-Message-ID: <CAJZ5v0hHcW-JkXyOZ7ftR+sUQxysEV2--j29owdojYbg_dR_iw@mail.gmail.com>
-Subject: Re: [PATCH v3] cpufreq: fix race on cpufreq online
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Schspa Shi <schspa@gmail.com>,
+References: <20220330094126.30252-1-alistair@alistair23.me>
+ <20220330094126.30252-2-alistair@alistair23.me> <45acc349-8fea-f755-065c-c561949c45af@roeck-us.net>
+ <CAKmqyKOqjperoku_uOy4sCa6LmCUtfB7SCvhLEKxLtcwDkzRyA@mail.gmail.com> <YmEQ1/Gs15gUxYdh@google.com>
+In-Reply-To: <YmEQ1/Gs15gUxYdh@google.com>
+From:   Alistair Francis <alistair23@gmail.com>
+Date:   Tue, 24 May 2022 21:55:37 +1000
+Message-ID: <CAKmqyKPqUuwguio07Jr99DV-3paEkmU-qJp6tERxPoU79BCAgw@mail.gmail.com>
+Subject: Re: [PATCH v20 1/4] mfd: silergy,sy7636a: Add config option
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Alistair Francis <alistair@alistair23.me>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        linux-hwmon@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Andreas Kemnade <andreas@kemnade.info>,
+        Zhang Rui <rui.zhang@intel.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Amit Kucheria <amitk@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, May 24, 2022 at 1:48 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Thu, Apr 21, 2022 at 6:07 PM Lee Jones <lee.jones@linaro.org> wrote:
 >
-> On Tue, May 24, 2022 at 1:29 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> >
-> > On 24-05-22, 13:22, Rafael J. Wysocki wrote:
-> > > On Tue, May 24, 2022 at 1:15 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> On Wed, 20 Apr 2022, Alistair Francis wrote:
+>
+> > On Thu, Mar 31, 2022 at 6:02 AM Guenter Roeck <linux@roeck-us.net> wrot=
+e:
+> > >
+> > > On 3/30/22 02:41, Alistair Francis wrote:
+> > > > Add a specific MFD_SY7636A config option.
 > > > >
-> > > > On 13-05-22, 09:57, Viresh Kumar wrote:
-> > > > > On 12-05-22, 12:49, Rafael J. Wysocki wrote:
-> > > > > > > > Moreover, I'm not sure why the locking dance in store() is necessary.
-> > > > > > >
-> > > > > > > commit fdd320da84c6 ("cpufreq: Lock CPU online/offline in cpufreq_register_driver()")
-> > > > > >
-> > > > > > I get that, but I'm wondering if locking CPU hotplug from store() is
-> > > > > > needed at all.  I mean, if we are in store(), we are holding an active
-> > > > > > reference to the policy kobject, so the policy cannot go away until we
-> > > > > > are done anyway.  Thus it should be sufficient to use the policy rwsem
-> > > > > > for synchronization.
-> > > > >
-> > > > > I think after the current patchset is applied and we have the inactive
-> > > > > policy check in store(), we won't required the dance after all.
+> > > > As part of this change we can use MFD_SY7636A as a dependency for a=
+ll
+> > > > SY7636a components and also remove the name from MFD_SIMPLE_MFD_I2C=
+ as
+> > > > it no longer needs to be selectable.
 > > > >
-> > > > I was writing a patch for this and then thought maybe look at mails
-> > > > around this time, when you sent the patch, and found the reason why we
-> > > > need the locking dance :)
-> > > >
-> > > > https://lore.kernel.org/lkml/20150729091136.GN7557@n2100.arm.linux.org.uk/
+> > > > Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> > >
+> > > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 > >
-> > Actually no, this is for the lock in cpufreq_driver_register().
-> >
-> > > Well, again, if we are in store(), we are holding a reference to the
-> > > policy kobject, so this is not initialization time.
-> >
-> > This is the commit which made the change.
-> >
-> > commit 4f750c930822 ("cpufreq: Synchronize the cpufreq store_*() routines with CPU hotplug")
+> > Any chance of getting this in for 5.18? It would be nice to have the
+> > configs all sorted before the release
 >
-> So this was done before the entire CPU hotplug rework and it was
-> useful at that time.
->
-> The current code always runs cpufreq_set_policy() under policy->rwsem
-> and governors are stopped under policy->rwsem, so this particular race
-> cannot happen AFAICS.
->
-> Locking CPU hotplug prevents CPUs from going away while store() is
-> running, but in order to run store(), the caller must hold an active
-> reference to the policy kobject.  That prevents the policy from being
-> freed and so policy->rwsem can be acquired.  After policy->rwsem has
-> been acquired, policy->cpus can be checked to determine whether or not
-> there are any online CPUs for the given policy (there may be none),
-> because policy->cpus is only manipulated under policy->rwsem.
->
-> If a CPU that belongs to the given policy is going away,
-> cpufreq_offline() has to remove it from policy->cpus under
-> policy->rwsem, so either it has to wait for store() to release
-> policy->rwsem, or store() will acquire policy->rwsem after it and will
-> find that policy->cpus is empty.
+> Can't do anything without Mark's Ack.
 
-Moreover, locking CPU hotplug doesn't actually prevent
-cpufreq_remove_dev() from running which can happen when the cpufreq
-driver is unregistered, for example.
+Can this be included in 5.19? I can re-send the series if required
+
+Alistair
+
+>
+> --
+> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
+> Principal Technical Lead - Developer Services
+> Linaro.org =E2=94=82 Open source software for Arm SoCs
+> Follow Linaro: Facebook | Twitter | Blog
