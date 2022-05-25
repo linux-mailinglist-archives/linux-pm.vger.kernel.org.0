@@ -2,267 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22FAF533E08
-	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 15:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F55533E2B
+	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 15:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244430AbiEYNjh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 May 2022 09:39:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
+        id S232202AbiEYNrA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 May 2022 09:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244472AbiEYNjc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 09:39:32 -0400
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0AF6CF69
-        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 06:39:24 -0700 (PDT)
-Date:   Wed, 25 May 2022 13:39:09 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dannyvanheumen.nl;
-        s=protonmail2; t=1653485960; x=1653745160;
-        bh=Imj1CnxdhLIA5G7hOmRvULuNRXnAYm37FUFBTmmK47U=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=Uq5HKpDZoyVxIhCR1iIqhj53VZIEVNW9qi9S1T5NocEwAzwDaTdPxnHdA9JzcWUiE
-         HYpTWxKivNhCPVmrhlplZwqoumxqEMPVnexqGenwpLIUp/CCQPQbr4ZkJLw4qFUYEk
-         9lPx10b2FqalHfkd1m0hj2RGoHqJvGz7/7tHZv9XCaJaFjJkd8N9Kw+Tl0jMI+7E0W
-         LtNbOfwibLLxwpZvxdq46oGB7sa6rHRFjTQ4VkasPDZkobO1q9s2OT29y5kzd5v2+P
-         +b997NwdW/spOgSUZhKGi4uorIg9pPyTZZMNxzWrI7OwfhKoSLLD8AHDo79CajcSEP
-         r5WMnSVKXbL1g==
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-From:   Danny van Heumen <danny@dannyvanheumen.nl>
-Cc:     =?utf-8?Q?=E2=80=9CRafael_J=2E_Wysocki=E2=80=9D?= 
-        <rafael@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Reply-To: Danny van Heumen <danny@dannyvanheumen.nl>
-Subject: Re: 'schedutil' (possibly) aberrant behavior surrounding suspend/resume process (timing/delay/run-away CPU issues)
-Message-ID: <34KkbDDzdEpklXuY3YwJi95cgyhc44xzV-xQVDRRuKctbmHUdH8Ddm2LMcSUVNVmwtGUaB73-yOqIijCnMFRfh3aYxlKOKcrrRyCHb2uOPw=@dannyvanheumen.nl>
-In-Reply-To: <20220525052804.rvnp2jinpmz7vukx@vireshk-i7>
-References: <R6AlCxZca3GET8vtwpOAkzQ4Y9SX-NOVQ05FlJAKDUvNTYCAhsWy1e0q5soCkapaviI8SS-9eC51nwJj6yn6n1rFAlwndEqYqlr_hqz4C_U=@dannyvanheumen.nl> <20220525052804.rvnp2jinpmz7vukx@vireshk-i7>
-Feedback-ID: 15073070:user:proton
+        with ESMTP id S229779AbiEYNq7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 09:46:59 -0400
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67EE62C67B;
+        Wed, 25 May 2022 06:46:57 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-3003cb4e064so42622897b3.3;
+        Wed, 25 May 2022 06:46:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sAZ+DgPPDDVzcDc1w8sv+0S0ncjGvCusX7p+z8GYQSA=;
+        b=CTrWiy1je9tiZ2ij1TQfUYG9Z7uNCWZlztLd+exIxrv991R6bWWeLN6ZMgZPdbcUST
+         DshJf8yixzS1k3jIx9IhdgqcnY0CCp4D22Xrbx832euL5KBbc8RmsrF//Xo5kn5Bexkz
+         UWNuyHc2L8lJ3cSHkVndyr4q2PQkpWlbrhRDzRkcWCu15uifi2qiMIkmzoMN68DvmNTy
+         +YfsTinDJxOGcBeA2Q36saoU2MLQP01u++RcfvtWxh9GDWSly1Rkcoo0zUHOL2TUVsYY
+         LhKjtg5VLkKtXiZoKdBXtgcjWTzNuhG9Dc71OO3CoybdeA6HBNTb/PtGQVSMWfdakSF1
+         cf/g==
+X-Gm-Message-State: AOAM533mrS3JT4/u9/+4L+dpcsStVWAWyxOjHMsYdBUWZ6bZJdS27R77
+        to0WlfRb1GejDAO5JBj2MhfjgTGgRtyOFAbFZyE=
+X-Google-Smtp-Source: ABdhPJz2UmrIsRVznag5o2/K+C1hQquZo+a1ndUPE067SJI5JbLTZS/Ql0Vf0ys9oGueNLcirzlmjJxwOrdOphckCpE=
+X-Received: by 2002:a81:8844:0:b0:2fe:a7de:20c2 with SMTP id
+ y65-20020a818844000000b002fea7de20c2mr34059926ywf.515.1653486416716; Wed, 25
+ May 2022 06:46:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220523174852.30725-1-sumeet.r.pawnikar@intel.com>
+In-Reply-To: <20220523174852.30725-1-sumeet.r.pawnikar@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 25 May 2022 15:46:45 +0200
+Message-ID: <CAJZ5v0ikhR+fhVz0HW63RhaEJ6C1OxqhBgW1EzRPS0ghmBCCsg@mail.gmail.com>
+Subject: Re: [PATCH v2] thermal: int340x: Add Meteor Lake PCI device id
+To:     Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-------- Original Message -------
-On Wednesday, May 25th, 2022 at 07:28, Viresh Kumar <viresh.kumar@linaro.or=
-g> wrote:
-
-> [..]
+On Mon, May 23, 2022 at 7:51 PM Sumeet Pawnikar
+<sumeet.r.pawnikar@intel.com> wrote:
 >
-> On 21-05-22, 22:13, Danny van Heumen wrote:
+> Add Meteor Lake PCI ID for processor thermal device.
 >
-> > Hi all,
-> >
-> > This is my first report directly to linux kernel mailing lists. I'll
-> > do my best, but I'll invariably make some mistakes.
+> Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+> Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
+> v2: Replaced Signed-off-by with Reviewed-by as per comment from
+>     Srinivas Pandruvada
+> ---
+>  drivers/thermal/intel/int340x_thermal/processor_thermal_device.h | 1 +
+>  .../thermal/intel/int340x_thermal/processor_thermal_device_pci.c | 1 +
+>  2 files changed, 2 insertions(+)
 >
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> index 49932a68abac..7d52fcff4937 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
+> @@ -24,6 +24,7 @@
+>  #define PCI_DEVICE_ID_INTEL_HSB_THERMAL        0x0A03
+>  #define PCI_DEVICE_ID_INTEL_ICL_THERMAL        0x8a03
+>  #define PCI_DEVICE_ID_INTEL_JSL_THERMAL        0x4E03
+> +#define PCI_DEVICE_ID_INTEL_MTLP_THERMAL       0x7D03
+>  #define PCI_DEVICE_ID_INTEL_RPL_THERMAL        0xA71D
+>  #define PCI_DEVICE_ID_INTEL_SKL_THERMAL        0x1903
+>  #define PCI_DEVICE_ID_INTEL_TGL_THERMAL        0x9A03
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> index ca40b0967cdd..c2dc4c158b9d 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> @@ -358,6 +358,7 @@ static SIMPLE_DEV_PM_OPS(proc_thermal_pci_pm, proc_thermal_pci_suspend,
 >
-> That's fine. Just two things you need to take care of normally, keep
-> the line length to 100 columns (as I have done now) and don't do
-> top-posting on replies. That's all :)
+>  static const struct pci_device_id proc_thermal_pci_ids[] = {
+>         { PCI_DEVICE_DATA(INTEL, ADL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
+> +       { PCI_DEVICE_DATA(INTEL, MTLP_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
+>         { PCI_DEVICE_DATA(INTEL, RPL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
+>         { },
+>  };
+> --
 
-Okay. Good to know.
-
->
-> > This bug report
-> > is based on "educated" guessing, some insight and intuition, so I
-> > will do my best to explain all the curiosities and why I blame
-> > `schedutil`. To clarify, I seems behavior of schedutil triggers
-> > issues elsewhere.
-> >
-> > I write the message not to say "this is the problem, fix it!" but
-> > rather, I hope to check with you if you recognize potential things
-> > to look for, if the reports make any sense.
-> >
-> > ## short summary
-> >
-> > On multiple computers, with kernel builds from distros and also
-> > vanilla custom (minimal) config builds by myself, I have had a
-> > number of issues that all center around suspend/resume with
-> > 'schedutil' scaling governor active. Some issues seem to be
-> > explained by other causes/bug-reports, but I report this here
-> > because `schedutil` is a common denominator.
-> >
-> > Characteristics:
-> > - Kabylake, upon suspend, problems with going into suspend, with
-> > "runaway processor" behavior starting to run at full power causing
-> > excessive build-up of heat. (intel_pstate=3Dpassive) (more details
-> > follow ...)
->
->
-> If this is actually related to cpufreq subsystem, then maybe the CPU
-> going down was programmed at a higher frequency (because there was
-> work to do during suspend) while going offline. I am not sure how it
-> works on Intel, but on ARM we have something like a
-> "suspend-frequency", which is programmed right before we suspend to
-> make sure not to consume a lot of power. Maybe we can do something
-> like this in intel-pstate driver, not sure though.
-
-To clarify, I am trying to figure out/debug why schedutil *seems to
-be* closely involved in a number of issues regarding suspend/resume.
-
-In particular, on the Pinebook Pro, with a custom compiled kernel and
-the only change being the 'schedutil' governor, it does not seem right
-to have often (not always) suspend-resume issues, compared to 0 so far
-with other governors.
-
-> > - Haswell laptop, upon suspend, sometimes does not suspend, instead
-> > screen off but then returned to active.
-> > - Pinebook Pro: upon resume from suspend (s2idle, I'm fairly
-> > certain): problems getting "display panel up in time", "eMMC/SDIO
-> > failing to initialize", screen-flickering from excessive refreshing
-> > many times the blinking rate. (more details follow ...)
-> >
-> > These issues start to happen upon suspend. The issues do not happen
-> > when `schedutil` is not involved.
-> >
-> > My interpretation: somewhere just before, or just after entering
-> > suspend-state/initiating restore, `schedutil` messes up something
-> > w.r.t. timings: timings/delays/repeats happen at many times the
-> > intended speed.
-> >
-> > ## `schedutil` before suspend: all good
-> >
-> > I have been using `schedutil` for many months. Upon normal
-> > operations there never seem to be any issues, or unexpected events.
-> > What I describe all happens centered around the suspension-process,
-> > and sometimes as consequence afterwards.
-> >
-> > ## Pinebook Pro issues
-> >
-> > - original Debian kernel,
-> > - custom-built kernel with very minimal config: versions
-> > 5.15.{38,39,41} 5.17.9
-> > - `schedutil` cpufreq scaling governor
-> > - Debian bullseye (original, no third-party kernels), up-to-date
-> > install
-> > - no tlp, manual suspend procedure (either button- or lid-triggered)
-> >
-> > The Pinebook Pro does not exhibit issues (AFAICT) upon entering
-> > suspend. However, resume will fail often, but not always. I have
-> > seen different symptoms exhibited:
-> >
-> > 1.) 3-line error message regarding analogix_dp_resume about
-> > rockchip-module not succeeding (through analogix) to re-initialize
-> > the display panel in time. (It shows on that exact display panel,
-> > so clearly it worked.)
-> > Those 3 lines of error message, are being refreshed at many times
-> > the necessary rate. The excessive refreshing interferes with the
-> > ability to switch terminals (TTY1, TTY2, etc.), because I see a
-> > "single frame blink" of the terminal and then gets overridden with
-> > the 3-line error message again. Same holds for switch to GUI DISPLAY
-> > terminal. Display does not have sufficient time to refresh and ends
-> > up with variations of extra long DPMS-off state before returning to
-> > the error-message-screen.
-> > Sometimes I am able to "interrupt" this excessive run-away behavior
-> > by keeping e.g. CTRL+ALT+1 pressed such that it will try to switch
-> > TTY at "key-repeat"-speed.
-> >
-> > 2.) error message regarding eMMC/SDIO issues. Similar to (1.) issue
-> > with failing to initialize eMMC and consequently I lose access to
-> > my persistent storage.
-> >
-> > 3.) issue also occurs when entering sleep from prolonged idleness
-> > with lid already closed (DPMS off + locked) as starting-point.
-> >
-> > [x.] Not sure if relevant at all: "crashes with wifi firmware". A
-> > buggy early firmware version for a broadcom wifi chip would
-> > occasionally crash. However, in particular around the suspend
-> > process there would be issues.
-> > I don't want to attribute this to schedutil, but maybe schedutil's
-> > behavior significantly increases the chance of this happening.
-> >
-> > NOTE: I tried switching back to 'ondemand' scheduler after first
-> > issues had occurred with 'schedutil' active. However, reverting to
-> > 'ondemand' did not resolve the outstanding issues at that point.
-> >
-> > ## Kabylake-laptop
-> >
-> > - Distro-kernel (i.e. not vanilla)
-> > - `intel_pstate=3Dpassive` kernel parameter
-> > - `schedutil` as cpufreq scaling governor (udev-rule)
-> >
-> > 1.) Trigger suspend on the laptop. System goes into suspend state as
-> > expected. Then (in about 2 seconds) fans start spinning and
-> > apparently excessive heat is being produced. (This was reported
-> > somewhere already as being an issue with PCH temp being too high,
-> > w.r.t. `S0ix` `intel_pch_thermal`.) However, I suspect that
-> > high-temperature may be caused through `schedutil`, because the
-> > laptop did not run any intensive tasks of any kind. (idling)
-> > Upon resuming, the laptop has lost significant amounts of battery,
-> > corresponding with the excessive CPU usage and cooling fans.
-> >
-> > ## Haswell laptop
-> >
-> > 1.) Not much to say: enter suspend, find out later that it did not
-> > truly enter suspend, but was kept back and is rather active.
-> >
-> > ## Without `schedutil`
-> >
-> > In all cases, when taking schedutil out of the loop, these issues
-> > disappear. In case of the Kabylake laptop, I do set
-> > intel_pstate=3Dactive.
->
->
-> Just to clarify here, from what I understand about the active/passive
-> parts of intel-pstate driver, if you set intel_pstate=3Dactive then none
-> of the cpufreq governor's will be used. This enables the setpolicy()
-> callback of the driver, which will decide how the frequency changes
-> later on. The cpufreq governors, ondemand or schedutil, are only in
-> play if intel_pstate=3Dpassive.
-
-So the fact that 'schedutil' is not available but the other governors
-are, is actually meaningless?
-
-Does that mean that setting 'powersave' vs 'performance' is meaningless
-too? If not, does that mean that the meaning changes (as in "determined
-by") intel_pstate?
-
->
-> > All have `ondemand` governor. Suspend/resume
-> > works, repeated many times over. Even if some errors are still
-> > shown, they no longer pose a problem. The excessive screen blinking
-> > behavior is not exhibited, for example.
-> >
-> > ## Other things I have tried
-> >
-> > As mentioned before, I have tried looking for other bugs. However,
-> > the issues seem to be too persistent. I have tried removing all
-> > external devices, tried using different USB ports, tried different
-> > suspend/resume settings in `/etc/systemd/sleep.conf`. Tried using
-> > 'tlp' package for additional power-management tricks. Tried
-> > switching governors, ... and probably more.
-> >
-> > I realize this bug report is far from perfect. I'm afraid I cannot
-> > make the report much more exact/clear. I am happy to answer any
-> > questions you may have. I will keep an eye out for further
-> > peculiarities.
->
->
-> Also I am not yet sure it is related to cpufreq right now.
-
-I am trying to figure out whether or not some problems are caused by
-'schedutil' vs it just being present. I guessed from the MAINTAINERS
-index that you are probably the maintainers with knowledge on
-schedutil. If not, do you know where I should look then?
-
-To clarify, I interpreted 'cpufreq' as in:
-/sys/devices/system/cpu/cpufreq/policy*/scaling_governor
-
-I wonder if I am taking a wrong approach in tackling these issues,
-so if you have recommendations, please let me know.
-
-> [..]
-
-Regards,
-Danny
-
+Applied as 5.19-rc material, thanks!
