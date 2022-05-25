@@ -2,126 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 083675340F5
-	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 18:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF67A5340FE
+	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 18:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242421AbiEYQCy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 May 2022 12:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
+        id S245393AbiEYQF2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 May 2022 12:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241633AbiEYQCy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 12:02:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502DFB41C0;
-        Wed, 25 May 2022 09:02:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 898C360FCF;
-        Wed, 25 May 2022 16:02:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 200D0C385B8;
-        Wed, 25 May 2022 16:02:51 +0000 (UTC)
-Date:   Wed, 25 May 2022 12:02:48 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, mingo@redhat.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        joao.m.martins@oracle.com, mtosatti@redhat.com
-Subject: Re: [PATCH v2] cpuidle: haltpoll: Add trace points for
- guest_halt_poll_ns grow/shrink
-Message-ID: <20220525120248.5cb37817@gandalf.local.home>
-In-Reply-To: <20220523235332.162966-1-eiichi.tsukata@nutanix.com>
-References: <20220523235332.162966-1-eiichi.tsukata@nutanix.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S245369AbiEYQFP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 12:05:15 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA2CB41D6
+        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 09:05:14 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id 3so14145718ily.2
+        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 09:05:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WniLzB5SiRVqHzMZUCEbBv/kb3dmETbEX6p4Sn4Jrug=;
+        b=cTa6aTwIXDVE5TRe6Qutp+ruroH5hAjEPMipG9ObxavNkGtrvXeGz3CHRE0RiRNypT
+         g5bcFQj1rQo7GETNNu6Oi+qLi3ZhffzsRFLW51cfiG2dJ9Zwf/ywTwzXPQuirzfi0+tP
+         Oq2G6ZHlT7xd/IIPTAuUhY62o7d70tqnsEvDY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WniLzB5SiRVqHzMZUCEbBv/kb3dmETbEX6p4Sn4Jrug=;
+        b=HfiiOsZD7tdNIJwScgib+0wPop1P/IBid506gzhJowHOHg3uaab9YM2XgdDhesTn2C
+         Ubm+xfdUjGV1cyfzcA9tnrIy2iD9BAW3ZChy85LdYrlTf8qsOm6ffBmXuV1yG5/Lk9bE
+         lUpeGxxqeFNAo+j2MIh6VOAum7RqBLbi+j2Wtq75436M125hzu+b5eiB5P4B0kJbe0zS
+         SdW6WAjgDTj3WWuxPr5T4jEqdY5j87X6BTg2fbEsBborWtonm6ZE9gKWWWOT4s+Z+9J6
+         HxTfVLoraGLxuFHK86owCFZm6RXo3QQhfmNezjvIOBdg/rh+7EwMM+ugChQzKxd5AwHA
+         VCrw==
+X-Gm-Message-State: AOAM53373K7I/9ZirYI/rYP933nT1qNoE30GjKy7CzDxImJU1zSF+w8s
+        sVYAp+2eziE/A8QkLJwtWeHz9g==
+X-Google-Smtp-Source: ABdhPJxPVFqJ+rxPJ/rSNc6KMtA5495jM0Ok6y/rfEw/mHFvhZlHY7xyDacOZBhSkKetr3O3vJ5dcA==
+X-Received: by 2002:a92:ca0d:0:b0:2d1:aa92:4da6 with SMTP id j13-20020a92ca0d000000b002d1aa924da6mr8792361ils.107.1653494713626;
+        Wed, 25 May 2022 09:05:13 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id c17-20020a023b11000000b0032e6f0d3796sm4209055jaa.145.2022.05.25.09.05.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 May 2022 09:05:13 -0700 (PDT)
+Subject: Re: [PATCH V7 2/4] cpufreq: amd-pstate: Add test module for
+ amd-pstate driver
+To:     Meng Li <li.meng@amd.com>, Huang Rui <ray.huang@amd.com>,
+        linux-pm@vger.kernel.org
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220522115423.1147282-1-li.meng@amd.com>
+ <20220522115423.1147282-3-li.meng@amd.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <6e3cdf37-299a-98df-1143-c3392e9acec0@linuxfoundation.org>
+Date:   Wed, 25 May 2022 10:05:12 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20220522115423.1147282-3-li.meng@amd.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 23 May 2022 23:53:32 +0000
-Eiichi Tsukata <eiichi.tsukata@nutanix.com> wrote:
+On 5/22/22 5:54 AM, Meng Li wrote:
+> Add amd-pstate-ut module, which is conceptually out-of-tree module
 
-> @@ -91,16 +95,17 @@ static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
->  			val = guest_halt_poll_ns;
->  
->  		dev->poll_limit_ns = val;
-> +		trace_guest_halt_poll_ns_grow(smp_processor_id(), val, old);
+I didn't notice this before. Let's get rid of "out-of-tree" workding.
 
-Why are you passing in smp_processor_id()?
+> and provides ways for selftests/amd-pstate driver to test various
+> kernel module-related functionality. This module will be expected by
+> some of selftests to be present and loaded.
+> 
 
->  	} else if (block_ns > guest_halt_poll_ns &&
->  		   guest_halt_poll_allow_shrink) {
->  		unsigned int shrink = guest_halt_poll_shrink;
->  
-> -		val = dev->poll_limit_ns;
->  		if (shrink == 0)
->  			val = 0;
->  		else
->  			val /= shrink;
->  		dev->poll_limit_ns = val;
-> +		trace_guest_halt_poll_ns_shrink(smp_processor_id(), val, old);
->  	}
->  }
->  
-> diff --git a/include/trace/events/power.h b/include/trace/events/power.h
-> index af5018aa9517..db065af9c3c0 100644
-> --- a/include/trace/events/power.h
-> +++ b/include/trace/events/power.h
-> @@ -500,6 +500,39 @@ DEFINE_EVENT(dev_pm_qos_request, dev_pm_qos_remove_request,
->  
->  	TP_ARGS(name, type, new_value)
->  );
+What does "various kernel module-related functionality" mean. Can we
+rephrase this to say "this module is used by kselftest to unit test
+amd-pstate functionality" ?
+
+> Signed-off-by: Meng Li <li.meng@amd.com>
+> Acked-by: Huang Rui <ray.huang@amd.com>
+> ---
+
+[snip]
+
 > +
-> +TRACE_EVENT(guest_halt_poll_ns,
+> +module_init(amd_pstate_ut_init);
+> +module_exit(amd_pstate_ut_exit);
 > +
-> +	TP_PROTO(bool grow, unsigned int cpu_id,
-> +		 unsigned int new, unsigned int old),
-> +
-> +	TP_ARGS(grow, cpu_id, new, old),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(bool, grow)
-> +		__field(unsigned int, cpu_id)
-> +		__field(unsigned int, new)
-> +		__field(unsigned int, old)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->grow   = grow;
-> +		__entry->cpu_id = cpu_id;
+> +MODULE_AUTHOR("Meng Li <li.meng@amd.com>");
+> +MODULE_DESCRIPTION("Kselftest for AMD P-state driver");
 
-You are wasting space to save the cpu_id, as the trace event already knows
-what CPU it occurred on.
+Change this to "AMD P-state driver Test module"
 
- # echo 1 > events/sched/enable
- # cat trace
-#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-#              | |         |   |||||     |         |
-         systemd-1       [004] .....    15.872715: ftrace_boot_snapshot: ** Boot snapshot taken **
-         systemd-1       [001] .....    22.555418: initcall_start: func=fuse_len_args+0x0/0x30 [fuse]
-         systemd-1       [001] .....    22.555425: initcall_finish: func=fuse_len_args+0x0/0x30 [fuse] ret=0
-        modprobe-643     [006] .....    26.737355: initcall_start: func=wmidev_evaluate_method+0x46/0x100 [wmi]
-        modprobe-643     [006] .....    26.742491: initcall_finish: func=wmidev_evaluate_method+0x46/0x100 [wmi] ret=0
+Having Kselftest in the name is confusing. It is a test driver
+that kselftest amd_pstate_test depends on.
 
--- Steve
+> +MODULE_LICENSE("GPL");
+> 
 
+With these above changes:
 
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
-> +		__entry->new    = new;
-> +		__entry->old    = old;
-> +	),
-> +
-> +	TP_printk("cpu %u: halt_poll_ns %u (%s %u)",
-> +		__entry->cpu_id,
-> +		__entry->new,
-> +		__entry->grow ? "grow" : "shrink",
-> +		__entry->old)
-> +);
-> +
+thanks,
+-- Shuah
