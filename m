@@ -2,60 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6AC753540E
-	for <lists+linux-pm@lfdr.de>; Thu, 26 May 2022 21:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7633F534263
+	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 19:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348816AbiEZTpM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 May 2022 15:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50302 "EHLO
+        id S234099AbiEYRsQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 May 2022 13:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346398AbiEZTpI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 May 2022 15:45:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 816F96A044
-        for <linux-pm@vger.kernel.org>; Thu, 26 May 2022 12:45:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1653594303;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wGw3S4Q9Vcbsrn/loM6Su2TerHvvfSdMEurV8a8JpS4=;
-        b=WHCbOQi3YCpmULupJqbys9ph7x6GZgl3hyhkyplzF9CwJlCTeHQX+Ts89YXVtxat5BBPl6
-        Dac4deE1S8ym53PstiaXkXltvMnC9x9rTwO4IgkLNpZuQ09wjtqIcH1fs0aF1YYbzgLiha
-        F2ZqGXSV1MzFhnvqo7a2wbtw+pTs2T4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-574-s_2j5mSHMUeeFkrfH07JZQ-1; Thu, 26 May 2022 15:44:59 -0400
-X-MC-Unique: s_2j5mSHMUeeFkrfH07JZQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 57AF280418B;
-        Thu, 26 May 2022 19:44:59 +0000 (UTC)
-Received: from fuller.cnet (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2833A2166B26;
-        Thu, 26 May 2022 19:44:59 +0000 (UTC)
-Received: by fuller.cnet (Postfix, from userid 1000)
-        id 5EA67416F574; Wed, 25 May 2022 14:31:29 -0300 (-03)
-Date:   Wed, 25 May 2022 14:31:29 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, rostedt@goodmis.org,
-        mingo@redhat.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, joao.m.martins@oracle.com
-Subject: Re: [PATCH v2] cpuidle: haltpoll: Add trace points for
- guest_halt_poll_ns grow/shrink
-Message-ID: <Yo5n8TsSuU9/IxEh@fuller.cnet>
-References: <20220523235332.162966-1-eiichi.tsukata@nutanix.com>
+        with ESMTP id S243025AbiEYRsP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 13:48:15 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A5143EDE;
+        Wed, 25 May 2022 10:48:14 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-3003cb4e064so50148747b3.3;
+        Wed, 25 May 2022 10:48:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=j2JUsEMh5hOyegzZyZUxJxVUxQUsXmJ/ErLMrTCdGGA=;
+        b=b40fdQ3QnfjUiOZ/ZnBRzImhI0kuPnDRbuqM4qKrZO/vm9cknubxRB+k+LYgr3o5pc
+         UXe3Q1klrjgCHlswH5PSbrmASEcO+oeNSHlprKBIAnQEa1lZ7rThgVomyxmiTq5A5iOM
+         5MIsFjBz74qXh8u3Y7HLmPEHodX9XSvNlKx0R2GQqXXjWbO1ji9Iky3ylszINc5jwZYs
+         5vmSNoPT/GlgjkraZhr9DoERDSuhXzgnh076peIUwGKjluIPJW+n2CzqHJUvfcT82hpF
+         P8i6mOwvar6uj88hd5WVWC2Wo733qIA3JYvu+iRB0kKugUtSl2U/znfAuWY9hA5TiyEI
+         evdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=j2JUsEMh5hOyegzZyZUxJxVUxQUsXmJ/ErLMrTCdGGA=;
+        b=ecFtDvVL1iwd5TbqR45Z8Qz2fRDB+kwhW5u3rIYsMEb84lgnITYo/PgUluOUDzeDwv
+         HM9kr14qwQlFywqt2HTbYSlIO55KBfLwraGIq4Y5dXstdA0V8r+pzUczCmBniC0snS7W
+         yvS89P3Vj5gP/WCMpofOw/C5Lw8sEzgPqhA94vpZLAHO/hvQJBFPhE4HTwopvyNXjD/B
+         BogmaJKBmfSq2QVsbOrg9Wvffatif4vxMIXvwbTC8qcZh+mNUmhxOIsLC3umQeS04Ix/
+         8o1UUZtpsbb/UqU2QXqhRX3Sqf8ojNMTYbRKL1c7yQCAucpS7ZbGoEqzX6kMPbGIeSba
+         SLdA==
+X-Gm-Message-State: AOAM531R6EHvFVdskNtVbsK8OfQ6LRFILqRAj+ZGdfEdcI21FX4Kvlc7
+        VBc30Rptvx9jbCqAWeWE22RfZajzuwazhYAbIWxxuRK4yGg=
+X-Google-Smtp-Source: ABdhPJzMNL4nDBfqU94XC7qe7W7TLRd4tfmEk8MhM8qxaKCXoB+SbhkG8lO5iC9oOVk7FsRISDBD7zwX0BlkNczVp3U=
+X-Received: by 2002:a81:87c4:0:b0:2ff:c5dc:72b9 with SMTP id
+ x187-20020a8187c4000000b002ffc5dc72b9mr20757239ywf.19.1653500893574; Wed, 25
+ May 2022 10:48:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220523235332.162966-1-eiichi.tsukata@nutanix.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+From:   =?UTF-8?Q?Rafa=C5=82_Wysocki?= <rjwysocki@gmail.com>
+Date:   Wed, 25 May 2022 19:48:02 +0200
+Message-ID: <CAJZ5v0hjp2-yLN_UyQvMwhoPreTkA3xU0g3boYtxgLi6TWqabA@mail.gmail.com>
+Subject: [CFP] Power Management and Thermal Control MC at LPC 2022
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <len.brown@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,119 +69,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 23, 2022 at 11:53:32PM +0000, Eiichi Tsukata wrote:
-> Add trace points as are implemented in KVM host halt polling.
-> This helps tune guest halt polling params.
-> 
-> Signed-off-by: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
-> ---
->  drivers/cpuidle/governors/haltpoll.c | 15 ++++++++-----
->  include/trace/events/power.h         | 33 ++++++++++++++++++++++++++++
->  2 files changed, 43 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/cpuidle/governors/haltpoll.c b/drivers/cpuidle/governors/haltpoll.c
-> index cb2a96eafc02..a5b6ad32956c 100644
-> --- a/drivers/cpuidle/governors/haltpoll.c
-> +++ b/drivers/cpuidle/governors/haltpoll.c
-> @@ -19,6 +19,7 @@
->  #include <linux/sched.h>
->  #include <linux/module.h>
->  #include <linux/kvm_para.h>
-> +#include <trace/events/power.h>
->  
->  static unsigned int guest_halt_poll_ns __read_mostly = 200000;
->  module_param(guest_halt_poll_ns, uint, 0644);
-> @@ -77,13 +78,16 @@ static int haltpoll_select(struct cpuidle_driver *drv,
->  
->  static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
->  {
-> -	unsigned int val;
-> +	unsigned int val, old;
->  
-> -	/* Grow cpu_halt_poll_us if
-> -	 * cpu_halt_poll_us < block_ns < guest_halt_poll_us
-> +	val = dev->poll_limit_ns;
-> +	old = val;
-> +
-> +	/* Grow poll_limit_ns if
-> +	 * poll_limit_ns < block_ns < guest_halt_poll_ns
->  	 */
->  	if (block_ns > dev->poll_limit_ns && block_ns <= guest_halt_poll_ns) {
-> -		val = dev->poll_limit_ns * guest_halt_poll_grow;
-> +		val *= guest_halt_poll_grow;
->  
->  		if (val < guest_halt_poll_grow_start)
->  			val = guest_halt_poll_grow_start;
-> @@ -91,16 +95,17 @@ static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
->  			val = guest_halt_poll_ns;
->  
+Hi All,
 
-Can do it before the assignment:
+The Power Management and Thermal Control micro-conference:
 
-		trace_guest_halt_poll_ns_grow(val, dev->poll_limit_ns);
+https://lpc.events/event/16/contributions/1158/
 
->  		dev->poll_limit_ns = val;
-> +		trace_guest_halt_poll_ns_grow(smp_processor_id(), val, old);
->  	} else if (block_ns > guest_halt_poll_ns &&
->  		   guest_halt_poll_allow_shrink) {
->  		unsigned int shrink = guest_halt_poll_shrink;
->  
-> -		val = dev->poll_limit_ns;
->  		if (shrink == 0)
->  			val = 0;
->  		else
->  			val /= shrink;
->  		dev->poll_limit_ns = val;
-> +		trace_guest_halt_poll_ns_shrink(smp_processor_id(), val, old);
->  	}
->  }
->  
-> diff --git a/include/trace/events/power.h b/include/trace/events/power.h
-> index af5018aa9517..db065af9c3c0 100644
-> --- a/include/trace/events/power.h
-> +++ b/include/trace/events/power.h
-> @@ -500,6 +500,39 @@ DEFINE_EVENT(dev_pm_qos_request, dev_pm_qos_remove_request,
->  
->  	TP_ARGS(name, type, new_value)
->  );
-> +
-> +TRACE_EVENT(guest_halt_poll_ns,
-> +
-> +	TP_PROTO(bool grow, unsigned int cpu_id,
-> +		 unsigned int new, unsigned int old),
-> +
-> +	TP_ARGS(grow, cpu_id, new, old),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(bool, grow)
-> +		__field(unsigned int, cpu_id)
-> +		__field(unsigned int, new)
-> +		__field(unsigned int, old)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->grow   = grow;
-> +		__entry->cpu_id = cpu_id;
-> +		__entry->new    = new;
-> +		__entry->old    = old;
-> +	),
-> +
-> +	TP_printk("cpu %u: halt_poll_ns %u (%s %u)",
-> +		__entry->cpu_id,
-> +		__entry->new,
-> +		__entry->grow ? "grow" : "shrink",
-> +		__entry->old)
-> +);
-> +
-> +#define trace_guest_halt_poll_ns_grow(cpu_id, new, old) \
-> +	trace_guest_halt_poll_ns(true, cpu_id, new, old)
-> +#define trace_guest_halt_poll_ns_shrink(cpu_id, new, old) \
-> +	trace_guest_halt_poll_ns(false, cpu_id, new, old)
->  #endif /* _TRACE_POWER_H */
->  
->  /* This part must be outside protection */
-> -- 
-> 2.36.1
-> 
-> 
+has been accepted for the LPC 2022, so if you have a topic for
+discussion in that session, please submit it through the LPC web page:
 
+https://lpc.events/event/16/abstracts/
+
+(please choose Power Management and Thermal Control MC as the track).
+Please also submit topics already listed in the MC description.
+
+Please note that the LPC is mostly about discussing work in progress
+and development proposals, so make sure that your topic falls into
+this category.  In particular, please avoid submitting topics
+regarding work that has already been done.
+
+The LPC will be held in Dublin this year, but it should be possible to
+participate in the sessions remotely, so it should be fine to submit a
+topic even if you cannot go to Dublin in person.
+
+Looking forward to seeing you all at the LPC!
+
+Cheers,
+Rafael
