@@ -1,92 +1,117 @@
 Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDEDF533D00
-	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 14:52:14 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 312FC533DAA
+	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 15:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233685AbiEYMvi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 May 2022 08:51:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37704 "EHLO
+        id S238240AbiEYNUY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 May 2022 09:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235210AbiEYMvh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 08:51:37 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51F39D4E3
-        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 05:51:36 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id c5-20020a1c3505000000b0038e37907b5bso1071454wma.0
-        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 05:51:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=O9h3T+Zmsq+gsSjavzG80oSaUN7uUIMz2AyYp3GE7EY=;
-        b=D5qx041TUB/Ueiuu9L+xJI9aIGJjacpJ0Ua9B8v4YTwn9+abXYd3va2HU3pbQBFVCY
-         TABWhlkGHbyv/z2k4fqApmmDNyto5jki5N4Makr135HVBQDIxZONHr4rU2ol0HNV6lh5
-         V1vVM1px9mo03P62GOk0tTIkeyktTXooDSB+hgreCFOHaLh1MZL8v++MELmuqHZWooFx
-         JRS/GwJmFpfIC1LVAA9kRddrRiPVW6xvAWgR+Qf7AcRRE8QNYe0YCklCJXoXSUmyx11j
-         BdiOhOTwlU+eM/4m+w2M5hxaSL56JvRTBnFVTp5zC7wgVXwEN9c1uHJzBZmEtGIvAgM5
-         LjLg==
+        with ESMTP id S244455AbiEYNTx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 09:19:53 -0400
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8771D0DD
+        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 06:19:41 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id g72so8183495ybf.0
+        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 06:19:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=O9h3T+Zmsq+gsSjavzG80oSaUN7uUIMz2AyYp3GE7EY=;
-        b=kx18ZjLzqU7jeJddLyPy5nDVRQjFY7yzFNApOod9iyGYs+ihKGi8Wjqx9JhITueM+h
-         tefgCu412sOZGUqzsTbaz+ay7w4fhdIvY3MM0pa8SSmXPYoCS9/lNf4oIgFxPgfTEiR7
-         QOQUZVueKD4CVhYA5GqnbRsOxmJRMMUiqESgRroW9+OdinACX3MqgjeFX01nrXHA2Zuc
-         XOvIGWplqQNCgTXU2eOXyCcGoN34r9yod/rDUwux4QLJOFWxZs0y/4bSTwH3P/88ajW8
-         LL9t1sZiwW5i+2C7PfBA8BVa6lU5ZotkMsmJxMRkl7c314O0P2WvzXtabdc6BWhnRD/+
-         N9vw==
-X-Gm-Message-State: AOAM530c7dWv6HgnkHQJUmqDiAPESDeozGtRls88jhZIxUqKoIeuae7Z
-        rj8vXzlxPMO7/GW1aiH1I1l2MA==
-X-Google-Smtp-Source: ABdhPJy5XKfq1yokbHHFsQxJDwadX+psJHwzNX2vKGsEXTGquqSIJWW+fIEoDLvYg/ffeMQpKSJ66w==
-X-Received: by 2002:a05:600c:26d2:b0:397:49cd:2cda with SMTP id 18-20020a05600c26d200b0039749cd2cdamr8195843wmv.141.1653483095255;
-        Wed, 25 May 2022 05:51:35 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id 129-20020a1c1987000000b00397550b387bsm2270838wmz.23.2022.05.25.05.51.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 May 2022 05:51:34 -0700 (PDT)
-Message-ID: <ef871d78-12d2-e19e-9a12-6288256116a7@linaro.org>
-Date:   Wed, 25 May 2022 13:51:33 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EN7y3UT5BTE4F+2bbUgE6JO/7u5HkYZnnALakV1gSwo=;
+        b=29LMFkrR4mBQcvfnQZ2r0VvaVu291kiYvMsPRNpWltgC9mOA2TwS9Gbh+QAPERJIuR
+         T4Z4Ro6JVDVnrU75WIJYvo8B+b0N5vUak5FYKdR7SMnEZLmrf1CW1W9YuuFJ64VuAEPT
+         PIrUleimToPlEWgadl5MVwoZJaqIheZ6y80+9Oi41h/yOMqNcvRTRliKnggGDM3iphSI
+         RVv+3zDdtzAfO8R6bEChSgKer6xJxg3YI4ta3TMvnsWmfHtr9UaD5RPyj4l78Tb3e+Mw
+         Zk8uPhqAaUJORLqgnY5tHCgs8rgHYYWqsA4yGQGWcH3piFMooM+9Eghcv3pv/US96TLC
+         RB9g==
+X-Gm-Message-State: AOAM533qKVNPHSksu/my1yblEIvOtJBlyQ7igth7LFpsrZ9in3NKE/OX
+        nSlFTfMpVr8xHAMMtiHj1owMB0rQP4Azy7ltCC4=
+X-Google-Smtp-Source: ABdhPJzrURzpKt8/h92nPvhM+mKRJ7DsSzhBPxP5Hps8GpY7P10+IJdvn0ln+nny0WRJ41W23F+hX8nrW04g0xknioU=
+X-Received: by 2002:a25:6dc5:0:b0:655:bf98:2421 with SMTP id
+ i188-20020a256dc5000000b00655bf982421mr2013906ybc.633.1653484764271; Wed, 25
+ May 2022 06:19:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 0/5] qcom-cpufreq-nvmem: Add msm8939 with some fixups
-Content-Language: en-US
-To:     agross@kernel.org, bjorn.andersson@linaro.org, ilia.lin@kernel.org,
-        rafael@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20220418162226.2983117-1-bryan.odonoghue@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20220418162226.2983117-1-bryan.odonoghue@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220524051731.lm2qg5ld34ss56hr@vireshk-i7>
+In-Reply-To: <20220524051731.lm2qg5ld34ss56hr@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 25 May 2022 15:19:13 +0200
+Message-ID: <CAJZ5v0iV=a3nfTR0Y7UwzQ4_AwFBtu2yH-+VfOAsUiaxzTZvBQ@mail.gmail.com>
+Subject: Re: [GIT PULL] cpufreq/arm updates for 5.19-rc1
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18/04/2022 17:22, Bryan O'Donoghue wrote:
-> Fix up some missing compat strings for the qcom-cpufreq-nvmem yaml.
-> Add in msm8939 as a compatible qcom-cpufreq-nvmem.
-> 
-> Bryan O'Donoghue (5):
->    dt-bindings: opp: Add missing compat devices
->    dt-bindings: opp: Add msm8939 to the compatible list
->    cpufreq: blocklist Qualcomm msm8939 in cpufreq-dt-platdev
->    cpufreq: qcom-cpufreq-nvmem: Rename qcs404 data to cpr_genpd
->    cpufreq: qcom-cpufreq-nvmem: Add msm8939 as cpr_genpd
-> 
->   .../devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 8 ++++++++
->   drivers/cpufreq/cpufreq-dt-platdev.c                     | 1 +
->   drivers/cpufreq/qcom-cpufreq-nvmem.c                     | 9 +++++----
->   3 files changed, 14 insertions(+), 4 deletions(-)
-> 
-ping
+On Tue, May 24, 2022 at 7:17 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> The following changes since commit e4e6448638a01905faeda9bf96aa9df7c8ef463c:
+>
+>   cpufreq: qcom-cpufreq-hw: Clear dcvs interrupts (2022-04-26 12:08:31 +0530)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq-arm-5.19-rc1
+>
+> for you to fetch changes up to 39b360102f3ac6b12cafac9db25762071eb0418c:
+>
+>   cpufreq: mediatek: Add support for MT8186 (2022-05-12 10:39:31 +0530)
+>
+> ----------------------------------------------------------------
+> cpufreq arm updates for 5.19-rc1
+>
+> - Tegra234 cpufreq support (Sumit Gupta).
+>
+> - Mediatek cleanups and enhancements (Wan Jiabing, Rex-BC Chen, and
+>   Jia-Wei Chang).
+>
+> ----------------------------------------------------------------
+> Jia-Wei Chang (8):
+>       cpufreq: mediatek: Use module_init and add module_exit
+>       cpufreq: mediatek: Cleanup variables and error handling in mtk_cpu_dvfs_info_init()
+>       cpufreq: mediatek: Remove unused headers
+>       cpufreq: mediatek: Enable clocks and regulators
+>       cpufreq: mediatek: Record previous target vproc value
+>       cpufreq: mediatek: Make sram regulator optional
+>       cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()
+>       cpufreq: mediatek: Add support for MT8186
+>
+> Rex-BC Chen (7):
+>       cpufreq: mediatek: Use device print to show logs
+>       cpufreq: mediatek: Replace old_* with pre_*
+>       cpufreq: mediatek: Unregister platform device on exit
+>       cpufreq: mediatek: Move voltage limits to platform data
+>       cpufreq: mediatek: Add opp notification support
+>       dt-bindings: cpufreq: mediatek: Add MediaTek CCI property
+>       cpufreq: mediatek: Link CCI device to CPU
+>
+> Sumit Gupta (4):
+>       dt-bindings: Document Tegra CCPLEX Cluster
+>       cpufreq: tegra194: add soc data to support multiple soc
+>       cpufreq: tegra194: Add support for Tegra234
+>       arm64: tegra: add node for tegra234 cpufreq
+>
+> Wan Jiabing (2):
+>       cpufreq: mediatek: Fix NULL pointer dereference in mediatek-cpufreq
+>       cpufreq: mediatek: Fix potential deadlock problem in mtk_cpufreq_set_target
+>
+>  .../arm/tegra/nvidia,tegra-ccplex-cluster.yaml     |  52 ++
+>  .../bindings/cpufreq/cpufreq-mediatek.txt          |   7 +
+>  arch/arm64/boot/dts/nvidia/tegra234.dtsi           |   7 +
+>  drivers/cpufreq/mediatek-cpufreq.c                 | 636 ++++++++++++++-------
+>  drivers/cpufreq/tegra194-cpufreq.c                 | 246 ++++++--
+>  5 files changed, 689 insertions(+), 259 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
+
+Pulled, thanks!
