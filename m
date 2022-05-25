@@ -2,63 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506475336E2
-	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 08:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32536533707
+	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 09:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238452AbiEYGrh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 May 2022 02:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
+        id S243504AbiEYHKp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 May 2022 03:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234014AbiEYGrg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 02:47:36 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C7D5FF1C
-        for <linux-pm@vger.kernel.org>; Tue, 24 May 2022 23:47:35 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d22so17770437plr.9
-        for <linux-pm@vger.kernel.org>; Tue, 24 May 2022 23:47:35 -0700 (PDT)
+        with ESMTP id S234277AbiEYHKg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 03:10:36 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1588862EF
+        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 00:05:55 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id z11so9071435pjc.3
+        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 00:05:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=hfJguTb36qQ34TuQiZ2VTczu2o5QLaoj2zZp1ypyNzk=;
-        b=YEKDGyY2ZmnANjlQKMn1Irwn0CfGR63M2n3Jpmonkkx1AQco+5V0Sb0KZb5o9yO3Yl
-         4WrEkjoSr3VtTg0iiudJTL6uqNCVndy5HRWofK/sBbQAHpS7U/kCKVzAZ0tFTZevnQaF
-         oJRe/O0iPq9hqk+uthzPVglaweZR7YWtfKuj3UvwjCs9afaEmuMFPu2zCxkAZElMNpQY
-         QczibTDTOSEWfCdzaPalz3cMyTg5RXXsTRU5kT/HmlbgvqFP+orEy37dpBTQGV8Hi6kK
-         lyb/8VpM82o+PmBNz8EP9wVny5u5Rn99Vw8B9sGlI4xyvZMC1XkT4Dphb5IgPqk/WWVK
-         l8TQ==
+        bh=GQOgQwVQ/waUJffCDtcivwSbqH5M+zW3KVOXOzVg+3I=;
+        b=hfxeN4TuHwZ+F26aVi1nDnyqqj9hzVXzKQLyUTyyseJ1iA2d76wNddPr+Rs8dRaw8U
+         6g2vsfECGDI/zklJP00Pvjz5teG9nmAJS5uNj3rHFuswYrxKgIoBmlWZoWXCgNjj86Nw
+         Vkffw8Z9LaoNwuAhLW48PfDj+fbdlnQyCDUcNUnhZPqLLqxucNyPXCbFCdNp7qMzjthM
+         mymx77ceQo5I2XfTuxYjsKmFpGcIReYXyG8UMB03cIeWtS+6g/6It1c3bKwQKOmb7bt/
+         dSvKqMiBn0YuUFNtMVFi8MhtNg134bEF2gpV9ILEW7JMJzgsd+aafYU9xoXS2GUdN3qU
+         /ARQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=hfJguTb36qQ34TuQiZ2VTczu2o5QLaoj2zZp1ypyNzk=;
-        b=D0ybi5pWT4uG29Ll4tBMSaqQ+QCPZ5ykug1Vdfa76VZgMjXIyAD9xlAM4LDW0sGtWI
-         z5PaVJ9GCJG9+qLNDGxvgo0WzHyPcqFEMYmk/5O4iyjPD/k6I7Dsz8FZjNaGU8VwQx2p
-         hs99vQ52JxTf5k/036UyqbRA8lbUI89OPmk5cp1hkV0mpsymnJRCKj/qF0KhjgYalL2E
-         GT0bJTaeChLqkhVG8QFEr1gi4hmorTQSmFFY+y2c+ny/gRTHTYBFmNfILNMKlkKYerD7
-         mBVzKp2SWsfwn4CXm7idXys2da3mwCZhm5mpxfz12KTOVEzlemWgLfI83JgxZGf+RnFX
-         osSw==
-X-Gm-Message-State: AOAM532Y2j8pfvH0mgw/7aNeX4TEuXUJfcpJBAqRkk4Q4kgwpkKCerxc
-        b7Rg6JpwtvSekMF2G+wP3jzInQ==
-X-Google-Smtp-Source: ABdhPJw7CqgkWOzwbw0mfwNHpJMV0qT5ZJw6yUuKKXGEqjx6xFrzaYoNSP5vX8FpNzpadqNsQhyttw==
-X-Received: by 2002:a17:90a:bf10:b0:1e0:89b0:7baa with SMTP id c16-20020a17090abf1000b001e089b07baamr5688858pjs.208.1653461254712;
-        Tue, 24 May 2022 23:47:34 -0700 (PDT)
+        bh=GQOgQwVQ/waUJffCDtcivwSbqH5M+zW3KVOXOzVg+3I=;
+        b=JM1ppml5sh06gCRDLnATt2h9OGIMbSw56rKwPUhIg5QO3lElgB3/dWJTK/Tw4ZYSaT
+         Md34MkzPYnKK0b0YhF0fE+rDzC2fCziiwIIVPSzWo1xzl5Ayt9FoGOzRxFbW9SmbkdD1
+         MXq16AuzefgMkE0BOzDqFsFELtK5H57gvOm4DyVHNgIkC5oi7WGPYolPn7TGL6UpJzru
+         1/QPr14vsScnOzdIFm2MSathJpSBQojiRrx4l0+LRlFUFiLr1zASLG4mb9FamY7Ssv/i
+         m6yjUgNCyQAxcpvIyVIJzinEY1eXKUVW/tn/tZXKokneQUjeuMUyopmAbeU5ZdcpkDl0
+         v0VA==
+X-Gm-Message-State: AOAM533Be4s3CJkklgazDikCNuHCcPAo0bMHWaFOM0Ul2hBlAhkANiR2
+        Z0VgOSxQl9rXVpECvkYkbFU/XQ==
+X-Google-Smtp-Source: ABdhPJxXwWFCbgZ5LyQsmogKN6LaNXPGnyZsOSm+FR1qUQynXNNGcC3+iJkueuoaM9Wz9sT5XQO9IQ==
+X-Received: by 2002:a17:902:cf05:b0:156:9d:ca01 with SMTP id i5-20020a170902cf0500b00156009dca01mr30978527plg.111.1653462354436;
+        Wed, 25 May 2022 00:05:54 -0700 (PDT)
 Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id cw25-20020a056a00451900b0050dc76281d3sm10581798pfb.173.2022.05.24.23.47.33
+        by smtp.gmail.com with ESMTPSA id b14-20020a170902650e00b001624f2b71b4sm2310001plk.152.2022.05.25.00.05.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 May 2022 23:47:34 -0700 (PDT)
-Date:   Wed, 25 May 2022 12:17:31 +0530
+        Wed, 25 May 2022 00:05:53 -0700 (PDT)
+Date:   Wed, 25 May 2022 12:35:51 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Tang Bin <tangbin@cmss.chinamobile.com>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] opp: Fix error check in dev_pm_opp_attach_genpd()
-Message-ID: <20220525064731.k4lgjrcu355b73q6@vireshk-i7>
-References: <20220524123151.1416-1-tangbin@cmss.chinamobile.com>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
+Message-ID: <20220525070551.guv3csxi5kkqfr4f@vireshk-i7>
+References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
+ <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
+ <20220425072710.v6gwo4gu3aouezg4@vireshk-i7>
+ <dea39b1f-0091-2690-7f07-108d07ef9f3c@linaro.org>
+ <20220510044053.ykn6ygnbeokhzrsa@vireshk-i7>
+ <1e533194-7047-8342-b426-f607fddbfaa3@linaro.org>
+ <20220511050643.hd5tcrojb3wkbg7t@vireshk-i7>
+ <20220518235708.1A04CC385A9@smtp.kernel.org>
+ <65a4c28d-6702-3a9f-f837-1ea69a428777@linaro.org>
+ <20220520005934.8AB1DC385AA@smtp.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220524123151.1416-1-tangbin@cmss.chinamobile.com>
+In-Reply-To: <20220520005934.8AB1DC385AA@smtp.kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -69,36 +92,42 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24-05-22, 20:31, Tang Bin wrote:
-> dev_pm_domain_attach_by_name() may return NULL in some cases,
-> so IS_ERR() doesn't meet the requirements. Thus fix it.
+On 19-05-22, 17:59, Stephen Boyd wrote:
+> This is a general problem with OPP. It is single clk frequency centric,
+> which works well for CPU/GPU devices that work with cpufreq/devfreq.
+> When it comes to other devices though we have to fit OPP into what those
+> devices want, which is something like gears for UFS, or "4k@60" (a
+> resolution) for display hardware.
 > 
-> Fixes: 6319aee10e53 ("opp: Attach genpds to devices from within OPP core")
-> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
-> ---
->  drivers/opp/core.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Would adding string labels and/or using an index based API work better
+> for these devices? I think we'd want to extend OPP for display devices
+> to have whatever set of use-cases the device driver wants to handle with
+> string labels. That naturally follows how some SoC manufacturers setup
+> their OPP tables anyway. They may want to bump only the bus bandwidth
+> for different display resolutions while maxing out the clk frequency.
+> Then we could let drivers either construct a string at probe time to get
+> a handle to those OPP entries or index directly. The frequency APIs
+> would stick around for OPP tables that have frequencies and for drivers
+> that want to do cpufreq/devfreq stuff.
 > 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 2945f3c1c..56cae6ee2 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -2409,8 +2409,8 @@ struct opp_table *dev_pm_opp_attach_genpd(struct device *dev,
->  		}
->  
->  		virt_dev = dev_pm_domain_attach_by_name(dev, *name);
-> -		if (IS_ERR(virt_dev)) {
-> -			ret = PTR_ERR(virt_dev);
-> +		if (IS_ERR_OR_NULL(virt_dev)) {
-> +			ret = PTR_ERR(virt_dev) ? : -ENODATA;
+> UFS may want to use an index based API that matches the gears per the
+> spec. I think it could do that with dev_pm_opp_find_level_exact(),
+> right?
 
-I have changed this to ENODEV instead.
+I think we can use "level" for all these use cases to find the OPP, if
+it aligns well with the requirements of all these frameworks.
 
->  			dev_err(dev, "Couldn't attach to pm_domain: %d\n", ret);
->  			goto err;
->  		}
+FWIW, we already have three ways to find the OPP currently, via
+frequency, level and bandwidth.
 
-Applied. Thanks.
+> Then the primary problem is the subject of this patch,
+> controlling multiple clks per OPP table. Could that be done by linking
+> one OPP table (for the gears) to an OPP table for each clk? Maybe
+> through 'required-opps'?
+
+Even in that case we will have an OPP table which will have multiple
+clocks. So it may not matter much which OPP table contains all the
+clocks.
 
 -- 
 viresh
