@@ -2,114 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56EBA53420D
-	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 19:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E29A8534212
+	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 19:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245606AbiEYRLv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 May 2022 13:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
+        id S238085AbiEYRN4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 May 2022 13:13:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245098AbiEYRLu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 13:11:50 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3482A366B6
-        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 10:11:49 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id bq30so37074013lfb.3
-        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 10:11:49 -0700 (PDT)
+        with ESMTP id S241157AbiEYRNz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 13:13:55 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A49A6A045;
+        Wed, 25 May 2022 10:13:51 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id v66so25764351oib.3;
+        Wed, 25 May 2022 10:13:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=WYCjX5QtKBJqD2JABeX9HzAdSG6a8Grq0WGneMZcZEE=;
-        b=2hT5HqVEm5g50zrmZEF9NVq8mZ86kDMKHQgo5mdbkgAIijaMqXCBJlGizl2R0+d3pM
-         30ucRbkOOtWXLe8f/2F5E5ZwCa28Srfxo745/8Oh+MS4ITUoth/aCwhIOH8TYoHPnMu6
-         MMUCcMz2mqXR++D2Y7q5OG4mEkSs/xdGNrrhM4N1PAdlZ4lDI5o6AOdUadx7f9Zn5Mlh
-         xsPEIOVZltNydXW+2DWMcdmbLq2OqmtVg6dD/8gDOj5ejqnpLo9xE5KD70mRRyml9cjZ
-         JTke2lv14j7FNJYOM5ZmGmDF9hzvOX+BP54hLJU2qf5bHOCtTmwmYH7EuZCitf03KAPU
-         rgkA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2VhfMHntHxmSu4vdA7es7dFU9dUngjl1nXJAN7GN/r8=;
+        b=kZKGzScoXhHCugo7nNQ3aTo4ayafls9LAV0Wuq4fg4ETAYxfvGs92hvMUkGnjxebhO
+         kz77QcfMRiAO4DGVdoZL49u3cU9TGlzdNiAOorusfjEs9ZhNnwjA3O0G2/JpAn34XlS6
+         biptInj2AoI9zZyx6MeFQ64vGIcCZe1jxDeAqpytkypEfI9e9wEQlBfjW3Af7q9jjT/T
+         0z/226gX/uerttVjB9nodKCuRTHgsHRJOkOE1CcKh88VB0t81kAM2FR85Ndn5J7LjTKO
+         +U+kTN2FtWpL/8zfwiDDsluNtVMvVVhsOSZlrJjHU5zhQKF19xGWPE9nfWoWaW6ZAimr
+         Jogw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=WYCjX5QtKBJqD2JABeX9HzAdSG6a8Grq0WGneMZcZEE=;
-        b=snzPum7jv5W+X+y6wEN9p2PFJanQ6/0M0DxSrmZkVkw0q9g9XVIZeWfsVFPJVrV4yN
-         TuGw1W4jurDZDO3Zzzh6mjQ8fKuhiSK9J/9BvoXGJMG2ZJjlp2bHeWR0m0NmidgFURNo
-         v5Ae7M3LxFh1mlsG1NMpyq5xDA9t6gfu65QlR1xAHFVCvYBmrCuk4JaVDmj6cBVYTUEJ
-         /RoYdp5nu+yX69Mq525mdTyZAMf3PX5gqoTvSnVSTWkPYbcnMU3cNPEIrsB8rhsxvavz
-         ygUcQPfFwSUnn1gWhRaAWzicj1IYc4AQ/N9w88WxACvOZXrCvXl5TWDPlhSItbp+mDZI
-         kbXA==
-X-Gm-Message-State: AOAM532DPO0yZ1rrdVu8vEGAQ8ja5OlHebS5poRjTgKcHY2jaKYB+8hk
-        41MvCauLiCyESTbvNMlcgR6p+4ftI13rdoiX
-X-Google-Smtp-Source: ABdhPJxpknDnQKBk4p/aZqPeZt+6ytgFyDg9KEq+55gWHBdi/p4G9h5+NS71FERfWKLIrgLhrltp/Q==
-X-Received: by 2002:a05:6512:3e13:b0:471:f6a9:85d3 with SMTP id i19-20020a0565123e1300b00471f6a985d3mr23427634lfv.120.1653498707578;
-        Wed, 25 May 2022 10:11:47 -0700 (PDT)
-Received: from localhost (h-85-24-188-65.A463.priv.bahnhof.se. [85.24.188.65])
-        by smtp.gmail.com with ESMTPSA id e1-20020ac25461000000b0047255d211d2sm3204039lfn.257.2022.05.25.10.11.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 10:11:47 -0700 (PDT)
-Date:   Wed, 25 May 2022 19:11:46 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] thermal: rcar_gen3_thermal: Add r8a779f0 support
-Message-ID: <Yo5jUjbN2xZqDfno@oden.dyn.berto.se>
-References: <20220525151216.24133-1-wsa+renesas@sang-engineering.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2VhfMHntHxmSu4vdA7es7dFU9dUngjl1nXJAN7GN/r8=;
+        b=H1nk9Y3+ZZKH6t5f134beehUjqBp+osJeVK/UrzbYNqRjsdYpbjmBw1OcIUsArjws8
+         WM7eVDXzj0ynVXyX7Ouv6bFqlsVUPUWDIwjg3K4i1Zwac263dnrVD92l6kfedKlzQHR1
+         yXgqVEWMACLsS4d0aMrDHViZSnRh5wJMQtWACX0xp1382faa/AZm+/H2dMaf/Mo7//P9
+         AA/OG2jqJ0Oa53ZLR++0L0MWLYIVaCZ72Msl+xKCysSYSJowaveiovOBaU+BQa9ywrML
+         uhoyk/Q5deDMlyfS3JZkMzysyOgYj0uzAht9qCQHEea07teWsgo1VHntFZO3LmqEFyRz
+         hzwA==
+X-Gm-Message-State: AOAM532ZKFYXZksVPlyswl0UUbsi8s8a2EX+//L/qS3TyeKR656To8Mo
+        4FLd4U/I8kZ7j/MKIcSA/rUT2zxhwMmlxFMn6Xs=
+X-Google-Smtp-Source: ABdhPJwAsAcUOElLy2daHM0hVO0+sJA1juSodv5/fTJ9HEOfvONqpQ34BaWqr5s+o3Iy3vKPxYDSPvPVZQ4TBMA1GVY=
+X-Received: by 2002:a54:4688:0:b0:325:9a36:ecfe with SMTP id
+ k8-20020a544688000000b003259a36ecfemr6136170oic.96.1653498830747; Wed, 25 May
+ 2022 10:13:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220525151216.24133-1-wsa+renesas@sang-engineering.com>
+References: <CANCKTBvqp7_MSG3aMpp6pmNoPUnYpH0c+8-r7Pzgebuzb4sZPA@mail.gmail.com>
+ <20220523221036.GA130515@bhelgaas> <CANCKTBsEjkbdWCB4D22iamPr7YP0qUX=M1dZNNgxkfk1EwjjZQ@mail.gmail.com>
+ <20220524235605.rz3cyw7akw3327ip@mraw.org>
+In-Reply-To: <20220524235605.rz3cyw7akw3327ip@mraw.org>
+From:   Jim Quinlan <jim2101024@gmail.com>
+Date:   Wed, 25 May 2022 13:13:38 -0400
+Message-ID: <CANCKTBvieyc-adXFrBrRm5k85Dr700=GmLBvdfLWhbkgN0Pw+Q@mail.gmail.com>
+Subject: Re: [PATCH v1] PCI: brcmstb: Fix regression regarding missing PCIe linkup
+To:     Cyril Brulebois <kibi@debian.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        James Dutton <james.dutton@gmail.com>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Wolfram,
+On Tue, May 24, 2022 at 7:56 PM Cyril Brulebois <kibi@debian.org> wrote:
+>
+> Hi Jim,
+>
+> Jim Quinlan <jim2101024@gmail.com> (2022-05-24):
+> > Yes. One repo did not have this node (Cyril/debina?), one did
+> > (https://github.com/raspberrypi/firmware/tree/master/boot).
+> > Of course there is nothing wrong with omitting the node; it should
+> > have pcie linkup regardless.
+>
+> I work/debug stuff on Debian systems, but Debian's just shipping what's
+> in mainline. Raspberry people maintain their own vendor DTBs.
+>
+> > Unless you object, I plan on sending you a v2 of my regression fix
+> > which will correct the commit message, change the "if (busno == 1)"
+> > conditional to only guard the pcie linkup call, and add further
+> > comments.
+> >
+> > I have noted and will also address your other concerns and suggestions
+> > in a future patchset as I think it is best that I get my hands on a
+> > CM4 board before I submit any more changes.
+>
+> For the record, I'm still happy to be cc'ed so that I spend time testing
+> further patches, be it the short-term regression fix (for inclusion in
+> master, but also checking it fixes linux-5.17.y and now linux-5.18.y,
+> if stable maintainers would welcome the extra testing), or the future
+> patchset.
+>
+> I can't guarantee you'll have an answer in a few hours like that
+> happened during the past few days (during which I prioritized testing
+> over anything else so as not to be a blocker in case it could be
+> squeezed into v5.18). But I'm still willing to allocate some time to
+> make sure the CM4 keeps working, even if you don't get your hands on
+> such systems right away.
 
-Thanks for your patch.
+I really appreciate the help, thank you.  We have ordered a CM4 and I
+will be testing on  it prior to sending pullreqs.
 
-On 2022-05-25 17:12:15 +0200, Wolfram Sang wrote:
-> Add support for R-Car S4.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Regards,
+Jim Quinlan
+Broadcom ST
 
-Reviewed-by: Niklas Söderlund <niklas.soderlund@ragnatech.se>
 
-> ---
->  drivers/thermal/rcar_gen3_thermal.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-> index 43eb25b167bc..ccdf8a24ddc7 100644
-> --- a/drivers/thermal/rcar_gen3_thermal.c
-> +++ b/drivers/thermal/rcar_gen3_thermal.c
-> @@ -399,6 +399,10 @@ static const struct of_device_id rcar_gen3_thermal_dt_ids[] = {
->  		.compatible = "renesas,r8a779a0-thermal",
->  		.data = &rcar_gen3_ths_tj_1,
->  	},
-> +	{
-> +		.compatible = "renesas,r8a779f0-thermal",
-> +		.data = &rcar_gen3_ths_tj_1,
-> +	},
->  	{},
->  };
->  MODULE_DEVICE_TABLE(of, rcar_gen3_thermal_dt_ids);
-> -- 
-> 2.35.1
-> 
-
--- 
-Kind Regards,
-Niklas Söderlund
+>
+>
+> Cheers,
+> --
+> Cyril Brulebois (kibi@debian.org)            <https://debamax.com/>
+> D-I release manager -- Release team member -- Freelance Consultant
