@@ -2,114 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0012D533E38
-	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 15:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF181533F38
+	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 16:30:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232676AbiEYNuR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 May 2022 09:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
+        id S244833AbiEYO3Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 May 2022 10:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244596AbiEYNuQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 09:50:16 -0400
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEA03584D;
-        Wed, 25 May 2022 06:50:15 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-300628e76f3so8260657b3.12;
-        Wed, 25 May 2022 06:50:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D7pNBXTzwb2NC+1B3pkw6XahPKXPrihCDQqGfh0Wnzo=;
-        b=UDr7JM9Zp9EaPbB6flSIhtvB2rBN91LXcTY6rg/XNnEmkypBFmx8VaTIPQWW7V8ljq
-         wo0gjJ8H82RLcuAuAp61ucpo/HIOlDaFBawgJ97i/2HsqrfRjL9czqv5LJDN0NmSwaQM
-         Fzz7epy4GXkt3VAR36Jb+cAbHG4vkJDiUjSnw588eCXVvbFMo43fkZd7K97uY5S3VU7T
-         bCUNYDZbsjmD5a49QjGwRayassCze0fNleUcVCuSgR1vNt5cNbGeA19EQoXkjCYqUFzw
-         vZLKNq5tnPuEX03Mijp75rOZ+5QG3KPuKjO2QLLbfG4l7Xq3EtFGNyVKRR9xkwXaDZ56
-         AHAg==
-X-Gm-Message-State: AOAM532xuiA1s+IhedFnUiIIb/k6AvbWzyRRzdLLPJxt5JqOpzPELD/D
-        awreOjGkSXDody8TroDrslNsU1tLqzuAXdBwspkY56N+
-X-Google-Smtp-Source: ABdhPJweqWSCLXeXw+r+GeogMl1WGgJ5ajSlE51Ud/iUBvqvwf0bA2VMSP4GcN/QX3cCdkBu3ImXYBXI9ubr+DisxJk=
-X-Received: by 2002:a81:87c4:0:b0:2ff:c5dc:72b9 with SMTP id
- x187-20020a8187c4000000b002ffc5dc72b9mr19519391ywf.19.1653486614968; Wed, 25
- May 2022 06:50:14 -0700 (PDT)
+        with ESMTP id S244860AbiEYO3Q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 10:29:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1BB74A7E21
+        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 07:29:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653488954;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rJXBSsswS1QbSCIORAlXaRxJTnMr6MqFIgMIGnJ+Qao=;
+        b=KCQ9CACA81kUvU1w/MWImHP0e5MNdhoF46ijTX4zt6vcnWVPYaz8ffAaCYHb4hZFnblmw8
+        qLZ1TfFHP/iIUtK+WmOoTlx/hKjC4OwqpRyTMtAKz9M9eHRPV3e6bTGBXGVIsoaNLtauen
+        wIdR9nxEM6tW+pDIIi2dY6/cNqWq8hU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-252-YR06shO1OwSFVnlHewrk4w-1; Wed, 25 May 2022 10:29:09 -0400
+X-MC-Unique: YR06shO1OwSFVnlHewrk4w-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1E95485A5BC;
+        Wed, 25 May 2022 14:29:08 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.193.81])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 8E4F5C15E71;
+        Wed, 25 May 2022 14:28:47 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Wed, 25 May 2022 16:29:07 +0200 (CEST)
+Date:   Wed, 25 May 2022 16:28:46 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
+        Robert OCallahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Douglas Miller <dougmill@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Subject: Re: [PATCH 07/16] signal: Wake up the designated parent
+Message-ID: <20220525142845.GA2687@redhat.com>
+References: <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
+ <20220518225355.784371-7-ebiederm@xmission.com>
+ <20220524132553.GD14347@redhat.com>
+ <20220524162808.GF14347@redhat.com>
 MIME-Version: 1.0
-References: <20220523181655.2352470-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20220523181655.2352470-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 25 May 2022 15:50:04 +0200
-Message-ID: <CAJZ5v0je=rTPG+y-CSd=mi4RTbOq2zni7-1SdKmbNadhUUihCA@mail.gmail.com>
-Subject: Re: [PATCH v2] Documentation: admin-guide: pm: Add Out of Band mode
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>, Len Brown <lenb@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Prarit Bhargava <prarit@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220524162808.GF14347@redhat.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 23, 2022 at 8:17 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
+On 05/24, Oleg Nesterov wrote:
 >
-> Update documentation for using the tool to support performance level
-> change via OOB (Out of Band) interface.
+> On 05/24, Oleg Nesterov wrote:
+> >
+> > I fail to understand this patch...
+> >
+> > On 05/18, Eric W. Biederman wrote:
+> > >
+> > > Today if a process is ptraced only the ptracer will ever be woken up in
+> > > wait
+> >
+> > and why is this wrong?
+> >
+> > > Fixes: 75b95953a569 ("job control: Add @for_ptrace to do_notify_parent_cldstop()")
+> >
+> > how does this change fix 75b95953a569?
 >
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
-> v2:
-> As suggested by Jonathan
-> - Indent literal block
-> - Show output of command
+> OK, I guess you mean the 2nd do_notify_parent_cldstop() in ptrace_stop(),
+> the problematic case is current->ptrace == T. Right?
 >
->  .../admin-guide/pm/intel-speed-select.rst     | 22 +++++++++++++++++++
->  1 file changed, 22 insertions(+)
->
-> diff --git a/Documentation/admin-guide/pm/intel-speed-select.rst b/Documentation/admin-guide/pm/intel-speed-select.rst
-> index 0a1fbdb54bfe..a2bfb971654f 100644
-> --- a/Documentation/admin-guide/pm/intel-speed-select.rst
-> +++ b/Documentation/admin-guide/pm/intel-speed-select.rst
-> @@ -262,6 +262,28 @@ Which shows that the base frequency now increased from 2600 MHz at performance
->  level 0 to 2800 MHz at performance level 4. As a result, any workload, which can
->  use fewer CPUs, can see a boost of 200 MHz compared to performance level 0.
->
-> +Changing performance level via BMC Interface
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +It is possible to change SST-PP level using out of band (OOB) agent (Via some
-> +remote management console, through BMC "Baseboard Management Controller"
-> +interface). This mode is supported from the Sapphire Rapids processor
-> +generation. The kernel and tool change to support this mode is added to Linux
-> +kernel version 5.18. To enable this feature, kernel config
-> +"CONFIG_INTEL_HFI_THERMAL" is required. The minimum version of the tool
-> +is "v1.12" to support this feature, which is part of Linux kernel version 5.18.
-> +
-> +To support such configuration, this tool can be used as a daemon. Add
-> +a command line option --oob::
-> +
-> + # intel-speed-select --oob
-> + Intel(R) Speed Select Technology
-> + Executing on CPU model:143[0x8f]
-> + OOB mode is enabled and will run as daemon
-> +
-> +In this mode the tool will online/offline CPUs based on the new performance
-> +level.
-> +
->  Check presence of other Intel(R) SST features
->  ---------------------------------------------
->
-> --
+> I dislike this patch anyway, but let me think more about it.
 
-Applied as 5.19-rc material, thanks!
+OK, now that I understand the problem, the patch doesn't look bad to me,
+although I'd ask to make the changelog more clear.
+
+After this change __wake_up_parent() can't accept any "parent" from
+p->parent thread group, but all callers look fine except ptrace_detach().
+
+Oleg.
+
