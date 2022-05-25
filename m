@@ -2,65 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B8853461F
-	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 23:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 433FF53462E
+	for <lists+linux-pm@lfdr.de>; Thu, 26 May 2022 00:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235296AbiEYV5o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 May 2022 17:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42326 "EHLO
+        id S1345091AbiEYWHU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 May 2022 18:07:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiEYV5n (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 17:57:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CD4B8BFA;
-        Wed, 25 May 2022 14:57:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16C4C61AC2;
-        Wed, 25 May 2022 21:57:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 299DAC385B8;
-        Wed, 25 May 2022 21:57:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653515861;
-        bh=LX20+QZZxM2G5xQ2EcmXl+cIxppSf56YnZwziPZLmts=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=dBv2TKRnilrhMIZdMoLxLfq2KT55fIqOzS1KPIrHU31yeDkVvV4XvNoQf8/tLAPgs
-         GiKBZf/iVZIw0rF/4kBQc7Pw0UnvBbKXwjGyDv2+ChG9kbZ8k/IiSEydRKC5QZ3QK0
-         1fNBy8mD8G01y1dnkpWDgczJMIzrGsRXgUxtCekQR6fwimyEIOxmn4ssaWa1hD+ebW
-         toestfEK530B5GYBXnHZTKBPXjVyh2nvSdAhX7XQs43811cJbxdg4hAHSWI/KuLe5D
-         FwhLZJFTvsgsahpdRb/+u8OU/Z4YWk6mJUG7jAazzIILfdT7gIx0Rk3XI5SHSBSwYv
-         jFlx9gD9eE70g==
-Date:   Wed, 25 May 2022 16:57:39 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jim Quinlan <jim2101024@gmail.com>
-Cc:     linux-pci <linux-pci@vger.kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        James Dutton <james.dutton@gmail.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Jim Quinlan <james.quinlan@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v1] PCI: brcmstb: Fix regression regarding missing PCIe
- linkup
-Message-ID: <20220525215739.GA275957@bhelgaas>
+        with ESMTP id S237130AbiEYWHT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 18:07:19 -0400
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E6111175
+        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 15:07:17 -0700 (PDT)
+Received: by mail-pf1-f171.google.com with SMTP id p8so125352pfh.8
+        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 15:07:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=IE2Ntb5oMK4K7amafeNetTiCxxwL4oFF63eZ4S/Cu40=;
+        b=Gvt3B4ZCxSmBQ4umJVEouUBr+x1vvkSz88ZzrRbe6oOWMGv2fb1rM5DZyt4NM4dsPH
+         NITBZtaVX3ao+o2ZJw8nyfq3ZRhaeMArtoYnqksJchrMzLGLm+kioYTgYi/4XETWLuab
+         4d+Ak2A5jSh3evQOjFT4WwrdNmy3PqsqXFYqitTDr3Vm8b2XGHUJhQ/tJ/PW4mqLz3p2
+         z50+5A0852DvFCYZxYWDKjwIQrN5/TN8W0g3U2ZqkcQjxhpgt+6Pyi81HOWhzH9TvhSS
+         t1UU0Sj+uIBCKdXJLMj3BcGZRGS0vd6OnoOrLEU/+DKI8u1Y/wj/KeW2f5NA6tzciaad
+         KaRw==
+X-Gm-Message-State: AOAM531rAhkggnoi9bp8yfDzhOktzSKRVRcvRBqPtifDbKZoOMiXdOek
+        0Rr9T2llDBRh0awwL/wSGQSX4A==
+X-Google-Smtp-Source: ABdhPJwdqFMCLJa7Y7vyj6CS5A+5uCRs6z3mJZo81jSCPzBgpMhVjT7B8zM+9XXAV6oNybU+EL4RYw==
+X-Received: by 2002:a63:c04a:0:b0:3fa:7277:964c with SMTP id z10-20020a63c04a000000b003fa7277964cmr13087451pgi.499.1653516436926;
+        Wed, 25 May 2022 15:07:16 -0700 (PDT)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id o1-20020a170902d4c100b0015edb22aba1sm10030189plg.270.2022.05.25.15.07.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 15:07:16 -0700 (PDT)
+From:   Kevin Hilman <khilman@kernel.org>
+To:     Chen-Yu Tsai <wenst@chromium.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Roger Lu <roger.lu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Fan Chen <fan.chen@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>,
+        =?utf-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
+        <rex-bc.chen@mediatek.com>
+Subject: Re: [PATCH v25 0/7] soc: mediatek: SVS: introduce MTK SVS
+In-Reply-To: <CAGXv+5HEG1VJ89LDHJmMvPqafcdb2cuJj2wxv44ozPxDeHj8ig@mail.gmail.com>
+References: <20220516004311.18358-1-roger.lu@mediatek.com>
+ <CAGXv+5GSdWPZe3fNpBJ_WW0zCL8Skg6fHx9ATxaKU1hyMEt2Ww@mail.gmail.com>
+ <7h4k1ndaui.fsf@baylibre.com> <7hy1yzbtb7.fsf@baylibre.com>
+ <CAGXv+5GT=3m=pVPwUOWR42BR=emCpBXvvoAiRV7YKt2kEKWdAQ@mail.gmail.com>
+ <CGME20220519182512epcas1p3020bd4713580c9244f759971b8bd2c3a@epcas1p3.samsung.com>
+ <7hmtfdbcsc.fsf@baylibre.com>
+ <5a1767dc-ba2d-4de5-d8fe-2f308d3318a9@samsung.com>
+ <CAGXv+5EsgiXCpe-8H0cQ=qm_Nq+yfM_a4b1L=hOFP6mcwfZymw@mail.gmail.com>
+ <eacf7a67-bc64-a764-e23d-c733a4666b8a@samsung.com>
+ <CAGXv+5HEG1VJ89LDHJmMvPqafcdb2cuJj2wxv44ozPxDeHj8ig@mail.gmail.com>
+Date:   Wed, 25 May 2022 15:07:15 -0700
+Message-ID: <7hleup9sh8.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANCKTBsEjkbdWCB4D22iamPr7YP0qUX=M1dZNNgxkfk1EwjjZQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,99 +85,172 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, May 24, 2022 at 12:54:48PM -0400, Jim Quinlan wrote:
-> On Mon, May 23, 2022 at 6:10 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Sat, May 21, 2022 at 02:51:42PM -0400, Jim Quinlan wrote:
-> > > On Sat, May 21,
-> > > 2CONFIG_INITRAMFS_SOURCE="/work3/jq921458/cpio/54-arm64-rootfs.cpio022
-> > > at 12:43 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > On Wed, May 18, 2022 at 03:42:11PM -0400, Jim Quinlan wrote:
-> > > > > commit 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice
-> > > > > voltage regulators")
-> > > > >
-> > > > > introduced a regression on the PCIe RPi4 Compute Module.  If the
-> > > > > PCIe endpoint node described in [2] was missing, no linkup would
-> > > > > be attempted, and subsequent accesses would cause a panic
-> > > > > because this particular PCIe HW causes a CPU abort on illegal
-> > > > > accesses (instead of returning 0xffffffff).
-> > > > >
-> > > > > We fix this by allowing the DT endpoint subnode to be missing.
-> > > > > This is important for platforms like the CM4 which have a
-> > > > > standard PCIe socket and the endpoint device is unknown.
+Chen-Yu Tsai <wenst@chromium.org> writes:
 
-> > But above you say it's the *endpoint* node that doesn't exist.  The
-> > existing code looks like it's checking for the *bridge* node
-> > (bus->dev->of_node).  We haven't even enumerated the devices on the
-> > child bus, so we don't know about them at this point.
+> On Fri, May 20, 2022 at 5:53 PM Chanwoo Choi <cw00.choi@samsung.com> wrote:
+>>
+>> Hi Kevin,
+>>
+>> On 5/20/22 11:42 AM, Chen-Yu Tsai wrote:
+>> > On Fri, May 20, 2022 at 9:28 AM Chanwoo Choi <cw00.choi@samsung.com> wrote:
+>> >>
+>> >> Hi Kevin, Chen-Yu,
+>> >>
+>> >> On 5/20/22 3:25 AM, Kevin Hilman wrote:
+>> >>> Chen-Yu Tsai <wenst@chromium.org> writes:
+>> >>>
+>> >>>> n Wed, May 18, 2022 at 8:03 AM Kevin Hilman <khilman@kernel.org> wrote:
+>> >>>>>
+>> >>>>> Kevin Hilman <khilman@kernel.org> writes:
+>> >>>>>
+>> >>>>>> Chen-Yu Tsai <wenst@chromium.org> writes:
+>> >>>>>>
+>> >>>>>>> On Mon, May 16, 2022 at 8:43 AM Roger Lu <roger.lu@mediatek.com> wrote:
+>> >>>>>>>>
+>> >>>>>>>> The Smart Voltage Scaling(SVS) engine is a piece of hardware
+>> >>>>>>>> which calculates suitable SVS bank voltages to OPP voltage table.
+>> >>>>>>>> Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
+>> >>>>>>>> when receiving OPP_EVENT_ADJUST_VOLTAGE.
+>> >>>>>>>>
+>> >>>>>>>> 1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
+>> >>>>>>>> 2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
+>> >>>>>>>> After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
+>> >>>>>>>>
+>> >>>>>>>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=25cb20a212a1f989385dfe23230817e69c62bee5
+>> >>>>>>>> [2] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=b325ce39785b1408040d90365a6ab1aa36e94f87
+>> >>>>>>>> [3] https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.16-next/dts64&id=a8168cebf1bca1b5269e8a7eb2626fb76814d6e2
+>> >>>>>>>>
+>> >>>>>>>> Change since v24:
+>> >>>>>>>> - Rebase to Linux 5.18-rc6
+>> >>>>>>>> - Show specific fail log in svs_platform_probe() to help catch which step fails quickly
+>> >>>>>>>> - Remove struct svs_bank member "pd_dev" because all subsys device's power domain has been merged into one node like above [3]
+>> >>>>>>>>
+>> >>>>>>>> Test in below environment:
+>> >>>>>>>> SW: Integration Tree [4] + Thermal patch [5] + SVS v25 (this patchset)
+>> >>>>>>>> HW: mt8183-Krane
+>> >>>>>>>>
+>> >>>>>>>> [4] https://protect2.fireeye.com/v1/url?k=847bae75-e5f0bb43-847a253a-000babff9b5d-0b6f42041b9dea1d&q=1&e=37a26c43-8564-4808-9701-dc76d1ebbb27&u=https%3A%2F%2Fgithub.com%2Fwens%2Flinux%2Fcommits%2Fmt8183-cpufreq-cci-svs-test
+>> >>>>>>>
+>> >>>>>>> I've updated my branch to include all the latest versions of the relevant
+>> >>>>>>> patch series:
+>> >>>>>>>
+>> >>>>>>> - anx7625 DPI bus type series v2 (so the display works)
+>> >>>>>>> - MT8183 thermal series v9 (this seems to have been overlooked by the
+>> >>>>>>> maintainer)
+>> >>>>>>> - MTK SVS driver series v25
+>> >>>>>>> - devfreq: cpu based scaling support to passive governor series v5
+>> >>>>>>> - MTK CCI devfreq series v4
+>> >>>>>>> - MT8183 cpufreq series v7
+>> >>>>>>> - Additional WIP patches for panfrost MTK devfreq
+>> >>>>>>
+>> >>>>>> Thanks for preparing an integration branch Chen-Yu.
+>> >>>>>>
+>> >>>>>> I'm testing this on mt8183-pumpkin with one patch to add the CCI
+>> >>>>>> regulator[1], and the defconfig you posted in a previous rev of this
+>> >>>>>> series, but the CCI driver still causes a fault on boot[2] on my
+>> >>>>>> platform.
+>> >>>>>>
+>> >>>>>> I mentioned in earlier reviews that I think there's potentially a race
+>> >>>>>> between CCI and SVS loading since they are co-dependent.  My hunch is
+>> >>>>>> that this is still not being handled properly.
+>> >>>>>
+>> >>>>> Ah, actually it's crashing when I try to boot the platform with
+>> >>>>> `maxcpus=4` on the cmdline (which I have to do because mt8183-pumpkin is
+>> >>>>> unstable upstream with the 2nd cluster enabled.)
+>> >>
+>> >> This warning message is printed by 'WARN_ON(cpufreq_passive_unregister_notifier(devfreq))'
+>> >> on devfreq passive governor.
+>> >>
+>> >> If the cpufreq drivers are not probed before of probing cci devfreq driver
+>> >> with passive governor, passive governor shows this warning message.
+>> >> Because passive governor with CPUFREQ_PARENT_DEV depends on the cpufreq driver
+>> >> in order to get 'struct cpufreq_policy'[2].
+>> >>
+>> >> [1] https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/tree/drivers/devfreq/governor_passive.c?h=devfreq-testing#n339
+>> >> [2] https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/tree/drivers/devfreq/governor_passive.c?h=devfreq-testing#n282
+>> >>
+>> >> But, as I knew, this message might not stop the kernel. Just show the warning
+>> >> message and then return -EPROBE_DEFER error. It means that maybe try to
+>> >> probe the cci devfreq driver on late time of kernel booting
+>> >> and then will be working. But, I need the full kernel booting log
+>> >> and the booting sequence of between cpufreq and cci devfreq driver.
+>> >
+>> > Maybe just use a standard dev_warn() instead? WARN_ON causes all sorts
+>> > of panicking in developers' minds. :p
+>> >
+>> >> In order to fix your issue, could you share the full booting log?
+>> >> And if possible, please explain the more detailed something about this.
+>> >
+>> > The shortened version is that on an 8 core system, with maxcpus=4,
+>> > only the first four cores are booted and have cpufreq associated.
+>> > I've not actually used this mechanism, so I don't really know what
+>> > happens if the other cores are brought up later with hotplug. Is
+>> > cpufreq expected to attach to them?
+>> >
+>> > Maybe Kevin can add some more details.
+>> >
+>> >
+>> > ChenYu
+>> >
+>> >
+>> >>>>>
+>> >>>>> The CCI driver should be a bit more robust about detecting
+>> >>>>> available/online CPUs
+>> >>>>
+>> >>>> This all seems to be handled in the devfreq passive governor.
+>> >>>
+>> >>> Well, that's the initial crash.  But the SVS driver will also go through
+>> >>> its svs_mt8183_banks[] array (including both big & little clusters) and
+>> >>> try to init SVS, so presumably that will have some problems also if only
+>> >>> one cluster is enabled.
+>> >>>
+>> >>>> And presumably we'd like to have CCI devfreq running even if just one
+>> >>>> core was booted.
+>> >>>
+>> >>> Yes, I assume so also.
+>> >>>
+>> >>>> Added Chanwoo for more ideas.
+>> >>>
+>> >>> OK, thanks.
+>> >>>
+>> >>> Kevin
+>>
+>>
+>> I tested the passive governor with my temporary test code
+>> on odroid-xu3 which contains the big.LITTLE cluster (Octa-core).
+>>
+>>
+>> [Sequence of cpufreq/devfreq driver]
+>> 1. Turn on all cpus
+>> 2. Probed cpufreq driver
+>> 3. Probed devfreq driver using passive governor with CPUFREQ_PARENT_DEV
+>>
+>> In my test case, there are no warning message during kernel booting.
+>> Also when scaling the cpu frequency of cpus of big.LITTLE clusters,
+>> temporary devfreq driver receives the notfication and then
+>> calculate the target frequency of devfreq device by iterating online cpu.
+>>
+>> If there are any h/w constraints on your case, please let me know.
 >
-> You are absolutely correct and I must change the commit message
-> to say the "root port DT node".   I'm sorry; this mistake likely did not
-> help you understand the fix. :-(
-
-Great, that will help me out!  I think including the relevant DT
-snippet would also make it more concrete and might conceivably be
-helpful to somebody working around it on a kernel without the fix.
-
-> > What happens if there is a DT node for the bridge, but it doesn't
-> > describe any regulators?  I assume regulator_bulk_get() will fail, and
-> > it looks like that might still keep us from bringing the link up?
+> Could you run your system with maxcpus=4 added to your cmdline?
+> This is what Kevin was running.
 >
-> The regulator_bulk_get() func does not fail if the regulators are
-> not present.  Instead it "gets" a dummy device and issues a warning
-> per missing regulator.  A version of my pullreq submitted code to
-> prescan the DT node and call regulator_bulk_get() with only the
-> names of the regulators present, but IIRC this was NAKd.  Hopefully
-> I will not be swamped with RPi developers' emails when they think
-> these warnings are an issue.
+> The current result is that the latter four cores aren't booted, so no
+> cpufreq tied to them, and the passive governor will fail to get their
+> cpufreq_policy. As mentioned before, the code path used to have a
+> WARN_ON(). Now it's a dev_warn(). It will still fail initialization
+> though.
+>
+> We're wondering if devfreq passive governor should be made to work
+> even if not all cpu cores are available when it probes.
 
-Ah, I see, this is the IS_ERR (but not -ENODEV) NORMAL_GET case in
-_regulator_get().  You might get some emails, but I guess it must be a
-fairly common situation :)
+For info, here is a boot log[1] from mt8183-pumpkin board where I'm
+testing Chen-Yu's lastest integration branch.  
 
-> > > >  What happens if we turn on the power but don't find any
-> > > >  downstream devices?
-> > >
-> > > They are turned off to conserve power.
-> ...
+As Chen-Yu said, the part that makes it trigger the warn is disabling
+some of the CPUs *at boot time*.  In this case, I'm passing `maxcpus=4`
+on the kernel command line.
 
-> When brcm_pcie_add_bus() is invoked, we will "get" and enable any
-> regulators that are present in the DT node.  If the busno==1, we will
-> will also attempt pcie-linkup.  If PCIe linkup fails, which can happen for
-> multiple reasons but most due to a  missing device, we turn
-> on "refusal" mode to prevent our unforgiving PCIe HW from causing an
-> abort on any subsequent PCIe config-space accesses.
+Kevin
 
-> Further, a failed linkup will have brcm_pcie_probe() stopping and
-> removing the root bus, which in turn invokes  brcm_pcie_remove_bus()
-> (actually named pci_subdev_regulators_remove_bus() as it may someday
-> find its way into bus.c), which invokes regulator_bulk_disable() on
-> any regulators that were enabled by the probe.
-
-Ah, thanks!  This is the detail I missed.  If pci_host_probe()
-succeeds and the link is down, we call brcm_pcie_remove() (the
-driver's .remove() method).  That's unusual and possibly unique among
-native host bridge drivers.  I'm not sure that's the best pattern
-here.  Most drivers can't do that because they expect multiple devices
-on the root bus.  And the Root Port is still a functional device on
-its own, even if its link is down.  Users likely expect to see it in
-lspci and manipulate it via setpci.  It may have AER logs with clues
-about why the link didn't come up.
-
-Again something for future discussion, not for this regression.
-
-> Unless you object, I plan on sending you a v2 of my regression fix
-> which will correct the commit message, change the "if (busno == 1)"
-> conditional to only guard the pcie linkup call, and add further
-> comments.
-
-I don't really *like* comparing "busno == 1" because the root bus
-number is programmable on most devices.  It would be more obvious if
-we could test for a Root Port directly.  But maybe it's the best we
-can do for now.
-
-Someday it seems like we should figure out how to make the PCI core
-smart enough to turn on any regulators for devices below the Root Port
-when we put the Root Port in D0.  But I don't know how to do that or
-even whether it's feasible.
-
-Bjorn
+[1] https://termbin.com/zidi
