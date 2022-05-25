@@ -1,73 +1,86 @@
 Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F3253374A
-	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 09:22:01 +0200 (CEST)
+Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA97533C0D
+	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 13:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238114AbiEYHV6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 May 2022 03:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55462 "EHLO
+        id S233616AbiEYL4K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 May 2022 07:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235495AbiEYHV5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 03:21:57 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314B63B3;
-        Wed, 25 May 2022 00:21:53 -0700 (PDT)
-Received: from [192.168.1.107] ([37.4.249.139]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1Mf0yy-1nN9XI2M5S-00gYvK; Wed, 25 May 2022 09:21:26 +0200
-Message-ID: <427974aa-2152-8397-65df-6808de3d3b5e@i2se.com>
-Date:   Wed, 25 May 2022 09:21:24 +0200
+        with ESMTP id S232614AbiEYL4K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 07:56:10 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226EDA2069;
+        Wed, 25 May 2022 04:56:05 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id C412F5C027B;
+        Wed, 25 May 2022 07:56:02 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Wed, 25 May 2022 07:56:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1653479762; x=1653566162; bh=jA
+        xrL7YUz+unCts2ytc9HlFrvuVEdWE6RN2VKDbjh44=; b=d2M9yUxcA9oH1c9dND
+        cwrnYxcvgmYpg5HPKpJwm9AzWNkNaDfrmjcy67JUtPbFe2yR8n+tu1cO5zDomBPS
+        v56nzNvGNXA+5B0FG43hm3jvc8jK7itaS+d1R7zBk/RyNZmNEg3YU6VLoKtzxd4L
+        MMh7vWXX+T/tKTZ4zlhAaXtHn8TA1vMXxoUvYwFD4lAqicYzSp3NoZyCUfWfojnE
+        LpVgwVmTQNCqVDCiteSmgJbrXHkWs1LtVb6bHoVwAfD9Cu22wNWvcSz1t30NlKz9
+        6t4llEzAtFxpbeLrV/z1Han1wIDBx/7a/IySVyOk7vtVJE+j0KeXMvxzcJfIWsiD
+        gEpQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1653479762; x=1653566162; bh=jAxrL7YUz+unC
+        ts2ytc9HlFrvuVEdWE6RN2VKDbjh44=; b=lUkXJuMBL+glesNbfuKUEj0Lbwgaq
+        QtNY04rvwGIivzJBLdLco81JslxvrYgBAa09RU7lXnM9a7ha7KVcJkliLsGbPkUM
+        b1y910IEK5ZUwYhpuuvrtLbVSLQJKDv5I3nYSF42o/mXUBUtCKakpvA2suNiANDq
+        1z2gp1vuimpBa8E0ZEgq876eVVqUOxG00yKKH0fT0OIReJsVRZIxFnTuQsFjpFtj
+        b8YeNlWgScsWVm6zYUXrjZEwpbqkwo9+GzHoYw3xOh45m01/x34MrVRXChZAxriP
+        zHnTf2ZZ/Zm6YAxihfhphTPDlyIWAMHBywwfHMmWNUQQa9pfh3hOufVKA==
+X-ME-Sender: <xms:UhmOYpcBoC1qHV9rOKXvjcJH4nezQbO65uJJI3WY4MHIrdhrS1YAmQ>
+    <xme:UhmOYnNzuN8DNrP3mXnhVj3qVPe1oUoKuWyjfWCMyy7EJx-WxGX5mi9F2hPqJemh5
+    LuhhGitVgI83O0SpqY>
+X-ME-Received: <xmr:UhmOYijSphjgTwUDg-aJ_jlNxeAIOgPsiqtQneA8M8Bl1iLl8PgHd1Xn909IYsJrCRaTj0TJ4Ery>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrjeehgdeggecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgtggfgsehtkeertd
+    ertdejnecuhfhrohhmpeetlhhishhtrghirhcuhfhrrghntghishcuoegrlhhishhtrghi
+    rhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrthhtvghrnhepffekhfelteeggf
+    etieekteekhedtffekvddtveetgeffgfelffeftdehuefgheefnecuvehluhhsthgvrhfu
+    ihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihhsthgrihhrsegrlhhish
+    htrghirhdvfedrmhgv
+X-ME-Proxy: <xmx:UhmOYi_XmhGCZwoj4Kz-3w--1CMVuozb5LBxPuG6HEy8gebi_uwK2A>
+    <xmx:UhmOYlud2fn7DqET4xV0F4lKucKShKxJMJFFUv5B-5YtUdXlo7E49A>
+    <xmx:UhmOYhFe0l-qucpmYp5p7AHRzj2pqPcG7AuIBxiy5W6wMOalFnJ44A>
+    <xmx:UhmOYgnyXF_DRbzCTQ_pPAqW6w_U8ckYxFB0kRQwKXeBUs8RDuJ48Q>
+Feedback-ID: ifd214418:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 25 May 2022 07:55:56 -0400 (EDT)
+From:   Alistair Francis <alistair@alistair23.me>
+To:     lgirdwood@gmail.com, lee.jones@linaro.org, broonie@kernel.org,
+        robh+dt@kernel.org, kernel@pengutronix.de
+Cc:     s.hauer@pengutronix.de, alistair23@gmail.com,
+        linux-arm-kernel@lists.infradead.org, andreas@kemnade.info,
+        amitk@kernel.org, shawnguo@kernel.org,
+        linux-kernel@vger.kernel.org, geert@linux-m68k.org,
+        linux-hwmon@vger.kernel.org, linux-imx@nxp.com, linux@roeck-us.net,
+        rui.zhang@intel.com, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, Alistair Francis <alistair@alistair23.me>
+Subject: [PATCH v21 0/4] Add support for the silergy,sy7636a
+Date:   Wed, 25 May 2022 21:55:50 +1000
+Message-Id: <20220525115554.430971-1-alistair@alistair23.me>
+X-Mailer: git-send-email 2.35.3
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v1] PCI: brcmstb: Fix regression regarding missing PCIe
- linkup
-Content-Language: en-US
-To:     Jim Quinlan <jim2101024@gmail.com>
-Cc:     linux-pci <linux-pci@vger.kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        James Dutton <james.dutton@gmail.com>,
-        Cyril Brulebois <kibi@debian.org>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Jim Quinlan <james.quinlan@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-References: <CANCKTBvqp7_MSG3aMpp6pmNoPUnYpH0c+8-r7Pzgebuzb4sZPA@mail.gmail.com>
- <20220523221036.GA130515@bhelgaas>
- <CANCKTBsEjkbdWCB4D22iamPr7YP0qUX=M1dZNNgxkfk1EwjjZQ@mail.gmail.com>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-In-Reply-To: <CANCKTBsEjkbdWCB4D22iamPr7YP0qUX=M1dZNNgxkfk1EwjjZQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:f0Q2OR5Ta0dr7CnmCGZvho+BbpygkgKR6q6eP3GZZYTHeWI4m+u
- DGPZqAbJylyPwROwLzjIIBTy/1dDetp6cSZzyMrm0bHViOolt7njTrUk+lUraDcIU4IsVgo
- RnAuyA/3wlPD033YrJo9AceacxRdMNyWP/gzmolxmIXmPZO2B+icLVeRyKuz7NLL+vhzDF7
- oEDkTlpcT21JtcQdhp9Ww==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:HV8TcJvspQw=:Nmsn/lw7cZw0UQJnyOq/Nt
- cjlSg881Mur6B4zJiXep1sagc+9KzVv8bk/UUpZ0ZxedOkczgm9Nvc23ZPk9ljvgd0Jhfpm5C
- WA40mI82Xjpl3NbxPe8HaTpAJ1Khkc7kv17ue4bGZyGxGbb7Iq0JDVuyf5h0G6ULOJcO4LtZN
- nATKk6MUJ/GiO0wA0os9RC/8pLd4CMYgadZEmNZEYbZotjibHej+GB5WSBE8kZqnmxv2wrk44
- la7zEGoRH+4FBpvkergkHJAJeeI+p+I7tz4c/ZUWzvagAQ8djNvRZvWVzpu1tiepOYcm9AjBs
- KaBQesekUuBXG2u6o7UPnsQuf9vRSSDpmqztEJNAezNFYKZx0PVEF05i3Nds7ZuK7oNiPQOtJ
- I+3X+Zouj+Hk+0CwRD5VQP3qmA38KTwjknvvY40ccDRL/gH4NlHaNrz5gWPL13rInnmNqUMJ8
- bWB9YB71nB9ZDXYJT3r00cY3V0L1Bhw1zKd1M65R4Ut7SqNuDE1AthU355dmKwFjMoy+o+RlJ
- 4NkhLyGb4gq1EDA/TR/fnTCir5HWiobwnDu22DNG8TjJgiw6+zF4BJY/2Q4mRNOu+uYBOgcuW
- OsnkgE0jYuSE/2+ScNuusymyiIVHXVOOkBPsouy1CGvJSIfHdltlLs5vAhk+e1uS+1xxgvVi+
- GvPO2qvuRVBFU2wXZ4RkKHjS2Y62843lhfXQiuyWQhorq8I2BAI34MhtzWctKES3syfOsbepS
- gfI4Rh1aKTZGG1OLu9yEt0MGHIVHU+392r/qHA5yW2b2l+XuIEMwhn/q6cc=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,88 +88,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Jim,
+v21:
+ - Rebase on master
+v20:
+ - Remove merged patches
+ - Fixup Kconfig selection based on previous discussions
+v19:
+ - Rebase on linux-next
+v18:
+ - Rebase
+v17:
+ - Rebase and fix build issues
+v16:
+ - Improve vdd regulator comments
+v15:
+ - Address comments on the patches
+v14:
+ - Merge the thermal driver and hwmon
+v13:
+ - Address comments on thermal driver
+ - Rebase on master (without other patches)
+v12:
+ - Rebase
+v11:
+ - Address comments on hwmon
+ - Improve "mfd: simple-mfd-i2c: Add a Kconfig name" commit message
+v10:
+ - Use dev_get_regmap() instead of dev_get_drvdata()
+v9:
+ - Convert to use the simple-mfd-i2c instead
 
-Am 24.05.22 um 18:54 schrieb Jim Quinlan:
-> On Mon, May 23, 2022 at 6:10 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->> On Sat, May 21, 2022 at 02:51:42PM -0400, Jim Quinlan wrote:
->>> On Sat, May 21,
->>> 2CONFIG_INITRAMFS_SOURCE="/work3/jq921458/cpio/54-arm64-rootfs.cpio022
->>> at 12:43 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->>>> On Wed, May 18, 2022 at 03:42:11PM -0400, Jim Quinlan wrote:
->>>>> commit 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice
->>>>> voltage regulators")
->>>>>
->>>>> introduced a regression on the PCIe RPi4 Compute Module.  If the
->>>>> PCIe endpoint node described in [2] was missing, no linkup would
->>>>> be attempted, and subsequent accesses would cause a panic
->>>>> because this particular PCIe HW causes a CPU abort on illegal
->>>>> accesses (instead of returning 0xffffffff).
->>>>>
->>>>> We fix this by allowing the DT endpoint subnode to be missing.
->>>>> This is important for platforms like the CM4 which have a
->>>>> standard PCIe socket and the endpoint device is unknown.
->>>> I think the problem here is that on the CM, we try to enumerate
->>>> devices that are not powered up, isn't it?  The commit log should
->>>> say something about that power situation and how the driver learns
->>>> about the power regulators instead of just pointing at an DT
->>>> endpoint node.
->>> This is incorrect.  The regression occurred because the code
->>> mistakenly skips PCIe-linkup if the PCI portdrv DT node does not
->>> exist. With our RC HW, doing a config space access to bus 1 w/o
->>> first linking up results in a CPU abort.  This regression has
->>> nothing to do with EP power at all.
->> OK, I think I'm starting to see, but I'm still missing some things.
->>
->> 67211aadcb4b ("PCI: brcmstb: Add mechanism to turn on subdev
->> regulators") added pci_subdev_regulators_add_bus() as an .add_bus()
->> method.  This is called by pci_alloc_child_bus(), and if the DT
->> describes any regulators for the bridge leading to the new child bus,
->> we turn them on.
->>
->> Then 93e41f3fca3d ("PCI: brcmstb: Add control of subdevice voltage
->> regulators") added brcm_pcie_add_bus() and made *it* the .add_bus()
->> method.  It turns on the regulators and brings the link up, but it
->> skips both if there's no DT node for the bridge to the new bus.
-> Hi Bjorn,
->
-> Yes, I meant it to skip the turning on of the regulators if the DT
-> node was missing
-> but I failed to notice that it would also skip the pcie linkup as well.  As you
-> may have guessed, all of my test systems have the PCIe root port
-> DT node.
->
->> I guess RPi4 CM has no DT node to describe regulators, so we skip both
->> turning them on *and* bringing the link up?
-> Yes. One repo did not have this node (Cyril/debina?), one did
-> (https://github.com/raspberrypi/firmware/tree/master/boot).
-> Of course there is nothing wrong with omitting the node; it should
-> have pcie linkup regardless.
-Please ignore the vendor tree, because you only have to care about 
-mainline kernel and DT here.
->
->> But above you say it's the *endpoint* node that doesn't exist.  The
->> existing code looks like it's checking for the *bridge* node
->> (bus->dev->of_node).  We haven't even enumerated the devices on the
->> child bus, so we don't know about them at this point.
-> You are absolutely correct and I must change the commit message
-> to say the "root port DT node".   I'm sorry; this mistake likely did not
-> help you understand the fix. :-(
->
->> What happens if there is a DT node for the bridge, but it doesn't
->> describe any regulators?  I assume regulator_bulk_get() will fail, and
->> it looks like that might still keep us from bringing the link up?
-> The regulator_bulk_get()  func does not fail if the regulators are not
-> present.  Instead it "gets"
-> a dummy device and issues a warning per missing regulator.
-> A version of my pullreq submitted code to prescan the DT node and call
-> regulator_bulk_get() with
-> only the names of the regulators present, but IIRC this was NAKd.
-> Hopefully I will not be swamped with RPi developers'  emails when they
-> think these warnings are an issue.
+Alistair Francis (4):
+  mfd: silergy,sy7636a: Add config option
+  ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a
+  ARM: dts: imx7d-remarkable2: Enable silergy,sy7636a
+  ARM: dts: imx7d-remarkable2: Enable lcdif
 
-This won't be the first driver complaining about missing regulators and 
-won't be the last one. So don't expect an email from me ;-)
+ arch/arm/boot/dts/imx7d-remarkable2.dts | 136 ++++++++++++++++++++++++
+ arch/arm/configs/imx_v6_v7_defconfig    |   3 +
+ drivers/hwmon/Kconfig                   |   1 +
+ drivers/mfd/Kconfig                     |  12 ++-
+ drivers/regulator/Kconfig               |   1 +
+ 5 files changed, 152 insertions(+), 1 deletion(-)
 
-Best regards
+-- 
+2.35.3
 
