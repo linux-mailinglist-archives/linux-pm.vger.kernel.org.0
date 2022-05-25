@@ -2,132 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32536533707
-	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 09:10:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61FFA533724
+	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 09:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243504AbiEYHKp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 May 2022 03:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51236 "EHLO
+        id S244274AbiEYHM0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 May 2022 03:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234277AbiEYHKg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 03:10:36 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1588862EF
-        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 00:05:55 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id z11so9071435pjc.3
-        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 00:05:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GQOgQwVQ/waUJffCDtcivwSbqH5M+zW3KVOXOzVg+3I=;
-        b=hfxeN4TuHwZ+F26aVi1nDnyqqj9hzVXzKQLyUTyyseJ1iA2d76wNddPr+Rs8dRaw8U
-         6g2vsfECGDI/zklJP00Pvjz5teG9nmAJS5uNj3rHFuswYrxKgIoBmlWZoWXCgNjj86Nw
-         Vkffw8Z9LaoNwuAhLW48PfDj+fbdlnQyCDUcNUnhZPqLLqxucNyPXCbFCdNp7qMzjthM
-         mymx77ceQo5I2XfTuxYjsKmFpGcIReYXyG8UMB03cIeWtS+6g/6It1c3bKwQKOmb7bt/
-         dSvKqMiBn0YuUFNtMVFi8MhtNg134bEF2gpV9ILEW7JMJzgsd+aafYU9xoXS2GUdN3qU
-         /ARQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GQOgQwVQ/waUJffCDtcivwSbqH5M+zW3KVOXOzVg+3I=;
-        b=JM1ppml5sh06gCRDLnATt2h9OGIMbSw56rKwPUhIg5QO3lElgB3/dWJTK/Tw4ZYSaT
-         Md34MkzPYnKK0b0YhF0fE+rDzC2fCziiwIIVPSzWo1xzl5Ayt9FoGOzRxFbW9SmbkdD1
-         MXq16AuzefgMkE0BOzDqFsFELtK5H57gvOm4DyVHNgIkC5oi7WGPYolPn7TGL6UpJzru
-         1/QPr14vsScnOzdIFm2MSathJpSBQojiRrx4l0+LRlFUFiLr1zASLG4mb9FamY7Ssv/i
-         m6yjUgNCyQAxcpvIyVIJzinEY1eXKUVW/tn/tZXKokneQUjeuMUyopmAbeU5ZdcpkDl0
-         v0VA==
-X-Gm-Message-State: AOAM533Be4s3CJkklgazDikCNuHCcPAo0bMHWaFOM0Ul2hBlAhkANiR2
-        Z0VgOSxQl9rXVpECvkYkbFU/XQ==
-X-Google-Smtp-Source: ABdhPJxXwWFCbgZ5LyQsmogKN6LaNXPGnyZsOSm+FR1qUQynXNNGcC3+iJkueuoaM9Wz9sT5XQO9IQ==
-X-Received: by 2002:a17:902:cf05:b0:156:9d:ca01 with SMTP id i5-20020a170902cf0500b00156009dca01mr30978527plg.111.1653462354436;
-        Wed, 25 May 2022 00:05:54 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id b14-20020a170902650e00b001624f2b71b4sm2310001plk.152.2022.05.25.00.05.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 00:05:53 -0700 (PDT)
-Date:   Wed, 25 May 2022 12:35:51 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        with ESMTP id S238372AbiEYHMF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 03:12:05 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBA95FDB;
+        Wed, 25 May 2022 00:12:03 -0700 (PDT)
+Date:   Wed, 25 May 2022 09:11:56 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1653462718;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+orsWNjWtAwiggB87niLJ7T2vo66GNbCnC4aWo769UQ=;
+        b=tXIaQWvesmewK1SQvqwWgjKsyAyyIrLjEanwcNAy2h/P5FMGq/kJgWZClGgDeKmANuYAkW
+        6I7SL146oVeYMmgPOm/K/5ULiZwNsVMQKo5zuy5USu5ms+bQvLeomBnv/Y7RF7ep6r43Fg
+        yrE+GteNpeB84vc7KB5yHCiGDGSLxpJF9n26BehK7VVK2KwTS1qiOtnBNXBBg3s07zq9LZ
+        QuC90oOJFyjhHJqpIG4b7pe7LqIsPAYDmbR2tbrm4G6CKN84jA5eTlcpkoSp3W47VVgETh
+        utsXLbJ9WiKBewsE1+4q4+5PmLVYRznaktasLTJPtcPFwgqlSj1UxEdIbhT9hg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1653462718;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+orsWNjWtAwiggB87niLJ7T2vo66GNbCnC4aWo769UQ=;
+        b=1vNUO3Dakuo2lI9Z/n9vsWIZ8Loex9gUHN2zaefzYBYblmfryFJ25az2ZrOSX+XZBIv9t6
+        eUlvctYCzDyGwvCQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
-Message-ID: <20220525070551.guv3csxi5kkqfr4f@vireshk-i7>
-References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
- <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
- <20220425072710.v6gwo4gu3aouezg4@vireshk-i7>
- <dea39b1f-0091-2690-7f07-108d07ef9f3c@linaro.org>
- <20220510044053.ykn6ygnbeokhzrsa@vireshk-i7>
- <1e533194-7047-8342-b426-f607fddbfaa3@linaro.org>
- <20220511050643.hd5tcrojb3wkbg7t@vireshk-i7>
- <20220518235708.1A04CC385A9@smtp.kernel.org>
- <65a4c28d-6702-3a9f-f837-1ea69a428777@linaro.org>
- <20220520005934.8AB1DC385AA@smtp.kernel.org>
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, kernel-team@android.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, John Stultz <jstultz@google.com>
+Subject: Re: [PATCH v1] driver core: Extend deferred probe timeout on driver
+ registration
+Message-ID: <Yo3WvGnNk3LvLb7R@linutronix.de>
+References: <YogkhvFGVcjNQ21Z@dev-arch.thelio-3990X>
+ <CAGETcx9nvBs1b4M=2hBhrLX_2-rzLtAmV9WfTXu0MC7JnsBvwA@mail.gmail.com>
+ <YogsiMCDupNUhMgL@dev-fedora.thelio-3990X>
+ <CAGETcx-JyWwoGA3o8eep7E29Cm4DcVT6D1JFJh72jLcqm_mjCQ@mail.gmail.com>
+ <Youleo3Ganxbc1sq@dev-arch.thelio-3990X>
+ <CAGETcx-sL08h2toEyxY6ztc6xNuJiPok6iDEeuJ1mOA3nvE+vA@mail.gmail.com>
+ <YowHNo4sBjr9ijZr@dev-arch.thelio-3990X>
+ <CAGETcx91_WgpmwEA7mBSvUdyJV0a8ymfaNKTmXq=mAJYAjzq1A@mail.gmail.com>
+ <Yo0KyWx+3oX3cMCS@linutronix.de>
+ <CAGETcx_qTLwbjzMruLThLYV+MZD5W2Ox-QwLFQeW=eQgxzq-Hw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220520005934.8AB1DC385AA@smtp.kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAGETcx_qTLwbjzMruLThLYV+MZD5W2Ox-QwLFQeW=eQgxzq-Hw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19-05-22, 17:59, Stephen Boyd wrote:
-> This is a general problem with OPP. It is single clk frequency centric,
-> which works well for CPU/GPU devices that work with cpufreq/devfreq.
-> When it comes to other devices though we have to fit OPP into what those
-> devices want, which is something like gears for UFS, or "4k@60" (a
-> resolution) for display hardware.
-> 
-> Would adding string labels and/or using an index based API work better
-> for these devices? I think we'd want to extend OPP for display devices
-> to have whatever set of use-cases the device driver wants to handle with
-> string labels. That naturally follows how some SoC manufacturers setup
-> their OPP tables anyway. They may want to bump only the bus bandwidth
-> for different display resolutions while maxing out the clk frequency.
-> Then we could let drivers either construct a string at probe time to get
-> a handle to those OPP entries or index directly. The frequency APIs
-> would stick around for OPP tables that have frequencies and for drivers
-> that want to do cpufreq/devfreq stuff.
-> 
-> UFS may want to use an index based API that matches the gears per the
-> spec. I think it could do that with dev_pm_opp_find_level_exact(),
-> right?
+On 2022-05-24 10:46:49 [-0700], Saravana Kannan wrote:
+> > Removing probe_timeout_waitqueue (as suggested) or setting the timeout
+> > to 0 avoids the delay.
+>=20
+> In your case, I think it might be working as intended? Curious, what
+> was the call stack in your case where it was blocked?
 
-I think we can use "level" for all these use cases to find the OPP, if
-it aligns well with the requirements of all these frameworks.
+Why is then there 10sec delay during boot? The backtrace is
+|------------[ cut here ]------------
+|WARNING: CPU: 4 PID: 1 at drivers/base/dd.c:742 wait_for_device_probe+0x30=
+/0x110
+|Modules linked in:
+|CPU: 4 PID: 1 Comm: swapper/0 Not tainted 5.18.0-rc5+ #154
+|RIP: 0010:wait_for_device_probe+0x30/0x110
+|Call Trace:
+| <TASK>
+| prepare_namespace+0x2b/0x160
+| kernel_init_freeable+0x2b3/0x2dd
+| kernel_init+0x11/0x110
+| ret_from_fork+0x22/0x30
+| </TASK>
 
-FWIW, we already have three ways to find the OPP currently, via
-frequency, level and bandwidth.
+Looking closer, it can't access init. This in particular box boots
+directly the kernel without an initramfs so the kernel later mounts
+/dev/sda1 and everything is good.  So that seems to be the reason=E2=80=A6
+My other machine with an initramfs does not show this problem.
 
-> Then the primary problem is the subject of this patch,
-> controlling multiple clks per OPP table. Could that be done by linking
-> one OPP table (for the gears) to an OPP table for each clk? Maybe
-> through 'required-opps'?
+> -Saravana
 
-Even in that case we will have an OPP table which will have multiple
-clocks. So it may not matter much which OPP table contains all the
-clocks.
-
--- 
-viresh
+Sebastian
