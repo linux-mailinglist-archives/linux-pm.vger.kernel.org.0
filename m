@@ -2,44 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 312FC533DAA
+	by mail.lfdr.de (Postfix) with ESMTP id C7B8A533DAD
 	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 15:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238240AbiEYNUY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 May 2022 09:20:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43862 "EHLO
+        id S234488AbiEYNU0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 May 2022 09:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244455AbiEYNTx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 09:19:53 -0400
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8771D0DD
-        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 06:19:41 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id g72so8183495ybf.0
-        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 06:19:41 -0700 (PDT)
+        with ESMTP id S244597AbiEYNUD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 09:20:03 -0400
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00842ABF46
+        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 06:19:48 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-2ff90e0937aso139583717b3.4
+        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 06:19:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=EN7y3UT5BTE4F+2bbUgE6JO/7u5HkYZnnALakV1gSwo=;
-        b=29LMFkrR4mBQcvfnQZ2r0VvaVu291kiYvMsPRNpWltgC9mOA2TwS9Gbh+QAPERJIuR
-         T4Z4Ro6JVDVnrU75WIJYvo8B+b0N5vUak5FYKdR7SMnEZLmrf1CW1W9YuuFJ64VuAEPT
-         PIrUleimToPlEWgadl5MVwoZJaqIheZ6y80+9Oi41h/yOMqNcvRTRliKnggGDM3iphSI
-         RVv+3zDdtzAfO8R6bEChSgKer6xJxg3YI4ta3TMvnsWmfHtr9UaD5RPyj4l78Tb3e+Mw
-         Zk8uPhqAaUJORLqgnY5tHCgs8rgHYYWqsA4yGQGWcH3piFMooM+9Eghcv3pv/US96TLC
-         RB9g==
-X-Gm-Message-State: AOAM533qKVNPHSksu/my1yblEIvOtJBlyQ7igth7LFpsrZ9in3NKE/OX
-        nSlFTfMpVr8xHAMMtiHj1owMB0rQP4Azy7ltCC4=
-X-Google-Smtp-Source: ABdhPJzrURzpKt8/h92nPvhM+mKRJ7DsSzhBPxP5Hps8GpY7P10+IJdvn0ln+nny0WRJ41W23F+hX8nrW04g0xknioU=
-X-Received: by 2002:a25:6dc5:0:b0:655:bf98:2421 with SMTP id
- i188-20020a256dc5000000b00655bf982421mr2013906ybc.633.1653484764271; Wed, 25
- May 2022 06:19:24 -0700 (PDT)
+        bh=y214NlD86AqNSAMmmF9BtUGBzp1ZXCVDrH4I6u3j9Y0=;
+        b=AhDScIBPQL13xZcEk6odRvJEDD26NVYb5RE0axtwuzih0DNX6D+tbZUmzZB7xL3WhR
+         eqF01eVECUz0N+fUNHYwuk4PSWORlbWxB9ElvGYPewoGszDyoUa6CsF/3viwzsjNoIiY
+         9ykH6aj0JiwOAOHdx3F7nEXyqmx9rJwotlnsV8CyOUHXS6Y9jevC0HZrtxbzedO8SUZF
+         NRSeSc0/Bl36E0zX31mww449IFBaqcb/tOYtSMJwNhvw6k5P3ExPVe7KthXuR/DapRPg
+         W3g0mLw/uuB5XPMoGiCavlhQPm6/K7XV+vNbQkYhXCEmek+rRPQPnM2t325yPrn2LkGj
+         36rQ==
+X-Gm-Message-State: AOAM530BbeGogH9Jh9ChyaCiAIOmMCqciileDFe0y33bfoj8Ba7ZsMWr
+        /7XFVivmKDKty7c4wyiU1dXeaomIhtbb1IyrkLJSSp/H
+X-Google-Smtp-Source: ABdhPJzVpaeQ+3CbxWuVtGsVQLe0WgrSiHsrwtcKRfp6LIq0sHCpSOHHRWiWNqGLeNPXJHQ1hqD7h0xLeA50IAYVwMU=
+X-Received: by 2002:a81:260a:0:b0:2f4:ca82:a42f with SMTP id
+ m10-20020a81260a000000b002f4ca82a42fmr34011597ywm.149.1653484786702; Wed, 25
+ May 2022 06:19:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220524051731.lm2qg5ld34ss56hr@vireshk-i7>
-In-Reply-To: <20220524051731.lm2qg5ld34ss56hr@vireshk-i7>
+References: <20220524053013.ohb46jykdjmss75l@vireshk-i7>
+In-Reply-To: <20220524053013.ohb46jykdjmss75l@vireshk-i7>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 25 May 2022 15:19:13 +0200
-Message-ID: <CAJZ5v0iV=a3nfTR0Y7UwzQ4_AwFBtu2yH-+VfOAsUiaxzTZvBQ@mail.gmail.com>
-Subject: Re: [GIT PULL] cpufreq/arm updates for 5.19-rc1
+Date:   Wed, 25 May 2022 15:19:35 +0200
+Message-ID: <CAJZ5v0gxnrTkLPozQas6Dh5xT+8yk=rN9_92+hK+wVFcH2StvA@mail.gmail.com>
+Subject: Re: [GIT PULL] OPP updates for 5.19-rc1
 To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>
@@ -54,64 +54,60 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, May 24, 2022 at 7:17 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Tue, May 24, 2022 at 7:30 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> The following changes since commit e4e6448638a01905faeda9bf96aa9df7c8ef463c:
+> The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 >
->   cpufreq: qcom-cpufreq-hw: Clear dcvs interrupts (2022-04-26 12:08:31 +0530)
+>   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 >
 > are available in the Git repository at:
 >
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq-arm-5.19-rc1
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/opp-updates-5.19-rc1
 >
-> for you to fetch changes up to 39b360102f3ac6b12cafac9db25762071eb0418c:
+> for you to fetch changes up to 22079af7df5a5dfef1c4d160abfd43035211759e:
 >
->   cpufreq: mediatek: Add support for MT8186 (2022-05-12 10:39:31 +0530)
->
-> ----------------------------------------------------------------
-> cpufreq arm updates for 5.19-rc1
->
-> - Tegra234 cpufreq support (Sumit Gupta).
->
-> - Mediatek cleanups and enhancements (Wan Jiabing, Rex-BC Chen, and
->   Jia-Wei Chang).
+>   opp: Reorder definition of ceil/floor helpers (2022-05-04 15:40:22 +0530)
 >
 > ----------------------------------------------------------------
-> Jia-Wei Chang (8):
->       cpufreq: mediatek: Use module_init and add module_exit
->       cpufreq: mediatek: Cleanup variables and error handling in mtk_cpu_dvfs_info_init()
->       cpufreq: mediatek: Remove unused headers
->       cpufreq: mediatek: Enable clocks and regulators
->       cpufreq: mediatek: Record previous target vproc value
->       cpufreq: mediatek: Make sram regulator optional
->       cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()
->       cpufreq: mediatek: Add support for MT8186
+> OPP updates for 5.19-rc1
 >
-> Rex-BC Chen (7):
->       cpufreq: mediatek: Use device print to show logs
->       cpufreq: mediatek: Replace old_* with pre_*
->       cpufreq: mediatek: Unregister platform device on exit
->       cpufreq: mediatek: Move voltage limits to platform data
->       cpufreq: mediatek: Add opp notification support
->       dt-bindings: cpufreq: mediatek: Add MediaTek CCI property
->       cpufreq: mediatek: Link CCI device to CPU
+> - Minor update to dt-binding for Qcom's opp-v2-kryo-cpu (Yassine Oudjana).
 >
-> Sumit Gupta (4):
->       dt-bindings: Document Tegra CCPLEX Cluster
->       cpufreq: tegra194: add soc data to support multiple soc
->       cpufreq: tegra194: Add support for Tegra234
->       arm64: tegra: add node for tegra234 cpufreq
+> - Use list iterator only inside the list_for_each_entry loop (Xiaomeng
+>   Tong, and Jakob Koschel).
 >
-> Wan Jiabing (2):
->       cpufreq: mediatek: Fix NULL pointer dereference in mediatek-cpufreq
->       cpufreq: mediatek: Fix potential deadlock problem in mtk_cpufreq_set_target
+> - New APIs related to finding OPP based on interconnect bandwidth
+>   (Krzysztof Kozlowski).
 >
->  .../arm/tegra/nvidia,tegra-ccplex-cluster.yaml     |  52 ++
->  .../bindings/cpufreq/cpufreq-mediatek.txt          |   7 +
->  arch/arm64/boot/dts/nvidia/tegra234.dtsi           |   7 +
->  drivers/cpufreq/mediatek-cpufreq.c                 | 636 ++++++++++++++-------
->  drivers/cpufreq/tegra194-cpufreq.c                 | 246 ++++++--
->  5 files changed, 689 insertions(+), 259 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
+> - Fix the missing of_node_put() in _bandwidth_supported() (Dan Carpenter).
+>
+> - Cleanups (Krzysztof Kozlowski, and Viresh Kumar).
+>
+> ----------------------------------------------------------------
+> Dan Carpenter (1):
+>       OPP: call of_node_put() on error path in _bandwidth_supported()
+>
+> Jakob Koschel (1):
+>       opp: replace usage of found with dedicated list iterator variable
+>
+> Krzysztof Kozlowski (2):
+>       PM: opp: simplify with dev_err_probe()
+>       opp: Add apis to retrieve opps with interconnect bandwidth
+>
+> Viresh Kumar (1):
+>       opp: Reorder definition of ceil/floor helpers
+>
+> Xiaomeng Tong (1):
+>       opp: use list iterator only inside the loop
+>
+> Yassine Oudjana (1):
+>       dt-bindings: opp: opp-v2-kryo-cpu: Remove SMEM
+>
+>  .../devicetree/bindings/opp/opp-v2-kryo-cpu.yaml   |  56 ++--
+>  drivers/opp/core.c                                 | 339 ++++++++++++++-------
+>  drivers/opp/debugfs.c                              |  10 +-
+>  drivers/opp/of.c                                   |   2 +-
+>  include/linux/pm_opp.h                             |  41 ++-
+>  5 files changed, 291 insertions(+), 157 deletions(-)
 
 Pulled, thanks!
