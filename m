@@ -2,53 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61F55533E2B
-	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 15:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0012D533E38
+	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 15:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232202AbiEYNrA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 May 2022 09:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45060 "EHLO
+        id S232676AbiEYNuR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 May 2022 09:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiEYNq7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 09:46:59 -0400
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67EE62C67B;
-        Wed, 25 May 2022 06:46:57 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-3003cb4e064so42622897b3.3;
-        Wed, 25 May 2022 06:46:57 -0700 (PDT)
+        with ESMTP id S244596AbiEYNuQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 09:50:16 -0400
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEA03584D;
+        Wed, 25 May 2022 06:50:15 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-300628e76f3so8260657b3.12;
+        Wed, 25 May 2022 06:50:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=sAZ+DgPPDDVzcDc1w8sv+0S0ncjGvCusX7p+z8GYQSA=;
-        b=CTrWiy1je9tiZ2ij1TQfUYG9Z7uNCWZlztLd+exIxrv991R6bWWeLN6ZMgZPdbcUST
-         DshJf8yixzS1k3jIx9IhdgqcnY0CCp4D22Xrbx832euL5KBbc8RmsrF//Xo5kn5Bexkz
-         UWNuyHc2L8lJ3cSHkVndyr4q2PQkpWlbrhRDzRkcWCu15uifi2qiMIkmzoMN68DvmNTy
-         +YfsTinDJxOGcBeA2Q36saoU2MLQP01u++RcfvtWxh9GDWSly1Rkcoo0zUHOL2TUVsYY
-         LhKjtg5VLkKtXiZoKdBXtgcjWTzNuhG9Dc71OO3CoybdeA6HBNTb/PtGQVSMWfdakSF1
-         cf/g==
-X-Gm-Message-State: AOAM533mrS3JT4/u9/+4L+dpcsStVWAWyxOjHMsYdBUWZ6bZJdS27R77
-        to0WlfRb1GejDAO5JBj2MhfjgTGgRtyOFAbFZyE=
-X-Google-Smtp-Source: ABdhPJz2UmrIsRVznag5o2/K+C1hQquZo+a1ndUPE067SJI5JbLTZS/Ql0Vf0ys9oGueNLcirzlmjJxwOrdOphckCpE=
-X-Received: by 2002:a81:8844:0:b0:2fe:a7de:20c2 with SMTP id
- y65-20020a818844000000b002fea7de20c2mr34059926ywf.515.1653486416716; Wed, 25
- May 2022 06:46:56 -0700 (PDT)
+        bh=D7pNBXTzwb2NC+1B3pkw6XahPKXPrihCDQqGfh0Wnzo=;
+        b=UDr7JM9Zp9EaPbB6flSIhtvB2rBN91LXcTY6rg/XNnEmkypBFmx8VaTIPQWW7V8ljq
+         wo0gjJ8H82RLcuAuAp61ucpo/HIOlDaFBawgJ97i/2HsqrfRjL9czqv5LJDN0NmSwaQM
+         Fzz7epy4GXkt3VAR36Jb+cAbHG4vkJDiUjSnw588eCXVvbFMo43fkZd7K97uY5S3VU7T
+         bCUNYDZbsjmD5a49QjGwRayassCze0fNleUcVCuSgR1vNt5cNbGeA19EQoXkjCYqUFzw
+         vZLKNq5tnPuEX03Mijp75rOZ+5QG3KPuKjO2QLLbfG4l7Xq3EtFGNyVKRR9xkwXaDZ56
+         AHAg==
+X-Gm-Message-State: AOAM532xuiA1s+IhedFnUiIIb/k6AvbWzyRRzdLLPJxt5JqOpzPELD/D
+        awreOjGkSXDody8TroDrslNsU1tLqzuAXdBwspkY56N+
+X-Google-Smtp-Source: ABdhPJweqWSCLXeXw+r+GeogMl1WGgJ5ajSlE51Ud/iUBvqvwf0bA2VMSP4GcN/QX3cCdkBu3ImXYBXI9ubr+DisxJk=
+X-Received: by 2002:a81:87c4:0:b0:2ff:c5dc:72b9 with SMTP id
+ x187-20020a8187c4000000b002ffc5dc72b9mr19519391ywf.19.1653486614968; Wed, 25
+ May 2022 06:50:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220523174852.30725-1-sumeet.r.pawnikar@intel.com>
-In-Reply-To: <20220523174852.30725-1-sumeet.r.pawnikar@intel.com>
+References: <20220523181655.2352470-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20220523181655.2352470-1-srinivas.pandruvada@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 25 May 2022 15:46:45 +0200
-Message-ID: <CAJZ5v0ikhR+fhVz0HW63RhaEJ6C1OxqhBgW1EzRPS0ghmBCCsg@mail.gmail.com>
-Subject: Re: [PATCH v2] thermal: int340x: Add Meteor Lake PCI device id
-To:     Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+Date:   Wed, 25 May 2022 15:50:04 +0200
+Message-ID: <CAJZ5v0je=rTPG+y-CSd=mi4RTbOq2zni7-1SdKmbNadhUUihCA@mail.gmail.com>
+Subject: Re: [PATCH v2] Documentation: admin-guide: pm: Add Out of Band mode
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Antoine Tenart <atenart@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>, Len Brown <lenb@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Prarit Bhargava <prarit@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -60,45 +61,55 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 23, 2022 at 7:51 PM Sumeet Pawnikar
-<sumeet.r.pawnikar@intel.com> wrote:
+On Mon, May 23, 2022 at 8:17 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
 >
-> Add Meteor Lake PCI ID for processor thermal device.
+> Update documentation for using the tool to support performance level
+> change via OOB (Out of Band) interface.
 >
-> Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-> Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 > ---
-> v2: Replaced Signed-off-by with Reviewed-by as per comment from
->     Srinivas Pandruvada
-> ---
->  drivers/thermal/intel/int340x_thermal/processor_thermal_device.h | 1 +
->  .../thermal/intel/int340x_thermal/processor_thermal_device_pci.c | 1 +
->  2 files changed, 2 insertions(+)
+> v2:
+> As suggested by Jonathan
+> - Indent literal block
+> - Show output of command
 >
-> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-> index 49932a68abac..7d52fcff4937 100644
-> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.h
-> @@ -24,6 +24,7 @@
->  #define PCI_DEVICE_ID_INTEL_HSB_THERMAL        0x0A03
->  #define PCI_DEVICE_ID_INTEL_ICL_THERMAL        0x8a03
->  #define PCI_DEVICE_ID_INTEL_JSL_THERMAL        0x4E03
-> +#define PCI_DEVICE_ID_INTEL_MTLP_THERMAL       0x7D03
->  #define PCI_DEVICE_ID_INTEL_RPL_THERMAL        0xA71D
->  #define PCI_DEVICE_ID_INTEL_SKL_THERMAL        0x1903
->  #define PCI_DEVICE_ID_INTEL_TGL_THERMAL        0x9A03
-> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> index ca40b0967cdd..c2dc4c158b9d 100644
-> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> @@ -358,6 +358,7 @@ static SIMPLE_DEV_PM_OPS(proc_thermal_pci_pm, proc_thermal_pci_suspend,
+>  .../admin-guide/pm/intel-speed-select.rst     | 22 +++++++++++++++++++
+>  1 file changed, 22 insertions(+)
 >
->  static const struct pci_device_id proc_thermal_pci_ids[] = {
->         { PCI_DEVICE_DATA(INTEL, ADL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
-> +       { PCI_DEVICE_DATA(INTEL, MTLP_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
->         { PCI_DEVICE_DATA(INTEL, RPL_THERMAL, PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_FIVR | PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_MBOX) },
->         { },
->  };
+> diff --git a/Documentation/admin-guide/pm/intel-speed-select.rst b/Documentation/admin-guide/pm/intel-speed-select.rst
+> index 0a1fbdb54bfe..a2bfb971654f 100644
+> --- a/Documentation/admin-guide/pm/intel-speed-select.rst
+> +++ b/Documentation/admin-guide/pm/intel-speed-select.rst
+> @@ -262,6 +262,28 @@ Which shows that the base frequency now increased from 2600 MHz at performance
+>  level 0 to 2800 MHz at performance level 4. As a result, any workload, which can
+>  use fewer CPUs, can see a boost of 200 MHz compared to performance level 0.
+>
+> +Changing performance level via BMC Interface
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +It is possible to change SST-PP level using out of band (OOB) agent (Via some
+> +remote management console, through BMC "Baseboard Management Controller"
+> +interface). This mode is supported from the Sapphire Rapids processor
+> +generation. The kernel and tool change to support this mode is added to Linux
+> +kernel version 5.18. To enable this feature, kernel config
+> +"CONFIG_INTEL_HFI_THERMAL" is required. The minimum version of the tool
+> +is "v1.12" to support this feature, which is part of Linux kernel version 5.18.
+> +
+> +To support such configuration, this tool can be used as a daemon. Add
+> +a command line option --oob::
+> +
+> + # intel-speed-select --oob
+> + Intel(R) Speed Select Technology
+> + Executing on CPU model:143[0x8f]
+> + OOB mode is enabled and will run as daemon
+> +
+> +In this mode the tool will online/offline CPUs based on the new performance
+> +level.
+> +
+>  Check presence of other Intel(R) SST features
+>  ---------------------------------------------
+>
 > --
 
 Applied as 5.19-rc material, thanks!
