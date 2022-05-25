@@ -2,140 +2,242 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC3E53345F
-	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 02:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B6C0533663
+	for <lists+linux-pm@lfdr.de>; Wed, 25 May 2022 07:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232361AbiEYAkE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 May 2022 20:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55002 "EHLO
+        id S240895AbiEYF2L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 May 2022 01:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiEYAkD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 May 2022 20:40:03 -0400
-X-Greylist: delayed 2616 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 24 May 2022 17:40:00 PDT
-Received: from hobbes.mraw.org (hobbes.mraw.org [195.154.31.160])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECB03915E
-        for <linux-pm@vger.kernel.org>; Tue, 24 May 2022 17:40:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mraw.org;
-        s=mail2022; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=gqCLtPa2Zzz2oEdqi3oj2xUKzoRcEUhnAmWGh8qOxXY=; b=yy2Kp0nLeoG5AeQGjfDVrGhQ+y
-        pEiZi9XROenv64p5mfS5GascFcVo2s/tCfVLYCgvnF3pRUOs7+BVEFfdAmao18gKYjCtebxa/JS3e
-        IcoqNGCZkcYT75K9Hbf2VdouOIHG2PIgPhlMT5zHs8EjoTy7OyektrI5a7jP6WCrP3DNVbd+R7Wpv
-        TvQR8FyqLbRYID50wuxE43ROx7cJ4Hp0qLU2hAlEeGLn7CQKk84Nj8fqp22q6nx/Xc/cisb4m/aMB
-        CVHVYgm1DCal2/sM4xnmGO+AuAbHiJQUvALG3xktns1r4XdOVvSR1VWjW7gZnXsihKD6LqDPxv6Xg
-        5HuC7ieQ==;
-Received: from 82-64-171-251.subs.proxad.net ([82.64.171.251] helo=mraw.org)
-        by hobbes.mraw.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <kibi@debian.org>)
-        id 1nteNj-003nRz-K7; Wed, 25 May 2022 01:56:07 +0200
-Date:   Wed, 25 May 2022 01:56:05 +0200
-From:   Cyril Brulebois <kibi@debian.org>
-To:     Jim Quinlan <jim2101024@gmail.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        James Dutton <james.dutton@gmail.com>,
-        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
-        Jim Quinlan <james.quinlan@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-rpi-kernel@lists.infradead.org>,
-        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v1] PCI: brcmstb: Fix regression regarding missing PCIe
- linkup
-Message-ID: <20220524235605.rz3cyw7akw3327ip@mraw.org>
-Organization: Debian
-References: <CANCKTBvqp7_MSG3aMpp6pmNoPUnYpH0c+8-r7Pzgebuzb4sZPA@mail.gmail.com>
- <20220523221036.GA130515@bhelgaas>
- <CANCKTBsEjkbdWCB4D22iamPr7YP0qUX=M1dZNNgxkfk1EwjjZQ@mail.gmail.com>
+        with ESMTP id S237184AbiEYF2K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 01:28:10 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC7E54BFA
+        for <linux-pm@vger.kernel.org>; Tue, 24 May 2022 22:28:08 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id n18so17650803plg.5
+        for <linux-pm@vger.kernel.org>; Tue, 24 May 2022 22:28:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QZdwl2eDPswcFHumm58a9Iw93tuwUp/qo/Knb69EJQA=;
+        b=MvnS1IZExahwrYwhSjOSa7LZQGz23l4AJGJZKt9TrNzWpagf2JON6Tkbb1Gs8JIOPG
+         sMSADrHviHKLBHVtfBK0S8dNvq+7jP8gWS/MFZSbF2tsB1wyOQHpFdfx1HCW5F1LEzlU
+         EcTsh+4GNnYVAGG+W6PSBJkOPcS+b3vw6UMWaXlsYGUtjcDmO6I8gdasuxSvHHqfuSu2
+         bIy1ENOuQ8n2FXiGGAvX6G1CxlJzMx5DuhCMfRxs7t670V/g8kV8hULYvLGKJDCO/Ta1
+         d5czWjX3BcbB1o/oqk1xurh4Z3cC4kVtYZuIr3j9920dys1/OZKG3YeSllXCoqe8UAYw
+         o0Cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QZdwl2eDPswcFHumm58a9Iw93tuwUp/qo/Knb69EJQA=;
+        b=hpI7RKN5oZ1h9cuwqdwk2Zt9IXSBHsg61LEaKXcnXVzR1kI+fWKPG1ZybLTSZenPuM
+         fh17Yoc02lstzFrIth6ubuOazl2yLwZ2VhnUba/awbpac91nGu3Tkxsg3UjlFHb5Qpeu
+         yRW1yXdS0LR7+45LC60vAk5pLf+QNaVFZKLq04Kj4nibbfclVGzK/Mhe558OF5HRzuwk
+         aQG09cl8gj89rZKVSzoESuTJ8WNWtnqZRdiZrltho4NGTNM/mj9SiXFoXvDGFYbkrI/u
+         GJXNHnkxhYBDy/ef5ElKXzwI8QNV0SAZBnTJvRtWIq9RKFdNabT4VdnNknr3ph/oFJ4J
+         NQcQ==
+X-Gm-Message-State: AOAM531pBBPvqRcdQxVNDFeS9XwnP/KEXKdtl1Mj47/KN6OXMrpl50TO
+        P44jq0gpUDQ9UdzsKaHtqOif8Q==
+X-Google-Smtp-Source: ABdhPJyyH6J2GSGZ4L/l6CNHTd/q71yv4qk6Jqt+7EtQLQPIDkHfF8vTQBVo110kOjNElAvFq6y1SA==
+X-Received: by 2002:a17:90b:1d10:b0:1e0:4bbb:3393 with SMTP id on16-20020a17090b1d1000b001e04bbb3393mr8356877pjb.218.1653456487622;
+        Tue, 24 May 2022 22:28:07 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id r129-20020a632b87000000b003fadcbccdbasm424308pgr.69.2022.05.24.22.28.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 22:28:06 -0700 (PDT)
+Date:   Wed, 25 May 2022 10:58:04 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Danny van Heumen <danny@dannyvanheumen.nl>
+Cc:     =?utf-8?B?4oCcUmFmYWVsIEouIFd5c29ja2nigJ0=?= <rafael@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: 'schedutil' (possibly) aberrant behavior surrounding
+ suspend/resume process (timing/delay/run-away CPU issues)
+Message-ID: <20220525052804.rvnp2jinpmz7vukx@vireshk-i7>
+References: <R6AlCxZca3GET8vtwpOAkzQ4Y9SX-NOVQ05FlJAKDUvNTYCAhsWy1e0q5soCkapaviI8SS-9eC51nwJj6yn6n1rFAlwndEqYqlr_hqz4C_U=@dannyvanheumen.nl>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gj63ap2kyrcnvzrr"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANCKTBsEjkbdWCB4D22iamPr7YP0qUX=M1dZNNgxkfk1EwjjZQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <R6AlCxZca3GET8vtwpOAkzQ4Y9SX-NOVQ05FlJAKDUvNTYCAhsWy1e0q5soCkapaviI8SS-9eC51nwJj6yn6n1rFAlwndEqYqlr_hqz4C_U=@dannyvanheumen.nl>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
++Peter
 
---gj63ap2kyrcnvzrr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 21-05-22, 22:13, Danny van Heumen wrote:
+> Hi all,
+> 
+> This is my first report directly to linux kernel mailing lists. I'll
+> do my best, but I'll invariably make some mistakes.
 
-Hi Jim,
+That's fine. Just two things you need to take care of normally, keep
+the line length to 100 columns (as I have done now) and don't do
+top-posting on replies. That's all :)
 
-Jim Quinlan <jim2101024@gmail.com> (2022-05-24):
-> Yes. One repo did not have this node (Cyril/debina?), one did
-> (https://github.com/raspberrypi/firmware/tree/master/boot).
-> Of course there is nothing wrong with omitting the node; it should
-> have pcie linkup regardless.
+> This bug report
+> is based on "educated" guessing, some insight and intuition, so I
+> will do my best to explain all the curiosities and why I blame
+> `schedutil`. To clarify, I seems behavior of schedutil triggers
+> issues elsewhere.
+> 
+> I write the message not to say "this is the problem, fix it!" but
+> rather, I hope to check with you if you recognize potential things
+> to look for, *if the reports make any sense*.
+> 
+> ## short summary
+> 
+> On multiple computers, with kernel builds from distros and also
+> vanilla custom (minimal) config builds by myself, I have had a
+> number of issues that all center around suspend/resume with
+> 'schedutil' scaling governor active. Some issues seem to be
+> explained by other causes/bug-reports, but I report this here
+> because `schedutil` is a common denominator.
+> 
+> Characteristics:
+> - Kabylake, upon suspend, problems with going into suspend, with
+> "runaway processor" behavior starting to run at full power causing
+> excessive build-up of heat. (intel_pstate=passive) (more details
+> follow ...)
 
-I work/debug stuff on Debian systems, but Debian's just shipping what's
-in mainline. Raspberry people maintain their own vendor DTBs.
+If this is actually related to cpufreq subsystem, then maybe the CPU
+going down was programmed at a higher frequency (because there was
+work to do during suspend) while going offline. I am not sure how it
+works on Intel, but on ARM we have something like a
+"suspend-frequency", which is programmed right before we suspend to
+make sure not to consume a lot of power. Maybe we can do something
+like this in intel-pstate driver, not sure though.
 
-> Unless you object, I plan on sending you a v2 of my regression fix
-> which will correct the commit message, change the "if (busno =3D=3D 1)"
-> conditional to only guard the pcie linkup call, and add further
-> comments.
->=20
-> I have noted and will also address your other concerns and suggestions
-> in a future patchset as I think it is best that I get my hands on a
-> CM4 board before I submit any more changes.
+> - Haswell laptop, upon suspend, sometimes does not suspend, instead
+> screen off but then returned to active.
+> - Pinebook Pro: upon resume from suspend (s2idle, I'm fairly
+> certain): problems getting "display panel up in time", "eMMC/SDIO
+> failing to initialize", screen-flickering from excessive refreshing
+> many times the blinking rate. (more details follow ...)
+> 
+> These issues start to happen upon suspend. The issues do not happen
+> when `schedutil` is not involved.
+> 
+> My interpretation: somewhere just before, or just after entering
+> suspend-state/initiating restore, `schedutil` messes up something
+> w.r.t. timings: timings/delays/repeats happen at many times the
+> intended speed.
+> 
+> ## `schedutil` before suspend: all good
+> 
+> I have been using `schedutil` for many months. Upon normal
+> operations there never seem to be any issues, or unexpected events.
+> What I describe all happens centered around the suspension-process,
+> and sometimes as consequence afterwards.
+> 
+> ## Pinebook Pro issues
+> 
+> - original Debian kernel,
+> - custom-built kernel with very minimal config: versions
+> 5.15.{38,39,41} 5.17.9
+> - `schedutil` cpufreq scaling governor
+> - Debian bullseye (original, no third-party kernels), up-to-date
+> install
+> - no tlp, manual suspend procedure (either button- or lid-triggered)
+> 
+> The Pinebook Pro does not exhibit issues (AFAICT) upon entering
+> suspend. However, resume will fail often, but not always. I have
+> seen different symptoms exhibited:
+> 
+> 1.) 3-line error message regarding analogix_dp_resume about
+>   rockchip-module not succeeding (through analogix) to re-initialize
+>   the display panel in time. (It shows on that exact display panel,
+>   so clearly it worked.)
+> Those 3 lines of error message, are being refreshed at many times
+> the necessary rate. The excessive refreshing interferes with the
+> ability to switch terminals (TTY1, TTY2, etc.), because I see a
+> "single frame blink" of the terminal and then gets overridden with
+> the 3-line error message again. Same holds for switch to GUI DISPLAY
+> terminal. Display does not have sufficient time to refresh and ends
+> up with variations of extra long DPMS-off state before returning to
+> the error-message-screen.
+> Sometimes I am able to "interrupt" this excessive run-away behavior by keeping e.g. CTRL+ALT+1 pressed such that it will try to switch TTY at "key-repeat"-speed.
+> 
+> 2.) error message regarding eMMC/SDIO issues. Similar to (1.) issue
+>   with failing to initialize eMMC and consequently I lose access to
+>   my persistent storage.
+> 
+> 3.) issue also occurs when entering sleep from prolonged idleness
+>   with lid already closed (DPMS off + locked) as starting-point.
+> 
+> [x.] Not sure if relevant at all: "crashes with wifi firmware". A
+> buggy early firmware version for a broadcom wifi chip would
+> occasionally crash. However, in particular around the suspend
+> process there would be issues.
+> I don't want to attribute this to schedutil, but maybe schedutil's
+> behavior significantly increases the chance of this happening.
+> 
+> NOTE: I tried switching back to 'ondemand' scheduler after first
+> issues had occurred with 'schedutil' active. However, reverting to
+> 'ondemand' did not resolve the outstanding issues at that point.
+> 
+> ## Kabylake-laptop
+> 
+> - Distro-kernel (i.e. not vanilla)
+> - `intel_pstate=passive` kernel parameter
+> - `schedutil` as cpufreq scaling governor (udev-rule)
+> 
+> 1.) Trigger suspend on the laptop. System goes into suspend state as
+>   expected. Then (in about 2 seconds) fans start spinning and
+>   apparently excessive heat is being produced. (This was reported
+>   somewhere already as being an issue with PCH temp being too high,
+>   w.r.t. `S0ix` `intel_pch_thermal`.) However, I suspect that
+>   high-temperature may be caused through `schedutil`, because the
+>   laptop did not run any intensive tasks of any kind. (idling)
+> Upon resuming, the laptop has lost significant amounts of battery,
+> corresponding with the excessive CPU usage and cooling fans.
+> 
+> ## Haswell laptop
+> 
+> 1.) Not much to say: enter suspend, find out later that it did not
+>   truly enter suspend, but was kept back and is rather active.
+> 
+> ## Without `schedutil`
+> 
+> In all cases, when taking schedutil out of the loop, these issues
+> disappear. In case of the Kabylake laptop, I do set
+> intel_pstate=active.
 
-For the record, I'm still happy to be cc'ed so that I spend time testing
-further patches, be it the short-term regression fix (for inclusion in
-master, but also checking it fixes linux-5.17.y and now linux-5.18.y,
-if stable maintainers would welcome the extra testing), or the future
-patchset.
+Just to clarify here, from what I understand about the active/passive
+parts of intel-pstate driver, if you set intel_pstate=active then none
+of the cpufreq governor's will be used. This enables the setpolicy()
+callback of the driver, which will decide how the frequency changes
+later on. The cpufreq governors, ondemand or schedutil, are only in
+play if intel_pstate=passive.
 
-I can't guarantee you'll have an answer in a few hours like that
-happened during the past few days (during which I prioritized testing
-over anything else so as not to be a blocker in case it could be
-squeezed into v5.18). But I'm still willing to allocate some time to
-make sure the CM4 keeps working, even if you don't get your hands on
-such systems right away.
+> All have `ondemand` governor. Suspend/resume
+> works, repeated many times over. Even if some errors are still
+> shown, they no longer pose a problem. The excessive screen blinking
+> behavior is not exhibited, for example.
+> 
+> ## Other things I have tried
+> 
+> As mentioned before, I have tried looking for other bugs. However,
+> the issues seem to be too persistent. I have tried removing all
+> external devices, tried using different USB ports, tried different
+> suspend/resume settings in `/etc/systemd/sleep.conf`. Tried using
+> 'tlp' package for additional power-management tricks. Tried
+> switching governors, ... and probably more.
+> 
+> I realize this bug report is far from perfect. I'm afraid I cannot
+> make the report much more exact/clear. I am happy to answer any
+> questions you may have. I will keep an eye out for further
+> peculiarities.
 
+Also I am not yet sure it is related to cpufreq right now.
 
-Cheers,
---=20
-Cyril Brulebois (kibi@debian.org)            <https://debamax.com/>
-D-I release manager -- Release team member -- Freelance Consultant
-
---gj63ap2kyrcnvzrr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEtg6/KYRFPHDXTPR4/5FK8MKzVSAFAmKNcI8ACgkQ/5FK8MKz
-VSCfFw/9ExgzEXqJQAACsMXdquRjdNCULhvZUtAQFLvLgusQmQ//RL+XzP5k8z6F
-j8WS/0fQMMoA9uIySXgLHFKJ5LXBgt3TG/x8KQqpYwM4Kir6XiG+g1iOnuLaTzRv
-xRVe31HhOSHP5XdrQqRgzjZRKBxP/llg/NNzbn4ZwL2M+TTNyMsZg/B5pLyGs+yp
-62ip+XyiIZtYMb63K3/rEH0gKNY+6P+XjRMfW55gPbz+hoXafuuJuElrlXaWeGj8
-i4DEOQNFH9Mqiy783Fm2+FpEMNC5sWlgg5DO8zzTUILKDMpi+IB9BxCD4M494ycD
-CWmJWx88mu4iKu62DIViW8Vb1Oi9PyZm0JauLGqjK/jQ/vljQgSr0sBpHc/vW9Lr
-sOy/b6ZhikOaYto/MgNkct2DE1Vlx/SOIsZPg3v7GDDBAw/j5pkEEghJFu8grpQp
-hyhI98GTEghoWOOHSZsxZ8xYCsXC4b6KcF4D6FBeyWygZtE+L4PPx/lLUl5z8N/G
-u7vvGdlFk/Eko5QOp7rR6qo+daaFhrAhUgDbRFL8Drgpawfze6XnebsgZV6t9mEs
-uwFOmPUaovWWRqCa65CEBJd6oqeL5LfSMPrvn6j2gLmwouMEzBAgN3O46WvOOYNn
-HxH7rCEK6s+Rxq2XcfUtez2tCNurBGRQCACaNBV8rElb/4nLJZE=
-=zXtQ
------END PGP SIGNATURE-----
-
---gj63ap2kyrcnvzrr--
+-- 
+viresh
