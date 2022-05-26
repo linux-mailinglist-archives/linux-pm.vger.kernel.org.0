@@ -2,255 +2,203 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 433FF53462E
-	for <lists+linux-pm@lfdr.de>; Thu, 26 May 2022 00:07:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A837534741
+	for <lists+linux-pm@lfdr.de>; Thu, 26 May 2022 02:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345091AbiEYWHU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 May 2022 18:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45990 "EHLO
+        id S235327AbiEZACT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 May 2022 20:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237130AbiEYWHT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 18:07:19 -0400
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E6111175
-        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 15:07:17 -0700 (PDT)
-Received: by mail-pf1-f171.google.com with SMTP id p8so125352pfh.8
-        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 15:07:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=IE2Ntb5oMK4K7amafeNetTiCxxwL4oFF63eZ4S/Cu40=;
-        b=Gvt3B4ZCxSmBQ4umJVEouUBr+x1vvkSz88ZzrRbe6oOWMGv2fb1rM5DZyt4NM4dsPH
-         NITBZtaVX3ao+o2ZJw8nyfq3ZRhaeMArtoYnqksJchrMzLGLm+kioYTgYi/4XETWLuab
-         4d+Ak2A5jSh3evQOjFT4WwrdNmy3PqsqXFYqitTDr3Vm8b2XGHUJhQ/tJ/PW4mqLz3p2
-         z50+5A0852DvFCYZxYWDKjwIQrN5/TN8W0g3U2ZqkcQjxhpgt+6Pyi81HOWhzH9TvhSS
-         t1UU0Sj+uIBCKdXJLMj3BcGZRGS0vd6OnoOrLEU/+DKI8u1Y/wj/KeW2f5NA6tzciaad
-         KaRw==
-X-Gm-Message-State: AOAM531rAhkggnoi9bp8yfDzhOktzSKRVRcvRBqPtifDbKZoOMiXdOek
-        0Rr9T2llDBRh0awwL/wSGQSX4A==
-X-Google-Smtp-Source: ABdhPJwdqFMCLJa7Y7vyj6CS5A+5uCRs6z3mJZo81jSCPzBgpMhVjT7B8zM+9XXAV6oNybU+EL4RYw==
-X-Received: by 2002:a63:c04a:0:b0:3fa:7277:964c with SMTP id z10-20020a63c04a000000b003fa7277964cmr13087451pgi.499.1653516436926;
-        Wed, 25 May 2022 15:07:16 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id o1-20020a170902d4c100b0015edb22aba1sm10030189plg.270.2022.05.25.15.07.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 May 2022 15:07:16 -0700 (PDT)
-From:   Kevin Hilman <khilman@kernel.org>
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Roger Lu <roger.lu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Fan Chen <fan.chen@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jia-wei Chang <jia-wei.chang@mediatek.com>,
-        =?utf-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
-        <rex-bc.chen@mediatek.com>
-Subject: Re: [PATCH v25 0/7] soc: mediatek: SVS: introduce MTK SVS
-In-Reply-To: <CAGXv+5HEG1VJ89LDHJmMvPqafcdb2cuJj2wxv44ozPxDeHj8ig@mail.gmail.com>
-References: <20220516004311.18358-1-roger.lu@mediatek.com>
- <CAGXv+5GSdWPZe3fNpBJ_WW0zCL8Skg6fHx9ATxaKU1hyMEt2Ww@mail.gmail.com>
- <7h4k1ndaui.fsf@baylibre.com> <7hy1yzbtb7.fsf@baylibre.com>
- <CAGXv+5GT=3m=pVPwUOWR42BR=emCpBXvvoAiRV7YKt2kEKWdAQ@mail.gmail.com>
- <CGME20220519182512epcas1p3020bd4713580c9244f759971b8bd2c3a@epcas1p3.samsung.com>
- <7hmtfdbcsc.fsf@baylibre.com>
- <5a1767dc-ba2d-4de5-d8fe-2f308d3318a9@samsung.com>
- <CAGXv+5EsgiXCpe-8H0cQ=qm_Nq+yfM_a4b1L=hOFP6mcwfZymw@mail.gmail.com>
- <eacf7a67-bc64-a764-e23d-c733a4666b8a@samsung.com>
- <CAGXv+5HEG1VJ89LDHJmMvPqafcdb2cuJj2wxv44ozPxDeHj8ig@mail.gmail.com>
-Date:   Wed, 25 May 2022 15:07:15 -0700
-Message-ID: <7hleup9sh8.fsf@baylibre.com>
+        with ESMTP id S1345893AbiEZACS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 20:02:18 -0400
+Received: from mx0a-002c1b01.pphosted.com (mx0a-002c1b01.pphosted.com [148.163.151.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9137D19037;
+        Wed, 25 May 2022 17:02:16 -0700 (PDT)
+Received: from pps.filterd (m0127837.ppops.net [127.0.0.1])
+        by mx0a-002c1b01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24PIEvXA030157;
+        Wed, 25 May 2022 17:02:02 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version;
+ s=proofpoint20171006; bh=SPnoPyODjpRWTZrcRKKc3tOa2Twqu28Nae/Sb1clfyk=;
+ b=Hp1tuHTukFjkl+iWwv5nVjWREx6X9iJWPOlgMOg/egxO7NGu4DTk4WSOm9pCHDdZdAQC
+ auunJY/xsoEGsfLEME1yuuAlBneSOEibPa2LvfpaG1Cj/lxPVjhcrtP3g7iGhtXic4+E
+ zftGzsPJfvxq+zuLWjvcF1k0WWCfhcmJ4X0zqyEguAQ+pMXjZUrpIq/S8VIG41pV2wLZ
+ i2WiBa68ZIWUj/5O0dAyDLiMmu4O37LxLLTvLeQrkcYSEcUtFdPAsKM2WwRgWhZ+XLyK
+ e9SF96FAD92EUrB8JlmkDw2UNx84mnYf2xPL+I/ToHYVLhQ6f6a0rfKwvq6M8r9Aon7Y 6g== 
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2106.outbound.protection.outlook.com [104.47.58.106])
+        by mx0a-002c1b01.pphosted.com (PPS) with ESMTPS id 3g93vb36c9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 May 2022 17:02:02 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KGxSOVWL+RAWm92gYlKOU8x1vOxfgUljZ5LRt5ZDbxgwazqaCjQq2KRrHuLONE9WoTqgeAn6uk3ckcintrpkT9IBJcZA3wM5DpiGZ9Kzc7o71ep6pTcKzH8zWp33V6v4mkZDcckPE4sD1K4/r9qmE5MvObvEVDSwkyjdStZSDf6Lap95t4+xOanwbQjhJmsjjB0MnExZ8QbazXnu+HhyAJ6X8vbPMrvQjDidMZqybGbX1S0fGw9lh36uqhvxpYhlsnOcm+XnHFEsXtCzTTzNuOQLh+9vIb8BmUO4k1+ky7g5s1ir0yf5uMQuYnT4K9hY8oBwtpxtRy/v16lCZ68V4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SPnoPyODjpRWTZrcRKKc3tOa2Twqu28Nae/Sb1clfyk=;
+ b=YqBRs/63dXsclB4XiXK9quE1njbziT3w4BvR4Cu0fLgqMCjXtIh/OxS+Z5lofcXY7FvZ3pX7IwsiWAwGelefA7Fm4wXf35YLiI+NgxN3MgZhUDokkaDNzPmKAQfeLd/1gSfh7DdWxgk153/SzcSm6q0gl1gZXeUVlSTs6Ow6+2E7n6TbTzIJ6jKtmMtlJ3E9YrUpESvJr/ZXhMj7d68tUHT5lmp1qliiVbtMXYCQj/B40GUnAOOmVP/OJjF6W6p83DjPrrq0UxWFEo//MdSnM+gYT/Y2gD9s1+/CDVHBek7tLy0RNscnILmnxlHx2Eicdx8G3i8JU8yv93/Pl3Lj5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nutanix.com; dmarc=pass action=none header.from=nutanix.com;
+ dkim=pass header.d=nutanix.com; arc=none
+Received: from CH0PR02MB8041.namprd02.prod.outlook.com (2603:10b6:610:106::10)
+ by MN2PR02MB6399.namprd02.prod.outlook.com (2603:10b6:208:1bd::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5273.16; Thu, 26 May
+ 2022 00:02:00 +0000
+Received: from CH0PR02MB8041.namprd02.prod.outlook.com
+ ([fe80::34c3:f129:a785:52b3]) by CH0PR02MB8041.namprd02.prod.outlook.com
+ ([fe80::34c3:f129:a785:52b3%5]) with mapi id 15.20.5273.023; Thu, 26 May 2022
+ 00:02:00 +0000
+From:   Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+CC:     "rafael@kernel.org" <rafael@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "joao.m.martins@oracle.com" <joao.m.martins@oracle.com>,
+        "mtosatti@redhat.com" <mtosatti@redhat.com>
+Subject: Re: [PATCH v2] cpuidle: haltpoll: Add trace points for
+ guest_halt_poll_ns grow/shrink
+Thread-Topic: [PATCH v2] cpuidle: haltpoll: Add trace points for
+ guest_halt_poll_ns grow/shrink
+Thread-Index: AQHYbwBVMVcdSUyOvkKa597s5rjAfq0vw8EAgACF4YA=
+Date:   Thu, 26 May 2022 00:02:00 +0000
+Message-ID: <684B8F16-CD02-452D-9D52-F60D5147500E@nutanix.com>
+References: <20220523235332.162966-1-eiichi.tsukata@nutanix.com>
+ <20220525120248.5cb37817@gandalf.local.home>
+In-Reply-To: <20220525120248.5cb37817@gandalf.local.home>
+Accept-Language: ja-JP, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.80.82.1.1)
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d539a49f-208d-490a-b2d6-08da3eaaf520
+x-ms-traffictypediagnostic: MN2PR02MB6399:EE_
+x-microsoft-antispam-prvs: <MN2PR02MB639935329DDF2766132098A180D99@MN2PR02MB6399.namprd02.prod.outlook.com>
+x-proofpoint-crosstenant: true
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 5UQQm7N9bnLpci5/SpJAMLrmDe17zTAoecCTO0fEvNLYdpWqaTnqJMqcOeqtfMTEm5slb+TB7Z+zjgL6vZYAh1v7TyoDsVSgakNAQd4WkEDpFatgMidhfJPPjqOuJlTaFPDZt0IXwgv1OeHrrHblTEfPeTHFzChydr+Vbg/dVL32n8zzxZUB6el6AI9FRIk/2g9lmD6+H7LN58yRUOhQpz14DKZpXTc9ahHhNXxxMn/EJLWZZpilywGlmNjd+U00uw190ugzgf7a8JFZ5TBzIrMUhdHvagZQYuw2FoNH1d8elrGODwMKhWO1CG4OwebPW4d9EnIeQbGc43I4CCH34mCjJIzxPDdh9TUEUgRHafS/S5tccBmbdnOHFJThoRLaPQEmgh6McUr1sVuTcJuwnss5TvLoYS6hV0vjrB8geeuaIh5gLk0vjtYISr8v9oK3T+RUe3i3Vkzs2hvbiGDH31M8JgsjRdkLXYjXYL8MT9VJ6gkmVn7j3i39PmDFjDwCn+wcEGyovNz+52mvPohJC0lDmQi0tdnsVYJ348ouZO/w1W3bktXds7mub9Lr4KU/l4699yn52TG2UuKGHY6Ags/KA72HDqRsoqORSh0v8Ux/c3cqOmmX3dIha91F2sbJTmsw4KtbMDBmkravoUtMmFPtP1NlqMwfwyW0eneO59f62LJdxsHmelamhueYXbr6rhnt2HS/9BCXKMAeJOv0ZPXxONSxbufqBh/W/PNmOQs=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR02MB8041.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(64756008)(66556008)(66476007)(66946007)(8936002)(44832011)(38100700002)(76116006)(91956017)(66446008)(4326008)(36756003)(5660300002)(186003)(83380400001)(71200400001)(6486002)(508600001)(54906003)(33656002)(2616005)(6916009)(316002)(122000001)(2906002)(38070700005)(86362001)(8676002)(6512007)(26005)(53546011)(6506007)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MWJOTFg1WnhHTjlVMVRQVGZhWXVkOHU0QWtXUGRkYmh5TEJPTEtVZjhNdE1n?=
+ =?utf-8?B?Z0VZUWVuVnhzY3pYOUo2Z0xRSFBjRTNtZWR2WTk5Z2h5UTdIMEhSQjNhMXJC?=
+ =?utf-8?B?SXk3MWRCSjhrMFFrRUJMdXhtaGRBSVVCeXUrWEdjZTBJWVJZYkQ0TExMc3M5?=
+ =?utf-8?B?aDVtTG9ic1NaWEZBcDZ6RXBHMVdSd2Iyc3hpcTgyb1ZNK2o0T2hLMjBrRCtX?=
+ =?utf-8?B?ZkJONDNDcGFqSEV6U2JEcmoyUWpVUFJKei9ibXo1WTUvNXMyYkpUZkN3TFJS?=
+ =?utf-8?B?TGF1ZnFaQmlUYkVEV0JTUE1nMENGdjRJOVNtNm1qQk9OYVlqb2QwL1RIbkRY?=
+ =?utf-8?B?QlNKOS8zYTBSR2c3Nm1tMVRZQnlBZkt5K0tCaTB2cHFxQVRnbU5RV3YvalJ1?=
+ =?utf-8?B?N3Y2aEZKbC9HeTJxYTRNQ29wU1F2L2FSL05VVmd0ajFNaG1KRjFiQWJNTEhZ?=
+ =?utf-8?B?T0IvSE1VcllDVXcvSDBqMFhHWXlCYnlTUmNFT0pVWHpHSHJmeVN2WlhHUjdi?=
+ =?utf-8?B?ek5UbDRQTkNhRWRjTnRXOXo2RDhFc2piN2hMZmRoM2tScW5mbG9EM1Q0ay8w?=
+ =?utf-8?B?Wnk4eEY3ai9SRU15NUxVSTQyUGo5VVRyTmc4em1JZnZxMGVnZkU1eVIyVERF?=
+ =?utf-8?B?THhJYXVJUkxESFBMWFZTd2tBTVZ3Q3lIcERkeXFVcTlERHJxREMxUUlkVk10?=
+ =?utf-8?B?emEyUThQS0hsSCs0eHZKVm5QUFp0SWJwbUw1UmpreW81WkxxaGxCTkZ6NnJV?=
+ =?utf-8?B?cFNuNFFSdFl1MUc1OHpMTFhaY3RoT3JiZWFuYVVaN3RzQzNJTzJOQnVPV2lS?=
+ =?utf-8?B?dHQ1L1pxRTZKS3czS2MvVEQ4TTVKQUQ3Z3BHblJtU1NLK1RBZitESDYrbEtE?=
+ =?utf-8?B?d1pNb1pTVG4wNUl3UnNpQkpSdm5rTEU3a2Jlc0VLZGVDWnRnTnhNUi8yWnlT?=
+ =?utf-8?B?ZUppVVQ1cFdyZlFnRjRVbkNLZzdXbnpydzc3OE1mTGNRbEQ4YVkrN1lKczVk?=
+ =?utf-8?B?VGd6WDZiQkdGWlROM1JadzFuQnYxZHlGYklhWVZWbXJiUEFhVEoveDkzVk9M?=
+ =?utf-8?B?d05HRENvR3lHcFBTckNXM3VUVW5ZaTQzVDVKUUdJK1N2SjRZMDZGdndiWC96?=
+ =?utf-8?B?UUtPYXRQQ2RBdU9zKzFNd01tU1ZmRi9YMUcvZ1pYdkdXUThrYXhabmZpdzJt?=
+ =?utf-8?B?NGpZYWYydFgrK1JzQzFEZzlHUkxMbUZBL2dkRERIMTlzemdVd2dVTm1kYXF3?=
+ =?utf-8?B?SlJFaDluQ1BYdGxiM2pBSHRkeW5CNW56Z0hUWGZ4dnI0ajlha2xZK29CNGxV?=
+ =?utf-8?B?UDF5WHZJaWlMeFhkOThRUWhLZUZsdmNScUp6cVBVMHpZMGxvUktoS2dWWHNn?=
+ =?utf-8?B?anFvOEpqY3laRHBrdGZIYStERnQ4RjhPRk9JTUxyWW1uU25JSDh2L21Nclk3?=
+ =?utf-8?B?dXBQbmQ3Wlh3UWlpSWtlbWhYRjUrYThKb2o3ekY2elRidEtiTlRuSUZnQzdD?=
+ =?utf-8?B?NS9mYkpGMXNzeFQ3Y1I1Q2xLVW5jNjREYmt1aHB4bW1oMURhUDNjeTlYekNS?=
+ =?utf-8?B?dHdXR2QvVmpMUmJKK2Z0WUxvWTBaV09wSTdDeDhvaTVyN0d6Sk9SaTFuYjRD?=
+ =?utf-8?B?ejdKUzVxZVBhT0tGb04vYlNGOU5mUnNMQW4xdmNDaWFHbjlHSWFLZG5DTmJm?=
+ =?utf-8?B?US9WVDRwdk0rVzhtNXFhRFNIL0h5ZDh6c0pFNktJbUpLV3BXRUJEd1Z1NS9V?=
+ =?utf-8?B?MDBnc2dMTHJWUy9qU0ZPQmVkdHlwNWI1UGoyZm5sQk9YelBBY0dIWkFQSXVx?=
+ =?utf-8?B?SDBSUVpsbGtaOVdob2pFaDZQaHo3VTZyU3IzUFNyYjZHc1Z3bXV5ajVkT3RI?=
+ =?utf-8?B?VWxaN3J4OG92U2tkQlNoeDIya3Fvc2ZEK3A2VWpJd1BKOUZwbWlXL3hNc0pL?=
+ =?utf-8?B?eFNhV2VyUythRllaY2xyUDc3T2l1YTBmdmFoU3E1Z0JxN3BTUFdpWUxHbWlP?=
+ =?utf-8?B?RXBnKzJHZXdqZWtIOVNJWjBMVTNCUkFiY0VoeGZJSXZwcHRnY281UUs3WElh?=
+ =?utf-8?B?NVBSeFdzQ2pOK2FsTVIrQ29XcmQ0Mzk3S0JNWEprRjBQa2V2Y3ZSY2dIL2lx?=
+ =?utf-8?B?OGhXT2h3WXZ0Tm0xRHp1SkdNOHIvSEZUa2dVUjJRUzc0TEJ0RWI4c2E2Zmpj?=
+ =?utf-8?B?SStZcXBvOGExUHZqNkxrbTZPbGpIWGlDSU9LekZudjJXa1RrNkZpcTQrbG5E?=
+ =?utf-8?B?UGlWc05rVVJBU0RYSVAyc3J3RllRdU9yakpwUUFtbFQ3N2VTYlpoVjAvb0xJ?=
+ =?utf-8?B?eWhDZjh5NTMzd21raVFFY3Mydms3ZmpDMFFCYnBaZFpSOHU5T1BNUjRENU92?=
+ =?utf-8?Q?mnHjYIAUogm8guPY=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <E2DB074AE51E62449546354559FF941A@namprd02.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: nutanix.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR02MB8041.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d539a49f-208d-490a-b2d6-08da3eaaf520
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 May 2022 00:02:00.3956
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: bb047546-786f-4de1-bd75-24e5b6f79043
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: HwZVF4srcGvGbQPd0xoUoepMXPU1hgOp8Ur9QJxxUWEKZg92lveFTD6z67YOoIzR5tzZypYnU8NkB3YNNivgfZlCXZoeRrcoh5zXK77oGUI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR02MB6399
+X-Proofpoint-ORIG-GUID: 2XuZ91xlEq9h0r7QiE1VgYUaF6cbkLWF
+X-Proofpoint-GUID: 2XuZ91xlEq9h0r7QiE1VgYUaF6cbkLWF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-05-25_07,2022-05-25_02,2022-02-23_01
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Chen-Yu Tsai <wenst@chromium.org> writes:
-
-> On Fri, May 20, 2022 at 5:53 PM Chanwoo Choi <cw00.choi@samsung.com> wrote:
->>
->> Hi Kevin,
->>
->> On 5/20/22 11:42 AM, Chen-Yu Tsai wrote:
->> > On Fri, May 20, 2022 at 9:28 AM Chanwoo Choi <cw00.choi@samsung.com> wrote:
->> >>
->> >> Hi Kevin, Chen-Yu,
->> >>
->> >> On 5/20/22 3:25 AM, Kevin Hilman wrote:
->> >>> Chen-Yu Tsai <wenst@chromium.org> writes:
->> >>>
->> >>>> n Wed, May 18, 2022 at 8:03 AM Kevin Hilman <khilman@kernel.org> wrote:
->> >>>>>
->> >>>>> Kevin Hilman <khilman@kernel.org> writes:
->> >>>>>
->> >>>>>> Chen-Yu Tsai <wenst@chromium.org> writes:
->> >>>>>>
->> >>>>>>> On Mon, May 16, 2022 at 8:43 AM Roger Lu <roger.lu@mediatek.com> wrote:
->> >>>>>>>>
->> >>>>>>>> The Smart Voltage Scaling(SVS) engine is a piece of hardware
->> >>>>>>>> which calculates suitable SVS bank voltages to OPP voltage table.
->> >>>>>>>> Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
->> >>>>>>>> when receiving OPP_EVENT_ADJUST_VOLTAGE.
->> >>>>>>>>
->> >>>>>>>> 1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
->> >>>>>>>> 2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
->> >>>>>>>> After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
->> >>>>>>>>
->> >>>>>>>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=25cb20a212a1f989385dfe23230817e69c62bee5
->> >>>>>>>> [2] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=b325ce39785b1408040d90365a6ab1aa36e94f87
->> >>>>>>>> [3] https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.16-next/dts64&id=a8168cebf1bca1b5269e8a7eb2626fb76814d6e2
->> >>>>>>>>
->> >>>>>>>> Change since v24:
->> >>>>>>>> - Rebase to Linux 5.18-rc6
->> >>>>>>>> - Show specific fail log in svs_platform_probe() to help catch which step fails quickly
->> >>>>>>>> - Remove struct svs_bank member "pd_dev" because all subsys device's power domain has been merged into one node like above [3]
->> >>>>>>>>
->> >>>>>>>> Test in below environment:
->> >>>>>>>> SW: Integration Tree [4] + Thermal patch [5] + SVS v25 (this patchset)
->> >>>>>>>> HW: mt8183-Krane
->> >>>>>>>>
->> >>>>>>>> [4] https://protect2.fireeye.com/v1/url?k=847bae75-e5f0bb43-847a253a-000babff9b5d-0b6f42041b9dea1d&q=1&e=37a26c43-8564-4808-9701-dc76d1ebbb27&u=https%3A%2F%2Fgithub.com%2Fwens%2Flinux%2Fcommits%2Fmt8183-cpufreq-cci-svs-test
->> >>>>>>>
->> >>>>>>> I've updated my branch to include all the latest versions of the relevant
->> >>>>>>> patch series:
->> >>>>>>>
->> >>>>>>> - anx7625 DPI bus type series v2 (so the display works)
->> >>>>>>> - MT8183 thermal series v9 (this seems to have been overlooked by the
->> >>>>>>> maintainer)
->> >>>>>>> - MTK SVS driver series v25
->> >>>>>>> - devfreq: cpu based scaling support to passive governor series v5
->> >>>>>>> - MTK CCI devfreq series v4
->> >>>>>>> - MT8183 cpufreq series v7
->> >>>>>>> - Additional WIP patches for panfrost MTK devfreq
->> >>>>>>
->> >>>>>> Thanks for preparing an integration branch Chen-Yu.
->> >>>>>>
->> >>>>>> I'm testing this on mt8183-pumpkin with one patch to add the CCI
->> >>>>>> regulator[1], and the defconfig you posted in a previous rev of this
->> >>>>>> series, but the CCI driver still causes a fault on boot[2] on my
->> >>>>>> platform.
->> >>>>>>
->> >>>>>> I mentioned in earlier reviews that I think there's potentially a race
->> >>>>>> between CCI and SVS loading since they are co-dependent.  My hunch is
->> >>>>>> that this is still not being handled properly.
->> >>>>>
->> >>>>> Ah, actually it's crashing when I try to boot the platform with
->> >>>>> `maxcpus=4` on the cmdline (which I have to do because mt8183-pumpkin is
->> >>>>> unstable upstream with the 2nd cluster enabled.)
->> >>
->> >> This warning message is printed by 'WARN_ON(cpufreq_passive_unregister_notifier(devfreq))'
->> >> on devfreq passive governor.
->> >>
->> >> If the cpufreq drivers are not probed before of probing cci devfreq driver
->> >> with passive governor, passive governor shows this warning message.
->> >> Because passive governor with CPUFREQ_PARENT_DEV depends on the cpufreq driver
->> >> in order to get 'struct cpufreq_policy'[2].
->> >>
->> >> [1] https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/tree/drivers/devfreq/governor_passive.c?h=devfreq-testing#n339
->> >> [2] https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/tree/drivers/devfreq/governor_passive.c?h=devfreq-testing#n282
->> >>
->> >> But, as I knew, this message might not stop the kernel. Just show the warning
->> >> message and then return -EPROBE_DEFER error. It means that maybe try to
->> >> probe the cci devfreq driver on late time of kernel booting
->> >> and then will be working. But, I need the full kernel booting log
->> >> and the booting sequence of between cpufreq and cci devfreq driver.
->> >
->> > Maybe just use a standard dev_warn() instead? WARN_ON causes all sorts
->> > of panicking in developers' minds. :p
->> >
->> >> In order to fix your issue, could you share the full booting log?
->> >> And if possible, please explain the more detailed something about this.
->> >
->> > The shortened version is that on an 8 core system, with maxcpus=4,
->> > only the first four cores are booted and have cpufreq associated.
->> > I've not actually used this mechanism, so I don't really know what
->> > happens if the other cores are brought up later with hotplug. Is
->> > cpufreq expected to attach to them?
->> >
->> > Maybe Kevin can add some more details.
->> >
->> >
->> > ChenYu
->> >
->> >
->> >>>>>
->> >>>>> The CCI driver should be a bit more robust about detecting
->> >>>>> available/online CPUs
->> >>>>
->> >>>> This all seems to be handled in the devfreq passive governor.
->> >>>
->> >>> Well, that's the initial crash.  But the SVS driver will also go through
->> >>> its svs_mt8183_banks[] array (including both big & little clusters) and
->> >>> try to init SVS, so presumably that will have some problems also if only
->> >>> one cluster is enabled.
->> >>>
->> >>>> And presumably we'd like to have CCI devfreq running even if just one
->> >>>> core was booted.
->> >>>
->> >>> Yes, I assume so also.
->> >>>
->> >>>> Added Chanwoo for more ideas.
->> >>>
->> >>> OK, thanks.
->> >>>
->> >>> Kevin
->>
->>
->> I tested the passive governor with my temporary test code
->> on odroid-xu3 which contains the big.LITTLE cluster (Octa-core).
->>
->>
->> [Sequence of cpufreq/devfreq driver]
->> 1. Turn on all cpus
->> 2. Probed cpufreq driver
->> 3. Probed devfreq driver using passive governor with CPUFREQ_PARENT_DEV
->>
->> In my test case, there are no warning message during kernel booting.
->> Also when scaling the cpu frequency of cpus of big.LITTLE clusters,
->> temporary devfreq driver receives the notfication and then
->> calculate the target frequency of devfreq device by iterating online cpu.
->>
->> If there are any h/w constraints on your case, please let me know.
->
-> Could you run your system with maxcpus=4 added to your cmdline?
-> This is what Kevin was running.
->
-> The current result is that the latter four cores aren't booted, so no
-> cpufreq tied to them, and the passive governor will fail to get their
-> cpufreq_policy. As mentioned before, the code path used to have a
-> WARN_ON(). Now it's a dev_warn(). It will still fail initialization
-> though.
->
-> We're wondering if devfreq passive governor should be made to work
-> even if not all cpu cores are available when it probes.
-
-For info, here is a boot log[1] from mt8183-pumpkin board where I'm
-testing Chen-Yu's lastest integration branch.  
-
-As Chen-Yu said, the part that makes it trigger the warn is disabling
-some of the CPUs *at boot time*.  In this case, I'm passing `maxcpus=4`
-on the kernel command line.
-
-Kevin
-
-[1] https://termbin.com/zidi
+SGkgU3RldmVuDQoNCj4gT24gTWF5IDI2LCAyMDIyLCBhdCAxOjAyLCBTdGV2ZW4gUm9zdGVkdCA8
+cm9zdGVkdEBnb29kbWlzLm9yZz4gd3JvdGU6DQo+IA0KPiBPbiBNb24sIDIzIE1heSAyMDIyIDIz
+OjUzOjMyICswMDAwDQo+IEVpaWNoaSBUc3VrYXRhIDxlaWljaGkudHN1a2F0YUBudXRhbml4LmNv
+bT4gd3JvdGU6DQo+IA0KPj4gQEAgLTkxLDE2ICs5NSwxNyBAQCBzdGF0aWMgdm9pZCBhZGp1c3Rf
+cG9sbF9saW1pdChzdHJ1Y3QgY3B1aWRsZV9kZXZpY2UgKmRldiwgdTY0IGJsb2NrX25zKQ0KPj4g
+CQkJdmFsID0gZ3Vlc3RfaGFsdF9wb2xsX25zOw0KPj4gDQo+PiAJCWRldi0+cG9sbF9saW1pdF9u
+cyA9IHZhbDsNCj4+ICsJCXRyYWNlX2d1ZXN0X2hhbHRfcG9sbF9uc19ncm93KHNtcF9wcm9jZXNz
+b3JfaWQoKSwgdmFsLCBvbGQpOw0KPiANCj4gV2h5IGFyZSB5b3UgcGFzc2luZyBpbiBzbXBfcHJv
+Y2Vzc29yX2lkKCk/DQo+IA0KPj4gCX0gZWxzZSBpZiAoYmxvY2tfbnMgPiBndWVzdF9oYWx0X3Bv
+bGxfbnMgJiYNCj4+IAkJICAgZ3Vlc3RfaGFsdF9wb2xsX2FsbG93X3Nocmluaykgew0KPj4gCQl1
+bnNpZ25lZCBpbnQgc2hyaW5rID0gZ3Vlc3RfaGFsdF9wb2xsX3NocmluazsNCj4+IA0KPj4gLQkJ
+dmFsID0gZGV2LT5wb2xsX2xpbWl0X25zOw0KPj4gCQlpZiAoc2hyaW5rID09IDApDQo+PiAJCQl2
+YWwgPSAwOw0KPj4gCQllbHNlDQo+PiAJCQl2YWwgLz0gc2hyaW5rOw0KPj4gCQlkZXYtPnBvbGxf
+bGltaXRfbnMgPSB2YWw7DQo+PiArCQl0cmFjZV9ndWVzdF9oYWx0X3BvbGxfbnNfc2hyaW5rKHNt
+cF9wcm9jZXNzb3JfaWQoKSwgdmFsLCBvbGQpOw0KPj4gCX0NCj4+IH0NCj4+IA0KPj4gZGlmZiAt
+LWdpdCBhL2luY2x1ZGUvdHJhY2UvZXZlbnRzL3Bvd2VyLmggYi9pbmNsdWRlL3RyYWNlL2V2ZW50
+cy9wb3dlci5oDQo+PiBpbmRleCBhZjUwMThhYTk1MTcuLmRiMDY1YWY5YzNjMCAxMDA2NDQNCj4+
+IC0tLSBhL2luY2x1ZGUvdHJhY2UvZXZlbnRzL3Bvd2VyLmgNCj4+ICsrKyBiL2luY2x1ZGUvdHJh
+Y2UvZXZlbnRzL3Bvd2VyLmgNCj4+IEBAIC01MDAsNiArNTAwLDM5IEBAIERFRklORV9FVkVOVChk
+ZXZfcG1fcW9zX3JlcXVlc3QsIGRldl9wbV9xb3NfcmVtb3ZlX3JlcXVlc3QsDQo+PiANCj4+IAlU
+UF9BUkdTKG5hbWUsIHR5cGUsIG5ld192YWx1ZSkNCj4+ICk7DQo+PiArDQo+PiArVFJBQ0VfRVZF
+TlQoZ3Vlc3RfaGFsdF9wb2xsX25zLA0KPj4gKw0KPj4gKwlUUF9QUk9UTyhib29sIGdyb3csIHVu
+c2lnbmVkIGludCBjcHVfaWQsDQo+PiArCQkgdW5zaWduZWQgaW50IG5ldywgdW5zaWduZWQgaW50
+IG9sZCksDQo+PiArDQo+PiArCVRQX0FSR1MoZ3JvdywgY3B1X2lkLCBuZXcsIG9sZCksDQo+PiAr
+DQo+PiArCVRQX1NUUlVDVF9fZW50cnkoDQo+PiArCQlfX2ZpZWxkKGJvb2wsIGdyb3cpDQo+PiAr
+CQlfX2ZpZWxkKHVuc2lnbmVkIGludCwgY3B1X2lkKQ0KPj4gKwkJX19maWVsZCh1bnNpZ25lZCBp
+bnQsIG5ldykNCj4+ICsJCV9fZmllbGQodW5zaWduZWQgaW50LCBvbGQpDQo+PiArCSksDQo+PiAr
+DQo+PiArCVRQX2Zhc3RfYXNzaWduKA0KPj4gKwkJX19lbnRyeS0+Z3JvdyAgID0gZ3JvdzsNCj4+
+ICsJCV9fZW50cnktPmNwdV9pZCA9IGNwdV9pZDsNCj4gDQo+IFlvdSBhcmUgd2FzdGluZyBzcGFj
+ZSB0byBzYXZlIHRoZSBjcHVfaWQsIGFzIHRoZSB0cmFjZSBldmVudCBhbHJlYWR5IGtub3dzDQo+
+IHdoYXQgQ1BVIGl0IG9jY3VycmVkIG9uLg0KPiANCj4gIyBlY2hvIDEgPiBldmVudHMvc2NoZWQv
+ZW5hYmxlDQo+ICMgY2F0IHRyYWNlDQo+ICMgICAgICAgICAgIFRBU0stUElEICAgICBDUFUjICB8
+fHx8fCAgVElNRVNUQU1QICBGVU5DVElPTg0KPiAjICAgICAgICAgICAgICB8IHwgICAgICAgICB8
+ICAgfHx8fHwgICAgIHwgICAgICAgICB8DQo+ICAgICAgICAgc3lzdGVtZC0xICAgICAgIFswMDRd
+IC4uLi4uICAgIDE1Ljg3MjcxNTogZnRyYWNlX2Jvb3Rfc25hcHNob3Q6ICoqIEJvb3Qgc25hcHNo
+b3QgdGFrZW4gKioNCj4gICAgICAgICBzeXN0ZW1kLTEgICAgICAgWzAwMV0gLi4uLi4gICAgMjIu
+NTU1NDE4OiBpbml0Y2FsbF9zdGFydDogZnVuYz1mdXNlX2xlbl9hcmdzKzB4MC8weDMwIFtmdXNl
+XQ0KPiAgICAgICAgIHN5c3RlbWQtMSAgICAgICBbMDAxXSAuLi4uLiAgICAyMi41NTU0MjU6IGlu
+aXRjYWxsX2ZpbmlzaDogZnVuYz1mdXNlX2xlbl9hcmdzKzB4MC8weDMwIFtmdXNlXSByZXQ9MA0K
+PiAgICAgICAgbW9kcHJvYmUtNjQzICAgICBbMDA2XSAuLi4uLiAgICAyNi43MzczNTU6IGluaXRj
+YWxsX3N0YXJ0OiBmdW5jPXdtaWRldl9ldmFsdWF0ZV9tZXRob2QrMHg0Ni8weDEwMCBbd21pXQ0K
+PiAgICAgICAgbW9kcHJvYmUtNjQzICAgICBbMDA2XSAuLi4uLiAgICAyNi43NDI0OTE6IGluaXRj
+YWxsX2ZpbmlzaDogZnVuYz13bWlkZXZfZXZhbHVhdGVfbWV0aG9kKzB4NDYvMHgxMDAgW3dtaV0g
+cmV0PTANCj4gDQo+IC0tIFN0ZXZlDQoNClRoYW5rcyBmb3IgeW91ciBzdWdnZXN0aW9uLg0KSSBh
+ZGRlZCBjcHVfaWQgYXMgdGhlcmUgaXMgYSBzaW1pbGFyIHByZWNlZGVudCDigJx0cmFjZV9jcHVf
+aWRsZeKAnSBidXQgSSB0aGluayB3ZSBjYW4gcmVtb3ZlIGNwdV9pZC4NCldpbGwgZml4IGl0IGlu
+IHYzLg0KDQpFaWljaGk=
