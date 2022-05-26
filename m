@@ -2,78 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B97534F4C
-	for <lists+linux-pm@lfdr.de>; Thu, 26 May 2022 14:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0C95534F77
+	for <lists+linux-pm@lfdr.de>; Thu, 26 May 2022 14:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242964AbiEZMgi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 May 2022 08:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42624 "EHLO
+        id S239744AbiEZMlq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 May 2022 08:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245568AbiEZMgh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 May 2022 08:36:37 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECACCE0F
-        for <linux-pm@vger.kernel.org>; Thu, 26 May 2022 05:36:36 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id wh22so2767521ejb.7
-        for <linux-pm@vger.kernel.org>; Thu, 26 May 2022 05:36:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Wl4uFPiTLXhXf4v+vyfxdpd3/HqIgIQQpbstfSoefxg=;
-        b=pA4RAyWqdryjNuZQYiOcRsfy1kaLLlydsrhVJxwzL6AzsC/RVJORQyWIRFU/vdFV+t
-         AMfd/xFG8qpiRoNQl3hVSjI+6O+gXZNRfkmSTsDt8/A56ff1Gwam6XfCMnwEzkY1fVQY
-         nPNksRCVpcN37uQiErPjL6rXTW6ea1zmmzVcPR+jSxfLEKFlp9D+PEFcV52b43ycsqeh
-         RBCPUrag1hpeH3SXEDIKIkjKbZOa1UrFdFXho6eRAj7Zx4Xjt/EdUkR8Hvf7jlv1nHoV
-         0UFwMXA3NTbp1UZK1o/cXr8tJsKL0DWJxefWhNTYAfB2gnl6oqeBt+FLwQdU6/SssgRs
-         3GAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Wl4uFPiTLXhXf4v+vyfxdpd3/HqIgIQQpbstfSoefxg=;
-        b=Xy7CVyTzBZv522pbdwPtBCGEkg1P/QYQ9DF+y6FWkNpUfvaQ5QXXVhaFi0lfBszvB3
-         f8bZJcGI98kpxa/uUNanso199mHPKJ5ix0px2yR8q9OH949pV6O0mLlDsBS+r6VH7Pba
-         lrTD578OoJz2KazzjE4syeCEP2ibRpb9El2qch12Go/+a5jdaEkfRyctW9ii0pao+ChN
-         vIbXn5yDgzEfiHtFWNLBdvZrBqHfpCNZqIo8KszlZt20hpMfbVwyi2r9JeYHrp2/6Bht
-         nTRZQHPRKMPWz0P+YpeXrs3iywSs6BBy+BpO7/X3NpON1qAM9CNQPF92HDQuxNcP7lRC
-         L01Q==
-X-Gm-Message-State: AOAM530QcAzoaJFZCQ126kkj64aqQeCnxZPI2hCKUs7phORAz8WRny0r
-        p8/qh+9Gs3mfS3ttWFB40HLEUDTysq0gKs/U
-X-Google-Smtp-Source: ABdhPJxSrsIaPyiY3MVFSltc/EMSJtv7+z9qdSSHzK+jCc+pJmp0QJ82aeWqObHLhjuMrioWUvFvHA==
-X-Received: by 2002:a17:907:7d91:b0:6fe:efb8:8f97 with SMTP id oz17-20020a1709077d9100b006feefb88f97mr17115923ejc.717.1653568594660;
-        Thu, 26 May 2022 05:36:34 -0700 (PDT)
-Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id p16-20020a170907911000b006febc1ef61csm471643ejq.106.2022.05.26.05.36.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 May 2022 05:36:34 -0700 (PDT)
-Message-ID: <2bef3fda-58ba-98c7-e9bf-d2d3a9dec6e3@linaro.org>
-Date:   Thu, 26 May 2022 14:36:33 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 3/5] dt-bindings: interconnect: Add Qualcomm SM6350 NoC
- support
-Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
+        with ESMTP id S231193AbiEZMlp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 May 2022 08:41:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C760B275FE;
+        Thu, 26 May 2022 05:41:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E57661A41;
+        Thu, 26 May 2022 12:41:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E89AC385A9;
+        Thu, 26 May 2022 12:41:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1653568902;
+        bh=wTJaY6UYeSQMpyCf6Zoa3Et0K39VOxkxRDN0JzGNRuY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Pi94MKiQV/HcCpM68GJEhEfgg8b/8JIMYc91v+ya7OvQRIcWDTm7B4xOMdHhFJeak
+         mAoQV3kIbM7RLMwKm46KUf30aZngTCAV+TuI4iq3YrGWuVpyosfq+GPpfiuxSeavEK
+         SdCSRT3acHUqRWm8eHEX+qgUDbOAASeYnoYQwW/HiLVQagZXaEBU6xW/+0cgAX9X8h
+         yEtw8udj1vpnBEl45XwQTSwmHFSDhxOTzPIzA2yRhMjiNxN/08LuzuVo4ik2AmIHBp
+         vcIHN0qe3rzZk/Ns/ZMiLeExiVsWT7UsBPP22NnfQJrmbj1sq/x9oQ0RwDpCqiopnV
+         uS1OW9z5luLBg==
+Date:   Thu, 26 May 2022 13:41:36 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220525144404.200390-1-luca.weiss@fairphone.com>
- <20220525144404.200390-4-luca.weiss@fairphone.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220525144404.200390-4-luca.weiss@fairphone.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH 23/31] spi: qcom: Migrate to dev_pm_opp_set_config()
+Message-ID: <Yo91gCrJR1Hkw3tl@sirena.org.uk>
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
+ <09fde85449e0e189572ea847e86148943aff8b2e.1653564321.git.viresh.kumar@linaro.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="0tXUzCv+bLIQI/l6"
+Content-Disposition: inline
+In-Reply-To: <09fde85449e0e189572ea847e86148943aff8b2e.1653564321.git.viresh.kumar@linaro.org>
+X-Cookie: Money is the root of all wealth.
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,53 +63,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25/05/2022 16:43, Luca Weiss wrote:
-> Add bindings for Qualcomm SM6350 Network-On-Chip interconnect devices.
-> 
-> As SM6350 has two pairs of NoCs sharing the same reg, allow this in the
-> binding documentation, as was done for qcm2290.
-> 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
-> Changes since v2:
-> * Put requires and unevaluatedProperties further down
-> 
->  .../interconnect/qcom,sm6350-rpmh.yaml        |  82 ++++++++++
->  .../dt-bindings/interconnect/qcom,sm6350.h    | 148 ++++++++++++++++++
->  2 files changed, 230 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm6350-rpmh.yaml
->  create mode 100644 include/dt-bindings/interconnect/qcom,sm6350.h
-> 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sm6350-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sm6350-rpmh.yaml
-> new file mode 100644
-> index 000000000000..3e3ea85b4792
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,sm6350-rpmh.yaml
-> @@ -0,0 +1,82 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interconnect/qcom,sm6350-rpmh.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm SM6350 RPMh Network-On-Chip Interconnect
-> +
-> +maintainers:
-> +  - Luca Weiss <luca.weiss@fairphone.com>
-> +
-> +description: |
 
-No need for |.
+--0tXUzCv+bLIQI/l6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +  Qualcomm RPMh-based interconnect provider on SM6350.
-> +
-> +allOf:
-> +  - $ref: qcom,rpmh-common.yaml#
-> +
+On Thu, May 26, 2022 at 05:12:22PM +0530, Viresh Kumar wrote:
+> The OPP core now provides a unified API for setting all configuration
+> types, i.e. dev_pm_opp_set_config().
+>=20
+> Lets start using it.
 
+Acked-by: Mark Brown <broonie@kernel.org>
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+--0tXUzCv+bLIQI/l6
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-Best regards,
-Krzysztof
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKPdX8ACgkQJNaLcl1U
+h9DhFwf/cYBqrNp3vBqv2DwNXoefB9v8zUwrtWUHRECmnkVJekcGzC8pl0wlqPQZ
+mw3r4zVDugva/Pd8iZM/TwvrQI7l8kFA2H5T40RwRFgrPfsSQ8d62X4MyJbZfVJB
+JqlGIKXBZF9gt7q9NwulTbln0eFC+BJFnrRwtjo+LY4lzf8WItIlgk02r+q98uwD
+PXTtOFxJ3S2KMqSo50/rGpp79KR46I1LqekgucI6gkKaohCzgthfPEPoylByPUu2
+uCWqHcVw1IwYxf0MnGPwEQYKsWbUMe3rUL/BBDV0r8xywH5nFNLhu4fr9nO8AG28
+hDnTtPs9ekk6QkqD2kWrOJZpDr27Ng==
+=cGQq
+-----END PGP SIGNATURE-----
+
+--0tXUzCv+bLIQI/l6--
