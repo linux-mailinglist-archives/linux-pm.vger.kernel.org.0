@@ -2,149 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1159753519A
-	for <lists+linux-pm@lfdr.de>; Thu, 26 May 2022 17:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D5BB5351DD
+	for <lists+linux-pm@lfdr.de>; Thu, 26 May 2022 18:10:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237795AbiEZPoT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 May 2022 11:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
+        id S236195AbiEZQKu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 May 2022 12:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237261AbiEZPoR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 May 2022 11:44:17 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E52D808E
-        for <linux-pm@vger.kernel.org>; Thu, 26 May 2022 08:44:15 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id j15so1308982ilo.5
-        for <linux-pm@vger.kernel.org>; Thu, 26 May 2022 08:44:15 -0700 (PDT)
+        with ESMTP id S235654AbiEZQKt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 May 2022 12:10:49 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5A85DA77
+        for <linux-pm@vger.kernel.org>; Thu, 26 May 2022 09:10:48 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-3043b3f7d8fso10484887b3.8
+        for <linux-pm@vger.kernel.org>; Thu, 26 May 2022 09:10:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=t9FuzQy1mkS/UW8FaDARdLXkyAZZV1awtms5PAsyAmE=;
-        b=MPuKvg9lbAGBLPLIhjIPsMx11w2QC+cO7KKzw+FGkCAUc6gPmdiIIxkz+mh/j1HjfX
-         F6jnxZ67hhtSdYsNqG6apPHjy78akKz/WPb6TpYlCPdSZnxgVr2XWZcVrEz+OXk9vn+Y
-         TKe/BUB9JIIuz3Jg7OYi8StCpDU/C7kE8cbOE=
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=97ymZEZwGq3ZkaE++ChZlElZU9T/NCpyjfxcrZEDWls=;
+        b=hFH2SFkLGW2dUFtTh5SNzpwC8JRSdxtLPpsA3sh3OroiI/xz+Nsp9Ms/HuaRUUMVzv
+         kZA1rj7l7+4thfHRFNfUA/OPYioTFDaen6ntsR8wv/PdBEhgd2D6A1ECD7WIxYYpweaW
+         xP9/ISIOTN8oJKSVm01msoaIWy+gyagimKYbUxD9rA1FpKP9vONuqQYHbAP9c2V06MIC
+         hI1+Hjx48SIiyk8Vga/VBzkoDvvM5FqvM6uOBYvef/c0A4ZK9YC4NZgpIPGHACLmfec2
+         exdzG26REvxDcUR2qUAI1WAh6oRZ6kUwkLseUY9huelfjFjMtMkIBU3R5taLJAgVC6uC
+         AR3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=t9FuzQy1mkS/UW8FaDARdLXkyAZZV1awtms5PAsyAmE=;
-        b=z8r1CPpZIgRTY44Q+F12ws1C/ofn4jRNLvblG4RvQlSOEFxxLYm2NBVT9ik/1O6O8A
-         EsX75m5PNryhRH2moP6ADv+wcJ2EH3Ey2Vtve7ZTrnTOoNfqgPrPgxHAwO9w3PnhWQ3s
-         paT4w8deL9nUxT1fyVTXOrOKzww0vUnDnflZrhaLLGm28US+V12f16izQmiiaS3EhZvC
-         9ttbmHCymy9VtGUh+P8P9Kt2pgiBZletB5we1Ez/HrvwifSW6loyjJLuh529emZv4MJn
-         J27GmSFRY4hlTm93LkdZKpxooiw6+u7Z+N7c/b9m6FGOgSxQ6KIbvIqUPUq7LXYCvB8D
-         PRcg==
-X-Gm-Message-State: AOAM533o3H45HVJJELNO53C57bzL36XMbambmMgEbPuisClUeNfVbNPN
-        TDhssiZrnS22rkKtRJ/j5d3nbA==
-X-Google-Smtp-Source: ABdhPJxd2HpYEqbVBTiZT+p7mu17J49fCl4Epd+1A0eBP4zKlo+QqSX/Qhe3DtpLgA5CbmV44RBlfA==
-X-Received: by 2002:a05:6e02:1b86:b0:2d1:ad50:53f1 with SMTP id h6-20020a056e021b8600b002d1ad5053f1mr10236181ili.191.1653579854622;
-        Thu, 26 May 2022 08:44:14 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id b7-20020a023807000000b0032ec819a560sm471302jaa.169.2022.05.26.08.44.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 May 2022 08:44:14 -0700 (PDT)
-Subject: Re: [PATCH V8 0/4] Add unit test module for AMD P-State driver
-To:     Meng Li <li.meng@amd.com>, Huang Rui <ray.huang@amd.com>,
-        linux-pm@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Jinzhou Su <Jinzhou.Su@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220526034725.1708916-1-li.meng@amd.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <fbd6bc2f-b6d7-497e-410c-4a82876075ff@linuxfoundation.org>
-Date:   Thu, 26 May 2022 09:44:13 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=97ymZEZwGq3ZkaE++ChZlElZU9T/NCpyjfxcrZEDWls=;
+        b=zQhzEHjqZSEWMxUALWxfIPycUR5FZVmF5sG1moBqaE7NssRKz9mP/ccJrWTld3bQFK
+         JGpsevuENQ3V8EUY3PdBd1HQNF+yrNXzbNJ2jdvXaWJg645rreAaX3oaRVlG+lpR5nDs
+         FNMecBttxzcPhtsLNb3jqn+RNHUNWKL89ezDzRcUzk953V4PP1qVuE0xW0EL5/69kjuA
+         3Ixru9mT6IcivnSlnRgaEVcFRjtYu2nfnOLoGMhzDm7tXsviwX5rwV8T5V0hdQLlLo/Y
+         Yg4vvu0rTIFihxSJRgW0HVqgFPL7O7FwPZgvc3DRm2cqC/uAc7IyG9PAzxaMAhiCnJbF
+         oMwQ==
+X-Gm-Message-State: AOAM532kdUz6C5a7KE44JYCFrHBe3ePn3TewWE6d3PXDUqcAlSpSRcO8
+        KcoHMKSlydHvutw3YUEjxp8xAXV3ubONBUdBSzo=
+X-Google-Smtp-Source: ABdhPJxe42JY53vFdm51W/+EkNjfLmn81ZvGZKw5Sfx+PqAWNYJv6LndF8HsG5CipdGGc2B9ulxUwPb3EuJFYhMBcTY=
+X-Received: by 2002:a81:7b56:0:b0:2ec:2d65:7ccf with SMTP id
+ w83-20020a817b56000000b002ec2d657ccfmr38104502ywc.208.1653581446949; Thu, 26
+ May 2022 09:10:46 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220526034725.1708916-1-li.meng@amd.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Sender: ibrahimvivane65@gmail.com
+Received: by 2002:a05:7000:b902:0:0:0:0 with HTTP; Thu, 26 May 2022 09:10:46
+ -0700 (PDT)
+From:   Sophia Erick <sdltdkggl3455@gmail.com>
+Date:   Thu, 26 May 2022 18:10:46 +0200
+X-Google-Sender-Auth: 0oyEaPR6hNhs1eYLSO05iuuKOwA
+Message-ID: <CAGCMmKeXT46mfp2pbh3zbG48myFj5aQmcFixeuy4aoe0gOtjeQ@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=3.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_NOVOWEL,HK_RANDOM_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_MONEY_PERCENT,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/25/22 9:47 PM, Meng Li wrote:
-> Hi all:
-> 
-> AMD P-State unit test(amd-pstate-ut) is a kernel module for testing
-> the functions of amd-pstate driver.
-> It could import as a module to launch some test tasks.
-> 1) It can help all users to verify their processor support (SBIOS/
-> Firmware or Hardware).
-> 2) Kernel can have a basic function test to avoid the kernel regression
-> during the update.
-> 3) We can introduce more functional or performance tests to align the
-> together, it will benefit power and performance scale optimization.
-> 
-> We upstream out AMD P-state driver into Linux kernel and use this unit
-> test module to verify the required conditions and basic functions of
-> amd-pstate before integration test.
-> 
-> We use test module in the kselftest frameworks to implement it.
-> We create amd-pstate-ut module and tie it into kselftest.
-> 
-> For example: The test case aput_acpi_cpc is used to check whether the
-> _CPC object is exist in SBIOS.
-> The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is not
-> existed at the detected processor, so it is a necessary condition.
-> 
-> At present, it only implements the basic framework and some simple test
-> cases.
-> 
-> TODO : 1) we will add more test cases to improve the depth and coverage of
-> the test. E.X. use the script to trigger the tbench, gitsource, kernbench,
-> netperf, speedometer, and etc. testing and monitor the cpu frequency and
-> performance goals change, power consumption at runtime.
-> 
-> Please check the documentation amd-pstate.rst for details of the test steps.
-> 
-> See patch series in below git repo:
-> V1: https://lore.kernel.org/linux-pm/20220323071502.2674156-1-li.meng@amd.com/
-> V2: https://lore.kernel.org/lkml/20220413090510.4039589-1-li.meng@amd.com/
-> V3: https://lore.kernel.org/lkml/20220421074152.599419-1-li.meng@amd.com/
-> V4: https://lore.kernel.org/lkml/20220427135315.3447550-1-li.meng@amd.com/
-> V5: https://lore.kernel.org/lkml/20220505022913.329259-1-li.meng@amd.com/
-> V6: https://lore.kernel.org/lkml/20220519134737.359290-1-li.meng@amd.com/
-> V7: https://lore.kernel.org/lkml/20220522115423.1147282-1-li.meng@amd.com/
-> 
+Hello ,
 
-> 
-> Changes from V7 -> V8:
-> - cpufreq: amd-pstate:
-> - - amend commit message.
-> - - amend module description.
-> - Documentation: amd-pstate:
-> - - amend commit message.
-> - - Remove the personal data.
-> 
+It is my pleasure to communicate with you, I know that this message
+will be a surprise to you my name is Mrs. Sophia Erick, I am diagnosed
+with ovarian cancer which my doctor have confirmed that I have only
+some weeks to live so I have decided you handover the sum of($
+11,000,000.00) through I decided handover the money in my account to
+you for help of the orphanage homes and the needy once
 
-Looks good to me. Thank you.
+Please   kindly reply me here as soon as possible to enable me give
+you more information but before handing over my details to you please
+assure me that you will only take 30%  of the money and share the rest
+to the poor orphanage home and the needy once, thank you am waiting to
+hear from you
 
-Rafael, Viresh,
-
-How do you want to handle this patch series? We are in merge window
-and this would be for Linux 5.20 based on the changes and content.
-
-Would you like to take the entire patch series through your tree, you
-have my Ack(s) and Reviewed-by(s)
-
-thanks,
--- Shuah
-
+Mrs Sophia Erick.
