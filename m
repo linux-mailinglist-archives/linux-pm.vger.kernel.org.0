@@ -2,112 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D9C534901
-	for <lists+linux-pm@lfdr.de>; Thu, 26 May 2022 04:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2375534948
+	for <lists+linux-pm@lfdr.de>; Thu, 26 May 2022 05:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237427AbiEZCrx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 May 2022 22:47:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
+        id S230135AbiEZD0I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 May 2022 23:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbiEZCrx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 22:47:53 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB6CA30AA;
-        Wed, 25 May 2022 19:47:52 -0700 (PDT)
+        with ESMTP id S230314AbiEZD0H (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 May 2022 23:26:07 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CEEB0A57
+        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 20:26:04 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id nn3-20020a17090b38c300b001e0e091cf03so116818pjb.1
+        for <linux-pm@vger.kernel.org>; Wed, 25 May 2022 20:26:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653533273; x=1685069273;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PgRpioET2y7bZCb+Y89tJdhhFbeZkP6JLCvsB8i273g=;
-  b=ZjkqR4CnvbFaLKZJTq4b101n7xd2yd20wFot6JS2HYlYk15t/32eQaXm
-   06SfZV9IkkXPTOpnfnJFfUSHBws3AJK5ap9pfc7kheSZcWmZEmUXs36W4
-   +EzCT5A+prfdrEVVOJk+eeoWdGz7Bqqpp4rcGerJdfyobEUuo9jQDIZ1O
-   k=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 25 May 2022 19:47:52 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2022 19:47:51 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 25 May 2022 19:47:51 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 25 May 2022 19:47:45 -0700
-Date:   Thu, 26 May 2022 08:17:41 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: Re: [PATCH v18 5/5] usb: dwc3: qcom: Keep power domain on to retain
- controller status
-Message-ID: <20220526024741.GP15121@hu-pkondeti-hyd.qualcomm.com>
-References: <1653502826-24256-1-git-send-email-quic_kriskura@quicinc.com>
- <1653502826-24256-6-git-send-email-quic_kriskura@quicinc.com>
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ArSZJa1J1kFEuElJFIYmUXoBdpEK05pDadUhvHYNYrk=;
+        b=UmqlIRm7NBvNzXuxGbw7NvDgEh0B+IN+hYO1NZAlJ+4ZP/AUMk5z5nCuDyx9Mgq6c7
+         RpRIx/ql5aQ6qOBY1MwyawhmZ7nUGa+hegM+w6Er6m3YdIAe90jb9vvytpM9znTObyIp
+         D3BBIMAA8FzPYToVy861uE3lLMlsra7VXp0iTpjf8VOlaUkyZ0Itc/60yBqldBcyFPno
+         +L8/VIsfCjoDq5Q/DHNGwBi3cjuhx860fy8uZBIkMUFjPNEMOy5vO3px1LDAg3GxaTFo
+         dp6CjlhXip6ogG4aUDeXxk8iGXJlW9ee/hDBDiBbmAO4ERbP8txkOIYQ1551XsYGYEew
+         Xo+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ArSZJa1J1kFEuElJFIYmUXoBdpEK05pDadUhvHYNYrk=;
+        b=skpdca/I23AgcscxyLgx6G3RpalK4POoc44bPf66ozEVqHVOG720bBWaa+qIe7xC3g
+         RSxQMOREcgJ6TJQ0HibtBteIEQFFDEcn4aNMWLEp0L8S4cVSCwUuf3VhNRxmQwuLNGi/
+         W9a9p+oxRT23l1b2tZwSv1OrDFSglpVCqqZQt31iXMFrzu7wd5EL2sZymD7Wk0s7E+nu
+         R3ZDL+jb55paYV1FZyA3SIUq8e+K/gX7vOIacbI/NPHfHNwIM8aES3/+IqxqiWae8Z9A
+         iAp51pZy94v9BcIiYuEZG38NI6TkREPeM0qWDLVR7soHKB5WF9Tw15dFMGqq9QT0Jxjk
+         2IdQ==
+X-Gm-Message-State: AOAM53075Fr4oIeg9ErHyON0TnVWgMAXm6n0z45Ahkva9ri25tc/5SGF
+        4tfaWiGrkmJzgA8VbMtCi6Fd3A==
+X-Google-Smtp-Source: ABdhPJyygmksUP4XHveI/lMupaklCIZTxTlgTChbVazs8xameZBhD6bGmx6qxULmZgdzv7vKO5DC1Q==
+X-Received: by 2002:a17:90b:388c:b0:1df:cb4b:3e72 with SMTP id mu12-20020a17090b388c00b001dfcb4b3e72mr412472pjb.130.1653535564079;
+        Wed, 25 May 2022 20:26:04 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id u10-20020a170902714a00b0015e8d4eb1f5sm181214plm.63.2022.05.25.20.26.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 May 2022 20:26:03 -0700 (PDT)
+Date:   Thu, 26 May 2022 08:56:00 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Danny van Heumen <danny@dannyvanheumen.nl>
+Cc:     =?utf-8?B?4oCcUmFmYWVsIEouIFd5c29ja2nigJ0=?= <rafael@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: 'schedutil' (possibly) aberrant behavior surrounding
+ suspend/resume process (timing/delay/run-away CPU issues)
+Message-ID: <20220526032600.dlbrrppqovizwpvs@vireshk-i7>
+References: <R6AlCxZca3GET8vtwpOAkzQ4Y9SX-NOVQ05FlJAKDUvNTYCAhsWy1e0q5soCkapaviI8SS-9eC51nwJj6yn6n1rFAlwndEqYqlr_hqz4C_U=@dannyvanheumen.nl>
+ <20220525052804.rvnp2jinpmz7vukx@vireshk-i7>
+ <34KkbDDzdEpklXuY3YwJi95cgyhc44xzV-xQVDRRuKctbmHUdH8Ddm2LMcSUVNVmwtGUaB73-yOqIijCnMFRfh3aYxlKOKcrrRyCHb2uOPw=@dannyvanheumen.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1653502826-24256-6-git-send-email-quic_kriskura@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <34KkbDDzdEpklXuY3YwJi95cgyhc44xzV-xQVDRRuKctbmHUdH8Ddm2LMcSUVNVmwtGUaB73-yOqIijCnMFRfh3aYxlKOKcrrRyCHb2uOPw=@dannyvanheumen.nl>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 25, 2022 at 11:50:26PM +0530, Krishna Kurapati wrote:
-> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+On 25-05-22, 13:39, Danny van Heumen wrote:
+> On Wednesday, May 25th, 2022 at 07:28, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > On 21-05-22, 22:13, Danny van Heumen wrote:
+> > > In all cases, when taking schedutil out of the loop, these issues
+> > > disappear. In case of the Kabylake laptop, I do set
+> > > intel_pstate=active.
+> >
+> >
+> > Just to clarify here, from what I understand about the active/passive
+> > parts of intel-pstate driver, if you set intel_pstate=active then none
+> > of the cpufreq governor's will be used. This enables the setpolicy()
+> > callback of the driver, which will decide how the frequency changes
+> > later on. The cpufreq governors, ondemand or schedutil, are only in
+> > play if intel_pstate=passive.
 > 
-> If dwc3 is wakeup capable, keep the power domain always ON so that
-> wakeup from system suspend can be supported. Otherwise, keep the
-> power domain ON only during runtime suspend to support wakeup from
-> runtime suspend.
+> So the fact that 'schedutil' is not available but the other governors
+> are, is actually meaningless?
+
+Cpufreq core in the kernel has two separate entities: drivers and
+governors. Drivers mostly decide how frequency is read or updated on
+the hardware and governors decide on the policy, i.e. what frequency
+to go to and when.
+
+When intel-pstate is set to "active", the governor algorithms from
+cpufreq core are take out, i.e. files like
+drivers/cpufreq/cpufreq_ondemand.c or cpufreq_conservative.c or
+sched/kernel/cpufreq_schedutil.c. Instead the driver, along with help
+from the hardware, decides the next frequency by itself. In this case
+we have two policies available (these are still called as governors in
+userspace), powersave and performance. These two tell how aggressive
+we need to be, but again the governor algorithms are gone.
+
+> Does that mean that setting 'powersave' vs 'performance' is meaningless
+> too?
+
+No.
+
+> If not, does that mean that the meaning changes (as in "determined
+> by") intel_pstate?
+
+What I wanted to say earlier was that if you want to pin point it to
+schedutil (I know you are just trying to find it out yourself as
+well), then you must always keep intel_pstate="passive" and then test
+between ondemand and schedutil and see if problem happens or not. That
+way we can see if it is one of the governors or both, when the problem
+happens.
+
+> > Also I am not yet sure it is related to cpufreq right now.
 > 
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 28 +++++++++++++++++++++-------
->  1 file changed, 21 insertions(+), 7 deletions(-)
-> 
->  
-<snip>
+> I am trying to figure out whether or not some problems are caused by
+> 'schedutil' vs it just being present. I guessed from the MAINTAINERS
+> index that you are probably the maintainers with knowledge on
+> schedutil. If not, do you know where I should look then?
 
-> -	device_init_wakeup(&pdev->dev, 1);
-> +	if (device_can_wakeup(&qcom->dwc3->dev)) {
-> +		/*
-> +		 * Setting GENPD_FLAG_ALWAYS_ON flag takes care of keeping
-> +		 * GEMPD on in both RT suspend and System suspend cases.
+That's right. Me, Rafael and Peter look at the schedutil governor
+normally. You have the mail to right people.
 
-Few typos, otherwise looks good to me. 
+> To clarify, I interpreted 'cpufreq' as in:
+> /sys/devices/system/cpu/cpufreq/policy*/scaling_governor
 
-%s/GEMPD/genpd
+Right.
 
-%s/RT/runtime
+> I wonder if I am taking a wrong approach in tackling these issues,
+> so if you have recommendations, please let me know.
 
-%s/System/system
+I would also try intel_pstate=passive with powersave and performance.
+The heating issue, if related to cpufreq leaving CPU at higher freq,
+should also occur with performance (which keeps CPUs at highest freq).
 
-Thanks,
-Pavan
+-- 
+viresh
