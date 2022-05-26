@@ -2,60 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C95534F77
-	for <lists+linux-pm@lfdr.de>; Thu, 26 May 2022 14:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BAFA534FAD
+	for <lists+linux-pm@lfdr.de>; Thu, 26 May 2022 14:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239744AbiEZMlq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 May 2022 08:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
+        id S241811AbiEZM5H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 May 2022 08:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231193AbiEZMlp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 May 2022 08:41:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C760B275FE;
-        Thu, 26 May 2022 05:41:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E57661A41;
-        Thu, 26 May 2022 12:41:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E89AC385A9;
-        Thu, 26 May 2022 12:41:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653568902;
-        bh=wTJaY6UYeSQMpyCf6Zoa3Et0K39VOxkxRDN0JzGNRuY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Pi94MKiQV/HcCpM68GJEhEfgg8b/8JIMYc91v+ya7OvQRIcWDTm7B4xOMdHhFJeak
-         mAoQV3kIbM7RLMwKm46KUf30aZngTCAV+TuI4iq3YrGWuVpyosfq+GPpfiuxSeavEK
-         SdCSRT3acHUqRWm8eHEX+qgUDbOAASeYnoYQwW/HiLVQagZXaEBU6xW/+0cgAX9X8h
-         yEtw8udj1vpnBEl45XwQTSwmHFSDhxOTzPIzA2yRhMjiNxN/08LuzuVo4ik2AmIHBp
-         vcIHN0qe3rzZk/Ns/ZMiLeExiVsWT7UsBPP22NnfQJrmbj1sq/x9oQ0RwDpCqiopnV
-         uS1OW9z5luLBg==
-Date:   Thu, 26 May 2022 13:41:36 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-pm@vger.kernel.org,
+        with ESMTP id S231599AbiEZM5F (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 May 2022 08:57:05 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038A25002D
+        for <linux-pm@vger.kernel.org>; Thu, 26 May 2022 05:57:04 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id rs12so2753875ejb.13
+        for <linux-pm@vger.kernel.org>; Thu, 26 May 2022 05:57:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=vGz/arC7Pja/MTSIyxP5U16GbCQiU6CFTvtPfMYEdA8=;
+        b=ytghNRDLFhibUiUzBwOt99ZQvclKbBNKmv+493Us2L8IpAuOIkeO7gbLs7hrMowYyG
+         mQs/Kcp9DH4ycc/uvZIYUVoXISs02vXapbyOm108gy6rx3F80HJPiEnlFJurrZGqt5eD
+         Z7tWDXDQprEatM6uEvMMPbsjWAy+as10sCYNOxFh4zcppcApyY0bqM0gVYVZjCdH6zBQ
+         KcGPLGz38bOIWFc1l4zVfCmq5r0A19sXp8uOFSqN2cgO7ptr9rIINo3SQ6WyObuWKdEA
+         h5GgzQVNI1GeHzAMDA2Fg9QaP00dqGy5zgLPZexKayNCyvhAOcNMNjjaWznjagNRQXe2
+         aWBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vGz/arC7Pja/MTSIyxP5U16GbCQiU6CFTvtPfMYEdA8=;
+        b=bvgsZyckH1JlYYemua2jk/gNrDcb0HW/sZvGp+t+diP3tIUrjDMF9ncl+wZHr5KTNQ
+         iFKFeMDL6Gt1Vi6yVrkF+T82Tyj9XGStIjGzrhPsnolR7Zry3AV4cp44CPRqnow1riwe
+         Ni0foLstmM2ybhBmDq4fMRwRn2PdQYTfCD1ipziPmdMaK26oDe0X12pDuKIWRAAQ93by
+         NQLHMs5h/tnNVk32wss6VYKEfbXHQ7AQkDROER4NxRGj6E3JqWNFHcw32t62lFQJG3NW
+         AE+wxDlqEz4hZiAzr9XKeZBLXD1V4PAgNi857aNM42wTYk5ASxNd2rbXiIsqub4Twno1
+         aG7A==
+X-Gm-Message-State: AOAM533Xe9qM0O1tg4xsAC43Zq9g7rM0lFZs1bwxrvm8ad1GxdXXU736
+        m49AwNdYZeCT2N/Hdp1Kn0fkyg==
+X-Google-Smtp-Source: ABdhPJxRWLIvdoBe8sRMkBO3R+GhmALdztkOU8Cxw5Bw7MtVNzxsCwiQzUnuHPxwDlAqVArNGpRiVw==
+X-Received: by 2002:a17:907:720a:b0:6ff:2e1c:f22f with SMTP id dr10-20020a170907720a00b006ff2e1cf22fmr733678ejc.16.1653569822611;
+        Thu, 26 May 2022 05:57:02 -0700 (PDT)
+Received: from [192.168.0.177] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id a9-20020a170906368900b006febca5a604sm498503ejc.58.2022.05.26.05.57.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 May 2022 05:57:02 -0700 (PDT)
+Message-ID: <f92bc466-734e-b040-b8d5-0add023fe341@linaro.org>
+Date:   Thu, 26 May 2022 14:57:00 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 18/31] media: tegra: Migrate to dev_pm_opp_set_config()
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Rafael Wysocki <rjw@rjwysocki.net>,
         Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 23/31] spi: qcom: Migrate to dev_pm_opp_set_config()
-Message-ID: <Yo91gCrJR1Hkw3tl@sirena.org.uk>
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
 References: <cover.1653564321.git.viresh.kumar@linaro.org>
- <09fde85449e0e189572ea847e86148943aff8b2e.1653564321.git.viresh.kumar@linaro.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0tXUzCv+bLIQI/l6"
-Content-Disposition: inline
-In-Reply-To: <09fde85449e0e189572ea847e86148943aff8b2e.1653564321.git.viresh.kumar@linaro.org>
-X-Cookie: Money is the root of all wealth.
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+ <67b10cc516558405bfff0fc7749cee9d3bf02fc0.1653564321.git.viresh.kumar@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <67b10cc516558405bfff0fc7749cee9d3bf02fc0.1653564321.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,33 +80,19 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---0tXUzCv+bLIQI/l6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, May 26, 2022 at 05:12:22PM +0530, Viresh Kumar wrote:
+On 26/05/2022 13:42, Viresh Kumar wrote:
 > The OPP core now provides a unified API for setting all configuration
 > types, i.e. dev_pm_opp_set_config().
->=20
+> 
 > Lets start using it.
+> 
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/memory/tegra/tegra124-emc.c | 14 +++++++++-----
 
-Acked-by: Mark Brown <broonie@kernel.org>
+Wrong subject prefix - it's memory.
 
---0tXUzCv+bLIQI/l6
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKPdX8ACgkQJNaLcl1U
-h9DhFwf/cYBqrNp3vBqv2DwNXoefB9v8zUwrtWUHRECmnkVJekcGzC8pl0wlqPQZ
-mw3r4zVDugva/Pd8iZM/TwvrQI7l8kFA2H5T40RwRFgrPfsSQ8d62X4MyJbZfVJB
-JqlGIKXBZF9gt7q9NwulTbln0eFC+BJFnrRwtjo+LY4lzf8WItIlgk02r+q98uwD
-PXTtOFxJ3S2KMqSo50/rGpp79KR46I1LqekgucI6gkKaohCzgthfPEPoylByPUu2
-uCWqHcVw1IwYxf0MnGPwEQYKsWbUMe3rUL/BBDV0r8xywH5nFNLhu4fr9nO8AG28
-hDnTtPs9ekk6QkqD2kWrOJZpDr27Ng==
-=cGQq
------END PGP SIGNATURE-----
-
---0tXUzCv+bLIQI/l6--
+Best regards,
+Krzysztof
