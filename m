@@ -2,56 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DF9F534B5B
-	for <lists+linux-pm@lfdr.de>; Thu, 26 May 2022 10:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 528AE534B64
+	for <lists+linux-pm@lfdr.de>; Thu, 26 May 2022 10:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346669AbiEZIQL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 May 2022 04:16:11 -0400
+        id S229993AbiEZIQT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 May 2022 04:16:19 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346632AbiEZIQJ (ORCPT
+        with ESMTP id S1346644AbiEZIQJ (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Thu, 26 May 2022 04:16:09 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C360B41D7
-        for <linux-pm@vger.kernel.org>; Thu, 26 May 2022 01:16:00 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2f4dfd09d7fso8176837b3.0
-        for <linux-pm@vger.kernel.org>; Thu, 26 May 2022 01:16:00 -0700 (PDT)
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA9AB8BD2
+        for <linux-pm@vger.kernel.org>; Thu, 26 May 2022 01:16:02 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id bj12-20020a056a02018c00b003a9eebaad34so544408pgb.10
+        for <linux-pm@vger.kernel.org>; Thu, 26 May 2022 01:16:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=dlvkAQYsuGB8Wv9lxWmQ5ia/pAj0723lrMJL/F7FmGY=;
-        b=PY2a/ZfTWLOTKMXKyETU+koM0WgQW4QxqX3sYrgc5F8Fync7J+e5f3GBKiPIqpwgPZ
-         SkDAVoB1jl7cjlSJwUihxgqBvVZnvCxi9I4QUaG5WqMu1pOMKtmDRTxpQFAeblPdDleX
-         mxDvzcfuqk3TE1tsWfuNrUDu6y3Z2uQsLnSOUjywddi7iE0G0uqUtlpP3c2Gm0KnZoNS
-         dnyI/ZOgNUHpkp0mB2EIPEiSrxIsj2RY5G5poVzBbXn9Rg97rrWC6Adibg/wQrj3n2xT
-         kI+LY0Yk8J7Hl0wWscTOZw/YR4+r0mDtAk/VmmToHBZWaKhAHd+W02rgl8RuAea8avYR
-         u8FQ==
+        bh=DUCLIv3fIFZkN4IwkAbrdxyKeVczdAPuMH/CpPcV4SU=;
+        b=CyzwtSa5kL7asxlJAQxy6KynJEIdFhvGau0g94npATBUb08mCN7xWPYiqWSpgyW7pp
+         AeKTLb8s+1yIbjcvPRGqkRXa/d5TFin/hQLWeMaJAETlo6oYW5f14ntDOqjhIvmFKH7Y
+         to71h+gy1/+mvnPHDbGWIsuAvvkUo1tnVwOwiNBYAz/Th1IFA4cu6ZOpIDrj4HrVUFgZ
+         8TxgahJGhhjYVYLYmfpUFt435KgFpIWHwyX3O6yL6OwYx2jNmvoxtX57zkKnPlBhHjOv
+         6ap3F7Gzmj4ck2T+A1f3T4XMo/l1Sr7ClNm8Ko3J8AHf9Vnb1FGRV7j+BHxzraC/ZahT
+         26MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=dlvkAQYsuGB8Wv9lxWmQ5ia/pAj0723lrMJL/F7FmGY=;
-        b=zE88rI0QW1gaoYnmSSqH7pEy9xlfuKPMfs3JDjS9Aa0nL2GmXeWcrxtNEvlVz5l3xk
-         f531TtmiuMzmGichPIWjyLlqmfnIFhihoNoOTGQKFDX1U+lczywVv3HPn+qgLzlPTITr
-         MX4lBHAiIxcz5n1ET96klFltFHH0irSLgcFuABxOlKKe5uNMyJAT/2mnh/Vk/pOcDnwd
-         YQBJAa0Exm9dk/cg9wJ++jtU8+RAyIvCxJ/oSV6um/9s8+D1UxYOCljxt2tyNUkkrFNx
-         +JTbVQRinVmUWrh9+1+X6YPAbmm88IF1kLH72i7a+Sxqj7mrruZPcZkVPabYlG9JDi/E
-         ezNg==
-X-Gm-Message-State: AOAM531Dq9YzDV7hl6SttHuNYi5dSSADne0aJur/eAM6OUsearYRQ3sb
-        C914cN+ZnF3slKGSiIPos/ddkO5X2K7wUfI=
-X-Google-Smtp-Source: ABdhPJxNRFl0/Al5aF4+hw2juEzzxnRNoJ08VAGxc9iz3rkpIotBWNb9jqq9kR5GKz6VAnObadTZe+xq9PgYyao=
+        bh=DUCLIv3fIFZkN4IwkAbrdxyKeVczdAPuMH/CpPcV4SU=;
+        b=GxkT/jC1A/SjHTVJyICgTbQ8kZ09S5PnC/0kU2Od2iV2ZZWkqfPq/TtHb0PaNfcbDz
+         Dwv7pj0eSIR1TAYyh3BQG5JFIEYcINegJyMatrpBsrVffstgOKxYRxBGb8taXr4oBwuL
+         dsgpAcLJcHzqffsLKLhioVTnhlVxt/GptYGEphrXhTj+CvtrcyuWsJs/j0h18eyfnVMd
+         FIFhezhpqGOzBX2RDJjp9btlLZF5qQHJKHFN7XF/PMFcGqc2YejMuQzeV0qTthitkbnv
+         dP0cXpnKDsFU3fwUOLjMExuFNjXuPNovVJUN1N4MWr/s14QfPDY/K6e/0tnkSg1i7pbJ
+         Z0cw==
+X-Gm-Message-State: AOAM531Sp2XcBpH8k0w7+OnlEa3U6+Q1f0O444qawCrUd8nkZYTRTnh5
+        qePx6Mc0TxrJdVV9pQ+St1B/GX1JVSp7iZQ=
+X-Google-Smtp-Source: ABdhPJw2pOLycSo0Dk2hnHYGrYjnmnj9FmTbJXx5Eil6VtjWJt3Y4OCof/7QvyjmXMAMae1GQK5aRzIjQ2vExSg=
 X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:ff1f:a3b7:b6de:d30f])
- (user=saravanak job=sendgmr) by 2002:a81:4757:0:b0:2ff:d34d:4d59 with SMTP id
- u84-20020a814757000000b002ffd34d4d59mr20437021ywa.511.1653552959732; Thu, 26
- May 2022 01:15:59 -0700 (PDT)
-Date:   Thu, 26 May 2022 01:15:41 -0700
+ (user=saravanak job=sendgmr) by 2002:a63:343:0:b0:3f6:52e5:edbe with SMTP id
+ 64-20020a630343000000b003f652e5edbemr29501334pgd.272.1653552962496; Thu, 26
+ May 2022 01:16:02 -0700 (PDT)
+Date:   Thu, 26 May 2022 01:15:42 -0700
 In-Reply-To: <20220526081550.1089805-1-saravanak@google.com>
-Message-Id: <20220526081550.1089805-3-saravanak@google.com>
+Message-Id: <20220526081550.1089805-4-saravanak@google.com>
 Mime-Version: 1.0
 References: <20220526081550.1089805-1-saravanak@google.com>
 X-Mailer: git-send-email 2.36.1.124.g0e6072fb45-goog
-Subject: [RFC PATCH v1 2/9] pinctrl: devicetree: Delete usage of driver_deferred_probe_check_state()
+Subject: [RFC PATCH v1 3/9] net: mdio: Delete usage of driver_deferred_probe_check_state()
 From:   Saravana Kannan <saravanak@google.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -88,38 +88,40 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Now that fw_devlink=on by default and fw_devlink supports
-"pinctrl-[0-8]" property, the execution will never get to the point
-where driver_deferred_probe_check_state() is called before the supplier
-has probed successfully or before deferred probe timeout has expired.
+Now that fw_devlink=on by default and fw_devlink supports interrupt
+properties, the execution will never get to the point where
+driver_deferred_probe_check_state() is called before the supplier has
+probed successfully or before deferred probe timeout has expired.
 
 So, delete the call and replace it with -ENODEV.
 
 Signed-off-by: Saravana Kannan <saravanak@google.com>
 ---
- drivers/pinctrl/devicetree.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/mdio/fwnode_mdio.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/pinctrl/devicetree.c b/drivers/pinctrl/devicetree.c
-index 3fb238714718..ef898ee8ca6b 100644
---- a/drivers/pinctrl/devicetree.c
-+++ b/drivers/pinctrl/devicetree.c
-@@ -129,7 +129,7 @@ static int dt_to_map_one_config(struct pinctrl *p,
- 		np_pctldev = of_get_next_parent(np_pctldev);
- 		if (!np_pctldev || of_node_is_root(np_pctldev)) {
- 			of_node_put(np_pctldev);
--			ret = driver_deferred_probe_check_state(p->dev);
-+			ret = -ENODEV;
- 			/* keep deferring if modules are enabled */
- 			if (IS_ENABLED(CONFIG_MODULES) && !allow_default && ret < 0)
- 				ret = -EPROBE_DEFER;
+diff --git a/drivers/net/mdio/fwnode_mdio.c b/drivers/net/mdio/fwnode_mdio.c
+index 1c1584fca632..3e79c2c51929 100644
+--- a/drivers/net/mdio/fwnode_mdio.c
++++ b/drivers/net/mdio/fwnode_mdio.c
+@@ -47,9 +47,7 @@ int fwnode_mdiobus_phy_device_register(struct mii_bus *mdio,
+ 	 * just fall back to poll mode
+ 	 */
+ 	if (rc == -EPROBE_DEFER)
+-		rc = driver_deferred_probe_check_state(&phy->mdio.dev);
+-	if (rc == -EPROBE_DEFER)
+-		return rc;
++		rc = -ENODEV;
+ 
+ 	if (rc > 0) {
+ 		phy->irq = rc;
 -- 
 2.36.1.124.g0e6072fb45-goog
 
