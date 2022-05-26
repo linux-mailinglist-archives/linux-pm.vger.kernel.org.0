@@ -2,202 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77F4535120
-	for <lists+linux-pm@lfdr.de>; Thu, 26 May 2022 17:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1159753519A
+	for <lists+linux-pm@lfdr.de>; Thu, 26 May 2022 17:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbiEZPBr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 May 2022 11:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
+        id S237795AbiEZPoT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 May 2022 11:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbiEZPBq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 May 2022 11:01:46 -0400
-X-Greylist: delayed 91341 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 26 May 2022 08:01:43 PDT
-Received: from mail-40136.proton.ch (mail-40136.proton.ch [185.70.40.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C8428E3E
-        for <linux-pm@vger.kernel.org>; Thu, 26 May 2022 08:01:43 -0700 (PDT)
-Date:   Thu, 26 May 2022 15:01:33 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dannyvanheumen.nl;
-        s=protonmail2; t=1653577300; x=1653836500;
-        bh=5P8QIJOOMnot0qfq/tW9v++oM8/Lf86PgjdkO5qWmHk=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
-         Feedback-ID:Message-ID;
-        b=C6g1XPjvHQz89eKaRRlIuNfStIJ/FoclZ/z0mr4Lok4h/Hh9mGxfkLzypITHSlSTO
-         eMgDC+uXZz5hTnKEX4yyVqmcsiHjFvtFtxNFanfy+gz2jmI/g8FQSXj03Or199h/oC
-         USPmQJfYvGQZiDlUBeHUpsDAseJHXNbc7RG8vhEhGfYyo2ayh7z3ENWpkTHROkh3Gb
-         D598hXRr+D+PU3b4d8Ca6/+bJOAFKpBUKnPzGz5GOeSmbBfmfuLzWJK3EhWUSzxec7
-         dyqEwICjc9lUU38z5KWZd0C2SgATd00JObWxWSHWmcBnqC11M9qYipbkZKaPal6Tua
-         hq+LsGDp0Hb2g==
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-From:   Danny van Heumen <danny@dannyvanheumen.nl>
-Cc:     =?utf-8?Q?=E2=80=9CRafael_J=2E_Wysocki=E2=80=9D?= 
-        <rafael@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Reply-To: Danny van Heumen <danny@dannyvanheumen.nl>
-Subject: Re: 'schedutil' (possibly) aberrant behavior surrounding suspend/resume process (timing/delay/run-away CPU issues)
-Message-ID: <B6Vf9ZGyW3CDcuxpGzU6WbTq7cEi6z-3zrd0JIlop56-d5R3JiD1eQPrLcoM41xDz8_WYWTvQhodW7NLSDURsXl4cRpzsk-UhF17J5Mu5j4=@dannyvanheumen.nl>
-In-Reply-To: <20220526032600.dlbrrppqovizwpvs@vireshk-i7>
-References: <R6AlCxZca3GET8vtwpOAkzQ4Y9SX-NOVQ05FlJAKDUvNTYCAhsWy1e0q5soCkapaviI8SS-9eC51nwJj6yn6n1rFAlwndEqYqlr_hqz4C_U=@dannyvanheumen.nl> <20220525052804.rvnp2jinpmz7vukx@vireshk-i7> <34KkbDDzdEpklXuY3YwJi95cgyhc44xzV-xQVDRRuKctbmHUdH8Ddm2LMcSUVNVmwtGUaB73-yOqIijCnMFRfh3aYxlKOKcrrRyCHb2uOPw=@dannyvanheumen.nl> <20220526032600.dlbrrppqovizwpvs@vireshk-i7>
-Feedback-ID: 15073070:user:proton
+        with ESMTP id S237261AbiEZPoR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 May 2022 11:44:17 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E52D808E
+        for <linux-pm@vger.kernel.org>; Thu, 26 May 2022 08:44:15 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id j15so1308982ilo.5
+        for <linux-pm@vger.kernel.org>; Thu, 26 May 2022 08:44:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=t9FuzQy1mkS/UW8FaDARdLXkyAZZV1awtms5PAsyAmE=;
+        b=MPuKvg9lbAGBLPLIhjIPsMx11w2QC+cO7KKzw+FGkCAUc6gPmdiIIxkz+mh/j1HjfX
+         F6jnxZ67hhtSdYsNqG6apPHjy78akKz/WPb6TpYlCPdSZnxgVr2XWZcVrEz+OXk9vn+Y
+         TKe/BUB9JIIuz3Jg7OYi8StCpDU/C7kE8cbOE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=t9FuzQy1mkS/UW8FaDARdLXkyAZZV1awtms5PAsyAmE=;
+        b=z8r1CPpZIgRTY44Q+F12ws1C/ofn4jRNLvblG4RvQlSOEFxxLYm2NBVT9ik/1O6O8A
+         EsX75m5PNryhRH2moP6ADv+wcJ2EH3Ey2Vtve7ZTrnTOoNfqgPrPgxHAwO9w3PnhWQ3s
+         paT4w8deL9nUxT1fyVTXOrOKzww0vUnDnflZrhaLLGm28US+V12f16izQmiiaS3EhZvC
+         9ttbmHCymy9VtGUh+P8P9Kt2pgiBZletB5we1Ez/HrvwifSW6loyjJLuh529emZv4MJn
+         J27GmSFRY4hlTm93LkdZKpxooiw6+u7Z+N7c/b9m6FGOgSxQ6KIbvIqUPUq7LXYCvB8D
+         PRcg==
+X-Gm-Message-State: AOAM533o3H45HVJJELNO53C57bzL36XMbambmMgEbPuisClUeNfVbNPN
+        TDhssiZrnS22rkKtRJ/j5d3nbA==
+X-Google-Smtp-Source: ABdhPJxd2HpYEqbVBTiZT+p7mu17J49fCl4Epd+1A0eBP4zKlo+QqSX/Qhe3DtpLgA5CbmV44RBlfA==
+X-Received: by 2002:a05:6e02:1b86:b0:2d1:ad50:53f1 with SMTP id h6-20020a056e021b8600b002d1ad5053f1mr10236181ili.191.1653579854622;
+        Thu, 26 May 2022 08:44:14 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id b7-20020a023807000000b0032ec819a560sm471302jaa.169.2022.05.26.08.44.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 May 2022 08:44:14 -0700 (PDT)
+Subject: Re: [PATCH V8 0/4] Add unit test module for AMD P-State driver
+To:     Meng Li <li.meng@amd.com>, Huang Rui <ray.huang@amd.com>,
+        linux-pm@vger.kernel.org
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220526034725.1708916-1-li.meng@amd.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <fbd6bc2f-b6d7-497e-410c-4a82876075ff@linuxfoundation.org>
+Date:   Thu, 26 May 2022 09:44:13 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220526034725.1708916-1-li.meng@amd.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-------- Original Message -------
-On Thursday, May 26th, 2022 at 05:26, Viresh Kumar <viresh.kumar@linaro.org=
-> wrote:
+On 5/25/22 9:47 PM, Meng Li wrote:
+> Hi all:
+> 
+> AMD P-State unit test(amd-pstate-ut) is a kernel module for testing
+> the functions of amd-pstate driver.
+> It could import as a module to launch some test tasks.
+> 1) It can help all users to verify their processor support (SBIOS/
+> Firmware or Hardware).
+> 2) Kernel can have a basic function test to avoid the kernel regression
+> during the update.
+> 3) We can introduce more functional or performance tests to align the
+> together, it will benefit power and performance scale optimization.
+> 
+> We upstream out AMD P-state driver into Linux kernel and use this unit
+> test module to verify the required conditions and basic functions of
+> amd-pstate before integration test.
+> 
+> We use test module in the kselftest frameworks to implement it.
+> We create amd-pstate-ut module and tie it into kselftest.
+> 
+> For example: The test case aput_acpi_cpc is used to check whether the
+> _CPC object is exist in SBIOS.
+> The amd-pstate initialization will fail if the _CPC in ACPI SBIOS is not
+> existed at the detected processor, so it is a necessary condition.
+> 
+> At present, it only implements the basic framework and some simple test
+> cases.
+> 
+> TODO : 1) we will add more test cases to improve the depth and coverage of
+> the test. E.X. use the script to trigger the tbench, gitsource, kernbench,
+> netperf, speedometer, and etc. testing and monitor the cpu frequency and
+> performance goals change, power consumption at runtime.
+> 
+> Please check the documentation amd-pstate.rst for details of the test steps.
+> 
+> See patch series in below git repo:
+> V1: https://lore.kernel.org/linux-pm/20220323071502.2674156-1-li.meng@amd.com/
+> V2: https://lore.kernel.org/lkml/20220413090510.4039589-1-li.meng@amd.com/
+> V3: https://lore.kernel.org/lkml/20220421074152.599419-1-li.meng@amd.com/
+> V4: https://lore.kernel.org/lkml/20220427135315.3447550-1-li.meng@amd.com/
+> V5: https://lore.kernel.org/lkml/20220505022913.329259-1-li.meng@amd.com/
+> V6: https://lore.kernel.org/lkml/20220519134737.359290-1-li.meng@amd.com/
+> V7: https://lore.kernel.org/lkml/20220522115423.1147282-1-li.meng@amd.com/
+> 
 
+> 
+> Changes from V7 -> V8:
+> - cpufreq: amd-pstate:
+> - - amend commit message.
+> - - amend module description.
+> - Documentation: amd-pstate:
+> - - amend commit message.
+> - - Remove the personal data.
+> 
 
-> On 25-05-22, 13:39, Danny van Heumen wrote:
->
-> > On Wednesday, May 25th, 2022 at 07:28, Viresh Kumar viresh.kumar@linaro=
-.org wrote:
-> >
-> > [..]
-> >
-> > So the fact that 'schedutil' is not available but the other governors
-> > are, is actually meaningless?
->
->
-> Cpufreq core in the kernel has two separate entities: drivers and
-> governors. Drivers mostly decide how frequency is read or updated on
-> the hardware and governors decide on the policy, i.e. what frequency
-> to go to and when.
+Looks good to me. Thank you.
 
-Understood. No surprises here.
+Rafael, Viresh,
 
-> When intel-pstate is set to "active", the governor algorithms from
-> cpufreq core are take out, i.e. files like
-> drivers/cpufreq/cpufreq_ondemand.c or cpufreq_conservative.c or
-> sched/kernel/cpufreq_schedutil.c. Instead the driver, along with help
-> from the hardware, decides the next frequency by itself. In this case
-> we have two policies available (these are still called as governors in
-> userspace), powersave and performance. These two tell how aggressive
-> we need to be, but again the governor algorithms are gone.
+How do you want to handle this patch series? We are in merge window
+and this would be for Linux 5.20 based on the changes and content.
 
-Right, I see now that the set of governors is different.
+Would you like to take the entire patch series through your tree, you
+have my Ack(s) and Reviewed-by(s)
 
-> > Does that mean that setting 'powersave' vs 'performance' is meaningless
-> > too?
->
->
-> No.
+thanks,
+-- Shuah
 
-This is clear, also by your explanation above.
-
-> > If not, does that mean that the meaning changes (as in "determined
-> > by") intel_pstate?
->
->
-> What I wanted to say earlier was that if you want to pin point it to
-> schedutil (I know you are just trying to find it out yourself as
-> well), then you must always keep intel_pstate=3D"passive" and then test
-> between ondemand and schedutil and see if problem happens or not. That
-> way we can see if it is one of the governors or both, when the problem
-> happens.
-
-Right. Thas already was my intention. I have already done more tests. I
-notice now that this seems to be a pattern such that if it occurs once,
-it keeps on occurring.
-
-I see patterns such as below, where first thermal is before suspend,
-second thermal is immediately after waking up. Note that apparently
-some intel driver logic prevents full suspend with temp > 50 degrees.
-I have very similar behavior to that case, but with temperature confirmed
-below 50 degrees.
-
-Below is a quick test of about 3 minutes time.
-
-```console
-> sensors pch_skylake-virtual-0; echo 'mem' | sudo tee /sys/power/state; \
-sensors pch_skylake-virtual-0
-
-pch_skylake-virtual-0
-Adapter: Virtual device
-temp1:        +47.5=C2=B0C
-
-mem
-
-pch_skylake-virtual-0
-Adapter: Virtual device
-temp1:        +57.5=C2=B0C
-```
-
-```dmesg
-intel_pch_thermal 0000:00:14.2: CPU-PCH is cool [47C], continue to suspend
-pcieport 0000:00:1c.5: Intel SPT PCH root port ACS workaround enabled
-ACPI: EC: interrupt blocked
-nvme nvme0: I/O 1015 QID 2 timeout, aborting
-nvme nvme0: I/O 22 QID 0 timeout, completion polled
-nvme nvme0: Abort status: 0x0
-ACPI: EC: interrupt unblocked
-pcieport 0000:00:1c.5: Intel SPT PCH root port ACS workaround enabled
-pcieport 0000:00:1c.4: Intel SPT PCH root port ACS workaround enabled
-pcieport 0000:00:1c.0: Intel SPT PCH root port ACS workaround enabled
-pcieport 0000:00:1d.0: Intel SPT PCH root port ACS workaround enabled
-usb 1-3: reset full-speed USB device number 2 using xhci_hcd
-OOM killer enabled.
-Restarting tasks ...
-mei_hdcp 0000:00:16.0-b638ab7e-94e2-4ea2-a552-d1c54b627f04: bound \
-0000:00:02.0 (ops i915_hdcp_component_ops [i915])
-done.
-systemd[1]: systemd-journald.service: Main process exited, code=3Dkilled, \
-status=3D6/ABRT
-systemd[1]: systemd-journald.service: Failed with result 'watchdog'.
-systemd[1]: systemd-journald.service: Consumed 1.844s CPU time.
-systemd[1]: systemd-journald.service: Scheduled restart job, restart counte=
-r \
-is at 1.
-systemd[1]: Stopping Flush Journal to Persistent Storage...
-systemd[1]: Stopped target Bluetooth.
-systemd[1]: Started Load/Save RF Kill Switch Status.
-PM: suspend exit
-```
-
-This is just to illustrate some tries. I will continue to test, to
-figure out if I can either trigger the circumstances without
-'schedutil' (which clears my suspicion) or otherwise try to make it
-more deterministic, reproducible.
-
-The nvme errors in dmesg are new to me. I have not seen those before.
-So I will also keep an eye out for those.
-
-
-> > > Also I am not yet sure it is related to cpufreq right now.
-> >
-> > I am trying to figure out whether or not some problems are caused by
-> > 'schedutil' vs it just being present. I guessed from the MAINTAINERS
-> > index that you are probably the maintainers with knowledge on
-> > schedutil. If not, do you know where I should look then?
->
->
-> That's right. Me, Rafael and Peter look at the schedutil governor
-> normally. You have the mail to right people.
->
-> [..]
->
-> > I wonder if I am taking a wrong approach in tackling these issues,
-> > so if you have recommendations, please let me know.
->
->
-> I would also try intel_pstate=3Dpassive with powersave and performance.
-> The heating issue, if related to cpufreq leaving CPU at higher freq,
-> should also occur with performance (which keeps CPUs at highest freq).
-
-I described the approach above. I will try 'performance' and/or
-'powersave' too. It does seem like temperature is not the driving
-factor here. (As temperature is low enough even intel_pch_thermal.)
-Maybe it does make reproduction easier.
-
->
-> --
-> viresh
