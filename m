@@ -2,36 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 231C3534FDA
-	for <lists+linux-pm@lfdr.de>; Thu, 26 May 2022 15:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B86535029
+	for <lists+linux-pm@lfdr.de>; Thu, 26 May 2022 15:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347499AbiEZNUn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 May 2022 09:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57748 "EHLO
+        id S1343998AbiEZNqC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 May 2022 09:46:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233310AbiEZNUm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 May 2022 09:20:42 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B723D682B;
-        Thu, 26 May 2022 06:20:41 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R771e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VEST7R4_1653571236;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VEST7R4_1653571236)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 26 May 2022 21:20:37 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     vireshk@kernel.org
-Cc:     nm@ti.com, sboyd@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] opp: Fix some kernel-doc comments
-Date:   Thu, 26 May 2022 21:20:35 +0800
-Message-Id: <20220526132035.112026-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        with ESMTP id S231330AbiEZNqC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 May 2022 09:46:02 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D72BE02E;
+        Thu, 26 May 2022 06:45:58 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D829A1688;
+        Thu, 26 May 2022 06:45:57 -0700 (PDT)
+Received: from [10.1.37.22] (e122027.cambridge.arm.com [10.1.37.22])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9F10E3F73D;
+        Thu, 26 May 2022 06:45:55 -0700 (PDT)
+Message-ID: <a6172ae4-d15f-ce89-fac8-0fb3efc623ce@arm.com>
+Date:   Thu, 26 May 2022 14:45:53 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 15/31] drm/panfrost: Migrate to dev_pm_opp_set_config()
+Content-Language: en-GB
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
+ <2a0970a5cf1fc92e16eb2b782798a6b609594cdc.1653564321.git.viresh.kumar@linaro.org>
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <2a0970a5cf1fc92e16eb2b782798a6b609594cdc.1653564321.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -39,48 +52,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Make @freq to @bw in dev_pm_opp_find_bw_ceil() and
-dev_pm_opp_find_bw_floor() kernel-doc comment to
-remove warnings found by running scripts/kernel-doc,
-which is caused by using 'make W=1'.
+On 26/05/2022 12:42, Viresh Kumar wrote:
+> The OPP core now provides a unified API for setting all configuration
+> types, i.e. dev_pm_opp_set_config().
+> 
+> Lets start using it.
+> 
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-drivers/opp/core.c:753: warning: Function parameter or member 'bw' not
-described in 'dev_pm_opp_find_bw_ceil'
-drivers/opp/core.c:753: warning: Excess function parameter 'freq'
-description in 'dev_pm_opp_find_bw_ceil'
-drivers/opp/core.c:812: warning: Function parameter or member 'bw' not
-described in 'dev_pm_opp_find_bw_floor'
-drivers/opp/core.c:812: warning: Excess function parameter 'freq'
-description in 'dev_pm_opp_find_bw_floor'
+Acked-by: Steven Price <steven.price@arm.com>
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/opp/core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 84063eaebb91..e44b73af2824 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -732,7 +732,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_find_level_ceil);
- /**
-  * dev_pm_opp_find_bw_ceil() - Search for a rounded ceil bandwidth
-  * @dev:	device for which we do this operation
-- * @freq:	start bandwidth
-+ * @bw:	start bandwidth
-  * @index:	which bandwidth to compare, in case of OPPs with several values
-  *
-  * Search for the matching floor *available* OPP from a starting bandwidth
-@@ -791,7 +791,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_find_bw_ceil);
- /**
-  * dev_pm_opp_find_bw_floor() - Search for a rounded floor bandwidth
-  * @dev:	device for which we do this operation
-- * @freq:	start bandwidth
-+ * @bw:	start bandwidth
-  * @index:	which bandwidth to compare, in case of OPPs with several values
-  *
-  * Search for the matching floor *available* OPP from a starting bandwidth
--- 
-2.20.1.7.g153144c
+> ---
+>  drivers/gpu/drm/panfrost/panfrost_devfreq.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> index 194af7f607a6..7826d9366d35 100644
+> --- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> +++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
+> @@ -91,6 +91,10 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
+>  	struct devfreq *devfreq;
+>  	struct thermal_cooling_device *cooling;
+>  	struct panfrost_devfreq *pfdevfreq = &pfdev->pfdevfreq;
+> +	struct dev_pm_opp_config config = {
+> +		.regulator_names = pfdev->comp->supply_names,
+> +		.regulator_count = pfdev->comp->num_supplies,
+> +	};
+>  
+>  	if (pfdev->comp->num_supplies > 1) {
+>  		/*
+> @@ -101,13 +105,12 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
+>  		return 0;
+>  	}
+>  
+> -	ret = devm_pm_opp_set_regulators(dev, pfdev->comp->supply_names,
+> -					 pfdev->comp->num_supplies);
+> +	ret = devm_pm_opp_set_config(dev, &config);
+>  	if (ret) {
+>  		/* Continue if the optional regulator is missing */
+>  		if (ret != -ENODEV) {
+>  			if (ret != -EPROBE_DEFER)
+> -				DRM_DEV_ERROR(dev, "Couldn't set OPP regulators\n");
+> +				DRM_DEV_ERROR(dev, "Couldn't set OPP config\n");
+>  			return ret;
+>  		}
+>  	}
 
