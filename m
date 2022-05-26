@@ -2,54 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B91D6535257
-	for <lists+linux-pm@lfdr.de>; Thu, 26 May 2022 18:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C035535300
+	for <lists+linux-pm@lfdr.de>; Thu, 26 May 2022 19:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241061AbiEZQy3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 May 2022 12:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55568 "EHLO
+        id S236554AbiEZR6G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 May 2022 13:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238069AbiEZQy2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 May 2022 12:54:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0026DFC5;
-        Thu, 26 May 2022 09:54:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 675EFB82176;
-        Thu, 26 May 2022 16:54:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5603C385A9;
-        Thu, 26 May 2022 16:54:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1653584065;
-        bh=3G1ExpudxEkUKLGdVnrmwJ/uiFkyw5RF02cjHtBsAW8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=RL+NcvCPbWw9Ew0REV/3asS3GSQ91R0RFFIQDTW2/7YiDe7+ndSzzBvAQHsLBzTqH
-         8oxv6oGTahVLDIg1gRGspWvSqpyexhEaK0st9HYBNV0Ly52hayPOv4n097H61Jdm45
-         w6h6eWXkj6doRHPeNw/Ytirs3yK+1eSfJxt86uL7YBU8qq6fNIKCuLFgbWcQdKqH1N
-         HR6vs2B+3KmlHGg+SlKFhafJEXh9XzVrdzrfaUitrnHZy9C17S+4IpBQ0504Vwlr7f
-         Gz4MOWPJeylHPSbWa7NOvQEN7BZMi+2cKYYP9u67Z8w22ClK4L/8Fo/cFk7A847mBx
-         Q+/W8cOsirSww==
-Date:   Thu, 26 May 2022 11:54:22 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PCI <linux-pci@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: [PATCH v1 06/11] PCI/PM: Write 0 to PMCSR in pci_power_up() in
- all cases
-Message-ID: <20220526165422.GA338382@bhelgaas>
+        with ESMTP id S233423AbiEZR6F (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 May 2022 13:58:05 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BFEDFD7;
+        Thu, 26 May 2022 10:58:03 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id DA6701F458C5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1653587881;
+        bh=vKrfmc3boXboPynKhfGf6a+AgAeTRHxWWw/3jLM5Jic=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DGkTuUPwewZwysjZztrVad/lb9S/kXm3+CYcMvUjKexgsyXtFd1nxFQrKIctmAXDE
+         Dg4zWR6Lg/z3Q5upNyDit2RITf3OMKBlmER62SyW0U42xsGGg6QU60mHzng41heGyk
+         NU4P7ccBQDG8c0W5TBR01+lyJcSnh8zyQ8X4MXL0wbrfDi55ocZBn4f47Yq+Qm9r/l
+         dkOwFM8+qVn8evQindIk4K2aIF4MZIQ+S647V8zghD5pI/2CMgkfBp23fAj8XzYIZ6
+         3Mt5DrdIKw58s6+5PISOPPMbS6bEZtDYTHtKIafhS/zxXwZl9zGfofl5uvRKsINlUj
+         HSzFw1AXzb0JQ==
+Message-ID: <45c29859-f7a6-48e5-be48-bd8191ac299a@collabora.com>
+Date:   Thu, 26 May 2022 20:57:56 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5748066.MhkbZ0Pkbq@kreacher>
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 21/31] soc/tegra: Remove the call to
+ devm_pm_opp_set_clkname()
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1653564321.git.viresh.kumar@linaro.org>
+ <1e88b248352afe03cd3bf0e887b1f2be86b5afb5.1653564321.git.viresh.kumar@linaro.org>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <1e88b248352afe03cd3bf0e887b1f2be86b5afb5.1653564321.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,64 +61,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 05, 2022 at 08:10:43PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 5/26/22 14:42, Viresh Kumar wrote:
+> The OPP core already performs devm_pm_opp_set_clkname() with name as
+> NULL, the callers shouldn't be doing the same unless they have a
+> different clock name to add here.
 > 
-> Make pci_power_up() write 0 to the device's PCI_PM_CTRL register in
-> order to put it into D0 regardless of the power state returned by
-> the previous read from that register which should not matter.
+> Drop the call.
 > 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: Dmitry Osipenko <digetx@gmail.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 > ---
->  drivers/pci/pci.c |   11 +++--------
->  1 file changed, 3 insertions(+), 8 deletions(-)
+>  drivers/soc/tegra/common.c | 6 ------
+>  1 file changed, 6 deletions(-)
 > 
-> Index: linux-pm/drivers/pci/pci.c
-> ===================================================================
-> --- linux-pm.orig/drivers/pci/pci.c
-> +++ linux-pm/drivers/pci/pci.c
-> @@ -1230,15 +1230,10 @@ int pci_power_up(struct pci_dev *dev)
->  	}
+> diff --git a/drivers/soc/tegra/common.c b/drivers/soc/tegra/common.c
+> index 32c346b72635..49a5360f4507 100644
+> --- a/drivers/soc/tegra/common.c
+> +++ b/drivers/soc/tegra/common.c
+> @@ -108,12 +108,6 @@ int devm_tegra_core_dev_init_opp_table(struct device *dev,
+>  	u32 hw_version;
+>  	int err;
 >  
->  	/*
-> -	 * If we're (effectively) in D3, force entire word to 0. This doesn't
-> -	 * affect PME_Status, disables PME_En, and sets PowerState to 0.
-> +	 * Force the entire word to 0. This doesn't affect PME_Status, disables
-> +	 * PME_En, and sets PowerState to 0.
->  	 */
-> -	if (state == PCI_D3hot)
-> -		pmcsr = 0;
-> -	else
-> -		pmcsr &= ~PCI_PM_CTRL_STATE_MASK;
+> -	err = devm_pm_opp_set_clkname(dev, NULL);
+> -	if (err) {
+> -		dev_err(dev, "failed to set OPP clk: %d\n", err);
+> -		return err;
+> -	}
 > -
-> -	pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, pmcsr);
-> +	pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, 0);
+>  	/* Tegra114+ doesn't support OPP yet */
+>  	if (!of_machine_is_compatible("nvidia,tegra20") &&
+>  	    !of_machine_is_compatible("nvidia,tegra30"))
 
-Can you reassure me why this is safe and useful?
+I can't see where OPP core performs devm_pm_opp_set_clkname().
 
-This is a 16-bit write that includes (PCIe r6.0, sec 7.5.2.2):
-
-  0x0003 PowerState     RW
-  0x0004                RsvdP
-  0x0008 No_Soft_Reset  RO
-  0x00f0                RsvdP
-  0x0100 PME_En         RW/RWS
-  0x1e00 Data_Select    RW, VF ROZ
-  0x6000 Data_Scale     RO, VF ROZ
-  0x8000 PME_Status     RW1CS
-
-We intend to set PowerState to 0 (D0), apparently intend to clear
-PME_En, and PME_Status is "write 1 to clear" to writing 0 does
-nothing, so those look OK.
-
-But the RsvdP fields are reserved for future RW bits and should be
-preserved, and it looks like clearing Data_Select could potentially
-break the Data Register power consumption reporting (which I don't
-think we support today).
-
-It seems like maybe we should do this instead:
-
-  pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL,
-                        pmcsr & ~PCI_PM_CTRL_STATE_MASK)
-
-to just unconditionally clear PowerState?
+-- 
+Best regards,
+Dmitry
