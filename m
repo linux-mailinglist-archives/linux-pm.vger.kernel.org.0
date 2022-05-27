@@ -2,147 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 152715359FF
-	for <lists+linux-pm@lfdr.de>; Fri, 27 May 2022 09:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 278E8535E51
+	for <lists+linux-pm@lfdr.de>; Fri, 27 May 2022 12:30:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231280AbiE0HNX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 May 2022 03:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55720 "EHLO
+        id S1350789AbiE0Kaz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 May 2022 06:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232415AbiE0HNW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 May 2022 03:13:22 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090B0B7ED;
-        Fri, 27 May 2022 00:13:21 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4L8bZm75p1zbc2f;
-        Fri, 27 May 2022 15:11:44 +0800 (CST)
-Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 15:13:18 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 15:13:17 +0800
-From:   keliu <liuke94@huawei.com>
-To:     <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
-        <amitk@kernel.org>, <rui.zhang@intel.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     keliu <liuke94@huawei.com>
-Subject: [PATCH] thermal: Directly use ida_alloc()/free()
-Date:   Fri, 27 May 2022 07:34:45 +0000
-Message-ID: <20220527073445.2474380-1-liuke94@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S1349416AbiE0Kax (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 May 2022 06:30:53 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCEC12AB01
+        for <linux-pm@vger.kernel.org>; Fri, 27 May 2022 03:30:52 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id i187so7182852ybg.6
+        for <linux-pm@vger.kernel.org>; Fri, 27 May 2022 03:30:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=gMRL2ChFV1c1fJH6+lzMvi+AnpLvf8Jv1voAqTadcaU=;
+        b=A4niVho5VDja4oggBTHYDBpSXs/UU9FUrj/W5Ex5x0gO33pX55qJjyD94+CyTXpNjt
+         ZIvKeAm2NQdlpLpoMptA733lJbEme/LpV+SxhZBwTTs9K7lKmO9rnWqK2+1QFTVqthgi
+         BaTkxWSGAYlT8Ufj3NUnO4qsXbP/bDTaLvW8BR1CSqle8MLiNWlHZjNsXsTCvaBQ597u
+         XvSkVQwAj2DPYSX3ElShzIGf6zXFevAHffZBa6ACHcK1aeKAZxSvmACdEHNa/pJ2mer/
+         mL1jNyxi1X0ngTFM1WYOke0KkyPHJSKBYSJoNOmCeZEzCPYEwrrUJ842shz8PB/K/Uh9
+         BTvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=gMRL2ChFV1c1fJH6+lzMvi+AnpLvf8Jv1voAqTadcaU=;
+        b=Oz66r4PVK7AalMOOZgTCuVOFyxZ6fCkxLylcS3XekREAH0an7kwulst2NiZjMLseOL
+         VmPuKLcXmekRlvzzpjtgAZ+4ks7GKGID7CpsEIIugc9I5Nee6LiJh7XvLzvmgGj/RPln
+         0bwPao9BZJO3/kX+K1VqswAqmVigAwMi37YPLzKUDh4WLwgUDWfQ9LyD0Dz6kuBl7XXi
+         iakOXGPxe7fCeAUbsDfDYcbRUdWtIoKjk6FT/0Jwh7gmsriCUNK0lA0J4xOJV0ZRDt7R
+         Lvkg8sbGnDPp9NGYwZnI7ciqHRK+AhgtkYdtPeWevJE2zqxsIP/b0T6W8FoIwt51V/FO
+         /Wkw==
+X-Gm-Message-State: AOAM533yNW9cde8t74ad/G2HPAnBMx2c27XqxIYeWsg3WmVegd/inV58
+        Xz0dSQ43+YkUN+LfvufK7ix/rLh4OHitMLTFvvc=
+X-Google-Smtp-Source: ABdhPJyK0an4l1OR+LbV9VWFw2gsmfR9uPk5PxYqWh96KFOwvug1R/FSn3N4sYn8pyy6DQvnnUOzA8ukDxGxSxwuj1I=
+X-Received: by 2002:a25:6645:0:b0:659:10b9:2281 with SMTP id
+ z5-20020a256645000000b0065910b92281mr4180551ybm.249.1653647451603; Fri, 27
+ May 2022 03:30:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500018.china.huawei.com (7.185.36.111)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:a05:6902:114d:0:0:0:0 with HTTP; Fri, 27 May 2022 03:30:51
+ -0700 (PDT)
+Reply-To: donaldcurtis3000@gmail.com
+From:   Donald Curtis <91474711amele@gmail.com>
+Date:   Fri, 27 May 2022 11:30:51 +0100
+Message-ID: <CAC=gNW2QuJTu3yu1WMD4VKLiRaJUrgCUQrcMeso_iORE9hqdiw@mail.gmail.com>
+Subject: Donald
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,FROM_STARTS_WITH_NUMS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b31 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5019]
+        *  0.7 FROM_STARTS_WITH_NUMS From: starts with several numbers
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [91474711amele[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [donaldcurtis3000[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use ida_alloc()/ida_free() instead of deprecated
-ida_simple_get()/ida_simple_remove() .
+Hello,
+I called to know if you received my previous email, reply to me asap.
+Donald
 
-Signed-off-by: keliu <liuke94@huawei.com>
----
- drivers/thermal/thermal_core.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 82654dc8382b..b36c348a110b 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -667,7 +667,7 @@ int thermal_zone_bind_cooling_device(struct thermal_zone_device *tz,
- 	dev->target = THERMAL_NO_TARGET;
- 	dev->weight = weight;
- 
--	result = ida_simple_get(&tz->ida, 0, 0, GFP_KERNEL);
-+	result = ida_alloc(&tz->ida, GFP_KERNEL);
- 	if (result < 0)
- 		goto free_mem;
- 
-@@ -721,7 +721,7 @@ int thermal_zone_bind_cooling_device(struct thermal_zone_device *tz,
- remove_symbol_link:
- 	sysfs_remove_link(&tz->device.kobj, dev->name);
- release_ida:
--	ida_simple_remove(&tz->ida, dev->id);
-+	ida_free(&tz->ida, dev->id);
- free_mem:
- 	kfree(dev);
- 	return result;
-@@ -768,7 +768,7 @@ int thermal_zone_unbind_cooling_device(struct thermal_zone_device *tz,
- 	device_remove_file(&tz->device, &pos->weight_attr);
- 	device_remove_file(&tz->device, &pos->attr);
- 	sysfs_remove_link(&tz->device.kobj, pos->name);
--	ida_simple_remove(&tz->ida, pos->id);
-+	ida_free(&tz->ida, pos->id);
- 	kfree(pos);
- 	return 0;
- }
-@@ -901,7 +901,7 @@ __thermal_cooling_device_register(struct device_node *np,
- 	if (!cdev)
- 		return ERR_PTR(-ENOMEM);
- 
--	ret = ida_simple_get(&thermal_cdev_ida, 0, 0, GFP_KERNEL);
-+	ret = ida_alloc(&thermal_cdev_ida, GFP_KERNEL);
- 	if (ret < 0)
- 		goto out_kfree_cdev;
- 	cdev->id = ret;
-@@ -951,7 +951,7 @@ __thermal_cooling_device_register(struct device_node *np,
- 	put_device(&cdev->device);
- 	cdev = NULL;
- out_ida_remove:
--	ida_simple_remove(&thermal_cdev_ida, id);
-+	ida_free(&thermal_cdev_ida, id);
- out_kfree_cdev:
- 	kfree(cdev);
- 	return ERR_PTR(ret);
-@@ -1110,7 +1110,7 @@ void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
- 
- 	mutex_unlock(&thermal_list_lock);
- 
--	ida_simple_remove(&thermal_cdev_ida, cdev->id);
-+	ida_free(&thermal_cdev_ida, cdev->id);
- 	device_del(&cdev->device);
- 	thermal_cooling_device_destroy_sysfs(cdev);
- 	kfree(cdev->type);
-@@ -1227,7 +1227,7 @@ thermal_zone_device_register(const char *type, int trips, int mask,
- 	INIT_LIST_HEAD(&tz->thermal_instances);
- 	ida_init(&tz->ida);
- 	mutex_init(&tz->lock);
--	id = ida_simple_get(&thermal_tz_ida, 0, 0, GFP_KERNEL);
-+	id = ida_alloc(&thermal_tz_ida, GFP_KERNEL);
- 	if (id < 0) {
- 		result = id;
- 		goto free_tz;
-@@ -1318,7 +1318,7 @@ thermal_zone_device_register(const char *type, int trips, int mask,
- 	put_device(&tz->device);
- 	tz = NULL;
- remove_id:
--	ida_simple_remove(&thermal_tz_ida, id);
-+	ida_free(&thermal_tz_ida, id);
- free_tz:
- 	kfree(tz);
- 	return ERR_PTR(result);
-@@ -1378,7 +1378,7 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
- 	thermal_set_governor(tz, NULL);
- 
- 	thermal_remove_hwmon_sysfs(tz);
--	ida_simple_remove(&thermal_tz_ida, tz->id);
-+	ida_free(&thermal_tz_ida, tz->id);
- 	ida_destroy(&tz->ida);
- 	mutex_destroy(&tz->lock);
- 	device_unregister(&tz->device);
--- 
-2.25.1
-
+Hallo,
+Ich habe angerufen, um zu wissen, ob Sie meine vorherige E-Mail
+erhalten haben. Antworten Sie mir so schnell wie m=C3=B6glich.
+Donald
