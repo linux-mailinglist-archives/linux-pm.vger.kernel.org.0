@@ -2,145 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BEB75363A5
-	for <lists+linux-pm@lfdr.de>; Fri, 27 May 2022 15:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E6C536721
+	for <lists+linux-pm@lfdr.de>; Fri, 27 May 2022 20:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351776AbiE0N6y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 May 2022 09:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37270 "EHLO
+        id S1345815AbiE0Swh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 May 2022 14:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240514AbiE0N6x (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 May 2022 09:58:53 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024E512AAF;
-        Fri, 27 May 2022 06:58:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653659933; x=1685195933;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=GF8r/LqGxsImMjC+zviPxuhzQ2c3jmTSmCRe85gniNQ=;
-  b=C3Of6hnkQ56S7bWQ7cdTortNPOiWmyrHXfL6fOChe+s7IwPi5IHleIPB
-   HRciHQQ1yPTRoU1zVx+7vRKSdpZ9Wsz3K9MD9v/N/jO/ASPhGewFLgPOy
-   Ih9ef9P1KP9jQ7XYSvdOl3VReCXiF5/X1gokTSvTAxE+C45WKAGhBVBxI
-   c=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 27 May 2022 06:58:52 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 06:58:52 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 27 May 2022 06:58:51 -0700
-Received: from [10.50.53.253] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 27 May
- 2022 06:58:49 -0700
-Message-ID: <35141cc2-8269-b4c6-8763-6f18c96ea12c@quicinc.com>
-Date:   Fri, 27 May 2022 19:28:46 +0530
+        with ESMTP id S1354445AbiE0Swg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 May 2022 14:52:36 -0400
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D275F21251;
+        Fri, 27 May 2022 11:52:29 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-306b5b452b1so24076257b3.1;
+        Fri, 27 May 2022 11:52:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PxtMQkxOsmxAx60o1Fx3MWQVX3yhClhlLKmqWp5oFv4=;
+        b=ftt7e5sA+2IIRA4SY10Kz327SG3cyPm3SErGPPfwk25ZU5TzwYm1DXI6IxK1z1iqkV
+         NEpaCCTqoRAtbkuK4p2ipwgSp4S5GAn+JdcNriaHt6wnVWhAd7+zu0GeFLcZJlmnhXyt
+         vkogweCoue+ZVMjigU9geYjr07xplwxSb2XZ6cnv0OUPPtFiGFjptvt4uwdUrs+q1A5T
+         voKec9YOsRgXdMqSDV4379AL+rOqTjjTKzRpPpdaBAbmxW0YivID5kMjn66O7RNJr1I8
+         p+WkVvG7Mv9NE7kjRWKpBr7LziJn8h/svsPsuUkeHboDXp33tY39+CXJ8nM/9EDbGJIp
+         8GFg==
+X-Gm-Message-State: AOAM533/g+8qv5ZlsYWugF6oVpesMeB0UFqVvY8xVqaV1ZlmROCSycY+
+        iGbQwjwFB39b+TCRI5xrPWOtQ4a//GPXjFSkrkY=
+X-Google-Smtp-Source: ABdhPJwrGwEytu43boU8pDUt2wpBGnryMJ/qzpbF1oRyr58yMLSW+l3GZ3N9x9ZvYwLsXdCgdE9Ow33zhqfjep92Rv8=
+X-Received: by 2002:a81:4ed6:0:b0:307:224f:eed3 with SMTP id
+ c205-20020a814ed6000000b00307224feed3mr3811628ywb.301.1653677548809; Fri, 27
+ May 2022 11:52:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v4 1/2] power_supply: Register cooling device outside of
- probe
-From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-To:     Sebastian Reichel <sre@kernel.org>
-CC:     David Collins <quic_collinsd@quicinc.com>,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <gregkh@google.com>
-References: <1640162489-7847-1-git-send-email-quic_manafm@quicinc.com>
- <029160a5-a7b0-790c-077a-985be5a1d560@quicinc.com>
-In-Reply-To: <029160a5-a7b0-790c-077a-985be5a1d560@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220526165422.GA338382@bhelgaas> <20220526194601.GA344086@bhelgaas>
+In-Reply-To: <20220526194601.GA344086@bhelgaas>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 27 May 2022 20:52:17 +0200
+Message-ID: <CAJZ5v0iteW2K0c7pS+ar1K_iL9L3ujQx=-ZRdrZFzxvkMVZorA@mail.gmail.com>
+Subject: Re: [PATCH v1 06/11] PCI/PM: Write 0 to PMCSR in pci_power_up() in
+ all cases
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-++
+On Thu, May 26, 2022 at 9:46 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> On Thu, May 26, 2022 at 11:54:22AM -0500, Bjorn Helgaas wrote:
+> > On Thu, May 05, 2022 at 08:10:43PM +0200, Rafael J. Wysocki wrote:
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > Make pci_power_up() write 0 to the device's PCI_PM_CTRL register in
+> > > order to put it into D0 regardless of the power state returned by
+> > > the previous read from that register which should not matter.
+> > >
+> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > ---
+> > >  drivers/pci/pci.c |   11 +++--------
+> > >  1 file changed, 3 insertions(+), 8 deletions(-)
+> > >
+> > > Index: linux-pm/drivers/pci/pci.c
+> > > ===================================================================
+> > > --- linux-pm.orig/drivers/pci/pci.c
+> > > +++ linux-pm/drivers/pci/pci.c
+> > > @@ -1230,15 +1230,10 @@ int pci_power_up(struct pci_dev *dev)
+> > >     }
+> > >
+> > >     /*
+> > > -    * If we're (effectively) in D3, force entire word to 0. This doesn't
+> > > -    * affect PME_Status, disables PME_En, and sets PowerState to 0.
+> > > +    * Force the entire word to 0. This doesn't affect PME_Status, disables
+> > > +    * PME_En, and sets PowerState to 0.
+> > >      */
+> > > -   if (state == PCI_D3hot)
+> > > -           pmcsr = 0;
+> > > -   else
+> > > -           pmcsr &= ~PCI_PM_CTRL_STATE_MASK;
+> > > -
+> > > -   pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, pmcsr);
+> > > +   pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, 0);
+> >
+> > Can you reassure me why this is safe and useful?
+> >
+> > This is a 16-bit write that includes (PCIe r6.0, sec 7.5.2.2):
+> >
+> >   0x0003 PowerState     RW
+> >   0x0004                RsvdP
+> >   0x0008 No_Soft_Reset  RO
+> >   0x00f0                RsvdP
+> >   0x0100 PME_En         RW/RWS
+> >   0x1e00 Data_Select    RW, VF ROZ
+> >   0x6000 Data_Scale     RO, VF ROZ
+> >   0x8000 PME_Status     RW1CS
+> >
+> > We intend to set PowerState to 0 (D0), apparently intend to clear
+> > PME_En, and PME_Status is "write 1 to clear" to writing 0 does
+> > nothing, so those look OK.
+> >
+> > But the RsvdP fields are reserved for future RW bits and should be
+> > preserved, and it looks like clearing Data_Select could potentially
+> > break the Data Register power consumption reporting (which I don't
+> > think we support today).
+> >
+> > It seems like maybe we should do this instead:
+> >
+> >   pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL,
+> >                         pmcsr & ~PCI_PM_CTRL_STATE_MASK)
+> >
+> > to just unconditionally clear PowerState?
+>
+> Or I guess this, since we want to clear PME_En as well?
+>
+>   pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, pmcsr &
+>                         ~(PCI_PM_CTRL_STATE_MASK | PCI_PM_CTRL_PME_ENABLE));
 
-On 1/25/2022 1:04 AM, Manaf Meethalavalappu Pallikunhi wrote:
-> Hi Sebastian Reichel,
->
-> Just reminder for review for these patches
->
-> Thanks,
->
-> Manaf
->
-> On 12/22/2021 2:11 PM, Manaf Meethalavalappu Pallikunhi wrote:
->> Registering the cooling device from the probe can result in the
->> execution of get_property() function before it gets initialized.
->>
->> To avoid this, register the cooling device from a workqueue
->> instead of registering in the probe.
->>
->> Signed-off-by: Manaf Meethalavalappu Pallikunhi 
->> <quic_manafm@quicinc.com>
->> ---
->>   drivers/power/supply/power_supply_core.c | 10 ++++------
->>   1 file changed, 4 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/power/supply/power_supply_core.c 
->> b/drivers/power/supply/power_supply_core.c
->> index 668369b..ef6f290 100644
->> --- a/drivers/power/supply/power_supply_core.c
->> +++ b/drivers/power/supply/power_supply_core.c
->> @@ -132,6 +132,7 @@ void power_supply_changed(struct power_supply *psy)
->>   }
->>   EXPORT_SYMBOL_GPL(power_supply_changed);
->>   +static int psy_register_cooler(struct power_supply *psy);
->>   /*
->>    * Notify that power supply was registered after parent finished 
->> the probing.
->>    *
->> @@ -139,6 +140,8 @@ EXPORT_SYMBOL_GPL(power_supply_changed);
->>    * calling power_supply_changed() directly from 
->> power_supply_register()
->>    * would lead to execution of get_property() function provided by 
->> the driver
->>    * too early - before the probe ends.
->> + * Also, registering cooling device from the probe will execute the
->> + * get_property() function. So register the cooling device after the 
->> probe.
->>    *
->>    * Avoid that by waiting on parent's mutex.
->>    */
->> @@ -156,6 +159,7 @@ static void 
->> power_supply_deferred_register_work(struct work_struct *work)
->>       }
->>         power_supply_changed(psy);
->> +    psy_register_cooler(psy);
->>         if (psy->dev.parent)
->>           mutex_unlock(&psy->dev.parent->mutex);
->> @@ -1238,10 +1242,6 @@ __power_supply_register(struct device *parent,
->>       if (rc)
->>           goto register_thermal_failed;
->>   -    rc = psy_register_cooler(psy);
->> -    if (rc)
->> -        goto register_cooler_failed;
->> -
->>       rc = power_supply_create_triggers(psy);
->>       if (rc)
->>           goto create_triggers_failed;
->> @@ -1271,8 +1271,6 @@ __power_supply_register(struct device *parent,
->>   add_hwmon_sysfs_failed:
->>       power_supply_remove_triggers(psy);
->>   create_triggers_failed:
->> -    psy_unregister_cooler(psy);
->> -register_cooler_failed:
->>       psy_unregister_thermal(psy);
->>   register_thermal_failed:
->>       device_del(dev);
->>
+Yes.
+
+Also, this patch actually only makes a difference if the device is
+going into D0 from D1 or D2, because we have always written 0 to the
+PMCSR during transitions from D3hot.
+
+It is inconsistent and confusing to do different things depending on
+the initial power state here and the code is simpler when 0 is written
+regardless.
