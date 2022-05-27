@@ -2,170 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49F2535925
-	for <lists+linux-pm@lfdr.de>; Fri, 27 May 2022 08:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B9B535943
+	for <lists+linux-pm@lfdr.de>; Fri, 27 May 2022 08:25:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244937AbiE0GMU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 May 2022 02:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35440 "EHLO
+        id S245192AbiE0GZO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 May 2022 02:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244558AbiE0GMO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 May 2022 02:12:14 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD6D3BBF3;
-        Thu, 26 May 2022 23:12:12 -0700 (PDT)
+        with ESMTP id S245156AbiE0GZN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 May 2022 02:25:13 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE57F25C4A
+        for <linux-pm@vger.kernel.org>; Thu, 26 May 2022 23:25:12 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id s23so3697452iog.13
+        for <linux-pm@vger.kernel.org>; Thu, 26 May 2022 23:25:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1653631932; x=1685167932;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=JSpQ+IVhEg6RrjYC+4Uz7ini4oT6bm/9mToI7OZcgp4=;
-  b=cTo4FLpR2xekCuNVRdzoz76Za7m/rWPRZCIlyZVXoD7rgBYfZs3cd6wU
-   OkBcgVV0R1N/3LWaqDvoCdrRN3c0cBZlHtqbI4Rz78Th8/1hiVLPdgjeC
-   du+ooDslBFYVeDvJDlbFIUsbGfyPePoa1QbdoZGP+AMCeczfSHmjaaY4Z
-   k=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 26 May 2022 23:12:11 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2022 23:12:10 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 26 May 2022 23:12:10 -0700
-Received: from [10.216.49.179] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 26 May
- 2022 23:12:03 -0700
-Message-ID: <ac791978-aa9e-ff0d-be9c-c12db1c1b8bf@quicinc.com>
-Date:   Fri, 27 May 2022 11:42:00 +0530
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=33H7bzlF73boyoKARvolMJlGymprQ+hHPrvlaQBxLsY=;
+        b=gBB/cwiGfmHtke5+MVOg1U2wNWTEr120LVQWK908/OVHr82Ivoq7Un0O2mD3i6fHG6
+         OThBqoy58hxFvilear3j/8YpPiFgIwr7tS/3KTeoverlG/LeQgwhL0Kn3HQRKWfaw1lA
+         koqCWfHlLrIMDArNXeq7xC7YU67zXwUHiaeMwRRU9R0k72+LrMpRoasCvZL2CsC+qqfm
+         jK3L+mfY9L0ohvfGZ1SV4+uxJ1Lr2ItAafFfZP98LBKdqEyVJ1KSvjDBqr3Pg8UK+75p
+         vpdeVhnaRT3FfhQBH13FUh+ppuPA+VKMIMeMy4whpYxjLkLs/mshrzwW7oEzFoqJxV5h
+         5dVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=33H7bzlF73boyoKARvolMJlGymprQ+hHPrvlaQBxLsY=;
+        b=bIiZfgKMOyzXtFakUO78vG0fNQTJYuIvZYYdpklw+m2Ragr9EXKLP4jR8QmBsVds7E
+         G5jobbb4hXSEHLfK6H5QjQV28YxAFTXzuzN5aY5dtQPK31KLoUaVU11Wn0Qtw0g6By/C
+         nRR3GQqyIHmB6Gg6vRS1M/FN/Q+N69n4dZpdcLm/aD9ASOFaiJLiZac8kj4H4jjDerAF
+         84S3GhSzvpAR6dUqU9gIipokLBO2+zM11+UQyg7/zapa3YvsjmK49mmbMSCLSYvAxypM
+         LojK0mQGgQHxi2BQPuyrNhpqQKxUrKqqMEv3D/HlIIA/1UQbzBgXl71oFyMM7rnve1it
+         NNjg==
+X-Gm-Message-State: AOAM531kXfOVL9oL2qKriK1reKu+nJrmyFJunDKY7GQzfMwv4GHQMi+J
+        iSthmD025rNqgVYMn2AJ/gSDkyQX4KMeny6y3oM=
+X-Google-Smtp-Source: ABdhPJyuSHQEY2A3k4hHTnJvScNnCsm2HeGVpawtkPs2YKwiTHyvgOhOCllSaVK2jiAKtmi8tOuzQsZIg0156fnaTJ0=
+X-Received: by 2002:a02:ba05:0:b0:330:f166:d90a with SMTP id
+ z5-20020a02ba05000000b00330f166d90amr1303825jan.213.1653632712131; Thu, 26
+ May 2022 23:25:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v18 2/5] usb: dwc3: core: Host wake up support from system
- suspend
-Content-Language: en-US
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_vpulyala@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-References: <1653502826-24256-1-git-send-email-quic_kriskura@quicinc.com>
- <1653502826-24256-3-git-send-email-quic_kriskura@quicinc.com>
- <20220526024319.GN15121@hu-pkondeti-hyd.qualcomm.com>
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20220526024319.GN15121@hu-pkondeti-hyd.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6638:388b:b0:32e:cca7:1993 with HTTP; Thu, 26 May 2022
+ 23:25:11 -0700 (PDT)
+Reply-To: IREnnewilliams@gmail.com
+From:   Irene Williams <lori.robinsonnj@gmail.com>
+Date:   Fri, 27 May 2022 06:25:11 +0000
+Message-ID: <CAD13ymaBeqKXgvfD_u2UWxZXj13uKaxNUKV4O4o+7kCc4JFEuw@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-On 5/26/2022 8:13 AM, Pavan Kondeti wrote:
-> On Wed, May 25, 2022 at 11:50:23PM +0530, Krishna Kurapati wrote:
->> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->>
->> Check wakeup-source property for dwc3 core node to set the
->> wakeup capability. Drop the device_init_wakeup call from
->> runtime suspend and resume.
->>
->> If the dwc3 is wakeup capable, don't power down the USB PHY(s).
->> The glue drivers are expected to take care of configuring the
->> additional wakeup settings if needed based on the dwc3 wakeup
->> capability status. In some SOC designs, powering off the PHY is
->> resulting in higher leakage, so this patch save power on such boards.
->>
->> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> Reviewed-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
->> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
->> ---
->>   drivers/usb/dwc3/core.c | 26 ++++++++++++--------------
->>   1 file changed, 12 insertions(+), 14 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> index e027c04..2b1b3f7 100644
->> --- a/drivers/usb/dwc3/core.c
->> +++ b/drivers/usb/dwc3/core.c
->> @@ -1787,6 +1787,7 @@ static int dwc3_probe(struct platform_device *pdev)
->>   
->>   	platform_set_drvdata(pdev, dwc);
->>   	dwc3_cache_hwparams(dwc);
->> +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
->>   
->>   	spin_lock_init(&dwc->lock);
->>   	mutex_init(&dwc->mutex);
->> @@ -1948,11 +1949,6 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->>   		dwc3_core_exit(dwc);
->>   		break;
->>   	case DWC3_GCTL_PRTCAP_HOST:
->> -		if (!PMSG_IS_AUTO(msg)) {
->> -			dwc3_core_exit(dwc);
->> -			break;
->> -		}
->> -
->>   		/* Let controller to suspend HSPHY before PHY driver suspends */
->>   		if (dwc->dis_u2_susphy_quirk ||
->>   		    dwc->dis_enblslpm_quirk) {
->> @@ -1967,6 +1963,11 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->>   
->>   		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
->>   		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
->> +
->> +		if (!PMSG_IS_AUTO(msg)) {
->> +			if (!device_can_wakeup(dwc->dev))
->> +				dwc3_core_exit(dwc);
->> +		}
->>   		break;
-> Earlier, the dwc3 which does not support wakeup just calls dwc3_core_exit().
-> With this patch we are modifying the behavior. Is that intentional? I expect
-> it to be something like
->
-> @@ -1761,8 +1782,10 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->                  break;
->          case DWC3_GCTL_PRTCAP_HOST:
->                  if (!PMSG_IS_AUTO(msg)) {
-> -                       dwc3_core_exit(dwc);
-> -                       break;
-> +                       if (!device_can_wakeup(dwc->dev)) {
-> +                               dwc3_core_exit(dwc);
-> +                               break;
-> +                       }
->                  }
->
->                  /* Let controller to suspend HSPHY before PHY driver suspends */
->
-> Thanks,
-> Pavan
-
-Hi Pavan,
-
-Thanks for pointing out that we are changing behavior. Will try to fix 
-it in next series.
+Hello,
 
 
-Thanks,
-
-Krishna,
-
+I wrote to you this morning because I have something to tell you, please
+let me know if you read my previous post today.
