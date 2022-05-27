@@ -2,74 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C6A536332
-	for <lists+linux-pm@lfdr.de>; Fri, 27 May 2022 15:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BEB75363A5
+	for <lists+linux-pm@lfdr.de>; Fri, 27 May 2022 15:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245567AbiE0NIz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 27 May 2022 09:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
+        id S1351776AbiE0N6y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 May 2022 09:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232082AbiE0NIy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 May 2022 09:08:54 -0400
-X-Greylist: delayed 7202 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 27 May 2022 06:08:53 PDT
-Received: from mail.composit.net (mail.composit.net [195.49.185.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA7FFED7BC;
-        Fri, 27 May 2022 06:08:53 -0700 (PDT)
-Received: from mail.composit.net (localhost.localdomain [127.0.0.1])
-        by mail.composit.net (Proxmox) with ESMTP id 6A7C13941C0;
-        Fri, 27 May 2022 14:04:50 +0300 (MSK)
-Received: from mail.composit.net (unknown [192.168.101.14])
-        by mail.composit.net (Proxmox) with SMTP id 315AE386970;
-        Fri, 27 May 2022 14:04:50 +0300 (MSK)
-Received: from [192.168.1.105] (Unknown [197.234.219.23])
-        by mail.composit.net with ESMTPSA
-        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256)
-        ; Fri, 27 May 2022 14:04:51 +0300
-Message-ID: <71DDB2B1-2A37-45B2-B68A-F7F20F810133@mail.composit.net>
-Content-Type: text/plain; charset="iso-8859-1"
+        with ESMTP id S240514AbiE0N6x (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 May 2022 09:58:53 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024E512AAF;
+        Fri, 27 May 2022 06:58:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1653659933; x=1685195933;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=GF8r/LqGxsImMjC+zviPxuhzQ2c3jmTSmCRe85gniNQ=;
+  b=C3Of6hnkQ56S7bWQ7cdTortNPOiWmyrHXfL6fOChe+s7IwPi5IHleIPB
+   HRciHQQ1yPTRoU1zVx+7vRKSdpZ9Wsz3K9MD9v/N/jO/ASPhGewFLgPOy
+   Ih9ef9P1KP9jQ7XYSvdOl3VReCXiF5/X1gokTSvTAxE+C45WKAGhBVBxI
+   c=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 27 May 2022 06:58:52 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2022 06:58:52 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 27 May 2022 06:58:51 -0700
+Received: from [10.50.53.253] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 27 May
+ 2022 06:58:49 -0700
+Message-ID: <35141cc2-8269-b4c6-8763-6f18c96ea12c@quicinc.com>
+Date:   Fri, 27 May 2022 19:28:46 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Greetings From Ukraine.  
-To:     Recipients <heiss@dnet.it>
-From:   "Kostiantyn Chichkov" <heiss@dnet.it>
-Date:   Fri, 27 May 2022 12:00:41 +0100
-Reply-To: kostiantync@online.ee
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_SBL,RCVD_IN_SORBS_WEB,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
-        *      bl.spamcop.net
-        *      [Blocked - see <https://www.spamcop.net/bl.shtml?195.49.185.119>]
-        *  1.5 RCVD_IN_SORBS_WEB RBL: SORBS: sender is an abusable web server
-        *      [197.234.219.23 listed in dnsbl.sorbs.net]
-        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
-        *      [197.234.219.23 listed in zen.spamhaus.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [195.49.185.119 listed in bl.score.senderscore.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v4 1/2] power_supply: Register cooling device outside of
+ probe
+From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+To:     Sebastian Reichel <sre@kernel.org>
+CC:     David Collins <quic_collinsd@quicinc.com>,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <gregkh@google.com>
+References: <1640162489-7847-1-git-send-email-quic_manafm@quicinc.com>
+ <029160a5-a7b0-790c-077a-985be5a1d560@quicinc.com>
+In-Reply-To: <029160a5-a7b0-790c-077a-985be5a1d560@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Good Morning,
+++
 
-We are Kostiantyn Chychkov and Maryna Chudnovska from Ukraine, we need your service, we have gone through your profile and we will like to work with you on an important service that needs urgent attention due to the ongoing war in our country. Kindly acknowledge this inquiry as soon as possible for a detailed discussion about the service.
-
-Thank you.
-
-Yours expectantly,
-
-Kostiantyn Chichkov & Ms. Maryna Chudnovska,
-From Ukraine.
-
-
+On 1/25/2022 1:04 AM, Manaf Meethalavalappu Pallikunhi wrote:
+> Hi Sebastian Reichel,
+>
+> Just reminder for review for these patches
+>
+> Thanks,
+>
+> Manaf
+>
+> On 12/22/2021 2:11 PM, Manaf Meethalavalappu Pallikunhi wrote:
+>> Registering the cooling device from the probe can result in the
+>> execution of get_property() function before it gets initialized.
+>>
+>> To avoid this, register the cooling device from a workqueue
+>> instead of registering in the probe.
+>>
+>> Signed-off-by: Manaf Meethalavalappu Pallikunhi 
+>> <quic_manafm@quicinc.com>
+>> ---
+>>   drivers/power/supply/power_supply_core.c | 10 ++++------
+>>   1 file changed, 4 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/power/supply/power_supply_core.c 
+>> b/drivers/power/supply/power_supply_core.c
+>> index 668369b..ef6f290 100644
+>> --- a/drivers/power/supply/power_supply_core.c
+>> +++ b/drivers/power/supply/power_supply_core.c
+>> @@ -132,6 +132,7 @@ void power_supply_changed(struct power_supply *psy)
+>>   }
+>>   EXPORT_SYMBOL_GPL(power_supply_changed);
+>>   +static int psy_register_cooler(struct power_supply *psy);
+>>   /*
+>>    * Notify that power supply was registered after parent finished 
+>> the probing.
+>>    *
+>> @@ -139,6 +140,8 @@ EXPORT_SYMBOL_GPL(power_supply_changed);
+>>    * calling power_supply_changed() directly from 
+>> power_supply_register()
+>>    * would lead to execution of get_property() function provided by 
+>> the driver
+>>    * too early - before the probe ends.
+>> + * Also, registering cooling device from the probe will execute the
+>> + * get_property() function. So register the cooling device after the 
+>> probe.
+>>    *
+>>    * Avoid that by waiting on parent's mutex.
+>>    */
+>> @@ -156,6 +159,7 @@ static void 
+>> power_supply_deferred_register_work(struct work_struct *work)
+>>       }
+>>         power_supply_changed(psy);
+>> +    psy_register_cooler(psy);
+>>         if (psy->dev.parent)
+>>           mutex_unlock(&psy->dev.parent->mutex);
+>> @@ -1238,10 +1242,6 @@ __power_supply_register(struct device *parent,
+>>       if (rc)
+>>           goto register_thermal_failed;
+>>   -    rc = psy_register_cooler(psy);
+>> -    if (rc)
+>> -        goto register_cooler_failed;
+>> -
+>>       rc = power_supply_create_triggers(psy);
+>>       if (rc)
+>>           goto create_triggers_failed;
+>> @@ -1271,8 +1271,6 @@ __power_supply_register(struct device *parent,
+>>   add_hwmon_sysfs_failed:
+>>       power_supply_remove_triggers(psy);
+>>   create_triggers_failed:
+>> -    psy_unregister_cooler(psy);
+>> -register_cooler_failed:
+>>       psy_unregister_thermal(psy);
+>>   register_thermal_failed:
+>>       device_del(dev);
+>>
