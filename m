@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA545357B2
-	for <lists+linux-pm@lfdr.de>; Fri, 27 May 2022 04:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2F9F5357C1
+	for <lists+linux-pm@lfdr.de>; Fri, 27 May 2022 04:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232417AbiE0CfK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 26 May 2022 22:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34014 "EHLO
+        id S235935AbiE0CfL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 26 May 2022 22:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiE0CfJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 May 2022 22:35:09 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023F3E7300;
-        Thu, 26 May 2022 19:35:09 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id n22so885310eda.5;
-        Thu, 26 May 2022 19:35:08 -0700 (PDT)
+        with ESMTP id S235921AbiE0CfL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 26 May 2022 22:35:11 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DA9E64C1;
+        Thu, 26 May 2022 19:35:10 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id h11so3830430eda.8;
+        Thu, 26 May 2022 19:35:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Dk2CW0KMrU8cUUrOM6+5oNfiuXKphpsTeJl2rd9O1jE=;
-        b=EVxd+bqaqEwLNWSfop+9ovXmDXm+fdgk4OAoH1RJ0K+E1cRdHmbnMJmvgp1yqi68aG
-         UTSaoW0u9QBE2P8aAWrdvH3lugg8L8XOt7niraQSNx5EQaZ5IYV6tXNKnS8DepCuxqM6
-         CSKJ8tfsBqlAdkybniXZOV9skzg1MfarWA29LFd3ccTYdZkMFHpis9Im5kEcqnsr4+Yo
-         Ht+hoSi7H54dzr/EXFN3DAcu60RMMbj5ujXc4odDHm0jfzRONZA8f4qxYZER5Em4sKi1
-         yM7caSaljDZ/M2bbjch80usULpacclQZ94KHqmjZx1Mr0BaR32uGWMv+YBQpJA9+dWP3
-         wUXA==
+        bh=+zy0ZMngfTOngFEr2IYaeKfKrlSi1ZcJUZpm4PtyoKk=;
+        b=CFTp3sTkY5CI8c8bv7T4i4oB//dxfwZP4PtkA6hHzdT4UKYA8tNK7wAfjOBE6a42vf
+         5x4Nhboo4ywWbGmUC0MnTHWWyRWFdpUCcoaZBU/91pVIXK0iPoZri4fj4PhW45ZOSCpR
+         dIGcD0f/dVXwUlviSMq+MzFU0Y79Y8fLKWxIUTTKo6IHV85Vgha/2wo6hF1Y+310LCZ2
+         x4Cyk2W89y01zeST7O5hZE/wcHkaqcgnVQ2JEfFFAS3NOCbBFPVcr9oeeYPNDUIkeIt1
+         OHp+yn7GDG61dNUnuHmUO+kmuUxpfL4YfE8FkJ4xp/Hzc791fONPNqksMZWzJv8zChlB
+         B4Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Dk2CW0KMrU8cUUrOM6+5oNfiuXKphpsTeJl2rd9O1jE=;
-        b=UUbMY1ea+JlFzI/WItSIyQD8437mble6DlqT2iGweudVx9YCy5UlVU1ycStxkJh/Bw
-         A6/qvCOoIGm1dp/aBpIimJ1WpIPymUbMcjqms3f0q1aeFQdiFrRXnYqfAGBE9UwkHHVV
-         mG4yDYkL0zL6GEAlBgWUBgtIOvCkNaeQjRSAIfaacNTtoxZv3YAODFKiuMJDPUgvT0N4
-         74wPRC/MUwEu5KFdBL7c5E6SSe6xIVJ4Mk3e46hO8r/zl7X29T7itq5ukRnvx96m7XKz
-         AU6Bt8sDS9fjB/ywaJGCk9GlxQOYwu8QQnNxpRGavwWDl9SzSTqMJJdqlNBzOittnkXl
-         mEHA==
-X-Gm-Message-State: AOAM531ZZ7UU6YfZ60JeQP/gS3vU07imDci+avEMs2RtvaxKsuzb8AlZ
-        YzLIYXDo1Yrcup/chGV276c=
-X-Google-Smtp-Source: ABdhPJww5phKO6ZTWttlGFWlqMHY/0LEKcufOVU/YqIt7E5NxZE1CzlLfzjMqhAT3ntNyeKVzjpWCA==
-X-Received: by 2002:aa7:d2cb:0:b0:42b:c9f8:a236 with SMTP id k11-20020aa7d2cb000000b0042bc9f8a236mr11194395edr.347.1653618907541;
-        Thu, 26 May 2022 19:35:07 -0700 (PDT)
+        bh=+zy0ZMngfTOngFEr2IYaeKfKrlSi1ZcJUZpm4PtyoKk=;
+        b=IaWOFYWf1YM08hX6gXuDXios51R2ndHRivWsrUqyOMd/hrhLrEVreV+9/D0UdcPnr9
+         V0cUU6JJXiAO8pQs7JifLdviiHQ5xfdZyscd9WAAcR40DoB5IYQGDaqIIeLAHNOJSxYh
+         K4q842qbGiJM9R6DTmQFXQ30TW/EjU4JiEF18y4dHgqZgTqDIbVnPySwdrc769ANqID5
+         gp81eFyZj6Nq7HKuOQKlb6RBt8EAybZsodyBtGPtspyRcwCWcv+dAtq+LrD613Oan+Z6
+         ErNNqO1Q9gG6gurTyWI3EejkWkatemL1qKYm8iE5GmkeGWrqRg+VzkdgouyBPQWhKhSq
+         8DCw==
+X-Gm-Message-State: AOAM531QJbVCok+3trYOs0k0AZH23Ud8pS9b8VtPoSa9XddjA6ngrne1
+        bMHxnBSZHep59l3ag3e0e6A=
+X-Google-Smtp-Source: ABdhPJwFjNXrX7OMZt7PLSL2J6omXHehakVkWuDP2UASzot24lrRxYlHgRbZuREjkzMOZYQMbZjLuw==
+X-Received: by 2002:a05:6402:2682:b0:42b:5ace:b0e5 with SMTP id w2-20020a056402268200b0042b5aceb0e5mr26557462edd.358.1653618908819;
+        Thu, 26 May 2022 19:35:08 -0700 (PDT)
 Received: from xws.localdomain ([37.120.217.83])
-        by smtp.gmail.com with ESMTPSA id qn12-20020a170907210c00b006fe89cafc42sm1025167ejb.172.2022.05.26.19.35.06
+        by smtp.gmail.com with ESMTPSA id qn12-20020a170907210c00b006fe89cafc42sm1025167ejb.172.2022.05.26.19.35.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 May 2022 19:35:07 -0700 (PDT)
+        Thu, 26 May 2022 19:35:08 -0700 (PDT)
 From:   Maximilian Luz <luzmaximilian@gmail.com>
 To:     Hans de Goede <hdegoede@redhat.com>,
         Jiri Kosina <jikos@kernel.org>,
@@ -57,9 +57,9 @@ Cc:     Mark Gross <markgross@kernel.org>,
         platform-driver-x86@vger.kernel.org, linux-input@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-doc@vger.kernel.org,
         Maximilian Luz <luzmaximilian@gmail.com>
-Subject: [PATCH v2 05/12] power/supply: surface_charger: Use client device wrappers for notifier registration
-Date:   Fri, 27 May 2022 04:34:40 +0200
-Message-Id: <20220527023447.2460025-6-luzmaximilian@gmail.com>
+Subject: [PATCH v2 06/12] power/supply: surface_battery: Use client device wrappers for notifier registration
+Date:   Fri, 27 May 2022 04:34:41 +0200
+Message-Id: <20220527023447.2460025-7-luzmaximilian@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220527023447.2460025-1-luzmaximilian@gmail.com>
 References: <20220527023447.2460025-1-luzmaximilian@gmail.com>
@@ -85,31 +85,31 @@ Changes in v2:
   - none
 
 ---
- drivers/power/supply/surface_charger.c | 4 ++--
+ drivers/power/supply/surface_battery.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/power/supply/surface_charger.c b/drivers/power/supply/surface_charger.c
-index a060c36c7766..59182d55742d 100644
---- a/drivers/power/supply/surface_charger.c
-+++ b/drivers/power/supply/surface_charger.c
-@@ -216,7 +216,7 @@ static int spwr_ac_register(struct spwr_ac_device *ac)
- 	if (IS_ERR(ac->psy))
- 		return PTR_ERR(ac->psy);
+diff --git a/drivers/power/supply/surface_battery.c b/drivers/power/supply/surface_battery.c
+index 5ec2e6bb2465..540707882bb0 100644
+--- a/drivers/power/supply/surface_battery.c
++++ b/drivers/power/supply/surface_battery.c
+@@ -802,7 +802,7 @@ static int spwr_battery_register(struct spwr_battery_device *bat)
+ 	if (IS_ERR(bat->psy))
+ 		return PTR_ERR(bat->psy);
  
--	return ssam_notifier_register(ac->sdev->ctrl, &ac->notif);
-+	return ssam_device_notifier_register(ac->sdev, &ac->notif);
+-	return ssam_notifier_register(bat->sdev->ctrl, &bat->notif);
++	return ssam_device_notifier_register(bat->sdev, &bat->notif);
  }
  
  
-@@ -251,7 +251,7 @@ static void surface_ac_remove(struct ssam_device *sdev)
+@@ -837,7 +837,7 @@ static void surface_battery_remove(struct ssam_device *sdev)
  {
- 	struct spwr_ac_device *ac = ssam_device_get_drvdata(sdev);
+ 	struct spwr_battery_device *bat = ssam_device_get_drvdata(sdev);
  
--	ssam_notifier_unregister(sdev->ctrl, &ac->notif);
-+	ssam_device_notifier_unregister(sdev, &ac->notif);
+-	ssam_notifier_unregister(sdev->ctrl, &bat->notif);
++	ssam_device_notifier_unregister(sdev, &bat->notif);
+ 	cancel_delayed_work_sync(&bat->update_work);
  }
  
- static const struct spwr_psy_properties spwr_psy_props_adp1 = {
 -- 
 2.36.1
 
