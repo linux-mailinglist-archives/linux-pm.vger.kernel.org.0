@@ -2,102 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278E8535E51
-	for <lists+linux-pm@lfdr.de>; Fri, 27 May 2022 12:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF88535ED7
+	for <lists+linux-pm@lfdr.de>; Fri, 27 May 2022 13:00:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350789AbiE0Kaz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 27 May 2022 06:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
+        id S1351136AbiE0LAx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 27 May 2022 07:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349416AbiE0Kax (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 May 2022 06:30:53 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDCEC12AB01
-        for <linux-pm@vger.kernel.org>; Fri, 27 May 2022 03:30:52 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id i187so7182852ybg.6
-        for <linux-pm@vger.kernel.org>; Fri, 27 May 2022 03:30:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=gMRL2ChFV1c1fJH6+lzMvi+AnpLvf8Jv1voAqTadcaU=;
-        b=A4niVho5VDja4oggBTHYDBpSXs/UU9FUrj/W5Ex5x0gO33pX55qJjyD94+CyTXpNjt
-         ZIvKeAm2NQdlpLpoMptA733lJbEme/LpV+SxhZBwTTs9K7lKmO9rnWqK2+1QFTVqthgi
-         BaTkxWSGAYlT8Ufj3NUnO4qsXbP/bDTaLvW8BR1CSqle8MLiNWlHZjNsXsTCvaBQ597u
-         XvSkVQwAj2DPYSX3ElShzIGf6zXFevAHffZBa6ACHcK1aeKAZxSvmACdEHNa/pJ2mer/
-         mL1jNyxi1X0ngTFM1WYOke0KkyPHJSKBYSJoNOmCeZEzCPYEwrrUJ842shz8PB/K/Uh9
-         BTvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=gMRL2ChFV1c1fJH6+lzMvi+AnpLvf8Jv1voAqTadcaU=;
-        b=Oz66r4PVK7AalMOOZgTCuVOFyxZ6fCkxLylcS3XekREAH0an7kwulst2NiZjMLseOL
-         VmPuKLcXmekRlvzzpjtgAZ+4ks7GKGID7CpsEIIugc9I5Nee6LiJh7XvLzvmgGj/RPln
-         0bwPao9BZJO3/kX+K1VqswAqmVigAwMi37YPLzKUDh4WLwgUDWfQ9LyD0Dz6kuBl7XXi
-         iakOXGPxe7fCeAUbsDfDYcbRUdWtIoKjk6FT/0Jwh7gmsriCUNK0lA0J4xOJV0ZRDt7R
-         Lvkg8sbGnDPp9NGYwZnI7ciqHRK+AhgtkYdtPeWevJE2zqxsIP/b0T6W8FoIwt51V/FO
-         /Wkw==
-X-Gm-Message-State: AOAM533yNW9cde8t74ad/G2HPAnBMx2c27XqxIYeWsg3WmVegd/inV58
-        Xz0dSQ43+YkUN+LfvufK7ix/rLh4OHitMLTFvvc=
-X-Google-Smtp-Source: ABdhPJyK0an4l1OR+LbV9VWFw2gsmfR9uPk5PxYqWh96KFOwvug1R/FSn3N4sYn8pyy6DQvnnUOzA8ukDxGxSxwuj1I=
-X-Received: by 2002:a25:6645:0:b0:659:10b9:2281 with SMTP id
- z5-20020a256645000000b0065910b92281mr4180551ybm.249.1653647451603; Fri, 27
- May 2022 03:30:51 -0700 (PDT)
+        with ESMTP id S1350414AbiE0LAu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 27 May 2022 07:00:50 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A6612E312;
+        Fri, 27 May 2022 04:00:45 -0700 (PDT)
+X-UUID: e89884477f564b6abae5384d5c00b662-20220527
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:09582b69-8c3b-4dce-9e74-524b0c1fc3b5,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:100
+X-CID-INFO: VERSION:1.1.5,REQID:09582b69-8c3b-4dce-9e74-524b0c1fc3b5,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:100
+X-CID-META: VersionHash:2a19b09,CLOUDID:c8747fb8-3c45-407b-8f66-25095432a27a,C
+        OID:238c0bece6fb,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:0,BEC:nil
+X-UUID: e89884477f564b6abae5384d5c00b662-20220527
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <johnson.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 751117326; Fri, 27 May 2022 19:00:39 +0800
+Received: from mtkmbs07n1.mediatek.inc (172.21.101.16) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 27 May 2022 19:00:38 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 27 May 2022 19:00:38 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 27 May 2022 19:00:38 +0800
+From:   Johnson Wang <johnson.wang@mediatek.com>
+To:     <cw00.choi@samsung.com>, <krzk+dt@kernel.org>,
+        <robh+dt@kernel.org>, <kyungmin.park@samsung.com>
+CC:     <khilman@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <jia-wei.chang@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>
+Subject: [PATCH v6 0/2] Introduce MediaTek CCI devfreq driver
+Date:   Fri, 27 May 2022 19:00:34 +0800
+Message-ID: <20220527110036.8810-1-johnson.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Received: by 2002:a05:6902:114d:0:0:0:0 with HTTP; Fri, 27 May 2022 03:30:51
- -0700 (PDT)
-Reply-To: donaldcurtis3000@gmail.com
-From:   Donald Curtis <91474711amele@gmail.com>
-Date:   Fri, 27 May 2022 11:30:51 +0100
-Message-ID: <CAC=gNW2QuJTu3yu1WMD4VKLiRaJUrgCUQrcMeso_iORE9hqdiw@mail.gmail.com>
-Subject: Donald
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,FROM_STARTS_WITH_NUMS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:b31 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5019]
-        *  0.7 FROM_STARTS_WITH_NUMS From: starts with several numbers
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [91474711amele[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [donaldcurtis3000[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
-I called to know if you received my previous email, reply to me asap.
-Donald
+The Cache Coherent Interconnect (CCI) is the management of cache
+coherency by hardware. CCI DEVFREQ is DVFS driver for power saving by
+scaling clock frequency and supply voltage of CCI. CCI uses the same
+input clock source and power rail as LITTLE CPUs on Mediatek SoCs.
 
-Hallo,
-Ich habe angerufen, um zu wissen, ob Sie meine vorherige E-Mail
-erhalten haben. Antworten Sie mir so schnell wie m=C3=B6glich.
-Donald
+This series depends on:
+Chanwoo's repo: kernel/git/chanwoo/linux.git
+branch: devfreq-testing
+[1]: PM / devfreq: Export devfreq_get_freq_range symbol within devfreq
+[2]: PM / devfreq: Add cpu based scaling support to passive governor
+[3]: PM / devfreq: passive: Reduce duplicate code when passive_devfreq case
+[4]: PM / devfreq: passive: Update frequency when start governor
+
+Changes in v6:
+- Remove unnecessary "goto" statement.
+
+Changes in v5:
+- Modify some binding description.
+- Remove pre_voltage member.
+- Not to enable/disable intermediate clock.
+- Not to "put" resources that using devm_ variants.
+
+Resend v4:
+- CC interconnect maintainer.
+- Change sign-off sequence in commit message.
+
+Changes in v4:
+- Add a maintainer in the binding document.
+- Modify clock description.
+- Add binding document into MAINTAINERS.
+- Replace format specifier %d with %ld.
+
+Changes in v3:
+- Move binding document to 'interconnect' and rename it.
+- Add COMPILE_TEST dependence symbol.
+- Remove need_voltage_tracking variable.
+- Move mtk_ccifreq_voltage_tracking() code into mtk_ccifreq_set_voltage().
+- Add an interation limit in the while() loop.
+- Replace 'cci_dev' with 'dev'
+- Replace old_* with pre_*
+- Remove of_match_ptr()
+- Use module_platform_driver()
+
+Changes in v2:
+- Take MT8183 as example in binding document.
+- Use dev_err() instead of pr_err().
+- Use 'goto' statement to handle error case.
+- Clean up driver code.
+
+Johnson Wang (2):
+  dt-bindings: interconnect: Add MediaTek CCI dt-bindings
+  PM / devfreq: mediatek: Introduce MediaTek CCI devfreq driver
+
+ .../bindings/interconnect/mediatek,cci.yaml   | 140 ++++++
+ MAINTAINERS                                   |   1 +
+ drivers/devfreq/Kconfig                       |  10 +
+ drivers/devfreq/Makefile                      |   1 +
+ drivers/devfreq/mtk-cci-devfreq.c             | 474 ++++++++++++++++++
+ 5 files changed, 626 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+ create mode 100644 drivers/devfreq/mtk-cci-devfreq.c
+
+-- 
+2.18.0
+
