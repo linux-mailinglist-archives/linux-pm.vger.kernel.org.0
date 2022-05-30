@@ -2,67 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B013953876D
+	by mail.lfdr.de (Postfix) with ESMTP id E5DEA53876E
 	for <lists+linux-pm@lfdr.de>; Mon, 30 May 2022 20:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242850AbiE3Sin (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 May 2022 14:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45010 "EHLO
+        id S242860AbiE3Siq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 May 2022 14:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237048AbiE3Sim (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 May 2022 14:38:42 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC288D699
-        for <linux-pm@vger.kernel.org>; Mon, 30 May 2022 11:38:40 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id y24so6867557wmq.5
-        for <linux-pm@vger.kernel.org>; Mon, 30 May 2022 11:38:40 -0700 (PDT)
+        with ESMTP id S242209AbiE3Sio (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 May 2022 14:38:44 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D558E18E
+        for <linux-pm@vger.kernel.org>; Mon, 30 May 2022 11:38:43 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id r129so1592444wmr.3
+        for <linux-pm@vger.kernel.org>; Mon, 30 May 2022 11:38:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gAZcIMVkbwQAZDaJSRG1uLvlbaEmw/pRqP3mytMc9Sk=;
-        b=SSgqIfRN0e3iUy0WuvEyWAskLlKpZcfPbBZyeZwWyTWSZlWlnExNurqhWYS8sLxgJs
-         7AnGX6iYAE/6GhEXOEm2FfMW6r7e/yEPkJ+PrRGgT9Uj/cHp0YFa3cURpQV5JM8vr9jK
-         BYkmPCoItCfRIsVO8xEq3T2KiHK34zxYxAOWzToJ25n563MLV64bq+nTA81GC7P+uShv
-         OiLSM7gSyh/46FH92dhVAQW2MwUvMn0PthAI145pTEhIGJsGV0ginynxkdvOSaX0qeL7
-         h6It4lXQuM/Tv4KXceslm6JN7BV1I2WEER5Ume6m6qw44SStThVESKEORJHCA4mSG3qy
-         lYbg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=WJIpNSj7cFGZKfz96vdTia4ueHbBhL0XrZ+0w4C6IYE=;
+        b=538U10qwEaxm5rxxQsk5NI8sE5wUkOtH4BNKM+zfVW0GNB3vHD62f5U//NDRHmkV2B
+         qccG+9m1TxPPc1csSJClj4js1U/gKXBMW0oLYqcBN4XDfCzoIU+RaHH+M0czK+u/H+Wc
+         sKkwZqIHJk+KDm7Z1+T36ysTnoDVBBwLEN1RoO2WKRVjUHvKnNVfiIsjWYBMp+9GrSmo
+         M1A7vAoy2itFKot4G3HbNejLNaXxeUHQMsQoJ42415V4yTjXKz/RiOO660+SD4QPfkOR
+         aIybp4d8hZ7xnZy1f9IYmoeBpAPOCvyuyvO9vovewnScKqmFJTIZS9uESXjhRJRldFHg
+         uXQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gAZcIMVkbwQAZDaJSRG1uLvlbaEmw/pRqP3mytMc9Sk=;
-        b=elUfGStkuYEpo1RvWmRcr3m504kDkVrn+6yzxJ24NbNOAboU+0spM28FrPC3pBHHqJ
-         VdPDdqys5rKnSOp57IAgkYwe/NUzkHLiKiOB85iUn4i2RUOXQj5W0LW0zOMomId0Ni62
-         s5YHfg7dv0p188sgSbnImOHUC5Rsp9/rKso4vWZRaPiVwfkCvibANaHPgjHAtYTD5W4n
-         PjeHlVtlh3IaDYYoQCLe22oLHpqP9uAxZIP4F7vsDzDA0v3nhOCXAP3jiEnjRCyyVo1l
-         L9QL1qub/dND4YPJB8QP2B2nfY4GJRWGrJcBMulwz4PUw9A1P4QpUIVkPyJZ9F9YFETz
-         aIbA==
-X-Gm-Message-State: AOAM532q8mqgNhK0Fsu9yIy9yoGMxLrce2tY1dQhqGlMorNUUqU7ls5x
-        xQxYqJVkXHmVdxH2uDWi07reRQ==
-X-Google-Smtp-Source: ABdhPJynr97IYtN0ZgoGAiRMpzW0FEJgGKAE0GAOj8GidWDJahFEiTIA+vDnJ9z6b1hv/Uv3l1DE/A==
-X-Received: by 2002:a05:600c:3799:b0:397:7c8c:bbd4 with SMTP id o25-20020a05600c379900b003977c8cbbd4mr19488928wmr.161.1653935919394;
-        Mon, 30 May 2022 11:38:39 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=WJIpNSj7cFGZKfz96vdTia4ueHbBhL0XrZ+0w4C6IYE=;
+        b=e1CJ5meoD1vIDn9znEQSZQRja8pdj+rkJBU9jGGlVUu8B8pB4bvSgUu237GJtImFeg
+         DdfPAEkfA8anZUVo8cEnsDyO80NxmV1jff9TW21x8+9EZ69zaw2KlTqh88WISY3EBJPp
+         5suyxj1IMwj6GbxDj+LrPBS+VMaH1PO5traCT13FTsXWOKDwdd7Z8h3fB+inWBOpSCbe
+         oCEeDwsICuK+SJkWU2h45H5YCFQUVEn7l0oebc1TSlOOyejE93CuoFeb78vlX1KbivLR
+         XWIzkH8qlwXUkgRw+1Yng7xqmjrvHLtLpOftOcmkMiVQrgMGAUNBFhWVwW7iJlxQBt6L
+         3N5g==
+X-Gm-Message-State: AOAM531D8kzDVodyJguk6kpt/uEdrD5Fg1mPC/MVDADCSMuWS4B/O9w0
+        GMI3WblbnL5ewmzwijRiJCYKRA==
+X-Google-Smtp-Source: ABdhPJzFPNMdqmxWHsp0ZjP89yZHiEJv77pVuSJhjJ50Elj7hVUbK5nlDWSL0Bz9w+pTjOdDshlSxw==
+X-Received: by 2002:a05:600c:4ca1:b0:397:8b29:255a with SMTP id g33-20020a05600c4ca100b003978b29255amr15885946wmp.139.1653935921545;
+        Mon, 30 May 2022 11:38:41 -0700 (PDT)
 Received: from localhost.localdomain ([88.160.162.107])
-        by smtp.gmail.com with ESMTPSA id e9-20020adfe389000000b0020c5253d8fcsm11459088wrm.72.2022.05.30.11.38.37
+        by smtp.gmail.com with ESMTPSA id e9-20020adfe389000000b0020c5253d8fcsm11459088wrm.72.2022.05.30.11.38.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 11:38:38 -0700 (PDT)
+        Mon, 30 May 2022 11:38:40 -0700 (PDT)
 From:   Fabien Parent <fparent@baylibre.com>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Fabien Parent <fparent@baylibre.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+Cc:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH 1/3] dt-bindings: thermal: mediatek: add binding documentation for MT8365 SoC
-Date:   Mon, 30 May 2022 20:38:31 +0200
-Message-Id: <20220530183833.863040-1-fparent@baylibre.com>
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/3] thermal: mediatek: control buffer enablement tweaks
+Date:   Mon, 30 May 2022 20:38:32 +0200
+Message-Id: <20220530183833.863040-2-fparent@baylibre.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220530183833.863040-1-fparent@baylibre.com>
+References: <20220530183833.863040-1-fparent@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,25 +74,77 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the binding documentation for the thermal support on MT8365 SoC.
+From: Markus Schneider-Pargmann <msp@baylibre.com>
 
+Add logic in order to be able to turn on the control buffer on MT8365.
+This change now allows to have control buffer support for MTK_THERMAL_V1,
+and it allows to define the register offset, and mask used to enable it.
+
+Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 Signed-off-by: Fabien Parent <fparent@baylibre.com>
 ---
- Documentation/devicetree/bindings/thermal/mediatek-thermal.txt | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/thermal/mtk_thermal.c | 23 +++++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt b/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
-index 5c7e7bdd029a..ba4ebffeade4 100644
---- a/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
-+++ b/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
-@@ -14,6 +14,7 @@ Required properties:
-   - "mediatek,mt2712-thermal" : For MT2712 family of SoCs
-   - "mediatek,mt7622-thermal" : For MT7622 SoC
-   - "mediatek,mt8183-thermal" : For MT8183 family of SoCs
-+  - "mediatek,mt8365-thermal" : For MT8365 family of SoCs
-   - "mediatek,mt8516-thermal", "mediatek,mt2701-thermal : For MT8516 family of SoCs
- - reg: Address range of the thermal controller
- - interrupts: IRQ for the thermal controller
+diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
+index ede94eadddda..b09738ef1093 100644
+--- a/drivers/thermal/mtk_thermal.c
++++ b/drivers/thermal/mtk_thermal.c
+@@ -271,6 +271,9 @@ struct mtk_thermal_data {
+ 	bool need_switch_bank;
+ 	struct thermal_bank_cfg bank_data[MAX_NUM_ZONES];
+ 	enum mtk_thermal_version version;
++	u32 apmixed_buffer_ctl_reg;
++	u32 apmixed_buffer_ctl_mask;
++	u32 apmixed_buffer_ctl_set;
+ };
+ 
+ struct mtk_thermal {
+@@ -514,6 +517,9 @@ static const struct mtk_thermal_data mt7622_thermal_data = {
+ 	.adcpnp = mt7622_adcpnp,
+ 	.sensor_mux_values = mt7622_mux_values,
+ 	.version = MTK_THERMAL_V2,
++	.apmixed_buffer_ctl_reg = APMIXED_SYS_TS_CON1,
++	.apmixed_buffer_ctl_mask = ~0x37,
++	.apmixed_buffer_ctl_set = 0x1,
+ };
+ 
+ /*
+@@ -963,14 +969,18 @@ static const struct of_device_id mtk_thermal_of_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, mtk_thermal_of_match);
+ 
+-static void mtk_thermal_turn_on_buffer(void __iomem *apmixed_base)
++static void mtk_thermal_turn_on_buffer(struct mtk_thermal *mt,
++				       void __iomem *apmixed_base)
+ {
+ 	int tmp;
+ 
+-	tmp = readl(apmixed_base + APMIXED_SYS_TS_CON1);
+-	tmp &= ~(0x37);
+-	tmp |= 0x1;
+-	writel(tmp, apmixed_base + APMIXED_SYS_TS_CON1);
++	if (!mt->conf->apmixed_buffer_ctl_reg)
++		return;
++
++	tmp = readl(apmixed_base + mt->conf->apmixed_buffer_ctl_reg);
++	tmp &= mt->conf->apmixed_buffer_ctl_mask;
++	tmp |= mt->conf->apmixed_buffer_ctl_set;
++	writel(tmp, apmixed_base + mt->conf->apmixed_buffer_ctl_reg);
+ 	udelay(200);
+ }
+ 
+@@ -1070,8 +1080,9 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+ 		goto err_disable_clk_auxadc;
+ 	}
+ 
++	mtk_thermal_turn_on_buffer(mt, apmixed_base);
++
+ 	if (mt->conf->version == MTK_THERMAL_V2) {
+-		mtk_thermal_turn_on_buffer(apmixed_base);
+ 		mtk_thermal_release_periodic_ts(mt, auxadc_base);
+ 	}
+ 
 -- 
 2.36.1
 
