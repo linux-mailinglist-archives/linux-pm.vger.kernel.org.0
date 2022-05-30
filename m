@@ -2,45 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9F653850A
-	for <lists+linux-pm@lfdr.de>; Mon, 30 May 2022 17:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED4B25386D7
+	for <lists+linux-pm@lfdr.de>; Mon, 30 May 2022 19:37:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237168AbiE3PgO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 May 2022 11:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59514 "EHLO
+        id S238966AbiE3RhZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 May 2022 13:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239685AbiE3PcF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 May 2022 11:32:05 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 80AE1139C9D;
-        Mon, 30 May 2022 07:34:50 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A00B1FB;
-        Mon, 30 May 2022 07:34:39 -0700 (PDT)
-Received: from bogus (unknown [10.57.9.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 322C73F766;
-        Mon, 30 May 2022 07:34:36 -0700 (PDT)
-Date:   Mon, 30 May 2022 15:33:49 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/2] arm64: cpuidle: remove generic cpuidle support
-Message-ID: <20220530143349.rvbx472q7vfwuqtd@bogus>
-References: <20220529181329.2345722-1-michael@walle.cc>
- <20220529181329.2345722-3-michael@walle.cc>
+        with ESMTP id S237263AbiE3RhW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 May 2022 13:37:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90B7B50B34
+        for <linux-pm@vger.kernel.org>; Mon, 30 May 2022 10:37:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1653932240;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ki6v5xLxLFY/6GL0UoRKrfzO5KtuWLGLHBkS7AIWb/o=;
+        b=igaVXLakst+HWyYJNeqed0vTuJ+Xxu9xZBJPHBujBuSnZz7BVznJvqmFbTKyMslTt0tosE
+        KjhZtilm6jhLZqOIWJiX2OdaK8iEjDnvJW/iHEjkgw5N8iuSGeER0JxVW0bEcqyEEpv6HW
+        UhAGyb12YljSo7VWa3q8d+zdm1yD7fA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-412-r8zveUoeMXm2RS3aS3jANA-1; Mon, 30 May 2022 13:37:16 -0400
+X-MC-Unique: r8zveUoeMXm2RS3aS3jANA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1134D185A794;
+        Mon, 30 May 2022 17:37:16 +0000 (UTC)
+Received: from fuller.cnet (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id CD72C140EBD5;
+        Mon, 30 May 2022 17:37:15 +0000 (UTC)
+Received: by fuller.cnet (Postfix, from userid 1000)
+        id C3AAE4169537; Mon, 30 May 2022 12:17:49 -0300 (-03)
+Date:   Mon, 30 May 2022 12:17:49 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, rostedt@goodmis.org,
+        mingo@redhat.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joao.m.martins@oracle.com
+Subject: Re: [PATCH v4] cpuidle: haltpoll: Add trace points for
+ guest_halt_poll_ns grow/shrink
+Message-ID: <YpTgHeSJA4Ha3Gs4@fuller.cnet>
+References: <20220527005345.189906-1-eiichi.tsukata@nutanix.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220529181329.2345722-3-michael@walle.cc>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220527005345.189906-1-eiichi.tsukata@nutanix.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,16 +63,88 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, May 29, 2022 at 08:13:29PM +0200, Michael Walle wrote:
-> The arm64 support of the generic ARM cpuidle driver was removed. This
-> let us remove all support code for it.
->
+On Fri, May 27, 2022 at 12:53:45AM +0000, Eiichi Tsukata wrote:
+> Add trace points as are implemented in KVM host halt polling.
+> This helps tune guest halt polling params.
+> 
+> Signed-off-by: Eiichi Tsukata <eiichi.tsukata@nutanix.com>
+> ---
+>  drivers/cpuidle/governors/haltpoll.c |  3 +++
+>  include/trace/events/power.h         | 29 ++++++++++++++++++++++++++++
+>  2 files changed, 32 insertions(+)
+> 
+> diff --git a/drivers/cpuidle/governors/haltpoll.c b/drivers/cpuidle/governors/haltpoll.c
+> index cb2a96eafc02..1dff3a52917d 100644
+> --- a/drivers/cpuidle/governors/haltpoll.c
+> +++ b/drivers/cpuidle/governors/haltpoll.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/sched.h>
+>  #include <linux/module.h>
+>  #include <linux/kvm_para.h>
+> +#include <trace/events/power.h>
+>  
+>  static unsigned int guest_halt_poll_ns __read_mostly = 200000;
+>  module_param(guest_halt_poll_ns, uint, 0644);
+> @@ -90,6 +91,7 @@ static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
+>  		if (val > guest_halt_poll_ns)
+>  			val = guest_halt_poll_ns;
+>  
+> +		trace_guest_halt_poll_ns_grow(val, dev->poll_limit_ns);
+>  		dev->poll_limit_ns = val;
+>  	} else if (block_ns > guest_halt_poll_ns &&
+>  		   guest_halt_poll_allow_shrink) {
+> @@ -100,6 +102,7 @@ static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
+>  			val = 0;
+>  		else
+>  			val /= shrink;
+> +		trace_guest_halt_poll_ns_shrink(val, dev->poll_limit_ns);
+>  		dev->poll_limit_ns = val;
+>  	}
+>  }
+> diff --git a/include/trace/events/power.h b/include/trace/events/power.h
+> index af5018aa9517..c708521e4ed5 100644
+> --- a/include/trace/events/power.h
+> +++ b/include/trace/events/power.h
+> @@ -500,6 +500,35 @@ DEFINE_EVENT(dev_pm_qos_request, dev_pm_qos_remove_request,
+>  
+>  	TP_ARGS(name, type, new_value)
+>  );
+> +
+> +TRACE_EVENT(guest_halt_poll_ns,
+> +
+> +	TP_PROTO(bool grow, unsigned int new, unsigned int old),
+> +
+> +	TP_ARGS(grow, new, old),
+> +
+> +	TP_STRUCT__entry(
+> +		__field(bool, grow)
+> +		__field(unsigned int, new)
+> +		__field(unsigned int, old)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__entry->grow   = grow;
+> +		__entry->new    = new;
+> +		__entry->old    = old;
+> +	),
+> +
+> +	TP_printk("halt_poll_ns %u (%s %u)",
+> +		__entry->new,
+> +		__entry->grow ? "grow" : "shrink",
+> +		__entry->old)
+> +);
+> +
+> +#define trace_guest_halt_poll_ns_grow(new, old) \
+> +	trace_guest_halt_poll_ns(true, new, old)
+> +#define trace_guest_halt_poll_ns_shrink(new, old) \
+> +	trace_guest_halt_poll_ns(false, new, old)
+>  #endif /* _TRACE_POWER_H */
+>  
+>  /* This part must be outside protection */
+> -- 
+> 2.36.1
+> 
+> 
 
-Thanks for doing this, we initially had plans to do this one release after
-PSCI idle driver got merged but clearly slipped through the cracks.
+Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
 
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-
--- 
-Regards,
-Sudeep
