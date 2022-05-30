@@ -2,107 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5948537714
-	for <lists+linux-pm@lfdr.de>; Mon, 30 May 2022 10:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92C4A537833
+	for <lists+linux-pm@lfdr.de>; Mon, 30 May 2022 12:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234110AbiE3ItQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 May 2022 04:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
+        id S233613AbiE3JHn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 May 2022 05:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231640AbiE3ItP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 May 2022 04:49:15 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9E672219;
-        Mon, 30 May 2022 01:49:13 -0700 (PDT)
-Date:   Mon, 30 May 2022 10:49:08 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1653900550;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mb32qARmKX/oF5s+kHIv0X9LwS5Vfd7eo5GK1onxbS4=;
-        b=oKod/4yDEBaJi9iSKiGnIgGVyCp8e+d2eVwVdzte+6E86zRPZJb6uEjvY9/CW55BhnnY43
-        ebGZ+E6AvYiBDeczcq+JHuFv1HT/m6EUhkoQLyx7NvTZQEIvJydHNpHBSZnzpfeZS4/A/7
-        WGOHtJFe9NMPJhsqGcfjxAiHHCgjBuhNBBwbV+/kN1yItnFW2+10TbUX85HAvObQVcfwy3
-        Z/TJ45JrIoDnh3p6gb7cbvNUxJHf5ULSF687VCmIIUyqaT3WK72dn/WdaL3xTiQEswmrnn
-        nOA8I3nPJmVo1oAkxzrvDFAlPJUQE6RQrsz0po9ChI7ybB+ptjNpn/bXqyZHyA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1653900550;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mb32qARmKX/oF5s+kHIv0X9LwS5Vfd7eo5GK1onxbS4=;
-        b=fn7UBgTUB18eEO+ZPOF0lTcnEkE+cEHthbTzQs24jteMlG7VDojMV7jKwiMO1pIQklIDh2
-        MZUM5BfSfn06/zCA==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        John Stultz <jstultz@google.com>,
-        Nathan Chancellor <nathan@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: [RFC PATCH v1 0/9] deferred_probe_timeout logic clean up
-Message-ID: <YpSFBNfGDpy3rqEV@linutronix.de>
-References: <20220526081550.1089805-1-saravanak@google.com>
+        with ESMTP id S233227AbiE3JHm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 May 2022 05:07:42 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2EE4D9E8
+        for <linux-pm@vger.kernel.org>; Mon, 30 May 2022 02:07:41 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id bo5so10071917pfb.4
+        for <linux-pm@vger.kernel.org>; Mon, 30 May 2022 02:07:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=FCiLa5AkDku+8YLr7wCTc9q2xNjYqTpfalfh6wTNH74=;
+        b=n46vXm0FgONZSQiqOdJlkxZ4MesZEUtUDgf4bbK/8O+FjdkmmMgT5DTT3CL3HDXH6E
+         D8tgRNhjGgHQJfUD2nWsFPwy2aKKq9RHCsDH3CIQRId5QTqxZz3zeB8wCAd2a6BHo5AZ
+         dT0CnIP0OYB7CQHzxoaB+A2AH4ZdsyzOmJfkPwbklmuftv1NKElxR6NuBBOZhZXVwo58
+         MfZRicunWOZuRqs+rbBfLvcOLPPVPXXgbZsczBCjTI4B+rfLvziWtFCqBnttjwKEwfAw
+         uZWr1BO6HS/r3w10yTXJ3FbOUzaiS89GA6vN0wD3LV50rmaHW1VwYdDJ7Ozqvo8GZDmk
+         +Cng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=FCiLa5AkDku+8YLr7wCTc9q2xNjYqTpfalfh6wTNH74=;
+        b=7lyrmLhhhlcikfY7sJIEj0AfOPeAlkujKJgQ3fQje5FY0Wb9PRiGWNm+06fQ8vEEFk
+         2YxVzJmb3sPg6+L81dDf1x7mCA9tHhaXVoyulGMcfh5MGQOD4cpSf921ho9h6+5zbjJC
+         RLghVXWc0E3rgTCqe6JUiKrm4dE9rHyaCZhEgTSasWMhtDZSkOSjrt6ieLL7qrztpIqx
+         8u+/Ip6qcmLj1mkRj6BUnQxgYmbfMpoHuRv5w1t3t5fNHzEZYLbvND0qN6O1RCWiG8sL
+         fkaPBn2KQ3ZgS4gGB5g9jKRnw95yProq79+B9cGdjUaFTNqwiy4MGJBuiAJKXPJFd7ew
+         /cyg==
+X-Gm-Message-State: AOAM533q/9Fn5KRkHNHL4ICmOaFhq8DS9dSskGvzIrYREBzsjDgsSdTB
+        4ztvrWN/vIuiiaYcUEUi3RIibg==
+X-Google-Smtp-Source: ABdhPJzoe9FuX+oleaoLGawpWPqdWSMzzj1F6HBxpWQSYqB1rNNrIO7XBlMHgvEOAaaiQSnqHNHfvw==
+X-Received: by 2002:a63:c00c:0:b0:3f6:103:5bc1 with SMTP id h12-20020a63c00c000000b003f601035bc1mr47658474pgg.404.1653901660989;
+        Mon, 30 May 2022 02:07:40 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id h18-20020a056a00231200b005104c6d7941sm8397202pfh.31.2022.05.30.02.07.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 May 2022 02:07:40 -0700 (PDT)
+Date:   Mon, 30 May 2022 14:37:38 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
+        Dietmar.Eggemann@arm.com,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v1] cpufreq: CPPC: Fix unused-function warning
+Message-ID: <20220530090738.7ycfr7g52b54jzj3@vireshk-i7>
+References: <20220530081236.40728-1-pierre.gondois@arm.com>
+ <20220530082025.vqzk37dvyzxiq7dv@vireshk-i7>
+ <3a26ce90-5d2d-0164-3799-85a9dc1abee6@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220526081550.1089805-1-saravanak@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3a26ce90-5d2d-0164-3799-85a9dc1abee6@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2022-05-26 01:15:39 [-0700], Saravana Kannan wrote:
-> Yoshihiro/Geert,
-Hi Saravana,
+On 30-05-22, 10:44, Pierre Gondois wrote:
+> 
+> 
+> On 5/30/22 10:20, Viresh Kumar wrote:
+> > On 30-05-22, 10:12, Pierre Gondois wrote:
+> > > Building the cppc_cpufreq driver with for arm64 with
+> > > CONFIG_ENERGY_MODEL=n triggers the following warnings:
+> > >   drivers/cpufreq/cppc_cpufreq.c:550:12: error: ‘cppc_get_cpu_cost’ defined but not used
+> > > [-Werror=unused-function]
+> > >     550 | static int cppc_get_cpu_cost(struct device *cpu_dev, unsigned long KHz,
+> > >         |            ^~~~~~~~~~~~~~~~~
+> > >   drivers/cpufreq/cppc_cpufreq.c:481:12: error: ‘cppc_get_cpu_power’ defined but not used
+> > > [-Werror=unused-function]
+> > >     481 | static int cppc_get_cpu_power(struct device *cpu_dev,
+> > >         |            ^~~~~~~~~~~~~~~~~~
+> > > 
+> > > Fixes: 740fcdc2c20e ("cpufreq: CPPC: Register EM based on efficiency class information")
+> > > Reported-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
+> > > Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+> > > ---
+> > >   drivers/cpufreq/cppc_cpufreq.c | 6 +++---
+> > >   1 file changed, 3 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> > > index d092c9bb4ba3..ecd0d3ee48c5 100644
+> > > --- a/drivers/cpufreq/cppc_cpufreq.c
+> > > +++ b/drivers/cpufreq/cppc_cpufreq.c
+> > > @@ -478,7 +478,7 @@ static inline unsigned long compute_cost(int cpu, int step)
+> > >   			step * CPPC_EM_COST_STEP;
+> > >   }
+> > > -static int cppc_get_cpu_power(struct device *cpu_dev,
+> > > +static __maybe_unused int cppc_get_cpu_power(struct device *cpu_dev,
+> > >   		unsigned long *power, unsigned long *KHz)
+> > >   {
+> > >   	unsigned long perf_step, perf_prev, perf, perf_check;
+> > > @@ -547,8 +547,8 @@ static int cppc_get_cpu_power(struct device *cpu_dev,
+> > >   	return 0;
+> > >   }
+> > > -static int cppc_get_cpu_cost(struct device *cpu_dev, unsigned long KHz,
+> > > -		unsigned long *cost)
+> > > +static __maybe_unused int cppc_get_cpu_cost(struct device *cpu_dev,
+> > > +		unsigned long KHz, unsigned long *cost)
+> > >   {
+> > >   	unsigned long perf_step, perf_prev;
+> > >   	struct cppc_perf_caps *perf_caps;
+> > 
+> > Should we actually run cppc_cpufreq_register_em() for
+> > !CONFIG_ENERGY_MODEL ? Why?
+> > 
+> 
+> Hello Viresh,
+> It seems that when CONFIG_ENERGY_MODEL=n, the compiler is already
+> considering cppc_cpufreq_register_em() as an empty function.
+> 
+> Indeed, CONFIG_ENERGY_MODEL=n makes em_dev_register_perf_domain()
+> an empty function, so cppc_cpufreq_register_em() is only made of
+> variable definitions. This compiler optimization also explains
+> why cppc_get_cpu_power() and cppc_get_cpu_cost() trigger the
+> -Wunused-function warning.
+> 
+> Putting cppc_cpufreq_register_em() inside an
+> #ifdef CONFIG_ENERGY_MODEL
+> guard seems also valid to me. To avoid too many empty definitions
+> of cppc_cpufreq_register_em(), I guess it should be inside an
+> #if defined(CONFIG_ARM64) && defined(CONFIG_ENERGY_MODEL)
+> guard instead.
+> Please let me know what you prefer.
 
-> If you can test this patch series and confirm that the NFS root case
-> works, I'd really appreciate that.
+In that case we shouldn't do:
 
-The two patches you sent earlier, plus this series, plus
+cppc_cpufreq_driver.register_em = cppc_cpufreq_register_em;
 
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 7ff7fbb006431..829d9b1f7403f 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -1697,8 +1697,6 @@ static int fw_devlink_may_probe(struct device *dev, void *data)
-  */
- void __init fw_devlink_unblock_may_probe(void)
- {
--	struct device_link *link, *ln;
--
- 	if (!fw_devlink_flags || fw_devlink_is_permissive())
- 		return;
- 
-and it compiles + boots without a delay.
+as well, as that is extra work for the cpufreq core, which won't be
+used at all.
 
-Sebastian
+So instead of __maybe_unused, lets put all dependent stuff within
+CONFIG_ENERGY_MODEL ?
+
+-- 
+viresh
