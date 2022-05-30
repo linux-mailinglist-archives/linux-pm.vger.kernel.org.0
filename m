@@ -2,109 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F26DA5384C2
-	for <lists+linux-pm@lfdr.de>; Mon, 30 May 2022 17:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B117D5384EE
+	for <lists+linux-pm@lfdr.de>; Mon, 30 May 2022 17:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234936AbiE3PWt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 May 2022 11:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39132 "EHLO
+        id S238408AbiE3P3u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 May 2022 11:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241543AbiE3PVz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 May 2022 11:21:55 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B3F1C8667
-        for <linux-pm@vger.kernel.org>; Mon, 30 May 2022 07:23:32 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id 3so7697611ily.2
-        for <linux-pm@vger.kernel.org>; Mon, 30 May 2022 07:23:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=XJqXgw0Qi4Ge6Q57wB4GlvotoYnhUuSq68y9152a6AE=;
-        b=RbLJCZVFtlwj7+Z3Y7O0qJYoBzYmhQGTvS5NB07cWgaLzfpl6yx8Kj4fQ2ftIv/z4J
-         ngANjnThxfX6oIbbTJhPgykypESQf7OjTy2kYBz1v1fjPHzS1laSAPBPVJKj3uW9csWw
-         yQJ9QY0OHMBfgiuXmszRqX7M19GcI4nUyWsNwY9mzZUaAA2IoGzn7L883g907c6jwD4V
-         NqIMl3m3/I9AGi1Jngi+1iXud+358BbC3kf4kYrRHcR7qWJfE6pDNrfrWZgiTqa63xtZ
-         RhPNiSI6Tt9IlA2KAo9braSDJGonjfWltprNqnSEuQFzgx5HEnkg7xtv5ur6zGMbz4jd
-         J93Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=XJqXgw0Qi4Ge6Q57wB4GlvotoYnhUuSq68y9152a6AE=;
-        b=grIjTxCPDRpuxt9zZreWalI5EzVpPIYBLq5Biw37ZBO+2RhGWqWzOIXU2GRKhcVWnU
-         /jinrQw+9PxGl7KDaI6hggXK2x4B0e4gUsWylm16gbfgxv5rcijuTzeEqFnsiZNyjJcm
-         wOB47lzQdypuQljSE/ywzpoC/a1q/O1dQo50/J0ENzBftyrqbyrDDGLmAZ2QROa+bMFU
-         30ZEa/5zxNxxmdomtg8gBGHa33qC6g0UFoh2A8WLabLxfqwfJYKMbXFTAMMAQ/6Oz5JM
-         V5E2b8VBn4W65weZbCirOTsI6nnUslMhTeoxwOJczwz2aP60IEY3L4oZdpIdeXU1jnpG
-         4/BA==
-X-Gm-Message-State: AOAM533j72vdB3z1DflAn08+nNbTeqVVwMW+wVlGnx8zn5yil76ACL9C
-        0c6EbyJnNK6ePJDz9/W8bKPLR6Vh0awiqaHeGvQ=
-X-Google-Smtp-Source: ABdhPJwkqQ/OIioqBR97/5zzSyy3lV4aE87tmDKwpi6v68YH7z0pcYmIQ2y3lvQmeJxEofabhQ+YK6IbKXKNcCfn+P0=
-X-Received: by 2002:a92:ddcb:0:b0:2cd:95b6:bede with SMTP id
- d11-20020a92ddcb000000b002cd95b6bedemr28008470ilr.280.1653920609933; Mon, 30
- May 2022 07:23:29 -0700 (PDT)
+        with ESMTP id S242497AbiE3P3X (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 May 2022 11:29:23 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30A671E049B;
+        Mon, 30 May 2022 07:33:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B251D1FB;
+        Mon, 30 May 2022 07:32:54 -0700 (PDT)
+Received: from bogus (unknown [10.57.9.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DDAAC3F766;
+        Mon, 30 May 2022 07:32:52 -0700 (PDT)
+Date:   Mon, 30 May 2022 15:32:05 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 1/2] cpuidle: cpuidle-arm: remove arm64 support
+Message-ID: <20220530143205.mdvxojvenb3lcii2@bogus>
+References: <20220529181329.2345722-1-michael@walle.cc>
+ <20220529181329.2345722-2-michael@walle.cc>
 MIME-Version: 1.0
-Received: by 2002:a05:6622:f06:0:0:0:0 with HTTP; Mon, 30 May 2022 07:23:29
- -0700 (PDT)
-Reply-To: barristerbenjamin221@gmail.com
-From:   Attorney Amadou <koadaidrissa1@gmail.com>
-Date:   Mon, 30 May 2022 07:23:29 -0700
-Message-ID: <CAOh7+P_S1KJjrGTcsy2OMG3ESqdo+WBN4sMaimz2b0zfWx46hQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: Yes, score=7.7 required=5.0 tests=BAYES_99,BAYES_999,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:141 listed in]
-        [list.dnswl.org]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [koadaidrissa1[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [barristerbenjamin221[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [koadaidrissa1[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220529181329.2345722-2-michael@walle.cc>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGVsbG8gZGVhciBmcmllbmQuDQoNClBsZWFzZSBJIHdpbGwgbG92ZSB0byBkaXNjdXNzIHNvbWV0
-aGluZyB2ZXJ5IGltcG9ydGFudCB3aXRoIHlvdSwgSQ0Kd2lsbCBhcHByZWNpYXRlIGl0IGlmIHlv
-dSBncmFudCBtZSBhdWRpZW5jZS4NCg0KU2luY2VyZWx5Lg0KQmFycmlzdGVyIEFtYWRvdSBCZW5q
-YW1pbiBFc3EuDQouLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4u
-Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4NCuimquaEm+OB
-quOCi+WPi+S6uuOAgeOBk+OCk+OBq+OBoeOBr+OAgg0KDQrnp4Hjga/jgYLjgarjgZ/jgajpnZ7l
-uLjjgavph43opoHjgarjgZPjgajjgavjgaTjgYTjgaboqbHjgZflkIjjgYbjga7jgYzlpKflpb3j
-gY3jgafjgZnjgIHjgYLjgarjgZ/jgYznp4HjgavogbTooYbjgpLkuI7jgYjjgabjgY/jgozjgozj
-gbDnp4Hjga/jgZ3jgozjgpLmhJ/orJ3jgZfjgb7jgZnjgIINCg0K5b+D44GL44KJ44CCDQrjg5Dj
-g6rjgrnjgr/jg7zjgqLjg57jg4njgqXjg5njg7Pjgrjjg6Pjg5/jg7NFc3HjgIINCg==
+On Sun, May 29, 2022 at 08:13:28PM +0200, Michael Walle wrote:
+> Since commit 788961462f34 ("ARM: psci: cpuidle: Enable PSCI CPUidle
+> driver") the generic ARM cpuidle driver doesn't probe anymore because
+> arm_cpuidle_init() will always return -EOPNOTSUPP. That is, because the
+> mentioned commit removes the only .cpu_suspend and .cpu_init_idle
+> provider.
+
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+
+-- 
+Regards,
+Sudeep
