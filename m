@@ -2,156 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C4A537833
-	for <lists+linux-pm@lfdr.de>; Mon, 30 May 2022 12:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9454B53782E
+	for <lists+linux-pm@lfdr.de>; Mon, 30 May 2022 12:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233613AbiE3JHn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 30 May 2022 05:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47512 "EHLO
+        id S233255AbiE3JNE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 30 May 2022 05:13:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233227AbiE3JHm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 May 2022 05:07:42 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2EE4D9E8
-        for <linux-pm@vger.kernel.org>; Mon, 30 May 2022 02:07:41 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id bo5so10071917pfb.4
-        for <linux-pm@vger.kernel.org>; Mon, 30 May 2022 02:07:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=FCiLa5AkDku+8YLr7wCTc9q2xNjYqTpfalfh6wTNH74=;
-        b=n46vXm0FgONZSQiqOdJlkxZ4MesZEUtUDgf4bbK/8O+FjdkmmMgT5DTT3CL3HDXH6E
-         D8tgRNhjGgHQJfUD2nWsFPwy2aKKq9RHCsDH3CIQRId5QTqxZz3zeB8wCAd2a6BHo5AZ
-         dT0CnIP0OYB7CQHzxoaB+A2AH4ZdsyzOmJfkPwbklmuftv1NKElxR6NuBBOZhZXVwo58
-         MfZRicunWOZuRqs+rbBfLvcOLPPVPXXgbZsczBCjTI4B+rfLvziWtFCqBnttjwKEwfAw
-         uZWr1BO6HS/r3w10yTXJ3FbOUzaiS89GA6vN0wD3LV50rmaHW1VwYdDJ7Ozqvo8GZDmk
-         +Cng==
+        with ESMTP id S231572AbiE3JNE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 30 May 2022 05:13:04 -0400
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9C257997;
+        Mon, 30 May 2022 02:13:02 -0700 (PDT)
+Received: by mail-qk1-f174.google.com with SMTP id o68so3028366qkf.13;
+        Mon, 30 May 2022 02:13:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=FCiLa5AkDku+8YLr7wCTc9q2xNjYqTpfalfh6wTNH74=;
-        b=7lyrmLhhhlcikfY7sJIEj0AfOPeAlkujKJgQ3fQje5FY0Wb9PRiGWNm+06fQ8vEEFk
-         2YxVzJmb3sPg6+L81dDf1x7mCA9tHhaXVoyulGMcfh5MGQOD4cpSf921ho9h6+5zbjJC
-         RLghVXWc0E3rgTCqe6JUiKrm4dE9rHyaCZhEgTSasWMhtDZSkOSjrt6ieLL7qrztpIqx
-         8u+/Ip6qcmLj1mkRj6BUnQxgYmbfMpoHuRv5w1t3t5fNHzEZYLbvND0qN6O1RCWiG8sL
-         fkaPBn2KQ3ZgS4gGB5g9jKRnw95yProq79+B9cGdjUaFTNqwiy4MGJBuiAJKXPJFd7ew
-         /cyg==
-X-Gm-Message-State: AOAM533q/9Fn5KRkHNHL4ICmOaFhq8DS9dSskGvzIrYREBzsjDgsSdTB
-        4ztvrWN/vIuiiaYcUEUi3RIibg==
-X-Google-Smtp-Source: ABdhPJzoe9FuX+oleaoLGawpWPqdWSMzzj1F6HBxpWQSYqB1rNNrIO7XBlMHgvEOAaaiQSnqHNHfvw==
-X-Received: by 2002:a63:c00c:0:b0:3f6:103:5bc1 with SMTP id h12-20020a63c00c000000b003f601035bc1mr47658474pgg.404.1653901660989;
-        Mon, 30 May 2022 02:07:40 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id h18-20020a056a00231200b005104c6d7941sm8397202pfh.31.2022.05.30.02.07.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 May 2022 02:07:40 -0700 (PDT)
-Date:   Mon, 30 May 2022 14:37:38 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
-        Dietmar.Eggemann@arm.com,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v1] cpufreq: CPPC: Fix unused-function warning
-Message-ID: <20220530090738.7ycfr7g52b54jzj3@vireshk-i7>
-References: <20220530081236.40728-1-pierre.gondois@arm.com>
- <20220530082025.vqzk37dvyzxiq7dv@vireshk-i7>
- <3a26ce90-5d2d-0164-3799-85a9dc1abee6@arm.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CevRGTtrDTs4Z7bTQdrqHWG/lWL6b5bSowmXhMt2lks=;
+        b=Gh4PquHJSV05mYTDDsQP76bO1MAnTJx2Q9AXD3F2RCz1bVegrYuXNOiIhFQlojjrVx
+         tDEjXGYSmyf4pdw1Pt+nvRrIirBuv7w1poToOnVDELG912A4WH9QMQR3bz2lGDstnk0Y
+         VDpozxLexcXXjQGVhojMsjMFhCiBwL+VgyDJdl6umZuYarIR3DvzPmgMR7eiVV+/ker9
+         fsgxzZjD/Pe+busswmYjfbIH9KmpD8v6wFAwWNheiHLb9K2F0xH0ui9GApUMzggXBd7r
+         6cPin+4B+28OjUkM0JJmMbgwp0D4xN57n6jKF/5V3wtqFr8gvg9aE8BKuDx2DZVII3kP
+         3hTg==
+X-Gm-Message-State: AOAM530snAlr3gqnuQ3dLiycErMHNldPfhMi5sRCQl7KxLpFB4RFO7In
+        ix8JjftLJLGfM8IFvpbHEhbNuHuSi7a+eA==
+X-Google-Smtp-Source: ABdhPJw8khA82V6rqgtUvHZvyJcvT+05F5uhWWJwKof6sBR4+S/NTAI6QUdQEI+v3gyW8647A61nVw==
+X-Received: by 2002:a05:620a:440c:b0:6a0:4c1d:eeaa with SMTP id v12-20020a05620a440c00b006a04c1deeaamr35648311qkp.370.1653901981933;
+        Mon, 30 May 2022 02:13:01 -0700 (PDT)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id 72-20020a370c4b000000b0069fc13ce1e1sm7639728qkm.18.2022.05.30.02.12.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 May 2022 02:12:58 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id r82so8100498ybc.13;
+        Mon, 30 May 2022 02:12:57 -0700 (PDT)
+X-Received: by 2002:a05:6902:905:b0:64a:2089:f487 with SMTP id
+ bu5-20020a056902090500b0064a2089f487mr53259449ybb.202.1653901976605; Mon, 30
+ May 2022 02:12:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3a26ce90-5d2d-0164-3799-85a9dc1abee6@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220526081550.1089805-1-saravanak@google.com> <20220526081550.1089805-5-saravanak@google.com>
+In-Reply-To: <20220526081550.1089805-5-saravanak@google.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 30 May 2022 11:12:43 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXcHcuAn8UVS6RPsfenuCny4BgWNJFod41CFjdOF+w0sg@mail.gmail.com>
+Message-ID: <CAMuHMdXcHcuAn8UVS6RPsfenuCny4BgWNJFod41CFjdOF+w0sg@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 4/9] Revert "driver core: Set default
+ deferred_probe_timeout back to 0."
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        John Stultz <jstultz@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Android Kernel Team <kernel-team@android.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux IOMMU <iommu@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30-05-22, 10:44, Pierre Gondois wrote:
-> 
-> 
-> On 5/30/22 10:20, Viresh Kumar wrote:
-> > On 30-05-22, 10:12, Pierre Gondois wrote:
-> > > Building the cppc_cpufreq driver with for arm64 with
-> > > CONFIG_ENERGY_MODEL=n triggers the following warnings:
-> > >   drivers/cpufreq/cppc_cpufreq.c:550:12: error: ‘cppc_get_cpu_cost’ defined but not used
-> > > [-Werror=unused-function]
-> > >     550 | static int cppc_get_cpu_cost(struct device *cpu_dev, unsigned long KHz,
-> > >         |            ^~~~~~~~~~~~~~~~~
-> > >   drivers/cpufreq/cppc_cpufreq.c:481:12: error: ‘cppc_get_cpu_power’ defined but not used
-> > > [-Werror=unused-function]
-> > >     481 | static int cppc_get_cpu_power(struct device *cpu_dev,
-> > >         |            ^~~~~~~~~~~~~~~~~~
-> > > 
-> > > Fixes: 740fcdc2c20e ("cpufreq: CPPC: Register EM based on efficiency class information")
-> > > Reported-by: Shaokun Zhang <zhangshaokun@hisilicon.com>
-> > > Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
-> > > ---
-> > >   drivers/cpufreq/cppc_cpufreq.c | 6 +++---
-> > >   1 file changed, 3 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> > > index d092c9bb4ba3..ecd0d3ee48c5 100644
-> > > --- a/drivers/cpufreq/cppc_cpufreq.c
-> > > +++ b/drivers/cpufreq/cppc_cpufreq.c
-> > > @@ -478,7 +478,7 @@ static inline unsigned long compute_cost(int cpu, int step)
-> > >   			step * CPPC_EM_COST_STEP;
-> > >   }
-> > > -static int cppc_get_cpu_power(struct device *cpu_dev,
-> > > +static __maybe_unused int cppc_get_cpu_power(struct device *cpu_dev,
-> > >   		unsigned long *power, unsigned long *KHz)
-> > >   {
-> > >   	unsigned long perf_step, perf_prev, perf, perf_check;
-> > > @@ -547,8 +547,8 @@ static int cppc_get_cpu_power(struct device *cpu_dev,
-> > >   	return 0;
-> > >   }
-> > > -static int cppc_get_cpu_cost(struct device *cpu_dev, unsigned long KHz,
-> > > -		unsigned long *cost)
-> > > +static __maybe_unused int cppc_get_cpu_cost(struct device *cpu_dev,
-> > > +		unsigned long KHz, unsigned long *cost)
-> > >   {
-> > >   	unsigned long perf_step, perf_prev;
-> > >   	struct cppc_perf_caps *perf_caps;
-> > 
-> > Should we actually run cppc_cpufreq_register_em() for
-> > !CONFIG_ENERGY_MODEL ? Why?
-> > 
-> 
-> Hello Viresh,
-> It seems that when CONFIG_ENERGY_MODEL=n, the compiler is already
-> considering cppc_cpufreq_register_em() as an empty function.
-> 
-> Indeed, CONFIG_ENERGY_MODEL=n makes em_dev_register_perf_domain()
-> an empty function, so cppc_cpufreq_register_em() is only made of
-> variable definitions. This compiler optimization also explains
-> why cppc_get_cpu_power() and cppc_get_cpu_cost() trigger the
-> -Wunused-function warning.
-> 
-> Putting cppc_cpufreq_register_em() inside an
-> #ifdef CONFIG_ENERGY_MODEL
-> guard seems also valid to me. To avoid too many empty definitions
-> of cppc_cpufreq_register_em(), I guess it should be inside an
-> #if defined(CONFIG_ARM64) && defined(CONFIG_ENERGY_MODEL)
-> guard instead.
-> Please let me know what you prefer.
+Hi Saravana,
 
-In that case we shouldn't do:
+On Thu, May 26, 2022 at 10:16 AM Saravana Kannan <saravanak@google.com> wrote:
+> This reverts commit 11f7e7ef553b6b93ac1aa74a3c2011b9cc8aeb61.
 
-cppc_cpufreq_driver.register_em = cppc_cpufreq_register_em;
+scripts/chdeckpatch.pl says:
 
-as well, as that is extra work for the cpufreq core, which won't be
-used at all.
+    WARNING: Unknown commit id
+'11f7e7ef553b6b93ac1aa74a3c2011b9cc8aeb61', maybe rebased or not
+pulled?
 
-So instead of __maybe_unused, lets put all dependent stuff within
-CONFIG_ENERGY_MODEL ?
+I assume this is your local copy of
+https://lore.kernel.org/r/20220526034609.480766-3-saravanak@google.com?
 
--- 
-viresh
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
