@@ -2,271 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A3B5390A9
-	for <lists+linux-pm@lfdr.de>; Tue, 31 May 2022 14:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 655FF5390EE
+	for <lists+linux-pm@lfdr.de>; Tue, 31 May 2022 14:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344215AbiEaMZj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 May 2022 08:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
+        id S1344211AbiEaMlt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 May 2022 08:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344224AbiEaMZi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 May 2022 08:25:38 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980EC8FFB4;
-        Tue, 31 May 2022 05:25:32 -0700 (PDT)
-X-UUID: 677773f18cee47b9a534dfaefdb15a0d-20220531
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.5,REQID:4f2e94e7-7d11-4f8b-9093-0dbca211270a,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:5
-X-CID-META: VersionHash:2a19b09,CLOUDID:2e746614-f88c-475e-badf-d9ee54230b8f,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:0,BEC:nil
-X-UUID: 677773f18cee47b9a534dfaefdb15a0d-20220531
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <jia-wei.chang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1830817681; Tue, 31 May 2022 20:25:23 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 31 May 2022 20:25:22 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 31 May 2022 20:25:21 +0800
-Message-ID: <31eca4ae2ec103e95bf3faf70d8810dc972db344.camel@mediatek.com>
-Subject: Re: [PATCH v6 2/2] PM / devfreq: mediatek: Introduce MediaTek CCI
- devfreq driver
-From:   Jia-Wei Chang <jia-wei.chang@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Johnson Wang <johnson.wang@mediatek.com>,
-        <cw00.choi@samsung.com>, <krzk+dt@kernel.org>,
-        <robh+dt@kernel.org>, <kyungmin.park@samsung.com>
-CC:     <khilman@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 31 May 2022 20:25:22 +0800
-In-Reply-To: <e4d3ab91-9c53-79a0-76f8-098e6b846441@collabora.com>
-References: <20220527110036.8810-1-johnson.wang@mediatek.com>
-         <20220527110036.8810-3-johnson.wang@mediatek.com>
-         <e4d3ab91-9c53-79a0-76f8-098e6b846441@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        with ESMTP id S238991AbiEaMls (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 May 2022 08:41:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F8C1056F;
+        Tue, 31 May 2022 05:41:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E914611EC;
+        Tue, 31 May 2022 12:41:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D415C385A9;
+        Tue, 31 May 2022 12:41:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654000905;
+        bh=50k5P2deod6KO8gvHsZ0qJej+m44dwOkD8HE8Gg5bjs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MO2bw7bbdUFxvvki8bhZ3MgawmrbJZNY4ep7dcTpbtkPkBrD1hNo20l60DI3T7Oj1
+         nlEdkpQz4meR1xf1XIYnfpCEfnmw3hcFzO7dSl+AV566wl8NggjS3iS6AJi7CzsMZX
+         AN27nByTMKymlcyySqfBAbf2gzy8zhdHvemoux4FVUEYrqpGuxQI+T7JGhU0N6HVrH
+         foWmceq2jqtCybmNYuVDwkPIWVeUhAcJAKqePfeEoG7aeHhOX0vJwnz4IPCq6XRJS0
+         Qh7pYiaRubz31TiwxkjXegOnMv4Tyt7uBHh0AoRxhnqbluKjyV3pK5BlOng75mJBSN
+         FCgiuBVpURnIQ==
+Date:   Tue, 31 May 2022 14:41:42 +0200
+From:   Mark Brown <broonie@kernel.org>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     lee.jones@linaro.org, daniel.thompson@linaro.org,
+        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
+        lgirdwood@gmail.com, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de,
+        cy_huang@richtek.com, alice_chen@richtek.com,
+        chiaen_wu@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org
+Subject: Re: [PATCH 03/14] regulator: mt6370: Add mt6370 DisplayBias and
+ VibLDO support
+Message-ID: <YpYNBo90NETXtjkV@sirena.org.uk>
+References: <20220531102809.11976-1-peterwu.pub@gmail.com>
+ <20220531102809.11976-4-peterwu.pub@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hl22OOkO/wMChZ8B"
+Content-Disposition: inline
+In-Reply-To: <20220531102809.11976-4-peterwu.pub@gmail.com>
+X-Cookie: May your camel be as swift as the wind.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2022-05-30 at 14:16 +0200, AngeloGioacchino Del Regno wrote:
-> Il 27/05/22 13:00, Johnson Wang ha scritto:
-> > We introduce a devfreq driver for the MediaTek Cache Coherent
-> > Interconnect
-> > (CCI) used by some MediaTek SoCs.
-> > 
-> > In this driver, we use the passive devfreq driver to get target
-> > frequencies
-> > and adjust voltages accordingly. In MT8183 and MT8186, the MediaTek
-> > CCI
-> > is supplied by the same regulators with the little core CPUs.
-> > 
-> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
-> > Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-> > ---
-> > This patch depends on "devfreq-testing"[1].
-> > [1]
-> > https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing__;!!CTRNKA9wMg0ARbw!2ldxtrMmK2WJP8_r1DcJRm0XQOSZQJfbI5DlNDPEfz84Ble0R7pSP7PbYLreNgVGRyFfDQ$
-> >  
-> > ---
-> >   drivers/devfreq/Kconfig           |  10 +
-> >   drivers/devfreq/Makefile          |   1 +
-> >   drivers/devfreq/mtk-cci-devfreq.c | 441
-> > ++++++++++++++++++++++++++++++
-> >   3 files changed, 452 insertions(+)
-> >   create mode 100644 drivers/devfreq/mtk-cci-devfreq.c
-> > 
-> > diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-> > index 87eb2b837e68..9754d8b31621 100644
-> > --- a/drivers/devfreq/Kconfig
-> > +++ b/drivers/devfreq/Kconfig
-> > @@ -120,6 +120,16 @@ config ARM_TEGRA_DEVFREQ
-> >   	  It reads ACTMON counters of memory controllers and adjusts
-> > the
-> >   	  operating frequencies and voltages with OPP support.
-> >   
-> > +config ARM_MEDIATEK_CCI_DEVFREQ
-> > +	tristate "MEDIATEK CCI DEVFREQ Driver"
-> > +	depends on ARM_MEDIATEK_CPUFREQ || COMPILE_TEST
-> > +	select DEVFREQ_GOV_PASSIVE
-> > +	help
-> > +	  This adds a devfreq driver for MediaTek Cache Coherent
-> > Interconnect
-> > +	  which is shared the same regulators with the cpu cluster. It
-> > can track
-> > +	  buck voltages and update a proper CCI frequency. Use the
-> > notification
-> > +	  to get the regulator status.
-> > +
-> >   config ARM_RK3399_DMC_DEVFREQ
-> >   	tristate "ARM RK3399 DMC DEVFREQ Driver"
-> >   	depends on (ARCH_ROCKCHIP && HAVE_ARM_SMCCC) || \
-> > diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
-> > index 0b6be92a25d9..bf40d04928d0 100644
-> > --- a/drivers/devfreq/Makefile
-> > +++ b/drivers/devfreq/Makefile
-> > @@ -11,6 +11,7 @@ obj-$(CONFIG_DEVFREQ_GOV_PASSIVE)	+=
-> > governor_passive.o
-> >   obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)	+= exynos-bus.o
-> >   obj-$(CONFIG_ARM_IMX_BUS_DEVFREQ)	+= imx-bus.o
-> >   obj-$(CONFIG_ARM_IMX8M_DDRC_DEVFREQ)	+= imx8m-ddrc.o
-> > +obj-$(CONFIG_ARM_MEDIATEK_CCI_DEVFREQ)	+= mtk-cci-devfreq.o
-> >   obj-$(CONFIG_ARM_RK3399_DMC_DEVFREQ)	+= rk3399_dmc.o
-> >   obj-$(CONFIG_ARM_SUN8I_A33_MBUS_DEVFREQ)	+= sun8i-a33-mbus.o
-> >   obj-$(CONFIG_ARM_TEGRA_DEVFREQ)		+= tegra30-devfreq.o
-> > diff --git a/drivers/devfreq/mtk-cci-devfreq.c
-> > b/drivers/devfreq/mtk-cci-devfreq.c
-> > new file mode 100644
-> > index 000000000000..df42da35b312
-> > --- /dev/null
-> > +++ b/drivers/devfreq/mtk-cci-devfreq.c
-> > @@ -0,0 +1,441 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Copyright (C) 2022 MediaTek Inc.
-> > + */
-> > +
-> 
-> ..snip..
-> 
-> > +};
-> > +
-> > +static int mtk_ccifreq_probe(struct platform_device *pdev)
-> > +{
-> > +	struct device *dev = &pdev->dev;
-> > +	struct mtk_ccifreq_drv *drv;
-> > +	struct devfreq_passive_data *passive_data;
-> > +	struct dev_pm_opp *opp;
-> > +	unsigned long rate, opp_volt;
-> > +	int ret;
-> > +
-> > +	drv = devm_kzalloc(dev, sizeof(*drv), GFP_KERNEL);
-> > +	if (!drv)
-> > +		return -ENOMEM;
-> > +
-> > +	drv->dev = dev;
-> > +	drv->soc_data = (const struct mtk_ccifreq_platform_data *)
-> > +				of_device_get_match_data(&pdev->dev);
-> > +	mutex_init(&drv->reg_lock);
-> > +	platform_set_drvdata(pdev, drv);
-> > +
-> > +	drv->cci_clk = devm_clk_get(dev, "cci");
-> > +	if (IS_ERR(drv->cci_clk)) {
-> > +		ret = PTR_ERR(drv->cci_clk);
-> > +		return dev_err_probe(dev, ret,
-> > +				     "failed to get cci clk: %d\n",
-> > ret);
-> > +	}
-> > +
-> > +	drv->inter_clk = devm_clk_get(dev, "intermediate");
-> > +	if (IS_ERR(drv->inter_clk)) {
-> > +		ret = PTR_ERR(drv->inter_clk);
-> > +		return dev_err_probe(dev, ret,
-> > +				     "failed to get intermediate clk:
-> > %d\n", ret);
-> > +	}
-> > +
-> > +	drv->proc_reg = devm_regulator_get_optional(dev, "proc");
-> 
-> In the devicetree binding for this driver, the "proc" regulator is
-> *not* optional,
-> but here you're using devm_regulator_get_optional.
-> 
-> If this is not optional, you should use devm_regulator_get() instead.
-> 
 
-Hi Angelo,
+--hl22OOkO/wMChZ8B
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This is similiar case to mediatek-cpufreq.c [1].
+On Tue, May 31, 2022 at 06:27:58PM +0800, ChiaEn Wu wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+>=20
+> Add mt6370 DisplayBias and VibLDO support.
 
-Regulator framework has three variants of APIs for getting regulator
-handler.
-We do NOT choose regulator_get_exclusive() because cpufreq and cci
-share with the same power rail.
-We choose regulator_get_optional() so that we can handle error if it
-returns ERR_PTR(-ENODEV) rather than a dummy handler from
-regulator_get().
+Other than one small thing this looks nice and clean:
 
-Please inform me if I get it wrong.
-That's what I understand and you can refer to [2].
+> +	enable_gpio =3D fwnode_gpiod_get_index(of_fwnode_handle(np), "enable", =
+0,
+> +					     GPIOD_OUT_HIGH |
+> +					     GPIOD_FLAGS_BIT_NONEXCLUSIVE,
+> +					     desc->name);
+> +	if (IS_ERR(enable_gpio)) {
+> +		config->ena_gpiod =3D NULL;
+> +		return 0;
+> +	}
 
-Thanks.
+Please just use the OF APIs - due to ACPI's handling of power for
+devices the regulator API OF bindings can't be used sensibly on
+ACPI so it's better to explicitly work on DT only.  This won't
+actually cause problems here but it's a bit clearer.
 
-[1]: 20220408045908.21671-4-rex-bc.chen@mediatek.com
-[2]: 
-https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1327385.html
+--hl22OOkO/wMChZ8B
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> > +	if (IS_ERR(drv->proc_reg)) {
-> > +		ret = PTR_ERR(drv->proc_reg);
-> > +		return dev_err_probe(dev, ret,
-> > +				     "failed to get proc regulator:
-> > %d\n", ret);
-> 
-> There's no need to print ret... dev_err_probe() takes care of that
-> for you already:
-> in this case, you're printing the value of ret twice.
-> 
-> > +	}
-> > +
-> > +	ret = regulator_enable(drv->proc_reg);
-> 
-> If you move this call after the devm_regulator_get_optional() call
-> for the sram
-> vreg, you will be able to use dev_err_probe for the latter as well.
-> 
-> > +	if (ret) {
-> > +		dev_err(dev, "failed to enable proc regulator\n");
-> 
-> Why aren't you using dev_err_probe here, like you've done for the
-> other instances?
-> 
-> > +		return ret;
-> > +	}
-> > +
-> > +	drv->sram_reg = devm_regulator_get_optional(dev, "sram");
-> > +	if (IS_ERR(drv->sram_reg))
-> > +		drv->sram_reg = NULL;
-> 
-> When you use regulator_get_optional() (including the devm_ variant of
-> it), you
-> shall return an error, if there's any... that's what the _optional()
-> is for.
-> 
-> if (IS_ERR(drv->sram_reg))
-> 	return dev_err_probe(dev, PTR_ERR(drv->proc_reg),
-> 			     "failed to get sram regulator");
-> 
-> > +	else {
-> > +		ret = regulator_enable(drv->sram_reg);
-> > +		if (ret) {
-> > +			dev_err(dev, "failed to enable sram
-> > regulator\n");
-> > +			goto out_free_resources;
-> > +		}
-> > +	}
-> > +
-> 
-> Regards,
-> Angelo
-> 
-> 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKWDQUACgkQJNaLcl1U
+h9CrHwf/Xn0rciY/VlcVjndWUL/zYX17wRyxPAwxx/DOq/VCeystayvT4671ML/1
+6h5ZE7pKGSzHQjyt8x3BXHDAvn0EW5KNrc+lwBTQDrhiE7hbKcXb0cChQBvcM4KJ
+m2ETTDdgNoBEkUQwj40OnrL/DIw7NpILWAOaoB+gGwelfj4Lu8LxTcZsRQqdwAGN
+Q4lC4mPkae3NP0+tc82DyjtHytJPaX5jCPML4AofpFKs6A95yGyKlARdDgQqVVXP
+sbKZA93RwgxZDSH0pxXBaKCBTEwOIjIl5qXbk0OXyvnopAYvVGVe6oFgutC2MPqa
+joJC6sXurZO+wFB9H9tlKwq9Au8AOQ==
+=WP6+
+-----END PGP SIGNATURE-----
+
+--hl22OOkO/wMChZ8B--
