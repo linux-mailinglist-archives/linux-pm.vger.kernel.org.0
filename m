@@ -2,499 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 073145390BC
-	for <lists+linux-pm@lfdr.de>; Tue, 31 May 2022 14:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20530538F45
+	for <lists+linux-pm@lfdr.de>; Tue, 31 May 2022 12:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344259AbiEaMdL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 May 2022 08:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56548 "EHLO
+        id S1343572AbiEaKwA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 May 2022 06:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237954AbiEaMdK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 May 2022 08:33:10 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FA8DEF6;
-        Tue, 31 May 2022 05:33:08 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id d198so13895033iof.12;
-        Tue, 31 May 2022 05:33:08 -0700 (PDT)
+        with ESMTP id S233804AbiEaKv7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 May 2022 06:51:59 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2B14833D
+        for <linux-pm@vger.kernel.org>; Tue, 31 May 2022 03:51:58 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id n28so8138994edb.9
+        for <linux-pm@vger.kernel.org>; Tue, 31 May 2022 03:51:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=2QW6EAQHfNGL3WRo5wHoHfZuTn8wkaAQDQ0iJvuyzQA=;
-        b=pSoCECW7l7ogsdkRWbAgKx4BphhhHPUzOpdwGI0tyddfQ0JoW8pezHuF99q3cvGLYo
-         LnX5/Pt76tE2Hpa/3reEPFg1qOZGV7SrJH6jtbNGf02QZ5nbYVLah52CCcfMYnsI0epE
-         RUn8mNU3n7T9wcpwmVrrMIn5HRaeAtp0zm3lxbW0UriIV1m6vpQIc9b+INuxY9rp25qI
-         t57F5jzz+KpECz/WFU/CRiMr5TYAvmZqxcwTuNfqjmZoqUus8HohR6vvOjTIe/OrVKYi
-         QPXNmoEqZYv6x51GxdP9Ao7eo1Vcx99NV5xYS7J26v7vBmMNMvZ/i2lNpXHMD6Kt6JBD
-         3hBw==
+        d=linaro.org; s=google;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f+aAYlhBaoqcFmdU6C9Gx84E9qMJBIbqGLgTA0/mSl4=;
+        b=pwIV2cacZ4ygg//TwNYbRKiQjUBGzgJXtzcat0O1FUmk1LRXTQlUJc6YLXXq5TAeVn
+         XTCERPOuIAUvyA1fsx/lioJV542cqtv6JlHCeTPnTmWtkvMqpvUNnDfn0Nn7mnVzj2kN
+         2V7sQohQUnjdNW6Y0rM64nPDNwRlpqtkcahLIXo/vWcujgCoxDuG7MYyY1LbTXnUCT/g
+         RwhPdpNiD3G44Ta4qb/1IKHQ5Ve1UePVPf/Fq3m871Uf1efZ3z/zrq7rBnrfJ2e3ETSO
+         qfWsPGcPhc31ZKBeBSaPCp6wfmp3PQDAY3ob04CrCAty60UOsIVAlXrhkiHVyKRxzsHK
+         uWTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=2QW6EAQHfNGL3WRo5wHoHfZuTn8wkaAQDQ0iJvuyzQA=;
-        b=QCOLtRuaxv57QRWtYfr/hKsgU6gdJH6j8kgHVgpGTJ2vSbAqGEgjRVk6F6vjthSP4H
-         NWKg/hQrS5ifZCfuv2THSq02+nu5wrpEJbjzpzbzsrBl1fIDzU2zNVqeBkXWivXHjJS1
-         P2AD2B+55b7rGQeSbzVkU9d2ZRkkVCyze02XSdhdACKQWABPViLkodw+BJuBfHVoYnsA
-         HwA8lDT2LI6xyF3rdB+LAvQujFBV40nWu8wqCtcBH1lZ6KHdi+FMxhXn79Nn07tg21in
-         vl4lrgN3ipjluJo2wE7zSiEc/CbVu7z9MdjaQ3hhx80nokKwU1ugOT48rG/p2s7Ju6Q3
-         IH4Q==
-X-Gm-Message-State: AOAM532v1XXJp3LAzJ8B9JMeA9Rgo7YMc5UUIxk8fiIvvv6phnhs9T1L
-        PCXuxefy3ERzS3/Vd8JSHguk6M/9pXs=
-X-Google-Smtp-Source: ABdhPJyxDQ1vBVuzKpzw6DdO7fUy7QY/febE476l02rDnEsCI0JTpMac3/9JG6HvMjk6Oy0dY8tacg==
-X-Received: by 2002:a63:5b0d:0:b0:3fb:9316:88ff with SMTP id p13-20020a635b0d000000b003fb931688ffmr19509313pgb.530.1653993767246;
-        Tue, 31 May 2022 03:42:47 -0700 (PDT)
-Received: from RD-3580-24288.rt.l (42-72-220-172.emome-ip.hinet.net. [42.72.220.172])
-        by smtp.gmail.com with ESMTPSA id d19-20020a17090ac25300b001cd4989feebsm1525829pjx.55.2022.05.31.03.42.42
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=f+aAYlhBaoqcFmdU6C9Gx84E9qMJBIbqGLgTA0/mSl4=;
+        b=NBRJ5RVTpwGwGbfAYtSDNoeJEXqiIW18mDpmxyr6j4Mt0x1RS3fBcSVj5KS4aSWbzV
+         4bODIBNWSxzqhSwrw4cOlascfqfSjAAYDyPYBocetyuyqLVtI/xG86g4F3g3hfDaPKEA
+         +izsJ747iN2Z0ULhGcxmos6CTBJS+1XDlgj9HDpV8XQiCT7O2X41OjaUSIYDH+ScYdqP
+         LXh3tNStcoWhekCbcOF5T2iUMv0iERFAnhS5WsawG6Ygce4LVV4zW8Zy8kwKqg9dttKS
+         xr8VRnKIX+tEvjZf+EcNh5MIQ5LhJAPReHY6B0tiNbV9l0sUqalFpd9c6NIthmpB0y+T
+         AV9w==
+X-Gm-Message-State: AOAM531/PiqpKDdkgDeDu4vhPtenc5s2931Uygw0oKSVB9aanO00wQX4
+        4z+yw5y1YGUOnaEZ9+oQvgvq2N6MXnEexL0E
+X-Google-Smtp-Source: ABdhPJw6rnERzo76jayiAAFVyPq+buvlnElOKXK3el57Jti5fQow9ZL3T4gzpxQSRGCHCDm5L/IYNg==
+X-Received: by 2002:a05:6402:2741:b0:41f:69dc:9bcd with SMTP id z1-20020a056402274100b0041f69dc9bcdmr63412100edd.239.1653994316871;
+        Tue, 31 May 2022 03:51:56 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id q3-20020a50aa83000000b0042dc513ced8sm5117441edc.30.2022.05.31.03.51.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 03:42:46 -0700 (PDT)
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-To:     lee.jones@linaro.org, daniel.thompson@linaro.org,
-        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, deller@gmx.de
-Cc:     cy_huang@richtek.com, alice_chen@richtek.com,
-        chiaen_wu@richtek.com, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org
-Subject: [PATCH 14/14] dt-bindings: mfd: Add Mediatek MT6370 binding documentation
-Date:   Tue, 31 May 2022 18:42:11 +0800
-Message-Id: <20220531104211.17106-6-peterwu.pub@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220531104211.17106-1-peterwu.pub@gmail.com>
-References: <20220531104211.17106-1-peterwu.pub@gmail.com>
+        Tue, 31 May 2022 03:51:56 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 0/4] soc/arm64: qcom: Add initial version of bwmon
+Date:   Tue, 31 May 2022 12:51:33 +0200
+Message-Id: <20220531105137.110050-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: ChiYuan Huang <cy_huang@richtek.com>
+Hi,
 
-Add Mediatek MT6370 binding documentation.
+Changes since v2
+================
+1. Spent a lot of time on benchmarking and learning the BWMON behavior.
+2. Drop PM/OPP patch - applied.
+3. Patch #1: drop opp-avg-kBps.
+4. Patch #2: Add several comments explaining pieces of code and BWMON, extend
+   commit msg with measurements, extend help message, add new #defines to document
+   some magic values, reorder bwmon clear/disable/enable operations to match
+   downstream source and document this with comments, fix unit count from 1 MB
+   to 65 kB.
+5. Patch #4: drop opp-avg-kBps.
+6. Add accumulated Rb tags.
 
-Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
----
- .../bindings/mfd/mediatek,mt6370.yaml         | 282 ++++++++++++++++++
- .../dt-bindings/iio/adc/mediatek,mt6370_adc.h |  18 ++
- include/dt-bindings/mfd/mediatek,mt6370.h     |  83 ++++++
- 3 files changed, 383 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
- create mode 100644 include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
- create mode 100644 include/dt-bindings/mfd/mediatek,mt6370.h
+Changes since v1
+================
+1. Add defconfig change.
+2. Fix missing semicolon in MODULE_AUTHOR.
+3. Add original downstream (msm-4.9 tree) copyrights to the driver.
 
-diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-new file mode 100644
-index 000000000000..96a12dce0108
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-@@ -0,0 +1,282 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/mediatek,mt6370.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Mediatek MT6370 SubPMIC
-+
-+maintainers:
-+  - ChiYuan Huang <cy_huang@richtek.com>
-+
-+description: |
-+  MT6370 is a highly-integrated smart power management IC, which includes a
-+  single cell Li-Ion/Li-Polymer switching battery charger, a USB Type-C &
-+  Power Delivery (PD) controller, dual flash LED current sources, a RGB LED
-+  driver, a backlight WLED driver, a display bias driver and a general LDO for
-+  portable devices.
-+
-+properties:
-+  compatible:
-+    const: mediatek,mt6370
-+
-+  reg:
-+    maxItems: 1
-+
-+  wakeup-source: true
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  interrupt-controller: true
-+
-+  '#interrupt-cells':
-+    const: 1
-+
-+  adc:
-+    type: object
-+    description: |
-+      List the compatible configurations of MT6370 ADC.
-+
-+    properties:
-+      compatible:
-+        const: mediatek,mt6370-adc
-+
-+      "#io-channel-cells":
-+        const: 1
-+
-+    required:
-+      - compatible
-+      - '#io-channel-cells'
-+
-+  backlight:
-+    type: object
-+    $ref: /schemas/leds/backlight/mediatek,mt6370-backlight.yaml#
-+
-+  charger:
-+    type: object
-+    $ref: /schemas/power/supply/mediatek,mt6370-charger.yaml#
-+
-+  tcpc:
-+    type: object
-+    $ref: /schemas/usb/mediatek,mt6370-tcpc.yaml#
-+
-+  indicator:
-+    type: object
-+    $ref: /schemas/leds/mediatek,mt6370-indicator.yaml#
-+
-+  flashlight:
-+    type: object
-+    $ref: /schemas/leds/mediatek,mt6370-flashlight.yaml#
-+
-+  regulators:
-+    type: object
-+    description: |
-+      List all supported regulators
-+
-+    patternProperties:
-+      "^(dsvbst|vibldo)$":
-+        $ref: /schemas/regulator/regulator.yaml#
-+        type: object
-+        unevaluatedProperties: false
-+
-+      "^(dsvpos|dsvneg)$":
-+        $ref: /schemas/regulator/regulator.yaml#
-+        type: object
-+        unevaluatedProperties: false
-+
-+        properties:
-+          enable-gpio:
-+            maxItems: 1
-+            description: |
-+              Specify a valid 'enable' gpio for the regulator and it's optional
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-controller
-+  - '#interrupt-cells'
-+  - regulators
-+  - adc
-+  - backlight
-+  - indicator
-+  - tcpc
-+  - charger
-+  - flashlight
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/leds/common.h>
-+    #include <dt-bindings/mfd/mediatek,mt6370.h>
-+    #include <dt-bindings/iio/adc/mediatek,mt6370_adc.h>
-+    #include <dt-bindings/usb/pd.h>
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      mt6370@34 {
-+        compatible = "mediatek,mt6370";
-+        reg = <0x34>;
-+        wakeup-source;
-+        interrupts-extended = <&gpio26 3 IRQ_TYPE_LEVEL_LOW>;
-+        interrupt-controller;
-+        #interrupt-cells = <1>;
-+
-+        mt6370_adc: adc {
-+          compatible = "mediatek,mt6370-adc";
-+          #io-channel-cells = <1>;
-+        };
-+
-+        backlight {
-+          compatible = "mediatek,mt6370-backlight";
-+          mediatek,bled-channel-use = /bits/ 8 <15>;
-+        };
-+
-+        charger {
-+          compatible = "mediatek,mt6370-charger";
-+          interrupts = <MT6370_IRQ_ATTACH>, <MT6370_IRQ_OVPCTRL_UVP_D>,
-+                       <MT6370_IRQ_CHG_MIVR>;
-+          interrupt-names = "attach_i", "uvp_d_evt", "mivr";
-+          io-channels = <&mt6370_adc MT6370_CHAN_IBUS>;
-+
-+          mt6370_otg_vbus: usb-otg-vbus {
-+            regulator-compatible = "mt6370,otg-vbus";
-+            regulator-name = "usb-otg-vbus";
-+            regulator-min-microvolt = <4350000>;
-+            regulator-max-microvolt = <5800000>;
-+            regulator-min-microamp = <500000>;
-+            regulator-max-microamp = <3000000>;
-+          };
-+        };
-+
-+        indicator {
-+          compatible = "mediatek,mt6370-indicator";
-+          #address-cells = <1>;
-+          #size-cells = <0>;
-+
-+          multi-led@0 {
-+            reg = <0>;
-+            function = LED_FUNCTION_INDICATOR;
-+            color = <LED_COLOR_ID_RGB>;
-+            led-max-microamp = <24000>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+            mediatek,soft-start = <3>;
-+              led@0 {
-+                reg = <0>;
-+                color = <LED_COLOR_ID_RED>;
-+              };
-+              led@1 {
-+                reg = <1>;
-+                color = <LED_COLOR_ID_GREEN>;
-+              };
-+              led@2 {
-+                reg = <2>;
-+                color = <LED_COLOR_ID_BLUE>;
-+              };
-+            };
-+          led@3 {
-+            reg = <3>;
-+            function = LED_FUNCTION_INDICATOR;
-+            color = <LED_COLOR_ID_WHITE>;
-+            led-max-microamp = <6000>;
-+          };
-+        };
-+
-+        flashlight {
-+          compatible = "mediatek,mt6370-flashlight";
-+          #address-cells = <1>;
-+          #size-cells = <0>;
-+          led@0 {
-+            reg = <0>;
-+            led-sources = <0>;
-+            function = LED_FUNCTION_FLASH;
-+            color = <LED_COLOR_ID_WHITE>;
-+            function-enumerator = <1>;
-+            led-max-microamp = <200000>;
-+            flash-max-microamp = <500000>;
-+            flash-max-timeout-us = <1248000>;
-+          };
-+          led@1 {
-+            reg = <1>;
-+            led-sources = <1>;
-+            function = LED_FUNCTION_FLASH;
-+            color = <LED_COLOR_ID_WHITE>;
-+            function-enumerator = <2>;
-+            led-max-microamp = <200000>;
-+            flash-max-microamp = <500000>;
-+            flash-max-timeout-us = <1248000>;
-+          };
-+        };
-+
-+        tcpc {
-+          compatible = "mediatek,mt6370-tcpc";
-+          interrupts-extended = <&gpio26 4 IRQ_TYPE_LEVEL_LOW>;
-+
-+          connector {
-+            compatible = "usb-c-connector";
-+            label = "USB-C";
-+            vbus-supply = <&mt6370_otg_vbus>;
-+            data-role = "dual";
-+            power-role = "dual";
-+            try-power-role = "sink";
-+            source-pdos = <PDO_FIXED(5000, 1000, PDO_FIXED_DUAL_ROLE | PDO_FIXED_DATA_SWAP)>;
-+            sink-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_DUAL_ROLE | PDO_FIXED_DATA_SWAP)>;
-+            op-sink-microwatt = <10000000>;
-+
-+            ports {
-+              #address-cells = <1>;
-+              #size-cells = <0>;
-+
-+              port@0 {
-+                reg = <0>;
-+                endpoint {
-+                  remote-endpoint = <&usb_hs>;
-+                };
-+              };
-+              port@1 {
-+                reg = <1>;
-+                endpoint {
-+                  remote-endpoint = <&usb_ss>;
-+                };
-+              };
-+              port@2 {
-+                reg = <2>;
-+                endpoint {
-+                  remote-endpoint = <&dp_aux>;
-+                };
-+              };
-+            };
-+          };
-+        };
-+
-+        regulators {
-+          dsvbst {
-+            regulator-name = "mt6370-dsv-vbst";
-+            regulator-min-microvolt = <4000000>;
-+            regulator-max-microvolt = <6200000>;
-+          };
-+          dsvpos {
-+            regulator-name = "mt6370-dsv-vpos";
-+            regulator-min-microvolt = <4000000>;
-+            regulator-max-microvolt = <6000000>;
-+            regulator-boot-on;
-+          };
-+          dsvneg {
-+            regulator-name = "mt6370-dsv-vneg";
-+            regulator-min-microvolt = <4000000>;
-+            regulator-max-microvolt = <6000000>;
-+            regulator-boot-on;
-+          };
-+          vibldo {
-+            regulator-name = "mt6370-vib-ldo";
-+            regulator-min-microvolt = <1600000>;
-+            regulator-max-microvolt = <4000000>;
-+          };
-+        };
-+      };
-+    };
-diff --git a/include/dt-bindings/iio/adc/mediatek,mt6370_adc.h b/include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
-new file mode 100644
-index 000000000000..18ce2fef8f9e
---- /dev/null
-+++ b/include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef __DT_BINDINGS_MEDIATEK_MT6370_ADC_H__
-+#define __DT_BINDINGS_MEDIATEK_MT6370_ADC_H__
-+
-+/* ADC Channel Index */
-+#define MT6370_CHAN_VBUSDIV5	0
-+#define MT6370_CHAN_VBUSDIV2	1
-+#define MT6370_CHAN_VSYS	2
-+#define MT6370_CHAN_VBAT	3
-+#define MT6370_CHAN_TS_BAT	4
-+#define MT6370_CHAN_IBUS	5
-+#define MT6370_CHAN_IBAT	6
-+#define MT6370_CHAN_CHG_VDDP	7
-+#define MT6370_CHAN_TEMP_JC	8
-+#define MT6370_CHAN_MAX		9
-+
-+#endif
-diff --git a/include/dt-bindings/mfd/mediatek,mt6370.h b/include/dt-bindings/mfd/mediatek,mt6370.h
-new file mode 100644
-index 000000000000..df641e5d651f
---- /dev/null
-+++ b/include/dt-bindings/mfd/mediatek,mt6370.h
-@@ -0,0 +1,83 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef __DT_BINDINGS_MEDIATEK_MT6370_H__
-+#define __DT_BINDINGS_MEDIATEK_MT6370_H__
-+
-+/* IRQ definitions */
-+#define MT6370_IRQ_DIRCHGON		0
-+#define MT6370_IRQ_CHG_TREG		4
-+#define MT6370_IRQ_CHG_AICR		5
-+#define MT6370_IRQ_CHG_MIVR		6
-+#define MT6370_IRQ_PWR_RDY		7
-+#define MT6370_IRQ_FL_CHG_VINOVP	11
-+#define MT6370_IRQ_CHG_VSYSUV		12
-+#define MT6370_IRQ_CHG_VSYSOV		13
-+#define MT6370_IRQ_CHG_VBATOV		14
-+#define MT6370_IRQ_CHG_VINOVPCHG	15
-+#define MT6370_IRQ_TS_BAT_COLD		20
-+#define MT6370_IRQ_TS_BAT_COOL		21
-+#define MT6370_IRQ_TS_BAT_WARM		22
-+#define MT6370_IRQ_TS_BAT_HOT		23
-+#define MT6370_IRQ_TS_STATC		24
-+#define MT6370_IRQ_CHG_FAULT		25
-+#define MT6370_IRQ_CHG_STATC		26
-+#define MT6370_IRQ_CHG_TMR		27
-+#define MT6370_IRQ_CHG_BATABS		28
-+#define MT6370_IRQ_CHG_ADPBAD		29
-+#define MT6370_IRQ_CHG_RVP		30
-+#define MT6370_IRQ_TSHUTDOWN		31
-+#define MT6370_IRQ_CHG_IINMEAS		32
-+#define MT6370_IRQ_CHG_ICCMEAS		33
-+#define MT6370_IRQ_CHGDET_DONE		34
-+#define MT6370_IRQ_WDTMR		35
-+#define MT6370_IRQ_SSFINISH		36
-+#define MT6370_IRQ_CHG_RECHG		37
-+#define MT6370_IRQ_CHG_TERM		38
-+#define MT6370_IRQ_CHG_IEOC		39
-+#define MT6370_IRQ_ADC_DONE		40
-+#define MT6370_IRQ_PUMPX_DONE		41
-+#define MT6370_IRQ_BST_BATUV		45
-+#define MT6370_IRQ_BST_MIDOV		46
-+#define MT6370_IRQ_BST_OLP		47
-+#define MT6370_IRQ_ATTACH		48
-+#define MT6370_IRQ_DETACH		49
-+#define MT6370_IRQ_HVDCP_STPDONE	51
-+#define MT6370_IRQ_HVDCP_VBUSDET_DONE	52
-+#define MT6370_IRQ_HVDCP_DET		53
-+#define MT6370_IRQ_CHGDET		54
-+#define MT6370_IRQ_DCDT			55
-+#define MT6370_IRQ_DIRCHG_VGOK		59
-+#define MT6370_IRQ_DIRCHG_WDTMR		60
-+#define MT6370_IRQ_DIRCHG_UC		61
-+#define MT6370_IRQ_DIRCHG_OC		62
-+#define MT6370_IRQ_DIRCHG_OV		63
-+#define MT6370_IRQ_OVPCTRL_SWON		67
-+#define MT6370_IRQ_OVPCTRL_UVP_D	68
-+#define MT6370_IRQ_OVPCTRL_UVP		69
-+#define MT6370_IRQ_OVPCTRL_OVP_D	70
-+#define MT6370_IRQ_OVPCTRL_OVP		71
-+#define MT6370_IRQ_FLED_STRBPIN		72
-+#define MT6370_IRQ_FLED_TORPIN		73
-+#define MT6370_IRQ_FLED_TX		74
-+#define MT6370_IRQ_FLED_LVF		75
-+#define MT6370_IRQ_FLED2_SHORT		78
-+#define MT6370_IRQ_FLED1_SHORT		79
-+#define MT6370_IRQ_FLED2_STRB		80
-+#define MT6370_IRQ_FLED1_STRB		81
-+#define mT6370_IRQ_FLED2_STRB_TO	82
-+#define MT6370_IRQ_FLED1_STRB_TO	83
-+#define MT6370_IRQ_FLED2_TOR		84
-+#define MT6370_IRQ_FLED1_TOR		85
-+#define MT6370_IRQ_OTP			93
-+#define MT6370_IRQ_VDDA_OVP		94
-+#define MT6370_IRQ_VDDA_UV		95
-+#define MT6370_IRQ_LDO_OC		103
-+#define MT6370_IRQ_BLED_OCP		118
-+#define MT6370_IRQ_BLED_OVP		119
-+#define MT6370_IRQ_DSV_VNEG_OCP		123
-+#define MT6370_IRQ_DSV_VPOS_OCP		124
-+#define MT6370_IRQ_DSV_BST_OCP		125
-+#define MT6370_IRQ_DSV_VNEG_SCP		126
-+#define MT6370_IRQ_DSV_VPOS_SCP		127
-+
-+#endif /* __DT_BINDINGS_MEDIATEK_MT6370_H__ */
+Description
+===========
+BWMON is a data bandwidth monitor providing throughput/bandwidth over certain
+interconnect links in a SoC.  It might be used to gather current bus usage and
+vote for interconnect bandwidth, thus adjusting the bus speed based on actual
+usage.
+
+The work is built on top of Thara Gopinath's patches with several cleanups,
+changes and simplifications.
+
+Best regards,
+Krzysztof
+
+Krzysztof Kozlowski (4):
+  dt-bindings: interconnect: qcom,sdm845-cpu-bwmon: add BWMON device
+  soc: qcom: icc-bwmon: Add bandwidth monitoring driver
+  arm64: defconfig: enable Qualcomm Bandwidth Monitor
+  arm64: dts: qcom: sdm845: Add CPU BWMON
+
+ .../interconnect/qcom,sdm845-cpu-bwmon.yaml   |  97 ++++
+ MAINTAINERS                                   |   7 +
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  54 +++
+ arch/arm64/configs/defconfig                  |   1 +
+ drivers/soc/qcom/Kconfig                      |  15 +
+ drivers/soc/qcom/Makefile                     |   1 +
+ drivers/soc/qcom/icc-bwmon.c                  | 418 ++++++++++++++++++
+ 7 files changed, 593 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
+ create mode 100644 drivers/soc/qcom/icc-bwmon.c
+
 -- 
-2.25.1
+2.34.1
 
