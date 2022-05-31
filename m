@@ -2,219 +2,271 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE1C539061
-	for <lists+linux-pm@lfdr.de>; Tue, 31 May 2022 14:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A3B5390A9
+	for <lists+linux-pm@lfdr.de>; Tue, 31 May 2022 14:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344095AbiEaMOa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 May 2022 08:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
+        id S1344215AbiEaMZj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 May 2022 08:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233776AbiEaMO2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 May 2022 08:14:28 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2050.outbound.protection.outlook.com [40.107.100.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB60986EB;
-        Tue, 31 May 2022 05:14:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ya9/DVqeewT/cSqSk08kRBqp00S7E8zMpBSWQI40/HBgZLOmCU0wjV3UNjhL5OufedmjulGeOWtX+dT/uWW8BhxkDfKYhAN81QJetpccK4r6+frrCqnBL0r3vgVGgt2DObb267gVugRBdlArL+Ww7e896dAQQfS93G8gtrI7OKwhfEEkbZ4Yum6XuLwjjDrW5era3njnQlBPkJsOMgk5DfGqRpmY+qa1Cejs8pjb6Q12PwYs6Gq38QSiioVRRXpTiwL/hrjHS+KF2EiWdse6iBlmZ/0+7ztQ39u2+RIh4DlX9JXWeIKSV1vmRAh57bMqspT/dHj23R26eL+kOjh92Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DlWaG+n2ocJe9g5um+6DjnLMnUKEBajrxod8iliTn4o=;
- b=T63cvpxtPMjEyADeTPt3UsHjIMCqk5Cy7lyQeCpLH4dRpff1Z9Qp3XZb2nI142cMF1vavHsY9xsJ4blFV9SPlaoH7rRqxuMaztklllV5y/BcrmCaAnoiroW1FMr6UtVHaLuQD5OEYXekyWNzPRD90GwcZCAgO8O7pkc9uggpke+lLphuSCl36XjbTTrW7DE7JWd09eQUJYWHW1T7OoSEXrtxYJKPh/nsM3+Zm8ukvl/ZhZWTRsnk1tnxz6C6vW/fv5XxFFQUlnokn/PHtdSwCAazZFt6YfnNnz8OSFFU8bvCJfQoHszEnAZ7b1B8L0SZyeCaYUWAva4MdMc1BVOntA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DlWaG+n2ocJe9g5um+6DjnLMnUKEBajrxod8iliTn4o=;
- b=Hmdjq44C502j88zC08D8NTG7AVENCjWvKBoMkUifA7Fjv9Ygn+Cgz6AQXOyaDwNWTOBOzc5jwIPbhbd1a0zvR4vCTwI/Kw5z51TgBqQ8xCQLUGRmXezglH+b/xzoLMDfYKycDYMHQ+5o8c8zTNDpYplrRbqRX1n7MQnO/tjPwN4DZozEvf5WtyNTcdDZuMb2gRzeLGVQZTXm5tQIL9B4WbzwkI9UK5LUhpqFhc/V1nW0aI+9b/BQnR82oIRSFSI8Jynby0kjY1tIqVRbFU3k50g22wPGo67xSEGcxONl5jLr90r784X/YlsdqRO422k/2T3aIIxYetqtrqKzOc4SoA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BL1PR12MB5304.namprd12.prod.outlook.com (2603:10b6:208:314::13)
- by MN0PR12MB6174.namprd12.prod.outlook.com (2603:10b6:208:3c5::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5293.19; Tue, 31 May
- 2022 12:14:25 +0000
-Received: from BL1PR12MB5304.namprd12.prod.outlook.com
- ([fe80::b844:73a2:d4b8:c057]) by BL1PR12MB5304.namprd12.prod.outlook.com
- ([fe80::b844:73a2:d4b8:c057%4]) with mapi id 15.20.5314.012; Tue, 31 May 2022
- 12:14:25 +0000
-Message-ID: <c73d537b-a653-bf79-68cd-ddc8f0f62a25@nvidia.com>
-Date:   Tue, 31 May 2022 17:44:11 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 8/8] vfio/pci: Add the support for PCI D3cold state
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
-References: <20220425092615.10133-1-abhsahu@nvidia.com>
- <20220425092615.10133-9-abhsahu@nvidia.com>
- <20220504134551.70d71bf0.alex.williamson@redhat.com>
- <9e44e9cc-a500-ab0d-4785-5ae26874b3eb@nvidia.com>
- <20220509154844.79e4915b.alex.williamson@redhat.com>
- <68463d9b-98ee-b9ec-1a3e-1375e50a2ad2@nvidia.com>
- <42518bd5-da8b-554f-2612-80278b527bf5@nvidia.com>
- <20220530122546.GZ1343366@nvidia.com>
-X-Nvconfidentiality: public
-From:   Abhishek Sahu <abhsahu@nvidia.com>
-In-Reply-To: <20220530122546.GZ1343366@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MA0PR01CA0009.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:80::20) To BL1PR12MB5304.namprd12.prod.outlook.com
- (2603:10b6:208:314::13)
+        with ESMTP id S1344224AbiEaMZi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 May 2022 08:25:38 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980EC8FFB4;
+        Tue, 31 May 2022 05:25:32 -0700 (PDT)
+X-UUID: 677773f18cee47b9a534dfaefdb15a0d-20220531
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:4f2e94e7-7d11-4f8b-9093-0dbca211270a,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:2a19b09,CLOUDID:2e746614-f88c-475e-badf-d9ee54230b8f,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 677773f18cee47b9a534dfaefdb15a0d-20220531
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <jia-wei.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1830817681; Tue, 31 May 2022 20:25:23 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Tue, 31 May 2022 20:25:22 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 31 May 2022 20:25:21 +0800
+Message-ID: <31eca4ae2ec103e95bf3faf70d8810dc972db344.camel@mediatek.com>
+Subject: Re: [PATCH v6 2/2] PM / devfreq: mediatek: Introduce MediaTek CCI
+ devfreq driver
+From:   Jia-Wei Chang <jia-wei.chang@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        <cw00.choi@samsung.com>, <krzk+dt@kernel.org>,
+        <robh+dt@kernel.org>, <kyungmin.park@samsung.com>
+CC:     <khilman@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 31 May 2022 20:25:22 +0800
+In-Reply-To: <e4d3ab91-9c53-79a0-76f8-098e6b846441@collabora.com>
+References: <20220527110036.8810-1-johnson.wang@mediatek.com>
+         <20220527110036.8810-3-johnson.wang@mediatek.com>
+         <e4d3ab91-9c53-79a0-76f8-098e6b846441@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5e89bb19-9c02-44f7-4d32-08da42ff196b
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6174:EE_
-X-Microsoft-Antispam-PRVS: <MN0PR12MB6174C730B4915D1065E09614CCDC9@MN0PR12MB6174.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: j6BPzinjwu/swHNXth12ZqV8PyB5YPPGZgnyu6be6qRgvKLY6rgMveInQpKSnHX7kz5K/OWqZarnvqX0OUbsQ3Y7CVOFTuulwbBngJjr5wnVjDL3NjaNj9d3AROr+y9KzsrMmMeYnFHmfEiLm4stNxPTbE2sczzm/PizwoRbvU50LRqSj09YyudvtDVfoY36cd0jdFEgydBBiVzqB5O+4QCy0vQ7SFm45yyFf2OpcJ1JRQ2dOs7LSS6SYP5iwFDEfQ690Xfv5FUpWbNssmURTaODf6gsZusJpQZF9ZdCnfeLSlk5Y+gfEurQyrhip7AH69aWKzqe2aks+TyaFQtMkJpYTe6YvxYZTUx/CHFZvJnNELn7Q/uIWQIR6jEBy+npe/8vTTppg4us7+Cap5wpK2Wym8TUvsvOB8R82jdEEPxTSMSnECKlOWzBUE2GWrbNl8dZUUHk8VmjJueTMBMHQA4dJlxnU6dM7Lql0/myvd/8RTgrgJLJclRLtpjQylulYBN3n8hw6SopDb1EjJZ+KxvwA4YjoD1Ytbqs7YKd/McvcpkHL9+gbPS4EG+jPKQDqA1nWvolRoV57NPz9eAsGHtx/VEriulBzyPo/7s2Lx376qtiRZze7gWWGlTqft6WmGcidsed6rRXUtWW9ZwxKVLU0KNF2Ar6ZqbfSIb5nJVNg8prT42ChIQY6FjGqpFm83O+nfKwW26ktPqIU57OqVvK7HWSfmEu2k8t3fcpGphb2AZaI6raWFIDSlvULRzwsBIXWLMJM/i0MHwN0wKqqw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5304.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(66556008)(2616005)(5660300002)(55236004)(6862004)(2906002)(4326008)(86362001)(31696002)(8676002)(66946007)(186003)(36756003)(7416002)(6666004)(31686004)(53546011)(6506007)(6512007)(83380400001)(26005)(508600001)(8936002)(6486002)(316002)(38100700002)(54906003)(6636002)(37006003)(32563001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MzRDeVlOTWtxQnpKVHRnTkkyTDJObWNEd1h2TTdrU0srVUhsbkhrckoySFBk?=
- =?utf-8?B?YjQybVZFbVJXWVBPZ2xOd29UMW9WUUNOMkIzWkpoZEt6ZS92aU5wdnNPRm1n?=
- =?utf-8?B?ekVHZTNqYnNlZTdRUTJzdlVkc05IdVEzU0ZvZGNIOVBrMjZZSWVPVWVYb0RB?=
- =?utf-8?B?MFpRbm9WNEhtVnNkR0xpQm10eEVCSlI5RVJSVlF6MlFsMU1ySEVUTXBnL2ta?=
- =?utf-8?B?TUl5cU9QdTFROGVaZDZNTThhWlNUQisyYjNlTC96bjloMzVTZGY4ZkhWYXBB?=
- =?utf-8?B?NEg0TVR6MDluMW5aSUgzSjhuakVBRmhmZnpHejROUytqYW9Mc2x5bmtmVWdv?=
- =?utf-8?B?Zmtyb2dyWDJETk5HWTNFSlIvTERFZmE3NE56RkswejQ0L1VBb2IxcWpENGdn?=
- =?utf-8?B?NGtVSWRoTUFVR2xFWEptQStkc282dW1semdxV1E5cG82bEVDYnREcGh5Tnhy?=
- =?utf-8?B?MzUwalVIWFExaFZFNUE2eUVCeTJLNVlRQzBPd3poMWxkeXlBcGNwZXlaWVhk?=
- =?utf-8?B?VHp4b0huTHB2YTJTc3ptUnpsVUlORmsyOXhLZWp0Vzh1OUJVUkZVNk5LVnVI?=
- =?utf-8?B?dCtSMVIrR09EbmgweDNzVTkxb3pVOC9tb0wzeUkxanBRMzY3MDNRbHdsM1Rk?=
- =?utf-8?B?ZXlkMTNGQkV5cytGWnpRQ2pqVU5ONE1LUi9IUG9uVkcyNnNDenBjbHloRTV1?=
- =?utf-8?B?RnN2aTYrVFFYNVZxZkEwTm45Sy9PNGJqNkJGWndnUllCcG1reVNKQ01USE1h?=
- =?utf-8?B?eTVrSERFS2NkVGdldGEra1RJU1EwWVpkNlprU3F5VjJNdXVlbGdyV2JibXJj?=
- =?utf-8?B?eis0SVQwbnNnVm0wU1IwQmhzSlBLOFY4WWlCRDNQdzZBYW81TGt2akUxTmxP?=
- =?utf-8?B?VVdQaEpuNWQ0S2FwcHJYbEpwOE55MkxMVFZ4cm54a1NzOVpBemlqaHpjQUxP?=
- =?utf-8?B?cnRmc2lVU3dyazZxUnQ2VlpyWVQvU0dBNGhkL09BS0MxZzlHTE5ZUUgyZU1n?=
- =?utf-8?B?ZWFCb2liRlIrSm9NR2h5M0kyMUs0OTBQWTA1N2FtS0xIcHl6UGFvSWk3VTUw?=
- =?utf-8?B?MHpsa08vWjBvb2IvemtoOEtaa0s5OVdKMFJaSC9UZXlQdlRLT1dsRGl6Z3ZO?=
- =?utf-8?B?d1FXUVlNcFJ3bWk0QTllMGMyMWhkSExIbG0yRm4yZ1g0a3NNQS9MejJHZGFQ?=
- =?utf-8?B?RG1POUYwUnlvYmVidUJmMVRwL2Z3WVRJSW1DNmJGLzd0ZEcwaERITmtrSitL?=
- =?utf-8?B?MDZ2RXRHcmowaE1MMksyNjJ0clo1a1JoMXdsMm9VT0J3SUkxMUptdG5GbFRo?=
- =?utf-8?B?azRZVWpQcWNaUUUyZld0OGVZaUJsc3QybWpDR0hjWFo3SWtFcmc0WGExa20v?=
- =?utf-8?B?bFB6WHVKVThldFV4a2dpSjFDMkh3R01uVzAxNXVSckFnKzJZdTVBK1NxM3RD?=
- =?utf-8?B?a3hMWE9IekZPN3h1S09lSFdlVDc5T3oyckFGUDFtb0RZTzd4R3FUN0luak9L?=
- =?utf-8?B?Y3prY0d0Ky9HMnJqdEIwb3FENUU3RHBhNzdDWnpzZ3N6ZTBSQTlHcitvblF3?=
- =?utf-8?B?WUhzVnl0RG5qSmxzWGpoTG5jNUxMYWpBd2NkV3J4L0NJUnJUcFY2NW9nSURv?=
- =?utf-8?B?NENlRlc4WlVRYmNXRTIvYnphNlQ4bWNlR3NYbG1FSzJGc08zMHEwR2M3NW5t?=
- =?utf-8?B?Q2JXczRZRWpLQmNjdnY2dTVNYXAyZG41alFyZGZTd21kbC9uR1Y2Wnlub3lB?=
- =?utf-8?B?UGJFcGFkQkNJMmZ3dzBMNlkvd05SZ2Q3dUJKSnZoMXduZWs2dG01KzFHTFRa?=
- =?utf-8?B?NEM2MTVNK3hkdmUvZ1JBSFhCdFVWN2NaZHlHckYvYkczZ0ZidGhJWFFxLytn?=
- =?utf-8?B?eEw1dXpsa2RtVkVyc0dKbjBRRHNreXMwcmJrWVcwUzNsRzk4UURjODBpRENI?=
- =?utf-8?B?SGlOeVhWYUI0ZzJJd1VXVlVDMWFPOXdobVRzbExIVVJ1Vk5ES0pWUEs5SDBO?=
- =?utf-8?B?WnFRZUpocDR6TW8vOVF0czg5WnZqRitBK3dWR05DKzVOWGRnTVdCbGJyUlBs?=
- =?utf-8?B?bnBuOWtZZWZwamg3QmVVVjRtY1JFSUtlVUwxTkd3NThOWjdDa3NBMDdDV2RJ?=
- =?utf-8?B?WEdhREdMWWlpUEdCczBnTnc4VzJpdXNxY081clhHZGxrek5EQ3Z5Um5rZEtl?=
- =?utf-8?B?dW9PRjZmNlpIUXJTU3lyZE5iZDNIcVVPWGo0MnIvNlMxR1U0cENHekhQMlZG?=
- =?utf-8?B?ZDB2WmJWVVdVM3c0ZzA4bXh1MzZGTzZ2ZVVua0dvVklhcGZCSmRpM281SUlN?=
- =?utf-8?B?cHNybWJMUWpBYXcraVRkT0MzeWZUeVBNbjRjU2VRQisxeHJMQlBvQT09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e89bb19-9c02-44f7-4d32-08da42ff196b
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5304.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2022 12:14:25.0518
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iXOR0awGacOt5zl710zhyyRb8r094mCQhOGpQeL0f5qgqQx6rDnhRtyiseDwfP/Zg6R3PhHulp682zBY2ih9ZA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6174
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/30/2022 5:55 PM, Jason Gunthorpe wrote:
-> On Mon, May 30, 2022 at 04:45:59PM +0530, Abhishek Sahu wrote:
+On Mon, 2022-05-30 at 14:16 +0200, AngeloGioacchino Del Regno wrote:
+> Il 27/05/22 13:00, Johnson Wang ha scritto:
+> > We introduce a devfreq driver for the MediaTek Cache Coherent
+> > Interconnect
+> > (CCI) used by some MediaTek SoCs.
+> > 
+> > In this driver, we use the passive devfreq driver to get target
+> > frequencies
+> > and adjust voltages accordingly. In MT8183 and MT8186, the MediaTek
+> > CCI
+> > is supplied by the same regulators with the little core CPUs.
+> > 
+> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> > Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+> > Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+> > ---
+> > This patch depends on "devfreq-testing"[1].
+> > [1]
+> > https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing__;!!CTRNKA9wMg0ARbw!2ldxtrMmK2WJP8_r1DcJRm0XQOSZQJfbI5DlNDPEfz84Ble0R7pSP7PbYLreNgVGRyFfDQ$
+> >  
+> > ---
+> >   drivers/devfreq/Kconfig           |  10 +
+> >   drivers/devfreq/Makefile          |   1 +
+> >   drivers/devfreq/mtk-cci-devfreq.c | 441
+> > ++++++++++++++++++++++++++++++
+> >   3 files changed, 452 insertions(+)
+> >   create mode 100644 drivers/devfreq/mtk-cci-devfreq.c
+> > 
+> > diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+> > index 87eb2b837e68..9754d8b31621 100644
+> > --- a/drivers/devfreq/Kconfig
+> > +++ b/drivers/devfreq/Kconfig
+> > @@ -120,6 +120,16 @@ config ARM_TEGRA_DEVFREQ
+> >   	  It reads ACTMON counters of memory controllers and adjusts
+> > the
+> >   	  operating frequencies and voltages with OPP support.
+> >   
+> > +config ARM_MEDIATEK_CCI_DEVFREQ
+> > +	tristate "MEDIATEK CCI DEVFREQ Driver"
+> > +	depends on ARM_MEDIATEK_CPUFREQ || COMPILE_TEST
+> > +	select DEVFREQ_GOV_PASSIVE
+> > +	help
+> > +	  This adds a devfreq driver for MediaTek Cache Coherent
+> > Interconnect
+> > +	  which is shared the same regulators with the cpu cluster. It
+> > can track
+> > +	  buck voltages and update a proper CCI frequency. Use the
+> > notification
+> > +	  to get the regulator status.
+> > +
+> >   config ARM_RK3399_DMC_DEVFREQ
+> >   	tristate "ARM RK3399 DMC DEVFREQ Driver"
+> >   	depends on (ARCH_ROCKCHIP && HAVE_ARM_SMCCC) || \
+> > diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
+> > index 0b6be92a25d9..bf40d04928d0 100644
+> > --- a/drivers/devfreq/Makefile
+> > +++ b/drivers/devfreq/Makefile
+> > @@ -11,6 +11,7 @@ obj-$(CONFIG_DEVFREQ_GOV_PASSIVE)	+=
+> > governor_passive.o
+> >   obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)	+= exynos-bus.o
+> >   obj-$(CONFIG_ARM_IMX_BUS_DEVFREQ)	+= imx-bus.o
+> >   obj-$(CONFIG_ARM_IMX8M_DDRC_DEVFREQ)	+= imx8m-ddrc.o
+> > +obj-$(CONFIG_ARM_MEDIATEK_CCI_DEVFREQ)	+= mtk-cci-devfreq.o
+> >   obj-$(CONFIG_ARM_RK3399_DMC_DEVFREQ)	+= rk3399_dmc.o
+> >   obj-$(CONFIG_ARM_SUN8I_A33_MBUS_DEVFREQ)	+= sun8i-a33-mbus.o
+> >   obj-$(CONFIG_ARM_TEGRA_DEVFREQ)		+= tegra30-devfreq.o
+> > diff --git a/drivers/devfreq/mtk-cci-devfreq.c
+> > b/drivers/devfreq/mtk-cci-devfreq.c
+> > new file mode 100644
+> > index 000000000000..df42da35b312
+> > --- /dev/null
+> > +++ b/drivers/devfreq/mtk-cci-devfreq.c
+> > @@ -0,0 +1,441 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright (C) 2022 MediaTek Inc.
+> > + */
+> > +
 > 
->>  1. In real use case, config or any other ioctl should not come along
->>     with VFIO_DEVICE_FEATURE_POWER_MANAGEMENT ioctl request.
->>  
->>  2. Maintain some 'access_count' which will be incremented when we
->>     do any config space access or ioctl.
+> ..snip..
 > 
-> Please don't open code locks - if you need a lock then write a proper
-> lock. You can use the 'try' variants to bail out in cases where that
-> is appropriate.
+> > +};
+> > +
+> > +static int mtk_ccifreq_probe(struct platform_device *pdev)
+> > +{
+> > +	struct device *dev = &pdev->dev;
+> > +	struct mtk_ccifreq_drv *drv;
+> > +	struct devfreq_passive_data *passive_data;
+> > +	struct dev_pm_opp *opp;
+> > +	unsigned long rate, opp_volt;
+> > +	int ret;
+> > +
+> > +	drv = devm_kzalloc(dev, sizeof(*drv), GFP_KERNEL);
+> > +	if (!drv)
+> > +		return -ENOMEM;
+> > +
+> > +	drv->dev = dev;
+> > +	drv->soc_data = (const struct mtk_ccifreq_platform_data *)
+> > +				of_device_get_match_data(&pdev->dev);
+> > +	mutex_init(&drv->reg_lock);
+> > +	platform_set_drvdata(pdev, drv);
+> > +
+> > +	drv->cci_clk = devm_clk_get(dev, "cci");
+> > +	if (IS_ERR(drv->cci_clk)) {
+> > +		ret = PTR_ERR(drv->cci_clk);
+> > +		return dev_err_probe(dev, ret,
+> > +				     "failed to get cci clk: %d\n",
+> > ret);
+> > +	}
+> > +
+> > +	drv->inter_clk = devm_clk_get(dev, "intermediate");
+> > +	if (IS_ERR(drv->inter_clk)) {
+> > +		ret = PTR_ERR(drv->inter_clk);
+> > +		return dev_err_probe(dev, ret,
+> > +				     "failed to get intermediate clk:
+> > %d\n", ret);
+> > +	}
+> > +
+> > +	drv->proc_reg = devm_regulator_get_optional(dev, "proc");
 > 
-> Jason
+> In the devicetree binding for this driver, the "proc" regulator is
+> *not* optional,
+> but here you're using devm_regulator_get_optional.
+> 
+> If this is not optional, you should use devm_regulator_get() instead.
+> 
 
- Thanks Jason for providing your inputs.
+Hi Angelo,
 
- In that case, should I introduce new rw_semaphore (For example
- power_lock) and move ‘platform_pm_engaged’ under ‘power_lock’ ?
- 
- I was mainly concerned about locking rules w.r.t. existing
- ‘memory_lock’ and the code present in
- vfio_pci_zap_and_down_write_memory_lock() which is internally taking
- ‘mmap_lock’ and ‘vma_lock’. But from the initial analysis, it seems
- this should not cause any issue since we should not need ‘power_lock’
- in the mmap fault handler or any read/write functions. We can
- maintain following locking order
- 
-   power_lock => memory_lock
- 
- 1. At the beginning of config space access or ioctl, we can take the
-    lock
- 
-     down_read(&vdev->power_lock);
-     if (vdev->platform_pm_engaged) {
-         up_read(&vdev->power_lock);
-         return -EIO;
-     }
- 
-    And before returning from config or ioctl, we can release the lock.
- 
- 2.  Now ‘platform_pm_engaged’ is not protected with memory_lock and we
-     need to support the case where VFIO_DEVICE_FEATURE_POWER_MANAGEMENT
-     can be called without putting the device into D3hot explicitly.
-     So, I need to introduce a second variable which tracks the memory
-     disablement (like power_state_d3 in this patch) and will be
-     protected with 'memory_lock'. It will be set for both the cases,
-     where users change the power state to D3hot by config
-     write or user makes this ioctl. Inside vfio_pci_core_feature_pm(), now
-     the code will become
-    
-         down_write(&vdev->power_lock);
-         ...
-         switch (vfio_pm.low_power_state) {
-         case VFIO_DEVICE_LOW_POWER_STATE_ENTER:
-                 ...
-                         vfio_pci_zap_and_down_write_memory_lock(vdev);
-                         vdev->power_state_d3 = true;
-                         up_write(&vdev->memory_lock);
+This is similiar case to mediatek-cpufreq.c [1].
 
-         ...
-         up_write(&vdev->power_lock);
- 
- 3.  Inside __vfio_pci_memory_enabled(), we can check
-     vdev->power_state_d3 instead of current_state.
- 
- 4.  For ioctl access, as mentioned previously I need to add two
-     callbacks functions (one for start and one for end) in the struct
-     vfio_device_ops and call the same at start and end of ioctl from
-     vfio_device_fops_unl_ioctl().
+Regulator framework has three variants of APIs for getting regulator
+handler.
+We do NOT choose regulator_get_exclusive() because cpufreq and cci
+share with the same power rail.
+We choose regulator_get_optional() so that we can handle error if it
+returns ERR_PTR(-ENODEV) rather than a dummy handler from
+regulator_get().
 
- Thanks,
- Abhishek
+Please inform me if I get it wrong.
+That's what I understand and you can refer to [2].
+
+Thanks.
+
+[1]: 20220408045908.21671-4-rex-bc.chen@mediatek.com
+[2]: 
+https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg1327385.html
+
+> > +	if (IS_ERR(drv->proc_reg)) {
+> > +		ret = PTR_ERR(drv->proc_reg);
+> > +		return dev_err_probe(dev, ret,
+> > +				     "failed to get proc regulator:
+> > %d\n", ret);
+> 
+> There's no need to print ret... dev_err_probe() takes care of that
+> for you already:
+> in this case, you're printing the value of ret twice.
+> 
+> > +	}
+> > +
+> > +	ret = regulator_enable(drv->proc_reg);
+> 
+> If you move this call after the devm_regulator_get_optional() call
+> for the sram
+> vreg, you will be able to use dev_err_probe for the latter as well.
+> 
+> > +	if (ret) {
+> > +		dev_err(dev, "failed to enable proc regulator\n");
+> 
+> Why aren't you using dev_err_probe here, like you've done for the
+> other instances?
+> 
+> > +		return ret;
+> > +	}
+> > +
+> > +	drv->sram_reg = devm_regulator_get_optional(dev, "sram");
+> > +	if (IS_ERR(drv->sram_reg))
+> > +		drv->sram_reg = NULL;
+> 
+> When you use regulator_get_optional() (including the devm_ variant of
+> it), you
+> shall return an error, if there's any... that's what the _optional()
+> is for.
+> 
+> if (IS_ERR(drv->sram_reg))
+> 	return dev_err_probe(dev, PTR_ERR(drv->proc_reg),
+> 			     "failed to get sram regulator");
+> 
+> > +	else {
+> > +		ret = regulator_enable(drv->sram_reg);
+> > +		if (ret) {
+> > +			dev_err(dev, "failed to enable sram
+> > regulator\n");
+> > +			goto out_free_resources;
+> > +		}
+> > +	}
+> > +
+> 
+> Regards,
+> Angelo
+> 
+> 
+
