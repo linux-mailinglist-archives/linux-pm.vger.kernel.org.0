@@ -2,67 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 665295399AA
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 00:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 356225399D6
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 00:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348476AbiEaWrD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 May 2022 18:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49328 "EHLO
+        id S1348578AbiEaWwP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 May 2022 18:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348400AbiEaWrA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 May 2022 18:47:00 -0400
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84FFDA466;
-        Tue, 31 May 2022 15:46:58 -0700 (PDT)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-f2a4c51c45so355449fac.9;
-        Tue, 31 May 2022 15:46:58 -0700 (PDT)
+        with ESMTP id S235623AbiEaWwO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 May 2022 18:52:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C08127CF3
+        for <linux-pm@vger.kernel.org>; Tue, 31 May 2022 15:52:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654037532;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9q9k+C5RGQU4qKgmWFkXDcgQ25M6UKH1DBXC6+yr110=;
+        b=E8E9R7zmtGGFSoCgN1WEBfttrIFe142RHCIs3N/J7k/laNcpKXQcjeOVw8WsgBIc56QPhH
+        NPE9SExht5T5qy3SHxf0Qgo90E2oHpsNZXJiNnKmvg5Yu3GItknp9kJ78Nd7R0PzucS3Li
+        yyslTAj5nF5PajyfZ3LAuuD8bekEiwI=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-659-11tj9_0APMGcioMXJQ4hYA-1; Tue, 31 May 2022 18:52:11 -0400
+X-MC-Unique: 11tj9_0APMGcioMXJQ4hYA-1
+Received: by mail-io1-f72.google.com with SMTP id k5-20020a6bba05000000b00668eb755190so1398645iof.13
+        for <linux-pm@vger.kernel.org>; Tue, 31 May 2022 15:52:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=AE9Fbrj6BPIXSH+6mmzzM5HJbPbBIVW+lbxzy622FhY=;
-        b=FC7YLCXVp+3Ey9OIsvgjO8KDG576KFeauHlGw9t9IKSPQoYy+B6Ehbg9N7Ys8Qmj2b
-         LmcAk4uBcXej5lFY3eJX00+fNT8nCYwM/FRlLQfSW+e63Gm5Ym6KP9OzTPCEBOOS4Nyb
-         9zDQIgoWggBTkFJizFd/bNEYl5SFd/MmWq8FTMjpzoQchlx9V8rP/Wn/KsfApTRhgMSS
-         LaPB5j8BSqzY4JQskTvNxp8wnrjQAM7K4YKN4W+xacuhXcIEcwiq4ZwFZ4MqP4kNam4g
-         7BvXB8v5N932AluPgFhuJUMJPCODzVK25uYIeDByuuvShMa0raQfnf/DEX1Q0e4kpZxD
-         VB+w==
-X-Gm-Message-State: AOAM531mZzff7zTh95UL62AZHhRlpQ7yBeIKsHZgTgAJaKmDydXz1SO+
-        k26Mv1kGjKXdj/z5e2B4Vg==
-X-Google-Smtp-Source: ABdhPJz9hzTJNp12uYZ4vHIk6ZhMev4DpgOt2zBvhqRIr7g1l5auyN0vlOttAqh+FCiKDf2dw2zOIw==
-X-Received: by 2002:a05:6870:b254:b0:ec:6ca4:c89f with SMTP id b20-20020a056870b25400b000ec6ca4c89fmr15083367oam.272.1654037217725;
-        Tue, 31 May 2022 15:46:57 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id u3-20020a056830248300b0060603221247sm7000503ots.23.2022.05.31.15.46.56
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=9q9k+C5RGQU4qKgmWFkXDcgQ25M6UKH1DBXC6+yr110=;
+        b=EJeycJHa7MYL3AvTMIfRvWebztO7Fim8jIry5MHs1xAb8T/G1GT/Q3dpTiCr6nM6jM
+         PaHdcgg+1TrCDahNHeWSpB8SJkMY4/MASLkY1mZU1yk3SmE2izt8RprHOQpRWcagwQ+o
+         pThLxxzwU30cMtNWppLIMfkRqsCPvevYBEd5HHL+rf+Ik3dwAlgYvyH2HaEPR+W5JLar
+         b8XPPBzVdGDO3QyEU5bKQI3EcnXUi2cqkrnpQpAtWz4gHYTBszUt4B05zoojApQ6GXZ6
+         XYWkYYR5knWAER+6WI5uTSaXrgDH5bhJ9RdLX6LBSvatJ7hDSQN7aoL3Xslm2Z5vZDl7
+         cbew==
+X-Gm-Message-State: AOAM530W0VMU/XHC9/y3/2g0Qf/BdOI15Oxkc7czTxU5K50Zo3axh/OM
+        n7hC0RCJYz8FFoP2X2tGgp0xo5hwxIAv9HIsIRaKBnD/FCtk7LXiuQNcYJEx9qR1QFM6wpn8B8V
+        2h7OFEhxOqjXrv+59MtQ=
+X-Received: by 2002:a05:6638:dc6:b0:32e:e2d7:8261 with SMTP id m6-20020a0566380dc600b0032ee2d78261mr21306062jaj.152.1654037531004;
+        Tue, 31 May 2022 15:52:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyFaz/Zncf57CZD055l8ggcPaldX2dVcDSiNf2yikAtVetyU+4sMp+QQR12XvYG/vo4kFwZKA==
+X-Received: by 2002:a05:6638:dc6:b0:32e:e2d7:8261 with SMTP id m6-20020a0566380dc600b0032ee2d78261mr21306045jaj.152.1654037530793;
+        Tue, 31 May 2022 15:52:10 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id c18-20020a92c8d2000000b002cde6e352ffsm33236ilq.73.2022.05.31.15.52.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 15:46:57 -0700 (PDT)
-Received: (nullmailer pid 2476555 invoked by uid 1000);
-        Tue, 31 May 2022 22:46:54 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     heikki.krogerus@linux.intel.com, broonie@kernel.org,
-        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, pavel@ucw.cz, sre@kernel.org,
-        dri-devel@lists.freedesktop.org, gregkh@linuxfoundation.org,
-        jic23@kernel.org, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        lgirdwood@gmail.com, linux-leds@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux@roeck-us.net,
-        chunfeng.yun@mediatek.com, linux-usb@vger.kernel.org,
-        alice_chen@richtek.com, lee.jones@linaro.org,
-        daniel.thompson@linaro.org, cy_huang@richtek.com,
-        robh+dt@kernel.org, chiaen_wu@richtek.com,
-        linux-fbdev@vger.kernel.org, jingoohan1@gmail.com, deller@gmx.de,
-        linux-pm@vger.kernel.org, lars@metafoo.de
-In-Reply-To: <20220531111900.19422-5-peterwu.pub@gmail.com>
-References: <20220531111900.19422-1-peterwu.pub@gmail.com> <20220531111900.19422-5-peterwu.pub@gmail.com>
-Subject: Re: [RESEND 04/14] dt-bindings: leds: Add Mediatek MT6370 flashlight binding
-Date:   Tue, 31 May 2022 17:46:54 -0500
-Message-Id: <1654037214.468113.2476554.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        Tue, 31 May 2022 15:52:10 -0700 (PDT)
+Date:   Tue, 31 May 2022 16:52:09 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Abhishek Sahu <abhsahu@nvidia.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Max Gurtovoy <mgurtovoy@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v3 8/8] vfio/pci: Add the support for PCI D3cold state
+Message-ID: <20220531165209.1c18854f.alex.williamson@redhat.com>
+In-Reply-To: <20220531194304.GN1343366@nvidia.com>
+References: <20220425092615.10133-1-abhsahu@nvidia.com>
+        <20220425092615.10133-9-abhsahu@nvidia.com>
+        <20220504134551.70d71bf0.alex.williamson@redhat.com>
+        <9e44e9cc-a500-ab0d-4785-5ae26874b3eb@nvidia.com>
+        <20220509154844.79e4915b.alex.williamson@redhat.com>
+        <68463d9b-98ee-b9ec-1a3e-1375e50a2ad2@nvidia.com>
+        <42518bd5-da8b-554f-2612-80278b527bf5@nvidia.com>
+        <20220530122546.GZ1343366@nvidia.com>
+        <c73d537b-a653-bf79-68cd-ddc8f0f62a25@nvidia.com>
+        <20220531194304.GN1343366@nvidia.com>
+Organization: Red Hat
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,41 +94,86 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 31 May 2022 19:18:50 +0800, ChiaEn Wu wrote:
-> From: Alice Chen <alice_chen@richtek.com>
-> 
-> Add Mediatek MT6370 flashlight binding documentation
-> 
-> Signed-off-by: Alice Chen <alice_chen@richtek.com>
-> ---
->  .../leds/mediatek,mt6370-flashlight.yaml      | 48 +++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/leds/mediatek,mt6370-flashlight.yaml
-> 
+On Tue, 31 May 2022 16:43:04 -0300
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> On Tue, May 31, 2022 at 05:44:11PM +0530, Abhishek Sahu wrote:
+> > On 5/30/2022 5:55 PM, Jason Gunthorpe wrote: =20
+> > > On Mon, May 30, 2022 at 04:45:59PM +0530, Abhishek Sahu wrote:
+> > >  =20
+> > >>  1. In real use case, config or any other ioctl should not come along
+> > >>     with VFIO_DEVICE_FEATURE_POWER_MANAGEMENT ioctl request.
+> > >> =20
+> > >>  2. Maintain some 'access_count' which will be incremented when we
+> > >>     do any config space access or ioctl. =20
+> > >=20
+> > > Please don't open code locks - if you need a lock then write a proper
+> > > lock. You can use the 'try' variants to bail out in cases where that
+> > > is appropriate.
+> > >=20
+> > > Jason =20
+> >=20
+> >  Thanks Jason for providing your inputs.
+> >=20
+> >  In that case, should I introduce new rw_semaphore (For example
+> >  power_lock) and move =E2=80=98platform_pm_engaged=E2=80=99 under =E2=
+=80=98power_lock=E2=80=99 ? =20
+>=20
+> Possibly, this is better than an atomic at least
+>=20
+> >  1. At the beginning of config space access or ioctl, we can take the
+> >     lock
+> > =20
+> >      down_read(&vdev->power_lock); =20
+>=20
+> You can also do down_read_trylock() here and bail out as you were
+> suggesting with the atomic.
+>=20
+> trylock doesn't have lock odering rules because it can't sleep so it
+> gives a bit more flexability when designing the lock ordering.
+>=20
+> Though userspace has to be able to tolerate the failure, or never make
+> the request.
+>=20
+> >          down_write(&vdev->power_lock);
+> >          ...
+> >          switch (vfio_pm.low_power_state) {
+> >          case VFIO_DEVICE_LOW_POWER_STATE_ENTER:
+> >                  ...
+> >                          vfio_pci_zap_and_down_write_memory_lock(vdev);
+> >                          vdev->power_state_d3 =3D true;
+> >                          up_write(&vdev->memory_lock);
+> >=20
+> >          ...
+> >          up_write(&vdev->power_lock); =20
+>=20
+> And something checks the power lock before allowing the memor to be
+> re-enabled?
+>=20
+> >  4.  For ioctl access, as mentioned previously I need to add two
+> >      callbacks functions (one for start and one for end) in the struct
+> >      vfio_device_ops and call the same at start and end of ioctl from
+> >      vfio_device_fops_unl_ioctl(). =20
+>=20
+> Not sure I followed this..
 
-yamllint warnings/errors:
+I'm kinda lost here too.  A couple replies back there was some concern
+about race scenarios with multiple user threads accessing the device.
+The ones concerning non-deterministic behavior if a user is
+concurrently changing power state and performing other accesses are a
+non-issue, imo.  I think our goal is only to expand the current
+memory_lock to block accesses, including config space, while the device
+is in low power, or some approximation bounded by the entry/exit ioctl.
 
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/leds/mediatek,mt6370-flashlight.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/leds/mediatek,mt6370-flashlight.yaml#
+I think the remaining issues is how to do that relative to the fact
+that config space access can change the memory enable state and would
+therefore need to upgrade the memory_lock read-lock to a write-lock.
+For that I think we can simply drop the read-lock, acquire the
+write-lock, and re-test the low power state.  If it has changed, that
+suggests the user has again raced changing power state with another
+access and we can simply drop the lock and return -EIO.
 
-doc reference errors (make refcheckdocs):
-Warning: Documentation/devicetree/bindings/leds/mediatek,mt6370-flashlight.yaml references a file that doesn't exist: Documentation/devicetree/bindings/mfd/mt6370.yaml
-Documentation/devicetree/bindings/leds/mediatek,mt6370-flashlight.yaml: Documentation/devicetree/bindings/mfd/mt6370.yaml
+If I'm still misunderstanding, please let me know.  Thanks,
 
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+Alex
 
