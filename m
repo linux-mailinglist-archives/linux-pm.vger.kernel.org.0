@@ -2,83 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB3BB539837
-	for <lists+linux-pm@lfdr.de>; Tue, 31 May 2022 22:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B68055398A8
+	for <lists+linux-pm@lfdr.de>; Tue, 31 May 2022 23:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347860AbiEaUq1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 May 2022 16:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
+        id S1347980AbiEaVZH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 31 May 2022 17:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238424AbiEaUq0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 May 2022 16:46:26 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBD18CCCE
-        for <linux-pm@vger.kernel.org>; Tue, 31 May 2022 13:46:23 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id y13so28989795eje.2
-        for <linux-pm@vger.kernel.org>; Tue, 31 May 2022 13:46:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KcvmS0RVCH7dS0drP08+taDktOji7A6kv3U7tUCF6Ik=;
-        b=HTr4rtci7pN7h0V00Ch+MPN8QFo2ca3cbuR97hJFCjr/w9xXjQBq2dVHkwu2xOQxuP
-         1BAcI7MDZnyoPC+UpdTeLBJPlg2PhTf6pVAwFMZWgaAMuCIAkFRoqjReMoODOOjmEMJX
-         IjUtvCCX1SazMLSX9dPPH4ll/fvXY9zNkCpWYWWm6qiRiNScCJ5X+FtKaejGXadsVW5p
-         Lz/guvnDDwLOuKIEGKL0cTmlihLsXks9QmOOfUl3nvKkS4hvGf3sf1rozyplnW3X71yG
-         o2gtsW2bOmKqoFZiVYnKs8AIcYfZFHvPWTEsCleu1N6AOYbrFfsieqmW/d1LzaiWM6l2
-         +aOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KcvmS0RVCH7dS0drP08+taDktOji7A6kv3U7tUCF6Ik=;
-        b=dhcyukFA7FR/jpkO+0iEx7uv2R/3YvLkF8KfUcrpw571GcFhq1ibNMa0ltP257pvwE
-         sCShDQWrLUWVZw0O4Fe+nSmWSN/CLb2wDVVRaAudwP6xeVAEsX6bn/CtM9tike35HqZZ
-         1xFYnMhnWjG6NiRsQYOm/DFErZ6VDhH0IlhOo+zht4nri13Msfu2Eg0SmbHAEhgfbTPp
-         XBcibu9GNSNJ+4QxnlNC0LZ6awTT0VvTP0kj2x0d/7I9UqYLTKDflzE1cJVLP5xfQ4tW
-         2URODzr2tC2NBwfEui/RSev8JDy6YJ/dZHkDWuYgbvXITPRcw4NtPLDh06YoSdArmlr6
-         mhqg==
-X-Gm-Message-State: AOAM530Oaz+icO6mdziCNSf6kF//Vp4Io9fla44sQi6bzJRcxxznkwaN
-        6Nw0OeIzy2+ZKf4yviaFI/bL0w==
-X-Google-Smtp-Source: ABdhPJxKQIk0np3addOYv0X6i3FNyMcBrbHc8niPiUYWepcaSBJXVhBWS9DiYV743l/82t3zhs6jFw==
-X-Received: by 2002:a17:906:685:b0:6fa:8e17:e9b5 with SMTP id u5-20020a170906068500b006fa8e17e9b5mr57334212ejb.522.1654029981975;
-        Tue, 31 May 2022 13:46:21 -0700 (PDT)
-Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id k2-20020a1709063e0200b006f3ef214e5bsm5182391eji.193.2022.05.31.13.46.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 May 2022 13:46:21 -0700 (PDT)
-Message-ID: <4ac3dc81-98e5-8c94-8dd4-b30ee587eb42@linaro.org>
-Date:   Tue, 31 May 2022 22:46:20 +0200
+        with ESMTP id S1347989AbiEaVZC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 May 2022 17:25:02 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD149CF26;
+        Tue, 31 May 2022 14:25:00 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id 4C9F21F43F0B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1654032299;
+        bh=dWPjJiUcTEsCTwSVeYSxHnF1/ruJ13+dt9/M97DHXpY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=iw1cl93DawB1wUr9b6KkZdHCFs5+L/GBohLHlROEAOks05zME/v6MXMPk6D7ui5Yi
+         RNRHdZFdzCLwhRjjb38P9M6JexB3Wbp2yKOPr5eeU8sVg/8ntyHzURiHlZSY6J8Cm9
+         q6oV/gJyO14M2ElVzYwoEuvi7LeAOBJpJO7JVAQIQbIk2iZISrAGCD8WEks6N0mo8W
+         PABIM3KRc5wMYvZgEpozGR6zO7yQLUE2dke3U5CmMfjFhmLTkzt3Ddgs0XBxEfDRJn
+         c+JlwyAdHThzhqLupTWaB45a5dOVfxT+a6WiHu8uAbSXS41ExvvXWl05U0ZRpjuSZP
+         ldNnEXKzwDRFg==
+Message-ID: <a41c323a-5d69-0ff1-d0da-38eb55e1e4db@collabora.com>
+Date:   Wed, 1 Jun 2022 00:24:49 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 14/14] dt-bindings: mfd: Add Mediatek MT6370 binding
- documentation
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v8 16/27] m68k: Switch to new sys-off handler API
 Content-Language: en-US
-To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee.jones@linaro.org,
-        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, jic23@kernel.org, lars@metafoo.de,
-        lgirdwood@gmail.com, broonie@kernel.org, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, deller@gmx.de
-Cc:     cy_huang@richtek.com, alice_chen@richtek.com,
-        chiaen_wu@richtek.com, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org
-References: <20220531102809.11976-1-peterwu.pub@gmail.com>
- <20220531102809.11976-15-peterwu.pub@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220531102809.11976-15-peterwu.pub@gmail.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-csky@vger.kernel.org,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        xen-devel@lists.xenproject.org,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>
+References: <20220509233235.995021-1-dmitry.osipenko@collabora.com>
+ <20220509233235.995021-17-dmitry.osipenko@collabora.com>
+ <CAMuHMdUFqf58F31EAGnhp_cu9k-G4Sx1cmwx-PGb3mU+6bjRnQ@mail.gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <CAMuHMdUFqf58F31EAGnhp_cu9k-G4Sx1cmwx-PGb3mU+6bjRnQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,382 +108,173 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 31/05/2022 12:28, ChiaEn Wu wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
+On 5/31/22 22:04, Geert Uytterhoeven wrote:
+> Hi Dmitry,
 > 
-> Add Mediatek MT6370 binding documentation.
-
-Subject: same as previous patches.
-
+> On Tue, May 10, 2022 at 1:34 AM Dmitry Osipenko
+> <dmitry.osipenko@collabora.com> wrote:
+>> Kernel now supports chained power-off handlers. Use
+>> register_power_off_handler() that registers power-off handlers and
+>> do_kernel_power_off() that invokes chained power-off handlers. Legacy
+>> pm_power_off() will be removed once all drivers will be converted to
+>> the new sys-off API.
+>>
+>> Normally arch code should adopt only the do_kernel_power_off() at first,
+>> but m68k is a special case because it uses pm_power_off() "inside out",
+>> i.e. pm_power_off() invokes machine_power_off() [in fact it does nothing],
+>> while it's machine_power_off() that should invoke the pm_power_off(), and
+>> thus, we can't convert platforms to the new API separately. There are only
+>> two platforms changed here, so it's not a big deal.
+>>
+>> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+>> Reviewed-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 > 
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> ---
->  .../bindings/mfd/mediatek,mt6370.yaml         | 282 ++++++++++++++++++
->  .../dt-bindings/iio/adc/mediatek,mt6370_adc.h |  18 ++
->  include/dt-bindings/mfd/mediatek,mt6370.h     |  83 ++++++
->  3 files changed, 383 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
->  create mode 100644 include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
->  create mode 100644 include/dt-bindings/mfd/mediatek,mt6370.h
+> Thanks for your patch, which is now commit f0f7e5265b3b37b0
+> ("m68k: Switch to new sys-off handler API") upstream.
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> new file mode 100644
-> index 000000000000..96a12dce0108
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> @@ -0,0 +1,282 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/mediatek,mt6370.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Mediatek MT6370 SubPMIC
-> +
-> +maintainers:
-> +  - ChiYuan Huang <cy_huang@richtek.com>
-> +
-> +description: |
-> +  MT6370 is a highly-integrated smart power management IC, which includes a
-> +  single cell Li-Ion/Li-Polymer switching battery charger, a USB Type-C &
-> +  Power Delivery (PD) controller, dual flash LED current sources, a RGB LED
-> +  driver, a backlight WLED driver, a display bias driver and a general LDO for
-> +  portable devices.
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt6370
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  wakeup-source: true
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  interrupt-controller: true
-> +
-> +  '#interrupt-cells':
-> +    const: 1
-> +
-> +  adc:
-> +    type: object
-> +    description: |
-> +      List the compatible configurations of MT6370 ADC.
+>> --- a/arch/m68k/emu/natfeat.c
+>> +++ b/arch/m68k/emu/natfeat.c
+>> @@ -15,6 +15,7 @@
+>>  #include <linux/string.h>
+>>  #include <linux/kernel.h>
+>>  #include <linux/module.h>
+>> +#include <linux/reboot.h>
+>>  #include <linux/io.h>
+>>  #include <asm/machdep.h>
+>>  #include <asm/natfeat.h>
+>> @@ -90,5 +91,5 @@ void __init nf_init(void)
+>>         pr_info("NatFeats found (%s, %lu.%lu)\n", buf, version >> 16,
+>>                 version & 0xffff);
+>>
+>> -       mach_power_off = nf_poweroff;
+>> +       register_platform_power_off(nf_poweroff);
+> 
+> Unfortunately nothing is registered, as this is called very early
+> (from setup_arch(), before the memory allocator is available.
+> Hence register_sys_off_handler() fails with -ENOMEM, and poweroff
+> stops working.
+> 
+> Possible solutions:
+>   - As at most one handler can be registered,
+>     register_platform_power_off() could use a static struct sys_off_handler
+>     instance,
+>   - Keep mach_power_off, and call register_platform_power_off() later.
+> 
+> Anything else?
+> Thanks!
+> 
+>> --- a/arch/m68k/mac/config.c
+>> +++ b/arch/m68k/mac/config.c
+>> @@ -12,6 +12,7 @@
+>>
+>>  #include <linux/errno.h>
+>>  #include <linux/module.h>
+>> +#include <linux/reboot.h>
+>>  #include <linux/types.h>
+>>  #include <linux/mm.h>
+>>  #include <linux/tty.h>
+>> @@ -140,7 +141,6 @@ void __init config_mac(void)
+>>         mach_hwclk = mac_hwclk;
+>>         mach_reset = mac_reset;
+>>         mach_halt = mac_poweroff;
+>> -       mach_power_off = mac_poweroff;
+>>  #if IS_ENABLED(CONFIG_INPUT_M68K_BEEP)
+>>         mach_beep = mac_mksound;
+>>  #endif
+>> @@ -160,6 +160,8 @@ void __init config_mac(void)
+>>
+>>         if (macintosh_config->ident == MAC_MODEL_IICI)
+>>                 mach_l2_flush = via_l2_flush;
+>> +
+>> +       register_platform_power_off(mac_poweroff);
+>>  }
+> 
+> This must have the same problem.
 
-This sentence does not make any sense. The "description" field is to
-describe, explain the meaning behind given property.
+The static variant should be better, IMO. I'm not sure whether other platforms won't face the same problem once they will start using register_platform_power_off(). I'll send the fix, thank you for the testing!
 
-> +
-> +    properties:
-> +      compatible:
-> +        const: mediatek,mt6370-adc
-> +
-> +      "#io-channel-cells":
-> +        const: 1
-> +
-> +    required:
-> +      - compatible
-> +      - '#io-channel-cells'
-> +
-> +  backlight:
-> +    type: object
-> +    $ref: /schemas/leds/backlight/mediatek,mt6370-backlight.yaml#
-> +
-> +  charger:
-> +    type: object
-> +    $ref: /schemas/power/supply/mediatek,mt6370-charger.yaml#
-> +
-> +  tcpc:
-> +    type: object
-> +    $ref: /schemas/usb/mediatek,mt6370-tcpc.yaml#
-> +
-> +  indicator:
-> +    type: object
-> +    $ref: /schemas/leds/mediatek,mt6370-indicator.yaml#
-> +
-> +  flashlight:
-> +    type: object
-> +    $ref: /schemas/leds/mediatek,mt6370-flashlight.yaml#
-> +
-> +  regulators:
-> +    type: object
-> +    description: |
-> +      List all supported regulators
+--- >8 ---
 
-Ditto
-
-> +
-> +    patternProperties:
-> +      "^(dsvbst|vibldo)$":
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        type: object
-> +        unevaluatedProperties: false
-> +
-> +      "^(dsvpos|dsvneg)$":
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        type: object
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          enable-gpio:
-> +            maxItems: 1
-> +            description: |
-> +              Specify a valid 'enable' gpio for the regulator and it's optional
-
-Same comment as your patch #10.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - interrupt-controller
-> +  - '#interrupt-cells'
-> +  - regulators
-> +  - adc
-> +  - backlight
-> +  - indicator
-> +  - tcpc
-> +  - charger
-> +  - flashlight
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/leds/common.h>
-> +    #include <dt-bindings/mfd/mediatek,mt6370.h>
-> +    #include <dt-bindings/iio/adc/mediatek,mt6370_adc.h>
-> +    #include <dt-bindings/usb/pd.h>
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      mt6370@34 {
-
-Generic node name, so "pmic".
-
-> +        compatible = "mediatek,mt6370";
-> +        reg = <0x34>;
-> +        wakeup-source;
-> +        interrupts-extended = <&gpio26 3 IRQ_TYPE_LEVEL_LOW>;
-> +        interrupt-controller;
-> +        #interrupt-cells = <1>;
-> +
-> +        mt6370_adc: adc {
-> +          compatible = "mediatek,mt6370-adc";
-> +          #io-channel-cells = <1>;
-> +        };
-> +
-> +        backlight {
-> +          compatible = "mediatek,mt6370-backlight";
-> +          mediatek,bled-channel-use = /bits/ 8 <15>;
-> +        };
-> +
-> +        charger {
-> +          compatible = "mediatek,mt6370-charger";
-> +          interrupts = <MT6370_IRQ_ATTACH>, <MT6370_IRQ_OVPCTRL_UVP_D>,
-> +                       <MT6370_IRQ_CHG_MIVR>;
-> +          interrupt-names = "attach_i", "uvp_d_evt", "mivr";
-> +          io-channels = <&mt6370_adc MT6370_CHAN_IBUS>;
-> +
-> +          mt6370_otg_vbus: usb-otg-vbus {
-> +            regulator-compatible = "mt6370,otg-vbus";
-> +            regulator-name = "usb-otg-vbus";
-> +            regulator-min-microvolt = <4350000>;
-> +            regulator-max-microvolt = <5800000>;
-> +            regulator-min-microamp = <500000>;
-> +            regulator-max-microamp = <3000000>;
-> +          };
-> +        };
-> +
-> +        indicator {
-> +          compatible = "mediatek,mt6370-indicator";
-> +          #address-cells = <1>;
-> +          #size-cells = <0>;
-> +
-> +          multi-led@0 {
-> +            reg = <0>;
-> +            function = LED_FUNCTION_INDICATOR;
-> +            color = <LED_COLOR_ID_RGB>;
-> +            led-max-microamp = <24000>;
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +            mediatek,soft-start = <3>;
-> +              led@0 {
-
-Messed up indentation.
-
-> +                reg = <0>;
-> +                color = <LED_COLOR_ID_RED>;
-> +              };
-> +              led@1 {
-> +                reg = <1>;
-> +                color = <LED_COLOR_ID_GREEN>;
-> +              };
-> +              led@2 {
-> +                reg = <2>;
-> +                color = <LED_COLOR_ID_BLUE>;
-> +              };
-> +            };
-> +          led@3 {
-> +            reg = <3>;
-> +            function = LED_FUNCTION_INDICATOR;
-> +            color = <LED_COLOR_ID_WHITE>;
-> +            led-max-microamp = <6000>;
-> +          };
-> +        };
-> +
-> +        flashlight {
-> +          compatible = "mediatek,mt6370-flashlight";
-> +          #address-cells = <1>;
-> +          #size-cells = <0>;
-> +          led@0 {
-> +            reg = <0>;
-> +            led-sources = <0>;
-> +            function = LED_FUNCTION_FLASH;
-> +            color = <LED_COLOR_ID_WHITE>;
-> +            function-enumerator = <1>;
-> +            led-max-microamp = <200000>;
-> +            flash-max-microamp = <500000>;
-> +            flash-max-timeout-us = <1248000>;
-> +          };
-> +          led@1 {
-> +            reg = <1>;
-> +            led-sources = <1>;
-> +            function = LED_FUNCTION_FLASH;
-> +            color = <LED_COLOR_ID_WHITE>;
-> +            function-enumerator = <2>;
-> +            led-max-microamp = <200000>;
-> +            flash-max-microamp = <500000>;
-> +            flash-max-timeout-us = <1248000>;
-> +          };
-> +        };
-> +
-> +        tcpc {
-> +          compatible = "mediatek,mt6370-tcpc";
-> +          interrupts-extended = <&gpio26 4 IRQ_TYPE_LEVEL_LOW>;
-> +
-> +          connector {
-> +            compatible = "usb-c-connector";
-> +            label = "USB-C";
-> +            vbus-supply = <&mt6370_otg_vbus>;
-> +            data-role = "dual";
-> +            power-role = "dual";
-> +            try-power-role = "sink";
-> +            source-pdos = <PDO_FIXED(5000, 1000, PDO_FIXED_DUAL_ROLE | PDO_FIXED_DATA_SWAP)>;
-> +            sink-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_DUAL_ROLE | PDO_FIXED_DATA_SWAP)>;
-> +            op-sink-microwatt = <10000000>;
-> +
-> +            ports {
-> +              #address-cells = <1>;
-> +              #size-cells = <0>;
-> +
-> +              port@0 {
-> +                reg = <0>;
-> +                endpoint {
-> +                  remote-endpoint = <&usb_hs>;
-> +                };
-> +              };
-> +              port@1 {
-> +                reg = <1>;
-> +                endpoint {
-> +                  remote-endpoint = <&usb_ss>;
-> +                };
-> +              };
-> +              port@2 {
-> +                reg = <2>;
-> +                endpoint {
-> +                  remote-endpoint = <&dp_aux>;
-> +                };
-> +              };
-> +            };
-> +          };
-> +        };
-> +
-> +        regulators {
-> +          dsvbst {
-> +            regulator-name = "mt6370-dsv-vbst";
-> +            regulator-min-microvolt = <4000000>;
-> +            regulator-max-microvolt = <6200000>;
-> +          };
-> +          dsvpos {
-> +            regulator-name = "mt6370-dsv-vpos";
-> +            regulator-min-microvolt = <4000000>;
-> +            regulator-max-microvolt = <6000000>;
-> +            regulator-boot-on;
-> +          };
-> +          dsvneg {
-> +            regulator-name = "mt6370-dsv-vneg";
-> +            regulator-min-microvolt = <4000000>;
-> +            regulator-max-microvolt = <6000000>;
-> +            regulator-boot-on;
-> +          };
-> +          vibldo {
-> +            regulator-name = "mt6370-vib-ldo";
-> +            regulator-min-microvolt = <1600000>;
-> +            regulator-max-microvolt = <4000000>;
-> +          };
-> +        };
-> +      };
-> +    };
-> diff --git a/include/dt-bindings/iio/adc/mediatek,mt6370_adc.h b/include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
-> new file mode 100644
-> index 000000000000..18ce2fef8f9e
-> --- /dev/null
-> +++ b/include/dt-bindings/iio/adc/mediatek,mt6370_adc.h
-> @@ -0,0 +1,18 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-
-Same license as bindings, please.
-
-> +
-> +#ifndef __DT_BINDINGS_MEDIATEK_MT6370_ADC_H__
-> +#define __DT_BINDINGS_MEDIATEK_MT6370_ADC_H__
-> +
-> +/* ADC Channel Index */
-> +#define MT6370_CHAN_VBUSDIV5	0
-> +#define MT6370_CHAN_VBUSDIV2	1
-> +#define MT6370_CHAN_VSYS	2
-> +#define MT6370_CHAN_VBAT	3
-> +#define MT6370_CHAN_TS_BAT	4
-> +#define MT6370_CHAN_IBUS	5
-> +#define MT6370_CHAN_IBAT	6
-> +#define MT6370_CHAN_CHG_VDDP	7
-> +#define MT6370_CHAN_TEMP_JC	8
-> +#define MT6370_CHAN_MAX		9
-> +
-> +#endif
-> diff --git a/include/dt-bindings/mfd/mediatek,mt6370.h b/include/dt-bindings/mfd/mediatek,mt6370.h
-> new file mode 100644
-> index 000000000000..df641e5d651f
-> --- /dev/null
-> +++ b/include/dt-bindings/mfd/mediatek,mt6370.h
-> @@ -0,0 +1,83 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-
-Same license as bindings, please.
-
-> +
-> +#ifndef __DT_BINDINGS_MEDIATEK_MT6370_H__
-> +#define __DT_BINDINGS_MEDIATEK_MT6370_H__
-> +
-> +/* IRQ definitions */
-
-> +#define MT6370_IRQ_DIRCHGON		0
-> +#define MT6370_IRQ_CHG_TREG		4
-
-These should be IDs, so numbers incremented by one. Holes are not
-accepted. There is no point in encoding actual hardware numbers which
-are directly passed to implementation. Just pass the number, not define.
-Therefore remove entire file.
-
-> +#define MT6370_IRQ_CHG_AICR		5
-> +#define MT6370_IRQ_CHG_MIVR		6
-> +#define MT6370_IRQ_PWR_RDY		7
-> +#define MT6370_IRQ_FL_CHG_VINOVP	11
-Best regards,
-Krzysztof
+diff --git a/kernel/reboot.c b/kernel/reboot.c
+index a091145ee710..4fea05d387dc 100644
+--- a/kernel/reboot.c
++++ b/kernel/reboot.c
+@@ -315,6 +315,37 @@ static int sys_off_notify(struct notifier_block *nb,
+ 	return handler->sys_off_cb(&data);
+ }
+ 
++static struct sys_off_handler platform_sys_off_handler;
++
++static struct sys_off_handler *alloc_sys_off_handler(int priority)
++{
++	struct sys_off_handler *handler;
++
++	/*
++	 * Platforms like m68k can't allocate sys_off handler dynamically
++	 * at the early boot time.
++	 */
++	if (priority == SYS_OFF_PRIO_PLATFORM) {
++		handler = &platform_sys_off_handler;
++		if (handler->cb_data)
++			return ERR_PTR(-EBUSY);
++	} else {
++		handler = kzalloc(sizeof(*handler), GFP_KERNEL);
++		if (!handler)
++			return ERR_PTR(-ENOMEM);
++	}
++
++	return handler;
++}
++
++static void free_sys_off_handler(struct sys_off_handler *handler)
++{
++	if (handler == &platform_sys_off_handler)
++		memset(handler, 0, sizeof(*handler));
++	else
++		kfree(handler);
++}
++
+ /**
+  *	register_sys_off_handler - Register sys-off handler
+  *	@mode: Sys-off mode
+@@ -345,9 +376,9 @@ register_sys_off_handler(enum sys_off_mode mode,
+ 	struct sys_off_handler *handler;
+ 	int err;
+ 
+-	handler = kzalloc(sizeof(*handler), GFP_KERNEL);
+-	if (!handler)
+-		return ERR_PTR(-ENOMEM);
++	handler = alloc_sys_off_handler(priority);
++	if (IS_ERR(handler))
++		return handler;
+ 
+ 	switch (mode) {
+ 	case SYS_OFF_MODE_POWER_OFF_PREPARE:
+@@ -364,7 +395,7 @@ register_sys_off_handler(enum sys_off_mode mode,
+ 		break;
+ 
+ 	default:
+-		kfree(handler);
++		free_sys_off_handler(handler);
+ 		return ERR_PTR(-EINVAL);
+ 	}
+ 
+@@ -391,7 +422,7 @@ register_sys_off_handler(enum sys_off_mode mode,
+ 	}
+ 
+ 	if (err) {
+-		kfree(handler);
++		free_sys_off_handler(handler);
+ 		return ERR_PTR(err);
+ 	}
+ 
+@@ -422,7 +453,7 @@ void unregister_sys_off_handler(struct sys_off_handler *handler)
+ 	/* sanity check, shall never happen */
+ 	WARN_ON(err);
+ 
+-	kfree(handler);
++	free_sys_off_handler(handler);
+ }
+ EXPORT_SYMBOL_GPL(unregister_sys_off_handler);
+ 
