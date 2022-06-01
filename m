@@ -2,95 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3F053A49F
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 14:13:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079F353A518
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 14:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350470AbiFAMN4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jun 2022 08:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35240 "EHLO
+        id S242057AbiFAMeJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jun 2022 08:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241956AbiFAMNz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 08:13:55 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3DA57992
-        for <linux-pm@vger.kernel.org>; Wed,  1 Jun 2022 05:13:54 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id q21so3377941ejm.1
-        for <linux-pm@vger.kernel.org>; Wed, 01 Jun 2022 05:13:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=iEYtWp/LKb36SgGQwS/VUb0SqQ4BTyw6Z9DZqPloy2w=;
-        b=KI1YSwJ5NVgkhhxRyYF1WU1VmQ/YirVw2zh8eWHIDNr4jEA+8iWjWpYQ6N/rdawohU
-         VNyFR84uUb7KIVgXjKbgTDF1hGx2y6B3gqmKz6gaM8X47kuE1za98vnBcQtMHz5sh8RJ
-         9nWotHcO2Vkg9t+RUrTR5eTcvVuou63xhAxiTHmewnHXNmgXKx4gWmAIX5R8iCh2ptBv
-         zgkNLX711IO+OXKh9bnkkJ39wclq2wOIfZ7fJm7i1y0F/1BOUhM3tlqW13uQ6tFi+XOA
-         FUOCuoY4MvTUz7CXF8zqmihOheV39ZQ6cuXV98lDC1blKVV3zT/5FrvwSfw+hHQ7umZ8
-         9zng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iEYtWp/LKb36SgGQwS/VUb0SqQ4BTyw6Z9DZqPloy2w=;
-        b=y1MPKNSR6+MwdL6QyJmuYsLrkB0B9V7OL8BSCUAxTYKJwycBVy9s0CJ7yOgdplffpW
-         oBI9bHNQ+k3Fqw8NY7haM/37oM4Qd9B2IKKFQk31pFoLZVpWZKoXDXDPSH0YxCyS72oR
-         ktKsW9EXlMCuBhS+GYyUvJHYtivjeUIdweLdu4Wpq3TKIf54pxtpXRzL9yxhZ2Y2pH60
-         +qjT1U580EoxPj7CeHWtDurCK61WzfNCFENgCJpNbFUQ0NYUJ+BqbS8JSIf9RXw9M+CD
-         Mz50nKrt0sQrBKka9y/+vVmqgZsVph6UXJnDr7KRnDdJ/qQFecE2im1PFamCseO5nqdq
-         p3Cg==
-X-Gm-Message-State: AOAM5324DaQ+fdGUa/DovM65vKn684XfoxF38MlNBa8C3zj7wFlTwb93
-        4QZmdpcVrC7ErIiQH4U+AgAuRg==
-X-Google-Smtp-Source: ABdhPJzOeICvQJzeUzWrX839CyQrkzHvsjKHXi5k+dcTQUUPsq9TjITyptkGvqhUagJTJ56hQ2ZOhA==
-X-Received: by 2002:a17:907:7ea9:b0:6fe:d412:ec2c with SMTP id qb41-20020a1709077ea900b006fed412ec2cmr43626906ejc.613.1654085632761;
-        Wed, 01 Jun 2022 05:13:52 -0700 (PDT)
-Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id iy5-20020a170907818500b006fecb577060sm631323ejc.119.2022.06.01.05.13.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 05:13:52 -0700 (PDT)
-Message-ID: <805ba97f-9e7f-d492-653b-1488f3d0dc0d@linaro.org>
-Date:   Wed, 1 Jun 2022 14:13:51 +0200
+        with ESMTP id S1348177AbiFAMeH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 08:34:07 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7009BAC3;
+        Wed,  1 Jun 2022 05:34:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654086846; x=1685622846;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RpGBVNkwcymhjFqeyT1aZ+dE1vCc/c11uRHbrc5eBGs=;
+  b=l/m3bb5egGLqriQAhEhOLQLL5ji9igU7cGKE7gd9dKBVWeP6PD8unvSn
+   zmOZKazrS6PGOAOOM8ar04f2fQsCwOPrhmylM3icIA1Ma/crv91KdIQ8i
+   CpS5pVkN2A7aMbQq3Njh6hTmV23icvN2QvcpiS46e11L/807WbT/Du58+
+   35Tg/Z2WWtPEQqmcTKEJ0rxoKHv+uwK6WTFvYUDYI6pGBJkWmTGtzsLkL
+   v3VRO08QfdK86GwcDLj8aVi0wqV49nFehiDc31Fj6j/1kZMqcW1tvV+5a
+   bn+BaejAnMKysFVqS8x8uLtMECIWyW6TCwbq24kR/OxkVuO3NKhLjW8GJ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10364"; a="336226511"
+X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
+   d="scan'208";a="336226511"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 05:34:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
+   d="scan'208";a="562777292"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 01 Jun 2022 05:34:01 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwNY0-0003xg-Ds;
+        Wed, 01 Jun 2022 12:34:00 +0000
+Date:   Wed, 1 Jun 2022 20:33:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, djakov@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        abel.vesa@nxp.com, abailon@baylibre.com, l.stach@pengutronix.de,
+        laurent.pinchart@ideasonboard.com, marex@denx.de,
+        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
+        aford173@gmail.com
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        kernel@pengutronix.de, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
+        Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH 2/8] interconnect: add device managed bulk API
+Message-ID: <202206012000.wFYpOdWH-lkp@intel.com>
+References: <20220601094156.3388454-3-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/8] dt-bindings: interconnect: imx8m: Add bindings for
- imx8mp noc
-Content-Language: en-US
-To:     Peng Fan <peng.fan@nxp.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "djakov@kernel.org" <djakov@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>, Abel Vesa <abel.vesa@nxp.com>,
-        "abailon@baylibre.com" <abailon@baylibre.com>,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        "laurent.pinchart@ideasonboard.com" 
-        <laurent.pinchart@ideasonboard.com>,
-        "marex@denx.de" <marex@denx.de>,
-        "paul.elder@ideasonboard.com" <paul.elder@ideasonboard.com>,
-        "Markus.Niebel@ew.tq-group.com" <Markus.Niebel@ew.tq-group.com>,
-        "aford173@gmail.com" <aford173@gmail.com>
-Cc:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-References: <20220601094156.3388454-1-peng.fan@oss.nxp.com>
- <20220601094156.3388454-2-peng.fan@oss.nxp.com>
- <cf90d9aa-1ba9-9619-35b7-8c2de436fc12@linaro.org>
- <DU0PR04MB9417380EC27688B3DFB9326388DF9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <DU0PR04MB9417380EC27688B3DFB9326388DF9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220601094156.3388454-3-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,65 +72,57 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/06/2022 14:06, Peng Fan wrote:
->> Subject: Re: [PATCH 1/8] dt-bindings: interconnect: imx8m: Add bindings for
->> imx8mp noc
->>
->> On 01/06/2022 11:41, Peng Fan (OSS) wrote:
->>> From: Peng Fan <peng.fan@nxp.com>
->>>
->>> i.MX8MP features same NoC/NIC as i.MX8MM/N/Q, and use two compatible
->>> strings.
->>>
->>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
->>> ---
->>>  .../devicetree/bindings/interconnect/fsl,imx8m-noc.yaml     | 6 ++++++
->>>  1 file changed, 6 insertions(+)
->>>
->>> diff --git
->>> a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
->>> b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
->>> index b8204ed22dd5..0923cd28d6c6 100644
->>> ---
->>> a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
->>> +++ b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yam
->>> +++ l
->>> @@ -26,16 +26,22 @@ properties:
->>>      oneOf:
->>>        - items:
->>>            - enum:
->>> +              - fsl,imx8mp-nic
->>
->> Please order the entries alphabetically, so 8mp goes after 8mm.
->>
->>>                - fsl,imx8mn-nic
->>>                - fsl,imx8mm-nic
->>>                - fsl,imx8mq-nic
->>>            - const: fsl,imx8m-nic
->>>        - items:
->>>            - enum:
->>> +              - fsl,imx8mp-noc
->>
->> ditto
->>
->>>                - fsl,imx8mn-noc
->>>                - fsl,imx8mm-noc
->>>                - fsl,imx8mq-noc
->>>            - const: fsl,imx8m-noc
->>> +      - items:
->>> +          - const: fsl,imx8mp-noc
->>> +          - const: fsl,imx8m-noc
->>> +          - const: syscon
->>
->> This is a bit confusing - why this is also fallbacked as syscon?
-> 
-> I thought to give some flexibility for drivers to access the
-> address through syscon. But it could be removed, I could
-> fix in V2.
+Hi "Peng,
 
-Please remove, unless you really need it. No one should poke someone's
-else registers in general :)
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on shawnguo/for-next]
+[also build test WARNING on robh/for-next linus/master v5.18 next-20220601]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan-OSS/interconnect-support-i-MX8MP/20220601-174431
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
+config: hexagon-randconfig-r041-20220531 (https://download.01.org/0day-ci/archive/20220601/202206012000.wFYpOdWH-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/23ecbba75b21962f25975cb014cf981a0420dae1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Peng-Fan-OSS/interconnect-support-i-MX8MP/20220601-174431
+        git checkout 23ecbba75b21962f25975cb014cf981a0420dae1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/opp/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/opp/core.c:22:
+   In file included from drivers/opp/opp.h:15:
+>> include/linux/interconnect.h:120:5: warning: no previous prototype for function 'devm_of_icc_bulk_get' [-Wmissing-prototypes]
+   int devm_of_icc_bulk_get(struct device *dev, int num_paths, struct icc_bulk_data *paths)
+       ^
+   include/linux/interconnect.h:120:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int devm_of_icc_bulk_get(struct device *dev, int num_paths, struct icc_bulk_data *paths)
+   ^
+   static 
+   1 warning generated.
 
 
-Best regards,
-Krzysztof
+vim +/devm_of_icc_bulk_get +120 include/linux/interconnect.h
+
+   119	
+ > 120	int devm_of_icc_bulk_get(struct device *dev, int num_paths, struct icc_bulk_data *paths)
+   121	{
+   122		return 0;
+   123	}
+   124	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
