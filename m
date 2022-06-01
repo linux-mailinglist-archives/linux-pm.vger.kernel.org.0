@@ -2,72 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C75EE53A21D
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 12:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 801E453A3F2
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 13:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351909AbiFAKMG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jun 2022 06:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44222 "EHLO
+        id S1352765AbiFALYL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jun 2022 07:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351835AbiFAKMD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 06:12:03 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEF020BE4
-        for <linux-pm@vger.kernel.org>; Wed,  1 Jun 2022 03:11:53 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id rs12so2662764ejb.13
-        for <linux-pm@vger.kernel.org>; Wed, 01 Jun 2022 03:11:53 -0700 (PDT)
+        with ESMTP id S1352809AbiFALX7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 07:23:59 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733095E76E
+        for <linux-pm@vger.kernel.org>; Wed,  1 Jun 2022 04:23:11 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id v25so1718875eda.6
+        for <linux-pm@vger.kernel.org>; Wed, 01 Jun 2022 04:23:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0VLAI4Ml+SYHKdIrxqb9eLy4RuGSKwigpqa2hE5EhyM=;
-        b=KdTk+xeAXQ8wsm4aSQlIU20whz1IffM5ydaFwWfMSZfBnChnZFwu+RsXjFj/7lC3NP
-         q/bLiDhiB8llQRYKV8jfOjp/zRGu6Oj7aq1VciRM8fxWt8W2JAlIC+0ozACUPthXCcCb
-         3+4dGTpxNvEDJRp6T2Gyub+mS2i0g4/3OKsgzwVK8gciPoDRCoRfMoXPRiqQVOH53s9O
-         N7xkmRlxSVVmbRFheCIkjZ8sSmuhslQ/iBHFBq4e6JGUpWgBNKpiN1tUAT/vLqRQohnm
-         0jm1mAyL1DIbO1jE1V0i+NH1A10gTA3QYwUtWqS1imlYNfOYqA8KOG+/RGyWdhw1UV07
-         6n4g==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=EmX78kZDbpi7zDJcl5NRBNnxEqWkEcLfuWB3zLytvQ4=;
+        b=r55wWxDb8gLLLDShPuOiJjmUz1D5Xgin/ldr6b/Tnulo5/FyaoiTrGCFmJK10iRxpl
+         /b5twD1DES3+6TJftiXJLlEH5MTxw6tzyqTXWS49/e4fUXACwFeWmyPUdl79bB1ZMm28
+         1EQZtIGbcpDoxuCn3othqQWKg+D6efafEyLZYTIBuSeyngpnqUPZSWp0zb/eRJWQMD+4
+         W6q5xcRyZJBNbHcwT564fW1iOCfBexrbxseQQNfQI9zG+QVQGtdYMM8Iugx4ALnbLNtu
+         EfIQzbvmIUrpisGyxuU8pS95ihIaVEMR2VjCfh69jDHQWuXdYfHfC7+QL1vDtMre9YvW
+         WOjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0VLAI4Ml+SYHKdIrxqb9eLy4RuGSKwigpqa2hE5EhyM=;
-        b=1BYg7PXjEHbNHBuBqvLGfG7vStGOi8pG/mRXYM/XgntL3wzCwu+bg9a8EZrKnlJ2z8
-         Adco26k72DNIIjesUYybWG6u71OwgqHSWAqbpUlAzaZH1TDGbyANs8ANYrrFUhzJLofq
-         KqQQ44hWxehPKUKImcKcYVdPFgNuzfvTfeafjs6woNu1P82NPq0eeMCRDTfFQDvQxPm7
-         hc1bR1kl7XJTDR3K4SK/+1/DLwuMt96T0VaxVcWRHmZ8bABK5f1ippZ54gF6WbJp8qLX
-         AyjYWpcjsneSwZqcS09Kbsci3EKyi1OkdrZDZSZUKkya5Ab2do2WBdjv60twxbABSDTs
-         1PVQ==
-X-Gm-Message-State: AOAM532n0oaY6PCN7wwZtsa7nr8nxXZc0AaR6HP+i9XHL72QcztzzO2z
-        WQrhFRqN37+dV2BpvTjs9sRZKhg5vZ9dkG3P
-X-Google-Smtp-Source: ABdhPJxYMIZaapgsvY80qG/83T9mL1n8nrcG58gH9s/gwMkjWMv3ztULv3t9VCh7k6hav4WBZ1rz0w==
-X-Received: by 2002:a17:907:16ac:b0:6fe:b7db:8af5 with SMTP id hc44-20020a17090716ac00b006feb7db8af5mr48421039ejc.433.1654078312673;
-        Wed, 01 Jun 2022 03:11:52 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id m9-20020a170906580900b006feb7b1379dsm501373ejq.181.2022.06.01.03.11.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jun 2022 03:11:52 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Thara Gopinath <thara.gopinath@linaro.org>
-Subject: [PATCH v4 4/4] arm64: dts: qcom: sdm845: Add CPU BWMON
-Date:   Wed,  1 Jun 2022 12:11:40 +0200
-Message-Id: <20220601101140.170504-5-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220601101140.170504-1-krzysztof.kozlowski@linaro.org>
-References: <20220601101140.170504-1-krzysztof.kozlowski@linaro.org>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=EmX78kZDbpi7zDJcl5NRBNnxEqWkEcLfuWB3zLytvQ4=;
+        b=CWmJZlIBbeu+K8L1JzuN4DirsMLYVn1DEDWguuxICxcGeJ9s410ubzCD+nkLx4k7i4
+         ZBfRuMru0KijrL2HDk/+dqDLMVLw+AlVVVYuYylE8Kw4WPEiyI/dUpveYXpWEccYEhHb
+         a56vDvTSPR+MHCAztFg9BZ1w9u5XbYe7HxXpFmRb5nHUz8tF+8qmk8wMN9inIy6OItfG
+         CMn4UP+zGDG3sVBTYHAQVk0LrcREiiebqli5h4kIu9lK7OWJWQKLH9C6b/Ab1XJkzkau
+         G49d3J69TQGzzy5WjK0Ik8jdAulH1KEiy3cnYw1Jw6tpw6KWAF+fGbSKG/RQOHpeGe+H
+         Posw==
+X-Gm-Message-State: AOAM532EDSeRy/bWhb8q2GHpXK5szY4OYCv+dh1vpPp3K9JbryGFaMN4
+        0fPW9mgbOe7mq7h7mjAJTjiESg==
+X-Google-Smtp-Source: ABdhPJzOJxGalCbiJf1Q2Q8zI2vrTUHr2z0fwXYzl5tTyez6dQrB/mI0xzVPeI2IOWLC/p/Lwqsvsw==
+X-Received: by 2002:a05:6402:1907:b0:42d:e90e:337 with SMTP id e7-20020a056402190700b0042de90e0337mr7327648edz.405.1654082589971;
+        Wed, 01 Jun 2022 04:23:09 -0700 (PDT)
+Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id p19-20020a056402155300b0042617ba638esm823008edx.24.2022.06.01.04.23.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jun 2022 04:23:09 -0700 (PDT)
+Message-ID: <7a66f2e2-1a2a-a262-138c-f535499984ae@linaro.org>
+Date:   Wed, 1 Jun 2022 13:23:08 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
+ <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
+ <20220425072710.v6gwo4gu3aouezg4@vireshk-i7>
+ <dea39b1f-0091-2690-7f07-108d07ef9f3c@linaro.org>
+ <20220510044053.ykn6ygnbeokhzrsa@vireshk-i7>
+ <1e533194-7047-8342-b426-f607fddbfaa3@linaro.org>
+ <20220511050643.hd5tcrojb3wkbg7t@vireshk-i7>
+ <20220518235708.1A04CC385A9@smtp.kernel.org>
+ <65a4c28d-6702-3a9f-f837-1ea69a428777@linaro.org>
+ <20220531103029.ntoypaafnd6447ag@vireshk-i7>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220531103029.ntoypaafnd6447ag@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,119 +96,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add device node for CPU-memory BWMON device (bandwidth monitoring) on
-SDM845 measuring bandwidth between CPU (gladiator_noc) and Last Level
-Cache (memnoc).  Usage of this BWMON allows to remove fixed bandwidth
-votes from cpufreq (CPU nodes) thus achieve high memory throughput even
-with lower CPU frequencies.
+On 31/05/2022 12:30, Viresh Kumar wrote:
+> On 19-05-22, 10:03, Krzysztof Kozlowski wrote:
+>> Yes, true. The clock frequencies are still changed with each gear, but
+>> in general the UFS indeed operates on gear concept.
+> 
+> Hi Krzysztof,
+> 
+> I have redesigned the OPP core a bit (two patchsets until now) to make
+> it easier to add multiple clock support going forward. I need some
+> inputs from you before moving forward with it now. Will this work for
+> your use case:
+> 
+> - Add support for multiple clocks, where none of them is primary.
+> 
+> - Which means you won't be able to use dev_pm_opp_set_rate() but will
+>   need something like dev_pm_opp_set_level(), will add it.
+> 
+> - That is, your OPP table will need to implement levels (I think of
+>   them as UFS gears) and then call dev_pm_opp_set_level() instead.
+> 
+> - This new API will work just like dev_pm_opp_set_rate(), except that
+>   it will find the target OPP based on level instead of freq and
+>   support configuration of multiple clock frequencies.
+> 
+> - Of course both these APIs will share most of the code.
 
-Performance impact (SDM845-MTP RB3 board, linux next-20220422):
-1. No noticeable impact when running with schedutil or performance
-   governors.
+Hi Viresh,
 
-2. When comparing to customized kernel with synced interconnects and
-   without bandwidth votes from CPU freq, the sysbench memory tests
-   show significant improvement with bwmon for blocksizes past the L3
-   cache.  The results for such superficial comparison:
+In general this looks reasonable and matches how the UFS gears should be
+modeled. It does not match how UFS drivers implemented the clock
+scaling, but that's the internal problem of UFS drivers. They scale the
+clocks only max or min, even though there are multiple gears in between.
+The new approach looks therefore appropriate.
 
-sysbench memory test, results in MB/s (higher is better)
- bs kB |  type |    V  | V+no bw votes | bwmon | benefit %
-     1 | W/seq | 14795 |          4816 |  4985 |      3.5%
-    64 | W/seq | 41987 |         10334 | 10433 |      1.0%
-  4096 | W/seq | 29768 |          8728 | 32007 |    266.7%
- 65536 | W/seq | 17711 |          4846 | 18399 |    279.6%
-262144 | W/seq | 16112 |          4538 | 17429 |    284.1%
-    64 | R/seq | 61202 |         67092 | 66804 |     -0.4%
-  4096 | R/seq | 23871 |          5458 | 24307 |    345.4%
- 65536 | R/seq | 18554 |          4240 | 18685 |    340.7%
-262144 | R/seq | 17524 |          4207 | 17774 |    322.4%
-    64 | W/rnd |  2663 |          1098 |  1119 |      1.9%
- 65536 | W/rnd |   600 |           316 |   610 |     92.7%
-    64 | R/rnd |  4915 |          4784 |  4594 |     -4.0%
- 65536 | R/rnd |   664 |           281 |   678 |    140.7%
-
-Legend:
-bs kB: block size in KB (small block size means only L1-3 caches are
-      used
-type: R - read, W - write, seq - sequential, rnd - random
-V: vanilla (next-20220422)
-V + no bw votes: vanilla without bandwidth votes from CPU freq
-bwmon: bwmon without bandwidth votes from CPU freq
-benefit %: difference between vanilla without bandwidth votes and bwmon
-           (higher is better)
-
-Co-developed-by: Thara Gopinath <thara.gopinath@linaro.org>
-Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 54 ++++++++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index 83e8b63f0910..adffb9c70566 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -2026,6 +2026,60 @@ llcc: system-cache-controller@1100000 {
- 			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
- 		};
- 
-+		pmu@1436400 {
-+			compatible = "qcom,sdm845-cpu-bwmon";
-+			reg = <0 0x01436400 0 0x600>;
-+
-+			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
-+					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-+			interconnect-names = "ddr", "l3c";
-+
-+			operating-points-v2 = <&cpu_bwmon_opp_table>;
-+
-+			cpu_bwmon_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				/*
-+				 * The interconnect paths bandwidths taken from
-+				 * cpu4_opp_table bandwidth.
-+				 * They also match different tables from
-+				 * msm-4.9 downstream kernel:
-+				 *  - the gladiator_noc-mem_noc from bandwidth
-+				 *    table of qcom,llccbw (property qcom,bw-tbl);
-+				 *    bus width: 4 bytes;
-+				 *  - the OSM L3 from bandwidth table of
-+				 *    qcom,cpu4-l3lat-mon (qcom,core-dev-table);
-+				 *    bus width: 16 bytes;
-+				 */
-+				opp-0 {
-+					opp-peak-kBps = <800000 4800000>;
-+				};
-+				opp-1 {
-+					opp-peak-kBps = <1804000 9216000>;
-+				};
-+				opp-2 {
-+					opp-peak-kBps = <2188000 11980800>;
-+				};
-+				opp-3 {
-+					opp-peak-kBps = <3072000 15052800>;
-+				};
-+				opp-4 {
-+					opp-peak-kBps = <4068000 19353600>;
-+				};
-+				opp-5 {
-+					opp-peak-kBps = <5412000 20889600>;
-+				};
-+				opp-6 {
-+					opp-peak-kBps = <6220000 22425600>;
-+				};
-+				opp-7 {
-+					opp-peak-kBps = <7216000 25497600>;
-+				};
-+			};
-+		};
-+
- 		pcie0: pci@1c00000 {
- 			compatible = "qcom,pcie-sdm845";
- 			reg = <0 0x01c00000 0 0x2000>,
--- 
-2.34.1
-
+Best regards,
+Krzysztof
