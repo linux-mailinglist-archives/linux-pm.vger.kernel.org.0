@@ -2,69 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC9D953AD6C
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 21:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E81153AFC1
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jun 2022 00:51:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiFATbK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jun 2022 15:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57942 "EHLO
+        id S231464AbiFAVTY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jun 2022 17:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiFATbJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 15:31:09 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2809817CE43
-        for <linux-pm@vger.kernel.org>; Wed,  1 Jun 2022 12:28:45 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-f2cd424b9cso4023484fac.7
-        for <linux-pm@vger.kernel.org>; Wed, 01 Jun 2022 12:28:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
-         :subject:to;
-        bh=Gk4nfCem3ECRa7Gml0J0mN/3RZoOAdfGaQAqyHPKtiI=;
-        b=DxxMd4k8tG1Z+DI+JxuL9225Cp+S+uInl/poXMcuMZiTQV1c8XJNPCuJB0EN9Fm1lJ
-         tjqO15tZbiRtkiZc869kqZb+gTGwGsofr4Ks/EzA24HoqZkeukApCRLbeWaJgYbzN6Uj
-         DJcyUaN0vgzLiaJiK8SKJwd17XWuJUN7X4OrSO+zy2q+txFdEpb8ifoCAb/ECnGeqxQV
-         22+OgKU21rrXICCeKXN25GVJHEIOuX810V30PW3f8Y111fShlwSlQkBARV9N87g0aoLJ
-         wQNCoaF08Ng768jLDvSBCHYHS21HkQkWfLc+tM30B/O2SgLendb0dLrFE3BY6UlGqUm0
-         gBYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
-         :from:date:message-id:subject:to;
-        bh=Gk4nfCem3ECRa7Gml0J0mN/3RZoOAdfGaQAqyHPKtiI=;
-        b=AKj+VtL/Ikm2rWNw4CpiXeNOWzh5EYcPj0vo04j5pZfNGwUrS9y7j+hizkadOm00kM
-         qRhsxd1I4Mdj1D6EZO9TqwXewgMvMsX5WnU4CsBC9PC3kpP9b8PzTJiG4eMS96exghHD
-         gAa4Fbg4WUv1WS7rYqPAMR1Nlq+qAhZGxu1wFoIa0AdYxtj/4gnONrK9kvcUBuawLwAh
-         VHD5Ih5EhZjizs36LjqBAd3o/pXfaN15RGEb/Sp2pY6neLY9rnuIMYK0JKvncjEEypEn
-         F90GkIWdfM2YP2xxZgz4IOxq4KvFkq9/S1LsXkUZiC2EWlNKS9oZ9BvVsnZY9ngjA1+1
-         Acpw==
-X-Gm-Message-State: AOAM532RMQNlhocURXkKUfM//kkPXOl2G9E0cySFSrWqagyDGLyLJ4nr
-        cYkTEGgVW17KC7b7mFpp6Af6KXsVegqxyplwcCwWhU6Dbyk=
-X-Google-Smtp-Source: ABdhPJxRHJ7PowqzwP8FVf7Pao2siL9+mp8F+vsKwg9Hvlld1uXwEH8+vzJyu5zLQk9d57eu+g6BtXkHW1P4ce0P3TA=
-X-Received: by 2002:a05:6870:4619:b0:f1:e78d:fd54 with SMTP id
- z25-20020a056870461900b000f1e78dfd54mr18175523oao.195.1654111088174; Wed, 01
- Jun 2022 12:18:08 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6358:3601:b0:a3:2139:251d with HTTP; Wed, 1 Jun 2022
- 12:18:07 -0700 (PDT)
-Reply-To: johnwinery@online.ee
-In-Reply-To: <CAFqHCSSUC0MpbjYK8d-GCxOG4b6Qbk2uH3+xQDZte6cPBsxLGA@mail.gmail.com>
-References: <CAFqHCSSUC0MpbjYK8d-GCxOG4b6Qbk2uH3+xQDZte6cPBsxLGA@mail.gmail.com>
-From:   johnwinery <alicejohnson8974@gmail.com>
-Date:   Wed, 1 Jun 2022 12:18:07 -0700
-Message-ID: <CAFqHCSTLW5uHwBqcyU-qn7_jF2jtwt2-CjgdN8-B9nAn9yi+vg@mail.gmail.com>
-Subject: Re:
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        with ESMTP id S231446AbiFAVTW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 17:19:22 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C18A76FF
+        for <linux-pm@vger.kernel.org>; Wed,  1 Jun 2022 14:19:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654118359; x=1685654359;
+  h=from:to:cc:subject:date:message-id;
+  bh=cSqWGNtv+6v6RP9cn0Y58/IafCZ7iFYvzsuBAE4yzt4=;
+  b=Zmm9MnaTLW/dDI3AKym6KuZ4imfFtj+9IBtjbDbj0d17KD/G1e4dYnk4
+   xvmKONfp0U1M8IGAu62vFBOQc4OTeOmZ1QIaGUjsxIsERSD3/kPgazJjw
+   Ch2JS8le53uJcBAWydqbVtUzgK4vcj00/C/foOjw2ulHCZ7mT2OBF8PFT
+   HZqj/mQ5FHr7yEpLbyU0AKOiTiqHnCZaB2zktUI79yPGTR/4bVt0HKkHP
+   On9nYGXK8LgkAuAJXE6oCtRCaB9VscmmH4ux+KeENTJHeRXDpVmhuEy+9
+   lUo81gGGTXEtnApDhlKLYE6VkCl+DKB51cRa7F5kMfL+GfhRK+aVz1ert
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="256173653"
+X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
+   d="scan'208";a="256173653"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 12:22:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
+   d="scan'208";a="612463364"
+Received: from otc-chromeosbuild-5.ostc.intel.com (HELO otc-chromeosbuild-5.intel.com) ([10.54.29.149])
+  by orsmga001.jf.intel.com with ESMTP; 01 Jun 2022 12:22:19 -0700
+From:   george.d.sworo@intel.com
+To:     rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, George D Sworo <george.d.sworo@intel.com>
+Subject: [PATCH] powercap: intel_rapl: Add support for RAPTORLAKE_P
+Date:   Wed,  1 Jun 2022 12:22:16 -0700
+Message-Id: <20220601192216.9174-1-george.d.sworo@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Greeting ,I had written an earlier mail to you but without response
+From: George D Sworo <george.d.sworo@intel.com>
+
+Add RAPTORLAKE_P to the list of supported processor model in the Intel
+
+RAPL power capping driver.
+
+Signed-off-by: George D Sworo <george.d.sworo@intel.com>
+---
+ drivers/powercap/intel_rapl_common.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+index a9c99d9e8b42..21d624f9f5fb 100644
+--- a/drivers/powercap/intel_rapl_common.c
++++ b/drivers/powercap/intel_rapl_common.c
+@@ -1109,6 +1109,7 @@ static const struct x86_cpu_id rapl_ids[] __initconst = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,		&rapl_defaults_core),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N,		&rapl_defaults_core),
+ 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,		&rapl_defaults_core),
++	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,        &rapl_defaults_core),
+ 	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,	&rapl_defaults_spr_server),
+ 	X86_MATCH_INTEL_FAM6_MODEL(LAKEFIELD,		&rapl_defaults_core),
+ 
+-- 
+2.17.1
+
