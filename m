@@ -2,178 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 356225399D6
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 00:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2D3539DE3
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 09:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348578AbiEaWwP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 31 May 2022 18:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
+        id S243798AbiFAHI5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jun 2022 03:08:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235623AbiEaWwO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 31 May 2022 18:52:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C08127CF3
-        for <linux-pm@vger.kernel.org>; Tue, 31 May 2022 15:52:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1654037532;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9q9k+C5RGQU4qKgmWFkXDcgQ25M6UKH1DBXC6+yr110=;
-        b=E8E9R7zmtGGFSoCgN1WEBfttrIFe142RHCIs3N/J7k/laNcpKXQcjeOVw8WsgBIc56QPhH
-        NPE9SExht5T5qy3SHxf0Qgo90E2oHpsNZXJiNnKmvg5Yu3GItknp9kJ78Nd7R0PzucS3Li
-        yyslTAj5nF5PajyfZ3LAuuD8bekEiwI=
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
- [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-659-11tj9_0APMGcioMXJQ4hYA-1; Tue, 31 May 2022 18:52:11 -0400
-X-MC-Unique: 11tj9_0APMGcioMXJQ4hYA-1
-Received: by mail-io1-f72.google.com with SMTP id k5-20020a6bba05000000b00668eb755190so1398645iof.13
-        for <linux-pm@vger.kernel.org>; Tue, 31 May 2022 15:52:11 -0700 (PDT)
+        with ESMTP id S1344420AbiFAHHP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 03:07:15 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781CB7981A
+        for <linux-pm@vger.kernel.org>; Wed,  1 Jun 2022 00:07:12 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id i16-20020a170902cf1000b001540b6a09e3so693801plg.0
+        for <linux-pm@vger.kernel.org>; Wed, 01 Jun 2022 00:07:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Mk17D+aOzb7UCdNS2oz9IAwDr5MmRg+quCipw6fx4RQ=;
+        b=hQa0JnnmV2cX05wxogayF7DAeIwm91UA5DD4Pd0261qK2nG5mlRfb8p0PwXRgLwmcG
+         6gimTBEfRJnzqCBPwGFDLXwY23Jge7qCK5EKBtDVk+4ZHueBZe2ScEh2abiJOXvqClXF
+         aItT2KKmdUihJqxg6KlMJQ+n9hDQfaXwUgpDUXId5vW641rUWKofWrnrujEe72Sytvnk
+         iXsC3g9D+PkO64XwFNhsJCy/xgMMwq44IzwR510vfqTBnn54+HA0yDiVcTK99umRrrcq
+         KawtwQ3E7vKCwmO2izMB9zQh9evWd8zx74HbqExwInwGL34iXnuFQ1QqmbkBW7qSDv5A
+         GPbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=9q9k+C5RGQU4qKgmWFkXDcgQ25M6UKH1DBXC6+yr110=;
-        b=EJeycJHa7MYL3AvTMIfRvWebztO7Fim8jIry5MHs1xAb8T/G1GT/Q3dpTiCr6nM6jM
-         PaHdcgg+1TrCDahNHeWSpB8SJkMY4/MASLkY1mZU1yk3SmE2izt8RprHOQpRWcagwQ+o
-         pThLxxzwU30cMtNWppLIMfkRqsCPvevYBEd5HHL+rf+Ik3dwAlgYvyH2HaEPR+W5JLar
-         b8XPPBzVdGDO3QyEU5bKQI3EcnXUi2cqkrnpQpAtWz4gHYTBszUt4B05zoojApQ6GXZ6
-         XYWkYYR5knWAER+6WI5uTSaXrgDH5bhJ9RdLX6LBSvatJ7hDSQN7aoL3Xslm2Z5vZDl7
-         cbew==
-X-Gm-Message-State: AOAM530W0VMU/XHC9/y3/2g0Qf/BdOI15Oxkc7czTxU5K50Zo3axh/OM
-        n7hC0RCJYz8FFoP2X2tGgp0xo5hwxIAv9HIsIRaKBnD/FCtk7LXiuQNcYJEx9qR1QFM6wpn8B8V
-        2h7OFEhxOqjXrv+59MtQ=
-X-Received: by 2002:a05:6638:dc6:b0:32e:e2d7:8261 with SMTP id m6-20020a0566380dc600b0032ee2d78261mr21306062jaj.152.1654037531004;
-        Tue, 31 May 2022 15:52:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyFaz/Zncf57CZD055l8ggcPaldX2dVcDSiNf2yikAtVetyU+4sMp+QQR12XvYG/vo4kFwZKA==
-X-Received: by 2002:a05:6638:dc6:b0:32e:e2d7:8261 with SMTP id m6-20020a0566380dc600b0032ee2d78261mr21306045jaj.152.1654037530793;
-        Tue, 31 May 2022 15:52:10 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id c18-20020a92c8d2000000b002cde6e352ffsm33236ilq.73.2022.05.31.15.52.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 15:52:10 -0700 (PDT)
-Date:   Tue, 31 May 2022 16:52:09 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Abhishek Sahu <abhsahu@nvidia.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v3 8/8] vfio/pci: Add the support for PCI D3cold state
-Message-ID: <20220531165209.1c18854f.alex.williamson@redhat.com>
-In-Reply-To: <20220531194304.GN1343366@nvidia.com>
-References: <20220425092615.10133-1-abhsahu@nvidia.com>
-        <20220425092615.10133-9-abhsahu@nvidia.com>
-        <20220504134551.70d71bf0.alex.williamson@redhat.com>
-        <9e44e9cc-a500-ab0d-4785-5ae26874b3eb@nvidia.com>
-        <20220509154844.79e4915b.alex.williamson@redhat.com>
-        <68463d9b-98ee-b9ec-1a3e-1375e50a2ad2@nvidia.com>
-        <42518bd5-da8b-554f-2612-80278b527bf5@nvidia.com>
-        <20220530122546.GZ1343366@nvidia.com>
-        <c73d537b-a653-bf79-68cd-ddc8f0f62a25@nvidia.com>
-        <20220531194304.GN1343366@nvidia.com>
-Organization: Red Hat
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Mk17D+aOzb7UCdNS2oz9IAwDr5MmRg+quCipw6fx4RQ=;
+        b=wXKOQ20Q7c6l6qGh6dnhcbhM5fAaPAV9Isx2Jo7YLEPa849UsBHkS4jg7gvIRyFZsC
+         m+e/jPu80JsvgnjGId5iyKnD+GxSmjRH+5w7cfCrbekKWfrylSl3xtmH3mE6+Dtn9WsX
+         Rz8Yo6s9IIShRAKzx1bGUX2+0goj5j1asE15EOTE+iCyEkvlX64F2EP5dyBIdVfchLQ+
+         O2qbao9G83XrunkPq5qZjzKdJTvjt8MODtd84trSdSO239+SA0qj4wDdgKaqiHlggt/P
+         CS18h4IMu1VJK5zzNWL11MAQALXQfzOYpX5w1tUJjUD/InMeIDduJ68npIhmjAxKz3JN
+         kR6A==
+X-Gm-Message-State: AOAM533dg90yw1Giw3VlLlWGHMhJcd6g48apICckr0N1CjlP+XHtCrwp
+        CQVLv/z8rUkfUzd3czqCXbMct/b1TtxPaSo=
+X-Google-Smtp-Source: ABdhPJwo0w/Ul81l80Uz+X1lE0Knuok5VeKXEtMoQ0Yzewr/LH6PL8JE3PUvMoXQAWKjDKNKYDX9hXZkKLb6+II=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:f3aa:cafe:c20a:e136])
+ (user=saravanak job=sendgmr) by 2002:a17:902:da8e:b0:164:537:d910 with SMTP
+ id j14-20020a170902da8e00b001640537d910mr7067516plx.75.1654067231712; Wed, 01
+ Jun 2022 00:07:11 -0700 (PDT)
+Date:   Wed,  1 Jun 2022 00:06:56 -0700
+Message-Id: <20220601070707.3946847-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.255.ge46751e96f-goog
+Subject: [PATCH v2 0/9] deferred_probe_timeout logic clean up
+From:   Saravana Kannan <saravanak@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>
+Cc:     Saravana Kannan <saravanak@google.com>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 31 May 2022 16:43:04 -0300
-Jason Gunthorpe <jgg@nvidia.com> wrote:
+This series is based on linux-next + these 2 small patches applies on top:
+https://lore.kernel.org/lkml/20220526034609.480766-1-saravanak@google.com/
 
-> On Tue, May 31, 2022 at 05:44:11PM +0530, Abhishek Sahu wrote:
-> > On 5/30/2022 5:55 PM, Jason Gunthorpe wrote: =20
-> > > On Mon, May 30, 2022 at 04:45:59PM +0530, Abhishek Sahu wrote:
-> > >  =20
-> > >>  1. In real use case, config or any other ioctl should not come along
-> > >>     with VFIO_DEVICE_FEATURE_POWER_MANAGEMENT ioctl request.
-> > >> =20
-> > >>  2. Maintain some 'access_count' which will be incremented when we
-> > >>     do any config space access or ioctl. =20
-> > >=20
-> > > Please don't open code locks - if you need a lock then write a proper
-> > > lock. You can use the 'try' variants to bail out in cases where that
-> > > is appropriate.
-> > >=20
-> > > Jason =20
-> >=20
-> >  Thanks Jason for providing your inputs.
-> >=20
-> >  In that case, should I introduce new rw_semaphore (For example
-> >  power_lock) and move =E2=80=98platform_pm_engaged=E2=80=99 under =E2=
-=80=98power_lock=E2=80=99 ? =20
->=20
-> Possibly, this is better than an atomic at least
->=20
-> >  1. At the beginning of config space access or ioctl, we can take the
-> >     lock
-> > =20
-> >      down_read(&vdev->power_lock); =20
->=20
-> You can also do down_read_trylock() here and bail out as you were
-> suggesting with the atomic.
->=20
-> trylock doesn't have lock odering rules because it can't sleep so it
-> gives a bit more flexability when designing the lock ordering.
->=20
-> Though userspace has to be able to tolerate the failure, or never make
-> the request.
->=20
-> >          down_write(&vdev->power_lock);
-> >          ...
-> >          switch (vfio_pm.low_power_state) {
-> >          case VFIO_DEVICE_LOW_POWER_STATE_ENTER:
-> >                  ...
-> >                          vfio_pci_zap_and_down_write_memory_lock(vdev);
-> >                          vdev->power_state_d3 =3D true;
-> >                          up_write(&vdev->memory_lock);
-> >=20
-> >          ...
-> >          up_write(&vdev->power_lock); =20
->=20
-> And something checks the power lock before allowing the memor to be
-> re-enabled?
->=20
-> >  4.  For ioctl access, as mentioned previously I need to add two
-> >      callbacks functions (one for start and one for end) in the struct
-> >      vfio_device_ops and call the same at start and end of ioctl from
-> >      vfio_device_fops_unl_ioctl(). =20
->=20
-> Not sure I followed this..
+A lot of the deferred_probe_timeout logic is redundant with
+fw_devlink=on.  Also, enabling deferred_probe_timeout by default breaks
+a few cases.
 
-I'm kinda lost here too.  A couple replies back there was some concern
-about race scenarios with multiple user threads accessing the device.
-The ones concerning non-deterministic behavior if a user is
-concurrently changing power state and performing other accesses are a
-non-issue, imo.  I think our goal is only to expand the current
-memory_lock to block accesses, including config space, while the device
-is in low power, or some approximation bounded by the entry/exit ioctl.
+This series tries to delete the redundant logic, simplify the frameworks
+that use driver_deferred_probe_check_state(), enable
+deferred_probe_timeout=10 by default, and fixes the nfsroot failure
+case.
 
-I think the remaining issues is how to do that relative to the fact
-that config space access can change the memory enable state and would
-therefore need to upgrade the memory_lock read-lock to a write-lock.
-For that I think we can simply drop the read-lock, acquire the
-write-lock, and re-test the low power state.  If it has changed, that
-suggests the user has again raced changing power state with another
-access and we can simply drop the lock and return -EIO.
+The overall idea of this series is to replace the global behavior of
+driver_deferred_probe_check_state() where all devices give up waiting on
+supplier at the same time with a more granular behavior:
 
-If I'm still misunderstanding, please let me know.  Thanks,
+1. Devices with all their suppliers successfully probed by late_initcall
+   probe as usual and avoid unnecessary deferred probe attempts.
 
-Alex
+2. At or after late_initcall, in cases where boot would break because of
+   fw_devlink=on being strict about the ordering, we
+
+   a. Temporarily relax the enforcement to probe any unprobed devices
+      that can probe successfully in the current state of the system.
+      For example, when we boot with a NFS rootfs and no network device
+      has probed.
+   b. Go back to enforcing the ordering for any devices that haven't
+      probed.
+
+3. After deferred probe timeout expires, we permanently give up waiting
+   on supplier devices without drivers. At this point, whatever devices
+   can probe without some of their optional suppliers end up probing.
+
+In the case where module support is disabled, it's fairly
+straightforward and all device probes are completed before the initcalls
+are done.
+
+Patches 1 to 3 are fairly straightforward and can probably be applied
+right away.
+
+Patches 4 to 6 are for fixing the NFS rootfs issue and setting the
+default deferred_probe_timeout back to 10 seconds when modules are
+enabled.
+
+Patches 7 to 9 are further clean up of the deferred_probe_timeout logic
+so that no framework has to know/care about deferred_probe_timeout.
+
+Yoshihiro/Geert,
+
+If you can test this patch series and confirm that the NFS root case
+works, I'd really appreciate that.
+
+Thanks,
+Saravana
+
+v1 -> v2:
+Rewrote the NFS rootfs fix to be a lot less destructive on the
+fw_devlink ordering for devices that don't end up probing during the
+"best effort" attempt at probing all devices needed for a network rootfs
+
+Saravana Kannan (9):
+  PM: domains: Delete usage of driver_deferred_probe_check_state()
+  pinctrl: devicetree: Delete usage of
+    driver_deferred_probe_check_state()
+  net: mdio: Delete usage of driver_deferred_probe_check_state()
+  driver core: Add wait_for_init_devices_probe helper function
+  net: ipconfig: Relax fw_devlink if we need to mount a network rootfs
+  Revert "driver core: Set default deferred_probe_timeout back to 0."
+  driver core: Set fw_devlink.strict=1 by default
+  iommu/of: Delete usage of driver_deferred_probe_check_state()
+  driver core: Delete driver_deferred_probe_check_state()
+
+ drivers/base/base.h            |   1 +
+ drivers/base/core.c            | 102 ++++++++++++++++++++++++++++++---
+ drivers/base/dd.c              |  54 ++++++-----------
+ drivers/base/power/domain.c    |   2 +-
+ drivers/iommu/of_iommu.c       |   2 +-
+ drivers/net/mdio/fwnode_mdio.c |   4 +-
+ drivers/pinctrl/devicetree.c   |   2 +-
+ include/linux/device/driver.h  |   2 +-
+ net/ipv4/ipconfig.c            |   6 ++
+ 9 files changed, 126 insertions(+), 49 deletions(-)
+
+-- 
+2.36.1.255.ge46751e96f-goog
 
