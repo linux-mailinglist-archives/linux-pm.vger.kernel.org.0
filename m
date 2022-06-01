@@ -2,47 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF38E53A805
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 16:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3A6253A82E
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 16:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354569AbiFAOGs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jun 2022 10:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
+        id S1354575AbiFAOG4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jun 2022 10:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355049AbiFAOF3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 10:05:29 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135D6A007A;
-        Wed,  1 Jun 2022 06:59:30 -0700 (PDT)
+        with ESMTP id S1355725AbiFAOGV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 10:06:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA8AB82DC;
+        Wed,  1 Jun 2022 06:59:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 431DFCE1C2F;
-        Wed,  1 Jun 2022 13:59:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE600C34119;
-        Wed,  1 Jun 2022 13:59:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E769BB81AF8;
+        Wed,  1 Jun 2022 13:59:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 849C3C3411E;
+        Wed,  1 Jun 2022 13:59:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654091947;
-        bh=XSCQaA6YXgw2zEPO29dmb2VLCfRXEk74fjBZeIAnomY=;
+        s=k20201202; t=1654091995;
+        bh=L3ps+AhSwW8NxBqDmuBa42/GqvPVehaDJ41x2KRZtoA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q+Ke7bPCUaNjlukv3LIUtbhKqFiRz/NkmnTk0gzK8ynsX7npkLR2wRc2NlcKc19wI
-         yLcXW50I9DeTLXcYVCIiX5jRIV7VJYQxX7/5K91cI1ef+9uQpN2sTVyNg44lQe5J5W
-         H9eKU3qPHw6UfiSHe5mhqD3mOAjHQKyonYY1po+3hB0+qImFivk9A4cuUMA+nx9PCw
-         DZO2ITgB38nKv9ceahlPSG38y63s+WPP0zLTGQlQxMr2Z3t4fUFBzgVyh1L6cwH543
-         bZ1PUFVKbNQtkbYE9G19cRuHvRAKzKv1qj0Fq5ZtwqoN1OqW3FXqrIiCCG7yuI867m
-         lbEXTG/wrnpTQ==
+        b=QFQdVBGEgEAk6a9hYfNMxkyPn9+eF9npKGMmMZPuT7qnxuCw/v4FGDusBh/+vLC4Z
+         0lwjD4nt5BTepsOYQ4D4ShvAA3WRnPKrA5nQCS1p+Ejrx4qmk0zrdl1p/Ub0jXReyB
+         oDDrc86YOvUsmdPhSeZS3SSFWNPNaqvaXVGBZCDxP7I3nziPuT8EXDnumxIsYocgBS
+         RoXAVv0fS6++yCLnE5j60i2c05ySTrfexxyL0svYiXH7Tsx+GrYofYq6fdzWar2yUi
+         MOB1HYcZh8dCkRBj5Du/ePEAYbFOr/ixM2j3LTTTGTsXfGLkn68G4Iou1bbNPbo9wW
+         j5/3y5e8TKHoQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Brian Norris <briannorris@chromium.org>,
         Chanwoo Choi <cw00.choi@samsung.com>,
         Sasha Levin <sashal@kernel.org>, myungjoo.ham@samsung.com,
         kyungmin.park@samsung.com, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 03/20] PM / devfreq: rk3399_dmc: Disable edev on remove()
-Date:   Wed,  1 Jun 2022 09:58:45 -0400
-Message-Id: <20220601135902.2004823-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 02/15] PM / devfreq: rk3399_dmc: Disable edev on remove()
+Date:   Wed,  1 Jun 2022 09:59:37 -0400
+Message-Id: <20220601135951.2005085-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220601135902.2004823-1-sashal@kernel.org>
-References: <20220601135902.2004823-1-sashal@kernel.org>
+In-Reply-To: <20220601135951.2005085-1-sashal@kernel.org>
+References: <20220601135951.2005085-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -101,10 +101,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+)
 
 diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
-index 027769e39f9b..a491dcfa1dd0 100644
+index e795ad2b3f6b..eefda6edc89c 100644
 --- a/drivers/devfreq/rk3399_dmc.c
 +++ b/drivers/devfreq/rk3399_dmc.c
-@@ -485,6 +485,8 @@ static int rk3399_dmcfreq_remove(struct platform_device *pdev)
+@@ -411,6 +411,8 @@ static int rk3399_dmcfreq_remove(struct platform_device *pdev)
  {
  	struct rk3399_dmcfreq *dmcfreq = dev_get_drvdata(&pdev->dev);
  
