@@ -2,130 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37EBA53A605
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 15:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB38A53A65A
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 15:53:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353287AbiFANiW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jun 2022 09:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
+        id S245053AbiFANw4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jun 2022 09:52:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353299AbiFANiR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 09:38:17 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42345F8EB;
-        Wed,  1 Jun 2022 06:38:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654090693; x=1685626693;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=LY/jDnHvBdo9PvVaRUZPxc5ZeLVIfMPgbA4VYWa03gs=;
-  b=Ox3soQNPTCXwO6a4Q1w+VgU4jAVKMWewIKikWTT8teYBOgx67exl0scH
-   +AHE7QdqP92EIqDAzsuj9FYFd2EcgrnxZL/nJKG47ldVuvTFRQRt8ONtu
-   TtCTIz2TCn2QZyqkgd6gTskB4ByW6ZKeY2NKkkkZA3h7RFC8ceIu0cVHp
-   QS47nDeuPVtB0/yTaBzIW8rj4LWajgwCTudWz8eTDH5lxiMoeHWTy4UgL
-   oOGGikqeDHylKUCemI5OfCNCbUxEMQFpbQVBWnM0pj7LfglA6PXqw3oCM
-   3Q+X82pfwz5EyH7S4Gm9yFkbiqkd2Q7UpvvwaiiSypr46KbtUZpDhApBy
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="275313304"
-X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="275313304"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 06:38:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="530061782"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 01 Jun 2022 06:38:03 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nwOXz-00041w-0f;
-        Wed, 01 Jun 2022 13:38:03 +0000
-Date:   Wed, 1 Jun 2022 21:37:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, djakov@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        abel.vesa@nxp.com, abailon@baylibre.com, l.stach@pengutronix.de,
-        laurent.pinchart@ideasonboard.com, marex@denx.de,
-        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
-        aford173@gmail.com
-Cc:     kbuild-all@lists.01.org, kernel@pengutronix.de,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 2/8] interconnect: add device managed bulk API
-Message-ID: <202206012118.zBGUugaB-lkp@intel.com>
-References: <20220601094156.3388454-3-peng.fan@oss.nxp.com>
+        with ESMTP id S1353442AbiFANww (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 09:52:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8865A33345;
+        Wed,  1 Jun 2022 06:52:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4E99B81AE7;
+        Wed,  1 Jun 2022 13:52:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BD20C34119;
+        Wed,  1 Jun 2022 13:52:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654091554;
+        bh=3a8gxMHCDSeL/R2EhuktrXzbJmCqXw0BGoZqVqZ6DYA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=iOf8WjufH+jJga0hQx2IzLZ0qcNYlV8BYXq9+231bD3J7a3kWgublXUQt/cItRjv8
+         nSjN/YYe6+hY73Qwhn4BTnJRt4yV2RmFSjD9FMT6ARk2xsTTPI7j75Dmvazib4Ol6K
+         bhPiyuJukkXnMLDPY02/Gi1nOKomnHptS3bfqv4m/3/sC3ntxPLM5F1VDgej4wvHAT
+         N7BaArVyGx4bvsXQz0eKZwp1BXJarHndg+Eayw4sUuVJw0h26HXxumWr6aJYux2VzM
+         LRWkuSoCuRjtUa5JsK8LY/0qkUur7p3uXKFOwDaDV86EcZj2InfKC7byOJEnYPF8cT
+         VN8k3CF1QQ/Ww==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Brian Norris <briannorris@chromium.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Sasha Levin <sashal@kernel.org>, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.18 09/49] PM / devfreq: rk3399_dmc: Disable edev on remove()
+Date:   Wed,  1 Jun 2022 09:51:33 -0400
+Message-Id: <20220601135214.2002647-9-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220601135214.2002647-1-sashal@kernel.org>
+References: <20220601135214.2002647-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220601094156.3388454-3-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi "Peng,
+From: Brian Norris <briannorris@chromium.org>
 
-Thank you for the patch! Yet something to improve:
+[ Upstream commit 2fccf9e6050e0e3b8b4cd275d41daf7f7fa22804 ]
 
-[auto build test ERROR on shawnguo/for-next]
-[also build test ERROR on robh/for-next linus/master v5.18 next-20220601]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Otherwise we hit an unablanced enable-count when unbinding the DFI
+device:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan-OSS/interconnect-support-i-MX8MP/20220601-174431
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
-config: riscv-randconfig-r042-20220531 (https://download.01.org/0day-ci/archive/20220601/202206012118.zBGUugaB-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/23ecbba75b21962f25975cb014cf981a0420dae1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Peng-Fan-OSS/interconnect-support-i-MX8MP/20220601-174431
-        git checkout 23ecbba75b21962f25975cb014cf981a0420dae1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+[ 1279.659119] ------------[ cut here ]------------
+[ 1279.659179] WARNING: CPU: 2 PID: 5638 at drivers/devfreq/devfreq-event.c:360 devfreq_event_remove_edev+0x84/0x8c
+...
+[ 1279.659352] Hardware name: Google Kevin (DT)
+[ 1279.659363] pstate: 80400005 (Nzcv daif +PAN -UAO -TCO BTYPE=--)
+[ 1279.659371] pc : devfreq_event_remove_edev+0x84/0x8c
+[ 1279.659380] lr : devm_devfreq_event_release+0x1c/0x28
+...
+[ 1279.659571] Call trace:
+[ 1279.659582]  devfreq_event_remove_edev+0x84/0x8c
+[ 1279.659590]  devm_devfreq_event_release+0x1c/0x28
+[ 1279.659602]  release_nodes+0x1cc/0x244
+[ 1279.659611]  devres_release_all+0x44/0x60
+[ 1279.659621]  device_release_driver_internal+0x11c/0x1ac
+[ 1279.659629]  device_driver_detach+0x20/0x2c
+[ 1279.659641]  unbind_store+0x7c/0xb0
+[ 1279.659650]  drv_attr_store+0x2c/0x40
+[ 1279.659663]  sysfs_kf_write+0x44/0x58
+[ 1279.659672]  kernfs_fop_write_iter+0xf4/0x190
+[ 1279.659684]  vfs_write+0x2b0/0x2e4
+[ 1279.659693]  ksys_write+0x80/0xec
+[ 1279.659701]  __arm64_sys_write+0x24/0x30
+[ 1279.659714]  el0_svc_common+0xf0/0x1d8
+[ 1279.659724]  do_el0_svc_compat+0x28/0x3c
+[ 1279.659738]  el0_svc_compat+0x10/0x1c
+[ 1279.659746]  el0_sync_compat_handler+0xa8/0xcc
+[ 1279.659758]  el0_sync_compat+0x188/0x1c0
+[ 1279.659768] ---[ end trace cec200e5094155b4 ]---
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/devfreq/rk3399_dmc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-All errors (new ones prefixed by >>):
-
-   riscv64-linux-ld: drivers/opp/core.o: in function `devm_of_icc_bulk_get':
->> include/linux/interconnect.h:121: multiple definition of `devm_of_icc_bulk_get'; drivers/usb/dwc3/dwc3-qcom.o:include/linux/interconnect.h:121: first defined here
-   riscv64-linux-ld: drivers/opp/cpu.o: in function `devm_of_icc_bulk_get':
->> include/linux/interconnect.h:121: multiple definition of `devm_of_icc_bulk_get'; drivers/usb/dwc3/dwc3-qcom.o:include/linux/interconnect.h:121: first defined here
-   riscv64-linux-ld: drivers/opp/of.o: in function `devm_of_icc_bulk_get':
->> include/linux/interconnect.h:121: multiple definition of `devm_of_icc_bulk_get'; drivers/usb/dwc3/dwc3-qcom.o:include/linux/interconnect.h:121: first defined here
-   riscv64-linux-ld: drivers/opp/debugfs.o: in function `devm_of_icc_bulk_get':
->> include/linux/interconnect.h:121: multiple definition of `devm_of_icc_bulk_get'; drivers/usb/dwc3/dwc3-qcom.o:include/linux/interconnect.h:121: first defined here
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
-   Depends on HAS_IOMEM && DRM && MMU
-   Selected by
-   - DRM_SSD130X && HAS_IOMEM && DRM
-
-
-vim +121 include/linux/interconnect.h
-
-   119	
-   120	int devm_of_icc_bulk_get(struct device *dev, int num_paths, struct icc_bulk_data *paths)
- > 121	{
-   122		return 0;
-   123	}
-   124	
-
+diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
+index 293857ebfd75..538e8dc74f40 100644
+--- a/drivers/devfreq/rk3399_dmc.c
++++ b/drivers/devfreq/rk3399_dmc.c
+@@ -477,6 +477,8 @@ static int rk3399_dmcfreq_remove(struct platform_device *pdev)
+ {
+ 	struct rk3399_dmcfreq *dmcfreq = dev_get_drvdata(&pdev->dev);
+ 
++	devfreq_event_disable_edev(dmcfreq->edev);
++
+ 	/*
+ 	 * Before remove the opp table we need to unregister the opp notifier.
+ 	 */
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+
