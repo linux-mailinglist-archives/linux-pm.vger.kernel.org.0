@@ -2,149 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE2A153A5B5
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 15:14:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE4D53A5BC
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 15:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353136AbiFANOb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jun 2022 09:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33674 "EHLO
+        id S1353149AbiFANPR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jun 2022 09:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351588AbiFANOb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 09:14:31 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C923CA46;
-        Wed,  1 Jun 2022 06:14:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654089267; x=1685625267;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=thV3dq7IP3pZFJ/eKrgaz8exm55qhJj7BG42P4ZLFS4=;
-  b=g8vqqojOIhfpgb6zTUBNH4QKI4yuyNwJ8Kh8qe2dab1QdXukEP1+ipPT
-   524lEDQsgfXPgLEsczpCCwtvvijBKQ7cdlwGoKZsVBnrtnen3MJV9bQis
-   AQoviHkYFntPSGysOLdm6SNPPibOjvsSOaeDHi8mBxjViiR8fldZDP/RX
-   I=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Jun 2022 06:14:27 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 06:14:27 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 1 Jun 2022 06:14:27 -0700
-Received: from codeaurora.org (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 1 Jun 2022
- 06:14:24 -0700
-From:   Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Manaf Meethalavalappu Pallikunhi" <quic_manafm@quicinc.com>
-Subject: [PATCH 1/1] drivers/thermal/thermal_of: Add critical/hot ops support for thermal_of sensor
-Date:   Wed, 1 Jun 2022 18:44:00 +0530
-Message-ID: <20220601131400.24627-2-quic_manafm@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220601131400.24627-1-quic_manafm@quicinc.com>
-References: <20220601131400.24627-1-quic_manafm@quicinc.com>
+        with ESMTP id S1353201AbiFANPK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 09:15:10 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71F23D491;
+        Wed,  1 Jun 2022 06:15:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654089307; x=1685625307;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=u7ZLlN9ab0mHsIRqx2mjBaMaUlNGl85e+RLEouUCsbM=;
+  b=DXOBvjMofAJgjYBTectnfjtdPPCoXsdS7yGTXd5pB8VFI36O5DXyZ+aF
+   N5cU8v3E90nd+sFkDV4PtROfcdSjsu0ONoxrwFSSzMnIcEFf9sA0Z6fpe
+   091WKidcAF6/oetMfNSZRWmtAQnE8obi8tIwdGWr+Wyf4VRBDwHplQcBS
+   xNwcjzz32lmNo3nHQt0zAgUoZIlK9vkSBf4I790KXwyIZ9mBnKnXJZLB+
+   QIBqsOlMLN7Rvx9R9lgmgnyN8Q0EhQJeMDMgV1n/n7IZcVcBSeYNu0954
+   JUXvzO7Wa3BPBE6RpYjSBPuDN5ID7CcHaNemNn55pvh+AUmTg++YcRN/e
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="273151672"
+X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
+   d="scan'208";a="273151672"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 06:15:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
+   d="scan'208";a="581576162"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 01 Jun 2022 06:15:02 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwOBi-00040M-5B;
+        Wed, 01 Jun 2022 13:15:02 +0000
+Date:   Wed, 1 Jun 2022 21:15:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, djakov@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        abel.vesa@nxp.com, abailon@baylibre.com, l.stach@pengutronix.de,
+        laurent.pinchart@ideasonboard.com, marex@denx.de,
+        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
+        aford173@gmail.com
+Cc:     kbuild-all@lists.01.org, kernel@pengutronix.de,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH 2/8] interconnect: add device managed bulk API
+Message-ID: <202206012137.3VySlLwf-lkp@intel.com>
+References: <20220601094156.3388454-3-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220601094156.3388454-3-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The sensor driver which register through thermal_of interface doesn't
-have an option to get thermal zone critical, hot trip violation
-notification from thermal core.
+Hi "Peng,
 
-Add support for these ops in thermal_of interface so that sensor
-driver can use these ops.
+Thank you for the patch! Yet something to improve:
 
-Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
----
- drivers/thermal/thermal_of.c | 21 +++++++++++++++++++++
- include/linux/thermal.h      |  6 ++++++
- 2 files changed, 27 insertions(+)
+[auto build test ERROR on shawnguo/for-next]
+[also build test ERROR on robh/for-next linus/master v5.18 next-20220601]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index b65d435cb92f..65e1848cb1dd 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -211,6 +211,20 @@ static int of_thermal_change_mode(struct thermal_zone_device *tz,
- 	return data->ops->change_mode(data->sensor_data, mode);
- }
- 
-+static void of_thermal_hot_notify(struct thermal_zone_device *tz)
-+{
-+	struct __thermal_zone *data = tz->devdata;
-+
-+	data->ops->hot(data->sensor_data);
-+}
-+
-+static void of_thermal_critical_notify(struct thermal_zone_device *tz)
-+{
-+	struct __thermal_zone *data = tz->devdata;
-+
-+	data->ops->critical(data->sensor_data);
-+}
-+
- static int of_thermal_bind(struct thermal_zone_device *thermal,
- 			   struct thermal_cooling_device *cdev)
- {
-@@ -419,6 +433,11 @@ thermal_zone_of_add_sensor(struct device_node *zone,
- 	if (ops->change_mode)
- 		tzd->ops->change_mode = of_thermal_change_mode;
- 
-+	if (ops->hot)
-+		tzd->ops->hot = of_thermal_hot_notify;
-+
-+	if (ops->critical)
-+		tzd->ops->critical = of_thermal_critical_notify;
- 	mutex_unlock(&tzd->lock);
- 
- 	return tzd;
-@@ -581,6 +600,8 @@ void thermal_zone_of_sensor_unregister(struct device *dev,
- 	tzd->ops->get_trend = NULL;
- 	tzd->ops->set_emul_temp = NULL;
- 	tzd->ops->change_mode = NULL;
-+	tzd->ops->hot = NULL;
-+	tzd->ops->critical = NULL;
- 
- 	tz->ops = NULL;
- 	tz->sensor_data = NULL;
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 365733b428d8..920f7e5c80bb 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -301,6 +301,10 @@ struct thermal_zone_params {
-  *		   hardware.
-  * @change_mode: a pointer to a function that notifies the thermal zone
-  *		   mode change.
-+ * @hot:	 a pointer to a function that notifies the thermal zone
-+ *		   hot trip violation.
-+ * @critical: a pointer to a function that notifies the thermal zone
-+ *		   critical trip violation.
-  */
- struct thermal_zone_of_device_ops {
- 	int (*get_temp)(void *, int *);
-@@ -309,6 +313,8 @@ struct thermal_zone_of_device_ops {
- 	int (*set_emul_temp)(void *, int);
- 	int (*set_trip_temp)(void *, int, int);
- 	int (*change_mode) (void *, enum thermal_device_mode);
-+	void (*hot)(void *sensor_data);
-+	void (*critical)(void *sensor_data);
- };
- 
- /* Function declarations */
+url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan-OSS/interconnect-support-i-MX8MP/20220601-174431
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20220601/202206012137.3VySlLwf-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/23ecbba75b21962f25975cb014cf981a0420dae1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Peng-Fan-OSS/interconnect-support-i-MX8MP/20220601-174431
+        git checkout 23ecbba75b21962f25975cb014cf981a0420dae1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   ld: drivers/opp/cpu.o: in function `devm_of_icc_bulk_get':
+>> cpu.c:(.text+0x2ad): multiple definition of `devm_of_icc_bulk_get'; drivers/opp/core.o:core.c:(.text+0xa4a): first defined here
+   ld: drivers/opp/debugfs.o: in function `devm_of_icc_bulk_get':
+   debugfs.c:(.text+0x13c): multiple definition of `devm_of_icc_bulk_get'; drivers/opp/core.o:core.c:(.text+0xa4a): first defined here
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
