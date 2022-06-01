@@ -2,93 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 801E453A3F2
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 13:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C387153A460
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 13:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352765AbiFALYL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jun 2022 07:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40802 "EHLO
+        id S233981AbiFALwU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jun 2022 07:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352809AbiFALX7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 07:23:59 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733095E76E
-        for <linux-pm@vger.kernel.org>; Wed,  1 Jun 2022 04:23:11 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id v25so1718875eda.6
-        for <linux-pm@vger.kernel.org>; Wed, 01 Jun 2022 04:23:11 -0700 (PDT)
+        with ESMTP id S229979AbiFALwT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 07:52:19 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364112DC3
+        for <linux-pm@vger.kernel.org>; Wed,  1 Jun 2022 04:52:18 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id q1so3199184ejz.9
+        for <linux-pm@vger.kernel.org>; Wed, 01 Jun 2022 04:52:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=EmX78kZDbpi7zDJcl5NRBNnxEqWkEcLfuWB3zLytvQ4=;
-        b=r55wWxDb8gLLLDShPuOiJjmUz1D5Xgin/ldr6b/Tnulo5/FyaoiTrGCFmJK10iRxpl
-         /b5twD1DES3+6TJftiXJLlEH5MTxw6tzyqTXWS49/e4fUXACwFeWmyPUdl79bB1ZMm28
-         1EQZtIGbcpDoxuCn3othqQWKg+D6efafEyLZYTIBuSeyngpnqUPZSWp0zb/eRJWQMD+4
-         W6q5xcRyZJBNbHcwT564fW1iOCfBexrbxseQQNfQI9zG+QVQGtdYMM8Iugx4ALnbLNtu
-         EfIQzbvmIUrpisGyxuU8pS95ihIaVEMR2VjCfh69jDHQWuXdYfHfC7+QL1vDtMre9YvW
-         WOjA==
+        bh=UOrJiCuy8WHaA80JcOoMi9l2SsxU2BIHhTFoCZlViNI=;
+        b=b13pWQVy4b9E49ocPJLgikGXBXj8JuvHCLWPDKyIy9pKSUC8clHsgJcx5f8bcKTuOP
+         eqI1pXdsYShcVmgD0KaxqNILNo9HsFHaglcAQSUNWgPdidYMTwn8pbTvhCcvB/WObLEt
+         eqn1G2RglDF21QAqNtWXQHAqHvEnL//0R4Xrb/Dlrf3/iGHKbnTl/dja/n3qCNC0mvyP
+         x+J5zTUMXK+n4ySXVK7DdvqarXBxvf/rXXbmy5Bt8AHeMk2Od1RXx895a5DZNhgrx752
+         oP4lp80sC7Ckc5vHKi7x7BYLlPEzRgdOdCY+xf3UEKkx0G3SUnTlb9vPisensvl3y2wy
+         LWnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=EmX78kZDbpi7zDJcl5NRBNnxEqWkEcLfuWB3zLytvQ4=;
-        b=CWmJZlIBbeu+K8L1JzuN4DirsMLYVn1DEDWguuxICxcGeJ9s410ubzCD+nkLx4k7i4
-         ZBfRuMru0KijrL2HDk/+dqDLMVLw+AlVVVYuYylE8Kw4WPEiyI/dUpveYXpWEccYEhHb
-         a56vDvTSPR+MHCAztFg9BZ1w9u5XbYe7HxXpFmRb5nHUz8tF+8qmk8wMN9inIy6OItfG
-         CMn4UP+zGDG3sVBTYHAQVk0LrcREiiebqli5h4kIu9lK7OWJWQKLH9C6b/Ab1XJkzkau
-         G49d3J69TQGzzy5WjK0Ik8jdAulH1KEiy3cnYw1Jw6tpw6KWAF+fGbSKG/RQOHpeGe+H
-         Posw==
-X-Gm-Message-State: AOAM532EDSeRy/bWhb8q2GHpXK5szY4OYCv+dh1vpPp3K9JbryGFaMN4
-        0fPW9mgbOe7mq7h7mjAJTjiESg==
-X-Google-Smtp-Source: ABdhPJzOJxGalCbiJf1Q2Q8zI2vrTUHr2z0fwXYzl5tTyez6dQrB/mI0xzVPeI2IOWLC/p/Lwqsvsw==
-X-Received: by 2002:a05:6402:1907:b0:42d:e90e:337 with SMTP id e7-20020a056402190700b0042de90e0337mr7327648edz.405.1654082589971;
-        Wed, 01 Jun 2022 04:23:09 -0700 (PDT)
+        bh=UOrJiCuy8WHaA80JcOoMi9l2SsxU2BIHhTFoCZlViNI=;
+        b=cqQXMvoW2S9U/2uzsbPyKJyTXtbz1NWXYz4atg23nGa7RCxuj5PCwtYjnFzfTmnBnQ
+         0AB1fRiiXWMz7eMfpiHBPg5si7MZzyVGgiL0G9riC02L1xEp+JIQ/Bg10SflRAEjd66B
+         qlGL+5mSSLJPXROodlMNN6xOvvhyw3Yk2DX/rrtBbH7rbLQDjFH/8CD0en1ymFQMhqF3
+         DXI0Zz0QIDic0D96wlcZgPdlrJS4v+YF8IGTwgew355Nt3q2NniCkp//sPBeNZBxGdwq
+         MDLGTwkDJgtOjJJrBdgYcBuDaFiaAkBoAnbfa6hz50wmT4a/aF1ollubIhK88vf9J+iw
+         37IA==
+X-Gm-Message-State: AOAM532Tk498scpdHjmx+QYUpdfhXXQv5wHlFlpSBkBQEG+oaUkOlez9
+        sKCjR/WossCTmNYRGHX5ZbY1Dw==
+X-Google-Smtp-Source: ABdhPJxe/8cGT85vXnLiNluXOpXCUgKbVNqJ0UUOERK9/MZjt4X30RlZebGWff180gJy+dmg1WA73w==
+X-Received: by 2002:a17:907:1b03:b0:6ff:78d4:c140 with SMTP id mp3-20020a1709071b0300b006ff78d4c140mr14279382ejc.554.1654084336800;
+        Wed, 01 Jun 2022 04:52:16 -0700 (PDT)
 Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id p19-20020a056402155300b0042617ba638esm823008edx.24.2022.06.01.04.23.08
+        by smtp.gmail.com with ESMTPSA id n8-20020aa7d048000000b0042dcdfb003esm860740edo.53.2022.06.01.04.52.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 04:23:09 -0700 (PDT)
-Message-ID: <7a66f2e2-1a2a-a262-138c-f535499984ae@linaro.org>
-Date:   Wed, 1 Jun 2022 13:23:08 +0200
+        Wed, 01 Jun 2022 04:52:16 -0700 (PDT)
+Message-ID: <306a4f66-8ad0-8965-1c29-66ee13dacd50@linaro.org>
+Date:   Wed, 1 Jun 2022 13:52:14 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [RFC PATCH v2 4/6] PM: opp: allow control of multiple clocks
+Subject: Re: [PATCH 1/8] dt-bindings: soc: imx: add interconnect property for
+ i.MX8MP media blk ctrl
 Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
- <20220411154347.491396-5-krzysztof.kozlowski@linaro.org>
- <20220425072710.v6gwo4gu3aouezg4@vireshk-i7>
- <dea39b1f-0091-2690-7f07-108d07ef9f3c@linaro.org>
- <20220510044053.ykn6ygnbeokhzrsa@vireshk-i7>
- <1e533194-7047-8342-b426-f607fddbfaa3@linaro.org>
- <20220511050643.hd5tcrojb3wkbg7t@vireshk-i7>
- <20220518235708.1A04CC385A9@smtp.kernel.org>
- <65a4c28d-6702-3a9f-f837-1ea69a428777@linaro.org>
- <20220531103029.ntoypaafnd6447ag@vireshk-i7>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, djakov@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        abel.vesa@nxp.com, abailon@baylibre.com, l.stach@pengutronix.de,
+        laurent.pinchart@ideasonboard.com, marex@denx.de,
+        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
+        aford173@gmail.com
+Cc:     kernel@pengutronix.de, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
+        Peng Fan <peng.fan@nxp.com>
+References: <20220601094537.3390127-1-peng.fan@oss.nxp.com>
+ <20220601094537.3390127-2-peng.fan@oss.nxp.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220531103029.ntoypaafnd6447ag@vireshk-i7>
+In-Reply-To: <20220601094537.3390127-2-peng.fan@oss.nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,39 +83,16 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 31/05/2022 12:30, Viresh Kumar wrote:
-> On 19-05-22, 10:03, Krzysztof Kozlowski wrote:
->> Yes, true. The clock frequencies are still changed with each gear, but
->> in general the UFS indeed operates on gear concept.
+On 01/06/2022 11:45, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> Hi Krzysztof,
+> Add interconnect property for i.MX8MP mediamix blk ctrl
 > 
-> I have redesigned the OPP core a bit (two patchsets until now) to make
-> it easier to add multiple clock support going forward. I need some
-> inputs from you before moving forward with it now. Will this work for
-> your use case:
-> 
-> - Add support for multiple clocks, where none of them is primary.
-> 
-> - Which means you won't be able to use dev_pm_opp_set_rate() but will
->   need something like dev_pm_opp_set_level(), will add it.
-> 
-> - That is, your OPP table will need to implement levels (I think of
->   them as UFS gears) and then call dev_pm_opp_set_level() instead.
-> 
-> - This new API will work just like dev_pm_opp_set_rate(), except that
->   it will find the target OPP based on level instead of freq and
->   support configuration of multiple clock frequencies.
-> 
-> - Of course both these APIs will share most of the code.
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 
-Hi Viresh,
 
-In general this looks reasonable and matches how the UFS gears should be
-modeled. It does not match how UFS drivers implemented the clock
-scaling, but that's the internal problem of UFS drivers. They scale the
-clocks only max or min, even though there are multiple gears in between.
-The new approach looks therefore appropriate.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 
 Best regards,
 Krzysztof
