@@ -2,51 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 993A253A730
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 15:59:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE02753A787
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 16:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354105AbiFAN65 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jun 2022 09:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
+        id S1354160AbiFAOCF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jun 2022 10:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348857AbiFAN6j (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 09:58:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E407B8B09A;
-        Wed,  1 Jun 2022 06:55:36 -0700 (PDT)
+        with ESMTP id S1354364AbiFAOAS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 10:00:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4695A33B3;
+        Wed,  1 Jun 2022 06:56:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3084B615AA;
-        Wed,  1 Jun 2022 13:55:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60812C34119;
-        Wed,  1 Jun 2022 13:55:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA8BAB81AE7;
+        Wed,  1 Jun 2022 13:56:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B278C34119;
+        Wed,  1 Jun 2022 13:56:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654091721;
-        bh=r3DLkc6jEcY3i0/3z56pH0qiShiXBiSeWD+DV9othKc=;
+        s=k20201202; t=1654091794;
+        bh=3a8gxMHCDSeL/R2EhuktrXzbJmCqXw0BGoZqVqZ6DYA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F0ebd9xcNqA4OfVMnzL50KZPsqCIVRy6Wo+QTq5OD1YNzhDBxFFD4N0t9ZsfG8igv
-         zI0sKfpFLe5nBrOFvE6xmbUX0CivY5GnEq4q4yMXRoy9GPI5VaAruNiF5DgP7syKEA
-         Qj6gS8/zvfRCEohvUwr1qSS6MFIleKS1HBlWCEWag2eFmwXqSSh5b+5xdhvmgZFoyI
-         y44XmtChJ5iB2Yy2qWqIm0aj9EhtzlDXvSQ97gNybF+npv8J/56AO7WNNiYhgBWKdZ
-         9Di53AeGYGvNyPg7RpQV3qmaDnx6mLadBcKVhome2zWPjVDlqiH887NYjxCo+N11U0
-         lWX4MIT6suG7A==
+        b=Jt9fX2x7NKMvfZ81RLm+5WqNMPdOj/phB4oqoqa6O1oQ4Wvz/Rq9rfSAHd0ly/RBm
+         FZjfufdMLE/xHpNWntwJ63F3LbSbiJ97wOSi4HXFgf7wlSNhVM6kh+whnpvAQ45na0
+         gbGcOjMBZd11i7Y7MKGSoFTZT7GsmlqWV9mmpBARy2H+bojBApePyNdVTtRI4WXWXN
+         DapLA8j5tYjiC1WnzXQ/wLfBuDMD+83jmLFTcedEtuKdtnoXZGuhO/GRpP3i2xHUKW
+         3BaIPYlaEuMw91gm4iuYeg7lNLG2Ws6XTeDQ/bOB4tLPqrNnpTCTanoE5QXv7P6x/M
+         oId78eNzmdpAg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Jia-wei Chang <jia-wei.chang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.17 27/48] cpufreq: Avoid unnecessary frequency updates due to mismatch
-Date:   Wed,  1 Jun 2022 09:54:00 -0400
-Message-Id: <20220601135421.2003328-27-sashal@kernel.org>
+Cc:     Brian Norris <briannorris@chromium.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Sasha Levin <sashal@kernel.org>, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 07/37] PM / devfreq: rk3399_dmc: Disable edev on remove()
+Date:   Wed,  1 Jun 2022 09:55:52 -0400
+Message-Id: <20220601135622.2003939-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220601135421.2003328-1-sashal@kernel.org>
-References: <20220601135421.2003328-1-sashal@kernel.org>
+In-Reply-To: <20220601135622.2003939-1-sashal@kernel.org>
+References: <20220601135622.2003939-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -61,60 +57,62 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Viresh Kumar <viresh.kumar@linaro.org>
+From: Brian Norris <briannorris@chromium.org>
 
-[ Upstream commit f55ae08c89873e140c7cac2a7fa161d31a0d60cf ]
+[ Upstream commit 2fccf9e6050e0e3b8b4cd275d41daf7f7fa22804 ]
 
-For some platforms, the frequency returned by hardware may be slightly
-different from what is provided in the frequency table. For example,
-hardware may return 499 MHz instead of 500 MHz. In such cases it is
-better to avoid getting into unnecessary frequency updates, as we may
-end up switching policy->cur between the two and sending unnecessary
-pre/post update notifications, etc.
+Otherwise we hit an unablanced enable-count when unbinding the DFI
+device:
 
-This patch has chosen allows the hardware frequency and table frequency
-to deviate by 1 MHz for now, we may want to increase it a bit later on
-if someone still complains.
+[ 1279.659119] ------------[ cut here ]------------
+[ 1279.659179] WARNING: CPU: 2 PID: 5638 at drivers/devfreq/devfreq-event.c:360 devfreq_event_remove_edev+0x84/0x8c
+...
+[ 1279.659352] Hardware name: Google Kevin (DT)
+[ 1279.659363] pstate: 80400005 (Nzcv daif +PAN -UAO -TCO BTYPE=--)
+[ 1279.659371] pc : devfreq_event_remove_edev+0x84/0x8c
+[ 1279.659380] lr : devm_devfreq_event_release+0x1c/0x28
+...
+[ 1279.659571] Call trace:
+[ 1279.659582]  devfreq_event_remove_edev+0x84/0x8c
+[ 1279.659590]  devm_devfreq_event_release+0x1c/0x28
+[ 1279.659602]  release_nodes+0x1cc/0x244
+[ 1279.659611]  devres_release_all+0x44/0x60
+[ 1279.659621]  device_release_driver_internal+0x11c/0x1ac
+[ 1279.659629]  device_driver_detach+0x20/0x2c
+[ 1279.659641]  unbind_store+0x7c/0xb0
+[ 1279.659650]  drv_attr_store+0x2c/0x40
+[ 1279.659663]  sysfs_kf_write+0x44/0x58
+[ 1279.659672]  kernfs_fop_write_iter+0xf4/0x190
+[ 1279.659684]  vfs_write+0x2b0/0x2e4
+[ 1279.659693]  ksys_write+0x80/0xec
+[ 1279.659701]  __arm64_sys_write+0x24/0x30
+[ 1279.659714]  el0_svc_common+0xf0/0x1d8
+[ 1279.659724]  do_el0_svc_compat+0x28/0x3c
+[ 1279.659738]  el0_svc_compat+0x10/0x1c
+[ 1279.659746]  el0_sync_compat_handler+0xa8/0xcc
+[ 1279.659758]  el0_sync_compat+0x188/0x1c0
+[ 1279.659768] ---[ end trace cec200e5094155b4 ]---
 
-Reported-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-Tested-by: Jia-wei Chang <jia-wei.chang@mediatek.com>
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpufreq/cpufreq.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/devfreq/rk3399_dmc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 80f535cc8a75..fbaa8e6c7d23 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -28,6 +28,7 @@
- #include <linux/suspend.h>
- #include <linux/syscore_ops.h>
- #include <linux/tick.h>
-+#include <linux/units.h>
- #include <trace/events/power.h>
+diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
+index 293857ebfd75..538e8dc74f40 100644
+--- a/drivers/devfreq/rk3399_dmc.c
++++ b/drivers/devfreq/rk3399_dmc.c
+@@ -477,6 +477,8 @@ static int rk3399_dmcfreq_remove(struct platform_device *pdev)
+ {
+ 	struct rk3399_dmcfreq *dmcfreq = dev_get_drvdata(&pdev->dev);
  
- static LIST_HEAD(cpufreq_policy_list);
-@@ -1707,6 +1708,16 @@ static unsigned int cpufreq_verify_current_freq(struct cpufreq_policy *policy, b
- 		return new_freq;
- 
- 	if (policy->cur != new_freq) {
-+		/*
-+		 * For some platforms, the frequency returned by hardware may be
-+		 * slightly different from what is provided in the frequency
-+		 * table, for example hardware may return 499 MHz instead of 500
-+		 * MHz. In such cases it is better to avoid getting into
-+		 * unnecessary frequency updates.
-+		 */
-+		if (abs(policy->cur - new_freq) < HZ_PER_MHZ)
-+			return policy->cur;
++	devfreq_event_disable_edev(dmcfreq->edev);
 +
- 		cpufreq_out_of_sync(policy, new_freq);
- 		if (update)
- 			schedule_work(&policy->update);
+ 	/*
+ 	 * Before remove the opp table we need to unregister the opp notifier.
+ 	 */
 -- 
 2.35.1
 
