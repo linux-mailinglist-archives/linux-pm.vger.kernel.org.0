@@ -2,78 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 295E353AF84
+	by mail.lfdr.de (Postfix) with ESMTP id EE15953AF86
 	for <lists+linux-pm@lfdr.de>; Thu,  2 Jun 2022 00:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231858AbiFAVtk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jun 2022 17:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
+        id S231967AbiFAVxE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jun 2022 17:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231825AbiFAVtk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 17:49:40 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0731D0596
-        for <linux-pm@vger.kernel.org>; Wed,  1 Jun 2022 14:49:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654120179; x=1685656179;
-  h=from:to:cc:subject:date:message-id;
-  bh=kjupCawO0+LBtPbOcEnuq+J1GIETFrc1mcVN9id2tFw=;
-  b=aGOjWqkRK+wk5IX582o4irz230+Ds4pYNLRMziAZ2m2WIGIh1CCIzzu8
-   lsEuVyyVb4apixjLijVqHRLVKDse4s5BQlV/dHAkYHV9gP/OdFR/WHj7P
-   V4QtCv3655/JjPRPTzNYU1jyXPUuv0yrjz7lu9JkOCOnV98yPOj136oxt
-   ziMgWZ1f5ve78oatk3ZTFdL5bU4fpqrke/jAASUya+28ezXXAPBsJ8czz
-   nWHkFxoNrxeB3XeUsddZpM20e2R1d15R+caRV3tr/5SQ7SjCCfibd1aOD
-   FUB6bB1vpe45PYTZTq4vzI+gkyHoR/UY3EWFQQUCUTEBkvRAZJ28YXTIJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="257811459"
-X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
-   d="scan'208";a="257811459"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 14:49:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
-   d="scan'208";a="680310070"
-Received: from otc-chromeosbuild-5.ostc.intel.com (HELO otc-chromeosbuild-5.intel.com) ([10.54.29.149])
-  by fmsmga002.fm.intel.com with ESMTP; 01 Jun 2022 14:49:28 -0700
-From:   george.d.sworo@intel.com
-To:     lenb@kernel.org
-Cc:     linux-pm@vger.kernel.org, George D Sworo <george.d.sworo@intel.com>
-Subject: [PATCH] tools/power turbostat: Support RAPTORLAKE P
-Date:   Wed,  1 Jun 2022 14:49:23 -0700
-Message-Id: <20220601214923.13239-1-george.d.sworo@intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S231810AbiFAVxE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 17:53:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D882E18B11;
+        Wed,  1 Jun 2022 14:53:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89E95B81CF0;
+        Wed,  1 Jun 2022 21:53:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 31B45C34119;
+        Wed,  1 Jun 2022 21:53:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654120380;
+        bh=zMCuPfsZ3FXBOJ+/RPBXt20WYRcWOUCEsnMPpWGksVs=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=LMJP0qvQJp5FiRCTaOQDEblFfhMhuFUiH4xfkdj+3sEkFLaMyxTCkEVGquAx67vjQ
+         MSPaDyiT7Aw9bj4d6Wfe8Dja/9rrVKgbIaqb0j8FyljZ/8ptsbjEgCYHRITCUE5bQ6
+         U15bACp0fSpnWq9ZXeH3X+hfheSiUEfg0SpgFy1PWrQVqig/TC2yy6PQDQ6+6GWR9D
+         FgB6UhMRBr4g1FcTQDfhyiuHkFc6EAIVHspBe+n/sr2+1ind+LXECFrqWTGClpb2AF
+         bcm3UMCYaFjhluf3czKqrgO5v0Ohu+ytgQdmwYiKc0P9DHfkZAALakld+KQKmWxCXl
+         +MPdGiSum5bVg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 20DE9F0394E;
+        Wed,  1 Jun 2022 21:53:00 +0000 (UTC)
+Subject: Re: [GIT PULL] power-supply changes for 5.19
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20220601201404.nc66eejtt4tuvre6@mercury.elektranox.org>
+References: <20220601201404.nc66eejtt4tuvre6@mercury.elektranox.org>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20220601201404.nc66eejtt4tuvre6@mercury.elektranox.org>
+X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.19
+X-PR-Tracked-Commit-Id: da50aad6d86716aa48a2b8463c85caea77c0355f
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c7993147519ca970ad4af17e0eac9d683e7721b9
+Message-Id: <165412038013.5556.17117490936906222974.pr-tracker-bot@kernel.org>
+Date:   Wed, 01 Jun 2022 21:53:00 +0000
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: George D Sworo <george.d.sworo@intel.com>
+The pull request you sent on Wed, 1 Jun 2022 22:14:04 +0200:
 
-Add initial support for Raptorlake model
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.19
 
-Signed-off-by: George D Sworo <george.d.sworo@intel.com>
----
- tools/power/x86/turbostat/turbostat.c | 1 +
- 1 file changed, 1 insertion(+)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c7993147519ca970ad4af17e0eac9d683e7721b9
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index ede31a4287a0..c42290133646 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -5361,6 +5361,7 @@ unsigned int intel_model_duplicates(unsigned int model)
- 	case INTEL_FAM6_LAKEFIELD:
- 	case INTEL_FAM6_ALDERLAKE:
- 	case INTEL_FAM6_ALDERLAKE_L:
-+	case INTEL_FAM6_RAPTORLAKE_P:
- 		return INTEL_FAM6_CANNONLAKE_L;
- 
- 	case INTEL_FAM6_ATOM_TREMONT_L:
+Thank you!
+
 -- 
-2.17.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
