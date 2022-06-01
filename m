@@ -2,68 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 124C953A97C
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 16:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDBAB53A9BD
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 17:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232717AbiFAO7N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jun 2022 10:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36120 "EHLO
+        id S238872AbiFAPPH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jun 2022 11:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiFAO7M (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 10:59:12 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636FD6C56D;
-        Wed,  1 Jun 2022 07:59:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654095551; x=1685631551;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=t02FFnqc6Y8S/GCyagVu8pZZE5QyASWhUXTr1q1i5K0=;
-  b=dZFHALMHQZWIULn2c5ezCZoB+LG8nRa+KA7LMkqzBQ1xC7XWMQObp909
-   RQZ2lViECiYmMdpFEUJz7gaYXGJIu892Oolk3IYwsugz3F05TzR3ioSid
-   sC31lxxkm9oTJo5EN/DaThlPUKAGS5jP+jxyjwgXnhnBAXpkulu44juK+
-   H8WPo8RQATXv+mc3lQ48KHpxJ3fTE8fqqG2ibuwK1B31HA0JoPjws6wov
-   OkAvJZ0CAVT3HKtyLKX8l6FDe1hqykgYCuTGtDdcUpjFkHx/UaeXWRHMr
-   235Tp9GXMwxhOxsd/6aGydM6e3lMC2427ZnZAA13oqNxkTF6v4H4DQAdy
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="275625370"
-X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="275625370"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 07:59:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,268,1647327600"; 
-   d="scan'208";a="606308020"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 01 Jun 2022 07:59:05 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nwPoP-00045W-6Q;
-        Wed, 01 Jun 2022 14:59:05 +0000
-Date:   Wed, 1 Jun 2022 22:58:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, djakov@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        abel.vesa@nxp.com, abailon@baylibre.com, l.stach@pengutronix.de,
-        laurent.pinchart@ideasonboard.com, marex@denx.de,
-        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
-        aford173@gmail.com
-Cc:     kbuild-all@lists.01.org, kernel@pengutronix.de,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 2/8] interconnect: add device managed bulk API
-Message-ID: <202206012228.VPwcFQ5b-lkp@intel.com>
-References: <20220601094156.3388454-3-peng.fan@oss.nxp.com>
+        with ESMTP id S1354961AbiFAPPA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 11:15:00 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C9191552
+        for <linux-pm@vger.kernel.org>; Wed,  1 Jun 2022 08:14:59 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id k16so2805458wrg.7
+        for <linux-pm@vger.kernel.org>; Wed, 01 Jun 2022 08:14:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LHnieHEw4RPGKoOIEHTzAQkLNeagtaYCFgNXH9dPMac=;
+        b=cRdEo239VtaUXETw8ISO74XI8xvlfNc4i6PeNXes20SRN+U49YXxawZ22ws9eo+uGW
+         08YhaRFvqcL30b0APelTlZaKS/b91/6+aN/n7rRGlmbEGzHzt/RQpqtNic67opWgnOxv
+         Q9yvdI9SIWSgKm1qDasS1on1xvQSJ6xxc6Rba4P5fjryXHMJoWjnLezdtKkhhUf74KBc
+         lgbHtnWnG/bzht7LlMafWPzF/F18JdjX71KzxvJ1ExBqjxA3DAcWnjX078B//XTIGABW
+         XHiPSH+tWHJoIYUIs6+DXYPdcyOx6PRIN7X8x362YocTWFqWypP4pbT2iVX8hzs+hooR
+         vLtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LHnieHEw4RPGKoOIEHTzAQkLNeagtaYCFgNXH9dPMac=;
+        b=bspQ0cIWdL+aNhpOknyMNX0KEj5NkHsE1mjr/sfavkODGJT6cj7XSV42SkKZiteoP9
+         NcoNNN5Swqmrns/kqp/xRAbBfZUMu/A98HvcdYAyKXdboH3VF19h65phjS7bI9YEVSfi
+         Rw5v+NXOf/Lgye3XwglYjeQkkNoRQTeeakelW6R650oPKeCFt3o/G85y/O9neXkAK+pS
+         XFhmauzr8Y2jE5XnR2U3L/54hCaSrsXfacVsLk8j1W7tyPW6J3paYCApBLPAewfGNpAt
+         EaCdvLbv7p8x+MMu9+7Y864I26HDFTLQTz8GkZN2m93KFQUXOcrm+KyhNBtwnJ//V78w
+         7Sog==
+X-Gm-Message-State: AOAM5312wmJpwQFGxMpa4rGBvwC5LgFKeBB4hhb3HcqH8dfe6SOOHIIy
+        vJ/5QDiVQxTUBfH0fWpwMt5I4Q==
+X-Google-Smtp-Source: ABdhPJyvsaFdVNck29C4extor+IlOzl9uYZ5uxE6guTkWtBxC73ZOWwV/rDc7ugpxlSVciZH79tmJA==
+X-Received: by 2002:adf:f582:0:b0:210:f0:24ac with SMTP id f2-20020adff582000000b0021000f024acmr251274wro.444.1654096497485;
+        Wed, 01 Jun 2022 08:14:57 -0700 (PDT)
+Received: from localhost.localdomain (176-182-171-101.abo.bbox.fr. [176.182.171.101])
+        by smtp.gmail.com with ESMTPSA id y5-20020adff6c5000000b0020c5253d926sm1882077wrp.114.2022.06.01.08.14.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 08:14:56 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_manafm@quicinc.com, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH 1/3] thermal/core: Encapsulate the set_cur_state function
+Date:   Wed,  1 Jun 2022 17:14:39 +0200
+Message-Id: <20220601151441.9128-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220601094156.3388454-3-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,52 +68,100 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi "Peng,
+Concentrate the actions in a single place when a cooling device state
+is changed. Provide a function to do that instead of calling the
+underlying ops.
 
-Thank you for the patch! Perhaps something to improve:
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/thermal/thermal_core.h    |  1 +
+ drivers/thermal/thermal_helpers.c | 32 ++++++++++++++++++++++++-------
+ drivers/thermal/thermal_sysfs.c   |  7 ++-----
+ 3 files changed, 28 insertions(+), 12 deletions(-)
 
-[auto build test WARNING on shawnguo/for-next]
-[also build test WARNING on robh/for-next linus/master v5.18 next-20220601]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Peng-Fan-OSS/interconnect-support-i-MX8MP/20220601-174431
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
-config: parisc-randconfig-r014-20220531 (https://download.01.org/0day-ci/archive/20220601/202206012228.VPwcFQ5b-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/23ecbba75b21962f25975cb014cf981a0420dae1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Peng-Fan-OSS/interconnect-support-i-MX8MP/20220601-174431
-        git checkout 23ecbba75b21962f25975cb014cf981a0420dae1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash drivers/opp/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/opp/opp.h:15,
-                    from drivers/opp/core.c:22:
->> include/linux/interconnect.h:120:5: warning: no previous prototype for 'devm_of_icc_bulk_get' [-Wmissing-prototypes]
-     120 | int devm_of_icc_bulk_get(struct device *dev, int num_paths, struct icc_bulk_data *paths)
-         |     ^~~~~~~~~~~~~~~~~~~~
-
-
-vim +/devm_of_icc_bulk_get +120 include/linux/interconnect.h
-
-   119	
- > 120	int devm_of_icc_bulk_get(struct device *dev, int num_paths, struct icc_bulk_data *paths)
-   121	{
-   122		return 0;
-   123	}
-   124	
-
+diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
+index 726e327b4205..4689f6cf898f 100644
+--- a/drivers/thermal/thermal_core.h
++++ b/drivers/thermal/thermal_core.h
+@@ -65,6 +65,7 @@ static inline bool cdev_is_power_actor(struct thermal_cooling_device *cdev)
+ 		cdev->ops->power2state;
+ }
+ 
++int thermal_cdev_set_state(struct thermal_cooling_device *cdev, int state);
+ void thermal_cdev_update(struct thermal_cooling_device *);
+ void __thermal_cdev_update(struct thermal_cooling_device *cdev);
+ 
+diff --git a/drivers/thermal/thermal_helpers.c b/drivers/thermal/thermal_helpers.c
+index 3edd047e144f..d5f162fad1ab 100644
+--- a/drivers/thermal/thermal_helpers.c
++++ b/drivers/thermal/thermal_helpers.c
+@@ -182,14 +182,32 @@ void thermal_set_delay_jiffies(unsigned long *delay_jiffies, int delay_ms)
+ 		*delay_jiffies = round_jiffies(*delay_jiffies);
+ }
+ 
+-static void thermal_cdev_set_cur_state(struct thermal_cooling_device *cdev,
+-				       int target)
++/**
++ * thermal_cdev_set_state - set the cooling device state
++ * @cdev: a pointer to a thermal_cooling_device
++ * @state: the target state
++ *
++ * Set the state of the cooling device passed as parameter. The
++ * cooling device lock must be held when calling this function.
++ *
++ * Return: 0 in case of success, otherwise the return value is the one
++ * returned by the backend for the ops
++ */
++int thermal_cdev_set_state(struct thermal_cooling_device *cdev, int state)
+ {
+-	if (cdev->ops->set_cur_state(cdev, target))
+-		return;
++	int ret;
+ 
+-	thermal_notify_cdev_state_update(cdev->id, target);
+-	thermal_cooling_device_stats_update(cdev, target);
++	/*
++	 * No check is needed for the ops->set_cur_state as the
++	 * registering function checked the ops are correctly set
++	 */
++	ret = cdev->ops->set_cur_state(cdev, state);
++	if (!ret) {
++		thermal_notify_cdev_state_update(cdev->id, state);
++		thermal_cooling_device_stats_update(cdev, state);
++	}
++
++	return ret;
+ }
+ 
+ void __thermal_cdev_update(struct thermal_cooling_device *cdev)
+@@ -207,7 +225,7 @@ void __thermal_cdev_update(struct thermal_cooling_device *cdev)
+ 			target = instance->target;
+ 	}
+ 
+-	thermal_cdev_set_cur_state(cdev, target);
++	thermal_cdev_set_state(cdev, target);
+ 
+ 	trace_cdev_update(cdev, target);
+ 	dev_dbg(&cdev->device, "set to state %lu\n", target);
+diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+index 1c4aac8464a7..935e79909121 100644
+--- a/drivers/thermal/thermal_sysfs.c
++++ b/drivers/thermal/thermal_sysfs.c
+@@ -617,12 +617,9 @@ cur_state_store(struct device *dev, struct device_attribute *attr,
+ 		return -EINVAL;
+ 
+ 	mutex_lock(&cdev->lock);
+-
+-	result = cdev->ops->set_cur_state(cdev, state);
+-	if (!result)
+-		thermal_cooling_device_stats_update(cdev, state);
+-
++	result = thermal_cdev_set_state(cdev, state);
+ 	mutex_unlock(&cdev->lock);
++
+ 	return result ? result : count;
+ }
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
