@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7132453A465
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 13:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F221F53A471
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Jun 2022 13:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349581AbiFALw4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jun 2022 07:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36068 "EHLO
+        id S1349493AbiFALz1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jun 2022 07:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350742AbiFALwz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 07:52:55 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC756CA9C
-        for <linux-pm@vger.kernel.org>; Wed,  1 Jun 2022 04:52:53 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id q21so3260901ejm.1
-        for <linux-pm@vger.kernel.org>; Wed, 01 Jun 2022 04:52:53 -0700 (PDT)
+        with ESMTP id S240205AbiFALzW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 07:55:22 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E1C5003C
+        for <linux-pm@vger.kernel.org>; Wed,  1 Jun 2022 04:55:21 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id fu3so1756887ejc.7
+        for <linux-pm@vger.kernel.org>; Wed, 01 Jun 2022 04:55:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0AglY+1+Y6nT5tUGbirs2CVjYEPSqR8ctpG8KYL1ge4=;
-        b=FI2JqFwBnVkQXCxczdrEtJeFFev4XkicqMbur0gVHJqUK+t0fWlK7500VhKo60XhBh
-         uroIJmwO/oB+MO810EYP3Q3WoyS3qpBIjOkSl1u6V3rwTHXjIgd9S3sTcdH8+ecus5Eq
-         RRGO/O1kV/q4DkxdF4D4Pmwe8MlGTeFGA2cC55SSlCz/2DLtqyzFAfmasUQxVoo8mWsg
-         r5gCbQ2me/G5AD1GRdVrxrCBHCHqNmzyOpOCvFlY3CpzQvCH3T6sS2pJSJTFcZ9C2Q6r
-         7BQpXM5wWo7J/R2QY0zpsmg+bL45QHFC+wWfAAS6fPdL2iVtMmzp2NpcSKSGpDpO/i/I
-         SOiQ==
+        bh=4OpO3uKfRtKodys5+/EnMixlHpVSJs70BVrbM2XAtfI=;
+        b=XLNphxDHaRzoOejyaPEbUl7phZ+HXq507aC+nEXNk7/SBkgJdljf+/nio0hIa05Ewz
+         HlhdlQTrN66hw0qiQ79JNN37F72one4RmyfdykzPzFeA4bO8il8W88lB+RHmYwinEXl2
+         6GfA6Mmvo3aZMeMmhATm/jKwGiZNTE/kx7MMu2j7yA+6nD4Rw4DC9CjSQhUbqlRVL/CL
+         K1KtuC4RppDslOJl9J9CynIBTW2qogpgK9cEvGI946Ncg6XrCb5ZAKDjPcyLNdVkmBO9
+         XVyvetr7WhsV4HBjZCO3OZsDuzmd3S3abCO6paJ/2I0o7lKRC/DhjLdDJVrw/0sJjSy8
+         R8Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=0AglY+1+Y6nT5tUGbirs2CVjYEPSqR8ctpG8KYL1ge4=;
-        b=vSIa69yQmb+nadf4zGk4I93z8Vv91+/ARddvraKYRF7wiDqY7anogV0S6TxDoC36eK
-         XiWMDDhytnuiv1o4xc+LVlfOS5oneUMNkwQwBxfCdx7VBJamGM6/92n4BnD6j/HrSvG7
-         3YJuhpWdXWGNErYa4bVEjryMx7QSKE3RP90kKgNgosvAeWbVqbrhFQzJQtB0012W+Vh9
-         Y5VEEZRyk6IQMAnSuD41p/lzF0dJnz2px85iVx0oN5uPcwfoC78az7YRF+66DzcnWNBh
-         Q9ChDj6YKbKbKep8hG7bmWVd9/t8BOFlHDIsAEuq7Qmvio6KgJh+cSim7fT4xvOYOd67
-         Lhfw==
-X-Gm-Message-State: AOAM533a4wec7VrNHI0pA8q5vV2nRvYMRDmFeAM/c9ooyEBkyrOhOS+V
-        1XEVPLi7m4SFSUhknLZU2qTV2g==
-X-Google-Smtp-Source: ABdhPJzcHqbLNZZnX7RgY3FztZmfteRZ5qeFecs5cZpTfofuYQdpVGoGRjira252J7iyp4ia7DFfTg==
-X-Received: by 2002:a17:907:6d1f:b0:6fe:e53b:7f53 with SMTP id sa31-20020a1709076d1f00b006fee53b7f53mr42448923ejc.375.1654084372371;
-        Wed, 01 Jun 2022 04:52:52 -0700 (PDT)
+        bh=4OpO3uKfRtKodys5+/EnMixlHpVSJs70BVrbM2XAtfI=;
+        b=FmnVMmhc0H9ffHVDwWFQBHQLhpaDGecigi1Mu0k1jMvBSRllRNCS59oq65I02botp+
+         F0qhUqj7LmyPSpvyP8YCnYifXOK4yLt3y2qcLScCh059RxeSL+vKkGlw09SoW2Xbhbln
+         XpK51/8TXCOPWakyaIaqq7k9cPUVcAbsg//BTEXPOi+lfAVlDR2vknn4kreQqWT63bcr
+         M7bD1DsMuYTwclEUUj/YklSymeSUazSVz/Ov617A5tQb/L8DPKlEZWc10OYxaM7pcI7s
+         x1uU7zeT9xPt+GMDyuGpL47xOJzNoVz3OTCMFYsBMoJaN5wRvwTzfL/Ro1gEX9s9BLrj
+         ZKhA==
+X-Gm-Message-State: AOAM530MsaBgMaprbLW+phxvIWB++qS5RLPQ8MQkOgxoDy7ptBhalWdo
+        NeEKMSX6XnyCg8xIMwhDdGnOQw==
+X-Google-Smtp-Source: ABdhPJzQpW3tl8/Gt3VogC+OWYGOrWx5aQpwt6DckwkqC0AbGuziXMIS9ExL1uGEI1ZQQd6JRPuIlw==
+X-Received: by 2002:a17:906:e87:b0:6df:8602:5801 with SMTP id p7-20020a1709060e8700b006df86025801mr57845149ejf.140.1654084519977;
+        Wed, 01 Jun 2022 04:55:19 -0700 (PDT)
 Received: from [192.168.0.179] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id ff4-20020a1709069c0400b006f3ef214e62sm609153ejc.200.2022.06.01.04.52.51
+        by smtp.gmail.com with ESMTPSA id o13-20020a17090608cd00b006fedcb78854sm624896eje.164.2022.06.01.04.55.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 04:52:51 -0700 (PDT)
-Message-ID: <5c754795-e569-1dfb-7474-658ccc3dc7a9@linaro.org>
-Date:   Wed, 1 Jun 2022 13:52:50 +0200
+        Wed, 01 Jun 2022 04:55:19 -0700 (PDT)
+Message-ID: <cf90d9aa-1ba9-9619-35b7-8c2de436fc12@linaro.org>
+Date:   Wed, 1 Jun 2022 13:55:18 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH 3/8] dt-bindings: soc: imx: add interconnect property for
- i.MX8MP hsio blk ctrl
+Subject: Re: [PATCH 1/8] dt-bindings: interconnect: imx8m: Add bindings for
+ imx8mp noc
 Content-Language: en-US
 To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, djakov@kernel.org,
         shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
@@ -67,15 +67,15 @@ Cc:     kernel@pengutronix.de, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-imx@nxp.com,
         Peng Fan <peng.fan@nxp.com>
-References: <20220601094537.3390127-1-peng.fan@oss.nxp.com>
- <20220601094537.3390127-4-peng.fan@oss.nxp.com>
+References: <20220601094156.3388454-1-peng.fan@oss.nxp.com>
+ <20220601094156.3388454-2-peng.fan@oss.nxp.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220601094537.3390127-4-peng.fan@oss.nxp.com>
+In-Reply-To: <20220601094156.3388454-2-peng.fan@oss.nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,15 +83,53 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/06/2022 11:45, Peng Fan (OSS) wrote:
+On 01/06/2022 11:41, Peng Fan (OSS) wrote:
 > From: Peng Fan <peng.fan@nxp.com>
 > 
-> Add interconnect property for i.MX8MP hsio blk ctrl
+> i.MX8MP features same NoC/NIC as i.MX8MM/N/Q, and use two compatible
+> strings.
 > 
 > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  .../devicetree/bindings/interconnect/fsl,imx8m-noc.yaml     | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+> index b8204ed22dd5..0923cd28d6c6 100644
+> --- a/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/fsl,imx8m-noc.yaml
+> @@ -26,16 +26,22 @@ properties:
+>      oneOf:
+>        - items:
+>            - enum:
+> +              - fsl,imx8mp-nic
 
+Please order the entries alphabetically, so 8mp goes after 8mm.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>                - fsl,imx8mn-nic
+>                - fsl,imx8mm-nic
+>                - fsl,imx8mq-nic
+>            - const: fsl,imx8m-nic
+>        - items:
+>            - enum:
+> +              - fsl,imx8mp-noc
+
+ditto
+
+>                - fsl,imx8mn-noc
+>                - fsl,imx8mm-noc
+>                - fsl,imx8mq-noc
+>            - const: fsl,imx8m-noc
+> +      - items:
+> +          - const: fsl,imx8mp-noc
+> +          - const: fsl,imx8m-noc
+> +          - const: syscon
+
+This is a bit confusing - why this is also fallbacked as syscon?
+
+>        - const: fsl,imx8m-nic
+>  
+>    reg:
 
 
 Best regards,
