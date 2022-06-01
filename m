@@ -2,73 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE15953AF86
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jun 2022 00:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9FE353B0D1
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jun 2022 02:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231967AbiFAVxE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jun 2022 17:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
+        id S232361AbiFAWzc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jun 2022 18:55:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231810AbiFAVxE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 17:53:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D882E18B11;
-        Wed,  1 Jun 2022 14:53:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89E95B81CF0;
-        Wed,  1 Jun 2022 21:53:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 31B45C34119;
-        Wed,  1 Jun 2022 21:53:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654120380;
-        bh=zMCuPfsZ3FXBOJ+/RPBXt20WYRcWOUCEsnMPpWGksVs=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=LMJP0qvQJp5FiRCTaOQDEblFfhMhuFUiH4xfkdj+3sEkFLaMyxTCkEVGquAx67vjQ
-         MSPaDyiT7Aw9bj4d6Wfe8Dja/9rrVKgbIaqb0j8FyljZ/8ptsbjEgCYHRITCUE5bQ6
-         U15bACp0fSpnWq9ZXeH3X+hfheSiUEfg0SpgFy1PWrQVqig/TC2yy6PQDQ6+6GWR9D
-         FgB6UhMRBr4g1FcTQDfhyiuHkFc6EAIVHspBe+n/sr2+1ind+LXECFrqWTGClpb2AF
-         bcm3UMCYaFjhluf3czKqrgO5v0Ohu+ytgQdmwYiKc0P9DHfkZAALakld+KQKmWxCXl
-         +MPdGiSum5bVg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 20DE9F0394E;
-        Wed,  1 Jun 2022 21:53:00 +0000 (UTC)
-Subject: Re: [GIT PULL] power-supply changes for 5.19
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220601201404.nc66eejtt4tuvre6@mercury.elektranox.org>
-References: <20220601201404.nc66eejtt4tuvre6@mercury.elektranox.org>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220601201404.nc66eejtt4tuvre6@mercury.elektranox.org>
-X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.19
-X-PR-Tracked-Commit-Id: da50aad6d86716aa48a2b8463c85caea77c0355f
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c7993147519ca970ad4af17e0eac9d683e7721b9
-Message-Id: <165412038013.5556.17117490936906222974.pr-tracker-bot@kernel.org>
-Date:   Wed, 01 Jun 2022 21:53:00 +0000
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S231368AbiFAWzc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 18:55:32 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA063C3D1D;
+        Wed,  1 Jun 2022 15:55:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654124130; x=1685660130;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JXIMFyOzlfpo6o9ipdECaK7wJn/4iqwzAp2siE0lhV8=;
+  b=A2D/CzzXXo6AO/RH/xnszknGm2aMqUDHsNc5uhC6LoADF2ObsF1FzYs+
+   II/I4rBFUTvJAOt8kBO8PG6vSr0+6w8cys4rGQjyyFPn35UT6yIuQ+nwh
+   OZEXbBabYSrrI61o2X/oYOTfgKjdm+8Ig54D+JJ2x+vdI3VdkrcTretbg
+   6+AVocDTzrUk8YKnWzcivNuglmBQlre+o4VepeQu46iM0Skebinn1CPuN
+   YKm2TAwD3J9HPlLWYhK7WvRgBiF0fLYcFQKYPtLH+98Ukd/C3Pty9CbHW
+   1npFAci3G8o32Q49Dhj+SaUeN9ZP+V+AEhJCS1fYFvYrPamU9tWpxsXBg
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="257824297"
+X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
+   d="scan'208";a="257824297"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 15:55:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,269,1647327600"; 
+   d="scan'208";a="667665784"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 01 Jun 2022 15:55:28 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwXFP-0004Uw-Ar;
+        Wed, 01 Jun 2022 22:55:27 +0000
+Date:   Thu, 2 Jun 2022 06:55:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     kbuild-all@lists.01.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_manafm@quicinc.com,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Subject: Re: [PATCH 2/3] thermal/debugfs: Add debugfs information
+Message-ID: <202206020607.DHohHTFP-lkp@intel.com>
+References: <20220601151441.9128-2-daniel.lezcano@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220601151441.9128-2-daniel.lezcano@linaro.org>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Wed, 1 Jun 2022 22:14:04 +0200:
+Hi Daniel,
 
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.19
+I love your patch! Yet something to improve:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c7993147519ca970ad4af17e0eac9d683e7721b9
+[auto build test ERROR on rafael-pm/thermal]
+[also build test ERROR on v5.18 next-20220601]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Thank you!
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-core-Encapsulate-the-set_cur_state-function/20220601-231733
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+config: x86_64-randconfig-a011 (https://download.01.org/0day-ci/archive/20220602/202206020607.DHohHTFP-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-1) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/04c295f7e8b49af742179609949736f6f056b49c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Lezcano/thermal-core-Encapsulate-the-set_cur_state-function/20220601-231733
+        git checkout 04c295f7e8b49af742179609949736f6f056b49c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   ld: drivers/thermal/thermal_core.o: in function `thermal_init':
+>> drivers/thermal/thermal_core.c:1496: undefined reference to `thermal_debugfs_init'
+
+
+vim +1496 drivers/thermal/thermal_core.c
+
+  1470	
+  1471	static int __init thermal_init(void)
+  1472	{
+  1473		int result;
+  1474	
+  1475		result = thermal_netlink_init();
+  1476		if (result)
+  1477			goto error;
+  1478	
+  1479		result = thermal_register_governors();
+  1480		if (result)
+  1481			goto error;
+  1482	
+  1483		result = class_register(&thermal_class);
+  1484		if (result)
+  1485			goto unregister_governors;
+  1486	
+  1487		result = of_parse_thermal_zones();
+  1488		if (result)
+  1489			goto unregister_class;
+  1490	
+  1491		result = register_pm_notifier(&thermal_pm_nb);
+  1492		if (result)
+  1493			pr_warn("Thermal: Can not register suspend notifier, return %d\n",
+  1494				result);
+  1495	
+> 1496		thermal_debugfs_init();
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+0-DAY CI Kernel Test Service
+https://01.org/lkp
