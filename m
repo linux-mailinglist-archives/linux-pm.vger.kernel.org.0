@@ -2,152 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35BED53B20F
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jun 2022 05:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2FDC53B281
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jun 2022 06:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233460AbiFBDMs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jun 2022 23:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45250 "EHLO
+        id S229739AbiFBERf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Jun 2022 00:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233490AbiFBDMr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 23:12:47 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D42C2AD9A9;
-        Wed,  1 Jun 2022 20:12:46 -0700 (PDT)
+        with ESMTP id S229724AbiFBERd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jun 2022 00:17:33 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9086ADDC;
+        Wed,  1 Jun 2022 21:17:30 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id q18so3493421pln.12;
+        Wed, 01 Jun 2022 21:17:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654139566; x=1685675566;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=gj7SYDoBtZDEnx2ObhP/ClinHJPnWLTIbNluq8OfXK4=;
-  b=ml4MxQaqDH60+WJsCSSMNA3LramMSdyHfiMf2MlKOt+exawWK9nlBjRu
-   dXgBgw05tpBag7axBbbpUqRvys9HvjCHXWfSDHpNH3lJPKh7OoBKwXJ1g
-   OmZM/HlDTzBd8MwcGWsahxyiu8ImD83iuUY3nK5qPkIyKYeTpJ2pKB04e
-   8=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 01 Jun 2022 20:12:46 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 20:12:45 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 1 Jun 2022 20:12:45 -0700
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 1 Jun 2022 20:12:39 -0700
-From:   Krishna Kurapati <quic_kriskura@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH v19 5/5] usb: dwc3: qcom: Keep power domain on to retain controller status
-Date:   Thu, 2 Jun 2022 08:41:55 +0530
-Message-ID: <1654139515-8177-6-git-send-email-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1654139515-8177-1-git-send-email-quic_kriskura@quicinc.com>
-References: <1654139515-8177-1-git-send-email-quic_kriskura@quicinc.com>
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=w5ebmhLj4oI6jokTJKCp02gLjiFucaCQB6mhTvl9VZk=;
+        b=lc+QMzwx/hSroE/5ewbNS+MrrC4UlGexZ3gZVVEA5Rw2uEwRUd07rtwSSXExqvSRrp
+         pDvxlgj+vZcGSPyw0CUmSNtY0LsaVJE14GYMqUFy+TZYo8x1e+i9n74A7VhkOmAyflfl
+         SicOSt9go7MZr54zScf7EJdos+GpRjQk6fj9TTaLLvTdnEMPdmihoYArXVHsFgr4eaRY
+         Hfl/hENlMF0qqvWzeF4f/JQT3zQ/aSTNV9X3emHRs0UtyvmALoPBa93gNFS9YKQSg/c4
+         vqrg6uVrxrVMPkrTTGTB2738/uaM6awS8qj8yEn6ePcix82C41AnRRFbikZFpaWYms3x
+         5iAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=w5ebmhLj4oI6jokTJKCp02gLjiFucaCQB6mhTvl9VZk=;
+        b=d9oMabqeYpx0f/YD8nvt7sOeYTOxdnH8nfqufWyntbhjbRid2Tkr3iCVEVaHPjn4f3
+         oESbas1JP3eIuWZeJoLW7LVm9utQTeBLaeGKgw0kk+JAfTgTrDhzo8OxweJYJTBl1eFO
+         807KoTzcTTXRlNYtXND0pE4Sr0W7oaDLSOo+e8eRoScO4pSuuK5QTSB2CUZWU5EGfPIE
+         udwuvi5hL/aobo7mW7YRzBFegwklWkGapmrNdCv7+9n3zxYci65v/X8RBdLtRVAOeqQl
+         u0XcKYx5dWB2eAwWJb8zuk588h49Qw6NkHYzFi0m61ddfWYqtAGn33/gAwhbjmjyE+1N
+         4ULA==
+X-Gm-Message-State: AOAM531iaApyDhDJIxZZ7O6decl2xZJUyKysjkh1mhYL9jOVZlAQbWfQ
+        TONjbczcybY7iQzJO73fW+I=
+X-Google-Smtp-Source: ABdhPJxgQcXunt99zIQQSrLS+7t55ND7PHrtpNaDCte4XXwrMQT84qOF1CiOW3GgkpS7w7P3OTEtOA==
+X-Received: by 2002:a17:90b:17d0:b0:1e3:5324:c465 with SMTP id me16-20020a17090b17d000b001e35324c465mr3089557pjb.34.1654143450093;
+        Wed, 01 Jun 2022 21:17:30 -0700 (PDT)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id z6-20020a170903018600b001621a66b318sm2440131plg.130.2022.06.01.21.17.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jun 2022 21:17:29 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] memory: samsung: exynos5422-dmc: Fix refcount leak in of_get_dram_timings
+Date:   Thu,  2 Jun 2022 08:17:21 +0400
+Message-Id: <20220602041721.64348-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+This function doesn't call of_node_put() in some error paths.
+To unify the structure, Add put_node label and goto it on errors.
 
-If dwc3 is wakeup capable, keep the power domain always ON so that
-wakeup from system suspend can be supported. Otherwise, keep the
-power domain ON only during runtime suspend to support wakeup from
-runtime suspend.
-
-Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+Fixes: 6e7674c3c6df ("memory: Add DMC driver for Exynos5422")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- drivers/usb/dwc3/dwc3-qcom.c | 28 +++++++++++++++++++++-------
- 1 file changed, 21 insertions(+), 7 deletions(-)
+ drivers/memory/samsung/exynos5422-dmc.c | 29 +++++++++++++++----------
+ 1 file changed, 18 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 56ecee0..2f5b5ae 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -17,6 +17,7 @@
- #include <linux/of_platform.h>
- #include <linux/platform_device.h>
- #include <linux/phy/phy.h>
-+#include <linux/pm_domain.h>
- #include <linux/usb/of.h>
- #include <linux/reset.h>
- #include <linux/iopoll.h>
-@@ -756,12 +757,13 @@ dwc3_qcom_create_urs_usb_platdev(struct device *dev)
+diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
+index 4733e7898ffe..c491cd549644 100644
+--- a/drivers/memory/samsung/exynos5422-dmc.c
++++ b/drivers/memory/samsung/exynos5422-dmc.c
+@@ -1187,33 +1187,39 @@ static int of_get_dram_timings(struct exynos5_dmc *dmc)
  
- static int dwc3_qcom_probe(struct platform_device *pdev)
- {
--	struct device_node	*np = pdev->dev.of_node;
--	struct device		*dev = &pdev->dev;
--	struct dwc3_qcom	*qcom;
--	struct resource		*res, *parent_res = NULL;
--	int			ret, i;
--	bool			ignore_pipe_clk;
-+	struct device_node *np = pdev->dev.of_node;
-+	struct device *dev = &pdev->dev;
-+	struct dwc3_qcom *qcom;
-+	struct resource	*res, *parent_res = NULL;
-+	int ret, i;
-+	bool ignore_pipe_clk;
-+	struct generic_pm_domain *genpd;
- 
- 	qcom = devm_kzalloc(&pdev->dev, sizeof(*qcom), GFP_KERNEL);
- 	if (!qcom)
-@@ -770,6 +772,8 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, qcom);
- 	qcom->dev = &pdev->dev;
- 
-+	genpd = pd_to_genpd(qcom->dev->pm_domain);
-+
- 	if (has_acpi_companion(dev)) {
- 		qcom->acpi_pdata = acpi_device_get_match_data(dev);
- 		if (!qcom->acpi_pdata) {
-@@ -877,7 +881,17 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto interconnect_exit;
- 
--	device_init_wakeup(&pdev->dev, 1);
-+	if (device_can_wakeup(&qcom->dwc3->dev)) {
-+		/*
-+		 * Setting GENPD_FLAG_ALWAYS_ON flag takes care of keeping
-+		 * GEMPD on in both RT suspend and System suspend cases.
-+		 */
-+		genpd->flags |= GENPD_FLAG_ALWAYS_ON;
-+		device_init_wakeup(&pdev->dev, true);
-+	} else {
-+		genpd->flags |= GENPD_FLAG_RPM_ALWAYS_ON;
+ 	dmc->timing_row = devm_kmalloc_array(dmc->dev, TIMING_COUNT,
+ 					     sizeof(u32), GFP_KERNEL);
+-	if (!dmc->timing_row)
+-		return -ENOMEM;
++	if (!dmc->timing_row) {
++		ret = -ENOMEM;
++		goto put_node;
 +	}
-+
- 	qcom->is_suspended = false;
- 	pm_runtime_set_active(dev);
- 	pm_runtime_enable(dev);
+ 
+ 	dmc->timing_data = devm_kmalloc_array(dmc->dev, TIMING_COUNT,
+ 					      sizeof(u32), GFP_KERNEL);
+-	if (!dmc->timing_data)
+-		return -ENOMEM;
++	if (!dmc->timing_data) {
++		ret = -ENOMEM;
++		goto put_node;
++	}
+ 
+ 	dmc->timing_power = devm_kmalloc_array(dmc->dev, TIMING_COUNT,
+ 					       sizeof(u32), GFP_KERNEL);
+-	if (!dmc->timing_power)
+-		return -ENOMEM;
++	if (!dmc->timing_power) {
++		ret = -ENOMEM;
++		goto put_node;
++	}
+ 
+ 	dmc->timings = of_lpddr3_get_ddr_timings(np_ddr, dmc->dev,
+ 						 DDR_TYPE_LPDDR3,
+ 						 &dmc->timings_arr_size);
+ 	if (!dmc->timings) {
+-		of_node_put(np_ddr);
+ 		dev_warn(dmc->dev, "could not get timings from DT\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_node;
+ 	}
+ 
+ 	dmc->min_tck = of_lpddr3_get_min_tck(np_ddr, dmc->dev);
+ 	if (!dmc->min_tck) {
+-		of_node_put(np_ddr);
+ 		dev_warn(dmc->dev, "could not get tck from DT\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_node;
+ 	}
+ 
+ 	/* Sorted array of OPPs with frequency ascending */
+@@ -1227,13 +1233,14 @@ static int of_get_dram_timings(struct exynos5_dmc *dmc)
+ 					     clk_period_ps);
+ 	}
+ 
+-	of_node_put(np_ddr);
+ 
+ 	/* Take the highest frequency's timings as 'bypass' */
+ 	dmc->bypass_timing_row = dmc->timing_row[idx - 1];
+ 	dmc->bypass_timing_data = dmc->timing_data[idx - 1];
+ 	dmc->bypass_timing_power = dmc->timing_power[idx - 1];
+ 
++put_node:
++	of_node_put(np_ddr);
+ 	return ret;
+ }
+ 
 -- 
-2.7.4
+2.25.1
 
