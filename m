@@ -2,93 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11CD953BBEC
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jun 2022 17:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD1953BBE3
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jun 2022 17:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235319AbiFBPzg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Jun 2022 11:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44606 "EHLO
+        id S234823AbiFBPwx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Jun 2022 11:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236645AbiFBPzf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jun 2022 11:55:35 -0400
-X-Greylist: delayed 461 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 02 Jun 2022 08:55:33 PDT
-Received: from ixit.cz (ip-94-112-206-30.net.upcbroadband.cz [94.112.206.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B762818379
-        for <linux-pm@vger.kernel.org>; Thu,  2 Jun 2022 08:55:33 -0700 (PDT)
-Received: from [192.168.43.127] (unknown [89.24.43.208])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ixit.cz (Postfix) with ESMTPSA id 0C4AF2007F;
-        Thu,  2 Jun 2022 17:47:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
-        t=1654184868;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cFipLSaSNt6AVZj+ipJuiWLqxOfkAwoPaoKp6HET13A=;
-        b=Px/3AEjj0ms3qrktWNl/+/H/NLVeovGt6F4eeiEjwwtQcKAJTH+lymb0lVYTNIiH99/Cko
-        zTHPO5GcDkbMou8ZNea8hjm4k+lRoHY5jz/lNOPbF+HTMHTEenckKoJjG+81ah0hs1PHQO
-        sS+EjBpCDaEoaWjA+oqggXoDirxalwk=
-Message-ID: <9a7b3be5-f75d-d269-1113-f2865e9c4919@ixit.cz>
-Date:   Thu, 2 Jun 2022 17:47:43 +0200
+        with ESMTP id S235319AbiFBPwx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jun 2022 11:52:53 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D471153;
+        Thu,  2 Jun 2022 08:52:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654185172; x=1685721172;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=stX6Gbo8Um10A6pAxqR7sGPejpzsxUNu9FxYx00Kap4=;
+  b=cmmH804WMCgdWqBbGi9PAHWdewtf0Acbsc2AHjOKjIGGj/F7TeDz9RCa
+   eiqNBYEukIPoPtDnxHV+UxihmGF+OOx4pe08hDffANZNqVpdHT64iddu1
+   qNA+dICQlk/lnUXQLRuCTJH+16qkXo5UUDgaarP4lXf6lZDrqTjB/f/yh
+   VrNuLlAc90M8uQ+ccS+HLCgjCkXYMsH+azoK2H8Hh8VwiaKMnxdjiV1zz
+   Qz/j7TsMgNAdMkO2+O0otoooXk8/ApKUNdHFkE+RcrNB7prdbG2M1Ycsh
+   Gx0vwnVvO/GNdfL2VpMTTnh4j2ipH+tjbCggvHr9CK5du1imrWmo4mv8S
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="256468521"
+X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
+   d="scan'208";a="256468521"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 08:52:50 -0700
+X-IronPort-AV: E=Sophos;i="5.91,271,1647327600"; 
+   d="scan'208";a="606908627"
+Received: from bcappucc-mobl3.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.183.28])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jun 2022 08:52:49 -0700
+Message-ID: <6caf53e059758234ee12a236f967412f1df1f8a0.camel@linux.intel.com>
+Subject: Re: x86/mce/therm_throt incorrect THERM_STATUS_CLEAR_CORE_MASK?
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Arnd Bergmann <arnd@kernel.org>, Len Brown <len.brown@intel.com>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 02 Jun 2022 08:52:49 -0700
+In-Reply-To: <CAK8P3a1mkHEjRJgJPsRy+kuN=48=JEDJAeR2z9n+O71qbJ8hSA@mail.gmail.com>
+References: <CAK8P3a1mkHEjRJgJPsRy+kuN=48=JEDJAeR2z9n+O71qbJ8hSA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 4/4] dt-bindings: power: supply: summit,smb347: use
- absolute path to schema
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Osipenko <digetx@gmail.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220601071911.6435-1-krzysztof.kozlowski@linaro.org>
- <20220601071911.6435-4-krzysztof.kozlowski@linaro.org>
-From:   David Heidelberg <david@ixit.cz>
-In-Reply-To: <20220601071911.6435-4-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_DYNAMIC,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Reviewed-by: David Heidelberg <david@ixit.cz>
+On Thu, 2022-06-02 at 11:19 +0200, Arnd Bergmann wrote:
+> I have a Xeon W-2265 (family 6, model 85, stepping 7) that started
+> constantly spewing messages from the therm_throt driver after one
+> core overheated:
+> 
+I think this is a Cascade Lake system. Have you tried the latest micro-
+code?
 
-On 01/06/2022 09:19, Krzysztof Kozlowski wrote:
-> Reference regulator schema by absolute path, as expected by DT schema
-> coding style.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->   .../devicetree/bindings/power/supply/summit,smb347-charger.yaml | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/devicetree/bindings/power/supply/summit,smb347-charger.yaml b/Documentation/devicetree/bindings/power/supply/summit,smb347-charger.yaml
-> index 20862cdfc116..ce0bca4689f6 100644
-> --- a/Documentation/devicetree/bindings/power/supply/summit,smb347-charger.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/summit,smb347-charger.yaml
-> @@ -82,7 +82,7 @@ properties:
->         - 1 # SMB3XX_SYSOK_INOK_ACTIVE_HIGH
->   
->     usb-vbus:
-> -    $ref: "../../regulator/regulator.yaml#"
-> +    $ref: /schemas/regulator/regulator.yaml#
->       type: object
->   
->       properties:
+Thanks,
+Srinivas
 
--- 
-David Heidelberg
-Consultant Software Engineer
 
-Matrix: @okias:matrix.org
+> May 31 13:57:54 kernel: [15512.209474] unchecked MSR access error:
+> WRMSR to 0x19c (tried to write 0x0000000000002a80) at rIP:
+> 0xffffffff9f67f974 (native_write_msr+0x4/0x20)
+> May 31 13:57:54 kernel: [15512.209486] Call Trace:
+> May 31 13:57:54 kernel: [15512.209488]  <TASK>
+> May 31 13:57:54 kernel: [15512.209489]  ?
+> throttle_active_work+0xea/0x1f0
+> May 31 13:57:54 kernel: [15512.209498]  process_one_work+0x21d/0x3c0
+> May 31 13:57:54 kernel: [15512.209502]  worker_thread+0x4d/0x3f0
+> May 31 13:57:54 kernel: [15512.209505]  ?
+> process_one_work+0x3c0/0x3c0
+> May 31 13:57:54 kernel: [15512.209508]  kthread+0x127/0x150
+> May 31 13:57:54 kernel: [15512.209510]  ?
+> set_kthread_struct+0x40/0x40
+> May 31 13:57:54 kernel: [15512.209513]  ret_from_fork+0x1f/0x30
+> ...
+> May 31 13:57:59 kernel: [15517.333445] CPU11: Core temperature is
+> above threshold, cpu clock is throttled (total events = 3)
+> 
+> I could not find CPU model specific documentation for this register,
+> but I see that in [1], the bits 13 through 15 are marked as reserved
+> in some cases but not others. Manually writing the value 0xa80
+> instead of 0x2a80 from user space makes the warnings stop, so
+> my guess is that this CPU does not support the 0x2000 bit:
+> 
+> $ sudo  wrmsr -p 11 0x19c 0xa80 ; dmesg
+> [177764.874555] msr: Write to unrecognized MSR 0x19c by wrmsr (pid:
+> 142969).
+> [177764.874560] msr: See
+> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/about for
+> details.
+> [177765.371180] CPU11: Core temperature/speed normal (total events =
+> 42)
+> [177765.371180] CPU23: Core temperature/speed normal (total events =
+> 42)
+> 
+> I have not tried the patch below, but I think this would address it
+> on my
+> system, while likely breaking other machines. Any ideas what the
+> correct fix is?
+> 
+>       Arnd
+> 
+> diff --git a/drivers/thermal/intel/therm_throt.c
+> b/drivers/thermal/intel/therm_throt.c
+> index 8352083b87c7..620d7f4c013e 100644
+> --- a/drivers/thermal/intel/therm_throt.c
+> +++ b/drivers/thermal/intel/therm_throt.c
+> @@ -196,7 +196,7 @@ static const struct attribute_group
+> thermal_attr_group = {
+>  #define THERM_THROT_POLL_INTERVAL      HZ
+>  #define THERM_STATUS_PROCHOT_LOG       BIT(1)
+> 
+> -#define THERM_STATUS_CLEAR_CORE_MASK (BIT(1) | BIT(3) | BIT(5) |
+> BIT(7) | BIT(9) | BIT(11) | BIT(13) | BIT(15))
+> +#define THERM_STATUS_CLEAR_CORE_MASK (BIT(1) | BIT(3) | BIT(5) |
+> BIT(7) | BIT(9) | BIT(11))
+>  #define THERM_STATUS_CLEAR_PKG_MASK  (BIT(1) | BIT(3) | BIT(5) |
+> BIT(7) | BIT(9) | BIT(11))
+> 
+>  static void clear_therm_status_log(int level)
+> 
+> [1]
+> https://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-vol-3b-part-2-manual.pdf
 
