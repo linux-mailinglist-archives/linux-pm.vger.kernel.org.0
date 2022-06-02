@@ -2,46 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 279B253B5CF
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jun 2022 11:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A2653B5DA
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jun 2022 11:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232842AbiFBJQ3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Jun 2022 05:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48940 "EHLO
+        id S232917AbiFBJSW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Jun 2022 05:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232836AbiFBJQ3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jun 2022 05:16:29 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B18912612;
-        Thu,  2 Jun 2022 02:16:27 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A39781063;
-        Thu,  2 Jun 2022 02:16:27 -0700 (PDT)
-Received: from [10.57.38.114] (unknown [10.57.38.114])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 309D93F766;
-        Thu,  2 Jun 2022 02:16:26 -0700 (PDT)
-Message-ID: <eada018c-b857-7946-ae4b-2532e6866a45@arm.com>
-Date:   Thu, 2 Jun 2022 10:16:23 +0100
+        with ESMTP id S231402AbiFBJSU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jun 2022 05:18:20 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDE053701;
+        Thu,  2 Jun 2022 02:18:18 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id me5so8233104ejb.2;
+        Thu, 02 Jun 2022 02:18:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0d9LPcPl2z82dxOAeBz8oaTNCeFfF1mrJ8xfIO9HyHE=;
+        b=lfLh9e2Zec+kRfUbieDqxaSJGfE2gK5tVDQL4/AlpgVcAAIBNipxqiaQ9KaF31NRoL
+         p4XLfqqfzJDaVnItedh+uY7WOZo9GWfO9EDs7Kwtb9g1ep7F/2s8jmC8C+5HKoB8mmqm
+         5+MnNkvj0n3QFu1KLRgu4qmE4FZpPqT/FxCabwWRio16T/tBO5n8YQs39umvhQZU1izc
+         kmND1i4pFf63FZslDTQd5TX2paKc+iavMXEEIfxzCgFARk5C9xBN1i2j5XO5tazLpbL3
+         wIlyYfmxX1H8YiEs73O3/gKRJfzGSjM99weIY/3wRiXAWXYqSVXb5yR9RaF0dJyLJck3
+         HKTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0d9LPcPl2z82dxOAeBz8oaTNCeFfF1mrJ8xfIO9HyHE=;
+        b=cyeok4LVFsdO0DNXsuUE0UImQfxvFOwMGCPhdctFrhGtkhqzr9JLqijDHPEW7Z+lFv
+         t7pXhQjnasw3UTDqdmp/tfCKcFkYupsS4eIMdctFOHIPZ2LcRR6bZBgImHeOjMyljmM/
+         pYN/JbtDRmIi7uTBBgMuLBR8JoIcT5LjO+T/KWZf2RY9+ep7Q/jiER7+KFEzqCWhDbQP
+         I+xFeMDq+N3ZDDCcxJLoGVZl4kPg4UW9BZc4FNEx+yk+Ma1lMvJwUMG6aN4mHn5CJez6
+         ai4rULChngwaunakkHLAGlv6YjOcbk6JONzdtOrKRH7WFmgkByrO7/nKTEylVc6Uo3WH
+         6wrA==
+X-Gm-Message-State: AOAM5301P6DGapNiS7JRDlVh4DtJhOJsWnwmkv1/pXkv8nDEA5CuyIF0
+        biwhgRFBbzFoTFKBJ319hdqCC5dDpmSiYJopJFg=
+X-Google-Smtp-Source: ABdhPJxRg1MZXl/SkbIUuNBrRuGNQldHFdLPZxE+GhC/BiCEKh8oflGlAj5dFnKQFyQ9Ns7hxKjhAhvcKy/fq3rTsjo=
+X-Received: by 2002:a17:907:6e04:b0:6f4:d6f3:c72a with SMTP id
+ sd4-20020a1709076e0400b006f4d6f3c72amr3415411ejc.636.1654161497069; Thu, 02
+ Jun 2022 02:18:17 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 3/3] thermal/sysfs: Remove cooling device sysfs statistics
-Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, quic_manafm@quicinc.com,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, Todd Kjos <tkjos@google.com>
-References: <20220601151441.9128-1-daniel.lezcano@linaro.org>
- <20220601151441.9128-3-daniel.lezcano@linaro.org>
- <be8395e3-98d7-7a8f-7153-c491b22d4463@arm.com>
- <cb35e356-bc90-2a67-6983-1a4c3a0ea62d@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <cb35e356-bc90-2a67-6983-1a4c3a0ea62d@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220531102809.11976-1-peterwu.pub@gmail.com> <20220531102809.11976-7-peterwu.pub@gmail.com>
+ <CAHp75Vd8taco19vsDmBcCv8euV1SvwSiY5=P9oMkA6zWsjwXxg@mail.gmail.com> <20220602062643.GA13824@cyhuang-hp-elitebook-840-g3.rt>
+In-Reply-To: <20220602062643.GA13824@cyhuang-hp-elitebook-840-g3.rt>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 2 Jun 2022 11:17:40 +0200
+Message-ID: <CAHp75Vd-n=oLnhRCK=pR5ybOZbC6BKXrE2jRdwDbH90E4KYFGA@mail.gmail.com>
+Subject: Re: [PATCH 06/14] leds: mt6370: Add Mediatek MT6370 Indicator support
+To:     ChiYuan Huang <u0084500@gmail.com>
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
+        Helge Deller <deller@gmx.de>, cy_huang@richtek.com,
+        alice_chen@richtek.com, chiaen_wu@richtek.com,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,71 +93,60 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Jun 2, 2022 at 8:27 AM ChiYuan Huang <u0084500@gmail.com> wrote:
+> On Wed, Jun 01, 2022 at 11:48:58AM +0200, Andy Shevchenko wrote:
+> > On Tue, May 31, 2022 at 1:16 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
+
+...
+
+> > What indicator?
+> It's RGB curent sink type LED driver (maximum supported current is only 24mA).
+
+Make your commit messages a slightly more verbose.
+
+...
+
+> > > +#include <linux/of.h>
+> >
+> > Are you sure this is the correct header? Seems you need
+> > mod_devicetable.h instead.
+> >
+> It's the correct header and be used for the struct 'of_device_id'.
+
+Nope. Run the following command
+$ git grep -n 'struct of_device_id {' -- include/linux/
+
+...
+
+> > > +struct mt6370_priv {
+> > > +       struct mutex lock;
+> >
+> > Do you use regmap locking?
+> >
+> MFD regmap register already the access lock.
+>
+> This lock is just to guarantee only one user can access the RGB register
+> part.
+>
+> Sorry, from the comment, do you want us to rename or remove this lock?
+
+My point is, since you have two locks, explain why you need each of them.
+
+> > > +       struct device *dev;
+> >
+> > > +       struct regmap *regmap;
+> >
+> > > +       struct regmap_field *fields[F_MAX_FIELDS];
+> > > +       const struct reg_field *reg_fields;
+> > > +       const struct linear_range *ranges;
+> > > +       struct reg_cfg *reg_cfgs;
+> > > +       unsigned int leds_count;
+> > > +       unsigned int leds_active;
+> > > +       bool is_mt6372;
+> > > +       struct mt6370_led leds[];
+> > > +};
 
 
-On 6/2/22 09:37, Daniel Lezcano wrote:
-> 
-> Hi Lukasz,
-> 
-> [Adding Todd]
-> 
-> On 01/06/2022 17:33, Lukasz Luba wrote:
->> Hi Daniel,
->>
->>
->> On 6/1/22 16:14, Daniel Lezcano wrote:
->>> The statistics are for debugging purpose and belong to debugfs rather
->>> than sysfs. As the previous changes introduced the same statistics in
->>> debugfs, those in sysfs are no longer needed and can be removed.
->>
->> I just want to let you know that in current Android kernels we cannot
->> even compile the kernel with CONFIG_DEBUG_FS.
-> 
-> Right, it makes sense. Precisely, with the sysfs stats they are always 
-> compiled in for the Android kernel and is a problem for low memory 
-> systems. While debugfs can fulfill its purpose in the developement and 
-> will be removed in production systems.
-
-True.
-
-> 
->> I have this pain with
->> Energy Model there... Some vendors might see useful info via this
->> sysfs interface in bring-up of the SoC.
-> 
-> Well alternatively, information can be extracted from procfs in the 
-> device-tree description.
-> 
-> What prevents to add energy information in sysfs now that the energy 
-> model is per device ?
-
-Probably nothing, but we need strong need. I have proposed this
-a few times internally, but this must have a requirement.
-If a user-space tool would ask for it, then I could send a patch
-exposing the sysfs. So far we have only one user-space tool, which
-suffers the missing debugfs EM dir: LISA (but we are working on a
-workaround for it).
-If you have a tool or plan to have such, which uses EM, please let
-me know. I'm gathering the requirements.
-
-> 
->> I don't know if there are user-space tools tracking this
->> information via sysfs. We probably should check that.
->>
->> I agree that these statistics look more like debug info, rather than
->> something useful for control.
->>
->> Furthermore, we have trace events for the cooling state changes, which
->> should be good enough for bring-up and experiments.
->>
->> I don't have strong preferences here. I tend to agree to remove this
->> interface if there are no user-space tools using it.
-> 
-> I agree userspace can also get information about the transition but the 
-> goal of the debugfs is also add information about thermal internals like 
-> average temperature at mitigation time, min and max, timings, etc ...
-> 
-> 
-
-I see, it makes sense. Let's see if Todd and Android folks don't
-use this thermal sysfs stats, so we could remove them.
+-- 
+With Best Regards,
+Andy Shevchenko
