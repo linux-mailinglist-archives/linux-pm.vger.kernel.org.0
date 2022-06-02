@@ -2,193 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4ABC53B38A
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jun 2022 08:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D1053B3F0
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jun 2022 08:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbiFBG1K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Jun 2022 02:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35610 "EHLO
+        id S231467AbiFBGyi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Jun 2022 02:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbiFBG1I (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jun 2022 02:27:08 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38B1CCE;
-        Wed,  1 Jun 2022 23:27:05 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id w2-20020a17090ac98200b001e0519fe5a8so4028710pjt.4;
-        Wed, 01 Jun 2022 23:27:05 -0700 (PDT)
+        with ESMTP id S231473AbiFBGyg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jun 2022 02:54:36 -0400
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40966BC86
+        for <linux-pm@vger.kernel.org>; Wed,  1 Jun 2022 23:54:35 -0700 (PDT)
+Received: by mail-vs1-xe32.google.com with SMTP id f13so3769064vsp.1
+        for <linux-pm@vger.kernel.org>; Wed, 01 Jun 2022 23:54:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=sgetwGF1PvFvysoUcKKwVGNS/40oEtUezOmpaPDogiY=;
-        b=ZMFPdPunvlYPQPU3WvFgrloJ8uyHxXAWCOMTRSZ9UdgD6rlNisHeAFF5/aY9eRXA0W
-         RVgqJzVwNnaI7+v11DYXSCOX+1qoTZ4UHTG6/wQD/YlQrYt1Hwg51G8tJEPipcv4GY66
-         4jWv5S3N+GmyqU6l+K858iXVMtXZSPnh1xSRU4u2GJihLrDkY356tc/U6/el6POMbuSC
-         BVjvraKgPJFIcs7OPE4lDWq0kSaW9OyCoibbg40N5i4AFl2cRDJlVWQrlLKvz816fS2X
-         IAmGmyJ+ToO08AHPxyjQEN6ZAc0PXhytlp05lepN1qcMlsN3si+QLc1JoCpWctNrxLBb
-         JqTw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hlIwxPeW006bY340NSBO3uX67HdfP5KYaInja9t5Jdw=;
+        b=zSYaSzSXSOohCB29IiDwFnX6SeGkhoWOYd5Kk0jN+zUsx3AJIsX/BLVWOxQvIR5EGS
+         pgptu0Jmn6hyjosrlBwz8EVK1Xg+y+3Wcd/PJIHfflRoyVfuMnb+2XNfvIedLoKti8WV
+         YxbKCT8pqX2ArUq+xe57dU0wtdKi8MFlyZJd6/ZswOEpHxSYJ7ea/+C4mYvJNpt/JXTA
+         LOMPvqkV+I7plEiRsqbAvDJLjdBWTkpJM0229rpLj3G1DBG3mAuRre229PgwPrHo1lmz
+         u7ML0iQbo3h+Oo3sqLx0auJbyHs+Q8ZXZGWKpcahgscYgq9ma6OCEBbXO9Qac/OfpTpT
+         gq0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=sgetwGF1PvFvysoUcKKwVGNS/40oEtUezOmpaPDogiY=;
-        b=Hisg3jz96Bfk9TZJSXpNCalvL2TC1Y3S4vXcaQ0MC3ZqP7Y9fjPuD0Id08enRmxfg9
-         GTAll6DYGjof5vq3Rykit9qYL/6drMcio9OMBDsGTx5mcWWrS19lPYc9v9ITEmRsaQ1u
-         wrhQUdpGrIEXX/Tg+4lsAopt1PIQF0n4WXhgnaBfUvBCeYdX5rJYScj8ua99+1NPXr23
-         BeH26iYZEWA4jwzsk19qYbXO2XJul7ZsH3nGSAM3JkWcdoHnhIkDDrzErA0Lp3jyM/CP
-         fydfU136CdEe9c0Rg9Lkop6C3Jpn4wyLELua7pZBWbyUh4s9StZhy1xnVbsB4sgz+8+t
-         CgjA==
-X-Gm-Message-State: AOAM531G2h5P/O9IgGjburLp3AGksWrmlqu/22mAuXaedLrNX5HrvUqJ
-        RG1NiYlktChxn88Xc2pC/lA=
-X-Google-Smtp-Source: ABdhPJw/XVMZxQqn7LbpCVPeOLw0PRZZYK3mOXAw1YPVhpRYJee8hLeBKf1SThBKLbxC47OMbHQhGw==
-X-Received: by 2002:a17:903:40ce:b0:164:248:1464 with SMTP id t14-20020a17090340ce00b0016402481464mr3355617pld.16.1654151225424;
-        Wed, 01 Jun 2022 23:27:05 -0700 (PDT)
-Received: from cyhuang-hp-elitebook-840-g3.rt ([2402:7500:569:e4e7:9594:e92e:b3a9:bf26])
-        by smtp.gmail.com with ESMTPSA id u14-20020a170902714e00b0015e8d4eb1f9sm2650433plm.67.2022.06.01.23.26.54
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 Jun 2022 23:27:04 -0700 (PDT)
-Date:   Thu, 2 Jun 2022 14:26:51 +0800
-From:   ChiYuan Huang <u0084500@gmail.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>, cy_huang@richtek.com,
-        alice_chen@richtek.com, chiaen_wu@richtek.com, u0084500@gmail.com,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
-Subject: Re: [PATCH 06/14] leds: mt6370: Add Mediatek MT6370 Indicator support
-Message-ID: <20220602062643.GA13824@cyhuang-hp-elitebook-840-g3.rt>
-References: <20220531102809.11976-1-peterwu.pub@gmail.com>
- <20220531102809.11976-7-peterwu.pub@gmail.com>
- <CAHp75Vd8taco19vsDmBcCv8euV1SvwSiY5=P9oMkA6zWsjwXxg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hlIwxPeW006bY340NSBO3uX67HdfP5KYaInja9t5Jdw=;
+        b=ZuU5+RC1uii2UrMABYiMzSy3Clwbkhnw4Yo4q31/Bh6pBoLPXsG8OSQ1linvstF0XL
+         Pf/hArlzky6uE4CDZE2zTxqvcuJqDEfrUX4ZoIQXfvc+KZS7Cxgy2JV4aW9+1HHMwqae
+         9P++lSHdmZWGUT45V+dzxvtokAsb/zaY5eZDoel7uMbNRslC3EOWtF1g5OgjdKntCIqK
+         aSgyUh9xvK0RPpxQs3dDH8Qdt+CiyfZ4XBJ6yEBNqQ11gKc74pIgg1Jcc8posWeyGIHb
+         zD0s3r0gYqg5p7UHcrtHYvv0Y5e8ua73urQPQwTiWWo1j8Gt2qim8WJv1f/ujzKpeC9/
+         hcgw==
+X-Gm-Message-State: AOAM533/5lI+nUEqWmsJOc9mzclnASUSAFppk/BD0tVyoFGuiMgEEQxr
+        eXRGl/SYxK6kCVlaTZh8NEGqzG86eOnuINBHoRvSsA==
+X-Google-Smtp-Source: ABdhPJzZDP+92yKh+HvVhjL2bgkmdnKMCOmgxYpMm3UYhBbvzzJhD3zGolsRDEE8/VTEu/+83qeqDGThDdoVtGXAYt4=
+X-Received: by 2002:a05:6102:3126:b0:349:f1a7:fe32 with SMTP id
+ f6-20020a056102312600b00349f1a7fe32mr1536566vsh.55.1654152874335; Wed, 01 Jun
+ 2022 23:54:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75Vd8taco19vsDmBcCv8euV1SvwSiY5=P9oMkA6zWsjwXxg@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <1553841972-19737-1-git-send-email-andrew-sh.cheng@mediatek.com> <1553841972-19737-3-git-send-email-andrew-sh.cheng@mediatek.com>
+In-Reply-To: <1553841972-19737-3-git-send-email-andrew-sh.cheng@mediatek.com>
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+Date:   Thu, 2 Jun 2022 12:24:23 +0530
+Message-ID: <CAKohpom625zOdWvvgsbnAe1EfzWABvdxHzjn2KVb0x2tftJnqg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] opp: add API which get max freq by voltage
+To:     "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        srv_heupstream@mediatek.com, fan.chen@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 11:48:58AM +0200, Andy Shevchenko wrote:
-> On Tue, May 31, 2022 at 1:16 PM ChiaEn Wu <peterwu.pub@gmail.com> wrote:
-> >
-> > From: Alice Chen <alice_chen@richtek.com>
-> 
-> All below comments are applicable to the rest of the series as well
-> (one way or another), so please fix all your patches where it's
-> appropriate.
-> 
-> >
-> > Add Mediatek MT6370 Indicator support
-> 
-> What indicator?
-It's RGB curent sink type LED driver (maximum supported current is only 24mA).
-> Please also keep attention on English punctuation (missed period).
-> 
-Ack in next.
-> ...
+On Fri, 29 Mar 2019 at 12:16, Andrew-sh.Cheng
+<andrew-sh.cheng@mediatek.com> wrote:
 >
-> > +       help
-> > +         Support 4 channels and reg/pwm/breath mode.
-> > +         Isink4 can also use as a CHG_VIN power good Indicator.
-> 
-> be used
-> 
-Ack in next.
-> > +         Say Y here to enable support for
-> > +         MT6370_RGB_LED device.
-> 
-> ...
-> 
-> > +#include <linux/module.h>
-> > +#include <linux/mutex.h>
-> > +#include <linux/platform_device.h>
-> 
-> > +#include <linux/of.h>
-> 
-> Are you sure this is the correct header? Seems you need
-> mod_devicetable.h instead.
-> 
-It's the correct header and be used for the struct 'of_device_id'.
-> > +#include <linux/property.h>
-> > +#include <linux/regmap.h>
-> 
-> ...
-> 
-> > +struct mt6370_priv {
-> > +       struct mutex lock;
-> 
-> Do you use regmap locking?
+> This API will get voltage as input parameter.
+> Search all opp items for the item which with max frequency,
+> and the voltae is smaller than provided voltage.
 >
-MFD regmap register already the access lock.
+> Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
+> ---
+>  drivers/opp/core.c     | 55 ++++++++++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/pm_opp.h |  8 ++++++++
+>  2 files changed, 63 insertions(+)
 
-This lock is just to guarantee only one user can access the RGB register
-part.
+This patch added dev_pm_opp_find_freq_ceil_by_volt() but I don't find anything
+in the kernel which uses it? The patchset for CCI never got merged ?
 
-Sorry, from the comment, do you want us to rename or remove this lock?
-> > +       struct device *dev;
-> 
-> > +       struct regmap *regmap;
-> 
-> > +       struct regmap_field *fields[F_MAX_FIELDS];
-> > +       const struct reg_field *reg_fields;
-> > +       const struct linear_range *ranges;
-> > +       struct reg_cfg *reg_cfgs;
-> > +       unsigned int leds_count;
-> > +       unsigned int leds_active;
-> > +       bool is_mt6372;
-> > +       struct mt6370_led leds[];
-> > +};
-> 
-> ...
-> 
-> > +static const unsigned int common_tfreqs[] = {
-> > +       10000, 5000, 2000, 1000, 500, 200, 5, 1
-> 
-> Leave a comma at the end.
-> 
-Ack in next.
-> > +};
-> > +
-> > +static const unsigned int mt6372_tfreqs[] = {
-> > +       8000, 4000, 2000, 1000, 500, 250, 8, 4
-> 
-> Ditto.
-> 
-Ack in next.
-> > +};
-> 
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
+I will remove the API now.
+
+--
+Viresh
