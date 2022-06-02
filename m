@@ -2,174 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6274D53B09D
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jun 2022 02:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD22E53B123
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jun 2022 03:23:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232566AbiFAXRZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jun 2022 19:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
+        id S232778AbiFBAkB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jun 2022 20:40:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232557AbiFAXRY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 19:17:24 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2079.outbound.protection.outlook.com [40.107.223.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10D61A15CC;
-        Wed,  1 Jun 2022 16:17:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZfekCytYgomXVnkXShCzZ2QopIeKtyZS1psiktF/TkiMN1TM92UPTRSOtsw8MycQBR2k2P9WecZtoWe8Qw6Fe9RgZ/EReB0DQx38WW/Zq0KY3+LwtuXbWUjKV9ycPWa52xFWTHlzyI4rKLSLtz5JiL+B0dUxt0kbKCDmP5sO3FMFG/tTdDXEkEg2bES6aUu0DORVl2Pb4/PjUWiRA1WPTV1PVzclCZDAZxDEnqRQOWrIIb1PXdG/HTzP62jmswJRyeLXc2iZwtUdJkHq7GqJyLnapwX2ni5C7l+w0zJJWtTa4L0PXvHzuB5H6+r8szbn97GRA95HmPBogKfNBptO6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GPB7WwVmMpiLiRSEAmdXPsuWBZxYigYQtB3pm+esYDc=;
- b=Mu8C2KyhVNl/f0LslYOLrJrykIGkEnVj7UQma8qiglnqDySNXslMY0Mm5jTg3I38yK8v5hKkrP/wXNvntewvKiVXHVMOKvgh5iGCpFkqM05xlRSzlyaCsvaZs4SIL0Ju7/pkJyMgr8+uFVqA6BnXZkqWuaFI6cCJV6jXPrGcgDICu5+RpyVM+W9feuM8Xj5wcoEdgw4lXUtt+iTxAvXAz0EBI4/ZupXemDTStHhlgLLtFVDWh+FXVTuzCKKeXXem8theBlJRBGP5VaT3afMSqOvYWZVPYHzQ8V3ax5sjzPXVgmbumRHL4evxNfA/mWDfbjJx8G+42SObtImapep1AA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GPB7WwVmMpiLiRSEAmdXPsuWBZxYigYQtB3pm+esYDc=;
- b=j4cf79EEyjiQwSKrSU02Hxr0cdAr5kJqPSIX8CVhfnOBlV2jk7plsr0C2ORJJH3Ic0NeVp/sa/pDKnw/5Cyu/jqD3UndsdooB3Y6LvifaWOr6Z2nHNIU0bu4TDjhUO5aKRUWFK5x2cjAQASPZMyQJBvtZxLYukvOeGl2JW+LS2JsaKQUpyZ0+Kb9GVQobjwWmuQ6tWAC3GnIpoClkYBP7xY4UOCMswEmnxjz7cB8+ockIrh6OAd5LwGQukhLoVVZ3prtiJ6y/pz736AFYlILnxPBgZY+DVYsqim/4OcvSPnxbx45VyLsshHjkbmCYe6YHAQJaYwCbAOF8tPQFZacMg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by BN8PR12MB2961.namprd12.prod.outlook.com (2603:10b6:408:65::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13; Wed, 1 Jun
- 2022 23:17:21 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::2484:51da:d56f:f1a5]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::2484:51da:d56f:f1a5%9]) with mapi id 15.20.5314.013; Wed, 1 Jun 2022
- 23:17:21 +0000
-Date:   Wed, 1 Jun 2022 20:17:20 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     Abhishek Sahu <abhsahu@nvidia.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Max Gurtovoy <mgurtovoy@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v3 8/8] vfio/pci: Add the support for PCI D3cold state
-Message-ID: <20220601231720.GT1343366@nvidia.com>
-References: <68463d9b-98ee-b9ec-1a3e-1375e50a2ad2@nvidia.com>
- <42518bd5-da8b-554f-2612-80278b527bf5@nvidia.com>
- <20220530122546.GZ1343366@nvidia.com>
- <c73d537b-a653-bf79-68cd-ddc8f0f62a25@nvidia.com>
- <20220531194304.GN1343366@nvidia.com>
- <20220531165209.1c18854f.alex.williamson@redhat.com>
- <00b6e380-ecf4-1eaf-f950-2c418bdb6cac@nvidia.com>
- <20220601102151.75445f6a.alex.williamson@redhat.com>
- <20220601173054.GS1343366@nvidia.com>
- <20220601121547.03ebbf64.alex.williamson@redhat.com>
+        with ESMTP id S232775AbiFBAkB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jun 2022 20:40:01 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276CA21F9A6;
+        Wed,  1 Jun 2022 17:40:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654130400; x=1685666400;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/NEsbvbuUCxR99tcx+zO5i0VaG0aRU9+4mB4ZBYmo6g=;
+  b=mIXIU3mzEiutZrlKgT5tf4f6OeXOGjB/lCYO7kzfjLDrzQtQd5H8jdu6
+   IkyDAXg9Ezi6OCbYqLzQkgml9TykG328qqg2dgTs/kxEdoCjSPkd341u1
+   3UO1UfOg0V/c3+EoihP6S2XOTRwBuOw5eYNtl6Obo8MKlpGwy4pl5Vt4J
+   XTXUq3rvJ6OYfwwhXJCS+yE/TXzDCYeavR15OcJP7mAGh9aU909nJ8vuL
+   FfhfDjlMNmNqPK9wmcBiDTjDp3h+GMzA3RDS0OfQW4zt7m+6q5NISSQq8
+   KdeqzGYBDLs+FGeD1zf9LgYxJQpMmV+GQLGL+sB4qkMZVNeKyH5jZjJhE
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10365"; a="301137991"
+X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
+   d="scan'208";a="301137991"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2022 17:39:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,270,1647327600"; 
+   d="scan'208";a="612575503"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 01 Jun 2022 17:39:56 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nwYsW-0004aE-05;
+        Thu, 02 Jun 2022 00:39:56 +0000
+Date:   Thu, 2 Jun 2022 08:39:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_manafm@quicinc.com, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Subject: Re: [PATCH 2/3] thermal/debugfs: Add debugfs information
+Message-ID: <202206020816.0blG5XwC-lkp@intel.com>
+References: <20220601151441.9128-2-daniel.lezcano@linaro.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220601121547.03ebbf64.alex.williamson@redhat.com>
-X-ClientProxiedBy: BL0PR02CA0124.namprd02.prod.outlook.com
- (2603:10b6:208:35::29) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d57344bf-511b-403c-0bba-08da4424e116
-X-MS-TrafficTypeDiagnostic: BN8PR12MB2961:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB2961514A5818C697D2D97FA7C2DF9@BN8PR12MB2961.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CoIO6tXD7u9OhcaCoYnpzO5FHtyGb4qQ1Eaiu4SPubUeS3V6w9aKwU39dPS0r0DhNrOxXwh+WGpr9n40aY6qfqoGL1CueUhuj29L8zFIXPTnymIl29FVFpN7F2Pz76Zkjkr87bG6ngYTF4uxtbg/b+qvfKHiAjmQoeIaYLJFOoRdkJGFBElW+3IR1sQ49NH7PH2DKb1vDuH/avBjY4b95tg+2l+YMkh9cj9z8Jc3vFssO3KxjMINhTk06sTojwAQyVbiYVo65a/jC6G0kwjYxu4Y7GFchSTZZMO7D24vyid9bZY9f3CZQlU2C4Iu2cE+6ZRrTEZ/wIJgMs0NKGOQlKUSs/dVmCbEKfO7TirRlI18DY0j1UkNmH2mnh1qwE5BXNBqWJa7wdhECKWBBCWNV5vMComr/EEh+v2qKCxZRotkqGlfONmVLTNdfG2lXOvMtjMp9LxruBMvGCO/eU+pKwfeKj1hpT5o4ExKuFFlqam0TsoDGY7No1xRvaT19fabUZUPy+GMDuqnQYhYZuFH/hPL2McgbBakxtAn/XeYZvG7S5NBlZUQt6YuChXdAO9Q7knS5r15DDZsAGE24tZL5YQKDL/k+f1kaeiTS9ngl9dXbC5RmInAjfiGCizEDuJB8QlCi9Q2FPLrdSqHzgXO6UL1uDtQshxKs0bmr3AG4jLm56RfKQRSx4L/H9EI4+uQdvXNB3kVJKyODr4Dc04Q+Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4326008)(8676002)(86362001)(66476007)(66946007)(66556008)(316002)(38100700002)(6916009)(54906003)(508600001)(5660300002)(186003)(2616005)(1076003)(6512007)(2906002)(26005)(6506007)(8936002)(33656002)(36756003)(83380400001)(7416002)(6486002)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GLkTqOdsaZt85s7EIPafH/pr4kvqL5CQ9Gko/a1cMzj/n8miiePsfwEjucbv?=
- =?us-ascii?Q?E5rgRHzHFwfJi3R16g8Fs9ZVM60EN4OfTYAXxsvsd8wOLFPVVJ8taFdYKr19?=
- =?us-ascii?Q?N7AFZWH0ag7Jf6FbBGHvZZ5k2iH0PD9mqKRJUtp2vEYnKmhpB5I1LIwglqSM?=
- =?us-ascii?Q?Hhh2pkoct/vtmR9hsNgKyh9ooCtkDSuyYuzDK7875L1HBRaZyylxcRU56dPV?=
- =?us-ascii?Q?Nv3PsZ7sq6hGoDtkt9ioONn0gEjB0xpXRBRhoDNf4UrY/s99RDjqDwGZUaCc?=
- =?us-ascii?Q?bBwP4yHVbwVAvU9JsTpWeglXsybdKJcIOOYz5OzG6xQ79cmvVfB0OUc505aO?=
- =?us-ascii?Q?EOKI5fTUFjVgco7crlulk0oXNR+RwYE1izm2aA+1sR69599/WH1qofdSoPjz?=
- =?us-ascii?Q?NGikVw+yb18PXiDojaIpQ3BgfjddQpP7ZOiBB+qEt6/TLVxdisWSfuDlBDMQ?=
- =?us-ascii?Q?MQVmXle2AKlAnlB2m9+y6hk3yyRRJQus7PuR1X94l7EUetEr4xMggOLHk2Qs?=
- =?us-ascii?Q?7I5l7Qx1QjWAemMqG4zKGbZO4pXEWBViDnzGJ7wSBVZN9wEF3GYQ8LE4C7to?=
- =?us-ascii?Q?d5u+X1JRKnzS+OLr5V2dP/f6rcsNsIcvpf9gcFNEtM1QI1+jgIGPnMEfcMpL?=
- =?us-ascii?Q?jV0Kpr6M57txb7vMY8bnDiEGmKtgUF/qJx8Sj3KNPooT+9lb8QRsg/r9C1Oh?=
- =?us-ascii?Q?iPGXioshh5QORbwyMN1rCGvyrKt1J/HuPfVfHyEixKayrLMuQejey4NGIMZa?=
- =?us-ascii?Q?U6+IaxiELBZMW3ORJSkxeLOFyLrOMqYqmMFcA7zJdQv61i3lSGY9DBNDL4iB?=
- =?us-ascii?Q?7y4kacUvcL7nwbi1xkF2IzCVuLA52HK0M94iOO4ONNZTtgEeD4ZBiDzxOTS/?=
- =?us-ascii?Q?o6jGTAoaHhYIwSleomZHVCh2saHsTSgCef19uMofyEYKLXYDZzXNZqDXjHYG?=
- =?us-ascii?Q?5ZhBZxvi4BlnkUODcm7ZGyGMLWmPmmL4pLaoCZLadq1fl4rvOIomSVh/IVrJ?=
- =?us-ascii?Q?YCVVBDyccH9EJy48VUbXErlDqg2LAY4lOl3x2YhE4aOQOpXE4gWjCS9eiu7a?=
- =?us-ascii?Q?EYcpo9QqU1ETNcJJkA2Mp8QPOleXK6AUkCm+R0COkzcWNdnjmgXKOBCkHHQY?=
- =?us-ascii?Q?kaw35Htp4Im9HyTljqlxUSXz53t3vKJJGQ5VyPJNgM6xq3Yzys66AOKUnTeB?=
- =?us-ascii?Q?O5XeAub8R0oDLnq/cGd5yLG4X+aNrqUYXtWTZHEdjkCDErEvjJoLiQsLbXV9?=
- =?us-ascii?Q?BnmU0h+jLirT83Sj9zUNud8Ihqi682+xkrIzWY/aroEGma5Sz2kcvFJm+SWy?=
- =?us-ascii?Q?KlhwOWCFCDljNgdmVCF0WIZw2n+kph7graRFd0hInRNIsR+ereudXEVu+GRn?=
- =?us-ascii?Q?7oM9gVj3VpjBuBy0w5pWk3ylzGI7JWXG6wW5lQxosLY1c1BfADGJ6z3YbbL+?=
- =?us-ascii?Q?IxsK0Obp5LNJmaT9sD6T9mD1fRULg2DS/8v81Oek4NfcblMP8iYt3Hvhv4XP?=
- =?us-ascii?Q?JBdp02x83enKyXOlwmmGiNEP+ciU160hRS4nNcDKVCltPMcOWfcZQ6Gbr7MX?=
- =?us-ascii?Q?HeIMaRcrMRPaLnZoqLBTOUPNKJ23smfX4F4Kt2+io6Uamv/p3FvIPv2847dK?=
- =?us-ascii?Q?kEqXfy39/gCF5w6eR2EqlmOoCMRRoUCEib8lr5IewdfnOIkayeAIjgcAkO86?=
- =?us-ascii?Q?uuz3rwrkLybMFCOhbR6wT0EQexY3Z7r71T+HNUw/3f1KYjqDDFGZuGzo5i3U?=
- =?us-ascii?Q?7em6LuxSJg=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d57344bf-511b-403c-0bba-08da4424e116
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jun 2022 23:17:21.4219
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Z3dXal2lwGJUs9dySq0xlsm/+Ny8LVu4l5MMiewlL5rHvYljLF3PtQz584ZbVpD2
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB2961
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220601151441.9128-2-daniel.lezcano@linaro.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 12:15:47PM -0600, Alex Williamson wrote:
-> On Wed, 1 Jun 2022 14:30:54 -0300
-> Jason Gunthorpe <jgg@nvidia.com> wrote:
-> 
-> > On Wed, Jun 01, 2022 at 10:21:51AM -0600, Alex Williamson wrote:
-> > 
-> > > Some ioctls clearly cannot occur while the device is in low power, such
-> > > as resets and interrupt control, but even less obvious things like
-> > > getting region info require device access.  Migration also provides a
-> > > channel to device access.    
-> > 
-> > I wonder what power management means in a case like that.
-> > 
-> > For the migration drivers they all rely on a PF driver that is not
-> > VFIO, so it should be impossible for power management to cause the PF
-> > to stop working.
-> > 
-> > I would expect any sane design of power management for a VF to not
-> > cause any harm to the migration driver..
-> 
-> Is there even a significant benefit or use case for power management
-> for VFs?  The existing D3hot support should be ok, but I imagine to
-> support D3cold, all the VFs and the PF would need to move to low power.
-> It might be safe to simply exclude VFs from providing this feature for
-> now.
+Hi Daniel,
 
-I know of no use case, I think it would be a good idea to exclude VFs.
+I love your patch! Perhaps something to improve:
 
-> Yes, but that's also penalizing devices that require no special
-> support, for the few that do.  I'm not opposed to some sort of
-> vfio-pci-nvidia-gpu variant driver to provide that device specific
-> support, but I'd think the device table for such a driver might just be
-> added to the exclusion list for power management support in vfio-pci.
-> vfio-pci-core would need some way for drivers to opt-out/in for power
-> management. 
+[auto build test WARNING on rafael-pm/thermal]
+[also build test WARNING on v5.18 next-20220601]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-If you think it can be done generically with a small exclusion list
-then that probably makes sense.
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-core-Encapsulate-the-set_cur_state-function/20220601-231733
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220602/202206020816.0blG5XwC-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c825abd6b0198fb088d9752f556a70705bc99dfd)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/04c295f7e8b49af742179609949736f6f056b49c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Lezcano/thermal-core-Encapsulate-the-set_cur_state-function/20220601-231733
+        git checkout 04c295f7e8b49af742179609949736f6f056b49c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
 
-Jason
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/thermal/thermal_core.c:27:
+   In file included from drivers/thermal/thermal_core.h:16:
+>> drivers/thermal/thermal_debugfs.h:11:20: warning: function 'thermal_debugfs_init' has internal linkage but is not defined [-Wundefined-internal]
+   static inline void thermal_debugfs_init(void);
+                      ^
+   drivers/thermal/thermal_core.c:1496:2: note: used here
+           thermal_debugfs_init();
+           ^
+   1 warning generated.
+
+
+vim +/thermal_debugfs_init +11 drivers/thermal/thermal_debugfs.h
+
+     2	
+     3	#ifdef CONFIG_THERMAL_DEBUGFS
+     4	void thermal_debugfs_init(void);
+     5	void thermal_debugfs_cdev_register(struct thermal_cooling_device *cdev);
+     6	void thermal_debugfs_cdev_unregister(struct thermal_cooling_device *cdev);
+     7	void thermal_debugfs_tz_register(struct thermal_zone_device *tz);
+     8	void thermal_debugfs_tz_unregister(struct thermal_zone_device *tz);
+     9	void thermal_debugfs_cdev_transition(struct thermal_cooling_device *cdev, int state);
+    10	#else
+  > 11	static inline void thermal_debugfs_init(void);
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
