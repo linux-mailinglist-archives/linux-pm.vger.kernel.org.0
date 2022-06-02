@@ -2,149 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A7953BA62
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jun 2022 16:00:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF3A853BB1C
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jun 2022 16:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235679AbiFBOA3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Jun 2022 10:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39816 "EHLO
+        id S235695AbiFBOnQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Jun 2022 10:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235643AbiFBOA1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jun 2022 10:00:27 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AD5271781;
-        Thu,  2 Jun 2022 07:00:26 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id f9so10254962ejc.0;
-        Thu, 02 Jun 2022 07:00:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=AYxq+mMduPBX5NXqRBF2+5IJjnwegK5vDcEeTyInUPU=;
-        b=auP1KW3KeSmMw7VIZ62/gbLMAnB923JIROgeNcNM60iNfs70SRXGH9Oh+PqNAIdl95
-         sF3KgLrJAdhJvNL5E/yTCatacqFZTuJwNSgnwpd8r3nWCcjRXQOJQGh/LEv8L8WGwDHn
-         GRMckxbpngc/1zSMfnGGQOEbWW1vqQbIAf/Fr7XQHihGGmhAIL+CXKz/Sx20mLoDFvK2
-         Mrq/lvN37tLRQTJChv3fW11X7HfKADxJn3lW1n7mcgkdAUHAPKZhMEZRqOIIvJS+CQJo
-         E9+wli3/tU0/Qxnp7IRGppAp11D6KG1QpREaRpW+RGISetT3kVGuRq7qeRk42Hciw7Be
-         LYwg==
+        with ESMTP id S235660AbiFBOnO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jun 2022 10:43:14 -0400
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B17255A1;
+        Thu,  2 Jun 2022 07:43:13 -0700 (PDT)
+Received: by mail-oi1-f171.google.com with SMTP id p129so2123701oig.3;
+        Thu, 02 Jun 2022 07:43:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=AYxq+mMduPBX5NXqRBF2+5IJjnwegK5vDcEeTyInUPU=;
-        b=ND6vo9TSDcon/FmEUjE+075JxG/6ovzx/dplStXFQ+KTdj+yLHnr9f2bum1FkOT6QG
-         oTnhJbLJ654aRR8//t3d6Nuj9JOSjq+bQRbHyEkbgc3rcRkJcBvFbOJryiRxeWlqP6eC
-         9MV/dDkEe0ziWC+CMLSgisNfLOa4r45JVnOJi9NEwoZwVb+g2PFtwwj3OBG6jayL1TiL
-         I9QzTvn+RiGuc91kDYdwic2yoRFit0rkF/Apwp7X+eILLFxqvLTOOXekzIlbIqaZB3Wb
-         cnHYUnCa/OtF7wGfhSvt6N43PinmmuswWRcF404NnjEimncKk8OVkVm8nSUp9qu/hLjM
-         f6Kw==
-X-Gm-Message-State: AOAM532TKGBJY+Ss51GOm90GYOOs8uwe5JUvEN5lnjmuMC0lKo/F1SlR
-        Z4UofG7MOSLrh/iTM0EEoTIop/aumYUXFE6Gi/I=
-X-Google-Smtp-Source: ABdhPJxtpuBCKEOrj7yi3ocCsJZ0ETA3Lw0fV9RaebX5CwbyumoNpdxxmykaJXm5oH5aPRnpODJs/24H5iu7FWYfbjE=
-X-Received: by 2002:a17:907:8a27:b0:707:cc50:e790 with SMTP id
- sc39-20020a1709078a2700b00707cc50e790mr4462180ejc.77.1654178424506; Thu, 02
- Jun 2022 07:00:24 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3ARHoM5LHWT9TByTd9RguxGGMAsE/6ISibQgr6i7ICU=;
+        b=3y8kPGjEjOtvm4XrogPqr+InlNByySuOMBafi+Lt6MAjrlE6/nKhOTeN9aPpXMhuCr
+         x3tcq3L6jLeWZFYMDoUpeQwoyEl8oUmwy3sLigPdf91c6Zo8oPhhqBm3jBOoNwZHCr33
+         eXimUm0HnT+oBQ9xz3YmCx+zAhHCA/Xqev489Kjfw3b+8oFid6il9fSB0j81ODIOcUTK
+         QdtWLfdBKaHKLdhgSMfRWkH+dF8IT2092klWccUjcZFcuXd1ysAAQZriQ3wwqfXQnTn2
+         OigUGwdYxaSJsYd5/P6YV9TD3GNFBsr/UZtYPDTmPd2XaRJdzj4mVS8yrR10CSRV/rfe
+         juFw==
+X-Gm-Message-State: AOAM530zJkS2MzHeHX959Xb6mUlFLFzOtfwmJlgMpDzsgwonEiat59P+
+        B56nqFDamFJWZrfArFCndQ==
+X-Google-Smtp-Source: ABdhPJysiNjG99QgKgCjncBPlVVdav9tlJP2F5lRbb9jnwiLuIn1hoWcc91mSkX8MrmN+cktC9jNwg==
+X-Received: by 2002:a05:6808:1686:b0:2f7:2f03:9792 with SMTP id bb6-20020a056808168600b002f72f039792mr17778848oib.278.1654180992727;
+        Thu, 02 Jun 2022 07:43:12 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c16-20020a544e90000000b0032b1b84f4e3sm2348061oiy.22.2022.06.02.07.43.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jun 2022 07:43:12 -0700 (PDT)
+Received: (nullmailer pid 2283162 invoked by uid 1000);
+        Thu, 02 Jun 2022 14:43:11 -0000
+Date:   Thu, 2 Jun 2022 09:43:11 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Sibi Sankar <quic_sibis@quicinc.com>, bjorn.andersson@linaro.org,
+        agross@kernel.org, djakov@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, p.zabel@pengutronix.de,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: interconnect: Update email address
+Message-ID: <20220602144311.GA2278169-robh@kernel.org>
+References: <1654130923-18722-1-git-send-email-quic_sibis@quicinc.com>
+ <cb8c7e28-dfef-78e2-c97c-11b9dee02fed@linaro.org>
 MIME-Version: 1.0
-References: <20220531102809.11976-1-peterwu.pub@gmail.com> <20220531102809.11976-8-peterwu.pub@gmail.com>
- <CAHp75VdUQqihr=AX-wEUD05jY1ReL63hMCL+eaqmjkN8CsS_Vg@mail.gmail.com>
- <CA+hk2fasiriGHepNjsnPCqTMJOgAEbVHACmWrDRZY7cHPcOQqA@mail.gmail.com> <CAHp75Vf=ATRfaaaGFuuPHuQj6wTjnRPBw4W5WYfgYuUP-A-L=g@mail.gmail.com>
-In-Reply-To: <CAHp75Vf=ATRfaaaGFuuPHuQj6wTjnRPBw4W5WYfgYuUP-A-L=g@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 2 Jun 2022 15:59:48 +0200
-Message-ID: <CAHp75VdDLnisODLCpTEHdGcxCFATdJHfJWf+=GdGtYV2U_o9+g@mail.gmail.com>
-Subject: Re: [PATCH 07/14] leds: flashlight: mt6370: Add Mediatek MT6370
- flashlight support
-To:     szuni chen <szunichen@gmail.com>
-Cc:     ChiaEn Wu <peterwu.pub@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>,
-        Helge Deller <deller@gmx.de>, cy_huang@richtek.com,
-        alice_chen@richtek.com, chiaen_wu@richtek.com,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:FRAMEBUFFER LAYER" <linux-fbdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cb8c7e28-dfef-78e2-c97c-11b9dee02fed@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 2, 2022 at 3:57 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Thu, Jun 2, 2022 at 2:07 PM szuni chen <szunichen@gmail.com> wrote:
-> > Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B46=E6=
-=9C=881=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=885:57=E5=AF=AB=E9=81=
-=93=EF=BC=9A
-> > > On Tue, May 31, 2022 at 1:32 PM ChiaEn Wu <peterwu.pub@gmail.com> wro=
-te:
-...
+On Thu, Jun 02, 2022 at 01:48:21PM +0200, Krzysztof Kozlowski wrote:
+> On 02/06/2022 02:48, Sibi Sankar wrote:
+> > Update email address to the quicinc.com domain.
+> > 
+> > Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> > ---
+> >  Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml | 2 +-
+> 
+> Thanks for updating the email addresses. All three patches should be
+> rather squashed to one (and taken by Rob for example), it's quite a
+> churn. Anyway:
 
-> > > > +       const char * const states[] =3D { "off", "keep", "on" };
-> > > > +       const char *str;
-> > > > +       int ret;
-> > > > +
-> > > > +       if (!fwnode_property_read_string(init_data->fwnode,
-> > > > +                                        "default-state", &str)) {
-> > > > +               ret =3D match_string(states, ARRAY_SIZE(states), st=
-r);
-> > > > +               if (ret < 0)
-> > > > +                       ret =3D STATE_OFF;
-> > > > +
-> > > > +               led->default_state =3D ret;
-> > > > +       }
-> > >
-> > > fwnode_property_match_string()?
-> > Sorry, but I think the use of this function is different from my target=
-.
-> > I want to read the string of the "default-state" property and figure
-> > out if the string is in the states array.
-> > But the fwnode_property_match_string aimed to figure out if the state
-> > in the property array.
-> > One is a property array and another one is a state array.
->
-> Ah, indeed. Nevertheless you may reduce the code base by doing like
-> the following (I wonder what your code do if there is no default-state
-> property):
->
->   led->default_state =3D STATE_OFF; // it's by default off since
-> kzalloc(), so I don't see why we need this line at all.
->
->   fwnode_property_read_string(init_data->fwnode, "default-state", &str);
->   ret =3D match_string(states, ARRAY_SIZE(states), str);
->   if (ret >=3D 0)
->     led->default_state =3D ret;
+I've applied the series and did this.
 
-Missed change
+Rob
 
-  const char *str =3D states[STATE_OFF];
-
---=20
-With Best Regards,
-Andy Shevchenko
+> 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
