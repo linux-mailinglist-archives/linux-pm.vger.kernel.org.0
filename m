@@ -2,76 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4C553C909
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Jun 2022 13:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23A9C53C967
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Jun 2022 13:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243911AbiFCLEo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Jun 2022 07:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51498 "EHLO
+        id S244047AbiFCLcq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Jun 2022 07:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243910AbiFCLEn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jun 2022 07:04:43 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA493BFB3
-        for <linux-pm@vger.kernel.org>; Fri,  3 Jun 2022 04:04:42 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id d5-20020a05600c34c500b0039776acee62so4645945wmq.1
-        for <linux-pm@vger.kernel.org>; Fri, 03 Jun 2022 04:04:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ExK+DYLUUomIg3mRJoq7EumeoyhrwGwm615hpYO0lXQ=;
-        b=K19PSH3lwY1yW8Us7aXC4yemQGjRs8tmgABDOI0vD1UaDVhaH/YnOt4TU0pQtq9eTw
-         fApFgN1kibEtjP25egxeZs1kpnOQIoxViM6OsebgTbVTljxbUhODUhk8QZINAYXoUjF0
-         yN6YF1mqAoVnHgWpelghaiVa7DLUlNd5j2TKIvc7CdXWlh/Q4+s8lsoZDftzXn605iiJ
-         LJEfnK/vRSQdUoyQkiByR6M/kGfadO9onx4Bi27AMDPQ0lB5CVx992UzbvzdK/w1d6jw
-         iYsD2DwWOaeTfUz6/rZdNt4Dv1qd3Z0QH4qcfHc/Zk+Hi/Pqh4cc/SYy17mb3beo+aFu
-         Mv2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ExK+DYLUUomIg3mRJoq7EumeoyhrwGwm615hpYO0lXQ=;
-        b=Ua+HLCfdkl7U8JaN2IA3G0ExmWXp+/7SRt8DmpSdqS8AApNCGZUlvdVSxayw3bFwmV
-         tSHnD/Teua1VMha3B01tgK5024dHUcg3+FHdF3fbL3siXr1id+RT5xuaoddwbaTXtrh6
-         88oxQLIgVXyV9Mz038dzm09LudVkVAlsRJYojGiha/3kp5vhho1b5v65NDuyXu2zePq9
-         1F0iTj7dlJSojfRqq/GqQMKnDW0sjVrxExZOEsB/ix2oyynPaZKU+mEwwCUQuIHwK0zp
-         L7qchpeTiNYrT+6ntGCxlzMQYeU0G/RVvZ4q1clNN+uk6R5HWUw33jiW/0I3gj9+b/Xg
-         uPaQ==
-X-Gm-Message-State: AOAM532LrPJqbxk/ucRuycXAkvDQ43YxpFAuIOc0jyTcy4XcJjkLGYC8
-        xOsQevVHIQMqXEWXAunFOs5o4pBwkkCNHA==
-X-Google-Smtp-Source: ABdhPJwp2zagP6UI2fFhVdDyk5de0gUKb9cOw6NpGThJLza8s+4ag0BrvmVlDKzxY3wiX3nST3JQbg==
-X-Received: by 2002:a05:600c:4f93:b0:399:e654:4481 with SMTP id n19-20020a05600c4f9300b00399e6544481mr28194292wmq.164.1654254280711;
-        Fri, 03 Jun 2022 04:04:40 -0700 (PDT)
-Received: from [192.168.1.41] (static-176-182-171-101.ncc.abo.bbox.fr. [176.182.171.101])
-        by smtp.googlemail.com with ESMTPSA id h24-20020adfa4d8000000b0020d0a57af5esm7152854wrb.79.2022.06.03.04.04.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Jun 2022 04:04:40 -0700 (PDT)
-Message-ID: <0ca654c0-d7b4-b955-7e9b-542452659694@linaro.org>
-Date:   Fri, 3 Jun 2022 13:04:39 +0200
+        with ESMTP id S244040AbiFCLco (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jun 2022 07:32:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAAA657A;
+        Fri,  3 Jun 2022 04:32:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BC446121E;
+        Fri,  3 Jun 2022 11:32:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6390C385A9;
+        Fri,  3 Jun 2022 11:32:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1654255962;
+        bh=myYHQBAtxsgh3YAl4G2/KmIJpUKMkCYSq4SI0B3ycQw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=1dPEkQLNIIwfjjXcy9eaC9MPBqHbOA0iF72mdp7QtXKOnt/+cNr7cpnuKJJGunDjk
+         0kjYMvnbFLhhnarwdm7cq64+BmeoKDUSlWH+vsLhvTUh7W5t76CqwQXgcdWpj5sclb
+         F9QHtB9MBJpMAcWWsly7ooef69b1lTQS9xi10E20=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Saravana Kannan <saravanak@google.com>,
+        John Stultz <jstultz@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Basil Eljuse <Basil.Eljuse@arm.com>,
+        Ferry Toth <fntoth@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        linux-pm@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH 1/2] driver core: Fix wait_for_device_probe() & deferred_probe_timeout interaction
+Date:   Fri,  3 Jun 2022 13:31:37 +0200
+Message-Id: <20220603113138.2689444-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <YpnwZ/Q5yTKRDBOD@kroah.com>
+References: <YpnwZ/Q5yTKRDBOD@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 3/3] thermal/sysfs: Remove cooling device sysfs statistics
-Content-Language: en-US
-To:     Todd Kjos <tkjos@google.com>, Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, quic_manafm@quicinc.com,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, Wei Wang <wvw@google.com>
-References: <20220601151441.9128-1-daniel.lezcano@linaro.org>
- <20220601151441.9128-3-daniel.lezcano@linaro.org>
- <be8395e3-98d7-7a8f-7153-c491b22d4463@arm.com>
- <cb35e356-bc90-2a67-6983-1a4c3a0ea62d@linaro.org>
- <eada018c-b857-7946-ae4b-2532e6866a45@arm.com>
- <CAHRSSEz9ExOgvByycztKYf1ncxCKeoy3uHuyQcnUC1r5nujc2w@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAHRSSEz9ExOgvByycztKYf1ncxCKeoy3uHuyQcnUC1r5nujc2w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3968; i=gregkh@linuxfoundation.org; h=from:subject; bh=MnYHk+TvRioyuCp9YPlGhGUqIO1D63k02GXidwo/63o=; b=owGbwMvMwCRo6H6F97bub03G02pJDEkzP0q1eJW4MB4LyH/2fDevn8ub8wn3l60WiBcVfzHtPlOO +rxnHbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjCR1a8YFjTlF1+f8YiZgYNly+EcL+ 3IL1WPMhhms1x10duet+p29qmIfknry9zdavJnAQ==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,48 +75,100 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: Saravana Kannan <saravanak@google.com>
 
-Hi Todd,
+Mounting NFS rootfs was timing out when deferred_probe_timeout was
+non-zero [1].  This was because ip_auto_config() initcall times out
+waiting for the network interfaces to show up when
+deferred_probe_timeout was non-zero. While ip_auto_config() calls
+wait_for_device_probe() to make sure any currently running deferred
+probe work or asynchronous probe finishes, that wasn't sufficient to
+account for devices being deferred until deferred_probe_timeout.
 
-[adding Wei]
+Commit 35a672363ab3 ("driver core: Ensure wait_for_device_probe() waits
+until the deferred_probe_timeout fires") tried to fix that by making
+sure wait_for_device_probe() waits for deferred_probe_timeout to expire
+before returning.
 
-On 02/06/2022 21:02, Todd Kjos wrote:
-> On Thu, Jun 2, 2022 at 2:16 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+However, if wait_for_device_probe() is called from the kernel_init()
+context:
 
-[ ... ]
+- Before deferred_probe_initcall() [2], it causes the boot process to
+  hang due to a deadlock.
 
->> I see, it makes sense. Let's see if Todd and Android folks don't
->> use this thermal sysfs stats, so we could remove them.
-> 
-> Android HALs do use the thermal sysfs stats. debugfs isn't a viable
-> replacement since debugfs must not be mounted during normal operation.
+- After deferred_probe_initcall() [3], it blocks kernel_init() from
+  continuing till deferred_probe_timeout expires and beats the point of
+  deferred_probe_timeout that's trying to wait for userspace to load
+  modules.
 
-Thanks for your answer.
+Neither of this is good. So revert the changes to
+wait_for_device_probe().
 
-I'm curious, what is the purpose of getting the statistics, especially 
-the transitions stats from normal operation?
+[1] - https://lore.kernel.org/lkml/TYAPR01MB45443DF63B9EF29054F7C41FD8C60@TYAPR01MB4544.jpnprd01.prod.outlook.com/
+[2] - https://lore.kernel.org/lkml/YowHNo4sBjr9ijZr@dev-arch.thelio-3990X/
+[3] - https://lore.kernel.org/lkml/Yo3WvGnNk3LvLb7R@linutronix.de/
 
-There were some complains about systems having a high number of cooling 
-devices with a lot of states. The state transitions are represented as a 
-matrix and result in up to hundred of megabytes of memory wasted.
+Fixes: 35a672363ab3 ("driver core: Ensure wait_for_device_probe() waits until the deferred_probe_timeout fires")
+Cc: John Stultz <jstultz@google.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>
+Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
+Cc: Rob Herring <robh@kernel.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc: Robin Murphy <robin.murphy@arm.com>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: Basil Eljuse <Basil.Eljuse@arm.com>
+Cc: Ferry Toth <fntoth@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Anders Roxell <anders.roxell@linaro.org>
+Cc: linux-pm@vger.kernel.org
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: John Stultz <jstultz@google.com>
+Signed-off-by: Saravana Kannan <saravanak@google.com>
+Link: https://lore.kernel.org/r/20220526034609.480766-2-saravanak@google.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/base/dd.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-Moreover, sysfs being limited a page size, the output is often truncated.
-
-As it is automatically enabled for GKI, this waste of memory which is 
-not negligible for system with low memory can not be avoided.
-
-I went through the thermal HAL but did not find an usage of these 
-statistics, do you have a pointer to the code using them ?
-
-Thanks
-
-   -- Daniel
-
-
-
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index 2fc8507f59ee..91f63cd33b12 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -263,7 +263,6 @@ int driver_deferred_probe_timeout;
+ #endif
+ 
+ EXPORT_SYMBOL_GPL(driver_deferred_probe_timeout);
+-static DECLARE_WAIT_QUEUE_HEAD(probe_timeout_waitqueue);
+ 
+ static int __init deferred_probe_timeout_setup(char *str)
+ {
+@@ -318,7 +317,6 @@ static void deferred_probe_timeout_work_func(struct work_struct *work)
+ 	list_for_each_entry(p, &deferred_probe_pending_list, deferred_probe)
+ 		dev_info(p->device, "deferred probe pending\n");
+ 	mutex_unlock(&deferred_probe_mutex);
+-	wake_up_all(&probe_timeout_waitqueue);
+ }
+ static DECLARE_DELAYED_WORK(deferred_probe_timeout_work, deferred_probe_timeout_work_func);
+ 
+@@ -736,9 +734,6 @@ int driver_probe_done(void)
+  */
+ void wait_for_device_probe(void)
+ {
+-	/* wait for probe timeout */
+-	wait_event(probe_timeout_waitqueue, !driver_deferred_probe_timeout);
+-
+ 	/* wait for the deferred probe workqueue to finish */
+ 	flush_work(&deferred_probe_work);
+ 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.36.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
