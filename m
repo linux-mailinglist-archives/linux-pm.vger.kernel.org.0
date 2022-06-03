@@ -2,127 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D8C53CD14
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Jun 2022 18:22:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E39E553CD24
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Jun 2022 18:25:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343848AbiFCQWn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Jun 2022 12:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
+        id S1343885AbiFCQZJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Jun 2022 12:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343813AbiFCQWm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jun 2022 12:22:42 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF9122519;
-        Fri,  3 Jun 2022 09:22:41 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-e93bbb54f9so11162648fac.12;
-        Fri, 03 Jun 2022 09:22:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MG4fB5L16PJOB6eygIdqZV5Ksttsv4vvkIROtuQ0QKg=;
-        b=joqdIXgCTJQK6rmOLq9hEzhW5hwG3cLQXUjb+cboAdPNERXpcXFUz62Yn33raBmc3o
-         blplY+PffT0s0Ma3Gjv1Dfji90dnBCQ0JR2M8adnSDl9hJoyKJqgg3aWFvyFxeB5RM+K
-         YoAkXQ88H8i9uUo9rKmbeuT/ZimhUj19/+ld6yWtzKNq1afkr3t3eiBm7Wso6leCedKO
-         cuYkfF5vxJ3xYJodra8xm2bhjpd+/hhXjeu6V0/G4NB9CrRPaFaXSDKbCX7KZsCwi2wh
-         jgjHN74aQl6bGwmJ2pDkbljmkUhKU6f8aC4TFk5T5u6RrZj1ScAJgyYyVZMHyM/ekVkJ
-         64vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=MG4fB5L16PJOB6eygIdqZV5Ksttsv4vvkIROtuQ0QKg=;
-        b=q4VDddI+QV9bvDivCISA403lqF09R7dQMCssj1lIxbg0tfAg6ncGIVWR33DuCgEoj+
-         0Fa/gc+QI7TQO8SGg+vTZUOrbRA1fNWY3RgQ9WCLSUmJk6LZnN7JX7V46USJNxpJ5UIw
-         7Y/a5e8P+qqkMt6Kg2fPUCG2XYnubceSRHjPkWBkT+g6rasYjFv4zA7Z1HVo+RhMg1CI
-         Y2VlGY6XiktwGC9b2Vlj9H8K8vdbFyiK4XF7qZCT1JEZya9QZPlX99FyMlXllMZPOAjt
-         VkKkerHrydYk7UlogzRMqNnNv+Bf1fDLyMFxpZN+Fr0rpM9cwtaBr3/VcxjjvwvGs8A9
-         MsMg==
-X-Gm-Message-State: AOAM533nIMgvlWy9pSnN3rfYWOyG1ozmMcevcUKoueKdq974HJFzogZ1
-        lRpK1uBW3A/AWJvgNkrv5gBga8wVlcU=
-X-Google-Smtp-Source: ABdhPJx2XtRXI3hkPrfqrFyv7zA3+CCZ1oBRo6S2VY+rDVqlMJ2cFUadZ8sCGk08GLh4x3pQ99KDyw==
-X-Received: by 2002:a05:6870:891f:b0:e1:ec98:3c59 with SMTP id i31-20020a056870891f00b000e1ec983c59mr6325967oao.295.1654273361054;
-        Fri, 03 Jun 2022 09:22:41 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j9-20020a056870530900b000f33b23a030sm3412594oan.57.2022.06.03.09.22.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Jun 2022 09:22:40 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4ef87536-7a71-0d1b-3121-94e763041562@roeck-us.net>
-Date:   Fri, 3 Jun 2022 09:22:37 -0700
+        with ESMTP id S237632AbiFCQZI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jun 2022 12:25:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FBD5131C;
+        Fri,  3 Jun 2022 09:25:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB0896195F;
+        Fri,  3 Jun 2022 16:25:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A239C385A9;
+        Fri,  3 Jun 2022 16:25:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654273507;
+        bh=4rw9dnXElz7aaMM5oeE5jfIs71mLFoPFuBfRRckUmRk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jUrPgyXf8lp+ALxVFmsd5m8fqg6DzUeCDsk1uHrHqSxQ6Pfr951Vtu6O7upSVw845
+         eRckR2c2q9tIwqsCPGmzUtDZ7EiJN7KkabGeLhDeRKZI8a/N4oiMOcgoW+ui+lkrPR
+         wVyqnq3xUwMT3X9uVr3ST3n3jQfBa1/BiXw9pZ1iokMS2pLgJ5qH9vsTLdVyuP0Mmp
+         E2gpPUi73jEDopcSXLhOYPWj6uQaWMbCFQ+hyEjHmta/WtCMT72BxRpmGzMKvgK1/L
+         18ufwHNbk2pBaeJ9f7UCJRddmDreMuSJZOhppEeqL7DTbXTyZRJ88qbtMy0y97GWEh
+         sflnWPW9nqrqg==
+Date:   Fri, 3 Jun 2022 17:34:04 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
+        lee.jones@linaro.org, sre@kernel.org, broonie@kernel.org,
+        gregkh@linuxfoundation.org, lgirdwood@gmail.com, lars@metafoo.de,
+        rafael@kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/10] dt-bindings: iio: adc: axp209: Add AXP192
+ compatible
+Message-ID: <20220603173404.4cb83647@jic23-huawei>
+In-Reply-To: <20220603135714.12007-4-aidanmacdonald.0x0@gmail.com>
+References: <20220603135714.12007-1-aidanmacdonald.0x0@gmail.com>
+        <20220603135714.12007-4-aidanmacdonald.0x0@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 6/6] watchdog: max77620: update Luca Ceresoli's e-mail
- address
-Content-Language: en-US
-To:     Luca Ceresoli <luca@lucaceresoli.net>, linux-kernel@vger.kernel.org
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Leon Luo <leonl@leopardimaging.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>
-References: <20220603155727.1232061-1-luca@lucaceresoli.net>
- <20220603155727.1232061-6-luca@lucaceresoli.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220603155727.1232061-6-luca@lucaceresoli.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/3/22 08:57, Luca Ceresoli wrote:
-> My Bootlin address is preferred from now on.
+On Fri,  3 Jun 2022 14:57:07 +0100
+Aidan MacDonald <aidanmacdonald.0x0@gmail.com> wrote:
+
+> The AXP192 is identical to the AXP20x, except for two additional
+> GPIO ADC channels.
 > 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+There is an argument that could be made here to say this should
+have a fallback compatible to a suitable existing part as the driver
+would work, we'd just be missing a couple of channels.
 
-An entry in .mailmap might be easier, though.
+I don't feel strongly either way, but thought I'd raise the possibility.
 
-Guenter
+I guess it's irrelevant if an updated kernel is needed anyway to have
+it functional because of support needed for some other part of the chip
+though.
+
+Jonathan
 
 > ---
->   drivers/watchdog/max77620_wdt.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>  .../bindings/iio/adc/x-powers,axp209-adc.yaml  | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
 > 
-> diff --git a/drivers/watchdog/max77620_wdt.c b/drivers/watchdog/max77620_wdt.c
-> index b76ad6ba0915..33835c0b06de 100644
-> --- a/drivers/watchdog/max77620_wdt.c
-> +++ b/drivers/watchdog/max77620_wdt.c
-> @@ -6,7 +6,7 @@
->    * Copyright (C) 2022 Luca Ceresoli
->    *
->    * Author: Laxman Dewangan <ldewangan@nvidia.com>
-> - * Author: Luca Ceresoli <luca@lucaceresoli.net>
-> + * Author: Luca Ceresoli <luca.ceresoli@bootlin.com>
->    */
->   
->   #include <linux/err.h>
-> @@ -260,5 +260,5 @@ MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started "
->   	"(default=" __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
->   
->   MODULE_AUTHOR("Laxman Dewangan <ldewangan@nvidia.com>");
-> -MODULE_AUTHOR("Luca Ceresoli <luca@lucaceresoli.net>");
-> +MODULE_AUTHOR("Luca Ceresoli <luca.ceresoli@bootlin.com>");
->   MODULE_LICENSE("GPL v2");
+> diff --git a/Documentation/devicetree/bindings/iio/adc/x-powers,axp209-adc.yaml b/Documentation/devicetree/bindings/iio/adc/x-powers,axp209-adc.yaml
+> index d6d3d8590171..1a68e650ac7d 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/x-powers,axp209-adc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/x-powers,axp209-adc.yaml
+> @@ -14,6 +14,23 @@ description: |
+>    Device is a child of an axp209 multifunction device
+>    ADC channels and their indexes per variant:
+>  
+> +  AXP192
+> +  ------
+> +   0 | acin_v
+> +   1 | acin_i
+> +   2 | vbus_v
+> +   3 | vbus_i
+> +   4 | pmic_temp
+> +   5 | gpio0_v
+> +   6 | gpio1_v
+> +   7 | gpio2_v
+> +   8 | gpio3_v
+> +   9 | ipsout_v
+> +  10 | batt_v
+> +  11 | batt_chrg_i
+> +  12 | batt_dischrg_i
+> +  13 | ts_v
+> +
+>    AXP209
+>    ------
+>     0 | acin_v
+> @@ -50,6 +67,7 @@ description: |
+>  properties:
+>    compatible:
+>      oneOf:
+> +      - const: x-powers,axp192-adc
+>        - const: x-powers,axp209-adc
+>        - const: x-powers,axp221-adc
+>        - const: x-powers,axp813-adc
 
