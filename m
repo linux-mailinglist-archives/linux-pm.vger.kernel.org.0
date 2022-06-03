@@ -2,70 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2CB53C4CF
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Jun 2022 08:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE9DF53C606
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Jun 2022 09:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241390AbiFCGUp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Jun 2022 02:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36048 "EHLO
+        id S242163AbiFCHYG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Jun 2022 03:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241428AbiFCGUn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jun 2022 02:20:43 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89E637037
-        for <linux-pm@vger.kernel.org>; Thu,  2 Jun 2022 23:20:40 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id w21so6550521pfc.0
-        for <linux-pm@vger.kernel.org>; Thu, 02 Jun 2022 23:20:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=gbNLNoNUtLpmvXGtkruf34xAYHi/j4E55WSdSx4bUmU=;
-        b=JYxSDO1g1tQSMHpPKKPMY2RVHLSYsZM4Akn7PtJlzCFV7ZBIWYNnG/MH4qSb/Z962J
-         p/Rlz7u3eTr0pn258InQjm1G49vXSF5ZtywFATcuk86gmi89yiVoEU0P8uYAC0iMeu0+
-         83L3xO5tQG/YrMiPjMNtnJjIATeKT2bggZ4aj31Agl0IPbkNBzopWEGddpxO2kk9AKUt
-         brS6x5cvldkh9cfyMeWy+LEmF682U99ZcZLq2VP5/VRTfTjGsqTVxkBYDiAqAlSHPX4+
-         K/NahCHpDS62o7bQBnFqIBKNd6L4jrN+Vw7I9rGqy0ea7Q7Ki22JoEkiLKovFBdZfzVc
-         DHKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gbNLNoNUtLpmvXGtkruf34xAYHi/j4E55WSdSx4bUmU=;
-        b=40vV6oBALvCjWs83uUyi6tO3H1fp/Wv++vzVQyxoCm6OnxcsOV2YcKkKqjcuqeYmV3
-         8GClPapIT4ECHRlyC2UpB38aQaH9eiOev+jhb1FdyKcVp6Hs4rPDUeMlW2P9GUkmrNHS
-         y0lUwGPeCi6CcKigfVk2NZ6z2sWEX7/7ybBivu43TMXZX91qb1MVOE8N5+EerHAAIZY9
-         IMLY64teyJI/BZKG6wBmuH7KEvihUM7Gc8FswMwujr9Ixq/Qt0uKLeg2qCuWtnL0QcH8
-         kcsJKp2/EkXNvpZGzQYsSTr20ayKxnxejs3bCPXerWSbjsb8PDsM9uVFShkNm37OqOq8
-         TUfw==
-X-Gm-Message-State: AOAM532PQNq7su8Ht7SxFTXk14FHkwLWJWLg5g0Q50tSQejWafN/WVVo
-        vg6Hi1OJfjZ4NsN3KVpmF1exVA==
-X-Google-Smtp-Source: ABdhPJztO9aPd48ZSjjD4aY9lShRgqdRU7Zs47AgfKXEdv0GxvFhUwP8Z+mcxJuzKx4yAUM+L2AMrA==
-X-Received: by 2002:a63:305:0:b0:3fc:7f18:8d7 with SMTP id 5-20020a630305000000b003fc7f1808d7mr7469116pgd.186.1654237240030;
-        Thu, 02 Jun 2022 23:20:40 -0700 (PDT)
-Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id a6-20020a170902710600b00163a6e1416dsm4575155pll.32.2022.06.02.23.20.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 23:20:39 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 5/5] OPP: Use generic key finding helpers for bandwidth key
-Date:   Fri,  3 Jun 2022 11:50:19 +0530
-Message-Id: <07c76851ac311d704522aef1d8712550ef1ac7ca.1654235445.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
-In-Reply-To: <cover.1654235445.git.viresh.kumar@linaro.org>
-References: <cover.1654235445.git.viresh.kumar@linaro.org>
+        with ESMTP id S240945AbiFCHYG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jun 2022 03:24:06 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1FA2E0AC;
+        Fri,  3 Jun 2022 00:24:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654241045; x=1685777045;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7Yciyx7VAW/zJpcHuy8/gsTy1zy7JoOWU2t1hPiCBEk=;
+  b=IHRutndjt7un5PB2URRMGYFWzy+r67RN77EDOLZypunRcKPhMSgaUfRO
+   DyqP622AEGpfSsVdsrmAooXM3z9eVFxr1PiSm/BTxAVBYHEXKbQ2uDuWT
+   OV+t9FIMQx5tJTX5SbcUZFiJG+rP3V+cshWG2VLOsq9PkZ5T0eN3SHOGS
+   VaIeWTpUeOHl1mOEcgJWxBUl/P51Zg3+bYgBsIr8VTVcTIHkMn+v6YRMU
+   VlbZK6C7agaeQIpR7KRCGSUQS6nly0QTyIwUqtFP/1iJ991cihGTsaZ8Z
+   WJOmYeo5gQyAmSI5+g1SJjOEC8o+X7gCSSz0Qv9ZK276vlh7ZZLQWkOLs
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10366"; a="258263402"
+X-IronPort-AV: E=Sophos;i="5.91,273,1647327600"; 
+   d="scan'208";a="258263402"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jun 2022 00:24:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,273,1647327600"; 
+   d="scan'208";a="707927252"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 03 Jun 2022 00:24:03 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nx1f8-0006m7-9e;
+        Fri, 03 Jun 2022 07:24:02 +0000
+Date:   Fri, 03 Jun 2022 15:23:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 473d7985fed12e32bd979fc32b1c910f51d396bd
+Message-ID: <6299b6f6.ajGGF30FBwNQpUxF%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,112 +63,129 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use the recently added generic key findings helpers to find bandwidth
-key values.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 473d7985fed12e32bd979fc32b1c910f51d396bd  Merge branch 'pm-sysoff' into linux-next
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/opp/core.c | 78 +++-------------------------------------------
- 1 file changed, 4 insertions(+), 74 deletions(-)
+elapsed time: 723m
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index d8a91900d8a9..f17e19872769 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -697,43 +697,9 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_find_level_ceil);
-  * The callers are required to call dev_pm_opp_put() for the returned OPP after
-  * use.
-  */
--struct dev_pm_opp *dev_pm_opp_find_bw_ceil(struct device *dev,
--					   unsigned int *bw, int index)
-+struct dev_pm_opp *dev_pm_opp_find_bw_ceil(struct device *dev, unsigned int *bw, int index)
- {
--	struct opp_table *opp_table;
--	struct dev_pm_opp *temp_opp, *opp = ERR_PTR(-ERANGE);
--
--	if (!dev || !bw) {
--		dev_err(dev, "%s: Invalid argument bw=%p\n", __func__, bw);
--		return ERR_PTR(-EINVAL);
--	}
--
--	opp_table = _find_opp_table(dev);
--	if (IS_ERR(opp_table))
--		return ERR_CAST(opp_table);
--
--	if (index >= opp_table->path_count)
--		return ERR_PTR(-EINVAL);
--
--	mutex_lock(&opp_table->lock);
--
--	list_for_each_entry(temp_opp, &opp_table->opp_list, node) {
--		if (temp_opp->available && temp_opp->bandwidth) {
--			if (temp_opp->bandwidth[index].peak >= *bw) {
--				opp = temp_opp;
--				*bw = opp->bandwidth[index].peak;
--
--				/* Increment the reference count of OPP */
--				dev_pm_opp_get(opp);
--				break;
--			}
--		}
--	}
--
--	mutex_unlock(&opp_table->lock);
--	dev_pm_opp_put_opp_table(opp_table);
--
--	return opp;
-+	return _find_key_ceil(dev, (unsigned long *)bw, index, true, _read_bw);
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_find_bw_ceil);
- 
-@@ -756,45 +722,9 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_find_bw_ceil);
-  * The callers are required to call dev_pm_opp_put() for the returned OPP after
-  * use.
-  */
--struct dev_pm_opp *dev_pm_opp_find_bw_floor(struct device *dev,
--					    unsigned int *bw, int index)
-+struct dev_pm_opp *dev_pm_opp_find_bw_floor(struct device *dev, unsigned int *bw, int index)
- {
--	struct opp_table *opp_table;
--	struct dev_pm_opp *temp_opp, *opp = ERR_PTR(-ERANGE);
--
--	if (!dev || !bw) {
--		dev_err(dev, "%s: Invalid argument bw=%p\n", __func__, bw);
--		return ERR_PTR(-EINVAL);
--	}
--
--	opp_table = _find_opp_table(dev);
--	if (IS_ERR(opp_table))
--		return ERR_CAST(opp_table);
--
--	if (index >= opp_table->path_count)
--		return ERR_PTR(-EINVAL);
--
--	mutex_lock(&opp_table->lock);
--
--	list_for_each_entry(temp_opp, &opp_table->opp_list, node) {
--		if (temp_opp->available && temp_opp->bandwidth) {
--			/* go to the next node, before choosing prev */
--			if (temp_opp->bandwidth[index].peak > *bw)
--				break;
--			opp = temp_opp;
--		}
--	}
--
--	/* Increment the reference count of OPP */
--	if (!IS_ERR(opp))
--		dev_pm_opp_get(opp);
--	mutex_unlock(&opp_table->lock);
--	dev_pm_opp_put_opp_table(opp_table);
--
--	if (!IS_ERR(opp))
--		*bw = opp->bandwidth[index].peak;
--
--	return opp;
-+	return _find_key_floor(dev, (unsigned long *)bw, index, true, _read_bw);
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_find_bw_floor);
- 
+configs tested: 106
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+sh                   secureedge5410_defconfig
+arm64                            alldefconfig
+sh                         microdev_defconfig
+xtensa                generic_kc705_defconfig
+powerpc                      cm5200_defconfig
+sh                ecovec24-romimage_defconfig
+arm                       aspeed_g5_defconfig
+arm                           sama5_defconfig
+mips                         mpc30x_defconfig
+openrisc                 simple_smp_defconfig
+x86_64                        randconfig-c001
+i386                          randconfig-c001
+arm                  randconfig-c002-20220531
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+arc                              allyesconfig
+nios2                               defconfig
+alpha                               defconfig
+csky                                defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+parisc64                            defconfig
+s390                                defconfig
+s390                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                                defconfig
+i386                             allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220531
+riscv                randconfig-r042-20220531
+s390                 randconfig-r044-20220531
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+
+clang tested configs:
+mips                 randconfig-c004-20220531
+x86_64                        randconfig-c007
+i386                          randconfig-c001
+s390                 randconfig-c005-20220531
+arm                  randconfig-c002-20220531
+powerpc              randconfig-c003-20220531
+riscv                randconfig-c006-20220531
+mips                malta_qemu_32r6_defconfig
+mips                        workpad_defconfig
+arm                             mxs_defconfig
+powerpc                 mpc832x_rdb_defconfig
+powerpc                 mpc832x_mds_defconfig
+powerpc                     tqm8540_defconfig
+arm                       cns3420vb_defconfig
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+hexagon              randconfig-r041-20220531
+hexagon              randconfig-r045-20220531
+
 -- 
-2.31.1.272.g89b43f80a514
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
