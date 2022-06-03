@@ -2,147 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBD2453CDCF
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Jun 2022 19:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0830153D1EE
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Jun 2022 20:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344255AbiFCRK3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Jun 2022 13:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52576 "EHLO
+        id S244651AbiFCSyq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Jun 2022 14:54:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230480AbiFCRK0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jun 2022 13:10:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869CE5251B;
-        Fri,  3 Jun 2022 10:10:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B46BB823AB;
-        Fri,  3 Jun 2022 17:10:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C2A6C385B8;
-        Fri,  3 Jun 2022 17:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654276222;
-        bh=Yhb8OPp1sSwZzVcLGVjDxYrN0vlwebO9faHuTNWhG4o=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=pJUj26xM3omq1XfJzae2/kNYP0GNrKZJAlX6qQvFkoORdgX2jatgBaZhjITDetyo4
-         6Ho3r8JCZNDTqYqTywpriBv1enouc70JPjw/sYrT7zAqOY3+TbCZUGrBVxnV0twFzb
-         vBFIAuE6Owl4SCoC0jyhKAh0Wkj62wDDrGkEYuY9ZHlH2kkn5YxDGMdMJ4lJ4ZJtOM
-         8FilAtIOaatwJZHh8x0+lYlCL4U9MemxvnRqpNaXZGP17ucBaA6OSj8utHuAIdF2Zq
-         mOVjuiYHKrUQzkdqfZZndqYO3gcqFcQLMxn6f/bbPrMbEy5YxC7w8yXCWqyVB3lzQC
-         zN8eYoz/vFcNw==
-Date:   Fri, 3 Jun 2022 18:19:17 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        lee.jones@linaro.org, daniel.thompson@linaro.org,
-        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        sre@kernel.org, chunfeng.yun@mediatek.com,
-        gregkh@linuxfoundation.org, lars@metafoo.de, lgirdwood@gmail.com,
-        broonie@kernel.org, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, deller@gmx.de,
-        ChiYuan Huang <cy_huang@richtek.com>, alice_chen@richtek.com,
-        chiaen_wu@richtek.com, dri-devel@lists.freedesktop.org,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org
-Subject: Re: [RESEND 10/14] iio: adc: mt6370: Add Mediatek MT6370 support
-Message-ID: <20220603181917.3f737913@jic23-huawei>
-In-Reply-To: <CABtFH5Lg43EXS7juhXQ2wQFZzkpD7YB8rM6UFT=U9BDOKcbaNw@mail.gmail.com>
-References: <20220531111900.19422-1-peterwu.pub@gmail.com>
-        <20220531111900.19422-11-peterwu.pub@gmail.com>
-        <20220531142102.00007df0@Huawei.com>
-        <CABtFH5Lg43EXS7juhXQ2wQFZzkpD7YB8rM6UFT=U9BDOKcbaNw@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        with ESMTP id S1347797AbiFCSyo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jun 2022 14:54:44 -0400
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D787289B6;
+        Fri,  3 Jun 2022 11:54:43 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id w2so15280118ybi.7;
+        Fri, 03 Jun 2022 11:54:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lsii2M/Z+BjHQ59FvjJ8av50zu7xha2i5JDwxAF3srs=;
+        b=t8bCVTdhcprieEQdJqIg2y/nndA5I93jpd4sgMYDrpi0xnbz68kQ3f22fOUNCihCS4
+         bsBKSnzsY8N9oXEFh56UMQHiB403GhHct9GUtes7r9myu57fujIyFdO3aHdyd5jzoWxR
+         hJ27eomJTdKNWG7nplj85e+z4kiH7lcxLWeipm/bVVWtBMZYPr7/+Df3q+QJEpx/L4DF
+         MP51hrfN/0b4cqaqzXDELAoOk15lxsxCqqc73i3QQLV6BXzxUQUYMYj/ELFf6BPNSOAL
+         1jPhgv/1VR3v3D02ZqXl8pzecLeydTsk9/cf9OqT0PGhLUtxrh8t5ipzF30dS4Q8tDk3
+         BTNw==
+X-Gm-Message-State: AOAM530U3en2oYbr2wPTkRgzun5OUUbFwQyVn/a1yTPXs3Q9JkoOrz8M
+        8W0OMU1ItXFDMOMqIpIKRy7aL69BDbsUdrTKQgg=
+X-Google-Smtp-Source: ABdhPJxB4pVovVskOU85j4HEBytnIdMzJtv/l+nGCWtbsux7xavEE6caGgyM1Qro50zwzIcWaOennN+kqEZC0EQP+vo=
+X-Received: by 2002:a25:2004:0:b0:650:740:f31d with SMTP id
+ g4-20020a252004000000b006500740f31dmr12046953ybg.81.1654282482815; Fri, 03
+ Jun 2022 11:54:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <YpnwZ/Q5yTKRDBOD@kroah.com> <20220603113138.2689444-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20220603113138.2689444-1-gregkh@linuxfoundation.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 3 Jun 2022 20:54:31 +0200
+Message-ID: <CAJZ5v0hJ_uPakb8s8v4VJw86ShsN8Y0Hnk2NZ4ta7GKGQeW8pg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] driver core: Fix wait_for_device_probe() &
+ deferred_probe_timeout interaction
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Saravana Kannan <saravanak@google.com>,
+        John Stultz <jstultz@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Basil Eljuse <Basil.Eljuse@arm.com>,
+        Ferry Toth <fntoth@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> >  
-> > > +
-> > > +#define MT6370_AICR_400MA            0x6
-> > > +#define MT6370_ICHG_500MA            0x4
-> > > +#define MT6370_ICHG_900MA            0x8
-> > > +
-> > > +#define ADC_CONV_TIME_US             35000
-> > > +#define ADC_CONV_POLLING_TIME                1000
-> > > +
-> > > +struct mt6370_adc_data {
-> > > +     struct device *dev;
-> > > +     struct regmap *regmap;
-> > > +     struct mutex lock;  
-> >
-> > All locks need documentation.  What is the scope of the lock?
-> > Looks like it protects device state when doing setup, wait for read, read
-> > cycles.  
-> 
-> This mutex lock is for preventing the different adc channel from being
-> read at the same time.
-> So, if I just change its name to adc_chan_lock or adc_lock and add the
-> comment for this mutex lock, does this change meet your requirement
+On Fri, Jun 3, 2022 at 1:32 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> From: Saravana Kannan <saravanak@google.com>
+>
+> Mounting NFS rootfs was timing out when deferred_probe_timeout was
+> non-zero [1].  This was because ip_auto_config() initcall times out
+> waiting for the network interfaces to show up when
+> deferred_probe_timeout was non-zero. While ip_auto_config() calls
+> wait_for_device_probe() to make sure any currently running deferred
+> probe work or asynchronous probe finishes, that wasn't sufficient to
+> account for devices being deferred until deferred_probe_timeout.
+>
+> Commit 35a672363ab3 ("driver core: Ensure wait_for_device_probe() waits
+> until the deferred_probe_timeout fires") tried to fix that by making
+> sure wait_for_device_probe() waits for deferred_probe_timeout to expire
+> before returning.
+>
+> However, if wait_for_device_probe() is called from the kernel_init()
+> context:
+>
+> - Before deferred_probe_initcall() [2], it causes the boot process to
+>   hang due to a deadlock.
+>
+> - After deferred_probe_initcall() [3], it blocks kernel_init() from
+>   continuing till deferred_probe_timeout expires and beats the point of
+>   deferred_probe_timeout that's trying to wait for userspace to load
+>   modules.
+>
+> Neither of this is good. So revert the changes to
+> wait_for_device_probe().
+>
+> [1] - https://lore.kernel.org/lkml/TYAPR01MB45443DF63B9EF29054F7C41FD8C60@TYAPR01MB4544.jpnprd01.prod.outlook.com/
+> [2] - https://lore.kernel.org/lkml/YowHNo4sBjr9ijZr@dev-arch.thelio-3990X/
+> [3] - https://lore.kernel.org/lkml/Yo3WvGnNk3LvLb7R@linutronix.de/
+>
+> Fixes: 35a672363ab3 ("driver core: Ensure wait_for_device_probe() waits until the deferred_probe_timeout fires")
+> Cc: John Stultz <jstultz@google.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>
+> Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> Cc: Robin Murphy <robin.murphy@arm.com>
+> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Cc: Basil Eljuse <Basil.Eljuse@arm.com>
+> Cc: Ferry Toth <fntoth@gmail.com>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Anders Roxell <anders.roxell@linaro.org>
+> Cc: linux-pm@vger.kernel.org
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Acked-by: John Stultz <jstultz@google.com>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> Link: https://lore.kernel.org/r/20220526034609.480766-2-saravanak@google.com
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Yes
+Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
 
-> 
-> >  
-> > > +};
-> > > +
-> > > +static int mt6370_adc_read_scale(struct mt6370_adc_data *priv,
-> > > +                              int chan, int *val1, int *val2)
-> > > +{
-> > > +     unsigned int reg_val;
-> > > +     int ret;
-> > > +
-> > > +     switch (chan) {
-> > > +     case MT6370_CHAN_VBAT:
-> > > +     case MT6370_CHAN_VSYS:
-> > > +     case MT6370_CHAN_CHG_VDDP:
-> > > +             *val1 = 5000;  
-> >
-> > This seems very large.  Voltages are in millivolts
-> > as per Documentation/ABI/testing/sysfs-bus-iio
-> > and this means each step is 5 volts.
-> >
-> > So value in mv is currently 5 * _raw
-> >  
-> 
-> OK, I got it. Also, I will add the ABI file in the next version. Thanks!
-Only add ABI documentation for anything non-standard.
-
-The documentation scripts really don't like repeats!
-
-> 
-> > > +static const char * const mt6370_channel_labels[MT6370_CHAN_MAX] = {  
-> >
-> > Perhaps define an enum with which to index this and the chan spec
-> > and hence ensure they end up matching.
-> >  [vbusdiv5] = "vbusdiv5", etc
-> >  
-> 
-> Do you mean that I can refine this const char array to the following array??
-> 
-> static const char * const mt6370_channel_labels[MT6370_CHAN_MAX] = {
->     [MT6370_CHAN_VBUSDIV5] =  "vbusdiv5",
->     [MT6370_CHAN_VBUSDIV2] =  "vbusdiv2",
->     ...
->     ...
->     [MT6370_CHAN_TEMP_JC] =  "temp_jc",
-> };
-
-Yes
-
-thanks,
-
-Jonathan
+> ---
+>  drivers/base/dd.c | 5 -----
+>  1 file changed, 5 deletions(-)
+>
+> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+> index 2fc8507f59ee..91f63cd33b12 100644
+> --- a/drivers/base/dd.c
+> +++ b/drivers/base/dd.c
+> @@ -263,7 +263,6 @@ int driver_deferred_probe_timeout;
+>  #endif
+>
+>  EXPORT_SYMBOL_GPL(driver_deferred_probe_timeout);
+> -static DECLARE_WAIT_QUEUE_HEAD(probe_timeout_waitqueue);
+>
+>  static int __init deferred_probe_timeout_setup(char *str)
+>  {
+> @@ -318,7 +317,6 @@ static void deferred_probe_timeout_work_func(struct work_struct *work)
+>         list_for_each_entry(p, &deferred_probe_pending_list, deferred_probe)
+>                 dev_info(p->device, "deferred probe pending\n");
+>         mutex_unlock(&deferred_probe_mutex);
+> -       wake_up_all(&probe_timeout_waitqueue);
+>  }
+>  static DECLARE_DELAYED_WORK(deferred_probe_timeout_work, deferred_probe_timeout_work_func);
+>
+> @@ -736,9 +734,6 @@ int driver_probe_done(void)
+>   */
+>  void wait_for_device_probe(void)
+>  {
+> -       /* wait for probe timeout */
+> -       wait_event(probe_timeout_waitqueue, !driver_deferred_probe_timeout);
+> -
+>         /* wait for the deferred probe workqueue to finish */
+>         flush_work(&deferred_probe_work);
+>
+> --
+> 2.36.1
+>
