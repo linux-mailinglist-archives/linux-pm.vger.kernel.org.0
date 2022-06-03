@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4B153C4D2
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Jun 2022 08:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9335A53C4CE
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Jun 2022 08:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbiFCGUk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S241408AbiFCGUk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Fri, 3 Jun 2022 02:20:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35858 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241397AbiFCGUh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jun 2022 02:20:37 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1CA637035
-        for <linux-pm@vger.kernel.org>; Thu,  2 Jun 2022 23:20:34 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id o6so1117392plg.2
-        for <linux-pm@vger.kernel.org>; Thu, 02 Jun 2022 23:20:34 -0700 (PDT)
+        with ESMTP id S241390AbiFCGUj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jun 2022 02:20:39 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CAC31DF4
+        for <linux-pm@vger.kernel.org>; Thu,  2 Jun 2022 23:20:37 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id u12-20020a17090a1d4c00b001df78c7c209so11373098pju.1
+        for <linux-pm@vger.kernel.org>; Thu, 02 Jun 2022 23:20:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=AJWbZrhYBBK/nZwEp8oEDzNVeqkUQnXH1sic0IKz15o=;
-        b=FYJXrijbSyRV9DxoEDjyD5K0VwHrFPs2Rxn229GB700FpcNUBGlnxk/4+4TUtNVXTs
-         EFykN0qpLNv4lF0FHxHrVyKOCkp4oe4UbnbRR9/X0CMmPhS4DDKsGO+dpFn1ZG3o9PS5
-         1uDP0ePVuxajD0juj1+hWAR+JjeUm25WCnRdEr83g5g+kOG40UKKZ94YRoTcaUucAbBU
-         ewE+Fvz4B6TpBOq8OwgaGUcTFgA6Cvgt+xfZ9wy7zhMztaGUUV2awuWnykBWGFJ13HOt
-         qSkUtbilU1K7oM4WKjgwp2ZX8Y00mqlg9VqSmBTzJo7HBkul5J5NYTHCvALlNns6ci7l
-         pjxA==
+        bh=4vGD8xeygMuouGJmhsw5Y0o7g11kgBD47l9iHV0atlE=;
+        b=PAIEVagjF87QEZSuJ46V1NbanKyWVzHu2P+0TaPHRFAhFD/E10fEZcstdDjH5aHwc6
+         kYXteNBdgV0t6hCyV9o1IWNvNeDQ2I3GL1ssgEnfy8XeQFNt0QwiEqFJ0dO06GqdsC0A
+         WcavoNLbur3qNEUc1rlZ3GUBcu9xZiwLJoW4sXZpE7t28EUtZduSTYd8C8HZg/WNzrGj
+         MiePq5i06UBmBWqxw8jqWEjn3bjsyIeA/1NmH+Xwk/g3CU63Hsw6oRpUFTW15Uh5XEDw
+         twHqF6GuAhuZOkSWVKp+MdXXyhHJ0EvVV1cCFWnMO3BGHAcWLzSv5xGqJTDrYsNTrwet
+         dijg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=AJWbZrhYBBK/nZwEp8oEDzNVeqkUQnXH1sic0IKz15o=;
-        b=hhZL7fkPD8hLSZn/8BQm0iyOlkMhO026ydSYx8vMucUyGZWIerdlHC5eofqQbyaBG1
-         K4I1eGiadaVEFGkv37MXzMZhMSvUov5zvDbcbjbhlqEztsNlpAmsIWhm8xtniitCvwTA
-         6OtVMunaMxiL+0e75qKSh0rVz75mPgsX0tsp++1382s+XHTMDJgTl/qZv1u6tKMgmXV1
-         R/+dCe331GyXj4m6otGjm+JVwMntr0fdPUSHmzTx32UO+XKxwXiouPV2tcLkdTsKGVZh
-         dSeY6mqPYAfAE4mVexm95tNBpL8LSBM5ANWmxpuS+JzX7vUGW9IQXASpR7WUU2gf3OLv
-         7Q8w==
-X-Gm-Message-State: AOAM5307zMGuenExKKQUHsaE7tpp1NligeEaxefZAMqmCgUzbtexT/HF
-        uyg3WROJ/e85zQ9CdkX0xlGozw==
-X-Google-Smtp-Source: ABdhPJx6Fes6DwkCQHCVRV+H/LydnWY82HwtV8Rol5UHgNxnFTNnHK9lxTrRfSlmwBiUM6XO+kBz6g==
-X-Received: by 2002:a17:902:db0a:b0:167:466e:b72c with SMTP id m10-20020a170902db0a00b00167466eb72cmr2387021plx.172.1654237234341;
-        Thu, 02 Jun 2022 23:20:34 -0700 (PDT)
+        bh=4vGD8xeygMuouGJmhsw5Y0o7g11kgBD47l9iHV0atlE=;
+        b=IO8DpfAZ8o1H6RRyEp8HCN3cGAqs/MD1t/BVn6QJpao38AEGHGApS9bbgokcdZxJUL
+         XfiLbEfipSovhuirVnb5qtNdsxrBp+UONlS648u9qHLPjLi50Sm5q06g7E4ncu3yiHGk
+         iwFn0aWzG4UBTwjR7DDsbdOv4omc5tHdZnBr+ITqgMQEBPHqCIvEFuwcIXyxnDZQlxB4
+         pIjqH7JjYEtt6G6X1MsDe+PXlxIzwaWbfYT74WHgDKmeBC4GoBccgP1E0+zz59mOVb0L
+         x5eYRQYA3FEs/0F256yMa6EZPm7VnivkIuP6q9F09GMnXwgIpUF1LsNvpNGH5w9q3k2+
+         XjNw==
+X-Gm-Message-State: AOAM530reK/aQsTWJ51Ini0Q+9+yMezK6O8SkqEopAWBlf8WGS8dl32D
+        s4qbtf0alMYcVtUoGKb/BiwitQ==
+X-Google-Smtp-Source: ABdhPJx3v0WTCiUSqEVf4ES8VFLb1f6/DrsOqENUN5DKirn9hteNSryYlnTTzGPxvH8DKzLFQxTAiw==
+X-Received: by 2002:a17:902:cf06:b0:163:62cb:250e with SMTP id i6-20020a170902cf0600b0016362cb250emr8720003plg.171.1654237237301;
+        Thu, 02 Jun 2022 23:20:37 -0700 (PDT)
 Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id r14-20020a63ec4e000000b003fb0354c43asm4387425pgj.32.2022.06.02.23.20.33
+        by smtp.gmail.com with ESMTPSA id fh6-20020a17090b034600b001cd4989fec6sm6837272pjb.18.2022.06.02.23.20.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jun 2022 23:20:33 -0700 (PDT)
+        Thu, 02 Jun 2022 23:20:36 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Stephen Boyd <sboyd@kernel.org>
@@ -55,9 +55,9 @@ Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/5] OPP: Use generic key finding helpers for freq key
-Date:   Fri,  3 Jun 2022 11:50:17 +0530
-Message-Id: <7bbf461f918b62867305f7ede05ee6691246f3e9.1654235445.git.viresh.kumar@linaro.org>
+Subject: [PATCH 4/5] OPP: Use generic key finding helpers for level key
+Date:   Fri,  3 Jun 2022 11:50:18 +0530
+Message-Id: <af798b8c4b87d5eb360d6184906fa6b7490768d8.1654235445.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1654235445.git.viresh.kumar@linaro.org>
 References: <cover.1654235445.git.viresh.kumar@linaro.org>
@@ -73,26 +73,25 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use the recently added generic key findings helpers to find frequency
-key values.
+Use the recently added generic key findings helpers to find level key
+values.
 
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/opp/core.c | 113 ++++-----------------------------------------
- 1 file changed, 8 insertions(+), 105 deletions(-)
+ drivers/opp/core.c | 60 +++-------------------------------------------
+ 1 file changed, 3 insertions(+), 57 deletions(-)
 
 diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 7ef6eafc7946..2e6cb2abf0b9 100644
+index 2e6cb2abf0b9..d8a91900d8a9 100644
 --- a/drivers/opp/core.c
 +++ b/drivers/opp/core.c
-@@ -575,62 +575,16 @@ _find_key_floor(struct device *dev, unsigned long *key, int index, bool availabl
+@@ -650,36 +650,9 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_find_freq_floor);
   * The callers are required to call dev_pm_opp_put() for the returned OPP after
   * use.
   */
--struct dev_pm_opp *dev_pm_opp_find_freq_exact(struct device *dev,
--					      unsigned long freq,
-+struct dev_pm_opp *dev_pm_opp_find_freq_exact(struct device *dev, unsigned long freq,
- 					      bool available)
+-struct dev_pm_opp *dev_pm_opp_find_level_exact(struct device *dev,
+-					       unsigned int level)
++struct dev_pm_opp *dev_pm_opp_find_level_exact(struct device *dev, unsigned int level)
  {
 -	struct opp_table *opp_table;
 -	struct dev_pm_opp *temp_opp, *opp = ERR_PTR(-ERANGE);
@@ -108,8 +107,7 @@ index 7ef6eafc7946..2e6cb2abf0b9 100644
 -	mutex_lock(&opp_table->lock);
 -
 -	list_for_each_entry(temp_opp, &opp_table->opp_list, node) {
--		if (temp_opp->available == available &&
--				temp_opp->rate == freq) {
+-		if (temp_opp->level == level) {
 -			opp = temp_opp;
 -
 -			/* Increment the reference count of OPP */
@@ -122,22 +120,31 @@ index 7ef6eafc7946..2e6cb2abf0b9 100644
 -	dev_pm_opp_put_opp_table(opp_table);
 -
 -	return opp;
-+	return _find_key_exact(dev, freq, 0, available, _read_freq);
++	return _find_key_exact(dev, level, 0, true, _read_level);
  }
- EXPORT_SYMBOL_GPL(dev_pm_opp_find_freq_exact);
+ EXPORT_SYMBOL_GPL(dev_pm_opp_find_level_exact);
  
--static noinline struct dev_pm_opp *_find_freq_ceil(struct opp_table *opp_table,
--						   unsigned long *freq)
-+static noinline struct dev_pm_opp *_find_freq_ceil(struct opp_table *opp_table, unsigned long *freq)
+@@ -701,34 +674,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_find_level_exact);
+ struct dev_pm_opp *dev_pm_opp_find_level_ceil(struct device *dev,
+ 					      unsigned int *level)
  {
+-	struct opp_table *opp_table;
 -	struct dev_pm_opp *temp_opp, *opp = ERR_PTR(-ERANGE);
+-
+-	opp_table = _find_opp_table(dev);
+-	if (IS_ERR(opp_table)) {
+-		int r = PTR_ERR(opp_table);
+-
+-		dev_err(dev, "%s: OPP table not found (%d)\n", __func__, r);
+-		return ERR_PTR(r);
+-	}
 -
 -	mutex_lock(&opp_table->lock);
 -
 -	list_for_each_entry(temp_opp, &opp_table->opp_list, node) {
--		if (temp_opp->available && temp_opp->rate >= *freq) {
+-		if (temp_opp->available && temp_opp->level >= *level) {
 -			opp = temp_opp;
--			*freq = opp->rate;
+-			*level = opp->level;
 -
 -			/* Increment the reference count of OPP */
 -			dev_pm_opp_get(opp);
@@ -146,86 +153,12 @@ index 7ef6eafc7946..2e6cb2abf0b9 100644
 -	}
 -
 -	mutex_unlock(&opp_table->lock);
--
--	return opp;
-+	return _opp_table_find_key_ceil(opp_table, freq, 0, true, _read_freq);
- }
- 
- /**
-@@ -651,26 +605,9 @@ static noinline struct dev_pm_opp *_find_freq_ceil(struct opp_table *opp_table,
-  * The callers are required to call dev_pm_opp_put() for the returned OPP after
-  * use.
-  */
--struct dev_pm_opp *dev_pm_opp_find_freq_ceil(struct device *dev,
--					     unsigned long *freq)
-+struct dev_pm_opp *dev_pm_opp_find_freq_ceil(struct device *dev, unsigned long *freq)
- {
--	struct opp_table *opp_table;
--	struct dev_pm_opp *opp;
--
--	if (!dev || !freq) {
--		dev_err(dev, "%s: Invalid argument freq=%p\n", __func__, freq);
--		return ERR_PTR(-EINVAL);
--	}
--
--	opp_table = _find_opp_table(dev);
--	if (IS_ERR(opp_table))
--		return ERR_CAST(opp_table);
--
--	opp = _find_freq_ceil(opp_table, freq);
--
 -	dev_pm_opp_put_opp_table(opp_table);
 -
 -	return opp;
-+	return _find_key_ceil(dev, freq, 0, true, _read_freq);
++	return _find_key_ceil(dev, (unsigned long *)level, 0, true, _read_level);
  }
- EXPORT_SYMBOL_GPL(dev_pm_opp_find_freq_ceil);
- 
-@@ -692,43 +629,9 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_find_freq_ceil);
-  * The callers are required to call dev_pm_opp_put() for the returned OPP after
-  * use.
-  */
--struct dev_pm_opp *dev_pm_opp_find_freq_floor(struct device *dev,
--					      unsigned long *freq)
-+struct dev_pm_opp *dev_pm_opp_find_freq_floor(struct device *dev, unsigned long *freq)
- {
--	struct opp_table *opp_table;
--	struct dev_pm_opp *temp_opp, *opp = ERR_PTR(-ERANGE);
--
--	if (!dev || !freq) {
--		dev_err(dev, "%s: Invalid argument freq=%p\n", __func__, freq);
--		return ERR_PTR(-EINVAL);
--	}
--
--	opp_table = _find_opp_table(dev);
--	if (IS_ERR(opp_table))
--		return ERR_CAST(opp_table);
--
--	mutex_lock(&opp_table->lock);
--
--	list_for_each_entry(temp_opp, &opp_table->opp_list, node) {
--		if (temp_opp->available) {
--			/* go to the next node, before choosing prev */
--			if (temp_opp->rate > *freq)
--				break;
--			else
--				opp = temp_opp;
--		}
--	}
--
--	/* Increment the reference count of OPP */
--	if (!IS_ERR(opp))
--		dev_pm_opp_get(opp);
--	mutex_unlock(&opp_table->lock);
--	dev_pm_opp_put_opp_table(opp_table);
--
--	if (!IS_ERR(opp))
--		*freq = opp->rate;
--
--	return opp;
-+	return _find_key_floor(dev, freq, 0, true, _read_freq);
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_find_freq_floor);
+ EXPORT_SYMBOL_GPL(dev_pm_opp_find_level_ceil);
  
 -- 
 2.31.1.272.g89b43f80a514
