@@ -2,173 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A9C53C967
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Jun 2022 13:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD0D53CAFC
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Jun 2022 15:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244047AbiFCLcq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Jun 2022 07:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54894 "EHLO
+        id S244873AbiFCN4k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Jun 2022 09:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244040AbiFCLco (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jun 2022 07:32:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAAA657A;
-        Fri,  3 Jun 2022 04:32:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BC446121E;
-        Fri,  3 Jun 2022 11:32:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6390C385A9;
-        Fri,  3 Jun 2022 11:32:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1654255962;
-        bh=myYHQBAtxsgh3YAl4G2/KmIJpUKMkCYSq4SI0B3ycQw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1dPEkQLNIIwfjjXcy9eaC9MPBqHbOA0iF72mdp7QtXKOnt/+cNr7cpnuKJJGunDjk
-         0kjYMvnbFLhhnarwdm7cq64+BmeoKDUSlWH+vsLhvTUh7W5t76CqwQXgcdWpj5sclb
-         F9QHtB9MBJpMAcWWsly7ooef69b1lTQS9xi10E20=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Saravana Kannan <saravanak@google.com>,
-        John Stultz <jstultz@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Basil Eljuse <Basil.Eljuse@arm.com>,
-        Ferry Toth <fntoth@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        linux-pm@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH 1/2] driver core: Fix wait_for_device_probe() & deferred_probe_timeout interaction
-Date:   Fri,  3 Jun 2022 13:31:37 +0200
-Message-Id: <20220603113138.2689444-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <YpnwZ/Q5yTKRDBOD@kroah.com>
-References: <YpnwZ/Q5yTKRDBOD@kroah.com>
+        with ESMTP id S240660AbiFCN4j (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jun 2022 09:56:39 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA439393F4;
+        Fri,  3 Jun 2022 06:56:38 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id d5-20020a05600c34c500b0039776acee62so4849414wmq.1;
+        Fri, 03 Jun 2022 06:56:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3Sl8htrp7f/bLQiWVIbkoPljNFJKTHKXwOdHEn31bUE=;
+        b=Rfl2TG6tufeeHWTdJNH1teNKgbTh0MtiZmWo+kzB4eCOJ2483TD38xdDYLBPK3hgmu
+         cecrH2INclg+a1G4+bEpeQzYVzSuA06+xcxF1XHzqqzuZ+vncQ/LaxGH+cCJAuB4BkuR
+         RCimEb3oiFE/mlYGs5eMwEtsyFNwPFGdDlir6oG+QzbXHyXWCusP9DSnGpCf7Zm5XtrW
+         eMBkxfziiclXALG6gnXIW8hNrcE0jjJPdyf6wm9qUWaYO2J5y/53SSz5B5bsc5Tj6+8f
+         bkTvIh7JRKaQzVnoSl31hZGZgkss6Kol9fmwlEHySpO31diwAtTE4xjMuh21csa6AbM1
+         kY7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3Sl8htrp7f/bLQiWVIbkoPljNFJKTHKXwOdHEn31bUE=;
+        b=4ioIsJbeP3CHuVakHpl6pqYn1PrluuJxr0znYfkvGccoAQRBlsdDHxr6ufIq86ioWA
+         CupmLlh2qMgIxGLsH3lg47CwcTBcIAKAsKespPMQU96+5cDNGnCipRX+ejOK/G1Ej8wr
+         5k03F7MCaOnWgaZqHNktccjJgGzVsDIwjBPRYn4ZOU2gl3/bEihWWubhNan097m/jJKZ
+         jEX95vJ3QvIcLjHtpjwlBMZtnN0f/OKTd5Iz7Kmlk7PFfo73eh1M7Q1c5l2kCAZtShKy
+         o9S9+e6i5h49DVwDoAigLBioDAbGHE+rfsMC2QVkhw1zsyuniErN2KFM15nMxkmiPFxp
+         uxJA==
+X-Gm-Message-State: AOAM532EdovK/dkY9BacY64FX4pDw7dRLSMDdMYlwyzAbcp0bqfKS7Kq
+        52RYnccggpH+47JytlcDZrE=
+X-Google-Smtp-Source: ABdhPJx3G6JcPO9f9Lx4lp6MC10FrxhY916fG6pxQTVuviBsQL7JtetKaQbK8nZ3y/6LrE/2wleVRA==
+X-Received: by 2002:a05:600c:1d91:b0:39c:2d34:34e with SMTP id p17-20020a05600c1d9100b0039c2d34034emr7483879wms.55.1654264597300;
+        Fri, 03 Jun 2022 06:56:37 -0700 (PDT)
+Received: from localhost (92.40.203.126.threembb.co.uk. [92.40.203.126])
+        by smtp.gmail.com with ESMTPSA id ay1-20020a5d6f01000000b0020fee88d0f2sm9596400wrb.0.2022.06.03.06.56.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jun 2022 06:56:36 -0700 (PDT)
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
+        lee.jones@linaro.org, sre@kernel.org, broonie@kernel.org,
+        gregkh@linuxfoundation.org, lgirdwood@gmail.com
+Cc:     lars@metafoo.de, rafael@kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 00/10] Add support for AXP192 PMIC
+Date:   Fri,  3 Jun 2022 14:57:04 +0100
+Message-Id: <20220603135714.12007-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3968; i=gregkh@linuxfoundation.org; h=from:subject; bh=MnYHk+TvRioyuCp9YPlGhGUqIO1D63k02GXidwo/63o=; b=owGbwMvMwCRo6H6F97bub03G02pJDEkzP0q1eJW4MB4LyH/2fDevn8ub8wn3l60WiBcVfzHtPlOO +rxnHbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjCR1a8YFjTlF1+f8YiZgYNly+EcL+ 3IL1WPMhhms1x10duet+p29qmIfknry9zdavJnAQ==
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Saravana Kannan <saravanak@google.com>
+Hi all,
 
-Mounting NFS rootfs was timing out when deferred_probe_timeout was
-non-zero [1].  This was because ip_auto_config() initcall times out
-waiting for the network interfaces to show up when
-deferred_probe_timeout was non-zero. While ip_auto_config() calls
-wait_for_device_probe() to make sure any currently running deferred
-probe work or asynchronous probe finishes, that wasn't sufficient to
-account for devices being deferred until deferred_probe_timeout.
+This patch series adds support for the X-Powers AXP192 PMIC to the
+AXP20x driver framework.
 
-Commit 35a672363ab3 ("driver core: Ensure wait_for_device_probe() waits
-until the deferred_probe_timeout fires") tried to fix that by making
-sure wait_for_device_probe() waits for deferred_probe_timeout to expire
-before returning.
+The first patch is a small change to regmap-irq to support the AXP192's
+unusual IRQ register layout. It isn't possible to include all of the
+IRQ registers in one regmap-irq chip without this.
 
-However, if wait_for_device_probe() is called from the kernel_init()
-context:
+The rest of the changes are pretty straightforward, I think the only
+notable parts are the axp20x_adc driver where there seems to be some
+opportunities for code reuse (the axp192 is nearly a duplicate of the
+axp20x) and the addition of a new pinctrl driver for the axp192, since
+the axp20x pinctrl driver was not very easy to adapt.
 
-- Before deferred_probe_initcall() [2], it causes the boot process to
-  hang due to a deadlock.
+Aidan MacDonald (10):
+  regmap-irq: Add get_irq_reg to support unusual register layouts
+  dt-bindings: mfd: add bindings for AXP192 MFD device
+  dt-bindings: iio: adc: axp209: Add AXP192 compatible
+  dt-bindings: power: supply: axp20x: Add AXP192 compatible
+  dt-bindings: gpio: Add AXP192 GPIO bindings
+  mfd: axp20x: Add support for AXP192
+  regulator: axp20x: Add support for AXP192
+  iio: adc: axp20x_adc: Add support for AXP192
+  power: supply: axp20x_usb_power: Add support for AXP192
+  pinctrl: Add AXP192 pin control driver
 
-- After deferred_probe_initcall() [3], it blocks kernel_init() from
-  continuing till deferred_probe_timeout expires and beats the point of
-  deferred_probe_timeout that's trying to wait for userspace to load
-  modules.
+ .../bindings/gpio/x-powers,axp192-gpio.yaml   |  59 ++
+ .../bindings/iio/adc/x-powers,axp209-adc.yaml |  18 +
+ .../bindings/mfd/x-powers,axp152.yaml         |   1 +
+ .../x-powers,axp20x-usb-power-supply.yaml     |   1 +
+ drivers/base/regmap/regmap-irq.c              |  19 +-
+ drivers/iio/adc/axp20x_adc.c                  | 289 ++++++++-
+ drivers/mfd/axp20x-i2c.c                      |   2 +
+ drivers/mfd/axp20x.c                          | 150 +++++
+ drivers/pinctrl/Kconfig                       |  14 +
+ drivers/pinctrl/Makefile                      |   1 +
+ drivers/pinctrl/pinctrl-axp192.c              | 589 ++++++++++++++++++
+ drivers/power/supply/axp20x_usb_power.c       |  75 ++-
+ drivers/regulator/axp20x-regulator.c          | 101 ++-
+ include/linux/mfd/axp20x.h                    |  84 +++
+ include/linux/regmap.h                        |   5 +
+ 15 files changed, 1375 insertions(+), 33 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml
+ create mode 100644 drivers/pinctrl/pinctrl-axp192.c
 
-Neither of this is good. So revert the changes to
-wait_for_device_probe().
-
-[1] - https://lore.kernel.org/lkml/TYAPR01MB45443DF63B9EF29054F7C41FD8C60@TYAPR01MB4544.jpnprd01.prod.outlook.com/
-[2] - https://lore.kernel.org/lkml/YowHNo4sBjr9ijZr@dev-arch.thelio-3990X/
-[3] - https://lore.kernel.org/lkml/Yo3WvGnNk3LvLb7R@linutronix.de/
-
-Fixes: 35a672363ab3 ("driver core: Ensure wait_for_device_probe() waits until the deferred_probe_timeout fires")
-Cc: John Stultz <jstultz@google.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>
-Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-Cc: Rob Herring <robh@kernel.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Sudeep Holla <sudeep.holla@arm.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: Basil Eljuse <Basil.Eljuse@arm.com>
-Cc: Ferry Toth <fntoth@gmail.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Anders Roxell <anders.roxell@linaro.org>
-Cc: linux-pm@vger.kernel.org
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: John Stultz <jstultz@google.com>
-Signed-off-by: Saravana Kannan <saravanak@google.com>
-Link: https://lore.kernel.org/r/20220526034609.480766-2-saravanak@google.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/base/dd.c | 5 -----
- 1 file changed, 5 deletions(-)
-
-diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index 2fc8507f59ee..91f63cd33b12 100644
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -263,7 +263,6 @@ int driver_deferred_probe_timeout;
- #endif
- 
- EXPORT_SYMBOL_GPL(driver_deferred_probe_timeout);
--static DECLARE_WAIT_QUEUE_HEAD(probe_timeout_waitqueue);
- 
- static int __init deferred_probe_timeout_setup(char *str)
- {
-@@ -318,7 +317,6 @@ static void deferred_probe_timeout_work_func(struct work_struct *work)
- 	list_for_each_entry(p, &deferred_probe_pending_list, deferred_probe)
- 		dev_info(p->device, "deferred probe pending\n");
- 	mutex_unlock(&deferred_probe_mutex);
--	wake_up_all(&probe_timeout_waitqueue);
- }
- static DECLARE_DELAYED_WORK(deferred_probe_timeout_work, deferred_probe_timeout_work_func);
- 
-@@ -736,9 +734,6 @@ int driver_probe_done(void)
-  */
- void wait_for_device_probe(void)
- {
--	/* wait for probe timeout */
--	wait_event(probe_timeout_waitqueue, !driver_deferred_probe_timeout);
--
- 	/* wait for the deferred probe workqueue to finish */
- 	flush_work(&deferred_probe_work);
- 
 -- 
-2.36.1
+2.35.1
 
