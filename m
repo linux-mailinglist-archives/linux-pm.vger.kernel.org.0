@@ -2,78 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9AA53DE9B
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jun 2022 00:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D5253DEC0
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jun 2022 00:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351664AbiFEW0T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 5 Jun 2022 18:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
+        id S1351740AbiFEWtS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 5 Jun 2022 18:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348226AbiFEW0T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Jun 2022 18:26:19 -0400
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C254A3DC;
-        Sun,  5 Jun 2022 15:26:18 -0700 (PDT)
-Received: by mail-pg1-f169.google.com with SMTP id d129so11492838pgc.9;
-        Sun, 05 Jun 2022 15:26:18 -0700 (PDT)
+        with ESMTP id S1351733AbiFEWtR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Jun 2022 18:49:17 -0400
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7366C31932;
+        Sun,  5 Jun 2022 15:49:16 -0700 (PDT)
+Received: by mail-qv1-f53.google.com with SMTP id l1so9274803qvh.1;
+        Sun, 05 Jun 2022 15:49:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=r8mYrZdUdj6SOr3fW1rTSyKFl3H7LMMUAEkXqWtIDxg=;
-        b=EZIC30L7p/7/7zRTrlWWti7QSlvH0JgB/BYSQq3oPeWej5eblXNmetXp6VWicBStgI
-         /C1BfPuBGIKNTVtKmnWO0UyKPRGjE51JMaM/Nlp4x+hHi5qKyUZNDgIFJRtNFw5Sj41t
-         JSRlpsOarnVWxGb+Ds/g3ejs5SursQlrXLT/DTmfEUW0i4kgX2MFcDggakZVHirqr/0U
-         N3lPizGP9opYh6xW26CesI1HGo/OICVz6Iq0sO5XVHHBra3uMLk725rbZTHkqgLjRWQ1
-         1k4FLJs43rP4ApRD604JmZi2Od/gFKaYNEzlZRKfDF5gh4B5tC1rnJB9Kv5WJA4IYjO1
-         P44w==
-X-Gm-Message-State: AOAM533XjMLqVE3qy2RHpRDMUKbgeJ5UmREr7xOyDgBD+L/vYfaHgniF
-        Rk9bGj2zRmGeO0y6agj2CQ==
-X-Google-Smtp-Source: ABdhPJw6I4Ot6zcRsVKm0NrEMVfNCEr14EknjAEOa4jSaY2xDnJJY3qJsSLM+sTb2Nf5RCqoqs7ILA==
-X-Received: by 2002:a63:8bc7:0:b0:3fc:b8ab:c612 with SMTP id j190-20020a638bc7000000b003fcb8abc612mr18197292pge.535.1654467977490;
-        Sun, 05 Jun 2022 15:26:17 -0700 (PDT)
-Received: from robh.at.kernel.org ([2607:fb90:27d2:a39a:a9b9:e8bc:8bee:41d7])
-        by smtp.gmail.com with ESMTPSA id u19-20020a170902e21300b00162529828aesm9066353plb.109.2022.06.05.15.26.15
+        bh=HPeLNf7+1CydMZ7pFSF+BZTDsbQcA2hSY+Z3kBqc6sI=;
+        b=B8PLxod3WjuO8bYtWadYoSHsxVR4uILFbBgNV6vFPXpOzqSnZGZyXvpbh8y7pYdOjJ
+         FC2Ok7CxuHiqPVf70NJT+cdD1zEM6dmNpGcX/k32rc5u+1ibcIyoqYeXNM536zMufvjN
+         z4UyHmvj9Zxvg4VbUKc1+e7XX5tkyC4a9Woa8H7KvlVvJ1MSRp+lttAlOnaHaVxV1WHu
+         qWPpjh46Ya+GXlg+4r4whv3U/ja6+iMOjR3xXgHNww1jIS2kAargJ0hh9FHUipkDVerc
+         sm79Gqm5N6XzciuBNkOl67/tououiZLKHq2zNivLobtmgJvkzoyV0ML4fnJel48pg74R
+         itJA==
+X-Gm-Message-State: AOAM533+UObigIPpIYZlW+oq3fAOjLOd3I82d6S0YVKOPMaSqaNTVNEF
+        mS8TU0Mq3qx/WnUTe7yfJg==
+X-Google-Smtp-Source: ABdhPJz/rcCdih6uOCQ6GFJpLCy3wn2x255TxS5kBmY6lIQIp5CFJQdOy+KBWYaEP4hjYSskjlu1Vw==
+X-Received: by 2002:a05:6214:5a81:b0:467:dcbb:ca64 with SMTP id ln1-20020a0562145a8100b00467dcbbca64mr10977914qvb.116.1654469355607;
+        Sun, 05 Jun 2022 15:49:15 -0700 (PDT)
+Received: from robh.at.kernel.org ([2607:fb90:1bdb:2e61:f12:452:5315:9c7e])
+        by smtp.gmail.com with ESMTPSA id x12-20020a05620a258c00b006a6aba966f4sm4726825qko.0.2022.06.05.15.49.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 15:26:17 -0700 (PDT)
-Received: (nullmailer pid 3639156 invoked by uid 1000);
-        Sun, 05 Jun 2022 22:26:14 -0000
-Date:   Sun, 5 Jun 2022 17:26:14 -0500
+        Sun, 05 Jun 2022 15:49:15 -0700 (PDT)
+Received: (nullmailer pid 3673615 invoked by uid 1000);
+        Sun, 05 Jun 2022 22:49:12 -0000
+Date:   Sun, 5 Jun 2022 17:49:12 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     David Heidelberg <david@ixit.cz>, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 4/4] dt-bindings: power: supply: summit,smb347: use
- absolute path to schema
-Message-ID: <20220605222614.GA3639102-robh@kernel.org>
-References: <20220601071911.6435-1-krzysztof.kozlowski@linaro.org>
- <20220601071911.6435-4-krzysztof.kozlowski@linaro.org>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org,
+        lee.jones@linaro.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lgirdwood@gmail.com,
+        linux-pm@vger.kernel.org, broonie@kernel.org, robh+dt@kernel.org,
+        wens@csie.org, sre@kernel.org, jic23@kernel.org, lars@metafoo.de,
+        brgl@bgdev.pl
+Subject: Re: [PATCH 02/10] dt-bindings: mfd: add bindings for AXP192 MFD
+ device
+Message-ID: <20220605224912.GA3673558-robh@kernel.org>
+References: <20220603135714.12007-1-aidanmacdonald.0x0@gmail.com>
+ <20220603135714.12007-3-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220601071911.6435-4-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220603135714.12007-3-aidanmacdonald.0x0@gmail.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 01 Jun 2022 09:19:11 +0200, Krzysztof Kozlowski wrote:
-> Reference regulator schema by absolute path, as expected by DT schema
-> coding style.
+On Fri, 03 Jun 2022 14:57:06 +0100, Aidan MacDonald wrote:
+> The AXP192 is another X-Powers PMIC similar to the existing ones.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 > ---
->  .../devicetree/bindings/power/supply/summit,smb347-charger.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>
