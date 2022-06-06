@@ -2,44 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC84A53EC23
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jun 2022 19:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 437BE53E8E7
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jun 2022 19:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233369AbiFFKDO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Jun 2022 06:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57608 "EHLO
+        id S233406AbiFFKFn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Jun 2022 06:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233406AbiFFKDN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jun 2022 06:03:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 783E29FF5;
-        Mon,  6 Jun 2022 03:03:07 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD96F15DB;
-        Mon,  6 Jun 2022 03:03:07 -0700 (PDT)
-Received: from e120937-lin.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6AD163F66F;
-        Mon,  6 Jun 2022 03:03:05 -0700 (PDT)
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
-        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
-        daniel.lezcano@linaro.org, tarek.el-sherbiny@arm.com,
-        adrian.slatineanu@arm.com, souvik.chakravarty@arm.com,
-        wleavitt@marvell.com, wbartczak@marvell.com,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH v2 7/7] powercap: arm_scmi: Add SCMI Powercap based driver
-Date:   Mon,  6 Jun 2022 11:02:30 +0100
-Message-Id: <20220606100230.3465828-8-cristian.marussi@arm.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220606100230.3465828-1-cristian.marussi@arm.com>
-References: <20220606100230.3465828-1-cristian.marussi@arm.com>
+        with ESMTP id S233321AbiFFKFl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jun 2022 06:05:41 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3955ADEEB1
+        for <linux-pm@vger.kernel.org>; Mon,  6 Jun 2022 03:05:36 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id kq6so14886184ejb.11
+        for <linux-pm@vger.kernel.org>; Mon, 06 Jun 2022 03:05:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AIkVYq1W6aeR7pLlb9g0Gp0Mmp5VFK5t189AI+gG36U=;
+        b=DHWzJ5x5zGheoymM8Hl7F7dXSNZQS0EDWGCkgPtHgTQxRdmq8MQKvGUdfQuQnYvAv+
+         gGrF/CLkiVDVUYKJCNNxmhBkbRuWVp7zlo0pEuKr6+DuuFUY+5M8VwX83auzZ/kAm4+x
+         M347uT7scrEh4vJJGx0rbb15wgW125ql/urjE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AIkVYq1W6aeR7pLlb9g0Gp0Mmp5VFK5t189AI+gG36U=;
+        b=j1eyDhL3wFJ8IMZtw+/+T5D2eUEBXMQtx4GY7G9pPTlltc7bgz4JfPJF89g6RebBSO
+         VfFo26lwZov/vbzPCpgM0GnjYQmCmNh3xBmRo9JxpdsSxidjQEmVWHWjYECC58NWqcuO
+         9DRNhyWygcngc1NLk/s3klr/0FpcB6SfcFXMDwCynYc4xYNrw6Py9ki6ryePgrI3IuzP
+         VF8XWOlwv+68JbJqcd6Hi2Qo/ZyVeS+aDA/rld7UEukC/7rowpiWFjLyi7DUl91y1b1y
+         BqYrw/FaCQdyuDmSn1BymF+drHcd9O4Trg+MIsSTen4BD+83q2BmI/fG1egikDLfdJ5X
+         cPRA==
+X-Gm-Message-State: AOAM533c5pLZFwtGH7t/jvU42LJInk1kyO+2oZBW5YCh2ATRvsR/aZd6
+        zEJ18QXYqwiZ4ufcdxe/wUpxCOb1CSSF90E5xfPnzQ==
+X-Google-Smtp-Source: ABdhPJxrsULcUL7RnphQnC492AqfZ5oatQK5j/H6akwbjkhMTISt2BxTJzUMgSyMrhNb3EwFTz1CAbT2R431hDlzOlk=
+X-Received: by 2002:a17:906:9493:b0:70c:4ddf:5d5d with SMTP id
+ t19-20020a170906949300b0070c4ddf5d5dmr16549535ejx.73.1654509934336; Mon, 06
+ Jun 2022 03:05:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220516004311.18358-1-roger.lu@mediatek.com>
+In-Reply-To: <20220516004311.18358-1-roger.lu@mediatek.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 6 Jun 2022 18:05:23 +0800
+Message-ID: <CAGXv+5Gs8=Yd-xiaYoHzdx6t_Egez1e+Zh+r=MtuMSaCXOzzwg@mail.gmail.com>
+Subject: Re: [PATCH v25 0/7] soc: mediatek: SVS: introduce MTK SVS
+To:     Roger Lu <roger.lu@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Fan Chen <fan.chen@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,602 +78,125 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a powercap driver that, using the ARM SCMI Protocol to query the SCMI
-platform firmware for the list of existing Powercap domains, registers all
-of such discovered domains under the new 'arm-scmi' powercap control type.
+On Mon, May 16, 2022 at 8:43 AM Roger Lu <roger.lu@mediatek.com> wrote:
+>
+> The Smart Voltage Scaling(SVS) engine is a piece of hardware
+> which calculates suitable SVS bank voltages to OPP voltage table.
+> Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
+> when receiving OPP_EVENT_ADJUST_VOLTAGE.
+>
+> 1. SVS driver uses OPP adjust event in [1] to update OPP table voltage part.
+> 2. SVS driver gets thermal/GPU device by node [2][3] and CPU device by get_cpu_device().
+> After retrieving subsys device, SVS driver calls device_link_add() to make sure probe/suspend callback priority.
+>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=25cb20a212a1f989385dfe23230817e69c62bee5
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git/commit/?h=opp/linux-next&id=b325ce39785b1408040d90365a6ab1aa36e94f87
+> [3] https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.16-next/dts64&id=a8168cebf1bca1b5269e8a7eb2626fb76814d6e2
+>
+> Change since v24:
+> - Rebase to Linux 5.18-rc6
+> - Show specific fail log in svs_platform_probe() to help catch which step fails quickly
+> - Remove struct svs_bank member "pd_dev" because all subsys device's power domain has been merged into one node like above [3]
+>
+> Test in below environment:
+> SW: Integration Tree [4] + Thermal patch [5] + SVS v25 (this patchset)
+> HW: mt8183-Krane
+>
+> [4] https://github.com/wens/linux/commits/mt8183-cpufreq-cci-svs-test
+> [5] https://patchwork.kernel.org/project/linux-pm/patch/20210820095206.30981-1-ben.tseng@mediatek.com
+>
+> Boots up log:
+> [    4.447369]  SVSB_CPU_LITTLE: svs_init01_isr_handler: VDN74~30:0x141e262e~0x33373c42, DC:0x02f3010b
+> [    4.447623]  SVSB_CPU_BIG: svs_init01_isr_handler: VDN74~30:0x151f2830~0x363a4046, DC:0x02f90141
+> [    4.447872]  SVSB_CCI: svs_init01_isr_handler: VDN74~30:0x141a232b~0x30363d42, DC:0x02ed00d5
+> [    4.448119]  SVSB_GPU: svs_init01_isr_handler: VDN74~30:0x1416171a~0x1d202327, DC:0x02f7012f
+> [    4.448239]  SVSB_CPU_LITTLE: svs_init02_isr_handler: VOP74~30:0x1b252d35~0x3a3e4349, DC:0x02f30000
+> [    4.448343]  SVSB_CPU_BIG: svs_init02_isr_handler: VOP74~30:0x1c262f37~0x3d41474d, DC:0x02f90000
+> [    4.448400]  SVSB_CCI: svs_init02_isr_handler: VOP74~30:0x1b212a32~0x373d4449, DC:0x02ed0000
+> [    4.448499]  SVSB_GPU: svs_init02_isr_handler: VOP74~30:0x1618191c~0x1f222529, DC:0x02f70000
+>
+> SVS commands log:
+> localhost ~ # cat /sys/kernel/debug/svs/*/*
+> init2
+> SVSB_CCI: temperature ignore, turn_pt = 0
+> opp_freq[00]: 1196000000, opp_volt[00]: 968750, svsb_volt[00]: 0x4b, freq_pct[00]: 100
+> opp_freq[01]: 1144000000, opp_volt[01]: 956250, svsb_volt[01]: 0x49, freq_pct[01]: 96
+> opp_freq[02]: 1092000000, opp_volt[02]: 937500, svsb_volt[02]: 0x46, freq_pct[02]: 92
+> opp_freq[03]: 1027000000, opp_volt[03]: 918750, svsb_volt[03]: 0x43, freq_pct[03]: 86
+> opp_freq[04]: 962000000, opp_volt[04]: 893750, svsb_volt[04]: 0x3f, freq_pct[04]: 81
+> opp_freq[05]: 923000000, opp_volt[05]: 881250, svsb_volt[05]: 0x3d, freq_pct[05]: 78
+> opp_freq[06]: 871000000, opp_volt[06]: 856250, svsb_volt[06]: 0x39, freq_pct[06]: 73
+> opp_freq[07]: 845000000, opp_volt[07]: 850000, svsb_volt[07]: 0x38, freq_pct[07]: 71
+> opp_freq[08]: 767000000, opp_volt[08]: 825000, svsb_volt[08]: 0x34, freq_pct[08]: 65
+> opp_freq[09]: 689000000, opp_volt[09]: 800000, svsb_volt[09]: 0x30, freq_pct[09]: 58
+> opp_freq[10]: 624000000, opp_volt[10]: 775000, svsb_volt[10]: 0x2c, freq_pct[10]: 53
+> opp_freq[11]: 546000000, opp_volt[11]: 750000, svsb_volt[11]: 0x28, freq_pct[11]: 46
+> opp_freq[12]: 463000000, opp_volt[12]: 718750, svsb_volt[12]: 0x23, freq_pct[12]: 39
+> opp_freq[13]: 403000000, opp_volt[13]: 700000, svsb_volt[13]: 0x20, freq_pct[13]: 34
+> opp_freq[14]: 338000000, opp_volt[14]: 681250, svsb_volt[14]: 0x1d, freq_pct[14]: 29
+> opp_freq[15]: 273000000, opp_volt[15]: 650000, svsb_volt[15]: 0x1a, freq_pct[15]: 23
+> init2
+> SVSB_CPU_BIG: temperature ignore, turn_pt = 0
+> opp_freq[00]: 1989000000, opp_volt[00]: 1050000, svsb_volt[00]: 0x59, freq_pct[00]: 100
+> opp_freq[01]: 1924000000, opp_volt[01]: 1025000, svsb_volt[01]: 0x57, freq_pct[01]: 97
+> opp_freq[02]: 1846000000, opp_volt[02]: 1000000, svsb_volt[02]: 0x53, freq_pct[02]: 93
+> opp_freq[03]: 1781000000, opp_volt[03]: 975000, svsb_volt[03]: 0x50, freq_pct[03]: 90
+> opp_freq[04]: 1716000000, opp_volt[04]: 950000, svsb_volt[04]: 0x4d, freq_pct[04]: 87
+> opp_freq[05]: 1677000000, opp_volt[05]: 931250, svsb_volt[05]: 0x4c, freq_pct[05]: 85
+> opp_freq[06]: 1625000000, opp_volt[06]: 912500, svsb_volt[06]: 0x49, freq_pct[06]: 82
+> opp_freq[07]: 1586000000, opp_volt[07]: 900000, svsb_volt[07]: 0x47, freq_pct[07]: 80
+> opp_freq[08]: 1508000000, opp_volt[08]: 875000, svsb_volt[08]: 0x43, freq_pct[08]: 76
+> opp_freq[09]: 1417000000, opp_volt[09]: 850000, svsb_volt[09]: 0x40, freq_pct[09]: 72
+> opp_freq[10]: 1326000000, opp_volt[10]: 825000, svsb_volt[10]: 0x3b, freq_pct[10]: 67
+> opp_freq[11]: 1248000000, opp_volt[11]: 800000, svsb_volt[11]: 0x38, freq_pct[11]: 63
+> opp_freq[12]: 1131000000, opp_volt[12]: 775000, svsb_volt[12]: 0x32, freq_pct[12]: 57
+> opp_freq[13]: 1014000000, opp_volt[13]: 750000, svsb_volt[13]: 0x2d, freq_pct[13]: 51
+> opp_freq[14]: 910000000, opp_volt[14]: 725000, svsb_volt[14]: 0x28, freq_pct[14]: 46
+> opp_freq[15]: 793000000, opp_volt[15]: 700000, svsb_volt[15]: 0x23, freq_pct[15]: 40
+> init2
+> SVSB_CPU_LITTLE: temperature ignore, turn_pt = 0
+> opp_freq[00]: 1989000000, opp_volt[00]: 968750, svsb_volt[00]: 0x4b, freq_pct[00]: 100
+> opp_freq[01]: 1924000000, opp_volt[01]: 956250, svsb_volt[01]: 0x49, freq_pct[01]: 97
+> opp_freq[02]: 1846000000, opp_volt[02]: 931250, svsb_volt[02]: 0x45, freq_pct[02]: 93
+> opp_freq[03]: 1781000000, opp_volt[03]: 918750, svsb_volt[03]: 0x43, freq_pct[03]: 90
+> opp_freq[04]: 1716000000, opp_volt[04]: 900000, svsb_volt[04]: 0x40, freq_pct[04]: 87
+> opp_freq[05]: 1677000000, opp_volt[05]: 893750, svsb_volt[05]: 0x3f, freq_pct[05]: 85
+> opp_freq[06]: 1625000000, opp_volt[06]: 875000, svsb_volt[06]: 0x3c, freq_pct[06]: 82
+> opp_freq[07]: 1586000000, opp_volt[07]: 868750, svsb_volt[07]: 0x3b, freq_pct[07]: 80
+> opp_freq[08]: 1508000000, opp_volt[08]: 843750, svsb_volt[08]: 0x37, freq_pct[08]: 76
+> opp_freq[09]: 1417000000, opp_volt[09]: 825000, svsb_volt[09]: 0x34, freq_pct[09]: 72
+> opp_freq[10]: 1326000000, opp_volt[10]: 793750, svsb_volt[10]: 0x2f, freq_pct[10]: 67
+> opp_freq[11]: 1248000000, opp_volt[11]: 775000, svsb_volt[11]: 0x2c, freq_pct[11]: 63
+> opp_freq[12]: 1131000000, opp_volt[12]: 743750, svsb_volt[12]: 0x27, freq_pct[12]: 57
+> opp_freq[13]: 1014000000, opp_volt[13]: 712500, svsb_volt[13]: 0x22, freq_pct[13]: 51
+> opp_freq[14]: 910000000, opp_volt[14]: 681250, svsb_volt[14]: 0x1d, freq_pct[14]: 46
+> opp_freq[15]: 793000000, opp_volt[15]: 650000, svsb_volt[15]: 0x18, freq_pct[15]: 40
+> mon mode
+> SVSB_GPU: temperature = 33492, turn_pt = 0
+> opp_freq[00]: 800000000, opp_volt[00]: 743750, svsb_volt[00]: 0x27, freq_pct[00]: 100
+> opp_freq[01]: 743000000, opp_volt[01]: 731250, svsb_volt[01]: 0x25, freq_pct[01]: 93
+> opp_freq[02]: 698000000, opp_volt[02]: 718750, svsb_volt[02]: 0x23, freq_pct[02]: 88
+> opp_freq[03]: 653000000, opp_volt[03]: 712500, svsb_volt[03]: 0x22, freq_pct[03]: 82
+> opp_freq[04]: 620000000, opp_volt[04]: 700000, svsb_volt[04]: 0x20, freq_pct[04]: 78
+> opp_freq[05]: 580000000, opp_volt[05]: 693750, svsb_volt[05]: 0x1f, freq_pct[05]: 73
+> opp_freq[06]: 540000000, opp_volt[06]: 681250, svsb_volt[06]: 0x1d, freq_pct[06]: 68
+> opp_freq[07]: 500000000, opp_volt[07]: 675000, svsb_volt[07]: 0x1c, freq_pct[07]: 63
+> opp_freq[08]: 460000000, opp_volt[08]: 662500, svsb_volt[08]: 0x1a, freq_pct[08]: 58
+> opp_freq[09]: 420000000, opp_volt[09]: 656250, svsb_volt[09]: 0x19, freq_pct[09]: 53
+> opp_freq[10]: 400000000, opp_volt[10]: 643750, svsb_volt[10]: 0x17, freq_pct[10]: 50
+> opp_freq[11]: 380000000, opp_volt[11]: 643750, svsb_volt[11]: 0x17, freq_pct[11]: 48
+> opp_freq[12]: 360000000, opp_volt[12]: 637500, svsb_volt[12]: 0x16, freq_pct[12]: 45
+> opp_freq[13]: 340000000, opp_volt[13]: 637500, svsb_volt[13]: 0x16, freq_pct[13]: 43
+> opp_freq[14]: 320000000, opp_volt[14]: 625000, svsb_volt[14]: 0x14, freq_pct[14]: 40
+> opp_freq[15]: 300000000, opp_volt[15]: 625000, svsb_volt[15]: 0x14, freq_pct[15]: 38
+>
+> Roger Lu (7):
+>   [v25,1/7] dt-bindings: soc: mediatek: add mtk svs dt-bindings
+>   [v25,2/7] arm64: dts: mt8183: add svs device information
+>   [v25,3/7] soc: mediatek: SVS: introduce MTK SVS engine
+>   [v25,4/7] soc: mediatek: SVS: add monitor mode
+>   [v25,5/7] soc: mediatek: SVS: add debug commands
+>   [v25,6/7] dt-bindings: soc: mediatek: add mt8192 svs dt-bindings
+>   [v25,7/7] soc: mediatek: SVS: add mt8192 SVS GPU driver
 
-A new simple powercap zone and constraint is registered for all the SCMI
-powercap zones that are found.
-
-Cc: Rafael J. Wysocki <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
----
-v1 --> v2
-- fix sparse warning about missing static on global  *scmi_top_pcntrl;
----
- drivers/powercap/Kconfig             |  13 +
- drivers/powercap/Makefile            |   1 +
- drivers/powercap/arm_scmi_powercap.c | 537 +++++++++++++++++++++++++++
- 3 files changed, 551 insertions(+)
- create mode 100644 drivers/powercap/arm_scmi_powercap.c
-
-diff --git a/drivers/powercap/Kconfig b/drivers/powercap/Kconfig
-index 515e3ceb3393..90d33cd1b670 100644
---- a/drivers/powercap/Kconfig
-+++ b/drivers/powercap/Kconfig
-@@ -44,6 +44,19 @@ config IDLE_INJECT
- 	  synchronously on a set of specified CPUs or alternatively
- 	  on a per CPU basis.
- 
-+config ARM_SCMI_POWERCAP
-+	tristate "ARM SCMI Powercap driver"
-+	depends on ARM_SCMI_PROTOCOL
-+	help
-+	  This enables support for the ARM Powercap based on ARM SCMI
-+	  Powercap protocol.
-+
-+	  ARM SCMI Powercap protocol allows power limits to be enforced
-+	  and monitored against the SCMI Powercap domains advertised as
-+	  available by the SCMI platform firmware.
-+
-+	  When compiled as module it will be called arm_scmi_powercap.ko.
-+
- config DTPM
- 	bool "Power capping for Dynamic Thermal Power Management (EXPERIMENTAL)"
- 	depends on OF
-diff --git a/drivers/powercap/Makefile b/drivers/powercap/Makefile
-index 494617cdad88..4474201b4aa7 100644
---- a/drivers/powercap/Makefile
-+++ b/drivers/powercap/Makefile
-@@ -6,3 +6,4 @@ obj-$(CONFIG_POWERCAP)	+= powercap_sys.o
- obj-$(CONFIG_INTEL_RAPL_CORE) += intel_rapl_common.o
- obj-$(CONFIG_INTEL_RAPL) += intel_rapl_msr.o
- obj-$(CONFIG_IDLE_INJECT) += idle_inject.o
-+obj-$(CONFIG_ARM_SCMI_POWERCAP) += arm_scmi_powercap.o
-diff --git a/drivers/powercap/arm_scmi_powercap.c b/drivers/powercap/arm_scmi_powercap.c
-new file mode 100644
-index 000000000000..36f6dc211fbb
---- /dev/null
-+++ b/drivers/powercap/arm_scmi_powercap.c
-@@ -0,0 +1,537 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * SCMI Powercap support.
-+ *
-+ * Copyright (C) 2022 ARM Ltd.
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/math.h>
-+#include <linux/limits.h>
-+#include <linux/list.h>
-+#include <linux/module.h>
-+#include <linux/powercap.h>
-+#include <linux/scmi_protocol.h>
-+
-+#define to_scmi_powercap_zone(z)		\
-+	container_of(z, struct scmi_powercap_zone, zone)
-+
-+static const struct scmi_powercap_proto_ops *powercap_ops;
-+
-+struct scmi_powercap_zone {
-+	unsigned int height;
-+	struct device *dev;
-+	struct scmi_protocol_handle *ph;
-+	const struct scmi_powercap_info *info;
-+	struct scmi_powercap_zone *spzones;
-+	struct powercap_zone zone;
-+	struct list_head node;
-+};
-+
-+struct scmi_powercap_root {
-+	unsigned int num_zones;
-+	struct scmi_powercap_zone *spzones;
-+	struct list_head *registered_zones;
-+};
-+
-+static struct powercap_control_type *scmi_top_pcntrl;
-+
-+static int scmi_powercap_zone_release(struct powercap_zone *pz)
-+{
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_max_power_range_uw(struct powercap_zone *pz,
-+						u64 *max_power_range_uw)
-+{
-+	*max_power_range_uw = (u64)U32_MAX;
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_power_uw(struct powercap_zone *pz,
-+				      u64 *power_uw)
-+{
-+	int ret;
-+	u32 avg_power, pai;
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	if (!spz->info->powercap_monitoring)
-+		return -EINVAL;
-+
-+	ret = powercap_ops->measurements_get(spz->ph, spz->info->id, &avg_power,
-+					     &pai);
-+	if (ret)
-+		return ret;
-+
-+	if (spz->info->powercap_scale_mw)
-+		*power_uw = (u64)(avg_power * 1000);
-+	else
-+		*power_uw = (u64)avg_power;
-+
-+	return 0;
-+}
-+
-+static const struct powercap_zone_ops zone_ops = {
-+	.get_max_power_range_uw = scmi_powercap_get_max_power_range_uw,
-+	.get_power_uw = scmi_powercap_get_power_uw,
-+	.release = scmi_powercap_zone_release,
-+};
-+
-+static inline int
-+scmi_powercap_normalize_cap(const struct scmi_powercap_info *info,
-+			    u64 power_limit_uw, u32 *normalized)
-+{
-+	u64 req_power;
-+
-+	if (info->powercap_scale_mw)
-+		req_power = DIV_ROUND_UP_ULL(power_limit_uw, 1000);
-+	else
-+		req_power = power_limit_uw;
-+
-+	if (req_power > info->max_power_cap)
-+		*normalized = info->max_power_cap;
-+	else if (req_power < info->min_power_cap)
-+		*normalized = info->min_power_cap;
-+	else
-+		*normalized = (u32)req_power;
-+
-+	*normalized = rounddown(*normalized, info->power_cap_step);
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_set_power_limit_uw(struct powercap_zone *pz, int cid,
-+					    u64 power_uw)
-+{
-+	int ret;
-+	u32 power;
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	if (!spz->info->powercap_cap_config)
-+		return -EINVAL;
-+
-+	ret = scmi_powercap_normalize_cap(spz->info, power_uw, &power);
-+	if (ret)
-+		return ret;
-+
-+	return powercap_ops->cap_set(spz->ph, spz->info->id, power, false);
-+}
-+
-+static int scmi_powercap_get_power_limit_uw(struct powercap_zone *pz, int cid,
-+					    u64 *power_limit_uw)
-+{
-+	int ret;
-+	u32 power;
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	ret = powercap_ops->cap_get(spz->ph, spz->info->id, &power);
-+	if (ret)
-+		return ret;
-+
-+	if (spz->info->powercap_scale_mw)
-+		*power_limit_uw = power * 1000;
-+	else
-+		*power_limit_uw = power;
-+
-+	return 0;
-+}
-+
-+static inline int
-+scmi_powercap_normalize_time(const struct scmi_powercap_info *info,
-+			     u64 time_us, u32 *normalized)
-+{
-+	if (time_us > info->max_pai)
-+		*normalized = info->max_pai;
-+	else if (time_us < info->min_pai)
-+		*normalized = info->min_pai;
-+	else
-+		*normalized = (u32)time_us;
-+
-+	*normalized = rounddown(*normalized, info->pai_step);
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_set_time_window_us(struct powercap_zone *pz, int cid,
-+					    u64 time_window_us)
-+{
-+	int ret;
-+	u32 pai;
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	if (!spz->info->powercap_pai_config)
-+		return -EINVAL;
-+
-+	ret = scmi_powercap_normalize_time(spz->info, time_window_us, &pai);
-+	if (ret)
-+		return ret;
-+
-+	return powercap_ops->pai_set(spz->ph, spz->info->id, pai);
-+}
-+
-+static int scmi_powercap_get_time_window_us(struct powercap_zone *pz, int cid,
-+					    u64 *time_window_us)
-+{
-+	int ret;
-+	u32 pai;
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	ret = powercap_ops->pai_get(spz->ph, spz->info->id, &pai);
-+	if (ret)
-+		return ret;
-+
-+	*time_window_us = (u64)pai;
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_max_power_uw(struct powercap_zone *pz, int cid,
-+					  u64 *max_power_uw)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	if (spz->info->powercap_scale_uw)
-+		*max_power_uw = (u64)spz->info->max_power_cap;
-+	else
-+		*max_power_uw = (u64)(spz->info->max_power_cap * 1000);
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_min_power_uw(struct powercap_zone *pz, int cid,
-+					  u64 *min_power_uw)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	if (spz->info->powercap_scale_uw)
-+		*min_power_uw = (u64)spz->info->min_power_cap;
-+	else
-+		*min_power_uw = (u64)(spz->info->min_power_cap * 1000);
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_max_time_window_us(struct powercap_zone *pz,
-+						int cid, u64 *time_window_us)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	*time_window_us = (u64)spz->info->max_pai;
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_min_time_window_us(struct powercap_zone *pz,
-+						int cid, u64 *time_window_us)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	if (!spz->info)
-+		return -ENODEV;
-+
-+	*time_window_us = (u64)spz->info->min_pai;
-+
-+	return 0;
-+}
-+
-+static const char *scmi_powercap_get_name(struct powercap_zone *pz, int cid)
-+{
-+	return "SCMI power-cap";
-+}
-+
-+static const struct powercap_zone_constraint_ops constraint_ops  = {
-+	.set_power_limit_uw = scmi_powercap_set_power_limit_uw,
-+	.get_power_limit_uw = scmi_powercap_get_power_limit_uw,
-+	.set_time_window_us = scmi_powercap_set_time_window_us,
-+	.get_time_window_us = scmi_powercap_get_time_window_us,
-+	.get_max_power_uw = scmi_powercap_get_max_power_uw,
-+	.get_min_power_uw = scmi_powercap_get_min_power_uw,
-+	.get_max_time_window_us = scmi_powercap_get_max_time_window_us,
-+	.get_min_time_window_us = scmi_powercap_get_min_time_window_us,
-+	.get_name = scmi_powercap_get_name,
-+};
-+
-+static void scmi_powercap_unregister_all_zones(struct scmi_powercap_root *pr)
-+{
-+	int i;
-+
-+	/* Un-register children zones first starting from the leaves */
-+	for (i = pr->num_zones - 1; i >= 0; i--) {
-+		if (!list_empty(&pr->registered_zones[i])) {
-+			struct scmi_powercap_zone *spz;
-+
-+			list_for_each_entry(spz, &pr->registered_zones[i], node)
-+				powercap_unregister_zone(scmi_top_pcntrl,
-+							 &spz->zone);
-+		}
-+	}
-+}
-+
-+static inline bool
-+scmi_powercap_is_zone_registered(struct scmi_powercap_zone *spz)
-+{
-+	return !list_empty(&spz->node);
-+}
-+
-+static inline unsigned int
-+scmi_powercap_get_zone_height(struct scmi_powercap_zone *spz)
-+{
-+	if (spz->info->parent_id == SCMI_POWERCAP_ROOT_ZONE_ID)
-+		return 0;
-+
-+	return spz->spzones[spz->info->parent_id].height + 1;
-+}
-+
-+static inline struct scmi_powercap_zone *
-+scmi_powercap_get_parent_zone(struct scmi_powercap_zone *spz)
-+{
-+	if (spz->info->parent_id == SCMI_POWERCAP_ROOT_ZONE_ID)
-+		return NULL;
-+
-+	return &spz->spzones[spz->info->parent_id];
-+}
-+
-+/**
-+ * scmi_powercap_register_zone  - Register an SCMI powercap zone recursively
-+ *
-+ * @pr: A reference to the root powercap zones descriptors
-+ * @spz: A reference to the SCMI powercap zone to register
-+ *
-+ * When registering SCMI powercap zones with the powercap framework we should
-+ * take care to always register zones starting from the root ones and to
-+ * deregister starting from the leaves.
-+ *
-+ * Unfortunately we cannot assume that the array of available SCMI powercap
-+ * zones provided by the SCMI platform firmware is built to comply with such
-+ * requirement.
-+ *
-+ * This function, given an SCMI powercap zone to register, takes care to walk
-+ * the SCMI powercap zones tree up to the root looking recursively for
-+ * unregistered parent zones before regsitering the provided zone; at the same
-+ * time each registered zone height in such a tree is accounted for and each
-+ * zone, once registered, is stored in the @registered_zones array that is
-+ * indexed by zone height: this way will be trivial, at unregister time, to walk
-+ * the @registered_zones array backward and unregister all the zones starting
-+ * from the leaves, removing children zones before parents.
-+ *
-+ * While doing this, we prune away any zone marked as invalid (like the ones
-+ * sporting an SCMI abstract power scale) as long as they are positioned as
-+ * leaves in the SCMI powercap zones hierarchy: any non-leaf invalid zone causes
-+ * the entire process to fail since we cannot assume the correctness of an SCMI
-+ * powercap zones hierarchy if some of the internal nodes are missing.
-+ *
-+ * Note that the array of SCMI powercap zones as returned by the SCMI platform
-+ * is known to be sane, i.e. zones relationships have been validated at the
-+ * protocol layer.
-+ *
-+ * Return: 0 on Success
-+ */
-+static int scmi_powercap_register_zone(struct scmi_powercap_root *pr,
-+				       struct scmi_powercap_zone *spz)
-+{
-+	int ret = 0;
-+	struct scmi_powercap_zone *parent;
-+
-+	if (!spz->info)
-+		return ret;
-+
-+	parent = scmi_powercap_get_parent_zone(spz);
-+	if (parent && !scmi_powercap_is_zone_registered(parent)) {
-+		/*
-+		 * Bail out if a parent domain was marked as unsupported:
-+		 * only domains participating as leaves can be skipped.
-+		 */
-+		if (!parent->info)
-+			return -ENODEV;
-+
-+		ret = scmi_powercap_register_zone(pr, parent);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (!scmi_powercap_is_zone_registered(spz)) {
-+		struct powercap_zone *z;
-+
-+		z = powercap_register_zone(&spz->zone,
-+					   scmi_top_pcntrl,
-+					   spz->info->name,
-+					   parent ? &parent->zone : NULL,
-+					   &zone_ops, 1, &constraint_ops);
-+		if (!IS_ERR(z)) {
-+			spz->height = scmi_powercap_get_zone_height(spz);
-+			list_add(&spz->node,
-+				 &pr->registered_zones[spz->height]);
-+			dev_dbg(spz->dev,
-+				"Registered node %s - parent %s - height:%d\n",
-+				spz->info->name,
-+				parent ? parent->info->name : "ROOT",
-+				spz->height);
-+			ret = 0;
-+		} else {
-+			ret = PTR_ERR(z);
-+			dev_err(spz->dev,
-+				"Error registering node:%s - parent:%s - h:%d - ret:%d\n",
-+				 spz->info->name,
-+				 parent ? parent->info->name : "ROOT",
-+				 spz->height, ret);
-+		}
-+	}
-+
-+	return ret;
-+}
-+
-+static int scmi_powercap_probe(struct scmi_device *sdev)
-+{
-+	int ret, i;
-+	struct scmi_powercap_root *pr;
-+	struct scmi_powercap_zone *spz;
-+	struct scmi_protocol_handle *ph;
-+	struct device *dev = &sdev->dev;
-+	const struct scmi_handle *handle = sdev->handle;
-+
-+	if (!handle)
-+		return -ENODEV;
-+
-+	powercap_ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_POWERCAP,
-+						 &ph);
-+	if (IS_ERR(powercap_ops))
-+		return PTR_ERR(powercap_ops);
-+
-+	pr = devm_kzalloc(dev, sizeof(*pr), GFP_KERNEL);
-+	if (!pr)
-+		return -ENOMEM;
-+
-+	pr->num_zones = powercap_ops->num_domains_get(ph);
-+	if (pr->num_zones < 0) {
-+		dev_err(dev, "number of powercap domains not found\n");
-+		return pr->num_zones;
-+	}
-+
-+	pr->spzones = devm_kcalloc(dev, pr->num_zones,
-+				   sizeof(*pr->spzones), GFP_KERNEL);
-+	if (!pr->spzones)
-+		return -ENOMEM;
-+
-+	/* Allocate for worst possible scenario of maximum tree height. */
-+	pr->registered_zones = devm_kcalloc(dev, pr->num_zones,
-+					    sizeof(*pr->registered_zones),
-+					    GFP_KERNEL);
-+	if (!pr->registered_zones)
-+		return -ENOMEM;
-+
-+	for (i = 0, spz = pr->spzones; i < pr->num_zones; i++, spz++) {
-+		/*
-+		 * Powercap domains are validate by the protocol layer, i.e.
-+		 * when only non-NULL domains are returned here, whose
-+		 * parent_id is assured to point to another valid domain.
-+		 */
-+		spz->info = powercap_ops->info_get(ph, i);
-+
-+		spz->dev = dev;
-+		spz->ph = ph;
-+		spz->spzones = pr->spzones;
-+		INIT_LIST_HEAD(&spz->node);
-+		INIT_LIST_HEAD(&pr->registered_zones[i]);
-+
-+		/*
-+		 * Forcibly skip powercap domains using an abstract scale.
-+		 * Note that only leaves domains can be skipped, so this could
-+		 * lead later to a global failure.
-+		 */
-+		if (!spz->info->powercap_scale_uw &&
-+		    !spz->info->powercap_scale_mw) {
-+			dev_warn(dev,
-+				 "Abstract power scale not supported. Skip %s.\n",
-+				 spz->info->name);
-+			spz->info = NULL;
-+			continue;
-+		}
-+	}
-+
-+	/*
-+	 * Scan array of retrieved SCMI powercap domains and register them
-+	 * recursively starting from the root domains.
-+	 */
-+	for (i = 0, spz = pr->spzones; i < pr->num_zones; i++, spz++) {
-+		ret = scmi_powercap_register_zone(pr, spz);
-+		if (ret) {
-+			dev_err(dev,
-+				"Failed to register powercap zone %s - ret:%d\n",
-+				spz->info->name, ret);
-+			scmi_powercap_unregister_all_zones(pr);
-+			return ret;
-+		}
-+	}
-+
-+	dev_set_drvdata(dev, pr);
-+
-+	dev_info(dev, "Registered %d SCMI Powercap domains !\n", pr->num_zones);
-+
-+	return ret;
-+}
-+
-+static void scmi_powercap_remove(struct scmi_device *sdev)
-+{
-+	struct device *dev = &sdev->dev;
-+	struct scmi_powercap_root *pr = dev_get_drvdata(dev);
-+
-+	scmi_powercap_unregister_all_zones(pr);
-+}
-+
-+static const struct scmi_device_id scmi_id_table[] = {
-+	{ SCMI_PROTOCOL_POWERCAP, "powercap" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(scmi, scmi_id_table);
-+
-+static int scmi_powercap_setup(void)
-+{
-+	scmi_top_pcntrl = powercap_register_control_type(NULL, "arm-scmi", NULL);
-+	if (!scmi_top_pcntrl)
-+		return -ENODEV;
-+
-+	return 0;
-+}
-+
-+static void scmi_powercap_teardown(void)
-+{
-+	powercap_unregister_control_type(scmi_top_pcntrl);
-+}
-+
-+static struct scmi_driver scmi_powercap_driver = {
-+	.name = "scmi-powercap",
-+	.setup = scmi_powercap_setup,
-+	.teardown = scmi_powercap_teardown,
-+	.probe = scmi_powercap_probe,
-+	.remove = scmi_powercap_remove,
-+	.id_table = scmi_id_table,
-+};
-+module_scmi_driver(scmi_powercap_driver);
-+
-+MODULE_AUTHOR("Cristian Marussi <cristian.marussi@arm.com>");
-+MODULE_DESCRIPTION("ARM SCMI Powercap driver");
-+MODULE_LICENSE("GPL");
--- 
-2.32.0
-
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
