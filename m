@@ -2,58 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C534653F06B
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jun 2022 22:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5B353F137
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jun 2022 22:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234452AbiFFUo6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Jun 2022 16:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49074 "EHLO
+        id S229862AbiFFU5F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Jun 2022 16:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232339AbiFFUoi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jun 2022 16:44:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206F6FC4DF;
-        Mon,  6 Jun 2022 13:39:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AEA561572;
-        Mon,  6 Jun 2022 20:39:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 436B5C385A9;
-        Mon,  6 Jun 2022 20:39:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654547967;
-        bh=qeDYNocyvB6ztqkmiLeKEV1qxWokU2Os5Sf6lfKULq8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=FLWMznABSFfkkpCwItmaxJq1ey3mCAS4AXqqUmDRoUHjQ/qct9ufY+QcZtrjhadXE
-         QFmDLlQYvd//o0Ort33ZfuZTBuMuFY9rDheTFpbf7HqkJJ/Yt87LO4lFHlKjylrsb8
-         UF7H/a94f7uM6JXxvsEgcbSl0V4JveoceNnBFhonxzrR/L6UCEbVun1WZ6fHg9FkYe
-         t/oP70qpkDr9wfj9yz4PSYlBCfOy5AnEhW+r4OA//YZm2aWlch0DTlJGSsRSj4dW/o
-         3PekMMwifLR+XgCyTqJAC1zbkjt7MX+0zV57FpKopFEAEwIUmNc6P08egXuTGZ7DBD
-         TsI7lBry+VZdA==
-Message-ID: <058de46e-24cf-e25b-121c-3ff080702776@kernel.org>
-Date:   Mon, 6 Jun 2022 23:39:19 +0300
-MIME-Version: 1.0
-Subject: Re: [PATCH v4 4/4] arm64: dts: qcom: sdm845: Add CPU BWMON
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        with ESMTP id S229834AbiFFU4s (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jun 2022 16:56:48 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECD8106A71
+        for <linux-pm@vger.kernel.org>; Mon,  6 Jun 2022 13:45:54 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id u2so13663796pfc.2
+        for <linux-pm@vger.kernel.org>; Mon, 06 Jun 2022 13:45:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=I1MYgC5T5e5Y+j3sUQDRFkx2mXQdu9/FeqjllZOguTI=;
+        b=Nb68eKSk0EqDzcMgyGdZaXPHSOspFn2UrOnyBXqnGbXVO9SyCXhbm4OFKVpLBB21v8
+         L+rv1FTctVUSpwHRCj07ceZR/MV0Sv3QT/e3z3OPpnc4FtLUoEIRWUjrFSFqZqVr/KkU
+         XIVxbDE2+37Dp4hVlnQ+42fmsnuyM8gOe1LDM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=I1MYgC5T5e5Y+j3sUQDRFkx2mXQdu9/FeqjllZOguTI=;
+        b=5yX8yQ0RocyNB4SbL0EbUy+3nhlN6p1PT/Jk0JtZZQmcsdsNCyEQFN0Ird4eZmbxub
+         XwuwIuP1SFZTaz0XioAoJdKU7Vbpfly36d7dsDiBAB7/o/qxic0jiEX7fh3cj2+zUaAD
+         uFNISulkaJJv6t17+YVgZBedR+7gYFV9Bhh5gvmmRZH0rkA/wapTc80t+05RUduGY0BH
+         6yQmjUgbmtJXvWOajmKWtqmmFpWghVIMQO5vB3fNjzxVwid1izfQ4QAi9L2EfB0p28VN
+         NYEA0k0S2daH+R8Xc9jVazlIXUyANq+zRLGZf6x+D0CUPJcy9cEWWWGRi+oOD4ITeqbD
+         Bj8Q==
+X-Gm-Message-State: AOAM5338TPYknzTi5ruLhlb7I6bOA3iezgfS6owBKE452S3t2jeqrPl4
+        MLPZST9cgz3sMpOt+wwWy+2GsOjs6S4Jyw==
+X-Google-Smtp-Source: ABdhPJwWjV+ZcZBiw7her510xIgFT3A3gR32FqSTa4dJg1oykKnZusf5iQQ2b9OYed3KiAyxFPGanA==
+X-Received: by 2002:a05:6a00:1485:b0:518:e601:dffb with SMTP id v5-20020a056a00148500b00518e601dffbmr26087994pfu.38.1654548353983;
+        Mon, 06 Jun 2022 13:45:53 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:196:a14c:7344:f6db])
+        by smtp.gmail.com with UTF8SMTPSA id u2-20020a170902714200b001621cd83e49sm10954415plm.92.2022.06.06.13.45.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jun 2022 13:45:53 -0700 (PDT)
+Date:   Mon, 6 Jun 2022 13:45:51 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Thara Gopinath <thara.gopinath@linaro.org>
-References: <20220601101140.170504-1-krzysztof.kozlowski@linaro.org>
- <20220601101140.170504-5-krzysztof.kozlowski@linaro.org>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20220601101140.170504-5-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <Yp5nf2w8uVZ38/XZ@google.com>
+References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
+ <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
+ <YpkRDi2m7cLaKYEf@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YpkRDi2m7cLaKYEf@google.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,128 +81,100 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 1.06.22 13:11, Krzysztof Kozlowski wrote:
-> Add device node for CPU-memory BWMON device (bandwidth monitoring) on
-> SDM845 measuring bandwidth between CPU (gladiator_noc) and Last Level
-> Cache (memnoc).  Usage of this BWMON allows to remove fixed bandwidth
-> votes from cpufreq (CPU nodes) thus achieve high memory throughput even
-> with lower CPU frequencies.
+On Thu, Jun 02, 2022 at 12:35:42PM -0700, Matthias Kaehlcke wrote:
+> Hi Krishna,
 > 
-> Performance impact (SDM845-MTP RB3 board, linux next-20220422):
-> 1. No noticeable impact when running with schedutil or performance
->     governors.
+> with this version I see xHCI errors on my SC7180 based system, like
+> these:
 > 
-> 2. When comparing to customized kernel with synced interconnects and
->     without bandwidth votes from CPU freq, the sysbench memory tests
->     show significant improvement with bwmon for blocksizes past the L3
->     cache.  The results for such superficial comparison:
+> [   65.352605] xhci-hcd xhci-hcd.13.auto: xHC error in resume, USBSTS 0x401, Reinit
 > 
-> sysbench memory test, results in MB/s (higher is better)
->   bs kB |  type |    V  | V+no bw votes | bwmon | benefit %
->       1 | W/seq | 14795 |          4816 |  4985 |      3.5%
->      64 | W/seq | 41987 |         10334 | 10433 |      1.0%
->    4096 | W/seq | 29768 |          8728 | 32007 |    266.7%
->   65536 | W/seq | 17711 |          4846 | 18399 |    279.6%
-> 262144 | W/seq | 16112 |          4538 | 17429 |    284.1%
->      64 | R/seq | 61202 |         67092 | 66804 |     -0.4%
->    4096 | R/seq | 23871 |          5458 | 24307 |    345.4%
->   65536 | R/seq | 18554 |          4240 | 18685 |    340.7%
-> 262144 | R/seq | 17524 |          4207 | 17774 |    322.4%
->      64 | W/rnd |  2663 |          1098 |  1119 |      1.9%
->   65536 | W/rnd |   600 |           316 |   610 |     92.7%
->      64 | R/rnd |  4915 |          4784 |  4594 |     -4.0%
->   65536 | R/rnd |   664 |           281 |   678 |    140.7%
+> [  101.307155] xhci-hcd xhci-hcd.13.auto: WARN: xHC CMD_RUN timeout
 > 
-> Legend:
-> bs kB: block size in KB (small block size means only L1-3 caches are
->        used
-> type: R - read, W - write, seq - sequential, rnd - random
-> V: vanilla (next-20220422)
-> V + no bw votes: vanilla without bandwidth votes from CPU freq
-> bwmon: bwmon without bandwidth votes from CPU freq
-> benefit %: difference between vanilla without bandwidth votes and bwmon
->             (higher is better)
+> After resume a downstream hub isn't enumerated again.
 > 
+> So far I didn't see those with v13, but I aso saw the first error with
+> v16.
 
-Ok, now i see! So bwmon shows similar performance compared with the current
-cpufreq-based bandwidth scaling. And if you add bwmon on top of vanilla, are
-the results close/same? Is the plan to remove the cpufreq based bandwidth
-scaling and switch to bwmon? It might improve the power consumption in some
-scenarios.
+It also happens with v13, but only when a wakeup capable vUSB <= 2
+device is plugged in. Initially I used a wakeup capable USB3 to
+Ethernet adapter to trigger the wakeup case, however older versions
+of this series that use usb_wakeup_enabled_descendants() to check
+for wakeup capable devices didn't actually check for vUSB > 2
+devices.
 
-Thanks,
-Georgi
+So the case were the controller/PHYs is powered down works, but
+the controller is unhappy when the runtime PM path is used during
+system suspend.
 
-> Co-developed-by: Thara Gopinath <thara.gopinath@linaro.org>
-> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->   arch/arm64/boot/dts/qcom/sdm845.dtsi | 54 ++++++++++++++++++++++++++++
->   1 file changed, 54 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> index 83e8b63f0910..adffb9c70566 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> @@ -2026,6 +2026,60 @@ llcc: system-cache-controller@1100000 {
->   			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
->   		};
->   
-> +		pmu@1436400 {
-> +			compatible = "qcom,sdm845-cpu-bwmon";
-> +			reg = <0 0x01436400 0 0x600>;
-> +
-> +			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
-> +					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-> +			interconnect-names = "ddr", "l3c";
-> +
-> +			operating-points-v2 = <&cpu_bwmon_opp_table>;
-> +
-> +			cpu_bwmon_opp_table: opp-table {
-> +				compatible = "operating-points-v2";
-> +
-> +				/*
-> +				 * The interconnect paths bandwidths taken from
-> +				 * cpu4_opp_table bandwidth.
-> +				 * They also match different tables from
-> +				 * msm-4.9 downstream kernel:
-> +				 *  - the gladiator_noc-mem_noc from bandwidth
-> +				 *    table of qcom,llccbw (property qcom,bw-tbl);
-> +				 *    bus width: 4 bytes;
-> +				 *  - the OSM L3 from bandwidth table of
-> +				 *    qcom,cpu4-l3lat-mon (qcom,core-dev-table);
-> +				 *    bus width: 16 bytes;
-> +				 */
-> +				opp-0 {
-> +					opp-peak-kBps = <800000 4800000>;
-> +				};
-> +				opp-1 {
-> +					opp-peak-kBps = <1804000 9216000>;
-> +				};
-> +				opp-2 {
-> +					opp-peak-kBps = <2188000 11980800>;
-> +				};
-> +				opp-3 {
-> +					opp-peak-kBps = <3072000 15052800>;
-> +				};
-> +				opp-4 {
-> +					opp-peak-kBps = <4068000 19353600>;
-> +				};
-> +				opp-5 {
-> +					opp-peak-kBps = <5412000 20889600>;
-> +				};
-> +				opp-6 {
-> +					opp-peak-kBps = <6220000 22425600>;
-> +				};
-> +				opp-7 {
-> +					opp-peak-kBps = <7216000 25497600>;
-> +				};
-> +			};
-> +		};
-> +
->   		pcie0: pci@1c00000 {
->   			compatible = "qcom,pcie-sdm845";
->   			reg = <0 0x01c00000 0 0x2000>,
-
+> On Thu, Jun 02, 2022 at 01:54:34PM +0530, Krishna Kurapati wrote:
+> > From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> > 
+> > Check wakeup-source property for dwc3 core node to set the
+> > wakeup capability. Drop the device_init_wakeup call from
+> > runtime suspend and resume.
+> > 
+> > If the dwc3 is wakeup capable, don't power down the USB PHY(s).
+> > The glue drivers are expected to take care of configuring the
+> > additional wakeup settings if needed based on the dwc3 wakeup
+> > capability status. In some SOC designs, powering off the PHY is
+> > resulting in higher leakage, so this patch save power on such boards.
+> > 
+> > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> > Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> > Reviewed-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+> > ---
+> >  drivers/usb/dwc3/core.c | 9 +++------
+> >  1 file changed, 3 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index e027c04..b99d3c2 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -1787,6 +1787,7 @@ static int dwc3_probe(struct platform_device *pdev)
+> >  
+> >  	platform_set_drvdata(pdev, dwc);
+> >  	dwc3_cache_hwparams(dwc);
+> > +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
+> >  
+> >  	spin_lock_init(&dwc->lock);
+> >  	mutex_init(&dwc->mutex);
+> > @@ -1948,7 +1949,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> >  		dwc3_core_exit(dwc);
+> >  		break;
+> >  	case DWC3_GCTL_PRTCAP_HOST:
+> > -		if (!PMSG_IS_AUTO(msg)) {
+> > +		if (!PMSG_IS_AUTO(msg) && !device_can_wakeup(dwc->dev)) {
+> >  			dwc3_core_exit(dwc);
+> >  			break;
+> >  		}
+> > @@ -2009,7 +2010,7 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+> >  		spin_unlock_irqrestore(&dwc->lock, flags);
+> >  		break;
+> >  	case DWC3_GCTL_PRTCAP_HOST:
+> > -		if (!PMSG_IS_AUTO(msg)) {
+> > +		if (!PMSG_IS_AUTO(msg) && !device_can_wakeup(dwc->dev)) {
+> >  			ret = dwc3_core_init_for_resume(dwc);
+> >  			if (ret)
+> >  				return ret;
+> > @@ -2086,8 +2087,6 @@ static int dwc3_runtime_suspend(struct device *dev)
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > -	device_init_wakeup(dev, true);
+> > -
+> >  	return 0;
+> >  }
+> >  
+> > @@ -2096,8 +2095,6 @@ static int dwc3_runtime_resume(struct device *dev)
+> >  	struct dwc3     *dwc = dev_get_drvdata(dev);
+> >  	int		ret;
+> >  
+> > -	device_init_wakeup(dev, false);
+> > -
+> >  	ret = dwc3_resume_common(dwc, PMSG_AUTO_RESUME);
+> >  	if (ret)
+> >  		return ret;
+> > -- 
+> > 2.7.4
+> > 
