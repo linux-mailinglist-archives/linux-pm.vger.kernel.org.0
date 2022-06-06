@@ -2,208 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BDB153F16A
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jun 2022 23:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE3C53F1F9
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jun 2022 00:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235030AbiFFVJa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Jun 2022 17:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43254 "EHLO
+        id S232004AbiFFWLI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Jun 2022 18:11:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235049AbiFFVJW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jun 2022 17:09:22 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F7D647C
-        for <linux-pm@vger.kernel.org>; Mon,  6 Jun 2022 14:09:18 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-fb6b4da1dfso2712763fac.4
-        for <linux-pm@vger.kernel.org>; Mon, 06 Jun 2022 14:09:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KjZUeR41V+hdVlsqMk8d6AC7MYE0tWAvsjnkRUTqWy0=;
-        b=pFvU4CCOoui9Xxwvj+qmAzvOiXI5aFvbgInYPFz5KR8vAZcLHD+eEK+zBnSYabG76Y
-         MRbf1UnC8j/xo4HYq+uQIv7B4Yo4XSCQVBFX4QN+29ohKySkRHLH8O6dLfXIRcEhoZHk
-         F+kZ7/hlhRgAU6+FKMAK4AcL0Zy1S2foyOzvqfUfQP4ii2fFfQPSFElUi+vip+WNdGs2
-         aJy5/A7s8iEQiAMgum4CAooOH52UZzohQgmE3lxqlDPwx39Z0rbT1T65u5ahuNxZgHri
-         XpAhd6N9EMVKAo2hPVj7k5YB+vDf1PNUK2WXKIL44ij8uok/rG3Qeu7OsWtHTFwEkoJ5
-         kWTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KjZUeR41V+hdVlsqMk8d6AC7MYE0tWAvsjnkRUTqWy0=;
-        b=zOE+nzsKR8yqjKG9ntD4lrQHklRngYnVunnxhF8hoi2ymmCmv87TskEDMlxEu85vys
-         nBw6Dz5uQOdKt5WzxgEjUrv1HcEyEVeDsKpo9NnqeFqregT/idwMN2fS67Xja/vgr50H
-         TtFukmwSiAR+/0nnmOlgDqITQURzIdIx5qS7mLbumLBAJNeuBnZv+njNvJBf/Dry8yt8
-         HXsphGsq6EQQ9GEC6UYsGVB5vsC4u1OHy59SgHbbhg6KwSlNMlVsbbETEQtXPHQ03np6
-         X7rxaJ2U8qUPeWscHzxxtbVbNvCED/led+S8jRrDjLj+o3A5RiYztL3hib61btDwCqvg
-         Sk0A==
-X-Gm-Message-State: AOAM532b3Fnk+J+Ifepxuj+plt3Yh+wD6ZGS3zmu1oEUgLn30YeggK+H
-        863Id5P+kWcqWe9O91qvV5kg8A==
-X-Google-Smtp-Source: ABdhPJyFpCdTs573Aa9BUetYgzmOYdpif+0Pijgsdtagi9smmxL5Z1AK44PHxIkjGftSEl++FYBRGQ==
-X-Received: by 2002:a05:6870:b14c:b0:fa:e853:9a7e with SMTP id a12-20020a056870b14c00b000fae8539a7emr9763440oal.186.1654549757512;
-        Mon, 06 Jun 2022 14:09:17 -0700 (PDT)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id q28-20020a05683022dc00b0060c00c3fde5sm1108100otc.72.2022.06.06.14.09.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jun 2022 14:09:16 -0700 (PDT)
-Date:   Mon, 6 Jun 2022 14:11:41 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v4 1/4] dt-bindings: interconnect: qcom,sdm845-cpu-bwmon:
- add BWMON device
-Message-ID: <Yp5tjUICIEUptKSx@ripper>
-References: <20220601101140.170504-1-krzysztof.kozlowski@linaro.org>
- <20220601101140.170504-2-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S231521AbiFFWLI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jun 2022 18:11:08 -0400
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326D96129D;
+        Mon,  6 Jun 2022 15:11:05 -0700 (PDT)
+Received: from in01.mta.xmission.com ([166.70.13.51]:48510)
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nyKvz-004XaN-Qz; Mon, 06 Jun 2022 16:10:51 -0600
+Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:53402 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1nyKvy-008VN9-IW; Mon, 06 Jun 2022 16:10:51 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
+        Robert OCallahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Douglas Miller <dougmill@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+References: <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
+        <20220518225355.784371-7-ebiederm@xmission.com>
+        <20220524132553.GD14347@redhat.com>
+        <20220524162808.GF14347@redhat.com> <20220525142845.GA2687@redhat.com>
+Date:   Mon, 06 Jun 2022 17:10:02 -0500
+In-Reply-To: <20220525142845.GA2687@redhat.com> (Oleg Nesterov's message of
+        "Wed, 25 May 2022 16:28:46 +0200")
+Message-ID: <87a6ap30lh.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220601101140.170504-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-XM-SPF: eid=1nyKvy-008VN9-IW;;;mid=<87a6ap30lh.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
+X-XM-AID: U2FsdGVkX1+3n228nDtWW1iPO1xW1EOl4V38qn2RLFc=
+X-SA-Exim-Connect-IP: 68.227.174.4
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ***;Oleg Nesterov <oleg@redhat.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 680 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 10 (1.5%), b_tie_ro: 9 (1.3%), parse: 0.95 (0.1%),
+         extract_message_metadata: 3.3 (0.5%), get_uri_detail_list: 1.48
+        (0.2%), tests_pri_-1000: 5 (0.8%), tests_pri_-950: 1.20 (0.2%),
+        tests_pri_-900: 1.06 (0.2%), tests_pri_-90: 345 (50.8%), check_bayes:
+        344 (50.6%), b_tokenize: 10 (1.5%), b_tok_get_all: 11 (1.5%),
+        b_comp_prob: 2.8 (0.4%), b_tok_touch_all: 316 (46.5%), b_finish: 0.90
+        (0.1%), tests_pri_0: 296 (43.5%), check_dkim_signature: 0.52 (0.1%),
+        check_dkim_adsp: 2.8 (0.4%), poll_dns_idle: 0.99 (0.1%), tests_pri_10:
+        2.1 (0.3%), tests_pri_500: 7 (1.0%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 07/16] signal: Wake up the designated parent
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed 01 Jun 03:11 PDT 2022, Krzysztof Kozlowski wrote:
+Oleg Nesterov <oleg@redhat.com> writes:
 
-> Add bindings for the Qualcomm Bandwidth Monitor device providing
-> performance data on interconnects.  The bindings describe only BWMON
-> version 4, e.g. the instance on SDM845 between CPU and Last Level Cache
-> Controller.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Acked-by: Georgi Djakov <djakov@kernel.org>
-> ---
->  .../interconnect/qcom,sdm845-cpu-bwmon.yaml   | 97 +++++++++++++++++++
->  1 file changed, 97 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
-> new file mode 100644
-> index 000000000000..8c82e06ee432
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,sdm845-cpu-bwmon.yaml
-> @@ -0,0 +1,97 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interconnect/qcom,sdm845-cpu-bwmon.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Interconnect Bandwidth Monitor
-> +
-> +maintainers:
-> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> +
-> +description:
-> +  Bandwidth Monitor measures current throughput on buses between various NoC
-> +  fabrics and provides information when it crosses configured thresholds.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,sdm845-cpu-bwmon       # BWMON v4
+> On 05/24, Oleg Nesterov wrote:
+>>
+>> On 05/24, Oleg Nesterov wrote:
+>> >
+>> > I fail to understand this patch...
+>> >
+>> > On 05/18, Eric W. Biederman wrote:
+>> > >
+>> > > Today if a process is ptraced only the ptracer will ever be woken up in
+>> > > wait
+>> >
+>> > and why is this wrong?
+>> >
+>> > > Fixes: 75b95953a569 ("job control: Add @for_ptrace to do_notify_parent_cldstop()")
+>> >
+>> > how does this change fix 75b95953a569?
+>>
+>> OK, I guess you mean the 2nd do_notify_parent_cldstop() in ptrace_stop(),
+>> the problematic case is current->ptrace == T. Right?
+>>
+>> I dislike this patch anyway, but let me think more about it.
+>
+> OK, now that I understand the problem, the patch doesn't look bad to me,
+> although I'd ask to make the changelog more clear.
 
-It seems the thing that's called bwmon v4 is compatible with a number of
-different platforms, should we add a generic compatible to the binding
-as well, to avoid having to update the implementation for each SoC?
+I will see what I can do.
 
-(I.e. "qcom,sdm845-cpu-bwmon", "qcom,bwmon-v4")
+> After this change __wake_up_parent() can't accept any "parent" from
+> p->parent thread group, but all callers look fine except
+> ptrace_detach().
 
-Regards,
-Bjorn
+Having looked at it a little more I think the change was too
+restrictive.  For the !ptrace_reparented case there are possibly
+two threads of the parent process that wait_consider_task will
+allow to wait even with __WNOTHREAD specified.  It is desirable
+to wake them both up.
 
-> +
-> +  interconnects:
-> +    maxItems: 2
-> +
-> +  interconnect-names:
-> +    items:
-> +      - const: ddr
-> +      - const: l3c
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  operating-points-v2: true
-> +  opp-table: true
-> +
-> +  reg:
-> +    # Currently described BWMON v4 and v5 use one register address space.
-> +    # BWMON v2 uses two register spaces - not yet described.
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - interconnects
-> +  - interconnect-names
-> +  - interrupts
-> +  - operating-points-v2
-> +  - opp-table
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interconnect/qcom,osm-l3.h>
-> +    #include <dt-bindings/interconnect/qcom,sdm845.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    pmu@1436400 {
-> +        compatible = "qcom,sdm845-cpu-bwmon";
-> +        reg = <0x01436400 0x600>;
-> +
-> +        interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +        interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
-> +                        <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-> +        interconnect-names = "ddr", "l3c";
-> +
-> +        operating-points-v2 = <&cpu_bwmon_opp_table>;
-> +
-> +        cpu_bwmon_opp_table: opp-table {
-> +            compatible = "operating-points-v2";
-> +
-> +            opp-0 {
-> +                opp-peak-kBps = <800000 4800000>;
-> +            };
-> +            opp-1 {
-> +                opp-peak-kBps = <1804000 9216000>;
-> +            };
-> +            opp-2 {
-> +                opp-peak-kBps = <2188000 11980800>;
-> +            };
-> +            opp-3 {
-> +                opp-peak-kBps = <3072000 15052800>;
-> +            };
-> +            opp-4 {
-> +                opp-peak-kBps = <4068000 19353600>;
-> +            };
-> +            opp-5 {
-> +                opp-peak-kBps = <5412000 20889600>;
-> +            };
-> +            opp-6 {
-> +                opp-peak-kBps = <6220000 22425600>;
-> +            };
-> +            opp-7 {
-> +                opp-peak-kBps = <7216000 25497600>;
-> +            };
-> +        };
-> +    };
-> -- 
-> 2.34.1
-> 
+Which if I have had enough sleep reduces this patch to just:
+
+diff --git a/kernel/exit.c b/kernel/exit.c
+index f072959fcab7..c8156366b722 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -1431,8 +1431,10 @@ static int child_wait_callback(wait_queue_entry_t *wait, unsigned mode,
+        if (!eligible_pid(wo, p))
+                return 0;
+ 
+-       if ((wo->wo_flags & __WNOTHREAD) && wait->private != p->parent)
+-               return 0;
++       if ((wo->wo_flags & __WNOTHREAD) &&
++           (wait->private != p->parent) &&
++           (wait->private != p->real_parent))
++                       return 0;
+ 
+        return default_wake_function(wait, mode, sync, key);
+ }
+
+
+I think that solves the issue without missing wake-ups without adding
+any more.
+
+For the same set of reasons it looks like the __wake_up_parent in
+__ptrace_detach is just simply dead code.  I don't think there is a case
+where when !ptrace_reparented the thread that is the real_parent can
+sleep in do_wait when the thread that was calling ptrace could not.
+
+That needs a very close look to confirm. 
+
+Eric
+
