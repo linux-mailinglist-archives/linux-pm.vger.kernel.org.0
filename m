@@ -2,70 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61E5753DEE1
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jun 2022 01:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F73953E01C
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jun 2022 05:34:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351792AbiFEXEL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 5 Jun 2022 19:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42678 "EHLO
+        id S1349387AbiFFDd4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 5 Jun 2022 23:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231932AbiFEXEK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Jun 2022 19:04:10 -0400
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35BDE37BCC;
-        Sun,  5 Jun 2022 16:04:10 -0700 (PDT)
-Received: by mail-qv1-f48.google.com with SMTP id s10so6132876qvt.8;
-        Sun, 05 Jun 2022 16:04:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PQ86WMtQWZtiSCCUV0t2mZwhMOZMEYWoxSVQTAw8avI=;
-        b=AmRluNomWSrH8h9MrGT3LA4kPVPUGE0frL/6r66BxjjKMiquWjS3IuONJhCcnwUFGF
-         tU3n/C5jZ/5tIYZQ1QaWR+3pet2oZUhP+h7ZDxodxvvR+qwh+y83Q1evk1BVRU40IevH
-         Iqxn1XRxV84iIUOzeGsk7nMfv2UZqBiGPZ9YFPMcqIwSo1g76PgMBTbJAMN1wYPCiFpx
-         jnMS7Ehb0xqphef0W8XBFuGuOe/w8ZZEMh6fvTxwtTvcx5CK9A2lvVSi0ce9EqIZfzXM
-         41K2TTVirM/afUE4cGr2l8nCHlO/BMjkT5MS+RpdM40MyM9xWK2woU5Y+JEy/GaiDE0V
-         pdPA==
-X-Gm-Message-State: AOAM531xbOdoX7UrD/K7LgDvJ51Fqh1WAmcLoJwYe9qEN4Z60WUefwT0
-        OPju4peITtq77e6Lk7OV1Wh3xBQFaw==
-X-Google-Smtp-Source: ABdhPJw8o4qYBHW4CaM8n7loO8vPejDTZL9r68n+Z50Xa/JCRCy726BVnoeF1wKhs0xUySvy2IwPyw==
-X-Received: by 2002:a05:6214:29c6:b0:466:fda7:8279 with SMTP id gh6-20020a05621429c600b00466fda78279mr15387044qvb.32.1654470249321;
-        Sun, 05 Jun 2022 16:04:09 -0700 (PDT)
-Received: from robh.at.kernel.org ([2607:fb90:1bdb:2e61:f12:452:5315:9c7e])
-        by smtp.gmail.com with ESMTPSA id q19-20020a05620a0d9300b006a68fdc2d18sm7459600qkl.130.2022.06.05.16.04.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jun 2022 16:04:09 -0700 (PDT)
-Received: (nullmailer pid 3694907 invoked by uid 1000);
-        Sun, 05 Jun 2022 23:04:04 -0000
-Date:   Sun, 5 Jun 2022 18:04:04 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Luca Ceresoli <luca@lucaceresoli.net>
-Cc:     linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Lee Jones <lee.jones@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-pm@vger.kernel.org, Leon Luo <leonl@leopardimaging.com>,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        linux-clk@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH 2/6] dt-bindings: update Luca Ceresoli's e-mail address
-Message-ID: <20220605230404.GA3694857-robh@kernel.org>
-References: <20220603155727.1232061-1-luca@lucaceresoli.net>
- <20220603155727.1232061-2-luca@lucaceresoli.net>
+        with ESMTP id S233696AbiFFDdx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Jun 2022 23:33:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5425237A38;
+        Sun,  5 Jun 2022 20:33:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C755C60EDE;
+        Mon,  6 Jun 2022 03:33:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 18083C341C0;
+        Mon,  6 Jun 2022 03:33:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654486430;
+        bh=TI4P18/3vyoUu1YoM1I93ZEGQv/UWUtMjgpV3is+1kU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=tFJZusU1hxG2s1CJAu/uiv0E+bAvVegQhojDIoAHyJhGf2CpfQHdYfd63OYaXP0/3
+         tl9nzWxkaafABij8lqsZ5MrgoRiCJkmKhT6mUps3kQJJUcarzBWjvqhX+nnzU7KuuH
+         M1sITb9nLev16/CnmDOBLDR9sft1NqYa56mDK6TYh+XhuSxzBGaz00U17pkjsv1ykO
+         1xbqro3byn4WFq2ZXjDSp5Mx6gkf+iadKrRgaEInhfU6CUJOoXak/Exda99R6yHsRc
+         ZpeQ/WkQ7MtuWXRB2kZKovQ5cRR+ulL6ulkGtXTJWKxLQIUAMOP2Du9HlLMaTPj68u
+         6fltf6QTe+EWQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E9551E737F0;
+        Mon,  6 Jun 2022 03:33:49 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220603155727.1232061-2-luca@lucaceresoli.net>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] dt-bindings: Fix properties without any type
+From:   patchwork-bot+chrome-platform@kernel.org
+Message-Id: <165448642995.20111.10251737230487275413.git-patchwork-notify@kernel.org>
+Date:   Mon, 06 Jun 2022 03:33:49 +0000
+References: <20220519211411.2200720-1-robh@kernel.org>
+In-Reply-To: <20220519211411.2200720-1-robh@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, krzk+dt@kernel.org,
+        thierry.reding@gmail.com, sam@ravnborg.org,
+        linus.walleij@linaro.org, brgl@bgdev.pl, dmitry.torokhov@gmail.com,
+        bleung@chromium.org, groeck@chromium.org, mchehab@kernel.org,
+        peda@axentia.se, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, kvalo@kernel.org, bhelgaas@google.com,
+        sre@kernel.org, mpm@selenic.com, herbert@gondor.apana.org.au,
+        gregkh@linuxfoundation.org, broonie@kernel.org, mripard@kernel.org,
+        dri-devel@lists.freedesktop.org, linux-gpio@vger.kernel.org,
+        linux-input@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-media@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,16 +69,29 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 03 Jun 2022 17:57:23 +0200, Luca Ceresoli wrote:
-> My Bootlin address is preferred from now on.
-> 
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> ---
->  Documentation/devicetree/bindings/clock/idt,versaclock5.yaml    | 2 +-
->  Documentation/devicetree/bindings/mfd/maxim,max77714.yaml       | 2 +-
->  .../devicetree/bindings/power/supply/maxim,max77976.yaml        | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
+Hello:
 
-Applied, thanks!
+This patch was applied to chrome-platform/linux.git (for-next)
+by Rob Herring <robh@kernel.org>:
+
+On Thu, 19 May 2022 16:14:11 -0500 you wrote:
+> Now that the schema tools can extract type information for all
+> properties (in order to decode dtb files), finding properties missing
+> any type definition is fairly trivial though not yet automated.
+> 
+> Fix the various property schemas which are missing a type. Most of these
+> tend to be device specific properties which don't have a vendor prefix.
+> A vendor prefix is how we normally ensure a type is defined.
+> 
+> [...]
+
+Here is the summary with links:
+  - dt-bindings: Fix properties without any type
+    https://git.kernel.org/chrome-platform/c/4e71ed985389
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
