@@ -2,178 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F8153ECBF
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jun 2022 19:11:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 044E253ECEE
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jun 2022 19:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbiFFRKo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Jun 2022 13:10:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41060 "EHLO
+        id S230017AbiFFRTW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Jun 2022 13:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiFFRJp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jun 2022 13:09:45 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1098EE01;
-        Mon,  6 Jun 2022 09:57:40 -0700 (PDT)
-Received: from dimapc.. (109-252-138-163.dynamic.spd-mgts.ru [109.252.138.163])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 60BFF6601C72;
-        Mon,  6 Jun 2022 17:57:38 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654534658;
-        bh=FIM8GIMepvfnT4TQY6iQ3wpMknXZhv7KK8TRc4lbx5s=;
-        h=From:To:Cc:Subject:Date:From;
-        b=YONWZn/EaULMwx0P2lLlZ6TNlQne7C9taGsOhCqpOvnf/WD5a+7HtSra1qVT8PzO5
-         ojtHkBlPKFJ7IswrQoiHmRsp4hGCVBCGLefXiJ5hX46H848bwPCdDFxkw0hC0II95d
-         mFLlTR17jOKfrUYCPn0q905VuZ2WfEErlUGYqbDAGHPpMXexGYXEFjCR3rGDff7bW5
-         Mmko2QII3kn72nAvQLANVJimNKekHDYoDJUT7AJ+VKfHd/SOAvwHqAC53na/UYrxqg
-         SuRCTnfA0MEreVTueWYbJZaA6NpF6flNj1j+5Tyd5gEfPQc9Kgit/hIBKsUcDJ3S8/
-         BALJPxR8zhZPw==
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v1] kernel/reboot: Fix powering off using a non-syscall code paths
-Date:   Mon,  6 Jun 2022 19:56:40 +0300
-Message-Id: <20220606165640.634811-1-dmitry.osipenko@collabora.com>
-X-Mailer: git-send-email 2.35.3
+        with ESMTP id S229737AbiFFRSy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jun 2022 13:18:54 -0400
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9672A5130C;
+        Mon,  6 Jun 2022 10:17:53 -0700 (PDT)
+Received: by mail-il1-f172.google.com with SMTP id d6so1584259ilm.4;
+        Mon, 06 Jun 2022 10:17:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HOgnxEn2ntmtyghL8kOb8yKeTcYGElnyCDEZZ25iRQw=;
+        b=4Rh+2Oy1eY+bYftHCMJntZLu8WUck5porKU754FT8zR6Zrc1ge8btPSGostMVvL3OV
+         SnatfcmfJPoHw7VIetGqvBuSKTKPotPkorQG4RXog3r5KyneQybFCNA9fqODyOKRq3cu
+         JkaTE/OFn4WPIjCWenuUfzjbasK2sDP1uqtUW/40cuMglBuofp7f/Oia3KkhOuYBhBs1
+         zDb4DZfYV+MsuQ3edePHr3aP1Esoi6MOLB2QkKXTxM7QsCyoF5MMBvITQaP0EV0aXodl
+         RetlcCfUZYhfHhYAog1vp4KXM6Gzb+sf29gK7B1QzTvRWwHn+wWbjU7x264uiR/Kwrn1
+         9X9A==
+X-Gm-Message-State: AOAM530qDiQ4MgwcvCqSG0y8EZVSl3dzi7fzsuYTm8MTuU14l6VTbLCZ
+        6jqA5yTXnzCXGGmZPA2C0A==
+X-Google-Smtp-Source: ABdhPJxXRz8rpxHVMQETrBoM9cb8XJJozkw5PJACTm4qK/vhBn8tviwY3PyY58j2eoaPB/u3qpK33w==
+X-Received: by 2002:a05:6e02:184f:b0:2d3:d0c2:d56a with SMTP id b15-20020a056e02184f00b002d3d0c2d56amr13953839ilv.174.1654535872910;
+        Mon, 06 Jun 2022 10:17:52 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id t17-20020a92c0d1000000b002d3da8e4af5sm6121750ilf.23.2022.06.06.10.17.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 10:17:52 -0700 (PDT)
+Received: (nullmailer pid 911134 invoked by uid 1000);
+        Mon, 06 Jun 2022 17:17:47 -0000
+Date:   Mon, 6 Jun 2022 12:17:47 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        keyrings@vger.kernel.org, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-cachefs@redhat.com,
+        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mmc@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [PATCH 00/23] Update Documentation/ cross-references
+Message-ID: <20220606171747.GB899329-robh@kernel.org>
+References: <cover.1654529011.git.mchehab@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1654529011.git.mchehab@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There are other methods of powering off machine than the reboot syscall.
-Previously we missed to coved those methods and it created power-off
-regression for some machines, like the PowerPC e500. Fix this problem
-by moving the legacy sys-off handler registration to the latest phase
-of power-off process and making the kernel_can_power_off() to check the
-legacy pm_power_off presence.
+On Mon, Jun 06, 2022 at 04:25:22PM +0100, Mauro Carvalho Chehab wrote:
+> Hi John,
+> 
+> There were a number of DT binding conversions and other docs change that
+> were not updated. Address them, in order to keep the cross-references on
+> a sane state.
+> 
+> Patch series is against v5.19-rc1 (and applies cleanly on the top of
+> today's -next).
+> 
+> Mauro Carvalho Chehab (23):
+>   dt-bindings: mfd: bd9571mwv: update rohm,bd9571mwv.yaml reference
+>   dt-bindings: interrupt-controller: update brcm,l2-intc.yaml reference
+>   dt-bindings: arm: update vexpress-config.yaml references
+>   dt-bindings: reset: update st,stih407-powerdown.yaml references
+>   dt-bindings: mfd: rk808: update rockchip,rk808.yaml reference
+>   dt-bindings: mmc: exynos-dw-mshc: update samsung,pinctrl.yaml
+>     reference
+>   docs: netdev: update maintainer-netdev.rst reference
+>   docs: filesystems: update netfs-api.rst reference
+>   Documentation: update watch_queue.rst references
+>   Documentation: KVM: update s390-pv.rst reference
+>   Documentation: KVM: update amd-memory-encryption.rst references
+>   Documentation: KVM: update msr.rst reference
+>   Documentation: KVM: update s390-diag.rst reference
+>   MAINTAINERS: update arm,hdlcd.yaml reference
+>   MAINTAINERS: update arm,komeda.yaml reference
+>   MAINTAINERS: update arm,malidp.yaml reference
+>   MAINTAINERS: update cortina,gemini-ethernet.yaml reference
+>   MAINTAINERS: update dongwoon,dw9807-vcm.yaml reference
+>   MAINTAINERS: update maxim,max77693.yaml reference
+>   MAINTAINERS: update snps,axs10x-reset.yaml reference
+>   objtool: update objtool.txt references
+>   ASoC: wm8731: update wlf,wm8731.yaml reference
+>   arch: m68k: q40: README: drop references to IDE driver
 
-Tested-by: Michael Ellerman <mpe@ellerman.id.au> # ppce500
-Reported-by: Michael Ellerman <mpe@ellerman.id.au> # ppce500
-Fixes: da007f171fc9 ("kernel/reboot: Change registration order of legacy power-off handler")
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
----
- kernel/reboot.c | 46 ++++++++++++++++++++++++++--------------------
- 1 file changed, 26 insertions(+), 20 deletions(-)
-
-diff --git a/kernel/reboot.c b/kernel/reboot.c
-index 3b19b123efec..b5a71d1ff603 100644
---- a/kernel/reboot.c
-+++ b/kernel/reboot.c
-@@ -320,6 +320,7 @@ static struct sys_off_handler platform_sys_off_handler;
- static struct sys_off_handler *alloc_sys_off_handler(int priority)
- {
- 	struct sys_off_handler *handler;
-+	gfp_t flags;
- 
- 	/*
- 	 * Platforms like m68k can't allocate sys_off handler dynamically
-@@ -330,7 +331,12 @@ static struct sys_off_handler *alloc_sys_off_handler(int priority)
- 		if (handler->cb_data)
- 			return ERR_PTR(-EBUSY);
- 	} else {
--		handler = kzalloc(sizeof(*handler), GFP_KERNEL);
-+		if (system_state > SYSTEM_RUNNING)
-+			flags = GFP_ATOMIC;
-+		else
-+			flags = GFP_KERNEL;
-+
-+		handler = kzalloc(sizeof(*handler), flags);
- 		if (!handler)
- 			return ERR_PTR(-ENOMEM);
- 	}
-@@ -440,7 +446,7 @@ void unregister_sys_off_handler(struct sys_off_handler *handler)
- {
- 	int err;
- 
--	if (!handler)
-+	if (IS_ERR_OR_NULL(handler))
- 		return;
- 
- 	if (handler->blocking)
-@@ -615,7 +621,23 @@ static void do_kernel_power_off_prepare(void)
-  */
- void do_kernel_power_off(void)
- {
-+	struct sys_off_handler *sys_off = NULL;
-+
-+	/*
-+	 * Register sys-off handlers for legacy PM callback. This allows
-+	 * legacy PM callbacks temporary co-exist with the new sys-off API.
-+	 *
-+	 * TODO: Remove legacy handlers once all legacy PM users will be
-+	 *       switched to the sys-off based APIs.
-+	 */
-+	if (pm_power_off)
-+		sys_off = register_sys_off_handler(SYS_OFF_MODE_POWER_OFF,
-+						   SYS_OFF_PRIO_DEFAULT,
-+						   legacy_pm_power_off, NULL);
-+
- 	atomic_notifier_call_chain(&power_off_handler_list, 0, NULL);
-+
-+	unregister_sys_off_handler(sys_off);
- }
- 
- /**
-@@ -626,7 +648,8 @@ void do_kernel_power_off(void)
-  */
- bool kernel_can_power_off(void)
- {
--	return !atomic_notifier_call_chain_is_empty(&power_off_handler_list);
-+	return !atomic_notifier_call_chain_is_empty(&power_off_handler_list) ||
-+		pm_power_off;
- }
- EXPORT_SYMBOL_GPL(kernel_can_power_off);
- 
-@@ -661,7 +684,6 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
- 		void __user *, arg)
- {
- 	struct pid_namespace *pid_ns = task_active_pid_ns(current);
--	struct sys_off_handler *sys_off = NULL;
- 	char buffer[256];
- 	int ret = 0;
- 
-@@ -686,21 +708,6 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
- 	if (ret)
- 		return ret;
- 
--	/*
--	 * Register sys-off handlers for legacy PM callback. This allows
--	 * legacy PM callbacks temporary co-exist with the new sys-off API.
--	 *
--	 * TODO: Remove legacy handlers once all legacy PM users will be
--	 *       switched to the sys-off based APIs.
--	 */
--	if (pm_power_off) {
--		sys_off = register_sys_off_handler(SYS_OFF_MODE_POWER_OFF,
--						   SYS_OFF_PRIO_DEFAULT,
--						   legacy_pm_power_off, NULL);
--		if (IS_ERR(sys_off))
--			return PTR_ERR(sys_off);
--	}
--
- 	/* Instead of trying to make the power_off code look like
- 	 * halt when pm_power_off is not set do it the easy way.
- 	 */
-@@ -758,7 +765,6 @@ SYSCALL_DEFINE4(reboot, int, magic1, int, magic2, unsigned int, cmd,
- 		break;
- 	}
- 	mutex_unlock(&system_transition_mutex);
--	unregister_sys_off_handler(sys_off);
- 	return ret;
- }
- 
--- 
-2.35.3
-
+Applied patches 1-5,17,18,20
