@@ -2,65 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F73953E01C
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jun 2022 05:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B40BE53E917
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jun 2022 19:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349387AbiFFDd4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 5 Jun 2022 23:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
+        id S232768AbiFFJU6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Jun 2022 05:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233696AbiFFDdx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 5 Jun 2022 23:33:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5425237A38;
-        Sun,  5 Jun 2022 20:33:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C755C60EDE;
-        Mon,  6 Jun 2022 03:33:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 18083C341C0;
-        Mon,  6 Jun 2022 03:33:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654486430;
-        bh=TI4P18/3vyoUu1YoM1I93ZEGQv/UWUtMjgpV3is+1kU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=tFJZusU1hxG2s1CJAu/uiv0E+bAvVegQhojDIoAHyJhGf2CpfQHdYfd63OYaXP0/3
-         tl9nzWxkaafABij8lqsZ5MrgoRiCJkmKhT6mUps3kQJJUcarzBWjvqhX+nnzU7KuuH
-         M1sITb9nLev16/CnmDOBLDR9sft1NqYa56mDK6TYh+XhuSxzBGaz00U17pkjsv1ykO
-         1xbqro3byn4WFq2ZXjDSp5Mx6gkf+iadKrRgaEInhfU6CUJOoXak/Exda99R6yHsRc
-         ZpeQ/WkQ7MtuWXRB2kZKovQ5cRR+ulL6ulkGtXTJWKxLQIUAMOP2Du9HlLMaTPj68u
-         6fltf6QTe+EWQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E9551E737F0;
-        Mon,  6 Jun 2022 03:33:49 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S232756AbiFFJUz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jun 2022 05:20:55 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40D837AAF
+        for <linux-pm@vger.kernel.org>; Mon,  6 Jun 2022 02:20:52 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id u12so27715405eja.8
+        for <linux-pm@vger.kernel.org>; Mon, 06 Jun 2022 02:20:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=BPuEXMq+9lFEX3s+CewNQ8QOCm+DO64U8n+0VKR7QWA=;
+        b=HK+Nt7xTLdOK4LakJ8fa1HYObrvUhYOKzTayvt6U/GnZYaeLXZmchU+MGT8KOKEoAC
+         mT4eXur0L2XfiuDlWK0H7ob5mehbXpY1L1L1ox73iApWtDylOAkhlO/PfAR4OVpbd/E7
+         RHgV5b8Z3peVnFnsvRJfBuwFhCEBiyem9XiokL1U3euUdohlP6/sWhyhiGY4wVGa/Uqs
+         rQ0Xcl9tDp4pIA6sswu97F74HnZKzGIsAGzcc3FXX0ri0YR9Akjm5OpbegeXFjNJ6G9c
+         +UVy4AWPEoxw1sY9oNlYLfvfEOR1z7wjMJVRoagfACbjncjKmD48fekXNKxSiyVsai9J
+         v27w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=BPuEXMq+9lFEX3s+CewNQ8QOCm+DO64U8n+0VKR7QWA=;
+        b=PHO9F7UzPYzAa5tqTtddM5qGYtdYlB1tIxuWBFeDbGqTi5EpWsG4llDCxjSvBRKwPD
+         Op+px7Yhk0Oq1MD0m4zpAZidCqtQXGXYhLX/T+z1J4Lz0nV3dDQ2Y5r3A7uMmQ9Ke5Jl
+         v39I7/6QS35LQlLM0W/q6lAqC/Q/RE11LkrLwPhaKcEVcEoU8k1K1wu7a7vHzcYM2ndn
+         tz0h4vm0UAa8W67PAUgGv8jkMSQiW7nT2RLVa8VVXRRijH/sOO6RKzGQCm/fNAG4iq8Y
+         qkx52UT33Htj1RjDAs98zXgyyfD0jF8jN+pWNfmhcjKuIEaqNrJgy8KazlcpOveJ9t8A
+         TWmg==
+X-Gm-Message-State: AOAM53373lqjxyfTx1iePMOm8lXhliaG37imIQW+IighksQk2BFvSC1f
+        anPYAvEKh2bwC4KzGCWe4nxGzA==
+X-Google-Smtp-Source: ABdhPJynT3v+VtJjrcp5BZ+V7EHBhpEc6hW6mQHDxxG6yYlPB0AL8NMfBPALluerzvpAZmm45rf8gg==
+X-Received: by 2002:a17:906:af0d:b0:708:d48a:271 with SMTP id lx13-20020a170906af0d00b00708d48a0271mr20415081ejb.329.1654507251574;
+        Mon, 06 Jun 2022 02:20:51 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id b6-20020a17090636c600b006feb6dee4absm6067412ejc.137.2022.06.06.02.20.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 02:20:51 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>,
+        linux-samsung-soc@vger.kernel.org,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] memory: samsung: exynos5422-dmc: Fix refcount leak in of_get_dram_timings
+Date:   Mon,  6 Jun 2022 11:20:46 +0200
+Message-Id: <165450724182.62574.13510345979647280538.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220602041721.64348-1-linmq006@gmail.com>
+References: <20220602041721.64348-1-linmq006@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] dt-bindings: Fix properties without any type
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <165448642995.20111.10251737230487275413.git-patchwork-notify@kernel.org>
-Date:   Mon, 06 Jun 2022 03:33:49 +0000
-References: <20220519211411.2200720-1-robh@kernel.org>
-In-Reply-To: <20220519211411.2200720-1-robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, krzk+dt@kernel.org,
-        thierry.reding@gmail.com, sam@ravnborg.org,
-        linus.walleij@linaro.org, brgl@bgdev.pl, dmitry.torokhov@gmail.com,
-        bleung@chromium.org, groeck@chromium.org, mchehab@kernel.org,
-        peda@axentia.se, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, kvalo@kernel.org, bhelgaas@google.com,
-        sre@kernel.org, mpm@selenic.com, herbert@gondor.apana.org.au,
-        gregkh@linuxfoundation.org, broonie@kernel.org, mripard@kernel.org,
-        dri-devel@lists.freedesktop.org, linux-gpio@vger.kernel.org,
-        linux-input@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-media@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,29 +74,19 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello:
-
-This patch was applied to chrome-platform/linux.git (for-next)
-by Rob Herring <robh@kernel.org>:
-
-On Thu, 19 May 2022 16:14:11 -0500 you wrote:
-> Now that the schema tools can extract type information for all
-> properties (in order to decode dtb files), finding properties missing
-> any type definition is fairly trivial though not yet automated.
+On Thu, 2 Jun 2022 08:17:21 +0400, Miaoqian Lin wrote:
+> of_parse_phandle() returns a node pointer with refcount
+> incremented, we should use of_node_put() on it when not need anymore.
+> This function doesn't call of_node_put() in some error paths.
+> To unify the structure, Add put_node label and goto it on errors.
 > 
-> Fix the various property schemas which are missing a type. Most of these
-> tend to be device specific properties which don't have a vendor prefix.
-> A vendor prefix is how we normally ensure a type is defined.
 > 
-> [...]
 
-Here is the summary with links:
-  - dt-bindings: Fix properties without any type
-    https://git.kernel.org/chrome-platform/c/4e71ed985389
+Applied, thanks!
 
-You are awesome, thank you!
+[1/1] memory: samsung: exynos5422-dmc: Fix refcount leak in of_get_dram_timings
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/1332661e09304b7b8e84e5edc11811ba08d12abe
+
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
