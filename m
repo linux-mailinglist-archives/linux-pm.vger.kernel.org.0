@@ -2,76 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9043653EC20
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jun 2022 19:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B460753E9AF
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jun 2022 19:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240692AbiFFP0M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Jun 2022 11:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46068 "EHLO
+        id S240607AbiFFPZx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Jun 2022 11:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240584AbiFFPZw (ORCPT
+        with ESMTP id S240585AbiFFPZw (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jun 2022 11:25:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BADE1CD350;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BED51CD351;
         Mon,  6 Jun 2022 08:25:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97A6761532;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7411261520;
         Mon,  6 Jun 2022 15:25:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F9A7C341DE;
-        Mon,  6 Jun 2022 15:25:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECFFFC36B02;
+        Mon,  6 Jun 2022 15:25:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1654529149;
-        bh=JJt0IO+HD16nKaMzBkekejjxzH6zJTBr5QCuFRGczGE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FQvjxVAjYkRkMlnXeUbGK/ffXS9EGiIGJB6czmy41m7BUi+gGlw+X1Vu+xVWhr8kL
-         VZmd7RutDKDJkQ6+PNC2k4EBuWcMiwehnWLeUgcaztEFymFfTpyADom9iKEZ2r0U6R
-         8QTKxcO8tqR2nN17KQ7uaYrNw3fG0aG82GOK9/YW0npuVqsyv4lNhNtBEPuUTmVVIT
-         XOE4wPosVqLjYqBNBMuGPxA5PXF0QCAYswfnxGdyJu5zTk6VkYY/y8ZNnVzT895FLj
-         P6YX/uUQeJAT8yJ01In++Ksk7XfTNpL0aA6OZ6qjgQfLIhLB4De2E2AivHQOnNJprR
-         rbUcjc+xUJibQ==
+        bh=bqkt61u+zvKhwW9PscdIFrK0g5ODerAJEm1NGd0q9cc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=KIwcWmEQkwvekBuusFzO+9SrNOpfcqguYyWSat2fDmJmoudC6CFT11yEYRv3M+yiW
+         WwOIki82j2qvn3Ei6L/mbwpK+ZE54sZN1MDL/iwEbqSQFipL/ih7rujoV1jaOsAqxc
+         IoFFBVKPq9HOSnQu9/BCTRLpAsZjF2yW+5GqQxw8hvpJvK9bAyKh36BQg5gDmmrrZ6
+         h2DUudu7BszmgnAocVjCFjX2aJdHc05ykiy65lZhta+yJg7vxTDehyCXmA9Cv+zuhX
+         k1V8KHkn02h6fHmohFjRg/LqL0zdqg+uctXiP7jno+Shi722+5lsgx4Sv7fUmtquXV
+         CyK//GWV8jGEQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.95)
         (envelope-from <mchehab@kernel.org>)
-        id 1nyEby-0012On-0x;
+        id 1nyEby-0012Ot-2R;
         Mon, 06 Jun 2022 16:25:46 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
         Jonathan Corbet <corbet@lwn.net>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Borislav Petkov <bp@alien8.de>,
         Broadcom internal kernel review list 
         <bcm-kernel-feedback-list@broadcom.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jean Delvare <jdelvare@suse.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
         Markus Mayer <mmayer@broadcom.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        keyrings@vger.kernel.org, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-cachefs@redhat.com,
-        linux-gpio@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mmc@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-usb@vger.kernel.org,
-        x86@kernel.org
-Subject: [PATCH 00/23] Update Documentation/ cross-references
-Date:   Mon,  6 Jun 2022 16:25:22 +0100
-Message-Id: <cover.1654529011.git.mchehab@kernel.org>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH 02/23] dt-bindings: interrupt-controller: update brcm,l2-intc.yaml reference
+Date:   Mon,  6 Jun 2022 16:25:24 +0100
+Message-Id: <a40c02a7aaea91ea7b6ce24b6bc574ae5bcf4cf6.1654529011.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <cover.1654529011.git.mchehab@kernel.org>
+References: <cover.1654529011.git.mchehab@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -84,73 +68,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi John,
+Changeset 539d25b21fe8 ("dt-bindings: interrupt-controller: Convert Broadcom STB L2 to YAML")
+renamed: Documentation/devicetree/bindings/interrupt-controller/brcm,l2-intc.txt
+to: Documentation/devicetree/bindings/interrupt-controller/brcm,l2-intc.yaml.
 
-There were a number of DT binding conversions and other docs change that
-were not updated. Address them, in order to keep the cross-references on
-a sane state.
+Update its cross-reference accordingly.
 
-Patch series is against v5.19-rc1 (and applies cleanly on the top of
-today's -next).
+Fixes: 539d25b21fe8 ("dt-bindings: interrupt-controller: Convert Broadcom STB L2 to YAML")
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+---
 
-Mauro Carvalho Chehab (23):
-  dt-bindings: mfd: bd9571mwv: update rohm,bd9571mwv.yaml reference
-  dt-bindings: interrupt-controller: update brcm,l2-intc.yaml reference
-  dt-bindings: arm: update vexpress-config.yaml references
-  dt-bindings: reset: update st,stih407-powerdown.yaml references
-  dt-bindings: mfd: rk808: update rockchip,rk808.yaml reference
-  dt-bindings: mmc: exynos-dw-mshc: update samsung,pinctrl.yaml
-    reference
-  docs: netdev: update maintainer-netdev.rst reference
-  docs: filesystems: update netfs-api.rst reference
-  Documentation: update watch_queue.rst references
-  Documentation: KVM: update s390-pv.rst reference
-  Documentation: KVM: update amd-memory-encryption.rst references
-  Documentation: KVM: update msr.rst reference
-  Documentation: KVM: update s390-diag.rst reference
-  MAINTAINERS: update arm,hdlcd.yaml reference
-  MAINTAINERS: update arm,komeda.yaml reference
-  MAINTAINERS: update arm,malidp.yaml reference
-  MAINTAINERS: update cortina,gemini-ethernet.yaml reference
-  MAINTAINERS: update dongwoon,dw9807-vcm.yaml reference
-  MAINTAINERS: update maxim,max77693.yaml reference
-  MAINTAINERS: update snps,axs10x-reset.yaml reference
-  objtool: update objtool.txt references
-  ASoC: wm8731: update wlf,wm8731.yaml reference
-  arch: m68k: q40: README: drop references to IDE driver
+To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+See [PATCH 00/23] at: https://lore.kernel.org/all/cover.1654529011.git.mchehab@kernel.org/
 
- .../ABI/testing/sysfs-driver-bd9571mwv-regulator   |  2 +-
- Documentation/admin-guide/kernel-parameters.txt    |  2 +-
- .../bindings/cpufreq/brcm,stb-avs-cpu-freq.txt     |  2 +-
- .../devicetree/bindings/hwmon/vexpress.txt         |  2 +-
- .../devicetree/bindings/mmc/exynos-dw-mshc.txt     |  2 +-
- .../devicetree/bindings/phy/phy-stih407-usb.txt    |  2 +-
- .../devicetree/bindings/pinctrl/pinctrl-rk805.txt  |  2 +-
- .../devicetree/bindings/regulator/vexpress.txt     |  2 +-
- .../bindings/sound/atmel-sam9x5-wm8731-audio.txt   |  2 +-
- Documentation/devicetree/bindings/usb/dwc3-st.txt  |  2 +-
- Documentation/devicetree/bindings/usb/ehci-st.txt  |  2 +-
- Documentation/devicetree/bindings/usb/ohci-st.txt  |  2 +-
- Documentation/security/keys/core.rst               |  2 +-
- Documentation/security/secrets/coco.rst            |  2 +-
- .../translations/it_IT/networking/netdev-FAQ.rst   |  2 +-
- Documentation/virt/kvm/api.rst                     |  4 ++--
- Documentation/virt/kvm/s390/s390-pv-boot.rst       |  2 +-
- Documentation/virt/kvm/x86/hypercalls.rst          |  2 +-
- Documentation/x86/orc-unwinder.rst                 |  2 +-
- MAINTAINERS                                        | 14 +++++++-------
- arch/m68k/q40/README                               |  4 +---
- include/linux/fscache.h                            |  2 +-
- include/linux/objtool.h                            |  2 +-
- include/linux/watch_queue.h                        |  2 +-
- init/Kconfig                                       |  2 +-
- kernel/watch_queue.c                               |  2 +-
- lib/Kconfig.debug                                  |  2 +-
- tools/include/linux/objtool.h                      |  2 +-
- tools/objtool/check.c                              |  2 +-
- 29 files changed, 36 insertions(+), 38 deletions(-)
+ .../devicetree/bindings/cpufreq/brcm,stb-avs-cpu-freq.txt       | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/Documentation/devicetree/bindings/cpufreq/brcm,stb-avs-cpu-freq.txt b/Documentation/devicetree/bindings/cpufreq/brcm,stb-avs-cpu-freq.txt
+index 73470ecd1f12..ce91a9197697 100644
+--- a/Documentation/devicetree/bindings/cpufreq/brcm,stb-avs-cpu-freq.txt
++++ b/Documentation/devicetree/bindings/cpufreq/brcm,stb-avs-cpu-freq.txt
+@@ -16,7 +16,7 @@ has been processed. See [2] for more information on the brcm,l2-intc node.
+ firmware. On some SoCs, this firmware supports DFS and DVFS in addition to
+ Adaptive Voltage Scaling.
+ 
+-[2] Documentation/devicetree/bindings/interrupt-controller/brcm,l2-intc.txt
++[2] Documentation/devicetree/bindings/interrupt-controller/brcm,l2-intc.yaml
+ 
+ 
+ Node brcm,avs-cpu-data-mem
 -- 
 2.36.1
-
 
