@@ -2,35 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96518540ABC
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jun 2022 20:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8885E540B33
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jun 2022 20:28:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350509AbiFGSXl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jun 2022 14:23:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
+        id S1348835AbiFGS1g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jun 2022 14:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352102AbiFGSQy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jun 2022 14:16:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB58CE1E;
-        Tue,  7 Jun 2022 10:50:33 -0700 (PDT)
+        with ESMTP id S1351364AbiFGSXO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jun 2022 14:23:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E09C6858;
+        Tue,  7 Jun 2022 10:54:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFBFA6159C;
-        Tue,  7 Jun 2022 17:50:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 629DCC34115;
-        Tue,  7 Jun 2022 17:50:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 855F4B8236D;
+        Tue,  7 Jun 2022 17:54:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81753C34119;
+        Tue,  7 Jun 2022 17:53:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654624232;
-        bh=tmYGo+rLkHrEmeRi3CAoeeKOGbYIsLcxEIvkpA80+5w=;
+        s=k20201202; t=1654624439;
+        bh=f6HB5NhIscnksW5jhehvzcWHKlFOREfOBHOcMMS+Xjc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B7sq9soKOmBb9GX3iK3MB6o0uZjFZ5z1gaABX+3gw9lkVSZzaSocVb4tKnADzqxJ/
-         8AeeOIy3T58Ulsb+6TlwNreKePuIweb5EUmmuxRvODc2RjjzwWXARpiCvZAIPlcGjO
-         ils5rh20ELOU1XjaQI/wF26SaOIxvOUhUY/ArfgzC+yM+OciA9xRmCWCBZP+6xLKDC
-         fSkf09ea9RjtDCvJ98FFTgeksKItPNYZoJHEIj8SndE23yvqwUIep/IUIxcK0uzF0H
-         nDtLUQFFHRhrOyyWqUU7c2vAS2PFt14vie9QMVW7+LD68+9bVp/+7eGJoLgJ6azxis
-         Tm4Mk7zUEyXsg==
+        b=c1bfCbiwnLAyFGIJiuHkQYRcav/42d/70yrA5uV3yMtZ4B5oK2EbnQ69DKjjx4ULs
+         TlbwMR4ukJ2m28GbSCmQtwtRzzbGhaJ5qI0VGs/0a2FSnDBeQZVdM+HQVbFuxU6/H1
+         7x+jrxr8oeW16hgnTmNYQMsU862s3fxnTSQdN3zIt3/C22P7y5pAUcoOD+a13lJ1le
+         whWUZN60jz4ouiDJSkRR2UD1oC0JAfYfycRZhswD+2yx+ZVgTpjFi1LOWt/MnKkQwM
+         toaCz8VNquoi2U23ay6sRHe9QxIuJkcA9PhWs7p+UHCh+oVS5NnJPGDPGp798uJuaA
+         i/1kE3JCDuOjg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
@@ -43,12 +43,12 @@ Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
         wens@csie.org, sre@kernel.org, balbi@kernel.org,
         gregkh@linuxfoundation.org, linux-pm@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-omap@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.18 24/68] extcon: Fix extcon_get_extcon_dev() error handling
-Date:   Tue,  7 Jun 2022 13:47:50 -0400
-Message-Id: <20220607174846.477972-24-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.17 22/60] extcon: Fix extcon_get_extcon_dev() error handling
+Date:   Tue,  7 Jun 2022 13:52:19 -0400
+Message-Id: <20220607175259.478835-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220607174846.477972-1-sashal@kernel.org>
-References: <20220607174846.477972-1-sashal@kernel.org>
+In-Reply-To: <20220607175259.478835-1-sashal@kernel.org>
+References: <20220607175259.478835-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -204,10 +204,10 @@ index d67edb760c94..92db79400a6a 100644
  
  	for (i = 0; i < ARRAY_SIZE(extcon_mapping); i++) {
 diff --git a/drivers/power/supply/max8997_charger.c b/drivers/power/supply/max8997_charger.c
-index 127c73b0b3bd..1ec3535a257d 100644
+index 25207fe2aa68..bfa7a576523d 100644
 --- a/drivers/power/supply/max8997_charger.c
 +++ b/drivers/power/supply/max8997_charger.c
-@@ -242,10 +242,10 @@ static int max8997_battery_probe(struct platform_device *pdev)
+@@ -248,10 +248,10 @@ static int max8997_battery_probe(struct platform_device *pdev)
  		dev_info(&pdev->dev, "couldn't get charger regulator\n");
  	}
  	charger->edev = extcon_get_extcon_dev("max8997-muic");
@@ -223,10 +223,10 @@ index 127c73b0b3bd..1ec3535a257d 100644
  
  	if (!IS_ERR(charger->reg) && !IS_ERR_OR_NULL(charger->edev)) {
 diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-index 8cad9e7d3368..4982edd13047 100644
+index f148b0370f82..81ff21bd405a 100644
 --- a/drivers/usb/dwc3/drd.c
 +++ b/drivers/usb/dwc3/drd.c
-@@ -455,13 +455,8 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
+@@ -454,13 +454,8 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
  	 * This device property is for kernel internal use only and
  	 * is expected to be set by the glue code.
  	 */
