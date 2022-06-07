@@ -2,124 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1D953F206
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jun 2022 00:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F1D53F34C
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jun 2022 03:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233295AbiFFWQU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Jun 2022 18:16:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
+        id S232641AbiFGBWf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Jun 2022 21:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbiFFWQU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jun 2022 18:16:20 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9352AE1;
-        Mon,  6 Jun 2022 15:16:19 -0700 (PDT)
-Received: from in01.mta.xmission.com ([166.70.13.51]:56556)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nyL18-00Dr2R-6X; Mon, 06 Jun 2022 16:16:10 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:53752 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1nyL17-008WKx-AS; Mon, 06 Jun 2022 16:16:09 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, tj@kernel.org,
-        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
-        Robert OCallahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Douglas Miller <dougmill@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-References: <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
-        <20220518225355.784371-8-ebiederm@xmission.com>
-        <20220524152725.GE14347@redhat.com>
-Date:   Mon, 06 Jun 2022 17:16:01 -0500
-In-Reply-To: <20220524152725.GE14347@redhat.com> (Oleg Nesterov's message of
-        "Tue, 24 May 2022 17:27:25 +0200")
-Message-ID: <87pmjl1lr2.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        with ESMTP id S229629AbiFGBWd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jun 2022 21:22:33 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D20A36408
+        for <linux-pm@vger.kernel.org>; Mon,  6 Jun 2022 18:22:32 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id g186so5524362pgc.1
+        for <linux-pm@vger.kernel.org>; Mon, 06 Jun 2022 18:22:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=zu660xJI+WSDALJvMPwylwZXg9Zr4jSCuQb1dtcYGHA=;
+        b=lfmDugkPcX+35FGF1H5blWTxiHlHKzhZ0jpZ2We0PV+3yRLIclA0aonw6D65qADffB
+         rfBzoH0O+TPOjf6p6jhVH/Xnv2rzusQb7foIsPLiWD1ZG1lv2f+gkl3kgfCs9kPlX7Ru
+         tD5SMR8ysdjqriaPATkgiR60Lyw6/4V91wjb8Tw16z6CR8A0gxFo7lRegSvfUwRG+GFz
+         jbqtPwWlSRYzbY7SRYH79E7YNIvTHe13VuPivpaIPKaNWrM5tBVStDF+5MH39eKlgymc
+         ecySIGNmMfr+pc+fnrliXVfdmc0OfmJ7W870BQTvWhJdhbAMI6J+ya4cAud/QtdobmuI
+         54Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=zu660xJI+WSDALJvMPwylwZXg9Zr4jSCuQb1dtcYGHA=;
+        b=Zc4NFfmfnVAJK246wbFCmAyC38chszFFENfvHVKwSgHRGlKZqN8bykw8gfOxhXsAH9
+         avD8feQa/BbgO7SCS13gStyO5GZJcwkxJcc6f9gsSUPe7tI6mQO30+vJI4ZUYreECkZv
+         Oei3usHuXrhmR4fuo/pN8SzU7p226dSMHjYmD5SNFEokjNPWpBI/HBk5syNnNVHUozh+
+         uURutQexSAWQhd2GUZ223UKq1FaxpzzyfLU3kAZclLfcFWDFpZA9LX63fhU2KTbP7y4N
+         lymHeSiX/aSBwv5wRHTgYG78mshX04gceJl9A5WpAfHhD7Yxvvxht+vxCbXmLgGxnSEa
+         ErPA==
+X-Gm-Message-State: AOAM5326aAt1EU6PIcpdVhsJJy9B/akLxpSafO7UUnJi17Bey3lsmzU3
+        D/l/YiQ2oFRcmeSEDRzIdghTL1+/wIkEZbBK
+X-Google-Smtp-Source: ABdhPJxgbGsoeJNDVi3U7f9TCWJ4t1AmjTcSdWzbbDoQQ2O0qEGapettjRjZpq6MVFXQNmFUeBRNow==
+X-Received: by 2002:aa7:9103:0:b0:519:3150:6b3f with SMTP id 3-20020aa79103000000b0051931506b3fmr27113874pfh.67.1654564952206;
+        Mon, 06 Jun 2022 18:22:32 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id s194-20020a6377cb000000b003fd1111d73csm8097894pgc.4.2022.06.06.18.22.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jun 2022 18:22:31 -0700 (PDT)
+Message-ID: <629ea857.1c69fb81.6e301.2169@mx.google.com>
+Date:   Mon, 06 Jun 2022 18:22:31 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1nyL17-008WKx-AS;;;mid=<87pmjl1lr2.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+XLuQrB0IHmo0lv55ADS0tXNzKSUteaDM=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v5.19-rc1-2-g6a8964e282382
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.19-rc1-2-g6a8964e282382)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;Oleg Nesterov <oleg@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 309 ms - load_scoreonly_sql: 0.06 (0.0%),
-        signal_user_changed: 11 (3.7%), b_tie_ro: 10 (3.2%), parse: 0.95
-        (0.3%), extract_message_metadata: 2.9 (0.9%), get_uri_detail_list:
-        0.92 (0.3%), tests_pri_-1000: 5 (1.7%), tests_pri_-950: 1.15 (0.4%),
-        tests_pri_-900: 1.03 (0.3%), tests_pri_-90: 64 (20.6%), check_bayes:
-        62 (20.1%), b_tokenize: 9 (2.8%), b_tok_get_all: 8 (2.6%),
-        b_comp_prob: 2.4 (0.8%), b_tok_touch_all: 39 (12.7%), b_finish: 0.94
-        (0.3%), tests_pri_0: 206 (66.7%), check_dkim_signature: 0.53 (0.2%),
-        check_dkim_adsp: 2.8 (0.9%), poll_dns_idle: 0.96 (0.3%), tests_pri_10:
-        2.1 (0.7%), tests_pri_500: 7 (2.1%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 08/16] ptrace: Only populate last_siginfo from ptrace
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Oleg Nesterov <oleg@redhat.com> writes:
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.19-rc1-2-g6a8=
+964e282382)
 
-> On 05/18, Eric W. Biederman wrote:
->>
->> The code in ptrace_signal to populate siginfo if the signal number
->> changed is buggy.  If the tracer contined the tracee using
->> ptrace_detach it is guaranteed to use the real_parent (or possibly a
->> new tracer) but definitely not the origional tracer to populate si_pid
->> and si_uid.
->
-> I guess nobody cares. As the comment says
->
-> 	 If the debugger wanted something
-> 	 specific in the siginfo structure then it should
-> 	 have updated *info via PTRACE_SETSIGINFO.
->
-> otherwise I don't think si_pid/si_uid have any value.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+19-rc1-2-g6a8964e282382/
 
-No one has complained so it is clearly no one cares.  So it is
-definitely not a regression.  Or even anything that needs to be
-backported.
+Tree: pm
+Branch: testing
+Git Describe: v5.19-rc1-2-g6a8964e282382
+Git Commit: 6a8964e282382ab8f2e64355d2ce8eda80e8fe30
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-However si_pid and si_uid are defined with SI_USER are defined
-to be whomever sent the signal.  So I would argue by definition
-those values are wrong.
+Warnings Detected:
 
-> However the patch looks fine to me, just the word "buggy" looks a bit
-> too strong imo.
+arc:
 
-I guess I am in general agreement.  Perhaps I can just say they values
-are wrong by definition?
+arm64:
 
-Eric
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
 
 
+Warnings summary:
+
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
