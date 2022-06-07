@@ -2,307 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37ED153F548
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jun 2022 06:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE25353F680
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jun 2022 08:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236626AbiFGEwU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jun 2022 00:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51124 "EHLO
+        id S237222AbiFGGsY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jun 2022 02:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236622AbiFGEwR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jun 2022 00:52:17 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2972D1085
-        for <linux-pm@vger.kernel.org>; Mon,  6 Jun 2022 21:52:11 -0700 (PDT)
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220607045206epoutp03d33e6710f55e9dd0f86d03cbebab4a41~2PX5u_C_E2291722917epoutp03i
-        for <linux-pm@vger.kernel.org>; Tue,  7 Jun 2022 04:52:06 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220607045206epoutp03d33e6710f55e9dd0f86d03cbebab4a41~2PX5u_C_E2291722917epoutp03i
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1654577526;
-        bh=4JdykfJOyARDoZoGQjgXmjIvIMGnRkH+KxtH2TPENgk=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=emAhWONL2XoxgAP08SBmWxjVZT2CyB7/h62TUr6ko5QXfffd72MPws1UdKSQ1mNDX
-         wvoAIW3xumyikdKb5MXlwuA3AkQCy/c81thLrLUR17tFQZwDBLZW5ERsRMkZgtuu0L
-         hwMC/nE95HlleXiqnD3rDQshHEHAnzayn66ipVo8=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20220607045205epcas1p3a09558742c06f69410ce9d34bca66c87~2PX5LF7Du0402804028epcas1p3G;
-        Tue,  7 Jun 2022 04:52:05 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.36.144]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4LHHyX2yNHz4x9Pw; Tue,  7 Jun
-        2022 04:52:04 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        AB.0D.10354.479DE926; Tue,  7 Jun 2022 13:52:04 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220607045203epcas1p3dceb041144e675506aa2130dfbf8d26a~2PX3hpT3z2608726087epcas1p3W;
-        Tue,  7 Jun 2022 04:52:03 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220607045203epsmtrp2d7b2b858051d88566efa153670319176~2PX3gtVXm2579925799epsmtrp2G;
-        Tue,  7 Jun 2022 04:52:03 +0000 (GMT)
-X-AuditID: b6c32a38-cc605a8000002872-fb-629ed974609e
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        26.75.11276.379DE926; Tue,  7 Jun 2022 13:52:03 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220607045203epsmtip2b8bb94c087b395c94c70beec80304fe7~2PX3Rk4W-2914229142epsmtip2d;
-        Tue,  7 Jun 2022 04:52:03 +0000 (GMT)
-Subject: Re: [PATCH v6 2/2] PM / devfreq: mediatek: Introduce MediaTek CCI
- devfreq driver
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Johnson Wang <johnson.wang@mediatek.com>, krzk+dt@kernel.org,
-        robh+dt@kernel.org, kyungmin.park@samsung.com
-Cc:     khilman@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <772c8198-b793-345f-2b78-2733ba304559@samsung.com>
-Date:   Tue, 7 Jun 2022 13:52:03 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        with ESMTP id S237294AbiFGGsK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jun 2022 02:48:10 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21DB1B0D27
+        for <linux-pm@vger.kernel.org>; Mon,  6 Jun 2022 23:48:07 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id me5so32641905ejb.2
+        for <linux-pm@vger.kernel.org>; Mon, 06 Jun 2022 23:48:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9oONL/OIu1tsLLfjz8MWbADwzFR0KPOH6QzNxFIcw1A=;
+        b=eHc01tNuGgQVe9JfPpB6GYMNwZK46sRHR3uDq807BB8RAkhtM9iR1guy6gYb+UKuJW
+         g3yAm4q1CjZJ6Pp9OZfINnQzQ6SlfDARMFL44cz7rzQyewKJDz4DCw2s9a6+PUnsnsls
+         kkbjZQKYC5uzVhSvIW60DvmNZwSNXhTnEDamP2tQK2CG6zybiBXQOP8biOwIXxqLd/lr
+         xXp4GE/l02zl0EyPtU9/au8J7ZOL5nvjMry9t1lUMfnAAiEl5h/aERCGNL3NcZMtNr6W
+         z9u/tnTpAuY5gaFcEPQ2vdavW7L3MZwzsFofi2wXD9QrtStZ8mfDytt2Wi/3dZ3/NivE
+         FNhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9oONL/OIu1tsLLfjz8MWbADwzFR0KPOH6QzNxFIcw1A=;
+        b=a75X07Gy9c7mnGvk7oXzVbRkFJB7LyJWh4JIcKtL8GGNTRtC2InbM4eCtVd8azOXlN
+         kS46ACuyGJZAyA/adQpFFvjZEe+pHp+BwblmN2cMKq0NfoKg5VzwWSfQKwaBoileHTFt
+         1I1ILKRk/3PxL9VNHauM8JogaxvliesQGvEni4uXq6qCK3RgTaC/JaTx7wqit3OmwJdx
+         jWTJWiQQd5YWeMPHsuOLSW7Pjeww/2SVXrEhLQrElfAmUTl6wjrzH2eDoRn10MU7GxIO
+         YUo1MVzLtoB9ZGVdLtGWx8RTX0xvRk5oVTKWfagmi+px42FJ0QWeLwkkO4M0dWkwo5rp
+         w1uA==
+X-Gm-Message-State: AOAM531dWZP1wcAt9G1janG6HkYpOOIfJh2Gm2rumCHLMrtkHStHUA5H
+        qhpd67f3XCy/5q0+4Oaf3IMXaQ==
+X-Google-Smtp-Source: ABdhPJwZ+u3wskAK8md9FAIw+OFZWkxhbfQb/zXoi4kIC5wHI/eBNsIRDkNmc9Xh8XtL7N+ZNnWZaw==
+X-Received: by 2002:a17:907:3d89:b0:6f9:1fc:ebf3 with SMTP id he9-20020a1709073d8900b006f901fcebf3mr25319012ejc.403.1654584485575;
+        Mon, 06 Jun 2022 23:48:05 -0700 (PDT)
+Received: from [192.168.0.181] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id d20-20020aa7ce14000000b0042dd4ccccf5sm9653874edv.82.2022.06.06.23.48.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jun 2022 23:48:05 -0700 (PDT)
+Message-ID: <e5029de5-2548-23a4-8dcf-101154e0be29@linaro.org>
+Date:   Tue, 7 Jun 2022 08:48:03 +0200
 MIME-Version: 1.0
-In-Reply-To: <e4d3ab91-9c53-79a0-76f8-098e6b846441@collabora.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v4 4/4] arm64: dts: qcom: sdm845: Add CPU BWMON
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrNJsWRmVeSWpSXmKPExsWy7bCmnm7JzXlJBkcniFpcWilhMf/IOVaL
-        4/uXsFsc+xVs8XTzYyaLl7PusVmcbXrDbrHp8TVWi8u75rBZXG6+yGjxufcIo8WndR0sFq17
-        j7A78HrsuLuE0WPTqk42j81L6j1aTu5n8ejbsorR4/MmuQC2qGybjNTElNQihdS85PyUzLx0
-        WyXv4HjneFMzA0NdQ0sLcyWFvMTcVFslF58AXbfMHKAzlRTKEnNKgUIBicXFSvp2NkX5pSWp
-        Chn5xSW2SqkFKTkFpgV6xYm5xaV56Xp5qSVWhgYGRqZAhQnZGdP/tjEV3Dar2PX/E1sD4xq9
-        LkZODgkBE4kDnbfZuxi5OIQEdjBKbL1+iQ3C+cQo8ev5QqjMN0aJnqlNLDAti07PYIRI7GWU
-        mLFyEhOE855R4sO296wgVcIC0RK9N1+wgiREBHYyStxa9g+shVmgm0li75Ob7CBVbAJaEvtf
-        3GADsfkFFCWu/ngMVMTBwStgJ9G5KwYkzCKgIrFz5S5GEFtUIEzi5LYWMJtXQFDi5MwnYCdx
-        CjhKPL36gQnEZhYQl7j1ZD6ULS/RvHU2M8heCYELHBJtf2ayQ/zgIvFz5hI2CFtY4tXxLVBx
-        KYnP7/ayQTQ0M0o0vLjNCOH0MEocfdYHDQFjif1LJzOBXMosoCmxfpc+RFhRYufvuYwQm/kk
-        3n3tYQUpkRDglehoE4IoUZa4/OAuE4QtKbG4vZNtAqPSLCT/zELywywkP8xCWLaAkWUVo1hq
-        QXFuemqxYYEJPMKT83M3MYJTsZbFDsa5bz/oHWJk4mA8xCjBwawkwus/eW6SEG9KYmVValF+
-        fFFpTmrxIUZTYAhPZJYSTc4HZoO8knhDE0sDEzMjYxMLQzNDJXHe3qmnE4UE0hNLUrNTUwtS
-        i2D6mDg4pRqYLMp0z4s6Fd/vyuSTY2Yt+HSp/0P9hcVFLHJ2Sze6vji+Ws5q0T/mkAPfpvAK
-        Pqn2cZxvJX5YwsvJ/3v1+Q2vDiVbFH6d5BuR+y2Uh/uGfMnaim+RU+0vdZd9V5ey6/a+U8QT
-        LX+2MPlJZ2TZ/nl/bx142dYslX0neU1P6g+t5WLx71s3xEySVo3IrYj0OfL8OxOz7+MjNV+C
-        j8v0RzF76Dvk3RNxlLBvFWNiNnvjwrnt+0yliQbtE6Lc+tTuLLDz2KT68f3bZaariv3zp3Gf
-        FnvNeUxuzhL/0HbD58fi0hkmxluxajPNeq6relFw28L22e88t0wt9kzin87486Rf/5/NUf6v
-        vI0bT3lxFCuxFGckGmoxFxUnAgBXOud7TgQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrMIsWRmVeSWpSXmKPExsWy7bCSvG7xzXlJBm3dphaXVkpYzD9yjtXi
-        +P4l7BbHfgVbPN38mMni5ax7bBZnm96wW2x6fI3V4vKuOWwWl5svMlp87j3CaPFpXQeLReve
-        I+wOvB477i5h9Ni0qpPNY/OSeo+Wk/tZPPq2rGL0+LxJLoAtissmJTUnsyy1SN8ugStj+t82
-        poLbZhW7/n9ia2Bco9fFyMkhIWAisej0DMYuRi4OIYHdjBJbjp9nhEhISky7eJS5i5EDyBaW
-        OHy4GKLmLaNEx/nTzCA1wgLREr03X7CC2CICOxklNs5TBSliFuhkkrizejsTRMcfRokV106z
-        g1SxCWhJ7H9xgw3E5hdQlLj64zEjyAZeATuJzl0xIGEWARWJnSt3gR0hKhAmsXPJYyYQm1dA
-        UOLkzCcsIDangKPE06sfwOLMAuoSf+ZdYoawxSVuPZkPFZeXaN46m3kCo/AsJO2zkLTMQtIy
-        C0nLAkaWVYySqQXFuem5xYYFhnmp5XrFibnFpXnpesn5uZsYwfGopbmDcfuqD3qHGJk4GA8x
-        SnAwK4nw+k+emyTEm5JYWZValB9fVJqTWnyIUZqDRUmc90LXyXghgfTEktTs1NSC1CKYLBMH
-        p1QDU6KO+z/hnvAgz7t7I95dPPhWvOxtji1f7ORdBxydtJZU8gk+Xf3AZtq5GxErLl75aXNt
-        yrJl9VvSLiowMxlyrp9eNvHCxOcCQSfbwwOUDDdYVa3v/f/cuHFzoFBv7bars1bdMt/iO7F2
-        ZdBxL/8/ex86qWQfStzM1BgvNT9XQGL2IrsH2rHzMvqZsrZJddwO0dYO3r4+r89gA//0I/Uy
-        DFpG2b4b5XjVQ+a8YZxhxcXi+8HrnoH+9KMhPzyT04IzIg9zbC+W4Nn2M4zpUXuy5LPjHQcN
-        rs1aWn/I6Uz4naKzq/6u9fFVmip8v3/rPaOLzCHcMZ8XTpDbaH0vVaP2aZB46Ja8yK5Ttbuu
-        LWH6r8RSnJFoqMVcVJwIALsrNhw2AwAA
-X-CMS-MailID: 20220607045203epcas1p3dceb041144e675506aa2130dfbf8d26a
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220530121644epcas1p482c15aa452315a2e5c343ee2eefc48c1
-References: <20220527110036.8810-1-johnson.wang@mediatek.com>
-        <20220527110036.8810-3-johnson.wang@mediatek.com>
-        <CGME20220530121644epcas1p482c15aa452315a2e5c343ee2eefc48c1@epcas1p4.samsung.com>
-        <e4d3ab91-9c53-79a0-76f8-098e6b846441@collabora.com>
-X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Thara Gopinath <thara.gopinath@linaro.org>
+References: <20220601101140.170504-1-krzysztof.kozlowski@linaro.org>
+ <20220601101140.170504-5-krzysztof.kozlowski@linaro.org>
+ <058de46e-24cf-e25b-121c-3ff080702776@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <058de46e-24cf-e25b-121c-3ff080702776@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/30/22 9:16 PM, AngeloGioacchino Del Regno wrote:
-> Il 27/05/22 13:00, Johnson Wang ha scritto:
->> We introduce a devfreq driver for the MediaTek Cache Coherent Interconnect
->> (CCI) used by some MediaTek SoCs.
+On 06/06/2022 22:39, Georgi Djakov wrote:
+> On 1.06.22 13:11, Krzysztof Kozlowski wrote:
+>> Add device node for CPU-memory BWMON device (bandwidth monitoring) on
+>> SDM845 measuring bandwidth between CPU (gladiator_noc) and Last Level
+>> Cache (memnoc).  Usage of this BWMON allows to remove fixed bandwidth
+>> votes from cpufreq (CPU nodes) thus achieve high memory throughput even
+>> with lower CPU frequencies.
 >>
->> In this driver, we use the passive devfreq driver to get target frequencies
->> and adjust voltages accordingly. In MT8183 and MT8186, the MediaTek CCI
->> is supplied by the same regulators with the little core CPUs.
+>> Performance impact (SDM845-MTP RB3 board, linux next-20220422):
+>> 1. No noticeable impact when running with schedutil or performance
+>>     governors.
 >>
->> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
->> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
->> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
->> ---
->> This patch depends on "devfreq-testing"[1].
->> [1]https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-testing
->> ---
->>   drivers/devfreq/Kconfig           |  10 +
->>   drivers/devfreq/Makefile          |   1 +
->>   drivers/devfreq/mtk-cci-devfreq.c | 441 ++++++++++++++++++++++++++++++
->>   3 files changed, 452 insertions(+)
->>   create mode 100644 drivers/devfreq/mtk-cci-devfreq.c
+>> 2. When comparing to customized kernel with synced interconnects and
+>>     without bandwidth votes from CPU freq, the sysbench memory tests
+>>     show significant improvement with bwmon for blocksizes past the L3
+>>     cache.  The results for such superficial comparison:
 >>
->> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
->> index 87eb2b837e68..9754d8b31621 100644
->> --- a/drivers/devfreq/Kconfig
->> +++ b/drivers/devfreq/Kconfig
->> @@ -120,6 +120,16 @@ config ARM_TEGRA_DEVFREQ
->>         It reads ACTMON counters of memory controllers and adjusts the
->>         operating frequencies and voltages with OPP support.
->>   +config ARM_MEDIATEK_CCI_DEVFREQ
->> +    tristate "MEDIATEK CCI DEVFREQ Driver"
->> +    depends on ARM_MEDIATEK_CPUFREQ || COMPILE_TEST
->> +    select DEVFREQ_GOV_PASSIVE
->> +    help
->> +      This adds a devfreq driver for MediaTek Cache Coherent Interconnect
->> +      which is shared the same regulators with the cpu cluster. It can track
->> +      buck voltages and update a proper CCI frequency. Use the notification
->> +      to get the regulator status.
->> +
->>   config ARM_RK3399_DMC_DEVFREQ
->>       tristate "ARM RK3399 DMC DEVFREQ Driver"
->>       depends on (ARCH_ROCKCHIP && HAVE_ARM_SMCCC) || \
->> diff --git a/drivers/devfreq/Makefile b/drivers/devfreq/Makefile
->> index 0b6be92a25d9..bf40d04928d0 100644
->> --- a/drivers/devfreq/Makefile
->> +++ b/drivers/devfreq/Makefile
->> @@ -11,6 +11,7 @@ obj-$(CONFIG_DEVFREQ_GOV_PASSIVE)    += governor_passive.o
->>   obj-$(CONFIG_ARM_EXYNOS_BUS_DEVFREQ)    += exynos-bus.o
->>   obj-$(CONFIG_ARM_IMX_BUS_DEVFREQ)    += imx-bus.o
->>   obj-$(CONFIG_ARM_IMX8M_DDRC_DEVFREQ)    += imx8m-ddrc.o
->> +obj-$(CONFIG_ARM_MEDIATEK_CCI_DEVFREQ)    += mtk-cci-devfreq.o
->>   obj-$(CONFIG_ARM_RK3399_DMC_DEVFREQ)    += rk3399_dmc.o
->>   obj-$(CONFIG_ARM_SUN8I_A33_MBUS_DEVFREQ)    += sun8i-a33-mbus.o
->>   obj-$(CONFIG_ARM_TEGRA_DEVFREQ)        += tegra30-devfreq.o
->> diff --git a/drivers/devfreq/mtk-cci-devfreq.c b/drivers/devfreq/mtk-cci-devfreq.c
->> new file mode 100644
->> index 000000000000..df42da35b312
->> --- /dev/null
->> +++ b/drivers/devfreq/mtk-cci-devfreq.c
->> @@ -0,0 +1,441 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Copyright (C) 2022 MediaTek Inc.
->> + */
->> +
+>> sysbench memory test, results in MB/s (higher is better)
+>>   bs kB |  type |    V  | V+no bw votes | bwmon | benefit %
+>>       1 | W/seq | 14795 |          4816 |  4985 |      3.5%
+>>      64 | W/seq | 41987 |         10334 | 10433 |      1.0%
+>>    4096 | W/seq | 29768 |          8728 | 32007 |    266.7%
+>>   65536 | W/seq | 17711 |          4846 | 18399 |    279.6%
+>> 262144 | W/seq | 16112 |          4538 | 17429 |    284.1%
+>>      64 | R/seq | 61202 |         67092 | 66804 |     -0.4%
+>>    4096 | R/seq | 23871 |          5458 | 24307 |    345.4%
+>>   65536 | R/seq | 18554 |          4240 | 18685 |    340.7%
+>> 262144 | R/seq | 17524 |          4207 | 17774 |    322.4%
+>>      64 | W/rnd |  2663 |          1098 |  1119 |      1.9%
+>>   65536 | W/rnd |   600 |           316 |   610 |     92.7%
+>>      64 | R/rnd |  4915 |          4784 |  4594 |     -4.0%
+>>   65536 | R/rnd |   664 |           281 |   678 |    140.7%
+>>
+>> Legend:
+>> bs kB: block size in KB (small block size means only L1-3 caches are
+>>        used
+>> type: R - read, W - write, seq - sequential, rnd - random
+>> V: vanilla (next-20220422)
+>> V + no bw votes: vanilla without bandwidth votes from CPU freq
+>> bwmon: bwmon without bandwidth votes from CPU freq
+>> benefit %: difference between vanilla without bandwidth votes and bwmon
+>>             (higher is better)
+>>
 > 
-> ..snip..
-> 
->> +};
->> +
->> +static int mtk_ccifreq_probe(struct platform_device *pdev)
->> +{
->> +    struct device *dev = &pdev->dev;
->> +    struct mtk_ccifreq_drv *drv;
->> +    struct devfreq_passive_data *passive_data;
->> +    struct dev_pm_opp *opp;
->> +    unsigned long rate, opp_volt;
->> +    int ret;
->> +
->> +    drv = devm_kzalloc(dev, sizeof(*drv), GFP_KERNEL);
->> +    if (!drv)
->> +        return -ENOMEM;
->> +
->> +    drv->dev = dev;
->> +    drv->soc_data = (const struct mtk_ccifreq_platform_data *)
->> +                of_device_get_match_data(&pdev->dev);
->> +    mutex_init(&drv->reg_lock);
->> +    platform_set_drvdata(pdev, drv);
->> +
->> +    drv->cci_clk = devm_clk_get(dev, "cci");
->> +    if (IS_ERR(drv->cci_clk)) {
->> +        ret = PTR_ERR(drv->cci_clk);
->> +        return dev_err_probe(dev, ret,
->> +                     "failed to get cci clk: %d\n", ret);
->> +    }
->> +
->> +    drv->inter_clk = devm_clk_get(dev, "intermediate");
->> +    if (IS_ERR(drv->inter_clk)) {
->> +        ret = PTR_ERR(drv->inter_clk);
->> +        return dev_err_probe(dev, ret,
->> +                     "failed to get intermediate clk: %d\n", ret);
->> +    }
->> +
->> +    drv->proc_reg = devm_regulator_get_optional(dev, "proc");
-> 
-> In the devicetree binding for this driver, the "proc" regulator is *not* optional,
-> but here you're using devm_regulator_get_optional.
-> 
-> If this is not optional, you should use devm_regulator_get() instead.
-> 
->> +    if (IS_ERR(drv->proc_reg)) {
->> +        ret = PTR_ERR(drv->proc_reg);
->> +        return dev_err_probe(dev, ret,
->> +                     "failed to get proc regulator: %d\n", ret);
-> 
-> There's no need to print ret... dev_err_probe() takes care of that for you already:
-> in this case, you're printing the value of ret twice.
-> 
+> Ok, now i see! So bwmon shows similar performance compared with the current
+> cpufreq-based bandwidth scaling. And if you add bwmon on top of vanilla, are
+> the results close/same? 
 
-I agree. better to remove the additional 'ret' printing
-from dev_err_probe. 
+Vanilla + bwmon results in almost no difference.
 
->> +    }
->> +
->> +    ret = regulator_enable(drv->proc_reg);
-> 
-> If you move this call after the devm_regulator_get_optional() call for the sram
-> vreg, you will be able to use dev_err_probe for the latter as well.
-> 
->> +    if (ret) {
->> +        dev_err(dev, "failed to enable proc regulator\n");
-> 
-> Why aren't you using dev_err_probe here, like you've done for the other instances?
+> Is the plan to remove the cpufreq based bandwidth
+> scaling and switch to bwmon? It might improve the power consumption in some
+> scenarios.
+
+The next plan would be to implement the second bwmon, one between CPU
+and caches. With both of them, the cpufreq bandwidth votes can be
+removed (I think Android might be interested in this).
 
 
-dev_err is enough because it means that get to regulator instance
-via regulator_get_optional. If error from regulator_enable happen,
-it depends on the internal logic of pmic driver.
-
-> 
->> +        return ret;
->> +    }
->> +
->> +    drv->sram_reg = devm_regulator_get_optional(dev, "sram");
->> +    if (IS_ERR(drv->sram_reg))
->> +        drv->sram_reg = NULL;
-> 
-> When you use regulator_get_optional() (including the devm_ variant of it), you
-> shall return an error, if there's any... that's what the _optional() is for.
-> 
-> if (IS_ERR(drv->sram_reg))
->     return dev_err_probe(dev, PTR_ERR(drv->proc_reg),
->                  "failed to get sram regulator");
-> 
->> +    else {
->> +        ret = regulator_enable(drv->sram_reg);
->> +        if (ret) {
->> +            dev_err(dev, "failed to enable sram regulator\n");
->> +            goto out_free_resources;
->> +        }
->> +    }
->> +
-> 
-> Regards,
-> Angelo
-> 
-
-Hi Johnson,
-
-Thanks for your work. Before merge, better to remove the 
-'ret' printing from dev_err_probe above. I'll merge it.
-
-
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+Best regards,
+Krzysztof
