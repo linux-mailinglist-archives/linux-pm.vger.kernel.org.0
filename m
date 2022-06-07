@@ -2,35 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8885E540B33
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jun 2022 20:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9EB540C21
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jun 2022 20:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348835AbiFGS1g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jun 2022 14:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
+        id S1351776AbiFGSd4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jun 2022 14:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351364AbiFGSXO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jun 2022 14:23:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E09C6858;
-        Tue,  7 Jun 2022 10:54:20 -0700 (PDT)
+        with ESMTP id S1351848AbiFGScv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jun 2022 14:32:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B2E17EC27;
+        Tue,  7 Jun 2022 10:57:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 855F4B8236D;
-        Tue,  7 Jun 2022 17:54:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81753C34119;
-        Tue,  7 Jun 2022 17:53:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07188B82239;
+        Tue,  7 Jun 2022 17:57:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDE09C3411F;
+        Tue,  7 Jun 2022 17:56:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654624439;
-        bh=f6HB5NhIscnksW5jhehvzcWHKlFOREfOBHOcMMS+Xjc=;
+        s=k20201202; t=1654624621;
+        bh=mMnzVq9sOLnEiZr3KwVE3vQbEh4GHtFSt5x1NKgBfO4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c1bfCbiwnLAyFGIJiuHkQYRcav/42d/70yrA5uV3yMtZ4B5oK2EbnQ69DKjjx4ULs
-         TlbwMR4ukJ2m28GbSCmQtwtRzzbGhaJ5qI0VGs/0a2FSnDBeQZVdM+HQVbFuxU6/H1
-         7x+jrxr8oeW16hgnTmNYQMsU862s3fxnTSQdN3zIt3/C22P7y5pAUcoOD+a13lJ1le
-         whWUZN60jz4ouiDJSkRR2UD1oC0JAfYfycRZhswD+2yx+ZVgTpjFi1LOWt/MnKkQwM
-         toaCz8VNquoi2U23ay6sRHe9QxIuJkcA9PhWs7p+UHCh+oVS5NnJPGDPGp798uJuaA
-         i/1kE3JCDuOjg==
+        b=ltE77oqBlHF6gOWePFZMLzKErSx8ONp9PXKPi7g/YQ+OGeXsvTIGO5eBgDcmUGp0B
+         AUw1B9mDhWIDxL9TDZ0bnrdC9gC2gxxcid8JCy4g2y5hTxHjgMwzZq8WWu/stT0a8g
+         6Mh+GETXZISm1hMEbJDA1BbQZzqDnR/9k9eC2Ri/DdSi7varYHv6FWP/A9yZ0OOw6R
+         FeBM/lWf65u6Cf/e70Lktl/4We1ioe8UZXPXeIqiE/C0ER0+pvuiAXSwOByrq4zvgj
+         PoXG3hj5VVkD9GmDmGA/ADfQ9YvwVLlImXYMjUs74zApJiBz9XJMccfEcFOoaEPriz
+         DHRsWS9XXmlkw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
@@ -43,12 +43,12 @@ Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
         wens@csie.org, sre@kernel.org, balbi@kernel.org,
         gregkh@linuxfoundation.org, linux-pm@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-omap@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.17 22/60] extcon: Fix extcon_get_extcon_dev() error handling
-Date:   Tue,  7 Jun 2022 13:52:19 -0400
-Message-Id: <20220607175259.478835-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 21/51] extcon: Fix extcon_get_extcon_dev() error handling
+Date:   Tue,  7 Jun 2022 13:55:20 -0400
+Message-Id: <20220607175552.479948-21-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220607175259.478835-1-sashal@kernel.org>
-References: <20220607175259.478835-1-sashal@kernel.org>
+In-Reply-To: <20220607175552.479948-1-sashal@kernel.org>
+References: <20220607175552.479948-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -115,10 +115,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  9 files changed, 28 insertions(+), 31 deletions(-)
 
 diff --git a/drivers/extcon/extcon-axp288.c b/drivers/extcon/extcon-axp288.c
-index 7c6d5857ff25..180be768c215 100644
+index fdb31954cf2b..8073bc7d3e61 100644
 --- a/drivers/extcon/extcon-axp288.c
 +++ b/drivers/extcon/extcon-axp288.c
-@@ -394,8 +394,8 @@ static int axp288_extcon_probe(struct platform_device *pdev)
+@@ -375,8 +375,8 @@ static int axp288_extcon_probe(struct platform_device *pdev)
  		if (adev) {
  			info->id_extcon = extcon_get_extcon_dev(acpi_dev_name(adev));
  			put_device(&adev->dev);
@@ -130,10 +130,10 @@ index 7c6d5857ff25..180be768c215 100644
  			dev_info(dev, "controlling USB role\n");
  		} else {
 diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
-index a09e704fd0fa..adb957470c65 100644
+index e7a9561a826d..9eb92997f3ae 100644
 --- a/drivers/extcon/extcon.c
 +++ b/drivers/extcon/extcon.c
-@@ -851,6 +851,8 @@ EXPORT_SYMBOL_GPL(extcon_set_property_capability);
+@@ -863,6 +863,8 @@ EXPORT_SYMBOL_GPL(extcon_set_property_capability);
   * @extcon_name:	the extcon name provided with extcon_dev_register()
   *
   * Return the pointer of extcon device if success or ERR_PTR(err) if fail.
@@ -142,7 +142,7 @@ index a09e704fd0fa..adb957470c65 100644
   */
  struct extcon_dev *extcon_get_extcon_dev(const char *extcon_name)
  {
-@@ -864,7 +866,7 @@ struct extcon_dev *extcon_get_extcon_dev(const char *extcon_name)
+@@ -876,7 +878,7 @@ struct extcon_dev *extcon_get_extcon_dev(const char *extcon_name)
  		if (!strcmp(sd->name, extcon_name))
  			goto out;
  	}
@@ -152,10 +152,10 @@ index a09e704fd0fa..adb957470c65 100644
  	mutex_unlock(&extcon_dev_list_lock);
  	return sd;
 diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply/axp288_charger.c
-index 19746e658a6a..15219ed43ce9 100644
+index fb9db7f43895..22378dad4d9f 100644
 --- a/drivers/power/supply/axp288_charger.c
 +++ b/drivers/power/supply/axp288_charger.c
-@@ -865,17 +865,20 @@ static int axp288_charger_probe(struct platform_device *pdev)
+@@ -832,17 +832,20 @@ static int axp288_charger_probe(struct platform_device *pdev)
  	info->regmap_irqc = axp20x->regmap_irqc;
  
  	info->cable.edev = extcon_get_extcon_dev(AXP288_EXTCON_DEV_NAME);
