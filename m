@@ -2,66 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5884754023D
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jun 2022 17:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E9C7540260
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jun 2022 17:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343945AbiFGPRJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jun 2022 11:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
+        id S1344048AbiFGP1a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jun 2022 11:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245065AbiFGPRI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jun 2022 11:17:08 -0400
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8627678ECB;
-        Tue,  7 Jun 2022 08:17:07 -0700 (PDT)
-Received: by mail-io1-f52.google.com with SMTP id a10so15788458ioe.9;
-        Tue, 07 Jun 2022 08:17:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SjlVFdnR7tYxM3f/CB6jirW0jGfTyiV+Y5jKRvu7N1I=;
-        b=s877vHbaKA9MSmRAvrZNXnPsQAYmu+F3VyJSYEp1unKXgHRVfeqHbOzMslEmr10U+3
-         I4BVJAh94m4KXLjvhcsPvMCmVung+lcQteHvzeOf/p+qzhW73Ss6CPZZLGYAR1qIy2gM
-         TbqoowXOk5vQAYoXcwOG3109iFs+e2dcDZ1y5ZkDd4nt8vg/Um51uxZqlTEmCorHxjHo
-         pB2susAL5fBAU6zRW2NpuClOu8kTnILbw63qojPOjgC+uNcTaqaM27QFqdE6y36vA0Ya
-         0VBH8U/NoeGcEOyK4n/p4CV/C5t64sBGdunuO9WAJKynaWVH3AKoVWClHsJe4nDrwayz
-         G9Og==
-X-Gm-Message-State: AOAM532jkOUrtrS4Ig0bfjrBYWbCLnfqdLPCjduf+BOBvW5jZ8VasB6r
-        o6pxBI8h1dacvHvjmCEwB/Bye6bLWg==
-X-Google-Smtp-Source: ABdhPJzeQ1o4uHp2G2vvHri3+rguSybk1tpA6g0SN4mirpEdhY9wF4Tm3Db5kCMXTu/0HyRttUBqtg==
-X-Received: by 2002:a05:6638:13d5:b0:331:a6f2:3dbf with SMTP id i21-20020a05663813d500b00331a6f23dbfmr7413793jaj.9.1654615026710;
-        Tue, 07 Jun 2022 08:17:06 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id t22-20020a5d8496000000b0065dc93eae5dsm6677682iom.7.2022.06.07.08.17.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jun 2022 08:17:06 -0700 (PDT)
-Received: (nullmailer pid 3267286 invoked by uid 1000);
-        Tue, 07 Jun 2022 15:17:03 -0000
-Date:   Tue, 7 Jun 2022 09:17:03 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
-        lee.jones@linaro.org, sre@kernel.org, broonie@kernel.org,
-        gregkh@linuxfoundation.org, lgirdwood@gmail.com, lars@metafoo.de,
-        rafael@kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/10] dt-bindings: gpio: Add AXP192 GPIO bindings
-Message-ID: <20220607151703.GB3254370-robh@kernel.org>
-References: <20220603135714.12007-1-aidanmacdonald.0x0@gmail.com>
- <20220603135714.12007-6-aidanmacdonald.0x0@gmail.com>
- <20220605225504.GA3678983-robh@kernel.org>
- <7w5P7NKqcSgfwmILB1hRmmdtkmw7UXrH@localhost>
+        with ESMTP id S236718AbiFGP10 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jun 2022 11:27:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 41D7435A98
+        for <linux-pm@vger.kernel.org>; Tue,  7 Jun 2022 08:27:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1654615643;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=j2QP74kmyLRjPfaslomjwazE8bxfaKWf8AzgM5WImZE=;
+        b=QnAPkHHbMeyjIPK2YmKCjUQbyw+bebTItkhXqjm6b3gVPrAhD6DMt/3Su64ZUnoDTvGVd8
+        9K0hnmHB8kr6OBiOubTHUhBNpsc0XjslSiAucl7mk8WoDuVE+EpwtDV+6Ni7t/LDN2eIzc
+        JnY7+RD2b8w/viRYUqRbkH6BN/70dwk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-470-ppflYsfZM8qOHDXTPBRCHg-1; Tue, 07 Jun 2022 11:27:20 -0400
+X-MC-Unique: ppflYsfZM8qOHDXTPBRCHg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 911C3968EEB;
+        Tue,  7 Jun 2022 15:27:18 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.101])
+        by smtp.corp.redhat.com (Postfix) with SMTP id DF67DC27E92;
+        Tue,  7 Jun 2022 15:26:58 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Tue,  7 Jun 2022 17:27:15 +0200 (CEST)
+Date:   Tue, 7 Jun 2022 17:26:54 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, bigeasy@linutronix.de,
+        Will Deacon <will@kernel.org>, tj@kernel.org,
+        linux-pm@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, linux-ia64@vger.kernel.org,
+        Robert OCallahan <roc@pernos.co>, Kyle Huey <khuey@pernos.co>,
+        Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Douglas Miller <dougmill@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Subject: Re: [PATCH 07/16] signal: Wake up the designated parent
+Message-ID: <20220607152627.GA10192@redhat.com>
+References: <871qwq5ucx.fsf_-_@email.froward.int.ebiederm.org>
+ <20220518225355.784371-7-ebiederm@xmission.com>
+ <20220524132553.GD14347@redhat.com>
+ <20220524162808.GF14347@redhat.com>
+ <20220525142845.GA2687@redhat.com>
+ <87a6ap30lh.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7w5P7NKqcSgfwmILB1hRmmdtkmw7UXrH@localhost>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <87a6ap30lh.fsf@email.froward.int.ebiederm.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,71 +88,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 07, 2022 at 11:34:19AM +0100, Aidan MacDonald wrote:
-> 
-> Rob Herring <robh@kernel.org> writes:
-> 
-> > On Fri, Jun 03, 2022 at 02:57:09PM +0100, Aidan MacDonald wrote:
-> >> The AXP192 PMIC is different enough from the PMICs supported by
-> >> the AXP20x GPIO driver to warrant a separate driver. The AXP192
-> >> driver also supports interrupts and pinconf settings.
-> >> 
-> >> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-> >> ---
-> >>  .../bindings/gpio/x-powers,axp192-gpio.yaml   | 59 +++++++++++++++++++
-> >>  1 file changed, 59 insertions(+)
-> >>  create mode 100644 Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml
-> >> 
-> >> diff --git a/Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml b/Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml
-> >> new file mode 100644
-> >> index 000000000000..7a985640ade8
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/gpio/x-powers,axp192-gpio.yaml
-> >> @@ -0,0 +1,59 @@
-> >> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> >> +%YAML 1.2
-> >> +---
-> >> +$id: "http://devicetree.org/schemas/gpio/x-powers,axp192-gpio.yaml#"
-> >> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> >> +
-> >> +title: X-Powers AXP192 GPIO Device Tree Bindings
-> >> +
-> >> +maintainers:
-> >> +  - Chen-Yu Tsai <wens@csie.org>
-> >> +
-> >> +properties:
-> >> +  "#gpio-cells":
-> >> +    const: 2
-> >> +    description: >
-> >> +      The first cell is the pin number and the second is the GPIO flags.
-> >> +
-> >> +  compatible:
-> >> +    oneOf:
-> >> +      - enum:
-> >
-> > No need for 'oneOf' with only 1 entry.
-> >
-> 
-> Got it.
-> 
-> >> +          - x-powers,axp192-gpio
-> >> +
-> >> +  gpio-controller: true
-> >> +
-> >> +patternProperties:
-> >> +  "^.*-pins?$":
-> >
-> > You can omit '^.*'
-> >
-> > Why does 's' need to be optional?
-> >
-> 
-> TBH I just copied this from x-powers,axp209-gpio.yaml. A similar pattern
-> is used in a few other bindings, eg. allwinner,sun4i-a10-pinctrl.yaml.
-> I guess it's to allow the node names to sound more natural when there's
-> only one pin.
+On 06/06, Eric W. Biederman wrote:
+>
+> Which if I have had enough sleep reduces this patch to just:
+>
+> diff --git a/kernel/exit.c b/kernel/exit.c
+> index f072959fcab7..c8156366b722 100644
+> --- a/kernel/exit.c
+> +++ b/kernel/exit.c
+> @@ -1431,8 +1431,10 @@ static int child_wait_callback(wait_queue_entry_t *wait, unsigned mode,
+>         if (!eligible_pid(wo, p))
+>                 return 0;
+>
+> -       if ((wo->wo_flags & __WNOTHREAD) && wait->private != p->parent)
+> -               return 0;
+> +       if ((wo->wo_flags & __WNOTHREAD) &&
+> +           (wait->private != p->parent) &&
+> +           (wait->private != p->real_parent))
+> +                       return 0;
+>
+>         return default_wake_function(wait, mode, sync, key);
+>  }
+>
+>
+> I think that solves the issue without missing wake-ups without adding
+> any more.
 
-Those cases were for compatibility with existing users. That shouldn't 
-be the case here.
+Agreed, and looks much simpler.
 
-Rob
+> For the same set of reasons it looks like the __wake_up_parent in
+> __ptrace_detach is just simply dead code.  I don't think there is a case
+> where when !ptrace_reparented the thread that is the real_parent can
+> sleep in do_wait when the thread that was calling ptrace could not.
+
+Yes... this doesn't really differ from the case when one thread reaps
+a natural child and another thread sleep in do_wait().
+
+> That needs a very close look to confirm.
+
+Yes.
+
+Oleg.
+
