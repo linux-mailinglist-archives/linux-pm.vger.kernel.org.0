@@ -2,45 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4148A53F48F
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jun 2022 05:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F9153F4B7
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jun 2022 05:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236344AbiFGDdj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Jun 2022 23:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54336 "EHLO
+        id S229529AbiFGDwI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Jun 2022 23:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236340AbiFGDde (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jun 2022 23:33:34 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6ECBDF71;
-        Mon,  6 Jun 2022 20:33:32 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LHG9q2SrvzbcC6;
-        Tue,  7 Jun 2022 11:31:43 +0800 (CST)
-Received: from kwepemm600018.china.huawei.com (7.193.23.140) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 7 Jun 2022 11:33:30 +0800
-Received: from huawei.com (10.174.176.88) by kwepemm600018.china.huawei.com
- (7.193.23.140) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 7 Jun
- 2022 11:33:29 +0800
-From:   gaochao <gaochao49@huawei.com>
-To:     <linus.walleij@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <zhengbin13@huawei.com>
-Subject: [PATCH -next] power: supply: ab8500_fg: add missing destroy_workqueue in ab8500_fg_probe
-Date:   Tue, 7 Jun 2022 11:33:28 +0800
-Message-ID: <20220607033328.1846-1-gaochao49@huawei.com>
-X-Mailer: git-send-email 2.28.0.windows.1
+        with ESMTP id S229459AbiFGDwF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jun 2022 23:52:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D495BC0453;
+        Mon,  6 Jun 2022 20:52:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B1FB6147E;
+        Tue,  7 Jun 2022 03:52:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F965C385A5;
+        Tue,  7 Jun 2022 03:52:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654573923;
+        bh=yNrQt95Y8ZC4NDramYhCk2RGnaCtu+WEz2UClGTdMnA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=u1fhAAeeNx8MwQn3pZ6MpAS4ae3vrtTpEGavsJdTngEvvlIdBCupTtKUgx199T5DY
+         ShqKQL/pt2v04wtjL5WrnDX8L7LrxoKSPk1mQoML0R7VSaRJ2Ci0LDnmZXr1AkPoUT
+         Z5Ri81vnwbnaaprIGJKOJ0xnYjyKTd2TDnrNvsezADVoeDAwPnB3aFiQ5j6hLv2tEk
+         Pb7cleJZND+Ha1SKG5y9Jj8890esXQMr4mWcoDpv2pI7ugOenw5jwyV+qY/S2ZoyH5
+         tIcgDXdi7kJ6mN2nyO8+vg6tibRlHUh9DCd1TDkA8imy8fXk9+PEcs1/uFhQq0U6US
+         3T5epRgYyj1WA==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH] PM / wakeup: Unify device_init_wakeup() for PM_SLEEP and !PM_SLEEP
+Date:   Mon,  6 Jun 2022 22:51:58 -0500
+Message-Id: <20220607035158.308111-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.176.88]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600018.china.huawei.com (7.193.23.140)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -49,73 +53,123 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Gao Chao <gaochao49@huawei.com>
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-In ab8500_fg_probe,  misses destroy_workqueue in error path,
-this patch fixes that.
+Previously the CONFIG_PM_SLEEP and !CONFIG_PM_SLEEP device_init_wakeup()
+implementations differed in confusing ways:
 
-Fixes: 010ddb813f35 ("power: supply: ab8500_fg: Allocate wq in probe")
-Signed-off-by: Gao Chao <gaochao49@huawei.com>
+  - The PM_SLEEP version checked for a NULL device pointer and returned
+    -EINVAL, while the !PM_SLEEP version did not and would simply
+    dereference a NULL pointer.
+
+  - When called with "false", the !PM_SLEEP version cleared "capable" and
+    "enable" in the opposite order of the PM_SLEEP version.  That was
+    harmless because for !PM_SLEEP they're simple assignments, but it's
+    unnecessary confusion.
+
+Use a simplified version of the PM_SLEEP implementation for both cases.
+
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 ---
- drivers/power/supply/ab8500_fg.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/base/power/wakeup.c | 30 ------------------------------
+ include/linux/pm_wakeup.h   | 31 +++++++++++++++++++++++--------
+ 2 files changed, 23 insertions(+), 38 deletions(-)
 
-diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
-index ec8a404d71b4..4339fa9ff009 100644
---- a/drivers/power/supply/ab8500_fg.c
-+++ b/drivers/power/supply/ab8500_fg.c
-@@ -3148,6 +3148,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	ret = ab8500_fg_init_hw_registers(di);
- 	if (ret) {
- 		dev_err(dev, "failed to initialize registers\n");
-+		destroy_workqueue(di->fg_wq);
- 		return ret;
- 	}
-
-@@ -3159,6 +3160,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	di->fg_psy = devm_power_supply_register(dev, &ab8500_fg_desc, &psy_cfg);
- 	if (IS_ERR(di->fg_psy)) {
- 		dev_err(dev, "failed to register FG psy\n");
-+		destroy_workqueue(di->fg_wq);
- 		return PTR_ERR(di->fg_psy);
- 	}
-
-@@ -3174,8 +3176,10 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	/* Register primary interrupt handlers */
- 	for (i = 0; i < ARRAY_SIZE(ab8500_fg_irq); i++) {
- 		irq = platform_get_irq_byname(pdev, ab8500_fg_irq[i].name);
--		if (irq < 0)
-+		if (irq < 0) {
-+			destroy_workqueue(di->fg_wq);
- 			return irq;
-+		}
-
- 		ret = devm_request_threaded_irq(dev, irq, NULL,
- 				  ab8500_fg_irq[i].isr,
-@@ -3185,6 +3189,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 		if (ret != 0) {
- 			dev_err(dev, "failed to request %s IRQ %d: %d\n",
- 				ab8500_fg_irq[i].name, irq, ret);
-+			destroy_workqueue(di->fg_wq);
- 			return ret;
- 		}
- 		dev_dbg(dev, "Requested %s IRQ %d: %d\n",
-@@ -3200,6 +3205,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	ret = ab8500_fg_sysfs_init(di);
- 	if (ret) {
- 		dev_err(dev, "failed to create sysfs entry\n");
-+		destroy_workqueue(di->fg_wq);
- 		return ret;
- 	}
-
-@@ -3207,6 +3213,7 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	if (ret) {
- 		dev_err(dev, "failed to create FG psy\n");
- 		ab8500_fg_sysfs_exit(di);
-+		destroy_workqueue(di->fg_wq);
- 		return ret;
- 	}
-
---
-2.17.1
+diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+index 11a4ffe91367..e3befa2c1b66 100644
+--- a/drivers/base/power/wakeup.c
++++ b/drivers/base/power/wakeup.c
+@@ -500,36 +500,6 @@ void device_set_wakeup_capable(struct device *dev, bool capable)
+ }
+ EXPORT_SYMBOL_GPL(device_set_wakeup_capable);
+ 
+-/**
+- * device_init_wakeup - Device wakeup initialization.
+- * @dev: Device to handle.
+- * @enable: Whether or not to enable @dev as a wakeup device.
+- *
+- * By default, most devices should leave wakeup disabled.  The exceptions are
+- * devices that everyone expects to be wakeup sources: keyboards, power buttons,
+- * possibly network interfaces, etc.  Also, devices that don't generate their
+- * own wakeup requests but merely forward requests from one bus to another
+- * (like PCI bridges) should have wakeup enabled by default.
+- */
+-int device_init_wakeup(struct device *dev, bool enable)
+-{
+-	int ret = 0;
+-
+-	if (!dev)
+-		return -EINVAL;
+-
+-	if (enable) {
+-		device_set_wakeup_capable(dev, true);
+-		ret = device_wakeup_enable(dev);
+-	} else {
+-		device_wakeup_disable(dev);
+-		device_set_wakeup_capable(dev, false);
+-	}
+-
+-	return ret;
+-}
+-EXPORT_SYMBOL_GPL(device_init_wakeup);
+-
+ /**
+  * device_set_wakeup_enable - Enable or disable a device to wake up the system.
+  * @dev: Device to handle.
+diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
+index 196a157456aa..77f4849e3418 100644
+--- a/include/linux/pm_wakeup.h
++++ b/include/linux/pm_wakeup.h
+@@ -109,7 +109,6 @@ extern struct wakeup_source *wakeup_sources_walk_next(struct wakeup_source *ws);
+ extern int device_wakeup_enable(struct device *dev);
+ extern int device_wakeup_disable(struct device *dev);
+ extern void device_set_wakeup_capable(struct device *dev, bool capable);
+-extern int device_init_wakeup(struct device *dev, bool val);
+ extern int device_set_wakeup_enable(struct device *dev, bool enable);
+ extern void __pm_stay_awake(struct wakeup_source *ws);
+ extern void pm_stay_awake(struct device *dev);
+@@ -167,13 +166,6 @@ static inline int device_set_wakeup_enable(struct device *dev, bool enable)
+ 	return 0;
+ }
+ 
+-static inline int device_init_wakeup(struct device *dev, bool val)
+-{
+-	device_set_wakeup_capable(dev, val);
+-	device_set_wakeup_enable(dev, val);
+-	return 0;
+-}
+-
+ static inline bool device_may_wakeup(struct device *dev)
+ {
+ 	return dev->power.can_wakeup && dev->power.should_wakeup;
+@@ -217,4 +209,27 @@ static inline void pm_wakeup_hard_event(struct device *dev)
+ 	return pm_wakeup_dev_event(dev, 0, true);
+ }
+ 
++/**
++ * device_init_wakeup - Device wakeup initialization.
++ * @dev: Device to handle.
++ * @enable: Whether or not to enable @dev as a wakeup device.
++ *
++ * By default, most devices should leave wakeup disabled.  The exceptions are
++ * devices that everyone expects to be wakeup sources: keyboards, power buttons,
++ * possibly network interfaces, etc.  Also, devices that don't generate their
++ * own wakeup requests but merely forward requests from one bus to another
++ * (like PCI bridges) should have wakeup enabled by default.
++ */
++static inline int device_init_wakeup(struct device *dev, bool enable)
++{
++	if (enable) {
++		device_set_wakeup_capable(dev, true);
++		return device_wakeup_enable(dev);
++	} else {
++		device_wakeup_disable(dev);
++		device_set_wakeup_capable(dev, false);
++		return 0;
++	}
++}
++
+ #endif /* _LINUX_PM_WAKEUP_H */
+-- 
+2.25.1
 
