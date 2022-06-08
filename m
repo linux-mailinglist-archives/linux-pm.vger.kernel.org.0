@@ -2,132 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C659543FCA
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 01:15:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 603DB544003
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 01:43:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231362AbiFHXPu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jun 2022 19:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59774 "EHLO
+        id S234574AbiFHXmD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jun 2022 19:42:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbiFHXPq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 19:15:46 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F76E43387
-        for <linux-pm@vger.kernel.org>; Wed,  8 Jun 2022 16:15:43 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-3137316bb69so30001717b3.10
-        for <linux-pm@vger.kernel.org>; Wed, 08 Jun 2022 16:15:44 -0700 (PDT)
+        with ESMTP id S235383AbiFHXl6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 19:41:58 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1AED1BE64A
+        for <linux-pm@vger.kernel.org>; Wed,  8 Jun 2022 16:41:36 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id y187so20341944pgd.3
+        for <linux-pm@vger.kernel.org>; Wed, 08 Jun 2022 16:41:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5dm3ORkewVvScpNnTHAWD0lWUpKHv8ZP9Eg12POa/hY=;
-        b=s8ajev8ylc24lWL+uVn0aQqBmKLBXSt4qhwBZySWYs06ap1dTsQm6yNKQo5ZZk1Ttw
-         CogFfnoV9WalwlDwJZQwIzhS53XYG0TnpLr6RaCiWz52oS8Ya2rxty3/51rSjmJayx7c
-         EWdKZF1ai138Psl2FvsA3fb81ZOFaNvnMqn373Non4bghec4LDcPh888h9mpuh/1unnN
-         f9dX3yfRPbSr2zW6HLeQ/tEvTedV0nhIrv0QdBSD7AwR10AtUBj/yefZJX+LJ+vEpqtI
-         mz7ygzZjwLzaYvbU7IBn1tdY8nY9jEOw6ZGRU2lMtt4y+nfEmnlgAfeCbdWY91a6rwLO
-         KGNQ==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=bptLTT3dH/tatgoIl0nwGfi61ndG5D6r8YsV+A9Z0lU=;
+        b=WxhEX+tzqrpIaxEZb/76W0ltul+ymUQA5ZLWyhVXv9EMoxU16+wjkHros2mz4MMM+/
+         gIOGR1H2It7Z3Zzj1AsRJJV9eqqlbC7FpLa/yXx9SRqfW1DkBdCGumLnJclczAkgVpif
+         00vJOFMKhARxDQ5BUGzq5PddnBh4lOozJmh1KcjOKK70kucU61PSl7WWn6YBolJg0oGF
+         P+OrQWnlkCap35j59L8LkRpSPlFRmw22ZsbjCG0xNLwTFKy0e53PJYEUXchx8NEtv2y/
+         TOryNDYr6mGwxSJ/gnKM8AkKrbh+Yq0h7qE/oE6gfxZ4nUIS7d4nF0EJHXvfmUnsv2nw
+         I21A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5dm3ORkewVvScpNnTHAWD0lWUpKHv8ZP9Eg12POa/hY=;
-        b=5S/+QALlWWAj+lFXNq5ynIB2aSEVUj3zNWb0u4wrarDl0RdEdIRL11jx3DGI1714st
-         G2DK2lWK3nnep17+PKfK8aijc/YYRrQJsAfokA2vT0YSrWvasLHyk6EzR/jFUfP3Y5Xf
-         aIwwqeMi9Jqe+rE1LjGl+oBLE/vKCetU2R8mKotfD/pwRPQZgrxmZQvqQJHiN3qsjOfZ
-         p7lms95jvT/XfhtU131JtpVKVh/p1Pwe7jrzQstw8kzxigM9jSxQJsOEa3U/aQnZcA2i
-         hncmFsCUcaEE/b6UZcBTfROaFZ1TL6eEfxvZjE0t+QV9At6ikAmBJNyHJz8qc8abBELD
-         MjlQ==
-X-Gm-Message-State: AOAM530otHl4pOj+L4Tz8s2QurO1hO3MDIc6WvU76BeLdccLvAn8ezpi
-        FQHt56Q2MSZgY33WCq4kvJOOKsl3ic4kkz5+ZF8EuQ==
-X-Google-Smtp-Source: ABdhPJydbDnoddm1zrWGAsHzuwqdddTQzuodu0O1Gb1JEUm33YqJ1CQ0JnoMmfFGzaJs2LsBc2KxBacSkdprXywkGyo=
-X-Received: by 2002:a81:1a4c:0:b0:30c:8363:e170 with SMTP id
- a73-20020a811a4c000000b0030c8363e170mr38925926ywa.455.1654730143827; Wed, 08
- Jun 2022 16:15:43 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=bptLTT3dH/tatgoIl0nwGfi61ndG5D6r8YsV+A9Z0lU=;
+        b=3+XTGgJgRTcpQzTcbnt6EwIXl/30QLHh7nUOBdVdC7vNAzUpBbG4PzSbTNm8Doj4qT
+         RUewSeUlFm5yoDYVT+KiLqZTVg9rpjjMZoJh3uD3qabzKXmZcUs95+Xq/qGLINWA77j9
+         nZg0xTiYMs2WGKpyl9SVS+W2rvtgUGW8yZh8nJ0GCMFhWQe2qPsFrQH6G1rABD49o+MF
+         OfMbMY4ychseG5B9aeJBd4tS3lUHplPvzzE72x+u6F0mKOxCiM+kr0ZKl3wt/K+it4U1
+         OiU/Qk5vExmrF3LcPsZ46XZ+od/2I/orxx1kHiHW7oaXcn+T1cqJoCj28V5bOd9VwNEr
+         /VcA==
+X-Gm-Message-State: AOAM530Hzb9vIn9hNImfjUiQf1Ft5ZHymYAy8eSWYalmgXG571oxyuRC
+        E/AQYvxcah3Eq/X/4lmWvSPtfg==
+X-Google-Smtp-Source: ABdhPJwPFajNfRSbI+LiO3mDoDFLUi8R9nR7Cvfd2I0+259/gOvhjLEOB/y1R9jIxL/JCGma+zHmFw==
+X-Received: by 2002:a05:6a00:3491:b0:51c:1d3b:b0b0 with SMTP id cp17-20020a056a00349100b0051c1d3bb0b0mr17364707pfb.68.1654731696467;
+        Wed, 08 Jun 2022 16:41:36 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 20-20020a17090a005400b001ea5d9ae7d9sm57623pjb.40.2022.06.08.16.41.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 16:41:36 -0700 (PDT)
+Message-ID: <62a133b0.1c69fb81.4a8ea.0201@mx.google.com>
+Date:   Wed, 08 Jun 2022 16:41:36 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220601070707.3946847-1-saravanak@google.com>
- <CAMuHMdXkX-SXtBuTRGJOUnpw9goSP6RFr_PTt_3w_yWgBpWsqg@mail.gmail.com>
- <CAGETcx9f0UBhpp6dM+KJwtYpLx19wwsq6_ygi3En7FrXobOSpA@mail.gmail.com>
- <CAGETcx8VM+xOCe7HEx9FUU-1B9nrX8Q=tE=NjTyb9uX2_8RXLQ@mail.gmail.com>
- <CAMuHMdXzu8Vp=a7fyjOB=xt04aee=vWXV=TcRZeeKUGYFFZ1CA@mail.gmail.com>
- <CAGETcx_Nqo4ju7cWwO3dP3YM2wpCb0jx23OHOReexOjpT5pATA@mail.gmail.com>
- <CAMuHMdXQCwMQj_ZiOBAzusdCxd8w6NbTqD_7nzykhVs+UWx8Gw@mail.gmail.com>
- <CAGETcx8UO=4mk31tU4QaWU3RaNM_myA9woe0idBp6p7+X5AEgg@mail.gmail.com> <20220608154908.4ddb9795@kernel.org>
-In-Reply-To: <20220608154908.4ddb9795@kernel.org>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 8 Jun 2022 16:15:07 -0700
-Message-ID: <CAGETcx_ZPB2ce-7Zf-bVy4hHe8Nvk62_7HVeO1dhQvg1iuHQDw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/9] deferred_probe_timeout logic clean up
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        David Ahern <dsahern@kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v5.19-rc1-4-g28e0b92ca611b
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.19-rc1-4-g28e0b92ca611b)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 3:49 PM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Wed, 8 Jun 2022 14:07:44 -0700 Saravana Kannan wrote:
-> > David/Jakub,
-> >
-> > Do the IP4 autoconfig changes look reasonable to you?
->
-> I'm no expert in this area, I'd trust the opinion of the embedded folks
-> (adding Florian as well) more than myself.
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.19-rc1-4-g28e=
+0b92ca611b)
 
-Thanks.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+19-rc1-4-g28e0b92ca611b/
 
-> It's unclear to me why we'd
-> wait_for_init_devices_probe() after the first failed iteration,
+Tree: pm
+Branch: testing
+Git Describe: v5.19-rc1-4-g28e0b92ca611b
+Git Commit: 28e0b92ca611bf10dda3570b0d43a0c5b62afda0
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-wait_for_init_devices_probe() relaxes ordering rules for all devices
-and it's not something we want to do unless we really need it. That's
-why we are doing that only if we can't find any network device in the
-first iteration.
+Warnings Detected:
 
-> sleep,
-> and then allow 11 more iterations with wait_for_device_probe().
-> Let me also add Thomas since he wrote e2ffe3ff6f5e ("net: ipconfig:
-> Wait for deferred device probes").
+arc:
 
-Even without this change, I'm not sure the wait_for_device_probe()
-needs to be within the loop. It's probably sufficient to just do it
-once in the beginning, but it's already there and I'm not sure if I'm
-missing some scenarios, so I left that part as is.
+arm64:
 
--Saravana
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
