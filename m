@@ -2,221 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82948543E3B
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jun 2022 23:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43DFE543F28
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 00:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234764AbiFHVIY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jun 2022 17:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51200 "EHLO
+        id S230322AbiFHW33 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jun 2022 18:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234356AbiFHVIX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 17:08:23 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112081D82C9
-        for <linux-pm@vger.kernel.org>; Wed,  8 Jun 2022 14:08:22 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-30fa61b1a83so216872707b3.0
-        for <linux-pm@vger.kernel.org>; Wed, 08 Jun 2022 14:08:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b5ReOqAs2o3gzeqG3OL7V4il5yL5akHyIyGPxcacfBA=;
-        b=Ba4mwhCNe1k/SVYGgiax1RHLVYaE16PYm+5fiQboXFgD/ag+N5cvz705MN4rVjpIPI
-         20mqv9SEpUPx3PtChBxCddPxC3gpwz6N5PF+G0ZElhJAMs7eaWr/Z+J8nMSxF5pOKofY
-         CLFQyzIeUPghYqThB66mUFHJcWTC93ASqEVRt3LVLl9QPXBD+PYs/yU2uLqcxreGwdik
-         4HASNcsIvuV/mOpjIf/knlk/2pymeg4ut2QXPF/hi4finuKXsMk29G9quSLgCq5XjL9S
-         aWkJqkdgxfW8i8wPGvE0N8YcrI2ZFizB9Lbxi1u9CnGJusfu9M2jfO6bciIlSU/xqWwh
-         708Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b5ReOqAs2o3gzeqG3OL7V4il5yL5akHyIyGPxcacfBA=;
-        b=jHZxNf8oAct0eZ2sD+MJS+g0QVAwzjL2PORZgrULML/e8gz4vq9UCJn6tUJHLWz46V
-         nkvSU+dvg7A7cEYjI/8RudCr2zPixN62xy+mCeLrwawg5V1JNF8F0UWSW3MLRHT/dEoi
-         CrsO3fbOIqE/DVSWWLj/Q5tVsu80TdnDa+0MTznSe/AvA4JKNZUj+s4gs3yH6h73L/sF
-         x/ySvOpcTzoQTEH4Qhu7BXS+zeXBAOQC0q85pccFE3EL0+nGF3CswhDEPlZFH6RRLLTF
-         YqKNC/cpqJ2lLYi8rKnVi3qakJC9xWJOs1Qx6tVDkd+8jp65WzXxq4v8Ijk6dk9VyZ4N
-         Xa0Q==
-X-Gm-Message-State: AOAM532/hgYyrn50d5zM8ykOwnQ9PQ507hWMKqc4O1wdAjb/9AAVqplz
-        8tK9OCLav206cULYfqDn/ahm1QxjNZi6uEkG9vcGag==
-X-Google-Smtp-Source: ABdhPJwApqB8Aa/s/hWKyN1cGMg0w6J6U6ZpPLsgPu6Z8rVbvyvZo/4KRS+qCvxDCZ36rJaIIDOHULExfT8EFh33Nno=
-X-Received: by 2002:a0d:c984:0:b0:30c:c95c:21d0 with SMTP id
- l126-20020a0dc984000000b0030cc95c21d0mr41306613ywd.218.1654722500963; Wed, 08
- Jun 2022 14:08:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220601070707.3946847-1-saravanak@google.com>
- <CAMuHMdXkX-SXtBuTRGJOUnpw9goSP6RFr_PTt_3w_yWgBpWsqg@mail.gmail.com>
- <CAGETcx9f0UBhpp6dM+KJwtYpLx19wwsq6_ygi3En7FrXobOSpA@mail.gmail.com>
- <CAGETcx8VM+xOCe7HEx9FUU-1B9nrX8Q=tE=NjTyb9uX2_8RXLQ@mail.gmail.com>
- <CAMuHMdXzu8Vp=a7fyjOB=xt04aee=vWXV=TcRZeeKUGYFFZ1CA@mail.gmail.com>
- <CAGETcx_Nqo4ju7cWwO3dP3YM2wpCb0jx23OHOReexOjpT5pATA@mail.gmail.com> <CAMuHMdXQCwMQj_ZiOBAzusdCxd8w6NbTqD_7nzykhVs+UWx8Gw@mail.gmail.com>
-In-Reply-To: <CAMuHMdXQCwMQj_ZiOBAzusdCxd8w6NbTqD_7nzykhVs+UWx8Gw@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Wed, 8 Jun 2022 14:07:44 -0700
-Message-ID: <CAGETcx8UO=4mk31tU4QaWU3RaNM_myA9woe0idBp6p7+X5AEgg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/9] deferred_probe_timeout logic clean up
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        with ESMTP id S229802AbiFHW32 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 18:29:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E035F80;
+        Wed,  8 Jun 2022 15:29:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41AB6B82B93;
+        Wed,  8 Jun 2022 22:29:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A29D9C34116;
+        Wed,  8 Jun 2022 22:29:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654727364;
+        bh=agcIRd3Ma6/Gbes0Mw59QQ3rWGelpWxP5sS/f7LjAzY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=qse6DMM0V269L2s8KhcvlPBFOBnFW+3I+XCR1D5klSxxFO3oEOJIxDoKlwaR2at69
+         kP+SRHRf5CBdmqg5KQpHxA3GvYDL0vHBnj+T4oQBCpwpUnIKqhX6i7fUtQTr+QbdtP
+         RnFT67kjUJmafdNy57Pg9+Mb2XzjlQ61A9kh4i2HjpsduZc8SKgXhXfvOy6sumBLNS
+         DI6+RktiKLYJI+DyJ/Ps1QYkx1t3sjfPMgqHksdFk5kw0bRTgM6B47ithqBQn1H8k6
+         dkaxo+a4U8YPqgtzhkswikYzFwPI0j8MayfmLBEUYEThS36IwjyU6Yqi/etXlXC8y5
+         hTuY0peeryJ4A==
+Date:   Wed, 8 Jun 2022 17:29:22 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        David Ahern <dsahern@kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URI_HEX,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] Documentation: PM: Drop pme_interrupt reference
+Message-ID: <20220608222922.GA429328@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220602163330.317-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 11:54 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Saravana,
->
-> On Wed, Jun 8, 2022 at 8:13 PM Saravana Kannan <saravanak@google.com> wrote:
-> > On Wed, Jun 8, 2022 at 3:26 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > On Wed, Jun 8, 2022 at 6:17 AM Saravana Kannan <saravanak@google.com> wrote:
-> > > > On Tue, Jun 7, 2022 at 5:55 PM Saravana Kannan <saravanak@google.com> wrote:
-> > > > > On Tue, Jun 7, 2022 at 11:13 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > > > > On Wed, Jun 1, 2022 at 12:46 PM Saravana Kannan <saravanak@google.com> wrote:
-> > > > > > > This series is based on linux-next + these 2 small patches applies on top:
-> > > > > > > https://lore.kernel.org/lkml/20220526034609.480766-1-saravanak@google.com/
-> > > > > > >
-> > > > > > > A lot of the deferred_probe_timeout logic is redundant with
-> > > > > > > fw_devlink=on.  Also, enabling deferred_probe_timeout by default breaks
-> > > > > > > a few cases.
-> > > > > > >
-> > > > > > > This series tries to delete the redundant logic, simplify the frameworks
-> > > > > > > that use driver_deferred_probe_check_state(), enable
-> > > > > > > deferred_probe_timeout=10 by default, and fixes the nfsroot failure
-> > > > > > > case.
-> > > > > > >
-> > > > > > > The overall idea of this series is to replace the global behavior of
-> > > > > > > driver_deferred_probe_check_state() where all devices give up waiting on
-> > > > > > > supplier at the same time with a more granular behavior:
-> > > > > > >
-> > > > > > > 1. Devices with all their suppliers successfully probed by late_initcall
-> > > > > > >    probe as usual and avoid unnecessary deferred probe attempts.
-> > > > > > >
-> > > > > > > 2. At or after late_initcall, in cases where boot would break because of
-> > > > > > >    fw_devlink=on being strict about the ordering, we
-> > > > > > >
-> > > > > > >    a. Temporarily relax the enforcement to probe any unprobed devices
-> > > > > > >       that can probe successfully in the current state of the system.
-> > > > > > >       For example, when we boot with a NFS rootfs and no network device
-> > > > > > >       has probed.
-> > > > > > >    b. Go back to enforcing the ordering for any devices that haven't
-> > > > > > >       probed.
-> > > > > > >
-> > > > > > > 3. After deferred probe timeout expires, we permanently give up waiting
-> > > > > > >    on supplier devices without drivers. At this point, whatever devices
-> > > > > > >    can probe without some of their optional suppliers end up probing.
-> > > > > > >
-> > > > > > > In the case where module support is disabled, it's fairly
-> > > > > > > straightforward and all device probes are completed before the initcalls
-> > > > > > > are done.
-> > > > > > >
-> > > > > > > Patches 1 to 3 are fairly straightforward and can probably be applied
-> > > > > > > right away.
-> > > > > > >
-> > > > > > > Patches 4 to 6 are for fixing the NFS rootfs issue and setting the
-> > > > > > > default deferred_probe_timeout back to 10 seconds when modules are
-> > > > > > > enabled.
-> > > > > > >
-> > > > > > > Patches 7 to 9 are further clean up of the deferred_probe_timeout logic
-> > > > > > > so that no framework has to know/care about deferred_probe_timeout.
-> > > > > > >
-> > > > > > > Yoshihiro/Geert,
-> > > > > > >
-> > > > > > > If you can test this patch series and confirm that the NFS root case
-> > > > > > > works, I'd really appreciate that.
-> > > > > >
-> > > > > > Thanks, I gave this a try on various boards I have access to.
-> > > > > > The results were quite positive. E.g. the compile error I saw on v1
-> > > > > > (implicit declation of fw_devlink_unblock_may_probe(), which is no longer
-> > > > > >  used in v2) is gone.
-> > > > >
-> > > > > Thanks a lot for testing these.
-> > > > >
-> > > > > > However, I'm seeing a weird error when userspace (Debian9 nfsroot) is
-> > > > > > starting:
->
-> > > Setting fw_devlink_strict to true vs. false seems to influence which of
-> > > two different failures will happen:
-> > >   - rcar-csi2: probe of feaa0000.csi2 failed with error -22
-> > >   - rcar-vin: probe of e6ef5000.video failed with error -22
-> > > The former causes the NULL pointer dereference later.
-> > > The latter existed before, but I hadn't noticed it, and bisection
-> > > led to the real culprit (commit 3e52419ec04f9769 ("media: rcar-{csi2,vin}:
-> > > Move to full Virtual Channel routing per CSI-2 IP").
-> >
-> > If you revert that patch, does this series work fine? If yes, are you
-> > happy with giving this a Tested-by?
->
-> Sure, sorry for forgetting that ;-)
->
-> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+On Thu, Jun 02, 2022 at 11:33:30AM -0500, Mario Limonciello wrote:
+> `pme_interrupt` was dropped from `struct pci_dev` as part of commit
+> 8370c2dc4c7b ("PCI / PM: Drop pme_interrupt flag from struct pci_dev"),
+> but the Documentation still includes this member.
+> 
+> Remove it from the documentation as well and update it to have the missing
+> `pme_poll` member instead.
+> 
+> Fixes: 8370c2dc4c7b ("PCI / PM: Drop pme_interrupt flag from struct pci_dev")
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  Documentation/power/pci.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/power/pci.rst b/Documentation/power/pci.rst
+> index b04fb18cc4e2..a125544b4cb6 100644
+> --- a/Documentation/power/pci.rst
+> +++ b/Documentation/power/pci.rst
+> @@ -315,7 +315,7 @@ that these callbacks operate on::
+>  					   configuration space */
+>  	unsigned int	pme_support:5;	/* Bitmask of states from which PME#
+>  					   can be generated */
+> -	unsigned int	pme_interrupt:1;/* Is native PCIe PME signaling used? */
+> +	unsigned int	pme_poll:1;	/* Poll device's PME status bit */
+>  	unsigned int	d1_support:1;	/* Low power state D1 is supported */
+>  	unsigned int	d2_support:1;	/* Low power state D2 is supported */
+>  	unsigned int	no_d1d2:1;	/* D1 and D2 are forbidden */
 
-+few folks who I forgot to add.
+I'm OK with this patch if Rafael wants to take it.
 
-Geert,
+But I'm not sure how much value this section of the doc really adds.
+The doc basically says "the PCI PM callbacks operate on several of
+these fields of the struct pci_dev" and goes on to quote part of the
+struct pci_dev.
 
-Thanks for the extensive testing!
+But "pm_cap" is the only one of those fields that is mentioned
+elsewhere in the doc, and that one is only incidental.
 
-Linus W, Ulf, Kevin, Will, Rob, Vladimir,
+For example, is it really useful to say "the PCI PM callbacks use
+pci_dev.pme_poll" without any other details about pme_poll?
 
-Can I get your reviews for the deletion of
-driver_deferred_probe_check_state() please? We can finally remove it
-and have frameworks not needing to know about it.
+I think I would consider just removing everything from "The structure
+representing a PCI device ..." to the end of the section, i.e., lines
+308-329 at [1].
 
-Greg, Rafael,
-
-Can you review the wait_for_init_devices_probe() patch and the other
-trivial driver core changes please?
-
-David/Jakub,
-
-Do the IP4 autoconfig changes look reasonable to you?
-
-Thanks,
-Saravana
-
-
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/power/pci.rst?id=v5.18#n308
