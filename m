@@ -2,59 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5285438A7
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jun 2022 18:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A515438D9
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jun 2022 18:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245281AbiFHQRM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jun 2022 12:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34720 "EHLO
+        id S245452AbiFHQ0r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jun 2022 12:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245301AbiFHQRL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 12:17:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AAE4B421;
-        Wed,  8 Jun 2022 09:17:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 327CD6183B;
-        Wed,  8 Jun 2022 16:17:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D39D8C34116;
-        Wed,  8 Jun 2022 16:17:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654705029;
-        bh=h2IyhMvbVxFctIhAi6hni9TmvDDM++uYJON5WLf5MaQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WznJDM+7LMAOKoav+8bN+LzAQpofCOthUjlxEMlBN3VKK3hiSwJwAI1QcvGg6GRpk
-         m+F4Fnqz8//CaomYv1+zMmfgUlqLEZYewUNEPZoOiW4k7dXgqq7v6jIgJnGzwq97mc
-         penQHCrjnG53ujfEMGN9aSfFCpVwUL/UJbWFfHR6k7scbMRw0HyYpqAoUwfOHJHKFX
-         8WkIs5fXNxJKX2YJOQqoFR/d/4o0iMf4oPq6e3CcKMgaV4cWOLbHR0RHTT+D1nN5QD
-         vBT1P0LsIfyJRD21gjPoxF2lWstpbjIzUm5JCkGcloGKKDjXg4Ik0yZ/gAAN344a3S
-         IVDAKL5MbdmrQ==
-Date:   Wed, 8 Jun 2022 17:17:02 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
-        lee.jones@linaro.org, sre@kernel.org, gregkh@linuxfoundation.org,
-        lgirdwood@gmail.com, lars@metafoo.de, rafael@kernel.org,
-        quic_gurus@quicinc.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 02/17] regmap-irq: Add get_irq_reg to support unusual
- register layouts
-Message-ID: <YqDLflKTsYaupArl@sirena.org.uk>
-References: <20220607155324.118102-1-aidanmacdonald.0x0@gmail.com>
- <20220607155324.118102-3-aidanmacdonald.0x0@gmail.com>
+        with ESMTP id S245214AbiFHQ0n (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 12:26:43 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8092013F3E
+        for <linux-pm@vger.kernel.org>; Wed,  8 Jun 2022 09:26:39 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id l2-20020a05600c1d0200b0039c35ef94c4so9419243wms.4
+        for <linux-pm@vger.kernel.org>; Wed, 08 Jun 2022 09:26:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PlENWwzlCM90o/vUAucZ/2PTf41RpbELMXSIvxOkRsg=;
+        b=kUamzuMZKjBGedJ41D2CVba2W72DHDvLXgAu+IRALCFkrP3w078R1o53D+vRCSe01F
+         rNkY2vVwnVV2VRLzYbzS3O+P9k5lDvVgJ5mKk0zXBbWb6hvTVl/V8nJzd0Lu6k2UhewB
+         bsL613wbo/x5NaZd+K7hm5wT4WUp6zMhwLUQ4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to;
+        bh=PlENWwzlCM90o/vUAucZ/2PTf41RpbELMXSIvxOkRsg=;
+        b=CTfzZ3U/VpxzcUe5MZJMwovRXc8bB5AgFK6QUGMl7iEBzWwt8hoqf9m89oQQ0quCm4
+         uyCJL1DVS66sH8+NOKLniPNarDWZhmS5xfBSDrlSwDbY4fLSeaq6580Ha0RT/0SdBGeE
+         OKpP3XWIBm9qG7OoIj8Dalwm56q4UH2TYKOURX2DYExrG+Lrey4IpJrTLMJbUjD9iYpf
+         kF3mfVwQvY8mLqyFf66ZkLd4YypoRCKP10lNYb3xx0qDqnvZhgpiibH+PwdDqJDFNGQM
+         BX/C6xTAXAHeJmr/pS6Tlh2JoJLxWaqjCIJ84HrStG2DcF8MRIZlNRzQC0e+avigmF0k
+         EcDw==
+X-Gm-Message-State: AOAM531wgeDKYLrsxNWjm00eptMnHIP2P+Xqe9bKUYDA9irrPfIKn+J5
+        F781BMbzmcOnhUeECHGsO9+Sew==
+X-Google-Smtp-Source: ABdhPJyf8Brmkv7/K+wwJLIHpp3flqMDoBonSFPbtVBOY+CiA4pt1qQf2htU+BvHHGfYnZWx/UoWTA==
+X-Received: by 2002:a05:600c:a42:b0:393:d831:bf05 with SMTP id c2-20020a05600c0a4200b00393d831bf05mr33885940wmq.187.1654705597681;
+        Wed, 08 Jun 2022 09:26:37 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id e7-20020adff347000000b0020ff4b8efc6sm21701293wrp.80.2022.06.08.09.26.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 09:26:36 -0700 (PDT)
+Date:   Wed, 8 Jun 2022 18:26:34 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH 0/2] video: fbdev: Convert from PCI to generic power
+ management
+Message-ID: <YqDNuhopLfpHkTS7@phenom.ffwll.local>
+Mail-Followup-To: Bjorn Helgaas <helgaas@kernel.org>,
+        Helge Deller <deller@gmx.de>, linux-fbdev@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <20220607231112.354165-1-helgaas@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="AErNnAXCh3erohiz"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220607155324.118102-3-aidanmacdonald.0x0@gmail.com>
-X-Cookie: My NOSE is NUMB!
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220607231112.354165-1-helgaas@kernel.org>
+X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,35 +80,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, Jun 07, 2022 at 06:11:10PM -0500, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> PCI-specific power management (pci_driver.suspend and pci_driver.resume) is
+> deprecated.  If drivers implement power management, they should use the
+> generic power management framework, not the PCI-specific hooks.
+> 
+> No fbdev drivers actually implement PCI power management, but there are a
+> cirrusfb has some commented-out references to it and skeletonfb has
+> examples of it.  Remove these.
 
---AErNnAXCh3erohiz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Is this holding up some cleanup on your side and so would be easier to
+merge these through the pci tree? If so
 
-On Tue, Jun 07, 2022 at 04:53:09PM +0100, Aidan MacDonald wrote:
+Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 
-> -	if (!chip->sub_reg_offsets || !chip->not_fixed_stride) {
-> +	if (chip->get_irq_reg) {
-> +		reg = chip->get_irq_reg(base_reg, i);
-> +	} else if (!chip->sub_reg_offsets || !chip->not_fixed_stride) {
+for merging through your tree. Otherwise I guess Helge will get around to
+pile them up for 5.20 (or 6.0) eventually.
 
-It seems like it would be cleaner and clearer to refactor things so that
-we always have a get_irq_reg() with standard chips getting given a
-default implementation which implements the current behaviour.
+Cheers, Daniel
+> 
+> Bjorn Helgaas (2):
+>   video: fbdev: cirrusfb: Remove useless reference to PCI power
+>     management
+>   video: fbdev: skeletonfb: Convert to generic power management
+> 
+>  drivers/video/fbdev/cirrusfb.c   |  6 ------
+>  drivers/video/fbdev/skeletonfb.c | 13 +++++++------
+>  2 files changed, 7 insertions(+), 12 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 
 
---AErNnAXCh3erohiz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKgy30ACgkQJNaLcl1U
-h9D2LggAhh2vyqK62zKVg1txw1uk9BvjdGtNZuayo8ymlgu/wf9/DpigQx6vQd7t
-E/BUEu07A6YSkWvaK/lkCg9dx3cYmU4qzesgWMwJw9IVOgfJvQOSBQY0jtGsiUUa
-sqIxeL67xeWyESm0IMcFpuIG5xVowTVyeHrkW4XMPQo6vaLSRqDq4XNTHjUwOYZk
-N312cuLTScImLhSwCfijmdRCcC8INBxS8PgVrnlBkHOtFrUN8Sm4iV1tXlH1cHlD
-G5FzZPoe6SBdsuqTvTJfQBeTJmafw96/viByXtA+ZlhZKbsiBcVVWX2Heo5/qaaI
-nahFe2tj7qLQWCqwRqOpLtihJsmX3w==
-=kesQ
------END PGP SIGNATURE-----
-
---AErNnAXCh3erohiz--
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
