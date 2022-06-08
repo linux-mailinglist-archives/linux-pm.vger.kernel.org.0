@@ -2,61 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65257542B03
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jun 2022 11:17:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC161542B3F
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jun 2022 11:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234521AbiFHJP7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jun 2022 05:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48650 "EHLO
+        id S232778AbiFHJTj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jun 2022 05:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235358AbiFHJOz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 05:14:55 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE46F45C0;
-        Wed,  8 Jun 2022 01:38:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1654677484; x=1686213484;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=h5gvcaktdP9Wz9Q/VYuzzQWlFGFeRLOZtsQqdiyCDq8=;
-  b=perHRxflkk++DwQ5g3x1bZwDNc/UByISRsSnCqPI7EYKnYI4qs23OfW2
-   46KYnO/M/0rFgyQcxJp6qXdK+sRet1Hfmp0JWvrp8rStGI+hKesH7KIdC
-   8rm4lzWt5OtbcZoGbTxDndhdRPZzt5LMNt2lBBv46ETA4TPPxZnwVjD3B
-   F1LuRNC2jHikwI2P+bXKMF5iqKq+jX2scs/av36QdcprB/KNP/r9eMZV1
-   ahtQOd4270Qy5BFKUGv9mn6aGD3naT8FknAK6hI4pF3l8TIq/yztqXw+x
-   O6maC4Ls7xYQRFUZMsTdtoA5LLecd+d8/HzbPlGyyKZQJVZPLlFFPQNxH
-   w==;
-X-IronPort-AV: E=Sophos;i="5.91,285,1647327600"; 
-   d="scan'208";a="167565087"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jun 2022 01:38:03 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 8 Jun 2022 01:38:03 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Wed, 8 Jun 2022 01:38:00 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <p.zabel@pengutronix.de>, <sre@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH v4 9/9] ARM: dts: at91: sama7g5: add reset-controller node
-Date:   Wed, 8 Jun 2022 11:39:42 +0300
-Message-ID: <20220608083942.1584087-10-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220608083942.1584087-1-claudiu.beznea@microchip.com>
-References: <20220608083942.1584087-1-claudiu.beznea@microchip.com>
+        with ESMTP id S235197AbiFHJTD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 05:19:03 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F88A22412E
+        for <linux-pm@vger.kernel.org>; Wed,  8 Jun 2022 01:41:11 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id n10so40047336ejk.5
+        for <linux-pm@vger.kernel.org>; Wed, 08 Jun 2022 01:41:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=S47dvdWUN7Ba1ERPw3oejaVkM1n7wr7OiK0XR5kUMiQ=;
+        b=uskTefCRS9kyK9iuKEe/3qoMsEytarqwN6AXzGTDBnv2LVMTzz/sxDZoGIH9d8zBPt
+         cwNJs62tItAXDHb2G0GHD/49bmVrFskdBCNFpJn9rsNKyvczECgj6pXsrBwZdj4cefa1
+         jGCnSUwy/sce9iFb8mwBofAv4BW4wX6IVWnOIA0tRBa6/VzaL+epPxgqPPIaQCePnjnP
+         WsQk67eePQ2ffVELCDJVr1sT+uJ71CzGaUe8ielsLR2g9tTGuZA+SlSAgH1RbqG+FZb3
+         /SFPJLn/gsaXj4WZXQ+xT8iyPB5wh9jEr4c5NRm4HVWcMq4gz3oRLqhi8ieVbYfm4QhM
+         cdiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=S47dvdWUN7Ba1ERPw3oejaVkM1n7wr7OiK0XR5kUMiQ=;
+        b=EQiBCogO4m077XXhXfpwSPN4zHC6C2SPEae58OHGi8YQSUE+WsTBomfx0/5XOJ2G/V
+         XtMtr7q6ZZUBfiMDT+YPYo4L8m4vkUjib/vGQ4WhbOSsDbtLYGvVffvyZPBMx55bpldk
+         1E4ekkuB6rS2nJ1ZmQmb1Sas2/ESk7N/eoER7+u0ipkk/0jSGXjS6OOTkPpIcd1FaU5+
+         wk3fJr56m8xJPHlr1aWybJAEIWzA5AoPIc3UOgz+LfhK4FfvlKfvzTtFtoIPaHEaECxN
+         yYHK96Pt7k8Ab+IgcIxWzo+0usNq8uIDa6D/mXyseYFDPrN46RD2m7CYU9UycHtXFpFn
+         Y2tw==
+X-Gm-Message-State: AOAM530JEKAnVWBnEln+PvuIqEcJo/FqAwGR/CdmfjgLfd0mletW/uPe
+        ulXwG3AvUolR96UF8XKtHtBQNcnAsMy/qg==
+X-Google-Smtp-Source: ABdhPJxy4wBmQ7wW9pIeaifXRzMYwbZ1QM8BkkK3IBZZEIknvSNeVtXpfTetoTj1b+dT5cZTfxs6iA==
+X-Received: by 2002:a17:906:449:b0:711:c975:cfb8 with SMTP id e9-20020a170906044900b00711c975cfb8mr15670663eja.58.1654677669990;
+        Wed, 08 Jun 2022 01:41:09 -0700 (PDT)
+Received: from [192.168.0.189] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id c2-20020a170906154200b006f3ef214dd2sm8699500ejd.56.2022.06.08.01.41.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 01:41:09 -0700 (PDT)
+Message-ID: <c2724dc0-b3c7-00eb-08ea-b23296f40044@linaro.org>
+Date:   Wed, 8 Jun 2022 10:41:08 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v4 1/9] ARM: dts: at91: use generic name for reset
+ controller
+Content-Language: en-US
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        p.zabel@pengutronix.de, sre@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220608083942.1584087-1-claudiu.beznea@microchip.com>
+ <20220608083942.1584087-2-claudiu.beznea@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220608083942.1584087-2-claudiu.beznea@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,31 +78,16 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add reset controller node.
+On 08/06/2022 10:39, Claudiu Beznea wrote:
+> Use generic name for reset controller of AT91 devices to comply with
+> DT specifications.
+> 
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
- arch/arm/boot/dts/sama7g5.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
 
-diff --git a/arch/arm/boot/dts/sama7g5.dtsi b/arch/arm/boot/dts/sama7g5.dtsi
-index a37e3a80392d..bb6d71e6dfeb 100644
---- a/arch/arm/boot/dts/sama7g5.dtsi
-+++ b/arch/arm/boot/dts/sama7g5.dtsi
-@@ -198,6 +198,13 @@ pmc: pmc@e0018000 {
- 			clock-names = "td_slck", "md_slck", "main_xtal";
- 		};
- 
-+		reset_controller: reset-controller@e001d000 {
-+			compatible = "microchip,sama7g5-rstc";
-+			reg = <0xe001d000 0xc>, <0xe001d0e4 0x4>;
-+			#reset-cells = <1>;
-+			clocks = <&clk32k 0>;
-+		};
-+
- 		shdwc: shdwc@e001d010 {
- 			compatible = "microchip,sama7g5-shdwc", "syscon";
- 			reg = <0xe001d010 0x10>;
--- 
-2.33.0
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+
+Best regards,
+Krzysztof
