@@ -2,120 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8CB5542E09
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jun 2022 12:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF7B542E47
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jun 2022 12:49:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236597AbiFHKjf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jun 2022 06:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40750 "EHLO
+        id S237495AbiFHKtA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jun 2022 06:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237554AbiFHKi2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 06:38:28 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D20592AC570;
-        Wed,  8 Jun 2022 03:36:07 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-30fdbe7467cso169047797b3.1;
-        Wed, 08 Jun 2022 03:36:07 -0700 (PDT)
+        with ESMTP id S237468AbiFHKs7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 06:48:59 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFD41A004E
+        for <linux-pm@vger.kernel.org>; Wed,  8 Jun 2022 03:48:57 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id v19so26496364edd.4
+        for <linux-pm@vger.kernel.org>; Wed, 08 Jun 2022 03:48:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=aUu+de0g86KF16rpJt3I15wAYwxHXppsK/rhqPeo1Q0=;
+        b=uaTceCdNGPnJo2LlPeOrg/JbnK2kXDBdeVy/uvKMknDrnjVMO3m0sBeb9QgQSPsifq
+         admE8n+5uE5XIPOj0tDvoPDYR1a2GScJDDB9zoRJCsaNSrP3FZRePa7ubOxMNHw0szsi
+         7nNeAj4lOtMWJWKk3yYoAY4ghC/a70g07XuBWRTwdKRHXWeLBA3mJFziYPudahTsgvXM
+         Z7/X/4e9osmX6nDOTRL9EyPRHVa9owJuioFihlIH7Qi11osxtgtXnYf/R1eSfDIYVyWS
+         OiqCUXpuUvpo9O6b5IJSgP2/LXp3WP3a2aJYCzPY0mLChsAKuxZc7pe/8pJZ9K9tc0XF
+         0taw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9inqKolylwY+9CN5LJBsj0ieLUPaFRDgrwMAar4kegU=;
-        b=Jlxd/4InTGQ3arVIG1dE5u8RLbDijR85cJdJkLZxMfEDJ0LcqaK8pNUmD7G/4Kuipa
-         0/m6VAeFfaa4qNn4iRS9qrtJ07B8X631E6f1ByRrqjcAD2gANeexzTDAbwmOMadIF/HM
-         qqPtd3bN3doJ/IZKHM+Y1z6nrBOoXefUwp9RzqviGn8cDK5uDbrC9vG+Olh5lusSiLWY
-         7uNN3+deX6pmOlUo6aN8dxPVGeahcTnJe4MwHaztIwXEMA9i0PPi6uqThYY7HbtI3Mry
-         dxCsmyg4rvNtH9iAUYS8n7E6xfGRw1GJr6K+jcmXaqV2xxtGCALShmCaJoYJD2hx/G7+
-         hvCQ==
-X-Gm-Message-State: AOAM531GBASXUwklrtisXb1YzJoUP5dL9DfeDGq6MxPZH1pmJe/TPF5K
-        QBG7m9BbO0JDNbCP561XOJyDeRYFc+tn6Su8Z8A=
-X-Google-Smtp-Source: ABdhPJwcDdMr9FPIGNqccLkzhIg8CyJ/eP0qJtvoHBQxHOyr2FeWxm2Z8z0maGBLjLLKvvAqU+8gR1ZZ0kEfoTeUVss=
-X-Received: by 2002:a81:260a:0:b0:2f4:ca82:a42f with SMTP id
- m10-20020a81260a000000b002f4ca82a42fmr36701040ywm.149.1654684546217; Wed, 08
- Jun 2022 03:35:46 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=aUu+de0g86KF16rpJt3I15wAYwxHXppsK/rhqPeo1Q0=;
+        b=gl1KbRcJefExxt0XZQzyc3Fr+gIUPuzgJC6Le3TQgDONuU6f3foHEn0CPJiZ8e6xPZ
+         nNXmQb2DiYTpEfj+oMcOjV2lWhi03o7VRn4366byUgrcWRb4m/6bpxg6ly7f9A99ZCYA
+         SVKoWskoSlKJmqp5uFSrSilSrBTdnopH+p0SbgrubfOIzW+cfDzrDyE7j61VGuhrm6fo
+         zh2MV7AEjCWc9LPqZoGcLp3TUAM8yxlF3km813aN4+oB/lWV7q8zXcj2HIbXge6aQcLf
+         +w8v1cdsqBHfx/ZpL/Dddck8m4T34ugbx2zyL7vvFasHnY7XKtSX16Er8BT5nuDtc4l4
+         5/0w==
+X-Gm-Message-State: AOAM533bBhqUkexQtWMj5PtzmITmwGHP4WVYg8doSzI1G/e2w4NS/Pn4
+        H9Vc8vfZr8DM21eK5C19+0+pPA==
+X-Google-Smtp-Source: ABdhPJwdqTV1pWBZhjN2YI/U/7nc8D2TetBbktJD9lEYEYnMLwMaBrM2nINP/KaaH/nRoR6xz3acOg==
+X-Received: by 2002:a05:6402:1713:b0:42d:cb5e:d799 with SMTP id y19-20020a056402171300b0042dcb5ed799mr38264426edu.34.1654685336296;
+        Wed, 08 Jun 2022 03:48:56 -0700 (PDT)
+Received: from [192.168.0.191] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id rn13-20020a170906d92d00b006f3ef214df2sm8860508ejb.88.2022.06.08.03.48.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jun 2022 03:48:55 -0700 (PDT)
+Message-ID: <d5465a36-f18a-ff48-b13e-e5f9c48a398a@linaro.org>
+Date:   Wed, 8 Jun 2022 12:48:54 +0200
 MIME-Version: 1.0
-References: <cover.1654680790.git.lukas@wunner.de>
-In-Reply-To: <cover.1654680790.git.lukas@wunner.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 8 Jun 2022 12:35:35 +0200
-Message-ID: <CAJZ5v0i1p=oReS5Ki69-uOLQNBu2Y=MkqDQ4fUU-ih=n_kshwQ@mail.gmail.com>
-Subject: Re: [PATCH net v2 0/1] PHY interruptus horribilis
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        netdev <netdev@vger.kernel.org>,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
-        Andre Edich <andre.edich@microchip.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Gabriel Hojda <ghojda@yo2urs.ro>,
-        Christoph Fritz <chf.fritz@googlemail.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        Ferry Toth <fntoth@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Linux Samsung SoC <linux-samsung-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 03/17] dt-bindings: mfd: add bindings for AXP192 MFD
+ device
+Content-Language: en-US
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
+        lee.jones@linaro.org, sre@kernel.org, broonie@kernel.org,
+        gregkh@linuxfoundation.org, lgirdwood@gmail.com
+Cc:     lars@metafoo.de, rafael@kernel.org, quic_gurus@quicinc.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20220607155324.118102-1-aidanmacdonald.0x0@gmail.com>
+ <20220607155324.118102-4-aidanmacdonald.0x0@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220607155324.118102-4-aidanmacdonald.0x0@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 11:52 AM Lukas Wunner <lukas@wunner.de> wrote:
->
-> Andrew Lunn (PHY maintainer) asked me to resend this patch and cc the
-> IRQ maintainer.  I'm also cc'ing PM maintainers for good measure.
->
-> The patch addresses an issue with PHY interrupts occurring during a
-> system sleep transition after the PHY has already been suspended.
->
-> The IRQ subsystem uses an internal flag IRQD_WAKEUP_ARMED to avoid
-> handling such interrupts, but it's not set until suspend_device_irqs()
-> is called during the ->suspend_noirq() phase.  That's too late in this
-> case as PHYs are suspended in the ->suspend() phase.  And there's
-> no external interface to set the flag earlier.
+On 07/06/2022 17:53, Aidan MacDonald wrote:
+> The AXP192 is another X-Powers PMIC similar to the existing ones.
+> 
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml | 1 +
 
-Yes, it is not there intentionally.
+You got here ack, didn't you? Why sending without it?
 
-Strictly speaking, IRQD_WAKEUP_ARMED is there to indicate to the IRQ
-subsystem that the given IRQ is a system wakeup one and has been left
-enabled specifically in order to signal system wakeup.  It allows the
-IRQ to trigger between suspend_device_irqs() and resume_device_irqs()
-exactly once, which causes the system to wake up from suspend-to-idle
-(that's the primary use case for it) or aborts system suspends in
-progress.
+https://elixir.bootlin.com/linux/v5.19-rc1/source/Documentation/process/submitting-patches.rst#L536
 
-As you have noticed, it is set automatically by suspend_device_irqs()
-if the given IRQ has IRQD_WAKEUP_STATE which is the case when it has
-been enabled for system wakeup.
 
-> As I'm lacking access to the flag, I'm open coding its functionality
-> in this patch.  Is this the correct approach or should I instead look
-> into providing an external interface to the flag?
-
-The idea is that the regular IRQ "action" handler will run before
-suspend_device_irqs(), so it should take care of signaling wakeup if
-need be.  IRQD_WAKEUP_ARMED to trigger wakeup when IRQ "action"
-handlers don't run.
-
-> Side note: suspend_device_irqs() and resume_device_irqs() have been
-> exported since forever even though there's no module user...
-
-Well, that's a mistake.
+Best regards,
+Krzysztof
