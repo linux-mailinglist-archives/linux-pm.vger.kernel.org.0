@@ -2,81 +2,261 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8622542C54
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jun 2022 12:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2FB542C65
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jun 2022 12:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234345AbiFHJ7y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jun 2022 05:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
+        id S235671AbiFHKBZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jun 2022 06:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235733AbiFHJ7m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 05:59:42 -0400
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA80E09B
-        for <linux-pm@vger.kernel.org>; Wed,  8 Jun 2022 02:33:44 -0700 (PDT)
-Received: by mail-pj1-f48.google.com with SMTP id w2-20020a17090ac98200b001e0519fe5a8so17813322pjt.4
-        for <linux-pm@vger.kernel.org>; Wed, 08 Jun 2022 02:33:44 -0700 (PDT)
+        with ESMTP id S235725AbiFHKBF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 06:01:05 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348EE56227
+        for <linux-pm@vger.kernel.org>; Wed,  8 Jun 2022 02:36:52 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id a15so32309688lfb.9
+        for <linux-pm@vger.kernel.org>; Wed, 08 Jun 2022 02:36:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SNSMelJob+01Kx7dFiWLtxUuIDJxTQ+L6IvyTQgdghc=;
+        b=o/GqrY/XZZ4f8+imiYFWgtBVnI/TwGDyqzmWsDacPxkg0HxboiUgErcBdZ6Bl3N7DY
+         LYXQePkVhJZ+3tmc97rvb3+jO0t0EJK28H/8aybBUruUwsJX8CnxdGQCvblBeHrEW84T
+         ObR3Kh1QnTcTVYvVJgJMpceIrhLuTAqT5hOQAGjlzba1MVWe0kA9Sm9toNMSGGlAL6nq
+         af88UDFvVBONvSN3ZRDKNvTgX1DuGEor2KnRl6rdNiQbfSipfXMmUutwQSP8YNFq5Hqu
+         EVnixXytYVTIgNBcfsVUQ4pzKrrVigLFqd4tfw08Xjg5xXysn7/lQkrU6jF/Z4YCsmTN
+         rmoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=3mAa+qEh4/jfutJ1TxAHiAnCiCxKpOm04PWu4D2bqUk=;
-        b=uXHv8575mX+dUvj2xTqinUYanfZhnPu9Y84xj3+o0nLRhW/D1fUfvP/FcMs66a8N07
-         bjQuLRXQ0xm86b94qIvTtpuh1XNbIPdwwZR0c37nkS2EqGC8z8q/pWakrjq75+7qyyFP
-         7MbBmZ8MaiJzO/pTlEdThx85tPOTKWrtXjkVdPpj0A8bW4EBySDvxaxGK9ZNzWDzuWOh
-         PIJ2SoUW9mypJ5k4XuycePG2TsdDLmTiSulT9R5Yf/ycEMwI+VzboG4m2fH9NBI7bYgF
-         oI4lpxOUTmlQgEPuUG3bmPrOad//Acskzi0XmZ2EGHrZwZIa7bRUh+tZYs4w5rpR386q
-         xzAQ==
-X-Gm-Message-State: AOAM5308GJBZr6DS99QDiAguYJpbfi7W90A0ZFmwfU6dKGkboUbZK5o9
-        1OT479jBIVQ94OoY92+yTzHLWQ==
-X-Google-Smtp-Source: ABdhPJxBrk9LmLklKuNqznjZxKlkynaLEB3hh2Mbvxl5e4tMEIfkOpur214mjwyKlvI9QsY8cDGQTg==
-X-Received: by 2002:a17:902:7087:b0:161:88a4:db37 with SMTP id z7-20020a170902708700b0016188a4db37mr32743936plk.131.1654680823883;
-        Wed, 08 Jun 2022 02:33:43 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id o13-20020a170902d4cd00b0015e8d4eb2aesm14318093plg.248.2022.06.08.02.33.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 02:33:43 -0700 (PDT)
-From:   Kevin Hilman <khilman@kernel.org>
-To:     Roger Lu <roger.lu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Fan Chen <fan.chen@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Angus Lin <Angus.Lin@mediatek.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jia-wei Chang <jia-wei.chang@mediatek.com>
-Subject: Re: [PATCH v25 0/7] soc: mediatek: SVS: introduce MTK SVS
-In-Reply-To: <20220516004311.18358-1-roger.lu@mediatek.com>
-References: <20220516004311.18358-1-roger.lu@mediatek.com>
-Date:   Wed, 08 Jun 2022 02:33:42 -0700
-Message-ID: <7ho7z37b49.fsf@baylibre.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SNSMelJob+01Kx7dFiWLtxUuIDJxTQ+L6IvyTQgdghc=;
+        b=BXmyRJc2SgYSv41JCGBTJE28y6Ln0DM2vL5v+xgh8YddtjpCGwdsgr8zKnjsQPjpbS
+         pMAr1NhI3lREkICC4ZwdXDQ+ZsRf3yFDbR3m5Ok1ozQe4Wq5BEV3mnJ8zSz1Mv9ZJN0m
+         SqbqpOQO780HpDUApdwIgBJ43JiU5jr8Lj+IxOuuTVG3/q02F3rzqnTuSFXdny4nioGP
+         rfW9K8wokzdwizHvMrLtTtVlRNAy48YquajHFEFiTyaHvY7zjmVamb/MvX5S8fEW5gRN
+         jcxA38atQ9qHNCsrN1BCc/A3W6jjz1GOJ5IjI1W0e4iS2qE2YbJyRTIVeMXi2bkHBgdL
+         fy8w==
+X-Gm-Message-State: AOAM533KJKcoJfOmFJlzYoCOnTD/4gQC57i5GFksmfSwT7W4CTZHsMez
+        GVGC37l625xn//f85+vvAeIs7rLfZHXMsOm8c+onGA==
+X-Google-Smtp-Source: ABdhPJwB0MZ/CDb9gBdADpk4GnZSb+bdi5rW+LV9zVIjqzr1/kAEbI4f76Ik0lFFzSt6KKqdtGfjNjNbOw+8D4Nj5DQ=
+X-Received: by 2002:ac2:47f1:0:b0:479:7517:d41 with SMTP id
+ b17-20020ac247f1000000b0047975170d41mr2979879lfp.254.1654681010468; Wed, 08
+ Jun 2022 02:36:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <1652275016-13423-1-git-send-email-quic_mkshah@quicinc.com>
+ <1652275016-13423-7-git-send-email-quic_mkshah@quicinc.com> <CAPDyKFqCdc206GX3s3PqExrp==mfJQ6m-u0F_ij_tLXbcv8G6Q@mail.gmail.com>
+In-Reply-To: <CAPDyKFqCdc206GX3s3PqExrp==mfJQ6m-u0F_ij_tLXbcv8G6Q@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 8 Jun 2022 11:36:14 +0200
+Message-ID: <CAPDyKFoQ4ugMsy+ZRvg9AzPwQa3LC73sYMw7gNfYqe+pCfncUw@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] soc: qcom: rpmh-rsc: Write CONTROL_TCS with next
+ timer wakeup
+To:     Maulik Shah <quic_mkshah@quicinc.com>
+Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, daniel.lezcano@linaro.org,
+        quic_lsrao@quicinc.com, quic_rjendra@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Roger Lu <roger.lu@mediatek.com> writes:
+On Fri, 20 May 2022 at 11:39, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> On Wed, 11 May 2022 at 15:17, Maulik Shah <quic_mkshah@quicinc.com> wrote:
+> >
+> > The next wakeup timer value needs to be set in always on domain timer
+> > as the arch timer interrupt can not wakeup the SoC if after the deepest
+> > CPUidle states the SoC also enters deepest low power state.
+> >
+> > To wakeup the SoC in such scenarios the earliest wakeup time is set in
+> > CONTROL_TCS and the firmware takes care of setting up its own timer in
+> > always on domain with next wakeup time. The timer wakes up the RSC and
+> > sets resources back to wake state.
+> >
+> > Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
+>
+> I didn't forget to review this, but please allow me a few more days to
+> think a little bit more about this.
 
-> The Smart Voltage Scaling(SVS) engine is a piece of hardware
-> which calculates suitable SVS bank voltages to OPP voltage table.
-> Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
-> when receiving OPP_EVENT_ADJUST_VOLTAGE.
+Apologize for the delay, this looks good to me!
 
-Tested-by: Kevin Hilman <khilman@baylibre.com>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+Kind regards
+Uffe
+
+>
+> > ---
+> >  drivers/soc/qcom/rpmh-internal.h |  3 ++
+> >  drivers/soc/qcom/rpmh-rsc.c      | 61 ++++++++++++++++++++++++++++++++++++++++
+> >  drivers/soc/qcom/rpmh.c          |  4 ++-
+> >  3 files changed, 67 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/soc/qcom/rpmh-internal.h b/drivers/soc/qcom/rpmh-internal.h
+> > index 7866bb1..39f5358 100644
+> > --- a/drivers/soc/qcom/rpmh-internal.h
+> > +++ b/drivers/soc/qcom/rpmh-internal.h
+> > @@ -112,6 +112,7 @@ struct rpmh_ctrlr {
+> >   * @tcs_wait:           Wait queue used to wait for @tcs_in_use to free up a
+> >   *                      slot
+> >   * @client:             Handle to the DRV's client.
+> > + * @dev:                RSC device.
+> >   */
+> >  struct rsc_drv {
+> >         const char *name;
+> > @@ -127,12 +128,14 @@ struct rsc_drv {
+> >         spinlock_t lock;
+> >         wait_queue_head_t tcs_wait;
+> >         struct rpmh_ctrlr client;
+> > +       struct device *dev;
+> >  };
+> >
+> >  int rpmh_rsc_send_data(struct rsc_drv *drv, const struct tcs_request *msg);
+> >  int rpmh_rsc_write_ctrl_data(struct rsc_drv *drv,
+> >                              const struct tcs_request *msg);
+> >  void rpmh_rsc_invalidate(struct rsc_drv *drv);
+> > +void rpmh_rsc_write_next_wakeup(struct rsc_drv *drv);
+> >
+> >  void rpmh_tx_done(const struct tcs_request *msg, int r);
+> >  int rpmh_flush(struct rpmh_ctrlr *ctrlr);
+> > diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
+> > index 8e01697..25b838b 100644
+> > --- a/drivers/soc/qcom/rpmh-rsc.c
+> > +++ b/drivers/soc/qcom/rpmh-rsc.c
+> > @@ -12,6 +12,7 @@
+> >  #include <linux/io.h>
+> >  #include <linux/iopoll.h>
+> >  #include <linux/kernel.h>
+> > +#include <linux/ktime.h>
+> >  #include <linux/list.h>
+> >  #include <linux/module.h>
+> >  #include <linux/notifier.h>
+> > @@ -25,6 +26,7 @@
+> >  #include <linux/spinlock.h>
+> >  #include <linux/wait.h>
+> >
+> > +#include <clocksource/arm_arch_timer.h>
+> >  #include <soc/qcom/cmd-db.h>
+> >  #include <soc/qcom/tcs.h>
+> >  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
+> > @@ -49,6 +51,14 @@
+> >  #define DRV_NCPT_MASK                  0x1F
+> >  #define DRV_NCPT_SHIFT                 27
+> >
+> > +/* Offsets for CONTROL TCS Registers */
+> > +#define RSC_DRV_CTL_TCS_DATA_HI                0x38
+> > +#define RSC_DRV_CTL_TCS_DATA_HI_MASK   0xFFFFFF
+> > +#define RSC_DRV_CTL_TCS_DATA_HI_VALID  BIT(31)
+> > +#define RSC_DRV_CTL_TCS_DATA_LO                0x40
+> > +#define RSC_DRV_CTL_TCS_DATA_LO_MASK   0xFFFFFFFF
+> > +#define RSC_DRV_CTL_TCS_DATA_SIZE      32
+> > +
+> >  /* Offsets for common TCS Registers, one bit per TCS */
+> >  #define RSC_DRV_IRQ_ENABLE             0x00
+> >  #define RSC_DRV_IRQ_STATUS             0x04
+> > @@ -142,6 +152,14 @@
+> >   *  +---------------------------------------------------+
+> >   */
+> >
+> > +#define USECS_TO_CYCLES(time_usecs)                    \
+> > +       xloops_to_cycles((time_usecs) * 0x10C7UL)
+> > +
+> > +static inline unsigned long xloops_to_cycles(unsigned long xloops)
+> > +{
+> > +       return (xloops * loops_per_jiffy * HZ) >> 32;
+> > +}
+> > +
+> >  static inline void __iomem *
+> >  tcs_reg_addr(const struct rsc_drv *drv, int reg, int tcs_id)
+> >  {
+> > @@ -757,6 +775,48 @@ static bool rpmh_rsc_ctrlr_is_busy(struct rsc_drv *drv)
+> >  }
+> >
+> >  /**
+> > + * rpmh_rsc_write_next_wakeup() - Write next wakeup in CONTROL_TCS.
+> > + * @drv: The controller
+> > + *
+> > + * Writes maximum wakeup cycles when called from suspend.
+> > + * Writes earliest hrtimer wakeup when called from idle.
+> > + */
+> > +void rpmh_rsc_write_next_wakeup(struct rsc_drv *drv)
+> > +{
+> > +       ktime_t now, wakeup;
+> > +       u64 wakeup_us, wakeup_cycles = ~0;
+> > +       u32 lo, hi;
+> > +
+> > +       if (!drv->tcs[CONTROL_TCS].num_tcs || !drv->genpd_nb.notifier_call)
+> > +               return;
+> > +
+> > +       /* Set highest time when system (timekeeping) is suspended */
+> > +       if (system_state == SYSTEM_SUSPEND)
+> > +               goto exit;
+> > +
+> > +       /* Find the earliest hrtimer wakeup from online cpus */
+> > +       wakeup = dev_pm_genpd_get_next_hrtimer(drv->dev);
+> > +
+> > +       /* Find the relative wakeup in kernel time scale */
+> > +       now = ktime_get();
+> > +       wakeup = ktime_sub(wakeup, now);
+> > +       wakeup_us = ktime_to_us(wakeup);
+> > +
+> > +       /* Convert the wakeup to arch timer scale */
+> > +       wakeup_cycles = USECS_TO_CYCLES(wakeup_us);
+> > +       wakeup_cycles += arch_timer_read_counter();
+> > +
+> > +exit:
+> > +       lo = wakeup_cycles & RSC_DRV_CTL_TCS_DATA_LO_MASK;
+> > +       hi = wakeup_cycles >> RSC_DRV_CTL_TCS_DATA_SIZE;
+> > +       hi &= RSC_DRV_CTL_TCS_DATA_HI_MASK;
+> > +       hi |= RSC_DRV_CTL_TCS_DATA_HI_VALID;
+> > +
+> > +       writel_relaxed(lo, drv->base + RSC_DRV_CTL_TCS_DATA_LO);
+> > +       writel_relaxed(hi, drv->base + RSC_DRV_CTL_TCS_DATA_HI);
+> > +}
+> > +
+> > +/**
+> >   * rpmh_rsc_cpu_pm_callback() - Check if any of the AMCs are busy.
+> >   * @nfb:    Pointer to the notifier block in struct rsc_drv.
+> >   * @action: CPU_PM_ENTER, CPU_PM_ENTER_FAILED, or CPU_PM_EXIT.
+> > @@ -1035,6 +1095,7 @@ static int rpmh_rsc_probe(struct platform_device *pdev)
+> >         INIT_LIST_HEAD(&drv->client.batch_cache);
+> >
+> >         dev_set_drvdata(&pdev->dev, drv);
+> > +       drv->dev = &pdev->dev;
+> >
+> >         ret = devm_of_platform_populate(&pdev->dev);
+> >         if (ret && pdev->dev.pm_domain) {
+> > diff --git a/drivers/soc/qcom/rpmh.c b/drivers/soc/qcom/rpmh.c
+> > index 01765ee..3a53ed9 100644
+> > --- a/drivers/soc/qcom/rpmh.c
+> > +++ b/drivers/soc/qcom/rpmh.c
+> > @@ -450,7 +450,7 @@ int rpmh_flush(struct rpmh_ctrlr *ctrlr)
+> >
+> >         if (!ctrlr->dirty) {
+> >                 pr_debug("Skipping flush, TCS has latest data.\n");
+> > -               goto exit;
+> > +               goto write_next_wakeup;
+> >         }
+> >
+> >         /* Invalidate the TCSes first to avoid stale data */
+> > @@ -479,6 +479,8 @@ int rpmh_flush(struct rpmh_ctrlr *ctrlr)
+> >
+> >         ctrlr->dirty = false;
+> >
+> > +write_next_wakeup:
+> > +       rpmh_rsc_write_next_wakeup(ctrlr_to_drv(ctrlr));
+> >  exit:
+> >         spin_unlock(&ctrlr->cache_lock);
+> >         return ret;
+> > --
+> > 2.7.4
+> >
