@@ -2,103 +2,267 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3981542F2B
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jun 2022 13:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6C4543142
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jun 2022 15:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238158AbiFHL1M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jun 2022 07:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43706 "EHLO
+        id S240069AbiFHNWs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jun 2022 09:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238182AbiFHL1K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 07:27:10 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6EA163288
-        for <linux-pm@vger.kernel.org>; Wed,  8 Jun 2022 04:27:09 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id q1so40845191ejz.9
-        for <linux-pm@vger.kernel.org>; Wed, 08 Jun 2022 04:27:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=PlJbn4bNHTDXfVbeqo+RJ46MdRo3S8OzIqiYf3bCFFg=;
-        b=w6oCeuCW85F2bY1la+P9McwrVJ5T4BrvQFtejLtN2xdcKqmI+dQG1SXjuh4aKYKix3
-         t8yMpqn9Tk5DkkDC10nGdgnGjkcLd84YsBiEKTj6rOHwY2lYoe/U8q2RLUG3umMv0fDQ
-         D8uxW+0D5+c4+xMghq7bk6589UqbK/4o9AbGGqAmZBWY3t2yA3vSAV0JhrUQL6np4+YO
-         y9a9NLAzPMyw9SHJb0W6cvsPvXMzvJ8hkEOOCzgy5zHil9KEaekFbBe3XQdhrF7dmHl4
-         lBix3meAPRSUmnZmCz41HRJ8fBw5NP5/gmNP/vwaqRZchKD2gN7sZi3TqKlx+Qeexiuq
-         p02g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=PlJbn4bNHTDXfVbeqo+RJ46MdRo3S8OzIqiYf3bCFFg=;
-        b=pURaLFg+ctEMSosV0CmT75VlMjflP53iT62Vdhy0EYOnqJuzbBI/4+VfLCntxpKKIL
-         PwuVhG98T7gycui0esZMVryv2VTTdyO68v7S+2AekdyZDZ5724yeJ38MrjePnjySsm99
-         gDjXhvsOBw69johVuOufSM1pReV3def8ghu0XzFtsyPaFZmWlqv91CSrRN0qo3VcPQzT
-         wUsq5aJPwgC2J3Tly3AxUQ/5lH5hEEejn0HX/CfVHkmVpFCTTYMJq7DmV93WwWETtgJw
-         Eq6OuenQDSbsmFWQsl3bpu9tSwaGZZ05GEHSU+K+9k5ymDiMhBTt14zbQ2WDuk/OlH9T
-         ix6w==
-X-Gm-Message-State: AOAM532TRKo6S/qkYuTOHXydaiuXSPjL4WOR2rupb60J2Fo4CsfIjMlP
-        id+E/Ma9L1gEEVAcgtvgUaCkXw==
-X-Google-Smtp-Source: ABdhPJz+lXqy1j4v0OdkAe6JJbzQVDU2J9eFaz4d6ri4ThGwuFuF1m+OsQfkXsek6qRGnIa9uNiEOQ==
-X-Received: by 2002:a17:906:216:b0:711:f623:8bb0 with SMTP id 22-20020a170906021600b00711f6238bb0mr2200799ejd.174.1654687627761;
-        Wed, 08 Jun 2022 04:27:07 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g12-20020a056402424c00b00431962fe5d4sm2729956edb.77.2022.06.08.04.27.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 04:27:07 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Ivan T. Ivanov" <ivan.ivanov@linaro.org>,
-        Kumar Gala <galak@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] ARM: dts: qcom: pm8841: add required thermal-sensor-cells
-Date:   Wed,  8 Jun 2022 13:27:02 +0200
-Message-Id: <20220608112702.80873-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220608112702.80873-1-krzysztof.kozlowski@linaro.org>
-References: <20220608112702.80873-1-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S239983AbiFHNWr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 09:22:47 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756E95641D;
+        Wed,  8 Jun 2022 06:22:45 -0700 (PDT)
+Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LJ7Cr1SYjz6H6pl;
+        Wed,  8 Jun 2022 21:21:28 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 8 Jun 2022 15:22:42 +0200
+Received: from localhost (10.202.226.42) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 8 Jun
+ 2022 14:22:41 +0100
+Date:   Wed, 8 Jun 2022 14:22:40 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+CC:     <linus.walleij@linaro.org>, <brgl@bgdev.pl>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <wens@csie.org>,
+        <jic23@kernel.org>, <lee.jones@linaro.org>, <sre@kernel.org>,
+        <broonie@kernel.org>, <gregkh@linuxfoundation.org>,
+        <lgirdwood@gmail.com>, <lars@metafoo.de>, <rafael@kernel.org>,
+        <quic_gurus@quicinc.com>, <linux-gpio@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v2 10/17] iio: adc: axp20x_adc: Minor code cleanups
+Message-ID: <20220608142240.00001161@Huawei.com>
+In-Reply-To: <20220607155324.118102-11-aidanmacdonald.0x0@gmail.com>
+References: <20220607155324.118102-1-aidanmacdonald.0x0@gmail.com>
+        <20220607155324.118102-11-aidanmacdonald.0x0@gmail.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhreml739-chm.china.huawei.com (10.201.108.189) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The PM8841 temperature sensor has to define thermal-sensor-cells.
+On Tue,  7 Jun 2022 16:53:17 +0100
+Aidan MacDonald <aidanmacdonald.0x0@gmail.com> wrote:
 
-Fixes: dab8134ca072 ("ARM: dts: qcom: Add PM8841 functions device nodes")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm/boot/dts/qcom-pm8841.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+> The code may be clearer if parameters are not re-purposed to hold
+> temporary results like register values, so introduce local variables
+> as necessary to avoid that. Also, use the common FIELD_PREP macro
+> instead of a hand-rolled version.
+> 
+> Suggested-by: Jonathan Cameron <jic23@kernel.org>
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 
-diff --git a/arch/arm/boot/dts/qcom-pm8841.dtsi b/arch/arm/boot/dts/qcom-pm8841.dtsi
-index 2caf71eacb52..b5cdde034d18 100644
---- a/arch/arm/boot/dts/qcom-pm8841.dtsi
-+++ b/arch/arm/boot/dts/qcom-pm8841.dtsi
-@@ -24,6 +24,7 @@ temp-alarm@2400 {
- 			compatible = "qcom,spmi-temp-alarm";
- 			reg = <0x2400>;
- 			interrupts = <4 0x24 0 IRQ_TYPE_EDGE_RISING>;
-+			#thermal-sensor-cells = <0>;
- 		};
- 	};
- 
--- 
-2.34.1
+Hi Aidan,
+
+Looks good.  One trivial further suggestion inline.
+
+Also, am I fine picking up the IIO patches, or does the whole
+set need to go in via mfd?
+
+Thanks,
+
+Jonathan
+
+> ---
+>  drivers/iio/adc/axp20x_adc.c | 61 +++++++++++++++++++-----------------
+>  1 file changed, 33 insertions(+), 28 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/axp20x_adc.c b/drivers/iio/adc/axp20x_adc.c
+> index 53bf7d4899d2..9d5b1de24908 100644
+> --- a/drivers/iio/adc/axp20x_adc.c
+> +++ b/drivers/iio/adc/axp20x_adc.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/property.h>
+>  #include <linux/regmap.h>
+>  #include <linux/thermal.h>
+> +#include <linux/bitfield.h>
+>  
+>  #include <linux/iio/iio.h>
+>  #include <linux/iio/driver.h>
+> @@ -22,20 +23,20 @@
+>  #include <linux/mfd/axp20x.h>
+>  
+>  #define AXP20X_ADC_EN1_MASK			GENMASK(7, 0)
+> -
+>  #define AXP20X_ADC_EN2_MASK			(GENMASK(3, 2) | BIT(7))
+> +
+>  #define AXP22X_ADC_EN1_MASK			(GENMASK(7, 5) | BIT(0))
+>  
+>  #define AXP20X_GPIO10_IN_RANGE_GPIO0		BIT(0)
+>  #define AXP20X_GPIO10_IN_RANGE_GPIO1		BIT(1)
+> -#define AXP20X_GPIO10_IN_RANGE_GPIO0_VAL(x)	((x) & BIT(0))
+> -#define AXP20X_GPIO10_IN_RANGE_GPIO1_VAL(x)	(((x) & BIT(0)) << 1)
+>  
+>  #define AXP20X_ADC_RATE_MASK			GENMASK(7, 6)
+> -#define AXP813_V_I_ADC_RATE_MASK		GENMASK(5, 4)
+> -#define AXP813_ADC_RATE_MASK			(AXP20X_ADC_RATE_MASK | AXP813_V_I_ADC_RATE_MASK)
+>  #define AXP20X_ADC_RATE_HZ(x)			((ilog2((x) / 25) << 6) & AXP20X_ADC_RATE_MASK)
+> +
+>  #define AXP22X_ADC_RATE_HZ(x)			((ilog2((x) / 100) << 6) & AXP20X_ADC_RATE_MASK)
+> +
+> +#define AXP813_V_I_ADC_RATE_MASK		GENMASK(5, 4)
+> +#define AXP813_ADC_RATE_MASK			(AXP20X_ADC_RATE_MASK | AXP813_V_I_ADC_RATE_MASK)
+>  #define AXP813_TS_GPIO0_ADC_RATE_HZ(x)		AXP20X_ADC_RATE_HZ(x)
+>  #define AXP813_V_I_ADC_RATE_HZ(x)		((ilog2((x) / 100) << 4) & AXP813_V_I_ADC_RATE_MASK)
+>  #define AXP813_ADC_RATE_HZ(x)			(AXP20X_ADC_RATE_HZ(x) | AXP813_V_I_ADC_RATE_HZ(x))
+> @@ -234,7 +235,7 @@ static int axp20x_adc_raw(struct iio_dev *indio_dev,
+>  			  struct iio_chan_spec const *chan, int *val)
+>  {
+>  	struct axp20x_adc_iio *info = iio_priv(indio_dev);
+> -	int size = 12;
+> +	int ret, size;
+>  
+>  	/*
+>  	 * N.B.:  Unlike the Chinese datasheets tell, the charging current is
+> @@ -246,10 +247,11 @@ static int axp20x_adc_raw(struct iio_dev *indio_dev,
+>  	else
+>  		size = 12;
+>  
+> -	*val = axp20x_read_variable_width(info->regmap, chan->address, size);
+> -	if (*val < 0)
+> -		return *val;
+> +	ret = axp20x_read_variable_width(info->regmap, chan->address, size);
+> +	if (ret < 0)
+> +		return ret;
+>  
+> +	*val = ret;
+>  	return IIO_VAL_INT;
+>  }
+>  
+> @@ -257,11 +259,13 @@ static int axp22x_adc_raw(struct iio_dev *indio_dev,
+>  			  struct iio_chan_spec const *chan, int *val)
+>  {
+>  	struct axp20x_adc_iio *info = iio_priv(indio_dev);
+> +	int ret;
+>  
+> -	*val = axp20x_read_variable_width(info->regmap, chan->address, 12);
+> -	if (*val < 0)
+> -		return *val;
+> +	ret = axp20x_read_variable_width(info->regmap, chan->address, 12);
+> +	if (ret < 0)
+> +		return ret;
+>  
+> +	*val = ret;
+>  	return IIO_VAL_INT;
+>  }
+>  
+> @@ -269,11 +273,13 @@ static int axp813_adc_raw(struct iio_dev *indio_dev,
+>  			  struct iio_chan_spec const *chan, int *val)
+>  {
+>  	struct axp20x_adc_iio *info = iio_priv(indio_dev);
+> +	int ret;
+>  
+> -	*val = axp20x_read_variable_width(info->regmap, chan->address, 12);
+> -	if (*val < 0)
+> -		return *val;
+> +	ret = axp20x_read_variable_width(info->regmap, chan->address, 12);
+> +	if (ret < 0)
+> +		return ret;
+>  
+> +	*val = ret;
+>  	return IIO_VAL_INT;
+>  }
+>  
+> @@ -443,27 +449,27 @@ static int axp20x_adc_offset_voltage(struct iio_dev *indio_dev, int channel,
+>  				     int *val)
+>  {
+>  	struct axp20x_adc_iio *info = iio_priv(indio_dev);
+> +	unsigned int regval;
+>  	int ret;
+>  
+> -	ret = regmap_read(info->regmap, AXP20X_GPIO10_IN_RANGE, val);
+> +	ret = regmap_read(info->regmap, AXP20X_GPIO10_IN_RANGE, &regval);
+>  	if (ret < 0)
+>  		return ret;
+>  
+>  	switch (channel) {
+>  	case AXP20X_GPIO0_V:
+> -		*val &= AXP20X_GPIO10_IN_RANGE_GPIO0;
+> +		regval &= AXP20X_GPIO10_IN_RANGE_GPIO0;
+
+Maybe use FIELD_GET() here to be clear you are extracting that
+field (even though we don't care about the shift).
+
+Hopefully the compiler will be clever enough to remove the shift
+anyway and using FIELD_GET() would act as slightly more 'documentation
+in code'.
+
+
+
+>  		break;
+>  
+>  	case AXP20X_GPIO1_V:
+> -		*val &= AXP20X_GPIO10_IN_RANGE_GPIO1;
+> +		regval &= AXP20X_GPIO10_IN_RANGE_GPIO1;
+>  		break;
+>  
+>  	default:
+>  		return -EINVAL;
+>  	}
+>  
+> -	*val = *val ? 700000 : 0;
+> -
+> +	*val = regval ? 700000 : 0;
+>  	return IIO_VAL_INT;
+>  }
+>  
+> @@ -548,7 +554,7 @@ static int axp20x_write_raw(struct iio_dev *indio_dev,
+>  			    long mask)
+>  {
+>  	struct axp20x_adc_iio *info = iio_priv(indio_dev);
+> -	unsigned int reg, regval;
+> +	unsigned int regmask, regval;
+>  
+>  	/*
+>  	 * The AXP20X PMIC allows the user to choose between 0V and 0.7V offsets
+> @@ -560,25 +566,24 @@ static int axp20x_write_raw(struct iio_dev *indio_dev,
+>  	if (val != 0 && val != 700000)
+>  		return -EINVAL;
+>  
+> -	val = val ? 1 : 0;
+> +	regval = val ? 1 : 0;
+>  
+>  	switch (chan->channel) {
+>  	case AXP20X_GPIO0_V:
+> -		reg = AXP20X_GPIO10_IN_RANGE_GPIO0;
+> -		regval = AXP20X_GPIO10_IN_RANGE_GPIO0_VAL(val);
+> +		regmask = AXP20X_GPIO10_IN_RANGE_GPIO0;
+> +		regval = FIELD_PREP(AXP20X_GPIO10_IN_RANGE_GPIO0, regval);
+>  		break;
+>  
+>  	case AXP20X_GPIO1_V:
+> -		reg = AXP20X_GPIO10_IN_RANGE_GPIO1;
+> -		regval = AXP20X_GPIO10_IN_RANGE_GPIO1_VAL(val);
+> +		regmask = AXP20X_GPIO10_IN_RANGE_GPIO1;
+> +		regval = FIELD_PREP(AXP20X_GPIO10_IN_RANGE_GPIO1, regval);
+>  		break;
+>  
+>  	default:
+>  		return -EINVAL;
+>  	}
+>  
+> -	return regmap_update_bits(info->regmap, AXP20X_GPIO10_IN_RANGE, reg,
+> -				  regval);
+> +	return regmap_update_bits(info->regmap, AXP20X_GPIO10_IN_RANGE, regmask, regval);
+>  }
+>  
+>  static const struct iio_info axp20x_adc_iio_info = {
 
