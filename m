@@ -2,38 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3AE6543F71
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 00:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C659543FCA
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 01:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbiFHWtR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jun 2022 18:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51830 "EHLO
+        id S231362AbiFHXPu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jun 2022 19:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbiFHWtQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 18:49:16 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA74228716;
-        Wed,  8 Jun 2022 15:49:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 18F51CE2C8A;
-        Wed,  8 Jun 2022 22:49:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5C22C34116;
-        Wed,  8 Jun 2022 22:49:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654728551;
-        bh=KoDfYZU8H3/Jk6nelCnyzGy1ViLp+HOvc80VTERRhLk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=c47L61jNlPTTvhMermxgEoTOR9tWN65ALmSIUqWA/wuOeo+x67eQrpqH+NwJc5S+h
-         PXtQCy08WczMlRL1nrqYaTzNO8rQ7ucEMUfc1fak2OFB8n3dUP4d+rjMPwR2VNbPH0
-         Mf6l5WTxg4u1Kcn783ubkdYv2krRDz2t1vUTXPBVPXt9B8mkQ0GMHULzam2VTrceSn
-         vNzj7lGKeQ8LZvsupIlQG5hs80ef3vrgPzzmPrVZUmCHf0eyTLpjvNj41LJJPA7k1D
-         MGP0elVE6cT4SScOWE7iEvpStoF4640FLL1sX7CvK+m4RK4FHM2MPS5Q45TdRfX4j3
-         QUGUYhF+ECwLQ==
-Date:   Wed, 8 Jun 2022 15:49:08 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Saravana Kannan <saravanak@google.com>
+        with ESMTP id S230228AbiFHXPq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 19:15:46 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F76E43387
+        for <linux-pm@vger.kernel.org>; Wed,  8 Jun 2022 16:15:43 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-3137316bb69so30001717b3.10
+        for <linux-pm@vger.kernel.org>; Wed, 08 Jun 2022 16:15:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5dm3ORkewVvScpNnTHAWD0lWUpKHv8ZP9Eg12POa/hY=;
+        b=s8ajev8ylc24lWL+uVn0aQqBmKLBXSt4qhwBZySWYs06ap1dTsQm6yNKQo5ZZk1Ttw
+         CogFfnoV9WalwlDwJZQwIzhS53XYG0TnpLr6RaCiWz52oS8Ya2rxty3/51rSjmJayx7c
+         EWdKZF1ai138Psl2FvsA3fb81ZOFaNvnMqn373Non4bghec4LDcPh888h9mpuh/1unnN
+         f9dX3yfRPbSr2zW6HLeQ/tEvTedV0nhIrv0QdBSD7AwR10AtUBj/yefZJX+LJ+vEpqtI
+         mz7ygzZjwLzaYvbU7IBn1tdY8nY9jEOw6ZGRU2lMtt4y+nfEmnlgAfeCbdWY91a6rwLO
+         KGNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5dm3ORkewVvScpNnTHAWD0lWUpKHv8ZP9Eg12POa/hY=;
+        b=5S/+QALlWWAj+lFXNq5ynIB2aSEVUj3zNWb0u4wrarDl0RdEdIRL11jx3DGI1714st
+         G2DK2lWK3nnep17+PKfK8aijc/YYRrQJsAfokA2vT0YSrWvasLHyk6EzR/jFUfP3Y5Xf
+         aIwwqeMi9Jqe+rE1LjGl+oBLE/vKCetU2R8mKotfD/pwRPQZgrxmZQvqQJHiN3qsjOfZ
+         p7lms95jvT/XfhtU131JtpVKVh/p1Pwe7jrzQstw8kzxigM9jSxQJsOEa3U/aQnZcA2i
+         hncmFsCUcaEE/b6UZcBTfROaFZ1TL6eEfxvZjE0t+QV9At6ikAmBJNyHJz8qc8abBELD
+         MjlQ==
+X-Gm-Message-State: AOAM530otHl4pOj+L4Tz8s2QurO1hO3MDIc6WvU76BeLdccLvAn8ezpi
+        FQHt56Q2MSZgY33WCq4kvJOOKsl3ic4kkz5+ZF8EuQ==
+X-Google-Smtp-Source: ABdhPJydbDnoddm1zrWGAsHzuwqdddTQzuodu0O1Gb1JEUm33YqJ1CQ0JnoMmfFGzaJs2LsBc2KxBacSkdprXywkGyo=
+X-Received: by 2002:a81:1a4c:0:b0:30c:8363:e170 with SMTP id
+ a73-20020a811a4c000000b0030c8363e170mr38925926ywa.455.1654730143827; Wed, 08
+ Jun 2022 16:15:43 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220601070707.3946847-1-saravanak@google.com>
+ <CAMuHMdXkX-SXtBuTRGJOUnpw9goSP6RFr_PTt_3w_yWgBpWsqg@mail.gmail.com>
+ <CAGETcx9f0UBhpp6dM+KJwtYpLx19wwsq6_ygi3En7FrXobOSpA@mail.gmail.com>
+ <CAGETcx8VM+xOCe7HEx9FUU-1B9nrX8Q=tE=NjTyb9uX2_8RXLQ@mail.gmail.com>
+ <CAMuHMdXzu8Vp=a7fyjOB=xt04aee=vWXV=TcRZeeKUGYFFZ1CA@mail.gmail.com>
+ <CAGETcx_Nqo4ju7cWwO3dP3YM2wpCb0jx23OHOReexOjpT5pATA@mail.gmail.com>
+ <CAMuHMdXQCwMQj_ZiOBAzusdCxd8w6NbTqD_7nzykhVs+UWx8Gw@mail.gmail.com>
+ <CAGETcx8UO=4mk31tU4QaWU3RaNM_myA9woe0idBp6p7+X5AEgg@mail.gmail.com> <20220608154908.4ddb9795@kernel.org>
+In-Reply-To: <20220608154908.4ddb9795@kernel.org>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 8 Jun 2022 16:15:07 -0700
+Message-ID: <CAGETcx_ZPB2ce-7Zf-bVy4hHe8Nvk62_7HVeO1dhQvg1iuHQDw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/9] deferred_probe_timeout logic clean up
+To:     Jakub Kicinski <kuba@kernel.org>
 Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -56,46 +81,53 @@ Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
         netdev <netdev@vger.kernel.org>,
         "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Niklas =?UTF-8?B?U8O2ZGVybHVuZA==?= 
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
         Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
         Rob Herring <robh+dt@kernel.org>,
         Vladimir Oltean <vladimir.oltean@nxp.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
         Thomas Bogendoerfer <tbogendoerfer@suse.de>
-Subject: Re: [PATCH v2 0/9] deferred_probe_timeout logic clean up
-Message-ID: <20220608154908.4ddb9795@kernel.org>
-In-Reply-To: <CAGETcx8UO=4mk31tU4QaWU3RaNM_myA9woe0idBp6p7+X5AEgg@mail.gmail.com>
-References: <20220601070707.3946847-1-saravanak@google.com>
-        <CAMuHMdXkX-SXtBuTRGJOUnpw9goSP6RFr_PTt_3w_yWgBpWsqg@mail.gmail.com>
-        <CAGETcx9f0UBhpp6dM+KJwtYpLx19wwsq6_ygi3En7FrXobOSpA@mail.gmail.com>
-        <CAGETcx8VM+xOCe7HEx9FUU-1B9nrX8Q=tE=NjTyb9uX2_8RXLQ@mail.gmail.com>
-        <CAMuHMdXzu8Vp=a7fyjOB=xt04aee=vWXV=TcRZeeKUGYFFZ1CA@mail.gmail.com>
-        <CAGETcx_Nqo4ju7cWwO3dP3YM2wpCb0jx23OHOReexOjpT5pATA@mail.gmail.com>
-        <CAMuHMdXQCwMQj_ZiOBAzusdCxd8w6NbTqD_7nzykhVs+UWx8Gw@mail.gmail.com>
-        <CAGETcx8UO=4mk31tU4QaWU3RaNM_myA9woe0idBp6p7+X5AEgg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 8 Jun 2022 14:07:44 -0700 Saravana Kannan wrote:
-> David/Jakub,
-> 
-> Do the IP4 autoconfig changes look reasonable to you?
+On Wed, Jun 8, 2022 at 3:49 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Wed, 8 Jun 2022 14:07:44 -0700 Saravana Kannan wrote:
+> > David/Jakub,
+> >
+> > Do the IP4 autoconfig changes look reasonable to you?
+>
+> I'm no expert in this area, I'd trust the opinion of the embedded folks
+> (adding Florian as well) more than myself.
 
-I'm no expert in this area, I'd trust the opinion of the embedded folks
-(adding Florian as well) more than myself. It's unclear to me why we'd
-wait_for_init_devices_probe() after the first failed iteration, sleep,
-and then allow 11 more iterations with wait_for_device_probe().
+Thanks.
 
-Let me also add Thomas since he wrote e2ffe3ff6f5e ("net: ipconfig:
-Wait for deferred device probes").
+> It's unclear to me why we'd
+> wait_for_init_devices_probe() after the first failed iteration,
+
+wait_for_init_devices_probe() relaxes ordering rules for all devices
+and it's not something we want to do unless we really need it. That's
+why we are doing that only if we can't find any network device in the
+first iteration.
+
+> sleep,
+> and then allow 11 more iterations with wait_for_device_probe().
+> Let me also add Thomas since he wrote e2ffe3ff6f5e ("net: ipconfig:
+> Wait for deferred device probes").
+
+Even without this change, I'm not sure the wait_for_device_probe()
+needs to be within the loop. It's probably sufficient to just do it
+once in the beginning, but it's already there and I'm not sure if I'm
+missing some scenarios, so I left that part as is.
+
+-Saravana
