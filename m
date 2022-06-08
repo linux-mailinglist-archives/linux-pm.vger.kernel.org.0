@@ -2,70 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB09542C4B
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jun 2022 12:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8622542C54
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jun 2022 12:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235676AbiFHJ7t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jun 2022 05:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46262 "EHLO
+        id S234345AbiFHJ7y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jun 2022 05:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235470AbiFHJ7e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 05:59:34 -0400
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8004E3135B
-        for <linux-pm@vger.kernel.org>; Wed,  8 Jun 2022 02:32:58 -0700 (PDT)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-e5e433d66dso26474151fac.5
-        for <linux-pm@vger.kernel.org>; Wed, 08 Jun 2022 02:32:58 -0700 (PDT)
+        with ESMTP id S235733AbiFHJ7m (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 05:59:42 -0400
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA80E09B
+        for <linux-pm@vger.kernel.org>; Wed,  8 Jun 2022 02:33:44 -0700 (PDT)
+Received: by mail-pj1-f48.google.com with SMTP id w2-20020a17090ac98200b001e0519fe5a8so17813322pjt.4
+        for <linux-pm@vger.kernel.org>; Wed, 08 Jun 2022 02:33:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
          :message-id:mime-version;
-        bh=8q0UkAZ4dvNknvTQvko17+mn/F0IPrhf3ct/EHs1tCQ=;
-        b=GPyfQl5q5Qf+9i9k/EQtnIzg7UPHXyhxGq5PvoANLagQp715HptsxkHHRZ6Mcl6Sth
-         2f91d11NxHl1zKS7Y49vO4FTzkWU1Sn2IDyftqmXNwnMyWUk5YjG7yIMHqCwfCO4Qyn1
-         gI2XGobgrW4/GntfOVXH0uVBsZoFJln5gTYhgE/lvbw/loJHDLeyPzcLWrHngLCvXheX
-         eL/Aqg9jCe+qFbO7V2ex+4sU+o0fPD7gLwtkP72JcH7i01r8TqsGg8ROgzn6aetiLFn5
-         g8X1OwkRt3nfbdpTgIhKGMK+xfabDqhf2N5pNg2AWGTjxqp5vGjYGtWNHAsRoJynBJ9P
-         OyBg==
-X-Gm-Message-State: AOAM532WksxkX1j/6ix/KBdWWAnuC4dNbvbBa4QcCtnIsDVYnRRI3m55
-        K6BqBM3zV9b+WoV0J855VO7+lmwxauiRxA28YrM=
-X-Google-Smtp-Source: ABdhPJzDC4rfQ2h72frt9dZYgo7p6s/mGWoR9neFT1AICp5chVHIamtKDi4iNqVMNjw1NMwuzyXGfA==
-X-Received: by 2002:a17:90b:3a90:b0:1e6:a203:c7dd with SMTP id om16-20020a17090b3a9000b001e6a203c7ddmr31913271pjb.144.1654680766972;
-        Wed, 08 Jun 2022 02:32:46 -0700 (PDT)
+        bh=3mAa+qEh4/jfutJ1TxAHiAnCiCxKpOm04PWu4D2bqUk=;
+        b=uXHv8575mX+dUvj2xTqinUYanfZhnPu9Y84xj3+o0nLRhW/D1fUfvP/FcMs66a8N07
+         bjQuLRXQ0xm86b94qIvTtpuh1XNbIPdwwZR0c37nkS2EqGC8z8q/pWakrjq75+7qyyFP
+         7MbBmZ8MaiJzO/pTlEdThx85tPOTKWrtXjkVdPpj0A8bW4EBySDvxaxGK9ZNzWDzuWOh
+         PIJ2SoUW9mypJ5k4XuycePG2TsdDLmTiSulT9R5Yf/ycEMwI+VzboG4m2fH9NBI7bYgF
+         oI4lpxOUTmlQgEPuUG3bmPrOad//Acskzi0XmZ2EGHrZwZIa7bRUh+tZYs4w5rpR386q
+         xzAQ==
+X-Gm-Message-State: AOAM5308GJBZr6DS99QDiAguYJpbfi7W90A0ZFmwfU6dKGkboUbZK5o9
+        1OT479jBIVQ94OoY92+yTzHLWQ==
+X-Google-Smtp-Source: ABdhPJxBrk9LmLklKuNqznjZxKlkynaLEB3hh2Mbvxl5e4tMEIfkOpur214mjwyKlvI9QsY8cDGQTg==
+X-Received: by 2002:a17:902:7087:b0:161:88a4:db37 with SMTP id z7-20020a170902708700b0016188a4db37mr32743936plk.131.1654680823883;
+        Wed, 08 Jun 2022 02:33:43 -0700 (PDT)
 Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id s2-20020a17090a1c0200b001dcf49d92a1sm13623279pjs.28.2022.06.08.02.32.45
+        by smtp.gmail.com with ESMTPSA id o13-20020a170902d4cd00b0015e8d4eb2aesm14318093plg.248.2022.06.08.02.33.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 02:32:46 -0700 (PDT)
+        Wed, 08 Jun 2022 02:33:43 -0700 (PDT)
 From:   Kevin Hilman <khilman@kernel.org>
-To:     Johnson Wang <johnson.wang@mediatek.com>, cw00.choi@samsung.com,
-        krzk+dt@kernel.org, robh+dt@kernel.org, kyungmin.park@samsung.com
-Cc:     djakov@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
+To:     Roger Lu <roger.lu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Fan Chen <fan.chen@mediatek.com>,
+        Charles Yang <Charles.Yang@mediatek.com>,
+        Angus Lin <Angus.Lin@mediatek.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nishanth Menon <nm@ti.com>, Roger Lu <roger.lu@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
         Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Johnson Wang <johnson.wang@mediatek.com>
-Subject: Re: [PATCH v7 0/2] Introduce MediaTek CCI devfreq driver
-In-Reply-To: <20220607140556.6278-1-johnson.wang@mediatek.com>
-References: <20220607140556.6278-1-johnson.wang@mediatek.com>
-Date:   Wed, 08 Jun 2022 02:32:45 -0700
-Message-ID: <7hr13z7b5u.fsf@baylibre.com>
+        Guenter Roeck <linux@roeck-us.net>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>
+Subject: Re: [PATCH v25 0/7] soc: mediatek: SVS: introduce MTK SVS
+In-Reply-To: <20220516004311.18358-1-roger.lu@mediatek.com>
+References: <20220516004311.18358-1-roger.lu@mediatek.com>
+Date:   Wed, 08 Jun 2022 02:33:42 -0700
+Message-ID: <7ho7z37b49.fsf@baylibre.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Johnson Wang <johnson.wang@mediatek.com> writes:
+Roger Lu <roger.lu@mediatek.com> writes:
 
-> The Cache Coherent Interconnect (CCI) is the management of cache
-> coherency by hardware. CCI DEVFREQ is DVFS driver for power saving by
-> scaling clock frequency and supply voltage of CCI. CCI uses the same
-> input clock source and power rail as LITTLE CPUs on Mediatek SoCs.
+> The Smart Voltage Scaling(SVS) engine is a piece of hardware
+> which calculates suitable SVS bank voltages to OPP voltage table.
+> Then, DVFS driver could apply those SVS bank voltages to PMIC/Buck
+> when receiving OPP_EVENT_ADJUST_VOLTAGE.
 
 Tested-by: Kevin Hilman <khilman@baylibre.com>
