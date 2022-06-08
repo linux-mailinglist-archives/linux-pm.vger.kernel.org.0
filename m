@@ -2,126 +2,239 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1D9542EE3
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jun 2022 13:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B79D542F27
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jun 2022 13:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238226AbiFHLLk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jun 2022 07:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
+        id S238174AbiFHL1K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jun 2022 07:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238228AbiFHLKo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 07:10:44 -0400
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D712200B2;
-        Wed,  8 Jun 2022 04:10:03 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id l204so35903331ybf.10;
-        Wed, 08 Jun 2022 04:10:03 -0700 (PDT)
+        with ESMTP id S238158AbiFHL1J (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 07:27:09 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047DF144BDE
+        for <linux-pm@vger.kernel.org>; Wed,  8 Jun 2022 04:27:08 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id q1so40845114ejz.9
+        for <linux-pm@vger.kernel.org>; Wed, 08 Jun 2022 04:27:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GQP2bwf02bCPb3p1b5kmO7uKZq8s04Q6xeuolnL2ees=;
+        b=Q4MJ7eCMUMGfx3UEpwkqoBH/mCtFQQg9j3lKLIIr4llFK49BreVYaukIl/VxNSSiqq
+         YdsSF0VS4j78nZ/Ht+nIcEX7fsgmqAINZ9NGmPf+Cx60UdY4Ypdx69D0r6fuwoSmKxxb
+         cUM0akJ112VkFYOikQYbpbOPgXXaxVciDCgsAf0yi1E9oPir84bZLEfcKfPHrXyKcSux
+         Ck6srZSvDCrhoZkfpEpp93qTCcF/G/A/Xgy7UifxyjQlVcrwSkpKruCzCCi8WyqtsYgB
+         +ad5LBBEssQ/STZXcDYqJ2pMlyScRe/AbHtfCi/SsdrRgZs7vdnWjywD/0tDjVuVG8Ek
+         MgHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Pc8sxjRlyZLiUc2vjV2mNnQdPSrQGggcOwRrmtPvRmQ=;
-        b=qe4IyOMZ1enGiEf1hklCCFUi3b60/6BlA5Lg/UspYBtAOyv0XMu9/oKSbuc3JFHEYf
-         K5HVWjr13x2ZZqbt6+Qgb0IhV/GR4LEH2dKXjk8WnFsnvCIsp7+DQbmAsd6VWECEJvbK
-         4dhpMtk5cK2w69gqeS9/p/96DXD4OGZ4GI6JtQcfG/CVNgATHQg/HRSIBYR+czqTGTeU
-         Om5DmRJ8AqmFUEVwY/uWkeApI7PEUjazHu+sZYZ5GRaQq7421CHYTLNR6BVA+qf83n9J
-         w5EkumHngZxtsvCUBkV00gXXseSCSfN1A8KVNKKYJBhg44gP1DliJn771LN6Cgbr+css
-         LNqg==
-X-Gm-Message-State: AOAM531ouiHgI3ieRHcSXolGy+SBFr/HQxFyrRxFaZiQKFvTizm/yGR7
-        eUw9Aiq1P1E8QvW42APNoJ/wj0PudKoXEqEmnOk=
-X-Google-Smtp-Source: ABdhPJwRKE+6ldZEiFkLjFAW/hFfOibVBLhzJ4mgNxUf5xFcMaFnctaDFCd44iSd/rY55Z6W8yVwkhAYYTiu/pGflk8=
-X-Received: by 2002:a25:84ca:0:b0:65c:b5a4:3d0a with SMTP id
- x10-20020a2584ca000000b0065cb5a43d0amr34085830ybm.137.1654686601554; Wed, 08
- Jun 2022 04:10:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1654680790.git.lukas@wunner.de> <CAJZ5v0i1p=oReS5Ki69-uOLQNBu2Y=MkqDQ4fUU-ih=n_kshwQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0i1p=oReS5Ki69-uOLQNBu2Y=MkqDQ4fUU-ih=n_kshwQ@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 8 Jun 2022 13:09:50 +0200
-Message-ID: <CAJZ5v0jocgtgZxA2wiDTbtOypQFy2WeHRCeNn9U4cvCZ_p48Bg@mail.gmail.com>
-Subject: Re: [PATCH net v2 0/1] PHY interruptus horribilis
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GQP2bwf02bCPb3p1b5kmO7uKZq8s04Q6xeuolnL2ees=;
+        b=6t8+iKCuIGmAKzlZjfEvHt7nq+22cH7MC/sZznBNnI7YPkUb4URiAC3PFWQqS14dpg
+         o4ayXZl8zzAfG9xGKCcCWM9Z/GbNlasoH9b7O51snUXUby/CDYaRasVIxdT/R8tYH4qy
+         b+LQ6RZ7LjVZgeihf3ekLdyLHrs0bx3guiZ91/UnrY5KCqFcEo4+G1K1EAJTHWEW9gE/
+         3Fp4qp5QMpK91EpaoMg4N2HMQpeVKaFI0stFyXGs4UJzFU+5WaHJMfiZFI2SjH1z6h7Q
+         V4sFKMR2HkIH5C45252jm0m54dtSHLBAMw/KJVPTr/hrTU02sfUfV7FsnXPbuxzsE/Ns
+         0XVw==
+X-Gm-Message-State: AOAM531JPhpFvRAoaoMyUw5pilL6ugS+8yGxbAbCXGM5G61jp4b2jxJo
+        ZZnL/4Ko/zByo/YFRvhbwIapgw==
+X-Google-Smtp-Source: ABdhPJwuljUq8jUguPt4DqqFPJ+0+t5pGM/BV881uqo9lRenq0gYe+ZVUWjx4dIPQ2+WeKB1o/YEFg==
+X-Received: by 2002:a17:906:4fc9:b0:70f:8970:dda2 with SMTP id i9-20020a1709064fc900b0070f8970dda2mr23009032ejw.324.1654687626507;
+        Wed, 08 Jun 2022 04:27:06 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id g12-20020a056402424c00b00431962fe5d4sm2729956edb.77.2022.06.08.04.27.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 04:27:05 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        netdev <netdev@vger.kernel.org>,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        UNGLinuxDriver@microchip.com, Oliver Neukum <oneukum@suse.com>,
-        Andre Edich <andre.edich@microchip.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Gabriel Hojda <ghojda@yo2urs.ro>,
-        Christoph Fritz <chf.fritz@googlemail.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        Ferry Toth <fntoth@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Linux Samsung SoC <linux-samsung-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Ivan T. Ivanov" <ivan.ivanov@linaro.org>,
+        Kumar Gala <galak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/2] dt-bindings: thermal: qcom,spmi-temp-alarm: convert to dtschema
+Date:   Wed,  8 Jun 2022 13:27:01 +0200
+Message-Id: <20220608112702.80873-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 8, 2022 at 12:35 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Wed, Jun 8, 2022 at 11:52 AM Lukas Wunner <lukas@wunner.de> wrote:
-> >
-> > Andrew Lunn (PHY maintainer) asked me to resend this patch and cc the
-> > IRQ maintainer.  I'm also cc'ing PM maintainers for good measure.
-> >
-> > The patch addresses an issue with PHY interrupts occurring during a
-> > system sleep transition after the PHY has already been suspended.
-> >
-> > The IRQ subsystem uses an internal flag IRQD_WAKEUP_ARMED to avoid
-> > handling such interrupts, but it's not set until suspend_device_irqs()
-> > is called during the ->suspend_noirq() phase.  That's too late in this
-> > case as PHYs are suspended in the ->suspend() phase.  And there's
-> > no external interface to set the flag earlier.
->
-> Yes, it is not there intentionally.
->
-> Strictly speaking, IRQD_WAKEUP_ARMED is there to indicate to the IRQ
-> subsystem that the given IRQ is a system wakeup one and has been left
-> enabled specifically in order to signal system wakeup.  It allows the
-> IRQ to trigger between suspend_device_irqs() and resume_device_irqs()
-> exactly once, which causes the system to wake up from suspend-to-idle
-> (that's the primary use case for it) or aborts system suspends in
-> progress.
->
-> As you have noticed, it is set automatically by suspend_device_irqs()
-> if the given IRQ has IRQD_WAKEUP_STATE which is the case when it has
-> been enabled for system wakeup.
->
-> > As I'm lacking access to the flag, I'm open coding its functionality
-> > in this patch.  Is this the correct approach or should I instead look
-> > into providing an external interface to the flag?
->
-> The idea is that the regular IRQ "action" handler will run before
-> suspend_device_irqs(), so it should take care of signaling wakeup if
-> need be.  IRQD_WAKEUP_ARMED to trigger wakeup when IRQ "action"
-> handlers don't run.
+Convert the Qualcomm QPNP PMIC Temperature Alarm to DT Schema.
 
-That said IMV there could be a wrapper around suspend_device_irq() to
-mark a specific IRQ as "suspended" before running
-suspend_device_irqs(), but that would require adding "suspend depth"
-to struct irq_desc, so the IRQ is not "resumed" prematurely by
-resume_device_irqs().  And there needs to be an analogous wrapper
-around resume_irq() for the resume path.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../thermal/qcom,spmi-temp-alarm.yaml         | 85 +++++++++++++++++++
+ .../bindings/thermal/qcom-spmi-temp-alarm.txt | 51 -----------
+ 2 files changed, 85 insertions(+), 51 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml
+ delete mode 100644 Documentation/devicetree/bindings/thermal/qcom-spmi-temp-alarm.txt
 
-Does the single prospective user justify this?
+diff --git a/Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml b/Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml
+new file mode 100644
+index 000000000000..5f08b6e59b8a
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml
+@@ -0,0 +1,85 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/qcom,spmi-temp-alarm.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm QPNP PMIC Temperature Alarm
++
++maintainers:
++  - Bjorn Andersson <bjorn.andersson@linaro.org>
++
++description:
++  QPNP temperature alarm peripherals are found inside of Qualcomm PMIC chips
++  that utilize the Qualcomm SPMI implementation. These peripherals provide an
++  interrupt signal and status register to identify high PMIC die temperature.
++
++allOf:
++  - $ref: thermal-sensor.yaml#
++
++properties:
++  compatible:
++    const: qcom,spmi-temp-alarm
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  io-channels:
++    items:
++      - description: ADC channel, which reports chip die temperature
++
++  io-channel-names:
++    items:
++      - const: thermal
++
++  '#thermal-sensor-cells':
++    const: 0
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - '#thermal-sensor-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    pmic {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        pm8350_temp_alarm: temperature-sensor@a00 {
++            compatible = "qcom,spmi-temp-alarm";
++            reg = <0xa00>;
++            interrupts = <0x1 0xa 0x0 IRQ_TYPE_EDGE_BOTH>;
++            #thermal-sensor-cells = <0>;
++        };
++    };
++
++    thermal-zones {
++        pm8350_thermal: pm8350c-thermal {
++            polling-delay-passive = <100>;
++            polling-delay = <0>;
++            thermal-sensors = <&pm8350_temp_alarm>;
++
++            trips {
++                pm8350_trip0: trip0 {
++                    temperature = <95000>;
++                    hysteresis = <0>;
++                    type = "passive";
++                };
++
++                pm8350_crit: pm8350c-crit {
++                    temperature = <115000>;
++                    hysteresis = <0>;
++                    type = "critical";
++                };
++            };
++        };
++    };
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-spmi-temp-alarm.txt b/Documentation/devicetree/bindings/thermal/qcom-spmi-temp-alarm.txt
+deleted file mode 100644
+index 2d5b2ad03314..000000000000
+--- a/Documentation/devicetree/bindings/thermal/qcom-spmi-temp-alarm.txt
++++ /dev/null
+@@ -1,51 +0,0 @@
+-Qualcomm QPNP PMIC Temperature Alarm
+-
+-QPNP temperature alarm peripherals are found inside of Qualcomm PMIC chips
+-that utilize the Qualcomm SPMI implementation. These peripherals provide an
+-interrupt signal and status register to identify high PMIC die temperature.
+-
+-Required properties:
+-- compatible:      Should contain "qcom,spmi-temp-alarm".
+-- reg:             Specifies the SPMI address.
+-- interrupts:      PMIC temperature alarm interrupt.
+-- #thermal-sensor-cells: Should be 0. See Documentation/devicetree/bindings/thermal/thermal-sensor.yaml for a description.
+-
+-Optional properties:
+-- io-channels:     Should contain IIO channel specifier for the ADC channel,
+-                   which report chip die temperature.
+-- io-channel-names: Should contain "thermal".
+-
+-Example:
+-
+-	pm8941_temp: thermal-alarm@2400 {
+-		compatible = "qcom,spmi-temp-alarm";
+-		reg = <0x2400>;
+-		interrupts = <0 0x24 0 IRQ_TYPE_EDGE_RISING>;
+-		#thermal-sensor-cells = <0>;
+-
+-		io-channels = <&pm8941_vadc VADC_DIE_TEMP>;
+-		io-channel-names = "thermal";
+-	};
+-
+-	thermal-zones {
+-		pm8941 {
+-			polling-delay-passive = <250>;
+-			polling-delay = <1000>;
+-
+-			thermal-sensors = <&pm8941_temp>;
+-
+-			trips {
+-				stage1 {
+-					temperature = <105000>;
+-					hysteresis = <2000>;
+-					type = "passive";
+-				};
+-				stage2 {
+-					temperature = <125000>;
+-					hysteresis = <2000>;
+-					type = "critical";
+-				};
+-			};
+-		};
+-	};
+-
+-- 
+2.34.1
+
