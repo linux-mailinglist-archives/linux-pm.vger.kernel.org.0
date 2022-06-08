@@ -2,132 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 440585436D8
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jun 2022 17:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0074354376E
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jun 2022 17:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244165AbiFHPOC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jun 2022 11:14:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55766 "EHLO
+        id S243215AbiFHPbk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jun 2022 11:31:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243481AbiFHPMV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 11:12:21 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFD82A276;
-        Wed,  8 Jun 2022 08:04:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:To:From:Date:Sender:Reply-To:Cc:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Ukp02Ivtbnt/qfD+Hr8nM4W5X9OZTZ1VV5qELeaRbZ8=; b=FdbZDiHXxrw9R5zBFDpdZ4bCmw
-        5EqLEtrQA4GAVtuQ4l7BXUjKrV0kbnuMXyTU0mKTl97PPyywe9dKH6V1TaR7+s04jt3vgRI5mst7b
-        MvEdRR4E7DMNS+4fdoyozYSMS3CHHYGRsbjSFC/FX969Mb3h5fENFOU77m6PPad0SmQklQKh0IO7h
-        IYy8ICeQDWkRRib9aqgM2U3yBaV/wh14vGpv4jtvEIXl8fZxQ7fVbucEOetEIOGb+PV/8PBB6Vpkx
-        USv7ghtiy/ArNAWwKGQZiEeZRhk2g1lrtCnBLBi4x8H1pqA+N9vGsS/o8HP+yXb0C4r8mRSmFSQx5
-        Ih95USug==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nyxEj-0067hZ-CL; Wed, 08 Jun 2022 15:04:45 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 25903301BEC;
-        Wed,  8 Jun 2022 17:04:41 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 089E520C0B5D8; Wed,  8 Jun 2022 17:04:41 +0200 (CEST)
-Date:   Wed, 8 Jun 2022 17:04:40 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, anup@brainfault.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
-        jiangshanlai@gmail.com, joel@joelfernandes.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
-        rcu@vger.kernel.org
-Subject: Re: [PATCH 34/36] cpuidle,omap3: Push RCU-idle into omap_sram_idle()
-Message-ID: <YqC6iJx4ygSmry0G@hirez.programming.kicks-ass.net>
-References: <20220608142723.103523089@infradead.org>
- <20220608144518.073801916@infradead.org>
+        with ESMTP id S243815AbiFHPbj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 11:31:39 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9B93CA7E
+        for <linux-pm@vger.kernel.org>; Wed,  8 Jun 2022 08:31:26 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id a15so33777708lfb.9
+        for <linux-pm@vger.kernel.org>; Wed, 08 Jun 2022 08:31:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PszhJWgHAI6pVsyU6iHd0WPiwfriVIOotwYAT+LX6GU=;
+        b=CJ9bUUwJ5I/2DRNLCwUbHItekG3dQdL6+dLnCT2zVgL6qMZvEEUR9eCHnpXyDYeVM0
+         dHfBKU7+U7dn9sO5zja+12uiXSJNCU1BzI7Ay6FoFGiczeGbMo8JcM5s0Swu6eCOtkZC
+         Q+AK6UE4hVeKkKwh8MtJbSqpCOMeJZaZbLqpVVMjRNypYaxgB4wW94kwpPirlmsO/Iab
+         DMgJ3LT0anyUrRiN30L60/8iJERFGNyJB/KrOMmJhtQbJZ5awHODafZlDF9otpqrBbMq
+         k4Ei9DQ6XDDZKioxSUzM1Pgt9K7gWnHt+lU0YdjTnlU8eTqSsEFB6VbxCz2yTZJJV5XL
+         AtUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PszhJWgHAI6pVsyU6iHd0WPiwfriVIOotwYAT+LX6GU=;
+        b=dpBurOUacW9A076/PeZMUpYAIM88HoS9+jgjorPgZeZ5WrrQKvj3BKfQy+Oe6c8lge
+         ZePo3dJOprsOEPJ0sMdOAeq3vS4QXUwTQSMHZz2Q77+chAw0MkTxc82LOyBtBUX9hlhW
+         4akaYo+MPO9FT7fxWvYVaHvdtOxiP3bIj4/g9tw43SkVfwcTJxvk5mKGX0/boxmPeVZG
+         nXSEsDSLvxmmFL322F9JRFE8X2vy7KTft1+vGzTGPVC1zweB1D92vmE0X3XOac0qG6mn
+         akCgqtXrkuXdRgwDjkL5C11pP2zi7gONGJF/1GyD02vsBfmlbESVuHur+qrvMHMsoa5u
+         j75g==
+X-Gm-Message-State: AOAM530Y3l5jj2ZxZpAKora7cH/wVHe0d1Kj5FM7ByhuXFlKzVsA179P
+        h4KT3/i+oJ905SOfexZ/ipHEDA==
+X-Google-Smtp-Source: ABdhPJw0DT7ia5MoypxM38XOxKE1ZGLksy/tIyqFVdh0t9mXVXB4daSntt2cx1ZWggrI94fa5IiEvg==
+X-Received: by 2002:ac2:5463:0:b0:479:15cc:5cfe with SMTP id e3-20020ac25463000000b0047915cc5cfemr18622178lfn.656.1654702284777;
+        Wed, 08 Jun 2022 08:31:24 -0700 (PDT)
+Received: from localhost.localdomain (h-155-4-133-137.NA.cust.bahnhof.se. [155.4.133.137])
+        by smtp.gmail.com with ESMTPSA id k6-20020a2e92c6000000b002556a17e193sm3348345ljh.38.2022.06.08.08.31.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 08:31:23 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Tony Lindgren <tony@atomide.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Axe Yang <axe.yang@mediatek.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH] PM: runtime: Extend support for wakeirq for force_suspend|resume
+Date:   Wed,  8 Jun 2022 17:31:20 +0200
+Message-Id: <20220608153120.303070-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220608144518.073801916@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 04:27:57PM +0200, Peter Zijlstra wrote:
-> @@ -254,11 +255,18 @@ void omap_sram_idle(void)
->  	 */
->  	if (save_state)
->  		omap34xx_save_context(omap3_arm_context);
-> +
-> +	if (rcuidle)
-> +		cpuidle_rcu_enter();
-> +
->  	if (save_state == 1 || save_state == 3)
->  		cpu_suspend(save_state, omap34xx_do_sram_idle);
->  	else
->  		omap34xx_do_sram_idle(save_state);
->  
-> +	if (rcuidle)
-> +		rcuidle_rcu_exit();
+A driver that makes use of pm_runtime_force_suspend|resume() to support
+system suspend/resume, currently needs to manage the wakeirq support
+itself. To avoid the boilerplate code in the driver's system suspend/resume
+callbacks in particular, let's extend pm_runtime_force_suspend|resume() to
+deal with the wakeirq.
 
-*sigh* so much for this having been exposed to the robots for >2 days :/
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+
+Note that, the reason behind this patch came up while discussing an MMC patch
+for a Mediatek MMC host driver [1].
+
+Kind regards
+Ulf Hansson
+
+[1]
+https://lkml.org/lkml/2022/6/8/813
+
+---
+ drivers/base/power/runtime.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+index 676dc72d912d..445a724cbded 100644
+--- a/drivers/base/power/runtime.c
++++ b/drivers/base/power/runtime.c
+@@ -1876,10 +1876,13 @@ int pm_runtime_force_suspend(struct device *dev)
+ 
+ 	callback = RPM_GET_CALLBACK(dev, runtime_suspend);
+ 
++	dev_pm_enable_wake_irq_check(dev, true);
+ 	ret = callback ? callback(dev) : 0;
+ 	if (ret)
+ 		goto err;
+ 
++	dev_pm_enable_wake_irq_complete(dev);
++
+ 	/*
+ 	 * If the device can stay in suspend after the system-wide transition
+ 	 * to the working state that will follow, drop the children counter of
+@@ -1896,6 +1899,7 @@ int pm_runtime_force_suspend(struct device *dev)
+ 	return 0;
+ 
+ err:
++	dev_pm_disable_wake_irq_check(dev, true);
+ 	pm_runtime_enable(dev);
+ 	return ret;
+ }
+@@ -1929,9 +1933,11 @@ int pm_runtime_force_resume(struct device *dev)
+ 
+ 	callback = RPM_GET_CALLBACK(dev, runtime_resume);
+ 
++	dev_pm_disable_wake_irq_check(dev, false);
+ 	ret = callback ? callback(dev) : 0;
+ 	if (ret) {
+ 		pm_runtime_set_suspended(dev);
++		dev_pm_enable_wake_irq_check(dev, false);
+ 		goto out;
+ 	}
+ 
+-- 
+2.25.1
+
