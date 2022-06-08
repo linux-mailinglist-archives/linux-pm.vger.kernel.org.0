@@ -2,286 +2,198 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4DA5422DE
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jun 2022 08:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D81525424F9
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jun 2022 08:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbiFHDrC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jun 2022 23:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37012 "EHLO
+        id S232903AbiFHFFU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jun 2022 01:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234639AbiFHDpL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jun 2022 23:45:11 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011EB22CBC9
-        for <linux-pm@vger.kernel.org>; Tue,  7 Jun 2022 17:55:43 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id w2so33927230ybi.7
-        for <linux-pm@vger.kernel.org>; Tue, 07 Jun 2022 17:55:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0eDnZ7I6mO5HIGKZ+f0UxkdVyF2auRBoobbCKlqgPAQ=;
-        b=JRO2H/wErVGZXWcbW+zNZ+nvh17H9KRevHibogV1hEKUtKNV+dHJedZUCcmsLRFsbr
-         GiORDL1v/+yoLQGYD2iqfRuGZ9U7QtizhqJI3wyOzjcbWw7nc3V/pPExvNPUW2BfUFmh
-         AGI3jVlmHwn1urkMrfPgLZun0si5RfPJ3OcK8P1tHu6tn0+7VzGJiRNsraCSC/oByMin
-         0S3hNucR2Nz1YSV4sS+c0ltRQRrlCvopskDBlBE6Uoo2zLOC6uWuDgdJvH7yYH3PtBm/
-         6v9ZuHGAPJE5S91uErDhqXltzDX0iZKPF0O2ILrt1wXCb3DnWFa0oK29hKP99H9jDk45
-         96vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0eDnZ7I6mO5HIGKZ+f0UxkdVyF2auRBoobbCKlqgPAQ=;
-        b=IPB9bEXC1J0SWTZd71Xnai51m3SoKLU6d07W8gkliavDe7xguqY6pMCryXLgZ0ZOeT
-         CQJ1CLRuJHFyHRQS2gctvA1pqUCJJTaOsTUfNl0tcEoqX8UpHTYgQ05ZZIZFavhw1GbS
-         Kt+I5egztN1CPwqZaEPA5aV4cy8vSwan1fC8PL8y2Arm59HLy0WYdHaGOP4AmHNu4yf9
-         9f+DEii1mVMvc/qRpAyrgCs8ROomPhFTVtnMbWh9bxutqOK43TWpmgpd9WfplIhGV+e8
-         hSMIFYsjyIYq8wkU4BL8bxsEqfYjzEKElw2/KLsnPefCfsSCeTxQ5ABxw5xlic9U3aVR
-         glPw==
-X-Gm-Message-State: AOAM533QR2k4Wa7wFXPG2qooRhDP3rhDD0fOnj5u8rfwlW/Fk7iXaUrN
-        iG0qpmT3uL2jqArx7JEJOreXEMpzgEyhPahFn6FR6g==
-X-Google-Smtp-Source: ABdhPJxpHy6/BJUWcDUdY5g10qH+All8zVtFTrAjp9C2q7jQcgGq/aMyju7q5MQTaob+8+AA8TcKSUB4ul1s7iBVhoM=
-X-Received: by 2002:a25:fe0d:0:b0:64d:915f:e73e with SMTP id
- k13-20020a25fe0d000000b0064d915fe73emr33071960ybe.447.1654649742822; Tue, 07
- Jun 2022 17:55:42 -0700 (PDT)
+        with ESMTP id S234087AbiFHFEb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 01:04:31 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81DD31DC878
+        for <linux-pm@vger.kernel.org>; Tue,  7 Jun 2022 19:00:42 -0700 (PDT)
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220608020040epoutp0395e82674e76a5a18ace2b9f858d51409~2grhB6XS01799317993epoutp03X
+        for <linux-pm@vger.kernel.org>; Wed,  8 Jun 2022 02:00:40 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220608020040epoutp0395e82674e76a5a18ace2b9f858d51409~2grhB6XS01799317993epoutp03X
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1654653641;
+        bh=NesFd0hFZnDgwRVoNRjbk3wCcwYkZt4oYwHdgKFII7g=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=n3E1QaWMyUDszrtrTSihdU6ijl78MfjHiYaFN2GPTcuziyIXHH6SuDofwE2pUbGFN
+         nB4GLosgo/ErTDg+++QrPjWNBBOe5r7JTCiwxjRvhb1jDGoCbm20Srdsra4knwwgK0
+         6Lf6I7loWZynkK0lDhAYg3FCHuVauPwmbINMFqgc=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20220608020040epcas1p3ac4a4f86f80302d0d910061cfa14fc9f~2grgh0AXD1369813698epcas1p3Y;
+        Wed,  8 Jun 2022 02:00:40 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.38.233]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4LHr6G5lhlz4x9Q1; Wed,  8 Jun
+        2022 02:00:38 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        B9.FD.09935.6C200A26; Wed,  8 Jun 2022 11:00:38 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220608020038epcas1p29d690189e5f4ec195a410e721da9c959~2greoE3K_3197331973epcas1p2D;
+        Wed,  8 Jun 2022 02:00:38 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220608020038epsmtrp1c4e2d10c9664c0259ec2f933dc5552ee~2grenPE1-1419514195epsmtrp1o;
+        Wed,  8 Jun 2022 02:00:38 +0000 (GMT)
+X-AuditID: b6c32a39-f37ff700000026cf-a0-62a002c6a183
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        AD.F5.11276.6C200A26; Wed,  8 Jun 2022 11:00:38 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220608020037epsmtip185ff608915ef81f4d9c3c6281c3cc037~2greO7RWm2414924149epsmtip1x;
+        Wed,  8 Jun 2022 02:00:37 +0000 (GMT)
+Subject: Re: [PATCH v7 0/2] Introduce MediaTek CCI devfreq driver
+To:     Johnson Wang <johnson.wang@mediatek.com>, krzk+dt@kernel.org,
+        robh+dt@kernel.org, kyungmin.park@samsung.com
+Cc:     khilman@kernel.org, djakov@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <1f3bb9cd-dd13-c9fb-9d90-a02159a59463@samsung.com>
+Date:   Wed, 8 Jun 2022 11:00:37 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-References: <20220601070707.3946847-1-saravanak@google.com> <CAMuHMdXkX-SXtBuTRGJOUnpw9goSP6RFr_PTt_3w_yWgBpWsqg@mail.gmail.com>
-In-Reply-To: <CAMuHMdXkX-SXtBuTRGJOUnpw9goSP6RFr_PTt_3w_yWgBpWsqg@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 7 Jun 2022 17:55:06 -0700
-Message-ID: <CAGETcx9f0UBhpp6dM+KJwtYpLx19wwsq6_ygi3En7FrXobOSpA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/9] deferred_probe_timeout logic clean up
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        David Ahern <dsahern@kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux IOMMU <iommu@lists.linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20220607140556.6278-1-johnson.wang@mediatek.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrGJsWRmVeSWpSXmKPExsWy7bCmvu4xpgVJBjf69CzmHznHavHsViOb
+        xfH9S9gtjv0Ktni6+TGTxctZ99gszja9YbfY9Pgaq8XlXXPYLC43X2S0+Nx7hNHi07oOFovW
+        vUfYHXg9Nq3qZPPYvKTeo+XkfhaPvi2rGD0+b5ILYI3KtslITUxJLVJIzUvOT8nMS7dV8g6O
+        d443NTMw1DW0tDBXUshLzE21VXLxCdB1y8wBOlFJoSwxpxQoFJBYXKykb2dTlF9akqqQkV9c
+        YquUWpCSU2BaoFecmFtcmpeul5daYmVoYGBkClSYkJ1x+XVMQYNoxYY7axgbGNcLdDFyckgI
+        mEhsmfOEtYuRi0NIYAejROvJ6SwQzidGifblh6Ey3xgl3n5fyQ7Tsvz3X2aIxF5Gibs3DkA5
+        7xkl/nduYASpEhZwlLj5fworiC0iUChx/+40dpAiZoF5TBKnz61kAkmwCWhJ7H9xgw3E5hdQ
+        lLj64zFYM6+AncTvtafBbBYBFYm+rTvBVosKhEmc3NYCVSMocXLmExYQmxOo/sPKVrBlzALi
+        EreezGeCsOUltr+dA3adhMABDomvr1ugfnCRmHf2AiuELSzx6vgWqLiUxMv+NnaIhmZGiYYX
+        txkhnB5GiaPP+lggqowl9i+dDLSCA2iFpsT6XfoQYUWJnb/nMkJs5pN497WHFaREQoBXoqNN
+        CKJEWeLyg7tMELakxOL2TrYJjEqzkPwzC8kPs5D8MAth2QJGllWMYqkFxbnpqcWGBabw+E7O
+        z93ECE7AWpY7GKe//aB3iJGJg/EQowQHs5IIr2T4/CQh3pTEyqrUovz4otKc1OJDjKbAEJ7I
+        LCWanA/MAXkl8YYmlgYmZkbGJhaGZoZK4ryrpp1OFBJITyxJzU5NLUgtgulj4uCUamBK2fGu
+        r+3DffnrqSdeFU4sylz8IM6wb/X2M3GX/VlqvznsZI9aunm67Y7Y018KInnueSayaDeWc/1/
+        knY507Y6+RLPnU9pmwpv/EnhK5Vs539x8/0x8/YuvhlFr+znP47orJnzpqZtu3f4iuyHys5G
+        f9WdRTYw/38XGl+4enL7kQ1rN+x5Zt9wtjhLROFb4wPemFQ5kWOOkU/vfFn1NZFxvdv75iUx
+        N3QVc0sZ+aetcrmcucZFXk+1gTdpm05aRmx/2izfz4HX7q1ed1Ly5N6XZvnOlrP/W66oldH+
+        UDtp19++lSxN8VNygkWm82fvPLXmzL8jF9dcfN3zr/HLEvnt+6UWN9spPdqrFORxcIKcEktx
+        RqKhFnNRcSIA4ObkXkkEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHIsWRmVeSWpSXmKPExsWy7bCSnO4xpgVJBh8f8FvMP3KO1eLZrUY2
+        i+P7l7BbHPsVbPF082Mmi5ez7rFZnG16w26x6fE1VovLu+awWVxuvsho8bn3CKPFp3UdLBat
+        e4+wO/B6bFrVyeaxeUm9R8vJ/SwefVtWMXp83iQXwBrFZZOSmpNZllqkb5fAlXH5dUxBg2jF
+        hjtrGBsY1wt0MXJySAiYSCz//Ze5i5GLQ0hgN6PE+7+zmCASkhLTLh4FSnAA2cIShw8XQ9S8
+        ZZT4fLWBHaRGWMBR4ub/KawgtohAocT59w/BbGaBOUwSn/fxQzRMZJSYfXMB2FA2AS2J/S9u
+        sIHY/AKKEld/PGYEsXkF7CR+rz0NZrMIqEj0bd0JtkBUIExi55LHTBA1ghInZz5hAbE5geo/
+        rGyFWqYu8WfeJWYIW1zi1pP5TBC2vMT2t3OYJzAKz0LSPgtJyywkLbOQtCxgZFnFKJlaUJyb
+        nltsWGCYl1quV5yYW1yal66XnJ+7iREchVqaOxi3r/qgd4iRiYPxEKMEB7OSCK9k+PwkId6U
+        xMqq1KL8+KLSnNTiQ4zSHCxK4rwXuk7GCwmkJ5akZqemFqQWwWSZODilGpj4C9gO3a8xiX+1
+        b09YAzdPzuX+l20Be/bNXmLaFhpTOP3xTr4zLqekOJOCvEqCNlxc1mKV+XftNBv7LJ3gkDLr
+        FUy/3vx0flGVM1sp4yLTuVuPF5v72DlsubxIzUbs7P2evRyz2FPka6fKPFK07xE4MHW56eYS
+        Y/vvcTMrH/sYzeusq0x+wRH885yq1i/pa+WaLw9Ouy55f/4Vi0b+xr1vNh/bd+eKup5C4WW1
+        fS4RH39NF3ATun8vMy1ETGD+y/L4924z3nyUOP2r/+Xadt+3Lx7abTj56wCvTphe7Vq1m+68
+        W74n7P2+iW9TulJ7ZscbrqIfjXUT9s2WK7X9r6VvM13j66EwgYZzYZ/CpdKVWIozEg21mIuK
+        EwEqd5peMQMAAA==
+X-CMS-MailID: 20220608020038epcas1p29d690189e5f4ec195a410e721da9c959
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220607140711epcas1p1aca32de28831fae8a6fd3b890b26f7ac
+References: <CGME20220607140711epcas1p1aca32de28831fae8a6fd3b890b26f7ac@epcas1p1.samsung.com>
+        <20220607140556.6278-1-johnson.wang@mediatek.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
--Hideaki -- their email keeps bouncing.
+On 6/7/22 11:05 PM, Johnson Wang wrote:
+> The Cache Coherent Interconnect (CCI) is the management of cache
+> coherency by hardware. CCI DEVFREQ is DVFS driver for power saving by
+> scaling clock frequency and supply voltage of CCI. CCI uses the same
+> input clock source and power rail as LITTLE CPUs on Mediatek SoCs.
+> 
+> This series depends on:
+> Chanwoo's repo: kernel/git/chanwoo/linux.git
+> branch: devfreq-testing
+> [1]: PM / devfreq: Export devfreq_get_freq_range symbol within devfreq
+> [2]: PM / devfreq: Add cpu based scaling support to passive governor
+> [3]: PM / devfreq: passive: Reduce duplicate code when passive_devfreq case
+> [4]: PM / devfreq: passive: Update frequency when start governor
+> 
+> Changes in v7:
+> - remove the 'ret' printing from dev_err_probe().
+> 
+> Changes in v6:
+> - Remove unnecessary "goto" statement.
+> 
+> Changes in v5:
+> - Modify some binding description.
+> - Remove pre_voltage member.
+> - Not to enable/disable intermediate clock.
+> - Not to "put" resources that using devm_ variants.
+> 
+> Resend v4:
+> - CC interconnect maintainer.
+> - Change sign-off sequence in commit message.
+> 
+> Changes in v4:
+> - Add a maintainer in the binding document.
+> - Modify clock description.
+> - Add binding document into MAINTAINERS.
+> - Replace format specifier %d with %ld.
+> 
+> Changes in v3:
+> - Move binding document to 'interconnect' and rename it.
+> - Add COMPILE_TEST dependence symbol.
+> - Remove need_voltage_tracking variable.
+> - Move mtk_ccifreq_voltage_tracking() code into mtk_ccifreq_set_voltage().
+> - Add an interation limit in the while() loop.
+> - Replace 'cci_dev' with 'dev'
+> - Replace old_* with pre_*
+> - Remove of_match_ptr()
+> - Use module_platform_driver()
+> 
+> Changes in v2:
+> - Take MT8183 as example in binding document.
+> - Use dev_err() instead of pr_err().
+> - Use 'goto' statement to handle error case.
+> - Clean up driver code.
+> 
+> Johnson Wang (2):
+>   dt-bindings: interconnect: Add MediaTek CCI dt-bindings
+>   PM / devfreq: mediatek: Introduce MediaTek CCI devfreq driver
+> 
+>  .../bindings/interconnect/mediatek,cci.yaml   | 140 ++++++
+>  MAINTAINERS                                   |   1 +
+>  drivers/devfreq/Kconfig                       |  10 +
+>  drivers/devfreq/Makefile                      |   1 +
+>  drivers/devfreq/mtk-cci-devfreq.c             | 474 ++++++++++++++++++
+>  5 files changed, 626 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interconnect/mediatek,cci.yaml
+>  create mode 100644 drivers/devfreq/mtk-cci-devfreq.c
+> 
 
-On Tue, Jun 7, 2022 at 11:13 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Saravana,
->
-> On Wed, Jun 1, 2022 at 12:46 PM Saravana Kannan <saravanak@google.com> wrote:
-> > This series is based on linux-next + these 2 small patches applies on top:
-> > https://lore.kernel.org/lkml/20220526034609.480766-1-saravanak@google.com/
-> >
-> > A lot of the deferred_probe_timeout logic is redundant with
-> > fw_devlink=on.  Also, enabling deferred_probe_timeout by default breaks
-> > a few cases.
-> >
-> > This series tries to delete the redundant logic, simplify the frameworks
-> > that use driver_deferred_probe_check_state(), enable
-> > deferred_probe_timeout=10 by default, and fixes the nfsroot failure
-> > case.
-> >
-> > The overall idea of this series is to replace the global behavior of
-> > driver_deferred_probe_check_state() where all devices give up waiting on
-> > supplier at the same time with a more granular behavior:
-> >
-> > 1. Devices with all their suppliers successfully probed by late_initcall
-> >    probe as usual and avoid unnecessary deferred probe attempts.
-> >
-> > 2. At or after late_initcall, in cases where boot would break because of
-> >    fw_devlink=on being strict about the ordering, we
-> >
-> >    a. Temporarily relax the enforcement to probe any unprobed devices
-> >       that can probe successfully in the current state of the system.
-> >       For example, when we boot with a NFS rootfs and no network device
-> >       has probed.
-> >    b. Go back to enforcing the ordering for any devices that haven't
-> >       probed.
-> >
-> > 3. After deferred probe timeout expires, we permanently give up waiting
-> >    on supplier devices without drivers. At this point, whatever devices
-> >    can probe without some of their optional suppliers end up probing.
-> >
-> > In the case where module support is disabled, it's fairly
-> > straightforward and all device probes are completed before the initcalls
-> > are done.
-> >
-> > Patches 1 to 3 are fairly straightforward and can probably be applied
-> > right away.
-> >
-> > Patches 4 to 6 are for fixing the NFS rootfs issue and setting the
-> > default deferred_probe_timeout back to 10 seconds when modules are
-> > enabled.
-> >
-> > Patches 7 to 9 are further clean up of the deferred_probe_timeout logic
-> > so that no framework has to know/care about deferred_probe_timeout.
-> >
-> > Yoshihiro/Geert,
-> >
-> > If you can test this patch series and confirm that the NFS root case
-> > works, I'd really appreciate that.
->
-> Thanks, I gave this a try on various boards I have access to.
-> The results were quite positive. E.g. the compile error I saw on v1
-> (implicit declation of fw_devlink_unblock_may_probe(), which is no longer
->  used in v2) is gone.
+Applied them. Thanks.
 
-Thanks a lot for testing these.
-
-> However, I'm seeing a weird error when userspace (Debian9 nfsroot) is
-> starting:
->
->     [  OK  ] Started D-Bus System Message Bus.
->     Unable to handle kernel NULL pointer dereference at virtual
-> address 0000000000000000
->     Unable to handle kernel NULL pointer dereference at virtual
-> address 0000000000000000
->     Mem abort info:
->       ESR = 0x0000000096000004
->     Mem abort info:
->       ESR = 0x0000000096000004
->       EC = 0x25: DABT (current EL), IL = 32 bits
->       SET = 0, FnV = 0
->       EC = 0x25: DABT (current EL), IL = 32 bits
->       EA = 0, S1PTW = 0
->       FSC = 0x04: level 0 translation fault
->       SET = 0, FnV = 0
->     Data abort info:
->       ISV = 0, ISS = 0x00000004
->       EA = 0, S1PTW = 0
->       FSC = 0x04: level 0 translation fault
->       CM = 0, WnR = 0
->     user pgtable: 4k pages, 48-bit VAs, pgdp=000000004ec45000
->     [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
->     Data abort info:
->     Internal error: Oops: 96000004 [#1] PREEMPT SMP
->     CPU: 0 PID: 374 Comm: v4l_id Tainted: G        W
-> 5.19.0-rc1-arm64-renesas-00799-gc13c3e49e8bd #1660
->       ISV = 0, ISS = 0x00000004
->     Hardware name: Renesas Ebisu-4D board based on r8a77990 (DT)
->     pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->       CM = 0, WnR = 0
->     pc : subdev_open+0x8c/0x128
->     lr : subdev_open+0x78/0x128
->     sp : ffff80000aadba60
->     x29: ffff80000aadba60 x28: 0000000000000000 x27: ffff80000aadbc58
->     x26: 0000000000020000 x25: ffff00000b3aaf00 x24: 0000000000000000
->     x23: ffff00000c331c00 x22: ffff000009aa61b8 x21: ffff000009aa6000
->     x20: ffff000008bae3e8 x19: ffff00000c3fe200 x18: 0000000000000000
->     x17: ffff800076945000 x16: ffff800008004000 x15: 00008cc6bf550c7c
->     x14: 000000000000038f x13: 000000000000001a x12: ffff00007fba8618
->     x11: 0000000000000001 x10: 0000000000000000 x9 : ffff800009253954
->     x8 : ffff00000b3aaf00 x7 : 0000000000000004 x6 : 000000000000001a
->     x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000001
->     x2 : 0000000100000001 x1 : 0000000000000000 x0 : 0000000000000000
->     Call trace:
->      subdev_open+0x8c/0x128
->      v4l2_open+0xa4/0x120
->      chrdev_open+0x78/0x178
->      do_dentry_open+0xfc/0x398
->      vfs_open+0x28/0x30
->      path_openat+0x584/0x9c8
->      do_filp_open+0x80/0x108
->      do_sys_openat2+0x20c/0x2d8
->     user pgtable: 4k pages, 48-bit VAs, pgdp=000000004ec53000
->      do_sys_open+0x54/0xa0
->      __arm64_sys_openat+0x20/0x28
->      invoke_syscall+0x40/0xf8
->      el0_svc_common.constprop.0+0xf0/0x110
->      do_el0_svc+0x20/0x78
->      el0_svc+0x48/0xd0
->      el0t_64_sync_handler+0xb0/0xb8
->      el0t_64_sync+0x148/0x14c
->     Code: f9405280 f9400400 b40000e0 f9400280 (f9400000)
->     ---[ end trace 0000000000000000 ]---
->
-> This only happens on the Ebisu-4D board (r8a77990-ebisu.dts).
-> I do not see this on the Salvator-X(S) boards.
-
-Ok. I don't know much about either of these boards. Are they supposed
-to be very similar?
-
-> Bisection shows this starts to happen with "[PATCH v2 7/9] driver core:
-> Set fw_devlink.strict=1 by default".
-
-So in the series, by this point, the previous patches would have
-deferred probe timeout set to 10s (it can get extended on new driver
-additions of course) and once the timer expires suppliers without
-drivers will no longer block any consumers. The only difference
-fw_devlink.strict=1 should cause is iommus and dmas dependency being
-treated as mandatory till the timeout expires.
-
-In this instance, do you have iommu drivers and dma drivers compiled
-in or loaded as modules or not available at all? In all these case,
-the list of devices that would end up probing eventually should be the
-same with or without fw_devlink.strict=1. The only difference would be
-some reordering of probes.
-
-So this looks to me like improper error handling/assumption in the
-driver for this subdev device. I'm guessing one of the suppliers to
-this subdev has a direct/indirect dependency on iommus and this subdev
-driver is assuming that the supplier would have probed by the time
-it's probed.
-
->
-> Adding more debug info:
->
->     subdev_open:54: file v4l-subdev1
->     Unable to handle kernel NULL pointer dereference at virtual
-> address 0000000000000000
->     subdev_open:54: file v4l-subdev2
->     Unable to handle kernel NULL pointer dereference at virtual
-> address 0000000000000000
->
-> Matching the subdev using sysfs gives:
->
->     /sys/devices/platform/soc/e6500000.i2c/i2c-0/0-0070/video4linux/v4l-subdev1
->     /sys/devices/platform/soc/e6500000.i2c/i2c-0/0-0070/video4linux/v4l-subdev2
->
-> The i2c device is the adi,adv7482 at address 0x70.
-
-I'm guessing the fix would be somewhere in this driver, but I haven't
-dug into it. Any guesses on which of its suppliers might have a
-direct/indirect dependency on an iommu/dma? You could also enable the
-debug log in fw_devlink_relax_link() and see if it relaxes any link
-where the supplier is an iommu/dma device. That might give us some
-hints.
-
--Saravana
-
-> But now I'm lost...
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
