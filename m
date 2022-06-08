@@ -2,92 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC161542B3F
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jun 2022 11:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB09542C4B
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jun 2022 12:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbiFHJTj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jun 2022 05:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35984 "EHLO
+        id S235676AbiFHJ7t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jun 2022 05:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235197AbiFHJTD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 05:19:03 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F88A22412E
-        for <linux-pm@vger.kernel.org>; Wed,  8 Jun 2022 01:41:11 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id n10so40047336ejk.5
-        for <linux-pm@vger.kernel.org>; Wed, 08 Jun 2022 01:41:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=S47dvdWUN7Ba1ERPw3oejaVkM1n7wr7OiK0XR5kUMiQ=;
-        b=uskTefCRS9kyK9iuKEe/3qoMsEytarqwN6AXzGTDBnv2LVMTzz/sxDZoGIH9d8zBPt
-         cwNJs62tItAXDHb2G0GHD/49bmVrFskdBCNFpJn9rsNKyvczECgj6pXsrBwZdj4cefa1
-         jGCnSUwy/sce9iFb8mwBofAv4BW4wX6IVWnOIA0tRBa6/VzaL+epPxgqPPIaQCePnjnP
-         WsQk67eePQ2ffVELCDJVr1sT+uJ71CzGaUe8ielsLR2g9tTGuZA+SlSAgH1RbqG+FZb3
-         /SFPJLn/gsaXj4WZXQ+xT8iyPB5wh9jEr4c5NRm4HVWcMq4gz3oRLqhi8ieVbYfm4QhM
-         cdiw==
+        with ESMTP id S235470AbiFHJ7e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 05:59:34 -0400
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8004E3135B
+        for <linux-pm@vger.kernel.org>; Wed,  8 Jun 2022 02:32:58 -0700 (PDT)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-e5e433d66dso26474151fac.5
+        for <linux-pm@vger.kernel.org>; Wed, 08 Jun 2022 02:32:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=S47dvdWUN7Ba1ERPw3oejaVkM1n7wr7OiK0XR5kUMiQ=;
-        b=EQiBCogO4m077XXhXfpwSPN4zHC6C2SPEae58OHGi8YQSUE+WsTBomfx0/5XOJ2G/V
-         XtMtr7q6ZZUBfiMDT+YPYo4L8m4vkUjib/vGQ4WhbOSsDbtLYGvVffvyZPBMx55bpldk
-         1E4ekkuB6rS2nJ1ZmQmb1Sas2/ESk7N/eoER7+u0ipkk/0jSGXjS6OOTkPpIcd1FaU5+
-         wk3fJr56m8xJPHlr1aWybJAEIWzA5AoPIc3UOgz+LfhK4FfvlKfvzTtFtoIPaHEaECxN
-         yYHK96Pt7k8Ab+IgcIxWzo+0usNq8uIDa6D/mXyseYFDPrN46RD2m7CYU9UycHtXFpFn
-         Y2tw==
-X-Gm-Message-State: AOAM530JEKAnVWBnEln+PvuIqEcJo/FqAwGR/CdmfjgLfd0mletW/uPe
-        ulXwG3AvUolR96UF8XKtHtBQNcnAsMy/qg==
-X-Google-Smtp-Source: ABdhPJxy4wBmQ7wW9pIeaifXRzMYwbZ1QM8BkkK3IBZZEIknvSNeVtXpfTetoTj1b+dT5cZTfxs6iA==
-X-Received: by 2002:a17:906:449:b0:711:c975:cfb8 with SMTP id e9-20020a170906044900b00711c975cfb8mr15670663eja.58.1654677669990;
-        Wed, 08 Jun 2022 01:41:09 -0700 (PDT)
-Received: from [192.168.0.189] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id c2-20020a170906154200b006f3ef214dd2sm8699500ejd.56.2022.06.08.01.41.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jun 2022 01:41:09 -0700 (PDT)
-Message-ID: <c2724dc0-b3c7-00eb-08ea-b23296f40044@linaro.org>
-Date:   Wed, 8 Jun 2022 10:41:08 +0200
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=8q0UkAZ4dvNknvTQvko17+mn/F0IPrhf3ct/EHs1tCQ=;
+        b=GPyfQl5q5Qf+9i9k/EQtnIzg7UPHXyhxGq5PvoANLagQp715HptsxkHHRZ6Mcl6Sth
+         2f91d11NxHl1zKS7Y49vO4FTzkWU1Sn2IDyftqmXNwnMyWUk5YjG7yIMHqCwfCO4Qyn1
+         gI2XGobgrW4/GntfOVXH0uVBsZoFJln5gTYhgE/lvbw/loJHDLeyPzcLWrHngLCvXheX
+         eL/Aqg9jCe+qFbO7V2ex+4sU+o0fPD7gLwtkP72JcH7i01r8TqsGg8ROgzn6aetiLFn5
+         g8X1OwkRt3nfbdpTgIhKGMK+xfabDqhf2N5pNg2AWGTjxqp5vGjYGtWNHAsRoJynBJ9P
+         OyBg==
+X-Gm-Message-State: AOAM532WksxkX1j/6ix/KBdWWAnuC4dNbvbBa4QcCtnIsDVYnRRI3m55
+        K6BqBM3zV9b+WoV0J855VO7+lmwxauiRxA28YrM=
+X-Google-Smtp-Source: ABdhPJzDC4rfQ2h72frt9dZYgo7p6s/mGWoR9neFT1AICp5chVHIamtKDi4iNqVMNjw1NMwuzyXGfA==
+X-Received: by 2002:a17:90b:3a90:b0:1e6:a203:c7dd with SMTP id om16-20020a17090b3a9000b001e6a203c7ddmr31913271pjb.144.1654680766972;
+        Wed, 08 Jun 2022 02:32:46 -0700 (PDT)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id s2-20020a17090a1c0200b001dcf49d92a1sm13623279pjs.28.2022.06.08.02.32.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jun 2022 02:32:46 -0700 (PDT)
+From:   Kevin Hilman <khilman@kernel.org>
+To:     Johnson Wang <johnson.wang@mediatek.com>, cw00.choi@samsung.com,
+        krzk+dt@kernel.org, robh+dt@kernel.org, kyungmin.park@samsung.com
+Cc:     djakov@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Johnson Wang <johnson.wang@mediatek.com>
+Subject: Re: [PATCH v7 0/2] Introduce MediaTek CCI devfreq driver
+In-Reply-To: <20220607140556.6278-1-johnson.wang@mediatek.com>
+References: <20220607140556.6278-1-johnson.wang@mediatek.com>
+Date:   Wed, 08 Jun 2022 02:32:45 -0700
+Message-ID: <7hr13z7b5u.fsf@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4 1/9] ARM: dts: at91: use generic name for reset
- controller
-Content-Language: en-US
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        p.zabel@pengutronix.de, sre@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220608083942.1584087-1-claudiu.beznea@microchip.com>
- <20220608083942.1584087-2-claudiu.beznea@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220608083942.1584087-2-claudiu.beznea@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/06/2022 10:39, Claudiu Beznea wrote:
-> Use generic name for reset controller of AT91 devices to comply with
-> DT specifications.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+Johnson Wang <johnson.wang@mediatek.com> writes:
 
+> The Cache Coherent Interconnect (CCI) is the management of cache
+> coherency by hardware. CCI DEVFREQ is DVFS driver for power saving by
+> scaling clock frequency and supply voltage of CCI. CCI uses the same
+> input clock source and power rail as LITTLE CPUs on Mediatek SoCs.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+Tested-by: Kevin Hilman <khilman@baylibre.com>
