@@ -2,131 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2099E544AE8
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 13:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC76544CEA
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 15:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244755AbiFILrS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jun 2022 07:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40534 "EHLO
+        id S1343629AbiFINCc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jun 2022 09:02:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244568AbiFILrJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 07:47:09 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE4DE441E
-        for <linux-pm@vger.kernel.org>; Thu,  9 Jun 2022 04:45:38 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id a29so9057306lfk.2
-        for <linux-pm@vger.kernel.org>; Thu, 09 Jun 2022 04:45:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=z3ypSb+XDrbeyHXO4y2Np7U53zPPEdC7B+zbSpknR0k=;
-        b=OY/i7kxud0oo+BFCt+TUyi9H+g3C5k5yrf+GXzEjHjPnjtkGEK4seV9DkRk020ZUWz
-         WKIH+f9T+Afyh0yOus92Sk0vZdrYShJ4ANs3mHE/+w0RKzy/cpBxO+5vSXpcs/6I/W1F
-         VgAz/3Vc0Nn9QjNv2tmAAZMKO/Zx0Ief1thCMpUMys0hnSluwTEWS9QWq5+xu+Xs3xCj
-         KJI2vfV/hzfKhedkmNIIP79nVy65JYBECsLTbLv14046cdq+juG+NEFNr00i7eve/JuS
-         L/L653ZLeJUs2U8MFmzrO0Dn6Jw5uA4RYssB8Qz6MWalyz5dsMEsbsKnbJjRN9KmbwEF
-         YCQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=z3ypSb+XDrbeyHXO4y2Np7U53zPPEdC7B+zbSpknR0k=;
-        b=oXpM9+pMP/0BGIXsiv1gbys0O+Y2A/9tB6IZVP93DYAnEA7968MDkj4XgY0DYYDy0X
-         9oym0BV8y7V+ak9deJBhf0tjidGy0vtW2c3F5OMFMH3nCEMCi2FQdPO3GN+NuNDW6ApA
-         UwMQvE+qxdnoIYhaG/hfYgtyVuNDiMxru1XoYggAS50qlMURclG6UO484bjISBLR3h2O
-         Y0+bVXJvrQxe2NDpDpDO5fktj5LPSuPn3OSxwCnGMbCT19odmCGmBGiMgmu6DUKy9Mde
-         LcIALVLzbW2ogmWihcrcEin5JutdKbNBHpvRXmFU3mI6vFOoMOIekSzg6HyCIJXJuV/O
-         6vKg==
-X-Gm-Message-State: AOAM5326AwM18x0C64PkR/BMgjtYuLCgES/52I8tx+S8g/hd2qfAvrlQ
-        c6j/ylesfMVAhYRGiz2bx+qqPz04qoHyuTicyXeG2g==
-X-Google-Smtp-Source: ABdhPJyH77X7NZCKlUAkh1b8rGns+ZTVzL2JJqtqHXE5Z9Yu2vwepFP1JhFxEiQXE3Fhj1dWwk3q+ErEVVRC0NDjZtA=
-X-Received: by 2002:a05:6512:303:b0:479:1baf:7e5b with SMTP id
- t3-20020a056512030300b004791baf7e5bmr19877546lfp.184.1654775136919; Thu, 09
- Jun 2022 04:45:36 -0700 (PDT)
+        with ESMTP id S235756AbiFINC3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 09:02:29 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87B527A;
+        Thu,  9 Jun 2022 06:02:27 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id A52461FE71;
+        Thu,  9 Jun 2022 13:02:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1654779746; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WNgY7GyrprNl76LhtyM4yyAr1//LVOR4uCT8xLqGCE8=;
+        b=ojtY10eQLedQ1p8W7bkgtPGLkS2AZjpFLq6Jm7M5r6QmnKTONMm4DEE4c/QdWiGdnShevp
+        eIN6ALkkVVj/WhUF02Ld8MHz00y8tRrFQ0iNR/EUdLO4UR9+Vq8VAuuJcSid16nMNGAGa3
+        XvOmhnJPAVDKUKq8/PtY3J2tLln4dQU=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 6EA862C141;
+        Thu,  9 Jun 2022 13:02:21 +0000 (UTC)
+Date:   Thu, 9 Jun 2022 15:02:20 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, rostedt@goodmis.org,
+        john.ogness@linutronix.de, paulmck@kernel.org, frederic@kernel.org,
+        quic_neeraju@quicinc.com, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
+        rcu@vger.kernel.org
+Subject: Re: [PATCH 24/36] printk: Remove trace_.*_rcuidle() usage
+Message-ID: <YqHvXFdIJfvUDI6e@alley>
+References: <20220608142723.103523089@infradead.org>
+ <20220608144517.444659212@infradead.org>
+ <YqG6URbihTNCk9YR@alley>
+ <YqHFHB6qqv5wiR8t@worktop.programming.kicks-ass.net>
+ <CA+_sPaoJGrXhNPCs2dKf2J7u07y1xYrRFZBUtkKwzK9GqcHSuQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220601070707.3946847-1-saravanak@google.com> <20220601070707.3946847-2-saravanak@google.com>
-In-Reply-To: <20220601070707.3946847-2-saravanak@google.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 9 Jun 2022 13:44:59 +0200
-Message-ID: <CAPDyKFpZTmt71LgQ9vNE4_iRff-OBkDWkHrc7y9zQ7o_Z_UYFA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/9] PM: domains: Delete usage of driver_deferred_probe_check_state()
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+_sPaoJGrXhNPCs2dKf2J7u07y1xYrRFZBUtkKwzK9GqcHSuQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 1 Jun 2022 at 09:07, Saravana Kannan <saravanak@google.com> wrote:
->
-> Now that fw_devlink=on by default and fw_devlink supports
-> "power-domains" property, the execution will never get to the point
-> where driver_deferred_probe_check_state() is called before the supplier
-> has probed successfully or before deferred probe timeout has expired.
->
-> So, delete the call and replace it with -ENODEV.
+On Thu 2022-06-09 20:30:58, Sergey Senozhatsky wrote:
+> My emails are getting rejected... Let me try web-interface
 
-With fw_devlink=on by default - does that mean that the parameter
-can't be changed?
+Bad day for mail sending. I have problems as well ;-)
 
-Or perhaps the point is that we don't want to go back, but rather drop
-the fw_devlink parameter altogether when moving forward?
+> Kudos to Petr for the questions and thanks to PeterZ for the answers.
+> 
+> On Thu, Jun 9, 2022 at 7:02 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> > This is the tracepoint used to spool all of printk into ftrace, I
+> > suspect there's users, but I haven't used it myself.
+> 
+> I'm somewhat curious whether we can actually remove that trace event.
 
->
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
+Good question.
 
-Just a minor nitpick below. Nevertheless, feel free to add:
+Well, I think that it might be useful. It allows to see trace and
+printk messages together.
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+It was ugly when it was in the console code. The new location
+in vprintk_store() allows to have it even "correctly" sorted
+(timestamp) against other tracing messages.
 
-> ---
->  drivers/base/power/domain.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 739e52cd4aba..3e86772d5fac 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -2730,7 +2730,7 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->                 mutex_unlock(&gpd_list_lock);
->                 dev_dbg(dev, "%s() failed to find PM domain: %ld\n",
->                         __func__, PTR_ERR(pd));
-> -               return driver_deferred_probe_check_state(base_dev);
-
-Adding a brief comment about why -EPROBE_DEFER doesn't make sense
-here, would be nice.
-
-> +               return -ENODEV;
->         }
->
->         dev_dbg(dev, "adding to PM domain %s\n", pd->name);
-> --
-> 2.36.1.255.ge46751e96f-goog
->
-
-Kind regards
-Uffe
+Best Regards,
+Petr
