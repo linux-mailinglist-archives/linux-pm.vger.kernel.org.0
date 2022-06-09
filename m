@@ -2,157 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 603DB544003
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 01:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E7C54405B
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 02:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234574AbiFHXmD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jun 2022 19:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44798 "EHLO
+        id S235152AbiFIAKY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jun 2022 20:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235383AbiFHXl6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 19:41:58 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1AED1BE64A
-        for <linux-pm@vger.kernel.org>; Wed,  8 Jun 2022 16:41:36 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id y187so20341944pgd.3
-        for <linux-pm@vger.kernel.org>; Wed, 08 Jun 2022 16:41:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=bptLTT3dH/tatgoIl0nwGfi61ndG5D6r8YsV+A9Z0lU=;
-        b=WxhEX+tzqrpIaxEZb/76W0ltul+ymUQA5ZLWyhVXv9EMoxU16+wjkHros2mz4MMM+/
-         gIOGR1H2It7Z3Zzj1AsRJJV9eqqlbC7FpLa/yXx9SRqfW1DkBdCGumLnJclczAkgVpif
-         00vJOFMKhARxDQ5BUGzq5PddnBh4lOozJmh1KcjOKK70kucU61PSl7WWn6YBolJg0oGF
-         P+OrQWnlkCap35j59L8LkRpSPlFRmw22ZsbjCG0xNLwTFKy0e53PJYEUXchx8NEtv2y/
-         TOryNDYr6mGwxSJ/gnKM8AkKrbh+Yq0h7qE/oE6gfxZ4nUIS7d4nF0EJHXvfmUnsv2nw
-         I21A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=bptLTT3dH/tatgoIl0nwGfi61ndG5D6r8YsV+A9Z0lU=;
-        b=3+XTGgJgRTcpQzTcbnt6EwIXl/30QLHh7nUOBdVdC7vNAzUpBbG4PzSbTNm8Doj4qT
-         RUewSeUlFm5yoDYVT+KiLqZTVg9rpjjMZoJh3uD3qabzKXmZcUs95+Xq/qGLINWA77j9
-         nZg0xTiYMs2WGKpyl9SVS+W2rvtgUGW8yZh8nJ0GCMFhWQe2qPsFrQH6G1rABD49o+MF
-         OfMbMY4ychseG5B9aeJBd4tS3lUHplPvzzE72x+u6F0mKOxCiM+kr0ZKl3wt/K+it4U1
-         OiU/Qk5vExmrF3LcPsZ46XZ+od/2I/orxx1kHiHW7oaXcn+T1cqJoCj28V5bOd9VwNEr
-         /VcA==
-X-Gm-Message-State: AOAM530Hzb9vIn9hNImfjUiQf1Ft5ZHymYAy8eSWYalmgXG571oxyuRC
-        E/AQYvxcah3Eq/X/4lmWvSPtfg==
-X-Google-Smtp-Source: ABdhPJwPFajNfRSbI+LiO3mDoDFLUi8R9nR7Cvfd2I0+259/gOvhjLEOB/y1R9jIxL/JCGma+zHmFw==
-X-Received: by 2002:a05:6a00:3491:b0:51c:1d3b:b0b0 with SMTP id cp17-20020a056a00349100b0051c1d3bb0b0mr17364707pfb.68.1654731696467;
-        Wed, 08 Jun 2022 16:41:36 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 20-20020a17090a005400b001ea5d9ae7d9sm57623pjb.40.2022.06.08.16.41.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jun 2022 16:41:36 -0700 (PDT)
-Message-ID: <62a133b0.1c69fb81.4a8ea.0201@mx.google.com>
-Date:   Wed, 08 Jun 2022 16:41:36 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S235529AbiFIAKV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 20:10:21 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137EC3467E;
+        Wed,  8 Jun 2022 17:10:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654733418; x=1686269418;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=a4P2Gcxk73HDhExF9ALEg8W8RNzRGhGylrPCFfw/tP0=;
+  b=UIl32lTyCoFNcJe0tLk+4DKWd/ztfwZQ+R/BjywYk0TNiVR0W8TPC91P
+   uMhcywBHm91c5ssR2GcD7FTy5FOiLeyNq5aXgJP5DwRJf0u1Az3oTWKHA
+   DZn/bj03az8Nb0FvmJfUHesRgD2HYBGeb+R6SZN3nUdAc7pYoYwxaKKeX
+   BmapWkfS1JMUgEo5AP0f4KqKolgUFWZZ6KrpTZ4leVlBJ+dNSJMCaaFTm
+   DuEAQDlE9+mtk3iihqY20os0QD7GD4aH9iH7BkhICuI08DYUZT5UsxjT4
+   JEBsSJjpyG3vT7ejS8jmOdrPNNhhE0bAqJFue8PeJX1BxNV7/MUca4y8Y
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="260229122"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="260229122"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 17:10:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="580316768"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga007.jf.intel.com with ESMTP; 08 Jun 2022 17:10:08 -0700
+Received: from rjingar-desk5.amr.corp.intel.com (unknown [10.251.26.11])
+        by linux.intel.com (Postfix) with ESMTP id 62BB3580BE1;
+        Wed,  8 Jun 2022 17:10:08 -0700 (PDT)
+From:   Rajvi Jingar <rajvi.jingar@linux.intel.com>
+To:     rafael.j.wysocki@intel.com, bhelgaas@google.com
+Cc:     rajvi.jingar@linux.intel.com, david.e.box@linux.intel.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v7 1/2] PCI/PM: refactor pci_pm_suspend_noirq()
+Date:   Wed,  8 Jun 2022 17:10:06 -0700
+Message-Id: <20220609001007.533242-1-rajvi.jingar@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v5.19-rc1-4-g28e0b92ca611b
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 1 warning (v5.19-rc1-4-g28e0b92ca611b)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.19-rc1-4-g28e=
-0b92ca611b)
+The state of the device is saved during pci_pm_suspend_noirq(), if it
+has not already been saved, regardless of the skip_bus_pm flag value. So
+skip_bus_pm check is removed before saving the device state.
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-19-rc1-4-g28e0b92ca611b/
-
-Tree: pm
-Branch: testing
-Git Describe: v5.19-rc1-4-g28e0b92ca611b
-Git Commit: 28e0b92ca611bf10dda3570b0d43a0c5b62afda0
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
+Signed-off-by: Rajvi Jingar <rajvi.jingar@linux.intel.com>
+Suggested-by: David E. Box <david.e.box@linux.intel.com>
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
-For more info write to <info@kernelci.org>
+ v1 -> v2: add comments to the changes
+ v2 -> v3: move changelog after "---" marker
+ v3 -> v4: add "---" marker after changelog
+ v4 -> v5: no change
+ v5 -> v6: no change
+ v6 -> v7: no change
+---
+ drivers/pci/pci-driver.c | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+index 49238ddd39ee..1f64de3e5280 100644
+--- a/drivers/pci/pci-driver.c
++++ b/drivers/pci/pci-driver.c
+@@ -867,20 +867,14 @@ static int pci_pm_suspend_noirq(struct device *dev)
+ 		}
+ 	}
+ 
+-	if (pci_dev->skip_bus_pm) {
++	if (!pci_dev->state_saved) {
++		pci_save_state(pci_dev);
+ 		/*
+-		 * Either the device is a bridge with a child in D0 below it, or
+-		 * the function is running for the second time in a row without
+-		 * going through full resume, which is possible only during
+-		 * suspend-to-idle in a spurious wakeup case.  The device should
+-		 * be in D0 at this point, but if it is a bridge, it may be
+-		 * necessary to save its state.
++		 * If the device is a bridge with a child in D0 below it, it needs to
++		 * stay in D0, so check skip_bus_pm to avoid putting it into a
++		 * low-power state in that case.
+ 		 */
+-		if (!pci_dev->state_saved)
+-			pci_save_state(pci_dev);
+-	} else if (!pci_dev->state_saved) {
+-		pci_save_state(pci_dev);
+-		if (pci_power_manageable(pci_dev))
++		if (!pci_dev->skip_bus_pm && pci_power_manageable(pci_dev))
+ 			pci_prepare_to_sleep(pci_dev);
+ 	}
+ 
+-- 
+2.25.1
+
