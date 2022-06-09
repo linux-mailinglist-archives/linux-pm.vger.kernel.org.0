@@ -2,156 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 960885444F3
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 09:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D895446F0
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 11:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239270AbiFIHjc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jun 2022 03:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
+        id S238803AbiFIJJn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 9 Jun 2022 05:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237153AbiFIHj0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 03:39:26 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 361E11AF1F;
-        Thu,  9 Jun 2022 00:39:25 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 88FEF80F1;
-        Thu,  9 Jun 2022 07:34:50 +0000 (UTC)
-Date:   Thu, 9 Jun 2022 10:39:22 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Richard Henderson <rth@twiddle.net>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Hans Ulli Kroll <ulli.kroll@googlemail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        bcain@quicinc.com, Huacai Chen <chenhuacai@kernel.org>,
-        Xuerui Wang <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Sam Creasey <sammy@sammy.net>, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        David Miller <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Juergen Gross <jgross@suse.com>, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, Pv-drivers <pv-drivers@vmware.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Rafael Wysocki <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        gregkh <gregkh@linuxfoundation.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        lpieralisi@kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Anup Patel <anup@brainfault.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        jacob.jun.pan@linux.intel.com, Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        quic_neeraju@quicinc.com, Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        vschneid@redhat.com, jpoimboe@kernel.org,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:SYNOPSYS ARC ARCHITECTURE" 
-        <linux-snps-arc@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        "open list:IA64 (Itanium) PLATFORM" <linux-ia64@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Openrisc <openrisc@lists.librecores.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-perf-users@vger.kernel.org,
-        "open list:DRM DRIVER FOR QEMU'S CIRRUS DEVICE" 
-        <virtualization@lists.linux-foundation.org>,
-        xen-devel <xen-devel@lists.xenproject.org>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:TEGRA ARCHITECTURE SUPPORT" <linux-tegra@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>, rcu@vger.kernel.org
-Subject: Re: [PATCH 33/36] cpuidle,omap3: Use WFI for omap3_pm_idle()
-Message-ID: <YqGjqgSrTRseJW6M@atomide.com>
-References: <20220608142723.103523089@infradead.org>
- <20220608144518.010587032@infradead.org>
- <CAK8P3a0g-fNu9=BUECSXcNeWT7XWHQMnSXZE-XYE+5eakHxKxA@mail.gmail.com>
+        with ESMTP id S230474AbiFIJJm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 05:09:42 -0400
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F6115A34;
+        Thu,  9 Jun 2022 02:09:40 -0700 (PDT)
+Received: by mail-qv1-f44.google.com with SMTP id z20so1757498qvv.3;
+        Thu, 09 Jun 2022 02:09:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=vcNcbXn7pen8qYNKzKfNZDPezgTFLJOA1+jKzy0m7VY=;
+        b=t6PzbYf89Sk0M6RM6PyE1SLKU0SPPd61Mb/xBv8gPezXcigd6/znYtr71WOIREtZaK
+         drUO/Rd4WnfztLJArF8ffYLYv/QoGVZGYho/irNqKpt4mkFPi+PTf6Av/O5jKNOV1Xc+
+         49R8RXhZfktueF/yAXi2wMVNuZgY7/GVv9aUeIRAQvJANlesQ9dPd4SoofpjI02toKMq
+         v257cyX5JSJBVIOhfpWacpk1bo5/imjA7mczAUeeelDbGxGjA/ETiqHBNQODgbVIaPEX
+         jlSZq9ki57WcoYXU0fT7DYFr2gVSBwR5gLuqyvOgu89OD91KcF3U3Bd+cQqXlPgI8LCG
+         TLUg==
+X-Gm-Message-State: AOAM5321xnpOczBEuXhevHoNac/3Wuqy/jPMnqd2DG0HLpI96Fg+x9hV
+        gBYSfD9+v8CkZ9tEzv75LYzQsakKiQEwKg==
+X-Google-Smtp-Source: ABdhPJyx2oWeULEhMDYBX+8aprOKzHGS4UYTp8GFV4glC/vwveZHEw3nh7WD9i+8supyEQclp8RhTQ==
+X-Received: by 2002:ad4:596b:0:b0:46b:cc90:5a87 with SMTP id eq11-20020ad4596b000000b0046bcc905a87mr6097794qvb.59.1654765779333;
+        Thu, 09 Jun 2022 02:09:39 -0700 (PDT)
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
+        by smtp.gmail.com with ESMTPSA id x2-20020a05620a01e200b006a7034b7efesm3498006qkn.25.2022.06.09.02.09.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jun 2022 02:09:38 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-30ce6492a60so234320067b3.8;
+        Thu, 09 Jun 2022 02:09:38 -0700 (PDT)
+X-Received: by 2002:a81:4811:0:b0:30c:8021:4690 with SMTP id
+ v17-20020a814811000000b0030c80214690mr41768687ywa.47.1654765778409; Thu, 09
+ Jun 2022 02:09:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a0g-fNu9=BUECSXcNeWT7XWHQMnSXZE-XYE+5eakHxKxA@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+References: <20220525151040.24024-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220525151040.24024-1-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 9 Jun 2022 11:09:27 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdX2qAMaejyEFCSNA1aZrMYQgQuf6mp0o_smKmdXUPkzwA@mail.gmail.com>
+Message-ID: <CAMuHMdX2qAMaejyEFCSNA1aZrMYQgQuf6mp0o_smKmdXUPkzwA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: thermal: rcar-gen3-thermal: Add r8a779f0 support
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -159,32 +75,55 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-* Arnd Bergmann <arnd@arndb.de> [220608 18:18]:
-> On Wed, Jun 8, 2022 at 4:27 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > arch_cpu_idle() is a very simple idle interface and exposes only a
-> > single idle state and is expected to not require RCU and not do any
-> > tracing/instrumentation.
-> >
-> > As such, omap_sram_idle() is not a valid implementation. Replace it
-> > with the simple (shallow) omap3_do_wfi() call. Leaving the more
-> > complicated idle states for the cpuidle driver.
+Hi Wolfram,
 
-Agreed it makes sense to limit deeper idle states to cpuidle. Hopefully
-there is some informative splat for attempting to use arch_cpu_ide()
-for deeper idle states :)
+On Wed, May 25, 2022 at 5:42 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> Add support for R-Car S4. The S4 IP differs a bit from its siblings in
+> such way that it has 3 out of 4 TSC nodes for Linux and the interrupts
+> are not routed to the INTC-AP but to the ECM.
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-> I see similar code in omap2:
-> 
-> omap2_pm_idle()
->  -> omap2_enter_full_retention()
->      -> omap2_sram_suspend()
-> 
-> Is that code path safe to use without RCU or does it need a similar change?
+Thanks for your patch!
 
-Seems like a similar change should be done for omap2. Then anybody who
-cares to implement a minimal cpuidle support can do so.
+> --- a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
+> @@ -8,9 +8,10 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: Renesas R-Car Gen3 Thermal Sensor
+>
+>  description:
+> -  On R-Car Gen3 SoCs, the thermal sensor controllers (TSC) control the thermal
+> -  sensors (THS) which are the analog circuits for measuring temperature (Tj)
+> -  inside the LSI.
+> +
+> +  On most R-Car Gen3 and later SoCs, the thermal sensor controllers (TSC)
+> +  control the thermal sensors (THS) which are the analog circuits for
+> +  measuring temperature (Tj) inside the LSI.
+>
+>  maintainers:
+>    - Niklas Söderlund <niklas.soderlund@ragnatech.se>
+> @@ -27,6 +28,7 @@ properties:
+>        - renesas,r8a77965-thermal # R-Car M3-N
+>        - renesas,r8a77980-thermal # R-Car V3H
+>        - renesas,r8a779a0-thermal # R-Car V3U
+> +      - renesas,r8a779f0-thermal # R-Car S4
+>
+>    reg: true
 
-Regards,
+As the interrupt is routed to the ECM, like on R-Car V3U, the interrupts
+property should not be required.  Else "make dtbs_check" complains:
 
-Tony
+    arch/arm64/boot/dts/renesas/r8a779f0-spider.dtb: thermal@e6198000:
+'interrupts' is a required property
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
