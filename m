@@ -2,55 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D48945455EF
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 22:47:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B13FA545609
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 22:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345229AbiFIUry (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jun 2022 16:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
+        id S1344645AbiFIUx3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jun 2022 16:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235068AbiFIUrx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 16:47:53 -0400
+        with ESMTP id S1345356AbiFIUxY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 16:53:24 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9321153B44;
-        Thu,  9 Jun 2022 13:47:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126D32E13CA;
+        Thu,  9 Jun 2022 13:53:23 -0700 (PDT)
 Received: from mercury (unknown [185.209.196.172])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 266CE6601752;
-        Thu,  9 Jun 2022 21:47:50 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 929BB6601649;
+        Thu,  9 Jun 2022 21:53:21 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654807670;
-        bh=KzK0yIWBvTo55qjdkN6IybgLP9WYqoc50joejUXPTSo=;
+        s=mail; t=1654808001;
+        bh=GLewdZGGHjUSe1VII7HyLaIQ1QG/YNTmpuKFRFF1oQw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L+LHpjpvAibRPCVJ4gUGIE3LTtsL7+aUzSSv7K0E14iTtbfY/c88ZbkBh0BCFdk+q
-         /VkHBRov2yNDgDKWfL5cSTa8KxwxI9RdKx7nj6IePAufQx/gb4cO79CvBtyrb4HsuH
-         zX9E9QXGGQ0agI0RoRfano5/Cj/7Iim06oXFZl3NojHjp22vTmOwGX5vSFldBKIW3o
-         fyi57oVg4l2iDyrkz4A7fKQpos7bg2FBrzUOEuA7KJFWoUM/mBptfnn95XToneamjM
-         gFFRWZxcdoSorkjvy05j21r75dfg9CVZceQNQg6IZ1Qg5mviL1udaeCPBfOVhCHNBR
-         D/7wbBx9Yhiyg==
+        b=h+/XxMvhY6SD+QdWkuQ+5WlCbhpFwW2Cs+PXidRlqVtJc+aD1vzXwShA+EBfb2X8Y
+         NF6TXADsHhou+uuot4BE8D2Yv7RoV2BIfJ3loploojFhCtJ0WeGMA0voJQqWXBdYIM
+         j4tufuvKC48U6giNusNys58sQKfGN+NWVQ7IEZDid6a3+7M3ROzYoQIB3xKr9TgKWO
+         du28CaAFMwcKo4WscIREs+jE4z0cao5fM1XS+KYQZI2N12ZIaUWHU3xUfoc03BxSRM
+         uRudyJQh8NDI3QQuoxNV6ye9CKzbVQLTRUM9gXqQ82CEnsZZAmnRYYOTBoyR5w//tS
+         PMLRvjLpSEbCQ==
 Received: by mercury (Postfix, from userid 1000)
-        id A0F2510605B9; Thu,  9 Jun 2022 22:47:47 +0200 (CEST)
-Date:   Thu, 9 Jun 2022 22:47:47 +0200
+        id 79F9310605B9; Thu,  9 Jun 2022 22:53:19 +0200 (CEST)
+Date:   Thu, 9 Jun 2022 22:53:19 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        p.zabel@pengutronix.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 7/9] power: reset: at91-reset: add
- reset_controller_dev support
-Message-ID: <20220609204747.dbsawvw5gvrmkbng@mercury.elektranox.org>
-References: <20220608083942.1584087-1-claudiu.beznea@microchip.com>
- <20220608083942.1584087-8-claudiu.beznea@microchip.com>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
+        lee.jones@linaro.org, broonie@kernel.org,
+        gregkh@linuxfoundation.org, lgirdwood@gmail.com, lars@metafoo.de,
+        rafael@kernel.org, quic_gurus@quicinc.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 13/17] power: supply: axp20x_usb_power: Add support
+ for AXP192
+Message-ID: <20220609205319.ws5a74xjyxfrdx6p@mercury.elektranox.org>
+References: <20220607155324.118102-1-aidanmacdonald.0x0@gmail.com>
+ <20220607155324.118102-14-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="s4tt47g5dxkb455c"
+        protocol="application/pgp-signature"; boundary="5qrqrngzkurwra5x"
 Content-Disposition: inline
-In-Reply-To: <20220608083942.1584087-8-claudiu.beznea@microchip.com>
+In-Reply-To: <20220607155324.118102-14-aidanmacdonald.0x0@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -62,227 +65,219 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---s4tt47g5dxkb455c
+--5qrqrngzkurwra5x
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Wed, Jun 08, 2022 at 11:39:40AM +0300, Claudiu Beznea wrote:
-> SAMA7G5 reset controller has 5 extra lines that goes to different devices
-> (3 lines to USB PHYs, 1 line to DDR controller, 1 line to DDR PHY
-> controller). These reset lines could be requested by different controller
-> drivers (e.g. USB PHY driver) and these controllers' drivers could
-> assert/deassert these lines when necessary. Thus add support for
-> reset_controller_dev which brings this functionality.
+On Tue, Jun 07, 2022 at 04:53:20PM +0100, Aidan MacDonald wrote:
+> The AXP192 is mostly the same as the AXP202 but has a different
+> current limit.
 >=20
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 > ---
->  drivers/power/reset/at91-reset.c | 106 +++++++++++++++++++++++++++++--
->  1 file changed, 102 insertions(+), 4 deletions(-)
+
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+-- Sebastian
+
+>  drivers/power/supply/axp20x_usb_power.c | 80 +++++++++++++++++++++----
+>  1 file changed, 69 insertions(+), 11 deletions(-)
 >=20
-> diff --git a/drivers/power/reset/at91-reset.c b/drivers/power/reset/at91-=
-reset.c
-> index 1b2aca3f490d..e25d8d38a2f8 100644
-> --- a/drivers/power/reset/at91-reset.c
-> +++ b/drivers/power/reset/at91-reset.c
-> @@ -17,10 +17,13 @@
->  #include <linux/of_address.h>
->  #include <linux/platform_device.h>
->  #include <linux/reboot.h>
-> +#include <linux/reset-controller.h>
+> diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supp=
+ly/axp20x_usb_power.c
+> index a1e6d1d44808..03145374ae72 100644
+> --- a/drivers/power/supply/axp20x_usb_power.c
+> +++ b/drivers/power/supply/axp20x_usb_power.c
+> @@ -48,6 +48,9 @@
+>  #define AXP813_VBUS_CLIMIT_2000mA	2
+>  #define AXP813_VBUS_CLIMIT_2500mA	3
 > =20
->  #include <soc/at91/at91sam9_ddrsdr.h>
->  #include <soc/at91/at91sam9_sdramc.h>
-> =20
-> +#include <dt-bindings/reset/sama7g5-reset.h>
+> +#define AXP192_VBUS_CLIMIT_EN		BIT(1)
+> +#define AXP192_VBUS_CLIMIT_100mA	BIT(0)
 > +
->  #define AT91_RSTC_CR	0x00		/* Reset Controller Control Register */
->  #define AT91_RSTC_PROCRST	BIT(0)		/* Processor Reset */
->  #define AT91_RSTC_PERRST	BIT(2)		/* Peripheral Reset */
-> @@ -65,7 +68,10 @@ enum reset_type {
->   * struct at91_reset - AT91 reset specific data structure
->   * @rstc_base:		base address for system reset
->   * @ramc_base:		array with base addresses of RAM controllers
-> + * @dev_base:		base address for devices reset
->   * @sclk:		slow clock
-> + * @rcdev:		reset controller device
-> + * @lock:		lock for devices reset register access
->   * @nb:			reset notifier block
->   * @args:		SoC specific system reset arguments
->   * @ramc_lpr:		SDRAM Controller Low Power Register
-> @@ -73,12 +79,17 @@ enum reset_type {
->  struct at91_reset {
->  	void __iomem *rstc_base;
->  	void __iomem *ramc_base[2];
-> +	void __iomem *dev_base;
->  	struct clk *sclk;
-> +	struct reset_controller_dev rcdev;
-> +	spinlock_t lock;
->  	struct notifier_block nb;
->  	u32 args;
->  	u32 ramc_lpr;
->  };
+>  #define AXP20X_ADC_EN1_VBUS_CURR	BIT(2)
+>  #define AXP20X_ADC_EN1_VBUS_VOLT	BIT(3)
 > =20
-> +#define to_at91_reset(r)	container_of(r, struct at91_reset, rcdev)
-> +
->  /**
->   * struct at91_reset_data - AT91 reset data
->   * @reset_args:		SoC specific system reset arguments
-> @@ -216,6 +227,87 @@ static const struct of_device_id at91_reset_of_match=
-[] =3D {
->  };
->  MODULE_DEVICE_TABLE(of, at91_reset_of_match);
+> @@ -121,6 +124,24 @@ static void axp20x_usb_power_poll_vbus(struct work_s=
+truct *work)
+>  		mod_delayed_work(system_power_efficient_wq, &power->vbus_detect, DEBOU=
+NCE_TIME);
+>  }
 > =20
-> +static int at91_reset_update(struct reset_controller_dev *rcdev,
-> +			     unsigned long id, bool assert)
+> +static int axp192_get_current_max(struct axp20x_usb_power *power, int *v=
+al)
 > +{
-> +	struct at91_reset *reset =3D to_at91_reset(rcdev);
-> +	unsigned long flags;
-> +	u32 val;
+> +	unsigned int v;
+> +	int ret =3D regmap_read(power->regmap, AXP20X_VBUS_IPSOUT_MGMT, &v);
 > +
-> +	spin_lock_irqsave(&reset->lock, flags);
-> +	val =3D readl_relaxed(reset->dev_base);
-> +	if (assert)
-> +		val |=3D BIT(id);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (!(v & AXP192_VBUS_CLIMIT_EN))
+> +		*val =3D -1;
+> +	else if (v & AXP192_VBUS_CLIMIT_100mA)
+> +		*val =3D 100000;
 > +	else
-> +		val &=3D ~BIT(id);
-> +	writel_relaxed(val, reset->dev_base);
-> +	spin_unlock_irqrestore(&reset->lock, flags);
+> +		*val =3D 500000;
 > +
 > +	return 0;
 > +}
 > +
-> +static int at91_reset_assert(struct reset_controller_dev *rcdev,
-> +			     unsigned long id)
-> +{
-> +	return at91_reset_update(rcdev, id, true);
-> +}
-> +
-> +static int at91_reset_deassert(struct reset_controller_dev *rcdev,
-> +			       unsigned long id)
-> +{
-> +	return at91_reset_update(rcdev, id, false);
-> +}
-> +
-> +static int at91_reset_dev_status(struct reset_controller_dev *rcdev,
-> +				 unsigned long id)
-> +{
-> +	struct at91_reset *reset =3D to_at91_reset(rcdev);
-> +	u32 val;
-> +
-> +	val =3D readl_relaxed(reset->dev_base);
-> +
-> +	return !!(val & BIT(id));
-> +}
-> +
-> +static const struct reset_control_ops at91_reset_ops =3D {
-> +	.assert =3D at91_reset_assert,
-> +	.deassert =3D at91_reset_deassert,
-> +	.status =3D at91_reset_dev_status,
-> +};
-> +
-> +static int at91_reset_of_xlate(struct reset_controller_dev *rcdev,
-> +			       const struct of_phandle_args *reset_spec)
-> +{
-> +	if (reset_spec->args[0] < SAMA7G5_RESET_USB_PHY1 ||
-> +	    reset_spec->args[0] > SAMA7G5_RESET_USB_PHY3)
-> +		return -EINVAL;
-
-Can you move the min/max info to the devce info struct, so that
-this stays as generic as the name suggests (and is prepared for
-future devices)?
-
--- Sebastian
-
-> +	return reset_spec->args[0];
-> +}
-> +
-> +static int at91_rcdev_init(struct at91_reset *reset,
-> +			   const struct at91_reset_data *data,
-> +			   struct platform_device *pdev)
-> +{
-> +	if (!data->n_device_reset)
-> +		return 0;
-> +
-> +	reset->dev_base =3D devm_of_iomap(&pdev->dev, pdev->dev.of_node, 1,
-> +					NULL);
-> +	if (IS_ERR(reset->dev_base))
-> +		return -ENODEV;
-> +
-> +	spin_lock_init(&reset->lock);
-> +	reset->rcdev.ops =3D &at91_reset_ops;
-> +	reset->rcdev.owner =3D THIS_MODULE;
-> +	reset->rcdev.of_node =3D pdev->dev.of_node;
-> +	reset->rcdev.nr_resets =3D data->n_device_reset;
-> +	reset->rcdev.of_reset_n_cells =3D 1;
-> +	reset->rcdev.of_xlate =3D at91_reset_of_xlate;
-> +
-> +	return devm_reset_controller_register(&pdev->dev, &reset->rcdev);
-> +}
-> +
->  static int __init at91_reset_probe(struct platform_device *pdev)
+>  static int axp20x_get_current_max(struct axp20x_usb_power *power, int *v=
+al)
 >  {
->  	const struct of_device_id *match;
-> @@ -269,6 +361,10 @@ static int __init at91_reset_probe(struct platform_d=
-evice *pdev)
+>  	unsigned int v;
+> @@ -179,7 +200,7 @@ static int axp20x_usb_power_get_property(struct power=
+_supply *psy,
+>  	enum power_supply_property psp, union power_supply_propval *val)
+>  {
+>  	struct axp20x_usb_power *power =3D power_supply_get_drvdata(psy);
+> -	unsigned int input, v;
+> +	unsigned int input, v, reg;
+>  	int ret;
 > =20
->  	platform_set_drvdata(pdev, reset);
+>  	switch (psp) {
+> @@ -215,6 +236,8 @@ static int axp20x_usb_power_get_property(struct power=
+_supply *psy,
+>  	case POWER_SUPPLY_PROP_CURRENT_MAX:
+>  		if (power->axp20x_id =3D=3D AXP813_ID)
+>  			return axp813_get_current_max(power, &val->intval);
+> +		else if (power->axp20x_id =3D=3D AXP192_ID)
+> +			return axp192_get_current_max(power, &val->intval);
+>  		return axp20x_get_current_max(power, &val->intval);
+>  	case POWER_SUPPLY_PROP_CURRENT_NOW:
+>  		if (IS_ENABLED(CONFIG_AXP20X_ADC)) {
+> @@ -256,16 +279,20 @@ static int axp20x_usb_power_get_property(struct pow=
+er_supply *psy,
 > =20
-> +	ret =3D at91_rcdev_init(reset, data, pdev);
-> +	if (ret)
-> +		goto disable_clk;
+>  		val->intval =3D POWER_SUPPLY_HEALTH_GOOD;
+> =20
+> -		if (power->axp20x_id =3D=3D AXP202_ID) {
+> -			ret =3D regmap_read(power->regmap,
+> -					  AXP20X_USB_OTG_STATUS, &v);
+> -			if (ret)
+> -				return ret;
+> +		if (power->axp20x_id =3D=3D AXP192_ID)
+> +			reg =3D AXP192_USB_OTG_STATUS;
+> +		else if (power->axp20x_id =3D=3D AXP202_ID)
+> +			reg =3D AXP20X_USB_OTG_STATUS;
+> +		else
+> +			/* Other chips do not have an OTG status register */
+> +			break;
+> =20
+> -			if (!(v & AXP20X_USB_STATUS_VBUS_VALID))
+> -				val->intval =3D
+> -					POWER_SUPPLY_HEALTH_UNSPEC_FAILURE;
+> -		}
+> +		ret =3D regmap_read(power->regmap, reg, &v);
+> +		if (ret)
+> +			return ret;
 > +
->  	if (of_device_is_compatible(pdev->dev.of_node, "microchip,sam9x60-rstc"=
-)) {
->  		u32 val =3D readl(reset->rstc_base + AT91_RSTC_MR);
-> =20
-> @@ -277,14 +373,16 @@ static int __init at91_reset_probe(struct platform_=
-device *pdev)
->  	}
-> =20
->  	ret =3D register_restart_handler(&reset->nb);
-> -	if (ret) {
-> -		clk_disable_unprepare(reset->sclk);
-> -		return ret;
-> -	}
-> +	if (ret)
-> +		goto disable_clk;
-> =20
->  	at91_reset_status(pdev, reset->rstc_base);
-> =20
->  	return 0;
-> +
-> +disable_clk:
-> +	clk_disable_unprepare(reset->sclk);
-> +	return ret;
+> +		if (!(v & AXP20X_USB_STATUS_VBUS_VALID))
+> +			val->intval =3D POWER_SUPPLY_HEALTH_UNSPEC_FAILURE;
+>  		break;
+>  	case POWER_SUPPLY_PROP_PRESENT:
+>  		val->intval =3D !!(input & AXP20X_PWR_STATUS_VBUS_PRESENT);
+> @@ -316,6 +343,24 @@ static int axp20x_usb_power_set_voltage_min(struct a=
+xp20x_usb_power *power,
+>  	return -EINVAL;
 >  }
 > =20
->  static int __exit at91_reset_remove(struct platform_device *pdev)
+> +static int axp192_usb_power_set_current_max(struct axp20x_usb_power *pow=
+er,
+> +					    int intval)
+> +{
+> +	int val =3D AXP192_VBUS_CLIMIT_EN;
+> +	const int mask =3D AXP192_VBUS_CLIMIT_EN | AXP192_VBUS_CLIMIT_100mA;
+> +
+> +	switch (intval) {
+> +	case 100000:
+> +		val |=3D AXP192_VBUS_CLIMIT_100mA;
+> +		fallthrough;
+> +	case 500000:
+> +		return regmap_update_bits(power->regmap,
+> +					  AXP20X_VBUS_IPSOUT_MGMT, mask, val);
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+>  static int axp813_usb_power_set_current_max(struct axp20x_usb_power *pow=
+er,
+>  					    int intval)
+>  {
+> @@ -383,6 +428,9 @@ static int axp20x_usb_power_set_property(struct power=
+_supply *psy,
+>  		if (power->axp20x_id =3D=3D AXP813_ID)
+>  			return axp813_usb_power_set_current_max(power,
+>  								val->intval);
+> +		else if (power->axp20x_id =3D=3D AXP192_ID)
+> +			return axp192_usb_power_set_current_max(power,
+> +								val->intval);
+>  		return axp20x_usb_power_set_current_max(power, val->intval);
+> =20
+>  	default:
+> @@ -468,6 +516,13 @@ struct axp_data {
+>  	enum axp20x_variants		axp20x_id;
+>  };
+> =20
+> +static const struct axp_data axp192_data =3D {
+> +	.power_desc	=3D &axp20x_usb_power_desc,
+> +	.irq_names	=3D axp20x_irq_names,
+> +	.num_irq_names	=3D ARRAY_SIZE(axp20x_irq_names),
+> +	.axp20x_id	=3D AXP192_ID,
+> +};
+> +
+>  static const struct axp_data axp202_data =3D {
+>  	.power_desc	=3D &axp20x_usb_power_desc,
+>  	.irq_names	=3D axp20x_irq_names,
+> @@ -600,7 +655,7 @@ static int axp20x_usb_power_probe(struct platform_dev=
+ice *pdev)
+>  	if (ret)
+>  		return ret;
+> =20
+> -	if (power->axp20x_id =3D=3D AXP202_ID) {
+> +	if (power->axp20x_id =3D=3D AXP192_ID || power->axp20x_id =3D=3D AXP202=
+_ID) {
+>  		/* Enable vbus valid checking */
+>  		ret =3D regmap_update_bits(power->regmap, AXP20X_VBUS_MON,
+>  					 AXP20X_VBUS_MON_VBUS_VALID,
+> @@ -659,6 +714,9 @@ static int axp20x_usb_power_probe(struct platform_dev=
+ice *pdev)
+> =20
+>  static const struct of_device_id axp20x_usb_power_match[] =3D {
+>  	{
+> +		.compatible =3D "x-powers,axp192-usb-power-supply",
+> +		.data =3D &axp192_data,
+> +	}, {
+>  		.compatible =3D "x-powers,axp202-usb-power-supply",
+>  		.data =3D &axp202_data,
+>  	}, {
 > --=20
-> 2.33.0
+> 2.35.1
 >=20
 
---s4tt47g5dxkb455c
+--5qrqrngzkurwra5x
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmKiXHAACgkQ2O7X88g7
-+po1Kg//buj+or26FD76L8KzrHPgJPEa9utL+Uj0dB3YZEQG1iBxdYnffShIIXqm
-3hz4b12LIyXDHyP517GHDthtcb2MUv00pOdqbbtrp9I3rEgbg88gDvv9MDQMshfA
-rvwLBNJMxTBdljZPSZZw8Zs1og6VyBkp40D5kW4j5knHoMuCqFXJXOfpR82HjJp5
-CU2Ivbsk+B7ZLJ7N+fzzqnmUuIiOiD/ZTEPkf10CyFVKgP/KOQtL5V7OPMAADBNh
-CwB8iDrQ6splVOlsTMopGT2jnv2d7zXNMW3pOXxovTMaLWvRBKOwsVeiSGthA0gy
-4zqnrZ4XBS0HjABcxJBjqh8HEvG7+9Gy/o4o//rt2L3pUScctyzBk9gd0EmbyE4e
-NWMOmNzGn23KJ5VhubYur3ztM9mbNATPnSFa5ne7Qb8L8CpwrjYFd5fRrJsTrhCs
-Ry6EYiIiHUW6wOHKQ4A93hpIyETGbNBIcBjXH8PMP4+nFFnpT+we3+VM15883lPd
-sVa9nFW2Jh5a/oA4EHO8ViTGijnwL7gl6/ilFTkayNnNzbecw0jkdT4HFgya55vb
-cVhwBIddDX8Q/Hs477pFrBjIP70lcpiAhV11dRlOgnAZHvuIWhK9gvRZVvoPVfcu
-xMQH2Ql+FC2/gTZ+dk7vjq5MbUouns2yOCb3/CW/LqCS/YTJnKo=
-=Omrx
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmKiXb8ACgkQ2O7X88g7
++pqxoQ/8D+GXBnmCcBb/KfGUzljFGpaLbqTNy1CYmFQZqTmVeJz9JPZlWVME/6Fk
++q+SJ3JHWeTQQCZQc2YtDmxWL3qJ0VwOXYrViZWvTm7ZC1YMuTpL8C8JPu3vd0f8
+aS4PM7T4ASzy6uAs8cMYXJnDKA+8DmAuljePBYofU/CdyR19OEyQbTxTk0nUDswI
+Zb1akk4N5XfokCji3r2h1G5Ka0QjnO9oIkQ085od6Bxnusum+orL36VuFJ8yHD28
+sq5GnkhAmIYOt4WPvq09a/oPUneTLoDGxZmV81y0tpNf7D6gEK3XuTJYWPjZ6l7W
+iDe4qAzGLwu5R24T0QUEAvdSbrJUY7VNtb8+r5JuNmxZtHf3YZfvqiXPyxV3XXZf
+Uy0OYEmfBvkcY1MwiM4sIaV+280t3/bmfJip4qa9WuHM+eqH3ymnb8VpU4UByv4c
+Eqs2X2fhjORsayq9IJcJwZVKBslB76igNGIyQP7kCO/uQleUfsOhDAR8rX103uA2
+i1uxgDKcIBezw2gh26MjHUmPA/QAHzRub9vu53PSdVCGo95XM+b1uBnwh+uQp56g
+H7IqS0Pa8xQ003WK3Wp7au09KyghE201xKps7SJcrpcZyOm9LRhmS+++jZ9UnQX3
+7mIbm/2j8D//F+7VuRtpJzOZ4nFD4PNWHMVFmncDUuc+sKEtNmg=
+=8R3Z
 -----END PGP SIGNATURE-----
 
---s4tt47g5dxkb455c--
+--5qrqrngzkurwra5x--
