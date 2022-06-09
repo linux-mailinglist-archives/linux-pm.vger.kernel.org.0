@@ -2,51 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF18545756
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 00:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA8654577C
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 00:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233887AbiFIWWo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jun 2022 18:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40410 "EHLO
+        id S239383AbiFIWfR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jun 2022 18:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245339AbiFIWWn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 18:22:43 -0400
+        with ESMTP id S1345750AbiFIWfQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 18:35:16 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135F6C3644;
-        Thu,  9 Jun 2022 15:22:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D052232DBE;
+        Thu,  9 Jun 2022 15:35:14 -0700 (PDT)
 Received: from mercury (unknown [185.209.196.172])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C83A86601752;
-        Thu,  9 Jun 2022 23:22:41 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D06496601752;
+        Thu,  9 Jun 2022 23:35:12 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654813361;
-        bh=4ojQfcR5z+/HTet3CnjuXgxWI97MSwy0zDx1guio4o4=;
+        s=mail; t=1654814112;
+        bh=+qnj272CW1aNAw+M+Z/uxXPUnZIVeOy+1u+55rk64D0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dbpQyQKM0jn2E52HdL9hUg4E2MXxfmoWAAf56+lpAhywa1pjncgkEn2hvkEeeOJBG
-         rv8+lkUEYIQbcq+8Cm3vjhj7l8yMRW7Xoqg3RRKOTnpzdWwlOfO7SOSrg4R9/LYzr0
-         +N9wI+pIik1xE9Rz9CKIIJdfM/h342lhCSByWbzCS0rX4+qo+6pBJsHi7LDsqZFwSs
-         0S5EZT8+XLwVBs9ePdTx2XVaUqndkElMhfXoWdl/M6LTlENPz424DyECKT8C4Fvq7c
-         8DZ0kIIuHMvjZ1N806aDkU/NGalt3QqE2n0yKBBgPfs+W3uXIKU8ueARckkrnxnhw8
-         qtoLhMbj1WYPA==
+        b=JkBzKocG4muefR/X7QGwlbdB48vI9qWOqEaTu+tDZsQfY2mKFVW1Zt3sT8y16RT9S
+         L2SPvRJcCrRoVKDxHe/LcajsH7ej3OfO6Cko9aqUpCW37+4jde6MSvo/5n4gcKkE3l
+         eyNzDRtWgZveIIykcFBU6Y7rY55KkRZOeCoOp2eBvllUUXZb7fwxJzRolOT8vdWvh9
+         Mm+vHJqnHS8/ZG1bb/yQC61tE1Ua16CsINoYxWowYEvWy3fiHlsIMB9mEyu8dOCU+M
+         tWtvJ3zi64j9mhYRZCctsN4MPdswYI7GINZi6DHBlLi5K3BVMaagoC20YpPhzqHiGE
+         eWB9n9q6J61Uw==
 Received: by mercury (Postfix, from userid 1000)
-        id 1DCE110605B9; Fri, 10 Jun 2022 00:22:39 +0200 (CEST)
-Date:   Fri, 10 Jun 2022 00:22:39 +0200
+        id 7E82C10605B9; Fri, 10 Jun 2022 00:35:10 +0200 (CEST)
+Date:   Fri, 10 Jun 2022 00:35:10 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Zheng Bin <zhengbin13@huawei.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gaochao49@huawei.com, Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH -next] power: supply: ab8500: add missing
- destroy_workqueue in ab8500_charger_bind
-Message-ID: <20220609222239.5fssqczkdqy4inoz@mercury.elektranox.org>
-References: <20220512093844.1109923-1-zhengbin13@huawei.com>
+To:     Asmaa Mnebhi <asmaa@nvidia.com>
+Cc:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linus.walleij@linaro.org
+Subject: Re: [PATCH v1 1/1] Support power control driver for BlueField SoCs.
+Message-ID: <20220609223510.64f5ucmuglnh4ebz@mercury.elektranox.org>
+References: <20220418174450.4304-1-asmaa@nvidia.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="njbu6seuv6gscm5c"
+        protocol="application/pgp-signature"; boundary="w5pknlgrafxnq4qw"
 Content-Disposition: inline
-In-Reply-To: <20220512093844.1109923-1-zhengbin13@huawei.com>
+In-Reply-To: <20220418174450.4304-1-asmaa@nvidia.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -58,63 +57,201 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---njbu6seuv6gscm5c
+--w5pknlgrafxnq4qw
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Thu, May 12, 2022 at 05:38:44PM +0800, Zheng Bin wrote:
-> ab8500_charger_bind misses destroy_workqueue in error path,
-> this patch fixes that.
->=20
-> Signed-off-by: Zheng Bin <zhengbin13@huawei.com>
-> ---
+Please find review feedback inline,
 
-LGTM, but adding Linus to Cc and waiting a bit to give him time to
-react.
+On Mon, Apr 18, 2022 at 01:44:50PM -0400, Asmaa Mnebhi wrote:
+> This patch supports handling 2 BlueField power states controlled by GPIO =
+interrupts:
+> 1) chip reset and
+> 2) low power mode
+>=20
+> This driver is dependent and should be loaded after the gpio-mlxbf2.c dri=
+ver,
+> which is the gpio and interrupt controller.
+>=20
+> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
+> ---
+>  drivers/power/reset/Kconfig     |   6 ++
+>  drivers/power/reset/Makefile    |   1 +
+>  drivers/power/reset/pwr-mlxbf.c | 100 ++++++++++++++++++++++++++++++++
+>  3 files changed, 107 insertions(+)
+>  create mode 100644 drivers/power/reset/pwr-mlxbf.c
+>=20
+> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+> index 4b563db3ab3e..a8c46ba5878f 100644
+> --- a/drivers/power/reset/Kconfig
+> +++ b/drivers/power/reset/Kconfig
+> @@ -297,4 +297,10 @@ config NVMEM_REBOOT_MODE
+>  	  then the bootloader can read it and take different
+>  	  action according to the mode.
+> =20
+> +config POWER_MLXBF
+> +	tristate "Mellanox BlueField power handling driver"
+> +	depends on (GPIO_MLXBF2 && ACPI)
+> +	help
+> +	  This driver supports reset or low power mode handling for Mellanox Bl=
+ueField.
+> +
+>  endif
+> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+> index f606a2f60539..0a39424fc558 100644
+> --- a/drivers/power/reset/Makefile
+> +++ b/drivers/power/reset/Makefile
+> @@ -35,3 +35,4 @@ obj-$(CONFIG_REBOOT_MODE) +=3D reboot-mode.o
+>  obj-$(CONFIG_SYSCON_REBOOT_MODE) +=3D syscon-reboot-mode.o
+>  obj-$(CONFIG_POWER_RESET_SC27XX) +=3D sc27xx-poweroff.o
+>  obj-$(CONFIG_NVMEM_REBOOT_MODE) +=3D nvmem-reboot-mode.o
+> +obj-$(CONFIG_POWER_MLXBF) +=3D pwr-mlxbf.o
+> diff --git a/drivers/power/reset/pwr-mlxbf.c b/drivers/power/reset/pwr-ml=
+xbf.c
+> new file mode 100644
+> index 000000000000..30b3ba13be75
+> --- /dev/null
+> +++ b/drivers/power/reset/pwr-mlxbf.c
+> @@ -0,0 +1,100 @@
+> +// SPDX-License-Identifier: GPL-2.0-only or BSD-3-Clause
+> +
+> +/*
+> + *  Copyright (c) 2022 NVIDIA CORPORATION & AFFILIATES.
+> + */
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/device.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm.h>
+> +#include <linux/reboot.h>
+> +#include <linux/types.h>
+> +
+> +const char *rst_pwr_hid =3D "MLNXBF24";
+> +const char *low_pwr_hid =3D "MLNXBF29";
+> +
+> +struct pwr_mlxbf {
+> +	struct work_struct send_work;
+> +	const char *hid;
+> +};
+> +
+> +static void pwr_mlxbf_send_work(struct work_struct *work)
+> +{
+> +	acpi_bus_generate_netlink_event("button/power.*", "Power Button", 0x80,=
+ 1);
+> +}
+> +
+> +static irqreturn_t pwr_mlxbf_irq(int irq, void *ptr)
+> +{
+> +	struct pwr_mlxbf *priv =3D ptr;
+> +
+> +	if (!strncmp(priv->hid, rst_pwr_hid, 8))
+> +		emergency_restart();
+> +
+> +	if (!strncmp(priv->hid, low_pwr_hid, 8))
+> +		schedule_work(&priv->send_work);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int
+> +pwr_mlxbf_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev =3D &pdev->dev;
+> +	struct acpi_device *adev;
+> +	struct pwr_mlxbf *priv;
+> +	const char *hid;
+> +	int irq, err;
+> +
+> +	priv =3D devm_kzalloc(dev, sizeof(struct pwr_mlxbf), GFP_KERNEL);
+
+priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	adev =3D ACPI_COMPANION(dev);
+> +	if (!adev)
+> +		return -ENXIO;
+> +
+> +	hid =3D acpi_device_hid(adev);
+> +	priv->hid =3D hid;
+> +
+> +	irq =3D acpi_dev_gpio_irq_get(ACPI_COMPANION(&pdev->dev), 0);
+> +	if (irq =3D=3D -EPROBE_DEFER) {
+> +		return -EPROBE_DEFER;
+> +	} else if (irq < 0) {
+> +		dev_err(&pdev->dev, "Error getting %s irq.\n", priv->hid);
+> +		return -ENXIO;
+> +	}
+
+if (irq < 0)
+    return dev_err_probe(&pdev->dev, irq, "Error getting %s irq.\n", priv->=
+hid);
+
+> +	INIT_WORK(&priv->send_work, pwr_mlxbf_send_work);
+
+err =3D devm_work_autocancel(dev, &priv->send_work, pwr_mlxbf_send_work);
+if (err)
+    return err;
+
+Otherwise LGTM,
 
 -- Sebastian
 
->  drivers/power/supply/ab8500_charger.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply=
-/ab8500_charger.c
-> index d04d087caa50..a5d055a628e7 100644
-> --- a/drivers/power/supply/ab8500_charger.c
-> +++ b/drivers/power/supply/ab8500_charger.c
-> @@ -3378,6 +3378,7 @@ static int ab8500_charger_bind(struct device *dev)
->  	ret =3D component_bind_all(dev, di);
->  	if (ret) {
->  		dev_err(dev, "can't bind component devices\n");
-> +		destroy_workqueue(di->charger_wq);
->  		return ret;
->  	}
->=20
-> --
-> 2.31.1
->=20
+> +	err =3D devm_request_irq(&pdev->dev, irq, pwr_mlxbf_irq, 0, hid, priv);
+> +	if (err)
+> +		dev_err(&pdev->dev, "Failed request of %s irq\n", priv->hid);
+> +
+> +	return err;
+> +}
+> +
+> +static const struct acpi_device_id __maybe_unused pwr_mlxbf_acpi_match[]=
+ =3D {
+> +	{ "MLNXBF24", 0 },
+> +	{ "MLNXBF29", 0 },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(acpi, pwr_mlxbf_acpi_match);
+> +
+> +static struct platform_driver pwr_mlxbf_driver =3D {
+> +	.driver =3D {
+> +		.name =3D "pwr_mlxbf",
+> +		.acpi_match_table =3D pwr_mlxbf_acpi_match,
+> +	},
+> +	.probe    =3D pwr_mlxbf_probe,
+> +};
+> +
+> +module_platform_driver(pwr_mlxbf_driver);
+> +
+> +MODULE_DESCRIPTION("Mellanox BlueField power driver");
+> +MODULE_AUTHOR("Asmaa Mnebhi <asmaa@nvidia.com>");
+> +MODULE_LICENSE("Dual BSD/GPL");
 
---njbu6seuv6gscm5c
+--w5pknlgrafxnq4qw
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmKicq4ACgkQ2O7X88g7
-+poAkg//Z0Z4+2U4rbm82Kb9faRGI41hH9iWXmcaQPtxIL/7eT5sv/15vghXtfua
-Oy5Ubsepr22BDo/RPt5HRget2ByyMPzp8YCY6/n2L4sOgOFPGAeksInKhPHvEUA8
-b8RfjOC8zivfuo+OcseOErHD1KK3vNoY8oL/wLdnhPwedQGQchG6tAEvJAp20FL/
-C21L/27qmW4vVJ0CDiAlvxZ+3w3uXI4lCrnlpQ8Aq5Jo6RSOOPtCW11AEPWNVI7f
-uVC/YiSyAihR6FFaMg6QQvJ7mwrC6fnfmm0e+fecwDcalpR+0smK19ScfY1QIOOr
-jqGdtX8071LVsav/0ddk07VSc69DztcSUZvChpMDrfh8kE7oCVixGrqzQS9ONeVx
-bwpo3HJpk7jYDSB0JXcV+//BIk1OikDCYgnB+Zl30GZIJsq9Q3qL7X4/spf6fsLA
-ifA2atSwDXlhgHdX0P7c0a8jsCba70stxUkJa7I9rwVQffGTrGDZwzwwOKYq2aL9
-e3fHH4qHD2GcOABJAblAXFI2ncuq/VHCLYVskPdFjRNQpbM8Tw7a5UrJR/D0FNj4
-phCGzljQZtSvrHWwQv56g/qyFtHBm/DvngGbhZk+ZvvVUarhgio4g2KuOoI2lsiS
-/k0pLNaKZUYDvmBhhz8GYzdPF0vXGhVSArX7wv7qRMNpvTgJvd8=
-=sJbO
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmKidZcACgkQ2O7X88g7
++pp+Ag/+Nuhd7gVyVs74n35Id5aUGx9WXYzPif2YzfQX2vtnksU7ZV0vKU1z4H05
+Ov5qv25Spvwot+EUsgrc8Q+qi8J4wikGCmKmm7aYKzzLa+OHWyK8JmJp8xlmkePz
+T9CInFoJWwrLadUIWDtUyrI5wR7UXj8EQfuH1i+wJBdYH7TxzYOPycaRg7tlsHu2
+uvdRraMDEg6f7+5YkTV9dULb4ci/lDYXJ23DnmhrpwbtgupEVJarXswNKbNAeDjU
+k4S8ZMI3hpgiI1E11GRU53v7Gh4xZrUdMzJFMqICWzJufp5iywcy6X6qzgdWAn9h
+TpwvMQbAyVgZHfhrDvSqG2lCPG4GorMiQnOkYmeLEHP7mAYQweU31SdKUW86iSb2
+8ZuVJ5wvzw57EcT4VRtf5r2bXkBD5aoA7ouEnOeQLrIftDxL4vl8ShU6+e0sCI2a
+iqWjUywV5/doZJQEk9zR0sGAxJXez65MmAuxP7cpgJsGIg0EEgHtbn8ywg4EfBj+
+K1OJUJRdzSAQJizM1rKkL6rUnPFyX2GuM8hwyaqfQ//tAwDzDOg9cV47Tau0iAQ3
+VJ2xV8OU8/q1tRZPoVKtLVZXV6GZ+KzTxLgS0YlC56mVKmTLUE2UfKfZRhO1GDCY
+wPLr05aoHyQlh4QChIeJI7nXxgUZO6Apy0+qyjbeR7DYVZJf2gQ=
+=Msk1
 -----END PGP SIGNATURE-----
 
---njbu6seuv6gscm5c--
+--w5pknlgrafxnq4qw--
