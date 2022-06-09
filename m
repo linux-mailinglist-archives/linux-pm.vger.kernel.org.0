@@ -2,67 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0290854505B
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 17:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D762954505F
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 17:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243030AbiFIPO3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jun 2022 11:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
+        id S241703AbiFIPPH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jun 2022 11:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240876AbiFIPO2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 11:14:28 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A284A46150;
-        Thu,  9 Jun 2022 08:14:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654787666; x=1686323666;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wr33ML0e4lODezvF0rSXZW2gyNc2rLAlNWAvEtgI1TQ=;
-  b=b2ls8HuuIxikpqK190ySTuiJx0LidsWad4miA2YaT/RD0WTlUxjMjhtc
-   0aMcoY0pVMYkkwM/t9YIdgix8wZ3yRBm0oS7wwUXnqf7kD1OaI7nGoqsM
-   77ePbIPoPBbYsTuc/Bauup64Ipd3Hi8JFPMLqzqzJKKYq4SWxRlQZ9a03
-   KanP9teVV95x6r56zbZE56rPubkx9XfmlSUZNi72PKi9HbOfYIEcSJZ24
-   dOFQH7Ew+HqEtsFkG2/YYl+qS7e8Tbm8UNdQHb3tHGZeifamZoRhDKRyK
-   S5I1JskXsRTFi34k0PzKRSYXnR9WmXPGYCcqSjnrn4N/O1ArIkLTkp7dX
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="274837351"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="274837351"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 08:14:26 -0700
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="649312322"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 08:14:23 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nzJpR-000XxY-4u;
-        Thu, 09 Jun 2022 18:12:09 +0300
-Date:   Thu, 9 Jun 2022 18:12:08 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Frank Rowand <frank.rowand@sony.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: [PATCH v1 00/16] ACPI: Get rid of the list of children in struct
- acpi_device
-Message-ID: <YqINyDTfpNBGDYlb@smile.fi.intel.com>
-References: <1843211.tdWV9SEqCh@kreacher>
+        with ESMTP id S1344192AbiFIPPG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 11:15:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EE827FCC
+        for <linux-pm@vger.kernel.org>; Thu,  9 Jun 2022 08:15:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FC7E61EF4
+        for <linux-pm@vger.kernel.org>; Thu,  9 Jun 2022 15:15:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8AFE9C34114
+        for <linux-pm@vger.kernel.org>; Thu,  9 Jun 2022 15:15:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654787704;
+        bh=B4ej79Sru0iL+cQmRN9Yz6LjXxqtuMqcIKtq4o/YVzM=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=tYz9NiMtRY0qlfTOJs6FaIBgq9qQh9S41Y+VVeZHNLQM7TWFz9T79qLAekjnuYi9D
+         Ekqf9owNdT5aiEDeIXBfMztGZ7GpXktDZsNQDwX98ogRRurFHqNZP2+mc1zoLmsb7e
+         cJMOATHj4nPfbNehbNSmR4R1t6CaAYL4Yz+AoQ7mval3HMAvaY00Yw7TldmxCpzGaH
+         HzZPGns4NvVkh9M5fwBu3BSPIdlmmryEkE4k2jrdZ6g04JQuvIEtcklU4Z67crz9dV
+         pvhi/fNkK+CoesCvKPXhCLnB9L+ggayN1jOBoJUbEMTOPcZ9nShgx4xmhegeSLmLNM
+         sdtkkXbY1v3EQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 72907CBF854; Thu,  9 Jun 2022 15:15:04 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 215938] amd-pstate ignoring scaling_max_freq after waking from
+ suspend
+Date:   Thu, 09 Jun 2022 15:15:04 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: perry_yuan@dell.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-215938-137361-qHYZOfCCqq@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215938-137361@https.bugzilla.kernel.org/>
+References: <bug-215938-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1843211.tdWV9SEqCh@kreacher>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,40 +71,26 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 03:44:27PM +0200, Rafael J. Wysocki wrote:
-> Hi All,
-> 
-> Confusingly enough, the ACPI subsystem stores the information on the given ACPI
-> device's children in two places: as the list of children in struct acpi_device
-> and (as a result of device registration) in the list of children in the embedded
-> struct device.
-> 
-> These two lists agree with each other most of the time, but not always (like in
-> error paths in some cases), and the list of children in struct acpi_device is
-> not generally safe to use without locking.  In principle, it should always be
-> walked under acpi_device_lock, but in practice holding acpi_scan_lock is
-> sufficient for that too.  However, its users may not know whether or not
-> they operate under acpi_scan_lock and at least in some cases it is not accessed
-> in a safe way (note that ACPI devices may go away as a result of hot-remove,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215938
 
-> unlike OF nodes).
+Perry_Yuan (perry_yuan@dell.com) changed:
 
-Hmm... Does it true for DT overlays? Not an expert in DT overlays, though,
-adding Rob and Frank.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |perry_yuan@dell.com
 
-> For this reason, it is better to consolidate the code that needs to walk the
-> children of an ACPI device which is the purpose of this patch series.
-> 
-> Overall, it switches over all of the users of the list of children in struct
-> acpi_device to using helpers based on the driver core's mechanics and finally
-> drops that list, but some extra cleanups are done on the way.
-> 
-> Please refer to the patch changelogs for details.
+--- Comment #11 from Perry_Yuan (perry_yuan@dell.com) ---
+(In reply to Alex Maras from comment #10)
+> Note - in the most recent test, I was limiting to 1gHz instead of 1.4 -
+> results are the same, successfully stating at 1gHz prior to sleeping,
+> unbound after waking from sleep.
 
-I'm going to look the individual patches.
+Hi Alex.
+Thanks for your detail and info share, I will check the logs soon. then will
+give you some feedback.
 
--- 
-With Best Regards,
-Andy Shevchenko
+--=20
+You may reply to this email to add a comment.
 
-
+You are receiving this mail because:
+You are the assignee for the bug.=
