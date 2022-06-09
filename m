@@ -2,139 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE626544FE5
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 16:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B329545005
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 16:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244857AbiFIOzw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jun 2022 10:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
+        id S237201AbiFIO7S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jun 2022 10:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234034AbiFIOzv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 10:55:51 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A9637F047
-        for <linux-pm@vger.kernel.org>; Thu,  9 Jun 2022 07:55:49 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id 15so21308587pfy.3
-        for <linux-pm@vger.kernel.org>; Thu, 09 Jun 2022 07:55:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ERqpHHB15unBSTeHEqEMR3UFvMYfb3/GCbSADTuIbHA=;
-        b=AkkQ1lNNSImZ+9IyPfR9U+c4QA+kolWUMUz3suIATQi0Q2AT516ThrNMDTDlnvc7YE
-         /ZhYeyTdnRriWNOxky9myWCfBKm4Sn1EWd1VrHKfPD1yEyHRqP4S1+QQbz/iIxwNIBjn
-         JQ7GFOFH08vZ6a6OHq94eZcvHzamYR/fbyvHYugF2OElBhX86mXkX1rNNeZpILEQFfBF
-         dE7hNmYosDvhTkksbpmcq2gzj7a/JVXxBPr73g/1Daer4sv0xHXFMfv/WYodigfXFFLF
-         X02RmIDCx9AtutgUj4ELTanbechY5vI8hnlVa9VUMddqUEjvdpZtsBkslYmL32KxgL8H
-         lhiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ERqpHHB15unBSTeHEqEMR3UFvMYfb3/GCbSADTuIbHA=;
-        b=vhTfTBb/iG+ZQCBFUnUoRwpmFlXngzFFGxOCs9Rbw/hjMEruk7+9RnMGdxJ6jc2Tgx
-         D8RINL2T+y0NwyTCF57KTtWRc18sXQu5myHchPrZzU0680HDcYJGJIOfgVtxHK8gU6q7
-         yyzM3mI/x6QJjHDipnmqxXWuUJfhqafFOm3xO4bCgr7m48sY2wDYR8LzhfPkhA8kP1qG
-         NDVqR1pdnpePsVpwbjMjPZgyG7amEoR2sgrcxg95FZsVMXu+e+KK6MFdd904j1m71eO0
-         Hpw0vz2IJAmGIxXX4sjwSb0fYe0wdYE36zFboy+0M9T5OwdbBvKxiSOD7LajDWBgDBpI
-         zoUg==
-X-Gm-Message-State: AOAM530C521/J6+9Fs49RZqu2YfaramrePDJBHa6AM4tu/xZ4iccmAAa
-        1E3taPOGqMA0upic3YRA8db34Q==
-X-Google-Smtp-Source: ABdhPJy8b0sXVZ9mcdG0q6aDwplLKBr+elC41y+xW9yxBNhIl6TnCHVg9fqa2vtTLTESAaaUZeU85A==
-X-Received: by 2002:aa7:8d0f:0:b0:518:d867:bae8 with SMTP id j15-20020aa78d0f000000b00518d867bae8mr39566603pfe.13.1654786548865;
-        Thu, 09 Jun 2022 07:55:48 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id j188-20020a62c5c5000000b0051c77027d7fsm2702846pfg.218.2022.06.09.07.55.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jun 2022 07:55:48 -0700 (PDT)
-Date:   Thu, 9 Jun 2022 14:55:44 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Grzegorz Jaszczyk <jaz@semihalf.com>
-Cc:     linux-kernel@vger.kernel.org, dmy@semihalf.com,
-        Zide Chen <zide.chen@intel.corp-partner.google.com>,
-        Peter Fang <peter.fang@intel.corp-partner.google.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Pratik Vishwakarma <Pratik.Vishwakarma@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sachi King <nakato@nakato.io>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        David Dunn <daviddunn@google.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>,
-        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
-        <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 1/2] x86: notify hypervisor about guest entering s2idle
- state
-Message-ID: <YqIJ8HtdqnoVzfQD@google.com>
-References: <20220609110337.1238762-1-jaz@semihalf.com>
- <20220609110337.1238762-2-jaz@semihalf.com>
+        with ESMTP id S230121AbiFIO7R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 10:59:17 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A3A6E8E8
+        for <linux-pm@vger.kernel.org>; Thu,  9 Jun 2022 07:59:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DCE67CE2F5C
+        for <linux-pm@vger.kernel.org>; Thu,  9 Jun 2022 14:59:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 04F18C3411B
+        for <linux-pm@vger.kernel.org>; Thu,  9 Jun 2022 14:59:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654786752;
+        bh=o7H4ZO+2+4Df8MOc+Plpn6IJtVntPj9IWpvfx2rYp40=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=LaLzFzR7XmKlNq8FggbzzKZiHxjx8hJwJpJg7EJe+W/y+U7FRxNEIaCQ6J0EDb2Lb
+         cMzOaTgReOnPN5+14nTYAbGsgmhWJxEO6eHHnIA2kRYwGDxQAEie8ldGTYw9H4vceu
+         GrOj73dxPn9+k9wAmMSJfpUm6X3cp+elNf4eTz7Qq2truOWWkmgwua33/Z9mj1Ah3U
+         4fKqOnqhbo/J7V2gMxw8v38EgIj18GPsdCZ1anBCFcoXTlYLYfho6I2REK4+lJ4vbi
+         14QFz5IeXJFb1cwq94I3fXexdIGWdIf7kTGmM97GlPjG7nMMuWLiI8FSRSwsSlns5F
+         k+fxkLE7M2jaA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id D0816CBF854; Thu,  9 Jun 2022 14:59:11 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 215938] amd-pstate ignoring scaling_max_freq after waking from
+ suspend
+Date:   Thu, 09 Jun 2022 14:59:11 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: dev@alexmaras.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-215938-137361-ghxkfydbhy@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215938-137361@https.bugzilla.kernel.org/>
+References: <bug-215938-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220609110337.1238762-2-jaz@semihalf.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 09, 2022, Grzegorz Jaszczyk wrote:
-> +9. KVM_HC_SYSTEM_S2IDLE
-> +------------------------
-> +
-> +:Architecture: x86
-> +:Status: active
-> +:Purpose: Notify the hypervisor that the guest is entering s2idle state.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215938
 
-What about exiting s2idle?  E.g.
+--- Comment #9 from Alex Maras (dev@alexmaras.com) ---
+Created attachment 301137
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D301137&action=3Dedit
+dmesg output - 5.18
 
-  1. VM0 enters s2idle
-  2. host notes that VM0 is in s2idle
-  3. VM0 exits s2idle
-  4. host still thinks VM0 is in s2idle
-  5. VM1 enters s2idle
-  6. host thinks all VMs are in s2idle, suspends the system
+same process with dmesg output with kernel built from 5.18 release tag
 
-> +static void s2idle_hypervisor_notify(void)
-> +{
-> +	if (static_cpu_has(X86_FEATURE_HYPERVISOR))
-> +		kvm_hypercall0(KVM_HC_SYSTEM_S2IDLE);
+--=20
+You may reply to this email to add a comment.
 
-Checking the HYPERVISOR flag is not remotely sufficient.  The hypervisor may not
-be KVM, and if it is KVM, it may be an older version of KVM that doesn't support
-the hypercall.  The latter scenario won't be fatal unless KVM has been modified,
-but blindly doing a hypercall for a different hypervisor could have disastrous
-results, e.g. the registers ABIs are different, so the above will make a random
-request depending on what is in other GPRs.
-
-The bigger question is, why is KVM involved at all?  KVM is just a dumb pipe out
-to userspace, and not a very good one at that.  There are multiple well established
-ways to communicate with the VMM without custom hypercalls.
-
-I bet if you're clever this can even be done without any guest changes, e.g. I
-gotta imagine acpi_sleep_run_lps0_dsm() triggers MMIO/PIO with the right ACPI
-configuration.
+You are receiving this mail because:
+You are the assignee for the bug.=
