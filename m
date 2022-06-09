@@ -2,49 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE5C3545523
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 21:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 464B6545530
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 21:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233224AbiFITnv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jun 2022 15:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57936 "EHLO
+        id S233317AbiFIT5Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jun 2022 15:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345266AbiFITnh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 15:43:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B521B140879
-        for <linux-pm@vger.kernel.org>; Thu,  9 Jun 2022 12:43:33 -0700 (PDT)
+        with ESMTP id S231303AbiFIT5V (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 15:57:21 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7546B1E9;
+        Thu,  9 Jun 2022 12:57:17 -0700 (PDT)
 Received: from mercury (unknown [185.209.196.172])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2BFA16601649;
-        Thu,  9 Jun 2022 20:43:32 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7D815660168F;
+        Thu,  9 Jun 2022 20:57:16 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654803812;
-        bh=wIw5xQazzdcaQPeGB+78em2JNtJ1yCrvfA2NAQSVAtA=;
+        s=mail; t=1654804636;
+        bh=RQQb7BmIektz/FsEL8cchJ+lkAHGyM8a4PfysX6zqow=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EPUC/aVMNJBh8SAFB+sG8occbX3ipub7wZcVPujdSivQqC53E1iTz7TlRYOLQGKFa
-         kbpYEBDJK5ZX/SeuWx4q+wTxNwarsmkbZZKX+J7SaznYbfENFc1BK4GF/qrw5tQzvG
-         yQsF1ZIrV7/nqCA7wPJ6Y+VWEB+QKR+JVucLry/ItmT4DfJ8PZm/P3CBAzDfxea5OI
-         sRjYZmLcbK6zUZSw94I8pb6e8HQC9qIwzt/0wgp6O3UrbUkiMEhp6JasSBf9gIHXmF
-         yDxvdiRiVaLkH74vk1RSyONzKQkUvWTq8xWaJZYhAEDTPzbcyKfzeugdBWuAyR6086
-         jjR2zdwRgKjLg==
+        b=BreZkrOQBydylDoZnlnE/hdoxTtyFRds91CvEpMaON93f64ZSOormVTr6Jh5+Suwq
+         uZVQGhErvpzC/ePWKaurMc5t0vJkghMZbO0orQyEFGbHpGLsZdlZuT2qqFj7yetuN+
+         UidtzfQWOGwVbrFVH/cxE1rj56m5gkekg0/S5qJBDuNqWYUNDbtSyjMxVIgPnPNgfX
+         V0CClFFA23WqU5q/0f9XcUZLZ0mwBFBO6q1aCoe0pe5GxoPXJlR5nX+5nAxe2FnScT
+         D2rUZkh7j8jG0jP+Na0a6ME/0EwD9GUE3cGfWZF0wk9FAQu4z/kJhFByPFa6plfHW6
+         PPJj799p8ZyPA==
 Received: by mercury (Postfix, from userid 1000)
-        id 9E1A910605B9; Thu,  9 Jun 2022 21:43:29 +0200 (CEST)
-Date:   Thu, 9 Jun 2022 21:43:29 +0200
+        id B936C10605B9; Thu,  9 Jun 2022 21:57:13 +0200 (CEST)
+Date:   Thu, 9 Jun 2022 21:57:13 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH] power: ab8500: Remove flush_scheduled_work() call.
-Message-ID: <20220609194329.bkvnxmxovnbqxuxg@mercury.elektranox.org>
-References: <50d84193-a933-1301-b9d9-bf6cc01ee126@I-love.SAKURA.ne.jp>
+To:     Anjelique Melendez <quic_amelende@quicinc.com>
+Cc:     corbet@lwn.net, robh+dt@kernel.org, vkoul@kernel.org,
+        linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        David Collins <quic_collinsd@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH] dt-bindings: power: reset: qcom-pon: update "reg"
+ property details
+Message-ID: <20220609195713.u762ie4lav47fhsc@mercury.elektranox.org>
+References: <20220606200203.22938-1-quic_amelende@quicinc.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="itjyily7edmuzn6j"
+        protocol="application/pgp-signature"; boundary="s6475kpyxxjrzego"
 Content-Disposition: inline
-In-Reply-To: <50d84193-a933-1301-b9d9-bf6cc01ee126@I-love.SAKURA.ne.jp>
+In-Reply-To: <20220606200203.22938-1-quic_amelende@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -56,123 +61,103 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---itjyily7edmuzn6j
+--s6475kpyxxjrzego
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Thu, Jun 09, 2022 at 01:58:04PM +0900, Tetsuo Handa wrote:
-> It seems to me that ab8500 driver is using dedicated workqueues and
-> is not calling schedule{,_delayed}_work{,_on}(). Then, there will be
-> no work to flush using flush_scheduled_work().
+On Mon, Jun 06, 2022 at 01:02:05PM -0700, Anjelique Melendez wrote:
+> From: David Collins <quic_collinsd@quicinc.com>
 >=20
-> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Update the description of "reg" property to add the PON_PBS base
+> address along with PON_HLOS base address.  Also add "reg-names"
+> property description.
+>=20
+> Signed-off-by: David Collins <quic_collinsd@quicinc.com>
+> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
 > ---
-> Please see commit c4f135d643823a86 ("workqueue: Wrap flush_workqueue()
-> using a macro") for background.
+>=20
+> New patch series to sperate this patch from applied patches.
+> Last comments from original patch series can be found
+> https://lore.kernel.org/linux-arm-msm/27515993-18f3-8891-4835-9b6a8d7f86b=
+0@quicinc.com/
+>=20
+>  bindings/power/reset/qcom,pon.yaml | 20 +++++++++++++++++++-
+>  1 file changed, 19 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/bindings/power/reset/qcom,pon.yaml b/bindings/power/reset/qc=
+om,pon.yaml
 
-Looks sensible to me. Adding Linus to Cc and waiting a bit so that
-he has time to review/test.
+uhm... the path is missing Documentation/devicetree prefix, so this
+obviously would not apply. Then you missed adding Krzysztof to CC.
+I will not apply this without an explicit Ack from DT binding maintainers.
 
-@Linus I think it makes sense to add something like this to
-MAINTAINERS or add the files to the "ARM/NOMADIK/Ux500 ARCHITECTURES"
-entry, so that you will be CC'd.
-
-AB8500 BATTERY AND CHARGER DRIVERS
-M:	Linus Walleij <linus.walleij@linaro.org>
-S:	Maintained
-F:	Documentation/devicetree/bindings/power/supply/*ab8500*
-F:	Documentation/devicetree/bindings/power/supply/*ab8500*
+Also I suppose GEN1/GEN2/GEN3 is something that can be inferred from
+the compatible string, so the binding can limit the allowed options
+based on that.
 
 -- Sebastian
 
->  drivers/power/supply/ab8500_btemp.c    | 1 -
->  drivers/power/supply/ab8500_chargalg.c | 1 -
->  drivers/power/supply/ab8500_charger.c  | 2 --
->  drivers/power/supply/ab8500_fg.c       | 1 -
->  4 files changed, 5 deletions(-)
->=20
-> diff --git a/drivers/power/supply/ab8500_btemp.c b/drivers/power/supply/a=
-b8500_btemp.c
-> index b7e842dff567..863fabe05bdc 100644
-> --- a/drivers/power/supply/ab8500_btemp.c
-> +++ b/drivers/power/supply/ab8500_btemp.c
-> @@ -697,7 +697,6 @@ static void ab8500_btemp_unbind(struct device *dev, s=
-truct device *master,
+> index 353f155d..1d8cf900 100644
+> --- a/bindings/power/reset/qcom,pon.yaml
+> +++ b/bindings/power/reset/qcom,pon.yaml
+> @@ -26,8 +26,26 @@ properties:
+>        - qcom,pm8998-pon
 > =20
->  	/* Delete the work queue */
->  	destroy_workqueue(di->btemp_wq);
-> -	flush_scheduled_work();
->  }
+>    reg:
+> -    maxItems: 1
+> +    description: |
+> +      Specifies the SPMI base address for the PON (power-on) peripheral.=
+  For
+> +      PMICs that have the PON peripheral (GEN3) split into PON_HLOS and =
+PON_PBS
+> +      (e.g. PMK8350), this can hold addresses of both PON_HLOS and PON_P=
+BS
+> +      peripherals.  In that case, the PON_PBS address needs to be specif=
+ied to
+> +      facilitate software debouncing on some PMICs.
+> +    minItems: 1
+> +    maxItems: 2
 > =20
->  static const struct component_ops ab8500_btemp_component_ops =3D {
-> diff --git a/drivers/power/supply/ab8500_chargalg.c b/drivers/power/suppl=
-y/ab8500_chargalg.c
-> index 431bbc352d1b..454acb1964fc 100644
-> --- a/drivers/power/supply/ab8500_chargalg.c
-> +++ b/drivers/power/supply/ab8500_chargalg.c
-> @@ -1746,7 +1746,6 @@ static void ab8500_chargalg_unbind(struct device *d=
-ev, struct device *master,
-> =20
->  	/* Delete the work queue */
->  	destroy_workqueue(di->chargalg_wq);
-> -	flush_scheduled_work();
->  }
-> =20
->  static const struct component_ops ab8500_chargalg_component_ops =3D {
-> diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply=
-/ab8500_charger.c
-> index d04d087caa50..0510e0ee4c60 100644
-> --- a/drivers/power/supply/ab8500_charger.c
-> +++ b/drivers/power/supply/ab8500_charger.c
-> @@ -3404,8 +3404,6 @@ static void ab8500_charger_unbind(struct device *de=
-v)
->  	/* Delete the work queue */
->  	destroy_workqueue(di->charger_wq);
-> =20
-> -	flush_scheduled_work();
-> -
->  	/* Unbind fg, btemp, algorithm */
->  	component_unbind_all(dev, di);
->  }
-> diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab85=
-00_fg.c
-> index ec8a404d71b4..e49f9b679b6c 100644
-> --- a/drivers/power/supply/ab8500_fg.c
-> +++ b/drivers/power/supply/ab8500_fg.c
-> @@ -3227,7 +3227,6 @@ static int ab8500_fg_remove(struct platform_device =
-*pdev)
->  	struct ab8500_fg *di =3D platform_get_drvdata(pdev);
-> =20
->  	destroy_workqueue(di->fg_wq);
-> -	flush_scheduled_work();
->  	component_del(&pdev->dev, &ab8500_fg_component_ops);
->  	list_del(&di->node);
->  	ab8500_fg_sysfs_exit(di);
+> +  reg-names:
+> +    description: |
+> +      For PON GEN1 and GEN2, it should be "pon". For PON GEN3 it should =
+include
+> +      "pon_hlos" and optionally "pon_pbs".
+> +    minItems: 1
+> +    maxItems: 2
+> +    items:
+> +      anyOf:
+> +        - const: pon_hlos
+> +        - const: pon_pbs
+> +        - const: pon
+>    pwrkey:
+>      type: object
+>      $ref: "../../input/qcom,pm8941-pwrkey.yaml#"
 > --=20
-> 2.18.4
+> 2.35.1
 >=20
 
---itjyily7edmuzn6j
+--s6475kpyxxjrzego
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmKiTVwACgkQ2O7X88g7
-+prl2g//Zj2OelZQrv13rCytY1wFcFvK6XXyW3tKi0jThN12Yp99qS2znw4GQvXD
-46X9MAEY7oLmCHL+pRTb4KGwZa2YD2wg0fXugykLFclD6YpS6iBo3LzM4MXron/x
-qzp+KsdnJXxEMKtnZMYY5IRlWZq0NSyy/9Pn2rmLBrmFkL9S8qboocYVH0CQTjFt
-lbVpY5HEfI//c13AqkXjsCve+IucS5YhyCnBjBqjDP5SGYeYax1be39z9riwkaHN
-o9E7sza+di2RYAjI47UDbC9PgjWMqXWy/F+aC05HrUEcag0psBQpTTsRfK/EEowZ
-X8KUgXOmc3kbgWx+VpWzJ5GYqW5HwDFKZTzEkxK/JMlpbTvv7krfhMBdhA9kBiDt
-Y3xJiIlMHihtNB2zJmtIPa4s67ax6Xrxxum55appNCj5NAJym//uTnagxEv28ygB
-CWaGnuMT2S7/LlSGS+IbrFgM8r5agpSI61EoWpF8Dwr6sEvksnemHYEVqEOo0bM2
-4VWoXswFv2Y3NYUvdhDz4k/EaE4Apjo5gsEI+mVUQPmw3f4p/uXsJBWlmRQ4WopS
-ACpNW8kDDkkBEMiADHogh64IadEGKumcxUTUfhJmrThgxDPkru185LliCVinxlEA
-Krz4z9tzjMh1QIimC9IWykhC2DPYtzYcWgtbyBgEl+MXiF1x53w=
-=r6OC
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmKiUJYACgkQ2O7X88g7
++poOMA/9G66Nb8kSBWXvKmSMvbcCkF37B+tf5WJC++z5qhJmvNRB+HZNMcEZh/Xm
+y7YgZiIcfuTIhl6N4vJjodobDlz7NdhH9s9WCMdllIrmQsObkIpRyDsf819erOkB
+YFwSiKGumqfDenLedqTp0Rr5ELyiLyCgMxqH+EZxxAaCEoxHNw9zGMkP1htsa0AS
+MJord0axgPM81d873R7QrD0GnQnk548CL0QKJEC47MoYQaWZgxYSq1KBBxrqhUwC
+cK5SlUjSpDY0tGF3UEsOkXZHZLzoU8t1CaEpEseMmjEQNSeX++M5zumvjFMsCXh8
+VlktuzIe/6nP2i8NbvDbuh0wXgk/J1msktco8D14EEsC4EIdkixQccgYYiRglWzH
+DjrlzBcRQnkLHtyNsK3F4SGf9SVpG0m9MtMcVrpYnzqGmcDYDcAeRM5icBPK7425
+tURbJHpljNn7IcC10XXAG92TnpbdTeT/akMt+nCFakSjwLuUo6fER3JECH2TeXKH
+QEVyfd5b6NdUIXJ36+mHiA9W6i2CCvEB1VLjSkT4KehiTXv0WY6IB93RE0Tsub/w
+hN9sYA9XVgfAjwxL7gLfG4ZFt2a7YHfgODwKX2UPl+tGjF9KN/ilaXAeyUhsUzC3
+9x+KEXYrw9HNrNXQqEdB3mvmRMTdpOP/d/LkOCeKHGfwbMFJI/w=
+=6fzu
 -----END PGP SIGNATURE-----
 
---itjyily7edmuzn6j--
+--s6475kpyxxjrzego--
