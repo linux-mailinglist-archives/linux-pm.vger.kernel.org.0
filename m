@@ -2,119 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 252AA545618
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 23:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E44545623
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 23:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233456AbiFIVCh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jun 2022 17:02:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58266 "EHLO
+        id S233972AbiFIVHK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jun 2022 17:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233386AbiFIVCh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 17:02:37 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06917110998
-        for <linux-pm@vger.kernel.org>; Thu,  9 Jun 2022 14:02:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654808556; x=1686344556;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=lUd0oYR1V3vwSg2Hp0oCsnbCXabjqX6pLq9MGrTjDbo=;
-  b=IFQ8jBxncX5yJLqqzs70zTykjFr2V+a6DXJY1AtOgll/tHSkRf1w1vrr
-   3lI5ybdsumQtFNVkJBdUOVaeec646VujBmOxzDy7fzYuntYzPooh148t4
-   lRgu/sdnPJPtSdMZRwy8WbuH9Cfpp7A5qNuozD0tSwXYweNBmlVp07m5C
-   NKDU1cXN7n7CHQd2JJTJ8zgHtCXxYkbgBo7WfHhPl+GjeTQ/jrRfeL5lQ
-   gJUah/k0SoHSk2K5BWj/+eNFZL1RpCsdf6dR3o7b33K3UtD7JY9LMsZ+u
-   zQQZrp9hTZozOXGGRqsCrc+K2wVHTXRXN+0W18h+tfe+eLgJ4NrqjQ9NK
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="266189277"
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="266189277"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 14:02:35 -0700
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="760226132"
-Received: from motahar-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.223.33])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 14:02:35 -0700
-Message-ID: <4060997f422b18a01eca3c8d0d17b39fef7e9e5e.camel@linux.intel.com>
-Subject: Re: [PATCH] powercap: intel_rapl: Add support for RAPTORLAKE_P
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        George D Sworo <george.d.sworo@intel.com>
-Date:   Thu, 09 Jun 2022 14:02:35 -0700
-In-Reply-To: <CAJZ5v0j8kahM+=VDg0Dj3mZjhw9W+cq6y-TU0M3QF4mNxYn-bQ@mail.gmail.com>
-References: <20220601192216.9174-1-george.d.sworo@intel.com>
-         <CAJZ5v0j8kahM+=VDg0Dj3mZjhw9W+cq6y-TU0M3QF4mNxYn-bQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        with ESMTP id S231946AbiFIVHJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 17:07:09 -0400
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB74DFE61A;
+        Thu,  9 Jun 2022 14:07:08 -0700 (PDT)
+Received: by mail-il1-f180.google.com with SMTP id u2so18704379iln.2;
+        Thu, 09 Jun 2022 14:07:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aPtqHDMoQGdoae6zzejWWCsMkFdeFOiCXUKMbTEVUPo=;
+        b=ikGIMExk9VFeDyn9b/kA0KGPV0+9lERT9fNJ5hRhy6I0eg9ks6bnkpDiHJyMOXqTdN
+         HrmIpQpXwaQQtqe3fg0iUk8GRWenSg8r2PFfKwhK1f/5Pf6NwPfDBd5Gak90aQ5+i7IU
+         MfrRKf24eeBD1HM0wfFulnl2RsgE5dP3CAqm8/sKKL/P9X9x/MyNXAJe2UB2LI1sLy5+
+         dxKoJbnq5t9b5lRKqr37ocVYJbZ/qoq19O0pka/TQrhmTycDUS55J/ljINlED6S8cyuN
+         EVLeQ4nTSy85hrsWdOrYQaN6znkS1PrX/Ed1HJwCW1Es5cSIbhQFN6E9PEOy4qjPnj+p
+         E8aQ==
+X-Gm-Message-State: AOAM531SFbbOHKQ8qx5EWwEwDLzMSePXS4udk8QEjhbMyA+fp/Kuy9BX
+        4soWZqnw6WuiLbHxS+mUWw==
+X-Google-Smtp-Source: ABdhPJwNB4CbEkIovPz4grxr9Q45QXlG6X7GESmaoa/6jf6ML/U3s4aEwaZkR4NCZsc4RBaOypUmWA==
+X-Received: by 2002:a05:6e02:1c89:b0:2d1:b0ae:88a1 with SMTP id w9-20020a056e021c8900b002d1b0ae88a1mr22730568ill.311.1654808828040;
+        Thu, 09 Jun 2022 14:07:08 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id n23-20020a02cc17000000b0032e2c859d8esm9960687jap.138.2022.06.09.14.07.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 14:07:07 -0700 (PDT)
+Received: (nullmailer pid 100144 invoked by uid 1000);
+        Thu, 09 Jun 2022 21:07:05 -0000
+Date:   Thu, 9 Jun 2022 15:07:05 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        "Ivan T. Ivanov" <ivan.ivanov@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Kumar Gala <galak@codeaurora.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: Re: [PATCH 1/2] dt-bindings: thermal: qcom,spmi-temp-alarm: convert
+ to dtschema
+Message-ID: <20220609210705.GA100111-robh@kernel.org>
+References: <20220608112702.80873-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220608112702.80873-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 2022-06-09 at 20:55 +0200, Rafael J. Wysocki wrote:
-> Rui, Srinivas, should I take this one?
+On Wed, 08 Jun 2022 13:27:01 +0200, Krzysztof Kozlowski wrote:
+> Convert the Qualcomm QPNP PMIC Temperature Alarm to DT Schema.
 > 
-Yes.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../thermal/qcom,spmi-temp-alarm.yaml         | 85 +++++++++++++++++++
+>  .../bindings/thermal/qcom-spmi-temp-alarm.txt | 51 -----------
+>  2 files changed, 85 insertions(+), 51 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/thermal/qcom-spmi-temp-alarm.txt
+> 
 
-Not sure if the RAPL-MMIO driver is loaded on this system.
-
-George,
-
-What is the output of
-lspci -vv -s :0:4.0
-
-If the device id is 0xA71D, then we have this change in the
-upstream kernel. If not then we need to submit patch for that.
-
-Thanks,
-Srinivas
-
-> On Wed, Jun 1, 2022 at 9:22 PM <george.d.sworo@intel.com> wrote:
-> > 
-> > From: George D Sworo <george.d.sworo@intel.com>
-> > 
-> > Add RAPTORLAKE_P to the list of supported processor model in the
-> > Intel
-> > 
-> > RAPL power capping driver.
-> > 
-> > Signed-off-by: George D Sworo <george.d.sworo@intel.com>
-> > ---
-> >  drivers/powercap/intel_rapl_common.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/powercap/intel_rapl_common.c
-> > b/drivers/powercap/intel_rapl_common.c
-> > index a9c99d9e8b42..21d624f9f5fb 100644
-> > --- a/drivers/powercap/intel_rapl_common.c
-> > +++ b/drivers/powercap/intel_rapl_common.c
-> > @@ -1109,6 +1109,7 @@ static const struct x86_cpu_id rapl_ids[]
-> > __initconst = {
-> >         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,        
-> > &rapl_defaults_core),
-> >         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N,        
-> > &rapl_defaults_core),
-> >         X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,         
-> > &rapl_defaults_core),
-> > +       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,       
-> > &rapl_defaults_core),
-> >         X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,   
-> > &rapl_defaults_spr_server),
-> >         X86_MATCH_INTEL_FAM6_MODEL(LAKEFIELD,          
-> > &rapl_defaults_core),
-> > 
-> > --
-> > 2.17.1
-> > 
-
+Reviewed-by: Rob Herring <robh@kernel.org>
