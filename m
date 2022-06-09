@@ -2,54 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 597115454F9
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 21:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2936454551F
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 21:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244078AbiFITal (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jun 2022 15:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
+        id S241978AbiFITmU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jun 2022 15:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiFITak (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 15:30:40 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6925F10C323;
-        Thu,  9 Jun 2022 12:30:39 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.172])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E5D776601607;
-        Thu,  9 Jun 2022 20:30:37 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654803038;
-        bh=4kRx5Zh3QILVMnAx/gm6vJa7wG2mpVykj/WUemRln/0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Cni9Gu0sCW8uW2pXmjQ0PmoaPxt2nI8TWGrOcdH4YbJb8p3a8N4FbHcL7bX3FzGYn
-         rNqoNjUeyzb79FbAP82eeDE0S6a/yDNomuzQSwkBMNl6m/TjyIX6MSndYaUMiEpeq2
-         E0xpgPq8YEmPX/JuvTrXRGz7UZmHosCQmBd9zxRR3bniISKrDXBngZB02azfodJnt5
-         HLFkFw1qhSCeKDsN3TNfJsaCT8aBWTehEWW7/Uj+KxtxtO9jPxqqgRjlHUTkBZpHD2
-         VR0m0eCA6rFJUYnsPpYOzN0to8+glovlIXdDXm7b2ywFasE0IvkOhjCXjhAQ6Cf9bD
-         bWSUfCA/9gTeg==
-Received: by mercury (Postfix, from userid 1000)
-        id D8C9610605B9; Thu,  9 Jun 2022 21:30:35 +0200 (CEST)
-Date:   Thu, 9 Jun 2022 21:30:35 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH -next] power: supply: Remove unnecessary print function
- dev_err()
-Message-ID: <20220609193035.ojzsan6baoqmlaep@mercury.elektranox.org>
-References: <20220504135214.28901-1-yang.lee@linux.alibaba.com>
+        with ESMTP id S235351AbiFITmT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 15:42:19 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783593BF85
+        for <linux-pm@vger.kernel.org>; Thu,  9 Jun 2022 12:42:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version:content-type
+        :content-transfer-encoding; s=k1; bh=Iz08tVktvNrbowTeGbModb3qzWC
+        sOcZZTav84wWb4W4=; b=uUEr2opAfqH2G3i89GbrxTWooooQcTpVRO3II2T2ZLU
+        +2fe+RlIH0pic2xOlSFlqMCQTI5760kzLa+JZBibQR+7ck4eWloFGszZdvbtV8+f
+        +EjZYnz60u7ADD8w5+vqeRCtRH+6f0LCdcTGZs4OARyx1G46lIYKqvq2QcF28MIY
+        =
+Received: (qmail 3437072 invoked from network); 9 Jun 2022 21:42:11 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 9 Jun 2022 21:42:11 +0200
+X-UD-Smtp-Session: l3s3148p1@GvcPBAnhM0VZD+/V
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] dt-bindings: thermal: rcar-gen3-thermal: Add r8a779f0 support
+Date:   Thu,  9 Jun 2022 21:41:53 +0200
+Message-Id: <20220609194154.12829-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iej2of25yg6hskqe"
-Content-Disposition: inline
-In-Reply-To: <20220504135214.28901-1-yang.lee@linux.alibaba.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,73 +54,57 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Add support for R-Car S4. The S4 IP differs a bit from its siblings in
+such way that it has 3 out of 4 TSC nodes for Linux and the interrupts
+are not routed to the INTC-AP but to the ECM.
 
---iej2of25yg6hskqe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
-Hi,
+Change since v1:
 
-On Wed, May 04, 2022 at 09:52:14PM +0800, Yang Li wrote:
-> The print function dev_err() is redundant because
-> platform_get_irq() already prints an error.
->=20
-> Eliminate the follow coccicheck warning:
-> ./drivers/power/supply/goldfish_battery.c:225:2-9: line 225 is
-> redundant because platform_get_irq() already prints an error
->=20
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> ---
+* Describe that this SoC does not require interrupts (Thanks, Geert!)
 
-Thanks, queued.
+I hope dtbs_check is happy now. I can't test it because I get tons of
+python install errors when trying to update my dtschema :(
 
--- Sebastian
+ .../devicetree/bindings/thermal/rcar-gen3-thermal.yaml   | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
->  drivers/power/supply/goldfish_battery.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->=20
-> diff --git a/drivers/power/supply/goldfish_battery.c b/drivers/power/supp=
-ly/goldfish_battery.c
-> index bf1754355c9f..a58d713d75ce 100644
-> --- a/drivers/power/supply/goldfish_battery.c
-> +++ b/drivers/power/supply/goldfish_battery.c
-> @@ -221,10 +221,8 @@ static int goldfish_battery_probe(struct platform_de=
-vice *pdev)
->  	}
-> =20
->  	data->irq =3D platform_get_irq(pdev, 0);
-> -	if (data->irq < 0) {
-> -		dev_err(&pdev->dev, "platform_get_irq failed\n");
-> +	if (data->irq < 0)
->  		return -ENODEV;
-> -	}
-> =20
->  	ret =3D devm_request_irq(&pdev->dev, data->irq,
->  			       goldfish_battery_interrupt,
-> --=20
-> 2.20.1.7.g153144c
->=20
+diff --git a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
+index 1368d90da0e8..08001d6fa67c 100644
+--- a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
+@@ -8,9 +8,10 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Renesas R-Car Gen3 Thermal Sensor
+ 
+ description:
+-  On R-Car Gen3 SoCs, the thermal sensor controllers (TSC) control the thermal
+-  sensors (THS) which are the analog circuits for measuring temperature (Tj)
+-  inside the LSI.
++
++  On most R-Car Gen3 and later SoCs, the thermal sensor controllers (TSC)
++  control the thermal sensors (THS) which are the analog circuits for
++  measuring temperature (Tj) inside the LSI.
+ 
+ maintainers:
+   - Niklas Söderlund <niklas.soderlund@ragnatech.se>
+@@ -27,6 +28,7 @@ properties:
+       - renesas,r8a77965-thermal # R-Car M3-N
+       - renesas,r8a77980-thermal # R-Car V3H
+       - renesas,r8a779a0-thermal # R-Car V3U
++      - renesas,r8a779f0-thermal # R-Car S4
+ 
+   reg: true
+ 
+@@ -63,6 +65,7 @@ if:
+         contains:
+           enum:
+             - renesas,r8a779a0-thermal
++            - renesas,r8a779f0-thermal
+ then:
+   properties:
+     reg:
+-- 
+2.35.1
 
---iej2of25yg6hskqe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmKiSlsACgkQ2O7X88g7
-+poP4g/+IBTPFMPxsgqiE8ymMfqh70gGwXufuI8Dz3MEpNSCgZZ1ZE7mEjaHiPiY
-FqMuMDF170op04EUU68iOOhAm4Lhrzgen+2u8/oTpKFy4AFrGWwnRoMVwlRkwz9j
-/3AYuKIu3XOTv83xijOZapgbvg9nNXnEOm8Vky2k48ZKnjM7XpoVN6eLbU7ld5I1
-LUu5EIu7F4cMT7d8bT5ZgTkJtxjoHGEFNOlLMkCW6gEY1yspS20Ngri2U/tzWpG0
-ZqYsbr8UZPVTX6MgKmr/YWCkU0FvM5kLJIdrZ667o7pP7DTjK1TQNAujAxZXomkH
-b514/ZTkIBHTlLmSTbOt+PXYHiO+b0zUUEAE2gwR+hMmQZWj/Q+44ugIVuKl8JM7
-mmLH3YIgtdyUzCZu7OxDcqtd+Q+JouzQANh8wj/CGXzUwcHBuSdwBovWIsJ6AC6e
-Nq3vjBO86d0+cLHM/gVKruSaW1rUwEsCe1yWXSvXPZu9HSak/KWIuhCOYoHEe+CB
-OFt6IwhPyZdvomqSM1xol4KzZn1LfT2Jz12W7fRG+r/utEjtYx3sdHfsVOpZ46q6
-i9V4qq8FEdbBr/0ALv6LvEjnBjRFiGtiIQx4vFkdGcYwhKQihNuaX1sxM0AoEllo
-um6PvdGToDppnA3V89JCQB0csNZdFHqxJIjUqBsBiW+JxmOaFiA=
-=/SEh
------END PGP SIGNATURE-----
-
---iej2of25yg6hskqe--
