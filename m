@@ -2,135 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A170545315
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 19:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5771E54536A
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 19:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232387AbiFIRgD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jun 2022 13:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
+        id S1344856AbiFIRvm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jun 2022 13:51:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344753AbiFIRgC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 13:36:02 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0692D9AF4
-        for <linux-pm@vger.kernel.org>; Thu,  9 Jun 2022 10:36:00 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id mh16-20020a17090b4ad000b001e8313301f1so1772184pjb.1
-        for <linux-pm@vger.kernel.org>; Thu, 09 Jun 2022 10:36:00 -0700 (PDT)
+        with ESMTP id S1343563AbiFIRvl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 13:51:41 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F9131AEA7;
+        Thu,  9 Jun 2022 10:51:39 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id h19so32235035edj.0;
+        Thu, 09 Jun 2022 10:51:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=8d0a50vlXPwK/evqvKND5Qkww0VWt34LxBu4KEjcCqk=;
-        b=mBWkbCkHm6C1SNvMBjj+j6cEPOa61p9SJsey0F0Cv9c6q64zIhkL2NWcUDWOWBgQSE
-         3hvcY8aJJ5CE9js7qfPuSxMRdp+PwJ+RGcFhoobDiPqPhmjlwjveTOq6h9e9c9fvdKjJ
-         xaqPS9/TTtxnbdCXlDqjOWrGzSa7YFugpey6R5VEvIrda02aLHk/NUCA4UTANscwIKHT
-         lyoYQZOrkLJEe6gt0kjFfKNxD3I5RxjgWeCtZ8r4XiWuDAQ2omJVomah7Vr6YmV5+Yg8
-         AaLInB+EnpNjsXX2WMHfsJCFn440O3yoSgojqFXjnc/9Ep134YTgCYC0qUWjvsQvAypi
-         Pfww==
+        h=references:from:to:cc:subject:in-reply-to:date:message-id
+         :mime-version;
+        bh=cfnFNEELhJfGAq/OjhFTkSl+Ek4qHu5L5VyE1+b7HTY=;
+        b=e93IIVKnlvb402Ftt9aZOW48kNScNs12uI9NjAPZ6RBwjOYTq0TFHjOZgSelyr1pqY
+         cNXCnzB7pde0fmWKvaUI6X2jJLkMgc3MAJye6X1fGCMgl0EpLqZ2oCIZOFe+ItaV4X5/
+         YYux3bUNFJo8dgz75sq5W44HGybT9VSXohjQUox1cWKnM/Wxf2gIpm9N1aMxuxGk6wZ4
+         JFWES8SeePyv2NNsQFI/szWWIWfpVfnofb8ejHPiYfC1LUUTGwrHXE7pvdMB+Ea7xAS8
+         AZhrlqL7wqo8E4Go4FOmqxZnYIMwNvJeUEkMTPBe/crVfVInGg5C+EIPj55+b3g1D4TM
+         yYQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=8d0a50vlXPwK/evqvKND5Qkww0VWt34LxBu4KEjcCqk=;
-        b=ylW02gCEjXRC5jjQsHvpbZ6eaHErDfffHOZxnyxJ9JWVVfX62b23GXFbQ5TkfSUXWT
-         kbJxtzwCw9wnx0ydzpKKAb4SKT4FsFe8FeotBc0iUw5G7BbIEHA4zW4lyJBaD9fXL/9V
-         CffxdEjWGxjuDn1lAEgrmWK5XAmj4CTuXCLkF93ITRvke8HfOYh1ZTeZbSm8CJEtNVVZ
-         fe07p/t5qy8QgaKliVPc2oEmPWTqUIvaPU9VF5Rjh9GnAVd37KnzK5p40N0opYfxhtjy
-         m56lx5yeD8sdQ0ySFmUTPN0Eqh3sLYYsDC8QexUN7LOz29bccmSvXG4I/ALTSOKb8AKE
-         S2Lg==
-X-Gm-Message-State: AOAM532waaQj+F7+wBw2aoc2I4bj2XwxgVXTVrTUK+nqFvS/4IY2zfyE
-        +7/xrAf+btgggT2vuJd/dj45jbl9EKDRuy6VdBA=
-X-Google-Smtp-Source: ABdhPJz02t2j9WHMmwPEP/pEm3letWNMc0QFGa8k6GnQYlX9k85uJReaT5e6P5kplsIbD38vYJTJHBLZfFvX8QMg0C8=
-X-Received: by 2002:a17:902:9a8d:b0:167:77c3:4c86 with SMTP id
- w13-20020a1709029a8d00b0016777c34c86mr23041488plp.122.1654796160118; Thu, 09
- Jun 2022 10:36:00 -0700 (PDT)
+        h=x-gm-message-state:references:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=cfnFNEELhJfGAq/OjhFTkSl+Ek4qHu5L5VyE1+b7HTY=;
+        b=GaTAlxUj9f1N5AoiBSS/fem0lOmD8emFvSNJfVQP+CAoMwbV30UINNiXj2KGmzmRcU
+         drJ87L/2pzT71HF3CC/HlyTKhHUFtOHNfZP9WMgP0FvYtazcI9QDBWw1FdGwxknBAnWc
+         4qg3sKbxWaziFMIFC8rrjXWwE81PRJhZkwzaMOuBmTnyydCbe7IZ6u5FafhCOImCQdAf
+         VglApO/nU7xTpC5dlcWxx1B5rKJmo3mMc9FGctG4OaEvn8WLZCG7cpoKPjP+IWEzbGAi
+         8SHN3U0uNXJvJOjN/k0Ju8V2+ldpOxhzt3yaGaMTK9fQuRS90LeYnlOh361S4O3pEB8r
+         190g==
+X-Gm-Message-State: AOAM532p+H4yw1Jf5SAwaZb+nPfNgJkqNc8gsHAZqCpg/SU8guxf2nkV
+        lYxx5vYb7RyyPoe0vBe1aIY=
+X-Google-Smtp-Source: ABdhPJw517rOIR4mHIiR+isPEkhFdVM+dJvQny5LZ2Cl9wto1cn5fPQdgomcbox5pf/JWlfD+KF62A==
+X-Received: by 2002:a05:6402:1d4a:b0:42e:93de:17f4 with SMTP id dz10-20020a0564021d4a00b0042e93de17f4mr38464878edb.8.1654797098116;
+        Thu, 09 Jun 2022 10:51:38 -0700 (PDT)
+Received: from localhost (92.40.202.100.threembb.co.uk. [92.40.202.100])
+        by smtp.gmail.com with ESMTPSA id a9-20020a50ff09000000b0042fb3badd48sm10678142edu.9.2022.06.09.10.51.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 10:51:37 -0700 (PDT)
+References: <20220607155324.118102-1-aidanmacdonald.0x0@gmail.com>
+ <20220607155324.118102-4-aidanmacdonald.0x0@gmail.com>
+ <d5465a36-f18a-ff48-b13e-e5f9c48a398a@linaro.org>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
+        lee.jones@linaro.org, sre@kernel.org, broonie@kernel.org,
+        gregkh@linuxfoundation.org, lgirdwood@gmail.com, lars@metafoo.de,
+        rafael@kernel.org, quic_gurus@quicinc.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 03/17] dt-bindings: mfd: add bindings for AXP192 MFD
+ device
+In-reply-to: <d5465a36-f18a-ff48-b13e-e5f9c48a398a@linaro.org>
+Date:   Thu, 09 Jun 2022 18:52:41 +0100
+Message-ID: <SAOEKBJz99Moqt4btaOY5IlUjs9zZAvh@localhost>
 MIME-Version: 1.0
-Reply-To: evelynjecob47@gmail.com
-Sender: mrsashaalqaddfi117@gmail.com
-Received: by 2002:a17:90a:f2d8:0:0:0:0 with HTTP; Thu, 9 Jun 2022 10:35:59
- -0700 (PDT)
-From:   Evelyn Jacob <evelynjecob47@gmail.com>
-Date:   Thu, 9 Jun 2022 10:35:59 -0700
-X-Google-Sender-Auth: 2fZj3d1iQlwlnZYHAIF8X4cHw2Q
-Message-ID: <CAE+vSYq=317B_dEYMgB57Jv9a7xZj+ZaVpVfr4FEmqqKq=GG_A@mail.gmail.com>
-Subject: Ms.Evelyn
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=7.5 required=5.0 tests=BAYES_95,DKIM_SIGNED,
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,MILLION_HUNDRED,
-        MONEY_FORM_SHORT,MONEY_FRAUD_3,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1034 listed in]
-        [list.dnswl.org]
-        *  3.0 BAYES_95 BODY: Bayes spam probability is 95 to 99%
-        *      [score: 0.9748]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mrsashaalqaddfi117[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrsashaalqaddfi117[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [evelynjecob47[at]gmail.com]
-        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
-        *      information
-        *  0.0 MONEY_FORM_SHORT Lots of money if you fill out a short form
-        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  1.6 MONEY_FRAUD_3 Lots of money and several fraud phrases
-X-Spam-Level: *******
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Greetings dearest
 
-I'm a 75 year old woman. I was born an orphan and GOD blessed me
-abundantly with riches but no children nor husband which makes me an
-unhappy woman. Now I am affected with cancer of the lung and breast
-with a partial stroke which has affected my speech. I can no longer
-talk well. and half of my body is paralyzed, I sent this email to you
-with the help of my private female nurse.
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
 
-My condition is really deteriorating day by day and it is really
-giving me lots to think about.  This has prompted my decision to
-donate all I have for charity; I have made numerous donations all over
-the world. After going through your profile, I decided to make my last
-donation of Ten Million Five Hundred Thousand United Kingdom Pounds
-(UK=C2=A310.500, 000, 00) to you as my investment manager. I want you to
-build an Orphanage Home With my name (  Ms.Evelyn Jacob) in your
-country.
+> On 07/06/2022 17:53, Aidan MacDonald wrote:
+>> The AXP192 is another X-Powers PMIC similar to the existing ones.
+>> 
+>> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+>> ---
+>>  Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml | 1 +
+>
+> You got here ack, didn't you? Why sending without it?
+>
+> https://elixir.bootlin.com/linux/v5.19-rc1/source/Documentation/process/submitting-patches.rst#L536
+>
+>
+> Best regards,
+> Krzysztof
 
-If you are willing and able to do this task for the sake of humanity
-then send me below information for more details to receive the funds.
-
-1. Name...................................................
-
-2. Phone number...............................
-
-3. Address.............................................
-
-4. Country of Origin and residence
-
- Ms.Evelyn Jecob  ,
+I'm sorry, I'm pretty new to kernel development and I forgot. Will make
+sure to add them in future. Thanks for pointing out my mistake.
