@@ -2,59 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6315456ED
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 00:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 440835456FB
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 00:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232434AbiFIWLB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jun 2022 18:11:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
+        id S1345498AbiFIWMb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jun 2022 18:12:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbiFIWK7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 18:10:59 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DFBF1DA7F
-        for <linux-pm@vger.kernel.org>; Thu,  9 Jun 2022 15:10:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654812657; x=1686348657;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=UlgEJEZzzL/zrxg16ECWHa6MAYYtCFSvHiqQtEQNXdc=;
-  b=clm++tIxLgyBAlxWSVnEa0hYZimFub8JL5TieR0Ejy9IDwbW058yi39A
-   7MKo2NIQ7oAO0aVWl7RAkY50CWCj2RoWk5ZikmPfSnD0ChaIWPe9iEBH/
-   YaPBOlGGZe2X9p4jmIHL/uoVU/krnRRBPBq9TslIDd9Qlk2A5NLN855p6
-   fxmBT1pVtwULB3JDpm5Dn1Bu3uP0eSY3+QPAmbb4DARBVmr+rK50lqsXn
-   aH1O7fh/okjhhMmvnVNfG1WMLRh5hXsNaJ/bGoaDz26tneL4/Cze4BLiG
-   jf3TnutOJ/Uy9H9E+sd2OVKben4oSA5oxs5bFHDati/LEvchf7ULCMody
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="260555960"
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="260555960"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 15:10:57 -0700
-X-IronPort-AV: E=Sophos;i="5.91,288,1647327600"; 
-   d="scan'208";a="616113447"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 15:10:57 -0700
-Message-ID: <448c7f1d3adbdc9c8eb71bba0ff7b547535d0e76.camel@linux.intel.com>
-Subject: Re: [PATCH] powercap: intel_rapl: Add support for RAPTORLAKE_P
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Sworo, George D" <george.d.sworo@intel.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Date:   Thu, 09 Jun 2022 15:10:57 -0700
-In-Reply-To: <abfe8223dd06766d4297cbef0728c84f1e7d3aed.camel@intel.com>
-References: <20220601192216.9174-1-george.d.sworo@intel.com>
-         <CAJZ5v0j8kahM+=VDg0Dj3mZjhw9W+cq6y-TU0M3QF4mNxYn-bQ@mail.gmail.com>
-         <4060997f422b18a01eca3c8d0d17b39fef7e9e5e.camel@linux.intel.com>
-         <abfe8223dd06766d4297cbef0728c84f1e7d3aed.camel@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+        with ESMTP id S235687AbiFIWM3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 18:12:29 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885B414D794;
+        Thu,  9 Jun 2022 15:12:28 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.172])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9545B6601752;
+        Thu,  9 Jun 2022 23:12:26 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1654812746;
+        bh=UeKHAwZPWYRBlM0ssIlCFA3SoNmcDziraTI4lnAG4pA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ESB8FynxqAB0ZtuFqhjILyFPW8Qt44o3mf8r3aaah/qSTCaOKa4l6MdGxPPkwFaZr
+         mrU7aoXWTZqBa2pENpf1ZjqZG6HAN2Edi5vwG47coNqqmr4fYDWX6XnxCHvVE6Q2QZ
+         1gSbU5gQ6NnADbIVuMvUC2qIiATIMvRsNYdmnQZUe7nvRO0JEDz+EI7o62ya+4od79
+         BzIOWPX2LmNeix1cMuQYNUIP5rbGdF+P20VjTG2WTOBVDG18UgpgnZusg64k2nS7zs
+         1jtF0hrlPvmvcAyPqzZpZz1Eu5IQcFhtLDjyXZe0OIMxcLA7GaDmVU+TK86Rn3Ku/6
+         pHxHEWkA1DH+g==
+Received: by mercury (Postfix, from userid 1000)
+        id 646CB10605B9; Fri, 10 Jun 2022 00:12:24 +0200 (CEST)
+Date:   Fri, 10 Jun 2022 00:12:24 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@google.com,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
+Subject: Re: [RESEND 1/2] power_supply: Register cooling device outside of
+ probe
+Message-ID: <20220609221224.t5k7i4w4dfjza5xc@mercury.elektranox.org>
+References: <20220531183054.6476-1-quic_manafm@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dyokn4q3tm7tzwko"
+Content-Disposition: inline
+In-Reply-To: <20220531183054.6476-1-quic_manafm@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,86 +58,108 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 2022-06-09 at 21:47 +0000, Sworo, George D wrote:
-> On Thu, 2022-06-09 at 14:02 -0700, srinivas pandruvada wrote:
-> > On Thu, 2022-06-09 at 20:55 +0200, Rafael J. Wysocki wrote:
-> > > Rui, Srinivas, should I take this one?
-> > > 
-> > Yes.
-> > 
-> > Not sure if the RAPL-MMIO driver is loaded on this system.
-> > 
-> > George,
-> > 
-> > What is the output of
-> > lspci -vv -s :0:4.0
-> > 
-> > If the device id is 0xA71D, then we have this change in the
-> > upstream kernel. If not then we need to submit patch for that.
-> > 
-> > Thanks,
-> > Srinivas
-> > 
-> Thanks for the quick review.
-> 
-> the device id is 0xA71D
-We have upstream patch for this ID. So we are good.
 
-Thanks,
-Srinivas
+--dyokn4q3tm7tzwko
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->  is not avaible without this patch. But when
-> add it i can see the ID. Below are the outputs
-> 
-> Output from a kernel without this patch:
-> -------------------------------------
-> localhost ~ # lspci -vv -s :0:4.0
-> 00:04.0 Signal processing controller: Intel Corporation Alder Lake
-> Innovation Platform Framework Processor Participant (rev 03)
->         Subsystem: Intel Corporation Device 7270
->         Control: I/O- Mem+ BusMaster- SpecCycle- MemWINV- VGASnoop-
-> 
-> Output with this patch added:
-> ----------------------------------------
-> localhost ~ # lspci -vv -s :0:4.0
-> 00:04.0 Signal processing controller: Intel Corporation Device a71d
-> 
-> > > On Wed, Jun 1, 2022 at 9:22 PM <george.d.sworo@intel.com> wrote:
-> > > > From: George D Sworo <george.d.sworo@intel.com>
-> > > > 
-> > > > Add RAPTORLAKE_P to the list of supported processor model in
-> > > > the
-> > > > Intel
-> > > > 
-> > > > RAPL power capping driver.
-> > > > 
-> > > > Signed-off-by: George D Sworo <george.d.sworo@intel.com>
-> > > > ---
-> > > >  drivers/powercap/intel_rapl_common.c | 1 +
-> > > >  1 file changed, 1 insertion(+)
-> > > > 
-> > > > diff --git a/drivers/powercap/intel_rapl_common.c
-> > > > b/drivers/powercap/intel_rapl_common.c
-> > > > index a9c99d9e8b42..21d624f9f5fb 100644
-> > > > --- a/drivers/powercap/intel_rapl_common.c
-> > > > +++ b/drivers/powercap/intel_rapl_common.c
-> > > > @@ -1109,6 +1109,7 @@ static const struct x86_cpu_id rapl_ids[]
-> > > > __initconst = {
-> > > >         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,        
-> > > > &rapl_defaults_core),
-> > > >         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N,        
-> > > > &rapl_defaults_core),
-> > > >         X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,         
-> > > > &rapl_defaults_core),
-> > > > +       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,       
-> > > > &rapl_defaults_core),
-> > > >         X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,   
-> > > > &rapl_defaults_spr_server),
-> > > >         X86_MATCH_INTEL_FAM6_MODEL(LAKEFIELD,          
-> > > > &rapl_defaults_core),
-> > > > 
-> > > > --
-> > > > 2.17.1
-> > > > 
+Hi,
 
+On Wed, Jun 01, 2022 at 12:00:53AM +0530, Manaf Meethalavalappu Pallikunhi =
+wrote:
+> Registering the cooling device from the probe can result in the
+> execution of get_property() function before it gets initialized.
+>=20
+> To avoid this, register the cooling device from a workqueue
+> instead of registering in the probe.
+>=20
+> Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+> ---
 
+This removes error handling from the psy_register_cooler() call, so
+it introduces a new potential problem. If power_supply_get_property()
+is called to early -EAGAIN is returned. So can you elaborate the problem
+that you are seeing with the current code?
+
+-- Sebastian
+
+>  drivers/power/supply/power_supply_core.c | 10 ++++------
+>  1 file changed, 4 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
+ply/power_supply_core.c
+> index 385814a14a0a..74623c4977db 100644
+> --- a/drivers/power/supply/power_supply_core.c
+> +++ b/drivers/power/supply/power_supply_core.c
+> @@ -132,6 +132,7 @@ void power_supply_changed(struct power_supply *psy)
+>  }
+>  EXPORT_SYMBOL_GPL(power_supply_changed);
+> =20
+> +static int psy_register_cooler(struct power_supply *psy);
+>  /*
+>   * Notify that power supply was registered after parent finished the pro=
+bing.
+>   *
+> @@ -139,6 +140,8 @@ EXPORT_SYMBOL_GPL(power_supply_changed);
+>   * calling power_supply_changed() directly from power_supply_register()
+>   * would lead to execution of get_property() function provided by the dr=
+iver
+>   * too early - before the probe ends.
+> + * Also, registering cooling device from the probe will execute the
+> + * get_property() function. So register the cooling device after the pro=
+be.
+>   *
+>   * Avoid that by waiting on parent's mutex.
+>   */
+> @@ -156,6 +159,7 @@ static void power_supply_deferred_register_work(struc=
+t work_struct *work)
+>  	}
+> =20
+>  	power_supply_changed(psy);
+> +	psy_register_cooler(psy);
+> =20
+>  	if (psy->dev.parent)
+>  		mutex_unlock(&psy->dev.parent->mutex);
+> @@ -1261,10 +1265,6 @@ __power_supply_register(struct device *parent,
+>  	if (rc)
+>  		goto register_thermal_failed;
+> =20
+> -	rc =3D psy_register_cooler(psy);
+> -	if (rc)
+> -		goto register_cooler_failed;
+> -
+>  	rc =3D power_supply_create_triggers(psy);
+>  	if (rc)
+>  		goto create_triggers_failed;
+> @@ -1294,8 +1294,6 @@ __power_supply_register(struct device *parent,
+>  add_hwmon_sysfs_failed:
+>  	power_supply_remove_triggers(psy);
+>  create_triggers_failed:
+> -	psy_unregister_cooler(psy);
+> -register_cooler_failed:
+>  	psy_unregister_thermal(psy);
+>  register_thermal_failed:
+>  	device_del(dev);
+
+--dyokn4q3tm7tzwko
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmKicEUACgkQ2O7X88g7
++pobxg//et2r5ybQ+rdiNpPXGulCO2f3CjkGSb3U14qmfM9ror6eqk3Ow+BAxVjV
+Dp4dYzxjOWZ1jjmUETVH2mgLvxe5EdOFDl/95Lcc8X9RDOl+xAwdf6UheT7omCsw
+cvq4HBLPpV0SiZAiSY7H92u4XPc1o5FNlW2ilCP3oFNH+XlI8y/GWKLxYamuEf4k
+upJV64TUtlC2NTwkAopIIHB92m5T1CW9+9jUe5ISRP1N0P5wEvz+vypsZ2DSjYDO
+nRL9XNcsSq4rnAeol8wxLnSS16IB756/3FgopVq/jFH/6p3ViIYXIEFmkHM8dl7A
+jC5N3Zg4Ro8zLOVgNYeppqdvE6xIplroRyRbelYh0K0LcK+ONIsa+pRsCWWF8fgZ
+9GNZ3TQdFUgdm2Yf2mWoB6PYT8wWu4W+X4QR4t6YS4VbHXzoHhCJdZNnC84xBU6c
+/TxVZG0vXZfscnrEV7NMBYT4l6qJGUnKu4OgEjeua+Uv7bp40qWiMaOd97KKpH3m
+lSqkmUwNN9sU1bqRupGUP1UJDnygBGVhcMGd/VbwUpIepNaEITkwoxaoYvNT3LZ/
+cJxAdbh4NtkY0xEuZnmjGEvDjNqD84kTc4expQQkmI3QcaLpgGcB/WudMfwP7T65
+rEfAAciOmyku6nB05bFmfkkS49uMourYXUPMZ74vv7QQFO7nnFI=
+=UWC+
+-----END PGP SIGNATURE-----
+
+--dyokn4q3tm7tzwko--
