@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 492775446F3
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 11:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C250E54470A
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 11:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241171AbiFIJKg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jun 2022 05:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42524 "EHLO
+        id S231685AbiFIJPj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jun 2022 05:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbiFIJKf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 05:10:35 -0400
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078BF16595;
-        Thu,  9 Jun 2022 02:10:32 -0700 (PDT)
-Received: by mail-qk1-f176.google.com with SMTP id c144so14799821qkg.11;
-        Thu, 09 Jun 2022 02:10:31 -0700 (PDT)
+        with ESMTP id S240651AbiFIJPh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 05:15:37 -0400
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B1C19299;
+        Thu,  9 Jun 2022 02:15:36 -0700 (PDT)
+Received: by mail-qk1-f171.google.com with SMTP id 15so12107785qki.6;
+        Thu, 09 Jun 2022 02:15:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=vC3VltqqExhpg4bVcodGmmZh57yEeJ2TT5vRq10L3PA=;
-        b=tDKt1ZNaA9qtM8g6z/sLEgOpA5e6tXx08mGGdAN4eTeXf6OmR+2OtXwrOjtSEsojR+
-         +6BaP3Z5ITE3MGYZaOE6tKS/wWw0PVtPHEynkSNq8zQ3GGJwVuxCh5ii3n4ReHxMS9iR
-         fbs/13lA4uSCxkxstJf5zhP42v+f0ZKgAZV1Ml1+WWmu20+L7eGBRY84ukhr6Ic7mVij
-         vp8WetcWlqo8MT6nDUi71vUu4xU04zmKSWzUmLSYA4TOgI1/kCvc5Rap14my8JZkIDHb
-         kF9aD8bJft3YgzqxT07eldI+Ssx7nLnL6+72GlDadus1mzZDpIGG+oz7w1f+DQ2Cd+G0
-         07Zg==
-X-Gm-Message-State: AOAM533r2udvKr8LGL0rPYSKhA9iWCnMPMtP3IlgBqn5cjiIQrb1NQkM
-        WNLv1E8I57lhPRoCm27N3w7EmEDXWi29TQ==
-X-Google-Smtp-Source: ABdhPJwpVisI3Uf1g2Bf2eVrPv3YznTh3vAE7Jc3tA0eoTyjpEQkyqHNt8xg/4d/seu1yluqeH6OoQ==
-X-Received: by 2002:a05:620a:1415:b0:6a6:c052:97e3 with SMTP id d21-20020a05620a141500b006a6c05297e3mr12898812qkj.196.1654765830985;
-        Thu, 09 Jun 2022 02:10:30 -0700 (PDT)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id t69-20020a374648000000b006a71c420460sm2173532qka.22.2022.06.09.02.10.30
+        bh=7nTBBYryHSMMkovXdmbTlpzxYn9tgvrwGD6VKVeo3rI=;
+        b=LoPFjriZuXVeF6lAFuiPtTPyJsMwMV8M0jL/9Bi+Y6fM8OdXNZEYjjTUXGDFmLJHgQ
+         eVca2xutLCtB8ivo++3Pm/Tml/sVdj56aunh2mcfgxadONm3vrbaEnSZIsbo8SZxqq9r
+         gixR59ohG5E24FSCTbZjpIiqkZzZr5UEV0auMyPXUsb33l9JaXVa5r9c+S6epo0YMDcR
+         0jvk70J0a7+47wDMHGWoCyGBdzoc+9QwzvhdDuEuWg7fbHK/ff/NUYYsuGWPkDHSsD1i
+         v/StmyAuYsB2PCgfPWUgC3JKtfT81Z4tcBcNMatr+EpvwyN1taFNoj4+pfjxZjO2JveF
+         q1Iw==
+X-Gm-Message-State: AOAM531XLG1ZDcQSprnVTC9QnqS9bFNv687e8kTude97Q/eVRj6m9Hxj
+        lk6lmgj32Z2S/88QTtAaUzbnMCWR5h6UtQ==
+X-Google-Smtp-Source: ABdhPJz/1We6QwUuziB5GoCh/cgmeXDc1kek5l623fMSL0phV7X5WWvw8bjtUA4ICwG4gZz3y4+maw==
+X-Received: by 2002:a05:620a:125a:b0:6a6:bfab:5c45 with SMTP id a26-20020a05620a125a00b006a6bfab5c45mr13277299qkl.736.1654766135283;
+        Thu, 09 Jun 2022 02:15:35 -0700 (PDT)
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
+        by smtp.gmail.com with ESMTPSA id v12-20020a05620a440c00b006a6a904c0a5sm6102817qkp.107.2022.06.09.02.15.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 02:10:30 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id r1so12133076ybd.4;
-        Thu, 09 Jun 2022 02:10:30 -0700 (PDT)
-X-Received: by 2002:a05:6902:120e:b0:634:6f29:6b84 with SMTP id
- s14-20020a056902120e00b006346f296b84mr39893413ybu.604.1654765829891; Thu, 09
- Jun 2022 02:10:29 -0700 (PDT)
+        Thu, 09 Jun 2022 02:15:34 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id r3so6569563ybr.6;
+        Thu, 09 Jun 2022 02:15:34 -0700 (PDT)
+X-Received: by 2002:a25:d748:0:b0:65c:6b00:55af with SMTP id
+ o69-20020a25d748000000b0065c6b0055afmr37699311ybg.365.1654766134128; Thu, 09
+ Jun 2022 02:15:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220525151216.24133-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20220525151216.24133-1-wsa+renesas@sang-engineering.com>
+References: <20220525151216.24133-1-wsa+renesas@sang-engineering.com> <20220525151216.24133-2-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220525151216.24133-2-wsa+renesas@sang-engineering.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 9 Jun 2022 11:10:18 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU1W8kMpw2CT7hX7ULd_fzP_S6+bciLMgJ3OHLwgqvYRg@mail.gmail.com>
-Message-ID: <CAMuHMdU1W8kMpw2CT7hX7ULd_fzP_S6+bciLMgJ3OHLwgqvYRg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] thermal: rcar_gen3_thermal: Add r8a779f0 support
+Date:   Thu, 9 Jun 2022 11:15:22 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWEzhE8aAfsDRpzpv=ZFLb7Cn0r-En0K6O7heT6OA1JEA@mail.gmail.com>
+Message-ID: <CAMuHMdWEzhE8aAfsDRpzpv=ZFLb7Cn0r-En0K6O7heT6OA1JEA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] thermal: rcar_gen3_thermal: improve logging during probe
 To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
 Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
         =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
@@ -69,13 +69,53 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 25, 2022 at 7:04 PM Wolfram Sang
+Hi Wolfram,
+
+On Wed, May 25, 2022 at 7:07 PM Wolfram Sang
 <wsa+renesas@sang-engineering.com> wrote:
-> Add support for R-Car S4.
+> When setting up a new board, a plain "Can't register thermal zone"
+> didn't help me much because the thermal zones in DT were all fine. I
+> just had a sensor entry too much in the parent TSC node. Reword the
+> failure/success messages to contain the sensor number to make it easier
+> to understand which sensor is affected. Example output now:
+>
+> rcar_gen3_thermal e6198000.thermal: Sensor 0: Trip points loaded: 1
+> rcar_gen3_thermal e6198000.thermal: Sensor 1: Trip points loaded: 1
+> rcar_gen3_thermal e6198000.thermal: Sensor 2: Trip points loaded: 1
+> rcar_gen3_thermal e6198000.thermal: Sensor 3: Can't register thermal zone
 >
 > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Thanks for your patch!
+
+> --- a/drivers/thermal/rcar_gen3_thermal.c
+> +++ b/drivers/thermal/rcar_gen3_thermal.c
+> @@ -511,7 +511,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
+>                 zone = devm_thermal_zone_of_sensor_register(dev, i, tsc,
+>                                                             &rcar_gen3_tz_of_ops);
+>                 if (IS_ERR(zone)) {
+> -                       dev_err(dev, "Can't register thermal zone\n");
+> +                       dev_err(dev, "Sensor %u: Can't register thermal zone\n", i);
+
+LGTM.
+
+>                         ret = PTR_ERR(zone);
+>                         goto error_unregister;
+>                 }
+> @@ -533,7 +533,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
+>                 if (ret < 0)
+>                         goto error_unregister;
+>
+> -               dev_info(dev, "TSC%u: Loaded %d trip points\n", i, ret);
+> +               dev_info(dev, "Sensor %u: Trip points loaded: %u\n", i, ret);
+
+I actually prefer the old wording (I'm undecided about "sensor" vs.
+"TSC", though, but consistency rules), as it makes it clear "ret"
+is the number of trip points, and not a success code.
+
+>         }
+>
+>         if (!priv->num_tscs) {
 
 Gr{oetje,eeting}s,
 
