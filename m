@@ -2,207 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C71D154405A
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 02:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4E95441D0
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 05:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235487AbiFIAKX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jun 2022 20:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43600 "EHLO
+        id S231346AbiFIDQ2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jun 2022 23:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235264AbiFIAKV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 20:10:21 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6598A34662;
-        Wed,  8 Jun 2022 17:10:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654733411; x=1686269411;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Y9+IS1gO54BIHDcDJFlgsbwaELjLugQXja76ti6srj8=;
-  b=LA+OvDS5+v+si6XCRWBzBMdU2kTnX2bL6S2jJBB6fkm5LFEv5B1h9IbU
-   gMOLNnn1xhBVcyJZksq2abKHmu1eVItcfmagOAaE8/6ahCTveZNAwIFDU
-   SEDf/cyIW8zJhfG9CZ5nz5QSOGuOfSYPvsT280Msi/iwGhklAvtzDp4Qo
-   D3c/TUDcPpr5gX+6xEqhn3PoAxz5X3WJpiyyDSnjsxuej7c5lPlOcCpHX
-   C4jTMPFjQtxru836y15WLT0rW/J7dX+m0km/msa1df8mm7GvYHZxUjWMC
-   cxKKsoT8bLa/rGK5n7REOZ6+fIK/363IhZxG9/QnlCy+VYC9Oc0JBzOxu
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10372"; a="341185153"
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="341185153"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2022 17:10:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
-   d="scan'208";a="670854669"
-Received: from linux.intel.com ([10.54.29.200])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Jun 2022 17:10:09 -0700
-Received: from rjingar-desk5.amr.corp.intel.com (unknown [10.251.26.11])
-        by linux.intel.com (Postfix) with ESMTP id 3EB53580BBE;
-        Wed,  8 Jun 2022 17:10:09 -0700 (PDT)
-From:   Rajvi Jingar <rajvi.jingar@linux.intel.com>
-To:     rafael.j.wysocki@intel.com, bhelgaas@google.com
-Cc:     rajvi.jingar@linux.intel.com, david.e.box@linux.intel.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v7 2/2] PCI/PM: Disable PTM on all devices
-Date:   Wed,  8 Jun 2022 17:10:07 -0700
-Message-Id: <20220609001007.533242-2-rajvi.jingar@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220609001007.533242-1-rajvi.jingar@linux.intel.com>
-References: <20220609001007.533242-1-rajvi.jingar@linux.intel.com>
+        with ESMTP id S230414AbiFIDQ2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jun 2022 23:16:28 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71375DF01;
+        Wed,  8 Jun 2022 20:16:25 -0700 (PDT)
+X-UUID: 370127a0762649d2af567f1e7da564b4-20220609
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.5,REQID:2c86a623-041b-4cd2-9cdc-4672b020aecc,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:2a19b09,CLOUDID:5893b97e-c8dc-403a-96e8-6237210dceee,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:0,BEC:nil
+X-UUID: 370127a0762649d2af567f1e7da564b4-20220609
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1193237865; Thu, 09 Jun 2022 11:16:20 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 9 Jun 2022 11:16:19 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 9 Jun 2022 11:16:19 +0800
+Message-ID: <086c0102b772bd86c23c4fdcb5b145854d76042d.camel@mediatek.com>
+Subject: Re: [PATCH] PM: runtime: Extend support for wakeirq for
+ force_suspend|resume
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        <linux-pm@vger.kernel.org>
+CC:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Tony Lindgren <tony@atomide.com>,
+        Axe Yang <axe.yang@mediatek.com>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        <linux-kernel@vger.kernel.org>
+Date:   Thu, 9 Jun 2022 11:16:17 +0800
+In-Reply-To: <20220608153120.303070-1-ulf.hansson@linaro.org>
+References: <20220608153120.303070-1-ulf.hansson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,SCC_BODY_URI_ONLY,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On receiving a PTM Request from a downstream device, if PTM is disabled
-on the root port, as per PCIe specification, such request would cause
-an Unsupported Request error. So disable PTM for any downstream devices.
-PTM state needs to be saved before disabling it to be restored later.
+On Wed, 2022-06-08 at 17:31 +0200, Ulf Hansson wrote:
+> A driver that makes use of pm_runtime_force_suspend|resume() to
+> support
+> system suspend/resume, currently needs to manage the wakeirq support
+> itself. To avoid the boilerplate code in the driver's system
+> suspend/resume
+> callbacks in particular, let's extend
+> pm_runtime_force_suspend|resume() to
+> deal with the wakeirq.
+> 
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+> 
+> Note that, the reason behind this patch came up while discussing an
+> MMC patch
+> for a Mediatek MMC host driver [1].
+> 
+> Kind regards
+> Ulf Hansson
+> 
+> [1]
+> https://lkml.org/lkml/2022/6/8/813
+> 
+> ---
+>  drivers/base/power/runtime.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/base/power/runtime.c
+> b/drivers/base/power/runtime.c
+> index 676dc72d912d..445a724cbded 100644
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -1876,10 +1876,13 @@ int pm_runtime_force_suspend(struct device
+> *dev)
+>  
+>  	callback = RPM_GET_CALLBACK(dev, runtime_suspend);
+>  
+> +	dev_pm_enable_wake_irq_check(dev, true);
+>  	ret = callback ? callback(dev) : 0;
+>  	if (ret)
+>  		goto err;
+>  
+> +	dev_pm_enable_wake_irq_complete(dev);
+> +
+>  	/*
+>  	 * If the device can stay in suspend after the system-wide
+> transition
+>  	 * to the working state that will follow, drop the children
+> counter of
+> @@ -1896,6 +1899,7 @@ int pm_runtime_force_suspend(struct device
+> *dev)
+>  	return 0;
+>  
+>  err:
+> +	dev_pm_disable_wake_irq_check(dev, true);
+>  	pm_runtime_enable(dev);
+>  	return ret;
+>  }
+> @@ -1929,9 +1933,11 @@ int pm_runtime_force_resume(struct device
+> *dev)
+>  
+>  	callback = RPM_GET_CALLBACK(dev, runtime_resume);
+>  
+> +	dev_pm_disable_wake_irq_check(dev, false);
+>  	ret = callback ? callback(dev) : 0;
+>  	if (ret) {
+>  		pm_runtime_set_suspended(dev);
+> +		dev_pm_enable_wake_irq_check(dev, false);
+>  		goto out;
+>  	}
+>  
+Reviewed-by Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-Set ptm_enabled from 'struct pci_dev' to 0 in pci_ptm_disable() and
-it is used in pci_save_state() before saving PTM state to avoid
-double save.
-
-Fixes: a697f072f5da ("PCI: Disable PTM during suspend to save power")
-Signed-off-by: Rajvi Jingar <rajvi.jingar@linux.intel.com>
-Suggested-by: David E. Box <david.e.box@linux.intel.com>
----
- v1 -> v2: add Fixes tag in commit message
- v2 -> v3: move changelog after "---" marker
- v3 -> v4: add "---" marker after changelog
- v4 -> v5: move pci_disable_ptm() out of the pci_dev->state_saved check.
-	   disable PTM for all devices, not just root ports.
- v5 -> v6: move pci_disable_ptm() to pci_pm_suspend()
-	   set pci_dev->ptm_enabled to 0 in pci_ptm_disable() and it is
-	   used in pci_save_state() before saving PTM state to avoid
-	   double save.
- v6 -> v7: add #ifdef CONFIG_PCIE_PTM in pci_save_state() before saving
-	   PTM state
----
- drivers/pci/pci-driver.c | 21 ++++++++++++++++++++-
- drivers/pci/pci.c        | 28 +++++++++++++---------------
- drivers/pci/pcie/ptm.c   |  1 +
- 3 files changed, 34 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-index 1f64de3e5280..db4d7835d7ae 100644
---- a/drivers/pci/pci-driver.c
-+++ b/drivers/pci/pci-driver.c
-@@ -803,14 +803,33 @@ static int pci_pm_suspend(struct device *dev)
- 		pci_dev_adjust_pme(pci_dev);
- 	}
- 
-+	/*
-+	 * If a PTM Requester is put in a low-power state, a PTM Responder
-+	 * upstream from it may also be put in a low-power state. Putting a
-+	 * Port in D1, D2, or D3hot does not prohibit it from sending or
-+	 * responding to PTM Requests. We want to disable PTM on Responders
-+	 * when they are in a low-power state. Per 6.21.3, a PTM Requester
-+	 * must not be enabled when the upstream PTM Responder is disabled.
-+	 * Therefore, we must disable all PTM on all downstream PTM
-+	 * Requesters before disabling it on the PTM Responder, e.g., a Root
-+	 * Port.
-+	 *
-+	 * Also, to restore the PTM state, it needs to be saved before
-+	 * disabling it for all devices.
-+	 */
-+	pci_save_ptm_state(pci_dev);
-+	pci_disable_ptm(pci_dev);
-+
- 	if (pm->suspend) {
- 		pci_power_t prev = pci_dev->current_state;
- 		int error;
- 
- 		error = pm->suspend(dev);
- 		suspend_report_result(dev, pm->suspend, error);
--		if (error)
-+		if (error) {
-+			pci_restore_ptm_state(pci_dev);
- 			return error;
-+		}
- 
- 		if (!pci_dev->state_saved && pci_dev->current_state != PCI_D0
- 		    && pci_dev->current_state != PCI_UNKNOWN) {
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index cfaf40a540a8..3e9dcb1bbffa 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -1669,7 +1669,15 @@ int pci_save_state(struct pci_dev *dev)
- 	pci_save_ltr_state(dev);
- 	pci_save_dpc_state(dev);
- 	pci_save_aer_state(dev);
--	pci_save_ptm_state(dev);
-+#ifdef CONFIG_PCIE_PTM
-+	/*
-+	 * PCI PM core disables PTM during suspend and saves PTM state before
-+	 * that to be able to restore the ptm state restored later. So PCI core
-+	 * needs this check to avoid double save.
-+	 */
-+	if (dev->ptm_enabled)
-+		pci_save_ptm_state(dev);
-+#endif
- 	return pci_save_vc_state(dev);
- }
- EXPORT_SYMBOL(pci_save_state);
-@@ -2710,24 +2718,12 @@ int pci_prepare_to_sleep(struct pci_dev *dev)
- 	if (target_state == PCI_POWER_ERROR)
- 		return -EIO;
- 
--	/*
--	 * There are systems (for example, Intel mobile chips since Coffee
--	 * Lake) where the power drawn while suspended can be significantly
--	 * reduced by disabling PTM on PCIe root ports as this allows the
--	 * port to enter a lower-power PM state and the SoC to reach a
--	 * lower-power idle state as a whole.
--	 */
--	if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
--		pci_disable_ptm(dev);
--
- 	pci_enable_wake(dev, target_state, wakeup);
- 
- 	error = pci_set_power_state(dev, target_state);
- 
--	if (error) {
-+	if (error)
- 		pci_enable_wake(dev, target_state, false);
--		pci_restore_ptm_state(dev);
--	}
- 
- 	return error;
- }
-@@ -2775,8 +2771,10 @@ int pci_finish_runtime_suspend(struct pci_dev *dev)
- 	 * port to enter a lower-power PM state and the SoC to reach a
- 	 * lower-power idle state as a whole.
- 	 */
--	if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
-+	if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT) {
-+		pci_save_ptm_state(dev);
- 		pci_disable_ptm(dev);
-+	}
- 
- 	__pci_enable_wake(dev, target_state, pci_dev_run_wake(dev));
- 
-diff --git a/drivers/pci/pcie/ptm.c b/drivers/pci/pcie/ptm.c
-index 368a254e3124..746e29779c27 100644
---- a/drivers/pci/pcie/ptm.c
-+++ b/drivers/pci/pcie/ptm.c
-@@ -44,6 +44,7 @@ void pci_disable_ptm(struct pci_dev *dev)
- 	pci_read_config_word(dev, ptm + PCI_PTM_CTRL, &ctrl);
- 	ctrl &= ~(PCI_PTM_CTRL_ENABLE | PCI_PTM_CTRL_ROOT);
- 	pci_write_config_word(dev, ptm + PCI_PTM_CTRL, ctrl);
-+	dev->ptm_enabled = 0;
- }
- 
- void pci_save_ptm_state(struct pci_dev *dev)
--- 
-2.25.1
 
