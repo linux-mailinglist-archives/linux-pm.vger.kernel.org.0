@@ -2,103 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C24C35448A5
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 12:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BEE75449A4
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 13:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234647AbiFIKUr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 9 Jun 2022 06:20:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50842 "EHLO
+        id S243376AbiFILEA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jun 2022 07:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbiFIKUp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 06:20:45 -0400
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27655366AB;
-        Thu,  9 Jun 2022 03:20:43 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-31336535373so85124857b3.2;
-        Thu, 09 Jun 2022 03:20:43 -0700 (PDT)
+        with ESMTP id S243351AbiFILEA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 07:04:00 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4364B366BF
+        for <linux-pm@vger.kernel.org>; Thu,  9 Jun 2022 04:03:55 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id b12so14744247ljq.3
+        for <linux-pm@vger.kernel.org>; Thu, 09 Jun 2022 04:03:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8uYu8lJiNuFARRdH3Dv0gK66JWjRf/8va0hEQMAWSVE=;
+        b=EMsI0ApUkRgweNKPg6JQ59+57gorw/10/iLwDPMox+DFf4tFX79NVzId4ZnoYaSeIo
+         ItBVH0yUXDl/dOKnowxrWthfkBO14pmFh/pObvY6R0XlN9RXXcUOJdXlciyD9tbNE/mb
+         7DoUyRDn5YzZDhSgtQYR+fraUF/bEIhS/QWB0o30u0oAZR49OSDY0FkV1Yg3zUxN0xoD
+         BUuJbojVzCL4rxEeIqfAcpRmngggYe/yr0HDMluZjStSaKFZbviwIT3BhLa2OtxLMKlA
+         9HWXRq6Wg8xi1TBsjlw/rPqpLweQiO/oDugVTY7SsZXfCNHHWJ2N37A3QNlSw/qAG6QG
+         F+wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=6UMvM2Od2zd3FK0Vx+mbZXyfmn7so9sKMco52kVS4vI=;
-        b=u8BCgFG9FoHEd+EDzpKZSKymPjfA+oCsTWR7pxdwQLMP971nYB2e7FRIbSFoVXTtej
-         dRs3M6unf/wGxdOlLAageGCbnnh4qy+dWcRyxGqnbo7Spmz+T3ZBKJpx/rj+OgcEyHud
-         PwHWBu2LkR8RVsulVgcUwZYKs9j0dn+dnHHgHZMCy6779Phap/fa4nnpwBdh54j3Pjfh
-         RvaQhgf1wntXG+UDKwhohKq2/UPrbfV9MTQjRJU2qC4tQCHhl+Qeg0DVZ8eSYXyXCgzY
-         WwM8aRsFPEBE3dF75W6r+imDzmSL9UtG/fZfhpeGWIQIVdRg2XYVI2/k94FfDaIGMtzn
-         wulg==
-X-Gm-Message-State: AOAM531P2+TZqBc12hujRgvalZLrMHDXs6YOIOWLpnLv0KmStbjR7cpx
-        9ySBfuBWxsQTAuKykIq+wGDWJV9acdP0/MF/NnLFiLL6pl8=
-X-Google-Smtp-Source: ABdhPJx8V1va8MPi99jGEZGUmafmjgzGfiLzAR8cpH6L+rWX736AiJTComkjSe00FioyENanmEbvDoXwVZvLs4kVh8w=
-X-Received: by 2002:a0d:c442:0:b0:2fe:beab:1fef with SMTP id
- g63-20020a0dc442000000b002febeab1fefmr42566152ywd.196.1654770042242; Thu, 09
- Jun 2022 03:20:42 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8uYu8lJiNuFARRdH3Dv0gK66JWjRf/8va0hEQMAWSVE=;
+        b=gkS/EOAkEdYW9sy6rwNlBeeh5m+e7rOSe+4tIU2cJ0oPYrnHcZil0oBcXXxe9Dwf36
+         EOGd6DTGSK1ClmcDmCUTHvRAKN6iUkJGhVIukhzG5DRm3cszjd2Rb8y6TUADJCAuNxxg
+         Mh2SBY8D6wg2PkNi00hxb+uiK1lIAa8dBmNbny376mPl33xLvVuLYTU2Bor9RXEWrUxE
+         85IQUmpBCWpYgLFAYWFwbPQoN8l85mYCw8BlTBj4Fya9WLJaduMN74b/rn/1bV06KKYb
+         0OApl6Mu9nFhllOk5KH6opbvCpDMOub12yV37UjXfBkRDdx/m6c8MnonI1Zu51lYxHAp
+         szWQ==
+X-Gm-Message-State: AOAM531ynWe1XLNkZNaMLNcwpYhkrNn+oM+oXwvsWPumYjFGXyKgZTKZ
+        ZfPB9IXVKRFM4VIlk1w8z6ma0g==
+X-Google-Smtp-Source: ABdhPJzP9OHSzABmTycdeFyssS0y/yZjxyhfETt55oRQaQYmjEFctwgh5JRBToJgpzHJlNQ/K/jgqg==
+X-Received: by 2002:a2e:b5c5:0:b0:255:5ba4:4892 with SMTP id g5-20020a2eb5c5000000b002555ba44892mr26027566ljn.3.1654772633411;
+        Thu, 09 Jun 2022 04:03:53 -0700 (PDT)
+Received: from jazctssd.c.googlers.com.com (138.58.228.35.bc.googleusercontent.com. [35.228.58.138])
+        by smtp.gmail.com with ESMTPSA id a10-20020a194f4a000000b004793605e59dsm2116674lfk.245.2022.06.09.04.03.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jun 2022 04:03:52 -0700 (PDT)
+From:   Grzegorz Jaszczyk <jaz@semihalf.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     jaz@semihalf.com, dmy@semihalf.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86@kernel.org (maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Steve Rutherford <srutherford@google.com>,
+        Zide Chen <zide.chen@intel.corp-partner.google.com>,
+        Peter Fang <peter.fang@intel.corp-partner.google.com>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Pratik Vishwakarma <Pratik.Vishwakarma@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sachi King <nakato@nakato.io>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        David Dunn <daviddunn@google.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        kvm@vger.kernel.org (open list:KERNEL VIRTUAL MACHINE (KVM)),
+        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+        linux-acpi@vger.kernel.org (open list:ACPI),
+        linux-pm@vger.kernel.org (open list:HIBERNATION (aka Software Suspend,
+        aka swsusp))
+Subject: [PATCH 0/2] x86: notify hypervisor/VMM about guest entering s2idle
+Date:   Thu,  9 Jun 2022 11:03:26 +0000
+Message-Id: <20220609110337.1238762-1-jaz@semihalf.com>
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
 MIME-Version: 1.0
-References: <CAJZ5v0hjp2-yLN_UyQvMwhoPreTkA3xU0g3boYtxgLi6TWqabA@mail.gmail.com>
- <CAJZ5v0iLoGsauHTh+H7EemsjGApXpant0RQFEDZRQMiGoHzpCg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iLoGsauHTh+H7EemsjGApXpant0RQFEDZRQMiGoHzpCg@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 9 Jun 2022 12:20:31 +0200
-Message-ID: <CAJZ5v0hEodhL2P50=MwN-jW7EF_k21CnQOnwiqTAGHyDo=2u3Q@mail.gmail.com>
-Subject: Re: [CFP] Power Management and Thermal Control MC at LPC 2022
-To:     Linux PM <linux-pm@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[I see I sent this from my personal e-mail address, sorry for the confusion.]
+This patchset introduces support which allows to notify first the
+hypervisor about guest entering the s2idle state (patch #1) and second
+propagate this notification to user-space so the VMM can take advantage
+of such notification (patch #2).
 
-On Tue, Jun 7, 2022 at 5:30 PM Rafał Wysocki <rjwysocki@gmail.com> wrote:
->
-> Hi All,
->
-> On Wed, May 25, 2022 at 7:48 PM Rafał Wysocki <rjwysocki@gmail.com> wrote:
-> >
-> > Hi All,
-> >
-> > The Power Management and Thermal Control micro-conference:
-> >
-> > https://lpc.events/event/16/contributions/1158/
-> >
-> > has been accepted for the LPC 2022, so if you have a topic for
-> > discussion in that session, please submit it through the LPC web page:
-> >
-> > https://lpc.events/event/16/abstracts/
-> >
-> > (please choose Power Management and Thermal Control MC as the track).
-> > Please also submit topics already listed in the MC description.
-> >
-> > Please note that the LPC is mostly about discussing work in progress
-> > and development proposals, so make sure that your topic falls into
-> > this category.  In particular, please avoid submitting topics
-> > regarding work that has already been done.
-> >
-> > The LPC will be held in Dublin this year, but it should be possible to
-> > participate in the sessions remotely, so it should be fine to submit a
-> > topic even if you cannot go to Dublin in person.
-> >
-> > Looking forward to seeing you all at the LPC!
->
-> The deadline for topic submissions is approaching (it appears to be June 15).
+Please see individual patches and commit logs for more verbose description.
 
-There are 5 topics submitted ATM, 4 from Intel and 1 from AMD.  ARM is
-obviously underrepresented.
+Zide Chen (2):
+  x86: notify hypervisor about guest entering s2idle state
+  KVM: x86: notify user space about guest entering s2idle
+
+ Documentation/virt/kvm/api.rst            | 21 +++++++++++++++++++++
+ Documentation/virt/kvm/x86/hypercalls.rst |  7 +++++++
+ arch/x86/include/asm/kvm_host.h           |  2 ++
+ arch/x86/kvm/x86.c                        | 18 ++++++++++++++++++
+ drivers/acpi/x86/s2idle.c                 |  8 ++++++++
+ include/linux/suspend.h                   |  1 +
+ include/uapi/linux/kvm.h                  |  2 ++
+ include/uapi/linux/kvm_para.h             |  1 +
+ kernel/power/suspend.c                    |  4 ++++
+ tools/include/uapi/linux/kvm.h            |  1 +
+ 10 files changed, 65 insertions(+)
+
+-- 
+2.36.1.476.g0c4daa206d-goog
+
