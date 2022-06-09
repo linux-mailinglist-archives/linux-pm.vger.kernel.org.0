@@ -2,87 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9942854547A
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 20:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 306D654549F
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 21:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234314AbiFIS4D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jun 2022 14:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39724 "EHLO
+        id S231928AbiFITIb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jun 2022 15:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237357AbiFIS4C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 14:56:02 -0400
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5DC4F1FF
-        for <linux-pm@vger.kernel.org>; Thu,  9 Jun 2022 11:56:00 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-30ce6492a60so250972297b3.8
-        for <linux-pm@vger.kernel.org>; Thu, 09 Jun 2022 11:56:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GeHMYVX1FuU/253EFrpq6cC8pS8DNefF3ay0F/Fq8K8=;
-        b=DRjzYzBCuPnLS7TnyNeekLk9kBl/9CpAEubqFXDdbCz8rvaUobJ3Vt9GtmTKtM9M+C
-         t4cRk2zqYwqu5imOdQGMnMDP1BRmEYqN7W7PqM/y43dFsgDoQgPY4Hju01nqGC6fOlVa
-         2HVD98zS8ylg+Nd+OOE6wVSD7qQ/bWe/dxVNz1NceP8klT+xXSTQNXr20C7dhAxG94io
-         RYXufnqVqnxQVNv+HTWmkc5G28TzVahQ4GPN3eIXl9CrC5nejD5a3l4lF9g4n4U415os
-         YPoIqxClPN+HDt3PYrgi0tWcRYJIEZDwx7gw7TGhbldgSBulbwoFNe2Fp6HFRqhA7efU
-         ZRYg==
-X-Gm-Message-State: AOAM53021odUIaZ7MIYbXLXdHdwfuS/Wf/5l5u0IQIWoRtgzqb69jM5o
-        +vDNqHUSRrRbGwj2L/ytQ923Y0e+cZE6RAMSZ30=
-X-Google-Smtp-Source: ABdhPJzCCMc3GI7Oc0mwGj6ZcJFH/tVMsogzTmbKqzDjMe697J0jopK2uZUBTgzspjL1w+CeNjWqiR76mpD7OCh04YI=
-X-Received: by 2002:a81:8844:0:b0:2fe:a7de:20c2 with SMTP id
- y65-20020a818844000000b002fea7de20c2mr45544850ywf.515.1654800959903; Thu, 09
- Jun 2022 11:55:59 -0700 (PDT)
+        with ESMTP id S231907AbiFITIb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 15:08:31 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD14C26CE49;
+        Thu,  9 Jun 2022 12:08:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1654801710; x=1686337710;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=c38Un+y998cp1mk//MudRgxdikF4s6RsjatPEg81vl0=;
+  b=F05Oe/n/LDmEbUvDAFeOAiOuCAhMxvF7TtNLkWTaRXL0DC8KVnhNUgNl
+   VDr1S9CYE1GcG1w5Gk/Lwun1CCPeKxbTnEY2BHnf8fre3mxtXYX4CBgRl
+   eiF6eg3h4pYxhVSZ59S23mLYMA6Fj+U6Mvw5ITc05mpsgocZxh3he4oPC
+   guVJt9rRMgZ5JpLkQFsg8XeVJyGgGzTfBCxTRtwTs4iaeeTRDDnNiXrbS
+   Izag7k/RYuJLeB0SPKqpubeAs+tNZAjTsqRstCgw9u6U5MBiWYpCdh+9m
+   MXFp5aVN/a+pjHk/dmhAnFoSvSeNjKW0ZBGSTwb5fglEiue7XtzQS7MFu
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="278533566"
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="278533566"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 12:08:14 -0700
+X-IronPort-AV: E=Sophos;i="5.91,287,1647327600"; 
+   d="scan'208";a="585751984"
+Received: from jeremywe-mobl3.amr.corp.intel.com (HELO [10.209.173.145]) ([10.209.173.145])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2022 12:08:12 -0700
+Message-ID: <a7ec7867-453c-f22d-ed1c-b793a5351837@linux.intel.com>
+Date:   Thu, 9 Jun 2022 14:08:11 -0500
 MIME-Version: 1.0
-References: <20220601192216.9174-1-george.d.sworo@intel.com>
-In-Reply-To: <20220601192216.9174-1-george.d.sworo@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 9 Jun 2022 20:55:48 +0200
-Message-ID: <CAJZ5v0j8kahM+=VDg0Dj3mZjhw9W+cq6y-TU0M3QF4mNxYn-bQ@mail.gmail.com>
-Subject: Re: [PATCH] powercap: intel_rapl: Add support for RAPTORLAKE_P
-To:     "Zhang, Rui" <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        George D Sworo <george.d.sworo@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [PATCH v1 14/16] soundwire: Use acpi_dev_for_each_child()
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
+        <alsa-devel@alsa-project.org>, Linux PM <linux-pm@vger.kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+References: <1843211.tdWV9SEqCh@kreacher> <5296779.Sb9uPGUboI@kreacher>
+ <63d7f3ed-b5a9-c869-5d25-a33a1d4e63c8@linux.intel.com>
+ <CAJZ5v0i7xtjrEOXgKiWP5St8OZoiZ4qq+gL62BFrmv-qpeaG_w@mail.gmail.com>
+ <7652ddab-53a5-ac8e-33f5-d25527acb1a6@linux.intel.com>
+ <CAJZ5v0jR1_tO_t90UKQFjYfyE+vOoToJSMCfZ8y37voaYO=wJQ@mail.gmail.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <CAJZ5v0jR1_tO_t90UKQFjYfyE+vOoToJSMCfZ8y37voaYO=wJQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Rui, Srinivas, should I take this one?
 
-On Wed, Jun 1, 2022 at 9:22 PM <george.d.sworo@intel.com> wrote:
->
-> From: George D Sworo <george.d.sworo@intel.com>
->
-> Add RAPTORLAKE_P to the list of supported processor model in the Intel
->
-> RAPL power capping driver.
->
-> Signed-off-by: George D Sworo <george.d.sworo@intel.com>
-> ---
->  drivers/powercap/intel_rapl_common.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-> index a9c99d9e8b42..21d624f9f5fb 100644
-> --- a/drivers/powercap/intel_rapl_common.c
-> +++ b/drivers/powercap/intel_rapl_common.c
-> @@ -1109,6 +1109,7 @@ static const struct x86_cpu_id rapl_ids[] __initconst = {
->         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,         &rapl_defaults_core),
->         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N,         &rapl_defaults_core),
->         X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,          &rapl_defaults_core),
-> +       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,        &rapl_defaults_core),
->         X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,    &rapl_defaults_spr_server),
->         X86_MATCH_INTEL_FAM6_MODEL(LAKEFIELD,           &rapl_defaults_core),
->
-> --
-> 2.17.1
->
+
+On 6/9/22 12:35, Rafael J. Wysocki wrote:
+> On Thu, Jun 9, 2022 at 6:21 PM Pierre-Louis Bossart
+> <pierre-louis.bossart@linux.intel.com> wrote:
+>>
+>>
+>>>> Shouldn't the return of sdw_acpi_find_one() be trapped, e.g. with
+>>>>
+>>>> return acpi_dev_for_each_child(parent, sdw_acpi_find_one, bus);
+>>>
+>>> Sure, I'll do that.  Thanks!
+>>
+>> I also added this EXPORT_SYMBOL to work-around link errors, not sure if
+>> this is in your tree already?
+> 
+> One of the previous patches in the series is adding the export.
+
+ok. I ran a bunch of tests with those two changes, so feel free to take
+my tags:
+
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Tested-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
