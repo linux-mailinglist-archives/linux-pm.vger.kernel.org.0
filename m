@@ -2,128 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C250E54470A
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 11:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE7D54471F
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 11:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231685AbiFIJPj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jun 2022 05:15:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
+        id S234227AbiFIJRB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jun 2022 05:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240651AbiFIJPh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 05:15:37 -0400
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B1C19299;
-        Thu,  9 Jun 2022 02:15:36 -0700 (PDT)
-Received: by mail-qk1-f171.google.com with SMTP id 15so12107785qki.6;
-        Thu, 09 Jun 2022 02:15:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7nTBBYryHSMMkovXdmbTlpzxYn9tgvrwGD6VKVeo3rI=;
-        b=LoPFjriZuXVeF6lAFuiPtTPyJsMwMV8M0jL/9Bi+Y6fM8OdXNZEYjjTUXGDFmLJHgQ
-         eVca2xutLCtB8ivo++3Pm/Tml/sVdj56aunh2mcfgxadONm3vrbaEnSZIsbo8SZxqq9r
-         gixR59ohG5E24FSCTbZjpIiqkZzZr5UEV0auMyPXUsb33l9JaXVa5r9c+S6epo0YMDcR
-         0jvk70J0a7+47wDMHGWoCyGBdzoc+9QwzvhdDuEuWg7fbHK/ff/NUYYsuGWPkDHSsD1i
-         v/StmyAuYsB2PCgfPWUgC3JKtfT81Z4tcBcNMatr+EpvwyN1taFNoj4+pfjxZjO2JveF
-         q1Iw==
-X-Gm-Message-State: AOAM531XLG1ZDcQSprnVTC9QnqS9bFNv687e8kTude97Q/eVRj6m9Hxj
-        lk6lmgj32Z2S/88QTtAaUzbnMCWR5h6UtQ==
-X-Google-Smtp-Source: ABdhPJz/1We6QwUuziB5GoCh/cgmeXDc1kek5l623fMSL0phV7X5WWvw8bjtUA4ICwG4gZz3y4+maw==
-X-Received: by 2002:a05:620a:125a:b0:6a6:bfab:5c45 with SMTP id a26-20020a05620a125a00b006a6bfab5c45mr13277299qkl.736.1654766135283;
-        Thu, 09 Jun 2022 02:15:35 -0700 (PDT)
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
-        by smtp.gmail.com with ESMTPSA id v12-20020a05620a440c00b006a6a904c0a5sm6102817qkp.107.2022.06.09.02.15.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jun 2022 02:15:34 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id r3so6569563ybr.6;
-        Thu, 09 Jun 2022 02:15:34 -0700 (PDT)
-X-Received: by 2002:a25:d748:0:b0:65c:6b00:55af with SMTP id
- o69-20020a25d748000000b0065c6b0055afmr37699311ybg.365.1654766134128; Thu, 09
- Jun 2022 02:15:34 -0700 (PDT)
+        with ESMTP id S233025AbiFIJQz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 05:16:55 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA0E1A046;
+        Thu,  9 Jun 2022 02:16:53 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 31C7E1FDAF;
+        Thu,  9 Jun 2022 09:16:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1654766212; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d57/DrqDiiJ2foYz2ew+5Cqn+PqODCYrsHqzu7X2C2Q=;
+        b=fo+sYmFjpmQOmpyD3JvJl9AYNinBjxAVeUE+HbamyvnKBmUJ4aJ/YSAu3A8+CqB7Ibeuz8
+        5d8JOsM43+X+4Im3fKziKImYEhGOTr+/e/e7kKF981tYnqb1CU7vBLnpyqhaj1HOQaPm0q
+        8dfR9EB/TBh2sOsSKiFiTu8q7nOVsPQ=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id B45BB2C14F;
+        Thu,  9 Jun 2022 09:16:46 +0000 (UTC)
+Date:   Thu, 9 Jun 2022 11:16:46 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org,
+        linux@armlinux.org.uk, ulli.kroll@googlemail.com,
+        linus.walleij@linaro.org, shawnguo@kernel.org,
+        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, tony@atomide.com,
+        khilman@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
+        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
+        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        shorne@gmail.com, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, rostedt@goodmis.org,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com, joel@joelfernandes.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
+        rcu@vger.kernel.org
+Subject: Re: [PATCH 24/36] printk: Remove trace_.*_rcuidle() usage
+Message-ID: <YqG6URbihTNCk9YR@alley>
+References: <20220608142723.103523089@infradead.org>
+ <20220608144517.444659212@infradead.org>
 MIME-Version: 1.0
-References: <20220525151216.24133-1-wsa+renesas@sang-engineering.com> <20220525151216.24133-2-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20220525151216.24133-2-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 9 Jun 2022 11:15:22 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWEzhE8aAfsDRpzpv=ZFLb7Cn0r-En0K6O7heT6OA1JEA@mail.gmail.com>
-Message-ID: <CAMuHMdWEzhE8aAfsDRpzpv=ZFLb7Cn0r-En0K6O7heT6OA1JEA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] thermal: rcar_gen3_thermal: improve logging during probe
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220608144517.444659212@infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Wolfram,
+On Wed 2022-06-08 16:27:47, Peter Zijlstra wrote:
+> The problem, per commit fc98c3c8c9dc ("printk: use rcuidle console
+> tracepoint"), was printk usage from the cpuidle path where RCU was
+> already disabled.
+> 
+> Per the patches earlier in this series, this is no longer the case.
 
-On Wed, May 25, 2022 at 7:07 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> When setting up a new board, a plain "Can't register thermal zone"
-> didn't help me much because the thermal zones in DT were all fine. I
-> just had a sensor entry too much in the parent TSC node. Reword the
-> failure/success messages to contain the sensor number to make it easier
-> to understand which sensor is affected. Example output now:
->
-> rcar_gen3_thermal e6198000.thermal: Sensor 0: Trip points loaded: 1
-> rcar_gen3_thermal e6198000.thermal: Sensor 1: Trip points loaded: 1
-> rcar_gen3_thermal e6198000.thermal: Sensor 2: Trip points loaded: 1
-> rcar_gen3_thermal e6198000.thermal: Sensor 3: Can't register thermal zone
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+My understanding is that this series reduces a lot the amount
+of code called with RCU disabled. As a result the particular printk()
+call mentioned by commit fc98c3c8c9dc ("printk: use rcuidle console
+tracepoint") is called with RCU enabled now. Hence this particular
+problem is fixed better way now.
 
-Thanks for your patch!
+But is this true in general?
+Does this "prevent" calling printk() a safe way in code with
+RCU disabled?
 
-> --- a/drivers/thermal/rcar_gen3_thermal.c
-> +++ b/drivers/thermal/rcar_gen3_thermal.c
-> @@ -511,7 +511,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
->                 zone = devm_thermal_zone_of_sensor_register(dev, i, tsc,
->                                                             &rcar_gen3_tz_of_ops);
->                 if (IS_ERR(zone)) {
-> -                       dev_err(dev, "Can't register thermal zone\n");
-> +                       dev_err(dev, "Sensor %u: Can't register thermal zone\n", i);
+I am not sure if anyone cares. printk() is the best effort
+functionality because of the consoles code anyway. Also I wonder
+if anyone uses this trace_console().
 
-LGTM.
+Therefore if this patch allows to remove some tricky tracing
+code then it might be worth it. But if trace_console_rcuidle()
+variant is still going to be available then I would keep using it.
 
->                         ret = PTR_ERR(zone);
->                         goto error_unregister;
->                 }
-> @@ -533,7 +533,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
->                 if (ret < 0)
->                         goto error_unregister;
->
-> -               dev_info(dev, "TSC%u: Loaded %d trip points\n", i, ret);
-> +               dev_info(dev, "Sensor %u: Trip points loaded: %u\n", i, ret);
+Best Regards,
+Petr
 
-I actually prefer the old wording (I'm undecided about "sensor" vs.
-"TSC", though, but consistency rules), as it makes it clear "ret"
-is the number of trip points, and not a success code.
-
->         }
->
->         if (!priv->num_tscs) {
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  kernel/printk/printk.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> --- a/kernel/printk/printk.c
+> +++ b/kernel/printk/printk.c
+> @@ -2238,7 +2238,7 @@ static u16 printk_sprint(char *text, u16
+>  		}
+>  	}
+>  
+> -	trace_console_rcuidle(text, text_len);
+> +	trace_console(text, text_len);
+>  
+>  	return text_len;
+>  }
+> 
