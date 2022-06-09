@@ -2,141 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89E7354539C
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 20:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 888BE545459
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jun 2022 20:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbiFISBp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jun 2022 14:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49842 "EHLO
+        id S239446AbiFISpI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jun 2022 14:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232321AbiFISBp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 14:01:45 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12380340D1;
-        Thu,  9 Jun 2022 11:01:44 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.172])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D415A66017BA;
-        Thu,  9 Jun 2022 19:01:42 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1654797702;
-        bh=COv9YkbXDTMR+TEI4D5j7tkKFAMKfvJAEv9mCgLuZ2Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hvPjhnr9dKTtoNpC1ASRBt+5tljQSro6Z61Aeu1Ks0AG/ImJJiKQKTWpHPZ3MNQ0v
-         7ZL8u3ZOwjW+uJ1fTtc3NhhYRJuQdCrgg4YV4kw0dcQJPCWkRSuVHTcPvwADG6FX/K
-         QDt72P/e/6P/fJDmwGLpLCR2JomHU2IpgBeMAhFo2FcfX9GWxLHjgEGhvAMsQyKUXc
-         0ym062ENJUm+GRtlzGd/nn25j6e9JnN64IbufBi33lg2E1E1ydVSX0fopyoJdRt/2+
-         8LYA6iRk1SfBhtOnrA66IxpSu72Dkt0h9M7cbWH/DV0sInodLNH3MAtoJhZ52Rb/YN
-         FC+2jvIRPHHpw==
-Received: by mercury (Postfix, from userid 1000)
-        id D9FF510605B9; Thu,  9 Jun 2022 20:01:40 +0200 (CEST)
-Date:   Thu, 9 Jun 2022 20:01:40 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Mark Gross <markgross@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        platform-driver-x86@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 06/12] power/supply: surface_battery: Use client
- device wrappers for notifier registration
-Message-ID: <20220609180140.zlpqsj7aqxihrxis@mercury.elektranox.org>
-References: <20220527023447.2460025-1-luzmaximilian@gmail.com>
- <20220527023447.2460025-7-luzmaximilian@gmail.com>
+        with ESMTP id S239383AbiFISpH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jun 2022 14:45:07 -0400
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32255BF66;
+        Thu,  9 Jun 2022 11:45:05 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-313a8a8b95aso16748147b3.5;
+        Thu, 09 Jun 2022 11:45:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ketC8ANShl5T/DJexVfPFGmyQceFPvOn5sBuN5PaWWk=;
+        b=nO+cJIgvAEpEMw7IkKrm8K4sYZf+I+tRqq49YMI7zB/bNslMY1iwLKAwVed4XBhM1j
+         1ZEyvQlVexphHb9JAHEIpYsL3bUx5Ki74plVKUudpIL0RfW/HbGr88RX6bk9okAVgLQM
+         Lm0UMLcSXdFNUpNXCdOpwKN6sQ3qKk4XpptrA7kwVg31KUuuZgJoSh5xj+HSYMycvl0c
+         08x712zroJnF0fWSD/7tVv68ctyxItLft+3OeARWngoj0fGfHStOLNgBPmWCxZjHC/Wy
+         TQW0FvYku5y3xnhTwt9hXNDoRy4DIVuTXbvgJCcet4FRVunQDVTCygCseZ3lQ4UKakNc
+         VWlg==
+X-Gm-Message-State: AOAM532oJa0TrANIUzFPgJRrzybjqdYxDiZ9pFWJKF/X8abl642YEySs
+        5R8INs6Tv/6sYvZ/kYBW9GJWCJaoB/gmUdxhLBI=
+X-Google-Smtp-Source: ABdhPJzaSV2Ou7aW6ZlIz1jOmShiXqw5dvran8jtr+6HB5ThEBFSoVgxH+xh5yCwJo4tKLw6Zu2MkDdF0Rbhq7drggE=
+X-Received: by 2002:a81:1341:0:b0:30c:3a7e:65e9 with SMTP id
+ 62-20020a811341000000b0030c3a7e65e9mr46370847ywt.7.1654800304445; Thu, 09 Jun
+ 2022 11:45:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="266k64e73ouevr3e"
-Content-Disposition: inline
-In-Reply-To: <20220527023447.2460025-7-luzmaximilian@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220607222458.1864805-1-gpiccoli@igalia.com>
+In-Reply-To: <20220607222458.1864805-1-gpiccoli@igalia.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 9 Jun 2022 20:44:53 +0200
+Message-ID: <CAJZ5v0j-g66TEizAV+j5it_uKkf+=+259yqNNkzJjUtL79=d9w@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: processor/idle: Annotate more functions to live in
+ cpuidle section
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        kernel@gpiccoli.net, kernel-dev@igalia.com,
+        Len Brown <lenb@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---266k64e73ouevr3e
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Fri, May 27, 2022 at 04:34:41AM +0200, Maximilian Luz wrote:
-> Use newly introduced client device wrapper functions for notifier
-> registration and unregistration.
->=20
-> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+On Wed, Jun 8, 2022 at 12:25 AM Guilherme G. Piccoli
+<gpiccoli@igalia.com> wrote:
+>
+> Commit 6727ad9e206c ("nmi_backtrace: generate one-line reports for idle cpus")
+> introduced a new text section called cpuidle; with that, we have a mechanism
+> to add idling functions in such section and skip them from nmi_backtrace
+> output, since they're useless and potentially flooding for such report.
+>
+> Happens that inlining might cause some real idle functions to end-up
+> outside of such section; this is currently the case of ACPI processor_idle
+> driver; the functions acpi_idle_enter_* do inline acpi_idle_do_entry(),
+> hence they stay out of the cpuidle section.
+> Fix that by marking such functions to also live in the cpuidle section.
+>
+> Fixes: 6727ad9e206c ("nmi_backtrace: generate one-line reports for idle cpus")
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Rafael J. Wysocki <rafael@kernel.org>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
 > ---
-
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
--- Sebastian
-
->=20
-> Changes in v2:
->   - none
->=20
-> ---
->  drivers/power/supply/surface_battery.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/power/supply/surface_battery.c b/drivers/power/suppl=
-y/surface_battery.c
-> index 5ec2e6bb2465..540707882bb0 100644
-> --- a/drivers/power/supply/surface_battery.c
-> +++ b/drivers/power/supply/surface_battery.c
-> @@ -802,7 +802,7 @@ static int spwr_battery_register(struct spwr_battery_=
-device *bat)
->  	if (IS_ERR(bat->psy))
->  		return PTR_ERR(bat->psy);
-> =20
-> -	return ssam_notifier_register(bat->sdev->ctrl, &bat->notif);
-> +	return ssam_device_notifier_register(bat->sdev, &bat->notif);
+>
+> Hi folks, this was tested on top of v5.19-rc1, with sysrq-l.
+>
+> An alternative for this approach would be to mark acpi_idle_do_entry()
+> as noinline, but I'd risk to say that's a bit worse performance-wise.
+> Let me know your preference, I can rework the patch if you prefer =)
+>
+> Thanks in advance for reviews,
+>
+>
+> Guilherme
+>
+>
+>  drivers/acpi/processor_idle.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
+> index 6a5572a1a80c..13200969ccf3 100644
+> --- a/drivers/acpi/processor_idle.c
+> +++ b/drivers/acpi/processor_idle.c
+> @@ -607,7 +607,7 @@ static DEFINE_RAW_SPINLOCK(c3_lock);
+>   * @cx: Target state context
+>   * @index: index of target state
+>   */
+> -static int acpi_idle_enter_bm(struct cpuidle_driver *drv,
+> +static int __cpuidle acpi_idle_enter_bm(struct cpuidle_driver *drv,
+>                                struct acpi_processor *pr,
+>                                struct acpi_processor_cx *cx,
+>                                int index)
+> @@ -664,7 +664,7 @@ static int acpi_idle_enter_bm(struct cpuidle_driver *drv,
+>         return index;
 >  }
-> =20
-> =20
-> @@ -837,7 +837,7 @@ static void surface_battery_remove(struct ssam_device=
- *sdev)
+>
+> -static int acpi_idle_enter(struct cpuidle_device *dev,
+> +static int __cpuidle acpi_idle_enter(struct cpuidle_device *dev,
+>                            struct cpuidle_driver *drv, int index)
 >  {
->  	struct spwr_battery_device *bat =3D ssam_device_get_drvdata(sdev);
-> =20
-> -	ssam_notifier_unregister(sdev->ctrl, &bat->notif);
-> +	ssam_device_notifier_unregister(sdev, &bat->notif);
->  	cancel_delayed_work_sync(&bat->update_work);
+>         struct acpi_processor_cx *cx = per_cpu(acpi_cstate[index], dev->cpu);
+> @@ -693,7 +693,7 @@ static int acpi_idle_enter(struct cpuidle_device *dev,
+>         return index;
 >  }
-> =20
-> --=20
-> 2.36.1
->=20
+>
+> -static int acpi_idle_enter_s2idle(struct cpuidle_device *dev,
+> +static int __cpuidle acpi_idle_enter_s2idle(struct cpuidle_device *dev,
+>                                   struct cpuidle_driver *drv, int index)
+>  {
+>         struct acpi_processor_cx *cx = per_cpu(acpi_cstate[index], dev->cpu);
+> --
 
---266k64e73ouevr3e
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmKiNYQACgkQ2O7X88g7
-+ppseA/+ObGFViG58wz5J1z1VWkyOsN3F66FzFlDxrZjD28yt8eJFmB9wLetJIqM
-EBa6o+WrcjFL/LvPA6se2eRQb1aZ/FRN/0jmJtPXUQsqhY+Uk2ZNNfuPq4U3PQCY
-TvS2z/VAApl2BMmofrfXTs1uxd92GF6Kdku3CED/xod7xG3VllJbD6mnEGkPB2NA
-0TNr+WhRiw4dCu0+2BkaG4+Ou7Yqnyo180+TXmrxTaf4N9lhncGmlHSIO3fDb1dZ
-abpDyCcoKRZbH/ndfal/kTa5TFxhqMADSKywckyJioKIDWkOHaeOvu/dPG2H/8dm
-Q0hHEVtrvuwRnj4/6THG/R5Ul0FG7RP2k3FLrpGbd5JFy8Mjf8klUfB65z990Sis
-aPI8xETfAng1LRAOk9x/yw40KczVSReSkJuy5LuIAqMWkWv8/+4AEi+MsHByRzGM
-v5Thmbaue0kaUPSZEndWJiHUgdM7Ej+g6cjnzr4ChS7wF4/THWQpKU5a3ZjNqHro
-2ZIePAd3tYKfhr69NJD/Zsm7BFoQ5E+lgLvcCSDvCrXbffzj5dHLZCeBNgeJU0zG
-ipEOEhgh97/813eKwFUOQGMiBtnsnRU2/tNWewOuX+J7CEJwbM8kBVga/mvnwO1L
-tsorCNhcwyM/a5GO9uUkOkVCYMthgRuTabgqJLubZVgsnFppS9M=
-=PM8u
------END PGP SIGNATURE-----
-
---266k64e73ouevr3e--
+Applied as 5.20 material, thanks!
