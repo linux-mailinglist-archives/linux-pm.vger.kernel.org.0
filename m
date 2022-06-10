@@ -2,141 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93B205465E4
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 13:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14CDC5465EB
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 13:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347769AbiFJLiR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jun 2022 07:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49320 "EHLO
+        id S244661AbiFJLn5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jun 2022 07:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236920AbiFJLhd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 07:37:33 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB9571DB8
-        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 04:36:53 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id h23so2649156ljl.3
-        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 04:36:53 -0700 (PDT)
+        with ESMTP id S1346864AbiFJLnc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 07:43:32 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CB8703E7
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 04:43:26 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id k16so36181132wrg.7
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 04:43:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=2bt8jTYVrowhc1gg8uINAlbLKdSaOnKBxI1tejzJnw0=;
-        b=VytV+NMseeOv5ay6lpQ90w3nH/J9TkSL7TDekYgqNJ6A5QUx0JjdEV0LQWDwhoNvvm
-         Rz8hppK3LV/Zx32rXRUnaGgGsmX5wt3+Wmt5lTiuSxzOy65Y0u8rI5JHIib+7RFuxjoR
-         K4FMqtzyophRWwfQGCU0kfhqOEQ94XiFDzl6um4dsmiYHUWa3LfOkaMwdF1Qku7lIBoX
-         +J4huc80z4RkwDz+5pqpvmsCfTSDrhJkZa4kFfpu1icagXacVx0PxFd+2xgKHpaVRf2K
-         OAx2EknOTp0kRe54ep30g5Aq3K5hi4ofIym1NY+KaQ9x9OaGRMBB+UILcxymGGjOJClP
-         HyHA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=/5YJpP3pdMDmTKMTFCWXXpZqW0H2SA7UK43ZKjPSKgc=;
+        b=yob+Rw2WWG/AgEEPq6tT3/t3XqlSfSQ3jvHLFr/TIpmuPbFwxlVia+GRePZuFJQrJX
+         VSVY3sx0GIuiw0VQKSguBpC5ELizScKoMI6TLuUBBTkjSsU45pbZvHSYN3QQIWwgEg/M
+         Sdp90ArObWOLFb85Y4xamML12ImzqmdetXCwF1L/JmeLXQO6fDpCUwN86tocl4I+84Ld
+         D/uy3tGwWG3Sc3Rh1gch3KlR/1km1l68hmLjwRDDHTBdodJNabY9Da/rGnjqmxQa9CVY
+         +1lCdOb+Dur+ByiRyWxTzbYIp2MeU5W48PpAStjmAqwydWyT1/5nto8G63yNBnC5dPyM
+         p2Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2bt8jTYVrowhc1gg8uINAlbLKdSaOnKBxI1tejzJnw0=;
-        b=fhce0dsN3KVQvO1S2OLoPD08xHs4a48Yt64hioSUuVypF+FLf5r81IxHJ8aUGCs7Yp
-         VMNwJ9RuKOP7NjYY56Xk3xBF5y90wMkhJNxPd3DwPSHb67i55uggLgps8D9ND+XfT9fg
-         R2I6PJ75+79DFiH57m7ukrcLn0B6jMJxROzZRDNCiKxxYm2OptGuozRgQM2QBP9UR0S6
-         qpu33I1eYXq6X4/T2iNVUzhfaxlg04jeEftoA+AUikLoAudjewCgKTssjhdG8u888xeX
-         RwC1SaDmUNpPbLFOqPE30N3+7Dd/69JAUUZZ8lK5A5LyHQo3LzY9yxyl427W4/MmM2Hd
-         JSjw==
-X-Gm-Message-State: AOAM532bGldYy29oVBOygsCBzVyz6EOaTLft6Re2BTbUfVptlU/53Dzd
-        V+Uth35dt7R44DOxnoH76nDNY2LrjR/ixlrbQRgsxg==
-X-Google-Smtp-Source: ABdhPJz8nMlzBjn3iuzofJua8K4CiElzoan8JfpHCRGcxYs+YT4rOc7inWwuPW0xOg+L4p23ZR9tOj3oZXYetl1y8Z0=
-X-Received: by 2002:a2e:9a82:0:b0:255:77fd:1c2c with SMTP id
- p2-20020a2e9a82000000b0025577fd1c2cmr21978710lji.357.1654861012161; Fri, 10
- Jun 2022 04:36:52 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/5YJpP3pdMDmTKMTFCWXXpZqW0H2SA7UK43ZKjPSKgc=;
+        b=BeFFNvdMxPjK/860W080nceYh8/AP4YLXVNsryfklAPJ18KkKJIgZnOPjIpKQjUsRO
+         FojWEFTb3s0eniMazTWAOnB8t5FiCf3JK5o/wtdTaXINglX5D7qS1Klu5KXp+U4wMeiA
+         ws8elMavAWF37f3hfXU44hQ09Picz8kfTZ52Zqyoijmkx1dokrWyrfaCW6G1KD4ZAAXn
+         aI2Pc3fpbV9eHuy0zDAqTrIBaTO28fkhqWQBVM7g3yC0JD4ZlQ+9LLy3PFSQ/Pi2RSSp
+         xglos+gRA6DTmKN80Eq0ro0rMFMdZn5im1V+wFfrEGbk+ipc/8R+Jofsw5Q6htGTEYi9
+         6+Bw==
+X-Gm-Message-State: AOAM533oVYqwJSlwj267o8bCcWnr2nWCyIfqHXb5XWSryPJ71eHLrm4L
+        cyMmHES51jj/sgn8u2/dGeMfrg==
+X-Google-Smtp-Source: ABdhPJwseanLf0i2ChgalXTWzdaG20s3fQfwYCNZ/3tWzUs4mQ/RBHTRdI5POW1Eg22PbtGPF+QDtQ==
+X-Received: by 2002:a5d:6141:0:b0:20f:c66b:209d with SMTP id y1-20020a5d6141000000b0020fc66b209dmr42129589wrt.27.1654861404895;
+        Fri, 10 Jun 2022 04:43:24 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:936e:a821:ac60:872f? ([2a05:6e02:1041:c10:936e:a821:ac60:872f])
+        by smtp.googlemail.com with ESMTPSA id c15-20020a7bc00f000000b0039c4e2ff7cfsm2609787wmb.43.2022.06.10.04.43.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Jun 2022 04:43:23 -0700 (PDT)
+Message-ID: <86edf34a-256d-9c30-9069-123aa1192c7e@linaro.org>
+Date:   Fri, 10 Jun 2022 13:43:22 +0200
 MIME-Version: 1.0
-References: <20220609110337.1238762-1-jaz@semihalf.com> <20220609110337.1238762-2-jaz@semihalf.com>
- <f62ab257-b2e0-3097-e394-93a9e7a0d2bf@intel.com>
-In-Reply-To: <f62ab257-b2e0-3097-e394-93a9e7a0d2bf@intel.com>
-From:   Grzegorz Jaszczyk <jaz@semihalf.com>
-Date:   Fri, 10 Jun 2022 13:36:41 +0200
-Message-ID: <CAH76GKPo6VL33tBaZyszL8wvjpzJ7hjOg3o1JddaEnuGbwk=dQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] x86: notify hypervisor about guest entering s2idle state
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     linux-kernel@vger.kernel.org, Dmytro Maluka <dmy@semihalf.com>,
-        Zide Chen <zide.chen@intel.corp-partner.google.com>,
-        Peter Fang <peter.fang@intel.corp-partner.google.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Pratik Vishwakarma <Pratik.Vishwakarma@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sachi King <nakato@nakato.io>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        David Dunn <daviddunn@google.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>,
-        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
-        <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [CFP] Power Management and Thermal Control MC at LPC 2022
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <len.brown@intel.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Sudeep Holla <sudeep.holla@arm.com>
+References: <CAJZ5v0hjp2-yLN_UyQvMwhoPreTkA3xU0g3boYtxgLi6TWqabA@mail.gmail.com>
+ <CAJZ5v0iLoGsauHTh+H7EemsjGApXpant0RQFEDZRQMiGoHzpCg@mail.gmail.com>
+ <CAJZ5v0hEodhL2P50=MwN-jW7EF_k21CnQOnwiqTAGHyDo=2u3Q@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0hEodhL2P50=MwN-jW7EF_k21CnQOnwiqTAGHyDo=2u3Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-czw., 9 cze 2022 o 16:27 Dave Hansen <dave.hansen@intel.com> napisa=C5=82(a=
-):
->
-> On 6/9/22 04:03, Grzegorz Jaszczyk wrote:
-> > Co-developed-by: Peter Fang <peter.fang@intel.corp-partner.google.com>
-> > Signed-off-by: Peter Fang <peter.fang@intel.corp-partner.google.com>
-> > Co-developed-by: Tomasz Nowicki <tn@semihalf.com>
-> > Signed-off-by: Tomasz Nowicki <tn@semihalf.com>
-> > Signed-off-by: Zide Chen <zide.chen@intel.corp-partner.google.com>
-> > Co-developed-by: Grzegorz Jaszczyk <jaz@semihalf.com>
-> > Signed-off-by: Grzegorz Jaszczyk <jaz@semihalf.com>
-> > ---
-> >  Documentation/virt/kvm/x86/hypercalls.rst | 7 +++++++
-> >  arch/x86/kvm/x86.c                        | 3 +++
-> >  drivers/acpi/x86/s2idle.c                 | 8 ++++++++
-> >  include/linux/suspend.h                   | 1 +
-> >  include/uapi/linux/kvm_para.h             | 1 +
-> >  kernel/power/suspend.c                    | 4 ++++
-> >  6 files changed, 24 insertions(+)
->
-> What's the deal with these emails?
->
->         zide.chen@intel.corp-partner.google.com
->
-> I see a smattering of those in the git logs, but never for Intel folks.
 
-I've kept emails as they were in the original patch and I do not think
-I should change them. This is what Zide and Peter originally used.
+Hi Rafael,
 
->
-> I'll also say that I'm a bit suspicious of a patch that includes 5
-> authors for 24 lines of code.  Did it really take five of you to write
-> 24 lines of code?
+done.
 
-This patch was built iteratively: original patch comes from Zide and
-Peter, I've squashed it with Tomasz later changes and reworked by
-myself for upstream. I didn't want to take credentials from any of the
-above so ended up with Zide as an author and 3 co-developers. Please
-let me know if that's an issue.
+Thanks for the reminder
 
-Best regards,
-Grzegorz
+   -- Daniel
+
+ps: I noticed the dead line is not June 15th but June 13th
+
+
+On 09/06/2022 12:20, Rafael J. Wysocki wrote:
+> [I see I sent this from my personal e-mail address, sorry for the confusion.]
+> 
+> On Tue, Jun 7, 2022 at 5:30 PM Rafał Wysocki <rjwysocki@gmail.com> wrote:
+>>
+>> Hi All,
+>>
+>> On Wed, May 25, 2022 at 7:48 PM Rafał Wysocki <rjwysocki@gmail.com> wrote:
+>>>
+>>> Hi All,
+>>>
+>>> The Power Management and Thermal Control micro-conference:
+>>>
+>>> https://lpc.events/event/16/contributions/1158/
+>>>
+>>> has been accepted for the LPC 2022, so if you have a topic for
+>>> discussion in that session, please submit it through the LPC web page:
+>>>
+>>> https://lpc.events/event/16/abstracts/
+>>>
+>>> (please choose Power Management and Thermal Control MC as the track).
+>>> Please also submit topics already listed in the MC description.
+>>>
+>>> Please note that the LPC is mostly about discussing work in progress
+>>> and development proposals, so make sure that your topic falls into
+>>> this category.  In particular, please avoid submitting topics
+>>> regarding work that has already been done.
+>>>
+>>> The LPC will be held in Dublin this year, but it should be possible to
+>>> participate in the sessions remotely, so it should be fine to submit a
+>>> topic even if you cannot go to Dublin in person.
+>>>
+>>> Looking forward to seeing you all at the LPC!
+>>
+>> The deadline for topic submissions is approaching (it appears to be June 15).
+> 
+> There are 5 topics submitted ATM, 4 from Intel and 1 from AMD.  ARM is
+> obviously underrepresented.
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
