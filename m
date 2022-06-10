@@ -2,58 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C00F546AC9
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 18:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1819546B60
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 19:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241580AbiFJQrQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jun 2022 12:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34826 "EHLO
+        id S240898AbiFJRDk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jun 2022 13:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235042AbiFJQrP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 12:47:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9DC5AA61;
-        Fri, 10 Jun 2022 09:47:13 -0700 (PDT)
+        with ESMTP id S1346733AbiFJRDk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 13:03:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A37A36309
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 10:03:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41CF76209C;
-        Fri, 10 Jun 2022 16:47:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA460C34114;
-        Fri, 10 Jun 2022 16:47:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 361CAB83666
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 17:03:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EE560C3411F
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 17:03:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654879632;
-        bh=unW26iVyYOILA6DuPNhMgkqz6zXnh/Dl4Z1P604q0XE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bI+jfQHqCN+w9/Ncpm9bvQdUzee34qzXjHDa2uywgpRCIPWxDvsPRkMd0meCY2srw
-         ND7sExB1ciAap5ao9d4ObQk9k7DR/hSgmm29gA8DzwxH/bWW5s3dlU5kiX/Dx9S7/K
-         VqJyZy2+GbnL9dBc3MlAU96zKaVlN7JIeF+X5lTy6NjLbj9UGDeycEEFBRkfynC8CN
-         HoMT49tsk1Yjg8umLhbLIlLu7h02qM2/frdHi5mZv3ZK56ELOdLuB3arBYVnEU+NXX
-         gKbAkHssmNXSL0Dz6vHjDhExTFyX9Vid7B8/c+KsFMs0ahtf4jEHOkRuzbUiKRmGK5
-         rxf+aERRcPU1g==
-Date:   Fri, 10 Jun 2022 17:47:05 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
-        lee.jones@linaro.org, sre@kernel.org, gregkh@linuxfoundation.org,
-        lgirdwood@gmail.com, lars@metafoo.de, rafael@kernel.org,
-        quic_gurus@quicinc.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 02/17] regmap-irq: Add get_irq_reg to support unusual
- register layouts
-Message-ID: <YqN1iTyyiRx4/CMf@sirena.org.uk>
-References: <20220607155324.118102-1-aidanmacdonald.0x0@gmail.com>
- <20220607155324.118102-3-aidanmacdonald.0x0@gmail.com>
- <YqDLflKTsYaupArl@sirena.org.uk>
- <6YJcC5wyOg6x6Ny4Os8ujFbK2qB4alkU@localhost>
+        s=k20201202; t=1654880617;
+        bh=6P0LKE1YK6F3lmCibd3x9fyMYxvIR5n6zWbUf2gs1cg=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=Gm2yODg8QEpMJfBLuRrriXwvAa5fzLGoOrOrmTsAkOA0eN/3QGmkmT0fabEjpfRcb
+         CvruqF3FhwiNyaC7xpRZH5Gs7y7DTdqV8MVnWZSydaVzZFCPxP+WdNDDQhBdAlKvaM
+         zGJMpBAnLEI4KVURKxmA+cIgFA8pLsVHO3SWxW8/6j50/5SnIEgFpP5zpn9ka2Kjmb
+         x6EC6/761TuvZOUl7ArfrOEyUKm6BnBuoUDharvJnsvq+NTAhmkG7QRUePy3p96wfY
+         ovz7qFYrKPIjUMyfz2roTvNgGFr+bTNbE6orvsCpgQfYBr+9pt+S+11kQmOVFVsG78
+         0wW1qkMCszcbw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id D4A51CC13B1; Fri, 10 Jun 2022 17:03:36 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 215938] amd-pstate ignoring scaling_max_freq after waking from
+ suspend
+Date:   Fri, 10 Jun 2022 17:03:36 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: perry_yuan@outlook.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215938-137361-IdN1f2pVN7@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215938-137361@https.bugzilla.kernel.org/>
+References: <bug-215938-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="U+ynXLAMuojBXMSJ"
-Content-Disposition: inline
-In-Reply-To: <6YJcC5wyOg6x6Ny4Os8ujFbK2qB4alkU@localhost>
-X-Cookie: Teachers have class.
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,46 +71,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215938
 
---U+ynXLAMuojBXMSJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--- Comment #12 from perry_yuan@outlook.com ---
+(In reply to Alex Maras from comment #8)
+> Created attachment 301080 [details]
+> dmesg output after sleeping - with debug params
+>=20
+> I've attached the dmesg output here after applying those kernel params. My
+> kernel version has the latest commit. I'll compile from git to ensure the
+> results are the same in the meantime.=20
+>=20
+> The dmesg results are interesting - cat-ing scaling_cur_freq still shows =
+the
+> same behavior, but dmesg doesn't show any values above 1.4gHz. I ran
+> `stress` either side of sleeping and watched the scaling_cur_freq, and can
+> confirm that it was maxing out at 1.4gHz before suspend, and not limited
+> after suspend.
 
-On Fri, Jun 10, 2022 at 04:40:20PM +0100, Aidan MacDonald wrote:
-> Mark Brown <broonie@kernel.org> writes:
-> > On Tue, Jun 07, 2022 at 04:53:09PM +0100, Aidan MacDonald wrote:
+Hi Alex.
+Could you help to try if you can change the cores frequency when you switch=
+ to
+userspace governor after suspend/resume test?
 
-> >> -	if (!chip->sub_reg_offsets || !chip->not_fixed_stride) {
-> >> +	if (chip->get_irq_reg) {
-> >> +		reg = chip->get_irq_reg(base_reg, i);
-> >> +	} else if (!chip->sub_reg_offsets || !chip->not_fixed_stride) {
 
-> > It seems like it would be cleaner and clearer to refactor things so that
-> > we always have a get_irq_reg() with standard chips getting given a
-> > default implementation which implements the current behaviour.
+ # sudo cpupower frequency-set -g userspace
+ # systemctl suspend=20
+ Resume from Suspend pressing power button or keyboards.
+ # cd /sys/devices/system/cpu/cpufreq/policy0
+ # echo 1752589 > scaling_setspeed  //change this core freq to see if it ca=
+n be
+changed=20
+ # cat scaling_setspeed
+ # cat scaling_governor
+ # cat scaling_cur_freq
 
-> I don't think that is a good way to clean things up. I only intended
-> get_irq_reg() to be a quick hack to solve a problem; in my opinion it
-> would be a poor abstraction to base the API around.
 
-I'm not sure why you are proposing this change if you are so convinced
-it's a bad idea.  If you want to propose a different rework go ahead,
-but adding the new operation without any form of factoring out is an
-issue.  At first glance your suggestion looked plausible.
+I would like to see if the cpu cores still can change freq or not after
+resuming.
 
---U+ynXLAMuojBXMSJ
-Content-Type: application/pgp-signature; name="signature.asc"
+If the cpu freq cannot be changed, even you change the cpuinfo_max_freq, co=
+re
+freq(scaling_cur_freq) will not be limited  successfully as well.=20
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKjdYgACgkQJNaLcl1U
-h9CDtwf/clBKHc7KCJ2ljj8ni+Y5o/BMRY1SoDObFay/XE+ilxSWGfKX6EgfFiWz
-827Zd2fpD+hDEiUTcOZeovGH6TavbS9+6H4PscGRcTC3wYqGFFbUj+LDCt25t+Pc
-+dkx10P5yUA6EsSQ40HwGVREKokYmbZ4+MxOXK3nu5p8KRGuKtTcMq2VgnhbR0ub
-OIZL3uofaMioD/SuPX8ILI/T1DH71iIP192txH7nF3W0b2Cv7i17xq6um1i9JH5X
-W4mmtDYS7aYF6K96WzV5knlILV88uFyKSPzH3PMS4eXHeR/MqM5/hcluVTZ1Yvo6
-e3yquuxp8XZltPBuU3QID4j9daKkHw==
-=Rx1o
------END PGP SIGNATURE-----
+Perry.
 
---U+ynXLAMuojBXMSJ--
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
