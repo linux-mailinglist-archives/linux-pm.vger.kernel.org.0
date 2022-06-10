@@ -2,142 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63EBA5466CC
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 14:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B59D5466FB
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 15:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244998AbiFJMtQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jun 2022 08:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40036 "EHLO
+        id S229574AbiFJNAV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jun 2022 09:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239131AbiFJMtI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 08:49:08 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAEC1EEF6;
-        Fri, 10 Jun 2022 05:49:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654865347; x=1686401347;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=tgp8OHfSndf8X9XOTJF9Tb0izZaAsaa2D0KBtc/ukNo=;
-  b=d9YWw9b92M3fXAVdGCcSSxlDxxwlOx9fNiiKgDyhhNbABmJww0tmWXC2
-   3yo4GcMb3iVZLPKSIQFxHnNdLxERAOKzlRrp0Bfpui32gHOPwUymOkUiX
-   FVQy9TX9mtjpPvx5e0mExLXlQDGjEeOjmnMuh3q9wtyLePC6MsJh027f2
-   yHskeDmpTIQLwjSxZQjTzfeAGIGslr2o3xf1p9WRxP0EJ79FyCu1cfKx3
-   JIkKTgUA7nsQX/DJwMG+PGogetYctgV6ZR5E9qTG9bfXK1iAcbY/RXFyt
-   +5O1tzppNlU891NMjg2LrAFQqbFqf6f9m/Nn0/ePxGvx8jA+5o0kJ7NM+
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10373"; a="275152767"
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="275152767"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 05:49:06 -0700
-X-IronPort-AV: E=Sophos;i="5.91,290,1647327600"; 
-   d="scan'208";a="684527290"
-Received: from elmerred-mobl2.amr.corp.intel.com (HELO [10.251.8.219]) ([10.251.8.219])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 05:49:05 -0700
-Message-ID: <2854ae00-e965-ab0f-80dd-6012ae36b271@intel.com>
-Date:   Fri, 10 Jun 2022 05:49:04 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/2] x86: notify hypervisor about guest entering s2idle
- state
-Content-Language: en-US
-To:     Grzegorz Jaszczyk <jaz@semihalf.com>
-Cc:     linux-kernel@vger.kernel.org, Dmytro Maluka <dmy@semihalf.com>,
-        Zide Chen <zide.chen@intel.corp-partner.google.com>,
-        Peter Fang <peter.fang@intel.corp-partner.google.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        with ESMTP id S229711AbiFJNAU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 09:00:20 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CEB43CBE29
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 06:00:17 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id p18so1116421lfr.1
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 06:00:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=1WVlkN+j9O2yrmJYHu/e/RTX9FG4N3bxp7VZVWMImKA=;
+        b=fUG79jG7lhF37awsbk/sDeiVyV0xag+XKVjBfgMCygEIc3wM7n7+k6yssEy6qHmEsy
+         Cygvc+bNCJnT0melbOcs06zikHZuTznd2o/3dMitJKAJNMmG6mdsgV44a7iRjTX7twsq
+         bqEL27kq0DU1driC3wb2a3XEcNrr/mXB8ng8zDfWEaqSdHOk3f2bzc1PQL1NXpA1Xgf8
+         p3+QwiwCCRPwPCX/6BWKgG98X+JAlluSolQFHfxye7IEfOAxkCgE0nlLtNcgXIj3vq3A
+         hM0VTCEzaIHeyeSEgQtDPbbHy2ryMwaiwjgsIcTTP5P3zslhvWHKJZ3/EtgEWiIzPJCh
+         fYug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=1WVlkN+j9O2yrmJYHu/e/RTX9FG4N3bxp7VZVWMImKA=;
+        b=r6c2bPY0kVXRiXdAvLv94WtEltDWVY6R69LMZcSKTQJkq0CgO4X0Pf2J+7X82golIy
+         P5jWcwMwn3b7DsffmEPsS8S6BPSVtceOZFjyPzOH/PvuUCBQfMwjNj4PKUHNnaqzSwM8
+         Af9pib2F1mM2QdqHOtpv47c6UBJQooX1gosSAoLcNA0IgwHSf/gc9JIdnLKbGdFL2K1v
+         9zpFT0BJxAIj3fABHYpcZRskbAzCXG7nZMdaCpQx/DjNkutDWvuuvJmqCoM7E9YAD5r4
+         gfG/2rMPAQg4lR/xZlg/qnLDYybzaVcJLJgSBuTeqLJMU9RT0pATaQy3Y6l5da6bKICL
+         x9Zw==
+X-Gm-Message-State: AOAM530o7Dgb0IG/eDakoA2AFYLpj/TwRhgfxZLibuojfXOCh5PXASl9
+        gU116tK3IXXcowpX8h5X/t1CwtCWOFraFw==
+X-Google-Smtp-Source: ABdhPJzIuovLMBrYREHuC6TbDDdse6irHhXThv7vAOYtB+Kyc5bKxI76QDfNtgdaxQvva9tMX0c5ZA==
+X-Received: by 2002:ac2:4e0a:0:b0:479:5311:52e8 with SMTP id e10-20020ac24e0a000000b00479531152e8mr14189486lfr.115.1654866015480;
+        Fri, 10 Jun 2022 06:00:15 -0700 (PDT)
+Received: from localhost (h-85-24-188-65.A463.priv.bahnhof.se. [85.24.188.65])
+        by smtp.gmail.com with ESMTPSA id d21-20020a05651c089500b0025567827117sm4117163ljq.13.2022.06.10.06.00.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jun 2022 06:00:14 -0700 (PDT)
+Date:   Fri, 10 Jun 2022 15:00:14 +0200
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Pratik Vishwakarma <Pratik.Vishwakarma@amd.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sachi King <nakato@nakato.io>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        David Dunn <daviddunn@google.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "open list:ACPI" <linux-acpi@vger.kernel.org>,
-        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
-        <linux-pm@vger.kernel.org>
-References: <20220609110337.1238762-1-jaz@semihalf.com>
- <20220609110337.1238762-2-jaz@semihalf.com>
- <f62ab257-b2e0-3097-e394-93a9e7a0d2bf@intel.com>
- <CAH76GKPo6VL33tBaZyszL8wvjpzJ7hjOg3o1JddaEnuGbwk=dQ@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <CAH76GKPo6VL33tBaZyszL8wvjpzJ7hjOg3o1JddaEnuGbwk=dQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] thermal: rcar_gen3_thermal: improve logging during
+ probe
+Message-ID: <YqNAXofRPsDasXi4@oden.dyn.berto.se>
+References: <20220609200709.4455-1-wsa+renesas@sang-engineering.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220609200709.4455-1-wsa+renesas@sang-engineering.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/10/22 04:36, Grzegorz Jaszczyk wrote:
-> czw., 9 cze 2022 o 16:27 Dave Hansen <dave.hansen@intel.com> napisaÅ‚(a):
->> On 6/9/22 04:03, Grzegorz Jaszczyk wrote:
->>> Co-developed-by: Peter Fang <peter.fang@intel.corp-partner.google.com>
->>> Signed-off-by: Peter Fang <peter.fang@intel.corp-partner.google.com>
->>> Co-developed-by: Tomasz Nowicki <tn@semihalf.com>
->>> Signed-off-by: Tomasz Nowicki <tn@semihalf.com>
->>> Signed-off-by: Zide Chen <zide.chen@intel.corp-partner.google.com>
->>> Co-developed-by: Grzegorz Jaszczyk <jaz@semihalf.com>
->>> Signed-off-by: Grzegorz Jaszczyk <jaz@semihalf.com>
->>> ---
->>>  Documentation/virt/kvm/x86/hypercalls.rst | 7 +++++++
->>>  arch/x86/kvm/x86.c                        | 3 +++
->>>  drivers/acpi/x86/s2idle.c                 | 8 ++++++++
->>>  include/linux/suspend.h                   | 1 +
->>>  include/uapi/linux/kvm_para.h             | 1 +
->>>  kernel/power/suspend.c                    | 4 ++++
->>>  6 files changed, 24 insertions(+)
->> What's the deal with these emails?
->>
->>         zide.chen@intel.corp-partner.google.com
->>
->> I see a smattering of those in the git logs, but never for Intel folks.
-> I've kept emails as they were in the original patch and I do not think
-> I should change them. This is what Zide and Peter originally used.
+Hi Wolfram,
 
-"Original patch"?  Where did you get this from?
+Thanks for your work.
 
->> I'll also say that I'm a bit suspicious of a patch that includes 5
->> authors for 24 lines of code.  Did it really take five of you to write
->> 24 lines of code?
-> This patch was built iteratively: original patch comes from Zide and
-> Peter, I've squashed it with Tomasz later changes and reworked by
-> myself for upstream. I didn't want to take credentials from any of the
-> above so ended up with Zide as an author and 3 co-developers. Please
-> let me know if that's an issue.
+On 2022-06-09 22:07:09 +0200, Wolfram Sang wrote:
+> When setting up a new board, a plain "Can't register thermal zone"
+> didn't help me much because the thermal zones in DT were all fine. I
+> just had a sensor entry too much in the parent TSC node. Reword the
+> failure/success messages to contain the sensor number to make it easier
+> to understand which sensor is affected. Example output now:
+> 
+> rcar_gen3_thermal e6198000.thermal: Sensor 0: Loaded 1 trip point
+> rcar_gen3_thermal e6198000.thermal: Sensor 1: Loaded 1 trip point
+> rcar_gen3_thermal e6198000.thermal: Sensor 2: Loaded 1 trip point
+> rcar_gen3_thermal e6198000.thermal: Sensor 3: Can't register thermal zone
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+> 
+> Change from v1: reword the dev_info string to be more like the original
+> one. Added a check to add the plural-'s' only when needed.
+> 
+> Geert: is this better now?
+> 
+>  drivers/thermal/rcar_gen3_thermal.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
+> index ccdf8a24ddc7..f7357b5bd506 100644
+> --- a/drivers/thermal/rcar_gen3_thermal.c
+> +++ b/drivers/thermal/rcar_gen3_thermal.c
+> @@ -511,7 +511,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
+>  		zone = devm_thermal_zone_of_sensor_register(dev, i, tsc,
+>  							    &rcar_gen3_tz_of_ops);
+>  		if (IS_ERR(zone)) {
+> -			dev_err(dev, "Can't register thermal zone\n");
+> +			dev_err(dev, "Sensor %u: Can't register thermal zone\n", i);
+>  			ret = PTR_ERR(zone);
+>  			goto error_unregister;
+>  		}
+> @@ -533,7 +533,8 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
+>  		if (ret < 0)
+>  			goto error_unregister;
+>  
+> -		dev_info(dev, "TSC%u: Loaded %d trip points\n", i, ret);
+> +		dev_info(dev, "Sensor %u: Loaded %u trip point%s\n", i, ret,
+> +			 ret == 1 ? "" : "s");
 
-It just looks awfully fishy.
+Bikeshedding, I'm not keen on this style as it makes it harder IMHO to 
+grep for log strings in the code. But I don't dislike it enough to ask 
+you to change it ;-) So if you and Geert are happy with this style,
 
-If it were me, and I'd put enough work into it to believe I deserved
-credit as an *author* (again, of ~13 lines of actual code), I'd probably
-just zap all the other SoB's and mention them in the changelog.  I'd
-also explain where the code came from.
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-Your text above wouldn't be horrible context to add to a cover letter.
+Do feel free to keep the tag if you send a version without the plural 
+special case.
+
+>  	}
+>  
+>  	if (!priv->num_tscs) {
+> -- 
+> 2.35.1
+> 
+
+-- 
+Kind Regards,
+Niklas Söderlund
