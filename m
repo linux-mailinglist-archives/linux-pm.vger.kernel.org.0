@@ -2,39 +2,39 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 918C7546406
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 12:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DBAD546479
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 12:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245577AbiFJKmx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jun 2022 06:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
+        id S1347069AbiFJKrV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jun 2022 06:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344113AbiFJKmS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 06:42:18 -0400
+        with ESMTP id S1346796AbiFJKrG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 06:47:06 -0400
 Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD47F4B1DE;
-        Fri, 10 Jun 2022 03:37:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0D78205F99;
+        Fri, 10 Jun 2022 03:43:12 -0700 (PDT)
 Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id C031A1E80D6E;
-        Fri, 10 Jun 2022 18:36:46 +0800 (CST)
+        by mail.nfschina.com (Postfix) with ESMTP id 05E351E80D6E;
+        Fri, 10 Jun 2022 18:42:27 +0800 (CST)
 X-Virus-Scanned: amavisd-new at test.com
 Received: from mail.nfschina.com ([127.0.0.1])
         by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id q_szG_0-xxXj; Fri, 10 Jun 2022 18:36:44 +0800 (CST)
+        with ESMTP id JGR-NiiVUZu0; Fri, 10 Jun 2022 18:42:24 +0800 (CST)
 Received: from localhost.localdomain (unknown [219.141.250.2])
         (Authenticated sender: kunyu@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id DD7271E80D24;
-        Fri, 10 Jun 2022 18:36:43 +0800 (CST)
+        by mail.nfschina.com (Postfix) with ESMTPA id 313A51E80D24;
+        Fri, 10 Jun 2022 18:42:24 +0800 (CST)
 From:   Li kunyu <kunyu@nfschina.com>
-To:     chenhuacai@kernel.org, kernel@xen0n.name, rafael@kernel.org,
-        len.brown@intel.com, pavel@ucw.cz, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com
-Cc:     linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Li kunyu <kunyu@nfschina.com>
+To:     chenhuacai@kernel.org, rafael@kernel.org, len.brown@intel.com,
+        pavel@ucw.cz, mingo@redhat.com, bp@alien8.de
+Cc:     kernel@xen0n.name, tglx@linutronix.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Li kunyu <kunyu@nfschina.com>
 Subject: [PATCH] x86: Change the return type of acpi_map_cpu2node to void
-Date:   Fri, 10 Jun 2022 18:36:44 +0800
-Message-Id: <20220610103644.201245-1-kunyu@nfschina.com>
+Date:   Fri, 10 Jun 2022 18:43:05 +0800
+Message-Id: <20220610104305.201688-1-kunyu@nfschina.com>
 X-Mailer: git-send-email 2.18.2
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
