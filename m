@@ -2,142 +2,202 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14CDC5465EB
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 13:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B54B0546663
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 14:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244661AbiFJLn5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jun 2022 07:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
+        id S1348667AbiFJMRC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jun 2022 08:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346864AbiFJLnc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 07:43:32 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CB8703E7
-        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 04:43:26 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id k16so36181132wrg.7
-        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 04:43:26 -0700 (PDT)
+        with ESMTP id S1348606AbiFJMRA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 08:17:00 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23A024855A
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 05:16:55 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id d19so16916178lji.10
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 05:16:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=/5YJpP3pdMDmTKMTFCWXXpZqW0H2SA7UK43ZKjPSKgc=;
-        b=yob+Rw2WWG/AgEEPq6tT3/t3XqlSfSQ3jvHLFr/TIpmuPbFwxlVia+GRePZuFJQrJX
-         VSVY3sx0GIuiw0VQKSguBpC5ELizScKoMI6TLuUBBTkjSsU45pbZvHSYN3QQIWwgEg/M
-         Sdp90ArObWOLFb85Y4xamML12ImzqmdetXCwF1L/JmeLXQO6fDpCUwN86tocl4I+84Ld
-         D/uy3tGwWG3Sc3Rh1gch3KlR/1km1l68hmLjwRDDHTBdodJNabY9Da/rGnjqmxQa9CVY
-         +1lCdOb+Dur+ByiRyWxTzbYIp2MeU5W48PpAStjmAqwydWyT1/5nto8G63yNBnC5dPyM
-         p2Hw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gx0HoGasRN7LdR7eXYM/bWw5laTDgx21Bj10QU7IgZA=;
+        b=PnkYuuTonTwBAgjp/oKukv2FRIPd9je9Ttx3Q7yPHEpSoRKF9u97bHZ5iZ6/9JNTFS
+         rhA5sF0dx/LtqGpSihcCe5Vsf6yVNhWEm3yCE2Uc23JvAxaaelk/CWNhazNI/abNqL5Q
+         PABNTspLYCIwWOsW8fRrQUBWWG+XSnXU9YGS1QdDHhewm+5321VV+AVLpJ77ALXkJJzn
+         a7PxBnMdO7CtNWeROr5ayi4wtni+E2aA82zhcSJ752cDBFC2JaBTnRiTCa99ph0NtaTe
+         q4A1pWQNZCtjoPzO2v4xzEAh/BW094vPipo8w/R+PYFayhNprB/QBOhb9EPotq478h0V
+         kUUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=/5YJpP3pdMDmTKMTFCWXXpZqW0H2SA7UK43ZKjPSKgc=;
-        b=BeFFNvdMxPjK/860W080nceYh8/AP4YLXVNsryfklAPJ18KkKJIgZnOPjIpKQjUsRO
-         FojWEFTb3s0eniMazTWAOnB8t5FiCf3JK5o/wtdTaXINglX5D7qS1Klu5KXp+U4wMeiA
-         ws8elMavAWF37f3hfXU44hQ09Picz8kfTZ52Zqyoijmkx1dokrWyrfaCW6G1KD4ZAAXn
-         aI2Pc3fpbV9eHuy0zDAqTrIBaTO28fkhqWQBVM7g3yC0JD4ZlQ+9LLy3PFSQ/Pi2RSSp
-         xglos+gRA6DTmKN80Eq0ro0rMFMdZn5im1V+wFfrEGbk+ipc/8R+Jofsw5Q6htGTEYi9
-         6+Bw==
-X-Gm-Message-State: AOAM533oVYqwJSlwj267o8bCcWnr2nWCyIfqHXb5XWSryPJ71eHLrm4L
-        cyMmHES51jj/sgn8u2/dGeMfrg==
-X-Google-Smtp-Source: ABdhPJwseanLf0i2ChgalXTWzdaG20s3fQfwYCNZ/3tWzUs4mQ/RBHTRdI5POW1Eg22PbtGPF+QDtQ==
-X-Received: by 2002:a5d:6141:0:b0:20f:c66b:209d with SMTP id y1-20020a5d6141000000b0020fc66b209dmr42129589wrt.27.1654861404895;
-        Fri, 10 Jun 2022 04:43:24 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:936e:a821:ac60:872f? ([2a05:6e02:1041:c10:936e:a821:ac60:872f])
-        by smtp.googlemail.com with ESMTPSA id c15-20020a7bc00f000000b0039c4e2ff7cfsm2609787wmb.43.2022.06.10.04.43.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jun 2022 04:43:23 -0700 (PDT)
-Message-ID: <86edf34a-256d-9c30-9069-123aa1192c7e@linaro.org>
-Date:   Fri, 10 Jun 2022 13:43:22 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gx0HoGasRN7LdR7eXYM/bWw5laTDgx21Bj10QU7IgZA=;
+        b=ybE73la6tgE8t+phSC2vA6TuaIKUkXbgZ/eE883BFYudIBDKlUt59xvhGLkgRjfraP
+         Gc77XrErfjbdjpwnOs2yRm0s19HU2i64bkv+nw4RPxqI0gRZsI5GzlmgLNtQlexVNXOi
+         32qGh1D9JEI9GbQ1mPf1AXERMVewdJ3/IR/Yznhkk75KXJMMUiIj+O5ldC7NGb4Yc6pg
+         W+xvB9Vv4kg1k540Kg/v5wowu+8Z9EH6ho1yQdSuDBgM8mj+fZo2108pdRA/76LA7nr2
+         Frsz4wRsGeUO60bEqHCU20yKeqUGzofhED3XG0scTsTQHr8EP9BIcuugp/2iK1GUAzmf
+         0nJQ==
+X-Gm-Message-State: AOAM530lv29tm7iFK3qfVnkKLuJWBwe8MQ7NVpeUoiLAACpB7+3IWLbg
+        aIllJJpofgqQPTc4NwLEOYRNdckJAqZ80/FGP3bsdQ==
+X-Google-Smtp-Source: ABdhPJzVguDPZ+MKhgnbfJ241zsjVT6vsWAAftLPmBKsL1BbPVGEvC63gkUEhpJLAgXajRky7w54C+QoCvQsvmQNKRc=
+X-Received: by 2002:a2e:818c:0:b0:255:a6c5:4304 with SMTP id
+ e12-20020a2e818c000000b00255a6c54304mr10731225ljg.367.1654863413929; Fri, 10
+ Jun 2022 05:16:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [CFP] Power Management and Thermal Control MC at LPC 2022
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+References: <1843211.tdWV9SEqCh@kreacher> <2159220.NgBsaNRSFp@kreacher>
+In-Reply-To: <2159220.NgBsaNRSFp@kreacher>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 10 Jun 2022 14:16:17 +0200
+Message-ID: <CAPDyKFrbSm7iMx-XnMJ5xyKnd13_kC9w+qjVreeadUb=+bwaNQ@mail.gmail.com>
+Subject: Re: [PATCH v1 15/16] ACPI / MMC: PM: Unify fixing up device power
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Morten Rasmussen <morten.rasmussen@arm.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-References: <CAJZ5v0hjp2-yLN_UyQvMwhoPreTkA3xU0g3boYtxgLi6TWqabA@mail.gmail.com>
- <CAJZ5v0iLoGsauHTh+H7EemsjGApXpant0RQFEDZRQMiGoHzpCg@mail.gmail.com>
- <CAJZ5v0hEodhL2P50=MwN-jW7EF_k21CnQOnwiqTAGHyDo=2u3Q@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0hEodhL2P50=MwN-jW7EF_k21CnQOnwiqTAGHyDo=2u3Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-mmc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, 9 Jun 2022 at 16:20, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Introduce acpi_device_fix_up_power_extended() for fixing up power of
+> a device having an ACPI companion in a manner that takes the device's
+> children into account and make the MMC code use it in two places
+> instead of walking the list of the device ACPI companion's children
+> directly.
+>
+> This will help to eliminate the children list head from struct
+> acpi_device as it is redundant and it is used in questionable ways
+> in some places (in particular, locking is needed for walking the
+> list pointed to it safely, but it is often missing).
+>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Hi Rafael,
+Rafael, feel free to pick this via your tree.
 
-done.
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Thanks for the reminder
+Kind regards
+Uffe
 
-   -- Daniel
-
-ps: I noticed the dead line is not June 15th but June 13th
-
-
-On 09/06/2022 12:20, Rafael J. Wysocki wrote:
-> [I see I sent this from my personal e-mail address, sorry for the confusion.]
-> 
-> On Tue, Jun 7, 2022 at 5:30 PM Rafał Wysocki <rjwysocki@gmail.com> wrote:
->>
->> Hi All,
->>
->> On Wed, May 25, 2022 at 7:48 PM Rafał Wysocki <rjwysocki@gmail.com> wrote:
->>>
->>> Hi All,
->>>
->>> The Power Management and Thermal Control micro-conference:
->>>
->>> https://lpc.events/event/16/contributions/1158/
->>>
->>> has been accepted for the LPC 2022, so if you have a topic for
->>> discussion in that session, please submit it through the LPC web page:
->>>
->>> https://lpc.events/event/16/abstracts/
->>>
->>> (please choose Power Management and Thermal Control MC as the track).
->>> Please also submit topics already listed in the MC description.
->>>
->>> Please note that the LPC is mostly about discussing work in progress
->>> and development proposals, so make sure that your topic falls into
->>> this category.  In particular, please avoid submitting topics
->>> regarding work that has already been done.
->>>
->>> The LPC will be held in Dublin this year, but it should be possible to
->>> participate in the sessions remotely, so it should be fine to submit a
->>> topic even if you cannot go to Dublin in person.
->>>
->>> Looking forward to seeing you all at the LPC!
->>
->> The deadline for topic submissions is approaching (it appears to be June 15).
-> 
-> There are 5 topics submitted ATM, 4 from Intel and 1 from AMD.  ARM is
-> obviously underrepresented.
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> ---
+>  drivers/acpi/device_pm.c          |   22 ++++++++++++++++++++++
+>  drivers/mmc/host/sdhci-acpi.c     |    7 ++-----
+>  drivers/mmc/host/sdhci-pci-core.c |   11 +++--------
+>  include/acpi/acpi_bus.h           |    1 +
+>  4 files changed, 28 insertions(+), 13 deletions(-)
+>
+> Index: linux-pm/drivers/mmc/host/sdhci-acpi.c
+> ===================================================================
+> --- linux-pm.orig/drivers/mmc/host/sdhci-acpi.c
+> +++ linux-pm/drivers/mmc/host/sdhci-acpi.c
+> @@ -775,8 +775,8 @@ static int sdhci_acpi_probe(struct platf
+>  {
+>         struct device *dev = &pdev->dev;
+>         const struct sdhci_acpi_slot *slot;
+> -       struct acpi_device *device, *child;
+>         const struct dmi_system_id *id;
+> +       struct acpi_device *device;
+>         struct sdhci_acpi_host *c;
+>         struct sdhci_host *host;
+>         struct resource *iomem;
+> @@ -796,10 +796,7 @@ static int sdhci_acpi_probe(struct platf
+>         slot = sdhci_acpi_get_slot(device);
+>
+>         /* Power on the SDHCI controller and its children */
+> -       acpi_device_fix_up_power(device);
+> -       list_for_each_entry(child, &device->children, node)
+> -               if (child->status.present && child->status.enabled)
+> -                       acpi_device_fix_up_power(child);
+> +       acpi_device_fix_up_power_extended(device);
+>
+>         if (sdhci_acpi_byt_defer(dev))
+>                 return -EPROBE_DEFER;
+> Index: linux-pm/drivers/acpi/device_pm.c
+> ===================================================================
+> --- linux-pm.orig/drivers/acpi/device_pm.c
+> +++ linux-pm/drivers/acpi/device_pm.c
+> @@ -369,6 +369,28 @@ int acpi_device_fix_up_power(struct acpi
+>  }
+>  EXPORT_SYMBOL_GPL(acpi_device_fix_up_power);
+>
+> +static int fix_up_power_if_applicable(struct acpi_device *adev, void *not_used)
+> +{
+> +       if (adev->status.present && adev->status.enabled)
+> +               acpi_device_fix_up_power(adev);
+> +
+> +       return 0;
+> +}
+> +
+> +/**
+> + * acpi_device_fix_up_power_extended - Force device and its children into D0.
+> + * @adev: Parent device object whose power state is to be fixed up.
+> + *
+> + * Call acpi_device_fix_up_power() for @adev and its children so long as they
+> + * are reported as present and enabled.
+> + */
+> +void acpi_device_fix_up_power_extended(struct acpi_device *adev)
+> +{
+> +       acpi_device_fix_up_power(adev);
+> +       acpi_dev_for_each_child(adev, fix_up_power_if_applicable, NULL);
+> +}
+> +EXPORT_SYMBOL_GPL(acpi_device_fix_up_power_extended);
+> +
+>  int acpi_device_update_power(struct acpi_device *device, int *state_p)
+>  {
+>         int state;
+> Index: linux-pm/include/acpi/acpi_bus.h
+> ===================================================================
+> --- linux-pm.orig/include/acpi/acpi_bus.h
+> +++ linux-pm/include/acpi/acpi_bus.h
+> @@ -524,6 +524,7 @@ const char *acpi_power_state_string(int
+>  int acpi_device_set_power(struct acpi_device *device, int state);
+>  int acpi_bus_init_power(struct acpi_device *device);
+>  int acpi_device_fix_up_power(struct acpi_device *device);
+> +void acpi_device_fix_up_power_extended(struct acpi_device *adev);
+>  int acpi_bus_update_power(acpi_handle handle, int *state_p);
+>  int acpi_device_update_power(struct acpi_device *device, int *state_p);
+>  bool acpi_bus_power_manageable(acpi_handle handle);
+> Index: linux-pm/drivers/mmc/host/sdhci-pci-core.c
+> ===================================================================
+> --- linux-pm.orig/drivers/mmc/host/sdhci-pci-core.c
+> +++ linux-pm/drivers/mmc/host/sdhci-pci-core.c
+> @@ -1240,16 +1240,11 @@ static const struct sdhci_pci_fixes sdhc
+>  #ifdef CONFIG_ACPI
+>  static void intel_mrfld_mmc_fix_up_power_slot(struct sdhci_pci_slot *slot)
+>  {
+> -       struct acpi_device *device, *child;
+> +       struct acpi_device *device;
+>
+>         device = ACPI_COMPANION(&slot->chip->pdev->dev);
+> -       if (!device)
+> -               return;
+> -
+> -       acpi_device_fix_up_power(device);
+> -       list_for_each_entry(child, &device->children, node)
+> -               if (child->status.present && child->status.enabled)
+> -                       acpi_device_fix_up_power(child);
+> +       if (device)
+> +               acpi_device_fix_up_power_extended(device);
+>  }
+>  #else
+>  static inline void intel_mrfld_mmc_fix_up_power_slot(struct sdhci_pci_slot *slot) {}
+>
+>
+>
