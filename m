@@ -2,97 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3399A546CCE
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 20:57:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1EA546CDB
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 21:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346441AbiFJS4L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jun 2022 14:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57198 "EHLO
+        id S1348059AbiFJTAt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jun 2022 15:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350378AbiFJS4K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 14:56:10 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0422C3687
-        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 11:56:08 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id d14so63467eda.12
-        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 11:56:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=tu0fTzyqzrDJCvJGCoSzfL+uIt2SiB12w9Df3WqdSV0=;
-        b=ILPRMvLcgdxn/DJNTX08x1h2h3sgKMyHcZtrB0IEbwm4hz9uSYatcWVJtnDpcfS8IX
-         3UNkjqU2QEwLI2xDs2BoFuu81wU+NJ5abcvTGRNZQxPzK87bsS1K1mXl7M2rpkSsPfAi
-         kLRW+sbic7AqBlS8DWLRz/s978b5Hu1HTvHwY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=tu0fTzyqzrDJCvJGCoSzfL+uIt2SiB12w9Df3WqdSV0=;
-        b=r49C3LrtMDravNFKlb6xfZkGZINV1Zz8pf9Smeq4kr69ZZfFUMiUPk8dR9bnv+xejJ
-         sNWGhbyK9Isd3vp5zlBIA2uydmmBYMB88pCRjNu3wAetJ6XXX0BtES7qpI6AiykrZTKX
-         Hnkc0hDNTYCtayCStTfTadLs4YFj2qVOz3oCSjifbZ+yBDW6udpew6lgVsiIW4m0QASC
-         dHaWlvVV22ljSNM7s/9q5mZ9Y9aK3C7eA9sQ3EhjwN0DHMsgGs0csxM/TvpJX+UesM3W
-         Yb/w8er6rJqEy7EfuP6pbPewapbZajS5SCh53FI9YrEslTXXC5fL9yRaALauk1LbxaoE
-         Zpcw==
-X-Gm-Message-State: AOAM530OCpdLfakNrs8zvOh4nrMyKxopPhODnGAQ+j6sdHCZMYUmXWEW
-        BiIiARJr7wNCa8UnUBM9IR4XOtH90QGilXvNPnk=
-X-Google-Smtp-Source: ABdhPJwM1NKOtjrC++hy7kMO+8PxnX/HErN3t8e1nsf2P91RrMnp4nUstkyPlhIaDQhw8HZrdlaSIg==
-X-Received: by 2002:a05:6402:350e:b0:42f:b2c1:9393 with SMTP id b14-20020a056402350e00b0042fb2c19393mr42463560edd.11.1654887367206;
-        Fri, 10 Jun 2022 11:56:07 -0700 (PDT)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
-        by smtp.gmail.com with ESMTPSA id i9-20020a05640242c900b0042dce73168csm27379edc.13.2022.06.10.11.56.06
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jun 2022 11:56:06 -0700 (PDT)
-Received: by mail-wm1-f46.google.com with SMTP id 67-20020a1c1946000000b00397382b44f4so98471wmz.2
-        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 11:56:06 -0700 (PDT)
-X-Received: by 2002:a05:600c:3485:b0:39c:7db5:f0f7 with SMTP id
- a5-20020a05600c348500b0039c7db5f0f7mr1123490wmq.8.1654887366093; Fri, 10 Jun
- 2022 11:56:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAJZ5v0j0YHi9XURA8pU=+zAyCB7kDFCJQ9G=PhfcVMygyWaV=A@mail.gmail.com>
- <CAJZ5v0i-BD=00qDK_mZ1=BF3DJeGA5CPLV+tUpEd2iEz0YHmsw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0i-BD=00qDK_mZ1=BF3DJeGA5CPLV+tUpEd2iEz0YHmsw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 10 Jun 2022 11:55:49 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whN=JSrmOGURKTXZLjn=dwmhXw1_BfWazNA6-idK1mVqg@mail.gmail.com>
-Message-ID: <CAHk-=whN=JSrmOGURKTXZLjn=dwmhXw1_BfWazNA6-idK1mVqg@mail.gmail.com>
+        with ESMTP id S1350442AbiFJTAs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 15:00:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256D62C27A8;
+        Fri, 10 Jun 2022 12:00:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C4186B83533;
+        Fri, 10 Jun 2022 19:00:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 93FA2C34114;
+        Fri, 10 Jun 2022 19:00:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654887645;
+        bh=1jFA1VUAtjuqODgt6WoxxjMtvZfN63q0VKqpixx7MXo=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=onuMFOLz3LDRj5sTwcDU/FfQKNMxUxA8gX6QNsQ9T0/gnX6q9JrsFSmjooRyvpvVZ
+         qspCG+T62QqSRjEmvjq8rNHHpQhIRVxmDQzwHgKOoIpkSxo0QVfL7YlJ/5D7ur+qP2
+         YOmdls48ECkRqKB7kCw9j43pGqv0gfzsDwy0pI/lLibYna9LQFukgY+pdnjOd7JpeJ
+         Um73lVpB3xtx4UNXRfbmbqFtM684/6Aj1MJrQV+LrjSLjmuHVL4A/QzI6wWjc1TBkB
+         J28XCBrqZrpMpV13ft+YsmmXdXxghJoirYG4yF8YauxkfnN2rw89AvOPEiqNPARfF4
+         SRgYScd55RIqw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 806C0E737EE;
+        Fri, 10 Jun 2022 19:00:45 +0000 (UTC)
 Subject: Re: [GIT PULL] Power management fixes for v5.19-rc2
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0j0YHi9XURA8pU=+zAyCB7kDFCJQ9G=PhfcVMygyWaV=A@mail.gmail.com>
+References: <CAJZ5v0j0YHi9XURA8pU=+zAyCB7kDFCJQ9G=PhfcVMygyWaV=A@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0j0YHi9XURA8pU=+zAyCB7kDFCJQ9G=PhfcVMygyWaV=A@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.19-rc2
+X-PR-Tracked-Commit-Id: 67e59f8d019fb097f35c82533cc9b27bb392e5b1
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 1bc27dec7ea5ac01f126734b723acc5f3cbe5713
+Message-Id: <165488764551.19537.14380231257193355856.pr-tracker-bot@kernel.org>
+Date:   Fri, 10 Jun 2022 19:00:45 +0000
+To:     =?UTF-8?Q?Rafa=C5=82_Wysocki?= <rjwysocki@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 11:50 AM Rafael J. Wysocki <rafael@kernel.org> wrot=
-e:
->
-> On Fri, Jun 10, 2022 at 8:47 PM Rafa=C5=82 Wysocki <rjwysocki@gmail.com> =
-wrote:
->
-> This was sent from my personal e-mail address again, hopefully that's
-> not a problem.
+The pull request you sent on Fri, 10 Jun 2022 20:47:58 +0200:
 
-Not a problem, the signature on the tag clarifies this.
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-5.19-rc2
 
-It meant that I initially copied your name as "Rafa=C5=82", but then I had
-this dim memory that you at some point said you actually preferred the
-kernel using the Westernized "Rafael" that you use in your kernel.org
-emails (and in your sign-offs), so I ended up editing that up.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/1bc27dec7ea5ac01f126734b723acc5f3cbe5713
 
-But just so you know - I randomly copy the names either from the email
-or from the signature block depending on the phase of the moon, and if
-you use your personal email you might end up being "Rafa=C5=82 Wysocki" as
-a result..
+Thank you!
 
-                Linus
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
