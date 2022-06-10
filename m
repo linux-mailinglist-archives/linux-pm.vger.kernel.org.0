@@ -2,167 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 941CE54631B
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 12:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCD754638C
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 12:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347521AbiFJKEE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jun 2022 06:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
+        id S240208AbiFJK3N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jun 2022 06:29:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348445AbiFJKED (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 06:04:03 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B50063B566;
-        Fri, 10 Jun 2022 03:04:01 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9C81912FC;
-        Fri, 10 Jun 2022 03:04:01 -0700 (PDT)
-Received: from e123648.arm.com (unknown [10.57.39.215])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 728343F766;
-        Fri, 10 Jun 2022 03:03:59 -0700 (PDT)
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        lukasz.luba@arm.com, viresh.kumar@linaro.org, rafael@kernel.org,
-        dietmar.eggemann@arm.com
-Subject: [PATCH 3/3] thermal: cpufreq_cooling: Update outdated comments
-Date:   Fri, 10 Jun 2022 11:03:43 +0100
-Message-Id: <20220610100343.32378-3-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220610100343.32378-1-lukasz.luba@arm.com>
-References: <20220610100343.32378-1-lukasz.luba@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S244609AbiFJK3L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 06:29:11 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC12140E0
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 03:29:10 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id o7so19320713eja.1
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 03:29:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tLO8M+bBtsFeLQBJeKorjii5kkChBo5ctWVAnJ9k72s=;
+        b=iWa9dQh1aY0vk7XC0r8UEikGjxDa0uCh5Wc2lvho+xKfJiDj6HkxfBcDbx9gQzhv8X
+         7k329I4+2op+Pu02VnxThT1bk9bLwv/jDU9ts6khNIgfmUHsPm0vNn0CVwPmMP/NH0CW
+         Y0tfDdFeqzdGpnrBs6SwDOQHHMyzcAPxtt8X13eKJexaya4MpHXRhHeWJVLERwA1O4em
+         KcVwzVVu0yiSJMK3WhtxOP6o5c6qiRpPodSPoj1/ewTrTmMB/y+8EBrbV25KnRM8IAbe
+         cXUiVQWQUZDMpCctn3rko0yzLSGpVG6XN16cGeqeAq3Klacrt3fgbpV/NXXKnSmX45/8
+         8ItA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tLO8M+bBtsFeLQBJeKorjii5kkChBo5ctWVAnJ9k72s=;
+        b=0b9dQI3hEJohpMpYt+1ew/53Xv+fj6PASq4o226mz0+X2w4616VOev/g5TxrKo2N1K
+         RfPXKc6U/L/mSXxKblJVEkNedcm3CqWdOSUgHgqjNsKYPUE+QD7iXCAhnHrBwOgP20EJ
+         ow2E2X7hydWn5ar6ikyn9smsb93qDLKAezPd5Ubcvkoxu2b1pmmlbo8ilIMxrwTllmxs
+         sAsk1C+f9vdOkjzMLlOAzjd2Lu//F/iNidOVQf8tKFCte6tOKlcRfXi1Y+cL5panB/fL
+         DYWTChdaqAnOiPwfy/ciTQfnQHiH4k+ZApN/h7VuL2EiZnKBM9zBKTQ2L7ZVVap0VFhr
+         gGhg==
+X-Gm-Message-State: AOAM5306c9UbymfxzteodjbV7ofrlMiHUSlNF4tlKece40/hAJKPiUNI
+        TanNAaEhQw1JSTflRRVKgIlGVw==
+X-Google-Smtp-Source: ABdhPJzo4/uJou01xICnCHlFFG6i9dGDLudvClUxMGfQhm5qoPNHdvDugPnGWxs+wZCCnIrwagewCw==
+X-Received: by 2002:a17:907:9495:b0:6ff:14df:d2a with SMTP id dm21-20020a170907949500b006ff14df0d2amr39824681ejc.338.1654856948936;
+        Fri, 10 Jun 2022 03:29:08 -0700 (PDT)
+Received: from [192.168.0.202] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id p21-20020aa7cc95000000b0042fb17da833sm12259010edt.60.2022.06.10.03.29.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Jun 2022 03:29:08 -0700 (PDT)
+Message-ID: <2edb2dbc-0f62-23cc-2f32-3d27d83a194e@linaro.org>
+Date:   Fri, 10 Jun 2022 12:29:07 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v9 2/2] dt-bindings:thermal: Add Sunplus schema
+Content-Language: en-US
+To:     =?UTF-8?B?6YOt5Yqb6LGq?= <lhjeff911@gmail.com>, rafael@kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>, amitk@kernel.org,
+        rui.zhang@intel.com, robh+dt@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "lh.kuo" <lh.kuo@sunplus.com>,
+        =?UTF-8?B?5ZGC6Iqz6aiwTHVXZWxscw==?= <wells.lu@sunplus.com>
+References: <CAGcXWkzSrEPPT2m=2trWN-BV-ix9TcHCvZYya5i54ei=EWGTZw@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAGcXWkzSrEPPT2m=2trWN-BV-ix9TcHCvZYya5i54ei=EWGTZw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The code has moved and left some comments stale. Update them where
-there is a need.
+On 10/06/2022 03:32, 郭力豪 wrote:
+> Add bindings for Sunplus thermal driver
+> 
+> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
- drivers/thermal/cpufreq_cooling.c | 44 +++++++++++++------------------
- 1 file changed, 18 insertions(+), 26 deletions(-)
+Thank you for your patch. There is something to discuss/improve.
 
-diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-index 2ef1dc2b96a3..e72ff85b9d7e 100644
---- a/drivers/thermal/cpufreq_cooling.c
-+++ b/drivers/thermal/cpufreq_cooling.c
-@@ -204,7 +204,7 @@ static u32 get_dynamic_power(struct cpufreq_cooling_device *cpufreq_cdev,
-  * complex code may be needed if experiments show that it's not
-  * accurate enough.
-  *
-- * Return: 0 on success, -E* if getting the static power failed.
-+ * Return: 0 on success, this function doesn't fail.
-  */
- static int cpufreq_get_requested_power(struct thermal_cooling_device *cdev,
- 				       u32 *power)
-@@ -247,9 +247,8 @@ static int cpufreq_get_requested_power(struct thermal_cooling_device *cdev,
-  * milliwatts assuming 100% load.  Store the calculated power in
-  * @power.
-  *
-- * Return: 0 on success, -EINVAL if the cooling device state could not
-- * be converted into a frequency or other -E* if there was an error
-- * when calculating the static power.
-+ * Return: 0 on success, -EINVAL if the cooling device state is bigger
-+ * than maximum allowed.
-  */
- static int cpufreq_state2power(struct thermal_cooling_device *cdev,
- 			       unsigned long state, u32 *power)
-@@ -279,15 +278,11 @@ static int cpufreq_state2power(struct thermal_cooling_device *cdev,
-  * Calculate a cooling device state for the cpus described by @cdev
-  * that would allow them to consume at most @power mW and store it in
-  * @state.  Note that this calculation depends on external factors
-- * such as the cpu load or the current static power.  Calling this
-- * function with the same power as input can yield different cooling
-- * device states depending on those external factors.
-- *
-- * Return: 0 on success, -ENODEV if no cpus are online or -EINVAL if
-- * the calculated frequency could not be converted to a valid state.
-- * The latter should not happen unless the frequencies available to
-- * cpufreq have changed since the initialization of the cpu cooling
-- * device.
-+ * such as the CPUs load.  Calling this function with the same power
-+ * as input can yield different cooling device states depending on those
-+ * external factors.
-+ *
-+ * Return: 0 on success, this function doesn't fail.
-  */
- static int cpufreq_power2state(struct thermal_cooling_device *cdev,
- 			       u32 power, unsigned long *state)
-@@ -399,7 +394,7 @@ static unsigned int get_state_freq(struct cpufreq_cooling_device *cpufreq_cdev,
-  * Callback for the thermal cooling device to return the cpufreq
-  * max cooling state.
-  *
-- * Return: 0 on success, an error code otherwise.
-+ * Return: 0 on success, this function doesn't fail.
-  */
- static int cpufreq_get_max_state(struct thermal_cooling_device *cdev,
- 				 unsigned long *state)
-@@ -418,7 +413,7 @@ static int cpufreq_get_max_state(struct thermal_cooling_device *cdev,
-  * Callback for the thermal cooling device to return the cpufreq
-  * current cooling state.
-  *
-- * Return: 0 on success, an error code otherwise.
-+ * Return: 0 on success, this function doesn't fail.
-  */
- static int cpufreq_get_cur_state(struct thermal_cooling_device *cdev,
- 				 unsigned long *state)
-@@ -485,7 +480,7 @@ static struct thermal_cooling_device_ops cpufreq_cooling_ops = {
-  * @em: Energy Model of the cpufreq policy
-  *
-  * This interface function registers the cpufreq cooling device with the name
-- * "thermal-cpufreq-%x". This api can support multiple instances of cpufreq
-+ * "cpufreq-%s". This API can support multiple instances of cpufreq
-  * cooling devices. It also gives the opportunity to link the cooling device
-  * with a device tree node, in order to bind it via the thermal DT code.
-  *
-@@ -600,8 +595,8 @@ __cpufreq_cooling_register(struct device_node *np,
-  * @policy: cpufreq policy
-  *
-  * This interface function registers the cpufreq cooling device with the name
-- * "thermal-cpufreq-%x". This api can support multiple instances of cpufreq
-- * cooling devices.
-+ * "cpufreq-%s". This API can support multiple instances of cpufreq cooling
-+ * devices.
-  *
-  * Return: a valid struct thermal_cooling_device pointer on success,
-  * on failure, it returns a corresponding ERR_PTR().
-@@ -618,17 +613,14 @@ EXPORT_SYMBOL_GPL(cpufreq_cooling_register);
-  * @policy: cpufreq policy
-  *
-  * This interface function registers the cpufreq cooling device with the name
-- * "thermal-cpufreq-%x". This api can support multiple instances of cpufreq
-- * cooling devices. Using this API, the cpufreq cooling device will be
-- * linked to the device tree node provided.
-+ * "cpufreq-%s". This API can support multiple instances of cpufreq cooling
-+ * devices. Using this API, the cpufreq cooling device will be linked to the
-+ * device tree node provided.
-  *
-  * Using this function, the cooling device will implement the power
-- * extensions by using a simple cpu power model.  The cpus must have
-+ * extensions by using the Energy Model (if present).  The cpus must have
-  * registered their OPPs using the OPP library.
-  *
-- * It also takes into account, if property present in policy CPU node, the
-- * static power consumed by the cpu.
-- *
-  * Return: a valid struct thermal_cooling_device pointer on success,
-  * and NULL on failure.
-  */
-@@ -664,7 +656,7 @@ EXPORT_SYMBOL_GPL(of_cpufreq_cooling_register);
-  * cpufreq_cooling_unregister - function to remove cpufreq cooling device.
-  * @cdev: thermal cooling device pointer.
-  *
-- * This interface function unregisters the "thermal-cpufreq-%x" cooling device.
-+ * This interface function unregisters the "cpufreq-%x" cooling device.
-  */
- void cpufreq_cooling_unregister(struct thermal_cooling_device *cdev)
- {
--- 
-2.17.1
+> ---
+> Changes in v9:
+>  - Change the setting of compatible
+>  - Mosdify the setting of remove funciton.
 
+Your subject misses space after "dt-bindings:". Look at other patches
+how they are named. Please fix it.
+Normally I would give conditional review, but I am afraid it you won't
+fix it, based on our previous history here. :(
+
+So sorry, but for such small change, I expect v10.
+
+Best regards,
+Krzysztof
