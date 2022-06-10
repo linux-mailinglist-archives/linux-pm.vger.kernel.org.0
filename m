@@ -2,64 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 907F5545EC6
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 10:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3627F545EC8
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 10:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347337AbiFJIYU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jun 2022 04:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60018 "EHLO
+        id S1347667AbiFJIY0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jun 2022 04:24:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348090AbiFJIYC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 04:24:02 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7973E7DCE
-        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 01:21:04 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id f65so13927596pgc.7
-        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 01:21:04 -0700 (PDT)
+        with ESMTP id S1347410AbiFJIYI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 04:24:08 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0830A3E866E
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 01:21:07 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id q18so22202462pln.12
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 01:21:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e26ugP+G0D2r5xR0rmI7tzXuT4/A3dEEKa7RW0oG3h8=;
-        b=rp11IKySQeUqZjSXxco0cSSupsGWjAH2k0IcKlNpZgrodfzpYhZ9EhosVi0nJnzCvu
-         OvPa27L5AFIJYsuKoxLfrmVpeRCapjhj2DUgHw35rVtgGB7CxnoOBgAF0FXW9MnsfQ88
-         Fpzl/XGYfoPrFuq6cHZ6j/+j5+ewGEVT4QH1+oMhfyWlWfcS4suvKkrcTi7FVpaQfJEk
-         HesevTNGOjveg2q3nqEkBjczH8z3v0cbv2CNNmxS8e1J0upmjFLV0KPYxcpYU7mkNdy1
-         cnO28senNigNxDEgGyXSSV4stL+DGoTxfaQlUS9XouiqxfyoFQRgP4zh9fgUoxaDZ6y8
-         gFJw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=nqmtsnnn/rBbgkYjsLkZHJ0d80G5x0xgJus9h30FBZI=;
+        b=RWzCHuEdf3vWCLjvt9cbjQmgL5DJ8D41Dw0K9q7oQ2Z17dJVX/Ex8GYjo4MxpIMyIx
+         n1jHM8GfK7Rjl8yTKYpta3YOhk7wz+q/3mebsqtJDiDlbo03fegZXHY6nW0czkAajCrI
+         NKoHem/WfBBDFKBvkOTszVml4Vw/Bak1nDSP6p/4mw041gKK4f6gt8cRnU918RztLxor
+         xx3bJG0/ZeLhNkaQKrorpXipGhF5IWQogb+mCuP8JieCIVsYUt3LAuWb/fzDxgMA0WUD
+         OUy/iDZ67NpeGVRqO3pSxWH/WabsZSP84xmnl/3eIVdEu5h6553DgmmiHX6H3ZPXjGby
+         glyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e26ugP+G0D2r5xR0rmI7tzXuT4/A3dEEKa7RW0oG3h8=;
-        b=Fc1+5NibCGEMY5KgjL6Q4rc9RDyWbjnXAeZvXW+IBYbiiDw68VNDhdNgm7YTBkoBio
-         auY6Jh23SwOzNMpdwVkNUnp96AHZw2OAz1pT6ZhE//BARbVV4kfPao6AIGn+cVYnQxsQ
-         K9HBZGwVZdo7Aed+/NrovTGSHNNHJcjqmyli9oiQiMeRnixAsT8j4qKQD3yRC6XoPO82
-         +a0/6332+UKApQMzC1oO7U21HU2eHPQiHrAHnWb99N/TG9hup0MFmK+Rv8rdRKZZE1jP
-         gvp3E6tNkIcYpxssitacrnCh1rpPsjx91G1uneUlsGDu3oDtU6fuszyK6SAyyBX9HOq6
-         KqTg==
-X-Gm-Message-State: AOAM5312pUSfM9zksnbZt4+frwVw8M52T75zmQ2yswJOcXy1qGosDBHR
-        r/91gsYMvz/4QSBckAHLM6hleA==
-X-Google-Smtp-Source: ABdhPJzS5tE0forDdQKBwrlwDpZzjHGLAz8PkQkqz1GDmOqpjiduq08hWCxEpAi6sQyk+83yDqtd6A==
-X-Received: by 2002:a63:441f:0:b0:3fc:8bd2:f828 with SMTP id r31-20020a63441f000000b003fc8bd2f828mr38169652pga.579.1654849263818;
-        Fri, 10 Jun 2022 01:21:03 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=nqmtsnnn/rBbgkYjsLkZHJ0d80G5x0xgJus9h30FBZI=;
+        b=gAZCETZJQlvZWqQ0z3fknjcPGsDS1dGxqHtarzKeAoYWTlO/znp2q3bsnG2+4ut7wU
+         gbHZVQWLcC/gJP7moM4Yn0xKDwwuxNngFT8/DnJr+dG4WjHHMunPkvYCgjNNS6fiByiW
+         ZFUjpucB46ucUceTVi6st7/9SJJuJlvNvEuodytdeJuW9hLzOoSk9O5QSSLMfEVD6H8R
+         giP5OLx2eMIa3Aqsl1minxhZCHl2G0AvtaMTlXSELYopwhh95MGU3YpWM5LQwAkl9AIi
+         o79SQtUgPmkiXJGdBqArOJzDK/2ZsY2As+W0z+7ZDdR2nwUly98/0E5vQX3ChmruzeK6
+         V0RA==
+X-Gm-Message-State: AOAM531oHYDbRyjKs3zAvzGJxNU0wG9U/ZIYmM1R1Kh0TylH5K96Acc8
+        48uxaz5gPv+8Nt7w4DWq7MMsOA==
+X-Google-Smtp-Source: ABdhPJzyphAF7MDKdO4LsySNr5NaWrcjnl2906vaS5KqAf4pmbtKPZggcXN/K3cTSGASmWxsAIJbvw==
+X-Received: by 2002:a17:90b:350b:b0:1e8:5177:fe7d with SMTP id ls11-20020a17090b350b00b001e85177fe7dmr7789962pjb.142.1654849266751;
+        Fri, 10 Jun 2022 01:21:06 -0700 (PDT)
 Received: from localhost ([122.162.234.2])
-        by smtp.gmail.com with ESMTPSA id gi6-20020a17090b110600b001e2f53e1042sm1117593pjb.7.2022.06.10.01.21.03
+        by smtp.gmail.com with ESMTPSA id n10-20020a056a0007ca00b0051bd9981ccbsm15298810pfu.39.2022.06.10.01.21.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jun 2022 01:21:03 -0700 (PDT)
+        Fri, 10 Jun 2022 01:21:06 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
 Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 0/8] OPP: Add support for multiple clocks
-Date:   Fri, 10 Jun 2022 13:50:44 +0530
-Message-Id: <cover.1654849214.git.viresh.kumar@linaro.org>
+Subject: [PATCH 1/8] OPP: Use consistent names for OPP table instances
+Date:   Fri, 10 Jun 2022 13:50:45 +0530
+Message-Id: <03780196cbd07ffff8ea4a1b2b4627a19a22e262.1654849214.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+In-Reply-To: <cover.1654849214.git.viresh.kumar@linaro.org>
+References: <cover.1654849214.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,39 +73,127 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+The OPP table is called "opp_table" at most of the places and "table" at
+few. Make all of them follow the same naming convention, "opp_table".
 
-This patchset adds support for device with multiple clocks. None of the clocks
-is considered primary in this case and all are handled equally.
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ drivers/opp/core.c |  7 ++++---
+ drivers/opp/cpu.c  | 12 ++++++------
+ drivers/opp/of.c   | 12 ++++++------
+ 3 files changed, 16 insertions(+), 15 deletions(-)
 
-This is rebased over a lot of other OPP changes and is pushed here:
-
-git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/clk
-
-Krzysztof, can you please test this for your use case. I wasn't able to test he
-multiple clock support.
-
---
-Viresh
-
-Viresh Kumar (8):
-  OPP: Use consistent names for OPP table instances
-  OPP: Remove rate_not_available parameter to _opp_add()
-  OPP: Reuse _opp_compare_key() in _opp_add_static_v2()
-  OPP: Make dev_pm_opp_set_opp() independent of frequency
-  OPP: Allow multiple clocks for a device
-  OPP: Add key specific assert() method to key finding helpers
-  OPP: Assert clk_count == 1 for single clk helpers
-  OPP: Provide a simple implementation to configure multiple clocks
-
- drivers/opp/core.c     | 337 +++++++++++++++++++++++++++++++----------
- drivers/opp/cpu.c      |  12 +-
- drivers/opp/debugfs.c  |  27 +++-
- drivers/opp/of.c       |  91 +++++++----
- drivers/opp/opp.h      |  22 +--
- include/linux/pm_opp.h |  17 ++-
- 6 files changed, 378 insertions(+), 128 deletions(-)
-
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 6e6c1ca92641..404f43759066 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -1567,15 +1567,16 @@ void dev_pm_opp_remove_all_dynamic(struct device *dev)
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_opp_remove_all_dynamic);
+ 
+-struct dev_pm_opp *_opp_allocate(struct opp_table *table)
++struct dev_pm_opp *_opp_allocate(struct opp_table *opp_table)
+ {
+ 	struct dev_pm_opp *opp;
+ 	int supply_count, supply_size, icc_size;
+ 
+ 	/* Allocate space for at least one supply */
+-	supply_count = table->regulator_count > 0 ? table->regulator_count : 1;
++	supply_count = opp_table->regulator_count > 0 ?
++			opp_table->regulator_count : 1;
+ 	supply_size = sizeof(*opp->supplies) * supply_count;
+-	icc_size = sizeof(*opp->bandwidth) * table->path_count;
++	icc_size = sizeof(*opp->bandwidth) * opp_table->path_count;
+ 
+ 	/* allocate new OPP node and supplies structures */
+ 	opp = kzalloc(sizeof(*opp) + supply_size + icc_size, GFP_KERNEL);
+diff --git a/drivers/opp/cpu.c b/drivers/opp/cpu.c
+index 5004335cf0de..3c3506021501 100644
+--- a/drivers/opp/cpu.c
++++ b/drivers/opp/cpu.c
+@@ -41,7 +41,7 @@
+  * the table if any of the mentioned functions have been invoked in the interim.
+  */
+ int dev_pm_opp_init_cpufreq_table(struct device *dev,
+-				  struct cpufreq_frequency_table **table)
++				  struct cpufreq_frequency_table **opp_table)
+ {
+ 	struct dev_pm_opp *opp;
+ 	struct cpufreq_frequency_table *freq_table = NULL;
+@@ -76,7 +76,7 @@ int dev_pm_opp_init_cpufreq_table(struct device *dev,
+ 	freq_table[i].driver_data = i;
+ 	freq_table[i].frequency = CPUFREQ_TABLE_END;
+ 
+-	*table = &freq_table[0];
++	*opp_table = &freq_table[0];
+ 
+ out:
+ 	if (ret)
+@@ -94,13 +94,13 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_init_cpufreq_table);
+  * Free up the table allocated by dev_pm_opp_init_cpufreq_table
+  */
+ void dev_pm_opp_free_cpufreq_table(struct device *dev,
+-				   struct cpufreq_frequency_table **table)
++				   struct cpufreq_frequency_table **opp_table)
+ {
+-	if (!table)
++	if (!opp_table)
+ 		return;
+ 
+-	kfree(*table);
+-	*table = NULL;
++	kfree(*opp_table);
++	*opp_table = NULL;
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_opp_free_cpufreq_table);
+ #endif	/* CONFIG_CPU_FREQ */
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index 30394929d700..e07fc31de416 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -767,7 +767,7 @@ void dev_pm_opp_of_remove_table(struct device *dev)
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_opp_of_remove_table);
+ 
+-static int _read_bw(struct dev_pm_opp *new_opp, struct opp_table *table,
++static int _read_bw(struct dev_pm_opp *new_opp, struct opp_table *opp_table,
+ 		    struct device_node *np, bool peak)
+ {
+ 	const char *name = peak ? "opp-peak-kBps" : "opp-avg-kBps";
+@@ -780,9 +780,9 @@ static int _read_bw(struct dev_pm_opp *new_opp, struct opp_table *table,
+ 		return -ENODEV;
+ 
+ 	count = prop->length / sizeof(u32);
+-	if (table->path_count != count) {
++	if (opp_table->path_count != count) {
+ 		pr_err("%s: Mismatch between %s and paths (%d %d)\n",
+-				__func__, name, count, table->path_count);
++				__func__, name, count, opp_table->path_count);
+ 		return -EINVAL;
+ 	}
+ 
+@@ -808,7 +808,7 @@ static int _read_bw(struct dev_pm_opp *new_opp, struct opp_table *table,
+ 	return ret;
+ }
+ 
+-static int _read_opp_key(struct dev_pm_opp *new_opp, struct opp_table *table,
++static int _read_opp_key(struct dev_pm_opp *new_opp, struct opp_table *opp_table,
+ 			 struct device_node *np, bool *rate_not_available)
+ {
+ 	bool found = false;
+@@ -832,10 +832,10 @@ static int _read_opp_key(struct dev_pm_opp *new_opp, struct opp_table *table,
+ 	 * opp-peak-kBps = <path1_value path2_value>;
+ 	 * opp-avg-kBps = <path1_value path2_value>;
+ 	 */
+-	ret = _read_bw(new_opp, table, np, true);
++	ret = _read_bw(new_opp, opp_table, np, true);
+ 	if (!ret) {
+ 		found = true;
+-		ret = _read_bw(new_opp, table, np, false);
++		ret = _read_bw(new_opp, opp_table, np, false);
+ 	}
+ 
+ 	/* The properties were found but we failed to parse them */
 -- 
 2.31.1.272.g89b43f80a514
 
