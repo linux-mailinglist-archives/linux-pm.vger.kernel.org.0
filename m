@@ -2,76 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 251F0545DE0
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 09:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30105545E1F
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 10:04:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236674AbiFJHzk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jun 2022 03:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32878 "EHLO
+        id S1346746AbiFJIE5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jun 2022 04:04:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236625AbiFJHzj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 03:55:39 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4876E53C4A
-        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 00:55:38 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LKCsm2PsGzjXKL;
-        Fri, 10 Jun 2022 15:54:36 +0800 (CST)
-Received: from localhost.localdomain (10.67.164.66) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 10 Jun 2022 15:55:35 +0800
-From:   Yicong Yang <yangyicong@hisilicon.com>
-To:     <myungjoo.ham@samsung.com>, <kyungmin.park@samsung.com>,
-        <cw00.choi@samsung.com>, <linux-pm@vger.kernel.org>
-CC:     <yangyicong@hisilicon.com>, <andriy.shevchenko@linux.intel.com>,
-        <daniel.lezcano@linaro.org>
-Subject: [PATCH] PM / devfreq: passive: use HZ_PER_KHZ macro in units.h
-Date:   Fri, 10 Jun 2022 15:54:28 +0800
-Message-ID: <20220610075428.62268-1-yangyicong@hisilicon.com>
-X-Mailer: git-send-email 2.31.0
+        with ESMTP id S1346525AbiFJIEz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 04:04:55 -0400
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E66633F;
+        Fri, 10 Jun 2022 01:04:52 -0700 (PDT)
+Received: by mail-qt1-f180.google.com with SMTP id i25so689081qtq.0;
+        Fri, 10 Jun 2022 01:04:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rfQ6+6RXDzdhBSxFYL22382fD6+9vWq5XpLo77tRV5s=;
+        b=KKgnB0aw3wPaLB9jNcWz1aoTIswa/9UFRANbq651X6a13JW4kBoUx8EDzhsCdfYolt
+         BYpzVzwn0lEML5J98j+jEcl2o2m9PdQTKvuunm1kvQn+tmcL/u8Ztypky7MTpjoI9asi
+         cqkofyC1LbWRSJBAi8SEV3tuqgBuThBc5kQKTOaGbrMBvNfxDqgAfGovkBaPbo6qAYEW
+         U/lOfYYbFzfYlGlbVNYoPmbY14xeKOg9R/vLr/8BAt19r60IlFQrpGeRYuujVGsEvy2M
+         OWv+u1I4D7BkA5ANOU7BtQOrDddQ9DucuO1KLxQ+6trmAdRbZDTmUmDpY7Jvg6mT6Tc5
+         2MTw==
+X-Gm-Message-State: AOAM531tc88HpgxWO/9kf8irM9gEp2FNXkkG2gMtEr6h0GcbsUghAAEM
+        XcT6KZ0ZEvGQFpFVkPqAK0EQU/jqidZrkw==
+X-Google-Smtp-Source: ABdhPJw3cPFK4IBmJ5EmAWsFjoKeSOaweaDZWsEgAcXl6aka4cE3wwHbrZYXSGQ2wrDlDY5Br9yqkQ==
+X-Received: by 2002:ac8:5856:0:b0:304:da79:e117 with SMTP id h22-20020ac85856000000b00304da79e117mr32243128qth.379.1654848291909;
+        Fri, 10 Jun 2022 01:04:51 -0700 (PDT)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id x14-20020a05620a448e00b006a6f8d26b35sm8041803qkp.63.2022.06.10.01.04.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Jun 2022 01:04:51 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id r82so45689700ybc.13;
+        Fri, 10 Jun 2022 01:04:50 -0700 (PDT)
+X-Received: by 2002:a05:6902:a:b0:65c:b38e:6d9f with SMTP id
+ l10-20020a056902000a00b0065cb38e6d9fmr44746879ybh.36.1654848290710; Fri, 10
+ Jun 2022 01:04:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.164.66]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220609200709.4455-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220609200709.4455-1-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 10 Jun 2022 10:04:38 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWbq+AUq6LoT3+b0NqjqyNtS3BKvonzt2PLuTAPv-GwQg@mail.gmail.com>
+Message-ID: <CAMuHMdWbq+AUq6LoT3+b0NqjqyNtS3BKvonzt2PLuTAPv-GwQg@mail.gmail.com>
+Subject: Re: [PATCH v2] thermal: rcar_gen3_thermal: improve logging during probe
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-HZ macros has been centralized in units.h since [1]. Use it to avoid
-duplicated definition.
+Hi Wolfram,
 
-[1] commit e2c77032fcbe ("units: add the HZ macros")
+On Thu, Jun 9, 2022 at 10:23 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> When setting up a new board, a plain "Can't register thermal zone"
+> didn't help me much because the thermal zones in DT were all fine. I
+> just had a sensor entry too much in the parent TSC node. Reword the
+> failure/success messages to contain the sensor number to make it easier
+> to understand which sensor is affected. Example output now:
+>
+> rcar_gen3_thermal e6198000.thermal: Sensor 0: Loaded 1 trip point
+> rcar_gen3_thermal e6198000.thermal: Sensor 1: Loaded 1 trip point
+> rcar_gen3_thermal e6198000.thermal: Sensor 2: Loaded 1 trip point
+> rcar_gen3_thermal e6198000.thermal: Sensor 3: Can't register thermal zone
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>
+> Change from v1: reword the dev_info string to be more like the original
+> one. Added a check to add the plural-'s' only when needed.
 
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
----
- drivers/devfreq/governor_passive.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Thanks for the update!
 
-diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
-index 72c67979ebe1..a2cf6c6a1a39 100644
---- a/drivers/devfreq/governor_passive.c
-+++ b/drivers/devfreq/governor_passive.c
-@@ -14,10 +14,9 @@
- #include <linux/slab.h>
- #include <linux/device.h>
- #include <linux/devfreq.h>
-+#include <linux/units.h>
- #include "governor.h"
- 
--#define HZ_PER_KHZ	1000
--
- static struct devfreq_cpu_data *
- get_parent_cpu_data(struct devfreq_passive_data *p_data,
- 		    struct cpufreq_policy *policy)
--- 
-2.24.0
+> Geert: is this better now?
 
+Much better!
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
