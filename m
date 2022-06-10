@@ -2,56 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E0F54673B
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 15:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD5B546767
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 15:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244761AbiFJNOy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jun 2022 09:14:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
+        id S1345771AbiFJNeN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jun 2022 09:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245512AbiFJNOv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 09:14:51 -0400
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCFD366AF;
-        Fri, 10 Jun 2022 06:14:46 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-3135519f95fso101691387b3.6;
-        Fri, 10 Jun 2022 06:14:46 -0700 (PDT)
+        with ESMTP id S238032AbiFJNeH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 09:34:07 -0400
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA734EA8;
+        Fri, 10 Jun 2022 06:34:06 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-3135519f95fso102232567b3.6;
+        Fri, 10 Jun 2022 06:34:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Ui+ZlqvjfQ4kGZHjfzfTbsf4WxD0gXAASGAQvdxLTE4=;
-        b=WnkfXbHlrjXUhu7KG+76UQVO3pEeljbjMVVMILJArZAi4lcTtVwmll20QF0hSsHWhO
-         uvHTBK45y9utD8bsAx1KojmWVCUL+neR5hgxHc+oRMOK4Yr6r4n62BREj+HorZA0j4e5
-         vOhFfQqaFLEpG1jA7pISfGuLm8u0/PUvOf97j4/aX1J+mo8z3uomC3F5OiaX6kdKyrRu
-         P/qY8dl/Lk4G3RbZORQ96kMxcK4I3ewzXOrDOdzj6opPqPeQ274ztEJd1SI9pR6CbMZ0
-         m5eaja4MxiNJludk16oz93cVSaWtAzTxI9xAng2oqXacKoG6obKCITh6moO14CxphCku
-         ASaw==
-X-Gm-Message-State: AOAM533uH+wr6PCbzHIi9XZJcjdfeg+vcy+Rxm7LzGjBdfRDdl9eg/s1
-        K6rvtTRDHVaKQwG430pDOu/geBGMVu0ewfL++/E=
-X-Google-Smtp-Source: ABdhPJyuHjFnt8ytasn5NVonoZhGYJm9UeC58xTHCEbcHnAEqznn/HVXg5u92OlyVXqsxxEFJaMWvIw2Oe96D+WIVqg=
-X-Received: by 2002:a81:3dc6:0:b0:313:cc8a:e39e with SMTP id
- k189-20020a813dc6000000b00313cc8ae39emr560803ywa.196.1654866886071; Fri, 10
- Jun 2022 06:14:46 -0700 (PDT)
+        bh=Y6ECJedJvloi1HGFoYaKDExh4EWkviU5WWXywQvPon0=;
+        b=rVnhOkkNHhTiGMth6YdiEQslWpXvfqLYdKkNcwd0DLL0xN47tPz/3nBQY/VPan7VQJ
+         SnEBfULrhyP4wqIPA+ygNaNbKGTieWnASauV0hxYQRUqojDC+fYgxLI1Un6dCZ1PnNPj
+         S/RiPfMgYy9oTwmlw3XDAVsQ+OwmJpixaOCQfcSekPQE/DkyIiirES0c6zteuo3fyA/v
+         aM3vyCpLEQyLd0h1mLcRGnzwZxj8kldj9q5gejoTU7gdj9BfHLUnQyA4f+26qYLAAOhj
+         MjyxpHjpWHaHUClbZg4caBt5I9g5sR3pHSS1Uj1dQtLwk8yr7lMiErTAabZLChp3di7N
+         vFbg==
+X-Gm-Message-State: AOAM531i/yprsbv44SKj1Zxj2Tw8KR6m616ujrA30R7zagFJ1xFrKmMp
+        6sWCSV/I+gsmE9bHpMrf62Ccq4d/TWv8DIPgkFwVYQDK
+X-Google-Smtp-Source: ABdhPJxOxa8glSpv9tbI8qCUA87VmBFTGvZ6WN/5NnYTVw4ckZZYEf3WniMBfs6Y6WGAWVwnxC4xqWWu/Te6zm4jpvk=
+X-Received: by 2002:a81:260a:0:b0:2f4:ca82:a42f with SMTP id
+ m10-20020a81260a000000b002f4ca82a42fmr48674377ywm.149.1654868045603; Fri, 10
+ Jun 2022 06:34:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <1843211.tdWV9SEqCh@kreacher> <3459925.iIbC2pHGDl@kreacher> <YqLpBp0NYhOCCd2X@kuha.fi.intel.com>
-In-Reply-To: <YqLpBp0NYhOCCd2X@kuha.fi.intel.com>
+References: <fad9b50609f9d9828ea14772dbd4d195713f1c4b.1654846687.git.lukas@wunner.de>
+In-Reply-To: <fad9b50609f9d9828ea14772dbd4d195713f1c4b.1654846687.git.lukas@wunner.de>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 10 Jun 2022 15:14:34 +0200
-Message-ID: <CAJZ5v0gPyxRpJ9PTsnBJcY7mf5K7uEoaU+rubc1SPJHwhFWgDQ@mail.gmail.com>
-Subject: Re: [PATCH v1 05/16] USB: ACPI: Use acpi_find_child_by_adr()
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>
+Date:   Fri, 10 Jun 2022 15:33:54 +0200
+Message-ID: <CAJZ5v0jBVyxegaETv5D25N+LNZWRUsJeVcx-p8cGXYod8=smWQ@mail.gmail.com>
+Subject: Re: [PATCH] genirq/PM: Unexport {suspend,resume}_device_irqs()
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -63,53 +56,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 8:47 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
+On Fri, Jun 10, 2022 at 9:41 AM Lukas Wunner <lukas@wunner.de> wrote:
 >
-> On Thu, Jun 09, 2022 at 03:56:42PM +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Instead of walking the list of children of an ACPI device directly
-> > in order to find the child matching a given bus address, use
-> > acpi_find_child_by_adr() for this purpose.
-> >
-> > Apart from simplifying the code, this will help to eliminate the
-> > children list head from struct acpi_device as it is redundant and it
-> > is used in questionable ways in some places (in particular, locking is
-> > needed for walking the list pointed to it safely, but it is often
-> > missing).
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  drivers/usb/core/usb-acpi.c |    9 +--------
-> >  1 file changed, 1 insertion(+), 8 deletions(-)
-> >
-> > Index: linux-pm/drivers/usb/core/usb-acpi.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/usb/core/usb-acpi.c
-> > +++ linux-pm/drivers/usb/core/usb-acpi.c
-> > @@ -127,17 +127,10 @@ out:
-> >  static struct acpi_device *usb_acpi_find_port(struct acpi_device *parent,
-> >                                             int raw)
-> >  {
-> > -     struct acpi_device *adev;
-> > -
-> >       if (!parent)
-> >               return NULL;
-> >
-> > -     list_for_each_entry(adev, &parent->children, node) {
-> > -             if (acpi_device_adr(adev) == raw)
-> > -                     return adev;
-> > -     }
-> > -
-> > -     return acpi_find_child_device(parent, raw, false);
-> > +     return acpi_find_child_by_adr(parent, raw);
-> >  }
-> >
-> >  static struct acpi_device *
+> Ever since {suspend,resume}_device_irqs() were introduced in 2009
+> by commit 0a0c5168df27 ("PM: Introduce functions for suspending and
+> resuming device interrupts"), they've been exported even though there
+> are no module users and never will be:  The functions are solely called
+> by the PM core, which is always built-in.  Unexport them.
 >
-> I think usb_acpi_find_port() can also be dropped now.
+> Signed-off-by: Lukas Wunner <lukas@wunner.de>
 
-Yes, it can.
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I'm dropping it in the new version of the patch to be posted.
+or I can take it if no one else does.
+
+> ---
+>  kernel/irq/pm.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/kernel/irq/pm.c b/kernel/irq/pm.c
+> index ca71123a6130..c556bc49d213 100644
+> --- a/kernel/irq/pm.c
+> +++ b/kernel/irq/pm.c
+> @@ -147,7 +147,6 @@ void suspend_device_irqs(void)
+>                         synchronize_irq(irq);
+>         }
+>  }
+> -EXPORT_SYMBOL_GPL(suspend_device_irqs);
+>
+>  static void resume_irq(struct irq_desc *desc)
+>  {
+> @@ -259,4 +258,3 @@ void resume_device_irqs(void)
+>  {
+>         resume_irqs(false);
+>  }
+> -EXPORT_SYMBOL_GPL(resume_device_irqs);
+> --
+> 2.35.2
+>
