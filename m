@@ -2,95 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD5B546767
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 15:34:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 635A6546834
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 16:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345771AbiFJNeN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jun 2022 09:34:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48284 "EHLO
+        id S236440AbiFJOWj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jun 2022 10:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238032AbiFJNeH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 09:34:07 -0400
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA734EA8;
-        Fri, 10 Jun 2022 06:34:06 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-3135519f95fso102232567b3.6;
-        Fri, 10 Jun 2022 06:34:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Y6ECJedJvloi1HGFoYaKDExh4EWkviU5WWXywQvPon0=;
-        b=rVnhOkkNHhTiGMth6YdiEQslWpXvfqLYdKkNcwd0DLL0xN47tPz/3nBQY/VPan7VQJ
-         SnEBfULrhyP4wqIPA+ygNaNbKGTieWnASauV0hxYQRUqojDC+fYgxLI1Un6dCZ1PnNPj
-         S/RiPfMgYy9oTwmlw3XDAVsQ+OwmJpixaOCQfcSekPQE/DkyIiirES0c6zteuo3fyA/v
-         aM3vyCpLEQyLd0h1mLcRGnzwZxj8kldj9q5gejoTU7gdj9BfHLUnQyA4f+26qYLAAOhj
-         MjyxpHjpWHaHUClbZg4caBt5I9g5sR3pHSS1Uj1dQtLwk8yr7lMiErTAabZLChp3di7N
-         vFbg==
-X-Gm-Message-State: AOAM531i/yprsbv44SKj1Zxj2Tw8KR6m616ujrA30R7zagFJ1xFrKmMp
-        6sWCSV/I+gsmE9bHpMrf62Ccq4d/TWv8DIPgkFwVYQDK
-X-Google-Smtp-Source: ABdhPJxOxa8glSpv9tbI8qCUA87VmBFTGvZ6WN/5NnYTVw4ckZZYEf3WniMBfs6Y6WGAWVwnxC4xqWWu/Te6zm4jpvk=
-X-Received: by 2002:a81:260a:0:b0:2f4:ca82:a42f with SMTP id
- m10-20020a81260a000000b002f4ca82a42fmr48674377ywm.149.1654868045603; Fri, 10
- Jun 2022 06:34:05 -0700 (PDT)
+        with ESMTP id S233916AbiFJOWi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 10:22:38 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC0F183142;
+        Fri, 10 Jun 2022 07:22:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=taDMUZIEgul2ITYIFLACg5Q+J8VqiWoHCll5z3PilY4=; b=Jz+h7b4O3ozdl6yfEml+x3bJ5H
+        9NirobyIj/c3ttimjSTbGxGqT+mcYiw5p2HXbL7SYwWksgYNnFLypeqy2AZFFGb6uN7utH4Wtmg/c
+        h4j+r074vP3xisV+ivq7zuCVeUpqQtd1bN+8924nhglINgJO4lvVAwUocsc7Nv6ufQLcoPjwWBLcl
+        X1v8EWSQCWNbVUa2BP8LJCkZJ82DWvdudLceZkoYUE7nUNnr21snjQaIv3nsi+V8qGtqbQbRd5Ju3
+        i/yYZLkrrfoBNKu+KTdzFirZdHTWLV/XDuDY/AgVrBCqDMHgZ8ATe8be7hJMeCumcURJxRja/1nBB
+        zW2t+Zpw==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nzfWG-006gV5-VO; Fri, 10 Jun 2022 14:21:49 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C9B2E30017D;
+        Fri, 10 Jun 2022 16:21:47 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 833F228405295; Fri, 10 Jun 2022 16:21:47 +0200 (CEST)
+Date:   Fri, 10 Jun 2022 16:21:47 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Li kunyu <kunyu@nfschina.com>, chenhuacai@kernel.org,
+        rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
+        mingo@redhat.com, bp@alien8.de, tglx@linutronix.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] x86: Change the return type of acpi_map_cpu2node to void
+Message-ID: <YqNTewtUzizxovJO@hirez.programming.kicks-ass.net>
+References: <20220610104423.201739-1-kunyu@nfschina.com>
+ <7eb4762e-723b-51e8-3d70-1c28568ac4f5@intel.com>
 MIME-Version: 1.0
-References: <fad9b50609f9d9828ea14772dbd4d195713f1c4b.1654846687.git.lukas@wunner.de>
-In-Reply-To: <fad9b50609f9d9828ea14772dbd4d195713f1c4b.1654846687.git.lukas@wunner.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 10 Jun 2022 15:33:54 +0200
-Message-ID: <CAJZ5v0jBVyxegaETv5D25N+LNZWRUsJeVcx-p8cGXYod8=smWQ@mail.gmail.com>
-Subject: Re: [PATCH] genirq/PM: Unexport {suspend,resume}_device_irqs()
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7eb4762e-723b-51e8-3d70-1c28568ac4f5@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 9:41 AM Lukas Wunner <lukas@wunner.de> wrote:
->
-> Ever since {suspend,resume}_device_irqs() were introduced in 2009
-> by commit 0a0c5168df27 ("PM: Introduce functions for suspending and
-> resuming device interrupts"), they've been exported even though there
-> are no module users and never will be:  The functions are solely called
-> by the PM core, which is always built-in.  Unexport them.
->
-> Signed-off-by: Lukas Wunner <lukas@wunner.de>
+On Fri, Jun 10, 2022 at 05:35:29AM -0700, Dave Hansen wrote:
+> On 6/10/22 03:44, Li kunyu wrote:
+> > Reduce eax register calls by removing unused return values.
+> 
+> Please stop sending these patches, at least with these repetitive,
+> inaccurate descriptions.
 
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-or I can take it if no one else does.
-
-> ---
->  kernel/irq/pm.c | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/kernel/irq/pm.c b/kernel/irq/pm.c
-> index ca71123a6130..c556bc49d213 100644
-> --- a/kernel/irq/pm.c
-> +++ b/kernel/irq/pm.c
-> @@ -147,7 +147,6 @@ void suspend_device_irqs(void)
->                         synchronize_irq(irq);
->         }
->  }
-> -EXPORT_SYMBOL_GPL(suspend_device_irqs);
->
->  static void resume_irq(struct irq_desc *desc)
->  {
-> @@ -259,4 +258,3 @@ void resume_device_irqs(void)
->  {
->         resume_irqs(false);
->  }
-> -EXPORT_SYMBOL_GPL(resume_device_irqs);
-> --
-> 2.35.2
->
+Dave, just add them to the /dev/null mailbox.
