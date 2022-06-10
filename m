@@ -2,68 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCD754638C
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 12:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E755C54639B
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jun 2022 12:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240208AbiFJK3N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jun 2022 06:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55532 "EHLO
+        id S1344554AbiFJKaP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jun 2022 06:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244609AbiFJK3L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 06:29:11 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC12140E0
-        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 03:29:10 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id o7so19320713eja.1
-        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 03:29:10 -0700 (PDT)
+        with ESMTP id S1347093AbiFJKaO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 06:30:14 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB952E6AB
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 03:30:12 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id fu3so51120942ejc.7
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 03:30:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tLO8M+bBtsFeLQBJeKorjii5kkChBo5ctWVAnJ9k72s=;
-        b=iWa9dQh1aY0vk7XC0r8UEikGjxDa0uCh5Wc2lvho+xKfJiDj6HkxfBcDbx9gQzhv8X
-         7k329I4+2op+Pu02VnxThT1bk9bLwv/jDU9ts6khNIgfmUHsPm0vNn0CVwPmMP/NH0CW
-         Y0tfDdFeqzdGpnrBs6SwDOQHHMyzcAPxtt8X13eKJexaya4MpHXRhHeWJVLERwA1O4em
-         KcVwzVVu0yiSJMK3WhtxOP6o5c6qiRpPodSPoj1/ewTrTmMB/y+8EBrbV25KnRM8IAbe
-         cXUiVQWQUZDMpCctn3rko0yzLSGpVG6XN16cGeqeAq3Klacrt3fgbpV/NXXKnSmX45/8
-         8ItA==
+        bh=Q1gr3NrnB39CoRuCt8vX807hgcXw9Mek2bCnOsXpGQo=;
+        b=QSvTbaU77/wWFvrHNSjvh11fTizVqERqxJuaRgPrXbIgYWkB3CNmRbgVdVuKjtHqg3
+         EhSrgR3EDatDWGn50GSs7FLRqgSt7xMwyUPawjSnOhbxJydoSzj+Z5VWNx0tqz85MBMo
+         Vk1XUUH3JEvlwH6cKqlREF9eU8xDoGFMNMu5Nl/jmUm64Flgc2ocZwbJyXi3drtRY6Ce
+         OtC/dRTh7/xtSe2jqd0/wVwIMillp/6cVXMKcDPCOT+jHNM5BWJhsKtk2KgZCrb75QJt
+         eb/XTr0mcr6gpXFDyxvAmk7j805M3kAuK/PDlIPjgsoRIylJTb3LlTJmGIUjbAD05Lm2
+         PkjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=tLO8M+bBtsFeLQBJeKorjii5kkChBo5ctWVAnJ9k72s=;
-        b=0b9dQI3hEJohpMpYt+1ew/53Xv+fj6PASq4o226mz0+X2w4616VOev/g5TxrKo2N1K
-         RfPXKc6U/L/mSXxKblJVEkNedcm3CqWdOSUgHgqjNsKYPUE+QD7iXCAhnHrBwOgP20EJ
-         ow2E2X7hydWn5ar6ikyn9smsb93qDLKAezPd5Ubcvkoxu2b1pmmlbo8ilIMxrwTllmxs
-         sAsk1C+f9vdOkjzMLlOAzjd2Lu//F/iNidOVQf8tKFCte6tOKlcRfXi1Y+cL5panB/fL
-         DYWTChdaqAnOiPwfy/ciTQfnQHiH4k+ZApN/h7VuL2EiZnKBM9zBKTQ2L7ZVVap0VFhr
-         gGhg==
-X-Gm-Message-State: AOAM5306c9UbymfxzteodjbV7ofrlMiHUSlNF4tlKece40/hAJKPiUNI
-        TanNAaEhQw1JSTflRRVKgIlGVw==
-X-Google-Smtp-Source: ABdhPJzo4/uJou01xICnCHlFFG6i9dGDLudvClUxMGfQhm5qoPNHdvDugPnGWxs+wZCCnIrwagewCw==
-X-Received: by 2002:a17:907:9495:b0:6ff:14df:d2a with SMTP id dm21-20020a170907949500b006ff14df0d2amr39824681ejc.338.1654856948936;
-        Fri, 10 Jun 2022 03:29:08 -0700 (PDT)
+        bh=Q1gr3NrnB39CoRuCt8vX807hgcXw9Mek2bCnOsXpGQo=;
+        b=qHCcn2gsiz9KA2sDad9VxfNHoyWsM62UeSFBo1qEikUKhcCCfhPTsKIgGnDCadR6l2
+         4qOj9+JzwEPhX8FVHaD2vWBe2vSJZQpp0cfmQWbICB0cruh2zLhBszCIG4Bm90sJWvLC
+         nqbKAypL5CmEy8nu7sg7HDDSkx3qyH3sNJqql9j34Xw++Iey9jU5QYt5CMpShL1duc7g
+         A9Q4bnx4N0YA+F56/kOFfclOeViS0EbFQcVQAjXt3fZSiF8V42TgIl2MFy8QeKrRceM7
+         miSR8VRNR4ASrxulkRhP/6hIbrRHUw15zOhGF2V3Tge/oZYV2SHRCV5MlbuJTkciOOpM
+         izRg==
+X-Gm-Message-State: AOAM531LAiUN6OPTeU9tjYoP9XSBKQnrjQAnmb4AEKDqZCsG40wTOxeL
+        +vFg+rYD9xHONuZyksQjIxas1A==
+X-Google-Smtp-Source: ABdhPJw7PvzVwnAjoaC8oJ5ApDXIoYkN0OCc5cmycobzyGZiBOEgvGwNWQ7HGD/AvnfFZNoUw76PJQ==
+X-Received: by 2002:a17:907:8195:b0:710:b40:95d2 with SMTP id iy21-20020a170907819500b007100b4095d2mr31029973ejc.604.1654857011476;
+        Fri, 10 Jun 2022 03:30:11 -0700 (PDT)
 Received: from [192.168.0.202] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id p21-20020aa7cc95000000b0042fb17da833sm12259010edt.60.2022.06.10.03.29.07
+        by smtp.gmail.com with ESMTPSA id e20-20020a056402149400b0042bd75c53casm16186593edv.83.2022.06.10.03.30.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jun 2022 03:29:08 -0700 (PDT)
-Message-ID: <2edb2dbc-0f62-23cc-2f32-3d27d83a194e@linaro.org>
-Date:   Fri, 10 Jun 2022 12:29:07 +0200
+        Fri, 10 Jun 2022 03:30:11 -0700 (PDT)
+Message-ID: <e68724b0-4a9f-f564-c833-befd6c3515fb@linaro.org>
+Date:   Fri, 10 Jun 2022 12:30:09 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v9 2/2] dt-bindings:thermal: Add Sunplus schema
+Subject: Re: [PATCH v9 1/2] thermal: Add thermal driver for Sunplus
 Content-Language: en-US
-To:     =?UTF-8?B?6YOt5Yqb6LGq?= <lhjeff911@gmail.com>, rafael@kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>, amitk@kernel.org,
-        rui.zhang@intel.com, robh+dt@kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        =?UTF-8?B?6YOt5Yqb6LGq?= <lhjeff911@gmail.com>,
+        rafael@kernel.org, Daniel Lezcano <daniel.lezcano@linaro.org>,
+        amitk@kernel.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Cc:     "lh.kuo" <lh.kuo@sunplus.com>,
         =?UTF-8?B?5ZGC6Iqz6aiwTHVXZWxscw==?= <wells.lu@sunplus.com>
-References: <CAGcXWkzSrEPPT2m=2trWN-BV-ix9TcHCvZYya5i54ei=EWGTZw@mail.gmail.com>
+References: <CAGcXWkzJwOPXfE6ESAtwBbe7W-UkApKosKUy=UBRh0kmi-Bc2Q@mail.gmail.com>
+ <395072af-3349-cead-fe07-62d3d758d635@infradead.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAGcXWkzSrEPPT2m=2trWN-BV-ix9TcHCvZYya5i54ei=EWGTZw@mail.gmail.com>
+In-Reply-To: <395072af-3349-cead-fe07-62d3d758d635@infradead.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,24 +79,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/06/2022 03:32, 郭力豪 wrote:
-> Add bindings for Sunplus thermal driver
+On 10/06/2022 05:19, Randy Dunlap wrote:
+> Hi--
 > 
-> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+> On 6/9/22 18:32, 郭力豪 wrote:
+>> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+>> index 0e5cc94..c85e668 100644
+>> --- a/drivers/thermal/Kconfig
+>> +++ b/drivers/thermal/Kconfig
+>> @@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
+>>     If you say yes here you get support for the FAN controlled
+>>     by the Microcontroller found on the Khadas VIM boards.
+>>
+>> +config SUNPLUS_THERMAL
+>> + tristate "Sunplus thermal drivers"
+>> + depends on SOC_SP7021 || COMPILE_TEST
+>> + help
+>> +   This enable the Sunplus SP7021 thermal driver, which supports the primitive
+>> +   temperature sensor embedded in Sunplus SP7021 SoC.
+>> +
+>> +   If you have a Sunplus SP7021 platform say Y here and enable this option
+>> +   to have support for thermal management
+> 
+> End the sentence above with a period ('.').
+> 
+> And the indentation here is all messed up.
+> See Documentation/process/coding-style.rst:
+> 
 
-Thank you for your patch. There is something to discuss/improve.
-
-> ---
-> Changes in v9:
->  - Change the setting of compatible
->  - Mosdify the setting of remove funciton.
-
-Your subject misses space after "dt-bindings:". Look at other patches
-how they are named. Please fix it.
-Normally I would give conditional review, but I am afraid it you won't
-fix it, based on our previous history here. :(
-
-So sorry, but for such small change, I expect v10.
+It's not only this one. Entire file has wrong indentation.
 
 Best regards,
 Krzysztof
