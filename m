@@ -2,67 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7705471C4
-	for <lists+linux-pm@lfdr.de>; Sat, 11 Jun 2022 06:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D885474FC
+	for <lists+linux-pm@lfdr.de>; Sat, 11 Jun 2022 15:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350295AbiFKELP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 11 Jun 2022 00:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51982 "EHLO
+        id S233061AbiFKNxu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 11 Jun 2022 09:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349624AbiFKELP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Jun 2022 00:11:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A8B26C6
-        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 21:11:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 155CFB83875
-        for <linux-pm@vger.kernel.org>; Sat, 11 Jun 2022 04:11:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BD528C3411F
-        for <linux-pm@vger.kernel.org>; Sat, 11 Jun 2022 04:11:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654920670;
-        bh=cfXzYtOIC7bPcF2L2hpUIZ+UtawiY//lUwAbp6GUOFA=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=jhP4r38AAVpapCLqZIZAIoCXw+/RhBF3BmAr9zJ5KkuVHjQ/qQLOcE0BH3oUMzEWI
-         a+X40k6EXlZXK81mU8ZQqq31bLoxKeSCfw3SDF1ELLBPhYuYBg0mfKpXx54xCEGvZz
-         L8c590bGV7VQLyI2e3KdPzNHqwMXNAF6y/zs7e2V5enUIGsiIGRsbNzAwqC1m7K8M6
-         XglpFv1h5IKZf4pGCp7MQZosw0Xpx+PBe7qj7vTKqm9sc3lEB6nSDYx8VXdUhYz5pJ
-         eqRF7f16LKDYH5FToqirGZx3wVmYlEQtOSHRIeT9Q6JujAz2t3fGSV8+sQct34LloW
-         Yzg0R/7jAZqug==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id A5636CBF854; Sat, 11 Jun 2022 04:11:10 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 215938] amd-pstate ignoring scaling_max_freq after waking from
- suspend
-Date:   Sat, 11 Jun 2022 04:11:10 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: perry_yuan@outlook.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215938-137361-F1M4dLb5ta@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215938-137361@https.bugzilla.kernel.org/>
-References: <bug-215938-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S233574AbiFKNxs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Jun 2022 09:53:48 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAC33F88F;
+        Sat, 11 Jun 2022 06:53:46 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1o01Ye-0006jb-NG; Sat, 11 Jun 2022 15:53:44 +0200
+Message-ID: <84d01637-febb-f602-2d03-fe1600e85ae3@leemhuis.info>
+Date:   Sat, 11 Jun 2022 15:53:44 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: regression, 5.19.0-rc1 not powering off when hibernated
+Content-Language: en-US
+To:     Ken Moffat <zarniwhoop@ntlworld.com>, linux-kernel@vger.kernel.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <YqE22nS9k2+AldI6@llamedos.localdomain>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Linux PM <linux-pm@vger.kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+In-Reply-To: <YqE22nS9k2+AldI6@llamedos.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1654955626;91ad4d5f;
+X-HE-SMSGID: 1o01Ye-0006jb-NG
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,61 +44,55 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215938
+Hi, this is your Linux kernel regression tracker.
 
---- Comment #14 from perry_yuan@outlook.com ---
-(In reply to Alex Maras from comment #13)
-> Hey Perry, results below:
->=20
-> [I] alex@alex-laptop ~> sudo cpupower frequency-set -g userspace
-> [sudo] password for alex:
-> Setting cpu: 0
-> Setting cpu: 1
-> Setting cpu: 2
-> Setting cpu: 3
-> Setting cpu: 4
-> Setting cpu: 5
-> Setting cpu: 6
-> Setting cpu: 7
-> Setting cpu: 8
-> Setting cpu: 9
-> Setting cpu: 10
-> Setting cpu: 11
-> Setting cpu: 12
-> Setting cpu: 13
-> Setting cpu: 14
-> Setting cpu: 15
-> [I] alex@alex-laptop ~> systemctl suspend
-> [I] alex@alex-laptop ~> cd /sys/devices/system/cpu/cpufreq/policy0
-> [I] alex@alex-laptop /s/d/s/c/c/policy0> echo 1752589 | sudo tee
-> scaling_setspeed
-> 1752589
-> [I] alex@alex-laptop /s/d/s/c/c/policy0> cat scaling_setspeed
-> 1752589
-> [I] alex@alex-laptop /s/d/s/c/c/policy0> cat scaling_governor
-> userspace
-> [I] alex@alex-laptop /s/d/s/c/c/policy0> cat scaling_cur_freq
-> 2796520
-> [I] alex@alex-laptop /s/d/s/c/c/policy0>
->=20
->=20
-> Looks like the same issue continuing. Do you want the same dmesg with pst=
-ate
-> logging turned on?
+CCing the regression mailing list, as it should be in the loop for all
+regressions, as explained here:
+https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
+Also CCing the hibernation maintainers and Linux-pm.
 
-Seeing from you result, issue can be reproduced by my side, the core freque=
-ncy
-is not updated by low level firmware.
-I suppose that the issue was caused by suspend/resume , firmware has proble=
-m to
-resume the CPU frequency control, so any new frequency set will be ignored.
-I will further do some debugging and try to resolve the problem.
-Thanks for your confirm.
+On 09.06.22 01:55, Ken Moffat wrote:
+> Up to 5.18.0 hibernation has worked ok on my ryzen 5 3400G : screen
+> blanks, disk activity for the write to swap, screen briefly has a
+> trashed display, machine powers off.  When powering up from
+> hibernation, after the saved files are loaded X starts with a
+> briefly trashed display before my desktop reappears.
+> 
+> But with 5.19.0-rc1 the screen is blank throughtout the hibernation,
+> and briefly when restoring (no complaint about that), but when
+> hibernating it no longer powers off and I have to hold the on/off
+> switch to power off.
+> 
+> Is this a known problem ?
 
-Perry.
+Thanks for the report. Maybe the hibernation maintainers might know, but
+often issues like this are caused by other things like drivers. If they
+don#t have a idea, you likely need to do a bisection to get down to the
+change that introduced this regressions.
 
---=20
-You may reply to this email to add a comment.
+Anyway: To be sure below issue doesn't fall through the cracks
+unnoticed, I'm adding it to regzbot, my Linux kernel regression tracking
+bot:
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+#regzbot ^introduced v5.18..v5.19-rc1
+#regzbot title hibernate: Not powering off when hibernated
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply -- ideally with also
+telling regzbot about it, as explained here:
+https://linux-regtracking.leemhuis.info/tracked-regression/
+
+Reminder for developers: When fixing the issue, add 'Link:' tags
+pointing to the report (the mail this one replied to), as the kernel's
+documentation call for; above page explains why this is important for
+tracked regressions.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
