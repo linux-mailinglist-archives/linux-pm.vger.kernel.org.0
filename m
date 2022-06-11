@@ -2,149 +2,288 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A795476FB
-	for <lists+linux-pm@lfdr.de>; Sat, 11 Jun 2022 19:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 446E2547711
+	for <lists+linux-pm@lfdr.de>; Sat, 11 Jun 2022 20:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbiFKRzE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 11 Jun 2022 13:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
+        id S229701AbiFKSOs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 11 Jun 2022 14:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiFKRzD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Jun 2022 13:55:03 -0400
-X-Greylist: delayed 1887 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 11 Jun 2022 10:55:01 PDT
-Received: from smtpq4.tb.ukmail.iss.as9143.net (smtpq4.tb.ukmail.iss.as9143.net [212.54.57.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE152DD49
-        for <linux-pm@vger.kernel.org>; Sat, 11 Jun 2022 10:55:01 -0700 (PDT)
-Received: from [212.54.57.97] (helo=smtpq2.tb.ukmail.iss.as9143.net)
-        by smtpq4.tb.ukmail.iss.as9143.net with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <zarniwhoop@ntlworld.com>)
-        id 1o04pj-0006Uz-1N
-        for linux-pm@vger.kernel.org; Sat, 11 Jun 2022 19:23:35 +0200
-Received: from [212.54.57.105] (helo=csmtp1.tb.ukmail.iss.as9143.net)
-        by smtpq2.tb.ukmail.iss.as9143.net with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <zarniwhoop@ntlworld.com>)
-        id 1o04pg-00039Q-LA
-        for linux-pm@vger.kernel.org; Sat, 11 Jun 2022 19:23:32 +0200
-Received: from llamedos.mydomain ([81.97.236.130])
-        by cmsmtp with ESMTPA
-        id 04pgo6VSR2Ckp04pgo0pFb; Sat, 11 Jun 2022 19:23:32 +0200
-X-SourceIP: 81.97.236.130
-X-Authenticated-Sender: zarniwhoop@ntlworld.com
-X-Spam: 0
-X-Authority: v=2.4 cv=S5fKfagP c=1 sm=1 tr=0 ts=62a4cf94 cx=a_exe
- a=OGiDJHazYrvzwCbh7ZIPzQ==:117 a=OGiDJHazYrvzwCbh7ZIPzQ==:17
- a=IkcTkHD0fZMA:10 a=JPEYwPQDsx4A:10 a=VwQbUJbxAAAA:8 a=lAgNKBcoAAAA:8
- a=T7ssiTtlOCIPov6mUGUA:9 a=QEXdDO2ut3YA:10 a=s7WzIJ968vAA:10
- a=oEyQGRKERE8A:10 a=-FEs8UIgK8oA:10 a=AjGcO6oz07-iQ99wixmX:22
- a=drE6d5tx1tjNRBs8zHOc:22
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ntlworld.com;
-        s=meg.feb2017; t=1654968212;
-        bh=ilnr9i/X41U0qRdhZb/1/6UnEC7zor2PPUXzLKyEOCE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=EyNfB/B5QhEyq5b6QFIF5saE6w6fW4JH4HMpBWGd8LkXsDZxQxABEbXsQnPxLG+ey
-         cJuNNl/rhbKMLtNPcVFnkKp3Dtwq0xM9Rzxd2JjrphXOdf4aDEVRiPqWNcGcb7VP0O
-         /iPX4/ZFGK0PJSvliLUpY6EroWawbjoRPZ2uFFLv44CPV705i30Fx+0PLFxnbw8VKK
-         Oln+W+ihKJQvMn5p6k59Lbs0+94AKEcTT8NEIRrp8W5ipIxviAGgk59WqGV7T66h2z
-         QCg7+jXpQTUTE8srzk2qj/89ZF8iQcF0ncbTlQmyqQvie6qXk5cgOkjLnx6bUqeree
-         GZG2X2V//lNWg==
-Received: by llamedos.mydomain (Postfix, from userid 1000)
-        id 153AB8DB3D; Sat, 11 Jun 2022 18:23:32 +0100 (BST)
-Date:   Sat, 11 Jun 2022 18:23:32 +0100
-From:   Ken Moffat <zarniwhoop@ntlworld.com>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     linux-kernel@vger.kernel.org,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: regression, 5.19.0-rc1 not powering off when hibernated
-Message-ID: <YqTPlGM9KQ0FqHdc@llamedos.localdomain>
-References: <YqE22nS9k2+AldI6@llamedos.localdomain>
- <84d01637-febb-f602-2d03-fe1600e85ae3@leemhuis.info>
+        with ESMTP id S229454AbiFKSOr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Jun 2022 14:14:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776D33ED30;
+        Sat, 11 Jun 2022 11:14:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 053BA61225;
+        Sat, 11 Jun 2022 18:14:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46C15C34116;
+        Sat, 11 Jun 2022 18:14:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1654971285;
+        bh=CFqslnbWvEvZ0znPP3sF1QhuRFp6eEWOIDgY+I1I6Jg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ESKjLssWLq5tLSHDJeYKxVKgcHjy9D+AYBBFYljVTbHyQ21vCuLFq/6EsHGw2fCqc
+         NhD2K4k/Z9ud4imQZhT9pvRSobJW1udlUH9humQIABCMUQz8+TBi+lBCSS6CqUknH8
+         JaPovEsS+OweyrixlmIsJRNOKUV1jgBtR9TEm4POhRG4RRDJKnZjJnmvf0Qyx4AibC
+         ZefhfNJEXWxFOJetBOW3HNg+4wcYiqdVtBCYPKhx/4/vjMPqyQszPTANzWf4YILCeW
+         XSLOJJENL6C+DUN2s/kcKlQUdyQcILn4DGdId9V9GhbptPij9kQN2M+jgdJiEyIng+
+         GzINKyrSPwy7g==
+Date:   Sat, 11 Jun 2022 19:23:52 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
+        linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
+        lee.jones@linaro.org, sre@kernel.org, broonie@kernel.org,
+        gregkh@linuxfoundation.org, lgirdwood@gmail.com, lars@metafoo.de,
+        rafael@kernel.org, quic_gurus@quicinc.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 11/17] iio: adc: axp20x_adc: Consolidate ADC raw read
+ functions
+Message-ID: <20220611192352.423eb29b@jic23-huawei>
+In-Reply-To: <6DEqBtaiVPj93S9KpELsBGaDLDnbWsEX@localhost>
+References: <20220607155324.118102-1-aidanmacdonald.0x0@gmail.com>
+        <20220607155324.118102-12-aidanmacdonald.0x0@gmail.com>
+        <20220608142808.00000650@Huawei.com>
+        <6DEqBtaiVPj93S9KpELsBGaDLDnbWsEX@localhost>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Clacks-Overhead: GNU Terry Pratchett
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <84d01637-febb-f602-2d03-fe1600e85ae3@leemhuis.info>
-User-Agent: Mutt/2.2.3 (2022-04-12)
-X-CMAE-Envelope: MS4xfJIrqa9cjv4v6xLCQjzwoPfTye1tzuMogVd/YyBnjYQQ8CTj3igIZZKNVJRTtTw28z3xTTEucG4iEYwT8BQaFA0DA0atVDgGmBR+GlINjNpJN2Yr0Bee
- PG2pyqvqUTkAc8OqgPJIO1PcxTOd5SWM8ey5J690L1nFkn/DXHdR3fAHOS0XfucpJsuMdkC+C6CTvElqjpaI+CPpkHb+eEKWsIE4c5ahd7U0tAo2OiFYSVED
- 3t1U8lq2SReNUW3IE/GZ3MparKCFYwY45pE8EgCA3zejm0WQ/nIr6VLAelFbReIidY7L4B4pi9YjnA2UPB1C6w3bvSCtxHbfD6e+lZQm7mNDjJkXPISf1jf6
- agkIr46ERI2KIs4r0ss9QK+bCh2gKQ==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jun 11, 2022 at 03:53:44PM +0200, Thorsten Leemhuis wrote:
-> Hi, this is your Linux kernel regression tracker.
-> 
-> CCing the regression mailing list, as it should be in the loop for all
-> regressions, as explained here:
-> https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
-> Also CCing the hibernation maintainers and Linux-pm.
-> 
-> On 09.06.22 01:55, Ken Moffat wrote:
-> > Up to 5.18.0 hibernation has worked ok on my ryzen 5 3400G : screen
-> > blanks, disk activity for the write to swap, screen briefly has a
-> > trashed display, machine powers off.  When powering up from
-> > hibernation, after the saved files are loaded X starts with a
-> > briefly trashed display before my desktop reappears.
-> > 
-> > But with 5.19.0-rc1 the screen is blank throughtout the hibernation,
-> > and briefly when restoring (no complaint about that), but when
-> > hibernating it no longer powers off and I have to hold the on/off
-> > switch to power off.
-> > 
-> > Is this a known problem ?
-> 
-> Thanks for the report. Maybe the hibernation maintainers might know, but
-> often issues like this are caused by other things like drivers. If they
-> don#t have a idea, you likely need to do a bisection to get down to the
-> change that introduced this regressions.
-> 
-> Anyway: To be sure below issue doesn't fall through the cracks
-> unnoticed, I'm adding it to regzbot, my Linux kernel regression tracking
-> bot:
-> 
-> #regzbot ^introduced v5.18..v5.19-rc1
-> #regzbot title hibernate: Not powering off when hibernated
-> #regzbot ignore-activity
-> 
-> This isn't a regression? This issue or a fix for it are already
-> discussed somewhere else? It was fixed already? You want to clarify when
-> the regression started to happen? Or point out I got the title or
-> something else totally wrong? Then just reply -- ideally with also
-> telling regzbot about it, as explained here:
-> https://linux-regtracking.leemhuis.info/tracked-regression/
-> 
-> Reminder for developers: When fixing the issue, add 'Link:' tags
-> pointing to the report (the mail this one replied to), as the kernel's
-> documentation call for; above page explains why this is important for
-> tracked regressions.
-> 
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> 
-> P.S.: As the Linux kernel's regression tracker I deal with a lot of
-> reports and sometimes miss something important when writing mails like
-> this. If that's the case here, don't hesitate to tell me in a public
-> reply, it's in everyone's interest to set the public record straight.
+On Thu, 09 Jun 2022 00:13:47 +0100
+Aidan MacDonald <aidanmacdonald.0x0@gmail.com> wrote:
 
-Thanks.  I've started to bisect, but I've got a lot else on and it
-might be a few days before I get a result.  All I know so far is
-that whatever got rid of the garbled screens was fine, and the
-problem seems to have arisen in the last 800+ commits for 5.19-rc1.
+> Jonathan Cameron <Jonathan.Cameron@Huawei.com> writes:
+> 
+> > On Tue,  7 Jun 2022 16:53:18 +0100
+> > Aidan MacDonald <aidanmacdonald.0x0@gmail.com> wrote:
+> >  
+> >> Add an axp20x_id variant field to the axp_data struct and use it
+> >> to consolidate the adc_raw functions, reducing code duplication.
+> >> Variant IDs are chosen to match the OF compatible strings.
+> >> 
+> >> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>  
+> >
+> > Hi Aidan,
+> >
+> > I'm not a big fan of using variant IDs, rather than a description
+> > of what is actually different between devices.  Long term, variant
+> > IDs tend to scale (as we add more supported devices) much worse
+> > than a flag describing the actual difference.
+> >
+> > Here I would have a field in struct axp_data called something like
+> > discharge_curr_res and set it to 12 or 13 as appropriate.
+> >  
+> 
+> I agree with your point in general, but here it seems impossible to get
+> away from variant IDs because the channel numbering depends on it and we
+> use the channel number to decide what number of bits to use.
 
-ĸen
--- 
-      Remembering The People's Republic of Treacle Mine Road.
-        Truth!  Justice!  Freedom!  Reasonably priced Love!
-                 And a Hard-boiled Egg!
+Ah. I'd missed that detail.  Perhaps add a comment to remind us that's
+the case in future.
+
+> The code
+> I'm replacing is just disguising the variant IDs by giving every variant
+> its own set of functions.
+> 
+> To me it seemed clearer to describe the channel properties and then use
+> one read_raw function for all variants, but when I did that it turned
+> out not to make any difference in size for x86. Probably because tables
+> encode a lot of redundant information compared to switches. It also
+> relied on a hack to associate extra info with an iio_chan_spec so it
+> wasn't much of an improvement, in the end.
+> 
+> So it's a question of using a variant ID explicitly or having separate
+> functions for each device. Combining the functions with an explicit ID
+> saves 752 bytes on x86, once the axp192 is added, and I don't think it
+> is any harder to understand than the separate functions. And it's still
+> possible to use a separate function when needed.
+> 
+> Nonetheless, if you'd prefer to stick with separate functions I'm fine
+> with that.
+
+This may well be a case of doing what you have here for now, but revisit
+in future if we end up with more cases of this turning up in the function.
+It may well become too complex and need the separate functions again.
+
+Jonathan
+
+> 
+> Regards,
+> Aidan
+> 
+> >> ---
+> >>  drivers/iio/adc/axp20x_adc.c | 83 +++++++++++++++---------------------
+> >>  1 file changed, 34 insertions(+), 49 deletions(-)
+> >> 
+> >> diff --git a/drivers/iio/adc/axp20x_adc.c b/drivers/iio/adc/axp20x_adc.c
+> >> index 9d5b1de24908..0260433782d8 100644
+> >> --- a/drivers/iio/adc/axp20x_adc.c
+> >> +++ b/drivers/iio/adc/axp20x_adc.c
+> >> @@ -71,6 +71,18 @@ struct axp20x_adc_iio {
+> >>  	const struct axp_data	*data;
+> >>  };
+> >>  
+> >> +struct axp_data {
+> >> +	const struct iio_info		*iio_info;
+> >> +	int				num_channels;
+> >> +	struct iio_chan_spec const	*channels;
+> >> +	unsigned long			adc_en1_mask;
+> >> +	unsigned long			adc_en2_mask;
+> >> +	int				(*adc_rate)(struct axp20x_adc_iio *info,
+> >> +						    int rate);
+> >> +	struct iio_map			*maps;
+> >> +	enum axp20x_variants		axp20x_id;
+> >> +};
+> >> +
+> >>  enum axp20x_adc_channel_v {
+> >>  	AXP20X_ACIN_V = 0,
+> >>  	AXP20X_VBUS_V,
+> >> @@ -237,15 +249,24 @@ static int axp20x_adc_raw(struct iio_dev *indio_dev,
+> >>  	struct axp20x_adc_iio *info = iio_priv(indio_dev);
+> >>  	int ret, size;
+> >>  
+> >> -	/*
+> >> -	 * N.B.:  Unlike the Chinese datasheets tell, the charging current is
+> >> -	 * stored on 12 bits, not 13 bits. Only discharging current is on 13
+> >> -	 * bits.
+> >> -	 */
+> >> -	if (chan->type == IIO_CURRENT && chan->channel == AXP20X_BATT_DISCHRG_I)
+> >> -		size = 13;
+> >> -	else
+> >> +	switch (info->data->axp20x_id) {
+> >> +	case AXP202_ID:
+> >> +	case AXP209_ID:
+> >> +		/*
+> >> +		 * N.B.:  Unlike the Chinese datasheets tell, the charging current is
+> >> +		 * stored on 12 bits, not 13 bits. Only discharging current is on 13
+> >> +		 * bits.
+> >> +		 */
+> >> +		if (chan->type == IIO_CURRENT && chan->channel == AXP20X_BATT_DISCHRG_I)  
+> >
+> > This line is getting a bit long, break it after the &&
+> >  
+> >> +			size = 13;
+> >> +		else
+> >> +			size = 12;
+> >> +		break;
+> >> +
+> >> +	default:
+> >>  		size = 12;
+> >> +		break;
+> >> +	}
+> >>  
+> >>  	ret = axp20x_read_variable_width(info->regmap, chan->address, size);
+> >>  	if (ret < 0)
+> >> @@ -255,34 +276,6 @@ static int axp20x_adc_raw(struct iio_dev *indio_dev,
+> >>  	return IIO_VAL_INT;
+> >>  }
+> >>  
+> >> -static int axp22x_adc_raw(struct iio_dev *indio_dev,
+> >> -			  struct iio_chan_spec const *chan, int *val)
+> >> -{
+> >> -	struct axp20x_adc_iio *info = iio_priv(indio_dev);
+> >> -	int ret;
+> >> -
+> >> -	ret = axp20x_read_variable_width(info->regmap, chan->address, 12);
+> >> -	if (ret < 0)
+> >> -		return ret;
+> >> -
+> >> -	*val = ret;
+> >> -	return IIO_VAL_INT;
+> >> -}
+> >> -
+> >> -static int axp813_adc_raw(struct iio_dev *indio_dev,
+> >> -			  struct iio_chan_spec const *chan, int *val)
+> >> -{
+> >> -	struct axp20x_adc_iio *info = iio_priv(indio_dev);
+> >> -	int ret;
+> >> -
+> >> -	ret = axp20x_read_variable_width(info->regmap, chan->address, 12);
+> >> -	if (ret < 0)
+> >> -		return ret;
+> >> -
+> >> -	*val = ret;
+> >> -	return IIO_VAL_INT;
+> >> -}
+> >> -
+> >>  static int axp20x_adc_scale_voltage(int channel, int *val, int *val2)
+> >>  {
+> >>  	switch (channel) {
+> >> @@ -522,7 +515,7 @@ static int axp22x_read_raw(struct iio_dev *indio_dev,
+> >>  		return axp22x_adc_scale(chan, val, val2);
+> >>  
+> >>  	case IIO_CHAN_INFO_RAW:
+> >> -		return axp22x_adc_raw(indio_dev, chan, val);
+> >> +		return axp20x_adc_raw(indio_dev, chan, val);
+> >>  
+> >>  	default:
+> >>  		return -EINVAL;
+> >> @@ -542,7 +535,7 @@ static int axp813_read_raw(struct iio_dev *indio_dev,
+> >>  		return axp813_adc_scale(chan, val, val2);
+> >>  
+> >>  	case IIO_CHAN_INFO_RAW:
+> >> -		return axp813_adc_raw(indio_dev, chan, val);
+> >> +		return axp20x_adc_raw(indio_dev, chan, val);
+> >>  
+> >>  	default:
+> >>  		return -EINVAL;
+> >> @@ -620,17 +613,6 @@ static int axp813_adc_rate(struct axp20x_adc_iio *info, int rate)
+> >>  				 AXP813_ADC_RATE_HZ(rate));
+> >>  }
+> >>  
+> >> -struct axp_data {
+> >> -	const struct iio_info		*iio_info;
+> >> -	int				num_channels;
+> >> -	struct iio_chan_spec const	*channels;
+> >> -	unsigned long			adc_en1_mask;
+> >> -	int				(*adc_rate)(struct axp20x_adc_iio *info,
+> >> -						    int rate);
+> >> -	bool				adc_en2;
+> >> -	struct iio_map			*maps;
+> >> -};
+> >> -
+> >>  static const struct axp_data axp20x_data = {
+> >>  	.iio_info = &axp20x_adc_iio_info,
+> >>  	.num_channels = ARRAY_SIZE(axp20x_adc_channels),
+> >> @@ -639,6 +621,7 @@ static const struct axp_data axp20x_data = {
+> >>  	.adc_rate = axp20x_adc_rate,
+> >>  	.adc_en2 = true,
+> >>  	.maps = axp20x_maps,
+> >> +	.axp20x_id = AXP209_ID,
+> >>  };
+> >>  
+> >>  static const struct axp_data axp22x_data = {
+> >> @@ -649,6 +632,7 @@ static const struct axp_data axp22x_data = {
+> >>  	.adc_rate = axp22x_adc_rate,
+> >>  	.adc_en2 = false,
+> >>  	.maps = axp22x_maps,
+> >> +	.axp20x_id = AXP221_ID,
+> >>  };
+> >>  
+> >>  static const struct axp_data axp813_data = {
+> >> @@ -659,6 +643,7 @@ static const struct axp_data axp813_data = {
+> >>  	.adc_rate = axp813_adc_rate,
+> >>  	.adc_en2 = false,
+> >>  	.maps = axp22x_maps,
+> >> +	.axp20x_id = AXP813_ID,
+> >>  };
+> >>  
+> >>  static const struct of_device_id axp20x_adc_of_match[] = {  
+> 
+
