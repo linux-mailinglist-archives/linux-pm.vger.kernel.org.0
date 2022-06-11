@@ -2,52 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE6C0547148
-	for <lists+linux-pm@lfdr.de>; Sat, 11 Jun 2022 04:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C344C547160
+	for <lists+linux-pm@lfdr.de>; Sat, 11 Jun 2022 04:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236391AbiFKCX0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jun 2022 22:23:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52896 "EHLO
+        id S1347046AbiFKCd0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jun 2022 22:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348870AbiFKCXU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 22:23:20 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922023F4A19
-        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 19:23:14 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id v25so1000376eda.6
-        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 19:23:14 -0700 (PDT)
+        with ESMTP id S1349009AbiFKCdX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jun 2022 22:33:23 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C0E5997B
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 19:33:17 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id g7so1032305eda.3
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jun 2022 19:33:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=HvaEucNyttJ72r4dgkt1sbWCJsvBPyIh5zMt0LNXalY=;
-        b=D62jI1p8sOcmW+dGG367yCKI6736qfwlRYdRbtg+pQI3VQ/mZvhMkSh4muEy4yFzXi
-         1pifN6keFBPADAFAutLs2f+vKDRy3jOy1SmannYfmHY7tjbpoLbP8600CMqIboz22zit
-         FmdCeKC+IDyY3i3YwKCGDz5In1oYgHbIW3q58=
+        bh=rgKkPquDB/3ylB22sdoq44O3nuMRqOGPmfYPJEM3DpI=;
+        b=JsXVqmPM/FghNi+FuyecZKJimRfQRZRaZMN7LbU4AElduixKN8TVkmhpZTWnrsGkbZ
+         5LwE/p8/n+cIXvQ1YTcLTi0yyURcD/DMLBUnB+eqSpwlWIAygkMHM4b3P17Zp5erCg7D
+         knTgcyr8j5ARmG7z3CGlckVUGoumxDAZyb+n8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=HvaEucNyttJ72r4dgkt1sbWCJsvBPyIh5zMt0LNXalY=;
-        b=ofWRLD00a7ucxCRNnzeC0N6jd8NXWfe3eemIZNtp4X45cdyRB4Ywh8/aftTqS8Fjsm
-         CvI8FwrZpgJqwSMknqiFYYWtVQjdqisHvLU81n+3/njtpZgvznj0zSCBzzEovonM8z8A
-         SzERrwJjV+RVTHw/FviaVTocMh5hCWfIsKDuoa5NvRpPMAMqG6GOf0LJfJqJc6K/14tR
-         GI407ECs7CqasD4MHodLcqzY4gLbF2AamSNgGcC5T5nEi0Oi8EHetmqAg+YkN8yRlgr+
-         1I66ZhLgX6PzG4/t6izVPpeAQOV0urhCS7gICFSyO3EiJR11YP4TPwb7Y5ltZbvptV1M
-         PTjQ==
-X-Gm-Message-State: AOAM530Vp6Y2Gbud/Twj61Habd6DHahCIRLofpLXqCMmZZtoqKrWXy7t
-        X9lZF0TiTxh51vZSFJ8sXOrB7kvoqZFNvRkF9hohtQ==
-X-Google-Smtp-Source: ABdhPJz16+9kQdS9QDTB0tjL4FsLbUEsFaIS0ykQfnx5qpyFYyBQCn1i8W4mcCkA/y3viUzYkXAgYYv9JpSOTwgMdpQ=
-X-Received: by 2002:a50:eb91:0:b0:42d:c1d8:616a with SMTP id
- y17-20020a50eb91000000b0042dc1d8616amr54940771edr.219.1654914192936; Fri, 10
- Jun 2022 19:23:12 -0700 (PDT)
+        bh=rgKkPquDB/3ylB22sdoq44O3nuMRqOGPmfYPJEM3DpI=;
+        b=Mc0YUNMUBtSpkaC8RdmLo180BlMC9X9J2fP1En7IIOr3qxRlMvRV3C3O+YjFkofM6c
+         OIm2AQVFxgM1mAx+l8m0lnvSF6GrJuHBu/+SH6Ynmdv6o6bQMYpZg954N6djrMoMyACl
+         oZlE7ulWgzoRmebm4Iupw0YWgr6z+VilLgXdtjZQ0ov2L13feKDjxZbFapc83BpP2kiP
+         +kd/jsdPJNTkTmIygw5PxSbmdDo8J2zat6rESxyylclmwCHxB9ATdpHbufzwheHrTp1P
+         Yrp2U9/S8rQka7rH++jx/hIOBIOuqe30budeTUC97y1qgOBAsd1vTEcZtSwWzD7w9J9o
+         zd2Q==
+X-Gm-Message-State: AOAM530SQrvbOFh2rTWvR2M8F5S/5XcfkYhWVj4uFGs4XocaRy8lSOwy
+        EcJvG016YQNsPBbcm54jTX03y12dPPStkNvV02YaLg==
+X-Google-Smtp-Source: ABdhPJzFbgEeXrjhdaEFlL5CPKYiFgrRM2XGTpISMDDKOxh3YJg+nd70yb1Qcu1fnLsZwhWAweXqTRUn04uTYMjQVNU=
+X-Received: by 2002:aa7:c604:0:b0:42d:cffb:f4dc with SMTP id
+ h4-20020aa7c604000000b0042dcffbf4dcmr55022482edq.270.1654914796079; Fri, 10
+ Jun 2022 19:33:16 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220608142723.103523089@infradead.org> <20220608144517.444659212@infradead.org>
- <YqG6URbihTNCk9YR@alley> <YqHFHB6qqv5wiR8t@worktop.programming.kicks-ass.net> <YqHwOFg/WlMqe8/Z@alley>
-In-Reply-To: <YqHwOFg/WlMqe8/Z@alley>
+ <YqG6URbihTNCk9YR@alley> <YqHFHB6qqv5wiR8t@worktop.programming.kicks-ass.net>
+ <CA+_sPaoJGrXhNPCs2dKf2J7u07y1xYrRFZBUtkKwzK9GqcHSuQ@mail.gmail.com> <YqHvXFdIJfvUDI6e@alley>
+In-Reply-To: <YqHvXFdIJfvUDI6e@alley>
 From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-Date:   Sat, 11 Jun 2022 11:23:02 +0900
-Message-ID: <CA+_sPaq_47C2PWnGU7WfGXMc03E1Nz+1=F-wZe0B2+ymqdm3Fg@mail.gmail.com>
+Date:   Sat, 11 Jun 2022 11:33:05 +0900
+Message-ID: <CA+_sPaq1ez7jah0bibAdeA__Yp92K_VA7E-NZ9knoUmOW9itJg@mail.gmail.com>
 Subject: Re: [PATCH 24/36] printk: Remove trace_.*_rcuidle() usage
 To:     Petr Mladek <pmladek@suse.com>
 Cc:     Peter Zijlstra <peterz@infradead.org>, ink@jurassic.park.msu.ru,
@@ -119,10 +120,31 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 10:06 PM Petr Mladek <pmladek@suse.com> wrote:
+On Thu, Jun 9, 2022 at 10:02 PM Petr Mladek <pmladek@suse.com> wrote:
 >
-> Makes sense. Feel free to use for this patch:
+> On Thu 2022-06-09 20:30:58, Sergey Senozhatsky wrote:
+> > My emails are getting rejected... Let me try web-interface
 >
-> Acked-by: Petr Mladek <pmladek@suse.com>
+> Bad day for mail sending. I have problems as well ;-)
 
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+For me the problem is still there and apparently it's an "too many
+recipients" error.
+
+> > I'm somewhat curious whether we can actually remove that trace event.
+>
+> Good question.
+>
+> Well, I think that it might be useful. It allows to see trace and
+> printk messages together.
+
+Fair enough. Seems that back in 2011 people were pretty happy with it
+https://lore.kernel.org/all/1322161388.5366.54.camel@jlt3.sipsolutions.net/T/#m7bf6416f469119372191f22a6ecf653c5f7331d2
+
+but... reportedly, one of the folks who Ack-ed it (*cough cough*
+PeterZ) has never used it.
+
+> It was ugly when it was in the console code. The new location
+> in vprintk_store() allows to have it even "correctly" sorted
+> (timestamp) against other tracing messages.
+
+That's true.
