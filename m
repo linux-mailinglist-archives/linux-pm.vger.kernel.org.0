@@ -2,42 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD2BF547A7E
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Jun 2022 16:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACD37547A93
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Jun 2022 16:54:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbiFLOe6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 12 Jun 2022 10:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
+        id S234188AbiFLOya (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 12 Jun 2022 10:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbiFLOe5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Jun 2022 10:34:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977BB31221
-        for <linux-pm@vger.kernel.org>; Sun, 12 Jun 2022 07:34:56 -0700 (PDT)
+        with ESMTP id S231723AbiFLOya (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Jun 2022 10:54:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0E331506
+        for <linux-pm@vger.kernel.org>; Sun, 12 Jun 2022 07:54:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55D12B80BA5
-        for <linux-pm@vger.kernel.org>; Sun, 12 Jun 2022 14:34:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DC81EC341C4
-        for <linux-pm@vger.kernel.org>; Sun, 12 Jun 2022 14:34:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EB9A60F1F
+        for <linux-pm@vger.kernel.org>; Sun, 12 Jun 2022 14:54:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DABBBC341C5
+        for <linux-pm@vger.kernel.org>; Sun, 12 Jun 2022 14:54:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655044493;
-        bh=9sx01SWQn6vTt2DXgZJYjLWJantWLVyqvbVbfNS5Jf0=;
+        s=k20201202; t=1655045667;
+        bh=lLPoEQ4aW20F+FB+DAj+qAAwvcDJHN4ElgpxaifpUsU=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=LQ/XGfZe/LdMCFj4wlPMu7EDHx5D7/9H3bIWeYDTKfXAylrsBYNGitzwipC74klO4
-         IJIzdlLWRFvxyFX1ysf9inC/dS2D0yDFdwezsic8lEdopLmODirH5+x5FT3919ZwQm
-         CHpH/mvzb8JeDFMzfQPTv2sPoRi5JZ9ptiRPJnCWR/6OGyEKwXLHKaHMMgxMh5wNeA
-         l+mQtx6++eNGPjFfX6UfYIJcIVKPa1PXzdGr9ejCRHUarEZkToe8cDfKQblpfoROCJ
-         bsfAyO1bgQ5CCs7YOJrFBr6A2OEf/6SB2m0j5ha3frzC6Ao8g5FvcdJjzKkAd85D/c
-         f8J5MkZ0468GQ==
+        b=bVVdgVb/IBfn/ArD6RppgCe0TMd8RCD5Jo2sESPSpYMX7L3r4aezMN5kOfCB7JKFZ
+         +Mc+y8iBWaxV7qWTT2m90CxyKHp/jn+u8ICHqzU9jlxte6JCkvMmJ5wD6ePgLCCi5I
+         manv6Kcp7HcDA00ZfXAx5AMI/qtbkOZ/aYRhW2GMs3FwL43E5f5msmID4e7iOMYkZe
+         9XQLvFegB9zJz/ZV6jECGegV6eOVCURJvHIk3ptRrU9+OHR2GQ/h3Zhf6I6661W3if
+         Zj6/fDB13+fG72iQnYSu3MnNQYrj8vS5zJCA+zm34NnCP0IedI69cJ8QvIplcFRmNQ
+         7njs37pUf5OmQ==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id C8D72CBF854; Sun, 12 Jun 2022 14:34:53 +0000 (UTC)
+        id BCF41CC13B4; Sun, 12 Jun 2022 14:54:27 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-pm@vger.kernel.org
 Subject: [Bug 215800] amd-pstate does not allow to set arbitrary maximum CPU
  frequency above 2200MHz for a desktop Zen 3 CPU
-Date:   Sun, 12 Jun 2022 14:34:53 +0000
+Date:   Sun, 12 Jun 2022 14:54:27 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -53,7 +53,7 @@ X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215800-137361-5tZp0tYQaV@https.bugzilla.kernel.org/>
+Message-ID: <bug-215800-137361-xFy4nFn2Hh@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-215800-137361@https.bugzilla.kernel.org/>
 References: <bug-215800-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -73,20 +73,26 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D215800
 
---- Comment #19 from Artem S. Tashkinov (aros@gmx.com) ---
-All the same with 5.18.3.
+--- Comment #20 from Artem S. Tashkinov (aros@gmx.com) ---
+> capture the min/max log
 
-Steps to reproduce:
+Now idea how to do that, where is it logged.
 
-echo 3000000 | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_max_fr=
-eq
+/sys/devices/system/cpu/cpu0/acpi_cppc contains this:
 
-Now all the CPU cores are stuck below 2.2GHz.
+feedback_ctrs:ref:1185870842796 del:939045433401
+lowest_nonlinear_perf:59
+highest_perf:186
+nominal_freq:3801
+lowest_freq:550
+nominal_perf:128
+lowest_perf:19
+reference_perf:128
+wraparound_time:18446744073709551615
 
-This is after `modprobe amd-pstate replace=3D1`
-
-I really don't understand what else I can do. This is reproducible with a
-single command on my Ryzen 7 5800X CPU.
+No idea what highest_perf is - it's a read only value anyways. No idea what=
+ its
+scale is, 0-255? Why is so below the maximum value?
 
 --=20
 You may reply to this email to add a comment.
