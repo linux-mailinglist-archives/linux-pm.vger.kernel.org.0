@@ -2,60 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CEBC54799A
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Jun 2022 11:26:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD2BF547A7E
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Jun 2022 16:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235826AbiFLJYL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 12 Jun 2022 05:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
+        id S231218AbiFLOe6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 12 Jun 2022 10:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235656AbiFLJYJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Jun 2022 05:24:09 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BCD66AC5;
-        Sun, 12 Jun 2022 02:24:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655025846; x=1686561846;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=AZ7mggDiFLFbnIeSvVBeEcXdi7rY8NniC+pdp5dUaTM=;
-  b=LTXqqIcirchnF6AfrqAcgO/0IhuRtktb4fVEzJjTirojZh8yfJpdlyJW
-   kkpDQOHcQ5VQGl8TXQflOlExWT8lw5Q35uC+xINV0hkGnesHvZIXHLnvT
-   t97yYd/2vhQzZYQgOpUifEf744uJ5lN0Yq+Sc6ft0gRa0eBW3fNKjZdI/
-   7iSqXRX7N2LQfD3ulwgoEtEbpSoFg8SBZWXGP3vyhAKv8egL/GhDYwsA/
-   IoASzerPuCP2LkpeKQ8XmDUXDTkr28HOQvygf72lcc8sp70F0uFVbRVwy
-   2XrPDUUC+5QrW7QQXexla6hfdXf0bTJJI6ZBSmHXCoxf4b3FN1bYQ8/0k
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10375"; a="258454931"
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="258454931"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 02:24:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,294,1647327600"; 
-   d="scan'208";a="829136140"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 12 Jun 2022 02:24:04 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o0JpD-000JpJ-FR;
-        Sun, 12 Jun 2022 09:24:03 +0000
-Date:   Sun, 12 Jun 2022 17:23:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- eacc9b3f283169f1e5426664dfad3ba6e02e75fd
-Message-ID: <62a5b09c.CRPUejZ0iQexaqQC%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229800AbiFLOe5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Jun 2022 10:34:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977BB31221
+        for <linux-pm@vger.kernel.org>; Sun, 12 Jun 2022 07:34:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 55D12B80BA5
+        for <linux-pm@vger.kernel.org>; Sun, 12 Jun 2022 14:34:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DC81EC341C4
+        for <linux-pm@vger.kernel.org>; Sun, 12 Jun 2022 14:34:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655044493;
+        bh=9sx01SWQn6vTt2DXgZJYjLWJantWLVyqvbVbfNS5Jf0=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=LQ/XGfZe/LdMCFj4wlPMu7EDHx5D7/9H3bIWeYDTKfXAylrsBYNGitzwipC74klO4
+         IJIzdlLWRFvxyFX1ysf9inC/dS2D0yDFdwezsic8lEdopLmODirH5+x5FT3919ZwQm
+         CHpH/mvzb8JeDFMzfQPTv2sPoRi5JZ9ptiRPJnCWR/6OGyEKwXLHKaHMMgxMh5wNeA
+         l+mQtx6++eNGPjFfX6UfYIJcIVKPa1PXzdGr9ejCRHUarEZkToe8cDfKQblpfoROCJ
+         bsfAyO1bgQ5CCs7YOJrFBr6A2OEf/6SB2m0j5ha3frzC6Ao8g5FvcdJjzKkAd85D/c
+         f8J5MkZ0468GQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id C8D72CBF854; Sun, 12 Jun 2022 14:34:53 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 215800] amd-pstate does not allow to set arbitrary maximum CPU
+ frequency above 2200MHz for a desktop Zen 3 CPU
+Date:   Sun, 12 Jun 2022 14:34:53 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215800-137361-5tZp0tYQaV@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215800-137361@https.bugzilla.kernel.org/>
+References: <bug-215800-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,109 +71,25 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: eacc9b3f283169f1e5426664dfad3ba6e02e75fd  Merge branch 'acpi-apei' into bleeding-edge
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215800
 
-elapsed time: 3745m
+--- Comment #19 from Artem S. Tashkinov (aros@gmx.com) ---
+All the same with 5.18.3.
 
-configs tested: 88
-configs skipped: 3
+Steps to reproduce:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+echo 3000000 | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_max_fr=
+eq
 
-gcc tested configs:
-arm                              allyesconfig
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-m68k                          atari_defconfig
-arc                          axs101_defconfig
-sh                             espt_defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-alpha                               defconfig
-csky                                defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-xtensa                           allyesconfig
-sh                               allmodconfig
-s390                             allyesconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-parisc64                            defconfig
-s390                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-i386                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-sparc                            allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a002
-x86_64                        randconfig-a004
-x86_64                        randconfig-a006
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arc                  randconfig-r043-20220609
-riscv                             allnoconfig
-riscv                            allyesconfig
-riscv                            allmodconfig
-riscv                    nommu_k210_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-syz
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                                  kexec
-x86_64                               rhel-8.3
+Now all the CPU cores are stuck below 2.2GHz.
 
-clang tested configs:
-powerpc                     tqm8560_defconfig
-powerpc                     mpc5200_defconfig
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a014
-x86_64                        randconfig-a012
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220609
-s390                 randconfig-r044-20220609
-hexagon              randconfig-r041-20220609
-riscv                randconfig-r042-20220609
+This is after `modprobe amd-pstate replace=3D1`
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I really don't understand what else I can do. This is reproducible with a
+single command on my Ryzen 7 5800X CPU.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
