@@ -2,151 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B20C4548286
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jun 2022 10:56:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DCF85482CF
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jun 2022 11:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240186AbiFMIpZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jun 2022 04:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60786 "EHLO
+        id S239585AbiFMJH5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jun 2022 05:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240320AbiFMIpG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jun 2022 04:45:06 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7CB20192;
-        Mon, 13 Jun 2022 01:44:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pN3d4KEFcv2ptnSv0mvCj6MvUML0g63O/kngZ8T7P5U=; b=jHY41velXm5OfTDUZVWOgGoGBS
-        3XcfJnIs2Kw4MnQzhXHXXp0NuTvYgWNNcy9H8ZMc64VSaMQLttlBqVnSkycnBSdvSyy0Jak2Oc/oh
-        vvGayo0C9yY99bqhrLdUZmtWJXcMrqnljzCxzdeOwv7I5/kT19cRmZ3SrWtebHTgXMFdZAZxKh/LD
-        FLvZqYIpmAvjq1lnM+gSi7696QvqdD2nf0hqYc6h4USx92PA9LVEoUSL3WQM5ig7zhrj1+/gECYeb
-        R1xWNHwwSLm1F21Q9Cu7wJn7J1PofxmN5bqxHgiOokEGCrOE72TMA7ta7eHf7Pxf1c+Q+Jc6wUzzF
-        Why4PJmw==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o0fgQ-007VfF-TN; Mon, 13 Jun 2022 08:44:27 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D9091302DA8;
-        Mon, 13 Jun 2022 10:44:22 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BB85B200C72F2; Mon, 13 Jun 2022 10:44:22 +0200 (CEST)
-Date:   Mon, 13 Jun 2022 10:44:22 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, anup@brainfault.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        Arnd Bergmann <arnd@arndb.de>, yury.norov@gmail.com,
-        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
-        rostedt@goodmis.org, pmladek@suse.com, senozhatsky@chromium.org,
-        john.ogness@linutronix.de, paulmck@kernel.org, frederic@kernel.org,
-        quic_neeraju@quicinc.com, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        joel@joelfernandes.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
-        rcu@vger.kernel.org
-Subject: Re: [PATCH 04/36] cpuidle,intel_idle: Fix CPUIDLE_FLAG_IRQ_ENABLE
-Message-ID: <Yqb45vclY2KVL0wZ@hirez.programming.kicks-ass.net>
-References: <20220608142723.103523089@infradead.org>
- <20220608144516.172460444@infradead.org>
- <20220609164921.5e61711d@jacob-builder>
+        with ESMTP id S239720AbiFMJHz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jun 2022 05:07:55 -0400
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9221010DA;
+        Mon, 13 Jun 2022 02:07:54 -0700 (PDT)
+Received: by mail-qv1-f41.google.com with SMTP id q104so3919049qvq.8;
+        Mon, 13 Jun 2022 02:07:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EBVgfZvHOFMLYwxjCwCR93H8ZcHhXQ17mo9XcZyf3JE=;
+        b=jD2o9/xPujtSTouJILilQWzB0mSOzn5x0eYw0rbmlBvTcCtAAFV3gSUYFWQgYLRxFZ
+         aWW1TTySPXiMHnVgEMkjUsoDGC6Eo+gNFvtcZHXRZDMhpdNdUqRPjY6Gy/xCj3wZyELH
+         +3zE57i/LFAtKRQXqM0oPSVT+UQ1vbUDPNykp+raOdmEocXGt/ktDbiqELRD/E4fdZEu
+         9ZZtRVHHBEz9VWP3l1LTAEDhzHvzJyTL2gYvp+JX5PI74+LebiPA++Oz00BbQLyvsQGA
+         WbTvV4BUBCaV0Om/SCnLeITC4ki+6Mr3SXKchG4ehztIRfW4683dq5SYpks+bUXKNMGI
+         k7cQ==
+X-Gm-Message-State: AOAM533mm/bgE3B0A5mv99lokm1RdT7Ih5GBEdtBjkdaE6TrliZlBVOi
+        lhZAszAN2KypUkI3caF8Lt0w6SPYUPr9eA==
+X-Google-Smtp-Source: ABdhPJyluuJPNBADUmjp65xxpUUInsfPY1e2vSfgcBhB0Up7IYnJ5AYXTBzNRTvPEEJvTtsk/CrfHA==
+X-Received: by 2002:a05:6214:1c49:b0:467:d775:3c6f with SMTP id if9-20020a0562141c4900b00467d7753c6fmr39189937qvb.9.1655111273666;
+        Mon, 13 Jun 2022 02:07:53 -0700 (PDT)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id t5-20020a05620a450500b006a79f9d6521sm250759qkp.74.2022.06.13.02.07.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 02:07:52 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id e184so8800792ybf.8;
+        Mon, 13 Jun 2022 02:07:52 -0700 (PDT)
+X-Received: by 2002:a25:7307:0:b0:65c:b98a:f592 with SMTP id
+ o7-20020a257307000000b0065cb98af592mr57068004ybc.380.1655111272121; Mon, 13
+ Jun 2022 02:07:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220609164921.5e61711d@jacob-builder>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220610200500.6727-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220610200500.6727-1-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 13 Jun 2022 11:07:41 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXmRTDfP_g0ado04sdBXZtv+4a8PUnTyh7idzJpHjZzeQ@mail.gmail.com>
+Message-ID: <CAMuHMdXmRTDfP_g0ado04sdBXZtv+4a8PUnTyh7idzJpHjZzeQ@mail.gmail.com>
+Subject: Re: [PATCH v3] thermal: rcar_gen3_thermal: improve logging during probe
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 04:49:21PM -0700, Jacob Pan wrote:
-> Hi Peter,
-> 
-> On Wed, 08 Jun 2022 16:27:27 +0200, Peter Zijlstra <peterz@infradead.org>
-> wrote:
-> 
-> > Commit c227233ad64c ("intel_idle: enable interrupts before C1 on
-> > Xeons") wrecked intel_idle in two ways:
-> > 
-> >  - must not have tracing in idle functions
-> >  - must return with IRQs disabled
-> > 
-> > Additionally, it added a branch for no good reason.
-> > 
-> > Fixes: c227233ad64c ("intel_idle: enable interrupts before C1 on Xeons")
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > ---
-> >  drivers/idle/intel_idle.c |   48
-> > +++++++++++++++++++++++++++++++++++----------- 1 file changed, 37
-> > insertions(+), 11 deletions(-)
-> > 
-> > --- a/drivers/idle/intel_idle.c
-> > +++ b/drivers/idle/intel_idle.c
-> > @@ -129,21 +137,37 @@ static unsigned int mwait_substates __in
-> >   *
-> >   * Must be called under local_irq_disable().
-> >   */
-> nit: this comment is no long true, right?
+On Fri, Jun 10, 2022 at 10:08 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> When setting up a new board, a plain "Can't register thermal zone"
+> didn't help me much because the thermal zones in DT were all fine. I
+> just had a sensor entry too much in the parent TSC node. Reword the
+> failure/success messages to contain the sensor number to make it easier
+> to understand which sensor is affected. Example output now:
+>
+> rcar_gen3_thermal e6198000.thermal: Sensor 0: Loaded 1 trip points
+> rcar_gen3_thermal e6198000.thermal: Sensor 1: Loaded 1 trip points
+> rcar_gen3_thermal e6198000.thermal: Sensor 2: Loaded 1 trip points
+> rcar_gen3_thermal e6198000.thermal: Sensor 3: Can't register thermal zone
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>
+> Change since v2:
+>
+> * don't add plural-'s' at runtime to allow for a greppable string
+>   (Thanks, Niklas!)
 
-It still is, all the idle routines are called with interrupts disabled,
-but must also exit with interrupts disabled.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-If the idle method requires interrupts to be enabled, it must be sure to
-disable them again before returning. Given all the RCU/tracing concerns
-it must use raw_local_irq_*() for this though.
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
