@@ -2,131 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2312A549DDB
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jun 2022 21:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4419549DEC
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jun 2022 21:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245269AbiFMTle (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jun 2022 15:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46254 "EHLO
+        id S243063AbiFMTnA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jun 2022 15:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233460AbiFMTlM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jun 2022 15:41:12 -0400
+        with ESMTP id S244954AbiFMTmh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jun 2022 15:42:37 -0400
 Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3B476281
-        for <linux-pm@vger.kernel.org>; Mon, 13 Jun 2022 11:08:35 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id s37so3745468pfg.11
-        for <linux-pm@vger.kernel.org>; Mon, 13 Jun 2022 11:08:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B0F29CA3
+        for <linux-pm@vger.kernel.org>; Mon, 13 Jun 2022 11:10:48 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id w21so6487321pfc.0
+        for <linux-pm@vger.kernel.org>; Mon, 13 Jun 2022 11:10:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6RfOO19u1aifVisZByr6WMgdeJkVkBAonCLIE3lhww4=;
-        b=ZayI3pusa6NPPyQZLxoG9kjQSrLh5RNRtXEreB7tn3HaMiEKs1Z81QJIKGnlBiOvT8
-         3ZLMkTlpiBnqjIIlh93/+g4p5UHN4QIWDyTopX3GH7Euacyu8/dnuI4KUls12eDKB465
-         pxLc45h7AyHIaDcwYjMRBCzav/15XOBFQDWOU=
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=YuzzcNPOTQoO/Ym3FKKMePrB7VOqlrLweIwG/yrAl2E=;
+        b=mQzcHIegYOXsSS0EagLD3I0E1jRitSrqFsMwJjcZd+uevQNTcnef8Hd7x+Tc1ihvix
+         6iDq/3Uwfj35lOnw+6JZW9wIH6WCWQjj0f8v+GD1svgNeX9Rhf4Vcg3LYMisF661q9Zy
+         3oKIybg7Cwq6+V1wSMKZRJz/on31h/YoeS7G3pzI3PEnAuwNRgg0IzISjEKNpvXV1reT
+         otKVIbzhRSRm3yEGn6dx33imA1MWQJmVpmQSupOwUMMMUWY4mLJlK/jEuWRpWExaa/i6
+         S+6H91BLX6GWDo9ruQgTwo3REPuDJWcp3UAuX/vdgZW/qoUBU9LfBcPVL9iXXO7v65TG
+         RYkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6RfOO19u1aifVisZByr6WMgdeJkVkBAonCLIE3lhww4=;
-        b=5Uh3mWWLJWxuerkLiM6OgXs/Yh4foi4l1VgEFtq/DSLZsFINDfQdNPv6cChW5HyWUe
-         DARkyO+cFaezTbgWUormsgkyn1X29IUT6ow3S/jREVT9BaJ2T3s9jzjXqE2w+JnCdT8g
-         IN9JkX7srDbVF/nuUskn8AncjxGb86LuMGlTalUZyBYFLOYgX2gBfw7r+vAFJVNAb2B3
-         J8UESZ1qpvdMX+1cmH34160cju00EaNhUf6PRYDy+mDLwE42t8wyjMpV0BkcwaAwBnEv
-         wryBOJUmc1g9gsTDZcK9Ivy507b/rr5YvpMXM3EUC24q5tRyNWZz9I4jp5Kx60ENzamf
-         j8tw==
-X-Gm-Message-State: AOAM532NUU3bb480YsGdRqL9Zy1ufDMLsfWzbLKGv0DnbPc72Ns+BtT7
-        FoHuMGzMpM1q4I+tLrujeAzTMg==
-X-Google-Smtp-Source: ABdhPJzyTBSrgeUuj8ZPrTjLj2otwZf42YS9YWJUq0VMLGjI4RlCZxEMTxCgygHUnY0IX59pPnAQ+w==
-X-Received: by 2002:a05:6a00:1acd:b0:51c:795b:860c with SMTP id f13-20020a056a001acd00b0051c795b860cmr591557pfv.16.1655143714650;
-        Mon, 13 Jun 2022 11:08:34 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:c4fb:a1d8:47ef:f10c])
-        by smtp.gmail.com with UTF8SMTPSA id f12-20020aa782cc000000b0051bd9981cacsm5734717pfn.123.2022.06.13.11.08.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jun 2022 11:08:34 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 11:08:32 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <Yqd9IHQEj3Ex+FcF@google.com>
-References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
- <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
- <YpkRDi2m7cLaKYEf@google.com>
- <Yp5nf2w8uVZ38/XZ@google.com>
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=YuzzcNPOTQoO/Ym3FKKMePrB7VOqlrLweIwG/yrAl2E=;
+        b=Wh4ZbFkP8az2CinGG4tHB7/77whp6ftYEPXKSefCIt45BV//iLYSy621faRcxb7g7U
+         RbNCNqvn8blpCQ/wNY9t397bcoWQFW1sbwAdt1kUdcFRCmglhK8SIuaRMyGgmo6jpvda
+         esPV07c+Skrpi2uppatr1h1wvvIf7vh9GNu9Kl8k/ElcPiVOzCz7Rbuf6+ME5VF4pSpI
+         capCN64lCnPBecWgsGmbhh2V0pUofDjudwUkpT8E9ZeXCkgQlg53WVVcD3K3vFSlOEVx
+         QfQ00VfGVP79t4un8zZEytB02RErta9eYjwKwkGVBhruXl3zS168WU6o+dheJbYd5eGX
+         nHlg==
+X-Gm-Message-State: AOAM531fahlHTMRZ1LMc3cGp6dJUwKq6LBV4f5o91tkboKvRHTf5M8g/
+        xcne7+wrzkH2cpU4mihDRpCBew==
+X-Google-Smtp-Source: ABdhPJxynFwxn5IvglcBQT6IIJkWttpyVjxdExfV0tPFNR6KKPSujc5spGZVJ1JuRTwUFmBS8FTV/w==
+X-Received: by 2002:a63:155:0:b0:3fd:1b8e:16ca with SMTP id 82-20020a630155000000b003fd1b8e16camr716124pgb.407.1655143847620;
+        Mon, 13 Jun 2022 11:10:47 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id f125-20020a62db83000000b0051be7a8c008sm5727406pfg.30.2022.06.13.11.10.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 11:10:47 -0700 (PDT)
+Message-ID: <62a77da7.1c69fb81.14058.6ab9@mx.google.com>
+Date:   Mon, 13 Jun 2022 11:10:47 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yp5nf2w8uVZ38/XZ@google.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v5.19-rc2-3-gd3104995c5831
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 1 warning (v5.19-rc2-3-gd3104995c5831)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 01:45:51PM -0700, Matthias Kaehlcke wrote:
-> On Thu, Jun 02, 2022 at 12:35:42PM -0700, Matthias Kaehlcke wrote:
-> > Hi Krishna,
-> > 
-> > with this version I see xHCI errors on my SC7180 based system, like
-> > these:
-> > 
-> > [   65.352605] xhci-hcd xhci-hcd.13.auto: xHC error in resume, USBSTS 0x401, Reinit
-> > 
-> > [  101.307155] xhci-hcd xhci-hcd.13.auto: WARN: xHC CMD_RUN timeout
-> > 
-> > After resume a downstream hub isn't enumerated again.
-> > 
-> > So far I didn't see those with v13, but I aso saw the first error with
-> > v16.
-> 
-> It also happens with v13, but only when a wakeup capable vUSB <= 2
-> device is plugged in. Initially I used a wakeup capable USB3 to
-> Ethernet adapter to trigger the wakeup case, however older versions
-> of this series that use usb_wakeup_enabled_descendants() to check
-> for wakeup capable devices didn't actually check for vUSB > 2
-> devices.
-> 
-> So the case were the controller/PHYs is powered down works, but
-> the controller is unhappy when the runtime PM path is used during
-> system suspend.
+pm/testing build: 7 builds: 0 failed, 7 passed, 1 warning (v5.19-rc2-3-gd31=
+04995c5831)
 
-The issue isn't seen on all systems using dwc3-qcom and the problem starts
-during probe(). The expected probe sequence is something like this:
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+19-rc2-3-gd3104995c5831/
 
-dwc3_qcom_probe
-  dwc3_qcom_of_register_core
-    dwc3_probe
+Tree: pm
+Branch: testing
+Git Describe: v5.19-rc2-3-gd3104995c5831
+Git Commit: d3104995c583179bd2018b049a834319969baa80
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-  if (device_can_wakeup(&qcom->dwc3->dev))
-    ...
+Warnings Detected:
 
-The important part is that device_can_wakeup() is called after dwc3_probe()
-has completed. That's what I see on a QC SC7280 system, where wakeup is
-generally working with these patches.
+arc:
 
-However on a QC SC7180 system dwc3_probe() is deferred and only executed after
-dwc3_qcom_probe(). As a result the device_can_wakeup() call returns false.
-With that the controller/driver ends up in an unhappy state after system
-suspend.
+arm64:
 
-Probing is deferred on SC7180 because device_links_check_suppliers() finds
-that '88e3000.phy' isn't ready yet.
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
