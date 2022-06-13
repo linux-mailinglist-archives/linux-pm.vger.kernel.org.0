@@ -2,32 +2,32 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A88548FB6
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jun 2022 18:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6DDC5489F8
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jun 2022 18:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378195AbiFMNky (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jun 2022 09:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33352 "EHLO
+        id S1383383AbiFMO0M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jun 2022 10:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379209AbiFMNkC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jun 2022 09:40:02 -0400
+        with ESMTP id S1383719AbiFMOXt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jun 2022 10:23:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4A8BF76;
-        Mon, 13 Jun 2022 04:30:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853EF2E6BD;
+        Mon, 13 Jun 2022 04:45:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CD3E61236;
-        Mon, 13 Jun 2022 11:30:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A6A3C34114;
-        Mon, 13 Jun 2022 11:30:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 223C9612AC;
+        Mon, 13 Jun 2022 11:45:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C3DCC34114;
+        Mon, 13 Jun 2022 11:45:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119805;
-        bh=EkK8Cyw/3AmtJUTRATVTiQo+YL8K0C8A+Mz2dBKdb/Q=;
+        s=korg; t=1655120703;
+        bh=IwDaFil21y+RmqPmcFfu8yD/yJO63gJXtYpW6HqIQbw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nRWPb0L3vEG+wGeeK9aszJXkzkRmqbcIBHBIj1mCfPGXv22BYNCamhWSWVyUiXdwc
-         At8DOiRq2AN4XrForFhbaaKKIq/1bY4ciU13nowxoRBocJte5jbAW9Tuztmzj2kOZc
-         +fNgNNDjhDw/Nd/kFL5b2YIsNC1CPsppa5RFe4z8=
+        b=dJw1HkuNsphHgcAptC6mbbUQfWJR/HEmwSGldL5/0RS/C/4+49RR4H4B8GhQtwLnT
+         3jW5lOyrDBzf9QI1UXzIj0X/LCO6P4QwlhYob0e95uUEsHWf5+uPvWJifVhaeNuqVB
+         vdC1VElNt5dlsGOJAnSjLW5O6HQbX1AuDKx0W/bc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -54,12 +54,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 146/339] driver core: Fix wait_for_device_probe() & deferred_probe_timeout interaction
-Date:   Mon, 13 Jun 2022 12:09:31 +0200
-Message-Id: <20220613094931.111416541@linuxfoundation.org>
+Subject: [PATCH 5.17 127/298] driver core: Fix wait_for_device_probe() & deferred_probe_timeout interaction
+Date:   Mon, 13 Jun 2022 12:10:21 +0200
+Message-Id: <20220613094928.793712131@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -143,7 +143,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 deletions(-)
 
 diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index ed02a529a896..d6980f33afc4 100644
+index 977e94cf669e..86fd2ea35656 100644
 --- a/drivers/base/dd.c
 +++ b/drivers/base/dd.c
 @@ -257,7 +257,6 @@ DEFINE_SHOW_ATTRIBUTE(deferred_devs);
@@ -162,7 +162,7 @@ index ed02a529a896..d6980f33afc4 100644
  }
  static DECLARE_DELAYED_WORK(deferred_probe_timeout_work, deferred_probe_timeout_work_func);
  
-@@ -716,9 +714,6 @@ int driver_probe_done(void)
+@@ -720,9 +718,6 @@ int driver_probe_done(void)
   */
  void wait_for_device_probe(void)
  {
