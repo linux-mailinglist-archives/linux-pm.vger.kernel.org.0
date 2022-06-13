@@ -2,155 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66001549E31
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jun 2022 21:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2205549E94
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jun 2022 22:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233671AbiFMT5F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jun 2022 15:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
+        id S1346582AbiFMUIA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jun 2022 16:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346056AbiFMT4U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jun 2022 15:56:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A25A5015;
-        Mon, 13 Jun 2022 11:27:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S1346727AbiFMUHO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jun 2022 16:07:14 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B213F30A;
+        Mon, 13 Jun 2022 11:41:13 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 25f72b661c5a2edc; Mon, 13 Jun 2022 20:41:11 +0200
+Received: from kreacher.localnet (unknown [213.134.187.64])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A83F61295;
-        Mon, 13 Jun 2022 18:27:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7195FC34114;
-        Mon, 13 Jun 2022 18:27:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655144873;
-        bh=4acUEF/GtiroxdkX0QUJJTf/NNYdtRPoMippfdF+Tbs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aEcS3c5PuXqEnaTpZNKg40R3God3d+LK8yPhQQejAGjRW1qBwC32okVmksKg2N2+z
-         yofbKTOOIypSFItFnYzAA1W79a9xS2NBzZLYopWs2Nr4x8FhfqjGrfTXjFKP5hPHPc
-         SAD1t6ahlh9v5DCGkHYm629+mfQETe8iketrGHBBTGoxehe9P2+H/DRZdJsGBGxJ9b
-         /DIXDBa6qIdjJ8jkJ6iNWbzHMGV3fBBub3ItPHhQEAhcnE3kcwKfWRFPCFSvozpIck
-         /Ot+ri4rcFjzH0npaiOlzwZ0zY/ajcIScCJTpHOwdu69UtJeEtA2PpBlOMUrJU66gw
-         SCYoOfOmuqNHQ==
-Message-ID: <d933f30b-4d53-eb97-d029-1c321ba84b62@kernel.org>
-Date:   Mon, 13 Jun 2022 21:27:45 +0300
+        by v370.home.net.pl (Postfix) with ESMTPSA id 2035D66C81D;
+        Mon, 13 Jun 2022 20:41:11 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: [PATCH v2 00/16] ACPI: Get rid of the list of children in struct acpi_device
+Date:   Mon, 13 Jun 2022 20:03:25 +0200
+Message-ID: <2653857.mvXUDI8C0e@kreacher>
+In-Reply-To: <1843211.tdWV9SEqCh@kreacher>
+References: <1843211.tdWV9SEqCh@kreacher>
 MIME-Version: 1.0
-Subject: Re: [PATCH 2/8] interconnect: add device managed bulk API
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, abel.vesa@nxp.com,
-        abailon@baylibre.com, l.stach@pengutronix.de,
-        laurent.pinchart@ideasonboard.com, marex@denx.de,
-        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
-        aford173@gmail.com
-Cc:     kernel@pengutronix.de, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
-References: <20220601094156.3388454-1-peng.fan@oss.nxp.com>
- <20220601094156.3388454-3-peng.fan@oss.nxp.com>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20220601094156.3388454-3-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.187.64
+X-CLIENT-HOSTNAME: 213.134.187.64
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedruddujedguddviecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudekjedrieegnecuvehluhhsthgvrhfuihiivgepgeenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekjedrieegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughrihihrdhshhgvvhgthhgvnhhkoheslhhinhhugidrihhn
+ thgvlhdrtghomhdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohephhguvghgohgvuggvsehrvgguhhgrthdrtghomhdprhgtphhtthhopehsrghkrghrihdrrghilhhusheslhhinhhugidrihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Peng,
-
-Thanks for the patches!
-
-On 1.06.22 12:41, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On Thursday, June 9, 2022 3:44:27 PM CEST Rafael J. Wysocki wrote:
+> Hi All,
 > 
-> Add device managed bulk API to simplify driver.
+> Confusingly enough, the ACPI subsystem stores the information on the given ACPI
+> device's children in two places: as the list of children in struct acpi_device
+> and (as a result of device registration) in the list of children in the embedded
+> struct device.
 > 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->   drivers/interconnect/bulk.c  | 34 ++++++++++++++++++++++++++++++++++
->   include/linux/interconnect.h |  6 ++++++
->   2 files changed, 40 insertions(+)
+> These two lists agree with each other most of the time, but not always (like in
+> error paths in some cases), and the list of children in struct acpi_device is
+> not generally safe to use without locking.  In principle, it should always be
+> walked under acpi_device_lock, but in practice holding acpi_scan_lock is
+> sufficient for that too.  However, its users may not know whether or not
+> they operate under acpi_scan_lock and at least in some cases it is not accessed
+> in a safe way (note that ACPI devices may go away as a result of hot-remove,
+> unlike OF nodes).
 > 
-> diff --git a/drivers/interconnect/bulk.c b/drivers/interconnect/bulk.c
-> index 448cc536aa79..4918844bfe0d 100644
-> --- a/drivers/interconnect/bulk.c
-> +++ b/drivers/interconnect/bulk.c
-> @@ -115,3 +115,37 @@ void icc_bulk_disable(int num_paths, const struct icc_bulk_data *paths)
->   		icc_disable(paths[num_paths].path);
->   }
->   EXPORT_SYMBOL_GPL(icc_bulk_disable);
-> +
-> +struct icc_bulk_devres {
-> +	struct icc_bulk_data *paths;
-> +	int num_paths;
-> +};
-> +
-> +static void devm_icc_bulk_release(struct device *dev, void *res)
-> +{
-> +	struct icc_bulk_devres *devres = res;
-> +
-> +	icc_bulk_put(devres->num_paths, devres->paths);
-> +}
-> +
-> +int devm_of_icc_bulk_get(struct device *dev, int num_paths, struct icc_bulk_data *paths)
+> For this reason, it is better to consolidate the code that needs to walk the
+> children of an ACPI device which is the purpose of this patch series.
+> 
+> Overall, it switches over all of the users of the list of children in struct
+> acpi_device to using helpers based on the driver core's mechanics and finally
+> drops that list, but some extra cleanups are done on the way.
+> 
+> Please refer to the patch changelogs for details.
 
-Adding a kerneldoc would be nice.
+Here's a v2 of this series, mostly addressing review comments, but the subjects
+of the Thunderbolt and USB patches have been changed too.
 
-> +{
-> +	struct icc_bulk_devres *devres;
-> +	int ret;
-> +
-> +	devres = devres_alloc(devm_icc_bulk_release, sizeof(*devres), GFP_KERNEL);
-> +	if (!devres)
-> +		return -ENOMEM;
-> +
-> +	ret = of_icc_bulk_get(dev, num_paths, paths);
-> +	if (!ret) {
-> +		devres->paths = paths;
-> +		devres->num_paths = num_paths;
-> +		devres_add(dev, devres);
-> +	} else {
-> +		devres_free(devres);
-> +	}
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(devm_of_icc_bulk_get);
-> diff --git a/include/linux/interconnect.h b/include/linux/interconnect.h
-> index f685777b875e..1a5fdf049edd 100644
-> --- a/include/linux/interconnect.h
-> +++ b/include/linux/interconnect.h
-> @@ -44,6 +44,7 @@ struct icc_path *icc_get(struct device *dev, const int src_id,
->   			 const int dst_id);
->   struct icc_path *of_icc_get(struct device *dev, const char *name);
->   struct icc_path *devm_of_icc_get(struct device *dev, const char *name);
-> +int devm_of_icc_bulk_get(struct device *dev, int num_paths, struct icc_bulk_data *paths);
->   struct icc_path *of_icc_get_by_index(struct device *dev, int idx);
->   void icc_put(struct icc_path *path);
->   int icc_enable(struct icc_path *path);
-> @@ -116,6 +117,11 @@ static inline int of_icc_bulk_get(struct device *dev, int num_paths, struct icc_
->   	return 0;
->   }
->   
-> +int devm_of_icc_bulk_get(struct device *dev, int num_paths, struct icc_bulk_data *paths)
+Thanks!
 
-Please make this static inline. The rest looks good!
 
-Thanks,
-Georgi
-
-> +{
-> +	return 0;
-> +}
-> +
->   static inline void icc_bulk_put(int num_paths, struct icc_bulk_data *paths)
->   {
->   }
 
