@@ -2,326 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 355CC549EC2
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jun 2022 22:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0429549EC9
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jun 2022 22:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245118AbiFMUQ4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jun 2022 16:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
+        id S1350914AbiFMURN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jun 2022 16:17:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350984AbiFMUQo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jun 2022 16:16:44 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D6C2AE25
-        for <linux-pm@vger.kernel.org>; Mon, 13 Jun 2022 11:54:07 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id z17so6528458pff.7
-        for <linux-pm@vger.kernel.org>; Mon, 13 Jun 2022 11:54:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=hos+vM7QPhmLKHrhoq7Tsb+wSvmhwbry7MYW25bIJ6o=;
-        b=zNHyYqDOfZejcq5aSVCs9Zw5L4PORk78uJU1e/GvCsYcxGcdcC/viU7v5qwtMPnj2T
-         Ua2fv7rFiYJivU/Lje0XgGnbueiAwbqhQITAZ/QJPyjHQbddyIq5hHMIo7aJResyzGNV
-         cz+ZyvoZPmqWCZVjZJ7pGxsLB/i6DGVl9uOjVir1Zeh1pAyP/yspsSu/aqjwSjswKeyr
-         fdSPowgK3wyQgWYyg3dPcUHw0y7PeMkMSYaTjxpEd1kxuuZ5AFTURIcDu61cW7R5Hm5e
-         J1MToaompqQLDaFb3MsM6vKcRJsczQvNkLLMsX760wWp7mot51XnXEdtL8H0fNahjS+6
-         UKDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=hos+vM7QPhmLKHrhoq7Tsb+wSvmhwbry7MYW25bIJ6o=;
-        b=w471QcP5cg8YSN+R90mnSlakWGuj3HSlM0OqTAcfR6NnYAG9a2sm7yzf3Hel12Ceog
-         MpHajXXgG8Z8joehfDL4KbL7BdRINmGnpwBE/ggtf2Kx1l0GgXLll/CGsrTAJfuzn6Jx
-         RqiCCAQVUUIJGOV+TV2ik6iu+oD35Hg8o3iu9jxDRTOu1lRoQfJ/9S5C78q3rwjrvX3O
-         /W5lX5MdVfHXmwAhWCJBo/7+JQVmNU6uWpNlcB6twZVO1NbemjQpE8YMD9aGel9ZxHGn
-         PsDx7JAaikzgvnLBrFQ8PFij8nAUlZDJWEuPP/+skq1097HISCFL36JW+xlP9SoCZvy/
-         7T2w==
-X-Gm-Message-State: AOAM532FFpwZff8SsomKPf6HHvEw3sz7ZBTPxKyVDkATXcQmFE1sZep8
-        Y2maXzuQq71PHT9y8Kwhyo5KUlaPxzO834/4AuE=
-X-Google-Smtp-Source: ABdhPJzsjapAf3rDksbZmVpFCd2ISbCszY25vJdh+NXkbKXcC1QzMx65ur9k8CgSyG60ff5FLb81nQ==
-X-Received: by 2002:a62:e116:0:b0:51b:c452:47e6 with SMTP id q22-20020a62e116000000b0051bc45247e6mr707807pfh.25.1655146447223;
-        Mon, 13 Jun 2022 11:54:07 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id n19-20020a638f13000000b00401a213a5f5sm5717962pgd.34.2022.06.13.11.54.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 11:54:06 -0700 (PDT)
-Message-ID: <62a787ce.1c69fb81.338c3.60ca@mx.google.com>
-Date:   Mon, 13 Jun 2022 11:54:06 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S1350960AbiFMUQy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jun 2022 16:16:54 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A501737AA;
+        Mon, 13 Jun 2022 11:54:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655146485; x=1686682485;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rrteT8J06qadrldMcQRzRLZphFKmersKJgLFFUeBMAw=;
+  b=acZCmGCyIAErSAEvtzRqpmxCogNIu7Kx1odcmKEC80A+F3SCN1890qMk
+   5jhVe6X8vBNAaCEJyXllB2lrzKQtYbBc187mf/UCcfbq/tWT1kTHoJ6Hs
+   YcouSYYeZdDrK2uPj1e0niTPUdLoFi8PsUA/Ofu00hnzilW6n1Ri6YFuS
+   kShvxtnbZzhD0o1Bz3xaE8kjxMD/4Rob6AzYa4xkkRPqhkCqoDnklsJrR
+   U7XCLh6xBhzz5Dl2fQHhk0xIugkyXQaSpSFyPM9f/vOaQPK2HvbUEmMyg
+   1u5QKX607sIHXm3a0CgjyYg+vKL+mH0/rpmxsxTB5VQxjWyN7yk3hQKLP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="278412731"
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="278412731"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 11:54:43 -0700
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="686212131"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 11:54:39 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o0pCu-000bIa-OV;
+        Mon, 13 Jun 2022 21:54:36 +0300
+Date:   Mon, 13 Jun 2022 21:54:36 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+        Mark Gross <markgross@kernel.org>,
+        ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH v2 12/16] platform/x86/thinkpad_acpi: Use
+ acpi_dev_for_each_child()
+Message-ID: <YqeH7G8pJMelXYaJ@smile.fi.intel.com>
+References: <1843211.tdWV9SEqCh@kreacher>
+ <2653857.mvXUDI8C0e@kreacher>
+ <2091400.OBFZWjSADL@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.19-rc2-3-gd3104995c5831
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing baseline: 85 runs,
- 6 regressions (v5.19-rc2-3-gd3104995c5831)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2091400.OBFZWjSADL@kreacher>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 85 runs, 6 regressions (v5.19-rc2-3-gd3104995c5831)
+On Mon, Jun 13, 2022 at 08:30:19PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Instead of walking the list of children of an ACPI device directly,
+> use acpi_dev_for_each_child() to carry out an action for all of
+> the given ACPI device's children.
+> 
+> This will help to eliminate the children list head from struct
+> acpi_device as it is redundant and it is used in questionable ways
+> in some places (in particular, locking is needed for walking the
+> list pointed to it safely, but it is often missing).
+
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> v1 -> v2:
+>    * Eliminate unnecessary branch (Andy).
+> 
+> ---
+>  drivers/platform/x86/thinkpad_acpi.c |   53 +++++++++++++++++------------------
+>  1 file changed, 27 insertions(+), 26 deletions(-)
+> 
+> Index: linux-pm/drivers/platform/x86/thinkpad_acpi.c
+> ===================================================================
+> --- linux-pm.orig/drivers/platform/x86/thinkpad_acpi.c
+> +++ linux-pm/drivers/platform/x86/thinkpad_acpi.c
+> @@ -6841,6 +6841,31 @@ static const struct backlight_ops ibm_ba
+>  
+>  /* --------------------------------------------------------------------- */
+>  
+> +static int __init tpacpi_evaluate_bcl(struct acpi_device *adev, void *not_used)
+> +{
+> +	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+> +	union acpi_object *obj;
+> +	acpi_status status;
+> +	int rc;
+> +
+> +	status = acpi_evaluate_object(adev->handle, "_BCL", NULL, &buffer);
+> +	if (ACPI_FAILURE(status))
+> +		return 0;
+> +
+> +	obj = buffer.pointer;
+> +	if (!obj || obj->type != ACPI_TYPE_PACKAGE) {
+> +		acpi_handle_info(adev->handle,
+> +				 "Unknown _BCL data, please report this to %s\n",
+> +				 TPACPI_MAIL);
+> +		rc = 0;
+> +	} else {
+> +		rc = obj->package.count;
+> +	}
+> +	kfree(obj);
+> +
+> +	return rc;
+> +}
+> +
+>  /*
+>   * Call _BCL method of video device.  On some ThinkPads this will
+>   * switch the firmware to the ACPI brightness control mode.
+> @@ -6848,37 +6873,13 @@ static const struct backlight_ops ibm_ba
+>  
+>  static int __init tpacpi_query_bcl_levels(acpi_handle handle)
+>  {
+> -	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+> -	union acpi_object *obj;
+> -	struct acpi_device *device, *child;
+> -	int rc;
+> +	struct acpi_device *device;
+>  
+>  	device = acpi_fetch_acpi_dev(handle);
+>  	if (!device)
+>  		return 0;
+>  
+> -	rc = 0;
+> -	list_for_each_entry(child, &device->children, node) {
+> -		acpi_status status = acpi_evaluate_object(child->handle, "_BCL",
+> -							  NULL, &buffer);
+> -		if (ACPI_FAILURE(status)) {
+> -			buffer.length = ACPI_ALLOCATE_BUFFER;
+> -			continue;
+> -		}
+> -
+> -		obj = (union acpi_object *)buffer.pointer;
+> -		if (!obj || (obj->type != ACPI_TYPE_PACKAGE)) {
+> -			pr_err("Unknown _BCL data, please report this to %s\n",
+> -				TPACPI_MAIL);
+> -			rc = 0;
+> -		} else {
+> -			rc = obj->package.count;
+> -		}
+> -		break;
+> -	}
+> -
+> -	kfree(buffer.pointer);
+> -	return rc;
+> +	return acpi_dev_for_each_child(device, tpacpi_evaluate_bcl, NULL);
+>  }
+>  
+>  
+> 
+> 
+> 
 
-Regressions Summary
--------------------
+-- 
+With Best Regards,
+Andy Shevchenko
 
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | multi_v=
-7_defconfig | 1          =
 
-jetson-tk1                   | arm   | lab-baylibre    | gcc-10   | multi_v=
-7_defconfig | 1          =
-
-kontron-kbox-a-230-ls        | arm64 | lab-kontron     | gcc-10   | defconf=
-ig          | 1          =
-
-sun50i-a64-pine64-plus       | arm64 | lab-broonie     | gcc-10   | defconf=
-ig          | 1          =
-
-sun8i-h2-plus...ch-all-h3-cc | arm   | lab-baylibre    | gcc-10   | multi_v=
-7_defconfig | 1          =
-
-sun8i-h2-plus-orangepi-zero  | arm   | lab-baylibre    | gcc-10   | multi_v=
-7_defconfig | 1          =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.19-rc=
-2-3-gd3104995c5831/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.19-rc2-3-gd3104995c5831
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      d3104995c583179bd2018b049a834319969baa80 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-imx6ul-pico-hobbit           | arm   | lab-pengutronix | gcc-10   | multi_v=
-7_defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62a77f2e0c42d17506a39bd4
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.19-rc2-3-gd31049=
-95c5831/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx6ul-pico-=
-hobbit.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.19-rc2-3-gd31049=
-95c5831/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx6ul-pico-=
-hobbit.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220610.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/62a77f2e0c42d17506a39=
-bd5
-        failing since 6 days (last pass: thermal-5.16-rc5-48-gf1f42573b6f3,=
- first fail: v5.19-rc1-2-g6a8964e282382) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-jetson-tk1                   | arm   | lab-baylibre    | gcc-10   | multi_v=
-7_defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62a77eef2e7534b257a39bd5
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.19-rc2-3-gd31049=
-95c5831/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-jetson-tk1.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.19-rc2-3-gd31049=
-95c5831/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-jetson-tk1.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220610.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/62a77eef2e7534b257a39=
-bd6
-        failing since 6 days (last pass: v5.18-rc6-123-g84d13b694ebbe, firs=
-t fail: v5.19-rc1-2-g6a8964e282382) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-kontron-kbox-a-230-ls        | arm64 | lab-kontron     | gcc-10   | defconf=
-ig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62a77d7eb1ef5f5d39a39c29
-
-  Results:     93 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.19-rc2-3-gd31049=
-95c5831/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.t=
-xt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.19-rc2-3-gd31049=
-95c5831/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220610.1/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/62=
-a77d7eb1ef5f5d39a39c32
-        failing since 6 days (last pass: v5.18-rc7-183-g45785e0ed597, first=
- fail: v5.19-rc1-2-g6a8964e282382)
-
-    2022-06-13T18:09:39.995567  /lava-127311/1/../bin/lava-test-case
-    2022-06-13T18:09:39.995821  <8>[   15.953249] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>
-    2022-06-13T18:09:39.995971  /lava-127311/1/../bin/lava-test-case
-    2022-06-13T18:09:39.996112  <8>[   15.965875] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dleds-gpio-driver-present RESULT=3Dpass>
-    2022-06-13T18:09:39.996274  /lava-127311/1/../bin/lava-test-case
-    2022-06-13T18:09:39.996411  <8>[   15.978636] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dleds-gpio-probed RESULT=3Dpass>
-    2022-06-13T18:09:39.996552  /lava-127311/1/../bin/lava-test-case   =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-sun50i-a64-pine64-plus       | arm64 | lab-broonie     | gcc-10   | defconf=
-ig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62a782cc4c77618985a39bd9
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.19-rc2-3-gd31049=
-95c5831/arm64/defconfig/gcc-10/lab-broonie/baseline-sun50i-a64-pine64-plus.=
-txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.19-rc2-3-gd31049=
-95c5831/arm64/defconfig/gcc-10/lab-broonie/baseline-sun50i-a64-pine64-plus.=
-html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220610.1/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/62a782cc4c77618985a39=
-bda
-        failing since 6 days (last pass: v5.18-rc7-126-g6b601767c503e, firs=
-t fail: v5.19-rc1-2-g6a8964e282382) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-sun8i-h2-plus...ch-all-h3-cc | arm   | lab-baylibre    | gcc-10   | multi_v=
-7_defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62a77f251ecfc696aea39cc9
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.19-rc2-3-gd31049=
-95c5831/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h2-plus-l=
-ibretech-all-h3-cc.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.19-rc2-3-gd31049=
-95c5831/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h2-plus-l=
-ibretech-all-h3-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220610.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/62a77f251ecfc696aea39=
-cca
-        failing since 6 days (last pass: v5.18-rc6-123-g84d13b694ebbe, firs=
-t fail: v5.19-rc1-2-g6a8964e282382) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-sun8i-h2-plus-orangepi-zero  | arm   | lab-baylibre    | gcc-10   | multi_v=
-7_defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/62a77eda77a65e54f0a39c92
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.19-rc2-3-gd31049=
-95c5831/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h2-plus-o=
-rangepi-zero.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.19-rc2-3-gd31049=
-95c5831/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h2-plus-o=
-rangepi-zero.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20220610.1/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/62a77eda77a65e54f0a39=
-c93
-        new failure (last pass: v5.19-rc1-2-g6a8964e282382) =
-
- =20
