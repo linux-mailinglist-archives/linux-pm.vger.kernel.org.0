@@ -2,215 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4E2549D06
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jun 2022 21:10:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2312A549DDB
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jun 2022 21:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348499AbiFMTKt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jun 2022 15:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60738 "EHLO
+        id S245269AbiFMTle (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jun 2022 15:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351560AbiFMTKK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jun 2022 15:10:10 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4991F30F69
-        for <linux-pm@vger.kernel.org>; Mon, 13 Jun 2022 10:08:58 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id g10-20020a17090a708a00b001ea8aadd42bso6605520pjk.0
-        for <linux-pm@vger.kernel.org>; Mon, 13 Jun 2022 10:08:58 -0700 (PDT)
+        with ESMTP id S233460AbiFMTlM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jun 2022 15:41:12 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3B476281
+        for <linux-pm@vger.kernel.org>; Mon, 13 Jun 2022 11:08:35 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id s37so3745468pfg.11
+        for <linux-pm@vger.kernel.org>; Mon, 13 Jun 2022 11:08:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=AZWAPWwrm8+A0CgIBwRq++T65dkqg+V1CymCWTXMIwM=;
-        b=LIOySr/baoj4EAyTjKf+aH+Qatb2p3UHDovP+gotSlTiSN1yTcg4GCjyqC3fyUX7wl
-         npmmJtdNhVDNh5XKGkUnpjvg/YJI9/ZyQwGvcnz/SS0pPOuUekmDMJRnmbvEUG9D+H7+
-         BZM1DLAMJ8q+I+4MvG2IfeZzZu5Z2p2pmZvJH76I7ELfeoqXCbnsuzr33o2epyIJ5WeO
-         vlWeMTh3YdX80pJSfJHrPWOfpq4BMQV7PRBFhgbMKMVtr4faZ0ISbwZoAbpm/guz5Lxu
-         3Q1Lh7nmkcWUV2iquou5G8hgE2UlhX7m7htGh4cx10X02rbX81xYSe5d64L24n5jYZOT
-         up1Q==
+        bh=6RfOO19u1aifVisZByr6WMgdeJkVkBAonCLIE3lhww4=;
+        b=ZayI3pusa6NPPyQZLxoG9kjQSrLh5RNRtXEreB7tn3HaMiEKs1Z81QJIKGnlBiOvT8
+         3ZLMkTlpiBnqjIIlh93/+g4p5UHN4QIWDyTopX3GH7Euacyu8/dnuI4KUls12eDKB465
+         pxLc45h7AyHIaDcwYjMRBCzav/15XOBFQDWOU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=AZWAPWwrm8+A0CgIBwRq++T65dkqg+V1CymCWTXMIwM=;
-        b=dbWRgus0WZrGyLkyRHQsIz6n16StTLsiYvyyvXazR3Do4q9JU3oZpu+YWQGUeoYh9D
-         65XYr+14bE7YG14MBD8d8hYUx9Q2fxS/5WG7qXKpHXmKoFJB+loJmEvlDBFw4SllF1V2
-         /q/8p6vqgWqzIQmh8xED6g++3osfTWI2hCuS/7PeVI8nlh/1n/qeajyVZ0t0s4z+Kr8c
-         GKH40NbmE6+47YaNFK6nnRtyP4qjTVaq6TrgjEoEwVWGA4r1XXhGZUfuHEUu05CNBFM7
-         2mFGrElXn8tZM2xL5eJVJoUjzsQhoJ98EkHz3yKrhx4ugAtyPJqwrOoZKjtoey+aGZrV
-         y1UA==
-X-Gm-Message-State: AJIora+B6HmO5agLGMfu2hwkPKdwaA1YZYQh/2lAxLXKKpG78sx/otwi
-        r9pTAMUj0efWU3N6TcvwIcfCdA==
-X-Google-Smtp-Source: AGRyM1sELmzXAHQOaDg6BJ3FBShrRSur5yPmIKoRf1jf9G2G72yJQERR+jxqILTIiQmADcP/b1HsAg==
-X-Received: by 2002:a17:902:c94b:b0:166:4f65:cffb with SMTP id i11-20020a170902c94b00b001664f65cffbmr14965pla.103.1655140137656;
-        Mon, 13 Jun 2022 10:08:57 -0700 (PDT)
-Received: from ash.lan ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id 142-20020a621994000000b00518b4cfbbe0sm5632766pfz.203.2022.06.13.10.08.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 10:08:56 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 18:08:53 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     jic23@kernel.org, lars@metafoo.de, matthias.bgg@gmail.com,
-        lee.jones@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        szunichen@gmail.com, ChiaEn Wu <chiaen_wu@richtek.com>
-Subject: Re: [PATCH v2 15/15] video: backlight: mt6370: Add Mediatek MT6370
- support
-Message-ID: <20220613170853.bffuwkcmflfgg4gt@ash.lan>
-References: <20220613111146.25221-1-peterwu.pub@gmail.com>
- <20220613111146.25221-16-peterwu.pub@gmail.com>
+        bh=6RfOO19u1aifVisZByr6WMgdeJkVkBAonCLIE3lhww4=;
+        b=5Uh3mWWLJWxuerkLiM6OgXs/Yh4foi4l1VgEFtq/DSLZsFINDfQdNPv6cChW5HyWUe
+         DARkyO+cFaezTbgWUormsgkyn1X29IUT6ow3S/jREVT9BaJ2T3s9jzjXqE2w+JnCdT8g
+         IN9JkX7srDbVF/nuUskn8AncjxGb86LuMGlTalUZyBYFLOYgX2gBfw7r+vAFJVNAb2B3
+         J8UESZ1qpvdMX+1cmH34160cju00EaNhUf6PRYDy+mDLwE42t8wyjMpV0BkcwaAwBnEv
+         wryBOJUmc1g9gsTDZcK9Ivy507b/rr5YvpMXM3EUC24q5tRyNWZz9I4jp5Kx60ENzamf
+         j8tw==
+X-Gm-Message-State: AOAM532NUU3bb480YsGdRqL9Zy1ufDMLsfWzbLKGv0DnbPc72Ns+BtT7
+        FoHuMGzMpM1q4I+tLrujeAzTMg==
+X-Google-Smtp-Source: ABdhPJzyTBSrgeUuj8ZPrTjLj2otwZf42YS9YWJUq0VMLGjI4RlCZxEMTxCgygHUnY0IX59pPnAQ+w==
+X-Received: by 2002:a05:6a00:1acd:b0:51c:795b:860c with SMTP id f13-20020a056a001acd00b0051c795b860cmr591557pfv.16.1655143714650;
+        Mon, 13 Jun 2022 11:08:34 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:c4fb:a1d8:47ef:f10c])
+        by smtp.gmail.com with UTF8SMTPSA id f12-20020aa782cc000000b0051bd9981cacsm5734717pfn.123.2022.06.13.11.08.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 11:08:34 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 11:08:32 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <Yqd9IHQEj3Ex+FcF@google.com>
+References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
+ <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
+ <YpkRDi2m7cLaKYEf@google.com>
+ <Yp5nf2w8uVZ38/XZ@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220613111146.25221-16-peterwu.pub@gmail.com>
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <Yp5nf2w8uVZ38/XZ@google.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 07:11:46PM +0800, ChiaEn Wu wrote:
-> +static int mt6370_init_backlight_properties(struct mt6370_priv *priv,
-> +					    struct backlight_properties *props)
+On Mon, Jun 06, 2022 at 01:45:51PM -0700, Matthias Kaehlcke wrote:
+> On Thu, Jun 02, 2022 at 12:35:42PM -0700, Matthias Kaehlcke wrote:
+> > Hi Krishna,
+> > 
+> > with this version I see xHCI errors on my SC7180 based system, like
+> > these:
+> > 
+> > [   65.352605] xhci-hcd xhci-hcd.13.auto: xHC error in resume, USBSTS 0x401, Reinit
+> > 
+> > [  101.307155] xhci-hcd xhci-hcd.13.auto: WARN: xHC CMD_RUN timeout
+> > 
+> > After resume a downstream hub isn't enumerated again.
+> > 
+> > So far I didn't see those with v13, but I aso saw the first error with
+> > v16.
+> 
+> It also happens with v13, but only when a wakeup capable vUSB <= 2
+> device is plugged in. Initially I used a wakeup capable USB3 to
+> Ethernet adapter to trigger the wakeup case, however older versions
+> of this series that use usb_wakeup_enabled_descendants() to check
+> for wakeup capable devices didn't actually check for vUSB > 2
+> devices.
+> 
+> So the case were the controller/PHYs is powered down works, but
+> the controller is unhappy when the runtime PM path is used during
+> system suspend.
 
-Most of the changes in this version looks good... but it looks the new
-code in this function has a number of problems. See below...
+The issue isn't seen on all systems using dwc3-qcom and the problem starts
+during probe(). The expected probe sequence is something like this:
 
+dwc3_qcom_probe
+  dwc3_qcom_of_register_core
+    dwc3_probe
 
-> +{
-> +	struct device *dev = priv->dev;
-> +	u8 prop_val;
-> +	u32 brightness;
-> +	unsigned int mask, val;
-> +	int ret;
-> +
-> +	/* Vendor optional properties
-> +	 * if property not exist, keep value in default.
-> +	 */
+  if (device_can_wakeup(&qcom->dwc3->dev))
+    ...
 
-That's not the right strategy for booleans. Not existing means false
-(e.g. flags should actively be unset).
+The important part is that device_can_wakeup() is called after dwc3_probe()
+has completed. That's what I see on a QC SC7280 system, where wakeup is
+generally working with these patches.
 
+However on a QC SC7180 system dwc3_probe() is deferred and only executed after
+dwc3_qcom_probe(). As a result the device_can_wakeup() call returns false.
+With that the controller/driver ends up in an unhappy state after system
+suspend.
 
-> +	if (device_property_read_bool(dev, "mediatek,bled-pwm-enable")) {
-> +		ret = regmap_update_bits(priv->regmap, MT6370_REG_BL_PWM,
-> +					 MT6370_BL_PWM_EN_MASK,
-> +					 MT6370_BL_PWM_EN_MASK);
-> +		if (ret)
-> +			return ret;
-> +	}
-
-As above comment... all of the boolean properties are now being read
-incorrectly.
-
-
-> +
-> +	if (device_property_read_bool(dev, "mediatek,bled-pwm-hys-enable")) {
-> +		ret = regmap_update_bits(priv->regmap, MT6370_REG_BL_PWM,
-> +					 MT6370_BL_PWM_HYS_EN_MASK,
-> +					 MT6370_BL_PWM_HYS_EN_MASK);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	ret = device_property_read_u8(dev, "mediatek,bled-pwm-hys-input-bit",
-> +				      &prop_val);
-> +	if (!ret) {
-> +		val = min_t(u8, prop_val, 3)
-> +		      << (ffs(MT6370_BL_PWM_HYS_SEL_MASK) - 1);
-> +		ret = regmap_update_bits(priv->regmap, MT6370_REG_BL_PWM,
-> +					 MT6370_BL_PWM_HYS_SEL_MASK, val);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	ret = device_property_read_u8(dev, "mediatek,bled-ovp-microvolt",
-> +				      &prop_val);
-> +	if (!ret) {
-> +		val = min_t(u8, prop_val, 3)
-> +		      << (ffs(MT6370_BL_OVP_SEL_MASK) - 1);
-
-This has been renamed but still seems to the using 0, 1, 2, 3 rather
-than an actual value in microvolts.
-
-
-> +		ret = regmap_update_bits(priv->regmap, MT6370_REG_BL_BSTCTRL,
-> +					 MT6370_BL_OVP_SEL_MASK, val);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	if (device_property_read_bool(dev, "mediatek,bled-ovp-shutdown")) {
-> +		ret = regmap_update_bits(priv->regmap, MT6370_REG_BL_BSTCTRL,
-> +					 MT6370_BL_OVP_EN_MASK,
-> +					 MT6370_BL_OVP_EN_MASK);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	ret = device_property_read_u8(dev, "mediatek,bled-ocp-microamp",
-> +				      &prop_val);
-> +	if (!ret) {
-> +		val = min_t(u8, prop_val, 3)
-> +		      << (ffs(MT6370_BL_OC_SEL_MASK) - 1);
-
-Likewise, should this be accepting a value in microamps?
-
-
-> +		ret = regmap_update_bits(priv->regmap, MT6370_REG_BL_BSTCTRL,
-> +					 MT6370_BL_OC_SEL_MASK, val);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	if (device_property_read_bool(dev, "mediatek,bled-ocp-shutdown")) {
-> +		ret = regmap_update_bits(priv->regmap, MT6370_REG_BL_BSTCTRL,
-> +					 MT6370_BL_OC_EN_MASK,
-> +					 MT6370_BL_OC_EN_MASK);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	/* Common properties */
-> +	ret = device_property_read_u32(dev, "max-brightness", &brightness);
-> +	if (ret)
-> +		brightness = MT6370_BL_MAX_BRIGHTNESS;
-> +
-> +	props->max_brightness = min_t(u32, brightness,
-> +				      MT6370_BL_MAX_BRIGHTNESS);
-> +
-> +	ret = device_property_read_u32(dev, "default-brightness", &brightness);
-> +	if (ret)
-> +		brightness = props->max_brightness;
-> +
-> +	props->brightness = min_t(u32, brightness, props->max_brightness);
-> +
-> +
-> +	ret = device_property_read_u8(dev, "mediatek,bled-channel-use",
-> +				      &prop_val);
-> +	if (ret) {
-> +		dev_err(dev, "mediatek,bled-channel-use DT property missing\n");
-> +		return ret;
-> +	}
-> +
-> +	if (!prop_val || prop_val > MT6370_BL_MAX_CH) {
-> +		dev_err(dev, "No channel specified (ch_val:%d)\n", prop_val);
-
-Error string has not been updated to match condition that triggers it.
-
-
-> +		return -EINVAL;
-> +	}
-
-
-Daniel.
+Probing is deferred on SC7180 because device_links_check_suppliers() finds
+that '88e3000.phy' isn't ready yet.
