@@ -2,102 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6EC54BCCD
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 23:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A33C554BE0C
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 01:02:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354124AbiFNVcE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jun 2022 17:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57134 "EHLO
+        id S239705AbiFNXAw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jun 2022 19:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234419AbiFNVcC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 17:32:02 -0400
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644DB51307;
-        Tue, 14 Jun 2022 14:32:01 -0700 (PDT)
-Received: by mail-qt1-f177.google.com with SMTP id t21so7067488qtw.11;
-        Tue, 14 Jun 2022 14:32:01 -0700 (PDT)
+        with ESMTP id S231812AbiFNXAw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 19:00:52 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231C652E63;
+        Tue, 14 Jun 2022 16:00:51 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id c130-20020a1c3588000000b0039c6fd897b4so180842wma.4;
+        Tue, 14 Jun 2022 16:00:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vJbJE6skXfdjpDBexkt9pOCoXBa0ZvUKkaoAQ2sW6PQ=;
+        b=JBLaQZKUv/hKG//oIMOtGegGNRAjJP2nI9Ja+8KmrT5ShvIc8wqO+E8OHwFT8FUdra
+         nYEEv4bQZG5EQSzGbvl5XTG+J8Yzx/XYqlyrQ4iW+7TwEEFcmPlCtQvFAe55WrSy6PAm
+         E3v9W4Za0nXL1rFqQy4tRhqFWwDMN3HpdKl062Gpreg3rBup08J44rxATgMCIebwSyU9
+         rnDLXxvxO/mjd1I1rVU3K8EyAA8r7Z7V7vgEyShYYguY9u5ODxxj4HJJiiB7PNd/ARMp
+         k4dBM7IMwkZLqacIpsDsHFoiub7UCXm8EnufZ/3UT/B9MRlL0NWBtrv2rQHe8z4Ih2zL
+         YCNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6PZK9Icgxpkd1Nlbn2edlrCQm5XYsFqwIxCzqxft+Dc=;
-        b=HsoFlgBaBSt48mzfWUmD7Krn9XrCGrGRT/NBErNu5KiOpI66E+vK66V4nM7q4GZE9M
-         RLEI9Qtov9c9dKOV+FhixAOZIOTDaLksWig/4VkVWAu67GJPQW6TUZMVIyQCN6Z2oJG3
-         +MMEUzTyQL6mEfdWeQEZpdOHGQKiE6zBbFYSYIKDdOctJeYDDkq+045wPSJdA2gB4pmp
-         N8w5mLuHx4xQL9iRQvrpbZxI951DMKzVamkPXVrofx7CPcUFOmlj6TUzU0Y+BFmLTKz8
-         JFCv8mcFiQ4uncky6aueEiZD75NPyqYwAIUqsoxLl7MoIP5cXDwxBVabQGNkjgwU3yQy
-         vSvQ==
-X-Gm-Message-State: AOAM530Ipk0yKZ3LhiDy+im7cGnk9uzrPFpPFvo7mXmBiX+oQ5JreQuw
-        zxpgN6vhqjNxDGnWkIdaAKtYuC/+XcGn/g==
-X-Google-Smtp-Source: ABdhPJwnMTi47HKefj6U3ZHJcYdIa5S9AO6X0wc6UpDswbVEgZZpj4tkDcN26HpPINgFlT7Uj/dRTQ==
-X-Received: by 2002:ac8:5cc9:0:b0:304:e03b:5964 with SMTP id s9-20020ac85cc9000000b00304e03b5964mr5913229qta.433.1655242320289;
-        Tue, 14 Jun 2022 14:32:00 -0700 (PDT)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id j1-20020a05620a410100b006a65c58db99sm10963831qko.64.2022.06.14.14.31.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 14:32:00 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-30fa61b1a83so43802617b3.0;
-        Tue, 14 Jun 2022 14:31:59 -0700 (PDT)
-X-Received: by 2002:a0d:f801:0:b0:30f:f716:2950 with SMTP id
- i1-20020a0df801000000b0030ff7162950mr8241270ywf.358.1655242319521; Tue, 14
- Jun 2022 14:31:59 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vJbJE6skXfdjpDBexkt9pOCoXBa0ZvUKkaoAQ2sW6PQ=;
+        b=7573dwk+7UMfmwCNMhO23XMyBLheVQBJ+aauuVtpfd95q8Zde/3oDVl2T+t2tJ960v
+         Nhjps2zFmcZ/1Klowg0VTsGqC1qJbH8xDwhlrLdh7/DKbiXdFdu3hhUxtYtGRVbKZUay
+         L2ONQSZn6n+7zmGGQ6/7cIDJbSaDcGOTNaQAioYSfeLSZfjPboVRDFaRhlFGRvkmxc1Y
+         W6f10sO/jJcb5LzkxF7fUyL9Jh53lOoTQ1V8/BAHY5s0QufS0cYYq2ZXDwXs2DkFjhhv
+         xaRFcE/W4Y9fY2LSJ+748Xf53ca7HRbJrJhuVHpWsbfH7SrumruY0aisws9OF9vynt9s
+         pw2A==
+X-Gm-Message-State: AOAM5324re7gcsYogezeRQ/izW4pMqbJ6xlLhxfpHhNBjcqN13S6Lqk1
+        VqMAmxpHiK8Gpud/pkLLX5x03WB5mMw=
+X-Google-Smtp-Source: ABdhPJx381pU549Qi/yK1BvFnU3NUNEt7pDrIBvv9lGyXsP6bM1VT9t7XuN50b4O8AQZ74anslX3dQ==
+X-Received: by 2002:a05:600c:348d:b0:39c:652b:5153 with SMTP id a13-20020a05600c348d00b0039c652b5153mr6587918wmq.24.1655247649368;
+        Tue, 14 Jun 2022 16:00:49 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id f7-20020a5d50c7000000b0021031c894d3sm13222790wrt.94.2022.06.14.16.00.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 16:00:48 -0700 (PDT)
+Message-ID: <62a91320.1c69fb81.7fba4.8c25@mx.google.com>
+X-Google-Original-Message-ID: <YqkGi5xPks0Y4R6C@Ansuel-xps.>
+Date:   Wed, 15 Jun 2022 00:07:07 +0200
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Chanwoo Choi <cwchoi00@gmail.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Saravana Kannan <skannan@codeaurora.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/5] PM / devfreq: Fix cpufreq passive unregister
+ erroring on PROBE_DEFER
+References: <20220614110701.31240-1-ansuelsmth@gmail.com>
+ <20220614110701.31240-2-ansuelsmth@gmail.com>
+ <7f00333d-40f9-34d5-fd84-54c10d7a243d@gmail.com>
 MIME-Version: 1.0
-References: <20220610201701.7946-1-wsa+renesas@sang-engineering.com>
- <20220610201701.7946-2-wsa+renesas@sang-engineering.com> <CAMuHMdW3uxQHk6SBX5MqnZsYqwY8p+0wmD6gHwS3ESUrkmpWkQ@mail.gmail.com>
- <YqjtBQdzexzCRrmq@shikoro>
-In-Reply-To: <YqjtBQdzexzCRrmq@shikoro>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 14 Jun 2022 23:31:48 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUTR8+8TbM_AaMXk96adHvdp_Oof8v48_zCY+R5FsOLnQ@mail.gmail.com>
-Message-ID: <CAMuHMdUTR8+8TbM_AaMXk96adHvdp_Oof8v48_zCY+R5FsOLnQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] dt-bindings: thermal: rcar-gen3-thermal: Add
- r8a779f0 support
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7f00333d-40f9-34d5-fd84-54c10d7a243d@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Wolfram,
-
-On Tue, Jun 14, 2022 at 10:18 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> > What about splitting this in two separate checks at the top level:
-> >   - one for regs (R-Car V3U vs. the world), and
-> >   - a second for interrupts (R-Car V3U+S4-8 vs. the world)?
+On Wed, Jun 15, 2022 at 07:58:16AM +0900, Chanwoo Choi wrote:
+> On 22. 6. 14. 20:06, Christian 'Ansuel' Marangi wrote:
+> > With the passive governor, the cpu based scaling can PROBE_DEFER due to
+> > the fact that CPU policy are not ready.
+> > The cpufreq passive unregister notifier is called both from the
+> > GOV_START errors and for the GOV_STOP and assume the notifier is
+> > successfully registred every time. With GOV_START failing it's wrong to
+> > loop over each possible CPU since the register path has failed for
+> > some CPU policy not ready. Change the logic and unregister the notifer
+> > based on the current allocated parent_cpu_data list to correctly handle
+> > errors and the governor unregister path.
+> > 
+> > Fixes: a03dacb0316f ("PM / devfreq: Add cpu based scaling support to passive governor")
+> > Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
+> > ---
+> >  drivers/devfreq/governor_passive.c | 23 ++++++-----------------
+> >  1 file changed, 6 insertions(+), 17 deletions(-)
+> > 
+> > diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
+> > index 72c67979ebe1..0188c32f5198 100644
+> > --- a/drivers/devfreq/governor_passive.c
+> > +++ b/drivers/devfreq/governor_passive.c
+> > @@ -222,8 +222,8 @@ static int cpufreq_passive_unregister_notifier(struct devfreq *devfreq)
+> >  {
+> >  	struct devfreq_passive_data *p_data
+> >  			= (struct devfreq_passive_data *)devfreq->data;
+> > -	struct devfreq_cpu_data *parent_cpu_data;
+> > -	int cpu, ret = 0;
+> > +	struct devfreq_cpu_data *parent_cpu_data, *tmp;
+> > +	int ret;
+> >  
+> >  	if (p_data->nb.notifier_call) {
+> >  		ret = cpufreq_unregister_notifier(&p_data->nb,
+> > @@ -232,27 +232,16 @@ static int cpufreq_passive_unregister_notifier(struct devfreq *devfreq)
+> >  			return ret;
+> >  	}
+> >  
+> > -	for_each_possible_cpu(cpu) {
+> > -		struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+> > -		if (!policy) {
+> > -			ret = -EINVAL;
+> > -			continue;
+> > -		}
+> > -
+> > -		parent_cpu_data = get_parent_cpu_data(p_data, policy);
+> > -		if (!parent_cpu_data) {
+> > -			cpufreq_cpu_put(policy);
+> > -			continue;
+> > -		}
+> > -
+> > +	list_for_each_entry_safe(parent_cpu_data, tmp, &p_data->cpu_data_list, node) {
+> >  		list_del(&parent_cpu_data->node);
+> > +
+> >  		if (parent_cpu_data->opp_table)
+> >  			dev_pm_opp_put_opp_table(parent_cpu_data->opp_table);
+> > +
+> >  		kfree(parent_cpu_data);
+> > -		cpufreq_cpu_put(policy);
+> >  	}
+> 
+> I agree this patch. Just, I'd like to make the separate function
+> to handle the removing of parent_cpu_data.
+> 
+> Please add new delete_parent_cpu_data() function under get_parent_cpu_data()
+> implementation and then call delete_parent_cpu_data()
+> in cpufreq_passive_unregister_notifier().
 >
-> This task seems too much for my YAML-foo :( I couldn't get it to work.
-> Can we leave it as-is for now?
 
-You just need an allOf with two if statements, cfr. e.g.
-Documentation/devicetree/bindings/media/renesas,vin.yaml?
+Ok just to make sure I understand this correctly.
+A dedicated function with just the list_for_each_entry_safe function
+correct?
 
-Gr{oetje,eeting}s,
+> >  
+> > -	return ret;
+> > +	return 0;
+> >  }
+> >  
+> >  static int cpufreq_passive_register_notifier(struct devfreq *devfreq)
+> 
+> 
+> -- 
+> Best Regards,
+> Samsung Electronics
+> Chanwoo Choi
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+	Ansuel
