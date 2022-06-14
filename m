@@ -2,117 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8BBE54ADC1
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 11:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B9954ADD1
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 11:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354623AbiFNJvd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jun 2022 05:51:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37130 "EHLO
+        id S240610AbiFNJ5Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jun 2022 05:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355067AbiFNJvN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 05:51:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5AE0A46664;
-        Tue, 14 Jun 2022 02:50:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 16A9123A;
-        Tue, 14 Jun 2022 02:50:58 -0700 (PDT)
-Received: from [10.57.41.45] (unknown [10.57.41.45])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 391D63F792;
-        Tue, 14 Jun 2022 02:50:56 -0700 (PDT)
-Message-ID: <8325cebd-ddf5-c6aa-16b9-c7c4282d790f@arm.com>
-Date:   Tue, 14 Jun 2022 10:50:53 +0100
+        with ESMTP id S238421AbiFNJ5Y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 05:57:24 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7583EB74;
+        Tue, 14 Jun 2022 02:57:23 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id 1D9B1E001A;
+        Tue, 14 Jun 2022 02:57:23 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id zmYV0_fNanVr; Tue, 14 Jun 2022 02:57:22 -0700 (PDT)
+Message-ID: <8024d9e3b885941084740cb0fb2fc9117acdd069.camel@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1655200642; bh=Rey8CK2/AutuqbNI1TttDkE+g6sTkkOOQ0cIeP09/Eg=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=m1KyYJfqGSa8yvppfGNN1HVrJe+k1SP09oiNB9b3GxttpaTCVbfZYSTeCOy19LdSh
+         JjjjAE1SqtzvoPrrS4P7CPg6ERRkyaNUx9iLaxzIFblEVUYsOxGrpPQkryTkYkFw2x
+         ekSi3VQUPNMKR8gwv+Scif1WeJqRUz5LArvWZHK4aBXpKF1Hb7/WKFFxfeEcjdbRk9
+         n1bDthsdG98QurGxSue03f5oVEVOZaoVLHqgmKVKg8kB7Vsx2S+Hs8tQbmw6fEn1QN
+         0410pLqoTaGzp2NtKZjlVYQDDmI7bcnr4nTjKmfMb2UsgUhwgErQzLF1afg2GKxJrm
+         ntd7liWKyvYKQ==
+Subject: Re: regulator: BD71837 PMIC resume during noirq phase?
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     matti.vaittinen@fi.rohmeurope.com, lgirdwood@gmail.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Date:   Tue, 14 Jun 2022 11:57:18 +0200
+In-Reply-To: <YqhSXuHMR6kuFu/A@sirena.org.uk>
+References: <573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm>
+         <YqhSXuHMR6kuFu/A@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 1/4] thermal: cpufreq_cooling: Use private callback ops
- for each cooling device
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        rafael@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
-        mingo@redhat.com
-References: <20220613124327.30766-1-lukasz.luba@arm.com>
- <20220613124327.30766-2-lukasz.luba@arm.com>
- <20220614022448.pqld3zhqucsfofss@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220614022448.pqld3zhqucsfofss@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 6/14/22 03:24, Viresh Kumar wrote:
-> On 13-06-22, 13:43, Lukasz Luba wrote:
->> It is very unlikely that one CPU cluster would have the EM and some other
->> won't have it (because EM registration failed or DT lacks needed entry).
->> Although, we should avoid modifying global variable with callbacks anyway.
->> Redesign this and add safety for such situation.
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   drivers/thermal/cpufreq_cooling.c | 15 ++++++---------
->>   1 file changed, 6 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
->> index b8151d95a806..ad8b86f5281b 100644
->> --- a/drivers/thermal/cpufreq_cooling.c
->> +++ b/drivers/thermal/cpufreq_cooling.c
->> @@ -59,6 +59,7 @@ struct time_in_idle {
->>    * @cdev: thermal_cooling_device pointer to keep track of the
->>    *	registered cooling device.
->>    * @policy: cpufreq policy.
->> + * @cooling_ops: cpufreq callbacks to thermal cooling device ops
->>    * @idle_time: idle time stats
->>    * @qos_req: PM QoS contraint to apply
->>    *
->> @@ -71,6 +72,7 @@ struct cpufreq_cooling_device {
->>   	unsigned int max_level;
->>   	struct em_perf_domain *em;
->>   	struct cpufreq_policy *policy;
->> +	struct thermal_cooling_device_ops cooling_ops;
->>   #ifndef CONFIG_SMP
->>   	struct time_in_idle *idle_time;
->>   #endif
->> @@ -485,14 +487,6 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
->>   	return ret;
->>   }
->>   
->> -/* Bind cpufreq callbacks to thermal cooling device ops */
->> -
->> -static struct thermal_cooling_device_ops cpufreq_cooling_ops = {
->> -	.get_max_state		= cpufreq_get_max_state,
->> -	.get_cur_state		= cpufreq_get_cur_state,
->> -	.set_cur_state		= cpufreq_set_cur_state,
->> -};
->> -
->>   /**
->>    * __cpufreq_cooling_register - helper function to create cpufreq cooling device
->>    * @np: a valid struct device_node to the cooling device device tree node
->> @@ -554,7 +548,10 @@ __cpufreq_cooling_register(struct device_node *np,
->>   	/* max_level is an index, not a counter */
->>   	cpufreq_cdev->max_level = i - 1;
->>   
->> -	cooling_ops = &cpufreq_cooling_ops;
->> +	cooling_ops = &cpufreq_cdev->cooling_ops;
->> +	cooling_ops->get_max_state = cpufreq_get_max_state;
->> +	cooling_ops->get_cur_state = cpufreq_get_cur_state;
->> +	cooling_ops->set_cur_state = cpufreq_set_cur_state;
->>   
->>   #ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
->>   	if (em_is_sane(cpufreq_cdev, em)) {
+Am Dienstag, dem 14.06.2022 um 10:18 +0100 schrieb Mark Brown:
+> On Tue, Jun 14, 2022 at 11:06:06AM +0200, Martin Kepplinger wrote:
 > 
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > and regulator_enable() in imx-pgc is called from
+> > genpd_resume_noirq().
+> > 
+> > At this point, does any workaround or fix come to your mind I could
+> > test? I guess i2c needs to be resumed too...
+> > 
+> > Why does power domain only implement resume_noirq? How could I
+> > untangle
+> > this?
 > 
+> Indeed - if a power domain is controlling regulators then I'd not
+> expect
+> things to go well if it tries to resume without interrupts, there
+> will
+> be some things that can be done purely with GPIOs but that's
+> depending
+> on the hardware having wired things up that way and the operations
+> needed by the power domain mapping well onto what can be done with
+> GPIOs.
+
+and what's the danger when resuming power domains later?:
+
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -2062,8 +2062,8 @@ int pm_genpd_init(struct generic_pm_domain
+*genpd,
+        genpd->domain.ops.runtime_suspend = genpd_runtime_suspend;
+        genpd->domain.ops.runtime_resume = genpd_runtime_resume;
+        genpd->domain.ops.prepare = genpd_prepare;
+-       genpd->domain.ops.suspend_noirq = genpd_suspend_noirq;
+-       genpd->domain.ops.resume_noirq = genpd_resume_noirq;
++       genpd->domain.ops.suspend = genpd_suspend_noirq;
++       genpd->domain.ops.resume = genpd_resume_noirq;
+        genpd->domain.ops.freeze_noirq = genpd_freeze_noirq;
+        genpd->domain.ops.thaw_noirq = genpd_thaw_noirq;
+        genpd->domain.ops.poweroff_noirq = genpd_poweroff_noirq;
 
 
-Thank you Viresh for the ACK!
+thanks for taking the time,
+
+                          martin
+
+
