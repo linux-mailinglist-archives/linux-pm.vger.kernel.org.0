@@ -2,96 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B59554B7C2
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 19:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A2154B7D6
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 19:40:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240684AbiFNRd3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jun 2022 13:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53896 "EHLO
+        id S1344840AbiFNRj4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jun 2022 13:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242526AbiFNRdZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 13:33:25 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77C763056C;
-        Tue, 14 Jun 2022 10:33:23 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD0DD1762;
-        Tue, 14 Jun 2022 10:33:22 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.41.154])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3C0913F66F;
-        Tue, 14 Jun 2022 10:33:04 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 18:33:00 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, jgross@suse.com,
-        srivatsa@csail.mit.edu, amakhalov@vmware.com,
-        pv-drivers@vmware.com, boris.ostrovsky@oracle.com,
-        chris@zankel.net, jcmvbkbc@gmail.com, rafael@kernel.org,
-        lenb@kernel.org, pavel@ucw.cz, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, anup@brainfault.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
-        jiangshanlai@gmail.com, joel@joelfernandes.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
-        rcu@vger.kernel.org
-Subject: Re: [PATCH 00/36] cpuidle,rcu: Cleanup the mess
-Message-ID: <YqjGTFEWSJGGOjNA@FVFF77S0Q05N>
-References: <20220608142723.103523089@infradead.org>
- <YqhuwQjmZyOVSiLI@FVFF77S0Q05N>
- <Yqi+Nqz1J8wI5GcX@hirez.programming.kicks-ass.net>
+        with ESMTP id S1344698AbiFNRjw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 13:39:52 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAA22F674
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jun 2022 10:39:50 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1o1AVr-0005KQ-66; Tue, 14 Jun 2022 19:39:35 +0200
+Message-ID: <c2034c030333f89e0ac7d86c906dd222cc151d52.camel@pengutronix.de>
+Subject: Re: [PATCH 0/8] interconnect: support i.MX8MP
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "djakov@kernel.org" <djakov@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>, Abel Vesa <abel.vesa@nxp.com>,
+        "abailon@baylibre.com" <abailon@baylibre.com>,
+        "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>,
+        "marex@denx.de" <marex@denx.de>,
+        "paul.elder@ideasonboard.com" <paul.elder@ideasonboard.com>,
+        "Markus.Niebel@ew.tq-group.com" <Markus.Niebel@ew.tq-group.com>,
+        "aford173@gmail.com" <aford173@gmail.com>
+Cc:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Date:   Tue, 14 Jun 2022 19:39:33 +0200
+In-Reply-To: <DU0PR04MB941799547BD863444C6F268D88AB9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20220601094156.3388454-1-peng.fan@oss.nxp.com>
+         <DU0PR04MB941799547BD863444C6F268D88AB9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yqi+Nqz1J8wI5GcX@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,119 +66,94 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 06:58:30PM +0200, Peter Zijlstra wrote:
-> On Tue, Jun 14, 2022 at 12:19:29PM +0100, Mark Rutland wrote:
-> > On Wed, Jun 08, 2022 at 04:27:23PM +0200, Peter Zijlstra wrote:
-> > > Hi All! (omg so many)
+Hi Peng,
+
+Am Montag, dem 13.06.2022 um 01:23 +0000 schrieb Peng Fan:
+> All,
+> 
+> > Subject: [PATCH 0/8] interconnect: support i.MX8MP
+> 
+> I am going to send out V2 this week to address the comments until now.
+> But before that I would like to see if any one has any comments on the
+> design here.
+> 
+> Georgi, do you have comments on Patch 2 " interconnect: add device
+> managed bulk API"
+> 
+> Lucas, since you had comments when I first use syscon to configure NoC,
+> are you ok with the design to use interconnect in this patchset?
+> 
+I'm still not 100% convinced that the blk-ctrl is the right consumer
+for the interconnect, since it doesn't do any busmastering. However,
+the design looks much better than the syscon based one.
+
+I mostly worry about being able to extend this to do more than the
+current static configuration if/when NXP decides to release more
+information about the NoC configuration options or someone reverse
+engineers this part of the SoC. I still hope that we could optimize NoC
+usage by setting real bandwidth and latency limits for the devices
+connected to the NoC. As the blk-ctrl doesn't have any clue about this
+right now, we can't really set any more specific requests than the
+current INT_MAX ones.
+I guess we could extend things in this way by making the blk-ctrl not
+only be a simple consumer of the interconnect, but aggregate requests
+from the devices in the blk-ctrl domain and forward them to the NOC
+provider, right?
+
+Regards,
+Lucas
+
+> Thanks,
+> Peng.
+> 
 > > 
-> > Hi Peter,
+> > From: Peng Fan <peng.fan@nxp.com>
 > > 
-> > Sorry for the delay; my plate has also been rather full recently. I'm beginning
-> > to page this in now.
-> 
-> No worries; we all have too much to do ;-)
-> 
-> > > These here few patches mostly clear out the utter mess that is cpuidle vs rcuidle.
-> > > 
-> > > At the end of the ride there's only 2 real RCU_NONIDLE() users left
-> > > 
-> > >   arch/arm64/kernel/suspend.c:            RCU_NONIDLE(__cpu_suspend_exit());
-> > >   drivers/perf/arm_pmu.c:                 RCU_NONIDLE(armpmu_start(event, PERF_EF_RELOAD));
+> > This patchset is to support i.MX8MP NoC settings, i.MX8MP NoC initial value
+> > after power up is invalid, need set a valid value after related power domain up.
 > > 
-> > The latter of these is necessary because apparently PM notifiers are called
-> > with RCU not watching. Is that still the case today (or at the end of this
-> > series)? If so, that feels like fertile land for more issues (yaey...). If not,
-> > we should be able to drop this.
-> 
-> That should be fixed; fingers crossed :-)
-
-Cool; I'll try to give that a spin when I'm sat next to some relevant hardware. :)
-
-> > >   kernel/cfi.c:   RCU_NONIDLE({
-> > > 
-> > > (the CFI one is likely dead in the kCFI rewrite) and there's only a hand full
-> > > of trace_.*_rcuidle() left:
-> > > 
-> > >   kernel/trace/trace_preemptirq.c:                        trace_irq_enable_rcuidle(CALLER_ADDR0, CALLER_ADDR1);
-> > >   kernel/trace/trace_preemptirq.c:                        trace_irq_disable_rcuidle(CALLER_ADDR0, CALLER_ADDR1);
-> > >   kernel/trace/trace_preemptirq.c:                        trace_irq_enable_rcuidle(CALLER_ADDR0, caller_addr);
-> > >   kernel/trace/trace_preemptirq.c:                        trace_irq_disable_rcuidle(CALLER_ADDR0, caller_addr);
-> > >   kernel/trace/trace_preemptirq.c:                trace_preempt_enable_rcuidle(a0, a1);
-> > >   kernel/trace/trace_preemptirq.c:                trace_preempt_disable_rcuidle(a0, a1);
-> > > 
-> > > All of them are in 'deprecated' code that is unused for GENERIC_ENTRY.
-> > I think those are also unused on arm64 too?
+> > This patchset also includes two patch[1,2] during my development to enable the
+> > ICC feature for i.MX8MP.
 > > 
-> > If not, I can go attack that.
-> 
-> My grep spots:
-> 
-> arch/arm64/kernel/entry-common.c:               trace_hardirqs_on();
-> arch/arm64/include/asm/daifflags.h:     trace_hardirqs_off();
-> arch/arm64/include/asm/daifflags.h:             trace_hardirqs_off();
-
-Ah; I hadn't realised those used trace_.*_rcuidle() behind the scenes.
-
-That affects local_irq_{enable,disable,restore}() too (which is what the
-daifflags.h bits are emulating), and also the generic entry code's
-irqentry_exit().
-
-So it feels to me like we should be fixing those more generally? e.g. say that
-with a new STRICT_ENTRY[_RCU], we can only call trace_hardirqs_{on,off}() with
-RCU watching, and alter the definition of those?
-
-> The _on thing should be replaced with something like:
-> 
-> 	trace_hardirqs_on_prepare();
-> 	lockdep_hardirqs_on_prepare();
-> 	instrumentation_end();
-> 	rcu_irq_exit();
-> 	lockdep_hardirqs_on(CALLER_ADDR0);
-> 
-> (as I think you know, since you have some of that already). And
-> something similar for the _off thing, but with _off_finish().
-
-Sure; I knew that was necessary for the outermost parts of entry (and I think
-that's all handled), I just hadn't realised that trace_hardirqs_{on,off} did
-the rcuidle thing in the middle.
-
-It'd be nice to not have to open-code the whole sequence everywhere for the
-portions which run after entry and are instrumentable, so (as above) I reckon
-we want to make trace_hardirqs_{on,off}() not do the rcuidle part
-unnecessarily (which IIUC is an end-goal anyway)?
-
-> > > I've touched a _lot_ of code that I can't test and likely broken some of it :/
-> > > In particular, the whole ARM cpuidle stuff was quite involved with OMAP being
-> > > the absolute 'winner'.
-> > > 
-> > > I'm hoping Mark can help me sort the remaining ARM64 bits as he moves that to
-> > > GENERIC_ENTRY.
+> > I not include ddrc DVFS in this patchset, ths patchset is only to support NoC
+> > value mode/priority/ext_control being set to a valid value that suggested by
+> > i.MX Chip Design Team. The value is same as NXP downstream one inside Arm
+> > Trusted Firmware:
+> > https://source.codeaurora.org/external/imx/imx-atf/tree/plat/imx/imx8m/imx
+> > 8mp/gpc.c?h=lf_v2.4#n97
 > > 
-> > Moving to GENERIC_ENTRY as a whole is going to take a tonne of work
-> > (refactoring both arm64 and the generic portion to be more amenable to each
-> > other), but we can certainly move closer to that for the bits that matter here.
-> 
-> I know ... been there etc.. :-)
-> 
-> > Maybe we want a STRICT_ENTRY option to get rid of all the deprecated stuff that
-> > we can select regardless of GENERIC_ENTRY to make that easier.
-> 
-> Possible yeah.
-> 
-> > > I've also got a note that says ARM64 can probably do a WFE based
-> > > idle state and employ TIF_POLLING_NRFLAG to avoid some IPIs.
+> > A repo created here:
+> > https://github.com/MrVan/linux/tree/imx8mp-interconnect
 > > 
-> > Possibly; I'm not sure how much of a win that'll be given that by default we'll
-> > have a ~10KHz WFE wakeup from the timer, but we could take a peek.
+> > Peng Fan (8):
+> >   dt-bindings: interconnect: imx8m: Add bindings for imx8mp noc
+> >   interconnect: add device managed bulk API
+> >   interconnect: imx: fix max_node_id
+> >   interconnect: imx: set src node
+> >   interconnect: imx: introduce imx_icc_provider
+> >   interconnect: imx: set of_node for interconnect provider
+> >   interconnect: imx: configure NoC mode/prioriry/ext_control
+> >   interconnect: imx: Add platform driver for imx8mp
+> > 
+> >  .../bindings/interconnect/fsl,imx8m-noc.yaml  |   6 +
+> >  drivers/interconnect/bulk.c                   |  34 +++
+> >  drivers/interconnect/imx/Kconfig              |   4 +
+> >  drivers/interconnect/imx/Makefile             |   2 +
+> >  drivers/interconnect/imx/imx.c                |  68 +++--
+> >  drivers/interconnect/imx/imx.h                |  25 +-
+> >  drivers/interconnect/imx/imx8mm.c             |   2 +-
+> >  drivers/interconnect/imx/imx8mn.c             |   2 +-
+> >  drivers/interconnect/imx/imx8mp.c             | 232
+> > ++++++++++++++++++
+> >  drivers/interconnect/imx/imx8mq.c             |   2 +-
+> >  include/dt-bindings/interconnect/fsl,imx8mp.h |  59 +++++
+> >  include/linux/interconnect.h                  |   6 +
+> >  12 files changed, 424 insertions(+), 18 deletions(-)  create mode 100644
+> > drivers/interconnect/imx/imx8mp.c  create mode 100644
+> > include/dt-bindings/interconnect/fsl,imx8mp.h
+> > 
+> > --
+> > 2.25.1
 > 
-> Ohh.. I didn't know it woke up *that* often. I just know Will made use
-> of it in things like smp_cond_load_relaxed() which would be somewhat
-> similar to a very shallow idle state that looks at the TIF word.
 
-We'll get some saving, I'm just not sure where that falls on the curve of idle
-states. FWIW the wakeup *can* be disabled (and it'd be nice to when we have
-WFxT instructions which take a timeout), it jsut happens to be on by default
-for reasons.
 
-Thanks,
-Mark.
