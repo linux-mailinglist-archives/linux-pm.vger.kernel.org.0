@@ -2,63 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A2154B7D6
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 19:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 309E754B822
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 19:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344840AbiFNRj4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jun 2022 13:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
+        id S1352188AbiFNRxq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jun 2022 13:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344698AbiFNRjw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 13:39:52 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAA22F674
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jun 2022 10:39:50 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1o1AVr-0005KQ-66; Tue, 14 Jun 2022 19:39:35 +0200
-Message-ID: <c2034c030333f89e0ac7d86c906dd222cc151d52.camel@pengutronix.de>
-Subject: Re: [PATCH 0/8] interconnect: support i.MX8MP
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Peng Fan <peng.fan@nxp.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "djakov@kernel.org" <djakov@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>, Abel Vesa <abel.vesa@nxp.com>,
-        "abailon@baylibre.com" <abailon@baylibre.com>,
-        "laurent.pinchart@ideasonboard.com" 
-        <laurent.pinchart@ideasonboard.com>,
-        "marex@denx.de" <marex@denx.de>,
-        "paul.elder@ideasonboard.com" <paul.elder@ideasonboard.com>,
-        "Markus.Niebel@ew.tq-group.com" <Markus.Niebel@ew.tq-group.com>,
-        "aford173@gmail.com" <aford173@gmail.com>
-Cc:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Date:   Tue, 14 Jun 2022 19:39:33 +0200
-In-Reply-To: <DU0PR04MB941799547BD863444C6F268D88AB9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <20220601094156.3388454-1-peng.fan@oss.nxp.com>
-         <DU0PR04MB941799547BD863444C6F268D88AB9@DU0PR04MB9417.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        with ESMTP id S1356922AbiFNRxj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 13:53:39 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0A9286ED
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jun 2022 10:53:37 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id f8so8346172plo.9
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jun 2022 10:53:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=HYjK3rxh/o4Ln2PasJCrv5tlXw/BblIG4nmWymg4CTU=;
+        b=Dmcl6h6O2UsD1cniilERBIHpLI5g0P/K6YyIIZFmCTiO3zfiNP7vsFGI5yW/YR2P0e
+         PHMFqa5OgjTuzo535YbgmMqa3WUOyvshljH6QUOuRceA/vRqu3tHJjXAifNq2QD6lIPT
+         aH2jUZ1mLLUT+psDLg/ujPik8r4QJQ6H8Rc2w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=HYjK3rxh/o4Ln2PasJCrv5tlXw/BblIG4nmWymg4CTU=;
+        b=RPR/jLLi6tH/UbFMiAxpqosTv344KmSfT9NGFH4VPbRlBHni8a5yZR7u4ZUy8r2quP
+         no0vT3mqeDWdqXsJti/75z4tlse1QXr7Rdq2LxYZ/LuMx6KuBE4IKN48K8bhPrNMvp0W
+         K2Lxp4fDtGlABnbbH2JdyBOdmiHDoKHcYMGjq8AOqGu4VQoDwpPI0d8NK+06Nlw7uITz
+         F6U/JeRgZUuDZV4jXLquWLItVteo/YPDFoUrjzdS+2hPDpYykKBE479UmTLVJGNMRg6q
+         Vi6y71cFOlV9b23fIkeXAfEa2S33KAroEM9tI1ifkrQREdiOmMOogD8Ue4PGfWwxcY+C
+         6tjw==
+X-Gm-Message-State: AJIora+YpHBVj04MiypiDJbx5zKaI3DdEwzcveTNGeFeboe6Nn+f4JPw
+        LZEZfRIgAuBMFFKAo6xfJyc3q0ArNzqUrQ==
+X-Google-Smtp-Source: AGRyM1tN4d34RCS0aereeUwhiOz9w4OfY8jYpf4mv8FMaFXrXs9yJ1MCFf+jjpM9PjH3Age+3pITZA==
+X-Received: by 2002:a17:902:eb92:b0:168:911c:5946 with SMTP id q18-20020a170902eb9200b00168911c5946mr5497583plg.167.1655229217250;
+        Tue, 14 Jun 2022 10:53:37 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:e2d5:2b03:9fb1:ce40])
+        by smtp.gmail.com with UTF8SMTPSA id r29-20020aa7963d000000b0051bc4ed56bcsm7855498pfg.204.2022.06.14.10.53.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 10:53:36 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 10:53:35 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com
+Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
+ system suspend
+Message-ID: <YqjLHyUVEjf7I3MI@google.com>
+References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
+ <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
+ <YpkRDi2m7cLaKYEf@google.com>
+ <Yp5nf2w8uVZ38/XZ@google.com>
+ <Yqd9IHQEj3Ex+FcF@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yqd9IHQEj3Ex+FcF@google.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,94 +84,79 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Peng,
+On Mon, Jun 13, 2022 at 11:08:32AM -0700, Matthias Kaehlcke wrote:
+> On Mon, Jun 06, 2022 at 01:45:51PM -0700, Matthias Kaehlcke wrote:
+> > On Thu, Jun 02, 2022 at 12:35:42PM -0700, Matthias Kaehlcke wrote:
+> > > Hi Krishna,
+> > > 
+> > > with this version I see xHCI errors on my SC7180 based system, like
+> > > these:
+> > > 
+> > > [   65.352605] xhci-hcd xhci-hcd.13.auto: xHC error in resume, USBSTS 0x401, Reinit
+> > > 
+> > > [  101.307155] xhci-hcd xhci-hcd.13.auto: WARN: xHC CMD_RUN timeout
+> > > 
+> > > After resume a downstream hub isn't enumerated again.
+> > > 
+> > > So far I didn't see those with v13, but I aso saw the first error with
+> > > v16.
+> > 
+> > It also happens with v13, but only when a wakeup capable vUSB <= 2
+> > device is plugged in. Initially I used a wakeup capable USB3 to
+> > Ethernet adapter to trigger the wakeup case, however older versions
+> > of this series that use usb_wakeup_enabled_descendants() to check
+> > for wakeup capable devices didn't actually check for vUSB > 2
+> > devices.
+> > 
+> > So the case were the controller/PHYs is powered down works, but
+> > the controller is unhappy when the runtime PM path is used during
+> > system suspend.
+> 
+> The issue isn't seen on all systems using dwc3-qcom and the problem starts
+> during probe(). The expected probe sequence is something like this:
+> 
+> dwc3_qcom_probe
+>   dwc3_qcom_of_register_core
+>     dwc3_probe
+> 
+>   if (device_can_wakeup(&qcom->dwc3->dev))
+>     ...
+> 
+> The important part is that device_can_wakeup() is called after dwc3_probe()
+> has completed. That's what I see on a QC SC7280 system, where wakeup is
+> generally working with these patches.
+> 
+> However on a QC SC7180 system dwc3_probe() is deferred and only executed after
+> dwc3_qcom_probe(). As a result the device_can_wakeup() call returns false.
+> With that the controller/driver ends up in an unhappy state after system
+> suspend.
+> 
+> Probing is deferred on SC7180 because device_links_check_suppliers() finds
+> that '88e3000.phy' isn't ready yet.
 
-Am Montag, dem 13.06.2022 um 01:23 +0000 schrieb Peng Fan:
-> All,
-> 
-> > Subject: [PATCH 0/8] interconnect: support i.MX8MP
-> 
-> I am going to send out V2 this week to address the comments until now.
-> But before that I would like to see if any one has any comments on the
-> design here.
-> 
-> Georgi, do you have comments on Patch 2 " interconnect: add device
-> managed bulk API"
-> 
-> Lucas, since you had comments when I first use syscon to configure NoC,
-> are you ok with the design to use interconnect in this patchset?
-> 
-I'm still not 100% convinced that the blk-ctrl is the right consumer
-for the interconnect, since it doesn't do any busmastering. However,
-the design looks much better than the syscon based one.
+It seems device links could be used to make sure the dwc3 core is present:
 
-I mostly worry about being able to extend this to do more than the
-current static configuration if/when NXP decides to release more
-information about the NoC configuration options or someone reverse
-engineers this part of the SoC. I still hope that we could optimize NoC
-usage by setting real bandwidth and latency limits for the devices
-connected to the NoC. As the blk-ctrl doesn't have any clue about this
-right now, we can't really set any more specific requests than the
-current INT_MAX ones.
-I guess we could extend things in this way by making the blk-ctrl not
-only be a simple consumer of the interconnect, but aggregate requests
-from the devices in the blk-ctrl domain and forward them to the NOC
-provider, right?
+  Another example for an inconsistent state would be a device link that
+  represents a driver presence dependency, yet is added from the consumer’s
+  ->probe callback while the supplier hasn’t probed yet: Had the driver core
+  known about the device link earlier, it wouldn’t have probed the consumer
+  in the first place. The onus is thus on the consumer to check presence of
+  the supplier after adding the link, and defer probing on non-presence.
 
-Regards,
-Lucas
-
-> Thanks,
-> Peng.
-> 
-> > 
-> > From: Peng Fan <peng.fan@nxp.com>
-> > 
-> > This patchset is to support i.MX8MP NoC settings, i.MX8MP NoC initial value
-> > after power up is invalid, need set a valid value after related power domain up.
-> > 
-> > This patchset also includes two patch[1,2] during my development to enable the
-> > ICC feature for i.MX8MP.
-> > 
-> > I not include ddrc DVFS in this patchset, ths patchset is only to support NoC
-> > value mode/priority/ext_control being set to a valid value that suggested by
-> > i.MX Chip Design Team. The value is same as NXP downstream one inside Arm
-> > Trusted Firmware:
-> > https://source.codeaurora.org/external/imx/imx-atf/tree/plat/imx/imx8m/imx
-> > 8mp/gpc.c?h=lf_v2.4#n97
-> > 
-> > A repo created here:
-> > https://github.com/MrVan/linux/tree/imx8mp-interconnect
-> > 
-> > Peng Fan (8):
-> >   dt-bindings: interconnect: imx8m: Add bindings for imx8mp noc
-> >   interconnect: add device managed bulk API
-> >   interconnect: imx: fix max_node_id
-> >   interconnect: imx: set src node
-> >   interconnect: imx: introduce imx_icc_provider
-> >   interconnect: imx: set of_node for interconnect provider
-> >   interconnect: imx: configure NoC mode/prioriry/ext_control
-> >   interconnect: imx: Add platform driver for imx8mp
-> > 
-> >  .../bindings/interconnect/fsl,imx8m-noc.yaml  |   6 +
-> >  drivers/interconnect/bulk.c                   |  34 +++
-> >  drivers/interconnect/imx/Kconfig              |   4 +
-> >  drivers/interconnect/imx/Makefile             |   2 +
-> >  drivers/interconnect/imx/imx.c                |  68 +++--
-> >  drivers/interconnect/imx/imx.h                |  25 +-
-> >  drivers/interconnect/imx/imx8mm.c             |   2 +-
-> >  drivers/interconnect/imx/imx8mn.c             |   2 +-
-> >  drivers/interconnect/imx/imx8mp.c             | 232
-> > ++++++++++++++++++
-> >  drivers/interconnect/imx/imx8mq.c             |   2 +-
-> >  include/dt-bindings/interconnect/fsl,imx8mp.h |  59 +++++
-> >  include/linux/interconnect.h                  |   6 +
-> >  12 files changed, 424 insertions(+), 18 deletions(-)  create mode 100644
-> > drivers/interconnect/imx/imx8mp.c  create mode 100644
-> > include/dt-bindings/interconnect/fsl,imx8mp.h
-> > 
-> > --
-> > 2.25.1
-> 
+  https://www.kernel.org/doc/html/v5.18/driver-api/device_link.html#usage
 
 
+You could add something like this to dwc3_qcom_of_register_core():
+
+
+  device_link_add(dev, &qcom->dwc3->dev,
+  		  DL_FLAG_AUTOREMOVE_CONSUMER | DL_FLAG_AUTOPROBE_CONSUMER);
+
+  if (qcom->dwc3->dev.links.status != DL_DEV_DRIVER_BOUND)
+      ret = -EPROBE_DEFER;
+
+
+From the doc it isn't clear how the consumer is supposed to check presence
+of the supplier, the above check of the link status is also used in
+drivers/cpufreq/mediatek-cpufreq.c , but not elsewhere outside of the
+driver framework.
