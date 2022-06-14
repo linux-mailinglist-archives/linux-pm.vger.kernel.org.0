@@ -2,160 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B341554ACC8
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 11:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50C3B54ACEA
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 11:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242195AbiFNJCh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jun 2022 05:02:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
+        id S233180AbiFNJHG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jun 2022 05:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242592AbiFNJC1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 05:02:27 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079A01013;
-        Tue, 14 Jun 2022 02:02:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655197346; x=1686733346;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1KfA+Z4zkxUy52TB32Y60QTCmoY7zwc4D2LPQ88A3oM=;
-  b=D1IoUAreOqP48B4KEsajoxFQi+AGoJ2jDkyD6vpqTUDmn6alEOoF3hyt
-   OiamX9fnWtmyCV/m2LXYk8KVMffk9IUe+OuIKEvS9G8OLQWcfShT2tBzl
-   9NllQ3XntgUJ4iHj1QCzVX9OdVj3uHSOj0sHo6yhxB9uNqlZlNI1ZrH7m
-   QGKHhF8g9Bcu19njTHI5YrsMajCFn1sBojQbqTJ7Ddtap8ZZv55RyRDDx
-   6TMq5bN7iajGUp4XvLsoWQbNSl+KRzgYaGOqEknl4YEXtEIhAglc4rDKO
-   69ZpC8OC44EEtB3x59Fh3OkcYx/fdINheOgkV4D42zOZbcnIW/FFVqn6h
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="258391749"
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="258391749"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 02:02:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="569832678"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 14 Jun 2022 02:02:22 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o12RK-000LhX-9J;
-        Tue, 14 Jun 2022 09:02:22 +0000
-Date:   Tue, 14 Jun 2022 17:01:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Saravana Kannan <skannan@codeaurora.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
-Subject: Re: [PATCH v2 1/5] PM / devfreq: Fix cpufreq passive unregister
- erroring on PROBE_DEFER
-Message-ID: <202206141647.zyZy1pSw-lkp@intel.com>
-References: <20220613134213.8904-2-ansuelsmth@gmail.com>
+        with ESMTP id S1353568AbiFNJGg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 05:06:36 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DFE419A8;
+        Tue, 14 Jun 2022 02:06:13 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id D96C9E001A;
+        Tue, 14 Jun 2022 02:06:12 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id voKW3dmm8_ZE; Tue, 14 Jun 2022 02:06:12 -0700 (PDT)
+Message-ID: <573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1655197572; bh=DRsSqt8gISIlXBvUsIdzvECBw1H0LbI7MkrMo87xlig=;
+        h=Subject:From:To:Cc:Date:From;
+        b=FN5oqRGvf4gwSqMKw7kQ2uElmFZVNm9+1W2u3luQWBublPhloBzglnhN78w2XWtJI
+         yPgVbq4XeIyMAC2iYcKizwDcPiNXQbo2ZCo6MrQ0MjVQuUoc1v7MZQFTY/3ITsjhJN
+         ffpoBiDwGCzm+ydufvo02gbOH8MbezzIMnGkeEeoZ9haTyrActyN8rO2kYJh3UH3PE
+         pUO4e7iS0GASg6eZn26vjw5pvlSPyD9U3g69Wv3kkK4vY9svcrIhEspjEsiC/SCnh1
+         I57qmuziGXIULD3DjOeB45txHRWXvFKykkZ2l86knc377kdymbLGFGzOM6v8vN2zan
+         4041KSKo+85iQ==
+Subject: regulator: BD71837 PMIC resume during noirq phase?
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     matti.vaittinen@fi.rohmeurope.com, lgirdwood@gmail.com,
+        broonie@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+Date:   Tue, 14 Jun 2022 11:06:06 +0200
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220613134213.8904-2-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Christian,
+hi Matti,
 
-Thank you for the patch! Yet something to improve:
+I heard you've been helpful in the past - thank for that! Here's a
+question I'm currently stuck at: In short, imx8mq can't yet resume from
+suspend when using the bd71839 pmic via i2c. The original report here,
+just for the background:
 
-[auto build test ERROR on chanwoo/devfreq-testing]
-[also build test ERROR on linus/master v5.19-rc2 next-20220614]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+https://lore.kernel.org/linux-arm-kernel/2d5d3bbec443742506e39488dbfbf724bb4ca93f.camel@puri.sm/T/#u
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Ansuel-Marangi/PM-devfreq-Various-Fixes-to-cpufreq-based-passive-governor/20220614-020616
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git devfreq-testing
-config: arc-randconfig-r043-20220613 (https://download.01.org/0day-ci/archive/20220614/202206141647.zyZy1pSw-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/378807dd7da24162524c0ba84e996157b3e289c6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Christian-Ansuel-Marangi/PM-devfreq-Various-Fixes-to-cpufreq-based-passive-governor/20220614-020616
-        git checkout 378807dd7da24162524c0ba84e996157b3e289c6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/devfreq/
+But here's what I *think* is going on: When the (buck3) regulator from
+bd71839 is the power-supply for a power domain (gpu), the power domain
+driver can't resume because buck3 can't be enabled when the pmic isn't
+running yet. I'm still a bit uncertain, but here's the logs when simply
+printing in the respective suspend/resume callbacks:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+[  452.199600] bd718xx-pmic bd71837-pmic.2.auto: bd718xx_resume_noirq
+[  452.301450] imx-pgc imx-pgc-domain.5: failed to enable regulator: -
+ETIMEDOUT
+[  452.320593] imx-i2c 30a20000.i2c: i2c_imx_resume
+[  452.322152] bd718xx-pmic bd71837-pmic.2.auto: bd718xx_resume
+[  452.323853] imx-i2c 30a30000.i2c: i2c_imx_resume
+[  452.324778] imx-i2c 30a40000.i2c: i2c_imx_resume
+[  452.325017] imx-i2c 30a50000.i2c: i2c_imx_resume
 
-All errors (new ones prefixed by >>):
+and regulator_enable() in imx-pgc is called from genpd_resume_noirq().
 
-   drivers/devfreq/governor_passive.c: In function 'cpufreq_passive_unregister_notifier':
->> drivers/devfreq/governor_passive.c:235:79: error: macro "list_for_each_entry_safe" requires 4 arguments, but only 3 given
-     235 |         list_for_each_entry_safe(parent_cpu_data, &p_data->cpu_data_list, node) {
-         |                                                                               ^
-   In file included from include/linux/module.h:12,
-                    from drivers/devfreq/governor_passive.c:10:
-   include/linux/list.h:760: note: macro "list_for_each_entry_safe" defined here
-     760 | #define list_for_each_entry_safe(pos, n, head, member)                  \
-         | 
->> drivers/devfreq/governor_passive.c:235:9: error: 'list_for_each_entry_safe' undeclared (first use in this function)
-     235 |         list_for_each_entry_safe(parent_cpu_data, &p_data->cpu_data_list, node) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/devfreq/governor_passive.c:235:9: note: each undeclared identifier is reported only once for each function it appears in
->> drivers/devfreq/governor_passive.c:235:33: error: expected ';' before '{' token
-     235 |         list_for_each_entry_safe(parent_cpu_data, &p_data->cpu_data_list, node) {
-         |                                 ^                                               ~
-         |                                 ;
-   drivers/devfreq/governor_passive.c:225:34: warning: unused variable 'parent_cpu_data' [-Wunused-variable]
-     225 |         struct devfreq_cpu_data *parent_cpu_data;
-         |                                  ^~~~~~~~~~~~~~~
-   drivers/devfreq/governor_passive.c:245:1: error: control reaches end of non-void function [-Werror=return-type]
-     245 | }
-         | ^
-   cc1: some warnings being treated as errors
+At this point, does any workaround or fix come to your mind I could
+test? I guess i2c needs to be resumed too...
+
+Why does power domain only implement resume_noirq? How could I untangle
+this?
+
+thank you very much,
+
+                            martin
 
 
-vim +/list_for_each_entry_safe +235 drivers/devfreq/governor_passive.c
-
-   220	
-   221	static int cpufreq_passive_unregister_notifier(struct devfreq *devfreq)
-   222	{
-   223		struct devfreq_passive_data *p_data
-   224				= (struct devfreq_passive_data *)devfreq->data;
-   225		struct devfreq_cpu_data *parent_cpu_data;
-   226		int ret;
-   227	
-   228		if (p_data->nb.notifier_call) {
-   229			ret = cpufreq_unregister_notifier(&p_data->nb,
-   230						CPUFREQ_TRANSITION_NOTIFIER);
-   231			if (ret < 0)
-   232				return ret;
-   233		}
-   234	
- > 235		list_for_each_entry_safe(parent_cpu_data, &p_data->cpu_data_list, node) {
-   236			list_del(&parent_cpu_data->node);
-   237	
-   238			if (parent_cpu_data->opp_table)
-   239				dev_pm_opp_put_opp_table(parent_cpu_data->opp_table);
-   240	
-   241			kfree(parent_cpu_data);
-   242		}
-   243	
-   244		return 0;
-   245	}
-   246	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
