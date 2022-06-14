@@ -2,157 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2DDD54B2F9
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 16:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39C9754B303
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 16:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234697AbiFNORH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jun 2022 10:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59746 "EHLO
+        id S231754AbiFNOSf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jun 2022 10:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbiFNORG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 10:17:06 -0400
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2D32FE5C;
-        Tue, 14 Jun 2022 07:17:04 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id e184so15372116ybf.8;
-        Tue, 14 Jun 2022 07:17:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YzJm+lc8uG4MWjlJ9/R6vxASJYsJF02HZHOuRM57po8=;
-        b=VpOjaG5ljvpTVOFm7MiB9OeiN6S+DKtUYIKS1xmvndtCySnmrcr05TwLlJR415v2jj
-         gGKmG0fmMF05oUa+WAjlmDTNuErM4WjbbJCktcNb1NVoV7r1bjm1wOXNE0bBhBgasFzY
-         EqIDFkV5b2cO6QiRQkIhaXitHP3496EXw3EaFervg5Yl4JjK83rK65iWiP92K0u2112q
-         ZYSJE627n9jS9IEYBM9TWOno0G0RSXfPoUzJ3osNOTzbaq68lbUnoPikYqgOWMIoiMNP
-         fDcnSeKLZ9zH5YyOOpsRWS74PLipvTCceuuEw8koxDch+lZUiQw3Jl7p/5pCXY4QDZT6
-         YO2w==
-X-Gm-Message-State: AJIora/anQtA4mXKCiw7LWHHOOhh8NnNJQ2U0k8ilUrzqUJF6jZRpodV
-        0eieEi+4+kmlY2znTxr0JyDECQ2Xgebbn35emRYUKzOi
-X-Google-Smtp-Source: AGRyM1szUqy4ac7OLk1kEVW53j2FXYhM2hvZR6OvD0S75oBYbi+k7ZtJoo2eKW4lGbZvVkjwxU8I5kvEZSC+cPvJAys=
-X-Received: by 2002:a25:6b50:0:b0:64f:4b33:664 with SMTP id
- o16-20020a256b50000000b0064f4b330664mr5417608ybm.153.1655216223200; Tue, 14
- Jun 2022 07:17:03 -0700 (PDT)
+        with ESMTP id S1343875AbiFNOSW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 10:18:22 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFB32DEC
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jun 2022 07:17:45 -0700 (PDT)
+Received: from mercury (dyndsl-037-138-185-186.ewe-ip-backbone.de [37.138.185.186])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5B4B6660169E;
+        Tue, 14 Jun 2022 15:17:44 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655216264;
+        bh=fLfr0gpq3wR0qhWYEE4vd9rX0xSZJXGZow966g4hRXI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S2JunKZHqx97/61wScHb1h8HjyGdwZM0zUMlK60lYrTl1kdKvp59pmT7ZzD7QR6Ii
+         cXdzzJncFsxBPRDbNsLYeGN/If6MpvzkFA9vHLr+sCwTlpXttc5K5apkwlVaej0KNh
+         arZOk+MJmEOdKZEpZpJL+7XB9VJ4FSz34VIF4PUdDofDIwCS4QUTTe2lT2eYDkTxb4
+         7hpRob4BA4DWpynug2ScSKNMsvw5IBnoV+3KEdxqtmrvcUlBLb1uwbPtT7n1jh6Pqa
+         aMy/TP67ESi/oyI6Mj42lBY0h2M3sjHWJ5kSibplCNjxG2gBXCcdFJTgP0zOMsG811
+         Er8tOFtBYoEng==
+Received: by mercury (Postfix, from userid 1000)
+        id 20B6110603F9; Tue, 14 Jun 2022 16:17:42 +0200 (CEST)
+Date:   Tue, 14 Jun 2022 16:17:42 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Alex Henrie <alexhenrie24@gmail.com>
+Cc:     Huw Davies <huw@codeweavers.com>, linux-pm@vger.kernel.org,
+        Wine Devel <wine-devel@winehq.org>
+Subject: Re: How to identify the primary battery (for Wine)
+Message-ID: <20220614141742.j7lrj2q5b3suebb2@mercury.elektranox.org>
+References: <CAMMLpeTRZnpQ8b6puhHeKaDgzW12ZM_g3nAWjVP71HbSaeHktQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220527073445.2474380-1-liuke94@huawei.com>
-In-Reply-To: <20220527073445.2474380-1-liuke94@huawei.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 14 Jun 2022 16:16:52 +0200
-Message-ID: <CAJZ5v0hwJAcaggRD9e9+jwn6KtTwsfdutgjSxQz_SMwC-OeSpQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal: Directly use ida_alloc()/free()
-To:     keliu <liuke94@huawei.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="l5mxh7jehpzc6ozy"
+Content-Disposition: inline
+In-Reply-To: <CAMMLpeTRZnpQ8b6puhHeKaDgzW12ZM_g3nAWjVP71HbSaeHktQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 27, 2022 at 9:13 AM keliu <liuke94@huawei.com> wrote:
->
-> Use ida_alloc()/ida_free() instead of deprecated
-> ida_simple_get()/ida_simple_remove() .
->
-> Signed-off-by: keliu <liuke94@huawei.com>
-> ---
->  drivers/thermal/thermal_core.c | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 82654dc8382b..b36c348a110b 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -667,7 +667,7 @@ int thermal_zone_bind_cooling_device(struct thermal_zone_device *tz,
->         dev->target = THERMAL_NO_TARGET;
->         dev->weight = weight;
->
-> -       result = ida_simple_get(&tz->ida, 0, 0, GFP_KERNEL);
-> +       result = ida_alloc(&tz->ida, GFP_KERNEL);
->         if (result < 0)
->                 goto free_mem;
->
-> @@ -721,7 +721,7 @@ int thermal_zone_bind_cooling_device(struct thermal_zone_device *tz,
->  remove_symbol_link:
->         sysfs_remove_link(&tz->device.kobj, dev->name);
->  release_ida:
-> -       ida_simple_remove(&tz->ida, dev->id);
-> +       ida_free(&tz->ida, dev->id);
->  free_mem:
->         kfree(dev);
->         return result;
-> @@ -768,7 +768,7 @@ int thermal_zone_unbind_cooling_device(struct thermal_zone_device *tz,
->         device_remove_file(&tz->device, &pos->weight_attr);
->         device_remove_file(&tz->device, &pos->attr);
->         sysfs_remove_link(&tz->device.kobj, pos->name);
-> -       ida_simple_remove(&tz->ida, pos->id);
-> +       ida_free(&tz->ida, pos->id);
->         kfree(pos);
->         return 0;
->  }
-> @@ -901,7 +901,7 @@ __thermal_cooling_device_register(struct device_node *np,
->         if (!cdev)
->                 return ERR_PTR(-ENOMEM);
->
-> -       ret = ida_simple_get(&thermal_cdev_ida, 0, 0, GFP_KERNEL);
-> +       ret = ida_alloc(&thermal_cdev_ida, GFP_KERNEL);
->         if (ret < 0)
->                 goto out_kfree_cdev;
->         cdev->id = ret;
-> @@ -951,7 +951,7 @@ __thermal_cooling_device_register(struct device_node *np,
->         put_device(&cdev->device);
->         cdev = NULL;
->  out_ida_remove:
-> -       ida_simple_remove(&thermal_cdev_ida, id);
-> +       ida_free(&thermal_cdev_ida, id);
->  out_kfree_cdev:
->         kfree(cdev);
->         return ERR_PTR(ret);
-> @@ -1110,7 +1110,7 @@ void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
->
->         mutex_unlock(&thermal_list_lock);
->
-> -       ida_simple_remove(&thermal_cdev_ida, cdev->id);
-> +       ida_free(&thermal_cdev_ida, cdev->id);
->         device_del(&cdev->device);
->         thermal_cooling_device_destroy_sysfs(cdev);
->         kfree(cdev->type);
-> @@ -1227,7 +1227,7 @@ thermal_zone_device_register(const char *type, int trips, int mask,
->         INIT_LIST_HEAD(&tz->thermal_instances);
->         ida_init(&tz->ida);
->         mutex_init(&tz->lock);
-> -       id = ida_simple_get(&thermal_tz_ida, 0, 0, GFP_KERNEL);
-> +       id = ida_alloc(&thermal_tz_ida, GFP_KERNEL);
->         if (id < 0) {
->                 result = id;
->                 goto free_tz;
-> @@ -1318,7 +1318,7 @@ thermal_zone_device_register(const char *type, int trips, int mask,
->         put_device(&tz->device);
->         tz = NULL;
->  remove_id:
-> -       ida_simple_remove(&thermal_tz_ida, id);
-> +       ida_free(&thermal_tz_ida, id);
->  free_tz:
->         kfree(tz);
->         return ERR_PTR(result);
-> @@ -1378,7 +1378,7 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
->         thermal_set_governor(tz, NULL);
->
->         thermal_remove_hwmon_sysfs(tz);
-> -       ida_simple_remove(&thermal_tz_ida, tz->id);
-> +       ida_free(&thermal_tz_ida, tz->id);
->         ida_destroy(&tz->ida);
->         mutex_destroy(&tz->lock);
->         device_unregister(&tz->device);
-> --
 
-Applied as 5.20 material, thanks!
+--l5mxh7jehpzc6ozy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi Alex,
+
+On Mon, Jun 13, 2022 at 07:54:49PM -0600, Alex Henrie wrote:
+> I've been working to improve battery status reporting for applications
+> running on Wine on Linux. However, we Wine developers are not sure
+> what the best way is to determine which battery is the computer's
+> primary battery. Could you take a look at
+> https://gitlab.winehq.org/wine/wine/-/merge_requests/134 and leave a
+> comment there or on the wine-devel mailing list?
+
+/sys/class/power_supply/*/scope is set to 'Device' for all
+batteries, that are not powering the main system. There can still
+be multiple batteries; for example Thinkpads in the 2014-2018 era
+used to have an internal and a removable battery. For a single
+"X %/hours left" info the data from all 'System' level batteries
+must be aggregated.
+
+> Wouldn't it make sense for Wine to use the UPower provided
+> DisplayDevice that can be queried through DBus?
+
+UPower does the required data aggregation for the 'DisplayDevice'.
+I don't know enough about the Wine codebase to recommend for or
+against using UPower.
+
+-- Sebastian
+
+--l5mxh7jehpzc6ozy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmKomHwACgkQ2O7X88g7
++pr4BQ/8CPZ/mo7XzihoFLI0hEe0Q+iE9ZGKHSQMp53rRUjBLT+zoLlTuRe5JZfI
+WfR4zBDTuE6NI+QSfp9qam8RNQkhR8n08fd1t0UcblRHSnLYTW47jSxVg9oKv7nK
+qKRvtQexehjg/+uJXkkp0Ce7oAGULIHMpfbdNckW9KnKcF5TcSYr6UK7YADRI20/
+F4oPNBb8+W/3KMy3iQyTeGqsNFaikI+d8NPQhdo5H1UzphIaogRdzV6onbK1kjV2
+CHgVpLvrt4Bdj6jpKoSneRBzzxu9b9ONsds+a8An4jSKkdVDpIeZgKDcCnCzQC31
+nUS7AbgfdMit8lh9uuvJHHgd7VYTNK3ff/4d0DCZiUeFy2OnVx0Qba5CjAP8kXkA
+GCQemJCHTlfGFQ8TsUE1T65N6p8YqZ+LYeEulRH6iCx8pemSXyG4Y0RnKj9bEzjs
+P9eOGeqxxbdycdj9UsUJ271hX1cZs1cd9JQBxizkqo+PhjQlTBU+7mTEEUp6coc/
+M0hp4sdcVzRBDROD5SK7ZV2126Pl9H8qbQpxpFwCX4v4VED+gGJ9FZXleGoan+TN
+qBla2yFtcXtCO/62MhFsUJaPC8qWaFTcc7tBhgMOcflzrCN43h1bJh46F1XiMlRI
+1BKSajZof+UBxI1imgmEno06oaLremJwaSRfayw8m+8RqDTucyo=
+=vO7M
+-----END PGP SIGNATURE-----
+
+--l5mxh7jehpzc6ozy--
