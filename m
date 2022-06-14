@@ -2,136 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5934954BCAC
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 23:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB6EC54BCCD
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 23:32:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiFNVT1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jun 2022 17:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
+        id S1354124AbiFNVcE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jun 2022 17:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234872AbiFNVT0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 17:19:26 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEED4ECC9
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jun 2022 14:19:25 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id w2so17280300ybi.7
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jun 2022 14:19:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=0pe/7jZrdd4wA9KSKjRVId1XeZmrdKxUsF6jrAi1z9o=;
-        b=TgovzMs4TKHp7QCrRx5ht9Sl4xwsIf7ncFERmJDn40Zeu5Qb+8aao1rzSn+Q/z7H5D
-         0cNDgb6FkXe0RHzt68CaEh38mcjws3v9CbBGI/mZZnS4Trs0mYSZevof6SdFRcm1sXm8
-         4PmvuhJbd92Ns3GOCvkZSTW9Rh5PQAjjunJYEQRubOEPkTm5LpqbaBWwLEI9M60sCG6B
-         qg/sap2Nvy3Z+BrKB3kGZgf5iOsXbX2qQC4EZ7GScU9H2CuwnC2qRFbaCvdvacToW0bP
-         DOUJP3ZzXRzMqa+r1/U8QJFxD60EEi3NWRo8ZCk9gXq/rLbNp8zTc5Hp9v0eEzni18Pb
-         ZbaQ==
+        with ESMTP id S234419AbiFNVcC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 17:32:02 -0400
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644DB51307;
+        Tue, 14 Jun 2022 14:32:01 -0700 (PDT)
+Received: by mail-qt1-f177.google.com with SMTP id t21so7067488qtw.11;
+        Tue, 14 Jun 2022 14:32:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=0pe/7jZrdd4wA9KSKjRVId1XeZmrdKxUsF6jrAi1z9o=;
-        b=AaVVT3NpZJ6JzD4XqVTt6T5KQkrlz1zXGpWv04K1UwoeXRQSwFoUtob/bONGktmOaq
-         pqKB/S/csLnAqu77J9SM57MTS83waxuX0og02T3khNp0PyDyIvWjRFC8YFvXPfGxefeD
-         XlGEHRn4J/flmGKXqSQQK+4r80UrcBVBbqAvaaFtSwlrxEEVbSp9/KNsFb+gWK6wbzO5
-         TOEet5lGvI26ZmCLMNSKxAWJdu2ZUhWiotJ9IHVz+oQWY4LJBUia09IraDekjB7z5iNb
-         oStigbrPOPBZcAOfuGZXU7/itvSc7m4ERnvK9104joMLjk0DP6u/uAQvh4sEUSKBBerR
-         Jw4w==
-X-Gm-Message-State: AJIora9zoxjUVTjR8rege3xjpzT9CfRKpWAFStULumZkyETyfv0Dk0rU
-        asfBwF0RaxwTpVr6rIVUMtVtRJpZ0dBOKeiQjvtYYg==
-X-Google-Smtp-Source: AGRyM1ujTcRYf1QhEgbwhq2UxYbzHPM1wCsUxk2r/ecN8hXJGuS+HdqinfwfW57GaqHYU8vFGo1aOKGcDTBYjA2MYWw=
-X-Received: by 2002:a25:d913:0:b0:664:67a5:29e3 with SMTP id
- q19-20020a25d913000000b0066467a529e3mr7363860ybg.592.1655241564154; Tue, 14
- Jun 2022 14:19:24 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6PZK9Icgxpkd1Nlbn2edlrCQm5XYsFqwIxCzqxft+Dc=;
+        b=HsoFlgBaBSt48mzfWUmD7Krn9XrCGrGRT/NBErNu5KiOpI66E+vK66V4nM7q4GZE9M
+         RLEI9Qtov9c9dKOV+FhixAOZIOTDaLksWig/4VkVWAu67GJPQW6TUZMVIyQCN6Z2oJG3
+         +MMEUzTyQL6mEfdWeQEZpdOHGQKiE6zBbFYSYIKDdOctJeYDDkq+045wPSJdA2gB4pmp
+         N8w5mLuHx4xQL9iRQvrpbZxI951DMKzVamkPXVrofx7CPcUFOmlj6TUzU0Y+BFmLTKz8
+         JFCv8mcFiQ4uncky6aueEiZD75NPyqYwAIUqsoxLl7MoIP5cXDwxBVabQGNkjgwU3yQy
+         vSvQ==
+X-Gm-Message-State: AOAM530Ipk0yKZ3LhiDy+im7cGnk9uzrPFpPFvo7mXmBiX+oQ5JreQuw
+        zxpgN6vhqjNxDGnWkIdaAKtYuC/+XcGn/g==
+X-Google-Smtp-Source: ABdhPJwnMTi47HKefj6U3ZHJcYdIa5S9AO6X0wc6UpDswbVEgZZpj4tkDcN26HpPINgFlT7Uj/dRTQ==
+X-Received: by 2002:ac8:5cc9:0:b0:304:e03b:5964 with SMTP id s9-20020ac85cc9000000b00304e03b5964mr5913229qta.433.1655242320289;
+        Tue, 14 Jun 2022 14:32:00 -0700 (PDT)
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
+        by smtp.gmail.com with ESMTPSA id j1-20020a05620a410100b006a65c58db99sm10963831qko.64.2022.06.14.14.31.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 14:32:00 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-30fa61b1a83so43802617b3.0;
+        Tue, 14 Jun 2022 14:31:59 -0700 (PDT)
+X-Received: by 2002:a0d:f801:0:b0:30f:f716:2950 with SMTP id
+ i1-20020a0df801000000b0030ff7162950mr8241270ywf.358.1655242319521; Tue, 14
+ Jun 2022 14:31:59 -0700 (PDT)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 15 Jun 2022 02:49:13 +0530
-Message-ID: <CA+G9fYsP05V+bVoZsPto-ZdZra3Mo4unBjNqyk1dOjfMEK1XWg@mail.gmail.com>
-Subject: [next] arm64: db410c: WARNING: CPU: 0 PID: 1 at drivers/opp/core.c:2265
- dev_pm_opp_clear_config+0x174/0x17c
-To:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        regressions@lists.linux.dev
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Nicolas Dechesne <nicolas.dechesne@linaro.org>
+References: <20220610201701.7946-1-wsa+renesas@sang-engineering.com>
+ <20220610201701.7946-2-wsa+renesas@sang-engineering.com> <CAMuHMdW3uxQHk6SBX5MqnZsYqwY8p+0wmD6gHwS3ESUrkmpWkQ@mail.gmail.com>
+ <YqjtBQdzexzCRrmq@shikoro>
+In-Reply-To: <YqjtBQdzexzCRrmq@shikoro>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 14 Jun 2022 23:31:48 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUTR8+8TbM_AaMXk96adHvdp_Oof8v48_zCY+R5FsOLnQ@mail.gmail.com>
+Message-ID: <CAMuHMdUTR8+8TbM_AaMXk96adHvdp_Oof8v48_zCY+R5FsOLnQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] dt-bindings: thermal: rcar-gen3-thermal: Add
+ r8a779f0 support
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Following kernel crash reported while booting arm64 db410c board with
-Linux next-20220614 [1] kfence enabled on this kernel.
+Hi Wolfram,
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+On Tue, Jun 14, 2022 at 10:18 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> > What about splitting this in two separate checks at the top level:
+> >   - one for regs (R-Car V3U vs. the world), and
+> >   - a second for interrupts (R-Car V3U+S4-8 vs. the world)?
+>
+> This task seems too much for my YAML-foo :( I couldn't get it to work.
+> Can we leave it as-is for now?
 
-Boot log:
----------
-[    0.850420] WARNING: CPU: 0 PID: 1 at drivers/opp/core.c:2265
-dev_pm_opp_clear_config+0x174/0x17c
-[    0.850447] Modules linked in:
-[    0.850459] CPU: 0 PID: 1 Comm: swapper/0 Not tainted
-5.19.0-rc1-next-20220610 #1
-[    0.850470] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-[    0.850477] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    0.850489] pc : dev_pm_opp_clear_config+0x174/0x17c
-[    0.850501] lr : dt_cpufreq_probe+0x1e4/0x4a0
-[    0.850513] sp : ffff80000802bb00
-[    0.850518] x29: ffff80000802bb00 x28: ffff80000ada1c30 x27: 0000000000000000
-[    0.850538] x26: 00000000fffffdfb x25: ffff00000311f410 x24: ffff00000389ec90
-[    0.850557] x23: ffff80000a9eea98 x22: ffff80000a9eed00 x21: ffff80000ada1b68
-[    0.850576] x20: ffff00000389ec80 x19: ffff00003fc41308 x18: ffffffffffffffff
-[    0.850595] x17: ffff800009f21700 x16: ffff8000080955c0 x15: ffff0000031c2a1c
-[    0.850614] x14: 0000000000000001 x13: 0a6b636f6c632064 x12: 6e69662074276e64
-[    0.850632] x11: 0000000000000040 x10: 0000000000000020 x9 : ffff800009006964
-[    0.850650] x8 : 0000000000000020 x7 : ffffffffffffffff x6 : 0000000000000000
-[    0.850668] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
-[    0.850686] x2 : 0000000000000004 x1 : 0000000000000000 x0 : 0000000000000000
-[    0.850704] Call trace:
-[    0.850708]  dev_pm_opp_clear_config+0x174/0x17c
-[    0.850722]  platform_probe+0x74/0xf0
-[    0.850735]  really_probe+0x19c/0x3f0
-[    0.850745]  __driver_probe_device+0x11c/0x190
-[    0.850755]  driver_probe_device+0x44/0xf4
-[    0.850765]  __driver_attach+0xd8/0x200
-[    0.850775]  bus_for_each_dev+0x7c/0xe0
-[    0.850790]  driver_attach+0x30/0x40
-[    0.850799]  bus_add_driver+0x154/0x240
-[    0.850813]  driver_register+0x84/0x140
-[    0.850824]  __platform_driver_register+0x34/0x40
-[    0.850835]  dt_cpufreq_platdrv_init+0x28/0x34
-[    0.850848]  do_one_initcall+0x50/0x2b0
-[    0.850861]  kernel_init_freeable+0x24c/0x2d4
-[    0.850871]  kernel_init+0x30/0x140
-[    0.850884]  ret_from_fork+0x10/0x20
-[    0.850897] ---[ end trace 0000000000000000 ]---
+You just need an allOf with two if statements, cfr. e.g.
+Documentation/devicetree/bindings/media/renesas,vin.yaml?
 
+Gr{oetje,eeting}s,
 
-metadata:
-  git_ref: master
-  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git_sha: 35d872b9ea5b3ad784d7479ea728dcb688df2db7
-  git_describe: next-20220614
-  kernel_version: 5.19.0-rc2
-  kernel-config: https://builds.tuxbuild.com/2AYbNeAYdcbtKeaEoYNvOAwsMQf/config
-  build-url: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/-/pipelines/563047963
-  artifact-location: https://builds.tuxbuild.com/2AYbNeAYdcbtKeaEoYNvOAwsMQf
-  System.map: https://builds.tuxbuild.com/2AYbNeAYdcbtKeaEoYNvOAwsMQf/System.map
-  vmlinux: https://builds.tuxbuild.com/2AYbNeAYdcbtKeaEoYNvOAwsMQf/vmlinux.xz
-  toolchain: gcc-11
-
-
-[1]
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20220614/testrun/10154254/suite/log-parser-boot/test/check-kernel-bug-5169280/details/
-
+                        Geert
 
 --
-Linaro LKFT
-https://lkft.linaro.org
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
