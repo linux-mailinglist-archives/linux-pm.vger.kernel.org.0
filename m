@@ -2,106 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F6E54B474
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 17:18:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F2354B559
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 18:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356616AbiFNPRt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jun 2022 11:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48988 "EHLO
+        id S239104AbiFNQGv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jun 2022 12:06:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356503AbiFNPRq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 11:17:46 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3EC0BC8D
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jun 2022 08:17:44 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id p18so14486547lfr.1
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jun 2022 08:17:44 -0700 (PDT)
+        with ESMTP id S1356754AbiFNQGq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 12:06:46 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8754E427C4;
+        Tue, 14 Jun 2022 09:06:31 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 25so12290810edw.8;
+        Tue, 14 Jun 2022 09:06:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=qsqCOOpowypdiEEM6D2t0JSVN3aZoVBRaXhuF0gjj4c=;
-        b=AmQF4Wf65tATmYxp2mWu7sibbamgUZABJkIJTQxkK9eZhiFMsF2tl7amdJBNkL3eN/
-         Z64doG+EjZTVMtXwAVQLIW8ercOF0Y8QYLghe/HbrR5t7oinSQy9oxwYU0Xfrl3oPllH
-         xs0y4pKlC/0tYi9ogWcpICWNbnj7MXOYysJArbuqOr3QAnovAuZUIVtquP5Na5SS0vEu
-         NwhyrhmaqpKRR30QFAEGIYxWL1B+ZFepSf6tWYW3v48f7uUBVRttUGqbi5qyRLWUr9Jc
-         TBTjdPIBQlbM/3Vkupv5YUcV68bK2If00+Rqeh0iDMb2uu+NvGo2x8y2ak39JbzwPuTo
-         P0VQ==
+        bh=hw+i+kkx4YIxq0kn0rdkeRwVFdr7fzk+p8UNtwWrSlI=;
+        b=QHODOl+ss9AAFbX1TVDtCtnZerdUPGPp/ulIHRySFiMi8M/0bURko553esXFs42Rps
+         qI1ZEPjfEy5F5gQa84e5QF2rsHcavHvA7SiVI2XaQMOjiEowLFU7KoNZU4nhA3GocAS+
+         E6GVYvPD3BvjTo9q1dDYS+lDCdj6fJLUkezxZhH8vaquozcd8X5Kk7dbzljxRprLakAL
+         uhwpiLylQua4wiQzal5Kzoi327xKR5kTPdAptvTgCgjziDi71cplvFNvbqtq779t8r5J
+         jCe40rxtcXOnn3fjn7sAFe92L3QfajVP3utkY9nYUkuxkaJ2gUGIBPx4OyTiS+NwogrN
+         dqYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qsqCOOpowypdiEEM6D2t0JSVN3aZoVBRaXhuF0gjj4c=;
-        b=sbeieaRUPXe7WpZVdor46k7UBefAnGgIWx9Yz+vXXVZjqd3deqffsmYcFxRZE086lP
-         hQYxs4RWjVsT1c+m8lKAW/ek84XvvnmkU5C/h+7kGQ1nqDOPI1X3lkpMVjZt5VkxmIg5
-         elXzv+sxnEsQC5ftVTihZ3smEMpJeD/CWyWY8XPmKFzQANeiihOln+oLw9mmayy2VAcQ
-         /vleQNXgxU6MugRAX0klPVZLOqB/QrGDX0JAG/1qc5H8CK1UrPyWLP6qpDVQ2sqmQLFa
-         0u5SzqIwylZDhyTBZ9TvwRe3zmsSN/FFQcTwmh3yLFGlZ3A/+7kL2p42h3rQ2o1k0wWh
-         R+zA==
-X-Gm-Message-State: AJIora9iiqHz+x9EI+nIGEVAEsf3rDjZx/KXpHDTsbQx0+JtxMsY5x4l
-        spkUORYVgrgtHW2y++sQEGS822GF+q5tKgalqk0i4wPLYKo=
-X-Google-Smtp-Source: AGRyM1vG67eI455/430AOTw4pM7yK3NubsqGgZ5A4zt9Qpx7m8+fkwYNJs4FKcxpiGYTpoRTqp4K+HUYIiLY7nmsR3E=
-X-Received: by 2002:a05:6512:c26:b0:47d:a6e3:ab51 with SMTP id
- z38-20020a0565120c2600b0047da6e3ab51mr3586675lfu.515.1655219863133; Tue, 14
- Jun 2022 08:17:43 -0700 (PDT)
+        bh=hw+i+kkx4YIxq0kn0rdkeRwVFdr7fzk+p8UNtwWrSlI=;
+        b=Oiz9ckTqgKxWNnTpxebk8OvqaX35G+7qPVhlVJ8d6mgYNNTfHTfHPGDGsUkdZ2MCNT
+         TfMpBhA35++Tm4KQP2wNDse0DOIxFRrtGyYYHCv0/8XMTPWZ3Y/qw+Upeunte0UgP/Lx
+         UXHewy3g9b5PryKe41wr1oR6/fX8Xo3eT4YZ77d3X80DP2+l912Mx1nXOeFjF92/SUBA
+         AhY7NOroiSgXEPwm1XIcWF/CES1jLfYkDIrq4NSB/fE9/qh70TJJ6hgA7nNylGCUmOjT
+         aEF3WVXL1B79cemQLYpAW+1uzLmDmuIk854BzL+zoJRuLyZ7MzRzGnyzfj58rnA1fZRV
+         lWSg==
+X-Gm-Message-State: AJIora9HqyZgkNVS2Yf1UnbGOjc7CPgJO30ClbBHfvUhqN7WhOkrPFtt
+        qLJWRAqbmEQYuAt0Wlz5VYkRQoXkkpdP3Nuvqf9fZGDdgFAxfe1M
+X-Google-Smtp-Source: ABdhPJzTgt145r18ST/hOWsiuIbdVEFBVIzw+2edJvkTxo7t553iQB2t6/Zpb/14bIuilDjAMB/SFwiDMrAK0i0N+zo=
+X-Received: by 2002:aa7:c396:0:b0:42d:8b86:a8dc with SMTP id
+ k22-20020aa7c396000000b0042d8b86a8dcmr6871504edq.54.1655222789972; Tue, 14
+ Jun 2022 09:06:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAMMLpeTRZnpQ8b6puhHeKaDgzW12ZM_g3nAWjVP71HbSaeHktQ@mail.gmail.com>
- <20220614141742.j7lrj2q5b3suebb2@mercury.elektranox.org>
-In-Reply-To: <20220614141742.j7lrj2q5b3suebb2@mercury.elektranox.org>
-From:   Alex Henrie <alexhenrie24@gmail.com>
-Date:   Tue, 14 Jun 2022 09:17:31 -0600
-Message-ID: <CAMMLpeSRQ4T=_J0uwjoh=NNeuO43-Nb3PkzfSoDdUhOfU8_TqQ@mail.gmail.com>
-Subject: Re: How to identify the primary battery (for Wine)
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Huw Davies <huw@codeweavers.com>, linux-pm@vger.kernel.org,
-        Wine Devel <wine-devel@winehq.org>
+References: <20220614151722.2194936-1-sravanhome@gmail.com> <20220614151722.2194936-3-sravanhome@gmail.com>
+In-Reply-To: <20220614151722.2194936-3-sravanhome@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 14 Jun 2022 18:05:52 +0200
+Message-ID: <CAHp75VcaU-KkCGZ0tczM6JKaVdGC6icGt0pbpC5sTf+0+ePamQ@mail.gmail.com>
+Subject: Re: [PATCH 3/6] mfd: mp2629: Add support for mps mp2733 battery charger
+To:     Saravanan Sekar <sravanhome@gmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 8:17 AM Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
+On Tue, Jun 14, 2022 at 5:17 PM Saravanan Sekar <sravanhome@gmail.com> wrote:
 >
-> On Mon, Jun 13, 2022 at 07:54:49PM -0600, Alex Henrie wrote:
-> > I've been working to improve battery status reporting for applications
-> > running on Wine on Linux. However, we Wine developers are not sure
-> > what the best way is to determine which battery is the computer's
-> > primary battery. Could you take a look at
-> > https://gitlab.winehq.org/wine/wine/-/merge_requests/134 and leave a
-> > comment there or on the wine-devel mailing list?
+> mp2733 is updated version of mp2629 battery charge management
+> device for single-cell Li-ion or Li-polymer battery. Additionally
+> supports usb fast-charge and higher range of input voltage.
+
+...
+
+> +#include <linux/of_device.h>
+
+What the original code misses is the mod_devicetable.h, and also see below.
+
+...
+
+> +static const struct of_device_id mp2629_of_match[] = {
+> +       { .compatible = "mps,mp2629", .data = (void *)CHIP_ID_MP2629 },
+> +       { .compatible = "mps,mp2733", .data = (void *)CHIP_ID_MP2733 },
+> +       { }
+> +};
+> +MODULE_DEVICE_TABLE(of, mp2629_of_match);
+
+No need to move, see below.
+
+...
+
+> +static int mp2629_probe(struct i2c_client *client,
+> +                       const struct i2c_device_id *id)
+
+Why out of a sudden you moved from ->probe_new() to ->probe()?
+
+> +       enum mp2xx_chip_id chip_id;
+> +       const struct of_device_id *of_id;
+>         int ret;
 >
-> /sys/class/power_supply/*/scope is set to 'Device' for all
-> batteries, that are not powering the main system. There can still
-> be multiple batteries; for example Thinkpads in the 2014-2018 era
-> used to have an internal and a removable battery. For a single
-> "X %/hours left" info the data from all 'System' level batteries
-> must be aggregated.
+> +       if (client->dev.of_node) {
+> +               of_id = of_match_device(mp2629_of_match, &client->dev);
+> +               if (!of_id) {
+> +                       dev_err(&client->dev, "Failed to match device\n");
+> +                       return -ENODEV;
+> +               }
+> +               chip_id = (enum mp2xx_chip_id)of_id->data;
+> +       }
 
-Thanks Sebastian, that helps a lot! We would really need to test this
-API on Windows on a laptop with two batteries to see whether Windows
-aggregates the batteries or just reports the charge of the first one.
-For now, I hope that not doing any aggregation in Wine is acceptable
-(and I hope someone will tell me if I'm mistaken).
+This all is a single LoC only + property.h:
 
-> On Tue, Jun 14, 2022 at 2:05 AM Benjamin Berg <benjamin@sipsolutions.net> wrote:
->
-> > Wouldn't it make sense for Wine to use the UPower provided
-> > DisplayDevice that can be queried through DBus?
->
-> UPower does the required data aggregation for the 'DisplayDevice'.
-> I don't know enough about the Wine codebase to recommend for or
-> against using UPower.
+#include <linux/property.h>
 
-I also don't know if D-Bus would be a good choice here. It would
-certainly be a bigger change than the patch that I've proposed. What
-are the advantages and disadvantages of querying the battery through
-D-Bus, besides it doing battery aggregation for us?
+     enum mp2xx_chip_id chip_id;
 
--Alex
+     chip_id = (uintptr_t)device_get_match_data(&client->dev);
+
+-- 
+With Best Regards,
+Andy Shevchenko
