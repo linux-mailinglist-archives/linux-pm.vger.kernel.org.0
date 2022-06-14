@@ -2,89 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C3B54ACEA
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 11:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D70C54AD16
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 11:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233180AbiFNJHG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jun 2022 05:07:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44814 "EHLO
+        id S239170AbiFNJSd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jun 2022 05:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353568AbiFNJGg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 05:06:36 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DFE419A8;
-        Tue, 14 Jun 2022 02:06:13 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id D96C9E001A;
-        Tue, 14 Jun 2022 02:06:12 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id voKW3dmm8_ZE; Tue, 14 Jun 2022 02:06:12 -0700 (PDT)
-Message-ID: <573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1655197572; bh=DRsSqt8gISIlXBvUsIdzvECBw1H0LbI7MkrMo87xlig=;
-        h=Subject:From:To:Cc:Date:From;
-        b=FN5oqRGvf4gwSqMKw7kQ2uElmFZVNm9+1W2u3luQWBublPhloBzglnhN78w2XWtJI
-         yPgVbq4XeIyMAC2iYcKizwDcPiNXQbo2ZCo6MrQ0MjVQuUoc1v7MZQFTY/3ITsjhJN
-         ffpoBiDwGCzm+ydufvo02gbOH8MbezzIMnGkeEeoZ9haTyrActyN8rO2kYJh3UH3PE
-         pUO4e7iS0GASg6eZn26vjw5pvlSPyD9U3g69Wv3kkK4vY9svcrIhEspjEsiC/SCnh1
-         I57qmuziGXIULD3DjOeB45txHRWXvFKykkZ2l86knc377kdymbLGFGzOM6v8vN2zan
-         4041KSKo+85iQ==
-Subject: regulator: BD71837 PMIC resume during noirq phase?
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     matti.vaittinen@fi.rohmeurope.com, lgirdwood@gmail.com,
-        broonie@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        with ESMTP id S231443AbiFNJSb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 05:18:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C2040919;
+        Tue, 14 Jun 2022 02:18:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CDE11B817BF;
+        Tue, 14 Jun 2022 09:18:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1EC9C3411B;
+        Tue, 14 Jun 2022 09:18:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655198307;
+        bh=qY4QYFNySUnbFd+YjwBFvK08ESBS0Xn6VzgWab0zmPQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c0Y8DLqiCpxygssmgukH6NsS6c5FANeyOctlu7871eAXxmG2RF0SQ7FUvon0Zvdpj
+         hccgCoLBLztOp5CCVvg+Sg24g3fQhdO76kzMbdsYwvf7RKtdIigEBuJzAl8LHcINR6
+         hhr8mAs/a0WdlZ0OMduJdrc8sTlnisaMJUDotbr1aI3lX4HK4DfftodMiMxtU3Kj3g
+         toLw2BkYx13L9W3dvaCEoZUb4pRqNw8vHJGRfv70m90HjNl5z8C8YfH5MrtRK/kN+0
+         Tvo8GoYkrBl462NLl2DqA7eQ/owxjt+ZP+dfXTu989Sr5iMkEK3UGIT/vrU7HF75ga
+         BwBQjUVDE7ZXA==
+Date:   Tue, 14 Jun 2022 10:18:22 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     matti.vaittinen@fi.rohmeurope.com, lgirdwood@gmail.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         arm-soc <linux-arm-kernel@lists.infradead.org>,
         Pengutronix Kernel Team <kernel@pengutronix.de>
-Date:   Tue, 14 Jun 2022 11:06:06 +0200
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+Subject: Re: regulator: BD71837 PMIC resume during noirq phase?
+Message-ID: <YqhSXuHMR6kuFu/A@sirena.org.uk>
+References: <573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+fR1QCK73X/HcG0b"
+Content-Disposition: inline
+In-Reply-To: <573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm>
+X-Cookie: DYSLEXICS OF THE WORLD, UNTIE!
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-hi Matti,
 
-I heard you've been helpful in the past - thank for that! Here's a
-question I'm currently stuck at: In short, imx8mq can't yet resume from
-suspend when using the bd71839 pmic via i2c. The original report here,
-just for the background:
+--+fR1QCK73X/HcG0b
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-https://lore.kernel.org/linux-arm-kernel/2d5d3bbec443742506e39488dbfbf724bb4ca93f.camel@puri.sm/T/#u
+On Tue, Jun 14, 2022 at 11:06:06AM +0200, Martin Kepplinger wrote:
 
-But here's what I *think* is going on: When the (buck3) regulator from
-bd71839 is the power-supply for a power domain (gpu), the power domain
-driver can't resume because buck3 can't be enabled when the pmic isn't
-running yet. I'm still a bit uncertain, but here's the logs when simply
-printing in the respective suspend/resume callbacks:
+> and regulator_enable() in imx-pgc is called from genpd_resume_noirq().
+>=20
+> At this point, does any workaround or fix come to your mind I could
+> test? I guess i2c needs to be resumed too...
+>=20
+> Why does power domain only implement resume_noirq? How could I untangle
+> this?
 
-[  452.199600] bd718xx-pmic bd71837-pmic.2.auto: bd718xx_resume_noirq
-[  452.301450] imx-pgc imx-pgc-domain.5: failed to enable regulator: -
-ETIMEDOUT
-[  452.320593] imx-i2c 30a20000.i2c: i2c_imx_resume
-[  452.322152] bd718xx-pmic bd71837-pmic.2.auto: bd718xx_resume
-[  452.323853] imx-i2c 30a30000.i2c: i2c_imx_resume
-[  452.324778] imx-i2c 30a40000.i2c: i2c_imx_resume
-[  452.325017] imx-i2c 30a50000.i2c: i2c_imx_resume
+Indeed - if a power domain is controlling regulators then I'd not expect
+things to go well if it tries to resume without interrupts, there will
+be some things that can be done purely with GPIOs but that's depending
+on the hardware having wired things up that way and the operations
+needed by the power domain mapping well onto what can be done with
+GPIOs.
 
-and regulator_enable() in imx-pgc is called from genpd_resume_noirq().
+--+fR1QCK73X/HcG0b
+Content-Type: application/pgp-signature; name="signature.asc"
 
-At this point, does any workaround or fix come to your mind I could
-test? I guess i2c needs to be resumed too...
+-----BEGIN PGP SIGNATURE-----
 
-Why does power domain only implement resume_noirq? How could I untangle
-this?
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKoUl4ACgkQJNaLcl1U
+h9A1yAf/Vx51C3O2i71jqkYFMKLPNfdrjqstyeRZT4HprhHHZUNGMWRhgBlrJsPt
+hR/FEJVsh0kG3KpCqp1ktcWf5h5NjHEuISgCFVUZCrOHwlD2y4RNBza1msTwVrCb
+gmXgtyhCqgYEkDQplyrjTO2HbdmY2d7Yp7R4aU9KteWnH+S3/bpWqZNdMvAeFskM
+DQ/6ZRlGk8xTpIQtW7s2RvAekPfYhSUihffMKIz7QwtbaYeyQnGzYb7yzgXHbELo
++HqfCb+AmiXs0BnfKOefC6Q1a2BOcjmrKX8a/O84B7hJdRYqEnCFqf87YAoMa5+c
+2m8TChKdHhRObPq49xmkzZNunZQsyw==
+=WUL+
+-----END PGP SIGNATURE-----
 
-thank you very much,
-
-                            martin
-
-
+--+fR1QCK73X/HcG0b--
