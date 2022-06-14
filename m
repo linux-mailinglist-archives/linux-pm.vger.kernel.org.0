@@ -2,121 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 168EF54B386
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 16:42:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82D254B464
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 17:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344006AbiFNOhx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jun 2022 10:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60510 "EHLO
+        id S1356589AbiFNPRm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jun 2022 11:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238564AbiFNOht (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 10:37:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29696175AA;
-        Tue, 14 Jun 2022 07:37:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7934E617B4;
-        Tue, 14 Jun 2022 14:37:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D478C3411C;
-        Tue, 14 Jun 2022 14:37:34 +0000 (UTC)
-Date:   Tue, 14 Jun 2022 10:37:32 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org,
-        linux@armlinux.org.uk, ulli.kroll@googlemail.com,
-        linus.walleij@linaro.org, shawnguo@kernel.org,
-        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, tony@atomide.com,
-        khilman@kernel.org, catalin.marinas@arm.com, will@kernel.org,
-        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
-        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
-        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
-        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
-        shorne@gmail.com, James.Bottomley@hansenpartnership.com,
-        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, anup@brainfault.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, john.ogness@linutronix.de,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
-        jiangshanlai@gmail.com, joel@joelfernandes.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
-        rcu@vger.kernel.org
-Subject: Re: [PATCH 24/36] printk: Remove trace_.*_rcuidle() usage
-Message-ID: <20220614103732.489ba62b@gandalf.local.home>
-In-Reply-To: <YqHvXFdIJfvUDI6e@alley>
-References: <20220608142723.103523089@infradead.org>
-        <20220608144517.444659212@infradead.org>
-        <YqG6URbihTNCk9YR@alley>
-        <YqHFHB6qqv5wiR8t@worktop.programming.kicks-ass.net>
-        <CA+_sPaoJGrXhNPCs2dKf2J7u07y1xYrRFZBUtkKwzK9GqcHSuQ@mail.gmail.com>
-        <YqHvXFdIJfvUDI6e@alley>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S1356586AbiFNPRi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 11:17:38 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0456962E3;
+        Tue, 14 Jun 2022 08:17:32 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id kq6so17807433ejb.11;
+        Tue, 14 Jun 2022 08:17:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=K/Bb9QNZS4KUSJsXgLquKvLX7xOgHLYAfEYnI8Rwogk=;
+        b=AFaVWlyXJ1FNEKXOiuwson3lZ8cfTXUQPrOam43nTKnwNtl29wG4yC9I4BKLiU093+
+         9nxcGWeZtPWw+VjHOE5zz/AfgFaQ95erSHURx3EH4kMGV+OX/Zhg52HUbNsK+F4O8qxa
+         YiDLHKSnFJEXXc9VXvMgeeKdvwBehE3gndoklvrfOPyKE0MQrYc6yNPCq0Ehrt4Wkx7b
+         NCXlLUvfwAv7+sXqBkBjus+6CueRX8yvK3zPnUXVgN5vtg5Wie1QnJnIwvkdTD1/riEB
+         34YPiKG/o1SYJkqi1jTiN3ZgzYjT2WTrokAX0zYXstowIcQBS0CDQQ1lwio8zIyvS2XE
+         yb1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=K/Bb9QNZS4KUSJsXgLquKvLX7xOgHLYAfEYnI8Rwogk=;
+        b=yYDJcKua1ahk3rxn1BOMbIz8BDYZSU/VvMQw3bqbivZc4ruLs+JxBEoGW3AN5w700t
+         qGsVd0b89LwaUMzTsrdgmXi6pzW0D4+cl4f9jzsbWewArvZOFLr+QgmosI5LVsaQEbUu
+         Nlx20N/oZIQB31WR0a+tiZgKWmXzaHpxvPNVMm3PiBu50DhkcXErqdkqJo8Xi3iVZlCm
+         zn8spaSZkBHtznVV8ZQSip21GeHqbqfMd8cAQZaPA33ptt1qrXDentJhLdpDGBUyI6rz
+         +kcmX0rXT/YeI/AI0h+Urq1OwH8jcF3VKRMd/MVuGaB+Nkds/I90t2cqPWOlcqXtKWjb
+         EIlA==
+X-Gm-Message-State: AOAM533dA9SNLWROvFpWo1h7z6Erb0mowO1JRdDzHErzfMs5/l3ZLTOU
+        kS08/zLUFCIr1vxKJNme36s=
+X-Google-Smtp-Source: AGRyM1tJm5/bvEJsCvork/9f2aT3katbgBIymlUUTiawbib1+mgc64mVno1uo/2ndBNZTkoAukTW+Q==
+X-Received: by 2002:a17:906:c209:b0:6fe:a3d5:c5a4 with SMTP id d9-20020a170906c20900b006fea3d5c5a4mr4672061ejz.759.1655219850365;
+        Tue, 14 Jun 2022 08:17:30 -0700 (PDT)
+Received: from localhost.localdomain (p5b3f7f9c.dip0.t-ipconnect.de. [91.63.127.156])
+        by smtp.gmail.com with ESMTPSA id f1-20020a50d541000000b0042dd7e13391sm7198180edj.45.2022.06.14.08.17.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 08:17:26 -0700 (PDT)
+From:   Saravanan Sekar <sravanhome@gmail.com>
+To:     sre@kernel.org, lee.jones@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jic23@kernel.org,
+        lars@metafoo.de, andy.shevchenko@gmail.com
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-iio@vger.kernel.org, Saravanan Sekar <sravanhome@gmail.com>
+Subject: [PATCH 1/6] iio: adc: mp2629: fix wrong comparison of channel
+Date:   Tue, 14 Jun 2022 17:17:17 +0200
+Message-Id: <20220614151722.2194936-1-sravanhome@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 9 Jun 2022 15:02:20 +0200
-Petr Mladek <pmladek@suse.com> wrote:
+Input voltage channel enum is compared against iio address instead
+of channel.
 
-> > I'm somewhat curious whether we can actually remove that trace event.  
-> 
-> Good question.
-> 
-> Well, I think that it might be useful. It allows to see trace and
-> printk messages together.
+Fixes: 7abd9fb64682 ("iio: adc: mp2629: Add support for mp2629 ADC driver")
+Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
+---
+ drivers/iio/adc/mp2629_adc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes people still use it. I was just asked about it at Kernel Recipes. That
-is, someone wanted printk mixed in with the tracing, and I told them about
-this event (which they didn't know about but was happy to hear that it
-existed).
+diff --git a/drivers/iio/adc/mp2629_adc.c b/drivers/iio/adc/mp2629_adc.c
+index aca084f1e78a..e7fbfe92e884 100644
+--- a/drivers/iio/adc/mp2629_adc.c
++++ b/drivers/iio/adc/mp2629_adc.c
+@@ -73,7 +73,7 @@ static int mp2629_read_raw(struct iio_dev *indio_dev,
+ 		if (ret)
+ 			return ret;
+ 
+-		if (chan->address == MP2629_INPUT_VOLT)
++		if (chan->channel == MP2629_INPUT_VOLT)
+ 			rval &= GENMASK(6, 0);
+ 		*val = rval;
+ 		return IIO_VAL_INT;
+-- 
+2.25.1
 
--- Steve
