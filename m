@@ -2,192 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CFBA54BD66
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 00:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C741854BDFF
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 00:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350861AbiFNWMm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jun 2022 18:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37802 "EHLO
+        id S1345802AbiFNW63 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jun 2022 18:58:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356516AbiFNWMj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 18:12:39 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C4327B0E;
-        Tue, 14 Jun 2022 15:12:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ieYeEcrodnP9d8uMI6KazQ9YDccjAyjy/+PGF5Ov/Sc=; b=OliYmJSibamFQ0oRl2XkG2+oLG
-        eUVxb3PF2WQS3d9O+63gY5P/Th5g3W0k/p07zjSFtfSstgpe5sY3UKPuYKK8U3d61xav16z47xA5h
-        tkNVX1vBm9t+GM0XpJtkUArdAr+6C0D6QPwa3LyJL5W3wePUH4pa4u9UPo+aiZ0VxHDbCXoe4qfJ4
-        E8Y2M6s9A8SopwISJUuliIWAcL2CXospZ4jCBSi0ba1Zs/HL4wyLHhGRHBuILPFIW3paG1eAzYhHw
-        AXd8m8CPomKQfchnKb7uAGftq4wK1SsdTGzKQsjqacjeCk0RsPVRrEJUUy3okfnQk1gM5l81agP/h
-        arzWLEHQ==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o1Elc-000Y9e-Ny; Tue, 14 Jun 2022 22:12:08 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id ED8F2981518; Wed, 15 Jun 2022 00:12:06 +0200 (CEST)
-Date:   Wed, 15 Jun 2022 00:12:06 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        khilman@kernel.org, catalin.marinas@arm.com, will@kernel.org,
-        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
-        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
-        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
-        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
-        shorne@gmail.com, James.Bottomley@hansenpartnership.com,
-        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, anup@brainfault.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
-        jiangshanlai@gmail.com, joel@joelfernandes.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
-        rcu@vger.kernel.org
-Subject: Re: [PATCH 34.5/36] cpuidle,omap4: Push RCU-idle into
- omap4_enter_lowpower()
-Message-ID: <YqkHto+zgAPs4kQI@worktop.programming.kicks-ass.net>
-References: <20220608142723.103523089@infradead.org>
- <20220608144518.073801916@infradead.org>
- <Yqcv6crSNKuSWoTu@atomide.com>
+        with ESMTP id S1357287AbiFNW6W (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 18:58:22 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9FFD52E55;
+        Tue, 14 Jun 2022 15:58:20 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id f9so8986466plg.0;
+        Tue, 14 Jun 2022 15:58:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=6rypLVDEi4Al+h2wMUYsIuc8jJslLN5EPrmzWEFbMuo=;
+        b=pxb/CAZdPFSGlo6VVkJyhZU3NdVha+pVgZFpcgpSTF3fH3JxiGjGJCXIpkJqAoas48
+         XlGIEYxr3nZwZ4j/opxfKbsMvLggMZ5S066/YRl2cOvIWyrThTKph/fBaifXYIuENlaQ
+         GsQzztHLvHIZKSRDY9D04//MeQe/4qrHnaMZ2GY8zMDBKeaE4wZUCWvCbWPlMQIEEmII
+         UewdInTMDijCmlCJAgpSF7tuKsqJueAWG/OULuCz2pXNTKZAzIfyJ0yhQbfqqg/YsU7X
+         H0lp7E2TFM4zLgcYkeBq/B1JWEZ4/A7/EHycstMoWCUmxaUinEpKWxOEloGX08giBUpK
+         OEwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=6rypLVDEi4Al+h2wMUYsIuc8jJslLN5EPrmzWEFbMuo=;
+        b=V5VrKtdfvR/T+5fEkNQN6BGfY6CbX9D+jLeYX7Lwa371zQKBXYDTbyMVaz7gisYXwq
+         tLj3mRaysnpnBBdNUZ43/GQzy7PTb+Lo4tDQBi6ze3da3h5LIs99L89kPW280sHabN9M
+         lOEVptCCk4+uSnU8Z6fR2ck2YniUbJaaWEA/MjhmcXAEV8e+1lTusSEoXN3+5mG87b2t
+         P1/m3KrEz15VneIK+R/IRzNN/hFKjhB5MpSBTD5sMn1M5i4pY1MUzV0U3ZZRaLdf0LRp
+         SQZIX7SPQ/PciFPbJXhUYsdc0e/6lUaogfBiugyx45cc6C/tZz2xRmuPrB3nSRj6HhD+
+         7KhA==
+X-Gm-Message-State: AJIora8l/hL20otAL9dcZ4is2WhYLQgLC/phoP1YOH6kD/KmUAXjZEm9
+        ZgRCg6fYPyd8Rcd+gO5FvWQ=
+X-Google-Smtp-Source: ABdhPJwofxFlNwHyeEkoxKk5EJ0NkYQN/adYl+33Xqnv+rHItyPrWR+2eZWo/2ukpK2LLuPmvQUgww==
+X-Received: by 2002:a17:902:e892:b0:167:4570:32e3 with SMTP id w18-20020a170902e89200b00167457032e3mr6376651plg.51.1655247500321;
+        Tue, 14 Jun 2022 15:58:20 -0700 (PDT)
+Received: from [172.30.1.37] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id iz3-20020a170902ef8300b0015e9d4a5d27sm7796067plb.23.2022.06.14.15.58.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 15:58:19 -0700 (PDT)
+Message-ID: <7f00333d-40f9-34d5-fd84-54c10d7a243d@gmail.com>
+Date:   Wed, 15 Jun 2022 07:58:16 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yqcv6crSNKuSWoTu@atomide.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 1/5] PM / devfreq: Fix cpufreq passive unregister
+ erroring on PROBE_DEFER
+Content-Language: en-US
+To:     Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Saravana Kannan <skannan@codeaurora.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220614110701.31240-1-ansuelsmth@gmail.com>
+ <20220614110701.31240-2-ansuelsmth@gmail.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20220614110701.31240-2-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 03:39:05PM +0300, Tony Lindgren wrote:
-> OMAP4 uses full SoC suspend modes as idle states, as such it needs the
-> whole power-domain and clock-domain code from the idle path.
+On 22. 6. 14. 20:06, Christian 'Ansuel' Marangi wrote:
+> With the passive governor, the cpu based scaling can PROBE_DEFER due to
+> the fact that CPU policy are not ready.
+> The cpufreq passive unregister notifier is called both from the
+> GOV_START errors and for the GOV_STOP and assume the notifier is
+> successfully registred every time. With GOV_START failing it's wrong to
+> loop over each possible CPU since the register path has failed for
+> some CPU policy not ready. Change the logic and unregister the notifer
+> based on the current allocated parent_cpu_data list to correctly handle
+> errors and the governor unregister path.
 > 
-> All that code is not suitable to run with RCU disabled, as such push
-> RCU-idle deeper still.
-> 
-> Signed-off-by: Tony Lindgren <tony@atomide.com>
+> Fixes: a03dacb0316f ("PM / devfreq: Add cpu based scaling support to passive governor")
+> Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
 > ---
+>  drivers/devfreq/governor_passive.c | 23 ++++++-----------------
+>  1 file changed, 6 insertions(+), 17 deletions(-)
 > 
-> Peter here's one more for your series, looks like this is needed to avoid
-> warnings similar to what you did for omap3.
+> diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
+> index 72c67979ebe1..0188c32f5198 100644
+> --- a/drivers/devfreq/governor_passive.c
+> +++ b/drivers/devfreq/governor_passive.c
+> @@ -222,8 +222,8 @@ static int cpufreq_passive_unregister_notifier(struct devfreq *devfreq)
+>  {
+>  	struct devfreq_passive_data *p_data
+>  			= (struct devfreq_passive_data *)devfreq->data;
+> -	struct devfreq_cpu_data *parent_cpu_data;
+> -	int cpu, ret = 0;
+> +	struct devfreq_cpu_data *parent_cpu_data, *tmp;
+> +	int ret;
+>  
+>  	if (p_data->nb.notifier_call) {
+>  		ret = cpufreq_unregister_notifier(&p_data->nb,
+> @@ -232,27 +232,16 @@ static int cpufreq_passive_unregister_notifier(struct devfreq *devfreq)
+>  			return ret;
+>  	}
+>  
+> -	for_each_possible_cpu(cpu) {
+> -		struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+> -		if (!policy) {
+> -			ret = -EINVAL;
+> -			continue;
+> -		}
+> -
+> -		parent_cpu_data = get_parent_cpu_data(p_data, policy);
+> -		if (!parent_cpu_data) {
+> -			cpufreq_cpu_put(policy);
+> -			continue;
+> -		}
+> -
+> +	list_for_each_entry_safe(parent_cpu_data, tmp, &p_data->cpu_data_list, node) {
+>  		list_del(&parent_cpu_data->node);
+> +
+>  		if (parent_cpu_data->opp_table)
+>  			dev_pm_opp_put_opp_table(parent_cpu_data->opp_table);
+> +
+>  		kfree(parent_cpu_data);
+> -		cpufreq_cpu_put(policy);
+>  	}
 
-Thanks Tony!
+I agree this patch. Just, I'd like to make the separate function
+to handle the removing of parent_cpu_data.
 
-I've had a brief look at omap2_pm_idle() and do I understand it right
-that something like the below patch would reduce it to a simple 'WFI'?
+Please add new delete_parent_cpu_data() function under get_parent_cpu_data()
+implementation and then call delete_parent_cpu_data()
+in cpufreq_passive_unregister_notifier().
 
-What do I do with the rest of that code, because I don't think this
-thing has a cpuidle driver to take over, effectively turning it into
-dead code.
+>  
+> -	return ret;
+> +	return 0;
+>  }
+>  
+>  static int cpufreq_passive_register_notifier(struct devfreq *devfreq)
 
---- a/arch/arm/mach-omap2/pm24xx.c
-+++ b/arch/arm/mach-omap2/pm24xx.c
-@@ -126,10 +126,20 @@ static int omap2_allow_mpu_retention(voi
- 	return 1;
- }
- 
--static void omap2_enter_mpu_retention(void)
-+static void omap2_do_wfi(void)
- {
- 	const int zero = 0;
- 
-+	/* WFI */
-+	asm("mcr p15, 0, %0, c7, c0, 4" : : "r" (zero) : "memory", "cc");
-+}
-+
-+#if 0
-+/*
-+ * possible cpuidle implementation between WFI and full_retention above
-+ */
-+static void omap2_enter_mpu_retention(void)
-+{
- 	/* The peripherals seem not to be able to wake up the MPU when
- 	 * it is in retention mode. */
- 	if (omap2_allow_mpu_retention()) {
-@@ -146,8 +157,7 @@ static void omap2_enter_mpu_retention(vo
- 		pwrdm_set_next_pwrst(mpu_pwrdm, PWRDM_POWER_ON);
- 	}
- 
--	/* WFI */
--	asm("mcr p15, 0, %0, c7, c0, 4" : : "r" (zero) : "memory", "cc");
-+	omap2_do_wfi();
- 
- 	pwrdm_set_next_pwrst(mpu_pwrdm, PWRDM_POWER_ON);
- }
-@@ -161,6 +171,7 @@ static int omap2_can_sleep(void)
- 
- 	return 1;
- }
-+#endif
- 
- static void omap2_pm_idle(void)
- {
-@@ -169,6 +180,7 @@ static void omap2_pm_idle(void)
- 	if (omap_irq_pending())
- 		return;
- 
-+#if 0
- 	error = cpu_cluster_pm_enter();
- 	if (error || !omap2_can_sleep()) {
- 		omap2_enter_mpu_retention();
-@@ -179,6 +191,9 @@ static void omap2_pm_idle(void)
- 
- out_cpu_cluster_pm:
- 	cpu_cluster_pm_exit();
-+#else
-+	omap2_do_wfi();
-+#endif
- }
- 
- static void __init prcm_setup_regs(void)
+
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
