@@ -2,87 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7530454B193
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 14:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4368354B263
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 15:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234149AbiFNMvl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jun 2022 08:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
+        id S235958AbiFNNhd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jun 2022 09:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbiFNMvl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 08:51:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1D943205C;
-        Tue, 14 Jun 2022 05:51:40 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 928771650;
-        Tue, 14 Jun 2022 05:51:40 -0700 (PDT)
-Received: from [10.57.37.71] (unknown [10.57.37.71])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1DCEB3F73B;
-        Tue, 14 Jun 2022 05:51:37 -0700 (PDT)
-Message-ID: <92f56aed-e6cd-c65b-f42f-5bd1e07b90c5@arm.com>
-Date:   Tue, 14 Jun 2022 13:51:35 +0100
+        with ESMTP id S237918AbiFNNhd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 09:37:33 -0400
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A4621AC;
+        Tue, 14 Jun 2022 06:37:32 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id t32so15131691ybt.12;
+        Tue, 14 Jun 2022 06:37:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=atVUmn8uXOx3ZXsVFS5tdc+EVO/H/mhk/Sw0YtUkpe8=;
+        b=2IbS59IKwK6qND+1CuJYx/PC5YQAvjtQWq8RJ7XZX5glyJZWEKx5tgCi0YTuDkHAWg
+         Epg6CQU3qk04nraDWvb0ineLa2RVnCgEcJkvMfBFtVYGN5VzF8yUiyGpyPdX6NS3wflO
+         RLiyXJIbhBCvonKue7Sml7EvEB4g8IRIgry0Qk7EEldkTUVeY7cSiRBdCzWuf5G50mbR
+         m/HwwSSSSy+BbXWctpevVT6foxWN07bjNWbgipuM5wma8YDnga7WR400zk/BMymAGijx
+         WXk/7/JXdLiRMXoviS0ItHt/5oFHs+K53JlsxHOYXY+wTnFbeuDoDS+SyF2KfkdLmK1G
+         atRw==
+X-Gm-Message-State: AJIora9BMG6ih3kVsmQKCphlbT9idUJUHbWaq2XZxJiGK7mYXNxjJLI9
+        ge3KavJn3alFPjJsTSsVvNO+uSN1ZldrBK9BKk+v5GlQ
+X-Google-Smtp-Source: AGRyM1scEPpgYPOR80Q2IkzxlYtMoCM12zi1+VTuH/wUSwvgxwomSrFAd5/t1JF9fbf7IZDXFPZ0aa1rHLFJB4BHMFk=
+X-Received: by 2002:a25:6b50:0:b0:64f:4b33:664 with SMTP id
+ o16-20020a256b50000000b0064f4b330664mr5217608ybm.153.1655213851134; Tue, 14
+ Jun 2022 06:37:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 0/4] Thermal cpufreq & devfreq cooling minor clean-ups
-Content-Language: en-US
-To:     daniel.lezcano@linaro.org
-Cc:     amitk@kernel.org, rui.zhang@intel.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
-        mingo@redhat.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220613124327.30766-1-lukasz.luba@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220613124327.30766-1-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220521063534.138930-1-yiyang13@huawei.com> <20220524071041.4aw3cfo3x5wphziy@vireshk-i7>
+In-Reply-To: <20220524071041.4aw3cfo3x5wphziy@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 14 Jun 2022 15:37:20 +0200
+Message-ID: <CAJZ5v0jCx0v-Q2=aW4nSSAHHajUnLdVtQMe3w1cX1w-o=mSesg@mail.gmail.com>
+Subject: Re: [PATCH -next] cpufreq: Fix reserved space in cpufreq_show_cpus()
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Yi Yang <yiyang13@huawei.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+On Tue, May 24, 2022 at 9:10 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 21-05-22, 14:35, Yi Yang wrote:
+> > Function scnprintf() would reserve space for the trailing '\0' and return
+> > value is the number of characters written into buf not including the
+> > trailing '\0'. internally meaning the next scnprintf() would write begin
+> > the trailing '\0'. The code specifying "PAGE_SIZE - i - 2" here is trying
+> > to reserve space for "\n\0" which would cause scnprintf() to reserve an
+> > additional byte making the tail of the buf looks like this: "\n\0\0".
+> > Thus. we should reserve only the space for one '\0'. passing in
+> > "PAGE_SIZE - i - 1".
+> >
+> > Additionally, each iteration would replace the trailing '\0' from the last
+> > iteration with a space, and append 4 additional bytes to the string making
+> > it a total of 5 additional bytes. That means we should stop printing into
+> > the buffer if the remaining size is less than 7 bytes(1 for the ' ', 4 for
+> > the %u and 2 for the tailing "\n\0")
+> >
+> > Signed-off-by: Yi Yang <yiyang13@huawei.com>
+> > ---
+> >  drivers/cpufreq/cpufreq.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 1f6667ce43bd..60c005c9961e 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -844,9 +844,9 @@ ssize_t cpufreq_show_cpus(const struct cpumask *mask, char *buf)
+> >
+> >       for_each_cpu(cpu, mask) {
+> >               if (i)
+> > -                     i += scnprintf(&buf[i], (PAGE_SIZE - i - 2), " ");
+> > -             i += scnprintf(&buf[i], (PAGE_SIZE - i - 2), "%u", cpu);
+> > -             if (i >= (PAGE_SIZE - 5))
+> > +                     i += scnprintf(&buf[i], (PAGE_SIZE - i - 1), " ");
+> > +             i += scnprintf(&buf[i], (PAGE_SIZE - i - 1), "%u", cpu);
+> > +             if (i >= (PAGE_SIZE - 6))
+> >                       break;
+> >       }
+> >       i += sprintf(&buf[i], "\n");
+>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-
-On 6/13/22 13:43, Lukasz Luba wrote:
-> Hi all,
-> 
-> This is v2 of some minor clean-ups for the thermal cpufreq and devfreq
-> cooling code.
-> 
-> Changes:
-> v2:
-> - extened the cpufreq_cooling_device with private ops field, to not waste
->    memory and simplify allocation/free code (Viresh)
-> - added devfreq_cooling clean-up to align with cpufreq cooling code
-> - added ACKs from Viresh for patch 2/4 and path 3/4
-> - added missing maintainers of tracing to CC list
-> 
-> Regards,
-> Lukasz
-> 
-> Lukasz Luba (4):
->    thermal: cpufreq_cooling: Use private callback ops for each cooling
->      device
->    thermal: cpufreq_cooling : Refactor thermal_power_cpu_get_power
->      tracing
->    thermal: cpufreq_cooling: Update outdated comments
->    thermal: devfreq_cooling: Extend the devfreq_cooling_device with ops
-> 
->   drivers/thermal/cpufreq_cooling.c | 77 ++++++++++---------------------
->   drivers/thermal/devfreq_cooling.c | 27 ++++-------
->   include/trace/events/thermal.h    | 28 ++++-------
->   3 files changed, 42 insertions(+), 90 deletions(-)
-> 
-
-Could you have a look and take the patches into your tree, please?
-The 3 of 4 patches got ACKs, the last one is devfreq cooling, which
-is pretty minor change.
-
-Regards,
-Lukasz
+Applied as 5.20 material, thanks!
