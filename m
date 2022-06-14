@@ -2,48 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D667554B289
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 15:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6E854B28F
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 15:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232844AbiFNNwC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jun 2022 09:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36648 "EHLO
+        id S236030AbiFNNyS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jun 2022 09:54:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiFNNwA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 09:52:00 -0400
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAD0377D8;
-        Tue, 14 Jun 2022 06:51:58 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-30c2f288f13so30166727b3.7;
-        Tue, 14 Jun 2022 06:51:58 -0700 (PDT)
+        with ESMTP id S235174AbiFNNyS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 09:54:18 -0400
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50BF538BF5;
+        Tue, 14 Jun 2022 06:54:17 -0700 (PDT)
+Received: by mail-qk1-f171.google.com with SMTP id l192so4234453qke.13;
+        Tue, 14 Jun 2022 06:54:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=2Oadu/kb7D/MBtdN1EAdB7NNOyY5NUmks3Xe0AFaOxI=;
-        b=dQk5mdgbTjIBYsxJHcizJcK2dKFjjtFEVURIJZKRCrI2O9L8zGGTX8r8sT3nYicdRA
-         xFly7bcHL7Dx/Jk19ythftYSyTrqO9Dq9GA1JdAqQUtyHay8JRJqror3Q0J3pJFmv5JZ
-         WSBO768qdCGn2NQd9rwLWBYccB2+71QZ589qi/T38ZzEvFcEYucvxnYhQEkq0/OCJQIj
-         JWC0vk3z4msX5Bm2c3ryJIN4RMtEbe6wkj35q6s8gpgK6E8J6j0R2RcntlSKS+YayAws
-         NBR8pN0nACO6Afm0In3bk1K2VKRwJPA/bGPG6DX+ie7PtspVdpeguQvSEPJPrNawOB6Z
-         CMpA==
-X-Gm-Message-State: AJIora8SkuDWUhr1WEBmceW2Vse1eqhEZ7L0NxJsXa8LjNdV4qlzfP0l
-        bCq63/POPTgBc537S2p0Iw7NpyA9q3mLtyLEiptlaTO7
-X-Google-Smtp-Source: AGRyM1uw67Ese+5wWKuBtoiVnyFv1kAqhirRGL5uPSGAfXwx+M56IWRT9PkE/KNVqzBowTiEpNUWASkYQ0SQ5QdJXfQ=
-X-Received: by 2002:a81:3dc6:0:b0:313:cc8a:e39e with SMTP id
- k189-20020a813dc6000000b00313cc8ae39emr5961765ywa.196.1655214718148; Tue, 14
- Jun 2022 06:51:58 -0700 (PDT)
+        bh=Xff5oMuYjLIbpEy0I37sAZKgq+SJdneKw8SbYhPEF5I=;
+        b=nRDD3I8h1/FTTPcU8qL+oryXac8KYjQ0f2dJyQsmIFBur17FRVx4EUqW6Xv3ijZXj9
+         nV9c9L6VSXuu6cgIGr6PVsxS7BjTT4VWDkhO4bpTj9feQIylpqZr90YN+dpWzL/IKw8A
+         +j6Ib4LUjWhPXj2cuC3KYXBAVhJwe1kFBfy5niamAAPIzkPic4h4y+8PpuTw+IPkFZ9o
+         r2O+nlZnt7llr/VEDk7qix0dtYrBH6QVfrz8pnLEuYyTfZbJcdFMku7aCs/u3ZaS80FI
+         +PhaZ2dKd08xmWCzuV7erO9w0mxdnhGFqiAa4PooheEanY7Tn3zbscD6iusLZUVHXlac
+         EcWA==
+X-Gm-Message-State: AOAM5316auRire1S1S1uIYW1AMucYqHWMznkL6Qb8ucQhK238APHcgbl
+        zQjxgQAAxZl4DKV7k7XxaFXzLHzEBIXcpg==
+X-Google-Smtp-Source: ABdhPJwEzp+nvoYhRugOLlCy39LiBYye9UwFah536hRdaTLvWjIcYfu2nJccJn5kXOVn+KcL2t1Q8Q==
+X-Received: by 2002:a05:620a:917:b0:6a6:b76b:d6b4 with SMTP id v23-20020a05620a091700b006a6b76bd6b4mr3890055qkv.279.1655214856091;
+        Tue, 14 Jun 2022 06:54:16 -0700 (PDT)
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
+        by smtp.gmail.com with ESMTPSA id j1-20020a05620a410100b006a65c58db99sm9813084qko.64.2022.06.14.06.54.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 06:54:15 -0700 (PDT)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-3137316bb69so30076547b3.10;
+        Tue, 14 Jun 2022 06:54:15 -0700 (PDT)
+X-Received: by 2002:a81:1dd2:0:b0:30f:a4fc:315e with SMTP id
+ d201-20020a811dd2000000b0030fa4fc315emr5910787ywd.383.1655214855297; Tue, 14
+ Jun 2022 06:54:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1653565641.git.viresh.kumar@linaro.org> <0a6620ff5a330126b21d00244d4fad62cff4f230.1653565641.git.viresh.kumar@linaro.org>
-In-Reply-To: <0a6620ff5a330126b21d00244d4fad62cff4f230.1653565641.git.viresh.kumar@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 14 Jun 2022 15:51:47 +0200
-Message-ID: <CAJZ5v0hU0obSLwCxUX5Qa2Usa7hMoF23mAGxcRK2TCuAYiGZcg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] cpufreq: Drop unnecessary cpus locking from store()
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
+References: <20220610201701.7946-1-wsa+renesas@sang-engineering.com> <20220610201701.7946-2-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220610201701.7946-2-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 14 Jun 2022 15:54:03 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW3uxQHk6SBX5MqnZsYqwY8p+0wmD6gHwS3ESUrkmpWkQ@mail.gmail.com>
+Message-ID: <CAMuHMdW3uxQHk6SBX5MqnZsYqwY8p+0wmD6gHwS3ESUrkmpWkQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] dt-bindings: thermal: rcar-gen3-thermal: Add
+ r8a779f0 support
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -56,53 +74,59 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 26, 2022 at 1:51 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> This change was introduced long back by:
->
-> commit 4f750c930822 ("cpufreq: Synchronize the cpufreq store_*() routines with CPU hotplug")
->
-> Since then, both cpufreq and hotplug core have been reworked and have
-> much better locking in place. The race mentioned in commit 4f750c930822
-> isn't possible anymore.
->
-> Drop the unnecessary locking.
->
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/cpufreq/cpufreq.c | 19 ++++---------------
->  1 file changed, 4 insertions(+), 15 deletions(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 53d163a84e06..bb237d1ce5e7 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -973,21 +973,10 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
->         if (!fattr->store)
->                 return -EIO;
->
-> -       /*
-> -        * cpus_read_trylock() is used here to work around a circular lock
-> -        * dependency problem with respect to the cpufreq_register_driver().
-> -        */
-> -       if (!cpus_read_trylock())
-> -               return -EBUSY;
-> -
-> -       if (cpu_online(policy->cpu)) {
-> -               down_write(&policy->rwsem);
-> -               if (likely(!policy_is_inactive(policy)))
-> -                       ret = fattr->store(policy, buf, count);
-> -               up_write(&policy->rwsem);
-> -       }
-> -
-> -       cpus_read_unlock();
-> +       down_write(&policy->rwsem);
-> +       if (likely(!policy_is_inactive(policy)))
-> +               ret = fattr->store(policy, buf, count);
-> +       up_write(&policy->rwsem);
->
->         return ret;
->  }
-> --
+Hi Wolfram,
 
-Applied along with the [1/3] as 5.20 material, thanks!
+On Fri, Jun 10, 2022 at 10:17 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> Add support for R-Car S4. The S4 IP differs a bit from its siblings in
+> such way that it has 3 out of 4 TSC nodes for Linux and the interrupts
+> are not routed to the INTC-AP but to the ECM.
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>
+> Change since V2:
+> * make interrupts not required for this SoC
+
+Thanks for the update!
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+> --- a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
+
+> @@ -79,8 +80,16 @@ else:
+>          - description: TSC1 registers
+>          - description: TSC2 registers
+>          - description: TSC3 registers
+> -  required:
+> -    - interrupts
+> +  if:
+> +    not:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - renesas,r8a779f0-thermal
+> +  then:
+> +    required:
+> +      - interrupts
+
+While correct, IMHO adding this check here loses again the improvement
+made by "[PATCH v3 1/2] dt-bindings: thermal: rcar-gen3-thermal: use
+positive logic".
+
+What about splitting this in two separate checks at the top level:
+  - one for regs (R-Car V3U vs. the world), and
+  - a second for interrupts (R-Car V3U+S4-8 vs. the world)?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
