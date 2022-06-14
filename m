@@ -2,155 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1163554A9EA
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 09:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E1D54AA73
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 09:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239256AbiFNHAs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jun 2022 03:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33812 "EHLO
+        id S1351345AbiFNHW0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jun 2022 03:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239438AbiFNHAq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 03:00:46 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BC83B03B;
-        Tue, 14 Jun 2022 00:00:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655190043; x=1686726043;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PHYT8LtTB+UCVv1AVqoKGvivIiIEQbiDWdQzxCZx89Q=;
-  b=mNga914b4kzUGz5zDDPZBTxluvpIv38YKwNI6AVmDq+WVOK228uNkCFb
-   1BL1iNp8FZka3W8OXjanj9Kp49l55cxWvlGFjUPd3a5W6ymklL1weQYpD
-   tIfGcini4bbqAq1jOJQLZ3pu4X8SiY0ZnqziMDjhS3SywCi5UXFQDX9SX
-   gYqRwSAZJL/RYE/JBzhqdLi1sGZEe26FR2fpkxuu95g77JDicP0ioTT9f
-   q76q57b/c/F5aCUHu3njkQyOplR1Er+j2ev83aqR2AOOGgIPa6wMgVIvA
-   mKgznl+klqkAYSxyOeYfP0b74sq34DCc6vMbFXnbHw5IYTCU4QNU6lmt7
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="342496382"
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="342496382"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 00:00:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="617846962"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 14 Jun 2022 00:00:18 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o10XC-000LbB-7B;
-        Tue, 14 Jun 2022 07:00:18 +0000
-Date:   Tue, 14 Jun 2022 14:59:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Saravana Kannan <skannan@codeaurora.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
-Subject: Re: [PATCH v2 1/5] PM / devfreq: Fix cpufreq passive unregister
- erroring on PROBE_DEFER
-Message-ID: <202206141415.1BsuJvCD-lkp@intel.com>
-References: <20220613134213.8904-2-ansuelsmth@gmail.com>
+        with ESMTP id S238663AbiFNHWZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 03:22:25 -0400
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D04B2AEC;
+        Tue, 14 Jun 2022 00:22:24 -0700 (PDT)
+Received: by mail-qk1-f176.google.com with SMTP id d128so5778728qkg.8;
+        Tue, 14 Jun 2022 00:22:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lz5y+DuSGcsSnnDOr5IwDKXRxK40o1ln7wWC0XPROlc=;
+        b=WwjDeL74QwwVwhWKrgTGdhjG9DuQ1Dk5Tvm99HMAYFWRlVf46+DWMUFhsNUB+B3+C2
+         GaNtptsyjRyvqUBfBOwXdz/8L68AisaTUDWan6SiOP8jOGTffQM+hCX0mnK9UZfp8qtO
+         5d1MyW/kvqWr7liUKvuXMHryAZOO+Ty5Du15Jxlbi4fte4qrZ/9hWYZtKeNtq1pEsUkN
+         CpxxTSTRbxjpZJ6XScVKqjFwNQoOs30psxdICWZQNjE5I5iTGgh0Tk3/c8YXFZ3Ef6Gr
+         nlD/wX9PdzfyZxywK1l0Mr37cSQUCO1+Yj9Ni1h6gP8n5urderuy5jPrWhPjxFLF102K
+         crSA==
+X-Gm-Message-State: AOAM533aYYjY1QTmgc9YqSmhq7QikzCgxazljUjK0lQ/xdVwczReuR+p
+        zRaGJXAd60T+JhzFMG9zY5aTtSY48RI8lA==
+X-Google-Smtp-Source: ABdhPJygmQ/2Wq7fVBb2ApZdNFsf81yjbpPU4jBrob2NBfSB269ymskQJYJ8cwc0k/v7c/CCC7v09Q==
+X-Received: by 2002:a05:620a:120f:b0:6a6:b30a:efb5 with SMTP id u15-20020a05620a120f00b006a6b30aefb5mr2919414qkj.21.1655191343244;
+        Tue, 14 Jun 2022 00:22:23 -0700 (PDT)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id t15-20020a05620a0b0f00b006a6d7c3a82esm8119423qkg.15.2022.06.14.00.22.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 00:22:22 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id p13so13757373ybm.1;
+        Tue, 14 Jun 2022 00:22:22 -0700 (PDT)
+X-Received: by 2002:a05:6902:905:b0:64a:2089:f487 with SMTP id
+ bu5-20020a056902090500b0064a2089f487mr3641955ybb.202.1655191341994; Tue, 14
+ Jun 2022 00:22:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220613134213.8904-2-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220609150851.23084-1-max.oss.09@gmail.com> <20220613191549.GA4092455-robh@kernel.org>
+In-Reply-To: <20220613191549.GA4092455-robh@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 14 Jun 2022 09:22:10 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU+aOw_D3SR6714U_i5WhE8S-FCLdPJaf_+Fncz4aH8VA@mail.gmail.com>
+Message-ID: <CAMuHMdU+aOw_D3SR6714U_i5WhE8S-FCLdPJaf_+Fncz4aH8VA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
+ which controls
+To:     Rob Herring <robh@kernel.org>
+Cc:     Max Krummenacher <max.oss.09@gmail.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Christian,
+Hi Rob,
 
-Thank you for the patch! Yet something to improve:
+On Mon, Jun 13, 2022 at 9:15 PM Rob Herring <robh@kernel.org> wrote:
+> On Thu, Jun 09, 2022 at 05:08:46PM +0200, Max Krummenacher wrote:
+> > From: Max Krummenacher <max.krummenacher@toradex.com>
+> >
+> > its power enable by using a regulator.
+> >
+> > The currently implemented PM domain providers are all specific to
+> > a particular system on chip.
+>
+> Yes, power domains tend to be specific to an SoC... 'power-domains' is
+> supposed to be power islands in a chip. Linux 'PM domains' can be
+> anything...
 
-[auto build test ERROR on chanwoo/devfreq-testing]
-[also build test ERROR on linus/master v5.19-rc2 next-20220610]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> > This allows to use the "regulator-pm-pd" driver with an arbitrary
+> > device just by adding the 'power-domains' property to the devices
+> > device tree node. However the device's dt-bindings schema likely does
+> > not allow the property 'power-domains'.
+> > One way to solve this would be to allow 'power-domains' globally
+> > similarly how 'status' and other common properties are allowed as
+> > implicit properties.
+>
+> No. For 'power-domains' bindings have to define how many there are and
+> what each one is.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Ansuel-Marangi/PM-devfreq-Various-Fixes-to-cpufreq-based-passive-governor/20220614-020616
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git devfreq-testing
-config: arm-randconfig-r026-20220613 (https://download.01.org/0day-ci/archive/20220614/202206141415.1BsuJvCD-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c97436f8b6e2718286e8496faf53a2c800e281cf)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/378807dd7da24162524c0ba84e996157b3e289c6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Christian-Ansuel-Marangi/PM-devfreq-Various-Fixes-to-cpufreq-based-passive-governor/20220614-020616
-        git checkout 378807dd7da24162524c0ba84e996157b3e289c6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+IMO "power-domains" are an integration feature, i.e. orthogonal to the
+actual device that is part of the domain.  Hence the "power-domains"
+property may appear everywhere.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+It is actually the same for on-chip devices, as an IP core may be
+reused on a new SoC that does have power or clock domains.  For
+these, we managed to handle that fine because most devices do have
+some form of family- or SoC-specific compatible values to control if
+the power-domains property can be present/is required or not.
 
-All errors (new ones prefixed by >>):
+But for off-chip devices, the integrator (board designed) can do
+whatever he wants.  Off-chip devices do have the advantage that it
+is usually well documented which power supply (if there are multiple)
+serves which purpose, which is not always clear for on-chip devices.
 
->> drivers/devfreq/governor_passive.c:235:72: error: too few arguments provided to function-like macro invocation
-           list_for_each_entry_safe(parent_cpu_data, &p_data->cpu_data_list, node) {
-                                                                                 ^
-   include/linux/list.h:760:9: note: macro 'list_for_each_entry_safe' defined here
-   #define list_for_each_entry_safe(pos, n, head, member)                  \
-           ^
->> drivers/devfreq/governor_passive.c:235:2: error: use of undeclared identifier 'list_for_each_entry_safe'
-           list_for_each_entry_safe(parent_cpu_data, &p_data->cpu_data_list, node) {
-           ^
-   2 errors generated.
+Gr{oetje,eeting}s,
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for ARM_CPU_SUSPEND
-   Depends on ARCH_SUSPEND_POSSIBLE
-   Selected by
-   - ARM_TEGRA_CPUIDLE && CPU_IDLE && (ARM || ARM64) && (ARCH_TEGRA || COMPILE_TEST && !ARM64 && MMU
-   - ARM_QCOM_SPM_CPUIDLE && CPU_IDLE && (ARM || ARM64) && (ARCH_QCOM || COMPILE_TEST && !ARM64 && MMU
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-vim +235 drivers/devfreq/governor_passive.c
-
-   220	
-   221	static int cpufreq_passive_unregister_notifier(struct devfreq *devfreq)
-   222	{
-   223		struct devfreq_passive_data *p_data
-   224				= (struct devfreq_passive_data *)devfreq->data;
-   225		struct devfreq_cpu_data *parent_cpu_data;
-   226		int ret;
-   227	
-   228		if (p_data->nb.notifier_call) {
-   229			ret = cpufreq_unregister_notifier(&p_data->nb,
-   230						CPUFREQ_TRANSITION_NOTIFIER);
-   231			if (ret < 0)
-   232				return ret;
-   233		}
-   234	
- > 235		list_for_each_entry_safe(parent_cpu_data, &p_data->cpu_data_list, node) {
-   236			list_del(&parent_cpu_data->node);
-   237	
-   238			if (parent_cpu_data->opp_table)
-   239				dev_pm_opp_put_opp_table(parent_cpu_data->opp_table);
-   240	
-   241			kfree(parent_cpu_data);
-   242		}
-   243	
-   244		return 0;
-   245	}
-   246	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
