@@ -2,66 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA6E854B28F
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 15:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 475EF54B2AB
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jun 2022 15:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236030AbiFNNyS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jun 2022 09:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39276 "EHLO
+        id S242070AbiFNN7S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jun 2022 09:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235174AbiFNNyS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 09:54:18 -0400
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50BF538BF5;
-        Tue, 14 Jun 2022 06:54:17 -0700 (PDT)
-Received: by mail-qk1-f171.google.com with SMTP id l192so4234453qke.13;
-        Tue, 14 Jun 2022 06:54:17 -0700 (PDT)
+        with ESMTP id S245328AbiFNN7N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jun 2022 09:59:13 -0400
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD683334C;
+        Tue, 14 Jun 2022 06:59:12 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-30ce6492a60so30351447b3.8;
+        Tue, 14 Jun 2022 06:59:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Xff5oMuYjLIbpEy0I37sAZKgq+SJdneKw8SbYhPEF5I=;
-        b=nRDD3I8h1/FTTPcU8qL+oryXac8KYjQ0f2dJyQsmIFBur17FRVx4EUqW6Xv3ijZXj9
-         nV9c9L6VSXuu6cgIGr6PVsxS7BjTT4VWDkhO4bpTj9feQIylpqZr90YN+dpWzL/IKw8A
-         +j6Ib4LUjWhPXj2cuC3KYXBAVhJwe1kFBfy5niamAAPIzkPic4h4y+8PpuTw+IPkFZ9o
-         r2O+nlZnt7llr/VEDk7qix0dtYrBH6QVfrz8pnLEuYyTfZbJcdFMku7aCs/u3ZaS80FI
-         +PhaZ2dKd08xmWCzuV7erO9w0mxdnhGFqiAa4PooheEanY7Tn3zbscD6iusLZUVHXlac
-         EcWA==
-X-Gm-Message-State: AOAM5316auRire1S1S1uIYW1AMucYqHWMznkL6Qb8ucQhK238APHcgbl
-        zQjxgQAAxZl4DKV7k7XxaFXzLHzEBIXcpg==
-X-Google-Smtp-Source: ABdhPJwEzp+nvoYhRugOLlCy39LiBYye9UwFah536hRdaTLvWjIcYfu2nJccJn5kXOVn+KcL2t1Q8Q==
-X-Received: by 2002:a05:620a:917:b0:6a6:b76b:d6b4 with SMTP id v23-20020a05620a091700b006a6b76bd6b4mr3890055qkv.279.1655214856091;
-        Tue, 14 Jun 2022 06:54:16 -0700 (PDT)
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
-        by smtp.gmail.com with ESMTPSA id j1-20020a05620a410100b006a65c58db99sm9813084qko.64.2022.06.14.06.54.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 06:54:15 -0700 (PDT)
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-3137316bb69so30076547b3.10;
-        Tue, 14 Jun 2022 06:54:15 -0700 (PDT)
-X-Received: by 2002:a81:1dd2:0:b0:30f:a4fc:315e with SMTP id
- d201-20020a811dd2000000b0030fa4fc315emr5910787ywd.383.1655214855297; Tue, 14
- Jun 2022 06:54:15 -0700 (PDT)
+        bh=DiRdL8duDyIHD6Nrt/s9DO6S9xYvs+pewZXGWKr83oU=;
+        b=F7+lDjB1LY8+C+uCiKKFDC/cJqlxZAcGXl7nB/Q5PoIFZOgo9quo68RClHJmF2F5/O
+         vtifMor1FWSdVJNUQ1m3+8O3M3TKDk9+VqDosQYUFqsDykdMwwB3ZmNEJjBpdQAS533w
+         0esdkmVWCl0t0JlUP6gNxnCpJOKlRFWbNVCwgZ4owuhOxmlp+3EtSgi7pjJ/cvDCU7qD
+         3Hr8ziTpXLn7d10RjU7YJr5lvVIQatu1y2N+1NN+a66EuXd8wjxDYv/2pPw74ONBLEE0
+         DrtPJ+v93x7zkg3gYkAsyCQhnC3ayWy8zyBqmThlkh5iazDVnQsAmfWFBJb1MGtWv8h9
+         /7wQ==
+X-Gm-Message-State: AJIora/qv8vYmiV6nkCsDJK51EfEpDBlBUKnkuh+77c1YYOOGKI0XnqN
+        /umtXsQNjRq0ywMeK+co39EqBdTNqtZKpTYSKAygV8q0/0w=
+X-Google-Smtp-Source: AGRyM1sFQuBs2xBokqAiNhHO7MCfL0HvIR4LcShp/DTuYO2FaLXtI5Mr+Cz8F2WU2HiJkgoLukiKankCmyFZUXoLeYA=
+X-Received: by 2002:a81:260a:0:b0:2f4:ca82:a42f with SMTP id
+ m10-20020a81260a000000b002f4ca82a42fmr5931264ywm.149.1655215151897; Tue, 14
+ Jun 2022 06:59:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220610201701.7946-1-wsa+renesas@sang-engineering.com> <20220610201701.7946-2-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20220610201701.7946-2-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 14 Jun 2022 15:54:03 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdW3uxQHk6SBX5MqnZsYqwY8p+0wmD6gHwS3ESUrkmpWkQ@mail.gmail.com>
-Message-ID: <CAMuHMdW3uxQHk6SBX5MqnZsYqwY8p+0wmD6gHwS3ESUrkmpWkQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] dt-bindings: thermal: rcar-gen3-thermal: Add
- r8a779f0 support
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
+References: <8c3d50faf8811e86136fb3f9c459e43fc3c50bc0.1653565641.git.viresh.kumar@linaro.org>
+ <426bf6edc80b2e944d459fa7b8dffbe8b73bb3d9.1653623526.git.viresh.kumar@linaro.org>
+In-Reply-To: <426bf6edc80b2e944d459fa7b8dffbe8b73bb3d9.1653623526.git.viresh.kumar@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 14 Jun 2022 15:59:01 +0200
+Message-ID: <CAJZ5v0gswDEdK9-gC1dPr9BFPv3G9rs+JYe-7=1JZ11OMoBb-g@mail.gmail.com>
+Subject: Re: [PATCH V2 2/3] cpufreq: Panic if policy is active in cpufreq_policy_free()
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        kernel test robot <oliver.sang@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -74,59 +58,73 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Wolfram,
-
-On Fri, Jun 10, 2022 at 10:17 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> Add support for R-Car S4. The S4 IP differs a bit from its siblings in
-> such way that it has 3 out of 4 TSC nodes for Linux and the interrupts
-> are not routed to the INTC-AP but to the ECM.
+On Fri, May 27, 2022 at 5:53 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> With the new design in place, to avoid potential races show() and
+> store() callbacks check if the policy is active or not before proceeding
+> any further. And in order to guarantee that cpufreq_policy_free() must
+> be called after clearing the policy->cpus mask, i.e. by marking it
+> inactive.
+>
+> Lets make sure we don't get a bug around this later and catch this early
+> by putting a BUG_ON() within cpufreq_policy_free().
+>
+> Also update cpufreq_online() a bit to make sure we clear the cpus mask
+> for each error case before calling cpufreq_policy_free().
+>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 > ---
+> V2: Update cpufreq_online() and changelog.
 >
-> Change since V2:
-> * make interrupts not required for this SoC
+>  drivers/cpufreq/cpufreq.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index e24aa5d4bca5..0f8245731783 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1284,6 +1284,12 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+>         unsigned long flags;
+>         int cpu;
+>
+> +       /*
+> +        * The callers must ensure the policy is inactive by now, to avoid any
+> +        * races with show()/store() callbacks.
+> +        */
+> +       BUG_ON(!policy_is_inactive(policy));
 
-Thanks for the update!
+I'm not a super-big fan of this change.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+First off, crashing the kernel outright here because of possible races
+appears a bit excessive to me.
 
-> --- a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
+Second, it looks like we are worrying about the code running before
+the wait_for_completion() call in cpufreq_policy_put_kobj(), because
+after that call no one can be running show() or store().  So why don't
+we reorder the wait_for_completion() call with respect to the code in
+question instead?
 
-> @@ -79,8 +80,16 @@ else:
->          - description: TSC1 registers
->          - description: TSC2 registers
->          - description: TSC3 registers
-> -  required:
-> -    - interrupts
-> +  if:
-> +    not:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - renesas,r8a779f0-thermal
-> +  then:
-> +    required:
-> +      - interrupts
-
-While correct, IMHO adding this check here loses again the improvement
-made by "[PATCH v3 1/2] dt-bindings: thermal: rcar-gen3-thermal: use
-positive logic".
-
-What about splitting this in two separate checks at the top level:
-  - one for regs (R-Car V3U vs. the world), and
-  - a second for interrupts (R-Car V3U+S4-8 vs. the world)?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> +
+>         /* Remove policy from list */
+>         write_lock_irqsave(&cpufreq_driver_lock, flags);
+>         list_del(&policy->policy_list);
+> @@ -1538,8 +1544,6 @@ static int cpufreq_online(unsigned int cpu)
+>         for_each_cpu(j, policy->real_cpus)
+>                 remove_cpu_dev_symlink(policy, j, get_cpu_device(j));
+>
+> -       cpumask_clear(policy->cpus);
+> -
+>  out_offline_policy:
+>         if (cpufreq_driver->offline)
+>                 cpufreq_driver->offline(policy);
+> @@ -1549,6 +1553,7 @@ static int cpufreq_online(unsigned int cpu)
+>                 cpufreq_driver->exit(policy);
+>
+>  out_free_policy:
+> +       cpumask_clear(policy->cpus);
+>         up_write(&policy->rwsem);
+>
+>         cpufreq_policy_free(policy);
+> --
+> 2.31.1.272.g89b43f80a514
+>
