@@ -2,59 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 362EE54C218
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 08:48:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B03C954C23B
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jun 2022 08:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236346AbiFOGsL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jun 2022 02:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34938 "EHLO
+        id S240925AbiFOG4i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jun 2022 02:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234799AbiFOGsL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 02:48:11 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408012DA9C;
-        Tue, 14 Jun 2022 23:48:08 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id c196so10604846pfb.1;
-        Tue, 14 Jun 2022 23:48:08 -0700 (PDT)
+        with ESMTP id S237644AbiFOG4h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jun 2022 02:56:37 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3EB3D4A6;
+        Tue, 14 Jun 2022 23:56:36 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id i64so10600517pfc.8;
+        Tue, 14 Jun 2022 23:56:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :references:from:in-reply-to:content-transfer-encoding;
-        bh=jEzroN9krnUkZ2+Y46mqGxrDo8hTabqX3KY2I2rzfxE=;
-        b=KnRE/wBH4kTNZhS7caskp/emMiN9IUW6MSHYhje8kK1JVkHgS89FZACYMwwnwH+ewB
-         I2xFtQqCywvOVOKQn+prVpQgf9EiGWZoQSz42tLGMcfN8tVYCojY0iQ0ZmEbz8m66UXK
-         w3u9vLaAumpSQ4THVWRo8v3eoWHdzNw0xDsS7A0CdyR7EjDViyjq0GxX8MO96+QtJwUZ
-         9U5C7c5QZt9c9ICvFrqEC5hdZge+Q7+rHCMbWn3VGncPk0DJxJTr4mZsk9+NNfCN9UAG
-         KlsF1Mxu3OjsLWUYfyvBnVx9Kfn+B8zt/E9Pvuq4Fd28ONQjcrbJ8rcBzz79OgElXaYh
-         qPYg==
+        bh=CMgkFC4hro1vR5myJtP0m6DCab+9w+a2nWaK1KXDdg8=;
+        b=DNU9JfpW9p0S0n702nniLd8FFhqCunhLuhEeexHgtNkFPJFCX0fY0sfydMzOcpcGPM
+         ntrnKDPlnTR5pC3aBIRUY4rAJg8JTkZhWyl3DTMo8PNAE3YKlOmeS2r6TG4/96+Mfvoa
+         hkeQzRVJOCV1So7nNpn9tG7H3DdeWac9OeWO+OEDj1qRCI/NZVNBOty0iE4Z0g7oiCEL
+         XjqpdZoMMPIP64F8YGgUe6sGHdPEKfmJ9BsnUQVnc1S5MyaAtkKBHniACf2OhJKq9EuR
+         srsF6e77+jhqKagL3GtOv0rqQYdhOdKorI5w4EDrbZ0DJ+EREuce85FVuBnK/Kt8SGdR
+         CvHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=jEzroN9krnUkZ2+Y46mqGxrDo8hTabqX3KY2I2rzfxE=;
-        b=LAhrLQgLEfnQKzNrX4f2J/EqYCbwhXsku8A8MoGIvoOABp2a7Um++4R42rNH+dt8Gy
-         h7tkeX/PQW0p8V2z0YL9i3ZALGu5lODMZqw5PogbzwcNuGA+6ctWzqBY3Fz06B/Cw8YP
-         Yl77V3REoFC9xDxYj2bAqM027CGrVUABb9n1K7yvXqLXuE2rDis2i6MbRSq/LjdF4++Y
-         BQuyX/q7WDzNZpSkYf5enHKXSP2Crn7f84XerDnqwCJUdI6vaWgVYN/EQvCJEwYJ+pB+
-         r0/gpieLDtRt81GPOn4DxwEYb9BPPU/T3kvke6ktQ9kUzJzD+yPQMKH8VUNdsHp5NeHy
-         gQSQ==
-X-Gm-Message-State: AOAM533BSfZxQLaBuZJhtucsa6LPBOrorkgzE5+vsF3XvDbFto7wf/Id
-        FEWxQyiAT2DfkZyk/yeSxno=
-X-Google-Smtp-Source: ABdhPJyWM743ytURp4tznEG+0ckbSOUe+kwhe5PahJKknnQY57U1mcESiTQNwxdt7aMzf6SHt5RqGQ==
-X-Received: by 2002:a63:221b:0:b0:401:afc8:dbfc with SMTP id i27-20020a63221b000000b00401afc8dbfcmr7654908pgi.482.1655275687544;
-        Tue, 14 Jun 2022 23:48:07 -0700 (PDT)
+        bh=CMgkFC4hro1vR5myJtP0m6DCab+9w+a2nWaK1KXDdg8=;
+        b=k+eJJn6CkCzJ+K0a4Wz0LE61DAvX5hulqA31CFHaybP5ysij7lLeCn0g0f/3HYzL+o
+         QAPgGov4inuV7VMeA7XKMGPVELhN7nl5F0eddgBBdeOh6l0BYpaWPiAT6ok8aI/yYKuM
+         9KRfB5ONYw+JKM6Ig21CMwJUuLU2pmlPeIREEsRq9H4+tYVtQkvXZsaCRou2omHQQRr8
+         OJ5wIJpeb4O4q4oRWpbu+1L3vEcxgJPs+yl78ajhKltrygGBGjse9ZNXzF1dnvXTGDA8
+         Vei2xEiLMFMzhZY2pf6ucm8ll3SpkhBK6CMZ8gT3gtqC3X2XVhhILGLhc1wrOGFegb8s
+         rPDQ==
+X-Gm-Message-State: AOAM5304Um9O/ZNSt/fPo53NH1/NoQd4zyKSPWqkFP6Ee9yMUKQm2AS9
+        Gri1tukJqATmZ7gnDa3/o0NmNI4GNbg=
+X-Google-Smtp-Source: ABdhPJzdT9b8qTIuHlzzbvFYeiR1F9pWWRgB8ECWRvlf4Oha0//IBH+dkfoEt4ryc7oybrDqJHvp/g==
+X-Received: by 2002:a63:6c42:0:b0:3fe:465:7a71 with SMTP id h63-20020a636c42000000b003fe04657a71mr7589011pgc.101.1655276195700;
+        Tue, 14 Jun 2022 23:56:35 -0700 (PDT)
 Received: from [172.30.1.37] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id e4-20020a170903240400b00168f329b27dsm1414604plo.53.2022.06.14.23.48.04
+        by smtp.gmail.com with ESMTPSA id j5-20020a17090a840500b001e2bd411079sm875733pjn.20.2022.06.14.23.56.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 23:48:07 -0700 (PDT)
-Message-ID: <17cb21c6-317a-3f70-8c4d-4d8fe20604d4@gmail.com>
-Date:   Wed, 15 Jun 2022 15:48:03 +0900
+        Tue, 14 Jun 2022 23:56:35 -0700 (PDT)
+Message-ID: <8dd8bfa2-0843-269b-2d55-e3cbdbf6a5e1@gmail.com>
+Date:   Wed, 15 Jun 2022 15:56:31 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v4 1/4] PM / devfreq: Fix cpufreq passive unregister
- erroring on PROBE_DEFER
+Subject: Re: [PATCH v4 4/4] PM / devfreq: Mute warning on governor PROBE_DEFER
 Content-Language: en-US
 To:     Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
@@ -64,9 +63,9 @@ To:     Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>,
         Saravana Kannan <skannan@codeaurora.org>,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20220614230950.426-1-ansuelsmth@gmail.com>
- <20220614230950.426-2-ansuelsmth@gmail.com>
+ <20220614230950.426-5-ansuelsmth@gmail.com>
 From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <20220614230950.426-2-ansuelsmth@gmail.com>
+In-Reply-To: <20220614230950.426-5-ansuelsmth@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,93 +79,58 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 22. 6. 15. 08:09, Christian 'Ansuel' Marangi wrote:
-> With the passive governor, the cpu based scaling can PROBE_DEFER due to
-> the fact that CPU policy are not ready.
-> The cpufreq passive unregister notifier is called both from the
-> GOV_START errors and for the GOV_STOP and assume the notifier is
-> successfully registred every time. With GOV_START failing it's wrong to
-> loop over each possible CPU since the register path has failed for
-> some CPU policy not ready. Change the logic and unregister the notifer
-> based on the current allocated parent_cpu_data list to correctly handle
-> errors and the governor unregister path.
+> Don't print warning when a governor PROBE_DEFER as it's not a real
+> GOV_START fail.
 > 
 > Fixes: a03dacb0316f ("PM / devfreq: Add cpu based scaling support to passive governor")
 > Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
 > ---
->  drivers/devfreq/governor_passive.c | 39 +++++++++++++-----------------
->  1 file changed, 17 insertions(+), 22 deletions(-)
+>  drivers/devfreq/devfreq.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/devfreq/governor_passive.c b/drivers/devfreq/governor_passive.c
-> index 72c67979ebe1..95de336f20d5 100644
-> --- a/drivers/devfreq/governor_passive.c
-> +++ b/drivers/devfreq/governor_passive.c
-> @@ -34,6 +34,20 @@ get_parent_cpu_data(struct devfreq_passive_data *p_data,
->  	return NULL;
->  }
->  
-> +static void delete_parent_cpu_data(struct devfreq_passive_data *p_data)
-> +{
-> +	struct devfreq_cpu_data *parent_cpu_data, *tmp;
-> +
-
-Need to add the validation checking of argument as following:
-
-	if (!p_data)
-		return;
-
-> +	list_for_each_entry_safe(parent_cpu_data, tmp, &p_data->cpu_data_list, node) {
-> +		list_del(&parent_cpu_data->node);
-> +
-> +		if (parent_cpu_data->opp_table)
-> +			dev_pm_opp_put_opp_table(parent_cpu_data->opp_table);
-> +
-> +		kfree(parent_cpu_data);
-> +	}
-> +}
-> +
->  static unsigned long get_target_freq_by_required_opp(struct device *p_dev,
->  						struct opp_table *p_opp_table,
->  						struct opp_table *opp_table,
-> @@ -222,8 +236,7 @@ static int cpufreq_passive_unregister_notifier(struct devfreq *devfreq)
->  {
->  	struct devfreq_passive_data *p_data
->  			= (struct devfreq_passive_data *)devfreq->data;
-> -	struct devfreq_cpu_data *parent_cpu_data;
-> -	int cpu, ret = 0;
-> +	int ret;
->  
->  	if (p_data->nb.notifier_call) {
->  		ret = cpufreq_unregister_notifier(&p_data->nb,
-> @@ -232,27 +245,9 @@ static int cpufreq_passive_unregister_notifier(struct devfreq *devfreq)
->  			return ret;
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index 2e2b3b414d67..6a39638ed064 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -931,8 +931,9 @@ struct devfreq *devfreq_add_device(struct device *dev,
+>  	err = devfreq->governor->event_handler(devfreq, DEVFREQ_GOV_START,
+>  						NULL);
+>  	if (err) {
+> -		dev_err(dev, "%s: Unable to start governor for the device\n",
+> -			__func__);
+> +		dev_err_probe(dev, err,
+> +			      "%s: Unable to start governor for the device\n",
+> +			      __func__);
+>  		goto err_init;
 >  	}
->  
-> -	for_each_possible_cpu(cpu) {
-> -		struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
-> -		if (!policy) {
-> -			ret = -EINVAL;
-> -			continue;
-> -		}
-> -
-> -		parent_cpu_data = get_parent_cpu_data(p_data, policy);
-> -		if (!parent_cpu_data) {
-> -			cpufreq_cpu_put(policy);
-> -			continue;
-> -		}
-> -
-> -		list_del(&parent_cpu_data->node);
-> -		if (parent_cpu_data->opp_table)
-> -			dev_pm_opp_put_opp_table(parent_cpu_data->opp_table);
-> -		kfree(parent_cpu_data);
-> -		cpufreq_cpu_put(policy);
-> -	}
-> +	delete_parent_cpu_data(p_data);
->  
-> -	return ret;
-> +	return 0;
->  }
->  
->  static int cpufreq_passive_register_notifier(struct devfreq *devfreq)
+>  	create_sysfs_files(devfreq, devfreq->governor);
+
+
+In order to keep the left-align with above error log
+when try_then_request_governor() is failed,
+I recommend to use the tab without space indentation as following:
+
+If you have no objection, I'll merge this change.
+
+diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+index 01474daf4548..80a1235ef8fb 100644
+--- a/drivers/devfreq/devfreq.c
++++ b/drivers/devfreq/devfreq.c
+@@ -932,8 +932,9 @@ struct devfreq *devfreq_add_device(struct device *dev,
+        err = devfreq->governor->event_handler(devfreq, DEVFREQ_GOV_START,
+                                                NULL);
+        if (err) {
+-               dev_err(dev, "%s: Unable to start governor for the device\n",
+-                       __func__);
++               dev_err_probe(dev, err,
++                       "%s: Unable to start governor for the device\n",
++                        __func__);
+                goto err_init;
+        }
+        create_sysfs_files(devfreq, devfreq->governor);
+
+
+
 
 
 -- 
